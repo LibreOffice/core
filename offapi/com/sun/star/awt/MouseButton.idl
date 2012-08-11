@@ -20,29 +20,24 @@
 #define __com_sun_star_awt_MouseButton_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module awt {
 
-//=============================================================================
 
 /** These values are used to specify which keys on the mouse are pressed.
  */
 published constants MouseButton
 {
-    //-------------------------------------------------------------------------
 
     /** specifies the left mouse button as being pressed.
      */
     const short LEFT = 1;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the right mouse button as being pressed.
      */
     const short RIGHT = 2;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the middle mouse button as being pressed.
      */
@@ -50,7 +45,6 @@ published constants MouseButton
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

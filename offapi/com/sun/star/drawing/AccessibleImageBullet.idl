@@ -24,11 +24,9 @@
 #include <com/sun/star/accessibility/XAccessibleEditableText.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module drawing {
 
-//=============================================================================
 
 /** The accessible view of an image bullet.
 
@@ -88,7 +86,6 @@ service AccessibleImageBullet
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

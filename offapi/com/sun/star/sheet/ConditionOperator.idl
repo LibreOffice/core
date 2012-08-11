@@ -20,71 +20,59 @@
 #ifndef __com_sun_star_sheet_ConditionOperator_idl__
 #define __com_sun_star_sheet_ConditionOperator_idl__
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** is used to specify the type of <type>XSheetCondition</type>.
  */
 published enum ConditionOperator
 {
-    //-------------------------------------------------------------------------
 
     /** no condition is specified.
      */
     NONE,
 
-    //-------------------------------------------------------------------------
 
     /** value has to be equal to the specified value.
      */
     EQUAL,
 
-    //-------------------------------------------------------------------------
 
     /** the value must not be equal to the specified value.
      */
     NOT_EQUAL,
 
-    //-------------------------------------------------------------------------
 
     /** the value has to be greater than the specified value.
      */
     GREATER,
 
-    //-------------------------------------------------------------------------
 
     /** the value has to be greater than or equal to the specified value.
      */
     GREATER_EQUAL,
 
-    //-------------------------------------------------------------------------
 
     /** the value has to be less than the specified value.
      */
     LESS,
 
-    //-------------------------------------------------------------------------
 
     /** the value has to be less than or equal to the specified value.
      */
     LESS_EQUAL,
 
-    //-------------------------------------------------------------------------
 
     /** the value has to be between the two specified values.
      */
     BETWEEN,
 
-    //-------------------------------------------------------------------------
 
     /** the value has to be outside of the two specified values.
      */
     NOT_BETWEEN,
 
-    //-------------------------------------------------------------------------
 
     /** the specified formula has to give a non-zero result.
      */
@@ -92,7 +80,6 @@ published enum ConditionOperator
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

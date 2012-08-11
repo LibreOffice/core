@@ -24,13 +24,11 @@
 #include <com/sun/star/graphic/XGraphic.idl>
 #include <com/sun/star/awt/Rectangle.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module awt {
 
  interface XMenuBarButtonListener;
 
-//=============================================================================
 
 /** multiple-inheritance interface designed to ease the use of all functions
     available for a <type scope="com::sun::star::awt">MenuBar</type>.
@@ -43,7 +41,6 @@
     interface com::sun::star::awt::XMenuBar;
 };
 
-//=============================================================================
 
 }; }; }; };
 

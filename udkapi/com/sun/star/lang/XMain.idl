@@ -24,11 +24,9 @@
 #include <com/sun/star/uno/Exception.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module lang {
 
-//=============================================================================
 
 /** Executing interface for executable components run by the uno executable
     loader.  This is an application to run components passing the command
@@ -47,7 +45,6 @@ published interface XMain: com::sun::star::uno::XInterface
     long run( [in] sequence< string > aArguments );
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -22,7 +22,6 @@
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** Data structure to store information about an external reference.  An
     external reference can be either a single cell reference, a cell range
@@ -34,7 +33,6 @@ module com {  module sun {  module star {  module sheet {
  */
 struct ExternalReference
 {
-    //-------------------------------------------------------------------------
 
     /** Index of an externally linked document.  Each externally-linked document
         has a unique index value.
@@ -49,7 +47,6 @@ struct ExternalReference
     long Index;
 
 #if 0
-    //-------------------------------------------------------------------------
 
     /** Name of the sheet that the external reference points to.
 
@@ -63,7 +60,6 @@ struct ExternalReference
     string SheetName;
 #endif
 
-    //-------------------------------------------------------------------------
 
     /** Reference data.
 
@@ -81,7 +77,6 @@ struct ExternalReference
     any Reference;
 };
 
-//=============================================================================
 
 }; }; }; };
 

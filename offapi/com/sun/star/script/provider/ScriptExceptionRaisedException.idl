@@ -22,11 +22,9 @@
 
 #include <com/sun/star/script/provider/ScriptErrorRaisedException.idl>
 
-//===========================================================================
 
 module com { module sun { module star { module script { module provider {
 
-//===========================================================================
 /**
     is a checked exception that represents the detail of an exception
         thrown by a LanguageScriptProvider whilst executing a script
@@ -37,7 +35,6 @@ exception ScriptExceptionRaisedException : ::com::sun::star::script::provider::S
     string exceptionType;
 };
 
-//===========================================================================
 }; }; }; }; }; // ::com::sun::star::script::provider
 
 #endif

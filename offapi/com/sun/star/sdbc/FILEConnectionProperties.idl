@@ -58,7 +58,6 @@ service FILEConnectionProperties
     [optional, property] string CharSet;
 };
 
-//=============================================================================
 
 }; }; }; };
 

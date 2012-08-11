@@ -21,11 +21,9 @@
 
 #include <com/sun/star/chart/XComplexDescriptionAccess.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module chart2 {
 
-//=============================================================================
 
 /** Offers any access to column and row descriptions.
 This allows to set date values as categories.
@@ -37,7 +35,6 @@ This allows to set date values as categories.
 
 interface XAnyDescriptionAccess : ::com::sun::star::chart::XComplexDescriptionAccess
 {
-    //-------------------------------------------------------------------------
 
     /** retrieves the descriptions for all rows.
 
@@ -49,7 +46,6 @@ interface XAnyDescriptionAccess : ::com::sun::star::chart::XComplexDescriptionAc
      */
     sequence< sequence< any > > getAnyRowDescriptions();
 
-    //-------------------------------------------------------------------------
 
     /** sets the descriptions for all rows.
 
@@ -61,7 +57,6 @@ interface XAnyDescriptionAccess : ::com::sun::star::chart::XComplexDescriptionAc
     */
     void setAnyRowDescriptions( [in] sequence< sequence< any > > rRowDescriptions );
 
-    //-------------------------------------------------------------------------
 
     /** retrieves the descriptions for all columns.
 
@@ -73,7 +68,6 @@ interface XAnyDescriptionAccess : ::com::sun::star::chart::XComplexDescriptionAc
      */
     sequence< sequence< any > > getAnyColumnDescriptions();
 
-    //-------------------------------------------------------------------------
 
     /** sets the descriptions for all columns.
 
@@ -86,7 +80,6 @@ interface XAnyDescriptionAccess : ::com::sun::star::chart::XComplexDescriptionAc
     void setAnyColumnDescriptions( [in] sequence< sequence< any > > rColumnDescriptions );
 };
 
-//=============================================================================
 
 }; }; }; };
 

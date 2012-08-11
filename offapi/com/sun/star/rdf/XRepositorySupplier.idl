@@ -23,11 +23,9 @@
 #include <com/sun/star/rdf/XRepository.idl>
 
 
-//=============================================================================
 
 module com {   module sun {   module star {   module rdf {
 
-//=============================================================================
 /** provides access to an RDF Repository.
 
     @since OOo 3.0
@@ -36,7 +34,6 @@ module com {   module sun {   module star {   module rdf {
  */
 interface XRepositorySupplier
 {
-    //-------------------------------------------------------------------------
     /** provides the RDF Repository associated with this object.
 
         @returns
@@ -46,7 +43,6 @@ interface XRepositorySupplier
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

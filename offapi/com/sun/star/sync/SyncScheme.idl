@@ -29,7 +29,6 @@
 #ifndef __com_sun_star_sync_SyncScheme_idl__
 #define __com_sun_star_sync_SyncScheme_idl__
 
-//=============================================================================
 
  module com {  module sun {  module star {  module sync {
 
@@ -43,14 +42,12 @@ published struct SyncScheme
      */
     string Scheme;
 
-    //-------------------------------------------------------------------------
 
     /** contains the root for this SyncScheme
      */
     string Root;
 };
 
-//=============================================================================
 
 }; }; }; };
 

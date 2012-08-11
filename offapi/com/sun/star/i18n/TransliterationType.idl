@@ -28,11 +28,9 @@
 #ifndef __com_sun_star_i18n_TransliterationType_idl__
 #define __com_sun_star_i18n_TransliterationType_idl__
 
-//=============================================================================
 
 module com {  module sun {  module star {  module i18n {
 
-//=============================================================================
 
 /**
     Bitmask transliteration types used with
@@ -76,7 +74,6 @@ published constants TransliterationType
     const short CASCADE            = 8;
 };
 
-//=============================================================================
 }; }; }; };
 
 #endif

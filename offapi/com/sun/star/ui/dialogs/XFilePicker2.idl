@@ -31,16 +31,13 @@
 
 #include <com/sun/star/ui/dialogs/XFilePicker.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module ui { module dialogs {
 
-//=============================================================================
 /** extends file picker interface to workaround some design problems.
 */
 interface XFilePicker2 : ::com::sun::star::ui::dialogs::XFilePicker
 {
-    //-------------------------------------------------------------------------
     /** Returns a sequence of the selected files including path information in
         URL format, conform to <a href="http://www.w3.org/Addressing/rfc1738.txt">Rfc1738</a>.
 
@@ -66,7 +63,6 @@ interface XFilePicker2 : ::com::sun::star::ui::dialogs::XFilePicker
     sequence< string > getSelectedFiles();
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

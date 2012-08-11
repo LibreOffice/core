@@ -25,11 +25,9 @@
 #include <com/sun/star/table/CellRangeAddress.idl>
 #include <com/sun/star/table/CellAddress.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** provides access to the settings of a consolidation descriptor.
 
@@ -39,39 +37,33 @@ module com {  module sun {  module star {  module sheet {
  */
 published interface XConsolidationDescriptor: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** returns the function by which the ranges are consolidated.
      */
     com::sun::star::sheet::GeneralFunction getFunction();
 
-    //-------------------------------------------------------------------------
 
     /** sets the function by which the ranges are consolidated.
      */
     void setFunction( [in] com::sun::star::sheet::GeneralFunction nFunction );
 
-    //-------------------------------------------------------------------------
 
     /** returns the cell ranges which are consolidated.
      */
     sequence< com::sun::star::table::CellRangeAddress > getSources();
 
-    //-------------------------------------------------------------------------
 
     /** sets the cell ranges which are consolidated.
      */
     void setSources(
             [in] sequence< com::sun::star::table::CellRangeAddress > aSources );
 
-    //-------------------------------------------------------------------------
 
     /** returns the position of the top left cell of the cell range where
         the consolidated data are copied.
      */
     com::sun::star::table::CellAddress getStartOutputPosition();
 
-    //-------------------------------------------------------------------------
 
     /** sets the position of the top left cell of the cell range
         where the consolidated data are copied.
@@ -79,42 +71,36 @@ published interface XConsolidationDescriptor: com::sun::star::uno::XInterface
     void setStartOutputPosition(
             [in] com::sun::star::table::CellAddress aStartOutputPosition );
 
-    //-------------------------------------------------------------------------
 
     /** returns, whether column headers from the cell ranges are used to
         find matching data or not.
      */
     boolean getUseColumnHeaders();
 
-    //-------------------------------------------------------------------------
 
     /** specifies if column headers from the cell ranges are used to find
         matching data.
      */
     void setUseColumnHeaders( [in] boolean bUseColumnHeaders );
 
-    //-------------------------------------------------------------------------
 
     /** returns, whether row headers from the cell ranges are used to
         find matching data or not.
      */
     boolean getUseRowHeaders();
 
-    //-------------------------------------------------------------------------
 
     /** specifies if row headers from the cell ranges are used to find
         matching data.
      */
     void setUseRowHeaders( [in] boolean bUseRowHeaders );
 
-    //-------------------------------------------------------------------------
 
     /** returns, whether links to the original data are inserted in the
         output area or not.
      */
     boolean getInsertLinks();
 
-    //-------------------------------------------------------------------------
 
     /** specifies if links to the original data are inserted in the
         output area.
@@ -123,7 +109,6 @@ published interface XConsolidationDescriptor: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

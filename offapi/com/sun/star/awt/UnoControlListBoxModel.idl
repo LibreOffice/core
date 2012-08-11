@@ -33,11 +33,9 @@
 #include <com/sun/star/util/Color.idl>
 #include <com/sun/star/awt/XItemList.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module awt {
 
-//=============================================================================
 
 /** specifies the standard model of an <type>UnoControlListBox</type>.
  */
@@ -45,7 +43,6 @@ published service UnoControlListBoxModel
 {
     service com::sun::star::awt::UnoControlModel;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the horizontal alignment of the text in the control.
 
@@ -57,13 +54,11 @@ published service UnoControlListBoxModel
      */
     [optional, property] short Align;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the background color (RGB) of the control.
      */
     [property] com::sun::star::util::Color BackgroundColor;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the border style of the control.
 
@@ -75,7 +70,6 @@ published service UnoControlListBoxModel
      */
     [property] short Border;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the color of the border, if present
 
@@ -86,99 +80,83 @@ published service UnoControlListBoxModel
      */
     [optional, property] long BorderColor;
 
-    //-------------------------------------------------------------------------
 
     /** specifies if the control has a drop down button.
      */
     [property] boolean Dropdown;
 
-    //-------------------------------------------------------------------------
 
     /** determines whether the control is enabled or disabled.
      */
     [property] boolean Enabled;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the font attributes of the text in the control.
      */
     [property] com::sun::star::awt::FontDescriptor FontDescriptor;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the <type scope="com::sun::star::text">FontEmphasis</type>
         value of the text in the control.
      */
     [property] short FontEmphasisMark;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the <type scope="com::sun::star::text">FontRelief</type>
         value of the text in the control.
      */
     [property] short FontRelief;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the help text of the control.
      */
     [property] string HelpText;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the help URL of the control.
      */
     [property] string HelpURL;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the maximum line count displayed in the drop down box.
      */
     [property] short LineCount;
 
-    //-------------------------------------------------------------------------
 
     /** specifies if more than one entry can be selected.
      */
     [property] boolean MultiSelection;
 
-    //-------------------------------------------------------------------------
 
     /** specifies that the control will be printed with the document.
      */
     [property] boolean Printable;
 
-    //-------------------------------------------------------------------------
 
     /** specifies that the content of the control cannot be modified by the user.
      */
     [property] boolean ReadOnly;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the sequence of selected items, identified by the position.
      */
     [property] sequence<short> SelectedItems;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the list of items.
      */
     [property] sequence<string> StringItemList;
 
-    //-------------------------------------------------------------------------
 
     /** specifies that the control can be reached with the TAB key.
      */
     [property] boolean Tabstop;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the text color (RGB) of the control.
      */
     [property] com::sun::star::util::Color TextColor;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the text line color (RGB) of the control.
      */
@@ -219,7 +197,6 @@ published service UnoControlListBoxModel
     [optional, property, maybevoid] short ItemSeparatorPos;
 };
 
-//=============================================================================
 
 }; }; }; };
 

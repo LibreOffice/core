@@ -21,11 +21,9 @@
 
 #include <com/sun/star/uno/XInterface.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module container {
 
-//=============================================================================
 
 /** specifies the name of the object.
 
@@ -33,14 +31,12 @@ module com {  module sun {  module star {  module container {
  */
 published interface XNamed: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** @returns
         the programmatic name of the object.
      */
     string getName();
 
-    //-------------------------------------------------------------------------
 
     /** sets the programmatic name of the object.
      */
@@ -48,7 +44,6 @@ published interface XNamed: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

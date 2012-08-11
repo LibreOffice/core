@@ -20,29 +20,24 @@
 #define __com_sun_star_text_PageNumberType_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module text {
 
-//=============================================================================
 
 // DocMerge from xml: enum com::sun::star::text::PageNumberType
 /** determines which page number is displayed in a page number text field.
  */
 published enum PageNumberType
 {
-    //-------------------------------------------------------------------------
     /** The number of the previous page is displayed if there is any, otherwise the
      field is empty.
      */
     PREV,
 
-    //-------------------------------------------------------------------------
     /** The number of the current page is displayed.
      */
     CURRENT,
 
-    //-------------------------------------------------------------------------
     /** The number of the next page is displayed if there is any, otherwise the
      field is empty.
      */
@@ -50,7 +45,6 @@ published enum PageNumberType
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

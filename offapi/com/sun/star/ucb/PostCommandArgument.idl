@@ -22,23 +22,19 @@
 #include <com/sun/star/io/XInputStream.idl>
 
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** The argument for the command "post".
 
     @see XCommandProcessor
 */
 published struct PostCommandArgument
 {
-    //-------------------------------------------------------------------------
     /** The data source containing the data to post.
     */
     com::sun::star::io::XInputStream Source;
 
-    //-------------------------------------------------------------------------
     /** The data sink receiving the returned contents (supporting either
         <type scope="com::sun::star::io">XActiveDataSink</type> or
         <type scope="com::sun::star::io">XOutputStream</type>).
@@ -46,7 +42,6 @@ published struct PostCommandArgument
     com::sun::star::uno::XInterface Sink;
 };
 
-//=============================================================================
 
 }; }; }; };
 

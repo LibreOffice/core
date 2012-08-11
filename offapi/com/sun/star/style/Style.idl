@@ -36,24 +36,20 @@
 #include <com/sun/star/xml/UserDefinedAttributesSupplier.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module style {
 
-//=============================================================================
 
 /** This service specifies a single style sheet.
  */
 published service Style
 {
-    //-------------------------------------------------------------------------
     /** contains user defined attributes.
 
         @see    <type scope="com::sun::star::xml">UserDefinedAttributesSupplier</type>
      */
     [optional] service com::sun::star::xml::UserDefinedAttributesSupplier;
 
-    //-------------------------------------------------------------------------
 
     interface com::sun::star::style::XStyle;
 
@@ -63,11 +59,9 @@ published service Style
 
     /* This optional interface is available as an optimization, allowing users
        to use "setAllPropertiesToDefault", for example. */
-    //-------------------------------------------------------------------------
 
     [optional] interface com::sun::star::beans::XMultiPropertyStates;
 
-    //-------------------------------------------------------------------------
 
     /** determines if a style is physically created.
 
@@ -77,14 +71,12 @@ published service Style
         </p>
      */
     [optional, readonly, property] boolean IsPhysical;
-    //-------------------------------------------------------------------------
 
     /** contains the name of the style that is applied to the next paragraph.
 
         <p> This property is usually available at paragraph styles only. </p>
      */
     [optional, property] string FollowStyle;
-    //-------------------------------------------------------------------------
 
     /** contains the name of the style as it is displayed in the user interface.
 
@@ -92,7 +84,6 @@ published service Style
         names are localized.</p>
      */
     [optional, readonly, property] string DisplayName;
-    //-------------------------------------------------------------------------
 
     /** determines if a style is automatically updated, if the properties of an object
         that the style is applied to are changed.
@@ -101,7 +92,6 @@ published service Style
         are changed then the style will be updated accordingly.</p>
      */
     [optional, property] string IsAutoUpdate;
-    //-------------------------------------------------------------------------
 
     /** defines the context and styles for conditional paragraphs.
 
@@ -156,7 +146,6 @@ published service Style
 
 };
 
-//=============================================================================
 
 }; }; }; };
 #endif

@@ -22,11 +22,9 @@
 
 #include <com/sun/star/sdbc/SQLException.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module sdbcx {
 
-//=============================================================================
 
 /** implements the possibility to alter aspects of a view's definition
 
@@ -48,11 +46,9 @@ interface XAlterView
         raises ( ::com::sun::star::sdbc::SQLException );
 };
 
-//=============================================================================
 
 }; }; }; };
 
-//=============================================================================
 
 #endif
 

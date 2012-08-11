@@ -22,11 +22,9 @@
 #include <com/sun/star/uno/Exception.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module plugin {
 
-//=============================================================================
 
 /** Indicates that an error occurred in an NPN or NPP function call.
 
@@ -40,7 +38,6 @@ published exception PluginException: com::sun::star::uno::Exception
     short ErrorCode;
 };
 
-//=============================================================================
 
 }; }; }; };
 

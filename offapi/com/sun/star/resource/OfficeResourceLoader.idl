@@ -31,9 +31,7 @@
 
 #include <com/sun/star/resource/XResourceBundleLoader.idl>
 
-//=============================================================================
 module com { module sun { module star { module resource {
-//=============================================================================
 
 /** describes a <type>XResourceBundleLoader</type> which provides access to the OpenOffice.org
     resource files.
@@ -73,9 +71,7 @@ module com { module sun { module star { module resource {
 */
 singleton OfficeResourceLoader : XResourceBundleLoader;
 
-//=============================================================================
 }; }; }; };
-//=============================================================================
 
 #endif
 

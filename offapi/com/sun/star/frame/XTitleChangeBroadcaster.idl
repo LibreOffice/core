@@ -22,27 +22,22 @@
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/frame/XTitleChangeListener.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module frame {
 
-//=============================================================================
 /** todo document me
  */
 interface XTitleChangeBroadcaster : com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** todo document me
      */
     void addTitleChangeListener ( [in] com::sun::star::frame::XTitleChangeListener xListener );
 
-    //-------------------------------------------------------------------------
     /** todo document me
      */
     void removeTitleChangeListener ( [in] com::sun::star::frame::XTitleChangeListener xListener );
 };
 
-//=============================================================================
 
 }; }; }; };
 

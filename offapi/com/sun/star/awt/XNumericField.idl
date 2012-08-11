@@ -22,109 +22,91 @@
 #include <com/sun/star/uno/XInterface.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module awt {
 
-//=============================================================================
 
 /** gives access to the value and formatting of a numeric field.
  */
 published interface XNumericField: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** sets the value which is displayed in the numeric field.
      */
     [oneway] void setValue( [in] double Value );
 
-    //-------------------------------------------------------------------------
 
     /** returns the value which is currently displayed in the numeric field.
      */
     double getValue();
 
-    //-------------------------------------------------------------------------
 
     /** sets the minimum value that can be entered by the user.
      */
     [oneway] void setMin( [in] double Value );
 
-    //-------------------------------------------------------------------------
 
     /** returns the currently set minimum value that can be entered by the
         user.
      */
     double getMin();
 
-    //-------------------------------------------------------------------------
 
     /** sets the maximum value that can be entered by the user.
      */
     [oneway] void setMax( [in] double Value );
 
-    //-------------------------------------------------------------------------
 
     /** returns the currently set maximum value that can be entered by the
         user.
      */
     double getMax();
 
-    //-------------------------------------------------------------------------
 
     /** sets the first value to be set on POS1 key.
      */
     [oneway] void setFirst( [in] double Value );
 
-    //-------------------------------------------------------------------------
 
     /** returns the currently set first value which is set on POS1 key.
      */
     double getFirst();
 
-    //-------------------------------------------------------------------------
 
     /** sets the last value to be set on END key.
      */
     [oneway] void setLast( [in] double Value );
 
-    //-------------------------------------------------------------------------
 
     /** returns the currently set last value which is set on END key.
      */
     double getLast();
 
-    //-------------------------------------------------------------------------
 
     /** sets the increment value for the spin button.
      */
     [oneway] void setSpinSize( [in] double Value );
 
-    //-------------------------------------------------------------------------
 
     /** returns the currently set increment value for the spin button.
      */
     double getSpinSize();
 
-    //-------------------------------------------------------------------------
 
     /** sets the number of decimals.
      */
     [oneway] void setDecimalDigits( [in] short nDigits );
 
-    //-------------------------------------------------------------------------
 
     /** returns the currently set number of decimals.
      */
     short getDecimalDigits();
 
-    //-------------------------------------------------------------------------
 
     /** determines if the format is checked during user input.
      */
     [oneway] void setStrictFormat( [in] boolean bStrict );
 
-    //-------------------------------------------------------------------------
 
     /** returns whether the format is currently checked during user input.
      */
@@ -132,7 +114,6 @@ published interface XNumericField: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -20,11 +20,9 @@
 #define __com_sun_star_drawing_MeasureTextVertPos_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module drawing {
 
-//=============================================================================
 
 // DocMerge from xml: enum com::sun::star::drawing::MeasureTextVertPos
 /** This enumeration defines the relative vertical placement of the text
@@ -32,31 +30,26 @@
  */
 published enum MeasureTextVertPos
 {
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR MeasureTextVertPos::   AUTO,
 
     // DocMerge: empty anyway
     AUTO,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR MeasureTextVertPos::   EAST,
 
     // DocMerge: empty anyway
     EAST,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR MeasureTextVertPos::   BREAKEDLINE,
 
     // DocMerge: empty anyway
     BREAKEDLINE,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR MeasureTextVertPos::   WEST,
 
     // DocMerge: empty anyway
     WEST,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR MeasureTextVertPos::   CENTERED
 
     // DocMerge: empty anyway
@@ -64,7 +57,6 @@ published enum MeasureTextVertPos
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

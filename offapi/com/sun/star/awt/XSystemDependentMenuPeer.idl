@@ -31,11 +31,9 @@
 #include <com/sun/star/uno/XInterface.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module awt {
 
-//=============================================================================
 
 /** provides access to the system dependent implementation of the window.
 
@@ -45,7 +43,6 @@
  */
 interface XSystemDependentMenuPeer: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** returns a system-specific window handle.
 
@@ -69,7 +66,6 @@ interface XSystemDependentMenuPeer: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

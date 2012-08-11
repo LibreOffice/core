@@ -30,11 +30,9 @@
 
 #include <com/sun/star/awt/tab/XTabPageModel.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module awt { module tab {
 
-//=============================================================================
 
 /** specifies the standard model of a XTabPageModel.
     @since OOo 3.4
@@ -50,7 +48,6 @@ service UnoControlTabPageModel : XTabPageModel
     load([in] short tabPageID,[in] string url);
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

@@ -33,11 +33,9 @@
 #include <com/sun/star/embed/XStorage.idl>
 #include <com/sun/star/script/XPersistentLibraryContainer.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module script {
 
-//=============================================================================
 
 /** is the interface for an <type>XLibraryContainer</type> which can be made
     persistent in an <type scope="com::sun::star::embed">XStorage</type>.
@@ -93,11 +91,9 @@ interface XStorageBasedLibraryContainer
         raises ( ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException );
 };
 
-//=============================================================================
 
 }; }; }; };
 
-//=============================================================================
 
 #endif
 

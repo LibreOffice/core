@@ -32,11 +32,9 @@
 #include <com/sun/star/i18n/XIndexEntrySupplier.idl>
 #include <com/sun/star/lang/Locale.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module i18n {
 
-//=============================================================================
 
 
 /**
@@ -56,33 +54,28 @@ module com { module sun { module star { module i18n {
  */
 published interface XExtendedIndexEntrySupplier : ::com::sun::star::i18n::XIndexEntrySupplier
 {
-    //-------------------------------------------------------------------------
     /**
         Returns locale list for which the IndexEntrySupplier provides service.
      */
     sequence < com::sun::star::lang::Locale > getLocaleList();
 
-    //-------------------------------------------------------------------------
     /**
         Returns index algorithm list for specific locale
      */
     sequence < string > getAlgorithmList(
                         [in] com::sun::star::lang::Locale aLocale );
 
-    //-------------------------------------------------------------------------
     /**
         Checks if Phonetic Entry should be used for the locale.
      */
     boolean usePhoneticEntry( [in] com::sun::star::lang::Locale aLocale);
 
-    //-------------------------------------------------------------------------
     /**
         Returns phonetic candidate for index entry for the locale.
      */
     string getPhoneticCandidate( [in] string aIndexEntry,
                     [in] com::sun::star::lang::Locale aLocale);
 
-    //-------------------------------------------------------------------------
     /**
         Loads index algorithm for the locale.
 
@@ -102,7 +95,6 @@ published interface XExtendedIndexEntrySupplier : ::com::sun::star::i18n::XIndex
                     [in] string aIndexAlgorithm,
                     [in] long nCollatorOptions );
 
-    //-------------------------------------------------------------------------
     /**
         Returns index key.
 
@@ -124,7 +116,6 @@ published interface XExtendedIndexEntrySupplier : ::com::sun::star::i18n::XIndex
     string getIndexKey( [in] string aIndexEntry, [in] string aPhoneticEntry,
                     [in] com::sun::star::lang::Locale aLocale );
 
-    //-------------------------------------------------------------------------
     /**
         Compares index entries
 
@@ -152,7 +143,6 @@ published interface XExtendedIndexEntrySupplier : ::com::sun::star::i18n::XIndex
                     [in] com::sun::star::lang::Locale aLocale2 );
 };
 
-//=============================================================================
 }; }; }; };
 
 #endif

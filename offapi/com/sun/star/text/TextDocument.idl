@@ -21,11 +21,9 @@
 
 #include <com/sun/star/text/GenericTextDocument.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module text {
 
-//=============================================================================
 
 /** Specify the document service of the text module.
  */
@@ -35,7 +33,6 @@ published service TextDocument
     service GenericTextDocument;
 };
 
-//=============================================================================
 
 }; }; }; };
 

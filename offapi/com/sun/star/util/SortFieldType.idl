@@ -20,11 +20,9 @@
 #define __com_sun_star_util_SortFieldType_idl__
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module util {
 
-//=============================================================================
 
 /** enumeration used to specify the type of contents in a sort field.
 
@@ -32,24 +30,20 @@ module com {  module sun {  module star {  module util {
  */
 published enum SortFieldType
 {
-    //-------------------------------------------------------------------------
     /** type is determined automatically.
      */
     AUTOMATIC,
 
-    //-------------------------------------------------------------------------
     /** sort field contains numerical data.
      */
     NUMERIC,
 
-    //-------------------------------------------------------------------------
     /** sort field contains text data.
      */
     ALPHANUMERIC
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

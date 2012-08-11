@@ -24,17 +24,14 @@
 #include <com/sun/star/sheet/GoalResult.idl>
 #include <com/sun/star/table/CellAddress.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** provides seeking a goal value for a cell.
  */
 published interface XGoalSeek: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** calculates a value which gives a specified result in a formula.
 
@@ -59,7 +56,6 @@ published interface XGoalSeek: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

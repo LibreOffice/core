@@ -22,11 +22,9 @@
 #include <com/sun/star/drawing/GenericDrawPage.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module drawing {
 
-//=============================================================================
 
 // DocMerge from xml: service com::sun::star::drawing::MasterPage
 /** This service is a single master page inside a drawing document.
@@ -59,7 +57,6 @@ published service MasterPage
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

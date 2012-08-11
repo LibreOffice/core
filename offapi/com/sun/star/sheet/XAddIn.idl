@@ -22,17 +22,14 @@
 
 #include <com/sun/star/lang/XLocalizable.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** gives access to function descriptions and user-visible names.
  */
 published interface XAddIn: com::sun::star::lang::XLocalizable
 {
-    //-------------------------------------------------------------------------
 
     /** returns the internal function name for an user-visible name.
 
@@ -53,7 +50,6 @@ published interface XAddIn: com::sun::star::lang::XLocalizable
      */
     string getProgrammaticFuntionName( [in] string aDisplayName );
 
-    //-------------------------------------------------------------------------
 
     /** returns the user-visible function name for an internal name.
 
@@ -70,7 +66,6 @@ published interface XAddIn: com::sun::star::lang::XLocalizable
      */
     string getDisplayFunctionName( [in] string aProgrammaticName );
 
-    //-------------------------------------------------------------------------
 
     /** returns the description of a function.
 
@@ -85,7 +80,6 @@ published interface XAddIn: com::sun::star::lang::XLocalizable
      */
     string getFunctionDescription( [in] string aProgrammaticName );
 
-    //-------------------------------------------------------------------------
 
     /** returns the user-visible name of the specified argument.
 
@@ -106,7 +100,6 @@ published interface XAddIn: com::sun::star::lang::XLocalizable
             [in] string aProgrammaticFunctionName,
             [in] long nArgument );
 
-    //-------------------------------------------------------------------------
 
     /** returns the description of the specified argument.
 
@@ -127,7 +120,6 @@ published interface XAddIn: com::sun::star::lang::XLocalizable
             [in] string aProgrammaticFunctionName,
             [in] long nArgument );
 
-    //-------------------------------------------------------------------------
 
     /** returns the programmatic name of the category the function
         belongs to.
@@ -182,7 +174,6 @@ published interface XAddIn: com::sun::star::lang::XLocalizable
      */
     string getProgrammaticCategoryName( [in] string aProgrammaticFunctionName );
 
-    //-------------------------------------------------------------------------
 
     /** returns the user-visible name of the category the function
         belongs to.
@@ -200,7 +191,6 @@ published interface XAddIn: com::sun::star::lang::XLocalizable
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -19,11 +19,9 @@
 #ifndef __com_sun_star_i18n_UnicodeType_idl__
 #define __com_sun_star_i18n_UnicodeType_idl__
 
-//============================================================================
 
 module com {  module sun {  module star {  module i18n {
 
-//============================================================================
 
 /**
     Constants to classify Unicode characters, returned by
@@ -65,7 +63,6 @@ published constants UnicodeType
     const short GENERAL_TYPES_COUNT    = 30;
 };
 
-//============================================================================
 }; }; }; };
 
 #endif

@@ -124,7 +124,6 @@ published service ColumnSettings
     [optional, property] string ControlDefault;
 };
 
-//=============================================================================
 
 }; }; }; };
 

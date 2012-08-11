@@ -22,11 +22,9 @@
 #include <com/sun/star/uno/RuntimeException.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module awt { module grid {
 
-//=============================================================================
 
 /** Exception is thrown to indicate that set data is invalid, e.g. type of data is unknown
     or data count doesn't match with column count.
@@ -38,7 +36,6 @@ exception GridInvalidDataException : com::sun::star::uno::RuntimeException
 
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

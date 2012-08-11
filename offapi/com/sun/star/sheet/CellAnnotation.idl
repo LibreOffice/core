@@ -25,11 +25,9 @@
 #include <com/sun/star/container/XChild.idl>
 #include <com/sun/star/text/XSimpleText.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** represents a cell annotation object attached to a spreadsheet cell.
 
@@ -37,14 +35,12 @@ module com {  module sun {  module star {  module sheet {
  */
 published service CellAnnotation
 {
-    //-------------------------------------------------------------------------
 
     /** provides methods to query data of the annotation
         and to show and hide it.
      */
     interface com::sun::star::sheet::XSheetAnnotation;
 
-    //-------------------------------------------------------------------------
 
     /** provides access to the parent of this object.
 
@@ -52,19 +48,16 @@ published service CellAnnotation
      */
     interface com::sun::star::container::XChild;
 
-    //-------------------------------------------------------------------------
 
     /** provides access to the text contents of the annotation.
      */
     interface com::sun::star::text::XSimpleText;
 
-    //-------------------------------------------------------------------------
 
     [optional] interface com::sun::star::sheet::XSheetAnnotationShapeSupplier;
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

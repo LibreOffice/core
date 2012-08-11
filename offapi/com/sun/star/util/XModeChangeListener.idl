@@ -24,11 +24,9 @@
 
 #include <com/sun/star/util/ModeChangeEvent.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module util {
 
-//=============================================================================
 
 /** allows to listen for changes in an object's internal mode.
 
@@ -43,7 +41,6 @@ published interface XModeChangeListener : com::sun::star::lang::XEventListener
     [oneway] void modeChanged( [in] ModeChangeEvent _rSource );
 };
 
-//=============================================================================
 
 }; }; }; };
 

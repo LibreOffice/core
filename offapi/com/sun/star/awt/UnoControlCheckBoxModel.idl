@@ -25,11 +25,9 @@
 #include <com/sun/star/util/Color.idl>
 #include <com/sun/star/graphic/XGraphic.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module awt {
 
-//=============================================================================
 
 /** specifies the standard model of an <type>UnoControlCheckBox</type>.
  */
@@ -37,7 +35,6 @@ published service UnoControlCheckBoxModel
 {
     service com::sun::star::awt::UnoControlModel;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the horizontal alignment of the text in the control.
 
@@ -51,51 +48,43 @@ published service UnoControlCheckBoxModel
      */
     [optional, property] short Align;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the background color (RGB) of the control.
      */
     [optional, property] long BackgroundColor;
 
-    //-------------------------------------------------------------------------
 
     /** determines whether the control is enabled or disabled.
      */
     [property] boolean Enabled;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the font attributes of the text in the control.
      */
     [property] com::sun::star::awt::FontDescriptor FontDescriptor;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the <type scope="com::sun::star::text">FontEmphasis</type>
         value of the text in the control.
      */
     [property] short FontEmphasisMark;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the <type scope="com::sun::star::text">FontRelief</type>
         value of the text in the control.
      */
     [property] short FontRelief;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the help text of the control.
      */
     [property] string HelpText;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the help URL of the control.
      */
     [property] string HelpURL;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the position of the image, if any, relative to the text, if any
 
@@ -103,14 +92,12 @@ published service UnoControlCheckBoxModel
      */
     [optional, property] short ImagePosition;
 
-    //-------------------------------------------------------------------------
 
     /** specifies an URL to an image to display besides the label of the control
         @see Graphic
      */
     [optional, property] string ImageURL;
 
-    //-------------------------------------------------------------------------
 
     /** specifies a graphic to be displayed besides the label of the control
 
@@ -127,13 +114,11 @@ published service UnoControlCheckBoxModel
      */
     [optional, property, transient] com::sun::star::graphic::XGraphic Graphic;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the label of the control.
      */
     [property] string Label;
 
-    //-------------------------------------------------------------------------
 
     /** specifies that the text may be displayed on more than one line.
 
@@ -141,13 +126,11 @@ published service UnoControlCheckBoxModel
      */
     [optional, property] boolean MultiLine;
 
-    //-------------------------------------------------------------------------
 
     /** specifies that the control will be printed with the document.
      */
     [property] boolean Printable;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the state of the control.
 
@@ -159,31 +142,26 @@ published service UnoControlCheckBoxModel
      */
     [property] short State;
 
-    //-------------------------------------------------------------------------
 
     /** specifies that the control can be reached with the TAB key.
      */
     [property] boolean Tabstop;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the text color (RGB) of the control.
      */
     [property] com::sun::star::util::Color TextColor;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the text line color (RGB) of the control.
      */
     [property] com::sun::star::util::Color TextLineColor;
 
-    //-------------------------------------------------------------------------
 
     /** specifies that the control may have the state "don't know".
      */
     [property] boolean TriState;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the vertical alignment of the text in the control.
 
@@ -191,7 +169,6 @@ published service UnoControlCheckBoxModel
      */
     [optional, property] com::sun::star::style::VerticalAlignment VerticalAlign;
 
-    //-------------------------------------------------------------------------
 
     /** specifies a visual effect to apply to the check box control
 
@@ -215,7 +192,6 @@ published service UnoControlCheckBoxModel
     [optional, property] short WritingMode;
 };
 
-//=============================================================================
 
 }; }; }; };
 

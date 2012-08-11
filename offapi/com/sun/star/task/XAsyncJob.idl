@@ -33,13 +33,11 @@
 #include <com/sun/star/beans/NamedValue.idl>
 #include <com/sun/star/lang/IllegalArgumentException.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module task {
 
  published interface XJobListener;
 
-//=============================================================================
 /** specifies a job which must be executed asynchronously
 
     <p>
@@ -56,7 +54,6 @@ module com {  module sun {  module star {  module task {
 */
 published interface XAsyncJob : com::sun::star::uno::XInterface
 {
-    //------------------------------------------------------------------------
     /** executes the job asynchronously
 
         @param Arguments

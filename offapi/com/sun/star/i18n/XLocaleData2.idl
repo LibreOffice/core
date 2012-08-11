@@ -22,11 +22,9 @@
 #include <com/sun/star/i18n/XLocaleData.idl>
 #include <com/sun/star/i18n/Currency2.idl>
 
-//============================================================================
 
 module com { module sun { module star { module i18n {
 
-//============================================================================
 
 /**
     Access locale specific data.
@@ -48,7 +46,6 @@ published interface XLocaleData2 : com::sun::star::i18n::XLocaleData
                                 [in] com::sun::star::lang::Locale aLocale );
 };
 
-//============================================================================
 }; }; }; };
 
 #endif

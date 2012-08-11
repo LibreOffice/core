@@ -20,11 +20,9 @@
 #ifndef __com_sun_star_i18n_Months_idl__
 #define __com_sun_star_i18n_Months_idl__
 
-//=============================================================================
 
 module com { module sun { module star { module i18n {
 
-//=============================================================================
 
 /**
     Constants for month names used in calls to <member>XCalendar::getDisplayName()</member>.
@@ -58,7 +56,6 @@ published constants Months
     const short DECEMBER    = 11;
 };
 
-//=============================================================================
 }; }; }; };
 
 #endif

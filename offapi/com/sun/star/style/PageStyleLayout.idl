@@ -20,35 +20,29 @@
 #ifndef __com_sun_star_style_PageStyleLayout_idl__
 #define __com_sun_star_style_PageStyleLayout_idl__
 
-//=============================================================================
 
 module com {  module sun {  module star {  module style {
 
-//=============================================================================
 
 /** specifies the pages for which a page layout is valid.
  */
 published enum PageStyleLayout
 {
-    //-------------------------------------------------------------------------
 
     /** The page style is identically used for left and right pages.
      */
     ALL,
 
-    //-------------------------------------------------------------------------
 
     /** The page style is only used for left pages.
      */
     LEFT,
 
-    //-------------------------------------------------------------------------
 
     /** The page style is only used for right pages.
      */
     RIGHT,
 
-    //-------------------------------------------------------------------------
 
     /** The page style is used unchanged for left pages and mirrored for
         right pages.
@@ -57,7 +51,6 @@ published enum PageStyleLayout
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

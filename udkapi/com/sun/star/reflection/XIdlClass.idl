@@ -25,7 +25,6 @@
 
 #include <com/sun/star/uno/Uik.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module reflection {
 
@@ -33,7 +32,6 @@ module com {  module sun {  module star {  module reflection {
  published interface XIdlMethod;
  published interface XIdlArray;
 
-//=============================================================================
 
 /** Provides information reflecting an UNO type.
 */
@@ -191,7 +189,6 @@ published interface XIdlClass: com::sun::star::uno::XInterface
     void createObject( [out] any obj );
 };
 
-//=============================================================================
 
 }; }; }; };
 

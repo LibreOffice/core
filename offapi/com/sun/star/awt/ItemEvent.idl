@@ -22,29 +22,24 @@
 #include <com/sun/star/lang/EventObject.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module awt {
 
-//=============================================================================
 
 /** specifies an event occurred to an item of a menu, a list box etc.
  */
 published struct ItemEvent: com::sun::star::lang::EventObject
 {
-    //-------------------------------------------------------------------------
 
     /** specifies which item is newly selected.
      */
     long Selected;
 
-    //-------------------------------------------------------------------------
 
     /** specifies which item is newly highlighted.
      */
     long Highlighted;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the id of the item.
      */
@@ -52,7 +47,6 @@ published struct ItemEvent: com::sun::star::lang::EventObject
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

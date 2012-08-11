@@ -23,11 +23,9 @@
 #include <com/sun/star/container/XStringKeyMap.idl>
 #include <com/sun/star/text/TextMarkupType.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module text {
 
-//=============================================================================
 
 /** provides functionality to markup text.
 
@@ -36,7 +34,6 @@ module com {  module sun {  module star {  module text {
 
 interface XTextMarkup
 {
-    //-------------------------------------------------------------------------
     /** obtains a container to store additional user defined text markup
         information.
 
@@ -47,7 +44,6 @@ interface XTextMarkup
     com::sun::star::container::XStringKeyMap getMarkupInfoContainer();
 
 
-    //-------------------------------------------------------------------------
     /** submits a new markup range.
 
         @param nType

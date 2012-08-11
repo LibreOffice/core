@@ -22,11 +22,9 @@
 #include <com/sun/star/drawing/Shapes.idl>
 #include <com/sun/star/lang/XComponent.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module drawing {
 
-//=============================================================================
 /** This service describes a generic container to manage collections of
     <type>Shape</type>. The <type>Shape</type> that are added to this
     collection are not owned by the collection.
@@ -46,7 +44,6 @@ published service ShapeCollection
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

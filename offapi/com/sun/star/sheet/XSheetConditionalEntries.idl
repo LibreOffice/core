@@ -23,11 +23,9 @@
 #include <com/sun/star/container/XIndexAccess.idl>
 #include <com/sun/star/beans/PropertyValue.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** provides methods to add and remove conditions of a conditional format.
 
@@ -36,7 +34,6 @@ module com {  module sun {  module star {  module sheet {
  */
 published interface XSheetConditionalEntries: com::sun::star::container::XIndexAccess
 {
-    //-------------------------------------------------------------------------
 
     /** adds a conditional entry to the format.
 
@@ -67,13 +64,11 @@ published interface XSheetConditionalEntries: com::sun::star::container::XIndexA
      */
     void addNew( [in] sequence< com::sun::star::beans::PropertyValue > aConditionalEntry );
 
-    //-------------------------------------------------------------------------
 
     /** removes a conditional entry from the format.
      */
     void removeByIndex( [in] long nIndex );
 
-    //-------------------------------------------------------------------------
 
     /** clears all condition entries.
      */
@@ -81,7 +76,6 @@ published interface XSheetConditionalEntries: com::sun::star::container::XIndexA
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

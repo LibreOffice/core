@@ -34,7 +34,6 @@
 
 module com { module sun { module star { module ucb {
 
-//============================================================================
 /** A listener interested in changes to a
     <type scope="com::sun::star::ucb">XRemoteContentProviderSupplier</type>.
 
@@ -44,7 +43,6 @@ module com { module sun { module star { module ucb {
 published interface XRemoteContentProviderChangeListener:
     com::sun::star::lang::XEventListener
 {
-    //------------------------------------------------------------------------
     /** gets called whenever changes to a
         <type scope="com::sun::star::ucb">XRemoteContentProviderSupplier</type>
         occur.

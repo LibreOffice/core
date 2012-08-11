@@ -22,20 +22,17 @@
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/beans/PropertyValue.idl>
 
-//============================================================================
 
  module com {
   module sun {
    module star {
     module frame {
 
-//============================================================================
 /** use <type scope="com::sun::star::document">XExtendedFilterDetection</type> instead of this
     @deprecated
  */
 published interface XExtendedFilterDetection: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** use <member scope="com::sun::star::document">XExtendedFilterDetection::detect()</member> instead of this
         @deprecated
      */

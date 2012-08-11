@@ -23,11 +23,9 @@
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/sheet/TablePageBreakData.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** provides access to page breaks in a sheet.
 
@@ -35,7 +33,6 @@ module com {  module sun {  module star {  module sheet {
  */
 published interface XSheetPageBreak: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** returns a sequence of descriptions of all horizontal page breaks
         on the sheet.
@@ -50,7 +47,6 @@ published interface XSheetPageBreak: com::sun::star::uno::XInterface
      */
     sequence< com::sun::star::sheet::TablePageBreakData > getColumnPageBreaks();
 
-    //-------------------------------------------------------------------------
 
     /** returns a sequence of descriptions of all vertical page breaks
         on the sheet.
@@ -65,7 +61,6 @@ published interface XSheetPageBreak: com::sun::star::uno::XInterface
      */
     sequence< com::sun::star::sheet::TablePageBreakData > getRowPageBreaks();
 
-    //-------------------------------------------------------------------------
 
     /** removes all manual page breaks on the sheet.
      */
@@ -73,7 +68,6 @@ published interface XSheetPageBreak: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

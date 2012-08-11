@@ -41,7 +41,6 @@ struct IntegerSize2D
     /// Amount of space occupied in the x direction.
     long Width;
 
-    //-------------------------------------------------------------------------
 
     /// Amount of space occupied in the y direction.
     long Height;

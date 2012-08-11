@@ -25,11 +25,9 @@
 #include <com/sun/star/sheet/XSheetCellCursor.idl>
 #include <com/sun/star/sheet/XUsedAreaCursor.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** represents a cursor in a spreadsheet.
 
@@ -38,26 +36,22 @@ module com {  module sun {  module star {  module sheet {
  */
 published service SheetCellCursor
 {
-    //-------------------------------------------------------------------------
 
     /** provides common methods to control the position of the cursor.
      */
     service com::sun::star::table::CellCursor;
 
-    //-------------------------------------------------------------------------
 
     /** provides the complete functionality of a cell range in a spreadsheet
         document.
      */
     service com::sun::star::sheet::SheetCellRange;
 
-    //=========================================================================
 
     /** provides advanced methods to control the position of the cursor.
      */
     interface com::sun::star::sheet::XSheetCellCursor;
 
-    //-------------------------------------------------------------------------
 
     /** provides methods to find the used area of the entire sheet.
      */
@@ -65,7 +59,6 @@ published service SheetCellCursor
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

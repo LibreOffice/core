@@ -32,11 +32,9 @@
 #include <com/sun/star/lang/WrappedTargetException.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module beans {
 
-//=============================================================================
 
 /** provides information about and access to the
     a hierarchy of properties from an implementation.
@@ -61,7 +59,6 @@ module com {  module sun {  module star {  module beans {
  */
 published interface XHierarchicalPropertySet: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** retrieve information about the hierarchy of properties
 
@@ -78,7 +75,6 @@ published interface XHierarchicalPropertySet: com::sun::star::uno::XInterface
     com::sun::star::beans::XHierarchicalPropertySetInfo
                 getHierarchicalPropertySetInfo();
 
-    //-------------------------------------------------------------------------
 
     /** sets the value of the property with the specified nested name.
 
@@ -115,7 +111,6 @@ published interface XHierarchicalPropertySet: com::sun::star::uno::XInterface
                     com::sun::star::lang::IllegalArgumentException,
                     com::sun::star::lang::WrappedTargetException );
 
-    //-------------------------------------------------------------------------
 
     /** @returns
                 the value of the property with the specified nested name.
@@ -144,11 +139,9 @@ published interface XHierarchicalPropertySet: com::sun::star::uno::XInterface
                     com::sun::star::lang::IllegalArgumentException,
                     com::sun::star::lang::WrappedTargetException );
 
-    //-------------------------------------------------------------------------
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

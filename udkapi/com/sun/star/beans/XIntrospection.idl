@@ -24,11 +24,9 @@
 #include <com/sun/star/beans/XIntrospectionAccess.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module beans {
 
-//=============================================================================
 
 // DocMerge from xml: interface com::sun::star::beans::XIntrospection
 /** allows the inspection of an object's properties and methods.
@@ -43,7 +41,6 @@
  */
 published interface XIntrospection: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::beans::XIntrospection::inspect
     /** inspects the given object.
@@ -102,7 +99,6 @@ published interface XIntrospection: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

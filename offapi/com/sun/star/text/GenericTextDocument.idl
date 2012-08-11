@@ -52,11 +52,9 @@
 #include <com/sun/star/lang/XMultiServiceFactory.idl>
 #include <com/sun/star/lang/Locale.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module text {
 
-//=============================================================================
 
 /** A text document is a model component which contains text
     structured by paragraphs.
@@ -135,32 +133,27 @@ published service GenericTextDocument
     /** @since OOo 1.1.2
      */
     [optional] interface com::sun::star::util::XNumberFormatsSupplier;
-    //-------------------------------------------------------------------------
 
     /** contains the identifier of the default locale of the document.
      */
     [optional, property] com::sun::star::lang::Locale CharLocale;
 
-    //-------------------------------------------------------------------------
 
     /** contains the count of all characters in the document.
      */
     [optional, readonly, property] long CharacterCount;
 
 
-    //-------------------------------------------------------------------------
 
     /** contains the count of all paragraphs in the document.
      */
     [optional, readonly, property] long ParagraphCount;
 
-    //-------------------------------------------------------------------------
 
     /** contains the count of all words in the document.@see WordSeparator
      */
     [optional, readonly, property] long WordCount;
 
-    //-------------------------------------------------------------------------
 
     /** contains a string that consists of characters that mark the
         separation of words in counting the words in a document.
@@ -173,7 +166,6 @@ published service GenericTextDocument
      */
     [optional, property] string WordSeparator;
 
-        //-------------------------------------------------------------------------
         /** specifies the concordance file taken into account when
          *  creating an index.
          *
@@ -184,14 +176,12 @@ published service GenericTextDocument
          */
         [optional, property] string IndexAutoMarkFileURL;
 
-        //-------------------------------------------------------------------------
         /** specifies if change recording is active.
      *
      *  @since OOo 1.1.2
          */
         [optional, property] boolean RecordChanges;
 
-        //-------------------------------------------------------------------------
         /** specifies the first 4 digit year to be used when years
          *  are given in 2 digits.
          *
@@ -205,7 +195,6 @@ published service GenericTextDocument
         [optional, property] short TwoDigitYear;
 };
 
-//=============================================================================
 
 }; }; }; };
 

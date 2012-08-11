@@ -42,7 +42,6 @@ struct RealPoint2D
     /// The x coordinate of the point.
     double X;
 
-    //-------------------------------------------------------------------------
 
     /// The x coordinate of the point.
     double Y;

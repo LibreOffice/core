@@ -35,7 +35,6 @@ module com { module sun { module star { module rendering {
  */
 interface XIeeeDoubleBitmap : XIeeeDoubleReadOnlyBitmap
 {
-    //-------------------------------------------------------------------------
 
     /** Set raw data of a bitmap.<p>
 
@@ -77,7 +76,6 @@ interface XIeeeDoubleBitmap : XIeeeDoubleReadOnlyBitmap
         raises (com::sun::star::lang::IllegalArgumentException,
                 com::sun::star::lang::IndexOutOfBoundsException);
 
-    //-------------------------------------------------------------------------
 
     /** Set a single pixel of the bitmap with the given color
         value.<p>

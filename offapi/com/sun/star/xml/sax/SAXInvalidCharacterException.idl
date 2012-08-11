@@ -31,11 +31,9 @@
 #include <com/sun/star/xml/sax/SAXException.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module xml {  module sax {
 
-//=============================================================================
 
 /** stores information for locating the error in the original XML document.
 
@@ -46,7 +44,6 @@ published exception SAXInvalidCharacterException: com::sun::star::xml::sax::SAXE
 
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

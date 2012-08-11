@@ -9,11 +9,9 @@
 #include <com/sun/star/chart2/IncrementData.idl>
 #include <com/sun/star/chart/TimeIncrement.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module chart2 {
 
-//=============================================================================
 
 struct ScaleData
 {
@@ -87,7 +85,6 @@ struct ScaleData
     ::com::sun::star::chart::TimeIncrement TimeIncrement;
 };
 
-//=============================================================================
 
 }; }; }; };
 

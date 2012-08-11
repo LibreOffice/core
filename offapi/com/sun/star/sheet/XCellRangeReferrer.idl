@@ -23,11 +23,9 @@
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/table/XCellRange.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** allows direct access to the cells in a named range or to the cells
     which are visible in a view, without the need to get the document
@@ -39,7 +37,6 @@ module com {  module sun {  module star {  module sheet {
  */
 published interface XCellRangeReferrer: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** returns the cell range object that is represented.
      */
@@ -47,7 +44,6 @@ published interface XCellRangeReferrer: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

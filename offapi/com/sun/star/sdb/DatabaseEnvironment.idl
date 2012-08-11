@@ -51,7 +51,6 @@ published service DatabaseEnvironment
                                NumberFormatsSupplier;
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -32,11 +32,9 @@
 #include <com/sun/star/resource/XStringResourceWithStorage.idl>
 
 
-//=============================================================================
 
 module com { module sun { module star { module resource {
 
-//=============================================================================
 
 /** specifies a service providing access to a resource string table implementing the
     <type scope="com::sun::star::resource">XStringResourceWithStorage</type> interface.
@@ -84,7 +82,6 @@ service StringResourceWithStorage : com::sun::star::resource::XStringResourceWit
         raises( ::com::sun::star::lang::IllegalArgumentException );
 };
 
-//=============================================================================
 
 }; }; }; };
 

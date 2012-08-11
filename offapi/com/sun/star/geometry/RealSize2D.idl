@@ -41,7 +41,6 @@ struct RealSize2D
     /// Amount of space occupied in the x direction.
     double Width;
 
-    //-------------------------------------------------------------------------
 
     /// Amount of space occupied in the y direction.
     double Height;

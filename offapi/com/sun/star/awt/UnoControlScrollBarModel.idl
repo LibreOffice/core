@@ -32,11 +32,9 @@
 #include <com/sun/star/util/Color.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module awt {
 
-//=============================================================================
 
 /** specifies the standard model of an <type>UnoControlScrollBar</type>.
  */
@@ -44,7 +42,6 @@ published service UnoControlScrollBarModel
 {
     service com::sun::star::awt::UnoControlModel;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the RGB color to be used for the control.
 
@@ -52,13 +49,11 @@ published service UnoControlScrollBarModel
      */
     [optional, property] com::sun::star::util::Color BackgroundColor;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the increment for a block move.
      */
     [property] long BlockIncrement;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the border style of the control.
 
@@ -70,7 +65,6 @@ published service UnoControlScrollBarModel
      */
     [property] short Border;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the color of the border, if present
 
@@ -81,31 +75,26 @@ published service UnoControlScrollBarModel
      */
     [optional, property] long BorderColor;
 
-    //-------------------------------------------------------------------------
 
     /** determines whether the control is enabled or disabled.
      */
     [property] boolean Enabled;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the help text of the control.
      */
     [property] string HelpText;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the help URL of the control.
      */
     [property] string HelpURL;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the increment for a single line move.
      */
     [property] long LineIncrement;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the scrolling behavior of the control.
 
@@ -118,19 +107,16 @@ published service UnoControlScrollBarModel
      */
     [optional, property] boolean LiveScroll;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the <type>ScrollBarOrientation</type> of the control.
      */
     [property] long Orientation;
 
-    //-------------------------------------------------------------------------
 
     /** specifies that the control will be printed with the document.
      */
     [property] boolean Printable;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the mouse repeat delay, in milliseconds.
 
@@ -144,13 +130,11 @@ published service UnoControlScrollBarModel
      */
     [optional, property] long RepeatDelay;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the scroll value of the control.
      */
     [property] long ScrollValue;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the minimum scroll value of the control.
 
@@ -159,13 +143,11 @@ published service UnoControlScrollBarModel
     */
     [optional, property] long ScrollValueMin;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the maximum scroll value of the control.
      */
     [property] long ScrollValueMax;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the RGB color to be used when painting symbols which are
         part of the control's appearance, such as the arrow buttons.
@@ -174,7 +156,6 @@ published service UnoControlScrollBarModel
      */
     [optional, property] com::sun::star::util::Color SymbolColor;
 
-    //-------------------------------------------------------------------------
 
     /** specifies that the control can be reached with the TAB key.
 
@@ -182,7 +163,6 @@ published service UnoControlScrollBarModel
      */
     [optional, property] boolean Tabstop;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the visible size of the scroll bar.
      */
@@ -190,7 +170,6 @@ published service UnoControlScrollBarModel
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

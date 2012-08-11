@@ -47,7 +47,6 @@
  */
 published interface XPooledConnection: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** return the connection which is pooled
         @returns
@@ -59,7 +58,6 @@ published interface XPooledConnection: com::sun::star::uno::XInterface
         raises (SQLException);
 };
 
-//=============================================================================
 
 }; }; }; };
 

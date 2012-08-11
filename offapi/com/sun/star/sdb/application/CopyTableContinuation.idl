@@ -29,11 +29,9 @@
 #ifndef __com_sun_star_sdb_application_CopyTableContinuation_idl__
 #define __com_sun_star_sdb_application_CopyTableContinuation_idl__
 
-//=============================================================================
 
 module com { module sun { module star { module sdb { module application {
 
-//=============================================================================
 
 /** specifies the possible continuations when copying a table row via a
     <type>CopyTableWizard</type> failed.
@@ -61,11 +59,9 @@ constants CopyTableContinuation
     const short AskUser         = 3;
 };
 
-//=============================================================================
 
 }; }; }; }; };
 
-//=============================================================================
 
 #endif
 

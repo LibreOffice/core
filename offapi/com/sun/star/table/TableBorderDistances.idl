@@ -22,11 +22,9 @@
 
 #include <com/sun/star/table/BorderLine.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module table {
 
-//=============================================================================
 
 /** contains the distance settings of the border lines of all cells in a cell
     range.
@@ -46,43 +44,36 @@ published struct TableBorderDistances
      */
         short TopDistance;
 
-    //-------------------------------------------------------------------------
 
         /** specifies whether the value of <member>TableBorder::TopDistance</member>
         is used.
      */
         boolean IsTopDistanceValid;
-        //-------------------------------------------------------------------------
 
         /** contains the distance between the bottom lines and other contents.
          */
         short BottomDistance;
 
-        //-------------------------------------------------------------------------
 
         /** specifies whether the value of <member>TableBorder::BottomDistance</member>
                 is used.
          */
         boolean IsBottomDistanceValid;
-        //-------------------------------------------------------------------------
 
         /** contains the distance between the left lines and other contents.
          */
         short LeftDistance;
 
-        //-------------------------------------------------------------------------
 
         /** specifies whether the value of <member>TableBorder::LeftDistance</member>
                 is used.
          */
         boolean IsLeftDistanceValid;
-        //-------------------------------------------------------------------------
 
         /** contains the distance between the right lines and other contents.
          */
         short RightDistance;
 
-        //-------------------------------------------------------------------------
 
         /** specifies whether the value of <member>TableBorder::RightDistance</member>
                 is used.
@@ -91,7 +82,6 @@ published struct TableBorderDistances
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

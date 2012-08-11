@@ -26,11 +26,9 @@
 #include <com/sun/star/lang/WrappedTargetException.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module container {
 
-//=============================================================================
 
 /** provides access to the elements of a collection through an
     index.
@@ -40,14 +38,12 @@ module com {  module sun {  module star {  module container {
  */
 published interface XIndexAccess: com::sun::star::container::XElementAccess
 {
-    //-------------------------------------------------------------------------
 
     /** @returns
                 the number of elements in this container.
      */
     long getCount();
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from idl: method com::sun::star::container::XIndexAccess::getByIndex
     /** @returns
@@ -70,7 +66,6 @@ published interface XIndexAccess: com::sun::star::container::XElementAccess
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

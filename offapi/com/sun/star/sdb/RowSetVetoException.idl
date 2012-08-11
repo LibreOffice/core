@@ -32,7 +32,6 @@ published exception RowSetVetoException: com::sun::star::sdbc::SQLException
 {
 };
 
-//=============================================================================
 
 }; }; }; };
 

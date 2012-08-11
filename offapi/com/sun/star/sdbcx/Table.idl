@@ -115,7 +115,6 @@ published service Table
     [optional, readonly, property] string Type;
 };
 
-//=============================================================================
 
 }; }; }; };
 

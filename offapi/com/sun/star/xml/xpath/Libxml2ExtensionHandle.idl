@@ -20,11 +20,9 @@
 #ifndef __com_sun_star_xml_xpath_Libxml2ExtensionHandle_idl__
 #define __com_sun_star_xml_xpath_Libxml2ExtensionHandle_idl__
 
-//=============================================================================
 
  module com {  module sun {  module star {  module xml {  module xpath {
 
-//=============================================================================
 
 struct Libxml2ExtensionHandle
 {
@@ -34,7 +32,6 @@ struct Libxml2ExtensionHandle
     hyper variableData;
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

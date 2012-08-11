@@ -20,11 +20,9 @@
 #define __com_sun_star_drawing_Arrangement_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module drawing {
 
-//=============================================================================
 
 // DocMerge from xml: enum com::sun::star::drawing::Arrangement
 /** With this enumeration you can arrange the relative position of an object
@@ -34,28 +32,24 @@
  */
 published enum Arrangement
 {
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: value com::sun::star::drawing::Arrangement::FRONT
     /** Move this object in front of all other objects.
      */
     FRONT,
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: value com::sun::star::drawing::Arrangement::MORE_FRONT
     /** Move this object one object more to the front.
      */
     MORE_FRONT,
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: value com::sun::star::drawing::Arrangement::MORE_BACK
     /** Move this object one object more to the back.
      */
     MORE_BACK,
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: value com::sun::star::drawing::Arrangement::BACK
     /** Move this object behind all other objects.
@@ -64,7 +58,6 @@ published enum Arrangement
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

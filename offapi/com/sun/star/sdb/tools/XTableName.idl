@@ -33,11 +33,8 @@
 #include <com/sun/star/container/NoSuchElementException.idl>
 #include <com/sun/star/beans/XPropertySet.idl>
 
-//=============================================================================
 module com {  module sun {  module star {  module sdb { module tools {
-//=============================================================================
 
-//-----------------------------------------------------------------------------
 /** allows to manipulate table names.
 
     <p>When, in a database application, dealing with table names, there's many degrees
@@ -139,9 +136,7 @@ interface XTableName
     };
 };
 
-//=============================================================================
 }; }; }; }; };
-//=============================================================================
 
 #endif
 

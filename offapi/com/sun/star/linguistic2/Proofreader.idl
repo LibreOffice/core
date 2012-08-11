@@ -19,17 +19,14 @@
 #ifndef __com_sun_star_linguistic2_Proofreader_idl__
 #define __com_sun_star_linguistic2_Proofreader_idl__
 
-//============================================================================
 
 module com { module sun { module star { module linguistic2 {
         interface XProofreader; };
 }; }; };
 
-//============================================================================
 
 module com { module sun { module star { module linguistic2 {
 
-//============================================================================
 
 /** provides a proofreader (often known as grammar checker) for text
 
@@ -48,7 +45,6 @@ module com { module sun { module star { module linguistic2 {
 
 service Proofreader : XProofreader {};
 
-//============================================================================
 
 }; }; }; };
 

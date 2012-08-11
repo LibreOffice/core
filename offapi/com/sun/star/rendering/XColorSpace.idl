@@ -99,7 +99,6 @@ interface XColorSpace
     sequence< ::com::sun::star::beans::PropertyValue > getProperties();
 
 
-    //=============================================================================
 
     /** Convert to color of another color space.<p>
 

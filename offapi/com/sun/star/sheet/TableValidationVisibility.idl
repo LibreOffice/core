@@ -20,30 +20,25 @@
 #ifndef __com_sun_star_sheet_TableValidationVisibility_idl__
 #define __com_sun_star_sheet_TableValidationVisibility_idl__
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** These constants specify whether and how a list of possible values
     of a cell should be shown.
  */
 constants TableValidationVisibility
 {
-    //-------------------------------------------------------------------------
 
     /** The List is not shown.
      */
     const short INVISIBLE = 0;
 
-    //-------------------------------------------------------------------------
 
     /** The List is shown unsorted.
      */
     const short UNSORTED = 1;
 
-    //-------------------------------------------------------------------------
 
     /** The List is shown sorted ascending.
      */
@@ -51,7 +46,6 @@ constants TableValidationVisibility
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

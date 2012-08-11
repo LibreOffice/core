@@ -36,7 +36,6 @@ published struct SQLErrorEvent: com::sun::star::lang::EventObject
     any Reason;
 };
 
-//=============================================================================
 
 }; }; }; };
 

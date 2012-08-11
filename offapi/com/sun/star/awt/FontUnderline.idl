@@ -20,11 +20,9 @@
 #define __com_sun_star_awt_FontUnderline_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module awt {
 
-//=============================================================================
 
 /** These values are used to specify the kind of underlining.
 
@@ -32,115 +30,96 @@
  */
 published constants FontUnderline
 {
-    //-------------------------------------------------------------------------
 
     /** specifies no underlining.
      */
     const short NONE = 0;
 
-    //-------------------------------------------------------------------------
 
     /** specifies underlining with a single line.
      */
     const short SINGLE = 1;
 
-    //-------------------------------------------------------------------------
 
     /** specifies underlining with a double line.
      */
     const short DOUBLE = 2;
 
-    //-------------------------------------------------------------------------
 
     /** specifies underlining with a dotted line.
      */
     const short DOTTED = 3;
 
-    //-------------------------------------------------------------------------
 
     /** The kind of underlining is not known.
      */
     const short DONTKNOW = 4;
 
-    //-------------------------------------------------------------------------
 
     /** specifies underlining with a dashed line.
      */
     const short DASH = 5;
 
-    //-------------------------------------------------------------------------
 
     /** specifies underlining with long dashes.
      */
     const short LONGDASH = 6;
 
-    //-------------------------------------------------------------------------
 
     /** specifies underlining with a dash and dot sequence.
      */
     const short DASHDOT = 7;
 
-    //-------------------------------------------------------------------------
 
     /** specifies underlining with a dash, dot, dot sequence.
      */
     const short DASHDOTDOT = 8;
 
-    //-------------------------------------------------------------------------
 
     /** specifies underlining with a small wave.
      */
     const short SMALLWAVE = 9;
 
-    //-------------------------------------------------------------------------
 
     /** specifies underlining with a wave.
      */
     const short WAVE = 10;
 
-    //-------------------------------------------------------------------------
 
     /** specifies underlining with a double wave.
      */
     const short DOUBLEWAVE = 11;
 
-    //-------------------------------------------------------------------------
 
     /** specifies underlining with a bold line.
      */
     const short BOLD = 12;
 
-    //-------------------------------------------------------------------------
 
     /** specifies underlining with bold dots.
      */
     const short BOLDDOTTED = 13;
 
-    //-------------------------------------------------------------------------
 
     /** specifies underlining with bold dashes.
      */
     const short BOLDDASH = 14;
 
-    //-------------------------------------------------------------------------
 
     /** specifies underlining with long bold dashes.
      */
     const short BOLDLONGDASH = 15;
 
-    //-------------------------------------------------------------------------
 
     /** specifies underlining with a dash and dot sequence in bold.
      */
     const short BOLDDASHDOT = 16;
 
-    //-------------------------------------------------------------------------
 
     /** specifies underlining with a dash, dot, dot sequence in bold.
      */
     const short BOLDDASHDOTDOT = 17;
 
-    //-------------------------------------------------------------------------
 
     /** specifies underlining with a bold wave.
      */
@@ -148,7 +127,6 @@ published constants FontUnderline
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -32,13 +32,10 @@
 #include <com/sun/star/lang/XEventListener.idl>
 #include <com/sun/star/ui/dialogs/FilePickerEvent.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module ui { module dialogs {
 
-//=============================================================================
 
-//=============================================================================
 /** Interface to be implemented by a FilePicker listener.
 
     <p> The <type>XFilePickerListener</type> interface must be implemented by
@@ -48,7 +45,6 @@ module com { module sun { module star { module ui { module dialogs {
 
 published interface XFilePickerListener: com::sun::star::lang::XEventListener
 {
-    //-------------------------------------------------------------------------
     /** A client receives this event if the file selection within the
         FilePicker service dialog changes.
 
@@ -60,7 +56,6 @@ published interface XFilePickerListener: com::sun::star::lang::XEventListener
     void fileSelectionChanged( [in] FilePickerEvent aEvent );
 
 
-    //-------------------------------------------------------------------------
     /** A client receives this event if the directory selection within the
         FilePicker dialog changes.
 
@@ -71,7 +66,6 @@ published interface XFilePickerListener: com::sun::star::lang::XEventListener
     */
     void directoryChanged( [in] FilePickerEvent aEvent );
 
-    //-------------------------------------------------------------------------
     /** A client receives this event if the F1 key or the help button was
         pressed.
 
@@ -89,7 +83,6 @@ published interface XFilePickerListener: com::sun::star::lang::XEventListener
     */
     string helpRequested( [in] FilePickerEvent aEvent );
 
-    //-------------------------------------------------------------------------
     /** A client receives this event if the state of a control within the
         FilePicker service dialog changes.
 
@@ -100,7 +93,6 @@ published interface XFilePickerListener: com::sun::star::lang::XEventListener
     */
     void controlStateChanged( [in] FilePickerEvent aEvent );
 
-    //-------------------------------------------------------------------------
     /** A client receives this event if the size of the FilePicker dialog
         has changed. If the FilePicker dialog contains a preview the client
         may ask for the new dimension of the preview area.
@@ -108,7 +100,6 @@ published interface XFilePickerListener: com::sun::star::lang::XEventListener
     void dialogSizeChanged( );
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

@@ -39,7 +39,6 @@ published interface XDataDescriptorFactory: com::sun::star::uno::XInterface
     com::sun::star::beans::XPropertySet createDataDescriptor();
 };
 
-//=============================================================================
 
 }; }; }; };
 

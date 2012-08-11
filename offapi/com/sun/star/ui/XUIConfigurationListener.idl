@@ -32,11 +32,9 @@
 #include <com/sun/star/lang/XEventListener.idl>
 #include <com/sun/star/ui/ConfigurationEvent.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module ui {
 
-//=============================================================================
 
 /** supplies information about changes of a user interface
     configuration manager.
@@ -46,7 +44,6 @@ module com { module sun { module star { module ui {
 
 interface XUIConfigurationListener : com::sun::star::lang::XEventListener
 {
-    //-------------------------------------------------------------------------
 
     /** is invoked when a configuration has inserted an user interface element.
 
@@ -55,7 +52,6 @@ interface XUIConfigurationListener : com::sun::star::lang::XEventListener
      */
     [oneway] void elementInserted( [in] ::com::sun::star::ui::ConfigurationEvent Event );
 
-    //-------------------------------------------------------------------------
 
     /** is invoked when a configuration has removed an user interface element.
 
@@ -64,7 +60,6 @@ interface XUIConfigurationListener : com::sun::star::lang::XEventListener
      */
     [oneway] void elementRemoved( [in] ::com::sun::star::ui::ConfigurationEvent Event );
 
-    //-------------------------------------------------------------------------
 
     /** is invoked when a configuration has replaced an user interface element.
 
@@ -76,7 +71,6 @@ interface XUIConfigurationListener : com::sun::star::lang::XEventListener
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

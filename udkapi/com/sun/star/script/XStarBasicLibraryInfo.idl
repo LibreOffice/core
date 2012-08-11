@@ -21,11 +21,9 @@
 
 #include <com/sun/star/container/XNameContainer.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module script {
 
-//=============================================================================
 
 /** Interface representing a library and provides access to its modules
 
@@ -33,12 +31,10 @@
  */
 published interface XStarBasicLibraryInfo: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** returns the library's name
      */
     string getName();
 
-    //-------------------------------------------------------------------------
     /** returns
         the module container giving access to the modules stored in the library.
         The container has to be returned in any case, no matter if the library is
@@ -49,7 +45,6 @@ published interface XStarBasicLibraryInfo: com::sun::star::uno::XInterface
      */
     com::sun::star::container::XNameContainer getModuleContainer();
 
-    //-------------------------------------------------------------------------
     /** returns
         the dialog container giving access to the dialogs stored in the library.
         The container has to be returned in any case, no matter if the library is
@@ -60,14 +55,12 @@ published interface XStarBasicLibraryInfo: com::sun::star::uno::XInterface
      */
     com::sun::star::container::XNameContainer getDialogContainer();
 
-    //-------------------------------------------------------------------------
     /** returns
         the password, if the library is protected with one,
         an empty string otherwise.
      */
     string getPassword();
 
-    //-------------------------------------------------------------------------
     /** returns an
         URL describing the location where the library is stored if the library
         is stored seperately (for example not in the main XML file but in a
@@ -77,7 +70,6 @@ published interface XStarBasicLibraryInfo: com::sun::star::uno::XInterface
      */
     string getExternalSourceURL();
 
-    //-------------------------------------------------------------------------
     /** returns an
         URL describing the location of the library linked to.
 
@@ -89,7 +81,6 @@ published interface XStarBasicLibraryInfo: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

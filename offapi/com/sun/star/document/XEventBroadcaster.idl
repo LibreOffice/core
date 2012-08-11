@@ -22,11 +22,9 @@
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/document/XEventListener.idl>
 
-//=============================================================================
 
 module com {   module sun {   module star {   module document {
 
-//=============================================================================
 /** makes it possible to register listeners which are called whenever
     a document event (see <type>EventObject</type>) occurs
 
@@ -35,7 +33,6 @@ module com {   module sun {   module star {   module document {
  */
 published interface XEventBroadcaster: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** registers the given listener
 
         @param Listener
@@ -43,7 +40,6 @@ published interface XEventBroadcaster: com::sun::star::uno::XInterface
      */
     [oneway] void addEventListener( [in] XEventListener Listener );
 
-    //-------------------------------------------------------------------------
     /** unregisters the given listener
 
         @param Listener
@@ -52,7 +48,6 @@ published interface XEventBroadcaster: com::sun::star::uno::XInterface
     [oneway] void removeEventListener( [in] XEventListener Listener );
 };
 
-//=============================================================================
 
 }; }; }; };
 

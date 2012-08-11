@@ -22,22 +22,18 @@
 #include <com/sun/star/lang/XEventListener.idl>
 #include <com/sun/star/frame/TitleChangedEvent.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module frame {
 
-//=============================================================================
 /** todo document me
  */
 interface XTitleChangeListener : com::sun::star::lang::XEventListener
 {
-    //-------------------------------------------------------------------------
     /** todo document me
      */
     void titleChanged ( [in] TitleChangedEvent aEvent );
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -2,11 +2,9 @@
 #ifndef com_sun_star_chart2_SubIncrement_idl
 #define com_sun_star_chart2_SubIncrement_idl
 
-//=============================================================================
 
 module com {  module sun {  module star {  module chart2 {
 
-//=============================================================================
 
 struct SubIncrement
 {
@@ -21,7 +19,6 @@ struct SubIncrement
     any         PostEquidistant;
 };
 
-//=============================================================================
 
 }; }; }; };
 

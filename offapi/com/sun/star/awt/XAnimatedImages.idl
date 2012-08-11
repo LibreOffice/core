@@ -33,11 +33,9 @@
 #include <com/sun/star/container/XContainer.idl>
 #include <com/sun/star/lang/IllegalArgumentException.idl>
 
-//======================================================================================================================
 
 module com { module sun { module star { module awt {
 
-//======================================================================================================================
 
 /** allows administrating a set of images, to be displayed as animated seres.
 
@@ -168,11 +166,9 @@ interface XAnimatedImages
     interface ::com::sun::star::container::XContainer;
 };
 
-//======================================================================================================================
 
 }; }; }; };
 
-//======================================================================================================================
 
 #endif
 

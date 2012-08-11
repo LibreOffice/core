@@ -19,17 +19,14 @@
 #ifndef __com_sun_star_beans_PropertyAttribute_idl__
 #define __com_sun_star_beans_PropertyAttribute_idl__
 
-//=============================================================================
 
  module com {  module sun {  module star {  module beans {
 
-//=============================================================================
 
 /** These values are used to specify the behavior of a <type>Property</type>.
  */
 published constants PropertyAttribute
 {
-    //-------------------------------------------------------------------------
 
     /** indicates that a property value can be void.
 
@@ -37,7 +34,6 @@ published constants PropertyAttribute
      */
     const short MAYBEVOID = 1;
 
-    //-------------------------------------------------------------------------
 
     /** indicates that a <type>PropertyChangeEvent</type> will be fired
         to all registered <type>XPropertyChangeListener</type>s whenever the
@@ -45,7 +41,6 @@ published constants PropertyAttribute
      */
     const short BOUND = 2;
 
-    //-------------------------------------------------------------------------
 
     /** indicates that a <type>PropertyChangeEvent</type> will be fired
         to all registered <type>XVetoableChangeListener</type>s whenever the
@@ -55,44 +50,37 @@ published constants PropertyAttribute
      */
     const short CONSTRAINED = 4;
 
-    //-------------------------------------------------------------------------
 
     /** indicates that the value of the property is not persistent.
      */
     const short TRANSIENT = 8;
 
-    //-------------------------------------------------------------------------
 
     /** indicates that the value of the property is read-only.
      */
     const short READONLY = 16;
 
-    //-------------------------------------------------------------------------
 
     /** indicates that the value of the property can be ambiguous.
      */
     const short MAYBEAMBIGUOUS = 32;
 
-    //-------------------------------------------------------------------------
 
     /** indicates that the property can be set to default.
      */
     const short MAYBEDEFAULT = 64;
 
-    //-------------------------------------------------------------------------
 
     /** indicates that the property can be removed
         (i.e., by calling <member>XPropertyContainer::removeProperty</member>).
      */
     const short REMOVEABLE = 128;
 
-    //-------------------------------------------------------------------------
     /** @deprecated
         same as <const>PropertyAttribute::REMOVEABLE</const>.
      */
     const short REMOVABLE = 128;
 
-    //-------------------------------------------------------------------------
     /** indicates that a property is optional.
 
         <p>This attribute is not of interest for concrete property
@@ -106,7 +94,6 @@ published constants PropertyAttribute
     const short OPTIONAL = 256;
 };
 
-//=============================================================================
 
 }; }; }; };
 

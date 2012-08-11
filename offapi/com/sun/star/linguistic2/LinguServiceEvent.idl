@@ -21,11 +21,9 @@
 
 #include <com/sun/star/lang/EventObject.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module linguistic2 {
 
-//=============================================================================
 /** represents a linguistic service event.
 
     <P>This type of event may be broadcast by a spell checker or
@@ -43,7 +41,6 @@ module com { module sun { module star { module linguistic2 {
 */
 published struct LinguServiceEvent : com::sun::star::lang::EventObject
 {
-    //-------------------------------------------------------------------------
     /** The type of event.
 
          <p>The value may be combined via logical OR from those values
@@ -53,7 +50,6 @@ published struct LinguServiceEvent : com::sun::star::lang::EventObject
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

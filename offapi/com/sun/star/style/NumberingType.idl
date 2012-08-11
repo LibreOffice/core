@@ -29,187 +29,153 @@
 #define __com_sun_star_style_NumberingType_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module style {
 
-//=============================================================================
 /** These constants are used to specify which numbering style is used.
  */
 published constants NumberingType
 {
-    //-------------------------------------------------------------------------
     /** Numbering is put in upper case letters as "A, B, C, D, ...".
      */
     const short CHARS_UPPER_LETTER = 0;
 
-    //-------------------------------------------------------------------------
     /** Numbering is in lower case letters as "a, b, c, e,...".
      */
     const short CHARS_LOWER_LETTER = 1;
 
-    //-------------------------------------------------------------------------
     /** Numbering is in Roman numbers with upper case letters
                 as "I, II, III, IV, ...".
      */
     const short ROMAN_UPPER = 2;
 
-    //-------------------------------------------------------------------------
     /** Numbering is in Roman numbers with lower case letters
                 as "i, ii, iii, iv, ...".
      */
     const short ROMAN_LOWER = 3;
 
-    //-------------------------------------------------------------------------
     /** Numbering is in Arabic numbers as "1, 2, 3, 4, ...".
      */
     const short ARABIC = 4;
 
-    //-------------------------------------------------------------------------
     /** Numbering is invisible.
      */
     const short NUMBER_NONE = 5;
 
-    //-------------------------------------------------------------------------
     /** Use a character from a specified font.
      */
     const short CHAR_SPECIAL = 6;
 
-    //-------------------------------------------------------------------------
     /** Numbering is specified in the page style.
      */
     const short PAGE_DESCRIPTOR = 7;
 
-    //-------------------------------------------------------------------------
     /** Numbering is displayed as a bitmap graphic.
      */
     const short BITMAP = 8;
 
-    //-------------------------------------------------------------------------
     /** Numbering is put in upper case letters as "A, B, ..., Y, Z,
         AA, BB, CC, ... AAA, ...".
      */
     const short CHARS_UPPER_LETTER_N = 9;
 
-    //-------------------------------------------------------------------------
     /** Numbering is put in lower case letters as "a, b, ..., y, z,
         aa, bb, cc, ... aaa, ...".
      */
     const short CHARS_LOWER_LETTER_N =10;
 
-    //-------------------------------------------------------------------------
     /** A transliteration module will be used to produce numbers in
         Chinese, Japanese, etc.
      */
 
     const short TRANSLITERATION = 11;
 
-    //-------------------------------------------------------------------------
     /** The NativeNumberSupplier service will be called to produce numbers in
         native languages.
      */
     const short NATIVE_NUMBERING = 12;
 
-    //-------------------------------------------------------------------------
     /** Numbering for fullwidth Arabic number
      */
     const short FULLWIDTH_ARABIC = 13;
 
-    //-------------------------------------------------------------------------
     /** Bullet for Circle Number
      */
     const short CIRCLE_NUMBER = 14;
 
-    //-------------------------------------------------------------------------
     /** Numbering for Chinese lower case number
         as "一,二,三..."
      */
     const short NUMBER_LOWER_ZH = 15;
 
-    //-------------------------------------------------------------------------
     /** Numbering for Chinese upper case number
      */
     const short NUMBER_UPPER_ZH = 16;
 
-    //-------------------------------------------------------------------------
     /** Numbering for Traditional Chinese upper case number
      */
     const short NUMBER_UPPER_ZH_TW = 17;
 
-    //-------------------------------------------------------------------------
     /** Bullet for Chinese Tian Gan
         as "甲,乙,丙..."
      */
     const short TIAN_GAN_ZH = 18;
 
-    //-------------------------------------------------------------------------
     /** Bullet for Chinese Di Zi
         as "子,丑,寅..."
      */
     const short DI_ZI_ZH = 19;
 
-    //-------------------------------------------------------------------------
     /** Numbering for Japanese traditional number
      */
     const short NUMBER_TRADITIONAL_JA = 20;
 
-    //-------------------------------------------------------------------------
     /** Bullet for Japanese AIU fullwidth
      */
     const short AIU_FULLWIDTH_JA = 21;
 
-    //-------------------------------------------------------------------------
     /** Bullet for Japanese AIU halfwidth
      */
     const short AIU_HALFWIDTH_JA = 22;
 
-    //-------------------------------------------------------------------------
     /** Bullet for Japanese IROHA fullwidth
      */
     const short IROHA_FULLWIDTH_JA = 23;
 
-    //-------------------------------------------------------------------------
     /** Bullet for Japanese IROHA halfwidth
      */
     const short IROHA_HALFWIDTH_JA = 24;
 
-    //-------------------------------------------------------------------------
     /** Numbering for Korean upper case number
         as "壹,貳,參..."
      */
     const short NUMBER_UPPER_KO = 25;
 
-    //-------------------------------------------------------------------------
     /** Numbering for Korean Hangul number
         as "일,이,삼..."
      */
     const short NUMBER_HANGUL_KO = 26;
 
-    //-------------------------------------------------------------------------
     /** Bullet for Korean Hangul Jamo
         as "ㄱ,ㄴ,ㄷ..."
      */
     const short HANGUL_JAMO_KO = 27;
 
-    //-------------------------------------------------------------------------
     /** Bullet for Korean Hangul Syllable
         as "가,나,다..."
      */
     const short HANGUL_SYLLABLE_KO = 28;
 
-    //-------------------------------------------------------------------------
     /** Bullet for Korean Hangul Circled Jamo
         as "㉠,㉡,㉢..."
      */
     const short HANGUL_CIRCLED_JAMO_KO = 29;
 
-    //-------------------------------------------------------------------------
     /** Bullet for Korean Hangul Circled Syllable
         as "㉮,㉯,㉰..."
      */
     const short HANGUL_CIRCLED_SYLLABLE_KO = 30;
 
-    //-------------------------------------------------------------------------
     /** Numbering in Arabic alphabet letters
         as "أ,ب,ت..."
 
@@ -217,48 +183,41 @@ published constants NumberingType
      */
     const short CHARS_ARABIC = 31;
 
-    //-------------------------------------------------------------------------
     /** Numbering in Thai alphabet letters
 
         @since OOo 1.1.2
      */
     const short CHARS_THAI = 32;
 
-    //-------------------------------------------------------------------------
     /** Numbering in Hebrew alphabet letters
 
         @since OOo 2.0
      */
     const short CHARS_HEBREW = 33;
 
-    //-------------------------------------------------------------------------
     /** Numbering in Nepali alphabet letters
 
         @since OOo 2.0.1
      */
     const short CHARS_NEPALI = 34;
 
-    //-------------------------------------------------------------------------
     /** Numbering in Khmer alphabet letters
 
         @since OOo 2.0.1
      */
     const short CHARS_KHMER = 35;
 
-    //-------------------------------------------------------------------------
     /** Numbering in Lao alphabet letters
 
         @since OOo 2.0.1
       */
     const short CHARS_LAO = 36;
-    //-------------------------------------------------------------------------
     /** Numbering in Tibetan/Dzongkha alphabet letters
 
         @since OOo 2.0.3
       */
     const short CHARS_TIBETAN = 37;
 
-    //-------------------------------------------------------------------------
     /** Numbering in Cyrillic alphabet upper case letters as
         "&#1040;, &#1041;,  &#1042;, &#1043;, ..., &#1070;, &#1071;, &#1040;&#1074;, &#1040;&#1072;, &#1040;&#1074;, ... &#1040;&#1072;&#1072;, &#1040;&#1072;&#1073;".
 
@@ -280,7 +239,6 @@ published constants NumberingType
       */
     const short CHARS_CYRILLIC_UPPER_LETTER_BG = 38;
 
-    //-------------------------------------------------------------------------
     /** Numbering in Cyrillic alphabet lower case letters as
         "&#1072;, &#1073;, &#1074;, &#1075;, ..., &#1102;, &#1103;, &#1072; &#1072;,  &#1072;&#1073;, &#1072;&#1074;, ...  &#1072; &#1072; &#1072;,  &#1072; &#1072;&#1073;".
 
@@ -298,7 +256,6 @@ published constants NumberingType
       */
     const short CHARS_CYRILLIC_LOWER_LETTER_BG = 39;
 
-    //-------------------------------------------------------------------------
     /** Numbering in Cyrillic alphabet upper case letters as
         "&#1040;, &#1041;, ..., &#1070;, &#1071;, &#1040;&#1072;, &#1041;&#1073;, &#1042;&#1074;, ... &#1040;&#1072;&#1072;, ...".
 
@@ -314,7 +271,6 @@ published constants NumberingType
       */
     const short CHARS_CYRILLIC_UPPER_LETTER_N_BG = 40;
 
-     //-------------------------------------------------------------------------
     /** Numbering in Cyrillic alphabet upper case letters as
         "&#1072;, &#1073;, ..., &#1102;, &#1103;, &#1072;&#1072;, &#1073;&#1073;, &#1074;&#1074;, ... &#1072;&#1072;&#1072;, ...".
 
@@ -330,7 +286,6 @@ published constants NumberingType
       */
     const short CHARS_CYRILLIC_LOWER_LETTER_N_BG = 41;
 
-    //-------------------------------------------------------------------------
     /** Numbering in Russian Cyrillic alphabet upper case letters as
         "&#1040;, &#1041;, &#1042;, &#1043;, ..., &#1070;, &#1071;, &#1040;&#1072;, &#1040;&#1073;, &#1040;&#1074;, ... &#1040;&#1072;&#1072;, &#1040;&#1072;&#1073;".
 
@@ -348,7 +303,6 @@ published constants NumberingType
       */
     const short CHARS_CYRILLIC_UPPER_LETTER_RU = 42;
 
-    //-------------------------------------------------------------------------
     /** Numbering in Russian Cyrillic alphabet lower case letters as
         "&#1072;, &#1073;, &#1074;, &#1075;, ..., &#1102;, &#1103;, &#1072;&#1072;, &#1072;&#1073;, &#1072;&#1074;, ... &#1072;&#1072;&#1072;, &#1072;&#1072;&#1073;".
 
@@ -366,7 +320,6 @@ published constants NumberingType
       */
     const short CHARS_CYRILLIC_LOWER_LETTER_RU = 43;
 
-    //-------------------------------------------------------------------------
     /** Numbering in Russian Cyrillic alphabet upper case letters as
         "&#1040;, &#1041;, ..., &#1070;, &#1071;, &#1040;&#1072;, &#1041;&#1073;, &#1042;&#1074;, ... &#1040;&#1072;&#1072;, ...".
 
@@ -382,7 +335,6 @@ published constants NumberingType
       */
     const short CHARS_CYRILLIC_UPPER_LETTER_N_RU = 44;
 
-    //-------------------------------------------------------------------------
     /** Numbering in Russian Cyrillic alphabet upper case letters as
         "&#1072;, &#1073;, ..., &#1102;, &#1103;, &#1072;&#1072;, &#1073;&#1073;, &#1074;&#1074;, ... &#1072;&#1072;&#1072;, ...".
 
@@ -398,21 +350,18 @@ published constants NumberingType
       */
     const short CHARS_CYRILLIC_LOWER_LETTER_N_RU = 45;
 
-    //-------------------------------------------------------------------------
     /** Numbering in Persian alphabet letters (aa, be, pe, te, ...)
 
         @since OOo 2.4
      */
     const short CHARS_PERSIAN = 46;
 
-    //-------------------------------------------------------------------------
     /** Numbering in Myanmar alphabet letters
 
         @since OOo 3.1
      */
     const short CHARS_MYANMAR = 47;
 
-    //-------------------------------------------------------------------------
     /** Numbering in Serbian Cyrillic alphabet upper case letters
 
         @since OOo 3.1
@@ -428,7 +377,6 @@ published constants NumberingType
       */
     const short CHARS_CYRILLIC_UPPER_LETTER_SR = 48;
 
-    //-------------------------------------------------------------------------
     /** Numbering in Russian Serbian alphabet lower case letters
 
         @since OOo 3.1
@@ -444,7 +392,6 @@ published constants NumberingType
       */
     const short CHARS_CYRILLIC_LOWER_LETTER_SR = 49;
 
-    //-------------------------------------------------------------------------
     /** Numbering in Serbian Cyrillic alphabet upper case letters
 
         @since OOo 3.1
@@ -458,7 +405,6 @@ published constants NumberingType
       */
     const short CHARS_CYRILLIC_UPPER_LETTER_N_SR = 50;
 
-    //-------------------------------------------------------------------------
     /** Numbering in Serbian Cyrillic alphabet upper case letters
 
         @since OOo 3.1
@@ -472,14 +418,12 @@ published constants NumberingType
       */
     const short CHARS_CYRILLIC_LOWER_LETTER_N_SR = 51;
 
-    //-------------------------------------------------------------------------
     /** Numbering in Greek alphabet upper case letters
 
         @since LibreOffice 3.3
      */
     const short CHARS_GREEK_UPPER_LETTER = 52;
 
-    //-------------------------------------------------------------------------
     /** Numbering in Greek alphabet lower case letters
 
         @since LibreOffice 3.3
@@ -487,14 +431,12 @@ published constants NumberingType
     const short CHARS_GREEK_LOWER_LETTER = 53;
 
 
-    //-------------------------------------------------------------------------
     /** Numbering in Arabic alphabet using abjad sequence
 
         @since LibreOffice 3.5
      */
     const short CHARS_ARABIC_ABJAD = 54;
 
-    //-------------------------------------------------------------------------
     /** Numbering in Persian words
 
         @since LibreOffice 3.5
@@ -503,7 +445,6 @@ published constants NumberingType
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

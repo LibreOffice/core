@@ -33,37 +33,31 @@
 #include <com/sun/star/drawing/PointSequenceSequence.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module drawing {
 
-//=============================================================================
 
 /** This service describes a poly-polygon.
     <p>A poly-polygon consists of multiple polygons combined in one.</p>
  */
 published service PolyPolygonDescriptor
 {
-    //-------------------------------------------------------------------------
 
     /** This is the type of polygon.
      */
     [readonly, property] com::sun::star::drawing::PolygonKind PolygonKind;
 
-    //-------------------------------------------------------------------------
 
     /** These are the reference points for this polygon.
      */
     [property] com::sun::star::drawing::PointSequenceSequence PolyPolygon;
 
-    //-------------------------------------------------------------------------
 
     /** These are the untransformed points of this polygon.
      */
     [property] com::sun::star::drawing::PointSequenceSequence Geometry;
 };
 
-//=============================================================================
 
 }; }; }; };
 

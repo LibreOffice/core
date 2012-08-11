@@ -29,52 +29,44 @@ enum ZoomLevel
      */
     NOT_AVAILABLE,
 
-    //-------------------------------------------------------------------------
 
     /** specifies that the video should be displayed with
         its original size
      */
     ORIGINAL,
 
-    //-------------------------------------------------------------------------
 
     /** specifies that the video should be zoomed to window size
      */
     FIT_TO_WINDOW,
 
-    //-------------------------------------------------------------------------
 
     /** specifies that the video should be zoomed to window size
         with using a fixed aspect ratio
      */
     FIT_TO_WINDOW_FIXED_ASPECT,
 
-    //-------------------------------------------------------------------------
 
     /** specifies that the video should be displayed in fullscreen mode,
         if available
      */
     FULLSCREEN,
 
-    //-------------------------------------------------------------------------
 
     /** specifies that the video should be zoomed to a factor of 1:4
      */
     ZOOM_1_TO_4,
 
-    //-------------------------------------------------------------------------
 
     /** specifies that the video should be zoomed to a factor of 1:2
      */
     ZOOM_1_TO_2,
 
-    //-------------------------------------------------------------------------
 
     /** specifies that the video should be zoomed to a factor of 2:1
      */
     ZOOM_2_TO_1,
 
-    //-------------------------------------------------------------------------
 
     /** specifies that the video should be zoomed to a factor of 4:1
      */

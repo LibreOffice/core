@@ -39,11 +39,9 @@
 #include <com/sun/star/sheet/XExternalSheetName.idl>
 #include <com/sun/star/util/Color.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** represents a complete spreadsheet in a spreadsheet document.
 
@@ -54,102 +52,85 @@ module com {  module sun {  module star {  module sheet {
  */
 service Spreadsheet
 {
-    //-------------------------------------------------------------------------
 
     /** provides functionality for cell range handling.
      */
     service com::sun::star::sheet::SheetCellRange;
 
-    //=========================================================================
 
     service com::sun::star::sheet::Scenario;
 
-    //=========================================================================
 
     /** provides methods to create a cell cursor.
      */
     interface com::sun::star::sheet::XSpreadsheet;
 
-    //-------------------------------------------------------------------------
 
     /** provides accessing the spreadsheet name.
      */
     interface com::sun::star::container::XNamed;
 
-    //-------------------------------------------------------------------------
 
     /** provides methods to protect and unprotect the sheet contents.
      */
     interface com::sun::star::util::XProtectable;
 
-    //-------------------------------------------------------------------------
 
     /** provides access to the collection of DataPilot tables.
      */
     interface com::sun::star::sheet::XDataPilotTablesSupplier;
 
-    //-------------------------------------------------------------------------
 
     /** provides access to the collection of scenarios.
      */
     interface com::sun::star::sheet::XScenariosSupplier;
 
-        //-------------------------------------------------------------------------
 
     /** provides access to the collection of annotations.
      */
     interface com::sun::star::sheet::XSheetAnnotationsSupplier;
 
-    //-------------------------------------------------------------------------
 
     /** provides access to the draw page of this spreadsheet.
      */
     interface com::sun::star::drawing::XDrawPageSupplier;
 
-    //-------------------------------------------------------------------------
 
     /** provides access to the collection of chart objects.
      */
     interface com::sun::star::table::XTableChartsSupplier;
 
-    //-------------------------------------------------------------------------
 
     /** provides methods to move cell ranges inside the spreadsheet or to
         other spreadsheets in this document.
      */
     interface com::sun::star::sheet::XCellRangeMovement;
 
-    //-------------------------------------------------------------------------
 
     /** provides access to the print area settings of this sheet.
      */
     interface com::sun::star::sheet::XPrintAreas;
 
-    //-------------------------------------------------------------------------
 
     /** provides access to the page breaks of this sheet.
      */
     interface com::sun::star::sheet::XSheetPageBreak;
 
-    //-------------------------------------------------------------------------
 
     /** provides access to row and column outline settings.
      */
     interface com::sun::star::sheet::XSheetOutline;
 
-    //-------------------------------------------------------------------------
 
     /** provides access to the auditing (detective) functionality.
      */
     interface com::sun::star::sheet::XSheetAuditing;
 
-    //-------------------------------------------------------------------------
 
     /** provides methods for a linked sheet.
      */
     interface com::sun::star::sheet::XSheetLinkable;
 
-    //-------------------------------------------------------------------------
 
     /** provides a method to set an external name at the sheet.
 
@@ -157,19 +138,16 @@ service Spreadsheet
      */
     [optional] interface com::sun::star::sheet::XExternalSheetName;
 
-    //=========================================================================
 
     /** specifies if the sheet is visible.
      */
     [property] boolean IsVisible;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the page style of the sheet.
      */
     [property] string PageStyle;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the direction of the columns in the spreadsheet.
 
@@ -182,7 +160,6 @@ service Spreadsheet
      */
     [optional, property] short TableLayout;
 
-    //-------------------------------------------------------------------------
 
     /** specifies whether the sheet has an automatic print area.
 
@@ -212,7 +189,6 @@ service Spreadsheet
     [optional, property] com::sun::star::util::Color TabColor;
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -20,11 +20,9 @@
 #define __com_sun_star_reflection_ParamMode_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module reflection {
 
-//=============================================================================
 
 /** The parameter mode denotes the transfer between caller and callee
     of a method.
@@ -45,7 +43,6 @@ published enum ParamMode
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

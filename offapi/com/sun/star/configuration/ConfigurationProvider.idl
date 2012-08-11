@@ -31,11 +31,9 @@
 #include <com/sun/star/lang/XMultiServiceFactory.idl>
 #include <com/sun/star/lang/XComponent.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module configuration {
 
-//=============================================================================
 /** manages one, or more, complete sets of configuration data and serves as a
  factory for objects that provide access to a subset of the configuration.
 
@@ -238,7 +236,6 @@ published service ConfigurationProvider
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

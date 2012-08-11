@@ -37,11 +37,9 @@
 #include <com/sun/star/xml/sax/XLocator.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module xml {  module sax {
 
-//=============================================================================
 
 /** receives notification of sax document events from a
     <type>XFastParser</type>.
@@ -50,7 +48,6 @@ module com {  module sun {  module star {  module xml {  module sax {
  */
 interface XFastContextHandler: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** receives notification of the beginning of an element .
 
@@ -72,7 +69,6 @@ interface XFastContextHandler: com::sun::star::uno::XInterface
     void startFastElement( [in] long Element, [in] XFastAttributeList Attribs )
             raises( com::sun::star::xml::sax::SAXException );
 
-    //-------------------------------------------------------------------------
 
     /** receives notification of the beginning of an unknown element .
 
@@ -87,7 +83,6 @@ interface XFastContextHandler: com::sun::star::uno::XInterface
     void startUnknownElement( [in] string Namespace, [in] string Name, [in] XFastAttributeList Attribs )
             raises( com::sun::star::xml::sax::SAXException );
 
-    //-------------------------------------------------------------------------
 
     /** receives notification of the end of an known element.
         @see startFastElement
@@ -95,7 +90,6 @@ interface XFastContextHandler: com::sun::star::uno::XInterface
     void endFastElement( [in] long Element )
             raises( com::sun::star::xml::sax::SAXException );
 
-    //-------------------------------------------------------------------------
 
     /** receives notification of the end of an known element.
         @see startUnknownElement
@@ -103,7 +97,6 @@ interface XFastContextHandler: com::sun::star::uno::XInterface
     void endUnknownElement( [in] string Namespace, [in] string Name )
             raises( com::sun::star::xml::sax::SAXException );
 
-    //-------------------------------------------------------------------------
 
     /** receives notification of the beginning of a known child element.
 
@@ -124,7 +117,6 @@ interface XFastContextHandler: com::sun::star::uno::XInterface
     XFastContextHandler createFastChildContext( [in] long Element, [in] XFastAttributeList Attribs )
             raises( com::sun::star::xml::sax::SAXException );
 
-    //-------------------------------------------------------------------------
 
     /** receives notification of the beginning of a unknown child element .
 
@@ -139,7 +131,6 @@ interface XFastContextHandler: com::sun::star::uno::XInterface
     XFastContextHandler createUnknownChildContext( [in] string Namespace, [in] string Name, [in] XFastAttributeList Attribs )
             raises( com::sun::star::xml::sax::SAXException );
 
-    //-------------------------------------------------------------------------
 
     /** receives notification of character data.
      */
@@ -147,7 +138,6 @@ interface XFastContextHandler: com::sun::star::uno::XInterface
             raises( com::sun::star::xml::sax::SAXException );
   };
 
-//=============================================================================
 
 }; }; }; }; };
 

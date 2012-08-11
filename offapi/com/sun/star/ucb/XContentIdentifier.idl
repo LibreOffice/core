@@ -31,11 +31,9 @@
 #include <com/sun/star/uno/XInterface.idl>
 
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** An identifier for contents.
 
      @version  1.0
@@ -44,7 +42,6 @@ module com { module sun { module star { module ucb {
 */
 published interface XContentIdentifier: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** returns the content identifier string.
 
         @returns
@@ -63,7 +60,6 @@ published interface XContentIdentifier: com::sun::star::uno::XInterface
     */
     string getContentIdentifier();
 
-    //-------------------------------------------------------------------------
     /** returns the content provider scheme string.
 
           <p>This string will   be calculated from the content identifier string
@@ -80,7 +76,6 @@ published interface XContentIdentifier: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

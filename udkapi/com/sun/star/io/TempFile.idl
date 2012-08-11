@@ -22,15 +22,12 @@
 #include <com/sun/star/io/XTempFile.idl>
 
 
-//=========================================================================
 module com { module sun { module star { module io {
 
-//========================================================================
 /** This service allows to get access to temp files.
  */
 service TempFile : XTempFile;
 
-//=========================================================================
 
 }; }; }; };
 

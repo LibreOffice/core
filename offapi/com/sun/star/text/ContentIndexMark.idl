@@ -23,11 +23,9 @@
 #include <com/sun/star/text/BaseIndexMark.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module text {
 
-//=============================================================================
 
 // DocMerge from xml: service com::sun::star::text::DocumentIndexMark
 /** is a <type>TextRange</type> which is explicitly marked
@@ -39,14 +37,12 @@ published service ContentIndexMark
 
     service com::sun::star::text::BaseIndexMark;
 
-    //-------------------------------------------------------------------------
     /** contains the level into which the index mark will be inserted into the content index.
      */
     [property] short Level;
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

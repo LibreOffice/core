@@ -31,11 +31,9 @@
 #include <com/sun/star/beans/XPropertySet.idl>
 #include <com/sun/star/i18n/XForbiddenCharacters.idl>
 
-//=============================================================================
 
 module com {   module sun {   module star {   module document {
 
-//=============================================================================
 
 /** describes properties that apply to the whole document of any
     application.
@@ -54,14 +52,12 @@ published service Settings
      */
     interface com::sun::star::beans::XPropertySet;
 
-    //-------------------------------------------------------------------------
 
     // Note: These settings are global.  However there is a note at
     // every property that shows which application currently makes use
     // of it.
 
     // Writer and Draw/Impress and Calc
-    //-------------------------------------------------------------------------
     /** gives access to the set of forbidden characters.
 
         @return the
@@ -72,7 +68,6 @@ published service Settings
     [optional, property] com::sun::star::i18n::XForbiddenCharacters ForbiddenCharacters;
 
     // Writer and Calc
-    //-------------------------------------------------------------------------
     /** specifies the update mode for links when loading text documents.
 
         <p>For supported values see the constants group
@@ -81,13 +76,11 @@ published service Settings
     [optional, property] short LinkUpdateMode;
 
     // Writer and Draw/Impress and Calc
-    //-------------------------------------------------------------------------
     /** printer used by the document.
      */
     [property] string PrinterName;
 
     // Writer and Draw/Impress and Calc
-    //-------------------------------------------------------------------------
     /** platform and driver dependent printer setup data.
 
         <p>This property serves to capture the current printer setup
@@ -99,7 +92,6 @@ published service Settings
     [property] sequence< byte > PrinterSetup;
 
     // Writer and Draw/Impress and Calc
-    //-------------------------------------------------------------------------
     /** specifies if kerning is applied to Asian punctuation.
 
         <p>Applies only if kerning is enabled.</p>
@@ -107,7 +99,6 @@ published service Settings
     [optional, property] boolean IsKernAsianPunctuation;
 
     // Writer and Draw/Impress and Calc
-    //-------------------------------------------------------------------------
     /** specifies the compression (character spacing) type used for
         Asian characters.
 
@@ -116,21 +107,18 @@ published service Settings
     [optional, property] short CharacterCompressionType;
 
     // Writer and Draw/Impress and Calc
-    //-------------------------------------------------------------------------
     /** specifies if the user-specific settings saved within a
         document should be loaded with the document.
     */
     [optional, property] boolean ApplyUserData;
 
     // Writer and Calc
-    //-------------------------------------------------------------------------
     /** specifies if a new version is created if a document has
         been modified and you want to close it.
     */
     [optional, property] boolean SaveVersionOnClose;
 
     // Writer and Draw/Impress and Calc
-    //-------------------------------------------------------------------------
     /** specifies if the document should be updated when the
         template it was created from changes.
 
@@ -139,13 +127,11 @@ published service Settings
     [optional, property] boolean UpdateFromTemplate;
 
     // Writer
-    //-------------------------------------------------------------------------
     /** specifies if fields in text documents are updated automatically.
      */
     [optional, property] boolean FieldAutoUpdate;
 
     // Writer
-    //-------------------------------------------------------------------------
     /** The name of the globally registered
         <type scope="com::sun::star::sdb">DataSource</type>
         from which the current data is taken.
@@ -156,14 +142,12 @@ published service Settings
     [optional, property] string CurrentDatabaseDataSource;
 
     // Writer
-    //-------------------------------------------------------------------------
     /** a string value, specifying the name of the object displayed
         currently (or the SQL statement used).
     */
     [optional, property] string CurrentDatabaseCommand;
 
     // Writer
-    //-------------------------------------------------------------------------
     // Note: What is the property DataTableName?  Is this Writer-specific?
     /** determines the interpretation of the property DataTableName.
 
@@ -172,13 +156,11 @@ published service Settings
     [optional, property] long CurrentDatabaseCommandType;
 
     // Draw and Impress
-    //-------------------------------------------------------------------------
     /**
      */
     [optional, property] long DefaultTabStop;
 
     // Draw and Impress
-    //-------------------------------------------------------------------------
     /** determines if the document will be printed as a booklet
         (brochure), i.e., two document pages are put together on one
         physical page, such that you can fold the print result and get
@@ -191,7 +173,6 @@ published service Settings
     [optional, property] boolean IsPrintBooklet;
 
     // Draw and Impress
-    //-------------------------------------------------------------------------
     /** is only effective, if <member>IsPrintBooklet</member> is
         <TRUE/>.  If this property is also <TRUE/>, only the fronts of
         the pages of your booklet are printed.
@@ -202,7 +183,6 @@ published service Settings
     [optional, property] boolean IsPrintBookletFront;
 
     // Draw and Impress
-    //-------------------------------------------------------------------------
     /** is only effective, if <member>IsPrintBooklet</member> is
         <TRUE/>.  If this property is also <TRUE/>, only the backs of
         the pages of your booklet are printed.
@@ -213,14 +193,12 @@ published service Settings
     [optional, property] boolean IsPrintBookletBack;
 
     // Draw and Impress
-    //-------------------------------------------------------------------------
     // Note: Define a constant group for that?
     /**
      */
     [optional, property] long PrintQuality;
 
     // Draw and Impress
-    //-------------------------------------------------------------------------
     /** contains the URL that points to a color table (file extension
         .soc) that will be used for showing a palette in dialogs using
         colors.
@@ -228,43 +206,36 @@ published service Settings
     [optional, property] string ColorTableURL;
 
     // Draw and Impress
-    //-------------------------------------------------------------------------
     /**
      */
     [optional, property] string DashTableURL;
 
     // Draw and Impress
-    //-------------------------------------------------------------------------
     /**
      */
     [optional, property] string LineEndTableURL;
 
     // Draw and Impress
-    //-------------------------------------------------------------------------
     /**
      */
     [optional, property] string HatchTableURL;
 
     // Draw and Impress
-    //-------------------------------------------------------------------------
     /**
      */
     [optional, property] string GradientTableURL;
 
     // Draw and Impress
-    //-------------------------------------------------------------------------
     /**
      */
     [optional, property] string BitmapTableURL;
 
     // Calc
-    //-------------------------------------------------------------------------
     /**
      */
     [optional, property] boolean AutoCalculate;
 
     // Writer, later others
-    //-------------------------------------------------------------------------
     /** forbid use of printer metrics for layout
 
         <p>For supported values see the constants group
@@ -273,7 +244,6 @@ published service Settings
     [optional, property] short PrinterIndependentLayout;
 
     // Writer, maybe later other applications, too
-    //-------------------------------------------------------------------------
     /** layout engine should add value of a Font's "external leading"
      * attribute to the line spacing.
      */
@@ -281,7 +251,6 @@ published service Settings
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

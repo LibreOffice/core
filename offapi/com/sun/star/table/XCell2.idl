@@ -32,11 +32,9 @@
 
 #include <com/sun/star/table/XCell.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module table {
 
-//=============================================================================
 
 /** extends XCell methods to access the contents of a cell in a table.
 
@@ -52,7 +50,6 @@ interface XCell2: com::sun::star::table::XCell
       */
     void setFormulaResult( [in] double nValue );
 
-    //-------------------------------------------------------------------------
 
     /** sets a formula string into the cell.
 
@@ -64,7 +61,6 @@ interface XCell2: com::sun::star::table::XCell
     void setFormulaString( [in] string aFormula );
 };
 
-//=============================================================================
 
 }; }; }; };
 

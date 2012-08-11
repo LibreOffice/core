@@ -22,11 +22,9 @@
 #include <com/sun/star/presentation/Presentation.idl>
 #include <com/sun/star/presentation/XPresentation2.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module presentation {
 
-//=============================================================================
 
 /** enhances the Presentation service to give access to a <type>XPresentation2</type> interface.
 
@@ -42,10 +40,8 @@ service Presentation2
      */
     interface com::sun::star::presentation::XPresentation2;
 
-    //-------------------------------------------------------------------------
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -24,11 +24,9 @@
 #include <com/sun/star/i18n/XIndexEntrySupplier.idl>
 #include <com/sun/star/i18n/XExtendedIndexEntrySupplier.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module i18n {
 
-//=============================================================================
 
 /// Supplier for creating index entries in a "table of alphabetical index"
 published service IndexEntrySupplier
@@ -39,7 +37,6 @@ published service IndexEntrySupplier
     [optional] interface com::sun::star::i18n::XExtendedIndexEntrySupplier;
 };
 
-//=============================================================================
 }; }; }; };
 
 #endif

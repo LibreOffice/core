@@ -21,18 +21,15 @@
 
 #include <com/sun/star/uno/XInterface.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module drawing {
 
-//=============================================================================
 
 
 /**
  */
 interface XEnhancedCustomShapeDefaulter: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /**
 
@@ -278,7 +275,6 @@ interface XEnhancedCustomShapeDefaulter: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

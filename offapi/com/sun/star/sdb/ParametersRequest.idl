@@ -24,11 +24,9 @@
 #include <com/sun/star/container/XIndexAccess.idl>
 #include <com/sun/star/sdbc/XConnection.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module sdb {
 
-//=============================================================================
 
 /** an error specifying the lack of parameters values
     <p>
@@ -54,7 +52,6 @@ published exception ParametersRequest: com::sun::star::task::ClassifiedInteracti
     com::sun::star::sdbc::XConnection       Connection;
 };
 
-//=============================================================================
 
 }; }; }; };
 

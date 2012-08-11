@@ -20,47 +20,37 @@
 #define __com_sun_star_drawing_EscapeDirection_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module drawing {
 
-//=============================================================================
 
 /** This enumeration defines the escape direction a connector takes on
     a glue point.
  */
 published enum EscapeDirection
 {
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR EscapeDirection::  SMART,
     SMART,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR EscapeDirection::  LEFT,
     LEFT,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR EscapeDirection::  RIGHT,
     RIGHT,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR EscapeDirection::  UP,
     UP,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR EscapeDirection::  DOWN
     DOWN,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR EscapeDirection::  HORIZONTAL
     HORIZONTAL,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR EscapeDirection::  VERTICAL
     VERTICAL
 };
 
-//=============================================================================
 
 }; }; }; };
 

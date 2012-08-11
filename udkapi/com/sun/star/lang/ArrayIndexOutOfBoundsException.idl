@@ -22,11 +22,9 @@
 #include <com/sun/star/lang/IndexOutOfBoundsException.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module lang {
 
-//=============================================================================
 
 // DocMerge from xml: exception com::sun::star::lang::ArrayIndexOutOfBoundsException
 /** This exception is thrown to indicate that an array has been
@@ -39,7 +37,6 @@ published exception ArrayIndexOutOfBoundsException: com::sun::star::lang::IndexO
 {
 };
 
-//=============================================================================
 
 }; }; }; };
 

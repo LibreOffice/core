@@ -106,7 +106,6 @@ service JDBCConnectionProperties
     [optional, property] sequence< any > TypeInfoSettings;
 };
 
-//=============================================================================
 
 }; }; }; };
 

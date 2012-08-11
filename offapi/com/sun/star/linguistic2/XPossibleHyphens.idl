@@ -32,11 +32,9 @@
 #include <com/sun/star/lang/Locale.idl>
 
 
-//=============================================================================
 
 module com { module sun { module star { module linguistic2 {
 
-//=============================================================================
 /** Gives information about a word's possible hyphenation points.
 
      <P>Example: In German pre-spelling-reform you may have the following:
@@ -52,7 +50,6 @@ module com { module sun { module star { module linguistic2 {
 */
 published interface XPossibleHyphens : com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /**
          @returns
              the word for which the information of possible hyphenation
@@ -60,7 +57,6 @@ published interface XPossibleHyphens : com::sun::star::uno::XInterface
     */
     string getWord();
 
-    //-------------------------------------------------------------------------
     /** @returns
             the language of the hyphenated word.
 
@@ -68,7 +64,6 @@ published interface XPossibleHyphens : com::sun::star::uno::XInterface
     */
     com::sun::star::lang::Locale getLocale();
 
-    //-------------------------------------------------------------------------
     /**
          @returns
              a string depicting the word with all hyphen positions
@@ -78,7 +73,6 @@ published interface XPossibleHyphens : com::sun::star::uno::XInterface
     */
     string getPossibleHyphens();
 
-    //-------------------------------------------------------------------------
     /**
          @returns
              an ascending sequence of numbers where each number is an offset
@@ -91,7 +85,6 @@ published interface XPossibleHyphens : com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

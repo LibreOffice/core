@@ -20,11 +20,9 @@
 #define __com_sun_star_task_InteractionClassification_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module task {
 
-//=============================================================================
 
 // DocMerge from xml: enum com::sun::star::task::InteractionClassification
 /** A classification of interaction requests.
@@ -34,21 +32,18 @@
  */
 published enum InteractionClassification
 {
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: value com::sun::star::task::InteractionClassification::ERROR
     /** An error.
      */
     ERROR,
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: value com::sun::star::task::InteractionClassification::WARNING
     /** A warning, less severe than an error.
      */
     WARNING,
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: value com::sun::star::task::InteractionClassification::INFO
     /** Some information for the client/user (which will typically lead to the
@@ -58,7 +53,6 @@ published enum InteractionClassification
      */
     INFO,
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: value com::sun::star::task::InteractionClassification::QUERY
     /** A query for the client/user (which will typically lead to the
@@ -71,7 +65,6 @@ published enum InteractionClassification
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

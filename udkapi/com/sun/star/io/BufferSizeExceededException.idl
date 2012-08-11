@@ -22,11 +22,9 @@
 #include <com/sun/star/io/IOException.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module io {
 
-//=============================================================================
 
 // DocMerge from xml: exception com::sun::star::io::BufferSizeExceededException
 /** is thrown by instances which need to buffer data.
@@ -40,7 +38,6 @@ published exception BufferSizeExceededException: com::sun::star::io::IOException
 {
 };
 
-//=============================================================================
 
 }; }; }; };
 

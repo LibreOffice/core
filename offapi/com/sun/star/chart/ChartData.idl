@@ -22,11 +22,9 @@
 #include <com/sun/star/chart/XChartData.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module chart {
 
-//=============================================================================
 
 /** must be supported by every component that wants to provide data
    for a chart
@@ -36,7 +34,6 @@ published service ChartData
     interface com::sun::star::chart::XChartData;
 };
 
-//=============================================================================
 
 }; }; }; };
 

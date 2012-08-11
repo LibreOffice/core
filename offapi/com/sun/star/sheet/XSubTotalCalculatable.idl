@@ -23,11 +23,9 @@
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/sheet/XSubTotalDescriptor.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** contains methods to handle a subtotal descriptor.
 
@@ -39,7 +37,6 @@ module com {  module sun {  module star {  module sheet {
  */
 published interface XSubTotalCalculatable: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** creates a subtotal descriptor.
 
@@ -51,7 +48,6 @@ published interface XSubTotalCalculatable: com::sun::star::uno::XInterface
     com::sun::star::sheet::XSubTotalDescriptor createSubTotalDescriptor(
             [in] boolean bEmpty );
 
-    //-------------------------------------------------------------------------
 
     /** creates subtotals using the settings of the passed descriptor.
 
@@ -66,7 +62,6 @@ published interface XSubTotalCalculatable: com::sun::star::uno::XInterface
             [in] com::sun::star::sheet::XSubTotalDescriptor xDescriptor,
             [in] boolean bReplace );
 
-    //-------------------------------------------------------------------------
 
     /** removes the subtotals from the current object.
      */
@@ -74,7 +69,6 @@ published interface XSubTotalCalculatable: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

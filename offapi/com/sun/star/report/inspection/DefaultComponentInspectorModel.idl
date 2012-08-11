@@ -31,11 +31,9 @@
 #include <com/sun/star/inspection/XObjectInspectorModel.idl>
 #include <com/sun/star/lang/IllegalArgumentException.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module report { module inspection {
 
-//=============================================================================
 
 /** implements a <type scope="com::sun::star::inspection">XObjectInspectorModel</type> for
     inspecting form components, in particular all components implementing the <type>ReportComponent</type>
@@ -86,7 +84,6 @@ service DefaultComponentInspectorModel : com::sun::star::inspection::XObjectInsp
         raises ( ::com::sun::star::lang::IllegalArgumentException );
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

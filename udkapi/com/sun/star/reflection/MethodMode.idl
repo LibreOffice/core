@@ -20,11 +20,9 @@
 #define __com_sun_star_reflection_MethodMode_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module reflection {
 
-//=============================================================================
 
 /** MethodMode denotes the mode in which method calls are run, i.e. either oneway or
     twoway.  Mode oneway denotes that a call may be run asynchronously
@@ -41,7 +39,6 @@ published enum MethodMode
     TWOWAY
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -21,34 +21,27 @@
 
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module style {
 
-//=============================================================================
 
 /** contains settings for the style of paragraphs with complex text layout.
  */
 published service ParagraphPropertiesAsian
 {
-        //-------------------------------------------------------------------------
         /** determines if hanging punctuation is allowed.
          */
         [property] boolean ParaIsHangingPunctuation;
-        //-------------------------------------------------------------------------
         /** determines if a distance between Asian text, western text or complex text is set.
          */
         [property] boolean ParaIsCharacterDistance;
-        //-------------------------------------------------------------------------
         /** determines if the rules for forbidden characters at the start or end
             of text lines are considered.
          */
         [property] boolean ParaIsForbiddenRules;
 
-        //-------------------------------------------------------------------------
 };
 
-//=============================================================================
 
 }; }; }; };
 

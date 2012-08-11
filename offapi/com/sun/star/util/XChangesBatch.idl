@@ -35,11 +35,9 @@
 #include <com/sun/star/util/ChangesSet.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module util {
 
-//=============================================================================
 /** this interface enables applying a set of changes in one batch transaction.
 
     <p>An object implementing this interface allows other interfaces to change
@@ -55,7 +53,6 @@ module com {  module sun {  module star {  module util {
  */
 published interface XChangesBatch: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** commits any pending changes.
 
         <p>The exact action depends on the concrete service.  </p>
@@ -63,18 +60,15 @@ published interface XChangesBatch: com::sun::star::uno::XInterface
     void commitChanges()
             raises( com::sun::star::lang::WrappedTargetException );
 
-    //-------------------------------------------------------------------------
     /** checks whether this object has any pending changes that can be committed.
      */
     boolean hasPendingChanges();
 
-    //-------------------------------------------------------------------------
     /** queries for any pending changes that can be committed.
      */
     ChangesSet getPendingChanges();
 };
 
-//=============================================================================
 
 }; }; }; };
 

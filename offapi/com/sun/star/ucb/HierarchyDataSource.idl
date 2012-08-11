@@ -31,11 +31,9 @@
 #include <com/sun/star/lang/XMultiServiceFactory.idl>
 #include <com/sun/star/lang/XComponent.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** manages one or more complete sets of hierarchy data and serves as a factory
     for objects that provide access to a subset of the data.
 
@@ -48,7 +46,6 @@ module com { module sun { module star { module ucb {
 */
 published service HierarchyDataSource
 {
-    //-------------------------------------------------------------------------
     /** allows creating access objects for specific views such as subsets and
         fragments of the hierarchy data.
 
@@ -102,14 +99,12 @@ published service HierarchyDataSource
      */
     interface com::sun::star::lang::XMultiServiceFactory;
 
-    //-------------------------------------------------------------------------
     /** allows controlling or observing the lifetime of the hierarchy data
         source and its views.
      */
     interface com::sun::star::lang::XComponent;
 };
 
-//=============================================================================
 
 }; }; }; };
 

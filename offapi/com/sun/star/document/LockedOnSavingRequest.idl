@@ -23,11 +23,9 @@
 #include <com/sun/star/beans/PropertyValue.idl>
 #include <com/sun/star/frame/XModel.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module document {
 
-//=============================================================================
 /** Is used for interaction handle to query user decision regarding locked
     document on saving.
 
@@ -45,7 +43,6 @@ published exception LockedOnSavingRequest : ::com::sun::star::uno::Exception
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

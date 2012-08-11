@@ -31,11 +31,9 @@
 #include <com/sun/star/ucb/InteractiveLockingException.idl>
 
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** An error indicating that the resource is not locked.
 
     <p>This error for instance can occur when trying to unlock a resource
@@ -48,7 +46,6 @@ module com { module sun { module star { module ucb {
 {
 };
 
-//=============================================================================
 
 }; }; }; };
 

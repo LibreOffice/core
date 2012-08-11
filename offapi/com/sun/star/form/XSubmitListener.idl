@@ -33,11 +33,9 @@
 #include <com/sun/star/lang/EventObject.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module form {
 
-//=============================================================================
 
 /** receives notifications about data being submitted.
 
@@ -52,7 +50,6 @@
  */
 published interface XSubmitListener: com::sun::star::lang::XEventListener
 {
-    //-------------------------------------------------------------------------
 
     /** is invoked when a component is about to submit it's data.
 
@@ -66,7 +63,6 @@ published interface XSubmitListener: com::sun::star::lang::XEventListener
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

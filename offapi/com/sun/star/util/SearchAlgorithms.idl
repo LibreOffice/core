@@ -30,11 +30,9 @@
 #define __com_sun_star_lang_SearchAlgorithms_idl__
 
 
-//=============================================================================
 
 module com { module sun { module star { module util {
 
-//=============================================================================
 
 published enum SearchAlgorithms
 {
@@ -46,7 +44,6 @@ published enum SearchAlgorithms
     APPROXIMATE
 };
 
-//=============================================================================
 }; }; }; };
 
 #endif

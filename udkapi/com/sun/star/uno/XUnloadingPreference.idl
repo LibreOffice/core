@@ -21,11 +21,9 @@
 
 #include <com/sun/star/uno/XInterface.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module uno {
 
-//=============================================================================
 /** Components can implement <code>XUnloadingPreference</code> in order to indicate
     how they should be treated when their hosting library is to be unloaded.
 
@@ -54,7 +52,6 @@ published interface XUnloadingPreference: com::sun::star::uno::XInterface
     */
     boolean releaseOnNotification();
 };
-//=============================================================================
 
 }; }; }; };
 

@@ -20,11 +20,9 @@
 #define __com_sun_star_style_HorizontalAlignment_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module style {
 
-//=============================================================================
 
 // DocMerge from xml: enum com::sun::star::style::HorizontalAlignment
 /** values specify the horizontal alignment of
@@ -32,7 +30,6 @@
  */
 published enum HorizontalAlignment
 {
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR HorizontalAlignment::  LEFT,
 
     // DocMerge from xml: value com::sun::star::style::HorizontalAlignment::LEFT
@@ -40,7 +37,6 @@ published enum HorizontalAlignment
      */
     LEFT,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR HorizontalAlignment::  CENTER,
 
     // DocMerge from xml: value com::sun::star::style::HorizontalAlignment::CENTER
@@ -48,7 +44,6 @@ published enum HorizontalAlignment
      */
     CENTER,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR HorizontalAlignment::  RIGHT
 
     // DocMerge from xml: value com::sun::star::style::HorizontalAlignment::RIGHT
@@ -58,7 +53,6 @@ published enum HorizontalAlignment
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

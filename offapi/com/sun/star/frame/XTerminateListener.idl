@@ -24,11 +24,9 @@
 #include <com/sun/star/frame/TerminationVetoException.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module frame {
 
-//=============================================================================
 /** has to be provided if an object wants to receive an event
     when the master environment (e.g., desktop) is terminated.
 
@@ -38,7 +36,6 @@
  */
 published interface XTerminateListener: com::sun::star::lang::XEventListener
 {
-    //-------------------------------------------------------------------------
     /** is called when the master environment (e.g., desktop) is about to terminate.
 
         <p>
@@ -56,7 +53,6 @@ published interface XTerminateListener: com::sun::star::lang::XEventListener
     void queryTermination( [in] com::sun::star::lang::EventObject Event )
             raises( TerminationVetoException );
 
-    //-------------------------------------------------------------------------
     /** is called when the master environment is finally terminated.
         Not veto will be accepted then.
 
@@ -66,7 +62,6 @@ published interface XTerminateListener: com::sun::star::lang::XEventListener
     void notifyTermination( [in] com::sun::star::lang::EventObject Event );
 };
 
-//=============================================================================
 
 }; }; }; };
 

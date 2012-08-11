@@ -32,50 +32,42 @@
 
 #include <com/sun/star/awt/Rectangle.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module awt {
 
  published interface XWindowPeer;
 
-//=============================================================================
 
 /** controls a pop-up menu.
  */
 published interface XPopupMenu: XMenu
 {
-    //-------------------------------------------------------------------------
 
     /** inserts a separator at the specified position.
      */
     [oneway] void insertSeparator( [in] short nPos );
 
-    //-------------------------------------------------------------------------
 
     /** sets the menu default item.
      */
     [oneway] void setDefaultItem( [in] short nItemId );
 
-    //-------------------------------------------------------------------------
 
     /** returns the menu default item.
      */
     short getDefaultItem();
 
-    //-------------------------------------------------------------------------
 
     /** sets the state of the item to be checked or unchecked.
      */
     [oneway] void checkItem( [in] short nItemId,
              [in] boolean bCheck );
 
-    //-------------------------------------------------------------------------
 
     /** returns whether the item is checked or unchecked.
      */
     boolean isItemChecked( [in] short nItemId );
 
-    //-------------------------------------------------------------------------
 
     /** executes the pop-up menu and returns the selected item
         or <code>0</code>, if canceled.
@@ -86,7 +78,6 @@ published interface XPopupMenu: XMenu
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

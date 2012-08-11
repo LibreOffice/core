@@ -22,11 +22,9 @@
 #include <com/sun/star/uno/Exception.idl>
 
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** This exception is thrown to indicate that a Listener is already set while
 only one is allowed.
 */
@@ -36,7 +34,6 @@ published exception ListenerAlreadySetException: com::sun::star::uno::Exception
 };
 
 
-//=============================================================================
 
 }; }; }; };
 

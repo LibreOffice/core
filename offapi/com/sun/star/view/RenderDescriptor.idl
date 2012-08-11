@@ -21,11 +21,9 @@
 
 #include <com/sun/star/awt/Size.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module view {
 
-//=============================================================================
 
 /** describes the options for Render jobs.
 
@@ -33,7 +31,6 @@ module com {  module sun {  module star {  module view {
  */
 published service RenderDescriptor
 {
-    //-------------------------------------------------------------------------
 
     /** specifies the page size for the current renderer. The unit of this page
     size is 1/100th mm.
@@ -41,7 +38,6 @@ published service RenderDescriptor
     [property] com::sun::star::awt::Size PageSize;
 };
 
-//=============================================================================
 
 }; }; }; };
 

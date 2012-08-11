@@ -20,42 +20,35 @@
 #define __com_sun_star_text_WrapInfluenceOnPosition_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module text {
 
-//=============================================================================
 
 /** These values specify the influence of the wrapping style of a floating
     screen object when it's positioned.
  */
 constants WrapInfluenceOnPosition
 {
-    //-------------------------------------------------------------------------
 
         /** wrapping style has no influence on the position and the floating screen
             object is successive positioned.
      */
         const short ONCE_SUCCESSIVE = 1;
 
-    //-------------------------------------------------------------------------
 
         /** wrapping style has no influence on the position and the floating screen
             object is concurrent positioned.
      */
         const short ONCE_CONCURRENT = 2;
 
-    //-------------------------------------------------------------------------
 
         /** wrapping style has  influence on the position and the floating screen
             object is iterative positioned.
          */
         const short ITERATIVE = 3;
 
-        //-------------------------------------------------------------------------
 };
 
-//=============================================================================
 
 }; }; }; };
 

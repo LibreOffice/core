@@ -30,11 +30,9 @@
 
 #include <com/sun/star/awt/XMenuBar.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module awt {
 
-//=============================================================================
 
 /** describes a menu for top-level windows.
 
@@ -45,7 +43,6 @@ module com {  module sun {  module star {  module awt {
  */
 published service MenuBar : XMenuBar;
 
-//=============================================================================
 
 }; }; }; };
 

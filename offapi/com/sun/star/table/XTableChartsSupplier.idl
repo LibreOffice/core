@@ -23,18 +23,15 @@
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/table/XTableCharts.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module table {
 
-//=============================================================================
 
 /** provides a method to access a collection of charts in a table or
     spreadsheet.
  */
 published interface XTableChartsSupplier: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** returns the collection of charts.
 
@@ -44,7 +41,6 @@ published interface XTableChartsSupplier: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

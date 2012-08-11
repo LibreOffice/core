@@ -22,11 +22,9 @@
 
 #include <com/sun/star/lang/EventObject.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module datatransfer { module dnd {
 
-//=============================================================================
 /** This class is the base class for <type>DropTargetDragEvent</type> and
      <type>DropTargetDropEvent</type>.
 
@@ -37,14 +35,12 @@ module com { module sun { module star { module datatransfer { module dnd {
 
 published struct DropTargetEvent: com::sun::star::lang::EventObject
 {
-    //-------------------------------------------------------------------------
     /** UNO specification does not allow empty struct definitions.
      */
 
     byte Dummy;
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

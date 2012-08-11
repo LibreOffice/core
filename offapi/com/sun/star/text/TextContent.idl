@@ -24,11 +24,9 @@
 #include <com/sun/star/text/WrapTextMode.idl>
 
 
-//=============================================================================
 
 module com { module sun { module star { module text {
 
-//=============================================================================
 /** is an object which can be anchored in a text, like instances of
     <type>TextFrame</type> or <type>TextField</type>.
 
@@ -55,19 +53,16 @@ published service TextContent
     */
     interface com::sun::star::text::XTextContent;
 
-    //-------------------------------------------------------------------------
     /** specifies how the text content is attached to its surrounding
         <type>Text</type>.
     */
     [optional, property] com::sun::star::text::TextContentAnchorType AnchorType;
 
-    //-------------------------------------------------------------------------
     /** contains the anchor type of the text content.
      @see com::sun::star::text::TextContentAnchorType
      */
     [optional, readonly, property] sequence<com::sun::star::text::TextContentAnchorType> AnchorTypes;
 
-    //-------------------------------------------------------------------------
     /** specifies if the text content is a shape
         and how the text is wrapped around the shape.
     */
@@ -75,7 +70,6 @@ published service TextContent
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

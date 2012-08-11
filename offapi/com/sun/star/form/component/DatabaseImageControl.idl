@@ -26,11 +26,9 @@
 #include <com/sun/star/form/XImageProducerSupplier.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module form {  module component {
 
-//=============================================================================
 
 /** specifies the model of a control used for displaying images stored in a database.
 
@@ -93,7 +91,6 @@ published service DatabaseImageControl
      */
     interface com::sun::star::form::XImageProducerSupplier;
 
-    //-------------------------------------------------------------------------
 
     /** indicates if it is possible to change the image being displayed.
      */
@@ -101,7 +98,6 @@ published service DatabaseImageControl
 
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

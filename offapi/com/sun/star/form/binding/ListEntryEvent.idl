@@ -31,11 +31,9 @@
 
 #include <com/sun/star/lang/EventObject.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module form { module binding {
 
-//=============================================================================
 
 /** specifies the event which is notified when a change in a string entry
     list occurred
@@ -66,7 +64,6 @@ struct ListEntryEvent : com::sun::star::lang::EventObject
             Entries;
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

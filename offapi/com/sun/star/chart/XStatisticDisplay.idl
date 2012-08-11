@@ -24,11 +24,9 @@
 #include <com/sun/star/beans/XPropertySet.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module chart {
 
-//=============================================================================
 
 /** gives access to statistical elements for the chart.
 
@@ -40,7 +38,6 @@
  */
 published interface XStatisticDisplay: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** @returns
             the properties of the up bars of a stock chart which has
@@ -54,7 +51,6 @@ published interface XStatisticDisplay: com::sun::star::uno::XInterface
      */
     com::sun::star::beans::XPropertySet getUpBar();
 
-    //-------------------------------------------------------------------------
 
     /** @returns
             the properties of the down bars of a stock chart which has
@@ -68,7 +64,6 @@ published interface XStatisticDisplay: com::sun::star::uno::XInterface
      */
     com::sun::star::beans::XPropertySet getDownBar();
 
-    //-------------------------------------------------------------------------
 
     /** @returns
             the properties of the lines that are drawn between the
@@ -80,7 +75,6 @@ published interface XStatisticDisplay: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

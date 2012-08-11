@@ -24,11 +24,9 @@
 #include <com/sun/star/container/XIndexContainer.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module form {
 
-//=============================================================================
 
 /** represents the window peer of a GridControl and allows you to set
     and retrieve the model data.
@@ -44,13 +42,11 @@
  */
 published interface XGridPeer: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** retrieves the currently used column definitions of the peer.
      */
     com::sun::star::container::XIndexContainer getColumns();
 
-    //-------------------------------------------------------------------------
 
     /** sets the column definition for the peer.
      */
@@ -58,7 +54,6 @@ published interface XGridPeer: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

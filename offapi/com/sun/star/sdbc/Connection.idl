@@ -73,7 +73,6 @@ published service Connection
     interface XWarningsSupplier;
 };
 
-//=============================================================================
 
 }; }; }; };
 

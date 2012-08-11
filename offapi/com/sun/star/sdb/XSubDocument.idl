@@ -31,11 +31,9 @@
 #include <com/sun/star/lang/WrappedTargetException.idl>
 #include <com/sun/star/lang/XComponent.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module sdb {
 
-//=============================================================================
 
 /** allows operating on a sub document of an <type>OfficeDatabaseDocument</type>
 
@@ -94,11 +92,9 @@ interface XSubDocument
                 raises( ::com::sun::star::lang::WrappedTargetException );
 };
 
-//=============================================================================
 
 }; }; }; };
 
-//=============================================================================
 
 #endif
 

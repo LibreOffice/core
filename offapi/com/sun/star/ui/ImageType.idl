@@ -32,19 +32,15 @@ module com {  module sun {  module star {  module ui {
  */
 constants ImageType
 {
-    //-------------------------------------------------------------------------
     /** an image with default size.
      */
     const short SIZE_DEFAULT       = 0;
-    //-------------------------------------------------------------------------
     /** an image with big size;
      */
     const short SIZE_LARGE         = 1;
-    //-------------------------------------------------------------------------
     /** an image with normal colors.
      */
     const short COLOR_NORMAL       = 0;
-    //-------------------------------------------------------------------------
     /** an image with high contrast colors.
      */
     const short COLOR_HIGHCONTRAST = 4;

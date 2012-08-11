@@ -21,11 +21,9 @@
 
 #include <com/sun/star/uno/XInterface.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module frame {
 
-//=============================================================================
 /** special interface to support sub-toolbars in a controller implementation.
 
     <p>
@@ -41,7 +39,6 @@
  */
 interface XSubToolbarController : com::sun::star::uno::XInterface
 {
-    //=============================================================================
     /** if the controller features a sub-toolbar.
 
         @return
@@ -54,7 +51,6 @@ interface XSubToolbarController : com::sun::star::uno::XInterface
     */
     boolean opensSubToolbar();
 
-    //=============================================================================
     /** provides the resource URL of the sub-toolbar this controller opens.
 
         @return
@@ -63,7 +59,6 @@ interface XSubToolbarController : com::sun::star::uno::XInterface
     */
     string getSubToolbarName();
 
-    //=============================================================================
     /** gets called to notify a controller that a sub-toolbar function has been
         selected.
 
@@ -73,7 +68,6 @@ interface XSubToolbarController : com::sun::star::uno::XInterface
     */
     void functionSelected( [in] string aCommand );
 
-    //=============================================================================
     /** gets called to notify a controller that it should set an image which
         represents the current selected function.
 

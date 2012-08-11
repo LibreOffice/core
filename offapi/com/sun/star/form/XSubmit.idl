@@ -37,11 +37,9 @@
 #include <com/sun/star/form/XSubmitListener.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module form {
 
-//=============================================================================
 
 /** provides functionality to submit data from a component.
 
@@ -52,7 +50,6 @@
  */
 published interface XSubmit: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** submits the component's data to a specified target.
 
@@ -67,7 +64,6 @@ published interface XSubmit: com::sun::star::uno::XInterface
     [oneway] void submit( [in] com::sun::star::awt::XControl aControl,
              [in] com::sun::star::awt::MouseEvent aMouseEvt );
 
-    //-------------------------------------------------------------------------
 
     /** adds the specified listener to receive the "approveSubmit" event.
 
@@ -78,7 +74,6 @@ published interface XSubmit: com::sun::star::uno::XInterface
      */
     [oneway] void addSubmitListener( [in] com::sun::star::form::XSubmitListener aListener );
 
-    //-------------------------------------------------------------------------
 
     /** removes the specified listener.
         @param aListener
@@ -89,7 +84,6 @@ published interface XSubmit: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

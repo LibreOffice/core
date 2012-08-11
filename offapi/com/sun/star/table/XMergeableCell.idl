@@ -23,11 +23,9 @@
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/table/XCell.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module table {
 
-//=============================================================================
 
 /** provides methods to access information about a cell that is mergeable with
     other sells.
@@ -36,26 +34,22 @@ module com {  module sun {  module star {  module table {
  */
 interface XMergeableCell: com::sun::star::table::XCell
 {
-    //-------------------------------------------------------------------------
 
     /** returns the number of columns this cell spans.
      */
     long getRowSpan();
 
-    //-------------------------------------------------------------------------
 
     /** returns the number of rows this cell spans.
      */
     long getColumnSpan();
 
-    //-------------------------------------------------------------------------
 
     /** returns <TRUE/> if this cell is merged with another cell.
      */
     boolean isMerged();
 };
 
-//=============================================================================
 
 }; }; }; };
 

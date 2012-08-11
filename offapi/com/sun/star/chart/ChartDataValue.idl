@@ -20,11 +20,9 @@
 #define __com_sun_star_chart_ChartDataValue_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module chart {
 
-//=============================================================================
 
 /** describes a single data value, including the error
 
@@ -38,13 +36,11 @@ published struct ChartDataValue
      */
     double Value;
 
-    //-------------------------------------------------------------------------
 
     /** highest possible error value.
      */
     double HighError;
 
-    //-------------------------------------------------------------------------
 
     /** lowest possible error value.
      */
@@ -52,7 +48,6 @@ published struct ChartDataValue
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

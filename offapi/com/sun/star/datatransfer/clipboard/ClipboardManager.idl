@@ -24,15 +24,12 @@
 #include <com/sun/star/lang/XServiceInfo.idl>
 #include <com/sun/star/lang/XTypeProvider.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module datatransfer { module clipboard {
 
-//=============================================================================
 
  published interface XClipboardManager;
 
-//=============================================================================
 /** The clipboard manager is a one-instance service that holds a list of all
     known clipboard instances.
 
@@ -40,28 +37,23 @@ module com { module sun { module star { module datatransfer { module clipboard {
 */
 published service ClipboardManager
 {
-    //-------------------------------------------------------------------------
     /** Manages internal and external clipboard implementations.
     */
     interface XClipboardManager;
 
-    //-------------------------------------------------------------------------
     /** For shutdown and listener support.
     */
     interface com::sun::star::lang::XComponent;
 
-    //-------------------------------------------------------------------------
     /** Service should always support this interface.
     */
     interface com::sun::star::lang::XServiceInfo;
 
-    //-------------------------------------------------------------------------
     /** Service should always support this interface.
     */
     interface com::sun::star::lang::XTypeProvider;
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

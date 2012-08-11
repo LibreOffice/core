@@ -12,19 +12,16 @@
 #include <com/sun/star/ucb/XCommandInfoChangeNotifier.idl>
 #include <com/sun/star/container/XChild.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
 service GnomeVFSDocumentContent
 {
-    //-------------------------------------------------------------------------
     /** This interface is implemented according to the specification of
         service <type>Content</type>.
      */
     interface com::sun::star::lang::XComponent;
 
-    //-------------------------------------------------------------------------
     /** This interface is implemented according to the specification of
         service <type>Content</type>.
      */
@@ -34,38 +31,32 @@ service GnomeVFSDocumentContent
 
     [optional] interface com::sun::star::ucb::XCommandProcessor2;
 
-    //-------------------------------------------------------------------------
     /** This interface is implemented according to the specification of
         service <type>Content</type>.
      */
     interface com::sun::star::beans::XPropertiesChangeNotifier;
 
-    //-------------------------------------------------------------------------
     /** This interface is implemented according to the specification of
         service <type>Content</type>.
      */
     interface com::sun::star::beans::XPropertyContainer;
 
-    //-------------------------------------------------------------------------
     /** This interface is implemented according to the specification of
         service <type>Content</type>.
      */
     interface com::sun::star::beans::XPropertySetInfoChangeNotifier;
 
-    //-------------------------------------------------------------------------
     /** This interface is implemented according to the specification of
         service <type>Content</type>.
      */
     interface com::sun::star::ucb::XCommandInfoChangeNotifier;
 
-    //-------------------------------------------------------------------------
     /** This interface is implemented according to the specification of
         service <type>Content</type>.
      */
     interface com::sun::star::container::XChild;
 };
 
-//=============================================================================
 
 }; }; }; };
 

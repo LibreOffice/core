@@ -26,40 +26,33 @@
 #include <com/sun/star/container/XIndexAccess.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module util {
 
-//=============================================================================
 
 /** @deprecated
  */
 published interface XArchiver: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR XArchiver::pack
     boolean pack( [in] sequence<string> input,
              [in] string destination,
              [in] sequence<com::sun::star::beans::PropertyValue> aArgs );
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR XArchiver::unpack
     boolean unpack( [in] string destinationpath,
              [in] string source,
              [in] sequence<string> files,
              [in] sequence<com::sun::star::beans::PropertyValue> aArgs );
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR XArchiver::getContent
     com::sun::star::container::XIndexAccess getContent( [in] string source );
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR XArchiver::getExtraData
     string getExtraData( [in] string source );
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -25,11 +25,9 @@
 #include <com/sun/star/lang/WrappedTargetException.idl>
 #include <com/sun/star/configuration/backend/MalformedDataException.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module configuration { module backend {
 
-//=============================================================================
 
 /**
   Handles access to the elements of a component schema,
@@ -39,7 +37,6 @@ module com { module sun { module star { module configuration { module backend {
 */
 published interface XSchema : ::com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /**
       Describes the full schema (templates + component) to a
@@ -66,7 +63,6 @@ published interface XSchema : ::com::sun::star::uno::XInterface
                 com::sun::star::lang::WrappedTargetException,
                 MalformedDataException) ;
 
-    //-------------------------------------------------------------------------
 
     /**
       Describes only the component definition to a <type>XSchemaHandler</type>.
@@ -92,7 +88,6 @@ published interface XSchema : ::com::sun::star::uno::XInterface
                 com::sun::star::lang::WrappedTargetException,
                 MalformedDataException) ;
 
-    //-------------------------------------------------------------------------
 
     /**
       Describes the component templates to a <type>XSchemaHandler</type>.
@@ -117,10 +112,8 @@ published interface XSchema : ::com::sun::star::uno::XInterface
                 com::sun::star::lang::WrappedTargetException,
                 MalformedDataException) ;
 
-    //-------------------------------------------------------------------------
 } ;
 
-//=============================================================================
 
 } ; } ; } ; } ; } ;
 #endif

@@ -23,11 +23,9 @@
 #include <com/sun/star/text/TextField.idl>
 #include <com/sun/star/text/DependentTextField.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module text { module textfield {
 
-//=============================================================================
 /** specifies service of a text field that increments a database selection.
     @see com::sun::star::text::TextField
 
@@ -69,7 +67,6 @@ published service DatabaseNextSet
 
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

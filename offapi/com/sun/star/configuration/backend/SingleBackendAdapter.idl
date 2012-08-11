@@ -21,11 +21,9 @@
 
 #include <com/sun/star/configuration/backend/BackendAdapter.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module configuration { module backend {
 
-//=============================================================================
 
 /**
     implements a simple <type>BackendAdapter</type> that can be used for
@@ -39,16 +37,13 @@ module com { module sun { module star { module configuration { module backend {
 */
 published service SingleBackendAdapter
 {
-    //-------------------------------------------------------------------------
 
     /** provides access to configuration data from a <type>SingleBackend</type>.
       */
     service BackendAdapter ;
 
-    //-------------------------------------------------------------------------
 } ;
 
-//=============================================================================
 
 } ; } ; } ; } ; } ;
 

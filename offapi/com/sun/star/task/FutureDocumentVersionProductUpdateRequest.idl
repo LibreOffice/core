@@ -22,11 +22,9 @@
 #ifndef __com_sun_star_task_FutureDocumentVersionProductUpdateRequest_idl__
 #define __com_sun_star_task_FutureDocumentVersionProductUpdateRequest_idl__
 
-//=============================================================================
 
 module com { module sun { module star { module task {
 
-//=============================================================================
 
 /** describes a request to the user to update OpenOffice.org to a newer version, since
     an ODF document was encountered which conforms to an ODF version unknown to the
@@ -49,11 +47,9 @@ exception FutureDocumentVersionProductUpdateRequest : ClassifiedInteractionReque
     string DocumentODFVersion;
 };
 
-//=============================================================================
 
 }; }; }; };
 
-//=============================================================================
 
 #endif
 

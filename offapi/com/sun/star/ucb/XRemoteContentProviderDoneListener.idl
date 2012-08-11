@@ -26,7 +26,6 @@ module com { module sun { module star { module ucb {
 
  published interface XRemoteContentProviderAcceptor;
 
-//============================================================================
 /** A notification mechanism that a
     <type>XRemoteContentProviderAcceptor</type> no longer needs a remote
     content provider.

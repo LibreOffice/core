@@ -26,11 +26,9 @@
 #include <com/sun/star/reflection/XMethodParameter.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module reflection {
 
-//=============================================================================
 
 /** Reflects an interface method type.
     The type class of this type is TypeClass_INTERFACE_METHOD.
@@ -66,7 +64,6 @@ published interface XInterfaceMethodTypeDescription: com::sun::star::reflection:
     sequence<com::sun::star::reflection::XTypeDescription> getExceptions();
 };
 
-//=============================================================================
 
 }; }; }; };
 

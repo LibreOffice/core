@@ -25,11 +25,9 @@
 #include <com/sun/star/util/XChangesSet.idl>
 */
 
-//=============================================================================
 
 module com { module sun { module star { module util {
 
-//=============================================================================
 /** describes a set of changes occurring as a batch transaction.
 
     @see XChangesBatch
@@ -42,7 +40,6 @@ published typedef sequence<ElementChange> ChangesSet;
 //typedef XChangesSet ChangesSet;
 
 
-//=============================================================================
 
 }; }; }; };
 

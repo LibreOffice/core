@@ -31,24 +31,20 @@
 
 #include <com/sun/star/sheet/FormulaToken.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** contains a mapping from a formula name (function name, operator,
     ...) to the OpCode used by the formula compiler.
  */
 struct FormulaOpCodeMapEntry
 {
-    //-------------------------------------------------------------------------
 
     /** The function name, or operator.
      */
     string Name;
 
-    //-------------------------------------------------------------------------
 
     /** The corresponding mapping.
      */
@@ -56,7 +52,6 @@ struct FormulaOpCodeMapEntry
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

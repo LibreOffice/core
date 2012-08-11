@@ -31,17 +31,14 @@ struct RealRectangle3D
     /// minimum X coordinate.
     double X1;
 
-    //-------------------------------------------------------------------------
 
     /// minimum Y coordinate.
     double Y1;
 
-    //-------------------------------------------------------------------------
 
     /// minimum Z coordinate.
     double Z1;
 
-    //-------------------------------------------------------------------------
 
     /** maximum X coordinate.<p>
 
@@ -49,7 +46,6 @@ struct RealRectangle3D
     */
     double X2;
 
-    //-------------------------------------------------------------------------
 
     /** maximum Y coordinate.<p>
 
@@ -57,7 +53,6 @@ struct RealRectangle3D
      */
     double Y2;
 
-    //-------------------------------------------------------------------------
 
     /** maximum Z coordinate.<p>
 

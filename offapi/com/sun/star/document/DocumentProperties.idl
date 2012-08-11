@@ -21,11 +21,9 @@
 
 #include <com/sun/star/document/XDocumentProperties.idl>
 
-//=============================================================================
 
 module com {   module sun {   module star {   module document {
 
-//=============================================================================
 /** provides document-specific information such as the author, creation date,
     and user-defined fields.
 
@@ -46,7 +44,6 @@ published service DocumentProperties : XDocumentProperties
     create();
 };
 
-//=============================================================================
 
 }; }; }; };
 

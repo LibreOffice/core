@@ -4,11 +4,9 @@
 
 #include <com/sun/star/logging/XLoggerPool.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module logging {
 
-//=============================================================================
 
 /** the global pool of named <type>XLogger</type> instances
 
@@ -24,11 +22,9 @@ module com { module sun { module star { module logging {
 */
 singleton LoggerPool : XLoggerPool;
 
-//=============================================================================
 
 }; }; }; };
 
-//=============================================================================
 
 #endif
 

@@ -22,29 +22,24 @@
 #include <com/sun/star/text/XTextCursor.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module text {
 
-//=============================================================================
 
 /** makes it possible to move paragraph by paragraph.
  */
 published interface XParagraphCursor: com::sun::star::text::XTextCursor
 {
-    //-------------------------------------------------------------------------
 
     /** determines if the cursor is positioned at the start of a paragraph.
      */
     boolean isStartOfParagraph();
 
-    //-------------------------------------------------------------------------
 
     /** determines if the cursor is positioned at the end of a paragraph.
      */
     boolean isEndOfParagraph();
 
-    //-------------------------------------------------------------------------
 
     /** moves the cursor to the start of the current paragraph.
 
@@ -55,7 +50,6 @@ published interface XParagraphCursor: com::sun::star::text::XTextCursor
      */
     boolean gotoStartOfParagraph( [in] boolean bExpand );
 
-    //-------------------------------------------------------------------------
 
     /** moves the cursor to the end of the current paragraph.
 
@@ -66,7 +60,6 @@ published interface XParagraphCursor: com::sun::star::text::XTextCursor
      */
     boolean gotoEndOfParagraph( [in] boolean bExpand );
 
-    //-------------------------------------------------------------------------
 
     /** moves the cursor to the next paragraph.
 
@@ -76,7 +69,6 @@ published interface XParagraphCursor: com::sun::star::text::XTextCursor
      */
     boolean gotoNextParagraph( [in] boolean bExpand );
 
-    //-------------------------------------------------------------------------
 
     /** moves the cursor to the previous paragraph.
 
@@ -88,7 +80,6 @@ published interface XParagraphCursor: com::sun::star::text::XTextCursor
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

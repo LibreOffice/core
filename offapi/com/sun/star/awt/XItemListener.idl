@@ -24,18 +24,15 @@
 #include <com/sun/star/awt/ItemEvent.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module awt {
 
-//=============================================================================
 
 /** makes it possible to receive events from a component
     when the state of an item changes.
  */
 published interface XItemListener: com::sun::star::lang::XEventListener
 {
-    //-------------------------------------------------------------------------
 
     /** is invoked when an item changes its state.
      */
@@ -43,7 +40,6 @@ published interface XItemListener: com::sun::star::lang::XEventListener
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -36,11 +36,9 @@
 #include <com/sun/star/lang/IllegalArgumentException.idl>
 #include <com/sun/star/beans/PropertyValue.idl>
 
-//============================================================================
 
  module com {  module sun {  module star {  module embed {
 
-//============================================================================
 /** specifies an implementation for embedded object persistence.
     <p>
     The idea is that any usable embedded object should be initialized
@@ -50,7 +48,6 @@
  */
 published interface XEmbedPersist: XCommonEmbedPersist
 {
-    //------------------------------------------------------------------------
     /** provides object with a parent storage and a name for object's entry.
 
         <p>
@@ -115,7 +112,6 @@ published interface XEmbedPersist: XCommonEmbedPersist
                 ::com::sun::star::io::IOException,
                 ::com::sun::star::uno::Exception );
 
-    //------------------------------------------------------------------------
     /** lets the object store itself to an entry in destination storage,
         the own persistence entry is not changed.
 
@@ -155,7 +151,6 @@ published interface XEmbedPersist: XCommonEmbedPersist
                 ::com::sun::star::io::IOException,
                 ::com::sun::star::uno::Exception );
 
-    //------------------------------------------------------------------------
     /** lets the object store itself to an entry in destination storage and
         prepare to use the new entry for own persistence.
 
@@ -206,7 +201,6 @@ published interface XEmbedPersist: XCommonEmbedPersist
                 ::com::sun::star::uno::Exception );
 
 
-    //------------------------------------------------------------------------
     /** specifies whether the object should use an old storage or a new one
         after "save as" operation.
 
@@ -225,7 +219,6 @@ published interface XEmbedPersist: XCommonEmbedPersist
         raises( ::com::sun::star::embed::WrongStateException,
                 ::com::sun::star::uno::Exception );
 
-    //------------------------------------------------------------------------
     /** allows to detect if the object has entry.
 
         @returns
@@ -235,7 +228,6 @@ published interface XEmbedPersist: XCommonEmbedPersist
     boolean hasEntry()
         raises( ::com::sun::star::embed::WrongStateException );
 
-    //------------------------------------------------------------------------
     /** allows to retrieve the current object entry name.
 
         @returns
@@ -248,7 +240,6 @@ published interface XEmbedPersist: XCommonEmbedPersist
         raises( ::com::sun::star::embed::WrongStateException );
 };
 
-//============================================================================
 
 }; }; }; };
 

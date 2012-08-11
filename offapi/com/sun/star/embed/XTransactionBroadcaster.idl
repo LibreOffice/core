@@ -24,31 +24,26 @@
 #include <com/sun/star/embed/XTransactionListener.idl>
 
 
-//============================================================================
 
 module com {  module sun {  module star {  module embed {
 
-//============================================================================
 
 /** broadcasts message in case transacted object is commited or reverted.
  */
 published interface XTransactionBroadcaster: com::sun::star::uno::XInterface
 {
-    //------------------------------------------------------------------------
     /** adds the specified listener to receive events about commits and
         reverts.
      */
     void addTransactionListener(
             [in] com::sun::star::embed::XTransactionListener aListener );
 
-    //------------------------------------------------------------------------
     /** removes the specified listener.
      */
     void removeTransactionListener(
             [in] com::sun::star::embed::XTransactionListener aListener );
 };
 
-//============================================================================
 
 }; }; }; };
 

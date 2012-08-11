@@ -30,11 +30,9 @@
 
 #include <com/sun/star/task/XInteractionContinuation.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** is an interaction continuation used to hand back a new name for something.
 
     <p>For example, this continuation can be selected when handling a
@@ -46,7 +44,6 @@ module com { module sun { module star { module ucb {
 */
 published interface XInteractionSupplyName : com::sun::star::task::XInteractionContinuation
 {
-    //-------------------------------------------------------------------------
     /** sets the name to supply.
 
         @param Name
@@ -55,7 +52,6 @@ published interface XInteractionSupplyName : com::sun::star::task::XInteractionC
     void setName( [in] string Name );
 };
 
-//=============================================================================
 
 }; }; }; };
 

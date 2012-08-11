@@ -22,11 +22,9 @@
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/graphic/XGraphic.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module awt {
 
-//=============================================================================
 
 /**
     @deprecated
@@ -39,7 +37,6 @@ published interface XSimpleAnimation: com::sun::star::uno::XInterface
     void setImageList( [in] sequence < com::sun::star::graphic::XGraphic > ImageList );
 };
 
-//=============================================================================
 
 }; }; }; };
 

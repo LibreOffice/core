@@ -22,11 +22,9 @@
 
 #include <com/sun/star/uno/XInterface.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module container {
 
-//=============================================================================
 
 interface XContainerApproveListener;
 
@@ -46,11 +44,9 @@ interface XContainerApproveBroadcaster
       [in] XContainerApproveListener Listener );
 };
 
-//=============================================================================
 
 }; }; }; };
 
-//=============================================================================
 
 #endif
 

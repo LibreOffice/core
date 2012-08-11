@@ -27,19 +27,15 @@ module com {  module sun {  module star {  module ui {
  */
 constants ItemType
 {
-    //-------------------------------------------------------------------------
     /** a normal item
      */
     const short DEFAULT = 0;
-    //-------------------------------------------------------------------------
     /** a separator is inserted as a line.
      */
     const short SEPARATOR_LINE = 1;
-    //-------------------------------------------------------------------------
     /** a separator is inserted as a space.
      */
     const short SEPARATOR_SPACE = 2;
-    //-------------------------------------------------------------------------
     /** a line break is inserted.
      */
     const short SEPARATOR_LINEBREAK = 3;

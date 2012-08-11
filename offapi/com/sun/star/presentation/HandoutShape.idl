@@ -33,11 +33,9 @@
 #include <com/sun/star/drawing/PageShape.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module presentation {
 
-//=============================================================================
 
 /** This service is implemented by the handout presentation shape.
 
@@ -52,7 +50,6 @@ published service HandoutShape
     service com::sun::star::drawing::PageShape;
 };
 
-//=============================================================================
 
 }; }; }; };
 

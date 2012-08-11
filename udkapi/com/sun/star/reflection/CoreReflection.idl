@@ -23,11 +23,9 @@
 #include <com/sun/star/lang/XComponent.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module reflection {
 
-//=============================================================================
 
 /** This service is the implementation of the reflection API.
     You can obtain information about types, modify values of reflected types
@@ -51,7 +49,6 @@ singleton theCoreReflection
 };
 */
 
-//=============================================================================
 
 }; }; }; };
 

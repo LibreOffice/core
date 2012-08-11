@@ -24,11 +24,9 @@
 #include <com/sun/star/container/XNameAccess.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module text {
 
-//=============================================================================
 
 // DocMerge from xml: interface com::sun::star::text::XTextGraphicObjectsSupplier
 /** provides access to the collection of all embedded and linked graphics
@@ -36,7 +34,6 @@
  */
 published interface XTextGraphicObjectsSupplier: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     // DocMerge from idl: method com::sun::star::text::XTextGraphicObjectsSupplier::getGraphicObjects
     /** @returns
@@ -46,7 +43,6 @@ published interface XTextGraphicObjectsSupplier: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

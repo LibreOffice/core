@@ -25,11 +25,9 @@
 
 #include <com/sun/star/mozilla/XMenuProxyListener.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module mozilla {
 
-//=============================================================================
 
 
 // DocMerge from xml: interface com::sun::star::mozilla::XMenuProxy
@@ -38,7 +36,6 @@
  */
 published interface XMenuProxy: com::sun::star::lang::XComponent
 {
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::mozilla::XMenuProxy::executeMenuItem
     /** Executes dispatch for the given menu id
@@ -48,7 +45,6 @@ published interface XMenuProxy: com::sun::star::lang::XComponent
      */
     void executeMenuItem([in] short ID);
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::mozilla::XMenuProxy::addMenuProxyListener
     /** Registers an event listener, which will be called when the menu changes
@@ -58,7 +54,6 @@ published interface XMenuProxy: com::sun::star::lang::XComponent
      */
     [oneway] void addMenuProxyListener([in] XMenuProxyListener xListener );
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::mozilla::XMenuProxy::removeMenuProxyListener
     /** Unregisters an event listener which was registered with
@@ -70,7 +65,6 @@ published interface XMenuProxy: com::sun::star::lang::XComponent
     [oneway] void removeMenuProxyListener([in] XMenuProxyListener xListener );
 };
 
-//=============================================================================
 
 }; }; }; };
 

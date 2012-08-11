@@ -26,17 +26,14 @@
 #include <com/sun/star/lang/IllegalArgumentException.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module view {
 
-//=============================================================================
 
 /** offers printing functionality.
  */
 published interface XPrintable: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** @returns
             a descriptor of the current printer.
 
@@ -46,7 +43,6 @@ published interface XPrintable: com::sun::star::uno::XInterface
      */
     sequence<com::sun::star::beans::PropertyValue> getPrinter();
 
-    //-------------------------------------------------------------------------
     /** assigns a new printer to the object.
 
         <p>Setting a new printer will cause reformatting.
@@ -56,7 +52,6 @@ published interface XPrintable: com::sun::star::uno::XInterface
     void setPrinter( [in] sequence<com::sun::star::beans::PropertyValue> aPrinter )
             raises( com::sun::star::lang::IllegalArgumentException );
 
-    //-------------------------------------------------------------------------
     /** prints the object.
 
         @param xOptions
@@ -70,7 +65,6 @@ published interface XPrintable: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

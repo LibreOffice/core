@@ -19,11 +19,9 @@
 #ifndef __com_sun_star_i18n_WordType_idl__
 #define __com_sun_star_i18n_WordType_idl__
 
-//=============================================================================
 
 module com {  module sun {  module star {  module i18n {
 
-//=============================================================================
 
 /** Constants to specify the type of words.
 
@@ -59,7 +57,6 @@ published constants WordType
     const short WORD_COUNT               = 3;
 };
 
-//=============================================================================
 }; }; }; };
 
 #endif

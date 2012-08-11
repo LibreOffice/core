@@ -24,11 +24,9 @@
 #include <com/sun/star/container/XNameAccess.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module text {
 
-//=============================================================================
 
 // DocMerge from xml: service com::sun::star::text::TextTables
 /** provides access to all tables in a document.
@@ -43,7 +41,6 @@ published service TextTables
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

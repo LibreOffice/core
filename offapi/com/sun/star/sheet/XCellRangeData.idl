@@ -21,10 +21,8 @@
 
 #include <com/sun/star/uno/XInterface.idl>
 
-//=============================================================================
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** allows to get and set an array of data from a cell range.
     <p>The outer sequence represents the rows and the inner sequence
@@ -52,7 +50,6 @@ published interface XCellRangeData: com::sun::star::uno::XInterface
     void setDataArray( [in] sequence< sequence< any > > aArray );
 };
 
-//=============================================================================
 }; }; }; };
 
 #endif

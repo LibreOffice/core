@@ -33,11 +33,9 @@
 #include <com/sun/star/awt/XContainerWindowProvider.idl>
 
 
-//=============================================================================
 
 module com { module sun { module star { module awt {
 
-//=============================================================================
 
 /** specifies a provider for container windows implementing the
     <type scope="com::sun::star::awt">XWindow</type> interface.
@@ -45,7 +43,6 @@ module com { module sun { module star { module awt {
 service ContainerWindowProvider : com::sun::star::awt::XContainerWindowProvider;
 
 
-//=============================================================================
 
 }; }; }; };
 

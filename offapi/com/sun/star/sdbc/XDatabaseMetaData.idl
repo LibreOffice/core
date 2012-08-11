@@ -91,7 +91,6 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     boolean allProceduresAreCallable() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** Can all the tables returned by getTable be SELECTed by the
         current user?
@@ -101,17 +100,14 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     boolean allTablesAreSelectable() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** returns the URL for the database connection
      */
     string getURL() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** returns the user name from this database connection.
      */
     string getUserName() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** checks if the database in read-only mode.
         @returns
@@ -120,7 +116,6 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     boolean isReadOnly() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** Are NULL values sorted high?
         @returns
@@ -129,7 +124,6 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
             if a database access error occurs.
     */
     boolean nullsAreSortedHigh() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** Are NULL values sorted low?
         @returns
@@ -138,7 +132,6 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
             if a database access error occurs.
     */
     boolean nullsAreSortedLow() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** Are NULL values sorted at the start regardless of sort order?
         @returns
@@ -147,7 +140,6 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     boolean nullsAreSortedAtStart() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /**  Are NULL values sorted at the end, regardless of sort order?
         @returns
@@ -156,37 +148,30 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     boolean nullsAreSortedAtEnd() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** returns the name of the database product.
      */
     string getDatabaseProductName() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** returns the version of the database product.
      */
     string getDatabaseProductVersion() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** returns the name of the SDBC driver.
      */
     string getDriverName() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** returns the version number of the SDBC driver.
      */
     string getDriverVersion() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** returns the SDBC driver major version number.
      */
     long getDriverMajorVersion();
-    //-------------------------------------------------------------------------
 
     /** returns the SDBC driver minor version number.
      */
     long getDriverMinorVersion();
-    //-------------------------------------------------------------------------
 
     /** use the database local files to save the tables.
         @returns
@@ -195,7 +180,6 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     boolean usesLocalFiles() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** use the database one local file to save for each table.
         @returns
@@ -204,7 +188,6 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     boolean usesLocalFilePerTable() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** use the database "mixed case unquoted SQL identifiers" case sensitive.
         @returns
@@ -213,7 +196,6 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     boolean supportsMixedCaseIdentifiers() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** Does the database treat mixed case unquoted SQL identifiers as
         case insensitive and store them in upper case?
@@ -223,7 +205,6 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     boolean storesUpperCaseIdentifiers() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** Does the database treat mixed case unquoted SQL identifiers as
         case insensitive and store them in lower case?
@@ -233,7 +214,6 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     boolean storesLowerCaseIdentifiers() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** Does the database treat mixed case unquoted SQL identifiers as
         case insensitive and store them in mixed case?
@@ -243,7 +223,6 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     boolean storesMixedCaseIdentifiers() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** Does the database treat mixed case quoted SQL identifiers as
         case sensitive and as a result store them in mixed case?
@@ -253,7 +232,6 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     boolean supportsMixedCaseQuotedIdentifiers() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** Does the database treat mixed case quoted SQL identifiers as
         case insensitive and store them in upper case?
@@ -263,7 +241,6 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     boolean storesUpperCaseQuotedIdentifiers() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** Does the database treat mixed case quoted SQL identifiers as
         case insensitive and store them in lower case?
@@ -273,7 +250,6 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     boolean storesLowerCaseQuotedIdentifiers() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** Does the database treat mixed case quoted SQL identifiers as
         case insensitive and store them in mixed case?
@@ -283,7 +259,6 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     boolean storesMixedCaseQuotedIdentifiers() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** What's the string used to quote SQL identifiers?
         This returns a space " " if identifier quoting is not supported.
@@ -293,7 +268,6 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     string getIdentifierQuoteString() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** gets a comma-separated list of all a database's SQL keywords
         that are NOT also SQL92 keywords.
@@ -303,7 +277,6 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     string getSQLKeywords() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** gets a comma-separated list of math functions. These are the
         X/Open CLI math function names used in the SDBC function escape
@@ -314,7 +287,6 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     string getNumericFunctions() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** gets a comma-separated list of string functions. These are the
         X/Open CLI string function names used in the SDBC function escape
@@ -325,7 +297,6 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     string getStringFunctions() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** gets a comma-separated list of system functions. These are the
         X/Open CLI system function names used in the SDBC function escape
@@ -336,7 +307,6 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     string getSystemFunctions() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** gets a comma-separated list of time and date functions.
         @returns
@@ -345,7 +315,6 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     string getTimeDateFunctions() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** gets the string that can be used to escape wildcard characters.
         This is the string that can be used to escape "_" or "%" in
@@ -365,7 +334,6 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     string getSearchStringEscape() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** gets all the "extra" characters that can be used in unquoted
         identifier names (those beyond a-z, A-Z, 0-9 and _).
@@ -375,7 +343,6 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     string getExtraNameCharacters() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** support the Database "ALTER TABLE" with add column?
         @returns
@@ -384,7 +351,6 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     boolean supportsAlterTableWithAddColumn() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** support the Database  "ALTER TABLE" with drop column?
         @returns
@@ -393,7 +359,6 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     boolean supportsAlterTableWithDropColumn() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** support the Database column aliasing?
 
@@ -408,7 +373,6 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     boolean supportsColumnAliasing() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** are concatenations between NULL and non-NULL values NULL?
         @returns
@@ -417,7 +381,6 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     boolean nullPlusNonNullIsNull() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** <TRUE/>
             , if the Database supports the CONVERT function between SQL types,
@@ -430,7 +393,6 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     boolean supportsTypeConversion() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /**     <TRUE/>
             , if the Database supports the CONVERT between the given SQL types
@@ -444,7 +406,6 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
      */
     boolean supportsConvert([in]long fromType, [in]long toType)
         raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** Are table correlation names supported?
         @returns
@@ -453,7 +414,6 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     boolean supportsTableCorrelationNames() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** If table correlation names are supported, are they restricted
         to be different from the names of the tables?
@@ -464,7 +424,6 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
      */
     boolean supportsDifferentTableCorrelationNames()
         raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** Are expressions in "ORDER BY" lists supported?
         @returns
@@ -473,7 +432,6 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     boolean supportsExpressionsInOrderBy() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** Can an "ORDER BY" clause use columns not in the SELECT statement?
         @returns
@@ -482,7 +440,6 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     boolean supportsOrderByUnrelated() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** Is some form of "GROUP BY" clause supported?
         @returns
@@ -491,7 +448,6 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     boolean supportsGroupBy() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** Can a "GROUP BY" clause use columns not in the SELECT?
         @returns
@@ -500,7 +456,6 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     boolean supportsGroupByUnrelated() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** Can a "GROUP BY" clause add columns not in the SELECT
         provided it specifies all the columns in the SELECT?
@@ -510,7 +465,6 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     boolean supportsGroupByBeyondSelect() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** Is the escape character in "LIKE" clauses supported?
         @returns
@@ -519,7 +473,6 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     boolean supportsLikeEscapeClause() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** Are multiple XResultSets from a single execute supported?
         @returns
@@ -528,7 +481,6 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     boolean supportsMultipleResultSets() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** Can we have multiple transactions open at once (on different
         connections)?
@@ -538,7 +490,6 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     boolean supportsMultipleTransactions() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** Can columns be defined as non-nullable?
         @returns
@@ -547,7 +498,6 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     boolean supportsNonNullableColumns() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /**     <TRUE/>, if the database supports ODBC Minimum SQL grammar,
             otherwise <FALSE/>.
@@ -557,7 +507,6 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     boolean supportsMinimumSQLGrammar() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** <TRUE/>, if the database supports ODBC Core SQL grammar,
             otherwise <FALSE/>.
@@ -567,7 +516,6 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     boolean supportsCoreSQLGrammar() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /**
             <TRUE/>, if the database supports ODBC Extended SQL grammar,
@@ -578,7 +526,6 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     boolean supportsExtendedSQLGrammar() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** @returns
             <TRUE/>, if the database supports ANSI92 entry level SQL grammar,
@@ -587,7 +534,6 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     boolean supportsANSI92EntryLevelSQL() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** @returns
             <TRUE/>, if the database supports ANSI92 intermediate SQL grammar,
@@ -596,7 +542,6 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     boolean supportsANSI92IntermediateSQL() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** @returns
             <TRUE/>, if the database supports ANSI92 full SQL grammar,
@@ -605,7 +550,6 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     boolean supportsANSI92FullSQL() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** returns
             <TRUE/>, if the Database supports SQL Integrity Enhancement Facility,
@@ -614,7 +558,6 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     boolean supportsIntegrityEnhancementFacility() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** @returns
             <TRUE/>, if some form of outer join is supported,
@@ -623,7 +566,6 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     boolean supportsOuterJoins() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** @returns
             <TRUE/>, if full nested outer joins are supported,
@@ -632,7 +574,6 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     boolean supportsFullOuterJoins() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** @returns
             <TRUE/>, if there is limited support for outer joins.
@@ -642,7 +583,6 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     boolean supportsLimitedOuterJoins() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** return the database vendor's preferred term for "schema"
         @returns
@@ -651,7 +591,6 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     string getSchemaTerm() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** return the database vendor's preferred term for "procedure"
         @returns
@@ -660,7 +599,6 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     string getProcedureTerm() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** return the database vendor's preferred term for "catalog"
         @returns
@@ -669,7 +607,6 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     string getCatalogTerm() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** Does a catalog appear at the start of a qualified table name?
         (Otherwise it appears at the end)
@@ -679,7 +616,6 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     boolean isCatalogAtStart() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** return the separator between catalog and table name
         @returns
@@ -688,7 +624,6 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     string getCatalogSeparator() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** Can a schema name be used in a data manipulation statement?
         @returns
@@ -697,7 +632,6 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     boolean supportsSchemasInDataManipulation() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** Can a schema name be used in a procedure call statement?
         @returns
@@ -706,7 +640,6 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     boolean supportsSchemasInProcedureCalls() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** Can a schema name be used in a table definition statement?
         @returns
@@ -715,7 +648,6 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     boolean supportsSchemasInTableDefinitions() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** Can a schema name be used in an index definition statement?
         @returns
@@ -724,7 +656,6 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     boolean supportsSchemasInIndexDefinitions() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** Can a schema name be used in a privilege definition statement?
         @returns
@@ -734,7 +665,6 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
      */
     boolean supportsSchemasInPrivilegeDefinitions()
         raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** Can a catalog name be used in a data manipulation statement?
         @returns
@@ -743,7 +673,6 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     boolean supportsCatalogsInDataManipulation() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** Can a catalog name be used in a procedure call statement?
         @returns
@@ -752,7 +681,6 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     boolean supportsCatalogsInProcedureCalls() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** Can a catalog name be used in a table definition statement?
         @returns
@@ -761,7 +689,6 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     boolean supportsCatalogsInTableDefinitions() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** Can a catalog name be used in an index definition statement?
         @returns
@@ -770,7 +697,6 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     boolean supportsCatalogsInIndexDefinitions() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** Can a catalog name be used in a privilege definition statement?
         @returns
@@ -780,7 +706,6 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
      */
     boolean supportsCatalogsInPrivilegeDefinitions()
         raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** Is positioned DELETE supported?
         @returns
@@ -789,7 +714,6 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     boolean supportsPositionedDelete() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** Is positioned UPDATE supported?
         @returns
@@ -798,7 +722,6 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     boolean supportsPositionedUpdate() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** Is SELECT for UPDATE supported?
         @returns
@@ -807,7 +730,6 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     boolean supportsSelectForUpdate() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** Are stored procedure calls using the stored procedure escape
         syntax supported?
@@ -817,7 +739,6 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     boolean supportsStoredProcedures() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** Are subqueries in comparison expressions supported?
         @returns
@@ -826,7 +747,6 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     boolean supportsSubqueriesInComparisons() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** Are subqueries in "exists" expressions supported?
         @returns
@@ -835,7 +755,6 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     boolean supportsSubqueriesInExists() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** Are subqueries in "in" statements supported?
         @returns
@@ -844,7 +763,6 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     boolean supportsSubqueriesInIns() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** Are subqueries in quantified expressions supported?
         @returns
@@ -853,7 +771,6 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     boolean supportsSubqueriesInQuantifieds() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** Are correlated subqueries supported?
         @returns
@@ -862,7 +779,6 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     boolean supportsCorrelatedSubqueries() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** Is SQL UNION supported?
         @returns
@@ -871,7 +787,6 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     boolean supportsUnion() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** Is SQL UNION ALL supported?
         @returns
@@ -880,7 +795,6 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     boolean supportsUnionAll() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** Can cursors remain open across commits?
         @returns
@@ -889,7 +803,6 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     boolean supportsOpenCursorsAcrossCommit() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** Can cursors remain open across rollbacks?
         @returns
@@ -898,7 +811,6 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     boolean supportsOpenCursorsAcrossRollback() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** Can statements remain open across commits?
         @returns
@@ -907,7 +819,6 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     boolean supportsOpenStatementsAcrossCommit() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** Can statements remain open across rollbacks?
         @returns
@@ -917,7 +828,6 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
      */
     boolean supportsOpenStatementsAcrossRollback()
         raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** return the maximal number of hex characters in an inline binary literal
         @returns
@@ -926,7 +836,6 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     long getMaxBinaryLiteralLength() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** return the max length for a character literal
         @returns
@@ -935,7 +844,6 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     long getMaxCharLiteralLength() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** return the limit on column name length
         @returns
@@ -944,7 +852,6 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     long getMaxColumnNameLength() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** return the maximum number of columns in a "GROUP BY" clause
         @returns
@@ -953,7 +860,6 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     long getMaxColumnsInGroupBy() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** return the maximum number of columns allowed in an index
         @returns
@@ -962,7 +868,6 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     long getMaxColumnsInIndex() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** return the maximum number of columns in an "ORDER BY" clause
         @returns
@@ -971,7 +876,6 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     long getMaxColumnsInOrderBy() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** return the maximum number of columns in a "SELECT" list
         @returns
@@ -980,7 +884,6 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     long getMaxColumnsInSelect() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** return the maximum number of columns in a table
         @returns
@@ -989,7 +892,6 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     long getMaxColumnsInTable() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** return the number of active connections at a time to this database.
         @returns
@@ -998,7 +900,6 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     long getMaxConnections() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** return the maximum cursor name length
     @returns
@@ -1007,7 +908,6 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     long getMaxCursorNameLength() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** return the maximum length of an index (in bytes)
         @returns
@@ -1016,7 +916,6 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     long getMaxIndexLength() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** return the maximum length allowed for a schema name
         @returns
@@ -1025,7 +924,6 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     long getMaxSchemaNameLength() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** return the maximum length of a procedure name
         @returns
@@ -1034,7 +932,6 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     long getMaxProcedureNameLength() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** return the maximum length of a catalog name
         @returns
@@ -1043,7 +940,6 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     long getMaxCatalogNameLength() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** return the maximum length of a single row.
     @returns
@@ -1052,7 +948,6 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     long getMaxRowSize() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** Did getMaxRowSize() include LONGVARCHAR and LONGVARBINARY
         blobs?
@@ -1062,7 +957,6 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     boolean doesMaxRowSizeIncludeBlobs() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** return the maximum length of a SQL statement
         @returns
@@ -1071,7 +965,6 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     long getMaxStatementLength() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** return the maximal number of open active statements at one time to this database
         @returns
@@ -1080,7 +973,6 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     long getMaxStatements() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** return the maximum length of a table name
         @returns
@@ -1089,7 +981,6 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     long getMaxTableNameLength() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** return the maximum number of tables in a SELECT statement
         @returns
@@ -1098,7 +989,6 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     long getMaxTablesInSelect() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** return the maximum length of a user name
         @returns
@@ -1107,7 +997,6 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     long getMaxUserNameLength() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** return the database default transaction isolation level.
         The values are defined in
@@ -1119,7 +1008,6 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
         @see com::sun::star::sdbc::XConnection
      */
     long getDefaultTransactionIsolation() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** support the Database transactions?
         If not, invoking the method
@@ -1132,7 +1020,6 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     boolean supportsTransactions() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** Does this database support the given transaction isolation level?
         @returns
@@ -1143,7 +1030,6 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
      */
     boolean supportsTransactionIsolationLevel([in]long level)
                             raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** support the Database both data definition and data manipulation statements
         within a transaction?
@@ -1161,7 +1047,6 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
  -->     */
     boolean supportsDataDefinitionAndDataManipulationTransactions()
                              raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** are only data manipulation statements within a transaction
         supported?
@@ -1172,7 +1057,6 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
      */
     boolean supportsDataManipulationTransactionsOnly()
                             raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** does a data definition statement within a transaction force the
         transaction to commit?
@@ -1183,7 +1067,6 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
      */
     boolean dataDefinitionCausesTransactionCommit()
                             raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** is a data definition statement within a transaction ignored?
         @returns
@@ -1193,7 +1076,6 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
      */
     boolean dataDefinitionIgnoredInTransactions()
                             raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** Gets a description of the stored procedures available in a
         catalog.
@@ -1251,7 +1133,6 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
      */
     XResultSet getProcedures([in]any catalog, [in]string schemaPattern,
                     [in]string procedureNamePattern) raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** gets a description of a catalog's stored procedure parameters
         and result columns.
@@ -1353,7 +1234,6 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
                                    [in]string procedureNamePattern,
                                    [in]string columnNamePattern)
                         raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** gets a description of tables available in a catalog.
 
@@ -1403,7 +1283,6 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
     XResultSet getTables([in]any catalog, [in]string schemaPattern,
         [in]string tableNamePattern, [in]sequence<string> types)
         raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** Gets the schema names available in this database. The results
         are ordered by schema name.
@@ -1422,7 +1301,6 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     XResultSet getSchemas() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** gets the catalog names available in this database. The results
         are ordered by catalog name.
@@ -1441,7 +1319,6 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     XResultSet getCatalogs() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** gets the table types available in this database. The results
         are ordered by table type.
@@ -1462,7 +1339,6 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     XResultSet getTableTypes() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** gets a description of table columns available in
         the specified catalog.
@@ -1561,7 +1437,6 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
     XResultSet getColumns([in]any catalog, [in]string schemaPattern,
         [in]string tableNamePattern, [in]string columnNamePattern)
                     raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** gets a description of the access rights for a table's columns.
 
@@ -1615,7 +1490,6 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
      */
     XResultSet getColumnPrivileges([in]any catalog, [in]string schema,
         [in]string table, [in]string columnNamePattern) raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** gets a description of the access rights for each table available
         in a catalog. Note that a table privilege applies to one or
@@ -1668,7 +1542,6 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
      */
     XResultSet getTablePrivileges([in]any catalog, [in]string schemaPattern,
                 [in]string tableNamePattern) raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** gets a description of a table's optimal set of columns that
         uniquely identifies a row. They are ordered by SCOPE.
@@ -1738,7 +1611,6 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
     XResultSet getBestRowIdentifier([in]any catalog, [in]string schema,
         [in]string table, [in]long scope, [in] boolean nullable)
         raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** gets a description of a table's columns that are automatically
         updated when any value in a row is updated. They are
@@ -1795,7 +1667,6 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
      */
     XResultSet getVersionColumns([in]any catalog, [in]string schema,
                 [in]string table) raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** gets a description of a table's primary key columns. They
         are ordered by COLUMN_NAME.
@@ -1836,7 +1707,6 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
      */
     XResultSet getPrimaryKeys([in]any catalog, [in]string schema,
                 [in]string table) raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** gets a description of the primary key columns that are
         referenced by a table's foreign key columns (the primary keys
@@ -1951,7 +1821,6 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
      */
     XResultSet getImportedKeys([in]any catalog, [in]string schema,
                 [in]string table) raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** gets a description of the foreign key columns that reference a
         table's primary key columns (the foreign keys exported by a
@@ -2066,7 +1935,6 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
      */
     XResultSet getExportedKeys([in]any catalog, [in]string schema,
                 [in]string table) raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** gets a description of the foreign key columns in the foreign key
         table that reference the primary key columns of the primary key
@@ -2193,7 +2061,6 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
         [in]string primaryTable,
         [in]any foreignCatalog, [in]string foreignSchema,
         [in]string foreignTable) raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** gets a description of all the standard SQL types supported by
         this database. They are ordered by DATA_TYPE and then by how
@@ -2288,7 +2155,6 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     XResultSet getTypeInfo() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** gets a description of a table's indices and statistics. They are
         ordered by NON_UNIQUE, TYPE, INDEX_NAME, and ORDINAL_POSITION.
@@ -2378,7 +2244,6 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
     XResultSet getIndexInfo([in]any catalog, [in]string schema, [in]string table,
             [in]boolean unique, [in]boolean approximate)
                     raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** Does the database support the given result set type?
         @param setType
@@ -2390,7 +2255,6 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     boolean supportsResultSetType([in]long setType) raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** Does the database support the concurrency type in combination
         with the given result set type?
@@ -2408,7 +2272,6 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
     boolean supportsResultSetConcurrency([in]long setType,
                                                   [in]long concurrency)
       raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** indicates whether a result set's own updates are visible.
         @param setType
@@ -2420,7 +2283,6 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     boolean ownUpdatesAreVisible([in]long setType) raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** indicates whether a result set's own deletes are visible.
         @param setType
@@ -2432,7 +2294,6 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     boolean ownDeletesAreVisible([in]long setType) raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** indicates whether a result set's own inserts are visible.
         @param setType
@@ -2444,7 +2305,6 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     boolean ownInsertsAreVisible([in]long setType) raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** indicates whether updates made by others are visible.
         @param setType
@@ -2456,7 +2316,6 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     boolean othersUpdatesAreVisible([in]long setType) raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** indicates whether deletes made by others are visible.
         @param setType
@@ -2468,7 +2327,6 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     boolean othersDeletesAreVisible([in]long setType) raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** indicates whether inserts made by others are visible.
         @param setType
@@ -2480,7 +2338,6 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     boolean othersInsertsAreVisible([in]long setType) raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** indicates whether or not a visible row update can be detected by
         calling the method
@@ -2494,7 +2351,6 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     boolean updatesAreDetected([in]long setType) raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** indicates whether or not a visible row delete can be detected by
         calling
@@ -2510,7 +2366,6 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     boolean deletesAreDetected([in]long setType) raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** indicates whether or not a visible row insert can be detected
         by calling
@@ -2524,7 +2379,6 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     boolean insertsAreDetected([in]long setType) raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** indicates whether the driver supports batch updates.
         @returns
@@ -2533,7 +2387,6 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     boolean supportsBatchUpdates() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** Gets a description of the user-defined types defined in a particular
         schema. Schema-specific UDTs may have type OBJECT, STRUCT,
@@ -2589,7 +2442,6 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
     XResultSet getUDTs([in]any catalog, [in]string schemaPattern,
               [in]string typeNamePattern, [in]sequence<long> types)
       raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** retrieves the connection that produced this metadata object.
         @returns
@@ -2600,7 +2452,6 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
     XConnection getConnection() raises (SQLException);
 };
 
-//=============================================================================
 
 }; }; }; };
 

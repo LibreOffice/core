@@ -23,11 +23,9 @@
 #include <com/sun/star/rdf/XURI.idl>
 
 
-//=============================================================================
 
 module com {   module sun {   module star {   module rdf {
 
-//=============================================================================
 /** represents a literal that may occur in a RDF graph.
 
     <p>
@@ -55,7 +53,6 @@ interface XLiteral : XNode
     //FIXME: TODO: have not looked at handling all kinds of types, maybe just have an any attr here...
 };
 
-//=============================================================================
 
 }; }; }; };
 

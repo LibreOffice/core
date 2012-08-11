@@ -22,11 +22,9 @@
 #include <com/sun/star/uno/XInterface.idl>
 
 
-//=============================================================================
 
 module com {   module sun {   module star {   module document {
 
-//=============================================================================
 
 /** makes it possible to prevent object internal updates for a certain period
     to be able to quickly change multiple parts of the objects, where the
@@ -34,23 +32,19 @@ module com {   module sun {   module star {   module document {
  */
 published interface XActionLockable: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** @returns
             <TRUE/> if at least one lock exists.
      */
     boolean isActionLocked();
 
-    //-------------------------------------------------------------------------
     /** increments the lock count of the object by one.
      */
     void addActionLock();
 
-    //-------------------------------------------------------------------------
     /** decrements the lock count of the object by one.
      */
     void removeActionLock();
 
-    //-------------------------------------------------------------------------
     /** sets the locking level.
 
         <p>This method is used for debugging purposes. The programming
@@ -59,7 +53,6 @@ published interface XActionLockable: com::sun::star::uno::XInterface
      */
     void setActionLocks( [in] short nLock );
 
-    //-------------------------------------------------------------------------
     /** resets the locking level.
 
         <p>This method is used for debugging purposes. The debugging
@@ -71,7 +64,6 @@ published interface XActionLockable: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

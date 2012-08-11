@@ -24,11 +24,9 @@
 #include <com/sun/star/util/Color.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module drawing {
 
-//=============================================================================
 
 // DocMerge from xml: struct com::sun::star::drawing::Hatch
 /** This struct defines the appearance of a hatch.
@@ -43,21 +41,18 @@ published struct Hatch
      */
     com::sun::star::drawing::HatchStyle Style;
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: field com::sun::star::drawing::Hatch::Color
     /** This is the color of the hatch lines.
      */
     com::sun::star::util::Color Color;
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: field com::sun::star::drawing::Hatch::Distance
     /** This is the distance between the lines in the hatch.
      */
     long Distance;
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: field com::sun::star::drawing::Hatch::Angle
     /** You can rotate the lines of the hatch with this angle.
@@ -66,7 +61,6 @@ published struct Hatch
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

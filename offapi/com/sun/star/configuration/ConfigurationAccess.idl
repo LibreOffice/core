@@ -36,11 +36,9 @@
 #include <com/sun/star/configuration/SetElement.idl>
 #include <com/sun/star/configuration/GroupElement.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module configuration {
 
-//=============================================================================
 /** provides read access to a fragment of the configuration hierarchy.
 
  <p>Values that are direct or indirect descendants of a root element can be
@@ -238,7 +236,6 @@ published service ConfigurationAccess
     [optional] service GroupElement;
 };
 
-//=============================================================================
 
 }; }; }; };
 

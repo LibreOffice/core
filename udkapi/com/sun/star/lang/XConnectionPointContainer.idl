@@ -21,13 +21,11 @@
 
 #include <com/sun/star/uno/XInterface.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module lang {
 
  published interface XConnectionPoint;
 
-//=============================================================================
 
 // DocMerge from xml: interface com::sun::star::lang::XConnectionPointContainer
 /** makes it possible to locate a specific connection point
@@ -42,7 +40,6 @@ module com {  module sun {  module star {  module lang {
  */
 published interface XConnectionPointContainer: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     // DocMerge from idl: method com::sun::star::lang::XConnectionPointContainer::getConnectionPointTypes
     /** @returns
@@ -51,7 +48,6 @@ published interface XConnectionPointContainer: com::sun::star::uno::XInterface
      */
     sequence<type> getConnectionPointTypes();
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from idl: method com::sun::star::lang::XConnectionPointContainer::queryConnectionPoint
     /** @returns
@@ -65,7 +61,6 @@ published interface XConnectionPointContainer: com::sun::star::uno::XInterface
      */
     XConnectionPoint queryConnectionPoint( [in] type aType );
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::lang::XConnectionPointContainer::advise
     /** creates a connection between this object and a
@@ -85,7 +80,6 @@ published interface XConnectionPointContainer: com::sun::star::uno::XInterface
     [oneway] void advise( [in] type aType,
              [in] com::sun::star::uno::XInterface xListener );
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::lang::XConnectionPointContainer::unadvise
     /** terminates a notification previously set up with
@@ -98,7 +92,6 @@ published interface XConnectionPointContainer: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

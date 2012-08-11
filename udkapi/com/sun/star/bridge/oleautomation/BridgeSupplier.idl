@@ -22,11 +22,9 @@
 #include <com/sun/star/bridge/XBridgeSupplier2.idl>
 
 
-//=============================================================================
 
 module com { module sun { module star { module bridge { module oleautomation {
 
-//=============================================================================
 /** maps UNO types to oleautomation types and vice versa.
     <p>
     The function
@@ -63,7 +61,6 @@ service BridgeSupplier
 
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

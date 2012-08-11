@@ -20,11 +20,9 @@
 #define __com_sun_star_drawing_EnhancedCustomShapeTextPathMode_idl__
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module drawing {
 
-//=============================================================================
 
 enum EnhancedCustomShapeTextPathMode
 {
@@ -41,7 +39,6 @@ enum EnhancedCustomShapeTextPathMode
     SHAPE
 };
 
-//=============================================================================
 
 }; }; }; };
 

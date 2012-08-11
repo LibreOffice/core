@@ -24,11 +24,9 @@
 #include <com/sun/star/text/TextMarkupDescriptor.idl>
 #include <com/sun/star/lang/IllegalArgumentException.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module text {
 
-//=============================================================================
 
 /** provides functionality to apply multiple text markups in one call.
 
@@ -37,7 +35,6 @@ module com {  module sun {  module star {  module text {
 
 interface XMultiTextMarkup
 {
-    //-------------------------------------------------------------------------
     /** submits multiple new markup ranges.
 
         <p>The main use of this function will probably be for proofreading to

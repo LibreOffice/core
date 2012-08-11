@@ -41,7 +41,6 @@ struct AnimationAttributes
     /// Preferred duration of the animation sequence in seconds.
     double                                      Duration;
 
-    //-------------------------------------------------------------------------
 
     /** Repeat mode of the animation sequence.<p>
 
@@ -53,7 +52,6 @@ struct AnimationAttributes
      */
     byte                                        RepeatMode;
 
-    //-------------------------------------------------------------------------
 
     /** Size of the untransformed animation sequence.<p>
 

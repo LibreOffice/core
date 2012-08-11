@@ -32,11 +32,9 @@
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/container/NoSuchElementException.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module  util {
 
-//=============================================================================
 /** A common interface for substituting string variables with
     other strings.
 
@@ -50,7 +48,6 @@
 */
 published interface XStringSubstitution : com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** Exchanges variables inside a given text with a substitution text
         defined for the variables.
 
@@ -79,7 +76,6 @@ published interface XStringSubstitution : com::sun::star::uno::XInterface
     string substituteVariables( [in] string aText, [in] boolean bSubstRequired )
         raises( com::sun::star::container::NoSuchElementException );
 
-    //-------------------------------------------------------------------------
     /** Tries to replace parts of aText with variables that represents
         these sub strings.
 
@@ -101,7 +97,6 @@ published interface XStringSubstitution : com::sun::star::uno::XInterface
 
     string reSubstituteVariables( [in] string aText );
 
-    //-------------------------------------------------------------------------
     /** Returns the current value of a variable.
 
         <p>
@@ -123,7 +118,6 @@ published interface XStringSubstitution : com::sun::star::uno::XInterface
         raises (::com::sun::star::container::NoSuchElementException );
 };
 
-//=============================================================================
 
 }; }; }; };
 

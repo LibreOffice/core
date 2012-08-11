@@ -26,11 +26,9 @@
 #include <com/sun/star/awt/Size.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module view {
 
-//=============================================================================
 
 /** describes a printer by specifying the queue name and some settings.
 
@@ -40,7 +38,6 @@ module com {  module sun {  module star {  module view {
  */
 published service PrinterDescriptor
 {
-    //-------------------------------------------------------------------------
     /** specifies the name of the printer queue to be used.
 
         <p>Which printer queues are available, can be figured out with the
@@ -48,12 +45,10 @@ published service PrinterDescriptor
      */
     [property] string Name;
 
-    //-------------------------------------------------------------------------
     /** specifies the orientation of the paper.
      */
     [property] com::sun::star::view::PaperOrientation PaperOrientation;
 
-    //-------------------------------------------------------------------------
     /** specifies a predefined paper size or if the paper size
         is a user-defined size.
 
@@ -62,7 +57,6 @@ published service PrinterDescriptor
      */
     [property] com::sun::star::view::PaperFormat PaperFormat;
 
-    //-------------------------------------------------------------------------
     /** specifies the size of the paper in 100th mm.
 
         <p>Setting this property may change the value of
@@ -70,24 +64,20 @@ published service PrinterDescriptor
      */
     [property] com::sun::star::awt::Size PaperSize;
 
-    //-------------------------------------------------------------------------
     /** indicates, whether the printer is busy or not.
      */
     [readonly, property] boolean IsBusy;
 
-    //-------------------------------------------------------------------------
     /** indicates, whether the printer allows changes to
         <member>PrinterDescriptor::PaperOrientation</member>.
      */
     [readonly, property] boolean CanSetPaperOrientation;
 
-    //-------------------------------------------------------------------------
     /** indicates, whether the printer allows changes to
         <member>PrinterDescriptor::PaperFormat</member>.
      */
     [readonly, property] boolean CanSetPaperFormat;
 
-    //-------------------------------------------------------------------------
 
     /** indicates if the printer allows changes to
         <member>PrinterDescriptor::PaperSize</member>.
@@ -96,7 +86,6 @@ published service PrinterDescriptor
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

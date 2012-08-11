@@ -29,24 +29,20 @@
 #define __com_sun_star_form_FormSubmitMethod_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module form {
 
-//=============================================================================
 
 /** specifies how information is sent to a program invoked by submitting a form.
  */
 published enum FormSubmitMethod
 {
-    //-------------------------------------------------------------------------
 
     /** specifies to append the input information of a form to the target
         URL as parameters.
      */
     GET,
 
-    //-------------------------------------------------------------------------
 
     /** specifies to send the input information in a data body.
     */
@@ -54,7 +50,6 @@ published enum FormSubmitMethod
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

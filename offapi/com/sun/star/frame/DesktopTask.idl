@@ -27,11 +27,9 @@
 #include <com/sun/star/awt/Point.idl>
 #include <com/sun/star/awt/Size.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module frame {
 
-//=============================================================================
 /** use the <type>Frame</type> service instead of this
     @deprecated
  */
@@ -74,7 +72,6 @@ published service DesktopTask
     [property] com::sun::star::awt::Size Size;
 };
 
-//=============================================================================
 
 }; }; }; };
 

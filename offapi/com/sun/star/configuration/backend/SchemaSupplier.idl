@@ -22,28 +22,23 @@
 #include <com/sun/star/configuration/backend/XSchemaSupplier.idl>
 
 
-//=============================================================================
 
 module com { module sun { module star { module configuration { module backend {
 
-//=============================================================================
 
 /**
      provides access to configuration schemas
 */
 service SchemaSupplier
 {
-    //-------------------------------------------------------------------------
      /**
       provides access to configuration schemas.
       */
      interface XSchemaSupplier ;
 
-    //-------------------------------------------------------------------------
 
 } ;
 
-//=============================================================================
 
 } ; } ; } ; } ; } ;
 

@@ -23,11 +23,9 @@
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/sheet/SubTotalColumn.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** provides access to the collection of subtotal fields in a subtotal
     descriptor.
@@ -36,7 +34,6 @@ module com {  module sun {  module star {  module sheet {
  */
 published interface XSubTotalDescriptor: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** adds a subtotal field definition to the descriptor.
 
@@ -51,7 +48,6 @@ published interface XSubTotalDescriptor: com::sun::star::uno::XInterface
         [in] sequence< com::sun::star::sheet::SubTotalColumn > aSubTotalColumns,
         [in] long nGroupColumn );
 
-    //-------------------------------------------------------------------------
 
     /** removes all subtotal field definitions from the descriptor.
      */
@@ -59,7 +55,6 @@ published interface XSubTotalDescriptor: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

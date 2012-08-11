@@ -23,11 +23,9 @@
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/drawing/XShape.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** provides methods to get the shape of o annotation
 
@@ -37,7 +35,6 @@ module com {  module sun {  module star {  module sheet {
  */
 published interface XSheetAnnotationShapeSupplier: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** returns the shape of the annotation
      */
@@ -45,7 +42,6 @@ published interface XSheetAnnotationShapeSupplier: com::sun::star::uno::XInterfa
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

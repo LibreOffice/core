@@ -21,13 +21,10 @@
 #define __com_sun_star_i18n_CTLScriptType_idl__
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module i18n {
 
-//=============================================================================
 
-//--------------------------------------------------------------------------
 /** CTL script type constants for layout engine, returned by
     <member>XScriptTypeDetector::getCTLScriptType()</member>
 
@@ -53,7 +50,6 @@ published constants CTLScriptType
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

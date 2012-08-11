@@ -56,7 +56,6 @@ struct RenderState
      */
     ::com::sun::star::geometry::AffineMatrix2D  AffineTransform;
 
-    //-------------------------------------------------------------------------
 
     /** The clipping area associated with this render operation.<p>
 
@@ -75,7 +74,6 @@ struct RenderState
      */
     XPolyPolygon2D                                      Clip;
 
-    //-------------------------------------------------------------------------
 
     /** The device color associated with this render operation.<p>
 
@@ -87,7 +85,6 @@ struct RenderState
      */
     sequence<ColorComponent>                            DeviceColor;
 
-    //-------------------------------------------------------------------------
 
     /** The composition mode associated with this render
         operation.<p>

@@ -24,11 +24,9 @@
 #include <com/sun/star/container/XNameContainer.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module presentation {
 
-//=============================================================================
 
 /** must be supported to provide access to customized
     presentations of a presentation document.
@@ -38,7 +36,6 @@
  */
 published interface XCustomPresentationSupplier: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** @returns
                 the <type>CustomPresentation</type>.
@@ -47,7 +44,6 @@ published interface XCustomPresentationSupplier: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

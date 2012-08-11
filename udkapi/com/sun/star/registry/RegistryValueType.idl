@@ -20,11 +20,9 @@
 #define __com_sun_star_registry_RegistryValueType_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module registry {
 
-//=============================================================================
 
 // DocMerge from xml: enum com::sun::star::registry::RegistryValueType
 /** represents all possible types of a key value.
@@ -35,7 +33,6 @@
  */
 published enum RegistryValueType
 {
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR RegistryValueType::    NOT_DEFINED,
 
     // DocMerge from xml: value com::sun::star::registry::RegistryValueType::NOT_DEFINED
@@ -43,7 +40,6 @@ published enum RegistryValueType
      */
     NOT_DEFINED,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR RegistryValueType::    LONG,
 
     // DocMerge from xml: value com::sun::star::registry::RegistryValueType::LONG
@@ -51,7 +47,6 @@ published enum RegistryValueType
      */
     LONG,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR RegistryValueType::    ASCII,
 
     // DocMerge from xml: value com::sun::star::registry::RegistryValueType::ASCII
@@ -59,7 +54,6 @@ published enum RegistryValueType
      */
     ASCII,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR RegistryValueType::    STRING,
 
     // DocMerge from xml: value com::sun::star::registry::RegistryValueType::STRING
@@ -67,7 +61,6 @@ published enum RegistryValueType
      */
     STRING,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR RegistryValueType::    BINARY,
 
     // DocMerge from xml: value com::sun::star::registry::RegistryValueType::BINARY
@@ -75,7 +68,6 @@ published enum RegistryValueType
      */
     BINARY,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR RegistryValueType::    LONGLIST,
 
     // DocMerge from xml: value com::sun::star::registry::RegistryValueType::LONGLIST
@@ -83,7 +75,6 @@ published enum RegistryValueType
      */
     LONGLIST,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR RegistryValueType::    ASCIILIST,
 
     // DocMerge from xml: value com::sun::star::registry::RegistryValueType::ASCIILIST
@@ -91,7 +82,6 @@ published enum RegistryValueType
      */
     ASCIILIST,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR RegistryValueType::    STRINGLIST
 
     // DocMerge from xml: value com::sun::star::registry::RegistryValueType::STRINGLIST
@@ -101,7 +91,6 @@ published enum RegistryValueType
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

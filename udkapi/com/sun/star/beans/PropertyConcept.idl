@@ -20,11 +20,9 @@
 #define __com_sun_star_beans_PropertyConcept_idl__
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module beans {
 
-//=============================================================================
 /** These constants are used to specify concepts of the
     introspection which apply to properties and to the
     methods which represent attributes.
@@ -38,7 +36,6 @@ module com {  module sun {  module star {  module beans {
  */
 published constants PropertyConcept
 {
-    //-------------------------------------------------------------------------
     /** This value is used to query for all properties.
 
         See
@@ -47,27 +44,23 @@ published constants PropertyConcept
      */
     const long ALL = -1;
 
-    //-------------------------------------------------------------------------
     /** specifies that the change or retrieval of this
         property directly by the user can result in an unstable
         state (deadlock, application crash, security hole, etc.)
      */
     const long DANGEROUS = 1;
 
-    //-------------------------------------------------------------------------
     /** specifies all properties which are reachable by
         <type>XPropertySet</type>, <type>XFastPropertySet</type> or
         <type>XMultiPropertySet</type>.
      */
     const long PROPERTYSET = 2;
 
-    //-------------------------------------------------------------------------
 
     /** specifies all properties which are actually attributes of interfaces.
      */
     const long ATTRIBUTES = 4;
 
-    //-------------------------------------------------------------------------
 
     /** specifies all properties which are represented by getter or setter methods.
 
@@ -78,7 +71,6 @@ published constants PropertyConcept
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

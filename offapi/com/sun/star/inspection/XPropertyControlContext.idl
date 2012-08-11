@@ -31,10 +31,8 @@
 
 #include <com/sun/star/inspection/XPropertyControlObserver.idl>
 
-//=============================================================================
 module com {  module sun {  module star {  module inspection {
 
-//-----------------------------------------------------------------------------
 /** specifies the interface of the context of an <type>XPropertyControl</type>.
 
     @see XPropertyControl::ControlContext
@@ -51,7 +49,6 @@ interface XPropertyControlContext : XPropertyControlObserver
     [oneway] void   activateNextControl( [in] XPropertyControl CurrentControl );
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -32,11 +32,9 @@
 #include <com/sun/star/rdf/XNode.idl>
 
 
-//=============================================================================
 
 module com {   module sun {   module star {   module rdf {
 
-//=============================================================================
 /** represents a resource node that may occur in a RDF graph.
 
     <p>
@@ -53,7 +51,6 @@ interface XResource : XNode
 {
 };
 
-//=============================================================================
 
 }; }; }; };
 

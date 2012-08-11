@@ -27,11 +27,9 @@
 #include <com/sun/star/lang/IllegalArgumentException.idl>
 #include <com/sun/star/lang/NoSupportException.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module configuration { module backend {
 
-//=============================================================================
 
 /**
   Handles access to layered data stored in a repository.
@@ -50,7 +48,6 @@ module com { module sun { module star { module configuration { module backend {
 */
 published interface XBackend : ::com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /**
       retrieves the layers associated to the owner
@@ -76,7 +73,6 @@ published interface XBackend : ::com::sun::star::uno::XInterface
         raises (BackendAccessException,
                 com::sun::star::lang::IllegalArgumentException) ;
 
-    //-------------------------------------------------------------------------
 
     /**
       creates an update handler for the owner entity
@@ -105,7 +101,6 @@ published interface XBackend : ::com::sun::star::uno::XInterface
                 com::sun::star::lang::NoSupportException,
                 com::sun::star::lang::IllegalArgumentException) ;
 
-    //-------------------------------------------------------------------------
 
     /**
       retrieves the layers associated to an entity for a component.
@@ -135,7 +130,6 @@ published interface XBackend : ::com::sun::star::uno::XInterface
         raises (BackendAccessException,
                 com::sun::star::lang::IllegalArgumentException) ;
 
-    //-------------------------------------------------------------------------
 
     /**
       creates an update handler on an entity's layer for a component.
@@ -168,10 +162,8 @@ published interface XBackend : ::com::sun::star::uno::XInterface
                 com::sun::star::lang::NoSupportException,
                 com::sun::star::lang::IllegalArgumentException) ;
 
-    //-------------------------------------------------------------------------
 } ;
 
-//=============================================================================
 
 } ; } ; } ; } ; } ;
 

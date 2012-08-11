@@ -26,11 +26,9 @@
 #include <com/sun/star/lang/WrappedTargetException.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module container {
 
-//=============================================================================
 
 /** provides functionality to enumerate the contents of a container.
 
@@ -56,13 +54,11 @@ module com {  module sun {  module star {  module container {
  */
 published interface XEnumeration: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** tests whether this enumeration contains more elements.
      */
     boolean hasMoreElements();
 
-    //-------------------------------------------------------------------------
 
     /** @returns
             the next element of this enumeration.
@@ -81,7 +77,6 @@ published interface XEnumeration: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

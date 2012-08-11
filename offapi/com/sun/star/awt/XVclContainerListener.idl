@@ -24,11 +24,9 @@
 #include <com/sun/star/awt/VclContainerEvent.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module awt {
 
-//=============================================================================
 
 /** makes it possible to receive container events.
 
@@ -40,13 +38,11 @@
  */
 published interface XVclContainerListener: com::sun::star::lang::XEventListener
 {
-    //-------------------------------------------------------------------------
 
     /** is invoked when a window has been added to the VCL container window.
      */
     [oneway] void windowAdded( [in] com::sun::star::awt::VclContainerEvent e );
 
-    //-------------------------------------------------------------------------
 
     /** is invoked when a window has been removed from the VCL container
         window.
@@ -55,7 +51,6 @@ published interface XVclContainerListener: com::sun::star::lang::XEventListener
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -48,7 +48,6 @@ published interface XSQLErrorBroadcaster: com::sun::star::uno::XInterface
      */
     [oneway] void addSQLErrorListener(
             [in]XSQLErrorListener Listener );
-    //-------------------------------------------------------------------------
 
     /** removes the specified listener.
         @param com::sun::star::sdb::XSQLErrorListener
@@ -57,7 +56,6 @@ published interface XSQLErrorBroadcaster: com::sun::star::uno::XInterface
             [in]XSQLErrorListener Listener );
 };
 
-//=============================================================================
 
 }; }; }; };
 

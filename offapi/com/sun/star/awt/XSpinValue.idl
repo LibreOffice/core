@@ -23,36 +23,30 @@
 #include <com/sun/star/awt/XAdjustmentListener.idl>
 #include <com/sun/star/lang/NoSupportException.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module awt {
 
-//=============================================================================
 
 /** gives access to the value and settings of a control which is associated with
     a spinnable value.
  */
 interface XSpinValue : com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** registers an adjustment event listener.
      */
     [oneway] void addAdjustmentListener( [in] com::sun::star::awt::XAdjustmentListener listener );
 
-    //-------------------------------------------------------------------------
 
     /** unregisters an adjustment event listener.
      */
     [oneway] void removeAdjustmentListener( [in] com::sun::star::awt::XAdjustmentListener listener );
 
-    //-------------------------------------------------------------------------
 
     /** sets the current value of the control
      */
     [oneway] void setValue( [in] long value );
 
-    //-------------------------------------------------------------------------
 
     /** sets the value and value range of the control
 
@@ -62,51 +56,43 @@ interface XSpinValue : com::sun::star::uno::XInterface
      */
     [oneway] void setValues( [in] long minValue, [in] long maxValue, [in] long currentValue );
 
-    //-------------------------------------------------------------------------
 
     /** returns the current value of the control.
      */
     long getValue();
 
-    //-------------------------------------------------------------------------
 
     /** sets the  minimum value which can be set on the control
      */
     [oneway] void setMinimum( [in] long minValue );
 
-    //-------------------------------------------------------------------------
 
     /** sets the  maximum value which can be set on the control
      */
     [oneway] void setMaximum( [in] long maxValue );
 
-    //-------------------------------------------------------------------------
 
     /** returns the currently set minimum value of the control
      */
     long getMinimum();
 
-    //-------------------------------------------------------------------------
 
     /** returns the currently set maximum value of the control
      */
     long getMaximum();
 
-    //-------------------------------------------------------------------------
 
     /** sets the value by which the current value of the control
         should be incremented or decremented upon spinning.
      */
     [oneway] void setSpinIncrement( [in] long spinIncrement );
 
-    //-------------------------------------------------------------------------
 
     /** returns the value by which the current value of the control
         should be incremented or decremented upon spinning.
      */
     long getSpinIncrement();
 
-    //-------------------------------------------------------------------------
 
     /** controls the orientation of the control
         @param orientation
@@ -117,7 +103,6 @@ interface XSpinValue : com::sun::star::uno::XInterface
     void setOrientation( [in] long orientation )
             raises( com::sun::star::lang::NoSupportException );
 
-    //-------------------------------------------------------------------------
 
     /** returns the current orientation of the control
      */
@@ -125,7 +110,6 @@ interface XSpinValue : com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

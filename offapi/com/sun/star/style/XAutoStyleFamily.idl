@@ -23,11 +23,9 @@
 
 #include <com/sun/star/beans/PropertyValues.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module style {
 
-//=============================================================================
 
 // DocMerge from xml: service com::sun::star::style::StyleFamilies
 /** This service contains the collection of automatic style families within the
@@ -41,7 +39,6 @@ interface XAutoStyleFamily
     com::sun::star::style::XAutoStyle insertStyle( [in] com::sun::star::beans::PropertyValues Values);
 };
 
-//=============================================================================
 
 }; }; }; };
 

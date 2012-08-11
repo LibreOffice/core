@@ -20,18 +20,15 @@
 #define __com_sun_star_drawing_ConnectorType_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module drawing {
 
-//=============================================================================
 
 // DocMerge from xml: enum com::sun::star::drawing::ConnectorType
 /** The <type>ConnectorType</type> specifies the appearance of a connector.
  */
 published enum ConnectorType
 {
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: value com::sun::star::drawing::ConnectorType::STANDARD
     /** the connector is drawn with three lines, with the middle line
@@ -39,21 +36,18 @@ published enum ConnectorType
      */
     STANDARD,
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: value com::sun::star::drawing::ConnectorType::CURVE
     /** the ConnectorShape is drawn as a curve
      */
     CURVE,
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: value com::sun::star::drawing::ConnectorType::LINE
     /** the ConnectorShape is drawn as a straight line
      */
     LINE,
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: value com::sun::star::drawing::ConnectorType::LINES
     /** the connector is drawn with three lines
@@ -62,7 +56,6 @@ published enum ConnectorType
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

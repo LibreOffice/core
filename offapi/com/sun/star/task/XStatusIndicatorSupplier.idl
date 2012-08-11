@@ -23,18 +23,15 @@
 #include <com/sun/star/task/XStatusIndicator.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module task {
 
-//=============================================================================
 /** use <type>XStatusIndicatorFactory</type> instead of this
 
     @deprecated
  */
 published interface XStatusIndicatorSupplier: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** use <member>XStatusIndicatorFactory::createStatusIndicator()</member>
         instead of this
 

@@ -22,11 +22,9 @@
 #include <com/sun/star/uno/XInterface.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module script {
 
-//=============================================================================
 /** provides access to additional scripting code.
 
     <p>This code is organized in modules and these modules contain
@@ -36,7 +34,6 @@
  */
 published interface XLibraryAccess: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** returns <TRUE/>, if the function is accessible through this library;
         otherwise it returns <FALSE/>.
 
@@ -46,7 +43,6 @@ published interface XLibraryAccess: com::sun::star::uno::XInterface
      */
     boolean isFunction( [in] string aFunctionName );
 
-    //-------------------------------------------------------------------------
     /** returns <TRUE/> if a fully qualified function name begins with this name.
 
                 @param aPathName
@@ -54,18 +50,15 @@ published interface XLibraryAccess: com::sun::star::uno::XInterface
      */
     boolean isValidPath( [in] string aPathName );
 
-    //-------------------------------------------------------------------------
     /** Return all module names which contain code.
          e.g., { "UtilLibrary.ModuleDate", "UtilLibrary.Output", ... }
      */
     sequence<string> getModuleNames();
 
-    //-------------------------------------------------------------------------
     /** get the source code of a module.
      */
     string getModuleSource( [in] string aModulName );
 
-    //-------------------------------------------------------------------------
     /** Get the hole compiled code of a module.
 
         @param ModuleName the full qualified name of a module.
@@ -75,12 +68,10 @@ published interface XLibraryAccess: com::sun::star::uno::XInterface
      */
     sequence<byte> getModuleCode( [in] string aModuleName );
 
-    //-------------------------------------------------------------------------
     /** get the source code of a function.
      */
     string getFunctionSource( [in] string aFunctionName );
 
-    //-------------------------------------------------------------------------
     /** Get the compiled code of a function.
 
         @param FunctionName the full qualified name of a function.
@@ -91,7 +82,6 @@ published interface XLibraryAccess: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -24,11 +24,9 @@
 #include <com/sun/star/xml/sax/SAXException.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module xml {  module sax {
 
-//=============================================================================
 
 /** this interface does not conform to the SAX-standard.
 
@@ -37,7 +35,6 @@ module com {  module sun {  module star {  module xml {  module sax {
  */
 published interface XExtendedDocumentHandler: com::sun::star::xml::sax::XDocumentHandler
 {
-    //-------------------------------------------------------------------------
     /** receives notification about the start of a CDATA section in the
         XML-source.
 
@@ -47,7 +44,6 @@ published interface XExtendedDocumentHandler: com::sun::star::xml::sax::XDocumen
     void startCDATA()
             raises( com::sun::star::xml::sax::SAXException );
 
-    //-------------------------------------------------------------------------
     /** informs about the end of a CDATA-Section.
 
         <p>Note that <code>startCDATA/endCDATA</code> MUST NOT enclose any
@@ -55,20 +51,17 @@ published interface XExtendedDocumentHandler: com::sun::star::xml::sax::XDocumen
      */
     void endCDATA();
 
-    //-------------------------------------------------------------------------
     /** receives notification about a comment in the XML-source.
      */
     void comment( [in] string sComment )
             raises( com::sun::star::xml::sax::SAXException );
 
-    //-------------------------------------------------------------------------
     /** informs a writer that it is allowable to insert a line break and
         indentation before the next <type>XDocumentHandler</type>-call.
      */
     void allowLineBreak()
             raises( com::sun::star::xml::sax::SAXException );
 
-    //-------------------------------------------------------------------------
     /** notifies that any characters that cannot be handled by other callback
         methods are announced through this method.
      */
@@ -76,7 +69,6 @@ published interface XExtendedDocumentHandler: com::sun::star::xml::sax::XDocumen
             raises( com::sun::star::xml::sax::SAXException );
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

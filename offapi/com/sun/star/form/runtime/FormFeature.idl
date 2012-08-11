@@ -29,11 +29,9 @@
 #ifndef __com_sun_star_form_runtime_FormFeature_idl__
 #define __com_sun_star_form_runtime_FormFeature_idl__
 
-//=============================================================================
 
 module com { module sun { module star { module form { module runtime {
 
-//=============================================================================
 
 /** specifies the operations on a user interface form, as supported by the
     <type>XFormOperations</type> interface.
@@ -147,11 +145,9 @@ constants FormFeature
     const short RefreshCurrentControl = 19;
 };
 
-//=============================================================================
 
 }; }; }; }; };
 
-//=============================================================================
 
 #endif
 

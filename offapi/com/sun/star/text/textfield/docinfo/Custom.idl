@@ -22,12 +22,10 @@
 
 #include <com/sun/star/text/TextField.idl>
 
-//=============================================================================
 
 module com { module sun { module star {
     module text { module textfield { module docinfo {
 
-//=============================================================================
 /** specifies service of a text field that refers to the content of a
     user-defined field in the document information.
 
@@ -54,7 +52,6 @@ published service Custom
     [property] boolean IsFixed;
 };
 
-//=============================================================================
 
 }; }; }; }; }; };
 

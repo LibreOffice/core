@@ -20,60 +20,49 @@
 #define __com_sun_star_ucb_OutgoingMessageState_idl__
 
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** These are the possible values for <member>RecipientInfo::State</member>.
 */
 published enum OutgoingMessageState
 {
-    //-------------------------------------------------------------------------
     /** Message has just been placed into the out tray.
     */
     WRITTEN,
 
-    //-------------------------------------------------------------------------
     /** Message has been sent upstream to some recipients.
     */
     PARTIALLY_LOCALLY_SENT,
 
-    //-------------------------------------------------------------------------
     /** Message has been sent upstream to all recipients.
     */
     COMPLETELY_LOCALLY_SENT,
 
-    //-------------------------------------------------------------------------
     /** Local, non-fatal error (e.g. network temporarily not available).
     */
     RECOVERABLE_LOCAL_ERROR,
 
-    //-------------------------------------------------------------------------
     /** Local fatal error (e.g. first SMTP server upstream did not accept the
         message).
     */
     NONRECOVERABLE_LOCAL_ERROR,
 
-    //-------------------------------------------------------------------------
     /** Global fatal error (e.g. last member in SMTP chain could not deliver
         the message).
     */
     EXTERNAL_ERROR,
 
-    //-------------------------------------------------------------------------
     /** Message was sent; we are waiting for confirmation.
     */
     WAITING_CONFIRMATION,
 
-    //-------------------------------------------------------------------------
     /** Recipient confirmed reading.
     */
     CONFIRMED
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

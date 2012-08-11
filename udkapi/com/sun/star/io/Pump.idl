@@ -26,11 +26,9 @@
 #include <com/sun/star/io/XActiveDataControl.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module io {
 
-//=============================================================================
 
 // DocMerge from xml: service com::sun::star::io::Pump
 /** the implementation of a data source and a data sink.
@@ -54,7 +52,6 @@ published service Pump
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

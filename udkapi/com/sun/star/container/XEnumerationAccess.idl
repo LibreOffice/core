@@ -24,17 +24,14 @@
 #include <com/sun/star/container/XEnumeration.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module container {
 
-//=============================================================================
 
 /** used to enumerate objects in a container which contains objects.
  */
 published interface XEnumerationAccess: com::sun::star::container::XElementAccess
 {
-    //-------------------------------------------------------------------------
 
     /** @returns
             a new enumeration object for this container.
@@ -44,7 +41,6 @@ published interface XEnumerationAccess: com::sun::star::container::XElementAcces
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

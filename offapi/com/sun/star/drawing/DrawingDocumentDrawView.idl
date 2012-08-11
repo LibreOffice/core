@@ -32,30 +32,25 @@
 #include <com/sun/star/awt/XWindow.idl>
 #include <com/sun/star/awt/Point.idl>
 
-//=============================================================================
 module com {  module sun {  module star {  module view {
     published interface XFormLayerAccess;
 }; }; }; };
 
-//=============================================================================
 
  module com {  module sun {  module star {  module drawing {
 
-//=============================================================================
 
 /** This component integrates a view to a <type>DrawPage</type>s or
     <type>MasterPage</type> from a <type>DrawingDocument</type>.
  */
 published service DrawingDocumentDrawView
 {
-    //-------------------------------------------------------------------------
 
     /** this services offers the  integration of this component into the
         desktop.
     */
     service com::sun::star::frame::Controller;
 
-    //-------------------------------------------------------------------------
 
     /** lets you access the window for this view
 
@@ -67,21 +62,18 @@ published service DrawingDocumentDrawView
     */
     [optional] interface com::sun::star::view::XFormLayerAccess;
 
-    //-------------------------------------------------------------------------
 
     /** lets you set/get the current page displayed by this
         view.
      */
     interface com::sun::star::drawing::XDrawView;
 
-    //-------------------------------------------------------------------------
 
 
     /** lets you access the properties of this service.
      */
     interface com::sun::star::beans::XPropertySet;
 
-    //-------------------------------------------------------------------------
 
 
     /** gives you access to the selected entities of this
@@ -90,21 +82,18 @@ published service DrawingDocumentDrawView
     interface com::sun::star::view::XSelectionSupplier;
 
 
-    //-------------------------------------------------------------------------
 
     /** provides the names of the services implemented by
                 this instance.
      */
     interface com::sun::star::lang::XServiceInfo;
 
-    //-------------------------------------------------------------------------
 
     /** If the view is in master page mode, the view shows the master pages
         of this model.
      */
     [property] boolean IsMasterPageMode;
 
-    //-------------------------------------------------------------------------
 
     /** If the view is in layer mode, the user can modify the layer of the
         model of this view in the user interface.
@@ -112,19 +101,16 @@ published service DrawingDocumentDrawView
     [property] boolean IsLayerMode;
 
 
-    //-------------------------------------------------------------------------
 
     /** This is the drawing page that is currently visible.
      */
     [property] XDrawPage CurrentPage;
 
-    //-------------------------------------------------------------------------
 
     /** This is the area that is currently visible.
      */
     [readonly, property] com::sun::star::awt::Rectangle VisibleArea;
 
-    //-------------------------------------------------------------------------
 
     /** This property defines the zoom type for the document.
         @see com::sun::star::view::DocumentZoomType
@@ -139,7 +125,6 @@ published service DrawingDocumentDrawView
     */
        [optional, property] short ZoomType;
 
-       //-------------------------------------------------------------------------
 
        /** Defines the zoom value to use.
         Valid only if the ZoomType is set to
@@ -149,7 +134,6 @@ published service DrawingDocumentDrawView
     */
        [optional, property] short ZoomValue;
 
-       //-------------------------------------------------------------------------
 
     /** defines the offset from the top left position of the displayed page
         to the top left position of the view area in 100th/mm.
@@ -168,7 +152,6 @@ published service DrawingDocumentDrawView
     */
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -45,7 +45,6 @@ module com { module sun { module star { module ucb {
  */
  published service CommandEnvironment : ::com::sun::star::ucb::XCommandEnvironment
  {
-    //-------------------------------------------------------------------------
     /** Constructor.
 
         @param InteractionHandler the interaction handler instance that will be

@@ -19,11 +19,9 @@
 #ifndef __com_sun_star_linguistic2_ConversionDictionaryType_idl__
 #define __com_sun_star_linguistic2_ConversionDictionaryType_idl__
 
-//=============================================================================
 
 module com { module sun { module star { module linguistic2 {
 
-//=============================================================================
 /** specifies the conversion dictionary type to be used with <type>XConversionDictionary</type>.
 
      @since OOo 1.1.2
@@ -41,7 +39,6 @@ constants ConversionDictionaryType
     const short SCHINESE_TCHINESE   = 2;
 };
 
-//=============================================================================
 
 }; }; }; };
 

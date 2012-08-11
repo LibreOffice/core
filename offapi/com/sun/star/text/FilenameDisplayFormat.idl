@@ -20,11 +20,9 @@
 #define __com_sun_star_text_FilenameDisplayFormat_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module text {
 
-//=============================================================================
 
 // DocMerge from idl: constants com::sun::star::text::FilenameDisplayFormat
 /** These constants are used to specify which parts of an URL are displayed
@@ -32,28 +30,24 @@
  */
 published constants FilenameDisplayFormat
 {
-    //-------------------------------------------------------------------------
 
     // DocMerge from idl: value com::sun::star::text::FilenameDisplayFormat::FULL
     /** The content of the URL is completely displayed.
      */
     const short FULL = 0;
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from idl: value com::sun::star::text::FilenameDisplayFormat::PATH
     /** Only the path of the file is displayed.
      */
     const short PATH = 1;
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from idl: value com::sun::star::text::FilenameDisplayFormat::NAME
     /** Only the name of the file without the file extension is displayed.
      */
     const short NAME = 2;
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from idl: value com::sun::star::text::FilenameDisplayFormat::NAME_AND_EXT
     /** The file name including the file extension is displayed.
@@ -62,7 +56,6 @@ published constants FilenameDisplayFormat
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

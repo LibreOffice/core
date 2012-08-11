@@ -22,29 +22,24 @@
 #include <com/sun/star/uno/XInterface.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module awt {
 
-//=============================================================================
 
 /** gives access to the text and formatting of a fixed text field.
  */
 published interface XFixedText: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** sets the text of the control.
      */
     [oneway] void setText( [in] string Text );
 
-    //-------------------------------------------------------------------------
 
     /** returns the text of the control.
      */
     string getText();
 
-    //-------------------------------------------------------------------------
 
     /** sets the alignment of the text in the control.
 
@@ -56,7 +51,6 @@ published interface XFixedText: com::sun::star::uno::XInterface
      */
     [oneway] void setAlignment( [in] short nAlign );
 
-    //-------------------------------------------------------------------------
 
     /** returns the alignment of the text in the control.
      */
@@ -64,7 +58,6 @@ published interface XFixedText: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

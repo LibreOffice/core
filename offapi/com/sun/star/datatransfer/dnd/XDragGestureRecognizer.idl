@@ -22,13 +22,11 @@
 
 #include <com/sun/star/uno/XInterface.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module datatransfer { module dnd {
 
  published interface XDragGestureListener;
 
-//=============================================================================
 /** This interface is implemented by a view or window that supports drag
     operations.
 
@@ -40,7 +38,6 @@ module com { module sun { module star { module datatransfer { module dnd {
 
 published interface XDragGestureRecognizer: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** Registers a new <type>XDragGestureListener</type>.
 
         @param dgl
@@ -50,7 +47,6 @@ published interface XDragGestureRecognizer: com::sun::star::uno::XInterface
 
     [oneway] void addDragGestureListener( [in] XDragGestureListener dgl );
 
-    //-------------------------------------------------------------------------
     /** Unregisters the specified <type>XDragGestureListener</type>.
 
         @param dgl
@@ -60,14 +56,12 @@ published interface XDragGestureRecognizer: com::sun::star::uno::XInterface
 
     [oneway] void removeDragGestureListener( [in] XDragGestureListener dgl );
 
-    //-------------------------------------------------------------------------
     /** Reset the recognizer. If it is currently recognizing a gesture, ignore it.
     */
 
     void resetRecognizer();
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

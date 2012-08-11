@@ -29,48 +29,40 @@
 #ifndef __com_sun_star_table_CellVertJustify_idl__
 #define __com_sun_star_table_CellVertJustify_idl__
 
-//=============================================================================
 
 module com {  module sun {  module star {  module table {
 
-//=============================================================================
 
 /** specifies how cell contents are aligned vertically.
  */
 constants CellVertJustify2
 {
-    //-------------------------------------------------------------------------
 
     /** default alignment is used.
      */
     const long STANDARD = 0;
 
-    //-------------------------------------------------------------------------
 
     /** contents are aligned with the upper edge of the cell.
      */
     const long TOP = 1;
 
-    //-------------------------------------------------------------------------
 
     /** contents are aligned to the vertical middle of the cell.
      */
     const long CENTER = 2;
 
-    //-------------------------------------------------------------------------
 
     /** contents are aligned to the lower edge of the cell.
      */
     const long BOTTOM = 3;
 
-    //-------------------------------------------------------------------------
 
     /** contents are justified to the cell height.
      */
     const long BLOCK = 4;
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -23,17 +23,14 @@
 #include <com/sun/star/container/XNamed.idl>
 #include <com/sun/star/beans/XPropertySet.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** represents a single item in a data pilot field.
  */
 service DataPilotItem
 {
-    //-------------------------------------------------------------------------
 
     /** provides access to the name of the data pilot item.
 
@@ -41,26 +38,22 @@ service DataPilotItem
      */
     interface com::sun::star::container::XNamed;
 
-    //-------------------------------------------------------------------------
 
 //! service PropertySet
     /** provides access to the properties.
      */
     interface com::sun::star::beans::XPropertySet;
 
-    //=========================================================================
 
     /** specifies whether the item is showing detail.
      */
     [property] boolean ShowDetail;
 
-    //=========================================================================
 
     /** specifies whether the item is hidden.
     */
     [property] boolean IsHidden;
 
-    //=========================================================================
 
     /** specifies the item's position in its field if sorting is manual.
 
@@ -69,7 +62,6 @@ service DataPilotItem
     [optional, property] long Position;
 };
 
-//=============================================================================
 
 }; }; }; };
 

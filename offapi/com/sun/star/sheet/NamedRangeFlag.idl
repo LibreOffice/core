@@ -20,35 +20,29 @@
 #ifndef __com_sun_star_sheet_NamedRangeFlag_idl__
 #define __com_sun_star_sheet_NamedRangeFlag_idl__
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** used to specify the purpose of a named range.
  */
 published constants NamedRangeFlag
 {
-    //-------------------------------------------------------------------------
 
     /** The range contains filter criteria.
      */
     const long FILTER_CRITERIA = 1;
 
-    //-------------------------------------------------------------------------
 
     /** The range can be used as a print range.
      */
     const long PRINT_AREA = 2;
 
-    //-------------------------------------------------------------------------
 
     /** The range can be used as column headers for printing.
      */
     const long COLUMN_HEADER = 4;
 
-    //-------------------------------------------------------------------------
 
     /** The range can be used as row headers for printing.
      */
@@ -56,7 +50,6 @@ published constants NamedRangeFlag
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

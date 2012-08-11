@@ -20,11 +20,9 @@
 #ifndef __com_sun_star_text_TextMarkupType_idl__
 #define __com_sun_star_text_TextMarkupType_idl__
 
-//=============================================================================
 
 module com {  module sun {  module star {  module text {
 
-//=============================================================================
 
 /** Constants to specify the type of text markup.
 

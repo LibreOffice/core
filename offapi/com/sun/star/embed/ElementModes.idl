@@ -29,11 +29,9 @@
 #define __com_sun_star_embed_ElementModes_idl__
 
 
-//============================================================================
 
 module com { module sun { module star { module embed {
 
-//============================================================================
 /** The constant set contains possible modes to open an element.
 
     <p>
@@ -46,12 +44,10 @@ module com { module sun { module star { module embed {
 */
 published constants ElementModes
 {
-    //------------------------------------------------------------------------
     /** specifies opening of an element for reading.
      */
     const long READ = 1;
 
-    //------------------------------------------------------------------------
     /** specifies opening of a seekable element.
 
         <p>
@@ -63,7 +59,6 @@ published constants ElementModes
      */
     const long SEEKABLE = 2;
 
-    //------------------------------------------------------------------------
     /** specifies opening of a seekable element for reading.
 
         <p>
@@ -73,12 +68,10 @@ published constants ElementModes
      */
     const long SEEKABLEREAD = 3;
 
-    //------------------------------------------------------------------------
     /** specifies opening of an element for writing.
      */
     const long WRITE = 4;
 
-    //------------------------------------------------------------------------
     /** specifies opening of an element for reading and writing.
 
         <p>
@@ -87,7 +80,6 @@ published constants ElementModes
      */
     const long READWRITE = 7;
 
-    //------------------------------------------------------------------------
     /** lets the document be truncated immediately after opening.
 
         <p>
@@ -97,7 +89,6 @@ published constants ElementModes
      */
     const long TRUNCATE = 8;
 
-    //------------------------------------------------------------------------
     /** restricts creation of a new element on opening in case a requested one
         does not exist.
 
@@ -109,7 +100,6 @@ published constants ElementModes
     const long NOCREATE = 16;
 };
 
-//============================================================================
 
 }; }; }; };
 

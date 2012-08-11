@@ -22,11 +22,9 @@
 #include <com/sun/star/uno/XInterface.idl>
 
 
-//=============================================================================
 
 module com { module sun { module star { module linguistic2 {
 
-//=============================================================================
 /** one of the possible meanings for a word.
 
     <P> Represents one of the possible meanings that may be returned from a
@@ -38,14 +36,12 @@ module com { module sun { module star { module linguistic2 {
  */
 published interface XMeaning : com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /**
          @returns
              the meaning represented by this object.
      */
     string getMeaning();
 
-    //-------------------------------------------------------------------------
     /**
          @returns
              a sequence of strings where each entry is a synonym of the
@@ -55,7 +51,6 @@ published interface XMeaning : com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

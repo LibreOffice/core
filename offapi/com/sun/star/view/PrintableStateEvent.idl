@@ -22,11 +22,9 @@
 #include <com/sun/star/lang/EventObject.idl>
 #include <com/sun/star/view/PrintableState.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module view {
 
-//=============================================================================
 
 /** specifies the print progress of an <type>XPrintable</type>.
 
@@ -40,7 +38,6 @@ published struct PrintableStateEvent : com::sun::star::lang::EventObject
     PrintableState State;
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -35,11 +35,9 @@
 #include <com/sun/star/beans/PropertyValue.idl>
 #include <com/sun/star/text/XTextMarkup.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module text {
 
-//=============================================================================
 
 /** provides functionality to ...
 
@@ -49,7 +47,6 @@ module com {  module sun {  module star {  module text {
 interface XFlatParagraph: com::sun::star::text::XTextMarkup
 {
 
-    //-------------------------------------------------------------------------
     /** get the content of the paragraph
 
         @returns
@@ -57,7 +54,6 @@ interface XFlatParagraph: com::sun::star::text::XTextMarkup
     */
     string getText();
 
-    //-------------------------------------------------------------------------
     /** check whether the content has been modified
 
         @returns
@@ -66,7 +62,6 @@ interface XFlatParagraph: com::sun::star::text::XTextMarkup
     */
     boolean isModified();
 
-    //-------------------------------------------------------------------------
     /** change the "checked" flag of the respective text node, i.e., mark the
         text node as "processed"
 
@@ -80,7 +75,6 @@ interface XFlatParagraph: com::sun::star::text::XTextMarkup
     */
     void setChecked( [in] long nType, [in] boolean bVal );
 
-    //-------------------------------------------------------------------------
     /** returns whether the respective text node has already been processed
 
         @param nType
@@ -92,7 +86,6 @@ interface XFlatParagraph: com::sun::star::text::XTextMarkup
     */
     boolean isChecked( [in] long nType );
 
-    //-------------------------------------------------------------------------
     /** get the language of the specific text
 
         @param  nPos
@@ -111,7 +104,6 @@ interface XFlatParagraph: com::sun::star::text::XTextMarkup
     com::sun::star::lang::Locale getLanguageOfText( [in] long nPos, [in] long nLen )
             raises( com::sun::star::lang::IllegalArgumentException );
 
-    //-------------------------------------------------------------------------
     /** get the single most probable language of the specific text,
         especially after getLanguageOfText fails
 
@@ -131,7 +123,6 @@ interface XFlatParagraph: com::sun::star::text::XTextMarkup
                                                            [in] long nLen )
             raises( com::sun::star::lang::IllegalArgumentException );
 
-    //-------------------------------------------------------------------------
     /** replace the specific text with new text.
 
         @param  nPos
@@ -153,7 +144,6 @@ interface XFlatParagraph: com::sun::star::text::XTextMarkup
                      [in] sequence<::com::sun::star::beans::PropertyValue> aAttributes )
             raises( com::sun::star::lang::IllegalArgumentException );
 
-    //-------------------------------------------------------------------------
     /** replace the attributes of the specific text with the given set of attributes.
 
         @param  nPos
@@ -172,7 +162,6 @@ interface XFlatParagraph: com::sun::star::text::XTextMarkup
                               [in] sequence<::com::sun::star::beans::PropertyValue> aAttributes )
             raises( com::sun::star::lang::IllegalArgumentException );
 
-    //-------------------------------------------------------------------------
     /** get a list of indexes that separate each two different languages
 
         @returns
@@ -181,7 +170,6 @@ interface XFlatParagraph: com::sun::star::text::XTextMarkup
     sequence< long > getLanguagePortions();
 };
 
-//=============================================================================
 
 }; }; }; };
 

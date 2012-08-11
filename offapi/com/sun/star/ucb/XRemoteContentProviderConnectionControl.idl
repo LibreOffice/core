@@ -28,7 +28,6 @@ module com { module sun { module star { module ucb {
 
 module com { module sun { module star { module ucb {
 
-//============================================================================
 /** A simple mechanism to find out if the connection between a remote content
     provider distributor and acceptor gets lost.
 
@@ -42,7 +41,6 @@ module com { module sun { module star { module ucb {
 published interface XRemoteContentProviderConnectionControl:
     com::sun::star::uno::XInterface
 {
-    //------------------------------------------------------------------------
     /** Enable connection control, using as a token some object implemented on
         the remote content provider acceptor's side.
 

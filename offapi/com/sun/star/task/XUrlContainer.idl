@@ -32,11 +32,9 @@
 #include <com/sun/star/task/XInteractionHandler.idl>
 
 
-//=============================================================================
 
 module com { module sun { module star { module task {
 
-//=============================================================================
 /** Allows to store and retrieve URLs. URLs can be stored persistently or
     until end of OOo session.
 
@@ -44,7 +42,6 @@ module com { module sun { module star { module task {
 */
 /*published*/ interface XUrlContainer : com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** Add a URL to the container.
 
         @param Url        URL to add to the container
@@ -54,7 +51,6 @@ module com { module sun { module star { module task {
     */
     void addUrl( [in] string Url, [in] boolean MakePersistent );
 
-    //-------------------------------------------------------------------------
     /** Lookup a URL in the container.
 
         @param Url     URL to lookup.
@@ -62,14 +58,12 @@ module com { module sun { module star { module task {
     */
     string findUrl( [in] string Url );
 
-    //-------------------------------------------------------------------------
     /** Remove a URL from the container.
 
         @param Url      URL to remove.
     */
     void removeUrl( [in] string Url );
 
-    //-------------------------------------------------------------------------
     /** Get all URLs.
 
         @param OnlyPersistent Only URLs that are stored persistently shall
@@ -80,7 +74,6 @@ module com { module sun { module star { module task {
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

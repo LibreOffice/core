@@ -31,10 +31,8 @@
 
 #include <com/sun/star/script/XTypeConverter.idl>
 
-//=============================================================================
 module com {  module sun {  module star {  module inspection {
 
-//-----------------------------------------------------------------------------
 /** handles string representations of property values.
     @see
 */
@@ -62,7 +60,6 @@ interface XStringRepresentation
                         ) raises( com::sun::star::uno::Exception );
 };
 
-//=============================================================================
 
 }; }; }; };
 

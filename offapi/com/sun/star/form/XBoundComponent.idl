@@ -22,11 +22,9 @@
 #include <com/sun/star/form/XUpdateBroadcaster.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module form {
 
-//=============================================================================
 
 /** specifies a (form) component which is bound to a data source.
 
@@ -44,7 +42,6 @@
  */
 published interface XBoundComponent: com::sun::star::form::XUpdateBroadcaster
 {
-    //-------------------------------------------------------------------------
 
     /** commits the content of the component into the data source it is bound to.
 
@@ -55,7 +52,6 @@ published interface XBoundComponent: com::sun::star::form::XUpdateBroadcaster
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

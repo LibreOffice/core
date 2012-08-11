@@ -28,11 +28,9 @@
 #include <com/sun/star/io/XDataTransferEventListener.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module io {
 
-//=============================================================================
 
 // DocMerge from xml: interface com::sun::star::io::XDataExporter
 /** makes it possible to export data from a component into a data sink.
@@ -42,7 +40,6 @@ module com {  module sun {  module star {  module io {
  */
 published interface XDataExporter: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::io::XDataExporter::exportData
     /** exports data for a component into an output stream.
@@ -51,7 +48,6 @@ published interface XDataExporter: com::sun::star::uno::XInterface
              [in] com::sun::star::lang::XComponent Component,
              [in] com::sun::star::io::XDataTransferEventListener aListener );
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::io::XDataExporter::cancel
     /** cancels the export process.
@@ -60,7 +56,6 @@ published interface XDataExporter: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

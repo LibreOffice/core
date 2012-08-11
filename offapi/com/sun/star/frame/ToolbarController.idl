@@ -35,11 +35,9 @@
 #include <com/sun/star/frame/XToolbarController.idl>
 #include <com/sun/star/frame/XSubToolbarController.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module frame {
 
-//=============================================================================
 /** is an abstract service for a component which offers a more complex user
     interface to users within a toolbar.
 
@@ -59,7 +57,6 @@
 
 service ToolbarController
 {
-    //-------------------------------------------------------------------------
     /** with this interface a component can receive events if a feature has
         changed.
 
@@ -98,7 +95,6 @@ service ToolbarController
     */
     interface com::sun::star::util::XUpdatable;
 
-    //-------------------------------------------------------------------------
     /** used to notify changed features and requests for additional user interface
         items.
 
@@ -112,7 +108,6 @@ service ToolbarController
      */
     interface com::sun::star::frame::XToolbarController;
 
-    //-------------------------------------------------------------------------
     /** used to notify and retrieve information that are specific for sub-toolbar
         controllers.
 
@@ -126,7 +121,6 @@ service ToolbarController
     [optional] interface ::com::sun::star::frame::XSubToolbarController;
 };
 
-//=============================================================================
 
 }; }; }; };
 

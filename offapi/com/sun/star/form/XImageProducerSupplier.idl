@@ -24,11 +24,9 @@
 #include <com/sun/star/awt/XImageProducer.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module form {
 
-//=============================================================================
 
 /** provides the access to an image producer.
 
@@ -36,7 +34,6 @@
  */
 published interface XImageProducerSupplier: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** accesses the image producer.
 
@@ -47,7 +44,6 @@ published interface XImageProducerSupplier: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

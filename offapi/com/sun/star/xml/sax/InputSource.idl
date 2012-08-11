@@ -31,11 +31,9 @@
 #include <com/sun/star/io/XInputStream.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module xml {  module sax {
 
-//=============================================================================
 
 /** specifies the Datasource plus some additional information for the parser.
 
@@ -54,7 +52,6 @@ published struct InputSource
      */
     com::sun::star::io::XInputStream aInputStream;
 
-    //-------------------------------------------------------------------------
 
     /** contains the encoding of the data stream. This is used by the parser
         to do Unicode conversions.
@@ -66,21 +63,18 @@ published struct InputSource
      */
     string sEncoding;
 
-    //-------------------------------------------------------------------------
 
     /** contains the public Id of the document, for example, needed in
         exception-message strings.
      */
     string sPublicId;
 
-    //-------------------------------------------------------------------------
 
     /** contains the system ID of the document.
      */
     string sSystemId;
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

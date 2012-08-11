@@ -35,17 +35,14 @@
 #include <com/sun/star/awt/Rectangle.idl>
 
 
-//=============================================================================
 
 module com { module sun { module star { module awt {
 
-//=============================================================================
 
 /** specifies a factory interface for creating message boxes.
  */
 published interface XMessageBoxFactory : com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** creates a message box.
 
@@ -91,7 +88,6 @@ published interface XMessageBoxFactory : com::sun::star::uno::XInterface
     XMessageBox createMessageBox( [in] com::sun::star::awt::XWindowPeer aParent, [in] com::sun::star::awt::Rectangle aPosSize, [in] string aType, [in] long aButtons, [in] string aTitle, [in] string aMessage );
 };
 
-//=============================================================================
 
 }; }; }; };
 

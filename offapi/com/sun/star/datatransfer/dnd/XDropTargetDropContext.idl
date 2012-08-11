@@ -23,11 +23,9 @@
 #include <com/sun/star/datatransfer/dnd/InvalidDNDOperationException.idl>
 #include <com/sun/star/uno/XInterface.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module datatransfer { module dnd {
 
-//=============================================================================
 /** This interface is implemented by any drop target context object.
 
     <p>A DropTargetContext is created whenever the logical cursor associated
@@ -41,7 +39,6 @@ module com { module sun { module star { module datatransfer { module dnd {
 
 published interface XDropTargetDropContext : com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** Accept the Drop.
 
         <p>This method should be called from the
@@ -57,7 +54,6 @@ published interface XDropTargetDropContext : com::sun::star::uno::XInterface
 
     [oneway] void acceptDrop( [in] byte dragOperation );
 
-    //-------------------------------------------------------------------------
     /** Reject the drop as a result of examining the available
         <type scope="com::sun::star::datatransfer">DataFlavor</type> types
         received in the <member>XDropTargetListener::dragEnter()</member> method.
@@ -65,7 +61,6 @@ published interface XDropTargetDropContext : com::sun::star::uno::XInterface
 
     [oneway] void rejectDrop();
 
-    //-------------------------------------------------------------------------
     /** Signals that the drop is completed and if it was successful or not.
 
         @param success
@@ -76,7 +71,6 @@ published interface XDropTargetDropContext : com::sun::star::uno::XInterface
     [oneway] void dropComplete( [in] boolean success );
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

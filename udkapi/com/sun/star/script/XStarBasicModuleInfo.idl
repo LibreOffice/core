@@ -22,28 +22,23 @@
 #include <com/sun/star/uno/XInterface.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module script {
 
-//=============================================================================
 
 /** Script Module containing some scripting code in a certain scripting language
     @deprecated
  */
 published interface XStarBasicModuleInfo: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** returns the name of the module
      */
     string getName();
 
-    //-------------------------------------------------------------------------
     /** returns the type of the script language as string, for example, "StarBasic" or "JavaScript".
      */
     string getLanguage();
 
-    //-------------------------------------------------------------------------
     /** returns the script source code as string.
 
         <p>The code has to correspond with the language
@@ -53,7 +48,6 @@ published interface XStarBasicModuleInfo: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

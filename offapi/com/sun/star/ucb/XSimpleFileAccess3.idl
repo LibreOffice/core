@@ -24,18 +24,15 @@
 #include <com/sun/star/io/XInputStream.idl>
 #include <com/sun/star/uno/Exception.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** This is an extension to the interface <type>XSimpleFileAccess2</type>.
 
     @since OOo 1.1.2
 */
 published interface XSimpleFileAccess3 : com::sun::star::ucb::XSimpleFileAccess2
 {
-    //-------------------------------------------------------------------------
     /** Checks if a file is "hidden"
 
         @param FileURL
@@ -47,7 +44,6 @@ published interface XSimpleFileAccess3 : com::sun::star::ucb::XSimpleFileAccess2
     boolean isHidden( [in] string FileURL )
         raises( com::sun::star::ucb::CommandAbortedException, com::sun::star::uno::Exception );
 
-    //-------------------------------------------------------------------------
     /** Sets the "hidden" of a file according to the boolean parameter,
         if the actual process has the right to do so and the used
         operation system supports this operation.
@@ -60,7 +56,6 @@ published interface XSimpleFileAccess3 : com::sun::star::ucb::XSimpleFileAccess2
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

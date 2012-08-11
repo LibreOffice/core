@@ -23,11 +23,9 @@
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/sheet/DataResult.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** provides access to a table of results of a data pilot source.
 
@@ -38,7 +36,6 @@ module com {  module sun {  module star {  module sheet {
  */
 published interface XDataPilotResults: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** returns the result array.
 
@@ -49,7 +46,6 @@ published interface XDataPilotResults: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

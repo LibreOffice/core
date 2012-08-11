@@ -24,11 +24,9 @@
 #include <com/sun/star/uno/Exception.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module lang {
 
-//=============================================================================
 
 /** Factories support this interface creating instances giving a name,
     e.g. a service name.
@@ -75,7 +73,6 @@ published interface XMultiServiceFactory: com::sun::star::uno::XInterface
     sequence<string> getAvailableServiceNames();
 };
 
-//=============================================================================
 
 }; }; }; };
 

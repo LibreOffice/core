@@ -20,46 +20,39 @@
 #define __com_sun_star_style_ParagraphAdjust_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module style {
 
-//=============================================================================
 
 // DocMerge from xml: enum com::sun::star::style::ParagraphAdjust
 /** These enumeration values describe the formatting of a text paragraph.
  */
 published enum ParagraphAdjust
 {
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: value com::sun::star::style::ParagraphAdjust::LEFT
     /** adjusted to the left border
      */
     LEFT,
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: value com::sun::star::style::ParagraphAdjust::RIGHT
     /** adjusted to the right border
      */
     RIGHT,
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: value com::sun::star::style::ParagraphAdjust::BLOCK
     /** adjusted to both borders / stretched, except for last line
      */
     BLOCK,
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: value com::sun::star::style::ParagraphAdjust::CENTER
     /** adjusted to the center
      */
     CENTER,
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: value com::sun::star::style::ParagraphAdjust::STRETCH
     /** adjusted to both borders / stretched, including last line
@@ -68,7 +61,6 @@ published enum ParagraphAdjust
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

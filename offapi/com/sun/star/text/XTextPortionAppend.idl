@@ -26,17 +26,14 @@
 #include <com/sun/star/beans/UnknownPropertyException.idl>
 #include <com/sun/star/text/XTextRange.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module text {
 
-//=============================================================================
 
 /** .
  */
 interface XTextPortionAppend : com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
         /** appends a new text portion to the paragraph at the end of the text.
 
@@ -58,7 +55,6 @@ interface XTextPortionAppend : com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

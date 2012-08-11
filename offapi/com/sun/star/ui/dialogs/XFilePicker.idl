@@ -32,18 +32,15 @@
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/ui/dialogs/XExecutableDialog.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module ui { module dialogs {
 
-//=============================================================================
 /** Specifies an interface for a FilePicker
 */
 
 published interface XFilePicker: com::sun::star::ui::dialogs::XExecutableDialog
 {
 
-    //-------------------------------------------------------------------------
     /** Enable/disable multi-selection mode
 
         <p>If the multi-selection mode is enabled, multiple files
@@ -55,7 +52,6 @@ published interface XFilePicker: com::sun::star::ui::dialogs::XExecutableDialog
     */
     void setMultiSelectionMode( [in] boolean bMode );
 
-    //-------------------------------------------------------------------------
     /** Sets the default string that appears in the file name box of a FilePicker.
 
         @param aName
@@ -66,7 +62,6 @@ published interface XFilePicker: com::sun::star::ui::dialogs::XExecutableDialog
     */
     void setDefaultName( [in] string aName );
 
-    //-------------------------------------------------------------------------
     /** Sets the directory that the file dialog initially displays.
 
         @param aDirectory
@@ -79,7 +74,6 @@ published interface XFilePicker: com::sun::star::ui::dialogs::XExecutableDialog
     void setDisplayDirectory( [in] string aDirectory )
         raises( ::com::sun::star::lang::IllegalArgumentException );
 
-    //-------------------------------------------------------------------------
     /** Returns the directory that the file dialog is currently showing or
         was last showing before closing the dialog with Ok. If the user
         did cancel the dialog, the returned value is undefined.
@@ -89,7 +83,6 @@ published interface XFilePicker: com::sun::star::ui::dialogs::XExecutableDialog
      */
     string getDisplayDirectory();
 
-    //-------------------------------------------------------------------------
     /** Returns a sequence of the selected files including path information in
         URL format, conform to <a href="http://www.w3.org/Addressing/rfc1738.txt">Rfc1738</a>.
 
@@ -129,7 +122,6 @@ published interface XFilePicker: com::sun::star::ui::dialogs::XExecutableDialog
     sequence< string > getFiles();
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

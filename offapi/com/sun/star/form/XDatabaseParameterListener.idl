@@ -24,17 +24,14 @@
 #include <com/sun/star/form/DatabaseParameterEvent.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module form {
 
-//=============================================================================
 
 /** allows to intercept value request for parametrized SQL statements.
  */
 published interface XDatabaseParameterListener: com::sun::star::lang::XEventListener
 {
-    //-------------------------------------------------------------------------
 
     /** is invoked when there is a need for parameter values
 
@@ -50,7 +47,6 @@ published interface XDatabaseParameterListener: com::sun::star::lang::XEventList
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

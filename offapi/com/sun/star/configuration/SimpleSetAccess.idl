@@ -24,11 +24,9 @@
 #include <com/sun/star/util/XStringEscape.idl>
 #include <com/sun/star/container/XContainer.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module configuration {
 
-//=============================================================================
 /** provides access to a dynamic, homogeneous, nonhierarchical set of values
  or objects.
 
@@ -96,7 +94,6 @@ published service SimpleSetAccess
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

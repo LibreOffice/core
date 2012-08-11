@@ -20,41 +20,34 @@
 #ifndef __com_sun_star_sheet_CellInsertMode_idl__
 #define __com_sun_star_sheet_CellInsertMode_idl__
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** is used to specify how cells are moved when new cells are inserted.
  */
 published enum CellInsertMode
 {
-    //-------------------------------------------------------------------------
 
     /** no cells are moved.
      */
     NONE,
 
-    //-------------------------------------------------------------------------
 
     /** the cells below the inserted cells are moved down.
      */
     DOWN,
 
-    //-------------------------------------------------------------------------
 
     /** the cells to the right of the inserted cells are moved right.
      */
     RIGHT,
 
-    //-------------------------------------------------------------------------
 
     /** entire rows below the inserted cells are moved down.
      */
     ROWS,
 
-    //-------------------------------------------------------------------------
 
     /** entire columns to the right of the inserted cells are moved right.
      */
@@ -62,7 +55,6 @@ published enum CellInsertMode
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

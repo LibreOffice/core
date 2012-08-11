@@ -29,11 +29,9 @@
 #define __com_sun_star_embed_EntryInitModes_idl__
 
 
-//============================================================================
 
 module com { module sun { module star { module embed {
 
-//============================================================================
 /** This constant set contains possible modes to initialize object
     persistence.
 
@@ -41,40 +39,34 @@ module com { module sun { module star { module embed {
 */
 published constants EntryInitModes
 {
-    // -----------------------------------------------------------------------
     /** In case object persistence is created based on existing entry,
         the object should be initialized from this entry. Otherwise
         the object should be initialized as a new one.
      */
     const long DEFAULT_INIT = 0;
 
-    // -----------------------------------------------------------------------
     /** The object should be initialized as a new empty one.
      */
     const long TRUNCATE_INIT = 1;
 
-    // -----------------------------------------------------------------------
     /** The object should be initialized as a new one only in case it still
         was not initialized. If the object initialized already do not
         reinitialize it.
      */
     const long NO_INIT = 2;
 
-    // -----------------------------------------------------------------------
     /** The object should be initialized using additional arguments from
         provided
         <type scope="com::sun::star::document">MediaDescriptor</type>.
      */
     const long MEDIA_DESCRIPTOR_INIT = 3;
 
-    // -----------------------------------------------------------------------
     /** The object should be initialized as a link using URL provided in
         additional arguments.
      */
     const long URL_LINK_INIT = 4;
 };
 
-//============================================================================
 
 }; }; }; };
 

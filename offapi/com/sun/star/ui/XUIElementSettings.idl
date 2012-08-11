@@ -32,11 +32,9 @@
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/container/XIndexAccess.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module ui {
 
-//=============================================================================
 
 /** provides functions to retrieve and change user interface element structure
     data and to update its visible representation.
@@ -93,7 +91,6 @@ interface XUIElementSettings : com::sun::star::uno::XInterface
 
 }; }; }; };
 
-//=============================================================================
 
 #endif
 

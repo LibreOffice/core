@@ -24,145 +24,117 @@
 #include <com/sun/star/beans/PropertyValue.idl>
 #include <com/sun/star/uno/TypeClass.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module beans {
 
  published interface XPropertyChangeListener;
  published interface XPropertiesChangeListener;
 
-//=============================================================================
 /** This is a test interface for introspection.
 
     @deprecated
 */
 published interface XIntroTest: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** contains the ID-String of the implementation.
      */
     [attribute] string  ObjectName;
 
-    //-------------------------------------------------------------------------
     /** contains the first name of a person.
      */
     [readonly, attribute] string    FirstName;
 
-    //-------------------------------------------------------------------------
     /** contains the last name of a person.
      */
     [readonly, attribute] string    LastName;
 
-    //-------------------------------------------------------------------------
     /** contains the age of a person.
      */
     [readonly, attribute] short     Age;
 
-    //-------------------------------------------------------------------------
     /** contains the number of children person has.
      */
     [attribute] short               ChildrenCount;
 
-    //-------------------------------------------------------------------------
     /** contains a struct of type <type>Property</type>.
      */
     [attribute] com::sun::star::beans::Property         FirstStruct;
 
-    //-------------------------------------------------------------------------
     /** contains a struct of type <type>PropertyValue</type>.
      */
     [attribute] com::sun::star::beans::PropertyValue    SecondStruct;
 
-    //-------------------------------------------------------------------------
     /** output method.
     */
     void writeln( [in] string Text );
 
-    //-------------------------------------------------------------------------
     /** ...
     */
     long getDroenk();
 
-    //-------------------------------------------------------------------------
     /** gets another object with this interface.
     */
     com::sun::star::beans::XIntroTest getIntroTest();
 
-    //-------------------------------------------------------------------------
     /** !!! No property, because parameter exists
     */
     long getUps( [in] long l );
 
-    //-------------------------------------------------------------------------
     /** ...
     */
     void setDroenk( [in] long l );
 
-    //-------------------------------------------------------------------------
     /** ...
     */
     short getBla();
 
-    //-------------------------------------------------------------------------
     /** !!! Not the set method for property Bla, because param type != return type.
     */
     void setBla( [in] long n );
 
-    //-------------------------------------------------------------------------
     /** ...
     */
     short getBlub();
 
-    //-------------------------------------------------------------------------
     /** ...
     */
     void setBlub( [in] short n );
 
-    //-------------------------------------------------------------------------
     /** ...
     */
     short getGulp();
 
-    //-------------------------------------------------------------------------
     /** !!! Not the set method for property Gulp, because return type != void.
     */
     short setGulp( [in] short n );
 
-    //-------------------------------------------------------------------------
     /** ...
     */
     com::sun::star::uno::TypeClass getTypeClass( [in] short n );
 
-    //-------------------------------------------------------------------------
     /** ...
     */
     void setTypeClass( [in] com::sun::star::uno::TypeClass t,
              [in] double d1,
              [in] double d2 );
 
-    //-------------------------------------------------------------------------
     sequence<string> getStrings();
 
-    //-------------------------------------------------------------------------
     /** ...
     */
     void setStrings( [in] sequence<string> Strings );
 
-    //-------------------------------------------------------------------------
     /** ...
     */
     void setStringsPerMethod( [in] sequence<string> Strings,
              [in] short n );
 
-    //-------------------------------------------------------------------------
     sequence< sequence< sequence< short > > > getMultiSequence();
 
-    //-------------------------------------------------------------------------
     /** ...
     */
     void setMultiSequence( [in] sequence< sequence< sequence< short > > > Seq );
 
-    //-------------------------------------------------------------------------
     /** adds a listener which is called, when one of the specified properties
         changes its value.
 
@@ -172,7 +144,6 @@ published interface XIntroTest: com::sun::star::uno::XInterface
     [oneway] void addPropertiesChangeListener( [in] sequence< string > PropertyNames,
              [in] XPropertiesChangeListener Listener );
 
-    //-------------------------------------------------------------------------
     /** removes a listener.
 
        <p>It is suggested to allow multiple registration of the same listener,
@@ -182,7 +153,6 @@ published interface XIntroTest: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

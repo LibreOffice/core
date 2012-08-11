@@ -20,11 +20,9 @@
 #ifndef __com_sun_star_i18n_AmPmValue_idl__
 #define __com_sun_star_i18n_AmPmValue_idl__
 
-//=============================================================================
 
 module com { module sun { module star { module i18n {
 
-//=============================================================================
 
 /** Constants for AM/PM used in calls to <member>XCalendar::getDisplayName()</member>.
  */
@@ -36,7 +34,6 @@ published constants AmPmValue
     const short PM  = 1;
 };
 
-//=============================================================================
 }; }; }; };
 
 #endif

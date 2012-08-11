@@ -22,11 +22,9 @@
 #include <com/sun/star/configuration/backend/Importer.idl>
 #include <com/sun/star/lang/XInitialization.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module configuration { module backend {
 
-//=============================================================================
 
 /**
     imports data into a configuration layer by copying over existing data.
@@ -36,7 +34,6 @@ module com { module sun { module star { module configuration { module backend {
 */
 published service CopyImporter
 {
-    //-------------------------------------------------------------------------
 
     /** allows importing configuration data into a backend.
 
@@ -47,7 +44,6 @@ published service CopyImporter
       */
     service Importer ;
 
-    //-------------------------------------------------------------------------
 
     /** allows initializing the implementation with settings that control
         its behavior .
@@ -66,10 +62,8 @@ published service CopyImporter
       */
     interface com::sun::star::lang::XInitialization ;
 
-    //-------------------------------------------------------------------------
 } ;
 
-//=============================================================================
 
 } ; } ; } ; } ; } ;
 

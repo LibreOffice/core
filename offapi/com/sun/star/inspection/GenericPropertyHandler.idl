@@ -31,10 +31,8 @@
 
 #include <com/sun/star/inspection/XPropertyHandler.idl>
 
-//=============================================================================
 module com {  module sun {  module star {  module inspection {
 
-//-----------------------------------------------------------------------------
 /** implements a general-purpose XPropertyHandler
 
     <p>The property handler implemented by this service will do an introspection
@@ -53,7 +51,6 @@ module com {  module sun {  module star {  module inspection {
 */
 service GenericPropertyHandler : XPropertyHandler;
 
-//=============================================================================
 
 }; }; }; };
 

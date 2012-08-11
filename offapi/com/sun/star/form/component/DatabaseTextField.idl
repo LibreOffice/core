@@ -24,11 +24,9 @@
 #include <com/sun/star/form/DataAwareControlModel.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module form {  module component {
 
-//=============================================================================
 
 /** This service specifies a text field which is data-aware, and can be bound to a database field.
  */
@@ -38,7 +36,6 @@ published service DatabaseTextField
 
     service com::sun::star::form::DataAwareControlModel;
 
-    //-------------------------------------------------------------------------
 
     /** determines if an empty text should be treated as a <NULL/> value.
 
@@ -54,7 +51,6 @@ published service DatabaseTextField
 
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

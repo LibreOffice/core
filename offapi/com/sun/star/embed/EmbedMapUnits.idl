@@ -29,83 +29,69 @@
 #define __com_sun_star_embed_EmbedMapUnits_idl__
 
 
-//============================================================================
 
 module com { module sun { module star { module embed {
 
-//============================================================================
 /** contains list of possible map modes supported by embedded object.
 
     @see XVisualObject
 */
 published constants EmbedMapUnits
 {
-    // ----------------------------------------------------------------------
     /** In this type of map mode one logical point is equal to one-hundredth
         of millimeter.
      */
     const long ONE_100TH_MM = 0;
 
-    // ----------------------------------------------------------------------
     /** In this type of map mode one logical point is equal to one-tenth
         of millimeter.
      */
     const long ONE_10TH_MM = 1;
 
-    // ----------------------------------------------------------------------
     /** In this type of map mode one logical point is equal to one
         millimeter.
      */
     const long ONE_MM = 2;
 
-    // ----------------------------------------------------------------------
     /** In this type of map mode one logical point is equal to one
         centimeter.
      */
     const long ONE_CM = 3;
 
-    // ----------------------------------------------------------------------
     /** In this type of map mode one logical point is equal to one-thousandth
         of inch.
      */
     const long ONE_1000TH_INCH = 4;
 
-    // ----------------------------------------------------------------------
     /** In this type of map mode one logical point is equal to one-hundredth
         of inch.
      */
     const long ONE_100TH_INCH = 5;
 
-    // ----------------------------------------------------------------------
     /** In this type of map mode one logical point is equal to one-tenth
         of inch.
      */
     const long ONE_10TH_INCH = 6;
 
-    // ----------------------------------------------------------------------
     /** In this type of map mode one logical point is equal to one inch.
      */
     const long ONE_INCH = 7;
 
-    // ----------------------------------------------------------------------
     /** In this type of map mode one logical point is equal to one
         typographical point.
      */
     const long POINT = 8;
 
-    // ----------------------------------------------------------------------
     /** In this type of map mode one logical point is equal to one twentieth
         of typographical point.
      */
     const long TWIP = 9;
 
-    // ----------------------------------------------------------------------
     /** In this type of map mode one logical point is equal to one pixel.
      */
     const long PIXEL = 10;
 };
 
-//=============================================================================
 
 }; }; }; };
 

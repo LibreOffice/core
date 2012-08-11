@@ -21,11 +21,9 @@
 
 #include <com/sun/star/frame/XTransientDocumentsDocumentContentFactory.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module frame {
 
-//=============================================================================
 /** specifies a factory for
     <type scope="com::sun::star::ucb">TransientDocumentsDocumentContent</type>s.
 
@@ -33,13 +31,11 @@ module com { module sun { module star { module frame {
 */
 service TransientDocumentsDocumentContentFactory
 {
-    //-------------------------------------------------------------------------
     /** a factory for <type>TransientDocumentsDocumentContent</type>s.
      */
     interface com::sun::star::frame::XTransientDocumentsDocumentContentFactory;
 };
 
-//=============================================================================
 
 }; }; }; };
 

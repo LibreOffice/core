@@ -21,32 +21,27 @@
 
 #include <com/sun/star/awt/Rectangle.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module awt {
 
-//=============================================================================
 
 /** data returned by docking handler
 
  */
 struct DockingData
 {
-    //-------------------------------------------------------------------------
 
     /** specifies the position and size where the window would be placed
         if the user releases the mouse
      */
     com::sun::star::awt::Rectangle TrackingRectangle;
 
-    //-------------------------------------------------------------------------
 
     /** specifies that the window should be floating (TRUE) or docked (FALSE)
      */
     boolean bFloating;
 };
 
-//=============================================================================
 
 }; }; }; };
 

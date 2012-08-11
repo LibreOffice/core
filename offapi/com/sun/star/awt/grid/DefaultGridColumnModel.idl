@@ -21,11 +21,9 @@
 
 #include <com/sun/star/awt/grid/XGridColumnModel.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module awt {  module grid {
 
-//=============================================================================
 
 /** If you do not want to implement the <type>XGridColumnModel</type> yourself, use this service.
     @since OOo 3.3
@@ -35,7 +33,6 @@ service DefaultGridColumnModel
     interface com::sun::star::awt::grid::XGridColumnModel;
 };
 
-//=============================================================================
 
 }; }; }; };};
 

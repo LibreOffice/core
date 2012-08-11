@@ -34,11 +34,9 @@
 #include <com/sun/star/linguistic2/XThesaurus.idl>
 #include <com/sun/star/lang/XEventListener.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module linguistic2 {
 
-//=============================================================================
 /** the basic interface to be used to access linguistic functionality.
 
     <P>This interface is used to access spell checker, hyphenator, and
@@ -68,7 +66,6 @@ module com { module sun { module star { module linguistic2 {
 */
 published interface XLinguServiceManager : com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /**
         @returns
             the <type scope="com::sun::star::linguistic2">XSpellChecker</type>
@@ -76,7 +73,6 @@ published interface XLinguServiceManager : com::sun::star::uno::XInterface
     */
     com::sun::star::linguistic2::XSpellChecker  getSpellChecker();
 
-    //-------------------------------------------------------------------------
     /**
         @returns
             the <type scope="com::sun::star::linguistic2">XHyphenator</type>
@@ -84,7 +80,6 @@ published interface XLinguServiceManager : com::sun::star::uno::XInterface
     */
     com::sun::star::linguistic2::XHyphenator    getHyphenator();
 
-    //-------------------------------------------------------------------------
     /**
         @returns
             the <type scope="com::sun::star::linguistic2">XThesaurus</type>
@@ -92,7 +87,6 @@ published interface XLinguServiceManager : com::sun::star::uno::XInterface
     */
     com::sun::star::linguistic2::XThesaurus     getThesaurus();
 
-    //-------------------------------------------------------------------------
     /** adds a listener to the list of event listeners.
 
         <P>The listeners may support one or both of
@@ -111,7 +105,6 @@ published interface XLinguServiceManager : com::sun::star::uno::XInterface
     boolean     addLinguServiceManagerListener(
         [in] com::sun::star::lang::XEventListener xListener );
 
-    //-------------------------------------------------------------------------
     /** removes a listener from the list of event listeners.
 
         @returns
@@ -123,7 +116,6 @@ published interface XLinguServiceManager : com::sun::star::uno::XInterface
     boolean     removeLinguServiceManagerListener(
         [in] com::sun::star::lang::XEventListener xListener );
 
-    //-------------------------------------------------------------------------
     /**
         @returns
             the list of implementation names of the available services.
@@ -139,7 +131,6 @@ published interface XLinguServiceManager : com::sun::star::uno::XInterface
         [in] string                         aServiceName,
         [in] com::sun::star::lang::Locale   aLocale );
 
-    //-------------------------------------------------------------------------
     /** sets the list of service implementations to be used for a
         given service and language.
 
@@ -158,7 +149,6 @@ published interface XLinguServiceManager : com::sun::star::uno::XInterface
         [in] com::sun::star::lang::Locale   aLocale,
         [in] sequence< string >             aServiceImplNames );
 
-    //-------------------------------------------------------------------------
     /** queries the list of service implementations to be used for a
         given service and language.
 
@@ -177,7 +167,6 @@ published interface XLinguServiceManager : com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

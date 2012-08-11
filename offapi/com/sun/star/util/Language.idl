@@ -20,16 +20,13 @@
 #define __com_sun_star_util_Language_idl__
 
 
-//=============================================================================
 
 module com { module sun { module star { module util {
 
-//=============================================================================
 /** This type is used for a language identifier number.
 */
 published typedef short Language;
 
-//=============================================================================
 
 }; }; }; };
 

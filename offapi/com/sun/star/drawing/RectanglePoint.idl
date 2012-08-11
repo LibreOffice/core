@@ -20,18 +20,15 @@
 #define __com_sun_star_drawing_RectanglePoint_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module drawing {
 
-//=============================================================================
 
 // DocMerge from xml: enum com::sun::star::drawing::RectanglePoint
 /** specifies one of nine points in a rectangle.
  */
 published enum RectanglePoint
 {
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR RectanglePoint::   LEFT_TOP,
 
     // DocMerge from xml: value com::sun::star::drawing::RectanglePoint::LEFT_TOP
@@ -39,7 +36,6 @@ published enum RectanglePoint
      */
     LEFT_TOP,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR RectanglePoint::   MIDDLE_TOP,
 
     // DocMerge from xml: value com::sun::star::drawing::RectanglePoint::MIDDLE_TOP
@@ -47,7 +43,6 @@ published enum RectanglePoint
      */
     MIDDLE_TOP,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR RectanglePoint::   RIGHT_TOP,
 
     // DocMerge from xml: value com::sun::star::drawing::RectanglePoint::RIGHT_TOP
@@ -55,7 +50,6 @@ published enum RectanglePoint
      */
     RIGHT_TOP,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR RectanglePoint::   LEFT_MIDDLE,
 
     // DocMerge from xml: value com::sun::star::drawing::RectanglePoint::LEFT_MIDDLE
@@ -63,7 +57,6 @@ published enum RectanglePoint
      */
     LEFT_MIDDLE,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR RectanglePoint::   MIDDLE_MIDDLE,
 
     // DocMerge from xml: value com::sun::star::drawing::RectanglePoint::MIDDLE_MIDDLE
@@ -71,7 +64,6 @@ published enum RectanglePoint
      */
     MIDDLE_MIDDLE,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR RectanglePoint::   RIGHT_MIDDLE,
 
     // DocMerge from xml: value com::sun::star::drawing::RectanglePoint::RIGHT_MIDDLE
@@ -79,7 +71,6 @@ published enum RectanglePoint
      */
     RIGHT_MIDDLE,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR RectanglePoint::   LEFT_BOTTOM,
 
     // DocMerge from xml: value com::sun::star::drawing::RectanglePoint::LEFT_BOTTOM
@@ -87,7 +78,6 @@ published enum RectanglePoint
      */
     LEFT_BOTTOM,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR RectanglePoint::   MIDDLE_BOTTOM,
 
     // DocMerge from xml: value com::sun::star::drawing::RectanglePoint::MIDDLE_BOTTOM
@@ -95,7 +85,6 @@ published enum RectanglePoint
      */
     MIDDLE_BOTTOM,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR RectanglePoint::   RIGHT_BOTTOM
 
     // DocMerge from xml: value com::sun::star::drawing::RectanglePoint::RIGHT_BOTTOM
@@ -105,7 +94,6 @@ published enum RectanglePoint
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -24,11 +24,9 @@
 #include <com/sun/star/container/XIndexAccess.idl>
 #include <com/sun/star/container/XNameAccess.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module text {
 
-//=============================================================================
 
 /** represents a collection of all columns of a table.
 
@@ -39,15 +37,12 @@ module com {  module sun {  module star {  module text {
  */
 published service TableColumns
 {
-    //-------------------------------------------------------------------------
     /** provides methods to insert and remove columns.
      */
     interface com::sun::star::table::XTableColumns;
 
-    //-------------------------------------------------------------------------
 };
 
-//=============================================================================
 
 }; }; }; };
 

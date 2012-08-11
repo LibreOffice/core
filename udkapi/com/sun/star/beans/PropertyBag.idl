@@ -26,11 +26,9 @@
 #include <com/sun/star/beans/XPropertyAccess.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module beans {
 
-//=============================================================================
 
 /** Implementation of this service can keep any properties and is useful
     when an <type>XPropertySet</type> is to be used, for example, as parameters for a method call.
@@ -49,7 +47,6 @@ published service PropertyBag
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

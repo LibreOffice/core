@@ -20,41 +20,34 @@
 #ifndef __com_sun_star_sheet_CellDeleteMode_idl__
 #define __com_sun_star_sheet_CellDeleteMode_idl__
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** is used to specify how remaining cells are moved when cells are deleted.
  */
 published enum CellDeleteMode
 {
-    //-------------------------------------------------------------------------
 
     /** no cells are moved.
      */
     NONE,
 
-    //-------------------------------------------------------------------------
 
     /** the cells below the deleted cells are moved up.
      */
     UP,
 
-    //-------------------------------------------------------------------------
 
     /** the cells to the right of the deleted cells are moved left.
      */
     LEFT,
 
-    //-------------------------------------------------------------------------
 
     /** entire rows below the deleted cells are moved up.
      */
     ROWS,
 
-    //-------------------------------------------------------------------------
 
     /** entire columns to the right of the deleted cells are moved left.
      */
@@ -62,7 +55,6 @@ published enum CellDeleteMode
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

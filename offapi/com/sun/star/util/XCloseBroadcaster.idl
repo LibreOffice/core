@@ -31,11 +31,9 @@
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/util/XCloseListener.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module util {
 
-//=============================================================================
 /** broadcasts each tried closing of an object to all interest listener
 
     <p>
@@ -52,7 +50,6 @@
  */
 published interface XCloseBroadcaster: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** adds the specified listener to receive or have a veto for "close" events
 
         @param Listener
@@ -60,7 +57,6 @@ published interface XCloseBroadcaster: com::sun::star::uno::XInterface
      */
     [oneway] void addCloseListener( [in] XCloseListener Listener );
 
-    //-------------------------------------------------------------------------
     /** removes the specified listener
 
         @param Listener
@@ -69,7 +65,6 @@ published interface XCloseBroadcaster: com::sun::star::uno::XInterface
     [oneway] void removeCloseListener( [in] XCloseListener Listener );
 };
 
-//=============================================================================
 
 }; }; }; };
 

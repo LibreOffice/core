@@ -20,7 +20,6 @@
 #ifndef __com_sun_star_awt_Command_idl__
 #define __com_sun_star_awt_Command_idl__
 
-//=============================================================================
 
 module com {  module sun {  module star {  module awt {
 
@@ -30,91 +29,76 @@ module com {  module sun {  module star {  module awt {
 published constants Command
 {
 
-    //-------------------------------------------------------------------------
 
     /** specifies a requests for a context menu.
     */
     const short CONTEXTMENU = 1;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the beginning of a drag operation.
     */
     const short STARTDRAG = 2;
 
-    //-------------------------------------------------------------------------
 
     /** specifies a mouse wheel operation.
     */
     const short WHEEL = 3;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the beginning of an auto scroll operation.
     */
     const short STARTAUTOSCROLL = 4;
 
-    //-------------------------------------------------------------------------
 
     /** specifies an auto scroll operation.
     */
     const short AUTOSCROLL = 5;
 
-    //-------------------------------------------------------------------------
 
     /** specifies a request for a voice operation.
     */
     const short VOICE = 6;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the beginning of an extended text input operation.
     */
     const short STARTEXTTEXTINPUT = 7;
 
-    //-------------------------------------------------------------------------
 
     /** specifies an extended text input operation.
     */
     const short EXTTEXTINPUT = 8;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the end of an extended text input operation.
     */
     const short ENDEXTTEXTINPUT = 9;
 
-    //-------------------------------------------------------------------------
 
     /** specifies that the input context has been changed.
     */
     const short INPUTCONTEXTCHANGE = 10;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the cursor position.
     */
     const short CURSORPOS = 11;
 
-    //-------------------------------------------------------------------------
 
     /** specifies a paste selection command.
     */
     const short PASTESELECTION = 12;
 
-    //-------------------------------------------------------------------------
 
     /** specifies that the state of a key modifier has changed.
     */
     const short MODKEYCHANGE = 13;
 
-    //-------------------------------------------------------------------------
 
     /** specifies a Hangul hanja conversion command.
     */
     const short HANGUL_HANJA_CONVERSION = 14;
 
-    //-------------------------------------------------------------------------
 
     /** specifies a user-defined command.
     */

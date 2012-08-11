@@ -22,11 +22,9 @@
 #include <com/sun/star/container/XEnumeration.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module text {
 
-//=============================================================================
 
 /** This interface creates an enumeration of paragraph within a text document.
  The elements created by this enumeration contains either parts of text with
@@ -39,7 +37,6 @@ published service TextPortionEnumeration
     interface   ::com::sun::star::container::XEnumeration;
 };
 
-//=============================================================================
 
 }; }; }; };
 #endif

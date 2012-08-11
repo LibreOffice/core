@@ -33,11 +33,9 @@
 #include <com/sun/star/lang/EventObject.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module form {
 
-//=============================================================================
 
 /** is the listener interface for receiving notifications about data changes.
 
@@ -49,7 +47,6 @@
  */
 published interface XChangeListener: com::sun::star::lang::XEventListener
 {
-    //-------------------------------------------------------------------------
 
     /** is invoked when the data of a component has been changed.
 
@@ -60,7 +57,6 @@ published interface XChangeListener: com::sun::star::lang::XEventListener
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

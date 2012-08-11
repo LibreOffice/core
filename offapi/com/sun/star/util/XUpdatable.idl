@@ -23,22 +23,18 @@
 #include <com/sun/star/util/XRefreshListener.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module util {
 
-//=============================================================================
 /** is supported by objects with data that can be updated from a data source.
  */
 published interface XUpdatable: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** refreshes the data of the object from the connected data source.
      */
     void update();
 };
 
-//=============================================================================
 
 }; }; }; };
 

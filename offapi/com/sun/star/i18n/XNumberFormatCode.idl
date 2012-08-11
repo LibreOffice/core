@@ -24,11 +24,9 @@
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/i18n/NumberFormatCode.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module i18n {
 
-//=============================================================================
 
 /**
     Access number format codes defined in locale data.
@@ -36,7 +34,6 @@ module com { module sun { module star { module i18n {
 
 published interface XNumberFormatCode : com::sun::star::uno::XInterface
 {
-    //------------------------------------------------------------------------
     /**
         returns the default number format code of a specific category
         (usage group) for a given locale and format length type.
@@ -51,7 +48,6 @@ published interface XNumberFormatCode : com::sun::star::uno::XInterface
                                  [in] short nFormatUsage,
                                  [in] com::sun::star::lang::Locale rLocale );
 
-    //------------------------------------------------------------------------
     /**
         returns the number format pointed to by <em>nFormatIndex</em> for
         a given locale.
@@ -62,7 +58,6 @@ published interface XNumberFormatCode : com::sun::star::uno::XInterface
     NumberFormatCode getFormatCode( [in] short nFormatIndex,
                                     [in] com::sun::star::lang::Locale rLocale );
 
-    //------------------------------------------------------------------------
     /**
         returns all format codes for a given <em>nFormatUsage</em> and locale.
 
@@ -73,7 +68,6 @@ published interface XNumberFormatCode : com::sun::star::uno::XInterface
                                 [in] short nFormatUsage,
                                 [in] com::sun::star::lang::Locale rLocale );
 
-    //------------------------------------------------------------------------
     /**
         returns all format codes for a given locale.
      */
@@ -82,7 +76,6 @@ published interface XNumberFormatCode : com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 }; }; }; };
 #endif
 

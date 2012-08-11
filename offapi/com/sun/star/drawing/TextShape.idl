@@ -30,11 +30,9 @@
 #include <com/sun/star/drawing/RotationDescriptor.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module drawing {
 
-//=============================================================================
 
 /** This service is for a text shape.
  */
@@ -57,7 +55,6 @@ published service TextShape
     [property] long CornerRadius;
 };
 
-//=============================================================================
 
 }; }; }; };
 

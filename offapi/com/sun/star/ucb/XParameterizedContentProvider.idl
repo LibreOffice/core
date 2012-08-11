@@ -24,11 +24,9 @@
 #include <com/sun/star/uno/XInterface.idl>
 
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** Register specially adjusted instances of content providers on URL
     templates and supplementary arguments.
 
@@ -37,7 +35,6 @@ module com { module sun { module star { module ucb {
 */
 published interface XParameterizedContentProvider: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** Register a content provider on a URL template and supplementary
         arguments.
 
@@ -70,7 +67,6 @@ published interface XParameterizedContentProvider: com::sun::star::uno::XInterfa
                      [in] boolean ReplaceExisting)
         raises (com::sun::star::lang::IllegalArgumentException);
 
-    //-------------------------------------------------------------------------
     /** Deregisters a content provider.
 
         @param Template  A URL template.  If the input is malformed or too
@@ -95,7 +91,6 @@ published interface XParameterizedContentProvider: com::sun::star::uno::XInterfa
         raises (com::sun::star::lang::IllegalArgumentException);
 };
 
-//=============================================================================
 
 }; }; }; };
 

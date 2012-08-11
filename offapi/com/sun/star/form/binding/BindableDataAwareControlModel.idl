@@ -32,11 +32,9 @@
 #include <com/sun/star/form/DataAwareControlModel.idl>
 #include <com/sun/star/form/binding/BindableControlModel.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module form { module binding {
 
-//=============================================================================
 
 /** is a specialization of the <type scope="com::sun::star::form">DataAwareControlModel</type>
     which additionally supports binding to external value suppliers.
@@ -121,7 +119,6 @@ service BindableDataAwareControlModel
     service BindableControlModel;
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

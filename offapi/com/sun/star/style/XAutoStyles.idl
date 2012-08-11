@@ -24,11 +24,9 @@
 #include <com/sun/star/container/XIndexAccess.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module style {
 
-//=============================================================================
 
 
 /** This service contains the collection of automatic style families within the
@@ -42,7 +40,6 @@ interface XAutoStyles
     interface com::sun::star::container::XIndexAccess;
 };
 
-//=============================================================================
 
 }; }; }; };
 

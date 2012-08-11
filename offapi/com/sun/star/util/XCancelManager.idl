@@ -33,11 +33,9 @@
 #include <com/sun/star/util/XCancellable.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module util {
 
-//=============================================================================
 
 /** manages a list of cancelable objects.
 
@@ -45,19 +43,16 @@ module com {  module sun {  module star {  module util {
  */
 published interface XCancelManager: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** registers a cancelable object.
      */
     void registerCancellable( [in] com::sun::star::util::XCancellable Cancel );
 
-    //-------------------------------------------------------------------------
     /** deregisters a cancelable object.
      */
     void releaseCancellable( [in] com::sun::star::util::XCancellable Cancel );
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

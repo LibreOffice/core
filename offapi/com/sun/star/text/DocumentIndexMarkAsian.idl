@@ -21,11 +21,9 @@
 
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module text {
 
-//=============================================================================
 
 /** is a <type>TextRange</type> which is explicitly marked
     as an index entry for a <type>DocumentIndex</type>.
@@ -37,24 +35,20 @@
  */
 published service DocumentIndexMarkAsian
 {
-    //-------------------------------------------------------------------------
     /** contains the reading of the string which has been chosen for the
         index entry.
      */
     [property] string TextReading;
-    //-------------------------------------------------------------------------
     /** contains the reading of the primary key of the index entry.
          It is used to build a hierarchical document index.
      */
     [property] string PrimaryKeyReading;
-    //-------------------------------------------------------------------------
     /** contains the reading the secondary key of the index entry.
          It is used to build a hierarchical document index.
      */
     [property] string SecondaryKeyReading;
 };
 
-//=============================================================================
 
 }; }; }; };
 #endif

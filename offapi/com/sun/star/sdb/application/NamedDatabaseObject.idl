@@ -20,11 +20,9 @@
 #ifndef __com_sun_star_sdb_application_NamedDatabaseObject_idl__
 #define __com_sun_star_sdb_application_NamedDatabaseObject_idl__
 
-//=============================================================================
 
 module com { module sun { module star { module sdb { module application {
 
-//=============================================================================
 
 /** denotes a named database object, or a named folder of database objects
 
@@ -71,11 +69,9 @@ struct NamedDatabaseObject
     string  Name;
 };
 
-//=============================================================================
 
 }; }; }; }; };
 
-//=============================================================================
 
 #endif
 

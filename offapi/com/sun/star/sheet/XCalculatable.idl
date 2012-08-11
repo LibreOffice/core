@@ -22,17 +22,14 @@
 
 #include <com/sun/star/uno/XInterface.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** represents something that can recalculate.
  */
 published interface XCalculatable: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** recalculates all dirty cells.
 
@@ -41,13 +38,11 @@ published interface XCalculatable: com::sun::star::uno::XInterface
      */
     void calculate();
 
-    //-------------------------------------------------------------------------
 
     /** recalculates all cells.
      */
     void calculateAll();
 
-    //-------------------------------------------------------------------------
 
     /** returns whether automatic calculation is enabled.
 
@@ -61,7 +56,6 @@ published interface XCalculatable: com::sun::star::uno::XInterface
      */
     boolean isAutomaticCalculationEnabled();
 
-    //-------------------------------------------------------------------------
 
     /** enables automatic calculation.
 
@@ -77,7 +71,6 @@ published interface XCalculatable: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

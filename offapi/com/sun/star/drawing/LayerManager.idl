@@ -24,11 +24,9 @@
 #include <com/sun/star/container/XNameAccess.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module drawing {
 
-//=============================================================================
 
 // DocMerge from xml: service com::sun::star::drawing::LayerManager
 /** This service is provided by documents to support <type>Layer</type>s.
@@ -60,7 +58,6 @@ published service LayerManager
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

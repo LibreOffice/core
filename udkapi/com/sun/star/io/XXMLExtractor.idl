@@ -23,18 +23,15 @@
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/io/XInputStream.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module io {
 
-//=============================================================================
 /** offers the capability to extract the XML document stream from a document
     storage.
 */
 
 published interface XXMLExtractor : com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** extracts the XML stream from the document storage.
 
         @returns
@@ -43,7 +40,6 @@ published interface XXMLExtractor : com::sun::star::uno::XInterface
     com::sun::star::io::XInputStream extract( [in] com::sun::star::io::XInputStream aStream );
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -24,42 +24,35 @@
 #include <com/sun/star/awt/XItemListener.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module awt {
 
-//=============================================================================
 
 /** gives access to the state of a radio button and makes it possible
     to register item event listeners.
  */
 published interface XRadioButton: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** registers a listener for item events.
      */
     [oneway] void addItemListener( [in] com::sun::star::awt::XItemListener l );
 
-    //-------------------------------------------------------------------------
 
     /** unregisters a listener for item events.
      */
     [oneway] void removeItemListener( [in] com::sun::star::awt::XItemListener l );
 
-    //-------------------------------------------------------------------------
 
     /** returns <true/> if the button is checked, <false/> otherwise.
      */
     boolean getState();
 
-    //-------------------------------------------------------------------------
 
     /** sets the state of the radio button.
      */
     [oneway] void setState( [in] boolean b );
 
-    //-------------------------------------------------------------------------
 
     /** sets the label of the radio button.
      */
@@ -67,7 +60,6 @@ published interface XRadioButton: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

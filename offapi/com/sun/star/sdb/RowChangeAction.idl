@@ -30,19 +30,16 @@ published constants RowChangeAction
     /** indicates that an insert will be performed.
      */
     const long INSERT   = 1;
-    //-------------------------------------------------------------------------
 
     /** indicates that an update will be performed.
      */
     const long UPDATE   = 2;
-    //-------------------------------------------------------------------------
 
     /** indicates that a delete will be performed.
      */
     const long DELETE   = 3;
 };
 
-//=============================================================================
 
 }; }; }; };
 

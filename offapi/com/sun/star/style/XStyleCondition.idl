@@ -22,11 +22,9 @@
 #include <com/sun/star/uno/XInterface.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module style {
 
-//=============================================================================
 
 /** This interface makes it possible to access conditional styles of the object.
 
@@ -34,14 +32,12 @@
  */
 published interface XStyleCondition: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** @returns
                     the style condition for the specified type.
      */
     string getStyleConditionByType( [in] short TextType );
 
-    //-------------------------------------------------------------------------
 
     /** sets the style condition for the specified type.
      */
@@ -50,7 +46,6 @@ published interface XStyleCondition: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

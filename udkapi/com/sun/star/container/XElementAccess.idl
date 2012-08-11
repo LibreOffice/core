@@ -24,17 +24,14 @@
 #include <com/sun/star/reflection/XIdlClass.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module container {
 
-//=============================================================================
 
 /** This is the base interface of all collection interfaces.
  */
 published interface XElementAccess: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** @returns
             the type of the elements. <atom>void</atom> means that it is a
@@ -43,7 +40,6 @@ published interface XElementAccess: com::sun::star::uno::XInterface
      */
     type getElementType();
 
-    //-------------------------------------------------------------------------
 
     /** @returns
             <TRUE/> if the object contain elements,
@@ -53,7 +49,6 @@ published interface XElementAccess: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -22,11 +22,9 @@
 
 #include <com/sun/star/uno/XInterface.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** provides access to a list of recently used functions.
 
@@ -34,7 +32,6 @@ module com {  module sun {  module star {  module sheet {
  */
 published interface XRecentFunctions: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** returns a sequence of those functions that were most recently used.
 
@@ -45,7 +42,6 @@ published interface XRecentFunctions: com::sun::star::uno::XInterface
      */
     sequence< long > getRecentFunctionIds();
 
-    //-------------------------------------------------------------------------
 
     /** sets the list of those functions that were most recently used.
 
@@ -56,7 +52,6 @@ published interface XRecentFunctions: com::sun::star::uno::XInterface
      */
     void setRecentFunctionIds( [in] sequence< long > aRecentFunctionIds );
 
-    //-------------------------------------------------------------------------
 
     /** returns the maximum number of entries that will be stored as
         recently used functions.
@@ -65,7 +60,6 @@ published interface XRecentFunctions: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -50,7 +50,6 @@ published interface XPreparedStatement: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     XResultSet executeQuery() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** executes the SQL INSERT, UPDATE or DELETE statement in this
         <type scope="com::sun::star::sdbc">PreparedStatement</type>
@@ -64,7 +63,6 @@ published interface XPreparedStatement: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     long executeUpdate() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** executes any kind of SQL statement.
 
@@ -80,7 +78,6 @@ published interface XPreparedStatement: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     boolean execute() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** returns the
         <type scope="com::sun::star::sdbc">Connection</type>
@@ -96,7 +93,6 @@ published interface XPreparedStatement: com::sun::star::uno::XInterface
     XConnection getConnection() raises (SQLException);
 };
 
-//=============================================================================
 
 }; }; }; };
 

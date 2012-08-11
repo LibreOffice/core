@@ -39,7 +39,6 @@ interface XBitmapPalette : ::com::sun::star::uno::XInterface
      */
     long getNumberOfEntries();
 
-    //-------------------------------------------------------------------------
 
     /** Request the color for the given palette entry.
 
@@ -64,7 +63,6 @@ interface XBitmapPalette : ::com::sun::star::uno::XInterface
     boolean getIndex( [out] sequence<ColorComponent> entry, [in] long nIndex )
         raises (com::sun::star::lang::IndexOutOfBoundsException);
 
-    //-------------------------------------------------------------------------
 
     /** Set the color for the given palette entry.
 
@@ -96,7 +94,6 @@ interface XBitmapPalette : ::com::sun::star::uno::XInterface
         raises (com::sun::star::lang::IndexOutOfBoundsException,
                 com::sun::star::lang::IllegalArgumentException);
 
-    //-------------------------------------------------------------------------
 
     /** Query associated color space.<p>
 

@@ -33,11 +33,9 @@
 #include <com/sun/star/beans/NamedValue.idl>
 #include <com/sun/star/lang/IllegalArgumentException.idl>
 
-//============================================================================
 
 module com {  module sun {  module star {  module task {
 
-//=============================================================================
 /** specifies a job which is to be executed synchronously
 
     <p>
@@ -50,7 +48,6 @@ module com {  module sun {  module star {  module task {
 */
 published interface XJob : com::sun::star::uno::XInterface
 {
-    //------------------------------------------------------------------------
     /** executes the job synchronously
 
         @param Arguments

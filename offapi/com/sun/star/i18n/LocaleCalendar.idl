@@ -34,11 +34,9 @@
 #include <com/sun/star/i18n/XExtendedCalendar.idl>
 #include <com/sun/star/i18n/XCalendar3.idl>
 
-//============================================================================
 
 module com { module sun { module star { module i18n {
 
-//============================================================================
 
 /// Access a locale specific calendar.
 published service LocaleCalendar
@@ -50,7 +48,6 @@ published service LocaleCalendar
     [optional] interface com::sun::star::i18n::XCalendar3;
 };
 
-//============================================================================
 }; }; }; };
 
 #endif

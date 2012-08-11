@@ -20,17 +20,14 @@
 #define __com_sun_star_form_FormComponentType_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module form {
 
-//=============================================================================
 
 /** These constants specify the class types used to identify a component.
  */
 published constants FormComponentType
 {
-    //-------------------------------------------------------------------------
 
     /** This generic identifier is for controls which cannot be identified by
                 an other specific identifier.
@@ -126,7 +123,6 @@ published constants FormComponentType
     const short NAVIGATIONBAR = 22;
 };
 
-//=============================================================================
 
 }; }; }; };
 

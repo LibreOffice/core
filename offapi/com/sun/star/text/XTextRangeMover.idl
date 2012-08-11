@@ -24,11 +24,9 @@
 #include <com/sun/star/text/XTextRange.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module text {
 
-//=============================================================================
 
 // DocMerge from xml: interface com::sun::star::text::XTextRangeMover
 /** makes it possible to move a text range (e.g. a paragraph by itself)
@@ -43,7 +41,6 @@
  */
 published interface XTextRangeMover: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::text::XTextRangeMover::moveTextRange
     /** moves the contents to which <var>xRange</var> refers forward or
@@ -54,7 +51,6 @@ published interface XTextRangeMover: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

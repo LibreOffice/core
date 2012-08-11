@@ -20,11 +20,9 @@
 #ifndef __com_sun_star_sdb_application_CopyTableOperation_idl__
 #define __com_sun_star_sdb_application_CopyTableOperation_idl__
 
-//=============================================================================
 
 module com { module sun { module star { module sdb { module application {
 
-//=============================================================================
 
 /** specifies the different basic operations a <type>CopyTableWizard</type>
     can do.
@@ -55,11 +53,9 @@ constants CopyTableOperation
     const short AppendData              = 3;
 };
 
-//=============================================================================
 
 }; }; }; }; };
 
-//=============================================================================
 
 #endif
 

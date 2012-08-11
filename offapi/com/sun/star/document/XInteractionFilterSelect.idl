@@ -30,11 +30,9 @@
 
 #include <com/sun/star/task/XInteractionContinuation.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module document {
 
-//=============================================================================
 /** continuation used by interaction mechanism at filter detection during
     loading documents
 
@@ -56,7 +54,6 @@ module com { module sun { module star { module document {
  */
 published interface XInteractionFilterSelect : com::sun::star::task::XInteractionContinuation
 {
-    //-------------------------------------------------------------------------
     /** used by interaction to set selected filter
 
         <p>
@@ -66,13 +63,11 @@ published interface XInteractionFilterSelect : com::sun::star::task::XInteractio
      */
     void setFilter( [in] string Name );
 
-    //-------------------------------------------------------------------------
     /** used by detection to get selected filter
      */
     string getFilter();
 };
 
-//=============================================================================
 
 }; }; }; };
 

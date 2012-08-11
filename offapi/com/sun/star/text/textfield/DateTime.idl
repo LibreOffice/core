@@ -23,11 +23,9 @@
 #include <com/sun/star/text/TextField.idl>
 #include <com/sun/star/util/DateTime.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module text { module textfield {
 
-//=============================================================================
 /** specifies service of a date or time text field.
     @see com::sun::star::text::TextField
 */
@@ -82,7 +80,6 @@ published service DateTime
     [optional, property] boolean IsFixedLanguage;
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

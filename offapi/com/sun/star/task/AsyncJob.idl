@@ -23,11 +23,9 @@
 #include <com/sun/star/task/XAsyncJob.idl>
 #include <com/sun/star/util/XCloseable.idl>
 
-//============================================================================
 
 module com { module sun { module star { module task {
 
-//============================================================================
 /** represent an asynchronous job, which can be executed by the global <type>JobExecutor</type>
     instance.
 
@@ -37,12 +35,10 @@ module com { module sun { module star { module task {
  */
 published service AsyncJob
 {
-    //------------------------------------------------------------------------
     /** used to initialize and execute this job.
      */
     interface com::sun::star::task::XAsyncJob;
 
-    //------------------------------------------------------------------------
     /** should be supported to handle environment termination gracefully.
      */
     [optional] interface com::sun::star::util::XCloseable;

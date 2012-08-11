@@ -22,11 +22,9 @@
 #include <com/sun/star/lang/EventObject.idl>
 #include <com/sun/star/sheet/XSpreadsheet.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** describes a change of the active sheet. The new active sheet is given
     with this event.
@@ -36,7 +34,6 @@
  */
 published struct ActivationEvent: com::sun::star::lang::EventObject
 {
-    //-------------------------------------------------------------------------
 
     /** specifies the new active Spreadsheet.
      */
@@ -44,7 +41,6 @@ published struct ActivationEvent: com::sun::star::lang::EventObject
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

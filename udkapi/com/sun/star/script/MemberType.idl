@@ -19,11 +19,9 @@
 #ifndef __com_sun_star_script_MemberType_idl__
 #define __com_sun_star_script_MemberType_idl__
 
-//=============================================================================
 
 module com { module sun { module star { module script {
 
-//=============================================================================
 /** These values are used to specify a member accessible by
     <type>XInvocation</type>.
 */
@@ -35,7 +33,6 @@ published enum MemberType
 };
 
 
-//=============================================================================
 
 }; }; }; };
 

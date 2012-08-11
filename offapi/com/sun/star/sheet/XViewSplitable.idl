@@ -22,11 +22,9 @@
 #include <com/sun/star/uno/XInterface.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** enables a <type>SpreadsheetView</type> to split the view.
 
@@ -34,7 +32,6 @@
  */
 published interface XViewSplitable: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** returns <TRUE/> if the view is split
         into individual panes.
@@ -46,33 +43,28 @@ published interface XViewSplitable: com::sun::star::uno::XInterface
      */
     boolean getIsWindowSplit();
 
-    //-------------------------------------------------------------------------
 
     /** returns the horizontal position in pixels where
         the view is split.
      */
     long getSplitHorizontal();
 
-    //-------------------------------------------------------------------------
 
     /** returns the vertical position in pixels where
         the view is split.
      */
     long getSplitVertical();
 
-    //-------------------------------------------------------------------------
 
     /** returns the column before which the view is split.
      */
     long getSplitColumn();
 
-    //-------------------------------------------------------------------------
 
     /** returns the row before which the view is split.
      */
     long getSplitRow();
 
-    //-------------------------------------------------------------------------
 
     /** splits the view at the specified position.
 
@@ -84,7 +76,6 @@ published interface XViewSplitable: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

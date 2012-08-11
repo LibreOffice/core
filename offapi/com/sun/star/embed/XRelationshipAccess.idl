@@ -34,11 +34,9 @@
 #include <com/sun/star/container/ElementExistException.idl>
 #include <com/sun/star/io/IOException.idl>
 
-//============================================================================
 
  module com {  module sun {  module star {  module embed {
 
-//============================================================================
 /** This interface allows to get access to relationship data.
 
     <p>
@@ -51,7 +49,6 @@
  */
 published interface XRelationshipAccess : ::com::sun::star::uno::XInterface
 {
-    // -----------------------------------------------------------------------
     /** allows to detect whether there is an entry with specified value of
         "ID" tag.
 
@@ -64,7 +61,6 @@ published interface XRelationshipAccess : ::com::sun::star::uno::XInterface
     boolean hasByID( [in] string sID )
         raises( ::com::sun::star::io::IOException );
 
-    // -----------------------------------------------------------------------
     /** retrieves the value of "Target" tag from the entry with specified "ID"
         tag.
 
@@ -85,7 +81,6 @@ published interface XRelationshipAccess : ::com::sun::star::uno::XInterface
         raises( ::com::sun::star::container::NoSuchElementException,
                 ::com::sun::star::io::IOException );
 
-    // -----------------------------------------------------------------------
     /** retrieves the value of "Type" tag from the entry with specified "ID"
         tag.
 
@@ -106,7 +101,6 @@ published interface XRelationshipAccess : ::com::sun::star::uno::XInterface
         raises( ::com::sun::star::container::NoSuchElementException,
                 ::com::sun::star::io::IOException );
 
-    // -----------------------------------------------------------------------
     /** retrieves the sequence containing all the tags from the entry with
         specified value of "ID" tag.
 
@@ -131,7 +125,6 @@ published interface XRelationshipAccess : ::com::sun::star::uno::XInterface
         raises( ::com::sun::star::container::NoSuchElementException,
                 ::com::sun::star::io::IOException );
 
-    // -----------------------------------------------------------------------
     /** retrieves the sequence containing all the entries which "Type" tag
         takes the specified value.
 
@@ -156,7 +149,6 @@ published interface XRelationshipAccess : ::com::sun::star::uno::XInterface
             getRelationshipsByType( [in] string sType )
         raises( ::com::sun::star::io::IOException );
 
-    // -----------------------------------------------------------------------
     /** retrieves the sequence containing all the entries controlled by the
         object.
 
@@ -175,7 +167,6 @@ published interface XRelationshipAccess : ::com::sun::star::uno::XInterface
             getAllRelationships()
         raises( ::com::sun::star::io::IOException );
 
-    // -----------------------------------------------------------------------
     /** allows to insert an entry.
 
         @param sID
@@ -207,7 +198,6 @@ published interface XRelationshipAccess : ::com::sun::star::uno::XInterface
         raises( ::com::sun::star::container::ElementExistException,
                 ::com::sun::star::io::IOException );
 
-    // -----------------------------------------------------------------------
     /** allows to remove an entry.
 
         @param sID
@@ -223,7 +213,6 @@ published interface XRelationshipAccess : ::com::sun::star::uno::XInterface
         raises( ::com::sun::star::container::NoSuchElementException,
                 ::com::sun::star::io::IOException );
 
-    // -----------------------------------------------------------------------
     /** allows to insert a set of entries
 
         @param aEntries
@@ -251,7 +240,6 @@ published interface XRelationshipAccess : ::com::sun::star::uno::XInterface
         raises( ::com::sun::star::container::ElementExistException,
                 ::com::sun::star::io::IOException );
 
-    // -----------------------------------------------------------------------
     /** allows to clear the set of entries.
 
         @throws ::com::sun::star::io::IOException
@@ -262,7 +250,6 @@ published interface XRelationshipAccess : ::com::sun::star::uno::XInterface
 
 };
 
-//============================================================================
 
 }; }; }; };
 

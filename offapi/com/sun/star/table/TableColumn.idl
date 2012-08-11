@@ -24,18 +24,15 @@
 #include <com/sun/star/beans/XPropertySet.idl>
 #include <com/sun/star/container/XNamed.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module table {
 
-//=============================================================================
 
 /** represents a special cell range containing all cells of a single
     specific column in a table or spreadsheet.
  */
 published service TableColumn
 {
-    //-------------------------------------------------------------------------
 
     /** provides access to the cells of this column.
 
@@ -43,14 +40,12 @@ published service TableColumn
      */
     interface com::sun::star::table::XCellRange;
 
-    //-------------------------------------------------------------------------
 
 //!published service PropertySet
     /** provides access to the cell properties of all cells of this column.
      */
     interface com::sun::star::beans::XPropertySet;
 
-    //-------------------------------------------------------------------------
 
     /** provides methods to access the name of the column.
 
@@ -58,7 +53,6 @@ published service TableColumn
      */
     interface com::sun::star::container::XNamed;
 
-    //=========================================================================
 
     /** contains the width of the column (in 1/100th mm).
 
@@ -67,19 +61,16 @@ published service TableColumn
      */
     [property] long Width;
 
-    //-------------------------------------------------------------------------
 
     /** is <TRUE/>, if the column always keeps its optimal width.
      */
     [property] boolean OptimalWidth;
 
-    //-------------------------------------------------------------------------
 
     /** is <TRUE/>, if the column is visible.
      */
     [property] boolean IsVisible;
 
-    //-------------------------------------------------------------------------
 
     /** is <TRUE/>, if there is a manual horizontal page break attached
         to the column.
@@ -88,7 +79,6 @@ published service TableColumn
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -29,11 +29,9 @@
 #define __com_sun_star_util_URL_idl__
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module util {
 
-//=============================================================================
 
 /** represents the structure of an Uniform Resource Locator.
 
@@ -65,43 +63,35 @@ published struct URL
      */
     string Complete;
 
-    //-------------------------------------------------------------------------
     /** contains the URL without a mark and without arguments, for example,
         http://www.sun.de:8080/pub/test/foo.txt
      */
     string Main;
 
-    //-------------------------------------------------------------------------
     /** contains the protocol (scheme) of the URL, for example, "http"
      */
     string Protocol;
 
-    //-------------------------------------------------------------------------
     /** contains the user-identifier of the URL, for example, "me"
      */
     string User;
 
-    //-------------------------------------------------------------------------
     /** contains the users password of the URL, for example, "pass"
      */
     string Password;
 
-    //-------------------------------------------------------------------------
     /** contains the server part of the URL, for example, "www.sun.de"
      */
     string Server;
 
-    //-------------------------------------------------------------------------
     /** contains the port at the server of the URL, for example, "8080"
      */
     short Port;
 
-    //-------------------------------------------------------------------------
     /** contains all segments but the last one of the hierarchical path of the URL, for example, "/pub/test/"
      */
     string Path;
 
-    //-------------------------------------------------------------------------
     /** contains the last segment of the hierarchical path of the URL, for the above example, "foo.txt"
         <p>
         <strong>Attention:</strong>A service implementing the <type>XURLTransformer</type> interface
@@ -113,19 +103,16 @@ published struct URL
      */
     string Name;
 
-    //-------------------------------------------------------------------------
     /** contains the arguments part of the URL, for example, "a=b"
      */
     string Arguments;
 
-    //-------------------------------------------------------------------------
     /** contains the mark part of the URL, for example, "xyz"
      */
     string Mark;
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

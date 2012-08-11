@@ -24,17 +24,14 @@
 #include <com/sun/star/awt/XImageConsumer.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module awt {
 
-//=============================================================================
 
 /** specifies a source for an image.
  */
 published interface XImageProducer: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** registers an image consumer with the image producer for accessing
         the image data during a later reconstruction of the image.
@@ -46,7 +43,6 @@ published interface XImageProducer: com::sun::star::uno::XInterface
      */
     [oneway] void addConsumer( [in] com::sun::star::awt::XImageConsumer xConsumer );
 
-    //-------------------------------------------------------------------------
 
     /** removes the given <type scope="com::sun::star::awt">XImageConsumer</type>
         callback from the list of consumers currently registered to receive
@@ -58,7 +54,6 @@ published interface XImageProducer: com::sun::star::uno::XInterface
      */
     [oneway] void removeConsumer( [in] com::sun::star::awt::XImageConsumer xConsumer );
 
-    //-------------------------------------------------------------------------
 
     /** registers the given image consumer as a consumer
         and starts an immediate reconstruction of the image data.
@@ -72,7 +67,6 @@ published interface XImageProducer: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

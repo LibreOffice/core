@@ -23,16 +23,13 @@
 #include <com/sun/star/lang/Locale.idl>
 
 
-//=============================================================================
 
 module com { module sun { module star { module linguistic2 {
 
-//=============================================================================
 /** retrieves the list of available languages.
 */
 published interface XAvailableLocales : com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** retrieve the list of supported languages (Locales).
 
         @see    <type scope"com::sun::star::linguistic2">XSupportedLocales</type>
@@ -48,7 +45,6 @@ published interface XAvailableLocales : com::sun::star::uno::XInterface
         [in] string                         aServiceName );
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -33,11 +33,9 @@
 #include <com/sun/star/awt/Rectangle.idl>
 #include <com/sun/star/awt/XWindow.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module ui {
 
-//=============================================================================
 
 /** this interface enables developer to implement different docking area
     acceptors which are used by the frame based layout manager.
@@ -107,7 +105,6 @@ interface XDockingAreaAcceptor : com::sun::star::uno::XInterface
 
 }; }; }; };
 
-//=============================================================================
 
 #endif
 

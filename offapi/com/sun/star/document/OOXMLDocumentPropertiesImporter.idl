@@ -21,17 +21,14 @@
 
 #include <com/sun/star/document/XOOXMLDocumentPropertiesImporter.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module document {
 
-//=============================================================================
 
 /** allows to import document properties from OOXML format
  */
 service OOXMLDocumentPropertiesImporter : XOOXMLDocumentPropertiesImporter;
 
-//=============================================================================
 
 }; }; }; };
 

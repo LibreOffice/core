@@ -21,11 +21,9 @@
 
 #include <com/sun/star/io/IOException.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module io {
 
-//=============================================================================
 
 // DocMerge from xml: exception com::sun::star::io::SocketException
 /** Thrown to indicate that there is an error in the underlying
@@ -35,7 +33,6 @@ exception SocketException: com::sun::star::io::IOException
 {
 };
 
-//=============================================================================
 
 }; }; }; };
 

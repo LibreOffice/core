@@ -32,17 +32,14 @@
 #include <com/sun/star/sdbc/XResultSet.idl>
 #include <com/sun/star/ucb/XContentIdentifierMapping.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** creates a <type>CachedContentResultSet</type>.
 */
 
 published interface XCachedContentResultSetFactory: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** creates a remote optimized
         <type scope="com::sun::star::sdbc">XResultSet</type>.
 
@@ -62,7 +59,6 @@ published interface XCachedContentResultSetFactory: com::sun::star::uno::XInterf
                 [in] com::sun::star::ucb::XContentIdentifierMapping xMapping );
 };
 
-//=============================================================================
 
 }; }; }; };
 

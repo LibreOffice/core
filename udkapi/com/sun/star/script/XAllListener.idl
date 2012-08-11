@@ -26,11 +26,9 @@
 #include <com/sun/star/reflection/InvocationTargetException.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module script {
 
-//=============================================================================
 /** specifies a listener combining all methods
     of a listener interface in a single generic call.
 
@@ -39,12 +37,10 @@
  */
 published interface XAllListener: com::sun::star::lang::XEventListener
 {
-    //-------------------------------------------------------------------------
     /** gets called when an event occurs at the object.
      */
     [oneway] void firing( [in] com::sun::star::script::AllEventObject iaEvent );
 
-    //-------------------------------------------------------------------------
     /** gets called when a "vetoable event" occurs at the object.
 
         <p>That happens when the listener method raises an exception,
@@ -54,7 +50,6 @@ published interface XAllListener: com::sun::star::lang::XEventListener
             raises( com::sun::star::reflection::InvocationTargetException );
 };
 
-//=============================================================================
 
 }; }; }; };
 

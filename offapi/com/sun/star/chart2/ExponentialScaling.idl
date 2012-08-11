@@ -21,11 +21,9 @@
 
 #include <com/sun/star/chart2/Scaling.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module chart2 {
 
-//=============================================================================
 
 /** Scaling that scales a value <em>x</em> by taking the power of the
     base to <em>x</em>.
@@ -38,7 +36,6 @@ service ExponentialScaling
     service Scaling;
 };
 
-//=============================================================================
 
 }; }; }; };
 

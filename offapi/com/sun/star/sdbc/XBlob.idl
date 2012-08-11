@@ -98,7 +98,6 @@
  */
 published interface XBlob: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** returns the number of bytes in the
         <i>
@@ -115,7 +114,6 @@ published interface XBlob: com::sun::star::uno::XInterface
      */
     hyper length() raises (SQLException);
 
-      //-------------------------------------------------------------------------
 
     /** returns as an array of bytes part or all of the
             <i>
@@ -161,7 +159,6 @@ published interface XBlob: com::sun::star::uno::XInterface
     sequence<byte> getBytes([in]hyper pos, [in]long length)
         raises (SQLException);
 
-      //-------------------------------------------------------------------------
 
     /** retrieves the
         <i>
@@ -177,7 +174,6 @@ published interface XBlob: com::sun::star::uno::XInterface
      */
     com::sun::star::io::XInputStream getBinaryStream()
         raises (SQLException);
-      //-------------------------------------------------------------------------
 
     /** determines the byte position at which the specified byte
         <code>pattern</code>
@@ -203,7 +199,6 @@ published interface XBlob: com::sun::star::uno::XInterface
     hyper position([in]sequence<byte> pattern, [in]hyper start)
         raises (SQLException);
 
-      //-------------------------------------------------------------------------
 
     /** determines the byte position in the
         <i>
@@ -230,7 +225,6 @@ published interface XBlob: com::sun::star::uno::XInterface
          raises (SQLException);
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -29,11 +29,9 @@
 
 #include <com/sun/star/container/NoSuchElementException.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module container {
 
-//=============================================================================
 
 /** This is the generic interface for supporting the creation and removal of
     elements with unique identifiers.
@@ -42,7 +40,6 @@ module com {  module sun {  module star {  module container {
  */
 published interface XIdentifierContainer: com::sun::star::container::XIdentifierReplace
 {
-    //-------------------------------------------------------------------------
 
     /** inserts an element and creates a new unique identifier for it.
 
@@ -65,7 +62,6 @@ published interface XIdentifierContainer: com::sun::star::container::XIdentifier
             raises( com::sun::star::lang::IllegalArgumentException,
                     com::sun::star::lang::WrappedTargetException );
 
-    //-------------------------------------------------------------------------
 
     /** removes the element with the specified identifier.
 
@@ -86,7 +82,6 @@ published interface XIdentifierContainer: com::sun::star::container::XIdentifier
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

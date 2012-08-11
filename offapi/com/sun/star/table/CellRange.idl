@@ -23,23 +23,19 @@
 #include <com/sun/star/table/CellProperties.idl>
 #include <com/sun/star/table/XCellRange.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module table {
 
-//=============================================================================
 
 /** represents a range of of cells within a table.
  */
 published service CellRange
 {
-    //-------------------------------------------------------------------------
 
     /** contains the properties of the cells of this cell range.
        */
     service com::sun::star::table::CellProperties;
 
-    //-------------------------------------------------------------------------
 
     /** provides access to the cells or to sub-ranges of this cell range.
      */
@@ -47,7 +43,6 @@ published service CellRange
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

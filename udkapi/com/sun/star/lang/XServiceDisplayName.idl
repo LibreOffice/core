@@ -23,11 +23,9 @@
 
 #include <com/sun/star/lang/Locale.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module lang {
 
-//=============================================================================
 /** provides a name for the service to be used in displays.
 
      <p>This name can be used in displays (dialogs, menus, etc.) to provide
@@ -37,7 +35,6 @@ module com {  module sun {  module star {  module lang {
  */
 published interface XServiceDisplayName : ::com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** returns the display name of the service for a given language.
 
          <p>The caller may specify a
@@ -56,7 +53,6 @@ published interface XServiceDisplayName : ::com::sun::star::uno::XInterface
             [in] ::com::sun::star::lang::Locale aLocale );
 };
 
-//=============================================================================
 
 }; }; }; };
 

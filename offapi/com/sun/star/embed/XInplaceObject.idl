@@ -35,16 +35,13 @@
 
 
 
-//============================================================================
 
  module com {  module sun {  module star {  module embed {
 
-//============================================================================
 /** represents common functionality for inplace embedded objects.
  */
 published interface XInplaceObject: com::sun::star::uno::XInterface
 {
-    //------------------------------------------------------------------------
     /** sets the visible part of the inplace object.
 
         <p>
@@ -76,7 +73,6 @@ published interface XInplaceObject: com::sun::star::uno::XInterface
         raises( ::com::sun::star::embed::WrongStateException,
                 ::com::sun::star::uno::Exception );
 
-    //------------------------------------------------------------------------
     /** enables or disables modeless dialogs of the object.
 
         <p>
@@ -99,7 +95,6 @@ published interface XInplaceObject: com::sun::star::uno::XInterface
         raises( ::com::sun::star::embed::WrongStateException,
                 ::com::sun::star::uno::Exception );
 
-    //------------------------------------------------------------------------
     /** provides accelerator table the container wants to use during inplace
         editing.
 
@@ -115,7 +110,6 @@ published interface XInplaceObject: com::sun::star::uno::XInterface
 
 };
 
-//============================================================================
 
 }; }; }; };
 

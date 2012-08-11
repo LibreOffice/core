@@ -22,7 +22,6 @@
 
 #include <com/sun/star/container/XIndexAccess.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module ui {
 

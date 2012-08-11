@@ -20,74 +20,63 @@
 #define __com_sun_star_drawing_PolygonKind_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module drawing {
 
-//=============================================================================
 
 // DocMerge from xml: enum com::sun::star::drawing::PolygonKind
 /** This enumeration defines the type of polygon.
  */
 published enum PolygonKind
 {
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: value com::sun::star::drawing::PolygonKind::LINE
     /** This is the PolygonKind for a LineShape.
      */
     LINE,
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: value com::sun::star::drawing::PolygonKind::POLY
     /** This is the PolygonKind for a PolyPolygonShape.
      */
     POLY,
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: value com::sun::star::drawing::PolygonKind::PLIN
     /** This is the PolygonKind for a PolyLineShape.
      */
     PLIN,
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: value com::sun::star::drawing::PolygonKind::PATHLINE
     /** This is the PolygonKind for an OpenBezierShape.
      */
     PATHLINE,
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: value com::sun::star::drawing::PolygonKind::PATHFILL
     /** This is the PolygonKind for a ClosedBezierShape.
      */
     PATHFILL,
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: value com::sun::star::drawing::PolygonKind::FREELINE
     /** This is the PolygonKind for an OpenFreeHandShape.
      */
     FREELINE,
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: value com::sun::star::drawing::PolygonKind::FREEFILL
     /** This is the PolygonKind for a ClosedFreeHandShape.
      */
     FREEFILL,
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: value com::sun::star::drawing::PolygonKind::PATHPOLY
     /** This is the PolygonKind for a PolyPolygonPathShape.
      */
     PATHPOLY,
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: value com::sun::star::drawing::PolygonKind::PATHPLIN
     /** This is the PolygonKind for a PolyLinePathShape.
@@ -96,7 +85,6 @@ published enum PolygonKind
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

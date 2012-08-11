@@ -59,7 +59,6 @@ published constants KeyRule
              </P>
      */
     const long CASCADE  = 0;
-    //-------------------------------------------------------------------------
 
     /** a possible value for the column's
              <code>UPDATE_RULE</code>
@@ -91,7 +90,6 @@ published constants KeyRule
              </P>
      */
     const long RESTRICT = 1;
-    //-------------------------------------------------------------------------
 
     /** a possible value for the column's
              <code>UPDATE_RULE</code>
@@ -119,7 +117,6 @@ published constants KeyRule
              </P>
      */
     const long SET_NULL  = 2;
-    //-------------------------------------------------------------------------
 
     /** a possible value for the column's
             <code>UPDATE_RULE</code>
@@ -145,7 +142,6 @@ published constants KeyRule
              </P>
      */
     const long NO_ACTION = 3;
-    //-------------------------------------------------------------------------
 
     /** a possible value for the column's
             <code>UPDATE_RULE</code>
@@ -175,7 +171,6 @@ published constants KeyRule
     const long SET_DEFAULT  = 4;
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -21,36 +21,30 @@
 #define __com_sun_star_chart2_datapointgeometry3d_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module chart2 {
 
-//=============================================================================
 
 /** These values specify the geometry of data points in
     3D bar charts.
  */
 constants DataPointGeometry3D
 {
-    //-------------------------------------------------------------------------
 
     /** a cuboid
      */
     const long CUBOID = 0;
 
-    //-------------------------------------------------------------------------
 
     /** a cylinder with a circle as base
      */
     const long CYLINDER = 1;
 
-    //-------------------------------------------------------------------------
 
     /** a cone with a circle as base
      */
     const long CONE = 2;
 
-    //-------------------------------------------------------------------------
 
     /** a pyramid with a square as base
      */
@@ -58,7 +52,6 @@ constants DataPointGeometry3D
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

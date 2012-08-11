@@ -30,11 +30,9 @@
 #include <com/sun/star/lang/IllegalAccessException.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module reflection {
 
-//=============================================================================
 
 /** Reflects an IDL interface attribute, enum or compound type
     (i.e. struct/exception) member.
@@ -105,7 +103,6 @@ published interface XIdlField2: com::sun::star::reflection::XIdlMember
                 com::sun::star::lang::IllegalAccessException );
 };
 
-//=============================================================================
 
 }; }; }; };
 

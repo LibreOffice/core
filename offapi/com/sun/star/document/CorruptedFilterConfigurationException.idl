@@ -22,11 +22,9 @@
 #include <com/sun/star/uno/RuntimeException.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module document {
 
-//=============================================================================
 
 /** This exception is thrown in case the global filter configuration
     does not exists or contains corrupted data.
@@ -40,7 +38,6 @@ published exception CorruptedFilterConfigurationException : ::com::sun::star::un
     string Details;
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -26,11 +26,9 @@
 #include <com/sun/star/util/ElementChange.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module util {
 
-//=============================================================================
 /** this interface enables inspecting a set of changes forming one batch transaction.
 
     <p>An object implementing this interface should implement more
@@ -43,7 +41,6 @@ module com {  module sun {  module star {  module util {
  */
 published interface XChangesSet: com::sun::star::container::XElementAccess
 {
-    //-------------------------------------------------------------------------
     /** queries for all contained changes at once.
 
         @returns an array of <type>ElementChange</type> holding information about
@@ -52,7 +49,6 @@ published interface XChangesSet: com::sun::star::container::XElementAccess
     sequence<ElementChange> getAllChanges();
 };
 
-//=============================================================================
 
 }; }; }; };
 

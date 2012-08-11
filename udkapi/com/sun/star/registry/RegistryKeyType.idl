@@ -20,11 +20,9 @@
 #define __com_sun_star_registry_RegistryKeyType_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module registry {
 
-//=============================================================================
 
 // DocMerge from xml: enum com::sun::star::registry::RegistryKeyType
 /** represents all possible types of a key.
@@ -34,13 +32,11 @@
  */
 published enum RegistryKeyType
 {
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR RegistryKeyType::  KEY,
 
     // DocMerge: empty anyway
     KEY,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR RegistryKeyType::  LINK
 
     // DocMerge: empty anyway
@@ -48,7 +44,6 @@ published enum RegistryKeyType
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

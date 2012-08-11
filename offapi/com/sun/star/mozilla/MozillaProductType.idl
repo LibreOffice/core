@@ -22,11 +22,9 @@
 #define __com_sun_star_mozilla_MozillaProductType_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module mozilla {
 
-//=============================================================================
 
 
 /** Mozilla Product Types
@@ -47,7 +45,6 @@ published enum  MozillaProductType
     Thunderbird = 3
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -31,11 +31,9 @@
 #include <com/sun/star/io/IOException.idl>
 
 
-//============================================================================
 
  module com {  module sun {  module star {  module embed {
 
-//============================================================================
 
 /** This exception can be thrown in case a storage commit is failed.
     <p>
@@ -57,7 +55,6 @@ published exception UseBackupException: com::sun::star::io::IOException
     string TemporaryFileURL;
 };
 
-//============================================================================
 
 }; }; }; };
 

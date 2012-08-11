@@ -30,11 +30,9 @@
 #include <com/sun/star/form/FormSubmitEncoding.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module form {  module component {
 
-//=============================================================================
 
 /** This service specifies the special kind of <type>Form</type>s for HTML documents.
 
@@ -64,24 +62,20 @@ published service HTMLForm
      */
     [property] string TargetFrame;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the URL, which should be used for submission.
      */
     [property] string TargetURL;
-    //-------------------------------------------------------------------------
 
     /** specifies the kind of submission.
      */
     [property] com::sun::star::form::FormSubmitMethod SubmitMethod;
-    //-------------------------------------------------------------------------
 
     /** specifies the kind of encoding for submission.
      */
     [property] com::sun::star::form::FormSubmitEncoding SubmitEncoding;
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

@@ -22,7 +22,6 @@
 
 
 module com { module sun { module star { module script { module browse {
-//==============================================================================
 /**
     These constants define the three different types of nodes in the BrowseNode
     hierarchy.

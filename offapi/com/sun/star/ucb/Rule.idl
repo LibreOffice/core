@@ -31,11 +31,9 @@
 #include <com/sun/star/ucb/RuleTerm.idl>
 
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** describes a rule that can be applies to a number of objects.
 
     <p>A rule consists of a sequence of <type>RuleTerm</type>s describing the
@@ -44,13 +42,11 @@ module com { module sun { module star { module ucb {
 */
 published struct Rule
 {
-    //-------------------------------------------------------------------------
     /** the rule terms describing the objects to which the rule should be
         applied.
     */
     sequence<com::sun::star::ucb::RuleTerm> Terms;
 
-    //-------------------------------------------------------------------------
     /** Some <type>RuleAction</type>s require a parameter.
 
         <table border =1>
@@ -74,7 +70,6 @@ published struct Rule
     */
     string Parameter;
 
-    //-------------------------------------------------------------------------
     /** the action to perform on the matching objects.
 
         <p>The value can be one of the <type>RuleAction</type> constants.
@@ -83,7 +78,6 @@ published struct Rule
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

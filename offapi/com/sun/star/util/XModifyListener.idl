@@ -24,17 +24,14 @@
 #include <com/sun/star/lang/EventObject.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module util {
 
-//=============================================================================
 
 /** makes it possible to receive events when a model object changes.
  */
 published interface XModifyListener: com::sun::star::lang::XEventListener
 {
-    //-------------------------------------------------------------------------
     /** is called when something changes in the object.
 
         <p>Due to such an event, it may be necessary to update views or
@@ -47,7 +44,6 @@ published interface XModifyListener: com::sun::star::lang::XEventListener
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

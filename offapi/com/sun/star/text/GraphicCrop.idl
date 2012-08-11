@@ -20,11 +20,9 @@
 #define __com_sun_star_text_GraphicCrop_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module text {
 
-//=============================================================================
 
 // DocMerge from xml: struct com::sun::star::text::GraphicCrop
 /** describes the cropping of graphic objects.
@@ -50,21 +48,18 @@ published struct GraphicCrop
      */
     long Top;
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: field com::sun::star::text::GraphicCrop::Bottom
     /** contains the bottom value to cut (if negative) or to extend (if positive)
      */
     long Bottom;
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: field com::sun::star::text::GraphicCrop::Left
     /** contains the left value to cut (if negative) or to extend (if positive)
      */
     long Left;
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: field com::sun::star::text::GraphicCrop::Right
     /** contains the right value to cut (if negative) or to extend (if positive)
@@ -73,7 +68,6 @@ published struct GraphicCrop
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

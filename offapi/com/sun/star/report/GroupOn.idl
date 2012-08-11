@@ -29,18 +29,15 @@
 #define __com_sun_star_report_GroupOn_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module report {
 
-//=============================================================================
 
 /** Specifies how to group data.
     @see XGroup
  */
 constants GroupOn
 {
-    //-------------------------------------------------------------------------
 
     /** The same value in the column value or expression.
      */
@@ -83,7 +80,6 @@ constants GroupOn
     const short INTERVAL = 9;
 };
 
-//=============================================================================
 
 }; }; }; };
 

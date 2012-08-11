@@ -26,11 +26,9 @@
 #include <com/sun/star/lang/IllegalArgumentException.idl>
 #include <com/sun/star/container/NoSuchElementException.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module container {
 
-//=============================================================================
 
 /** maps strings to anys.
 
@@ -39,7 +37,6 @@ module com {  module sun {  module star {  module container {
 
 interface XStringKeyMap
 {
-    //-------------------------------------------------------------------------
     /** reads data from the map.
 
         @param aKey
@@ -55,7 +52,6 @@ interface XStringKeyMap
         raises( com::sun::star::container::NoSuchElementException );
 
 
-    //-------------------------------------------------------------------------
     /** checks for element existence.
 
         @param aKey
@@ -67,7 +63,6 @@ interface XStringKeyMap
     boolean hasValue( [in] string aKey );
 
 
-    //-------------------------------------------------------------------------
     /** writes data to the map.
 
         @param aKey
@@ -87,13 +82,11 @@ interface XStringKeyMap
                 com::sun::star::container::ElementExistException );
 
 
-    //-------------------------------------------------------------------------
     /** the number of elements in the map.
      */
     [attribute, readonly] long Count;
 
 
-    //-------------------------------------------------------------------------
     /** obtains the key of an element by index.
 
         @param nIndex
@@ -110,7 +103,6 @@ interface XStringKeyMap
         raises( com::sun::star::lang::IndexOutOfBoundsException );
 
 
-    //-------------------------------------------------------------------------
     /** obtains the value of an element by index.
 
         @param nIndex

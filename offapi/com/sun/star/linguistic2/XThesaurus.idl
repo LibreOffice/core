@@ -24,11 +24,9 @@
 #include <com/sun/star/lang/IllegalArgumentException.idl>
 #include <com/sun/star/beans/PropertyValues.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module linguistic2 {
 
-//=============================================================================
 /** allows for the retrieval of possible meanings for a given word and language.
 
     <P>
@@ -41,7 +39,6 @@ module com { module sun { module star { module linguistic2 {
 */
 published interface XThesaurus : com::sun::star::linguistic2::XSupportedLocales
 {
-    //-------------------------------------------------------------------------
     /**
         @returns
             a list of meanings for the given word and language.
@@ -72,7 +69,6 @@ published interface XThesaurus : com::sun::star::linguistic2::XSupportedLocales
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

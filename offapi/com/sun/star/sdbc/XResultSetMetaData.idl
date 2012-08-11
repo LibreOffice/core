@@ -39,7 +39,6 @@ published interface XResultSetMetaData: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     long getColumnCount() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** indicates whether the column is automatically numbered, thus read-only.
         @param column
@@ -50,7 +49,6 @@ published interface XResultSetMetaData: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     boolean isAutoIncrement([in]long column) raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** indicates whether a column's case matters.
         @param column
@@ -61,7 +59,6 @@ published interface XResultSetMetaData: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     boolean isCaseSensitive([in]long column) raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** indicates whether the column can be used in a where clause.
         @param column
@@ -72,7 +69,6 @@ published interface XResultSetMetaData: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     boolean isSearchable([in]long column) raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** indicates whether the column is a cash value.
         @param column
@@ -83,7 +79,6 @@ published interface XResultSetMetaData: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     boolean isCurrency([in]long column) raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** indicates the nullability of values in the designated column.@see com::sun::star::sdbc::ColumnValue
         @param column
@@ -94,7 +89,6 @@ published interface XResultSetMetaData: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     long isNullable([in]long column) raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** indicates whether values in the column are signed numbers.
         @param column
@@ -105,7 +99,6 @@ published interface XResultSetMetaData: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     boolean isSigned([in]long column) raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** indicates the column's normal max width in chars.
         @param column
@@ -116,7 +109,6 @@ published interface XResultSetMetaData: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     long getColumnDisplaySize([in]long column) raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** gets the suggested column title for use in printouts and
         displays.
@@ -128,7 +120,6 @@ published interface XResultSetMetaData: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     string getColumnLabel([in]long column) raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** gets a column's name.
         @param column
@@ -139,7 +130,6 @@ published interface XResultSetMetaData: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     string getColumnName([in]long column) raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** gets a column's table's schema.
         @param column
@@ -150,7 +140,6 @@ published interface XResultSetMetaData: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     string getSchemaName([in]long column) raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** gets a column's number of decimal digits.
         @param column
@@ -161,7 +150,6 @@ published interface XResultSetMetaData: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     long getPrecision([in]long column) raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** gets a column's number of digits to right of the decimal point.
         @param column
@@ -172,7 +160,6 @@ published interface XResultSetMetaData: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     long getScale([in]long column) raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** gets a column's table name.
         @param column
@@ -183,7 +170,6 @@ published interface XResultSetMetaData: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     string getTableName([in]long column) raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** gets a column's table's catalog name.
         @param column
@@ -194,7 +180,6 @@ published interface XResultSetMetaData: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     string getCatalogName([in]long column) raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** retrieves a column's SQL type.
         @param column
@@ -205,7 +190,6 @@ published interface XResultSetMetaData: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     long getColumnType([in]long column) raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** retrieves a column's database-specific type name.
         @param column
@@ -216,7 +200,6 @@ published interface XResultSetMetaData: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     string getColumnTypeName([in]long column) raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** indicates whether a column is definitely not writable.
         @param column
@@ -227,7 +210,6 @@ published interface XResultSetMetaData: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     boolean isReadOnly([in]long column) raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** indicates whether it is possible for a write on the column to succeed.
         @param column
@@ -238,7 +220,6 @@ published interface XResultSetMetaData: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     boolean isWritable([in]long column) raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** indicates whether a write on the column will definitely succeed.
         @param column
@@ -249,7 +230,6 @@ published interface XResultSetMetaData: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     boolean isDefinitelyWritable([in]long column) raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** returns the fully-qualified name of the service whose instances
         are manufactured if the method
@@ -265,7 +245,6 @@ published interface XResultSetMetaData: com::sun::star::uno::XInterface
     string getColumnServiceName([in]long column) raises (SQLException);
 };
 
-//=============================================================================
 
 }; }; }; };
 

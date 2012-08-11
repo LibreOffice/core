@@ -19,11 +19,9 @@
 #ifndef com_sun_star_chart2_SymbolStyle_idl
 #define com_sun_star_chart2_SymbolStyle_idl
 
-//=============================================================================
 
 module com {  module sun {  module star {  module chart2 {
 
-//=============================================================================
 
 /** determines what kind of symbol to use
  */
@@ -57,7 +55,6 @@ enum SymbolStyle
     GRAPHIC
 };
 
-//=============================================================================
 
 }; }; }; };
 

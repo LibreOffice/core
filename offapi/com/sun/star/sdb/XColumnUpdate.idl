@@ -46,7 +46,6 @@ published interface XColumnUpdate: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     void updateNull() raises (com::sun::star::sdbc::SQLException);
-    //-------------------------------------------------------------------------
 
     /** updates a column with a boolean value.
         @param x
@@ -55,7 +54,6 @@ published interface XColumnUpdate: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     void updateBoolean([in]boolean x) raises (com::sun::star::sdbc::SQLException);
-    //-------------------------------------------------------------------------
 
     /** updates a column with a byte value.
         @param x
@@ -64,7 +62,6 @@ published interface XColumnUpdate: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     void updateByte([in]byte x) raises (com::sun::star::sdbc::SQLException);
-    //-------------------------------------------------------------------------
 
     /** updates a column with a short value.
         @param x
@@ -73,7 +70,6 @@ published interface XColumnUpdate: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     void updateShort([in]short x) raises (com::sun::star::sdbc::SQLException);
-    //-------------------------------------------------------------------------
 
     /** updates a column with a long value.
         @param x
@@ -82,7 +78,6 @@ published interface XColumnUpdate: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     void updateInt([in]long x) raises (com::sun::star::sdbc::SQLException);
-    //-------------------------------------------------------------------------
 
     /** updates a column with a hyper value.
         @param x
@@ -91,7 +86,6 @@ published interface XColumnUpdate: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     void updateLong([in]hyper x) raises (com::sun::star::sdbc::SQLException);
-    //-------------------------------------------------------------------------
 
     /** updates a column with a float value.
         @param x
@@ -100,7 +94,6 @@ published interface XColumnUpdate: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     void updateFloat([in]float x) raises (com::sun::star::sdbc::SQLException);
-    //-------------------------------------------------------------------------
 
     /** updates a column with a double value.
         @param x
@@ -109,7 +102,6 @@ published interface XColumnUpdate: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     void updateDouble([in]double x) raises (com::sun::star::sdbc::SQLException);
-    //-------------------------------------------------------------------------
 
     /** updates a column with a string value.
         @param x
@@ -118,7 +110,6 @@ published interface XColumnUpdate: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     void updateString([in]string x) raises (com::sun::star::sdbc::SQLException);
-    //-------------------------------------------------------------------------
 
     /** updates a column with a byte array value.
         @param x
@@ -127,7 +118,6 @@ published interface XColumnUpdate: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     void updateBytes([in]sequence<byte> x) raises (com::sun::star::sdbc::SQLException);
-    //-------------------------------------------------------------------------
 
     /** updates a column with a Date value.
         @param x
@@ -137,7 +127,6 @@ published interface XColumnUpdate: com::sun::star::uno::XInterface
      */
     void updateDate([in]com::sun::star::util::Date x)
         raises (com::sun::star::sdbc::SQLException);
-    //-------------------------------------------------------------------------
 
     /** updates a column with a Time value.
         @param x
@@ -147,7 +136,6 @@ published interface XColumnUpdate: com::sun::star::uno::XInterface
      */
     void updateTime([in]com::sun::star::util::Time x)
         raises (com::sun::star::sdbc::SQLException);
-    //-------------------------------------------------------------------------
 
     /** updates a column with a Timestamp value.
         @param x
@@ -157,7 +145,6 @@ published interface XColumnUpdate: com::sun::star::uno::XInterface
      */
     void updateTimestamp([in]com::sun::star::util::DateTime x)
       raises (com::sun::star::sdbc::SQLException);
-    //-------------------------------------------------------------------------
 
     /** updates a column with a stream value.
         @param x
@@ -167,7 +154,6 @@ published interface XColumnUpdate: com::sun::star::uno::XInterface
      */
     void updateBinaryStream([in]com::sun::star::io::XInputStream x,
                              [in]long length) raises (com::sun::star::sdbc::SQLException);
-    //-------------------------------------------------------------------------
 
     /** updates a column with a stream value.
         @param x
@@ -179,7 +165,6 @@ published interface XColumnUpdate: com::sun::star::uno::XInterface
      */
     void updateCharacterStream([in]com::sun::star::io::XInputStream x,
                                  [in]long length) raises (com::sun::star::sdbc::SQLException);
-    //-------------------------------------------------------------------------
 
     /** updates a column with an Object value.
         @param x
@@ -189,7 +174,6 @@ published interface XColumnUpdate: com::sun::star::uno::XInterface
      */
     void updateObject([in]any x)
       raises (com::sun::star::sdbc::SQLException);
-    //-------------------------------------------------------------------------
 
     /** updates a column with an Object value.
         @param x
@@ -203,7 +187,6 @@ published interface XColumnUpdate: com::sun::star::uno::XInterface
       raises (com::sun::star::sdbc::SQLException);
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -22,11 +22,9 @@
 #include <com/sun/star/chart/XAxisZSupplier.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module chart {
 
-//=============================================================================
 
 /** A helper service for chart documents which supply a z-axis.
  */
@@ -36,34 +34,29 @@ published service ChartAxisZSupplier
      */
     interface com::sun::star::chart::XAxisZSupplier;
 
-    //-------------------------------------------------------------------------
 
     /** Determines if the z-axis is shown or hidden.@see ChartAxis
      */
     [property] boolean HasZAxis;
 
-    //-------------------------------------------------------------------------
 
     /** Determines if the description of the z-axis
         is shown or hidden.
      */
     [property] boolean HasZAxisDescription;
 
-    //-------------------------------------------------------------------------
 
     /** Determines if the major grid of the z-axis
         is shown or hidden.@see ChartGrid
      */
     [property] boolean HasZAxisGrid;
 
-    //-------------------------------------------------------------------------
 
     /** Determines if the minor grid of the z-axis is shown
         or hidden.@see ChartGrid
      */
     [property] boolean HasZAxisHelpGrid;
 
-    //-------------------------------------------------------------------------
 
     /** Determines if the title of the z-axis is shown
         or hidden.@see ChartTitle
@@ -71,7 +64,6 @@ published service ChartAxisZSupplier
     [property] boolean HasZAxisTitle;
 };
 
-//=============================================================================
 
 }; }; }; };
 

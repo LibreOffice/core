@@ -20,11 +20,9 @@
 #define __com_sun_star_frame_status_Template_idl__
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module frame { module status {
 
-//=============================================================================
 
 /** contains an association between a style name and a value.
 
@@ -32,20 +30,17 @@ module com {  module sun {  module star {  module frame { module status {
  */
 struct Template
 {
-    //-------------------------------------------------------------------------
 
     /** specifies a style name.
      */
     string  StyleName;
 
-    //-------------------------------------------------------------------------
 
     /** specifies a value that is bound to the style name.
      */
     long    Value;
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

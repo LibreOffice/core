@@ -23,11 +23,9 @@
 #include <com/sun/star/beans/GetPropertyTolerantResult.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module beans {
 
-//=============================================================================
 
 /** specifies information being retrieved about a single property.
 
@@ -45,7 +43,6 @@ published struct GetDirectPropertyTolerantResult : com::sun::star::beans::GetPro
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

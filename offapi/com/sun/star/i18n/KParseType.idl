@@ -19,11 +19,9 @@
 #ifndef __com_sun_star_i18n_KParseType_idl__
 #define __com_sun_star_i18n_KParseType_idl__
 
-//============================================================================
 
 module com {  module sun {  module star {  module i18n {
 
-//============================================================================
 
 /**
     Constants to specify the type of a parsed token.
@@ -78,7 +76,6 @@ published constants KParseType
     const long ANY_NUMBER           = ASC_NUMBER | UNI_NUMBER;
 };
 
-//============================================================================
 }; }; }; };
 
 #endif

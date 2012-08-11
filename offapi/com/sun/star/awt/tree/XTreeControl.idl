@@ -33,11 +33,9 @@
 #include <com/sun/star/view/XMultiSelectionSupplier.idl>
 #include <com/sun/star/awt/tree/XTreeEditListener.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module awt { module tree {
 
-//=============================================================================
 
 /** An interface to a control that displays a set of hierarchical data as an outline.
 
@@ -56,9 +54,7 @@ interface XTreeControl
     */
     interface ::com::sun::star::view::XMultiSelectionSupplier;
 
-    // ----------------------------
     // expanding/collapsing/visible
-    // ----------------------------
 
     /** Returns <TRUE/> if <var>Node</var> is currently expanded.
 
@@ -180,9 +176,7 @@ interface XTreeControl
     */
     [attribute] string DefaultCollapsedGraphicURL;
 
-    // ------------
     // tree geometry
-    // ------------
 
     /** Returns the node at the specified location.
 
@@ -220,9 +214,7 @@ interface XTreeControl
         getNodeRect( [in] XTreeNode Node )
             raises( ::com::sun::star::lang::IllegalArgumentException );
 
-    // ------------
     // tree editing
-    // ------------
 
     /** Returns <TRUE/> if one of tree's nodes is being currently edited.
         <p>The node that is being edited can be obtained using <method scope="com::sun::star::view">XSelectionSupplier::getSelection()</method>.
@@ -278,7 +270,6 @@ interface XTreeControl
     void removeTreeEditListener( [in] XTreeEditListener Listener );
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

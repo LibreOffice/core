@@ -26,11 +26,9 @@
 #include <com/sun/star/accessibility/XAccessibleSelection.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** The accessible object of the data table in the CSV import dialog.
     @see ::com::sun::star::sheet::AccessibleCsvRuler
@@ -40,32 +38,27 @@ module com {  module sun {  module star {  module sheet {
  */
 published service AccessibleCsvTable
 {
-    //-------------------------------------------------------------------------
 
     /** This interface gives access to the whole content of the table.
      */
     interface ::com::sun::star::accessibility::XAccessibleContext;
 
-    //-------------------------------------------------------------------------
 
     /** This interface gives access to the visibility of the table.
      */
     interface ::com::sun::star::accessibility::XAccessibleComponent;
 
-    //-------------------------------------------------------------------------
 
     /** This interface gives access to functionality specific for a table.
      */
     interface ::com::sun::star::accessibility::XAccessibleTable;
 
-    //-------------------------------------------------------------------------
 
     /** This interface gives access to selection functionality.
      */
     interface ::com::sun::star::accessibility::XAccessibleSelection;
 };
 
-//=============================================================================
 
 }; }; }; };
 

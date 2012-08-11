@@ -21,11 +21,9 @@
 
 #include <com/sun/star/io/XInputStream.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module io {
 
-//=============================================================================
 
 /** Interface for providing an input stream.
 

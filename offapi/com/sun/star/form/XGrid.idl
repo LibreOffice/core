@@ -22,11 +22,9 @@
 #include <com/sun/star/uno/XInterface.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module form {
 
-//=============================================================================
 
 /** provides the possibility of setting and retrieving the position
     of the current cell in a grid control.
@@ -45,13 +43,11 @@
  */
 published interface XGrid: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** retrieves the current column position.
      */
     short getCurrentColumnPosition();
 
-    //-------------------------------------------------------------------------
 
     /** sets the current column position.
      */
@@ -59,7 +55,6 @@ published interface XGrid: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

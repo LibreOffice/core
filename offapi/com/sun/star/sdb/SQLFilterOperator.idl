@@ -70,7 +70,6 @@ constants SQLFilterOperator
     /// is not null
     const long NOT_SQLNULL      = 10;
 };
-//=============================================================================
 
 }; }; }; };
 

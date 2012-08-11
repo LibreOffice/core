@@ -22,11 +22,9 @@
 
 #include <com/sun/star/task/XInteractionContinuation.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module task {
 
-//=============================================================================
 
 /** specifies a continuation where the user does not actually decide the question
     she was confronted with, but postpones the decision to a later time.
@@ -35,11 +33,9 @@ interface XInteractionAskLater : com::sun::star::task::XInteractionContinuation
 {
 };
 
-//=============================================================================
 
 }; }; }; };
 
-//=============================================================================
 
 #endif
 

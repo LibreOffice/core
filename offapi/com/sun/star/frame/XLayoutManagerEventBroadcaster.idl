@@ -30,11 +30,9 @@
 
 #include <com/sun/star/frame/XLayoutManagerListener.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module frame {
 
-//=============================================================================
 /** makes it possible to receive events from a layout manager.
 
     @see ::com::sun::star::frame::LayoutManager

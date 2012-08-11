@@ -22,11 +22,9 @@
 
 #include <com/sun/star/drawing/CaptionShape.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** represents the shape of a cell annotation object attached to a spreadsheet cell.
 
@@ -39,7 +37,6 @@ published service CellAnnotationShape
     service com::sun::star::drawing::CaptionShape;
 };
 
-//=============================================================================
 
 }; }; }; };
 

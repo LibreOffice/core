@@ -33,11 +33,9 @@
 #include <com/sun/star/lang/Locale.idl>
 #include <com/sun/star/uno/XInterface.idl>
 
-//============================================================================
 
 module com { module sun { module star { module i18n {
 
-//============================================================================
 
 /*
 
@@ -76,7 +74,6 @@ NUMBER=[SIGN]*(1*DIGIT  *(GRPSEP 1*DIGIT))[DECSEP]1*DIGIT[EXPONENT]
 
 */
 
-//============================================================================
 
 /**
     Character classification (upper, lower, digit, letter, number, ...)
@@ -85,47 +82,39 @@ NUMBER=[SIGN]*(1*DIGIT  *(GRPSEP 1*DIGIT))[DECSEP]1*DIGIT[EXPONENT]
 
 published interface XCharacterClassification : com::sun::star::uno::XInterface
 {
-    //------------------------------------------------------------------------
     /** Convert lower case alpha to upper case alpha, starting at
         position <em>nPos</em> for <em>nCount</em> code points.
      */
     string   toUpper( [in] string aText, [in] long nPos, [in] long nCount,
                       [in] com::sun::star::lang::Locale aLocale );
 
-    //------------------------------------------------------------------------
     /** Convert upper case alpha to lower case alpha, starting at
         position <em>nPos</em> for <em>nCount</em> code points.
      */
     string   toLower( [in] string aText, [in] long nPos, [in] long nCount,
                       [in] com::sun::star::lang::Locale aLocale );
 
-    //------------------------------------------------------------------------
     /** Convert to title case, starting at
         position <em>nPos</em> for <em>nCount</em> code points.
      */
     string   toTitle( [in] string aText, [in] long nPos, [in] long nCount,
                       [in] com::sun::star::lang::Locale aLocale );
 
-    //------------------------------------------------------------------------
     /// Get <type>UnicodeType</type> of character at position <em>nPos</em>.
     short    getType( [in] string aText, [in] long nPos );
 
-    //------------------------------------------------------------------------
     /** Get <type>DirectionProperty</type> of character at position
         <em>nPos</em>.
      */
     short    getCharacterDirection( [in] string aText, [in] long nPos );
 
-    //------------------------------------------------------------------------
     /// Get <type>UnicodeScript</type> of character at position <em>nPos</em>.
     short    getScript( [in] string aText, [in] long nPos );
 
-    //------------------------------------------------------------------------
     /// Get <type>KCharacterType</type> of character at position <em>nPos</em>.
     long getCharacterType( [in] string aText, [in] long nPos,
                            [in] com::sun::star::lang::Locale aLocale );
 
-    //------------------------------------------------------------------------
     /** Get accumulated <type>KCharacterType</type>s of string starting
         at position <em>nPos</em> of length <em>nCount</em> code points.
 
@@ -138,7 +127,6 @@ published interface XCharacterClassification : com::sun::star::uno::XInterface
                         [in] com::sun::star::lang::Locale aLocale );
 
 
-    //------------------------------------------------------------------------
     /**
         Parse a string for a token starting at position <em>nPos</em>.
 
@@ -228,7 +216,6 @@ published interface XCharacterClassification : com::sun::star::uno::XInterface
                             [in] string aUserDefinedCharactersCont
                             );
 
-    //------------------------------------------------------------------------
     /**
         Parse a string for a token of type <em>nTokenType</em> starting
         at position <em>nPos</em>.
@@ -276,7 +263,6 @@ published interface XCharacterClassification : com::sun::star::uno::XInterface
                             );
 };
 
-//=============================================================================
 }; }; }; };
 
 #endif

@@ -29,11 +29,9 @@
 #ifndef __com_sun_star_i18n_CalendarDisplayCode_idl__
 #define __com_sun_star_i18n_CalendarDisplayCode_idl__
 
-//=============================================================================
 
 module com { module sun { module star { module i18n {
 
-//=============================================================================
 
 
 /**
@@ -126,7 +124,6 @@ published constants CalendarDisplayCode
 
 };
 
-//=============================================================================
 }; }; }; };
 
 #endif

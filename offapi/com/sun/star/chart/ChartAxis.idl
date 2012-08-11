@@ -43,11 +43,9 @@
 #include <com/sun/star/chart/XAxis.idl>
 #include <com/sun/star/xml/UserDefinedAttributeSupplier.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module chart {
 
-//=============================================================================
 
 /** Specifies the axes in a diagram.
 
@@ -80,29 +78,24 @@ published service ChartAxis
 
     interface com::sun::star::beans::XPropertySet;
 
-    //-------------------------------------------------------------------------
     /** Properties for scaling:
     */
 
-    //-------------------------------------------------------------------------
 
     /** Contains the maximum value for the axis scale.
      */
     [optional, property] double Max;
 
-    //-------------------------------------------------------------------------
 
     /** Contains the minimum value for the axis scale.
      */
     [optional, property] double Min;
 
-    //-------------------------------------------------------------------------
 
     /** Contains the distance between the main tick marks.
      */
     [optional, property] double StepMain;
 
-    //-------------------------------------------------------------------------
 
     /**
     Contains the number of help intervals within a main interval. E.g. a StepHelpCount of 5 divides
@@ -110,7 +103,6 @@ published service ChartAxis
     */
     [optional, property] long StepHelpCount;
 
-    //-------------------------------------------------------------------------
 
     /** @deprecated
     User property StepHelpCount instead
@@ -118,28 +110,24 @@ published service ChartAxis
     */
     [optional, property] double StepHelp;
 
-    //-------------------------------------------------------------------------
 
     /** The maximum value of the axis scale is calculated by the chart if
         this property is <TRUE/>.
      */
     [optional, property] boolean AutoMax;
 
-    //-------------------------------------------------------------------------
 
     /** The minimum value of the axis scale is calculated by the chart if
         this property is <TRUE/>.
      */
     [optional, property] boolean AutoMin;
 
-    //-------------------------------------------------------------------------
 
     /** The distance between the main tick marks is calculated by the chart
         if this property is <TRUE/>.
      */
     [optional, property] boolean AutoStepMain;
 
-    //-------------------------------------------------------------------------
 
     /** The number of help intervals within a main interval is calculated by the
         chart if this property is <TRUE/>.
@@ -147,46 +135,39 @@ published service ChartAxis
     [optional, property] boolean AutoStepHelp;
 
 
-    //-------------------------------------------------------------------------
 
     /** Determines if the axis is scaled logarithmically or
         not (linear).
      */
     [optional, property] boolean Logarithmic;
 
-    //-------------------------------------------------------------------------
 
     /** determines which type of axis this is, e.g. a date-axis or a category-axis @see ChartAxisType
         @since OOo 3.4
      */
     [optional, property] long AxisType;
 
-    //-------------------------------------------------------------------------
 
     /** if the current axis is a date-axis the intervals are choosen as given with TimeIncrement
         @since OOo 3.4
      */
     [optional, maybevoid, property] TimeIncrement TimeIncrement;
 
-    //-------------------------------------------------------------------------
 
     /** Determines if the axis orientation is mathematical or reversed.
      */
     [optional, property] boolean ReverseDirection;
 
-    //-------------------------------------------------------------------------
 
     /** Determines where the axis crosses the other axis.
      */
     [optional, property] com::sun::star::chart::ChartAxisPosition CrossoverPosition;
 
-    //-------------------------------------------------------------------------
 
     /** Determines the scale value on the other axis when CrossoverPosition is set to VALUE.
      */
     [optional, property] double CrossoverValue;
 
-    //-------------------------------------------------------------------------
 
     /** Indicates the reference value where bars or areas have their grounding.
         This property has only an effect when the used ODF file format does not allow for
@@ -194,44 +175,36 @@ published service ChartAxis
      */
     [optional, property] double Origin;
 
-    //-------------------------------------------------------------------------
 
     /** The origin is calculated by the chart if this property is <TRUE/>.
      */
     [optional, property] boolean AutoOrigin;
 
-    //-------------------------------------------------------------------------
     /** Properties for interval marks:
     */
 
-    //-------------------------------------------------------------------------
 
     /** Determines the type of the marks.@see ChartAxisMarks
      */
     [property] long Marks;
 
-    //-------------------------------------------------------------------------
 
     /** Determines the type of the help marks.@see ChartAxisMarks
      */
     [property] long HelpMarks;
-    //-------------------------------------------------------------------------
 
     /** Determines where the interval marks are placed.
      */
     [optional, property] com::sun::star::chart::ChartAxisMarkPosition MarkPosition;
 
-    //-------------------------------------------------------------------------
     /** Properties for axes labels:
     */
 
-    //-------------------------------------------------------------------------
 
     /** Determines whether to display text at the axis or not.
      */
     [property] boolean DisplayLabels;
 
-    //-------------------------------------------------------------------------
 
     /** Contains the type id for the number formatter of the axis.
 
@@ -239,7 +212,6 @@ published service ChartAxis
      */
     [property] long NumberFormat;
 
-    //-------------------------------------------------------------------------
 
     /** determines whether to use the number format given by the
         container application, e.g.  a spreadsheet document, or from
@@ -247,44 +219,37 @@ published service ChartAxis
      */
     [optional, property] boolean LinkNumberFormatToSource;
 
-    //-------------------------------------------------------------------------
 
     /** Determines where the axis labels are placed.
      */
     [optional, property] com::sun::star::chart::ChartAxisLabelPosition LabelPosition;
 
-    //-------------------------------------------------------------------------
 
     /** Determines the rotation of the text elements
         (axis description) in 100th degrees.
      */
     [property] long TextRotation;
 
-    //-------------------------------------------------------------------------
 
     /** The axis description may be arranged in a special order for a
         better placement.
      */
     [property] com::sun::star::chart::ChartAxisArrangeOrderType ArrangeOrder;
 
-    //-------------------------------------------------------------------------
 
     /** Determines if long text is broken into multiple lines.
      */
     [property] boolean TextBreak;
 
-    //-------------------------------------------------------------------------
 
     /** Determines if certain labels are hidden, if they would otherwise overlap.
         In this case, the value of this property must be set to <FALSE/>.
      */
     [property] boolean TextCanOverlap;
 
-    //-------------------------------------------------------------------------
     /** Properties related to bar charts:
     */
 
-    //-------------------------------------------------------------------------
 
     /** Determines the overlap of the bars in a bar-type chart.
 
@@ -294,7 +259,6 @@ published service ChartAxis
      */
     [property] long Overlap;
 
-    //-------------------------------------------------------------------------
 
     /** Specifies the width of the gaps between each set of data points
         in a bar chart.
@@ -305,7 +269,6 @@ published service ChartAxis
     [property] long GapWidth;
 };
 
-//=============================================================================
 
 }; }; }; };
 

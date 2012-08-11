@@ -21,11 +21,9 @@
 
 #include <com/sun/star/uno/Exception.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module util {
 
-//=============================================================================
 
 /** @deprecated
  */
@@ -33,7 +31,6 @@ published exception FileIOException: com::sun::star::uno::Exception
 {
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -24,17 +24,14 @@
 #include <com/sun/star/awt/PaintEvent.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module awt {
 
-//=============================================================================
 
 /** makes it possible to receive paint events.
  */
 published interface XPaintListener: com::sun::star::lang::XEventListener
 {
-    //-------------------------------------------------------------------------
 
     /** is invoked when a region of the window became invalid, e.g. when
         another window has been moved away.
@@ -43,7 +40,6 @@ published interface XPaintListener: com::sun::star::lang::XEventListener
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

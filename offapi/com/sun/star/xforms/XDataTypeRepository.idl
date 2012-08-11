@@ -28,10 +28,8 @@
 #include <com/sun/star/util/VetoException.idl>
 
 
-//=============================================================================
 module com {  module sun {  module star {  module xforms {
 
-//-----------------------------------------------------------------------------
 /** specifies a repository of XSD data types
 
     <p>The elements of the repository are instances supporting the <type scope="com::sun::star::xsd">XDataType</type>
@@ -93,7 +91,6 @@ interface XDataTypeRepository
             raises( com::sun::star::container::NoSuchElementException );
 };
 
-//=============================================================================
 
 }; }; }; };
 

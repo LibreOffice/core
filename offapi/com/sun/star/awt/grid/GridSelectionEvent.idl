@@ -32,11 +32,9 @@
 
 #include <com/sun/star/awt/grid/SelectionEventType.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module awt { module grid {
 
-//=============================================================================
 
 /** An event used by a <type>XGridControl</type> to notify changes in the selection.
 
@@ -45,7 +43,6 @@ module com {  module sun {  module star {  module awt { module grid {
  */
 struct GridSelectionEvent: com::sun::star::lang::EventObject
 {
-    //-------------------------------------------------------------------------
 
     /** the selected row*/
     long Row;
@@ -61,7 +58,6 @@ struct GridSelectionEvent: com::sun::star::lang::EventObject
 
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

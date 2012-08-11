@@ -34,11 +34,9 @@
 #include <com/sun/star/beans/XPropertyChangeListener.idl>
 #include <com/sun/star/graphic/XGraphic.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module awt {
 
-//=============================================================================
 
 /** specifies the standard model of an <type>UnoControlContainer</type>.
  */
@@ -56,7 +54,6 @@ service UnoControlRoadmapModel
      */
     interface com::sun::star::container::XIndexContainer;
 
-    //-------------------------------------------------------------------------
 
 
     /** specifies the background color (RGB) of the control.
@@ -64,7 +61,6 @@ service UnoControlRoadmapModel
      */
     [property] long BackgroundColor;
 
-    //-------------------------------------------------------------------------
 
     /** determines whether the control is interactive or not.
 
@@ -73,7 +69,6 @@ service UnoControlRoadmapModel
      */
     [property] boolean Interactive;
 
-    //-------------------------------------------------------------------------
 
     /** determines whether the control container is complete or not. If it is
         false than a non - interactive RoadmapItem is appended
@@ -81,7 +76,6 @@ service UnoControlRoadmapModel
     [property] boolean Complete;
 
 
-    //-------------------------------------------------------------------------
 
     /** specifies an URL to an image to use for the control.
         The image is placed in the lower right corner of the control
@@ -89,7 +83,6 @@ service UnoControlRoadmapModel
      */
     [property] string ImageURL;
 
-    //-------------------------------------------------------------------------
 
     /** specifies a graphic to be displayed on the control
 
@@ -106,7 +99,6 @@ service UnoControlRoadmapModel
      */
     [optional, property, transient] com::sun::star::graphic::XGraphic Graphic;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the border style of the control.
 
@@ -118,19 +110,16 @@ service UnoControlRoadmapModel
      */
     [property] short Border;
 
-    //-------------------------------------------------------------------------
 
     /** specifies whether the control will be printed with the document.
      */
     [property] boolean Printable;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the text displayed in the control.
      */
     [property] string Text;
 
-    //-------------------------------------------------------------------------
 
     /** refers to the  ID of the currently selected item. Initially this property is set to "-1"
         which is equal to "undefined"
@@ -140,14 +129,12 @@ service UnoControlRoadmapModel
     [property] short CurrentItemID;
 
 
-    //-------------------------------------------------------------------------
 
     /** specifies the help text of the control.
      */
     [property] string HelpText;
 
 
-    //-------------------------------------------------------------------------
 
     /** specifies the help URL of the control.
      */
@@ -155,7 +142,6 @@ service UnoControlRoadmapModel
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

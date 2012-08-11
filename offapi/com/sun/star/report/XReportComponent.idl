@@ -39,11 +39,9 @@
 #include <com/sun/star/awt/XControlModel.idl>
 #include <com/sun/star/drawing/XShape.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module report {
  interface XSection;
-//=============================================================================
 /** describes a component which may be part of a report.
 
     @see XReportDefinition
@@ -102,7 +100,6 @@ interface XReportComponent
         get raises ( com::sun::star::beans::UnknownPropertyException );
     };
 
-    //-------------------------------------------------------------------------
 
     /** specifies the color of the border, if present
 
@@ -177,7 +174,6 @@ interface XReportComponent
     [attribute,readonly] com::sun::star::report::XSection Section;
 };
 
-//=============================================================================
 
 }; }; }; };
 

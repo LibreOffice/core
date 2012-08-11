@@ -35,11 +35,9 @@
 #include <com/sun/star/util/XSearchDescriptor.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module util {
 
-//=============================================================================
 
 /** makes it possible to replace strings in a text described by a
     <type>SearchDescriptor</type>.
@@ -55,20 +53,17 @@ module com {  module sun {  module star {  module util {
  */
 published interface XReplaceable: com::sun::star::util::XSearchable
 {
-    //-------------------------------------------------------------------------
     /** creates a descriptor which contains properties that
         specify a search in this container.@see SearchDescriptor
      */
     com::sun::star::util::XReplaceDescriptor createReplaceDescriptor();
 
-    //-------------------------------------------------------------------------
     /** searches for all occurrences of whatever is specified.@see SearchDescriptor
      */
     long replaceAll( [in] com::sun::star::util::XSearchDescriptor xDesc );
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

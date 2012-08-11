@@ -31,7 +31,6 @@
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/lang/IllegalArgumentException.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module text {
 
@@ -51,7 +50,6 @@
  */
 published interface XRelativeTextContentRemove: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::text::XRelativeTextContentRemove::removeTextContentBefore
     /** removes the text content that precedes the argument.
@@ -61,7 +59,6 @@ published interface XRelativeTextContentRemove: com::sun::star::uno::XInterface
     void removeTextContentBefore(
             [in] XTextContent xSuccessor )
         raises( com::sun::star::lang::IllegalArgumentException );
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::text::XRelativeTextContentRemove::removeTextContentAfter
     /** removes the text content that follows the argument.

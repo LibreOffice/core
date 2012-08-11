@@ -22,11 +22,9 @@
 #include <com/sun/star/chart/Diagram.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module chart {
 
-//=============================================================================
 
 /** a service for donut diagrams.
 
@@ -37,7 +35,6 @@ published service DonutDiagram
     service com::sun::star::chart::Diagram;
 };
 
-//=============================================================================
 
 }; }; }; };
 

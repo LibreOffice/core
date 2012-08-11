@@ -26,11 +26,9 @@
 #include <com/sun/star/drawing/XDrawPage.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module drawing {
 
-//=============================================================================
 
 /** is implemented by documents that can expand the contents
     of a summary on a <type>DrawPage</type> into a collection of
@@ -42,7 +40,6 @@
  */
 published interface XDrawPageExpander: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** creates a collection of <type>DrawPage</type>s from the
         summary inside the given <type>DrawPage</type> and adds
@@ -52,7 +49,6 @@ published interface XDrawPageExpander: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -22,28 +22,23 @@
 #include <com/sun/star/ucb/XPropertySetRegistry.idl>
 #include <com/sun/star/container/XNameAccess.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** This service contains the interfaces to implement by objects
     returned by <member>XPropertySetRegistryFactory::createRegistry</member>.
   */
 published service PropertySetRegistry
 {
-    //-------------------------------------------------------------------------
     /** A property set registry.
      */
     interface com::sun::star::ucb::XPropertySetRegistry;
 
-    //-------------------------------------------------------------------------
     /** An interface for accessing registry entries.
      */
     interface com::sun::star::container::XNameAccess;
 };
 
-//=============================================================================
 
 }; }; }; };
 

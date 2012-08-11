@@ -24,11 +24,9 @@
 #include <com/sun/star/awt/XEnhancedMouseClickHandler.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** provides methods to add and remove EnhancedMouseClickHandler
 
@@ -37,7 +35,6 @@ module com {  module sun {  module star {  module sheet {
  */
 published interface XEnhancedMouseClickBroadcaster: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** allows a component supporting the
         <type>XEnhancedMouseClickHandler</type> interface to
@@ -59,7 +56,6 @@ published interface XEnhancedMouseClickBroadcaster: com::sun::star::uno::XInterf
      */
     void addEnhancedMouseClickHandler([in] com::sun::star::awt::XEnhancedMouseClickHandler aListener);
 
-    //-------------------------------------------------------------------------
 
     /** removes a previously registered listener.
 
@@ -70,7 +66,6 @@ published interface XEnhancedMouseClickBroadcaster: com::sun::star::uno::XInterf
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

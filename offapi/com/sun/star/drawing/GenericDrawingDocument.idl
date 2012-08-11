@@ -40,11 +40,9 @@
 #include <com/sun/star/i18n/XForbiddenCharacters.idl>
 #include <com/sun/star/document/OfficeDocument.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module drawing {
 
-//=============================================================================
 
 /** specifies a document which consists of multiple pages
     with drawings.
@@ -173,27 +171,23 @@ service GenericDrawingDocument
      */
     interface com::sun::star::style::XStyleFamiliesSupplier;
 
-    //-------------------------------------------------------------------------
 
     /** This property specifies the length between the default tab stops
         inside text in this document in 1/100th mm.
      */
     [property] long TabStop;
 
-    //-------------------------------------------------------------------------
 
     /** contains the identifier of the default locale of the document.
      */
     [property] com::sun::star::lang::Locale CharLocale;
 
-    //-------------------------------------------------------------------------
 
     /** if this document is an OLE client, this is the current visible area
         in 100th mm
     */
     [property] com::sun::star::awt::Rectangle VisibleArea;
 
-    //-------------------------------------------------------------------------
 
     /** This property gives the XForbiddenCharacters.
      */
@@ -201,7 +195,6 @@ service GenericDrawingDocument
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

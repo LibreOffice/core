@@ -32,11 +32,9 @@
 #include <com/sun/star/container/XNameAccess.idl>
 #include <com/sun/star/container/XContainerQuery.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module frame {
 
-//=============================================================================
 /** factory to create frame loader
 
     <p>
@@ -50,7 +48,6 @@ module com { module sun { module star { module frame {
  */
 published service FrameLoaderFactory
 {
-    //-------------------------------------------------------------------------
     /** interface to create loader objects by using his internal name
 
         <p>
@@ -64,7 +61,6 @@ published service FrameLoaderFactory
     */
     interface com::sun::star::lang::XMultiServiceFactory;
 
-    //-------------------------------------------------------------------------
     /** provides access to the whole frame loader configuration
 
     <p>This interface supports an access to the internal configuration of all accessible loader objects.
@@ -85,7 +81,6 @@ published service FrameLoaderFactory
     */
     interface com::sun::star::container::XNameAccess;
 
-    //-------------------------------------------------------------------------
     /** supports query mode for configuration access
 
         <p>
@@ -96,7 +91,6 @@ published service FrameLoaderFactory
     interface com::sun::star::container::XContainerQuery;
 };
 
-//=============================================================================
 
 }; }; }; };
 

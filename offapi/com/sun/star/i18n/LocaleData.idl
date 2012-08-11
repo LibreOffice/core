@@ -32,11 +32,9 @@
 #include <com/sun/star/lang/XServiceInfo.idl>
 #include <com/sun/star/i18n/XLocaleData4.idl>
 
-//============================================================================
 
 module com { module sun { module star { module i18n {
 
-//============================================================================
 
 /// Access locale specific data.
 published service LocaleData
@@ -49,7 +47,6 @@ published service LocaleData
     [optional] interface com::sun::star::i18n::XLocaleData4;
 };
 
-//============================================================================
 }; }; }; };
 
 #endif

@@ -24,11 +24,9 @@
 #include <com/sun/star/util/XRefreshable.idl>
 #include <com/sun/star/beans/XPropertySet.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** represents a linked cell range.
 
@@ -40,44 +38,37 @@ module com {  module sun {  module star {  module sheet {
  */
 published service CellAreaLink
 {
-    //-------------------------------------------------------------------------
 
     /** provides methods to change the settings of the linked cell range.
      */
     interface com::sun::star::sheet::XAreaLink;
 
-    //-------------------------------------------------------------------------
 
     /** provides methods to reload the external data.
      */
     interface com::sun::star::util::XRefreshable;
 
-    //-------------------------------------------------------------------------
 
 //!published service PropertySet
     /** provides access to the properties.
      */
     interface com::sun::star::beans::XPropertySet;
 
-     //========================================================================
 
     /** specifies the URL of the source document.
      */
     [property] string Url;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the name of the filter used to load the source document.
      */
     [property] string Filter;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the filter options needed to load the source document.
      */
     [property] string FilterOptions;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the delay time between two refresh actions in seconds.
 
@@ -86,7 +77,6 @@ published service CellAreaLink
      */
     [property] long RefreshDelay;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the time between two refresh actions in seconds.
 
@@ -97,7 +87,6 @@ published service CellAreaLink
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

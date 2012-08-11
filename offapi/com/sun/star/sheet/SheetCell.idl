@@ -57,72 +57,60 @@
 #include <com/sun/star/beans/XTolerantMultiPropertySet.idl>
 #include <com/sun/star/util/XModifyBroadcaster.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** represents a single addressable cell in a spreadsheet document.
  */
 published service SheetCell
 {
-    //-------------------------------------------------------------------------
 
     /** provides basic cell handling and contributes common cell
         formatting properties.
      */
     service com::sun::star::table::Cell;
 
-    //-------------------------------------------------------------------------
 
     /** provides handling of formatted text cells.
      */
     service com::sun::star::text::Text;
 
-    //-------------------------------------------------------------------------
 
     /** contributes properties for character formatting of Western text.
      */
     service com::sun::star::style::CharacterProperties;
 
-    //-------------------------------------------------------------------------
 
     /** contributes properties for character formatting of Asian text.
      */
     service com::sun::star::style::CharacterPropertiesAsian;
 
-    //-------------------------------------------------------------------------
 
     /** contributes properties for character formatting of Complex text.
      */
     service com::sun::star::style::CharacterPropertiesComplex;
 
-    //-------------------------------------------------------------------------
 
     /** contributes properties for paragraph formatting.
      */
     service com::sun::star::style::ParagraphProperties;
 
-    //-------------------------------------------------------------------------
 
     /** contributes properties for paragraph formatting of Asian text.
      */
     [optional] service com::sun::star::style::ParagraphPropertiesAsian;
 
-    //-------------------------------------------------------------------------
 
     /** contributes properties for paragraph formatting of Complex text.
      */
     [optional] service com::sun::star::style::ParagraphPropertiesComplex;
 
-    //-------------------------------------------------------------------------
 
     /** provides interfaces to find cells with specific properties.
      */
     service com::sun::star::sheet::SheetRangesQuery;
 
-    //=========================================================================
 
     /** provides methods to lock and unlock the update between
         <type scope="com::sun::star::table">XCell</type> and
@@ -130,7 +118,6 @@ published service SheetCell
     */
     interface com::sun::star::document::XActionLockable;
 
-    //-------------------------------------------------------------------------
 
     /** provides "Find & Replace" functionality.
 
@@ -141,41 +128,34 @@ published service SheetCell
      */
     interface com::sun::star::util::XReplaceable;
 
-    //-------------------------------------------------------------------------
 
     /** provides modifying the cell indentation.
      */
     interface com::sun::star::util::XIndent;
 
-    //-------------------------------------------------------------------------
 
     /** provides access to the collections of columns and rows.
      */
     interface com::sun::star::table::XColumnRowRange;
 
-    //-------------------------------------------------------------------------
 
     /** provides access to the cell address of this cell.
      */
     interface com::sun::star::sheet::XCellAddressable;
 
-    //-------------------------------------------------------------------------
 
     /** provides access to the annotation attached to this cell.
      */
     interface com::sun::star::sheet::XSheetAnnotationAnchor;
 
-    //-------------------------------------------------------------------------
 
     /** provides access to the text fields used in this cell.
      */
     interface com::sun::star::text::XTextFieldsSupplier;
 
-    //-------------------------------------------------------------------------
 
     [optional] interface com::sun::star::beans::XTolerantMultiPropertySet;
 
-    //-------------------------------------------------------------------------
 
     /**
 
@@ -184,7 +164,6 @@ published service SheetCell
     */
     [optional] interface com::sun::star::util::XModifyBroadcaster;
 
-    //=========================================================================
 
     /** contains the position of this cell in the sheet (in 1/100 mm).
 
@@ -193,13 +172,11 @@ published service SheetCell
      */
     [readonly, property] com::sun::star::awt::Point Position;
 
-    //-------------------------------------------------------------------------
 
     /** contains the size of this cell (in 1/100 mm).
      */
     [readonly, property] com::sun::star::awt::Size Size;
 
-    //-------------------------------------------------------------------------
 
     /** contains the formula string with localized function names.
 
@@ -207,7 +184,6 @@ published service SheetCell
      */
     [optional, property] string FormulaLocal;
 
-    //-------------------------------------------------------------------------
 
     /** contains the result type of a formula.
 
@@ -215,7 +191,6 @@ published service SheetCell
      */
     [readonly, property] long FormulaResultType;
 
-    //-------------------------------------------------------------------------
 
     /** contains the conditional formatting settings for this cell.
 
@@ -227,7 +202,6 @@ published service SheetCell
     [property] com::sun::star::sheet::XSheetConditionalEntries
         ConditionalFormat;
 
-    //-------------------------------------------------------------------------
 
     /** contains the conditional formatting settings for this cell,
         using localized formulas.
@@ -240,7 +214,6 @@ published service SheetCell
     [optional, property] com::sun::star::sheet::XSheetConditionalEntries
         ConditionalFormatLocal;
 
-    //-------------------------------------------------------------------------
 
     /** contains the data validation settings for this cell.
 
@@ -251,7 +224,6 @@ published service SheetCell
      */
     [property] com::sun::star::beans::XPropertySet Validation;
 
-    //-------------------------------------------------------------------------
 
     /** contains the data validation settings for this cell,
         using localized formulas.
@@ -263,14 +235,12 @@ published service SheetCell
      */
     [optional, property] com::sun::star::beans::XPropertySet ValidationLocal;
 
-    //-------------------------------------------------------------------------
 
     /** Returns the absolute address of the range as string, e.g. "$Sheet1.$B$2".
      */
     [optional, readonly, property] string AbsoluteName;
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -24,11 +24,8 @@
 #include <com/sun/star/lang/XInitialization.idl>
 #include <com/sun/star/beans/XPropertySet.idl>
 
-//=============================================================================
 module com {  module sun {  module star {  module sdb { module tools {
-//=============================================================================
 
-//-----------------------------------------------------------------------------
 /** allows to access the active connection
 
     @see com::sun::star::sdbcx::XConnection
@@ -44,9 +41,7 @@ interface XConnectionSupplier
     interface com::sun::star::lang::XInitialization;
 
 };
-//=============================================================================
 }; }; }; }; };
-//=============================================================================
 
 #endif
 

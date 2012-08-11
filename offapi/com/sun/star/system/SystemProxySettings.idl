@@ -24,11 +24,9 @@
 #include <com/sun/star/lang/XTypeProvider.idl>
 #include <com/sun/star/system/ProxySettings.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module system {
 
-//=============================================================================
 /** Specifies a service for reading the system proxy settings. Some  systems
     store this information in a central configuration database.
 
@@ -40,7 +38,6 @@ published service SystemProxySettings
     service ProxySettings;
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -23,7 +23,6 @@
 
 module com { module sun { module star { module ui { module dialogs {
 
-//=============================================================================
 /** These constants are deprecated and should not be used anymore. They're superseded
     by <type>ControlActions</type>.
     @deprecated
@@ -31,18 +30,15 @@ module com { module sun { module star { module ui { module dialogs {
 
 published constants ListboxControlActions
 {
-    //---------------------------------------------------------------------
     /** Adds an item to the content of the listbox. The given item has to
         be a string.
      */
     const short ADD_ITEM        = 1;
 
-    //---------------------------------------------------------------------
     /** Adds a sequence of strings to the content of the listbox.
      */
     const short ADD_ITEMS       = 2;
 
-    //---------------------------------------------------------------------
     /** Removes an item from a listbox. The given value has to be a
         position. If the position is invalid an exception will be thrown.
         The index of the first position is 0.
@@ -50,12 +46,10 @@ published constants ListboxControlActions
      */
     const short DELETE_ITEM     = 3;
 
-    //---------------------------------------------------------------------
     /** Removes all items from the listbox.
     */
     const short DELETE_ITEMS    = 4;
 
-    //---------------------------------------------------------------------
     /** Selects an item in a listbox. The given value has to be a position.
         The index of the first position is 0. A value of -1 removes the
         selection.
@@ -64,19 +58,16 @@ published constants ListboxControlActions
      */
     const short SET_SELECT_ITEM = 5;
 
-    //---------------------------------------------------------------------
     /** Returns all items of the listbox as a sequence of strings.
     */
     const short GET_ITEMS       = 6;
 
-    //---------------------------------------------------------------------
     /** Returns the currently selected item. The returned item is an empty
         string if the listbox is empty or no item is selected.
      */
     const short GET_SELECTED_ITEM = 7;
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

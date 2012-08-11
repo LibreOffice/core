@@ -19,11 +19,9 @@
 #ifndef __com_sun_star_drawing_EnhancedCustomShapeParameter_idl__
 #define __com_sun_star_drawing_EnhancedCustomShapeParameter_idl__
 
-//=============================================================================
 
  module com {  module sun {  module star {  module drawing {
 
-//=============================================================================
 
 /** specifies a single value which is used with EnhancedCustomShapes
  */
@@ -38,7 +36,6 @@ struct EnhancedCustomShapeParameter
     short   Type;
 };
 
-//=============================================================================
 
 }; }; }; };
 

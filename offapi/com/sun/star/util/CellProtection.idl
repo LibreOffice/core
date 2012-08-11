@@ -20,11 +20,9 @@
 #define __com_sun_star_util_CellProtection_idl__
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module util {
 
-//=============================================================================
 
 /** describes the kind of protection for a protectable cell.
  */
@@ -34,24 +32,20 @@ published struct CellProtection
      */
     boolean IsLocked;
 
-    //-------------------------------------------------------------------------
     /** specifies if the formula is hidden from the user.
      */
     boolean IsFormulaHidden;
 
-    //-------------------------------------------------------------------------
     /** specifies if the cell is hidden from the user.
      */
     boolean IsHidden;
 
-    //-------------------------------------------------------------------------
     /** specifies if the cell is hidden on printouts.
      */
     boolean IsPrintHidden;
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

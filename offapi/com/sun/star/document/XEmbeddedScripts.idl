@@ -22,11 +22,9 @@
 
 #include <com/sun/star/script/XStorageBasedLibraryContainer.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module document {
 
-//=============================================================================
 
 /** is supported by <type>OfficeDocument</type>s which allow to embed scripts
 
@@ -53,11 +51,9 @@ interface XEmbeddedScripts
     [attribute, readonly]   boolean AllowMacroExecution;
 };
 
-//=============================================================================
 
 }; }; }; };
 
-//=============================================================================
 
 #endif
 

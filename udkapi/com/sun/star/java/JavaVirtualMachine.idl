@@ -19,14 +19,12 @@
 #ifndef __com_sun_star_java_JavaVirtualMachine_idl__
 #define __com_sun_star_java_JavaVirtualMachine_idl__
 
-//=============================================================================
 
 module com {  module sun {  module star {  module java {
 
  published interface XJavaVM;
  published interface XJavaThreadRegister_11;
 
-//=============================================================================
 
 // DocMerge from xml: service com::sun::star::java::JavaVirtualMachine
 /** exports interfaces to handle a JavaVM and Java threads.
@@ -46,7 +44,6 @@ published service JavaVirtualMachine
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

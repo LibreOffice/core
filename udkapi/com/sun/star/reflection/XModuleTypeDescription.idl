@@ -22,11 +22,9 @@
 
 #include <com/sun/star/reflection/XTypeDescription.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module reflection {
 
-//=============================================================================
 
 /** Reflects a module.
 
@@ -44,7 +42,6 @@ published interface XModuleTypeDescription : com::sun::star::reflection::XTypeDe
     sequence< XTypeDescription > getMembers();
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -33,11 +33,9 @@
 #include <com/sun/star/logging/LogRecord.idl>
 #include <com/sun/star/logging/XLogFormatter.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module logging {
 
-//=============================================================================
 
 /** provides possibilities to send <type>LogRecord</type>s to an arbitrary output
     channel.
@@ -94,11 +92,9 @@ interface XLogHandler
     boolean publish( [in] LogRecord Record );
 };
 
-//=============================================================================
 
 }; }; }; };
 
-//=============================================================================
 
 #endif
 

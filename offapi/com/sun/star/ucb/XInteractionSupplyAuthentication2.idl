@@ -32,11 +32,9 @@
 
 
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** An interaction continuation handing back some authentication data.
 
     <p> This continuation is typically used in conjunction with
@@ -46,7 +44,6 @@ module com { module sun { module star { module ucb {
 */
 interface XInteractionSupplyAuthentication2 : XInteractionSupplyAuthentication
 {
-    //-------------------------------------------------------------------------
     /** Specifies if "system credentials" can be obtained and used by the issuer
         of the authentication request.
 
@@ -60,7 +57,6 @@ interface XInteractionSupplyAuthentication2 : XInteractionSupplyAuthentication
     */
     boolean canUseSystemCredentials( [out] boolean Default );
 
-    //-------------------------------------------------------------------------
     /** Set a new "use system credentials" value to hand back.
 
         @param UseSystemCredentials
@@ -70,7 +66,6 @@ interface XInteractionSupplyAuthentication2 : XInteractionSupplyAuthentication
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

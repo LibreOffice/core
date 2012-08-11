@@ -41,7 +41,6 @@ published constants ResultSetConcurrency
     const long UPDATABLE = 1008;
 };
 
-//=============================================================================
 
 }; }; }; };
 

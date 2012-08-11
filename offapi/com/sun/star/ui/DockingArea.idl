@@ -29,11 +29,9 @@
 #ifndef __com_sun_star_ui_DockingArea_idl__
 #define __com_sun_star_ui_DockingArea_idl__
 
-//=============================================================================
 
 module com { module sun { module star { module ui {
 
-//=============================================================================
 
 /** specifies different docking areas a frame based layout manager
     supports.

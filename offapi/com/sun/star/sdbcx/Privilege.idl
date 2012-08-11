@@ -27,54 +27,44 @@
  */
 published constants Privilege
 {
-    //-------------------------------------------------------------------------
 
     /** indicates that a user is allowed to read the data.
      */
     const long SELECT       = 0x00000001;
-    //-------------------------------------------------------------------------
 
     /** indicates that a user is allowed to insert new data.
      */
     const long INSERT       = 0x00000002;
-    //-------------------------------------------------------------------------
 
     /** indicates that a user is allowed to update data.
      */
     const long UPDATE       = 0x00000004;
-    //-------------------------------------------------------------------------
 
     /** indicates that a user is allowed to delete data.
      */
     const long DELETE       = 0x00000008;
-    //-------------------------------------------------------------------------
 
     /** indicates that a user is allowed to read the structure of a definition object.
      */
     const long READ         = 0x00000010;
-    //-------------------------------------------------------------------------
 
     /** indicates that a user is allowed to create a definition object.
      */
     const long CREATE       = 0x00000020;
-    //-------------------------------------------------------------------------
 
     /** indicates that a user is allowed to alter an existing object.
      */
     const long ALTER        = 0x00000040;
-    //-------------------------------------------------------------------------
 
     /** indicates that a user is allowed to set foreign keys for a table.
      */
     const long REFERENCE    = 0x00000080;
-    //-------------------------------------------------------------------------
 
     /** indicates that a user is allowed to drop a definition object.
      */
     const long DROP         = 0x00000100;
 };
 
-//=============================================================================
 
 }; }; }; };
 

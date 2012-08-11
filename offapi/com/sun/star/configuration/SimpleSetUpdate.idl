@@ -24,11 +24,9 @@
 #include <com/sun/star/lang/XSingleServiceFactory.idl>
 #include <com/sun/star/lang/XMultiServiceFactory.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module configuration {
 
-//=============================================================================
 /** provides write access to a dynamic, homogeneous, non-hierarchical set of
  values or objects.
 
@@ -158,7 +156,6 @@ published service SimpleSetUpdate
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

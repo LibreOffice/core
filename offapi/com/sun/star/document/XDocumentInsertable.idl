@@ -28,18 +28,15 @@
 #include <com/sun/star/io/IOException.idl>
 
 
-//=============================================================================
 
 module com {   module sun {   module star {   module document {
 
-//=============================================================================
 
 /** makes it possible to import a document from a given URL
     into this document.
  */
 published interface XDocumentInsertable: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** inserts the document that is specified by the URL.
      */
     void insertDocumentFromURL( [in] string aURL,
@@ -49,7 +46,6 @@ published interface XDocumentInsertable: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

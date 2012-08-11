@@ -25,11 +25,9 @@
 
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module awt {
 
-//=============================================================================
 
 /** specifies some extended operations for a window component.
 
@@ -40,7 +38,6 @@
  */
 published interface XWindow2: com::sun::star::awt::XWindow
 {
-    //-------------------------------------------------------------------------
 
     /** sets the inner bounds of the window, also known as the client size
 
@@ -50,40 +47,33 @@ published interface XWindow2: com::sun::star::awt::XWindow
     */
     void setOutputSize( [in] com::sun::star::awt::Size aSize );
 
-    //-------------------------------------------------------------------------
 
     /** returns the inner bounds of the window, also known as the client size.
      */
     com::sun::star::awt::Size getOutputSize();
 
-    //-------------------------------------------------------------------------
 
     /** returns the visibility state of the window
      */
     boolean isVisible();
 
-    //-------------------------------------------------------------------------
 
     /** returns the activation state of the window
      */
     boolean isActive();
 
-    //-------------------------------------------------------------------------
 
     /** returns the enabled state of the window
      */
     boolean isEnabled();
 
-    //-------------------------------------------------------------------------
 
     /** returns the focus state of the window
      */
     boolean hasFocus();
 
-    //-------------------------------------------------------------------------
 };
 
-//=============================================================================
 
 }; }; }; };
 

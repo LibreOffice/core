@@ -20,11 +20,9 @@
 #define __com_sun_star_chart_ChartDataRowSource_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module chart {
 
-//=============================================================================
 
 /** specifies if the data rows (aka data series) displayed in the
     chart, take their values from the row or the column in the underlying
@@ -32,13 +30,11 @@
  */
 published enum ChartDataRowSource
 {
-    //-------------------------------------------------------------------------
 
     /** values displayed as data rows are taken from the rows of the data source.
      */
     ROWS,
 
-    //-------------------------------------------------------------------------
 
     /** values displayed as data rows are taken from the columns of the data source.
      */
@@ -46,7 +42,6 @@ published enum ChartDataRowSource
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

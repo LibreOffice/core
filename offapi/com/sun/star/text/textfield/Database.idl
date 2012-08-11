@@ -32,11 +32,9 @@
 #include <com/sun/star/text/TextField.idl>
 #include <com/sun/star/text/DependentTextField.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module text { module textfield {
 
-//=============================================================================
 /** specifies service of a database text field which is used as mail merge field.
     @see com::sun::star::text::TextField
 */
@@ -62,7 +60,6 @@ published service Database
     [property]long NumberFormat;
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

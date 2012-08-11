@@ -33,13 +33,11 @@
 #include <com/sun/star/lang/IllegalArgumentException.idl>
 #include <com/sun/star/lang/WrappedTargetException.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module sdb { module application {
 
 interface XDatabaseDocumentUI;
 
-//=============================================================================
 
 /** is used by the database application to obtain non-default user
     interface information and/or components for database tables.
@@ -114,11 +112,9 @@ interface XTableUIProvider
         raises (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException);
 };
 
-//=============================================================================
 
 }; }; }; }; };
 
-//=============================================================================
 
 #endif
 

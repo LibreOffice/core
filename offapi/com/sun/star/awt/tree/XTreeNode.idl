@@ -31,11 +31,9 @@
 #include <com/sun/star/container/XEnumerationAccess.idl>
 #include <com/sun/star/lang/IndexOutOfBoundsException.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module awt { module tree {
 
-//=============================================================================
 
 /** An instance implementing this interface represents the model data for an entry in a
     <type>XTreeDataModel</type>.
@@ -94,7 +92,6 @@ interface XTreeNode
     string getCollapsedGraphicURL();
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

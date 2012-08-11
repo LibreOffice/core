@@ -31,20 +31,17 @@ published constants CheckOption
              view data.
      */
     const long NONE = 0;
-    //-------------------------------------------------------------------------
 
     /** indicates that the value checking is applied for the view and all base
              views.
      */
     const long CASCADE = 2;
-    //-------------------------------------------------------------------------
 
     /** indicates that the value checking is applied only for the view.
      */
     const long LOCAL = 3;
 };
 
-//=============================================================================
 
 }; }; }; };
 

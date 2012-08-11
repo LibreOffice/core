@@ -24,11 +24,9 @@
 #include <com/sun/star/xml/sax/SAXException.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module xml {  module sax {
 
-//=============================================================================
 
 /** is the basic interface for SAX error handlers.
 
@@ -45,19 +43,16 @@ module com {  module sun {  module star {  module xml {  module sax {
  */
 published interface XErrorHandler: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** receives notification of a recoverable error.
      */
     void error( [in] any aSAXParseException )
             raises( com::sun::star::xml::sax::SAXException );
 
-    //-------------------------------------------------------------------------
     /** receives notification of a non-recoverable error.
      */
     void fatalError( [in] any aSAXParseException )
             raises( com::sun::star::xml::sax::SAXException );
 
-    //-------------------------------------------------------------------------
     /** receives notification of a warning.
      */
     void warning( [in] any aSAXParseException )
@@ -65,7 +60,6 @@ published interface XErrorHandler: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

@@ -22,11 +22,9 @@
 #include <com/sun/star/uno/Exception.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module container {
 
-//=============================================================================
 
 /** is thrown by container methods, if an element is added which is already
     a child of the container.
@@ -41,7 +39,6 @@ published exception ElementExistException: com::sun::star::uno::Exception
 {
 };
 
-//=============================================================================
 
 }; }; }; };
 

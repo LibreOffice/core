@@ -22,11 +22,9 @@
 
 #include <com/sun/star/container/XIndexAccess.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module table {
 
-//=============================================================================
 
 /** provides methods to access rows via index and to insert and remove rows.
 
@@ -34,7 +32,6 @@ module com {  module sun {  module star {  module table {
  */
 published interface XTableRows: com::sun::star::container::XIndexAccess
 {
-    //-------------------------------------------------------------------------
 
     /** inserts new rows.
 
@@ -49,7 +46,6 @@ published interface XTableRows: com::sun::star::container::XIndexAccess
      */
     void insertByIndex( [in] long nIndex, [in] long nCount );
 
-    //-------------------------------------------------------------------------
 
     /** deletes rows.
 
@@ -66,7 +62,6 @@ published interface XTableRows: com::sun::star::container::XIndexAccess
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

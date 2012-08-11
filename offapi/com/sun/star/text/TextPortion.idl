@@ -28,11 +28,9 @@
 #include <com/sun/star/text/XFootnote.idl>
 
 
-//=============================================================================
 
 module com { module sun { module star { module text {
 
-//=============================================================================
 /** A TextPortion is a piece of text within a paragraph that does not
     contain changes of its attributes inside.
 
@@ -49,7 +47,6 @@ published service TextPortion
 {
     service ::com::sun::star::text::TextRange;
 
-    //-------------------------------------------------------------------------
     /** contains text frames, graphic objects, embedded objects or
         shapes that are anchored at or as character.
         @see com.sun.star.text.TextFrame
@@ -58,14 +55,12 @@ published service TextPortion
     [optional]
     interface ::com::sun::star::container::XContentEnumerationAccess;
 
-    //-------------------------------------------------------------------------
     /** gives access to a sequence of properties.
         @since OOo 2.0
      */
     [optional]
     interface ::com::sun::star::beans::XTolerantMultiPropertySet;
 
-    //-------------------------------------------------------------------------
     /** contains the type of the text portion.
 
     <p> Valid content type names are:</p>
@@ -93,51 +88,42 @@ published service TextPortion
      */
     [readonly, property] string TextPortionType;
 
-    //-------------------------------------------------------------------------
     /** contains the control character of a text portion of type
         ControlCharacter.
         @deprecated type ControlCharacter no longer implemented
      */
     [readonly, property] short ControlCharacter;
 
-    //-------------------------------------------------------------------------
     /** contains the bookmark of a text portion of type Bookmark. */
     [optional, readonly, property]
     ::com::sun::star::text::XTextContent Bookmark;
 
-    //-------------------------------------------------------------------------
     /** contains the document index mark of a text portion of type
         DocumentIndexMark. */
     [optional, readonly, property]
     ::com::sun::star::text::XTextContent DocumentIndexMark;
 
-    //-------------------------------------------------------------------------
     /** contains the bookmark of a text portion of type ReferenceMark. */
     [optional, readonly, property]
     ::com::sun::star::text::XTextContent ReferenceMark;
 
-    //-------------------------------------------------------------------------
     /** contains the footnote of a text portion of type Footnote. */
     [optional, readonly, property]
     ::com::sun::star::text::XFootnote Footnote;
 
-    //-------------------------------------------------------------------------
     /** contains the text field of a text portion of type TextField. */
     [optional, readonly, property]
     ::com::sun::star::text::XTextField TextField;
 
-    //-------------------------------------------------------------------------
     /** contains the text range of a text portion of type InContentMetadata.
         @since OOo 3.2
      */
     [optional, readonly, property]
     ::com::sun::star::text::XTextContent InContentMetadata;
 
-    //-------------------------------------------------------------------------
     /** contains whether the portion is a point only. */
     [optional, readonly, property] boolean IsCollapsed;
 
-    //-------------------------------------------------------------------------
     /** contains whether the portion is the start of the portion.
 
         <p>This is used for portions which are represented by
@@ -147,7 +133,6 @@ published service TextPortion
 
 };
 
-//=============================================================================
 
 }; }; }; };
 #endif

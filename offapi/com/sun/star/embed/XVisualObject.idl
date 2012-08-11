@@ -35,16 +35,13 @@
 #include <com/sun/star/lang/IllegalArgumentException.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module embed {
 
-//=============================================================================
 /** represents common visualization functionality for embedded objects.
  */
 published interface XVisualObject: ::com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** sets the size of object's visual area.
 
         <p>
@@ -79,7 +76,6 @@ published interface XVisualObject: ::com::sun::star::uno::XInterface
                 ::com::sun::star::embed::WrongStateException,
                 ::com::sun::star::uno::Exception );
 
-    //-------------------------------------------------------------------------
     /** gets the size of object's visual area.
 
         <p>
@@ -105,7 +101,6 @@ published interface XVisualObject: ::com::sun::star::uno::XInterface
                 ::com::sun::star::embed::WrongStateException,
                 ::com::sun::star::uno::Exception );
 
-    //------------------------------------------------------------------------
     /** retrieves visual representation of the object in preferable format.
 
         <p>
@@ -137,7 +132,6 @@ published interface XVisualObject: ::com::sun::star::uno::XInterface
                 ::com::sun::star::uno::Exception );
 
 
-    //-------------------------------------------------------------------------
     /** retrieves map mode the object communicates in.
 
         @param nAspect
@@ -158,7 +152,6 @@ published interface XVisualObject: ::com::sun::star::uno::XInterface
         raises( ::com::sun::star::uno::Exception );
 };
 
-//=============================================================================
 
 }; }; }; };
 

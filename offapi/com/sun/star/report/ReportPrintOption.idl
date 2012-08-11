@@ -29,17 +29,14 @@
 #define __com_sun_star_report_ReportPrintOption_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module report {
 
-//=============================================================================
 
 /** Specifies whether a page header or footer is printed on the same page as the report header or report footer.
  */
 constants ReportPrintOption
 {
-    //-------------------------------------------------------------------------
 
     /** The page header/footer is printed on all pages.
      */
@@ -58,7 +55,6 @@ constants ReportPrintOption
     const short NOT_WITH_REPORT_HEADER_FOOTER = 3;
 };
 
-//=============================================================================
 
 }; }; }; };
 

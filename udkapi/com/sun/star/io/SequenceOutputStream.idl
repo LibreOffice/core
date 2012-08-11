@@ -22,16 +22,13 @@
 #include <com/sun/star/io/XSequenceOutputStream.idl>
 
 
-//=============================================================================
 
 module com { module sun { module star { module io {
 
-//=============================================================================
 /** This service allows to wrap a sequence of bytes with a output stream object.
  */
 service SequenceOutputStream : XSequenceOutputStream;
 
-//=============================================================================
 
 }; }; }; };
 

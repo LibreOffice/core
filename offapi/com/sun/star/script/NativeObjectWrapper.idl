@@ -20,14 +20,12 @@
 #ifndef __com_sun_star_script_NativeObjectWrapper_idl__
 #define __com_sun_star_script_NativeObjectWrapper_idl__
 
-//=============================================================================
 module com {  module sun {  module star { module script {
 struct NativeObjectWrapper
 {
     any ObjectId;
 };
 
-//=============================================================================
 
 }; }; }; };
 

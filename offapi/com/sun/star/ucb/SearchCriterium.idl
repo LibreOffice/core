@@ -22,24 +22,20 @@
 #include <com/sun/star/ucb/RuleTerm.idl>
 
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** a criterion describing how an object must match some rules that specify
     (part of) a search.
 */
 published struct SearchCriterium
 {
-    //-------------------------------------------------------------------------
     /** a number of rule terms.
     */
     sequence<com::sun::star::ucb::RuleTerm> Terms;
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

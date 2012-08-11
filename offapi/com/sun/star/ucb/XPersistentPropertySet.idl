@@ -21,14 +21,12 @@
 
 #include <com/sun/star/beans/XPropertySet.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
 // forward.
  published interface XPropertySetRegistry;
 
-//=============================================================================
 /** A persistent property set, which can be saved in and restored from a
     <type>XPropertySetRegistry</type>.
 
@@ -37,7 +35,6 @@ module com { module sun { module star { module ucb {
   */
 published interface XPersistentPropertySet : com::sun::star::beans::XPropertySet
 {
-    //-------------------------------------------------------------------------
     /** returns the registry used to store the property set.
 
         @returns
@@ -45,7 +42,6 @@ published interface XPersistentPropertySet : com::sun::star::beans::XPropertySet
       */
     com::sun::star::ucb::XPropertySetRegistry getRegistry();
 
-    //-------------------------------------------------------------------------
     /** returns the key used to address the set in the property set registry.
 
         @returns
@@ -54,7 +50,6 @@ published interface XPersistentPropertySet : com::sun::star::beans::XPropertySet
     string getKey();
 };
 
-//=============================================================================
 
 }; }; }; };
 

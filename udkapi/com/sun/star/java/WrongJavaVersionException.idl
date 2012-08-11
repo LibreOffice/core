@@ -24,25 +24,21 @@
 
 module com { module sun { module star { module java {
 
-//============================================================================
 /** indicates that an operation involving Java (probably executing Java code)
     failed due to a wrong Java version.
  */
 published exception WrongJavaVersionException: com::sun::star::uno::Exception
 {
-    //------------------------------------------------------------------------
     /** contains the lowest Java version for which the operation would
         succeed, or is left empty if this is unknown.
      */
     string LowestSupportedVersion;
 
-    //------------------------------------------------------------------------
     /** contains the highest Java version for which the operation would
         succeed, or is left empty if this is unknown.
      */
     string HighestSupportedVersion;
 
-    //------------------------------------------------------------------------
     /** contains the Java version that has been detected, or is left empty if
         this is unknown.
      */

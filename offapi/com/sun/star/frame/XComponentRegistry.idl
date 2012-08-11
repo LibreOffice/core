@@ -23,16 +23,13 @@
 #include <com/sun/star/uno/Uik.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module frame {
 
-//=============================================================================
 /** @deprecated
  */
 published interface XComponentRegistry: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** @deprecated
     */
     com::sun::star::uno::XInterface createObject(
@@ -40,7 +37,6 @@ published interface XComponentRegistry: com::sun::star::uno::XInterface
         [in] com::sun::star::uno::Uik Uik );
 };
 
-//=============================================================================
 
 }; }; }; };
 

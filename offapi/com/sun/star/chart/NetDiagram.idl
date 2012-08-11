@@ -26,11 +26,9 @@
 #include <com/sun/star/chart/ChartAxisYSupplier.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module chart {
 
-//=============================================================================
 
 /** specifies net diagrams.
 
@@ -44,7 +42,6 @@ published service NetDiagram
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -24,29 +24,24 @@
 #include <com/sun/star/awt/Size.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module awt {
 
-//=============================================================================
 
 /** specifies the layout constraints for a surrounding container.
  */
 published interface XLayoutConstrains: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** returns the minimum size for this component.
      */
     com::sun::star::awt::Size getMinimumSize();
 
-    //-------------------------------------------------------------------------
 
     /** returns the preferred size for this component.
      */
     com::sun::star::awt::Size getPreferredSize();
 
-    //-------------------------------------------------------------------------
 
     /** calculates the adjusted size for a given maximum size.
      */
@@ -54,7 +49,6 @@ published interface XLayoutConstrains: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

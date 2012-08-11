@@ -50,7 +50,6 @@ published constants ResultSetType
     const long SCROLL_SENSITIVE     = 1005;
 };
 
-//=============================================================================
 
 }; }; }; };
 

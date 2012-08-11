@@ -23,11 +23,9 @@
 #include <com/sun/star/lang/Locale.idl>
 
 
-//=============================================================================
 
 module com { module sun { module star { module resource {
 
-//=============================================================================
 /** Resource bundles contain locale-specific objects.
 
     <p>When your program needs a locale-specific resource, such as
@@ -189,7 +187,6 @@ module com { module sun { module star { module resource {
 */
 published interface XResourceBundle: com::sun::star::container::XNameAccess
 {
-    //-------------------------------------------------------------------------
     /** contains the parent bundle of this bundle.
 
         <p>The parent bundle is searched by the method
@@ -198,7 +195,6 @@ published interface XResourceBundle: com::sun::star::container::XNameAccess
      */
     [attribute] XResourceBundle Parent;
 
-    //-------------------------------------------------------------------------
     /** @returns
         the locale for this resource bundle.
 
@@ -209,7 +205,6 @@ published interface XResourceBundle: com::sun::star::container::XNameAccess
     */
     com::sun::star::lang::Locale getLocale();
 
-    //-------------------------------------------------------------------------
     /** @returns
         an object from a resource bundle or NULL if no resource
         exists.
@@ -223,7 +218,6 @@ published interface XResourceBundle: com::sun::star::container::XNameAccess
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

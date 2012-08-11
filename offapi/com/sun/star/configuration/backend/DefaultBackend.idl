@@ -21,11 +21,9 @@
 
 #include <com/sun/star/configuration/backend/Backend.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module configuration { module backend {
 
-//=============================================================================
 
 /**
     is a <type>DefaultBackend</type>, that is
@@ -38,16 +36,13 @@ module com { module sun { module star { module configuration { module backend {
 */
 service DefaultBackend
 {
-    //-------------------------------------------------------------------------
 
     /** characterizes the functionality.
       */
     service Backend ;
 
-    //-------------------------------------------------------------------------
 } ;
 
-//=============================================================================
 
 } ; } ; } ; } ; } ;
 

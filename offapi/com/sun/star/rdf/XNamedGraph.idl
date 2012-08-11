@@ -27,11 +27,9 @@
 #include <com/sun/star/rdf/XURI.idl>
 
 
-//=============================================================================
 
 module com {   module sun {   module star {   module rdf {
 
-//=============================================================================
 /** represents an RDF named graph that is stored in an RDF Repository.
 
     <p>
@@ -55,7 +53,6 @@ module com {   module sun {   module star {   module rdf {
 interface XNamedGraph : XURI
 {
 
-    //-------------------------------------------------------------------------
     /** returns the name of the graph.
 
         <p>
@@ -67,7 +64,6 @@ interface XNamedGraph : XURI
      */
     XURI getName();
 
-    //-------------------------------------------------------------------------
     /** removes all statements from the graph.
 
         @throws com::sun::star::container::NoSuchElementException
@@ -80,7 +76,6 @@ interface XNamedGraph : XURI
         raises( com::sun::star::container::NoSuchElementException,
                 RepositoryException );
 
-    //-------------------------------------------------------------------------
     /** adds a RDF statement to the graph.
 
         <p>
@@ -115,7 +110,6 @@ interface XNamedGraph : XURI
                 com::sun::star::container::NoSuchElementException,
                 RepositoryException );
 
-    //-------------------------------------------------------------------------
     /** removes matching RDF statements from the graph.
 
         <p>
@@ -152,7 +146,6 @@ interface XNamedGraph : XURI
         raises( com::sun::star::container::NoSuchElementException,
                 RepositoryException );
 
-    //-------------------------------------------------------------------------
     /** gets matching RDF statements from a graph.
 
         <p>
@@ -200,7 +193,6 @@ interface XNamedGraph : XURI
 //FIXME reification: addReifiedStatement(Statement)...
 };
 
-//=============================================================================
 
 }; }; }; };
 

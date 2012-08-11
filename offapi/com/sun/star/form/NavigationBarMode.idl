@@ -20,17 +20,14 @@
 #define __com_sun_star_form_NavigationBarMode_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module form {
 
-//=============================================================================
 
 /** describes in which way the navigation of the records of a database form is performed.
  */
 published enum NavigationBarMode
 {
-    //-------------------------------------------------------------------------
 
     /** no navigation bar is provided and navigation on the current
         form is only possible with the keyboard (TAB/SHIFT TAB).
@@ -43,7 +40,6 @@ published enum NavigationBarMode
      */
     NONE,
 
-    //-------------------------------------------------------------------------
 
     /** a navigation bar is provided and navigation will be performed
         on the current/active form.
@@ -51,7 +47,6 @@ published enum NavigationBarMode
      */
     CURRENT,
 
-    //-------------------------------------------------------------------------
 
     /** a navigation bar is provided and navigation will be performed
         on the parent of the current/active form.
@@ -65,7 +60,6 @@ published enum NavigationBarMode
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -19,13 +19,11 @@
 #ifndef __com_sun_star_connection_Connector_idl__
 #define __com_sun_star_connection_Connector_idl__
 
-//=============================================================================
 
  module com {  module sun {  module star {  module connection {
 
 published interface XConnector;
 
-//=============================================================================
 
 /** allows to establish a connection to another process.
     <p>
@@ -35,7 +33,6 @@ published interface XConnector;
  */
 published service Connector: XConnector;
 
-//=============================================================================
 
 }; }; }; };
 #endif

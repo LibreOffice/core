@@ -22,11 +22,9 @@
 #include <com/sun/star/uno/RuntimeException.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module awt { module grid {
 
-//=============================================================================
 
 /** Exception is thrown when data or column model isn't set.
 
@@ -37,7 +35,6 @@ exception GridInvalidModelException : com::sun::star::uno::RuntimeException
 
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

@@ -23,11 +23,9 @@
 #include <com/sun/star/form/component/DatabaseComboBox.idl>
 #include <com/sun/star/form/binding/BindableDataAwareControlModel.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module form {  module binding {
 
-//=============================================================================
 
 /** This service specifies a model of a combo box (a list box combined with a text
     input field) which is data-aware and thus can be bound to a database field,
@@ -53,7 +51,6 @@ service BindableDatabaseComboBox
 
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

@@ -21,11 +21,9 @@
 
 #include <com/sun/star/frame/XFrames.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module frame {
 
-//=============================================================================
 /** this is a special container which can contain frames
 
     <p>
@@ -38,13 +36,11 @@
  */
 published service FramesContainer
 {
-    //-------------------------------------------------------------------------
     /** access to frame collection by reference
      */
     interface XFrames;
 };
 
-//=============================================================================
 
 }; }; }; };
 

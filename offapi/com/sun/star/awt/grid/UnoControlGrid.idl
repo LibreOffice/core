@@ -32,13 +32,10 @@
 
 #include <com/sun/star/awt/grid/XGridControl.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module awt {  module grid {
 
-//=============================================================================
 
-//=============================================================================
 
 /** A control that displays a set of tabular data.
 
@@ -72,7 +69,6 @@ service UnoControlGrid
     interface com::sun::star::awt::grid::XGridControl;
 };
 
-//=============================================================================
 
 }; }; }; };};
 

@@ -22,11 +22,9 @@
 #include <com/sun/star/lang/EventObject.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module form {
 
-//=============================================================================
 
 /** is fired if a database record is going to be deleted.
     <p>Please do <em><b>not</b></em> use anymore, this struct is deprecated.
@@ -38,7 +36,6 @@ published struct DatabaseDeleteEvent: com::sun::star::lang::EventObject
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

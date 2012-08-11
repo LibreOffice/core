@@ -25,11 +25,9 @@
 #include <com/sun/star/rdf/XRepository.idl>
 
 
-//=============================================================================
 
 module com {   module sun {   module star {   module rdf {
 
-//=============================================================================
 /** extends <type>XRepository</type> with document-specific functionality.
 
     <p>
@@ -47,7 +45,6 @@ module com {   module sun {   module star {   module rdf {
 interface XDocumentRepository : XRepository
 {
 
-    //-------------------------------------------------------------------------
     /** update the RDFa statement(s) that correspond to an ODF element in the
         repository.
 
@@ -119,7 +116,6 @@ interface XDocumentRepository : XRepository
         raises( com::sun::star::lang::IllegalArgumentException,
                 RepositoryException );
 
-    //-------------------------------------------------------------------------
     /** remove the RDFa statement(s) that correspond to an ODF element from the
         repository.
 
@@ -142,7 +138,6 @@ interface XDocumentRepository : XRepository
         raises( com::sun::star::lang::IllegalArgumentException,
                 RepositoryException );
 
-    //-------------------------------------------------------------------------
     /** find the RDFa statement(s) associated with an ODF element.
 
         @param Element
@@ -176,7 +171,6 @@ interface XDocumentRepository : XRepository
         raises( com::sun::star::lang::IllegalArgumentException,
                 RepositoryException );
 
-    //-------------------------------------------------------------------------
     /** gets matching RDFa statements from the repository.
 
         <p>
@@ -220,7 +214,6 @@ interface XDocumentRepository : XRepository
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

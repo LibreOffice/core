@@ -26,17 +26,14 @@
 #include <com/sun/star/drawing/ConnectionType.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module drawing {
 
-//=============================================================================
 
 /** @deprecated
  */
 published interface XConnectorShape: com::sun::star::drawing::XShape
 {
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::drawing::XConnectorShape::connectStart
     /** connects the start of this instance
@@ -44,7 +41,6 @@ published interface XConnectorShape: com::sun::star::drawing::XShape
     void connectStart( [in] com::sun::star::drawing::XConnectableShape xShape,
              [in] com::sun::star::drawing::ConnectionType nPos );
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::drawing::XConnectorShape::connectEnd
     /** connects the end of this instance.
@@ -52,7 +48,6 @@ published interface XConnectorShape: com::sun::star::drawing::XShape
     void connectEnd( [in] com::sun::star::drawing::XConnectableShape xShape,
              [in] com::sun::star::drawing::ConnectionType nPos );
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::drawing::XConnectorShape::disconnectBegin
     /** disconnects the given <type>Shape</type> from the start of
@@ -60,7 +55,6 @@ published interface XConnectorShape: com::sun::star::drawing::XShape
      */
     void disconnectBegin( [in] com::sun::star::drawing::XConnectableShape xShape );
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::drawing::XConnectorShape::disconnectEnd
     /** disconnects the given <type>Shape</type> from the end of
@@ -70,7 +64,6 @@ published interface XConnectorShape: com::sun::star::drawing::XShape
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

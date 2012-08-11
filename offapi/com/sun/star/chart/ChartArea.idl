@@ -26,11 +26,9 @@
 #include <com/sun/star/beans/XPropertySet.idl>
 #include <com/sun/star/xml/UserDefinedAttributeSupplier.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module chart {
 
-//=============================================================================
 
 /** Specifies the area elements of a chart, e.g. the
     background area, the diagram wall, and the diagram floor of
@@ -52,7 +50,6 @@ published service ChartArea
     interface com::sun::star::beans::XPropertySet;
 };
 
-//=============================================================================
 
 }; }; }; };
 

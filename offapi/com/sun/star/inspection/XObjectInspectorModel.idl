@@ -32,12 +32,10 @@
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/inspection/PropertyCategoryDescriptor.idl>
 
-//=============================================================================
 module com {  module sun {  module star {  module inspection {
 
 interface XPropertyHandler;
 
-//-----------------------------------------------------------------------------
 /** describes the model of an <type>ObjectInspector</type>
 
     @see ObjectInspector
@@ -180,7 +178,6 @@ interface XObjectInspectorModel
     [attribute, bound] boolean IsReadOnly;
 };
 
-//=============================================================================
 
 }; }; }; };
 

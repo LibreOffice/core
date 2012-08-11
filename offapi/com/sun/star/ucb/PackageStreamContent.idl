@@ -38,11 +38,9 @@
 #include <com/sun/star/ucb/XCommandInfoChangeNotifier.idl>
 #include <com/sun/star/container/XChild.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** A PCP Stream is a content which represents a file inside a package.
 
     <p>It is always contained in a PCP Folder. A PCP Stream has no children.
@@ -52,19 +50,16 @@ module com { module sun { module star { module ucb {
 */
 published service PackageStreamContent
 {
-    //-------------------------------------------------------------------------
     /** This interface is implemented according to the specification of
         service <type>Content</type>.
      */
     interface com::sun::star::lang::XComponent;
 
-    //-------------------------------------------------------------------------
     /** This interface is implemented according to the specification of
         service <type>Content</type>.
      */
     interface com::sun::star::ucb::XContent;
 
-    //-------------------------------------------------------------------------
     /** This interface is implemented according to the specification of
         service <type>Content</type>.
 
@@ -131,7 +126,6 @@ published service PackageStreamContent
      */
     interface com::sun::star::ucb::XCommandProcessor;
 
-    //-------------------------------------------------------------------------
     /** is an enhanced version of <type>XCommandProcessor</type> that has an
         additional method for releasing command identifiers obtained via
         <member>XCommandProcessor::createCommandIdentifier</member> to avoid
@@ -143,38 +137,32 @@ published service PackageStreamContent
      */
     [optional] interface com::sun::star::ucb::XCommandProcessor2;
 
-    //-------------------------------------------------------------------------
     /** This interface is implemented according to the specification of
         service <type>Content</type>.
      */
     interface com::sun::star::beans::XPropertiesChangeNotifier;
 
-    //-------------------------------------------------------------------------
     /** This interface is implemented according to the specification of
         service <type>Content</type>.
      */
     interface com::sun::star::beans::XPropertyContainer;
 
-    //-------------------------------------------------------------------------
     /** This interface is implemented according to the specification of
         service <type>Content</type>.
      */
     interface com::sun::star::beans::XPropertySetInfoChangeNotifier;
 
-    //-------------------------------------------------------------------------
     /** This interface is implemented according to the specification of
         service <type>Content</type>.
      */
     interface com::sun::star::ucb::XCommandInfoChangeNotifier;
 
-    //-------------------------------------------------------------------------
     /** This interface is implemented according to the specification of
         service <type>Content</type>.
      */
     interface com::sun::star::container::XChild;
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -21,11 +21,9 @@
 
 #include <com/sun/star/uno/XInterface.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module uno {
 
-//=============================================================================
 /** Objects which implement this interface can become aggregates of
     a delegator.
 
@@ -70,7 +68,6 @@ module com { module sun { module star { module uno {
 */
 published interface XAggregation: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** sets the object to which all calls to the method
         <member>XInterface::queryInterface()</member>
         have to be forwarded. @
@@ -88,7 +85,6 @@ published interface XAggregation: com::sun::star::uno::XInterface
     */
     void setDelegator( [in] com::sun::star::uno::XInterface pDelegator );
 
-    //-------------------------------------------------------------------------
     /** is similar to <member>XInterface::queryInterface()</member>,
         but it is to be processed directly without being forwarded to the
         delegator. @
@@ -107,7 +103,6 @@ published interface XAggregation: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

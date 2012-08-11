@@ -20,11 +20,9 @@
 #ifndef __com_sun_star_sheet_DDELinkMode_idl__
 #define __com_sun_star_sheet_DDELinkMode_idl__
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** used to specify how the DDE server application converts its data into
     numbers.
@@ -35,19 +33,16 @@ module com {  module sun {  module star {  module sheet {
  */
 published enum DDELinkMode
 {
-    //-------------------------------------------------------------------------
 
     /** numbers are converted into the default format.
      */
     DEFAULT,
 
-    //-------------------------------------------------------------------------
 
     /** numbers are converted into the English default format.
      */
     ENGLISH,
 
-    //-------------------------------------------------------------------------
 
     /** numbers are not converted, but treated as text.
      */
@@ -55,7 +50,6 @@ published enum DDELinkMode
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

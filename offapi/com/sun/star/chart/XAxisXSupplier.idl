@@ -26,11 +26,9 @@
 #include <com/sun/star/beans/XPropertySet.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module chart {
 
-//=============================================================================
 
 /** gives access to the <i>x</i>-axis of a chart.
 
@@ -41,7 +39,6 @@
  */
 published interface XAxisXSupplier: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** @returns
             the <i>x</i>-axis title shape.
@@ -50,7 +47,6 @@ published interface XAxisXSupplier: com::sun::star::uno::XInterface
      */
     com::sun::star::drawing::XShape getXAxisTitle();
 
-    //-------------------------------------------------------------------------
 
     /** @returns
             the properties of the <i>x</i>-axis of the diagram.
@@ -62,7 +58,6 @@ published interface XAxisXSupplier: com::sun::star::uno::XInterface
      */
     com::sun::star::beans::XPropertySet getXAxis();
 
-    //-------------------------------------------------------------------------
 
     /** @returns
             the properties of the main grid (major grid) of the
@@ -72,7 +67,6 @@ published interface XAxisXSupplier: com::sun::star::uno::XInterface
      */
     com::sun::star::beans::XPropertySet getXMainGrid();
 
-    //-------------------------------------------------------------------------
 
     /** @returns
             the properties of the help grid (minor grid) of the
@@ -84,7 +78,6 @@ published interface XAxisXSupplier: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

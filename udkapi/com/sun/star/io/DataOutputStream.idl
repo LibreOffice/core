@@ -24,11 +24,9 @@
 #include <com/sun/star/io/XActiveDataSource.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module io {
 
-//=============================================================================
 
 // DocMerge from xml: service com::sun::star::io::DataOutputStream
 /** writes structured data to a chained <type>XOutputStream</type>.
@@ -49,7 +47,6 @@ published service DataOutputStream
     interface com::sun::star::io::XActiveDataSource;
 };
 
-//=============================================================================
 
 }; }; }; };
 

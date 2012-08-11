@@ -24,28 +24,23 @@
 #include <com/sun/star/beans/XPropertySet.idl>
 
 
-//============================================================================
 
  module com {  module sun {  module star {  module embed {
 
-//============================================================================
 /** This is a service that allows to get access to a storage hierarchy.
  */
 published service BaseStorage
 {
-    // -----------------------------------------------------------------------
     /** This is a general interface representing storage functionality.
         It allows to copy storages, get access to child elements and to
         control lifetime.
      */
     interface ::com::sun::star::embed::XStorage;
 
-    // -----------------------------------------------------------------------
     /** allows to get access to storage properties.
      */
     interface ::com::sun::star::beans::XPropertySet;
 
-    // -----------------------------------------------------------------------
     /** allows to get the mode the storage is opened in.
 
         <p>
@@ -54,14 +49,12 @@ published service BaseStorage
      */
     [property, readonly] long OpenMode;
 
-    // -----------------------------------------------------------------------
     /** allows to retrieve URL the storage is based on.
      */
     [property, optional, readonly] string URL;
 
 };
 
-//============================================================================
 
 }; }; }; };
 

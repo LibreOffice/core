@@ -22,11 +22,9 @@
 #include <com/sun/star/io/IOException.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module io {
 
-//=============================================================================
 
 // DocMerge from xml: exception com::sun::star::io::UnexpectedEOFException
 /** is thrown when the <code>EOF/code> is reached during reading a datatype
@@ -36,7 +34,6 @@ published exception UnexpectedEOFException: com::sun::star::io::IOException
 {
 };
 
-//=============================================================================
 
 }; }; }; };
 

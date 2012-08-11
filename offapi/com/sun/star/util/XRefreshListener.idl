@@ -24,24 +24,20 @@
 #include <com/sun/star/lang/EventObject.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module util {
 
-//=============================================================================
 
 /** makes it possible to receive <em>refreshed</em> events.
  */
 published interface XRefreshListener: com::sun::star::lang::XEventListener
 {
-    //-------------------------------------------------------------------------
     /** is called when the object data is refreshed.
      */
     void refreshed( [in] com::sun::star::lang::EventObject rEvent );
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

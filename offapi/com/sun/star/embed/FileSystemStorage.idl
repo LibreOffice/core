@@ -22,17 +22,14 @@
 
 #include <com/sun/star/embed/BaseStorage.idl>
 
-//============================================================================
 
  module com {  module sun {  module star {  module embed {
 
-//============================================================================
 /** This is a service that allows to get access to a file system folder using
     storage hierarchy.
  */
 published service FileSystemStorage
 {
-    // -----------------------------------------------------------------------
     /** This service describes the base functionality of storages.
 
         <p>
@@ -99,7 +96,6 @@ published service FileSystemStorage
     service BaseStorage;
 };
 
-//============================================================================
 
 }; }; }; };
 

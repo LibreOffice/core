@@ -19,11 +19,9 @@
 #ifndef __com_sun_star_ucb_NumberedSortingInfo_idl__
 #define __com_sun_star_ucb_NumberedSortingInfo_idl__
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** contains information for sorting a <type>ContentResultSet</type>.
 
     <p> In contrast to the struct <type>SortingInfo</type> this struct is
@@ -32,18 +30,15 @@ module com { module sun { module star { module ucb {
 */
 published struct NumberedSortingInfo
 {
-    //-------------------------------------------------------------------------
     /** sort the result set by this column. Index starts with <code>1</code>.
     */
     long ColumnIndex;
 
-    //-------------------------------------------------------------------------
     /** contains a flag indicating the sort mode (ascending or descending).
     */
     boolean Ascending;
 };
 
-//=============================================================================
 
 }; }; }; };
 

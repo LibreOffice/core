@@ -24,11 +24,9 @@
 #include <com/sun/star/beans/Pair.idl>
 #include <com/sun/star/container/XEnumerableMap.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module container {
 
-//=============================================================================
 
 /** provides a default <type>XEnumerableMap</type> implementation
 
@@ -124,11 +122,9 @@ service EnumerableMap : XEnumerableMap
                 ::com::sun::star::lang::IllegalArgumentException );
 };
 
-//=============================================================================
 
 }; }; }; };
 
-//=============================================================================
 
 #endif
 

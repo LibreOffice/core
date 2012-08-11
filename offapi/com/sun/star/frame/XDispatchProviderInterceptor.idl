@@ -22,11 +22,9 @@
 #include <com/sun/star/frame/XDispatchProvider.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module frame {
 
-//=============================================================================
 /** makes it possible to intercept request of <type>XDispatch</type>.
 
     <p>
@@ -37,7 +35,6 @@
  */
 published interface XDispatchProviderInterceptor: XDispatchProvider
 {
-    //-------------------------------------------------------------------------
     /** access to the slave <type>XDispatchProvider</type> of this interceptor
 
         @returns
@@ -47,7 +44,6 @@ published interface XDispatchProviderInterceptor: XDispatchProvider
      */
     XDispatchProvider getSlaveDispatchProvider();
 
-    //-------------------------------------------------------------------------
     /** sets the slave <type>XDispatchProvider</type> to which calls to
         <member>XDispatchProvider::queryDispatch()</member> can be forwarded
         under control of this dispatch provider.
@@ -59,7 +55,6 @@ published interface XDispatchProviderInterceptor: XDispatchProvider
      */
     void setSlaveDispatchProvider( [in] XDispatchProvider NewDispatchProvider );
 
-    //-------------------------------------------------------------------------
     /** access to the master <type>XDispatchProvider</type> of this interceptor
 
         @returns
@@ -69,7 +64,6 @@ published interface XDispatchProviderInterceptor: XDispatchProvider
      */
     XDispatchProvider getMasterDispatchProvider();
 
-    //-------------------------------------------------------------------------
     /** sets the master <type>XDispatchProvider</type>, which may forward
         calls to its <member>XDispatchProvider::queryDispatch()</member>
         to this dispatch provider.
@@ -83,7 +77,6 @@ published interface XDispatchProviderInterceptor: XDispatchProvider
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

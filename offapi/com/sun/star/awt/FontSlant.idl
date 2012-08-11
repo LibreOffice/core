@@ -20,47 +20,39 @@
 #define __com_sun_star_awt_FontSlant_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module awt {
 
-//=============================================================================
 
 /** used to specify the slant of a font.
  */
 published enum FontSlant
 {
-    //-------------------------------------------------------------------------
 
     /** specifies a font without slant.
      */
     NONE,
 
-    //-------------------------------------------------------------------------
 
     /** specifies an oblique font (slant not designed into the font).
      */
     OBLIQUE,
 
-    //-------------------------------------------------------------------------
 
     /** specifies an italic font (slant designed into the font).
      */
     ITALIC,
 
-    //-------------------------------------------------------------------------
 
     /** specifies a font with an unknown slant.
      */
     DONTKNOW,
 
-    //-------------------------------------------------------------------------
 
     /** specifies a reverse oblique font (slant not designed into the font).
      */
     REVERSE_OBLIQUE,
 
-    //-------------------------------------------------------------------------
 
     /** specifies a reverse italic font (slant designed into the font).
      */
@@ -68,7 +60,6 @@ published enum FontSlant
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -37,11 +37,9 @@
 #include <com/sun/star/task/XStatusIndicator.idl>
 #include <com/sun/star/frame/XFrame.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module document {
 
-//=============================================================================
 /** describes properties of a document, regarding the relationship
     between the loaded document and the resource the document is
     loaded from / stored to.
@@ -66,13 +64,11 @@ module com { module sun { module star { module document {
  */
 published service MediaDescriptor
 {
-    //-------------------------------------------------------------------------
     /** May be set by filters or detection services if user has chosen to
         abort loading/saving, e.g. while entering a password.
      */
     [optional,property] boolean Aborted;
 
-    //-------------------------------------------------------------------------
     /** document is a template
 
         <p>
@@ -85,7 +81,6 @@ published service MediaDescriptor
      */
     [optional,property] boolean AsTemplate;
 
-    //-------------------------------------------------------------------------
     /** the author of the document
 
         <p>
@@ -95,7 +90,6 @@ published service MediaDescriptor
      */
     [optional,property] string Author;
 
-    //-------------------------------------------------------------------------
     /** identifier of used character set
 
         <p>
@@ -105,7 +99,6 @@ published service MediaDescriptor
      */
     [optional,property] string CharacterSet;
 
-    //-------------------------------------------------------------------------
     /** description of document
 
         <p>
@@ -115,7 +108,6 @@ published service MediaDescriptor
      */
     [optional,property] string Comment;
 
-    //-------------------------------------------------------------------------
     /** pack specific properties of caller
 
         <p>
@@ -131,12 +123,10 @@ published service MediaDescriptor
      */
     [optional,property] any ComponentData;
 
-    //-------------------------------------------------------------------------
     /** The base URL of the document to be used to resolve relative links.
      */
     [optional,property] string DocumentBaseURL;
 
-    //-------------------------------------------------------------------------
     /** document title
 
         <p>
@@ -145,7 +135,6 @@ published service MediaDescriptor
      */
     [optional,property] string DocumentTitle;
 
-    //-------------------------------------------------------------------------
     /** encryption information for encryption/decryption of documents
 
         <p>
@@ -162,7 +151,6 @@ published service MediaDescriptor
      */
     [optional,property] sequence< ::com::sun::star::beans::NamedValue > EncryptionData;
 
-    //-------------------------------------------------------------------------
     /** same as <member>MediaDescriptor::URL</member>
 
         <p>
@@ -173,7 +161,6 @@ published service MediaDescriptor
      */
     [optional,property] string FileName;
 
-    //-------------------------------------------------------------------------
     /** internal filter name
 
         <p>
@@ -186,7 +173,6 @@ published service MediaDescriptor
      */
     [optional,property] string FilterName;
 
-    //-------------------------------------------------------------------------
     /** same as <member>MediaDescriptor::FilterOptions</member>
 
         <p>
@@ -197,7 +183,6 @@ published service MediaDescriptor
      */
     [optional,property] string FilterFlags;
 
-    //-------------------------------------------------------------------------
     /** additional properties for filter
 
         <p>
@@ -209,7 +194,6 @@ published service MediaDescriptor
      */
     [optional,property] string FilterOptions;
 
-        //-------------------------------------------------------------------------
     /** additional properties for filter
 
         <p>
@@ -220,7 +204,6 @@ published service MediaDescriptor
      */
     [optional,property] any FilterData;
 
-    //-------------------------------------------------------------------------
     /** load document invisible
 
         <p>
@@ -230,12 +213,10 @@ published service MediaDescriptor
      */
     [optional,property] boolean Hidden;
 
-    //-------------------------------------------------------------------------
     /** The hierarchical path to the embedded document from topmost container.
      */
     [optional,property] string HierarchicalDocumentName;
 
-    //-------------------------------------------------------------------------
     /** a stream to receive the document data.
 
         <p>
@@ -247,7 +228,6 @@ published service MediaDescriptor
      */
     [optional,property] com::sun::star::io::XOutputStream OutputStream;
 
-    //-------------------------------------------------------------------------
     /** content of document
 
         <p>
@@ -261,7 +241,6 @@ published service MediaDescriptor
      */
     [optional,property] com::sun::star::io::XInputStream InputStream;
 
-    //-------------------------------------------------------------------------
     /** handle exceptional situations
 
         <p>
@@ -276,7 +255,6 @@ published service MediaDescriptor
      */
     [optional,property] com::sun::star::task::XInteractionHandler InteractionHandler;
 
-    //-------------------------------------------------------------------------
     /** jump to a marked position after loading
 
         <p>
@@ -286,7 +264,6 @@ published service MediaDescriptor
      */
     [optional,property] string JumpMark;
 
-    //-------------------------------------------------------------------------
     /** specify mime type of content
 
         <p>
@@ -298,7 +275,6 @@ published service MediaDescriptor
      */
     [optional,property] string MediaType;
 
-    //-------------------------------------------------------------------------
     /** please use the corresponding parameters of this descriptor instead
 
         <p>
@@ -337,7 +313,6 @@ published service MediaDescriptor
      */
     [optional,property] string OpenFlags;
 
-    //-------------------------------------------------------------------------
     /** opens a new view for an already loaded document
 
         <p>
@@ -350,7 +325,6 @@ published service MediaDescriptor
     [optional,property] boolean OpenNewView;
 
 
-    //-------------------------------------------------------------------------
     /** overwrite any existing file
 
         <p>
@@ -360,7 +334,6 @@ published service MediaDescriptor
      */
     [optional,property] boolean Overwrite;
 
-    //-------------------------------------------------------------------------
     /** password for loading storing documents
 
         <p>
@@ -373,7 +346,6 @@ published service MediaDescriptor
      */
     [optional,property] string Password;
 
-    //-------------------------------------------------------------------------
     /** contains the data for HTTP post method as a sequence of bytes.
 
         <p>
@@ -384,7 +356,6 @@ published service MediaDescriptor
      */
     [optional,property] sequence< byte > PostData;
 
-    //-------------------------------------------------------------------------
     /** use <member>MediaDescriptor::PostData</member> instead of this
 
         <p>
@@ -396,7 +367,6 @@ published service MediaDescriptor
      */
     [optional,property] string PostString;
 
-    //-------------------------------------------------------------------------
     /** show preview
 
         <p>
@@ -407,7 +377,6 @@ published service MediaDescriptor
      */
     [optional,property] boolean Preview;
 
-    //-------------------------------------------------------------------------
     /** open document readonly
 
         <p>
@@ -423,7 +392,6 @@ published service MediaDescriptor
      */
     [optional,property] boolean ReadOnly;
 
-    //-------------------------------------------------------------------------
     /** start presentation from a document
 
         <p>
@@ -433,7 +401,6 @@ published service MediaDescriptor
     */
     [optional,property] boolean StartPresentation;
 
-    //-------------------------------------------------------------------------
     /** name of document referrer
 
         <p>
@@ -448,7 +415,6 @@ published service MediaDescriptor
      */
     [optional,property] string Referer;
 
-    //-------------------------------------------------------------------------
     /** let the document be opened in repair mode
 
         <p>
@@ -460,7 +426,6 @@ published service MediaDescriptor
      */
     [optional,property] boolean RepairPackage;
 
-    //-------------------------------------------------------------------------
     /** can be used for status informations
 
         <p>
@@ -473,7 +438,6 @@ published service MediaDescriptor
      */
     [optional,property] com::sun::star::task::XStatusIndicator StatusIndicator;
 
-    //-------------------------------------------------------------------------
     /** allows to specify the URL that is used next time SaveAs dialog is opened
 
         <p>
@@ -483,7 +447,6 @@ published service MediaDescriptor
      */
     [optional,property] string SuggestedSaveAsDir;
 
-    //-------------------------------------------------------------------------
     /** allows to specify the suggested file name that is used next time SaveAs
         dialog is opened
 
@@ -494,7 +457,6 @@ published service MediaDescriptor
      */
     [optional,property] string SuggestedSaveAsName;
 
-    //-------------------------------------------------------------------------
     /** name of the template instead of the URL
 
         <p>
@@ -505,7 +467,6 @@ published service MediaDescriptor
      */
     [optional,property] string TemplateName;
 
-    //-------------------------------------------------------------------------
     /** name of the template instead of the URL
 
         <p>
@@ -516,7 +477,6 @@ published service MediaDescriptor
      */
     [optional,property] string TemplateRegionName;
 
-    //-------------------------------------------------------------------------
     /** regulate using of compressing
 
         <p>
@@ -527,7 +487,6 @@ published service MediaDescriptor
      */
     [optional,property] boolean Unpacked;
 
-    //-------------------------------------------------------------------------
     /** URL of the document
 
         <p>
@@ -536,7 +495,6 @@ published service MediaDescriptor
      */
     [optional,property] string URL;
 
-    //-------------------------------------------------------------------------
     /** storage version
 
         <p>
@@ -547,7 +505,6 @@ published service MediaDescriptor
      */
     [optional,property] short Version;
 
-    //-------------------------------------------------------------------------
     /** set special view state
         <p>
         Data to set a special view state after loading. The type depends on
@@ -558,7 +515,6 @@ published service MediaDescriptor
      */
     [optional,property] any ViewData;
 
-    //-------------------------------------------------------------------------
     /** id of the initial view
 
         <p>
@@ -569,7 +525,6 @@ published service MediaDescriptor
      */
     [optional,property] short ViewId;
 
-    //-------------------------------------------------------------------------
     /** should the macro be executed.
         the value should be one from <type scope="com::sun::star::document">MacroExecMode</type>
         constant list.
@@ -578,7 +533,6 @@ published service MediaDescriptor
      */
     [optional,property] short MacroExecutionMode;
 
-    //-------------------------------------------------------------------------
     /** can the document be updated depending from links.
         the value should be one from <type scope="com::sun::star::document">UpdateDocMode</type>
         constant list.
@@ -587,7 +541,6 @@ published service MediaDescriptor
      */
     [optional,property] short UpdateDocMode;
 
-    //-------------------------------------------------------------------------
     /** specifies the name of the view controller to create when loading a document
 
         <p>If this property is used when loading a document into a frame, then it
@@ -603,14 +556,12 @@ published service MediaDescriptor
         @since OOo 3.0
      */
     [optional,property] string ViewControllerName;
-    //-------------------------------------------------------------------------
 
     /** specifies the frame containing the document. May be empty.
      */
     [optional,property] com::sun::star::frame::XFrame Frame;
 };
 
-//=============================================================================
 
 }; }; }; };
 

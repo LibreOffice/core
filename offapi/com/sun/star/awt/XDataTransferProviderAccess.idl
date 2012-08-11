@@ -22,7 +22,6 @@
 
 #include <com/sun/star/uno/XInterface.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module datatransfer {
 module dnd {
@@ -35,20 +34,17 @@ module clipboard {
 };
 }; }; }; };
 
-//=============================================================================
 
 module com { module sun { module star { module awt {
 
  published interface XWindow;
 
-//=============================================================================
 
 /** This interface extends the XToolkit interface with clipboard and
     drag-and-drop support.
 */
 published interface XDataTransferProviderAccess: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** returns the drag gesture recognizer of the specified window.
 
@@ -59,7 +55,6 @@ published interface XDataTransferProviderAccess: com::sun::star::uno::XInterface
     */
     com::sun::star::datatransfer::dnd::XDragGestureRecognizer getDragGestureRecognizer( [in] XWindow window );
 
-    //-------------------------------------------------------------------------
 
     /** returns the drag source of the specified window.
 
@@ -70,7 +65,6 @@ published interface XDataTransferProviderAccess: com::sun::star::uno::XInterface
     */
     com::sun::star::datatransfer::dnd::XDragSource getDragSource( [in] XWindow window );
 
-    //-------------------------------------------------------------------------
 
     /** returns the drop target of the specified window.
 
@@ -81,7 +75,6 @@ published interface XDataTransferProviderAccess: com::sun::star::uno::XInterface
     */
     com::sun::star::datatransfer::dnd::XDropTarget getDropTarget( [in] XWindow window );
 
-    //-------------------------------------------------------------------------
 
     /** returns the specified clipboard.
 
@@ -94,7 +87,6 @@ published interface XDataTransferProviderAccess: com::sun::star::uno::XInterface
     com::sun::star::datatransfer::clipboard::XClipboard getClipboard( [in] string clipboardName );
 };
 
-//=============================================================================
 
 }; }; }; };
 

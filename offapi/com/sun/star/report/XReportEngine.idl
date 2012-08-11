@@ -40,7 +40,6 @@
 #include <com/sun/star/lang/DisposedException.idl>
 #include <com/sun/star/uno/Exception.idl>
 
-//=============================================================================
 module com {  module sun {  module star {  module report {
 /** identifies a <type>XReportEngine</type> which allows the creation of OpenDocument files.
 
@@ -138,7 +137,6 @@ interface XReportEngine
     [attribute,bound] long MaxRows;
 };
 
-//=============================================================================
 
 }; }; }; };
 

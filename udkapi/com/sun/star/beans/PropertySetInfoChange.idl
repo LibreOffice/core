@@ -20,11 +20,9 @@
 #define __com_sun_star_beans_PropertySetInfoChange_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module beans {
 
-//=============================================================================
 
 /** specifies reasons for sending <type>PropertySetInfoChangeEvent</type>s.
 
@@ -33,20 +31,17 @@
  */
 published constants PropertySetInfoChange
 {
-    //-------------------------------------------------------------------------
 
     /** A property was inserted into a <type>XPropertySetInfo</type>.
      */
     const long PROPERTY_INSERTED = 0;
 
-    //-------------------------------------------------------------------------
 
     /** A property was removed from a <type>XPropertySetInfo</type>.
      */
     const long PROPERTY_REMOVED = 1;
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -24,25 +24,21 @@
 #include <com/sun/star/io/IOException.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module io {
 
-//=============================================================================
 
 // DocMerge from xml: interface com::sun::star::io::XPersist
 /** makes it possible to write this object to an URL or read it from an URL.
  */
 published interface XPersist: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::io::XPersist::write
     /** writes all the persistent data of the object to the URL.
      */
     void write ( [in] string URL ) raises ( com::sun::star::io::IOException ) ;
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::io::XPersist::read
     /** reads all the persistent data of the object from the URL.
@@ -51,7 +47,6 @@ published interface XPersist: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

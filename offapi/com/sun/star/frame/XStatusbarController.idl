@@ -33,11 +33,9 @@
 #include <com/sun/star/awt/Rectangle.idl>
 #include <com/sun/star/awt/XGraphics.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module frame {
 
-//=============================================================================
 /** is an abstract service for a component which offers a more complex user interface
     to users within a status bar.
 
@@ -56,7 +54,6 @@ module com {  module sun {  module star {  module frame {
  */
 interface XStatusbarController : ::com::sun::star::uno::XInterface
 {
-    //=============================================================================
     /** is called by a status bar if the mouse position is within the controller
         and a mouse button has been pressed. If the controller has captured the
         mouse input this function is also called when the mouse position is not
@@ -71,7 +68,6 @@ interface XStatusbarController : ::com::sun::star::uno::XInterface
     */
     boolean mouseButtonDown( [in] ::com::sun::star::awt::MouseEvent aMouseEvent );
 
-    //=============================================================================
     /** is called by a status bar if the mouse position is within the controller
         and a mouse has been moved. If the controller has captured the
         mouse input this function is also called when the mouse position is not
@@ -86,7 +82,6 @@ interface XStatusbarController : ::com::sun::star::uno::XInterface
     */
     boolean mouseMove( [in] ::com::sun::star::awt::MouseEvent aMouseEvent );
 
-    //=============================================================================
     /** is called by a status bar if the mouse position is within the controller
         and a mouse button has been released. If the controller has captured the
         mouse input this function is also called when the mouse position is not
@@ -101,7 +96,6 @@ interface XStatusbarController : ::com::sun::star::uno::XInterface
     */
     boolean mouseButtonUp( [in] ::com::sun::star::awt::MouseEvent aMouseEvent );
 
-    //=============================================================================
     /** is called by a status bar if a command event is available for a controller.
 
         @param aPos
@@ -121,7 +115,6 @@ interface XStatusbarController : ::com::sun::star::uno::XInterface
                   [in] boolean bMouseEvent,
                   [in] any aData );
 
-    //=============================================================================
     /** is called by a status bar if the controller has to update the visual
         representation.
 
@@ -144,13 +137,11 @@ interface XStatusbarController : ::com::sun::star::uno::XInterface
                 [in] long nItemId,
                 [in] long nStyle );
 
-    //=============================================================================
     /** is called by a status bar if the user clicked with mouse into the
         field of the corresponding control.
     */
     void click();
 
-    //=============================================================================
     /** is called by a status bar if the user double-clicked with mouse
         into the field of the corresponding control.
     */

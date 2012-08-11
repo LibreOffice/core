@@ -22,11 +22,9 @@
 #include <com/sun/star/document/XDocumentRevisionListPersistence.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module document {
 
-//=============================================================================
 /** interface to maintain a list of document revisions
 
     <p>
@@ -34,7 +32,6 @@ module com {  module sun {  module star {  module document {
  */
 service DocumentRevisionListPersistence : XDocumentRevisionListPersistence;
 
-//=============================================================================
 
 }; }; }; };
 

@@ -24,23 +24,19 @@
 #include <com/sun/star/container/XEnumerationAccess.idl>
 #include <com/sun/star/container/XIndexAccess.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** represents a collection of scenarios.
  */
 published service Scenarios
 {
-    //-------------------------------------------------------------------------
 
     /** provides access via name to the scenarios in the collection.
      */
     interface com::sun::star::sheet::XScenarios;
 
-    //-------------------------------------------------------------------------
 
     /** creates an enumeration of scenarios.
 
@@ -48,7 +44,6 @@ published service Scenarios
      */
     interface com::sun::star::container::XEnumerationAccess;
 
-    //-------------------------------------------------------------------------
 
     /** provides access to the scenarios in the collection via index.
 
@@ -59,7 +54,6 @@ published service Scenarios
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

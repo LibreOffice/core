@@ -30,11 +30,9 @@
 
 #include <com/sun/star/animations/XAnimate.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module animations {
 
-//=============================================================================
 
 /** Interface for animation by simply setting the value of the target attribute to a constant value.
     This interface provides a simple means of just setting the value of an attribute for
@@ -58,7 +56,6 @@ interface XAnimateSet : XAnimate
 {
 };
 
-//=============================================================================
 
 }; }; }; };
 

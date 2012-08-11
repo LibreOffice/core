@@ -22,11 +22,9 @@
 #include <com/sun/star/uno/Exception.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module io {
 
-//=============================================================================
 
 // DocMerge from xml: exception com::sun::star::io::IOException
 /** is thrown when an input or output error has occurred.
@@ -35,7 +33,6 @@ published exception IOException: com::sun::star::uno::Exception
 {
 };
 
-//=============================================================================
 
 }; }; }; };
 

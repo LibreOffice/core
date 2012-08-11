@@ -35,11 +35,9 @@
 
 #include <com/sun/star/style/VerticalAlignment.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module awt {
 
-//=============================================================================
 
 /** specifies the standard model of an <type>UnoControlDateField</type>.
  */
@@ -47,13 +45,11 @@ published service UnoControlDateFieldModel
 {
     service com::sun::star::awt::UnoControlModel;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the background color(RGB) of the control.
      */
     [property] com::sun::star::util::Color BackgroundColor;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the border style of the control.
 
@@ -65,7 +61,6 @@ published service UnoControlDateFieldModel
      */
     [property] short Border;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the color of the border, if present
 
@@ -76,7 +71,6 @@ published service UnoControlDateFieldModel
      */
     [optional, property] long BorderColor;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the date displayed in the control.
 
@@ -84,7 +78,6 @@ published service UnoControlDateFieldModel
      */
     [property] long Date;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the format of the displayed date.
 
@@ -105,69 +98,58 @@ published service UnoControlDateFieldModel
      */
     [property] short DateFormat;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the maximum date that can be entered.
      */
     [property] long DateMax;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the minimum date that can be entered.
      */
     [property] long DateMin;
 
-    //-------------------------------------------------------------------------
 
     /** specifies, if the date century is displayed.
      */
     [property] boolean DateShowCentury;
 
-    //-------------------------------------------------------------------------
 
     /** specifies, if the control has a dropdown button.
      */
     [property] boolean Dropdown;
 
-    //-------------------------------------------------------------------------
 
     /** determines whether the control is enabled or disabled.
      */
     [property] boolean Enabled;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the font attributes of the text in the control.
      */
     [property] com::sun::star::awt::FontDescriptor FontDescriptor;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the <type scope="com::sun::star::text">FontEmphasis</type>
         value of the text in the control.
      */
     [property] short FontEmphasisMark;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the <type scope="com::sun::star::text">FontRelief</type>
         value of the text in the control.
      */
     [property] short FontRelief;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the help text of the control.
      */
     [property] string HelpText;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the help URL of the control.
      */
     [property] string HelpURL;
 
-    //-------------------------------------------------------------------------
 
     /** specifies whether the selection in the control should be hidden when
         the control is not active (focused).
@@ -176,19 +158,16 @@ published service UnoControlDateFieldModel
      */
     [optional, property] boolean HideInactiveSelection;
 
-    //-------------------------------------------------------------------------
 
     /** specifies that the control will be printed with the document.
      */
     [property] boolean Printable;
 
-    //-------------------------------------------------------------------------
 
     /** specifies that the content of the control cannot be modified by the user.
      */
     [property] boolean ReadOnly;
 
-    //-------------------------------------------------------------------------
 
     /** specifies whether the mouse should show repeating behavior, i.e.
         repeatedly trigger an action when keeping pressed.
@@ -197,7 +176,6 @@ published service UnoControlDateFieldModel
      */
     [optional, property] boolean Repeat;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the mouse repeat delay, in milliseconds.
 
@@ -211,25 +189,21 @@ published service UnoControlDateFieldModel
      */
     [optional, property] long RepeatDelay;
 
-    //-------------------------------------------------------------------------
 
     /** specifies that the control has a spin button.
      */
     [property] boolean Spin;
 
-    //-------------------------------------------------------------------------
 
     /** specifies that the date is checked during the user input.
      */
     [property] boolean StrictFormat;
 
-    //-------------------------------------------------------------------------
 
     /** specifies that the control can be reached with the TAB key.
      */
     [property] boolean Tabstop;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the text displayed in the control.
 
@@ -237,13 +211,11 @@ published service UnoControlDateFieldModel
      */
     [optional, property] string Text;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the text color (RGB) of the control.
      */
     [property] com::sun::star::util::Color TextColor;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the text line color (RGB) of the control.
      */
@@ -267,7 +239,6 @@ published service UnoControlDateFieldModel
     */
     [optional, property] short MouseWheelBehavior;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the vertical alignment of the text in the control.
 
@@ -276,7 +247,6 @@ published service UnoControlDateFieldModel
     [optional, property] com::sun::star::style::VerticalAlignment VerticalAlign;
 };
 
-//=============================================================================
 
 }; }; }; };
 

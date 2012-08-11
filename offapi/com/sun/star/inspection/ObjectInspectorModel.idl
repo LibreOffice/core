@@ -32,10 +32,8 @@
 #include <com/sun/star/inspection/XObjectInspectorModel.idl>
 #include <com/sun/star/lang/IllegalArgumentException.idl>
 
-//=============================================================================
 module com {  module sun {  module star {  module inspection {
 
-//-----------------------------------------------------------------------------
 /** describes a default implementation of an ObjectInspectorModel
 
     <p>This service simplifies usage of an <type>ObjectInspector</type>.</p>
@@ -108,7 +106,6 @@ service ObjectInspectorModel : XObjectInspectorModel
         raises ( ::com::sun::star::lang::IllegalArgumentException );
 };
 
-//=============================================================================
 
 }; }; }; };
 

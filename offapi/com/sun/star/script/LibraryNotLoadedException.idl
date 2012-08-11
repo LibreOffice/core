@@ -22,11 +22,9 @@
 
 #include <com/sun/star/uno/Exception.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module script {
 
-//=============================================================================
 
 /** is thrown when an operation on a unloaded library is attempted which requires the library
     being loaded.
@@ -37,11 +35,9 @@ exception LibraryNotLoadedException : com::sun::star::uno::Exception
 {
 };
 
-//=============================================================================
 
 }; }; }; };
 
-//=============================================================================
 
 #endif
 

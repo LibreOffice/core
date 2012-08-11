@@ -32,9 +32,7 @@
 #include <com/sun/star/beans/Optional.idl>
 #include <com/sun/star/lang/XComponent.idl>
 #include <com/sun/star/container/XChild.idl>
-//=============================================================================
  module com {  module sun {  module star {  module report {
-//=============================================================================
 /** specifies a format condition for a control.
 */
 interface XFunction
@@ -73,7 +71,6 @@ interface XFunction
     [attribute,bound] com::sun::star::beans::Optional<string> InitialFormula;
 };
 
-//=============================================================================
 
 }; }; }; };
 #endif

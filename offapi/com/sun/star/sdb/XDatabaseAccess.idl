@@ -29,13 +29,11 @@
  published interface XInteractionHandler;
 };};};};
 
-//=============================================================================
 
  module com {  module sun {  module star {  module sdb {
 
  published interface XDatabaseAccessListener;
 
-//=============================================================================
 
 /** is not to be used anymore
     @deprecated
@@ -50,7 +48,6 @@ published interface XDatabaseAccess: com::sun::star::sdbc::XDataSource
     [oneway] void removeDatabaseAccessListener([in]XDatabaseAccessListener listener);
 };
 
-//=============================================================================
 
 }; }; }; };
 

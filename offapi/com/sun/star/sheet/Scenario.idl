@@ -25,11 +25,9 @@
 #include <com/sun/star/beans/XPropertySet.idl>
 #include <com/sun/star/container/XNamed.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** represents a scenario in a spreadsheet document.
 
@@ -44,49 +42,41 @@ service Scenario
 
     interface com::sun::star::container::XNamed;
 
-    //-------------------------------------------------------------------------
 
     /** specifies if the scenario is active.
      */
     [optional, property] boolean IsActive;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the color of the border of the scenario.
      */
     [optional, property] long BorderColor;
 
-    //-------------------------------------------------------------------------
 
     /** specifies if the scenario is protected.
      */
     [optional, property] boolean Protected;
 
-    //-------------------------------------------------------------------------
 
     /** specifies if the scenario shows a border.
      */
     [optional, property] boolean ShowBorder;
 
-    //-------------------------------------------------------------------------
 
     /** specifies if the scenario prints a border.
      */
     [optional, property] boolean PrintBorder;
 
-    //-------------------------------------------------------------------------
 
     /** specifies if the data should be copied back into the scenario.
      */
     [optional, property] boolean CopyBack;
 
-    //-------------------------------------------------------------------------
 
     /** specifies if the styles are copied.
      */
     [optional, property] boolean CopyStyles;
 
-    //-------------------------------------------------------------------------
 
     /** specifies if the formulas are copied or only the results.
      */
@@ -95,7 +85,6 @@ service Scenario
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

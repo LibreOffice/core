@@ -21,11 +21,9 @@
 
 #include <com/sun/star/lang/XEventListener.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module ui {
 
-//=============================================================================
 /** special interface to receive notification that a user interface
     element will execute a function.
 
@@ -33,7 +31,6 @@
  */
 interface XUIFunctionListener : com::sun::star::lang::XEventListener
 {
-    //=============================================================================
     /** gets called to notify a component that a user interface element
         wants to execute a function.
 

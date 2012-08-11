@@ -20,46 +20,39 @@
 #define __com_sun_star_text_PlaceholderType_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module text {
 
-//=============================================================================
 
 // DocMerge from idl: constants com::sun::star::text::PlaceholderType
 /** These constants define how the place-holder text fields act in a document.
  */
 published constants PlaceholderType
 {
-    //-------------------------------------------------------------------------
 
     // DocMerge from idl: value com::sun::star::text::PlaceholderType::TEXT
     /** The field represents a piece of text.
      */
     const short TEXT = 0;
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from idl: value com::sun::star::text::PlaceholderType::TABLE
     /** The field initiates the insertion of a text table.
      */
     const short TABLE = 1;
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from idl: value com::sun::star::text::PlaceholderType::TEXTFRAME
     /** The field initiates the insertion of a text frame.
      */
     const short TEXTFRAME = 2;
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from idl: value com::sun::star::text::PlaceholderType::GRAPHIC
     /** The field initiates the insertion of a graphic object.
      */
     const short GRAPHIC = 3;
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from idl: value com::sun::star::text::PlaceholderType::OBJECT
     /** The field initiates the insertion of an embedded object.
@@ -68,7 +61,6 @@ published constants PlaceholderType
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

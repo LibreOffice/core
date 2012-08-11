@@ -20,11 +20,9 @@
 #ifndef __com_sun_star_sdb_BooleanComparisonMode_idl__
 #define __com_sun_star_sdb_BooleanComparisonMode_idl__
 
-//=============================================================================
 
 module com { module sun { module star { module sdb {
 
-//=============================================================================
 
 /** specifies different mode how boolean comparison predicates are to be generated
     by a <type>SingleSelectQueryComposer</type>.
@@ -57,11 +55,9 @@ constants BooleanComparisonMode
     const long ACCESS_COMPAT    = 3;
 };
 
-//=============================================================================
 
 }; }; }; };
 
-//=============================================================================
 
 #endif
 

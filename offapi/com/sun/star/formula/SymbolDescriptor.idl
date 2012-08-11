@@ -28,11 +28,9 @@
 #ifndef __com_sun_star_formula_Symbol_idl__
 #define __com_sun_star_formula_Symbol_idl__
 
-//=============================================================================
 
  module com {  module sun {  module star {  module formula {
 
-//=============================================================================
 /** @deprecated draft
     - nWeight should be changed to float as in FontWeight.idl
     - nItalic probably needs to have FontItalic extended by the two

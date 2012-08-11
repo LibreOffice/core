@@ -23,21 +23,17 @@
 #include <com/sun/star/beans/PropertyValue.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module frame {
 
-//=============================================================================
 /** @deprecated
  */
 published interface XBrowseHistoryRegistry: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** @deprecated
     */
     [oneway] void updateViewData( [in] any Value );
 
-    //-------------------------------------------------------------------------
     /** @deprecated
     */
     [oneway] void createNewEntry(
@@ -46,7 +42,6 @@ published interface XBrowseHistoryRegistry: com::sun::star::uno::XInterface
         [in] string Title);
 };
 
-//=============================================================================
 
 }; }; }; };
 

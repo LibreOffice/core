@@ -20,11 +20,9 @@
 #ifndef __com_sun_star_awt_ImageScaleMode_idl__
 #define __com_sun_star_awt_ImageScaleMode_idl__
 
-//=============================================================================
 
 module com { module sun { module star { module awt {
 
-//=============================================================================
 
 /** defines modes how an image displayed in a given area should be scaled to fit this area
  */
@@ -46,11 +44,9 @@ constants ImageScaleMode
     const short Anisotropic = 2;
 };
 
-//=============================================================================
 
 }; }; }; };
 
-//=============================================================================
 
 #endif
 

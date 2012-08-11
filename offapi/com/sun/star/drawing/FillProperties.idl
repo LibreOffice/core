@@ -37,28 +37,23 @@
 #include <com/sun/star/drawing/RectanglePoint.idl>
 
 
-//=============================================================================
 
 module com { module sun { module star { module drawing {
 
-//=============================================================================
 
 /** This is a set of properties to describe the style for rendering an area.
  */
 published service FillProperties
 {
-    //-------------------------------------------------------------------------
     /** This enumeration selects the style the area will be filled with.
     */
     [property] FillStyle FillStyle;
 
-    //-------------------------------------------------------------------------
     /** If the property <member>FillStyle</member> is set to <const>
         FillStyle::SOLID</const>, this is the color used.
     */
     [property] com::sun::star::util::Color FillColor;
 
-    //-------------------------------------------------------------------------
     /** This is the transparence of the filled area.
 
         <p>This property is only valid if the property <member>FillStyle
@@ -66,7 +61,6 @@ published service FillProperties
     */
     [property] short FillTransparence;
 
-    //-------------------------------------------------------------------------
     /** If a gradient is used for transparency, this is the name of the
         used transparence gradient style or it is empty. If you set the name
         of a transparence gradient style contained in the document, this
@@ -75,95 +69,80 @@ published service FillProperties
     [property] string FillTransparenceGradientName;
 
 
-    //-------------------------------------------------------------------------
     /** This describes the transparency of the fill area as a gradient.
     */
     [optional, property] com::sun::star::awt::Gradient FillTransparenceGradient;
 
-    //-------------------------------------------------------------------------
     /** If the property <member>FillStyle</member> is set to <const>
         FillStyle::GRADIENT</const>, this is the name of the used fill
         gradient style.
     */
     [property] string FillGradientName;
 
-    //-------------------------------------------------------------------------
     /** If the property <member>FillStyle</member> is set to <const>
         FillStyle::GRADIENT</const>, this describes the gradient used.
     */
     [optional, property] com::sun::star::awt::Gradient FillGradient;
 
-    //-------------------------------------------------------------------------
     /** If the property <member>FillStyle</member> is set to <const>
         FillStyle::HATCH</const>, this is the name of the used fill hatch
         style.
     */
     [property] string FillHatchName;
 
-    //-------------------------------------------------------------------------
     /** If the property <member>FillStyle</member> is set to <const>
         FillStyle::HATCH</const>, this describes the hatch used.
     */
     [optional, property] Hatch FillHatch;
 
-    //-------------------------------------------------------------------------
     /** if this is <TRUE/>, the transparent background of a
         hatch filled area is drawn in the current background color.
     */
     [property] boolean FillBackground;
 
-    //-------------------------------------------------------------------------
     /** If the property <member>FillStyle</member> is set to <const>
         FillStyle::BITMAP</const>, this is the name of the used fill bitmap
         style.
     */
     [property] string FillBitmapName;
 
-    //-------------------------------------------------------------------------
     /** If the property <member>FillStyle</member> is set to <const>
         FillStyle::BITMAP</const>, this is the bitmap used.
     */
     [optional, property] com::sun::star::awt::XBitmap FillBitmap;
 
-    //-------------------------------------------------------------------------
     /** If the property <member>FillStyle</member> is set to <const>
         FillStyle::BITMAP</const>, this is a URL to the bitmap used.
     */
     [optional, property] string FillBitmapURL;
 
-    //-------------------------------------------------------------------------
     /** This is the horizontal offset where the tile starts.
 
         <p>It is given in percent in relation to the width of the bitmap.</p>
     */
     [property] short FillBitmapPositionOffsetX;
 
-    //-------------------------------------------------------------------------
     /** This is the vertical offset where the tile starts.
 
         <p>It is given in percent in relation to the height of the bitmap.</p>
     */
     [property] short FillBitmapPositionOffsetY;
 
-    //-------------------------------------------------------------------------
     /** Every second line of tiles is moved the given percent of the
         width of the bitmap.
     */
     [property] short FillBitmapOffsetX;
 
-    //-------------------------------------------------------------------------
     /** Every second row of tiles is moved the given percent of the
         height of the bitmap.
     */
     [property] short FillBitmapOffsetY;
 
-    //-------------------------------------------------------------------------
     /** The RectanglePoint specifies the position inside of the bitmap to
         use as the top left position for rendering.
     */
     [property] RectanglePoint FillBitmapRectanglePoint;
 
-    //-------------------------------------------------------------------------
     /** specifies if the size is given in percentage or as an absolute value.
 
         <p>If this is <TRUE/>, the properties <member>FillBitmapSizeX</member>
@@ -173,7 +152,6 @@ published service FillProperties
     */
     [property] boolean FillBitmapLogicalSize;
 
-    //-------------------------------------------------------------------------
     /** This is the width of the tile for filling.
 
         <p>Depending on the property <member>FillBitmapLogicalSize</member>,
@@ -181,7 +159,6 @@ published service FillProperties
     */
     [property] long FillBitmapSizeX;
 
-    //-------------------------------------------------------------------------
     /** This is the height of the tile for filling.
 
         <p>Depending on the property <member>FillBitmapLogicalSize</member>,
@@ -189,7 +166,6 @@ published service FillProperties
     */
     [property] long FillBitmapSizeY;
 
-    //-------------------------------------------------------------------------
     /** this enum selects how a area is filled with a single bitmap.
 
         <p>This property corresponds to the properties <member>
@@ -208,7 +184,6 @@ published service FillProperties
     */
     [property] BitmapMode FillBitmapMode;
 
-    //-------------------------------------------------------------------------
     /** if set, the fill bitmap is stretched to fill the area of the shape.
 
         <p>This property should not be used anymore and is included here for
@@ -226,7 +201,6 @@ published service FillProperties
      */
     [optional, property] boolean FillBitmapStretch;
 
-    //-------------------------------------------------------------------------
     /** if set, the fill bitmap is repeated to fill the area of the shape.
 
         <p>This property should not be used anymore and is included here for
@@ -244,10 +218,8 @@ published service FillProperties
      */
     [optional, property] boolean FillBitmapTile;
 
-    //-------------------------------------------------------------------------
 };
 
-//=============================================================================
 
 }; }; }; };
 

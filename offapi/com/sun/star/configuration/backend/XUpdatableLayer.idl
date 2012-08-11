@@ -25,11 +25,9 @@
 #include <com/sun/star/lang/WrappedTargetException.idl>
 #include <com/sun/star/configuration/backend/MalformedDataException.idl>
 
-//==============================================================================
 
 module com { module sun { module star { module configuration { module backend {
 
-//==============================================================================
 
 /**
   Provides access to a read-write layer of configuration data for
@@ -39,7 +37,6 @@ module com { module sun { module star { module configuration { module backend {
   */
 published interface XUpdatableLayer : XLayer
 {
-    //--------------------------------------------------------------------------
 
     /**
        Replaces the current layer with the layer given as input
@@ -66,7 +63,6 @@ published interface XUpdatableLayer : XLayer
                 com::sun::star::lang::WrappedTargetException,
                 MalformedDataException) ;
 
-    //--------------------------------------------------------------------------
 } ;
 
 } ; } ; } ; } ; } ;

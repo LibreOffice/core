@@ -32,11 +32,9 @@
 
 #include <com/sun/star/mozilla/XMozillaBootstrap.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module mozilla {
 
-//=============================================================================
 
 
 /** Allow to discover Mozilla/Thunderbird profiles
@@ -46,7 +44,6 @@
  */
 published service MozillaBootstrap : XMozillaBootstrap;
 
-//=============================================================================
 
 }; }; }; };
 

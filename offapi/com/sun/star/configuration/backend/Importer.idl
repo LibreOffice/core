@@ -22,11 +22,9 @@
 #include <com/sun/star/lang/XInitialization.idl>
 #include <com/sun/star/configuration/backend/XLayerImporter.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module configuration { module backend {
 
-//=============================================================================
 
 /**
     imports data into a configuration layer.
@@ -39,13 +37,11 @@ module com { module sun { module star { module configuration { module backend {
 */
 published service Importer
 {
-    //-------------------------------------------------------------------------
 
     /** allows importing configuration data into a backend.
       */
     interface XLayerImporter ;
 
-    //-------------------------------------------------------------------------
 
     /** allows initializing the implementation with settings that control
         its behavior .
@@ -64,10 +60,8 @@ published service Importer
     */
     [optional] interface com::sun::star::lang::XInitialization ;
 
-    //-------------------------------------------------------------------------
 } ;
 
-//=============================================================================
 
 } ; } ; } ; } ; } ;
 

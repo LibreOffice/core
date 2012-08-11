@@ -23,11 +23,9 @@
 #include <com/sun/star/awt/UnoControlComboBox.idl>
 #include <com/sun/star/form/XBoundControl.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module form {  module control {
 
-//=============================================================================
 
 /** describes a combo box control.
 
@@ -44,7 +42,6 @@ published service ComboBox
     interface com::sun::star::form::XBoundControl;
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

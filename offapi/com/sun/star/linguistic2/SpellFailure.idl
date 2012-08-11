@@ -29,11 +29,9 @@
 #define __com_sun_star_linguistic2_SpellFailure_idl__
 
 
-//=============================================================================
 
 module com { module sun { module star { module linguistic2 {
 
-//=============================================================================
 /** these define the various return types for spell checking to fail verification.
 
     <P>A value of this type is part of the
@@ -45,24 +43,20 @@ module com { module sun { module star { module linguistic2 {
 */
 published constants SpellFailure
 {
-    //-------------------------------------------------------------------------
     /** The word is a negative one, that is, it should not be used.
     */
     const short IS_NEGATIVE_WORD = 2;
 
-    //-------------------------------------------------------------------------
     /** The capitalization of the word is wrong.
     */
     const short CAPTION_ERROR = 3;
 
-    //-------------------------------------------------------------------------
     /** The spelling of the word is wrong (or at least not known to be correct).
     */
     const short SPELLING_ERROR = 4;
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

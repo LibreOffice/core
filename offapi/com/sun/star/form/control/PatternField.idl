@@ -23,11 +23,9 @@
 #include <com/sun/star/awt/UnoControlPatternField.idl>
 #include <com/sun/star/form/XBoundControl.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module form {  module control {
 
-//=============================================================================
 
 /** describes a control for inputting text complying to a given pattern,
     and which can (but not necessarily has to) be bound to a database field.
@@ -45,7 +43,6 @@ published service PatternField
     interface com::sun::star::form::XBoundControl;
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

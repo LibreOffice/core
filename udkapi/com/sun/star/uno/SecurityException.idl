@@ -22,11 +22,9 @@
 #include <com/sun/star/uno/RuntimeException.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module uno {
 
-//=============================================================================
 
 /** Base exception for all security related exceptions.
 */
@@ -34,7 +32,6 @@ published exception SecurityException : com::sun::star::uno::RuntimeException
 {
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -33,11 +33,9 @@
 #include <com/sun/star/beans/PropertyValues.idl>
 #include <com/sun/star/lang/Locale.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module text { module fieldmaster {
 
-//=============================================================================
 /** specifies service of a Bibliography field master.
     @see com::sun::star::text::TextField
 */
@@ -45,26 +43,21 @@ published service Bibliography
 {
     service  com::sun::star::text::TextFieldMaster;
 
-    //------------------------------------------------------------------------
     /** determines whether the bibliography text fields are numbered. If <FALSE/> the
      short name of the bibliography entry is displayed instead.
      */
     [property] boolean IsNumberEntries;
-    //------------------------------------------------------------------------
     /** determines whether the bibliography entries in a bibliography index are sorted
      by the document position. If <FALSE/> the SortKey property determines the
      sorting of the entries.
      */
     [property] boolean IsSortByPosition;
-    //------------------------------------------------------------------------
     /** determines the opening bracket used to display the bibliography text fields.
      */
     [property] string BracketBefore;
-    //------------------------------------------------------------------------
     /** determines the closing bracket used to display the bibliography text fields.
      */
     [property] string BracketAfter;
-    //------------------------------------------------------------------------
     /** determines the sorting of the bibliography entries in a bibliography index.
         This property is used if the property IsSortByPosition is not set.
         Each contained element of the sequence is a sequence of the following
@@ -82,18 +75,15 @@ published service Bibliography
         </UL>
      */
     [property] sequence< com::sun::star::beans::PropertyValues >  SortKeys;
-    //------------------------------------------------------------------------
     /** contains the locale of the field master
      */
     [property] com::sun::star::lang::Locale  Locale;
-    //------------------------------------------------------------------------
     /** contains the name of the sort algorithm that is used to sort the text fields.
      */
     [property] string SortAlgorithm;
 
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

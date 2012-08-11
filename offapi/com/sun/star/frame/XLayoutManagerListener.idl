@@ -30,11 +30,9 @@
 
 #include <com/sun/star/lang/XEventListener.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module frame {
 
-//=============================================================================
 /** makes it possible to receive events from a layout manager.
 
     <p>Events are provided <strong>only</strong> for notification
@@ -50,7 +48,6 @@ module com {  module sun {  module star {  module frame {
  */
 interface XLayoutManagerListener : com::sun::star::lang::XEventListener
 {
-    //=============================================================================
     /** is invoked when a layout manager has made a certain operation.
 
         @param aSource

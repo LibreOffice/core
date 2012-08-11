@@ -24,17 +24,14 @@
 #include <com/sun/star/beans/PropertyChangeEvent.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module beans {
 
-//=============================================================================
 
 /** receives events which get fired whenever a bound property is changed.
  */
 published interface XPropertiesChangeListener: com::sun::star::lang::XEventListener
 {
-    //-------------------------------------------------------------------------
 
     /** gets called when bound properties are changed.
 
@@ -47,7 +44,6 @@ published interface XPropertiesChangeListener: com::sun::star::lang::XEventListe
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -26,11 +26,9 @@
 #include <com/sun/star/awt/SimpleFontMetric.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module awt {
 
-//=============================================================================
 
 /** describes a font on a specific device.
 
@@ -38,7 +36,6 @@
  */
 published interface XFont: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** returns the description of the font.
 
@@ -46,13 +43,11 @@ published interface XFont: com::sun::star::uno::XInterface
      */
     com::sun::star::awt::FontDescriptor getFontDescriptor();
 
-    //-------------------------------------------------------------------------
 
     /** returns additional information about the font.
      */
     com::sun::star::awt::SimpleFontMetric getFontMetric();
 
-    //-------------------------------------------------------------------------
 
     /** returns the width of the specified character.
 
@@ -61,7 +56,6 @@ published interface XFont: com::sun::star::uno::XInterface
      */
     short getCharWidth( [in] char c );
 
-    //-------------------------------------------------------------------------
 
     /** returns the widths of the specified characters.
 
@@ -70,7 +64,6 @@ published interface XFont: com::sun::star::uno::XInterface
      */
     sequence<short> getCharWidths( [in] char nFirst, [in] char nLast );
 
-    //-------------------------------------------------------------------------
 
     /** returns the string width.
 
@@ -80,7 +73,6 @@ published interface XFont: com::sun::star::uno::XInterface
      */
     long getStringWidth( [in] string str );
 
-    //-------------------------------------------------------------------------
 
     /** returns the string and the character widths.
 
@@ -95,7 +87,6 @@ published interface XFont: com::sun::star::uno::XInterface
     long getStringWidthArray( [in] string str,
              [out] sequence<long> aDXArray );
 
-    //-------------------------------------------------------------------------
 
     /** queries the kerning pair table.
      */
@@ -105,7 +96,6 @@ published interface XFont: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -34,18 +34,15 @@
 #include <com/sun/star/container/NoSuchElementException.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module text {
 
-//=============================================================================
 
 // DocMerge from xml: interface com::sun::star::text::XAutoTextGroup
 /** The interface provide methods to insert, rename and delete autotext entries from the current autotext group.
  */
 published interface XAutoTextGroup: com::sun::star::container::XNameAccess
 {
-    //-------------------------------------------------------------------------
 
     // DocMerge from idl: method com::sun::star::text::XAutoTextGroup::getTitles
     /** returns the titles of all autotext entries. The order of the entries
@@ -53,7 +50,6 @@ published interface XAutoTextGroup: com::sun::star::container::XNameAccess
      */
     sequence<string> getTitles();
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::text::XAutoTextGroup::renameByName
     /** renames an entry in the autotext group.
@@ -71,7 +67,6 @@ published interface XAutoTextGroup: com::sun::star::container::XNameAccess
                     com::sun::star::container::ElementExistException,
                     com::sun::star::io::IOException );
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::text::XAutoTextGroup::insertNewByName
     /** creates a new <type>AutoTextEntry</type> entry.
@@ -81,7 +76,6 @@ published interface XAutoTextGroup: com::sun::star::container::XNameAccess
              [in] com::sun::star::text::XTextRange xTextRange )
             raises( com::sun::star::container::ElementExistException );
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::text::XAutoTextGroup::removeByName
     /** removes the specified autotext entry.
@@ -91,7 +85,6 @@ published interface XAutoTextGroup: com::sun::star::container::XNameAccess
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

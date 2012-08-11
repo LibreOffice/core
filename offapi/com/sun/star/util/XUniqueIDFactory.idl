@@ -21,7 +21,6 @@
 
 #include <com/sun/star/uno/XInterface.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module util {
 
@@ -34,7 +33,6 @@ published interface XUniqueIDFactory: com::sun::star::uno::XInterface
     string createUniqueID( );
 };
 
-//=============================================================================
 
 }; }; }; };
 

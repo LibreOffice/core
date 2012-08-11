@@ -23,11 +23,9 @@
 #include <com/sun/star/sheet/RangeSelectionEvent.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** allows notification when the selected range is changed.
 
@@ -41,7 +39,6 @@ published interface XRangeSelectionChangeListener: com::sun::star::lang::XEventL
     void descriptorChanged( [in] com::sun::star::sheet::RangeSelectionEvent aEvent );
 };
 
-//=============================================================================
 
 }; }; }; };
 

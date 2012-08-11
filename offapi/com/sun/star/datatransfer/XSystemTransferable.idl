@@ -22,18 +22,15 @@
 
 #include <com/sun/star/uno/XInterface.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module datatransfer {
 
-//=============================================================================
 /** Interface to be implemented by  objects used to provide system dependent data
     for a transfer operation. Those objects usually also implement <type>XTransferable</type>.
 */
 
 published interface XSystemTransferable: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** Called by a data consumer to obtain a system specific data object from the
         source.
         The data object is returned in an any. The contained type may differ on

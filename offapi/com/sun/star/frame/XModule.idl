@@ -33,11 +33,9 @@
 #include <com/sun/star/lang/IllegalArgumentException.idl>
 #include <com/sun/star/frame/UnknownModuleException.idl>
 
-//===============================================
 
 module com { module sun { module star { module frame {
 
-//===============================================
 /** can be used to overrule identification of office modules.
 
     <p>
@@ -55,13 +53,11 @@ module com { module sun { module star { module frame {
  */
 interface XModule : com::sun::star::uno::XInterface
 {
-    //-------------------------------------------
     /** @param  Identifier
                 a new "name" for this module.
      */
     void setIdentifier([in] string Identifier);
 
-    //-------------------------------------------
     /** @return the module identifier.
      */
     string getIdentifier();

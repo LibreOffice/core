@@ -33,13 +33,11 @@
 #include <com/sun/star/lang/NoSupportException.idl>
 #include <com/sun/star/lang/NullPointerException.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module form { module validation {
 
 interface XFormComponentValidityListener;
 
-//=============================================================================
 
 /** is a convenience interface for accessing several aspects of a form component
     which supports validation.
@@ -112,7 +110,6 @@ interface XValidatableFormComponent : XValidatable
                 raises( com::sun::star::lang::NullPointerException );
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

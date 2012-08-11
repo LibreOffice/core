@@ -31,18 +31,15 @@
 #include <com/sun/star/embed/XEncryptionProtectedSource.idl>
 #include <com/sun/star/beans/NamedValue.idl>
 
-//============================================================================
 
 module com {  module sun {  module star {  module embed {
 
-//============================================================================
 /** This interface allows to set a password for an object.
 
     @since OOo 3.4
  */
 interface XEncryptionProtectedSource2: XEncryptionProtectedSource
 {
-    // -----------------------------------------------------------------------
     /** sets an encryption data for the object.
 
         @param aEncryptionData
@@ -54,7 +51,6 @@ interface XEncryptionProtectedSource2: XEncryptionProtectedSource
     void setEncryptionData( [in] sequence< ::com::sun::star::beans::NamedValue > aEncryptionData )
         raises( ::com::sun::star::io::IOException );
 
-    // -----------------------------------------------------------------------
     /** determine if an encryption data is set for this object.
 
         @return
@@ -63,7 +59,6 @@ interface XEncryptionProtectedSource2: XEncryptionProtectedSource
     boolean hasEncryptionData();
 };
 
-//============================================================================
 
 }; }; }; };
 

@@ -34,11 +34,9 @@
 #include <com/sun/star/document/XLinkTargetSupplier.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module presentation {
 
-//=============================================================================
 
 /** This is the service provided by a presentation document.
  */
@@ -88,7 +86,6 @@ service PresentationDocument
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -22,27 +22,22 @@
 #include <com/sun/star/uno/XInterface.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module frame {
 
-//=============================================================================
 /** @deprecated
  */
 published interface XWindowArranger: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** @deprecated
      */
     boolean hasArrangeCommand( [in] short nCommand );
 
-    //-------------------------------------------------------------------------
     /** @deprecated
      */
     [oneway] void arrange( [in] short nCommand );
 };
 
-//=============================================================================
 
 }; }; }; };
 

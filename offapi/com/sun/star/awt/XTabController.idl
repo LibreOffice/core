@@ -28,66 +28,55 @@
 #include <com/sun/star/awt/XControl.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module awt {
 
-//=============================================================================
 
 /** specifies the basic operations for a tab controller.
  */
 published interface XTabController: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** sets the tab controller model.
      */
     [oneway] void setModel( [in] com::sun::star::awt::XTabControllerModel Model );
 
-    //-------------------------------------------------------------------------
 
     /** returns the tab controller model.
      */
     com::sun::star::awt::XTabControllerModel getModel();
 
-    //-------------------------------------------------------------------------
 
     /** set the control container.
      */
     [oneway] void setContainer( [in] com::sun::star::awt::XControlContainer Container );
 
-    //-------------------------------------------------------------------------
 
     /** returns the control container.
      */
     com::sun::star::awt::XControlContainer getContainer();
 
-    //-------------------------------------------------------------------------
 
     /** returns all controls of the control container.
      */
     sequence<com::sun::star::awt::XControl> getControls();
 
-    //-------------------------------------------------------------------------
 
     /** enables automatic tab order.
      */
     [oneway] void autoTabOrder();
 
-    //-------------------------------------------------------------------------
 
     /** activates tab order.
      */
     [oneway] void activateTabOrder();
 
-    //-------------------------------------------------------------------------
 
     /** sets the focus to the first control that can be reached with the
         TAB key.
      */
     [oneway] void activateFirst();
 
-    //-------------------------------------------------------------------------
 
     /** sets the focus to the last control that can be reached with the
         TAB key.
@@ -96,7 +85,6 @@ published interface XTabController: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

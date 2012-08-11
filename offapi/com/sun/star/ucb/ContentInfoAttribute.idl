@@ -20,41 +20,34 @@
 #define __com_sun_star_ucb_ContentInfoAttribute_idl__
 
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** These are the possible values for <member>ContentInfo::Attributes</member>.
 */
 published constants ContentInfoAttribute
 {
-    //-------------------------------------------------------------------------
     /** No extra attributes.
     */
     const short NONE = 0;
 
-    //-------------------------------------------------------------------------
     /** Supply an input stream with the <type>InsertCommandArgument</type>,
         when committing the new content by executing the command "insert" at it.
     */
     const short INSERT_WITH_INPUTSTREAM = 1;
 
-    //-------------------------------------------------------------------------
     /** The new content is of kind document.
 
         <p>It's value for the property "IsDocument" will be true.
     */
     const short KIND_DOCUMENT = 2;
 
-    //-------------------------------------------------------------------------
     /** The new content is of kind folder.
 
         <p>It's value for the property "IsFolder" will be true.
     */
     const short KIND_FOLDER = 4;
 
-    //-------------------------------------------------------------------------
     /** The new content is of kind link.
 
         <p>It will support the property "TargetURL" ( which identifies it as
@@ -63,7 +56,6 @@ published constants ContentInfoAttribute
     const short KIND_LINK = 8;
 };
 
-//=============================================================================
 
 }; }; }; };
 

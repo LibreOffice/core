@@ -23,11 +23,9 @@
 #include <com/sun/star/resource/XStringResourceResolver.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module resource {
 
-//=============================================================================
 
 /**
     Provides access to a string resource represented by a
@@ -35,7 +33,6 @@ module com {  module sun {  module star {  module resource {
  */
 interface XStringResourceSupplier: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /**
         Provides access to a string resource.
@@ -50,7 +47,6 @@ interface XStringResourceSupplier: com::sun::star::uno::XInterface
     com::sun::star::resource::XStringResourceResolver getStringResource();
 };
 
-//=============================================================================
 
 }; }; }; };
 

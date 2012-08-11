@@ -33,11 +33,9 @@
 #include <com/sun/star/beans/XPropertyState.idl>
 #include <com/sun/star/beans/XMultiPropertyStates.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module configuration {
 
-//=============================================================================
 /** provides access to a predefined heterogeneous group of values and nested
  trees as part of a hierarchy.
 
@@ -125,7 +123,6 @@ published service GroupAccess
     [optional] interface com::sun::star::beans::XMultiPropertyStates;
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -21,11 +21,9 @@
 
 #include <com/sun/star/uno/Exception.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module configuration {
 
-//=============================================================================
 
 /** is thrown when an application tries to create a configuration provider
     but the configuration can't be loaded
@@ -34,7 +32,6 @@ published exception CannotLoadConfigurationException: com::sun::star::uno::Excep
 {
 };
 
-//=============================================================================
 
 }; }; }; };
 

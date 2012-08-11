@@ -23,11 +23,9 @@
 #include <com/sun/star/util/Color.idl>
 #include <com/sun/star/document/Settings.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** describes properties that apply to the whole spreadsheet document.
 
@@ -40,12 +38,10 @@ published service DocumentSettings
 {
     service com::sun::star::document::Settings;
 
-    //-------------------------------------------------------------------------
     /** provides access to the properties.
      */
     interface com::sun::star::beans::XPropertySet;
 
-    //-------------------------------------------------------------------------
 
     /** enables display of zero-values.
      */
@@ -114,7 +110,6 @@ published service DocumentSettings
     [optional, property] boolean IsRasterAxisSynchronized;
 };
 
-//=============================================================================
 
 }; }; }; };
 

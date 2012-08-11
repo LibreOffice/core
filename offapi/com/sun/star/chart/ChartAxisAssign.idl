@@ -20,23 +20,19 @@
 #define __com_sun_star_chart_ChartAxisAssign_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module chart {
 
-//=============================================================================
 
 /** These values specify to which y-axis a data row is assigned.
  */
 published constants ChartAxisAssign
 {
-    //-------------------------------------------------------------------------
 
     /** Assign row to primary <i>y</i>-axis
      */
     const long PRIMARY_Y = 2;
 
-    //-------------------------------------------------------------------------
 
     /** Assign row to secondary <i>y</i>-axis
      */
@@ -44,7 +40,6 @@ published constants ChartAxisAssign
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

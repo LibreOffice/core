@@ -22,11 +22,9 @@
 #include <com/sun/star/container/XIndexContainer.idl>
 
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** specifies a container for (binary) data.
 
     <p>A data container may contain data and/or other data containers.
@@ -40,7 +38,6 @@ module com { module sun { module star { module ucb {
 */
 published interface XDataContainer: com::sun::star::container::XIndexContainer
 {
-    //-------------------------------------------------------------------------
     /** returns the content type (MIME Type) of the data container.
 
         @returns
@@ -48,7 +45,6 @@ published interface XDataContainer: com::sun::star::container::XIndexContainer
     */
     string getContentType();
 
-    //-------------------------------------------------------------------------
     /** sets the content type (MIME Type) of the data container.
 
         @param aType
@@ -56,7 +52,6 @@ published interface XDataContainer: com::sun::star::container::XIndexContainer
     */
     void setContentType( [in] string aType );
 
-    //-------------------------------------------------------------------------
     /** returns the data of the data container.
 
         @returns
@@ -64,7 +59,6 @@ published interface XDataContainer: com::sun::star::container::XIndexContainer
     */
     sequence<byte> getData();
 
-    //-------------------------------------------------------------------------
     /** sets the data of the data container.
 
         @param aData
@@ -72,14 +66,12 @@ published interface XDataContainer: com::sun::star::container::XIndexContainer
     */
     void setData( [in] sequence<byte> aData );
 
-    //-------------------------------------------------------------------------
     /** Deprecated. Do not use!
 
         @deprecated
     */
     string getDataURL();
 
-    //-------------------------------------------------------------------------
     /** Deprecated. Do not use!
 
         @deprecated
@@ -87,7 +79,6 @@ published interface XDataContainer: com::sun::star::container::XIndexContainer
     void setDataURL( [in] string aURL );
 };
 
-//=============================================================================
 
 }; }; }; };
 

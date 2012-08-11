@@ -26,7 +26,6 @@
 #include <com/sun/star/lang/WrappedTargetException.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module container {
 
@@ -42,7 +41,6 @@ published interface XImplicitIDReplace: com::sun::star::uno::XInterface
         raises( com::sun::star::container::NoSuchElementException );
 };
 
-//=============================================================================
 
 }; }; }; };
 

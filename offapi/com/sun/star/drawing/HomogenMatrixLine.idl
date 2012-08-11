@@ -20,11 +20,9 @@
 #define __com_sun_star_drawing_HomogenMatrixLine_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module drawing {
 
-//=============================================================================
 
 // DocMerge from xml: struct com::sun::star::drawing::HomogenMatrixLine
 /** specifies a single line for a <type>HomogenMatrix</type>.
@@ -34,19 +32,16 @@ published struct HomogenMatrixLine
     // DocMerge: empty anyway
     double Column1;
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR HomogenMatrixLine::Column2
 
     // DocMerge: empty anyway
     double Column2;
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR HomogenMatrixLine::Column3
 
     // DocMerge: empty anyway
     double Column3;
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR HomogenMatrixLine::Column4
 
     // DocMerge: empty anyway
@@ -54,7 +49,6 @@ published struct HomogenMatrixLine
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

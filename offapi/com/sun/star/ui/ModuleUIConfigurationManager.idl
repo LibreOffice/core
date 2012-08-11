@@ -97,7 +97,6 @@ service ModuleUIConfigurationManager
     interface com::sun::star::ui::XUIConfiguration;
 };
 
-//=============================================================================
 
 }; }; }; };
 

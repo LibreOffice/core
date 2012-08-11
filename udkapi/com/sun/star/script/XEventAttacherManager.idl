@@ -30,16 +30,13 @@
 #include <com/sun/star/script/XScriptListener.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module script {
 
-//=============================================================================
 /** registers listeners for specified events.
  */
 published interface XEventAttacherManager: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** registers one event for an object identified by its index.
 
         <p>If any object is attached under this index, then this
@@ -54,7 +51,6 @@ published interface XEventAttacherManager: com::sun::star::uno::XInterface
              [in] com::sun::star::script::ScriptEventDescriptor aScriptEvent )
             raises( com::sun::star::lang::IllegalArgumentException );
 
-    //-------------------------------------------------------------------------
     /** registers several events for an object identified by its index.
 
         <p>The result is the same as if the method <member>registerScriptEvent
@@ -77,7 +73,6 @@ published interface XEventAttacherManager: com::sun::star::uno::XInterface
              [in] sequence<com::sun::star::script::ScriptEventDescriptor> aScriptEvents )
             raises( com::sun::star::lang::IllegalArgumentException );
 
-    //-------------------------------------------------------------------------
     /** revokes the registration of an event.
 
         <p>The parameters <var>ListenerType</var> and
@@ -101,7 +96,6 @@ published interface XEventAttacherManager: com::sun::star::uno::XInterface
              [in] string aRemoveListenerParam )
             raises( com::sun::star::lang::IllegalArgumentException );
 
-    //-------------------------------------------------------------------------
     /** revokes all events which are registered for the given index.
 
         <p>If the events at this index have been attached to any
@@ -113,7 +107,6 @@ published interface XEventAttacherManager: com::sun::star::uno::XInterface
     void revokeScriptEvents( [in] long nIndex )
             raises( com::sun::star::lang::IllegalArgumentException );
 
-    //-------------------------------------------------------------------------
     /** creates an empty entry at the given position.
 
         <p>The index <var>n</var> of all entries with <code>n &amp;gt;=
@@ -122,7 +115,6 @@ published interface XEventAttacherManager: com::sun::star::uno::XInterface
     void insertEntry( [in] long nIndex )
             raises( com::sun::star::lang::IllegalArgumentException );
 
-    //-------------------------------------------------------------------------
     /** removes the entry at the given position.
 
         <p>If any events are registered at this index, they will
@@ -135,7 +127,6 @@ published interface XEventAttacherManager: com::sun::star::uno::XInterface
     void removeEntry( [in] long nIndex )
             raises( com::sun::star::lang::IllegalArgumentException );
 
-    //-------------------------------------------------------------------------
     /** @eturns
             all events registered for the given object index.
 
@@ -148,7 +139,6 @@ published interface XEventAttacherManager: com::sun::star::uno::XInterface
     sequence<com::sun::star::script::ScriptEventDescriptor> getScriptEvents( [in] long Index )
             raises( com::sun::star::lang::IllegalArgumentException );
 
-    //-------------------------------------------------------------------------
     /** attaches all the <type>ScriptEvent</type>s which are registered
         for the given index to the given object.
 
@@ -164,7 +154,6 @@ published interface XEventAttacherManager: com::sun::star::uno::XInterface
             raises( com::sun::star::lang::IllegalArgumentException,
                     com::sun::star::lang::ServiceNotRegisteredException );
 
-    //-------------------------------------------------------------------------
     /** detaches all the <type>ScriptEvent</type>s from the given object
         which are registered at this object for the given index.
 
@@ -178,7 +167,6 @@ published interface XEventAttacherManager: com::sun::star::uno::XInterface
              [in] com::sun::star::uno::XInterface xObject )
             raises( com::sun::star::lang::IllegalArgumentException );
 
-    //-------------------------------------------------------------------------
     /** adds an <type>XScriptListener</type> that will be notified when an
         event takes place. For that a
         <type>ScriptEventDescriptor</type> is registered at and
@@ -192,7 +180,6 @@ published interface XEventAttacherManager: com::sun::star::uno::XInterface
     void addScriptListener( [in] com::sun::star::script::XScriptListener xListener )
             raises( com::sun::star::lang::IllegalArgumentException );
 
-    //-------------------------------------------------------------------------
     /** removes a <type>XScriptListener</type> from the listener list.
 
         <p>Nothing happens if the listener is not registered.
@@ -207,7 +194,6 @@ published interface XEventAttacherManager: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

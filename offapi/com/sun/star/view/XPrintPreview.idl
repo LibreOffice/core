@@ -22,11 +22,9 @@
 #include <com/sun/star/uno/XInterface.idl>
 
 
-//=============================================================================
 
 module com { module sun { module star { module view {
 
-//=============================================================================
 /** @deprecated
 */
 published interface XPrintPreview: com::sun::star::uno::XInterface
@@ -40,7 +38,6 @@ published interface XPrintPreview: com::sun::star::uno::XInterface
     [attribute]short ColumnCount;
 };
 
-//=============================================================================
 
 }; }; }; };
 

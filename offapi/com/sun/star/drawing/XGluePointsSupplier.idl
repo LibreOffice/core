@@ -21,17 +21,14 @@
 
 #include <com/sun/star/container/XIndexContainer.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module drawing {
 
-//=============================================================================
 
 /** must be supported to provide access to a container of <type>GluePoint2</type>.
  */
 published interface XGluePointsSupplier: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /**
         @return
@@ -41,7 +38,6 @@ published interface XGluePointsSupplier: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

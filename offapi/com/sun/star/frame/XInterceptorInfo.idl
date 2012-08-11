@@ -30,11 +30,9 @@
 
 #include <com/sun/star/uno/XInterface.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module frame {
 
-//=============================================================================
 
 /** makes it possible to get information about a registered interceptor and is used by
     frame interceptor mechanism to perform interception.
@@ -51,7 +49,6 @@
  */
 published interface XInterceptorInfo: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** returns the URL list for interception.
 
         <p>
@@ -65,7 +62,6 @@ published interface XInterceptorInfo: com::sun::star::uno::XInterface
     sequence< string > getInterceptedURLs();
 };
 
-//=============================================================================
 
 }; }; }; };
 

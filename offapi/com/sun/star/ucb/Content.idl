@@ -41,18 +41,15 @@
 #include <com/sun/star/ucb/XContentCreator.idl>
 #include <com/sun/star/container/XChild.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** A <type>Content</type> is a service that provides access to data of a
     content provided by an implementation of the service
     <type>ContentProvider</type>.
 */
 published service Content
 {
-    //-------------------------------------------------------------------------
     /** provides access to the identity and the type of the content and
         allows the registration of listeners for <type>ContentEvent</type>s.
 
@@ -60,7 +57,6 @@ published service Content
      */
     interface com::sun::star::ucb::XContent;
 
-    //-------------------------------------------------------------------------
     /** must be implemented to make it possible to resolve cyclic object
         references.
 
@@ -79,7 +75,6 @@ published service Content
      */
     interface com::sun::star::lang::XComponent;
 
-    //-------------------------------------------------------------------------
     /** enables the caller to let the content execute commands.
 
         <p>It is strongly recommended that any implementation supports the
@@ -138,9 +133,7 @@ published service Content
         // <type scope="com::sun::star::beans">PropertyValue</type> passed as
         // command argument and so on. The exceptions will never be passed to
         // an Interaction Handler.
-        //
         // An any containing:
-        //
         // - No value indicates, that the property value was set successfully.
         // - <type scope="com::sun::star::beans">UnknownPropertyException</type>
         //   indicates, that the property is not known to the content
@@ -159,7 +152,6 @@ published service Content
         //   indicates, that the value was not set successfully. For example,
         //   this can be a <type>InteractiveAugmentedIOException</type>
         //   transporting the error code <member>IOErrorCode::ACCESS_DENIED</member>.
-        //
         // If the value to set is equal to the current value, no exception must
         // be added to the returned sequence
         sequence&lt; any &gt;
@@ -172,9 +164,7 @@ published service Content
 
         // For folder objects, this command will return an implementation
         // of service <type>DynamicResultSet</type>.
-        //
         // The <type>OpenCommandArgument2</type> members must be filled as follows:
-        //
         // Mode         : ALL or FOLDERS or DOCUMENTS. The implementation
         //                of the open command MUST support all these modes!
         // Priority     : can be set, but implementation may ignore the value
@@ -186,7 +176,6 @@ published service Content
         //                number one, second will be row number two, ...
         // SortingInfo      : contains sort criteria, if result set shall
         //                be sorted, otherwise it can be left empty.
-        //
         // The execution must be aborted by the implementation of this command
         // (by throwing a <type>CommandAbortedException</type>), if an
         // unsupported mode is requested.
@@ -197,9 +186,7 @@ published service Content
         // For non-folder objects, the <type>OpenCommandArgument2</type> struct
         // will be prefilled with a data sink object, which will be filled
         // with the content data.
-        //
         // The <type>OpenCommandArgument2</type> members must be filled as follows:
-        //
         // Mode         : DOCUMENT or DOCUMENT_SHARE_DENY_NONE or
         //                DOCUMENT_SHARE_DENY_WRITE. Support for DOCUMENT
         //                is mandatory, all others are optional.
@@ -208,7 +195,6 @@ published service Content
         //                document data into.
         // Properties   : empty ( ignored )
         // SortingInfo      : empty ( ignored )
-        //
         // The execution must be aborted by the implementation of this command
         // (by throwing a <type>CommandAbortedException</type>), if an
         // unsupported mode is requested.
@@ -276,7 +262,6 @@ published service Content
         // On successful completion of this command, the parent of the inserted
         // content must propagate the change by notifying a
         // <type>ContentEvent</type> - <member>ContentAction::INSERTED</member>.
-        //
         // (2) Additionally this command can be called at any time to overwrite
         // the data of an existing content.
         void
@@ -295,7 +280,6 @@ published service Content
         // "globalTransfer" at the <type>UniversalContentBroker</type>.
         // This command is able to transfer all kind of content
         // supported by that UCB.
-        //
         // This command transfers (copies/moves) an object from one location
         // to another. It must be executed at the folder content representing
         // the destination of the transfer operation. Note that the
@@ -312,9 +296,7 @@ published service Content
         // handle a given source URL, it should indicate this by issuing a
         // <type>InteractiveBadTransferURLException</type> interaction request.
         // Source and target folder may be the same when doing a move operation.
-        //
         // Transfers without the transfer command can be done as follows:
-        //
         // 1) Create a new content at the target folder
         //    --> targetContent = target.execute( "createNewContent", type )
         // 2) Transfer data from source to target content
@@ -325,7 +307,6 @@ published service Content
         //    --> targetContent.execute( "insert", dataStream )
         // 4) For move operations only: destroy the source content
         //    sourceContent.execute( "delete", ... )
-        //
         // This mechanism should work for all transfer operations, but generally
         // it's less efficient than the transfer command.
         void
@@ -354,7 +335,6 @@ published service Content
         // be raised by any command that requires a previously obtained lock.
 
         // This command creates a new non-persistent content of a given type.
-        //
         // <p>Creation of a new (persistent) content:
         // <ol>
         //    <li>creatabletypes = obtain "CreatableContentsInfo" property<br>
@@ -366,11 +346,9 @@ published service Content
         //    <li>execute command "insert" at new content. This command
         //        commits the data and makes the new content persistent.
         // </ol>
-        //
         // This command must be supported by every Content that supports the
         // property "CreatableContentsInfo" if the returned property value
         // contains a non-empty sequence of creatable types.
-        //
         // Note: This command is part of the replacement for the deprecated
         // interface <type>XContentCreator</type>.
         <type>XContent</type> >
@@ -598,10 +576,8 @@ published service Content
 
         // contains the types of Contents a Content object can create via
         // command "createNewContent".
-        //
         // If the property value can be a non-empty sequence, the Content must
         // also support command "createNewContent".
-        //
         // Note: This property is part of the replacement for the deprecated
         // interface <type>XContentCreator</type>.
         sequence <type>ContentInfo</type> CreatableContentsInfo
@@ -610,7 +586,6 @@ published service Content
      */
     interface com::sun::star::ucb::XCommandProcessor;
 
-    //-------------------------------------------------------------------------
     /** is an enhanced version of <type>XCommandProcessor</type> that has an
         additional method for releasing command identifiers obtained via
         <member>XCommandProcessor::createCommandIdentifier</member> to avoid
@@ -622,7 +597,6 @@ published service Content
      */
     [optional] interface com::sun::star::ucb::XCommandProcessor2;
 
-    //-------------------------------------------------------------------------
     /** notifies changes of property values to listeners registered for
         those properties.
 
@@ -630,7 +604,6 @@ published service Content
      */
     interface com::sun::star::beans::XPropertiesChangeNotifier;
 
-    //-------------------------------------------------------------------------
     /** can be used to add new properties to the content and to remove
         properties from the content dynamically.
 
@@ -662,7 +635,6 @@ published service Content
      */
     interface com::sun::star::beans::XPropertyContainer;
 
-    //-------------------------------------------------------------------------
     /** can be used to notify properties removed from or added to the
         content's property set.
 
@@ -673,7 +645,6 @@ published service Content
      */
     [optional] interface com::sun::star::beans::XPropertySetInfoChangeNotifier;
 
-    //-------------------------------------------------------------------------
     /** can be used to notify commands removed from or added to the
         content's command set.
 
@@ -686,7 +657,6 @@ published service Content
      */
     [optional] interface com::sun::star::ucb::XCommandInfoChangeNotifier;
 
-    //-------------------------------------------------------------------------
     /** creates new contents (i.e. creates a new folder in another folder
         somewhere in the local file system).
 
@@ -703,7 +673,6 @@ published service Content
      */
     [optional] interface com::sun::star::ucb::XContentCreator;
 
-    //-------------------------------------------------------------------------
     /** provides access to the parent content of this content.
 
         <p>The object returned by the implementation of the method
@@ -717,7 +686,6 @@ published service Content
     [optional] interface com::sun::star::container::XChild;
 };
 
-//=============================================================================
 
 }; }; }; };
 

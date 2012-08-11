@@ -21,12 +21,10 @@
 #define __com_sun_star_rdf_URIs_idl__
 
 
-//=============================================================================
 
 module com {   module sun {   module star {   module rdf {
 
 
-//=============================================================================
 /** Constants to specify some well-known URIs.
 
     <p>
@@ -318,7 +316,6 @@ constants URIs
 //    const short TEXT_META_FIELD = 3000;
 };
 
-//=============================================================================
 
 }; }; }; };
 

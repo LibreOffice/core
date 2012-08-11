@@ -21,11 +21,9 @@
 
 #include <com/sun/star/uno/XInterface.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module mozilla {
 
-//=============================================================================
 
 // DocMerge from xml: interface com::sun::star::mozilla::XPluginWindowPeer
 /** Allows to notify a plugin from the office side about plugin window's child window creation.
@@ -33,7 +31,6 @@
  */
 published interface XPluginWindowPeer: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
 
     // DocMerge from xml: method com::sun::star::mozilla::XPluginWindowPeer::setChildWindow
@@ -45,7 +42,6 @@ published interface XPluginWindowPeer: com::sun::star::uno::XInterface
     [oneway] void setChildWindow( [in] any SystemWindowData );
 };
 
-//=============================================================================
 
 }; }; }; };
 

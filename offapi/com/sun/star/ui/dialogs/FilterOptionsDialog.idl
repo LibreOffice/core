@@ -22,11 +22,9 @@
 #include <com/sun/star/ui/dialogs/XExecutableDialog.idl>
 #include <com/sun/star/beans/XPropertyAccess.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module ui { module dialogs {
 
-//=============================================================================
 
 /** This service enables a filter developer to register a dialog to query
     for user options before the filter operation is performed.
@@ -50,7 +48,6 @@ module com { module sun { module star { module ui { module dialogs {
  */
 published service FilterOptionsDialog
 {
-    //-------------------------------------------------------------------------
     /** this interface is used to set the property values of the
         <type scope="com::sun::star::document">MediaDescriptor</type> before executing
         the dialog and to retrieve the changed <type scope="com::sun::star::document">MediaDescriptor</type>
@@ -59,7 +56,6 @@ published service FilterOptionsDialog
      */
     interface com::sun::star::beans::XPropertyAccess;
 
-    //-------------------------------------------------------------------------
     /** this interface executes a dialog that displays the options
         for a filter.
         If <method>XExecutableDialog::execute<method>
@@ -69,7 +65,6 @@ published service FilterOptionsDialog
     interface ::com::sun::star::ui::dialogs::XExecutableDialog;
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

@@ -31,11 +31,9 @@
 #include <com/sun/star/lang/DisposedException.idl>
 #endif
 
-//============================================================================
 
  module com {  module sun {  module star {  module xml { module crypto {
 
-//============================================================================
 /** This interface allows to encrypt/decrypt data using the cipher context.
     <p>
     The algorithm as well as encryption data are specified on object creation.
@@ -46,7 +44,6 @@
  */
 interface XCipherContext : com::sun::star::uno::XInterface
 {
-    //------------------------------------------------------------------------
     /** encrypts/decrypts the data using the cipher.
         <p>
         Please have in mind, the cipher object state might depend from the
@@ -66,14 +63,12 @@ interface XCipherContext : com::sun::star::uno::XInterface
         raises( ::com::sun::star::lang::IllegalArgumentException,
                 ::com::sun::star::lang::DisposedException );
 
-    //------------------------------------------------------------------------
     /** finalizes cipher and disposes context.
      */
     sequence<byte> finalizeCipherContextAndDispose()
         raises( ::com::sun::star::lang::DisposedException );
 };
 
-//============================================================================
 
 }; }; }; }; };
 

@@ -23,11 +23,9 @@
 #include <com/sun/star/container/XIndexAccess.idl>
 #include <com/sun/star/frame/XDispatchProvider.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module frame {
 
-//=============================================================================
 
 /** provides functions to set and remove a merged menu bar for inplace
     editing.

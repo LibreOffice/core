@@ -23,11 +23,9 @@
 #include <com/sun/star/awt/XScrollBar.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module awt {
 
-//=============================================================================
 
 /** specifies a scroll bar control.
  */
@@ -39,7 +37,6 @@ published service UnoControlScrollBar
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

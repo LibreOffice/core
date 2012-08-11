@@ -24,48 +24,40 @@
 #include <com/sun/star/awt/XItemListener.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module awt {
 
-//=============================================================================
 
 /** gives access to the state of a check box and makes it possible
     to register for events.
  */
 published interface XCheckBox: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** registers a listener for item events.
      */
     [oneway] void addItemListener( [in] com::sun::star::awt::XItemListener l );
 
-    //-------------------------------------------------------------------------
 
     /** unregisters a listener for item events.
      */
     [oneway] void removeItemListener( [in] com::sun::star::awt::XItemListener l );
 
-    //-------------------------------------------------------------------------
 
     /** returns the state of the check box.
      */
     short getState();
 
-    //-------------------------------------------------------------------------
 
     /** sets the state of the check box.
      */
     [oneway] void setState( [in] short n );
 
-    //-------------------------------------------------------------------------
 
     /** sets the label of the check box.
      */
     [oneway] void setLabel( [in] string Label );
 
-    //-------------------------------------------------------------------------
 
     /** enables or disables the tri state mode.
      */
@@ -73,7 +65,6 @@ published interface XCheckBox: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -33,11 +33,9 @@
 #include <com/sun/star/accessibility/XAccessibleEventBroadcaster.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module text {
 
-//=============================================================================
 
 /** The accessible view of headers and footers.
 
@@ -129,7 +127,6 @@ published service AccessibleHeaderFooterView
     interface ::com::sun::star::accessibility::XAccessibleEventBroadcaster;
 };
 
-//=============================================================================
 
 }; }; }; };
 

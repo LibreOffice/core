@@ -26,11 +26,9 @@
 #include <com/sun/star/form/XFormControllerListener.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module form {
 
-//=============================================================================
 
 /** is superseded by <type scope="com::sun::star::form::runtime">XFormController</type>.
     @deprecated
@@ -43,7 +41,6 @@ published interface XFormController: com::sun::star::awt::XTabController
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

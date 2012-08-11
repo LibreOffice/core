@@ -22,11 +22,9 @@
 
 #include <com/sun/star/text/TextField.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module text { module textfield {
 
-//=============================================================================
 /** specifies service of a text field to combine 1 to 6 characters that are treated
  as one normal character.
     @see com::sun::star::text::TextField
@@ -39,7 +37,6 @@ published service CombinedCharacters
     [property]string Content;
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

@@ -21,11 +21,9 @@
 
 #include <com/sun/star/sdbc/XResultSet.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** This struct is to be contained in the first notification of an
     <type>XDynamicResultSet</type>.
 
@@ -37,19 +35,16 @@ module com { module sun { module star { module ucb {
 
 published struct WelcomeDynamicResultSetStruct
 {
-    //-------------------------------------------------------------------------
     /** The static result set containing the previous version of result set data.
     */
     com::sun::star::sdbc::XResultSet    Old;
 
-    //-------------------------------------------------------------------------
     /** The static result set containing the new version of result set data.
     */
     com::sun::star::sdbc::XResultSet    New;
 };
 
 
-//=============================================================================
 
 }; }; }; };
 

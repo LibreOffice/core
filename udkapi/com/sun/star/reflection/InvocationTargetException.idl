@@ -22,11 +22,9 @@
 #include <com/sun/star/lang/WrappedTargetException.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module reflection {
 
-//=============================================================================
 
 /** This exception denotes a checked exception (wrapping an originating exception)
     and may be thrown upon using invocation API.
@@ -37,7 +35,6 @@ published exception InvocationTargetException: com::sun::star::lang::WrappedTarg
 {
 };
 
-//=============================================================================
 
 }; }; }; };
 

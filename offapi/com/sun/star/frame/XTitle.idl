@@ -31,16 +31,13 @@
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/lang/IllegalArgumentException.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module frame {
 
-//=============================================================================
 /** an interface representing an entity with a modifyable title.
  */
 interface XTitle : com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** Returns the title of the object.
      *
      * @returns
@@ -48,7 +45,6 @@ interface XTitle : com::sun::star::uno::XInterface
      */
     string getTitle ();
 
-    //-------------------------------------------------------------------------
     /** Sets the title of the object.
      *
      * @param sTitle
@@ -57,7 +53,6 @@ interface XTitle : com::sun::star::uno::XInterface
     void setTitle ( [in] string sTitle );
 };
 
-//=============================================================================
 
 }; }; }; };
 

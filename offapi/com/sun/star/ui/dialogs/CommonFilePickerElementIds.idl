@@ -23,47 +23,39 @@
 
 module com { module sun { module star { module ui { module dialogs {
 
-//=============================================================================
 /** These constants are used to specify common controls of a FilePicker dialog.
 
  */
 
 published constants CommonFilePickerElementIds
 {
-    //---------------------------------------------------------------------
     /** The control id of the OK button.
     */
     const short PUSHBUTTON_OK     = 1;
 
-    //---------------------------------------------------------------------
     /** The control id of the Cancel button.
     */
     const short PUSHBUTTON_CANCEL = 2;
 
-    //---------------------------------------------------------------------
     /** The filter listbox of a FilePicker dialog.
     */
     const short LISTBOX_FILTER = 3;
 
-    //---------------------------------------------------------------------
     /** Is used to refer to the file view of the file picker. This view shows the list of
         all files/folders in the currently selected folder.
     */
     const short CONTROL_FILEVIEW = 4;
 
-    //---------------------------------------------------------------------
     /** Is used to refer to the edit line where a file or path can be entered by the user.
     */
     const short EDIT_FILEURL = 5;
 
-    //---------------------------------------------------------------------
     /** The label of the filter listbox of a FilePicker dialog.
 
         @since OOo 1.1.2
     */
     const short LISTBOX_FILTER_LABEL = 6;
 
-    //---------------------------------------------------------------------
     /** The label of the file name listbox of a FilePicker dialog.
 
         @since OOo 1.1.2
@@ -71,7 +63,6 @@ published constants CommonFilePickerElementIds
     const short EDIT_FILEURL_LABEL = 7;
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

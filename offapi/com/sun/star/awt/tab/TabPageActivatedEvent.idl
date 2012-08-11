@@ -30,11 +30,9 @@
 
 #include <com/sun/star/lang/EventObject.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module awt { module tab {
 
-//=============================================================================
 
 /** An event used by a <type>XTabPageContainer</type> to notify changes in tab page activation.
 
@@ -48,7 +46,6 @@ struct TabPageActivatedEvent: com::sun::star::lang::EventObject
 
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

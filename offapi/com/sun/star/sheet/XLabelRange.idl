@@ -23,11 +23,9 @@
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/table/CellRangeAddress.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** provides access to the settings of a label range in a spreadsheet
     document.
@@ -38,26 +36,22 @@ module com {  module sun {  module star {  module sheet {
  */
 published interface XLabelRange: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** returns the cell range address that contains the labels.
      */
     com::sun::star::table::CellRangeAddress getLabelArea();
 
-    //-------------------------------------------------------------------------
 
     /** sets the cell range address that contains the labels.
      */
     void setLabelArea(
             [in] com::sun::star::table::CellRangeAddress aLabelArea );
 
-    //-------------------------------------------------------------------------
 
     /** returns the cell range address for which the labels are valid.
      */
     com::sun::star::table::CellRangeAddress getDataArea();
 
-    //-------------------------------------------------------------------------
 
     /** sets the cell range address for which the labels are valid.
      */
@@ -66,7 +60,6 @@ published interface XLabelRange: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

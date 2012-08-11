@@ -27,24 +27,20 @@
  */
 published constants FetchDirection
 {
-    //-------------------------------------------------------------------------
 
     /** The rows in a result set will be processed in a forward direction; first-to-last.
      */
     const long FORWARD = 1000;
-    //-------------------------------------------------------------------------
 
     /** The rows in a result set will be processed in a reverse direction; last-to-first.
      */
     const long REVERSE = 1001;
-    //-------------------------------------------------------------------------
 
     /** The order in which rows in a result set will be processed is unknown:
      */
     const long UNKNOWN = 1002;
 };
 
-//=============================================================================
 
 }; }; }; };
 

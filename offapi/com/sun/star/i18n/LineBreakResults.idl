@@ -21,11 +21,9 @@
 
 #include <com/sun/star/linguistic2/XHyphenatedWord.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module i18n {
 
-//=============================================================================
 
 /** Results of method <member>XBreakIterator::getLineBreak()</member>.
  */
@@ -41,7 +39,6 @@ published struct LineBreakResults
     ::com::sun::star::linguistic2::XHyphenatedWord rHyphenatedWord;
 };
 
-//=============================================================================
 }; }; }; };
 
 #endif

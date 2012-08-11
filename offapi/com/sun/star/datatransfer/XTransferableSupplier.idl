@@ -32,13 +32,11 @@
 #include <com/sun/star/datatransfer/XTransferable.idl>
 #include <com/sun/star/uno/XInterface.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module datatransfer {
 
 interface XTransferableSupplier
 {
-    //-------------------------------------------------------------------------
     /** To get access to a transferable representation of a selected part of an object.
 
         @returns
@@ -48,7 +46,6 @@ interface XTransferableSupplier
     */
     XTransferable getTransferable();
 
-    //-------------------------------------------------------------------------
     /** Hands over a transferable object that shall be inserted.
 
         @param xTrans
@@ -66,7 +63,6 @@ interface XTransferableSupplier
         raises ( UnsupportedFlavorException );
 };
 
-//=============================================================================
 
 }; }; }; };
 

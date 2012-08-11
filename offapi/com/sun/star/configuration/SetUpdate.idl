@@ -22,11 +22,9 @@
 #include <com/sun/star/configuration/SetAccess.idl>
 #include <com/sun/star/configuration/SimpleSetUpdate.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module configuration {
 
-//=============================================================================
 /** provides write access to a dynamic homogeneous set of values or nested
  trees within a hierarchy.
 
@@ -85,7 +83,6 @@ published service SetUpdate
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

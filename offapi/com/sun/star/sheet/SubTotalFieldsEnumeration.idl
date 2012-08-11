@@ -22,11 +22,9 @@
 
 #include <com/sun/star/container/XEnumeration.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** represents an enumeration of sub total fields.
 
@@ -34,7 +32,6 @@ module com {  module sun {  module star {  module sheet {
  */
 published service SubTotalFieldsEnumeration
 {
-    //-------------------------------------------------------------------------
 
     /** provides methods to access the sub total fields in the enumeration.
 
@@ -44,7 +41,6 @@ published service SubTotalFieldsEnumeration
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

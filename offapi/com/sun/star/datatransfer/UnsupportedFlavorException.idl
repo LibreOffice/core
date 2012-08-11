@@ -22,11 +22,9 @@
 
 #include <com/sun/star/uno/Exception.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module datatransfer {
 
-//=============================================================================
 /** Exception will be thrown if there is a request for data in a
     <type>DataFlavor</type> that is not supported by a data source.
 
@@ -37,7 +35,6 @@ published exception UnsupportedFlavorException: com::sun::star::uno::Exception
 {
 };
 
-//=============================================================================
 
 }; }; }; };
 

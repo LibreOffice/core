@@ -22,11 +22,9 @@
 
 #include <com/sun/star/text/TextField.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module text { module textfield {
 
-//=============================================================================
 /** specifies service of a text input field.
     @see com::sun::star::text::TextField
 */
@@ -34,20 +32,17 @@ published service Input
 {
     service  com::sun::star::text::TextField;
 
-    //-------------------------------------------------------------------------
     /** contains the text content of the text field.
         <p> The field displays the text content.</p>
      */
     [optional, property] string Content;
 
-    //-------------------------------------------------------------------------
     /** contains a hint text.
      <p> This hint may be used as help tip or as headline of a corresponding
          dialog to edit the field content.</p>
      */
     [optional, property] string Hint;
 
-    //-------------------------------------------------------------------------
     /** contains an internal-use-only multi purpose string.
      <p>This is an internal multi purpose string used in WW8 import/export.
         Usually it holds the help text for form fields.</p>
@@ -57,7 +52,6 @@ published service Input
 
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

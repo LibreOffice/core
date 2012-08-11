@@ -22,13 +22,11 @@
 
 #include <com/sun/star/uno/XInterface.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module form { module submission {
 
 interface XSubmission;
 
-//=============================================================================
 
 /** is implemented by a component which allows access to a component which can
     submit data.
@@ -43,7 +41,6 @@ interface XSubmissionSupplier : com::sun::star::uno::XInterface
     [attribute] XSubmission Submission;
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

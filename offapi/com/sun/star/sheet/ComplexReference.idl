@@ -31,30 +31,25 @@
 
 #include <com/sun/star/sheet/SingleReference.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** contains a reference to a cell range.
  */
 struct ComplexReference
 {
-    //-------------------------------------------------------------------------
 
     /** is the first reference.
      */
     SingleReference Reference1;
 
-    //-------------------------------------------------------------------------
 
     /** is the second reference.
      */
     SingleReference Reference2;
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -28,11 +28,9 @@
 #ifndef __com_sun_star_ucb_FetchResult_idl__
 #define __com_sun_star_ucb_FetchResult_idl__
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** contains data of several rows of a <type>ContentResultSet</type>.
 
     <p>This struct is returned from <member>XFetchProvider::fetch</member>,
@@ -41,7 +39,6 @@ module com { module sun { module star { module ucb {
 
 published struct FetchResult
 {
-    //-------------------------------------------------------------------------
     /** contains the demanded data.
 
         <p>One any contains the data of one whole row. Those methods which
@@ -49,7 +46,6 @@ published struct FetchResult
     */
     sequence< any > Rows;
 
-    //-------------------------------------------------------------------------
     /** indicates the index of the first row contained in
         <member>FetchResult::Rows</member> in the original result set. So if
         <member>FetchResult::StartIndex</member> equals <code>3</code>, the
@@ -61,7 +57,6 @@ published struct FetchResult
     */
     long StartIndex;
 
-    //-------------------------------------------------------------------------
     /** indicates the orientation in which the rows are fetched and set into
         the sequence <member>FetchResult::Rows</member>.
 
@@ -71,7 +66,6 @@ published struct FetchResult
     */
     boolean Orientation;
 
-    //-------------------------------------------------------------------------
     /** indicates whether and which error has occurred, while fetching.
 
         <p>The value may contain zero or more constants of the
@@ -80,7 +74,6 @@ published struct FetchResult
     short FetchError;
 };
 
-//=============================================================================
 
 }; }; }; };
 

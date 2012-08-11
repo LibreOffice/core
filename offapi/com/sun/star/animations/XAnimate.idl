@@ -31,11 +31,9 @@
 #include <com/sun/star/animations/XAnimationNode.idl>
 #include <com/sun/star/animations/TimeFilterPair.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module animations {
 
-//=============================================================================
 
 /** Interface for generic animation.
 
@@ -143,7 +141,6 @@ interface XAnimate : XAnimationNode
     [attribute] string Formula;
 };
 
-//=============================================================================
 
 }; }; }; };
 

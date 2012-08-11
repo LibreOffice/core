@@ -31,11 +31,9 @@
 
 #include <com/sun/star/text/TextField.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module text { module textfield {
 
-//=============================================================================
 /** specifies service of a table formula text field.
     @deprecated
     @see com::sun::star::text::TextField
@@ -61,7 +59,6 @@ published service TableFormula
     [property] short NumberFormat;
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

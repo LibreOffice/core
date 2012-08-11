@@ -23,11 +23,9 @@
 
 #include <com/sun/star/container/NoSuchElementException.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module container {
 
-//=============================================================================
 
 /** is used to have hierarchical access to elements within a container.
 
@@ -41,7 +39,6 @@ module com {  module sun {  module star {  module container {
  */
 published interface XHierarchicalNameAccess: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** @returns
                 the object with the specified name.
@@ -55,7 +52,6 @@ published interface XHierarchicalNameAccess: com::sun::star::uno::XInterface
     any getByHierarchicalName( [in] string aName )
             raises( com::sun::star::container::NoSuchElementException );
 
-    //-------------------------------------------------------------------------
 
     /** @returns
             <TRUE/> if an element with this name is in
@@ -71,7 +67,6 @@ published interface XHierarchicalNameAccess: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

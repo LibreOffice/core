@@ -20,57 +20,45 @@
 #define __com_sun_star_text_FontEmphasis_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module text {
 
-//=============================================================================
 /**  Determines the type and position of an emphasis mark in Asian texts.
  */
 published constants FontEmphasis
 {
-    //-------------------------------------------------------------------------
     /** no emphasis mark is used.
      */
     const short NONE = 0;
 
-    //-------------------------------------------------------------------------
     /** a dot is set above (or right from vertical text) the text.
      */
     const short DOT_ABOVE = 1;
 
-    //-------------------------------------------------------------------------
     /** a circle is set above (or right from vertical text) the text.
      */
     const short CIRCLE_ABOVE = 2;
-    //-------------------------------------------------------------------------
     /** a disc is set above (or right from vertical text) the text.
      */
     const short DISK_ABOVE = 3;
-    //-------------------------------------------------------------------------
     /** an accent is set above (or right from vertical text) the text.
      */
     const short ACCENT_ABOVE = 4;
-    //-------------------------------------------------------------------------
     /** a dot is set below (or left from vertical text) the text.
      */
     const short DOT_BELOW = 11;
-    //-------------------------------------------------------------------------
     /** a circle is set below (or left from vertical text) the text.
      */
     const short CIRCLE_BELOW = 12;
-    //-------------------------------------------------------------------------
     /** a disk is set below (or left from vertical text) the text.
      */
     const short DISK_BELOW = 13;
-    //-------------------------------------------------------------------------
     /** an accent is set below (or left from vertical text) the text.
      */
     const short ACCENT_BELOW = 14;
 
 };
 
-//=============================================================================
 
 }; }; }; };
 #endif

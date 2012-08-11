@@ -21,11 +21,9 @@
 
 #include <com/sun/star/lang/Locale.idl>
 
-//============================================================================
 
 module com { module sun { module star { module i18n {
 
-//============================================================================
 
 /**
     supplies information on index entries to generate a "table of
@@ -34,7 +32,6 @@ module com { module sun { module star { module i18n {
 
 published interface XIndexEntrySupplier : com::sun::star::uno::XInterface
 {
-    //------------------------------------------------------------------------
     /**
         returns the capital index key for sorting a table of indexes, to
         a given index entry, to a given <type
@@ -47,7 +44,6 @@ published interface XIndexEntrySupplier : com::sun::star::uno::XInterface
     string getIndexCharacter( [in] string aIndexEntry, [in]
     com::sun::star::lang::Locale aLocale, [in] string aSortAlgorithm );
 
-    //------------------------------------------------------------------------
     /**
         returns the page number word of an index entry, where one page
         or more pages are combined to one page number entry, for a given
@@ -61,7 +57,6 @@ published interface XIndexEntrySupplier : com::sun::star::uno::XInterface
                                    [in] com::sun::star::lang::Locale aLocale );
 };
 
-//============================================================================
 };};};};
 
 #endif

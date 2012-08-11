@@ -27,11 +27,9 @@
 
 #include <com/sun/star/xml/UserDefinedAttributeSupplier.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module chart {
 
-//=============================================================================
 
 /** specifies the properties for a group of graphic elements which
     belong to a data row (also known as data series).
@@ -61,7 +59,6 @@ published service ChartDataRowProperties
 
     interface com::sun::star::beans::XPropertySet;
 
-    //-------------------------------------------------------------------------
 
     /** determines to which axis the data row is assigned.
 
@@ -73,7 +70,6 @@ published service ChartDataRowProperties
      */
     [property] long Axis;
 
-    //-------------------------------------------------------------------------
 
     /** holds the properties of the regression line, if such one is
         enabled.
@@ -83,7 +79,6 @@ published service ChartDataRowProperties
      */
     [optional, readonly, property] com::sun::star::beans::XPropertySet DataRegressionProperties;
 
-    //-------------------------------------------------------------------------
 
     /** holds the properties of the error markers, if those are
         enabled.
@@ -93,7 +88,6 @@ published service ChartDataRowProperties
      */
     [optional, readonly, property] com::sun::star::beans::XPropertySet DataErrorProperties;
 
-    //-------------------------------------------------------------------------
 
     /** holds the properties of the average line, if such one is
         enabled.
@@ -104,7 +98,6 @@ published service ChartDataRowProperties
     [optional, readonly, property] com::sun::star::beans::XPropertySet DataMeanValueProperties;
 };
 
-//=============================================================================
 
 }; }; }; };
 

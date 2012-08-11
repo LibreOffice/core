@@ -23,24 +23,20 @@
 #include <com/sun/star/configuration/backend/XMultiLayerStratum.idl>
 
 
-//=============================================================================
 
 module com { module sun { module star { module configuration { module backend {
 
-//=============================================================================
 
 /**
    Provides access to a singe layer of configuration data
 */
 service MultiLayerStratum
 {
-    //-------------------------------------------------------------------------
      /**
       provides access to multiple layers of configuration data .
       */
     interface XMultiLayerStratum ;
 
-    //-------------------------------------------------------------------------
 
 
     /**
@@ -49,10 +45,8 @@ service MultiLayerStratum
     [optional] interface XBackendEntities ;
 
 
-    //-------------------------------------------------------------------------
 } ;
 
-//=============================================================================
 
 } ; } ; } ; } ; } ;
 

@@ -20,18 +20,15 @@
 #ifndef __com_sun_star_ucb_LockType_idl__
 #define __com_sun_star_ucb_LockType_idl__
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** specifies the access type of a lock.
 
     @see LockEntry
 */
 published enum LockType
 {
-    //-------------------------------------------------------------------------
     /** specifies a write lock.
     */
     WRITE
@@ -40,7 +37,6 @@ published enum LockType
 //  /** read lock.
 //  */
 //  READ,
-//
 //  //-------------------------------------------------------------------------
 //  /** read-write lock.
 //  */
@@ -48,7 +44,6 @@ published enum LockType
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

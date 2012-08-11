@@ -21,11 +21,9 @@
 
 #include <com/sun/star/drawing/DrawingDocumentDrawView.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module presentation {
 
-//=============================================================================
 
 /** This component integrates a view to a handout page inside a presentation
     document into the desktop.
@@ -34,7 +32,6 @@
  */
 published service HandoutView
 {
-    //-------------------------------------------------------------------------
 
     /** this services offers the  integration of this component into the
         desktop and the basic interfaces and properties of a draw view.
@@ -42,7 +39,6 @@ published service HandoutView
     service com::sun::star::drawing::DrawingDocumentDrawView;
 };
 
-//=============================================================================
 
 }; }; }; };
 

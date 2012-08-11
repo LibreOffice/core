@@ -24,11 +24,9 @@
 #include <com/sun/star/task/XInteractionHandler.idl>
 #include <com/sun/star/ucb/XProgressHandler.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** defines the environment for a command.
 
     @version  1.0
@@ -37,7 +35,6 @@ module com { module sun { module star { module ucb {
 */
 published interface XCommandEnvironment : com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** returns the command's interaction handler.
 
         <p>If called multiple times, this method should consistently return the
@@ -48,7 +45,6 @@ published interface XCommandEnvironment : com::sun::star::uno::XInterface
     */
     com::sun::star::task::XInteractionHandler getInteractionHandler();
 
-    //-------------------------------------------------------------------------
     /** returns the command's progress handler.
 
         <p>If called multiple times, this method should consistently return the
@@ -60,7 +56,6 @@ published interface XCommandEnvironment : com::sun::star::uno::XInterface
     com::sun::star::ucb::XProgressHandler getProgressHandler();
 };
 
-//=============================================================================
 
 }; }; }; };
 

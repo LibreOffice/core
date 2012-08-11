@@ -21,16 +21,13 @@
 
 #include <com/sun/star/drawing/PolygonFlags.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module drawing {
 
-//=============================================================================
 /**
 */
 published typedef sequence<PolygonFlags> FlagSequence;
 
-//=============================================================================
 
 }; }; }; };
 

@@ -40,7 +40,6 @@ published struct RowChangeEvent: com::sun::star::lang::EventObject
     long Rows;
 };
 
-//=============================================================================
 
 }; }; }; };
 

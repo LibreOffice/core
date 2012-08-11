@@ -23,16 +23,13 @@
 #include <com/sun/star/beans/NamedValue.idl>
 
 
-//============================================================================
 
  module com {  module sun {  module star {  module embed {
 
-//============================================================================
 /** This interface extends the base XStorage interface.
  */
 interface XStorage2 : XStorage
 {
-    // -----------------------------------------------------------------------
     /** allows to get access to a child encrypted stream with EncryptionData.
 
         <p>
@@ -87,7 +84,6 @@ interface XStorage2 : XStorage
                 ::com::sun::star::io::IOException,
                 ::com::sun::star::embed::StorageWrappedTargetException );
 
-    // -----------------------------------------------------------------------
     /** allows to get readonly copy of a child encrypted stream with encryption
         data.
 
@@ -144,7 +140,6 @@ interface XStorage2 : XStorage
                 ::com::sun::star::embed::StorageWrappedTargetException );
 };
 
-//============================================================================
 
 }; }; }; };
 

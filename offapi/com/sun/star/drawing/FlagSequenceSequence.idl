@@ -21,17 +21,14 @@
 
 #include <com/sun/star/drawing/FlagSequence.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module drawing {
 
-//=============================================================================
 /**
 */
 published typedef sequence<FlagSequence> FlagSequenceSequence;
 
 
-//=============================================================================
 
 }; }; }; };
 

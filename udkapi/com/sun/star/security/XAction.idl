@@ -23,11 +23,9 @@
 #include <com/sun/star/uno/Exception.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module security {
 
-//=============================================================================
 
 /** Interface for running an action.
 
@@ -46,7 +44,6 @@ published interface XAction : com::sun::star::uno::XInterface
         raises (com::sun::star::uno::Exception);
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -35,17 +35,14 @@
 #include <com/sun/star/lang/IllegalArgumentException.idl>
 #include <com/sun/star/beans/PropertyValue.idl>
 
-//============================================================================
 
  module com {  module sun {  module star {  module embed {
 
-//============================================================================
 /** specifies common implementation for embedded objects and links
     persistence.
  */
 published interface XCommonEmbedPersist: com::sun::star::uno::XInterface
 {
-     //------------------------------------------------------------------------
     /** lets the object or the link store itself.
 
         @throws com::sun::star::embed::WrongStateException
@@ -62,7 +59,6 @@ published interface XCommonEmbedPersist: com::sun::star::uno::XInterface
                 ::com::sun::star::io::IOException,
                 ::com::sun::star::uno::Exception );
 
-    //------------------------------------------------------------------------
     /** allows to detect if the data store is read-only.
 
         @returns
@@ -75,7 +71,6 @@ published interface XCommonEmbedPersist: com::sun::star::uno::XInterface
     boolean isReadonly()
         raises( ::com::sun::star::embed::WrongStateException );
 
-    //------------------------------------------------------------------------
     /** lets the object or the link reload itself.
 
         <p>
@@ -112,7 +107,6 @@ published interface XCommonEmbedPersist: com::sun::star::uno::XInterface
                 ::com::sun::star::uno::Exception );
 };
 
-//============================================================================
 
 }; }; }; };
 

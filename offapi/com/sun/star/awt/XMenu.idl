@@ -31,33 +31,28 @@
 #include <com/sun/star/uno/XInterface.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module awt {
 
  published interface XPopupMenu;
  published interface XMenuListener;
 
-//=============================================================================
 
 /** specifies a simple menu.
  */
 published interface XMenu: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** adds the specified menu listener to receive events from this menu.
      */
     [oneway] void addMenuListener( [in] XMenuListener xListener );
 
-    //-------------------------------------------------------------------------
 
     /** removes the specified menu listener so that it no longer
         receives events from this menu.
      */
     [oneway] void removeMenuListener( [in] XMenuListener xListener );
 
-    //-------------------------------------------------------------------------
 
     /** inserts an item into the menu.
 
@@ -69,65 +64,55 @@ published interface XMenu: com::sun::star::uno::XInterface
              [in] short nItemStyle,
              [in] short nPos );
 
-    //-------------------------------------------------------------------------
 
     /** removes one or more items from the menu.
      */
     [oneway] void removeItem( [in] short nPos,
              [in] short nCount );
 
-    //-------------------------------------------------------------------------
 
     /** returns the number of items in the menu.
      */
     short getItemCount();
 
-    //-------------------------------------------------------------------------
 
     /** returns the id of the item at the specified position.
      */
     short getItemId( [in] short nPos );
 
-    //-------------------------------------------------------------------------
 
     /** returns the position of the item with the specified id.
      */
     short getItemPos( [in] short nId );
 
-    //-------------------------------------------------------------------------
 
     /** enables or disables the menu item.
      */
     [oneway] void enableItem( [in] short nItemId,
              [in] boolean bEnable );
 
-    //-------------------------------------------------------------------------
 
     /** returns the state of the menu item.
      */
     boolean isItemEnabled( [in] short nItemId );
 
-    //-------------------------------------------------------------------------
 
     /** sets the text for the menu item.
      */
     [oneway] void setItemText( [in] short nItemId,
              [in] string aText );
 
-    //-------------------------------------------------------------------------
 
     /** returns the string for the given item id.
      */
     string getItemText( [in] short nItemId );
 
-    //-------------------------------------------------------------------------
 
     /** sets the pop-up menu for a specified menu item.
      */
     [oneway] void setPopupMenu( [in] short nItemId,
              [in] XPopupMenu aPopupMenu );
 
-    //-------------------------------------------------------------------------
 
     /** returns the pop-up menu from the menu item.
      */

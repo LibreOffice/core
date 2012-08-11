@@ -29,17 +29,14 @@
 #include <com/sun/star/util/Color.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module util {
 
-//=============================================================================
 
 /** represents a number formatter.
  */
 published interface XNumberFormatter: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** attaches an <type>XNumberFormatsSupplier</type> to this
         <type>NumberFormatter</type>.
@@ -50,14 +47,12 @@ published interface XNumberFormatter: com::sun::star::uno::XInterface
      */
     void attachNumberFormatsSupplier( [in] com::sun::star::util::XNumberFormatsSupplier xSupplier );
 
-    //-------------------------------------------------------------------------
 
     /** @returns
                 the attached <type>XNumberFormatsSupplier</type>.
      */
     com::sun::star::util::XNumberFormatsSupplier getNumberFormatsSupplier();
 
-    //-------------------------------------------------------------------------
 
     /** detects the number format in a string which contains a formatted number.
      */
@@ -65,7 +60,6 @@ published interface XNumberFormatter: com::sun::star::uno::XInterface
              [in] string aString )
             raises( com::sun::star::util::NotNumericException );
 
-    //-------------------------------------------------------------------------
 
     /** converts a string which contains a formatted number into a number.
 
@@ -75,14 +69,12 @@ published interface XNumberFormatter: com::sun::star::uno::XInterface
              [in] string aString )
             raises( com::sun::star::util::NotNumericException );
 
-    //-------------------------------------------------------------------------
 
     /** converts a number into a string.
      */
     string convertNumberToString( [in] long nKey,
              [in] double fValue );
 
-    //-------------------------------------------------------------------------
 
     /** @returns
                 the color which is specified for the given value in the number format,
@@ -92,14 +84,12 @@ published interface XNumberFormatter: com::sun::star::uno::XInterface
              [in] double fValue,
              [in] com::sun::star::util::Color aDefaultColor );
 
-    //-------------------------------------------------------------------------
 
     /** converts a string into another string.
      */
     string formatString( [in] long nKey,
              [in] string aString );
 
-    //-------------------------------------------------------------------------
 
     /** @returns
                 the color which is specified for the given string in the number format,
@@ -109,7 +99,6 @@ published interface XNumberFormatter: com::sun::star::uno::XInterface
              [in] string aString,
              [in] com::sun::star::util::Color aDefaultColor );
 
-    //-------------------------------------------------------------------------
 
     /** converts a number into a string with the specified format.
 
@@ -122,7 +111,6 @@ published interface XNumberFormatter: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

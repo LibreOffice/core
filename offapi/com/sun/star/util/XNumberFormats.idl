@@ -28,24 +28,20 @@
 #include <com/sun/star/util/MalformedNumberFormatException.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module util {
 
-//=============================================================================
 
 /** provides access to multiple <type>NumberFormat</type>s.
  */
 published interface XNumberFormats: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** @returns
                     a readonly <type>NumberFormatProperties</type>.
      */
     com::sun::star::beans::XPropertySet getByKey( [in] long nKey );
 
-    //-------------------------------------------------------------------------
 
     /** @returns
                     a sequence of the keys of all number formats with the specified type and language.
@@ -65,7 +61,6 @@ published interface XNumberFormats: com::sun::star::uno::XInterface
              [in] com::sun::star::lang::Locale nLocale,
              [in] boolean bCreate );
 
-    //-------------------------------------------------------------------------
 
     /** finds a number format by its format string and returns its key.
      */
@@ -73,7 +68,6 @@ published interface XNumberFormats: com::sun::star::uno::XInterface
              [in] com::sun::star::lang::Locale nLocale,
              [in] boolean bScan );
 
-    //-------------------------------------------------------------------------
 
     /** adds a new number format to the list, using a format string.
      */
@@ -81,7 +75,6 @@ published interface XNumberFormats: com::sun::star::uno::XInterface
              [in] com::sun::star::lang::Locale nLocale )
             raises( com::sun::star::util::MalformedNumberFormatException );
 
-    //-------------------------------------------------------------------------
 
     /** adds a new number format to the list, using a format
         string in a different locale than the desired locale of the
@@ -92,13 +85,11 @@ published interface XNumberFormats: com::sun::star::uno::XInterface
              [in] com::sun::star::lang::Locale nNewLocale )
             raises( com::sun::star::util::MalformedNumberFormatException );
 
-    //-------------------------------------------------------------------------
 
     /** removes a number format from the list.
      */
     void removeByKey( [in] long nKey );
 
-    //-------------------------------------------------------------------------
 
     /** generates a format string from several parameters without
         creating an actual number format.
@@ -112,7 +103,6 @@ published interface XNumberFormats: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

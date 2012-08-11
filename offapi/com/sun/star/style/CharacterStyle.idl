@@ -22,22 +22,18 @@
 #include <com/sun/star/style/CharacterProperties.idl>
 #include <com/sun/star/style/Style.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module style {
 
-//=============================================================================
 
 /** specifies a style sheet for characters within a
     <type scope="com::sun::star::text">Text</type>.
  */
 published service CharacterStyle
 {
-    //-------------------------------------------------------------------------
     /// specifies administrative properties.
     service Style;
 
-    //-------------------------------------------------------------------------
     /// specifies the style properties.
     service CharacterProperties;
     /** This value contains the character height as difference in point to the height of
@@ -66,7 +62,6 @@ published service CharacterStyle
     [property] short CharPropHeightComplex;
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -22,11 +22,9 @@
 #include <com/sun/star/uno/Exception.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module registry {
 
-//=============================================================================
 
 // DocMerge from xml: exception com::sun::star::registry::InvalidValueException
 /** signals that the value of the key is invalid or does not have the
@@ -36,7 +34,6 @@ published exception InvalidValueException: com::sun::star::uno::Exception
 {
 };
 
-//=============================================================================
 
 }; }; }; };
 

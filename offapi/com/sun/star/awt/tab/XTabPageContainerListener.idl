@@ -31,11 +31,9 @@
 #include <com/sun/star/lang/XEventListener.idl>
 #include <com/sun/star/awt/tab/TabPageActivatedEvent.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module awt { module tab {
 
-//=============================================================================
 
 /** An instance of this interface is used by the <type>XTabPageContainer</type> to
     get notifications about changes in activation of tab pages.
@@ -44,14 +42,12 @@ module com {  module sun {  module star {  module awt { module tab {
  */
 interface XTabPageContainerListener: com::sun::star::lang::XEventListener
 {
-    //-------------------------------------------------------------------------
     /** Invoked after a tab page was activated.
      */
     [oneway] void tabPageActivated( [in] TabPageActivatedEvent tabPageActivatedEvent);
 
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

@@ -23,11 +23,9 @@
 #include <com/sun/star/rdf/Statement.idl>
 
 
-//=============================================================================
 
 module com {   module sun {   module star {   module rdf {
 
-//=============================================================================
 /** represents a reified RDF statement.
 
     @since OOo 3.0
@@ -40,7 +38,6 @@ interface XReifiedStatement : XResource
     [readonly, attribute] Statement Statement;
 };
 
-//=============================================================================
 
 }; }; }; };
 

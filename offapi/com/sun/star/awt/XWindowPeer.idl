@@ -24,45 +24,38 @@
 #include <com/sun/star/util/Color.idl>
 #include <com/sun/star/awt/Rectangle.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module awt {
 
  published interface XToolkit;
  published interface XPointer;
 
-//=============================================================================
 
 /** gives access to the actual window implementation on the device.
  */
 published interface XWindowPeer: com::sun::star::lang::XComponent
 {
-    //-------------------------------------------------------------------------
 
     /** returns the toolkit which created this object.
      */
     XToolkit getToolkit();
 
-    //-------------------------------------------------------------------------
 
     /** sets the mouse pointer.
      */
     [oneway] void setPointer( [in] XPointer Pointer );
 
-    //-------------------------------------------------------------------------
 
     /** sets the background color.
      */
     [oneway] void setBackground( [in] com::sun::star::util::Color Color );
 
-    //-------------------------------------------------------------------------
 
     /** invalidates the whole window with the specified
         <type>InvalidateStyle</type>.
      */
     [oneway] void invalidate( [in] short Flags );
 
-    //-------------------------------------------------------------------------
 
     /** invalidates a rectangular area of the window with the specified
         <type>InvalidateStyle</type>.
@@ -71,7 +64,6 @@ published interface XWindowPeer: com::sun::star::lang::XComponent
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -42,11 +42,9 @@
 #include <com/sun/star/drawing/RotationDescriptor.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module drawing {
 
-//=============================================================================
 
 /** This service is for a polygon shape.
     <p>A poly-polygon has 2 or more straight lines, with the first and
@@ -70,7 +68,6 @@ published service PolyPolygonShape
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

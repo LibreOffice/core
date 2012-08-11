@@ -22,17 +22,14 @@
 #include <com/sun/star/lang/XEventListener.idl>
 #include <com/sun/star/ucb/ListEvent.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** used to receive notifications from an <type>XDynamicResultSet</type>.
 */
 
 published interface XDynamicResultSetListener: com::sun::star::lang::XEventListener
 {
-    //-------------------------------------------------------------------------
     /** A method used to propagate changes of a result set.
 
         <p>In the first notify-call the listener gets two(!)
@@ -60,7 +57,6 @@ published interface XDynamicResultSetListener: com::sun::star::lang::XEventListe
     void notify( [in] ListEvent Changes );
 };
 
-//=============================================================================
 
 }; }; }; };
 

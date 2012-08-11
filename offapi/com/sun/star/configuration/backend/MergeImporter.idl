@@ -22,11 +22,9 @@
 #include <com/sun/star/configuration/backend/Importer.idl>
 #include <com/sun/star/lang/XInitialization.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module configuration { module backend {
 
-//=============================================================================
 
 /**
     imports data into a configuration layer by merging with existing data.
@@ -40,7 +38,6 @@ module com { module sun { module star { module configuration { module backend {
 */
 published service MergeImporter
 {
-    //-------------------------------------------------------------------------
 
     /** allows importing configuration data into a backend.
 
@@ -54,10 +51,8 @@ published service MergeImporter
       */
     service Importer ;
 
-    //-------------------------------------------------------------------------
 } ;
 
-//=============================================================================
 
 } ; } ; } ; } ; } ;
 

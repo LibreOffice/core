@@ -35,11 +35,9 @@
 #include <com/sun/star/frame/XDispatchProvider.idl>
 #include <com/sun/star/lang/XComponent.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module frame {
 
-//=============================================================================
 
 /** provides access to a pop-up menu controller.
 
@@ -56,7 +54,6 @@ module com { module sun { module star { module frame {
 
 service PopupMenuController
 {
-    //-------------------------------------------------------------------------
     /** supports functions to initialize and update a pop-up menu controller
         implementation.
 
@@ -69,7 +66,6 @@ service PopupMenuController
     */
     interface com::sun::star::frame::XPopupMenuController;
 
-    //-------------------------------------------------------------------------
     /** provides functions to initialize a pop-up menu controller with
         specific data which are needed.
 
@@ -90,7 +86,6 @@ service PopupMenuController
     */
     interface com::sun::star::lang::XInitialization;
 
-    //-------------------------------------------------------------------------
     /** used to brief the pop-up menu controller with new status information.
 
         <p>
@@ -101,7 +96,6 @@ service PopupMenuController
     */
     interface com::sun::star::frame::XStatusListener;
 
-    //-------------------------------------------------------------------------
     /** used to query for commands supported by the pop-up menu controller to
         execute them directly.
 
@@ -118,7 +112,6 @@ service PopupMenuController
     */
     [optional] interface com::sun::star::frame::XDispatchProvider;
 
-    //-------------------------------------------------------------------------
     /** used to dispose pop-up menu controller by the owner instance.
 
         <p>
@@ -134,7 +127,6 @@ service PopupMenuController
 
 }; }; }; };
 
-//=============================================================================
 
 #endif
 

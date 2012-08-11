@@ -23,11 +23,9 @@
 #include <com/sun/star/container/XNameAccess.idl>
 #include <com/sun/star/table/CellRangeAddress.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** provides access via name to the scenarios in a collection and inserting
     and removing scenarios.
@@ -37,7 +35,6 @@ module com {  module sun {  module star {  module sheet {
  */
 published interface XScenarios: com::sun::star::container::XNameAccess
 {
-    //-------------------------------------------------------------------------
 
     /** creates a new scenario and adds it to the collection.
 
@@ -55,7 +52,6 @@ published interface XScenarios: com::sun::star::container::XNameAccess
             [in] sequence< com::sun::star::table::CellRangeAddress > aRanges,
             [in] string aComment );
 
-    //-------------------------------------------------------------------------
 
     /** removes a scenario from the collection.
      */
@@ -63,7 +59,6 @@ published interface XScenarios: com::sun::star::container::XNameAccess
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

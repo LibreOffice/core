@@ -22,11 +22,9 @@
 #include <com/sun/star/embed/WrongStateException.idl>
 
 
-//============================================================================
 
  module com {  module sun {  module star {  module embed {
 
-//============================================================================
 
 /** This exception can be thrown in case a list of accepted verbs of states is
     requested and the object is in loaded state and this information can be
@@ -41,7 +39,6 @@ published exception NeedsRunningStateException: WrongStateException
 {
 };
 
-//============================================================================
 
 }; }; }; };
 

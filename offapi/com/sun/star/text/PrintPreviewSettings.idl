@@ -22,11 +22,9 @@
 #include <com/sun/star/text/NotePrintMode.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module text {
 
-//=============================================================================
 
 /** These properties describe the printing of the content of a text document.
  *
@@ -65,7 +63,6 @@ published service PrintPreviewSettings
     [property, maybevoid] boolean PreviewPrintLandscape;
 };
 
-//=============================================================================
 
 }; }; }; };
 

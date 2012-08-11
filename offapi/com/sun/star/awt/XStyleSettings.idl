@@ -32,13 +32,11 @@
 #include <com/sun/star/awt/FontDescriptor.idl>
 #include <com/sun/star/uno/XInterface.idl>
 
-//==================================================================================================================
 
 module com { module sun { module star { module awt {
 
 interface XStyleChangeListener;
 
-//==================================================================================================================
 
 /** provides access to certain style settings within an OpenOffice.org component, such as a window, or
     within OpenOffice.org as a whole.
@@ -231,11 +229,9 @@ interface XStyleSettings
         [in] XStyleChangeListener Listener );
 };
 
-//==================================================================================================================
 
 }; }; }; };
 
-//==================================================================================================================
 
 #endif
 

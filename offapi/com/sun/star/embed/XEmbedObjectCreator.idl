@@ -26,11 +26,9 @@
 #include <com/sun/star/lang/IllegalArgumentException.idl>
 #include <com/sun/star/beans/PropertyValue.idl>
 
-//============================================================================
 
  module com {  module sun {  module star {  module embed {
 
-//============================================================================
 /** allows to create and initialize a new embedded object.
 
     <p>
@@ -40,7 +38,6 @@
  */
 published interface XEmbedObjectCreator: com::sun::star::uno::XInterface
 {
-    // -----------------------------------------------------------------------
     /** creates a new object and initializes it as a new one.
 
         <p> In case specified entry exists it's contents are ignored and
@@ -84,7 +81,6 @@ published interface XEmbedObjectCreator: com::sun::star::uno::XInterface
                 ::com::sun::star::uno::Exception );
 
 
-    // -----------------------------------------------------------------------
     /** creates a new object that should be based on specified storage entry.
 
         <p> The specified entry must exists and the object should be loaded
@@ -131,7 +127,6 @@ published interface XEmbedObjectCreator: com::sun::star::uno::XInterface
                 ::com::sun::star::io::IOException,
                 ::com::sun::star::uno::Exception );
 
-    // -----------------------------------------------------------------------
     /** creates a new object and initializes it based on
         <type scope="com::sun::star::document">MediaDescriptor</type>.
 
@@ -173,7 +168,6 @@ published interface XEmbedObjectCreator: com::sun::star::uno::XInterface
                 ::com::sun::star::uno::Exception );
 };
 
-//============================================================================
 
 }; }; }; };
 

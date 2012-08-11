@@ -32,11 +32,9 @@
 #include <com/sun/star/lang/XEventListener.idl>
 #include <com/sun/star/lang/EventObject.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module util {
 
-//=============================================================================
 /** makes it possible to receive events when an object
     is called for closing
 
@@ -61,7 +59,6 @@
  */
 published interface XCloseListener: com::sun::star::lang::XEventListener
 {
-    //-------------------------------------------------------------------------
     /** is called when somewhere tries to close listened object
 
         <p>
@@ -105,7 +102,6 @@ published interface XCloseListener: com::sun::star::lang::XEventListener
         [in] boolean GetsOwnership )
             raises( CloseVetoException );
 
-    //-------------------------------------------------------------------------
     /** is called when the listened object is closed really
 
         <p>
@@ -125,7 +121,6 @@ published interface XCloseListener: com::sun::star::lang::XEventListener
     void notifyClosing( [in] com::sun::star::lang::EventObject Source );
 };
 
-//=============================================================================
 
 }; }; }; };
 

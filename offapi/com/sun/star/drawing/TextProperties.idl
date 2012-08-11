@@ -50,11 +50,9 @@
 #include <com/sun/star/drawing/TextHorizontalAdjust.idl>
 #include <com/sun/star/text/WritingMode.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module drawing {
 
-//=============================================================================
 
 
 /** This is a set of properties to describe the style for rendering the
@@ -67,48 +65,41 @@ published service TextProperties
      */
     service com::sun::star::style::CharacterProperties;
 
-    //-------------------------------------------------------------------------
 
     /** The properties in this service set default formats for Asian text
         inside the <type>Shape</type>.
      */
     [optional] service com::sun::star::style::CharacterPropertiesAsian;
 
-    //-------------------------------------------------------------------------
 
     /** The properties in this service set default formats for complex text
         inside the <type>Shape</type>.
      */
     [optional] service com::sun::star::style::CharacterPropertiesComplex;
 
-    //-------------------------------------------------------------------------
 
     /** The properties in this service set default formats for text
         inside the <type>Shape</type>.
      */
     service com::sun::star::style::ParagraphProperties;
 
-    //-------------------------------------------------------------------------
 
     /** The properties in this service set default formats for Asian text
         inside the <type>Shape</type>.
      */
     [optional] service com::sun::star::style::ParagraphPropertiesAsian;
 
-    //-------------------------------------------------------------------------
 
     /** The properties in this service set default formats for complex text
         inside the <type>Shape</type>.
      */
     [optional] service com::sun::star::style::ParagraphPropertiesComplex;
-    //-------------------------------------------------------------------------
 
     /** If this is <TRUE/>, numbering is ON for the text of
         this <type>Shape</type>.
      */
     [optional, property] boolean IsNumbering;
 
-    //-------------------------------------------------------------------------
 
     /** describes the numbering levels.
         <p>The different rules accessible with this
@@ -118,7 +109,6 @@ published service TextProperties
      */
     [optional, property] com::sun::star::container::XIndexReplace NumberingRules;
 
-    //-------------------------------------------------------------------------
 
     /** If this value is <TRUE/>, the height of the <type>Shape</type> is
         automatically expanded/shrunk when text is added to or removed from
@@ -126,7 +116,6 @@ published service TextProperties
      */
     [property] boolean TextAutoGrowHeight;
 
-    //-------------------------------------------------------------------------
 
     /** If this value is <TRUE/>, the width of the <type>Shape</type> is
         automatically expanded/shrunk when text is added to or removed from
@@ -134,7 +123,6 @@ published service TextProperties
      */
     [property] boolean TextAutoGrowWidth;
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::drawing::Text::TextContourFrame
     /** If this value is <TRUE/>, the left edge of every line of text is
@@ -142,28 +130,24 @@ published service TextProperties
      */
     [property] boolean TextContourFrame;
 
-    //-------------------------------------------------------------------------
 
     /** With this set to <TRUE/>, the text inside of the <type>Shape</type>
         is stretched to fit into the <type>Shape</type>.
      */
     [property] com::sun::star::drawing::TextFitToSizeType TextFitToSize;
 
-    //-------------------------------------------------------------------------
 
     /** adjusts the horizontal position of the text inside of
         the <type>Shape</type>.
      */
     [property] com::sun::star::drawing::TextHorizontalAdjust TextHorizontalAdjust;
 
-    //-------------------------------------------------------------------------
 
     /** adjusts the vertical position of the text inside of
         the <type>Shape</type>.
      */
     [property] com::sun::star::drawing::TextVerticalAdjust TextVerticalAdjust;
 
-    //-------------------------------------------------------------------------
 
     /** This is the distance from the left edge of the <type>Shape</type>
         to the left edge of the text.
@@ -173,7 +157,6 @@ published service TextProperties
      */
     [property] long TextLeftDistance;
 
-    //-------------------------------------------------------------------------
 
     /** This is the distance from the right edge of the <type>Shape</type>
         to the right edge of the text.
@@ -184,7 +167,6 @@ published service TextProperties
      */
     [property] long TextRightDistance;
 
-    //-------------------------------------------------------------------------
 
     /** This is the distance from the upper edge of the <type>Shape</type> to
         the upper edge of the text.
@@ -195,7 +177,6 @@ published service TextProperties
      */
     [property] long TextUpperDistance;
 
-    //-------------------------------------------------------------------------
 
     /** This is the distance from the lower edge of the <type>Shape</type> to the
         lower edge of the text.
@@ -208,7 +189,6 @@ published service TextProperties
      */
     [property] long TextLowerDistance;
 
-    //-------------------------------------------------------------------------
 
     /** with this property you can set the maximum height for a shape with text.
         On edit, the auto grow feature will not grow the object higher than
@@ -216,7 +196,6 @@ published service TextProperties
     */
     [property] long TextMaximumFrameHeight;
 
-    //-------------------------------------------------------------------------
 
     /** with this property you can set the maximum width for a shape with text.
         On edit, the auto grow feature will not grow the objects wider than
@@ -224,7 +203,6 @@ published service TextProperties
     */
     [property] long TextMaximumFrameWidth;
 
-    //-------------------------------------------------------------------------
 
     /** with this property you can set the minimum height for a shape with text.
         On edit, the auto grow feature will not shrink the objects height smaller
@@ -232,7 +210,6 @@ published service TextProperties
     */
     [property] long TextMinimumFrameHeight;
 
-    //-------------------------------------------------------------------------
 
     /** with this property you can set the minimum width for a shape with text.
         On edit, the auto grow feature will not shrink the object width smaller
@@ -240,60 +217,51 @@ published service TextProperties
     */
     [property] long TextMinimumFrameWidth;
 
-    //-------------------------------------------------------------------------
 
     /** This is the number of pixels the text is moved in each animation step.
      */
     [property] short TextAnimationAmount;
 
-    //-------------------------------------------------------------------------
 
     /** This number defines how many times the text animation is repeated.
         <p>If this is set to zero, the repeat is endless.</p>
      */
     [property] short TextAnimationCount;
 
-    //-------------------------------------------------------------------------
 
     /** This is the delay in thousandths of a second between each
         of the animation steps.
      */
     [property] short TextAnimationDelay;
 
-    //-------------------------------------------------------------------------
 
     /** This enumeration defines the direction in which the text moves.
      */
     [property] com::sun::star::drawing::TextAnimationDirection TextAnimationDirection;
 
-    //-------------------------------------------------------------------------
 
     /** This value defines the type of animation.
      */
     [property] com::sun::star::drawing::TextAnimationKind TextAnimationKind;
 
-    //-------------------------------------------------------------------------
 
     /** If this value is <TRUE/>, the text is visible at the start of the
         animation.
      */
     [property] boolean TextAnimationStartInside;
 
-    //-------------------------------------------------------------------------
 
     /** If this value is <TRUE/>, the text is visible at the end of the
         animation.
      */
     [property] boolean TextAnimationStopInside;
 
-    //-------------------------------------------------------------------------
 
     /** This value selects the writing mode for the text.
      */
     [property] ::com::sun::star::text::WritingMode TextWritingMode;
 };
 
-//=============================================================================
 
 }; }; }; };
 

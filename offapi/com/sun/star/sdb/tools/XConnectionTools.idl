@@ -40,17 +40,14 @@ module com {  module sun {  module star {
         interface XComponent;
     };
 };};};
-//=============================================================================
 module com {  module sun {  module star {  module sdb {
     interface XSingleSelectQueryComposer;
     module tools {
-//=============================================================================
 
 interface XTableName;
 interface XObjectNames;
 interface XDataSourceMetaData;
 
-//-----------------------------------------------------------------------------
 /** encapsulates various useful functionality around a
     <type scope="com::sun::star::sdb">Connection</type>
 
@@ -136,9 +133,7 @@ interface XConnectionTools
     ::com::sun::star::sdb::XSingleSelectQueryComposer getComposer([in] long commandType,[in] string command);
 };
 
-//=============================================================================
 }; }; }; }; };
-//=============================================================================
 
 #endif
 

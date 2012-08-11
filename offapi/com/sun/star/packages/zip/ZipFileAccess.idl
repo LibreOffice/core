@@ -26,11 +26,9 @@
 #include <com/sun/star/io/IOException.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {   module packages {  module zip {
 
-//=============================================================================
 
 /** allows to get reading access to non-encrypted entries inside zip file.
  */
@@ -42,7 +40,6 @@ service ZipFileAccess
     interface ::com::sun::star::lang::XComponent;
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

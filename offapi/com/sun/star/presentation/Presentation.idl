@@ -24,11 +24,9 @@
 #include <com/sun/star/beans/XPropertySet.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module presentation {
 
-//=============================================================================
 
 /** This service is a presentation that is available from a
     <type>PresentationDocument</type> via the
@@ -43,41 +41,35 @@ published service Presentation
      */
     interface com::sun::star::presentation::XPresentation;
 
-    //-------------------------------------------------------------------------
 
     /** This is the standard interface for access to the properties from this
         service.
      */
     interface com::sun::star::beans::XPropertySet;
 
-    //-------------------------------------------------------------------------
 
     /** enables/disables the shape animations.
      */
     [property] boolean AllowAnimations;
 
-    //-------------------------------------------------------------------------
 
     /** If this string is not empty, it contains the name of a customized
         show that is used for the presentation.
      */
     [property] string CustomShow;
 
-    //-------------------------------------------------------------------------
 
     /** If this string is not empty, it contains the name of the page where
         the presentation is started.
      */
     [property] string FirstPage;
 
-    //-------------------------------------------------------------------------
 
     /** If this property is set to <TRUE/>, the window of the presentation is
         always on top of all other windows.
      */
     [property] boolean IsAlwaysOnTop;
 
-    //-------------------------------------------------------------------------
 
     /** If this property is <TRUE/>, all pages are changed automatically.
 
@@ -85,21 +77,18 @@ published service Presentation
      */
     [property] boolean IsAutomatic;
 
-    //-------------------------------------------------------------------------
 
     /** If this property is set to <TRUE/>, the presentation is repeated
         endlessly.
      */
     [property] boolean IsEndless;
 
-    //-------------------------------------------------------------------------
 
     /** If this property is set to <TRUE/>, the presentation runs in
         full-screen mode.
      */
     [property] boolean IsFullScreen;
 
-    //-------------------------------------------------------------------------
 
     /** With this property, you can set the presentation to live mode.
         <p>Implementations that have no live mode capability may ignore this
@@ -107,14 +96,12 @@ published service Presentation
      */
     [property] boolean IsLivePresentation;
 
-    //-------------------------------------------------------------------------
 
     /** If this property is <TRUE/>, the mouse is visible during the
         presentation.
      */
     [property] boolean IsMouseVisible;
 
-    //-------------------------------------------------------------------------
 
     /** is the duration of the black screen after the
         presentation has finished.
@@ -123,14 +110,12 @@ published service Presentation
      */
     [property] long Pause;
 
-    //-------------------------------------------------------------------------
 
     /** If this is set to <TRUE/>, the Navigator is opened at the start of the
         presentation.
      */
     [property] boolean StartWithNavigator;
 
-    //-------------------------------------------------------------------------
 
     /** If this is <TRUE/>, a pen is shown during presentation.
 
@@ -140,7 +125,6 @@ published service Presentation
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

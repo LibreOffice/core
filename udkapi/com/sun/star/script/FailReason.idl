@@ -20,11 +20,9 @@
 #define __com_sun_star_script_FailReason_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module script {
 
-//=============================================================================
 
 /** These values specify the reason why a type conversion failed.
 */
@@ -73,7 +71,6 @@ published constants FailReason
     const long UNKNOWN = 10;
 };
 
-//=============================================================================
 
 }; }; }; };
 

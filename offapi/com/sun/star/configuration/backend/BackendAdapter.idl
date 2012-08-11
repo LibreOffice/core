@@ -23,11 +23,9 @@
 #include <com/sun/star/configuration/backend/XBackendEntities.idl>
 #include <com/sun/star/lang/XInitialization.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module configuration { module backend {
 
-//=============================================================================
 
 /**
     implements <type>Backend</type> retrieving data
@@ -37,13 +35,11 @@ module com { module sun { module star { module configuration { module backend {
 */
 published service BackendAdapter
 {
-    //-------------------------------------------------------------------------
 
     /** provides access to configuration data.
       */
     service Backend ;
 
-    //-------------------------------------------------------------------------
 
     /**
       This interface, that is optional in <type>Backend</type>, is
@@ -51,7 +47,6 @@ published service BackendAdapter
       */
     interface XBackendEntities ;
 
-    //-------------------------------------------------------------------------
 
     /**
       allows initializing the backend to use.
@@ -68,10 +63,8 @@ published service BackendAdapter
       */
     [optional] interface com::sun::star::lang::XInitialization ;
 
-    //-------------------------------------------------------------------------
 } ;
 
-//=============================================================================
 
 } ; } ; } ; } ; } ;
 

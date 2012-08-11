@@ -20,11 +20,9 @@
 #define __com_sun_star_chart_ChartAxisMarks_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module chart {
 
-//=============================================================================
 
 /** With these constants you can specify how the tick-marks of an axis
     are displayed.
@@ -35,19 +33,16 @@
  */
 published constants ChartAxisMarks
 {
-    //-------------------------------------------------------------------------
 
     /** Do not display any marks.
      */
     const long NONE = 0;
 
-    //-------------------------------------------------------------------------
 
     /** Display marks that point into the diagram area.
      */
     const long INNER = 1;
 
-    //-------------------------------------------------------------------------
 
     /** Display marks that point out of the diagram area.
      */
@@ -55,7 +50,6 @@ published constants ChartAxisMarks
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

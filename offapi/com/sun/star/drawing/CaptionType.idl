@@ -20,37 +20,31 @@
 #ifndef __com_sun_star_drawing_CaptionType_idl__
 #define __com_sun_star_drawing_CaptionType_idl__
 
-//=============================================================================
 
 module com { module sun { module star { module drawing {
 
-//=============================================================================
 /** This constants specifies the geometry of the line of a <type>CaptionShape</type>.
 
     @see CaptionShape
 */
 published constants CaptionType
 {
-    //-------------------------------------------------------------------------
     /** the caption line is a straight line from a caption area edge to the
         caption point.
     */
     const short straight = 0;
 
-    //-------------------------------------------------------------------------
     /** the caption line is the shortest line from the caption area edge to
         the caption point.
     */
     const short angled = 1;
 
-    //-------------------------------------------------------------------------
     /** the caption line is build up with a straight line from the caption area
         edge, followed by the shortest line to the caption area point.
     */
     const short connector = 2;
 };
 
-//=============================================================================
 
 }; }; }; };
 

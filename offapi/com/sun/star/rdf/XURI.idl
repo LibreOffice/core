@@ -32,11 +32,9 @@
 #include <com/sun/star/rdf/XResource.idl>
 
 
-//=============================================================================
 
 module com {   module sun {   module star {   module rdf {
 
-//=============================================================================
 /** represents an URI node that may occur in a RDF graph.
 
     <p>
@@ -69,7 +67,6 @@ interface XURI : XResource
     [readonly, attribute] string LocalName;
 };
 
-//=============================================================================
 
 }; }; }; };
 

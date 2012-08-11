@@ -23,13 +23,11 @@
 #include <com/sun/star/lang/IllegalArgumentException.idl>
 #include <com/sun/star/beans/NamedValue.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module logging {
 
 interface XLogHandler;
 
-//=============================================================================
 
 /** specifies a component implementing a log handler whose output
     channel is a file.
@@ -76,11 +74,9 @@ service FileHandler : XLogHandler
         raises ( ::com::sun::star::lang::IllegalArgumentException );
 };
 
-//=============================================================================
 
 }; }; }; };
 
-//=============================================================================
 
 #endif
 

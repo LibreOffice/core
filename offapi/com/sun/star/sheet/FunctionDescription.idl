@@ -22,11 +22,9 @@
 
 #include <com/sun/star/sheet/FunctionArgument.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** collects all properties used to describe a function.
 
@@ -34,7 +32,6 @@ module com {  module sun {  module star {  module sheet {
  */
 published service FunctionDescription
 {
-    //-------------------------------------------------------------------------
 
     /** returns the function's unique identifier.
 
@@ -42,7 +39,6 @@ published service FunctionDescription
      */
     [readonly, property] long Id;
 
-    //-------------------------------------------------------------------------
 
     /** returns the function's category.
 
@@ -50,19 +46,16 @@ published service FunctionDescription
      */
     [readonly, property] long Category;
 
-    //-------------------------------------------------------------------------
 
     /** returns the localized function's name.
      */
     [readonly, property] string Name;
 
-    //-------------------------------------------------------------------------
 
     /** returns a localized description of the function.
      */
     [readonly, property] string Description;
 
-    //-------------------------------------------------------------------------
 
     /** returns a sequence of localized descriptions of the function's
         arguments (in the order specified by the function).
@@ -71,7 +64,6 @@ published service FunctionDescription
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

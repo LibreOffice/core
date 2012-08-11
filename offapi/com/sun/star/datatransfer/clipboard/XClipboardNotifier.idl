@@ -22,11 +22,9 @@
 
 #include <com/sun/star/uno/XInterface.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module datatransfer { module clipboard {
 
-//=============================================================================
 /** Provides the ability to request notifications on clipboard content changes.
 
     @see com::sun::star::datatransfer::clipboard::XClipboardListener
@@ -36,7 +34,6 @@ module com { module sun { module star { module datatransfer { module clipboard {
 
 published interface XClipboardNotifier: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** Requests notifications on clipboard content changes.
 
         @param listener
@@ -44,7 +41,6 @@ published interface XClipboardNotifier: com::sun::star::uno::XInterface
     */
     [oneway] void addClipboardListener( [in] XClipboardListener listener );
 
-    //-------------------------------------------------------------------------
     /** Removes listener from notification list.
 
         @param listener
@@ -53,7 +49,6 @@ published interface XClipboardNotifier: com::sun::star::uno::XInterface
     [oneway] void removeClipboardListener( [in] XClipboardListener listener );
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

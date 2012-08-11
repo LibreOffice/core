@@ -21,22 +21,18 @@
 
 #include <com/sun/star/task/ClassifiedInteractionRequest.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** An exception used to notify a name clash.
 */
 published exception NameClashException : com::sun::star::task::ClassifiedInteractionRequest
 {
-    //-------------------------------------------------------------------------
     /** contains the clashing name.
      */
     string Name;
 };
 
-//=============================================================================
 
 }; }; }; };
 

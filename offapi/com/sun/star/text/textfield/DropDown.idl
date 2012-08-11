@@ -31,11 +31,9 @@
 
 #include <com/sun/star/text/TextField.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module text { module textfield {
 
-//=============================================================================
 /** specifies service of an author text field.
     @see com::sun::star::text::TextField
 */
@@ -63,7 +61,6 @@ published service DropDown
 
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

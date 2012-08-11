@@ -20,89 +20,74 @@
 #define __com_sun_star_util_NumberFormat_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module util {
 
-//=============================================================================
 
 /** contains constants that are used to specify the type of a number format.
  */
 published constants NumberFormat
 {
-    //-------------------------------------------------------------------------
 
     /** selects all number formats.
      */
     const short ALL = 0;
 
-    //-------------------------------------------------------------------------
 
     /** selects only user-defined number formats.
      */
     const short DEFINED = 1;
 
-    //-------------------------------------------------------------------------
 
     /** selects date formats.
      */
     const short DATE = 2;
 
-    //-------------------------------------------------------------------------
 
     /** selects time formats.
      */
     const short TIME = 4;
 
-    //-------------------------------------------------------------------------
 
     /** selects currency formats.
      */
     const short CURRENCY = 8;
 
-    //-------------------------------------------------------------------------
 
     /** selects decimal number formats.
      */
     const short NUMBER = 16;
 
-    //-------------------------------------------------------------------------
 
     /** selects scientific number formats.
      */
     const short SCIENTIFIC = 32;
 
-    //-------------------------------------------------------------------------
 
     /** selects number formats for fractions.
      */
     const short FRACTION = 64;
 
-    //-------------------------------------------------------------------------
 
     /** selects percentage number formats.
      */
     const short PERCENT = 128;
 
-    //-------------------------------------------------------------------------
 
     /** selects text number formats.
      */
     const short TEXT = 256;
 
-    //-------------------------------------------------------------------------
 
     /** selects number formats which contain date and time.
      */
     const short DATETIME = 6;
 
-    //-------------------------------------------------------------------------
 
     /** selects boolean number formats.
      */
     const short LOGICAL = 1024;
 
-    //-------------------------------------------------------------------------
 
     /** is used as a return value if no format exists.
      */
@@ -110,7 +95,6 @@ published constants NumberFormat
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

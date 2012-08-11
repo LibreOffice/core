@@ -26,104 +26,84 @@
 #include <com/sun/star/drawing/MeasureTextVertPos.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module drawing {
 
-//=============================================================================
 
 /** This service describes a <type>MeasureShape</type>.
  */
 published service MeasureProperties
 {
-    //-------------------------------------------------------------------------
     /** If this property is <TRUE/>, the measure is drawn below the
         reference edge instead of above it.
      */
     [property] boolean MeasureBelowReferenceEdge;
 
-    //-------------------------------------------------------------------------
     /** This is the length of the first help line.
      */
     [property] long MeasureHelpLine1Length;
 
-    //-------------------------------------------------------------------------
     /** This is the length of the second help line.
      */
     [property] long MeasureHelpLine2Length;
 
-    //-------------------------------------------------------------------------
     /** This is the distance from the measure line to the start of the
         help lines.
      */
     [property] long MeasureHelpLineDistance;
 
-    //-------------------------------------------------------------------------
     /** This is the overhang of the two help lines.
      */
     [property] long MeasureHelpLineOverhang;
 
-    //-------------------------------------------------------------------------
     /** This enumeration specifies the <type>MeasureKind</type>.
      */
     [property] com::sun::star::drawing::MeasureKind MeasureKind;
 
-    //-------------------------------------------------------------------------
     /** This is the distance from the reference edge to the measure line.
      */
     [property] long MeasureLineDistance;
 
-    //-------------------------------------------------------------------------
     /** This is the overhang of the reference line over the help lines.
      */
     [property] long MeasureOverhang;
 
-    //-------------------------------------------------------------------------
     /** If this is <TRUE/>, the unit of measure is shown in the measure text.
      */
     [property] boolean MeasureShowUnit;
 
-    //-------------------------------------------------------------------------
     /** If this is <TRUE/>, the angle of the measure is set automatically.
      */
     [property] boolean MeasureTextAutoAngle;
 
-    //-------------------------------------------------------------------------
     /** This is the automatic angle.
      */
     [property] long MeasureTextAutoAngleView;
 
-    //-------------------------------------------------------------------------
     /** This is the fixed angle.
      */
     [property] long MeasureTextFixedAngle;
 
-    //-------------------------------------------------------------------------
     /** This is the horizontal position of the measure text.
      */
     [property] com::sun::star::drawing::MeasureTextHorzPos MeasureTextHorizontalPosition;
 
-    //-------------------------------------------------------------------------
     /** This is the vertical position of the text.
      */
     [property] com::sun::star::drawing::MeasureTextVertPos MeasureTextVerticalPosition;
 
-    //-------------------------------------------------------------------------
     /** If this value is <TRUE/>, the measure has a fixed angle.
      */
     [property] boolean MeasureTextIsFixedAngle;
 
-    //-------------------------------------------------------------------------
     /** If this value is <TRUE/>, the text is rotated 90 degrees.
      */
     [property] boolean MeasureTextRotate90;
 
-    //-------------------------------------------------------------------------
     /** If this value is <TRUE/>, the text is printed upside down.
      */
     [property] boolean MeasureTextUpsideDown;
 
-    //-------------------------------------------------------------------------
     /** This value is the number of decimal places that is used to format the
         measure value.
 
@@ -132,7 +112,6 @@ published service MeasureProperties
     [optional, property] short MeasureDecimalPlaces;
  };
 
-//=============================================================================
 
 }; }; }; };
 

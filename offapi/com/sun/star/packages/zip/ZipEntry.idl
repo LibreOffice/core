@@ -35,11 +35,9 @@
 #include <com/sun/star/io/IOException.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {   module packages {  module zip {
 
-//=============================================================================
 
 /** used to represent a ZIP file entry
 
@@ -49,68 +47,55 @@ module com {  module sun {  module star {   module packages {  module zip {
  */
 published struct ZipEntry
 {
-    //-------------------------------------------------------------------------
     /** version needed to extract
      */
     short nVersion;
 
-    //-------------------------------------------------------------------------
     /** bit flags
      */
     short nFlag;
 
-    //-------------------------------------------------------------------------
     /** compression method
      */
     short nMethod;
 
-    //-------------------------------------------------------------------------
     /** modification time
      */
     long nTime;
 
-    //-------------------------------------------------------------------------
     /** CRC-32 of entry data
      */
     long nCrc;
 
-    //-------------------------------------------------------------------------
     /** uncompressed size of entry data
      */
     long nCompressedSize;
 
-    //-------------------------------------------------------------------------
     /** uncompressed size of entry data
      */
     long nSize;
 
-    //-------------------------------------------------------------------------
     /** offset of LOC header
      */
     long nOffset;
 
-    //-------------------------------------------------------------------------
     /** The number of the disk this entry is saved on
      */
     short nDiskNumber;
 
-    //-------------------------------------------------------------------------
     /** the entry name
      */
     string sName;
 
-    //-------------------------------------------------------------------------
     /** optional extra field data for entry
      */
     sequence<byte> extra;
 
-    //-------------------------------------------------------------------------
     /** optional comment
      */
     string sComment;
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

@@ -22,11 +22,9 @@
 #include <com/sun/star/reflection/XTypeDescription.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module reflection {
 
-//=============================================================================
 
 /** Reflects an enum type.
 */
@@ -54,7 +52,6 @@ published interface XEnumTypeDescription: com::sun::star::reflection::XTypeDescr
     sequence<long> getEnumValues();
 };
 
-//=============================================================================
 
 }; }; }; };
 

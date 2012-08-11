@@ -24,11 +24,9 @@
 #include <com/sun/star/reflection/XIdlClass.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module reflection {
 
-//=============================================================================
 
 /** Deprecated interface.  Do not use anymore.
 
@@ -39,7 +37,6 @@ published interface XIdlClassProvider: com::sun::star::uno::XInterface
     sequence<com::sun::star::reflection::XIdlClass> getIdlClasses();
 };
 
-//=============================================================================
 
 }; }; }; };
 

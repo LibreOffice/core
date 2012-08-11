@@ -22,11 +22,9 @@
 #include <com/sun/star/uno/XInterface.idl>
 
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /**
      @deprecated
 
@@ -37,7 +35,6 @@ module com { module sun { module star { module ucb {
 
 published interface XContentTransmitter: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /**
     */
     [oneway] void transmit( [in] string Source,
@@ -47,7 +44,6 @@ published interface XContentTransmitter: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

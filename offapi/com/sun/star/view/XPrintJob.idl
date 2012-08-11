@@ -24,11 +24,9 @@
 #include <com/sun/star/beans/PropertyValue.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module view {
 
-//-----------------------------------------------------------------------------
 /** allows for getting information about a print job.
 
     <p><type>XPrintJob</type> is implemented by print jobs that are created by

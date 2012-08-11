@@ -39,18 +39,15 @@
 #include <com/sun/star/xml/crypto/CipherID.idl>
 #endif
 
-//============================================================================
 
 module com {  module sun {  module star {  module embed {
 
-//============================================================================
 /** This interface allows to set a password for an object.
 
     @since OOo 3.4
  */
 interface XEncryptionProtectedStorage: XEncryptionProtectedSource2
 {
-    // -----------------------------------------------------------------------
     /** allows to set the encryption algorithms for the object.
         <p>
         The algorithms will of course be used only for streams that have been
@@ -98,13 +95,11 @@ interface XEncryptionProtectedStorage: XEncryptionProtectedSource2
     void setEncryptionAlgorithms( [in] sequence< ::com::sun::star::beans::NamedValue > aAlgorithms )
         raises( ::com::sun::star::lang::IllegalArgumentException );
 
-    // -----------------------------------------------------------------------
     /** allows to get the encryption algorithms of the object.
      */
     sequence< ::com::sun::star::beans::NamedValue > getEncryptionAlgorithms();
 };
 
-//============================================================================
 
 }; }; }; };
 

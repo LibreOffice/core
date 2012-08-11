@@ -22,14 +22,12 @@
 #include <com/sun/star/lang/XComponent.idl>
 #include <com/sun/star/lang/XServiceInfo.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module linguistic2 {
 
  published interface XLinguServiceManager;
  published interface XAvailableLocales;
 
-//=============================================================================
 /** offers linguistic functionality. Is to be used to access spell checker,
     hyphenator and thesaurus.
 */
@@ -41,7 +39,6 @@ published service LinguServiceManager
     interface com::sun::star::lang::XServiceInfo;
 };
 
-//=============================================================================
 
 }; }; }; };
 

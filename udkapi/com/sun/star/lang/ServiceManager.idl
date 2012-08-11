@@ -34,11 +34,9 @@
 
 #include <com/sun/star/beans/XPropertySet.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module lang {
 
-//=============================================================================
 
 /** Provides a collection of implementations for services.  This is a singleton
     you commonly find in your component context under key
@@ -121,7 +119,6 @@ published service ServiceManager
     [optional, property] com::sun::star::uno::XComponentContext DefaultContext;
 };
 
-//=============================================================================
 
 }; }; }; };
 

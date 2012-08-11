@@ -21,13 +21,11 @@
 
 #include <com/sun/star/uno/XInterface.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module awt {
 
  published interface XImageProducer;
 
-//=============================================================================
 
 /** specifies a data sink for an image.
 
@@ -38,14 +36,12 @@
  */
 published interface XImageConsumer: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** initializes the consumer with image dimensions.
      */
     [oneway] void init( [in] long Width,
              [in] long Height );
 
-    //-------------------------------------------------------------------------
 
     /** changes color model for next pixels
         typically called once after initialization.
@@ -57,7 +53,6 @@ published interface XImageConsumer: com::sun::star::uno::XInterface
              [in] long BlueMask,
              [in] long AlphaMask );
 
-    //-------------------------------------------------------------------------
 
     /** delivers a chunk of pixels as <atom>long</atom> values.
 
@@ -77,7 +72,6 @@ published interface XImageConsumer: com::sun::star::uno::XInterface
              [in] long nOffset,
              [in] long nScanSize );
 
-    //-------------------------------------------------------------------------
 
     /** delivers a chunk of pixels as <atom>byte</atom> values.
 
@@ -97,7 +91,6 @@ published interface XImageConsumer: com::sun::star::uno::XInterface
              [in] long nOffset,
              [in] long nScanSize );
 
-    //-------------------------------------------------------------------------
 
     /** is called for the notification of the degree to which the
         image is delivered.
@@ -115,7 +108,6 @@ published interface XImageConsumer: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

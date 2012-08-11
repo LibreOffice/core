@@ -24,11 +24,9 @@
 #include <com/sun/star/table/CellRangeAddress.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** represents a pane in a view of a spreadsheet document.
 
@@ -36,31 +34,26 @@
  */
 published interface XViewPane: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** returns the first column that is visible in the pane.
      */
     long getFirstVisibleColumn();
 
-    //-------------------------------------------------------------------------
 
     /** sets the first column that is visible in the pane.
      */
     void setFirstVisibleColumn( [in] long nFirstVisibleColumn );
 
-    //-------------------------------------------------------------------------
 
     /** returns the first row that is visible in the pane.
      */
     long getFirstVisibleRow();
 
-    //-------------------------------------------------------------------------
 
     /** sets the first row that is visible in the pane.
      */
     void setFirstVisibleRow( [in] long nFirstVisibleRow );
 
-    //-------------------------------------------------------------------------
 
     /** returns the address of the cell range that consists of
         the cells which are visible in the pane.
@@ -69,7 +62,6 @@ published interface XViewPane: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -43,7 +43,6 @@ published service PreparedStatement
     interface com::sun::star::sdbcx::XColumnsSupplier;
 };
 
-//=============================================================================
 
 }; }; }; };
 

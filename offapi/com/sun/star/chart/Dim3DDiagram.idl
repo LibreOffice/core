@@ -23,11 +23,9 @@
 #include <com/sun/star/chart/X3DDefaultSetter.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module chart {
 
-//=============================================================================
 
 /** is a service for diagrams that support the capability to render
     themselves as three-dimensional diagrams as well as
@@ -45,7 +43,6 @@ published service Dim3DDiagram
      */
     [optional] interface ::com::sun::star::chart::X3DDefaultSetter;
 
-    //-------------------------------------------------------------------------
 
     /** If set to <TRUE/>, the chart becomes a three-dimensional
         chart.  Otherwise it is two-dimensional.
@@ -65,7 +62,6 @@ published service Dim3DDiagram
     [optional, property] long   RotationVertical;
 };
 
-//=============================================================================
 
 }; }; }; };
 

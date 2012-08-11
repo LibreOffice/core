@@ -23,11 +23,9 @@
 #include <com/sun/star/lang/EventObject.idl>
 #include <com/sun/star/sdbc/XResultSet.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module sdb { module application {
 
-//=============================================================================
 
 /** specifies an event happening while copying table data between databases.
 
@@ -50,11 +48,9 @@ struct CopyTableRowEvent : ::com::sun::star::lang::EventObject
     any Error;
 };
 
-//=============================================================================
 
 }; }; }; }; };
 
-//=============================================================================
 
 #endif
 

@@ -22,11 +22,9 @@
 #include <com/sun/star/ucb/InteractiveLockingException.idl>
 
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** An error indicating that a lock that has been previously obtained by this
     OOo session has expired.
 
@@ -36,7 +34,6 @@ module com { module sun { module star { module ucb {
 {
 };
 
-//=============================================================================
 
 }; }; }; };
 

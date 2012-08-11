@@ -20,43 +20,36 @@
 #define __com_sun_star_awt_RasterOperation_idl__
 
 
-//=============================================================================
 
 module com { module sun { module star { module awt {
 
-//=============================================================================
 
 /** These values are used to specify the binary pixel-operation applied
     when pixels are written to the device.
 */
 published enum RasterOperation
 {
-    //-------------------------------------------------------------------------
 
     /** sets all pixel as written in the output operation.
     */
     OVERPAINT,
 
-    //-------------------------------------------------------------------------
 
     /** uses the pixel written as one and the current pixel as
         the other operator of an exclusive or-operation.
     */
     XOR,
 
-    //-------------------------------------------------------------------------
 
     /** All bits which are affected by this operation are set to 0.
     */
     ZEROBITS,
 
-    //-------------------------------------------------------------------------
 
     /** All bits which are affected by this operation are set to 1.
     */
     ALLBITS,
 
-    //-------------------------------------------------------------------------
 
     /** All bits which are affected by this operation are inverted.
     */
@@ -64,7 +57,6 @@ published enum RasterOperation
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

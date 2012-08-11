@@ -33,11 +33,9 @@
 #include <com/sun/star/ucb/XContent.idl>
 #include <com/sun/star/ucb/IllegalIdentifierException.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** a content provider which creates and manages <type>XContent</type>s.
 
      @version  1.0
@@ -47,7 +45,6 @@ module com { module sun { module star { module ucb {
 */
 published interface XContentProvider: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** creates a new <type>XContent</type> instance, if the given
         <type>XContentIdentifier</type> matches a content provided by the
         implementation of this interface.
@@ -66,7 +63,6 @@ published interface XContentProvider: com::sun::star::uno::XInterface
                 [in] com::sun::star::ucb::XContentIdentifier Identifier )
         raises ( com::sun::star::ucb::IllegalIdentifierException );
 
-    //-------------------------------------------------------------------------
     /** compares two <type>XContentIdentifier</type>s.
 
         @param Id1
@@ -86,7 +82,6 @@ published interface XContentProvider: com::sun::star::uno::XInterface
                  [in] com::sun::star::ucb::XContentIdentifier Id2 );
 };
 
-//=============================================================================
 
 }; }; }; };
 

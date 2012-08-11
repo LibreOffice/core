@@ -21,24 +21,20 @@
 
 #include <com/sun/star/uno/XInterface.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module util {
 
-//=============================================================================
 
 /** provides a mapping from <atom>string</atom> to <atom>string</atom>
  */
 published interface XStringMapping: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** provides a mapping for a given sequence of strings to
         a sequence of belonging strings.
      */
     boolean mapStrings( [inout] sequence< string > Parameter );
 };
 
-//=============================================================================
 
 }; }; }; };
 

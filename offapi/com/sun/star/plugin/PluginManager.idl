@@ -31,17 +31,14 @@
 #include <com/sun/star/plugin/XPluginManager.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module plugin {
 
-//=============================================================================
 
 /** This service manages all recognized Netscape plugins.
 */
 published service PluginManager : XPluginManager;
 
-//=============================================================================
 
 }; }; }; };
 

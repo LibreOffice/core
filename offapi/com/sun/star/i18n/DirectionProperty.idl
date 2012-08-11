@@ -19,11 +19,9 @@
 #ifndef __com_sun_star_i18n_DirectionProperty_idl__
 #define __com_sun_star_i18n_DirectionProperty_idl__
 
-//============================================================================
 
 module com {  module sun {  module star {  module i18n {
 
-//============================================================================
 
 /**
     Direction properties returned by
@@ -53,7 +51,6 @@ published enum DirectionProperty
     BOUNDARY_NEUTRAL           = 18
 };
 
-//============================================================================
 }; }; }; };
 
 #endif

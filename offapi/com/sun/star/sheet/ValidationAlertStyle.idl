@@ -20,37 +20,31 @@
 #ifndef __com_sun_star_sheet_ValidationAlertStyle_idl__
 #define __com_sun_star_sheet_ValidationAlertStyle_idl__
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** used to specify how invalid cell contents are treated.
  */
 published enum ValidationAlertStyle
 {
-    //-------------------------------------------------------------------------
 
     /** error message is shown and the change is rejected.
      */
     STOP,
 
-    //-------------------------------------------------------------------------
 
     /** warning message is shown and the user is asked whether the
         change will be accepted (defaulted to "No").
      */
     WARNING,
 
-    //-------------------------------------------------------------------------
 
     /** information message is shown and the user is asked whether the
         change will be accepted (defaulted to "Yes").
      */
     INFO,
 
-    //-------------------------------------------------------------------------
 
     /** macro is executed.
      */
@@ -58,7 +52,6 @@ published enum ValidationAlertStyle
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

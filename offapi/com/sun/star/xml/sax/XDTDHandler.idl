@@ -22,11 +22,9 @@
 #include <com/sun/star/uno/XInterface.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module xml {  module sax {
 
-//=============================================================================
 
 /** receives events according to the DTD of the document.
 
@@ -43,7 +41,6 @@ module com {  module sun {  module star {  module xml {  module sax {
  */
 published interface XDTDHandler: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** receives notification of a notation declaration event.
      */
@@ -51,7 +48,6 @@ published interface XDTDHandler: com::sun::star::uno::XInterface
              [in] string sPublicId,
              [in] string sSystemId );
 
-    //-------------------------------------------------------------------------
 
     /** receives notification of an unparsed entity declaration event.
      */
@@ -62,7 +58,6 @@ published interface XDTDHandler: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

@@ -20,11 +20,9 @@
 #ifndef __com_sun_star_drawing_CaptionEscapeDirection_idl__
 #define __com_sun_star_drawing_CaptionEscapeDirection_idl__
 
-//=============================================================================
 
 module com { module sun { module star { module drawing {
 
-//=============================================================================
 /** this flags describe escape direction for
         the line of a <type>CaptionShape</type>.
 
@@ -32,26 +30,22 @@ module com { module sun { module star { module drawing {
 */
 published constants CaptionEscapeDirection
 {
-    //-------------------------------------------------------------------------
     /** the caption line leaves the caption area at the horizontal edge
         that is nearest to the caption point.
     */
     const short horizontal = 0;
 
-    //-------------------------------------------------------------------------
     /** the caption line leaves the caption area at the vertical edge
         that is nearest to the caption point.
     */
     const short vertical = 1;
 
-    //-------------------------------------------------------------------------
     /** the caption line leaves the caption area at the edge
         that is nearest to the caption point.
     */
     const short auto = 2;
 };
 
-//=============================================================================
 
 }; }; }; };
 

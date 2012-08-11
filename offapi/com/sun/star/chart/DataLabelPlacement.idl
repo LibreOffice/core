@@ -20,11 +20,9 @@
 #define __com_sun_star_chart_DataLabelPlacement_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module chart {
 
-//=============================================================================
 
 /** These values specify where the captions/labels of data points are displayed.
  */
@@ -45,7 +43,6 @@ published constants DataLabelPlacement
     const long NEAR_ORIGIN = 12;
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -74,7 +74,6 @@ published service ResultSet
     [optional, readonly, property] boolean CanUpdateInsertedRows;
 };
 
-//=============================================================================
 
 }; }; }; };
 

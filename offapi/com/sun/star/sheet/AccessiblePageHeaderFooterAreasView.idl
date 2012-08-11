@@ -32,11 +32,9 @@
 #include <com/sun/star/accessibility/XAccessibleComponent.idl>
 #include <com/sun/star/accessibility/XAccessibleEventBroadcaster.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** The accessible view of the Header/Footer in a spreadsheet page preview
 
@@ -134,7 +132,6 @@ published service AccessiblePageHeaderFooterAreasView
     interface ::com::sun::star::accessibility::XAccessibleEventBroadcaster;
 };
 
-//=============================================================================
 
 }; }; }; };
 

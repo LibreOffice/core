@@ -43,7 +43,6 @@ published service ResultSet
     interface com::sun::star::sdbcx::XColumnsSupplier;
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -31,11 +31,9 @@
 #include <com/sun/star/ucb/AuthenticationRequest.idl>
 
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** An error specifying lack of correct authentication data (e.g., to log into
     an account).
 
@@ -43,13 +41,11 @@ module com { module sun { module star { module ucb {
 */
 exception URLAuthenticationRequest : AuthenticationRequest
 {
-    //-------------------------------------------------------------------------
     /** The URL for which authentication is requested.
      */
     string URL;
 };
 
-//=============================================================================
 
 }; }; }; };
 

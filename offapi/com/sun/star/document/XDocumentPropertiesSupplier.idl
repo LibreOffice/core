@@ -22,11 +22,9 @@
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/document/XDocumentProperties.idl>
 
-//=============================================================================
 
 module com {   module sun {   module star {   module document {
 
-//=============================================================================
 /** provides access to the <type>XDocumentProperties</type> instance of a
     document.
     <p>
@@ -41,7 +39,6 @@ module com {   module sun {   module star {   module document {
  */
 published interface XDocumentPropertiesSupplier
 {
-    //-------------------------------------------------------------------------
     /** provides the document properties object.
 
         @returns
@@ -50,7 +47,6 @@ published interface XDocumentPropertiesSupplier
     XDocumentProperties getDocumentProperties();
 };
 
-//=============================================================================
 
 }; }; }; };
 

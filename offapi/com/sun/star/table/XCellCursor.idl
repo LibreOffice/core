@@ -22,11 +22,9 @@
 
 #include <com/sun/star/table/XCellRange.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module table {
 
-//=============================================================================
 
 /** provides methods to control the position of a cell cursor.
 
@@ -34,21 +32,18 @@ module com {  module sun {  module star {  module table {
  */
 published interface XCellCursor: com::sun::star::table::XCellRange
 {
-    //-------------------------------------------------------------------------
 
     /** points the cursor to a single cell which is the beginning of a
         contiguous series of (filled) cells.
      */
     void gotoStart();
 
-    //-------------------------------------------------------------------------
 
     /** points the cursor to a single cell which is the end of a contiguous
         series of (filled) cells.
      */
     void gotoEnd();
 
-    //-------------------------------------------------------------------------
 
     /** points the cursor to the next unprotected cell.
 
@@ -57,7 +52,6 @@ published interface XCellCursor: com::sun::star::table::XCellRange
      */
     void gotoNext();
 
-    //-------------------------------------------------------------------------
 
     /** points the cursor to the previous unprotected cell.
 
@@ -66,7 +60,6 @@ published interface XCellCursor: com::sun::star::table::XCellRange
      */
     void gotoPrevious();
 
-    //-------------------------------------------------------------------------
 
     /** moves the origin of the cursor relative to the current position.
 
@@ -82,7 +75,6 @@ published interface XCellCursor: com::sun::star::table::XCellRange
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

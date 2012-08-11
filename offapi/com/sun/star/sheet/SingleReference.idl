@@ -29,53 +29,44 @@
 #ifndef __com_sun_star_sheet_SingleReference_idl__
 #define __com_sun_star_sheet_SingleReference_idl__
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** contains a reference to a single cell.
  */
 struct SingleReference
 {
-    //-------------------------------------------------------------------------
 
     /** is the absolute column number.
      */
     long Column;
 
-    //-------------------------------------------------------------------------
 
     /** is the relative column number.
      */
     long RelativeColumn;
 
-    //-------------------------------------------------------------------------
 
     /** is the absolute row number.
      */
     long Row;
 
-    //-------------------------------------------------------------------------
 
     /** is the relative row number.
      */
     long RelativeRow;
 
-    //-------------------------------------------------------------------------
 
     /** is the absolute sheet number.
      */
     long Sheet;
 
-    //-------------------------------------------------------------------------
 
     /** is the relative sheet number.
      */
     long RelativeSheet;
 
-    //-------------------------------------------------------------------------
 
     /** contains flags.
         @see ReferenceFlags
@@ -83,7 +74,6 @@ struct SingleReference
     long Flags;
 };
 
-//=============================================================================
 
 }; }; }; };
 

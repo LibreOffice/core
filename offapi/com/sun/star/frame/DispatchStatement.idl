@@ -21,11 +21,9 @@
 
 #include <com/sun/star/beans/PropertyValue.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module frame {
 
-//=============================================================================
 
 // DocMerge from xml: struct com::sun::star::frame::DispatchStatement
 /** represents a dispatch statement from a recorded macro
@@ -43,7 +41,6 @@ published struct DispatchStatement
          */
     string aCommand;
 
-    //-------------------------------------------------------------------------
 
 
         // DocMerge from xml: field com::sun::star::frame::DispatchStatement::aTarget
@@ -55,7 +52,6 @@ published struct DispatchStatement
          */
         string aTarget;
 
-        //-------------------------------------------------------------------------
 
         // DocMerge from xml: field com::sun::star::frame::DispatchStatement::aArgs
         /** specifies the dispatch command arguments
@@ -66,7 +62,6 @@ published struct DispatchStatement
          */
         sequence < com::sun::star::beans::PropertyValue > aArgs;
 
-        //-------------------------------------------------------------------------
 
         // DocMerge from xml: field com::sun::star::frame::DispatchStatement::nFlags
         /** specifies the optional search flags
@@ -76,7 +71,6 @@ published struct DispatchStatement
          */
         long nFlags;
 
-        //-------------------------------------------------------------------------
 
         // DocMerge from xml: field com::sun::star::frame::DispatchStatement::bIsComment
         /** specifies if this statement should be recorded as commented out or not
@@ -85,10 +79,8 @@ published struct DispatchStatement
          */
         boolean bIsComment;
 
-        //-------------------------------------------------------------------------
 };
 
-//=============================================================================
 
 }; }; }; };
 

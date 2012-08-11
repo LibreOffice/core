@@ -28,11 +28,9 @@
 #ifndef __com_sun_star_table_BorderLineStyle_idl__
 #define __com_sun_star_table_BorderLineStyle_idl__
 
-//=============================================================================
 
 module com {  module sun {  module star {  module table {
 
-//=============================================================================
 
 constants BorderLineStyle
 {
@@ -103,7 +101,6 @@ constants BorderLineStyle
     const short INSET = 13;
 };
 
-//=============================================================================
 
 }; }; }; };
 

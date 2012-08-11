@@ -34,11 +34,9 @@
 #include <com/sun/star/awt/XWindowPeer.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module plugin {
 
-//=============================================================================
 
 /** Interface accessing all recognized Netscape plugins.
 */
@@ -108,7 +106,6 @@ published interface XPluginManager: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

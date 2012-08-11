@@ -89,7 +89,6 @@ published service View
     [readonly, property] long CheckOption;
 };
 
-//=============================================================================
 
 }; }; }; };
 

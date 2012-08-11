@@ -19,11 +19,9 @@
 #ifndef __com_sun_star_i18n_NumberFormatCode_idl__
 #define __com_sun_star_i18n_NumberFormatCode_idl__
 
-//=============================================================================
 
 module com {  module sun {  module star {  module i18n {
 
-//=============================================================================
 
 /**
     Number format code information returned by various
@@ -48,7 +46,6 @@ published struct NumberFormatCode
     boolean Default;
 };
 
-//=============================================================================
 }; }; }; };
 
 #endif

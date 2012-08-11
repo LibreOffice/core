@@ -19,11 +19,9 @@
 #ifndef __com_sun_star_beans_StringPair_idl__
 #define __com_sun_star_beans_StringPair_idl__
 
-//=============================================================================
 
  module com {  module sun {  module star {  module beans {
 
-//=============================================================================
 
 /** specifies a pair of two strings.
  */
@@ -33,14 +31,12 @@ published struct StringPair
      */
     string First;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the second of the two strings.
      */
     string Second;
 };
 
-//=============================================================================
 
 }; }; }; };
 

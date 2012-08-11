@@ -22,11 +22,9 @@
 
 #include <com/sun/star/beans/XPropertySet.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module sdb {
 
-//=============================================================================
 
 /** allows creating instances of the DataAccessDescriptor service.
 
@@ -45,11 +43,9 @@ interface XDataAccessDescriptorFactory
         createDataAccessDescriptor();
 };
 
-//=============================================================================
 
 }; }; }; };
 
-//=============================================================================
 
 #endif
 

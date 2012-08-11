@@ -23,14 +23,12 @@
 #include <com/sun/star/i18n/XCollator.idl>
 #include <com/sun/star/lang/IllegalArgumentException.idl>
 
-//==================================================================================================================
 
 module com { module sun { module star { module awt { module grid {
 
 interface XSortableMutableGridDataModel;
 interface XMutableGridDataModel;
 
-//==================================================================================================================
 
 /** provides a default implementation of a <type>XSortableGridData</type>.
 
@@ -86,11 +84,9 @@ service SortableGridDataModel : XSortableMutableGridDataModel
         raises ( ::com::sun::star::lang::IllegalArgumentException );
 };
 
-//==================================================================================================================
 
 }; }; }; }; };
 
-//==================================================================================================================
 
 #endif
 

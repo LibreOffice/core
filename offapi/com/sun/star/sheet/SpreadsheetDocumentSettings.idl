@@ -26,11 +26,9 @@
 #include <com/sun/star/lang/Locale.idl>
 #include <com/sun/star/awt/XDevice.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** contributes properties to control the configuration which is global
     for all views of a spreadsheet document.
@@ -41,20 +39,17 @@ module com {  module sun {  module star {  module sheet {
  */
 published service SpreadsheetDocumentSettings
 {
-    //-------------------------------------------------------------------------
 
 //!published service PropertySet
     /** provides access to the properties.
      */
     interface com::sun::star::beans::XPropertySet;
 
-    //=========================================================================
 
     /** enables iterated calculation of circular references.
      */
     [property] boolean IsIterationEnabled;
 
-    //-------------------------------------------------------------------------
 
     /** specifies how many iterations are carried out.
 
@@ -63,7 +58,6 @@ published service SpreadsheetDocumentSettings
      */
     [property] long IterationCount;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the point at which a change in results will stop
         the iteration.
@@ -78,32 +72,27 @@ published service SpreadsheetDocumentSettings
      */
     [property] double IterationEpsilon;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the number of decimals in the default number format.
      */
     [property] short StandardDecimals;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the date that is represented by the value zero.
      */
     [property] com::sun::star::util::Date NullDate;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the width of default tabulators.
      */
     [property] short DefaultTabStop;
 
-    //-------------------------------------------------------------------------
 
     /** specifies whether upper and lower cases are treated as equal
         when comparing cells.
      */
     [property] boolean IgnoreCase;
 
-    //-------------------------------------------------------------------------
 
     /** specifies whether calculations are performed with the rounded
         values displayed in cells (set to <TRUE/>) instead of the
@@ -111,19 +100,16 @@ published service SpreadsheetDocumentSettings
      */
     [property] boolean CalcAsShown;
 
-    //-------------------------------------------------------------------------
 
     /** specifies whether filter criteria must match entire cell contents.
      */
     [property] boolean MatchWholeCell;
 
-    //-------------------------------------------------------------------------
 
     /** enables online spell checking.
      */
     [property] boolean SpellOnline;
 
-    //-------------------------------------------------------------------------
 
     /** specifies whether column or row labels are looked up from
         anywhere on the sheet.
@@ -135,20 +121,17 @@ published service SpreadsheetDocumentSettings
      */
     [property] boolean LookUpLabels;
 
-    //-------------------------------------------------------------------------
 
     /** specifies whether regular expressions in formulas are enabled,
         e.g., for functions which look up spreadsheet contents.
      */
     [property] boolean RegularExpressions;
 
-    //-------------------------------------------------------------------------
 
     /** contains the interface XForbiddenCharacters.
      */
     [readonly, optional, property] com::sun::star::i18n::XForbiddenCharacters ForbiddenCharacters;
 
-    //-------------------------------------------------------------------------
 
     /** If this property is set the document has DrawPages. Use this
         property to find out, whether the document has DrawPages or not,
@@ -159,25 +142,21 @@ published service SpreadsheetDocumentSettings
      */
     [readonly, optional, property] boolean HasDrawPages;
 
-    //-------------------------------------------------------------------------
 
     /** contains the standard document language for Western text.
      */
     [optional, property] com::sun::star::lang::Locale CharLocale;
 
-    //-------------------------------------------------------------------------
 
     /** contains the standard document language for Asian text.
      */
     [optional, property] com::sun::star::lang::Locale CharLocaleAsian;
 
-    //-------------------------------------------------------------------------
 
     /** contains the standard document language for Complex text.
      */
     [optional, property] com::sun::star::lang::Locale CharLocaleComplex;
 
-    //-------------------------------------------------------------------------
 
     /** specifies whether the document data are already loaded.
 
@@ -185,7 +164,6 @@ published service SpreadsheetDocumentSettings
      */
     [optional, property] boolean IsLoaded;
 
-    //-------------------------------------------------------------------------
 
     /** specifies whether the undo command is enabled.
 
@@ -193,7 +171,6 @@ published service SpreadsheetDocumentSettings
      */
     [optional, property] boolean IsUndoEnabled;
 
-    //-------------------------------------------------------------------------
 
     /** specifies whether the automatic adjustment of the row height is
         enabled.
@@ -202,7 +179,6 @@ published service SpreadsheetDocumentSettings
      */
     [optional, property] boolean IsAdjustHeightEnabled;
 
-    //-------------------------------------------------------------------------
 
     /** specifies whether the automatic execution of links is enabled.
 
@@ -210,7 +186,6 @@ published service SpreadsheetDocumentSettings
      */
     [optional, property] boolean IsExecuteLinkEnabled;
 
-    //-------------------------------------------------------------------------
 
     /** contains the reference device used for formatting the document.
 
@@ -220,7 +195,6 @@ published service SpreadsheetDocumentSettings
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

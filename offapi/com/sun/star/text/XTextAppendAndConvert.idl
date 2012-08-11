@@ -24,11 +24,9 @@
 #include <com/sun/star/text/XTextContentAppend.idl>
 #include <com/sun/star/text/XTextConvert.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module text {
 
-//=============================================================================
 
 /** merges the functions of <type>XTextAppend</type>,
     <type>XTextContentAppend</type> and <type>XTextConvert</type>.
@@ -40,7 +38,6 @@
     interface com::sun::star::text::XTextConvert;
 };
 
-//=============================================================================
 
 }; }; }; };
 

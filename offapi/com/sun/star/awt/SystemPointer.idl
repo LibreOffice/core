@@ -29,456 +29,382 @@
 #define __com_sun_star_awt_SystemPointer_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module awt {
 
-//=============================================================================
 
 /** specifies the shape of a mouse pointer.
  */
 published constants SystemPointer
 {
-    //-------------------------------------------------------------------------
 
     /** specifies the normal arrow-like mouse pointer.
      */
     const long ARROW = 0;
 
-    //-------------------------------------------------------------------------
 
     /** specifies an invisible mouse pointer.
      */
     const long INVISIBLE = 1;
 
-    //-------------------------------------------------------------------------
 
     /** specifies a waiting symbol as a mouse pointer (for example hourglass).
      */
     const long WAIT = 2;
 
-    //-------------------------------------------------------------------------
 
     /** specifies a mouse pointer for text (cursor-like).
      */
     const long TEXT = 3;
 
-    //-------------------------------------------------------------------------
 
     /** specifies a mouse pointer for on-line help.
      */
     const long HELP = 4;
 
-    //-------------------------------------------------------------------------
 
     /** specifies a cross as a mouse pointer.
      */
     const long CROSS = 5;
 
-    //-------------------------------------------------------------------------
 
     /** specifies a mouse pointer which symbolizes movement.
      */
     const long MOVE = 6;
 
-    //-------------------------------------------------------------------------
 
     /** specifies a mouse pointer which symbolizes resizing for a top border.
      */
     const long NSIZE = 7;
 
-    //-------------------------------------------------------------------------
 
     /** specifies a mouse pointer which symbolizes resizing for a bottom
         border.
      */
     const long SSIZE = 8;
 
-    //-------------------------------------------------------------------------
 
     /** specifies a mouse pointer which symbolizes resizing for a left border.
      */
     const long WSIZE = 9;
 
-    //-------------------------------------------------------------------------
 
     /** specifies a mouse pointer which symbolizes resizing for a right border.
      */
     const long ESIZE = 10;
 
-    //-------------------------------------------------------------------------
 
     /** specifies a mouse pointer which symbolizes resizing for the top-left
         corner.
      */
     const long NWSIZE = 11;
 
-    //-------------------------------------------------------------------------
 
     /** specifies a mouse pointer which symbolizes resizing for the top-right
         corner.
      */
     const long NESIZE = 12;
 
-    //-------------------------------------------------------------------------
 
     /** specifies a mouse pointer which symbolizes resizing for the bottom-left
         corner.
      */
     const long SWSIZE = 13;
 
-    //-------------------------------------------------------------------------
 
     /** specifies a mouse pointer which symbolizes resizing for the
         bottom-right corner.
      */
     const long SESIZE = 14;
 
-    //-------------------------------------------------------------------------
 
     /** specifies a mouse pointer which symbolizes window resizing for a top
         border.
      */
     const long WINDOW_NSIZE = 15;
 
-    //-------------------------------------------------------------------------
 
     /** specifies a mouse pointer which symbolizes window resizing for a bottom
         border.
      */
     const long WINDOW_SSIZE = 16;
 
-    //-------------------------------------------------------------------------
 
     /** specifies a mouse pointer which symbolizes window resizing for a left
         border.
      */
     const long WINDOW_WSIZE = 17;
 
-    //-------------------------------------------------------------------------
 
     /** specifies a mouse pointer which symbolizes window resizing for a right
         border.
      */
     const long WINDOW_ESIZE = 18;
 
-    //-------------------------------------------------------------------------
 
     /** specifies a mouse pointer which symbolizes window resizing for the
         top-left corner.
      */
     const long WINDOW_NWSIZE = 19;
 
-    //-------------------------------------------------------------------------
 
     /** specifies a mouse pointer which symbolizes window resizing for the
         top-right corner.
      */
     const long WINDOW_NESIZE = 20;
 
-    //-------------------------------------------------------------------------
 
     /** specifies a mouse pointer which symbolizes window resizing for the
         bottom-left corner.
      */
     const long WINDOW_SWSIZE = 21;
 
-    //-------------------------------------------------------------------------
 
     /** specifies a mouse pointer which symbolizes window resizing for the
         bottom-right corner.
      */
     const long WINDOW_SESIZE = 22;
 
-    //-------------------------------------------------------------------------
 
     /** specifies a mouse pointer which symbolizes horizontal splitting.
      */
     const long HSPLIT = 23;
 
-    //-------------------------------------------------------------------------
 
     /** specifies a mouse pointer which symbolizes vertical splitting.
      */
     const long VSPLIT = 24;
 
-    //-------------------------------------------------------------------------
 
     /** specifies a mouse pointer which symbolizes horizontal resizing.
      */
     const long HSIZEBAR = 25;
 
-    //-------------------------------------------------------------------------
 
     /** specifies a mouse pointer which symbolizes vertical resizing.
      */
     const long VSIZEBAR = 26;
 
-    //-------------------------------------------------------------------------
 
     /** specifies a hand symbol as mouse pointer.
      */
     const long HAND = 27;
 
-    //-------------------------------------------------------------------------
 
     /** specifies a pointing hand symbol as mouse pointer.
      */
     const long REFHAND = 28;
 
-    //-------------------------------------------------------------------------
 
     /** specifies a pen symbol as mouse pointer.
      */
     const long PEN = 29;
 
-    //-------------------------------------------------------------------------
 
     /** specifies a magnify symbol as mouse pointer.
      */
     const long MAGNIFY = 30;
 
-    //-------------------------------------------------------------------------
 
     /** specifies a fill symbol as mouse pointer.
      */
     const long FILL = 31;
 
-    //-------------------------------------------------------------------------
 
     /** specifies a rotate symbol as mouse pointer.
      */
     const long ROTATE = 32;
 
-    //-------------------------------------------------------------------------
 
     /** specifies a horizontal shear symbol as mouse pointer.
      */
     const long HSHEAR = 33;
 
-    //-------------------------------------------------------------------------
 
     /** specifies a vertical shear symbol as mouse pointer.
      */
     const long VSHEAR = 34;
 
-    //-------------------------------------------------------------------------
 
     /** specifies a mirror symbol as mouse pointer.
      */
     const long MIRROR = 35;
 
-    //-------------------------------------------------------------------------
 
     /** specifies a crook symbol as mouse pointer.
      */
     const long CROOK = 36;
 
-    //-------------------------------------------------------------------------
 
     /** specifies a crop symbol as mouse pointer.
      */
     const long CROP = 37;
 
-    //-------------------------------------------------------------------------
 
     /** specifies a mouse pointer which symbolizes moving a point.
      */
     const long MOVEPOINT = 38;
 
-    //-------------------------------------------------------------------------
 
     /** specifies a mouse pointer which symbolizes moving a Bezier weight.
      */
     const long MOVEBEZIERWEIGHT = 39;
 
-    //-------------------------------------------------------------------------
 
     /** specifies a mouse pointer which symbolizes moving data.
      */
     const long MOVEDATA = 40;
 
-    //-------------------------------------------------------------------------
 
     /** specifies a mouse pointer which symbolizes copying data.
      */
     const long COPYDATA = 41;
 
-    //-------------------------------------------------------------------------
 
     /** specifies a mouse pointer which symbolizes linking data.
      */
     const long LINKDATA = 42;
 
-    //-------------------------------------------------------------------------
 
     /** specifies a mouse pointer which symbolizes moving a data link.
      */
     const long MOVEDATALINK = 43;
 
-    //-------------------------------------------------------------------------
 
     /** specifies a mouse pointer which symbolizes copying a data link.
      */
     const long COPYDATALINK = 44;
 
-    //-------------------------------------------------------------------------
 
     /** specifies a mouse pointer which symbolizes moving a file.
      */
     const long MOVEFILE = 45;
 
-    //-------------------------------------------------------------------------
 
     /** specifies a mouse pointer which symbolizes copying a file.
      */
     const long COPYFILE = 46;
 
-    //-------------------------------------------------------------------------
 
     /** specifies a mouse pointer which symbolizes linking a file.
      */
     const long LINKFILE = 47;
 
-    //-------------------------------------------------------------------------
 
     /** specifies a mouse pointer which symbolizes moving a file link.
      */
     const long MOVEFILELINK = 48;
 
-    //-------------------------------------------------------------------------
 
     /** specifies a mouse pointer which symbolizes copying a file link.
      */
     const long COPYFILELINK = 49;
 
-    //-------------------------------------------------------------------------
 
     /** specifies a mouse pointer which symbolizes moving multiple files.
      */
     const long MOVEFILES = 50;
 
-    //-------------------------------------------------------------------------
 
     /** specifies a mouse pointer which symbolizes copying multiple files.
      */
     const long COPYFILES = 51;
 
-    //-------------------------------------------------------------------------
 
     /** specifies a mouse pointer which symbolizes "not allowed".
      */
     const long NOTALLOWED = 52;
 
-    //-------------------------------------------------------------------------
 
     /** specifies a mouse pointer which symbolizes drawing a line.
      */
     const long DRAW_LINE = 53;
 
-    //-------------------------------------------------------------------------
 
     /** specifies a mouse pointer which symbolizes drawing a rectangle.
      */
     const long DRAW_RECT = 54;
 
-    //-------------------------------------------------------------------------
 
     /** specifies a mouse pointer which symbolizes drawing a polygon.
      */
     const long DRAW_POLYGON = 55;
 
-    //-------------------------------------------------------------------------
 
     /** specifies a mouse pointer which symbolizes drawing a Bezier.
      */
     const long DRAW_BEZIER = 56;
 
-    //-------------------------------------------------------------------------
 
     /** specifies a mouse pointer which symbolizes drawing an arc.
      */
     const long DRAW_ARC = 57;
 
-    //-------------------------------------------------------------------------
 
     /** specifies a mouse pointer which symbolizes drawing a pie.
      */
     const long DRAW_PIE = 58;
 
-    //-------------------------------------------------------------------------
 
     /** specifies a mouse pointer which symbolizes drawing a circle cut.
      */
     const long DRAW_CIRCLECUT = 59;
 
-    //-------------------------------------------------------------------------
 
     /** specifies a mouse pointer which symbolizes drawing an ellipse.
      */
     const long DRAW_ELLIPSE = 60;
 
-    //-------------------------------------------------------------------------
 
     /** specifies a mouse pointer which symbolizes drawing free handed.
      */
     const long DRAW_FREEHAND = 61;
 
-    //-------------------------------------------------------------------------
 
     /** specifies a mouse pointer which symbolizes drawing a connector.
      */
     const long DRAW_CONNECT = 62;
 
-    //-------------------------------------------------------------------------
 
     /** specifies a mouse pointer which symbolizes drawing text.
      */
     const long DRAW_TEXT = 63;
 
-    //-------------------------------------------------------------------------
 
     /** specifies a mouse pointer which symbolizes drawing a text caption.
      */
     const long DRAW_CAPTION = 64;
 
-    //-------------------------------------------------------------------------
 
     /** specifies a mouse pointer which symbolizes a chart.
      */
     const long CHART = 65;
 
-    //-------------------------------------------------------------------------
 
     /** specifies a mouse pointer which symbolizes a detective.
      */
     const long DETECTIVE = 66;
 
-    //-------------------------------------------------------------------------
 
     /** specifies a mouse pointer which symbolizes a pivot column.
      */
     const long PIVOT_COL = 67;
 
-    //-------------------------------------------------------------------------
 
     /** specifies a mouse pointer which symbolizes a pivot row.
      */
     const long PIVOT_ROW = 68;
 
-    //-------------------------------------------------------------------------
 
     /** specifies a mouse pointer which symbolizes a pivot field.
      */
     const long PIVOT_FIELD = 69;
 
-    //-------------------------------------------------------------------------
 
     /** specifies a mouse pointer which symbolizes a chain.
      */
     const long CHAIN = 70;
 
-    //-------------------------------------------------------------------------
 
     /** specifies a mouse pointer which symbolizes "chaining not allowed".
      */
@@ -486,7 +412,6 @@ published constants SystemPointer
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -24,11 +24,9 @@
 #include <com/sun/star/table/TableSortFieldType.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module text {
 
-//=============================================================================
 
 /** describes sort criteria for sorting paragraphs or table contents in
     a text document.
@@ -39,13 +37,11 @@ published service TextSortDescriptor2
 {
     service com::sun::star::table::TableSortDescriptor2;
 
-    //-------------------------------------------------------------------------
     /** determines if the content of a table or a selection of
         paragraphs is to be sorted.
      */
     [property] boolean IsSortInTable;
 
-    //-------------------------------------------------------------------------
     /** contains the character that marks the column separator
         when a selection of paragraphs is to be sorted.
      */
@@ -53,7 +49,6 @@ published service TextSortDescriptor2
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

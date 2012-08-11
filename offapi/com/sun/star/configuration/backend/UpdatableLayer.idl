@@ -23,11 +23,9 @@
 #include <com/sun/star/configuration/backend/Layer.idl>
 #include <com/sun/star/configuration/backend/XUpdatableLayer.idl>
 
-//==============================================================================
 
 module com { module sun { module star { module configuration { module backend {
 
-//==============================================================================
 
 /**
   provides read/write access to a configuration data layer.
@@ -43,7 +41,6 @@ module com { module sun { module star { module configuration { module backend {
   */
 published service UpdatableLayer
 {
-    //--------------------------------------------------------------------------
 
     /**
         handles read access to the contents of the layer.
@@ -58,7 +55,6 @@ published service UpdatableLayer
       */
     service Layer ;
 
-    //--------------------------------------------------------------------------
 
     /**
       provides write access to the contents of the layer.
@@ -102,11 +98,9 @@ published service UpdatableLayer
       */
     interface XUpdatableLayer ;
 
-    //--------------------------------------------------------------------------
 
 } ;
 
-//==============================================================================
 
 } ; } ; } ; } ; } ;
 

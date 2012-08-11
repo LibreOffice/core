@@ -23,11 +23,9 @@
 #include <com/sun/star/form/component/DatabaseFormattedField.idl>
 #include <com/sun/star/form/binding/BindableDataAwareControlModel.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module form {  module binding {
 
-//=============================================================================
 
 /** This service specifies a formatted input field which is data-aware and thus can be bound to a
     database field, and additionally supports binding to arbitrary external values.
@@ -49,7 +47,6 @@ service BindableDatabaseFormattedField
 
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

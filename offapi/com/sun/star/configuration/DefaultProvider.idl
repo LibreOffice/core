@@ -34,11 +34,9 @@
 #include <com/sun/star/lang/XLocalizable.idl>
 
 
-//=============================================================================
 
 module com { module sun { module star { module configuration {
 
-//=============================================================================
 
 /**
     is a <type>ConfigurationProvider</type>, that is
@@ -52,7 +50,6 @@ module com { module sun { module star { module configuration {
 */
 published service DefaultProvider
 {
-    //-------------------------------------------------------------------------
 
     /** characterizes the functionality.
       */
@@ -81,10 +78,8 @@ published service DefaultProvider
 
     [optional,property] boolean EnableAsync;
 
-    //-------------------------------------------------------------------------
 } ;
 
-//=============================================================================
 
 } ; } ; } ; } ;
 

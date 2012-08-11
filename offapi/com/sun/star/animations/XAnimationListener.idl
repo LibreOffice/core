@@ -31,11 +31,9 @@
 #include <com/sun/star/lang/XEventListener.idl>
 #include <com/sun/star/animations/XAnimationNode.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module animations {
 
-//=============================================================================
 
 /** makes it possible to register listeners, which are called whenever
     an animation event occurs.
@@ -78,7 +76,6 @@ interface XAnimationListener : ::com::sun::star::lang::XEventListener
     void repeat( [in] XAnimationNode Node, [in] long Repeat );
 };
 
-//=============================================================================
 
 }; }; }; };
 

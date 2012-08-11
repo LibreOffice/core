@@ -51,7 +51,6 @@ published interface XCompletedConnection: com::sun::star::uno::XInterface
              raises (com::sun::star::sdbc::SQLException);
 };
 
-//=============================================================================
 
 }; }; }; };
 

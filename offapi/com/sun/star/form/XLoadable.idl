@@ -23,11 +23,9 @@
 
 #include <com/sun/star/form/XLoadListener.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module form {
 
-//=============================================================================
 
 /** provides functionality to implement objects which may be loaded.
 
@@ -37,7 +35,6 @@
  */
 published interface XLoadable: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** loads the data.
 
@@ -46,13 +43,11 @@ published interface XLoadable: com::sun::star::uno::XInterface
      */
     [oneway] void load();
 
-    //-------------------------------------------------------------------------
 
     /** unloads the data.
      */
     [oneway] void unload();
 
-    //-------------------------------------------------------------------------
 
     /** does a smart refresh of the object.
 
@@ -61,13 +56,11 @@ published interface XLoadable: com::sun::star::uno::XInterface
      */
     [oneway] void reload();
 
-    //-------------------------------------------------------------------------
 
     /** returns if the object is in loaded state.
      */
     boolean isLoaded();
 
-    //-------------------------------------------------------------------------
 
     /** adds the specified listener to receive load-related events
 
@@ -76,7 +69,6 @@ published interface XLoadable: com::sun::star::uno::XInterface
      */
     [oneway] void addLoadListener( [in] com::sun::star::form::XLoadListener aListener );
 
-    //-------------------------------------------------------------------------
 
     /** removes the specified listener.
 

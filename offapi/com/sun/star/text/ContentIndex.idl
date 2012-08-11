@@ -32,11 +32,9 @@
 
 #include <com/sun/star/text/BaseIndex.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module text {
 
-//=============================================================================
 
 /** specifies service of content indexes within a document.@see com::sun::star::text::BaseIndex
  */
@@ -67,7 +65,6 @@ published service ContentIndex
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

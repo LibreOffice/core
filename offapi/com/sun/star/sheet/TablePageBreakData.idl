@@ -20,11 +20,9 @@
 #ifndef __com_sun_star_sheet_TablePageBreakData_idl__
 #define __com_sun_star_sheet_TablePageBreakData_idl__
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** describes a page break in a spreadsheet.
 
@@ -32,13 +30,11 @@ module com {  module sun {  module star {  module sheet {
  */
 published struct TablePageBreakData
 {
-    //-------------------------------------------------------------------------
 
     /** the position (column or row index) of the page break.
      */
     long Position;
 
-    //-------------------------------------------------------------------------
 
     /** is <TRUE/> for a manual page break, <FALSE/> for an automatic one.
      */
@@ -46,7 +42,6 @@ published struct TablePageBreakData
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

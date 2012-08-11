@@ -46,11 +46,9 @@
 #include <com/sun/star/xml/UserDefinedAttributesSupplier.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module text {
 
-//=============================================================================
 
 /** is a table of text cells which is anchored to a surrounding text.
 
@@ -106,84 +104,68 @@ published service TextTable
     /** determines the type of break that is applied at the beginning of the table.@see com.sun.star.style.BreakType
      */
     [property] com::sun::star::style::BreakType BreakType;
-    //-------------------------------------------------------------------------
 
     /** contains the left margin of the table.
      */
     [property] long LeftMargin;
-    //-------------------------------------------------------------------------
 
     /** contains the right margin of the table.
      */
     [property] long RightMargin;
-    //-------------------------------------------------------------------------
 
     /** contains the horizontal orientation.@see com.sun.star.text.HoriOrientation
      */
     [property] short HoriOrient;
-    //-------------------------------------------------------------------------
 
     /** Setting this property to TRUE prevents page or column
         breaks between this table and the following paragraph or text table.
      */
     [property] boolean KeepTogether;
-    //-------------------------------------------------------------------------
 
     /** Setting this property to FALSE prevents the table from
         getting spread on two pages.
      */
     [property] boolean Split;
-    //-------------------------------------------------------------------------
 
     /** If a page break property is set at the table,
         this property contains the new value for the page number.
      */
     [property] short PageNumberOffset;
-    //-------------------------------------------------------------------------
 
     /** If this property is set, it creates a page break before the
         table and assigns the value as the name of the new page style sheet to use.
      */
     [property] string PageDescName;
-    //-------------------------------------------------------------------------
 
     /** determines the width of the table relative to its environment.
      */
     [property] short RelativeWidth;
-    //-------------------------------------------------------------------------
     /** determines if the value of the relative width is valid.
      */
     [property] boolean IsWidthRelative;
-    //-------------------------------------------------------------------------
 
     /** determines if the first row of the table is repeated on every new page.
      */
     [property] boolean RepeatHeadline;
-        //-------------------------------------------------------------------------
         /** determines the number of rows of the table repeated on every new page.
          */
         [optional, property] long HeaderRowCount;
-        //-------------------------------------------------------------------------
 
     /** determines the type, color and size of the shadow.@see com.sun.star.table.ShadowFormat
      */
     [property] com::sun::star::table::ShadowFormat ShadowFormat;
-    //-------------------------------------------------------------------------
 
     /** determines the top margin.
      */
     [property] long TopMargin;
-    //-------------------------------------------------------------------------
 
     /** determines the bottom margin.
      */
     [property] long BottomMargin;
-    //-------------------------------------------------------------------------
 
     /** determines if the background color is transparent.
      */
     [property] boolean BackTransparent;
-    //-------------------------------------------------------------------------
 
     /** contains the absolute table width.
 
@@ -192,58 +174,48 @@ published service TextTable
         RightMargin and HoriOrient. </p>
      */
     [property] long Width;
-    //-------------------------------------------------------------------------
 
     /** determines if the first row of the table should be treated as
         axis labels when a chart is to be created.
      */
     [property] boolean ChartRowAsLabel;
-    //-------------------------------------------------------------------------
 
     /** determines if the first column of the table should be treated as
         axis labels when a chart is to be created.
      */
     [property] boolean ChartColumnAsLabel;
-    //-------------------------------------------------------------------------
 
     /** contains the description of the table borders.@see com.sun.star.table.TableBorder
      */
     [property] com::sun::star::table::TableBorder TableBorder;
-    //-------------------------------------------------------------------------
 
     /** contains the column description of the table.
              @see com.sun.star.text.TableColumnSeparator
      */
     [property] sequence<com::sun::star::text::TableColumnSeparator> TableColumnSeparators;
-    //-------------------------------------------------------------------------
 
     /** contains the sum of the column width values used in TableColumnSeparators.
      */
     [property] short TableColumnRelativeSum;
-    //-------------------------------------------------------------------------
 
     /** contains the color of the background.
      */
     [property] com::sun::star::util::Color BackColor;
-    //-------------------------------------------------------------------------
 
     /** contains the URL for the background graphic.
      */
     [property] string BackGraphicURL;
 
-    //-------------------------------------------------------------------------
 
     /** contains the name of the file filter for the background graphic.
      */
     [property] string BackGraphicFilter;
 
-    //-------------------------------------------------------------------------
 
     /** determines the position of the background graphic.@see GraphicLocation
      */
     [property] com::sun::star::style::GraphicLocation BackGraphicLocation;
 
-    //-------------------------------------------------------------------------
 
     /** determines whether borders of neighboring table cells are
      * collapsed into one
@@ -252,7 +224,6 @@ published service TextTable
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

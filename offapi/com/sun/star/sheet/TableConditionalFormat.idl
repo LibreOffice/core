@@ -24,11 +24,9 @@
 #include <com/sun/star/container/XNameAccess.idl>
 #include <com/sun/star/container/XEnumerationAccess.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** represents a collection of conditional formatting settings for a
     cell or cell range.
@@ -42,7 +40,6 @@ module com {  module sun {  module star {  module sheet {
  */
 published service TableConditionalFormat
 {
-    //-------------------------------------------------------------------------
 
     /** provides methods to insert and remove conditions and to access
         the condition via index.
@@ -51,7 +48,6 @@ published service TableConditionalFormat
      */
     interface com::sun::star::sheet::XSheetConditionalEntries;
 
-    //-------------------------------------------------------------------------
 
     /** provides methods to access the condition via name.
 
@@ -62,7 +58,6 @@ published service TableConditionalFormat
      */
     interface com::sun::star::container::XNameAccess;
 
-    //-------------------------------------------------------------------------
 
     /** creates an enumeration of all conditional entries.
 
@@ -70,7 +65,6 @@ published service TableConditionalFormat
      */
     interface com::sun::star::container::XEnumerationAccess;
 
-    //-------------------------------------------------------------------------
 
     /** provides methods to access the contained conditional entries by index.
 
@@ -80,7 +74,6 @@ published service TableConditionalFormat
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

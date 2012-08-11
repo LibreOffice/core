@@ -24,11 +24,9 @@
 #include <com/sun/star/io/XInputStream.idl>
 #include <com/sun/star/io/XOutputStream.idl>
 
-//=============================================================================
 
 module com {   module sun {   module star {   module document {
 
-//=============================================================================
 
       /** This is an interface that can be used to link a filter to the
         FilterAdapter

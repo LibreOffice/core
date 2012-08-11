@@ -22,26 +22,21 @@
 #include <com/sun/star/uno/XInterface.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module frame {
 
-//=============================================================================
 /** use <type>XModel</type> instead of this
     @deprecated
  */
 published interface XFrameSetModel: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
         /** - */
         string getSource();
 
-    //-------------------------------------------------------------------------
         /** - */
     void setSource( [in] string Source );
 };
 
-//=============================================================================
 
 }; }; }; };
 

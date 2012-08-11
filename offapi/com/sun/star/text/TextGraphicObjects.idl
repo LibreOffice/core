@@ -23,11 +23,9 @@
 #include <com/sun/star/container/XIndexAccess.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module text {
 
-//=============================================================================
 
 /** This is the collection of all <type>TextGraphicObject</type> instances within a
     context (e.g. a document).
@@ -52,7 +50,6 @@ published service TextGraphicObjects
     interface com::sun::star::container::XIndexAccess;
 };
 
-//=============================================================================
 
 }; }; }; };
 #endif

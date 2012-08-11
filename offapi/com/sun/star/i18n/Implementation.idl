@@ -19,11 +19,9 @@
 #ifndef __com_sun_star_i18n_Implementation_idl__
 #define __com_sun_star_i18n_Implementation_idl__
 
-//============================================================================
 
 module com {  module sun {  module star {  module i18n {
 
-//============================================================================
 
 /**
     Implementation name details returned in a sequence by
@@ -41,7 +39,6 @@ published struct Implementation
     boolean isDefault;
 };
 
-//============================================================================
 }; }; }; };
 
 #endif

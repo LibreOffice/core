@@ -22,7 +22,6 @@
 #include <com/sun/star/lang/XEventListener.idl>
 #include <com/sun/star/view/PrintJobEvent.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module view {
 
@@ -38,7 +37,6 @@ module com {  module sun {  module star {  module view {
  */
 published interface XPrintJobListener : com::sun::star::lang::XEventListener
 {
-    //--------------------------------------------------------------------------
     /** informs the user about the creation or the progress of a PrintJob
         @param Event
         contains the <type>XPrintJob</type> having changed state and the new state.

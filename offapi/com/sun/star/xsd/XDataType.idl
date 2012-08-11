@@ -25,10 +25,8 @@
 #include <com/sun/star/lang/IllegalArgumentException.idl>
 #include <com/sun/star/beans/XPropertySet.idl>
 
-//=============================================================================
 module com {  module sun {  module star {  module xsd {
 
-//-----------------------------------------------------------------------------
 /** specifies an <a href="http://www.w3.org/TR/xmlschema-2/#built-in-datatypes">XSD compliant simple data type</a>
 */
 interface XDataType
@@ -79,7 +77,6 @@ interface XDataType
     string  explainInvalid( [in] string value );
 };
 
-//=============================================================================
 
 }; }; }; };
 

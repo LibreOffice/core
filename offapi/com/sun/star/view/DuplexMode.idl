@@ -20,38 +20,31 @@
 #define __com_sun_star_view_DuplexMode_idl__
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module view {
 
-//=============================================================================
 
 /** These constants specify available duplex modes
  */
 constants DuplexMode
 {
-    //-------------------------------------------------------------------------
     /** specifies an unknown duplex mode.
      */
     const short UNKNOWN = 0;
 
-    //-------------------------------------------------------------------------
     /** specifies that there is no duplex mode enabled
      */
     const short OFF = 1;
 
-    //-------------------------------------------------------------------------
     /** specifies a long edge duplex mode
      */
     const short LONGEDGE = 2;
 
-    //-------------------------------------------------------------------------
     /** specifies a short edge duplex mode
      */
     const short SHORTEDGE = 3;
 };
 
-//=============================================================================
 
 }; }; }; };
 

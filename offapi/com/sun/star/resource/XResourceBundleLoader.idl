@@ -28,11 +28,9 @@
 #include <com/sun/star/lang/Locale.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module resource {
 
-//=============================================================================
 
 /** makes it possible to load resource bundles.
 
@@ -46,14 +44,12 @@ module com {  module sun {  module star {  module resource {
  */
 published interface XResourceBundleLoader: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** loads the appropriate resource bundle.
      */
     com::sun::star::resource::XResourceBundle loadBundle_Default( [in] string aBaseName )
             raises( com::sun::star::resource::MissingResourceException );
 
-    //-------------------------------------------------------------------------
 
     /** loads the appropriate resource bundle subclass.
      */
@@ -63,7 +59,6 @@ published interface XResourceBundleLoader: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -22,13 +22,11 @@
 
 #include <com/sun/star/lang/EventObject.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module datatransfer { module dnd {
 
  published interface XDragSource;
 
-//=============================================================================
 /** A DragGestureEvent is passed to the method <member>XDragGestureListener::dragGestureRecognized()</member>
      when a particular <type>XDragGestureRecognizer</type> detects that a platform
      dependent drag initiating gesture has occurred on the component that it is
@@ -37,7 +35,6 @@ module com { module sun { module star { module datatransfer { module dnd {
 
 published struct DragGestureEvent: com::sun::star::lang::EventObject
 {
-    //-------------------------------------------------------------------------
     /** The action selected by the user.
         <p>Different constants may be combined using a logical OR.</p>
         It's further possible to combine the ACTION_DEFAULT with one of the other
@@ -50,25 +47,21 @@ published struct DragGestureEvent: com::sun::star::lang::EventObject
 
     byte DragAction;
 
-    //-------------------------------------------------------------------------
     /** The x coordinate where the drag originated in component coordinates.
      */
 
     long DragOriginX;
 
-    //-------------------------------------------------------------------------
     /** The y coordinate where the drag originated in component coordinates.
      */
 
     long DragOriginY;
 
-    //-------------------------------------------------------------------------
     /** The DragSource associated with this drag action.
      */
 
     XDragSource DragSource;
 
-    //-------------------------------------------------------------------------
     /** The last event comprising the gesture.
 
     <p>The initial trigger event will presumably be a <type scope="com::sun::star::awt">MouseEvent</type> event.
@@ -79,7 +72,6 @@ published struct DragGestureEvent: com::sun::star::lang::EventObject
     any Event;
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

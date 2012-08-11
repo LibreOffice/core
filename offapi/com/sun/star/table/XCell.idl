@@ -32,11 +32,9 @@
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/table/CellContentType.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module table {
 
-//=============================================================================
 
 /** provides methods to access the contents of a cell in a table.
 
@@ -44,7 +42,6 @@ module com {  module sun {  module star {  module table {
  */
 published interface XCell: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** returns the formula string of a cell.
 
@@ -58,7 +55,6 @@ published interface XCell: com::sun::star::uno::XInterface
      */
     string getFormula();
 
-    //-------------------------------------------------------------------------
 
     /** sets a formula into the cell.
 
@@ -68,7 +64,6 @@ published interface XCell: com::sun::star::uno::XInterface
      */
     void setFormula( [in] string aFormula );
 
-    //-------------------------------------------------------------------------
 
     /** returns the floating point value of the cell.
 
@@ -78,7 +73,6 @@ published interface XCell: com::sun::star::uno::XInterface
      */
     double getValue();
 
-    //-------------------------------------------------------------------------
 
     /** sets a floating point value into the cell.
 
@@ -87,13 +81,11 @@ published interface XCell: com::sun::star::uno::XInterface
      */
     void setValue( [in] double nValue );
 
-    //-------------------------------------------------------------------------
 
     /** returns the type of the cell.
      */
     com::sun::star::table::CellContentType getType();
 
-    //-------------------------------------------------------------------------
 
     /** returns the error value of the cell.
 
@@ -104,7 +96,6 @@ published interface XCell: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

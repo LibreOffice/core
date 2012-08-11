@@ -19,11 +19,9 @@
 #ifndef __com_sun_star_awt_UnoControlDialogElement_idl__
 #define __com_sun_star_awt_UnoControlDialogElement_idl__
 
-//=============================================================================
 
  module com {  module sun {  module star {  module awt {
 
-//=============================================================================
 
 /** specifies a set of properties to describe the model of an
     <type>UnoControl</type> which is embedded in a
@@ -31,58 +29,48 @@
  */
 published service UnoControlDialogElement
 {
-    //-------------------------------------------------------------------------
 
     /** specifies the height of the control.
      */
     [property] long Height;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the name of the control.
      */
     [property] string Name;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the horizontal position of the control.
      */
     [property] string PositionX;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the vertical position of the control.
      */
     [property] string PositionY;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the step of the control.
      */
     [property] long Step;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the tabindex of the control.
      */
     [property] short TabIndex;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the tag of the control.
      */
     [property] string Tag;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the width of the control.
      */
     [property] long Width;
 
-    //-------------------------------------------------------------------------
 };
 
-//=============================================================================
 
 }; }; }; };
 

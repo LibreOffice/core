@@ -24,17 +24,14 @@
 #include <com/sun/star/test/XTestListener.idl>
 
 
-//=============================================================================
 
 module com { module sun { module star { module test {
 
-//=============================================================================
 /**
     A simple interface to test a service or interface implementation.
 */
 published interface XTest: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /**
         Test the object TestObject against the test specified with TestName. This test
         does not change the semantic state of the object, so it can be called on a existing
@@ -53,7 +50,6 @@ published interface XTest: com::sun::star::uno::XInterface
              [in] com::sun::star::uno::XInterface TestObject )
             raises( com::sun::star::lang::IllegalArgumentException );
 
-    //-------------------------------------------------------------------------
     /**
         Test the object TestObject against the test specified with TestName.
         This test changes the state of the object. The object may be useless
@@ -82,7 +78,6 @@ published interface XTest: com::sun::star::uno::XInterface
              [in] long hTestHandle )
             raises( com::sun::star::lang::IllegalArgumentException );
 
-    //-------------------------------------------------------------------------
     /**
         Test the object TestObject against the test specified with TestName using
         several threads. That does NOT mean that testMultiThread should implement
@@ -117,13 +112,11 @@ published interface XTest: com::sun::star::uno::XInterface
              [in] long hTestHandle )
             raises( com::sun::star::lang::IllegalArgumentException );
 
-    //-------------------------------------------------------------------------
     /** registers an event listener, which will be called for reporting
         errors/exceptions and warnings and for protocol purpuses.
     */
     void addTestListener( [in] XTestListener xListener );
 
-    //-------------------------------------------------------------------------
     /** unregisters an event listener which was registered with
         <member>XTest::addTestListener()</member>.
 
@@ -132,7 +125,6 @@ published interface XTest: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -27,11 +27,9 @@
 #include <com/sun/star/reflection/NoSuchTypeNameException.idl>
 #include <com/sun/star/reflection/InvalidTypeNameException.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module reflection {
 
-//=============================================================================
 
 /** Defines an interface for creating enumerations for type descriptions.
 
@@ -160,7 +158,6 @@ published interface XTypeDescriptionEnumerationAccess : com::sun::star::uno::XIn
         raises( NoSuchTypeNameException, InvalidTypeNameException );
 };
 
-//=============================================================================
 
 }; }; }; };
 

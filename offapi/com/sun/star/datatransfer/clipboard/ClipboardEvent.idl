@@ -32,11 +32,9 @@
 #include <com/sun/star/datatransfer/XTransferable.idl>
 #include <com/sun/star/lang/EventObject.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module datatransfer { module clipboard {
 
-//=============================================================================
 /** A clipboard uses this object to notify its listeners of content changes.
 
     @see com::sun::star::datatransfer::clipboard::XClipboardListener
@@ -44,13 +42,11 @@ module com { module sun { module star { module datatransfer { module clipboard {
 
 published struct ClipboardEvent: com::sun::star::lang::EventObject
 {
-    //-------------------------------------------------------------------------
     /** The current content of the clipboard.
     */
     com::sun::star::datatransfer::XTransferable Contents;
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

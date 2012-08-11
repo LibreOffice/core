@@ -30,9 +30,7 @@
 
 #include <com/sun/star/report/XReportControlFormat.idl>
 
-//=============================================================================
  module com {  module sun {  module star {  module report {
-//=============================================================================
 /** specifies a format condition for a control.
 */
 interface XFormatCondition
@@ -53,7 +51,6 @@ interface XFormatCondition
     [attribute,bound] string Formula;
 };
 
-//=============================================================================
 
 }; }; }; };
 #endif

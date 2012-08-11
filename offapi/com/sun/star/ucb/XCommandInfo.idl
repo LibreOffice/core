@@ -33,11 +33,9 @@
 #include <com/sun/star/ucb/UnsupportedCommandException.idl>
 
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** provides access to information on a set of commands.
 
     @version  1.0
@@ -45,7 +43,6 @@ module com { module sun { module star { module ucb {
 */
 published interface XCommandInfo: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** obtains information for all supported commands.
 
         @returns
@@ -53,7 +50,6 @@ published interface XCommandInfo: com::sun::star::uno::XInterface
     */
     sequence<com::sun::star::ucb::CommandInfo> getCommands();
 
-    //-------------------------------------------------------------------------
     /** returns information for a specific command.
 
         @returns
@@ -68,7 +64,6 @@ published interface XCommandInfo: com::sun::star::uno::XInterface
     com::sun::star::ucb::CommandInfo getCommandInfoByName( [in] string Name )
             raises( com::sun::star::ucb::UnsupportedCommandException );
 
-    //-------------------------------------------------------------------------
     /** returns information for a specific command.
 
         @returns
@@ -83,7 +78,6 @@ published interface XCommandInfo: com::sun::star::uno::XInterface
     com::sun::star::ucb::CommandInfo getCommandInfoByHandle( [in] long Handle )
             raises( com::sun::star::ucb::UnsupportedCommandException );
 
-    //-------------------------------------------------------------------------
     /** checks whether a command specific is supported.
 
         @returns
@@ -95,7 +89,6 @@ published interface XCommandInfo: com::sun::star::uno::XInterface
     */
     boolean hasCommandByName( [in] string Name );
 
-    //-------------------------------------------------------------------------
     /** checks whether a specific command is supported.
 
         @returns
@@ -109,7 +102,6 @@ published interface XCommandInfo: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

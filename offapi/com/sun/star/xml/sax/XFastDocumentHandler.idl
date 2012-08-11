@@ -37,32 +37,27 @@
 #include <com/sun/star/xml/sax/XLocator.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module xml {  module sax {
 
-//=============================================================================
 
 /** receives notification of sax document events from a
     <type>XFastParser</type>
  */
 interface XFastDocumentHandler: XFastContextHandler
 {
-    //-------------------------------------------------------------------------
 
     /** called by the parser when parsing of an XML stream is started.
      */
     void startDocument()
             raises( com::sun::star::xml::sax::SAXException );
 
-    //-------------------------------------------------------------------------
 
     /** called by the parser after the last XML element of a stream is processed.
      */
     void endDocument()
             raises( com::sun::star::xml::sax::SAXException );
 
-    //-------------------------------------------------------------------------
 
     /** receives an object for locating the origin of SAX document events.
      */
@@ -71,7 +66,6 @@ interface XFastDocumentHandler: XFastContextHandler
 
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

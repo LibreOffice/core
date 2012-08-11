@@ -35,17 +35,14 @@
 #include <com/sun/star/reflection/InvocationTargetException.idl>
 #include <com/sun/star/script/provider/ScriptFrameworkErrorException.idl>
 
-//===========================================================================
 
 module com { module sun { module star { module script { module provider {
 
-//===========================================================================
 /**
     This interface represents an invokable script or UNO function.
 */
 interface XScript : ::com::sun::star::uno::XInterface {
 
-    //----------------------------------------------------------------------
     /**
         invoke the script or function represented by the implementing
             object
@@ -83,7 +80,6 @@ interface XScript : ::com::sun::star::uno::XInterface {
 
 };
 
-//===========================================================================
 }; }; }; }; }; // ::com::sun::star::script::provider
 
 #endif

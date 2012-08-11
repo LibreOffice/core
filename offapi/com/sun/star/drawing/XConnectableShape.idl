@@ -24,17 +24,14 @@
 #include <com/sun/star/awt/Point.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module drawing {
 
-//=============================================================================
 
 /** @deprecated
 */
 published interface XConnectableShape: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR XConnectableShape::canConnect
 
     // DocMerge: empty anyway
@@ -42,7 +39,6 @@ published interface XConnectableShape: com::sun::star::uno::XInterface
              [in] boolean bCreateGluePoint,
              [in] long nMaxDist );
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR XConnectableShape::doConnect
 
     // DocMerge: empty anyway
@@ -52,7 +48,6 @@ published interface XConnectableShape: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -20,11 +20,9 @@
 #define __com_sun_star_bridge_ModelDependent_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module bridge {
 
-//=============================================================================
 
 // DocMerge from idl: constants com::sun::star::bridge::ModelDependent
 /** These constants are used to specify model-dependant representations.
@@ -35,25 +33,21 @@
  */
 published constants ModelDependent
 {
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR constants::1
 
     // DocMerge: empty anyway
     const short UNO = 1;
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR constants::2
 
     // DocMerge: empty anyway
     const short OLE = 2;
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR constants::3
 
     // DocMerge: empty anyway
     const short JAVA = 3;
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR constants::4
 
     // DocMerge: empty anyway
@@ -61,7 +55,6 @@ published constants ModelDependent
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

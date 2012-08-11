@@ -22,7 +22,6 @@
 
 module com { module sun { module star { module sheet {
 
-//============================================================================
 
 /** specifies region type of DataPilot table range
 
@@ -36,26 +35,22 @@ module com { module sun { module star { module sheet {
  */
 constants DataPilotOutputRangeType
 {
-    //------------------------------------------------------------------------
 
     /** whole DataPilot output range including the header area above the table
         where the filter and page field buttons are located. */
     const long WHOLE = 0;
 
-    //------------------------------------------------------------------------
 
     /** whole table but without the header area where the filter and page field
         buttons are located. */
     const long TABLE = 1;
 
-    //------------------------------------------------------------------------
 
     /** result area where the result values are displayed.  This also includes
         the column and row subtotal areas when they are displayed. */
     const long RESULT = 2;
 };
 
-//============================================================================
 
 }; }; }; };
 

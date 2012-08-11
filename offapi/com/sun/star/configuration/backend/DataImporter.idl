@@ -21,11 +21,9 @@
 
 #include <com/sun/star/task/XJob.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module configuration { module backend {
 
-//=============================================================================
 
 /**
     allows importing data from one configuration repository into another. .
@@ -34,7 +32,6 @@ module com { module sun { module star { module configuration { module backend {
 */
 published service DataImporter
 {
-    //-------------------------------------------------------------------------
 
     /** allows running an import job
 
@@ -107,10 +104,8 @@ published service DataImporter
       */
     interface com::sun::star::task::XJob ;
 
-    //-------------------------------------------------------------------------
 } ;
 
-//=============================================================================
 
 } ; } ; } ; } ; } ;
 

@@ -20,47 +20,39 @@
 #define __com_sun_star_awt_GradientStyle_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module awt {
 
-//=============================================================================
 
 /** specify the style of color dispersion.
  */
 published enum GradientStyle
 {
-    //-------------------------------------------------------------------------
 
     /** specifies a linear gradient.
      */
     LINEAR,
 
-    //-------------------------------------------------------------------------
 
     /** specifies an axial gradient.
      */
     AXIAL,
 
-    //-------------------------------------------------------------------------
 
     /** specifies a radial gradient.
      */
     RADIAL,
 
-    //-------------------------------------------------------------------------
 
     /** specifies an elliptical gradient.
      */
     ELLIPTICAL,
 
-    //-------------------------------------------------------------------------
 
     /** specifies a gradient in the shape of a square.
      */
     SQUARE,
 
-    //-------------------------------------------------------------------------
 
     /** specifies a gradient in the shape of a rectangle.
      */
@@ -68,7 +60,6 @@ published enum GradientStyle
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

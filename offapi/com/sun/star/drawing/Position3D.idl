@@ -20,11 +20,9 @@
 #define __com_sun_star_drawing_Position3D_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module drawing {
 
-//=============================================================================
 
 // DocMerge from xml: struct com::sun::star::drawing::Position3D
 /** specifies a 3-dimensional point.
@@ -36,7 +34,6 @@ published struct Position3D
      */
     double PositionX;
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR Position3D::PositionY
 
     // DocMerge from xml: field com::sun::star::drawing::Position3D::PositionY
@@ -44,7 +41,6 @@ published struct Position3D
      */
     double PositionY;
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR Position3D::PositionZ
 
     // DocMerge from xml: field com::sun::star::drawing::Position3D::PositionZ
@@ -54,7 +50,6 @@ published struct Position3D
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

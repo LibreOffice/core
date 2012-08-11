@@ -31,11 +31,9 @@
 #include <com/sun/star/document/HeaderFooterSettings.idl>
 #include <com/sun/star/document/Settings.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module presentation {
 
-//=============================================================================
 
 /** describes properties that apply to the whole presentation document.
  */
@@ -45,19 +43,16 @@ published service DocumentSettings
      */
     service com::sun::star::document::Settings;
 
-    //-------------------------------------------------------------------------
 
     /** This service configures the header and footer settings during print
      */
     [optional] service com::sun::star::document::HeaderFooterSettings;
 
-    //-------------------------------------------------------------------------
 
     /** provides access to the properties.
      */
     interface com::sun::star::beans::XPropertySet;
 
-    //-------------------------------------------------------------------------
 
     /** enables or disables the printing of the drawing pages
      */
@@ -83,7 +78,6 @@ published service DocumentSettings
     // Note: the following properties exist also in
     // css::drawing::DocumentSettings
 
-    // ------------------------------------------------------------
 
     /** enables or disables the fitting of the page to the printable
         area during print
@@ -109,7 +103,6 @@ published service DocumentSettings
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

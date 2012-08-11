@@ -21,11 +21,9 @@
 
 #include <com/sun/star/drawing/FillProperties.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module drawing {
 
-//=============================================================================
 
 /** this service provides the properties to describe a background filling for
     a drawing page. It can be obtained by the <type scope="com::sun::star::lang">XMultiServiceFactory</type>
@@ -36,7 +34,6 @@ published service Background
     service FillProperties;
 };
 
-//=============================================================================
 
 }; }; }; };
 

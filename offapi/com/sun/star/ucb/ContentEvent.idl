@@ -21,26 +21,22 @@
 
 #include <com/sun/star/lang/EventObject.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
  published interface XContent;
  published interface XContentIdentifier;
 
-//=============================================================================
 /** A structure for content events.
 */
 published struct ContentEvent: com::sun::star::lang::EventObject
 {
-    //-------------------------------------------------------------------------
     /** The action.
 
         <p>The value can be one of the <type>ContentAction</type> constants.
     */
     long Action;
 
-    //-------------------------------------------------------------------------
     /** The content to that the action is related (e.g., the content that was
         just physically destroyed, the content that was just inserted into a
         folder content).
@@ -68,7 +64,6 @@ published struct ContentEvent: com::sun::star::lang::EventObject
     */
     XContent Content;
 
-    //-------------------------------------------------------------------------
     /** A content identifier, which must be filled according to the action
         notified (e.g., the id of the folder content into which another content
         was inserted).
@@ -97,7 +92,6 @@ published struct ContentEvent: com::sun::star::lang::EventObject
     XContentIdentifier Id;
 };
 
-//=============================================================================
 
 }; }; }; };
 

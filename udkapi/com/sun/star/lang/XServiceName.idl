@@ -22,11 +22,9 @@
 #include <com/sun/star/uno/XInterface.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module lang {
 
-//=============================================================================
 
 // DocMerge from xml: interface com::sun::star::lang::XServiceName
 /** identifies the object with a service name which can be used to create
@@ -34,7 +32,6 @@
  */
 published interface XServiceName: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     // DocMerge from idl: method com::sun::star::lang::XServiceName::getServiceName
     /** @returns
@@ -47,7 +44,6 @@ published interface XServiceName: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

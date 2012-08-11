@@ -23,15 +23,12 @@
 #include <com/sun/star/lang/XServiceInfo.idl>
 #include <com/sun/star/lang/XTypeProvider.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module system {
 
-//=============================================================================
 
  published interface XProxySettings;
 
-//=============================================================================
 /** Specifies a service for reading the proxy settings from an old office
     installation or a central system database.
 
@@ -42,23 +39,19 @@ module com { module sun { module star { module system {
 
 published service ProxySettings
 {
-    //-------------------------------------------------------------------------
     /** Provides access to a <type>XProxySettings</type> interface.
     */
     interface XProxySettings;
 
-    //-------------------------------------------------------------------------
     /** Service should always support this interface.
     */
     interface com::sun::star::lang::XServiceInfo;
 
-    //-------------------------------------------------------------------------
     /** Service should always support this interface.
     */
     interface com::sun::star::lang::XTypeProvider;
 };
 
-//=============================================================================
 
 }; }; }; };
 

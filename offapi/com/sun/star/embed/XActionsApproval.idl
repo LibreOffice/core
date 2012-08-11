@@ -21,11 +21,9 @@
 
 #include <com/sun/star/uno/XInterface.idl>
 
-//============================================================================
 
  module com {  module sun {  module star {  module embed {
 
-//============================================================================
 /** allows to request an approval for an action.
 
     <p>
@@ -36,7 +34,6 @@
  */
 published interface XActionsApproval: com::sun::star::uno::XInterface
 {
-    //------------------------------------------------------------------------
     /** requests an approval for the specified action.
 
         @param nAction
@@ -52,7 +49,6 @@ published interface XActionsApproval: com::sun::star::uno::XInterface
     boolean approveAction( [in] long nAction );
 };
 
-//============================================================================
 
 }; }; }; };
 

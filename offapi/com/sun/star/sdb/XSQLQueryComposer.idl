@@ -34,11 +34,9 @@
 
 #include <com/sun/star/sdbc/SQLException.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module sdb {
 
-//=============================================================================
 
 /** should be provided by a tool which simplifies the handling with SQL select statements.
 
@@ -55,7 +53,6 @@ published interface XSQLQueryComposer: com::sun::star::uno::XInterface
             the query
      */
     string getQuery();
-    //-------------------------------------------------------------------------
 
     /** sets a new query for the composer, which may be expanded by filters
         and sort criteria.
@@ -66,14 +63,12 @@ published interface XSQLQueryComposer: com::sun::star::uno::XInterface
      */
     void setQuery([in] string command )
             raises (com::sun::star::sdbc::SQLException);
-    //-------------------------------------------------------------------------
 
     /** returns the query composed with filters and sort criteria.
         @returns
             the composed query
      */
     string getComposedQuery();
-    //-------------------------------------------------------------------------
 
     /** returns the currently used filter.
 
@@ -85,7 +80,6 @@ published interface XSQLQueryComposer: com::sun::star::uno::XInterface
             the filter
      */
     string getFilter();
-    //-------------------------------------------------------------------------
 
     /** returns the currently used filter.
              <p>
@@ -99,7 +93,6 @@ published interface XSQLQueryComposer: com::sun::star::uno::XInterface
      */
     sequence< sequence<com::sun::star::beans::PropertyValue> >
         getStructuredFilter();
-    //-------------------------------------------------------------------------
 
     /** returns the currently used sort order.
 
@@ -112,7 +105,6 @@ published interface XSQLQueryComposer: com::sun::star::uno::XInterface
             the order
      */
     string getOrder();
-    //-------------------------------------------------------------------------
 
     /** appends a new filter condition by a
         <type scope="com::sun::star::sdb">DataColumn</type>
@@ -124,7 +116,6 @@ published interface XSQLQueryComposer: com::sun::star::uno::XInterface
      */
     void appendFilterByColumn([in] com::sun::star::beans::XPropertySet column)
             raises (com::sun::star::sdbc::SQLException);
-    //-------------------------------------------------------------------------
 
     /** appends an additional part to the sort order criteria of the select
         statement.
@@ -138,7 +129,6 @@ published interface XSQLQueryComposer: com::sun::star::uno::XInterface
     void appendOrderByColumn([in] com::sun::star::beans::XPropertySet column,
                               [in] boolean ascending)
             raises (com::sun::star::sdbc::SQLException);
-    //-------------------------------------------------------------------------
 
     /** makes it possible to set a filter condition for the query.
         @param filter
@@ -148,7 +138,6 @@ published interface XSQLQueryComposer: com::sun::star::uno::XInterface
      */
     void setFilter([in] string filter)
             raises (com::sun::star::sdbc::SQLException);
-    //-------------------------------------------------------------------------
 
     /** makes it possible to set a sort condition for the query.
         @param order
@@ -160,7 +149,6 @@ published interface XSQLQueryComposer: com::sun::star::uno::XInterface
             raises (com::sun::star::sdbc::SQLException);
 };
 
-//=============================================================================
 
 }; }; }; };
 

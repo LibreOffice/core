@@ -19,11 +19,9 @@
 #ifndef __com_sun_star_chart_TimeUnit_idl__
 #define __com_sun_star_chart_TimeUnit_idl__
 
-//=============================================================================
 
  module com {  module sun {  module star {  module chart {
 
-//=============================================================================
 
 /** Specifies a unit for intervals on a date-time axis
 @since OOo 3.4
@@ -35,7 +33,6 @@ published constants TimeUnit
     const long YEAR = 2;
 };
 
-//=============================================================================
 
 }; }; }; };
 

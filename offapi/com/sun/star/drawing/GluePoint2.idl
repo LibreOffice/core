@@ -23,11 +23,9 @@
 #include <com/sun/star/awt/Point.idl>
 #include <com/sun/star/drawing/EscapeDirection.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module drawing {
 
-//=============================================================================
 
 /** This struct defines the attributes of a glue point.
     <p>A glue point is a position inside a drawing shape where an edge
@@ -65,7 +63,6 @@ published struct GluePoint2
     boolean IsUserDefined;
 };
 
-//=============================================================================
 
 }; }; }; };
 

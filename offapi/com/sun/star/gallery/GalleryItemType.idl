@@ -26,28 +26,23 @@ module com { module sun { module star { module gallery {
 */
 constants GalleryItemType
 {
-    //-------------------------------------------------------------------------
     /** Item is empty
      */
      const byte EMPTY = 0;
 
-    //-------------------------------------------------------------------------
     /** Item represents a graphic
      */
      const byte GRAPHIC = 1;
 
-    //-------------------------------------------------------------------------
     /** Item represents a media file
      */
      const byte MEDIA = 2;
 
-    //-------------------------------------------------------------------------
     /** Item represents a drawing
      */
      const byte DRAWING = 3;
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -23,7 +23,6 @@
 
 #include <com/sun/star/util/XDataEditorListener.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module util {
 
@@ -35,29 +34,24 @@ published interface XDataEditor: com::sun::star::uno::XInterface
      */
     void show();
 
-    //--------------------------------------------------------------------------
     /** connects the data editor to a data model.
      */
     void setModel( [in] com::sun::star::uno::XInterface model );
 
-    //--------------------------------------------------------------------------
     /** @returns
             the data model which was set by <method>XDataEditor::setModel</method>.
      */
     com::sun::star::uno::XInterface getModel();
 
-    //--------------------------------------------------------------------------
     /** registers a listener to receive <type>DataEditorEvent</type>s.
      */
     void addDataEditorListener( [in] XDataEditorListener listener );
 
-    //--------------------------------------------------------------------------
     /** unregisters a listener which received <type>DataEditorEvent</type>s.
      */
     void removeDataEditorListener( [in] XDataEditorListener listener );
 };
 
-//=============================================================================
 
 }; }; }; };
 

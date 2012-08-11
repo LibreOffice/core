@@ -33,7 +33,6 @@ published exception PDFExportException: com::sun::star::uno::Exception
     sequence< long > ErrorCodes;
 };
 
-//=============================================================================
 
 }; }; }; };
 

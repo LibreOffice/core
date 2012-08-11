@@ -36,22 +36,18 @@
 #include <com/sun/star/awt/XBitmap.idl>
 
 
-//=============================================================================
 
 module com { module sun { module star { module scanner {
 
-//=============================================================================
 /**
 */
 published interface XScannerManager: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     // DOCUMENTATION CHANGED FOR XScannerManager::getAvailableScanners
     /** returns all available scanner devices
      */
     sequence<com::sun::star::scanner::ScannerContext> getAvailableScanners();
 
-    //-------------------------------------------------------------------------
     /** produce some kind of User Interface to let the user have a preview,
         configure the scan area, etc., it
         returns FALSE if user cancelled this process
@@ -59,7 +55,6 @@ published interface XScannerManager: com::sun::star::uno::XInterface
     boolean configureScanner( [inout] com::sun::star::scanner::ScannerContext scanner_context )
             raises( com::sun::star::scanner::ScannerException );
 
-    //-------------------------------------------------------------------------
     /**start the scanning process
         listener will be called when scan is complete
         the EventObject of the disposing call will contain
@@ -70,13 +65,11 @@ published interface XScannerManager: com::sun::star::uno::XInterface
              [in] com::sun::star::lang::XEventListener listener )
             raises( com::sun::star::scanner::ScannerException );
 
-    //-------------------------------------------------------------------------
     /**get the state of scanning after completion of scan
     */
     com::sun::star::scanner::ScanError getError( [in] com::sun::star::scanner::ScannerContext scanner_context )
             raises( com::sun::star::scanner::ScannerException );
 
-    //-------------------------------------------------------------------------
     /**get the image after completion of scan
     */
     com::sun::star::awt::XBitmap getBitmap( [in] com::sun::star::scanner::ScannerContext scanner_context )
@@ -84,7 +77,6 @@ published interface XScannerManager: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

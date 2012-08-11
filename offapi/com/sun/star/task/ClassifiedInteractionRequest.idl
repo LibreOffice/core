@@ -24,18 +24,15 @@
 #include <com/sun/star/task/InteractionClassification.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module task {
 
-//=============================================================================
 
 // DocMerge from xml: exception com::sun::star::task::ClassifiedInteractionRequest
 /** A classified interaction request.
  */
 published exception ClassifiedInteractionRequest: com::sun::star::uno::Exception
 {
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: field com::sun::star::task::ClassifiedInteractionRequest::Classification
     /** The classification of the request.
@@ -44,7 +41,6 @@ published exception ClassifiedInteractionRequest: com::sun::star::uno::Exception
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

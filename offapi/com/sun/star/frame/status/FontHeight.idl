@@ -20,11 +20,9 @@
 #define __com_sun_star_frame_status_FontHeight_idl__
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module frame { module status {
 
-//=============================================================================
 
 /** describes the characteristics of a font.
 
@@ -34,20 +32,17 @@ module com {  module sun {  module star {  module frame { module status {
  */
 struct FontHeight
 {
-    //-------------------------------------------------------------------------
 
     /** specifies the current height of the font.
      */
     float Height;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the height of the font in the measure of the
         destination.
      */
     short Prop;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the width of the font in the measure of the
         destination.
@@ -55,7 +50,6 @@ struct FontHeight
     float Diff;
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

@@ -22,11 +22,9 @@
 #include <com/sun/star/text/TextContent.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module text {
 
-//=============================================================================
 
 /** is a <type>TextRange</type> which is explicitly marked
     as an index entry. This is the base service of index marks for <type>DocumentIndex</type>,
@@ -35,7 +33,6 @@
 published service BaseIndexMark
 {
     service com::sun::star::text::TextContent;
-    //-------------------------------------------------------------------------
 
     /** the string that will be inserted into the corresponding index. If AlternativeText is empty then
         the string that is marked by the TextRange is inserted into the index.
@@ -43,7 +40,6 @@ published service BaseIndexMark
     [property] string AlternativeText;
 };
 
-//=============================================================================
 
 }; }; }; };
 #endif

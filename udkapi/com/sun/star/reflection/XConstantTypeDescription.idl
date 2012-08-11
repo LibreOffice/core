@@ -22,11 +22,9 @@
 
 #include <com/sun/star/reflection/XTypeDescription.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module reflection {
 
-//=============================================================================
 
 /** Reflects a constant.
 
@@ -63,7 +61,6 @@ published interface XConstantTypeDescription : com::sun::star::reflection::XType
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

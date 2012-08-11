@@ -22,11 +22,9 @@
 
 #include <com/sun/star/container/XEnumeration.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** represents an enumeration of equal-formatted cell range collections.
 
@@ -34,7 +32,6 @@ module com {  module sun {  module star {  module sheet {
  */
 published service UniqueCellFormatRangesEnumeration
 {
-    //-------------------------------------------------------------------------
 
     /** provides methods to access the cell range collections
         in the enumeration.
@@ -45,7 +42,6 @@ published service UniqueCellFormatRangesEnumeration
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

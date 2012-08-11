@@ -31,11 +31,9 @@
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/lang/Locale.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module linguistic2 {
 
-//=============================================================================
 /** Gives access to the results of failed
     spell checking attempts and may provide spelling alternatives.
 
@@ -50,21 +48,18 @@ module com { module sun { module star { module linguistic2 {
 */
 published interface XSpellAlternatives : com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /**
          @returns
              the word that was misspelled.
      */
     string getWord();
 
-    //-------------------------------------------------------------------------
     /**
         @returns
             the Locale which specifies the language of the misspelled word.
     */
     com::sun::star::lang::Locale getLocale();
 
-    //-------------------------------------------------------------------------
     /**
         @returns
             the type (reason) for spell checking to have failed verification.
@@ -73,14 +68,12 @@ published interface XSpellAlternatives : com::sun::star::uno::XInterface
     */
     short getFailureType();
 
-    //-------------------------------------------------------------------------
     /**
         @returns
             the number of suggested spelling alternatives available.
     */
     short getAlternativesCount();
 
-    //-------------------------------------------------------------------------
     /**
          @returns
             the sequence of suggested spelling alternatives.
@@ -89,7 +82,6 @@ published interface XSpellAlternatives : com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

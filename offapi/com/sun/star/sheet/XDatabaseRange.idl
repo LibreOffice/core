@@ -26,11 +26,9 @@
 #include <com/sun/star/sheet/XSheetFilterDescriptor.idl>
 #include <com/sun/star/sheet/XSubTotalDescriptor.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** provides access to the settings and options of a database range.
 
@@ -38,20 +36,17 @@ module com {  module sun {  module star {  module sheet {
  */
 published interface XDatabaseRange: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** returns the data area of the database range in the
         spreadsheet document.
      */
     com::sun::star::table::CellRangeAddress getDataArea();
 
-    //-------------------------------------------------------------------------
 
     /** sets the data area of the database range.
      */
     void setDataArea( [in] com::sun::star::table::CellRangeAddress aDataArea );
 
-    //-------------------------------------------------------------------------
 
     /** returns the sort descriptor stored with the database range.
 
@@ -59,7 +54,6 @@ published interface XDatabaseRange: com::sun::star::uno::XInterface
      */
     sequence< com::sun::star::beans::PropertyValue > getSortDescriptor();
 
-    //-------------------------------------------------------------------------
 
     /** returns the filter descriptor stored with the database range.
 
@@ -71,7 +65,6 @@ published interface XDatabaseRange: com::sun::star::uno::XInterface
      */
     XSheetFilterDescriptor getFilterDescriptor();
 
-    //-------------------------------------------------------------------------
 
     /** returns the subtotal descriptor stored with the database range.
 
@@ -83,7 +76,6 @@ published interface XDatabaseRange: com::sun::star::uno::XInterface
      */
     XSubTotalDescriptor getSubTotalDescriptor();
 
-    //-------------------------------------------------------------------------
 
     /** returns the database import descriptor stored with this database
         range.
@@ -92,7 +84,6 @@ published interface XDatabaseRange: com::sun::star::uno::XInterface
      */
     sequence< com::sun::star::beans::PropertyValue > getImportDescriptor();
 
-    //-------------------------------------------------------------------------
 
     /** executes the stored import, filter, sorting, and subtotals
         descriptors again.
@@ -101,7 +92,6 @@ published interface XDatabaseRange: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

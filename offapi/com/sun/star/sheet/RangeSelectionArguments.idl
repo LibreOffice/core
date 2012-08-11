@@ -19,11 +19,9 @@
 #ifndef __com_sun_star_sheet_RangeSelectionArguments_idl__
 #define __com_sun_star_sheet_RangeSelectionArguments_idl__
 
-//=============================================================================
 
  module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** contains the arguments for starting the range selection.
 
@@ -56,7 +54,6 @@ published service RangeSelectionArguments
     [optional, property] boolean SingleCellMode;
 };
 
-//=============================================================================
 
 }; }; }; };
 

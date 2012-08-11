@@ -42,7 +42,6 @@ service DataPoint
     [optional] service ::com::sun::star::style::CharacterPropertiesAsian;
     [optional] service ::com::sun::star::style::CharacterPropertiesComplex;
 
-    // ----------------------------------------------------------------------
 
     /** this property handles the style.  This property must support
         the service <type scope="com::sun::star::style">Style</type>.

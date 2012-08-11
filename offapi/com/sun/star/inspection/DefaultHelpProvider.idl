@@ -30,13 +30,11 @@
 
 #include <com/sun/star/lang/IllegalArgumentException.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module inspection {
 
 interface XObjectInspectorUI;
 
-//=============================================================================
 
 /** implements a component which can default-fill the help section of an
     <type>ObjectInspector</type>.
@@ -60,11 +58,9 @@ service DefaultHelpProvider : com::sun::star::uno::XInterface
         raises ( ::com::sun::star::lang::IllegalArgumentException );
 };
 
-//=============================================================================
 
 }; }; }; };
 
-//=============================================================================
 
 #endif
 

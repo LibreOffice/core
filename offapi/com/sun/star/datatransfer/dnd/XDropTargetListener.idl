@@ -33,11 +33,9 @@
 #include <com/sun/star/datatransfer/dnd/DropTargetDropEvent.idl>
 #include <com/sun/star/lang/XEventListener.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module datatransfer { module dnd {
 
-//=============================================================================
 /** This interface is the callback interface used by the drop target object to
     provide notification of Drag and Drop operations that involve the subject
     drop target.
@@ -48,7 +46,6 @@ module com { module sun { module star { module datatransfer { module dnd {
 
 published interface XDropTargetListener: com::sun::star::lang::XEventListener
 {
-    //-------------------------------------------------------------------------
     /** The drag operation has terminated with a drop on this drop target.
 
         <p><strong>NOTE:</strong> This method should not be oneway. The implementation
@@ -65,7 +62,6 @@ published interface XDropTargetListener: com::sun::star::lang::XEventListener
 
     void drop( [in] DropTargetDropEvent dtde );
 
-      //-------------------------------------------------------------------------
     /** Called when a drag operation has encountered the drop target.
 
         @param dtde
@@ -74,7 +70,6 @@ published interface XDropTargetListener: com::sun::star::lang::XEventListener
 
     [oneway] void dragEnter( [in] DropTargetDragEnterEvent dtdee );
 
-      //-------------------------------------------------------------------------
     /** The drag operation has departed the drop target without dropping.
 
         @param dte
@@ -83,7 +78,6 @@ published interface XDropTargetListener: com::sun::star::lang::XEventListener
 
     [oneway] void dragExit( [in] DropTargetEvent dte );
 
-      //-------------------------------------------------------------------------
     /** Called when a drag operation is ongoing on the drop target.
 
         @param dtde
@@ -92,7 +86,6 @@ published interface XDropTargetListener: com::sun::star::lang::XEventListener
 
     [oneway] void dragOver( [in] DropTargetDragEvent dtde );
 
-      //-------------------------------------------------------------------------
     /** Called when the user has modified the drop gesture.
 
         @param dtde
@@ -102,7 +95,6 @@ published interface XDropTargetListener: com::sun::star::lang::XEventListener
     [oneway] void dropActionChanged( [in] DropTargetDragEvent dtde );
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

@@ -23,11 +23,9 @@
 #include <com/sun/star/datatransfer/dnd/DragGestureEvent.idl>
 #include <com/sun/star/lang/XEventListener.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module datatransfer { module dnd {
 
-//=============================================================================
 /** This interface will be used by a <type>XDragGestureRecognizer</type>
     when it detects a drag initiating gesture.
 
@@ -38,7 +36,6 @@ module com { module sun { module star { module datatransfer { module dnd {
 
 published interface XDragGestureListener: com::sun::star::lang::XEventListener
 {
-    //-------------------------------------------------------------------------
     /** A <type>XDragGestureRecognizer</type> has detected a platform-dependent
         drag initiating gesture and is notifying this listener in order
         for it to initiate the action for the user.
@@ -50,7 +47,6 @@ published interface XDragGestureListener: com::sun::star::lang::XEventListener
     [oneway] void dragGestureRecognized( [in] DragGestureEvent dge );
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

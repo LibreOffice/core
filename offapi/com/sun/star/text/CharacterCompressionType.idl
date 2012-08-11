@@ -20,34 +20,28 @@
 #define __com_sun_star_text_CharacterCompressionType_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module text {
 
-//=============================================================================
 
 /** These constants define character compression in Asian text.
  */
 published constants CharacterCompressionType
 {
-    //-------------------------------------------------------------------------
     /** the characters are uncompressed.
      */
     const short NONE = 0;
 
-    //-------------------------------------------------------------------------
     /** only punctuation is compressed.
      */
     const short PUNCTUATION_ONLY = 1;
 
-    //-------------------------------------------------------------------------
     /** punctuation and Japanese Kana are compressed.
      */
     const short PUNCTUATION_AND_KANA = 2;
 
 };
 
-//=============================================================================
 
 }; }; }; };
 #endif

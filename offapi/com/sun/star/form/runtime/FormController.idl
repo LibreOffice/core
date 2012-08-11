@@ -22,11 +22,9 @@
 
 #include <com/sun/star/form/runtime/XFormController.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module form { module runtime {
 
-//=============================================================================
 
 /** specifies a component controlling the interaction between the user and multiple
     form controls belonging to a single form.
@@ -36,11 +34,9 @@ service FormController
     interface XFormController;
 };
 
-//=============================================================================
 
 }; }; }; }; };
 
-//=============================================================================
 
 #endif
 

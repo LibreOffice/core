@@ -12,11 +12,9 @@
 #include <com/sun/star/awt/Size.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module chart2 {
 
-//=============================================================================
 
 /**
 this interface is used for a wrapper of objects implementing the service com::sun::star::drawing::Shape
@@ -34,35 +32,29 @@ interface XChartShape : ::com::sun::star::uno::XInterface
                     com::sun::star::lang::IllegalArgumentException,
                     com::sun::star::lang::WrappedTargetException );
 
-    //-------------------------------------------------------------------------
     /** the method corresponds to the identical methods of the interface com::sun::star::beans::XPropertySet
     */
     any getPropertyValue( [in] string PropertyName )
             raises( com::sun::star::beans::UnknownPropertyException,
                     com::sun::star::lang::WrappedTargetException );
 
-    //-------------------------------------------------------------------------
     /** the method corresponds to the identical methods of the interface com::sun::star::drawing::XShape
      */
     com::sun::star::awt::Point getPosition();
 
-    //-------------------------------------------------------------------------
     /** the method corresponds to the identical methods of the interface com::sun::star::drawing::XShape
      */
     void setPosition( [in] com::sun::star::awt::Point aPosition );
 
-    //-------------------------------------------------------------------------
     /** the method corresponds to the identical methods of the interface com::sun::star::drawing::XShape
      */
     com::sun::star::awt::Size getSize();
 
-    //-------------------------------------------------------------------------
     /** the method corresponds to the identical methods of the interface com::sun::star::drawing::XShape
      */
     void setSize( [in] com::sun::star::awt::Size aSize )
             raises( com::sun::star::beans::PropertyVetoException );
 
-    //-------------------------------------------------------------------------
     /** the method corresponds to the identical methods of the interface com::sun::star::drawing::XShape
     * ??????????? deprecated
     *
@@ -70,7 +62,6 @@ interface XChartShape : ::com::sun::star::uno::XInterface
     string getShapeType();
 };
 
-//=============================================================================
 
 }; }; }; };
 

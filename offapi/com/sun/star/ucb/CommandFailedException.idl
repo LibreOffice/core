@@ -32,11 +32,9 @@
 #include <com/sun/star/uno/Exception.idl>
 
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** This exception is thrown if an exception situation occurred during the
     processing of a command and an
     <type scope="com::sun::star::task">XInteractionHandler</type> was able
@@ -50,14 +48,12 @@ module com { module sun { module star { module ucb {
 */
 published exception CommandFailedException : com::sun::star::uno::Exception
 {
-    //-------------------------------------------------------------------------
     /** contains the exception that was passed to the
         <type scope="com::sun::star::task">XInteractionHandler</type>.
      */
     any Reason;
 };
 
-//=============================================================================
 
 }; }; }; };
 

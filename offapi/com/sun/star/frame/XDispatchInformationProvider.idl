@@ -23,11 +23,9 @@
 #include <com/sun/star/frame/DispatchInformation.idl>
 #include <com/sun/star/container/NoSuchElementException.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module frame {
 
-//=============================================================================
 /** provides information about supported commands
 
     <p>
@@ -44,7 +42,6 @@ module com {  module sun {  module star {  module frame {
  */
 published interface XDispatchInformationProvider: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** returns all supported command groups.
 
         @returns
@@ -54,7 +51,6 @@ published interface XDispatchInformationProvider: com::sun::star::uno::XInterfac
     */
     sequence < short > getSupportedCommandGroups();
 
-    //-------------------------------------------------------------------------
     /** returns additional information about supported commands of a
         given command group.
 
@@ -68,7 +64,6 @@ published interface XDispatchInformationProvider: com::sun::star::uno::XInterfac
     sequence < DispatchInformation > getConfigurableDispatchInformation( [in] short CommandGroup );
 };
 
-//=============================================================================
 
 }; }; }; };
 

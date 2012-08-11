@@ -22,11 +22,9 @@
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/ucb/XPersistentPropertySet.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** A registry (storage medium) for persistent property sets.
 
      @version  1.0
@@ -35,7 +33,6 @@ module com { module sun { module star { module ucb {
   */
 published interface XPropertySetRegistry : com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** creates a new or opens an existing property set in the registry.
 
         @param key
@@ -51,7 +48,6 @@ published interface XPropertySetRegistry : com::sun::star::uno::XInterface
     com::sun::star::ucb::XPersistentPropertySet
     openPropertySet( [in] string key, [in] boolean create );
 
-    //-------------------------------------------------------------------------
     /** removes a property set from the registry.
 
         @param key
@@ -60,7 +56,6 @@ published interface XPropertySetRegistry : com::sun::star::uno::XInterface
     [oneway] void removePropertySet( [in] string key );
 };
 
-//=============================================================================
 
 }; }; }; };
 

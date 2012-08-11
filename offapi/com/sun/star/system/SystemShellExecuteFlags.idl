@@ -32,18 +32,15 @@
 
 module com { module sun { module star { module system {
 
-//=============================================================================
 /** Different settings for the <type>SystemShellExecute</type> service.
  */
 
 published constants SystemShellExecuteFlags
 {
-    //---------------------------------------------------------------------
     /** Uses the default settings for executing commands.
     */
     const long DEFAULTS                = 0;
 
-    //---------------------------------------------------------------------
     /** Prevents the display of system error message boxes if the
         method <member scope="com::sun::star::system">XSystemShellExecute::execute()</member> fails.
      */
@@ -56,7 +53,6 @@ published constants SystemShellExecuteFlags
     const long URIS_ONLY = 2;
 };
 
-//=============================================================================
 
 }; }; }; };
 

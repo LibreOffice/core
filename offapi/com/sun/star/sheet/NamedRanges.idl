@@ -26,11 +26,9 @@
 #include <com/sun/star/container/XIndexAccess.idl>
 #include <com/sun/star/document/XActionLockable.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** represents a collection of named ranges in a spreadsheet document.
 
@@ -41,13 +39,11 @@ module com {  module sun {  module star {  module sheet {
  */
 published service NamedRanges
 {
-    //-------------------------------------------------------------------------
 
     /** provides access to the named ranges and to insert and remove them.
      */
     interface com::sun::star::sheet::XNamedRanges;
 
-    //-------------------------------------------------------------------------
 
     /** provides access to the named ranges via index.
 
@@ -56,7 +52,6 @@ published service NamedRanges
      */
     interface com::sun::star::container::XIndexAccess;
 
-    //-------------------------------------------------------------------------
 
     /** creates an enumeration of all named ranges.
 
@@ -65,7 +60,6 @@ published service NamedRanges
      */
     interface com::sun::star::container::XEnumerationAccess;
 
-    //-------------------------------------------------------------------------
 
     /** provides methods to control the internal update of named ranges.
 
@@ -75,7 +69,6 @@ published service NamedRanges
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

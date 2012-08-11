@@ -24,15 +24,12 @@
 #include <com/sun/star/lang/XServiceInfo.idl>
 #include <com/sun/star/lang/XTypeProvider.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module datatransfer {
 
-//=============================================================================
 
  published interface XMimeContentTypeFactory;
 
-//=============================================================================
 /** Used to create an instance that implement the interface
     <type>XMimeContentType</type> from a string
     representation of such a MIME content-type that is conform to
@@ -43,7 +40,6 @@ module com { module sun { module star { module datatransfer {
 */
 published service MimeContentTypeFactory
 {
-    //-------------------------------------------------------------------------
     /** Creates an instance that implement the interface
         <type>XMimeContentType</type> from the string
         representation of such a MIME content-types that is conform to
@@ -52,18 +48,15 @@ published service MimeContentTypeFactory
     */
     interface XMimeContentTypeFactory;
 
-    //-------------------------------------------------------------------------
     /** Service should always support this interface.
     */
     interface com::sun::star::lang::XServiceInfo;
 
-    //-------------------------------------------------------------------------
     /** Service should always support this interface.
     */
     interface com::sun::star::lang::XTypeProvider;
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -30,11 +30,9 @@
 
 #include <com/sun/star/ucb/XContentProvider.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** The Transient Documents Content Provider (TDCP) implements a
     <type>ContentProvider</type> for the <type>UniversalContentBroker</type>
     (UCB).
@@ -60,7 +58,6 @@ module com { module sun { module star { module ucb {
 */
 service TransientDocumentsContentProvider
 {
-    //-------------------------------------------------------------------------
     /** provides four different types of contents: Stream, Folder, Document and
         Root.
 
@@ -150,7 +147,6 @@ service TransientDocumentsContentProvider
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

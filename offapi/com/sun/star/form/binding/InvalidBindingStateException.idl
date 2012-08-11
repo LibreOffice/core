@@ -22,11 +22,9 @@
 #include <com/sun/star/uno/Exception.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module form { module binding {
 
-//=============================================================================
 
 /** thrown when an <type>XValueBinding</type> cannot perform a requested
     operation due to an invalid state.
@@ -35,11 +33,9 @@ exception InvalidBindingStateException: com::sun::star::uno::Exception
 {
 };
 
-//=============================================================================
 
 }; }; }; }; };
 
-//=============================================================================
 
 #endif
 

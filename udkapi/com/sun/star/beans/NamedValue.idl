@@ -18,11 +18,9 @@
  */
 #ifndef __com_sun_star_beans_NamedValue_idl__
 #define __com_sun_star_beans_NamedValue_idl__
-//=============================================================================
 
  module com {  module sun {  module star {  module beans {
 
-//=============================================================================
 
 /** specifies a pair assembled from a name and a value.
  */
@@ -32,14 +30,12 @@ published struct NamedValue
      */
     string Name;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the value part of the pair.
      */
     any Value;
 };
 
-//=============================================================================
 
 }; }; }; };
 

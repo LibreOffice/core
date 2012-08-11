@@ -22,11 +22,9 @@
 
 #include <com/sun/star/sheet/XConsolidationDescriptor.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** contains all settings of a data consolidation in a spreadsheet
     document.
@@ -35,7 +33,6 @@ module com {  module sun {  module star {  module sheet {
  */
 published service ConsolidationDescriptor
 {
-    //-------------------------------------------------------------------------
 
 /** provides methods to access the settings of the descriptor.
  */
@@ -43,7 +40,6 @@ published service ConsolidationDescriptor
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

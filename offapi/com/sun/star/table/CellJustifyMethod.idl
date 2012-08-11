@@ -29,11 +29,9 @@
 #ifndef __com_sun_star_table_CellJustifyMethod_idl__
 #define __com_sun_star_table_CellJustifyMethod_idl__
 
-//=============================================================================
 
 module com {  module sun {  module star {  module table {
 
-//=============================================================================
 
 /** Specifies how text inside a cell is justified.  The justification methods
     closely follow the methods described under the text-justify property of the
@@ -42,13 +40,11 @@ module com {  module sun {  module star {  module table {
  */
 constants CellJustifyMethod
 {
-    //-------------------------------------------------------------------------
 
     /** Automatic.
      */
     const long AUTO = 0;
 
-    //-------------------------------------------------------------------------
 
     /** When applied in the direction of text flow, characters in each line are
         distributed at equal intervals so that the ends of each line are aligned
@@ -60,7 +56,6 @@ constants CellJustifyMethod
     const long DISTRIBUTE = 1;
 };
 
-//=============================================================================
 
 }; }; }; };
 

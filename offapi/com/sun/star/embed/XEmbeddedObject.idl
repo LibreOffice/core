@@ -36,50 +36,39 @@
 
 
 
-//============================================================================
 
  module com {  module sun {  module star {  module embed {
 
-//============================================================================
 /** represents common functionality for embedded objects.
  */
 published interface XEmbeddedObject
 {
     // INTERFACES
-    //
-    //------------------------------------------------------------------------
     /** represents common visualization functionality for embedded objects.
      */
     interface XVisualObject;
 
-    //------------------------------------------------------------------------
     /** allows to detect class ID of the object.
      */
     interface XClassifiedObject;
 
-    //------------------------------------------------------------------------
     /** allows to get access to the component handled by the object.
      */
     interface XComponentSupplier;
 
-    //------------------------------------------------------------------------
     /** allows to be notified when object changes the state.
      */
     interface XStateChangeBroadcaster;
 
-    //------------------------------------------------------------------------
     /** allows to be notified about object related events.
      */
     interface ::com::sun::star::document::XEventBroadcaster;
 
-    //------------------------------------------------------------------------
     /** allows to control lifetime of the object.
      */
     interface ::com::sun::star::util::XCloseable;
 
     // METHODS
-    //
-    //------------------------------------------------------------------------
     /** changes the state of the object to the requested one.
 
         @param nNewState
@@ -100,7 +89,6 @@ published interface XEmbeddedObject
                 ::com::sun::star::embed::WrongStateException,
                 ::com::sun::star::uno::Exception );
 
-    //------------------------------------------------------------------------
     /** returns supported states for the object.
 
         @returns
@@ -118,7 +106,6 @@ published interface XEmbeddedObject
         raises( ::com::sun::star::embed::NeedsRunningStateException,
                 ::com::sun::star::embed::WrongStateException );
 
-    //------------------------------------------------------------------------
     /** returns the current state of the object.
 
         @returns
@@ -130,7 +117,6 @@ published interface XEmbeddedObject
     long getCurrentState()
         raises( ::com::sun::star::embed::WrongStateException );
 
-    //------------------------------------------------------------------------
     /** lets object perform an action referenced by nVerbID.
 
         @param nVerbID
@@ -155,7 +141,6 @@ published interface XEmbeddedObject
                 ::com::sun::star::embed::UnreachableStateException,
                 ::com::sun::star::uno::Exception );
 
-    //------------------------------------------------------------------------
     /** returns supported verbs for the object.
 
         @returns
@@ -173,7 +158,6 @@ published interface XEmbeddedObject
         raises( ::com::sun::star::embed::NeedsRunningStateException,
                 ::com::sun::star::embed::WrongStateException );
 
-    //------------------------------------------------------------------------
     /** sets a connection to the container's client.
 
         @param xClient
@@ -185,7 +169,6 @@ published interface XEmbeddedObject
     void setClientSite( [in] XEmbeddedClient xClient )
         raises( ::com::sun::star::embed::WrongStateException );
 
-    //------------------------------------------------------------------------
     /** provides access to the internal link to the container client.
 
         @returns
@@ -197,7 +180,6 @@ published interface XEmbeddedObject
     XEmbeddedClient getClientSite()
         raises( ::com::sun::star::embed::WrongStateException );
 
-    //------------------------------------------------------------------------
     /** updates object's representations.
 
         @throws com::sun::star::embed::WrongStateException
@@ -210,7 +192,6 @@ published interface XEmbeddedObject
         raises( ::com::sun::star::embed::WrongStateException,
                 ::com::sun::star::uno::Exception );
 
-    //------------------------------------------------------------------------
     /** specifies how often the object's representation should be updated.
 
         @param nMode
@@ -223,7 +204,6 @@ published interface XEmbeddedObject
     void setUpdateMode( [in] long nMode )
         raises( ::com::sun::star::embed::WrongStateException );
 
-    //------------------------------------------------------------------------
     /** retrieves the status of the object.
 
         @param nAspect
@@ -239,7 +219,6 @@ published interface XEmbeddedObject
     hyper getStatus( [in] hyper nAspect )
         raises( ::com::sun::star::embed::WrongStateException );
 
-    //-------------------------------------------------------------------------
     /** provides object with the name of container document.
 
         @param sName
@@ -249,7 +228,6 @@ published interface XEmbeddedObject
 
 };
 
-//============================================================================
 
 }; }; }; };
 

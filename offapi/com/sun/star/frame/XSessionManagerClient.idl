@@ -21,11 +21,9 @@
 
 #include <com/sun/star/frame/XSessionManagerListener.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module frame {
 
-//=============================================================================
 /** Connect to a session manager to get information about pending
     desktop shutdown
 

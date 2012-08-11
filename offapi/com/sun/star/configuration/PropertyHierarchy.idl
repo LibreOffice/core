@@ -24,11 +24,9 @@
 #include <com/sun/star/beans/XHierarchicalPropertySet.idl>
 #include <com/sun/star/beans/XMultiHierarchicalPropertySet.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module configuration {
 
-//=============================================================================
 /** provides access to and information about properties and subproperties
  of an implementation.
 
@@ -78,7 +76,6 @@ published service PropertyHierarchy
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

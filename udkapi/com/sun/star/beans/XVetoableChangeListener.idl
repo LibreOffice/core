@@ -26,11 +26,9 @@
 #include <com/sun/star/beans/PropertyVetoException.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module beans {
 
-//=============================================================================
 
 /** is used to receive <type>PropertyChangeEvent</type>s
     whenever a "constrained" property is changed.
@@ -40,7 +38,6 @@ module com {  module sun {  module star {  module beans {
  */
 published interface XVetoableChangeListener: com::sun::star::lang::XEventListener
 {
-    //-------------------------------------------------------------------------
 
     /** gets called when a constrained property is changed.
      */
@@ -49,7 +46,6 @@ published interface XVetoableChangeListener: com::sun::star::lang::XEventListene
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

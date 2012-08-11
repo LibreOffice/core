@@ -22,13 +22,10 @@
 
 #include <com/sun/star/uno/XInterface.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module i18n {
 
-//=============================================================================
 
-//--------------------------------------------------------------------------
 /**
     contains the routine to check Thai input sequence checking
 
@@ -46,7 +43,6 @@ published interface XInputSequenceChecker : ::com::sun::star::uno::XInterface
                 [in] char cInputChar, [in] short nInputCheckMode );
 };
 
-//=============================================================================
 }; }; }; };
 
 #endif

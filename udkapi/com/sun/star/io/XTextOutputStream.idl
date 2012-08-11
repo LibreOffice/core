@@ -24,11 +24,9 @@
 #include <com/sun/star/io/IOException.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module io {
 
-//=============================================================================
 /** Interface to write strings to a stream using a special
     character encoding.
 
@@ -38,7 +36,6 @@ module com {  module sun {  module star {  module io {
  */
 published interface XTextOutputStream: com::sun::star::io::XOutputStream
 {
-    //-------------------------------------------------------------------------
     /** writes a string to the stream using the encoding
         defined by <member>setEncoding</member>.
 
@@ -54,7 +51,6 @@ published interface XTextOutputStream: com::sun::star::io::XOutputStream
     void writeString( [in] string aString )
             raises( com::sun::star::io::IOException );
 
-    //-------------------------------------------------------------------------
     /** sets character encoding.
 
         @param Encoding
@@ -67,7 +63,6 @@ published interface XTextOutputStream: com::sun::star::io::XOutputStream
     void setEncoding( [in] string Encoding );
 };
 
-//=============================================================================
 
 }; }; }; };
 

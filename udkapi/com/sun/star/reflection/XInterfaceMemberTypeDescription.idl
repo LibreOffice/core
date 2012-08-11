@@ -22,11 +22,9 @@
 #include <com/sun/star/reflection/XTypeDescription.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module reflection {
 
-//=============================================================================
 
 /** Base interface for reflected interface members.
 
@@ -51,7 +49,6 @@ published interface XInterfaceMemberTypeDescription: com::sun::star::reflection:
     long getPosition();
 };
 
-//=============================================================================
 
 }; }; }; };
 

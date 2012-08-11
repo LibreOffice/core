@@ -24,11 +24,9 @@
 #include <com/sun/star/container/XNamed.idl>
 #include <com/sun/star/sheet/XCellRangeReferrer.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** represents a named range in a spreadsheet document.
 
@@ -39,13 +37,11 @@ module com {  module sun {  module star {  module sheet {
  */
 published service NamedRange
 {
-    //-------------------------------------------------------------------------
 
     /** provides access to the settings of the named range.
      */
     interface com::sun::star::sheet::XNamedRange;
 
-    //-------------------------------------------------------------------------
 
     /** provides access to the cell range object referred by this named range.
 
@@ -54,7 +50,6 @@ published service NamedRange
      */
     interface com::sun::star::sheet::XCellRangeReferrer;
 
-    //-------------------------------------------------------------------------
 
     /** returns the index used to refer to this name in token arrays.
 
@@ -69,7 +64,6 @@ published service NamedRange
      */
     [optional, readonly, property] long TokenIndex;
 
-    //-------------------------------------------------------------------------
 
     /** Determines if this defined name represents a shared formula.
 
@@ -88,7 +82,6 @@ published service NamedRange
     [optional, property] boolean IsSharedFormula;
 };
 
-//=============================================================================
 
 }; }; }; };
 

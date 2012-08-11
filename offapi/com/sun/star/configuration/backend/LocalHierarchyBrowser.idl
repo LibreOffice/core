@@ -21,11 +21,9 @@
 
 #include <com/sun/star/configuration/backend/HierarchyBrowser.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module configuration { module backend {
 
-//=============================================================================
 
 /**
     is a <type>HierarchyBrowser</type>, that browses a configuration database
@@ -37,7 +35,6 @@ module com { module sun { module star { module configuration { module backend {
 */
 published service LocalHierarchyBrowser
 {
-    //-------------------------------------------------------------------------
 
     /** allows browsing a configuration hierarchy for components.
 
@@ -72,10 +69,8 @@ published service LocalHierarchyBrowser
       */
     service HierarchyBrowser ;
 
-    //-------------------------------------------------------------------------
 } ;
 
-//=============================================================================
 
 } ; } ; } ; } ; } ;
 

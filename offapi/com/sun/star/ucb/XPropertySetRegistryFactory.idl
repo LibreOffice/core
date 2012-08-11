@@ -22,11 +22,9 @@
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/ucb/XPropertySetRegistry.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** A factory for property set registries.
 
      @version  1.0
@@ -34,7 +32,6 @@ module com { module sun { module star { module ucb {
   */
 published interface XPropertySetRegistryFactory : com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** creates a property set registry.
 
         @param URL
@@ -48,7 +45,6 @@ published interface XPropertySetRegistryFactory : com::sun::star::uno::XInterfac
                                                             [in] string URL );
 };
 
-//=============================================================================
 
 }; }; }; };
 

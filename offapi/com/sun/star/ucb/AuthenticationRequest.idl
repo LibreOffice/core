@@ -31,73 +31,61 @@
 #include <com/sun/star/task/ClassifiedInteractionRequest.idl>
 
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** An error specifying lack of correct authentication data (e.g., to log into
     an account).
 */
 published exception AuthenticationRequest: com::sun::star::task::ClassifiedInteractionRequest
 {
-    //-------------------------------------------------------------------------
     /** The name of the server (if applicable).
      */
     string ServerName;
 
-    //-------------------------------------------------------------------------
     /** Any diagnostic message about the failure to log in (if applicable; it
         will typically be an English phrase or sentence).
      */
     string Diagnostic;
 
-    //-------------------------------------------------------------------------
     /** Specifies if the authentication involves a "realm" (as can be the case
         for HTTP).
      */
     boolean HasRealm;
 
-    //-------------------------------------------------------------------------
     /** Any already specified realm.
 
         If HasRealm is false, this member should be ignored.
      */
     string Realm;
 
-    //-------------------------------------------------------------------------
     /** Specifies if the authentication involves a "user name" (as is almost
         always the case).
     */
     boolean HasUserName;
 
-    //-------------------------------------------------------------------------
     /** Any already specified user name.
 
         If HasUserName is false, this member should be ignored.
      */
     string UserName;
 
-    //-------------------------------------------------------------------------
     /** Specifies if the authentication involves a "password" (as is almost
         always the case).
     */
     boolean HasPassword;
 
-    //-------------------------------------------------------------------------
     /** Any already specified password.
 
         If HasPassword is false, this member should be ignored.
      */
     string Password;
 
-    //-------------------------------------------------------------------------
     /** Specifies if the authentication involves an "account" (as can be the
         case for FTP).
     */
     boolean HasAccount;
 
-    //-------------------------------------------------------------------------
     /** Any already specified account.
 
         If HasAccount is false, this member should be ignored.
@@ -106,7 +94,6 @@ published exception AuthenticationRequest: com::sun::star::task::ClassifiedInter
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

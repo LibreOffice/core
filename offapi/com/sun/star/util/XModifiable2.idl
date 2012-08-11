@@ -33,11 +33,9 @@
 #include <com/sun/star/beans/PropertyVetoException.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module util {
 
-//=============================================================================
 
 /** allows to control modifiable state change.
 
@@ -50,7 +48,6 @@ module com {  module sun {  module star {  module util {
  */
 interface XModifiable2: com::sun::star::util::XModifiable
 {
-    //-------------------------------------------------------------------------
     /** disable possibility to change modified state of the document
 
         @returns the value that says whether the modified state change was
@@ -61,7 +58,6 @@ interface XModifiable2: com::sun::star::util::XModifiable
      */
     boolean disableSetModified();
 
-    //-------------------------------------------------------------------------
     /** enable possibility to change modified state of the document
 
         @returns the value that says whether the modified state change was
@@ -71,13 +67,11 @@ interface XModifiable2: com::sun::star::util::XModifiable
      */
     boolean enableSetModified();
 
-    //-------------------------------------------------------------------------
     /** allows to detect whether the modified state change is enabled
      */
     boolean isSetModifiedEnabled();
 };
 
-//=============================================================================
 
 }; }; }; };
 

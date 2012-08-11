@@ -40,7 +40,6 @@ published interface XUser: XAuthorizable
         raises (com::sun::star::sdbc::SQLException);
 };
 
-//=============================================================================
 
 }; }; }; };
 

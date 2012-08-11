@@ -20,11 +20,9 @@
 #ifndef __com_sun_star_sheet_GoalResult_idl__
 #define __com_sun_star_sheet_GoalResult_idl__
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** is the result of a goal seek operation.
  */
@@ -34,7 +32,6 @@ published struct GoalResult
      */
     double Divergence;
 
-    //-------------------------------------------------------------------------
 
     /** the resulting value.
      */
@@ -42,7 +39,6 @@ published struct GoalResult
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

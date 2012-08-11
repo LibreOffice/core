@@ -30,11 +30,9 @@
 
 #include <com/sun/star/awt/tab/XTabPageContainerListener.idl>
 #include <com/sun/star/awt/tab/XTabPage.idl>
-//=============================================================================
 
 module com {  module sun {  module star {  module awt { module tab {
 
-//=============================================================================
 
 /** An interface to a control that displays tab pages.
 
@@ -50,7 +48,6 @@ interface XTabPageContainer
     */
     long getTabPageCount();
 
-    //-------------------------------------------------------------------------
 
     /** Checks whether a tab page is activated.
         @param
@@ -60,7 +57,6 @@ interface XTabPageContainer
     */
     boolean isTabPageActive([in] short tabPageIndex);
 
-    //-------------------------------------------------------------------------
 
     /** Returns tab page for the given index.
         @param
@@ -70,7 +66,6 @@ interface XTabPageContainer
     */
     XTabPage getTabPage([in] short tabPageIndex);
 
-    //-------------------------------------------------------------------------
 
     /** Returns tab page for the given ID.
         @param
@@ -80,7 +75,6 @@ interface XTabPageContainer
     */
     XTabPage getTabPageByID([in] short tabPageID);
 
-    //-------------------------------------------------------------------------
 
     /** Adds a listener for the <type>TabPageActivedEvent</type> posted after
         the tab page was activated.
@@ -89,7 +83,6 @@ interface XTabPageContainer
     */
     [oneway] void addTabPageListener( [in] XTabPageContainerListener  listener);
 
-    //-------------------------------------------------------------------------
 
     /** Removes a listener previously added with <method>addTabPageListener()</method>.
         @param listener
@@ -97,13 +90,11 @@ interface XTabPageContainer
     */
     [oneway] void removeTabPageListener( [in] XTabPageContainerListener listener);
 
-    //-------------------------------------------------------------------------
     /** Specifies the ID of the current active tab page.
     */
     [attribute] short ActiveTabPageID;
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

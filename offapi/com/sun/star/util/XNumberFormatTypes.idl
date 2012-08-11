@@ -23,24 +23,20 @@
 #include <com/sun/star/lang/Locale.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module util {
 
-//=============================================================================
 
 /** represents functions to get specific, predefined number formats.
  */
 published interface XNumberFormatTypes: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** @returns
                 the key of the standard format for a locale.
      */
     long getStandardIndex( [in] com::sun::star::lang::Locale nLocale );
 
-    //-------------------------------------------------------------------------
 
     /** @returns
                 the key of the standard format within a specified type for a given locale.
@@ -52,7 +48,6 @@ published interface XNumberFormatTypes: com::sun::star::uno::XInterface
     long getStandardFormat( [in] short nType,
              [in] com::sun::star::lang::Locale nLocale );
 
-    //-------------------------------------------------------------------------
 
     /** @returns
                 the key of a built-in format for a locale:
@@ -66,14 +61,12 @@ published interface XNumberFormatTypes: com::sun::star::uno::XInterface
     long getFormatIndex( [in] short nIndex,
              [in] com::sun::star::lang::Locale nLocale );
 
-    //-------------------------------------------------------------------------
 
     /** verifies if one type of number format is compatible with another type.
      */
     boolean isTypeCompatible( [in] short nOldType,
              [in] short nNewType );
 
-    //-------------------------------------------------------------------------
 
     /** @returns
                 the index of the converted number format if successful,
@@ -90,7 +83,6 @@ published interface XNumberFormatTypes: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

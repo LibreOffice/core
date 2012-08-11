@@ -22,11 +22,9 @@
 
 #include <com/sun/star/sheet/XLabelRange.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** represents a cell area that contains labels and values related to the
     labels.
@@ -43,7 +41,6 @@ published service LabelRange
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

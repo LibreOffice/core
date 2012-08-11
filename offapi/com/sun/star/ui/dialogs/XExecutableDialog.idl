@@ -32,18 +32,15 @@
 #include <com/sun/star/uno/RuntimeException.idl>
 #include <com/sun/star/uno/XInterface.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module ui { module dialogs {
 
-//=============================================================================
 /** Specifies an interface for an executable dialog.
 */
 
 
 published interface XExecutableDialog: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** Sets the title of the dialog.
 
         @param aTitle
@@ -53,7 +50,6 @@ published interface XExecutableDialog: com::sun::star::uno::XInterface
     */
     void setTitle( [in] string aTitle );
 
-    //-------------------------------------------------------------------------
     /** Executes (shows) the dialog.
 
         @returns
@@ -62,7 +58,6 @@ published interface XExecutableDialog: com::sun::star::uno::XInterface
     short execute();
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

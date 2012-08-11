@@ -20,11 +20,9 @@
 #define __com_sun_star_presentation_PresentationRange_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module presentation {
 
-//=============================================================================
 
 /** specifies which part of the presentation is to show.
  */
@@ -34,13 +32,11 @@ published enum PresentationRange
      */
     PRESENTATIONRANGE_ALL,
 
-    //-------------------------------------------------------------------------
 
     /** use only the active slide.
      */
     PRESENTATIONRANGE_FROM_PAGE,
 
-    //-------------------------------------------------------------------------
 
     /** use an individual choice of slides.
      */
@@ -48,7 +44,6 @@ published enum PresentationRange
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

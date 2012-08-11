@@ -22,11 +22,9 @@
 
 #include <com/sun/star/beans/NamedValue.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module frame {
 
-//=============================================================================
 
 /** describes a command which can be send to a generic toolbar control.
 
@@ -34,14 +32,12 @@ module com {  module sun {  module star {  module frame {
  */
 struct ControlCommand
 {
-    //-------------------------------------------------------------------------
 
     /** specifies the command which should be processed by the toolbar
         control.
      */
     string Command;
 
-    //-------------------------------------------------------------------------
 
     /** specifies a sequence of named values which are used as argument
         for the command. The number and type of arguments depend on the
@@ -50,7 +46,6 @@ struct ControlCommand
     sequence< com::sun::star::beans::NamedValue > Arguments;
 };
 
-//=============================================================================
 
 }; }; }; };
 

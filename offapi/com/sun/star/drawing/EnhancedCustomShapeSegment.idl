@@ -21,11 +21,9 @@
 
 #include <com/sun/star/drawing/EnhancedCustomShapeSegmentCommand.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module drawing {
 
-//=============================================================================
 
 /**
  */
@@ -36,7 +34,6 @@ struct EnhancedCustomShapeSegment
     short Count;
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -20,41 +20,34 @@
 #define __com_sun_star_ucb_NameClash_idl__
 
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** These are the possible values for <member>TransferInfo::NameClash</member>.
 */
 published constants NameClash
 {
-    //-------------------------------------------------------------------------
     /** Means to set an error and cancel the operation.
     */
     const long ERROR = 0;
 
-    //-------------------------------------------------------------------------
     /** Means to overwrite the object in the target folder with the object to
         transfer.
     */
     const long OVERWRITE = 1;
 
-    //-------------------------------------------------------------------------
     /** Means to rename the object to transfer to solve the clash.
 
         <p>The implementation needs to supply and set a suitable new name.
     */
     const long RENAME = 2;
 
-    //-------------------------------------------------------------------------
     /** Deprecated. Do not use!
 
         @deprecated
     */
     const long KEEP = 3;
 
-    //-------------------------------------------------------------------------
     /** Means to use a <type>NameClashResolveRequest</type> in order to solve
         the name clash.
 
@@ -63,7 +56,6 @@ published constants NameClash
     const long ASK = 4;
 };
 
-//=============================================================================
 
 }; }; }; };
 

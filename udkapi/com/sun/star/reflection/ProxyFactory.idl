@@ -22,11 +22,9 @@
 #include <com/sun/star/reflection/XProxyFactory.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module reflection {
 
-//=============================================================================
 
 /** Service to create proxy objects acting on behalf of a given
     target object.<br>
@@ -53,7 +51,6 @@ published service ProxyFactory
     interface com::sun::star::reflection::XProxyFactory;
 };
 
-//=============================================================================
 
 }; }; }; };
 

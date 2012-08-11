@@ -22,11 +22,9 @@
 
 #include <com/sun/star/container/XNameAccess.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** represents the collection of hierarchies in a data pilot source
     dimension.
@@ -36,7 +34,6 @@ module com {  module sun {  module star {  module sheet {
  */
 published service DataPilotSourceHierarchies
 {
-    //-------------------------------------------------------------------------
 
     /** provides access by name to the hierarchies in the collection.
 
@@ -46,7 +43,6 @@ published service DataPilotSourceHierarchies
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

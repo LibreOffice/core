@@ -56,7 +56,6 @@ published service SQLQueryComposer
     interface com::sun::star::sdbcx::XColumnsSupplier;
 };
 
-//=============================================================================
 
 }; }; }; };
 

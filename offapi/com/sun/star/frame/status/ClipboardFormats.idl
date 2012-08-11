@@ -20,11 +20,9 @@
 #define __com_sun_star_frame_status_ClipboardFormats_idl__
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module frame { module status {
 
-//=============================================================================
 
 /** contains a list of format IDs and names which are part of the
     system clipboard.
@@ -33,14 +31,12 @@ module com {  module sun {  module star {  module frame { module status {
  */
 struct ClipboardFormats
 {
-    //-------------------------------------------------------------------------
 
     /** specifies a sequence of format IDs which are contained in the
         system clipboard.
      */
     sequence< hyper > Identifiers;
 
-    //-------------------------------------------------------------------------
 
     /** specifies a sequence of format names which are contained in the
         system clipboard.
@@ -48,7 +44,6 @@ struct ClipboardFormats
     sequence< string > Names;
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

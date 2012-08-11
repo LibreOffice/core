@@ -25,11 +25,9 @@
 #include <com/sun/star/awt/FontDescriptor.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module awt {
 
-//=============================================================================
 
 /** gives access to the VCL window implementation.
 
@@ -37,44 +35,37 @@
  */
 published interface XVclWindowPeer: com::sun::star::awt::XWindowPeer
 {
-    //-------------------------------------------------------------------------
 
     /** returns <true/> if the window peer is a child, <false/> otherwise.
      */
     boolean isChild( [in] com::sun::star::awt::XWindowPeer Peer );
 
-    //-------------------------------------------------------------------------
 
     /** sets the design mode for use in a design editor.
      */
     [oneway] void setDesignMode( [in] boolean bOn );
 
-    //-------------------------------------------------------------------------
 
     /** returns <true/> if the window peer is in design mode,
         <false/> otherwise.
      */
     boolean isDesignMode();
 
-    //-------------------------------------------------------------------------
 
     /** enables clipping of sibling windows.
      */
     [oneway] void enableClipSiblings( [in] boolean bClip );
 
-    //-------------------------------------------------------------------------
 
     /** sets the foreground color.
      */
     [oneway] void setForeground( [in] com::sun::star::util::Color Color );
 
-    //-------------------------------------------------------------------------
 
     /** sets the control font.
      */
     [oneway] void setControlFont( [in] com::sun::star::awt::FontDescriptor aFont );
 
-    //-------------------------------------------------------------------------
 
     /** returns the font, foreground and background color for the specified
         type.
@@ -84,14 +75,12 @@ published interface XVclWindowPeer: com::sun::star::awt::XWindowPeer
              [out] com::sun::star::util::Color ForegroundColor,
              [out] com::sun::star::util::Color BackgroundColor );
 
-    //-------------------------------------------------------------------------
 
     /** sets the value of the property with the specified name.
      */
     void setProperty( [in] string PropertyName,
              [in] any Value );
 
-    //-------------------------------------------------------------------------
 
     /** returns the value of the property with the specified name.
      */
@@ -99,7 +88,6 @@ published interface XVclWindowPeer: com::sun::star::awt::XWindowPeer
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

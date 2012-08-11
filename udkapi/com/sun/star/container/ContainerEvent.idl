@@ -22,11 +22,9 @@
 #include <com/sun/star/lang/EventObject.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module container {
 
-//=============================================================================
 
 /** This event is fired when an element is inserted in a container.
 
@@ -34,7 +32,6 @@ module com {  module sun {  module star {  module container {
  */
 published struct ContainerEvent: com::sun::star::lang::EventObject
 {
-    //-------------------------------------------------------------------------
 
     /** It contains the accessor to the element which is inserted or removed.
 
@@ -42,13 +39,11 @@ published struct ContainerEvent: com::sun::star::lang::EventObject
      */
     any Accessor;
 
-    //-------------------------------------------------------------------------
 
     /** This contains the element that was inserted or removed.
      */
     any Element;
 
-    //-------------------------------------------------------------------------
 
     /** This contains the replaced element.
      */
@@ -56,7 +51,6 @@ published struct ContainerEvent: com::sun::star::lang::EventObject
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -34,11 +34,9 @@
 #include <com/sun/star/container/XEnumerationAccess.idl>
 #include <com/sun/star/container/XIndexAccess.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** represents a description of how subtotals are created.
 
@@ -47,13 +45,11 @@ module com {  module sun {  module star {  module sheet {
  */
 published service SubTotalDescriptor
 {
-    //-------------------------------------------------------------------------
 
     /** provides access to the collection of subtotal fields.
      */
     interface com::sun::star::sheet::XSubTotalDescriptor;
 
-    //-------------------------------------------------------------------------
 
     /** creates an enumeration of all sub total fields.
 
@@ -61,38 +57,32 @@ published service SubTotalDescriptor
      */
     interface com::sun::star::container::XEnumerationAccess;
 
-    //-------------------------------------------------------------------------
 
     /** provides access to the sub total fields in the collection via index.
      */
     interface com::sun::star::container::XIndexAccess;
 
-    //-------------------------------------------------------------------------
 
 //!published service PropertySet
     /** provides access to the properties.
      */
     interface com::sun::star::beans::XPropertySet;
 
-    //=========================================================================
 
     /** specifies if page breaks are inserted after each group change.
      */
     [property] boolean InsertPageBreaks;
 
-    //-------------------------------------------------------------------------
 
     /** specifies if the case of letters is important when comparing entries.
      */
     [property] boolean IsCaseSensitive;
 
-    //-------------------------------------------------------------------------
 
     /** specifies if a user defined sorting list is used.
      */
     [property] boolean EnableUserSortList;
 
-    //-------------------------------------------------------------------------
 
     /** specifies which user defined sorting list is used.
 
@@ -102,27 +92,23 @@ published service SubTotalDescriptor
      */
     [property] long UserSortListIndex;
 
-    //-------------------------------------------------------------------------
 
     /** specifies if cell formats are moved with the contents they belong to.
      */
     [property] boolean BindFormatsToContent;
 
-    //-------------------------------------------------------------------------
 
     /** specifies if the contents of the fields will be sorted to groups
         while performing a subtotal operation.
      */
     [property] boolean EnableSort;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the sorting order if
         <member>SubTotalDescriptor::EnableSort</member> is set to <TRUE/>.
      */
     [property] boolean SortAscending;
 
-    //-------------------------------------------------------------------------
 
     /** returns the maximum number of subtotal fields the descriptor can
         hold.
@@ -134,7 +120,6 @@ published service SubTotalDescriptor
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -32,11 +32,9 @@
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/logging/XLogFormatter.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module logging {
 
-//=============================================================================
 
 /** specifies the interface used for formatting log records for RFC4180 CSV
     output
@@ -70,11 +68,9 @@ interface XCsvLogFormatter : XLogFormatter
     string formatMultiColumn( [in] sequence< string > column_data);
 };
 
-//=============================================================================
 
 }; }; }; };
 
-//=============================================================================
 
 #endif
 

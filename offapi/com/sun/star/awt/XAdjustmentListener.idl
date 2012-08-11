@@ -24,17 +24,14 @@
 #include <com/sun/star/awt/AdjustmentEvent.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module awt {
 
-//=============================================================================
 
 /** makes it possible to receive adjustment events.
  */
 published interface XAdjustmentListener: com::sun::star::lang::XEventListener
 {
-    //-------------------------------------------------------------------------
 
     /** is invoked when the adjustment has changed.
      */
@@ -42,7 +39,6 @@ published interface XAdjustmentListener: com::sun::star::lang::XEventListener
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

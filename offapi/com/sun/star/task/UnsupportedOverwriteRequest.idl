@@ -22,11 +22,9 @@
 #include <com/sun/star/task/ClassifiedInteractionRequest.idl>
 
 
-//=============================================================================
 
 module com { module sun { module star { module task {
 
-//=============================================================================
 /** this request is used in case a content can't keep files from overwriting
 
     <P>
@@ -45,7 +43,6 @@ published exception UnsupportedOverwriteRequest: ClassifiedInteractionRequest
     string Name;
 };
 
-//=============================================================================
 
 }; }; }; };
 

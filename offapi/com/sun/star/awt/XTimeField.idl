@@ -22,17 +22,14 @@
 #include <com/sun/star/uno/XInterface.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module awt {
 
-//=============================================================================
 
 /** gives access to the value and settings of a time field.
  */
 published interface XTimeField: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** sets the time value which is displayed in the time field.
 
@@ -42,81 +39,68 @@ published interface XTimeField: com::sun::star::uno::XInterface
      */
     [oneway] void setTime( [in] long Time );
 
-    //-------------------------------------------------------------------------
 
     /** returns the time value which is currently displayed in the time field.
      */
     long getTime();
 
-    //-------------------------------------------------------------------------
 
     /** sets the minimum time value that can be entered by the user.
      */
     [oneway] void setMin( [in] long Time );
 
-    //-------------------------------------------------------------------------
 
     /** returns the currently set minimum time value that can be entered by
         the user.
      */
     long getMin();
 
-    //-------------------------------------------------------------------------
 
     /** sets the maximum time value that can be entered by the user.
      */
     [oneway] void setMax( [in] long Time );
 
-    //-------------------------------------------------------------------------
 
     /** returns the currently set maximum time value that can be entered by
         the user.
      */
     long getMax();
 
-    //-------------------------------------------------------------------------
 
     /** sets the first value to be set on POS1 key.
      */
     [oneway] void setFirst( [in] long Time );
 
-    //-------------------------------------------------------------------------
 
     /** returns the currently set first value which is set on POS1 key.
      */
     long getFirst();
 
-    //-------------------------------------------------------------------------
 
     /** sets the last value to be set on END key.
      */
     [oneway] void setLast( [in] long Time );
 
-    //-------------------------------------------------------------------------
 
     /** returns the currently set last value which is set on END key.
      */
     long getLast();
 
-    //-------------------------------------------------------------------------
 
     /** sets an empty value for the time.
      */
     void setEmpty();
 
-    //-------------------------------------------------------------------------
 
     /** returns whether currently an empty value is set for the time.
      */
     boolean isEmpty();
 
-    //-------------------------------------------------------------------------
 
     /** determines if the format is checked during user input.
      */
     [oneway] void setStrictFormat( [in] boolean bStrict );
 
-    //-------------------------------------------------------------------------
 
     /** returns whether the format is currently checked during user input.
      */
@@ -124,7 +108,6 @@ published interface XTimeField: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

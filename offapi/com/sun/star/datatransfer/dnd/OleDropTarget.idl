@@ -34,15 +34,12 @@
 #include <com/sun/star/lang/XInitialization.idl>
 #include <com/sun/star/lang/XTypeProvider.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module datatransfer { module dnd {
 
-//=============================================================================
 
  published interface XDropTarget;
 
-//=============================================================================
 /** This service connects the Java-like UNO Drag & Drop protocol to the protocol
     used on window platforms. It realizes the drop target.
 
@@ -51,33 +48,27 @@ module com { module sun { module star { module datatransfer { module dnd {
 
 published service OleDropTarget
 {
-    //-------------------------------------------------------------------------
     /** Used to provide data to other applications via Ole Drag & Drop protocol.
     */
     interface XDropTarget;
 
-    //-------------------------------------------------------------------------
     /** The service expects a windows window handle. It is passed as unsigned long.
     */
     interface com::sun::star::lang::XInitialization;
 
-    //-------------------------------------------------------------------------
     /** For shutdown and listener support.
     */
     interface com::sun::star::lang::XComponent;
 
-    //-------------------------------------------------------------------------
     /** Service should always support this interface.
     */
     interface com::sun::star::lang::XServiceInfo;
 
-    //-------------------------------------------------------------------------
     /** Service should always support this interface.
     */
     interface com::sun::star::lang::XTypeProvider;
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

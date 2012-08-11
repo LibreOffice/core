@@ -33,7 +33,6 @@
  */
 published interface XConnectionBroadcaster: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** registers an object to receive events from this connection.
 
@@ -42,7 +41,6 @@ published interface XConnectionBroadcaster: com::sun::star::uno::XInterface
      */
     void addStreamListener( [in] com::sun::star::io::XStreamListener aListener );
 
-    //-------------------------------------------------------------------------
 
     /** unregisters an object to receive events from this connection.
 

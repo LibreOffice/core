@@ -24,11 +24,9 @@
 #include <com/sun/star/beans/XPropertySet.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module style {
 
-//=============================================================================
 
 /** This interface provides access to an XPropertySet of defaults. This can
     either be the parent of an XPropertySet or the global property defaults
@@ -36,14 +34,12 @@
  */
 published interface XDefaultsSupplier: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** This method returns an XPropertySet of defaults.
      */
     com::sun::star::beans::XPropertySet getDefaults();
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

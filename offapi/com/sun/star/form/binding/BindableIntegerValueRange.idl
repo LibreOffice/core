@@ -22,11 +22,9 @@
 
 #include <com/sun/star/form/binding/BindableControlModel.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module form {  module binding {
 
-//=============================================================================
 
 /** this service specifies a <type>BindableControlModel</type> which reflects
     an integer value, out of a range of permitted integer values.
@@ -58,7 +56,6 @@ service BindableIntegerValueRange
 
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

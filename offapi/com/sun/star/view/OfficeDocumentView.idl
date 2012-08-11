@@ -26,11 +26,9 @@
 #include <com/sun/star/view/XControlAccess.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module view {
 
-//=============================================================================
 
 /** specifies a view of a standard office document.
  */
@@ -59,7 +57,6 @@ published service OfficeDocumentView
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

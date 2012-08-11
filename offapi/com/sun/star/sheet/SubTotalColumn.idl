@@ -22,11 +22,9 @@
 
 #include <com/sun/star/sheet/GeneralFunction.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** describes how a single data column is treated when creating subtotals.
 
@@ -34,13 +32,11 @@ module com {  module sun {  module star {  module sheet {
  */
 published struct SubTotalColumn
 {
-    //-------------------------------------------------------------------------
 
     /** the index of the column inside the source data area.
      */
     long Column;
 
-    //-------------------------------------------------------------------------
 
     /** specifies what kind of subtotals are calculated.
      */
@@ -48,7 +44,6 @@ published struct SubTotalColumn
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -20,11 +20,9 @@
 #define __com_sun_star_text_TextColumn_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module text {
 
-//=============================================================================
 
 // DocMerge from xml: struct com::sun::star::text::TextColumn
 /** defines a single text column.
@@ -39,7 +37,6 @@ published struct TextColumn
      */
     long Width;
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: field com::sun::star::text::TextColumn::LeftMargin
     /** contains the left margin of the column.
@@ -50,7 +47,6 @@ published struct TextColumn
      */
     long LeftMargin;
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: field com::sun::star::text::TextColumn::RightMargin
     /** contains the right margin of the column.
@@ -63,7 +59,6 @@ published struct TextColumn
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -20,11 +20,9 @@
 #ifndef __com_sun_star_sheet_SolverConstraintOperator_idl__
 #define __com_sun_star_sheet_SolverConstraintOperator_idl__
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** is used to specify the type of <type>SolverConstraint</type>.
  */
@@ -46,7 +44,6 @@ enum SolverConstraintOperator
     BINARY
 };
 
-//=============================================================================
 
 }; }; }; };
 

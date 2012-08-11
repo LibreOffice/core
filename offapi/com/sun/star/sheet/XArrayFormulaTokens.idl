@@ -23,23 +23,19 @@
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/sheet/FormulaToken.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** gives access to an array formula as token sequence.
  */
 interface XArrayFormulaTokens
 {
-    //-------------------------------------------------------------------------
 
     /** returns the array formula as sequence of tokens.
      */
     sequence< FormulaToken > getArrayTokens();
 
-    //-------------------------------------------------------------------------
 
     /** sets the array formula as sequence of tokens.
      */
@@ -47,7 +43,6 @@ interface XArrayFormulaTokens
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

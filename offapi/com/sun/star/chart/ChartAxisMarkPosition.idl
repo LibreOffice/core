@@ -29,31 +29,26 @@
 #define __com_sun_star_chart_ChartAxisMarkPosition_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module chart {
 
-//=============================================================================
 
 /** Specifies the position of the axis interval marks.
 */
 
 published enum ChartAxisMarkPosition
 {
-    //-------------------------------------------------------------------------
 
     /** The interval marks are drawn besides the axis labels.
      */
     AT_LABELS,
 
-    //-------------------------------------------------------------------------
 
     /** The interval marks are drawn at the axis line.
     This makes a difference to "AT_LABELS" only when the labels are not placed near the axis (@see ChartAxisLabelPosition).
      */
     AT_AXIS,
 
-    //-------------------------------------------------------------------------
 
     /** Interval marks are drawn at the axis line and also besides the axis labels.
     This makes a difference to "AT_LABELS" only when the labels are not placed near the axis (@see ChartAxisLabelPosition).
@@ -61,7 +56,6 @@ published enum ChartAxisMarkPosition
     AT_LABELS_AND_AXIS
 };
 
-//=============================================================================
 
 }; }; }; };
 

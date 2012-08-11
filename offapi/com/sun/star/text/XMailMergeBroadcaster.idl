@@ -27,11 +27,9 @@
 //     published interface XMailMergeListener;
 //}; }; }; };
 
-//=============================================================================
 
 module com { module sun { module star { module text {
 
-//=============================================================================
 /** allows for adding/removing of mail merge event listeners.
 
     <p>Registered listeners will be notified with a
@@ -45,7 +43,6 @@ module com { module sun { module star { module text {
 */
 published interface XMailMergeBroadcaster : com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** Adds an entry to the list of mail merge listeners.
 
         @param xListener
@@ -54,7 +51,6 @@ published interface XMailMergeBroadcaster : com::sun::star::uno::XInterface
     void addMailMergeEventListener(
                 [in] com::sun::star::text::XMailMergeListener xListener );
 
-    //-------------------------------------------------------------------------
     /** Removes an entry to the list of mail merge listeners.
 
         @param xListener
@@ -64,7 +60,6 @@ published interface XMailMergeBroadcaster : com::sun::star::uno::XInterface
                 [in] com::sun::star::text::XMailMergeListener xListener );
 };
 
-//=============================================================================
 
 }; }; }; };
 

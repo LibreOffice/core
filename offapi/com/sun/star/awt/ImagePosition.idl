@@ -20,11 +20,9 @@
 #ifndef __com_sun_star_awt_ImagePosition_idl__
 #define __com_sun_star_awt_ImagePosition_idl__
 
-//=============================================================================
 
 module com {  module sun {  module star {  module awt {
 
-//=============================================================================
 
 /** specifies the position of a image, relative to another object
 
@@ -85,7 +83,6 @@ constants ImagePosition
     const short Centered = 12;
 };
 
-//=============================================================================
 
 }; }; }; };
 

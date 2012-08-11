@@ -31,10 +31,8 @@
 #include <com/sun/star/inspection/XObjectInspector.idl>
 #include <com/sun/star/lang/IllegalArgumentException.idl>
 
-//=============================================================================
 module com {  module sun {  module star {  module inspection {
 
-//-----------------------------------------------------------------------------
 /** describes an <type scope="com::sun::star::frame">Controller</type> which can be used to
     browse and modify properties of components.
 
@@ -97,7 +95,6 @@ service ObjectInspector : XObjectInspector
         raises ( ::com::sun::star::lang::IllegalArgumentException );
 };
 
-//=============================================================================
 
 }; }; }; };
 

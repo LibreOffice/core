@@ -24,54 +24,45 @@
 #include <com/sun/star/awt/XControlModel.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module awt {
 
-//=============================================================================
 
 /** specifies the basic operations for a tab controller model.
  */
 published interface XTabControllerModel: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** returns whether the control models are grouped together.
      */
     boolean getGroupControl();
 
-    //-------------------------------------------------------------------------
 
     /** determines if the control models are grouped together.
      */
     [oneway] void setGroupControl( [in] boolean GroupControl );
 
-    //-------------------------------------------------------------------------
 
     /** sets the control models.
      */
     [oneway] void setControlModels( [in] sequence<com::sun::star::awt::XControlModel> Controls );
 
-    //-------------------------------------------------------------------------
 
     /** returns the control models.
      */
     sequence<com::sun::star::awt::XControlModel> getControlModels();
 
-    //-------------------------------------------------------------------------
 
     /** sets a control model group.
      */
     [oneway] void setGroup( [in] sequence<com::sun::star::awt::XControlModel> Group,
              [in] string GroupName );
 
-    //-------------------------------------------------------------------------
 
     /** returns the number of control model groups.
      */
     long getGroupCount();
 
-    //-------------------------------------------------------------------------
 
     /** returns a control model group.
      */
@@ -79,7 +70,6 @@ published interface XTabControllerModel: com::sun::star::uno::XInterface
              [out] sequence<com::sun::star::awt::XControlModel> Group,
              [out] string Name );
 
-    //-------------------------------------------------------------------------
 
     /** returns a control model group by name.
      */
@@ -88,7 +78,6 @@ published interface XTabControllerModel: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

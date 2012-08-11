@@ -22,11 +22,9 @@
 
 #include <com/sun/star/lang/XMultiServiceFactory.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module drawing {
 
-//=============================================================================
 
 /** @deprecated Pleas use the factory interface of the service GenericDrawingDocument.
  */
@@ -36,7 +34,6 @@ published service DrawingDocumentFactory
     interface com::sun::star::lang::XMultiServiceFactory;
 };
 
-//=============================================================================
 
 }; }; }; };
 

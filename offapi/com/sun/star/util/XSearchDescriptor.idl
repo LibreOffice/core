@@ -22,30 +22,25 @@
 #include <com/sun/star/beans/XPropertySet.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module util {
 
-//=============================================================================
 
 /** specifies a string search operation.
  */
 published interface XSearchDescriptor: com::sun::star::beans::XPropertySet
 {
-    //-------------------------------------------------------------------------
     /** @returns
                     the string of characters to search for.
      */
     string getSearchString();
 
-    //-------------------------------------------------------------------------
     /** sets the string of characters to look for.
      */
     [oneway] void setSearchString( [in] string aString );
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

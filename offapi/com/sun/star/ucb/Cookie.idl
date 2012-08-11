@@ -32,54 +32,44 @@
 #include <com/sun/star/ucb/CookiePolicy.idl>
 
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** A cookie.
 @deprecated
 */
 published struct Cookie
 {
-    //-------------------------------------------------------------------------
     /** The name of the cookie.
     */
     string Name;
 
-    //-------------------------------------------------------------------------
     /** The value of the cookie.
     */
     string Value;
 
-    //-------------------------------------------------------------------------
     /** The domain to which the cookie applies.
     */
     string Domain;
 
-    //-------------------------------------------------------------------------
     /** The path to which the cookie applies.
     */
     string Path;
 
-    //-------------------------------------------------------------------------
     /** The date the cookie will expire.
     */
     com::sun::star::util::DateTime Expires;
 
-    //-------------------------------------------------------------------------
     /** Whether the requested action should be performed in a secure fashion.
     */
     boolean Secure;
 
-    //-------------------------------------------------------------------------
     /** The policy for handling this cookie in the future.
     */
     com::sun::star::ucb::CookiePolicy Policy;
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

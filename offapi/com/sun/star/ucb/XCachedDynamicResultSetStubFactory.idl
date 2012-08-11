@@ -33,11 +33,9 @@
 #include <com/sun/star/ucb/NumberedSortingInfo.idl>
 #include <com/sun/star/ucb/XAnyCompareFactory.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** creates a <type>CachedDynamicResultSetStub</type> and connects a non-remote
     optimized <type>DynamicResultSet</type> to a remote optimized
     <type>CachedDynamicResultSet</type>.
@@ -59,7 +57,6 @@ module com { module sun { module star { module ucb {
 
 published interface XCachedDynamicResultSetStubFactory: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** creates a remote optimizes <type>XDynamicResultSet</type>.
 
         @param Source
@@ -72,7 +69,6 @@ published interface XCachedDynamicResultSetStubFactory: com::sun::star::uno::XIn
     com::sun::star::ucb::XDynamicResultSet  createCachedDynamicResultSetStub(
                 [in] com::sun::star::ucb::XDynamicResultSet Source );
 
-    //-------------------------------------------------------------------------
     /** If you have instantiated a <type>CachedDynamicResultSet</type> on
         client side already, use this to connect your given Source on server
         side to the TargetCache.
@@ -110,7 +106,6 @@ published interface XCachedDynamicResultSetStubFactory: com::sun::star::uno::XIn
                  );
 };
 
-//=============================================================================
 
 }; }; }; };
 

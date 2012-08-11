@@ -42,7 +42,6 @@ published struct ConfigurationEvent : ::com::sun::star::container::ContainerEven
     any     aInfo;
 };
 
-//=============================================================================
 
 }; }; }; };
 

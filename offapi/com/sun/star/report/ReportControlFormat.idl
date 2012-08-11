@@ -30,14 +30,11 @@
 
 #include <com/sun/star/report/XReportControlFormat.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module report {
 
-//=============================================================================
 
 service ReportControlFormat : XReportControlFormat;
-//=============================================================================
 
 }; }; }; };
 #endif

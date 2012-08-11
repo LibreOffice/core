@@ -22,11 +22,9 @@
 #include <com/sun/star/uno/Exception.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module registry {
 
-//=============================================================================
 
 // DocMerge from xml: exception com::sun::star::registry::InvalidRegistryException
 /** signals that the registry is invalid or an operation on the registry
@@ -36,7 +34,6 @@ published exception InvalidRegistryException: com::sun::star::uno::Exception
 {
 };
 
-//=============================================================================
 
 }; }; }; };
 

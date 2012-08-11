@@ -19,11 +19,9 @@
 #ifndef __com_sun_star_linguistic2_ConversionDirection_idl__
 #define __com_sun_star_linguistic2_ConversionDirection_idl__
 
-//=============================================================================
 
 module com { module sun { module star { module linguistic2 {
 
-//=============================================================================
 /** Conversion direction to be used with <type>XConversionDictionary</type>
     when looking for conversions.
 
@@ -42,7 +40,6 @@ published enum ConversionDirection
     FROM_RIGHT
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -25,7 +25,6 @@
 
 module com { module sun { module star { module ui { module dialogs {
 
-//=============================================================================
 /**  Used to notify listeners about dialog-closed events.
 
     <p>Registered listeners will be notified with a
@@ -38,7 +37,6 @@ module com { module sun { module star { module ui { module dialogs {
 
 interface XDialogClosedListener: com::sun::star::lang::XEventListener
 {
-    //-------------------------------------------------------------------------
     /** A client receives this event if a dialog is closed.
 
         @param aEvent

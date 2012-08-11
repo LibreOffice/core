@@ -32,13 +32,11 @@
 #include <com/sun/star/datatransfer/dnd/DropTargetEvent.idl>
 #include <com/sun/star/datatransfer/XTransferable.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module datatransfer { module dnd {
 
  published interface XDropTargetDropContext;
 
-//=============================================================================
 /** The <type>DropTargetDropEvent</type> is delivered from the drop target to
     its currently registered drop target listener.
 
@@ -48,7 +46,6 @@ module com { module sun { module star { module datatransfer { module dnd {
 
 published struct DropTargetDropEvent: com::sun::star::datatransfer::dnd::DropTargetEvent
 {
-    //-------------------------------------------------------------------------
     /** The drop target context of the current drag operation.
 
         @see com::sun::star::datatransfer::dnd::XDropTargetDropContext
@@ -56,7 +53,6 @@ published struct DropTargetDropEvent: com::sun::star::datatransfer::dnd::DropTar
 
     XDropTargetDropContext Context;
 
-    //-------------------------------------------------------------------------
     /** This value represents the action or actions selected by the user at
         the time of the drop.
 
@@ -68,25 +64,21 @@ published struct DropTargetDropEvent: com::sun::star::datatransfer::dnd::DropTar
 
     byte DropAction;
 
-    //-------------------------------------------------------------------------
     /** The cursor's current x location within the window's coordinates.
      */
 
     long LocationX;
 
-    //-------------------------------------------------------------------------
     /** The cursor's current y location within the window's coordinates.
      */
 
     long LocationY;
 
-    //-------------------------------------------------------------------------
     /** This value represents the action or actions supported by the source.
      */
 
     byte SourceActions;
 
-    //-------------------------------------------------------------------------
     /** The transferable object associated with the drop.
 
         @see com::sun::star::datatransfer::XTransferable
@@ -95,7 +87,6 @@ published struct DropTargetDropEvent: com::sun::star::datatransfer::dnd::DropTar
     com::sun::star::datatransfer::XTransferable Transferable;
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

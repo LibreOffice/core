@@ -22,11 +22,9 @@
 
 #include <com/sun/star/uno/XInterface.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** gives access to user-visible strings for a solver.
  */
@@ -47,7 +45,6 @@ interface XSolverDescription: com::sun::star::uno::XInterface
     [attribute, readonly] string StatusDescription;
 };
 
-//=============================================================================
 
 }; }; }; };
 

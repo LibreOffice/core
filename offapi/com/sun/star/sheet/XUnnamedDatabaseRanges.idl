@@ -48,11 +48,9 @@
 #include <com/sun/star/lang/IndexOutOfBoundsException.idl>
 #endif
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** provides functions to manage the sheet local databases
  */
@@ -71,7 +69,6 @@ interface XUnnamedDatabaseRanges: com::sun::star::uno::XInterface
 
  };
 
-//=============================================================================
 
 }; }; }; };
 

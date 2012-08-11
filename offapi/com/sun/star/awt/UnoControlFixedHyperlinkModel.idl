@@ -25,11 +25,9 @@
 #include <com/sun/star/util/Color.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module awt {
 
-//=============================================================================
 
 /** specifies the standard model of an <type>UnoControlFixedHyperlink</type>.
  */
@@ -37,7 +35,6 @@ service UnoControlFixedHyperlinkModel
 {
     service com::sun::star::awt::UnoControlModel;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the horizontal alignment of the text in the control.
 
@@ -49,13 +46,11 @@ service UnoControlFixedHyperlinkModel
      */
     [property] short Align;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the background color (RGB) of the control.
      */
     [property] com::sun::star::util::Color BackgroundColor;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the border style of the control.
 
@@ -67,7 +62,6 @@ service UnoControlFixedHyperlinkModel
      */
     [property] short Border;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the color of the border, if present
 
@@ -78,81 +72,68 @@ service UnoControlFixedHyperlinkModel
      */
     [optional, property] long BorderColor;
 
-    //-------------------------------------------------------------------------
 
     /** determines whether the control is enabled or disabled.
      */
     [property] boolean Enabled;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the font attributes of the text in the control.
      */
     [property] com::sun::star::awt::FontDescriptor FontDescriptor;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the <type scope="com::sun::star::text">FontEmphasis</type>
         value of the text in the control.
      */
     [property] short FontEmphasisMark;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the <type scope="com::sun::star::text">FontRelief</type>
         value of the text in the control.
      */
     [property] short FontRelief;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the help text of the control.
      */
     [property] string HelpText;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the help URL of the control.
      */
     [property] string HelpURL;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the label of the control.
      */
     [property] string Label;
 
-    //-------------------------------------------------------------------------
 
     /** specifies that the text may be displayed on more than one line.
      */
     [property] boolean MultiLine;
 
-    //-------------------------------------------------------------------------
 
     /** specifies that the control will be printed with the document.
      */
     [property] boolean Printable;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the text color (RGB) of the control.
      */
     [property] com::sun::star::util::Color TextColor;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the text line color (RGB) of the control.
      */
     [property] com::sun::star::util::Color TextLineColor;
 
-        //-------------------------------------------------------------------------
 
         /** specifies the URL.
          */
         [property] string URL;
 
-    //-------------------------------------------------------------------------
 
         /** specifies the vertical alignment of the text in the control.
 
@@ -161,7 +142,6 @@ service UnoControlFixedHyperlinkModel
         [optional, property] com::sun::star::style::VerticalAlignment VerticalAlign;
 };
 
-//=============================================================================
 
 }; }; }; };
 

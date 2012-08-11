@@ -23,11 +23,9 @@
 #include <com/sun/star/beans/PropertyValue.idl>
 #include <com/sun/star/frame/XModel.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module document {
 
-//=============================================================================
 /** Is used for interaction handle to query user decision in case the document
     being saved was already stored by another user during the editing.
 
@@ -37,7 +35,6 @@ published exception ChangedByOthersRequest : ::com::sun::star::uno::Exception
 {
 };
 
-//=============================================================================
 
 }; }; }; };
 

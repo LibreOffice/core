@@ -21,11 +21,9 @@
 
 #include <com/sun/star/frame/XDispatch.idl>
 #include <com/sun/star/frame/XDispatchResultListener.idl>
-//=============================================================================
 
 module com {  module sun {  module star {  module frame {
 
-//=============================================================================
 /** dispatch with guaranteed notify (instead of <type>XDispatch</type>)
 
     @see XDispatch
@@ -33,7 +31,6 @@ module com {  module sun {  module star {  module frame {
  */
 published interface XNotifyingDispatch: XDispatch
 {
-    //-------------------------------------------------------------------------
     /** Do the same like <member>XDispatch::dispatch()</member> but notifies
         listener in every case. Should be used if result must be known.
 
@@ -53,7 +50,6 @@ published interface XNotifyingDispatch: XDispatch
         [in] XDispatchResultListener Listener);
 };
 
-//=============================================================================
 
 }; }; }; };
 

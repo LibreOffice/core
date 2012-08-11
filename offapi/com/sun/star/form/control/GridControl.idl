@@ -41,7 +41,6 @@
 #include <com/sun/star/frame/XDispatchProviderInterception.idl>
 #include <com/sun/star/view/XSelectionSupplier.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module form {
 
@@ -49,7 +48,6 @@ published interface XGridControl;
 
 module control {
 
-//=============================================================================
 
 /** describes a table-like control for displaying data.
 
@@ -133,7 +131,6 @@ published service GridControl
     [optional] interface com::sun::star::frame::XDispatchProviderInterception;
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

@@ -20,11 +20,9 @@
 #define __com_sun_star_beans_PropertyState_idl__
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module beans {
 
-//=============================================================================
 
 /** This enumeration lists the states that a property value can have.
 
@@ -40,7 +38,6 @@ module com {  module sun {  module star {  module beans {
  */
 published enum PropertyState
 {
-    //-------------------------------------------------------------------------
 
     /** The value of the property is stored in the PropertySet itself.
 
@@ -51,7 +48,6 @@ published enum PropertyState
      */
     DIRECT_VALUE,
 
-    //-------------------------------------------------------------------------
 
     /** The value of the property is available from a master (e.g., template).
 
@@ -65,7 +61,6 @@ published enum PropertyState
      */
     DEFAULT_VALUE,
 
-    //-------------------------------------------------------------------------
 
     /** The value of the property is only a recommendation because there
         are multiple values for this property (e.g., from a multi selection).
@@ -82,7 +77,6 @@ published enum PropertyState
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

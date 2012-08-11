@@ -31,11 +31,9 @@
 #include <com/sun/star/lang/XEventListener.idl>
 #include <com/sun/star/document/DocumentEvent.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module document {
 
-//=============================================================================
 
 /** allows to be notified of events happening in an <type>OfficeDocument</type>
 
@@ -52,11 +50,9 @@ interface XDocumentEventListener : ::com::sun::star::lang::XEventListener
     void documentEventOccured( [in] DocumentEvent Event );
 };
 
-//=============================================================================
 
 }; }; }; };
 
-//=============================================================================
 
 #endif
 

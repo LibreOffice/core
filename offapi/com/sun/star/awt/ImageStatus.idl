@@ -20,37 +20,31 @@
 #define __com_sun_star_awt_ImageStatus_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module awt {
 
-//=============================================================================
 
 /** These values are used to specify to which degree an image is available.
  */
 published constants ImageStatus
 {
-    //-------------------------------------------------------------------------
 
     /** This conveys that an error was encountered while producing the image.
      */
     const long IMAGESTATUS_ERROR = 1;
 
-    //-------------------------------------------------------------------------
 
     /** This conveys that one frame of the image is complete but there are more
         frames to be delivered.
      */
     const long IMAGESTATUS_SINGLEFRAMEDONE = 2;
 
-    //-------------------------------------------------------------------------
 
     /** This conveys that the image is complete and there are no more pixels or
         frames to be delivered.
      */
     const long IMAGESTATUS_STATICIMAGEDONE = 3;
 
-    //-------------------------------------------------------------------------
 
     /** This conveys that the image creation process was deliberately aborted.
      */
@@ -58,7 +52,6 @@ published constants ImageStatus
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

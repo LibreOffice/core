@@ -26,11 +26,9 @@
 #include <com/sun/star/form/XReset.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module form {  module component {
 
-//=============================================================================
 
 /** specifies the control model for a field which can be used to input time values.
  */
@@ -47,7 +45,6 @@ published service TimeField
     */
     interface com::sun::star::form::XReset;
 
-    //-------------------------------------------------------------------------
 
     /** contains a default value for the control.
 
@@ -60,7 +57,6 @@ published service TimeField
 
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

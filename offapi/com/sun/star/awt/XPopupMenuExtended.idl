@@ -36,7 +36,6 @@
 #include <com/sun/star/awt/KeyEvent.idl>
 #include <com/sun/star/graphic/XGraphic.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module awt {
 
@@ -56,7 +55,6 @@ interface XPopupMenuExtended
     */
     interface ::com::sun::star::awt::XMenuExtended2;
 
-    //=========================================================================
 
     /** queries if the <type scope="com::sun::star::awt">PopupMenu</type>
         is being executed as a result of invoking
@@ -83,7 +81,6 @@ interface XPopupMenuExtended
     */
     void endExecute();
 
-    //=============================================================================
 
     /** sets the <type>MenuLogo</type> for this <type>PopupMenu</type>.
 
@@ -104,7 +101,6 @@ interface XPopupMenuExtended
     ::com::sun::star::awt::MenuLogo getLogo();
 
 
-    //=========================================================================
 
 
     /** specifies whether mnemonics are automatically assigned to menu items, or not.
@@ -115,7 +111,6 @@ interface XPopupMenuExtended
     void enableAutoMnemonics( [in] boolean bEnable );
 
 
-    //=========================================================================
 
     /** sets the <type>KeyEvent</type> for the menu item.
 
@@ -159,7 +154,6 @@ interface XPopupMenuExtended
     ::com::sun::star::awt::KeyEvent getAcceleratorKeyEvent( [in] short nItemId )
         raises ( ::com::sun::star::container::NoSuchElementException );
 
-    //=============================================================================
 
     /** sets the help text for the menu item.
 
@@ -193,7 +187,6 @@ interface XPopupMenuExtended
     string getHelpText( [in] short nItemId )
         raises ( ::com::sun::star::container::NoSuchElementException );
 
-    //=============================================================================
 
     /** sets the tip help text for the menu item.
 
@@ -227,7 +220,6 @@ interface XPopupMenuExtended
     string getTipHelpText( [in] short nItemId )
         raises ( ::com::sun::star::container::NoSuchElementException );
 
-    //=============================================================================
 
     /** sets the image for the menu item.
 

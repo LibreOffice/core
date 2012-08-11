@@ -23,11 +23,9 @@
 
 #include <com/sun/star/beans/Property.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module beans {
 
-//=============================================================================
 
 /** Is implemented by objects that also are a property of
     some other object.
@@ -47,10 +45,8 @@ published interface XProperty: com::sun::star::uno::XInterface
      */
     com::sun::star::beans::Property getAsProperty();
 
-    //-------------------------------------------------------------------------
 };
 
-//=============================================================================
 
 }; }; }; };
 

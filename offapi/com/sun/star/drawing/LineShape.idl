@@ -31,11 +31,9 @@
 
 #include <com/sun/star/drawing/RotationDescriptor.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module drawing {
 
-//=============================================================================
 
 /** This service is for a simple <type>Shape</type> with lines.
  */
@@ -54,7 +52,6 @@ published service LineShape
     service com::sun::star::drawing::RotationDescriptor;
 };
 
-//=============================================================================
 
 }; }; }; };
 

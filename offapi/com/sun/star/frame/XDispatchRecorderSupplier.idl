@@ -32,11 +32,9 @@
 #include <com/sun/star/frame/XDispatch.idl>
 #include <com/sun/star/frame/XDispatchRecorder.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module frame {
 
-//=============================================================================
 /** provides access to the record mechanism of dispatches
 
     <p>
@@ -52,7 +50,6 @@
  */
 published interface XDispatchRecorderSupplier: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** set a dispatch recorder on this supplier
 
         <p>
@@ -68,7 +65,6 @@ published interface XDispatchRecorderSupplier: com::sun::star::uno::XInterface
      */
     void setDispatchRecorder( [in] com::sun::star::frame::XDispatchRecorder Recorder );
 
-    //-------------------------------------------------------------------------
     /** provides access on the recorder of this supplier
 
         <p>
@@ -84,7 +80,6 @@ published interface XDispatchRecorderSupplier: com::sun::star::uno::XInterface
      */
     com::sun::star::frame::XDispatchRecorder getDispatchRecorder();
 
-    //-------------------------------------------------------------------------
     /** dispatch given URL and record it if recording is enabled
 
         <p>
@@ -116,7 +111,6 @@ published interface XDispatchRecorderSupplier: com::sun::star::uno::XInterface
         [in] XDispatch Dispatcher);
 };
 
-//=============================================================================
 
 }; }; }; };
 

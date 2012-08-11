@@ -26,11 +26,9 @@
 #include <com/sun/star/drawing/XDrawPages.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module drawing {
 
-//=============================================================================
 
 // DocMerge from xml: interface com::sun::star::drawing::XDrawPageSummarizer
 /** is implemented by documents that can create summaries
@@ -40,7 +38,6 @@
  */
 published interface XDrawPageSummarizer: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::drawing::XDrawPageSummarizer::summarize
     /** creates a new <type>DrawPage</type> with a summary of all
@@ -50,7 +47,6 @@ published interface XDrawPageSummarizer: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

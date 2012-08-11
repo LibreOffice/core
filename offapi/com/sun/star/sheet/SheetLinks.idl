@@ -24,11 +24,9 @@
 #include <com/sun/star/container/XNameAccess.idl>
 #include <com/sun/star/container/XEnumerationAccess.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** represents a collection of sheet links.
 
@@ -37,7 +35,6 @@ module com {  module sun {  module star {  module sheet {
  */
 published service SheetLinks
 {
-    //-------------------------------------------------------------------------
 
     /** provides access to the sheet links via index.
 
@@ -46,7 +43,6 @@ published service SheetLinks
      */
     interface com::sun::star::container::XIndexAccess;
 
-    //-------------------------------------------------------------------------
 
     /** provides access to the sheet links using the name of the linked
         document.
@@ -56,7 +52,6 @@ published service SheetLinks
      */
     interface com::sun::star::container::XNameAccess;
 
-    //-------------------------------------------------------------------------
 
     /** creates an enumeration of all sheet links.
 
@@ -67,7 +62,6 @@ published service SheetLinks
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

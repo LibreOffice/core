@@ -30,11 +30,9 @@
 #include <com/sun/star/chart/XChartData.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module chart {
 
-//=============================================================================
 
 /** manages the chart document.
 
@@ -43,7 +41,6 @@
  */
 published interface XChartDocument: com::sun::star::frame::XModel
 {
-    //-------------------------------------------------------------------------
 
     /** @returns
             the shape of the main title of the chart document.
@@ -52,7 +49,6 @@ published interface XChartDocument: com::sun::star::frame::XModel
      */
     com::sun::star::drawing::XShape getTitle();
 
-    //-------------------------------------------------------------------------
 
     /** @returns
             the shape of the subtitle of the chart document.
@@ -65,7 +61,6 @@ published interface XChartDocument: com::sun::star::frame::XModel
      */
     com::sun::star::drawing::XShape getSubTitle();
 
-    //-------------------------------------------------------------------------
 
     /** @returns
             the shape of the legend of the chart document.
@@ -74,7 +69,6 @@ published interface XChartDocument: com::sun::star::frame::XModel
      */
     com::sun::star::drawing::XShape getLegend();
 
-    //-------------------------------------------------------------------------
 
     /** @returns
             the properties of the background area of the chart document.
@@ -90,7 +84,6 @@ published interface XChartDocument: com::sun::star::frame::XModel
      */
     com::sun::star::beans::XPropertySet getArea();
 
-    //-------------------------------------------------------------------------
 
     /** @returns
             the diagram of the chart document.
@@ -99,7 +92,6 @@ published interface XChartDocument: com::sun::star::frame::XModel
      */
     com::sun::star::chart::XDiagram getDiagram();
 
-    //-------------------------------------------------------------------------
 
     /** sets the diagram for the chart document.
 
@@ -115,7 +107,6 @@ published interface XChartDocument: com::sun::star::frame::XModel
      */
     void setDiagram( [in] com::sun::star::chart::XDiagram xDiagram );
 
-    //-------------------------------------------------------------------------
 
     /** @returns
             the data of the chart.
@@ -135,7 +126,6 @@ published interface XChartDocument: com::sun::star::frame::XModel
      */
     com::sun::star::chart::XChartData getData();
 
-    //-------------------------------------------------------------------------
 
     /** attaches data to the chart.
 
@@ -162,7 +152,6 @@ published interface XChartDocument: com::sun::star::frame::XModel
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -25,7 +25,6 @@
 
 #include <com/sun/star/awt/FontDescriptor.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module awt {
 
@@ -34,7 +33,6 @@
  published interface XBitmap;
  published interface XDisplayBitmap;
 
-//=============================================================================
 
 /** provides information about a graphical output device and
     offers a factory for the <em>graphics</em> which provides write
@@ -42,14 +40,12 @@
  */
 published interface XDevice: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** creates a new graphics whose output operation is directed to this
         device.
      */
     XGraphics createGraphics();
 
-    //-------------------------------------------------------------------------
 
     /** creates a new device which is compatible with this one.
 
@@ -59,19 +55,16 @@ published interface XDevice: com::sun::star::uno::XInterface
     XDevice createDevice( [in] long nWidth,
              [in] long nHeight );
 
-    //-------------------------------------------------------------------------
 
     /** returns information about the device.
      */
     com::sun::star::awt::DeviceInfo getInfo();
 
-    //-------------------------------------------------------------------------
 
     /** returns the list of available font descriptors.
      */
     sequence<FontDescriptor> getFontDescriptors();
 
-    //-------------------------------------------------------------------------
 
     /** returns information about a font offered by this device.
 
@@ -83,7 +76,6 @@ published interface XDevice: com::sun::star::uno::XInterface
      */
     com::sun::star::awt::XFont getFont( [in] FontDescriptor aDescriptor );
 
-    //-------------------------------------------------------------------------
 
     /** creates a bitmap with the current device depth.
 
@@ -95,7 +87,6 @@ published interface XDevice: com::sun::star::uno::XInterface
              [in] long nWidth,
              [in] long nHeight );
 
-    //-------------------------------------------------------------------------
 
     /** creates a device compatible bitmap.
 
@@ -106,7 +97,6 @@ published interface XDevice: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

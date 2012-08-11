@@ -22,11 +22,9 @@
 
 #include <com/sun/star/uno/XInterface.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module datatransfer { module clipboard {
 
-//=============================================================================
 /** An interface for flushable clipboards may optionally be implemented by a
     system clipboard service.
 
@@ -36,14 +34,12 @@ module com { module sun { module star { module datatransfer { module clipboard {
 
 published interface XFlushableClipboard: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** Renders the current content of the clipboard to the system so that it
         is available even if the source application no longer exist.
     */
     void flushClipboard();
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

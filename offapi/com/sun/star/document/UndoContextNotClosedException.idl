@@ -30,11 +30,9 @@
 
 #include <com/sun/star/util/InvalidStateException.idl>
 
-//==================================================================================================================
 
 module com { module sun { module star { module document {
 
-//==================================================================================================================
 
 /** is thrown when an operation is attempted at an <type>XUndoManager</type> which requires all undo
     contexts to be closed, but this requirement is not fullfilled.
@@ -43,11 +41,9 @@ exception UndoContextNotClosedException : ::com::sun::star::util::InvalidStateEx
 {
 };
 
-//==================================================================================================================
 
 }; }; }; };
 
-//==================================================================================================================
 
 #endif
 

@@ -22,24 +22,20 @@
 
 #include <com/sun/star/uno/XInterface.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** provides handling of array formulas in a cell range.
  */
 published interface XArrayFormulaRange: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** returns the array formula of the range or an empty string, if the
         range does not contain an array formula.
      */
     string getArrayFormula();
 
-    //-------------------------------------------------------------------------
 
     /** applies the array formula to the entire cell range.
 
@@ -51,7 +47,6 @@ published interface XArrayFormulaRange: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

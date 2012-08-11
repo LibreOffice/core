@@ -24,11 +24,9 @@
 #include <com/sun/star/uno/Exception.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module lang {
 
-//=============================================================================
 
 // DocMerge from xml: interface com::sun::star::lang::XInitialization
 /** initializes an object directly after its creation.
@@ -49,7 +47,6 @@ module com {  module sun {  module star {  module lang {
  */
 published interface XInitialization: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::lang::XInitialization::initialize
     /** initializes the object.
@@ -61,7 +58,6 @@ published interface XInitialization: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

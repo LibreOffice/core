@@ -29,29 +29,24 @@
 #define __com_sun_star_awt_KeyModifier_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module awt {
 
-//=============================================================================
 
 /** These values are used to specify which modifier keys are pressed.
  */
 published constants KeyModifier
 {
-    //-------------------------------------------------------------------------
 
     /** refers to both shift keys.
      */
     const short SHIFT = 1;
 
-    //-------------------------------------------------------------------------
 
     /** refers in the most cases to the "Ctrl" key (Cmd on Mac OS X).
      */
     const short MOD1 = 2;
 
-    //-------------------------------------------------------------------------
 
     /** refers in the most cases to the "Alt" key.
      */
@@ -62,7 +57,6 @@ published constants KeyModifier
     const short MOD3 = 8;
 };
 
-//=============================================================================
 
 }; }; }; };
 

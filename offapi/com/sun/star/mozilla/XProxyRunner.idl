@@ -58,7 +58,6 @@ published interface XProxyRunner: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

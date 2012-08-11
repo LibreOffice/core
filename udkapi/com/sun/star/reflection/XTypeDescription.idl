@@ -24,11 +24,9 @@
 #include <com/sun/star/uno/TypeClass.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module reflection {
 
-//=============================================================================
 
 /** Reflects a UNOIDL entity.
 
@@ -63,7 +61,6 @@ published interface XTypeDescription : com::sun::star::uno::XInterface
     string getName();
 };
 
-//=============================================================================
 
 }; }; }; };
 

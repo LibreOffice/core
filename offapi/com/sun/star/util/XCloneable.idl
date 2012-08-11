@@ -22,24 +22,20 @@
 #include <com/sun/star/uno/XInterface.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module util {
 
-//=============================================================================
 
 /** makes it possible to create a copy of the object which supports this interface.
  */
 published interface XCloneable: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** creates a copy of the object.
      */
     com::sun::star::util::XCloneable createClone();
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

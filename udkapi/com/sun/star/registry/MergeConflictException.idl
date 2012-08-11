@@ -22,11 +22,9 @@
 #include <com/sun/star/uno/Exception.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module registry {
 
-//=============================================================================
 
 // DocMerge from xml: exception com::sun::star::registry::MergeConflictException
 /** is thrown if entries of two registries are contradictory in the context of
@@ -36,7 +34,6 @@ published exception MergeConflictException: com::sun::star::uno::Exception
 {
 };
 
-//=============================================================================
 
 }; }; }; };
 

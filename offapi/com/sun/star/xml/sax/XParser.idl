@@ -38,11 +38,9 @@
 #include <com/sun/star/lang/Locale.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module xml {  module sax {
 
-//=============================================================================
 
 /** specifies a SAX parser.
 
@@ -51,7 +49,6 @@ module com {  module sun {  module star {  module xml {  module sax {
  */
 published interface XParser: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** parses an XML document from a stream.
 
         <p>Set the desired handlers before calling this method.</p>
@@ -60,12 +57,10 @@ published interface XParser: com::sun::star::uno::XInterface
             raises( com::sun::star::xml::sax::SAXException,
                     com::sun::star::io::IOException );
 
-    //-------------------------------------------------------------------------
     /** allows an application to register a document event handler.
      */
     void setDocumentHandler( [in] com::sun::star::xml::sax::XDocumentHandler xHandler );
 
-    //-------------------------------------------------------------------------
     /** allows an application to register an error event handler.
 
         <p>Note that the error handler can throw an exception when an error or
@@ -74,17 +69,14 @@ published interface XParser: com::sun::star::uno::XInterface
      */
     void setErrorHandler( [in] com::sun::star::xml::sax::XErrorHandler xHandler );
 
-    //-------------------------------------------------------------------------
     /** allows an application to register a DTD-Handler.
      */
     void setDTDHandler( [in] com::sun::star::xml::sax::XDTDHandler xHandler );
 
-    //-------------------------------------------------------------------------
     /** allows an application to register a DTD-Handler.
      */
     void setEntityResolver( [in] com::sun::star::xml::sax::XEntityResolver xResolver );
 
-    //-------------------------------------------------------------------------
     /** sets a locale specified for localization of warnings and error messages.
 
         <p>Set the language of the error messages. Useful when the parsing
@@ -93,7 +85,6 @@ published interface XParser: com::sun::star::uno::XInterface
     void setLocale( [in] com::sun::star::lang::Locale locale );
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

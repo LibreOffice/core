@@ -29,11 +29,9 @@
 #ifndef __com_sun_star_datatransfer_clipboard_RenderingCapabilities_idl__
 #define __com_sun_star_datatransfer_clipboard_RenderingCapabilities_idl__
 
-//=============================================================================
 
 module com { module sun { module star { module datatransfer { module clipboard {
 
-//=============================================================================
 /** These flags describe the capabilities a system clipboard has to transfer
     data to other applications via the OS.
 
@@ -41,19 +39,16 @@ module com { module sun { module star { module datatransfer { module clipboard {
 */
 published constants RenderingCapabilities
 {
-    //-------------------------------------------------------------------------
     /** The implementation supports delayed rendering.
     */
     const byte Delayed = 1;
 
-    //-------------------------------------------------------------------------
     /** The implementation is able to store the data persistent in the system
         so that it does not get lost when the source application no longer exist.
     */
     const byte Persistant = 2;
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

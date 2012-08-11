@@ -20,11 +20,9 @@
 #define __com_sun_star_ucb_SendInfo_idl__
 
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** contains information related to a send protocol.
 
     <p>It can contain any string values (server names, user names, passwords,
@@ -32,19 +30,16 @@ module com { module sun { module star { module ucb {
 */
 published struct SendInfo
 {
-    //-------------------------------------------------------------------------
     /** the protocol to which the info is related (i.e. "NNTP", "SMTP", "VIM").
     */
     string ProtocolType;
 
-    //-------------------------------------------------------------------------
     /** the value.
     */
     string Value;
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -5,11 +5,9 @@
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/drawing/XShape.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module chart2 {
 
-//=============================================================================
 
 interface XChartShapeContainer : ::com::sun::star::uno::XInterface
 {
@@ -25,7 +23,6 @@ interface XChartShapeContainer : ::com::sun::star::uno::XInterface
     //... provide something for creation of Transformation ...
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -26,17 +26,14 @@
 #include <com/sun/star/script/XEngineListener.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module script {
 
-//=============================================================================
 /** makes it possible to control a scripting engine.
     @deprecated
  */
 published interface XEngine: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** sets an interface to an object as a scripting root.
 
         <p>If the root object implements the XInvocation interface,
@@ -46,24 +43,20 @@ published interface XEngine: com::sun::star::uno::XInterface
      */
     void setRoot( [in] com::sun::star::uno::XInterface xRoot );
 
-    //-------------------------------------------------------------------------
     /** gets an interface to the object which is the scripting root.
      */
     com::sun::star::uno::XInterface getRoot();
 
-    //-------------------------------------------------------------------------
     /** sets an access object to get external functions.
      */
     void setLibraryAccess( [in] com::sun::star::script::XLibraryAccess Library );
 
-    //-------------------------------------------------------------------------
     /** compiles a script module in the scope of the root object.
      */
     boolean compile( [in] string ModuleName,
              [in] string Script,
              [in] boolean CreateDebugInfo );
 
-    //-------------------------------------------------------------------------
     /** runs a script specified by a string.
 
         <p>The arguments given in <var>aArgs</var> can be ignored by
@@ -73,7 +66,6 @@ published interface XEngine: com::sun::star::uno::XInterface
              [in] com::sun::star::uno::XInterface xThis,
              [in] sequence<any> aArgs );
 
-    //-------------------------------------------------------------------------
     /** runs the script specified by a string and makes callbacks.
 
         <p>The arguments given in <var>aArgs</var> can be ignored by
@@ -86,14 +78,12 @@ published interface XEngine: com::sun::star::uno::XInterface
              [in] sequence<any> args,
              [in] com::sun::star::script::XEngineListener xCallback );
 
-    //-------------------------------------------------------------------------
     /** terminates the execution of the running script.
 
         <p>The waiting queue is cleared too.</p>
      */
     void cancel();
 
-    //-------------------------------------------------------------------------
     /** adds an engine listener.
 
        <p>It is suggested to allow multiple registration of the same listener,
@@ -101,7 +91,6 @@ published interface XEngine: com::sun::star::uno::XInterface
      */
     void addEngineListener( [in] com::sun::star::script::XEngineListener Listener );
 
-    //-------------------------------------------------------------------------
     /** removes an engine listener.
 
        <p>It is suggested to allow multiple registration of the same listener,
@@ -111,7 +100,6 @@ published interface XEngine: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

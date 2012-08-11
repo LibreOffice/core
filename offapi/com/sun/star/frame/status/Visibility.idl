@@ -19,11 +19,9 @@
 #ifndef __com_sun_star_frame_status_Visibility_idl__
 #define __com_sun_star_frame_status_Visiblilty_idl__
 
-//=============================================================================
 
 module com {  module sun {  module star {  module frame { module status {
 
-//=============================================================================
 
 /** describes the visibility state of a property.
 
@@ -31,14 +29,12 @@ module com {  module sun {  module star {  module frame { module status {
  */
 struct Visibility
 {
-    //-------------------------------------------------------------------------
 
     /** <TRUE/> if the property is visible otherwise <FALSE/>.
      */
     boolean bVisible;
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

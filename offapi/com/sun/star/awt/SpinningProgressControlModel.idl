@@ -30,11 +30,9 @@
 
 #include <com/sun/star/awt/AnimatedImagesControlModel.idl>
 
-//======================================================================================================================
 
 module com { module sun { module star { module awt {
 
-//======================================================================================================================
 
 /** is a specialization of the <type>AnimatedImagesControlModel</type> which provides standard image sets
     for displaying a non-procentual progress.
@@ -46,11 +44,9 @@ service SpinningProgressControlModel
     service AnimatedImagesControlModel;
 };
 
-//======================================================================================================================
 
 }; }; }; };
 
-//======================================================================================================================
 
 #endif
 

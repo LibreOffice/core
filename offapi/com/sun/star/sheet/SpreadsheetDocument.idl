@@ -46,24 +46,20 @@
 #include <com/sun/star/sheet/XAreaLinks.idl>
 #include <com/sun/star/sheet/XExternalDocLinks.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** represents a model component which consists of some settings and
     one or more spreadsheets.
  */
 published service SpreadsheetDocument
 {
-    //-------------------------------------------------------------------------
 
     /** common service for all types of documents.
      */
     service com::sun::star::document::OfficeDocument;
 
-    //-------------------------------------------------------------------------
 
     /** contributes spreadsheet document specific properties.
 
@@ -71,14 +67,12 @@ published service SpreadsheetDocument
      */
     [optional] service com::sun::star::sheet::SpreadsheetDocumentSettings;
 
-    //=========================================================================
 
     /** provides methods to create instances of several spreadsheet
         services.
      */
     interface com::sun::star::lang::XMultiServiceFactory;
 
-    //-------------------------------------------------------------------------
 
     /** provides common methods for a document model.
 
@@ -87,62 +81,52 @@ published service SpreadsheetDocument
      */
     interface com::sun::star::frame::XModel;
 
-    //-------------------------------------------------------------------------
 
     /** provides methods to control the automatic update of cell contents.
      */
     interface com::sun::star::document::XActionLockable;
 
-    //-------------------------------------------------------------------------
 
     /** provides access to the collection of link targets available in
         the document.
      */
     interface com::sun::star::document::XLinkTargetSupplier;
 
-    //-------------------------------------------------------------------------
 
     /** provides methods to protect and unprotect the document.
      */
     interface com::sun::star::util::XProtectable;
 
-    //-------------------------------------------------------------------------
 
     /** provides access to the collection of spreadsheets.
      */
     interface com::sun::star::sheet::XSpreadsheetDocument;
 
-    //-------------------------------------------------------------------------
 
     /** controls the recalculation settings of the document.
      */
     interface com::sun::star::sheet::XCalculatable;
 
-    //-------------------------------------------------------------------------
 
     /** provides a method to refresh all auditing arrows.
      */
     interface com::sun::star::sheet::XDocumentAuditing;
 
-    //-------------------------------------------------------------------------
 
     /** provides methods to perform a data consolidation.
      */
     interface com::sun::star::sheet::XConsolidatable;
 
-    //-------------------------------------------------------------------------
 
     /** provides a method to perform a goal seek.
      */
     interface com::sun::star::sheet::XGoalSeek;
 
-    //-------------------------------------------------------------------------
 
     /** provides access to the collection of draw pages of this document.
      */
     interface com::sun::star::drawing::XDrawPagesSupplier;
 
-    //-------------------------------------------------------------------------
 
     /** provides access to the collection of style families.
 
@@ -151,56 +135,47 @@ published service SpreadsheetDocument
      */
     interface com::sun::star::style::XStyleFamiliesSupplier;
 
-    //-------------------------------------------------------------------------
 
     /** provides access to the collection of number formats contained in
         the document.
      */
     interface com::sun::star::util::XNumberFormatsSupplier;
 
-    //=========================================================================
 
     /** contains the collection of named ranges in the document.
      */
     [readonly, property] com::sun::star::sheet::XNamedRanges NamedRanges;
 
-    //-------------------------------------------------------------------------
 
     /** contains the collection of database ranges in the document.
      */
     [readonly, property] com::sun::star::sheet::XDatabaseRanges DatabaseRanges;
 
-    //-------------------------------------------------------------------------
 
     /** contains the collection of column label ranges in the document.
      */
     [readonly, property] com::sun::star::sheet::XLabelRanges ColumnLabelRanges;
 
-    //-------------------------------------------------------------------------
 
     /** contains the collection of row label ranges in the document.
      */
     [readonly, property] com::sun::star::sheet::XLabelRanges RowLabelRanges;
 
-    //-------------------------------------------------------------------------
 
     /** contains the collection of sheet links in the document.
      */
     [readonly, property] com::sun::star::container::XNameAccess SheetLinks;
 
-    //-------------------------------------------------------------------------
 
     /** contains the collection of area links in the document.
      */
     [readonly, property] com::sun::star::sheet::XAreaLinks AreaLinks;
 
-    //-------------------------------------------------------------------------
 
     /** contains the collection of DDE links in the document.
      */
     [readonly, property] com::sun::star::container::XNameAccess DDELinks;
 
-    //-------------------------------------------------------------------------
 
 #if 0
     /** contains the collection of external document links in the document.
@@ -212,7 +187,6 @@ published service SpreadsheetDocument
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

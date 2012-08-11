@@ -20,41 +20,34 @@
 #ifndef __com_sun_star_table_ShadowLocation_idl__
 #define __com_sun_star_table_ShadowLocation_idl__
 
-//=============================================================================
 
 module com {  module sun {  module star {  module table {
 
-//=============================================================================
 
 /** specifies the location of the shadow in a <type>ShadowFormat</type>.
  */
 published enum ShadowLocation
 {
-    //-------------------------------------------------------------------------
 
     /** no shadow.
      */
     NONE,
 
-    //-------------------------------------------------------------------------
 
     /** shadow is located along the upper and left sides.
      */
     TOP_LEFT,
 
-    //-------------------------------------------------------------------------
 
     /** shadow is located along the upper and right sides.
      */
     TOP_RIGHT,
 
-    //-------------------------------------------------------------------------
 
     /** shadow is located along the lower and left sides.
      */
     BOTTOM_LEFT,
 
-    //-------------------------------------------------------------------------
 
     /** shadow is located along the lower and right sides.
      */
@@ -62,7 +55,6 @@ published enum ShadowLocation
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

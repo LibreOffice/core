@@ -19,11 +19,9 @@
 #ifndef __com_sun_star_i18n_CollatorOptions_idl__
 #define __com_sun_star_i18n_CollatorOptions_idl__
 
-//=============================================================================
 
 module com {  module sun {  module star {  module i18n {
 
-//=============================================================================
 
 /** Options to be used with <type>XCollator</type> methods.
  */
@@ -39,7 +37,6 @@ published constants CollatorOptions
     const short CollatorOptions_IGNORE_CASE_ACCENT = 8;
 };
 
-//=============================================================================
 }; }; }; };
 
 #endif

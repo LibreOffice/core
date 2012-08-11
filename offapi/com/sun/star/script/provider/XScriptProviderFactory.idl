@@ -33,18 +33,15 @@
 #include <com/sun/star/script/provider/XScriptProvider.idl>
 #include <com/sun/star/lang/IllegalArgumentException.idl>
 
-//===========================================================================
 
 module com { module sun { module star { module script { module provider {
 
-//===========================================================================
 /**
     This interface provides a factory for obtaining objects implementing the
     XScriptProvider interface.
 */
 interface XScriptProviderFactory : ::com::sun::star::uno::XInterface {
 
-    //----------------------------------------------------------------------
     /** a factory method for the creation of XScriptProviders
         implementations.
 
@@ -61,7 +58,6 @@ interface XScriptProviderFactory : ::com::sun::star::uno::XInterface {
         ::com::sun::star::lang::IllegalArgumentException );
 };
 
-//===========================================================================
 }; }; }; }; }; // ::com::sun::star::script::provider
 
 #endif

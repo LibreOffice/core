@@ -64,7 +64,6 @@ published interface XColumnLocate: com::sun::star::uno::XInterface
     long findColumn([in]string columnName) raises (SQLException);
 };
 
-//=============================================================================
 
 }; }; }; };
 

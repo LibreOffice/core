@@ -22,11 +22,9 @@
 #include <com/sun/star/uno/XInterface.idl>
 
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** An object representing the start of a task's activity that will progress
     from some minimal to some maximal value.
 
@@ -36,23 +34,19 @@ module com { module sun { module star { module ucb {
 */
 published struct CHAOSProgressStart
 {
-    //-------------------------------------------------------------------------
     /** An optional text describing the activity.
     */
     string Text;
 
-    //-------------------------------------------------------------------------
     /** The minimal value of the progress.
     */
     long Minimum;
 
-    //-------------------------------------------------------------------------
     /** The maximal value of the progress.
     */
     long Maximum;
 };
 
-//=============================================================================
 
 }; }; }; };
 

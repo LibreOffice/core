@@ -224,7 +224,6 @@ interface XImageManager
     interface ::com::sun::star::lang::XInitialization;
 };
 
-//=============================================================================
 
 }; }; }; };
 

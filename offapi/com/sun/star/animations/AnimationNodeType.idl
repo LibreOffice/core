@@ -28,11 +28,9 @@
 #ifndef __com_sun_star_animations_AnimationNodeType_idl__
 #define __com_sun_star_animations_AnimationNodeType_idl__
 
-//=============================================================================
 
  module com {  module sun {  module star {  module animations {
 
-//=============================================================================
 
 /** This constants defines a type for an animation node.
     <br>
@@ -81,7 +79,6 @@ constants AnimationNodeType
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

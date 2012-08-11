@@ -24,11 +24,9 @@
 #include <com/sun/star/lang/EventObject.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module view {
 
-//=============================================================================
 
 /** makes it possible to receive an event when the current selection changes.
 
@@ -36,7 +34,6 @@ module com {  module sun {  module star {  module view {
  */
 published interface XSelectionChangeListener: com::sun::star::lang::XEventListener
 {
-    //-------------------------------------------------------------------------
 
     /** is called when the selection changes.
 
@@ -48,7 +45,6 @@ published interface XSelectionChangeListener: com::sun::star::lang::XEventListen
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

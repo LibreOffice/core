@@ -75,13 +75,11 @@ interface XPolyPolygon2D : ::com::sun::star::uno::XInterface
     void        addPolyPolygon( [in] ::com::sun::star::geometry::RealPoint2D position, [in] XPolyPolygon2D polyPolygon )
         raises (com::sun::star::lang::IllegalArgumentException);
 
-    //-------------------------------------------------------------------------
 
     /** Query number of polygons inside this poly-polygon
      */
     long        getNumberOfPolygons();
 
-    //-------------------------------------------------------------------------
 
     /** Query number of points inside given polygon
 
@@ -92,28 +90,24 @@ interface XPolyPolygon2D : ::com::sun::star::uno::XInterface
     long        getNumberOfPolygonPoints( [in] long polygon )
         raises (com::sun::star::lang::IndexOutOfBoundsException);
 
-    //-------------------------------------------------------------------------
 
     /** Query the rule used to determine inside and outside of the
         poly-polygon.
      */
     FillRule    getFillRule();
 
-    //-------------------------------------------------------------------------
 
     /** Set the rule used to determine inside and outside of the
         poly-polygon.
      */
     void        setFillRule( [in] FillRule fillRule );
 
-    //-------------------------------------------------------------------------
 
     /** Query whether the specified polygon outline is closed.
      */
     boolean     isClosed( [in] long index )
         raises (com::sun::star::lang::IndexOutOfBoundsException);
 
-    //-------------------------------------------------------------------------
 
     /** Set the close state of the specified polygon outline. Use -1
         as the index to affect all polygons of this poly-polygon.

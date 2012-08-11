@@ -22,11 +22,9 @@
 
 #include <com/sun/star/container/XNameContainer.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** provides methods to access the spreadsheets by name and to insert,
     copy, remove and rearrange spreadsheets.
@@ -35,7 +33,6 @@ module com {  module sun {  module star {  module sheet {
  */
 published interface XSpreadsheets: com::sun::star::container::XNameContainer
 {
-    //-------------------------------------------------------------------------
 
     /** inserts a new sheet into the collection.
 
@@ -46,7 +43,6 @@ published interface XSpreadsheets: com::sun::star::container::XNameContainer
      */
     void insertNewByName( [in] string aName, [in] short nPosition );
 
-    //-------------------------------------------------------------------------
 
     /** moves a sheet within the collection.
 
@@ -57,7 +53,6 @@ published interface XSpreadsheets: com::sun::star::container::XNameContainer
      */
     void moveByName( [in] string aName, [in] short nDestination );
 
-    //-------------------------------------------------------------------------
 
     /** copies a sheet within the collection.
 
@@ -75,7 +70,6 @@ published interface XSpreadsheets: com::sun::star::container::XNameContainer
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -23,11 +23,9 @@
 #include <com/sun/star/lang/XComponent.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module util {
 
-//=============================================================================
 
 /** This meta service supports the XMacroExpander interface for expanding
     arbitrary macro expressions, i.e. substitude macro names.

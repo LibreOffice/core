@@ -24,11 +24,9 @@
 #include <com/sun/star/form/FormControlModel.idl>
 #include <com/sun/star/text/TextRange.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module form {  module component {
 
-//=============================================================================
 
 /** specifies a component which extends the <type scope="com::sun::star::awt">UnoControlEditModel</type>
     with capabilities to display and input formatted text.
@@ -68,7 +66,6 @@ published service RichTextControl
     [property] boolean RichText;
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

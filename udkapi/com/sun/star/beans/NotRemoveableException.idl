@@ -21,11 +21,9 @@
 
 #include <com/sun/star/uno/Exception.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module beans {
 
-//=============================================================================
 
 /** This exception is thrown to indicate that removing a property from an
     <type>XPropertyContainer</type> is not allowed.
@@ -34,7 +32,6 @@ published exception NotRemoveableException: com::sun::star::uno::Exception
 {
 };
 
-//=============================================================================
 
 }; }; }; };
 

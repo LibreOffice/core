@@ -23,11 +23,9 @@
 #include <com/sun/star/awt/XLayoutConstrains.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module awt {
 
-//=============================================================================
 
 /** specifies a control for displaying an image.
  */
@@ -39,7 +37,6 @@ published service UnoControlImageControl
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

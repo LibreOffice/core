@@ -23,11 +23,9 @@
 #include <com/sun/star/script/XInvocationAdapterFactory2.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module script {
 
-//=============================================================================
 /** Provides functionality to create an adapter that supports (a)
     special interface type(s) and maps calls to the interface's
     methods to an invocation interface.
@@ -58,7 +56,6 @@ published service InvocationAdapterFactory
     interface com::sun::star::script::XInvocationAdapterFactory2;
 };
 
-//=============================================================================
 
 }; }; }; };
 

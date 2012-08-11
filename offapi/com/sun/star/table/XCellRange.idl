@@ -24,11 +24,9 @@
 #include <com/sun/star/lang/IndexOutOfBoundsException.idl>
 #include <com/sun/star/table/XCell.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module table {
 
-//=============================================================================
 
 /** provides access to the cells or to sub-ranges of a cell range.
 
@@ -36,7 +34,6 @@ module com {  module sun {  module star {  module table {
  */
 published interface XCellRange: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** Returns a single cell within the range.
 
@@ -59,7 +56,6 @@ published interface XCellRange: com::sun::star::uno::XInterface
             [in] long nRow )
         raises( com::sun::star::lang::IndexOutOfBoundsException );
 
-    //-------------------------------------------------------------------------
 
     /** Returns a sub-range of cells within the range.
 
@@ -90,7 +86,6 @@ published interface XCellRange: com::sun::star::uno::XInterface
             [in] long nBottom )
         raises( com::sun::star::lang::IndexOutOfBoundsException );
 
-    //-------------------------------------------------------------------------
 
     /** Returns a sub-range of cells within the range.
 
@@ -111,7 +106,6 @@ published interface XCellRange: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

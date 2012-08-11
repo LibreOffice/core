@@ -20,17 +20,14 @@
 #define __com_sun_star_awt_AdjustmentType_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module awt {
 
-//=============================================================================
 
 /** specifies the adjustment type.
  */
 published enum AdjustmentType
 {
-    //-------------------------------------------------------------------------
 
     /** adjustment is originated by a line jump.
 
@@ -39,7 +36,6 @@ published enum AdjustmentType
      */
     ADJUST_LINE,
 
-    //-------------------------------------------------------------------------
 
     /** adjustment is originated by a page jump.
 
@@ -49,7 +45,6 @@ published enum AdjustmentType
      */
     ADJUST_PAGE,
 
-    //-------------------------------------------------------------------------
 
     /** adjustment is originated by dragging the thumb.
      */
@@ -57,7 +52,6 @@ published enum AdjustmentType
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

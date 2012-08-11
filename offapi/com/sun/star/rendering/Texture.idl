@@ -64,7 +64,6 @@ struct Texture
      */
     ::com::sun::star::geometry::AffineMatrix2D  AffineTransform;
 
-    //-------------------------------------------------------------------------
 
     /** Overall transparency of the texturing.<p>
 
@@ -73,7 +72,6 @@ struct Texture
      */
     double                                      Alpha;
 
-    //-------------------------------------------------------------------------
 
     /** Specifies the number of parameterized polygons used for the texture.<p>
 
@@ -89,7 +87,6 @@ struct Texture
      */
     long                                        NumberOfHatchPolygons;
 
-    //-------------------------------------------------------------------------
 
     /** Texture bitmap.<p>
 
@@ -100,7 +97,6 @@ struct Texture
     */
     XBitmap                                     Bitmap;
 
-    //-------------------------------------------------------------------------
 
     /** Texture gradient.<p>
 
@@ -110,7 +106,6 @@ struct Texture
      */
     XParametricPolyPolygon2D                    Gradient;
 
-    //-------------------------------------------------------------------------
 
     /** Texture hatching.<p>
 
@@ -120,7 +115,6 @@ struct Texture
      */
     XParametricPolyPolygon2D                    Hatching;
 
-    //-------------------------------------------------------------------------
 
     /** Specifies the stroke attributes used for hatching.<p>
 
@@ -128,7 +122,6 @@ struct Texture
      */
     StrokeAttributes                            HatchAttributes;
 
-    //-------------------------------------------------------------------------
 
     /** Repeat mode of the texture, x direction.<p>
 

@@ -20,61 +20,51 @@
 #ifndef __com_sun_star_datatransfer_dnd_DNDConstants_idl__
 #define __com_sun_star_datatransfer_dnd_DNDConstants_idl__
 
-//=============================================================================
 
 module com { module sun { module star { module datatransfer { module dnd {
 
-//=============================================================================
 /** These values represent the type of action or actions to be performed by a
     Drag and Drop operation.
 */
 
 published constants DNDConstants
 {
-    //=============================================================================
     /** No action.
     */
 
     const byte ACTION_NONE = 0x00;
 
-    //=============================================================================
     /** Action copy.
     */
 
     const byte ACTION_COPY = 0x01;
 
-    //=============================================================================
     /** Action move.
     */
 
     const byte ACTION_MOVE = 0x02;
 
-    //=============================================================================
     /** Action copy or move.
     */
 
     const byte ACTION_COPY_OR_MOVE = 0x03;
 
-    //=============================================================================
     /** Action link.
     */
 
     const byte ACTION_LINK = 0x04;
 
-    //=============================================================================
     /** Action reference.
     */
 
     const byte ACTION_REFERENCE = 0x04;
 
-    //=============================================================================
     /** Action default.
     */
 
     const byte ACTION_DEFAULT = 0x80;
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

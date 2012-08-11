@@ -32,11 +32,9 @@
 #include <com/sun/star/io/XActiveDataSource.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module plugin {
 
-//=============================================================================
 
 /** Interface receiving calls from a plugin library.
     A default context can be created using the <type>PluginManager</type>.
@@ -171,7 +169,6 @@ published interface XPluginContext: com::sun::star::uno::XInterface
             raises( com::sun::star::plugin::PluginException );
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -22,11 +22,9 @@
 #include <com/sun/star/task/XInteractionContinuation.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module task {
 
-//=============================================================================
 
 // DocMerge from xml: interface com::sun::star::task::XInteractionAbort
 /** An interaction continuation specifing to abort executing the process that
@@ -36,7 +34,6 @@ published interface XInteractionAbort: com::sun::star::task::XInteractionContinu
 {
 };
 
-//=============================================================================
 
 }; }; }; };
 

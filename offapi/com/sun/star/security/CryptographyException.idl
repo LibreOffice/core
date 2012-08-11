@@ -27,17 +27,14 @@
 #include <com/sun/star/uno/SecurityException.idl>
 
 
-//=============================================================================
 
 module com { module sun { module star { module security {
 
-//=============================================================================
 
 exception CryptographyException : com::sun::star::uno::SecurityException
 {
 };
 
-//=============================================================================
 
 }; }; }; };
 

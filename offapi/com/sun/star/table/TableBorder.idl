@@ -22,11 +22,9 @@
 
 #include <com/sun/star/table/BorderLine.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module table {
 
-//=============================================================================
 
 /** contains the style settings of the border lines of all cells in a cell
     range.
@@ -41,93 +39,79 @@ module com {  module sun {  module star {  module table {
  */
 published struct TableBorder
 {
-    //-------------------------------------------------------------------------
 
     /** determines the line style at the top edge.
      */
     com::sun::star::table::BorderLine TopLine;
 
-    //-------------------------------------------------------------------------
 
     /** specifies whether the value of <member>TableBorder::TopLine</member>
         is used.
      */
     boolean IsTopLineValid;
 
-    //-------------------------------------------------------------------------
 
     /** determines the line style at the bottom edge.
      */
     com::sun::star::table::BorderLine BottomLine;
 
-    //-------------------------------------------------------------------------
 
     /** specifies whether the value of
         <member>TableBorder::BottomLine</member> is used.
      */
     boolean IsBottomLineValid;
 
-    //-------------------------------------------------------------------------
 
     /** determines the line style at the left edge.
      */
     com::sun::star::table::BorderLine LeftLine;
 
-    //-------------------------------------------------------------------------
 
     /** specifies whether the value of <member>TableBorder::LeftLine</member>
         is used.
      */
     boolean IsLeftLineValid;
 
-    //-------------------------------------------------------------------------
 
     /** determines the line style at the right edge.
      */
     com::sun::star::table::BorderLine RightLine;
 
-    //-------------------------------------------------------------------------
 
     /** specifies whether the value of <member>TableBorder::RightLine</member>
         is used.
      */
     boolean IsRightLineValid;
 
-    //-------------------------------------------------------------------------
 
     /** determines the line style of horizontal lines for the inner part
         of a cell range.
      */
     com::sun::star::table::BorderLine HorizontalLine;
 
-    //-------------------------------------------------------------------------
 
     /** specifies whether the value of
         <member>TableBorder::HorizontalLine</member> is used.
      */
     boolean IsHorizontalLineValid;
 
-    //-------------------------------------------------------------------------
 
     /** determines the line style of vertical lines for the inner part
         of a cell range.
      */
     com::sun::star::table::BorderLine VerticalLine;
 
-    //-------------------------------------------------------------------------
 
     /** specifies whether the value of
         <member>TableBorder::VerticalLine</member> is used.
      */
     boolean IsVerticalLineValid;
 
-    //-------------------------------------------------------------------------
 
     /** contains the distance between the lines and other contents.
      */
     short Distance;
 
-    //-------------------------------------------------------------------------
 
     /** specifies whether the value of <member>TableBorder::Distance</member>
         is used.
@@ -136,7 +120,6 @@ published struct TableBorder
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

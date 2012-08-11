@@ -27,11 +27,9 @@
 #include <com/sun/star/lang/IllegalArgumentException.idl>
 #include <com/sun/star/lang/WrappedTargetException.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module configuration { module backend {
 
-//=============================================================================
 
 /** allows importing a layer into a <type>Backend</type>
 
@@ -39,7 +37,6 @@ module com { module sun { module star { module configuration { module backend {
 */
 published interface XLayerImporter : ::com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** gets the target backend for importing.
 
@@ -50,7 +47,6 @@ published interface XLayerImporter : ::com::sun::star::uno::XInterface
     */
     XBackend getTargetBackend();
 
-    //-------------------------------------------------------------------------
 
     /** sets the target backend for importing.
 
@@ -64,7 +60,6 @@ published interface XLayerImporter : ::com::sun::star::uno::XInterface
     void setTargetBackend([in] XBackend aBackend)
         raises (com::sun::star::lang::NullPointerException) ;
 
-    //-------------------------------------------------------------------------
 
     /** Imports the layer given into the backend.
 
@@ -94,7 +89,6 @@ published interface XLayerImporter : ::com::sun::star::uno::XInterface
                 com::sun::star::lang::NullPointerException,
                 com::sun::star::lang::WrappedTargetException) ;
 
-    //-------------------------------------------------------------------------
 
     /** Imports the layer given into the backend for a given entity.
 
@@ -128,10 +122,8 @@ published interface XLayerImporter : ::com::sun::star::uno::XInterface
                 com::sun::star::lang::NullPointerException,
                 com::sun::star::lang::WrappedTargetException) ;
 
-    //-------------------------------------------------------------------------
 } ;
 
-//=============================================================================
 
 } ; } ; } ; } ; } ;
 

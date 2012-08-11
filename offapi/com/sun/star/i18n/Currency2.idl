@@ -22,11 +22,9 @@
 
 #include <com/sun/star/i18n/Currency.idl>
 
-//============================================================================
 
 module com { module sun { module star { module i18n {
 
-//============================================================================
 
 /**
     Symbols, names, and attributes of a specific currency, returned in a
@@ -52,7 +50,6 @@ published struct Currency2 : com::sun::star::i18n::Currency
     boolean LegacyOnly;
 };
 
-//============================================================================
 }; }; }; };
 
 #endif

@@ -23,16 +23,13 @@
 #include <com/sun/star/lang/NoSupportException.idl>
 
 
-//============================================================================
 
  module com {  module sun {  module star {  module embed {
 
-//============================================================================
 /** represents common functionality for embedded objects
  */
 published interface XClassifiedObject: com::sun::star::uno::XInterface
 {
-    // -----------------------------------------------------------------------
     /** retrieves class ID of the object.
 
         @return
@@ -40,7 +37,6 @@ published interface XClassifiedObject: com::sun::star::uno::XInterface
      */
     sequence< byte > getClassID();
 
-    // -----------------------------------------------------------------------
     /** retrieves symbolic name for the object type to be used in UI.
 
         @return
@@ -48,7 +44,6 @@ published interface XClassifiedObject: com::sun::star::uno::XInterface
      */
     string getClassName();
 
-    // -----------------------------------------------------------------------
     /** sets the class ID and symbolic name to an object.
 
         @param aClassID
@@ -65,7 +60,6 @@ published interface XClassifiedObject: com::sun::star::uno::XInterface
         raises( ::com::sun::star::lang::NoSupportException );
 };
 
-//=============================================================================
 
 }; }; }; };
 

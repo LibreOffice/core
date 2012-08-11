@@ -24,18 +24,15 @@
 #include <com/sun/star/io/IOException.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module style {
 
-//=============================================================================
 
 // DocMerge from xml: interface com::sun::star::style::XStyleLoader
 /** enables the object to import styles from documents.
  */
 published interface XStyleLoader: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::style::XStyleLoader::loadStylesFromURL
     /** loads styles from a document at the given URL.
@@ -62,7 +59,6 @@ published interface XStyleLoader: com::sun::star::uno::XInterface
              [in] sequence<com::sun::star::beans::PropertyValue> aOptions )
             raises( com::sun::star::io::IOException );
 
-    //-------------------------------------------------------------------------
     /** @returns
     a sequence of the supported properties as declared in <member>XStyleLoader::loadStylesFromURL</member>
     with their current values.
@@ -71,7 +67,6 @@ published interface XStyleLoader: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

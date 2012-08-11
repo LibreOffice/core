@@ -22,11 +22,9 @@
 #include <com/sun/star/configuration/backend/SchemaSupplier.idl>
 
 
-//=============================================================================
 
 module com { module sun { module star { module configuration { module backend {
 
-//=============================================================================
 
 /**
     implements <type>SchemaSupplier</type> providing access to
@@ -34,17 +32,14 @@ module com { module sun { module star { module configuration { module backend {
 */
 service LocalSchemaSupplier
 {
-    //-------------------------------------------------------------------------
      /**
       provides access to configuration schemas.
       */
     service SchemaSupplier ;
 
-    //-------------------------------------------------------------------------
 
 } ;
 
-//=============================================================================
 
 } ; } ; } ; } ; } ;
 

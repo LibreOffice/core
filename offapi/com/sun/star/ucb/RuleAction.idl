@@ -20,76 +20,62 @@
 #define __com_sun_star_ucb_RuleAction_idl__
 
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /**  These are the possible values for <member>Rule::Action</member>.
 
      @see RuleSet
 */
 published constants RuleAction
 {
-    //-------------------------------------------------------------------------
     /** "None" - Do nothing.
     */
     const short NONE = 0;
 
-    //-------------------------------------------------------------------------
     /** "Show" - Shows object when term matches.
     */
     const short SHOW = 1;
 
-    //-------------------------------------------------------------------------
     /** "Hide" - Hides object when term matches.
     */
     const short HIDE = 2;
 
-    //-------------------------------------------------------------------------
     /** "Mark" - Marks object when term matches.
     */
     const short MARK = 3;
 
-    //-------------------------------------------------------------------------
     /** "UnMark" - Removes mark from object when term matches.
     */
     const short UNMARK = 4;
 
-    //-------------------------------------------------------------------------
     /** "MarkRead" - Marks object as read when term matches.
     */
     const short MARKREAD = 5;
 
-    //-------------------------------------------------------------------------
     /** "MarkUnRead" - Marks object as not read when term matches.
     */
     const short MARKUNREAD = 6;
 
-    //-------------------------------------------------------------------------
     /** "Move" - Moves object to <member>Rule::Parameter</member> when term
         matches.
     */
     const short MOVE = 7;
 
-    //-------------------------------------------------------------------------
     /** "Copy" - Copies object to <member>Rule::Parameter</member> when term
         matches.
     */
     const short COPY = 8;
 
-    //-------------------------------------------------------------------------
     /** "Delete" - Deletes object when term matches.
     */
     const short DELETE = 9;
 
-    //-------------------------------------------------------------------------
     /** "Link" - Creates a link to <member>Rule::Parameter</member> when term
         matches.
     */
     const short LINK = 10;
 
-    //-------------------------------------------------------------------------
     /** "Forward" - Forwards object to <member>Rule::Parameter</member> when
         term matches.
     */
@@ -97,7 +83,6 @@ published constants RuleAction
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

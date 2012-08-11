@@ -21,16 +21,13 @@
 
 #include <com/sun/star/util/XCloseable.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module embed {
 
-//=============================================================================
 /** provides access to a component.
  */
 published interface XComponentSupplier: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** allows to get access to a component.
         <p>
         The component may not support
@@ -43,7 +40,6 @@ published interface XComponentSupplier: com::sun::star::uno::XInterface
     ::com::sun::star::util::XCloseable getComponent();
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -32,16 +32,13 @@
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/embed/XStorage.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module document {
 
-//=============================================================================
 /** allows to be notified when a document is switched to a new storage.
  */
 interface XStorageChangeListener: com::sun::star::lang::XEventListener
 {
-    //-------------------------------------------------------------------------
     /** is called when document switches to another storage.
 
         @param xDocument
@@ -55,7 +52,6 @@ interface XStorageChangeListener: com::sun::star::lang::XEventListener
         [in] ::com::sun::star::embed::XStorage xStorage );
 };
 
-//=============================================================================
 
 }; }; }; };
 

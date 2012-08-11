@@ -25,11 +25,9 @@
 
 #include <com/sun/star/xml/UserDefinedAttributeSupplier.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module chart {
 
-//=============================================================================
 
 /** specifies the grid of the diagram in a chart.
 
@@ -53,7 +51,6 @@ published service ChartGrid
     interface com::sun::star::beans::XPropertySet;
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -22,18 +22,15 @@
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/io/XInputStream.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** The argument for the command "insert".
 
     @see XCommandProcessor
 */
 published struct InsertCommandArgument
 {
-    //-------------------------------------------------------------------------
     /** A stream containing document data.
 
         <p>This member can be left blank, if no (new) document data shall be
@@ -41,7 +38,6 @@ published struct InsertCommandArgument
     */
     com::sun::star::io::XInputStream Data;
 
-    //-------------------------------------------------------------------------
     /** A flag indicating whether a possibly existing content (and its data)
         shall be overwritten.
 
@@ -52,7 +48,6 @@ published struct InsertCommandArgument
     boolean ReplaceExisting;
 };
 
-//=============================================================================
 
 }; }; }; };
 

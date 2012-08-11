@@ -22,11 +22,9 @@
 #include <com/sun/star/uno/Exception.idl>
 
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** is thrown to indicate that a content provider with the same
     identifier already was registered with a content provider manager.
 
@@ -38,7 +36,6 @@ published exception DuplicateProviderException: com::sun::star::uno::Exception
 {
 };
 
-//=============================================================================
 
 }; }; }; };
 

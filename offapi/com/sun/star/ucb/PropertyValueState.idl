@@ -20,11 +20,9 @@
 #define __com_sun_star_ucb_PropertyValueState_idl__
 
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** defines the states of a property value in the process of obtaining the
     value (asynchronously).
 
@@ -32,31 +30,26 @@ module com { module sun { module star { module ucb {
 */
 published enum PropertyValueState
 {
-    //-------------------------------------------------------------------------
     /** The property value was not obtained yet.
     */
     UNPROCESSED,
 
-    //-------------------------------------------------------------------------
     /** The value was obtained.
 
         <p>The value is stored in <member>PropertyValueInfo::Value</member>.
     */
     PROCESSED,
 
-    //-------------------------------------------------------------------------
     /** The given property name/handle is invalid.
     */
     INVALID_NAME,
 
-    //-------------------------------------------------------------------------
     /** The given property type is invalid.
     */
     INVALID_TYPE
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

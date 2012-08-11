@@ -31,11 +31,9 @@
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/lang/Locale.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module linguistic2 {
 
-//=============================================================================
 /** This interfaces gives access to a dictionary entry.
 
     <P>A dictionary entry can supply a word and its hyphenation
@@ -58,14 +56,12 @@ module com { module sun { module star { module linguistic2 {
 */
 published interface XDictionaryEntry : com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /**
          @returns
              the word defining this entry.
      */
     string getDictionaryWord();
 
-    //-------------------------------------------------------------------------
     /**
         @returns
             <TRUE/> if the word (entry) is a negative one and should not be
@@ -73,7 +69,6 @@ published interface XDictionaryEntry : com::sun::star::uno::XInterface
     */
     boolean isNegative();
 
-    //-------------------------------------------------------------------------
     /** is the suggested replacement text for negative words.
 
          <p>It is undefined if the entry is not negative.</p>
@@ -86,7 +81,6 @@ published interface XDictionaryEntry : com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

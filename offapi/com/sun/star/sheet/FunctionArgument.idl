@@ -20,11 +20,9 @@
 #ifndef __com_sun_star_sheet_FunctionArgument_idl__
 #define __com_sun_star_sheet_FunctionArgument_idl__
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** contains the description of a single argument within a spreadsheet
     function.
@@ -33,19 +31,16 @@ module com {  module sun {  module star {  module sheet {
  */
 published struct FunctionArgument
 {
-    //-------------------------------------------------------------------------
 
     /** the name of the argument.
      */
     string Name;
 
-    //-------------------------------------------------------------------------
 
     /** a description of the argument.
      */
     string Description;
 
-    //-------------------------------------------------------------------------
 
     /** determines whether the argument is optional.
      */
@@ -53,7 +48,6 @@ published struct FunctionArgument
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

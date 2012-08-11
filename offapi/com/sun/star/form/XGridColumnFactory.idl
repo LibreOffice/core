@@ -26,11 +26,9 @@
 #include <com/sun/star/lang/IllegalArgumentException.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module form {
 
-//=============================================================================
 
 /** allows to create columns to be added into a grid control model.
 
@@ -43,7 +41,6 @@
  */
 published interface XGridColumnFactory: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** creates a new column object
 
@@ -59,7 +56,6 @@ published interface XGridColumnFactory: com::sun::star::uno::XInterface
     com::sun::star::beans::XPropertySet createColumn( [in] string aColumnType )
             raises( com::sun::star::lang::IllegalArgumentException );
 
-    //-------------------------------------------------------------------------
 
     /** returns a list of available column types.
 
@@ -69,7 +65,6 @@ published interface XGridColumnFactory: com::sun::star::uno::XInterface
     sequence<string> getColumnTypes();
 };
 
-//=============================================================================
 
 }; }; }; };
 

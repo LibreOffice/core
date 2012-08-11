@@ -23,11 +23,9 @@
 #include <com/sun/star/text/TextField.idl>
 #include <com/sun/star/text/DependentTextField.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module text { module textfield {
 
-//=============================================================================
 /** specifies service of a text field that displays the current set number of
  a database.
     @see com::sun::star::text::TextField
@@ -75,7 +73,6 @@ published service DatabaseSetNumber
 
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

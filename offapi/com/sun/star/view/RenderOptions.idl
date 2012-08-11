@@ -30,11 +30,9 @@
 
 #include <com/sun/star/awt/XDevice.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module view {
 
-//=============================================================================
 
 /** describes the options for Render jobs.
 
@@ -42,13 +40,11 @@ module com {  module sun {  module star {  module view {
  */
 published service RenderOptions
 {
-    //-------------------------------------------------------------------------
 
     /** specifies the device the page should be rendered to
      */
     [property] com::sun::star::awt::XDevice RenderDevice;
 
-    //-------------------------------------------------------------------------
 
     /** indicates that the current page is the first page to be exported.
 
@@ -62,7 +58,6 @@ published service RenderOptions
         @see XRenderable
      */
     [optional, property] boolean IsFirstPage;
-    //-------------------------------------------------------------------------
 
     /** indicates that the current page is the last page to be exported.
 
@@ -75,7 +70,6 @@ published service RenderOptions
         @see XRenderable
      */
     [optional, property] boolean IsLastPage;
-    //-------------------------------------------------------------------------
 
     /** specifies if empty pages should be skipped.
 
@@ -88,7 +82,6 @@ published service RenderOptions
         @see XRenderable
      */
     [optional, property] boolean IsSkipEmptyPages;
-    //-------------------------------------------------------------------------
 
     /** specifies the page ranges to be rendered.
 
@@ -103,7 +96,6 @@ published service RenderOptions
     [optional, property] string PageRange;
 };
 
-//=============================================================================
 
 }; }; }; };
 

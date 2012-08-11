@@ -20,29 +20,24 @@
 #define __com_sun_star_view_PaperOrientation_idl__
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module view {
 
-//=============================================================================
 
 /** specifies the orientation of the paper.
  */
 published enum PaperOrientation
 {
-    //-------------------------------------------------------------------------
     /** set the paper orientation to portrait.
      */
     PORTRAIT,
 
-    //-------------------------------------------------------------------------
     /** set the paper orientation to landscape.
      */
     LANDSCAPE
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

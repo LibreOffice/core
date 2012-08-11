@@ -21,11 +21,9 @@
 
 #include <com/sun/star/chart2/XScaling.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module chart2 {
 
-//=============================================================================
 
 /** stateless service
 */
@@ -36,7 +34,6 @@ service Scaling
     interface com::sun::star::chart2::XScaling;
 };
 
-//=============================================================================
 
 }; }; }; };
 

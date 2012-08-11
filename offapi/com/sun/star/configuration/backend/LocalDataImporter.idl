@@ -21,11 +21,9 @@
 
 #include <com/sun/star/configuration/backend/DataImporter.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module configuration { module backend {
 
-//=============================================================================
 
 /**
     allows importing data from a local configuration data repository
@@ -47,7 +45,6 @@ module com { module sun { module star { module configuration { module backend {
 */
 published service LocalDataImporter
 {
-    //-------------------------------------------------------------------------
 
     /** provides for running an import job
 
@@ -91,10 +88,8 @@ published service LocalDataImporter
       */
     service DataImporter ;
 
-    //-------------------------------------------------------------------------
 } ;
 
-//=============================================================================
 
 } ; } ; } ; } ; } ;
 

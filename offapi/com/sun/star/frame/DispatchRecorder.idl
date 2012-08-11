@@ -31,11 +31,9 @@
 #include <com/sun/star/frame/XDispatchRecorder.idl>
 #include <com/sun/star/container/XIndexReplace.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module frame {
 
-//=============================================================================
 /** provides functionality to record <member>XDispatch::dispatch()</member> requests
 
     <p>
@@ -55,7 +53,6 @@
  */
 published service DispatchRecorder
 {
-    //-------------------------------------------------------------------------
     /** provides the record functionality and access on the generated code
      */
     interface com::sun::star::frame::XDispatchRecorder;
@@ -64,7 +61,6 @@ published service DispatchRecorder
     interface com::sun::star::container::XIndexReplace;
 };
 
-//=============================================================================
 
 }; }; }; };
 

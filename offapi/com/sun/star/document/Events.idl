@@ -21,11 +21,9 @@
 
 #include <com/sun/star/container/XNameReplace.idl>
 
-//=============================================================================
 
 module com {   module sun {   module star {   module document {
 
-//=============================================================================
 /** is a collection of all events supported by a document or content of a
     document
 
@@ -36,7 +34,6 @@ module com {   module sun {   module star {   module document {
  */
 published service Events
 {
-    //-------------------------------------------------------------------------
     /** offers access to the list of <type>EventDescriptor</type>s
 
         <p>
@@ -88,7 +85,6 @@ published service Events
     interface com::sun::star::container::XNameReplace;
 };
 
-//=============================================================================
 
 }; }; }; };
 

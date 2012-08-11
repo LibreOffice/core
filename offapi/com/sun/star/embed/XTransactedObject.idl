@@ -23,16 +23,13 @@
 #include <com/sun/star/io/IOException.idl>
 #include <com/sun/star/lang/WrappedTargetException.idl>
 
-//============================================================================
 
  module com {  module sun {  module star {  module embed {
 
-//============================================================================
 /** allows transacted access to an object.
  */
 published interface XTransactedObject: com::sun::star::uno::XInterface
 {
-    // -----------------------------------------------------------------------
     /** commits the changes made for object.
      */
     void commit()
@@ -47,7 +44,6 @@ published interface XTransactedObject: com::sun::star::uno::XInterface
                 ::com::sun::star::lang::WrappedTargetException );
 };
 
-//============================================================================
 
 }; }; }; };
 

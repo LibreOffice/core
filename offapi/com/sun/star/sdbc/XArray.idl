@@ -65,7 +65,6 @@ published interface XArray: com::sun::star::uno::XInterface
      */
     string getBaseTypeName() raises (SQLException);
 
-      //-------------------------------------------------------------------------
 
     /** returns the SDBC type of the elements in the array designated
         by this
@@ -78,7 +77,6 @@ published interface XArray: com::sun::star::uno::XInterface
      */
     long getBaseType() raises (SQLException);
 
-    //-------------------------------------------------------------------------
 
     /** retrieves the contents of the SQL array designated by this
                 <code>Array</code>
@@ -111,7 +109,6 @@ published interface XArray: com::sun::star::uno::XInterface
     sequence<any> getArray([in]com::sun::star::container::XNameAccess typeMap)
         raises (SQLException);
 
-      //-------------------------------------------------------------------------
 
     /** returns an array containing a slice of the SQL array, beginning with the
                 specified
@@ -150,7 +147,6 @@ published interface XArray: com::sun::star::uno::XInterface
                                                                       typeMap)
             raises (SQLException);
 
-      //-------------------------------------------------------------------------
 
     /** returns a result set that contains the elements of the array
         designated by this
@@ -188,7 +184,6 @@ published interface XArray: com::sun::star::uno::XInterface
     XResultSet getResultSet([in]com::sun::star::container::XNameAccess typeMap)
         raises (SQLException);
 
-      //-------------------------------------------------------------------------
 
     /** returns a result set holding the elements of the subarray that
         starts at index
@@ -234,7 +229,6 @@ published interface XArray: com::sun::star::uno::XInterface
         raises (SQLException);
 };
 
-//=============================================================================
 
 }; }; }; };
 

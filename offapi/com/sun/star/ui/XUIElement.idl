@@ -33,11 +33,9 @@
 #include <com/sun/star/beans/XPropertySet.idl>
 #include <com/sun/star/frame/XFrame.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module ui {
 
-//=============================================================================
 
 /** provides a function to retrieve a special purpose interface dependent
     on the user interface element type.
@@ -85,7 +83,6 @@ interface XUIElement : com::sun::star::uno::XInterface
 
 }; }; }; };
 
-//=============================================================================
 
 #endif
 

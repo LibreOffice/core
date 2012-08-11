@@ -35,13 +35,11 @@
 #include <com/sun/star/lang/NoSupportException.idl>
 #include <com/sun/star/task/XInteractionHandler.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module form { module submission {
 
 interface XSubmissionVetoListener;
 
-//=============================================================================
 
 /** is implemented by components which support submitting data.
 */
@@ -98,7 +96,6 @@ interface XSubmission : com::sun::star::uno::XInterface
         raises ( com::sun::star::lang::NoSupportException );
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

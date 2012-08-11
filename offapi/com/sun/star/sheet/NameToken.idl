@@ -31,11 +31,9 @@
 #ifndef __com_sun_star_sheet_NameToken_idl__
 #define __com_sun_star_sheet_NameToken_idl__
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** contains the information regarding named tokens
  */
@@ -46,7 +44,6 @@ struct NameToken
     boolean Global;
 };
 
-//=============================================================================
 
 }; }; }; };
 

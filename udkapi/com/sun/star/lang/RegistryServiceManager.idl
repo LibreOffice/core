@@ -30,11 +30,9 @@
 #include <com/sun/star/registry/XSimpleRegistry.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module lang {
 
-//=============================================================================
 
 /** Provides a collection of implementations for services reading from a
     persistent registry storage.
@@ -72,7 +70,6 @@ published service RegistryServiceManager
     [readonly, property] com::sun::star::registry::XSimpleRegistry Registry;
 };
 
-//=============================================================================
 
 }; }; }; };
 

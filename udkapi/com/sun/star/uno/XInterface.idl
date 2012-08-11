@@ -19,11 +19,9 @@
 #ifndef __com_sun_star_uno_XInterface_idl__
 #define __com_sun_star_uno_XInterface_idl__
 
-//=============================================================================
 
  module com {  module sun {  module star {  module uno {
 
-//=============================================================================
 
 // DocMerge from xml: interface com::sun::star::uno::XInterface
 /** base interface of all UNO interfaces
@@ -88,7 +86,6 @@ published interface XInterface
      */
     any queryInterface( [in] type aType );
 
-    //-------------------------------------------------------------------------
     /** increases the reference counter by one.
 
         <p>When you have called acquire() on the
@@ -104,7 +101,6 @@ published interface XInterface
      */
     [oneway] void acquire();
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::uno::XInterface::release
     /** decreases the reference counter by one.
@@ -116,7 +112,6 @@ published interface XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

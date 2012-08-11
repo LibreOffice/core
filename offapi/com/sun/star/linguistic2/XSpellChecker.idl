@@ -25,11 +25,9 @@
 #include <com/sun/star/linguistic2/XSpellAlternatives.idl>
 #include <com/sun/star/beans/PropertyValues.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module linguistic2 {
 
-//=============================================================================
 /** This interface allows for spell checking.
 
     <P>It is possible to simply check if a word, in a specified language,
@@ -40,7 +38,6 @@ module com { module sun { module star { module linguistic2 {
 */
 published interface XSpellChecker : com::sun::star::linguistic2::XSupportedLocales
 {
-    //-------------------------------------------------------------------------
     /** checks if a word is spelled correctly in a given language.
 
         @returns
@@ -71,7 +68,6 @@ published interface XSpellChecker : com::sun::star::linguistic2::XSupportedLocal
             [in] com::sun::star::beans::PropertyValues aProperties )
         raises( com::sun::star::lang::IllegalArgumentException );
 
-    //-------------------------------------------------------------------------
     /** This method checks if a word is spelled correctly in a given
         language.
 
@@ -106,7 +102,6 @@ published interface XSpellChecker : com::sun::star::linguistic2::XSupportedLocal
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

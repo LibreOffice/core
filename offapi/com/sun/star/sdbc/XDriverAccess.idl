@@ -45,7 +45,6 @@ published interface XDriverAccess: com::sun::star::uno::XInterface
     XDriver     getDriverByURL([in]string url);
 };
 
-//=============================================================================
 
 }; }; }; };
 

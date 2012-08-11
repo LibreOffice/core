@@ -31,11 +31,9 @@
 #include <com/sun/star/uno/XInterface.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module document {
 
-//=============================================================================
 
 /** registers embedded server for StarOffice documents
     <p>
@@ -48,7 +46,6 @@ module com {  module sun {  module star {  module document {
 published service OleEmbeddedServerRegistration
     : com::sun::star::uno::XInterface;
 
-//=============================================================================
 
 }; }; }; };
 

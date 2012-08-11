@@ -22,11 +22,9 @@
 
 #include <com/sun/star/text/TextField.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module presentation { module textfield {
 
-//=============================================================================
 /** specifies service of a presentation header text field.
     @see com::sun::star::text::TextField
 */
@@ -35,7 +33,6 @@ service Header
     service  com::sun::star::text::TextField;
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

@@ -19,10 +19,8 @@
 #ifndef __com_sun_star_util_AliasProgrammaticPair_idl__
 #define __com_sun_star_util_AliasProgrammaticPair_idl__
 
-//=============================================================================
 module com {  module sun {  module star {  module util {
 
-//=============================================================================
 
 /** represents an entry from a component which implements the
     <type>XLocalizedAliases</type>.
@@ -32,7 +30,6 @@ published struct AliasProgrammaticPair
     /** determines the name which is registered as an alias for a programmatic name.
      */
     string Alias;
-    //-------------------------------------------------------------------------
 
     /** determines which programmatic name belongs to the alias.
 
@@ -41,7 +38,6 @@ published struct AliasProgrammaticPair
     string ProgrammaticName;
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -23,11 +23,9 @@
 #include <com/sun/star/rdf/XRepository.idl>
 
 
-//=============================================================================
 
 module com {   module sun {   module star {   module rdf {
 
-//=============================================================================
 /** provides access to a set of named RDF graphs.
 
     @since OOo 3.0
@@ -43,7 +41,6 @@ service Repository : XRepository
     // FIXME: if we want to support HTTP/SQL-based storage, or inference, define more constructors here
 };
 
-//=============================================================================
 
 }; }; }; };
 

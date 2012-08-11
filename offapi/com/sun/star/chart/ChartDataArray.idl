@@ -26,11 +26,9 @@
 #include <com/sun/star/chart/XChartData.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module chart {
 
-//=============================================================================
 
 /** must be supported by each data source for charts, where you want
     to access the values directly.
@@ -44,7 +42,6 @@ published service ChartDataArray
     interface com::sun::star::chart::XChartDataArray;
 };
 
-//=============================================================================
 
 }; }; }; };
 

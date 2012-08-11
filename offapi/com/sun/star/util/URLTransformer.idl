@@ -31,18 +31,15 @@
 #include <com/sun/star/util/XURLTransformer.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module util {
 
-//=============================================================================
 
 /** helps to split up a string containing a URL into its
     structural parts and assembles the parts into a single string.
  */
 published service URLTransformer : XURLTransformer;
 
-//=============================================================================
 
 }; }; }; };
 

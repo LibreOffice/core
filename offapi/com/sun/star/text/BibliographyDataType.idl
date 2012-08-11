@@ -28,17 +28,14 @@
 #ifndef __com_sun_star_text_BibliographyDataType_idl__
 #define __com_sun_star_text_BibliographyDataType_idl__
 
-//=============================================================================
 
  module com {  module sun {  module star {  module text {
-//=============================================================================
 
 // DocMerge from idl: constants com::sun::star::text::BibliographyDataType
 /** These values define the type of bibliographic data like book, journal, magazine, etc.
  */
 published constants BibliographyDataType
 {
-    //-------------------------------------------------------------------------
 
     // DocMerge from idl: value com::sun::star::text::BibliographyDataType::ARTICLE
     /** An article from a journal or magazine.
@@ -151,7 +148,6 @@ published constants BibliographyDataType
      */
     const short CUSTOM5         = 21;
 };
-//=============================================================================
 
 }; }; }; };
 

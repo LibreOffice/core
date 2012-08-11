@@ -32,11 +32,9 @@
 #include <com/sun/star/style/VerticalAlignment.idl>
 #include <com/sun/star/util/Color.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module text {
 
-//=============================================================================
 
 // DocMerge from xml: service com::sun::star::text::TextColumns
 /** provides access to columns in text (e.g., in TextFrames ).
@@ -46,46 +44,36 @@ published service TextColumns
     // DocMerge: empty anyway
     interface com::sun::star::text::XTextColumns;
 
-    //------------------------------------------------------------------------
     /** determines whether the columns all have equal width. This flag is set if XTextColumns::setColumnCount() is called
      and it is reset if XTextColumns::setColumns() is called.
      */
     [readonly, property]  boolean IsAutomatic;
-    //------------------------------------------------------------------------
     /** contains the distance between the columns. It is valid if the property IsAutomatic is set.
  <!-- The h -->Half of this distance is set to the left and right margins of all columns,
     except for the left margin of the first column, and the right margin of the last column.*/
     [property]  long AutomaticDistance;
-    //------------------------------------------------------------------------
     /** determines the width of the separator lines between the columns.
      */
     [property]  long SeparatorLineWidth;
-    //------------------------------------------------------------------------
     /** determines the color of the separator lines between the columns.
      */
     [property]  com::sun::star::util::Color SeparatorLineColor;
-    //------------------------------------------------------------------------
     /** determines the relative height of the separator lines between the columns.
      */
     [property]  long SeparatorLineRelativeHeight;
-    //------------------------------------------------------------------------
     /** determines the vertical alignment of the separator lines between the columns.
      */
     [property]  com::sun::star::style::VerticalAlignment SeparatorLineVerticalAlignment;
-    //------------------------------------------------------------------------
     /** determines whether separator lines are on.
      */
     [property]  boolean SeparatorLineIsOn;
-    //------------------------------------------------------------------------
     /** determines the style of the separator lines between the columns.
         @see com::sun::star::text:ColumnSeparatorStyle
             for the possible values.
      */
     [property, optional]  short SeparatorLineStyle;
-    //------------------------------------------------------------------------
 };
 
-//=============================================================================
 
 }; }; }; };
 

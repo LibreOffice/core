@@ -30,13 +30,10 @@
 #define __com_sun_star_i18n_TextConversionOption_idl__
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module i18n {
 
-//=============================================================================
 
-//--------------------------------------------------------------------------
 /** Text conversion options to be used with <type>XTextConversion</type>.
 
     <p>These text conversion options are usually selected by end users.
@@ -65,7 +62,6 @@ published constants TextConversionOption
     const long  USE_CHARACTER_VARIANTS          = 2;    // (1 << 1)
 };
 
-//=============================================================================
 
 }; }; }; };
 

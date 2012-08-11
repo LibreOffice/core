@@ -26,10 +26,8 @@
 #include <com/sun/star/lang/IllegalArgumentException.idl>
 #include <com/sun/star/frame/DoubleInitializationException.idl>
 
-//=============================================================================
 module com {  module sun {  module star {  module embed {
 
-//-----------------------------------------------------------------------------
 /** The main task of this service is to prevent closing, terminating and/or
     etc. of controlled object.
 
@@ -91,7 +89,6 @@ published service InstanceLocker : com::sun::star::lang::XComponent
                 ::com::sun::star::uno::Exception );
 };
 
-//=============================================================================
 
 }; }; }; };
 

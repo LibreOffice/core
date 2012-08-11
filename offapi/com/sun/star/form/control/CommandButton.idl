@@ -23,11 +23,9 @@
 #include <com/sun/star/awt/UnoControlButton.idl>
 #include <com/sun/star/form/XApproveActionBroadcaster.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module form {  module control {
 
-//=============================================================================
 
 /** describes a button control.
 
@@ -62,7 +60,6 @@ published service CommandButton
     interface com::sun::star::form::XApproveActionBroadcaster;
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

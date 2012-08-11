@@ -33,7 +33,6 @@
 #include <com/sun/star/beans/PropertyValues.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module text {
 
@@ -41,7 +40,6 @@
  published interface XTextRangeMover;
  published interface XTextRangeCompare;
  published interface XRelativeTextContentInsert;
-//=============================================================================
 
 /** is an independent piece of text which consists of a
     series of one or more paragraphs.
@@ -62,27 +60,23 @@ published service Text
      */
     interface com::sun::star::container::XEnumerationAccess;
 
-//=============================================================================
 
     /** provides a cursor factory and the possibility to insert and remove contents.
      */
     interface XText;
 
-//=============================================================================
 
     /** optional interface to compare positions of <type>TextRange</type>
                 instances within this text.
      */
     [optional] interface XTextRangeCompare;
 
-//=============================================================================
 
     /** makes it possible to change the position of paragraphs.
 
      */
     [optional] interface XTextRangeMover;
 
-//=============================================================================
 
     /** makes it possible to insert a new text content, before or
                    after existing text contents.
@@ -91,7 +85,6 @@ published service Text
      */
     [optional] interface XRelativeTextContentInsert;
 
-//=============================================================================
 
     /** contains the properties of a redline at the start of the document.<br>
     The sequence contains the following properties
@@ -112,7 +105,6 @@ published service Text
      */
     [optional, property] ::com::sun::star::beans::PropertyValues StartRedline;
 
-//=============================================================================
 
     /** contains the properties of a redline at the start of the document.
     The sequence contains the following properties
@@ -133,11 +125,9 @@ published service Text
      */
     [optional, maybevoid, property] ::com::sun::star::beans::PropertyValues EndRedline;
 
-//=============================================================================
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

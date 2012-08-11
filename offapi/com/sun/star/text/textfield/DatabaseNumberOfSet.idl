@@ -23,11 +23,9 @@
 #include <com/sun/star/text/TextField.idl>
 #include <com/sun/star/text/DependentTextField.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module text { module textfield {
 
-//=============================================================================
 /** specifies service of text field that conditionally set the selection of
     a database cursor.
     @see com::sun::star::text::TextField
@@ -74,7 +72,6 @@ published service DatabaseNumberOfSet
 
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

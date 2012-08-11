@@ -28,11 +28,9 @@
 #ifndef __com_sun_star_ucb_FetchError_idl__
 #define __com_sun_star_ucb_FetchError_idl__
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** These values are used to specify whether and which error has occurred
     while fetching data of some <type>ContentResultSet</type> rows.
 
@@ -40,12 +38,10 @@ module com { module sun { module star { module ucb {
 */
 published constants FetchError
 {
-    //-------------------------------------------------------------------------
     /** indicates that fetching of data was successful.
     */
     const short SUCCESS = 0;
 
-    //-------------------------------------------------------------------------
     /** indicates that during fetching we went beyond the last or first row.
 
         <p>Therefore the <type>FetchResult</type> does not contain the full
@@ -54,7 +50,6 @@ published constants FetchError
     */
     const short ENDOFDATA = 1;
 
-    //-------------------------------------------------------------------------
     /** indicates that during fetching we got an exception.
 
         <p>The row, that causes the exception, and all following ( "following"
@@ -65,7 +60,6 @@ published constants FetchError
     const short EXCEPTION = 2;
 };
 
-//=============================================================================
 
 }; }; }; };
 

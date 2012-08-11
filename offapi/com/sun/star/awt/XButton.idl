@@ -24,35 +24,29 @@
 #include <com/sun/star/awt/XActionListener.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module awt {
 
-//=============================================================================
 
 /** makes it possible to set the label of a button and to register for action events.
  */
 published interface XButton: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** registers an event handler for button action events.
      */
     [oneway] void addActionListener( [in] com::sun::star::awt::XActionListener l );
 
-    //-------------------------------------------------------------------------
 
     /** unregisters an event handler for button action events.
      */
     [oneway] void removeActionListener( [in] com::sun::star::awt::XActionListener l );
 
-    //-------------------------------------------------------------------------
 
     /** sets the label of the button.
      */
     [oneway] void setLabel( [in] string Label );
 
-    //-------------------------------------------------------------------------
 
     /** sets a command string for pushing the button.
      */
@@ -60,7 +54,6 @@ published interface XButton: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

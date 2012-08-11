@@ -24,11 +24,9 @@
 #include <com/sun/star/beans/XPropertySet.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module chart {
 
-//=============================================================================
 
 /** gives access to both the primary and the secondary <i>x</i>-axis
     of a chart.
@@ -37,7 +35,6 @@
  */
 published interface XTwoAxisXSupplier: com::sun::star::chart::XAxisXSupplier
 {
-    //-------------------------------------------------------------------------
 
     /** @returns
             the properties of the secondary <i>x</i>-axis of the
@@ -52,7 +49,6 @@ published interface XTwoAxisXSupplier: com::sun::star::chart::XAxisXSupplier
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

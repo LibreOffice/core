@@ -25,13 +25,11 @@
 #include <com/sun/star/datatransfer/XTransferable.idl>
 #include <com/sun/star/lang/IllegalArgumentException.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module datatransfer { module dnd {
 
  published interface XDragSourceListener;
 
-//=============================================================================
 /** This interface is implemented by a view or window that supports drag
     operations and will be received as part of a <type>DragGestureEvent</type>
     through a <member scope="com::sun::star::datatransfer::dnd">XDragGestureListener::dragGestureRecognized()</member>
@@ -46,7 +44,6 @@ module com { module sun { module star { module datatransfer { module dnd {
 published interface XDragSource: com::sun::star::uno::XInterface
 {
 
-    //-------------------------------------------------------------------------
     /** In order to query if drag image support is available.
 
         @returns
@@ -56,7 +53,6 @@ published interface XDragSource: com::sun::star::uno::XInterface
 
     boolean isDragImageSupported();
 
-    //-------------------------------------------------------------------------
     /** To get the default cursor for a specified drag action.
 
         @param dragAction
@@ -71,7 +67,6 @@ published interface XDragSource: com::sun::star::uno::XInterface
     long getDefaultCursor( [in] byte dragAction )
         raises( com::sun::star::lang::IllegalArgumentException );
 
-    //-------------------------------------------------------------------------
     /** Starts the drag operation.
 
         <p>Note: this call does <em>not</em> block until the drag and drop
@@ -113,7 +108,6 @@ published interface XDragSource: com::sun::star::uno::XInterface
         [in] XDragSourceListener listener );
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

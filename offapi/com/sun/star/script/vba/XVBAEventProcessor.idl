@@ -24,17 +24,14 @@
 #include <com/sun/star/lang/IllegalArgumentException.idl>
 #include <com/sun/star/util/VetoException.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module script { module vba {
 
-//=============================================================================
 
 /** Executes VBA event handlers.
  */
 interface XVBAEventProcessor
 {
-    //-------------------------------------------------------------------------
 
     /** Returns whether a VBA event handler exists.
 
@@ -55,7 +52,6 @@ interface XVBAEventProcessor
     boolean hasVbaEventHandler( [in] long nEventId, [in] sequence< any > aArgs )
         raises (::com::sun::star::lang::IllegalArgumentException);
 
-    //-------------------------------------------------------------------------
 
     /** Executes a VBA event handler.
 
@@ -82,14 +78,11 @@ interface XVBAEventProcessor
         raises (::com::sun::star::lang::IllegalArgumentException,
                 ::com::sun::star::util::VetoException);
 
-    //-------------------------------------------------------------------------
 };
 
-//=============================================================================
 
 }; }; }; }; };
 
-//=============================================================================
 
 #endif
 

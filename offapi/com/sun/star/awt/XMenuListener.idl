@@ -24,35 +24,29 @@
 #include <com/sun/star/awt/MenuEvent.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module awt {
 
-//=============================================================================
 
 /** makes it possible to receive menu events on a window.
  */
 published interface XMenuListener: com::sun::star::lang::XEventListener
 {
-    //-------------------------------------------------------------------------
 
     /** is invoked when a menu item is highlighted.
      */
     [oneway] void highlight( [in] com::sun::star::awt::MenuEvent rEvent );
 
-    //-------------------------------------------------------------------------
 
     /** is invoked when a menu item is selected.
      */
     [oneway] void select( [in] com::sun::star::awt::MenuEvent rEvent );
 
-    //-------------------------------------------------------------------------
 
     /** is invoked when a menu is activated.
      */
     [oneway] void activate( [in] com::sun::star::awt::MenuEvent rEvent );
 
-    //-------------------------------------------------------------------------
 
     /** is invoked when a menu is deactivated.
      */
@@ -60,7 +54,6 @@ published interface XMenuListener: com::sun::star::lang::XEventListener
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

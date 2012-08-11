@@ -31,11 +31,9 @@
 
 #include <com/sun/star/container/XNameContainer.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module ui {
 
-//=============================================================================
 
 /** a service which provides window based information about user interface
     elements of a single application module.

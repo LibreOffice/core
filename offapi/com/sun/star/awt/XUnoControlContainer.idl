@@ -24,35 +24,29 @@
 #include <com/sun/star/awt/XTabController.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module awt {
 
-//=============================================================================
 
 /** gives access to the tab controllers of a <type>UnoControlContainer</type>.
  */
 published interface XUnoControlContainer: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** sets a set of tab controllers.
      */
     [oneway] void setTabControllers( [in] sequence<com::sun::star::awt::XTabController> TabControllers );
 
-    //-------------------------------------------------------------------------
 
     /** returns all currently specified tab controllers.
      */
     sequence<com::sun::star::awt::XTabController> getTabControllers();
 
-    //-------------------------------------------------------------------------
 
     /** adds a single tab controller.
      */
     [oneway] void addTabController( [in] com::sun::star::awt::XTabController TabController );
 
-    //-------------------------------------------------------------------------
 
     /** removes a single tab controller.
      */
@@ -60,7 +54,6 @@ published interface XUnoControlContainer: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

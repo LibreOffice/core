@@ -20,11 +20,9 @@
 #ifndef __com_sun_star_sync_SyncAction_idl__
 #define __com_sun_star_sync_SyncAction_idl__
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sync {
 
-//=============================================================================
 
 /** contains a synchronization element
 
@@ -47,7 +45,6 @@ published constants SyncAction
     const unsigned long CONFLICT_AMBIGUITY      = 0x02000000;
 };
 
-//=============================================================================
 
 }; }; }; };
 

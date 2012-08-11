@@ -22,11 +22,9 @@
 #include <com/sun/star/uno/XInterface.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module uno {
 
-//=============================================================================
 
 // DocMerge from xml: interface com::sun::star::uno::XReference
 /** must be implemented by anyone who holds the adapter on the client side.@see XWeak
@@ -34,7 +32,6 @@
  */
 published interface XReference: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::uno::XReference::dispose
     /** removes all references to the adapter.
@@ -51,7 +48,6 @@ published interface XReference: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

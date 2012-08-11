@@ -29,11 +29,9 @@
 #include <com/sun/star/ucb/XCommandInfoChangeNotifier.idl>
 #include <com/sun/star/container/XChild.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** A FTPContent provides an object representing either a (ftp-server-side)
     directory object allowing listing of children or a content object providing
     access to a (ftp-server-side) file.
@@ -44,19 +42,16 @@ module com { module sun { module star { module ucb {
 */
 published service FTPContent
 {
-    //-------------------------------------------------------------------------
     /** This interface is implemented according to the specification of
         service <type>Content</type>.
      */
     interface com::sun::star::lang::XComponent;
 
-    //-------------------------------------------------------------------------
     /** This interface is implemented according to the specification of
         service <type>Content</type>.
      */
     interface com::sun::star::ucb::XContent;
 
-    //-------------------------------------------------------------------------
     /** This interface is implemented according to the specification of
         service <type>Content</type>.
 
@@ -94,7 +89,6 @@ published service FTPContent
      */
     interface com::sun::star::ucb::XContentCreator;
 
-    //-------------------------------------------------------------------------
     /** This interface is implemented according to the specification of
         service <type>Content</type>.
 
@@ -161,38 +155,32 @@ published service FTPContent
      */
     interface com::sun::star::ucb::XCommandProcessor;
 
-    //-------------------------------------------------------------------------
     /** This interface is implemented according to the specification of
         service <type>Content</type>.
      */
     interface com::sun::star::beans::XPropertiesChangeNotifier;
 
-    //-------------------------------------------------------------------------
     /** This interface is implemented according to the specification of
         service <type>Content</type>.
      */
     interface com::sun::star::beans::XPropertyContainer;
 
-    //-------------------------------------------------------------------------
     /** This interface is implemented according to the specification of
         service <type>Content</type>.
      */
     interface com::sun::star::beans::XPropertySetInfoChangeNotifier;
 
-    //-------------------------------------------------------------------------
     /** This interface is implemented according to the specification of
         service <type>Content</type>.
      */
     interface com::sun::star::ucb::XCommandInfoChangeNotifier;
 
-    //-------------------------------------------------------------------------
     /** This interface is implemented according to the specification of
         service <type>Content</type>.
      */
     interface com::sun::star::container::XChild;
 };
 
-//=============================================================================
 
 }; }; }; };
 

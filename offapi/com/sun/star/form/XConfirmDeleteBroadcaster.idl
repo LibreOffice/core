@@ -24,11 +24,9 @@
 #include <com/sun/star/form/XConfirmDeleteListener.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module form {
 
-//=============================================================================
 
 /** provides the possibility of receiving an event for confirming deletions of
     rows in a <type scope="com::sun::star::form::component">DataForm</type>.
@@ -37,7 +35,6 @@
  */
 published interface XConfirmDeleteBroadcaster: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** remembers the specified listener to receive an event for confirming deletions
 
@@ -51,7 +48,6 @@ published interface XConfirmDeleteBroadcaster: com::sun::star::uno::XInterface
      */
     [oneway] void addConfirmDeleteListener( [in] com::sun::star::form::XConfirmDeleteListener aListener );
 
-    //-------------------------------------------------------------------------
 
     /** removes the specified listener.
 
@@ -64,7 +60,6 @@ published interface XConfirmDeleteBroadcaster: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

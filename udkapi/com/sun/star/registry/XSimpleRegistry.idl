@@ -25,11 +25,9 @@
 #include <com/sun/star/registry/MergeConflictException.idl>
 
 
-//=============================================================================
 
 module com { module sun { module star { module registry {
 
-//=============================================================================
 /** allows access to a registry (a persistent data source).
     The data is stored in a hierarchical key structure beginning with a root key.
     Each key can store a value and can have multiple subkeys.
@@ -38,12 +36,10 @@ module com { module sun { module star { module registry {
 */
 published interface XSimpleRegistry: com::sun::star::uno::XInterface
 {
-    //---------------------------------------------------------------------
     /** returns the URL of the current data source of the registry.
      */
     string  getURL();
 
-    //-------------------------------------------------------------------------
     /** connects the registry to a persistent data source represented by
         an URL.
 
@@ -69,12 +65,10 @@ published interface XSimpleRegistry: com::sun::star::uno::XInterface
              [in] boolean bCreate )
             raises( com::sun::star::registry::InvalidRegistryException );
 
-    //-------------------------------------------------------------------------
     /** checks if the registry points to a valid data-source.
     */
     boolean isValid();
 
-    //-------------------------------------------------------------------------
     /** disconnects the registry from the data-source.
 
         @throws InvalidRegistryException
@@ -83,7 +77,6 @@ published interface XSimpleRegistry: com::sun::star::uno::XInterface
     void close()
             raises( com::sun::star::registry::InvalidRegistryException );
 
-    //-------------------------------------------------------------------------
     /** destroys the registry and the data source.
 
         @throws InvalidRegistryException
@@ -92,7 +85,6 @@ published interface XSimpleRegistry: com::sun::star::uno::XInterface
     void destroy()
             raises( com::sun::star::registry::InvalidRegistryException );
 
-    //-------------------------------------------------------------------------
     /** @returns
         the root key of the registry.
 
@@ -102,7 +94,6 @@ published interface XSimpleRegistry: com::sun::star::uno::XInterface
     com::sun::star::registry::XRegistryKey getRootKey()
             raises( com::sun::star::registry::InvalidRegistryException );
 
-    //-------------------------------------------------------------------------
     /** checks if the registry is readonly.
 
         @throws InvalidRegistryException
@@ -111,7 +102,6 @@ published interface XSimpleRegistry: com::sun::star::uno::XInterface
     boolean isReadOnly()
             raises( com::sun::star::registry::InvalidRegistryException );
 
-    //-------------------------------------------------------------------------
     /** DEPRECATED: this method lacks a registry key (better than a URL).
 
         merges a registry under the specified key.
@@ -133,7 +123,6 @@ published interface XSimpleRegistry: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

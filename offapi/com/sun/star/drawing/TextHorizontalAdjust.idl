@@ -20,11 +20,9 @@
 #define __com_sun_star_drawing_TextHorizontalAdjust_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module drawing {
 
-//=============================================================================
 
 /** This enumeration specifies the horizontal position of text inside a shape in
     relation to the shape.
@@ -32,32 +30,27 @@
  */
 published enum TextHorizontalAdjust
 {
-    //-------------------------------------------------------------------------
 
     /** The left edge of the text is adjusted to the left edge of the shape.
      */
     LEFT,
 
-    //-------------------------------------------------------------------------
 
     /** The text is centered inside the shape.
      */
     CENTER,
 
-    //-------------------------------------------------------------------------
 
     /** The right edge of the text is adjusted to the right edge of the shape.
      */
     RIGHT,
 
-    //-------------------------------------------------------------------------
 
     /** The text extends from the left to the right edge of the shape.
      */
     BLOCK
 };
 
-//=============================================================================
 
 }; }; }; };
 

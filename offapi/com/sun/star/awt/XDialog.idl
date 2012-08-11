@@ -22,36 +22,30 @@
 #include <com/sun/star/uno/XInterface.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module awt {
 
-//=============================================================================
 
 /** makes it possible to show and hide a dialog and gives access to
     the title of the dialog.
  */
 published interface XDialog: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** sets the title of the dialog.
      */
     [oneway] void setTitle( [in] string Title );
 
-    //-------------------------------------------------------------------------
 
     /** gets the title of the dialog.
      */
     string getTitle();
 
-    //-------------------------------------------------------------------------
 
     /** shows the dialog.
      */
     short execute();
 
-    //-------------------------------------------------------------------------
 
     /** hides the dialog and then causes <member>XDialog::execute</member>
         to return.
@@ -60,7 +54,6 @@ published interface XDialog: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

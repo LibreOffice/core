@@ -29,18 +29,15 @@
 #define __com_sun_star_report_SectionPageBreak_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module report {
 
-//=============================================================================
 
 /** Specifies that page breaks are allowed inside this section.
     @see XSection
  */
 constants SectionPageBreak
 {
-    //-------------------------------------------------------------------------
 
     /** Page breaks will never be inserted. If the section doesn't fit on a page than the content will be cut.
      */
@@ -54,7 +51,6 @@ constants SectionPageBreak
      */
     const short AUTO = 2;
 };
-//=============================================================================
 }; }; }; };
 /*=============================================================================
 =============================================================================*/

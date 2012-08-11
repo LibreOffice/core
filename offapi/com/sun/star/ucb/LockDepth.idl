@@ -28,34 +28,28 @@
 #ifndef __com_sun_star_ucb_LockDepth_idl__
 #define __com_sun_star_ucb_LockDepth_idl__
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** defines a depth for a lock.
 
     @see Lock
 */
 published enum LockDepth
 {
-    //-------------------------------------------------------------------------
     /** Zero (includes no children).
     */
     ZERO,
 
-    //-------------------------------------------------------------------------
     /** One (includes children).
     */
     ONE,
 
-    //-------------------------------------------------------------------------
     /** Infinity (includes children and children's children and ...).
     */
     INFINITY
 };
 
-//=============================================================================
 
 }; }; }; };
 

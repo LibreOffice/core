@@ -25,11 +25,9 @@
 #include <com/sun/star/lang/IllegalArgumentException.idl>
 
 
-//=============================================================================
 
 module com { module sun { module star { module script {
 
-//=============================================================================
 
 /** defines a container of StarBasic script libraries, which is to be made
     persistent in a sub storage of a document storage.
@@ -59,11 +57,9 @@ service DocumentScriptLibraryContainer : XStorageBasedLibraryContainer
 
 };
 
-//=============================================================================
 
 }; }; }; };
 
-//=============================================================================
 
 #endif
 

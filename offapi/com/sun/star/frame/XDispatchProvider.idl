@@ -25,11 +25,9 @@
 #include <com/sun/star/frame/DispatchDescriptor.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module frame {
 
-//=============================================================================
 /** provides <type>XDispatch</type> interfaces for certain functions which
     are useful at the UI.
 
@@ -37,7 +35,6 @@
  */
 published interface XDispatchProvider: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** searches for an <type>XDispatch</type> for the specified URL within
         the specified target frame.
 
@@ -64,7 +61,6 @@ published interface XDispatchProvider: com::sun::star::uno::XInterface
         [in] string TargetFrameName,
         [in] long SearchFlags );
 
-    //-------------------------------------------------------------------------
     /** actually this method is redundant to <member>XDispatchProvider::queryDispatch()</member>
         to avoid multiple remote calls.
 
@@ -83,7 +79,6 @@ published interface XDispatchProvider: com::sun::star::uno::XInterface
         [in] sequence<DispatchDescriptor> Requests);
 };
 
-//=============================================================================
 
 }; }; }; };
 

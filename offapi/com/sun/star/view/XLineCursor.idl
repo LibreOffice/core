@@ -22,11 +22,9 @@
 #include <com/sun/star/uno/XInterface.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module view {
 
-//=============================================================================
 
 /** makes it possible to move a cursor by lines within laid out text.
 
@@ -36,17 +34,14 @@ module com {  module sun {  module star {  module view {
  */
 published interface XLineCursor: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** determines if the cursor is positioned at the start of a line.
      */
     boolean isAtStartOfLine();
 
-    //-------------------------------------------------------------------------
     /** determines if the cursor is positioned at the end of a line.
      */
     boolean isAtEndOfLine();
 
-    //-------------------------------------------------------------------------
     /** moves the cursor to the end of the current line.
 
         @param bExpand
@@ -55,7 +50,6 @@ published interface XLineCursor: com::sun::star::uno::XInterface
      */
     void gotoEndOfLine( [in] boolean bExpand );
 
-    //-------------------------------------------------------------------------
     /** moves the cursor to the start of the current line.
 
         @param bExpand
@@ -66,7 +60,6 @@ published interface XLineCursor: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

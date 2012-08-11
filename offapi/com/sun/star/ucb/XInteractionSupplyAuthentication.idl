@@ -32,11 +32,9 @@
 #include <com/sun/star/ucb/RememberAuthentication.idl>
 
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** An interaction continuation handing back some authentication data.
 
     <p> This continuation is typically used in conjunction with
@@ -44,12 +42,10 @@ module com { module sun { module star { module ucb {
 */
 published interface XInteractionSupplyAuthentication: com::sun::star::task::XInteractionContinuation
 {
-    //-------------------------------------------------------------------------
     /** Specifies if a new "realm" value can be handed back.
     */
     boolean canSetRealm();
 
-    //-------------------------------------------------------------------------
     /** Set a new "realm" value to hand back.
 
         <p>This method should be called before
@@ -60,12 +56,10 @@ published interface XInteractionSupplyAuthentication: com::sun::star::task::XInt
     */
     void setRealm( [in] string Realm );
 
-    //-------------------------------------------------------------------------
     /** Specifies if a "user name" value can be handed back.
     */
     boolean canSetUserName();
 
-    //-------------------------------------------------------------------------
     /** Set a new "user name" value to hand back.
 
         <p>This method should be called before
@@ -76,12 +70,10 @@ published interface XInteractionSupplyAuthentication: com::sun::star::task::XInt
     */
     void setUserName( [in] string UserName );
 
-    //-------------------------------------------------------------------------
     /** Specifies if a "password" value can be handed back.
     */
     boolean canSetPassword();
 
-    //-------------------------------------------------------------------------
     /** Set a new "password" value to hand back.
 
         <p>This method should be called before
@@ -92,7 +84,6 @@ published interface XInteractionSupplyAuthentication: com::sun::star::task::XInt
     */
     void setPassword( [in] string Password );
 
-    //-------------------------------------------------------------------------
     /** Specifies the available modes of how long to remember the password.
 
         @param Default
@@ -105,7 +96,6 @@ published interface XInteractionSupplyAuthentication: com::sun::star::task::XInt
     */
     sequence<com::sun::star::ucb::RememberAuthentication> getRememberPasswordModes( [out] com::sun::star::ucb::RememberAuthentication Default );
 
-    //-------------------------------------------------------------------------
     /** Set a new mode of how long to remember the password.
 
         <p>This method should be called before
@@ -120,12 +110,10 @@ published interface XInteractionSupplyAuthentication: com::sun::star::task::XInt
     */
     void setRememberPassword( [in] com::sun::star::ucb::RememberAuthentication Remember );
 
-    //-------------------------------------------------------------------------
     /** Specifies if an "account" value can be handed back.
     */
     boolean canSetAccount();
 
-    //-------------------------------------------------------------------------
     /** Set a new "account" value to hand back.
 
         <p>This method should be called before
@@ -137,7 +125,6 @@ published interface XInteractionSupplyAuthentication: com::sun::star::task::XInt
     */
     void setAccount( [in] string Account );
 
-    //-------------------------------------------------------------------------
     /** Specifies the available modes of how long to remember the account.
 
         @param Default  Returns the default mode (to be initially displayed to
@@ -149,7 +136,6 @@ published interface XInteractionSupplyAuthentication: com::sun::star::task::XInt
      */
     sequence<com::sun::star::ucb::RememberAuthentication> getRememberAccountModes( [out] com::sun::star::ucb::RememberAuthentication Default );
 
-    //-------------------------------------------------------------------------
     /** Set a new mode of how long to remember the account.
 
         <p>This method should be called before
@@ -166,7 +152,6 @@ published interface XInteractionSupplyAuthentication: com::sun::star::task::XInt
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

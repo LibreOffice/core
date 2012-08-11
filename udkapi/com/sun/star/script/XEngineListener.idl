@@ -28,17 +28,14 @@
 #include <com/sun/star/script/FinishEngineEvent.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module script {
 
-//=============================================================================
 /** makes it possible to receive events from a scripting engine.
     @deprecated
  */
 published interface XEngineListener: com::sun::star::lang::XEventListener
 {
-    //-------------------------------------------------------------------------
     /** gets fired when an interrupt occurs during the script execution.
 
         <p>If you call the method, the execution stops.  So in this situation,
@@ -48,19 +45,16 @@ published interface XEngineListener: com::sun::star::lang::XEventListener
      */
     void interrupt( [in] com::sun::star::script::InterruptEngineEvent Evt );
 
-    //-------------------------------------------------------------------------
     /** gets fired when the script gets into execution state.
      */
     void running( [in] com::sun::star::lang::EventObject Evt );
 
-    //-------------------------------------------------------------------------
     /** gets fired when the script execution has finished.
      */
     void finished( [in] com::sun::star::script::FinishEngineEvent Evt );
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

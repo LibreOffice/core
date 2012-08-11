@@ -22,11 +22,9 @@
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/beans/XPropertySetInfoChangeListener.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module beans {
 
-//=============================================================================
 
 /** a notifier for changes of <type>XPropertySetInfo</type>s.
 
@@ -35,7 +33,6 @@ module com {  module sun {  module star {  module beans {
  */
 published interface XPropertySetInfoChangeNotifier: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** registers a listener for <type>PropertySetInfoChangeEvent</type>s.
 
@@ -45,7 +42,6 @@ published interface XPropertySetInfoChangeNotifier: com::sun::star::uno::XInterf
     void addPropertySetInfoChangeListener(
                             [in] XPropertySetInfoChangeListener Listener );
 
-    //-------------------------------------------------------------------------
 
     /** removes a listener for <type>PropertySetInfoChangeEvent</type>s.
 
@@ -56,7 +52,6 @@ published interface XPropertySetInfoChangeNotifier: com::sun::star::uno::XInterf
                             [in] XPropertySetInfoChangeListener Listener );
 };
 
-//=============================================================================
 
 }; }; }; };
 

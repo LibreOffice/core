@@ -22,17 +22,14 @@
 
 #include <com/sun/star/lang/IllegalArgumentException.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module script { module vba {
 
-//=============================================================================
 
 /** Converts VBA macro names to script URLs and vice versa.
  */
 interface XVBAMacroResolver
 {
-    //-------------------------------------------------------------------------
 
     /** Returns the script URL representing the passed VBA macro name.
 
@@ -57,7 +54,6 @@ interface XVBAMacroResolver
     string resolveVBAMacroToScriptURL( [in] string aVBAMacroName )
         raises (::com::sun::star::lang::IllegalArgumentException);
 
-    //-------------------------------------------------------------------------
 
     /** Returns the VBA macro name for a macro with the passed script URL.
 
@@ -74,14 +70,11 @@ interface XVBAMacroResolver
     string resolveScriptURLtoVBAMacro( [in] string aScriptURL )
         raises (::com::sun::star::lang::IllegalArgumentException);
 
-    //-------------------------------------------------------------------------
 };
 
-//=============================================================================
 
 }; }; }; }; };
 
-//=============================================================================
 
 #endif
 

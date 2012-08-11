@@ -24,11 +24,9 @@
 #include <com/sun/star/configuration/backend/BackendAccessException.idl>
 #include <com/sun/star/lang/IllegalArgumentException.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module configuration { module backend {
 
-//=============================================================================
 
 /**
   provides access to configuration component schemas.
@@ -37,7 +35,6 @@ module com { module sun { module star { module configuration { module backend {
 */
 published interface XSchemaSupplier : ::com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /**
       Returns the schema information (component + templates)
@@ -60,10 +57,8 @@ published interface XSchemaSupplier : ::com::sun::star::uno::XInterface
         raises (BackendAccessException,
                 com::sun::star::lang::IllegalArgumentException) ;
 
-    //-------------------------------------------------------------------------
 } ;
 
-//=============================================================================
 
 } ; } ; } ; } ; } ;
 

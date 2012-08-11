@@ -23,11 +23,9 @@
 #include <com/sun/star/frame/FrameActionEvent.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module frame {
 
-//=============================================================================
 /** has to be provided if an object wants to receive events
     when several things happen to components within frames of the desktop frame tree.
 
@@ -41,7 +39,6 @@
  */
 published interface XFrameActionListener: com::sun::star::lang::XEventListener
 {
-    //-------------------------------------------------------------------------
     /** is called whenever any action occurs to a component within a frame.
 
         @param Action
@@ -50,7 +47,6 @@ published interface XFrameActionListener: com::sun::star::lang::XEventListener
     [oneway] void frameAction( [in] FrameActionEvent Action );
 };
 
-//=============================================================================
 
 }; }; }; };
 

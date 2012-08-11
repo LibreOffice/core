@@ -22,11 +22,9 @@
 #include <com/sun/star/lang/EventObject.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module awt {
 
-//=============================================================================
 
 /** a semantic event which indicates that a component-defined action occurred.
 
@@ -44,7 +42,6 @@
  */
 published struct ActionEvent: com::sun::star::lang::EventObject
 {
-    //-------------------------------------------------------------------------
 
     /** contains the command string associated with this action.
      */
@@ -52,7 +49,6 @@ published struct ActionEvent: com::sun::star::lang::EventObject
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

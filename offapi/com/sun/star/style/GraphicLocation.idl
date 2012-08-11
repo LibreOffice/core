@@ -20,11 +20,9 @@
 #define __com_sun_star_style_GraphicLocation_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module style {
 
-//=============================================================================
 
 // DocMerge from xml: enum com::sun::star::style::GraphicLocation
 /** These enumeration values are used to specify the location of a
@@ -32,84 +30,72 @@
  */
 published enum GraphicLocation
 {
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: value com::sun::star::style::GraphicLocation::NONE
     /** This value specifies that a location is not yet assigned.
      */
     NONE,
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: value com::sun::star::style::GraphicLocation::LEFT_TOP
     /** The graphic is located in the top left corner.
      */
     LEFT_TOP,
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: value com::sun::star::style::GraphicLocation::MIDDLE_TOP
     /** The graphic is located in the middle of the top edge.
      */
     MIDDLE_TOP,
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: value com::sun::star::style::GraphicLocation::RIGHT_TOP
     /** The graphic is located in the top right corner.
      */
     RIGHT_TOP,
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: value com::sun::star::style::GraphicLocation::LEFT_MIDDLE
     /** The graphic is located in the middle of the left edge.
      */
     LEFT_MIDDLE,
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: value com::sun::star::style::GraphicLocation::MIDDLE_MIDDLE
     /** The graphic is located at the center of the surrounding object.
      */
     MIDDLE_MIDDLE,
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: value com::sun::star::style::GraphicLocation::RIGHT_MIDDLE
     /** The graphic is located in the middle of the right edge.
      */
     RIGHT_MIDDLE,
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: value com::sun::star::style::GraphicLocation::LEFT_BOTTOM
     /** The graphic is located in the bottom left corner.
      */
     LEFT_BOTTOM,
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: value com::sun::star::style::GraphicLocation::MIDDLE_BOTTOM
     /** The graphic is located in the middle of the bottom edge.
      */
     MIDDLE_BOTTOM,
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: value com::sun::star::style::GraphicLocation::RIGHT_BOTTOM
     /** The graphic is located in the bottom right corner.
      */
     RIGHT_BOTTOM,
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: value com::sun::star::style::GraphicLocation::AREA
     /** The graphic is scaled to fill the whole surrounding area.
      */
     AREA,
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: value com::sun::star::style::GraphicLocation::TILED
     /** The graphic is repeatedly spread over the surrounding object
@@ -119,7 +105,6 @@ published enum GraphicLocation
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

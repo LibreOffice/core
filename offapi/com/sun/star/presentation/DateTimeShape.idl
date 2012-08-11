@@ -33,11 +33,9 @@
 #include <com/sun/star/drawing/TextShape.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module presentation {
 
-//=============================================================================
 
 /** This service is implemented by the date and time presentation shape.
 
@@ -52,7 +50,6 @@ service DateTimeShape
     service com::sun::star::drawing::TextShape;
 };
 
-//=============================================================================
 
 }; }; }; };
 

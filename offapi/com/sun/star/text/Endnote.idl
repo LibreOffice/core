@@ -22,11 +22,9 @@
 #include <com/sun/star/text/Footnote.idl>
 
 
-//=============================================================================
 
 module com { module sun { module star { module text {
 
-//=============================================================================
 /** This service specifies a an endnote in a
     <type>TextDocument</type>.
 */
@@ -35,7 +33,6 @@ published service Endnote
     service Footnote;
 };
 
-//=============================================================================
 
 }; }; }; };
 

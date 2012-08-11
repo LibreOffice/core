@@ -33,11 +33,9 @@
 #include <com/sun/star/graphic/XGraphic.idl>
 #include <com/sun/star/chart2/SymbolStyle.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module chart2 {
 
-//=============================================================================
 
 /** properties that are used for DataSeries that display symbols.
  */
@@ -111,7 +109,6 @@ struct Symbol
     long                                                FillColor;
 };
 
-//=============================================================================
 
 }; }; }; };
 

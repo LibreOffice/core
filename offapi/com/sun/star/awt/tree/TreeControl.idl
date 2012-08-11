@@ -21,11 +21,9 @@
 
 #include <com/sun/star/awt/tree/XTreeControl.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module awt { module tree {
 
-//=============================================================================
 
 /** A control that displays a set of hierarchical data as an outline.
 
@@ -80,7 +78,6 @@ service TreeControl: XTreeControl
 {
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

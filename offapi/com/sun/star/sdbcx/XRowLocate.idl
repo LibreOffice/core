@@ -55,7 +55,6 @@ published interface XRowLocate: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     any getBookmark() raises (com::sun::star::sdbc::SQLException);
-    //-------------------------------------------------------------------------
 
     /** moves the cursor to the row identified by an valid bookmark.
 
@@ -74,7 +73,6 @@ published interface XRowLocate: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     boolean moveToBookmark([in]any bookmark) raises (com::sun::star::sdbc::SQLException);
-    //-------------------------------------------------------------------------
 
     /** moves the cursor a relative number of rows, either positive or negative
         starting at a given bookmark position.
@@ -98,7 +96,6 @@ published interface XRowLocate: com::sun::star::uno::XInterface
      */
     boolean moveRelativeToBookmark([in]any bookmark, [in]long rows)
         raises (com::sun::star::sdbc::SQLException);
-    //-------------------------------------------------------------------------
 
     /** compares two bookmarks and returns an indication of their relative values.
 
@@ -123,7 +120,6 @@ published interface XRowLocate: com::sun::star::uno::XInterface
      */
     long compareBookmarks([in]any first, [in]any second)
         raises (com::sun::star::sdbc::SQLException);
-    //-------------------------------------------------------------------------
 
     /** determines whether the bookmarks of a result set are ordered or not.
         @returns
@@ -133,7 +129,6 @@ published interface XRowLocate: com::sun::star::uno::XInterface
         @see com::sun::star::sdbcx::CompareBookmark
      */
     boolean hasOrderedBookmarks() raises (com::sun::star::sdbc::SQLException);
-    //-------------------------------------------------------------------------
 
     /** returns the hash value for a specified bookmark.
         @param bookmark
@@ -146,7 +141,6 @@ published interface XRowLocate: com::sun::star::uno::XInterface
     long hashBookmark([in]any bookmark) raises (com::sun::star::sdbc::SQLException);
 };
 
-//=============================================================================
 
 }; }; }; };
 

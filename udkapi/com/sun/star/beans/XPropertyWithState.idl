@@ -25,11 +25,9 @@
 
 #include <com/sun/star/lang/WrappedTargetException.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module beans {
 
-//=============================================================================
 
 /** makes it possible to query information about the state of
     this object, seen as a property contained in a property set.
@@ -53,14 +51,12 @@ module com {  module sun {  module star {  module beans {
  */
 published interface XPropertyWithState: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** @returns
                 the state of this as a property.
      */
     com::sun::star::beans::PropertyState getStateAsProperty( );
 
-    //-------------------------------------------------------------------------
 
     /** sets this to its default value.
 
@@ -78,7 +74,6 @@ published interface XPropertyWithState: com::sun::star::uno::XInterface
     void setToDefaultAsProperty( )
             raises( com::sun::star::lang::WrappedTargetException );
 
-    //-------------------------------------------------------------------------
 
     /**     @returns
                 an object representing the default state of this object (as a property).
@@ -96,7 +91,6 @@ published interface XPropertyWithState: com::sun::star::uno::XInterface
             raises( com::sun::star::lang::WrappedTargetException );
 };
 
-//=============================================================================
 
 }; }; }; };
 

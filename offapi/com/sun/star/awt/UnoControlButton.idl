@@ -26,11 +26,9 @@
 #include <com/sun/star/awt/XLayoutConstrains.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module awt {
 
-//=============================================================================
 
 /** specifies a button control.
  */
@@ -44,7 +42,6 @@ published service UnoControlButton
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

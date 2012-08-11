@@ -32,11 +32,9 @@
 #include <com/sun/star/datatransfer/dnd/DropTargetDragEvent.idl>
 #include <com/sun/star/datatransfer/DataFlavor.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module datatransfer { module dnd {
 
-//=============================================================================
 /** The <type>DropTargetDragEnterEvent</type> is delivered from the drop target to the
     currently registered drop target listeners whenever the logical cursor
     associated with a Drag and Drop operation enters the visible geometry
@@ -50,7 +48,6 @@ module com { module sun { module star { module datatransfer { module dnd {
 
 published struct DropTargetDragEnterEvent: DropTargetDragEvent
 {
-    //-------------------------------------------------------------------------
     /** A sequence of supported <type scope="com::sun::star::datatransfer">DataFlavor</type> types.
 
      */
@@ -58,7 +55,6 @@ published struct DropTargetDragEnterEvent: DropTargetDragEvent
     sequence< com::sun::star::datatransfer::DataFlavor > SupportedDataFlavors;
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

@@ -22,18 +22,15 @@
 #include <com/sun/star/lang/XEventListener.idl>
 #include <com/sun/star/frame/DispatchResultEvent.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module frame {
 
-//=============================================================================
 /** listener for results of <member>XNotifyingDispatch::dispatchWithNotification()</member>
 
     @see XNotifyingDispatch
  */
 published interface XDispatchResultListener: com::sun::star::lang::XEventListener
 {
-    //-------------------------------------------------------------------------
     /** indicates finished dispatch
 
         @param Result
@@ -44,7 +41,6 @@ published interface XDispatchResultListener: com::sun::star::lang::XEventListene
     void dispatchFinished( [in] DispatchResultEvent Result );
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -24,17 +24,14 @@
 #include <com/sun/star/drawing/XDrawPage.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module drawing {
 
-//=============================================================================
 
 /** is implemented by views that display <type>DrawPage</type>s or <type>MasterPage</type>s.
  */
 published interface XDrawView: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** changes the current page.
 
@@ -44,7 +41,6 @@ published interface XDrawView: com::sun::star::uno::XInterface
      */
     void setCurrentPage( [in] com::sun::star::drawing::XDrawPage xPage );
 
-    //-------------------------------------------------------------------------
 
     /** returns the current page.
 
@@ -56,7 +52,6 @@ published interface XDrawView: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

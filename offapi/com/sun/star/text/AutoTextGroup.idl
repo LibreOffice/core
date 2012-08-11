@@ -26,11 +26,9 @@
 #include <com/sun/star/container/XNamed.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module text {
 
-//=============================================================================
 
 // DocMerge from xml: service com::sun::star::text::AutoTextGroup
 /** provides access to text blocks in a group.@see com::sun::star::text::AutoTextContainer
@@ -51,7 +49,6 @@ published service AutoTextGroup
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

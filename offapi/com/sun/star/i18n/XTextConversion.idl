@@ -36,11 +36,9 @@
 #include <com/sun/star/lang/NoSupportException.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module i18n {
 
-//=============================================================================
 
 /** Method to convert text from one type to another
 
@@ -48,7 +46,6 @@ module com {  module sun {  module star {  module i18n {
 */
 published interface XTextConversion : ::com::sun::star::uno::XInterface
 {
-    //---------------------------------------------------------------------
     /** Method to search dictionaries for the conversion candidates.
 
         @param aText
@@ -80,7 +77,6 @@ published interface XTextConversion : ::com::sun::star::uno::XInterface
         raises( com::sun::star::lang::IllegalArgumentException,
                 com::sun::star::lang::NoSupportException );
 
-    //---------------------------------------------------------------------
     /** Method to search dictionaries for the conversion candidate, if there
         are multiple candidates, it will return first one. This is for the
         conversion in non-interactive mode.
@@ -114,7 +110,6 @@ published interface XTextConversion : ::com::sun::star::uno::XInterface
         raises( com::sun::star::lang::IllegalArgumentException,
                 com::sun::star::lang::NoSupportException );
 
-    //---------------------------------------------------------------------
     /** Method to query if the conversion type should be interactive or
         non-interactive mode.
 
@@ -141,7 +136,6 @@ published interface XTextConversion : ::com::sun::star::uno::XInterface
 };
 
 
-//=============================================================================
 
 }; }; }; };
 

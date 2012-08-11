@@ -24,11 +24,9 @@
 #include <com/sun/star/text/TextField.idl>
 #include <com/sun/star/text/DependentTextField.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module text { module textfield {
 
-//=============================================================================
 /** specifies service of a bibliography text field.
     @see com::sun::star::text::TextField
 */
@@ -41,7 +39,6 @@ published service Bibliography
     [property] sequence <com::sun::star::beans::PropertyValue> Fields;
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

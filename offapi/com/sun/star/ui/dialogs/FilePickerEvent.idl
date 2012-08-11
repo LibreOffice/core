@@ -22,18 +22,14 @@
 
 #include <com/sun/star/lang/EventObject.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module ui { module dialogs {
 
-//=============================================================================
 
-//=============================================================================
 /** Context information in case of a FilePicker event.
 */
 published struct FilePickerEvent: com::sun::star::lang::EventObject
 {
-    //-------------------------------------------------------------------------
     /**
         @param ElementId
         Identifies the affected element
@@ -44,7 +40,6 @@ published struct FilePickerEvent: com::sun::star::lang::EventObject
     short ElementId;
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

@@ -24,11 +24,9 @@
 #include <com/sun/star/container/XIndexAccess.idl>
 #include <com/sun/star/container/XEnumerationAccess.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** represents the collection of AutoFormats.
 
@@ -37,7 +35,6 @@ module com {  module sun {  module star {  module sheet {
  */
 published service TableAutoFormats
 {
-    //-------------------------------------------------------------------------
 
     /** provides methods to access, insert and remove AutoFormats via name.
 
@@ -45,7 +42,6 @@ published service TableAutoFormats
      */
     interface com::sun::star::container::XNameContainer;
 
-    //-------------------------------------------------------------------------
 
     /** provides methods to access AutoFormats via index.
 
@@ -53,7 +49,6 @@ published service TableAutoFormats
      */
     interface com::sun::star::container::XIndexAccess;
 
-    //-------------------------------------------------------------------------
 
     /** creates an enumeration of all AutoFormats.
 
@@ -63,7 +58,6 @@ published service TableAutoFormats
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

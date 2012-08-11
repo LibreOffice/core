@@ -22,11 +22,9 @@
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/lang/ArrayIndexOutOfBoundsException.idl>
 
-//=============================================================================
 
 module com {   module sun {   module star {   module document {
 
-//=============================================================================
 /** provides access to the user fields for the information regarding the
     document
 
@@ -45,7 +43,6 @@ module com {   module sun {   module star {   module document {
  */
 published interface XDocumentInfo: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** provides information about count of available fields
 
         <p>
@@ -58,7 +55,6 @@ published interface XDocumentInfo: com::sun::star::uno::XInterface
      */
     short getUserFieldCount();
 
-    //-------------------------------------------------------------------------
     /** returns the name of an user field
 
         @param Index
@@ -74,7 +70,6 @@ published interface XDocumentInfo: com::sun::star::uno::XInterface
     string getUserFieldName( [in] short Index )
         raises( com::sun::star::lang::ArrayIndexOutOfBoundsException );
 
-    //-------------------------------------------------------------------------
     /** returns the value of an user field
 
         @param Index
@@ -90,7 +85,6 @@ published interface XDocumentInfo: com::sun::star::uno::XInterface
     string getUserFieldValue( [in] short Index )
         raises( com::sun::star::lang::ArrayIndexOutOfBoundsException );
 
-    //-------------------------------------------------------------------------
     /** changes the name of one of the user fields
 
         @param Index
@@ -108,7 +102,6 @@ published interface XDocumentInfo: com::sun::star::uno::XInterface
         [in] string Name  )
             raises( com::sun::star::lang::ArrayIndexOutOfBoundsException );
 
-    //-------------------------------------------------------------------------
     /** changes the value of one of the user fields
 
         @param Index
@@ -127,7 +120,6 @@ published interface XDocumentInfo: com::sun::star::uno::XInterface
             raises( com::sun::star::lang::ArrayIndexOutOfBoundsException );
 };
 
-//=============================================================================
 
 }; }; }; };
 

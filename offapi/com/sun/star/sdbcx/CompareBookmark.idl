@@ -52,7 +52,6 @@ published constants CompareBookmark
     const long NOT_COMPARABLE = 3;
 };
 
-//=============================================================================
 
 }; }; }; };
 

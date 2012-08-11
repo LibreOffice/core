@@ -22,15 +22,12 @@
 
 #include <com/sun/star/table/XCellRange.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
  published interface XSpreadsheet;
 
-//=============================================================================
 
 /** provides access to the spreadsheet that contains a cell range.
 
@@ -38,7 +35,6 @@ module com {  module sun {  module star {  module sheet {
  */
 published interface XSheetCellRange: com::sun::star::table::XCellRange
 {
-    //-------------------------------------------------------------------------
 
     /** returns the spreadsheet interface which contains the cell range.
 
@@ -52,7 +48,6 @@ published interface XSheetCellRange: com::sun::star::table::XCellRange
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

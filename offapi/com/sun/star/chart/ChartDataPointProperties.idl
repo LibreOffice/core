@@ -30,11 +30,9 @@
 #include <com/sun/star/beans/XPropertySet.idl>
 #include <com/sun/star/xml/UserDefinedAttributeSupplier.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module chart {
 
-//=============================================================================
 
 /** specifies all the properties for the graphic object of
     a data point (e.g., a single bar in a bar chart).
@@ -68,7 +66,6 @@ published service ChartDataPointProperties
      */
     [optional] service com::sun::star::xml::UserDefinedAttributeSupplier;
 
-    //-------------------------------------------------------------------------
 
     /** is only available if the chart is of type
         <type>BarDiagram</type> and <type>Dim3DDiagram</type> and the
@@ -83,32 +80,27 @@ published service ChartDataPointProperties
 
     interface com::sun::star::beans::XPropertySet;
 
-    //-------------------------------------------------------------------------
 
     /** specifies how the captions of data points are displayed.@see ChartDataCaption
      */
     [property] long DataCaption;
 
 
-    //-------------------------------------------------------------------------
 
     /** specifies a string that is used to separate the parts of a data label (caption)
      */
     [optional, property] string LabelSeparator;
 
-    //-------------------------------------------------------------------------
 
     /** specifies a number format for the display of the value in the data label
      */
     [optional, property] long NumberFormat;
 
-    //-------------------------------------------------------------------------
 
     /** specifies a number format for the display of the percentage value in the data label
      */
     [optional, property] long PercentageNumberFormat;
 
-    //-------------------------------------------------------------------------
 
     /** specifies a relative position for the data label
 
@@ -116,7 +108,6 @@ published service ChartDataPointProperties
      */
     [optional, property] long LabelPlacement;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the type of symbols if the current chart type
         supports the usage of symbols.
@@ -125,7 +116,6 @@ published service ChartDataPointProperties
      */
     [optional, property] long SymbolType;
 
-    //-------------------------------------------------------------------------
 
     /** In charts that support symbols, you can set this property to
         any valid URL that points to a graphic file.  This graphic is
@@ -145,7 +135,6 @@ published service ChartDataPointProperties
     [optional, property] long SegmentOffset;
 };
 
-//=============================================================================
 
 }; }; }; };
 

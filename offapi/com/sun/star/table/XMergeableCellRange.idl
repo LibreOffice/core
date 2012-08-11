@@ -32,11 +32,9 @@
 #include <com/sun/star/lang/IllegalArgumentException.idl>
 #include <com/sun/star/lang/NoSupportException.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module table {
 
-//=============================================================================
 
 /** represents a range of cells that can possibly be merged or unmerged.
  */
@@ -50,7 +48,6 @@ interface XMergeableCellRange : com::sun::star::uno::XInterface
      */
     void merge() raises( ::com::sun::star::lang::NoSupportException );
 
-    //-------------------------------------------------------------------------
 
     /** splits the cells in this range.
         This will be done by inserting rows and columns if needed or unmerging
@@ -74,7 +71,6 @@ interface XMergeableCellRange : com::sun::star::uno::XInterface
         raises( ::com::sun::star::lang::NoSupportException,
                 ::com::sun::star::lang::IllegalArgumentException );
 
-    //-------------------------------------------------------------------------
 
     /** @returns
             <TRUE/> if all cells from this range can be merged to one
@@ -83,7 +79,6 @@ interface XMergeableCellRange : com::sun::star::uno::XInterface
     boolean isMergeable();
 };
 
-//=============================================================================
 
 }; }; }; };
 

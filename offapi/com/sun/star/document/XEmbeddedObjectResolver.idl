@@ -21,11 +21,9 @@
 
 #include <com/sun/star/uno/XInterface.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module document {
 
-//=============================================================================
 
 /** this interface converts embedded object URLs from one URL space to another.
  */
@@ -37,7 +35,6 @@ published interface XEmbeddedObjectResolver: com::sun::star::uno::XInterface
     string resolveEmbeddedObjectURL( [in] string aURL );
 };
 
-//=============================================================================
 
 }; }; }; };
 

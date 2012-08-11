@@ -22,11 +22,9 @@
 
 #include <com/sun/star/sheet/XDataPilotField.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** Provides access to the <type>DataPilotField</type> used to layout
     multiple data fields.
@@ -43,7 +41,6 @@ module com {  module sun {  module star {  module sheet {
  */
 published interface XDataPilotDataLayoutFieldSupplier
 {
-    //-------------------------------------------------------------------------
 
     /** Returns the <type>DataPilotField</type> used to layout multiple data
         fields.
@@ -56,7 +53,6 @@ published interface XDataPilotDataLayoutFieldSupplier
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

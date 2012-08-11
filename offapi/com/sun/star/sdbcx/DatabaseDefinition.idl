@@ -72,7 +72,6 @@ published service DatabaseDefinition
     [optional] interface XGroupsSupplier;
 };
 
-//=============================================================================
 
 }; }; }; };
 

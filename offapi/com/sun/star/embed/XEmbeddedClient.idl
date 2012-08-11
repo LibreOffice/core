@@ -35,16 +35,13 @@
 
 
 
-//============================================================================
 
  module com {  module sun {  module star {  module embed {
 
-//============================================================================
 /** represents common functionality for embedded clients.
  */
 published interface XEmbeddedClient: XComponentSupplier
 {
-    //------------------------------------------------------------------------
     /** asks client to let the object store itself.
 
         @throws com::sun::star::uno::ObjectSaveVetoException
@@ -57,7 +54,6 @@ published interface XEmbeddedClient: XComponentSupplier
         raises( ::com::sun::star::embed::ObjectSaveVetoException,
                 ::com::sun::star::uno::Exception );
 
-    //------------------------------------------------------------------------
     /** An object can use this method to notify the client when the object
         outplace window becomes visible or invisible.
 
@@ -72,7 +68,6 @@ published interface XEmbeddedClient: XComponentSupplier
 
 };
 
-//============================================================================
 
 }; }; }; };
 

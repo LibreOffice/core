@@ -25,11 +25,8 @@
 #include <com/sun/star/lang/XInitialization.idl>
 #include <com/sun/star/beans/XPropertySet.idl>
 
-//=============================================================================
 module com {  module sun {  module star {  module sdb { module tools {
-//=============================================================================
 
-//-----------------------------------------------------------------------------
 /** allows to fetch and to change the sql statements of views
 
     @see com::sun::star::sdb::DataSource::Settings
@@ -63,9 +60,7 @@ interface XViewAccess
     void  alterCommand( [in] com::sun::star::beans::XPropertySet view, [in] string command)
         raises ( com::sun::star::sdbc::SQLException );
 };
-//=============================================================================
 }; }; }; }; };
-//=============================================================================
 
 #endif
 

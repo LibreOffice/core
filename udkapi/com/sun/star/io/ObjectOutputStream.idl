@@ -26,11 +26,9 @@
 #include <com/sun/star/io/XConnectable.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module io {
 
-//=============================================================================
 
 // DocMerge from xml: service com::sun::star::io::ObjectOutputStream
 /** is a stream which allows writing the data of persistent objects.
@@ -72,7 +70,6 @@ published service ObjectOutputStream
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

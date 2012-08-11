@@ -20,11 +20,9 @@
 #ifndef __com_sun_star_script_vba_VBAEventId_idl__
 #define __com_sun_star_script_vba_VBAEventId_idl__
 
-//=============================================================================
 
 module com {  module sun {  module star { module script { module vba {
 
-//=============================================================================
 
 /** Constants used to identify VBA document events.
 
@@ -38,12 +36,10 @@ module com {  module sun {  module star { module script { module vba {
  */
 constants VBAEventId
 {
-    //=========================================================================
 
     /** An identifier not corresponding to any VBA document event. */
     const long NO_EVENT                             = -1;
 
-    //=========================================================================
     // Global events (identifiers from 1 to 999)
 
     /** New document opened from template. No arguments. */
@@ -57,7 +53,6 @@ constants VBAEventId
     /** Application exit. No arguments. */
     const long AUTO_EXIT                            = 5;
 
-    //=========================================================================
     // MS Word (identifiers from 1001 to 1999)
 
     /** New text document opened from template. No arguments. */
@@ -67,10 +62,8 @@ constants VBAEventId
     /** Document about to be closed. No arguments. */
     const long DOCUMENT_CLOSE                       = 1003;
 
-    //=========================================================================
     // MS Excel (identifiers from 2001 to 2999)
 
-    //-------------------------------------------------------------------------
     // document events (2001-2099)
 
     /** Document activated. No arguments. */
@@ -96,7 +89,6 @@ constants VBAEventId
     /** Document window has been resized. Arguments: XController aController. */
     const long WORKBOOK_WINDOWRESIZE                = 2011;
 
-    //-------------------------------------------------------------------------
     // sheet events (2101-2199)
 
     /** Worksheet has been activated (made visible). Arguments: short nSheet. */
@@ -116,18 +108,15 @@ constants VBAEventId
     /** Hyperlink has been clicked. Arguments: XCell aCell. */
     const long WORKSHEET_FOLLOWHYPERLINK            = 2108;
 
-    //=========================================================================
 
     /** Implementations are allowed to use identifiers above this value for any
         internal purpose. */
     const long USERDEFINED_START                    = 1000000;
 };
 
-//=============================================================================
 
 }; }; }; }; };
 
-//=============================================================================
 
 #endif
 

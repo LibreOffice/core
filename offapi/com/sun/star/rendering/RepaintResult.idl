@@ -32,13 +32,11 @@ constants RepaintResult
      */
     const byte REDRAWN=1;
 
-    //-------------------------------------------------------------------------
 
     /** Repaint succeeded, primitive has been reproduced in preview quality.
      */
     const byte DRAFTED=2;
 
-    //-------------------------------------------------------------------------
 
     /** Repaint failed altogether.
      */

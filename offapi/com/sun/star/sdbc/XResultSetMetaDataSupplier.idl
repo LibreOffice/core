@@ -52,7 +52,6 @@ published interface XResultSetMetaDataSupplier: com::sun::star::uno::XInterface
     XResultSetMetaData getMetaData() raises (SQLException);
 };
 
-//=============================================================================
 
 }; }; }; };
 

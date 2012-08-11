@@ -22,11 +22,9 @@
 
 #include <com/sun/star/table/XCellCursor.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module table {
 
-//=============================================================================
 
 /** represents a cell cursor in a table.
 
@@ -35,7 +33,6 @@ module com {  module sun {  module star {  module table {
  */
 published service CellCursor
 {
-    //-------------------------------------------------------------------------
 
     /** provides methods to control the position of the cursor.
      */
@@ -43,7 +40,6 @@ published service CellCursor
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

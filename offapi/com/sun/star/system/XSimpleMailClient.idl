@@ -26,17 +26,14 @@
 #include <com/sun/star/system/XSimpleMailMessage.idl>
 #include <com/sun/star/system/SimpleMailClientFlags.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module system {
 
-//=============================================================================
 /** Specifies an interface for creating and sending email messages.
 */
 
 published interface XSimpleMailClient: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** Create a simple mail message object that implements the interface
         <type>XSimpleMailMessage</type>.
         @returns
@@ -44,7 +41,6 @@ published interface XSimpleMailClient: com::sun::star::uno::XInterface
     */
     XSimpleMailMessage createSimpleMailMessage( );
 
-    //-------------------------------------------------------------------------
     /** Sends a given simple mail message object that implements the interface
         <type>XSimpleMailMessage</type>.
 
@@ -75,7 +71,6 @@ published interface XSimpleMailClient: com::sun::star::uno::XInterface
         raises( ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::Exception );
 };
 
-//=============================================================================
 
 }; }; }; };
 

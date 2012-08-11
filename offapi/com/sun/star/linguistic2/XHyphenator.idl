@@ -37,11 +37,9 @@
 #include <com/sun/star/beans/PropertyValues.idl>
 #include <com/sun/star/lang/IllegalArgumentException.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module linguistic2 {
 
-//=============================================================================
 /** provides functionality for hyphenation of single words.
 
     <P>Its three main functionalities are to provide a suitable position for
@@ -63,7 +61,6 @@ module com { module sun { module star { module linguistic2 {
 */
 published interface XHyphenator : com::sun::star::linguistic2::XSupportedLocales
 {
-    //-------------------------------------------------------------------------
     /** tries to find a valid hyphenation position relative
         to the beginning of a word.
 
@@ -105,7 +102,6 @@ published interface XHyphenator : com::sun::star::linguistic2::XSupportedLocales
             [in] com::sun::star::beans::PropertyValues aProperties )
         raises( com::sun::star::lang::IllegalArgumentException );
 
-    //-------------------------------------------------------------------------
     /** checks whether hyphenation at a position in a word will result in
         an alternative spelling or not.
 
@@ -153,7 +149,6 @@ published interface XHyphenator : com::sun::star::linguistic2::XSupportedLocales
             [in] com::sun::star::beans::PropertyValues aProperties )
         raises( com::sun::star::lang::IllegalArgumentException );
 
-    //-------------------------------------------------------------------------
     /** returns information about all possible hyphenation positions of a word.
 
         @returns
@@ -187,7 +182,6 @@ published interface XHyphenator : com::sun::star::linguistic2::XSupportedLocales
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

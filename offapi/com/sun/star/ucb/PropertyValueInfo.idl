@@ -23,24 +23,20 @@
 #include <com/sun/star/ucb/PropertyValueState.idl>
 
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** contains value and state of a
     <type scope="com::sun::star::beans">Property</type>.
 */
 published struct PropertyValueInfo: com::sun::star::beans::PropertyValue
 {
-    //-------------------------------------------------------------------------
     /** the state of the property value.
     */
     com::sun::star::ucb::PropertyValueState ValueState;
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

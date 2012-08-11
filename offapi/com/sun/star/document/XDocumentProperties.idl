@@ -39,11 +39,9 @@
 #include <com/sun/star/beans/XPropertyContainer.idl>
 
 
-//=============================================================================
 
 module com {   module sun {   module star {   module document {
 
-//=============================================================================
 /** provides document-specific information such as the author, creation date,
     and user-defined fields.
 
@@ -65,13 +63,11 @@ module com {   module sun {   module star {   module document {
  */
 published interface XDocumentProperties
 {
-    //-------------------------------------------------------------------------
     /** contains the initial author of the document.
      */
 
     [attribute] string Author;
 
-    //-------------------------------------------------------------------------
     /** identifies which application was used to create or last modify the
         document.
         <p>
@@ -84,25 +80,21 @@ published interface XDocumentProperties
 
     [attribute] string Generator;
 
-    //-------------------------------------------------------------------------
     /** contains the date and time when the document was created.
      */
 
     [attribute] com::sun::star::util::DateTime CreationDate;
 
-    //-------------------------------------------------------------------------
     /** contains the title of the document.
      */
 
     [attribute] string Title;
 
-    //-------------------------------------------------------------------------
     /** contains the subject of the document.
      */
 
     [attribute] string Subject;
 
-    //-------------------------------------------------------------------------
     /** contains a multi-line comment describing the document.
         <p>
         Line delimiters can be UNIX, Macintosh or DOS style.
@@ -111,25 +103,21 @@ published interface XDocumentProperties
 
     [attribute] string Description;
 
-    //-------------------------------------------------------------------------
     /** contains a list of keywords for the document.
      */
 
     [attribute] sequence< string > Keywords;
 
-    //-------------------------------------------------------------------------
     /** contains the default language of the document.
      */
 
     [attribute] com::sun::star::lang::Locale Language;
 
-    //-------------------------------------------------------------------------
     /** contains the name of the person who most recently stored the document.
      */
 
     [attribute] string ModifiedBy;
 
-    //-------------------------------------------------------------------------
     /** contains the date and time of the last time the document was stored.
         <p>
         If the document has never been stored, contains a default value.
@@ -138,13 +126,11 @@ published interface XDocumentProperties
 
     [attribute] com::sun::star::util::DateTime ModificationDate;
 
-    //-------------------------------------------------------------------------
     /** contains the name of the person who most recently printed the document.
      */
 
     [attribute] string PrintedBy;
 
-    //-------------------------------------------------------------------------
     /** contains the date and time when the document was last printed.
         <p>
         If the document has never been printed, contains a default value.
@@ -153,7 +139,6 @@ published interface XDocumentProperties
 
     [attribute] com::sun::star::util::DateTime PrintDate;
 
-    //-------------------------------------------------------------------------
     /** contains the name of the template from which the document was created.
         <p>
         The value is an empty <atom>string</atom> if the document was not
@@ -163,7 +148,6 @@ published interface XDocumentProperties
 
     [attribute] string TemplateName;
 
-    //-------------------------------------------------------------------------
     /** contains the URL of the template from which the document was created.
         <p>
         The value is an empty <atom>string</atom> if the document was not
@@ -173,14 +157,12 @@ published interface XDocumentProperties
 
     [attribute] string TemplateURL;
 
-    //-------------------------------------------------------------------------
     /** contains the date and time of when the document
         was created or updated from the template.
      */
 
     [attribute] com::sun::star::util::DateTime TemplateDate;
 
-    //-------------------------------------------------------------------------
     /** contains the URL to load automatically at a
         specified time after the document is loaded into a desktop frame.
         <p>
@@ -197,7 +179,6 @@ published interface XDocumentProperties
 
     [attribute] string AutoloadURL;
 
-    //-------------------------------------------------------------------------
     /** contains the number of seconds after which a specified
         URL is to be loaded after the document is loaded into a desktop
         frame.
@@ -218,7 +199,6 @@ published interface XDocumentProperties
             set raises ( com::sun::star::lang::IllegalArgumentException );
     };
 
-    //-------------------------------------------------------------------------
     /** contains the name of the default frame into which
         links should be loaded if no target is specified.
         <p>
@@ -228,7 +208,6 @@ published interface XDocumentProperties
 
     [attribute] string DefaultTarget;
 
-    //-------------------------------------------------------------------------
     /** contains some statistics about the document.
         <p>
         The contained statistics may be specific to the type of the document.
@@ -238,7 +217,6 @@ published interface XDocumentProperties
     [attribute]
          sequence< com::sun::star::beans::NamedValue > DocumentStatistics;
 
-    //-------------------------------------------------------------------------
     /** describes how often the document was edited and saved.
         <p>
         </p>
@@ -251,7 +229,6 @@ published interface XDocumentProperties
             set raises ( com::sun::star::lang::IllegalArgumentException );
     };
 
-    //-------------------------------------------------------------------------
     /** contains the net time of editing the document (in seconds).
         <p>
         </p>
@@ -264,7 +241,6 @@ published interface XDocumentProperties
             set raises ( com::sun::star::lang::IllegalArgumentException );
     };
 
-    //-------------------------------------------------------------------------
     /** resets all attributes that could identify the user.
         <p>
         Clears the document properties, such that it appears the document
@@ -289,7 +265,6 @@ published interface XDocumentProperties
      */
     void resetUserData( [in] string Author );
 
-    //-------------------------------------------------------------------------
     /** provides access to a container for user-defined properties.
         <p>
         The returned object also implements the interface
@@ -300,7 +275,6 @@ published interface XDocumentProperties
 
     com::sun::star::beans::XPropertyContainer getUserDefinedProperties();
 
-    //-------------------------------------------------------------------------
     /** loads document properties from an ODF package.
         <p>
         This method is used for accessing an ODF package that is owned by
@@ -336,7 +310,6 @@ published interface XDocumentProperties
                 com::sun::star::lang::WrappedTargetException,
                 com::sun::star::io::IOException );
 
-    //-------------------------------------------------------------------------
     /** loads document properties from an ODF package or an OLE container.
 
         @param URL
@@ -365,7 +338,6 @@ published interface XDocumentProperties
                 com::sun::star::lang::WrappedTargetException,
                 com::sun::star::io::IOException );
 
-    //-------------------------------------------------------------------------
     /** stores document properties to an ODF package.
         <p>
         This method is used for accessing an ODF package that is owned by
@@ -401,7 +373,6 @@ published interface XDocumentProperties
                 com::sun::star::lang::WrappedTargetException,
                 com::sun::star::io::IOException );
 
-    //-------------------------------------------------------------------------
     /** stores document properties to an ODF package or an OLE container.
 
         @param URL
@@ -428,7 +399,6 @@ published interface XDocumentProperties
                 com::sun::star::io::IOException );
 };
 
-//=============================================================================
 
 }; }; }; };
 

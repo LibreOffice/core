@@ -25,11 +25,9 @@
 
 #include <com/sun/star/form/XReset.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module form {  module component {
 
-//=============================================================================
 
 /** This service specifies the control model of an edit field for a
     file name.
@@ -57,7 +55,6 @@ published service FileControl
 
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

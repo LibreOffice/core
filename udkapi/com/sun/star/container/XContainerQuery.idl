@@ -23,11 +23,9 @@
 #include <com/sun/star/container/XEnumeration.idl>
 #include <com/sun/star/beans/NamedValue.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module container {
 
-//=============================================================================
 /** supports simple query feature on a container
 
     <p>
@@ -37,7 +35,6 @@ module com {  module sun {  module star {  module container {
  */
 published interface XContainerQuery: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** creates a sub set of container items which match given query command
 
         <p>
@@ -62,7 +59,6 @@ published interface XContainerQuery: com::sun::star::uno::XInterface
      */
     XEnumeration createSubSetEnumerationByQuery( [in] string Query );
 
-    //-------------------------------------------------------------------------
     /** creates a sub set of container items which supports searched properties as minimum
 
         <p>
@@ -91,7 +87,6 @@ published interface XContainerQuery: com::sun::star::uno::XInterface
     XEnumeration createSubSetEnumerationByProperties( [in] sequence< com::sun::star::beans::NamedValue > Properties );
 };
 
-//=============================================================================
 
 }; }; }; };
 

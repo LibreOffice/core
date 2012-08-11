@@ -26,85 +26,71 @@
 #include <com/sun/star/awt/Selection.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module awt {
 
-//=============================================================================
 
 /** gives access to the text of a component and makes it possible
     to register event listeners.
  */
 published interface XTextComponent: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** registers a text event listener.
      */
     [oneway] void addTextListener( [in] com::sun::star::awt::XTextListener l );
 
-    //-------------------------------------------------------------------------
 
     /** unregisters a text event listener.
      */
     [oneway] void removeTextListener( [in] com::sun::star::awt::XTextListener l );
 
-    //-------------------------------------------------------------------------
 
     /** sets the text of the component.
      */
     [oneway] void setText( [in] string aText );
 
-    //-------------------------------------------------------------------------
 
     /** inserts text at the specified position.
      */
     [oneway] void insertText( [in] com::sun::star::awt::Selection Sel,
              [in] string Text );
 
-    //-------------------------------------------------------------------------
 
     /** returns the text of the component.
      */
     string getText();
 
-    //-------------------------------------------------------------------------
 
     /** returns the currently selected text.
      */
     string getSelectedText();
 
-    //-------------------------------------------------------------------------
 
     /** sets the user selection.
      */
     [oneway] void setSelection( [in] com::sun::star::awt::Selection aSelection );
 
-    //-------------------------------------------------------------------------
 
     /** returns the current user selection.
      */
     com::sun::star::awt::Selection getSelection();
 
-    //-------------------------------------------------------------------------
 
     /** returns if the text is editable by the user.
      */
     boolean isEditable();
 
-    //-------------------------------------------------------------------------
 
     /** makes the text editable for the user or read-only.
      */
     [oneway] void setEditable( [in] boolean bEditable );
 
-    //-------------------------------------------------------------------------
 
     /** sets the maximum text length.
      */
     [oneway] void setMaxTextLen( [in] short nLen );
 
-    //-------------------------------------------------------------------------
 
     /** returns the currently set maximum text length.
      */
@@ -112,7 +98,6 @@ published interface XTextComponent: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

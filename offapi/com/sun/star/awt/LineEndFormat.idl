@@ -20,29 +20,24 @@
 #define __com_sun_star_awt_LineEndFormat_idl__
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module awt {
 
-//=============================================================================
 
 /** These values are used to specify which line end format should be used in strings
  */
 constants LineEndFormat
 {
-    //-------------------------------------------------------------------------
 
     /** specifies that line ends are to be represented by a carriage return character (\r)
     */
     const short CARRIAGE_RETURN = 0;
 
-    //-------------------------------------------------------------------------
 
     /** specifies that line ends are to be represented by a line feed character (\n)
     */
     const short LINE_FEED = 1;
 
-    //-------------------------------------------------------------------------
 
     /** specifies that line ends are to be represented by a line feed character (\n), followed
         by a carriage return character (\r).
@@ -51,7 +46,6 @@ constants LineEndFormat
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

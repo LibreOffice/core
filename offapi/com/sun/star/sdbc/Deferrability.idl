@@ -38,7 +38,6 @@ published constants Deferrability
             INITIALLY_DEFERRED, INITIALLY_IMMEDIATE, and NONE?              -->
 */
     const long INITIALLY_DEFERRED  = 5;
-    //-------------------------------------------------------------------------
 
     /** A possible value for the column <code>DEFERRABILITY</code>
              in the
@@ -48,7 +47,6 @@ published constants Deferrability
              <P>Indicates deferrability.  See SQL-92 for a definition.
      */
     const long INITIALLY_IMMEDIATE  = 6;
-    //-------------------------------------------------------------------------
 
     /** A possible value for the column <code>DEFERRABILITY</code>
              in the
@@ -60,7 +58,6 @@ published constants Deferrability
     const long NONE         = 7;
 };
 
-//=============================================================================
 
 }; }; }; };
 

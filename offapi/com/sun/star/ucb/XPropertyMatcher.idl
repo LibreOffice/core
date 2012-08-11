@@ -23,18 +23,15 @@
 #include <com/sun/star/ucb/XCommandProcessor.idl>
 #include <com/sun/star/ucb/XCommandEnvironment.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** Checks whether a set of properties matches a set of search criteria.
 
     @see  XPropertyMatcherFactory.
 */
 published interface XPropertyMatcher : com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** Checks whether a set of properties matches the given search criteria.
 
         @param Properties
@@ -51,7 +48,6 @@ published interface XPropertyMatcher : com::sun::star::uno::XInterface
                     [in] com::sun::star::ucb::XCommandEnvironment Environment);
 };
 
-//=============================================================================
 
 }; }; }; };
 

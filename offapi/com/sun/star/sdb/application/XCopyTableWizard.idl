@@ -24,13 +24,11 @@
 #include <com/sun/star/lang/IllegalArgumentException.idl>
 #include <com/sun/star/beans/Optional.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module sdb { module application {
 
 interface XCopyTableListener;
 
-//=============================================================================
 
 /** describes a wizard which can be used to copy table like data from one
     database to another.
@@ -130,11 +128,9 @@ interface XCopyTableWizard : ::com::sun::star::ui::dialogs::XExecutableDialog
     void    removeCopyTableListener( [in] XCopyTableListener Listener );
 };
 
-//=============================================================================
 
 }; }; }; }; };
 
-//=============================================================================
 
 #endif
 

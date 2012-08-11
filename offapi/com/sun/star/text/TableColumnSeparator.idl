@@ -20,11 +20,9 @@
 #define __com_sun_star_text_TableColumnSeparator_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module text {
 
-//=============================================================================
 
 /** The width of the cells of a text table is defined by the position
     of the separator between neighboring cells.
@@ -62,7 +60,6 @@ published struct TableColumnSeparator
      */
     short Position;
 
-    //-------------------------------------------------------------------------
 
     /** determines if the separator is visible.
      */
@@ -70,7 +67,6 @@ published struct TableColumnSeparator
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

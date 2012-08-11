@@ -24,11 +24,9 @@
 #include <com/sun/star/beans/PropertyState.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module beans {
 
-//=============================================================================
 
 /** specifies a property value.
  */
@@ -41,7 +39,6 @@ published struct PropertyValue
      */
     string Name;
 
-    //-------------------------------------------------------------------------
 
     /** contains an implementation-specific handle for the property.
 
@@ -50,14 +47,12 @@ published struct PropertyValue
      */
     long Handle;
 
-    //-------------------------------------------------------------------------
 
     /** contains the value of the property or <void/>,
         if no value is available.
      */
     any Value;
 
-    //-------------------------------------------------------------------------
 
     /** determines if the value comes from the object itself or from
         a default and if the value cannot be determined exactly.
@@ -66,7 +61,6 @@ published struct PropertyValue
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

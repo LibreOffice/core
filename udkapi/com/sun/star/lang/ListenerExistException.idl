@@ -22,11 +22,9 @@
 #include <com/sun/star/uno/Exception.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module lang {
 
-//=============================================================================
 
 // DocMerge from xml: exception com::sun::star::lang::ListenerExistException
 /** is thrown by the <member>XConnectionPoint::advise</member> method
@@ -38,7 +36,6 @@ published exception ListenerExistException: com::sun::star::uno::Exception
 {
 };
 
-//=============================================================================
 
 }; }; }; };
 

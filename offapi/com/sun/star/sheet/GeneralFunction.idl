@@ -20,23 +20,19 @@
 #ifndef __com_sun_star_sheet_GeneralFunction_idl__
 #define __com_sun_star_sheet_GeneralFunction_idl__
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** used to specify a function to be calculated from values.
  */
 published enum GeneralFunction
 {
-    //-------------------------------------------------------------------------
 
     /** nothing is calculated.
      */
     NONE,
 
-    //-------------------------------------------------------------------------
 
     /** function is determined automatically.
 
@@ -44,67 +40,56 @@ published enum GeneralFunction
      */
     AUTO,
 
-    //-------------------------------------------------------------------------
 
     /** sum of all numerical values is calculated.
      */
     SUM,
 
-    //-------------------------------------------------------------------------
 
     /** all values, including non-numerical values, are counted.
      */
     COUNT,
 
-    //-------------------------------------------------------------------------
 
     /** average of all numerical values is calculated.
      */
     AVERAGE,
 
-    //-------------------------------------------------------------------------
 
     /** maximum value of all numerical values is calculated.
      */
     MAX,
 
-    //-------------------------------------------------------------------------
 
     /** minimum value of all numerical values is calculated.
      */
     MIN,
 
-    //-------------------------------------------------------------------------
 
     /** product of all numerical values is calculated.
      */
     PRODUCT,
 
-    //-------------------------------------------------------------------------
 
     /** numerical values are counted.
      */
     COUNTNUMS,
 
-    //-------------------------------------------------------------------------
 
     /** standard deviation is calculated based on a sample.
      */
     STDEV,
 
-    //-------------------------------------------------------------------------
 
     /** standard deviation is calculated based on the entire population.
      */
     STDEVP,
 
-    //-------------------------------------------------------------------------
 
     /** variance is calculated based on a sample.
      */
     VAR,
 
-    //-------------------------------------------------------------------------
 
     /** variance is calculated based on the entire population.
      */
@@ -112,7 +97,6 @@ published enum GeneralFunction
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

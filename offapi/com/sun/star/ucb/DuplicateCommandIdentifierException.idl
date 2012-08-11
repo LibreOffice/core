@@ -22,11 +22,9 @@
 #include <com/sun/star/uno/Exception.idl>
 
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** is thrown by <member>XCommandProcessor::execute</member> to indicate that
     the same command identifier was used for two threads.
 
@@ -43,7 +41,6 @@ published exception DuplicateCommandIdentifierException : com::sun::star::uno::E
 {
 };
 
-//=============================================================================
 
 }; }; }; };
 

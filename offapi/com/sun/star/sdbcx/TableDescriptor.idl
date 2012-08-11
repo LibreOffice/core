@@ -78,7 +78,6 @@ published service TableDescriptor
     [property] string Description;
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -24,17 +24,14 @@
 #include <com/sun/star/container/XNameContainer.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module form {
 
-//=============================================================================
 
 /** provides the access to a collection of forms.
  */
 published interface XFormsSupplier: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** accesses the forms.
 
@@ -83,7 +80,6 @@ published interface XFormsSupplier: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

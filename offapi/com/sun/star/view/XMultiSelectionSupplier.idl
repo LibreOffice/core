@@ -31,11 +31,9 @@
 #include <com/sun/star/view/XSelectionSupplier.idl>
 #include <com/sun/star/container/XEnumeration.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module view {
 
-//=============================================================================
 
 /** makes it possible to append and remove objects from a selection.
 
@@ -49,7 +47,6 @@ module com {  module sun {  module star {  module view {
  */
 interface XMultiSelectionSupplier: XSelectionSupplier
 {
-    //-------------------------------------------------------------------------
 
     /** adds the object or the objects represented by <var>Selection</var> to the selection
         of this <type>XMultiSelectionSupplier</type>.
@@ -70,7 +67,6 @@ interface XMultiSelectionSupplier: XSelectionSupplier
     boolean addSelection( [in] any Selection )
                 raises( com::sun::star::lang::IllegalArgumentException );
 
-    //-------------------------------------------------------------------------
 
     /** remove the object or objects represented by <var>Selection</var> from the
         selection of this <type>XMultiSelectionSupplier</type>.
@@ -91,19 +87,16 @@ interface XMultiSelectionSupplier: XSelectionSupplier
     void removeSelection( [in] any Selection )
                 raises( com::sun::star::lang::IllegalArgumentException );
 
-    //-------------------------------------------------------------------------
 
     /** clears the selection of this <type>XMultiSelectionSupplier</type>.
     */
     void clearSelection();
 
-    //-------------------------------------------------------------------------
 
     /** returns the number of selected objects of this <type>XMultiSelectionSupplier</type>.
     */
     long getSelectionCount();
 
-    //-------------------------------------------------------------------------
 
     /** @returns
             a new object to enumerate the selection of this <type>XMultiSelectionSupplier</type>.
@@ -121,7 +114,6 @@ interface XMultiSelectionSupplier: XSelectionSupplier
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

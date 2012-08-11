@@ -23,11 +23,9 @@
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/sheet/XResultListener.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** provides methods to handle a volatile function result.
 
@@ -36,14 +34,12 @@ module com {  module sun {  module star {  module sheet {
  */
 published interface XVolatileResult: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** adds a listener to be notified when a new value is available.
      */
     [oneway] void addResultListener(
             [in] com::sun::star::sheet::XResultListener aListener );
 
-    //-------------------------------------------------------------------------
 
     /** removes the specified listener.
      */
@@ -52,7 +48,6 @@ published interface XVolatileResult: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

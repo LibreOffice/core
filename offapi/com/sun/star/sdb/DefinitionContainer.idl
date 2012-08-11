@@ -80,7 +80,6 @@ published service DefinitionContainer
     [optional] interface com::sun::star::lang::XSingleServiceFactory;
 };
 
-//=============================================================================
 
 }; }; }; };
 

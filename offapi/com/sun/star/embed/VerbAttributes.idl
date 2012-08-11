@@ -20,30 +20,25 @@
 #define __com_sun_star_embed_VerbAttributes_idl__
 
 
-//============================================================================
 
 module com { module sun { module star { module embed {
 
-//============================================================================
 /** The constant set specifies possible attributes of a verb.
 
     @see VerbDescriptor
 */
 published constants VerbAttributes
 {
-    // -----------------------------------------------------------------------
     /** Execution of the verb with this attribute must not modify the
         object.
      */
     const long MS_VERBATTR_NEVERDIRTIES = 1;
 
-    // -----------------------------------------------------------------------
     /** indicates that the verb should appear in the object's menu.
      */
     const long MS_VERBATTR_ONCONTAINERMENU = 2;
 };
 
-//============================================================================
 
 }; }; }; };
 

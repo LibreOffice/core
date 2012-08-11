@@ -22,11 +22,9 @@
 #include <com/sun/star/configuration/GroupAccess.idl>
 #include <com/sun/star/container/XNameReplace.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module configuration {
 
-//=============================================================================
 /** provides write access to a predefined heterogeneous group of values
  and nested trees as part of a hierarchy.
 
@@ -72,7 +70,6 @@ published service GroupUpdate
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

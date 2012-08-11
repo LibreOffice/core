@@ -33,11 +33,9 @@
 #include <com/sun/star/drawing/TextShape.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module presentation {
 
-//=============================================================================
 
 /** This service is implemented by the title and subtitle presentation shape.
 
@@ -52,7 +50,6 @@ published service TitleTextShape
     service com::sun::star::drawing::TextShape;
 };
 
-//=============================================================================
 
 }; }; }; };
 

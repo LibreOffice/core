@@ -22,11 +22,9 @@
 #include <com/sun/star/embed/WrongStateException.idl>
 
 
-//============================================================================
 
  module com {  module sun {  module star {  module embed {
 
-//============================================================================
 
 /** This exception can be thrown in case the object does not allow
     to call requested functionality currently because the object is changing
@@ -34,7 +32,6 @@
  */
 published exception StateChangeInProgressException: com::sun::star::embed::WrongStateException
 {
-    //------------------------------------------------------------------------
     /** contains the target state the object tries to reach currently.
 
         <p>
@@ -44,7 +41,6 @@ published exception StateChangeInProgressException: com::sun::star::embed::Wrong
     long TargetState;
 };
 
-//============================================================================
 
 }; }; }; };
 

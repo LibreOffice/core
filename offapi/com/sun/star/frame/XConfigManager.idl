@@ -22,19 +22,16 @@
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/beans/XPropertyChangeListener.idl>
 
-//============================================================================
 
  module com {
   module sun {
    module star {
     module frame {
 
-//============================================================================
 /** @deprecated
  */
 published interface XConfigManager: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** add a listener to notify changes on well known variables
         inside the real implementation
 
@@ -57,7 +54,6 @@ published interface XConfigManager: com::sun::star::uno::XInterface
         [in] string KeyName,
         [in] com::sun::star::beans::XPropertyChangeListener Listener );
 
-    //-------------------------------------------------------------------------
     /** remove a registered listener
 
         @param KeyName
@@ -74,7 +70,6 @@ published interface XConfigManager: com::sun::star::uno::XInterface
         [in] string KeyName,
         [in] com::sun::star::beans::XPropertyChangeListener Listener);
 
-    //-------------------------------------------------------------------------
     /** substitute variables (place holder) inside given parameter <var>Text</var>
 
         <p>
@@ -89,7 +84,6 @@ published interface XConfigManager: com::sun::star::uno::XInterface
      */
     string substituteVariables( [in] string Text );
 
-    //-------------------------------------------------------------------------
     /** was designed for additional functionality for interface <type scope="com::sun::star::registry">XSimpleRegistry</type>
         and make no sense without that
         @deprecated

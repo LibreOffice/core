@@ -28,36 +28,30 @@
 #ifndef __com_sun_star_view_SelectionType_idl__
 #define __com_sun_star_view_SelectionType_idl__
 
-//=============================================================================
 
 module com {  module sun {  module star {  module view {
 
-//=============================================================================
 
 /** Specifies a selection type for a view that supports a selection model.
  */
 enum SelectionType
 {
-    //-------------------------------------------------------------------------
 
     /** No selection is possible.
     <p>The selection is always empty.</p>
      */
     NONE,
 
-    //-------------------------------------------------------------------------
 
     /** The selection can only contain one or zero objects.
      */
     SINGLE,
 
-    //-------------------------------------------------------------------------
 
     /** The selection can contain zero or more objects.
      */
     MULTI,
 
-    //-------------------------------------------------------------------------
 
     /** The selection can contain zero or more objects.
         <p>all selected objects must be part of a continues range</p>
@@ -65,7 +59,6 @@ enum SelectionType
     RANGE
 };
 
-//=============================================================================
 
 }; }; }; };
 

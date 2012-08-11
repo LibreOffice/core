@@ -25,11 +25,9 @@
 #include <com/sun/star/security/AccessControlException.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module security {
 
-//=============================================================================
 
 /** Interface for checking permissions and invoking privileged or restricted
     actions.
@@ -130,7 +128,6 @@ published interface XAccessController : com::sun::star::uno::XInterface
     XAccessControlContext getContext();
 };
 
-//=============================================================================
 
 }; }; }; };
 

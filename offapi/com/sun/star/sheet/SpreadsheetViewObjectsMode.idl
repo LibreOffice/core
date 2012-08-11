@@ -20,32 +20,26 @@
 #ifndef __com_sun_star_sheet_SpreadsheetViewObjectsMode_idl__
 #define __com_sun_star_sheet_SpreadsheetViewObjectsMode_idl__
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** Constants that control how embedded objects are shown in the view.
  */
 published constants SpreadsheetViewObjectsMode
 {
-    //-------------------------------------------------------------------------
 
     /** Specifies to display a specific set of objects in the spreadsheet view.
      */
     const short SHOW = 0;
 
-    //-------------------------------------------------------------------------
 
     /** Specifies to hide a specific set of objects from the spreadsheet view.
      */
     const short HIDE = 1;
 
-    //-------------------------------------------------------------------------
 };
 
-//=============================================================================
 
 }; }; }; };
 

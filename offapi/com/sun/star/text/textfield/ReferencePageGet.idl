@@ -22,11 +22,9 @@
 
 #include <com/sun/star/text/TextField.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module text { module textfield {
 
-//=============================================================================
 /** specifies service of a text field that
     displays the page number with respect to a reference point.
     The reference point is determined by a ReferencePageSet text field.
@@ -42,7 +40,6 @@ published service ReferencePageGet
     [property]short NumberingType;
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

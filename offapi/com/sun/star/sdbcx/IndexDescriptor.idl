@@ -54,7 +54,6 @@ published service IndexDescriptor
     [property] boolean IsClustered;
 };
 
-//=============================================================================
 
 }; }; }; };
 

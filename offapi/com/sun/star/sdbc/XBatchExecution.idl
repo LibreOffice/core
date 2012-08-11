@@ -51,14 +51,12 @@ published interface XBatchExecution: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     void addBatch([in]string sql ) raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** makes the set of commands in the current batch empty.
         @throws SQLException
             if a database access error occurs.
      */
     void clearBatch() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** submits a batch of commands to the database for execution.
              @returns
@@ -71,7 +69,6 @@ published interface XBatchExecution: com::sun::star::uno::XInterface
     sequence<long> executeBatch() raises (SQLException);
 };
 
-//=============================================================================
 
 }; }; }; };
 

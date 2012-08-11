@@ -24,29 +24,24 @@
 #include <com/sun/star/sheet/XDataPilotTable.idl>
 #include <com/sun/star/util/XModifyBroadcaster.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** represents a data pilot table on a spreadsheet.
  */
 published service DataPilotTable
 {
-    //-------------------------------------------------------------------------
 
     /** provides access to the layout settings of the data pilot table.
      */
     interface com::sun::star::sheet::XDataPilotDescriptor;
 
-    //-------------------------------------------------------------------------
 
     /** provides methods to control a data pilot table.
      */
     interface com::sun::star::sheet::XDataPilotTable;
 
-    //-------------------------------------------------------------------------
 
     /** allows notification of modifications to the data pilot table.
 
@@ -56,7 +51,6 @@ published service DataPilotTable
     [optional] interface com::sun::star::util::XModifyBroadcaster;
 };
 
-//=============================================================================
 
 }; }; }; };
 

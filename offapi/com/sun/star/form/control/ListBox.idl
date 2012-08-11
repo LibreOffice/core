@@ -24,11 +24,9 @@
 #include <com/sun/star/form/XBoundControl.idl>
 #include <com/sun/star/form/XChangeBroadcaster.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module form {  module control {
 
-//=============================================================================
 
 /** describes a list box control which can (but not necessarily has to) be bound to a database field.
 
@@ -57,7 +55,6 @@ published service ListBox
     interface com::sun::star::form::XChangeBroadcaster;
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

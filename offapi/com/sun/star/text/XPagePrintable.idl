@@ -33,17 +33,14 @@
 #include <com/sun/star/lang/IllegalArgumentException.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module text {
 
-//=============================================================================
 
 /** Print several pages on one printer page.
  */
 published interface XPagePrintable: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** @returns the settings of printing of pages.
              <p>
@@ -63,13 +60,11 @@ published interface XPagePrintable: com::sun::star::uno::XInterface
      */
     sequence<com::sun::star::beans::PropertyValue> getPagePrintSettings();
 
-    //-------------------------------------------------------------------------
         /** adjusts the settings of the page printing.
             @see getPagePrintSettings
      */
     void setPagePrintSettings( [in] sequence<com::sun::star::beans::PropertyValue> aSettings );
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::text::XPagePrintable::printPages
     /** prints the pages according to the <type>PagePrintSettings</type>.
@@ -81,7 +76,6 @@ published interface XPagePrintable: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

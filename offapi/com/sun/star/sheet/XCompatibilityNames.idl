@@ -22,11 +22,9 @@
 
 #include <com/sun/star/sheet/LocalizedName.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** gives access to the sequence of compatibility names for an Addin
     function.
@@ -64,7 +62,6 @@ published interface XCompatibilityNames: com::sun::star::uno::XInterface
         getCompatibilityNames( [in] string aProgrammaticName );
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -24,16 +24,13 @@
 #include <com/sun/star/awt/Rectangle.idl>
 
 
-//============================================================================
 
  module com {  module sun {  module star {  module frame {
 
-//============================================================================
 /** allows to retrieve information about controller's border.
  */
 interface XControllerBorder: com::sun::star::uno::XInterface
 {
-    //------------------------------------------------------------------------
     /** allows to get current border sizes of the document.
 
         @return
@@ -41,18 +38,15 @@ interface XControllerBorder: com::sun::star::uno::XInterface
      */
     BorderWidths getBorder();
 
-    //------------------------------------------------------------------------
     /** adds the specified listener to receive events about controller's
         border resizing.
      */
     void addBorderResizeListener( [in] XBorderResizeListener xListener );
 
-    //------------------------------------------------------------------------
     /** removes the specified listener.
      */
     void removeBorderResizeListener( [in] XBorderResizeListener xListener );
 
-    //------------------------------------------------------------------------
     /** allows to get suggestion for resizing of object area surrounded
         by the border.
 
@@ -67,7 +61,6 @@ interface XControllerBorder: com::sun::star::uno::XInterface
             [in] ::com::sun::star::awt::Rectangle aPreliminaryRectangle );
 };
 
-//============================================================================
 
 }; }; }; };
 

@@ -20,83 +20,69 @@
 #ifndef __com_sun_star_sheet_FilterOperator_idl__
 #define __com_sun_star_sheet_FilterOperator_idl__
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** specifies the type of a single condition in a filter descriptor.
  */
 published enum FilterOperator
 {
-    //-------------------------------------------------------------------------
 
     /** selects empty entries.
      */
     EMPTY,
 
-    //-------------------------------------------------------------------------
 
     /** selects non-empty entries.
      */
     NOT_EMPTY,
 
-    //-------------------------------------------------------------------------
 
     /** value has to be equal to the specified value.
      */
     EQUAL,
 
-    //-------------------------------------------------------------------------
 
     /** value must not be equal to the specified value.
      */
     NOT_EQUAL,
 
-    //-------------------------------------------------------------------------
 
     /** value has to be greater than the specified value.
      */
     GREATER,
 
-    //-------------------------------------------------------------------------
 
     /** value has to be greater than or equal to the specified value.
      */
     GREATER_EQUAL,
 
-    //-------------------------------------------------------------------------
 
     /** value has to be less than the specified value.
      */
     LESS,
 
-    //-------------------------------------------------------------------------
 
     /** value has to be less than or equal to the specified value.
      */
     LESS_EQUAL,
 
-    //-------------------------------------------------------------------------
 
     /** selects a specified number of entries with the greatest values.
      */
     TOP_VALUES,
 
-    //-------------------------------------------------------------------------
 
     /** selects a specified percentage of entries with the greatest values.
      */
     TOP_PERCENT,
 
-    //-------------------------------------------------------------------------
 
     /** selects a specified number of entries with the lowest values.
      */
     BOTTOM_VALUES,
 
-    //-------------------------------------------------------------------------
 
     /** selects a specified percentage of entries with the lowest values.
      */
@@ -104,7 +90,6 @@ published enum FilterOperator
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

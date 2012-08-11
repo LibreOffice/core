@@ -30,11 +30,9 @@
 #include <com/sun/star/beans/XFastPropertySet.idl>
 #include <com/sun/star/lang/IllegalArgumentException.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module table {
 
-//=============================================================================
 
 /**
 */
@@ -43,15 +41,12 @@ interface XTable
 
     interface com::sun::star::lang::XComponent;
 
-    //-------------------------------------------------------------------------
 
     interface com::sun::star::table::XCellRange;
 
-    //-------------------------------------------------------------------------
 
     interface com::sun::star::table::XColumnRowRange;
 
-    //-------------------------------------------------------------------------
 
     /** interface to make the modify state of the table accessible.
         <p>Additionally, it makes it possible to register listener objects, which
@@ -59,19 +54,15 @@ interface XTable
     */
     interface ::com::sun::star::util::XModifiable;
 
-    //-------------------------------------------------------------------------
 
     /* interface ::com::sun::star::beans::XMultiPropertySet; */
 
-    //-------------------------------------------------------------------------
 
     interface ::com::sun::star::beans::XPropertySet;
 
-    //-------------------------------------------------------------------------
 
     interface ::com::sun::star::beans::XFastPropertySet;
 
-    //-------------------------------------------------------------------------
 
     /** creates a cell cursor including the whole table
 
@@ -79,7 +70,6 @@ interface XTable
      */
     com::sun::star::table::XCellCursor createCursor();
 
-    //-------------------------------------------------------------------------
 
     /** creates a cell cursor to travel in the given range context.
 
@@ -94,18 +84,15 @@ interface XTable
     com::sun::star::table::XCellCursor createCursorByRange( [in] com::sun::star::table::XCellRange Range )
         raises ( com::sun::star::lang::IllegalArgumentException );
 
-    //-------------------------------------------------------------------------
 
     /** stores the current row count of this table */
     [readonly, attribute] long RowCount;
 
-    //-------------------------------------------------------------------------
 
     /** stores the current column count of this table */
     [readonly, attribute] long ColumnCount;
 };
 
-//=============================================================================
 
 }; }; }; };
 

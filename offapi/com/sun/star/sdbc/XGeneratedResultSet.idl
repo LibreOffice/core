@@ -39,7 +39,6 @@
  */
 published interface XGeneratedResultSet: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** gives access to automatically generated values after a new row was inserted.
         @returns
             a result set that contains the data produced by the query
@@ -50,7 +49,6 @@ published interface XGeneratedResultSet: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

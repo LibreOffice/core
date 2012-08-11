@@ -31,29 +31,24 @@
 #include <com/sun/star/lang/EventObject.idl>
 #include <com/sun/star/awt/Rectangle.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module awt {
 
-//=============================================================================
 
 /** specifies an end docking event.
  */
 struct EndDockingEvent: com::sun::star::lang::EventObject
 {
-    //-------------------------------------------------------------------------
 
     /** specifies the new bounding rectangle of the window
      */
     com::sun::star::awt::Rectangle WindowRectangle;
 
-    //-------------------------------------------------------------------------
 
     /** specifies if the window is now floating <TRUE/> or docked <FALSE/>
      */
     boolean bFloating;
 
-    //-------------------------------------------------------------------------
 
     /** specifies that the docking procedure was canceled
      */
@@ -61,7 +56,6 @@ struct EndDockingEvent: com::sun::star::lang::EventObject
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

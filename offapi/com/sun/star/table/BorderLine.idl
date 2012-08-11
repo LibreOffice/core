@@ -31,23 +31,19 @@
 
 #include <com/sun/star/util/Color.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module table {
 
-//=============================================================================
 
 /** describes the line type for a single cell edge.
  */
 published struct BorderLine
 {
-    //-------------------------------------------------------------------------
 
     /** contains the color value of the line.
      */
     com::sun::star::util::Color Color;
 
-    //-------------------------------------------------------------------------
 
     /** contains the width of the inner part of a double line (in 1/100 mm).
 
@@ -55,7 +51,6 @@ published struct BorderLine
      */
     short InnerLineWidth;
 
-    //-------------------------------------------------------------------------
 
     /** contains the width of a single line or the width of outer part of
         a double line (in 1/100 mm).
@@ -64,7 +59,6 @@ published struct BorderLine
      */
     short OuterLineWidth;
 
-    //-------------------------------------------------------------------------
 
     /** contains the distance between the inner and outer parts of a
         double line (in 1/100 mm).
@@ -72,7 +66,6 @@ published struct BorderLine
     short LineDistance;
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -20,11 +20,9 @@
 #define __com_sun_star_chart_StackableDiagram_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module chart {
 
-//=============================================================================
 
 /**
 
@@ -34,14 +32,12 @@ a helper service for stackable chart types (e.g., charts in
  */
 published service StackableDiagram
 {
-    //-------------------------------------------------------------------------
 
     /** If <TRUE/>, the series of the diagram are stacked and each
         category sums up to 100%.
      */
     [property] boolean Percent;
 
-    //-------------------------------------------------------------------------
 
     /** If <TRUE/>, the series of the diagram are stacked.
 
@@ -53,7 +49,6 @@ published service StackableDiagram
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

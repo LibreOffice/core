@@ -20,37 +20,31 @@
 #define __com_sun_star_drawing_BitmapMode_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module drawing {
 
-//=============================================================================
 
 /** The <type>BitmapMode</type> selects an algorithm for filling an area with
     a bitmap.
  */
 published enum BitmapMode
 {
-    //-------------------------------------------------------------------------
 
     /** the bitmap is repeated over the fill area.
      */
     REPEAT,
 
-    //-------------------------------------------------------------------------
 
     /** the bitmap is stretched to fill the area.
      */
     STRETCH,
 
-    //-------------------------------------------------------------------------
 
     /** the bitmap is painted in its original or selected size.
      */
     NO_REPEAT
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -22,11 +22,9 @@
 #include <com/sun/star/ucb/PostCommandArgument.idl>
 
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** The argument for the command "post".
 
     @see XCommandProcessor
@@ -34,18 +32,15 @@ module com { module sun { module star { module ucb {
 */
 published struct PostCommandArgument2 : PostCommandArgument
 {
-    //-------------------------------------------------------------------------
     /** The media type (mime type) for the data to post.
     */
     string MediaType;
 
-    //-------------------------------------------------------------------------
     /** The URL of the referrer.
     */
     string Referer;
 };
 
-//=============================================================================
 
 }; }; }; };
 

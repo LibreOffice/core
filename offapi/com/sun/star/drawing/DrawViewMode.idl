@@ -20,11 +20,9 @@
 #define __com_sun_star_drawing_DrawViewMode_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module drawing {
 
-//=============================================================================
 
 // DocMerge from xml: enum com::sun::star::drawing::DrawViewMode
 /** This enumeration specifies the view mode of a view in a presentation
@@ -34,21 +32,18 @@
  */
 published enum DrawViewMode
 {
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: value com::sun::star::drawing::DrawViewMode::DRAW
     /** The view shows the drawing pages.
      */
     DRAW,
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: value com::sun::star::drawing::DrawViewMode::NOTES
     /** The view shows the notes pages.
      */
     NOTES,
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: value com::sun::star::drawing::DrawViewMode::HANDOUT
     /** The view shows the handout pages,
@@ -57,7 +52,6 @@ published enum DrawViewMode
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -31,17 +31,14 @@
 #include <com/sun/star/lang/EventObject.idl>
 #include <com/sun/star/awt/Point.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module awt {
 
-//=============================================================================
 
 /** specifies an end pop-up mode event.
  */
 struct EndPopupModeEvent: com::sun::star::lang::EventObject
 {
-    //-------------------------------------------------------------------------
 
     /** specifies how the pop-up mode was ended
         <TRUE/> means the window should be teared-off and positioned at FloatingPosition
@@ -49,7 +46,6 @@ struct EndPopupModeEvent: com::sun::star::lang::EventObject
      */
     boolean bTearoff;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the new position of the floating window in frame coordinates
          if bTearoff is <TRUE/>
@@ -57,7 +53,6 @@ struct EndPopupModeEvent: com::sun::star::lang::EventObject
     com::sun::star::awt::Point FloatingPosition;
 };
 
-//=============================================================================
 
 }; }; }; };
 

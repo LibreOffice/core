@@ -31,11 +31,9 @@
 #include <com/sun/star/awt/grid/GridDataEvent.idl>
 #include <com/sun/star/lang/XEventListener.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module awt { module grid {
 
-//=============================================================================
 
 /** An instance of this interface is used by the <type>XGridDataModel</type> to
     get notifications about data model changes.
@@ -65,7 +63,6 @@ interface XGridDataListener: com::sun::star::lang::XEventListener
     void rowHeadingChanged( [in] GridDataEvent Event );
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

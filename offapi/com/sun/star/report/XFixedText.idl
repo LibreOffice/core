@@ -29,11 +29,9 @@
 #define __com_sun_star_report_XFixedText_idl__
 
 #include <com/sun/star/report/XReportControlModel.idl>
-//=============================================================================
 
  module com {  module sun {  module star {  module report {
 
-//=============================================================================
 interface XFixedText
 {
     interface XReportControlModel;
@@ -43,7 +41,6 @@ interface XFixedText
     [attribute,bound] string Label;
 };
 
-//=============================================================================
 
 }; }; }; };
 

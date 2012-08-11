@@ -22,11 +22,9 @@
 #include <com/sun/star/uno/XInterface.idl>
 
 
-//=============================================================================
 
 module com { module sun { module star { module frame {
 
-//=============================================================================
 /** @deprecated
 */
 published interface XUrlList: com::sun::star::uno::XInterface
@@ -35,7 +33,6 @@ published interface XUrlList: com::sun::star::uno::XInterface
         [attribute] sequence<string> List;
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -21,13 +21,11 @@
 
 #include <com/sun/star/uno/XInterface.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module text {
 
  published interface XText;
 
-//=============================================================================
 
 // DocMerge from xml: interface com::sun::star::text::XTextRange
 /** describes the object's position in a text.
@@ -40,7 +38,6 @@
  */
 published interface XTextRange: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     // DocMerge from idl: method com::sun::star::text::XTextRange::getText
     /** @returns
@@ -48,7 +45,6 @@ published interface XTextRange: com::sun::star::uno::XInterface
      */
     XText getText();
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from idl: method com::sun::star::text::XTextRange::getStart
     /** @returns
@@ -56,7 +52,6 @@ published interface XTextRange: com::sun::star::uno::XInterface
      */
     XTextRange getStart();
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from idl: method com::sun::star::text::XTextRange::getEnd
     /** @returns
@@ -64,7 +59,6 @@ published interface XTextRange: com::sun::star::uno::XInterface
      */
     XTextRange getEnd();
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from idl: method com::sun::star::text::XTextRange::getString
     /** @returns
@@ -72,7 +66,6 @@ published interface XTextRange: com::sun::star::uno::XInterface
      */
     string getString();
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::text::XTextRange::setString
     /** the whole string of characters of this piece of text is replaced.
@@ -87,7 +80,6 @@ published interface XTextRange: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

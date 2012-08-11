@@ -23,11 +23,9 @@
 #include <com/sun/star/lang/Locale.idl>
 
 
-//=============================================================================
 
 module com { module sun { module star { module linguistic2 {
 
-//=============================================================================
 /** gives information obtained by a successful hyphenation attempt.
 
     <P>This interface is used as a return value for some of the hyphenator
@@ -37,14 +35,12 @@ module com { module sun { module star { module linguistic2 {
 */
 published interface XHyphenatedWord : com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /**
          @returns
              the word that was hyphenated.
      */
     string getWord();
 
-    //-------------------------------------------------------------------------
     /**
          @returns
             the language of the hyphenated word.
@@ -53,7 +49,6 @@ published interface XHyphenatedWord : com::sun::star::uno::XInterface
     */
     com::sun::star::lang::Locale getLocale();
 
-    //-------------------------------------------------------------------------
     /**
         @returns
             the position where hyphenation was applied in the word.
@@ -64,7 +59,6 @@ published interface XHyphenatedWord : com::sun::star::uno::XInterface
     */
     short getHyphenationPos();
 
-    //-------------------------------------------------------------------------
     /**
          @returns
              the hyphenated word as it should be written (without the hyphen
@@ -72,7 +66,6 @@ published interface XHyphenatedWord : com::sun::star::uno::XInterface
      */
     string getHyphenatedWord();
 
-    //-------------------------------------------------------------------------
     /**
         @returns
             the position of the hyphen in the hyphenated word.
@@ -83,7 +76,6 @@ published interface XHyphenatedWord : com::sun::star::uno::XInterface
     */
     short getHyphenPos();
 
-    //-------------------------------------------------------------------------
     /** is used to query if the hyphenation result is an alternative spelling.
 
          <p>A hyphenation result is an alternative spelling if the hyphenated
@@ -96,7 +88,6 @@ published interface XHyphenatedWord : com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

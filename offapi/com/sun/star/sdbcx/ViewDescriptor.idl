@@ -55,7 +55,6 @@ published service ViewDescriptor
     [property] long CheckOption;
 };
 
-//=============================================================================
 
 }; }; }; };
 

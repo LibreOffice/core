@@ -22,11 +22,9 @@
 #include <com/sun/star/uno/XInterface.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module lang {
 
-//=============================================================================
 
 /** Provides information regarding the implementation, i.e. which services
     are implemented and the name of the implementation.
@@ -59,7 +57,6 @@ published interface XServiceInfo: com::sun::star::uno::XInterface
     sequence<string> getSupportedServiceNames();
 };
 
-//=============================================================================
 
 }; }; }; };
 

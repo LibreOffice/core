@@ -20,30 +20,25 @@
 #define __com_sun_star_drawing_SnapObjectType_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module drawing {
 
-//=============================================================================
 
 // DocMerge from xml: enum com::sun::star::drawing::SnapObjectType
 /** @deprecated
  */
 published enum SnapObjectType
 {
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR SnapObjectType::   POINT,
 
     // DocMerge: empty anyway
     POINT,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR SnapObjectType::   VERTICAL,
 
     // DocMerge: empty anyway
     VERTICAL,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR SnapObjectType::   HORIZONTAL
 
     // DocMerge: empty anyway
@@ -51,7 +46,6 @@ published enum SnapObjectType
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

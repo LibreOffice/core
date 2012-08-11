@@ -22,11 +22,9 @@
 
 #include <com/sun/star/configuration/backend/ComponentChangeEvent.idl>
 #include <com/sun/star/lang/XEventListener.idl>
-//=============================================================================
 
 module com {  module sun {  module star {  module configuration {  module backend {
 
-//=============================================================================
 
 /** receives notification from backend broadcaster objects.
 
@@ -35,7 +33,6 @@ module com {  module sun {  module star {  module configuration {  module backen
  */
     interface XBackendChangesListener: ::com::sun::star::lang::XEventListener
 {
-    //-------------------------------------------------------------------------
     /** is invoked when component data in backend source changes
 
         @param Event
@@ -45,7 +42,6 @@ module com {  module sun {  module star {  module configuration {  module backen
 
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

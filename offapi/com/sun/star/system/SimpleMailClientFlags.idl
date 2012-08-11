@@ -23,20 +23,17 @@
 
 module com { module sun { module star { module system {
 
-//=============================================================================
 /** These constants are used to specify how the SimpleMailClient Service
     should behave.
  */
 
 published constants SimpleMailClientFlags
 {
-    //---------------------------------------------------------------------
     /** Uses the default settings when sending a mail, e.g.
         launches the current configured system mail client.
     */
     const long DEFAULTS             = 0;
 
-    //---------------------------------------------------------------------
     /** Does not show the current configured system mail client, but sends
         the mail without any further user interaction.
         If this flag is specified, a recipient address must have been
@@ -46,7 +43,6 @@ published constants SimpleMailClientFlags
      */
     const long NO_USER_INTERFACE    = 1;
 
-    //---------------------------------------------------------------------
     /** No logon dialog should be displayed to prompt the user for logon
         information if necessary.
         When this flag is specified and the user needs to logon in order
@@ -57,7 +53,6 @@ published constants SimpleMailClientFlags
     const long NO_LOGON_DIALOG      = 2;
 };
 
-//=============================================================================
 
 }; }; }; };
 

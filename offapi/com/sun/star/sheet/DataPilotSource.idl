@@ -25,11 +25,9 @@
 #include <com/sun/star/util/XRefreshable.idl>
 #include <com/sun/star/beans/XPropertySet.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** represents a data pilot source.
 
@@ -38,46 +36,39 @@ module com {  module sun {  module star {  module sheet {
  */
 published service DataPilotSource
 {
-    //-------------------------------------------------------------------------
 
     /** provides access to the collection of the dimensions of the data
         pilot source.
      */
     interface com::sun::star::sheet::XDimensionsSupplier;
 
-    //-------------------------------------------------------------------------
 
     /** gives access to the results of the data pilot table.
      */
     interface com::sun::star::sheet::XDataPilotResults;
 
-    //-------------------------------------------------------------------------
 
     /** provides methods to refresh the data pilot table, that means to
         read the data again from the data pilot source.
      */
     interface com::sun::star::util::XRefreshable;
 
-    //-------------------------------------------------------------------------
 
 //!published service PropertySet
     /** provides access to the properties.
      */
     interface com::sun::star::beans::XPropertySet;
 
-    //=========================================================================
 
     /** specifies if grand totals for the columns are inserted.
      */
     [property] boolean ColumnGrand;
 
-    //-------------------------------------------------------------------------
 
     /** specifies if grand totals for the rows are inserted.
      */
     [property] boolean RowGrand;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the number of row fields.
 
@@ -85,7 +76,6 @@ published service DataPilotSource
      */
     [readonly, property, optional] long RowFieldCount;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the number of column fields.
 
@@ -93,7 +83,6 @@ published service DataPilotSource
      */
     [readonly, property, optional] long ColumnFieldCount;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the number of data fields.
 
@@ -102,7 +91,6 @@ published service DataPilotSource
     [readonly, property, optional] long DataFieldCount;
 };
 
-//=============================================================================
 
 }; }; }; };
 

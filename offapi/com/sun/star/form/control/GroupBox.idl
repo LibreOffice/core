@@ -23,11 +23,9 @@
 #include <com/sun/star/awt/UnoControlGroupBox.idl>
 #include <com/sun/star/form/XBoundControl.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module form {  module control {
 
-//=============================================================================
 
 /** describes a control which can be used for visually grouping controls
 
@@ -42,7 +40,6 @@ published service GroupBox
     service com::sun::star::awt::UnoControlGroupBox;
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

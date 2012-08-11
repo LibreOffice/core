@@ -22,11 +22,9 @@
 #include <com/sun/star/reflection/XIdlClass.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module beans {
 
-//=============================================================================
 
 /** This structure describes a property.
 
@@ -46,7 +44,6 @@ published struct Property
      */
     string Name;
 
-    //-------------------------------------------------------------------------
 
     /** contains an implementation-specific handle for the property.
 
@@ -55,7 +52,6 @@ published struct Property
      */
     long Handle;
 
-    //-------------------------------------------------------------------------
 
     /** contains an object that identifies the declared type for
         the property.
@@ -66,7 +62,6 @@ published struct Property
      */
     type Type;
 
-    //-------------------------------------------------------------------------
 
     /** This field may contain zero or more constants of the
         <type>PropertyAttribute</type> constants group.
@@ -75,7 +70,6 @@ published struct Property
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

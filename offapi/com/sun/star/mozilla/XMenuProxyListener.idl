@@ -27,11 +27,9 @@
 
 #include <com/sun/star/mozilla/MenuSingleChange.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module mozilla {
 
-//=============================================================================
 
 
 // DocMerge from xml: interface com::sun::star::mozilla::XMenuProxyListener
@@ -39,7 +37,6 @@
  */
 published interface XMenuProxyListener: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::mozilla::XMenuProxyListener::menuChangedMultiple
     /** is called, if the content or graphical representation/state of the menu changes
@@ -47,7 +44,6 @@ published interface XMenuProxyListener: com::sun::star::uno::XInterface
      */
     void menuChangedMultiple([in] sequence<MenuMultipleChange> MenuMultipleChanges);
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::mozilla::XMenuProxyListener::menuChangedSingle
     /** is called, if the content or graphical representation/state of the menu changes,
@@ -55,7 +51,6 @@ published interface XMenuProxyListener: com::sun::star::uno::XInterface
      */
     void menuChangedSingle([in] sequence<MenuSingleChange> MenuSingleChanges);
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::mozilla::XMenuProxyListener::menuItemDeleted
     /** is called, if one menu item designated by the ID, is deleted.
@@ -66,7 +61,6 @@ published interface XMenuProxyListener: com::sun::star::uno::XInterface
     void menuItemDeleted([in] short ID);
 };
 
-//=============================================================================
 
 }; }; }; };
 

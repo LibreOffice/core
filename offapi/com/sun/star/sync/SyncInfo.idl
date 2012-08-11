@@ -32,11 +32,9 @@
 #include <com/sun/star/sync/SyncScheme.idl>
 #include <com/sun/star/sync/FilterData.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sync {
 
-//=============================================================================
 
 /// @deprecated
 published struct SyncInfo
@@ -52,7 +50,6 @@ published struct SyncInfo
     unsigned long   SyncOptions;
 };
 
-//=============================================================================
 
 }; }; }; };
 

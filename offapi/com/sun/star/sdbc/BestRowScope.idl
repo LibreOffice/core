@@ -39,7 +39,6 @@ published constants BestRowScope
              .
      */
     const long TEMPORARY   = 0;
-    //-------------------------------------------------------------------------
 
     /** indicates that the scope of the best row identifier is
              the remainder of the current transaction.
@@ -53,7 +52,6 @@ published constants BestRowScope
              .
      */
     const long TRANSACTION = 1;
-    //-------------------------------------------------------------------------
 
     /** indicates that the scope of the best row identifier is
              the remainder of the current session.
@@ -69,7 +67,6 @@ published constants BestRowScope
     const long SESSION     = 2;
 };
 
-//=============================================================================
 
 }; }; }; };
 

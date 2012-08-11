@@ -22,17 +22,14 @@
 #include <com/sun/star/uno/XInterface.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module awt {
 
-//=============================================================================
 
 /** gives access to the text in a control.
  */
 published interface XTextArea: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** returns the text lines as a single string with line separators.
      */
@@ -40,7 +37,6 @@ published interface XTextArea: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

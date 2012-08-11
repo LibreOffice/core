@@ -23,11 +23,9 @@
 #include <com/sun/star/text/BaseIndexMark.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module text {
 
-//=============================================================================
 
 /** is a <type>TextRange</type> which is explicitly marked
     as an index entry for a <type>UserIndex</type>.
@@ -37,14 +35,12 @@ published service UserIndexMark
     service com::sun::star::text::TextContent;
 
     service com::sun::star::text::BaseIndexMark;
-    //-------------------------------------------------------------------------
     /** contains the name of the user index it belongs to.
      */
     [property] string UserIndexName;
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

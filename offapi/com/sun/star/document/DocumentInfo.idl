@@ -37,11 +37,9 @@
 #include <com/sun/star/util/DateTime.idl>
 #include <com/sun/star/lang/Locale.idl>
 
-//=============================================================================
 
   module com {   module sun {   module star {   module document {
 
-//=============================================================================
 /** this service provides document-specific information like the
     author, creation date and user fields
 
@@ -59,7 +57,6 @@
  */
 published service DocumentInfo
 {
-    //-------------------------------------------------------------------------
     /** provides access to the user fields for the information regarding the
         document
 
@@ -70,17 +67,14 @@ published service DocumentInfo
      */
     interface XDocumentInfo;
 
-    //-------------------------------------------------------------------------
     /** necessary to support normal properties
      */
     interface com::sun::star::beans::XPropertySet;
 
-    //-------------------------------------------------------------------------
     /** supports faster access on well known properties by using index
      */
     interface com::sun::star::beans::XFastPropertySet;
 
-    //-------------------------------------------------------------------------
     /** provides access to the user fields, which (instead to the user fields set
         by the interface XDocumentInfo) will be typesafe.
 
@@ -91,36 +85,30 @@ published service DocumentInfo
      */
     [optional] interface com::sun::star::beans::XPropertyContainer;
 
-    //-------------------------------------------------------------------------
     /** contains the initial author of the document
      */
     [property] string Author;
 
-    //-------------------------------------------------------------------------
     /** @deprecated
      */
     [property] boolean AutoloadEnabled;
 
-    //-------------------------------------------------------------------------
     /** contains the number of seconds after which a specified
         URL is to be loaded after the document is loaded into a desktop
         frame
      */
     [property] long AutoloadSecs;
 
-    //-------------------------------------------------------------------------
     /** contains the URL to load automatically after a
         specified time after the document is loaded into a desktop frame
      */
     [property] string AutoloadURL;
 
-    //-------------------------------------------------------------------------
     /** contains the date and time of the first time the
         document was stored
      */
     [property] com::sun::star::util::DateTime CreationDate;
 
-    //-------------------------------------------------------------------------
     /** contains the name of the default frame into which
         links should be loaded if no target is specified
 
@@ -130,7 +118,6 @@ published service DocumentInfo
      */
     [property] string DefaultTarget;
 
-    //-------------------------------------------------------------------------
     /** contains a multi-line comment of the document
 
         <p>
@@ -139,7 +126,6 @@ published service DocumentInfo
      */
     [property] string Description;
 
-    //-------------------------------------------------------------------------
     /** contains some statistics about the document
 
         <p>
@@ -148,28 +134,23 @@ published service DocumentInfo
      */
     [property] sequence< com::sun::star::beans::NamedValue > DocumentStatistic;
 
-    //-------------------------------------------------------------------------
     /** describes how often the document was edited and saved
      */
     [property] short EditingCycles;
 
-    //-------------------------------------------------------------------------
     /** contains the net time of editing the document (in seconds)
      */
     [property] long EditingDuration;
 
-    //-------------------------------------------------------------------------
     /** identifies application was used to create or last modify the document
      */
     [property] string Generator;
 
-    //-------------------------------------------------------------------------
     /** contains a comma separated list of keywords for
         the document
      */
     [property] string Keywords;
 
-    //-------------------------------------------------------------------------
     /** contains the MIME-type of the document's resource
 
         <p>
@@ -180,41 +161,34 @@ published service DocumentInfo
      */
     [readonly, property] string MIMEType;
 
-    //-------------------------------------------------------------------------
     /** default language of the document
      */
     [property] com::sun::star::lang::Locale Language;
 
-    //-------------------------------------------------------------------------
     /** contains the name of the editor who was the last
         person to store this document
      */
     [property] string ModifiedBy;
 
-    //-------------------------------------------------------------------------
     /** contains the date and time of the last time the
         document was stored
      */
     [property] com::sun::star::util::DateTime ModifyDate;
 
-    //-------------------------------------------------------------------------
     /** contains the date and time of when the document was
         last printed
      */
     [property] com::sun::star::util::DateTime PrintDate;
 
-    //-------------------------------------------------------------------------
     /** contains the name of the editor who was the last
         person to print the document
      */
     [property] string PrintedBy;
 
-    //-------------------------------------------------------------------------
     /** subject of document
      */
     [property] string Subject;
 
-    //-------------------------------------------------------------------------
     /** contains logical name of the template from
         which the document was created
 
@@ -225,26 +199,22 @@ published service DocumentInfo
      */
     [property] string Template;
 
-    //-------------------------------------------------------------------------
     /** contains the file path name of the template from
         which the document was created
      */
     [property] string TemplateFileName;
 
-    //-------------------------------------------------------------------------
     /** contains the date and time of when the document
         was created or updated from the template
      */
     [property] com::sun::star::util::DateTime TemplateDate;
 
-    //-------------------------------------------------------------------------
     /** contains the title of the document
      */
     [property] string Title;
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

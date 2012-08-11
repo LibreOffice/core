@@ -24,11 +24,9 @@
 #include <com/sun/star/form/XChangeListener.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module form {
 
-//=============================================================================
 
 /** provides functionality to notify listeners of data changes.
 
@@ -39,7 +37,6 @@
  */
 published interface XChangeBroadcaster: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** adds the specified listener to receive the "changed" event.
 
@@ -50,7 +47,6 @@ published interface XChangeBroadcaster: com::sun::star::uno::XInterface
      */
     [oneway] void addChangeListener( [in] com::sun::star::form::XChangeListener aListener );
 
-    //-------------------------------------------------------------------------
 
     /** removes the specified listener.
 
@@ -63,7 +59,6 @@ published interface XChangeBroadcaster: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

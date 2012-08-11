@@ -23,11 +23,9 @@
 #include <com/sun/star/embed/XHatchWindowController.idl>
 #include <com/sun/star/awt/Size.idl>
 
-//============================================================================
 
  module com {  module sun {  module star {  module embed {
 
-//============================================================================
 
 /** specifies the operations for a hatch window.
 
@@ -42,7 +40,6 @@
  */
 published interface XHatchWindow: com::sun::star::lang::XComponent
 {
-    //------------------------------------------------------------------------
     /** sets the object that will control resizing/moving, if the object is
     not set the window can not be resized/moved.
      */
@@ -51,7 +48,6 @@ published interface XHatchWindow: com::sun::star::lang::XComponent
     [attribute] com::sun::star::awt::Size HatchBorderSize;
 };
 
-//============================================================================
 
 }; }; }; };
 

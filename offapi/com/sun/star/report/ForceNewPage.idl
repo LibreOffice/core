@@ -29,11 +29,9 @@
 #define __com_sun_star_report_ForceNewPage_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module report {
 
-//=============================================================================
 
 /** Specifies if the section will be printed on an separate page.
     <p>This does not apply to page header or page footer.</p>
@@ -41,7 +39,6 @@
  */
 constants ForceNewPage
 {
-    //-------------------------------------------------------------------------
 
     /** The current section is printed on the current page.
      */
@@ -60,7 +57,6 @@ constants ForceNewPage
     const short BEFORE_AFTER_SECTION = 3;
 };
 
-//=============================================================================
 
 }; }; }; };
 

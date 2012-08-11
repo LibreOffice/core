@@ -20,30 +20,24 @@
 #define __com_sun_star_drawing_HomogenMatrixLine3_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module drawing {
 
-//=============================================================================
 
 /** specifies a single line for a <type>HomogenMatrix3</type>.
  */
 published struct HomogenMatrixLine3
 {
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR HomogenMatrixLine3::Column1
     double Column1;
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR HomogenMatrixLine3::Column2
     double Column2;
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR HomogenMatrixLine3::Column3
     double Column3;
 };
 
-//=============================================================================
 
 }; }; }; };
 

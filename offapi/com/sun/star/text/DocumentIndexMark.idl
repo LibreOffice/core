@@ -32,11 +32,9 @@
 #include <com/sun/star/text/BaseIndexMark.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module text {
 
-//=============================================================================
 
 /** is a <type>TextRange</type> which is explicitly marked
     as an index entry for a <type>DocumentIndex</type>.
@@ -47,24 +45,20 @@ published service DocumentIndexMark
 
     service com::sun::star::text::BaseIndexMark;
 
-    //-------------------------------------------------------------------------
     /** contains the primary key of the index entry.
          It is used to build a hierarchical document index.
      */
     [property] string PrimaryKey;
-    //-------------------------------------------------------------------------
     /** contains the secondary key of the index entry.
          It is used to build a hierarchical document index.
      */
     [property] string SecondaryKey;
-    //-------------------------------------------------------------------------
     /** determines if this entry is a main entry. In a document index this entry will
         be emphasized by assigning a character style to it.
      */
     [property] boolean IsMainEntry;
 };
 
-//=============================================================================
 
 }; }; }; };
 #endif

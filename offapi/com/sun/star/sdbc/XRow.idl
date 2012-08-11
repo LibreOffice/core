@@ -52,7 +52,6 @@
  */
 published interface XRow: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** reports whether the last column read had a value of SQL NULL.
         Note that you must first call getXXX on a column to try to read
@@ -65,7 +64,6 @@ published interface XRow: com::sun::star::uno::XInterface
                 if a database access error occurs.
      */
     boolean wasNull() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** gets the value of a column in the current row as a string.
         @param columnIndex
@@ -76,7 +74,6 @@ published interface XRow: com::sun::star::uno::XInterface
                 if a database access error occurs.
      */
     string getString([in]long columnIndex) raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** gets the value of a column in the current row as boolean.
         @param columnIndex
@@ -87,7 +84,6 @@ published interface XRow: com::sun::star::uno::XInterface
                 if a database access error occurs.
      */
     boolean getBoolean([in]long columnIndex) raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** get the value of a column in the current row as a byte.
         @param columnIndex
@@ -98,7 +94,6 @@ published interface XRow: com::sun::star::uno::XInterface
                 if a database access error occurs.
      */
     byte getByte([in]long columnIndex) raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** gets the value of a column in the current row as a short.
         @param columnIndex
@@ -109,7 +104,6 @@ published interface XRow: com::sun::star::uno::XInterface
                 if a database access error occurs.
      */
     short getShort([in]long columnIndex) raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** get the value of a column in the current row as an integer.
         @param columnIndex
@@ -120,7 +114,6 @@ published interface XRow: com::sun::star::uno::XInterface
                 if a database access error occurs.
      */
     long getInt([in]long columnIndex) raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** get the value of a column in the current row as a long.
         @param columnIndex
@@ -131,7 +124,6 @@ published interface XRow: com::sun::star::uno::XInterface
                 if a database access error occurs.
      */
     hyper getLong([in]long columnIndex) raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** gets the value of a column in the current row as a float.
         @param columnIndex
@@ -142,7 +134,6 @@ published interface XRow: com::sun::star::uno::XInterface
                 if a database access error occurs.
      */
     float getFloat([in]long columnIndex) raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** gets the value of a column in the current row as a double.
         @param columnIndex
@@ -153,7 +144,6 @@ published interface XRow: com::sun::star::uno::XInterface
                 if a database access error occurs.
      */
     double getDouble([in]long columnIndex) raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** gets the value of a column in the current row as a byte array.
              The bytes represent the raw values returned by the driver.
@@ -165,7 +155,6 @@ published interface XRow: com::sun::star::uno::XInterface
                 if a database access error occurs.
      */
     sequence<byte> getBytes([in]long columnIndex) raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** gets the value of a column in the current row as a date object.
         @param columnIndex
@@ -177,7 +166,6 @@ published interface XRow: com::sun::star::uno::XInterface
      */
     com::sun::star::util::Date getDate([in]long columnIndex)
         raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** gets the value of a column in the current row as a time object.
         @param columnIndex
@@ -189,7 +177,6 @@ published interface XRow: com::sun::star::uno::XInterface
      */
     com::sun::star::util::Time getTime([in]long columnIndex)
         raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** gets the value of a column in the current row as a datetime object.
         @param columnIndex
@@ -201,7 +188,6 @@ published interface XRow: com::sun::star::uno::XInterface
      */
     com::sun::star::util::DateTime getTimestamp([in]long columnIndex)
         raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** gets the value of a column in the current row as a stream of
         uninterpreted bytes. The value can then be read in chunks from the
@@ -227,7 +213,6 @@ published interface XRow: com::sun::star::uno::XInterface
      */
     com::sun::star::io::XInputStream getBinaryStream([in]long columnIndex)
         raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** gets the value of a column in the current row as a stream of
         uninterpreted bytes. The value can then be read in chunks from the
@@ -253,7 +238,6 @@ published interface XRow: com::sun::star::uno::XInterface
      */
     com::sun::star::io::XInputStream getCharacterStream([in]long columnIndex)
         raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** returns the value of a column in the current row as an object.
         This method uses the given
@@ -272,7 +256,6 @@ published interface XRow: com::sun::star::uno::XInterface
     any getObject([in]long columnIndex,
                   [in]com::sun::star::container::XNameAccess typeMap)
         raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** gets a REF(&amp;lt;structured-type&amp;gt;) column value from the current row.
         @param columnIndex
@@ -283,7 +266,6 @@ published interface XRow: com::sun::star::uno::XInterface
                 if a database access error occurs.
      */
     XRef getRef([in]long columnIndex) raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** gets a BLOB value in the current row.
         @param columnIndex
@@ -294,7 +276,6 @@ published interface XRow: com::sun::star::uno::XInterface
                 if a database access error occurs.
      */
     XBlob getBlob([in]long columnIndex) raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** gets a CLOB value in the current row of this
         <code>ResultSet</code>
@@ -307,7 +288,6 @@ published interface XRow: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     XClob getClob([in]long columnIndex) raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** gets a SQL ARRAY value from the current row of this
         <code>ResultSet</code>
@@ -322,7 +302,6 @@ published interface XRow: com::sun::star::uno::XInterface
     XArray getArray([in]long columnIndex) raises (SQLException);
 };
 
-//=============================================================================
 
 }; }; }; };
 

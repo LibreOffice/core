@@ -20,11 +20,9 @@
 #define __com_sun_star_style_LineNumberPosition_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module style {
 
-//=============================================================================
 
 // DocMerge from idl: constants com::sun::star::style::LineNumberPosition
 /** These constants are used to specify the position of the numbering
@@ -32,28 +30,24 @@
  */
 published constants LineNumberPosition
 {
-    //-------------------------------------------------------------------------
 
     // DocMerge from idl: value com::sun::star::style::LineNumberPosition::LEFT
     /** the number occurs on the left side of the pages.
      */
     const short LEFT = 0;
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from idl: value com::sun::star::style::LineNumberPosition::RIGHT
     /** the number occurs on the right side of the pages.
      */
     const short RIGHT = 1;
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from idl: value com::sun::star::style::LineNumberPosition::INSIDE
     /** the number occurs alternating on the inner side of the pages.
      */
     const short INSIDE = 2;
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from idl: value com::sun::star::style::LineNumberPosition::OUTSIDE
     /** the number occurs alternating on the outside side of the pages.
@@ -62,7 +56,6 @@ published constants LineNumberPosition
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

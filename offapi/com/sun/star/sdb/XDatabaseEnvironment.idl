@@ -27,13 +27,11 @@
 
 #include <com/sun/star/beans/PropertyValue.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module sdb {
 
  published interface XDatabaseAccess;
 
-//=============================================================================
 
 /** is not to be used anymore.
 
@@ -47,7 +45,6 @@ published interface XDatabaseEnvironment: com::sun::star::sdbc::XDriverManager
         raises (com::sun::star::sdbc::SQLException);
 };
 
-//=============================================================================
 
 }; }; }; };
 

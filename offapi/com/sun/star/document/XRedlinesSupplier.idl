@@ -30,17 +30,14 @@
 
 #include <com/sun/star/container/XEnumerationAccess.idl>
 
-//=============================================================================
 
 module com {   module sun {   module star {   module document {
 
-//=============================================================================
 
 /** provides access to a container of the redline objects of the document.
  */
 published interface XRedlinesSupplier: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** @returns
             an enumeration access that provides access to the redline objects of the document.
 
@@ -51,7 +48,6 @@ published interface XRedlinesSupplier: com::sun::star::uno::XInterface
     com::sun::star::container::XEnumerationAccess getRedlines();
 };
 
-//=============================================================================
 
 }; }; }; };
 

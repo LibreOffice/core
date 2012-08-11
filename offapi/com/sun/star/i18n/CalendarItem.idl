@@ -20,11 +20,9 @@
 #ifndef __com_sun_star_i18n_CalendarItem_idl__
 #define __com_sun_star_i18n_CalendarItem_idl__
 
-//=============================================================================
 
 module com { module sun { module star { module i18n {
 
-//=============================================================================
 
 
 /**
@@ -46,7 +44,6 @@ published struct CalendarItem
     /// The full name, for example, <b>"Sunday"</b>.
     string FullName; };
 
-//=============================================================================
 }; }; }; };
 
 #endif

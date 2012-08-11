@@ -24,11 +24,9 @@
 #include <com/sun/star/container/NoSuchElementException.idl>
 
 
-//============================================================================
 
 module com {  module sun {  module star {  module i18n {
 
-//============================================================================
 
 /**
     provides access to forbidden character settings in a document.
@@ -39,34 +37,29 @@ module com {  module sun {  module star {  module i18n {
 
 published interface XForbiddenCharacters : com::sun::star::uno::XInterface
 {
-    //------------------------------------------------------------------------
     /** returns the forbidden characters for a given locale.
      */
     ForbiddenCharacters getForbiddenCharacters(
                     [in] com::sun::star::lang::Locale aLocale )
             raises( com::sun::star::container::NoSuchElementException );
 
-    //------------------------------------------------------------------------
     /** determines if forbidden characters are set for a given locale.
      */
     boolean     hasForbiddenCharacters(
                     [in] com::sun::star::lang::Locale aLocale );
 
-    //------------------------------------------------------------------------
     /** sets the forbidden characters for a given Locale.
      */
     void        setForbiddenCharacters(
                     [in] com::sun::star::lang::Locale aLocale,
                     [in] ForbiddenCharacters aForbiddenCharacters );
 
-    //------------------------------------------------------------------------
     /** removes the setting of forbidden characters for a given locale.
      */
     void        removeForbiddenCharacters(
                     [in] com::sun::star::lang::Locale aLocale );
 };
 
-//============================================================================
 }; }; }; };
 
 #endif

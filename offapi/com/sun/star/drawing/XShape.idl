@@ -28,18 +28,15 @@
 #include <com/sun/star/beans/PropertyVetoException.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module drawing {
 
-//=============================================================================
 
 /** lets you do a basic transformation on a <type>Shape</type> and
     get its type.
  */
 published interface XShape: com::sun::star::drawing::XShapeDescriptor
 {
-    //-------------------------------------------------------------------------
 
     /** gets the current position of this object.
 
@@ -48,7 +45,6 @@ published interface XShape: com::sun::star::drawing::XShapeDescriptor
      */
     com::sun::star::awt::Point getPosition();
 
-    //-------------------------------------------------------------------------
 
     /** sets the current position of this object
 
@@ -57,7 +53,6 @@ published interface XShape: com::sun::star::drawing::XShapeDescriptor
      */
     void setPosition( [in] com::sun::star::awt::Point aPosition );
 
-    //-------------------------------------------------------------------------
 
     /** gets the size of this object.
 
@@ -66,7 +61,6 @@ published interface XShape: com::sun::star::drawing::XShapeDescriptor
      */
     com::sun::star::awt::Size getSize();
 
-    //-------------------------------------------------------------------------
 
     /** sets the size of this object.
 
@@ -78,7 +72,6 @@ published interface XShape: com::sun::star::drawing::XShapeDescriptor
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

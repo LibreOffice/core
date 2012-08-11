@@ -30,11 +30,9 @@
 
 #include <com/sun/star/beans/XPropertySetInfo.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** This service provides access to the meta data of the well known
     (predefined) UCB properties.
 
@@ -45,7 +43,6 @@ module com { module sun { module star { module ucb {
 published service PropertiesManager
     : com::sun::star::beans::XPropertySetInfo;
 
-//=============================================================================
 
 }; }; }; };
 

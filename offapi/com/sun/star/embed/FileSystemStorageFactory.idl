@@ -32,11 +32,9 @@
 #include <com/sun/star/lang/XSingleServiceFactory.idl>
 
 
-//============================================================================
 
  module com {  module sun {  module star {  module embed {
 
-//============================================================================
 /** The <type>FileSystemStorageFactory</type> is a service that allows to
     create a <type>FileSystemStorage</type> based on URL. The URL must point
     to a folder.
@@ -95,7 +93,6 @@
 published service FileSystemStorageFactory
     : ::com::sun::star::lang::XSingleServiceFactory;
 
-//============================================================================
 
 }; }; }; };
 

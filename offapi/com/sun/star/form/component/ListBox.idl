@@ -26,11 +26,9 @@
 #include <com/sun/star/form/XReset.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module form {  module component {
 
-//=============================================================================
 
 /** specifies a model for a control which allows to choose in a list of alternative values.
  */
@@ -63,7 +61,6 @@ published service ListBox
 
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

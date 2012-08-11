@@ -50,11 +50,9 @@
 #include <com/sun/star/sheet/XSheetConditionalEntries.idl>
 #include <com/sun/star/beans/XPropertySet.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** represents a collection of cell ranges in a spreadsheet document.
 
@@ -62,43 +60,36 @@ module com {  module sun {  module star {  module sheet {
  */
 published service SheetCellRanges
 {
-    //-------------------------------------------------------------------------
 
     /** contributes common cell formatting properties.
      */
     service com::sun::star::table::CellProperties;
 
-    //-------------------------------------------------------------------------
 
     /** contributes properties for character formatting of Western text.
      */
     service com::sun::star::style::CharacterProperties;
 
-    //-------------------------------------------------------------------------
 
     /** contributes properties for character formatting of Asian text.
      */
     service com::sun::star::style::CharacterPropertiesAsian;
 
-    //-------------------------------------------------------------------------
 
     /** contributes properties for character formatting of Complex text.
      */
     service com::sun::star::style::CharacterPropertiesComplex;
 
-    //-------------------------------------------------------------------------
 
     /** contributes properties for paragraph formatting.
      */
     service com::sun::star::style::ParagraphProperties;
 
-    //-------------------------------------------------------------------------
 
     /** provides interfaces to find cells with specific properties.
      */
     service com::sun::star::sheet::SheetRangesQuery;
 
-    //=========================================================================
 
     /** provides "Find & Replace" functionality.
 
@@ -109,34 +100,29 @@ published service SheetCellRanges
      */
     interface com::sun::star::util::XReplaceable;
 
-    //-------------------------------------------------------------------------
 
     /** provides modifying the cell indentation.
      */
     interface com::sun::star::util::XIndent;
 
-    //-------------------------------------------------------------------------
 
     /** provides computation of a value based on the contents of all
         cells of this range and to clear specific cells.
      */
     interface com::sun::star::sheet::XSheetOperation;
 
-    //-------------------------------------------------------------------------
 
     /** provides modifying the source data cells of a chart and makes
         it possible to learn about changes in the cell values.
      */
     interface com::sun::star::chart::XChartDataArray;
 
-    //-------------------------------------------------------------------------
 
     /** provides methods to access cell ranges via index and to add and
         remove cell ranges.
      */
     interface com::sun::star::sheet::XSheetCellRangeContainer;
 
-    //-------------------------------------------------------------------------
 
     /** creates an enumeration of all cell ranges.
 
@@ -144,7 +130,6 @@ published service SheetCellRanges
      */
     interface com::sun::star::container::XEnumerationAccess;
 
-    //-------------------------------------------------------------------------
 
     /** provides access of the cell ranges via an user-defined name.
 
@@ -153,7 +138,6 @@ published service SheetCellRanges
      */
     interface com::sun::star::container::XNameContainer;
 
-    //=========================================================================
 
     /** contains the conditional formatting settings for this cell.
 
@@ -165,7 +149,6 @@ published service SheetCellRanges
     [property] com::sun::star::sheet::XSheetConditionalEntries
         ConditionalFormat;
 
-    //-------------------------------------------------------------------------
 
     /** contains the conditional formatting settings for this cell,
         using localized formulas.
@@ -178,7 +161,6 @@ published service SheetCellRanges
     [optional, property] com::sun::star::sheet::XSheetConditionalEntries
         ConditionalFormatLocal;
 
-    //-------------------------------------------------------------------------
 
     /** contains the data validation settings for this cell.
 
@@ -189,7 +171,6 @@ published service SheetCellRanges
      */
     [property] com::sun::star::beans::XPropertySet Validation;
 
-    //-------------------------------------------------------------------------
 
     /** contains the data validation settings for this cell,
         using localized formulas.
@@ -201,14 +182,12 @@ published service SheetCellRanges
      */
     [optional, property] com::sun::star::beans::XPropertySet ValidationLocal;
 
-    //-------------------------------------------------------------------------
 
     /** Returns the absolute address of the ranges as string, e.g. "$Sheet1.$B$2:$D$5".
      */
     [optional, readonly, property] string AbsoluteName;
 };
 
-//=============================================================================
 
 }; }; }; };
 

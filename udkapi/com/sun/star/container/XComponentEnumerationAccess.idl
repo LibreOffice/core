@@ -24,18 +24,15 @@
 #include <com/sun/star/container/XComponentEnumeration.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module container {
 
-//=============================================================================
 
 /** provides a factory for a typified enumeration through
     a collection of components.
  */
 published interface XComponentEnumerationAccess: com::sun::star::container::XEnumerationAccess
 {
-    //-------------------------------------------------------------------------
 
     /** creates a new instance of enumeration through components.
      */
@@ -43,7 +40,6 @@ published interface XComponentEnumerationAccess: com::sun::star::container::XEnu
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -22,11 +22,9 @@
 #include <com/sun/star/drawing/XShapes.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module drawing {
 
-//=============================================================================
 
 /** identifies an <type>XShapes</type> as a <type>DrawPage</type>.
  */
@@ -34,7 +32,6 @@ published interface XDrawPage: com::sun::star::drawing::XShapes
 {
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -23,11 +23,9 @@
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/sheet/XDataPilotTables.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** grants access to a collection of data pilot tables.
 
@@ -35,7 +33,6 @@ module com {  module sun {  module star {  module sheet {
  */
 published interface XDataPilotTablesSupplier: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** Returns the collection of data pilot tables.
 
@@ -45,7 +42,6 @@ published interface XDataPilotTablesSupplier: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

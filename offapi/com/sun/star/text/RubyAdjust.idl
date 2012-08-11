@@ -20,39 +20,31 @@
 #define __com_sun_star_text_RubyAdjust_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module text {
 
-//=============================================================================
 
 /** These enumeration values describe the adjustment of ruby text.
  */
 published enum RubyAdjust
 {
-    //-------------------------------------------------------------------------
     /** adjusted to the left.
      */
     LEFT,
-    //-------------------------------------------------------------------------
     /** centric adjusted.
      */
     CENTER,
-    //-------------------------------------------------------------------------
     /** adjusted to the right.
      */
     RIGHT,
-    //-------------------------------------------------------------------------
     /** adjusted to both borders / stretched
      */
     BLOCK,
-    //-------------------------------------------------------------------------
     /** adjusted to both borders except for a small indent on both sides
      */
     INDENT_BLOCK
 };
 
-//=============================================================================
 
 }; }; }; };
 

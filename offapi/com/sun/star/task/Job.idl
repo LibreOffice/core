@@ -23,11 +23,9 @@
 #include <com/sun/star/task/XJob.idl>
 #include <com/sun/star/util/XCloseable.idl>
 
-//============================================================================
 
 module com { module sun { module star { module task {
 
-//============================================================================
 /** represent a synchronous job, which can be executed by the global <type>JobExecutor</type>
     instance.
 
@@ -37,12 +35,10 @@ module com { module sun { module star { module task {
  */
 published service Job
 {
-    //------------------------------------------------------------------------
     /** used to initialize and execute this job.
      */
     interface com::sun::star::task::XJob;
 
-    //------------------------------------------------------------------------
     /** should be supported to handle environment termination gracefully.
      */
     [optional] interface com::sun::star::util::XCloseable;

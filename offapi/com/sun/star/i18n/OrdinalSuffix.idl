@@ -23,7 +23,6 @@
 #include <com/sun/star/lang/XServiceInfo.idl>
 #include <com/sun/star/i18n/XOrdinalSuffix.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module i18n {
 
@@ -44,7 +43,6 @@ service OrdinalSuffix
     interface com::sun::star::lang::XServiceInfo;
 };
 
-//=============================================================================
 
 }; }; }; };
 

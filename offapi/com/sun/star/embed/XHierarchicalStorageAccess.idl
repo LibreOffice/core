@@ -42,11 +42,9 @@
 #include <com/sun/star/packages/NoEncryptionException.idl>
 
 
-//============================================================================
 
  module com {  module sun {  module star {  module embed {
 
-//============================================================================
 /** This interface allows hierarchical access to storage tree.
 
     <p>
@@ -64,8 +62,6 @@
 published interface XHierarchicalStorageAccess
 {
     // METHODS
-    //
-    // -----------------------------------------------------------------------
     /** allows to get access to a child stream of the storage, using
         hierarchical path.
 
@@ -106,7 +102,6 @@ published interface XHierarchicalStorageAccess
                 ::com::sun::star::io::IOException,
                 ::com::sun::star::embed::StorageWrappedTargetException );
 
-    // -----------------------------------------------------------------------
     /** allows to get access to a child encrypted stream with password using
         hierarchical path.
 
@@ -162,7 +157,6 @@ published interface XHierarchicalStorageAccess
                 ::com::sun::star::io::IOException,
                 ::com::sun::star::embed::StorageWrappedTargetException );
 
-    // -----------------------------------------------------------------------
     /** removes a stream specified by hierarchical name from a storage.
 
         @param sElementPath
@@ -193,7 +187,6 @@ published interface XHierarchicalStorageAccess
 
 };
 
-//============================================================================
 
 }; }; }; };
 

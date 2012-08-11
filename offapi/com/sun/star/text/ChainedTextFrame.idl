@@ -24,11 +24,9 @@
 #include <com/sun/star/util/XChainable.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module text {
 
-//=============================================================================
 
 /** extends a <type>TextFrame</type> which shares the same <type>Text</type>
     with other <type>ChainedTextFrame</type> instances that will make the text
@@ -39,14 +37,12 @@ published service ChainedTextFrame
 {
     service com::sun::star::text::TextFrame;
 
-    //-------------------------------------------------------------------------
     /** name of the previous frame in the chain
 
         <p>An empty string indicates that there is no previous frame.</p>
      */
     [property, maybevoid] string ChainNextName;
 
-    //-------------------------------------------------------------------------
     /** name of the next frame in the chain
 
         <p>An empty string indicates that there is no next frame.</p>
@@ -54,7 +50,6 @@ published service ChainedTextFrame
     [property, maybevoid] string ChainPrevName;
 };
 
-//=============================================================================
 
 }; }; }; };
 

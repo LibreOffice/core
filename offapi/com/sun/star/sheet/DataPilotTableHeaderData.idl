@@ -23,11 +23,9 @@
 #include <com/sun/star/sheet/DataPilotFieldFilter.idl>
 #include <com/sun/star/sheet/DataResult.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** information about a cell within the column or row header area of a DataPilot table.
 
@@ -63,7 +61,6 @@ struct DataPilotTableHeaderData
     string  MemberName;
 };
 
-//=============================================================================
 
 }; }; }; };
 

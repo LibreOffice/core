@@ -24,17 +24,14 @@
 #include <com/sun/star/presentation/XPresentation.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module presentation {
 
-//=============================================================================
 
 /** controls a presentation directly. This supplier will do this.
  */
 published interface XPresentationSupplier: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /**
         @returns an interface to control a presentation.
@@ -43,7 +40,6 @@ published interface XPresentationSupplier: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

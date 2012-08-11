@@ -25,11 +25,9 @@
 #include <com/sun/star/form/runtime/XFormController.idl>
 #include <com/sun/star/lang/IllegalArgumentException.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module view {
 
-//=============================================================================
 
 /** provides access to the form layer elements in a view
 
@@ -84,11 +82,9 @@ interface XFormLayerAccess
     void    setFormDesignMode( [in] boolean DesignMode );
 };
 
-//=============================================================================
 
 }; }; }; };
 
-//=============================================================================
 
 #endif
 

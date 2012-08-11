@@ -31,41 +31,34 @@
 #include <com/sun/star/lang/EventObject.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module awt {
 
-//=============================================================================
 
 /** specifies a window event.
  */
 published struct WindowEvent: com::sun::star::lang::EventObject
 {
-    //-------------------------------------------------------------------------
 
     /** specifies the outer x position of the window.
      */
     long X;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the outer y position of the window.
      */
     long Y;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the outer (total) width of the window.
      */
     long Width;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the outer (total) height of the window.
      */
     long Height;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the inset from the left.
 
@@ -74,7 +67,6 @@ published struct WindowEvent: com::sun::star::lang::EventObject
      */
     long LeftInset;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the inset from the top.
 
@@ -83,7 +75,6 @@ published struct WindowEvent: com::sun::star::lang::EventObject
      */
     long TopInset;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the inset from the right.
 
@@ -92,7 +83,6 @@ published struct WindowEvent: com::sun::star::lang::EventObject
      */
     long RightInset;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the inset from the bottom.
 
@@ -103,7 +93,6 @@ published struct WindowEvent: com::sun::star::lang::EventObject
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

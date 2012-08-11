@@ -23,11 +23,9 @@
 #include <com/sun/star/ucb/XContentIdentifier.idl>
 #include <com/sun/star/ucb/XCommandProcessor.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** Allows an <type>XContent</type> to delete itself into the trash can.
 
     <p>This is an additional interface the XContent representing the trash
@@ -35,7 +33,6 @@ module com { module sun { module star { module ucb {
 */
 published interface XRecycler : com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** Notify the trash can that an <type>XContent</type> is deleting itself
         into it.
 
@@ -54,7 +51,6 @@ published interface XRecycler : com::sun::star::uno::XInterface
                         [in] com::sun::star::ucb::XContentIdentifier Identifier);
 };
 
-//=============================================================================
 
 }; }; }; };
 

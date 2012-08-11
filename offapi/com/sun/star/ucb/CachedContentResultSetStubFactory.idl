@@ -31,17 +31,14 @@
 
 #include <com/sun/star/ucb/XCachedContentResultSetStubFactory.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** is a factory for <type>CachedContentResultSetStub</type> implementations.
 */
 published service CachedContentResultSetStubFactory
     : XCachedContentResultSetStubFactory;
 
-//=============================================================================
 
 }; }; }; };
 

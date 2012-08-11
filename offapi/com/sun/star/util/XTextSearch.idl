@@ -42,18 +42,15 @@ module com { module sun { module star { module util {
  */
 published interface XTextSearch : com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** set the options for the forward or backward search.
 
     */
     void setOptions ([in] SearchOptions options);
-    //-------------------------------------------------------------------------
     /** search forward in the searchStr, starts at startPos and ends by endpos.
         The result is returned in the SearchResult.
 
     */
     SearchResult  searchForward  ([in] string searchStr, [in] long startPos, [in] long endPos );
-    //-------------------------------------------------------------------------
     /** search backward in the searchStr, starts at startPos and ends by endpos.
         The endpos must be lower then the startpos, because the function searches backward!
         The result is returned in the SearchResult.
@@ -62,7 +59,6 @@ published interface XTextSearch : com::sun::star::uno::XInterface
     SearchResult  searchBackward ([in] string searchStr, [in] long startPos, [in] long endPos );
 };
 
-//=============================================================================
 }; }; }; };
 
 #endif

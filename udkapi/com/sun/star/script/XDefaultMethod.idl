@@ -23,7 +23,6 @@
 #include <com/sun/star/uno/XInterface.idl>
 
 module com { module sun { module star { module script {
-//==============================================================================
 /**
     An object supporting this interface indicates to interested
     parties or clients the name of the default method for
@@ -37,7 +36,6 @@ module com { module sun { module star { module script {
 */
 interface XDefaultMethod : ::com::sun::star::uno::XInterface
 {
-  //-----------------------------------------------------------------------
   /**
     Returns the name of the default method
 

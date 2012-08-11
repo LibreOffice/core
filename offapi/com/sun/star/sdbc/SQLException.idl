@@ -62,7 +62,6 @@ published exception SQLException: com::sun::star::uno::Exception
     any             NextException;
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -20,11 +20,9 @@
 #define __com_sun_star_script_ContextInformation_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module script {
 
-//=============================================================================
 /** provides information about a certain stack frame.
 
     @deprecated
@@ -37,14 +35,12 @@ published struct ContextInformation
      */
     string Name;
 
-    //-------------------------------------------------------------------------
     /** Source code of the Module, that is associated with the context. If the source can
         be accessed using the ModuleName or if the source is unknown (executing compiled
         code) this string can be empty.
      */
     string SourceCode;
 
-    //-------------------------------------------------------------------------
     /** contains the first line in the module's source code associated with
         the context.
 
@@ -58,33 +54,28 @@ published struct ContextInformation
      */
     long StartLine;
 
-    //-------------------------------------------------------------------------
     /** contains the first column in the <var>StartLine</var> associated with
         the context.
      */
     long StartColumn;
 
-    //-------------------------------------------------------------------------
 
     /** contains the last line in the module's source code associated with
         the context.
      */
     long EndLine;
 
-    //-------------------------------------------------------------------------
     /** contains the first column in the <var>EndLine</var> that is NOT
         associated with the context.
      */
     long EndColumn;
 
-    //-------------------------------------------------------------------------
     /** Get all names of the local variable in this context.
      */
     sequence<string> LocalVariableNames;
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

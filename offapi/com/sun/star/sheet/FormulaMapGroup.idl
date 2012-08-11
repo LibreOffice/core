@@ -20,11 +20,9 @@
 #ifndef __com_sun_star_sheet_FormulaMapGroup_idl__
 #define __com_sun_star_sheet_FormulaMapGroup_idl__
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** Constants of bit masks used with
     <member>XFormurmulaOpCodeMapper::getAvailableMappings</member> to
@@ -61,7 +59,6 @@ constants FormulaMapGroup
     const long ALL_EXCEPT_SPECIAL = 0x7fffffff;
 };
 
-//=============================================================================
 
 }; }; }; };
 

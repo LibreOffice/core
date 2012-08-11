@@ -19,13 +19,11 @@
 #ifndef __com_sun_star_connection_Acceptor_idl__
 #define __com_sun_star_connection_Acceptor_idl__
 
-//=============================================================================
 
  module com {  module sun {  module star {  module connection {
 
 published interface XAcceptor;
 
-//=============================================================================
 
 /** allows to accept connection attempts from another process.
     <p>
@@ -36,7 +34,6 @@ published interface XAcceptor;
  */
 published service Acceptor: XAcceptor;
 
-//=============================================================================
 
 }; }; }; };
 #endif

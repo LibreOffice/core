@@ -22,29 +22,24 @@
 #include <com/sun/star/text/XTextCursor.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module text {
 
-//=============================================================================
 
 /** makes it possible to move a cursor word by word.
  */
 published interface XWordCursor: com::sun::star::text::XTextCursor
 {
-    //-------------------------------------------------------------------------
 
     /** determines if the cursor is positioned at the start of a word.
      */
     boolean isStartOfWord();
 
-    //-------------------------------------------------------------------------
 
     /** determines if the cursor is positioned at the end of a word.
      */
     boolean isEndOfWord();
 
-    //-------------------------------------------------------------------------
 
     /** moves the cursor to the next word.
 
@@ -58,7 +53,6 @@ published interface XWordCursor: com::sun::star::text::XTextCursor
      */
     boolean gotoNextWord( [in] boolean bExpand );
 
-    //-------------------------------------------------------------------------
 
     /** moves the cursor to the previous word.
 
@@ -72,7 +66,6 @@ published interface XWordCursor: com::sun::star::text::XTextCursor
      */
     boolean gotoPreviousWord( [in] boolean bExpand );
 
-    //-------------------------------------------------------------------------
 
     /** moves the cursor to the end of the current word.
 
@@ -83,7 +76,6 @@ published interface XWordCursor: com::sun::star::text::XTextCursor
      */
     boolean gotoEndOfWord( [in] boolean bExpand );
 
-    //-------------------------------------------------------------------------
 
     /** moves the cursor to the start of the current word.
 
@@ -96,7 +88,6 @@ published interface XWordCursor: com::sun::star::text::XTextCursor
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

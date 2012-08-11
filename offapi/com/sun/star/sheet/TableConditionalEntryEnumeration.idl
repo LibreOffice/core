@@ -22,11 +22,9 @@
 
 #include <com/sun/star/container/XEnumeration.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** represents an enumeration of conditional entries.
 
@@ -34,7 +32,6 @@ module com {  module sun {  module star {  module sheet {
  */
 published service TableConditionalEntryEnumeration
 {
-    //-------------------------------------------------------------------------
 
     /** provides methods to access the conditional entries in the enumeration.
 
@@ -44,7 +41,6 @@ published service TableConditionalEntryEnumeration
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

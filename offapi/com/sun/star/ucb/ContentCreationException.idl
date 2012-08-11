@@ -22,11 +22,9 @@
 #include <com/sun/star/uno/Exception.idl>
 #include <com/sun/star/ucb/ContentCreationError.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** This exception is thrown to indicate that the creation of a UCB content
     failed.
 
@@ -40,7 +38,6 @@ published exception ContentCreationException : com::sun::star::uno::Exception
     ContentCreationError eError;
 };
 
-//=============================================================================
 
 }; }; }; };
 

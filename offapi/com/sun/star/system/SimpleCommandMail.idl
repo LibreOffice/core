@@ -24,15 +24,12 @@
 #include <com/sun/star/lang/XServiceInfo.idl>
 #include <com/sun/star/lang/XTypeProvider.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module system {
 
-//=============================================================================
 
  published interface XSimpleMailClientSupplier;
 
-//=============================================================================
 /** Specifies a SimpleCommandMail service. Implementations of such a service, do
     implement an interface to send mail messages via the current configured
     command line mail application.
@@ -42,24 +39,20 @@ module com { module sun { module star { module system {
 
 published service SimpleCommandMail
 {
-    //-------------------------------------------------------------------------
     /** Provides access to a <type>XSimpleMailClientSupplier</type> interface.
     */
     interface XSimpleMailClientSupplier;
 
-    //-------------------------------------------------------------------------
     /** Service should always support this interface.
     */
     interface com::sun::star::lang::XServiceInfo;
 
-    //-------------------------------------------------------------------------
     /** Service should always support this interface.
     */
     interface com::sun::star::lang::XTypeProvider;
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

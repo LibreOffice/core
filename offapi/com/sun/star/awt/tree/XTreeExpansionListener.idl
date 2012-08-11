@@ -33,11 +33,9 @@
 #include <com/sun/star/awt/tree/TreeExpansionEvent.idl>
 #include <com/sun/star/awt/tree/ExpandVetoException.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module awt {  module tree {
 
-//=============================================================================
 
 /** An instance of this interface can get notifications from a <type>TreeControl</type>
     when nodes are expanded or collapsed.
@@ -79,7 +77,6 @@ interface XTreeExpansionListener: com::sun::star::lang::XEventListener
     void treeCollapsed( [in] TreeExpansionEvent Event );
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

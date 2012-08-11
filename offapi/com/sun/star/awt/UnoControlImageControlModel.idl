@@ -24,11 +24,9 @@
 #include <com/sun/star/graphic/XGraphic.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module awt {
 
-//=============================================================================
 
 /** specifies the standard model of an <type>UnoControlImageControl</type>.
  */
@@ -36,13 +34,11 @@ published service UnoControlImageControlModel
 {
     service com::sun::star::awt::UnoControlModel;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the background color (RGB) of the control.
      */
     [property] com::sun::star::util::Color BackgroundColor;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the border style of the control.
 
@@ -54,7 +50,6 @@ published service UnoControlImageControlModel
      */
     [property] short Border;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the color of the border, if present
 
@@ -65,32 +60,27 @@ published service UnoControlImageControlModel
      */
     [optional, property] long BorderColor;
 
-    //-------------------------------------------------------------------------
 
     /** determines whether the control is enabled or disabled.
      */
     [property] boolean Enabled;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the help text of the control.
      */
     [property] string HelpText;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the help URL of the control.
      */
     [property] string HelpURL;
 
-    //-------------------------------------------------------------------------
 
     /** specifies an URL to an image to use for the control.
         @see Graphic
      */
     [property] string ImageURL;
 
-    //-------------------------------------------------------------------------
 
     /** specifies a graphic to be displayed on the control
 
@@ -107,13 +97,11 @@ published service UnoControlImageControlModel
      */
     [optional, property, transient] com::sun::star::graphic::XGraphic Graphic;
 
-    //-------------------------------------------------------------------------
 
     /** specifies that the control will be printed with the document.
      */
     [property] boolean Printable;
 
-    //-------------------------------------------------------------------------
 
     /** specifies if the image is automatically scaled to the size of the
         control.
@@ -130,7 +118,6 @@ published service UnoControlImageControlModel
     */
     [property, optional] short ScaleMode;
 
-    //-------------------------------------------------------------------------
 
     /** specifies that the control can be reached with the TAB key.
 
@@ -140,7 +127,6 @@ published service UnoControlImageControlModel
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

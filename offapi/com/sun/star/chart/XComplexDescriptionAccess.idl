@@ -21,11 +21,9 @@
 
 #include <com/sun/star/chart/XChartDataArray.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module chart {
 
-//=============================================================================
 
 /** Offers access to complex column and row descriptions.
 
@@ -36,7 +34,6 @@
 
 published interface XComplexDescriptionAccess : XChartDataArray
 {
-    //-------------------------------------------------------------------------
 
     /** retrieves the description texts for all rows.
 
@@ -47,7 +44,6 @@ published interface XComplexDescriptionAccess : XChartDataArray
      */
     sequence< sequence< string > > getComplexRowDescriptions();
 
-    //-------------------------------------------------------------------------
 
     /** sets the description texts for all rows.
 
@@ -58,7 +54,6 @@ published interface XComplexDescriptionAccess : XChartDataArray
     */
     void setComplexRowDescriptions( [in] sequence< sequence< string > > rRowDescriptions );
 
-    //-------------------------------------------------------------------------
 
     /** retrieves the description texts for all columns.
 
@@ -69,7 +64,6 @@ published interface XComplexDescriptionAccess : XChartDataArray
      */
     sequence< sequence< string > > getComplexColumnDescriptions();
 
-    //-------------------------------------------------------------------------
 
     /** sets the description texts for all columns.
 
@@ -81,7 +75,6 @@ published interface XComplexDescriptionAccess : XChartDataArray
     void setComplexColumnDescriptions( [in] sequence< sequence< string > > rColumnDescriptions );
 };
 
-//=============================================================================
 
 }; }; }; };
 

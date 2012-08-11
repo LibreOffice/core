@@ -34,11 +34,9 @@
 #include <com/sun/star/linguistic2/XDictionaryEntry.idl>
 #include <com/sun/star/linguistic2/XDictionaryEventListener.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module linguistic2 {
 
-//=============================================================================
 /** This interfaces enables the object to access personal dictionaries.
 
     <P>Personal dictionaries are used to supply additional
@@ -59,7 +57,6 @@ module com { module sun { module star { module linguistic2 {
 */
 published interface XDictionary : com::sun::star::container::XNamed
 {
-    //-------------------------------------------------------------------------
     /** returns the type of the dictionary.
 
         @returns
@@ -69,7 +66,6 @@ published interface XDictionary : com::sun::star::container::XNamed
     */
     com::sun::star::linguistic2::DictionaryType getDictionaryType();
 
-    //-------------------------------------------------------------------------
     /** specifies whether the dictionary should be used or not .
 
         @param  bAcvtivate
@@ -78,21 +74,18 @@ published interface XDictionary : com::sun::star::container::XNamed
     */
     void setActive( [in] boolean bActivate );
 
-    //-------------------------------------------------------------------------
     /**
         @returns
             <TRUE/> if the dictionary is active, <FALSE/> otherwise.
     */
     boolean isActive();
 
-    //-------------------------------------------------------------------------
     /**
         @returns
                the number of entries in the dictionary.
     */
     long getCount();
 
-    //-------------------------------------------------------------------------
     /**
          @returns
              the language of the dictionary.
@@ -101,7 +94,6 @@ published interface XDictionary : com::sun::star::container::XNamed
     */
     com::sun::star::lang::Locale getLocale();
 
-    //-------------------------------------------------------------------------
     /** is used to set the language of the dictionary.
 
          @param aLocale
@@ -111,7 +103,6 @@ published interface XDictionary : com::sun::star::container::XNamed
     */
     void setLocale( [in] com::sun::star::lang::Locale aLocale );
 
-    //-------------------------------------------------------------------------
     /** searches for an entry that matches the given word.
 
         @returns
@@ -125,7 +116,6 @@ published interface XDictionary : com::sun::star::container::XNamed
     */
     com::sun::star::linguistic2::XDictionaryEntry getEntry( [in] string aWord );
 
-    //-------------------------------------------------------------------------
     /** is used to add an entry to the dictionary.
 
         <P>If an entry already exists, the dictionary remains unchanged
@@ -146,7 +136,6 @@ published interface XDictionary : com::sun::star::container::XNamed
     boolean addEntry(
         [in] com::sun::star::linguistic2::XDictionaryEntry xDicEntry );
 
-    //-------------------------------------------------------------------------
     /** is used to make an entry in the dictionary.
 
         <P>If an entry already exists, the dictionary remains unchanged
@@ -175,7 +164,6 @@ published interface XDictionary : com::sun::star::container::XNamed
             [in] boolean bIsNegative,
             [in] string aRplcText );
 
-    //-------------------------------------------------------------------------
     /** removes an entry from the dictionary.
 
         @param  aWord
@@ -187,7 +175,6 @@ published interface XDictionary : com::sun::star::container::XNamed
     */
     boolean remove( [in] string aWord );
 
-    //-------------------------------------------------------------------------
     /**
         @returns
              <TRUE/> if the dictionary is full and no further
@@ -195,7 +182,6 @@ published interface XDictionary : com::sun::star::container::XNamed
     */
     boolean isFull();
 
-    //-------------------------------------------------------------------------
     /**
         <p>This function should no longer be used since with the expansion of the
         maximum number of allowed entries the result may become unreasonable large!</p>
@@ -210,12 +196,10 @@ published interface XDictionary : com::sun::star::container::XNamed
 
     sequence<com::sun::star::linguistic2::XDictionaryEntry> getEntries();
 
-    //-------------------------------------------------------------------------
     /** removes all entries from the dictionary.
     */
     void clear();
 
-    //-------------------------------------------------------------------------
     /** adds an entry to the list of dictionary event listeners.
 
         <P>On dictionary events, each entry in the listener list will
@@ -236,7 +220,6 @@ published interface XDictionary : com::sun::star::container::XNamed
     boolean addDictionaryEventListener(
         [in] com::sun::star::linguistic2::XDictionaryEventListener xListener );
 
-    //-------------------------------------------------------------------------
     /** removes an entry from the list of dictionary event listeners.
 
         @param  xListener
@@ -254,7 +237,6 @@ published interface XDictionary : com::sun::star::container::XNamed
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

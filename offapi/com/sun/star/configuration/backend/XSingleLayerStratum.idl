@@ -26,11 +26,9 @@
 #include <com/sun/star/lang/IllegalArgumentException.idl>
 #include <com/sun/star/lang/NoSupportException.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module configuration { module backend {
 
-//=============================================================================
 
 /**
   Handles access to a stratum consisting of a single layer
@@ -48,7 +46,6 @@ module com { module sun { module star { module configuration { module backend {
 */
 published interface XSingleLayerStratum : ::com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /**
         retrieves the layer data for a component, if newer than indicated.
@@ -90,7 +87,6 @@ published interface XSingleLayerStratum : ::com::sun::star::uno::XInterface
         raises (BackendAccessException,
                 com::sun::star::lang::IllegalArgumentException) ;
 
-    //-------------------------------------------------------------------------
 
     /**
         retrieves a writable representation of the layer for a component.
@@ -116,10 +112,8 @@ published interface XSingleLayerStratum : ::com::sun::star::uno::XInterface
                 com::sun::star::lang::NoSupportException,
                 com::sun::star::lang::IllegalArgumentException) ;
 
-    //-------------------------------------------------------------------------
 } ;
 
-//=============================================================================
 
 } ; } ; } ; } ; } ;
 

@@ -49,7 +49,6 @@ published interface XResultSetAccess: com::sun::star::uno::XInterface
     com::sun::star::sdbc::XResultSet createResultSet() raises (com::sun::star::sdbc::SQLException);
 };
 
-//=============================================================================
 
 }; }; }; };
 

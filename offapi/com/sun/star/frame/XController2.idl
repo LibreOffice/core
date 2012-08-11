@@ -32,11 +32,9 @@
 #include <com/sun/star/awt/XWindow.idl>
 #include <com/sun/star/beans/PropertyValue.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module frame {
 
-//=============================================================================
 
 /** extends the <type>XController</type> interface
 
@@ -72,11 +70,9 @@ interface XController2 : XController
                                                             CreationArguments;
 };
 
-//=============================================================================
 
 }; }; }; };
 
-//=============================================================================
 
 #endif
 

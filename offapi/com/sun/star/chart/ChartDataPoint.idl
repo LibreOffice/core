@@ -21,16 +21,13 @@
 
 #include <com/sun/star/chart/ChartDataValue.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module chart {
 
-//=============================================================================
 /** @deprecated
 */
 published typedef sequence<ChartDataValue> ChartDataPoint;
 
-//=============================================================================
 
 }; }; }; };
 

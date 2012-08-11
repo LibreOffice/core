@@ -37,7 +37,6 @@ published service IndexColumn
     [readonly, property] boolean IsAscending;
 };
 
-//=============================================================================
 
 }; }; }; };
 

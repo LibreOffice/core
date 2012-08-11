@@ -20,11 +20,9 @@
 #define __com_sun_star_text_MailMergeType_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module text {
 
-//=============================================================================
 
 /** Defines the possible output types/devices for mail merge.
 
@@ -32,19 +30,16 @@
  */
 published constants MailMergeType
 {
-    //-------------------------------------------------------------------------
 
     /** The output device is a printer.
      */
     const short PRINTER = 1;
 
-    //-------------------------------------------------------------------------
 
     /** The output device is a file.
      */
     const short FILE = 2;
 
-    //-------------------------------------------------------------------------
 
     /** The output is sent as e-Mail.
      */
@@ -52,7 +47,6 @@ published constants MailMergeType
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

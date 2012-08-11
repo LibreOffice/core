@@ -20,67 +20,57 @@
 #define __com_sun_star_text_RelOrientation_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module text {
 
-//=============================================================================
 
 // DocMerge from idl: constants com::sun::star::text::RelOrientation
 /** These values define the reference position of relative orientations.
  */
 published constants RelOrientation
 {
-    //-------------------------------------------------------------------------
 
     // DocMerge from idl: value com::sun::star::text::RelOrientation::FRAME
     /** paragraph, including margins
      */
     const short FRAME = 0;
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from idl: value com::sun::star::text::RelOrientation::PRINT_AREA
     /** paragraph, without margins
      */
     const short PRINT_AREA = 1;
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from idl: value com::sun::star::text::RelOrientation::CHAR
     /** at a character
      */
     const short CHAR = 2;
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from idl: value com::sun::star::text::RelOrientation::PAGE_LEFT
     /** inside the left page margin
      */
     const short PAGE_LEFT = 3;
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from idl: value com::sun::star::text::RelOrientation::PAGE_RIGHT
     /** inside the right page margin
      */
     const short PAGE_RIGHT = 4;
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from idl: value com::sun::star::text::RelOrientation::FRAME_LEFT
     /** inside the left paragraph margin
      */
     const short FRAME_LEFT = 5;
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from idl: value com::sun::star::text::RelOrientation::FRAME_RIGHT
     /** inside the right paragraph margin
      */
     const short FRAME_RIGHT = 6;
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from idl: value com::sun::star::text::RelOrientation::PAGE_FRAME
     /** page includes margins for page-anchored frames identical with
@@ -88,7 +78,6 @@ published constants RelOrientation
      */
     const short PAGE_FRAME = 7;
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from idl: value com::sun::star::text::RelOrientation::PAGE_PRINT_AREA
     /** page without borders (for page anchored frames identical with
@@ -106,7 +95,6 @@ published constants RelOrientation
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

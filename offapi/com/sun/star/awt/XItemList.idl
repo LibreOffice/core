@@ -31,13 +31,11 @@
 #include <com/sun/star/lang/IndexOutOfBoundsException.idl>
 #include <com/sun/star/beans/Pair.idl>
 
-//==================================================================================================================
 
 module com { module sun { module star { module awt {
 
 interface XItemListListener;
 
-//==================================================================================================================
 
 /** provides convenient access to the list of items in a list box
  */
@@ -278,11 +276,9 @@ interface XItemList
     void removeItemListListener( [in] XItemListListener Listener );
 };
 
-//==================================================================================================================
 
 }; }; }; };
 
-//==================================================================================================================
 
 #endif
 

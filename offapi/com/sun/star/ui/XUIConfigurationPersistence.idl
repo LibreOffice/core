@@ -97,7 +97,6 @@ interface XUIConfigurationPersistence : ::com::sun::star::uno::XInterface
     boolean isReadOnly();
 };
 
-//=============================================================================
 
 }; }; }; };
 

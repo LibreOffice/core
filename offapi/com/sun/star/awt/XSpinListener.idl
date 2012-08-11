@@ -24,35 +24,29 @@
 #include <com/sun/star/awt/SpinEvent.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module awt {
 
-//=============================================================================
 
 /** makes it possible to receive spin events.
  */
 published interface XSpinListener: com::sun::star::lang::XEventListener
 {
-    //-------------------------------------------------------------------------
 
     /** is invoked when the spin field is spun up.
      */
     [oneway] void up( [in] com::sun::star::awt::SpinEvent rEvent );
 
-    //-------------------------------------------------------------------------
 
     /** is invoked when the spin field is spun down.
      */
     [oneway] void down( [in] com::sun::star::awt::SpinEvent rEvent );
 
-    //-------------------------------------------------------------------------
 
     /** is invoked when the spin field is set to the lower value.
      */
     [oneway] void first( [in] com::sun::star::awt::SpinEvent rEvent );
 
-    //-------------------------------------------------------------------------
 
     /** is invoked when the spin field is set to the upper value.
      */
@@ -60,7 +54,6 @@ published interface XSpinListener: com::sun::star::lang::XEventListener
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

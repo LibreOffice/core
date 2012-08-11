@@ -22,11 +22,9 @@
 
 #include <com/sun/star/uno/XInterface.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** provides methods to change the settings of a DDE link.
 
@@ -36,20 +34,17 @@ module com {  module sun {  module star {  module sheet {
  */
 published interface XDDELink: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** returns the application from which data are requested
         (the DDE server application).
      */
     string getApplication();
 
-    //-------------------------------------------------------------------------
 
     /** returns the DDE topic from which data are requested.
      */
     string getTopic();
 
-    //-------------------------------------------------------------------------
 
     /** returns the DDE item from which data are requested.
      */
@@ -57,7 +52,6 @@ published interface XDDELink: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

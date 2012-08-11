@@ -31,11 +31,9 @@
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/frame/ControlEvent.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module frame {
 
-//=============================================================================
 
 /** Must be implemented by dispatch objects which want to get
     notifications about control events.
@@ -44,7 +42,6 @@ module com {  module sun {  module star {  module frame {
  */
 interface XControlNotificationListener : com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** notifies that a control event has happened
 
         @param Event
@@ -54,7 +51,6 @@ interface XControlNotificationListener : com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

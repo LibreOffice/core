@@ -24,18 +24,15 @@
 #include <com/sun/star/task/XInteractionContinuation.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module task {
 
-//=============================================================================
 
 // DocMerge from xml: interface com::sun::star::task::XInteractionRequest
 /** The description of an interaction request.
  */
 published interface XInteractionRequest: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::task::XInteractionRequest::getRequest
     /** Get information about the request itself.
@@ -46,7 +43,6 @@ published interface XInteractionRequest: com::sun::star::uno::XInterface
      */
     any getRequest();
 
-    //-------------------------------------------------------------------------
     /** Get the set of
         <type scope="com::sun::star::task">XInteractionContinuation</type>s
         the client supports for this request.
@@ -55,7 +51,6 @@ published interface XInteractionRequest: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

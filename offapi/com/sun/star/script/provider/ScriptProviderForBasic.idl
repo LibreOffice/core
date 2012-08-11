@@ -23,11 +23,9 @@
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/script/provider/LanguageScriptProvider.idl>
 
-//===========================================================================
 
 module com { module sun { module star { module script { module provider {
 
-//===========================================================================
 /**
     This service is a Basic-specific LanguageScriptProvider.
 */
@@ -35,7 +33,6 @@ service ScriptProviderForBasic {
     service ::com::sun::star::script::provider::LanguageScriptProvider;
 };
 
-//===========================================================================
 }; }; }; }; }; // ::com::sun::star::script::provider
 
 #endif

@@ -20,29 +20,24 @@
 #define __com_sun_star_ucb_RuleTerm_idl__
 
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** describes a term.
 
     <p>A term is used to select objects to which a rule should apply.
 */
 published struct RuleTerm
 {
-    //-------------------------------------------------------------------------
     /** the name of the property used to match the term.
     */
     string Property;
 
-    //-------------------------------------------------------------------------
     /** the value of the property used to compare with the document
         property.
     */
     any Operand;
 
-    //-------------------------------------------------------------------------
     /** the operator used to compare the property of the document with
         the given value (e.g. "contains" or "greater equal").
 
@@ -50,13 +45,11 @@ published struct RuleTerm
     */
     short Operator;
 
-    //-------------------------------------------------------------------------
     /** this flag indicates whether a string "operand" shall be compared
         case sensitive.
     */
     boolean CaseSensitive;
 
-    //-------------------------------------------------------------------------
     /** this flag indicates whether a string "operand" shall be treated
         as a regular expression.
     */
@@ -64,7 +57,6 @@ published struct RuleTerm
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

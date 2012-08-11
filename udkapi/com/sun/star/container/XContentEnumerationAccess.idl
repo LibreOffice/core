@@ -24,11 +24,9 @@
 #include <com/sun/star/container/XEnumeration.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module container {
 
-//=============================================================================
 
 /** allows access to the collections of all content types within the object.
 
@@ -44,14 +42,12 @@ module com {  module sun {  module star {  module container {
  */
 published interface XContentEnumerationAccess: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** @returns
             a new enumeration object for the contents of the specified service type.
      */
     com::sun::star::container::XEnumeration createContentEnumeration( [in] string aServiceName );
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from idl: method com::sun::star::container::XContentEnumerationAccess::getAvailableServiceNames
     /** @returns
@@ -65,7 +61,6 @@ published interface XContentEnumerationAccess: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

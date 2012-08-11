@@ -21,11 +21,9 @@
 
 #include <com/sun/star/uno/RuntimeException.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module lang {
 
-//=============================================================================
 
 /** This is a runtime exception that wraps any other exception thrown
     by the original target.
@@ -38,13 +36,11 @@ module com {  module sun {  module star {  module lang {
  */
 published exception WrappedTargetRuntimeException: ::com::sun::star::uno::RuntimeException
 {
-    //-------------------------------------------------------------------------
     /** The exception is thrown by the target.
      */
     any TargetException;
 };
 
-//=============================================================================
 
 }; }; }; };
 

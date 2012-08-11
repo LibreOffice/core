@@ -24,17 +24,14 @@
 #include <com/sun/star/awt/TextEvent.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module awt {
 
-//=============================================================================
 
 /** makes it possible to receive text change events.
  */
 published interface XTextListener: com::sun::star::lang::XEventListener
 {
-    //-------------------------------------------------------------------------
 
     /** is invoked when the text has changed.
      */
@@ -42,7 +39,6 @@ published interface XTextListener: com::sun::star::lang::XEventListener
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

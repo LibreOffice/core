@@ -36,11 +36,9 @@
 #include <com/sun/star/style/VerticalAlignment.idl>
 #include <com/sun/star/util/Color.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module awt { module grid {
 
-//=============================================================================
 
 /** specifies the standard model of a <type>UnoControlGrid</type> control.
 
@@ -222,7 +220,6 @@ service UnoControlGridModel
 
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

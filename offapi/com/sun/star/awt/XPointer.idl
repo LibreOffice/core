@@ -22,23 +22,19 @@
 #include <com/sun/star/uno/XInterface.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module awt {
 
-//=============================================================================
 
 /** gives access to the type of mouse pointer.
  */
 published interface XPointer: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** selects a <type>SystemPointer</type> for this mouse pointer.
      */
     [oneway] void setType( [in] long nType );
 
-    //-------------------------------------------------------------------------
 
     /** returns the currently set <type>SystemPointer</type> of this mouse
         pointer.
@@ -47,7 +43,6 @@ published interface XPointer: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -36,11 +36,9 @@
 #include <com/sun/star/frame/XTitleChangeBroadcaster.idl>
 #include <com/sun/star/sdb/application/XDatabaseDocumentUI.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module sdb { module application {
 
-//=============================================================================
 
 /** is the default controller implementation for OpenOffice.org's database application.
  */
@@ -93,11 +91,9 @@ service DefaultViewController
     interface XDatabaseDocumentUI;
 };
 
-//=============================================================================
 
 }; }; }; }; };
 
-//=============================================================================
 
 #endif
 

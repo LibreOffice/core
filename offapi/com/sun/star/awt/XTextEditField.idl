@@ -22,17 +22,14 @@
 #include <com/sun/star/uno/XInterface.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module awt {
 
-//=============================================================================
 
 /** is used for password fields.
  */
 published interface XTextEditField: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** sets the character to display as a substitute on user input.
      */
@@ -40,7 +37,6 @@ published interface XTextEditField: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

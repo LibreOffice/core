@@ -22,19 +22,16 @@
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/io/IOException.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module io {
 
 
-//=============================================================================
 
 /** makes it possible to set the size of the underlying data of a stream
     to zero.
  */
 published interface XTruncate: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** sets the size of the underlying data of the stream to zero.
     */
@@ -44,7 +41,6 @@ published interface XTruncate: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

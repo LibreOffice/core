@@ -23,13 +23,11 @@
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/util/VetoException.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module form { module validation {
 
 interface XValidator;
 
-//=============================================================================
 
 /** specifies support for validating a component
 
@@ -57,7 +55,6 @@ interface XValidatable : com::sun::star::uno::XInterface
             getValidator( );
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

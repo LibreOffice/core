@@ -21,11 +21,9 @@
 
 #include <com/sun/star/linguistic2/XHyphenator.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module i18n {
 
-//=============================================================================
 
 /** Hyphenation options passed in calls to <member>XBreakIterator::getLineBreak()</member>.
  */
@@ -43,7 +41,6 @@ published struct LineBreakHyphenationOptions
     long  hyphenIndex;
 };
 
-//=============================================================================
 }; }; }; };
 
 #endif

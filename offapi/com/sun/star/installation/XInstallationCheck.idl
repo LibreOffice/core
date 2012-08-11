@@ -22,11 +22,9 @@
 #include <com/sun/star/uno/XInterface.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module installation {
 
-//=============================================================================
 
 // DocMerge from xml: interface com::sun::star::installation::XInstallationCheck
 /** a flag called "suppressed", changes the action of check and checkWithDialog
@@ -35,7 +33,6 @@ module com {  module sun {  module star {  module installation {
  */
 published interface XInstallationCheck: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::installation::XInstallationCheck::check
     /** checks if something of the installation is missing.
@@ -47,7 +44,6 @@ published interface XInstallationCheck: com::sun::star::uno::XInterface
      */
     boolean check( [in] boolean bForce );
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::installation::XInstallationCheck::checkWithDialog
     /** same as check, but additionally shows a dialog if result is <FALSE/>.
@@ -60,7 +56,6 @@ published interface XInstallationCheck: com::sun::star::uno::XInterface
      */
     boolean checkWithDialog( [in] boolean bForce );
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::installation::XInstallationCheck::executeDialog
     /** shows a dialog if something of the installation is missing.
@@ -73,7 +68,6 @@ published interface XInstallationCheck: com::sun::star::uno::XInterface
      */
     boolean executeDialog();
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::installation::XInstallationCheck::getSuppressed
     /** gets the status of flag suppressed
@@ -88,7 +82,6 @@ published interface XInstallationCheck: com::sun::star::uno::XInterface
      */
     boolean getSuppressed();
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::installation::XInstallationCheck::setSuppressed
     /** set status of flag "suppressed".
@@ -97,7 +90,6 @@ published interface XInstallationCheck: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

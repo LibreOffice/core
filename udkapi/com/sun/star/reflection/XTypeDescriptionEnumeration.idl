@@ -24,11 +24,9 @@
 #include <com/sun/star/container/XEnumeration.idl>
 #include <com/sun/star/container/NoSuchElementException.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module reflection {
 
-//=============================================================================
 
 /** Defines an enumeration for type descriptions.
 
@@ -48,7 +46,6 @@ published interface XTypeDescriptionEnumeration : com::sun::star::container::XEn
         raises( com::sun::star::container::NoSuchElementException );
 };
 
-//=============================================================================
 
 }; }; }; };
 

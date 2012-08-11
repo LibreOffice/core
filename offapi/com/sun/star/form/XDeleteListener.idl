@@ -33,11 +33,9 @@
 #include <com/sun/star/lang/EventObject.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module form {
 
-//=============================================================================
 
 /** This is the listener interface for receiving "approveDelete" and
     "deleted" events posted by a database form.
@@ -52,13 +50,11 @@
  */
 published interface XDeleteListener: com::sun::star::lang::XEventListener
 {
-    //-------------------------------------------------------------------------
 
     /** is invoked when the current record of the database form will be deleted.
      */
     boolean approveDelete( [in] com::sun::star::lang::EventObject aEvent );
 
-    //-------------------------------------------------------------------------
 
     /** is invoked when a database form has finished the delete processing and
         the data has been successfully deleted from the datasource.
@@ -67,7 +63,6 @@ published interface XDeleteListener: com::sun::star::lang::XEventListener
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

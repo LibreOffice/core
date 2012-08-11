@@ -229,7 +229,6 @@ service OfficeDatabaseDocument
     interface com::sun::star::util::XCloseable;
 };
 
-//=============================================================================
 
 }; }; }; };
 

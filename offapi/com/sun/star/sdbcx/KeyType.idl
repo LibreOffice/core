@@ -30,19 +30,16 @@ published constants KeyType
     /** indicates that the key is the primary key of a table.
      */
     const long PRIMARY  = 1;
-    //-------------------------------------------------------------------------
 
     /** indicates that the key is unique, NULL values are allowed.
      */
     const long UNIQUE = 2;
-    //-------------------------------------------------------------------------
 
     /** indicates that the key is a foreign key of a table.
      */
     const long FOREIGN = 3;
 };
 
-//=============================================================================
 
 }; }; }; };
 

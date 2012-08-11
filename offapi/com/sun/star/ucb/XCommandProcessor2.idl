@@ -33,14 +33,12 @@
 
 module com { module sun { module star { module ucb {
 
-//============================================================================
 /** An improved version of a
     <type scope="com::sun::star::ucb">XCommandProcessor</type> that helps avoid
     ever-increasing resource consumption.
  */
 published interface XCommandProcessor2: com::sun::star::ucb::XCommandProcessor
 {
-    //------------------------------------------------------------------------
     /** releases a command identifier obtained through
         <member>XCommandProcessor::createCommandIdentifier</member> when it is
         no longer used.

@@ -34,11 +34,9 @@
 #include <com/sun/star/lang/XComponent.idl>
 #include <com/sun/star/util/XModifyBroadcaster.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module form { module binding {
 
-//=============================================================================
 
 /** defines a component which allows access to a single value
 
@@ -75,12 +73,10 @@ service ValueBinding
     */
     [optional, property, bound, readonly]  boolean  Relevant;
 
-    //-------------------------------------------------------------------------
     /** allows access to the properties of the binding
     */
     [optional] interface   com::sun::star::beans::XPropertySet;
 
-    //-------------------------------------------------------------------------
     /** allows read and write access to the value represented by this binding
     */
     interface XValueBinding;
@@ -110,7 +106,6 @@ service ValueBinding
     interface com::sun::star::lang::XComponent;
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

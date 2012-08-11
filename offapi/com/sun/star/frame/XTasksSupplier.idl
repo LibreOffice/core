@@ -24,30 +24,25 @@
 #include <com/sun/star/frame/XTask.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module frame {
 
-//=============================================================================
 /** use <type>XFramesSupplier</type> instead of that
     @deprecated
  */
 published interface XTasksSupplier: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** use <member>XFramesSupplier::getFrames()</member> instead of this one
         @deprecated
      */
     com::sun::star::container::XEnumerationAccess getTasks();
 
-    //-------------------------------------------------------------------------
     /** use <member>XFramesSupplier::getActiveFrame()</member> instead of this one
         @deprecated
      */
     XTask getActiveTask();
 };
 
-//=============================================================================
 
 }; }; }; };
 

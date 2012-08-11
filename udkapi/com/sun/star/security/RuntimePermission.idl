@@ -18,11 +18,9 @@
  */
 #ifndef __com_sun_star_security_RuntimePermission_idl__
 #define __com_sun_star_security_RuntimePermission_idl__
-//=============================================================================
 
 module com {  module sun {  module star {  module security {
 
-//=============================================================================
 
 /** This permission grants runtime access to some named functionality.
     A RuntimePermission contains a name (also referred to as a "target name")
@@ -37,7 +35,6 @@ published struct RuntimePermission
     string Name;
 };
 
-//=============================================================================
 
 }; }; }; };
 

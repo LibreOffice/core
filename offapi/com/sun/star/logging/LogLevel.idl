@@ -20,11 +20,9 @@
 #ifndef __com_sun_star_logging_LogLevel_idl__
 #define __com_sun_star_logging_LogLevel_idl__
 
-//=============================================================================
 
 module com { module sun { module star { module logging {
 
-//=============================================================================
 
 /** specifies levels to distinguish between severities of logged events
 
@@ -70,11 +68,9 @@ constants LogLevel
     const long  ALL       = -0x80000000;
 };
 
-//=============================================================================
 
 }; }; }; };
 
-//=============================================================================
 
 #endif
 

@@ -116,7 +116,6 @@ module com { module sun { module star { module linguistic2 {
  */
 interface XLanguageGuessing
 {
-    //-------------------------------------------------------------------------
     /** determines the single most probable language of a sub-string.
 
         <p>Please note that because statistical analysis is part
@@ -154,7 +153,6 @@ interface XLanguageGuessing
             [in] long    nLen )
         raises( com::sun::star::lang::IllegalArgumentException );
 
-    //-------------------------------------------------------------------------
     /** allows to explicitly discard some languages from the set of
         languages possibly returned.
 
@@ -164,7 +162,6 @@ interface XLanguageGuessing
             [in] sequence< com::sun::star::lang::Locale > aLanguages )
         raises( com::sun::star::lang::IllegalArgumentException );
 
-    //-------------------------------------------------------------------------
     /** allows to explicitly re-enable some languages that got previously
         disabled.
 
@@ -174,7 +171,6 @@ interface XLanguageGuessing
             [in] sequence< com::sun::star::lang::Locale > aLanguages )
         raises( com::sun::star::lang::IllegalArgumentException );
 
-    //-------------------------------------------------------------------------
     /** returns a list of all supported languages.
 
         <p>This should be the same as the mathematical union of
@@ -182,12 +178,10 @@ interface XLanguageGuessing
     */
     sequence< com::sun::star::lang::Locale > getAvailableLanguages();
 
-    //-------------------------------------------------------------------------
     /** returns the list of all enabled languages
     */
     sequence< com::sun::star::lang::Locale > getEnabledLanguages();
 
-    //-------------------------------------------------------------------------
     /** returns the list of all disabled languages
     */
     sequence< com::sun::star::lang::Locale > getDisabledLanguages();

@@ -102,7 +102,6 @@ published service ResultColumn
     [readonly, property] string CatalogName;
 };
 
-//=============================================================================
 
 }; }; }; };
 

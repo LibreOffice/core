@@ -32,7 +32,6 @@ struct RowsChangeEvent: com::sun::star::sdb::RowChangeEvent
     sequence< any > Bookmarks;
 };
 
-//=============================================================================
 
 }; }; }; };
 

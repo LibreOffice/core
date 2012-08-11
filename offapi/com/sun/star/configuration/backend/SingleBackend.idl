@@ -32,11 +32,9 @@
 #include <com/sun/star/configuration/backend/XSchemaSupplier.idl>
 #include <com/sun/star/configuration/backend/XMultiLayerStratum.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module configuration { module backend {
 
-//=============================================================================
 
 /**
     is a configuration storage backends containing a complete
@@ -63,31 +61,26 @@ module com { module sun { module star { module configuration { module backend {
 */
 published service SingleBackend
 {
-    //-------------------------------------------------------------------------
 
     /**
       provides access to configuration schemas.
       */
     interface XSchemaSupplier ;
 
-    //-------------------------------------------------------------------------
 
     /**
       provides access to the layer data.
       */
     interface XMultiLayerStratum ;
 
-    //-------------------------------------------------------------------------
 
     /**
       provides information about supported and special entities.
       */
     interface XBackendEntities ;
 
-    //-------------------------------------------------------------------------
 } ;
 
-//=============================================================================
 
 } ; } ; } ; } ; } ;
 

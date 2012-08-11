@@ -51,7 +51,6 @@ published service DatabaseAccessDataSource
     [optional, property] com::sun::star::ucb::RememberAuthentication PasswordMode;
 };
 
-//=============================================================================
 
 }; }; }; };
 

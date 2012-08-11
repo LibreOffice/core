@@ -41,7 +41,6 @@ constants RenderingIntent
     */
     const byte PERCEPTUAL=0;
 
-    //-------------------------------------------------------------------------
 
     /** The rendering intent for business graphics that
         maintains vivid color at the expense of accurate

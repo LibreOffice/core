@@ -32,11 +32,9 @@
 #include <com/sun/star/frame/XModuleManager.idl>
 #include <com/sun/star/container/XNameAccess.idl>
 
-//===============================================
 
 module com { module sun { module star { module frame {
 
-//===============================================
 /** can be used to identify office modules.
 
     <p>
@@ -49,12 +47,10 @@ module com { module sun { module star { module frame {
 
 service ModuleManager
 {
-    //-------------------------------------------
     /** provides functions to identify office modules.
      */
     interface XModuleManager;
 
-    //-------------------------------------------
     /** provides read access to the configuration of office modules.
 
         <p>

@@ -22,11 +22,9 @@
 
 #include <com/sun/star/uno/Exception.idl>
 
-//=============================================================================
 
 module com {   module sun {   module star {   module rdf {
 
-//=============================================================================
 /** represents an error condition that is signaled on accessing an RDF
     Repository.
 
@@ -38,7 +36,6 @@ exception RepositoryException : com::sun::star::uno::Exception
 {
 };
 
-//=============================================================================
 
 }; }; }; };
 

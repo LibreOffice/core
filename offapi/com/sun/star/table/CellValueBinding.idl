@@ -33,11 +33,9 @@
 #include <com/sun/star/table/CellAddress.idl>
 #include <com/sun/star/lang/XInitialization.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module table {
 
-//=============================================================================
 
 /** defines the binding to a single cell in a table document
 
@@ -94,7 +92,6 @@ service CellValueBinding
     interface com::sun::star::lang::XInitialization;
 };
 
-//=============================================================================
 
 }; }; }; };
 

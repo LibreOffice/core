@@ -38,11 +38,9 @@
 #include <com/sun/star/frame/XDispatchInformationProvider.idl>
 #include <com/sun/star/xml/UserDefinedAttributesSupplier.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module frame {
 
-//=============================================================================
 /** represents the environment for a desktop component
 
     <p>
@@ -58,21 +56,18 @@
  */
 published service Frame
 {
-    //-------------------------------------------------------------------------
     /** contains user defined attributes.
 
         @see    <type scope="com::sun::star::xml">UserDefinedAttributesSupplier</type>
      */
     [optional] service com::sun::star::xml::UserDefinedAttributesSupplier;
 
-    //-------------------------------------------------------------------------
     /** allows the component to be loaded and accessed
         within the frame; it is the main connection to the
         environment of the component.
      */
     interface XFrame;
 
-    //-------------------------------------------------------------------------
     /** provides access to dispatchers for the frame.
 
         <p>
@@ -99,14 +94,12 @@ published service Frame
     */
     interface XDispatchProvider;
 
-    //-------------------------------------------------------------------------
     /** provides information about supported commands
 
         @since OOo 2.0
     */
     [optional] interface XDispatchInformationProvider;
 
-    //-------------------------------------------------------------------------
     /** supports interception mechanism for dispatched URLs
 
         <p>
@@ -118,18 +111,15 @@ published service Frame
      */
     interface XDispatchProviderInterception;
 
-    //-------------------------------------------------------------------------
     /** provides access to sub frames within this frame
      */
     interface XFramesSupplier;
 
-    //-------------------------------------------------------------------------
     /** supplies access to <type scope="com::sun::star::task">XStatusIndicator</type> objects
         for the component within the frame to show progresses
      */
     [optional] interface com::sun::star::task::XStatusIndicatorFactory;
 
-    //-------------------------------------------------------------------------
     /** if possible it sets/gets the UI title on/from the frame container window
 
         <p>
@@ -141,7 +131,6 @@ published service Frame
      */
     [property] string Title;
 
-    //-------------------------------------------------------------------------
     /** provides access to the dispatch recorder of the frame
 
         <p>
@@ -168,13 +157,11 @@ published service Frame
      */
     [optional, property] XDispatchRecorderSupplier RecorderSupplier;
 
-    //-------------------------------------------------------------------------
     /** provides access to the <type>LayoutManager</type> of the frame.
     */
     [optional, property] com::sun::star::uno::XInterface LayoutManager;
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -25,7 +25,6 @@
 
  module com {  module sun {  module star {  module sdb {
 
-//=============================================================================
 
 /** uses a row set as datasource.
 
@@ -33,7 +32,6 @@
  */
 published interface XRowSetSupplier: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** provides access to the data source.
         @returns
@@ -41,7 +39,6 @@ published interface XRowSetSupplier: com::sun::star::uno::XInterface
      */
     com::sun::star::sdbc::XRowSet getRowSet();
 
-    //-------------------------------------------------------------------------
 
     /** sets the data source.
         @param xDataSource
@@ -51,7 +48,6 @@ published interface XRowSetSupplier: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

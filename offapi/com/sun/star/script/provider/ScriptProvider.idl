@@ -24,11 +24,9 @@
 #include <com/sun/star/script/provider/XScriptProvider.idl>
 #include <com/sun/star/script/browse/BrowseNode.idl>
 
-//===========================================================================
 
 module com { module sun { module star { module script { module provider {
 
-//===========================================================================
 /**
     This service providers a means to browse and execute scripts.
 */
@@ -39,7 +37,6 @@ service ScriptProvider {
 
 };
 
-//===========================================================================
 }; }; }; }; }; // ::com::sun::star::script::provider
 
 #endif

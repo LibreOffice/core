@@ -22,11 +22,9 @@
 
 #include <com/sun/star/uno/Exception.idl>
 
-//===========================================================================
 
 module com { module sun { module star { module script { module provider {
 
-//===========================================================================
 /**
     is a checked exception that represents an error encountered
         by a LanguageScriptProvider whilst executing a script
@@ -43,7 +41,6 @@ exception ScriptErrorRaisedException : com::sun::star::uno::Exception {
     long lineNum;
 };
 
-//===========================================================================
 }; }; }; }; }; // ::com::sun::star::script::provider
 
 #endif

@@ -28,11 +28,9 @@
 #include <com/sun/star/xml/UserDefinedAttributesSupplier.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module text {
 
-//=============================================================================
 
 /** specifies a cursor in text tables.
 
@@ -60,7 +58,6 @@ published service TextTableCursor
     [optional] service com::sun::star::xml::UserDefinedAttributesSupplier;
 };
 
-//=============================================================================
 
 }; }; }; };
 

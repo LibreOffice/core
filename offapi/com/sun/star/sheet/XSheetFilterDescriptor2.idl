@@ -23,11 +23,9 @@
 #include <com/sun/star/sheet/TableFilterField2.idl>
 #include <com/sun/star/uno/XInterface.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** provides access to a collection of filter conditions (filter fields).
 
@@ -40,13 +38,11 @@ module com {  module sun {  module star {  module sheet {
  */
 published interface XSheetFilterDescriptor2: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** returns the collection of filter fields.
      */
     sequence< TableFilterField2 > getFilterFields2();
 
-    //-------------------------------------------------------------------------
 
     /** sets a new collection of filter fields.
      */
@@ -54,7 +50,6 @@ published interface XSheetFilterDescriptor2: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

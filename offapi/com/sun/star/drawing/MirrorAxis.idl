@@ -20,25 +20,21 @@
 #define __com_sun_star_drawing_MirrorAxis_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module drawing {
 
-//=============================================================================
 
 // DocMerge from xml: enum com::sun::star::drawing::MirrorAxis
 /** defines an axis for simple mirroring.
  */
 published enum MirrorAxis
 {
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: value com::sun::star::drawing::MirrorAxis::VERTICAL
     /** mirror to the vertical axis
      */
     VERTICAL,
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: value com::sun::star::drawing::MirrorAxis::HORIZONTAL
     /** mirror to the horizontal axis
@@ -47,7 +43,6 @@ published enum MirrorAxis
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

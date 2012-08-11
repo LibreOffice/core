@@ -23,11 +23,9 @@
 #include <com/sun/star/lang/XEventListener.idl>
 #include <com/sun/star/sdb/application/CopyTableRowEvent.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module sdb { module application {
 
-//=============================================================================
 
 /** specifies the interface required to listen for progress in copying
     table rows via a <code>CopyTableWizard</code>.
@@ -77,11 +75,9 @@ interface XCopyTableListener : ::com::sun::star::lang::XEventListener
     short   copyRowError( [in] CopyTableRowEvent Event );
 };
 
-//=============================================================================
 
 }; }; }; }; };
 
-//=============================================================================
 
 #endif
 

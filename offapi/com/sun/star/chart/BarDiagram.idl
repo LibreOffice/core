@@ -28,11 +28,9 @@
 #include <com/sun/star/chart/StackableDiagram.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module chart {
 
-//=============================================================================
 
 /**This is a service for bar and column diagrams.
  */
@@ -46,7 +44,6 @@ published service BarDiagram
     service com::sun::star::chart::Dim3DDiagram;
     service com::sun::star::chart::StackableDiagram;
 
-    //-------------------------------------------------------------------------
 
     /** Determines if the bars of a chart are drawn vertically or
         horizontally.  Default is vertical.
@@ -56,7 +53,6 @@ published service BarDiagram
      */
     [property] boolean Vertical;
 
-    //-------------------------------------------------------------------------
 
     /** If <TRUE/>, determines that in a three-dimensional bar chart
         the bars of each series are arranged behind each other in the
@@ -65,7 +61,6 @@ published service BarDiagram
      */
     [optional, property] boolean Deep;
 
-    //-------------------------------------------------------------------------
 
     /** determines if, in a stacked chart, there are connecting lines
         between corresponding bars. Currently, bar charts with
@@ -73,7 +68,6 @@ published service BarDiagram
      */
     [optional, property] boolean StackedBarsConnected;
 
-    //-------------------------------------------------------------------------
 
     /** If bars of a bar or column chart are attached to different
         axis, this property determines how to display those.  If
@@ -88,7 +82,6 @@ published service BarDiagram
     */
     [optional, property] boolean GroupBarsPerAxis;
 
-    //-------------------------------------------------------------------------
 
 
     /** Determines how many data rows are displayed as lines rather than
@@ -103,7 +96,6 @@ published service BarDiagram
     [property] long NumberOfLines;
 };
 
-//=============================================================================
 
 }; }; }; };
 

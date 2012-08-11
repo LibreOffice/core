@@ -23,11 +23,9 @@
 #include <com/sun/star/container/XNamed.idl>
 #include <com/sun/star/table/CellAddress.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** provides access to the settings of a named range in a spreadsheet
     document.
@@ -36,7 +34,6 @@ module com {  module sun {  module star {  module sheet {
  */
 published interface XNamedRange: com::sun::star::container::XNamed
 {
-    //-------------------------------------------------------------------------
 
     /** returns the content of the named range.
 
@@ -45,7 +42,6 @@ published interface XNamedRange: com::sun::star::container::XNamed
      */
     string getContent();
 
-    //-------------------------------------------------------------------------
 
     /** sets the content of the named range.
 
@@ -54,14 +50,12 @@ published interface XNamedRange: com::sun::star::container::XNamed
      */
     void setContent( [in] string aContent );
 
-    //-------------------------------------------------------------------------
 
     /** returns the position in the document which is used as a
         base for relative references in the content.
      */
     com::sun::star::table::CellAddress getReferencePosition();
 
-    //-------------------------------------------------------------------------
 
     /** sets the position in the document which is used as a
         base for relative references in the content.
@@ -69,7 +63,6 @@ published interface XNamedRange: com::sun::star::container::XNamed
     void setReferencePosition(
             [in] com::sun::star::table::CellAddress aReferencePosition );
 
-    //-------------------------------------------------------------------------
 
     /** returns the type of the named range.
 
@@ -78,7 +71,6 @@ published interface XNamedRange: com::sun::star::container::XNamed
      */
     long getType();
 
-    //-------------------------------------------------------------------------
 
     /** sets the type of the named range.
 
@@ -90,7 +82,6 @@ published interface XNamedRange: com::sun::star::container::XNamed
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

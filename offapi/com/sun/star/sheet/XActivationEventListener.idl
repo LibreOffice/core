@@ -32,17 +32,14 @@
 #include <com/sun/star/sheet/ActivationEvent.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** makes it possible to receive events when the active spreadsheet changes.
  */
 published interface XActivationEventListener: com::sun::star::lang::XEventListener
 {
-    //-------------------------------------------------------------------------
 
     /** is called whenever data or a selection changed.
 
@@ -63,7 +60,6 @@ published interface XActivationEventListener: com::sun::star::lang::XEventListen
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

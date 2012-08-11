@@ -27,11 +27,9 @@
 
 #include <com/sun/star/lang/WrappedTargetException.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module container {
 
-//=============================================================================
 
 /** This is the generic interface for supporting the replacement of named
     elements.
@@ -39,7 +37,6 @@ module com {  module sun {  module star {  module container {
  */
 published interface XNameReplace: com::sun::star::container::XNameAccess
 {
-    //-------------------------------------------------------------------------
 
     /** replaces the element with the specified name with the given element.
      */
@@ -51,7 +48,6 @@ published interface XNameReplace: com::sun::star::container::XNameAccess
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

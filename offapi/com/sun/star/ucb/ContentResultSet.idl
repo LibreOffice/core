@@ -37,11 +37,9 @@
 #include <com/sun/star/ucb/XContentAccess.idl>
 #include <com/sun/star/sdbc/ResultSet.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** provides access to the children of a folder content.
 
     <p>It can be understand as a table containing a row for each child. The
@@ -49,7 +47,6 @@ module com { module sun { module star { module ucb {
 */
 published service ContentResultSet
 {
-    //-------------------------------------------------------------------------
     /** must be implemented to make it possible to resolve cyclic object
         references ( i.e. between an implementation of
         <type scope="com::sun::star::beans">XPropertySet</type>
@@ -69,7 +66,6 @@ published service ContentResultSet
      */
     interface com::sun::star::sdbc::XResultSetMetaDataSupplier;
 
-    //-------------------------------------------------------------------------
     /** enables traveling through the result set members ( the contents ).
         This interface mainly provides a cursor for the result set.
 
@@ -83,7 +79,6 @@ published service ContentResultSet
      */
     interface com::sun::star::sdbc::XResultSet;
 
-    //-------------------------------------------------------------------------
     /** provides access to data of the content the cursor is pointing to.
 
         <p>Note that every method of this interface implementation additionally
@@ -96,7 +91,6 @@ published service ContentResultSet
      */
     interface com::sun::star::sdbc::XRow;
 
-    //-------------------------------------------------------------------------
     /** makes it possible to abort running activities ( i.e. to cancel
         retrieving data from a server ).
 
@@ -110,14 +104,12 @@ published service ContentResultSet
      */
     interface com::sun::star::sdbc::XCloseable;
 
-    //-------------------------------------------------------------------------
     /** holds properties of the result set.
 
         <p>This interface is required.
      */
     interface com::sun::star::beans::XPropertySet;
 
-    //-------------------------------------------------------------------------
     /** controls the travel mode of the result set cursor.
 
         <p>There are two possible travel modes:
@@ -187,7 +179,6 @@ published service ContentResultSet
     /** indicates that all rows of the result set have been obtained. */
     [readonly, property] boolean IsRowCountFinal;
 
-    //-------------------------------------------------------------------------
     /** provides access to the content identifier and the content object
         itself.
 
@@ -195,7 +186,6 @@ published service ContentResultSet
      */
     interface XContentAccess;
 
-    //-------------------------------------------------------------------------
     /** can be implemented to provide a complete JDBC conform result set
         interface for the implementation of this service.
 
@@ -204,7 +194,6 @@ published service ContentResultSet
     service com::sun::star::sdbc::ResultSet;
 };
 
-//=============================================================================
 
 }; }; }; };
 

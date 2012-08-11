@@ -22,11 +22,9 @@
 #include <com/sun/star/configuration/AccessRootElement.idl>
 #include <com/sun/star/util/XChangesBatch.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module configuration {
 
-//=============================================================================
 /** provides update control for a hierarchy of configuration items
  and information about the hierarchy as a whole as well as its root.
 
@@ -90,7 +88,6 @@ published service UpdateRootElement
     interface com::sun::star::util::XChangesBatch;
 };
 
-//=============================================================================
 
 }; }; }; };
 

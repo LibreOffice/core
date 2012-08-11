@@ -32,11 +32,9 @@
 
 #include <com/sun/star/drawing/PointSequence.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module image {
 
-//=============================================================================
 
 /** this service describes a polygon-shaped region inside
     a HTML image map.
@@ -53,7 +51,6 @@ published service ImageMapPolygonObject
     [property] com::sun::star::drawing::PointSequence Polygon;
 };
 
-//=============================================================================
 
 }; }; }; };
 

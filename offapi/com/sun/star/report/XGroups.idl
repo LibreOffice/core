@@ -32,12 +32,10 @@
 #include <com/sun/star/container/XContainer.idl>
 #include <com/sun/star/container/XIndexContainer.idl>
 #include <com/sun/star/lang/XComponent.idl>
-//=============================================================================
 
  module com {  module sun {  module star {  module report {
 interface XReportDefinition;
 interface XGroup;
-//=============================================================================
 
 /** This interface specifies the groups collections of the report definition.
     @see XGroup
@@ -68,7 +66,6 @@ interface XGroups
     [attribute,readonly] com::sun::star::report::XReportDefinition ReportDefinition;
 };
 
-//=============================================================================
 
 }; }; }; };
 

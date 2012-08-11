@@ -30,11 +30,9 @@
 
 #include <com/sun/star/configuration/backend/SingleLayerStratum.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module configuration { module backend {
 
-//=============================================================================
 
 /**
    implements <type>SingleLayerStratum</type> that
@@ -42,17 +40,14 @@ module com { module sun { module star { module configuration { module backend {
 */
 service LdapSingleStratum
 {
-    //-------------------------------------------------------------------------
 
     /**
       provides access to configuration data.
      */
     service  SingleLayerStratum;
 
-    //-------------------------------------------------------------------------
 } ;
 
-//=============================================================================
 
 } ; } ; } ; } ; } ;
 

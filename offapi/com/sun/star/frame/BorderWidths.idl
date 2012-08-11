@@ -20,39 +20,32 @@
 #define __com_sun_star_frame_BorderWidths_idl__
 
 
-//============================================================================
 
  module com {  module sun {  module star {  module frame {
 
-//============================================================================
 
 /** specifies a border area by offsets from each side.
  */
 struct BorderWidths
 {
-    //------------------------------------------------------------------------
     /** specifies the offset from left border.
      */
     long Left;
 
-     //------------------------------------------------------------------------
     /** specifies the offset from top border.
      */
     long Top;
 
-     //------------------------------------------------------------------------
     /** specifies the offset from right border.
      */
     long Right;
 
-     //------------------------------------------------------------------------
     /** specifies the offset from bottom border.
      */
     long Bottom;
 
 };
 
-//============================================================================
 
 }; }; }; };
 

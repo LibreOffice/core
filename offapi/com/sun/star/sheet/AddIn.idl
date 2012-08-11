@@ -24,11 +24,9 @@
 #include <com/sun/star/sheet/XAddIn.idl>
 #include <com/sun/star/sheet/XCompatibilityNames.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** is the base for AddIn services that supply functions which can be called
     by other components.
@@ -116,27 +114,23 @@ module com {  module sun {  module star {  module sheet {
  */
 published service AddIn
 {
-    // ------------------------------------------------------------------------
 
     /** contains a method that returns the service name of the add-in.
      */
     interface com::sun::star::lang::XServiceName;
 
-    // ------------------------------------------------------------------------
 
     /** provides access to function descriptions and localized names
         and descriptions.
       */
     interface com::sun::star::sheet::XAddIn;
 
-    // ------------------------------------------------------------------------
 
     /** provides access to compatibility names for the functions.
      */
     [optional] interface com::sun::star::sheet::XCompatibilityNames;
 };
 
-//=============================================================================
 
 }; }; }; };
 

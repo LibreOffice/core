@@ -26,11 +26,9 @@
 #include <com/sun/star/io/XConnectable.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star { module io {
 
-//=============================================================================
 
 // DocMerge from xml: service com::sun::star::io::DataInputStream
 /** reads structured data from a chained <type>XInputStream</type>.
@@ -57,7 +55,6 @@ published service DataInputStream
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

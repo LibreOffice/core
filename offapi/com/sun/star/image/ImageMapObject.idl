@@ -23,11 +23,9 @@
 
 #include <com/sun/star/document/XEventsSupplier.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module image {
 
-//=============================================================================
 
 /** this is a base service for objects inside a image maps.
     @see ImageMap
@@ -65,7 +63,6 @@ published service ImageMapObject
     [property] boolean IsActive;
 };
 
-//=============================================================================
 
 }; }; }; };
 

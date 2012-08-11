@@ -30,25 +30,21 @@
 
 #include <com/sun/star/io/IOException.idl>
 
-//============================================================================
 
  module com {  module sun {  module star {  module task {
 
-//============================================================================
 
 /** IOException that can carry error codes ( not only io related ).
     It can be used to transport the error code information.
  */
 exception ErrorCodeIOException : com::sun::star::io::IOException
 {
-    //------------------------------------------------------------------------
     /** specifies the error code.
      */
 
     long ErrCode;
 };
 
-//============================================================================
 
 }; }; }; };
 

@@ -32,11 +32,9 @@
 #include <com/sun/star/beans/PropertyValue.idl>
 #include <com/sun/star/drawing/XShape.idl>
 #include <com/sun/star/drawing/HomogenMatrix3.idl>
-//=============================================================================
 
  module com {  module sun {  module star {  module report {
 
-//=============================================================================
 interface XShape
 {
     interface XReportControlModel;
@@ -52,13 +50,11 @@ interface XShape
      */
     [attribute,bound] com::sun::star::drawing::HomogenMatrix3 Transformation;
 
-    //-------------------------------------------------------------------------
     /** This property contains the CustomShapeEngine service name that has to
         be used for rendering.
     */
     [attribute] string CustomShapeEngine;
 
-    //-------------------------------------------------------------------------
     /** This property can be used to store data that the CustomShapeEngine may
         use for rendering
     */
@@ -78,7 +74,6 @@ interface XShape
     [attribute,bound] boolean Opaque;
 };
 
-//=============================================================================
 
 }; }; }; };
 

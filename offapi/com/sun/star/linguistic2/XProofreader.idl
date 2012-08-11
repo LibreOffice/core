@@ -27,11 +27,9 @@
 #include <com/sun/star/linguistic2/ProofreadingResult.idl>
 #include <com/sun/star/beans/PropertyValue.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module linguistic2 {
 
-//=============================================================================
 /** API for proofreading a text
 
     @since  OOo 3.0.1
@@ -39,14 +37,12 @@ module com {  module sun {  module star {  module linguistic2 {
 interface XProofreader: com::sun::star::linguistic2::XSupportedLocales
 {
 
-    //-------------------------------------------------------------------------
     /** whether is the text checked by the spell checker
 
         @returns true if it is also a spell checker
     */
     boolean isSpellChecker();
 
-    //-------------------------------------------------------------------------
     /** start checking
 
         @param  nDocId
@@ -78,7 +74,6 @@ interface XProofreader: com::sun::star::linguistic2::XSupportedLocales
                             [in] sequence< com::sun::star::beans::PropertyValue > aProperties )
             raises( com::sun::star::lang::IllegalArgumentException );
 
-    //-------------------------------------------------------------------------
     /** disables a specific rule for a given locale.
 
         <p>If the locale is empty the rule should be ignored for all languages.</p>
@@ -87,14 +82,12 @@ interface XProofreader: com::sun::star::linguistic2::XSupportedLocales
                      [in] com::sun::star::lang::Locale aLocale )
             raises( com::sun::star::lang::IllegalArgumentException );
 
-    //-------------------------------------------------------------------------
     /** sets all rules back to their default settings.
     */
     void resetIgnoreRules();
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

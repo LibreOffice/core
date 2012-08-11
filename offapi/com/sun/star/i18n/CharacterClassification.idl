@@ -23,11 +23,9 @@
 #include <com/sun/star/lang/XServiceInfo.idl>
 #include <com/sun/star/i18n/XCharacterClassification.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module i18n {
 
-//=============================================================================
 
 /**
     Character classification, such as upper, lower, alpha, digit, et al.
@@ -40,7 +38,6 @@ published service CharacterClassification
     interface com::sun::star::lang::XServiceInfo;
 };
 
-//=============================================================================
 }; }; }; };
 
 #endif

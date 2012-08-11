@@ -20,11 +20,9 @@
 #define __com_sun_star_text_TextContentAnchorType_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module text {
 
-//=============================================================================
 
 // DocMerge from xml: enum com::sun::star::text::TextContentAnchorType
 /** specify how the text content is attached to its
@@ -32,14 +30,12 @@
  */
 published enum TextContentAnchorType
 {
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: value com::sun::star::text::TextContentAnchorType::AT_PARAGRAPH
     /** The anchor of the object is set at the top left position of the paragraph.
      */
     AT_PARAGRAPH,
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: value com::sun::star::text::TextContentAnchorType::AS_CHARACTER
     /** The object is anchored instead of a character.
@@ -50,7 +46,6 @@ published enum TextContentAnchorType
      */
     AS_CHARACTER,
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: value com::sun::star::text::TextContentAnchorType::AT_PAGE
     /** The object is anchored to the page.
@@ -61,14 +56,12 @@ published enum TextContentAnchorType
      */
     AT_PAGE,
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: value com::sun::star::text::TextContentAnchorType::AT_FRAME
     /** The object is anchored to a text frame.
      */
     AT_FRAME,
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: value com::sun::star::text::TextContentAnchorType::AT_CHARACTER
     /** The object is anchored to a character.
@@ -83,7 +76,6 @@ published enum TextContentAnchorType
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

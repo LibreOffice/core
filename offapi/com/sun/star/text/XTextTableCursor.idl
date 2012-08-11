@@ -31,11 +31,9 @@
 #include <com/sun/star/uno/XInterface.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module text {
 
-//=============================================================================
 
 /** The TextTableCursor provide methods to navigate through the table structure, to merge and split cells
 
@@ -46,7 +44,6 @@ module com {  module sun {  module star {  module text {
  */
 published interface XTextTableCursor: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** @returns
                 the name of the cell range that is selected by this cursor.
@@ -58,7 +55,6 @@ published interface XTextTableCursor: com::sun::star::uno::XInterface
      */
     string getRangeName();
 
-    //-------------------------------------------------------------------------
 
     /** moves the cursor to the cell with the specified name.
 
@@ -73,7 +69,6 @@ published interface XTextTableCursor: com::sun::star::uno::XInterface
     boolean gotoCellByName( [in] string aCellName,
              [in] boolean bExpand );
 
-    //-------------------------------------------------------------------------
 
     /** moves the cursor to the left neighbor.
 
@@ -86,7 +81,6 @@ published interface XTextTableCursor: com::sun::star::uno::XInterface
     boolean goLeft( [in] short nCount,
              [in] boolean bExpand );
 
-    //-------------------------------------------------------------------------
 
     /** moves the cursor to the right neighbor.
 
@@ -99,7 +93,6 @@ published interface XTextTableCursor: com::sun::star::uno::XInterface
     boolean goRight( [in] short nCount,
              [in] boolean bExpand );
 
-    //-------------------------------------------------------------------------
 
     /** moves the cursor to the top neighbor.
 
@@ -112,7 +105,6 @@ published interface XTextTableCursor: com::sun::star::uno::XInterface
     boolean goUp( [in] short nCount,
              [in] boolean bExpand );
 
-    //-------------------------------------------------------------------------
 
     /** moves the cursor to the bottom neighbor cell.
 
@@ -125,7 +117,6 @@ published interface XTextTableCursor: com::sun::star::uno::XInterface
     boolean goDown( [in] short nCount,
              [in] boolean bExpand );
 
-    //-------------------------------------------------------------------------
 
     /** moves the cursor to the top left cell of the table.
 
@@ -134,7 +125,6 @@ published interface XTextTableCursor: com::sun::star::uno::XInterface
      */
     void gotoStart( [in] boolean bExpand );
 
-    //-------------------------------------------------------------------------
 
     /** moves the cursor to the bottom right cell of the table.
 
@@ -143,7 +133,6 @@ published interface XTextTableCursor: com::sun::star::uno::XInterface
      */
     void gotoEnd( [in] boolean bExpand );
 
-    //-------------------------------------------------------------------------
 
     /** merges the selected range of cells.
 
@@ -151,7 +140,6 @@ published interface XTextTableCursor: com::sun::star::uno::XInterface
      */
     boolean mergeRange();
 
-    //-------------------------------------------------------------------------
 
     /** splits the range of cells.
 
@@ -171,7 +159,6 @@ published interface XTextTableCursor: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -39,11 +39,9 @@
 #include <com/sun/star/beans/XPropertySet.idl>
 
 
-//============================================================================
 
  module com {  module sun {  module star {  module embed {
 
-//============================================================================
 /** This is a service that allows to get access to a package using storage
     hierarchy.
 
@@ -55,7 +53,6 @@
  */
 published service Storage
 {
-    // -----------------------------------------------------------------------
     /** This service describes the base functionality of storages.
 
         <p>
@@ -235,7 +232,6 @@ published service Storage
      */
     service BaseStorage;
 
-    // -----------------------------------------------------------------------
     /** allows to commit or revert changes that were done for the storage.
 
         <p>
@@ -249,12 +245,10 @@ published service Storage
      */
     interface ::com::sun::star::embed::XTransactedObject;
 
-    // -----------------------------------------------------------------------
     /** allows to track storage's transaction state.
      */
     interface ::com::sun::star::embed::XTransactionBroadcaster;
 
-    // -----------------------------------------------------------------------
     /** allows to set password to a root storage.
 
         <p>
@@ -270,18 +264,15 @@ published service Storage
     [optional]
     interface ::com::sun::star::embed::XEncryptionProtectedSource;
 
-    // -----------------------------------------------------------------------
     /** allows to get and set the media type of the storage.
      */
     [property] string MediaType;
 
-    // -----------------------------------------------------------------------
     /** allows to get and set the version of the format related to the
         MediaType.
      */
     [property,optional] string Version;
 
-    // -----------------------------------------------------------------------
     /** allows to detect whether mediatype is detected by using fallback
         approach.
 
@@ -300,18 +291,15 @@ published service Storage
      */
     [property, readonly] boolean MediaTypeFallbackIsUsed;
 
-    // -----------------------------------------------------------------------
     /** allows to detect whether the storage is a root one.
      */
     [property, readonly] boolean IsRoot;
 
-    // -----------------------------------------------------------------------
     /** allows to detect whether storage is open in "repair package" mode or
         not.
      */
     [property, optional, readonly] boolean RepairPackage;
 
-    // -----------------------------------------------------------------------
     /** allows to detect if the storage contains encrypted entries.
 
         <p>
@@ -323,7 +311,6 @@ published service Storage
      */
     [property, optional, readonly] boolean HasEncryptedEntries;
 
-    // -----------------------------------------------------------------------
     /** allows to detect if the storage contains non-encrypted entries.
 
         <p>
@@ -336,7 +323,6 @@ published service Storage
     [property, optional, readonly] boolean HasNonEncryptedEntries;
 };
 
-//============================================================================
 
 }; }; }; };
 

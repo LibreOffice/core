@@ -23,7 +23,6 @@
 
 #include <com/sun/star/util/DataEditorEventType.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module util {
 
@@ -36,7 +35,6 @@ published struct DataEditorEvent: com::sun::star::lang::EventObject
     DataEditorEventType Type;
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -19,11 +19,9 @@
 #ifndef __com_sun_star_frame_LayoutManagerEvents_idl__
 #define __com_sun_star_frame_LayoutManagerEvents_idl__
 
-//=============================================================================
 
 module com {  module sun {  module star {  module frame {
 
-//=============================================================================
 /** provides information about layout manager events
 
     <p>Events are provided <strong>only</strong> for notification
@@ -36,7 +34,6 @@ module com {  module sun {  module star {  module frame {
  */
 constants LayoutManagerEvents
 {
-    //-------------------------------------------------------------------------
     /** specifies that the layout manager processed a lock call, which
         prevents it from doing layouts.
 
@@ -47,7 +44,6 @@ constants LayoutManagerEvents
      */
     const short LOCK = 0;
 
-    //-------------------------------------------------------------------------
     /** specifies that the layout manager processed an unlock call, which
         admit layouts when the lock count is zero.
 
@@ -58,7 +54,6 @@ constants LayoutManagerEvents
      */
     const short UNLOCK = 1;
 
-    //-------------------------------------------------------------------------
     /** specifies that the layout manager refreshed the layout of
         the frame.
 
@@ -68,7 +63,6 @@ constants LayoutManagerEvents
      */
     const short LAYOUT = 2;
 
-    //-------------------------------------------------------------------------
     /** specifies that the layout manager container frame window
         becomes visible.
 
@@ -78,7 +72,6 @@ constants LayoutManagerEvents
      */
     const short VISIBLE = 3;
 
-    //-------------------------------------------------------------------------
     /** specifies that the layout manager container frame window
         becomes invisible.
 
@@ -88,7 +81,6 @@ constants LayoutManagerEvents
      */
     const short INVISIBLE = 4;
 
-    //-------------------------------------------------------------------------
     /** A merged menu bar has been set at the layout manager.
 
         <p>
@@ -97,7 +89,6 @@ constants LayoutManagerEvents
      */
     const short MERGEDMENUBAR = 5;
 
-    //-------------------------------------------------------------------------
     /** specifies that a certain user interface element has been made
         visible
 
@@ -108,7 +99,6 @@ constants LayoutManagerEvents
      */
     const short UIELEMENT_VISIBLE = 6;
 
-    //-------------------------------------------------------------------------
     /** specifies that a certain user interface element has been made
         invisible
 

@@ -19,11 +19,9 @@
 #ifndef __com_sun_star_animations_AnimationAdditiveMode_idl__
 #define __com_sun_star_animations_AnimationAdditiveMode_idl__
 
-//=============================================================================
 
  module com {  module sun {  module star {  module animations {
 
-//=============================================================================
 
 /** Specifies the additive mode for the animation.
 
@@ -54,7 +52,6 @@ constants AnimationAdditiveMode
     const short NONE = 4;
 };
 
-//=============================================================================
 
 }; }; }; };
 

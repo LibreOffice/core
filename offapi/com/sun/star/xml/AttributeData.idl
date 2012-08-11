@@ -20,11 +20,9 @@
 #ifndef __com_sun_star_xml_AttributeData_idl__
 #define __com_sun_star_xml_AttributeData_idl__
 
-//=============================================================================
 
  module com {  module sun {  module star {  module xml {
 
-//=============================================================================
 
 /** store the type and value of an XML attribute
     inside a XNameContainer
@@ -50,7 +48,6 @@ published struct AttributeData
     string Value;
 };
 
-//=============================================================================
 
 }; }; }; };
 

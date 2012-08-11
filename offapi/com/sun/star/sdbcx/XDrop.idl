@@ -44,7 +44,6 @@ published interface XDrop: com::sun::star::uno::XInterface
     void dropByName([in]string elementName) raises
     (com::sun::star::sdbc::SQLException,
         com::sun::star::container::NoSuchElementException);
-    //-------------------------------------------------------------------------
 
     /** drops an object of the related container identified by its position.
         @param index
@@ -56,7 +55,6 @@ published interface XDrop: com::sun::star::uno::XInterface
         com::sun::star::lang::IndexOutOfBoundsException);
 };
 
-//=============================================================================
 
 }; }; }; };
 

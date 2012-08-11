@@ -67,7 +67,6 @@ published service DatabaseAccessContext
     interface com::sun::star::lang::XLocalizable;
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -33,11 +33,9 @@
 #include <com/sun/star/accessibility/XAccessibleEventBroadcaster.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module text {
 
-//=============================================================================
 
 /** The accessible view of endnotes.
     @since OOo 1.1.2
@@ -124,7 +122,6 @@ published service AccessibleEndnoteView
     interface ::com::sun::star::accessibility::XAccessibleEventBroadcaster;
 };
 
-//=============================================================================
 
 }; }; }; };
 

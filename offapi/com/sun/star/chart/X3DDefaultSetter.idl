@@ -22,11 +22,9 @@
 #include <com/sun/star/uno/XInterface.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module chart {
 
-//=============================================================================
 
 /** makes it easy to set suitable defaults for illumination and rotation for 3D charts
 
@@ -50,7 +48,6 @@ published interface X3DDefaultSetter : com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

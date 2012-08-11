@@ -33,11 +33,9 @@
 #include <com/sun/star/i18n/XExtendedCalendar.idl>
 #include <com/sun/star/i18n/Calendar2.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module i18n {
 
-//=============================================================================
 
 
 /**
@@ -54,29 +52,24 @@ module com { module sun { module star { module i18n {
  */
 published interface XCalendar3 : com::sun::star::i18n::XExtendedCalendar
 {
-    //------------------------------------------------------------------------
     /// Get the currently loaded <type>Calendar2</type>.
     Calendar2   getLoadedCalendar2();
 
-    //------------------------------------------------------------------------
     /** returns a sequence of <type>CalendarItem2</type> describing the
         day names.
      */
     sequence< CalendarItem2 >    getDays2();
 
-    //------------------------------------------------------------------------
     /** returns a sequence of <type>CalendarItem2</type> describing the
         month names.
      */
     sequence< CalendarItem2 >    getMonths2();
 
-    //------------------------------------------------------------------------
     /** returns a sequence of <type>CalendarItem2</type> describing the
         genitive case month names.
      */
     sequence< CalendarItem2 >    getGenitiveMonths2();
 
-    //------------------------------------------------------------------------
     /** returns a sequence of <type>CalendarItem2</type> describing the
         partitive case month names.
      */
@@ -84,7 +77,6 @@ published interface XCalendar3 : com::sun::star::i18n::XExtendedCalendar
 
 };
 
-//=============================================================================
 }; }; }; };
 
 #endif

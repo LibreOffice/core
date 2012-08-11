@@ -22,11 +22,9 @@
 #include <com/sun/star/frame/XFrame.idl>
 #include <com/sun/star/frame/XTask.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module frame {
 
-//=============================================================================
 /** represents a top level frame in the frame hierarchy with the desktop as root
 
     <p>
@@ -43,13 +41,11 @@
  */
 published service Task
 {
-    //-------------------------------------------------------------------------
     /**
      @deprecated
      */
     interface XFrame;
 
-    //-------------------------------------------------------------------------
     /**
      @deprecated
          use <type scope="com::sun::star::util">XCloseable</type> instead.
@@ -58,7 +54,6 @@ published service Task
     interface XTask;
 };
 
-//=============================================================================
 
 }; }; }; };
 

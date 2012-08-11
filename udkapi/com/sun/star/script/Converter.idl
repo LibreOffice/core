@@ -22,11 +22,9 @@
 #include <com/sun/star/script/XTypeConverter.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module script {
 
-//=============================================================================
 
 /** This service provides a widening converter converting from one type to another,
     if possible.
@@ -78,7 +76,6 @@
 */
 published service Converter: XTypeConverter;
 
-//=============================================================================
 
 }; }; }; };
 

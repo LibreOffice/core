@@ -25,11 +25,9 @@
 #include <com/sun/star/beans/XPropertyWithState.idl>
 #include <com/sun/star/container/XChild.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module configuration {
 
-//=============================================================================
 /** provides information about an element within a hierarchy.
 
  <p>The local name and the full hierarchical name can be retrieved.
@@ -103,7 +101,6 @@ published service HierarchyElement
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

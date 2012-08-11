@@ -22,11 +22,9 @@
 
 #include <com/sun/star/inspection/XPropertyHandler.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module form { module inspection {
 
-//=============================================================================
 
 /** implements a property handler for use with an <type scope="com::sun::star::inspection">ObjectInspector</type>
     which provides properties related to binding form control models to XForm bindings and validating
@@ -59,7 +57,6 @@ service XSDValidationPropertyHandler
     interface com::sun::star::inspection::XPropertyHandler;
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

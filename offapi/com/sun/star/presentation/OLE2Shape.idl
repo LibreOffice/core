@@ -33,11 +33,9 @@
 #include <com/sun/star/drawing/OLE2Shape.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module presentation {
 
-//=============================================================================
 
 /** This service is implemented by the OLE2 presentation shape.
 
@@ -52,7 +50,6 @@ published service OLE2Shape
     service com::sun::star::drawing::OLE2Shape;
 };
 
-//=============================================================================
 
 }; }; }; };
 

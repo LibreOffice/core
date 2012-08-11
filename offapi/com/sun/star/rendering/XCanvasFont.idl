@@ -71,13 +71,11 @@ interface XCanvasFont : ::com::sun::star::uno::XInterface
      */
     XTextLayout                                         createTextLayout( [in] StringContext aText, [in] byte nDirection, [in] hyper nRandomSeed );
 
-    //-------------------------------------------------------------------------
 
     /** Query the FontRequest that was used to generate this object.
      */
     FontRequest                                         getFontRequest();
 
-    //-------------------------------------------------------------------------
 
     /** Query metric information about the font, that is generic to
         all its glyphs.<p>
@@ -90,7 +88,6 @@ interface XCanvasFont : ::com::sun::star::uno::XInterface
      */
     FontMetrics                                         getFontMetrics();
 
-    //-------------------------------------------------------------------------
 
     /** Query the list of available font sizes.<p>
 
@@ -106,13 +103,11 @@ interface XCanvasFont : ::com::sun::star::uno::XInterface
      */
     sequence< double >                                  getAvailableSizes();
 
-    //-------------------------------------------------------------------------
 
     /** Query the list of additional font properties.<p>
      */
     sequence< ::com::sun::star::beans::PropertyValue >  getExtraFontProperties();
 
-    //-------------------------------------------------------------------------
 
 };
 

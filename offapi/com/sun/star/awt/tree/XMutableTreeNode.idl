@@ -33,11 +33,9 @@
 
 #include <com/sun/star/lang/IndexOutOfBoundsException.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module awt { module tree {
 
-//=============================================================================
 
 /** Represents a mutable tree node as used by the <type>MutableTreeDataModel</type>
  */
@@ -109,7 +107,6 @@ interface XMutableTreeNode : XTreeNode
     void setCollapsedGraphicURL( [in] string URL );
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

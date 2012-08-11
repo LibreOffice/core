@@ -20,11 +20,9 @@
 #define __com_sun_star_ucb_DocumentStoreMode_idl__
 
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** These are the possible values for the property "DocumentStoreMode".
 
     @see XCommandProcessor
@@ -32,19 +30,16 @@ module com { module sun { module star { module ucb {
 */
 published enum DocumentStoreMode
 {
-    //-------------------------------------------------------------------------
     /** Document contents are not stored locally.
     */
     REMOTE,
 
-    //-------------------------------------------------------------------------
     /** Document contents are stored locally.
     */
     LOCAL
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

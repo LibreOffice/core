@@ -33,11 +33,9 @@
 #include <com/sun/star/lang/EventObject.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module form {
 
-//=============================================================================
 
 /** allows to be notified when the activation status of a <type>FormController</type> changes.
 
@@ -48,7 +46,6 @@
  */
 published interface XFormControllerListener: com::sun::star::lang::XEventListener
 {
-    //-------------------------------------------------------------------------
 
     /** is invoked when a control of the controller gained the focus and
         the controller was not previously activated.
@@ -58,7 +55,6 @@ published interface XFormControllerListener: com::sun::star::lang::XEventListene
      */
     [oneway] void formActivated( [in] com::sun::star::lang::EventObject rEvent );
 
-    //-------------------------------------------------------------------------
 
     /** is invoked when a control of the "XFormController" lost the focus
         and no control of the controller received the focus. In other
@@ -71,7 +67,6 @@ published interface XFormControllerListener: com::sun::star::lang::XEventListene
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -30,16 +30,13 @@
 
 #include <com/sun/star/ucb/XPropertySetRegistryFactory.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** creates instances of the service <type>PropertySetRegistry</type>.
   */
 published service Store : XPropertySetRegistryFactory;
 
-//=============================================================================
 
 }; }; }; };
 

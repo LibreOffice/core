@@ -31,11 +31,9 @@
 #include <com/sun/star/report/XReportControlModel.idl>
 #include <com/sun/star/form/XImageProducerSupplier.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module report {
 
-//=============================================================================
 interface XImageControl
 {
     interface XReportControlModel;
@@ -78,7 +76,6 @@ interface XImageControl
     [attribute,bound] boolean PreserveIRI;
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -50,7 +50,6 @@ enum FillRule
      */
     NON_ZERO,
 
-    //-------------------------------------------------------------------------
 
     /** Fill every area, where, when traveling along a line, an
         uneven number of intersections with polygon edges have

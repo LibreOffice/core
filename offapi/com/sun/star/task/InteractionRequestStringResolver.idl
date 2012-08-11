@@ -26,7 +26,6 @@ module com { module sun { module star {
 
 module com { module sun { module star { module task {
 
-//============================================================================
 /* An interaction request string resolver that obtains human readable strings
    from an <type>XInteractionRequest</type>.
  */

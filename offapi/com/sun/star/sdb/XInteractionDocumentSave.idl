@@ -44,7 +44,6 @@ interface XInteractionDocumentSave: com::sun::star::task::XInteractionContinuati
     void setName( [in] string Name, [in] com::sun::star::ucb::XContent Content);
 };
 
-//=============================================================================
 
 }; }; }; };
 

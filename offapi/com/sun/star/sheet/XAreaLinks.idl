@@ -23,11 +23,9 @@
 #include <com/sun/star/container/XIndexAccess.idl>
 #include <com/sun/star/table/CellAddress.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** provides access via index to a collection of area links and inserting
     and removing area links.
@@ -37,7 +35,6 @@ module com {  module sun {  module star {  module sheet {
  */
 published interface XAreaLinks: com::sun::star::container::XIndexAccess
 {
-    //-------------------------------------------------------------------------
 
     /** creates an area link and adds it to the collection.
 
@@ -66,7 +63,6 @@ published interface XAreaLinks: com::sun::star::container::XIndexAccess
              [in] string aFilter,
              [in] string aFilterOptions );
 
-    //-------------------------------------------------------------------------
 
     /** removes an area link from the collection.
      */
@@ -74,7 +70,6 @@ published interface XAreaLinks: com::sun::star::container::XIndexAccess
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

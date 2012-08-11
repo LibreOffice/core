@@ -22,12 +22,10 @@
 
 #include <com/sun/star/table/CellValueBinding.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module table {
 
 
-//=============================================================================
 
 /** defines the binding to a single cell in a table document, which can be used to
     transfer a list position into the cell.
@@ -44,7 +42,6 @@ service ListPositionCellBinding
     service CellValueBinding;
 };
 
-//=============================================================================
 
 }; }; }; };
 

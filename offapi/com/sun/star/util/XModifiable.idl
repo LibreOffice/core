@@ -24,11 +24,9 @@
 #include <com/sun/star/beans/PropertyVetoException.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module util {
 
-//=============================================================================
 
 /** makes the modify state of the object accessible.
 
@@ -37,7 +35,6 @@ module com {  module sun {  module star {  module util {
  */
 published interface XModifiable: com::sun::star::util::XModifyBroadcaster
 {
-    //-------------------------------------------------------------------------
     /** @returns
                 <TRUE/> if the object is modified.
 
@@ -46,7 +43,6 @@ published interface XModifiable: com::sun::star::util::XModifyBroadcaster
      */
     boolean isModified();
 
-    //-------------------------------------------------------------------------
     /** sets the status of the <em>modified</em>-flag from outside of the
         object.
      */
@@ -55,7 +51,6 @@ published interface XModifiable: com::sun::star::util::XModifyBroadcaster
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

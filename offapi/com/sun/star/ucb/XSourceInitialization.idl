@@ -22,17 +22,14 @@
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/ucb/AlreadyInitializedException.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** provides the initialization of a component with any source object.
 */
 
 published interface XSourceInitialization: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** provides the initialization of a component with any source object.
 
         <p>The service description has to specify which type of interface must
@@ -57,7 +54,6 @@ published interface XSourceInitialization: com::sun::star::uno::XInterface
          raises (AlreadyInitializedException);
 };
 
-//=============================================================================
 
 }; }; }; };
 

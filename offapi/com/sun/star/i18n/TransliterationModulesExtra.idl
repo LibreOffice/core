@@ -19,11 +19,9 @@
 #ifndef __com_sun_star_i18n_TransliterationModulesExtra_idl__
 #define __com_sun_star_i18n_TransliterationModulesExtra_idl__
 
-//=============================================================================
 
 module com {  module sun {  module star {  module i18n {
 
-//=============================================================================
 
 /** Extra transliteration module enumeration to use with
     <member>XTransliteration::loadModule()</member>
@@ -40,26 +38,22 @@ constants TransliterationModulesExtra
      */
     const short SENTENCE_CASE = 200;
 
-    //-------------------------------------------------------------------------
 
     /** The first character of the word is put in upper case.
      * This one is part
      */
     const short TITLE_CASE = 201;
 
-    //-------------------------------------------------------------------------
 
     /** All characters of the word are to change their case from small letters
      * to capital letters and vice versa.
      */
     const short TOGGLE_CASE = 202;
 
-    //-------------------------------------------------------------------------
 
     const long END_OF_MODULE    = 0;
 };
 
-//=============================================================================
 }; }; }; };
 
 #endif

@@ -21,11 +21,9 @@
 
 #include <com/sun/star/uno/Exception.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module document {
 
-//=============================================================================
 /** Is used for interaction handle in case package is broken.
 
     @since OOo 1.1.2
@@ -38,7 +36,6 @@ published exception BrokenPackageRequest : ::com::sun::star::uno::Exception
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

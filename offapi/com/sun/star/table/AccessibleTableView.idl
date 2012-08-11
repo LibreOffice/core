@@ -35,11 +35,9 @@
 #include <com/sun/star/accessibility/XAccessibleEventBroadcaster.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module table {
 
-//=============================================================================
 
 /** The accessible view of a table in a text document or in the page preview
       of a spreadsheet document. See
@@ -141,7 +139,6 @@ published service AccessibleTableView
     interface ::com::sun::star::accessibility::XAccessibleEventBroadcaster;
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -19,11 +19,9 @@
 #ifndef __com_sun_star_document_PrinterIndependentLayout_idl__
 #define __com_sun_star_document_PrinterIndependentLayout_idl__
 
-//=============================================================================
 
 module com {   module sun {   module star {   module document {
 
-//=============================================================================
 
 /** specifies whether the document printer metric is used.
 
@@ -51,7 +49,6 @@ published constants PrinterIndependentLayout
      */
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -26,11 +26,9 @@
 #include <com/sun/star/beans/XPropertySet.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module text {
 
-//=============================================================================
 
 // DocMerge from xml: interface com::sun::star::text::XFootnotesSupplier
 /** makes it possible to access the footnotes within
@@ -38,14 +36,12 @@
  */
 published interface XFootnotesSupplier: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::text::XFootnotesSupplier::getFootnotes
     /** returns a collection of footnotes.
      */
     com::sun::star::container::XIndexAccess getFootnotes();
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from idl: method com::sun::star::text::XFootnotesSupplier::getFootnoteSettings
     /** @returns
@@ -55,7 +51,6 @@ published interface XFootnotesSupplier: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

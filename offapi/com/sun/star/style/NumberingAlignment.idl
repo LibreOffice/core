@@ -22,39 +22,33 @@
 #include <com/sun/star/style/HorizontalAlignment.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module style {
 
-//=============================================================================
 
 // DocMerge from xml: service com::sun::star::style::NumberingAlignment
 /** specify the alignment of a numbering level.
  */
 published service NumberingAlignment
 {
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::style::NumberingAlignment::Alignment
     /** set the alignment from the numbering. Use the com::sun::star::style::HorizontalAlignment enum to change the alignment.
      */
     [property] com::sun::star::style::HorizontalAlignment Alignment;
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::style::NumberingAlignment::TextMarginDistance
     /** the minimum distance between the numbering symbol and the following text.
      */
     [property] short TextMarginDistance;
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::style::NumberingAlignment::TextNumberingDistance
     /** the distance between left margin and the numbering symbol.
      */
     [property] short TextNumberingDistance;
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::style::NumberingAlignment::Insertion
     /** the distance between the numbering symbol and text.
@@ -63,7 +57,6 @@ published service NumberingAlignment
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

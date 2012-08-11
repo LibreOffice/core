@@ -21,11 +21,9 @@
 
 #include <com/sun/star/beans/XPropertySet.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module chart {
 
-//=============================================================================
 
 /** Specifies all the properties for the graphic object of a data point in a
     three-dimensional bar diagram.@see BarDiagram
@@ -34,7 +32,6 @@ published service Chart3DBarProperties
 {
     interface com::sun::star::beans::XPropertySet;
 
-    //-------------------------------------------------------------------------
 
     /** Specifies the solid shape of a data point.@see ChartSolidType
      */
@@ -42,7 +39,6 @@ published service Chart3DBarProperties
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

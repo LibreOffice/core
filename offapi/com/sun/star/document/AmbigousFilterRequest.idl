@@ -21,11 +21,9 @@
 
 #include <com/sun/star/uno/Exception.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module document {
 
-//=============================================================================
 /** should be used for interaction to handle states of ambiguous filter detection
 
     <p>
@@ -42,23 +40,19 @@ module com { module sun { module star { module document {
 */
 published exception AmbigousFilterRequest : ::com::sun::star::uno::Exception
 {
-    //-------------------------------------------------------------------------
     /** transport URL which couldn't be detected right
      */
     string URL;
 
-    //-------------------------------------------------------------------------
     /** transport the preselected filter
      */
     string SelectedFilter;
 
-        //-------------------------------------------------------------------------
     /** transport the real detected filter, which stands in conflict to the pre selected one
      */
     string DetectedFilter;
 };
 
-//=============================================================================
 
 }; }; }; };
 

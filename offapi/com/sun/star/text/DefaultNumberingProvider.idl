@@ -31,17 +31,14 @@
 
 #include <com/sun/star/text/XDefaultNumberingProvider.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module text {
 
-//=============================================================================
 /** provides access to language dependent numbering types and supports
     formatting of those numberings.
  */
 published service DefaultNumberingProvider : XDefaultNumberingProvider;
 
-//=============================================================================
 }; }; }; };
 
 #endif

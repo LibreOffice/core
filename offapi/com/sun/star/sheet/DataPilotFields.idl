@@ -33,11 +33,9 @@
 #include <com/sun/star/container/XEnumerationAccess.idl>
 #include <com/sun/star/container/XIndexAccess.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** represents a collection of fields in a data pilot table.
 
@@ -49,13 +47,11 @@ module com {  module sun {  module star {  module sheet {
  */
 published service DataPilotFields
 {
-    //-------------------------------------------------------------------------
 
     /** provides access to the data pilot fields in the collection via index.
      */
     interface com::sun::star::container::XIndexAccess;
 
-    //-------------------------------------------------------------------------
 
     /** creates an enumeration of all data pilot fields.
 
@@ -63,7 +59,6 @@ published service DataPilotFields
      */
     interface com::sun::star::container::XEnumerationAccess;
 
-    //-------------------------------------------------------------------------
 
     /** provides access to the data pilot fields in the collection via name.
      */
@@ -71,7 +66,6 @@ published service DataPilotFields
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

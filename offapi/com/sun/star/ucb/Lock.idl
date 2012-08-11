@@ -31,21 +31,17 @@
 #include <com/sun/star/ucb/LockEntry.idl>
 #include <com/sun/star/ucb/LockDepth.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** defines a lock.
 */
 published struct Lock : LockEntry
 {
-    //-------------------------------------------------------------------------
     /** defines the lock's depth.
     */
     LockDepth Depth;
 
-    //-------------------------------------------------------------------------
     /** the owner of the lock.
 
         <p>This element provides information sufficient for either directly
@@ -55,7 +51,6 @@ published struct Lock : LockEntry
     */
     any Owner;
 
-    //-------------------------------------------------------------------------
     /** a timeout value for the lock.
 
         <p>This element specifies the number of seconds between granting
@@ -65,7 +60,6 @@ published struct Lock : LockEntry
     */
     hyper Timeout;
 
-    //-------------------------------------------------------------------------
     /** the lock tokens.
 
         <p>Each lock token is a URI.
@@ -73,7 +67,6 @@ published struct Lock : LockEntry
     sequence< string > LockTokens;
 };
 
-//=============================================================================
 
 }; }; }; };
 

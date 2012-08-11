@@ -24,11 +24,9 @@
 #include <com/sun/star/lang/IllegalArgumentException.idl>
 #include <com/sun/star/text/XFlatParagraph.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module text {
 
-//=============================================================================
 
 /** provides functionality to ...
 
@@ -38,7 +36,6 @@ module com {  module sun {  module star {  module text {
 interface XFlatParagraphIterator: com::sun::star::uno::XInterface
 {
 
-    //-------------------------------------------------------------------------
     /** get the first flat paragraph to be checked or an empty reference if
         there are no more paragraphs to check.
 
@@ -47,7 +44,6 @@ interface XFlatParagraphIterator: com::sun::star::uno::XInterface
     */
     com::sun::star::text::XFlatParagraph getFirstPara();
 
-    //-------------------------------------------------------------------------
     /** get the next flat paragraph to be checked or an empty reference if
         there are no more paragraphs to check.
 
@@ -56,7 +52,6 @@ interface XFlatParagraphIterator: com::sun::star::uno::XInterface
     */
     com::sun::star::text::XFlatParagraph getNextPara();
 
-    //-------------------------------------------------------------------------
     /** get the last flat paragraph
 
         @returns
@@ -64,7 +59,6 @@ interface XFlatParagraphIterator: com::sun::star::uno::XInterface
     */
     com::sun::star::text::XFlatParagraph getLastPara();
 
-    //-------------------------------------------------------------------------
     /** get the flat paragraph before this one
 
         @param  xPara
@@ -79,7 +73,6 @@ interface XFlatParagraphIterator: com::sun::star::uno::XInterface
     com::sun::star::text::XFlatParagraph getParaBefore( [in] com::sun::star::text::XFlatParagraph xPara )
             raises( com::sun::star::lang::IllegalArgumentException );
 
-    //-------------------------------------------------------------------------
     /** get the flat paragraph just following this one
 
         @param  xPara
@@ -95,7 +88,6 @@ interface XFlatParagraphIterator: com::sun::star::uno::XInterface
             raises( com::sun::star::lang::IllegalArgumentException );
 };
 
-//=============================================================================
 
 }; }; }; };
 

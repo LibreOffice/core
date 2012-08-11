@@ -29,11 +29,9 @@
 #include <com/sun/star/container/NoSuchElementException.idl>
 
 
-//=============================================================================
 
 module com { module sun { module star { module linguistic2 {
 
-//=============================================================================
 /** Allows the user to access a conversion dictionary.
 
     <p>The dictionary consists of entries (pairs) of the form
@@ -53,14 +51,12 @@ module com { module sun { module star { module linguistic2 {
 */
 published interface XConversionDictionary : com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /**
         @returns
             the name of the dictionary.
     */
     string getName();
 
-    //-------------------------------------------------------------------------
     /**
         @returns
             the language supported by the dictionary.
@@ -69,7 +65,6 @@ published interface XConversionDictionary : com::sun::star::uno::XInterface
     */
     com::sun::star::lang::Locale getLocale();
 
-    //-------------------------------------------------------------------------
     /**
         @returns
             the conversion type supported by the dictionary.
@@ -78,7 +73,6 @@ published interface XConversionDictionary : com::sun::star::uno::XInterface
     */
     short getConversionType();
 
-    //-------------------------------------------------------------------------
     /** specifies whether the dictionary should be used or not .
 
         @param  bAcvtivate
@@ -87,19 +81,16 @@ published interface XConversionDictionary : com::sun::star::uno::XInterface
     */
     void setActive( [in] boolean bActivate );
 
-    //-------------------------------------------------------------------------
     /**
         @returns
             <TRUE/> if the dictionary is active, <FALSE/> otherwise.
     */
     boolean isActive();
 
-    //-------------------------------------------------------------------------
     /** removes all entries from the dictionary.
     */
     void clear();
 
-    //-------------------------------------------------------------------------
     /** searches for entries or conversions that match the given text.
 
         <p>The exact string to be looked for is the substring from the
@@ -140,7 +131,6 @@ published interface XConversionDictionary : com::sun::star::uno::XInterface
             [in] long nTextConversionOptions )
         raises( com::sun::star::lang::IllegalArgumentException );
 
-    //-------------------------------------------------------------------------
     /** is used to add a conversion pair to the dictionary.
 
         @param  aLeftText
@@ -163,7 +153,6 @@ published interface XConversionDictionary : com::sun::star::uno::XInterface
         raises( com::sun::star::lang::IllegalArgumentException,
                 com::sun::star::container::ElementExistException);
 
-    //-------------------------------------------------------------------------
     /** removes a conversion pair from the dictionary.
 
         @param  aLeftText
@@ -180,7 +169,6 @@ published interface XConversionDictionary : com::sun::star::uno::XInterface
             [in] string     aRightText )
         raises( com::sun::star::container::NoSuchElementException );
 
-    //-------------------------------------------------------------------------
     /** returns the maximum number of characters used as left or right text
         in entries.
 
@@ -193,7 +181,6 @@ published interface XConversionDictionary : com::sun::star::uno::XInterface
     short getMaxCharCount(
             [in] com::sun::star::linguistic2::ConversionDirection eDirection );
 
-    //-------------------------------------------------------------------------
     /**
         @returns
             a list of all left or right parts of the dictionaries entries.
@@ -207,7 +194,6 @@ published interface XConversionDictionary : com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

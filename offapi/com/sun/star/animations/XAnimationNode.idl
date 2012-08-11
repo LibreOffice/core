@@ -31,11 +31,9 @@
 #include <com/sun/star/container/XChild.idl>
 #include <com/sun/star/beans/NamedValue.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module animations {
 
-//=============================================================================
 
 /**
 */
@@ -250,7 +248,6 @@ interface XAnimationNode : ::com::sun::star::container::XChild
     [attribute] sequence< ::com::sun::star::beans::NamedValue > UserData;
 };
 
-//=============================================================================
 
 }; }; }; };
 

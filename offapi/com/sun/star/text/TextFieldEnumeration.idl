@@ -22,11 +22,9 @@
 #include <com/sun/star/container/XEnumeration.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module text {
 
-//=============================================================================
 
 /** This interface creates an enumeration of all text fields within a text document.
  */
@@ -37,7 +35,6 @@ published service TextFieldEnumeration
     interface   ::com::sun::star::container::XEnumeration;
 };
 
-//=============================================================================
 
 }; }; }; };
 #endif

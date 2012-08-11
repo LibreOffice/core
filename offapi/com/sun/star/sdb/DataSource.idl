@@ -239,7 +239,6 @@ published service DataSource
     [property] sequence<string> TableTypeFilter;
 };
 
-//=============================================================================
 
 }; }; }; };
 

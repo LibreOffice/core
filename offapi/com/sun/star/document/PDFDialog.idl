@@ -21,11 +21,9 @@
 
 #include <com/sun/star/ui/dialogs/FilterOptionsDialog.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module document {
 
-//=============================================================================
 
 /** This service is for a PDFDialog
  */
@@ -33,7 +31,6 @@ service PDFDialog
 {
     service com::sun::star::ui::dialogs::FilterOptionsDialog;
 
-    //-------------------------------------------------------------------------
     /** PDFDialog options can be set as sequence of
         com.sun.star.beans.PropertyValue at the FilterData property of the
         MediaDescriptor. The PropertyValues which are supported within the
@@ -43,10 +40,8 @@ service PDFDialog
         "officecfg/registry/schema/org/openoffice/Office/Common.xcs"
     */
 
-    //-------------------------------------------------------------------------
 };
 
-//=============================================================================
 
 }; }; }; };
 

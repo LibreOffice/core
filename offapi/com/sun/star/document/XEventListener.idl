@@ -22,11 +22,9 @@
 #include <com/sun/star/lang/XEventListener.idl>
 #include <com/sun/star/document/EventObject.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module document {
 
-//=============================================================================
 /** makes it possible to register listeners, which are called whenever
     a document or document content event occurs
 
@@ -37,7 +35,6 @@ module com {  module sun {  module star {  module document {
  */
 published interface XEventListener: com::sun::star::lang::XEventListener
 {
-    //-------------------------------------------------------------------------
     /** is called whenever a document event (see <type>EventObject</type>) occurs
 
         @param Event
@@ -46,7 +43,6 @@ published interface XEventListener: com::sun::star::lang::XEventListener
     [oneway] void notifyEvent( [in] EventObject Event );
 };
 
-//=============================================================================
 
 }; }; }; };
 

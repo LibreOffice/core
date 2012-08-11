@@ -22,11 +22,9 @@
 #include <com/sun/star/chart/XAxisXSupplier.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module chart {
 
-//=============================================================================
 
 /** has to be supported by charts providing the capabilities of a
    horizontal axis, i.e., an <em>x</em>-axis.
@@ -37,34 +35,29 @@ published service ChartAxisXSupplier
      */
     interface com::sun::star::chart::XAxisXSupplier;
 
-    //-------------------------------------------------------------------------
 
     /** This property determines if the x-axis is shown or hidden.@see ChartAxis
      */
     [property] boolean HasXAxis;
 
-    //-------------------------------------------------------------------------
 
     /** Determines if the description of the x-axis is
         shown or hidden.
      */
     [property] boolean HasXAxisDescription;
 
-    //-------------------------------------------------------------------------
 
     /** Determines if the major grid of the x-axis is
         shown or hidden.@see ChartGrid
      */
     [property] boolean HasXAxisGrid;
 
-    //-------------------------------------------------------------------------
 
     /** Determines if the minor grid of the x-axis is shown
         or hidden.@see ChartGrid
      */
     [property] boolean HasXAxisHelpGrid;
 
-    //-------------------------------------------------------------------------
 
     /** Determines if the title of the x-axis is shown
         or hidden.@see ChartTitle
@@ -73,7 +66,6 @@ published service ChartAxisXSupplier
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

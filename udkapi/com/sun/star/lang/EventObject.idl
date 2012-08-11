@@ -22,11 +22,9 @@
 #include <com/sun/star/uno/XInterface.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module lang {
 
-//=============================================================================
 
 // DocMerge from xml: struct com::sun::star::lang::EventObject
 /** specifies the base for all event objects and identifies the
@@ -41,7 +39,6 @@ published struct EventObject
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

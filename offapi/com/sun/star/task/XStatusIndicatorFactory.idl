@@ -22,11 +22,9 @@
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/task/XStatusIndicator.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module task {
 
-//=============================================================================
 /** provides multiple, probably parallel running, status indicator objects
 
     <p>
@@ -38,7 +36,6 @@
  */
 published interface XStatusIndicatorFactory: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** create a new status indicator instance
 
         @returns

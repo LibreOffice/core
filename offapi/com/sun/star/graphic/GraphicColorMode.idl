@@ -20,11 +20,9 @@
 #ifndef __com_sun_star_graphic_GraphicColorMode_idl__
 #define __com_sun_star_graphic_GraphicColorMode_idl__
 
-//=============================================================================
 
 module com { module sun { module star { module graphic {
 
-//=============================================================================
 
 /** describes different color modes which can be specified when requesting a graphic.
  */
@@ -41,11 +39,9 @@ constants GraphicColorMode
     const long HIGH_CONTRAST    = 1;
 };
 
-//=============================================================================
 
 }; }; }; };
 
-//=============================================================================
 
 #endif
 

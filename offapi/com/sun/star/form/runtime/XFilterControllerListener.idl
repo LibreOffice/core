@@ -23,11 +23,9 @@
 #include <com/sun/star/lang/XEventListener.idl>
 #include <com/sun/star/form/runtime/FilterEvent.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module form { module runtime {
 
-//=============================================================================
 
 /** is implemented by components listening for events fired by an <type>XFilterController</type>.
 
@@ -69,11 +67,9 @@ interface XFilterControllerListener : ::com::sun::star::lang::XEventListener
     void    disjunctiveTermAdded( [in] FilterEvent _Event );
 };
 
-//=============================================================================
 
 }; }; }; }; };
 
-//=============================================================================
 
 #endif
 

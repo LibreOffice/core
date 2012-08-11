@@ -24,67 +24,49 @@
 #include <com/sun/star/linguistic2/XDictionaryEntry.idl>
 #include <com/sun/star/linguistic2/XDictionaryEventListener.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module linguistic2 {
 
-//=============================================================================
 /**
     @deprecated
 */
 published interface XDictionary1 : com::sun::star::container::XNamed
 {
-    //-------------------------------------------------------------------------
     com::sun::star::linguistic2::DictionaryType getDictionaryType();
 
-    //-------------------------------------------------------------------------
     void setActive( [in] boolean bActivate );
 
-    //-------------------------------------------------------------------------
     boolean isActive();
 
-    //-------------------------------------------------------------------------
     short getCount();
 
-    //-------------------------------------------------------------------------
     short getLanguage();
 
-    //-------------------------------------------------------------------------
     void setLanguage( [in] short nLang );
 
-    //-------------------------------------------------------------------------
     com::sun::star::linguistic2::XDictionaryEntry getEntry( [in] string aWord );
 
-    //-------------------------------------------------------------------------
     boolean addEntry( [in] com::sun::star::linguistic2::XDictionaryEntry xDicEntry );
 
-    //-------------------------------------------------------------------------
     boolean add(
             [in] string aWord,
             [in] boolean bIsNegative,
             [in] string aRplcText );
 
-    //-------------------------------------------------------------------------
     boolean remove( [in] string aWord );
 
-    //-------------------------------------------------------------------------
     boolean isFull();
 
-    //-------------------------------------------------------------------------
     sequence<com::sun::star::linguistic2::XDictionaryEntry> getEntries();
 
-    //-------------------------------------------------------------------------
     void clear();
 
-    //-------------------------------------------------------------------------
     boolean addDictionaryEventListener( [in] com::sun::star::linguistic2::XDictionaryEventListener xListener );
 
-    //-------------------------------------------------------------------------
     boolean removeDictionaryEventListener( [in] com::sun::star::linguistic2::XDictionaryEventListener xListener );
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

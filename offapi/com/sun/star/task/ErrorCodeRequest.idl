@@ -30,11 +30,9 @@
 
 #include <com/sun/star/uno/Exception.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module task {
 
-//=============================================================================
 
 /** represents a general error exception.
     It can be used to transport the error code information.
@@ -48,7 +46,6 @@ published exception ErrorCodeRequest : com::sun::star::uno::Exception
         long ErrCode;
 };
 
-//=============================================================================
 
 }; }; }; };
 

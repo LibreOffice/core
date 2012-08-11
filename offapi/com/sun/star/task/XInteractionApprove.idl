@@ -22,11 +22,9 @@
 #include <com/sun/star/task/XInteractionContinuation.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module task {
 
-//=============================================================================
 
 // DocMerge from xml: interface com::sun::star::task::XInteractionApprove
 /** An interaction continuation specifying "approval".
@@ -35,7 +33,6 @@ published interface XInteractionApprove: com::sun::star::task::XInteractionConti
 {
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -29,11 +29,9 @@
 #define __com_sun_star_ucb_ListActionType_idl__
 
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** These values are used to specify the type of change happened to a list.
 
     <p>A change happened is sent from an <type>XDynamicResultSet</type>
@@ -44,7 +42,6 @@ module com { module sun { module star { module ucb {
 
 published constants ListActionType
 {
-    //-------------------------------------------------------------------------
     /** First notification to a single listener for purpose of initialization.
 
     <p>This type of notification is required to be sent first and only once
@@ -64,7 +61,6 @@ published constants ListActionType
     */
     const long WELCOME = 20;
 
-    //-------------------------------------------------------------------------
     /** One or more rows were inserted into the list.
 
     <p>This action is related to <member>ContentAction::INSERTED</member>.
@@ -84,7 +80,6 @@ published constants ListActionType
     */
     const long INSERTED = 21;
 
-    //-------------------------------------------------------------------------
     /** One or more rows were removed from the list.
 
     <p>This action is related to <member>ContentAction::REMOVED</member>.
@@ -99,7 +94,6 @@ published constants ListActionType
     const long REMOVED = 22;
 
 
-    //-------------------------------------------------------------------------
     /** The whole list was destroyed and independently rebuild.
 
     <p>If "CLEARED" is sent you don't need to refer to the old ResultSet.
@@ -110,7 +104,6 @@ published constants ListActionType
     */
     const long CLEARED = 23;
 
-    //-------------------------------------------------------------------------
     /** One or more rows were moved to another position.
 
     <p>The members <member>ListAction::Count</member> and
@@ -127,7 +120,6 @@ published constants ListActionType
     */
     const long MOVED = 24;
 
-    //-------------------------------------------------------------------------
     /** The properties of one or more rows have changed.
 
     <p>This action is related to a <type scope="com::sun::star::beans">PropertyChangeEvent</type>.
@@ -147,7 +139,6 @@ published constants ListActionType
     */
     const long PROPERTIES_CHANGED = 25;
 
-    //-------------------------------------------------------------------------
     /*??????????????????????????? we probably will not need this
 
     The identity of a row has changed.
@@ -166,7 +157,6 @@ published constants ListActionType
     const long EXCHANGED = 26;
     */
 
-    //-------------------------------------------------------------------------
     /*??????????????????????????? we probably will need this
     After a completely notified Iteration send "COMPLETED".
 
@@ -185,7 +175,6 @@ published constants ListActionType
     const long COMPLETED = 27;
 };
 
-//=============================================================================
 
 }; }; }; };
 

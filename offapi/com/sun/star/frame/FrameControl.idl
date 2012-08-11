@@ -31,11 +31,9 @@
 #include <com/sun/star/awt/UnoControl.idl>
 #include <com/sun/star/beans/XPropertySet.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module frame {
 
-//=============================================================================
 /** contains a frame with a desktop component
 
     <p>
@@ -47,18 +45,15 @@
  */
 published service FrameControl
 {
-    //-------------------------------------------------------------------------
     /** the base service of all controls
      */
     service com::sun::star::awt::UnoControl;
 
-    //-------------------------------------------------------------------------
     /** contains the type of the component which is loaded into the frame,
         or the document which implicitly specifies the type
      */
     [property] string ComponentUrl;
 
-    //-------------------------------------------------------------------------
     /** the frame held by this control
 
         <p>
@@ -69,7 +64,6 @@ published service FrameControl
     [property, readonly] string Frame;
 };
 
-//=============================================================================
 
 }; }; }; };
 

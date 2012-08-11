@@ -23,11 +23,9 @@
 
 #include <com/sun/star/drawing/XCustomShapeEngine.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module drawing {
 
-//=============================================================================
 
 /** This service is for a CustomShape
  */
@@ -44,7 +42,6 @@ service CustomShapeEngine
     interface com::sun::star::drawing::XCustomShapeEngine;
 };
 
-//=============================================================================
 
 }; }; }; };
 

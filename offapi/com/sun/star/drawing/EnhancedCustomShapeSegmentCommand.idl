@@ -29,11 +29,9 @@
 #define __com_sun_star_drawing_EnhancedCustomShapeSegmentInformationCommand_idl__
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module drawing {
 
-//=============================================================================
 
 /**
  */
@@ -132,7 +130,6 @@ constants EnhancedCustomShapeSegmentCommand
     const short LIGHTENLESS = 21;
 };
 
-//=============================================================================
 
 }; }; }; };
 

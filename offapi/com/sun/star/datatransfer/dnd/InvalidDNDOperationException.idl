@@ -22,11 +22,9 @@
 
 #include <com/sun/star/uno/RuntimeException.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module datatransfer { module dnd {
 
-//=============================================================================
 /** This exception is thrown by various methods in the datatransfer.dnd
     package.
 
@@ -39,7 +37,6 @@ published exception InvalidDNDOperationException: com::sun::star::uno::RuntimeEx
 {
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

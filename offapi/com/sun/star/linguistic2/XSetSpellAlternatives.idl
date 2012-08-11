@@ -31,11 +31,9 @@
 #include <com/sun/star/uno/XInterface.idl>
 
 
-//=============================================================================
 
 module com { module sun { module star { module linguistic2 {
 
-//=============================================================================
 /**
     allows to modify the suggestion list returned by a spell checker.
 
@@ -47,7 +45,6 @@ module com { module sun { module star { module linguistic2 {
 */
 interface XSetSpellAlternatives : com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /**
         set the list of suggestions to be returned.
 
@@ -55,7 +52,6 @@ interface XSetSpellAlternatives : com::sun::star::uno::XInterface
     */
     void setAlternatives( [in] sequence< string > aAlternatives );
 
-    //-------------------------------------------------------------------------
     /**
         set the type of error found.
 
@@ -66,7 +62,6 @@ interface XSetSpellAlternatives : com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

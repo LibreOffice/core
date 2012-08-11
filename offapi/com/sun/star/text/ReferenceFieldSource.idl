@@ -20,42 +20,34 @@
 #define __com_sun_star_text_ReferenceFieldSource_idl__
 
 
-//=============================================================================
 
 module com { module sun { module star { module text {
 
-//=============================================================================
 /** These constants define the type of the source of a reference field.
 */
 published constants ReferenceFieldSource
 {
-    //-------------------------------------------------------------------------
     /** The source is a reference mark.
     */
     const short REFERENCE_MARK = 0;
 
-    //-------------------------------------------------------------------------
     /** The source is a number sequence field.
     */
     const short SEQUENCE_FIELD = 1;
 
-    //-------------------------------------------------------------------------
     /** The source is a bookmark.
     */
     const short BOOKMARK = 2;
 
-    //-------------------------------------------------------------------------
     /** The source is a footnote.
     */
     const short FOOTNOTE = 3;
 
-    //-------------------------------------------------------------------------
     /** The source is an endnote.
     */
     const short ENDNOTE = 4;
 };
 
-//=============================================================================
 
 }; }; }; };
 #endif

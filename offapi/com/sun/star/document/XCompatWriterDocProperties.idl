@@ -29,7 +29,6 @@
 #define __com_sun_star_document_XCompatWriterDocProperties_idl__
 
 #include <com/sun/star/document/XDocumentProperties.idl>
-//=============================================================================
 
 module com {   module sun {   module star {   module document {
 interface XCompatWriterDocProperties

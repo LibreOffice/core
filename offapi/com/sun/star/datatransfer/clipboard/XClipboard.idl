@@ -32,11 +32,9 @@
 #include <com/sun/star/datatransfer/XTransferable.idl>
 #include <com/sun/star/uno/XInterface.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module datatransfer { module clipboard {
 
-//=============================================================================
 /** The default interface to access clipboard instances.
 */
 
@@ -45,7 +43,6 @@ module com { module sun { module star { module datatransfer { module clipboard {
 
 published interface XClipboard: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** To get the current content of the clipboard.
 
         @returns
@@ -56,7 +53,6 @@ published interface XClipboard: com::sun::star::uno::XInterface
     */
     com::sun::star::datatransfer::XTransferable getContents();
 
-    //-------------------------------------------------------------------------
     /** Sets the current contents of the clipboard to the specified
         transferable object and registers the specified clipboard owner
         as the owner of the new contents.
@@ -78,7 +74,6 @@ published interface XClipboard: com::sun::star::uno::XInterface
     */
     [oneway] void setContents( [in] com::sun::star::datatransfer::XTransferable xTrans, [in] XClipboardOwner xClipboardOwner );
 
-    //-------------------------------------------------------------------------
     /** To get the name of the clipboard instance.
 
         @returns
@@ -89,7 +84,6 @@ published interface XClipboard: com::sun::star::uno::XInterface
     string getName();
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

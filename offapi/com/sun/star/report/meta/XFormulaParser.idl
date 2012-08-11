@@ -34,7 +34,6 @@
 #include <com/sun/star/sheet/FormulaOpCodeMapEntry.idl>
 #include <com/sun/star/sheet/XFormulaOpCodeMapper.idl>
 #include <com/sun/star/beans/XPropertySet.idl>
-//=============================================================================
 module com {  module sun {  module star {  module report { module meta {
 /** identifies a <type>XFormulaParser</type> which allows to retrieve the meta data of all supported functions.
 
@@ -62,7 +61,6 @@ interface XFormulaParser
     [attribute,readonly] com::sun::star::sheet::XFormulaOpCodeMapper FormulaOpCodeMapper;
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

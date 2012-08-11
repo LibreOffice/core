@@ -49,11 +49,9 @@
 #include <com/sun/star/beans/XPropertySet.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module text {
 
-//=============================================================================
 
 // DocMerge from xml: service com::sun::star::text::AdvancedTextDocument
 /** An advanced text document is an extension of a hypertext document
@@ -92,35 +90,30 @@ published service AdvancedTextDocument
     // DocMerge: empty anyway
     interface com::sun::star::beans::XPropertySet;
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::text::AdvancedTextDocument::CharLocale
     /** contains the identifier of the default locale of the document.
      */
     [property] com::sun::star::lang::Locale CharLocale;
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::text::AdvancedTextDocument::CharacterCount
     /** contains the count of all characters in the document.
      */
     [readonly, property] long CharacterCount;
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::text::AdvancedTextDocument::ParagraphCount
     /** contains the count of all paragraphs in the document.
      */
     [readonly, property] long ParagraphCount;
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::text::AdvancedTextDocument::WordCount
     /** contains the count of all words in the document.@see WordSeparator
      */
     [readonly, property] long WordCount;
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::text::AdvancedTextDocument::WordSeparator
     /** contains a string that consists of characters that mark the
@@ -136,7 +129,6 @@ published service AdvancedTextDocument
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

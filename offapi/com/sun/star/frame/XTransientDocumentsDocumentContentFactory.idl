@@ -24,11 +24,9 @@
 #include <com/sun/star/frame/XModel.idl>
 #include <com/sun/star/lang/IllegalArgumentException.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module frame {
 
-//=============================================================================
 /** specifies a factory for
     <type scope="com::sun::star::ucb">TransientDocumentsDocumentContent</type>s.
 
@@ -41,7 +39,6 @@ module com { module sun { module star { module frame {
 */
 interface XTransientDocumentsDocumentContentFactory : com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** creates a
         <type scope="com::sun::star::ucb">TransientDocumentsDocumentContent</type>
         based on a given <type scope="com::sun::star::document">OfficeDocument</type>.
@@ -66,7 +63,6 @@ interface XTransientDocumentsDocumentContentFactory : com::sun::star::uno::XInte
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

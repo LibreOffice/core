@@ -21,11 +21,9 @@
 
 #include <com/sun/star/animations/XAnimationNode.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module animations {
 
-//=============================================================================
 
 /**
 */
@@ -34,7 +32,6 @@ interface XAnimationNodeSupplier
     XAnimationNode getAnimationNode();
 };
 
-//=============================================================================
 
 }; }; }; };
 

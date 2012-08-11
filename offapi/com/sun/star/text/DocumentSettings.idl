@@ -33,11 +33,9 @@
 #include <com/sun/star/text/PrintSettings.idl>
 #include <com/sun/star/text/PrintPreviewSettings.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module text {
 
-//=============================================================================
 
 /** describes properties that apply to the whole text document.
  */
@@ -49,12 +47,10 @@ published service DocumentSettings
 
     [optional] service com::sun::star::text::PrintPreviewSettings;
 
-    //-------------------------------------------------------------------------
     /** gives access to the properties implemented by this service.
      */
     interface com::sun::star::beans::XPropertySet;
 
-    //-------------------------------------------------------------------------
 
     /** specifies if charts in text documents are updated automatically.
 
@@ -93,7 +89,6 @@ published service DocumentSettings
     */
     [optional, property] boolean AlignTabStopPosition;
 
-    // ------------------------------------------------------------
     /** specifies if the contents of links in the global document
         are saved or not.
 
@@ -103,7 +98,6 @@ published service DocumentSettings
         something like <code>SaveLinkedDocumentContent</code>.</p>
     */
     [optional, property] boolean SaveGlobalDocumentLinks;
-    // ------------------------------------------------------------
     /** specifies if the document has been created as a label document.
 
         <p>This property indicates that the document contains multiple text frames
@@ -112,7 +106,6 @@ published service DocumentSettings
 
     */
     [optional, property] boolean IsLabelDocument;
-    // ------------------------------------------------------------
     /** specifies if the former (till OpenOffice.org 1.1) or the new
         line spacing formatting is applied.
 
@@ -132,7 +125,6 @@ published service DocumentSettings
         @since OOo 2.0
     */
     [optional, property] boolean UseFormerLineSpacing;
-    // ------------------------------------------------------------
     /** specifies if paragraph and table spacing is added at the
         bottom of table cells
 
@@ -149,7 +141,6 @@ published service DocumentSettings
         @since OOo 2.0
     */
     [optional, property] boolean AddParaSpacingToTableCells;
-    // ------------------------------------------------------------
     /** specifies if the former (till OpenOffice.org 1.1) or the new
         object positioning is applied.
 
@@ -168,7 +159,6 @@ published service DocumentSettings
     */
     [optional, property] boolean UseFormerObjectPositioning;
 
-    // ------------------------------------------------------------
     /** specifies if the text wrap of floating screen objects are
         considered in a specified way in the positioning algorithm.
 
@@ -185,7 +175,6 @@ published service DocumentSettings
     */
     [optional, property] boolean ConsiderTextWrapOnObjPos;
 
-    // ------------------------------------------------------------
     /** specifies if Math objects should automatically vertically aligned to
         match the baseline of the surrounding text.
 
@@ -197,7 +186,6 @@ published service DocumentSettings
     [optional, property] boolean MathBaselineAlignment;
 };
 
-//=============================================================================
 
 }; }; }; };
 

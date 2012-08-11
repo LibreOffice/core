@@ -24,11 +24,9 @@
 #include <com/sun/star/io/IOException.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module io {
 
-//=============================================================================
 
 // DocMerge from xml: interface com::sun::star::io::XDataInputStream
 /** makes it possible to read machine-independent simple data types from a
@@ -37,7 +35,6 @@ module com {  module sun {  module star {  module io {
  */
 published interface XDataInputStream: com::sun::star::io::XInputStream
 {
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::io::XDataInputStream::readBoolean
     /** reads in a boolean. It is an 8-bit value. 0 means FALSE; all
@@ -46,7 +43,6 @@ published interface XDataInputStream: com::sun::star::io::XInputStream
     byte readBoolean()
             raises( com::sun::star::io::IOException );
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::io::XDataInputStream::readByte
     /** reads an 8-bit byte.
@@ -54,7 +50,6 @@ published interface XDataInputStream: com::sun::star::io::XInputStream
     byte readByte()
             raises( com::sun::star::io::IOException );
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::io::XDataInputStream::readChar
     /** reads a 16-bit unicode character.
@@ -62,7 +57,6 @@ published interface XDataInputStream: com::sun::star::io::XInputStream
     char readChar()
             raises( com::sun::star::io::IOException );
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::io::XDataInputStream::readShort
     /** reads a 16-bit big endian integer.
@@ -70,7 +64,6 @@ published interface XDataInputStream: com::sun::star::io::XInputStream
     short readShort()
             raises( com::sun::star::io::IOException );
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::io::XDataInputStream::readLong
     /** reads a 32-bit big endian integer.
@@ -78,7 +71,6 @@ published interface XDataInputStream: com::sun::star::io::XInputStream
     long readLong()
             raises( com::sun::star::io::IOException );
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::io::XDataInputStream::readHyper
     /** reads a 64-bit big endian integer.
@@ -86,7 +78,6 @@ published interface XDataInputStream: com::sun::star::io::XInputStream
     hyper readHyper()
             raises( com::sun::star::io::IOException );
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::io::XDataInputStream::readFloat
     /** reads a 32-bit IEEE float.
@@ -94,7 +85,6 @@ published interface XDataInputStream: com::sun::star::io::XInputStream
     float readFloat()
             raises( com::sun::star::io::IOException );
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::io::XDataInputStream::readDouble
     /** reads a 64-bit IEEE double.
@@ -102,7 +92,6 @@ published interface XDataInputStream: com::sun::star::io::XInputStream
     double readDouble()
             raises( com::sun::star::io::IOException );
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::io::XDataInputStream::readUTF
     /** reads a string of UTF encoded characters.
@@ -112,7 +101,6 @@ published interface XDataInputStream: com::sun::star::io::XInputStream
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

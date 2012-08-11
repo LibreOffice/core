@@ -33,18 +33,15 @@
 #include <com/sun/star/beans/NamedValue.idl>
 
 
-//=============================================================================
 
 module com { module sun { module star { module awt {
 
-//=============================================================================
 
 /** provides dialogs implementing the
     <type scope="com::sun::star::awt">XDialog</type> interface.
  */
 interface XDialogProvider2 : ::com::sun::star::awt::XDialogProvider {
 
-    //-------------------------------------------------------------------------
 
     /** creates a dialog for the given URL accepting an Interface used
         to handle dialog events.
@@ -126,7 +123,6 @@ interface XDialogProvider2 : ::com::sun::star::awt::XDialogProvider {
         raises  (   com::sun::star::lang::IllegalArgumentException );
 };
 
-//=============================================================================
 
 }; }; }; };
 

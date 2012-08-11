@@ -22,11 +22,9 @@
 #include <com/sun/star/lang/EventObject.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module beans {
 
-//=============================================================================
 
 /** gets delivered whenever a "bound" or "constrained" property is changed.
 
@@ -42,19 +40,16 @@
  */
 published struct PropertyChangeEvent: com::sun::star::lang::EventObject
 {
-    //-------------------------------------------------------------------------
 
     /** contains the unique name of the property which changes its value.
      */
     string PropertyName;
 
-    //-------------------------------------------------------------------------
 
     /** contains <true/> if further events in the same transaction occur.
      */
     boolean Further;
 
-    //-------------------------------------------------------------------------
 
     /** contains the implementation handle for the property.
 
@@ -63,13 +58,11 @@ published struct PropertyChangeEvent: com::sun::star::lang::EventObject
      */
     long PropertyHandle;
 
-    //-------------------------------------------------------------------------
 
     /** contains the old value of the property.
      */
     any OldValue;
 
-    //-------------------------------------------------------------------------
 
     /** contains the new value of the property.
      */
@@ -77,7 +70,6 @@ published struct PropertyChangeEvent: com::sun::star::lang::EventObject
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -103,7 +103,6 @@ service DataSequence
     */
     interface ::com::sun::star::beans::XPropertySet;
 
-    // ----------------------------------------------------------------------
 
     /** The key (index) of the number format that this sequence should
         be formatted with.

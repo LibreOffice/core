@@ -39,7 +39,6 @@ published interface XParametersSupplier: com::sun::star::uno::XInterface
     com::sun::star::container::XIndexAccess getParameters();
 };
 
-//=============================================================================
 
 }; }; }; };
 

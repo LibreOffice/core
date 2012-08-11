@@ -26,11 +26,9 @@
 #include <com/sun/star/drawing/XDrawPageExpander.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module drawing {
 
-//=============================================================================
 
 // DocMerge from xml: service com::sun::star::drawing::DrawPages
 /** provides access to a container of <type>DrawPage</type>s
@@ -58,7 +56,6 @@ published service DrawPages
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -22,11 +22,9 @@
 #include <com/sun/star/uno/Exception.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module registry {
 
-//=============================================================================
 
 // DocMerge from xml: exception com::sun::star::registry::CannotRegisterImplementationException
 /** is thrown when an application tries to register a new component (implementation) using the
@@ -44,7 +42,6 @@ published exception CannotRegisterImplementationException: com::sun::star::uno::
 {
 };
 
-//=============================================================================
 
 }; }; }; };
 

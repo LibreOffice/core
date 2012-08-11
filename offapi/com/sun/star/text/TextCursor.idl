@@ -31,11 +31,9 @@
 #include <com/sun/star/util/XSortable.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module text {
 
-//=============================================================================
 
 // DocMerge from xml: service com::sun::star::text::TextCursor
 /** A <type>TextCursor</type> is a <type>TextRange</type> which can be moved
@@ -89,7 +87,6 @@ published service TextCursor
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

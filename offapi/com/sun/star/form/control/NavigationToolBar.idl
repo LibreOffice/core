@@ -22,11 +22,9 @@
 
 #include <com/sun/star/awt/UnoControl.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module form {  module control {
 
-//=============================================================================
 
 /** This service specifies the model for control which provides controller
     functionality for a <type scope="com::sun::star::form::component">DataForm</type>, such as navigating or filtering
@@ -39,7 +37,6 @@ service NavigationToolBar
     service com::sun::star::awt::UnoControl;
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

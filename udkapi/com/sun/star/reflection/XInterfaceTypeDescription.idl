@@ -26,11 +26,9 @@
 #include <com/sun/star/reflection/XInterfaceMemberTypeDescription.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module reflection {
 
-//=============================================================================
 
 /** Reflects an interface type.
 
@@ -72,7 +70,6 @@ published interface XInterfaceTypeDescription: com::sun::star::reflection::XType
     sequence<com::sun::star::reflection::XInterfaceMemberTypeDescription> getMembers();
 };
 
-//=============================================================================
 
 }; }; }; };
 

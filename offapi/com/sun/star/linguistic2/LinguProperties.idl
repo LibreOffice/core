@@ -35,11 +35,9 @@
 #include <com/sun/star/lang/XServiceInfo.idl>
 #include <com/sun/star/lang/Locale.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module linguistic2 {
 
-//=============================================================================
 /** the set of linguistic relevant properties.
 */
 published service LinguProperties
@@ -49,7 +47,6 @@ published service LinguProperties
     interface com::sun::star::lang::XComponent;
     interface com::sun::star::lang::XServiceInfo;
 
-    //-------------------------------------------------------------------------
     /** defines whether new German spelling rules should be used for German
          text or not when doing spell checking or hyphenation, or using the
          thesaurus.
@@ -58,76 +55,63 @@ published service LinguProperties
       */
     [property, maybevoid] boolean IsGermanPreReform;
 
-    //-------------------------------------------------------------------------
     /** defines if the dictionary-list should be used for spell checking
          and hyphenation or not.
     */
     [property] boolean IsUseDictionaryList;
 
-    //-------------------------------------------------------------------------
     /** defines if control characters should be ignored or not, by the linguistic
          (i.e., spell checker, hyphenator and thesaurus).
     */
     [property] boolean IsIgnoreControlCharacters;
 
-    //-------------------------------------------------------------------------
     /** defines if words with only uppercase letters should be
          subject to spell checking or not.
     */
     [property] boolean IsSpellUpperCase;
 
-    //-------------------------------------------------------------------------
     /** defines if words containing digits (or numbers) should be
          subject to spell checking or not.
     */
     [property] boolean IsSpellWithDigits;
 
-    //-------------------------------------------------------------------------
     /** defines if the capitalization of words should be checked or not.
     */
     [property] boolean IsSpellCapitalization;
 
-    //-------------------------------------------------------------------------
     /** the minimum number of characters of a word to remain before the
          hyphen when doing hyphenation.
     */
     [property] short HyphMinLeading;
 
-    //-------------------------------------------------------------------------
     /** the minimum number of characters of a word to remain after the
          hyphen when doing hyphenation.
     */
     [property] short HyphMinTrailing;
 
-    //-------------------------------------------------------------------------
     /** the minimum length of a word in order to be hyphenated.
     */
     [property] short HyphMinWordLength;
 
-    //-------------------------------------------------------------------------
     /** the default western language for new documents.
     */
     [property] com::sun::star::lang::Locale DefaultLocale;
 
-    //-------------------------------------------------------------------------
     /** defines whether interactive hyphenation should be performed without
         requiring the user to select every hyphenation position after the user
         has triggered the hyphenation.
     */
     [property] boolean IsHyphAuto;
 
-    //-------------------------------------------------------------------------
     /** defines whether hyphenation should be done in special regions of
          documents or not.
     */
     [property] boolean IsHyphSpecial;
 
-    //-------------------------------------------------------------------------
     /** indicates whether spell checking should be done automatically or not.
     */
     [property] boolean IsSpellAuto;
 
-    //-------------------------------------------------------------------------
     /** indicates whether the markings for incorrectly spelled text should be
          hidden or not.
 
@@ -135,7 +119,6 @@ published service LinguProperties
     */
     [property, maybevoid] boolean IsSpellHide;
 
-    //-------------------------------------------------------------------------
     /** indicates if spell checking should be performed in all available
          languages.
 
@@ -143,31 +126,26 @@ published service LinguProperties
     */
     [property, maybevoid] boolean IsSpellInAllLanguages;
 
-    //-------------------------------------------------------------------------
     /** defines whether spell checking should be done in special regions of
          documents or not.
     */
     [property] boolean IsSpellSpecial;
 
-    //-------------------------------------------------------------------------
     /** defines whether spell checking should be done in reverse
          direction or not.
     */
     [property] boolean IsWrapReverse;
 
-    //-------------------------------------------------------------------------
     /** the default language for CJK languages.
     */
     [property] com::sun::star::lang::Locale DefaultLocale_CJK;
 
-    //-------------------------------------------------------------------------
     /** the default language for CTL languages.
     */
     [property] com::sun::star::lang::Locale DefaultLocale_CTL;
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

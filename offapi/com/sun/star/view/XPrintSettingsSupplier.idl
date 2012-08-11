@@ -24,18 +24,15 @@
 #include <com/sun/star/beans/XPropertySet.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module view {
 
-//=============================================================================
 
 /** offers printing related settings, which affect document rendering,
     but are not related to the printer itself.
  */
 published interface XPrintSettingsSupplier: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** @returns
             a set of properties which are related to printing.
@@ -46,7 +43,6 @@ published interface XPrintSettingsSupplier: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

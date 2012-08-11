@@ -22,29 +22,24 @@
 #include <com/sun/star/uno/XInterface.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module view {
 
-//=============================================================================
 
 /** makes it possible to page through the document in steps of the displayed size.
  */
 published interface XScreenCursor: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** scrolls the view forward by one visible page.
      */
     boolean screenDown();
 
-    //-------------------------------------------------------------------------
     /** scrolls the view backward by one visible page.
      */
     boolean screenUp();
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

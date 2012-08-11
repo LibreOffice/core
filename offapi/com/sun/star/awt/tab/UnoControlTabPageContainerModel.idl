@@ -31,11 +31,9 @@
 #include <com/sun/star/awt/UnoControlModel.idl>
 #include <com/sun/star/awt/tab/XTabPageContainerModel.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module awt {  module tab {
 
-//=============================================================================
 
 /** specifies a model for a UnoControlTabPageContainer control.
 
@@ -49,7 +47,6 @@ service UnoControlTabPageContainerModel
 
 };
 
-//=============================================================================
 
  }; }; }; }; };
 

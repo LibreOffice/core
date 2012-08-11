@@ -32,11 +32,9 @@
 #include <com/sun/star/report/XSection.idl>
 #include <com/sun/star/report/XGroups.idl>
 #include <com/sun/star/report/XFunctions.idl>
-//=============================================================================
 
  module com {  module sun {  module star {  module report {
 
-//=============================================================================
 
 /** identifies a <type>XGroup</type>.
     A group is always a child of the groups collection in the report.
@@ -133,7 +131,6 @@ interface XGroup
     [attribute,bound] boolean ResetPageNumber;
 };
 
-//=============================================================================
 
 }; }; }; };
 

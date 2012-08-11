@@ -33,17 +33,14 @@
 #include <com/sun/star/awt/MouseEvent.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module awt {
 
-//=============================================================================
 
 /** makes it possible to receive events from the mouse in a certain window.
  */
 published interface XMouseListener: com::sun::star::lang::XEventListener
 {
-    //-------------------------------------------------------------------------
 
     /** is invoked when a mouse button has been pressed on a window.
 
@@ -58,19 +55,16 @@ published interface XMouseListener: com::sun::star::lang::XEventListener
     */
     [oneway] void mousePressed( [in] com::sun::star::awt::MouseEvent e );
 
-    //-------------------------------------------------------------------------
 
     /** is invoked when a mouse button has been released on a window.
      */
     [oneway] void mouseReleased( [in] com::sun::star::awt::MouseEvent e );
 
-    //-------------------------------------------------------------------------
 
     /** is invoked when the mouse enters a window.
      */
     [oneway] void mouseEntered( [in] com::sun::star::awt::MouseEvent e );
 
-    //-------------------------------------------------------------------------
 
     /** is invoked when the mouse exits a window.
      */
@@ -78,7 +72,6 @@ published interface XMouseListener: com::sun::star::lang::XEventListener
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -23,11 +23,9 @@
 #include <com/sun/star/io/XPersistObject.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module awt {
 
-//=============================================================================
 
 /** specifies a standard tab controller model.
  */
@@ -39,7 +37,6 @@ published service TabControllerModel
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

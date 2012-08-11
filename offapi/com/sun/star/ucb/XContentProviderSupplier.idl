@@ -22,11 +22,9 @@
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/ucb/XContentProvider.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** a supplier for a content provider.
 
      @version  1.0
@@ -35,7 +33,6 @@ module com { module sun { module star { module ucb {
 */
 published interface XContentProviderSupplier : com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** returns a content provider.
 
         @returns
@@ -44,7 +41,6 @@ published interface XContentProviderSupplier : com::sun::star::uno::XInterface
     com::sun::star::ucb::XContentProvider getContentProvider();
 };
 
-//=============================================================================
 
 }; }; }; };
 

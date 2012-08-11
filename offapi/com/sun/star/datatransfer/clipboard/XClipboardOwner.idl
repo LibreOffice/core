@@ -31,13 +31,11 @@
 #include <com/sun/star/datatransfer/XTransferable.idl>
 #include <com/sun/star/uno/XInterface.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module datatransfer { module clipboard {
 
  published interface XClipboard;
 
-//=============================================================================
 /** The owner of a transferable object may pass this interface to the
     clipboard instance.
 
@@ -46,7 +44,6 @@ module com { module sun { module star { module datatransfer { module clipboard {
 
 published interface XClipboardOwner: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** Notifies the transferable object source that it is no longer the owner of
         the clipboard.
 
@@ -62,7 +59,6 @@ published interface XClipboardOwner: com::sun::star::uno::XInterface
     [oneway] void lostOwnership( [in] XClipboard xClipboard, [in] com::sun::star::datatransfer::XTransferable xTrans );
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

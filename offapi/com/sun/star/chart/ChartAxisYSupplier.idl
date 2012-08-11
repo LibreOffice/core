@@ -22,11 +22,9 @@
 #include <com/sun/star/chart/XAxisYSupplier.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module chart {
 
-//=============================================================================
 
 /** A helper service for the y-axis.
  */
@@ -36,34 +34,29 @@ published service ChartAxisYSupplier
      */
     interface com::sun::star::chart::XAxisYSupplier;
 
-    //-------------------------------------------------------------------------
 
     /** Determines if the y-axis is shown or hidden.@see ChartAxis
      */
     [property] boolean HasYAxis;
 
-    //-------------------------------------------------------------------------
 
     /** Determines if the description of the y-axis
         is shown or hidden.
      */
     [property] boolean HasYAxisDescription;
 
-    //-------------------------------------------------------------------------
 
     /** Determines if the major grid of the y-axis is
         shown or hidden.@see ChartGrid
      */
     [property] boolean HasYAxisGrid;
 
-    //-------------------------------------------------------------------------
 
     /** Determines if the minor grid of the y-axis is
         shown or hidden.@see ChartGrid
      */
     [property] boolean HasYAxisHelpGrid;
 
-    //-------------------------------------------------------------------------
 
     /** Determines if the title of the y-axis is shown
         or hidden.@see ChartTitle
@@ -72,7 +65,6 @@ published service ChartAxisYSupplier
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

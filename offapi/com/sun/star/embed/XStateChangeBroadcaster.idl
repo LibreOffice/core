@@ -24,30 +24,25 @@
 #include <com/sun/star/embed/XStateChangeListener.idl>
 
 
-//============================================================================
 
 module com {  module sun {  module star {  module embed {
 
-//============================================================================
 
 /** broadcasts message in case embedded object object changes it's state.
  */
 published interface XStateChangeBroadcaster: com::sun::star::uno::XInterface
 {
-    //------------------------------------------------------------------------
     /** adds the specified listener to receive events about states change
      */
     void addStateChangeListener(
             [in] com::sun::star::embed::XStateChangeListener xListener );
 
-    //------------------------------------------------------------------------
     /** removes the specified listener
      */
     void removeStateChangeListener(
             [in] com::sun::star::embed::XStateChangeListener xListener );
 };
 
-//============================================================================
 
 }; }; }; };
 

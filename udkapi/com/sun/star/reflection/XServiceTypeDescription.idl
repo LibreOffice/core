@@ -24,11 +24,9 @@
 #include <com/sun/star/reflection/XInterfaceTypeDescription.idl>
 #include <com/sun/star/reflection/XPropertyTypeDescription.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module reflection {
 
-//=============================================================================
 
 /** Reflects a service.
 
@@ -88,7 +86,6 @@ published interface XServiceTypeDescription : com::sun::star::reflection::XTypeD
     sequence< XPropertyTypeDescription > getProperties();
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -24,11 +24,9 @@
 #include <com/sun/star/util/XReplaceDescriptor.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module util {
 
-//=============================================================================
 
 /** describes what and how to replace strings.
  */
@@ -40,7 +38,6 @@ published service ReplaceDescriptor
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

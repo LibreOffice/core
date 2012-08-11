@@ -23,11 +23,9 @@
 #include <com/sun/star/lang/XComponent.idl>
 #include <com/sun/star/bridge/XBridge.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module bridge {
 
-//=============================================================================
 /** Concrete service of the meta service Bridge for iiop.
 
     <p> This bridge works with the iiop protocol. </p>
@@ -58,7 +56,6 @@ published service IiopBridge
     interface com::sun::star::lang::XComponent;
 
 };
-//=============================================================================
 
 }; }; }; };
 #endif

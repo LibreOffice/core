@@ -26,11 +26,9 @@
 #include <com/sun/star/lang/XComponent.idl>
 #include <com/sun/star/util/XUpdatable.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module ui {
 
-//=============================================================================
 
 /** specifies a user interface element.
 
@@ -85,7 +83,6 @@ service UIElement
 
 }; }; }; };
 
-//=============================================================================
 
 #endif
 

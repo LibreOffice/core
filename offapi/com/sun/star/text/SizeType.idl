@@ -29,11 +29,9 @@
 #define __com_sun_star_text_SizeType_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module text {
 
-//=============================================================================
 
 // DocMerge from idl: constants com::sun::star::text::SizeType
 /** The height value of objects like text frames or table rows may
@@ -46,19 +44,16 @@
  */
 published constants SizeType
 {
-    //-------------------------------------------------------------------------
     // The height of the object is determined by the content only.
 
     // DocMerge: empty anyway
     const short VARIABLE = 0;
 
-    //-------------------------------------------------------------------------
     // The height property determines the height of the object.
 
     // DocMerge: empty anyway
     const short FIX = 1;
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from idl: value com::sun::star::text::SizeType::MIN
     /** The height property determines the minimum height of the object, but the
@@ -68,7 +63,6 @@ published constants SizeType
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -20,11 +20,9 @@
 #define __com_sun_star_style_VerticalAlignment_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module style {
 
-//=============================================================================
 
 // DocMerge from xml: enum com::sun::star::style::VerticalAlignment
 /** specify the horizontal alignment of
@@ -32,7 +30,6 @@
  */
 published enum VerticalAlignment
 {
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTING FOR VerticalAlignment::   TOP,
 
     // DocMerge from xml: value com::sun::star::style::VerticalAlignment::TOP
@@ -40,7 +37,6 @@ published enum VerticalAlignment
      */
     TOP,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTING FOR VerticalAlignment::   MIDDLE,
 
     // DocMerge from xml: value com::sun::star::style::VerticalAlignment::MIDDLE
@@ -48,7 +44,6 @@ published enum VerticalAlignment
      */
     MIDDLE,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTING FOR VerticalAlignment::   BOTTOM
 
     // DocMerge from xml: value com::sun::star::style::VerticalAlignment::BOTTOM
@@ -58,7 +53,6 @@ published enum VerticalAlignment
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

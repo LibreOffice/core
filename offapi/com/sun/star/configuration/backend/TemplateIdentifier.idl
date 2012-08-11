@@ -20,11 +20,9 @@
 #define __com_sun_star_configuration_backend_TemplateIdentifier_idl__
 
 
-//=============================================================================
 
 module com { module sun { module star { module configuration { module backend {
 
-//=============================================================================
 
 /** holds the data needed to identify a template.
 
@@ -39,22 +37,18 @@ published struct TemplateIdentifier
      */
     string Name;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the component where the template originates.
 
      */
     string Component;
 
-    //-------------------------------------------------------------------------
 
 };
 
-//=============================================================================
 
 }; }; }; }; };
 
-//=============================================================================
 
 #endif
 

@@ -22,11 +22,9 @@
 #include <com/sun/star/drawing/XDrawPage.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module presentation {
 
-//=============================================================================
 
 /** describes a page from a presentation.
 
@@ -34,7 +32,6 @@
  */
 published interface XPresentationPage: com::sun::star::drawing::XDrawPage
 {
-    //-------------------------------------------------------------------------
 
     /** return the note page from the current page in the presentation,
         the name for the note page in the user interface note view, and one of the views
@@ -44,7 +41,6 @@ published interface XPresentationPage: com::sun::star::drawing::XDrawPage
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

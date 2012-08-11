@@ -24,11 +24,9 @@
 #include <com/sun/star/table/XTableColumns.idl>
 #include <com/sun/star/table/XTableRows.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module table {
 
-//=============================================================================
 
 /** provides methods to access the collections of columns and rows
     of a cell range.
@@ -37,7 +35,6 @@ module com {  module sun {  module star {  module table {
  */
 published interface XColumnRowRange: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** returns the collection of columns in the range.
 
@@ -45,7 +42,6 @@ published interface XColumnRowRange: com::sun::star::uno::XInterface
      */
     com::sun::star::table::XTableColumns getColumns();
 
-    //-------------------------------------------------------------------------
 
     /** returns the collection of rows in the range.
 
@@ -55,7 +51,6 @@ published interface XColumnRowRange: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

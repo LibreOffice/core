@@ -20,31 +20,26 @@
 #ifndef __com_sun_star_sheet_DataPilotFieldReferenceItemType_idl__
 #define __com_sun_star_sheet_DataPilotFieldReferenceItemType_idl__
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** is used to select the reference item
  */
 constants DataPilotFieldReferenceItemType
 {
-    //-------------------------------------------------------------------------
 
     /** the reference item is given by a name.
      */
 
     const long NAMED = 0;
 
-    //-------------------------------------------------------------------------
 
     /** the reference item is the previous one.
      */
 
     const long PREVIOUS = 1;
 
-    //-------------------------------------------------------------------------
 
     /** the reference item is the next one.
      */
@@ -52,7 +47,6 @@ constants DataPilotFieldReferenceItemType
     const long NEXT = 2;
 };
 
-//=============================================================================
 
 }; }; }; };
 

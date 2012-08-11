@@ -19,11 +19,9 @@
 #ifndef __com_sun_star_animations_AnimationEndSync_idl__
 #define __com_sun_star_animations_AnimationEndSync_idl__
 
-//=============================================================================
 
  module com {  module sun {  module star {  module animations {
 
-//=============================================================================
 
 /** @see http://www.w3.org/TR/smil20/smil-timing.html#adef-endsync
 */
@@ -66,7 +64,6 @@ constants AnimationEndSync
     const short MEDIA = 3;
 };
 
-//=============================================================================
 
 }; }; }; };
 

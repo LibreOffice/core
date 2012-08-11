@@ -31,11 +31,9 @@
 
 #include <com/sun/star/ui/XUIElementFactory.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module ui {
 
-//=============================================================================
 
 /** specifies a user interface element factory that can create and initialize
     a user interface element type.

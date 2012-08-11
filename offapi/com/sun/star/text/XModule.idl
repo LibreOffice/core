@@ -22,11 +22,9 @@
 #include <com/sun/star/uno/XInterface.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module text {
 
-//=============================================================================
 
 // DocMerge from xml: interface com::sun::star::text::XModule
 /** @deprecated
@@ -35,7 +33,6 @@ published interface XModule: com::sun::star::uno::XInterface
 {
 };
 
-//=============================================================================
 
 }; }; }; };
 

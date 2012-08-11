@@ -28,14 +28,12 @@
 #ifndef __com_sun_star_configuration_ConfigurationRegistry_idl__
 #define __com_sun_star_configuration_ConfigurationRegistry_idl__
 
-//=============================================================================
 
 #include <com/sun/star/registry/XSimpleRegistry.idl>
 #include <com/sun/star/util/XFlushable.idl>
 
 module com { module sun { module star { module configuration {
 
-//=============================================================================
 
 
 /*  provides access to a configuration tree as a registry.
@@ -96,7 +94,6 @@ published service ConfigurationRegistry
 };
 
 
-//=============================================================================
 
 }; }; }; };
 

@@ -31,16 +31,13 @@
 #include <com/sun/star/ucb/InteractiveNetworkException.idl>
 
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** A network error specifying a read failure.
 */
 published exception InteractiveNetworkReadException: com::sun::star::ucb::InteractiveNetworkException
 {
-    //-------------------------------------------------------------------------
     /** Any diagnostic message about the failure (which will typically be an
         English phrase or sentence).
     */
@@ -48,7 +45,6 @@ published exception InteractiveNetworkReadException: com::sun::star::ucb::Intera
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

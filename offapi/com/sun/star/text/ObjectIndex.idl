@@ -23,11 +23,9 @@
 
 #include <com/sun/star/text/BaseIndex.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module text {
 
-//=============================================================================
 
 // DocMerge from xml: service com::sun::star::text::ObjectIndex
 /** specifies service of object indexes within a document.@see com::sun::star::text::BaseIndex
@@ -63,7 +61,6 @@ published service ObjectIndex
     [optional, property] boolean CreateFromOtherEmbeddedObjects;//objects
 };
 
-//=============================================================================
 
 }; }; }; };
 

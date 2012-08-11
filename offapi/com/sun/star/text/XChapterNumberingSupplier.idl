@@ -24,11 +24,9 @@
 #include <com/sun/star/container/XIndexReplace.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module text {
 
-//=============================================================================
 
 // DocMerge from xml: interface com::sun::star::text::XChapterNumberingSupplier
 /** contains the settings of the chapter numbering in a text
@@ -36,7 +34,6 @@
  */
 published interface XChapterNumberingSupplier: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     // DocMerge from idl: method com::sun::star::text::XChapterNumberingSupplier::getChapterNumberingRules
     /** @returns
@@ -49,7 +46,6 @@ published interface XChapterNumberingSupplier: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

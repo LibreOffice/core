@@ -22,11 +22,9 @@
 #include <com/sun/star/lang/MultiServiceFactory.idl>
 
 
-//=============================================================================
 
 module com { module sun { module star { module test {
 
-//=============================================================================
 /** describes a factory of services with interfaces for testing purposes.
 
     <p>It create instances that support the interface
@@ -53,7 +51,6 @@ published service TestFactory
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

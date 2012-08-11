@@ -20,35 +20,29 @@
 #ifndef __com_sun_star_sheet_Border_idl__
 #define __com_sun_star_sheet_Border_idl__
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** is used to select one of the four borders of a cell range.
  */
 published enum Border
 {
-    //-------------------------------------------------------------------------
 
     /** selects the top border.
      */
     TOP,
 
-    //-------------------------------------------------------------------------
 
     /** selects the bottom border.
      */
     BOTTOM,
 
-    //-------------------------------------------------------------------------
 
     /** selects the right border.
      */
     RIGHT,
 
-    //-------------------------------------------------------------------------
 
     /** selects the left border.
      */
@@ -56,7 +50,6 @@ published enum Border
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

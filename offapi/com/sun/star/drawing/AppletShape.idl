@@ -31,11 +31,9 @@
 #include <com/sun/star/drawing/Shape.idl>
 #include <com/sun/star/beans/PropertyValue.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module drawing {
 
-//=============================================================================
 /** This <type>Shape</type> encapsulates an applet.
 
     <p> An applet is a small Java-based program that is executed and rendered
@@ -49,7 +47,6 @@ published service AppletShape
      */
     service com::sun::star::drawing::Shape;
 
-    //-------------------------------------------------------------------------
 
     /** This property specifies the base URI for the applet.
 
@@ -58,13 +55,11 @@ published service AppletShape
     */
     [property] string AppletCodeBase;
 
-    //-------------------------------------------------------------------------
 
     /** this is an optional name for the applet.
     */
     [property] string AppletName;
 
-    //-------------------------------------------------------------------------
 
     /** This property specifies one of the following:
         <br>The name of the class file that contains the compiled applet subclass.
@@ -72,21 +67,18 @@ published service AppletShape
     */
     [property] string AppletCode;
 
-    //-------------------------------------------------------------------------
 
     /** This sequence contains parameters that are passed to the applet
         when it is initialized.
     */
     [property] sequence< com::sun::star::beans::PropertyValue > AppletCommands;
 
-    //-------------------------------------------------------------------------
 
     /** This property specifies whether or not the applet can be scripted.
     */
     [readonly, property] boolean AppletIsScript;
 };
 
-//=============================================================================
 
 }; }; }; };
 

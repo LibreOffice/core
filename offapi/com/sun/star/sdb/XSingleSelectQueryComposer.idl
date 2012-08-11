@@ -36,11 +36,9 @@
 
 #include <com/sun/star/sdb/XSingleSelectQueryAnalyzer.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module sdb {
 
-//=============================================================================
 
 /** simplifies the composing of single select statements.
 
@@ -53,9 +51,7 @@
  */
 interface XSingleSelectQueryComposer: XSingleSelectQueryAnalyzer
 {
-    //-------------------------------------------------------------------------
     // FILTER
-    //-------------------------------------------------------------------------
 
     /** makes it possible to set a filter condition for the query.
         @param filter
@@ -67,7 +63,6 @@ interface XSingleSelectQueryComposer: XSingleSelectQueryAnalyzer
      */
     void setFilter([in] string filter)
             raises (com::sun::star::sdbc::SQLException);
-    //-------------------------------------------------------------------------
 
     /** appends a new set of filter criteria which is split into levels.
         @param filter
@@ -81,7 +76,6 @@ interface XSingleSelectQueryComposer: XSingleSelectQueryAnalyzer
      */
     void setStructuredFilter([in] sequence< sequence<com::sun::star::beans::PropertyValue> > filter)
         raises (com::sun::star::sdbc::SQLException,com::sun::star::lang::IllegalArgumentException);
-    //-------------------------------------------------------------------------
 
     /** appends a new filter condition by a
         <type scope="com::sun::star::sdb">DataColumn</type>
@@ -101,9 +95,7 @@ interface XSingleSelectQueryComposer: XSingleSelectQueryAnalyzer
     void appendFilterByColumn([in] com::sun::star::beans::XPropertySet column,[in] boolean andCriteria,[in] long filterOperator)
             raises (com::sun::star::sdbc::SQLException);
 
-    //-------------------------------------------------------------------------
     // GROUP BY
-    //-------------------------------------------------------------------------
 
 
     /** makes it possible to set a group for the query.
@@ -117,7 +109,6 @@ interface XSingleSelectQueryComposer: XSingleSelectQueryAnalyzer
     void setGroup([in] string group)
             raises (com::sun::star::sdbc::SQLException);
 
-    //-------------------------------------------------------------------------
 
     /** appends an additional part to the group criteria of the select
         statement. The column must be a <type scope="com::sun::star::sdbcx">Column</type>.
@@ -129,9 +120,7 @@ interface XSingleSelectQueryComposer: XSingleSelectQueryAnalyzer
     void appendGroupByColumn([in] com::sun::star::beans::XPropertySet column)
             raises (com::sun::star::sdbc::SQLException);
 
-    //-------------------------------------------------------------------------
     // HAVING
-    //-------------------------------------------------------------------------
 
     /** makes it possible to set a HAVING filter condition for the query.
         @param filter
@@ -144,7 +133,6 @@ interface XSingleSelectQueryComposer: XSingleSelectQueryAnalyzer
     void setHavingClause([in] string filter)
             raises (com::sun::star::sdbc::SQLException);
 
-    //-------------------------------------------------------------------------
 
     /** appends a new set of HAVING filter criteria which is split into levels.
         @param filter
@@ -158,7 +146,6 @@ interface XSingleSelectQueryComposer: XSingleSelectQueryAnalyzer
      */
     void setStructuredHavingClause([in] sequence< sequence<com::sun::star::beans::PropertyValue> > filter)
             raises (com::sun::star::sdbc::SQLException);
-    //-------------------------------------------------------------------------
 
     /** appends a new HAVING filter condition by a
         <type scope="com::sun::star::sdb">DataColumn</type>
@@ -177,9 +164,7 @@ interface XSingleSelectQueryComposer: XSingleSelectQueryAnalyzer
     void appendHavingClauseByColumn([in] com::sun::star::beans::XPropertySet column,[in] boolean andCriteria,[in] long filterOperator)
             raises (com::sun::star::sdbc::SQLException);
 
-    //-------------------------------------------------------------------------
     // ORDER BY
-    //-------------------------------------------------------------------------
 
     /** makes it possible to set a sort condition for the query.
         @param order
@@ -192,7 +177,6 @@ interface XSingleSelectQueryComposer: XSingleSelectQueryAnalyzer
     void setOrder([in] string order)
             raises (com::sun::star::sdbc::SQLException);
 
-    //-------------------------------------------------------------------------
 
     /** appends an additional part to the sort order criteria of the select
         statement. The column must be a <type scope="com::sun::star::sdbcx">Column</type>.
@@ -207,9 +191,7 @@ interface XSingleSelectQueryComposer: XSingleSelectQueryAnalyzer
                              [in] boolean ascending)
             raises (com::sun::star::sdbc::SQLException);
 
-    //-------------------------------------------------------------------------
     // cumulative composing
-    //-------------------------------------------------------------------------
 
     /** sets a new elementary query for the composer
 
@@ -256,7 +238,6 @@ interface XSingleSelectQueryComposer: XSingleSelectQueryAnalyzer
     };
 };
 
-//=============================================================================
 
 }; }; }; };
 

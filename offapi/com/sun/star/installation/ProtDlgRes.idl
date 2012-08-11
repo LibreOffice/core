@@ -20,11 +20,9 @@
 #define __com_sun_star_installation_ProtDlgRes_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module installation {
 
-//=============================================================================
 
 /** contains the status of a dialog with an "always display Checkbox".
 
@@ -32,14 +30,12 @@
  */
 published enum ProtDlgRes
 {
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: value com::sun::star::installation::ProtDlgRes::NOCHANGE
     /** dialog quit without the use of the YES/NO buttons.
      */
     NOCHANGE,
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: value com::sun::star::installation::ProtDlgRes::CHECK
     /** when the dialog quit the checkbox, "Always display this message" was
@@ -47,7 +43,6 @@ published enum ProtDlgRes
      */
     CHECK,
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: value com::sun::star::installation::ProtDlgRes::UNCHECK
     /** when the dialog quit the checkbox, "Always display this message"
@@ -57,7 +52,6 @@ published enum ProtDlgRes
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

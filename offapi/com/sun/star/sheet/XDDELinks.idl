@@ -24,11 +24,9 @@
 #include <com/sun/star/sheet/XDDELink.idl>
 #include <com/sun/star/sheet/DDELinkMode.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** provides a method to add a DDE link to a spreadsheet.
 
@@ -38,7 +36,6 @@ module com {  module sun {  module star {  module sheet {
  */
 published interface XDDELinks: com::sun::star::container::XNameAccess
 {
-    //-------------------------------------------------------------------------
 
     /** adds a DDE link to the spreadsheet without updating it.
 
@@ -69,7 +66,6 @@ published interface XDDELinks: com::sun::star::container::XNameAccess
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

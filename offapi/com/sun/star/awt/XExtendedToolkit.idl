@@ -37,11 +37,9 @@
 #include <com/sun/star/awt/XFocusListener.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module awt {
 
-//=============================================================================
 
 /** The <type>XExtendedToolkit</type> is an extension of the <type
     scope="::com::sun::star::awt">XToolkit</type> interface.  It basically
@@ -70,7 +68,6 @@ module com {  module sun {  module star {  module awt {
 */
 published interface XExtendedToolkit : ::com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** This function returns the number of currently existing top-level
         windows.
@@ -81,7 +78,6 @@ published interface XExtendedToolkit : ::com::sun::star::uno::XInterface
     */
     long getTopWindowCount ();
 
-    //-------------------------------------------------------------------------
 
     /** Return a reference to the specified top-level window.  Note that the
         number of top-level windows may change between a call to
@@ -99,7 +95,6 @@ published interface XExtendedToolkit : ::com::sun::star::uno::XInterface
     ::com::sun::star::awt::XTopWindow getTopWindow ([in] long nIndex)
         raises (::com::sun::star::lang::IndexOutOfBoundsException);
 
-    //-------------------------------------------------------------------------
 
     /** Return the currently active top-level window, i.e. which has
         currently the input focus.
@@ -124,7 +119,6 @@ published interface XExtendedToolkit : ::com::sun::star::uno::XInterface
     [oneway] void addTopWindowListener (
         [in] ::com::sun::star::awt::XTopWindowListener xListener);
 
-    //-------------------------------------------------------------------------
 
     /** Remove the specified listener from the list of listeners.
         @param xListener
@@ -135,7 +129,6 @@ published interface XExtendedToolkit : ::com::sun::star::uno::XInterface
     [oneway] void removeTopWindowListener (
         [in] ::com::sun::star::awt::XTopWindowListener xListener);
 
-    //-------------------------------------------------------------------------
 
     /** Add a new listener that is called on <type
         scope="::com::sun::star::awt">KeyEvent</type>s.  Every listener is
@@ -150,7 +143,6 @@ published interface XExtendedToolkit : ::com::sun::star::uno::XInterface
     [oneway] void addKeyHandler (
         [in] ::com::sun::star::awt::XKeyHandler xHandler);
 
-    //-------------------------------------------------------------------------
 
     /** Remove the specified listener from the list of listeners.
         @param xHandler
@@ -161,7 +153,6 @@ published interface XExtendedToolkit : ::com::sun::star::uno::XInterface
     [oneway] void removeKeyHandler (
         [in] ::com::sun::star::awt::XKeyHandler xHandler);
 
-    //-------------------------------------------------------------------------
 
     /** Add a new listener that is called on <type
         scope="::com::sun::star::awt">FocusEvent</type>s.  Use this focus
@@ -176,7 +167,6 @@ published interface XExtendedToolkit : ::com::sun::star::uno::XInterface
     [oneway] void addFocusListener (
         [in] ::com::sun::star::awt::XFocusListener xListener);
 
-    //-------------------------------------------------------------------------
 
     /** Remove the specified listener from the list of listeners.
         @param xListener
@@ -187,7 +177,6 @@ published interface XExtendedToolkit : ::com::sun::star::uno::XInterface
     [oneway] void removeFocusListener (
         [in] ::com::sun::star::awt::XFocusListener xListener);
 
-    //-------------------------------------------------------------------------
 
     /** Broadcasts the a focusGained on all registered focus listeners
         @param source
@@ -197,7 +186,6 @@ published interface XExtendedToolkit : ::com::sun::star::uno::XInterface
     [oneway] void fireFocusGained (
         [in] ::com::sun::star::uno::XInterface source);
 
-    //-------------------------------------------------------------------------
 
     /** Broadcasts the a focusGained on all registered focus listeners
         @param source

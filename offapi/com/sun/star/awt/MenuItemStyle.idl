@@ -29,11 +29,9 @@
 #define __com_sun_star_awt_MenuItemStyle_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module awt {
 
-//=============================================================================
 
 /** These values are used to specify the properties of a menu item.
 
@@ -41,20 +39,17 @@
  */
 published constants MenuItemStyle
 {
-    //-------------------------------------------------------------------------
 
     /** specifies an item which can be checked independently.
      */
     const short CHECKABLE = 1;
 
-    //-------------------------------------------------------------------------
 
     /** specifies an item which can be checked dependent on the neighboring
         items.
      */
     const short RADIOCHECK = 2;
 
-    //-------------------------------------------------------------------------
 
     /** specifies to check this item automatically on select.
      */
@@ -62,7 +57,6 @@ published constants MenuItemStyle
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

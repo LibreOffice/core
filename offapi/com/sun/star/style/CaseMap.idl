@@ -20,11 +20,9 @@
 #define __com_sun_star_style_CaseMap_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module style {
 
-//=============================================================================
 
 // DocMerge from idl: constants com::sun::star::style::CaseMap
 /** These constants are used to specify a case-related mapping for
@@ -32,35 +30,30 @@
  */
 published constants CaseMap
 {
-    //-------------------------------------------------------------------------
 
     // DocMerge from idl: value com::sun::star::style::CaseMap::NONE
     /** The case of the characters is unchanged.
      */
     const short NONE = 0;
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from idl: value com::sun::star::style::CaseMap::UPPERCASE
     /** All characters are put in upper case.
      */
     const short UPPERCASE = 1;
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from idl: value com::sun::star::style::CaseMap::LOWERCASE
     /** All characters are put in lower case.
      */
     const short LOWERCASE = 2;
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from idl: value com::sun::star::style::CaseMap::TITLE
     /** The first character of each word is put in upper case.
      */
     const short TITLE = 3;
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from idl: value com::sun::star::style::CaseMap::SMALLCAPS
     /** All characters are put in upper case, but with a smaller font height.
@@ -69,7 +62,6 @@ published constants CaseMap
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -20,32 +20,27 @@
 #define __com_sun_star_text_HorizontalAdjust_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module text {
 
-//=============================================================================
 
 // DocMerge from xml: enum com::sun::star::text::HorizontalAdjust
 /** enumeration values define the horizontal adjustments of objects.
  */
 published enum HorizontalAdjust
 {
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: value com::sun::star::text::HorizontalAdjust::LEFT
     /** the object is left adjusted.
      */
     LEFT,
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: value com::sun::star::text::HorizontalAdjust::CENTER
     /** the object is adjusted to the center.
      */
     CENTER,
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: value com::sun::star::text::HorizontalAdjust::RIGHT
     /** the object is right adjusted.
@@ -54,7 +49,6 @@ published enum HorizontalAdjust
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

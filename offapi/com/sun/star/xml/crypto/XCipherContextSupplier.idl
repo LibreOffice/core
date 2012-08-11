@@ -35,11 +35,9 @@
 #include <com/sun/star/lang/IllegalArgumentException.idl>
 #endif
 
-//============================================================================
 
  module com {  module sun {  module star {  module xml { module crypto {
 
-//============================================================================
 /** This interface allows to get an object that allows to encrypt/decrypt data
     using the specified algorithm.
 
@@ -47,7 +45,6 @@
  */
 interface XCipherContextSupplier : com::sun::star::uno::XInterface
 {
-    //------------------------------------------------------------------------
     /** returns an object that allows to encrypt/decrypt data.
 
         @param nCipherID
@@ -76,7 +73,6 @@ interface XCipherContextSupplier : com::sun::star::uno::XInterface
         raises( ::com::sun::star::lang::IllegalArgumentException );
 };
 
-//============================================================================
 
 }; }; }; }; };
 

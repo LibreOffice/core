@@ -20,42 +20,35 @@
 #ifndef __com_sun_star_ucb_FileSystemNotation_idl__
 #define __com_sun_star_ucb_FileSystemNotation_idl__
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** The notational conventions used to denote file system paths on different
     file systems or operating systems.
 */
 published constants FileSystemNotation
 {
-    //-------------------------------------------------------------------------
     /** No information regarding any conventions is available.
     */
     const long UNKNOWN_NOTATION = 0;
 
-    //-------------------------------------------------------------------------
     /** The conventions of Unix like file systems (e.g.,
         <code>/dir1/dir2/file</code>).
     */
     const long UNIX_NOTATION = 1;
 
-    //-------------------------------------------------------------------------
     /** The conventions of DOS like file systems (e.g.,
         <code>a:\dir1\dir2\file</code> or UNC notation like
         <code>\\host\dir1\dir2\file</code>).
     */
     const long DOS_NOTATION = 2;
 
-    //-------------------------------------------------------------------------
     /** The conventions of Mac like file systems (e.g.,
         <code>volume:dir1:dir2:file</code>).
     */
     const long MAC_NOTATION = 3;
 };
 
-//=============================================================================
 
 }; }; }; };
 

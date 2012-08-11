@@ -28,11 +28,9 @@
 #include <com/sun/star/xml/sax/XLocator.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module xml {  module sax {
 
-//=============================================================================
 
 /** receives notification of general document events.
 
@@ -42,21 +40,18 @@ module com {  module sun {  module star {  module xml {  module sax {
  */
 published interface XDocumentHandler: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** receives notification of the beginning of a document.
      */
     void startDocument()
             raises( com::sun::star::xml::sax::SAXException );
 
-    //-------------------------------------------------------------------------
 
     /** receives notification of the end of a document.
      */
     void endDocument()
             raises( com::sun::star::xml::sax::SAXException );
 
-    //-------------------------------------------------------------------------
 
     /** receives notification of the beginning of an element .
      */
@@ -64,28 +59,24 @@ published interface XDocumentHandler: com::sun::star::uno::XInterface
              [in] com::sun::star::xml::sax::XAttributeList xAttribs )
             raises( com::sun::star::xml::sax::SAXException );
 
-    //-------------------------------------------------------------------------
 
     /** receives notification of the end of an element.
      */
     void endElement( [in] string aName )
             raises( com::sun::star::xml::sax::SAXException );
 
-    //-------------------------------------------------------------------------
 
     /** receives notification of character data.
      */
     void characters( [in] string aChars )
             raises( com::sun::star::xml::sax::SAXException );
 
-    //-------------------------------------------------------------------------
 
     /** receives notification of white space that can be ignored.
      */
     void ignorableWhitespace( [in] string aWhitespaces )
             raises( com::sun::star::xml::sax::SAXException );
 
-    //-------------------------------------------------------------------------
 
     /** receives notification of a processing instruction.
      */
@@ -93,7 +84,6 @@ published interface XDocumentHandler: com::sun::star::uno::XInterface
              [in] string aData )
             raises( com::sun::star::xml::sax::SAXException );
 
-    //-------------------------------------------------------------------------
 
     /** receives an object for locating the origin of SAX document events.
      */
@@ -102,7 +92,6 @@ published interface XDocumentHandler: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

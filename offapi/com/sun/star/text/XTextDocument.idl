@@ -24,18 +24,15 @@
 #include <com/sun/star/text/XText.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module text {
 
-//=============================================================================
 
 // DocMerge from xml: interface com::sun::star::text::XTextDocument
 /** is the main interface of a text document.@see com::sun::star::text::TextDocument
  */
 published interface XTextDocument: com::sun::star::frame::XModel
 {
-    //-------------------------------------------------------------------------
 
     // DocMerge from idl: method com::sun::star::text::XTextDocument::getText
     /** @returns
@@ -48,7 +45,6 @@ published interface XTextDocument: com::sun::star::frame::XModel
      */
     com::sun::star::text::XText getText();
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::text::XTextDocument::reformat
     /** reformats the contents of the document.
@@ -57,7 +53,6 @@ published interface XTextDocument: com::sun::star::frame::XModel
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

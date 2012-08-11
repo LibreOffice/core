@@ -24,18 +24,15 @@
 #include <com/sun/star/awt/Point.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module text {
 
-//=============================================================================
 
 // DocMerge from xml: interface com::sun::star::text::XTextViewCursor
 /** describes a cursor in a text document's view.
  */
 published interface XTextViewCursor: com::sun::star::text::XTextCursor
 {
-    //-------------------------------------------------------------------------
 
     // DocMerge from idl: method com::sun::star::text::XTextViewCursor::isVisible
     /** @returns
@@ -43,14 +40,12 @@ published interface XTextViewCursor: com::sun::star::text::XTextCursor
      */
     boolean isVisible();
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::text::XTextViewCursor::setVisible
     /** shows or hides this cursor for the user.
      */
     [oneway] void setVisible( [in] boolean bVisible );
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from idl: method com::sun::star::text::XTextViewCursor::getPosition
     /** @returns
@@ -61,7 +56,6 @@ published interface XTextViewCursor: com::sun::star::text::XTextCursor
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

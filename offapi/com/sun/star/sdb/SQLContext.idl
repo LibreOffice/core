@@ -54,7 +54,6 @@ published exception SQLContext: com::sun::star::sdbc::SQLWarning
     string          Details;
 };
 
-//=============================================================================
 
 }; }; }; };
 

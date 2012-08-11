@@ -20,11 +20,9 @@
 #define __com_sun_star_drawing_LineJoint_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module drawing {
 
-//=============================================================================
 
 // DocMerge from xml: enum com::sun::star::drawing::LineJoint
 /** The <type>LineJoint</type> defines rendering of joints between thick lines
@@ -58,7 +56,6 @@ published enum LineJoint
     ROUND
 };
 
-//=============================================================================
 
 }; }; }; };
 

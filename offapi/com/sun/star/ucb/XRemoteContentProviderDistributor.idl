@@ -34,11 +34,9 @@
 #include <com/sun/star/uno/XInterface.idl>
 
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** Distribute a content broker to various
     <type>XRemoteContentProviderAcceptor</type>s.
 
@@ -48,7 +46,6 @@ module com { module sun { module star { module ucb {
 */
 published interface XRemoteContentProviderDistributor: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** Offer the local content broker to a remote content provider acceptor.
 
         <p> The Uno Url is handed to the
@@ -71,7 +68,6 @@ published interface XRemoteContentProviderDistributor: com::sun::star::uno::XInt
                 com::sun::star::connection::ConnectionSetupException,
                 com::sun::star::lang::IllegalArgumentException);
 
-    //-------------------------------------------------------------------------
     /** Undo the offering of the local content broker to a specific remote
         content provider acceptor.
 
@@ -82,14 +78,12 @@ published interface XRemoteContentProviderDistributor: com::sun::star::uno::XInt
     */
     boolean disconnectFromRemoteAcceptor([in] string Url);
 
-    //-------------------------------------------------------------------------
     /** Undo the offering of the local content broker to all remote content
         provider acceptors.
     */
     void disconnectFromAll();
 };
 
-//=============================================================================
 
 }; }; }; };
 

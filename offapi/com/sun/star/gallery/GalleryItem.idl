@@ -34,11 +34,9 @@
 #include <com/sun/star/graphic/XGraphic.idl>
 #include <com/sun/star/lang/XComponent.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module gallery {
 
-//=============================================================================
 
 /** service to get access to the properties of a single Gallery item
  */
@@ -86,7 +84,6 @@ service GalleryItem
     [optional, readonly, property ] ::com::sun::star::lang::XComponent Drawing;
 };
 
-//=============================================================================
 
 }; }; }; };
 

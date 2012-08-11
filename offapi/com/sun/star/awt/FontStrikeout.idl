@@ -20,11 +20,9 @@
 #define __com_sun_star_awt_FontStrikeout_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module awt {
 
-//=============================================================================
 
 /** These values are used to specify the kind of strikeout.
 
@@ -32,43 +30,36 @@
  */
 published constants FontStrikeout
 {
-    //-------------------------------------------------------------------------
 
     /** specifies not to strike out the characters.
      */
     const short NONE = 0;
 
-    //-------------------------------------------------------------------------
 
     /** specifies to strike out the characters with a single line.
      */
     const short SINGLE = 1;
 
-    //-------------------------------------------------------------------------
 
     /** specifies to strike out the characters with a double line.
      */
     const short DOUBLE = 2;
 
-    //-------------------------------------------------------------------------
 
     /** The strikeout mode is not specified.
      */
     const short DONTKNOW = 3;
 
-    //-------------------------------------------------------------------------
 
     /** specifies to strike out the characters with a bold line.
      */
     const short BOLD = 4;
 
-    //-------------------------------------------------------------------------
 
     /** specifies to strike out the characters with slashes.
      */
     const short SLASH = 5;
 
-    //-------------------------------------------------------------------------
 
     /** specifies to strike out the characters with X's.
      */
@@ -76,7 +67,6 @@ published constants FontStrikeout
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -50,7 +50,6 @@ published interface XSQLErrorListener: com::sun::star::lang::XEventListener
     void errorOccured([in]com::sun::star::sdb::SQLErrorEvent aEvent);
 };
 
-//=============================================================================
 
 }; }; }; };
 

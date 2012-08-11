@@ -26,17 +26,14 @@
 #include <com/sun/star/container/NoSuchElementException.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module container {
 
-//=============================================================================
 
 /** provides a typified enumeration through components.
  */
 published interface XComponentEnumeration: com::sun::star::container::XEnumeration
 {
-    //-------------------------------------------------------------------------
 
     /** @returns
             the next component of this enumeration.
@@ -49,7 +46,6 @@ published interface XComponentEnumeration: com::sun::star::container::XEnumerati
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

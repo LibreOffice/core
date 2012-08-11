@@ -30,9 +30,7 @@
 
 #include <com/sun/star/beans/XPropertySet.idl>
 #include <com/sun/star/container/XNameContainer.idl>
-//=============================================================================
  module com {  module sun {  module star {  module report {
-//=============================================================================
 
 interface XFunctions;
 /** specifies the functions supplier which are located in a report definition or a group.
@@ -43,7 +41,6 @@ interface XFunctionsSupplier
     */
     [attribute,readonly] com::sun::star::report::XFunctions Functions;
 };
-//=============================================================================
 
 }; }; }; };
 #endif

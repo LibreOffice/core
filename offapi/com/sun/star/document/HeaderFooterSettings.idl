@@ -21,11 +21,9 @@
 
 #include <com/sun/star/beans/XPropertySet.idl>
 
-//=============================================================================
 
 module com {   module sun {   module star {   module document {
 
-//=============================================================================
 
 // Note: Where is the distinction between header and footer ?
 /** describes properties that control the formatting of headers and
@@ -38,7 +36,6 @@ published service HeaderFooterSettings
      */
     interface com::sun::star::beans::XPropertySet;
 
-    //-------------------------------------------------------------------------
 
     /** enables or disables the printing of the page name in the
         header or footer
@@ -56,7 +53,6 @@ published service HeaderFooterSettings
     [optional, property] boolean IsPrintTime;
 };
 
-//=============================================================================
 
 }; }; }; };
 

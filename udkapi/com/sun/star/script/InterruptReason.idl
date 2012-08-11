@@ -20,60 +20,49 @@
 #define __com_sun_star_script_InterruptReason_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module script {
 
-//=============================================================================
 /** values used to specify the response for a scripting engine
     interrupt.
     @deprecated
  */
 published enum InterruptReason
 {
-    //-------------------------------------------------------------------------
     /** script execution was cancelled.
      */
     Cancel,
 
-    //-------------------------------------------------------------------------
     /** runtime error occurred during script execution.
      */
     RuntimeError,
 
-    //-------------------------------------------------------------------------
     /** script has invalid syntax.
      */
     CompileError,
 
-    //-------------------------------------------------------------------------
     /** script stopped at a breakpoint.
      */
     BreakPoint,
 
-    //-------------------------------------------------------------------------
     /** script stops because only one scripting engine command was executed.
      */
     Step,
 
-    //-------------------------------------------------------------------------
     /** script stops because one step was executed.
      */
     StepOver,
 
-    //-------------------------------------------------------------------------
     /** script stops because it leaves a function.
      */
     StepOut,
 
-    //-------------------------------------------------------------------------
     /** script stop because one step was executed.
      */
     StepStatement
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

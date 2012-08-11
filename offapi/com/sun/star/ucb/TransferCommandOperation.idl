@@ -20,31 +20,25 @@
 #define __com_sun_star_ucb_TransferCommandOperation_idl__
 
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** These are the possible values for
     <member>GlobalTransferCommandArgument::Operation</member>.
 */
 published enum TransferCommandOperation
 {
-    //-------------------------------------------------------------------------
     /** Copy the source to the target folder. */
     COPY,
 
-    //-------------------------------------------------------------------------
     /** Move the source to the target folder. */
     MOVE,
 
-    //-------------------------------------------------------------------------
     /** Create a link in the target folder. The link's target is the source
         object. */
     LINK
 };
 
-//=============================================================================
 
 }; }; }; };
 

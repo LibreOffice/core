@@ -22,11 +22,9 @@
 
 #include <com/sun/star/uno/Exception.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module sheet {
 
-//=============================================================================
 
 /** Thrown by a Calc Add-In function this exception indicates the
     function's algorithm did not converge to a meaningful result.
@@ -35,9 +33,7 @@ module com { module sun { module star { module sheet {
  */
 exception NoConvergenceException : ::com::sun::star::uno::Exception{};
 
-//=============================================================================
 }; }; }; };
-//=============================================================================
 
 #endif
 

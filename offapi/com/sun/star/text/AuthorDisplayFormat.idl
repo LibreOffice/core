@@ -20,36 +20,30 @@
 #define __com_sun_star_text_AuthorDisplayFormat_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module text {
 
-//=============================================================================
 
 /** These constants are used to specify which parts of an author name are displayed
         in a field.
  */
 published constants AuthorDisplayFormat
 {
-    //-------------------------------------------------------------------------
 
     /** The full name of the author is displayed
      */
     const short FULL = 0;
 
-    //-------------------------------------------------------------------------
 
     /** Only the last name of the author is displayed
      */
     const short LAST_NAME = 1;
 
-    //-------------------------------------------------------------------------
 
     /** Only the first name of the author is displayed
      */
     const short FIRST_NAME = 2;
 
-    //-------------------------------------------------------------------------
 
     /** The initials of the author are displayed
      */
@@ -57,7 +51,6 @@ published constants AuthorDisplayFormat
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -22,11 +22,9 @@
 #include <com/sun/star/uno/Exception.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module script {
 
-//=============================================================================
 
 /** is thrown in order to transport an error to Basic.
 
@@ -34,13 +32,11 @@ module com {  module sun {  module star {  module script {
  */
 published exception BasicErrorException: com::sun::star::uno::Exception
 {
-    //-------------------------------------------------------------------------
 
     /** The error code.
      */
     long ErrorCode;
 
-    //-------------------------------------------------------------------------
 
     /** Specifies the argument which is used in the localized error message for
         the placeholder.
@@ -49,7 +45,6 @@ published exception BasicErrorException: com::sun::star::uno::Exception
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

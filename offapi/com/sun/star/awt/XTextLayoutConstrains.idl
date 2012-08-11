@@ -24,24 +24,20 @@
 #include <com/sun/star/awt/Size.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module awt {
 
-//=============================================================================
 
 /** specifies the layout constraints for a text field.
  */
 published interface XTextLayoutConstrains: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** returns the minimum size for a given number of columns and lines.
      */
     com::sun::star::awt::Size getMinimumSize( [in] short nCols,
              [in] short nLines );
 
-    //-------------------------------------------------------------------------
 
     /** returns the ideal number of columns and lines for displaying this text.
      */
@@ -49,7 +45,6 @@ published interface XTextLayoutConstrains: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

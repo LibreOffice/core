@@ -24,11 +24,9 @@
 #include <com/sun/star/form/FormControlModel.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module form {  module component {
 
-//=============================================================================
 
 /** This service specifies the control model for a text which can be
     displayed, but not edited by the user.
@@ -45,7 +43,6 @@ published service FixedText
 
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

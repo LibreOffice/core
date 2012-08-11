@@ -23,11 +23,9 @@
 #include <com/sun/star/reflection/XTypeDescription.idl>
 #include <com/sun/star/reflection/XServiceTypeDescription.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module reflection {
 
-//=============================================================================
 
 /** Reflects a singleton.
 
@@ -52,7 +50,6 @@ published interface XSingletonTypeDescription : com::sun::star::reflection::XTyp
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

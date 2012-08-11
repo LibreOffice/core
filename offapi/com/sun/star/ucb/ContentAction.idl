@@ -29,11 +29,9 @@
 #define __com_sun_star_ucb_ContentAction_idl__
 
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** specifies actions which can be transported with content events.
 
     <p>
@@ -109,7 +107,6 @@ module com { module sun { module star { module ucb {
 */
 published constants ContentAction
 {
-    //-------------------------------------------------------------------------
     /** A content was inserted into a folder content (i.e., while updating the
         folder).
 
@@ -117,7 +114,6 @@ published constants ContentAction
     */
     const long INSERTED = 0;
 
-    //-------------------------------------------------------------------------
     /** A content was removed from a folder content, but not physically
         destroyed (i.e., due to rules just applied to the folder).
 
@@ -125,7 +121,6 @@ published constants ContentAction
     */
     const long REMOVED = 1;
 
-    //-------------------------------------------------------------------------
     /** A content was physically destroyed.
 
         <p>Events containing this action may be generated at any time. So a
@@ -137,7 +132,6 @@ published constants ContentAction
     */
     const long DELETED = 2;
 
-    //-------------------------------------------------------------------------
     /** This Action indicates that a content has changed its identity (i.e.
         after renaming a file system folder).
 
@@ -146,7 +140,6 @@ published constants ContentAction
     */
     const long EXCHANGED = 4;
 
-    //-------------------------------------------------------------------------
     /** This is obsolete and should no longer be used.
 
         @deprecated
@@ -155,7 +148,6 @@ published constants ContentAction
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

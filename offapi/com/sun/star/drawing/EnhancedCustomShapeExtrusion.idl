@@ -28,11 +28,9 @@
 #include <com/sun/star/drawing/ShadeMode.idl>
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module drawing {
 
-//=============================================================================
 /**
   This service may be represented by a ::com::sun::star::beans::PropertyValue [].
 */
@@ -144,7 +142,6 @@ service EnhancedCustomShapeExtrusion
     [optional, property] boolean ExtrusionColor;
 };
 
-//=============================================================================
 
 }; }; }; };
 

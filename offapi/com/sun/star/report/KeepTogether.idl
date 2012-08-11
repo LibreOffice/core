@@ -29,18 +29,15 @@
 #define __com_sun_star_report_KeepTogether_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module report {
 
-//=============================================================================
 
 /** Specifies that a group header, detail, and footer section is printed on the same page.
     @see XGroup
  */
 constants KeepTogether
 {
-    //-------------------------------------------------------------------------
 
     /** Prints the group without keeping the header, detail, and footer together on the same page.
      */
@@ -55,7 +52,6 @@ constants KeepTogether
     const short WITH_FIRST_DETAIL = 2;
 };
 
-//=============================================================================
 
 }; }; }; };
 

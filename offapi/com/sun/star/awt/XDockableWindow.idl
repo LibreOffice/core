@@ -32,11 +32,9 @@
 #include <com/sun/star/awt/XDockableWindowListener.idl>
 #include <com/sun/star/awt/Rectangle.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module awt {
 
-//=============================================================================
 
 /** specifies the docking interface for a window component.
 
@@ -53,13 +51,11 @@ interface XDockableWindow : com::sun::star::uno::XInterface
      */
     void addDockableWindowListener( [in] com::sun::star::awt::XDockableWindowListener xListener );
 
-    //-------------------------------------------------------------------------
 
     /** removes the specified docking listener from the object.
      */
     void removeDockableWindowListener( [in] com::sun::star::awt::XDockableWindowListener xListener );
 
-    //-------------------------------------------------------------------------
 
     /** enable or disable docking, docking is disabled by default
 
@@ -70,7 +66,6 @@ interface XDockableWindow : com::sun::star::uno::XInterface
      */
     void enableDocking( [in] boolean bEnable );
 
-    //-------------------------------------------------------------------------
 
     /** queries the current window state
         @returns
@@ -79,7 +74,6 @@ interface XDockableWindow : com::sun::star::uno::XInterface
      */
     boolean isFloating();
 
-    //-------------------------------------------------------------------------
 
     /** toggle between floating and docked state
         @param bFloating
@@ -88,21 +82,18 @@ interface XDockableWindow : com::sun::star::uno::XInterface
      */
     void setFloatingMode( [in] boolean bFloating );
 
-    //-------------------------------------------------------------------------
 
     /** prevents the window from being undocked
         this has no effect if the window is floating
      */
     void lock();
 
-    //-------------------------------------------------------------------------
 
     /** enables undocking
         this has no effect if the window is floating
      */
     void unlock();
 
-    //-------------------------------------------------------------------------
 
     /** queries the current locking state
         @returns
@@ -111,7 +102,6 @@ interface XDockableWindow : com::sun::star::uno::XInterface
      */
     boolean isLocked();
 
-    //-------------------------------------------------------------------------
 
     /** shows the window in a menu like style, i.e. without decoration
         a special indicator will allow for tearing off the window
@@ -122,7 +112,6 @@ interface XDockableWindow : com::sun::star::uno::XInterface
      */
     void startPopupMode( [in] com::sun::star::awt::Rectangle WindowRect );
 
-    //-------------------------------------------------------------------------
 
     /** queries the current pop-up mode
         @returns
@@ -132,7 +121,6 @@ interface XDockableWindow : com::sun::star::uno::XInterface
     boolean isInPopupMode();
 };
 
-//=============================================================================
 
 }; }; }; };
 

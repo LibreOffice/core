@@ -20,11 +20,9 @@
 #define __com_sun_star_drawing_TextVerticalAdjust_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module drawing {
 
-//=============================================================================
 
 /** This enumeration specifies the vertical position of text inside a shape in
     relation to the shape.
@@ -32,35 +30,30 @@
  */
 published enum TextVerticalAdjust
 {
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: value com::sun::star::drawing::TextAdjust::LEFT
     /** The top edge of the text is adjusted to the top edge of the shape.
      */
     TOP,
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: value com::sun::star::drawing::TextAdjust::CENTER
     /** The text is centered inside the shape.
      */
     CENTER,
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: value com::sun::star::drawing::TextAdjust::RIGHT
     /** The bottom edge of the text is adjusted to the bottom edge of the shape.
      */
     BOTTOM,
 
-    //-------------------------------------------------------------------------
 
     /** The text extends from the top to the bottom edge of the shape.
      */
     BLOCK
  };
 
-//=============================================================================
 
 }; }; }; };
 

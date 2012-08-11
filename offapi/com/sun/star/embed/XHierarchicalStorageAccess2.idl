@@ -22,16 +22,13 @@
 #include <com/sun/star/embed/XHierarchicalStorageAccess.idl>
 #include <com/sun/star/beans/NamedValue.idl>
 
-//============================================================================
 
  module com {  module sun {  module star {  module embed {
 
-//============================================================================
 /** This interface extends XHierarchicalStorageAccess interface.
  */
 interface XHierarchicalStorageAccess2 : XHierarchicalStorageAccess
 {
-    // -----------------------------------------------------------------------
     /** allows to get access to a child encrypted stream with encryption data
         using hierarchical path.
 
@@ -88,7 +85,6 @@ interface XHierarchicalStorageAccess2 : XHierarchicalStorageAccess
                 ::com::sun::star::embed::StorageWrappedTargetException );
 };
 
-//============================================================================
 
 }; }; }; };
 

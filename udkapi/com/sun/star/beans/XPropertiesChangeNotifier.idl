@@ -23,17 +23,14 @@
 
 #include <com/sun/star/beans/XPropertiesChangeListener.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module beans {
 
-//=============================================================================
 
 /** specifies a notifier for changed property values@see      XPropertiesChangeListener
  */
 published interface XPropertiesChangeNotifier: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** adds an <type>XPropertiesChangeListener</type> to the
         specified properties with the specified names.
@@ -42,7 +39,6 @@ published interface XPropertiesChangeNotifier: com::sun::star::uno::XInterface
             [in] sequence<string> PropertyNames,
             [in] com::sun::star::beans::XPropertiesChangeListener Listener );
 
-    //-------------------------------------------------------------------------
 
     /** removes an <type>XPropertiesChangeListener</type> from the
         listener list.
@@ -52,7 +48,6 @@ published interface XPropertiesChangeNotifier: com::sun::star::uno::XInterface
             [in] com::sun::star::beans::XPropertiesChangeListener Listener );
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -22,11 +22,9 @@
 #include <com/sun/star/uno/Exception.idl>
 
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** An interaction request to inform the client of a "transfer" command
     that the supplied source URL is not supported.
 
@@ -36,7 +34,6 @@ published exception InteractiveBadTransferURLException: com::sun::star::uno::Exc
 {
 };
 
-//=============================================================================
 
 }; }; }; };
 

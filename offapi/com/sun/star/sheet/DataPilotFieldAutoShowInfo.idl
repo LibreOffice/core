@@ -20,11 +20,9 @@
 #ifndef __com_sun_star_sheet_DataPilotFieldAutoShowInfo_idl__
 #define __com_sun_star_sheet_DataPilotFieldAutoShowInfo_idl__
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** contains the auto show information of a DataPilotField.
 
@@ -35,14 +33,12 @@ module com {  module sun {  module star {  module sheet {
  */
 published struct DataPilotFieldAutoShowInfo
 {
-    //-------------------------------------------------------------------------
 
     /** specifies whether the AutoShow feature is enabled or not.
         */
 
         boolean IsEnabled;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the mode which items have to be shown.
 
@@ -52,14 +48,12 @@ published struct DataPilotFieldAutoShowInfo
 
         long ShowItemsMode;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the number of the items to show.
         */
 
         long ItemCount;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the field where the values to show and select are taken from.
         */
@@ -67,7 +61,6 @@ published struct DataPilotFieldAutoShowInfo
         string DataField;
 };
 
-//=============================================================================
 
 }; }; }; };
 

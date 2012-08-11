@@ -24,11 +24,9 @@
 #include <com/sun/star/container/XNamed.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module text {
 
-//=============================================================================
 
 // DocMerge from xml: service com::sun::star::text::Bookmark
 /** A bookmark is a <type>TextContent</type>, which is like a jump
@@ -47,7 +45,6 @@ published service Bookmark
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

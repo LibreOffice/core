@@ -32,18 +32,15 @@
 #include <com/sun/star/lang/XEventListener.idl>
 #include <com/sun/star/beans/NamedValue.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module awt {
 
-//=============================================================================
 
 /** such listener will be informed if tab's was inserted/removed from
     an XSimpleTabController instance or if the properties of a tab was changed.
  */
 interface XTabListener : com::sun::star::lang::XEventListener
 {
-    //-------------------------------------------------------------------------
     /** a new tab was inserted.
 
         @param  ID
@@ -51,7 +48,6 @@ interface XTabListener : com::sun::star::lang::XEventListener
      */
     void inserted( [in] long ID );
 
-    //-------------------------------------------------------------------------
     /** a tab was removed.
 
         @param  ID
@@ -59,7 +55,6 @@ interface XTabListener : com::sun::star::lang::XEventListener
      */
     void removed( [in] long ID );
 
-    //-------------------------------------------------------------------------
     /** a tab was changed within it's properties.
 
         @param  ID
@@ -71,19 +66,16 @@ interface XTabListener : com::sun::star::lang::XEventListener
     void changed( [in] long                                          ID         ,
                   [in] sequence< com::sun::star::beans::NamedValue > Properties );
 
-    //-------------------------------------------------------------------------
     /** a tab was activated (e.g. by using mouse/keyboard or
         method XSimpleTabController::activateTab()
      */
     void activated( [in] long ID );
 
-    //-------------------------------------------------------------------------
     /** a tab was deactivated, because another tab became the new active state.
      */
     void deactivated( [in] long ID );
 };
 
-//=============================================================================
 
 }; }; }; };
 

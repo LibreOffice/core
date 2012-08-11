@@ -20,11 +20,9 @@
 #define __com_sun_star_ucb_VerificationMode_idl__
 
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** These are the possible values for the property "VerificationMode".
 
     @see XCommandProcessor
@@ -32,24 +30,20 @@ module com { module sun { module star { module ucb {
 */
 published enum VerificationMode
 {
-    //-------------------------------------------------------------------------
     /** Always.
     */
     ALWAYS,
 
-    //-------------------------------------------------------------------------
     /** Once.
     */
     ONCE,
 
-    //-------------------------------------------------------------------------
     /** Never.
     */
     NEVER
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

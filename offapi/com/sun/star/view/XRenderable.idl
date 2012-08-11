@@ -25,11 +25,9 @@
 
 #include <com/sun/star/lang/IllegalArgumentException.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module view {
 
-//=============================================================================
 
 /** represents something that can be rendered.
 
@@ -37,7 +35,6 @@ module com {  module sun {  module star {  module view {
  */
 published interface XRenderable : com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** @returns
             the count of renderers (based on paper count of a document, for example).
@@ -55,7 +52,6 @@ published interface XRenderable : com::sun::star::uno::XInterface
     long getRendererCount( [in] any aSelection, [in] sequence<com::sun::star::beans::PropertyValue> xOptions )
             raises( com::sun::star::lang::IllegalArgumentException );
 
-    //-------------------------------------------------------------------------
 
     /** @returns
             a descriptor of the specific renderer.
@@ -72,7 +68,6 @@ published interface XRenderable : com::sun::star::uno::XInterface
     sequence<com::sun::star::beans::PropertyValue> getRenderer( [in] long nRenderer, [in] any aSelection, [in] sequence<com::sun::star::beans::PropertyValue> xOptions )
             raises( com::sun::star::lang::IllegalArgumentException );
 
-    //-------------------------------------------------------------------------
 
     /** renders the object.
 
@@ -89,7 +84,6 @@ published interface XRenderable : com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

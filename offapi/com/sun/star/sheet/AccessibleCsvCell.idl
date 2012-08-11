@@ -25,11 +25,9 @@
 #include <com/sun/star/accessibility/XAccessibleText.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** The accessible object of a cell in the CSV import dialog.
     @see ::com::sun::star::sheet::AccessibleCsvTable
@@ -38,19 +36,16 @@ module com {  module sun {  module star {  module sheet {
  */
 published service AccessibleCsvCell
 {
-    //-------------------------------------------------------------------------
 
     /** This interface gives access to the whole content of the cell.
      */
     interface ::com::sun::star::accessibility::XAccessibleContext;
 
-    //-------------------------------------------------------------------------
 
     /** This interface gives access to the visibility of the cell.
      */
     interface ::com::sun::star::accessibility::XAccessibleComponent;
 
-    //-------------------------------------------------------------------------
 
     /** This interface gives access to the text representation of the cell
         content.
@@ -58,7 +53,6 @@ published service AccessibleCsvCell
     interface ::com::sun::star::accessibility::XAccessibleText;
 };
 
-//=============================================================================
 
 }; }; }; };
 

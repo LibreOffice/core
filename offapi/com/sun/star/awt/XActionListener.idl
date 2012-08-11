@@ -24,17 +24,14 @@
 #include <com/sun/star/awt/ActionEvent.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module awt {
 
-//=============================================================================
 
 /** makes it possible to receive action events.
  */
 published interface XActionListener: com::sun::star::lang::XEventListener
 {
-    //-------------------------------------------------------------------------
 
     /** is invoked when an action is performed.
      */
@@ -42,7 +39,6 @@ published interface XActionListener: com::sun::star::lang::XEventListener
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

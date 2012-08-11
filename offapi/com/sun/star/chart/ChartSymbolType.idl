@@ -20,11 +20,9 @@
 #define __com_sun_star_chart_ChartSymbolType_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module chart {
 
-//=============================================================================
 
 /** These values specify the type of the symbol used for data points.
 
@@ -49,20 +47,17 @@
 */
 published constants ChartSymbolType
 {
-    //-------------------------------------------------------------------------
 
     /** No symbol is used.
      */
     const long NONE = -3;
 
-    //-------------------------------------------------------------------------
 
     /** The symbol is selected automatically.  The size of symbol will
         be dynamic and the type depends on the data row number.
      */
     const long AUTO = -2;
 
-    //-------------------------------------------------------------------------
 
     /** Take a Bitmap from a URL and use this as symbol.
 
@@ -74,49 +69,41 @@ published constants ChartSymbolType
      */
     const long BITMAPURL = -1;
 
-    //-------------------------------------------------------------------------
 
     /** The default symbol for row 0 is used.
      */
     const long SYMBOL0 = 0;
 
-    //-------------------------------------------------------------------------
 
     /** The default symbol for row 1 is used.
      */
     const long SYMBOL1 = 1;
 
-    //-------------------------------------------------------------------------
 
     /** The default symbol for row 2 is used.
      */
     const long SYMBOL2 = 2;
 
-    //-------------------------------------------------------------------------
 
     /** The default symbol for row 3 is used.
      */
     const long SYMBOL3 = 3;
 
-    //-------------------------------------------------------------------------
 
     /** The default symbol for row 4 is used.
      */
     const long SYMBOL4 = 4;
 
-    //-------------------------------------------------------------------------
 
     /** The default symbol for row 5 is used.
      */
     const long SYMBOL5 = 5;
 
-    //-------------------------------------------------------------------------
 
     /** The default symbol for row 6 is used.
      */
     const long SYMBOL6 = 6;
 
-    //-------------------------------------------------------------------------
 
     /** The default symbol for row 7 is used.
      */
@@ -124,7 +111,6 @@ published constants ChartSymbolType
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

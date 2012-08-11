@@ -22,11 +22,9 @@
 #include <com/sun/star/script/XLibraryContainer.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module script {
 
-//=============================================================================
 
 /**
     Extension of <type>XLibraryContainer</type> to provide additional information
@@ -81,7 +79,6 @@ published interface XLibraryContainer2: com::sun::star::script::XLibraryContaine
 
 };
 
-//=============================================================================
 
 
 }; }; }; };

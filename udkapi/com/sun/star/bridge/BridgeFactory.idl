@@ -22,11 +22,9 @@
 #include <com/sun/star/lang/XComponent.idl>
 #include <com/sun/star/bridge/XBridgeFactory.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module bridge {
 
-//=============================================================================
 
 /** allows to create new or access existing interprocess bridges.
 
@@ -47,7 +45,6 @@ published service BridgeFactory
     interface com::sun::star::lang::XComponent;
 };
 
-//=============================================================================
 
 }; }; }; };
 #endif

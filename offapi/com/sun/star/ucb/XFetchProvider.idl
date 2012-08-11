@@ -22,18 +22,15 @@
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/ucb/FetchResult.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** provides the possibility to get the contents of the columns of several
     rows of a <type>ContentResultSet</type> with a single function call.
 */
 
 published interface XFetchProvider: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** returns the contents of the columns of the indicated rows
 
         @returns
@@ -56,7 +53,6 @@ published interface XFetchProvider: com::sun::star::uno::XInterface
                                           , [in] boolean bDirection );
 };
 
-//=============================================================================
 
 }; }; }; };
 

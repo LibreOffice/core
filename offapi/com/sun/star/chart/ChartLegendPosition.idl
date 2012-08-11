@@ -29,18 +29,15 @@
 #define __com_sun_star_chart_ChartLegendPosition_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module chart {
 
-//=============================================================================
 
 /** specifies one of the default positions of the legend in relation
     to the diagram.
  */
 published enum ChartLegendPosition
 {
-    //-------------------------------------------------------------------------
 
     /** no chart legend is displayed.
 
@@ -50,7 +47,6 @@ published enum ChartLegendPosition
      */
     NONE,
 
-    //-------------------------------------------------------------------------
 
     /** displays the chart legend on the left side of the diagram.
 
@@ -59,7 +55,6 @@ published enum ChartLegendPosition
      */
     LEFT,
 
-    //-------------------------------------------------------------------------
 
     /** displays the chart legend above the diagram.
 
@@ -68,7 +63,6 @@ published enum ChartLegendPosition
      */
     TOP,
 
-    //-------------------------------------------------------------------------
 
     /** displays the chart legend on the right side of the diagram.
 
@@ -77,7 +71,6 @@ published enum ChartLegendPosition
      */
     RIGHT,
 
-    //-------------------------------------------------------------------------
 
     /** displays the chart legend beneath the diagram.
 
@@ -87,7 +80,6 @@ published enum ChartLegendPosition
     BOTTOM
 };
 
-//=============================================================================
 
 }; }; }; };
 

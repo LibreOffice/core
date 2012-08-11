@@ -32,30 +32,25 @@
 #include <com/sun/star/sheet/SpreadsheetDocumentSettings.idl>
 #include <com/sun/star/sheet/XFunctionAccess.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** allows generic access to all spreadsheet functions.
  */
 published service FunctionAccess
 {
-    //-------------------------------------------------------------------------
 
     /** contributes properties to control the behavior of some functions
         (i.e. NullDate, IgnoreCase, RegularExpressions).
      */
     service com::sun::star::sheet::SpreadsheetDocumentSettings;
 
-    //-------------------------------------------------------------------------
 
     /** provides calculating the result of a spreadsheet function.
      */
     interface com::sun::star::sheet::XFunctionAccess;
 
-    //-------------------------------------------------------------------------
 
     /** specifies whether the function call is performed as array function
         call.
@@ -83,7 +78,6 @@ published service FunctionAccess
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

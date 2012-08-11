@@ -44,18 +44,14 @@
 #include <com/sun/star/packages/NoRawFormatException.idl>
 
 
-//============================================================================
 
  module com {  module sun {  module star {  module embed {
 
-//============================================================================
 /** This interface represents main storage functionality.
  */
 published interface XStorage
 {
     // INTERFACES
-    //
-    // -----------------------------------------------------------------------
     /** allows to get list of child elements and to check if an element with a
         specified name exists in a storage.
 
@@ -69,7 +65,6 @@ published interface XStorage
      */
     interface ::com::sun::star::container::XNameAccess;
 
-    // -----------------------------------------------------------------------
     /** allows to control and track lifetime of the storage.
 
         <p>
@@ -81,8 +76,6 @@ published interface XStorage
 
 
     // METHODS
-    //
-    // -----------------------------------------------------------------------
     /** allows to copy current storage to another one
 
         <p>
@@ -112,7 +105,6 @@ published interface XStorage
                 ::com::sun::star::io::IOException,
                 ::com::sun::star::embed::StorageWrappedTargetException );
 
-    // -----------------------------------------------------------------------
     /** allows to get access to a child stream of the storage.
 
         <p>
@@ -152,7 +144,6 @@ published interface XStorage
                 ::com::sun::star::io::IOException,
                 ::com::sun::star::embed::StorageWrappedTargetException );
 
-    // -----------------------------------------------------------------------
     /** allows to get access to a child encrypted stream with password.
 
         <p>
@@ -207,7 +198,6 @@ published interface XStorage
                 ::com::sun::star::io::IOException,
                 ::com::sun::star::embed::StorageWrappedTargetException );
 
-    // -----------------------------------------------------------------------
     /** allows to get access to a child storage.
 
         <p>
@@ -243,7 +233,6 @@ published interface XStorage
                 ::com::sun::star::io::IOException,
                 ::com::sun::star::embed::StorageWrappedTargetException );
 
-    // -----------------------------------------------------------------------
     /** allows to get readonly copy of a child stream of the storage.
 
         <p>
@@ -277,7 +266,6 @@ published interface XStorage
                 ::com::sun::star::io::IOException,
                 ::com::sun::star::embed::StorageWrappedTargetException );
 
-    // -----------------------------------------------------------------------
     /** allows to get readonly copy of a child encrypted stream with password.
 
         <p>
@@ -332,7 +320,6 @@ published interface XStorage
                 ::com::sun::star::io::IOException,
                 ::com::sun::star::embed::StorageWrappedTargetException );
 
-    // -----------------------------------------------------------------------
     /** allows to get copy of this storage at the state of it's last commit.
 
         <p>
@@ -362,7 +349,6 @@ published interface XStorage
                 ::com::sun::star::io::IOException,
                 ::com::sun::star::embed::StorageWrappedTargetException );
 
-    // -----------------------------------------------------------------------
     /** allows to get copy of a child storage at the state of it's last commit.
 
         <p>
@@ -397,7 +383,6 @@ published interface XStorage
                 ::com::sun::star::io::IOException,
                 ::com::sun::star::embed::StorageWrappedTargetException );
 
-    // -----------------------------------------------------------------------
     /** allows to check if an element is a child stream with specified name.
 
         <p>
@@ -428,7 +413,6 @@ published interface XStorage
                 ::com::sun::star::embed::InvalidStorageException );
 
 
-    // -----------------------------------------------------------------------
     /** allows to check if an element is a child storage with specified name.
 
         <p>
@@ -458,7 +442,6 @@ published interface XStorage
                 ::com::sun::star::lang::IllegalArgumentException,
                 ::com::sun::star::embed::InvalidStorageException );
 
-    // -----------------------------------------------------------------------
     /** removes an element from a storage.
 
         @param sElementName
@@ -487,7 +470,6 @@ published interface XStorage
                 ::com::sun::star::io::IOException,
                 ::com::sun::star::embed::StorageWrappedTargetException );
 
-    // -----------------------------------------------------------------------
     /** renames an element in a storage.
 
         @param sElementName
@@ -523,7 +505,6 @@ published interface XStorage
                 ::com::sun::star::io::IOException,
                 ::com::sun::star::embed::StorageWrappedTargetException );
 
-    // -----------------------------------------------------------------------
     /** allows to copy an entry from one storage to another.
 
         <p>
@@ -567,7 +548,6 @@ published interface XStorage
                 ::com::sun::star::io::IOException,
                 ::com::sun::star::embed::StorageWrappedTargetException );
 
-    // -----------------------------------------------------------------------
     /** allows to move an entry from one storage to another.
 
         <p>
@@ -613,7 +593,6 @@ published interface XStorage
 
 };
 
-//============================================================================
 
 }; }; }; };
 

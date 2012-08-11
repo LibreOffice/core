@@ -29,11 +29,9 @@
 #define __com_sun_star_frame_FrameAction_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module frame {
 
-//=============================================================================
 /** these are the events which can happen to the components in frames
     of the desktop
 
@@ -48,7 +46,6 @@
  */
 published enum FrameAction
 {
-    //-------------------------------------------------------------------------
     /** an event of this kind is broadcast whenever a component is
         attached to a frame
 
@@ -62,7 +59,6 @@ published enum FrameAction
      */
     COMPONENT_ATTACHED,
 
-    //-------------------------------------------------------------------------
     /** an event of this kind is broadcast whenever a component is
         detaching from a frame
 
@@ -77,7 +73,6 @@ published enum FrameAction
      */
     COMPONENT_DETACHING,
 
-    //-------------------------------------------------------------------------
     /** an event of this kind is broadcast whenever a component is
         attached to a new model.
 
@@ -88,7 +83,6 @@ published enum FrameAction
      */
     COMPONENT_REATTACHED,
 
-    //-------------------------------------------------------------------------
     /** an event of this kind is broadcast whenever a component gets
         activated
 
@@ -101,7 +95,6 @@ published enum FrameAction
      */
     FRAME_ACTIVATED,
 
-    //-------------------------------------------------------------------------
     /** an event of this kind is broadcasted immediately before the
         component is deactivated
 
@@ -115,7 +108,6 @@ published enum FrameAction
      */
     FRAME_DEACTIVATING,
 
-    //-------------------------------------------------------------------------
     /** an event of this kind is broadcast whenever a component changes
         its internal context (i.e., the selection).
 
@@ -128,7 +120,6 @@ published enum FrameAction
      */
     CONTEXT_CHANGED,
 
-    //-------------------------------------------------------------------------
     /** an event of this kind is broadcast by an active frame when it
         is getting UI control (tool control).
 
@@ -136,7 +127,6 @@ published enum FrameAction
      */
     FRAME_UI_ACTIVATED,
 
-    //-------------------------------------------------------------------------
     /** an event of this kind is broadcast by an active frame when it
         is losing UI control (tool control).
 
@@ -145,7 +135,6 @@ published enum FrameAction
     FRAME_UI_DEACTIVATING
 };
 
-//=============================================================================
 
 }; }; }; };
 

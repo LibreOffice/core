@@ -21,23 +21,19 @@
 
 #include <com/sun/star/sheet/ExternalLinkType.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 /** describes an external link in a formula.
 
     @since OOo 3.1
  */
 struct ExternalLinkInfo
 {
-    //-------------------------------------------------------------------------
     /** Link type, one of <type>ExternalLinkType</type> constants.
      */
     long Type;
 
-    //-------------------------------------------------------------------------
     /** Location of this link type.
 
         <p>Modes used:
@@ -60,7 +56,6 @@ struct ExternalLinkInfo
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

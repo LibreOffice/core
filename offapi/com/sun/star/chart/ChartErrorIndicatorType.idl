@@ -20,42 +20,35 @@
 #define __com_sun_star_chart_ChartErrorIndicatorType_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module chart {
 
-//=============================================================================
 
 /** specifies how the error is indicated.
  */
 published enum ChartErrorIndicatorType
 {
-    //-------------------------------------------------------------------------
 
     /** displays no error indicators.
      */
     NONE,
 
-    //-------------------------------------------------------------------------
 
     /** displays both the upper and lower values.
      */
     TOP_AND_BOTTOM,
 
-    //-------------------------------------------------------------------------
 
     /** displays only the upper value.
      */
     UPPER,
 
-    //-------------------------------------------------------------------------
 
     /** displays only the lower value.
      */
     LOWER
 };
 
-//=============================================================================
 
 }; }; }; };
 

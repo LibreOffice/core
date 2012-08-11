@@ -31,11 +31,9 @@
 
 #include <com/sun/star/i18n/XTextConversion.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module i18n {
 
-//=============================================================================
 
 
 /**
@@ -50,7 +48,6 @@ module com { module sun { module star { module i18n {
  */
 published interface XExtendedTextConversion : ::com::sun::star::i18n::XTextConversion
 {
-    //-------------------------------------------------------------------------
     /**
         The functionality of this method is same as
         <member scope="::com::sun::star::i18n">XTextConversion::getConversion()</member>,
@@ -77,7 +74,6 @@ published interface XExtendedTextConversion : ::com::sun::star::i18n::XTextConve
                 com::sun::star::lang::NoSupportException );
 };
 
-//=============================================================================
 }; }; }; };
 
 #endif

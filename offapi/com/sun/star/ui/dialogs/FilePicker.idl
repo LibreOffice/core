@@ -35,13 +35,10 @@
 #include <com/sun/star/lang/XInitialization.idl>
 #include <com/sun/star/util/XCancellable.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module ui { module dialogs {
 
-//=============================================================================
 
-//=============================================================================
 /** A FilePicker.
 
     It is <strong>NOT</strong> recommended to cache a reference to a file
@@ -61,33 +58,27 @@ module com { module sun { module star { module ui { module dialogs {
 
 published service FilePicker
 {
-    //-------------------------------------------------------------------------
     /** Allows to associate a help URL with the file picker instance.
     */
     [optional, property] string HelpURL;
 
-    //-------------------------------------------------------------------------
     /** Provides access to the basic FilePicker functionality.
     */
     interface XFilePicker;
 
-    //-------------------------------------------------------------------------
     /** Provides the ability to request notifications about changes.
     */
     interface XFilePickerNotifier;
 
-    //-------------------------------------------------------------------------
     /** Provides the ability to add different filter, query for the current
         filters and set a current filter
     */
     interface XFilterManager;
 
-    //-------------------------------------------------------------------------
     /** Provides the ability to show a preview of a selected file
     */
     [optional] interface XFilePreview;
 
-    //-------------------------------------------------------------------------
     /** Provides the ability manage additional controls (checkboxes, listboxes etc.)
         offered by an extended FilePicker, these controls extend the subset of
         common controls that a FilePicker usually supports.
@@ -99,12 +90,10 @@ published service FilePicker
     */
     [optional] interface XFilePickerControlAccess;
 
-    //-------------------------------------------------------------------------
     /** An interface which allows manipulation of groups of filters
     */
     [optional] interface XFilterGroupManager;
 
-    //-------------------------------------------------------------------------
     /** Provides the ability to choose between different custom templates that
         do extend the subset of common controls a FilePicker usually supports.
         Implementers may omit this interface if the FileOpen
@@ -123,29 +112,24 @@ published service FilePicker
     */
     [optional] interface com::sun::star::lang::XInitialization;
 
-    //-------------------------------------------------------------------------
     /** For canceling a running dialog instance.
         <p>This may be useful for automatic test tools for instance.</p>
     */
     [optional] interface com::sun::star::util::XCancellable;
 
-    //-------------------------------------------------------------------------
     /** For shutdown and listener support.
     */
     interface com::sun::star::lang::XComponent;
 
-    //-------------------------------------------------------------------------
     /** Service should always support this interface.
     */
     interface com::sun::star::lang::XServiceInfo;
 
-    //-------------------------------------------------------------------------
     /** Service should always support this interface.
     */
     interface com::sun::star::lang::XTypeProvider;
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

@@ -24,11 +24,9 @@
 #include <com/sun/star/awt/XDateField.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module awt {
 
-//=============================================================================
 
 /** specifies a date field control.
 
@@ -49,7 +47,6 @@ published service UnoControlDateField
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

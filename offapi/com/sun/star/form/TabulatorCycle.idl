@@ -20,11 +20,9 @@
 #define __com_sun_star_form_TabulatorCycle_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module form {
 
-//=============================================================================
 
 /** specifies how the TAB key should be used in a form.
 
@@ -43,21 +41,18 @@
  */
 published enum TabulatorCycle
 {
-    //-------------------------------------------------------------------------
 
     /** pressing the TAB key from the last control moves the focus to
         the first control in the tab order of the next record.
      */
     RECORDS,
 
-    //-------------------------------------------------------------------------
 
     /** pressing the TAB key from the last control moves the focus to
         the first control in the tab order of the same record.
      */
     CURRENT,
 
-    //-------------------------------------------------------------------------
 
     /** pressing the TAB key from the last control of a form moves
         the focus to the first control of the next form in the tab order.
@@ -66,7 +61,6 @@ published enum TabulatorCycle
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

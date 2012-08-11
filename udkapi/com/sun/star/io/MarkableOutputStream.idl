@@ -26,7 +26,6 @@
 
 module com {  module sun {  module star {  module io {
 
-//==========================================================================
 /** allows to set marks in an outputstream and to later jump back to these
     marks.
     <p>The implementation stores the data as long as marks exists

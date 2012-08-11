@@ -26,17 +26,14 @@
 #include <com/sun/star/script/XAllListener.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module script {
 
-//=============================================================================
 /** allows the generation of adapters from specific
     interfaces to the <type>XAllListener</type> interface.
  */
 published interface XAllListenerAdapterService: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** creates a wrapper from the listener of type
         <var>xListenerType</var> to the <type>XAllListener</type>
         listener.
@@ -51,7 +48,6 @@ published interface XAllListenerAdapterService: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

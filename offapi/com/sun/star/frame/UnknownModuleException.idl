@@ -30,11 +30,9 @@
 
 #include <com/sun/star/uno/Exception.idl>
 
-//===============================================
 
 module com {  module sun {  module star {  module frame {
 
-//===============================================
 /** This exception can be thrown in case an office
  *  module could not be classified or does not have
  *  a valid configuration.

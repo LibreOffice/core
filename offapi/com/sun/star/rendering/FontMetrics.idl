@@ -57,17 +57,14 @@ struct FontMetrics
     /// Ascent (above the baseline) part of the font.
     double      Ascent;
 
-    //-------------------------------------------------------------------------
 
     /// Descent (below the baseline) part of the font.
     double      Descent;
 
-    //-------------------------------------------------------------------------
 
     /// Extra space above ascent
     double      InternalLeading;
 
-    //-------------------------------------------------------------------------
 
     /** Extra space outside the font cells.<p>
 
@@ -76,7 +73,6 @@ struct FontMetrics
      */
     double      ExternalLeading;
 
-    //-------------------------------------------------------------------------
 
     /** This value specifies the reference character width of the
         font.<p>
@@ -87,14 +83,12 @@ struct FontMetrics
      */
     double      ReferenceCharSize;
 
-    //-------------------------------------------------------------------------
 
     /** Specifies the offset to be added to the baseline when drawing
         underlined text.
      */
     double      UnderlineOffset;
 
-    //-------------------------------------------------------------------------
 
     /** Specifies the offset to be added to the baseline when striking
         through the text.

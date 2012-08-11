@@ -20,11 +20,9 @@
 #ifndef __com_sun_star_awt_VisualEffect_idl__
 #define __com_sun_star_awt_VisualEffect_idl__
 
-//=============================================================================
 
 module com {  module sun {  module star {  module awt {
 
-//=============================================================================
 
 /** These values are used to specify the visual effect of controls
 
@@ -32,23 +30,19 @@ module com {  module sun {  module star {  module awt {
 */
 constants VisualEffect
 {
-    //-------------------------------------------------------------------------
     /** specifies that no visual effect is to be applied
     */
     const short NONE = 0;
 
-    //-------------------------------------------------------------------------
     /** specifies a 3D-like look
     */
     const short LOOK3D = 1;
 
-    //-------------------------------------------------------------------------
     /** specifies a "flat" look
     */
     const short FLAT = 2;
 };
 
-//=============================================================================
 
 }; }; }; };
 

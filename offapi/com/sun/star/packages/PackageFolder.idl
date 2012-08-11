@@ -33,11 +33,9 @@
 #include <com/sun/star/container/XNameContainer.idl>
 #include <com/sun/star/beans/XPropertySet.idl>
 #include <com/sun/star/container/XEnumerationAccess.idl>
-//=============================================================================
 
 module com {  module sun {  module star {   module packages {
 
-//=============================================================================
 /**
     The PackageFolder service represents a single folder or directory within
     a Package. Instances of this service can only be constructed by an

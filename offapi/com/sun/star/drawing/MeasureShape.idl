@@ -32,11 +32,9 @@
 
 #include <com/sun/star/awt/Point.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module drawing {
 
-//=============================================================================
 
 /** This service is for a dimensioning shape.
  */
@@ -57,13 +55,11 @@ published service MeasureShape
     /** this point is the start of the measured distance */
     [property] com::sun::star::awt::Point StartPosition;
 
-    //-------------------------------------------------------------------------
 
     /** this point is the end of the measured distance */
     [property] com::sun::star::awt::Point EndPosition;
 };
 
-//=============================================================================
 
 }; }; }; };
 

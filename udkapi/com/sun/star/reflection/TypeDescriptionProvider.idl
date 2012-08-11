@@ -23,11 +23,9 @@
 #include <com/sun/star/lang/XComponent.idl>
 #include <com/sun/star/reflection/XTypeDescriptionEnumerationAccess.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module reflection {
 
-//=============================================================================
 
 /** This service provides type descriptions, i.e. concrete
     service implementations read from source like the persistent registry
@@ -64,7 +62,6 @@ published service TypeDescriptionProvider
     [optional] interface XTypeDescriptionEnumerationAccess;
 };
 
-//=============================================================================
 
 }; }; }; };
 

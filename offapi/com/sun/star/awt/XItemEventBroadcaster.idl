@@ -33,33 +33,27 @@
 
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module awt {
 
-//=============================================================================
 
 /**  registers item listeners at controls like the com::sun::star::awt::Roadmap
  */
 
 interface XItemEventBroadcaster: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** registers a listener for item events.
      */
     [oneway] void addItemListener( [in] com::sun::star::awt::XItemListener l );
 
-    //-------------------------------------------------------------------------
 
     /** unregisters a listener for item events.
      */
     [oneway] void removeItemListener( [in] com::sun::star::awt::XItemListener l );
 
-    //-------------------------------------------------------------------------
 };
 
-//=============================================================================
 
 }; }; }; };
 

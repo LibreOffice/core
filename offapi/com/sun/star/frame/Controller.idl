@@ -36,11 +36,9 @@
 #include <com/sun/star/view/XSelectionSupplier.idl>
 #include <com/sun/star/datatransfer/XTransferableSupplier.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module frame {
 
-//=============================================================================
 /** is an abstract service for a component which offers a deeper integration of
     desktop components than a <type scope="com::sun::star::awt">XWindow</type>
     can offer
@@ -57,13 +55,11 @@
  */
 published service Controller
 {
-    //-------------------------------------------------------------------------
     /** with this interface, components viewed in a <type>Frame</type> can serve
         events (by supplying dispatches)
      */
     interface XController;
 
-    //-------------------------------------------------------------------------
     /** for certain functions which are useful at the UI
 
         <p>
@@ -77,7 +73,6 @@ published service Controller
      */
     interface XDispatchProvider;
 
-    //-------------------------------------------------------------------------
     /** this interface enables the controller to get interceptors registered that
         change context menus or prevent them from being executed
 
@@ -88,23 +83,19 @@ published service Controller
      */
     [optional] interface com::sun::star::ui::XContextMenuInterception;
 
-    //-------------------------------------------------------------------------
     /** makes it possible to intercept keyboard and mouse input.
      */
     [optional] interface com::sun::star::awt::XUserInputInterception;
 
-    //-------------------------------------------------------------------------
     /** makes it possible to access and change the selection in a view
      */
     [optional] interface com::sun::star::view::XSelectionSupplier;
 
-    //-------------------------------------------------------------------------
     /** makes it possible to work with clipboard data
      */
     [optional] interface com::sun::star::datatransfer::XTransferableSupplier;
 };
 
-//=============================================================================
 
 }; }; }; };
 

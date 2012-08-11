@@ -22,11 +22,9 @@
 
 #include <com/sun/star/inspection/XPropertyHandler.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module form { module inspection {
 
-//=============================================================================
 
 /** implements a property handler for use with an <type scope="com::sun::star::inspection">ObjectInspector</type>
     which, for a <type scope="com::sun::star::form">FormComponent</type>, provides the script events
@@ -45,7 +43,6 @@ service EventHandler
     interface com::sun::star::inspection::XPropertyHandler;
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

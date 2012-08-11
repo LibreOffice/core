@@ -20,18 +20,15 @@
 #define __com_sun_star_drawing_PolygonFlags_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module drawing {
 
-//=============================================================================
 
 // DocMerge from xml: enum com::sun::star::drawing::PolygonFlags
 /** defines how a Bezier curve goes through a point.
  */
 published enum PolygonFlags
 {
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR PolygonFlags:: NORMAL,
 
     // DocMerge from xml: value com::sun::star::drawing::PolygonFlags::NORMAL
@@ -39,7 +36,6 @@ published enum PolygonFlags
      */
     NORMAL,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR PolygonFlags:: SMOOTH,
 
     // DocMerge from xml: value com::sun::star::drawing::PolygonFlags::SMOOTH
@@ -47,7 +43,6 @@ published enum PolygonFlags
      */
     SMOOTH,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR PolygonFlags:: CONTROL,
 
     // DocMerge from xml: value com::sun::star::drawing::PolygonFlags::CONTROL
@@ -55,7 +50,6 @@ published enum PolygonFlags
      */
     CONTROL,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR PolygonFlags:: SYMMETRIC
 
     // DocMerge from xml: value com::sun::star::drawing::PolygonFlags::SYMMETRIC
@@ -65,7 +59,6 @@ published enum PolygonFlags
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

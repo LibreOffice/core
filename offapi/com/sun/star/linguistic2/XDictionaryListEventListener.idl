@@ -23,11 +23,9 @@
 #include <com/sun/star/linguistic2/DictionaryListEvent.idl>
 
 
-//=============================================================================
 
 module com { module sun { module star { module linguistic2 {
 
-//=============================================================================
 /** This interfaces allows the object to act according to
     dictionary-list events.
 
@@ -40,7 +38,6 @@ module com { module sun { module star { module linguistic2 {
 */
 published interface XDictionaryListEventListener : com::sun::star::lang::XEventListener
 {
-    //-------------------------------------------------------------------------
     /** is used to notify the object about dictionary-list events.
 
         @param  aDicListEvent
@@ -53,7 +50,6 @@ published interface XDictionaryListEventListener : com::sun::star::lang::XEventL
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

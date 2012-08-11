@@ -20,11 +20,9 @@
 #define __com_sun_star_style_LineSpacing_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module style {
 
-//=============================================================================
 
 // DocMerge from xml: struct com::sun::star::style::LineSpacing
 /** This structure is used to specify the height of a text line.@see LineSpacingMode
@@ -36,7 +34,6 @@ published struct LineSpacing
      */
     short Mode;
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: field com::sun::star::style::LineSpacing::Height
     /** This value specifies the height in regard to <var>Mode</var>.
@@ -45,7 +42,6 @@ published struct LineSpacing
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

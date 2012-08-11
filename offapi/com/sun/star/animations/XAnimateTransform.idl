@@ -21,11 +21,9 @@
 
 #include <com/sun/star/animations/XAnimate.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module animations {
 
-//=============================================================================
 
 /** animates a transformation attribute on a target element, thereby allowing
     animations to control translation, scaling, rotation and/or skewing.
@@ -61,7 +59,6 @@ interface XAnimateTransform : XAnimate
     [attribute] short TransformType;
 };
 
-//=============================================================================
 
 }; }; }; };
 

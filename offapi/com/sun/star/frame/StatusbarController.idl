@@ -33,11 +33,9 @@
 #include <com/sun/star/frame/XStatusListener.idl>
 #include <com/sun/star/frame/XStatusbarController.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module frame {
 
-//=============================================================================
 /** is an abstract service for a component which offers a more complex user
     interface to users within a status bar.
 
@@ -59,7 +57,6 @@
 
 service StatusbarController
 {
-    //-------------------------------------------------------------------------
     /** with this interface a component can receive events if a feature has
         changed.
 
@@ -109,7 +106,6 @@ service StatusbarController
     */
     interface com::sun::star::util::XUpdatable;
 
-    //-------------------------------------------------------------------------
     /** used to notify changed features and requests for additional user
         interface items.
 
@@ -125,7 +121,6 @@ service StatusbarController
     interface com::sun::star::frame::XStatusbarController;
 };
 
-//=============================================================================
 
 }; }; }; };
 

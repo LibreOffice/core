@@ -23,17 +23,14 @@
 #include <com/sun/star/lang/IllegalArgumentException.idl>
 
 
-//=============================================================================
 
 module com { module sun { module star { module test {
 
-//=============================================================================
 /**
     A simple interface to test a service or interface implementation.
 */
 published interface XSimpleTest: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /**
         Test the object TestObject against the test specified with TestName. This test
         does not change the semantic state of the object, so it can be called on a existing
@@ -52,7 +49,6 @@ published interface XSimpleTest: com::sun::star::uno::XInterface
              [in] com::sun::star::uno::XInterface TestObject )
             raises( com::sun::star::lang::IllegalArgumentException );
 
-    //-------------------------------------------------------------------------
     /**
         Test the object TestObject against the test specified with TestName. This test
         changes the state of the object. The object may be useless afterwards.
@@ -80,28 +76,23 @@ published interface XSimpleTest: com::sun::star::uno::XInterface
              [in] long hTestHandle )
             raises( com::sun::star::lang::IllegalArgumentException );
 
-    //-------------------------------------------------------------------------
     /**States if one of the last test has failed. This is cumulative.
         @return true if all test have been passed successfully. false if an error has occurred.
 
     */
     boolean testPassed();
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION MISSING FOR XSimpleTest::getErrors
     sequence<string> getErrors();
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION MISSING FOR XSimpleTest::getErrorExceptions
     sequence<any> getErrorExceptions();
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION MISSING FOR XSimpleTest::getWarnings
     sequence<string> getWarnings();
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

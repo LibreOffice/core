@@ -24,11 +24,9 @@
 #include <com/sun/star/container/XNameAccess.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module text {
 
-//=============================================================================
 
 // DocMerge from xml: interface com::sun::star::text::XTextFieldsSupplier
 /** makes it possible to access the text fields used in this context
@@ -37,7 +35,6 @@
  */
 published interface XTextFieldsSupplier: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     // DocMerge from idl: method com::sun::star::text::XTextFieldsSupplier::getTextFields
     /** @returns
@@ -46,7 +43,6 @@ published interface XTextFieldsSupplier: com::sun::star::uno::XInterface
      */
     com::sun::star::container::XEnumerationAccess getTextFields();
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from idl: method com::sun::star::text::XTextFieldsSupplier::getTextFieldMasters
     /** @returns
@@ -57,7 +53,6 @@ published interface XTextFieldsSupplier: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

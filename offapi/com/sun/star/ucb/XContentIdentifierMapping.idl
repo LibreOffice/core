@@ -30,14 +30,12 @@
 
 #include <com/sun/star/uno/XInterface.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
  published interface XContent;
  published interface XContentIdentifier;
 
-//=============================================================================
 /** A mapping from a (source) set of <type>XContentIdentifier</type>s to
     another (target) set of XContentIdentifiers.
 
@@ -58,7 +56,6 @@ module com { module sun { module star { module ucb {
 
 published interface XContentIdentifierMapping: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** Map the string representation of an <type>XContentIdentifier</type>.
 
         @param Source  The string representation of an XContentIdentifier
@@ -71,7 +68,6 @@ published interface XContentIdentifierMapping: com::sun::star::uno::XInterface
     */
     string mapContentIdentifierString([in] string Source);
 
-    //-------------------------------------------------------------------------
     /** Map an <type>XContentIdentifier</type>.
 
         @param Source  An XContentIdentifier from the source set.
@@ -83,7 +79,6 @@ published interface XContentIdentifierMapping: com::sun::star::uno::XInterface
     */
     XContentIdentifier mapContentIdentifier([in] XContentIdentifier Source);
 
-    //-------------------------------------------------------------------------
     /** Map the <type>XContent</type> identified by an
         <type>XContentIdentifier</type>.
 
@@ -97,7 +92,6 @@ published interface XContentIdentifierMapping: com::sun::star::uno::XInterface
     */
     XContent mapContent([in] XContent Source);
 
-    //-------------------------------------------------------------------------
     /** Map the content identifiers (or related data) contained in the columns
         of a <type scope="com::sun::star::sdbc">XRow</type>.
 
@@ -117,7 +111,6 @@ published interface XContentIdentifierMapping: com::sun::star::uno::XInterface
     boolean mapRow([inout] sequence< any > Value);
 };
 
-//=============================================================================
 
 }; }; }; };
 

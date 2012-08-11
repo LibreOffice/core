@@ -23,7 +23,6 @@
 #include <com/sun/star/form/binding/XBindableValue.idl>
 #include <com/sun/star/form/FormControlModel.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module form { module binding {
 
@@ -73,7 +72,6 @@ service BindableControlModel
     interface XBindableValue;
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

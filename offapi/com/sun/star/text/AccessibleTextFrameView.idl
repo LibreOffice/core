@@ -25,11 +25,9 @@
 
 #include <com/sun/star/accessibility/XAccessibleEventBroadcaster.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module text {
 
-//=============================================================================
 
 /** The accessible view of text frames.
 
@@ -127,7 +125,6 @@ published service AccessibleTextFrameView
     interface ::com::sun::star::accessibility::XAccessibleEventBroadcaster;
 };
 
-//=============================================================================
 
 }; }; }; };
 

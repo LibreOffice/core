@@ -34,11 +34,9 @@
 #include <com/sun/star/awt/grid/XGridDataListener.idl>
 #include <com/sun/star/lang/IndexOutOfBoundsException.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module awt { module grid {
 
-//=============================================================================
 /** An instance of this interface is used by the <type>UnoControlGrid</type> to
     retrieve the content data that is displayed in the actual control.
 
@@ -99,7 +97,6 @@ interface XGridDataModel
         raises ( ::com::sun::star::lang::IndexOutOfBoundsException );
 };
 
-//=============================================================================
 
 }; }; }; };};
 

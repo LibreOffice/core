@@ -23,11 +23,9 @@
 #include <com/sun/star/sheet/XSheetAnnotations.idl>
 #include <com/sun/star/container/XEnumerationAccess.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** represents a collection of cell annotations.
 
@@ -35,7 +33,6 @@ module com {  module sun {  module star {  module sheet {
  */
 published service CellAnnotations
 {
-    //-------------------------------------------------------------------------
 
     /** provides methods to access cell annotations via index and to
         insert and remove annotations.
@@ -44,7 +41,6 @@ published service CellAnnotations
      */
     interface com::sun::star::sheet::XSheetAnnotations;
 
-    //-------------------------------------------------------------------------
 
     /** creates an enumeration of all cell annotations.
 
@@ -54,7 +50,6 @@ published service CellAnnotations
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

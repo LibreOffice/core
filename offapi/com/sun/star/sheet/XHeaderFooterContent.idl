@@ -23,11 +23,9 @@
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/text/XText.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** provides access to the text contents of a header or footer on a page.
 
@@ -36,7 +34,6 @@ module com {  module sun {  module star {  module sheet {
  */
 published interface XHeaderFooterContent: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** returns the text which is printed in the left part of the
         header or footer.
@@ -45,7 +42,6 @@ published interface XHeaderFooterContent: com::sun::star::uno::XInterface
      */
     com::sun::star::text::XText getLeftText();
 
-    //-------------------------------------------------------------------------
 
     /** returns the text which is printed in the center part of the
         header or footer.
@@ -54,7 +50,6 @@ published interface XHeaderFooterContent: com::sun::star::uno::XInterface
      */
     com::sun::star::text::XText getCenterText();
 
-    //-------------------------------------------------------------------------
 
     /** returns the text which is printed in the right part of the
         header or footer.
@@ -65,7 +60,6 @@ published interface XHeaderFooterContent: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

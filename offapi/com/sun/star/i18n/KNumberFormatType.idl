@@ -19,11 +19,9 @@
 #ifndef __com_sun_star_i18n_KNumberFormatType_idl__
 #define __com_sun_star_i18n_KNumberFormatType_idl__
 
-//=============================================================================
 
 module com {  module sun {  module star {  module i18n {
 
-//=============================================================================
 
 /**
     Attribute of number format, classifies the length of the formatted
@@ -40,7 +38,6 @@ published constants KNumberFormatType
     const short LONG   = 3;
 };
 
-//=============================================================================
 }; }; }; };
 
 #endif

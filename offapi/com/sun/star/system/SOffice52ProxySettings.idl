@@ -24,11 +24,9 @@
 #include <com/sun/star/lang/XTypeProvider.idl>
 #include <com/sun/star/system/ProxySettings.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module system {
 
-//=============================================================================
 /** Specifies a service for reading the proxy settings from an old
     StarOffice 5.2 installation.
 
@@ -42,7 +40,6 @@ published service SOffice52ProxySettings
     service ProxySettings;
 };
 
-//=============================================================================
 
 }; }; }; };
 

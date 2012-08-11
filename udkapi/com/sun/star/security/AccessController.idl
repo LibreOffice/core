@@ -22,11 +22,9 @@
 #include <com/sun/star/security/XAccessController.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module security {
 
-//=============================================================================
 /** This meta service supports the XAccessController interface for checking
     security permissions.
 

@@ -30,11 +30,9 @@
 
 #include <com/sun/star/installation/XInstallationCheck.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module installation {
 
-//=============================================================================
 
 // DocMerge from xml: service com::sun::star::installation::InstallationCheck
 /** is a simple implementation of the <type>XInstallationCheck</type>.
@@ -56,7 +54,6 @@ published service InstallationCheck
     interface com::sun::star::installation::XInstallationCheck;
 };
 
-//=============================================================================
 
 }; }; }; };
 

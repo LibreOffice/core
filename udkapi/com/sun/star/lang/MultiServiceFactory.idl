@@ -25,11 +25,9 @@
 #include <com/sun/star/lang/XServiceInfo.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module lang {
 
-//=============================================================================
 
 /** Provides a collection of implementations of services.
 
@@ -62,7 +60,6 @@ published service MultiServiceFactory
     interface com::sun::star::lang::XServiceInfo;
 };
 
-//=============================================================================
 
 }; }; }; };
 

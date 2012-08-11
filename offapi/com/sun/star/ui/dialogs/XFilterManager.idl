@@ -32,18 +32,15 @@
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/lang/IllegalArgumentException.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module ui { module dialogs {
 
-//=============================================================================
 /** Specifies a filter manager interface for a FilePicker
 */
 
 published interface XFilterManager: com::sun::star::uno::XInterface
 {
 
-    //-------------------------------------------------------------------------
     /** Adds a filter identified by a title.
 
         @param aTitle
@@ -62,7 +59,6 @@ published interface XFilterManager: com::sun::star::uno::XInterface
     void appendFilter( [in] string aTitle, [in] string aFilter )
         raises( ::com::sun::star::lang::IllegalArgumentException );
 
-    //-------------------------------------------------------------------------
     /** Sets the current filter.
 
         @param aTitle
@@ -74,7 +70,6 @@ published interface XFilterManager: com::sun::star::uno::XInterface
     void setCurrentFilter( [in] string aTitle )
         raises( ::com::sun::star::lang::IllegalArgumentException );
 
-    //-------------------------------------------------------------------------
     /** Returns the currently selected filter.
 
         @returns
@@ -84,7 +79,6 @@ published interface XFilterManager: com::sun::star::uno::XInterface
     string getCurrentFilter( );
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

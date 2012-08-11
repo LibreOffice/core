@@ -27,18 +27,15 @@
 
 #include <com/sun/star/lang/WrappedTargetException.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module container {
 
-//=============================================================================
 
 /** This is the generic interface for supporting the insertion and removal of
     indexed elements.@see XContainer
  */
 published interface XIndexContainer: com::sun::star::container::XIndexReplace
 {
-    //-------------------------------------------------------------------------
 
     /** inserts the given element at the specified index.
 
@@ -50,7 +47,6 @@ published interface XIndexContainer: com::sun::star::container::XIndexReplace
                     com::sun::star::lang::IndexOutOfBoundsException,
                     com::sun::star::lang::WrappedTargetException );
 
-    //-------------------------------------------------------------------------
 
     /** removes the element at the specified index.
      */
@@ -60,7 +56,6 @@ published interface XIndexContainer: com::sun::star::container::XIndexReplace
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

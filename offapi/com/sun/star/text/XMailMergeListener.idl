@@ -24,11 +24,9 @@
 #include <com/sun/star/text/MailMergeEvent.idl>
 
 
-//=============================================================================
 
 module com { module sun { module star { module text {
 
-//=============================================================================
 /**  used to notify listeners about mail merge events.
 
     <p>Registered listeners will be notified with a
@@ -42,7 +40,6 @@ module com { module sun { module star { module text {
 */
 published interface XMailMergeListener : com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** Notifies the listener about mail merge events.
 
         @param aEvent
@@ -53,7 +50,6 @@ published interface XMailMergeListener : com::sun::star::uno::XInterface
                 [in] com::sun::star::text::MailMergeEvent aEvent );
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -58,7 +58,6 @@ published interface XSQLData: com::sun::star::uno::XInterface
      */
     string getSQLTypeName() raises (SQLException);
 
-     //-------------------------------------------------------------------------
 
     /** populates this object with data read from the database.
 
@@ -99,7 +98,6 @@ published interface XSQLData: com::sun::star::uno::XInterface
      */
     void readSQL([in]XSQLInput stream, [in]string typeName)
         raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** writes this object to the given SQL data stream.
 
@@ -125,7 +123,6 @@ published interface XSQLData: com::sun::star::uno::XInterface
     void writeSQL([in]XSQLOutput stream) raises (SQLException);
 };
 
-//=============================================================================
 
 }; }; }; };
 

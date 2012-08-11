@@ -25,23 +25,19 @@
 
 module com { module sun { module star { module util {
 
-//============================================================================
 /** Manage cancelable jobs.
 
  */
 published interface XJobManager: com::sun::star::uno::XInterface
 {
-        //-------------------------------------------------------------------------
         /** registers a cancelable job.
          */
         void registerJob( [in] com::sun::star::util::XCancellable Job );
 
-        //-------------------------------------------------------------------------
         /** deregisters a cancelable jobs.
          */
         void releaseJob( [in] com::sun::star::util::XCancellable Job );
 
-        //-------------------------------------------------------------------------
         /** cancel all registered jobs.
          */
         void cancelAllJobs();

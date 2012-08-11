@@ -35,11 +35,9 @@
 #include <com/sun/star/drawing/LineJoint.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module drawing {
 
-//=============================================================================
 
 /** This is a set of properties to describe the style for rendering a Line.
     <p>The properties for line ends and line starts are only supported by
@@ -51,96 +49,81 @@ published service LineProperties
      */
     [property] com::sun::star::drawing::LineStyle LineStyle;
 
-    //-------------------------------------------------------------------------
 
     /** This property contains the dash of the line.
      */
     [property] com::sun::star::drawing::LineDash LineDash;
 
-    //-------------------------------------------------------------------------
 
     /** This property contains the name of the dash of the line.
      */
     [optional, property] string LineDashName;
 
-    //-------------------------------------------------------------------------
 
     /** This property contains the line color.
      */
     [property] com::sun::star::util::Color LineColor;
 
-    //-------------------------------------------------------------------------
 
     /** This property contains the extent of transparency.
      */
     [property] short LineTransparence;
 
-    //-------------------------------------------------------------------------
 
     /** This property contains the width of the line in 1/100th mm.
      */
     [property] long LineWidth;
 
-    //-------------------------------------------------------------------------
 
     /** This property defines the rendering of joints between thick lines
      */
     [property] com::sun::star::drawing::LineJoint LineJoint;
 
-    //-------------------------------------------------------------------------
 
     /** This property contains the name of the line start poly polygon Bezier.
         <p>If this string is empty, no line start polygon is rendered.
      */
     [optional, property] string LineStartName;
 
-    //-------------------------------------------------------------------------
 
     /** This property contains the name of the line end poly polygon Bezier.
         <p>If this string is empty, no line end polygon is rendered.
      */
     [optional, property] string LineEndName;
 
-    //-------------------------------------------------------------------------
 
     /** This property contains the line start in the form of a poly polygon Bezier.
      */
     [optional, property] com::sun::star::drawing::PolyPolygonBezierCoords LineStart;
 
-    //-------------------------------------------------------------------------
 
     /** This property contains the line end in the form of a poly polygon Bezier.
      */
     [optional, property] com::sun::star::drawing::PolyPolygonBezierCoords LineEnd;
 
-    //-------------------------------------------------------------------------
 
     /** If this property is <TRUE/>, the line will
         start from the center of the polygon.
      */
     [optional, property] boolean LineStartCenter;
 
-    //-------------------------------------------------------------------------
 
     /** This property contains the width of the line start polygon.
      */
     [optional, property] long LineStartWidth;
 
-    //-------------------------------------------------------------------------
 
     /** If this property is <TRUE/>, the line will end
         in the center of the polygon.
      */
     [optional, property] boolean LineEndCenter;
 
-    //-------------------------------------------------------------------------
 
     /** This property contains the width of the line end polygon.
      */
     [optional, property] long LineEndWidth;
 };
 
-//=============================================================================
 
 }; }; }; };
 

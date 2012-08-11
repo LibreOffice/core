@@ -26,11 +26,9 @@
 #include <com/sun/star/registry/InvalidValueException.idl>
 
 
-//=============================================================================
 
 module com { module sun { module star { module registry {
 
-//=============================================================================
 /** makes structural information (except regarding tree structures)
     of a single registry key accessible.
 
@@ -40,7 +38,6 @@ module com { module sun { module star { module registry {
 */
 published interface XRegistryKey: com::sun::star::uno::XInterface
 {
-    //---------------------------------------------------------------------
     /** This is the key of the entry relative to its parent.<p>
 
         <p>The access path starts with the root "/" and all parent
@@ -51,7 +48,6 @@ published interface XRegistryKey: com::sun::star::uno::XInterface
      */
     [readonly, attribute] string    KeyName;
 
-    //-------------------------------------------------------------------------
     /** checks if the key can be overwritten.
 
         @throws InvalidRegistryException
@@ -60,12 +56,10 @@ published interface XRegistryKey: com::sun::star::uno::XInterface
     boolean isReadOnly()
             raises( com::sun::star::registry::InvalidRegistryException );
 
-    //-------------------------------------------------------------------------
     /** checks if the key points to an open valid key in the data-source.
     */
     boolean isValid();
 
-    //-------------------------------------------------------------------------
     /** @returns
         the type of the specified key.
 
@@ -79,7 +73,6 @@ published interface XRegistryKey: com::sun::star::uno::XInterface
     com::sun::star::registry::RegistryKeyType getKeyType( [in] string rKeyName )
             raises( com::sun::star::registry::InvalidRegistryException );
 
-    //-------------------------------------------------------------------------
     /** @returns
         the type of the key value or NOT_DEFINED if the key has no value.
 
@@ -89,7 +82,6 @@ published interface XRegistryKey: com::sun::star::uno::XInterface
     com::sun::star::registry::RegistryValueType getValueType()
             raises( com::sun::star::registry::InvalidRegistryException );
 
-    //-------------------------------------------------------------------------
     /** @returns
         a long value if the key contains one.
 
@@ -103,7 +95,6 @@ published interface XRegistryKey: com::sun::star::uno::XInterface
             raises( com::sun::star::registry::InvalidRegistryException,
                     com::sun::star::registry::InvalidValueException );
 
-    //-------------------------------------------------------------------------
     /** sets a long value to the key.
 
         <p>If the key already has a value, the value will be
@@ -115,7 +106,6 @@ published interface XRegistryKey: com::sun::star::uno::XInterface
     void setLongValue( [in] long value )
             raises( com::sun::star::registry::InvalidRegistryException );
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION CHANGED FOR XRegistryKey::getLongListValue
     /** @returns
         a sequence of longs if the key contains a long list value.
@@ -130,7 +120,6 @@ published interface XRegistryKey: com::sun::star::uno::XInterface
             raises( com::sun::star::registry::InvalidRegistryException,
                     com::sun::star::registry::InvalidValueException );
 
-    //-------------------------------------------------------------------------
     /** sets a long list value to the key.
 
         <p>If the key already has a value, the value will be
@@ -142,7 +131,6 @@ published interface XRegistryKey: com::sun::star::uno::XInterface
     void setLongListValue( [in] sequence<long> seqValue )
             raises( com::sun::star::registry::InvalidRegistryException );
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION CHANGED FOR XRegistryKey::getAsciiValue
     /** @returns
         an ascii string value if the key contains one.
@@ -157,7 +145,6 @@ published interface XRegistryKey: com::sun::star::uno::XInterface
             raises( com::sun::star::registry::InvalidRegistryException,
                     com::sun::star::registry::InvalidValueException );
 
-    //-------------------------------------------------------------------------
     /** sets an ASCII string value to the key.
 
         <p>The high byte of the string should be NULL.  If not, there
@@ -170,7 +157,6 @@ published interface XRegistryKey: com::sun::star::uno::XInterface
     void setAsciiValue( [in] string value )
             raises( com::sun::star::registry::InvalidRegistryException );
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION CHANGED FOR XRegistryKey::getAsciiListValue
     /** @returns
         a sequence of ascii strings if the key contains an asci list value.
@@ -185,7 +171,6 @@ published interface XRegistryKey: com::sun::star::uno::XInterface
             raises( com::sun::star::registry::InvalidRegistryException,
                     com::sun::star::registry::InvalidValueException );
 
-    //-------------------------------------------------------------------------
     /** sets an ASCII string list value to the key.
 
         <p>The high byte of the string should be NULL. If not, there
@@ -198,7 +183,6 @@ published interface XRegistryKey: com::sun::star::uno::XInterface
     void setAsciiListValue( [in] sequence<string> seqValue )
             raises( com::sun::star::registry::InvalidRegistryException );
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION CHANGED FOR XRegistryKey::getStringValue
     /** @returns
         a unicode string value if the key contains one.
@@ -213,7 +197,6 @@ published interface XRegistryKey: com::sun::star::uno::XInterface
             raises( com::sun::star::registry::InvalidRegistryException,
                     com::sun::star::registry::InvalidValueException );
 
-    //-------------------------------------------------------------------------
     /** sets a unicode string value to the key.
 
         <p> If the key already has a value, the value will be
@@ -225,7 +208,6 @@ published interface XRegistryKey: com::sun::star::uno::XInterface
     void setStringValue( [in] string value )
             raises( com::sun::star::registry::InvalidRegistryException );
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION CHANGED FOR XRegistryKey::getStringListValue
     /** @returns
         a sequence of unicode strings if the key contains an unicode string list value.
@@ -240,7 +222,6 @@ published interface XRegistryKey: com::sun::star::uno::XInterface
             raises( com::sun::star::registry::InvalidRegistryException,
                     com::sun::star::registry::InvalidValueException );
 
-    //-------------------------------------------------------------------------
     /** sets a unicode string value to the key.
 
         <p>If the key already has a value, the value will be overridden.
@@ -251,7 +232,6 @@ published interface XRegistryKey: com::sun::star::uno::XInterface
     void setStringListValue( [in] sequence<string> seqValue )
             raises( com::sun::star::registry::InvalidRegistryException );
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION CHANGED FOR XRegistryKey::getBinaryValue
     /** @returns
         a binary value if the key contains one.
@@ -266,7 +246,6 @@ published interface XRegistryKey: com::sun::star::uno::XInterface
             raises( com::sun::star::registry::InvalidRegistryException,
                     com::sun::star::registry::InvalidValueException );
 
-    //-------------------------------------------------------------------------
     /** sets a binary value to the key.
 
         <p>If the key already has a value, the value will be
@@ -278,7 +257,6 @@ published interface XRegistryKey: com::sun::star::uno::XInterface
     void setBinaryValue( [in] sequence<byte> value )
             raises( com::sun::star::registry::InvalidRegistryException );
 
-    //-------------------------------------------------------------------------
     /** opens a sub key of the key.
 
         <p>If the sub key does not exist, the function returns a
@@ -297,7 +275,6 @@ published interface XRegistryKey: com::sun::star::uno::XInterface
     com::sun::star::registry::XRegistryKey openKey( [in] string aKeyName )
             raises( com::sun::star::registry::InvalidRegistryException );
 
-    //-------------------------------------------------------------------------
     /** creates a new key in the registry.<p>
 
         <p>If the key already exists, the function will open the key.
@@ -316,7 +293,6 @@ published interface XRegistryKey: com::sun::star::uno::XInterface
     com::sun::star::registry::XRegistryKey createKey( [in] string aKeyName )
             raises( com::sun::star::registry::InvalidRegistryException );
 
-    //-------------------------------------------------------------------------
     /** closes a key in the registry.
 
         @throws InvalidRegistryException
@@ -325,7 +301,6 @@ published interface XRegistryKey: com::sun::star::uno::XInterface
     void closeKey()
             raises( com::sun::star::registry::InvalidRegistryException );
 
-    //-------------------------------------------------------------------------
     /** deletes a key from the registry.
 
         @param aKeyName
@@ -339,7 +314,6 @@ published interface XRegistryKey: com::sun::star::uno::XInterface
     void deleteKey( [in] string rKeyName )
             raises( com::sun::star::registry::InvalidRegistryException );
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION CHANGED FOR XRegistryKey::openKeys
     /** opens all subkeys of the key. If a subkey is a link, the link will be
         resolved and the appropriate key will be opened.
@@ -353,7 +327,6 @@ published interface XRegistryKey: com::sun::star::uno::XInterface
     sequence<com::sun::star::registry::XRegistryKey> openKeys()
             raises( com::sun::star::registry::InvalidRegistryException );
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION CHANGED FOR XRegistryKey::getKeyNames
     /** @returns a sequence with the names of all subkeys of the key.
           If the key has no subkeys, the function returns an empty sequence. If a subkey is
@@ -365,7 +338,6 @@ published interface XRegistryKey: com::sun::star::uno::XInterface
     sequence<string> getKeyNames()
             raises( com::sun::star::registry::InvalidRegistryException );
 
-    //-------------------------------------------------------------------------
     /** creates a new link in the registry.
 
         @returns
@@ -390,7 +362,6 @@ published interface XRegistryKey: com::sun::star::uno::XInterface
              [in] string aLinkTarget )
             raises( com::sun::star::registry::InvalidRegistryException );
 
-    //-------------------------------------------------------------------------
     /** deletes a link from the registry.
 
         @param aLinkName
@@ -404,7 +375,6 @@ published interface XRegistryKey: com::sun::star::uno::XInterface
     void deleteLink( [in] string rLinkName )
             raises( com::sun::star::registry::InvalidRegistryException );
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION CHANGED FOR XRegistryKey::getLinkTarget
     /** @returns
         the target (complete path of a key) of the link specified by rLinkName.
@@ -419,7 +389,6 @@ published interface XRegistryKey: com::sun::star::uno::XInterface
     string getLinkTarget( [in] string rLinkName )
             raises( com::sun::star::registry::InvalidRegistryException );
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION CHANGED FOR XRegistryKey::getResolvedName
     /** @returns
         the resolved name of a key. The function resolve the complete name of the key.
@@ -437,7 +406,6 @@ published interface XRegistryKey: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

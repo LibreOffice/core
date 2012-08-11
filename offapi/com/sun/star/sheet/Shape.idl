@@ -22,23 +22,19 @@
 #include <com/sun/star/drawing/Shape.idl>
 #include <com/sun/star/uno/XInterface.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** specifies the service of shapes in a spreadsheet document
  */
 service Shape
 {
     service com::sun::star::drawing::Shape;
-    //-------------------------------------------------------------------------
     /** contains the object where this shape is anchored on.
         <p> Possible objects are XSpreadsheet and XCell.</p>
     */
     [readonly, property] com::sun::star::uno::XInterface Anchor;
-        //-------------------------------------------------------------------------
     /** contains the horizontal position of the object (1/100 mm).
         <p> The position is relative to the anchor object.</p>
         <p> If the underlying table layout direction is left to right
@@ -49,7 +45,6 @@ service Shape
         object and the right top edge of the drawing object.</p>
      */
     [property] long HoriOrientPosition;
-    //-------------------------------------------------------------------------
     /** contains the vertical position of the object (1/100 mm).
         <p> The position is relative to the anchor object.</p>
         <p> If the underlying table layout direction is left to right
@@ -63,7 +58,6 @@ service Shape
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

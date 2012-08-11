@@ -33,18 +33,15 @@
 #include <com/sun/star/util/Color.idl>
 #include <com/sun/star/lang/IllegalArgumentException.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module ui { module dialogs {
 
-//=============================================================================
 /** FilePicker that support the preview of various file formats should implement
     this interface.
 */
 
 published interface XFilePreview: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** The method returns all image formats that the preview supports.
 
         @returns
@@ -54,7 +51,6 @@ published interface XFilePreview: com::sun::star::uno::XInterface
     */
     sequence< short > getSupportedImageFormats( );
 
-    //-------------------------------------------------------------------------
     /** The method returns the supported color depth of the target device.
 
         @returns
@@ -62,7 +58,6 @@ published interface XFilePreview: com::sun::star::uno::XInterface
     */
     com::sun::star::util::Color getTargetColorDepth( );
 
-    //-------------------------------------------------------------------------
     /** The method returns the available width of the preview window
         even if the window is invisible or could not be created.
         If a service implementation doesn't support a file preview
@@ -73,7 +68,6 @@ published interface XFilePreview: com::sun::star::uno::XInterface
     */
     long getAvailableWidth( );
 
-    //-------------------------------------------------------------------------
     /** The method returns the available height of the preview window
         even if the window is invisible or could not be created.
         If a service implementation doesn't support a file preview
@@ -84,7 +78,6 @@ published interface XFilePreview: com::sun::star::uno::XInterface
     */
     long getAvailableHeight( );
 
-    //-------------------------------------------------------------------------
     /** Sets a new image. If the preview is currently hidden the
         image will be ignored. An empty any will clear the preview window.
 
@@ -104,7 +97,6 @@ published interface XFilePreview: com::sun::star::uno::XInterface
     void setImage( [in] short aImageFormat, [in] any aImage )
         raises( ::com::sun::star::lang::IllegalArgumentException );
 
-    //-------------------------------------------------------------------------
     /** Optionally sets the current show state of the preview. It is possible
         that the preview implementation doesn't support hiding the preview.
 
@@ -119,7 +111,6 @@ published interface XFilePreview: com::sun::star::uno::XInterface
     */
     boolean setShowState( [in] boolean bShowState );
 
-    //-------------------------------------------------------------------------
     /** Returns the current show state of the preview.
 
         @returns
@@ -129,7 +120,6 @@ published interface XFilePreview: com::sun::star::uno::XInterface
     boolean getShowState( );
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

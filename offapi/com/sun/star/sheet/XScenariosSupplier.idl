@@ -23,17 +23,14 @@
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/sheet/XScenarios.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** provides access to a collection of scenarios.
  */
 published interface XScenariosSupplier: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** returns the collection of scenarios.
 
@@ -43,7 +40,6 @@ published interface XScenariosSupplier: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

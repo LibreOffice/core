@@ -24,37 +24,31 @@
 #include <com/sun/star/container/NoSuchElementException.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module style {
 
-//=============================================================================
 
 /** specifies a template for a style (aka style sheet).
  */
 published interface XStyle: com::sun::star::container::XNamed
 {
-    //-------------------------------------------------------------------------
 
     /** identifies a style as defined by the user.
      */
     boolean isUserDefined();
 
-    //-------------------------------------------------------------------------
 
     /** @returns
                     <TRUE/> if this type is used in the document.
      */
     boolean isInUse();
 
-    //-------------------------------------------------------------------------
 
     /** @returns
                     the name of the parent style, probably empty.
      */
     string getParentStyle();
 
-    //-------------------------------------------------------------------------
 
     /** sets the name of the parent style.
      */
@@ -63,7 +57,6 @@ published interface XStyle: com::sun::star::container::XNamed
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

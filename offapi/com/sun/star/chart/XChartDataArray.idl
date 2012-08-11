@@ -21,11 +21,9 @@
 
 #include <com/sun/star/chart/XChartData.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module chart {
 
-//=============================================================================
 
 /** gives access to data represented as an array of rows.
 
@@ -36,7 +34,6 @@
  */
 published interface XChartDataArray: XChartData
 {
-    //-------------------------------------------------------------------------
 
     /** retrieves the numerical data as a nested sequence of values.
 
@@ -46,7 +43,6 @@ published interface XChartDataArray: XChartData
     */
     sequence< sequence< double > > getData();
 
-    //-------------------------------------------------------------------------
 
     /** sets the chart data as an array of numbers.
 
@@ -56,7 +52,6 @@ published interface XChartDataArray: XChartData
      */
     void setData( [in] sequence< sequence< double > > aData );
 
-    //-------------------------------------------------------------------------
 
     /** retrieves the description texts for all rows.
 
@@ -66,7 +61,6 @@ published interface XChartDataArray: XChartData
      */
     sequence< string > getRowDescriptions();
 
-    //-------------------------------------------------------------------------
 
     /** sets the description texts for all rows.
 
@@ -76,7 +70,6 @@ published interface XChartDataArray: XChartData
     */
     void setRowDescriptions( [in] sequence< string > aRowDescriptions );
 
-    //-------------------------------------------------------------------------
 
     /** retrieves the description texts for all columns.
 
@@ -86,7 +79,6 @@ published interface XChartDataArray: XChartData
      */
     sequence< string > getColumnDescriptions();
 
-    //-------------------------------------------------------------------------
 
     /** sets the description texts for all columns.
 
@@ -97,7 +89,6 @@ published interface XChartDataArray: XChartData
     void setColumnDescriptions( [in] sequence< string > aColumnDescriptions );
 };
 
-//=============================================================================
 
 }; }; }; };
 

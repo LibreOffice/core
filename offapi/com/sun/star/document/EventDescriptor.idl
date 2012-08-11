@@ -19,11 +19,9 @@
 #ifndef __com_sun_star_document_EventDescriptor_idl__
 #define __com_sun_star_document_EventDescriptor_idl__
 
-//=============================================================================
 
 module com {   module sun {   module star {   module document {
 
-//=============================================================================
 /** specifies an event binding for a document or a document content
 
     @see Events
@@ -31,7 +29,6 @@ module com {   module sun {   module star {   module document {
  */
 published service EventDescriptor
 {
-    //-------------------------------------------------------------------------
     /** specifies the type of the event handler
 
         <p>
@@ -47,13 +44,11 @@ published service EventDescriptor
      */
     [property] string EventType;
 
-    //-------------------------------------------------------------------------
     /** specifies the script source code
      */
     [property] string Script;
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -20,11 +20,9 @@
 #define __com_sun_star_frame_status_UpperLowerMargin_idl__
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module frame {  module status {
 
-//=============================================================================
 
 /** specifies an upper and lower margin.
 
@@ -36,14 +34,12 @@ struct UpperLowerMargin
      */
     long Upper;
 
-    //-------------------------------------------------------------------------
 
     /** specifies a lower margin in 1/100th mm.
      */
     long Lower;
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

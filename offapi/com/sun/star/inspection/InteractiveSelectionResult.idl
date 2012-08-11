@@ -28,10 +28,8 @@
 #ifndef __com_sun_star_inspection_InteractiveSelectionResult_idl__
 #define __com_sun_star_inspection_InteractiveSelectionResult_idl__
 
-//=============================================================================
 module com {  module sun {  module star {  module inspection {
 
-//-----------------------------------------------------------------------------
 /** describes possible results of an interactive selection of a property value
     in an object inspector
 
@@ -68,7 +66,6 @@ enum InteractiveSelectionResult
     Pending
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -61,7 +61,6 @@ interface XParametricPolyPolygon2D : ::com::sun::star::uno::XInterface
     XPolyPolygon2D              getOutline( [in] double t )
         raises (com::sun::star::lang::IllegalArgumentException);
 
-    //-------------------------------------------------------------------------
 
     /** Query the color value for the polygonal area at the specified
         parameter value.
@@ -73,7 +72,6 @@ interface XParametricPolyPolygon2D : ::com::sun::star::uno::XInterface
     sequence<ColorComponent>    getColor( [in] double t )
         raises (com::sun::star::lang::IllegalArgumentException);
 
-    //-------------------------------------------------------------------------
 
     /** Query the color for a dedicated point in the plane.
 
@@ -83,7 +81,6 @@ interface XParametricPolyPolygon2D : ::com::sun::star::uno::XInterface
     sequence<ColorComponent>    getPointColor( [in] ::com::sun::star::geometry::RealPoint2D point )
         raises (com::sun::star::lang::IllegalArgumentException);
 
-    //-------------------------------------------------------------------------
 
     /** Query the color space employed by this object
 

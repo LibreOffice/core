@@ -22,17 +22,14 @@
 #include <com/sun/star/beans/PropertyValues.idl>
 #include <com/sun/star/lang/IllegalArgumentException.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module text {
 
-//=============================================================================
 
 /** enables creation of redlines (change tracking).
  */
 published interface XRedline
 {
-    //-------------------------------------------------------------------------
 
         /**
                 @param RedlineType
@@ -54,7 +51,6 @@ published interface XRedline
                         raises( com::sun::star::lang::IllegalArgumentException );
 };
 
-//=============================================================================
 
 }; }; }; };
 

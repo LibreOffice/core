@@ -23,11 +23,9 @@
 #include <com/sun/star/lang/XEventListener.idl>
 #include <com/sun/star/form/binding/ListEntryEvent.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module form { module binding {
 
-//=============================================================================
 
 /** specifies a listener for changes in a string entry list
 */
@@ -70,7 +68,6 @@ interface XListEntryListener : com::sun::star::lang::XEventListener
     void    allEntriesChanged( [in] com::sun::star::lang::EventObject Source );
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

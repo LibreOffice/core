@@ -21,7 +21,6 @@
 
 #include <com/sun/star/xml/sax/XFastTokenHandler.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module xml {  module sax {
 

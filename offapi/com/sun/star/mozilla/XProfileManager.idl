@@ -106,7 +106,6 @@ published interface XProfileManager: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

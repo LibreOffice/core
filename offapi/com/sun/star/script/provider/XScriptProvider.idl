@@ -34,18 +34,15 @@
 #include <com/sun/star/script/provider/ScriptFrameworkErrorException.idl>
 #include <com/sun/star/lang/IllegalArgumentException.idl>
 
-//===========================================================================
 
 module com { module sun { module star { module script { module provider {
 
-//===========================================================================
 /**
     This interface provides a factory for obtaining objects implementing the
     XScript interface.
 */
 interface XScriptProvider : ::com::sun::star::uno::XInterface {
 
-    //----------------------------------------------------------------------
     /** a factory method for the creation of XScript
         implementations.
 
@@ -61,7 +58,6 @@ interface XScriptProvider : ::com::sun::star::uno::XInterface {
     XScript getScript( [in] string sScriptURI )  raises ( ::com::sun::star::script::provider::ScriptFrameworkErrorException );
 };
 
-//===========================================================================
 }; }; }; }; }; // ::com::sun::star::script::provider
 
 #endif

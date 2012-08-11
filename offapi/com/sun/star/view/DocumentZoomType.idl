@@ -29,44 +29,36 @@
 #define __com_sun_star_view_DocumentZoomType_idl__
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module view {
 
-//=============================================================================
 
 /** These constants specify how the document content is zoomed into the document view.
  */
 published constants DocumentZoomType
 {
-    //-------------------------------------------------------------------------
     /** The page content width (excluding margins) at the current selection is fit into the view.
      */
     const short OPTIMAL = 0;
 
-    //-------------------------------------------------------------------------
     /** The page width at the current selection is fit into the view.
      */
     const short PAGE_WIDTH = 1;
 
-    //-------------------------------------------------------------------------
     /** A complete page of the document is fit into the view.
      */
     const short ENTIRE_PAGE = 2;
 
-    //-------------------------------------------------------------------------
     /** The zoom is relative and is to be set via the property
         <member>ViewSettings::ZoomValue</member>.
      */
     const short BY_VALUE = 3;
-    //-------------------------------------------------------------------------
     /** The page width at the current selection is fit into the view,
         with the view ends exactly at the end of the page.
      */
     const short PAGE_WIDTH_EXACT = 4;
 };
 
-//=============================================================================
 
 }; }; }; };
 

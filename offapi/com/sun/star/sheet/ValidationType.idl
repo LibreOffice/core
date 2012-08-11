@@ -29,59 +29,49 @@
 #ifndef __com_sun_star_sheet_ValidationType_idl__
 #define __com_sun_star_sheet_ValidationType_idl__
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** used to specify which cell contents are treated as valid.
  */
 published enum ValidationType
 {
-    //-------------------------------------------------------------------------
 
     /** any cell content is valid; no conditions are used.
      */
     ANY,
 
-    //-------------------------------------------------------------------------
 
     /** any whole number matching the specified condition is valid.
      */
     WHOLE,
 
-    //-------------------------------------------------------------------------
 
     /** any number matching the specified condition is valid.
      */
     DECIMAL,
 
-    //-------------------------------------------------------------------------
 
     /** any date value matching the specified condition is valid.
      */
     DATE,
 
-    //-------------------------------------------------------------------------
 
     /** any time value matching the specified condition is valid.
      */
     TIME,
 
-    //-------------------------------------------------------------------------
 
     /** string is valid if its length matches the specified condition.
      */
     TEXT_LEN,
 
-    //-------------------------------------------------------------------------
 
     /** Only strings from a specified list are valid.
      */
     LIST,
 
-    //-------------------------------------------------------------------------
 
     /** The specified formula determines which contents are valid.
      */
@@ -89,7 +79,6 @@ published enum ValidationType
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

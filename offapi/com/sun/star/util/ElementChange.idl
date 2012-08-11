@@ -20,11 +20,9 @@
 #define __com_sun_star_util_ElementChange_idl__
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module util {
 
-//=============================================================================
 
 /** This structure describes a single change that is part of a batch of changes.
  */
@@ -36,13 +34,11 @@ published struct ElementChange
      */
     any Accessor;
 
-    //-------------------------------------------------------------------------
 
     /** This contains the element that was inserted or changed.
      */
     any Element;
 
-    //-------------------------------------------------------------------------
 
     /** This contains the element that was replaced or removed.
      */
@@ -50,7 +46,6 @@ published struct ElementChange
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -23,11 +23,9 @@
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/table/CellRangeAddress.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** provides methods to change the settings of a linked cell range.
 
@@ -35,7 +33,6 @@ module com {  module sun {  module star {  module sheet {
  */
 published interface XAreaLink: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** returns the source of the range within the source document.
 
@@ -44,7 +41,6 @@ published interface XAreaLink: com::sun::star::uno::XInterface
      */
     string getSourceArea();
 
-    //-------------------------------------------------------------------------
 
     /** sets the source of the range within the source document.
 
@@ -53,14 +49,12 @@ published interface XAreaLink: com::sun::star::uno::XInterface
      */
     void setSourceArea( [in] string aSourceArea );
 
-    //-------------------------------------------------------------------------
 
     /** returns the position of the linked range in the destination
         document.
      */
     com::sun::star::table::CellRangeAddress getDestArea();
 
-    //-------------------------------------------------------------------------
 
     /** sets the position of the linked range in the destination document.
      */
@@ -68,7 +62,6 @@ published interface XAreaLink: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

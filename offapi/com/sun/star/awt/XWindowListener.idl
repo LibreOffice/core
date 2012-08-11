@@ -26,11 +26,9 @@
 #include <com/sun/star/lang/EventObject.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module awt {
 
-//=============================================================================
 
 /** makes it possible to receive window events.
 
@@ -41,25 +39,21 @@
  */
 published interface XWindowListener: com::sun::star::lang::XEventListener
 {
-    //-------------------------------------------------------------------------
 
     /** is invoked when the window has been resized.
      */
     [oneway] void windowResized( [in] com::sun::star::awt::WindowEvent e );
 
-    //-------------------------------------------------------------------------
 
     /** is invoked when the window has been moved.
      */
     [oneway] void windowMoved( [in] com::sun::star::awt::WindowEvent e );
 
-    //-------------------------------------------------------------------------
 
     /** is invoked when the window has been shown.
      */
     [oneway] void windowShown( [in] com::sun::star::lang::EventObject e );
 
-    //-------------------------------------------------------------------------
 
     /** is invoked when the window has been hidden.
      */
@@ -67,7 +61,6 @@ published interface XWindowListener: com::sun::star::lang::XEventListener
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

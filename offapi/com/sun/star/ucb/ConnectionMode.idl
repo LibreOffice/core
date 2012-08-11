@@ -20,11 +20,9 @@
 #define __com_sun_star_ucb_ConnectionMode_idl__
 
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** These are the possible values for the property "ConnectionMode".
 
     @see XCommandProcessor
@@ -32,19 +30,16 @@ module com { module sun { module star { module ucb {
 */
 published constants ConnectionMode
 {
-    //-------------------------------------------------------------------------
     /** "Online" - Network access is allowed.
     */
     const short ONLINE = 0;
 
-    //-------------------------------------------------------------------------
     /** "Offline" - Network access is not allowed.
     */
     const short OFFLINE = 1;
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -22,13 +22,11 @@
 
 #include <com/sun/star/uno/XInterface.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module sdb {
 
 interface XRowsChangeListener;
 
-//=============================================================================
 
 /** broadcasts changes in the <code>RowSet</code> supplied by a component
 
@@ -47,11 +45,9 @@ interface XRowsChangeBroadcaster
     void removeRowsChangeListener( [in] XRowsChangeListener listener );
 };
 
-//=============================================================================
 
 }; }; }; };
 
-//=============================================================================
 
 #endif
 

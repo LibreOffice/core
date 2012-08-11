@@ -36,11 +36,9 @@
 #include <com/sun/star/lang/NoSupportException.idl>
 
 
-//=============================================================================
 
 module com { module sun { module star { module resource {
 
-//=============================================================================
 /**
     Interface to manage a resource string table containing a set of
     strings for different locales.
@@ -294,7 +292,6 @@ interface XStringResourceManager: com::sun::star::resource::XStringResourceResol
         raises( com::sun::star::lang::NoSupportException );
 };
 
-//=============================================================================
 
 }; }; }; };
 

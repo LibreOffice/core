@@ -25,11 +25,9 @@
 #include <com/sun/star/sheet/FillMode.idl>
 #include <com/sun/star/sheet/FillDateMode.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** provides methods to fill out a cell range automatically with values
     based on a start value, step count and fill mode.
@@ -38,7 +36,6 @@ module com {  module sun {  module star {  module sheet {
  */
 published interface XCellSeries: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** fills all cells in the range based on the specified settings.
 
@@ -65,7 +62,6 @@ published interface XCellSeries: com::sun::star::uno::XInterface
             [in] double fStep,
             [in] double fEndValue );
 
-    //-------------------------------------------------------------------------
 
     /** fills all cells in the range in a way that is specified by the
         first cell(s) in the range.
@@ -83,7 +79,6 @@ published interface XCellSeries: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

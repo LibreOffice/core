@@ -21,20 +21,17 @@
 
 #include <com/sun/star/frame/XFrame.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module frame {
 
  published interface XFrames;
 
-//=============================================================================
 /** provides access to sub frames of current one
 
     @see XFrames
  */
 published interface XFramesSupplier: XFrame
 {
-    //-------------------------------------------------------------------------
     /** provides access to this container and to all other <type>XFramesSupplier</type>
         which are available from this node of frame tree
 
@@ -44,7 +41,6 @@ published interface XFramesSupplier: XFrame
      */
     XFrames getFrames();
 
-    //-------------------------------------------------------------------------
     /** gets the current active frame of this container
         (not of any other available supplier)
 
@@ -62,7 +58,6 @@ published interface XFramesSupplier: XFrame
      */
     XFrame getActiveFrame();
 
-    //-------------------------------------------------------------------------
     /** is called on activation of a direct sub-frame.
 
         <p>
@@ -89,7 +84,6 @@ published interface XFramesSupplier: XFrame
     void setActiveFrame( [in] XFrame Frame );
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -28,11 +28,9 @@
 #ifndef __com_sun_star_awt_FieldUnit_idl__
 #define __com_sun_star_awt_FieldUnit_idl__
 
-//=============================================================================
 
  module com {  module sun {  module star {  module awt {
 
-//=============================================================================
 
 /** specifies attributes for the MetricField map units.
 
@@ -57,7 +55,6 @@ constants FieldUnit
     const short FUNIT_100TH_MM = 13;
 };
 
-//=============================================================================
 
 }; }; }; };
 

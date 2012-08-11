@@ -27,17 +27,14 @@
 #include <com/sun/star/security/SignatureException.idl>
 
 
-//=============================================================================
 
 module com { module sun { module star { module xml { module crypto {
 
-//=============================================================================
 
 exception XMLSignatureException : com::sun::star::security::SignatureException
 {
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

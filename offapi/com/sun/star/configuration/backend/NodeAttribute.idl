@@ -19,11 +19,9 @@
 #ifndef __com_sun_star_configuration_backend_NodeAttribute_idl__
 #define __com_sun_star_configuration_backend_NodeAttribute_idl__
 
-//=============================================================================
 
 module com { module sun { module star { module configuration { module backend {
 
-//=============================================================================
 
 /** These values are used to specify the behavior of a node or property
     in a layer.
@@ -40,28 +38,24 @@ module com { module sun { module star { module configuration { module backend {
  */
 published constants NodeAttribute
 {
-    //-------------------------------------------------------------------------
 
     /** indicates that a node or property may not be changed or overridden
         in subsequent layers
      */
     const short FINALIZED = 256;
 
-    //-------------------------------------------------------------------------
 
     /** indicates that a set item may not be removed or replaced
         in subsequent layers.
      */
     const short MANDATORY = 512;
 
-    //-------------------------------------------------------------------------
 
     /** indicates that a node or property may not be changed
         in this or subsequent layer.
      */
     const short READONLY = 1024;
 
-    //-------------------------------------------------------------------------
 
     /** indicates that contents shall be fused.
 
@@ -74,21 +68,17 @@ published constants NodeAttribute
      */
     const short FUSE = 2048;
 
-    //-------------------------------------------------------------------------
 
     /** can be used to mask the node attributes from merged attributes
      */
     const short MASK = 32512; // 0xFF00, changed to 0x7F00 because only 3 bits
                               // are masked and fixing a bug in idlc
 
-    //-------------------------------------------------------------------------
 };
 
-//=============================================================================
 
 }; }; }; }; };
 
-//=============================================================================
 
 #endif
 

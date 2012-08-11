@@ -25,13 +25,11 @@
 #include <com/sun/star/lang/IllegalArgumentException.idl>
 #include <com/sun/star/lang/IllegalAccessException.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module sdb {
 
 interface XDatabaseRegistrationsListener;
 
-//=============================================================================
 
 /** provides access to the application-wide registered databases.
 
@@ -143,11 +141,9 @@ interface XDatabaseRegistrations
     void    removeDatabaseRegistrationsListener( [in] XDatabaseRegistrationsListener Listener );
 };
 
-//=============================================================================
 
 }; }; }; };
 
-//=============================================================================
 
 #endif
 

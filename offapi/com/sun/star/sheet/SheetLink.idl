@@ -24,11 +24,9 @@
 #include <com/sun/star/util/XRefreshable.idl>
 #include <com/sun/star/beans/XPropertySet.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** represents a sheet link.
 
@@ -43,7 +41,6 @@ module com {  module sun {  module star {  module sheet {
  */
 published service SheetLink
 {
-    //-------------------------------------------------------------------------
 
     /** provides access to the name of the linked document.
 
@@ -51,33 +48,28 @@ published service SheetLink
      */
     interface com::sun::star::container::XNamed;
 
-    //-------------------------------------------------------------------------
 
     /** provides methods to reload the external data.
      */
     interface com::sun::star::util::XRefreshable;
 
-    //-------------------------------------------------------------------------
 
 //!published service PropertySet
     /** provides access to the properties.
      */
     interface com::sun::star::beans::XPropertySet;
 
-    //=========================================================================
 
     /** specifies the URL of the source document.
      */
     [property] string Url;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the name of the filter needed to load the source
         document.
      */
     [property] string Filter;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the filter options needed to load the source document.
      */
@@ -85,7 +77,6 @@ published service SheetLink
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

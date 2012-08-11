@@ -118,7 +118,6 @@ published interface XPerformanceTest : com::sun::star::uno::XInterface
     void raiseRuntimeException();
 };
 
-//=============================================================================
 
 };
 };

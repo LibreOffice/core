@@ -20,11 +20,9 @@
 #define __com_sun_star_awt_Point_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module awt {
 
-//=============================================================================
 
 /** specifies a 2-dimensional point using the Cartesian coordinate system.
  */
@@ -34,7 +32,6 @@ published struct Point
      */
     long X;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the y-coordinate.
      */
@@ -42,7 +39,6 @@ published struct Point
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

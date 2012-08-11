@@ -55,7 +55,6 @@ service ModuleUIConfigurationManagerSupplier
     interface XModuleUIConfigurationManagerSupplier;
 };
 
-//=============================================================================
 
 }; }; }; };
 

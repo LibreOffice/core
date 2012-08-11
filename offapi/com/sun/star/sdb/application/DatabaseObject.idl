@@ -22,11 +22,9 @@
 
 #include <com/sun/star/sdb/CommandType.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module sdb { module application {
 
-//=============================================================================
 
 /** denotes different objects within a database document
 
@@ -57,11 +55,9 @@ constants DatabaseObject
     const long REPORT = 3;
 };
 
-//=============================================================================
 
 }; }; }; }; };
 
-//=============================================================================
 
 #endif
 

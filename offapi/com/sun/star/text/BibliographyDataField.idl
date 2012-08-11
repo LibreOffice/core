@@ -19,10 +19,8 @@
 #ifndef __com_sun_star_text_BibliographyDataField_idl__
 #define __com_sun_star_text_BibliographyDataField_idl__
 
-//=============================================================================
 
  module com {  module sun {  module star {  module text {
-//=============================================================================
 
 // DocMerge from idl: constants com::sun::star::text::BibliographyDataField
 /** These values define parts of bibliographic data. They are used to create a
@@ -32,7 +30,6 @@
  */
 published constants BibliographyDataField
 {
-    //-------------------------------------------------------------------------
 
     // DocMerge from idl: value com::sun::star::text::BibliographyDataField::IDENTIFIER
     /** This field contains a unique identifier for the bibliographic data.
@@ -191,7 +188,6 @@ published constants BibliographyDataField
      */
     const short ISBN            = 30;
 };
-//=============================================================================
 
 }; }; }; };
 

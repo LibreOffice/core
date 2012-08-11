@@ -31,11 +31,9 @@
 #include <com/sun/star/awt/InputEvent.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module awt {
 
-//=============================================================================
 
 /** specifies an event from the mouse.
 
@@ -48,7 +46,6 @@
  */
 published struct MouseEvent: com::sun::star::awt::InputEvent
 {
-    //-------------------------------------------------------------------------
 
     /** contains the pressed mouse buttons.
 
@@ -57,25 +54,21 @@ published struct MouseEvent: com::sun::star::awt::InputEvent
      */
     short Buttons;
 
-    //-------------------------------------------------------------------------
 
     /** contains the x coordinate location of the mouse.
      */
     long X;
 
-    //-------------------------------------------------------------------------
 
     /** contains the y coordinate location of the mouse.
      */
     long Y;
 
-    //-------------------------------------------------------------------------
 
     /** contains the number of mouse clicks associated with event.
      */
     long ClickCount;
 
-    //-------------------------------------------------------------------------
 
     /** specifies if this event is a pop-up menu trigger event.
 
@@ -93,7 +86,6 @@ published struct MouseEvent: com::sun::star::awt::InputEvent
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

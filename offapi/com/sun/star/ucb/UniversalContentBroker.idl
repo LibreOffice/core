@@ -36,11 +36,9 @@
 #include <com/sun/star/ucb/XContentIdentifierFactory.idl>
 #include <com/sun/star/lang/XInitialization.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** is a one-instance service that provides access to a set of
     <type>Content</type>s via <type>ContentProvider</type>s.
 
@@ -55,7 +53,6 @@ module com { module sun { module star { module ucb {
 */
 published service UniversalContentBroker
 {
-    //-------------------------------------------------------------------------
     /** must be implemented to make it possible to resolve cyclic object
         references.
 
@@ -75,7 +72,6 @@ published service UniversalContentBroker
      */
     interface com::sun::star::lang::XComponent;
 
-    //-------------------------------------------------------------------------
     /** provides access to all kind of contents provided by the registered
         content providers.
 
@@ -83,14 +79,12 @@ published service UniversalContentBroker
      */
     interface com::sun::star::ucb::XContentProvider;
 
-    //-------------------------------------------------------------------------
     /** provides access to a set of content providers registered with the UCB.
 
         <p>This interface is required.
      */
     interface com::sun::star::ucb::XContentProviderManager;
 
-    //-------------------------------------------------------------------------
     /** creates <type>XContentIdentifier</type> implementation objects for
         all kind of contents provided by the UCB.
 
@@ -98,7 +92,6 @@ published service UniversalContentBroker
       */
     interface com::sun::star::ucb::XContentIdentifierFactory;
 
-    //-------------------------------------------------------------------------
     /** supports the configuration of a newly created broker.
 
         <p>The
@@ -119,7 +112,6 @@ published service UniversalContentBroker
      */
     interface com::sun::star::lang::XInitialization;
 
-    //-------------------------------------------------------------------------
     /** enables the caller to execute commands at the broker.
 
         <p>This interface is required.
@@ -159,7 +151,6 @@ published service UniversalContentBroker
      */
     interface com::sun::star::ucb::XCommandProcessor;
 
-    //-------------------------------------------------------------------------
     /** is an enhanced version of <type>XCommandProcessor</type> that has an
         additional method for releasing command identifiers obtained via
         <member>XCommandProcessor::createCommandIdentifier</member> to avoid
@@ -174,7 +165,6 @@ published service UniversalContentBroker
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

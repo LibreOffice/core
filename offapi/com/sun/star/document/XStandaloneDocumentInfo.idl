@@ -31,11 +31,9 @@
 #include <com/sun/star/document/XDocumentInfo.idl>
 #include <com/sun/star/io/IOException.idl>
 
-//=============================================================================
 
 module com {   module sun {   module star {   module document {
 
-//=============================================================================
 /** makes it possible to load document information from
     a resource specified by a URL and to store it into a resource also
     specified by a URL
@@ -58,7 +56,6 @@ module com {   module sun {   module star {   module document {
  */
 published interface XStandaloneDocumentInfo: XDocumentInfo
 {
-    //-------------------------------------------------------------------------
     /** loads the document information from a file referred by an URL
 
         <p>
@@ -76,7 +73,6 @@ published interface XStandaloneDocumentInfo: XDocumentInfo
     void loadFromURL( [in] string URL )
         raises( com::sun::star::io::IOException );
 
-    //-------------------------------------------------------------------------
     /** stores the document information into a file referred by a URL
 
         <p>
@@ -94,7 +90,6 @@ published interface XStandaloneDocumentInfo: XDocumentInfo
         raises( com::sun::star::io::IOException );
 };
 
-//=============================================================================
 
 }; }; }; };
 

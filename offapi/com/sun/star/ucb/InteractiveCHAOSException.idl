@@ -31,18 +31,15 @@
 #include <com/sun/star/task/ClassifiedInteractionRequest.idl>
 
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** An error capsuling error information as used by CHAOS.
 
     @deprecated
 */
 published exception InteractiveCHAOSException: com::sun::star::task::ClassifiedInteractionRequest
 {
-    //-------------------------------------------------------------------------
     /** The error ID.
 
         <p>For a "dynamic" error (with extra textual arguments), this ID
@@ -50,7 +47,6 @@ published exception InteractiveCHAOSException: com::sun::star::task::ClassifiedI
     */
     long ID;
 
-    //-------------------------------------------------------------------------
     /** Any textual arguments of a "dynamic" error (which will get merged into
         the error message).
 
@@ -60,7 +56,6 @@ published exception InteractiveCHAOSException: com::sun::star::task::ClassifiedI
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

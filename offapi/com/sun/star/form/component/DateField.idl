@@ -26,11 +26,9 @@
 #include <com/sun/star/form/XReset.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module form {  module component {
 
-//=============================================================================
 
 /** specifies the model of a date field control, which is an edit field used to enter a date.
 */
@@ -47,7 +45,6 @@ published service DateField
     */
     interface com::sun::star::form::XReset;
 
-    //-------------------------------------------------------------------------
 
     /** contains a default value for the control.
 
@@ -60,7 +57,6 @@ published service DateField
 
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

@@ -20,39 +20,33 @@
 #define __com_sun_star_drawing_LayerType_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module drawing {
 
-//=============================================================================
 
 // DocMerge from xml: enum com::sun::star::drawing::LayerType
 /** This enumeration specifies the type of a drawing layer.
  */
 published enum LayerType
 {
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: value com::sun::star::drawing::LayerType::LAYOUT
     /** This is the layer for all standard shapes.
      */
     LAYOUT,
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: value com::sun::star::drawing::LayerType::CONTROLSA
     /** This is the layer for the controls.
      */
     CONTROLSA,
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: value com::sun::star::drawing::LayerType::DIMENSIONIANG_LINES
     /** This is the layer for all measure shapes.
      */
     DIMENSIONIANG_LINES,
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: value com::sun::star::drawing::LayerType::USER_DEFINED
     /** There can be zero or more layers of this type.
@@ -61,7 +55,6 @@ published enum LayerType
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

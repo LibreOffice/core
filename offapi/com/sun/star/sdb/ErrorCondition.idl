@@ -29,11 +29,9 @@
 #ifndef __com_sun_star_sdb_ErrorCondition_idl__
 #define __com_sun_star_sdb_ErrorCondition_idl__
 
-//=============================================================================
 
 module com { module sun { module star { module sdb {
 
-//=============================================================================
 
 /** defines error conditions for OpenOffice.org Base core components
 
@@ -69,7 +67,6 @@ module com { module sun { module star { module sdb {
  */
 constants ErrorCondition
 {
-    // ========================================================================
     // = section ROW_SET - css.sdb.RowSet related error conditions
 
     /** is used by and <type>RowSet</type> to indicate that an operation has been vetoed
@@ -82,7 +79,6 @@ constants ErrorCondition
     */
     const long ROW_SET_OPERATION_VETOED = 100;
 
-    // ========================================================================
     // = section PARSER - parsing related error conditions
 
     /** indicates that while parsing an SQL statement, cyclic sub queries have been detected.
@@ -95,9 +91,7 @@ constants ErrorCondition
     */
     const long PARSER_CYCLIC_SUB_QUERIES = 200;
 
-    // ========================================================================
     // = section DB - application-level error conditions
-    // =
     // = next section should start with 500
 
     /** indicates that the name of a client side database object - a query, a form,
@@ -140,9 +134,7 @@ constants ErrorCondition
     */
     const long DB_NOT_CONNECTED = 304;
 
-    // ========================================================================
     // = section AB - address book access related error conditions
-    // =
     // = next section should start with 550
 
     /** used by the component implementing address book access to indicate that a requested address book could
@@ -154,9 +146,7 @@ constants ErrorCondition
     */
     const long AB_ADDRESSBOOK_NOT_FOUND = 500;
 
-    // ========================================================================
     // = section DATA - data retrieval related error conditions
-    // =
     // = next section should start with 600
 
     /** used to indicate that a <code>SELECT</code> operation on a table needs a filter.
@@ -172,11 +162,9 @@ constants ErrorCondition
     const long DATA_CANNOT_SELECT_UNFILTERED = 550;
 };
 
-//=============================================================================
 
 }; }; }; };
 
-//=============================================================================
 
 #endif
 

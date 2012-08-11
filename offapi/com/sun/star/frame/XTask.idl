@@ -22,17 +22,14 @@
 #include <com/sun/star/frame/XFrame.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module frame {
 
-//=============================================================================
 /** use <type>XFrame</type> instead of this one
     @deprecated
  */
 published interface XTask: XFrame
 {
-    //-------------------------------------------------------------------------
     /** use <type scope="com::sun::star::util">XCloseable</type> or
         <member scope="com::sun::star::lang">XComponent::dispose()</member>
         at a <type>Frame</type> instead of this one
@@ -40,23 +37,19 @@ published interface XTask: XFrame
      */
     boolean close();
 
-    //-------------------------------------------------------------------------
     /** @deprecated
      */
     [oneway] void tileWindows();
 
-    //-------------------------------------------------------------------------
     /** @deprecated
      */
     [oneway] void arrangeWindowsVertical();
 
-    //-------------------------------------------------------------------------
     /** @deprecated
      */
     [oneway] void arrangeWindowsHorizontal();
 };
 
-//=============================================================================
 
 }; }; }; };
 

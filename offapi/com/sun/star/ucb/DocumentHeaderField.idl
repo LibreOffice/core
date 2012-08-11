@@ -20,29 +20,24 @@
 #define __com_sun_star_ucb_DocumentHeaderField_idl__
 
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** This struct contains a name-value pair of a document header (i.e.
     the "subject" field and the appropriate value of a MIME message).
 */
 published struct DocumentHeaderField
 {
-    //-------------------------------------------------------------------------
     /** The name of the header field.
     */
     string Name;
 
-    //-------------------------------------------------------------------------
     /** The value of the header field.
     */
     string Value;
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -20,18 +20,15 @@
 #define __com_sun_star_drawing_FillStyle_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module drawing {
 
-//=============================================================================
 
 // DocMerge from xml: enum com::sun::star::drawing::FillStyle
 /** specifies how an area will be filled.
  */
 published enum FillStyle
 {
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR FillStyle::    NONE,
 
     // DocMerge from xml: value com::sun::star::drawing::FillStyle::NONE
@@ -39,7 +36,6 @@ published enum FillStyle
      */
     NONE,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR FillStyle::    SOLID,
 
     // DocMerge from xml: value com::sun::star::drawing::FillStyle::SOLID
@@ -47,7 +43,6 @@ published enum FillStyle
      */
     SOLID,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR FillStyle::    GRADIENT,
 
     // DocMerge from xml: value com::sun::star::drawing::FillStyle::GRADIENT
@@ -55,7 +50,6 @@ published enum FillStyle
      */
     GRADIENT,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR FillStyle::    HATCH,
 
     // DocMerge from xml: value com::sun::star::drawing::FillStyle::HATCH
@@ -63,7 +57,6 @@ published enum FillStyle
      */
     HATCH,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR FillStyle::    BITMAP
 
     // DocMerge from xml: value com::sun::star::drawing::FillStyle::BITMAP
@@ -73,7 +66,6 @@ published enum FillStyle
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

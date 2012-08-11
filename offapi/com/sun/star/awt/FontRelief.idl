@@ -20,11 +20,9 @@
 #define __com_sun_star_awt_FontRelief_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module awt {
 
-//=============================================================================
 
 /** These values are used to specify the kind of relief.
 
@@ -33,19 +31,16 @@
 
 published constants FontRelief
 {
-    //-------------------------------------------------------------------------
 
     /** specifies no relief.
      */
     const short NONE = 0;
 
-    //-------------------------------------------------------------------------
 
     /** specifies no embossed.
      */
     const short EMBOSSED = 1;
 
-    //-------------------------------------------------------------------------
 
     /** specifies no engraved.
      */
@@ -53,7 +48,6 @@ published constants FontRelief
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

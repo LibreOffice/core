@@ -24,17 +24,14 @@
 #include <com/sun/star/script/provider/XScriptProvider.idl>
 #include <com/sun/star/lang/IllegalArgumentException.idl>
 
-//===========================================================================
 
 module com { module sun { module star { module script { module provider {
 
-//===========================================================================
 /**
     This interface allows to get the scripting provider related to the object.
 */
 interface XScriptProviderSupplier : ::com::sun::star::uno::XInterface {
 
-    //----------------------------------------------------------------------
     /** returns scripting provider related to the object.
 
         @returns
@@ -43,7 +40,6 @@ interface XScriptProviderSupplier : ::com::sun::star::uno::XInterface {
     XScriptProvider getScriptProvider();
 };
 
-//===========================================================================
 }; }; }; }; }; // ::com::sun::star::script::provider
 
 #endif

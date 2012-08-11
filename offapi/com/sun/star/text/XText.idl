@@ -30,18 +30,15 @@
 #include <com/sun/star/container/NoSuchElementException.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module text {
 
-//=============================================================================
 
 /** extends a <type>XSimpleText</type> by the capability of inserting
         <type>XTextContent</type>s.
  */
 published interface XText: com::sun::star::text::XSimpleText
 {
-    //-------------------------------------------------------------------------
 
     /** inserts a content, such as a text table, text frame or text
         field.
@@ -69,7 +66,6 @@ published interface XText: com::sun::star::text::XSimpleText
              [in] boolean bAbsorb )
             raises( com::sun::star::lang::IllegalArgumentException );
 
-    //-------------------------------------------------------------------------
 
     /** removes the specified content from the text object.
 
@@ -80,7 +76,6 @@ published interface XText: com::sun::star::text::XSimpleText
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

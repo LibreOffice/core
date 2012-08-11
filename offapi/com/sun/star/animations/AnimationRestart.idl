@@ -19,11 +19,9 @@
 #ifndef __com_sun_star_animations_AnimationRestart_idl__
 #define __com_sun_star_animations_AnimationRestart_idl__
 
-//=============================================================================
 
  module com {  module sun {  module star {  module animations {
 
-//=============================================================================
 
 /** defines the restart behavior
 
@@ -60,7 +58,6 @@ constants AnimationRestart
     const short NEVER = 3;
 };
 
-//=============================================================================
 
 }; }; }; };
 

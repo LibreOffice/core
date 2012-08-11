@@ -23,13 +23,11 @@
 #include <com/sun/star/datatransfer/XTransferable.idl>
 #include <com/sun/star/uno/XInterface.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module datatransfer { module dnd {
 
  published interface XDropTargetListener;
 
-//=============================================================================
 /** This interface is implemented by a view or window that supports drop
     operations.
 
@@ -41,7 +39,6 @@ module com { module sun { module star { module datatransfer { module dnd {
 
 published interface XDropTarget: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** Add a DropTargetListener.
 
         <p>The listener will be queried for the <type>XAutoscroll</type> interface
@@ -53,7 +50,6 @@ published interface XDropTarget: com::sun::star::uno::XInterface
 
     [oneway] void addDropTargetListener( [in] XDropTargetListener dtl );
 
-    //-------------------------------------------------------------------------
     /** Remove a drop target listener.
 
         @param dtl
@@ -62,7 +58,6 @@ published interface XDropTarget: com::sun::star::uno::XInterface
 
     [oneway] void removeDropTargetListener( [in] XDropTargetListener dtl );
 
-    //-------------------------------------------------------------------------
     /** Indicates either a drop target object is active or not.
 
         @returns
@@ -72,7 +67,6 @@ published interface XDropTarget: com::sun::star::uno::XInterface
 
     boolean isActive();
 
-    //-------------------------------------------------------------------------
     /** Sets the drop target object active or inactive.
 
         @param active
@@ -82,7 +76,6 @@ published interface XDropTarget: com::sun::star::uno::XInterface
 
     void setActive( [in] boolean active );
 
-    //-------------------------------------------------------------------------
     /** Determine the actions supported by a drop target.
 
         @returns
@@ -95,7 +88,6 @@ published interface XDropTarget: com::sun::star::uno::XInterface
 
     byte getDefaultActions();
 
-    //-------------------------------------------------------------------------
     /** Sets the default acceptable actions for this drop target.
 
         <p>This method is a way to reduce the number of Drag and Drop events
@@ -110,7 +102,6 @@ published interface XDropTarget: com::sun::star::uno::XInterface
     [oneway] void setDefaultActions( [in] byte actions );
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

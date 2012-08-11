@@ -21,11 +21,9 @@
 
 #include <com/sun/star/container/XNameContainer.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module drawing {
 
-//=============================================================================
 
 /** this is a container for <type scope="com::sun::star::awt">Gradient</type>s
 
@@ -46,7 +44,6 @@ published service GradientTable
     interface com::sun::star::container::XNameContainer;
 };
 
-//=============================================================================
 
 }; }; }; };
 

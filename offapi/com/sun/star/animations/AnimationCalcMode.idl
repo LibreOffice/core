@@ -19,11 +19,9 @@
 #ifndef __com_sun_star_animations_AnimationCalcMode_idl__
 #define __com_sun_star_animations_AnimationCalcMode_idl__
 
-//=============================================================================
 
  module com {  module sun {  module star {  module animations {
 
-//=============================================================================
 
 /** Specifies the interpolation mode for the animation.
 
@@ -59,7 +57,6 @@ constants AnimationCalcMode
     const short SPLINE = 3;
 };
 
-//=============================================================================
 
 }; }; }; };
 

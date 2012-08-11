@@ -25,23 +25,18 @@
 #include <com/sun/star/sheet/FormulaOpCodeMapEntry.idl>
 #include <com/sun/star/sheet/ExternalLinkInfo.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 service FormulaParser
 {
-    // ------------------------------------------------------------------------
 
     service com::sun::star::beans::PropertySet;
 
-    // ------------------------------------------------------------------------
 
     interface XFormulaParser;
 
-    // ------------------------------------------------------------------------
 
     /** specifies whether to use English parser and formatter.
 
@@ -51,7 +46,6 @@ service FormulaParser
      */
     [property] boolean CompileEnglish;
 
-    // ------------------------------------------------------------------------
 
     /** specifies which address reference style convention to use when
         parsing a formula string.
@@ -60,15 +54,12 @@ service FormulaParser
       */
     [property] short FormulaConvention;
 
-    // ------------------------------------------------------------------------
 
     [property] boolean IgnoreLeadingSpaces;
 
-    // ------------------------------------------------------------------------
 
     [property] string ParameterSeparator;
 
-    // ------------------------------------------------------------------------
 
     /** contains the complete mapping of names to op-codes.
 
@@ -76,7 +67,6 @@ service FormulaParser
      */
     [property] sequence< FormulaOpCodeMapEntry > OpCodeMap;
 
-    // ------------------------------------------------------------------------
 
     /** contains a list of external links referenced in formulas.
 
@@ -91,10 +81,8 @@ service FormulaParser
      */
     [property] sequence< ExternalLinkInfo > ExternalLinks;
 
-    // ------------------------------------------------------------------------
 };
 
-//=============================================================================
 
 }; }; }; };
 

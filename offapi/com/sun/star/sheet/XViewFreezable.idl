@@ -22,18 +22,15 @@
 #include <com/sun/star/uno/XInterface.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** enables a <type>SpreadsheetView</type> to freeze
     columns and rows of the view.
  */
 published interface XViewFreezable: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** returns <TRUE/> if the view has frozen panes.
 
@@ -44,7 +41,6 @@ published interface XViewFreezable: com::sun::star::uno::XInterface
      */
     boolean hasFrozenPanes();
 
-    //-------------------------------------------------------------------------
 
     /** freezes panes with the specified number of
         columns and rows.
@@ -57,7 +53,6 @@ published interface XViewFreezable: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

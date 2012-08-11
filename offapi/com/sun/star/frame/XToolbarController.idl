@@ -31,11 +31,9 @@
 #include <com/sun/star/awt/XWindow.idl>
 #include <com/sun/star/awt/KeyModifier.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module frame {
 
-//=============================================================================
 /** is an abstract service for a component which offers a more complex user interface
     to users within a toolbar.
 
@@ -53,7 +51,6 @@
  */
 interface XToolbarController : com::sun::star::uno::XInterface
 {
-    //=============================================================================
     /** provides a function to execute the command which is bound to the toolbar controller.
 
         @param
@@ -67,17 +64,14 @@ interface XToolbarController : com::sun::star::uno::XInterface
     */
     void execute( [in] short KeyModifier );
 
-    //=============================================================================
     /** notifies a component that a single click has been made on the toolbar item.
     */
     void click();
 
-    //=============================================================================
     /** notifies a component that a double click has been made on the toolbar item.
     */
     void doubleClick();
 
-    //=============================================================================
     /** requests to create a pop-up window for additional functions.
 
         @return
@@ -87,7 +81,6 @@ interface XToolbarController : com::sun::star::uno::XInterface
     */
     com::sun::star::awt::XWindow createPopupWindow();
 
-    //=============================================================================
     /** requests to create an item window which can be added to the toolbar.
 
         @param Parent

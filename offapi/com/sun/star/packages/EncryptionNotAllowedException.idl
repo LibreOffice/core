@@ -22,11 +22,9 @@
 #include <com/sun/star/uno/Exception.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module packages {
 
-//=============================================================================
 
 // DocMerge from xml: exception com::sun::star::packages::EncryptionNotAllowedException
 /** This exception can be thrown in case object is encrypted when it is not allowed
@@ -35,7 +33,6 @@ exception EncryptionNotAllowedException: com::sun::star::uno::Exception
 {
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -28,11 +28,9 @@
 #include <com/sun/star/sheet/GeneralFunction.idl>
 #include <com/sun/star/sheet/TableFilterField.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** represents a dimension in a data pilot source.
 
@@ -53,20 +51,17 @@
  */
 published service DataPilotSourceDimension
 {
-    //-------------------------------------------------------------------------
 
     /** provides access to the name of the dimension, i.e. used in
         collections.
      */
     interface com::sun::star::container::XNamed;
 
-    //-------------------------------------------------------------------------
 
     /** provides access to the collection of hierarchies of this dimension.
      */
     interface com::sun::star::sheet::XHierarchiesSupplier;
 
-    //-------------------------------------------------------------------------
 
     /** supports duplicating the dimension.
 
@@ -75,46 +70,39 @@ published service DataPilotSourceDimension
      */
     interface com::sun::star::util::XCloneable;
 
-    //-------------------------------------------------------------------------
 
 //!published service PropertySet
     /** provides access to the properties.
      */
     interface com::sun::star::beans::XPropertySet;
 
-    //=========================================================================
 
     /** returns the name of the dimension from which this dimension was
         cloned, or <NULL/> if it was not cloned.
      */
     [readonly, property] com::sun::star::container::XNamed Original;
 
-    //-------------------------------------------------------------------------
 
     /** contains <TRUE/> if this is the dimension used to layout the
         different data dimensions.
      */
     [readonly, property] boolean IsDataLayoutDimension;
 
-    //-------------------------------------------------------------------------
 
     /** specifies where the dimension is used.
      */
     [property] com::sun::star::sheet::DataPilotFieldOrientation Orientation;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the position of the dimension within its orientation.
      */
     [property] long Position;
 
-    //-------------------------------------------------------------------------
 
     /** specifies how data are aggregated.
      */
     [property] com::sun::star::sheet::GeneralFunction Function;
 
-    //-------------------------------------------------------------------------
 
     /** specifies which hierarchy of the dimension is used.
 
@@ -122,13 +110,11 @@ published service DataPilotSourceDimension
      */
     [property] long UsedHierarchy;
 
-    //-------------------------------------------------------------------------
 
     /** specifies which values are used.
      */
     [property] sequence< com::sun::star::sheet::TableFilterField > Filter;
 
-    //-------------------------------------------------------------------------
 
     /** contains flags that control the usage of the dimension.
 
@@ -138,7 +124,6 @@ published service DataPilotSourceDimension
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

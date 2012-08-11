@@ -24,11 +24,9 @@
 #include <com/sun/star/form/XDatabaseParameterListener.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module form {
 
-//=============================================================================
 
 /** provides the possibility of receiving an event for configuration of parameters.
     <p>This interface is usually implemented by components which are to execute a statement,
@@ -41,7 +39,6 @@
  */
 published interface XDatabaseParameterBroadcaster: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** adds the specified listener, to allow it to fill in necessary parameter values.
         @param aListener
@@ -50,7 +47,6 @@ published interface XDatabaseParameterBroadcaster: com::sun::star::uno::XInterfa
      */
     [oneway] void addParameterListener( [in] com::sun::star::form::XDatabaseParameterListener aListener );
 
-    //-------------------------------------------------------------------------
 
     /** removes the specified listener.
         @param aListener
@@ -61,7 +57,6 @@ published interface XDatabaseParameterBroadcaster: com::sun::star::uno::XInterfa
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -83,7 +83,6 @@ service ODBCConnectionProperties
     [optional, property] string AutoRetrievingStatement;
 };
 
-//=============================================================================
 
 }; }; }; };
 

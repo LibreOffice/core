@@ -22,11 +22,9 @@
 #include <com/sun/star/awt/XProgressBar.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module awt {
 
-//=============================================================================
 
 /** gives access to the text of a progress monitor.
 
@@ -34,19 +32,16 @@
  */
 published interface XProgressMonitor: com::sun::star::awt::XProgressBar
 {
-    //-------------------------------------------------------------------------
 
     /** adds a new text line to the control.
      */
     [oneway] void addText ( [in] string Topic, [in] string Text, [in] boolean beforeProgress ) ;
 
-    //-------------------------------------------------------------------------
 
     /** removes a text line from the control.
      */
     [oneway] void removeText ( [in] string Topic, [in] boolean beforeProgress ) ;
 
-    //-------------------------------------------------------------------------
 
     /** updates an existing text line at the control.
      */
@@ -54,7 +49,6 @@ published interface XProgressMonitor: com::sun::star::awt::XProgressBar
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

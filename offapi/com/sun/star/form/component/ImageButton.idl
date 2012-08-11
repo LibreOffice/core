@@ -30,11 +30,9 @@
 #include <com/sun/star/form/FormButtonType.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module form {  module component {
 
-//=============================================================================
 
 /** This service specifies the control model for a clickable button which
     is represented by an image.
@@ -66,12 +64,10 @@ published service ImageButton
      */
     interface com::sun::star::form::XImageProducerSupplier;
 
-    //-------------------------------------------------------------------------
     /** describes the action to be executed by the button when pressed.
      */
     [property] com::sun::star::form::FormButtonType ButtonType;
 
-    //-------------------------------------------------------------------------
     /** describes the frame, where to open the document specified by the TargetURL.
 
         <p>This property is evaluated if the button is of type URL.</p>
@@ -81,7 +77,6 @@ published service ImageButton
      */
     [property] string TargetFrame;
 
-    //-------------------------------------------------------------------------
     /** specifies the URL, which should be opened if the button was clicked.
 
         <p>This property is evaluated if the button is of type URL.</p>
@@ -91,7 +86,6 @@ published service ImageButton
     [property] string TargetURL;
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

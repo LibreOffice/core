@@ -51,7 +51,6 @@ struct ViewState
      */
     ::com::sun::star::geometry::AffineMatrix2D  AffineTransform;
 
-    //-------------------------------------------------------------------------
 
     /** The clipping area associated with the view.<p>
 

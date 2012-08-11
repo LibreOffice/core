@@ -22,23 +22,19 @@
 #include <com/sun/star/ucb/InteractiveNetworkException.idl>
 
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** A network error specifying a connection failure.
 */
 published exception InteractiveNetworkConnectException: InteractiveNetworkException
 {
-    //-------------------------------------------------------------------------
     /** The name of the server to which connecting failed.
     */
     string Server;
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -24,11 +24,9 @@
 #include <com/sun/star/awt/XItemEventBroadcaster.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module awt {
 
-//=============================================================================
 
 /** is supported by buttons which can be toggled between a "pressed" and an "unpressed" state
 
@@ -38,7 +36,6 @@ interface XToggleButton: XItemEventBroadcaster
 {
 };
 
-//=============================================================================
 
 }; }; }; };
 

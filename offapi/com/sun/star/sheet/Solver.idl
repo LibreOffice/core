@@ -22,17 +22,14 @@
 
 #include <com/sun/star/sheet/XSolver.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** A solver for a model that is defined by spreadsheet cells.
  */
 service Solver: XSolver;
 
-//=============================================================================
 
 }; }; }; };
 

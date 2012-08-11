@@ -26,7 +26,6 @@
  */
 published constants ColumnSearch
 {
-    //-------------------------------------------------------------------------
 
     /** A possible value for column <code>SEARCHABLE</code> in the
              <type scope="com::sun::star::sdbc">XResultSet</type>
@@ -40,7 +39,6 @@ published constants ColumnSearch
              for this type.
      */
     const long NONE = 0;
-    //-------------------------------------------------------------------------
 
     /** A possible value for column <code>SEARCHABLE</code> in the
              <type scope="com::sun::star::sdbc">XResultSet</type>
@@ -56,7 +54,6 @@ published constants ColumnSearch
              .
      */
     const long CHAR = 1;
-    //-------------------------------------------------------------------------
 
     /** A possible value for column <code>SEARCHABLE</code> in the
              <type scope="com::sun::star::sdbc">XResultSet</type>
@@ -72,7 +69,6 @@ published constants ColumnSearch
              on this data type.
      */
     const long BASIC = 2;
-    //-------------------------------------------------------------------------
 
     /** A possible value for column
             <code>SEARCHABLE</code>
@@ -90,7 +86,6 @@ published constants ColumnSearch
     const long FULL  = 3;
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -19,11 +19,9 @@
 #ifndef __com_sun_star_task_UserRecord_idl__
 #define __com_sun_star_task_UserRecord_idl__
 
-//=============================================================================
 
 module com { module sun { module star { module task {
 
-//=============================================================================
 /* Specifies user/password entries for <type>UrlRecord</type>.
 */
 published struct UserRecord
@@ -35,7 +33,6 @@ published struct UserRecord
     sequence<string> Passwords;
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -25,11 +25,9 @@
 
 #include <com/sun/star/io/IOException.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {   module packages {  module zip {
 
-//=============================================================================
 
 /** used to indicate that a ZIP exception has occurred.
     <p>This interface is an IDL version of the Java interface
@@ -39,7 +37,6 @@ published exception ZipException: com::sun::star::uno::Exception
 {
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

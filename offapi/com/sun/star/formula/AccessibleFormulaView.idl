@@ -25,11 +25,9 @@
 #include <com/sun/star/accessibility/XAccessibleEventBroadcaster.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module formula {
 
-//=============================================================================
 
 /** The accessible view of a formula documents visual representation.
 
@@ -44,7 +42,6 @@ published service AccessibleFormulaView
     interface ::com::sun::star::accessibility::XAccessibleEventBroadcaster;
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -23,11 +23,9 @@
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/sheet/SubTotalColumn.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** provides access to the settings of a field in a subtotal descriptor.
 
@@ -36,26 +34,22 @@ module com {  module sun {  module star {  module sheet {
  */
 published interface XSubTotalField: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** returns the column by which entries are grouped.
      */
     long getGroupColumn();
 
-    //-------------------------------------------------------------------------
 
     /** sets the column by which entries are grouped.
      */
     void setGroupColumn( [in] long nGroupColumn );
 
-    //-------------------------------------------------------------------------
 
     /** returns the definitions of which columns should have subtotals
         added to them.
      */
     sequence< com::sun::star::sheet::SubTotalColumn > getSubTotalColumns();
 
-    //-------------------------------------------------------------------------
 
     /** sets the definitions of which columns should have subtotals
         added to them.
@@ -66,7 +60,6 @@ published interface XSubTotalField: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

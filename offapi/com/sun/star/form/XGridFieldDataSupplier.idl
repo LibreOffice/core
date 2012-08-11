@@ -33,11 +33,9 @@
 #include <com/sun/star/reflection/XIdlClass.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module form {
 
-//=============================================================================
 
 /** provides access to the data of a GridControl
 
@@ -55,7 +53,6 @@
  */
 published interface XGridFieldDataSupplier: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** checks whether or not the content of the grid's columns can be retrieved in the requested format.
 
         <p>Not every cell content can be retrieved in every representation. For example, in a text column,
@@ -72,7 +69,6 @@ published interface XGridFieldDataSupplier: com::sun::star::uno::XInterface
     */
     sequence<boolean> queryFieldDataType( [in] type xType );
 
-    //-------------------------------------------------------------------------
     /** retrieves the actual column data for the given row
 
         <p>If a column does not support the requested type, <NULL/> is returned at the respective
@@ -84,7 +80,6 @@ published interface XGridFieldDataSupplier: com::sun::star::uno::XInterface
              [in] type xType );
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -24,11 +24,9 @@
 #include <com/sun/star/awt/XLayoutConstrains.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module awt {
 
-//=============================================================================
 
 /** specifies a control for displaying fixed hyperlink.
  */
@@ -41,7 +39,6 @@ service UnoControlFixedHyperlink
     interface com::sun::star::awt::XLayoutConstrains;
 };
 
-//=============================================================================
 
 }; }; }; };
 

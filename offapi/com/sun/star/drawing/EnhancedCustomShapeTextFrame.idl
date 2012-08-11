@@ -21,11 +21,9 @@
 
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module drawing {
 
-//=============================================================================
 
 /** specifies the coordinates used with EnhancedCustomShapes
  */
@@ -33,13 +31,11 @@ struct EnhancedCustomShapeTextFrame
 {
     ::com::sun::star::drawing::EnhancedCustomShapeParameterPair TopLeft;
 
-    //-------------------------------------------------------------------------
 
     ::com::sun::star::drawing::EnhancedCustomShapeParameterPair BottomRight;
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

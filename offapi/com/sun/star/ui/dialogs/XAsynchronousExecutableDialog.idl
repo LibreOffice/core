@@ -32,16 +32,13 @@
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/ui/dialogs/XDialogClosedListener.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module ui { module dialogs {
 
-//=============================================================================
 /** Specifies an interface for an executable dialog in asynchronous mode.
 */
 interface XAsynchronousExecutableDialog: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** Sets the title of the dialog.
 
         @param aTitle
@@ -50,7 +47,6 @@ interface XAsynchronousExecutableDialog: com::sun::star::uno::XInterface
     */
     void setDialogTitle( [in] string aTitle );
 
-    //-------------------------------------------------------------------------
     /** Executes (shows) the dialog and returns immediately.
 
         @param xListener
@@ -60,7 +56,6 @@ interface XAsynchronousExecutableDialog: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

@@ -23,24 +23,20 @@
 #include <com/sun/star/ucb/IOErrorCode.idl>
 
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** An application error.
 
     @since OOo 1.1.2
 */
 published exception InteractiveAppException: com::sun::star::task::ClassifiedInteractionRequest
 {
-    //-------------------------------------------------------------------------
     /** The type of application error.
     */
     unsigned long Code;
 };
 
-//=============================================================================
 
 }; }; }; };
 

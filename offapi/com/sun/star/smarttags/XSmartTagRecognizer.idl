@@ -37,11 +37,9 @@
 #include <com/sun/star/frame/XController.idl>
 #include <com/sun/star/lang/IndexOutOfBoundsException.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module smarttags {
 
-//=============================================================================
 
 /**
     provides access to a smart tag recognizer.
@@ -51,7 +49,6 @@ module com {  module sun {  module star {  module smarttags {
 
 interface XSmartTagRecognizer: com::sun::star::lang::XInitialization
 {
-    //-------------------------------------------------------------------------
     /** obtains a name that describes this recognizer component.
 
         @param aLocale
@@ -63,7 +60,6 @@ interface XSmartTagRecognizer: com::sun::star::lang::XInitialization
     string getName( [in] ::com::sun::star::lang::Locale aLocale );
 
 
-    //-------------------------------------------------------------------------
     /** obtains a detailed description of this recognizer component.
 
         @param aLocale
@@ -75,14 +71,12 @@ interface XSmartTagRecognizer: com::sun::star::lang::XInitialization
     string getDescription( [in] ::com::sun::star::lang::Locale aLocale );
 
 
-    //-------------------------------------------------------------------------
     /** The number of smart tag types supported by this recognizer
         component.
      */
     [attribute, readonly] long SmartTagCount;
 
 
-    //-------------------------------------------------------------------------
     /** obtains the name of one specific smart tag type supported by
         this recognizer component.
 
@@ -102,7 +96,6 @@ interface XSmartTagRecognizer: com::sun::star::lang::XInitialization
         raises( com::sun::star::lang::IndexOutOfBoundsException );
 
 
-    //-------------------------------------------------------------------------
     /** obtains the URL that can be used to download new or updated
         recognizers.
 
@@ -121,7 +114,6 @@ interface XSmartTagRecognizer: com::sun::star::lang::XInitialization
         raises( com::sun::star::lang::IndexOutOfBoundsException );
 
 
-    //-------------------------------------------------------------------------
     /** recognizes smart tags.
 
         @param aText
@@ -164,7 +156,6 @@ interface XSmartTagRecognizer: com::sun::star::lang::XInitialization
                     [in] com::sun::star::i18n::XBreakIterator xTokenizer );
 
 
-    //-------------------------------------------------------------------------
     /** indicates whether there is a property page for a smart tag type.
 
         @param nSmartTagIndex
@@ -187,7 +178,6 @@ interface XSmartTagRecognizer: com::sun::star::lang::XInitialization
         raises( com::sun::star::lang::IndexOutOfBoundsException );
 
 
-    //-------------------------------------------------------------------------
     /** launches the property page for a smart tag type.
 
         @param nSmartTagIndex

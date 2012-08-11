@@ -20,11 +20,9 @@
 #define __com_sun_star_drawing_TextureKind_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module drawing {
 
-//=============================================================================
 
 // DocMerge from xml: enum com::sun::star::drawing::TextureKind
 /** These enumeration values specify how the texture is applied.
@@ -32,7 +30,6 @@
  */
 published enum TextureKind
 {
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: value com::sun::star::drawing::TextureKind::LUMINANCE
     /** With <type>TextureKind</type> <const>LUMINANCE</const>, the texture
@@ -41,7 +38,6 @@ published enum TextureKind
      */
     LUMINANCE,
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: value com::sun::star::drawing::TextureKind::COLOR
     /** With this mode the lighting is ignored and only the
@@ -51,7 +47,6 @@ published enum TextureKind
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -23,11 +23,9 @@
 #include <com/sun/star/document/XExporter.idl>
 #include <com/sun/star/document/XMimeTypeInfo.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module drawing {
 
-//=============================================================================
 
 /** a component that supports this service lets you export pages, shapes, or
     groups of shapes from a DrawingDocument to a file in one of the file formats
@@ -80,7 +78,6 @@ published service GraphicExportFilter
     interface ::com::sun::star::document::XMimeTypeInfo;
 };
 
-//=============================================================================
 
 }; }; }; };
 

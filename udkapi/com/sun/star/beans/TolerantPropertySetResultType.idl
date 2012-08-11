@@ -20,11 +20,9 @@
 #define __com_sun_star_beans_TolerantPropertySetResultType_idl__
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module beans {
 
-//=============================================================================
 
 /** specifies the possible failure types when using the
     <type scope="com::sun::star::beans">XTolerantMultiPropertySet</type>
@@ -75,7 +73,6 @@ constants TolerantPropertySetResultType
     const short UNKNOWN_FAILURE     = 5;
 };
 
-//=============================================================================
 
 }; }; }; };
 

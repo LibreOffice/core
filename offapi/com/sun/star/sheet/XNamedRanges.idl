@@ -25,11 +25,9 @@
 #include <com/sun/star/table/CellRangeAddress.idl>
 #include <com/sun/star/sheet/Border.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** provides access to the members in a collection of named ranges and to
     insert and remove them.
@@ -39,7 +37,6 @@ module com {  module sun {  module star {  module sheet {
  */
 published interface XNamedRanges: com::sun::star::container::XNameAccess
 {
-    //-------------------------------------------------------------------------
 
     /** adds a new named range to the collection.
 
@@ -67,7 +64,6 @@ published interface XNamedRanges: com::sun::star::container::XNameAccess
             [in] com::sun::star::table::CellAddress aPosition,
             [in] long nType );
 
-    //-------------------------------------------------------------------------
 
     /** creates named cell ranges from titles in a cell range.
 
@@ -95,13 +91,11 @@ published interface XNamedRanges: com::sun::star::container::XNameAccess
             [in] com::sun::star::table::CellRangeAddress aSource,
             [in] com::sun::star::sheet::Border aBorder );
 
-    //-------------------------------------------------------------------------
 
     /** removes a named range from the collection.
      */
     void removeByName( [in] string aName );
 
-    //-------------------------------------------------------------------------
 
     /** writes a list of all named ranges into the document.
 
@@ -115,7 +109,6 @@ published interface XNamedRanges: com::sun::star::container::XNameAccess
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

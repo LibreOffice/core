@@ -21,11 +21,9 @@
 
 #include <com/sun/star/configuration/CannotLoadConfigurationException.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module configuration {
 
-//=============================================================================
 
 /** is thrown when creating a configuration provider fails because
     a bootstrap file needed to locate the configuration contains invalid data
@@ -36,7 +34,6 @@ published exception InvalidBootstrapFileException: com::sun::star::configuration
     string BootstrapFileURL;
 };
 
-//=============================================================================
 
 }; }; }; };
 

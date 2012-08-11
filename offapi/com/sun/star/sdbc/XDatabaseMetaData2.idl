@@ -23,11 +23,9 @@
 #include <com/sun/star/sdbc/XDatabaseMetaData.idl>
 #include <com/sun/star/beans/PropertyValue.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module sdbc {
 
-//=============================================================================
 
 /** extends the <type>XDatabaseMetaData</type> interface to allow retrieval of additional
     information.
@@ -44,11 +42,9 @@ interface XDatabaseMetaData2 : XDatabaseMetaData
         getConnectionInfo();
 };
 
-//=============================================================================
 
 }; }; }; };
 
-//=============================================================================
 
 #endif
 

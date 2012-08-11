@@ -23,11 +23,9 @@
 #include <com/sun/star/configuration/backend/XLayer.idl>
 #include <com/sun/star/lang/XInitialization.idl>
 
-//==============================================================================
 
 module com { module sun { module star { module configuration { module backend {
 
-//==============================================================================
 
 /**
   provides a filtered version of a configuration data <type>Layer</type>.
@@ -45,7 +43,6 @@ module com { module sun { module star { module configuration { module backend {
   */
 published service LayerFilter
 {
-    //--------------------------------------------------------------------------
 
     /**
       provides read access to the filtered contents.
@@ -56,7 +53,6 @@ published service LayerFilter
       */
     interface XLayer ;
 
-    //--------------------------------------------------------------------------
 
     /**
       provides a means to set the source data for the filter.
@@ -70,10 +66,8 @@ published service LayerFilter
       */
     interface com::sun::star::lang::XInitialization ;
 
-    //--------------------------------------------------------------------------
 } ;
 
-//==============================================================================
 
 } ; } ; } ; } ; } ;
 

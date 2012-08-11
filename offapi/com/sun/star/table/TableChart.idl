@@ -24,11 +24,9 @@
 #include <com/sun/star/document/XEmbeddedObjectSupplier.idl>
 #include <com/sun/star/container/XNamed.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module table {
 
-//=============================================================================
 
 /** represents a chart based on data in a table or spreadsheet.
 
@@ -37,13 +35,11 @@ module com {  module sun {  module star {  module table {
  */
 published service TableChart
 {
-    //-------------------------------------------------------------------------
 
     /** provides access to the settings of this chart.
      */
     interface com::sun::star::table::XTableChart;
 
-    //-------------------------------------------------------------------------
 
     /** provides access to the chart document model.
 
@@ -51,7 +47,6 @@ published service TableChart
      */
     interface com::sun::star::document::XEmbeddedObjectSupplier;
 
-    //-------------------------------------------------------------------------
 
     /** provides methods to access the name of the chart.
      */
@@ -59,7 +54,6 @@ published service TableChart
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

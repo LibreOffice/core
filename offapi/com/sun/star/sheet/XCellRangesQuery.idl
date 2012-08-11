@@ -34,11 +34,9 @@
 #include <com/sun/star/table/CellAddress.idl>
 #include <com/sun/star/table/CellRangeAddress.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** provides methods to query for cell ranges with specific contents.
 
@@ -49,7 +47,6 @@ module com {  module sun {  module star {  module sheet {
  */
 published interface XCellRangesQuery: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** queries all visible cells.
 
@@ -58,7 +55,6 @@ published interface XCellRangesQuery: com::sun::star::uno::XInterface
      */
     com::sun::star::sheet::XSheetCellRanges queryVisibleCells();
 
-    //-------------------------------------------------------------------------
 
     /** queries all empty cells.
 
@@ -67,7 +63,6 @@ published interface XCellRangesQuery: com::sun::star::uno::XInterface
      */
     com::sun::star::sheet::XSheetCellRanges queryEmptyCells();
 
-    //-------------------------------------------------------------------------
 
     /** queries all cells with the specified content type(s).
 
@@ -90,7 +85,6 @@ published interface XCellRangesQuery: com::sun::star::uno::XInterface
     com::sun::star::sheet::XSheetCellRanges queryContentCells(
             [in] short nContentFlags );
 
-    //-------------------------------------------------------------------------
 
     /** queries all formula cells with the specified result type.
 
@@ -104,7 +98,6 @@ published interface XCellRangesQuery: com::sun::star::uno::XInterface
     com::sun::star::sheet::XSheetCellRanges queryFormulaCells(
             [in] long nResultFlags );
 
-    //-------------------------------------------------------------------------
 
     /** queries all cells with different values in a specified row.
 
@@ -123,7 +116,6 @@ published interface XCellRangesQuery: com::sun::star::uno::XInterface
     com::sun::star::sheet::XSheetCellRanges queryColumnDifferences(
             [in] com::sun::star::table::CellAddress aCompare );
 
-    //-------------------------------------------------------------------------
 
     /** queries all cells with different values in a specified column.
 
@@ -142,7 +134,6 @@ published interface XCellRangesQuery: com::sun::star::uno::XInterface
     com::sun::star::sheet::XSheetCellRanges queryRowDifferences(
             [in] com::sun::star::table::CellAddress aCompare );
 
-    //-------------------------------------------------------------------------
 
     /** intersects the current cell range(s) with the specified cell range.
 
@@ -159,7 +150,6 @@ published interface XCellRangesQuery: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

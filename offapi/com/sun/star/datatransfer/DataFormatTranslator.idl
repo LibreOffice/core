@@ -23,15 +23,12 @@
 #include <com/sun/star/lang/XServiceInfo.idl>
 #include <com/sun/star/lang/XTypeProvider.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module datatransfer {
 
-//=============================================================================
 
  published interface XDataFormatTranslator;
 
-//=============================================================================
 /** Different platforms use different types to describe data formats available
     during data exchange operations like clipboard or drag&drop.
     Implementations of this service do convert system dependent data types to a
@@ -42,23 +39,19 @@ module com { module sun { module star { module datatransfer {
 */
 published service DataFormatTranslator
 {
-    //-------------------------------------------------------------------------
     /** Converts a <type>DataFlavor</type> to system data types and vice versa.
     */
     interface XDataFormatTranslator;
 
-    //-------------------------------------------------------------------------
     /** Service should always support this interface.
     */
     interface com::sun::star::lang::XServiceInfo;
 
-    //-------------------------------------------------------------------------
     /** Service should always support this interface.
     */
     interface com::sun::star::lang::XTypeProvider;
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -33,11 +33,9 @@
 #include <com/sun/star/util/XCloneable.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module awt {
 
-//=============================================================================
 
 /** specifies the standard model of an <type>UnoControl</type>
     in the <em>Smalltalk model view controller design</em>.
@@ -67,7 +65,6 @@ published service UnoControlModel
 
     interface com::sun::star::util::XCloneable;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the service name of the default control for this model.
      */
@@ -75,7 +72,6 @@ published service UnoControlModel
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

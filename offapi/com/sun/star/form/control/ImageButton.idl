@@ -23,11 +23,9 @@
 #include <com/sun/star/awt/UnoControlImageControl.idl>
 #include <com/sun/star/form/XApproveActionBroadcaster.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module form {  module control {
 
-//=============================================================================
 
 /** describes a control which can be used for displaying images on a control acting like a button.
 
@@ -62,7 +60,6 @@ published service ImageButton
     interface com::sun::star::form::XApproveActionBroadcaster;
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

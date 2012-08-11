@@ -21,11 +21,9 @@
 
 #include <com/sun/star/uno/XInterface.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module chart {
 
-//=============================================================================
 
 /** Allows to set date values as categories.
 
@@ -36,7 +34,6 @@
 
 published interface XDateCategories
 {
-    //-------------------------------------------------------------------------
 
     /** sets dates as categories
 
@@ -45,7 +42,6 @@ published interface XDateCategories
     */
     void setDateCategories( [in] sequence< double > rDates );
 
-    //-------------------------------------------------------------------------
 
     /** retrieves the date values if the category x-axis id a date axis
 
@@ -55,7 +51,6 @@ published interface XDateCategories
     sequence< double > getDateCategories();
 };
 
-//=============================================================================
 
 }; }; }; };
 

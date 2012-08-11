@@ -38,13 +38,11 @@
 #include <com/sun/star/lang/WrappedTargetException.idl>
 #include <com/sun/star/task/XInteractionHandler.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module xforms {
 
 interface XSubmission;
 
-//=============================================================================
 
 /** represent an XForms model
  */
@@ -123,9 +121,7 @@ interface XModel
         getDataTypeRepository( );
 
 
-    //
     // instances
-    //
 
     /** gets container containing all instances;
 
@@ -143,9 +139,7 @@ interface XModel
     com::sun::star::xml::dom::XDocument getDefaultInstance();
 
 
-    //
     // bindings
-    //
 
     /** create a binding element for this model
 
@@ -175,9 +169,7 @@ interface XModel
     com::sun::star::container::XSet getBindings();
 
 
-    //
     // submissions
-    //
 
     /** create a submission element for this model
 
@@ -207,7 +199,6 @@ interface XModel
     com::sun::star::container::XSet getSubmissions();
 };
 
-//=============================================================================
 
 }; }; }; };
 

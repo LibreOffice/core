@@ -22,29 +22,24 @@
 #include <com/sun/star/io/XOutputStream.idl>
 
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** information needed to export an object in mbx format (supplying an output
     stream to export into).
 */
 published struct ExportStreamInfo
 {
-    //-------------------------------------------------------------------------
     /** the output stream to export into.
     */
     com::sun::star::io::XOutputStream Target;
 
-    //-------------------------------------------------------------------------
     /** tries hard to make message (document) bodies available for export.
     */
     boolean ForceBodies;
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

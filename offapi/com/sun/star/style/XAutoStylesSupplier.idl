@@ -22,11 +22,9 @@
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/style/XAutoStyles.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module style {
 
-//=============================================================================
 
 // DocMerge from xml: interface com::sun::star::style::XStyleFamiliesSupplier
 /** This interface provides access to the style families within the
@@ -34,7 +32,6 @@
  */
 interface XAutoStylesSupplier: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** This method returns the collection of automatic style families available
         in the container document.@see AutoStyles
@@ -43,7 +40,6 @@ interface XAutoStylesSupplier: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

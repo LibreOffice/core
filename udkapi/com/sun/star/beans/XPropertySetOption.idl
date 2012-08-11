@@ -42,7 +42,6 @@ interface XPropertySetOption: com::sun::star::uno::XInterface
     void enableChangeListenerNotification( [in] boolean bEnable );
 };
 
-//=============================================================================
 
 }; }; }; };
 

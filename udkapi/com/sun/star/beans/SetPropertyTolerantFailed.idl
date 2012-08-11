@@ -20,11 +20,9 @@
 #define __com_sun_star_beans_SetPropertyTolerantFailed_idl__
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module beans {
 
-//=============================================================================
 
 /** specifies information about a single property failed to be set.
 
@@ -36,7 +34,6 @@ published struct SetPropertyTolerantFailed
      */
     string  Name;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the success or error code for setting the
         properties value.
@@ -51,7 +48,6 @@ published struct SetPropertyTolerantFailed
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

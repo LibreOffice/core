@@ -22,7 +22,6 @@
 #include <com/sun/star/awt/UnoControlModel.idl>
 
 
-//=============================================================================
  module com {  module sun {  module star {
     module sdbc {
         interface XConnection;
@@ -33,7 +32,6 @@
 
  module com {  module sun {  module star {  module sdb {
 
-//=============================================================================
 
 /** specifies the standard model of an <type>ColumnDescriptorControl</type>.
  */
@@ -41,7 +39,6 @@ service ColumnDescriptorControlModel
 {
     service com::sun::star::awt::UnoControlModel;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the border style of the control.
 
@@ -53,14 +50,12 @@ service ColumnDescriptorControlModel
      */
     [property] short Border;
 
-    //-------------------------------------------------------------------------
 
     /** determines whether the control is enabled or disabled.
      */
     [property] boolean Enabled;
 
 
-    //-------------------------------------------------------------------------
 
     /** specifies that the control can be reached with the TAB key.
      */
@@ -76,7 +71,6 @@ service ColumnDescriptorControlModel
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

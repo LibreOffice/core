@@ -22,7 +22,6 @@
 
 #include <com/sun/star/xml/sax/XDocumentHandler.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module svg {
 
@@ -44,7 +43,6 @@ published interface XSVGPrinter: com::sun::star::uno::XInterface
     void            endJob();
 };
 
-//=============================================================================
 
 }; }; }; };
 

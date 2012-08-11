@@ -20,36 +20,30 @@
 #ifndef __com_sun_star_sheet_MoveDirection_idl__
 #define __com_sun_star_sheet_MoveDirection_idl__
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** used to specify the direction of moving the current selection i.e.
     after a cell has been left with Enter.
  */
 published constants MoveDirection
 {
-    //-------------------------------------------------------------------------
 
     /** specifies that the selection moves one cell down.
      */
     const short DOWN = 0;
 
-    //-------------------------------------------------------------------------
 
     /** specifies that the selection moves one cell right.
      */
     const short RIGHT = 1;
 
-    //-------------------------------------------------------------------------
 
     /** specifies that the selection moves one cell up.
      */
     const short UP = 2;
 
-    //-------------------------------------------------------------------------
 
     /** specifies that the selection moves one cell left.
      */
@@ -57,7 +51,6 @@ published constants MoveDirection
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

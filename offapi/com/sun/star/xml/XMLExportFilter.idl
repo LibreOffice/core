@@ -23,11 +23,9 @@
 
 #include <com/sun/star/document/ExportFilter.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module xml {
 
-//=============================================================================
 /** describes an export filter for XML-based file formats.
 
     <p>It is an extension of <type scope="com::sun::star::document">ExportFilter</type>
@@ -43,7 +41,6 @@ published service XMLExportFilter
     service com::sun::star::document::ExportFilter;
 };
 
-//=============================================================================
 
 }; }; }; };
 

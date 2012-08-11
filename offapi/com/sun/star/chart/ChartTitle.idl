@@ -22,11 +22,9 @@
 #include <com/sun/star/drawing/Shape.idl>
 #include <com/sun/star/xml/UserDefinedAttributeSupplier.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module chart {
 
-//=============================================================================
 
 /** specifies titles in a chart.
 
@@ -37,7 +35,6 @@ published service ChartTitle
 {
     service com::sun::star::drawing::Shape;
 
-    //-------------------------------------------------------------------------
 
     /** If this property is <TRUE/> the position is calculated by the application automatically.
         Setting this property to false will have no effect. Instead use the interface <type scope="com::sun::star::drawing">XShape</type>
@@ -45,7 +42,6 @@ published service ChartTitle
      */
     [optional, property] boolean AutomaticPosition;
 
-    //-------------------------------------------------------------------------
 
     /** If a <type>ChartTitle</type> may be stored as XML element,
         this service should be supported in order to preserve unparsed
@@ -55,7 +51,6 @@ published service ChartTitle
      */
     [optional] service com::sun::star::xml::UserDefinedAttributeSupplier;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the rotation of the shape in 100th of degrees.
 
@@ -66,7 +61,6 @@ published service ChartTitle
      */
     [property] long TextRotation;
 
-    //-------------------------------------------------------------------------
 
     /** contains the text of the title.
 
@@ -78,7 +72,6 @@ published service ChartTitle
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

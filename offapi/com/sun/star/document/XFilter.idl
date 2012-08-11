@@ -31,11 +31,9 @@
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/beans/PropertyValue.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module document {
 
-//=============================================================================
 /** interface to filter documents
 
     <p>
@@ -54,7 +52,6 @@ module com {  module sun {  module star {  module document {
  */
 published interface XFilter: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
         /** filter the document.
 
         <p>
@@ -70,14 +67,12 @@ published interface XFilter: com::sun::star::uno::XInterface
      */
     boolean filter( [in] sequence< com::sun::star::beans::PropertyValue > aDescriptor );
 
-    //-------------------------------------------------------------------------
         /** cancel the process.
       */
     void cancel();
 
 };
 
-//=============================================================================
 
 }; }; }; };
 
