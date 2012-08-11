@@ -54,12 +54,14 @@ void TestLanguageTag::testInit()
     const char* pEnv = getenv("OUTDIR");
     CPPUNIT_ASSERT_MESSAGE("No $OUTDIR", pEnv);
     aBuf.append( "file:///").append( OStringToOUString( pEnv, RTL_TEXTENCODING_UTF8)).append( "/share/liblangtag");
-    OUString aPath( aBuf.makeStringAndClear());
-    OUString aData( aPath);
+    OUString aURL( aBuf.makeStringAndClear());
+    OUString aData( aURL);
     aData += "/language-subtag-registry.xml";
     osl::DirectoryItem aDirItem;
     CPPUNIT_ASSERT_MESSAGE("liblangtag data not found",
             osl::DirectoryItem::get( aData, aDirItem) == osl::DirectoryItem::E_None);
+    OUString aPath;
+    CPPUNIT_ASSERT( osl::FileBase::getSystemPathFromFileURL( aURL, aPath) == osl::FileBase::E_None);
     LanguageTag::overrideDataPath( aPath);
 #endif
 }
