@@ -226,6 +226,70 @@ struct HashUChar
     size_t operator()( const sal_Unicode uchar ) const { return static_cast< size_t >( uchar ); }
 };
 
+// ---------------------------
+// - HashBmpExScale -
+// ---------------------------
+
+struct HashBmpExScale
+{
+    size_t operator()( const ObjectRepresentation& rObjRep ) const
+    {
+        const GDIMetaFile& aMtf = rObjRep.GetRepresentation();
+        if( aMtf.GetActionSize() == 1 )
+        {
+            const MetaBmpExScaleAction* pAction = (const MetaBmpExScaleAction*) aMtf.GetAction( 0 );
+            if( pAction )
+            {
+                return static_cast< size_t >( pAction->GetBitmapEx().GetChecksum() );
+            }
+            else
+            {
+                OSL_FAIL( "HashBmpExScale: metafile should have MetaBmpExScaleAction only." );
+                return 0;
+            }
+        }
+        else
+        {
+            OSL_FAIL( "HashBmpExScale: metafile should have a single action." );
+            return 0;
+        }
+    }
+};
+
+// ---------------------------
+// - EqualityBmpExScale -
+// ---------------------------
+
+struct EqualityBmpExScale
+{
+    bool operator()( const ObjectRepresentation& rObjRep1,
+                     const ObjectRepresentation& rObjRep2 ) const
+    {
+        const GDIMetaFile& aMtf1 = rObjRep1.GetRepresentation();
+        const GDIMetaFile& aMtf2 = rObjRep2.GetRepresentation();
+        if( aMtf1.GetActionSize() == 1 && aMtf2.GetActionSize() == 1 )
+        {
+            const MetaBmpExScaleAction* pA1 = (const MetaBmpExScaleAction*) aMtf1.GetAction( 0 );
+            const MetaBmpExScaleAction* pA2 = (const MetaBmpExScaleAction*) aMtf2.GetAction( 0 );
+            if( pA1 && pA2 )
+            {
+                return ( pA1->GetBitmapEx().GetChecksum() == pA2->GetBitmapEx().GetChecksum() );
+            }
+            else
+            {
+                OSL_FAIL( "EqualityBmpExScale: metafile should have MetaBmpExScaleAction only." );
+                return false;
+            }
+        }
+        else
+        {
+            OSL_FAIL( "EqualityBmpExScale: metafile should have a single action." );
+            return false;
+        }
+
+    }
+};
+
 
 // -------------
 // - SVGFilter -
@@ -250,6 +314,10 @@ public:
     typedef ::boost::unordered_map< ::rtl::OUString, UCharSet, HashOUString >                                   UCharSetMap;
     typedef ::boost::unordered_map< Reference< XInterface >, UCharSetMap, HashReferenceXInterface >             UCharSetMapMap;
 
+    typedef ::boost::unordered_map< Reference< XInterface >, ::rtl::OUString, HashReferenceXInterface >         UOStringMap;
+
+    typedef ::boost::unordered_set< ObjectRepresentation, HashBmpExScale, EqualityBmpExScale >                  MetaBitmapActionSet;
+
 private:
 
     Reference< XMultiServiceFactory >   mxMSF;
@@ -267,6 +335,9 @@ private:
     ::rtl::OUString                     msClipPathId;
     UCharSetMapMap                      mTextFieldCharSets;
     Reference< XInterface >             mCreateOjectsCurrentMasterPage;
+    UOStringMap                         mTextShapeIdListMap;
+    MetaBitmapActionSet                 mEmbeddedBitmapActionSet;
+    ObjectMap                           mEmbeddedBitmapActionMap;
 
     ObjectMap*                          mpObjects;
     Reference< XComponent >             mxSrcDoc;
@@ -285,6 +356,10 @@ private:
 
     sal_Bool                            implGetPagePropSet( const Reference< XDrawPage > & rxPage );
     sal_Bool                            implGenerateMetaData();
+    void                                implExportTextShapeIndex();
+    void                                implEmbedBulletGlyphs();
+    void                                implEmbedBulletGlyph( sal_Unicode cBullet, const ::rtl::OUString & sPathData );
+    sal_Bool                            implExportTextEmbeddedBitmaps();
     sal_Bool                            implGenerateScript();
 
     sal_Bool                            implExportDocument();
@@ -303,8 +378,8 @@ private:
     sal_Bool                            implExportShape( const Reference< XShape >& rxShape );
 
     sal_Bool                            implCreateObjects();
-    sal_Bool                            implCreateObjectsFromShapes( const Reference< XShapes >& rxShapes );
-    sal_Bool                            implCreateObjectsFromShape( const Reference< XShape >& rxShape );
+    sal_Bool                            implCreateObjectsFromShapes( const Reference< XDrawPage > & rxPage, const Reference< XShapes >& rxShapes );
+    sal_Bool                            implCreateObjectsFromShape( const Reference< XDrawPage > & rxPage, const Reference< XShape >& rxShape );
     sal_Bool                            implCreateObjectsFromBackground( const Reference< XDrawPage >& rxMasterPage );
 
     ::rtl::OUString                     implGetClassFromShape( const Reference< XShape >& rxShape );

@@ -45,6 +45,12 @@
 #include <xmloff/nmspmap.hxx>
 
 #include <com/sun/star/uno/Reference.h>
+#include <com/sun/star/container/XEnumerationAccess.hpp>
+#include <com/sun/star/container/XEnumeration.hpp>
+#include <com/sun/star/container/XIndexReplace.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
@@ -55,6 +61,21 @@
 #include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>
 #include <com/sun/star/i18n/CharacterIteratorMode.hpp>
 #include <com/sun/star/i18n/XBreakIterator.hpp>
+#include <com/sun/star/drawing/XShape.hpp>
+#include <com/sun/star/text/XText.hpp>
+#include <com/sun/star/text/XTextContent.hpp>
+#include <com/sun/star/text/XTextRange.hpp>
+#include <com/sun/star/text/XTextField.hpp>
+#include <com/sun/star/style/NumberingType.hpp>
+
+// -----------------------------------------------------------------------------
+
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::container;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::text;
+using namespace ::com::sun::star::drawing;
+using namespace ::com::sun::star::style;
 
 // -----------------------------------------------------------------------------
 
@@ -141,29 +162,68 @@ struct SVGShapeDescriptor
     }
 };
 
-// -------------------
-// - SVGActionWriter -
-// -------------------
+
 
 class SVGAttributeWriter;
 class GDIMetaFile;
+
+
+// ---------------------------
+// - BulletListItemInfo -
+// ---------------------------
+struct BulletListItemInfo
+{
+    long nFontSize;
+    Color aColor;
+    Point aPos;
+    sal_Unicode cBulletChar;
+};
+
+// ---------------------------
+// - OUStringHasher -
+// ---------------------------
+
+struct OUStringHasher
+{
+    size_t operator()( const ::rtl::OUString& oustr ) const { return static_cast< size_t >( oustr.hashCode() ); }
+};
+
 
 // -------------------
 // - SVGTextWriter -
 // -------------------
 class SVGTextWriter
 {
+  public:
+    typedef ::boost::unordered_map< ::rtl::OUString, BulletListItemInfo, OUStringHasher >         BulletListItemInfoMap;
+
   private:
     SVGExport&                                  mrExport;
     SVGFontExport&                              mrFontExport;
     SVGAttributeWriter*                         mpContext;
     VirtualDevice*                              mpVDev;
+    Reference<XText>                            mrTextShape;
+    Reference<XEnumeration>                     mrParagraphEnumeration;
+    Reference<XEnumeration>                     mrTextPortionEnumeration;
+    Reference<XTextRange>                       mrCurrentTextPortion;
+    const GDIMetaFile*                          mpTextEmbeddedBitmapMtf;
     MapMode*                                    mpTargetMapMode;
     SvXMLElementExport*                         mpTextShapeElem;
     SvXMLElementExport*                         mpTextParagraphElem;
     SvXMLElementExport*                         mpTextPositionElem;
+    sal_Int32                                   mnLeftTextPortionLength;
     Point                                       maTextPos;
     long int                                    mnTextWidth;
+    sal_Bool                                    mbPositioningNeeded;
+    sal_Bool                                    mbIsNumbering;
+    sal_Int16                                   meNumberingType;
+    sal_Unicode                                 mcBulletChar;
+    BulletListItemInfoMap                       maBulletListItemMap;
+    sal_Bool                                    mbIsListLevelStyleImage;
+    sal_Bool                                    mbLineBreak;
+    sal_Bool                                    mbIsURLField;
+    ::rtl::OUString                             msUrl;
+    ::rtl::OUString                             msHyperlinkIdList;
     sal_Bool                                    mbIsPlacehlolderShape;
     sal_Bool                                    mbIWS;
     Font                                        maCurrentFont;
@@ -177,12 +237,19 @@ class SVGTextWriter
     void setTextProperties( const GDIMetaFile& rMtf, sal_uLong nCurAction );
     void addFontAttributes( sal_Bool bIsTextContainer );
 
+    sal_Bool nextParagraph();
+    sal_Bool nextTextPortion();
+
     void startTextShape();
     void endTextShape();
     void startTextParagraph();
     void endTextParagraph();
     void startTextPosition( sal_Bool bExportX = sal_True, sal_Bool bExportY = sal_True);
     void endTextPosition();
+    void implExportHyperlinkIds();
+    void implWriteBulletChars();
+    void writeBitmapPlaceholder( const MetaBmpExScaleAction* pAction );
+    void implWriteEmbeddedBitmaps();
     void writeTextPortion( const Point& rPos, const String& rText,
                            sal_Bool bApplyMapping = sal_True );
     void implWriteTextPortion( const Point& rPos, const String& rText,
@@ -201,6 +268,19 @@ class SVGTextWriter
         mpContext = pContext;
     }
 
+    void setTextShape( const Reference<XText>& rxText,
+                       const GDIMetaFile* pTextEmbeddedBitmapMtf )
+    {
+        mrTextShape.set( rxText );
+        mpTextEmbeddedBitmapMtf = pTextEmbeddedBitmapMtf;
+    }
+
+    const Reference<XText>& getTextShape() const
+    {
+        return mrTextShape;
+    }
+
+
     void setPlaceholderShapeFlag( sal_Bool bState )
     {
         mbIsPlacehlolderShape = bState;
@@ -213,9 +293,15 @@ class SVGTextWriter
     void implSetFontFamily();
     template< typename SubType >
     sal_Bool implGetTextPosition( const MetaAction* pAction, Point& raPos, sal_Bool& bEmpty );
+    void implRegisterInterface( const Reference< XInterface >& rxIf );
+    const ::rtl::OUString & implGetValidIDFromInterface( const Reference< XInterface >& rxIf );
+
 
 };
 
+// -------------------
+// - SVGActionWriter -
+// -------------------
 
 class SVGActionWriter
 {
@@ -289,13 +375,18 @@ private:
     void                    ImplCheckFontAttributes();
     void                    ImplCheckPaintAttributes();
 
-    void                    ImplWriteActions( const GDIMetaFile& rMtf, sal_uInt32 nWriteFlags, const ::rtl::OUString* pElementId );
+    void                    ImplWriteActions( const GDIMetaFile& rMtf,
+                                              sal_uInt32 nWriteFlags,
+                                              const ::rtl::OUString* pElementId,
+                                              const Reference< XShape >* pXShape = NULL,
+                                              const GDIMetaFile* pTextEmbeddedBitmapMtf = NULL );
 
     Font                    ImplSetCorrectFontHeight() const;
 
 public:
 
     static ::rtl::OUString  GetPathString( const PolyPolygon& rPolyPoly, sal_Bool bLine );
+    static sal_uLong        GetChecksum( const MetaBmpExScaleAction* pAct );
 
 public:
 
@@ -306,7 +397,9 @@ public:
                                            const Size& rSize100thmm,
                                            const GDIMetaFile& rMtf,
                                            sal_uInt32 nWriteFlags,
-                                           const ::rtl::OUString* pElementId = NULL );
+                                           const ::rtl::OUString* pElementId = NULL,
+                                           const Reference< XShape >* pXShape = NULL,
+                                           const GDIMetaFile* pTextEmbeddedBitmapMtf = NULL );
     sal_Bool bIsTextShape;
 };
 
