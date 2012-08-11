@@ -31,9 +31,10 @@
 #include "svgfontexport.hxx"
 #include "svgwriter.hxx"
 
+#include <rtl/crc.h>
 #include <vcl/unohelp.hxx>
 #include <tools/helpers.hxx>
-
+#include <xmloff/unointerfacetouniqueidentifiermapper.hxx>
 #include <sax/tools/converter.hxx>
 
 #include <boost/shared_array.hpp>
@@ -97,7 +98,18 @@ static const char   aXMLAttrPatternUnits[] = "patternUnits";
 static const char   aXMLAttrOffset[] = "offset";
 static const char   aXMLAttrStopColor[] = "stop-color";
 
+
+#define NSPREFIX "ooo:"
+
+static const char aOOOAttrNumberingType[] = NSPREFIX "numbering-type";
+
+
+static sal_Char const XML_UNO_NAME_NRULE_NUMBERINGTYPE[] = "NumberingType";
+static sal_Char const XML_UNO_NAME_NRULE_BULLET_CHAR[] = "BulletChar";
 // -----------------------------------------------------------------------------
+
+
+
 
 // ----------------------
 // - SVGAttributeWriter -
@@ -443,12 +455,25 @@ SVGTextWriter::SVGTextWriter( SVGExport& rExport, SVGFontExport& rFontExport )
         mrFontExport( rFontExport ),
         mpContext( NULL ),
         mpVDev( NULL ),
+        mrTextShape(),
+        mrParagraphEnumeration(),
+        mrTextPortionEnumeration(),
+        mrCurrentTextPortion(),
+        mpTextEmbeddedBitmapMtf( NULL ),
         mpTargetMapMode( NULL ),
         mpTextShapeElem( NULL ),
         mpTextParagraphElem( NULL ),
         mpTextPositionElem( NULL ),
+        mnLeftTextPortionLength( 0 ),
         maTextPos(0,0),
         mnTextWidth(0),
+        mbPositioningNeeded( sal_False ),
+        mbIsNumbering( sal_False ),
+        maBulletListItemMap(),
+        mbIsListLevelStyleImage( sal_False ),
+        mbLineBreak( sal_False ),
+        mbIsURLField( sal_False ),
+        msUrl(),
         mbIsPlacehlolderShape( sal_False ),
         mbIWS( sal_False ),
         maCurrentFont(),
@@ -461,6 +486,21 @@ SVGTextWriter::SVGTextWriter( SVGExport& rExport, SVGFontExport& rFontExport )
 SVGTextWriter::~SVGTextWriter()
 {
     endTextParagraph();
+}
+
+// -----------------------------------------------------------------------------
+
+void SVGTextWriter::implRegisterInterface( const Reference< XInterface >& rxIf )
+{
+    if( rxIf.is() )
+        (mrExport.getInterfaceToIdentifierMapper()).registerReference( rxIf );
+}
+
+// -----------------------------------------------------------------------------
+
+const ::rtl::OUString & SVGTextWriter::implGetValidIDFromInterface( const Reference< XInterface >& rxIf )
+{
+   return (mrExport.getInterfaceToIdentifierMapper()).getIdentifier( rxIf );
 }
 
 // -----------------------------------------------------------------------------
@@ -818,8 +858,236 @@ void SVGTextWriter::implSetFontFamily()
 
 // -----------------------------------------------------------------------------
 
+sal_Bool SVGTextWriter::nextParagraph()
+{
+    mrTextPortionEnumeration.clear();
+    if( mrParagraphEnumeration.is() && mrParagraphEnumeration->hasMoreElements() )
+    {
+        Reference < XTextContent >  xTextContent( mrParagraphEnumeration->nextElement(), UNO_QUERY_THROW );
+        if( xTextContent.is() )
+        {
+            Reference< XServiceInfo > xServiceInfo( xTextContent, UNO_QUERY_THROW );
+            if( xServiceInfo.is() )
+            {
+                OUString sInfo;
+                if( xServiceInfo->supportsService( B2UCONST( "com.sun.star.text.Paragraph" ) ) )
+                {
+                    Reference< XPropertySet > xPropSet( xTextContent, UNO_QUERY_THROW );
+                    Reference< XPropertySetInfo > xPropSetInfo = xPropSet->getPropertySetInfo();
+                    mbIsNumbering = sal_False;
+                    mbIsListLevelStyleImage = sal_False;
+                    if( xPropSetInfo->hasPropertyByName( B2UCONST( "NumberingLevel" ) ) )
+                    {
+                        sal_Int16 nListLevel = 0;
+                        if( xPropSet->getPropertyValue( B2UCONST( "NumberingLevel" ) ) >>= nListLevel )
+                        {
+                            mbIsNumbering = sal_True;
+                            sInfo = B2UCONST( "NumberingLevel: " );
+                            sInfo += OUString::valueOf( (sal_Int32)nListLevel );
+                            mrExport.AddAttribute( XML_NAMESPACE_NONE, "style", sInfo );
+
+                            Reference< XIndexReplace > xNumRules;
+                            if( xPropSetInfo->hasPropertyByName( B2UCONST( "NumberingRules" ) ) )
+                            {
+                                xPropSet->getPropertyValue( B2UCONST( "NumberingRules" ) ) >>= xNumRules;
+                            }
+                            if( xNumRules.is() && ( nListLevel < xNumRules->getCount() ) )
+                            {
+                                Sequence<PropertyValue> aProps;
+                                if( xNumRules->getByIndex( nListLevel ) >>= aProps )
+                                {
+                                    sal_Int16 eType = NumberingType::CHAR_SPECIAL;
+                                    sal_Unicode cBullet = 0xf095;
+                                    const sal_Int32 nCount = aProps.getLength();
+                                    const PropertyValue* pPropArray = aProps.getConstArray();
+                                    for( sal_Int32 i = 0; i < nCount; ++i )
+                                    {
+                                        const PropertyValue& rProp = pPropArray[i];
+                                        if( rProp.Name.equalsAsciiL( XML_UNO_NAME_NRULE_NUMBERINGTYPE, sizeof(XML_UNO_NAME_NRULE_NUMBERINGTYPE)-1 ) )
+                                        {
+                                            rProp.Value >>= eType;
+                                        }
+                                        else if( rProp.Name.equalsAsciiL( XML_UNO_NAME_NRULE_BULLET_CHAR, sizeof(XML_UNO_NAME_NRULE_BULLET_CHAR)-1 ) )
+                                        {
+                                            OUString sValue;
+                                            rProp.Value >>= sValue;
+                                            if( !sValue.isEmpty() )
+                                            {
+                                                cBullet = (sal_Unicode)sValue[0];
+                                            }
+                                        }
+                                    }
+                                    meNumberingType = eType;
+                                    mbIsListLevelStyleImage = ( NumberingType::BITMAP == meNumberingType );
+                                    if( NumberingType::CHAR_SPECIAL == meNumberingType )
+                                    {
+                                        if( cBullet )
+                                        {
+                                            if( cBullet < ' ' )
+                                            {
+                                                cBullet = 0xF000 + 149;
+                                            }
+                                            mcBulletChar = cBullet;
+                                            // text:bullet-char="..."
+                                            sInfo = OUString::valueOf( (sal_Int32) cBullet );
+                                            mrExport.AddAttribute( XML_NAMESPACE_NONE, "bullet-char", sInfo );
+                                        }
+
+                                    }
+                                }
+                            }
+
+                        }
+                    }
+
+                    Reference< XEnumerationAccess > xEnumerationAccess( xTextContent, UNO_QUERY_THROW );
+                    Reference< XEnumeration > xEnumeration( xEnumerationAccess->createEnumeration(), UNO_QUERY_THROW );
+                    if( xEnumeration.is() && xEnumeration->hasMoreElements() )
+                    {
+                        mrTextPortionEnumeration.set( xEnumeration );
+                    }
+                    sInfo = B2UCONST( "Paragraph" );
+                }
+                else if( xServiceInfo->supportsService( B2UCONST( "com.sun.star.text.Table" ) ) )
+                {
+                    sInfo = B2UCONST( "Table" );
+                }
+                else
+                {
+                    OSL_FAIL( "SVGTextWriter::nextParagraph: Unknown text content." );
+                    return sal_False;
+                }
+                mrExport.AddAttribute( XML_NAMESPACE_NONE, "class", sInfo );
+                SvXMLElementExport aParaElem( mrExport, XML_NAMESPACE_NONE, "desc", mbIWS, mbIWS );
+            }
+
+            Reference< XInterface > xRef( xTextContent, UNO_QUERY );
+            const OUString& rParagraphId = implGetValidIDFromInterface( xRef );
+            if( !rParagraphId.isEmpty() )
+            {
+                mrExport.AddAttribute( XML_NAMESPACE_NONE, "id", rParagraphId );
+            }
+            return sal_True;
+        }
+    }
+    return sal_False;
+}
+
+// -----------------------------------------------------------------------------
+
+sal_Bool SVGTextWriter::nextTextPortion()
+{
+    mrCurrentTextPortion.clear();
+    mbIsURLField = sal_False;
+    if( mrTextPortionEnumeration.is() && mrTextPortionEnumeration->hasMoreElements() )
+    {
+        OUString sInfo;
+        Reference< XPropertySet > xPortionPropSet( mrTextPortionEnumeration->nextElement(), UNO_QUERY );
+        Reference< XPropertySetInfo > xPortionPropInfo( xPortionPropSet->getPropertySetInfo() );
+        Reference < XTextRange > xPortionTextRange( xPortionPropSet, UNO_QUERY);
+        if( xPortionPropSet.is() && xPortionPropInfo.is()
+                && xPortionPropInfo->hasPropertyByName( B2UCONST( "TextPortionType" ) ) )
+        {
+            ::rtl::OUString sPortionType;
+            if( xPortionPropSet->getPropertyValue( B2UCONST( "TextPortionType" ) ) >>= sPortionType )
+            {
+                sInfo = B2UCONST( "type: " );
+                sInfo += sPortionType;
+                sInfo += B2UCONST( "; " );
+            }
+            if( xPortionTextRange.is() )
+            {
+                sInfo += B2UCONST( "content: " );
+                sInfo += xPortionTextRange->getString();
+                sInfo += B2UCONST( "; " );
+
+                mrCurrentTextPortion.set( xPortionTextRange );
+
+                Reference < XPropertySet > xRangePropSet( xPortionTextRange, UNO_QUERY );
+                if( xRangePropSet.is() && xRangePropSet->getPropertySetInfo()->hasPropertyByName( B2UCONST( "TextField" ) ) )
+                {
+                    Reference < XTextField > xTextField( xRangePropSet->getPropertyValue( B2UCONST( "TextField" ) ), UNO_QUERY );
+                    if( xTextField.is() )
+                    {
+                        const ::rtl::OUString sServicePrefix( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.textfield.") );
+                        Reference< XServiceInfo > xService( xTextField, UNO_QUERY );
+                        const Sequence< OUString > aServices = xService->getSupportedServiceNames();
+                        const OUString* pNames = aServices.getConstArray();
+                        sal_Int32 nCount = aServices.getLength();
+
+                        OUString sFieldName;    // service name postfix of current field
+
+                        // search for TextField service name
+                        while( nCount-- )
+                        {
+                            if ( pNames->matchIgnoreAsciiCase( sServicePrefix ) )
+                            {
+                                // TextField found => postfix is field type!
+                                sFieldName = pNames->copy( sServicePrefix.getLength() );
+                                break;
+                            }
+
+                            ++pNames;
+                        }
+
+                        sInfo += B2UCONST( "text field type: " );
+                        sInfo += sFieldName;
+                        sInfo += B2UCONST( "; " );
+
+                        mbIsURLField = sFieldName.equalsAscii( "URL" );
+                        if( mbIsURLField )
+                        {
+                            Reference<XPropertySet> xTextFieldPropSet(xTextField, UNO_QUERY);
+                            if( xTextFieldPropSet.is() )
+                            {
+                                OUString sURL;
+                                if( ( xTextFieldPropSet->getPropertyValue( sFieldName ) ) >>= sURL )
+                                {
+                                    sInfo += B2UCONST( "url: " );
+                                    sInfo += mrExport.GetRelativeReference( sURL );
+
+                                    msUrl = mrExport.GetRelativeReference( sURL );
+                                    if( !msUrl.isEmpty() )
+                                    {
+                                        implRegisterInterface( xPortionTextRange );
+
+                                        Reference< XInterface > xRef( xPortionTextRange, UNO_QUERY );
+                                        const OUString& rTextPortionId = implGetValidIDFromInterface( xRef );
+                                        if( !rTextPortionId.isEmpty() )
+                                        {
+                                            msHyperlinkIdList += rTextPortionId;
+                                            msHyperlinkIdList += B2UCONST( " " );
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            mrExport.AddAttribute( XML_NAMESPACE_NONE, "class", B2UCONST( "TextPortion" ) );
+            SvXMLElementExport aPortionElem( mrExport, XML_NAMESPACE_NONE, "desc", mbIWS, mbIWS );
+            mrExport.GetDocHandler()->characters( sInfo );
+            return sal_True;
+        }
+    }
+    return sal_False;
+}
+
+// -----------------------------------------------------------------------------
+
 void SVGTextWriter::startTextShape()
 {
+    if( mrTextShape.is() )
+    {
+        Reference< XEnumerationAccess > xEnumerationAccess( mrTextShape, UNO_QUERY_THROW );
+        Reference< XEnumeration > xEnumeration( xEnumerationAccess->createEnumeration(), UNO_QUERY_THROW );
+        if( xEnumeration.is() && xEnumeration->hasMoreElements() )
+        {
+            mrParagraphEnumeration.set( xEnumeration );
+        }
+    }
+
     if( mpTextShapeElem )
     {
         OSL_FAIL( "SVGTextWriter::startTextShape: text shape already defined." );
@@ -827,6 +1095,7 @@ void SVGTextWriter::startTextShape()
     else
     {
         maParentFont = Font();
+        mrExport.AddAttribute( XML_NAMESPACE_NONE, "class", B2UCONST( "TextShape" ) );
         mpTextShapeElem = new SvXMLElementExport( mrExport, XML_NAMESPACE_NONE, aXMLElemText, sal_True, mbIWS );
         startTextParagraph();
     }
@@ -837,11 +1106,20 @@ void SVGTextWriter::startTextShape()
 void SVGTextWriter::endTextShape()
 {
     endTextParagraph();
+    if( mrTextShape.is() )
+        mrTextShape.clear();
+    if( mrParagraphEnumeration.is() )
+        mrParagraphEnumeration.clear();
     if( mpTextShapeElem )
     {
         delete mpTextShapeElem;
         mpTextShapeElem = NULL;
     }
+    // these need to be invoked after the <text> element has been closed
+    implExportHyperlinkIds();
+    implWriteBulletChars();
+    implWriteEmbeddedBitmaps();
+
 }
 
 // -----------------------------------------------------------------------------
@@ -849,11 +1127,36 @@ void SVGTextWriter::endTextShape()
 void SVGTextWriter::startTextParagraph()
 {
     endTextParagraph();
-    mrExport.AddAttribute( XML_NAMESPACE_NONE, "class", B2UCONST( "TextParagraph" ) );
+    nextParagraph();
+    if( mbIsNumbering )
+    {
+        OUString sNumberingType;
+        switch( meNumberingType )
+        {
+            case( NumberingType::CHAR_SPECIAL ):
+                    sNumberingType = B2UCONST( "bullet-style" );
+                    break;
+            case( NumberingType::BITMAP ):
+                    sNumberingType = B2UCONST( "image-style" );
+                    break;
+            default:
+                    sNumberingType = B2UCONST( "number-style" );
+                    break;
+        }
+        mrExport.AddAttribute( XML_NAMESPACE_NONE, aOOOAttrNumberingType, sNumberingType );
+        mrExport.AddAttribute( XML_NAMESPACE_NONE, "class", B2UCONST( "ListItem" ) );
+    }
+    else
+    {
+        mrExport.AddAttribute( XML_NAMESPACE_NONE, "class", B2UCONST( "TextParagraph" ) );
+    }
     maParentFont = Font();
     addFontAttributes( /* isTexTContainer: */ true );
     mpTextParagraphElem = new SvXMLElementExport( mrExport, XML_NAMESPACE_NONE, aXMLElemTspan, mbIWS, mbIWS );
-    startTextPosition();
+    if( !mbIsListLevelStyleImage )
+    {
+        startTextPosition();
+    }
 }
 
 // -----------------------------------------------------------------------------
@@ -861,11 +1164,16 @@ void SVGTextWriter::startTextParagraph()
 void SVGTextWriter::endTextParagraph()
 {
     endTextPosition();
+    mbIsNumbering = sal_False;
+    mbIsListLevelStyleImage = sal_False;
+    mbPositioningNeeded = sal_False;
+
     if( mpTextParagraphElem )
     {
         delete mpTextParagraphElem;
         mpTextParagraphElem = NULL;
     }
+
 }
 
 // -----------------------------------------------------------------------------
@@ -895,10 +1203,215 @@ void SVGTextWriter::endTextPosition()
 
 // -----------------------------------------------------------------------------
 
+void SVGTextWriter::implExportHyperlinkIds()
+{
+    if( !msHyperlinkIdList.isEmpty() )
+    {
+        mrExport.AddAttribute( XML_NAMESPACE_NONE, "class", B2UCONST( "HyperlinkIdList" ) );
+        SvXMLElementExport aDescElem( mrExport, XML_NAMESPACE_NONE, "desc", sal_True, sal_True );
+        mrExport.GetDocHandler()->characters( msHyperlinkIdList.trim() );
+        msHyperlinkIdList = OUString();
+    }
+}
+
+// -----------------------------------------------------------------------------
+
+void SVGTextWriter::implWriteBulletChars()
+{
+    if( maBulletListItemMap.empty() )
+        return;
+
+    mrExport.AddAttribute( XML_NAMESPACE_NONE, "class", B2UCONST( "BulletChars" ) );
+    SvXMLElementExport aGroupElem( mrExport, XML_NAMESPACE_NONE, aXMLElemG, sal_True, sal_True );
+
+    BulletListItemInfoMap::const_iterator it = maBulletListItemMap.begin();
+    BulletListItemInfoMap::const_iterator end = maBulletListItemMap.end();
+    OUString sId, sPosition, sScaling, sRefId;
+    for( ; it != end; ++it )
+    {
+        // <g id="?" > (used by animations)
+        {
+            // As id we use the id of the text portion placeholder wrapped
+            // by bullet-char(*)
+            sId = B2UCONST( "bullet-char(" );
+            sId += it->first;
+            sId += B2UCONST( ")" );
+            mrExport.AddAttribute( XML_NAMESPACE_NONE, "id", sId );
+            SvXMLElementExport aBulletCharElem( mrExport, XML_NAMESPACE_NONE, aXMLElemG, sal_True, sal_True );
+
+            // <g transform="translate(x,y)" >
+            {
+                const BulletListItemInfo& rInfo = it->second;
+
+                // Add positioning attribute through a translation
+                sPosition = B2UCONST( "translate(" );
+                sPosition += OUString::valueOf( rInfo.aPos.X() );
+                sPosition += B2UCONST( "," );
+                sPosition += OUString::valueOf( rInfo.aPos.Y() );
+                sPosition += B2UCONST( ")" );
+                mrExport.AddAttribute( XML_NAMESPACE_NONE, "transform", sPosition );
+
+                mpContext->AddPaintAttr( COL_TRANSPARENT, rInfo.aColor );
+
+                SvXMLElementExport aPositioningElem( mrExport, XML_NAMESPACE_NONE, aXMLElemG, sal_True, sal_True );
+
+                // <use transform="scale(font-size)" xlink:ref="/" >
+                {
+                    // Add size attribute through a scaling
+                    sScaling = B2UCONST( "scale(" );
+                    sScaling += OUString::valueOf( rInfo.nFontSize );
+                    sScaling += B2UCONST( "," );
+                    sScaling += OUString::valueOf( rInfo.nFontSize );
+                    sScaling += B2UCONST( ")" );
+                    mrExport.AddAttribute( XML_NAMESPACE_NONE, "transform", sScaling );
+
+                    // Add ref attribute
+                    sRefId = B2UCONST( "#bullet-char-template(" );
+                    sRefId += OUString::valueOf( (sal_Int32)( rInfo.cBulletChar )  );
+                    sRefId += B2UCONST( ")" );
+                    mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrXLinkHRef, sRefId );
+
+                    SvXMLElementExport aRefElem( mrExport, XML_NAMESPACE_NONE, "use", sal_True, sal_True );
+                }
+            } // close aPositioningElem
+        } // close aBulletCharElem
+    }
+
+
+    // clear the map
+    maBulletListItemMap.clear();
+}
+
+// -----------------------------------------------------------------------------
+
+void SVGTextWriter::writeBitmapPlaceholder( const MetaBmpExScaleAction* pAction )
+{
+    // text position element
+    const Point& rPos = pAction->GetPoint();
+    implMap( rPos, maTextPos );
+    startTextPosition();
+    mbPositioningNeeded = sal_True;
+    if( mbIsNumbering )
+    {
+        mbIsNumbering = sal_False;
+        mbIsListLevelStyleImage = sal_False;
+    }
+
+    // bitmap placeholder element
+    sal_uLong nId = SVGActionWriter::GetChecksum( pAction );
+    OUString sId = B2UCONST( "bitmap-placeholder(" );
+    sId += OUString::valueOf( (sal_Int64)nId );
+    sId += B2UCONST( ")" );
+    mrExport.AddAttribute( XML_NAMESPACE_NONE, "id", sId );
+
+    mrExport.AddAttribute( XML_NAMESPACE_NONE, "class", B2UCONST( "BitmapPlaceholder" ) );
+    SvXMLElementExport aSVGTspanElem( mrExport, XML_NAMESPACE_NONE, aXMLElemTspan, mbIWS, mbIWS );
+}
+
+// -----------------------------------------------------------------------------
+
+void SVGTextWriter::implWriteEmbeddedBitmaps()
+{
+    if( mpTextEmbeddedBitmapMtf && mpTextEmbeddedBitmapMtf->GetActionSize() )
+    {
+        mrExport.AddAttribute( XML_NAMESPACE_NONE, "class", B2UCONST( "EmbeddedBitmaps" ) );
+        SvXMLElementExport aEmbBitmapGroupElem( mrExport, XML_NAMESPACE_NONE, aXMLElemG, sal_True, sal_True );
+
+        const GDIMetaFile& rMtf = *mpTextEmbeddedBitmapMtf;
+
+        OUString sId, sRefId;
+        sal_uLong nId;
+        sal_uLong nCount = rMtf.GetActionSize();
+        for( sal_uLong nCurAction = 0; nCurAction < nCount; nCurAction++ )
+        {
+            MetaBmpExScaleAction* pAction = (MetaBmpExScaleAction*) rMtf.GetAction( nCurAction );
+
+            // <g id="?" > (used by animations)
+            {
+                // embedded bitmap id
+                nId = SVGActionWriter::GetChecksum( pAction );
+                sId = B2UCONST( "embedded-bitmap(" );
+                sId += OUString::valueOf( (sal_Int64)nId );
+                sId += B2UCONST( ")" );
+                mrExport.AddAttribute( XML_NAMESPACE_NONE, "id", sId );
+
+                SvXMLElementExport aEmbBitmapElem( mrExport, XML_NAMESPACE_NONE, aXMLElemG, sal_True, sal_True );
+
+                // <use x="?" y="?" xlink:ref="?" >
+                {
+                    // referenced bitmap template
+                    nId = pAction->GetBitmapEx().GetChecksum();
+                    sRefId = B2UCONST( "#bitmap(" );
+                    sRefId += OUString::valueOf( (sal_Int64)nId );
+                    sRefId += B2UCONST( ")" );
+
+                    const Point& rPt = pAction->GetPoint();
+                    const Size&  rSz = pAction->GetSize();
+                    Point aPt;
+                    Size  aSz;
+                    implMap( rPt, aPt );
+                    implMap( rSz, aSz );
+
+                    mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrX, OUString::valueOf( aPt.X() ) );
+                    mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrY, OUString::valueOf( aPt.Y() ) );
+                    mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrXLinkHRef, sRefId );
+
+                    SvXMLElementExport aRefElem( mrExport, XML_NAMESPACE_NONE, "use", sal_True, sal_True );
+                }
+            } // close aEmbBitmapElem
+        }
+    }
+}
+
+// -----------------------------------------------------------------------------
+
 void SVGTextWriter::writeTextPortion( const Point& rPos,
                                       const String& rText,
                                       sal_Bool bApplyMapping )
 {
+    if( rText.Len() == 0 )
+        return;
+
+    mbLineBreak = sal_False;
+
+    if( !mbIsNumbering || mbIsListLevelStyleImage )
+    {
+        bool bNotSync = true;
+        OUString sContent;
+        sal_Int32 nStartPos;
+        do
+        {
+            while( bNotSync )
+            {
+                if( mnLeftTextPortionLength <= 0 )
+                {
+                    if( !nextTextPortion() )
+                        break;
+                    else
+                    {
+                        sContent = mrCurrentTextPortion->getString();
+                        mnLeftTextPortionLength = sContent.getLength();
+                    }
+                }
+                else
+                {
+                    sContent = mrCurrentTextPortion->getString();
+                }
+
+                nStartPos = sContent.getLength() - mnLeftTextPortionLength;
+                if( nStartPos < 0 ) nStartPos = 0;
+                mnLeftTextPortionLength -= rText.Len();
+
+                if( sContent.isEmpty() )
+                    continue;
+                if( sContent.equalsAscii( "\n" ) )
+                    mbLineBreak = sal_True;
+                if( sContent.match( rText, nStartPos ) )
+                    bNotSync = false;
+            }
+        } while( bNotSync && nextParagraph() );
+    }
+
     if( !mpVDev )
         OSL_FAIL( "SVGTextWriter::writeTextPortion: invalid virtual device." );
 
@@ -1014,23 +1527,71 @@ void SVGTextWriter::implWriteTextPortion( const Point& rPos,
     else
         aPos = rPos;
 
-
-    if( maTextPos.Y() != aPos.Y() )
+    if( mbPositioningNeeded )
+    {
+        mbPositioningNeeded = sal_False;
+        maTextPos.setX( aPos.X() );
+        maTextPos.setY( aPos.Y() );
+        startTextPosition();
+    }
+    else if( maTextPos.Y() != aPos.Y() )
     {
         // In case the text position moved backward we could have a line break
         // so we end the current line and start a new one.
-        if( ( maTextPos.X() + mnTextWidth ) > aPos.X() )
+        if( mbLineBreak || ( ( maTextPos.X() + mnTextWidth ) > aPos.X() ) )
         {
+            mbLineBreak = sal_False;
             maTextPos.setX( aPos.X() );
             maTextPos.setY( aPos.Y() );
             startTextPosition();
         }
-        else // superscript, subscript, bullets
+        else // superscript, subscript, list item numbering
         {
-            //mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrY, ::rtl::OUString::valueOf( aPos.Y() ) );
             maTextPos.setY( aPos.Y() );
             startTextPosition( sal_False /* do not export x attribute */ );
         }
+    }
+    // we are dealing with a bullet, so set up this for the next text portion
+    if( mbIsNumbering )
+    {
+        mbIsNumbering = sal_False;
+        mbPositioningNeeded = sal_True;
+
+        if( meNumberingType == NumberingType::CHAR_SPECIAL )
+        {
+            // Create an id for the current text portion
+            implRegisterInterface( mrCurrentTextPortion );
+
+            // Add the needed info to the BulletListItemMap
+            Reference< XInterface > xRef( mrCurrentTextPortion, UNO_QUERY );
+            const OUString& rId = implGetValidIDFromInterface( xRef );
+            if( !rId.isEmpty() )
+            {
+                BulletListItemInfo& aBulletListItemInfo = maBulletListItemMap[ rId ];
+                aBulletListItemInfo.nFontSize = rFont.GetHeight();
+                aBulletListItemInfo.aColor = aTextColor;
+                aBulletListItemInfo.aPos = maTextPos;
+                aBulletListItemInfo.cBulletChar = mcBulletChar;
+
+                // Make this text portion a bullet placeholder
+                mrExport.AddAttribute( XML_NAMESPACE_NONE, "id", rId );
+                mrExport.AddAttribute( XML_NAMESPACE_NONE, "class", B2UCONST( "BulletPlaceholder" ) );
+                SvXMLElementExport aSVGTspanElem( mrExport, XML_NAMESPACE_NONE, aXMLElemTspan, mbIWS, mbIWS );
+                return;
+            }
+        }
+    }
+
+    Reference< XInterface > xRef( mrCurrentTextPortion, UNO_QUERY );
+    const OUString& rTextPortionId = implGetValidIDFromInterface( xRef );
+    if( !rTextPortionId.isEmpty() )
+    {
+        mrExport.AddAttribute( XML_NAMESPACE_NONE, "id", rTextPortionId );
+    }
+
+    if( mbIsURLField && !msUrl.isEmpty() )
+    {
+        mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrXLinkHRef, msUrl );
     }
 
 
@@ -1232,6 +1793,35 @@ PolyPolygon& SVGActionWriter::ImplMap( const PolyPolygon& rPolyPoly, PolyPolygon
     }
 
      return aPathData;
+}
+
+// -----------------------------------------------------------------------------
+
+sal_uLong SVGActionWriter::GetChecksum( const MetaBmpExScaleAction* pAct )
+{
+    sal_uLong           nCrc = 0;
+    SVBT16              aBT16;
+    SVBT32              aBT32;
+
+    ShortToSVBT16( pAct->GetType(), aBT16 );
+    nCrc = rtl_crc32( nCrc, aBT16, 2 );
+
+    UInt32ToSVBT32( pAct->GetBitmapEx().GetChecksum(), aBT32 );
+    nCrc = rtl_crc32( nCrc, aBT32, 4 );
+
+    UInt32ToSVBT32( pAct->GetPoint().X(), aBT32 );
+    nCrc = rtl_crc32( nCrc, aBT32, 4 );
+
+    UInt32ToSVBT32( pAct->GetPoint().Y(), aBT32 );
+    nCrc = rtl_crc32( nCrc, aBT32, 4 );
+
+    UInt32ToSVBT32( pAct->GetSize().Width(), aBT32 );
+    nCrc = rtl_crc32( nCrc, aBT32, 4 );
+
+    UInt32ToSVBT32( pAct->GetSize().Height(), aBT32 );
+    nCrc = rtl_crc32( nCrc, aBT32, 4 );
+
+    return nCrc;
 }
 
 // -----------------------------------------------------------------------------
@@ -2043,14 +2633,23 @@ void SVGActionWriter::ImplWriteBmp( const BitmapEx& rBmpEx,
 
 void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                                         sal_uInt32 nWriteFlags,
-                                        const ::rtl::OUString* pElementId )
+                                        const ::rtl::OUString* pElementId,
+                                        const Reference< XShape >* pxShape,
+                                        const GDIMetaFile* pTextEmbeddedBitmapMtf )
 {
     if( mnInnerMtfCount )
         nWriteFlags |= SVGWRITER_NO_SHAPE_COMMENTS;
 
+    if( !mrExport.IsUsePositionedCharacters() && pxShape
+            && Reference< XText >( *pxShape, UNO_QUERY ).is() )
+    {
+        Reference< XText > xText( *pxShape, UNO_QUERY );
+        maTextWriter.setTextShape( xText, pTextEmbeddedBitmapMtf );
+    }
+
     mbIsPlacehlolderShape = false;
     maTextWriter.setPlaceholderShapeFlag( false );
-    if( pElementId != NULL && ( *pElementId == sPlaceholderTag ) )
+    if( ( pElementId != NULL ) && ( *pElementId == sPlaceholderTag ) )
     {
         mbIsPlacehlolderShape = true;
         maTextWriter.setPlaceholderShapeFlag( true );
@@ -2063,7 +2662,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
         const MetaAction*   pAction = rMtf.GetAction( nCurAction );
         const sal_uInt16        nType = pAction->GetType();
 
-        if( bIsTextShape )
+        if( maTextWriter.getTextShape().is() )
         {
             try
             {
@@ -2677,9 +3276,17 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                 {
                     const MetaBmpExScaleAction* pA = (const MetaBmpExScaleAction*) pAction;
 
-                    ImplWriteBmp( pA->GetBitmapEx(),
-                                  pA->GetPoint(), pA->GetSize(),
-                                  Point(), pA->GetBitmapEx().GetSizePixel() );
+                    // Bitmaps embedded into text shapes are collected and exported elsewhere.
+                    if( maTextWriter.getTextShape().is() )
+                    {
+                        maTextWriter.writeBitmapPlaceholder( pA );
+                    }
+                    else
+                    {
+                        ImplWriteBmp( pA->GetBitmapEx(),
+                                      pA->GetPoint(), pA->GetSize(),
+                                      Point(), pA->GetBitmapEx().GetSizePixel() );
+                    }
                 }
             }
             break;
@@ -2874,7 +3481,9 @@ void SVGActionWriter::WriteMetaFile( const Point& rPos100thmm,
                                      const Size& rSize100thmm,
                                      const GDIMetaFile& rMtf,
                                      sal_uInt32 nWriteFlags,
-                                     const ::rtl::OUString* pElementId )
+                                     const ::rtl::OUString* pElementId,
+                                     const Reference< XShape >* pXShape,
+                                     const GDIMetaFile* pTextEmbeddedBitmapMtf )
 {
     MapMode     aMapMode( rMtf.GetPrefMapMode() );
     Size        aPrefSize( rMtf.GetPrefSize() );
@@ -2895,7 +3504,7 @@ void SVGActionWriter::WriteMetaFile( const Point& rPos100thmm,
 
     mapCurShape.reset();
 
-    ImplWriteActions( rMtf, nWriteFlags, pElementId );
+    ImplWriteActions( rMtf, nWriteFlags, pElementId, pXShape, pTextEmbeddedBitmapMtf );
 
     // draw open shape that doesn't have a border
     if( mapCurShape.get() )
