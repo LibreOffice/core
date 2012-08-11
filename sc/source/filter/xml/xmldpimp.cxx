@@ -329,7 +329,7 @@ void ScXMLDataPilotTableContext::SetButtons()
     aGeometry.setPageFieldCount(mnPageFieldCount);
     aGeometry.setDataFieldCount(mnDataFieldCount);
 
-    std::vector<const ScDPSaveDimension*> aRowDims, aColDims, aPageDims;
+    std::vector<const ScDPSaveDimension*> aRowDims, aColDims;
     pDPSave->GetAllDimensionsByOrientation(sheet::DataPilotFieldOrientation_ROW, aRowDims);
     pDPSave->GetAllDimensionsByOrientation(sheet::DataPilotFieldOrientation_COLUMN, aColDims);
 
