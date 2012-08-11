@@ -311,25 +311,27 @@ bool TemplateLocalView::removeRegion(const sal_uInt16 nItemId)
 bool TemplateLocalView::removeTemplate (const sal_uInt16 nItemId, const sal_uInt16 nSrcItemId)
 {
     sal_uInt16 nRegionId = nSrcItemId - 1;
-    sal_uInt16 nTemplateId = nItemId - 1;
-
-    if (!mpDocTemplates->Delete(nRegionId,nTemplateId))
-        return false;
 
     for (size_t i = 0, n = mItemList.size(); i < n; ++i)
     {
         if (mItemList[i]->mnId == nSrcItemId)
         {
-
             TemplateLocalViewItem *pItem = static_cast<TemplateLocalViewItem*>(mItemList[i]);
             std::vector<TemplateItemProperties>::iterator pIter;
             for (pIter = pItem->maTemplates.begin(); pIter != pItem->maTemplates.end(); ++pIter)
             {
                 if (pIter->nId == nItemId)
                 {
-                    pItem->maTemplates.erase(pIter);
+                    if (!mpDocTemplates->Delete(nRegionId,pIter->nDocId))
+                        return false;
+
+                    pIter = pItem->maTemplates.erase(pIter);
 
                     mpItemView->RemoveItem(nItemId);
+
+                    // Update Doc Idx for all templates that follow
+                    for (; pIter != pItem->maTemplates.end(); ++pIter)
+                        pIter->nDocId = pIter->nDocId - 1;
 
                     break;
                 }
