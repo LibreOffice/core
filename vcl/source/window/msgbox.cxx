@@ -327,10 +327,8 @@ void MessBox::ImplPosControls()
     }
 
     // Style fuer VCLMultiLineEdit ermitteln
-    mpVCLMultiLineEdit = new VCLMultiLineEdit( this, nWinStyle );
-    mpVCLMultiLineEdit->SetText( aMessText );
-    aMEditSize = mpVCLMultiLineEdit->CalcMinimumSize();
-
+    aMEditSize.Width()  = aTextInfo.GetMaxLineWidth()+1;
+    aMEditSize.Height() = aFormatRect.GetHeight();
     aPageSize.Width()   = aImageSize.Width();
     if ( aMEditSize.Height() < aImageSize.Height() )
     {
@@ -400,7 +398,8 @@ void MessBox::ImplPosControls()
         mpCheckBox->Show();
     }
 
-
+    mpVCLMultiLineEdit = new VCLMultiLineEdit( this, nWinStyle );
+    mpVCLMultiLineEdit->SetText( aMessText );
     mpVCLMultiLineEdit->SetPosSizePixel( aTextPos, aMEditSize );
     mpVCLMultiLineEdit->Show();
     mpVCLMultiLineEdit->SetPaintTransparent(sal_True);
