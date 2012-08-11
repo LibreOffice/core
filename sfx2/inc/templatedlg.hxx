@@ -128,7 +128,6 @@ private:
     PopupMenu *mpRepositoryMenu;
     PopupMenu *mpTemplateDefaultMenu;
 
-    int mnSelectionCount;
     std::set<const ThumbnailViewItem*> maSelTemplates;
     std::set<const ThumbnailViewItem*> maSelFolders;
 

@@ -120,7 +120,6 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg (Window *parent)
       mpSearchView(new TemplateSearchView(this)),
       maView(new TemplateLocalView(this,SfxResId(TEMPLATE_VIEW))),
       mpOnlineView(new TemplateOnlineView(this, WB_VSCROLL,false)),
-      mnSelectionCount(0),
       mxDesktop(comphelper::getProcessServiceFactory()->createInstance( "com.sun.star.frame.Desktop" ),uno::UNO_QUERY )
 {
     maButtonSelMode.SetStyle(maButtonSelMode.GetStyle() | WB_TOGGLE);
