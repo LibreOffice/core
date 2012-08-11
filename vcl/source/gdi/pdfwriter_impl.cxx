@@ -82,6 +82,14 @@
 
 #include "cppuhelper/implbase1.hxx"
 
+// NSS header files for PDF signing support
+#include "nss.h"
+#include "cert.h"
+#include "hasht.h"
+#include "sechash.h"
+#include "pkcs7t.h"
+#include "secpkcs7.h"
+
 using namespace vcl;
 
 using ::rtl::OUString;
@@ -6098,7 +6106,7 @@ bool PDFWriterImpl::emitSignature()
     OStringBuffer aContentFiller( MAX_SIGNATURE_CONTENT_LENGTH );
     comphelper::string::padToLength(aContentFiller, MAX_SIGNATURE_CONTENT_LENGTH, '0');
     aLine.append( aContentFiller.makeStringAndClear() );
-    aLine.append( ">\n/Type/Sig/SubFilter/adbe.pkcs7.sha1");
+    aLine.append( ">\n/Type/Sig/SubFilter/adbe.pkcs7.detached");
 
     if( m_aContext.DocumentInfo.Author.Len() )
     {
@@ -6152,6 +6160,23 @@ bool PDFWriterImpl::emitSignature()
     return true;
 }
 
+void PDFSigningPKCS7Callback(void *arg, const char *buf, unsigned long len)
+{
+    OStringBuffer outbuffer;
+
+    for (unsigned int i = 0; i < len ; i++)
+        appendHex(buf[i], outbuffer);
+
+    sal_uInt64 nWritten = 0;
+
+    osl_writeFile((oslFileHandle)arg, outbuffer.getStr(), outbuffer.getLength(), &nWritten);
+}
+
+void *PDFSigningPKCS7PasswordCallback(void *arg, void * /*handle*/)
+{
+    return arg;
+}
+
 bool PDFWriterImpl::finalizeSignature()
 {
 
@@ -6162,7 +6187,7 @@ bool PDFWriterImpl::finalizeSignature()
     sal_uInt64 nOffset = ~0U;
     CHECK_RETURN( (osl_File_E_None == osl_getFilePos( m_aFile, &nOffset ) ) );
 
-    sal_Int64 nLastByteRangeNo = nOffset - (m_nSignatureContentOffset + MAX_SIGNATURE_CONTENT_LENGTH) - 1;
+    sal_Int64 nLastByteRangeNo = nOffset - (m_nSignatureContentOffset + MAX_SIGNATURE_CONTENT_LENGTH + 1);
 
     // 2- overwrite the value to the m_nSignatureLastByteRangeNoOffset position
     sal_uInt64 nWritten = 0;
@@ -6185,18 +6210,102 @@ bool PDFWriterImpl::finalizeSignature()
     if (!derEncoded.hasElements())
         return false;
 
-#if 0
-    // FIXME TODO
     sal_Int8* n_derArray = derEncoded.getArray();
     sal_Int32 n_derLength = derEncoded.getLength();
-#endif
 
-    // 4- overwrite the PKCS7 content to the m_nSignatureContentOffset
-    CHECK_RETURN( (osl_File_E_None == osl_setFilePos( m_aFile, osl_Pos_Absolut, m_nSignatureContentOffset ) ) );
-    // osl_writeFile()
+    NSS_NoDB_Init(".");
 
-    // revert the file position back
-    CHECK_RETURN( (osl_File_E_None == osl_setFilePos( m_aFile, osl_Pos_Absolut, nOffset ) ) );
+    /* An alternate method for certificate reconstruction
+    SECItem certitem;
+    certitem.data = reinterpret_cast<unsigned char *>(n_derArray);
+    certitem.len = n_derLength;
+    certitem.type = siDERCertBuffer;
+    CERTCertificate *cert = CERT_NewTempCertificate(CERT_GetDefaultCertDB(), &certitem, NULL, PR_FALSE, PR_TRUE);
+    */
+
+    CERTCertificate *cert = CERT_DecodeCertFromPackage(reinterpret_cast<char *>(n_derArray), n_derLength);
+
+    if (!cert)
+    {
+        SAL_WARN("vcl.gdi", "PDF Signing: Error occured, certificate cannot be reconstructed.");
+        return false;
+    }
+
+    SAL_WARN("vcl.gdi", "PDF Signing: Certificate Subject: " <<  cert->subjectName << "\n\tCertificate Issuer: " << cert->issuerName);
+
+
+    // Prepare buffer and calculate PDF file digest
+    CHECK_RETURN( (osl_File_E_None == osl_setFilePos( m_aFile, osl_Pos_Absolut, 0) ) );
+
+    HASHContext *hc = HASH_Create(HASH_AlgSHA1);
+
+    if (!hc)
+    {
+        SAL_WARN("vcl.gdi", "PDF Signing: SHA1 HASH_Create failed!");
+        return false;
+    }
+
+    HASH_Begin(hc);
+
+    char *buffer = new char[m_nSignatureContentOffset + 1];
+    sal_uInt64 bytesRead;
+
+    //FIXME: Check if SHA1 is calculated from the correct byterange
+
+    CHECK_RETURN( (osl_File_E_None == osl_readFile( m_aFile, buffer, m_nSignatureContentOffset, &bytesRead ) ) );
+    if (bytesRead != (sal_uInt64)m_nSignatureContentOffset)
+        SAL_WARN("vcl.gdi", "PDF Signing: First buffer read failed!");
+
+    HASH_Update(hc, reinterpret_cast<const unsigned char*>(buffer), m_nSignatureContentOffset);
+    delete[] buffer;
+
+    buffer = new char[nLastByteRangeNo + 1];
+    CHECK_RETURN( (osl_File_E_None == osl_setFilePos( m_aFile, osl_Pos_Absolut, m_nSignatureContentOffset + MAX_SIGNATURE_CONTENT_LENGTH + 1) ) );
+    CHECK_RETURN( (osl_File_E_None == osl_readFile( m_aFile, buffer, nLastByteRangeNo, &bytesRead ) ) );
+    if (bytesRead != (sal_uInt64) nLastByteRangeNo)
+        SAL_WARN("vcl.gdi", "PDF Signing: Second buffer read failed!");
+
+    HASH_Update(hc, reinterpret_cast<const unsigned char*>(buffer), nLastByteRangeNo);
+    delete[] buffer;
+
+    SECItem digest;
+    unsigned char hash[SHA1_LENGTH];
+    digest.data = hash;
+    HASH_End(hc, digest.data, &digest.len, SHA1_LENGTH);
+    HASH_Destroy(hc);
+
+    const char *pass = OUStringToOString( m_aContext.SignPassword, RTL_TEXTENCODING_UTF8 ).getStr();
+
+    //FIXME: Check if password is passed correctly to SEC_PKCS7CreateSignedData function
+    //TODO: Create PKCS7 object even if the certificate is invalid
+    SEC_PKCS7ContentInfo *ci = SEC_PKCS7CreateSignedData(cert, certUsageEmailSigner, NULL, SEC_OID_SHA1, &digest, (SECKEYGetPasswordKey)::PDFSigningPKCS7PasswordCallback, (void *)pass);
+
+    if (!ci)
+    {
+        SAL_WARN("vcl.gdi", "PDF Signing: PKCS7 Creation failed: " << PORT_GetError());
+        return false;
+    }
+
+    SAL_WARN("vcl.gdi","PKCS7 Object created successfully!");
+
+    //SEC_PKCS7AddSigningTime(ci); //FIXME: Requires PDF 1.6 ?
+
+    // Set file pointer to the m_nSignatureContentOffset, we're ready to overwrite PKCS7 object
+    // Be careful! This is an asynchronous method, so signature may not be ready when the method returns back
+    CHECK_RETURN( (osl_File_E_None == osl_setFilePos( m_aFile, osl_Pos_Absolut, m_nSignatureContentOffset) ) );
+    SECStatus srv = SEC_PKCS7Encode(ci, (SEC_PKCS7EncoderOutputCallback)::PDFSigningPKCS7Callback, (void *)m_aFile, NULL, (SECKEYGetPasswordKey)::PDFSigningPKCS7PasswordCallback, (void *)pass);
+
+    if (srv != SECSuccess)
+    {
+        SAL_WARN("vcl.gdi", "PKCS encoding failed!");
+        return false;
+    }
+
+    SAL_WARN("vcl.gdi","PKCS7 object encoded successfully!");
+
+    SEC_PKCS7DestroyContentInfo(ci);
+
+    //CHECK_RETURN( (osl_File_E_None == osl_setFilePos( m_aFile, osl_Pos_Absolut, nOffset ) ) );
     return true;
 }
 

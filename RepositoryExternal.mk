@@ -1900,6 +1900,7 @@ else
 
 $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO,\
     nspr4 \
+    smime3 \
     nss3 \
     plc4 \
 ))
