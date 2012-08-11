@@ -110,13 +110,6 @@ ModelessDialog DLG_TEMPLATE_MANAGER
         QuickHelpText [en-US] = "Enables selecting items by just clicking in the thumbnail or title.";
     };
 
-    PushButton BTN_TEMPLATE_CLOSE
-    {
-        Size = MAP_APPFONT(50,14);
-        TabStop = TRUE;
-        Text [en-US] = "Close";
-    };
-
     Control TEMPLATE_VIEW
     {
         Pos = MAP_APPFONT(5,30);

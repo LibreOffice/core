@@ -49,7 +49,6 @@ private:
 
     virtual void MouseButtonDown( const MouseEvent& rMEvt );
 
-    DECL_LINK(CloseHdl, void*);
     DECL_LINK(CloseOverlayHdl, void*);
 
     DECL_LINK(OnClickSelectionMode, ImageButton*);
@@ -114,7 +113,6 @@ private:
     PushButton aButtonPresents;
     PushButton aButtonSheets;
     PushButton aButtonDraws;
-    PushButton maButtonClose;
     ImageButton maButtonSelMode;
 
     Edit *mpSearchEdit;

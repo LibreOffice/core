@@ -32,8 +32,6 @@
 #define MNI_ACTION_REFRESH          22
 #define MNI_ACTION_SORT_NAME        23
 
-#define BTN_TEMPLATE_CLOSE          24
-
 #define TBI_TEMPLATE_FOLDER_DEL     25
 #define TBI_TEMPLATE_REPOSITORY     26
 

@@ -107,7 +107,6 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg (Window *parent)
       aButtonPresents(this,SfxResId(BTN_SELECT_PRESENTATIONS)),
       aButtonSheets(this,SfxResId(BTN_SELECT_SHEETS)),
       aButtonDraws(this,SfxResId(BTN_SELECT_DRAWS)),
-      maButtonClose(this,SfxResId(BTN_TEMPLATE_CLOSE)),
       maButtonSelMode(this,SfxResId(BTN_SELECTION_MODE)),
       mpSearchEdit(new Edit(this,WB_HIDE | WB_BORDER)),
       mpViewBar( new ToolBox(this, SfxResId(TBX_ACTION_VIEW))),
@@ -229,22 +228,11 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg (Window *parent)
 
     mpSearchView->setItemStateHdl(LINK(this,SfxTemplateManagerDlg,TVTemplateStateHdl));
 
-    // Set OK button position
-    Point aBtnPos;
-    Size aBtnSize = maButtonClose.GetSizePixel();
-    aBtnPos.setX(aWinSize.getWidth() - PADDING_DLG_BORDER - aBtnSize.getWidth());
-    aBtnPos.setY(aViewPos.getY()+aThumbSize.getHeight() + PADDING_TOOLBAR_VIEW);
-    maButtonClose.SetPosPixel(aBtnPos);
-
-    if (aWinSize.getHeight() != aBtnPos.getY() + aBtnSize.getHeight() + PADDING_DLG_BORDER )
-        aWinSize.setHeight(aBtnPos.getY() + aBtnSize.getHeight() + PADDING_DLG_BORDER);
-
     aButtonAll.SetClickHdl(LINK(this,SfxTemplateManagerDlg,ViewAllHdl));
     aButtonDocs.SetClickHdl(LINK(this,SfxTemplateManagerDlg,ViewDocsHdl));
     aButtonPresents.SetClickHdl(LINK(this,SfxTemplateManagerDlg,ViewPresentsHdl));
     aButtonSheets.SetClickHdl(LINK(this,SfxTemplateManagerDlg,ViewSheetsHdl));
     aButtonDraws.SetClickHdl(LINK(this,SfxTemplateManagerDlg,ViewDrawsHdl));
-    maButtonClose.SetClickHdl(LINK(this,SfxTemplateManagerDlg,CloseHdl));
     maButtonSelMode.SetClickHdl(LINK(this,SfxTemplateManagerDlg,OnClickSelectionMode));
 
     // Set dialog to correct dimensions
@@ -324,12 +312,6 @@ void SfxTemplateManagerDlg::MouseButtonDown( const MouseEvent& rMEvt )
 
         maView->showOverlay(false);
     }
-}
-
-IMPL_LINK_NOARG (SfxTemplateManagerDlg, CloseHdl)
-{
-    Close();
-    return 0;
 }
 
 IMPL_LINK_NOARG(SfxTemplateManagerDlg, CloseOverlayHdl)
@@ -783,7 +765,6 @@ void SfxTemplateManagerDlg::OnTemplateImport ()
 void SfxTemplateManagerDlg::OnTemplateSearch ()
 {
     Point aPos = maView->GetPosPixel();
-    Point aClosePos = maButtonClose.GetPosPixel();
     bool bVisible = mpSearchEdit->IsVisible();
     Size aWinSize = GetSizePixel();
     long nEditHeight = mpSearchEdit->GetSizePixel().getHeight();
@@ -792,14 +773,12 @@ void SfxTemplateManagerDlg::OnTemplateSearch ()
     {
         aWinSize.setHeight(aWinSize.getHeight() - nEditHeight );
         aPos.setY(aPos.getY() - nEditHeight );
-        aClosePos.setY(aClosePos.getY() - nEditHeight );
         mpActionBar->SetItemState(TBI_TEMPLATE_SEARCH,STATE_NOCHECK);
     }
     else
     {
         aWinSize.setHeight(aWinSize.getHeight() + nEditHeight );
         aPos.setY(aPos.getY() + nEditHeight );
-        aClosePos.setY(aClosePos.getY() + nEditHeight );
         mpActionBar->SetItemState(TBI_TEMPLATE_SEARCH,STATE_CHECK);
     }
 
@@ -807,7 +786,6 @@ void SfxTemplateManagerDlg::OnTemplateSearch ()
     maView->SetPosPixel(aPos);
     mpOnlineView->SetPosPixel(aPos);
     mpSearchView->SetPosPixel(aPos);
-    maButtonClose.SetPosPixel(aClosePos);
 
     // Hide search view
     if (bVisible)
