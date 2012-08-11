@@ -651,6 +651,9 @@ IMPL_LINK(TemplateLocalView, ChangeNameHdl, TemplateView*, pView)
 
 void lcl_updateThumbnails (TemplateLocalViewItem *pItem)
 {
+    pItem->maPreview1.Clear();
+    pItem->maPreview2.Clear();
+
     // Update folder thumbnails
     for (size_t i = 0, n = pItem->maTemplates.size(); i < 2 && i < n; ++i)
     {
