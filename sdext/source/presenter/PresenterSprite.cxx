@@ -70,7 +70,7 @@ void PresenterSprite::SetFactory (
         DisposeSprite();
         mxSpriteFactory = rxSpriteFactory;
         if (mbIsVisible)
-            PresenterSprite();
+            ProvideSprite();
     }
 }
 
