@@ -725,9 +725,9 @@ double ScDataBarFormat::getMax(double nMin, double nMax) const
         return nMax;
     else if(mpFormatData->mpUpperLimit->GetPercent())
         return nMin + (nMax-nMin)/100*mpFormatData->mpUpperLimit->GetValue();
-    else if(mpFormatData->mpLowerLimit->GetPercentile())
+    else if(mpFormatData->mpUpperLimit->GetPercentile())
     {
-        double fPercentile = mpFormatData->mpLowerLimit->GetValue()/100.0;
+        double fPercentile = mpFormatData->mpUpperLimit->GetValue()/100.0;
         std::vector<double> aValues;
         getValues(aValues);
         return GetPercentile(aValues, fPercentile);
