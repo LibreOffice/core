@@ -80,6 +80,10 @@ void SetColorScaleEntryTypes( const ScColorScaleEntry& rEntry, ListBox& rLbType,
             rEdit.SetText(rtl::OUString::valueOf(rEntry.GetValue()));
             rLbType.SelectEntryPos(3);
             break;
+        case COLORSCALE_AUTOMIN:
+            break;
+        case COLORSCALE_AUTOMAX:
+            break;
     }
     rLbCol.SelectEntry(rEntry.GetColor());
 }
@@ -108,6 +112,10 @@ void SetDataBarEntryTypes( const ScColorScaleEntry& rEntry, ListBox& rLbType, Ed
         case COLORSCALE_VALUE:
             rEdit.SetText(rtl::OUString::valueOf(rEntry.GetValue()));
             rLbType.SelectEntryPos(3);
+            break;
+        case COLORSCALE_AUTOMIN:
+            break;
+        case COLORSCALE_AUTOMAX:
             break;
     }
 }

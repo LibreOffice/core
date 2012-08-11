@@ -3800,6 +3800,10 @@ rtl::OUString getCondFormatEntryType(const ScColorScaleEntry& rEntry)
             return rtl::OUString("formula");
         case COLORSCALE_VALUE:
             return rtl::OUString("number");
+        case COLORSCALE_AUTOMIN:
+            return rtl::OUString("auto-minimum");
+        case COLORSCALE_AUTOMAX:
+            return rtl::OUString("auto-maximum");
     }
     return rtl::OUString();
 }
