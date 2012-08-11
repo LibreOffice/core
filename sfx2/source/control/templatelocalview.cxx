@@ -531,29 +531,37 @@ bool TemplateLocalView::moveTemplates(std::set<const ThumbnailViewItem *> &rItem
 void TemplateLocalView::copyFrom(const sal_uInt16 nRegionItemId, const BitmapEx &rThumbnail,
                                   const OUString &rPath)
 {
-    sal_uInt16 nId = 0;
     sal_uInt16 nRegionId = nRegionItemId - 1;
 
-    if (!mItemList.empty())
-        nId = (mItemList.back())->mnId;
-
-    String aPath(rPath);
-
-    if (mpDocTemplates->CopyFrom(nRegionId,nId,aPath))
+    for (size_t i = 0, n = mItemList.size(); i < n; ++i)
     {
-        TemplateItemProperties aTemplate;
-        aTemplate.nId = nId+1;
-        aTemplate.nDocId = nId;
-        aTemplate.nRegionId = nRegionId;
-        aTemplate.aName = aPath;
-        aTemplate.aThumbnail = rThumbnail;
-        aTemplate.aPath = mpDocTemplates->GetPath(nRegionId,nId);
-        aTemplate.aType = SvFileInformationManager::GetDescription(INetURLObject(aPath));
-
-        for (size_t i = 0, n = mItemList.size(); i < n; ++i)
+        if (mItemList[i]->mnId == nRegionItemId)
         {
-            if (mItemList[i]->mnId == nRegionItemId)
+            sal_uInt16 nId = 0;
+            sal_uInt16 nDocId = 0;
+
+            TemplateLocalViewItem *pRegionItem =
+                    static_cast<TemplateLocalViewItem*>(mItemList[i]);
+
+            if (!pRegionItem->maTemplates.empty())
             {
+                nId = (pRegionItem->maTemplates.back()).nId+1;
+                nDocId = (pRegionItem->maTemplates.back()).nDocId+1;
+            }
+
+            String aPath(rPath);
+
+            if (mpDocTemplates->CopyFrom(nRegionId,nDocId,aPath))
+            {
+                TemplateItemProperties aTemplate;
+                aTemplate.nId = nId;
+                aTemplate.nDocId = nDocId;
+                aTemplate.nRegionId = nRegionId;
+                aTemplate.aName = aPath;
+                aTemplate.aThumbnail = rThumbnail;
+                aTemplate.aPath = mpDocTemplates->GetPath(nRegionId,nDocId);
+                aTemplate.aType = SvFileInformationManager::GetDescription(INetURLObject(aTemplate.aPath));
+
                 TemplateLocalViewItem *pItem =
                         static_cast<TemplateLocalViewItem*>(mItemList[i]);
 
@@ -561,26 +569,30 @@ void TemplateLocalView::copyFrom(const sal_uInt16 nRegionItemId, const BitmapEx 
 
                 lcl_updateThumbnails(pItem);
             }
-        }
 
-        CalculateItemPositions();
+            break;
+        }
     }
 }
 
 void TemplateLocalView::copyFrom (TemplateLocalViewItem *pItem, const rtl::OUString &rPath)
 {
     sal_uInt16 nId = 0;
+    sal_uInt16 nDocId = 0;
     sal_uInt16 nRegionId = pItem->mnId - 1;
     String aPath(rPath);
 
-    if (!mItemList.empty())
-        nId = (mItemList.back())->mnId+1;
+    if (!pItem->maTemplates.empty())
+    {
+        nId = (pItem->maTemplates.back()).nId+1;
+        nDocId = (pItem->maTemplates.back()).nDocId+1;
+    }
 
-    if (mpDocTemplates->CopyFrom(nRegionId,nId,aPath))
+    if (mpDocTemplates->CopyFrom(nRegionId,nDocId,aPath))
     {
         TemplateItemProperties aTemplate;
-        aTemplate.nId = nId+1;
-        aTemplate.nDocId = nId;
+        aTemplate.nId = nId;
+        aTemplate.nDocId = nDocId;
         aTemplate.nRegionId = nRegionId;
         aTemplate.aName = aPath;
         aTemplate.aThumbnail = TemplateAbstractView::fetchThumbnail(rPath,
