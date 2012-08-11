@@ -967,12 +967,6 @@ void SfxTemplateManagerDlg::OnTemplateAsDefault ()
 
         // clear selection and display view/action toolbars
         maView->deselectOverlayItem(pItem->mnId);
-        maSelTemplates.clear();
-
-        mpTemplateBar->SetItemDown(TBI_TEMPLATE_DEFAULT,false);
-        mpTemplateBar->Show(false);
-        mpViewBar->Show();
-        mpActionBar->Show();
     }
 }
 
