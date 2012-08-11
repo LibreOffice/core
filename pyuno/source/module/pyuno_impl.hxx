@@ -43,6 +43,12 @@
 #include <cppuhelper/implbase2.hxx>
 #include <cppuhelper/weakref.hxx>
 
+// Compatibility of older versions of Python
+#ifndef PyVarObject_HEAD_INIT
+#define PyVarObject_HEAD_INIT(type, size) \
+    PyObject_HEAD_INIT(type) size,
+#endif
+
 namespace pyuno
 {
 
