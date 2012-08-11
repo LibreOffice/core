@@ -1,4 +1,4 @@
-vc	vcl	:	TRANSLATIONS:translations apple_remote BOOST:boost officecfg DESKTOP:rsc sot ucbhelper unotools ICU:icu GRAPHITE:graphite i18npool i18nutil unoil ridljar X11_EXTENSIONS:x11_extensions offapi basegfx basebmp tools DESKTOP:l10ntools cpputools svl LCMS2:lcms2 LIBXSLT:libxslt CAIRO:cairo FREETYPE:freetype FONTCONFIG:fontconfig shell NULL
+vc	vcl	:	TRANSLATIONS:translations apple_remote BOOST:boost officecfg DESKTOP:rsc sot ucbhelper unotools ICU:icu GRAPHITE:graphite i18npool i18nutil unoil ridljar X11_EXTENSIONS:x11_extensions offapi basegfx basebmp tools DESKTOP:l10ntools cpputools svl LCMS2:lcms2 LIBXSLT:libxslt CAIRO:cairo FREETYPE:freetype FONTCONFIG:fontconfig shell NSS:nss NULL
 vc	vcl										usr1	-	all	vc_mkout NULL
 vc	vcl\prj									nmake	-	all	vc_prj NULL
 
