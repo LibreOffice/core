@@ -774,6 +774,8 @@ void SfxTemplateManagerDlg::OnTemplateImport ()
                 for (size_t i = 0, n = aFiles.getLength(); i < n; ++i)
                     maView->copyFrom(pFolder,aFiles[i]);
             }
+
+            maView->Invalidate(INVALIDATE_NOERASE);
         }
     }
 }
@@ -1110,6 +1112,8 @@ void SfxTemplateManagerDlg::remoteMoveTo(const sal_uInt16 nMenuId)
 
             maView->copyFrom(nItemId,pItem->maPreview1,pItem->getPath());
         }
+
+        maView->Invalidate(INVALIDATE_NOERASE);
     }
 }
 
