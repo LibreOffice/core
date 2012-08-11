@@ -582,7 +582,7 @@ void TemplateLocalView::copyFrom (TemplateLocalViewItem *pItem, const rtl::OUStr
         aTemplate.nId = nId+1;
         aTemplate.nDocId = nId;
         aTemplate.nRegionId = nRegionId;
-        aTemplate.aName = mpDocTemplates->GetName(nRegionId,nId);
+        aTemplate.aName = aPath;
         aTemplate.aThumbnail = TemplateAbstractView::fetchThumbnail(rPath,
                                                                     THUMBNAIL_MAX_WIDTH,
                                                                     THUMBNAIL_MAX_HEIGHT);
