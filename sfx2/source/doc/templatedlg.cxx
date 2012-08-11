@@ -324,6 +324,7 @@ IMPL_LINK_NOARG(SfxTemplateManagerDlg, CloseOverlayHdl)
     maSelTemplates.clear();
     mpTemplateBar->Hide();
     mpViewBar->Show();
+    mpActionBar->Show();
 
     if (mpCurView == maView)
         mpCurView->showOverlay(false);
