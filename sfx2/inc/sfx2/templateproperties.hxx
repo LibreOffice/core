@@ -15,7 +15,8 @@
 
 struct TemplateItemProperties
 {
-    sal_uInt16 nId;
+    sal_uInt16 nId;         ///< Index for ThumbnailView
+    sal_uInt16 nDocId;      ///< Index based on SfxTemplateDocument
     sal_uInt16 nRegionId;
     rtl::OUString aName;
     rtl::OUString aPath;

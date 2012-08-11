@@ -154,6 +154,7 @@ void TemplateLocalView::Populate ()
 
             TemplateItemProperties aProperties;;
             aProperties.nId = j+1;
+            aProperties.nDocId = j;
             aProperties.nRegionId = i;
             aProperties.aName = aName;
             aProperties.aPath = aURL;
@@ -384,6 +385,7 @@ bool TemplateLocalView::moveTemplate (const ThumbnailViewItem *pItem, const sal_
 
         TemplateItemProperties aTemplateItem;
         aTemplateItem.nId = nTargetIdx + 1;
+        aTemplateItem.nDocId = nTargetIdx;
         aTemplateItem.nRegionId = nTargetRegion;
         aTemplateItem.aName = pViewItem->maTitle;
         aTemplateItem.aPath = pViewItem->getPath();
@@ -478,6 +480,7 @@ bool TemplateLocalView::moveTemplates(std::set<const ThumbnailViewItem *> &rItem
 
             TemplateItemProperties aTemplateItem;
             aTemplateItem.nId = nTargetIdx + 1;
+            aTemplateItem.nDocId = nTargetIdx;
             aTemplateItem.nRegionId = nTargetRegion;
             aTemplateItem.aName = pViewItem->maTitle;
             aTemplateItem.aPath = pViewItem->getPath();
@@ -538,6 +541,7 @@ void TemplateLocalView::copyFrom(const sal_uInt16 nRegionItemId, const BitmapEx 
     {
         TemplateItemProperties aTemplate;
         aTemplate.nId = nId+1;
+        aTemplate.nDocId = nId;
         aTemplate.nRegionId = nRegionId;
         aTemplate.aName = aPath;
         aTemplate.aThumbnail = rThumbnail;
@@ -574,6 +578,7 @@ void TemplateLocalView::copyFrom (TemplateLocalViewItem *pItem, const rtl::OUStr
     {
         TemplateItemProperties aTemplate;
         aTemplate.nId = nId+1;
+        aTemplate.nDocId = nId;
         aTemplate.nRegionId = nRegionId;
         aTemplate.aName = mpDocTemplates->GetName(nRegionId,nId);
         aTemplate.aThumbnail = TemplateAbstractView::fetchThumbnail(rPath,
