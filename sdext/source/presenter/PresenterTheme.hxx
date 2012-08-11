@@ -31,7 +31,6 @@
 
 #include "PresenterBitmapContainer.hxx"
 #include "PresenterConfigurationAccess.hxx"
-#include "PresenterTheme.hxx"
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/rendering/XCanvas.hpp>
 #include <com/sun/star/rendering/XCanvasFont.hpp>
