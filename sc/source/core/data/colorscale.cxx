@@ -701,7 +701,7 @@ double ScDataBarFormat::getMax(double nMin, double nMax) const
             return nMin + (nMax-nMin)/100*mpFormatData->mpUpperLimit->GetValue();
         case COLORSCALE_PERCENTILE:
         {
-            double fPercentile = mpFormatData->mpLowerLimit->GetValue()/100.0;
+            double fPercentile = mpFormatData->mpUpperLimit->GetValue()/100.0;
             std::vector<double> aValues;
             getValues(aValues);
             return GetPercentile(aValues, fPercentile);
