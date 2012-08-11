@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-/* nicht geschuetzt, darf nur einmal includet werden */
+/* not protected, do only include once! */
 
-// Konfl�kt mit den Tools-Pair vermeiden
+// avoid conflict with pair in tools
 #define Pair StlPair
 
 #if defined WNT

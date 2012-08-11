@@ -90,11 +90,11 @@ enum StringCompare { COMPARE_LESS = -1, COMPARE_EQUAL = 0, COMPARE_GREATER = 1 }
 // -----------------------------------------------------------------------
 
 // ------------------------
-// - Interne String-Daten -
+// Internal String data
 // ------------------------
 
-// Daten vom String, mit denen der String verwaltet wird
-// Nur fuer Debug-Zwecke (darf nie direkt einem String zugewiesen werden)
+// Data used for the management of this String
+// use only for debugging purposes (never assign to String directly!)
 
 #ifdef SAL_W32
 #pragma pack(push, 4)
@@ -102,7 +102,7 @@ enum StringCompare { COMPARE_LESS = -1, COMPARE_EQUAL = 0, COMPARE_GREATER = 1 }
 
 typedef struct _UniStringData
 {
-    sal_Int32               mnRefCount;     // Referenz counter
+    sal_Int32               mnRefCount;     // reference counter
     sal_Int32               mnLen;          // Length of the String
     sal_Unicode             maStr[1];       // CharArray (String)
 } UniStringData;

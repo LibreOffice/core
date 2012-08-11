@@ -155,46 +155,45 @@ typedef std::map<SvPersistBase*, sal_uIntPtr> PersistBaseMap;
 
 //=========================================================================
 class SvStream;
-class TOOLS_DLLPUBLIC SvPersistStream : public SvStream
-/*  [Beschreibung]
 
-    Mit dieser Klasse k"onnen Laufzeit Objektstrukturen gespeichert
-    und geladen werden. Es m"ussen immer alle beteiligten Objekte
-    gespeichert oder geladen werden. Um die Objekte automatisch
-    laden zu k"onnen, wird eine Factory f"ur jede Klasse von Objekten,
-    die im Stream vorkommen k"onnen, ben"otigt. Die Liste aller Klassen
-    wird in einem <SvClassManager> Objekt gespeichert und dem
-     SvPersistStream "ubergeben, wenn er erzeugt wird.
-    Weiterhin wird die M"oglichkeit geboten sal_uInt32 Werte komprimiert
-    zu schreiben und zu lesen (<SvPersistStream::WriteCompressed>,
-    <SvPersistStream::ReadCompressed>).
-    Es gibt auch die drei Hilfsmethoden <SvPersistStream::WriteDummyLen>,
-    <SvPersistStream::WriteLen> und <SvPersistStream::ReadLen> um eine
-    L"ange vor das Objekt zu schreiben.
+/** Persistent Stream
 
-    [Beispiel]
+    This class provides accessor to storing and loading runtime objects.
+    All dependent objects have to be stored as well.
+    In order to load objects automatically, every object class must
+    provide a Factory method to read an object from stream.
+    The list of all classes is stored in a <SvClassManager> object
+    and is sent to SvPersistStream upon initialization.
+    By using the Method SvPersistStream::WriteCompressed and
+    SvPersistStream::ReadCompressed, compressed sal_uInt32 values may be
+    written to / read from the Stream.
+    Several helper methods exists for writing and reading
+    object lengths to the stream: SvPersistStream::WriteDummyLen,
+    SvPersistStream::WriteLen and SvPersistStream::ReadLen.
 
-    Ein konkretes Beispiel ist im Konstruktor beschrieben.
-    Objekt A verweist auf B, dieses auf C und das wieder auf A.
-    C verweist auf D.
+    [Example]
 
-    Die Reihenfolge beim Speichern und Laden ist egal, sie muss nur
-    gleich sein:
-    Speichern:      Laden:
-    A,B,C,D         A,B,C,D     richtig
-    B,A,C,D         B,A,C,D     richtig
-    C,A,B,D         A,B,C,D     falsch
-    A,B,C,D         A,B,C       falsch
+    One example is described in the constructor.
+    Assume a ring-like dependency, where A referenes B,
+    B itself references C, and C references to both D and A.
 
-    [Anmerkung]
+    The order of the objects upon saving and loading does not matter,
+    as long objects are loaded in the same order they were stored.
 
-    Das Dateiformat zwischen DBG_UTIL und !DBG_UTIL ist unterschiedlich,
-    kann aber von beiden Versionen gelesen werden.
+    Saving:         Loading:
+    A,B,C,D         A,B,C,D     correct
+    B,A,C,D         B,A,C,D     correct
+    C,A,B,D         A,B,C,D     wrong
+    A,B,C,D         A,B,C       wrong
+
+    @note The file formats DBG_UTIL and !DBG_UTIL differ, but we can read from
+          both versions.
 */
+class TOOLS_DLLPUBLIC SvPersistStream : public SvStream
 {
     SvClassManager &        rClassMgr;
     SvStream *              pStm;
-    PersistBaseMap          aPTable; // Pointer und Key gedreht
+    PersistBaseMap          aPTable; // reversed pointer and key
     SvPersistUIdx           aPUIdx;
     sal_uIntPtr                   nStartIdx;
     const SvPersistStream * pRefStm;
@@ -239,8 +238,7 @@ public:
     TOOLS_DLLPUBLIC friend SvPersistStream& operator << (SvPersistStream &, SvPersistBase *);
     TOOLS_DLLPUBLIC friend SvPersistStream& operator >> (SvPersistStream &, SvPersistBase * &);
 
-                        // Objekte halten ihre Id's w"ahrend geladen und
-                        // gespeichert werden.
+    // Objects maintain their IDs while storing and loading to/from stream
     friend SvStream& operator >> ( SvStream &, SvPersistStream & );
     friend SvStream& operator << ( SvStream &, SvPersistStream & );
 };

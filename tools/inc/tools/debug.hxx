@@ -46,8 +46,6 @@
 
 #ifdef DBG_UTIL
 
-// --- Dbg-Daten ---
-
 typedef void (*DbgPrintLine)( const sal_Char* pLine );
 typedef const sal_Char* (*DbgUsr)(const void* pThis );
 typedef void (*DbgTestSolarMutexProc)();
@@ -102,8 +100,7 @@ struct DbgDataType
     sal_Char const *   pName;
 };
 
-// --- Dbg-Prototypen ---
-
+// Dbg prototypes
 #define DBG_FUNC_DEBUGSTART         1
 #define DBG_FUNC_DEBUGEND           2
 #define DBG_FUNC_GLOBALDEBUGEND     3
@@ -307,8 +304,7 @@ inline void DbgPrintFile( const sal_Char* pLine )
     DbgFunc( DBG_FUNC_PRINTFILE, (void*)(sal_Char*)pLine );
 }
 
-// --- Dbg-Output ---
-
+// Dbg output
 #define DBG_OUT_TRACE               1
 #define DBG_OUT_WARNING             2
 #define DBG_OUT_ERROR               3
@@ -320,7 +316,7 @@ TOOLS_DLLPUBLIC void DbgOutTypef( sal_uInt16 nOutType, const sal_Char* pFStr, ..
 TOOLS_DLLPUBLIC void DbgOutf( const sal_Char* pFStr, ... );
 TOOLS_DLLPUBLIC void ImpDbgOutfBuf( sal_Char* pBuf, const sal_Char* pFStr, ... );
 
-// --- Dbg-Test-Functions ---
+// Dbg test functions
 
 #define DBG_PROF_START              1
 #define DBG_PROF_STOP               2
@@ -364,7 +360,7 @@ public:
                     }
 };
 
-// --- Dbg-Defines (intern) ---
+// (internally used) defines
 
 #define DBG_FUNC( aName )                   DbgName_##aName()
 #define DBG_NAME( aName )                   static DbgDataType aImpDbgData_##aName = { 0, #aName }; \
@@ -372,7 +368,7 @@ public:
 #define DBG_NAMEEX_VISIBILITY( aName, vis ) vis DbgDataType* DBG_FUNC( aName );
 #define DBG_NAMEEX( aName )                 DBG_NAMEEX_VISIBILITY( aName, )
 
-// --- Dbg-Defines (extern) ---
+// (externally used) defines
 
 #define DBG_DEBUGSTART()                    DbgDebugStart()
 #define DBG_DEBUGEND()                      DbgDebugEnd()
@@ -443,7 +439,7 @@ do                                          \
     DbgTestSolarMutex();                    \
 } while(0)
 
-// --- Dbg-Defines (An/Ausschlaten) ---
+// en-/disable debug defines
 
 #define DBG_INSTOUTTRACE( nOut )            \
 do                                          \

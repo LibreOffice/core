@@ -79,7 +79,6 @@ class TOOLS_DLLPUBLIC Resource
     rtl::OString ReadByteStringRes()
     { return m_pResMgr->ReadByteString(); }
 
-    // Gibt die Resource frei (this-Zeiger fuer Fehlerueberpruefung)
     // free the resource from m_pResMgr's stack (pass this ptr for validation)
     void FreeResource()
     { m_pResMgr->PopContext( this ); }

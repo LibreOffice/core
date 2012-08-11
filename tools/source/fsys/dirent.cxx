@@ -190,9 +190,9 @@ DirEntryStack::~DirEntryStack()
 |*
 |*    ImpCheckDirEntry()
 |*
-|*    Beschreibung      Pruefung eines DirEntry fuer DBG_UTIL
-|*    Parameter         void* p     Zeiger auf den DirEntry
-|*    Return-Wert       char*       Fehlermeldungs-TExtension oder NULL
+|*    Description       Check DirEntry for DBG_UTIL
+|*    Parameter         void* p     Pointer to DirEntry
+|*    Return-Valu       char*       Error-TExtension or NULL
 |*
 *************************************************************************/
 
@@ -212,7 +212,7 @@ const char* ImpCheckDirEntry( const void* p )
 |*
 |*    ImplCutPath()
 |*
-|*    Beschreibung      Fuegt ... ein, damit maximal nMaxChars lang
+|*    Description       Insert "..." for max length of nMaxChars
 |*
 *************************************************************************/
 
@@ -226,7 +226,7 @@ rtl::OString ImplCutPath( const rtl::OString& rStr, sal_Int32 nMax, char cAccDel
     if( nBegin == -1 )
         nBegin = 0;
     else
-        nMaxPathLen += 2;   // fuer Prefix <Laufwerk>:
+        nMaxPathLen += 2;   // Prefix <Disk>:
 
     while( aCutPath.getLength() > nMaxPathLen )
     {
@@ -271,7 +271,7 @@ FSysError DirEntry::ImpParseName( const rtl::OString& rPfad )
 #if defined(WNT)
     DBG_CHKTHIS( DirEntry, ImpCheckDirEntry );
 
-    // die einzelnen Namen auf einen Stack packen
+    // put single names onto stack
     String aPfad(rtl::OStringToOUString(rPfad, osl_getThreadTextEncoding()));
     DirEntryStack   aStack;
 

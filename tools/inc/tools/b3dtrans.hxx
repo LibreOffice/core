@@ -20,7 +20,6 @@
 #ifndef _B3D_B3DTRANS_HXX
 #define _B3D_B3DTRANS_HXX
 
-// Zu verwendender DephRange des Z-Buffers
 #define ZBUFFER_DEPTH_RANGE         ((double)(256L * 256L * 256L))
 
 #include <basegfx/matrix/b3dhommatrix.hxx>
@@ -30,13 +29,8 @@
 #include <basegfx/point/b2dpoint.hxx>
 #include <tools/toolsdllapi.h>
 
-// Vorausdeklarationen
 
-/*************************************************************************
-|*
-|* Unterstuetzte Methoden, um das Seitenverhaeltnis einzuhalten
-|*
-\************************************************************************/
+// Supported methods for setting/keeping the aspect ratio
 
 enum Base3DRatio
 {
@@ -45,11 +39,7 @@ enum Base3DRatio
     Base3DRatioMiddle
 };
 
-/*************************************************************************
-|*
-|* Typ der Projektion
-|*
-\************************************************************************/
+// Supported projection types
 
 enum Base3DProjectionType
 {
@@ -57,11 +47,7 @@ enum Base3DProjectionType
     Base3DProjectionTypePerspective
 };
 
-/*************************************************************************
-|*
-|* Transformationen fuer alle 3D Ausgaben
-|*
-\************************************************************************/
+// Transformation sets for 3D output
 
 class TOOLS_DLLPUBLIC B3dTransformationSet
 {
@@ -81,13 +67,13 @@ private:
     // Texture Matrices
     basegfx::B2DHomMatrix           maTexture;
 
-    // Speziell zum Umwandeln von Punkten Objekt -> Device
+    // Special transformation set for converting Object -> Device
     basegfx::B3DHomMatrix           maObjectToDevice;
 
-    // Transponierte Inverse fuer Vectortransformationen
+    // Transposed and inversed matrix for vector transformations
     basegfx::B3DHomMatrix           maInvTransObjectToEye;
 
-    // Transformation World->View
+    // Transformation for World->View
     basegfx::B3DHomMatrix           maMatFromWorldToView;
     basegfx::B3DHomMatrix           maInvMatFromWorldToView;
 
@@ -95,7 +81,7 @@ private:
     basegfx::B3DVector          maScale;
     basegfx::B3DVector          maTranslate;
 
-    // ViewPlane DeviceRectangle (vom Benutzer gesetzt)
+    // ViewPlane DeviceRectangle (user-defined)
     double                          mfLeftBound;
     double                          mfRightBound;
     double                          mfBottomBound;
@@ -105,22 +91,22 @@ private:
     double                          mfNearBound;
     double                          mfFarBound;
 
-    // Seitenverhaeltnis der 3D Abbildung (Y / X)
-    // default ist 1:1 -> 1.0
-    // Deaktivieren mit 0.0 als Wert
+    // Aspect ratio of 3D transformation (Y / X)
+    // default: 1:1 -> 1.0
+    // Disable with value 0.0
     double                          mfRatio;
 
-    // Der gesetzte Ausgabebereich (in logischen Koordinaten)
-    // und der dazugehoerige sichtbare Bereich
+    // Viewport area in logical coordinates
     Rectangle                       maViewportRectangle;
+    // Visible area within viewport
     Rectangle                       maVisibleRectangle;
 
-    // Die tatsaechlich von CalcViewport gesetzten Abmessungen
-    // des sichtbaren Bereichs (in logischen Koordinaten)
+    // Actual coordinates as set by CalcViewport
+    // of visible viewport area (logical coordinates)
     Rectangle                       maSetBound;
 
-    // Methode zur Aufrechterhaltung des Seitenverhaeltnisses
-    // default ist Base3DRatioGrow
+    // Method of keeping defined aspect ratio
+    // default: Base3DRatioGrow
     Base3DRatio                     meRatio;
 
     // Flags
@@ -134,7 +120,6 @@ public:
     B3dTransformationSet();
     virtual ~B3dTransformationSet();
 
-    // Zurueck auf Standard
     void Reset();
 
     // ObjectTrans
@@ -156,12 +141,12 @@ public:
     // Texture
     const basegfx::B2DHomMatrix& GetTexture() { return maTexture; }
 
-    // Seitenverhaeltnis und Modus zu dessen Aufrechterhaltung
+    // aspect ratio accessors and the defined method of keeping defined aspect ratio
     double GetRatio() { return mfRatio; }
     void SetRatio(double fNew=1.0);
     Base3DRatio GetRatioMode() { return meRatio; }
 
-    // Parameter der ViewportTransformation
+    // Parameters of ViewportTransformation
     void SetDeviceRectangle(double fL=-1.0, double fR=1.0, double fB=-1.0, double fT=1.0, sal_Bool bBroadCastChange=sal_True);
     double GetDeviceRectangleWidth() const { return mfRightBound - mfLeftBound; }
     double GetDeviceRectangleHeight() const { return mfTopBound - mfBottomBound; }
@@ -174,7 +159,7 @@ public:
     const Rectangle& GetViewportRectangle() { return maViewportRectangle; }
     void CalcViewport();
 
-    // Direkter Zugriff auf verschiedene Transformationen
+    // Direct accessors for miscellaneous transformations
     const basegfx::B3DPoint WorldToEyeCoor(const basegfx::B3DPoint& rVec);
     const basegfx::B3DPoint EyeToWorldCoor(const basegfx::B3DPoint& rVec);
 
@@ -204,12 +189,10 @@ protected:
 };
 
 /*************************************************************************
+|* Viewport for B3D
 |*
-|* Viewport fuer B3D
-|*
-|* Verwendet wird hier ein vereinfachtes System, bei dem der abzubildende
-|* Punkt durch VRP repraesentiert wird
-|*
+|* Uses a simplified model, in which a point
+|* is described using a View Reference Point (VRP)
 \************************************************************************/
 
 class TOOLS_DLLPUBLIC B3dViewport : public B3dTransformationSet
@@ -237,11 +220,7 @@ protected:
     void CalcOrientation();
 };
 
-/*************************************************************************
-|*
-|* Kamera fuer B3D
-|*
-\************************************************************************/
+// B3D camera
 
 class TOOLS_DLLPUBLIC B3dCamera : public B3dViewport
 {
@@ -262,17 +241,14 @@ public:
         sal_Bool bUseFocLen = sal_False);
     virtual ~B3dCamera();
 
-    // Positionen
     const basegfx::B3DPoint& GetPosition() const { return aPosition; }
     const basegfx::B3DVector& GetLookAt() const { return aLookAt; }
 
-    // Brennweite in mm
+    // Focal length in mm
     double GetFocalLength() const { return fFocalLength; }
 
-    // Neigung links/rechts
     double GetBankAngle() const { return fBankAngle; }
 
-    // FocalLength Flag
     sal_Bool GetUseFocalLength() const { return (sal_Bool)bUseFocalLength; }
 
 protected:

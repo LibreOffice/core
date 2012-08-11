@@ -105,25 +105,24 @@ typedef void* (*TypeId)();
 
 //-------------------------------------------------------------------------
 
-//      Die (exemplarischen) Makros fuer die Anwendung ( hier fuer
-//      Pointer, kann aber nach dem gleichen Strickmuster fuer
-//      Referenzen erweitert werden.
-//      PTR_CAST: sicheres Casten eines Pointers auf einen Pointer
-//      einer abgeleiteten Klasse. Liefert im Fehlerfall einen
-//      Nullpointer (wahrscheinlich die haeufigste Anwendung)
+//      Exemplary application macros for pointers
+//      (can be extended for use with references)
 //
-//      T: Typ, auf den gecastet werden soll
-//      p: Pointer, der gecastet werden soll
+//      PTR_CAST: Safe pointer casting to a derived class.
+//      Returns NULL pointer on cast error.
+//
+//      T: Target type to cast into
+//      p: Pointer to be cast into T
 #define PTR_CAST( T, pObj ) \
         ( pObj && (pObj)->IsA( TYPE(T) ) ? (T*)(pObj) : 0 )
 
-//      Abfrage, ob ein Objekt eine bestimmte Klasse als
-//      Basisklasse hat (oder genau von dieser Klasse ist)
+//      Check whether object pObj has a Base Class T
+//      (or if pObj is an instance of T)
 #define HAS_BASE( T, pObj ) \
         ( pObj && (pObj)->IsA( TYPE(T) ) )
 
-//      Abfrage, ob ein Pointer auf ein Objekt eines bestimmten
-//      Typs zeigt
+//      Check whether a pointer is targetting
+//      an object of type T.
 #define IS_TYPE(T,pObj) \
         ( pObj && (pObj)->Type() == TYPE(T) )
 

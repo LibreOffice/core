@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-/* nicht geschuetz, muss als gegenstueck zu prestl.h includet werden */
+/* not protected, must be included together with prestl.h! */
 
 #if defined WNT
 
@@ -27,7 +27,7 @@
 #undef Rectangle
 #undef DELETE
 
-/* Hilfe-Ids umbenennen */
+/* rename help IDs */
 #define WIN_HELP_INDEX       0x0003
 #define WIN_HELP_HELPONHELP  0x0004
 #undef HELP_INDEX
@@ -206,7 +206,6 @@
 #define WIN_FindWindow FindWindow
 #endif
 
-// keine Yield-Definition
 #undef Yield
 
 /* new StretchBlt() Modes (simpler names) */
@@ -229,7 +228,7 @@ extern "C"
 
 #endif
 
-// Konfl�kt mit den Tools-Pair vermeiden
+// avoid conflict with Pair in tools
 #undef Pair
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

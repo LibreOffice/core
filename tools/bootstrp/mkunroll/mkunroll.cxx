@@ -136,13 +136,13 @@ void MkFilter::Filter()
         rtl::OString aLine(aLineBuf);
         if (aLine.indexOf(rtl::OString(RTL_CONSTASCII_STRINGPARAM("mkfilter1"))) != -1)
         {
-            // Zeilen unterdruecken
+            // surpress lines
             fprintf( stderr, "mkfilter1\n" );
             nState = 0;
         }
         else if (aLine.indexOf(rtl::OString(RTL_CONSTASCII_STRINGPARAM("unroll begin"))) != -1)
         {
-            // Zeilen raus schreiben mit ersetzen von $(TNR) nach int n
+            // Print lines while replacing $(TNR) with int n
             fprintf( stderr, "\nunroll begin\n" );
             nState = 1;
         }
@@ -182,19 +182,19 @@ void MkFilter::Filter()
                 pTnrLst->push_back( pMkLine );
         }
         else {
-            /* Zeilen ignorieren */;
+            /* Skip these lines */;
         }
     }   // End Of File
     fprintf( stderr, "\n" );
 
-    // das File wieder ausgegeben
+    // Output file again
     size_t nLines = pLst->size();
     for ( size_t j=0; j<nLines; j++ )
     {
         MkLine *pLine = (*pLst)[ j ];
         if ( pLine->bHier )
         {
-            // die List n - Mal abarbeiten
+            // Iterate list n times
             for ( sal_uInt16 n=1; n<11; n++)
             {
                 size_t nCount = pLine->pPrivateTnrLst->size();

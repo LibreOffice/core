@@ -22,25 +22,24 @@
 
 #include <tools/resid.hxx>
 
-// Definition der Versionsnummer
+// Definition of the version number
 #define RSCVERSION_ID           200U
-// Definition eines ungueltige Identifiers.
+// Definition of an invalid identifier
 #define RC_NO_ID                (sal_uInt32(0xFFFFFFFF))
 
-// Dies sind die Resourcetypen
-// Mindestens 0x100 wegen MS-Windows Resourcetypen
-//#define RSC_NOTYPE              0x100
-//RSC_NOTYPE wird in resid.hxx definiert
+// Resource types
+// Minimum is 0x100 due to MS-Windows resource types
+// (RSC_NOTYPE=0x100) is defined in resid.hxx
 #define RSC_BYNAME              (RSC_NOTYPE + 0x01)
-#define RSC_VERSIONCONTROL      (RSC_NOTYPE + 0x02) // Versionskontrolle
+#define RSC_VERSIONCONTROL      (RSC_NOTYPE + 0x02) // Version control
 
 #define RSC_RESOURCE            (RSC_NOTYPE + 0x10)
 #define RSC_STRING              (RSC_NOTYPE + 0x11)
 #define RSC_BITMAP              (RSC_NOTYPE + 0x13)
 #define RSC_ACCEL               (RSC_NOTYPE + 0x1a)
-#define RSC_ACCELITEM           (RSC_NOTYPE + 0x1b)// nur intern
+#define RSC_ACCELITEM           (RSC_NOTYPE + 0x1b) // only used internally
 #define RSC_MENU                (RSC_NOTYPE + 0x1c)
-#define RSC_MENUITEM            (RSC_NOTYPE + 0x1d)// nur intern
+#define RSC_MENUITEM            (RSC_NOTYPE + 0x1d) // only used internally
 #define RSC_KEYCODE             (RSC_NOTYPE + 0x1f)
 #define RSC_TIME                (RSC_NOTYPE + 0x20)
 #define RSC_DATE                (RSC_NOTYPE + 0x21)
@@ -115,13 +114,12 @@
 #define RSC_TREELISTBOX         (RSC_NOTYPE + 0x78)
 #define RSC_STRINGARRAY         (RSC_NOTYPE + 0x79)
 
-// (RSC_NOTYPE + 0x200) - (RSC_NOTYPE + 0x300) fuer Sfx reserviert
+// (RSC_NOTYPE + 0x200) - (RSC_NOTYPE + 0x300) reserved for Sfx
 
 #define RT_SYS_BITMAP           (RSC_NOTYPE + 0xf2)
-#define RT_SYS_STRING           (RSC_NOTYPE + 0xf3)     // Sonderbehandlung
-#define RT_SYS_FILE             (RSC_NOTYPE + 0xf4)     // nicht implementiert
+#define RT_SYS_STRING           (RSC_NOTYPE + 0xf3) // special case
+#define RT_SYS_FILE             (RSC_NOTYPE + 0xf4) // not implemented
 
-// (RSC_NOTYPE + 0x200) - (RSC_NOTYPE + 0x300) fuer Sfx reserviert
 
 #endif // _RCID_H
 

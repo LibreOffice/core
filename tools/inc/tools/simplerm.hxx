@@ -57,7 +57,7 @@ public:
     static SimpleResMgr*    Create( const sal_Char* pPrefixName,
                                       ::com::sun::star::lang::Locale aLocale = ::com::sun::star::lang::Locale( rtl::OUString(),
                                                                                                                rtl::OUString(),
-                                                                                                               rtl::OUString()));// nur in VCL
+                                                                                                               rtl::OUString()));// only in VCL
 
     bool                    IsValid() const { return m_pResImpl != NULL; }
 

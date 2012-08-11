@@ -32,7 +32,7 @@ Warning           ||   ||      |
  |   ||           ||   ||      |
  Dynamic          ||   ||      |
       |           ||   ||      |
-      Subsystembereiche |      |
+      Subsystemarea|   ||      |
                    |   ||      |
                    |   ||      |
                    |   ||      |
@@ -294,7 +294,7 @@ inline sal_uIntPtr ERRCODE_TOERROR( sal_uIntPtr x )
 
 #define SVSTREAM_DISK_FULL              ERRCODE_IO_OUTOFSPACE
 
-// Fuer die EditEngine:
+// For the EditEngine:
 #define SVSTREAM_ERRBASE_USER           ERRCODE_AREA_LIB1
 
 #define PRINTER_OK                      ERRCODE_NONE

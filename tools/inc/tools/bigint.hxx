@@ -48,7 +48,7 @@ class TOOLS_DLLPUBLIC BigInt
 private:
     long            nVal;
     unsigned short  nNum[MAX_DIGITS];
-    sal_uInt8       nLen        : 5;    // Aktuelle Laenge
+    sal_uInt8       nLen        : 5;    // current length
     sal_Bool        bIsNeg      : 1,    // Is Sign negative
                     bIsBig      : 1,    // sal_True == BigInt
                     bIsSet      : 1;    // Not "Null" (not not 0)

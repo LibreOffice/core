@@ -63,7 +63,7 @@ typedef int DirEntryKind;
 #define FSYS_KIND_BLOCK             ((DirEntryKind)     8)
 #define FSYS_KIND_CHAR              ((DirEntryKind)    16)
 #define FSYS_KIND_WILD              ((DirEntryKind)    32)
-#define FSYS_KIND_BLOCK_REMOTE      ((DirEntryKind)    64)  //TPF: fuer RFS
+#define FSYS_KIND_BLOCK_REMOTE      ((DirEntryKind)    64)
 #define FSYS_KIND_REMOVEABLE        ((DirEntryKind)   128)
 #define FSYS_KIND_FIXED             ((DirEntryKind)   256)
 #define FSYS_KIND_REMOTE            ((DirEntryKind)   512)
@@ -92,11 +92,11 @@ typedef ::std::vector< FSysSort > FSysSortList;
 enum DirEntryFlag
 {
     FSYS_FLAG_NORMAL,
-    FSYS_FLAG_VOLUME,                      // Dir( FSYS_FLAG_VOLUME ) und GetDevice()
-    FSYS_FLAG_ABSROOT,                     // z.B. "a:\" oder "\"
-    FSYS_FLAG_RELROOT,                     // z.B. "a:", "a:." oder "."
-    FSYS_FLAG_CURRENT = FSYS_FLAG_RELROOT, // Synonym fuer FSYS_FLAG_RELROOT
-    FSYS_FLAG_PARENT,                      // z.B. ".."
+    FSYS_FLAG_VOLUME,                      // Dir( FSYS_FLAG_VOLUME ) and GetDevice()
+    FSYS_FLAG_ABSROOT,                     // e.g. "a:\" or "\"
+    FSYS_FLAG_RELROOT,                     // e.g. "a:", "a:." or "."
+    FSYS_FLAG_CURRENT = FSYS_FLAG_RELROOT, // Synonym for FSYS_FLAG_RELROOT
+    FSYS_FLAG_PARENT,                      // e.g. ".."
     FSYS_FLAG_INVALID
 };
 
@@ -122,7 +122,7 @@ typedef int FSysAction;
                                             // clashes
 #define FSYS_ACTION_STANDARD        0
 
-// Fuer RFS
+// RFS
 #define RFS_IDENTIFIER  "-rfs-"
 
 typedef sal_uIntPtr FSysError;
@@ -373,10 +373,10 @@ class TOOLS_DLLPUBLIC Dir : public DirEntry
 {
 friend struct DirReader_Impl;
 
-    DirReader_Impl* pReader;        // systemabhaengig
+    DirReader_Impl* pReader;        // is system-dependent
     DirEntryList*   pLst;
-    FSysSortList*   pSortLst;       // NULL, wenn kein Sort gefordert
-    FileStatList*   pStatLst;       // NULL, wenn keine Stat's benoetigt
+    FSysSortList*   pSortLst;       // NULL if no sorting requested
+    FileStatList*   pStatLst;       // NULL if no stats requested
     WildCard        aNameMask;
     DirEntryKind eAttrMask;
 

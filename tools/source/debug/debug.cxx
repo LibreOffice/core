@@ -78,7 +78,7 @@ public:
     sal_uIntPtr       Count() const { return nCount; }
 };
 
-// --- Datentypen ---
+// data types
 
 #define DBG_MAXNAME     28
 
@@ -157,7 +157,7 @@ struct DebugData
                              DBG_TEST_XTOR_EXIT |  DBG_TEST_XTOR_REPORT )
 
 // ------------------------------
-// - statische Verwaltungsdaten -
+// - static maintenance variables -
 // ------------------------------
 
 static DebugData aDebugData;
@@ -637,7 +637,7 @@ static DebugData* GetDebugData()
     {
         aDebugData.bInit = sal_True;
 
-        // Default Debug-Namen setzen
+        // set default debug names
         DbgGetLogFileName( aDebugData.aDbgData.aDebugName );
 
         // DEBUG.INI-File
@@ -718,7 +718,7 @@ static DebugData* GetDebugData()
             OSL_TRACE( "getcwd failed with error %s", strerror(errno) );
         }
 
-        // Daten initialisieren
+        // initialize debug data
         if ( aDebugData.aDbgData.nTestFlags & DBG_TEST_XTOR )
             aDebugData.pXtorList = new PointerList;
         if ( aDebugData.aDbgData.nTestFlags & DBG_TEST_PROFILING )
@@ -780,7 +780,7 @@ static FILETYPE ImplDbgInitFile()
             pTime = localtime( &nTime );
 #endif
 
-            // Header ausgeben
+            // print header
             FilePrintF( pDebugFile, "******************************************************************************%s", FILE_LINEEND );
             FilePrintF( pDebugFile, "%s%s", pData->aDbgData.aDebugName, FILE_LINEEND );
             if ( pTime )
@@ -898,11 +898,11 @@ static void DebugDeInit()
         pData->bOslIsHooked = sal_False;
     }
 
-    // Statistik-Ausgaben immer in File
+    // Output statistics trace data to file
     nOldOut = pData->aDbgData.nTraceOut;
     pData->aDbgData.nTraceOut = DBG_OUT_FILE;
 
-    // Xtor-Liste ausgeben
+    // output Xtor list
     if ( pData->pXtorList && pData->pXtorList->Count() &&
          (pData->aDbgData.nTestFlags & DBG_TEST_XTOR_REPORT) )
     {
@@ -917,7 +917,7 @@ static void DebugDeInit()
             XtorType* pXtorData = (XtorType*)pData->pXtorList->Get( i );
             if ( pXtorData->bTest )
             {
-                // Static-Objekte dazurechnen
+                // Add static objects
                 pXtorData->nDtorCalls += pXtorData->nStatics;
                 if ( pXtorData->nStatics && (pXtorData->nDtorCalls > pXtorData->nCtorCalls) )
                     pXtorData->nDtorCalls = pXtorData->nCtorCalls;
@@ -931,7 +931,7 @@ static void DebugDeInit()
         DbgOutf( "==============================================================================" );
     }
 
-    // Aufraeumen
+    // free XtorList
     if ( pData->pXtorList )
     {
         for( i = 0, nCount = pData->pXtorList->Count(); i < nCount; i++ )
@@ -943,11 +943,11 @@ static void DebugDeInit()
         pData->pXtorList = NULL;
     }
 
-    // Alles auf sal_False setzen, damit globale Variablen nicht das
-    // System zum Abstuerzen bringt. Dabei muessen aber die
-    // Memory-Flags erhalten bleiben, da sonst new/delete in globalen
-    // Variablen abstuerzen, da die Pointeranpassung dann nicht mehr richtig
-    // funktioniert
+    // Set everything to sal_False, as global variables
+    // may cause a system crash otherwise.
+    // Maintain memory flags, as otherwise new/delete calls
+    // for global variables will crash,
+    // as pointer alignment won't work then.
     pData->aDbgData.nTraceOut   = nOldOut;
     pData->aDbgData.nTestFlags &= DBG_TEST_PROFILING;
     pData->aDbgPrintUserChannels.clear();
@@ -966,11 +966,11 @@ static void DebugGlobalDeInit()
     sal_uIntPtr       nCount;
     sal_uIntPtr       nOldOut;
 
-    // Statistik-Ausgaben immer in File
+    // Output statistics trace data to file
     nOldOut = pData->aDbgData.nTraceOut;
     pData->aDbgData.nTraceOut = DBG_OUT_FILE;
 
-    // Profileliste ausgeben
+    // output profile liste
     if ( pData->pProfList && pData->pProfList->Count() )
     {
         DbgOutf( "------------------------------------------------------------------------------" );
@@ -991,7 +991,7 @@ static void DebugGlobalDeInit()
         DbgOutf( "==============================================================================" );
     }
 
-    // Aufraeumen
+    // free profile list
     if ( pData->pProfList )
     {
         for( i = 0, nCount = pData->pProfList->Count(); i < nCount; i++ )
@@ -1003,7 +1003,7 @@ static void DebugGlobalDeInit()
         pData->pProfList = NULL;
     }
 
-    // Profiling-Flags ausschalten
+    // disable profiling flags
     pData->aDbgData.nTraceOut   = nOldOut;
     pData->aDbgData.nTestFlags &= ~DBG_TEST_PROFILING;
 }
@@ -1031,7 +1031,7 @@ static void DebugXTorInfo( sal_Char* pBuf )
     sal_uIntPtr       i;
     sal_uIntPtr       nCount;
 
-    // Xtor-Liste ausgeben
+    // output Xtor list
     if ( pData->pXtorList && pData->pXtorList->Count() &&
          (pData->aDbgData.nTestFlags & DBG_TEST_XTOR_REPORT) )
     {
@@ -1219,7 +1219,6 @@ DbgChannelId DbgRegisterUserChannel( DbgPrintLine pProc )
 
 void DbgProf( sal_uInt16 nAction, DbgDataType* pDbgData )
 {
-    // Ueberhaupt Profiling-Test an
     DebugData* pData = ImplGetDebugData();
 
     if ( !(pData->aDbgData.nTestFlags & DBG_TEST_PROFILING) )
@@ -1315,7 +1314,7 @@ void DbgXtor( DbgDataType* pDbgData, sal_uInt16 nAction, const void* pThis,
 {
     DebugData* pData = ImplGetDebugData();
 
-    // Schnell-Test
+    // quick test
     if ( !(pData->aDbgData.nTestFlags & DBG_TEST_XTOR) )
         return;
 
@@ -1351,10 +1350,10 @@ void DbgXtor( DbgDataType* pDbgData, sal_uInt16 nAction, const void* pThis,
          : nAct == DBG_XTOR_DTOR ? "Enter Dtor from class "
          : "Enter method from class ") << pDbgData->pName);
 
-    // Sind noch Xtor-Tests als Trace an
+    // If some Xtor-tests are still tracing
     if ( pData->aDbgData.nTestFlags & DBG_TEST_XTOR_EXTRA )
     {
-        // DBG_CTOR-Aufruf vor allen anderen DBG_XTOR-Aufrufen
+        // call DBG_CTOR before all other DBG_XTOR calls
         if ( ((nAction & ~DBG_XTOR_DTOROBJ) != DBG_XTOR_CTOR) && !pDbgData->pData )
         {
             SAL_WARN(
@@ -1364,7 +1363,7 @@ void DbgXtor( DbgDataType* pDbgData, sal_uInt16 nAction, const void* pThis,
             return;
         }
 
-        // Testen, ob This-Pointer gueltig
+        // Test if the pointer is still valid
         if ( pData->aDbgData.nTestFlags & DBG_TEST_XTOR_THIS )
         {
             if ( (pData->aDbgData.nTestFlags & DBG_TEST_XTOR_EXIT) ||
@@ -1388,7 +1387,7 @@ void DbgXtor( DbgDataType* pDbgData, sal_uInt16 nAction, const void* pThis,
             }
         }
 
-        // Function-Test durchfuehren und Verwaltungsdaten updaten
+        // execute function test and update maintenance data
         const sal_Char* pMsg = NULL;
         switch ( nAction & ~DBG_XTOR_DTOROBJ )
         {
@@ -1446,7 +1445,6 @@ void DbgXtor( DbgDataType* pDbgData, sal_uInt16 nAction, const void* pThis,
                 break;
         }
 
-        // Gegebenenfalls Fehlermeldung ausgeben
         SAL_WARN_IF(
             pMsg, "tools.debug",
             "Error-Msg from Object " << pThis << " in class "
@@ -1537,7 +1535,7 @@ void DbgOut( const sal_Char* pMsg, sal_uInt16 nDbgOut, const sal_Char* pFile, sa
         strcat( aBufOut, pFile );
         strcat( aBufOut, " at Line " );
 
-        // Line in String umwandeln und dranhaengen
+        // Convert line to String and append
         sal_Char    aLine[9];
         sal_Char*   pLine = &aLine[7];
         sal_uInt16      i;

@@ -32,20 +32,20 @@ typedef void* PVOID;
 class CBlock
 {
 private:
-    CBlock*         pPrev;              // Vorheriger Block
-    CBlock*         pNext;              // Naechster Block
-    sal_uInt16          nSize;              // Groesse des Blocks
-    sal_uInt16          nCount;             // Anzahl Pointer
-    void**          pNodes;             // Pointer auf die Daten
+    CBlock*         pPrev;              // Previous block
+    CBlock*         pNext;              // Next block
+    sal_uInt16      nSize;              // block size
+    sal_uInt16      nCount;             // number of pointers
+    void**          pNodes;             // stores node pointers
 
 #if defined DBG_UTIL
     static char const * DbgCheckCBlock(void const *);
 #endif
 
 public:
-                    // Fuer List-Container
+                    // used for list container
                     CBlock( sal_uInt16 nSize, CBlock* pPrev, CBlock* pNext );
-                    // Fuer Array-Container
+                    // used for array container
                     CBlock( sal_uInt16 nSize, CBlock* pPrev );
                     // Copy-Ctor
                     CBlock( const CBlock& r, CBlock* pPrev );
@@ -78,7 +78,7 @@ private:
 |*
 |*    CBlock::GetObject()
 |*
-|*    Beschreibung      Gibt einen Pointer aus dem Block zurueck
+|*    Description      Returns a node pointer given a block index
 |*
 *************************************************************************/
 
@@ -91,16 +91,15 @@ inline void* CBlock::GetObject( sal_uInt16 nIndex ) const
 |*
 |*    Container::ImpGetObject()
 |*
-|*    Beschreibung      Wir gehen davon aus, das Pointer in der Regel
-|*                      sich im ersten Block befindet und schalten
-|*                      deshalb eine Inline-Methode davor
+|*    Description       A pointer is often located in the first block,
+|*                      thus check this position before calling GetObject
 |*
 *************************************************************************/
 
 inline void* Container::ImpGetObject( sal_uIntPtr nIndex ) const
 {
     if ( pFirstBlock && (nIndex < pFirstBlock->Count()) )
-        // Item innerhalb des gefundenen Blocks zurueckgeben
+        // Return item within the found block
         return pFirstBlock->GetObject( (sal_uInt16)nIndex );
     else
         return GetObject( nIndex );
@@ -110,8 +109,7 @@ inline void* Container::ImpGetObject( sal_uIntPtr nIndex ) const
 |*
 |*    Container::ImpGetOnlyNodes()
 |*
-|*    Beschreibung      Wenn es nur einen Block gibt, wird davon
-|*                      das Daten-Array zurueckgegeben
+|*    Description       If only one block exists, return its data array
 |*
 *************************************************************************/
 

@@ -22,9 +22,9 @@
 
 #include <tools/rcid.h>
 
-// Definition der Struktur die alle "Window"-Resourcen haben
-// Hier sind die Fensterstyles definiert die nicht in WinBits sind
-#define RSC_EXTRAMAPUNIT                0xFFFF //Wert nicht veraendern!!!
+// Defines for all "Window" resources.
+// (Here are all window styles that are not in WinBits)
+#define RSC_EXTRAMAPUNIT                0xFFFF // do not change that value!
 
 typedef short RSWND_STYLE;
 #define RSWND_DISABLED                  0x01
@@ -44,26 +44,26 @@ typedef short RSWND_STYLE;
 #define WINDOW_BORDER_STYLE             0x2000
 #define WINDOW_HELPID                   0x4000
 
-// Definition der Struktur die alle "WorkWindow"-Resourcen haben
+// For "WorkWindow" resources:
 #define WORKWIN_SHOWNORMAL              0
 #define WORKWIN_SHOWMINIMIZED           1
 #define WORKWIN_SHOWMAXIMIZED           2
 
-// Definition der Struktur der FixedBitmap-Resource.
+// For "FixedBitmap" resource:
 #define RSC_FIXEDBITMAP_BITMAP          0x0001
 
-// Definition der Struktur der FixedImage-Resource.
+// For "FixedImage" resource:
 #define RSC_FIXEDIMAGE_IMAGE            0x0001
 
-// Definition der Struktur des MenuButtons
+// For "MenuButton" resources:
 #define RSCMENUBUTTON_MENU              0x01
 
-// Definition der Struktur die alle Menu-Resourcen haben
+// For all menu resources:
 #define RSC_MENU_ITEMS                  0x01
 #define RSC_MENU_TEXT                   0x02
 #define RSC_MENU_DEFAULTITEMID          0x04
 
-// Hier sind die MenuItem-Resourceoptionen definiert
+// "MenuItem" resource options:
 #define RSC_MENUITEM_SEPARATOR          0x001
 #define RSC_MENUITEM_ID                 0x002
 #define RSC_MENUITEM_STATUS             0x004
@@ -77,11 +77,11 @@ typedef short RSWND_STYLE;
 #define RSC_MENUITEM_DISABLE            0x400
 #define RSC_MENUITEM_COMMAND            0x800
 
-// Hier sind die AccelKey-Resourceoptionen definiert
+// "AccelKey" resource options:
 #define ACCELITEM_ACCEL                 0x01
 #define ACCELITEM_KEY                   0x02
 
-// Definition der Struktur die alle "Field"-Resourcen haben
+// For "Field" resources:
 #define PATTERNFORMATTER_STRICTFORMAT   0x01
 #define PATTERNFORMATTER_EDITMASK       0x02
 #define PATTERNFORMATTER_LITTERALMASK   0x04
@@ -130,7 +130,7 @@ typedef short RSWND_STYLE;
 #define TIMEFIELD_FIRST                 0x01
 #define TIMEFIELD_LAST                  0x02
 
-// Definition der Struktur die alle "ToolBoxItem"-Resourcen haben
+// For "ToolBoxItem" resources:
 #define RSC_TOOLBOXITEM_ID              0x0001
 #define RSC_TOOLBOXITEM_TYPE            0x0002
 #define RSC_TOOLBOXITEM_STATUS          0x0004
@@ -145,7 +145,7 @@ typedef short RSWND_STYLE;
 #define RSC_TOOLBOXITEM_COMMAND         0x0800
 #define RSC_TOOLBOXITEM_MENUSTRINGS     0x1000
 
-// Definition der Struktur die alle ToolBox-Resourcen haben
+// For "ToolBox" resources:
 #define RSC_TOOLBOX_BUTTONTYPE          0x01
 #define RSC_TOOLBOX_ALIGN               0x02
 #define RSC_TOOLBOX_LINECOUNT           0x04
@@ -155,45 +155,45 @@ typedef short RSWND_STYLE;
 #define RSC_TOOLBOX_ITEMIMAGELIST       0x40
 #define RSC_TOOLBOX_ITEMLIST            0x80
 
-// Definition der Struktur die alle MoreButton-Resourcen haben
+// For "MoreButton" resources:
 #define RSC_MOREBUTTON_STATE            0x01
 #define RSC_MOREBUTTON_MAPUNIT          0x02
 #define RSC_MOREBUTTON_DELTA            0x04
 
-// Definition der Struktur die alle FloatingWindow-Resourcen haben
+// For "FloatingWindow" resources:
 #define RSC_FLOATINGWINDOW_WHMAPMODE    0x01
 #define RSC_FLOATINGWINDOW_WIDTH        0x02
 #define RSC_FLOATINGWINDOW_HEIGHT       0x04
 #define RSC_FLOATINGWINDOW_ZOOMIN       0x08
 
-// Definition der Struktur die alle DockingWindow-Resourcen haben
+// For "DockingWindow" resources:
 #define RSC_DOCKINGWINDOW_XYMAPMODE     0x01
 #define RSC_DOCKINGWINDOW_X             0x02
 #define RSC_DOCKINGWINDOW_Y             0x04
 #define RSC_DOCKINGWINDOW_FLOATING      0x08
 
-// Definition der Struktur die alle "TabControlItem"-Resourcen haben
+// For "TabControlItem" resources:
 #define RSC_TABCONTROLITEM_ID           0x0001
 #define RSC_TABCONTROLITEM_TEXT         0x0002
 #define RSC_TABCONTROLITEM_PAGERESID    0x0008
 
-// Definition der Struktur die alle TabControl-Resourcen haben
+// For "TabControl" resources:
 #define RSC_TABCONTROL_ITEMLIST         0x01
 
-// Definition der Struktur des ImageButtons
+// For "ImageButtons":
 #define RSC_IMAGEBUTTON_IMAGE           0x01
 #define RSC_IMAGEBUTTON_SYMBOL          0x02
 #define RSC_IMAGEBUTTON_STATE           0x04
 
-// Definition der Struktur des ImageRadioButtons
+// For "ImageRadioButtons":
 #define RSC_IMAGERADIOBUTTON_IMAGE      0x01
 
-// Definition der Struktur des Image
+// For "Image":
 #define RSC_IMAGE_IMAGEBITMAP           0x01
 #define RSC_IMAGE_MASKBITMAP            0x02
 #define RSC_IMAGE_MASKCOLOR             0x04
 
-// Definition der Struktur des Image
+// For "ImageList":
 #define RSC_IMAGELIST_IMAGEBITMAP       0x01
 #define RSC_IMAGELIST_MASKBITMAP        0x02
 #define RSC_IMAGELIST_MASKCOLOR         0x04

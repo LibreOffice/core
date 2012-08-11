@@ -68,7 +68,7 @@ struct DirReader_Impl
                     bInUse( sal_False )
                 {
 
-                    // nur den String der Memer-Var nehmen!
+                    // only use the String from Memer-Var
 
 #if defined(UNX)    //for further eplanation see DirReader_Impl::Read() in unx.cxx
                     pDosDir = NULL;
@@ -77,7 +77,7 @@ struct DirReader_Impl
                     pDosDir = opendir( aBypass.getStr() );
 #endif
 
-                    // Parent f"ur die neuen DirEntries ermitteln
+                    // Determine parents for new DirEntries
                     pParent = pDir->GetFlag() == FSYS_FLAG_NORMAL ||
                               pDir->GetFlag() == FSYS_FLAG_ABSROOT
                                     ? pDir
@@ -88,20 +88,20 @@ struct DirReader_Impl
                 ~DirReader_Impl()
                 { if( pDosDir ) closedir( pDosDir ); }
 
-                // die folgenden sind systemabh"angig implementiert
-    sal_uInt16      Init(); // initialisiert, liest ggf. devices
-    sal_uInt16      Read(); // liest 1 Eintrag, F2ugt ein falls ok
+                // Init and Read are system-independent
+    sal_uInt16      Init(); // initializes (and if necessary reads devices)
+    sal_uInt16      Read(); // Reads one entry and appends it if ok
 };
 
 //--------------------------------------------------------------------
 
 struct FileCopier_Impl
 {
-    FSysAction      nActions;       // was zu tun ist (Copy/Move/recur)
-    Link            aErrorLink;     // bei Fehlern zu rufen
-    ErrCode         eErr;           // aktueller Fehlercode im Error-Handler
-    const DirEntry* pErrSource;     // fuer Error-Handler falls Source-Fehler
-    const DirEntry* pErrTarget;     // fuer Error-Handler falls Target-Fehler
+    FSysAction      nActions;       // action command  (Copy/Move/recur)
+    Link            aErrorLink;     // link to call upon errors
+    ErrCode         eErr;           // current errorcode in the handler
+    const DirEntry* pErrSource;     // for error handlers in case of Source error
+    const DirEntry* pErrTarget;     // for error handlers in case of Target error
 
                     FileCopier_Impl()
                     :   nActions( 0 ), eErr( 0 ),

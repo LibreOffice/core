@@ -51,7 +51,7 @@ public:
                     ~SvCacheStream();
 
     void            SetFilename( const String& rFN )
-                 { aFileName = rFN; } // darf nur vom FilenameHdl gerufen werden!
+                 { aFileName = rFN; } // call only from FilenameHdl
     const String&   GetFilename() const { return aFileName; }
 
     void            SwapOut();
@@ -61,7 +61,7 @@ public:
     sal_Bool            IsPersistent() { return bPersistent != 0; }
     void            SetPersistence( sal_Bool b = sal_True ) { bPersistent = b; }
     void            SetSwapStream( SvStream *p )
-                 { pSwapStream = p; } // darf nur vom FilenameHdl gerufen werden!
+                 { pSwapStream = p; } // call only from FilenameHdl
 };
 
 #endif

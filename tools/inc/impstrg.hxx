@@ -23,15 +23,11 @@
 #include <tools/tools.h>
 #include <tools/string.hxx>
 
-// ------------------------------
-// - Debug-Methoden fuer String -
-// ------------------------------
+// Debug methode for Strings
 
 const char* DbgCheckUniString( const void* pString );
 
-// -------------------------------
-// - Hilfsfunktionen fuer String -
-// -------------------------------
+// Helper functions for Strings
 
 xub_StrLen ImplStringLen( const sal_Char* pStr );
 xub_StrLen ImplStringLen( const sal_Unicode* pStr );

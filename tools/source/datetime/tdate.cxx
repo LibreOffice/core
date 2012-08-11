@@ -134,7 +134,7 @@ Date::Date( DateInitSystem )
     SYSTEMTIME aDateTime;
     GetLocalTime( &aDateTime );
 
-    // Datum zusammenbauen
+    // Combine to date
     nDate = ((sal_uIntPtr)aDateTime.wDay) +
             (((sal_uIntPtr)aDateTime.wMonth)*100) +
             (((sal_uIntPtr)aDateTime.wYear)*10000);
@@ -142,10 +142,10 @@ Date::Date( DateInitSystem )
     time_t     nTmpTime;
     struct tm aTime;
 
-    // Zeit ermitteln
+    // get current time
     nTmpTime = time( 0 );
 
-    // Datum zusammenbauen
+    // compute date
     if ( localtime_r( &nTmpTime, &aTime ) )
     {
         nDate = ((sal_uIntPtr)aTime.tm_mday) +
@@ -217,9 +217,9 @@ sal_uInt16 Date::GetWeekOfYear( DayOfWeek eStartDay,
     short n1WDay = (short)Date( 1, 1, GetYear() ).GetDayOfWeek();
     short nDayOfYear = (short)GetDayOfYear();
 
-    // Wochentage beginnen bei 0, deshalb einen abziehen
+    // weekdays start at 0, thus decrement one
     nDayOfYear--;
-    // StartDay beruecksichtigen
+    // account for StartDay
     n1WDay = (n1WDay+(7-(short)eStartDay)) % 7;
 
     if (nMinimumNumberOfDaysInWeek < 1 || 7 < nMinimumNumberOfDaysInWeek)
@@ -231,8 +231,8 @@ sal_uInt16 Date::GetWeekOfYear( DayOfWeek eStartDay,
     if ( nMinimumNumberOfDaysInWeek == 1 )
     {
         nWeek = ((n1WDay+nDayOfYear)/7) + 1;
-        // 53te-Woche nur dann, wenn wir nicht schon in der ersten
-        // Woche des neuen Jahres liegen
+        // Set to 53rd week only if we're not in the
+        // first week of the new year
         if ( nWeek == 54 )
             nWeek = 1;
         else if ( nWeek == 53 )
@@ -247,8 +247,7 @@ sal_uInt16 Date::GetWeekOfYear( DayOfWeek eStartDay,
     else if ( nMinimumNumberOfDaysInWeek == 7 )
     {
         nWeek = ((n1WDay+nDayOfYear)/7);
-        // Erste Woche eines Jahres entspricht der letzen Woche des
-        // vorherigen Jahres
+        // First week of a year is equal to the last week of the previous year
         if ( nWeek == 0 )
         {
             Date aLastDatePrevYear( 31, 12, GetYear()-1 );
@@ -284,8 +283,8 @@ sal_uInt16 Date::GetWeekOfYear( DayOfWeek eStartDay,
                 nWeek = (nDayOfYear + n1WDay) / 7;
             if ( nWeek == 53 )
             {
-                // naechster x_Sonntag == erster x_Sonntag im neuen Jahr
-                //                     == noch gleiche Woche
+                // next x_Sonntag == first x_Sonntag in the new year
+                // == still the same week!
                 long nTempDays = DateToDays( GetDay(), GetMonth(), GetYear() );
                 nTempDays +=  6 - (GetDayOfWeek()+(7-(short)eStartDay)) % 7;
                 sal_uInt16  nDay;

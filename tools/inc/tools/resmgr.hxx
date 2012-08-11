@@ -34,20 +34,20 @@ class InternalResMgr;
 // - RSHEADER_TYPE -
 // -----------------
 
-// Definition der Struktur, aus denen die Resource aufgebaut ist
+// Defines structure used to build resource
 struct RSHEADER_TYPE
 {
 private:
-    sal_uInt32              nId;        // Identifier der Resource
-    RESOURCE_TYPE           nRT;        // Resource Typ
-    sal_uInt32              nGlobOff;   // Globaler Offset
-    sal_uInt32              nLocalOff;  // Lokaler Offset
+    sal_uInt32              nId;        // Identifier of resource
+    RESOURCE_TYPE           nRT;        // Resource type
+    sal_uInt32              nGlobOff;   // Global offset
+    sal_uInt32              nLocalOff;  // Local offset
 
 public:
-    inline sal_uInt32       GetId();       // Identifier der Resource
-    inline RESOURCE_TYPE    GetRT();       // Resource Typ
-    inline sal_uInt32       GetGlobOff();   // Globaler Offset
-    inline sal_uInt32       GetLocalOff();  // Lokaler Offset
+    inline sal_uInt32       GetId();       // Identifier of resource
+    inline RESOURCE_TYPE    GetRT();       // Resource type
+    inline sal_uInt32       GetGlobOff();  // Global offset
+    inline sal_uInt32       GetLocalOff(); // Local offset
 };
 
 // ----------
@@ -60,9 +60,9 @@ typedef rtl::OUString (*ResHookProc)( const rtl::OUString& rStr );
 // - ResMgr -
 // ----------
 
-// Initialisierung
+// Initialization
 #define RC_NOTYPE               0x00
-// Globale Resource
+// Global resource
 #define RC_GLOBAL               0x01
 #define RC_AUTORELEASE          0x02
 #define RC_NOTFOUND             0x04
@@ -134,11 +134,11 @@ private:
     ResMgr(const ResMgr&);
     ResMgr& operator=(const ResMgr&);
 public:
-    static void         DestroyAllResMgr();  // Wird gerufen, wenn App beendet wird
+    static void         DestroyAllResMgr();  // Called upon app shutdown
 
     ~ResMgr();
 
-                        // Sprachabhaengige Resource Library
+    // Language-dependent resource library
     static const sal_Char*  GetLang( LanguageType& eLanguage, sal_uInt16 nPrio = 0 ); //depricated! see "tools/source/rc/resmgr.cxx"
     static ResMgr*      SearchCreateResMgr( const sal_Char* pPrefixName,
                                             com::sun::star::lang::Locale& rLocale );
@@ -147,23 +147,23 @@ public:
                                                                                                            rtl::OUString(),
                                                                                                            rtl::OUString()));
 
-    // Testet ob Resource noch da ist
+    // Test whether resource still exists
     void                TestStack( const Resource * );
 
-    // ist Resource verfuegbar
+    // Returns whether resource is available
     sal_Bool                IsAvailable( const ResId& rId,
                                      const Resource* = NULL) const;
 
-    // Resource suchen und laden
+    // Search and load resource, given its ID
     sal_Bool                GetResource( const ResId& rId, const Resource * = NULL );
     static void *       GetResourceSkipHeader( const ResId& rResId, ResMgr ** ppResMgr );
-    // Kontext freigeben
+    // Free resource context
     void                PopContext( const Resource* = NULL );
 
-    // Resourcezeiger erhoehen
+    // Increment resource pointer
     void*               Increment( sal_uInt32 nSize );
 
-    // Groesse ein Objektes in der Resource
+    // Size of an object within the resource
     static sal_uInt32   GetObjSize( RSHEADER_TYPE* pHT )
                             { return( pHT->GetGlobOff() ); }
 
@@ -172,24 +172,23 @@ public:
     // returns a byte string and its length out of the resource
     static sal_uInt32   GetByteString( rtl::OString& rStr, const sal_uInt8* pStr );
 
-    // Groesse eines Strings in der Resource
+    // returns the size of a string in the resource
     static sal_uInt32   GetStringSize( sal_uInt32 nLen )
                             { nLen++; return (nLen + nLen%2); }
     static sal_uInt32   GetStringSize( const sal_uInt8* pStr, sal_uInt32& nLen );
 
     // return a int64
     static sal_uInt64   GetUInt64( void* pDatum );
-    // Gibt einen long zurueck
+    // return a long
     static sal_Int32        GetLong( void * pLong );
     // return a short
     static sal_Int16        GetShort( void * pShort );
 
-    // Gibt einen Zeiger auf die Resource zurueck
+    // return a pointer to the resource
     void *              GetClass();
 
     RSHEADER_TYPE *     CreateBlock( const ResId & rId );
 
-    // Gibt die verbleibende Groesse zurueck
     sal_uInt32          GetRemainSize();
 
     const rtl::OUString&GetFileName() const;

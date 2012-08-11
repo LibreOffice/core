@@ -26,8 +26,7 @@
 
 /*********************************************************************
 *
-*   Die Klasse SimpleConfig kann benutzt werden, um aus einer Textdatei
-*   alle Tokens zu lesen
+*   This class can be used for extracting tokens from a file
 *
 *********************************************************************/
 

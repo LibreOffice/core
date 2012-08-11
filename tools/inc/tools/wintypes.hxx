@@ -119,7 +119,7 @@ typedef sal_uInt16 WindowType;
 
 typedef sal_Int64 WinBits;
 
-// Window-Bits fuer Window
+// Window-Bits for Window
 #define WB_CLIPCHILDREN         ((WinBits)0x00000001)
 #define WB_DIALOGCONTROL        ((WinBits)0x00000002)
 #define WB_NODIALOGCONTROL      ((WinBits)0x00000004)
@@ -129,7 +129,7 @@ typedef sal_Int64 WinBits;
 #define WB_3DLOOK               ((WinBits)0x00000040)
 #define WB_AUTOSIZE             ((WinBits)0x00000080)
 
-// Window-Bits fuer SystemWindows
+// Window-Bits for SystemWindows
 #define WB_MOVEABLE             ((WinBits)0x00000100)
 #define WB_ROLLABLE             ((WinBits)0x00000200)
 #define WB_CLOSEABLE            ((WinBits)0x00000400)
@@ -149,7 +149,7 @@ typedef sal_Int64 WinBits;
 #define WB_SYSTEMCHILDWINDOW    ((WinBits)SAL_CONST_INT64(0x8000000000))
 #define WB_SIZEMOVE             (WB_SIZEABLE | WB_MOVEABLE)
 
-// Standard-Window-Bits fuer ChildWindows
+// Standard-Window-Bits for ChildWindows
 #define WB_TABSTOP              ((WinBits)0x00000100)
 #define WB_NOTABSTOP            ((WinBits)0x00000200)
 #define WB_GROUP                ((WinBits)0x00000400)

@@ -30,7 +30,6 @@ class CBlock;
 // - Container -
 // -------------
 
-// Maximale Blockgroesse
 #define CONTAINER_MAXBLOCKSIZE      ((sal_uInt16)0x3FF0)
 
 #define CONTAINER_APPEND            ULONG_MAX

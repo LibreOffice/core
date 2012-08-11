@@ -230,25 +230,24 @@ class TOOLS_DLLPUBLIC SvStream
 private:
     // LockBytes Interface
     void*       pImp;           // unused
-    SvLockBytesRef  xLockBytes;     // Default Implmentierung
+    SvLockBytesRef  xLockBytes;     // Default implementation
     sal_Size        nActPos;        //
 
     // Puffer-Verwaltung
-    sal_uInt8*  pRWBuf;         // Zeigt auf Read/Write-Puffer
+    sal_uInt8*  pRWBuf;         // Points to read/write buffer
     sal_uInt8*  pBufPos;        // pRWBuf + nBufActualPos
-    sal_uInt16  nBufSize;       // Allozierte Groesse des Puffers
-    sal_uInt16  nBufActualLen;  // Laenge des beschriebenen Teils des Puffers
-                                    // Entspricht nBufSize, wenn EOF nicht
-                                    // ueberschritten wurde
-    sal_uInt16  nBufActualPos;  // aktuelle Position im Puffer (0..nBufSize-1)
-    sal_uInt16  nBufFree;       // freier Platz im Puffer fuer IO vom Typ eIOMode
+    sal_uInt16  nBufSize;       // Allocated size of buffer
+    sal_uInt16  nBufActualLen;  // Length of used segment of puffer
+                                // = nBufSize, if EOF did not occur
+    sal_uInt16  nBufActualPos;  // current position in buffer (0..nBufSize-1)
+    sal_uInt16  nBufFree;       // number of free slots in buffer to IO of type eIOMode
     unsigned int    eIOMode:2;      // STREAM_IO_*
 
-    // Error-Codes, Konvertierung, Komprimierung, ...
-    int             bIsDirty:1;     // sal_True: Stream != Pufferinhalt
-    int             bIsConsistent:1;// sal_False: Buffer enthaelt Daten, die NICHT
-                                    // per PutData in den abgeleiteten Stream
-                                    // geschrieben werden duerfen (siehe PutBack)
+    // Error codes, conversion, compression, ...
+    int             bIsDirty:1;     // sal_True: Stream != buffer content
+    int             bIsConsistent:1;// sal_False: Buffer contains data, which were
+                                    // NOT allowed to be written by PutData
+                                    // into the derived stream (cf. PutBack)
     int             bSwap:1;
     int             bIsEof:1;
     sal_uInt32  nError;
@@ -257,21 +256,21 @@ private:
     LineEnd         eLineDelimiter;
     CharSet         eStreamCharSet;
 
-    // Verschluesselung
-    rtl::OString m_aCryptMaskKey;           // aCryptMaskKey.getLength != 0  -> Verschluesselung
+    // Encryption
+    rtl::OString m_aCryptMaskKey;   // aCryptMaskKey.getLength != 0  -> Encryption used
     unsigned char   nCryptMask;
 
     // Userdata
     long            nVersion;       // for external use
 
-    // Hilfsmethoden
+    // helper methods
     TOOLS_DLLPRIVATE void           ImpInit();
 
                      SvStream ( const SvStream& rStream ); // not implemented
     SvStream&       operator=( const SvStream& rStream ); // not implemented
 
 protected:
-    sal_Size            nBufFilePos;    // Fileposition von pBuf[0]
+    sal_Size            nBufFilePos;    // File position of pBuf[0]
     sal_uInt16          eStreamMode;
     sal_Bool            bIsWritable;
 
@@ -284,7 +283,7 @@ protected:
     void            ClearError();
     void            ClearBuffer();
 
-    // verschluesselt & schreibt blockweise
+    // encrypt and write in blocks
     sal_Size            CryptAndWriteBuffer( const void* pStart, sal_Size nLen );
     sal_Bool            EncryptBuffer( void* pStart, sal_Size nLen );
 
@@ -487,7 +486,7 @@ public:
     long            GetVersion() { return nVersion; }
     void            SetVersion( long n ) { nVersion = n; }
 
-    friend SvStream& operator<<( SvStream& rStr, SvStrPtr f ); // fuer Manips
+    friend SvStream& operator<<( SvStream& rStr, SvStrPtr f ); // for Manips
 
     //end of input seen during previous i/o operation
     bool eof() const { return bIsEof; }
@@ -694,7 +693,7 @@ protected:
     virtual void    FlushData();
 
 public:
-                    // Schaltet bei fehlgeschlagenem Schreiboeffnen auf Lesen zurueck
+                    // Switches to Read StreamMode on failed attempt of Write opening
                     SvFileStream( const String& rFileName, StreamMode eOpenMode );
                     SvFileStream();
                     ~SvFileStream();
@@ -737,25 +736,24 @@ protected:
     virtual void    SetSize( sal_Size nSize );
     virtual void    FlushData();
 
-    // AllocateMemory muss folgende Variable mitpflegen:
-    // - pBuf: Adresse des neuen Blocks
+    // AllocateMemory must update pBuf accordingly
+    // - pBuf: Address of new block
     virtual sal_Bool    AllocateMemory( sal_Size nSize );
 
-    // ReAllocateMemory muss folgende Variablen mitpflegen:
-    // - pBuf: Adresse des neuen Blocks
-    // - nEndOfData: Muss auf nNewSize-1L gesetzt werden, wenn ausserhalb des Blocks
-    //               Muss auf 0 gesetzt werden, wenn neuer Block 0 Byte gross
-    // - nSize: Neue Groesse des Blocks
-    // - nPos: Muss auf 0 gesetzt werden, wenn ausserhalb des Blocks
+    // ReAllocateMemory must update the following variables:
+    // - pBuf: Address of new block
+    // - nEndOfData: Set to nNewSize-1L if outside of block
+    //               Set to 0 if new block size is 0 bytes
+    // - nSize: New block size
+    // - nPos: Set to 0 if position outside of block
     virtual sal_Bool    ReAllocateMemory( long nDiff );
 
-    // wird aufgerufen, wenn dem Stream der Speicher gehoert oder wenn
-    // der Speicher in der Groesse veraendert wird.
-    // FreeMemory muss folgende Variablen mitpflegen:
-    // - in abgeleiteten Klassen muessen ggf. Handles genullt werden
+    // is called when this stream allocated the buffer
+    // or the buffer is resized.
+    // FreeMemory may need to NULL handles in derived classes
     virtual void    FreeMemory();
 
-                    SvMemoryStream(void*) { }   // Fuer unsere Subklassen
+                    SvMemoryStream(void*) { }   // for sub-classes
 
 public:
                     SvMemoryStream( void* pBuf, sal_Size nSize, StreamMode eMode);
@@ -784,14 +782,13 @@ public:
 // - SvDataCopyStream -
 // --------------------
 
-// AB 10.5.1996: Diese Klasse bildet die Basis fuer Klassen, die mittels
-// SvData (SO2\DTRANS.HXX/CXX) transportiert werden sollen, z.B. Graphik
-// Die abgeleiteten Klassen muessen die virtuellen Funktionen ueberladen.
+// This class is the foundation for all classes that use SvData for
+// transportation (e.g., graphics).
 
 class TOOLS_DLLPUBLIC SvDataCopyStream
 {
 public:
-    // mehrfaches Aufrufen von Load und Assign erlaubt
+    // repeated execution of Load or Assign is allowed
                     TYPEINFO();
     virtual         ~SvDataCopyStream(){}
     virtual void    Load( SvStream & ) = 0;
