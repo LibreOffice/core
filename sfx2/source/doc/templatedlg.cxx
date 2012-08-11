@@ -786,6 +786,28 @@ void SfxTemplateManagerDlg::OnTemplateExport()
 
         if (mpSearchView->IsVisible())
         {
+            sal_uInt16 i = 1;
+
+            std::set<const ThumbnailViewItem*>::const_iterator pIter = maSelTemplates.begin();
+            for (pIter = maSelTemplates.begin(); pIter != maSelTemplates.end(); ++pIter, ++i)
+            {
+                const TemplateSearchViewItem *pItem = static_cast<const TemplateSearchViewItem*>(*pIter);
+
+                INetURLObject aItemPath(pItem->getPath());
+
+                if ( 1 == i )
+                    aPathObj.Append(aItemPath.getName());
+                else
+                    aPathObj.setName(aItemPath.getName());
+
+                OUString aPath = aPathObj.GetMainURL( INetURLObject::NO_DECODE );
+
+                if (!maView->exportTo(pItem->mnIdx+1,pItem->mnRegionId+1,aPath))
+                {
+                }
+            }
+
+            mpSearchView->deselectItems();
         }
         else
         {
