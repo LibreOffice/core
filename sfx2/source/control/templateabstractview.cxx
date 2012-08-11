@@ -85,6 +85,11 @@ bool TemplateAbstractView::isOverlayVisible () const
     return mpItemView->IsVisible();
 }
 
+void TemplateAbstractView::deselectOverlayItems()
+{
+    mpItemView->deselectItems();
+}
+
 void TemplateAbstractView::deselectOverlayItem(const sal_uInt16 nItemId)
 {
     mpItemView->deselectItem(nItemId);

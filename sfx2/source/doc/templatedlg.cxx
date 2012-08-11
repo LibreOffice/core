@@ -834,6 +834,8 @@ void SfxTemplateManagerDlg::OnTemplateExport()
                 {
                 }
             }
+
+            maView->deselectOverlayItems();
         }
     }
 }

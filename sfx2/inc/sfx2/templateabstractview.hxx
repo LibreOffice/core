@@ -79,6 +79,8 @@ public:
     // Check if the overlay is visible or not.
     bool isOverlayVisible () const;
 
+    void deselectOverlayItems ();
+
     void deselectOverlayItem (const sal_uInt16 nItemId);
 
     void sortOverlayItems (const boost::function<bool (const ThumbnailViewItem*,
