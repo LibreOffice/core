@@ -48,7 +48,6 @@
  */
 published interface XDriverManager: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** attempts to establish a connection to the given database URL.
         The DriverManager attempts to select an appropriate driver from
@@ -62,7 +61,6 @@ published interface XDriverManager: com::sun::star::uno::XInterface
      */
     XConnection getConnection([in]string url)
         raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** attempts to establish a connection to the given database URL.
         The DriverManager attempts to select an appropriate driver from
@@ -81,7 +79,6 @@ published interface XDriverManager: com::sun::star::uno::XInterface
     XConnection getConnectionWithInfo([in]string url,
             [in]sequence<com::sun::star::beans::PropertyValue> info)
         raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** sets the maximum time in seconds that a driver will wait
         while attempting to connect to a database.
@@ -92,7 +89,6 @@ published interface XDriverManager: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     void setLoginTimeout([in]long seconds);
-    //-------------------------------------------------------------------------
 
     /** gets the maximum time in seconds that a driver can wait
         when attempting to login to a database.
@@ -105,7 +101,6 @@ published interface XDriverManager: com::sun::star::uno::XInterface
     long getLoginTimeout();
 };
 
-//=============================================================================
 
 }; }; }; };
 

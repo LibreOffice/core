@@ -22,39 +22,33 @@
 #include <com/sun/star/uno/XInterface.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module text {
 
-//=============================================================================
 
 // DocMerge from xml: interface com::sun::star::text::XPageCursor
 /** makes it possible to perform cursor movements between pages.
  */
 published interface XPageCursor: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::text::XPageCursor::jumpToFirstPage
     /** moves the cursor to the first page.
      */
     boolean jumpToFirstPage();
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::text::XPageCursor::jumpToLastPage
     /** moves the cursor to the last page.
      */
     boolean jumpToLastPage();
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::text::XPageCursor::jumpToPage
     /** moves the cursor to the specified page.
      */
     boolean jumpToPage( [in] short nPage );
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from idl: method com::sun::star::text::XPageCursor::getPage
     /** @returns
@@ -62,7 +56,6 @@ published interface XPageCursor: com::sun::star::uno::XInterface
      */
     short getPage();
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::text::XPageCursor::jumpToNextPage
     /** moves the cursor to the next page.
@@ -71,7 +64,6 @@ published interface XPageCursor: com::sun::star::uno::XInterface
      */
     boolean jumpToNextPage();
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::text::XPageCursor::jumpToPreviousPage
     /** moves the cursor to the previous page.
@@ -80,7 +72,6 @@ published interface XPageCursor: com::sun::star::uno::XInterface
      */
     boolean jumpToPreviousPage();
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::text::XPageCursor::jumpToEndOfPage
     /** moves the cursor to the end of the current page.
@@ -89,7 +80,6 @@ published interface XPageCursor: com::sun::star::uno::XInterface
      */
     boolean jumpToEndOfPage();
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::text::XPageCursor::jumpToStartOfPage
     /** moves the cursor to the start of the current page.
@@ -98,7 +88,6 @@ published interface XPageCursor: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

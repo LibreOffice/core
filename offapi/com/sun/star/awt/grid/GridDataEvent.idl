@@ -30,11 +30,9 @@
 
 #include <com/sun/star/lang/EventObject.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module awt {  module grid {
 
-//=============================================================================
 
 /** used to notify changes in the data represented by an <type>XMutableGridDataModel</type>.
 
@@ -71,7 +69,6 @@ struct GridDataEvent: com::sun::star::lang::EventObject
     long    LastRow;
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

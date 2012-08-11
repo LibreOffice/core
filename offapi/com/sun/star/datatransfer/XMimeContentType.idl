@@ -26,7 +26,6 @@
 
 module com { module sun { module star { module datatransfer {
 
-//-------------------------------------------------------------------------
 /** An implementation of this interface represents a MIME content-type that
     is conform to <a href="ftp://ftp.isi.edu/in-notes/rfc2045.txt">Rfc2045</a> and
     <a href="ftp://ftp.isi.edu/in-notes/rfc2046.txt">Rfc2046</a>.
@@ -36,7 +35,6 @@ module com { module sun { module star { module datatransfer {
 
 published interface XMimeContentType : com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** To get the media type of the MIME content-type.
 
         @returns
@@ -44,7 +42,6 @@ published interface XMimeContentType : com::sun::star::uno::XInterface
     */
     string getMediaType( );
 
-    //-------------------------------------------------------------------------
     /** To get the media subtype of the MIME content-type.
 
         @returns
@@ -52,7 +49,6 @@ published interface XMimeContentType : com::sun::star::uno::XInterface
     */
     string getMediaSubtype( );
 
-    //-------------------------------------------------------------------------
     /** To get the full media/submedia type of the MIME content-type.
 
         @returns
@@ -60,7 +56,6 @@ published interface XMimeContentType : com::sun::star::uno::XInterface
     */
     string getFullMediaType( );
 
-    //-------------------------------------------------------------------------
     /** To get a list of parameters that the MIME content-type contains.
 
         @returns
@@ -68,7 +63,6 @@ published interface XMimeContentType : com::sun::star::uno::XInterface
     */
     sequence< string > getParameters( );
 
-    //-------------------------------------------------------------------------
     /** To query if a specific parameter is supported.
 
         @param aName
@@ -80,7 +74,6 @@ published interface XMimeContentType : com::sun::star::uno::XInterface
     */
     boolean hasParameter( [in] string aName );
 
-    //-------------------------------------------------------------------------
     /** To get the value of a specified parameter.
 
         @param aName

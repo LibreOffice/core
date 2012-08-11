@@ -21,16 +21,13 @@
 
 #include <com/sun/star/drawing/DoubleSequence.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module drawing {
 
-//=============================================================================
 /**
 */
 published typedef sequence<DoubleSequence> DoubleSequenceSequence;
 
-//=============================================================================
 
 }; }; }; };
 

@@ -22,11 +22,9 @@
 
 #include <com/sun/star/sheet/DataImportMode.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** represents a description of how data from an external database is
     imported.
@@ -35,20 +33,17 @@ module com {  module sun {  module star {  module sheet {
  */
 published service DatabaseImportDescriptor
 {
-    //-------------------------------------------------------------------------
 
     /** enables importing and specifies from what type of source data is
         imported.
      */
     [property] com::sun::star::sheet::DataImportMode SourceType;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the name of the database from which data is imported.
      */
     [property] string DatabaseName;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the table, query, or statement from which data is imported.
 
@@ -57,7 +52,6 @@ published service DatabaseImportDescriptor
      */
     [property] string SourceObject;
 
-    //-------------------------------------------------------------------------
 
     /** specifies whether the SQL statement is given directly to the database
         or is parsed before.
@@ -67,7 +61,6 @@ published service DatabaseImportDescriptor
      */
     [optional, property] boolean IsNative;
 
-    //-------------------------------------------------------------------------
 
     /** indicates a connection URL, which locates a database driver.
         @since OOo 2.0
@@ -76,7 +69,6 @@ published service DatabaseImportDescriptor
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

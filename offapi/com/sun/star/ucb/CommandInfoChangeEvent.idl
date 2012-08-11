@@ -22,11 +22,9 @@
 #include <com/sun/star/lang/EventObject.idl>
 
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** This event gets delivered whenever a <type>XCommandInfo</type> is changed.
 
     <p>A <type>CommandInfoChangeEvent</type> object is sent to
@@ -34,19 +32,16 @@ module com { module sun { module star { module ucb {
 */
 published struct CommandInfoChangeEvent: com::sun::star::lang::EventObject
 {
-    //-------------------------------------------------------------------------
     /** contains the name of the command.
     */
     string Name;
 
-    //-------------------------------------------------------------------------
     /** contains the implementation handle for the command.
 
         <p>May be <code>-1</code> if the implementation has no handle.
     */
     long   Handle;
 
-    //-------------------------------------------------------------------------
     /** contains the reason for the event.
 
         <p>The value can be one of the <type>CommandInfoChange</type> constants.
@@ -54,7 +49,6 @@ published struct CommandInfoChangeEvent: com::sun::star::lang::EventObject
     long   Reason;
 };
 
-//=============================================================================
 
 }; }; }; };
 

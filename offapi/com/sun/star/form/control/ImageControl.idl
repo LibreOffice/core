@@ -23,11 +23,9 @@
 #include <com/sun/star/awt/UnoControlImageControl.idl>
 #include <com/sun/star/form/XBoundControl.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module form {  module control {
 
-//=============================================================================
 
 /** describes a control used for displaying images stored in a database.
 
@@ -48,7 +46,6 @@ published service ImageControl
     interface com::sun::star::form::XBoundControl;
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

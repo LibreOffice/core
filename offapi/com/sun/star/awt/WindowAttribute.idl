@@ -29,11 +29,9 @@
 #define __com_sun_star_awt_WindowAttribute_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module awt {
 
-//=============================================================================
 
 /** These values are used to specify the decorations of a window.
 
@@ -42,13 +40,11 @@
  */
 published constants WindowAttribute
 {
-    //-------------------------------------------------------------------------
 
     /** specifies that the window is initially visible.
      */
     const long SHOW = 1;
 
-    //-------------------------------------------------------------------------
 
     /** specifies that the window fills the complete desktop area.
 
@@ -56,7 +52,6 @@ published constants WindowAttribute
      */
     const long FULLSIZE = 2;
 
-    //-------------------------------------------------------------------------
 
     /** specifies that the window is optimum size.
 
@@ -64,7 +59,6 @@ published constants WindowAttribute
      */
     const long OPTIMUMSIZE = 4;
 
-    //-------------------------------------------------------------------------
 
     /** specifies that the window is minimum size.
 
@@ -72,7 +66,6 @@ published constants WindowAttribute
      */
     const long MINSIZE = 8;
 
-    //-------------------------------------------------------------------------
 
     /** specifies that the window has visible borders.
 
@@ -80,7 +73,6 @@ published constants WindowAttribute
      */
     const long BORDER = 16;
 
-    //-------------------------------------------------------------------------
 
     /** specifies that the size of the window can be changed by the user.
 
@@ -88,7 +80,6 @@ published constants WindowAttribute
      */
     const long SIZEABLE = 32;
 
-    //-------------------------------------------------------------------------
 
     /** specifies that the window can be moved by the user.
 
@@ -96,7 +87,6 @@ published constants WindowAttribute
      */
     const long MOVEABLE = 64;
 
-    //-------------------------------------------------------------------------
 
     /** specifies that the window can be closed by the user.
 
@@ -104,7 +94,6 @@ published constants WindowAttribute
      */
     const long CLOSEABLE = 128;
 
-    //-------------------------------------------------------------------------
 
     /** specifies that the window should support the
         <type scope="com::sun::star::awt::">XSystemDependentWindowPeer</type>
@@ -121,7 +110,6 @@ published constants WindowAttribute
      */
     const long SYSTEMDEPENDENT = 256;
 
-    //-------------------------------------------------------------------------
 
     /** specifies that the window should have no decoration.
      */
@@ -129,7 +117,6 @@ published constants WindowAttribute
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -32,11 +32,9 @@
 #include <com/sun/star/util/URL.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module util {
 
-//=============================================================================
 
 /** supports parsing and assembling of URLs
 
@@ -45,7 +43,6 @@ module com {  module sun {  module star {  module util {
  */
 published interface XURLTransformer: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** parses the string in <member>URL::Complete</member> which should contain
         a syntactically complete URL.
 
@@ -66,7 +63,6 @@ published interface XURLTransformer: com::sun::star::uno::XInterface
      */
     boolean parseStrict( [inout] com::sun::star::util::URL aURL );
 
-    //-------------------------------------------------------------------------
     /** parses the string in <member>URL::Complete</member>, which may contain
         a syntactically complete URL or is specified by the provided protocol
 
@@ -94,7 +90,6 @@ published interface XURLTransformer: com::sun::star::uno::XInterface
         [inout] com::sun::star::util::URL aURL,
         [in] string sSmartProtocol );
 
-    //-------------------------------------------------------------------------
     /** assembles the parts of the URL specified by <var>aURL</var> and
         stores it into <member>URL::Complete</member>
 
@@ -109,7 +104,6 @@ published interface XURLTransformer: com::sun::star::uno::XInterface
      */
     boolean assemble( [inout] com::sun::star::util::URL aURL );
 
-    //-------------------------------------------------------------------------
     /** returns a representation of the URL for UI purposes only
 
         <p>
@@ -135,7 +129,6 @@ published interface XURLTransformer: com::sun::star::uno::XInterface
         [in] boolean bWithPassword );
 };
 
-//=============================================================================
 
 }; }; }; };
 

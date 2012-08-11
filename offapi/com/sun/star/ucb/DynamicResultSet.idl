@@ -21,11 +21,9 @@
 
 #include <com/sun/star/ucb/XDynamicResultSet.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** provides read access to a static or dynamically changing
     <type>ContentResultSet</type>.
 
@@ -36,7 +34,6 @@ module com { module sun { module star { module ucb {
 
 published service DynamicResultSet
 {
-    //-------------------------------------------------------------------------
     /** Provides read access to a static or a dynamically changing
         <type>ContentResultSet</type>.
 
@@ -45,7 +42,6 @@ published service DynamicResultSet
     interface com::sun::star::ucb::XDynamicResultSet;
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -35,23 +35,19 @@
 #include <com/sun/star/awt/EndPopupModeEvent.idl>
 #include <com/sun/star/lang/EventObject.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module awt {
 
-//=============================================================================
 
 /** makes it possible to receive docking events.
  */
 interface XDockableWindowListener: com::sun::star::lang::XEventListener
 {
-    //-------------------------------------------------------------------------
 
     /** is invoked when the docking procedure starts.
      */
     void startDocking( [in] com::sun::star::awt::DockingEvent e );
 
-    //-------------------------------------------------------------------------
 
     /** is invoked during the docking procedure when the window has been moved.
 
@@ -65,14 +61,12 @@ interface XDockableWindowListener: com::sun::star::lang::XEventListener
      */
     DockingData docking( [in] com::sun::star::awt::DockingEvent e );
 
-    //-------------------------------------------------------------------------
 
     /** is invoked when the docking procedure ends.
         aWindowRect contains the new position and size of the window
      */
     void endDocking( [in] com::sun::star::awt::EndDockingEvent e );
 
-    //-------------------------------------------------------------------------
 
     /** is invoked when the floating mode is about to be changed between
             floating and docked or vice versa
@@ -81,20 +75,17 @@ interface XDockableWindowListener: com::sun::star::lang::XEventListener
      */
     boolean prepareToggleFloatingMode( [in] com::sun::star::lang::EventObject e );
 
-    //-------------------------------------------------------------------------
 
     /** is invoked when the floating mode is changed between
             floating and docked or vice versa
      */
     void toggleFloatingMode( [in] com::sun::star::lang::EventObject e );
 
-    //-------------------------------------------------------------------------
 
     /** is invoked when the window was actively closed
      */
     void closed( [in] com::sun::star::lang::EventObject e );
 
-    //-------------------------------------------------------------------------
 
     /** is invoked when the window currently is in pop-up mode and wants to be undocked
         or closed
@@ -103,7 +94,6 @@ interface XDockableWindowListener: com::sun::star::lang::XEventListener
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

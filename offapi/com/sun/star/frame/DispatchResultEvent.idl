@@ -32,11 +32,9 @@
 #include <com/sun/star/lang/EventObject.idl>
 #include <com/sun/star/util/URL.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module frame {
 
-//=============================================================================
 /** contains the result of the dispatch action, if State is set to SUCCESS
 
     <p>
@@ -51,18 +49,15 @@
 */
 published struct DispatchResultEvent: com::sun::star::lang::EventObject
 {
-    //-------------------------------------------------------------------------
     /** describes state of dispatch
      */
     short State;
 
-    //-------------------------------------------------------------------------
     /** describes result for given <var>State</var>
      */
     any Result;
 };
 
-//=============================================================================
 
 }; }; }; };
 

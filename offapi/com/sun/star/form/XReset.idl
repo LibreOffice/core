@@ -33,11 +33,9 @@
 #include <com/sun/star/form/XResetListener.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module form {
 
-//=============================================================================
 
 /** provides functionality to reset components to some default values.
 
@@ -45,13 +43,11 @@
  */
 published interface XReset: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** resets a component to some default value.
      */
     [oneway] void reset();
 
-    //-------------------------------------------------------------------------
 
     /** adds the specified listener to receive events related to resetting the
         component.
@@ -61,7 +57,6 @@ published interface XReset: com::sun::star::uno::XInterface
      */
     [oneway] void addResetListener( [in] com::sun::star::form::XResetListener aListener );
 
-    //-------------------------------------------------------------------------
 
     /** removes the specified listener
 
@@ -72,7 +67,6 @@ published interface XReset: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

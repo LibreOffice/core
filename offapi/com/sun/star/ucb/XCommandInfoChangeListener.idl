@@ -22,11 +22,9 @@
 #include <com/sun/star/lang/XEventListener.idl>
 #include <com/sun/star/ucb/CommandInfoChangeEvent.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** a listener for events related to changing <type>XCommandInfo</type>s.
 
     @version  1.0
@@ -36,7 +34,6 @@ module com { module sun { module star { module ucb {
 */
 published interface XCommandInfoChangeListener : com::sun::star::lang::XEventListener
 {
-    //-------------------------------------------------------------------------
     /** gets called whenever changes of a <type>XCommandInfo</type> shall
         be propagated.
 
@@ -46,7 +43,6 @@ published interface XCommandInfoChangeListener : com::sun::star::lang::XEventLis
     void commandInfoChange( [in] CommandInfoChangeEvent evt );
 };
 
-//=============================================================================
 
 }; }; }; };
 

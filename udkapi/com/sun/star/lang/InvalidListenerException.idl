@@ -22,11 +22,9 @@
 #include <com/sun/star/uno/Exception.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module lang {
 
-//=============================================================================
 
 // DocMerge from xml: exception com::sun::star::lang::InvalidListenerException
 /** is thrown by the <member>XConnectionPoint::advice</member> method
@@ -39,7 +37,6 @@ published exception InvalidListenerException: com::sun::star::uno::Exception
 {
 };
 
-//=============================================================================
 
 }; }; }; };
 

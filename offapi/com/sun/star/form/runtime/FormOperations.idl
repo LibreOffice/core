@@ -25,11 +25,9 @@
 #include <com/sun/star/form/XForm.idl>
 #include <com/sun/star/lang/IllegalArgumentException.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module form { module runtime {
 
-//=============================================================================
 
 /** encapsulates operations on a database form which has a UI representation,
     and is interacting with the user.
@@ -66,11 +64,9 @@ service FormOperations : XFormOperations
     );
 };
 
-//=============================================================================
 
 }; }; }; }; };
 
-//=============================================================================
 
 #endif
 

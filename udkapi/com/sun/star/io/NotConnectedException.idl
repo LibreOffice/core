@@ -22,11 +22,9 @@
 #include <com/sun/star/io/IOException.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module io {
 
-//=============================================================================
 
 // DocMerge from xml: exception com::sun::star::io::NotConnectedException
 /** is thrown when a read/write operation is tried on an instance that has
@@ -36,7 +34,6 @@ published exception NotConnectedException: com::sun::star::io::IOException
 {
 };
 
-//=============================================================================
 
 }; }; }; };
 

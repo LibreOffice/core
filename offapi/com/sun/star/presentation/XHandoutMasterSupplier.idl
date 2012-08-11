@@ -24,11 +24,9 @@
 #include <com/sun/star/drawing/XDrawPage.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module presentation {
 
-//=============================================================================
 
 /** returns the handout master page for this document
  */
@@ -39,7 +37,6 @@ published interface XHandoutMasterSupplier: com::sun::star::uno::XInterface
     com::sun::star::drawing::XDrawPage getHandoutMasterPage();
 };
 
-//=============================================================================
 
 }; }; }; };
 

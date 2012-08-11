@@ -22,7 +22,6 @@
 
 module com { module sun { module star { module ucb {
 
-//============================================================================
 /** An indication used in a
     <type scope="com::sun::star::ucb">RemoteContentProviderChangeEvent</type> to
     specify whether a remote content provider has been added to or removed
@@ -34,12 +33,10 @@ module com { module sun { module star { module ucb {
  */
 published enum RemoteContentProviderChangeAction
 {
-    //------------------------------------------------------------------------
     /** The indicator that a remote content provider has been added.
      */
     ADDED,
 
-    //------------------------------------------------------------------------
     /** The indicator that a remote content provider has been removed.
      */
     REMOVED

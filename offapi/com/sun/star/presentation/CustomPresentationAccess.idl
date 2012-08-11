@@ -23,11 +23,9 @@
 
 #include <com/sun/star/lang/XSingleServiceFactory.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module presentation {
 
-//=============================================================================
 
 /** This is a container for custom presentations.
  */
@@ -52,7 +50,6 @@ published service CustomPresentationAccess
     interface com::sun::star::lang::XSingleServiceFactory;
 };
 
-//=============================================================================
 
 }; }; }; };
 

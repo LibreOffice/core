@@ -21,11 +21,9 @@
 
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module drawing {
 
-//=============================================================================
 
 /**
   This service may be represented by a ::com::sun::star::beans::PropertyValue [].
@@ -103,7 +101,6 @@ service EnhancedCustomShapeHandle
     [optional, property] ::com::sun::star::drawing::EnhancedCustomShapeParameter RadiusRangeMaximum;
 };
 
-//=============================================================================
 
 }; }; }; };
 

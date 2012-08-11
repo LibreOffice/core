@@ -20,11 +20,9 @@
 #define __com_sun_star_xml_crypto_DigestID_idl__
 
 
-//============================================================================
 
 module com { module sun { module star { module xml { module crypto {
 
-//============================================================================
 /** The constant set contains identifiers of supported digest-creation
     algorithms.
 
@@ -33,30 +31,25 @@ module com { module sun { module star { module xml { module crypto {
 */
 constants DigestID
 {
-    //------------------------------------------------------------------------
     /** identifier of SHA-1 algorithm
      */
     const long SHA1 = 1;
 
-    //------------------------------------------------------------------------
     /** identifier of SHA-256 algorithm
      */
     const long SHA256 = 2;
 
-    //------------------------------------------------------------------------
     /** identifier of SHA-1 algorithm that is applied to the first kilobyte
         of data.
      */
     const long SHA1_1K = 3;
 
-    //------------------------------------------------------------------------
     /** identifier of SHA-256 algorithm that is applied to the first kilobyte
         of data.
      */
     const long SHA256_1K = 4;
 };
 
-//============================================================================
 
 }; }; }; }; };
 

@@ -26,11 +26,9 @@
 #include <com/sun/star/awt/Size.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module awt {
 
-//=============================================================================
 
 /** makes it possible to attach an output device to the object.
 
@@ -38,20 +36,17 @@
  */
 published interface XView: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** sets the output device.
      */
     boolean setGraphics( [in] com::sun::star::awt::XGraphics aDevice );
 
-    //-------------------------------------------------------------------------
 
     /** returns the output device which was set using the method
         <member>XView::setGraphics</member>.
      */
     com::sun::star::awt::XGraphics getGraphics();
 
-    //-------------------------------------------------------------------------
 
     /** returns the size of the object in device units.
 
@@ -59,7 +54,6 @@ published interface XView: com::sun::star::uno::XInterface
      */
     com::sun::star::awt::Size getSize();
 
-    //-------------------------------------------------------------------------
 
     /** draws the object at the specified position.
 
@@ -69,7 +63,6 @@ published interface XView: com::sun::star::uno::XInterface
     [oneway] void draw( [in] long nX,
              [in] long nY );
 
-    //-------------------------------------------------------------------------
 
     /** sets the zoom factor.
 
@@ -80,7 +73,6 @@ published interface XView: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

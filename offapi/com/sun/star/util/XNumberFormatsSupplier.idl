@@ -26,25 +26,21 @@
 #include <com/sun/star/util/XNumberFormats.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module util {
 
-//=============================================================================
 
 /** supplies the collection of <type>NumberFormat</type>s (for example, in a
     document) and the settings belonging to these formats.
  */
 published interface XNumberFormatsSupplier: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** @returns
                 the <type>NumberFormatSettings</type> of this object.
      */
     com::sun::star::beans::XPropertySet getNumberFormatSettings();
 
-    //-------------------------------------------------------------------------
 
     /** @returns
                 the collection of number formats belonging to this object (e.g., to this document).
@@ -53,7 +49,6 @@ published interface XNumberFormatsSupplier: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

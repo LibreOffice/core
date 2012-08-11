@@ -37,11 +37,9 @@
 #include <com/sun/star/container/XNameContainer.idl>
 #include <com/sun/star/beans/XTolerantMultiPropertySet.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module drawing {
 
-//=============================================================================
 
 /** This abstract service specifies the general characteristics of all
     <type>Shape</type>s.
@@ -53,13 +51,11 @@
  */
 published service Shape
 {
-    //-------------------------------------------------------------------------
 
     /** handles all the properties of this instance.
      */
     interface com::sun::star::beans::XPropertySet;
 
-    //-------------------------------------------------------------------------
 
     /** This gives you the size and position of this <type>Shape</type>
                 and lets you change it. You can use <member>getShapeType</member>
@@ -67,20 +63,17 @@ published service Shape
      */
     interface com::sun::star::drawing::XShape;
 
-    //-------------------------------------------------------------------------
 
     /** is used for lifetime control of this <type>Shape</type>.
      */
     interface com::sun::star::lang::XComponent;
 
-    //-------------------------------------------------------------------------
 
     /** The <type>XShapeDescriptor</type> tells you what kind of
                 <type>Shape</type> this instance is.
      */
     interface com::sun::star::drawing::XShapeDescriptor;
 
-    //-------------------------------------------------------------------------
 
     /** This interfaces gives access to an optional container of glue points.
         To have unique ids you should query the returned interface for
@@ -88,30 +81,25 @@ published service Shape
     */
     [optional] interface com::sun::star::drawing::XGluePointsSupplier;
 
-    //-------------------------------------------------------------------------
 
         [optional] interface com::sun::star::beans::XTolerantMultiPropertySet;
 
-    //-------------------------------------------------------------------------
 
     /** is used to query or change the ZOrder of this <type>Shape</type>. */
     [optional, property] long ZOrder;
 
-    //-------------------------------------------------------------------------
 
     /** This is the ID of the <type>Layer</type> to which this
         <type>Shape</type> is attached.
      */
     [optional, property] short LayerID;
 
-    //-------------------------------------------------------------------------
 
     /** This is the name of the <type>Layer</type> to which this
         <type>Shape</type> is attached.
      */
     [optional, property] string LayerName;
 
-    //-------------------------------------------------------------------------
 
     /** If this is <FALSE/>, the <type>Shape</type> is not visible
         on screen outputs. Please note that the <type>Shape</type> may still
@@ -119,40 +107,34 @@ published service Shape
      */
     [optional, property] boolean Visible;
 
-    //-------------------------------------------------------------------------
 
     /** If this is <FALSE/>, the <type>Shape</type> is not visible
         on printer outputs.
      */
     [optional, property] boolean Printable;
 
-    //-------------------------------------------------------------------------
 
     /** With this set to <TRUE/>, this <type>Shape</type>
         cannot be moved interactively in the user interface.
      */
     [optional, property] boolean MoveProtect;
 
-    //-------------------------------------------------------------------------
 
     /** This is the name of this <type>Shape</type>.
      */
     [optional, property] string Name;
 
-    //-------------------------------------------------------------------------
 
     /** With this set to <TRUE/>, this <type>Shape</type> may not be
         sized interactively in the user interface.
      */
     [optional, property] boolean SizeProtect;
 
-    //-------------------------------------------------------------------------
 
     /** this property lets you get and set a style for this shape.
      */
     [optional, property] com::sun::star::style::XStyle Style;
 
-    //-------------------------------------------------------------------------
 
     /** this property lets you get and set the transformation matrix
         for this shape.
@@ -162,7 +144,6 @@ published service Shape
      */
     [optional, property] com::sun::star::drawing::HomogenMatrix3 Transformation;
 
-    //-------------------------------------------------------------------------
 
     /** this property stores xml attributes.
         They will be saved to and restored from automatic styles inside xml files.
@@ -171,7 +152,6 @@ published service Shape
     */
     [optional, property] com::sun::star::container::XNameContainer ShapeUserDefinedAttributes;
 
-    //-------------------------------------------------------------------------
 
     /** this property stores the navigation order of this shape. If this value
         is negative, the navigation order for this shapes page is equal to
@@ -184,7 +164,6 @@ published service Shape
     [optional, property] string Hyperlink;
 };
 
-//=============================================================================
 
 }; }; }; };
 

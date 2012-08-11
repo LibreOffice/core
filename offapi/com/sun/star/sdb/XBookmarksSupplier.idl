@@ -24,17 +24,14 @@
 #include <com/sun/star/container/XNameAccess.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module sdb {
 
-//=============================================================================
 
 /** provides access to the collection of all bookmarks associated with a data source.
  */
 published interface XBookmarksSupplier: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** @returns    the collection of all bookmarks associated with a data source
             <p>
@@ -46,7 +43,6 @@ published interface XBookmarksSupplier: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

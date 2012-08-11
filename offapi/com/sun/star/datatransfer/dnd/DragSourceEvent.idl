@@ -22,14 +22,12 @@
 
 #include <com/sun/star/lang/EventObject.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module datatransfer { module dnd {
 
  published interface XDragSource;
  published interface XDragSourceContext;
 
-//=============================================================================
 /** This class is the base class for <type>DragSourceDragEvent</type> and <type>DragSourceDropEvent</type>.
 
     <p>To access the <type>XDragSource</type> that originated this event, use the
@@ -39,7 +37,6 @@ module com { module sun { module star { module datatransfer { module dnd {
 
 published struct DragSourceEvent: com::sun::star::lang::EventObject
 {
-    //-------------------------------------------------------------------------
     /** The drag source context of the current drag operation.
 
         @see com::sun::star::datatransfer::dnd::XDragSourceContext
@@ -47,7 +44,6 @@ published struct DragSourceEvent: com::sun::star::lang::EventObject
 
     XDragSourceContext DragSourceContext;
 
-    //-------------------------------------------------------------------------
     /** The drag source on which the Drag and Drop operation was initiated.
 
         @see com::sun::star::datatransfer::dnd::XDragSource
@@ -56,7 +52,6 @@ published struct DragSourceEvent: com::sun::star::lang::EventObject
     XDragSource DragSource;
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

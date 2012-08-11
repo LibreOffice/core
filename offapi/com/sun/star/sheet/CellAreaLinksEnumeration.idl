@@ -22,11 +22,9 @@
 
 #include <com/sun/star/container/XEnumeration.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** represents an enumeration of cell area links.
 
@@ -34,7 +32,6 @@ module com {  module sun {  module star {  module sheet {
  */
 published service CellAreaLinksEnumeration
 {
-    //-------------------------------------------------------------------------
 
     /** provides methods to access the cell area links in the enumeration.
 
@@ -44,7 +41,6 @@ published service CellAreaLinksEnumeration
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

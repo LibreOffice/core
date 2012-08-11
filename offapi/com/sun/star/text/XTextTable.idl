@@ -30,11 +30,9 @@
 #include <com/sun/star/text/XTextTableCursor.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module text {
 
-//=============================================================================
 
 /** manages a text table.
 
@@ -43,7 +41,6 @@
  */
 published interface XTextTable: com::sun::star::text::XTextContent
 {
-    //-------------------------------------------------------------------------
 
     /** determines the numbers of rows and columns of the text table.
 
@@ -54,7 +51,6 @@ published interface XTextTable: com::sun::star::text::XTextContent
     void initialize( [in] long nRows,
              [in] long nColumns );
 
-    //-------------------------------------------------------------------------
 
     /** @returns
             the access object for the text table rows.
@@ -63,7 +59,6 @@ published interface XTextTable: com::sun::star::text::XTextContent
      */
     com::sun::star::table::XTableRows getRows();
 
-    //-------------------------------------------------------------------------
 
     /** @returns
             the access object for the text table columns.
@@ -72,7 +67,6 @@ published interface XTextTable: com::sun::star::text::XTextContent
      */
     com::sun::star::table::XTableColumns getColumns();
 
-    //-------------------------------------------------------------------------
 
     /** @returns
             the <type scope="com::sun::star::table">XCell</type> interface of the cell with the specified name.
@@ -97,14 +91,12 @@ published interface XTextTable: com::sun::star::text::XTextContent
      */
     com::sun::star::table::XCell getCellByName( [in] string aCellName );
 
-    //-------------------------------------------------------------------------
 
     /** @returns
             the names of all cells of this text table.
      */
     sequence<string> getCellNames();
 
-    //-------------------------------------------------------------------------
 
     /** creates a text table cursor and returns the
         <type>XTextTableCursor</type> interface.
@@ -118,7 +110,6 @@ published interface XTextTable: com::sun::star::text::XTextContent
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

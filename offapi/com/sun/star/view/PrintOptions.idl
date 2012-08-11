@@ -29,11 +29,9 @@
 #define __com_sun_star_view_PrintOptions_idl__
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module view {
 
-//=============================================================================
 
 /** describes the options for print jobs.
 
@@ -42,22 +40,18 @@ module com {  module sun {  module star {  module view {
  */
 published service PrintOptions
 {
-    //-------------------------------------------------------------------------
     /** specifies the number of copies to print.
      */
     [property] short CopyCount;
 
-    //-------------------------------------------------------------------------
     /** if set, specifies the name of a file to print to.
      */
     [property] string FileName;
 
-    //-------------------------------------------------------------------------
     /** advises the printer to collate the pages of the copies.
      */
     [property] boolean Collate;
 
-    //-------------------------------------------------------------------------
     /** advises the printer to sort the pages of the copies.
 
         @deprecated
@@ -65,7 +59,6 @@ published service PrintOptions
      */
     [property] boolean Sort;
 
-    //-------------------------------------------------------------------------
     /** specifies which pages to print.
 
         <p>This range is given as at the user interface. For example: "1-4;10"
@@ -73,7 +66,6 @@ published service PrintOptions
      */
     [property] string Pages;
 
-    //-------------------------------------------------------------------------
     /** if set to TRUE, the corresponding <type>XPrintable</type>.print() request will
         be executed synchronous.
 
@@ -84,7 +76,6 @@ published service PrintOptions
      */
     [optional, property] boolean Wait;
 
-    //-------------------------------------------------------------------------
     /** determines the duplex mode for the print job.
 
         @see <type>DuplexMode</type> for more information about supported values
@@ -92,7 +83,6 @@ published service PrintOptions
     [optional, property] short DuplexMode;
 };
 
-//=============================================================================
 
 }; }; }; };
 

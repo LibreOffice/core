@@ -33,11 +33,9 @@
 #include <com/sun/star/lang/XInitialization.idl>
 #include <com/sun/star/container/XNamed.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module document {
 
-//=============================================================================
 /** filter for exports
 
     <p>
@@ -50,7 +48,6 @@ module com { module sun { module star { module document {
  */
 published service ExportFilter
 {
-    //-------------------------------------------------------------------------
     /** set source(!) document for this filter
 
         <p>
@@ -60,7 +57,6 @@ published service ExportFilter
      */
     interface XExporter;
 
-    //-------------------------------------------------------------------------
     /** filter interface
 
         <p>
@@ -80,7 +76,6 @@ published service ExportFilter
      */
     interface XFilter;
 
-    //-------------------------------------------------------------------------
     /** support initialization of filter with its own configuration
 
         <p>
@@ -100,7 +95,6 @@ published service ExportFilter
      */
     [optional] interface com::sun::star::lang::XInitialization;
 
-    //-------------------------------------------------------------------------
     /** provides access to the internal name of this filter
 
         <p>
@@ -119,7 +113,6 @@ published service ExportFilter
     [optional] interface com::sun::star::container::XNamed;
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -25,11 +25,9 @@
 #include <com/sun/star/lang/IllegalArgumentException.idl>
 #include <com/sun/star/container/ElementExistException.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module animations {
 
-//=============================================================================
 
 /**
 
@@ -103,7 +101,6 @@ interface XTimeContainer : XAnimationNode
                 com::sun::star::lang::WrappedTargetException );
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -24,34 +24,28 @@
 #include <com/sun/star/util/XRefreshListener.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module util {
 
-//=============================================================================
 
 /** is supported by objects with data that can be refreshed from a data source.
  */
 published interface XRefreshable: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** refreshes the data of the object from the connected data source.
      */
     void refresh();
 
-    //-------------------------------------------------------------------------
     /** adds the specified listener to receive the event "refreshed."
      */
     [oneway] void addRefreshListener( [in] com::sun::star::util::XRefreshListener l );
 
-    //-------------------------------------------------------------------------
     /** removes the specified listener.
      */
     [oneway] void removeRefreshListener( [in] com::sun::star::util::XRefreshListener l );
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

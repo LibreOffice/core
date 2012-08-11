@@ -25,11 +25,9 @@
 #include <com/sun/star/io/IOException.idl>
 #include <com/sun/star/uno/XInterface.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module datatransfer {
 
-//=============================================================================
 /** Interface to be implemented by objects used to provide data for a data
     transfer operation.
 
@@ -38,7 +36,6 @@ module com { module sun { module star { module datatransfer {
 
 published interface XTransferable: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** Called by a data consumer to obtain data from the source in a specified
         format.
 
@@ -57,7 +54,6 @@ published interface XTransferable: com::sun::star::uno::XInterface
     any getTransferData( [in] DataFlavor aFlavor )
         raises ( UnsupportedFlavorException, com::sun::star::io::IOException );
 
-    //-------------------------------------------------------------------------
     /** Returns a sequence of supported <type>DataFlavor</type>.
 
         @returns
@@ -67,7 +63,6 @@ published interface XTransferable: com::sun::star::uno::XInterface
     */
     sequence < DataFlavor > getTransferDataFlavors();
 
-    //-------------------------------------------------------------------------
     /** Checks if the data object supports the specified data flavor.
 
         @param aFlavor
@@ -84,7 +79,6 @@ published interface XTransferable: com::sun::star::uno::XInterface
     boolean isDataFlavorSupported( [in] DataFlavor aFlavor );
 };
 
-//=============================================================================
 
 }; }; }; };
 

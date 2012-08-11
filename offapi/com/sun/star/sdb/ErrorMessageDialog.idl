@@ -34,7 +34,6 @@
 #include <com/sun/star/lang/XInitialization.idl>
 #include <com/sun/star/beans/XPropertySet.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sdb {
 
@@ -153,7 +152,6 @@ published service ErrorMessageDialog
     interface com::sun::star::lang::XInitialization;
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -34,11 +34,9 @@
 #include <com/sun/star/accessibility/XAccessibleSelection.idl>
 #include <com/sun/star/accessibility/XAccessibleEventBroadcaster.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** The accessible view of a spreadsheet document
 
@@ -137,7 +135,6 @@ published service AccessibleSpreadsheet
     interface ::com::sun::star::accessibility::XAccessibleEventBroadcaster;
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -24,17 +24,14 @@
 #include <com/sun/star/awt/XDevice.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module awt {
 
-//=============================================================================
 
 /** represents an information printer.
  */
 published interface XInfoPrinter: com::sun::star::awt::XPrinterPropertySet
 {
-    //-------------------------------------------------------------------------
 
     /** creates a new object which implements an <type>XDevice</type>.
 
@@ -44,7 +41,6 @@ published interface XInfoPrinter: com::sun::star::awt::XPrinterPropertySet
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -7,11 +7,9 @@
 
 
 
-//=============================================================================
 
 module com { module sun { module star { module configuration { module backend {
 
-//=============================================================================
 
 /**
    describe the contents of a layer to an XLayerHandler object. The contents of
@@ -22,16 +20,13 @@ module com { module sun { module star { module configuration { module backend {
 service LayerDescriber
 {
 
-    //-------------------------------------------------------------------------
 
     /**
       describes a set of configuration data to an XLayerHandler Object.
     */
     interface com::sun::star::configuration::backend::XLayerContentDescriber ;
 
-    //-------------------------------------------------------------------------
 
-//=============================================================================
 } ;
 } ; } ; } ; } ; } ;
 #endif

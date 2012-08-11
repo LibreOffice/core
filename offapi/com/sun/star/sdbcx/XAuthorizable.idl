@@ -45,7 +45,6 @@ published interface XAuthorizable: com::sun::star::uno::XInterface
      */
     long getPrivileges([in]string objName, [in]long objType) raises
                         (com::sun::star::sdbc::SQLException);
-    //-------------------------------------------------------------------------
 
     /** retrieves the permissions for a specific object, which could be granted
         to other users and groups.
@@ -61,7 +60,6 @@ published interface XAuthorizable: com::sun::star::uno::XInterface
      */
     long getGrantablePrivileges([in]string objName, [in]long objType) raises
                         (com::sun::star::sdbc::SQLException);
-    //-------------------------------------------------------------------------
 
     /** adds additional permissions for a specific object.
         @param objName
@@ -74,7 +72,6 @@ published interface XAuthorizable: com::sun::star::uno::XInterface
     void grantPrivileges([in]string objName, [in]long objType,
                          [in]long objPrivileges) raises
         (com::sun::star::sdbc::SQLException);
-    //-------------------------------------------------------------------------
 
     /** removes permissions for a specific object from a group or user.
         @param objName
@@ -89,7 +86,6 @@ published interface XAuthorizable: com::sun::star::uno::XInterface
         (com::sun::star::sdbc::SQLException);
 };
 
-//=============================================================================
 
 }; }; }; };
 

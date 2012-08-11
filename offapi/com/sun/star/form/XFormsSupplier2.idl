@@ -22,11 +22,9 @@
 
 #include <com/sun/star/form/XFormsSupplier.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module form {
 
-//=============================================================================
 
 /** extends the <type>XFormsSupplier</type> with convenience methods
 */
@@ -48,7 +46,6 @@ interface XFormsSupplier2: XFormsSupplier
     boolean hasForms();
 };
 
-//=============================================================================
 
 }; }; }; };
 

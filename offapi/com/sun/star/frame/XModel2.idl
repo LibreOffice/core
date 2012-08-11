@@ -34,11 +34,9 @@
 #include <com/sun/star/awt/XWindow.idl>
 #include <com/sun/star/lang/IllegalArgumentException.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module frame {
 
-//=============================================================================
 /** extends interface XModel.
 
     The following functions are added:
@@ -51,7 +49,6 @@
  */
 interface XModel2 : com::sun::star::frame::XModel
 {
-    //-------------------------------------------------------------------------
     /** provides list of all currently connected controller objects.
 
         <p>
@@ -67,7 +64,6 @@ interface XModel2 : com::sun::star::frame::XModel
      */
     com::sun::star::container::XEnumeration getControllers();
 
-    //-------------------------------------------------------------------------
     /** provides the available names of the factory to be used to create views.
 
         <p>The names are usually logical view names. The following names have
@@ -92,7 +88,6 @@ interface XModel2 : com::sun::star::frame::XModel
      */
     sequence< string > getAvailableViewControllerNames();
 
-    //-------------------------------------------------------------------------
     /** creates the default view instance for this model.
 
         <p>Effectively, this method is equivalent to calling <member>createView</member> with
@@ -113,7 +108,6 @@ interface XModel2 : com::sun::star::frame::XModel
         raises (com::sun::star::lang::IllegalArgumentException,
                 com::sun::star::uno::Exception                );
 
-    //-------------------------------------------------------------------------
     /** creates a new view instance classified by the specified name and arguments.
 
         <p>The newly created controller must not be connected with the document and the
@@ -146,7 +140,6 @@ interface XModel2 : com::sun::star::frame::XModel
                 com::sun::star::uno::Exception                );
 };
 
-//=============================================================================
 
 }; }; }; };
 

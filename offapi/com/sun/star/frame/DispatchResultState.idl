@@ -23,28 +23,23 @@
 
 module com { module sun { module star { module frame {
 
-//=============================================================================
 /** possible values for <type>DispatchResultEvent</type>
  */
 published constants DispatchResultState
 {
-    //-------------------------------------------------------------------------
     /** indicates: dispatch failed
      */
     const short FAILURE = 0;
 
-    //-------------------------------------------------------------------------
     /** indicates: dispatch was successfully
      */
     const short SUCCESS = 1;
 
-    //-------------------------------------------------------------------------
     /** indicates: result isn't defined
      */
     const short DONTKNOW = 2;
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -26,11 +26,9 @@
 #include <com/sun/star/plugin/PluginException.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module plugin {
 
-//=============================================================================
 
 /** This interface allows the container, e.g. document to control the plugin.
 */
@@ -61,7 +59,6 @@ published interface XPlugin: com::sun::star::uno::XInterface
             raises( com::sun::star::plugin::PluginException );
 };
 
-//=============================================================================
 
 }; }; }; };
 

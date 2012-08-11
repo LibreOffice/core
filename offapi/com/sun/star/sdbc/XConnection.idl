@@ -92,7 +92,6 @@ published interface XConnection: com::sun::star::sdbc::XCloseable
             if a database access error occurs.
      */
     XStatement createStatement() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** creates a
         <type scope="com::sun::star::sdbc">PreparedStatement</type>
@@ -139,7 +138,6 @@ published interface XConnection: com::sun::star::sdbc::XCloseable
             if a database access error occurs.
      */
     XPreparedStatement prepareStatement([in]string sql) raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** creates a
         <type scope="com::sun::star::sdbc">CallableStatement</type>
@@ -176,7 +174,6 @@ published interface XConnection: com::sun::star::sdbc::XCloseable
             if a database access error occurs.
      */
     XPreparedStatement prepareCall([in]string sql) raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** converts the given SQL statement into the system's native SQL grammar.
         A driver may convert the JDBC SQL grammar into its system's
@@ -191,7 +188,6 @@ published interface XConnection: com::sun::star::sdbc::XCloseable
             if a database access error occurs.
      */
     string nativeSQL([in]string sql) raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** sets this connection's auto-commit mode.
 
@@ -225,7 +221,6 @@ published interface XConnection: com::sun::star::sdbc::XCloseable
             if a database access error occurs.
      */
     void setAutoCommit([in] boolean autoCommit) raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** gets the current auto-commit state.
 
@@ -237,7 +232,6 @@ published interface XConnection: com::sun::star::sdbc::XCloseable
         @see setAutoCommit
      */
     boolean getAutoCommit() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** makes all changes made since the previous commit/rollback
         permanent and releases any database locks currently held
@@ -250,7 +244,6 @@ published interface XConnection: com::sun::star::sdbc::XCloseable
         @see setAutoCommit
      */
     void commit() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** drops all changes made since the previous
         commit/rollback and releases any database locks currently held
@@ -262,7 +255,6 @@ published interface XConnection: com::sun::star::sdbc::XCloseable
         @see setAutoCommit
      */
     void rollback() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** tests to see if a connection is closed.
 
@@ -281,7 +273,6 @@ published interface XConnection: com::sun::star::sdbc::XCloseable
             if a database access error occurs.
      */
     boolean isClosed() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** gets the metadata regarding this connection's database.
 
@@ -300,7 +291,6 @@ published interface XConnection: com::sun::star::sdbc::XCloseable
             if a database access error occurs.
      */
     XDatabaseMetaData getMetaData() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** puts this connection in read-only mode as a hint to enable
         database optimizations.
@@ -323,7 +313,6 @@ published interface XConnection: com::sun::star::sdbc::XCloseable
             if a database access error occurs.
      */
     void setReadOnly([in]boolean readOnly) raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** tests to see if the connection is in read-only mode.
         @returns
@@ -332,7 +321,6 @@ published interface XConnection: com::sun::star::sdbc::XCloseable
             if a database access error occurs.
      */
     boolean isReadOnly() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** sets a catalog name in order to select
         a subspace of this Connection's database in which to work.
@@ -344,7 +332,6 @@ published interface XConnection: com::sun::star::sdbc::XCloseable
             if a database access error occurs.
      */
     void setCatalog([in]string catalog) raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** returns the Connection's current catalog name.
         @returns
@@ -353,7 +340,6 @@ published interface XConnection: com::sun::star::sdbc::XCloseable
             if a database access error occurs.
      */
     string getCatalog() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** attempts to change the transaction isolation level to the one given.
 
@@ -378,7 +364,6 @@ published interface XConnection: com::sun::star::sdbc::XCloseable
         @see com::sun::star::sdbc::XDatabaseMetaData::supportsTransactionIsolationLevel()
      */
     void setTransactionIsolation([in]long level) raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** gets this Connection's current transaction isolation level.
         @returns
@@ -387,7 +372,6 @@ published interface XConnection: com::sun::star::sdbc::XCloseable
             if a database access error occurs.
      */
     long getTransactionIsolation() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** gets the type map object associated with this connection. Only drivers
         which implement the custom type mapping facility will return an object otherwise
@@ -404,7 +388,6 @@ published interface XConnection: com::sun::star::sdbc::XCloseable
             if a database access error occurs.
      */
     com::sun::star::container::XNameAccess getTypeMap() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** installs the given type map as the type map for this connection.
         The type map will be used for the custom mapping of SQL structured types
@@ -424,7 +407,6 @@ published interface XConnection: com::sun::star::sdbc::XCloseable
         raises (SQLException);
 };
 
-//=============================================================================
 
 }; }; }; };
 

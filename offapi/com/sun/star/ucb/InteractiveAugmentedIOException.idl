@@ -22,16 +22,13 @@
 #include <com/sun/star/ucb/InteractiveIOException.idl>
 
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** An input/output error with arguments.
 */
 published exception InteractiveAugmentedIOException : com::sun::star::ucb::InteractiveIOException
 {
-    //-------------------------------------------------------------------------
     /** Additional arguments.
 
         <P>See <type scope="com::sun::star::task">InteractionHandler</type>
@@ -40,7 +37,6 @@ published exception InteractiveAugmentedIOException : com::sun::star::ucb::Inter
         sequence< any > Arguments;
 };
 
-//=============================================================================
 
 }; }; }; };
 

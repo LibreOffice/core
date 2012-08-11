@@ -38,7 +38,6 @@ published interface XQueryDefinitionsSupplier: com::sun::star::uno::XInterface
     com::sun::star::container::XNameAccess getQueryDefinitions();
 };
 
-//=============================================================================
 
 }; }; }; };
 

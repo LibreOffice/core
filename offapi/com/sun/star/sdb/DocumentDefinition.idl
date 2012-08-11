@@ -90,7 +90,6 @@ service DocumentDefinition
     [readonly, property] boolean AsTemplate;
 };
 
-//=============================================================================
 
 }; }; }; };
 

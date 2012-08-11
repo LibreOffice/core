@@ -32,7 +32,6 @@
  */
 published interface XWarningsSupplier: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** returns the first warning reported by calls on an object that supports
         the usage of warnings.
@@ -49,7 +48,6 @@ published interface XWarningsSupplier: com::sun::star::uno::XInterface
      */
     any getWarnings() raises (SQLException);
 
-    //-------------------------------------------------------------------------
 
     /** clears all warnings reported for the object implementing the interface.
         After a call to this method, the method
@@ -63,7 +61,6 @@ published interface XWarningsSupplier: com::sun::star::uno::XInterface
     void clearWarnings() raises (SQLException);
 };
 
-//=============================================================================
 
 }; }; }; };
 

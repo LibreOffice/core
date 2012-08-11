@@ -25,11 +25,9 @@
 #include <com/sun/star/text/TableColumnSeparator.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module text {
 
-//=============================================================================
 
 /** specifies the properties of a text table row.
 
@@ -39,56 +37,47 @@ published service TextTableRow
 {
     interface com::sun::star::beans::XPropertySet;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the color of the background.
      */
     [property] com::sun::star::util::Color BackColor;
 
-    //-------------------------------------------------------------------------
 
     /** If <TRUE/>, the background color value in "BackColor" is not visible.
      */
     [property] boolean BackTransparent;
 
-    //-------------------------------------------------------------------------
 
     /** contains the URL of a background graphic.
      */
     [property] string BackGraphicURL;
 
-    //-------------------------------------------------------------------------
 
     /** contains the name of the file filter of a background graphic.
      */
     [property] string BackGraphicFilter;
 
-    //-------------------------------------------------------------------------
 
     /** determines the position of the background graphic.@see GraphicLocation
      */
     [property] com::sun::star::style::GraphicLocation BackGraphicLocation;
 
-    //-------------------------------------------------------------------------
 
     /** contains the description of the columns in the table row.
      */
     [property] sequence< com::sun::star::text::TableColumnSeparator >   TableColumnSeparators;
 
-    //-------------------------------------------------------------------------
 
     /** contains the height of the table row.
      */
     [property] long Height;
 
-    //-------------------------------------------------------------------------
 
     /** If the value of this property is <TRUE/>, the height of the table row
         depends on the content of the table cells.
      */
     [property] boolean IsAutoHeight;
 
-        //-------------------------------------------------------------------------
 
         /** If <TRUE/>, the row is allowed to be split at page or column breaks.
 
@@ -99,7 +88,6 @@ published service TextTableRow
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

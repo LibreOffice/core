@@ -20,51 +20,43 @@
 #define __com_sun_star_chart_ChartDataChangeType_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module chart {
 
-//=============================================================================
 
 /** specifies the type of change that was applied to the data.
  */
 published enum ChartDataChangeType
 {
-    //-------------------------------------------------------------------------
 
     /** Major changes were applied to the data.
      */
     ALL,
 
-    //-------------------------------------------------------------------------
 
     /** The range of columns and rows, given in the
          <type>ChartDataChangeEvent</type>, has changed.
      */
     DATA_RANGE,
 
-    //-------------------------------------------------------------------------
 
     /** The column given in the <type>ChartDataChangeEvent</type>, was
         inserted.
      */
     COLUMN_INSERTED,
 
-    //-------------------------------------------------------------------------
 
     /** The row given in the <type>ChartDataChangeEvent</type>, was
         inserted.
      */
     ROW_INSERTED,
 
-    //-------------------------------------------------------------------------
 
     /** The column given in the <type>ChartDataChangeEvent</type>, was
         deleted.
     */
     COLUMN_DELETED,
 
-    //-------------------------------------------------------------------------
 
     /** The row given in the <type>ChartDataChangeEvent</type>, was
         deleted.
@@ -73,7 +65,6 @@ published enum ChartDataChangeType
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

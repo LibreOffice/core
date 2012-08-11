@@ -24,11 +24,9 @@
 #include <com/sun/star/container/XIndexAccess.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module style {
 
-//=============================================================================
 
 // DocMerge from xml: service com::sun::star::style::StyleFamily
 /** This service is a container of style sheets of the same style family.@see StyleFamilies
@@ -67,7 +65,6 @@ published service StyleFamily
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

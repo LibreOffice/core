@@ -24,11 +24,9 @@
 #include <com/sun/star/container/XNamed.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module presentation {
 
-//=============================================================================
 
 /** A custom presentation can show the pages of its presentation in a
     customized order.
@@ -49,7 +47,6 @@ published service CustomPresentation
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

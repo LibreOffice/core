@@ -21,11 +21,9 @@
 
 #include <com/sun/star/lang/EventObject.idl>
 
-//=============================================================================
 
 module com {   module sun {   module star {   module document {
 
-//=============================================================================
 /** is thrown on document and document content events
 
     @see XEventListener
@@ -36,7 +34,6 @@ module com {   module sun {   module star {   module document {
  */
 published struct EventObject: com::sun::star::lang::EventObject
 {
-    //-------------------------------------------------------------------------
     /** specifies the name of the occurred event
 
         <p>
@@ -46,7 +43,6 @@ published struct EventObject: com::sun::star::lang::EventObject
     string EventName;
 };
 
-//=============================================================================
 
 }; }; }; };
 

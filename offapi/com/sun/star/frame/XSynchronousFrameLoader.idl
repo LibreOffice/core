@@ -32,11 +32,9 @@
 #include <com/sun/star/frame/XFrame.idl>
 #include <com/sun/star/beans/PropertyValue.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module frame {
 
-//=============================================================================
 /** loads a resource into a <type>Frame</type>.
 
     <p>
@@ -47,7 +45,6 @@
  */
 published interface XSynchronousFrameLoader: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** starts the loading of the specified resource into the specified <type>Frame</type>.
 
         @param Descriptor
@@ -66,7 +63,6 @@ published interface XSynchronousFrameLoader: com::sun::star::uno::XInterface
         [in] sequence< com::sun::star::beans::PropertyValue > Descriptor,
         [in] XFrame Frame );
 
-    //-------------------------------------------------------------------------
     /** cancels the loading process.
 
         <p>
@@ -81,7 +77,6 @@ published interface XSynchronousFrameLoader: com::sun::star::uno::XInterface
     void cancel();
 };
 
-//=============================================================================
 
 }; }; }; };
 

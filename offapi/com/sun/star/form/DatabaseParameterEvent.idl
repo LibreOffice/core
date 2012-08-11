@@ -24,11 +24,9 @@
 #include <com/sun/star/container/XIndexAccess.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module form {
 
-//=============================================================================
 
 /** is fired if values for parameters are needed.
  */
@@ -48,7 +46,6 @@ published struct DatabaseParameterEvent: com::sun::star::lang::EventObject
     com::sun::star::container::XIndexAccess Parameters;
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -22,11 +22,9 @@
 
 #include <com/sun/star/uno/XInterface.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module logging {
 
-//=============================================================================
 
 /** a simple log ring allowing to collect a limited number of last events
 
@@ -55,11 +53,9 @@ interface XSimpleLogRing
     sequence< string > getCollectedLog();
 };
 
-//=============================================================================
 
 }; }; }; };
 
-//=============================================================================
 
 #endif
 

@@ -20,11 +20,9 @@
 #ifndef com_sun_star_chart2_data_LabelOrigin_idl
 #define com_sun_star_chart2_data_LabelOrigin_idl
 
-//=============================================================================
 
 module com {  module sun {  module star {  module chart2 { module data {
 
-//=============================================================================
 
 /** is used to specify how the labels have to be created.
 
@@ -32,7 +30,6 @@ module com {  module sun {  module star {  module chart2 { module data {
  */
 enum LabelOrigin
 {
-    //-------------------------------------------------------------------------
 
     /** If a range spans a single row over more than one column, this
         parameter has the same effect as ROW.  If the range spans a
@@ -51,7 +48,6 @@ enum LabelOrigin
      */
     SHORT_SIDE,
 
-    //-------------------------------------------------------------------------
 
     /** This is exactly the opposite of SHORT_SIDE.  I.e., if
         SHORT_SIDE has the same effect as ROW, LONG_SIDE will have the
@@ -61,7 +57,6 @@ enum LabelOrigin
      */
     LONG_SIDE,
 
-    //-------------------------------------------------------------------------
 
     /** Uses the column name for label generation.  A spreadsheet
         range A1:A6 could, e.g., result in "Column A".
@@ -72,7 +67,6 @@ enum LabelOrigin
      */
     COLUMN,
 
-    //-------------------------------------------------------------------------
 
     /** Uses the column name for label generation.  A spreadsheet
         range A2:D2 could, e.g., result in "Row 2".
@@ -84,7 +78,6 @@ enum LabelOrigin
     ROW
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

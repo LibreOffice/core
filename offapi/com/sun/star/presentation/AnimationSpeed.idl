@@ -20,29 +20,24 @@
 #define __com_sun_star_presentation_AnimationSpeed_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module presentation {
 
-//=============================================================================
 
 /** specifies the speed values of animation/fade effects.
  */
 published enum AnimationSpeed
 {
-    //-------------------------------------------------------------------------
 
     /** set the speed from the animation/fade to slow.
      */
     SLOW,
 
-    //-------------------------------------------------------------------------
 
     /** set the speed from the animation/fade to medium.
      */
     MEDIUM,
 
-    //-------------------------------------------------------------------------
 
     /** set the speed from the animation/fade to fast.
      */
@@ -50,7 +45,6 @@ published enum AnimationSpeed
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

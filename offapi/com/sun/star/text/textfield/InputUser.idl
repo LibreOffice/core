@@ -22,11 +22,9 @@
 
 #include <com/sun/star/text/TextField.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module text { module textfield {
 
-//=============================================================================
 /** specifies service of an input field that is used to change the content of a corresponding
      field master of a user defined text field.
 
@@ -47,7 +45,6 @@ published service InputUser
     [optional, property] string Hint;
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

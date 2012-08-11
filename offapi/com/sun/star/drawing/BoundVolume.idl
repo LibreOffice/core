@@ -21,11 +21,9 @@
 
 #include <com/sun/star/drawing/Position3D.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module drawing {
 
-//=============================================================================
 
 /** specifies a three-dimensional boundary volume with two positions.
  */
@@ -35,14 +33,12 @@ published struct BoundVolume
      */
     Position3D min;
 
-    //-------------------------------------------------------------------------
 
     /** this is the maximum position inside the boundary volume.
      */
     Position3D max;
 };
 
-//=============================================================================
 
 }; }; }; };
 

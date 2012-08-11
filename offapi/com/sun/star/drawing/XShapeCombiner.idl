@@ -35,17 +35,14 @@
 #include <com/sun/star/drawing/XShapes.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module drawing {
 
-//=============================================================================
 
 /** specifies the combine/split functionality.
  */
 published interface XShapeCombiner: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** combines <type>Shape</type>s
 
@@ -64,7 +61,6 @@ published interface XShapeCombiner: com::sun::star::uno::XInterface
      */
     com::sun::star::drawing::XShape combine( [in] com::sun::star::drawing::XShapes xShapes );
 
-    //-------------------------------------------------------------------------
 
     /** splits <type>Shape</type>s.
 
@@ -79,7 +75,6 @@ published interface XShapeCombiner: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

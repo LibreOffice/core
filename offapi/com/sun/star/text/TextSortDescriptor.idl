@@ -22,11 +22,9 @@
 #include <com/sun/star/util/SortDescriptor.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module text {
 
-//=============================================================================
 
 // DocMerge from xml: service com::sun::star::text::TextSortDescriptor
 /** describes sort criteria for sorting text.
@@ -38,28 +36,24 @@ published service TextSortDescriptor
     // DocMerge: empty anyway
     service com::sun::star::util::SortDescriptor;
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::text::TextSortDescriptor::Delimiter
     /** contains the character that marks the separation of columns.
      */
     [property] char Delimiter;
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::text::TextSortDescriptor::IsSortInTable
     /** determines if the content of a table is to be sorted.
      */
     [property] boolean IsSortInTable;
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::text::TextSortDescriptor::SortRowOrColumnNo0
     /** contains the row or column index used in the first search key.
      */
     [property] long SortRowOrColumnNo0;
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::text::TextSortDescriptor::IsSortNumeric0
     /** determines if the sorting in the first search key is done
@@ -67,7 +61,6 @@ published service TextSortDescriptor
      */
     [property] boolean IsSortNumeric0;
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::text::TextSortDescriptor::IsSortAscending0
     /** determines if the sorting in the first search key is done
@@ -75,14 +68,12 @@ published service TextSortDescriptor
      */
     [property] boolean IsSortAscending0;
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::text::TextSortDescriptor::SortRowOrColumnNo1
     /** contains the row or column index used in the second search key.
      */
     [property] long SortRowOrColumnNo1;
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::text::TextSortDescriptor::IsSortNumeric1
     /** determines if the sorting in the second search key is done
@@ -90,7 +81,6 @@ published service TextSortDescriptor
      */
     [property] boolean IsSortNumeric1;
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::text::TextSortDescriptor::IsSortAscending1
     /** determines if the sorting in the second search key is done
@@ -98,14 +88,12 @@ published service TextSortDescriptor
      */
     [property] boolean IsSortAscending1;
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::text::TextSortDescriptor::SortRowOrColumnNo2
     /** contains the row or column index used in the third search key.
      */
     [property] long SortRowOrColumnNo2;
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::text::TextSortDescriptor::IsSortNumeric2
     /** determines if the sorting in the third search key is done
@@ -113,7 +101,6 @@ published service TextSortDescriptor
      */
     [property] boolean IsSortNumeric2;
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::text::TextSortDescriptor::IsSortAscending2
     /** determines if the sorting in the third search key is done
@@ -123,7 +110,6 @@ published service TextSortDescriptor
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

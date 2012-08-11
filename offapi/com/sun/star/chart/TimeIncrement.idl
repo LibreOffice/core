@@ -21,11 +21,9 @@
 
 #include <com/sun/star/chart/TimeInterval.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module chart {
 
-//=============================================================================
 
 /** A TimeIncrement describes how tickmarks are positioned on the scale of a date-time axis.
 @since OOo 3.4
@@ -52,7 +50,6 @@ published struct TimeIncrement
     any     TimeResolution;
 };
 
-//=============================================================================
 
 }; }; }; };
 

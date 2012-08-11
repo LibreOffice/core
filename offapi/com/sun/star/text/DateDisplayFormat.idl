@@ -20,11 +20,9 @@
 #define __com_sun_star_text_DateDisplayFormat_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module text {
 
-//=============================================================================
 
 /** This constants define how a date field is formated before it is displayed.
     The format may also depend on the system or document locale. The samples
@@ -38,50 +36,42 @@ published constants DateDisplayFormat
      */
     const short STANDARD_SHORT = 0;
 
-    //-------------------------------------------------------------------------
 
     /** the longest system standard
      */
     const short STANDARD_LONG = 1;
 
-    //-------------------------------------------------------------------------
 
     /** 22.11.73
      */
     const short MMDDYY = 2;
 
-    //-------------------------------------------------------------------------
 
     /** 22.11.1973
      */
     const short MMDDYYYY = 3;
 
-    //-------------------------------------------------------------------------
 
     /** 22. Nov 1973
      */
     const short DDMMMYYYY = 4;
 
-    //-------------------------------------------------------------------------
 
     /** 22. November 1973
      */
     const short DDMMMMYYYY = 5;
 
-    //-------------------------------------------------------------------------
 
     /** Do, 22. November 1973
      */
     const short NNDDMMMMYYYY = 6;
 
-    //-------------------------------------------------------------------------
 
     /** Donnerstag, 22. November 1973
      */
     const short NNNNDDMMMMYYYY = 7;
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -32,11 +32,9 @@
 #include <com/sun/star/awt/UnoControlModel.idl>
 #include <com/sun/star/view/SelectionType.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module awt { module tree {
 
-//=============================================================================
 
 /** specifies the standard model of a <type>TreeControl</type>.
  */
@@ -100,7 +98,6 @@ service TreeControlModel
     [property] boolean InvokesStopNodeEditing;
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

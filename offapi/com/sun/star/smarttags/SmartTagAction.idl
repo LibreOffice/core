@@ -20,17 +20,14 @@
 #ifndef __com_sun_star_smarttags_SmartTagAction_idl__
 #define __com_sun_star_smarttags_SmartTagAction_idl__
 
-//============================================================================
 
 module com { module sun { module star { module smarttags {
         interface XSmartTagAction; };
 }; }; };
 
-//============================================================================
 
 module com { module sun { module star { module smarttags {
 
-//============================================================================
 
 /** provides one or more actions for smart tags.
 
@@ -43,7 +40,6 @@ module com { module sun { module star { module smarttags {
 
 service SmartTagAction : XSmartTagAction {};
 
-//============================================================================
 
 }; }; }; };
 

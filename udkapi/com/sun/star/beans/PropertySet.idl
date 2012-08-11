@@ -29,11 +29,9 @@
 
 #include <com/sun/star/beans/XMultiPropertySet.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module beans {
 
-//=============================================================================
 
 /** This is a generic service which should be supported by all servies
     which have properties.
@@ -51,7 +49,6 @@ published service PropertySet
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

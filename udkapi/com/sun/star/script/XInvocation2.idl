@@ -23,11 +23,9 @@
 
 #include <com/sun/star/script/InvocationInfo.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module script {
 
-//=============================================================================
 
 /**
     Extension of XInvocation to provide additional information
@@ -65,7 +63,6 @@ published interface XInvocation2: com::sun::star::script::XInvocation
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

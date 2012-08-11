@@ -32,39 +32,31 @@
 #include <com/sun/star/frame/XModel.idl>
 #include <com/sun/star/script/vba/XVBAScriptListener.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module script { module vba {
 
 interface XVBACompatibility
 {
-    //-------------------------------------------------------------------------
 
     [attribute] boolean VBACompatibilityMode;
     [attribute ] string  ProjectName;
 
-    //-------------------------------------------------------------------------
 
     [attribute, readonly] long RunningVBAScripts;
 
-    //-------------------------------------------------------------------------
 
     [oneway] void addVBAScriptListener( [in] XVBAScriptListener Listener );
 
-    //-------------------------------------------------------------------------
 
     [oneway] void removeVBAScriptListener( [in] XVBAScriptListener Listener );
 
-    //-------------------------------------------------------------------------
 
     void broadcastVBAScriptEvent( [in] long Identifier, [in] string ModuleName );
 
-    //-------------------------------------------------------------------------
 };
 
 }; }; }; }; };
 
-//=============================================================================
 
 #endif
 

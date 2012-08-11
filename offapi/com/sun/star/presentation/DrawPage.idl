@@ -37,11 +37,9 @@
 #include <com/sun/star/presentation/AnimationSpeed.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module presentation {
 
-//=============================================================================
 
 /** This is the service provided by a <type scope="com::sun::star::drawing">DrawPage</type> inside a
     <type>PresentationDocument</type>.
@@ -56,7 +54,6 @@ published service DrawPage
      */
     service com::sun::star::document::LinkTarget;
 
-    //-------------------------------------------------------------------------
 
     /** specifies how the page change is triggered.
 
@@ -67,7 +64,6 @@ published service DrawPage
      */
     [property] long Change;
 
-    //-------------------------------------------------------------------------
 
     /** If the property <member scope="com::sun::star::drawing">DrawPage::Change</member> is set to 1,
         this is the time in seconds this page is shown before switching
@@ -75,26 +71,22 @@ published service DrawPage
      */
     [property] long Duration;
 
-    //-------------------------------------------------------------------------
 
     /** This is the effect that is used to fade in this page.
      */
     [property] com::sun::star::presentation::FadeEffect Effect;
 
-    //-------------------------------------------------------------------------
 
     /** If this property is not ZERO, this number specifies a presentation
         layout for this page.
      */
     [property] short Layout;
 
-    //-------------------------------------------------------------------------
 
     /** defines the speed of the fade-in effect of this page.
      */
     [property] com::sun::star::presentation::AnimationSpeed Speed;
 
-    //-------------------------------------------------------------------------
 
     /** defines if a header presentation shape from the master page is visible
         on this page.
@@ -102,14 +94,12 @@ published service DrawPage
 
     [optional, property] boolean IsHeaderVisible;
 
-    //-------------------------------------------------------------------------
 
     /** defines the text that is displayed in a header textfield rendered on this
         page.
     */
     [optional, property] string HeaderText;
 
-    //-------------------------------------------------------------------------
 
     /** defines if a footer presentation shape from the master page is visible
         on this page.
@@ -117,14 +107,12 @@ published service DrawPage
 
     [optional, property] boolean IsFooterVisible;
 
-    //-------------------------------------------------------------------------
 
     /** defines the text that is displayed in a footer textfield rendered on this
         page.
     */
     [optional, property] string FooterText;
 
-    //-------------------------------------------------------------------------
 
     /** defines if a page number presentation shape from the master page is visible
         on this page.
@@ -132,7 +120,6 @@ published service DrawPage
 
     [optional, property] boolean IsPageNumberVisible;
 
-    //-------------------------------------------------------------------------
 
     /** defines if a date and time presentation shape from the master page is visible
         on this page.
@@ -140,7 +127,6 @@ published service DrawPage
 
     [optional, property] boolean IsDateTimeVisible;
 
-    //-------------------------------------------------------------------------
 
     /** defines if a date and time text field shows a fixed string value or the
         current date on this page.
@@ -148,14 +134,12 @@ published service DrawPage
 
     [optional, property] boolean IsDateTimeFixed;
 
-    //-------------------------------------------------------------------------
 
     /** defines the text that is displayed in a date and time textfield rendered on this
         page. This value is only used if <code>IsDateTimeFixed</code> is <true/>.
     */
     [optional, property] string DateTimeText;
 
-    //-------------------------------------------------------------------------
 
     /** defines the format that is used to format a date and time text field on
         this page. This is only used if <code>IsDateTimeFixed</code> is <false/>.
@@ -163,7 +147,6 @@ published service DrawPage
     [optional, property] long DateTimeFormat;
 };
 
-//=============================================================================
 
 }; }; }; };
 

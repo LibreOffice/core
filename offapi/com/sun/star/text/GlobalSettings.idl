@@ -24,27 +24,22 @@
 
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module text {
 
-//=============================================================================
 
 /** specifies a service that provides access to the settings of a text module.
  */
 published service GlobalSettings
 {
-    //-------------------------------------------------------------------------
     /** This interface specifies the access to the print settings.
      */
     interface com::sun::star::view::XPrintSettingsSupplier;
-    //-------------------------------------------------------------------------
     /** This interface specifies the access to the view settings.
      */
     interface com::sun::star::view::XViewSettingsSupplier;
 };
 
-//=============================================================================
 
 }; }; }; };
 

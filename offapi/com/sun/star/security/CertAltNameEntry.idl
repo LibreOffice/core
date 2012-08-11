@@ -23,11 +23,9 @@
 
 #include <com/sun/star/security/ExtAltNameType.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module security {
 
-//=============================================================================
 /**
  * struct contains a single entry within a Subject Alternative Name Extension of a
  * X509 certificate.

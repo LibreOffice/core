@@ -20,23 +20,19 @@
 #define __com_sun_star_awt_ScrollBarOrientation_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module awt {
 
-//=============================================================================
 
 /** These constants are used to specify the orientation of a scroll bar.
  */
 published constants ScrollBarOrientation
 {
-    //-------------------------------------------------------------------------
 
     /** specifies a horizontal scroll bar.
      */
     const long HORIZONTAL = 0;
 
-    //-------------------------------------------------------------------------
 
     /** specifies a vertical scroll bar.
      */
@@ -44,7 +40,6 @@ published constants ScrollBarOrientation
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

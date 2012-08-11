@@ -19,11 +19,9 @@
 #ifndef __com_sun_star_connection_SocketPermission_idl__
 #define __com_sun_star_connection_SocketPermission_idl__
 
-//=============================================================================
 
 module com {  module sun {  module star {  module connection {
 
-//=============================================================================
 
 /** This permission represents access to a network via sockets.
     A SocketPermission consists of a host specification and a set of actions
@@ -89,7 +87,6 @@ published struct SocketPermission
     string Actions;
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -32,11 +32,9 @@
 #include <com/sun/star/awt/XView.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module awt {
 
-//=============================================================================
 
 /** identifies a control.
 
@@ -51,19 +49,16 @@
  */
 published interface XControl: com::sun::star::lang::XComponent
 {
-    //-------------------------------------------------------------------------
 
     /** sets the context of the control.
      */
     [oneway] void setContext( [in] com::sun::star::uno::XInterface Context );
 
-    //-------------------------------------------------------------------------
 
     /** gets the context of the control.
      */
     com::sun::star::uno::XInterface getContext();
 
-    //-------------------------------------------------------------------------
 
     /** creates a "child" window on the screen.
 
@@ -73,31 +68,26 @@ published interface XControl: com::sun::star::lang::XComponent
     [oneway] void createPeer( [in] com::sun::star::awt::XToolkit Toolkit,
              [in] com::sun::star::awt::XWindowPeer Parent );
 
-    //-------------------------------------------------------------------------
 
     /** returns the peer which was previously created or set.
      */
     com::sun::star::awt::XWindowPeer getPeer();
 
-    //-------------------------------------------------------------------------
 
     /** sets a model for the control.
      */
     boolean setModel( [in] com::sun::star::awt::XControlModel Model );
 
-    //-------------------------------------------------------------------------
 
     /** returns the model for this control.
      */
     com::sun::star::awt::XControlModel getModel();
 
-    //-------------------------------------------------------------------------
 
     /** returns the view of this control.
      */
     com::sun::star::awt::XView getView();
 
-    //-------------------------------------------------------------------------
 
     /** sets the design mode for use in a design editor.
 
@@ -105,13 +95,11 @@ published interface XControl: com::sun::star::lang::XComponent
      */
     [oneway] void setDesignMode( [in] boolean bOn );
 
-    //-------------------------------------------------------------------------
 
     /** returns <true/> if the control is in design mode, <false/> otherwise.
      */
     boolean isDesignMode();
 
-    //-------------------------------------------------------------------------
 
     /** returns <true/> if the control is transparent, <false/> otherwise.
      */
@@ -119,7 +107,6 @@ published interface XControl: com::sun::star::lang::XComponent
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

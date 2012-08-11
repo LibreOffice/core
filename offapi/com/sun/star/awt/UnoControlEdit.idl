@@ -27,11 +27,9 @@
 #include <com/sun/star/awt/XTextLayoutConstrains.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module awt {
 
-//=============================================================================
 
 /** specifies an edit control.
  */
@@ -47,7 +45,6 @@ published service UnoControlEdit
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

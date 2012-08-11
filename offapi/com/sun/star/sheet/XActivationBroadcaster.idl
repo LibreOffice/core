@@ -24,11 +24,9 @@
 #include <com/sun/star/sheet/XActivationEventListener.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** provides methods to add and remove XActivationEventListener
 
@@ -37,7 +35,6 @@ module com {  module sun {  module star {  module sheet {
  */
 published interface XActivationBroadcaster: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** allows a component supporting the
         <type>XActivationEventListener</type> interface to
@@ -53,7 +50,6 @@ published interface XActivationBroadcaster: com::sun::star::uno::XInterface
      */
     void addActivationEventListener([in] com::sun::star::sheet::XActivationEventListener aListener);
 
-    //-------------------------------------------------------------------------
 
     /** removes a previously registered listener.
 
@@ -64,7 +60,6 @@ published interface XActivationBroadcaster: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -24,11 +24,9 @@
 #include <com/sun/star/container/XEnumerationAccess.idl>
 #include <com/sun/star/container/XIndexAccess.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** represents a collection of groups in a data pilot field.
 
@@ -41,14 +39,12 @@ module com {  module sun {  module star {  module sheet {
  */
 published service DataPilotFieldGroups
 {
-    //-------------------------------------------------------------------------
 
     /** provides access to the data pilot field groups in the collection via
         index.
      */
     interface com::sun::star::container::XIndexAccess;
 
-    //-------------------------------------------------------------------------
 
     /** creates an enumeration of all data pilot field groups.
 
@@ -56,14 +52,12 @@ published service DataPilotFieldGroups
      */
     interface com::sun::star::container::XEnumerationAccess;
 
-    //-------------------------------------------------------------------------
 
     /** provides access to the data pilot field groups in the collection via
         name.
      */
     interface com::sun::star::container::XNameAccess;
 
-    //-------------------------------------------------------------------------
 
     /** provides read/write access to the data pilot field groups in the
         collection via name.
@@ -105,7 +99,6 @@ published service DataPilotFieldGroups
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

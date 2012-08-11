@@ -23,11 +23,9 @@
 #include <com/sun/star/container/XEnumeration.idl>
 
 
-//=============================================================================
 
 module com {   module sun {   module star {   module rdf {
 
-//=============================================================================
 /** represents the result of a SPARQL "SELECT" query.
 
     <p>
@@ -50,7 +48,6 @@ module com {   module sun {   module star {   module rdf {
  */
 interface XQuerySelectResult : com::sun::star::container::XEnumeration
 {
-    //-------------------------------------------------------------------------
     /** get the names of the query variables.
 
         <p>
@@ -59,7 +56,6 @@ interface XQuerySelectResult : com::sun::star::container::XEnumeration
      sequence<string> getBindingNames();
 };
 
-//=============================================================================
 
 }; }; }; };
 

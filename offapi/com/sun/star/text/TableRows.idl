@@ -23,11 +23,9 @@
 #include <com/sun/star/table/XTableRows.idl>
 #include <com/sun/star/container/XIndexAccess.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module text {
 
-//=============================================================================
 
 /** represents a collection of all rows of a text table.
 
@@ -38,15 +36,12 @@ module com {  module sun {  module star {  module text {
  */
 published service TableRows
 {
-    //-------------------------------------------------------------------------
     /** provides methods to insert and remove rows.
      */
     interface com::sun::star::table::XTableRows;
 
-    //-------------------------------------------------------------------------
 };
 
-//=============================================================================
 
 }; }; }; };
 

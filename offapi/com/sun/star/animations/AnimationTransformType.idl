@@ -19,11 +19,9 @@
 #ifndef __com_sun_star_animations_AnimationTransformType_idl__
 #define __com_sun_star_animations_AnimationTransformType_idl__
 
-//=============================================================================
 
  module com {  module sun {  module star {  module animations {
 
-//=============================================================================
 
 /** Specifies the transformation type for an <type>XAnimateTransform</type>.
 
@@ -52,7 +50,6 @@ constants AnimationTransformType
     const short SKEWY = 4;
 };
 
-//=============================================================================
 
 }; }; }; };
 

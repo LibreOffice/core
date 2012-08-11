@@ -20,11 +20,9 @@
 #ifndef __com_sun_star_sdb_application_DatabaseObjectContainer_idl__
 #define __com_sun_star_sdb_application_DatabaseObjectContainer_idl__
 
-//=============================================================================
 
 module com { module sun { module star { module sdb { module application {
 
-//=============================================================================
 
 /** denotes different types of (maybe virtual) containers of database objects
 
@@ -88,11 +86,9 @@ constants DatabaseObjectContainer
     const long REPORTS_FOLDER = 1008;
 };
 
-//=============================================================================
 
 }; }; }; }; };
 
-//=============================================================================
 
 #endif
 

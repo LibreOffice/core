@@ -27,11 +27,9 @@
 #include <com/sun/star/lang/IllegalArgumentException.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module beans {
 
-//=============================================================================
 
 /** provides access to multiple iformation of
     a set of properties with a single call.
@@ -49,7 +47,6 @@ module com {  module sun {  module star {  module beans {
  */
 published interface XTolerantMultiPropertySet : com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** sets the values to the properties with the specified names.
 
@@ -84,7 +81,6 @@ published interface XTolerantMultiPropertySet : com::sun::star::uno::XInterface
                 [in] sequence< any >    aValues )
         raises( com::sun::star::lang::IllegalArgumentException );
 
-    //-------------------------------------------------------------------------
 
     /** retrieve the values of the specified properties
 
@@ -107,7 +103,6 @@ published interface XTolerantMultiPropertySet : com::sun::star::uno::XInterface
                 [in] sequence< string > aPropertyNames );
 
 
-    //-------------------------------------------------------------------------
 
     /** retrieve only those values of the specified properties which
         are direct values.
@@ -134,7 +129,6 @@ published interface XTolerantMultiPropertySet : com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

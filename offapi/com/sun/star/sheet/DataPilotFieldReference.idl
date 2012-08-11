@@ -22,11 +22,9 @@
 
 #include <com/sun/star/sheet/DataPilotFieldReferenceItemType.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** controls how a data pilot field's results are shown in relation to
     a selected reference result.
@@ -35,7 +33,6 @@ module com {  module sun {  module star {  module sheet {
  */
 published struct DataPilotFieldReference
 {
-    //-------------------------------------------------------------------------
 
     /** contains the type of the reference.
 
@@ -45,14 +42,12 @@ published struct DataPilotFieldReference
 
         long ReferenceType;
 
-    //-------------------------------------------------------------------------
 
     /** contains the reference field
         */
 
         string ReferenceField;
 
-    //-------------------------------------------------------------------------
 
     /** selects between a named reference item and using the previous or next
         item for each item from the reference field.
@@ -63,7 +58,6 @@ published struct DataPilotFieldReference
 
         long ReferenceItemType;
 
-    //-------------------------------------------------------------------------
 
     /** contains the name of the reference item, when the
         <member>DataPilotFieldReference::ReferenceItemType</member> is NAMED
@@ -73,7 +67,6 @@ published struct DataPilotFieldReference
         string ReferenceItemName;
 };
 
-//=============================================================================
 
 }; }; }; };
 

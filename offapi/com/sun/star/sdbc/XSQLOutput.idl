@@ -89,7 +89,6 @@ published interface XSQLOutput: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     void writeString([in]string x) raises (SQLException);
-      //-------------------------------------------------------------------------
 
     /** writes the next attribute to the stream as boolean.
         @param x
@@ -98,7 +97,6 @@ published interface XSQLOutput: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     void writeBoolean([in]boolean x) raises (SQLException);
-      //-------------------------------------------------------------------------
 
     /** writes the next attribute to the stream as byte.
         @param x
@@ -107,7 +105,6 @@ published interface XSQLOutput: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     void writeByte([in]byte x) raises (SQLException);
-      //-------------------------------------------------------------------------
 
     /** writes the next attribute to the stream as short.
         @param x
@@ -116,7 +113,6 @@ published interface XSQLOutput: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     void writeShort([in]short x) raises (SQLException);
-      //-------------------------------------------------------------------------
 
     /** writes the next attribute to the stream as long.
         @param x
@@ -125,7 +121,6 @@ published interface XSQLOutput: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     void writeInt([in]long x) raises (SQLException);
-      //-------------------------------------------------------------------------
 
     /** writes the next attribute to the stream as hyper.
         @param x
@@ -134,7 +129,6 @@ published interface XSQLOutput: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     void writeLong([in]hyper x) raises (SQLException);
-      //-------------------------------------------------------------------------
 
     /** writes the next attribute to the stream as float.
         @param x
@@ -143,7 +137,6 @@ published interface XSQLOutput: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     void writeFloat([in]float x) raises (SQLException);
-      //-------------------------------------------------------------------------
 
     /** writes the next attribute to the stream as double.
         @param x
@@ -152,7 +145,6 @@ published interface XSQLOutput: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     void writeDouble([in]double x) raises (SQLException);
-      //-------------------------------------------------------------------------
 
     /** writes the next attribute to the stream as byte sequence.
         @param x
@@ -161,7 +153,6 @@ published interface XSQLOutput: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     void writeBytes([in]sequence<byte> x) raises (SQLException);
-      //-------------------------------------------------------------------------
 
     /** writes the next attribute to the stream as a date.
         @param x
@@ -170,7 +161,6 @@ published interface XSQLOutput: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     void writeDate([in]com::sun::star::util::Date x) raises (SQLException);
-      //-------------------------------------------------------------------------
 
     /** writes the next attribute to the stream as a time.
         @param x
@@ -179,7 +169,6 @@ published interface XSQLOutput: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     void writeTime([in]com::sun::star::util::Time x) raises (SQLException);
-      //-------------------------------------------------------------------------
 
     /** writes the next attribute to the stream as a datetime.
         @param x
@@ -189,7 +178,6 @@ published interface XSQLOutput: com::sun::star::uno::XInterface
      */
     void writeTimestamp([in]com::sun::star::util::DateTime x)
         raises (SQLException);
-      //-------------------------------------------------------------------------
 
     /** writes the next attribute to the stream as a stream of uninterpreted
         bytes.
@@ -200,7 +188,6 @@ published interface XSQLOutput: com::sun::star::uno::XInterface
      */
     void writeBinaryStream([in]com::sun::star::io::XInputStream x)
         raises (SQLException);
-      //-------------------------------------------------------------------------
 
     /** writes the next attribute to the stream as a stream of Unicode string.
         @param x
@@ -210,7 +197,6 @@ published interface XSQLOutput: com::sun::star::uno::XInterface
      */
     void writeCharacterStream([in]com::sun::star::io::XInputStream x)
         raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** writes to the stream the data contained in the given
         <code>XSQLData</code> object.
@@ -245,7 +231,6 @@ published interface XSQLOutput: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     void writeObject([in]XSQLData x) raises (SQLException);
-      //-------------------------------------------------------------------------
 
     /** writes a REF(&amp;lt;structured-type&amp;gt;) to the stream.
         @param x
@@ -254,7 +239,6 @@ published interface XSQLOutput: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     void writeRef([in]XRef x) raises (SQLException);
-      //-------------------------------------------------------------------------
 
     /** writes a BLOB to the stream.
         @param x
@@ -263,7 +247,6 @@ published interface XSQLOutput: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     void writeBlob([in]XBlob x) raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** writes a CLOB to the stream.
         @param x
@@ -272,7 +255,6 @@ published interface XSQLOutput: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     void writeClob([in]XClob x) raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** writes a structured-type to the stream.
         @param x
@@ -281,7 +263,6 @@ published interface XSQLOutput: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     void writeStruct([in]XStruct x) raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** writes an array to the stream.
         @param x
@@ -292,7 +273,6 @@ published interface XSQLOutput: com::sun::star::uno::XInterface
     void writeArray([in]XArray x) raises (SQLException);
 };
 
-//=============================================================================
 
 }; }; }; };
 

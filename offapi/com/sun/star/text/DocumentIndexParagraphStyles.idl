@@ -21,11 +21,9 @@
 
 #include <com/sun/star/container/XIndexReplace.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module text {
 
-//=============================================================================
 
 // DocMerge from xml: service com::sun::star::text::DocumentIndexParagraphStyles
 /** provides access to the names of paragraph styles that are included
@@ -35,11 +33,9 @@ published service DocumentIndexParagraphStyles
 {
     // DocMerge: empty anyway
     interface com::sun::star::container::XIndexReplace;
-    //-------------------------------------------------------------------------
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

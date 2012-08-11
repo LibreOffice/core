@@ -23,11 +23,9 @@
 
 #include <com/sun/star/lang/XComponent.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module mozilla {
 
-//=============================================================================
 
 
 // DocMerge from idl: struct com::sun::star::mozilla::MenuMultipleChange
@@ -40,56 +38,48 @@ published struct MenuMultipleChange
      */
     short       ID;
 
-        //-------------------------------------------------------------------------
 
     // DocMerge from xml: field com::sun::star::mozilla::MenuMultipleChange::GroupID
     /** unique ID of the group this menu item belongs to
      */
     short       GroupID;
 
-        //-------------------------------------------------------------------------
 
     // DocMerge from xml: field com::sun::star::mozilla::MenuMultipleChange::PreItemID
     /** unique ID of the item directly above this menu item, used for fuzzy placement
      */
     short       PreItemID;
 
-        //-------------------------------------------------------------------------
 
     // DocMerge from xml: field com::sun::star::mozilla::MenuMultipleChange::ItemText
     /** text of the menu item
      */
     string      ItemText;
 
-        //-------------------------------------------------------------------------
 
     // DocMerge from xml: field com::sun::star::mozilla::MenuMultipleChange::IsVisible
     /** true if visible
      */
     boolean     IsVisible;
 
-        //-------------------------------------------------------------------------
 
     // DocMerge from xml: field com::sun::star::mozilla::MenuMultipleChange::IsActive
     /** true if active, so clickable
      */
     boolean     IsActive;
 
-        //-------------------------------------------------------------------------
 
     // DocMerge from xml: field com::sun::star::mozilla::MenuMultipleChange::IsCheckable
     /** true if checkable, so there can be a checkmark
      */
     boolean     IsCheckable;
 
-        //-------------------------------------------------------------------------
 
     // DocMerge from xml: field com::sun::star::mozilla::MenuMultipleChange::IsChecked
     /** true if there is a checkmark
      */
     boolean     IsChecked;
 
-        //-------------------------------------------------------------------------
 
     // DocMerge from idl: field com::sun::star::mozilla::MenuMultipleChange::Image
     /** sequence of bytes representing a possible image
@@ -97,7 +87,6 @@ published struct MenuMultipleChange
     sequence<byte> Image;
     };
 
-//=============================================================================
 
 }; }; }; };
 

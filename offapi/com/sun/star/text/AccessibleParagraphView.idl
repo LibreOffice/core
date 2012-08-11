@@ -34,11 +34,9 @@
 #include <com/sun/star/accessibility/XAccessibleEventBroadcaster.idl>
 #include <com/sun/star/accessibility/XAccessibleTextAttributes.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module text {
 
-//=============================================================================
 
 /** The accessible view of a paragraph fragment.
 
@@ -192,7 +190,6 @@ published service AccessibleParagraphView
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

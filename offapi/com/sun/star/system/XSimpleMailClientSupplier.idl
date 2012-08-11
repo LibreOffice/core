@@ -25,11 +25,9 @@
 #include <com/sun/star/lang/IllegalArgumentException.idl>
 #include <com/sun/star/system/XSimpleMailClient.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module system {
 
-//=============================================================================
 /** Implementations of this interface do provide access to a simple mail client
     if there is one available
 
@@ -38,7 +36,6 @@ module com { module sun { module star { module system {
 
 published interface XSimpleMailClientSupplier: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** Allows a client to query for an object that implements
         <type>XSimpleMailClient</type>.
         @returns
@@ -50,7 +47,6 @@ published interface XSimpleMailClientSupplier: com::sun::star::uno::XInterface
     XSimpleMailClient querySimpleMailClient( );
 };
 
-//=============================================================================
 
 }; }; }; };
 

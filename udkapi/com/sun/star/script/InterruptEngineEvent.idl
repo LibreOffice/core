@@ -24,17 +24,14 @@
 #include <com/sun/star/script/InterruptReason.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module script {
 
-//=============================================================================
 /** describes an interrupt which occurs in the scripting engine.
     @deprecated
  */
 published struct InterruptEngineEvent: com::sun::star::lang::EventObject
 {
-    //-------------------------------------------------------------------------
     /** fully qualified name to address the module or function affected by the event that
         took place.
 
@@ -43,7 +40,6 @@ published struct InterruptEngineEvent: com::sun::star::lang::EventObject
      */
     string Name;
 
-    //-------------------------------------------------------------------------
     /** source code of the Module affected by the event that took place.
 
         <p>If the source can
@@ -52,7 +48,6 @@ published struct InterruptEngineEvent: com::sun::star::lang::EventObject
      */
     string SourceCode;
 
-    //-------------------------------------------------------------------------
     /** contains the first line in the module's source code that is affected
         by the event that took place.
 
@@ -68,38 +63,32 @@ published struct InterruptEngineEvent: com::sun::star::lang::EventObject
      */
     long StartLine;
 
-    //-------------------------------------------------------------------------
     /** contains the first column in the "StartLine" that is affected by the
         event that took place.
      */
     long StartColumn;
 
-    //-------------------------------------------------------------------------
     /** contains the last line in the module's source code that is affected
         by the event that took place.
      */
     long EndLine;
 
-    //-------------------------------------------------------------------------
     /** contains the first column in the "EndLine" which is NOT affected by
         the event that took place.
      */
     long EndColumn;
 
-    //-------------------------------------------------------------------------
     /** error message.
         <p>Only valid if Reason is RuntimeError or CompileError.</p>
      */
     string ErrorMessage;
 
-    //-------------------------------------------------------------------------
     /** contains the interrupt reason.
      */
     com::sun::star::script::InterruptReason Reason;
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

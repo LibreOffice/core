@@ -20,16 +20,13 @@
 #define __com_sun_star_drawing_DoubleSequence_idl__
 
 
-//=============================================================================
 
 module com { module sun { module star { module drawing {
 
-//=============================================================================
 /**
 */
 published typedef sequence<double> DoubleSequence;
 
-//=============================================================================
 
 }; }; }; };
 

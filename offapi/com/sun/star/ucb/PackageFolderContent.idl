@@ -30,11 +30,9 @@
 #include <com/sun/star/container/XChild.idl>
 #include <com/sun/star/ucb/XContentCreator.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** A PCP Folder is a container for other PCP Folders and PCP Streams.
 
     @see com::sun::star::ucb::PackageContentProvider
@@ -42,19 +40,16 @@ module com { module sun { module star { module ucb {
 */
 published service PackageFolderContent
 {
-    //-------------------------------------------------------------------------
     /** This interface is implemented according to the specification of
         service <type>Content</type>.
      */
     interface com::sun::star::lang::XComponent;
 
-    //-------------------------------------------------------------------------
     /** This interface is implemented according to the specification of
         service <type>Content</type>.
      */
     interface com::sun::star::ucb::XContent;
 
-    //-------------------------------------------------------------------------
     /** This interface is implemented according to the specification of
         service <type>Content</type>.
 
@@ -122,7 +117,6 @@ published service PackageFolderContent
      */
     interface com::sun::star::ucb::XCommandProcessor;
 
-    //-------------------------------------------------------------------------
     /** is an enhanced version of <type>XCommandProcessor</type> that has an
         additional method for releasing command identifiers obtained via
         <member>XCommandProcessor::createCommandIdentifier</member> to avoid
@@ -134,37 +128,31 @@ published service PackageFolderContent
      */
     [optional] interface com::sun::star::ucb::XCommandProcessor2;
 
-    //-------------------------------------------------------------------------
     /** This interface is implemented according to the specification of
         service <type>Content</type>.
      */
     interface com::sun::star::beans::XPropertiesChangeNotifier;
 
-    //-------------------------------------------------------------------------
     /** This interface is implemented according to the specification of
         service <type>Content</type>.
      */
     interface com::sun::star::beans::XPropertyContainer;
 
-    //-------------------------------------------------------------------------
     /** This interface is implemented according to the specification of
         service <type>Content</type>.
      */
     interface com::sun::star::beans::XPropertySetInfoChangeNotifier;
 
-    //-------------------------------------------------------------------------
     /** This interface is implemented according to the specification of
         service <type>Content</type>.
      */
     interface com::sun::star::ucb::XCommandInfoChangeNotifier;
 
-    //-------------------------------------------------------------------------
     /** This interface is implemented according to the specification of
         service <type>Content</type>.
      */
     interface com::sun::star::container::XChild;
 
-    //-------------------------------------------------------------------------
     /** This interface is implemented according to the specification of
         service <type>Content</type>.
 
@@ -212,7 +200,6 @@ published service PackageFolderContent
     interface com::sun::star::ucb::XContentCreator;
 };
 
-//=============================================================================
 
 }; }; }; };
 

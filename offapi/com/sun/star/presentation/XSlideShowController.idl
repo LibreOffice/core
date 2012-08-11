@@ -33,11 +33,9 @@
 #include <com/sun/star/lang/XComponent.idl>
 #include <com/sun/star/presentation/XSlideShow.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module presentation {
 
-//=============================================================================
 
 /** interface to control a running slide show.
 
@@ -46,7 +44,6 @@
 */
 interface XSlideShowController
 {
-    //-------------------------------------------------------------------------
 
     /** returns true if the slide show is still running.
         If this returns false, this component is already disposed.
@@ -55,7 +52,6 @@ interface XSlideShowController
     */
     boolean isRunning();
 
-    //-------------------------------------------------------------------------
 
     /** @returns
                 the number of slides in this slide show.
@@ -64,7 +60,6 @@ interface XSlideShowController
      */
     long getSlideCount();
 
-    //-------------------------------------------------------------------------
 
     /** gives access to the slides that will be shown in this slide show.
 
@@ -87,17 +82,14 @@ interface XSlideShowController
     ::com::sun::star::drawing::XDrawPage getSlideByIndex( [in] long Index )
             raises( com::sun::star::lang::IndexOutOfBoundsException );
 
-    //-------------------------------------------------------------------------
 
     /** adds a listener that receives events while the slide show is running. */
     void addSlideShowListener( [in] XSlideShowListener Listener );
 
-    //-------------------------------------------------------------------------
 
     /** removes a listener. */
     void removeSlideShowListener( [in] XSlideShowListener Listener );
 
-    //-------------------------------------------------------------------------
 
     /** start next effects that wait on a generic trigger.
         <p>If no generic triggers are waiting the next
@@ -105,7 +97,6 @@ interface XSlideShowController
     */
     void gotoNextEffect();
 
-    //-------------------------------------------------------------------------
 
     /** undo the last effects that where triggered by a generic trigger.
         <p>If there is no previous effect that can be undone then the
@@ -113,35 +104,29 @@ interface XSlideShowController
     */
     void gotoPreviousEffect();
 
-    //-------------------------------------------------------------------------
 
     /** goto and display first slide */
     void gotoFirstSlide();
 
-    //-------------------------------------------------------------------------
 
     /** goto and display next slide.
         <p>Remaining effects on the current slide will be skipped.*/
     void gotoNextSlide();
 
-    //-------------------------------------------------------------------------
 
     /** goto and display previous slide.
         <p>Remaining effects on the current slide will be skipped.*/
     void gotoPreviousSlide();
 
-    //-------------------------------------------------------------------------
 
     /** goto and display last slide.
         <p>Remaining effects on the current slide will be skipped.*/
     void gotoLastSlide();
 
-    //-------------------------------------------------------------------------
 
     /** goto the given textual bookmark */
     void gotoBookmark( [in] string Bookmark );
 
-    //-------------------------------------------------------------------------
 
     /** jumps to the given slide.
         <p>The slide can also be a slide that would normally not be shown during
@@ -155,18 +140,15 @@ interface XSlideShowController
     void gotoSlide( [in] com::sun::star::drawing::XDrawPage Page )
         raises( com::sun::star::lang::IllegalArgumentException );
 
-    //-------------------------------------------------------------------------
 
     /** jumps to the slide at the given index.
     */
     void gotoSlideIndex( [in] long Index );
 
-    //-------------------------------------------------------------------------
 
     /** stop all currently played sounds */
     void stopSound();
 
-    //-------------------------------------------------------------------------
 
     /** pauses the slide show. All effects are paused.
         <p>The slide show continues on next user input or if
@@ -174,13 +156,11 @@ interface XSlideShowController
     */
     void pause();
 
-    //-------------------------------------------------------------------------
 
     /** resumes a paused slide show.
     */
     void resume();
 
-    //-------------------------------------------------------------------------
 
     /** returns <TRUE/> if the slide show is currently paused.
 
@@ -189,7 +169,6 @@ interface XSlideShowController
     */
     boolean isPaused();
 
-    //-------------------------------------------------------------------------
 
     /** pauses the slide show and blanks the screen in the given color.
         <p>Change attribute <member>Pause</member> to false to unpause
@@ -197,7 +176,6 @@ interface XSlideShowController
     */
     void blankScreen( [in] long Color );
 
-    //-------------------------------------------------------------------------
 
     /** activates the user interface of this slide show.
 
@@ -206,7 +184,6 @@ interface XSlideShowController
     */
     void activate();
 
-    //-------------------------------------------------------------------------
     /** can be called to deactivate the user interface of this slide show.
 
         <p>A deactivated
@@ -215,7 +192,6 @@ interface XSlideShowController
      */
     void deactivate();
 
-    //-------------------------------------------------------------------------
 
     /** determines if the slide show is active.
 
@@ -226,48 +202,40 @@ interface XSlideShowController
      */
     boolean isActive();
 
-    //-------------------------------------------------------------------------
 
     /** returns slide that is currently displayed */
     com::sun::star::drawing::XDrawPage getCurrentSlide();
 
-    //-------------------------------------------------------------------------
 
     /** returns the index of the current slide. */
     long getCurrentSlideIndex();
 
-    //-------------------------------------------------------------------------
 
     /** the index for the slide that is displayed next. */
     long getNextSlideIndex();
 
-    //-------------------------------------------------------------------------
 
     /** returns <TRUE/> if the slide show was started to run endlessly.
      */
     boolean isEndless();
 
-    //-------------------------------------------------------------------------
 
     /** Returns <TRUE/> if the slide show was started in full-screen mode.
      */
     boolean isFullScreen();
 
-    //-------------------------------------------------------------------------
 
     /** If this attribute is set to <TRUE/>, the window of the slide show is
         always on top of all other windows.
      */
     [attribute] boolean AlwaysOnTop;
 
-    //-------------------------------------------------------------------------
 
     /** If this attribute is <TRUE/>, the mouse is visible during the
         slide show.
      */
     [attribute] boolean MouseVisible;
 
-    //-------------------------------------------------------------------------
 
     /** If this is <TRUE/>, a pen is shown during presentation.
 
@@ -275,12 +243,10 @@ interface XSlideShowController
      */
     [attribute] boolean UsePen;
 
-    //-------------------------------------------------------------------------
 
     /** This attribute changes the color of the pen. */
     [attribute] long PenColor;
 
-    //-------------------------------------------------------------------------
 
     /** returns the actual <type>XSlideShow</type> instance that runs the
         slide show.
@@ -288,10 +254,8 @@ interface XSlideShowController
         not the <type>XSlideShow</type> itself. */
     XSlideShow getSlideShow();
 
-    //-------------------------------------------------------------------------
 };
 
-//=============================================================================
 
 }; }; }; };
 

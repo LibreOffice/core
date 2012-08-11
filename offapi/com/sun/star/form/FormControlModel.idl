@@ -28,11 +28,9 @@
 #include <com/sun/star/beans/XPropertyState.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module form {
 
-//=============================================================================
 
 /** specifies a control model within a form.
 
@@ -56,14 +54,12 @@ published service FormControlModel
      */
     [optional] interface com::sun::star::beans::XPropertyState;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the ID for classification of the component.
         @see FormComponentType
      */
     [readonly, property] short ClassId;
 
-    //-------------------------------------------------------------------------
 
     /** determines the relative taborder of the control associated with the model.
 
@@ -77,7 +73,6 @@ published service FormControlModel
      */
     [optional, property] short TabIndex;
 
-    //-------------------------------------------------------------------------
 
     /** used for additional information.
         <p>No semantics is given for this property, it will usually be used by the creator of a document
@@ -87,7 +82,6 @@ published service FormControlModel
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

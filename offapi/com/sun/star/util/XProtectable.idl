@@ -24,28 +24,23 @@
 #include <com/sun/star/lang/IllegalArgumentException.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module util {
 
-//=============================================================================
 
 /** makes it possible to protect objects from modifications.
  */
 published interface XProtectable: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** activates the protection.
      */
     void protect( [in] string aPassword );
 
-    //-------------------------------------------------------------------------
     /** removes the protection.
      */
     void unprotect( [in] string aPassword )
             raises( com::sun::star::lang::IllegalArgumentException );
 
-    //-------------------------------------------------------------------------
     /** @returns
                 the current state of protection.
      */
@@ -53,7 +48,6 @@ published interface XProtectable: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

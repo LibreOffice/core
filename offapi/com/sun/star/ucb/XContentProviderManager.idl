@@ -34,11 +34,9 @@
 #include <com/sun/star/ucb/ContentProviderInfo.idl>
 
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** makes it possible to query/register/deregister content providers.
 
     @version  1.0
@@ -47,7 +45,6 @@ module com { module sun { module star { module ucb {
 */
 published interface XContentProviderManager: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** registers a content provider for a specific URL template.
 
         @see XContentIdentifier
@@ -129,7 +126,6 @@ published interface XContentProviderManager: com::sun::star::uno::XInterface
                 [in] boolean ReplaceExisting )
         raises( com::sun::star::ucb::DuplicateProviderException );
 
-    //-------------------------------------------------------------------------
     /** deregisters a content provider.
 
         @param Provider
@@ -145,7 +141,6 @@ published interface XContentProviderManager: com::sun::star::uno::XInterface
                 [in] com::sun::star::ucb::XContentProvider Provider,
                  [in] string Scheme );
 
-    //-------------------------------------------------------------------------
     /** returns a list of information on all registered content providers.
 
         @returns
@@ -153,7 +148,6 @@ published interface XContentProviderManager: com::sun::star::uno::XInterface
     */
     sequence<com::sun::star::ucb::ContentProviderInfo> queryContentProviders();
 
-    //-------------------------------------------------------------------------
     /** returns the currently active content provider for a content
         identifier.
 
@@ -167,7 +161,6 @@ published interface XContentProviderManager: com::sun::star::uno::XInterface
                 [in] string Identifier );
 };
 
-//=============================================================================
 
 }; }; }; };
 

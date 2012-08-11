@@ -20,23 +20,19 @@
 #define __com_sun_star_chart_ChartRegressionCurveType_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module chart {
 
-//=============================================================================
 
 /** specifies the type of the regression curve to be displayed.
  */
 published enum ChartRegressionCurveType
 {
-    //-------------------------------------------------------------------------
 
     /** displays no regression curve.
      */
     NONE,
 
-    //-------------------------------------------------------------------------
 
     /** displays a linear regression curve.
 
@@ -45,7 +41,6 @@ published enum ChartRegressionCurveType
      */
     LINEAR,
 
-    //-------------------------------------------------------------------------
 
     /** displays a linear logarithmic regression curve.
 
@@ -54,7 +49,6 @@ published enum ChartRegressionCurveType
      */
     LOGARITHM,
 
-    //-------------------------------------------------------------------------
 
     /** displays an exponential regression curve.
 
@@ -64,7 +58,6 @@ published enum ChartRegressionCurveType
     */
     EXPONENTIAL,
 
-    //-------------------------------------------------------------------------
 
     /** displays a polynomial regression curve.
 
@@ -72,7 +65,6 @@ published enum ChartRegressionCurveType
     */
     POLYNOMIAL,
 
-    //-------------------------------------------------------------------------
 
     /** displays a regression curve using a power function.
 
@@ -83,7 +75,6 @@ published enum ChartRegressionCurveType
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

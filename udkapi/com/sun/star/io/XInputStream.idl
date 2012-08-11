@@ -26,11 +26,9 @@
 #include <com/sun/star/io/BufferSizeExceededException.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module io {
 
-//=============================================================================
 
 // DocMerge from xml: interface com::sun::star::io::XInputStream
 /** This is the basic interface to read data from a stream.
@@ -40,7 +38,6 @@ module com {  module sun {  module star {  module io {
  */
 published interface XInputStream: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::io::XInputStream::readBytes
     /** reads the specified number of bytes in the given sequence.
@@ -84,7 +81,6 @@ published interface XInputStream: com::sun::star::uno::XInterface
                     com::sun::star::io::BufferSizeExceededException,
                     com::sun::star::io::IOException);
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::io::XInputStream::readSomeBytes
     /** reads the available number of bytes, at maximum
@@ -108,7 +104,6 @@ published interface XInputStream: com::sun::star::uno::XInterface
                     com::sun::star::io::BufferSizeExceededException,
                     com::sun::star::io::IOException );
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::io::XInputStream::skipBytes
     /** skips the next <var>nBytesToSkip</var> bytes (must be positive).
@@ -123,7 +118,6 @@ published interface XInputStream: com::sun::star::uno::XInterface
                     com::sun::star::io::BufferSizeExceededException,
                     com::sun::star::io::IOException );
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::io::XInputStream::available
     /** states how many bytes can be read or skipped without blocking.
@@ -136,7 +130,6 @@ published interface XInputStream: com::sun::star::uno::XInterface
                     com::sun::star::io::IOException
                     );
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::io::XInputStream::closeInput
     /** closes the stream.
@@ -153,7 +146,6 @@ published interface XInputStream: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -33,18 +33,15 @@
 #include <com/sun/star/awt/XWindowPeer.idl>
 #include <com/sun/star/lang/IllegalArgumentException.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module awt {
 
-//=============================================================================
 
 /** provides container windows implementing the
     <type scope="com::sun::star::awt">XWindow</type> interface.
  */
 interface XContainerWindowProvider : ::com::sun::star::uno::XInterface {
 
-    //-------------------------------------------------------------------------
 
     /** creates a window for the given URL
 
@@ -118,7 +115,6 @@ interface XContainerWindowProvider : ::com::sun::star::uno::XInterface {
             raises ( com::sun::star::lang::IllegalArgumentException );
 };
 
-//=============================================================================
 
 }; }; }; };
 

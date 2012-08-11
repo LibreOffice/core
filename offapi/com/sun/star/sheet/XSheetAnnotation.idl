@@ -23,11 +23,9 @@
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/table/CellAddress.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** provides methods to query data of the annotation and to show and
     hide it.
@@ -36,33 +34,28 @@ module com {  module sun {  module star {  module sheet {
  */
 published interface XSheetAnnotation: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** returns the position of cell in the spreadsheet document that
         contains this annotation.
      */
     com::sun::star::table::CellAddress getPosition();
 
-    //-------------------------------------------------------------------------
 
     /** returns the name of the user who last changed the annotation.
      */
     string getAuthor();
 
-    //-------------------------------------------------------------------------
 
     /** returns a formatted string representing the date when the
         annotation was last changed.
      */
     string getDate();
 
-    //-------------------------------------------------------------------------
 
     /** returns, whether the annotation is permanently visible.
      */
     boolean getIsVisible();
 
-    //-------------------------------------------------------------------------
 
     /** specifies whether the annotation is permanently visible.
      */
@@ -70,7 +63,6 @@ published interface XSheetAnnotation: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

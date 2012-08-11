@@ -22,11 +22,9 @@
 #include <com/sun/star/container/XChild.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module form {
 
-//=============================================================================
 
 /** describes a component which may be part of a form.
 
@@ -39,7 +37,6 @@ published interface XFormComponent: com::sun::star::container::XChild
 {
 };
 
-//=============================================================================
 
 }; }; }; };
 

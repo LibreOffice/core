@@ -30,11 +30,9 @@
 #include <com/sun/star/uno/TypeClass.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module script {
 
-//=============================================================================
 
 /** Interface to provide standard type conversions.
 
@@ -81,7 +79,6 @@ published interface XTypeConverter: com::sun::star::uno::XInterface
                 com::sun::star::script::CannotConvertException );
 };
 
-//=============================================================================
 
 }; }; }; };
 

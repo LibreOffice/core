@@ -20,24 +20,20 @@
 #ifndef __com_sun_star_sheet_DataPilotFieldReferenceType_idl__
 #define __com_sun_star_sheet_DataPilotFieldReferenceType_idl__
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** These constants select different types of References to calculate
     the data fields.
  */
 constants DataPilotFieldReferenceType
 {
-    //-------------------------------------------------------------------------
 
     /** This type means, that the results in the data fields are displayed like they are.
      */
     const long NONE = 0;
 
-    //-------------------------------------------------------------------------
 
     /** From each result, its reference value (see below) is subtracted, and the difference is shown.
         Totals outside of the base field are shown as empty results.
@@ -73,7 +69,6 @@ constants DataPilotFieldReferenceType
 
     const long ITEM_DIFFERENCE = 1;
 
-    //-------------------------------------------------------------------------
 
     /** Each result is divided by its reference value. The reference value is determined in the
         same way as for <const scope="::com::sun::star::sheet">DataPilotFieldReferenceType::ITEM_DIFFERENCE</const>.
@@ -87,7 +82,6 @@ constants DataPilotFieldReferenceType
 
         const long ITEM_PERCENTAGE = 2;
 
-    //-------------------------------------------------------------------------
 
     /** From each result, its reference value is subtracted, and the difference divided by the
         reference value. The reference value is determined in the same way as for
@@ -99,7 +93,6 @@ constants DataPilotFieldReferenceType
 
         const long ITEM_PERCENTAGE_DIFFERENCE = 3;
 
-    //-------------------------------------------------------------------------
 
     /** Each result is added to the sum of the results for preceding items in the base field,
         in the base field's sort order, and the total sum is shown.
@@ -115,7 +108,6 @@ constants DataPilotFieldReferenceType
 
         const long RUNNING_TOTAL = 4;
 
-    //-------------------------------------------------------------------------
 
     /** Each result is divided by the total result for its row in the DataPilot table.
 
@@ -131,21 +123,18 @@ constants DataPilotFieldReferenceType
 
         const long ROW_PERCENTAGE = 5;
 
-    //-------------------------------------------------------------------------
 
     /** Same as <const scope="::com::sun::star::sheet">DataPilotFieldReferenceType::ROW_PERCENTAGE</const>, but the total for the result's column is used.
     */
 
         const long COLUMN_PERCENTAGE = 6;
 
-    //-------------------------------------------------------------------------
 
     /** Same as <const scope="::com::sun::star::sheet">DataPilotFieldReferenceType::ROW_PERCENTAGE</const>, but the grand total for the result's data field is used.
     */
 
         const long TOTAL_PERCENTAGE = 7;
 
-    //-------------------------------------------------------------------------
 
     /** The row and column totals and the grand total, following the same rules as above, are used to calculate the following expression.
 
@@ -159,7 +148,6 @@ constants DataPilotFieldReferenceType
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

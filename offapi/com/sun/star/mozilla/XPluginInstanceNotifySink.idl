@@ -21,11 +21,9 @@
 
 #include <com/sun/star/uno/XInterface.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module mozilla {
 
-//=============================================================================
 
 
 // DocMerge from xml: interface com::sun::star::mozilla::XPluginInstanceNotifySink
@@ -35,7 +33,6 @@
  */
 published interface XPluginInstanceNotifySink: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
 
     // DocMerge from xml: method com::sun::star::mozilla::XPluginInstanceNotifySink::notifyURL
@@ -48,7 +45,6 @@ published interface XPluginInstanceNotifySink: com::sun::star::uno::XInterface
     [oneway] void notifyURL( [in] string theURL );
 };
 
-//=============================================================================
 
 }; }; }; };
 

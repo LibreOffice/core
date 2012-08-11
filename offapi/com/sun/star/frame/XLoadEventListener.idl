@@ -21,20 +21,17 @@
 
 #include <com/sun/star/lang/XEventListener.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module frame {
 
  published interface XFrameLoader;
 
-//=============================================================================
 /** is used to receive callbacks from an asynchronous frame loader.
 
     @see XFrameLoader
  */
 published interface XLoadEventListener: com::sun::star::lang::XEventListener
 {
-    //-------------------------------------------------------------------------
     /** is called when a new component is loaded into a frame successfully.
 
         @param Loader
@@ -42,7 +39,6 @@ published interface XLoadEventListener: com::sun::star::lang::XEventListener
      */
     [oneway] void loadFinished( [in] XFrameLoader Loader );
 
-    //-------------------------------------------------------------------------
     /** is called when a frame load is canceled or failed.
 
         @param Loader
@@ -51,7 +47,6 @@ published interface XLoadEventListener: com::sun::star::lang::XEventListener
     [oneway] void loadCancelled( [in] XFrameLoader Loader );
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -20,17 +20,14 @@
 #define __com_sun_star_drawing_TextureKind2_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module drawing {
 
-//=============================================================================
 
 /** These enumeration values specify how the texture is applied.
  */
 published enum TextureKind2
 {
-    //-------------------------------------------------------------------------
 
     /** With <type>TextureKind</type> <const>LUMINANCE</const>, the texture
         and the lighting information are    mixed to produce the image, so a
@@ -42,7 +39,6 @@ published enum TextureKind2
         pixel is used as an intensity value.
      */
     INTENSITY,
-    //-------------------------------------------------------------------------
 
     /** With this mode, the lighting is ignored and only the
         texture color information is used.
@@ -50,7 +46,6 @@ published enum TextureKind2
     COLOR
 };
 
-//=============================================================================
 
 }; }; }; };
 

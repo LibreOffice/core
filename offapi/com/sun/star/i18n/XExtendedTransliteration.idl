@@ -32,11 +32,9 @@
 #include <com/sun/star/i18n/XTransliteration.idl>
 #include <com/sun/star/i18n/MultipleCharsOutputException.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module i18n {
 
-//=============================================================================
 
 
 /**
@@ -54,7 +52,6 @@ module com { module sun { module star { module i18n {
  */
 published interface XExtendedTransliteration : ::com::sun::star::i18n::XTransliteration
 {
-    //------------------------------------------------------------------------
     /** Transliterate a substring. The functionality is the same as
         <member scope="::com::sun::star::i18n">XTransliteration::transliterate()</member>
         but omits the offset parameter to improve performance.
@@ -73,7 +70,6 @@ published interface XExtendedTransliteration : ::com::sun::star::i18n::XTranslit
             [in] long nStartPos, [in] long nCount );
 
 
-    //------------------------------------------------------------------------
     /** Transliterate a character to a string.
 
         @param cChar
@@ -81,7 +77,6 @@ published interface XExtendedTransliteration : ::com::sun::star::i18n::XTranslit
      */
     string  transliterateChar2String( [in] char cChar );
 
-    //------------------------------------------------------------------------
     /** Transliterate a character to a character.
 
         <p> If the output contains multiple characters, for example when
@@ -100,7 +95,6 @@ published interface XExtendedTransliteration : ::com::sun::star::i18n::XTranslit
 
 };
 
-//=============================================================================
 }; }; }; };
 
 #endif

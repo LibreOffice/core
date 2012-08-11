@@ -36,17 +36,14 @@
 
 #include <com/sun/star/text/XTextRange.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module text {
 
-//=============================================================================
 
 /** .
  */
 interface XParagraphAppend : com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
         /** appends a new and empty paragraph at the end of the text.
 
                 <p>The properties are applied to the new paragraph.
@@ -76,7 +73,6 @@ interface XParagraphAppend : com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -29,11 +29,9 @@
 #define __com_sun_star_text_WritingMode2_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module text {
 
-//=============================================================================
 
 /** this set of constants describes different writing directions
 
@@ -42,7 +40,6 @@
  */
 published constants WritingMode2
 {
-    //-------------------------------------------------------------------------
 
     /** text within lines is written left-to-right. Lines and blocks are placed
         top-to-bottom.
@@ -51,7 +48,6 @@ published constants WritingMode2
      */
     const short LR_TB = 0;
 
-    //-------------------------------------------------------------------------
 
     /** text within a line are written right-to-left. Lines and blocks are
         placed top-to-bottom.
@@ -60,7 +56,6 @@ published constants WritingMode2
      */
     const short RL_TB = 1;
 
-    //-------------------------------------------------------------------------
 
     /** text within a line is written top-to-bottom. Lines and blocks are
         placed right-to-left.
@@ -69,7 +64,6 @@ published constants WritingMode2
      */
     const short TB_RL = 2;
 
-    //-------------------------------------------------------------------------
 
     /** text within a line is written top-to-bottom. Lines and blocks are
         placed left-to-right.
@@ -78,7 +72,6 @@ published constants WritingMode2
      */
     const short TB_LR = 3;
 
-    //-------------------------------------------------------------------------
 
     /** obtain writing mode from the current page.
 
@@ -94,7 +87,6 @@ published constants WritingMode2
     const short CONTEXT = 4;
 };
 
-//=============================================================================
 
 }; }; }; };
 

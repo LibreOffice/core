@@ -30,11 +30,9 @@ module com { module sun { module star { module document {
     interface XScriptInvocationContext;
 }; }; }; };
 
-//===========================================================================
 
 module com { module sun { module star { module script { module provider {
 
-//===========================================================================
 /**
     This interface is provided to scripts, and provides a means of access to
     the various interfaces which they might need to perform some action on
@@ -43,7 +41,6 @@ module com { module sun { module star { module script { module provider {
 */
 interface XScriptContext : ::com::sun::star::uno::XInterface {
 
-    //----------------------------------------------------------------------
     /**
         Obtain the document reference on which the script can operate
 
@@ -89,7 +86,6 @@ interface XScriptContext : ::com::sun::star::uno::XInterface {
 
 };
 
-//===========================================================================
 }; }; }; }; }; // ::com::sun::star::script::provider
 
 #endif

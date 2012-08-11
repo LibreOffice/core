@@ -21,11 +21,9 @@
 
 #include <com/sun/star/chart2/Scaling.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module chart2 {
 
-//=============================================================================
 
 /** Scaling that scales values by taking their logarithm.
 
@@ -37,7 +35,6 @@ service LogarithmicScaling
     service Scaling;
 };
 
-//=============================================================================
 
 }; }; }; };
 

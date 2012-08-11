@@ -25,11 +25,9 @@
 #include <com/sun/star/container/NoSuchElementException.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module script {
 
-//=============================================================================
 
 /**
     Extension of XLibraryContainer to provide functionality to
@@ -57,7 +55,6 @@ interface XLibraryContainerExport : com::sun::star::uno::XInterface
                     com::sun::star::container::NoSuchElementException );
 };
 
-//=============================================================================
 
 
 }; }; }; };

@@ -24,11 +24,9 @@
 #include <com/sun/star/text/XDependentTextField.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module text {
 
-//=============================================================================
 
 // DocMerge from xml: service com::sun::star::text::DependentTextField
 /** is a <type>TextField</type> which is not specified by itself,
@@ -48,7 +46,6 @@ published service DependentTextField
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

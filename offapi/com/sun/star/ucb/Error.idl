@@ -20,416 +20,314 @@
 #define __com_sun_star_ucb_Error_idl__
 
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** These codes are used to indicate errors.
 
     @deprecated
 */
 published constants Error
 {
-    //-------------------------------------------------------------------------
     // DOCUMENTATION MISSING FOR constants::0
     const long NONE = 0;
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION MISSING FOR constants::122880
     const long LOGIN_FAILURE_RECEIVE = 122880;
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION MISSING FOR constants::122881
     const long LOGIN_FAILURE_NEWSSEND = 122881;
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION MISSING FOR constants::122882
     const long LOGIN_FAILURE_MAILSEND = 122882;
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION MISSING FOR constants::122883
     const long CONNECT_FAILURE = 122883;
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION MISSING FOR constants::122884
     const long UCB_OFFLINE = 122884;
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION MISSING FOR constants::122885
     const long UCB_SERVER_ERROR = 122885;
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION MISSING FOR constants::122886
     const long STORAGE_READONLY = 122886;
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION MISSING FOR constants::122887
     const long STORAGE_KILLED = 122887;
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION MISSING FOR constants::122888
     const long WRONG_FILE_FORMAT = 122888;
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION MISSING FOR constants::122889
     const long UNSUPPORTED_URL = 122889;
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION MISSING FOR constants::122890
     const long CNTOUT_NO_FROM = 122890;
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION MISSING FOR constants::122891
     const long TOO_MANY_GROUPS = 122891;
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION MISSING FOR constants::122892
     const long DELETE_ABORTED = 122892;
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION MISSING FOR constants::122893
     const long QUERY_DELETE = 122893;
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION MISSING FOR constants::122894
     const long NOTAVAILABLE = 122894;
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION MISSING FOR constants::122895
     const long VIM_LIBRARY_ERROR = 122895;
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION MISSING FOR constants::122896
     const long FOLDER_INVALID = 122896;
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION MISSING FOR constants::122897
     const long FTP_RESOLVERERROR = 122897;
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION MISSING FOR constants::122898
     const long FTP_NETWORKERROR = 122898;
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION MISSING FOR constants::122899
     const long FTP_NOTNECESSARYCMD = 122899;
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION MISSING FOR constants::122900
     const long FTP_SERVICEUNAVAILABLE = 122900;
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION MISSING FOR constants::122901
     const long FTP_DCONFAILURE = 122901;
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION MISSING FOR constants::122902
     const long FTP_TRANSFERABORTED = 122902;
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION MISSING FOR constants::122903
     const long NO_VIM_LIBRARY = 122903;
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION MISSING FOR constants::122904
     const long VIM_LIBRARY_CORRUPTED = 122904;
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION MISSING FOR constants::122905
     const long CCMAIL_EXPORT_ERROR = 122905;
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION MISSING FOR constants::122906
     const long NO_CCMAIL_EXPORT_FILE = 122906;
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION MISSING FOR constants::122907
     const long ILLEGAL_CCMAIL_EXPORT_FILE = 122907;
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION MISSING FOR constants::122908
     const long MESSAGE_NOT_FOUND = 122908;
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION MISSING FOR constants::122909
     const long BAD_CCMAIL_EXPORT_PASSWORD = 122909;
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION MISSING FOR constants::122910
     const long CCMAIL_EXPORT_TOO_LONG = 122910;
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION MISSING FOR constants::122911
     const long FOLDER_EXISTS = 122911;
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION MISSING FOR constants::122912
     const long FOLDER_NOT_EXISTS = 122912;
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION MISSING FOR constants::122913
     const long NO_VIM_BBOARDLIST = 122913;
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION MISSING FOR constants::122914
     const long ILLEGAL_MESSAGE_ID = 122914;
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION MISSING FOR constants::122915
     const long SERVER_PORT_SYNTAX = 122915;
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION MISSING FOR constants::122916
     const long SERVERNAME_SYNTAX = 122916;
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION MISSING FOR constants::122917
     const long USERNAME_SYNTAX = 122917;
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION MISSING FOR constants::122918
     const long IS_RESCHEDULED = 122918;
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION MISSING FOR constants::122919
     const long VIM_NO_FAKE_MESSAGE_ID = 122919;
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION MISSING FOR constants::122920
     const long FSYS_ROOT_DELETE = 122920;
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION MISSING FOR constants::122921
     const long FILE_EXISTS = 122921;
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION MISSING FOR constants::122922
     const long FILE_NOT_EXISTS = 122922;
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION MISSING FOR constants::122923
     const long FSYS_MISPLACED_CHAR = 122923;
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION MISSING FOR constants::122924
     const long FSYS_INVALID_CHAR = 122924;
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION MISSING FOR constants::122925
     const long FSYS_INVALID_DEVICE = 122925;
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION MISSING FOR constants::122926
     const long FSYS_ACCESS_DENIED = 122926;
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION MISSING FOR constants::122927
     const long FSYS_LOCK_VIOLATION = 122927;
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION MISSING FOR constants::122928
     const long FSYS_VOLUME_FULL = 122928;
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION MISSING FOR constants::122929
     const long FSYS_NOT_SUPPORTED = 122929;
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION MISSING FOR constants::122930
     const long FSYS_UNKNOWN = 122930;
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION MISSING FOR constants::122931
     const long FSYS_NOT_A_FILE = 122931;
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION MISSING FOR constants::122932
     const long FSYS_NOT_A_DIRECTORY = 122932;
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION MISSING FOR constants::122933
     const long FSYS_IS_WILDCARD = 122933;
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION MISSING FOR constants::122934
     const long RENAMED_WRONG_FILE_FORMAT = 122934;
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION MISSING FOR constants::122935
     const long FSYS_UPDATE_NEEDED = 122935;
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION MISSING FOR constants::122936
     const long FSYS_CANT_RESOLVE_CONFLICT = 122936;
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION MISSING FOR constants::122937
     const long FSYS_CANT_ITERATE = 122937;
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION MISSING FOR constants::122938
     const long ONE_NOT_SEARCHABLE = 122938;
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION MISSING FOR constants::122939
     const long MULTIPLE_NOT_SEARCHABLE = 122939;
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION MISSING FOR constants::122940
     const long FSYS_CACHE_INCONSISTENT = 122940;
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION MISSING FOR constants::122941
     const long FSYS_READONLY = 122941;
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION MISSING FOR constants::122942
     const long FSYS_LOCK = 122942;
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION MISSING FOR constants::122943
     const long FSYS_UNLOCK = 122943;
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION MISSING FOR constants::122944
     const long FSYS_DELETE = 122944;
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION MISSING FOR constants::122945
     const long FSYS_IS_MARKED = 122945;
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION MISSING FOR constants::122946
     const long FTP_GENERAL_FAILURE = 122946;
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION MISSING FOR constants::122947
     const long DO_LOG = 122947;
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION MISSING FOR constants::122948
     const long HTTP_COOKIE_REQUEST = 122948;
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION MISSING FOR constants::122949
     const long FSYS_LOST_ROOT = 122949;
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION MISSING FOR constants::122950
     const long FTP_PROXY = 122950;
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION MISSING FOR constants::122951
     const long SOURCE_SAME_AS_TARGET = 122951;
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION MISSING FOR constants::122952
     const long CONFIRM_EMPTY_TRASH = 122952;
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION MISSING FOR constants::122953
     const long FSYS_NO_TARGET = 122953;
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION MISSING FOR constants::122954
     const long FSYS_RECURSIVE = 122954;
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION MISSING FOR constants::122955
     const long FSYS_INSERT_MEDIUM = 122955;
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION MISSING FOR constants::122956
     const long NO_DOCINFO = 122956;
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION MISSING FOR constants::122957
     const long CCMAIL_EXPORT_NOT_TERMINATING = 122957;
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION MISSING FOR constants::122958
     const long EXTERNAL_COMMAND_FAILED = 122958;
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION MISSING FOR constants::122959
     const long RENAME_FAILED = 122959;
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION MISSING FOR constants::122960
     const long NOT_HANDLED = 122960;
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION MISSING FOR constants::122961
     const long COULD_NOT_INIT_COMPONENT = 122961;
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION MISSING FOR constants::122962
     const long TRANSFER_URL_NOT_SUPPORTED = 122962;
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION MISSING FOR constants::122963
     const long EMPTY_SERVERNAME = 122963;
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION MISSING FOR constants::122964
     const long EMPTY_USERNAME = 122964;
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION MISSING FOR constants::122965
     const long BAD_INET = 122965;
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION MISSING FOR constants::122966
     const long IMAP_SERVER_MSG = 122966;
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION MISSING FOR constants::122967
     const long IMAP_CONNECTION_CLOSED = 122967;
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION MISSING FOR constants::122968
     const long IMAP_NOT_IMAP4 = 122968;
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION MISSING FOR constants::122969
     const long IMAP_BAD_SERVER = 122969;
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION MISSING FOR constants::122970
     const long REORGANIZE_FILE_LOCKED = 122970;
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION MISSING FOR constants::122971
     const long IMAP_BAD_TITLE = 122971;
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION MISSING FOR constants::122972
     const long SERVER_CONNECT_FAILURE = 122972;
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION MISSING FOR constants::122973
     const long PASSWORD_SYNTAX = 122973;
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION MISSING FOR constants::122974
     const long QUERY_DELETE_CACHE = 122974;
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION MISSING FOR constants::122975
     const long REORGANIZE_NO_DISKSPACE = 122975;
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION MISSING FOR constants::122976
     const long LOGIN_FAILURE_ACCOUNT = 122976;
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION MISSING FOR constants::122977
     const long ACCOUNT_SYNTAX = 122977;
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

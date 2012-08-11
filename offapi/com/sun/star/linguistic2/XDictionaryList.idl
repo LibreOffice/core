@@ -32,11 +32,9 @@
 #include <com/sun/star/linguistic2/XDictionary.idl>
 #include <com/sun/star/linguistic2/XDictionaryListEventListener.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module linguistic2 {
 
-//=============================================================================
 /** is used to manage and maintain a list of dictionaries.
 
     <P>A dictionary-list may be given to a spell checker or hyphenator
@@ -49,14 +47,12 @@ module com { module sun { module star { module linguistic2 {
 */
 published interface XDictionaryList : com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /**
         @returns
             the number of dictionaries in the list.
     */
     short getCount();
 
-    //-------------------------------------------------------------------------
     /**
         @returns
              a sequence with an entry for every dictionary
@@ -66,7 +62,6 @@ published interface XDictionaryList : com::sun::star::uno::XInterface
     */
     sequence<com::sun::star::linguistic2::XDictionary> getDictionaries();
 
-    //-------------------------------------------------------------------------
     /** searches the list for a dictionary with a given name.
 
          @returns
@@ -81,7 +76,6 @@ published interface XDictionaryList : com::sun::star::uno::XInterface
     com::sun::star::linguistic2::XDictionary getDictionaryByName(
             [in] string aDictionaryName );
 
-    //-------------------------------------------------------------------------
     /** adds a dictionary to the list.
 
         <P>Additionally, the dictionary-list will add itself to the list of dictionary
@@ -99,7 +93,6 @@ published interface XDictionaryList : com::sun::star::uno::XInterface
     boolean addDictionary(
             [in] com::sun::star::linguistic2::XDictionary xDictionary );
 
-    //-------------------------------------------------------------------------
     /** removes a single dictionary from the list.
 
         <P>If the dictionary is still active, it will be deactivated
@@ -118,7 +111,6 @@ published interface XDictionaryList : com::sun::star::uno::XInterface
     boolean removeDictionary(
             [in] com::sun::star::linguistic2::XDictionary xDictionary );
 
-    //-------------------------------------------------------------------------
     /** adds an entry to the list of dictionary-list event listeners.
 
         <P>On dictionary-list events, each entry in the listener list will
@@ -144,7 +136,6 @@ published interface XDictionaryList : com::sun::star::uno::XInterface
         [in] com::sun::star::linguistic2::XDictionaryListEventListener xListener,
         [in] boolean bReceiveVerbose );
 
-    //-------------------------------------------------------------------------
     /** removes an entry from the list of dictionary-list event listeners.
 
         @returns
@@ -160,7 +151,6 @@ published interface XDictionaryList : com::sun::star::uno::XInterface
     boolean removeDictionaryListEventListener(
         [in] com::sun::star::linguistic2::XDictionaryListEventListener xListener );
 
-    //-------------------------------------------------------------------------
     /** increases request level for event buffering by one.
 
          <P>The request level for event buffering is an integer
@@ -178,7 +168,6 @@ published interface XDictionaryList : com::sun::star::uno::XInterface
     */
     short beginCollectEvents();
 
-    //-------------------------------------------------------------------------
     /** flushes the event buffer and decreases the request level for
          event buffering by one.
 
@@ -197,7 +186,6 @@ published interface XDictionaryList : com::sun::star::uno::XInterface
     */
     short endCollectEvents();
 
-    //-------------------------------------------------------------------------
     /** notifies the listeners of all buffered events and then clears
          that buffer.
 
@@ -211,7 +199,6 @@ published interface XDictionaryList : com::sun::star::uno::XInterface
     */
     short flushEvents();
 
-    //-------------------------------------------------------------------------
     /** creates a new dictionary.
 
         @returns
@@ -246,7 +233,6 @@ published interface XDictionaryList : com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

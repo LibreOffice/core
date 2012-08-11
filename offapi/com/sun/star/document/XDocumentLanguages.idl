@@ -23,14 +23,11 @@
 #include <com/sun/star/lang/Locale.idl>
 #include <com/sun/star/lang/IllegalArgumentException.idl>
 
-//=============================================================================
 
 module com {   module sun {   module star {   module document {
 
-//=============================================================================
 interface XDocumentLanguages: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** retrieve the list of languages already used in current document
 
         @returns
@@ -41,7 +38,6 @@ interface XDocumentLanguages: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

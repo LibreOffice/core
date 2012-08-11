@@ -33,11 +33,9 @@
 #include <com/sun/star/scanner/XScannerManager.idl>
 
 
-//=============================================================================
 
 module com { module sun { module star { module scanner {
 
-//=============================================================================
 // DOCUMENTATION CHANGED FOR ScannerManager
 /** ScannerManager provides a simple method to access scanner devices
     (or other image producing devices)
@@ -47,7 +45,6 @@ module com { module sun { module star { module scanner {
 */
 published service ScannerManager : XScannerManager;
 
-//=============================================================================
 
 }; }; }; };
 

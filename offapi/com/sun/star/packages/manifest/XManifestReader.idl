@@ -31,16 +31,13 @@
 #include <com/sun/star/beans/PropertyValue.idl>
 #include <com/sun/star/io/XInputStream.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {   module packages {  module manifest {
 
-//=============================================================================
 /** This interface reads the manifest data from a file. The user
     must supply an XInputStream when calling readManifestSequence() to receive
     a sequence of manifest entries. Each manifest entry is represented by
     a sequence of PropertyValues. */
-//=============================================================================
 published interface XManifestReader: com::sun::star::uno::XInterface
 {
     /** Supplies the XManifestReader with an XInputStream to read from, reads

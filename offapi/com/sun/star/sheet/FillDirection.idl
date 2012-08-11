@@ -20,36 +20,30 @@
 #ifndef __com_sun_star_sheet_FillDirection_idl__
 #define __com_sun_star_sheet_FillDirection_idl__
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** used to specify the direction of filling cells, for example,
     with a series.
  */
 published enum FillDirection
 {
-    //-------------------------------------------------------------------------
 
     /** specifies that rows are filled from top to bottom.
      */
     TO_BOTTOM,
 
-    //-------------------------------------------------------------------------
 
     /** specifies that columns are filled from left to right.
      */
     TO_RIGHT,
 
-    //-------------------------------------------------------------------------
 
     /** specifies that rows are filled from bottom to top.
      */
     TO_TOP,
 
-    //-------------------------------------------------------------------------
 
     /** specifies that columns are filled from right to left.
      */
@@ -57,7 +51,6 @@ published enum FillDirection
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

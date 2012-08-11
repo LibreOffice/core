@@ -22,11 +22,9 @@
 
 #include <com/sun/star/uno/Exception.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module util {
 
-//=============================================================================
 
 /** thrown to indicate a general veto.
 
@@ -36,7 +34,6 @@ published exception VetoException : com::sun::star::uno::Exception
 {
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -24,11 +24,9 @@
 #include <com/sun/star/awt/FocusEvent.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module awt {
 
-//=============================================================================
 
 /** makes it possible to receive keyboard focus events.
 
@@ -37,7 +35,6 @@
  */
 published interface XFocusListener: com::sun::star::lang::XEventListener
 {
-    //-------------------------------------------------------------------------
 
     /** is invoked when a window gains the keyboard focus.
 
@@ -45,7 +42,6 @@ published interface XFocusListener: com::sun::star::lang::XEventListener
      */
     [oneway] void focusGained( [in] com::sun::star::awt::FocusEvent e );
 
-    //-------------------------------------------------------------------------
 
     /** is invoked when a window loses the keyboard focus.
 
@@ -55,7 +51,6 @@ published interface XFocusListener: com::sun::star::lang::XEventListener
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

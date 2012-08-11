@@ -20,71 +20,59 @@
 #define __com_sun_star_awt_DeviceInfo_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module awt {
 
-//=============================================================================
 
 /** contains information about a device.
  */
 published struct DeviceInfo
 {
-    //-------------------------------------------------------------------------
 
     /** contains the width of the device in pixels.
      */
     long Width;
 
-    //-------------------------------------------------------------------------
 
     /** contains the height of the device in pixels.
      */
     long Height;
 
-    //-------------------------------------------------------------------------
 
     /** contains the inset from the left.
      */
     long LeftInset;
 
-    //-------------------------------------------------------------------------
 
     /** contains the inset from the top.
      */
     long TopInset;
 
-    //-------------------------------------------------------------------------
 
     /** contains the inset from the right.
      */
     long RightInset;
 
-    //-------------------------------------------------------------------------
 
     /** contains the inset from the bottom.
      */
     long BottomInset;
 
-    //-------------------------------------------------------------------------
 
     /** contains the X-axis resolution of the device in pixel/meter.
      */
     double PixelPerMeterX;
 
-    //-------------------------------------------------------------------------
 
     /** contains the Y-axis resolution of the device in pixel/meter.
      */
     double PixelPerMeterY;
 
-    //-------------------------------------------------------------------------
 
     /** contains the color-depth of the device.
      */
     short BitsPerPixel;
 
-    //-------------------------------------------------------------------------
 
     /** specifies special operations which are possible on the device.
 
@@ -94,7 +82,6 @@ published struct DeviceInfo
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -30,11 +30,9 @@
 
 #include <com/sun/star/uno/XComponentContext.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module configuration { module bootstrap {
 
-//=============================================================================
 
 /**
     provides access to a component context that is enhanced with
@@ -54,7 +52,6 @@ module com { module sun { module star { module configuration { module bootstrap 
 */
 published service BootstrapContext
 {
-    //-------------------------------------------------------------------------
 
     /**
       provides access to metaconfiguration data.
@@ -65,10 +62,8 @@ published service BootstrapContext
       */
     interface com::sun::star::uno::XComponentContext ;
 
-    //-------------------------------------------------------------------------
 } ;
 
-//=============================================================================
 
 } ; } ; } ; } ; } ;
 

@@ -31,11 +31,9 @@
 #include <com/sun/star/io/IOException.idl>
 #include <com/sun/star/lang/WrappedTargetException.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module document {
 
-//=============================================================================
 
 /** is the interface to be implemented by documents who wish to participate in
     the document emergency-save / recovery process.
@@ -119,11 +117,9 @@ interface XDocumentRecovery
                     );
 };
 
-//=============================================================================
 
 }; }; }; };
 
-//=============================================================================
 
 #endif
 

@@ -35,11 +35,9 @@
 #include <com/sun/star/lang/WrappedTargetException.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module script {
 
-//=============================================================================
 
 /**
     Provides access to a library system.
@@ -91,7 +89,6 @@ published interface XLibraryContainer: com::sun::star::container::XNameAccess
 
 };
 
-//=============================================================================
 
 
 }; }; }; };

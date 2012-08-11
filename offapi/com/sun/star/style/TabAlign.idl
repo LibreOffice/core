@@ -20,11 +20,9 @@
 #define __com_sun_star_style_TabAlign_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module style {
 
-//=============================================================================
 
 // DocMerge from xml: enum com::sun::star::style::TabAlign
 /** These enumeration values are used to specify the alignment of
@@ -32,7 +30,6 @@
  */
 published enum TabAlign
 {
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: value com::sun::star::style::TabAlign::LEFT
     /** The text range is left-aligned between the previous tabulator
@@ -40,7 +37,6 @@ published enum TabAlign
      */
     LEFT,
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: value com::sun::star::style::TabAlign::CENTER
     /** The text range is centered between the previous tabulator
@@ -48,7 +44,6 @@ published enum TabAlign
      */
     CENTER,
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: value com::sun::star::style::TabAlign::RIGHT
     /** The text range is right-aligned between the previous tabulator
@@ -56,7 +51,6 @@ published enum TabAlign
      */
     RIGHT,
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: value com::sun::star::style::TabAlign::DECIMAL
     /** The decimal point of the text range to the left of this
@@ -64,7 +58,6 @@ published enum TabAlign
      */
     DECIMAL,
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: value com::sun::star::style::TabAlign::DEFAULT
     /** The default alignment for tabulators is applied.
@@ -73,7 +66,6 @@ published enum TabAlign
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

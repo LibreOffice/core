@@ -30,18 +30,15 @@
 
 #include <com/sun/star/ucb/XAnyCompareFactory.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** is a factory to get <type>XAnyCompare</type> service implementations.
 
     @since OOo 1.1.2
 */
 published service AnyCompareFactory : XAnyCompareFactory;
 
-//=============================================================================
 
 }; }; }; };
 

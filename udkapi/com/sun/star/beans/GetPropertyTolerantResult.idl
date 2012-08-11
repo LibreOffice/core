@@ -23,11 +23,9 @@
 #include <com/sun/star/beans/PropertyState.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module beans {
 
-//=============================================================================
 
 /** specifies information being retrieved about a single property.
 
@@ -42,7 +40,6 @@ published struct GetPropertyTolerantResult
 
     short   Result;
 
-    //-------------------------------------------------------------------------
 
     /** contains the state of the property.
 
@@ -51,7 +48,6 @@ published struct GetPropertyTolerantResult
      */
     com::sun::star::beans::PropertyState    State;
 
-    //-------------------------------------------------------------------------
 
     /** contains the value of the property.
 
@@ -62,7 +58,6 @@ published struct GetPropertyTolerantResult
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

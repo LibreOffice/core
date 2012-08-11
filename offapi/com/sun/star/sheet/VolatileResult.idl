@@ -31,11 +31,9 @@
 
 #include <com/sun/star/sheet/XVolatileResult.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** represents a volatile function result.
 
@@ -47,7 +45,6 @@ module com {  module sun {  module star {  module sheet {
  */
 published service VolatileResult
 {
-    // ------------------------------------------------------------------------
 
     /** provides handling with a volatile function result.
      */
@@ -55,7 +52,6 @@ published service VolatileResult
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

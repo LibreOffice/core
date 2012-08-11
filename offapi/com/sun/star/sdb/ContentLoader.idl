@@ -34,7 +34,6 @@
 
 module com {  module sun {  module star {  module sdb {
 
-//=============================================================================
 /** implements a loader for various datasource-related user interface components.
 
     <p>Usually, you don't deal with this loader directly. Instead, use an instance with
@@ -96,7 +95,6 @@ published service ContentLoader
     service com::sun::star::frame::FrameLoader;
 };
 
-//=============================================================================
 }; }; }; };
 
 #endif

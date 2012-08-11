@@ -24,11 +24,9 @@
 #include <com/sun/star/beans/XPropertySet.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module chart {
 
-//=============================================================================
 
 /** specifies all the properties for the graphic object of a
     pie segment.@see PieDiagram
@@ -38,7 +36,6 @@ published service ChartPieSegmentProperties
     service com::sun::star::chart::ChartDataPointProperties;
     interface com::sun::star::beans::XPropertySet;
 
-    //-------------------------------------------------------------------------
 
     /** reflects the offset of a pie segment in percent of the radius.
 
@@ -56,7 +53,6 @@ published service ChartPieSegmentProperties
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

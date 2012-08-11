@@ -35,7 +35,6 @@ module com { module sun { module star { module ucb {
  published interface XContentProvider;
  published interface XParameterizedContentProvider;
 
-//============================================================================
 /** A <type>ContentProvider</type> that wraps remote content providers that
     (potentially) have been distributed to a UCB.
 
@@ -53,20 +52,17 @@ module com { module sun { module star { module ucb {
  */
 published service RemoteProxyContentProvider
 {
-    //------------------------------------------------------------------------
     /** activates any potentially inactive remote content providers before
         passing on requests to the underlying <type>XContentProvider</type>.
      */
     interface XContentProvider;
 
-    //------------------------------------------------------------------------
     /** activates any potentially inactive remote content providers before
         passing on requests to the underlying
         <type>XContentIdentifierFactory</type>.
      */
     [optional] interface XContentIdentifierFactory;
 
-    //------------------------------------------------------------------------
     /** allows this <type>ContentProvider</type> to adjust itself to special
         needs.
      */

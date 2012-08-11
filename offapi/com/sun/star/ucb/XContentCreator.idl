@@ -24,11 +24,9 @@
 #include <com/sun/star/ucb/XContent.idl>
 
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** A creator for new (persistent) contents, like file system folders.
 
     <p>Creation of a new (persistent) content:
@@ -53,7 +51,6 @@ module com { module sun { module star { module ucb {
 */
 published interface XContentCreator: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** returns a list with information about the creatable contents.
 
         @returns
@@ -61,7 +58,6 @@ published interface XContentCreator: com::sun::star::uno::XInterface
     */
     sequence<com::sun::star::ucb::ContentInfo> queryCreatableContentsInfo();
 
-    //-------------------------------------------------------------------------
     /** creates a new content of given type.
 
         @param Info
@@ -74,7 +70,6 @@ published interface XContentCreator: com::sun::star::uno::XInterface
                         [in] com::sun::star::ucb::ContentInfo Info );
 };
 
-//=============================================================================
 
 }; }; }; };
 

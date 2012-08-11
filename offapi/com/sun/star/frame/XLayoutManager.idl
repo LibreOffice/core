@@ -38,11 +38,9 @@
 #include <com/sun/star/ui/DockingArea.idl>
 #include <com/sun/star/ui/XDockingAreaAcceptor.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module frame {
 
-//=============================================================================
 
 /** central interface to query for, create, destroy and manipulate user
     interface elements which are bound to a layout manager.

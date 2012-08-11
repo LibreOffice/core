@@ -21,11 +21,9 @@
 
 #include <com/sun/star/container/XEnumerationAccess.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module frame {
 
-//=============================================================================
 /** @deprecated
  */
 published service DesktopTasks
@@ -33,7 +31,6 @@ published service DesktopTasks
     interface com::sun::star::container::XEnumerationAccess;
 };
 
-//=============================================================================
 
 }; }; }; };
 

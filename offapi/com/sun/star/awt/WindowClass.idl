@@ -20,36 +20,30 @@
 #define __com_sun_star_awt_WindowClass_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module awt {
 
-//=============================================================================
 
 /** specifies the class of a window.
  */
 published enum WindowClass
 {
-    //-------------------------------------------------------------------------
 
     /** specifies a top level window on the desktop. It is also a container.
      */
     TOP,
 
-    //-------------------------------------------------------------------------
 
     /** is a modal top level window on the desktop. It is also a container.
      */
     MODALTOP,
 
-    //-------------------------------------------------------------------------
 
     /** is a container that may contain other components.
         It is not a top window.
      */
     CONTAINER,
 
-    //-------------------------------------------------------------------------
 
     /** is the simplest window. It can be a container.
      */
@@ -57,7 +51,6 @@ published enum WindowClass
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

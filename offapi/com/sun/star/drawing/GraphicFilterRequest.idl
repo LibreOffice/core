@@ -30,11 +30,9 @@
 
 #include <com/sun/star/uno/Exception.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module drawing {
 
-//=============================================================================
 
 /** represents a general error graphic filter exception.
     It can be used to transport the error code information.
@@ -48,7 +46,6 @@ exception GraphicFilterRequest : com::sun::star::uno::Exception
         long ErrCode;
 };
 
-//=============================================================================
 
 }; }; }; };
 

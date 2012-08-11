@@ -29,11 +29,9 @@
 #define __com_sun_star_drawing_RotationDescriptor_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module drawing {
 
-//=============================================================================
 
 /** This abstract service specifies the general characteristics of an optional
     rotation and shearing for a <type>Shape</type>.
@@ -45,7 +43,6 @@
  */
 published service RotationDescriptor
 {
-    //-------------------------------------------------------------------------
 
     /** This is the angle for rotation of this <type>Shape</type>.
         The shape is rotated counter-clockwise around the center
@@ -59,7 +56,6 @@ published service RotationDescriptor
     */
     [property] long RotateAngle;
 
-    //-------------------------------------------------------------------------
 
     /** This is the amount of shearing for this <type>Shape</type>.
         The shape is sheared counter-clockwise around the center
@@ -70,7 +66,6 @@ published service RotationDescriptor
     [optional, property] long ShearAngle;
 };
 
-//=============================================================================
 
 }; }; }; };
 

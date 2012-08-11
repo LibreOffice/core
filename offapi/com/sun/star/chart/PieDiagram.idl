@@ -24,11 +24,9 @@
 #include <com/sun/star/chart/Dim3DDiagram.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module chart {
 
-//=============================================================================
 
 /** a service for pie diagrams.
  */
@@ -38,7 +36,6 @@ published service PieDiagram
     service com::sun::star::chart::Dim3DDiagram;
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -31,11 +31,9 @@
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/beans/NamedValue.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** A command environment that can be used to deal with WebDAV/HTTP specific
     commands.
 
@@ -45,7 +43,6 @@ module com { module sun { module star { module ucb {
 */
 interface XWebDAVCommandEnvironment : com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** This method gets called while assembling an WebDAV/HTTP request.
         The returned headername-headervalue pairs will be appended to
         the list of request headers before the request is dispatched.
@@ -66,7 +63,6 @@ interface XWebDAVCommandEnvironment : com::sun::star::uno::XInterface
         [in] string aMethod);
 };
 
-//=============================================================================
 
 }; }; }; };
 

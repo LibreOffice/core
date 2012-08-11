@@ -24,11 +24,9 @@
 #include <com/sun/star/form/DataAwareControlModel.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module form {  module component {
 
-//=============================================================================
 
 /** This service specifies a data-aware control model for entering text which matches a specific
     pattern.
@@ -39,7 +37,6 @@ published service DatabasePatternField
 
     service com::sun::star::form::DataAwareControlModel;
 
-    //-------------------------------------------------------------------------
 
     /** determines if an empty text should be treated as a <NULL/> value.
 
@@ -55,7 +52,6 @@ published service DatabasePatternField
 
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

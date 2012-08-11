@@ -23,30 +23,25 @@
 #include <com/sun/star/beans/Property.idl>
 #include <com/sun/star/ucb/SearchInfo.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** The argument for the command "search".
 
     @see XCommandProcessor
 */
 published struct SearchCommandArgument
 {
-    //-------------------------------------------------------------------------
     /** the search criteria.
     */
     SearchInfo Info;
 
-    //-------------------------------------------------------------------------
     /** the properties for which values shall be provided through the
         <type>ContentResultSet</type> returned by the search command.
     */
     sequence< com::sun::star::beans::Property > Properties;
 };
 
-//=============================================================================
 
 }; }; }; };
 

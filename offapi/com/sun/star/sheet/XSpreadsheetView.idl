@@ -24,24 +24,20 @@
 #include <com/sun/star/sheet/XSpreadsheet.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** is the main interface of a <type>SpreadsheetView</type>. It
     manages the active sheet within this view.
  */
 published interface XSpreadsheetView: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** returns the sheet that is shown in the view.
      */
     com::sun::star::sheet::XSpreadsheet getActiveSheet();
 
-    //-------------------------------------------------------------------------
 
     /** sets the sheet that is shown in the view.
      */
@@ -49,7 +45,6 @@ published interface XSpreadsheetView: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

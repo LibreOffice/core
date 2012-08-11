@@ -26,17 +26,14 @@
 #include <com/sun/star/beans/UnknownPropertyException.idl>
 #include <com/sun/star/text/XTextContent.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module text {
 
-//=============================================================================
 
 /** .
  */
 interface XTextContentAppend : com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
         /** appends a text content at the end of the text.
 
@@ -60,7 +57,6 @@ interface XTextContentAppend : com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

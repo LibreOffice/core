@@ -22,18 +22,15 @@
 
 #include <com/sun/star/lang/XEventListener.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module task {
 
  published interface XAsyncJob;
 
-//=============================================================================
 /** listener on finish states of asynchronous job execution
  */
 published interface XJobListener : com::sun::star::lang::XEventListener
 {
-    //------------------------------------------------------------------------
     /** indicates that the job is done
 
         @param Job

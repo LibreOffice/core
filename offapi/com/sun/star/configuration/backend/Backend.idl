@@ -32,11 +32,9 @@
 #include <com/sun/star/configuration/backend/XBackendEntities.idl>
 #include <com/sun/star/configuration/backend/XSchemaSupplier.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module configuration { module backend {
 
-//=============================================================================
 
 /**
     provides access to a configuration database composed of one or more
@@ -62,31 +60,26 @@ module com { module sun { module star { module configuration { module backend {
 */
 published service Backend
 {
-    //-------------------------------------------------------------------------
 
     /**
       provides access to configuration schemas.
       */
     interface XSchemaSupplier ;
 
-    //-------------------------------------------------------------------------
 
     /**
       provides access to the layer data.
       */
     interface XBackend ;
 
-    //-------------------------------------------------------------------------
 
     /**
       provides information about supported and special entities.
       */
     [optional] interface XBackendEntities ;
 
-    //-------------------------------------------------------------------------
 } ;
 
-//=============================================================================
 
 } ; } ; } ; } ; } ;
 

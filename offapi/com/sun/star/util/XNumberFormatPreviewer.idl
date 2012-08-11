@@ -29,11 +29,9 @@
 #include <com/sun/star/util/Color.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module util {
 
-//=============================================================================
 
 /** represents a number formatter which can preview number
     formats without inserting them.
@@ -42,7 +40,6 @@
  */
 published interface XNumberFormatPreviewer: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** formats a value using a format string, without inserting a
         number format into the list.
@@ -73,7 +70,6 @@ published interface XNumberFormatPreviewer: com::sun::star::uno::XInterface
              [in] boolean bAllowEnglish )
             raises( com::sun::star::util::MalformedNumberFormatException );
 
-    //-------------------------------------------------------------------------
 
     /** returns the color which is to be used for a number.
 
@@ -110,7 +106,6 @@ published interface XNumberFormatPreviewer: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

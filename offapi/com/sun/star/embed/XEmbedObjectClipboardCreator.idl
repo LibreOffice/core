@@ -36,11 +36,9 @@
 #include <com/sun/star/lang/IllegalArgumentException.idl>
 #include <com/sun/star/beans/PropertyValue.idl>
 
-//============================================================================
 
  module com {  module sun {  module star {  module embed {
 
-//============================================================================
 /** allows to create and initialize a new embedded object from clipboard.
 
     <p>
@@ -50,7 +48,6 @@
  */
 published interface XEmbedObjectClipboardCreator: com::sun::star::uno::XInterface
 {
-    // -----------------------------------------------------------------------
     /** creates a new object and initializes it from the system clipboard.
 
         <p> In case specified entry exists it's contents are ignored and
@@ -95,7 +92,6 @@ published interface XEmbedObjectClipboardCreator: com::sun::star::uno::XInterfac
                 ::com::sun::star::uno::Exception );
 };
 
-//============================================================================
 
 }; }; }; };
 

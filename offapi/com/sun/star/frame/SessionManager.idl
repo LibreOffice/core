@@ -30,11 +30,9 @@
 
 #include <com/sun/star/frame/XSessionManagerClient.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module frame {
 
-//=============================================================================
 /** The SessionManager service provides an interface to the session manager
     of the desktop. A session manager keeps track of applications that are
     running when the desktop shuts down and starts them again in the same

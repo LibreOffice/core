@@ -22,18 +22,15 @@
 #include <com/sun/star/task/XInteractionContinuation.idl>
 #include <com/sun/star/beans/PropertyValue.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module document {
 
-//=============================================================================
 /** A continuation to return filter options from interaction helper.
 
     @since OOo 1.1.2
 */
 published interface XInteractionFilterOptions : ::com::sun::star::task::XInteractionContinuation
 {
-    //-------------------------------------------------------------------------
     /** Store results to the continuation.
 
         @param rProperties  the list of properties containing filter options.
@@ -41,7 +38,6 @@ published interface XInteractionFilterOptions : ::com::sun::star::task::XInterac
     */
     void   setFilterOptions( [in] sequence< com::sun::star::beans::PropertyValue > rProperties );
 
-    //-------------------------------------------------------------------------
     /** Get results from the continuation.
 
         @returns       the stored list of properties containing filter options.
@@ -49,7 +45,6 @@ published interface XInteractionFilterOptions : ::com::sun::star::task::XInterac
     sequence< com::sun::star::beans::PropertyValue > getFilterOptions();
 };
 
-//=============================================================================
 
 }; }; }; };
 

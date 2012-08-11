@@ -70,7 +70,6 @@ interface XAnimatedSprite : XSprite
      */
     void startAnimation( [in] double nSpeed );
 
-    //-------------------------------------------------------------------------
 
     /** Stop the animation sequence.<p>
 
@@ -82,7 +81,6 @@ interface XAnimatedSprite : XSprite
     */
     void stopAnimation();
 
-    //-------------------------------------------------------------------------
 
     /** Reset the animation sequence to start with the first frame.<p>
 
@@ -94,7 +92,6 @@ interface XAnimatedSprite : XSprite
      */
     void resetAnimation();
 
-    //-------------------------------------------------------------------------
 
     /** Issue an additional render call to this sprite's
         animation.<p>
@@ -107,7 +104,6 @@ interface XAnimatedSprite : XSprite
      */
     void updateAnimation();
 
-    //-------------------------------------------------------------------------
 
     /** Changes the view state in place for this sprite's
         animation.<p>
@@ -133,7 +129,6 @@ interface XAnimatedSprite : XSprite
     void setViewState( [in] ViewState aViewState )
         raises (com::sun::star::lang::IllegalArgumentException);
 
-    //-------------------------------------------------------------------------
 
     /** Changes all of the sprite's attributes at one atomic
         instance.<p>

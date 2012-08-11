@@ -20,11 +20,9 @@
 #define __com_sun_star_text_ControlCharacter_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module text {
 
-//=============================================================================
 
 // DocMerge from idl: constants com::sun::star::text::ControlCharacter
 /** These constants are the codes for inserting control characters
@@ -32,21 +30,18 @@
  */
 published constants ControlCharacter
 {
-    //-------------------------------------------------------------------------
 
     // DocMerge from idl: value com::sun::star::text::ControlCharacter::PARAGRAPH_BREAK
     /** This control character starts a new paragraph.
      */
     const short PARAGRAPH_BREAK = 0;
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from idl: value com::sun::star::text::ControlCharacter::LINE_BREAK
     /** This control character starts a new line in a paragraph.
      */
     const short LINE_BREAK = 1;
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from idl: value com::sun::star::text::ControlCharacter::HARD_HYPHEN
     /** This control character equals a dash but prevents this
@@ -54,7 +49,6 @@ published constants ControlCharacter
      */
     const short HARD_HYPHEN = 2;
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from idl: value com::sun::star::text::ControlCharacter::SOFT_HYPHEN
     /** This control character defines a special position as a
@@ -64,7 +58,6 @@ published constants ControlCharacter
      */
     const short SOFT_HYPHEN = 3;
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from idl: value com::sun::star::text::ControlCharacter::HARD_SPACE
     /** This control character is used to link two words and
@@ -73,13 +66,11 @@ published constants ControlCharacter
      */
     const short HARD_SPACE = 4;
 
-    //-------------------------------------------------------------------------
     /** This control character appends a new paragraph.
     */
     const short APPEND_PARAGRAPH = 5;
 };
 
-//=============================================================================
 
 }; }; }; };
 

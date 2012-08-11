@@ -22,17 +22,14 @@
 #include <com/sun/star/util/Color.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module drawing {
 
-//=============================================================================
 
 /** This is a set of properties to describe the style for rendering a shadow.
  */
 published service ShadowProperties
 {
-    //-------------------------------------------------------------------------
 
     /** enables/disables the shadow of a <type>Shape</type>.
         <p>The other shadow properties are only applied if this is
@@ -40,26 +37,22 @@ published service ShadowProperties
      */
     [property] boolean Shadow;
 
-    //-------------------------------------------------------------------------
 
     /** This is the color of the shadow of this <type>Shape</type>.
      */
     [property] com::sun::star::util::Color ShadowColor;
 
-    //-------------------------------------------------------------------------
 
     /** This defines the degree of transparence of the shadow in percent.
      */
     [property] short ShadowTransparence;
 
-    //-------------------------------------------------------------------------
 
     /** This is the horizontal distance of the left edge of the
         <type>Shape</type> to the shadow.
      */
     [property] long ShadowXDistance;
 
-    //-------------------------------------------------------------------------
 
     /** This is the vertical distance of the top edge of the
         <type>Shape</type> to the shadow.
@@ -68,7 +61,6 @@ published service ShadowProperties
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

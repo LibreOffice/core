@@ -20,11 +20,9 @@
 #ifndef __com_sun_star_sheet_DimensionFlags_idl__
 #define __com_sun_star_sheet_DimensionFlags_idl__
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** used to specify flags for a dimension in a data pilot source.
 
@@ -32,25 +30,21 @@ module com {  module sun {  module star {  module sheet {
  */
 published constants DimensionFlags
 {
-    //-------------------------------------------------------------------------
 
     /** The dimension cannot be used in column orientation.
      */
     const long NO_COLUMN_ORIENTATION = 1;
 
-    //-------------------------------------------------------------------------
 
     /** The dimension cannot be used in row orientation.
      */
     const long NO_ROW_ORIENTATION = 2;
 
-    //-------------------------------------------------------------------------
 
     /** The dimension cannot be used in page orientation.
      */
     const long NO_PAGE_ORIENTATION = 4;
 
-    //-------------------------------------------------------------------------
 
     /** The dimension cannot be used in data orientation.
      */
@@ -58,7 +52,6 @@ published constants DimensionFlags
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

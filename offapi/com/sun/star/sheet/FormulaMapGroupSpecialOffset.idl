@@ -29,11 +29,9 @@
 #ifndef __com_sun_star_sheet_FormulaMapGroupSpecialOffset_idl__
 #define __com_sun_star_sheet_FormulaMapGroupSpecialOffset_idl__
 
-// ===========================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-// ===========================================================================
 
 /** Constants designating the offsets within the sequence returned by
     <member>XFormulaOpCodeMapper::getAvailableMappings</member> when
@@ -43,7 +41,6 @@ module com {  module sun {  module star {  module sheet {
  */
 constants FormulaMapGroupSpecialOffset
 {
-    // -----------------------------------------------------------------------
 
     /** Formula tokens containing the op-code obtained from this offset
         describe a formula operand token that will be pushed onto the formula
@@ -69,11 +66,9 @@ constants FormulaMapGroupSpecialOffset
      */
     const long PUSH = 0;
 
-    // -----------------------------------------------------------------------
 
     const long CALL = 1;
 
-    // -----------------------------------------------------------------------
 
     /** Formula tokens containing the op-code obtained from this offset
         instruct the formula interpreter to immediately stop interpreting the
@@ -84,7 +79,6 @@ constants FormulaMapGroupSpecialOffset
      */
     const long STOP = 2;
 
-    // -----------------------------------------------------------------------
 
     /** Formula tokens containing the op-code obtained from this offset
         describe the reference to an external function (e.g. add-in function)
@@ -97,7 +91,6 @@ constants FormulaMapGroupSpecialOffset
      */
     const long EXTERNAL = 3;
 
-    // -----------------------------------------------------------------------
 
     /** Formula tokens containing the op-code obtained from this offset
         describe the reference to a defined name (also known as named range)
@@ -112,7 +105,6 @@ constants FormulaMapGroupSpecialOffset
      */
     const long NAME = 4;
 
-    // -----------------------------------------------------------------------
 
     /** Formula tokens containing the op-code obtained from this offset
         describe an invalid name that resolves to the #NAME? error in formulas.
@@ -122,7 +114,6 @@ constants FormulaMapGroupSpecialOffset
      */
     const long NO_NAME = 5;
 
-    // -----------------------------------------------------------------------
 
     /** Formula tokens containing the op-code obtained from this offset
         describe an empty function parameter.
@@ -136,7 +127,6 @@ constants FormulaMapGroupSpecialOffset
      */
     const long MISSING = 6;
 
-    // -----------------------------------------------------------------------
 
     /** Formula tokens containing the op-code obtained from this offset
         describe "bad" data in a formula, e.g. data the formula parser was not
@@ -148,7 +138,6 @@ constants FormulaMapGroupSpecialOffset
      */
     const long BAD = 7;
 
-    // -----------------------------------------------------------------------
 
     /** Formula tokens containing the op-code obtained from this offset
         describe whitespace characters within the string representation of a
@@ -167,11 +156,9 @@ constants FormulaMapGroupSpecialOffset
      */
     const long SPACES = 8;
 
-    // -----------------------------------------------------------------------
 
     const long MAT_REF = 9;
 
-    // -----------------------------------------------------------------------
 
     /** Formula tokens containing the op-code obtained from this offset
         describe the reference to a database range used in formulas.
@@ -185,7 +172,6 @@ constants FormulaMapGroupSpecialOffset
      */
     const long DB_AREA            = 10;
 
-    // -----------------------------------------------------------------------
 
     /** Formula tokens containing the op-code obtained from this offset
         describe the reference to a macro function called in a formula.
@@ -195,15 +181,12 @@ constants FormulaMapGroupSpecialOffset
      */
     const long MACRO              = 11;
 
-    // -----------------------------------------------------------------------
 
     const long COL_ROW_NAME       = 12;
 
-    // -----------------------------------------------------------------------
 
 };
 
-// ===========================================================================
 
 }; }; }; };
 

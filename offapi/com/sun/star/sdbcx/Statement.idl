@@ -45,7 +45,6 @@ published service Statement
     [property] boolean UseBookmarks;
 };
 
-//=============================================================================
 
 }; }; }; };
 

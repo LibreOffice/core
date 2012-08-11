@@ -31,20 +31,17 @@ published constants CommandType
              process a command like "select * from tablename".
      */
     const long TABLE    = 0;
-    //-------------------------------------------------------------------------
 
     /** indicates that a command contains a name of a query component, which
              contains a certain statement.
      */
     const long QUERY    = 1;
-    //-------------------------------------------------------------------------
 
     /** indicates that the command is an SQL-Statement.
      */
     const long COMMAND  = 2;
 };
 
-//=============================================================================
 
 }; }; }; };
 

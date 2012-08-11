@@ -23,11 +23,9 @@
 #include <com/sun/star/drawing/Direction3D.idl>
 #include <com/sun/star/drawing/Position3D.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module drawing {
 
-//=============================================================================
 
 /** specifies a three-dimensional camera.
  */
@@ -43,7 +41,6 @@ published struct CameraGeometry
     Direction3D vup;
 };
 
-//=============================================================================
 
 }; }; }; };
 

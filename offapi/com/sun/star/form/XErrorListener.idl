@@ -33,11 +33,9 @@
 #include <com/sun/star/form/ErrorEvent.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module form {
 
-//=============================================================================
 
 /** used to be notified when errors in a database form happen.
 
@@ -52,7 +50,6 @@
  */
 published interface XErrorListener: com::sun::star::lang::XEventListener
 {
-    //-------------------------------------------------------------------------
 
     /** is invoked when a database action performed by a database form raises
         an exception.
@@ -61,7 +58,6 @@ published interface XErrorListener: com::sun::star::lang::XEventListener
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

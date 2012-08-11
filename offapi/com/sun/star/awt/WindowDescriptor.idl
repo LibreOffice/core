@@ -35,23 +35,19 @@
 #include <com/sun/star/awt/Rectangle.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module awt {
 
-//=============================================================================
 
 /** describes a window.
  */
 published struct WindowDescriptor
 {
-    //-------------------------------------------------------------------------
 
     /** specifies the type of window.
      */
     com::sun::star::awt::WindowClass Type;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the name of the component service.
 
@@ -128,7 +124,6 @@ published struct WindowDescriptor
      */
     string WindowServiceName;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the parent of the component.
 
@@ -137,7 +132,6 @@ published struct WindowDescriptor
      */
     com::sun::star::awt::XWindowPeer Parent;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the index of the parent window, if available.
 
@@ -147,7 +141,6 @@ published struct WindowDescriptor
      */
     short ParentIndex;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the position and size of the window.
 
@@ -156,7 +149,6 @@ published struct WindowDescriptor
      */
     com::sun::star::awt::Rectangle Bounds;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the window attributes.
 
@@ -167,7 +159,6 @@ published struct WindowDescriptor
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

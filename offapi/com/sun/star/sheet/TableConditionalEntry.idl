@@ -23,11 +23,9 @@
 #include <com/sun/star/sheet/XSheetCondition.idl>
 #include <com/sun/star/sheet/XSheetConditionalEntry.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** represents a single condition in a conditional format.
 
@@ -35,13 +33,11 @@ module com {  module sun {  module star {  module sheet {
  */
 published service TableConditionalEntry
 {
-    //-------------------------------------------------------------------------
 
     /** provides methods to access the settings of this condition.
      */
     interface com::sun::star::sheet::XSheetCondition;
 
-    //-------------------------------------------------------------------------
 
     /** provides methods to access the cell style name for this condition.
      */
@@ -49,7 +45,6 @@ published service TableConditionalEntry
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -19,11 +19,9 @@
 #ifndef __com_sun_star_i18n_ScriptType_idl__
 #define __com_sun_star_i18n_ScriptType_idl__
 
-//=============================================================================
 
 module com {  module sun {  module star {  module i18n {
 
-//=============================================================================
 
 /** Constants to specify the script type.
 
@@ -47,7 +45,6 @@ published constants ScriptType
     const short WEAK    = 4;
 };
 
-//=============================================================================
 }; }; }; };
 
 #endif

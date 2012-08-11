@@ -29,18 +29,15 @@
 #define __com_sun_star_drawing_ShadeMode_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module drawing {
 
-//=============================================================================
 
 // DocMerge from xml: enum com::sun::star::drawing::ShadeMode
 /** The <type>ShadeMode</type> determines the quality of displaying the object.
  */
 published enum ShadeMode
 {
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: value com::sun::star::drawing::ShadeMode::FLAT
     /** With <const>FLAT</const> shading, the faces of the object are
@@ -48,7 +45,6 @@ published enum ShadeMode
      */
     FLAT,
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: value com::sun::star::drawing::ShadeMode::PHONG
     /** With <const>PHONG</const> shading, the normal itself is interpolated
@@ -56,14 +52,12 @@ published enum ShadeMode
      */
     PHONG,
 
-    //-------------------------------------------------------------------------
 
     /** With <const>SMOOTH</const> shading, the colors of the lit vertices is
         interpolated.
      */
     SMOOTH,
 
-    //-------------------------------------------------------------------------
 
     // DocMerge: empty anyway
     /** <const>DRAFT</const> is a special mode which uses a BSP tree and
@@ -73,7 +67,6 @@ published enum ShadeMode
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

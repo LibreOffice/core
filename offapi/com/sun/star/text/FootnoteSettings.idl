@@ -20,65 +20,55 @@
 #define __com_sun_star_text_FootnoteSettings_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module text {
 
-//=============================================================================
 
 /** provides access to the settings of footnotes or endnotes in a
     (text) document.
  */
 published service FootnoteSettings
 {
-    //-------------------------------------------------------------------------
 
     /** contains the name of the character style that is used
             for the label in front of the footnote/endnote text.
      */
     [property] string CharStyleName;
 
-    //-------------------------------------------------------------------------
 
     /** contains the numbering type for the numbering of the
         footnotes/endnotes.
      */
     [property] short NumberingType;
 
-    //-------------------------------------------------------------------------
 
     /** contains the page style that is used for the page that
             contains the footnote/endnote texts
      */
     [property] string PageStyleName;
 
-    //-------------------------------------------------------------------------
 
     /** contains the paragraph style that is used for the
             footnote/endnote text.
      */
     [property] string ParaStyleName;
 
-    //-------------------------------------------------------------------------
 
     /** contains the prefix for the footnote/endnote symbol.
      */
     [property] string Prefix;
 
-    //-------------------------------------------------------------------------
 
     /** contains the first number of the automatic numbering
         of footnotes/endnotes.
      */
     [property] short StartAt;
 
-    //-------------------------------------------------------------------------
 
     /** contains the suffix for the footnote/endnote symbol.
      */
     [property] string Suffix;
 
-    //-------------------------------------------------------------------------
 
     /** contains the string at the restart of the footnote
         text after a break.
@@ -87,7 +77,6 @@ published service FootnoteSettings
      */
     [optional, property] string BeginNotice;
 
-    //-------------------------------------------------------------------------
 
     /** contains the string at the end of a footnote part in
         front of a break.
@@ -96,7 +85,6 @@ published service FootnoteSettings
      */
     [optional, property] string EndNotice;
 
-    //-------------------------------------------------------------------------
 
     /** contains the type of the counting of the footnote numbers.
 
@@ -105,7 +93,6 @@ published service FootnoteSettings
      */
     [optional, property] short FootnoteCounting;
 
-    //-------------------------------------------------------------------------
 
     /** If <TRUE/>, the footnote text is shown at the end of the document.
 
@@ -113,7 +100,6 @@ published service FootnoteSettings
      */
     [optional, property] boolean PositionEndOfDoc;
 
-    //-------------------------------------------------------------------------
 
     /** contains the name of the character style that is used
         for footnote/endnote anchor in the text.
@@ -124,7 +110,6 @@ published service FootnoteSettings
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

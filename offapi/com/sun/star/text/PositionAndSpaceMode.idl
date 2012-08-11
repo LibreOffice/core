@@ -20,11 +20,9 @@
 #define __com_sun_star_text_PositionAndSpaceMode_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module text {
 
-//=============================================================================
 
 /** These enumeration values specify the position and space mode for a numbering level
 
@@ -32,13 +30,11 @@
  */
 published constants PositionAndSpaceMode
 {
-    //-------------------------------------------------------------------------
 
         /** positioning and spacing of list label via label width and position
      */
         const short LABEL_WIDTH_AND_POSITION = 0;
 
-    //-------------------------------------------------------------------------
 
         /** positioning and spacing of list label via label alignment
      */
@@ -46,7 +42,6 @@ published constants PositionAndSpaceMode
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -22,11 +22,9 @@
 
 #include <com/sun/star/lang/EventObject.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module form { module runtime {
 
-//=============================================================================
 
 /** is an event fired by a filter controller, when the filter managed by the controller changes.
 
@@ -49,11 +47,9 @@ struct FilterEvent : ::com::sun::star::lang::EventObject
     string  PredicateExpression;
 };
 
-//=============================================================================
 
 }; }; }; }; };
 
-//=============================================================================
 
 #endif
 

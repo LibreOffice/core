@@ -33,11 +33,9 @@
 #include <com/sun/star/sheet/DataPilotFieldGroupInfo.idl>
 #include <com/sun/star/lang/IllegalArgumentException.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** Provides methods to create new DataPilot fields where some or all items of
     this DataPilot field are grouped in some way.
@@ -46,7 +44,6 @@ module com {  module sun {  module star {  module sheet {
  */
 published interface XDataPilotFieldGrouping: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** Creates a new DataPilot field which contains a group containing the
         given DataPilot field items (members).
@@ -76,7 +73,6 @@ published interface XDataPilotFieldGrouping: com::sun::star::uno::XInterface
     XDataPilotField createNameGroup([in] sequence< string > aItems)
         raises( com::sun::star::lang::IllegalArgumentException );
 
-    //-------------------------------------------------------------------------
 
     /** Groups the members of this field by dates, according to the passed
         settings.
@@ -160,7 +156,6 @@ published interface XDataPilotFieldGrouping: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -22,13 +22,10 @@
 
 #include <com/sun/star/lang/EventObject.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module ui { module dialogs {
 
-//=============================================================================
 
-//=============================================================================
 /** Information of a closed dialog.
 
     <p>The broadcaster who sends such event, must send the dialog as the source.</p>
@@ -37,7 +34,6 @@ module com { module sun { module star { module ui { module dialogs {
 */
 struct DialogClosedEvent: com::sun::star::lang::EventObject
 {
-    //-------------------------------------------------------------------------
     /**
         @param DialogResult
         Identifies the result of a dialog.
@@ -47,7 +43,6 @@ struct DialogClosedEvent: com::sun::star::lang::EventObject
     short DialogResult;
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

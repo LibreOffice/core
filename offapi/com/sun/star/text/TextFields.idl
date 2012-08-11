@@ -22,11 +22,9 @@
 #include <com/sun/star/container/XEnumerationAccess.idl>
 #include <com/sun/star/util/XRefreshable.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module text {
 
-//=============================================================================
 
 // DocMerge from xml: service com::sun::star::text::TextFields
 /** This is a collection of <type>TextField</type> instances.
@@ -49,7 +47,6 @@ published service TextFields
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

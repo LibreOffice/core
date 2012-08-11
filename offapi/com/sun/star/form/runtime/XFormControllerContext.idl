@@ -22,11 +22,9 @@
 
 #include <com/sun/star/awt/XControl.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module form { module runtime {
 
-//=============================================================================
 
 /** provides a context for a <type>FormController</type>
 
@@ -42,11 +40,9 @@ interface XFormControllerContext
     void    makeVisible( [in] ::com::sun::star::awt::XControl _Control );
 };
 
-//=============================================================================
 
 }; }; }; }; };
 
-//=============================================================================
 
 #endif
 

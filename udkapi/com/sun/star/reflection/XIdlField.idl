@@ -30,11 +30,9 @@
 #include <com/sun/star/lang/IllegalAccessException.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module reflection {
 
-//=============================================================================
 
 /** Deprecated.  Use <type scope="com::sun::star::reflection">XIdlField2</type>
     instead.
@@ -55,7 +53,6 @@ published interface XIdlField: com::sun::star::reflection::XIdlMember
                 com::sun::star::lang::IllegalAccessException );
 };
 
-//=============================================================================
 
 }; }; }; };
 

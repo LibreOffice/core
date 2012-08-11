@@ -21,11 +21,9 @@
 
 #include <com/sun/star/linguistic2/ConversionDictionary.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module linguistic2 {
 
-//=============================================================================
 /** represents a dictionary for Hangul/Hanja text conversion.
 
     <p>A dictionary implementing this service will be used for
@@ -45,7 +43,6 @@ published service HangulHanjaConversionDictionary
     service com::sun::star::linguistic2::ConversionDictionary;
 };
 
-//=============================================================================
 
 }; }; }; };
 

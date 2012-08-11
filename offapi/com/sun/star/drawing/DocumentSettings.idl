@@ -31,11 +31,9 @@
 #include <com/sun/star/document/Settings.idl>
 #include <com/sun/star/document/HeaderFooterSettings.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module drawing {
 
-//=============================================================================
 
 /** describes properties that apply to the whole drawing document.
  */
@@ -43,18 +41,15 @@ published service DocumentSettings
 {
     service com::sun::star::document::Settings;
 
-    //-------------------------------------------------------------------------
     /** This service configures the header and footer settings during print
      */
     [optional] service com::sun::star::document::HeaderFooterSettings;
 
-    //-------------------------------------------------------------------------
 
     /** provides access to the properties.
      */
     interface com::sun::star::beans::XPropertySet;
 
-    //-------------------------------------------------------------------------
 
     /** This is the default logical measure unit that is used for string
         formating inside the document, f.e. the measure text
@@ -72,7 +67,6 @@ published service DocumentSettings
     // Note: the following properties exist also in
     // css::presentation::DocumentSettings
 
-    // ------------------------------------------------------------
 
     /** enables or disables the fitting of the page to the printable
         area during print
@@ -98,7 +92,6 @@ published service DocumentSettings
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

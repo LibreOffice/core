@@ -32,11 +32,9 @@
 
 #include <com/sun/star/awt/Point.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module image {
 
-//=============================================================================
 
 /** this service describes a circular-shaped region inside
     a HTML image map.
@@ -55,7 +53,6 @@ published service ImageMapCircleObject
     [property] long Radius;
 };
 
-//=============================================================================
 
 }; }; }; };
 

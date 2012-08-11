@@ -20,11 +20,9 @@
 #define __com_sun_star_text_WritingMode_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module text {
 
-//=============================================================================
 
 /** this enum covers the different writing directions
 
@@ -33,7 +31,6 @@
  */
 published enum WritingMode
 {
-    //-------------------------------------------------------------------------
 
     /** text within lines is written left-to-right. lines and blocks are placed
         top-to-bottom.
@@ -42,7 +39,6 @@ published enum WritingMode
      */
     LR_TB,
 
-    //-------------------------------------------------------------------------
 
     /** text within a line are written right-to-left. Lines and blocks are
         placed top-to-bottom.
@@ -51,7 +47,6 @@ published enum WritingMode
      */
     RL_TB,
 
-    //-------------------------------------------------------------------------
 
     /** text within a line is written top-to-bottom. Lines and blocks are
         placed right-to-left.
@@ -62,7 +57,6 @@ published enum WritingMode
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

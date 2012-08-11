@@ -22,11 +22,9 @@
 
 #include <com/sun/star/container/XEnumeration.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** represents an enumeration of sheet links.
 
@@ -34,7 +32,6 @@ module com {  module sun {  module star {  module sheet {
  */
 published service SheetLinksEnumeration
 {
-    //-------------------------------------------------------------------------
 
     /** provides methods to access the sheet links in the enumeration.
 
@@ -44,7 +41,6 @@ published service SheetLinksEnumeration
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -20,11 +20,9 @@
 #define __com_sun_star_frame_status_LeftRightMargin_idl__
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module frame {  module status {
 
-//=============================================================================
 
 /** specifies a left and right margin.
 
@@ -36,14 +34,12 @@ struct LeftRightMargin
      */
     long Left;
 
-    //-------------------------------------------------------------------------
 
     /** specifies a right side margin in 1/100th mm.
      */
     long Right;
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

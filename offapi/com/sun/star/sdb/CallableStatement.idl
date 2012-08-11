@@ -38,7 +38,6 @@ published service CallableStatement
     service com::sun::star::sdb::PreparedStatement;
 };
 
-//=============================================================================
 
 }; }; }; };
 

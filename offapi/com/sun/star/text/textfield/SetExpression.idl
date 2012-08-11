@@ -32,11 +32,9 @@
 #include <com/sun/star/text/TextField.idl>
 #include <com/sun/star/text/DependentTextField.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module text { module textfield {
 
-//=============================================================================
 /** specifies service of an expression text field.
     @see com::sun::star::text::TextField
 */
@@ -94,7 +92,6 @@ published service SetExpression
     [optional, property] boolean IsFixedLanguage;
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

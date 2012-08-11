@@ -51,13 +51,11 @@
 module com {  module sun {  module star {  module sdbc {
 published interface XConnection;
 };};};};
-//=============================================================================
 
  module com {  module sun {  module star {  module report {
 
      interface XSection;
      interface XGroups;
-//=============================================================================
 
 /** identifies a <type>XReportComponent</type> as being a (sub-) report.
 
@@ -109,7 +107,6 @@ interface XReportDefinition
      */
     interface com::sun::star::style::XStyleFamiliesSupplier;
 
-    //-------------------------------------------------------------------------
     /** a storable document should provide information about his modify state
 
         <p>
@@ -144,7 +141,6 @@ interface XReportDefinition
         raises( ::com::sun::star::lang::DisposedException,
                 ::com::sun::star::uno::Exception );
 
-    //-------------------------------------------------------------------------
 
     /** Represents the output format (media (mime) type) of the resulting document when executing this report.
     */
@@ -314,7 +310,6 @@ interface XReportDefinition
     };
 };
 
-//=============================================================================
 
 }; }; }; };
 

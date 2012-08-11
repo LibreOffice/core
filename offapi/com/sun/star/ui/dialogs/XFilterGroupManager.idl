@@ -25,7 +25,6 @@
 
 module com {  module sun {  module star {  module ui { module dialogs {
 
-//=============================================================================
 /** Specifies an interface which allows manipulation of groups of filters
     for the <type>FilePicker</type> service.
 */

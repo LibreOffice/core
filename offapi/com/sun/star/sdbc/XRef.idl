@@ -33,7 +33,6 @@
  */
 published interface XRef: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** gets the fully-qualified SQL structured type name of the referenced item.
         @returns
@@ -44,7 +43,6 @@ published interface XRef: com::sun::star::uno::XInterface
     string getBaseTypeName() raises (SQLException);
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -22,11 +22,9 @@
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/awt/Rectangle.idl>
 
-//============================================================================
 
  module com {  module sun {  module star {  module embed {
 
-//============================================================================
 
 /** specifies the operations for a hatch window.
 
@@ -38,7 +36,6 @@
  */
 published interface XHatchWindowController: com::sun::star::uno::XInterface
 {
-    //------------------------------------------------------------------------
     /** requests window owner to resize/move the window.
 
         @param aRect
@@ -46,7 +43,6 @@ published interface XHatchWindowController: com::sun::star::uno::XInterface
      */
     void requestPositioning( [in] com::sun::star::awt::Rectangle aRect );
 
-    //------------------------------------------------------------------------
     /** returns the closest valid rectangle to the provided one.
 
         @param aRect
@@ -62,7 +58,6 @@ published interface XHatchWindowController: com::sun::star::uno::XInterface
     void deactivated();
 };
 
-//============================================================================
 
 }; }; }; };
 

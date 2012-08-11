@@ -22,11 +22,9 @@
 #include <com/sun/star/uno/XInterface.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module util {
 
-//=============================================================================
 
 /** offers the possibility of canceling a job.
 
@@ -34,14 +32,12 @@ module com {  module sun {  module star {  module util {
  */
 published interface XCancellable: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** cancels the current job of the object.
      */
     void cancel();
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

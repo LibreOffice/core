@@ -31,11 +31,9 @@
 
 #include <com/sun/star/uno/XInterface.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module task {
 
-//=============================================================================
 /** starts action for any triggered event from outside
 
     <p>
@@ -51,7 +49,6 @@ module com {  module sun {  module star {  module task {
  */
 published interface XJobExecutor : com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** trigger event to start registered jobs
 
         <p>

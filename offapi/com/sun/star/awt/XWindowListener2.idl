@@ -30,30 +30,25 @@
 
 #include <com/sun/star/awt/XWindowListener.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module awt {
 
-//=============================================================================
 
 /** allows receive window-related events, additional to the ones received by an <type>XWindowListener</type>
  */
 interface XWindowListener2: XWindowListener
 {
-    //-------------------------------------------------------------------------
 
     /** is called when the window has been enabled.
      */
     [oneway] void windowEnabled( [in] com::sun::star::lang::EventObject e );
 
-    //-------------------------------------------------------------------------
 
     /** is called when the window has been disabled.
      */
     [oneway] void windowDisabled( [in] com::sun::star::lang::EventObject e );
 };
 
-//=============================================================================
 
 }; }; }; };
 

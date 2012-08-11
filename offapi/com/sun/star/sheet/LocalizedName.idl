@@ -22,11 +22,9 @@
 
 #include <com/sun/star/lang/Locale.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** A name that is valid for a specified locale.
 
@@ -34,20 +32,17 @@ module com {  module sun {  module star {  module sheet {
  */
 published struct LocalizedName
 {
-    // ------------------------------------------------------------------------
 
     /** The locale for which this name is valid.
      */
     ::com::sun::star::lang::Locale  Locale;
 
-    // ------------------------------------------------------------------------
 
     /** The name itself.
      */
     string  Name;
 };
 
-//=============================================================================
 
 }; }; }; };
 

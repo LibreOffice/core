@@ -34,7 +34,6 @@ published interface XDatabaseAccessListener: com::sun::star::lang::XEventListene
     [oneway] void connectionClosing([in]com::sun::star::lang::EventObject event);
 };
 
-//=============================================================================
 
 }; }; }; };
 

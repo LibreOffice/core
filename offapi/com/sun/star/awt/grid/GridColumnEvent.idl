@@ -30,11 +30,9 @@
 
 #include <com/sun/star/lang/EventObject.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module awt { module grid {
 
-//=============================================================================
 /** An event used by a <type>XGridColumn</type> to notify changes in the column.
 
     @since OOo 3.3
@@ -52,10 +50,8 @@ struct GridColumnEvent: com::sun::star::lang::EventObject
 
     /** Contains the index of the changed column**/
     long ColumnIndex;
-    //-------------------------------------------------------------------------
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

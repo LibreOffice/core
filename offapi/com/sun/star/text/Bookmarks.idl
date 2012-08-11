@@ -23,11 +23,9 @@
 #include <com/sun/star/container/XIndexAccess.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module text {
 
-//=============================================================================
 
 // DocMerge from xml: service com::sun::star::text::Bookmarks
 /** This service specifies a collection of <type>Bookmark</type>s.
@@ -50,7 +48,6 @@ published service Bookmarks
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

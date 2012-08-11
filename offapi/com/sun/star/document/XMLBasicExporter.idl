@@ -24,11 +24,9 @@
 #include <com/sun/star/lang/XInitialization.idl>
 
 
-//=============================================================================
 
 module com { module sun { module star { module document {
 
-//=============================================================================
 
 /** Filter for exporting Basic macros to the OpenOffice.org file format.
 
@@ -41,19 +39,16 @@ module com { module sun { module star { module document {
  */
 published service XMLBasicExporter
 {
-    //-------------------------------------------------------------------------
 
     /** sets the source document for this filter.
      */
     interface com::sun::star::document::XExporter;
 
-    //-------------------------------------------------------------------------
 
     /** filters the document.
      */
     interface com::sun::star::document::XFilter;
 
-    //-------------------------------------------------------------------------
 
     /** initializes the component.
      */
@@ -61,7 +56,6 @@ published service XMLBasicExporter
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -24,11 +24,9 @@
 #include <com/sun/star/lang/WrappedTargetException.idl>
 #include <com/sun/star/util/XVeto.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module container {
 
-//=============================================================================
 
 /** is notified to approve changes which happen to the content of a generic container
 
@@ -64,11 +62,9 @@ interface XContainerApproveListener
       raises ( com::sun::star::lang::WrappedTargetException );
 };
 
-//=============================================================================
 
 }; }; }; };
 
-//=============================================================================
 
 #endif
 

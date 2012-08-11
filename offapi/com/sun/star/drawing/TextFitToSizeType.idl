@@ -29,11 +29,9 @@
 #define __com_sun_star_drawing_TextFitToSizeType_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module drawing {
 
-//=============================================================================
 
 // DocMerge from xml: enum com::sun::star::drawing::TextFitToSizeType
 /** This enumeration specifies how the text within a shape relates to the
@@ -41,25 +39,21 @@
  */
 published enum TextFitToSizeType
 {
-    //-------------------------------------------------------------------------
     /** the text size is only defined by the font properties
     */
     NONE,
 
-    //-------------------------------------------------------------------------
 
     /** if the shape is scaled, the text character size is scaled proportional
     */
     PROPORTIONAL,
 
-    //-------------------------------------------------------------------------
 
     /** like <code>PROPORTIONAL</code>, but the width of each text row is
         also scaled proportional.
     */
     ALLLINES,
 
-    //-------------------------------------------------------------------------
 
     /** if the shape is scaled, the font is scaled isotropically to
         fit the available space. Auto line-breaks will keep working
@@ -68,7 +62,6 @@ published enum TextFitToSizeType
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

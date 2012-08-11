@@ -20,32 +20,27 @@
 #define __com_sun_star_drawing_DashStyle_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module drawing {
 
-//=============================================================================
 
 // DocMerge from xml: enum com::sun::star::drawing::DashStyle
 /** This enumeration defines the style of a dash on a line.
  */
 published enum DashStyle
 {
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: value com::sun::star::drawing::DashStyle::RECT
     /** the dash is a rectangle
      */
     RECT,
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: value com::sun::star::drawing::DashStyle::ROUND
     /** the dash is a point
      */
     ROUND,
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: value com::sun::star::drawing::DashStyle::RECTRELATIVE
     /** the dash is a rectangle, with the size of the dash given in
@@ -53,7 +48,6 @@ published enum DashStyle
      */
     RECTRELATIVE,
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: value com::sun::star::drawing::DashStyle::ROUNDRELATIVE
     /** the dash is a point, with the size of the dash given in relation
@@ -63,7 +57,6 @@ published enum DashStyle
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

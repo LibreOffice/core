@@ -23,11 +23,9 @@
 #include <com/sun/star/lang/Locale.idl>
 #include <com/sun/star/i18n/NativeNumberXmlAttributes.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module i18n {
 
-//=============================================================================
 
 /** Methods to convert between strings of ASCII Arabic digits and native
     numeral strings.
@@ -37,7 +35,6 @@ module com { module sun { module star { module i18n {
 
 published interface XNativeNumberSupplier : ::com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** Returns native number string for given number string.
 
         @param nNativeNumberMode
@@ -48,7 +45,6 @@ published interface XNativeNumberSupplier : ::com::sun::star::uno::XInterface
                     [in] ::com::sun::star::lang::Locale aLocale,
                     [in] short nNativeNumberMode );
 
-    //-------------------------------------------------------------------------
     /** Check if the NatNum is valid for the given locale.
 
         @param nNativeNumberMode
@@ -58,7 +54,6 @@ published interface XNativeNumberSupplier : ::com::sun::star::uno::XInterface
     boolean isValidNatNum( [in] ::com::sun::star::lang::Locale aLocale,
                     [in] short nNativeNumberMode );
 
-    //-------------------------------------------------------------------------
     /** Convert a specific NatNum/Locale combination to attributes used
         in the XML file format.
 
@@ -70,7 +65,6 @@ published interface XNativeNumberSupplier : ::com::sun::star::uno::XInterface
             [in] ::com::sun::star::lang::Locale aLocale,
             [in] short nNativeNumberMode );
 
-    //-------------------------------------------------------------------------
     /** Convert XML attributes to a NatNum value.
 
         @returns
@@ -81,7 +75,6 @@ published interface XNativeNumberSupplier : ::com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 }; }; }; };
 
 #endif

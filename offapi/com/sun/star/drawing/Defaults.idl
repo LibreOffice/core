@@ -27,11 +27,9 @@
 #include <com/sun/star/drawing/MeasureProperties.idl>
 
 
-//=============================================================================
 
 module com { module sun { module star { module drawing {
 
-//=============================================================================
 
 /** This is a set of properties to access the defaults of a drawing document
 
@@ -47,7 +45,6 @@ published service Defaults
     service MeasureProperties;
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -25,17 +25,14 @@
 #include <com/sun/star/awt/Size.idl>
 #include <com/sun/star/lang/IllegalArgumentException.idl>
 
-//============================================================================
 
  module com {  module sun {  module star {  module embed {
 
-//============================================================================
 
 /** creates a hatch window implementation.
  */
 published interface XHatchWindowFactory: com::sun::star::uno::XInterface
 {
-    //------------------------------------------------------------------------
     /** creates a new hatch window instance.
 
         @param xParent
@@ -61,7 +58,6 @@ published interface XHatchWindowFactory: com::sun::star::uno::XInterface
         raises( ::com::sun::star::lang::IllegalArgumentException );
 };
 
-//============================================================================
 
 }; }; }; };
 

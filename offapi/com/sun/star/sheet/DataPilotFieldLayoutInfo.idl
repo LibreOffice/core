@@ -20,17 +20,14 @@
 #ifndef __com_sun_star_sheet_DataPilotFieldLayoutInfo_idl__
 #define __com_sun_star_sheet_DataPilotFieldLayoutInfo_idl__
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** contains the layout information of a <type>DataPilotField</type>.
  */
 published struct DataPilotFieldLayoutInfo
 {
-    //-------------------------------------------------------------------------
 
     /** specifies the layout mode.
 
@@ -40,7 +37,6 @@ published struct DataPilotFieldLayoutInfo
 
         long LayoutMode;
 
-    //-------------------------------------------------------------------------
 
     /** If <TRUE/>, an empty row is inserted in the <type>DataPilotTable</type>
         result table after the data
@@ -50,7 +46,6 @@ published struct DataPilotFieldLayoutInfo
         boolean AddEmptyLines;
 };
 
-//=============================================================================
 
 }; }; }; };
 

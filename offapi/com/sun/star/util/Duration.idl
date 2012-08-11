@@ -21,11 +21,9 @@
 #define __com_sun_star_util_Duration_idl__
 
 
-//========================================================================
 
 module com {  module sun {  module star {  module util {
 
-//========================================================================
 
 /** represents a duration.
 
@@ -43,49 +41,40 @@ module com {  module sun {  module star {  module util {
  */
 struct Duration
 {
-    //--------------------------------------------------------------------
     /** explicit sign bit.
      */
     boolean Negative;
 
-    //--------------------------------------------------------------------
     /** contains the years.
      */
     unsigned short Years;
 
-    //--------------------------------------------------------------------
     /** contains the months.
      */
     unsigned short Months;
 
-    //--------------------------------------------------------------------
     /** contains the days.
      */
     unsigned short Days;
 
-    //--------------------------------------------------------------------
     /** contains the hours.
      */
     unsigned short Hours;
 
-    //--------------------------------------------------------------------
     /** contains the minutes.
      */
     unsigned short Minutes;
 
-    //--------------------------------------------------------------------
     /** contains the seconds.
      */
     unsigned short Seconds;
 
-    //--------------------------------------------------------------------
     /** contains the milliseconds.
      */
     unsigned short MilliSeconds;
 
 };
 
-//========================================================================
 
 }; }; }; };
 

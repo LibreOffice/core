@@ -20,7 +20,6 @@
 #define __com_sun_star_uno_Uik_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module uno {
 
@@ -52,7 +51,6 @@ published struct Uik
     unsigned long m_Data5;
 };
 
-//=============================================================================
 
 }; }; }; };
 

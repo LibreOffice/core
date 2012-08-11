@@ -20,11 +20,9 @@
 #define __com_sun_star_ucb_SynchronizePolicy_idl__
 
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** These are the possible values for the property "SynchronizePolicy".
 
     @see XCommandProcessor
@@ -32,24 +30,20 @@ module com { module sun { module star { module ucb {
 */
 published enum SynchronizePolicy
 {
-    //-------------------------------------------------------------------------
     /** Server is master.
     */
     SERVER_IS_MASTER,
 
-    //-------------------------------------------------------------------------
     /** Client is master.
     */
     CLIENT_IS_MASTER,
 
-    //-------------------------------------------------------------------------
     /** None is master.
     */
     NONE_IS_MASTER
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

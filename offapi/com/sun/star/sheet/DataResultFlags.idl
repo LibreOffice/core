@@ -20,11 +20,9 @@
 #ifndef __com_sun_star_sheet_DataResultFlags_idl__
 #define __com_sun_star_sheet_DataResultFlags_idl__
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** used to specify the result type of one element in the data pilot
     data array.
@@ -33,19 +31,16 @@ module com {  module sun {  module star {  module sheet {
  */
 published constants DataResultFlags
 {
-    //-------------------------------------------------------------------------
 
     /** The element contains data.
      */
     const long HASDATA = 1;
 
-    //-------------------------------------------------------------------------
 
     /** The element contains a subtotal.
      */
     const long SUBTOTAL = 2;
 
-    //-------------------------------------------------------------------------
 
     /** The element has an error.
      */
@@ -53,7 +48,6 @@ published constants DataResultFlags
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

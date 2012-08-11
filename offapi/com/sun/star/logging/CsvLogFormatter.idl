@@ -28,13 +28,11 @@
 #ifndef __com_sun_star_logging_CsvLogFormatter_idl__
 #define __com_sun_star_logging_CsvLogFormatter_idl__
 
-//=============================================================================
 
 module com { module sun { module star { module logging {
 
 interface XCsvLogFormatter;
 
-//=============================================================================
 
 /** specifies a service which formats log records for RFC4180-style CSV-Files
 
@@ -55,11 +53,9 @@ service CsvLogFormatter : XCsvLogFormatter
     create();
 };
 
-//=============================================================================
 
 }; }; }; };
 
-//=============================================================================
 
 #endif
 

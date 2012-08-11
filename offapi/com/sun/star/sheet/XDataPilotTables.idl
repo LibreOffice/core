@@ -24,11 +24,9 @@
 #include <com/sun/star/sheet/XDataPilotDescriptor.idl>
 #include <com/sun/star/table/CellAddress.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** provides access to the data pilot tables via name and inserting and
     removing data pilot tables.
@@ -42,7 +40,6 @@ module com {  module sun {  module star {  module sheet {
  */
 published interface XDataPilotTables: com::sun::star::container::XNameAccess
 {
-    //-------------------------------------------------------------------------
 
     /** creates a data pilot descriptor.
 
@@ -53,7 +50,6 @@ published interface XDataPilotTables: com::sun::star::container::XNameAccess
      */
     com::sun::star::sheet::XDataPilotDescriptor createDataPilotDescriptor();
 
-    //-------------------------------------------------------------------------
 
     /** creates a new data pilot table and adds it to the collection.
 
@@ -74,7 +70,6 @@ published interface XDataPilotTables: com::sun::star::container::XNameAccess
             [in] com::sun::star::table::CellAddress aOutputAddress,
             [in] com::sun::star::sheet::XDataPilotDescriptor xDescriptor );
 
-    //-------------------------------------------------------------------------
 
     /** deletes a data pilot table from the collection.
      */
@@ -82,7 +77,6 @@ published interface XDataPilotTables: com::sun::star::container::XNameAccess
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

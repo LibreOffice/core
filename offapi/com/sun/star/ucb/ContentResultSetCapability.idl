@@ -20,17 +20,14 @@
 #define __com_sun_star_ucb_ContentResultSetCapability_idl__
 
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** These values are used to specify the capabilities of an
     <type>XDynamicResultSet</type>.
 */
 published constants ContentResultSetCapability
 {
-    //-------------------------------------------------------------------------
     /** indicates that a <type>ContentResultSet</type> is properly sorted,
         exactly following the rules given during the ContentResultSet was
         created.
@@ -38,7 +35,6 @@ published constants ContentResultSetCapability
     const short SORTED = 1;
 };
 
-//=============================================================================
 
 }; }; }; };
 

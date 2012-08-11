@@ -29,50 +29,41 @@
 #define __com_sun_star_ucb_FolderListEntry_idl__
 
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** Information about a single folder in a <type>FolderList</type>.
 */
 published struct FolderListEntry
 {
-    //-------------------------------------------------------------------------
     /** The title of the folder.
     */
     string Title;
 
-    //-------------------------------------------------------------------------
     /** A (unique) identifier for the folder (used by IMAP, where different
         folders with equal human-readable titles may exist; otherwise, it may
         be left empty).
     */
     string ID;
 
-    //-------------------------------------------------------------------------
     /** The folder is subscribed.
     */
     boolean Subscribed;
 
-    //-------------------------------------------------------------------------
     /** The folder is new.
     */
     boolean New;
 
-    //-------------------------------------------------------------------------
     /** The folder has been removed.
     */
     boolean Removed;
 
-    //-------------------------------------------------------------------------
     /** The folder shall be purged (only used in conjunction with the
         <member>FolderListCommand::SET</member>).
     */
     boolean Purge;
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -35,11 +35,9 @@
 #include <com/sun/star/drawing/EnhancedCustomShapeSegment.idl>
 #include <com/sun/star/drawing/EnhancedCustomShapeTextFrame.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module drawing {
 
-//=============================================================================
 /**
   This service may be represented by a ::com::sun::star::beans::PropertyValue [].
 */
@@ -103,7 +101,6 @@ service EnhancedCustomShapePath
     [optional, property] sequence< ::com::sun::star::awt::Size > SubViewSize;
 };
 
-//=============================================================================
 
 }; }; }; };
 

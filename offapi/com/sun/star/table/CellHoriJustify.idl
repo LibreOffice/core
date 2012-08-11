@@ -20,47 +20,39 @@
 #ifndef __com_sun_star_table_CellHoriJustify_idl__
 #define __com_sun_star_table_CellHoriJustify_idl__
 
-//=============================================================================
 
 module com {  module sun {  module star {  module table {
 
-//=============================================================================
 
 /** specifies how cell contents are aligned horizontally.
  */
 published enum CellHoriJustify
 {
-    //-------------------------------------------------------------------------
 
     /** default alignment is used (left for numbers, right for text).
      */
     STANDARD,
 
-    //-------------------------------------------------------------------------
 
     /** contents are aligned to the left edge of the cell.
      */
     LEFT,
 
-    //-------------------------------------------------------------------------
 
     /** contents are horizontally centered.
      */
     CENTER,
 
-    //-------------------------------------------------------------------------
 
     /** contents are aligned to the right edge of the cell.
      */
     RIGHT,
 
-    //-------------------------------------------------------------------------
 
     /** contents are justified to the cell width.
      */
     BLOCK,
 
-    //-------------------------------------------------------------------------
 
     /** contents are repeated to fill the cell.
      */
@@ -68,7 +60,6 @@ published enum CellHoriJustify
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -23,11 +23,9 @@
 #include <com/sun/star/lang/Locale.idl>
 #include <com/sun/star/lang/IllegalArgumentException.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module linguistic2 {
 
-//=============================================================================
 /** Offers information about which languages are supported by the object.
 
     <P>This interface has to be implemented by
@@ -43,14 +41,12 @@ module com { module sun { module star { module linguistic2 {
 */
 published interface XSupportedLocales : com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /**
          @returns
              the sequence of all supported languages.
     */
     sequence<com::sun::star::lang::Locale> getLocales();
 
-    //-------------------------------------------------------------------------
     /**
         @param  aLocale
             specifies the language being checked for support
@@ -62,7 +58,6 @@ published interface XSupportedLocales : com::sun::star::uno::XInterface
     boolean hasLocale( [in] com::sun::star::lang::Locale aLocale );
 };
 
-//=============================================================================
 
 }; }; }; };
 

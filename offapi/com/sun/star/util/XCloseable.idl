@@ -31,11 +31,9 @@
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/util/XCloseBroadcaster.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module util {
 
-//=============================================================================
 /** makes it possible to release any objects in a ordered manner by using
     a two-step mechanism
 
@@ -66,7 +64,6 @@ module com {  module sun {  module star {  module util {
  */
 published interface XCloseable: XCloseBroadcaster
 {
-    //-------------------------------------------------------------------------
     /** try to close the object
 
         <p>
@@ -124,7 +121,6 @@ published interface XCloseable: XCloseBroadcaster
             raises( CloseVetoException );
 };
 
-//=============================================================================
 
 }; }; }; };
 

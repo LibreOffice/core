@@ -37,7 +37,6 @@ published constants ProcedureColumn
              .
      */
     const long UNKNOWN          = 0;
-    //-------------------------------------------------------------------------
 
     /** indicates that the column stores IN parameters.
              A possible value for the column
@@ -49,7 +48,6 @@ published constants ProcedureColumn
              .
      */
     const long IN               = 1;
-    //-------------------------------------------------------------------------
 
     /** indicates that the column stores INOUT parameters.
              A possible value for the column
@@ -61,7 +59,6 @@ published constants ProcedureColumn
              .
      */
     const long INOUT            = 2;
-    //-------------------------------------------------------------------------
 
     /** indicates that the column stores results.
              A possible value for the column
@@ -73,7 +70,6 @@ published constants ProcedureColumn
              .
      */
     const long RESULT           = 3;
-    //-------------------------------------------------------------------------
 
     /** indicates that the column stores OUT parameters.
              A possible value for the column
@@ -85,7 +81,6 @@ published constants ProcedureColumn
              .
      */
     const long OUT              = 4;
-    //-------------------------------------------------------------------------
 
     /** Indicates that the column stores return values.
              A possible value for the column
@@ -99,7 +94,6 @@ published constants ProcedureColumn
     const long RETURN           = 5;
 };
 
-//=============================================================================
 
 }; }; }; };
 

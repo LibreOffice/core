@@ -32,11 +32,9 @@
 #include <com/sun/star/ucb/IOErrorCode.idl>
 
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** An input/output error while processing a file.
 
     <p>This exception is deprecated. Use
@@ -46,13 +44,11 @@ module com { module sun { module star { module ucb {
 */
 published exception InteractiveFileIOException: com::sun::star::ucb::InteractiveIOException
 {
-    //-------------------------------------------------------------------------
     /** The file url where the i/o error occurred
     */
     string FileName;
 };
 
-//=============================================================================
 
 }; }; }; };
 

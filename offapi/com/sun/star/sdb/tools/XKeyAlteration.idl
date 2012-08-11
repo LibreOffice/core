@@ -25,11 +25,8 @@
 #include <com/sun/star/lang/XInitialization.idl>
 #include <com/sun/star/beans/XPropertySet.idl>
 
-//=============================================================================
 module com {  module sun {  module star {  module sdb { module tools {
-//=============================================================================
 
-//-----------------------------------------------------------------------------
 /** allows to alter the keys of a table.
 
     @see com::sun::star::sdb::DataSource::Settings
@@ -71,9 +68,7 @@ interface XKeyAlteration
 
 
 };
-//=============================================================================
 }; }; }; }; };
-//=============================================================================
 
 #endif
 

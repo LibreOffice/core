@@ -49,7 +49,6 @@ published exception BatchUpdateException: SQLException
     sequence<long> UpdateCounts;
 };
 
-//=============================================================================
 
 }; }; }; };
 

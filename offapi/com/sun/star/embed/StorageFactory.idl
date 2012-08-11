@@ -32,11 +32,9 @@
 #include <com/sun/star/lang/XSingleServiceFactory.idl>
 
 
-//============================================================================
 
  module com {  module sun {  module star {  module embed {
 
-//============================================================================
 /** The <type>StorageFactory</type> is a service that allows to create
     a storage based on either stream or URL.
 
@@ -112,7 +110,6 @@
 published service StorageFactory
     : ::com::sun::star::lang::XSingleServiceFactory;
 
-//============================================================================
 
 }; }; }; };
 

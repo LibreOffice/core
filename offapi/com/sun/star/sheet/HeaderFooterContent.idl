@@ -22,11 +22,9 @@
 
 #include <com/sun/star/sheet/XHeaderFooterContent.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** represents the contents of a header or footer line in a page style.
 
@@ -34,7 +32,6 @@ module com {  module sun {  module star {  module sheet {
  */
 published service HeaderFooterContent
 {
-    //-------------------------------------------------------------------------
 
     /** provides access to the text parts of the header or footer line.
      */
@@ -42,7 +39,6 @@ published service HeaderFooterContent
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -22,11 +22,9 @@
 
 #include <com/sun/star/logging/XLogHandler.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module logging {
 
-//=============================================================================
 
 /** implemented by a log handler whose output channel is the processes console.
 
@@ -48,11 +46,9 @@ interface XConsoleHandler : XLogHandler
     [attribute] long    Threshold;
 };
 
-//=============================================================================
 
 }; }; }; };
 
-//=============================================================================
 
 #endif
 

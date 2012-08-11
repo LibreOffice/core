@@ -20,11 +20,9 @@
 #ifndef __com_sun_star_sheet_CellFlags_idl__
 #define __com_sun_star_sheet_CellFlags_idl__
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** These constants select different types of cell contents.
 
@@ -33,64 +31,54 @@ module com {  module sun {  module star {  module sheet {
  */
 published constants CellFlags
 {
-    //-------------------------------------------------------------------------
 
     /** selects constant numeric values that are not formatted
         as dates or times.
      */
     const long VALUE = 1;
 
-    //-------------------------------------------------------------------------
 
     /** selects constant numeric values that have a date or time
         number format.
      */
     const long DATETIME = 2;
 
-    //-------------------------------------------------------------------------
 
     /** selects constant strings.
      */
     const long STRING = 4;
 
-    //-------------------------------------------------------------------------
 
     /** selects cell annotations.
      */
     const long ANNOTATION = 8;
 
-    //-------------------------------------------------------------------------
 
     /** selects formulas.
      */
     const long FORMULA = 16;
 
-    //-------------------------------------------------------------------------
 
     /** selects all explicit formatting, but not the formatting which is
         applied implicitly through style sheets.
      */
     const long HARDATTR = 32;
 
-    //-------------------------------------------------------------------------
 
     /** selects cell styles.
      */
     const long STYLES = 64;
 
-    //-------------------------------------------------------------------------
 
     /** selects drawing objects.
      */
     const long OBJECTS = 128;
 
-    //-------------------------------------------------------------------------
 
     /** selects formatting within parts of the cell contents.
      */
     const long EDITATTR = 256;
 
-    //-------------------------------------------------------------------------
 
     /** selects cells with formatting within the cells or cells with more than
         one paragraph within the cells.
@@ -98,7 +86,6 @@ published constants CellFlags
     const long FORMATTED = 512;
 };
 
-//=============================================================================
 
 }; }; }; };
 

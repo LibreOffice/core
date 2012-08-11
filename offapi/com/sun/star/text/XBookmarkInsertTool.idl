@@ -26,18 +26,15 @@
 #include <com/sun/star/text/XTextRange.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module text {
 
-//=============================================================================
 
 // DocMerge from xml: interface com::sun::star::text::XBookmarkInsertTool
 /** offers an easy way to insert bookmarks by name.@see Text
  */
 published interface XBookmarkInsertTool: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::text::XBookmarkInsertTool::insertNewBookmark
     /** inserts a bookmark at the specified text position.
@@ -47,7 +44,6 @@ published interface XBookmarkInsertTool: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

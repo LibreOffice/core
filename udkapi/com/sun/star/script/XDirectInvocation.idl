@@ -30,16 +30,13 @@
 #include <com/sun/star/beans/UnknownPropertyException.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module script {
 
-//=============================================================================
 /** provides access to an object's methods and properties.
  */
 published interface XDirectInvocation: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** provides access to methods and properties exposed by an object.
 
         @param aParams all parameters, out parameters are not supported
@@ -50,13 +47,11 @@ published interface XDirectInvocation: com::sun::star::uno::XInterface
                     com::sun::star::script::CannotConvertException,
                     com::sun::star::reflection::InvocationTargetException );
 
-    //-------------------------------------------------------------------------
     /** returns <TRUE/> if the method or property with the specified name exists, else <FALSE/>.
      */
     boolean hasMember( [in] string aName );
 };
 
-//=============================================================================
 
 }; }; }; };
 

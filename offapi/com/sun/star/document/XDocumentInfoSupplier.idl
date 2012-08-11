@@ -22,11 +22,9 @@
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/document/XDocumentInfo.idl>
 
-//=============================================================================
 
 module com {   module sun {   module star {   module document {
 
-//=============================================================================
 /** through this interface documents can provide a <type>DocumentInfo</type>
 
     <p>
@@ -45,7 +43,6 @@ module com {   module sun {   module star {   module document {
  */
 published interface XDocumentInfoSupplier: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** provides the document information object
 
         @returns
@@ -54,7 +51,6 @@ published interface XDocumentInfoSupplier: com::sun::star::uno::XInterface
     XDocumentInfo getDocumentInfo();
 };
 
-//=============================================================================
 
 }; }; }; };
 

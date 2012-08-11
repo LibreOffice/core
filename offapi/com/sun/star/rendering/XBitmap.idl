@@ -56,7 +56,6 @@ interface XBitmap : ::com::sun::star::uno::XInterface
       */
     ::com::sun::star::geometry::IntegerSize2D   getSize();
 
-    //-------------------------------------------------------------------------
 
     /** Query transparency status of the bitmap.<p>
 
@@ -72,7 +71,6 @@ interface XBitmap : ::com::sun::star::uno::XInterface
       */
     boolean                                     hasAlpha();
 
-    //-------------------------------------------------------------------------
 
     /** Query a scaled copy of the original bitmap.
 

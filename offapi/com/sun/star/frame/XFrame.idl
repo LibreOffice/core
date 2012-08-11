@@ -31,7 +31,6 @@
 #include <com/sun/star/lang/XComponent.idl>
 #include <com/sun/star/awt/XWindow.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module frame {
 
@@ -39,7 +38,6 @@
  published interface XController;
  published interface XFramesSupplier;
 
-//=============================================================================
 /** a frame object can be considered to be an "anchor" object where a component
     can be attached to.
 
@@ -53,7 +51,6 @@
  */
 published interface XFrame: com::sun::star::lang::XComponent
 {
-    //-------------------------------------------------------------------------
     /** is called to initialize the frame within a window - the container window.
 
         <p>
@@ -74,7 +71,6 @@ published interface XFrame: com::sun::star::lang::XComponent
      */
     void initialize( [in] com::sun::star::awt::XWindow xWindow );
 
-    //-------------------------------------------------------------------------
     /** provides access to the container window of the frame.
 
         <p>
@@ -89,7 +85,6 @@ published interface XFrame: com::sun::star::lang::XComponent
      */
     com::sun::star::awt::XWindow getContainerWindow();
 
-    //-------------------------------------------------------------------------
     /** sets the frame container that created this frame.
 
         <p>
@@ -107,7 +102,6 @@ published interface XFrame: com::sun::star::lang::XComponent
      */
     [oneway] void setCreator( [in] XFramesSupplier Creator );
 
-    //-------------------------------------------------------------------------
     /** provides access to the creator (parent) of this frame
 
         @returns
@@ -117,7 +111,6 @@ published interface XFrame: com::sun::star::lang::XComponent
      */
     XFramesSupplier getCreator();
 
-    //-------------------------------------------------------------------------
     /** access to the name property of this frame
 
         @returns
@@ -127,7 +120,6 @@ published interface XFrame: com::sun::star::lang::XComponent
      */
     string getName();
 
-    //-------------------------------------------------------------------------
     /** sets the name of the frame.
 
         <p>
@@ -153,7 +145,6 @@ published interface XFrame: com::sun::star::lang::XComponent
      */
     [oneway] void setName( [in] string aName );
 
-    //-------------------------------------------------------------------------
     /** searches for a frame with the specified name.
 
         <p>
@@ -200,7 +191,6 @@ published interface XFrame: com::sun::star::lang::XComponent
         [in] string aTargetFrameName,
         [in] long nSearchFlags);
 
-    //-------------------------------------------------------------------------
     /** determines if the frame is a top frame.
 
         <p>
@@ -217,7 +207,6 @@ published interface XFrame: com::sun::star::lang::XComponent
      */
     boolean isTop();
 
-    //-------------------------------------------------------------------------
     /** activates this frame and thus the component within.
 
         <p>
@@ -239,7 +228,6 @@ published interface XFrame: com::sun::star::lang::XComponent
     */
     [oneway] void activate();
 
-    //-------------------------------------------------------------------------
     /** is called by the creator frame when another sub-frame gets activated.
 
         <p>
@@ -253,7 +241,6 @@ published interface XFrame: com::sun::star::lang::XComponent
      */
     [oneway] void deactivate();
 
-    //-------------------------------------------------------------------------
     /** determines if the frame is active.
 
         @return
@@ -266,7 +253,6 @@ published interface XFrame: com::sun::star::lang::XComponent
      */
     boolean isActive();
 
-    //-------------------------------------------------------------------------
     /** sets a new component into the frame or release an existing one from a frame.
 
         @param xComponentWindow
@@ -298,7 +284,6 @@ published interface XFrame: com::sun::star::lang::XComponent
         [in] com::sun::star::awt::XWindow xComponentWindow,
         [in] XController xController);
 
-    //-------------------------------------------------------------------------
     /** provides access to the component window
 
         <p>
@@ -314,7 +299,6 @@ published interface XFrame: com::sun::star::lang::XComponent
      */
     com::sun::star::awt::XWindow getComponentWindow();
 
-    //-------------------------------------------------------------------------
     /** provides access to the controller
 
         <p>
@@ -333,7 +317,6 @@ published interface XFrame: com::sun::star::lang::XComponent
      */
     XController getController();
 
-    //-------------------------------------------------------------------------
     /** notifies the frame that the context of the controller within this
         frame changed (i.e. the selection).
 
@@ -350,7 +333,6 @@ published interface XFrame: com::sun::star::lang::XComponent
     */
     void contextChanged();
 
-    //-------------------------------------------------------------------------
     /** registers an event listener, which will be called when certain things
         happen to the components within this frame or within sub-frames of this frame.
 
@@ -366,7 +348,6 @@ published interface XFrame: com::sun::star::lang::XComponent
      */
     [oneway] void addFrameActionListener( [in]XFrameActionListener xListener );
 
-    //-------------------------------------------------------------------------
     /** unregisters an event listener
 
         @param xListener
@@ -377,7 +358,6 @@ published interface XFrame: com::sun::star::lang::XComponent
     [oneway] void removeFrameActionListener( [in] XFrameActionListener xListener );
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -22,11 +22,9 @@
 
 #include <com/sun/star/lang/XEventListener.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module sdb {
 
-//=============================================================================
 
 /** is implemented by components which want to be notified when the <code>RowSet</code> supplied
     by a <type>XRowSetSupplier</type> changes.
@@ -43,11 +41,9 @@ module com { module sun { module star { module sdb {
     [oneway] void onRowSetChanged( [in] ::com::sun::star::lang::EventObject i_Event );
 };
 
-//=============================================================================
 
 }; }; }; };
 
-//=============================================================================
 
 #endif
 

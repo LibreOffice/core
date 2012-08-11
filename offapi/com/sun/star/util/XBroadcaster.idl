@@ -21,11 +21,9 @@
 
 #include <com/sun/star/uno/XInterface.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module util {
 
-//=============================================================================
 
 /** allows to control notification behavior of a broadcaster.
 
@@ -45,7 +43,6 @@ interface XBroadcaster: com::sun::star::uno::XInterface
      */
     [oneway] void lockBroadcasts();
 
-    //-------------------------------------------------------------------------
     /** resumes the broadcasts which were suspended by
         <member>XBroadcaster::lockBroadcasts()</member>.
 
@@ -67,7 +64,6 @@ interface XBroadcaster: com::sun::star::uno::XInterface
     [oneway] void unlockBroadcasts();
 };
 
-//=============================================================================
 
 }; }; }; };
 

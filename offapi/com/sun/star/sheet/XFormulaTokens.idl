@@ -32,23 +32,19 @@
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/sheet/FormulaToken.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** gives access to a formula as token sequence.
  */
 interface XFormulaTokens
 {
-    //-------------------------------------------------------------------------
 
     /** returns the formula as sequence of tokens.
      */
     sequence< FormulaToken > getTokens();
 
-    //-------------------------------------------------------------------------
 
     /** sets the formula as sequence of tokens.
      */
@@ -56,7 +52,6 @@ interface XFormulaTokens
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -30,17 +30,14 @@
 
 #include <com/sun/star/frame/XTerminateListener.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module frame {
 
-//=============================================================================
 /** extend interface XTerminateListener so a listener will be informed
     in case termination process was canceled by other reasons.
  */
 interface XTerminateListener2 : ::com::sun::star::frame::XTerminateListener
 {
-    //-------------------------------------------------------------------------
     /** is called when the master environment (e.g., desktop) was canceled in
         it's terminate request.
 
@@ -61,7 +58,6 @@ interface XTerminateListener2 : ::com::sun::star::frame::XTerminateListener
     void cancelTermination( [in] com::sun::star::lang::EventObject Event );
 };
 
-//=============================================================================
 
 }; }; }; };
 

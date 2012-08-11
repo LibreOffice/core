@@ -19,11 +19,9 @@
 #ifndef __com_sun_star_i18n_ForbiddenCharacters_idl__
 #define __com_sun_star_i18n_ForbiddenCharacters_idl__
 
-//============================================================================
 
 module com {  module sun {  module star {  module i18n {
 
-//============================================================================
 
 /**
     Locale (mostly CJK) dependent characters that are forbidden at the
@@ -43,7 +41,6 @@ published struct ForbiddenCharacters
     string endLine;
 };
 
-//============================================================================
 }; }; }; };
 
 #endif

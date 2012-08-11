@@ -30,90 +30,75 @@
 #ifndef __com_sun_star_sheet_ConditionOperator2_idl__
 #define __com_sun_star_sheet_ConditionOperator2_idl__
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** is used to specify the type of <type>XSheetCondition2</type>.
  */
 constants ConditionOperator2
 {
-    //-------------------------------------------------------------------------
 
     /** no condition is specified.
      */
     const long NONE = 0;
 
-    //-------------------------------------------------------------------------
 
     /** value has to be equal to the specified value.
      */
     const long EQUAL = 1;
 
-    //-------------------------------------------------------------------------
 
     /** the value must not be equal to the specified value.
      */
     const long NOT_EQUAL = 2;
 
-    //-------------------------------------------------------------------------
 
     /** the value has to be greater than the specified value.
      */
     const long GREATER = 3;
 
-    //-------------------------------------------------------------------------
 
     /** the value has to be greater than or equal to the specified value.
      */
     const long GREATER_EQUAL = 4;
 
-    //-------------------------------------------------------------------------
 
     /** the value has to be less than the specified value.
      */
     const long LESS = 5;
 
-    //-------------------------------------------------------------------------
 
     /** the value has to be less than or equal to the specified value.
      */
     const long LESS_EQUAL = 6;
 
-    //-------------------------------------------------------------------------
 
     /** the value has to be between the two specified values.
      */
     const long BETWEEN = 7;
 
-    //-------------------------------------------------------------------------
 
     /** the value has to be outside of the two specified values.
      */
     const long NOT_BETWEEN = 8;
 
-    //-------------------------------------------------------------------------
 
     /** the specified formula has to give a non-zero result.
      */
     const long FORMULA = 9;
 
-    //-------------------------------------------------------------------------
 
     /** Conditionally format duplicate values
      */
     const long DUPLICATE = 10;
 
-    //-------------------------------------------------------------------------
 
     /** Conditionally format non-duplicate values
      */
     const long NOT_DUPLICATE = 11;
 };
 
-//=============================================================================
 
 }; }; }; };
 

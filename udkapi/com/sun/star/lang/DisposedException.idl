@@ -22,11 +22,9 @@
 #include <com/sun/star/uno/RuntimeException.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module lang {
 
-//=============================================================================
 
 // DocMerge from xml: exception com::sun::star::lang::DisposedException
 /** This exception occurs if the object behind this interface has been
@@ -40,7 +38,6 @@ published exception DisposedException: com::sun::star::uno::RuntimeException
 {
 };
 
-//=============================================================================
 
 }; }; }; };
 

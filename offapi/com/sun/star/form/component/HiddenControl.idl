@@ -22,11 +22,9 @@
 #include <com/sun/star/form/FormComponent.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module form {  module component {
 
-//=============================================================================
 
 /** This service specifies the model of a hidden control.
 
@@ -48,7 +46,6 @@ published service HiddenControl
 
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

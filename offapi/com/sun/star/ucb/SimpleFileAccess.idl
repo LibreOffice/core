@@ -31,11 +31,9 @@
 #include <com/sun/star/ucb/XSimpleFileAccess2.idl>
 
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** Offers a simple access to resources, like files and folders located in a
 local file system or on an WebDAV server.
 
@@ -44,7 +42,6 @@ local file system or on an WebDAV server.
 */
 published service SimpleFileAccess : XSimpleFileAccess2;
 
-//=============================================================================
 
 }; }; }; };
 

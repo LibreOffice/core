@@ -31,12 +31,10 @@
 
 #include <com/sun/star/graphic/XGraphic.idl>
 
-//=============================================================================
 module com {  module sun {  module star {  module inspection {
 
 interface XPropertyControl;
 
-//-----------------------------------------------------------------------------
 /** describes the appearance of a line representing a single property in an <type>ObjectInspector</type>.
 
     Such a line consists of
@@ -192,7 +190,6 @@ struct LineDescriptor
     string Category;
 };
 
-//=============================================================================
 
 }; }; }; };
 

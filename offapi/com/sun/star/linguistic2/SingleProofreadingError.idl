@@ -22,11 +22,9 @@
 #include <com/sun/star/lang/Locale.idl>
 #include <com/sun/star/beans/PropertyValue.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module linguistic2 {
 
-//=============================================================================
 /** holds a single error found by the proofreader.
 
     @since  OOo 3.0.1
@@ -65,7 +63,6 @@ struct SingleProofreadingError
     sequence< com::sun::star::beans::PropertyValue > aProperties;
 };
 
-//=============================================================================
 
 }; }; }; };
 

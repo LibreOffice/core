@@ -24,43 +24,36 @@
 #include <com/sun/star/awt/XControl.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module awt {
 
-//=============================================================================
 
 /** Provides access to the controls within an
     <type>UnoControlContainer</type>.
  */
 published interface XControlContainer: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** sets the status text in the status bar of the container.
      */
     [oneway] void setStatusText( [in] string StatusText );
 
-    //-------------------------------------------------------------------------
 
     /** returns all controls.
      */
     sequence<com::sun::star::awt::XControl> getControls();
 
-    //-------------------------------------------------------------------------
 
     /** returns the control with the specified name.
      */
     com::sun::star::awt::XControl getControl( [in] string aName );
 
-    //-------------------------------------------------------------------------
 
     /** adds the given control with the specified name to the container.
      */
     [oneway] void addControl( [in] string Name,
              [in] com::sun::star::awt::XControl Control );
 
-    //-------------------------------------------------------------------------
 
     /** removes the given control from the container.
      */
@@ -68,7 +61,6 @@ published interface XControlContainer: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

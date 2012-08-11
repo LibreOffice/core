@@ -33,11 +33,9 @@
 #include <com/sun/star/sheet/DataPilotFieldFilter.idl>
 #include <com/sun/star/table/CellAddress.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** supplies a filtered subset of the original data source based on filtering criteria.
 
@@ -72,7 +70,6 @@ interface XDrillDownDataSupplier: com::sun::star::uno::XInterface
         [in] sequence< com::sun::star::sheet::DataPilotFieldFilter > aFilters );
 };
 
-//=============================================================================
 
 }; }; }; };
 

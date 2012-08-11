@@ -34,11 +34,9 @@
 #include <com/sun/star/lang/Locale.idl>
 
 
-//=============================================================================
 
 module com { module sun { module star { module linguistic2 {
 
-//=============================================================================
 /** allows searching for an entry in all dictionaries of the dictionary-list.
 
     <P> Only active dictionaries of a suitable language will be searched
@@ -51,7 +49,6 @@ module com { module sun { module star { module linguistic2 {
 */
 published interface XSearchableDictionaryList : com::sun::star::linguistic2::XDictionaryList
 {
-    //-------------------------------------------------------------------------
     /** looks for an entry for a given word in the list of dictionaries.
 
         @returns
@@ -79,7 +76,6 @@ published interface XSearchableDictionaryList : com::sun::star::linguistic2::XDi
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

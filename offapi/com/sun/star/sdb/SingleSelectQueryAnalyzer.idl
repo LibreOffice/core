@@ -71,7 +71,6 @@ service SingleSelectQueryAnalyzer
     [optional] interface com::sun::star::sdb::XParametersSupplier;
 };
 
-//=============================================================================
 
 }; }; }; };
 

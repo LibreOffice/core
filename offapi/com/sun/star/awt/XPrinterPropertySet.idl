@@ -26,11 +26,9 @@
 #include <com/sun/star/lang/IllegalArgumentException.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module awt {
 
-//=============================================================================
 
 /** represents an extended property set for printer properties.
 
@@ -45,7 +43,6 @@
  */
 published interface XPrinterPropertySet: com::sun::star::beans::XPropertySet
 {
-    //-------------------------------------------------------------------------
 
     /** sets the orientation.
      */
@@ -53,13 +50,11 @@ published interface XPrinterPropertySet: com::sun::star::beans::XPropertySet
             raises( com::sun::star::beans::PropertyVetoException,
                     com::sun::star::lang::IllegalArgumentException );
 
-    //-------------------------------------------------------------------------
 
     /** returns descriptions of all available printer forms.
      */
     sequence<string> getFormDescriptions();
 
-    //-------------------------------------------------------------------------
 
     /** sets the form that should be used.
 
@@ -69,13 +64,11 @@ published interface XPrinterPropertySet: com::sun::star::beans::XPropertySet
             raises( com::sun::star::beans::PropertyVetoException,
                     com::sun::star::lang::IllegalArgumentException );
 
-    //-------------------------------------------------------------------------
 
     /** returns a binary encoded version of the printer setup.
      */
     sequence<byte> getBinarySetup();
 
-    //-------------------------------------------------------------------------
 
     /** sets the data specific to the printer driver.
 
@@ -88,7 +81,6 @@ published interface XPrinterPropertySet: com::sun::star::beans::XPropertySet
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

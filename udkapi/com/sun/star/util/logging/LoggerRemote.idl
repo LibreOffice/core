@@ -24,11 +24,9 @@
 #include <com/sun/star/util/logging/XLogger.idl>
 #include <com/sun/star/util/logging/XLoggerRemote.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module util { module logging {
 
-//=============================================================================
 
     /** deprecated API - use <type scope="com::sun::star::logging">LoggerPool</type> instead
 
@@ -41,7 +39,6 @@ published service LoggerRemote
     interface com::sun::star::util::logging::XLoggerRemote;
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

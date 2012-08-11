@@ -25,18 +25,15 @@
 #include <com/sun/star/sheet/TableOperationMode.idl>
 #include <com/sun/star/table/CellAddress.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** provides a method to apply a Multiple Operations Table to the
     cell range.
  */
 published interface XMultipleOperation: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** creates a table of formulas (a "Multiple Operations Table").
 
@@ -75,7 +72,6 @@ published interface XMultipleOperation: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

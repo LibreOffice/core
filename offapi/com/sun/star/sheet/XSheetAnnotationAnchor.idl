@@ -23,11 +23,9 @@
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/sheet/XSheetAnnotation.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** provides access to a cell annotation attached to a spreadsheet cell.
 
@@ -36,7 +34,6 @@
  */
 published interface XSheetAnnotationAnchor: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** returns the annotation at this anchor.
      */
@@ -44,7 +41,6 @@ published interface XSheetAnnotationAnchor: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

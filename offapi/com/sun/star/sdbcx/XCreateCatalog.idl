@@ -58,7 +58,6 @@ published interface XCreateCatalog: com::sun::star::uno::XInterface
                 com::sun::star::container::ElementExistException);
 };
 
-//=============================================================================
 
 }; }; }; };
 

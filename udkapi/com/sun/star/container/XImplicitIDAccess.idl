@@ -25,7 +25,6 @@
 
 #include <com/sun/star/lang/WrappedTargetException.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module container {
 
@@ -44,7 +43,6 @@ published interface XImplicitIDAccess: com::sun::star::container::XElementAccess
     sequence<string> getImplicitIDs();
 };
 
-//=============================================================================
 
 }; }; }; };
 

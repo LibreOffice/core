@@ -24,11 +24,9 @@
 #include <com/sun/star/lang/IllegalArgumentException.idl>
 #include <com/sun/star/office/XAnnotation.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module office {
 
-//=============================================================================
 
 /** This interface gives access to the annotation for a document content.
  */
@@ -49,7 +47,6 @@ interface XAnnotationAccess
     XAnnotationEnumeration createAnnotationEnumeration();
 };
 
-//=============================================================================
 
 }; }; }; };
 

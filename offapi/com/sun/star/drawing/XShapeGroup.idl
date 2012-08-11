@@ -22,11 +22,9 @@
 #include <com/sun/star/drawing/XShape.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module drawing {
 
-//=============================================================================
 
 /** is implemented by <type>Shape</type>s that contain other
     <type>Shape</type>s.
@@ -35,7 +33,6 @@
  */
 published interface XShapeGroup: com::sun::star::drawing::XShape
 {
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::drawing::XShapeGroup::enterGroup
     /** enters the group which enables the editing function
@@ -50,7 +47,6 @@ published interface XShapeGroup: com::sun::star::drawing::XShape
      */
     void enterGroup();
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::drawing::XShapeGroup::leaveGroup
     /** leaves the group, which disables the editing function
@@ -67,7 +63,6 @@ published interface XShapeGroup: com::sun::star::drawing::XShape
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

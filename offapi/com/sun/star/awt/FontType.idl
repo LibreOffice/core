@@ -20,11 +20,9 @@
 #define __com_sun_star_awt_FontType_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module awt {
 
-//=============================================================================
 
 /** These values are used to specify the technology of the font representation.
 
@@ -32,25 +30,21 @@
  */
 published constants FontType
 {
-    //-------------------------------------------------------------------------
 
     /** The type of the font is not known.
      */
     const short DONTKNOW = 0;
 
-    //-------------------------------------------------------------------------
 
     /** specifies a raster font.
      */
     const short RASTER = 1;
 
-    //-------------------------------------------------------------------------
 
     /** specifies a device font.
      */
     const short DEVICE = 2;
 
-    //-------------------------------------------------------------------------
 
     /** specifies a scalable font.
      */
@@ -58,7 +52,6 @@ published constants FontType
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

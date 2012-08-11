@@ -23,11 +23,9 @@
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/container/XIndexAccess.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** provides access to a collection of collections of equal-formatted
     cell ranges.
@@ -56,7 +54,6 @@ published interface XUniqueCellFormatRangesSupplier: com::sun::star::uno::XInter
     com::sun::star::container::XIndexAccess getUniqueCellFormatRanges();
 };
 
-//=============================================================================
 
 }; }; }; };
 

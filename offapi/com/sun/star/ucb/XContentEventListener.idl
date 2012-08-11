@@ -22,11 +22,9 @@
 #include <com/sun/star/lang/XEventListener.idl>
 #include <com/sun/star/ucb/ContentEvent.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /**  a listener for events related to <type>XContent</type>s.
 
     @version  1.0
@@ -35,7 +33,6 @@ module com { module sun { module star { module ucb {
 */
 published interface XContentEventListener: com::sun::star::lang::XEventListener
 {
-    //-------------------------------------------------------------------------
     /** gets called whenever a content wishes to notify changes.
 
         @param evt
@@ -45,7 +42,6 @@ published interface XContentEventListener: com::sun::star::lang::XEventListener
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

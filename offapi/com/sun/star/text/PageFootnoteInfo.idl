@@ -22,11 +22,9 @@
 #include <com/sun/star/text/HorizontalAdjust.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module text {
 
-//=============================================================================
 
 // DocMerge from xml: service com::sun::star::text::PageFootnoteInfo
 /** specifies the properties of the footnote area of a page or a
@@ -34,7 +32,6 @@
  */
 published service PageFootnoteInfo
 {
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::text::PageFootnoteInfo::FootnoteHeight
     /** contains the maximum height of the footnote section.
@@ -45,42 +42,36 @@ published service PageFootnoteInfo
      */
     [property] long FootnoteHeight;
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::text::PageFootnoteInfo::FootnoteSeparatorLineWidth
     /** contains the relative width of the footnote separator line.
      */
     [property] long FootnoteSeparatorLineWidth;
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::text::PageFootnoteInfo::FootnoteTopDistance
     /** contains the distance between the text and footnote section.
      */
     [property] long FootnoteTopDistance;
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::text::PageFootnoteInfo::FootnoteBottomDistance
     /** contains the distance between the separator line and the footnote section.
      */
     [property] long FootnoteBottomDistance;
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::text::PageFootnoteInfo::FootnoteSeparatorLineWidthPercent
     /** contains the relative width of the footnote separator line.
      */
     [property] short FootnoteSeparatorLineWidthPercent;
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::text::PageFootnoteInfo::FootnoteSeparatorLineAdjust
     /** contains the adjustment of the footnote separator line.
      */
     [property] com::sun::star::text::HorizontalAdjust FootnoteSeparatorLineAdjust;
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::text::PageFootnoteInfo::FootnoteSeparatorLinePenWidth
     /** contains the width of the pen for the footnote separator line.
@@ -89,7 +80,6 @@ published service PageFootnoteInfo
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

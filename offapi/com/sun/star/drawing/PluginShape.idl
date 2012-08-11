@@ -31,11 +31,9 @@
 #include <com/sun/star/drawing/Shape.idl>
 #include <com/sun/star/beans/PropertyValue.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module drawing {
 
-//=============================================================================
 /** This <type>Shape</type> encapsulates a plugin.
 
     <p>A plugin is a binary object that is plugged into a document to represent
@@ -49,20 +47,17 @@ published service PluginShape
      */
     service com::sun::star::drawing::Shape;
 
-    //-------------------------------------------------------------------------
 
     /** This property specifies the media-type to which this plugin should
         be registered.
     */
     [property] string PluginMimeType;
 
-    //-------------------------------------------------------------------------
 
     /** This property specifies the url to the binary object.
     */
     [property] string PluginURL;
 
-    //-------------------------------------------------------------------------
 
     /** This sequence contains parameters that are passed to the application
         that renders the plugin when it is initialized.
@@ -70,7 +65,6 @@ published service PluginShape
     [property] sequence< com::sun::star::beans::PropertyValue > PluginCommands;
 };
 
-//=============================================================================
 
 }; }; }; };
 

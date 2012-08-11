@@ -20,24 +20,20 @@
 #ifndef __com_sun_star_document_UpdateDocMode_idl__
 #define __com_sun_star_document_UpdateDocMode_idl__
 
-//=============================================================================
 
 module com { module sun { module star { module document {
 
-//=============================================================================
 /** Specify the way a document can be updated.
 
     @since OOo 1.1.2
 */
 published constants UpdateDocMode
 {
-    //-------------------------------------------------------------------------
     /** Do not update document.
     */
 
     const short NO_UPDATE = 0;
 
-    //-------------------------------------------------------------------------
     /** Update document if it does not require a dialog.
         Otherwise do not update. For example a link to a database
         can require a dialog to get password for an update.
@@ -45,14 +41,12 @@ published constants UpdateDocMode
 
     const short QUIET_UPDATE = 1;
 
-    //-------------------------------------------------------------------------
     /** Produce update according to configuration settings.
         If there are no settings use dialog.
     */
 
     const short ACCORDING_TO_CONFIG = 2;
 
-    //-------------------------------------------------------------------------
     /** Update document even if it does require a dialog.
     */
 
@@ -60,7 +54,6 @@ published constants UpdateDocMode
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

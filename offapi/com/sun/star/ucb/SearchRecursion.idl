@@ -20,11 +20,9 @@
 #define __com_sun_star_ucb_SearchRecursion_idl__
 
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** the various modes of recursion when searching through a hierarchical
     object.
 
@@ -32,24 +30,20 @@ module com { module sun { module star { module ucb {
 */
 published enum SearchRecursion
 {
-    //-------------------------------------------------------------------------
     /** Does not search through any sub-objects.
     */
     NONE,
 
-    //-------------------------------------------------------------------------
     /** Only searches through sub-objects of the first hierarchy level.
     */
     ONE_LEVEL,
 
-    //-------------------------------------------------------------------------
     /** Searches through the complete hierarchy of all sub-objects.
     */
     DEEP
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

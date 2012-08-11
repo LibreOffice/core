@@ -22,11 +22,9 @@
 #include <com/sun/star/uno/RuntimeException.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module configuration {
 
-//=============================================================================
 
 /** This exception is thrown in case a configuration
     does not exists or contains corrupt data.
@@ -44,7 +42,6 @@ published exception CorruptedConfigurationException : ::com::sun::star::uno::Run
     string Details;
 };
 
-//=============================================================================
 
 }; }; }; };
 

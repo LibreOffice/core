@@ -31,11 +31,9 @@
 #include <com/sun/star/awt/tree/XMutableTreeDataModel.idl>
 #include <com/sun/star/awt/tree/XMutableTreeNode.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module awt {  module tree {
 
-//=============================================================================
 
 /** If you do not want to implement the <type>XTreeDataModel</type> yourself, use this service.
     This implementation uses <type>MutableTreeNode</type> for its nodes.
@@ -44,7 +42,6 @@ service MutableTreeDataModel : XMutableTreeDataModel
 {
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

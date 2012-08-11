@@ -31,11 +31,9 @@
 #include <com/sun/star/report/XReportControlModel.idl>
 #include <com/sun/star/util/XNumberFormatsSupplier.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module report {
 
-//=============================================================================
 /** describes a control which can be used for displaying values with a arbitrary formatting.
 
     @see com::sun::star::report::XReportControlModel
@@ -58,7 +56,6 @@ interface XFormattedField
     [attribute,bound] com::sun::star::util::XNumberFormatsSupplier FormatsSupplier;
 };
 
-//=============================================================================
 
 }; }; }; };
 

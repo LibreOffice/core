@@ -21,11 +21,9 @@
 #define __com_sun_star_configuration_backend_ComponentChangeEvent_idl__
 
 #include <com/sun/star/lang/EventObject.idl>
-//=============================================================================
 
 module com {  module sun {  module star {  module configuration {  module backend {
 
-//=============================================================================
 
 /** This event is fired when a change becomes effective on the source of the event
 
@@ -34,14 +32,12 @@ module com {  module sun {  module star {  module configuration {  module backen
  */
 struct ComponentChangeEvent: ::com::sun::star::lang::EventObject
 {
-    //-------------------------------------------------------------------------
     /** The name of the Component that changed
     */
     string Component;
 
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

@@ -33,11 +33,9 @@
 #include <com/sun/star/beans/PropertyValue.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module util {
 
-//=============================================================================
 
 /** makes it possible to sort the contents of this object.
 
@@ -65,7 +63,6 @@ module com {  module sun {  module star {  module util {
  */
 published interface XSortable: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** @returns
             a sequence of properties which allows to specify/modify the
             sort criteria.
@@ -84,7 +81,6 @@ published interface XSortable: com::sun::star::uno::XInterface
      */
     sequence< com::sun::star::beans::PropertyValue > createSortDescriptor();
 
-    //-------------------------------------------------------------------------
     /** sorts the contents of the object according to the specified
         properties.
 
@@ -103,7 +99,6 @@ published interface XSortable: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

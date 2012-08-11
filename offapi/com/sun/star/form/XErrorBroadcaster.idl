@@ -33,11 +33,9 @@
 #include <com/sun/star/form/XErrorListener.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module form {
 
-//=============================================================================
 
 /** provides the possibility of receiving database error events.
 
@@ -48,13 +46,11 @@
  */
 published interface XErrorBroadcaster: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** adds the specified listener to be notified of errors.
      */
     [oneway] void addErrorListener( [in] com::sun::star::form::XErrorListener aListener );
 
-    //-------------------------------------------------------------------------
 
     /** removes the specified listener.
      */
@@ -62,7 +58,6 @@ published interface XErrorBroadcaster: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

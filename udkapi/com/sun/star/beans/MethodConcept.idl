@@ -20,11 +20,9 @@
 #define __com_sun_star_beans_MethodConcept_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module beans {
 
-//=============================================================================
 /** These constants are used to specify concepts of the
     introspection which apply to methods.
 
@@ -37,21 +35,18 @@
 */
 published constants MethodConcept
 {
-    //-------------------------------------------------------------------------
     /** This value is used to query for all methods, see
         <member>XIntrospectionAccess::getMethod()</member> and
         <member>XIntrospectionAccess::getMethods()</member>
      */
     const long ALL = -1;
 
-    //-------------------------------------------------------------------------
     /** specifies methods which can result in an unstable state
         (i.e. deadlock, application crash, security hole, etc.)
         when called directly by the user.
      */
     const long DANGEROUS = 1;
 
-    //-------------------------------------------------------------------------
     /** specifies methods which are used to set and get the
         value of properties/attributes.
 
@@ -61,7 +56,6 @@ published constants MethodConcept
      */
     const long PROPERTY = 2;
 
-    //-------------------------------------------------------------------------
     /** specifies methods of the <em>listener concept</em>.
 
         <p>These methods have the signature <code>add...Listener()
@@ -69,7 +63,6 @@ published constants MethodConcept
      */
     const long LISTENER = 4;
 
-    //-------------------------------------------------------------------------
     /** specifies methods of the <em>enumeration concept</em>.
 
         <p>These methods have the signature
@@ -81,7 +74,6 @@ published constants MethodConcept
      */
     const long ENUMERATION = 8;
 
-    //-------------------------------------------------------------------------
     /** specifies methods of the <em>name container concept</em>.
 
         <p>These methods have the signature
@@ -96,7 +88,6 @@ published constants MethodConcept
      */
     const long NAMECONTAINER = 16;
 
-    //-------------------------------------------------------------------------
     /** specifies methods of the <em>index container concept</em>.
 
         <p>These methods have the signature
@@ -112,7 +103,6 @@ published constants MethodConcept
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -21,11 +21,9 @@
 
 #include <com/sun/star/chart/TimeUnit.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module chart {
 
-//=============================================================================
 
 /** Describes an interval on a date-axis
 @since OOo 3.4
@@ -42,7 +40,6 @@ published struct TimeInterval
     long    TimeUnit;
 };
 
-//=============================================================================
 
 }; }; }; };
 

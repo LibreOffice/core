@@ -34,11 +34,9 @@
 #include <com/sun/star/document/XEventBroadcaster.idl>
 #include <com/sun/star/beans/XPropertySet.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module frame {
 
-//=============================================================================
 /** is the environment for components which can instantiate within frames
 
     <p>
@@ -50,7 +48,6 @@
  */
 published service Desktop
 {
-    //-------------------------------------------------------------------------
     /** make it possible to be the global root of different separated frame trees
 
         <p>
@@ -61,18 +58,15 @@ published service Desktop
      */
     service Frame;
 
-    //-------------------------------------------------------------------------
     /** regulate life time of desktop environment and support high level
         access to components of sub frame tree
      */
     interface XDesktop;
 
-    //-------------------------------------------------------------------------
     /** supports simple API for loading components into the frame environment
      */
     interface XComponentLoader;
 
-    //-------------------------------------------------------------------------
     /** @deprecated This interface is a documentation error. It was never thought to be supported
                     by this service. Please use the service <type cope="com::sun::star::frame">GlobalEventBroadcaster</type>
                     instead of this interface.
@@ -80,7 +74,6 @@ published service Desktop
     interface com::sun::star::document::XEventBroadcaster;
 };
 
-//=============================================================================
 
 }; }; }; };
 

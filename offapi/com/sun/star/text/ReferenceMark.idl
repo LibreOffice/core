@@ -23,11 +23,9 @@
 #include <com/sun/star/container/XNamed.idl>
 
 
-//=============================================================================
 
 module com { module sun { module star { module text {
 
-//=============================================================================
 /** is used for cross references in text documents.
 */
 published service ReferenceMark
@@ -37,7 +35,6 @@ published service ReferenceMark
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

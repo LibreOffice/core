@@ -20,11 +20,9 @@
 #ifndef __com_sun_star_sync_SyncOptions_idl__
 #define __com_sun_star_sync_SyncOptions_idl__
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sync {
 
-//=============================================================================
 
 /** contains a synchronization element
 
@@ -45,7 +43,6 @@ published constants SyncOptions
     const unsigned long CREATE_BACKUP   = 0x00010000;
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -28,11 +28,9 @@
 #include <com/sun/star/lang/WrappedTargetException.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module container {
 
-//=============================================================================
 
 /** This is the generic interface for supporting the replacement of elements
     with unique identifiers.
@@ -66,7 +64,6 @@ published interface XIdentifierReplace: com::sun::star::container::XIdentifierAc
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

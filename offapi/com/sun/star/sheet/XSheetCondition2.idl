@@ -35,11 +35,9 @@
 #include <com/sun/star/sheet/XSheetCondition.idl>
 #include <com/sun/star/table/CellAddress.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** provides methods to access the settings of a condition in a
     conditional format or data validation.
@@ -50,13 +48,11 @@ module com {  module sun {  module star {  module sheet {
  */
 interface XSheetCondition2: com::sun::star::sheet::XSheetCondition
 {
-    //-------------------------------------------------------------------------
 
     /** returns the operator in the condition (new interface).
      */
     long getConditionOperator();
 
-    //-------------------------------------------------------------------------
 
     /** sets the operator in the condition (new interface).
      */
@@ -64,7 +60,6 @@ interface XSheetCondition2: com::sun::star::sheet::XSheetCondition
             [in] long nOperator );
 };
 
-//=============================================================================
 
 }; }; }; };
 

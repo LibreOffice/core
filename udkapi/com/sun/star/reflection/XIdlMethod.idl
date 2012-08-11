@@ -30,13 +30,11 @@
 #include <com/sun/star/reflection/InvocationTargetException.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module reflection {
 
  published interface XIdlClass;
 
-//=============================================================================
 
 /** Reflects an IDL interface method.
 */
@@ -113,7 +111,6 @@ published interface XIdlMethod: com::sun::star::reflection::XIdlMember
                 com::sun::star::reflection::InvocationTargetException );
 };
 
-//=============================================================================
 
 }; }; }; };
 

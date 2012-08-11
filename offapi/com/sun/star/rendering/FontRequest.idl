@@ -55,7 +55,6 @@ struct FontRequest
      */
     FontInfo                        FontDescription;
 
-    //-------------------------------------------------------------------------
 
     /** The size of the font in <em>device</em> coordinate space.<p>
 
@@ -83,7 +82,6 @@ struct FontRequest
     */
     double                          CellSize;
 
-    //-------------------------------------------------------------------------
 
     /** This value specifies the size of the font in the writing
         direction (i.e. width for horizontal writing, and height for
@@ -98,7 +96,6 @@ struct FontRequest
      */
     double                          ReferenceAdvancement;
 
-    //-------------------------------------------------------------------------
 
     /** The locale this font should be able to render.<p>
 

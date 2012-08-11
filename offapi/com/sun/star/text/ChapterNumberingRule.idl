@@ -22,11 +22,9 @@
 #include <com/sun/star/style/NumberingRule.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module text {
 
-//=============================================================================
 
 // DocMerge from xml: service com::sun::star::text::ChapterNumberingRule
 /** describes the rules for chapter numbering in a text document.
@@ -55,7 +53,6 @@ published service ChapterNumberingRule
     // DocMerge: empty anyway
     service com::sun::star::style::NumberingRule;
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::text::ChapterNumberingRule::HeadingStyleName
     /** contains the name of the paragraph style that marks this heading
@@ -70,7 +67,6 @@ published service ChapterNumberingRule
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

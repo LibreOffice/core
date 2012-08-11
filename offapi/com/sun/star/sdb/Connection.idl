@@ -75,7 +75,6 @@ published service Connection
 //    [optional] interface com::sun::star::sdb::application::XTableUIProvider;
 };
 
-//=============================================================================
 
 }; }; }; };
 

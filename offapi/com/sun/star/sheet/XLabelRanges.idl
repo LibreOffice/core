@@ -23,11 +23,9 @@
 #include <com/sun/star/container/XIndexAccess.idl>
 #include <com/sun/star/table/CellRangeAddress.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** provides methods to access the members of a label range collection
     and to insert and remove them.
@@ -37,7 +35,6 @@ module com {  module sun {  module star {  module sheet {
  */
 published interface XLabelRanges: com::sun::star::container::XIndexAccess
 {
-    //-------------------------------------------------------------------------
 
     /** adds a new label range to the collection.
 
@@ -51,7 +48,6 @@ published interface XLabelRanges: com::sun::star::container::XIndexAccess
             [in] com::sun::star::table::CellRangeAddress aLabelArea,
             [in] com::sun::star::table::CellRangeAddress aDataArea );
 
-    //-------------------------------------------------------------------------
 
     /** removes a label range from the collection.
      */
@@ -59,7 +55,6 @@ published interface XLabelRanges: com::sun::star::container::XIndexAccess
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

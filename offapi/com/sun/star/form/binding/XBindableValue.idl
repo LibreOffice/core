@@ -23,13 +23,11 @@
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/form/binding/IncompatibleTypesException.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module form { module binding {
 
 interface XValueBinding;
 
-//=============================================================================
 
 /** specifies support for being bound to an external value
 
@@ -59,7 +57,6 @@ interface XBindableValue : com::sun::star::uno::XInterface
             getValueBinding( );
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

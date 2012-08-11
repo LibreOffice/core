@@ -23,16 +23,13 @@
 #include <com/sun/star/ucb/XPropertyMatcher.idl>
 #include <com/sun/star/ucb/SearchCriterium.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** Creates an <type>XPropertyMatcher</type>, given a set of search criteria.
 */
 published interface XPropertyMatcherFactory : com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** Creates an XPropertyMatcher.
 
         @param Criteria
@@ -45,7 +42,6 @@ published interface XPropertyMatcherFactory : com::sun::star::uno::XInterface
             [in] sequence<com::sun::star::ucb::SearchCriterium> Criteria);
 };
 
-//=============================================================================
 
 }; }; }; };
 

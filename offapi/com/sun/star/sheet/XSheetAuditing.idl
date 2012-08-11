@@ -23,18 +23,15 @@
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/table/CellAddress.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** provides methods to access auditing (detective) features in a
     spreadsheet.
  */
 published interface XSheetAuditing: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** removes arrows for one level of dependents of a formula cell.
 
@@ -46,7 +43,6 @@ published interface XSheetAuditing: com::sun::star::uno::XInterface
      */
     boolean hideDependents( [in] com::sun::star::table::CellAddress aPosition );
 
-    //-------------------------------------------------------------------------
 
     /** removes arrows for one level of precedents of a formula cell.
 
@@ -58,7 +54,6 @@ published interface XSheetAuditing: com::sun::star::uno::XInterface
      */
     boolean hidePrecedents( [in] com::sun::star::table::CellAddress aPosition );
 
-    //-------------------------------------------------------------------------
 
     /** draws arrows between a formula cell and its dependents.
 
@@ -70,7 +65,6 @@ published interface XSheetAuditing: com::sun::star::uno::XInterface
      */
     boolean showDependents( [in] com::sun::star::table::CellAddress aPosition );
 
-    //-------------------------------------------------------------------------
 
     /** draws arrows between a formula cell and its precedents.
 
@@ -82,20 +76,17 @@ published interface XSheetAuditing: com::sun::star::uno::XInterface
      */
     boolean showPrecedents( [in] com::sun::star::table::CellAddress aPosition );
 
-    //-------------------------------------------------------------------------
 
     /** draws arrows between a formula cell containing an error
         and the cells causing the error.
      */
     boolean showErrors( [in] com::sun::star::table::CellAddress aPosition );
 
-    //-------------------------------------------------------------------------
 
     /** marks all cells containing invalid values.
      */
     boolean showInvalid();
 
-    //-------------------------------------------------------------------------
 
     /** removes all auditing arrows from the spreadsheet.
      */
@@ -103,7 +94,6 @@ published interface XSheetAuditing: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

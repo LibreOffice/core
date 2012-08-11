@@ -26,11 +26,9 @@
 #include <com/sun/star/lang/IllegalArgumentException.idl>
 #include <com/sun/star/beans/PropertyValue.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module embed {
 
-//=============================================================================
 /** allows to create and initialize a new link.
     <p>
     Methods of this interface does not require specification of the object type,
@@ -39,7 +37,6 @@
  */
 published interface XLinkCreator: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** creates a new object based on
         <type scope="com::sun::star::document">MediaDescriptor</type>
         and initializes it as a link.
@@ -83,7 +80,6 @@ published interface XLinkCreator: com::sun::star::uno::XInterface
                 ::com::sun::star::uno::Exception );
 };
 
-//=============================================================================
 
 }; }; }; };
 

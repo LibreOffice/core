@@ -20,17 +20,14 @@
 #define __com_sun_star_chart_ChartAxisArrangeOrderType_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module chart {
 
-//=============================================================================
 
 /** Values specify the arrangement of the axes descriptions.
  */
 published enum ChartAxisArrangeOrderType
 {
-    //-------------------------------------------------------------------------
 
     /** The descriptions are arranged automatically.
 
@@ -40,20 +37,17 @@ published enum ChartAxisArrangeOrderType
      */
     AUTO,
 
-    //-------------------------------------------------------------------------
 
     /** The descriptions are arranged side by side.
      */
     SIDE_BY_SIDE,
 
-    //-------------------------------------------------------------------------
 
     /** The descriptions are alternately put on two lines with the even
         values out of the normal line.
      */
     STAGGER_EVEN,
 
-    //-------------------------------------------------------------------------
 
     /** The descriptions are alternately put on two lines with the odd
         values out of the normal line.
@@ -61,7 +55,6 @@ published enum ChartAxisArrangeOrderType
     STAGGER_ODD
 };
 
-//=============================================================================
 
 }; }; }; };
 

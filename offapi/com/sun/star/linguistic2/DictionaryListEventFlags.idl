@@ -20,11 +20,9 @@
 #define __com_sun_star_linguistic2_DictionaryListEventFlags_idl__
 
 
-//=============================================================================
 
 module com { module sun { module star { module linguistic2 {
 
-//=============================================================================
 /** constants representing a single dictionary-list event.
 
     <P>These flags define the possible types for a
@@ -36,58 +34,49 @@ module com { module sun { module star { module linguistic2 {
 */
 published constants DictionaryListEventFlags
 {
-    //-------------------------------------------------------------------------
     /** A positive entry was added to a dictionary from the
         dictionary list.
     */
     const short ADD_POS_ENTRY = 1;
 
-    //-------------------------------------------------------------------------
     /** A positive entry was deleted from a dictionary of the
         dictionary-list or a dictionary with positive entries
         was cleared.
     */
     const short DEL_POS_ENTRY = 2;
 
-    //-------------------------------------------------------------------------
     /** A negative entry was added to a dictionary from the
         dictionary-list.
      */
     const short ADD_NEG_ENTRY = 4;
 
-    //-------------------------------------------------------------------------
     /** A negative entry was deleted from a dictionary of the
         dictionary-list or a dictionary with negative entries
         was cleared.
     */
     const short DEL_NEG_ENTRY = 8;
 
-    //-------------------------------------------------------------------------
     /** A dictionary with positive entries was activated or
         has changed its language.
     */
     const short ACTIVATE_POS_DIC = 16;
 
-    //-------------------------------------------------------------------------
     /** A dictionary with positive entries was deactivated or
         has changed its language.
     */
     const short DEACTIVATE_POS_DIC = 32;
 
-    //-------------------------------------------------------------------------
     /** A dictionary with negative entries was activated or
         has changed its language.
     */
     const short ACTIVATE_NEG_DIC = 64;
 
-    //-------------------------------------------------------------------------
     /** A dictionary with negative entries was deactivated or
         has changed its language.
     */
     const short DEACTIVATE_NEG_DIC = 128;
 };
 
-//=============================================================================
 
 }; }; }; };
 

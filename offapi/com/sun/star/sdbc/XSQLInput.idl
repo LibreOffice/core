@@ -89,7 +89,6 @@ published interface XSQLInput: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     string readString() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** reads the next attribute in the stream as boolean.
         @returns
@@ -98,7 +97,6 @@ published interface XSQLInput: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     boolean readBoolean() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** reads the next attribute in the stream as byte.
         @returns
@@ -107,7 +105,6 @@ published interface XSQLInput: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     byte readByte() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** reads the next attribute in the stream as short.
         @returns
@@ -116,7 +113,6 @@ published interface XSQLInput: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     short readShort() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** reads the next attribute in the stream as long.
         @returns
@@ -125,7 +121,6 @@ published interface XSQLInput: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     long readInt() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** reads the next attribute in the stream as hyper.
         @returns
@@ -134,7 +129,6 @@ published interface XSQLInput: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     hyper readLong() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** reads the next attribute in the stream as float.
         @returns
@@ -143,7 +137,6 @@ published interface XSQLInput: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     float readFloat() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** reads the next attribute in the stream as double.
         @returns
@@ -152,7 +145,6 @@ published interface XSQLInput: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     double readDouble() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** reads the next attribute in the stream as sequence of bytes.
                  @returns
@@ -161,7 +153,6 @@ published interface XSQLInput: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     sequence<byte> readBytes() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** reads the next attribute in the stream as date.
         @returns
@@ -170,7 +161,6 @@ published interface XSQLInput: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     com::sun::star::util::Date readDate() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** reads the next attribute in the stream as time.
         @returns
@@ -179,7 +169,6 @@ published interface XSQLInput: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     com::sun::star::util::Time readTime() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** reads the next attribute in the stream as datetime.
         @returns
@@ -188,7 +177,6 @@ published interface XSQLInput: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     com::sun::star::util::DateTime readTimestamp() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** reads the next attribute in the stream as sequence of bytes.
         @returns
@@ -197,7 +185,6 @@ published interface XSQLInput: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     com::sun::star::io::XInputStream readBinaryStream() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** reads the next attribute in the stream as a Unicode string.
         @returns
@@ -206,7 +193,6 @@ published interface XSQLInput: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     com::sun::star::io::XInputStream readCharacterStream() raises (SQLException);
-       //-------------------------------------------------------------------------
 
     /** returns the datum at the head of the stream as an any.
 
@@ -235,7 +221,6 @@ published interface XSQLInput: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     any readObject() raises (SQLException);
-      //-------------------------------------------------------------------------
 
     /** reads a REF(&amp;lt;structured-type&amp;gt;) from the stream.
         @returns
@@ -244,7 +229,6 @@ published interface XSQLInput: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     XRef readRef() raises (SQLException);
-      //-------------------------------------------------------------------------
 
     /** reads a BLOB from the stream.
         @returns
@@ -253,7 +237,6 @@ published interface XSQLInput: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     XBlob readBlob() raises (SQLException);
-      //-------------------------------------------------------------------------
 
     /** reads a CLOB from the stream.
         @returns
@@ -262,7 +245,6 @@ published interface XSQLInput: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     XClob readClob() raises (SQLException);
-      //-------------------------------------------------------------------------
 
     /** reads an array from the stream.
         @returns
@@ -271,7 +253,6 @@ published interface XSQLInput: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     XArray readArray() raises (SQLException);
-      //-------------------------------------------------------------------------
 
     /** determines whether the last value read was null.
         @returns
@@ -282,7 +263,6 @@ published interface XSQLInput: com::sun::star::uno::XInterface
     boolean wasNull() raises (SQLException);
 };
 
-//=============================================================================
 
 }; }; }; };
 

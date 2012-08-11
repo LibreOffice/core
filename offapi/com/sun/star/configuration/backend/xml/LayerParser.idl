@@ -32,12 +32,10 @@
 #include <com/sun/star/io/XActiveDataSink.idl>
 #include <com/sun/star/lang/XInitialization.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module configuration { module backend {
 module xml {
 
-//=============================================================================
 
 /**
     represents a configuration data layer that is stored in a stream in
@@ -58,19 +56,16 @@ module xml {
 */
 published service LayerParser
 {
-    //-------------------------------------------------------------------------
 
     /** provides access to the parsed layer data.
       */
     interface com::sun::star::configuration::backend::XLayer ;
 
-    //-------------------------------------------------------------------------
 
     /** provides access to the source XML stream.
       */
     interface com::sun::star::io::XActiveDataSink ;
 
-    //-------------------------------------------------------------------------
 
     /** allows initializing the source stream.
 
@@ -81,10 +76,8 @@ published service LayerParser
       */
     interface com::sun::star::lang::XInitialization ;
 
-    //-------------------------------------------------------------------------
 } ;
 
-//=============================================================================
 } ;
 } ; } ; } ; } ; } ;
 

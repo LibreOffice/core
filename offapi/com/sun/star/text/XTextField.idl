@@ -22,11 +22,9 @@
 #include <com/sun/star/text/XTextContent.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module text {
 
-//=============================================================================
 
 // DocMerge from xml: interface com::sun::star::text::XTextField
 /** is the base interface for all text fields.
@@ -40,7 +38,6 @@
  */
 published interface XTextField: com::sun::star::text::XTextContent
 {
-    //-------------------------------------------------------------------------
 
     // DocMerge from idl: method com::sun::star::text::XTextField::getPresentation
     /** @returns the display string of the text field either as the command
@@ -52,7 +49,6 @@ published interface XTextField: com::sun::star::text::XTextContent
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

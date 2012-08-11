@@ -31,11 +31,9 @@
 #include <com/sun/star/container/XIndexContainer.idl>
 #include <com/sun/star/container/XContainer.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module awt {  module tab {
 
-//=============================================================================
 
 /** specifies an interface for a UnoControlTabPageContainerModel.
 
@@ -47,7 +45,6 @@ interface XTabPageContainerModel
     interface com::sun::star::container::XContainer;
 };
 
-//=============================================================================
 
  }; }; }; }; };
 

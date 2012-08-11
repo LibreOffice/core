@@ -31,11 +31,9 @@
 
 #include <com/sun/star/uno/Exception.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** <p>This exception must be thrown in case the requested name clash
     directive is not supported, because it is not possible to implement
     it or if it is just not (yet) implemented.
@@ -59,13 +57,11 @@ module com { module sun { module star { module ucb {
 */
 published exception UnsupportedNameClashException : com::sun::star::uno::Exception
 {
-    //-------------------------------------------------------------------------
     /** contains the <type>NameClash</type> that is not supported.
      */
     long NameClash;
 };
 
-//=============================================================================
 
 }; }; }; };
 

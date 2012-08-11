@@ -24,11 +24,9 @@
 #include <com/sun/star/form/FormControlModel.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module form {  module component {
 
-//=============================================================================
 
 /** This service specifies a model for a control which can be used to visually
     group controls.
@@ -41,7 +39,6 @@ published service GroupBox
 
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

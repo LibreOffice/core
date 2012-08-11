@@ -22,11 +22,9 @@
 #include <com/sun/star/linguistic2/XConversionDictionaryList.idl>
 #include <com/sun/star/lang/XComponent.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module linguistic2 {
 
-//=============================================================================
 /** represents a list of available conversion dictionaries.
 
     <p>There will be only one list that may hold different types of
@@ -50,7 +48,6 @@ published service ConversionDictionaryList
     interface com::sun::star::lang::XComponent;
 };
 
-//=============================================================================
 
 }; }; }; };
 

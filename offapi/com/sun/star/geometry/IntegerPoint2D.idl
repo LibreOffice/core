@@ -33,7 +33,6 @@ struct IntegerPoint2D
     /// The x coordinate of the point.
     long X;
 
-    //-------------------------------------------------------------------------
 
     /// The x coordinate of the point.
     long Y;

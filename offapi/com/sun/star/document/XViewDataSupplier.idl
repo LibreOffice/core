@@ -21,11 +21,9 @@
 
 #include <com/sun/star/container/XIndexAccess.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module document {
 
-//=============================================================================
 /** gives access to some properties describing all open views to a document
 
     <p>
@@ -38,7 +36,6 @@ module com { module sun { module star { module document {
  */
 published interface XViewDataSupplier: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** retrieve informations about currently opened view to restore it later
 
         @returns
@@ -48,7 +45,6 @@ published interface XViewDataSupplier: com::sun::star::uno::XInterface
      */
     ::com::sun::star::container::XIndexAccess getViewData();
 
-    //-------------------------------------------------------------------------
     /** restore all views which will be represented by given data argument
 
         @param Data
@@ -59,7 +55,6 @@ published interface XViewDataSupplier: com::sun::star::uno::XInterface
     void setViewData( [in] com::sun::star::container::XIndexAccess Data );
 };
 
-//=============================================================================
 
 }; }; }; };
 

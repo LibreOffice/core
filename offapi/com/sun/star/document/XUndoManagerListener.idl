@@ -31,11 +31,9 @@
 #include <com/sun/star/document/UndoManagerEvent.idl>
 #include <com/sun/star/lang/XEventListener.idl>
 
-//==================================================================================================================
 
 module com { module sun { module star { module document {
 
-//==================================================================================================================
 
 /** implemented by components which want to be notified of changes in the Undo/Redo stacks of an Undo manager.
 
@@ -136,11 +134,9 @@ interface XUndoManagerListener : ::com::sun::star::lang::XEventListener
     void    cancelledContext( [in] UndoManagerEvent i_event );
 };
 
-//==================================================================================================================
 
 }; }; }; };
 
-//==================================================================================================================
 
 #endif
 

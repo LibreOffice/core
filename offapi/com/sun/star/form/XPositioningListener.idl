@@ -33,11 +33,9 @@
 #include <com/sun/star/lang/EventObject.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module form {
 
-//=============================================================================
 
 /** allows to receive notifications about cursor movements into a database form.
 
@@ -49,7 +47,6 @@
  */
 published interface XPositioningListener: com::sun::star::lang::XEventListener
 {
-    //-------------------------------------------------------------------------
 
     /** is invoked when the database form has been positioned on a data record.
      */
@@ -57,7 +54,6 @@ published interface XPositioningListener: com::sun::star::lang::XEventListener
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

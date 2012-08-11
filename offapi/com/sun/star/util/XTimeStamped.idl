@@ -24,7 +24,6 @@
 
 module com { module sun { module star { module util {
 
-//============================================================================
 
 /**
   provides timestamp information for an object
@@ -45,7 +44,6 @@ module com { module sun { module star { module util {
   */
 published interface XTimeStamped : ::com::sun::star::uno::XInterface
 {
-    //------------------------------------------------------------------------
 
     /**
       returns the timestamp of the object.
@@ -56,7 +54,6 @@ published interface XTimeStamped : ::com::sun::star::uno::XInterface
       */
     string getTimestamp() ;
 
-    //------------------------------------------------------------------------
 } ;
 
 } ; } ; } ; } ;

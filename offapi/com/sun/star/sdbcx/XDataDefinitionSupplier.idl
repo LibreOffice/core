@@ -50,7 +50,6 @@ published interface XDataDefinitionSupplier: com::sun::star::uno::XInterface
     XTablesSupplier getDataDefinitionByConnection(
                 [in]com::sun::star::sdbc::XConnection connection)
         raises (com::sun::star::sdbc::SQLException);
-    //-------------------------------------------------------------------------
 
     /** returns at least the container of tables related to the given Database URL.
         @param url
@@ -69,7 +68,6 @@ published interface XDataDefinitionSupplier: com::sun::star::uno::XInterface
         raises (com::sun::star::sdbc::SQLException);
 };
 
-//=============================================================================
 
 }; }; }; };
 

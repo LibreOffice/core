@@ -25,17 +25,14 @@
 #include <com/sun/star/lang/XTypeProvider.idl>
 #include <com/sun/star/lang/XInitialization.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module datatransfer { module clipboard {
 
-//=============================================================================
 
  published interface XClipboardEx;
  published interface XClipboardNotifier;
  published interface XFlushableClipboard;
 
-//=============================================================================
 /** The system clipboard service builds a bridge to the OS specific clipboard
     interfaces.
 
@@ -49,17 +46,14 @@ module com { module sun { module star { module datatransfer { module clipboard {
 */
 published service SystemClipboard
 {
-    //-------------------------------------------------------------------------
     /** Provides access to the clipboard content.
     */
     interface XClipboardEx;
 
-    //-------------------------------------------------------------------------
     /** Provides the ability to request notifications on content changes.
     */
     interface XClipboardNotifier;
 
-    //-------------------------------------------------------------------------
     /** Provides the ability to render the complete clipboard content. This
         interface is only available if the method
         <member scope="com::sun::star::datatransfer::clipboard">XClipboardEx::getRenderingCapabilities()</member>
@@ -67,28 +61,23 @@ published service SystemClipboard
     */
     [optional] interface XFlushableClipboard;
 
-    //-------------------------------------------------------------------------
     /** Provides the ability to initialize the clipboard
     */
     [optional] interface com::sun::star::lang::XInitialization;
 
-    //-------------------------------------------------------------------------
     /** For shutdown and listener support.
     */
     interface com::sun::star::lang::XComponent;
 
-    //-------------------------------------------------------------------------
     /** Service should always support this interface.
     */
     interface com::sun::star::lang::XServiceInfo;
 
-    //-------------------------------------------------------------------------
     /** Service should always support this interface.
     */
     interface com::sun::star::lang::XTypeProvider;
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

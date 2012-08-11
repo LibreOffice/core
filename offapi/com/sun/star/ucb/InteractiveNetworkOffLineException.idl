@@ -22,18 +22,15 @@
 #include <com/sun/star/ucb/InteractiveNetworkException.idl>
 
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** A network error specifying an off line condition.
 */
 published exception InteractiveNetworkOffLineException: com::sun::star::ucb::InteractiveNetworkException
 {
 };
 
-//=============================================================================
 
 }; }; }; };
 

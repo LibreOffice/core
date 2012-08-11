@@ -22,11 +22,9 @@
 #include <com/sun/star/beans/XPropertySet.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module drawing {
 
-//=============================================================================
 
 // DocMerge from xml: service com::sun::star::drawing::Layer
 /** A layer is an entity inside a document which contains shapes.
@@ -54,7 +52,6 @@ published service Layer
      */
     interface com::sun::star::beans::XPropertySet;
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::drawing::Layer::Name
     /** The name of a <type>Layer</type> is used to identify the
@@ -62,7 +59,6 @@ published service Layer
      */
     [property] string Name;
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::drawing::Layer::IsVisible
     /** If a <type>Layer</type> is not visible, the objects in this
@@ -70,7 +66,6 @@ published service Layer
      */
     [property] boolean IsVisible;
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::drawing::Layer::IsPrintable
     /** If a <type>Layer</type> is not printable, the objects in
@@ -78,7 +73,6 @@ published service Layer
      */
     [property] boolean IsPrintable;
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::drawing::Layer::IsLocked
     /** If a <type>Layer</type> is locked, the objects in this
@@ -88,7 +82,6 @@ published service Layer
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

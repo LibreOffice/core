@@ -31,11 +31,9 @@
 #include <com/sun/star/xml/sax/SAXException.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module xml {  module sax {
 
-//=============================================================================
 
 /** stores information for locating the error in the original XML document.
 
@@ -43,26 +41,22 @@ module com {  module sun {  module star {  module xml {  module sax {
  */
 published exception SAXParseException: com::sun::star::xml::sax::SAXException
 {
-    //-------------------------------------------------------------------------
 
     /** contains the public identifier of the document where the exception
         has occurred.
      */
     string PublicId;
 
-    //-------------------------------------------------------------------------
 
     /** contains the system identifier of the document.
      */
     string SystemId;
 
-    //-------------------------------------------------------------------------
 
     /** contains the line number in the document.
      */
     long LineNumber;
 
-    //-------------------------------------------------------------------------
 
     /** contains the column number in the document.
      */
@@ -70,7 +64,6 @@ published exception SAXParseException: com::sun::star::xml::sax::SAXException
 
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

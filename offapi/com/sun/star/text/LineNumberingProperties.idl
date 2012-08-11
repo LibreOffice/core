@@ -30,73 +30,60 @@
 
 #include <com/sun/star/text/XLineNumberingProperties.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module text {
 
-//=============================================================================
 
 // DocMerge from xml: service com::sun::star::text::LineNumberingProperties
 /** provides access to the settings of the line numbering.
  */
 published service LineNumberingProperties
 {
-    //-------------------------------------------------------------------------
 
     /** If <TRUE/>, line numbering is used.
      */
     [property] boolean IsOn;
 
-    //-------------------------------------------------------------------------
 
     /** The name of the character style that is used for the line number.
      */
     [property] string CharStyleName;
 
-    //-------------------------------------------------------------------------
 
     /** If <TRUE/>, empty lines are counted.
      */
     [property] boolean CountEmptyLines;
 
-    //-------------------------------------------------------------------------
     /** If <TRUE/>, lines in frames are included in counting.
      */
     [property] boolean CountLinesInFrames;
 
-    //-------------------------------------------------------------------------
     /** specifies the distance between the line number and the start or
         end of the text area.
      */
     [property] long Distance;
 
-    //-------------------------------------------------------------------------
     /** Line numbers are shown on every <var>Interval</var>th line.
      */
     [property] short Interval;
 
-    //-------------------------------------------------------------------------
     /** specifies the string that is used for the line separator.
      */
     [property] string SeparatorText;
 
-    //-------------------------------------------------------------------------
     /** The line separator is shown every <var>SeparatorInterval</var>th line.
      */
     [property] short SeparatorInterval;
 
-    //-------------------------------------------------------------------------
     /** specifies the position of the line number (constant LineNumberPositions
         left/right/inside/outside).
      */
     [property] short NumberPosition;
 
-    //-------------------------------------------------------------------------
     /** specifies the type of the numbering.
      */
     [property] short NumberingType;
 
-    //-------------------------------------------------------------------------
     /** specifies if the line numbering should start from the
         beginning at each page.
 
@@ -108,7 +95,6 @@ published service LineNumberingProperties
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

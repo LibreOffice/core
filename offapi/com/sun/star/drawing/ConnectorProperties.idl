@@ -22,41 +22,34 @@
 #include <com/sun/star/drawing/ConnectorType.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module drawing {
 
-//=============================================================================
 
 /** This is a set of properties to describe the style for rendering connector.
  */
 published service ConnectorProperties
 {
-    //-------------------------------------------------------------------------
 
     /** This property contains the kind of the connector.
      */
     [property] com::sun::star::drawing::ConnectorType EdgeKind;
 
-    //-------------------------------------------------------------------------
 
     /** This property contains the horizontal distance of node 1.
      */
     [property] long EdgeNode1HorzDist;
 
-    //-------------------------------------------------------------------------
 
     /** This property contains the vertical distance of node 1.
      */
     [property] long EdgeNode1VertDist;
 
-    //-------------------------------------------------------------------------
 
     /** This property contains the horizontal distance of node 2.
      */
     [property] long EdgeNode2HorzDist;
 
-    //-------------------------------------------------------------------------
 
     /** This property contains the vertical distance of node 2.
      */
@@ -64,7 +57,6 @@ published service ConnectorProperties
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -28,13 +28,10 @@
 //    allows for different iterators for grammar checking and smart tags,
 //    interface must be implemented exactly once for each document since
 //    the interface pointer will be used to get an unique document id.
-//-----------------------------------------------------------------------------
 
-//=============================================================================
 
 module com {  module sun {  module star {  module text {
 
-//=============================================================================
 
 /** provides functionality to ...
 
@@ -43,7 +40,6 @@ module com {  module sun {  module star {  module text {
 
 interface XFlatParagraphIteratorProvider: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** get XFlatParagraphIterator
 
         @param  nType
@@ -64,7 +60,6 @@ interface XFlatParagraphIteratorProvider: com::sun::star::uno::XInterface
             raises( com::sun::star::lang::IllegalArgumentException );
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -20,11 +20,9 @@
 #define __com_sun_star_drawing_Direction3D_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module drawing {
 
-//=============================================================================
 
 // DocMerge from xml: struct com::sun::star::drawing::Direction3D
 /** specifies a 3-dimensional vector.
@@ -34,13 +32,11 @@ published struct Direction3D
     // DocMerge: empty anyway
     double DirectionX;
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR Direction3D::DirectionY
 
     // DocMerge: empty anyway
     double DirectionY;
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR Direction3D::DirectionZ
 
     // DocMerge: empty anyway
@@ -48,7 +44,6 @@ published struct Direction3D
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

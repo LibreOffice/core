@@ -29,11 +29,9 @@
 #include <com/sun/star/table/ShadowFormat.idl>
 #include <com/sun/star/text/XTextFrame.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module text {
 
-//=============================================================================
 
 /** specifies the base service of text frames, graphic objects, and embedded objects
  */
@@ -41,7 +39,6 @@ published service BaseFrame
 {
     service BaseFrameProperties;
     service TextContent;
-    //-------------------------------------------------------------------------
     /** This interface specifies the access to the shape data (position
                 and size) of the text frame.
 
@@ -59,7 +56,6 @@ published service BaseFrame
                 owner text of this text component.
      */
     [optional] interface com::sun::star::drawing::XShape;
-    //-------------------------------------------------------------------------
     /** This interface makes it possible to access the properties of
                 this text frame.
 
@@ -67,21 +63,18 @@ published service BaseFrame
                 a surrounding text.
      */
     interface com::sun::star::beans::XPropertySet;
-    //-------------------------------------------------------------------------
     /** This interface specifies the name of this text frame.
 
                 <p>The name may be set automatically by the container if it is not
                 set when inserted. In this case a random, unique name is assigned.
      */
     interface com::sun::star::container::XNamed;
-    //-------------------------------------------------------------------------
     /** contains the name of the frame style that is applied to this object.
      */
     [property] string FrameStyleName;
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

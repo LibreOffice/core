@@ -20,11 +20,9 @@
 #define __com_sun_star_text_ChapterFormat_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module text {
 
-//=============================================================================
 
 // DocMerge from idl: constants com::sun::star::text::ChapterFormat
 /** These constants define the display format of the chapter number in a
@@ -32,35 +30,30 @@
  */
 published constants ChapterFormat
 {
-    //-------------------------------------------------------------------------
 
     // DocMerge from idl: value com::sun::star::text::ChapterFormat::NAME
     /** The title of the chapter is displayed.
      */
     const short NAME = 0;
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from idl: value com::sun::star::text::ChapterFormat::NUMBER
     /** The number including prefix and suffix of the chapter is displayed.
      */
     const short NUMBER = 1;
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from idl: value com::sun::star::text::ChapterFormat::NAME_NUMBER
     /** The title and number including prefix and suffix of the chapter are displayed.
      */
     const short NAME_NUMBER = 2;
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from idl: value com::sun::star::text::ChapterFormat::NO_PREFIX_SUFFIX
     /** The name and number of the chapter are displayed.
      */
     const short NO_PREFIX_SUFFIX = 3;
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from idl: value com::sun::star::text::ChapterFormat::DIGIT
     /** The number of the chapter is displayed.
@@ -69,7 +62,6 @@ published constants ChapterFormat
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

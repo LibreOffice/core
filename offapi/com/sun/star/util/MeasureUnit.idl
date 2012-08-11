@@ -20,11 +20,9 @@
 #define __com_sun_star_util_MeasureUnit_idl__
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module util {
 
-//=============================================================================
 
 /** These constants are used to specify a measure.<p>
     A component using these constants may not support all units.
@@ -90,7 +88,6 @@ published constants MeasureUnit
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

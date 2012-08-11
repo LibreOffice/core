@@ -19,11 +19,9 @@
 #ifndef com_sun_star_chart2_AxisOrientation_idl
 #define com_sun_star_chart2_AxisOrientation_idl
 
-//=============================================================================
 
 module com {  module sun {  module star {  module chart2 {
 
-//=============================================================================
 
 enum AxisOrientation
 {
@@ -36,7 +34,6 @@ enum AxisOrientation
     REVERSE
 };
 
-//=============================================================================
 
 }; }; }; };
 

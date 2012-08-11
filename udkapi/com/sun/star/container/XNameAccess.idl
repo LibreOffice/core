@@ -25,11 +25,9 @@
 
 #include <com/sun/star/lang/WrappedTargetException.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module container {
 
-//=============================================================================
 
 /** is used to access named objects within a container.
 
@@ -40,7 +38,6 @@ module com {  module sun {  module star {  module container {
  */
 published interface XNameAccess: com::sun::star::container::XElementAccess
 {
-    //-------------------------------------------------------------------------
 
     /** @returns
         the object with the specified name.
@@ -60,7 +57,6 @@ published interface XNameAccess: com::sun::star::container::XElementAccess
             raises( com::sun::star::container::NoSuchElementException,
                     com::sun::star::lang::WrappedTargetException );
 
-    //-------------------------------------------------------------------------
 
     /** @returns
             a sequence of all element names in this container.
@@ -69,7 +65,6 @@ published interface XNameAccess: com::sun::star::container::XElementAccess
      */
     sequence<string> getElementNames();
 
-    //-------------------------------------------------------------------------
 
     /** @returns
             <TRUE/> if an element with this name is in
@@ -85,7 +80,6 @@ published interface XNameAccess: com::sun::star::container::XElementAccess
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

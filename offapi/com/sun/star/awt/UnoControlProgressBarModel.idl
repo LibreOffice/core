@@ -24,11 +24,9 @@
 #include <com/sun/star/util/Color.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module awt {
 
-//=============================================================================
 
 /** specifies the standard model of an <type>UnoControlProgressBar</type>.
  */
@@ -36,13 +34,11 @@ published service UnoControlProgressBarModel
 {
     service com::sun::star::awt::UnoControlModel;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the background color (RGB) of the control.
      */
     [property] com::sun::star::util::Color BackgroundColor;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the border style of the control.
 
@@ -54,7 +50,6 @@ published service UnoControlProgressBarModel
      */
     [property] short Border;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the color of the border, if present
 
@@ -65,49 +60,41 @@ published service UnoControlProgressBarModel
      */
     [optional, property] long BorderColor;
 
-    //-------------------------------------------------------------------------
 
     /** determines whether the control is enabled or disabled.
      */
     [property] boolean Enabled;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the fill color (RGB) of the control.
      */
     [property] com::sun::star::util::Color FillColor;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the help text of the control.
      */
     [property] string HelpText;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the help URL of the control.
      */
     [property] string HelpURL;
 
-    //-------------------------------------------------------------------------
 
     /** specifies that the control will be printed with the document.
      */
     [property] boolean Printable;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the progress value of the control.
      */
     [property] long ProgressValue;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the maximum progress value of the control.
      */
     [property] long ProgressValueMax;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the minimum progress value of the control.
      */
@@ -115,7 +102,6 @@ published service UnoControlProgressBarModel
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

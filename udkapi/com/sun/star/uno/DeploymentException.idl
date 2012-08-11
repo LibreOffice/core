@@ -22,11 +22,9 @@
 #include <com/sun/star/uno/RuntimeException.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module uno {
 
-//=============================================================================
 
 /** Exception signalling a deployment error.
 
@@ -36,7 +34,6 @@ published exception DeploymentException : com::sun::star::uno::RuntimeException
 {
 };
 
-//=============================================================================
 
 }; }; }; };
 

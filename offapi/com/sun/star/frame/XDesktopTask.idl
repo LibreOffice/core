@@ -23,23 +23,19 @@
 #include <com/sun/star/awt/XWindow.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module frame {
 
-//=============================================================================
 /** use <type>XFrame</type> instead of this
     @deprecated
  */
 published interface XDesktopTask: com::sun::star::lang::XComponent
 {
-    //-------------------------------------------------------------------------
     /** use <type scope="com::sun::star::lang">XInitialization</type> instead..
         @deprecated
      */
     void initialize( [in] com::sun::star::awt::XWindow TaskWindow );
 
-    //-------------------------------------------------------------------------
     /** use <type scope="com::sun::star::util">XCloseable</type>
         or <member scope="com::sun::star::lang">XComponent::dispose()</member>
         instead.
@@ -49,7 +45,6 @@ published interface XDesktopTask: com::sun::star::lang::XComponent
     boolean close();
 };
 
-//=============================================================================
 
 }; }; }; };
 

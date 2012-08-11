@@ -40,25 +40,21 @@
 #include <com/sun/star/table/TableBorder.idl>
 #include <com/sun/star/table/TableBorder2.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** represents a field in an AutoFormat. A field contains all cell
     properties for a specific position in an AutoFormat.
  */
 published service TableAutoFormatField
 {
-    //-------------------------------------------------------------------------
 
 //! service com::sun::star::beans::PropertySet;
     /** provides access to the properties.
      */
     interface com::sun::star::beans::XPropertySet;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the name of the western font.
      */
@@ -72,7 +68,6 @@ published service TableAutoFormatField
      */
     [optional, property] string CharFontNameComplex;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the name of the western font style.
      */
@@ -86,7 +81,6 @@ published service TableAutoFormatField
      */
     [optional, property] string CharFontStyleNameComplex;
 
-    //-------------------------------------------------------------------------
 
     /** contains the value of the character set of the western font.
      */
@@ -100,7 +94,6 @@ published service TableAutoFormatField
      */
     [optional, property] string CharFontCharSetComplex;
 
-    //-------------------------------------------------------------------------
 
     /** contains the value of the western font family.
      */
@@ -114,7 +107,6 @@ published service TableAutoFormatField
      */
     [optional, property] string CharFontFamilyComplex;
 
-    //-------------------------------------------------------------------------
 
     /** contains the value of the pitch of the western font.
      */
@@ -128,7 +120,6 @@ published service TableAutoFormatField
      */
     [optional, property] string CharFontPitchComplex;
 
-    //-------------------------------------------------------------------------
 
     /** contains the height of characters of the western font in point.
      */
@@ -142,7 +133,6 @@ published service TableAutoFormatField
      */
     [optional, property] float CharHeightComplex;
 
-    //-------------------------------------------------------------------------
 
     /** contains the value for the weight of characters of the western font.
      */
@@ -156,7 +146,6 @@ published service TableAutoFormatField
      */
     [optional, property] float CharWeightComplex;
 
-    //-------------------------------------------------------------------------
 
     /** contains the value of the posture of characters of the western font.
      */
@@ -170,43 +159,36 @@ published service TableAutoFormatField
      */
     [optional, property] com::sun::star::awt::FontSlant CharPostureComplex;
 
-    //-------------------------------------------------------------------------
 
     /** contains the value for the character underline.
      */
     [property] short CharUnderline;
 
-    //-------------------------------------------------------------------------
 
     /** is <TRUE/> if the characters are crossed out.
      */
     [property] boolean CharCrossedOut;
 
-    //-------------------------------------------------------------------------
 
     /** is <TRUE/> if the characters are contoured.
      */
     [property] boolean CharContoured;
 
-    //-------------------------------------------------------------------------
 
     /** is <TRUE/> if the characters are shadowed.
      */
     [property] boolean CharShadowed;
 
-    //-------------------------------------------------------------------------
 
     /** contains the value of the text color.
      */
     [property] com::sun::star::util::Color CharColor;
 
-    //-------------------------------------------------------------------------
 
     /** contains the cell background color.
      */
     [property] com::sun::star::util::Color CellBackColor;
 
-    //-------------------------------------------------------------------------
 
     /** is <TRUE/> if the cell background is transparent.
 
@@ -215,19 +197,16 @@ published service TableAutoFormatField
      */
     [property] boolean IsCellBackgroundTransparent;
 
-    //-------------------------------------------------------------------------
 
     /** contains a description of the shadow.
      */
     [optional, property] com::sun::star::table::ShadowFormat ShadowFormat;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the horizontal alignment of the cell contents.
      */
     [optional, property] com::sun::star::table::CellHoriJustify HoriJustify;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the vertical alignment of the cell contents.
 
@@ -237,26 +216,22 @@ published service TableAutoFormatField
      */
     [optional, property] long VertJustify;
 
-    //-------------------------------------------------------------------------
 
     /** is <TRUE/> if text breaks automatically at cell borders.
      */
     [optional, property] boolean IsTextWrapped;
 
-    //-------------------------------------------------------------------------
 
     /** contains the orientation of the cell contents
         (i.e. top-to-bottom or stacked).
      */
     [optional, property] com::sun::star::table::CellOrientation Orientation;
 
-    //-------------------------------------------------------------------------
 
     /** contains the rotation angle of the cell contents.
      */
     [optional, property] long RotateAngle;
 
-    //-------------------------------------------------------------------------
 
     /** contains the reference edge of the cell rotation.
 
@@ -266,35 +241,30 @@ published service TableAutoFormatField
      */
     [optional, property] long RotateReference;
 
-    //-------------------------------------------------------------------------
 
     /** contains the margin between cell contents and top border
         (in 1/100 mm).
      */
     [optional, property] long ParaTopMargin;
 
-    //-------------------------------------------------------------------------
 
     /** contains the margin between cell contents and bottom border
         (in 1/100 mm).
      */
     [optional, property] long ParaBottomMargin;
 
-    //-------------------------------------------------------------------------
 
     /** contains the margin between cell contents and left border
         (in 1/100 mm).
      */
     [optional, property] long ParaLeftMargin;
 
-    //-------------------------------------------------------------------------
 
     /** contains the margin between cell contents and right border
         (in 1/100 mm).
      */
     [optional, property] long ParaRightMargin;
 
-    //-------------------------------------------------------------------------
 
     /** property containing a description of the cell border.
 
@@ -302,7 +272,6 @@ published service TableAutoFormatField
      */
     [optional, property] com::sun::star::table::TableBorder TableBorder;
 
-    //-------------------------------------------------------------------------
 
     /** property containing a description of the cell border.
         Preferred over <type scope="com::sun::star::table">TableBorder</type> 
@@ -313,11 +282,9 @@ published service TableAutoFormatField
     [optional, property] com::sun::star::table::TableBorder2 TableBorder2;
 };
 
-//=============================================================================
 
 }; }; }; };
 
-//=============================================================================
 
 #endif
 

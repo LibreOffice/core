@@ -22,35 +22,29 @@
 #include <com/sun/star/text/XTextRange.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module text {
 
-//=============================================================================
 
 /** extends a text range by method to modify its position.
  */
 published interface XTextCursor: com::sun::star::text::XTextRange
 {
-    //-------------------------------------------------------------------------
 
     /** sets the end of the position to the start.
      */
     [oneway] void collapseToStart();
 
-    //-------------------------------------------------------------------------
 
     /** sets the start of the position to the end.
      */
     [oneway] void collapseToEnd();
 
-    //-------------------------------------------------------------------------
 
     /** determines if the start and end positions are the same.
      */
     boolean isCollapsed();
 
-    //-------------------------------------------------------------------------
 
     /** moves the cursor the specified number of characters to the left.
 
@@ -73,7 +67,6 @@ published interface XTextCursor: com::sun::star::text::XTextRange
     boolean goLeft( [in] short nCount,
              [in] boolean bExpand );
 
-    //-------------------------------------------------------------------------
 
     /** moves the cursor the specified number of characters to the right.
 
@@ -96,19 +89,16 @@ published interface XTextCursor: com::sun::star::text::XTextRange
     boolean goRight( [in] short nCount,
              [in] boolean bExpand );
 
-    //-------------------------------------------------------------------------
 
     /** moves the cursor to the start of the text.
      */
     void gotoStart( [in] boolean bExpand );
 
-    //-------------------------------------------------------------------------
 
     /** moves the cursor to the end of the text.
      */
     void gotoEnd( [in] boolean bExpand );
 
-    //-------------------------------------------------------------------------
 
     /** moves or expands the cursor to a specified <type>TextRange</type>.
      */
@@ -117,7 +107,6 @@ published interface XTextCursor: com::sun::star::text::XTextRange
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

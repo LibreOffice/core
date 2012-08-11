@@ -23,11 +23,9 @@
 
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module lang {
 
-//=============================================================================
 
 /** An interface to tunnel UNO. This means providing access to data or
     something else, which is not specified by UNO-IDL.
@@ -60,7 +58,6 @@ published interface XUnoTunnel: com::sun::star::uno::XInterface
     hyper getSomething( [in] sequence< byte > aIdentifier );
 };
 
-//=============================================================================
 
 }; }; }; };
 

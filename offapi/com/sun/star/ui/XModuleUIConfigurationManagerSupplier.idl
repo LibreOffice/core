@@ -42,7 +42,6 @@ module com { module sun { module star { module ui {
 
 interface XModuleUIConfigurationManagerSupplier : ::com::sun::star::uno::XInterface
 {
-    //----------------------------------------------------------------------
     /** returns the requested module based user interface configuration manager.
 
         @param ModuleIdentifier
@@ -60,7 +59,6 @@ interface XModuleUIConfigurationManagerSupplier : ::com::sun::star::uno::XInterf
     XUIConfigurationManager getUIConfigurationManager( [in] string ModuleIdentifier ) raises ( com::sun::star::container::NoSuchElementException );
 };
 
-//=============================================================================
 
 }; }; }; };
 

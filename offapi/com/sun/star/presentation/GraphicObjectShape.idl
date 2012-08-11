@@ -33,11 +33,9 @@
 #include <com/sun/star/drawing/GraphicObjectShape.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module presentation {
 
-//=============================================================================
 
 /** This service is implemented by the graphic presentation shape.
 
@@ -52,7 +50,6 @@ published service GraphicObjectShape
     service com::sun::star::drawing::GraphicObjectShape;
 };
 
-//=============================================================================
 
 }; }; }; };
 

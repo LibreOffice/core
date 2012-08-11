@@ -31,11 +31,9 @@
 
 #include <com/sun/star/container/XIndexAccess.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module table {
 
-//=============================================================================
 
 /** provides methods to access columns via index and to insert and remove
     columns.
@@ -44,7 +42,6 @@ module com {  module sun {  module star {  module table {
  */
 published interface XTableColumns: com::sun::star::container::XIndexAccess
 {
-    //-------------------------------------------------------------------------
 
     /** inserts new columns.
 
@@ -56,7 +53,6 @@ published interface XTableColumns: com::sun::star::container::XIndexAccess
      */
     void insertByIndex( [in] long nIndex, [in] long nCount );
 
-    //-------------------------------------------------------------------------
 
     /** deletes columns.
 
@@ -70,7 +66,6 @@ published interface XTableColumns: com::sun::star::container::XIndexAccess
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

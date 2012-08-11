@@ -33,11 +33,9 @@
 
 #include <com/sun/star/beans/IllegalTypeException.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module beans {
 
-//=============================================================================
 
 /** represents the result of an introspection operation done by
     the inspect method of <type scope="com::sun::star::beans">
@@ -64,7 +62,6 @@
  */
 published interface XIntrospectionAccess: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** returns information about which method concepts described in
         the <type>MethodConcept</type> constants group are supported
         by this <type>XIntrospectionAccess</type> implementation.
@@ -85,7 +82,6 @@ published interface XIntrospectionAccess: com::sun::star::uno::XInterface
      */
     long getSuppliedMethodConcepts();
 
-    //-------------------------------------------------------------------------
     /** returns information about which property concepts described in
         the <type>PropertyConcept</type> constants group are supported
         by this <type>XIntrospectionAccess</type> implementation.
@@ -104,7 +100,6 @@ published interface XIntrospectionAccess: com::sun::star::uno::XInterface
      */
     long getSuppliedPropertyConcepts();
 
-    //-------------------------------------------------------------------------
     /** returns information about a property if a property with
         the demanded name exists and if it accords to one of the
         demanded <type>PropertyConcept</type>s. The information
@@ -132,7 +127,6 @@ published interface XIntrospectionAccess: com::sun::star::uno::XInterface
              [in] long nPropertyConcepts )
             raises( com::sun::star::container::NoSuchElementException );
 
-    //-------------------------------------------------------------------------
     /** allows to ask if a property with the demanded name exists
         and if it accords to one of the demanded <type>
         PropertyConcept</type>s.
@@ -153,7 +147,6 @@ published interface XIntrospectionAccess: com::sun::star::uno::XInterface
     boolean hasProperty( [in] string aName,
              [in] long nPropertyConcepts );
 
-    //-------------------------------------------------------------------------
     /** returns a sequence of properties of the introspected object
 
         @returns
@@ -168,7 +161,6 @@ published interface XIntrospectionAccess: com::sun::star::uno::XInterface
     sequence<com::sun::star::beans::Property> getProperties(
                 [in] long nPropertyConcepts );
 
-    //-------------------------------------------------------------------------
     /** returns information about a method if a method with
         the demanded name exists and if it accords to one of
         the demanded MethodConcepts. The information is
@@ -197,7 +189,6 @@ published interface XIntrospectionAccess: com::sun::star::uno::XInterface
              [in] long nMethodConcepts )
             raises( com::sun::star::lang::NoSuchMethodException );
 
-    //-------------------------------------------------------------------------
     /** allows to ask if a method with the demanded name exists
         and if it accords to one of the demanded <type>MethodConcept
         </type>s.
@@ -218,7 +209,6 @@ published interface XIntrospectionAccess: com::sun::star::uno::XInterface
     boolean hasMethod( [in] string aName,
              [in] long nMethodConcepts );
 
-    //-------------------------------------------------------------------------
     /** returns a sequence of methods of the introspected object.
 
         @returns
@@ -233,7 +223,6 @@ published interface XIntrospectionAccess: com::sun::star::uno::XInterface
     sequence<com::sun::star::reflection::XIdlMethod> getMethods(
             [in] long nMethodConcepts );
 
-    //-------------------------------------------------------------------------
     /** returns the listener types supported by the introspected
         object.
 
@@ -249,7 +238,6 @@ published interface XIntrospectionAccess: com::sun::star::uno::XInterface
      */
     sequence<type> getSupportedListeners();
 
-    //-------------------------------------------------------------------------
     /** creates an adapter that implements an interface with the
         specified type.
 
@@ -292,7 +280,6 @@ published interface XIntrospectionAccess: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

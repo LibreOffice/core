@@ -29,11 +29,9 @@
 #define __com_sun_star_frame_FrameSearchFlag_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module frame {
 
-//=============================================================================
 /** these types describe the algorithm to be used to search a frame
 
     <p>
@@ -49,7 +47,6 @@
  */
 published constants FrameSearchFlag
 {
-    //-------------------------------------------------------------------------
     /** no longer supported
 
         <p>
@@ -61,17 +58,14 @@ published constants FrameSearchFlag
      */
     const long AUTO = 0;
 
-    //-------------------------------------------------------------------------
     /** allows search on the parent frames
      */
     const long PARENT = 1;
 
-    //-------------------------------------------------------------------------
     /** includes the start frame himself
      */
     const long SELF = 2;
 
-    //-------------------------------------------------------------------------
         /** includes all child frames of the start frame
 
             <p>
@@ -81,12 +75,10 @@ published constants FrameSearchFlag
          */
     const long CHILDREN = 4;
 
-    //-------------------------------------------------------------------------
     /** frame will be created if not found
      */
     const long CREATE = 8;
 
-    //-------------------------------------------------------------------------
         /** includes the direct siblings of the start frame
 
             <p>
@@ -97,7 +89,6 @@ published constants FrameSearchFlag
      */
     const long SIBLINGS = 16;
 
-    //-------------------------------------------------------------------------
         /** allow the search outside the current sub task tree of the whole possible frame tree
 
         <p>
@@ -111,20 +102,17 @@ published constants FrameSearchFlag
      */
     const long TASKS = 32;
 
-    //-------------------------------------------------------------------------
         /** includes all frames except frames in other tasks sub trees
         but doesn't create any new frame
      */
     const long ALL = 23;
 
-    //-------------------------------------------------------------------------
     /** searches in the whole hierarchy of frames
         but doesn't create any new frame
      */
     const long GLOBAL = 55;
 };
 
-//=============================================================================
 
 }; }; }; };
 

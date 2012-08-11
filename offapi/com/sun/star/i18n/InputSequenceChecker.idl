@@ -23,11 +23,9 @@
 #include <com/sun/star/lang/XServiceInfo.idl>
 #include <com/sun/star/i18n/XExtendedInputSequenceChecker.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module i18n {
 
-//=============================================================================
 
 /** Check input sequence of CTL languages like Thai or Hindi.
 
@@ -41,7 +39,6 @@ published service InputSequenceChecker
     [optional] interface com::sun::star::i18n::XExtendedInputSequenceChecker;
 };
 
-//=============================================================================
 }; }; }; };
 
 #endif

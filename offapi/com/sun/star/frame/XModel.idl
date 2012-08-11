@@ -35,11 +35,9 @@
 #include <com/sun/star/uno/XInterface.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module frame {
 
-//=============================================================================
 /** represents a component which is created from an URL and arguments.
 
     <p>
@@ -68,7 +66,6 @@
  */
 published interface XModel: com::sun::star::lang::XComponent
 {
-    //-------------------------------------------------------------------------
     /** informs a model about its resource description.
 
         @param URL
@@ -87,7 +84,6 @@ published interface XModel: com::sun::star::lang::XComponent
         [in] string URL,
         [in] sequence<com::sun::star::beans::PropertyValue> Arguments);
 
-    //-------------------------------------------------------------------------
     /** provides information about the location of this model
 
         @returns
@@ -97,7 +93,6 @@ published interface XModel: com::sun::star::lang::XComponent
      */
     string getURL();
 
-    //-------------------------------------------------------------------------
     /** provides read access on currently representation of the
         <type scope="com::sun::star::document">MediaDescriptor</type>
         of this model which describes the model and his state
@@ -108,7 +103,6 @@ published interface XModel: com::sun::star::lang::XComponent
      */
     sequence< com::sun::star::beans::PropertyValue > getArgs();
 
-    //-------------------------------------------------------------------------
     /** is called whenever a new controller is created for this model.
 
         <p>
@@ -123,7 +117,6 @@ published interface XModel: com::sun::star::lang::XComponent
      */
     [oneway] void connectController( [in] XController Controller );
 
-    //-------------------------------------------------------------------------
     /** is called whenever an existing controller should be deregistered at this model.
 
         <p>
@@ -138,7 +131,6 @@ published interface XModel: com::sun::star::lang::XComponent
      */
     [oneway] void disconnectController( [in] XController Controller );
 
-    //-------------------------------------------------------------------------
     /** suspends some notifications to the controllers which are used
         for display updates.
 
@@ -152,7 +144,6 @@ published interface XModel: com::sun::star::lang::XComponent
      */
     [oneway] void lockControllers();
 
-    //-------------------------------------------------------------------------
     /** resumes the notifications which were suspended by
         <member>XModel::lockControllers()</member>.
 
@@ -166,7 +157,6 @@ published interface XModel: com::sun::star::lang::XComponent
     */
     [oneway] void unlockControllers();
 
-    //-------------------------------------------------------------------------
     /** determines if there is at least one lock remaining.
 
         <p>
@@ -181,7 +171,6 @@ published interface XModel: com::sun::star::lang::XComponent
      */
     boolean hasControllersLocked();
 
-    //-------------------------------------------------------------------------
     /** provides access to the controller which currently controls this model
 
         @returns
@@ -193,7 +182,6 @@ published interface XModel: com::sun::star::lang::XComponent
      */
     XController getCurrentController();
 
-    //-------------------------------------------------------------------------
     /** sets a registered controller as the current controller.
 
         @param Controller
@@ -206,7 +194,6 @@ published interface XModel: com::sun::star::lang::XComponent
     void setCurrentController( [in] XController Controller )
             raises( com::sun::star::container::NoSuchElementException );
 
-    //-------------------------------------------------------------------------
     /** provides read access on current selection on controller
 
         @returns
@@ -216,7 +203,6 @@ published interface XModel: com::sun::star::lang::XComponent
     com::sun::star::uno::XInterface getCurrentSelection();
 };
 
-//=============================================================================
 
 }; }; }; };
 

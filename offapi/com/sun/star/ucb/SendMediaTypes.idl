@@ -29,30 +29,25 @@
 #define __com_sun_star_ucb_SendMediaTypes_idl__
 
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** contains a list of Internet media types (like "text/plain" and "text/html"),
     that are related to a send protocol.
 */
 published struct SendMediaTypes
 {
-    //-------------------------------------------------------------------------
     /** the protocol to which the information is related (i.e. "NNTP", "SMTP",
         "VIM").
     */
     string ProtocolType;
 
-    //-------------------------------------------------------------------------
     /** a list of Internet media types
     */
     sequence<string> Value;
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

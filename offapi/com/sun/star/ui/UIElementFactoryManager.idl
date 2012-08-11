@@ -23,11 +23,9 @@
 #include <com/sun/star/lang/XMultiComponentFactory.idl>
 #include <com/sun/star/ui/XUIElementFactoryRegistration.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module ui {
 
-//=============================================================================
 
 /** specifies a user interface factory manager that controls all registered user
     interface element factories.

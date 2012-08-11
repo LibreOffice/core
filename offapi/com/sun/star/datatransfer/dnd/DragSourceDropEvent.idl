@@ -22,11 +22,9 @@
 
 #include <com/sun/star/datatransfer/dnd/DragSourceEvent.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module datatransfer { module dnd {
 
-//=============================================================================
 /** The <type>DragSourceDropEvent</type> is delivered from an object that implements
     <type>XDragSourceContext</type> to its currently registered drag source listener's.
 
@@ -38,7 +36,6 @@ module com { module sun { module star { module datatransfer { module dnd {
 
 published struct DragSourceDropEvent: com::sun::star::datatransfer::dnd::DragSourceEvent
 {
-    //-------------------------------------------------------------------------
     /** The action performed by the target on the subject of the drop.
 
         @see com::sun::star::datatransfer::dnd::DNDConstants
@@ -46,14 +43,12 @@ published struct DragSourceDropEvent: com::sun::star::datatransfer::dnd::DragSou
 
     byte DropAction;
 
-    //-------------------------------------------------------------------------
     /** Indicates if the drop was successful.
      */
 
     boolean DropSuccess;
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

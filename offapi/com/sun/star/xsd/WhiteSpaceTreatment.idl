@@ -20,10 +20,8 @@
 #ifndef __com_sun_star_xsd_WhiteSpaceTreatment_idl__
 #define __com_sun_star_xsd_WhiteSpaceTreatment_idl__
 
-//=============================================================================
 module com {  module sun {  module star {  module xsd {
 
-//-----------------------------------------------------------------------------
 /** specifies possibilities how to treat whitespace in strings
 
     @see XDataType
@@ -44,7 +42,6 @@ constants WhiteSpaceTreatment
     const short Collapse = 2;
 };
 
-//=============================================================================
 
 }; }; }; };
 

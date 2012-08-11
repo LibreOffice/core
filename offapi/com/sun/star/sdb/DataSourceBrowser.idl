@@ -38,7 +38,6 @@
 
 module com {  module sun {  module star {  module sdb {
 
-//=============================================================================
 /** implements a component which allows browsing the data sources registered on the system.
 
     <p>
@@ -275,7 +274,6 @@ published service DataSourceBrowser
     [optional] interface ::com::sun::star::ui::XContextMenuInterception;
 };
 
-//=============================================================================
 }; }; }; };
 
 #endif

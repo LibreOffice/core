@@ -29,11 +29,9 @@
 #include <com/sun/star/container/NoSuchElementException.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module container {
 
-//=============================================================================
 
 /**
  * Replacement of hierarchical elements.
@@ -51,7 +49,6 @@ published interface XHierarchicalNameReplace : com::sun::star::container::XHiera
 };
 
 
-//=============================================================================
 
 }; }; }; };
 

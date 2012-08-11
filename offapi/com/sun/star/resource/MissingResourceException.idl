@@ -22,11 +22,9 @@
 #include <com/sun/star/uno/RuntimeException.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module resource {
 
-//=============================================================================
 
 /** is used to signal that a resource is missing.
 
@@ -36,7 +34,6 @@ published exception MissingResourceException: com::sun::star::uno::RuntimeExcept
 {
 };
 
-//=============================================================================
 
 }; }; }; };
 

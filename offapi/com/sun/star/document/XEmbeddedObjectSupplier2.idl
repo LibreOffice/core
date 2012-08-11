@@ -25,17 +25,14 @@
 #include <com/sun/star/document/XEmbeddedObjectSupplier.idl>
 
 
-//=============================================================================
 
 module com {   module sun {   module star {   module document {
 
-//=============================================================================
 
 /** represents something that provides an embedded object.
  */
 interface XEmbeddedObjectSupplier2: com::sun::star::document::XEmbeddedObjectSupplier
 {
-    //-------------------------------------------------------------------------
     /** returns the object which is embedded into this object.
 
         <p>
@@ -45,19 +42,16 @@ interface XEmbeddedObjectSupplier2: com::sun::star::document::XEmbeddedObjectSup
      */
     com::sun::star::embed::XEmbeddedObject getExtendedControlOverEmbeddedObject();
 
-    //-------------------------------------------------------------------------
     /** allows to control the aspect of the object.
      */
     [attribute] hyper Aspect;
 
-    //-------------------------------------------------------------------------
     /** allows to get the replacement image of the object.
      */
     [attribute,readonly] com::sun::star::graphic::XGraphic ReplacementGraphic;
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

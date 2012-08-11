@@ -22,11 +22,9 @@
 #include <com/sun/star/registry/XSimpleRegistry.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module registry {
 
-//=============================================================================
 
 // DocMerge from xml: service com::sun::star::registry::DefaultRegistry
 /** implicitly supports a local registry and a read-only
@@ -143,7 +141,6 @@ published service DefaultRegistry
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

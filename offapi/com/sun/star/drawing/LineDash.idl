@@ -22,11 +22,9 @@
 #include <com/sun/star/drawing/DashStyle.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module drawing {
 
-//=============================================================================
 
 // DocMerge from xml: struct com::sun::star::drawing::LineDash
 /** A <type>LineDash</type> defines a non-continuous line.
@@ -38,35 +36,30 @@ published struct LineDash
      */
     com::sun::star::drawing::DashStyle Style;
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: field com::sun::star::drawing::LineDash::Dots
     /** This is the number of dots in this <type>LineDash</type>.
      */
     short Dots;
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: field com::sun::star::drawing::LineDash::DotLen
     /** This is the length of a dot.
      */
     long DotLen;
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: field com::sun::star::drawing::LineDash::Dashes
     /** This is the number of dashes.
      */
     short Dashes;
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: field com::sun::star::drawing::LineDash::DashLen
     /** This is the length of a single dash.
      */
     long DashLen;
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: field com::sun::star::drawing::LineDash::Distance
     /** This is the distance between the dots.
@@ -75,7 +68,6 @@ published struct LineDash
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

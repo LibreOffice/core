@@ -32,13 +32,11 @@
 #include <com/sun/star/util/URL.idl>
 #include <com/sun/star/beans/PropertyValue.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module frame {
 
  published interface XFrame;
 
-//=============================================================================
 /** provides recording functionality of dispatches
 
     <p>
@@ -57,7 +55,6 @@ module com {  module sun {  module star {  module frame {
  */
 published interface XDispatchRecorder: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** initializes the recorder by passing the frame for which all
         macro statements shall be recorded
 
@@ -66,7 +63,6 @@ published interface XDispatchRecorder: com::sun::star::uno::XInterface
     */
     void startRecording( [in] com::sun::star::frame::XFrame Frame );
 
-        //-------------------------------------------------------------------------
     /** stops the recording process
 
         <p>
@@ -81,7 +77,6 @@ published interface XDispatchRecorder: com::sun::star::uno::XInterface
     */
     void endRecording();
 
-    //-------------------------------------------------------------------------
     /** records a single dispatch call identified by its command URL
 
         @param URL
@@ -97,7 +92,6 @@ published interface XDispatchRecorder: com::sun::star::uno::XInterface
         [in] com::sun::star::util::URL URL,
         [in] sequence<com::sun::star::beans::PropertyValue> Arguments);
 
-    //-------------------------------------------------------------------------
     /** records a single dispatch call identified by its command URL, but
         comments it out
 
@@ -118,7 +112,6 @@ published interface XDispatchRecorder: com::sun::star::uno::XInterface
         [in] com::sun::star::util::URL URL,
         [in] sequence<com::sun::star::beans::PropertyValue> Arguments);
 
-    //-------------------------------------------------------------------------
     /** returns the recorded source code
 
         <p>
@@ -132,7 +125,6 @@ published interface XDispatchRecorder: com::sun::star::uno::XInterface
     string getRecordedMacro();
 };
 
-//=============================================================================
 
 }; }; }; };
 

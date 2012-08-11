@@ -20,11 +20,9 @@
 #define __com_sun_star_drawing_VerticalDimensioning_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module drawing {
 
-//=============================================================================
 
 // DocMerge from xml: enum com::sun::star::drawing::VerticalDimensioning
 /** specifies the vertical position of
@@ -32,7 +30,6 @@
  */
 published enum VerticalDimensioning
 {
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: value com::sun::star::drawing::VerticalDimensioning::AUTO
     /** Set this to have the application select the best horizontal
@@ -40,21 +37,18 @@ published enum VerticalDimensioning
      */
     AUTO,
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: value com::sun::star::drawing::VerticalDimensioning::TOP
     /** The text is positioned above the main line.
      */
     TOP,
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: value com::sun::star::drawing::VerticalDimensioning::CENTERED
     /** The text is positioned over the main line.
      */
     CENTERED,
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: value com::sun::star::drawing::VerticalDimensioning::BOTTOM
     /** The text is positioned below the main line.
@@ -63,7 +57,6 @@ published enum VerticalDimensioning
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

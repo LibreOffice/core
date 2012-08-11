@@ -20,11 +20,9 @@
 #define __com_sun_star_drawing_LineEndType_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module drawing {
 
-//=============================================================================
 
 // DocMerge from xml: enum com::sun::star::drawing::LineEndType
 /** The <type>LineEndType</type> specifies the appearance of the bullet at the
@@ -34,7 +32,6 @@
  */
 published enum LineEndType
 {
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR LineEndType::  NONE,
 
     // DocMerge from xml: value com::sun::star::drawing::LineEndType::NONE
@@ -42,7 +39,6 @@ published enum LineEndType
      */
     NONE,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR LineEndType::  ARROW,
 
     // DocMerge from xml: value com::sun::star::drawing::LineEndType::ARROW
@@ -50,7 +46,6 @@ published enum LineEndType
      */
     ARROW,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR LineEndType::  CIRCLE,
 
     // DocMerge from xml: value com::sun::star::drawing::LineEndType::CIRCLE
@@ -58,7 +53,6 @@ published enum LineEndType
      */
     CIRCLE,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR LineEndType::  SQUARE,
 
     // DocMerge from xml: value com::sun::star::drawing::LineEndType::SQUARE
@@ -66,7 +60,6 @@ published enum LineEndType
      */
     SQUARE,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR LineEndType::  SPECIAL
 
     // DocMerge from xml: value com::sun::star::drawing::LineEndType::SPECIAL
@@ -76,7 +69,6 @@ published enum LineEndType
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

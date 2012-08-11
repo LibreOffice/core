@@ -24,11 +24,9 @@
 #include <com/sun/star/table/CellRangeAddress.idl>
 #include <com/sun/star/container/NoSuchElementException.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** provides methods to access cell ranges in a collection via index and
     to add and remove cell ranges.
@@ -37,7 +35,6 @@ module com {  module sun {  module star {  module sheet {
  */
 published interface XSheetCellRangeContainer: com::sun::star::sheet::XSheetCellRanges
 {
-    //-------------------------------------------------------------------------
 
     /** adds the given range to the collection of cell ranges.
 
@@ -52,7 +49,6 @@ published interface XSheetCellRangeContainer: com::sun::star::sheet::XSheetCellR
             [in] com::sun::star::table::CellRangeAddress aCellRangeAddress,
             [in] boolean bMergeRanges );
 
-    //-------------------------------------------------------------------------
 
     /** removes the given range from the collection of cell ranges.
 
@@ -69,7 +65,6 @@ published interface XSheetCellRangeContainer: com::sun::star::sheet::XSheetCellR
             [in] com::sun::star::table::CellRangeAddress aCellRangeAddress )
         raises( com::sun::star::container::NoSuchElementException );
 
-    //-------------------------------------------------------------------------
 
     /** adds the given ranges to the collection of cell ranges.
 
@@ -84,7 +79,6 @@ published interface XSheetCellRangeContainer: com::sun::star::sheet::XSheetCellR
             [in] sequence<com::sun::star::table::CellRangeAddress> aCellRangeAddresses,
             [in] boolean bMergeRanges );
 
-    //-------------------------------------------------------------------------
 
     /** removes the given ranges from the collection of cell ranges.
 
@@ -103,7 +97,6 @@ published interface XSheetCellRangeContainer: com::sun::star::sheet::XSheetCellR
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

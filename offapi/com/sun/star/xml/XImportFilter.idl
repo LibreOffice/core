@@ -26,12 +26,10 @@
 #include <com/sun/star/xml/sax/XDocumentHandler.idl>
 #include <com/sun/star/lang/IllegalArgumentException.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module xml {
 
 
-//=============================================================================
 
 /** interface to implement for an XML-based import filter.
 

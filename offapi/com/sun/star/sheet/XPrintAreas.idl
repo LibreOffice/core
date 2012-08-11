@@ -32,23 +32,19 @@
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/table/CellRangeAddress.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** represents a sheet which has print areas.
  */
 published interface XPrintAreas: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** returns a sequence containing all print areas of the sheet.
      */
     sequence< com::sun::star::table::CellRangeAddress > getPrintAreas();
 
-    //-------------------------------------------------------------------------
 
     /** sets the print areas of the sheet.
 
@@ -61,14 +57,12 @@ published interface XPrintAreas: com::sun::star::uno::XInterface
      */
     void setPrintAreas( [in] sequence< com::sun::star::table::CellRangeAddress > aPrintAreas );
 
-    //-------------------------------------------------------------------------
 
     /** returns, whether the title columns are repeated on all subsequent
         print pages to the right.
      */
     boolean getPrintTitleColumns();
 
-    //-------------------------------------------------------------------------
 
     /** specifies whether the title columns are repeated on all subsequent
         print pages to the right.
@@ -78,7 +72,6 @@ published interface XPrintAreas: com::sun::star::uno::XInterface
      */
     void setPrintTitleColumns( [in] boolean bPrintTitleColumns );
 
-    //-------------------------------------------------------------------------
 
     /** returns the range that is specified as title columns range.
 
@@ -91,7 +84,6 @@ published interface XPrintAreas: com::sun::star::uno::XInterface
      */
     com::sun::star::table::CellRangeAddress getTitleColumns();
 
-    //-------------------------------------------------------------------------
 
     /** specifies a range of columns as title columns range.
 
@@ -106,14 +98,12 @@ published interface XPrintAreas: com::sun::star::uno::XInterface
      */
     void setTitleColumns( [in] com::sun::star::table::CellRangeAddress aTitleColumns );
 
-    //-------------------------------------------------------------------------
 
     /** returns, whether the title rows are repeated on all subsequent
         print pages to the bottom.
      */
     boolean getPrintTitleRows();
 
-    //-------------------------------------------------------------------------
 
     /** specifies whether the title rows are repeated on all subsequent
         print pages to the bottom.
@@ -123,7 +113,6 @@ published interface XPrintAreas: com::sun::star::uno::XInterface
      */
     void setPrintTitleRows( [in] boolean bPrintTitleRows );
 
-    //-------------------------------------------------------------------------
 
     /** returns the range that is specified as title rows range.
 
@@ -136,7 +125,6 @@ published interface XPrintAreas: com::sun::star::uno::XInterface
      */
     com::sun::star::table::CellRangeAddress getTitleRows();
 
-    //-------------------------------------------------------------------------
 
     /** specifies a range of rows as title rows range.
 
@@ -153,7 +141,6 @@ published interface XPrintAreas: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

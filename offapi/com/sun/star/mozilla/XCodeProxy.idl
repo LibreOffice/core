@@ -48,7 +48,6 @@ published interface XCodeProxy: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

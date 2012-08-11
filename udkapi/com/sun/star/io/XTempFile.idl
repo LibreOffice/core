@@ -24,49 +24,39 @@
 #include <com/sun/star/io/XSeekable.idl>
 
 
-//========================================================================
 module com { module sun { module star { module io {
 
-//========================================================================
 /** This interface offers access to temp files.
  */
 interface XTempFile
 {
     // INTERFACES
-    //
-    // -------------------------------------------------------------------
     /** interface <type>XStream</type> offers read and write access to
         the same stream.
     */
     interface XStream;
 
-    // --------------------------------------------------------------------
     /** interface <type>XSeekable</type> makes it possible to seek to a
         certain position within a stream.
     */
     interface XSeekable;
 
     // ATTRIBUTES
-    //
-    // --------------------------------------------------------------------
     /** This attribute controls whether the file will be automatically
         removed on object destruction.
     */
     [attribute] boolean RemoveFile;
 
-    // --------------------------------------------------------------------
     /** This attribute specifies the URL of the temp file.
     */
     [readonly,attribute] string Uri;
 
-    // --------------------------------------------------------------------
     /** This attribute specifies the temp file name.
     */
     [readonly,attribute] string ResourceName;
 
 };
 
-//=========================================================================
 
 }; }; }; };
 

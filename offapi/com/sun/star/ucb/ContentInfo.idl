@@ -21,11 +21,9 @@
 
 #include <com/sun/star/beans/Property.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** A structure for information about contents.
 
     @see XContentCreator
@@ -33,7 +31,6 @@ module com { module sun { module star { module ucb {
 */
 published struct ContentInfo
 {
-    //-------------------------------------------------------------------------
     /** A type identifier string for a content.
 
         <p>This is an implementation specific string characterizing the
@@ -43,7 +40,6 @@ published struct ContentInfo
     */
     string Type;
 
-    //-------------------------------------------------------------------------
     /** Additional attributes.
 
         <p>These flags contain extra information on the content, like its kind
@@ -58,7 +54,6 @@ published struct ContentInfo
     */
     long Attributes;
 
-    //-------------------------------------------------------------------------
     /** This field contains a list with the properties which must be set at
         a content that was just created using
         <member>XContentCreator::createNewContent</member> before it can be
@@ -91,7 +86,6 @@ published struct ContentInfo
     sequence< com::sun::star::beans::Property > Properties;
 };
 
-//=============================================================================
 
 }; }; }; };
 

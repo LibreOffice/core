@@ -31,11 +31,9 @@
 #include <com/sun/star/configuration/backend/XBackendChangesListener.idl>
 #include <com/sun/star/uno/XInterface.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module configuration {  module backend {
 
-//=============================================================================
 
 /** broadcasts changes when data from backend sources has changed.
 
@@ -43,7 +41,6 @@ module com {  module sun {  module star {  module configuration {  module backen
 */
 interface XBackendChangesNotifier: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** adds the specified listener to receive events when changes occurred.
         @param aListener
             specifies the listener object.
@@ -55,7 +52,6 @@ interface XBackendChangesNotifier: com::sun::star::uno::XInterface
     [oneway] void addChangesListener( [in] com::sun::star::configuration::backend::XBackendChangesListener aListener,
                                       [in] string component);
 
-    //-------------------------------------------------------------------------
     /** removes the specified listener.
         @param aListener
             specifies the listener object.
@@ -69,7 +65,6 @@ interface XBackendChangesNotifier: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

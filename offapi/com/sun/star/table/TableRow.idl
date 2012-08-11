@@ -23,18 +23,15 @@
 #include <com/sun/star/table/XCellRange.idl>
 #include <com/sun/star/beans/XPropertySet.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module table {
 
-//=============================================================================
 
 /** represents a special cell range containing all cells of a single
     specific row in a table or spreadsheet.
  */
 published service TableRow
 {
-    //-------------------------------------------------------------------------
 
     /** provides access to the cells of this row.
 
@@ -42,14 +39,12 @@ published service TableRow
      */
     interface com::sun::star::table::XCellRange;
 
-    //-------------------------------------------------------------------------
 
 //!published service PropertySet
     /** provides access to the cell properties of all cells of this row.
      */
     interface com::sun::star::beans::XPropertySet;
 
-    //=========================================================================
 
     /** contains the height of the row (in 1/100 mm).
 
@@ -58,19 +53,16 @@ published service TableRow
      */
     [property] long Height;
 
-    //-------------------------------------------------------------------------
 
     /** is <TRUE/>, if the row always keeps its optimal height.
      */
     [property] boolean OptimalHeight;
 
-    //-------------------------------------------------------------------------
 
     /** is <TRUE/>, if the row is visible.
      */
     [property] boolean IsVisible;
 
-    //-------------------------------------------------------------------------
 
     /** is <TRUE/>, if there is a manual vertical page break attached
         to the row.
@@ -79,7 +71,6 @@ published service TableRow
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

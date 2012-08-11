@@ -31,11 +31,9 @@
 #include <com/sun/star/resource/XStringResourcePersistence.idl>
 
 
-//=============================================================================
 
 module com { module sun { module star { module resource {
 
-//=============================================================================
 /**
     Extends <type>XStringResourcePersistence</type> by methods to handle an
     associated <type scope="com::sun::star::embed">XStorage</type> instance.
@@ -81,7 +79,6 @@ interface XStringResourceWithStorage: com::sun::star::resource::XStringResourceP
         raises( ::com::sun::star::lang::IllegalArgumentException );
 };
 
-//=============================================================================
 
 }; }; }; };
 

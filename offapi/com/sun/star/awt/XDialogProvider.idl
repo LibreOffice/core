@@ -34,18 +34,15 @@
 #include <com/sun/star/lang/IllegalArgumentException.idl>
 
 
-//=============================================================================
 
 module com { module sun { module star { module awt {
 
-//=============================================================================
 
 /** provides dialogs implementing the
     <type scope="com::sun::star::awt">XDialog</type> interface.
  */
 interface XDialogProvider : ::com::sun::star::uno::XInterface {
 
-    //-------------------------------------------------------------------------
 
     /** creates a dialog for the given URL.
 
@@ -63,7 +60,6 @@ interface XDialogProvider : ::com::sun::star::uno::XInterface {
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

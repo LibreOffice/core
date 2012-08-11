@@ -20,24 +20,20 @@
 #ifndef __com_sun_star_sheet_FilterConnection_idl__
 #define __com_sun_star_sheet_FilterConnection_idl__
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** used to specify how two conditions in a filter descriptor are
     connected.
  */
 published enum FilterConnection
 {
-    //-------------------------------------------------------------------------
 
     /** both conditions have to be fulfilled.
      */
     AND,
 
-    //-------------------------------------------------------------------------
 
     /** at least one of the conditions has to be fulfilled.
      */
@@ -45,7 +41,6 @@ published enum FilterConnection
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

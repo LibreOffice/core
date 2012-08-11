@@ -23,11 +23,9 @@
 #include <com/sun/star/view/XScreenCursor.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module text {
 
-//=============================================================================
 
 // DocMerge from xml: service com::sun::star::text::TextViewCursor
 /** A <type>TextViewCursor</type> is a <type>TextRange</type> which can travel
@@ -44,7 +42,6 @@ published service TextViewCursor
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

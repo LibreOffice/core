@@ -36,13 +36,11 @@ module com { module sun { module star { module accessibility {
  */
 published interface XAccessibleEventBroadcaster: ::com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** registers the given <type>XAccessibleEventListener</type>.
      */
     [oneway] void addEventListener( [in] XAccessibleEventListener xListener );
 
-    //-------------------------------------------------------------------------
 
     /** unregisters the given <type>XAccessibleEventListener</type>.
      */

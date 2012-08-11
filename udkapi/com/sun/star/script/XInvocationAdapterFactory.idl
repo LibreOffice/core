@@ -24,11 +24,9 @@
 #include <com/sun/star/script/XInvocation.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module script {
 
-//=============================================================================
 
 /** Interface to create adapter objects giving a type to be supported and a
     an invocation interface incoming calls are delegated to.
@@ -38,7 +36,6 @@
 */
 published interface XInvocationAdapterFactory: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** Creates an adapter interface of given type for calling the given
         <type>XInvocation</type> interface.
 
@@ -53,7 +50,6 @@ published interface XInvocationAdapterFactory: com::sun::star::uno::XInterface
     */
     com::sun::star::uno::XInterface createAdapter( [in]XInvocation Invocation, [in]type aType );
 };
-//=============================================================================
 
 }; }; }; };
 

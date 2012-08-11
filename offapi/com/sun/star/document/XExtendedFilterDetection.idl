@@ -31,11 +31,9 @@
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/beans/PropertyValue.idl>
 
-//============================================================================
 
 module com { module sun { module star { module document {
 
-//============================================================================
 /** provides a "deep" filter detection
 
     <p>
@@ -50,7 +48,6 @@ module com { module sun { module star { module document {
  */
 published interface XExtendedFilterDetection: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** controls agreement of a "flat" <type>TypeDetection</type>
         with given URL or arguments
 

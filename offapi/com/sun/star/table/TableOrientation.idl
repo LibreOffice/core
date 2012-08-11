@@ -20,23 +20,19 @@
 #ifndef __com_sun_star_table_TableOrientation_idl__
 #define __com_sun_star_table_TableOrientation_idl__
 
-//=============================================================================
 
 module com {  module sun {  module star {  module table {
 
-//=============================================================================
 
 /** used to select whether operations are carried out on columns or rows.
  */
 published enum TableOrientation
 {
-    //-------------------------------------------------------------------------
 
     /** operations are carried out on columns.
      */
     COLUMNS,
 
-    //-------------------------------------------------------------------------
 
     /** operations are carried out on rows.
      */
@@ -44,7 +40,6 @@ published enum TableOrientation
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

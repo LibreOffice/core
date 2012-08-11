@@ -51,7 +51,6 @@
  */
 published interface XColumn: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** reports whether the last column read had a value of SQL NULL.
         Note that you must first call getXXX on a column to try to read
@@ -64,7 +63,6 @@ published interface XColumn: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     boolean wasNull() raises (com::sun::star::sdbc::SQLException);
-    //-------------------------------------------------------------------------
 
     /** gets the value of a column in the current row as a String.
         @returns
@@ -73,7 +71,6 @@ published interface XColumn: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     string getString() raises (com::sun::star::sdbc::SQLException);
-    //-------------------------------------------------------------------------
 
     /** gets the value of a column in the current row as boolean.
         @returns
@@ -82,7 +79,6 @@ published interface XColumn: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     boolean getBoolean() raises (com::sun::star::sdbc::SQLException);
-    //-------------------------------------------------------------------------
 
     /** gets the value of a column in the current row as a byte.
         @returns
@@ -91,7 +87,6 @@ published interface XColumn: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     byte getByte() raises (com::sun::star::sdbc::SQLException);
-    //-------------------------------------------------------------------------
 
     /** gets the value of a column in the current row as a short.
         @returns
@@ -100,7 +95,6 @@ published interface XColumn: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     short getShort() raises (com::sun::star::sdbc::SQLException);
-    //-------------------------------------------------------------------------
 
     /** gets the value of a column in the current row as a long.
         @returns
@@ -109,7 +103,6 @@ published interface XColumn: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     long getInt() raises (com::sun::star::sdbc::SQLException);
-    //-------------------------------------------------------------------------
 
     /** gets the value of a column in the current row as a hyper.
         @returns
@@ -118,7 +111,6 @@ published interface XColumn: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     hyper getLong() raises (com::sun::star::sdbc::SQLException);
-    //-------------------------------------------------------------------------
 
     /** gets the value of a column in the current row as a float.
         @returns
@@ -127,7 +119,6 @@ published interface XColumn: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     float getFloat() raises (com::sun::star::sdbc::SQLException);
-    //-------------------------------------------------------------------------
 
     /** gets the value of a column in the current row as a double.
         @returns
@@ -136,7 +127,6 @@ published interface XColumn: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     double getDouble() raises (com::sun::star::sdbc::SQLException);
-    //-------------------------------------------------------------------------
 
     /** gets the value of a column in the current row as a byte array.
              The bytes represent the raw values returned by the driver.
@@ -146,7 +136,6 @@ published interface XColumn: com::sun::star::uno::XInterface
                 if a database access error occurs.
     */
     sequence<byte> getBytes() raises (com::sun::star::sdbc::SQLException);
-    //-------------------------------------------------------------------------
 
     /** gets the value of a column in the current row as a date object.
         @returns
@@ -156,7 +145,6 @@ published interface XColumn: com::sun::star::uno::XInterface
      */
     com::sun::star::util::Date getDate()
         raises (com::sun::star::sdbc::SQLException);
-    //-------------------------------------------------------------------------
 
     /** gets the value of a column in the current row as a time object.
         @returns
@@ -166,7 +154,6 @@ published interface XColumn: com::sun::star::uno::XInterface
      */
     com::sun::star::util::Time getTime()
         raises (com::sun::star::sdbc::SQLException);
-    //-------------------------------------------------------------------------
 
     /** gets the value of a column in the current row as a datetime object.
         @returns
@@ -176,7 +163,6 @@ published interface XColumn: com::sun::star::uno::XInterface
      */
     com::sun::star::util::DateTime getTimestamp()
         raises (com::sun::star::sdbc::SQLException);
-    //-------------------------------------------------------------------------
 
     /** gets the value of a column in the current row as a stream of
         uninterpreted bytes. The value can then be read in chunks from the
@@ -199,7 +185,6 @@ published interface XColumn: com::sun::star::uno::XInterface
      */
     com::sun::star::io::XInputStream getBinaryStream()
         raises (com::sun::star::sdbc::SQLException);
-    //-------------------------------------------------------------------------
 
     /** gets the value of a column in the current row as a stream of
         uninterpreted bytes. The value can then be read in chunks from the
@@ -221,7 +206,6 @@ published interface XColumn: com::sun::star::uno::XInterface
      */
     com::sun::star::io::XInputStream getCharacterStream()
         raises (com::sun::star::sdbc::SQLException);
-    //-------------------------------------------------------------------------
 
     /** @returns the value of a column in the current row as an object.
         This method uses the given
@@ -238,7 +222,6 @@ published interface XColumn: com::sun::star::uno::XInterface
      */
     any getObject([in]com::sun::star::container::XNameAccess typeMap)
         raises (com::sun::star::sdbc::SQLException);
-    //-------------------------------------------------------------------------
 
     /** gets a REF(&lt;structured-type&gt) column value from the current row.
 
@@ -248,7 +231,6 @@ published interface XColumn: com::sun::star::uno::XInterface
             if a database access error occurs.
     */
     com::sun::star::sdbc::XRef getRef() raises (com::sun::star::sdbc::SQLException);
-    //-------------------------------------------------------------------------
 
     /** gets a BLOB (Binary Large OBject) value in the current row.
         @returns
@@ -257,7 +239,6 @@ published interface XColumn: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     com::sun::star::sdbc::XBlob getBlob() raises (com::sun::star::sdbc::SQLException);
-    //-------------------------------------------------------------------------
 
     /** gets a CLOB value in the current row of this <code>ResultSet</code> object.
         @returns
@@ -266,7 +247,6 @@ published interface XColumn: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     com::sun::star::sdbc::XClob getClob() raises (com::sun::star::sdbc::SQLException);
-    //-------------------------------------------------------------------------
 
     /** gets a SQL ARRAY value from the current row.
         @returns
@@ -277,7 +257,6 @@ published interface XColumn: com::sun::star::uno::XInterface
     com::sun::star::sdbc::XArray getArray() raises (com::sun::star::sdbc::SQLException);
 };
 
-//=============================================================================
 
 }; }; }; };
 

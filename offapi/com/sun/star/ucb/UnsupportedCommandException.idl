@@ -22,11 +22,9 @@
 #include <com/sun/star/uno/Exception.idl>
 
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** is thrown to indicate that the a command is not known by the
     implementation of an interface.
 
@@ -38,7 +36,6 @@ published exception UnsupportedCommandException: com::sun::star::uno::Exception
 {
 };
 
-//=============================================================================
 
 }; }; }; };
 

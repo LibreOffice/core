@@ -33,42 +33,34 @@ constants EmphasisMark
     /// No automatic emphasis marks
     const byte NONE = 0;
 
-    //-------------------------------------------------------------------------
 
     /// Automatic emphasis marks as dots above the glyphs
     const byte DOT_ABOVE = 1;
 
-    //-------------------------------------------------------------------------
 
     /// Automatic emphasis marks as dots below the glyphs
     const byte DOT_BELOW = 2;
 
-    //-------------------------------------------------------------------------
 
     /// Automatic emphasis marks as circles (unfilled outlines) above the glyphs
     const byte CIRCLE_ABOVE = 3;
 
-    //-------------------------------------------------------------------------
 
     /// Automatic emphasis marks as circles (unfilled outlines) below the glyphs
     const byte CIRCLE_BELOW = 4;
 
-    //-------------------------------------------------------------------------
 
     /// Automatic emphasis marks as discs (filled circles) above the glyphs
     const byte DISC_ABOVE = 5;
 
-    //-------------------------------------------------------------------------
 
     /// Automatic emphasis marks as discs (filled circles) below the glyphs
     const byte DISC_BELOW = 6;
 
-    //-------------------------------------------------------------------------
 
     /// Automatic emphasis marks as accent marks above the glyphs
     const byte ACCENT_ABOVE = 7;
 
-    //-------------------------------------------------------------------------
 
     /// Automatic emphasis marks as accent marks below the glyphs
     const byte ACCENT_BELOW = 8;

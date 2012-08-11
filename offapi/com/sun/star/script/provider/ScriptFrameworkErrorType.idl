@@ -20,11 +20,9 @@
 #ifndef __com_sun_star_script_provider_ScriptFrameworkErrorType_idl__
 #define __com_sun_star_script_provider_ScriptFrameworkErrorType_idl__
 
-//===========================================================================
 
 module com { module sun { module star { module script { module provider {
 
-//===========================================================================
 /**
     is a checked exception that represents an error encountered
         by the Scripting Framework whilst executing a script
@@ -48,7 +46,6 @@ constants ScriptFrameworkErrorType
     const long MALFORMED_URL = 3;
 };
 
-//===========================================================================
 }; }; }; }; }; // com::sun::star::script::provider
 
 #endif

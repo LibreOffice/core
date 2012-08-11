@@ -30,11 +30,9 @@
 #include <com/sun/star/chart/ChartTwoAxisYSupplier.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module chart {
 
-//=============================================================================
 
 /** specifies a diagram which can be used for presenting stock quotes.
 
@@ -88,7 +86,6 @@ published service StockDiagram
     service com::sun::star::chart::ChartAxisXSupplier;
     service com::sun::star::chart::ChartTwoAxisYSupplier;
 
-    //-------------------------------------------------------------------------
 
     /** indicates if a stock chart contains data representing the
         volume of stocks.
@@ -101,7 +98,6 @@ published service StockDiagram
      */
     [property] boolean Volume;
 
-    //-------------------------------------------------------------------------
 
     /** indicates if a stock chart contains data representing the
         value of stocks on the opening and closing date.
@@ -126,7 +122,6 @@ published service StockDiagram
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

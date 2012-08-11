@@ -26,11 +26,9 @@
 #include <com/sun/star/awt/XWindow.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module awt {
 
-//=============================================================================
 
 /** represents a VCL container window.
 
@@ -38,21 +36,18 @@
  */
 published interface XVclContainer: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** adds the specified container listener to receive
         container events from this container.
      */
     [oneway] void addVclContainerListener( [in] com::sun::star::awt::XVclContainerListener l );
 
-    //-------------------------------------------------------------------------
 
     /** removes the specified container listener so that it
         no longer receives container events from this container.
      */
     [oneway] void removeVclContainerListener( [in] com::sun::star::awt::XVclContainerListener l );
 
-    //-------------------------------------------------------------------------
 
     /** returns all windows.
      */
@@ -60,7 +55,6 @@ published interface XVclContainer: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

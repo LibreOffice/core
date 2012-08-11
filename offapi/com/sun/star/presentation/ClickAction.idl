@@ -29,96 +29,80 @@
 #define __com_sun_star_presentation_ClickAction_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module presentation {
 
-//=============================================================================
 
 /** This enumeration specifies the actions which can be processed when
     a user clicks on an object.
  */
 published enum ClickAction
 {
-    //-------------------------------------------------------------------------
 
     /** No action is performed on click.
      */
     NONE,
 
-    //-------------------------------------------------------------------------
 
     /** The presentation jumps to the previous page.
      */
     PREVPAGE,
 
-    //-------------------------------------------------------------------------
 
     /** The presentation jumps to the next page.
      */
     NEXTPAGE,
 
-    //-------------------------------------------------------------------------
 
     /** The presentation continues with the first page.
      */
     FIRSTPAGE,
 
-    //-------------------------------------------------------------------------
 
     /** The presentation continues with the last page.
      */
     LASTPAGE,
 
-    //-------------------------------------------------------------------------
 
     /** The presentation jumps to a bookmark.
      */
     BOOKMARK,
 
-    //-------------------------------------------------------------------------
 
     /** The presentation jumps to another document.
      */
     DOCUMENT,
 
-    //-------------------------------------------------------------------------
 
     /** The object renders itself invisible after a click.
      */
     INVISIBLE,
 
-    //-------------------------------------------------------------------------
 
     /** A sound is played after a click.
      */
     SOUND,
 
-    //-------------------------------------------------------------------------
 
     /** An OLE verb is performed on this object.
      */
     VERB,
 
-    //-------------------------------------------------------------------------
 
     /** The object vanishes with its effect.
      */
     VANISH,
 
-    //-------------------------------------------------------------------------
 
     /** Another program is executed after a click.
      */
     PROGRAM,
 
-    //-------------------------------------------------------------------------
 
     /** A star basic macro is executed after the click.
      */
     MACRO,
 
-    //-------------------------------------------------------------------------
 
     /** The presentation is stopped after the click.
      */
@@ -126,7 +110,6 @@ published enum ClickAction
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

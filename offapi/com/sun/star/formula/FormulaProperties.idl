@@ -19,24 +19,20 @@
 #ifndef __com_sun_star_formula_FormulaProperties_idl__
 #define __com_sun_star_formula_FormulaProperties_idl__
 
-//=============================================================================
 
  module com {  module sun {  module star {  module formula {
 
-//=============================================================================
 
 /** The formula properties provide access to the properties of a formula
     in a formula generator
  */
 published service FormulaProperties
 {
-    //-------------------------------------------------------------------------
 
     /** contains the alignment of the formula.
         @see HorizontalAlignment
      */
     [property] short    Alignment;
-    //-------------------------------------------------------------------------
 
     /** contains the base font height in point the formula will be
         formatted in.
@@ -45,132 +41,107 @@ published service FormulaProperties
         </p>
      */
     [property] short    BaseFontHeight;
-    //-------------------------------------------------------------------------
 
     /** customized name for fixed font.
      */
     [property] string   CustomFontNameFixed;
-    //-------------------------------------------------------------------------
 
     /** determines if the customized fixed font is italic.
      */
     [property] boolean FontFixedIsItalic;
-    //-------------------------------------------------------------------------
 
     /** determines if the customized fixed font is bold.
      */
     [property] boolean FontFixedIsBold;
-    //-------------------------------------------------------------------------
 
     /** customized name for sans serif font
      */
     [property] string   CustomFontNameSans;
-    //-------------------------------------------------------------------------
 
     /** determines if the customized sans serif font is italic.
      */
     [property] boolean FontSansIsItalic;
-    //-------------------------------------------------------------------------
 
     /** determines if the customized sans serif font is bold.
      */
     [property] boolean FontSansIsBold;
-    //-------------------------------------------------------------------------
 
     /** customized name for serif font
      */
     [property] string   CustomFontNameSerif;
-    //-------------------------------------------------------------------------
 
     /** determines if the customized serif font is italic.
      */
     [property] boolean FontSerifIsItalic;
-    //-------------------------------------------------------------------------
 
     /** determines if the customized serif font is bold.
      */
     [property] boolean FontSerifIsBold;
-    //-------------------------------------------------------------------------
 
     /** contains the name of the font that is used to
         display functions contained in the formula.
      */
     [property] string FontNameFunctions;
-    //-------------------------------------------------------------------------
 
     /** determines if the font that is used to display functions is italic.
      */
     [property] boolean FontFunctionsIsItalic;
-    //-------------------------------------------------------------------------
 
     /** determines if the font that is used to display functions is bold.
      */
     [property] boolean FontFunctionsIsBold;
-    //-------------------------------------------------------------------------
 
     /** contains the name of the font that is used to
         display numbers contained in the formula.
      */
     [property] string   FontNameNumbers;
-    //-------------------------------------------------------------------------
 
     /** determines if the font that is used to display numbers is italic.
      */
     [property] boolean FontNumbersIsItalic;
-    //-------------------------------------------------------------------------
 
     /** determines if the font that is used to display numbers is bold.
      */
     [property] boolean FontNumbersIsBold;
-    //-------------------------------------------------------------------------
 
     /** contains the name of the font that is used to
         display text contained in the formula.
      */
     [property] string   FontNameText;
-    //-------------------------------------------------------------------------
 
     /** determines if the font that is used to display text is italic.
      */
     [property] boolean FontTextIsItalic;
-    //-------------------------------------------------------------------------
 
     /** determines if the font that is used to display text is bold.
      */
     [property] boolean FontTextIsBold;
-    //-------------------------------------------------------------------------
 
     /** contains the name of the font that is used to
         display variables contained in the formula.
      */
     [property] string   FontNameVariables;
-    //-------------------------------------------------------------------------
 
     /** determines if the font that is used to display variables is italic.
      */
     [property] boolean FontVariablesIsItalic;
-    //-------------------------------------------------------------------------
 
     /** determines if the font that is used to display variables is bold.
      */
     [property] boolean FontVariablesIsBold;
-    //-------------------------------------------------------------------------
 
     /** contains the command string of the formula
      */
     [property] string   Formula;
-    //-------------------------------------------------------------------------
 
     /** decides if all brackets (even those without "left"/"right"
         modifier) are scaled.
      */
     [property] boolean  IsScaleAllBrackets;
-    //-------------------------------------------------------------------------
 
     /** switches into text mode.
      */
     [property] boolean  IsTextMode;
-    //-------------------------------------------------------------------------
 
     /** contains the relative height of the font for functions.
 
@@ -178,7 +149,6 @@ published service FormulaProperties
         <member scope="com::sun::star::formula">FormulaProperties::BaseFontHeight</member>
      */
     [property] short    RelativeFontHeightFunctions;
-    //-------------------------------------------------------------------------
 
     /** contains the relative height of the font for indices.
 
@@ -186,7 +156,6 @@ published service FormulaProperties
         <member scope="com::sun::star::formula">FormulaProperties::BaseFontHeight</member>
      */
     [property] short    RelativeFontHeightIndices;
-    //-------------------------------------------------------------------------
 
     /** contains the relative height of the font for limits.
 
@@ -194,7 +163,6 @@ published service FormulaProperties
         <member scope="com::sun::star::formula">FormulaProperties::BaseFontHeight</member>
      */
     [property] short    RelativeFontHeightLimits;
-    //-------------------------------------------------------------------------
 
     /** contains the relative height of the font for operators.
 
@@ -202,7 +170,6 @@ published service FormulaProperties
         <member scope="com::sun::star::formula">FormulaProperties::BaseFontHeight</member>
      */
     [property] short    RelativeFontHeightOperators;
-    //-------------------------------------------------------------------------
 
     /** contains the relative height of the font for text.
 
@@ -210,128 +177,103 @@ published service FormulaProperties
         <member scope="com::sun::star::formula">FormulaProperties::BaseFontHeight</member>
      */
     [property] short    RelativeFontHeightText;
-    //-------------------------------------------------------------------------
 
     /** contains the relative distance of brackets.
      */
     [property] short    RelativeBracketDistance;
-    //-------------------------------------------------------------------------
 
     /** contains the relative excess size of brackets.
      */
     [property] short    RelativeBracketExcessSize;
-    //-------------------------------------------------------------------------
 
     /** contains the relative excess length of a fraction bar.
      */
     [property] short    RelativeFractionBarExcessLength;
-    //-------------------------------------------------------------------------
 
     /** contains the relative line weight of a fraction bar.
      */
     [property] short    RelativeFractionBarLineWeight;
-    //-------------------------------------------------------------------------
 
     /** contains the relative depth of the denominator of a fraction
      */
     [property] short    RelativeFractionDenominatorDepth;
-    //-------------------------------------------------------------------------
 
     /** contains the relative height of the numerator of a fraction.
      */
     [property] short    RelativeFractionNumeratorHeight;
-    //-------------------------------------------------------------------------
 
     /** contains the relative superscript of indices.
      */
     [property] short    RelativeIndexSubscript;
-    //-------------------------------------------------------------------------
 
     /** contains the relative subscript of indices.
      */
     [property] short    RelativeIndexSuperscript;
-    //-------------------------------------------------------------------------
 
     /** contains the relative line spacing.
      */
     [property] short    RelativeLineSpacing;
-    //-------------------------------------------------------------------------
 
     /** contains the relative distance of lower limits.
      */
     [property] short    RelativeLowerLimitDistance;
-    //-------------------------------------------------------------------------
 
     /** contains the relative column spacing of matrices.
      */
     [property] short    RelativeMatrixColumnSpacing;
-    //-------------------------------------------------------------------------
 
     /** contains the relative line spacing of matrices.
      */
     [property] short    RelativeMatrixLineSpacing;
-    //-------------------------------------------------------------------------
 
     /** contains the relative excess of operators.
      */
     [property] short    RelativeOperatorExcessSize;
-    //-------------------------------------------------------------------------
 
     /** contains the relative spacing of operators.
      */
     [property] short    RelativeOperatorSpacing;
-    //-------------------------------------------------------------------------
 
     /** contains the relative root spacing
      */
     [property] short    RelativeRootSpacing;
-    //-------------------------------------------------------------------------
 
     /** contains the relative scaling of the bracket excess.
      */
     [property] short    RelativeScaleBracketExcessSize;
-    //-------------------------------------------------------------------------
 
     /** contains the relative spacing.
      */
     [property] short    RelativeSpacing;
-    //-------------------------------------------------------------------------
 
     /** contains the relative minimum height of the formula.
      */
     [property] short    RelativeSymbolMinimumHeight;
-    //-------------------------------------------------------------------------
 
     /** contains the relative primary height of symbols.
      */
     [property] short    RelativeSymbolPrimaryHeight;
-    //-------------------------------------------------------------------------
 
     /** contains the relative distance of upper limits
      */
     [property] short    RelativeUpperLimitDistance;
-    //-------------------------------------------------------------------------
 
     /** contains the metric value of the top margin of the formula.
      */
     [property] short    TopMargin;
-    //-------------------------------------------------------------------------
 
     /** contains the metric value of the bottom margin of the formula.
      */
     [property] short    BottomMargin;
-    //-------------------------------------------------------------------------
 
     /** contains the metric value of the left margin of the formula.
      */
     [property] short    LeftMargin;
-    //-------------------------------------------------------------------------
 
     /** contains the metric value of the right margin of the formula.
      */
     [property] short    RightMargin;
 
-    //-------------------------------------------------------------------------
 
     /** contains the baselines offset in respect to the top of the formula rectangle
 
@@ -340,7 +282,6 @@ published service FormulaProperties
     [property, optional] short    BaseLine;
 };
 
-//=============================================================================
 
 }; }; }; };
 

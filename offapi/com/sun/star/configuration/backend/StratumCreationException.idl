@@ -21,11 +21,9 @@
 
 #include <com/sun/star/configuration/backend/BackendSetupException.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module configuration { module backend {
 
-//=============================================================================
 
 /** is passed to an <type>InteractionHandler<type> when creating a stratum backend fails.
 
@@ -45,7 +43,6 @@ exception StratumCreationException : BackendSetupException
 
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

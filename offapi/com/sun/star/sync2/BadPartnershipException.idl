@@ -24,7 +24,6 @@
 
 module com { module sun { module star { module sync2 {
 
-//============================================================================
 /** indicates that a partnership does not exist, or that there are problems
     accessing the partnership state.
 
@@ -32,7 +31,6 @@ module com { module sun { module star { module sync2 {
  */
 published exception BadPartnershipException: com::sun::star::uno::Exception
 {
-    //------------------------------------------------------------------------
     /** contains the name of the partnership, or is left empty if this is
         unknown.
      */

@@ -24,7 +24,6 @@
 
 #include <com/sun/star/view/PrintableStateEvent.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module view {
 
@@ -37,7 +36,6 @@ module com {  module sun {  module star {  module view {
  */
 published interface XPrintableListener : com::sun::star::lang::XEventListener
 {
-    //--------------------------------------------------------------------------
     /** informs the user of the new state in print progress.
 
         @param Event

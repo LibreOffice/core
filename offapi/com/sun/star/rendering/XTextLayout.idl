@@ -83,7 +83,6 @@ interface XTextLayout : ::com::sun::star::uno::XInterface
      */
     sequence<XPolyPolygon2D>    queryTextShapes();
 
-    //-------------------------------------------------------------------------
 
     /** Query the ink bounding boxes for every glyph in the layouted
         text.<p>
@@ -101,7 +100,6 @@ interface XTextLayout : ::com::sun::star::uno::XInterface
      */
     sequence<::com::sun::star::geometry::RealRectangle2D >  queryInkMeasures();
 
-    //-------------------------------------------------------------------------
 
     /** Query the logical bounding boxes of every character in the
         given text string.<p>
@@ -118,7 +116,6 @@ interface XTextLayout : ::com::sun::star::uno::XInterface
      */
     sequence<::com::sun::star::geometry::RealRectangle2D>   queryMeasures();
 
-    //-------------------------------------------------------------------------
 
     /** Query the advancements for every character in the input string.<p>
 
@@ -140,7 +137,6 @@ interface XTextLayout : ::com::sun::star::uno::XInterface
      */
     sequence<double>            queryLogicalAdvancements();
 
-    //-------------------------------------------------------------------------
 
     /** Apply explicit advancements for every character in the layout
         string.<p>
@@ -165,7 +161,6 @@ interface XTextLayout : ::com::sun::star::uno::XInterface
     void                        applyLogicalAdvancements( [in] sequence< double > aAdvancements )
         raises (com::sun::star::lang::IllegalArgumentException);
 
-    //-------------------------------------------------------------------------
 
     /** Query the overall bounding box of the text.<p>
 
@@ -178,7 +173,6 @@ interface XTextLayout : ::com::sun::star::uno::XInterface
      */
     ::com::sun::star::geometry::RealRectangle2D   queryTextBounds();
 
-    //-------------------------------------------------------------------------
 
     /** Justify the text to the given size.<p>
 
@@ -204,7 +198,6 @@ interface XTextLayout : ::com::sun::star::uno::XInterface
     double justify( [in] double nSize )
         raises (com::sun::star::lang::IllegalArgumentException);
 
-    //-------------------------------------------------------------------------
 
     /** Justify a number of text layouts to the given size.<p>
 
@@ -241,7 +234,6 @@ interface XTextLayout : ::com::sun::star::uno::XInterface
     double combinedJustify( [in] sequence< XTextLayout > aNextLayouts, [in] double nSize )
         raises (com::sun::star::lang::IllegalArgumentException);
 
-    //-------------------------------------------------------------------------
 
     /** This method determines the hit position in the text.<p>
 
@@ -255,7 +247,6 @@ interface XTextLayout : ::com::sun::star::uno::XInterface
      */
     TextHit getTextHit( [in] ::com::sun::star::geometry::RealPoint2D aHitPoint );
 
-    //-------------------------------------------------------------------------
 
     /** This method converts an insertion index to a caret.<p>
 
@@ -281,7 +272,6 @@ interface XTextLayout : ::com::sun::star::uno::XInterface
                     [in] boolean bExcludeLigatures )
         raises (com::sun::star::lang::IndexOutOfBoundsException);
 
-    //-------------------------------------------------------------------------
 
     /** This method calculates a new insertion index.<p>
 
@@ -308,7 +298,6 @@ interface XTextLayout : ::com::sun::star::uno::XInterface
                                 [in] boolean bExcludeLigatures )
         raises (com::sun::star::lang::IndexOutOfBoundsException);
 
-    //-------------------------------------------------------------------------
 
     /** This method generates a highlight polygon.<p>
 
@@ -332,7 +321,6 @@ interface XTextLayout : ::com::sun::star::uno::XInterface
                                             [in] long nEndIndex )
         raises (com::sun::star::lang::IndexOutOfBoundsException);
 
-    //-------------------------------------------------------------------------
 
     /** This method generates a highlight polygon.<p>
 
@@ -358,7 +346,6 @@ interface XTextLayout : ::com::sun::star::uno::XInterface
                                              [in] long nEndIndex )
         raises (com::sun::star::lang::IndexOutOfBoundsException);
 
-    //-------------------------------------------------------------------------
 
     /** This method yields the baseline offset.<p>
 
@@ -375,7 +362,6 @@ interface XTextLayout : ::com::sun::star::uno::XInterface
      */
     double getBaselineOffset();
 
-    //-------------------------------------------------------------------------
 
     /** This method returns the main writing direction.<p>
 
@@ -386,7 +372,6 @@ interface XTextLayout : ::com::sun::star::uno::XInterface
      */
     byte getMainTextDirection();
 
-    //-------------------------------------------------------------------------
 
     /** Request the associated font for this layout..
 
@@ -394,7 +379,6 @@ interface XTextLayout : ::com::sun::star::uno::XInterface
      */
     XCanvasFont getFont();
 
-    //-------------------------------------------------------------------------
 
     /** Request the text this layout contains.
 
@@ -402,7 +386,6 @@ interface XTextLayout : ::com::sun::star::uno::XInterface
      */
     StringContext getText();
 
-    //-------------------------------------------------------------------------
 
 };
 

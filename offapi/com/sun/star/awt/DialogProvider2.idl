@@ -33,18 +33,15 @@
 #include <com/sun/star/awt/XDialogProvider2.idl>
 
 
-//=============================================================================
 
 module com { module sun { module star { module awt {
 
-//=============================================================================
 
 /** specifies a provider for dialogs implementing the
     <type scope="com::sun::star::awt">XDialog</type> interface.
  */
 service DialogProvider2 : com::sun::star::awt::XDialogProvider2;
 
-//=============================================================================
 
 }; }; }; };
 

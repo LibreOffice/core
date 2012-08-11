@@ -22,11 +22,9 @@
 #include <com/sun/star/script/Engine.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module script {
 
-//=============================================================================
 /** service is implementation of a JavaScript interpreter.
 
     <p>The interpreter should be similar to JavaScript 1.1. The exact
@@ -39,7 +37,6 @@ published service JavaScript
     service com::sun::star::script::Engine;
 };
 
-//=============================================================================
 
 }; }; }; };
 

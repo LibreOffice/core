@@ -25,15 +25,12 @@ module com {  module sun {  module star {  module ui {
  */
 published constants ActionTriggerSeparatorType
 {
-    //-------------------------------------------------------------------------
     /** a separator is inserted as a line.
      */
     const short LINE = 0;
-    //-------------------------------------------------------------------------
     /** a separator is inserted as a space.
      */
     const short SPACE = 1;
-    //-------------------------------------------------------------------------
     /** a line break is inserted.
      */
     const short LINEBREAK = 2;

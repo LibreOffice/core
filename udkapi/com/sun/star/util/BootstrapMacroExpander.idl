@@ -23,11 +23,9 @@
 #include <com/sun/star/lang/XInitialization.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module util {
 
-//=============================================================================
 
 /** Macro expander expanding using rtl bootstrap notation.
 

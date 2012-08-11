@@ -36,11 +36,9 @@
 #include <com/sun/star/presentation/AnimationSpeed.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module presentation {
 
-//=============================================================================
 
 /** this service is supported from all shapes inside a <type>PresentationDocument</type>.
 
@@ -50,13 +48,11 @@
 */
 published service Shape
 {
-    //-------------------------------------------------------------------------
 
     /** is a generic URL for the property OnClick.
      */
     [property] string Bookmark;
 
-    //-------------------------------------------------------------------------
 
     /** This is the color for dimming this shape.
 
@@ -65,14 +61,12 @@ published service Shape
      */
     [property] com::sun::star::util::Color DimColor;
 
-    //-------------------------------------------------------------------------
 
     /** If this property and the property <member scope="com::sun::star::drawing">Shape::DimPrev</member>
         are both <TRUE/>, the shape is hidden instead of dimmed to a color.
      */
     [property] boolean DimHide;
 
-    //-------------------------------------------------------------------------
 
     /** If this property is <TRUE/>, this shape is dimmed to the color of
         property <member scope="com::sun::star::drawing">Shape::DimColor</member> after executing its
@@ -80,20 +74,17 @@ published service Shape
      */
     [property] boolean DimPrevious;
 
-    //-------------------------------------------------------------------------
 
     /** selects the animation effect of this shape.
      */
     [property] com::sun::star::presentation::AnimationEffect Effect;
 
-    //-------------------------------------------------------------------------
 
     /** If this is a default presentation object and if it is empty,
         this property is <TRUE/>.
      */
     [property] boolean IsEmptyPresentationObject;
 
-    //-------------------------------------------------------------------------
 
     /** If this is a presentation object, this property is <TRUE/>.
         <p>Presentation objects are objects like TitleTextShape and
@@ -101,14 +92,12 @@ published service Shape
      */
     [readonly, property] boolean IsPresentationObject;
 
-    //-------------------------------------------------------------------------
 
     /** selects an action performed after the user clicks
         on this shape.
      */
     [property] com::sun::star::presentation::ClickAction OnClick;
 
-    //-------------------------------------------------------------------------
 
     /** If this property is <TRUE/>, the sound of this shape is played in
         full.
@@ -118,7 +107,6 @@ published service Shape
      */
     [property] boolean PlayFull;
 
-    //-------------------------------------------------------------------------
 
     /** This is the position of this shape in the order of the shapes which
         can be animated on its page.
@@ -130,33 +118,28 @@ published service Shape
      */
     [property] long PresentationOrder;
 
-    //-------------------------------------------------------------------------
 
     /** This is the URL to a sound file that is played while the animation
         effect of this shape is running.
      */
     [property] string Sound;
 
-    //-------------------------------------------------------------------------
 
     /** If this property is set to <TRUE/>, a sound is played while the
         animation effect is executed.
      */
     [property] boolean SoundOn;
 
-    //-------------------------------------------------------------------------
 
     /** This is the speed of the animation effect.
      */
     [property] com::sun::star::presentation::AnimationSpeed Speed;
 
-    //-------------------------------------------------------------------------
 
     /** This is the animation effect for the text inside this shape.
      */
     [property] com::sun::star::presentation::AnimationEffect TextEffect;
 
-    //-------------------------------------------------------------------------
 
     /** specifies an "OLE2" verb for the ClickAction VERB in
         the property <member scope="com::sun::star::drawing">Shape::OnClick</member>.
@@ -165,7 +148,6 @@ published service Shape
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

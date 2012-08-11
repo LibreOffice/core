@@ -22,11 +22,9 @@
 #include <com/sun/star/awt/FontSlant.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module awt {
 
-//=============================================================================
 
 /** describes the characteristics of a font.
 
@@ -34,33 +32,28 @@
  */
 published struct FontDescriptor
 {
-    //-------------------------------------------------------------------------
 
     /** specifies the exact name of the font.
      */
     string Name;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the height of the font in the measure of the
         destination.
      */
     short Height;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the width of the font in the measure of the
         destination.
      */
     short Width;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the style name of the font.
      */
     string StyleName;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the general style of the font.
 
@@ -69,7 +62,6 @@ published struct FontDescriptor
      */
     short Family;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the character set which is supported by the font.
 
@@ -78,7 +70,6 @@ published struct FontDescriptor
      */
     short CharSet;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the pitch of the font.
 
@@ -87,7 +78,6 @@ published struct FontDescriptor
      */
     short Pitch;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the character width.
 
@@ -98,7 +88,6 @@ published struct FontDescriptor
      */
     float CharacterWidth;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the thickness of the line.
 
@@ -109,13 +98,11 @@ published struct FontDescriptor
      */
     float Weight;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the slant of the font.
      */
     com::sun::star::awt::FontSlant Slant;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the kind of underlining.
 
@@ -124,7 +111,6 @@ published struct FontDescriptor
      */
     short Underline;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the kind of strikeout.
 
@@ -133,7 +119,6 @@ published struct FontDescriptor
      */
     short Strikeout;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the rotation of the font.
 
@@ -141,14 +126,12 @@ published struct FontDescriptor
      */
     float Orientation;
 
-    //-------------------------------------------------------------------------
 
     /** For requesting, it specifies if there is a kerning table available.
         For selecting, it specifies if the kerning table is to be used.
      */
     boolean Kerning;
 
-    //-------------------------------------------------------------------------
 
     /** specifies if only words get underlined.
 
@@ -161,7 +144,6 @@ published struct FontDescriptor
      */
     boolean WordLineMode;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the technology of the font representation.
 
@@ -173,7 +155,6 @@ published struct FontDescriptor
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

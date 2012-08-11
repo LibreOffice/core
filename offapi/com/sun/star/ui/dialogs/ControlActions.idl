@@ -23,7 +23,6 @@
 
 module com { module sun { module star { module ui { module dialogs {
 
-//=============================================================================
 /** Control actions for common and extended controls of a FilePicker.
 
     @see com::sun::star::ui::dialogs::XFilePickerControlAccess
@@ -33,18 +32,15 @@ module com { module sun { module star { module ui { module dialogs {
 
 published constants ControlActions
 {
-    //---------------------------------------------------------------------
     /** Adds an item to the content of the listbox. The given item has to
         be a string.
      */
     const short ADD_ITEM        = 1;
 
-    //---------------------------------------------------------------------
     /** Adds a sequence of strings to the content of the listbox.
      */
     const short ADD_ITEMS       = 2;
 
-    //---------------------------------------------------------------------
     /** Removes an item from a listbox. The given value has to be a
         position. If the position is invalid an exception will be thrown.
         The index of the first position is 0.
@@ -52,12 +48,10 @@ published constants ControlActions
      */
     const short DELETE_ITEM     = 3;
 
-    //---------------------------------------------------------------------
     /** Removes all items from the listbox.
     */
     const short DELETE_ITEMS    = 4;
 
-    //---------------------------------------------------------------------
     /** Selects an item in a listbox. The given value has to be a position.
         The index of the first position is 0. A value of -1 removes the
         selection.
@@ -66,18 +60,15 @@ published constants ControlActions
      */
     const short SET_SELECT_ITEM = 5;
 
-    //---------------------------------------------------------------------
     /** Returns all items of the listbox as a sequence of strings.
     */
     const short GET_ITEMS       = 6;
 
-    //---------------------------------------------------------------------
     /** Returns the currently selected item. The returned item is an empty
         string if the listbox is empty or no item is selected.
      */
     const short GET_SELECTED_ITEM = 7;
 
-    //---------------------------------------------------------------------
     /** Returns the zero based index of the currently selected item.
         If the listbox is empty or there is no item selected -1 will be
         returned. The returned value is a sal_Int32.
@@ -85,18 +76,15 @@ published constants ControlActions
 
     const short GET_SELECTED_ITEM_INDEX = 8;
 
-    //---------------------------------------------------------------------
     /** Sets the help URL of a control.
      */
     const short SET_HELP_URL = 100;
 
-    //---------------------------------------------------------------------
     /** Retrieves the help URL of a control.
      */
     const short GET_HELP_URL = 101;
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

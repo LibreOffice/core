@@ -22,11 +22,9 @@
 #include <com/sun/star/configuration/backend/Backend.idl>
 #include <com/sun/star/lang/XInitialization.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module configuration { module backend {
 
-//=============================================================================
 
 /**
    implements <type>Backend</type>  provides access to a configuration database
@@ -34,7 +32,6 @@ module com { module sun { module star { module configuration { module backend {
 */
 service MultiStratumBackend
 {
-    //-------------------------------------------------------------------------
 
     /** characterizes the functionality.
       */
@@ -54,10 +51,8 @@ service MultiStratumBackend
 
     [optional] interface com::sun::star::lang::XInitialization ;
 
-    //-------------------------------------------------------------------------
 } ;
 
-//=============================================================================
 
 } ; } ; } ; } ; } ;
 #endif

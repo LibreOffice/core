@@ -22,11 +22,9 @@
 
 #include <com/sun/star/container/XNameAccess.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** represents the collection of members in a data pilot source level.
 
@@ -35,7 +33,6 @@ module com {  module sun {  module star {  module sheet {
  */
 published service DataPilotSourceMembers
 {
-    //-------------------------------------------------------------------------
 
     /** provides access by name to the members in the collection.
 
@@ -45,7 +42,6 @@ published service DataPilotSourceMembers
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

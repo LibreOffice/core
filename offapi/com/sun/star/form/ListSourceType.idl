@@ -20,11 +20,9 @@
 #define __com_sun_star_form_ListSourceType_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module form {
 
-//=============================================================================
 
 /** describes the kind of data source used to fill the list data of a listbox or a combobox control.
     @see com::sun::star::form::component::ListBox
@@ -32,38 +30,32 @@
  */
 published enum ListSourceType
 {
-    //-------------------------------------------------------------------------
 
     /** The control should be filled with a list of string values.
      */
     VALUELIST,
 
-    //-------------------------------------------------------------------------
 
     /** The control should be filled with the data of a table.
      */
     TABLE,
 
-    //-------------------------------------------------------------------------
 
     /** The control should be filled with the results of a database query.
      */
     QUERY,
 
-    //-------------------------------------------------------------------------
 
     /** The control should be filled with the results of a database statement.
      */
     SQL,
 
-    //-------------------------------------------------------------------------
 
     /** The control should be filled with the results of a database statement,
         which is not evaluated by the database engine.
      */
     SQLPASSTHROUGH,
 
-    //-------------------------------------------------------------------------
 
     /** The control should be filled with the field names of a database table.
      */
@@ -71,7 +63,6 @@ published enum ListSourceType
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

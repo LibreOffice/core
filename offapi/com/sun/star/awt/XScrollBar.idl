@@ -33,36 +33,30 @@
 #include <com/sun/star/awt/XAdjustmentListener.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module awt {
 
-//=============================================================================
 
 /** gives access to the value and settings of a scroll bar and makes it possible
     to register adjustment event listeners.
  */
 published interface XScrollBar: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** registers an adjustment event listener.
      */
     [oneway] void addAdjustmentListener( [in] com::sun::star::awt::XAdjustmentListener l );
 
-    //-------------------------------------------------------------------------
 
     /** unregisters an adjustment event listener.
      */
     [oneway] void removeAdjustmentListener( [in] com::sun::star::awt::XAdjustmentListener l );
 
-    //-------------------------------------------------------------------------
 
     /** sets the scroll value of the scroll bar.
      */
     [oneway] void setValue( [in] long n );
 
-    //-------------------------------------------------------------------------
 
     /** sets the scroll value, visible area and maximum scroll value
         of the scroll bar.
@@ -71,67 +65,56 @@ published interface XScrollBar: com::sun::star::uno::XInterface
              [in] long nVisible,
              [in] long nMax );
 
-    //-------------------------------------------------------------------------
 
     /** returns the current scroll value of the scroll bar.
      */
     long getValue();
 
-    //-------------------------------------------------------------------------
 
     /** sets the maximum scroll value of the scroll bar.
      */
     [oneway] void setMaximum( [in] long n );
 
-    //-------------------------------------------------------------------------
 
     /** returns the currently set maximum scroll value of the scroll bar.
      */
     long getMaximum();
 
-    //-------------------------------------------------------------------------
 
     /** sets the increment for a single line move.
      */
     [oneway] void setLineIncrement( [in] long n );
 
-    //-------------------------------------------------------------------------
 
     /** returns the currently set increment for a single line move.
      */
     long getLineIncrement();
 
-    //-------------------------------------------------------------------------
 
     /** sets the increment for a block move.
      */
     [oneway] void setBlockIncrement( [in] long n );
 
-    //-------------------------------------------------------------------------
 
     /** returns the currently set increment for a block move.
      */
     long getBlockIncrement();
 
-    //-------------------------------------------------------------------------
 
     /** sets the visible size of the scroll bar.
      */
     [oneway] void setVisibleSize( [in] long n );
 
-    //-------------------------------------------------------------------------
 
     /** returns the currently visible size of the scroll bar.
      */
     long getVisibleSize();
 
-    //-------------------------------------------------------------------------
 
     /** sets the <type>ScrollBarOrientation</type> of the scroll bar.
      */
     [oneway] void setOrientation( [in] long n );
 
-    //-------------------------------------------------------------------------
 
     /** returns the currently set <type>ScrollBarOrientation</type> of the
         scroll bar.
@@ -140,7 +123,6 @@ published interface XScrollBar: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

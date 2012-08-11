@@ -30,11 +30,9 @@
 
 #include <com/sun/star/uno/Exception.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module document {
 
-//=============================================================================
 /** should be used for interaction to handle states of unknown filter during detection
 
     <p>
@@ -55,13 +53,11 @@ module com { module sun { module star { module document {
 */
 published exception NoSuchFilterRequest : ::com::sun::star::uno::Exception
 {
-    //-------------------------------------------------------------------------
     /** transport URL which couldn't be detected
      */
     string URL;
 };
 
-//=============================================================================
 
 }; }; }; };
 

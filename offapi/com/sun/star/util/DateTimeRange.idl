@@ -20,11 +20,9 @@
 #define __com_sun_star_util_DateTimeRange_idl__
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module util {
 
-//=============================================================================
 
 /** represents a range of date+time values.
  */
@@ -34,74 +32,60 @@ published struct DateTimeRange
      */
     unsigned short StartHundredthSeconds;
 
-    //-------------------------------------------------------------------------
     /** contains the start seconds (0-59) for the range.
      */
     unsigned short StartSeconds;
 
-    //-------------------------------------------------------------------------
     /** contains the start minutes (0-59) for the range.
      */
     unsigned short StartMinutes;
 
-    //-------------------------------------------------------------------------
     /** contains the start hour (0-23) for the range.
      */
     unsigned short StartHours;
 
-    //-------------------------------------------------------------------------
     /** contains the start day of month (1-31 or 0 for a void date) for the range.
      */
     unsigned short StartDay;
 
-    //-------------------------------------------------------------------------
     /** contains the start month of year (1-12 or 0 for a void date) for the range.
      */
     unsigned short StartMonth;
 
-    //-------------------------------------------------------------------------
     /** contains the start year for the range.
      */
     unsigned short StartYear;
 
-    //-------------------------------------------------------------------------
     /** contains the end hundredth seconds (0-99) for the range.
      */
     unsigned short EndHundredthSeconds;
 
-    //-------------------------------------------------------------------------
     /** contains the end seconds (0-59) for the range.
      */
     unsigned short EndSeconds;
 
-    //-------------------------------------------------------------------------
     /** contains the end minutes (0-59) for the range.
      */
     unsigned short EndMinutes;
 
-    //-------------------------------------------------------------------------
     /** contains the end hour (0-23) for the range.
      */
     unsigned short EndHours;
 
-    //-------------------------------------------------------------------------
     /** contains the end day of month (1-31 or 0 for a void date) for the range.
      */
     unsigned short EndDay;
 
-    //-------------------------------------------------------------------------
     /** contains the end month of year (1-12 or 0 for a void date) for the range.
      */
     unsigned short EndMonth;
 
-    //-------------------------------------------------------------------------
     /** contains the end year for the range.
      */
     unsigned short EndYear;
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

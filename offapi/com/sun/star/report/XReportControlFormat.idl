@@ -36,11 +36,9 @@
 #include <com/sun/star/style/ParagraphAdjust.idl>
 #include <com/sun/star/style/VerticalAlignment.idl>
 #include <com/sun/star/util/Color.idl>
-//=============================================================================
 
  module com {  module sun {  module star {  module report {
 
-//=============================================================================
 /** specifies a format condition for a control.
 */
 interface XReportControlFormat
@@ -70,7 +68,6 @@ interface XReportControlFormat
         get raises ( com::sun::star::beans::UnknownPropertyException );
     };
 
-    //-------------------------------------------------------------------------
 
     /** specifies the font attributes of the text in the control.
      */
@@ -96,7 +93,6 @@ interface XReportControlFormat
         get raises ( com::sun::star::beans::UnknownPropertyException );
     };
 
-    //-------------------------------------------------------------------------
 
     /** specifies the <type scope="com::sun::star::text">FontEmphasis</type>
         value of the text in the control.
@@ -123,7 +119,6 @@ interface XReportControlFormat
         set raises ( com::sun::star::beans::UnknownPropertyException );
         get raises ( com::sun::star::beans::UnknownPropertyException );
     };
-    //-------------------------------------------------------------------------
     /** contains the prefix (usually parenthesis) before text that is formatted in two lines.
      <p>It is linked to the properties CharCombineIsOn and CharCombineSuffix.</p>
      */
@@ -132,7 +127,6 @@ interface XReportControlFormat
         set raises ( com::sun::star::beans::UnknownPropertyException );
         get raises ( com::sun::star::beans::UnknownPropertyException );
     };
-    //-------------------------------------------------------------------------
     /** contains the suffix (usually parenthesis) after text that is formatted in two lines.
      <p>It is linked to the properties CharCombineIsOn and CharCombinePrefix.</p>
      */
@@ -152,7 +146,6 @@ interface XReportControlFormat
         get raises ( com::sun::star::beans::UnknownPropertyException );
     };
 
-    //-------------------------------------------------------------------------
     /** specifies if the characters are formatted and
         displayed with a shadow effect.
      */
@@ -258,7 +251,6 @@ interface XReportControlFormat
         set raises ( com::sun::star::beans::UnknownPropertyException );
         get raises ( com::sun::star::beans::UnknownPropertyException );
     };
-    //-------------------------------------------------------------------------
 
     /** This attribute contains the name of the font style.
 
@@ -269,7 +261,6 @@ interface XReportControlFormat
         set raises ( com::sun::star::beans::UnknownPropertyException );
         get raises ( com::sun::star::beans::UnknownPropertyException );
     };
-    //-------------------------------------------------------------------------
 
     /** This attribute contains font family as specified in
         com.sun.star.awt.FontFamily .
@@ -279,7 +270,6 @@ interface XReportControlFormat
         set raises ( com::sun::star::beans::UnknownPropertyException );
         get raises ( com::sun::star::beans::UnknownPropertyException );
     };
-    //-------------------------------------------------------------------------
 
     /** This attribute contains the text encoding of the font as specified in
         com.sun.star.awt.CharSet.
@@ -289,7 +279,6 @@ interface XReportControlFormat
         set raises ( com::sun::star::beans::UnknownPropertyException );
         get raises ( com::sun::star::beans::UnknownPropertyException );
     };
-    //-------------------------------------------------------------------------
 
     /** This attribute contains the font pitch as specified in com.sun.star.awt.FontPitch.
      */
@@ -307,7 +296,6 @@ interface XReportControlFormat
         get raises ( com::sun::star::beans::UnknownPropertyException );
     };
 
-    //-------------------------------------------------------------------------
 
     /** specifies the text line color (RGB) of the control.
      */
@@ -325,7 +313,6 @@ interface XReportControlFormat
         get raises ( com::sun::star::beans::UnknownPropertyException );
     };
 
-    //-------------------------------------------------------------------------
 
     /** This attribute contains the value for the character underline.@see com::sun::star::awt::FontUnderline
      */
@@ -335,7 +322,6 @@ interface XReportControlFormat
         get raises ( com::sun::star::beans::UnknownPropertyException );
     };
 
-    //-------------------------------------------------------------------------
 
     /** This attribute contains the value of the font weight.@see com::sun::star::awt::FontWeight
      */
@@ -345,7 +331,6 @@ interface XReportControlFormat
         get raises ( com::sun::star::beans::UnknownPropertyException );
     };
 
-    //-------------------------------------------------------------------------
 
     /** This attribute contains the value of the posture of the document.@see com::sun::star::awt::FontSlant
      */
@@ -355,7 +340,6 @@ interface XReportControlFormat
         get raises ( com::sun::star::beans::UnknownPropertyException );
     };
 
-    //-------------------------------------------------------------------------
     /** determines the type of the strike out of the character.
         @see com.sun.star.awt.FontStrikeout
     */
@@ -383,7 +367,6 @@ interface XReportControlFormat
         set raises ( com::sun::star::beans::UnknownPropertyException );
         get raises ( com::sun::star::beans::UnknownPropertyException );
     };
-    //-------------------------------------------------------------------------
 
     /** determines the percentage value for scaling the width of characters.
 
@@ -406,7 +389,6 @@ interface XReportControlFormat
         get raises ( com::sun::star::beans::UnknownPropertyException );
     };
 
-    //-------------------------------------------------------------------------
     /** contains the URL of a hyperlink (if set).
      */
     [attribute,bound] string HyperLinkURL
@@ -415,7 +397,6 @@ interface XReportControlFormat
         get raises ( com::sun::star::beans::UnknownPropertyException );
     };
 
-    //-------------------------------------------------------------------------
     /** contains the name of the target for a hyperlink (if set).
      */
     [attribute,bound] string HyperLinkTarget
@@ -424,7 +405,6 @@ interface XReportControlFormat
         get raises ( com::sun::star::beans::UnknownPropertyException );
     };
 
-    //-------------------------------------------------------------------------
     /** contains the name of the hyperlink (if set).
      */
     [attribute,bound] string HyperLinkName
@@ -433,7 +413,6 @@ interface XReportControlFormat
         get raises ( com::sun::star::beans::UnknownPropertyException );
     };
 
-    //--------------------------------------------------------------------
     /** contains the character style name for visited hyperlinks.
      */
     [attribute,bound] string VisitedCharStyleName
@@ -442,7 +421,6 @@ interface XReportControlFormat
         get raises ( com::sun::star::beans::UnknownPropertyException );
     };
 
-    //--------------------------------------------------------------------
     /** contains the character style name for unvisited hyperlinks.
      */
     [attribute,bound] string UnvisitedCharStyleName
@@ -457,7 +435,6 @@ interface XReportControlFormat
         set raises ( com::sun::star::beans::UnknownPropertyException );
         get raises ( com::sun::star::beans::UnknownPropertyException );
     };
-    //-------------------------------------------------------------------------
     /** This property contains the value of the font weight.@see com::sun::star::awt::FontWeight
      */
     [attribute,bound] float CharWeightAsian
@@ -465,7 +442,6 @@ interface XReportControlFormat
         set raises ( com::sun::star::beans::UnknownPropertyException );
         get raises ( com::sun::star::beans::UnknownPropertyException );
     };
-    //-------------------------------------------------------------------------
     /** This property specifies the name of the font style.
         <p>It may contain more than one name separated by comma.</p>
      */
@@ -474,7 +450,6 @@ interface XReportControlFormat
         set raises ( com::sun::star::beans::UnknownPropertyException );
         get raises ( com::sun::star::beans::UnknownPropertyException );
     };
-    //-------------------------------------------------------------------------
     /** This property contains the name of the font style.
         <p>This property may be empty.</p>
      */
@@ -483,7 +458,6 @@ interface XReportControlFormat
         set raises ( com::sun::star::beans::UnknownPropertyException );
         get raises ( com::sun::star::beans::UnknownPropertyException );
     };
-    //-------------------------------------------------------------------------
     /** This property contains font family as specified in
         com.sun.star.awt.FontFamily .
      */
@@ -492,7 +466,6 @@ interface XReportControlFormat
         set raises ( com::sun::star::beans::UnknownPropertyException );
         get raises ( com::sun::star::beans::UnknownPropertyException );
     };
-    //-------------------------------------------------------------------------
     /** This property contains the text encoding of the font as specified in
         com.sun.star.awt.CharSet.
      */
@@ -501,7 +474,6 @@ interface XReportControlFormat
         set raises ( com::sun::star::beans::UnknownPropertyException );
         get raises ( com::sun::star::beans::UnknownPropertyException );
     };
-    //-------------------------------------------------------------------------
     /** This property contains the font pitch as specified in com.sun.star.awt.FontPitch.
      */
     [attribute,bound] short CharFontPitchAsian
@@ -509,7 +481,6 @@ interface XReportControlFormat
         set raises ( com::sun::star::beans::UnknownPropertyException );
         get raises ( com::sun::star::beans::UnknownPropertyException );
     };
-    //-------------------------------------------------------------------------
     /** This property contains the value of the posture of the document.@see com::sun::star::awt::FontSlant
      */
     [attribute,bound] com::sun::star::awt::FontSlant CharPostureAsian
@@ -518,7 +489,6 @@ interface XReportControlFormat
         get raises ( com::sun::star::beans::UnknownPropertyException );
     };
 
-    //-------------------------------------------------------------------------
     /** contains the value of the locale.
      */
     [attribute,bound] com::sun::star::lang::Locale CharLocaleAsian
@@ -527,7 +497,6 @@ interface XReportControlFormat
         get raises ( com::sun::star::beans::UnknownPropertyException );
     };
 
-    //-------------------------------------------------------------------------
     /** This value contains the height of the characters in point.
      */
     [attribute,bound] float CharHeightComplex
@@ -535,7 +504,6 @@ interface XReportControlFormat
         set raises ( com::sun::star::beans::UnknownPropertyException );
         get raises ( com::sun::star::beans::UnknownPropertyException );
     };
-    //-------------------------------------------------------------------------
     /** This property contains the value of the font weight.@see com::sun::star::awt::FontWeight
      */
     [attribute,bound] float CharWeightComplex
@@ -543,7 +511,6 @@ interface XReportControlFormat
         set raises ( com::sun::star::beans::UnknownPropertyException );
         get raises ( com::sun::star::beans::UnknownPropertyException );
     };
-    //-------------------------------------------------------------------------
     /** This property specifies the name of the font style.
         <p>It may contain more than one name separated by comma.</p>
      */
@@ -552,7 +519,6 @@ interface XReportControlFormat
         set raises ( com::sun::star::beans::UnknownPropertyException );
         get raises ( com::sun::star::beans::UnknownPropertyException );
     };
-    //-------------------------------------------------------------------------
     /** This property contains the name of the font style.
         <p>This property may be empty.</p>
      */
@@ -562,7 +528,6 @@ interface XReportControlFormat
         set raises ( com::sun::star::beans::UnknownPropertyException );
         get raises ( com::sun::star::beans::UnknownPropertyException );
     };
-    //-------------------------------------------------------------------------
     /** This property contains font family as specified in
         com.sun.star.awt.FontFamily .
      */
@@ -571,7 +536,6 @@ interface XReportControlFormat
         set raises ( com::sun::star::beans::UnknownPropertyException );
         get raises ( com::sun::star::beans::UnknownPropertyException );
     };
-    //-------------------------------------------------------------------------
     /** This property contains the text encoding of the font as specified in
         com.sun.star.awt.CharSet.
      */
@@ -580,7 +544,6 @@ interface XReportControlFormat
         set raises ( com::sun::star::beans::UnknownPropertyException );
         get raises ( com::sun::star::beans::UnknownPropertyException );
     };
-    //-------------------------------------------------------------------------
     /** This property contains the font pitch as specified in com.sun.star.awt.FontPitch.
      */
     [attribute,bound] short CharFontPitchComplex
@@ -588,7 +551,6 @@ interface XReportControlFormat
         set raises ( com::sun::star::beans::UnknownPropertyException );
         get raises ( com::sun::star::beans::UnknownPropertyException );
     };
-    //-------------------------------------------------------------------------
     /** This property contains the value of the posture of the document.@see com::sun::star::awt::FontSlant
      */
     [attribute,bound] com::sun::star::awt::FontSlant CharPostureComplex
@@ -597,7 +559,6 @@ interface XReportControlFormat
         get raises ( com::sun::star::beans::UnknownPropertyException );
     };
 
-    //-------------------------------------------------------------------------
     /** contains the value of the locale.
      */
     [attribute,bound] com::sun::star::lang::Locale CharLocaleComplex
@@ -607,7 +568,6 @@ interface XReportControlFormat
     };
 };
 
-//=============================================================================
 
 }; }; }; };
 #endif

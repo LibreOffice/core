@@ -29,10 +29,8 @@
 #ifndef __com_sun_star_inspection_PropertyControlType_idl__
 #define __com_sun_star_inspection_PropertyControlType_idl__
 
-//=============================================================================
 module com {  module sun {  module star {  module inspection {
 
-//-----------------------------------------------------------------------------
 /** describes pre-defined possible control types to be used to display and enter
     property values within a <type>ObjectInspector</type>.
 
@@ -146,7 +144,6 @@ constants PropertyControlType
     const short Unknown = 13;
 };
 
-//=============================================================================
 
 }; }; }; };
 

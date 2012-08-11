@@ -19,11 +19,9 @@
 #ifndef __com_sun_star_xml_FastAttribute_idl__
 #define __com_sun_star_xml_FastAttribute_idl__
 
-//=============================================================================
 
 module com {  module sun {  module star {  module xml {
 
-//=============================================================================
 
 /**
  * A struct to keep information of an element's attribute.
@@ -41,7 +39,6 @@ struct FastAttribute
     string Value;
 };
 
-//=============================================================================
 
 }; }; }; };
 

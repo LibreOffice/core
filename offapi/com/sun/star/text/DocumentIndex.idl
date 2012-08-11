@@ -33,11 +33,9 @@
 #include <com/sun/star/text/BaseIndex.idl>
 #include <com/sun/star/text/XDocumentIndexMark.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module text {
 
-//=============================================================================
 
 /** specifies service of content indexes within a document.@see com::sun::star::text::BaseIndex
  */
@@ -83,18 +81,15 @@ published service DocumentIndex
      */
     [readonly, property] sequence <com::sun::star::text::XDocumentIndexMark> DocumentIndexMarks;
 
-    //------------------------------------------------------------------------
     /** contains the locale of the index.
      */
     [property] com::sun::star::lang::Locale  Locale;
 
-    //------------------------------------------------------------------------
     /** contains the name of the sort algorithm that is used to sort the entries.
      */
     [property] string SortAlgorithm;
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -23,11 +23,9 @@
 #include <com/sun/star/sheet/FilterConnection.idl>
 #include <com/sun/star/sheet/FilterOperator2.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** describes a single condition in a filter descriptor.
 
@@ -40,39 +38,33 @@ module com {  module sun {  module star {  module sheet {
  */
 published struct TableFilterField2
 {
-    //-------------------------------------------------------------------------
 
     /** specifies how the condition is connected to the previous condition.
      */
     FilterConnection Connection;
 
-    //-------------------------------------------------------------------------
 
     /** specifies which field (column) is used for the condition.
      */
     long Field;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the type of the condition as defined in
         <type>FilterOperator2</type>.
     */
     long Operator;
 
-    //-------------------------------------------------------------------------
 
     /** selects whether the <member>TableFilterField2::NumericValue</member>
         or the <member>TableFilterField2::StringValue</member> is used.
      */
     boolean IsNumeric;
 
-    //-------------------------------------------------------------------------
 
     /** specifies a numeric value for the condition.
      */
     double NumericValue;
 
-    //-------------------------------------------------------------------------
 
     /** specifies a string value for the condition.
      */
@@ -80,7 +72,6 @@ published struct TableFilterField2
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -23,11 +23,9 @@
 #include <com/sun/star/frame/FeatureStateEvent.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module frame {
 
-//=============================================================================
 /** makes it possible to receive events when the state of a feature changes.
 
     <p>
@@ -41,7 +39,6 @@
  */
 published interface XStatusListener: com::sun::star::lang::XEventListener
 {
-    //-------------------------------------------------------------------------
     /** is called when the status of the feature changes.
 
         @param State
@@ -50,7 +47,6 @@ published interface XStatusListener: com::sun::star::lang::XEventListener
     [oneway] void statusChanged( [in] FeatureStateEvent State );
 };
 
-//=============================================================================
 
 }; }; }; };
 

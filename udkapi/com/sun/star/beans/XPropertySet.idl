@@ -36,11 +36,9 @@
 #include <com/sun/star/beans/XVetoableChangeListener.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module beans {
 
-//=============================================================================
 
 /** provides information about and access to the
     properties from an implementation.
@@ -64,7 +62,6 @@ module com {  module sun {  module star {  module beans {
  */
 published interface XPropertySet: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** @returns
             the <type>XPropertySetInfo</type> interface, which
@@ -78,7 +75,6 @@ published interface XPropertySet: com::sun::star::uno::XInterface
      */
     com::sun::star::beans::XPropertySetInfo getPropertySetInfo();
 
-    //-------------------------------------------------------------------------
 
     /** sets the value of the property with the specified name.
 
@@ -99,7 +95,6 @@ published interface XPropertySet: com::sun::star::uno::XInterface
                     com::sun::star::lang::IllegalArgumentException,
                     com::sun::star::lang::WrappedTargetException );
 
-    //-------------------------------------------------------------------------
 
     /** @returns
             the value of the property with the specified name.
@@ -119,7 +114,6 @@ published interface XPropertySet: com::sun::star::uno::XInterface
             raises( com::sun::star::beans::UnknownPropertyException,
                     com::sun::star::lang::WrappedTargetException );
 
-    //-------------------------------------------------------------------------
 
     /** adds an <type>XPropertyChangeListener</type> to the specified property.
 
@@ -137,7 +131,6 @@ published interface XPropertySet: com::sun::star::uno::XInterface
             raises( com::sun::star::beans::UnknownPropertyException,
                     com::sun::star::lang::WrappedTargetException );
 
-    //-------------------------------------------------------------------------
 
     /** removes an <type>XPropertyChangeListener</type> from
         the listener list.
@@ -154,7 +147,6 @@ published interface XPropertySet: com::sun::star::uno::XInterface
             raises( com::sun::star::beans::UnknownPropertyException,
                     com::sun::star::lang::WrappedTargetException );
 
-    //-------------------------------------------------------------------------
 
     /** adds an <type>XVetoableChangeListener</type> to the specified
         property with the name PropertyName.
@@ -170,7 +162,6 @@ published interface XPropertySet: com::sun::star::uno::XInterface
             raises( com::sun::star::beans::UnknownPropertyException,
                     com::sun::star::lang::WrappedTargetException );
 
-    //-------------------------------------------------------------------------
 
     /** removes an <type>XVetoableChangeListener</type> from the
         listener list.
@@ -186,7 +177,6 @@ published interface XPropertySet: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

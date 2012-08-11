@@ -23,11 +23,9 @@
 #include <com/sun/star/container/XIndexAccess.idl>
 #include <com/sun/star/container/XEnumerationAccess.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** represents a collection of equal-formatted cell ranges.
 
@@ -40,7 +38,6 @@ module com {  module sun {  module star {  module sheet {
  */
 published service CellFormatRanges
 {
-    //-------------------------------------------------------------------------
 
     /** provides methods to access the contained cell ranges by index.
 
@@ -48,7 +45,6 @@ published service CellFormatRanges
      */
     interface com::sun::star::container::XIndexAccess;
 
-    //-------------------------------------------------------------------------
 
     /** creates an enumeration of all cell ranges.
 
@@ -58,7 +54,6 @@ published service CellFormatRanges
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

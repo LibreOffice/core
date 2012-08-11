@@ -32,11 +32,9 @@
 
 #include <com/sun/star/i18n/CalendarItem2.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module i18n {
 
-//=============================================================================
 
 /**
     Calendar items as returned in a sequence by
@@ -94,7 +92,6 @@ published struct Calendar2
     string                      Name;
 };
 
-//=============================================================================
 }; }; }; };
 
 #endif

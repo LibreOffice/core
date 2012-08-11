@@ -32,11 +32,9 @@
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/lang/IllegalArgumentException.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module ui { module dialogs {
 
-//=============================================================================
 /** Interface to query for controls and control properties supported by the
     implementing instance.
 
@@ -44,7 +42,6 @@ module com { module sun { module star { module ui { module dialogs {
 */
 published interface XControlInformation: com::sun::star::uno::XInterface
 {
-//-------------------------------------------------------------------------
 /** Query for the supported controls of a service instance.
 
     @returns
@@ -52,7 +49,6 @@ published interface XControlInformation: com::sun::star::uno::XInterface
 */
 sequence<string> getSupportedControls( );
 
-//-------------------------------------------------------------------------
 /** Returns whether the specified control is supported or not.
 
     @param aControlName
@@ -65,7 +61,6 @@ sequence<string> getSupportedControls( );
 */
 boolean isControlSupported( [in] string aControlName );
 
-//-------------------------------------------------------------------------
 /** Returns a sequence with properties supported by the specified
     control.
 
@@ -82,7 +77,6 @@ boolean isControlSupported( [in] string aControlName );
 sequence<string> getSupportedControlProperties( [in] string aControlName )
     raises( com::sun::star::lang::IllegalArgumentException );
 
-//-------------------------------------------------------------------------
 /** Returns whether control property is supported by a control.
 
     @param aControlName

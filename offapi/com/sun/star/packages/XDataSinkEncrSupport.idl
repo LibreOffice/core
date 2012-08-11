@@ -40,17 +40,14 @@
 #include <com/sun/star/packages/NoRawFormatException.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module packages {
 
-//=============================================================================
 
 /** Allows to get access to the stream of a <type>PackageStream</type>.
  */
 interface XDataSinkEncrSupport: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** Allows to get access to the data of the PackageStream.
     <p>
         In case stream is encrypted one and the key for the stream is not set,
@@ -71,7 +68,6 @@ interface XDataSinkEncrSupport: com::sun::star::uno::XInterface
                 ::com::sun::star::io::IOException );
 
 
-    //-------------------------------------------------------------------------
     /** Allows to get access to the data of the PackageStream as to raw stream.
     In case stream is not encrypted an exception will be thrown.
     <p>
@@ -93,7 +89,6 @@ interface XDataSinkEncrSupport: com::sun::star::uno::XInterface
         raises( ::com::sun::star::packages::NoEncryptionException,
                 ::com::sun::star::io::IOException );
 
-    //-------------------------------------------------------------------------
     /** Allows to set a data stream for the PackageStream.
     <p>
         In case PackageStream is marked as encrypted the data stream will be encrypted on storing.
@@ -108,7 +103,6 @@ interface XDataSinkEncrSupport: com::sun::star::uno::XInterface
     void setDataStream( [in] ::com::sun::star::io::XInputStream aStream )
         raises( ::com::sun::star::io::IOException );
 
-    //-------------------------------------------------------------------------
     /** Allows to set raw stream for the PackageStream.
     The PackageStream object can not be marked as encrypted one,
     an exception will be thrown in such case.
@@ -130,7 +124,6 @@ interface XDataSinkEncrSupport: com::sun::star::uno::XInterface
                 ::com::sun::star::packages::NoRawFormatException,
                 ::com::sun::star::io::IOException );
 
-    //-------------------------------------------------------------------------
     /** Allows to get access to the raw data of the stream as it is stored in
         the package.
 
@@ -145,7 +138,6 @@ interface XDataSinkEncrSupport: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

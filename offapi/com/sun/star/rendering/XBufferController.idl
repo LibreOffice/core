@@ -62,13 +62,11 @@ interface XBufferController : ::com::sun::star::uno::XInterface
     long    createBuffers( [in] long nBuffers )
         raises (com::sun::star::lang::IllegalArgumentException);
 
-    //-------------------------------------------------------------------------
 
     /** Destroy all buffers generated via this object.
      */
     void    destroyBuffers();
 
-    //-------------------------------------------------------------------------
 
     /** Switch the display to show the specified buffer.<p>
 
@@ -94,7 +92,6 @@ interface XBufferController : ::com::sun::star::uno::XInterface
      */
     boolean showBuffer( [in] boolean bUpdateAll );
 
-    //-------------------------------------------------------------------------
 
     /** Schedule the display of the specified buffer.<p>
 

@@ -21,11 +21,9 @@
 
 #include <com/sun/star/uno/XInterface.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module configuration {
 
-//=============================================================================
 
 /** is implemented by objects that contain instances of a named template to
     provide information about the template.
@@ -45,7 +43,6 @@
  */
 published interface XTemplateContainer: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** retrieves the name of the template
 
@@ -63,7 +60,6 @@ published interface XTemplateContainer: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

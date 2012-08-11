@@ -30,11 +30,9 @@
 
 #include <com/sun/star/ucb/XContentProvider.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** The Package Content Provider (PCP) implements a <type>ContentProvider</type>
     for the <type>UniversalContentBroker</type> (UCB).
 
@@ -45,7 +43,6 @@ module com { module sun { module star { module ucb {
 */
 published service PackageContentProvider
 {
-    //-------------------------------------------------------------------------
     /** provides two types of contents: Stream and Folder.
 
         <p>
@@ -124,7 +121,6 @@ published service PackageContentProvider
     interface com::sun::star::ucb::XContentProvider;
 };
 
-//=============================================================================
 
 }; }; }; };
 

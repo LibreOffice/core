@@ -24,34 +24,28 @@
 #include <com/sun/star/util/XFlushListener.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module util {
 
-//=============================================================================
 
 /** is supported by objects with data that can be flushed to a data source.
  */
 published interface XFlushable: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** flushes the data of the object to the connected data source.
      */
     void flush();
 
-    //-------------------------------------------------------------------------
     /** adds the specified listener to receive event "flushed."
      */
     [oneway] void addFlushListener( [in] com::sun::star::util::XFlushListener l );
 
-    //-------------------------------------------------------------------------
     /** removes the specified listener.
      */
     [oneway] void removeFlushListener( [in] com::sun::star::util::XFlushListener l );
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

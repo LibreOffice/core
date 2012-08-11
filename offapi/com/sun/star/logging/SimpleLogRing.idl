@@ -23,13 +23,11 @@
 #include <com/sun/star/lang/IllegalArgumentException.idl>
 #include <com/sun/star/beans/NamedValue.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module logging {
 
 interface XSimpleLogRing;
 
-//=============================================================================
 
 /** This service allows to log the events in a ring of specified size.
 
@@ -48,11 +46,9 @@ service SimpleLogRing : XSimpleLogRing
     createWithSize( [in] long nSize );
 };
 
-//=============================================================================
 
 }; }; }; };
 
-//=============================================================================
 
 #endif
 

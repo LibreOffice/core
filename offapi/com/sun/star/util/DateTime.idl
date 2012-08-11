@@ -20,11 +20,9 @@
 #define __com_sun_star_util_DateTime_idl__
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module util {
 
-//=============================================================================
 
 /** represents a combined date+time value.
  */
@@ -34,37 +32,31 @@ published struct DateTime
      */
     unsigned short HundredthSeconds;
 
-    //-------------------------------------------------------------------------
 
     /** contains the seconds (0-59).
      */
     unsigned short Seconds;
 
-    //-------------------------------------------------------------------------
 
     /** contains the minutes (0-59).
      */
     unsigned short Minutes;
 
-    //-------------------------------------------------------------------------
 
     /** contains the hour (0-23).
      */
     unsigned short Hours;
 
-    //-------------------------------------------------------------------------
 
     /** is the day of month (1-31 or 0 for a void date).
      */
     unsigned short Day;
 
-    //-------------------------------------------------------------------------
 
     /** is the month of year (1-12 or 0 for a void date).
      */
     unsigned short Month;
 
-    //-------------------------------------------------------------------------
 
     /** is the year.
      */
@@ -72,7 +64,6 @@ published struct DateTime
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

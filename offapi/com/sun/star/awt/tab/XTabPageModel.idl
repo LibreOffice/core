@@ -33,11 +33,9 @@
 #include <com/sun/star/container/XContainer.idl>
 #include <com/sun/star/container/XNameContainer.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module awt {  module tab {
 
-//=============================================================================
 
 /** specifies an XTabPageModel interface.
 
@@ -55,25 +53,21 @@ interface XTabPageModel
     /**ID for tab page.
     */
     [attribute, readonly] short TabPageID;
-        //-------------------------------------------------------------------------
 
     /** determines whether a tab page is enabled or disabled.
      */
     [attribute] boolean Enabled;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the text that is displayed in the tab bar of the tab page.
      */
     [attribute] string Title;
 
-    //-------------------------------------------------------------------------
 
     /** specifies a URL that references a graphic that should be displayed in the tab bar.
     */
     [attribute] string ImageURL;
 
-    //-------------------------------------------------------------------------
 
     /** specifies a tooltip text that should be displayed in the tab bar.
     */
@@ -81,7 +75,6 @@ interface XTabPageModel
 };
 
 
-//=============================================================================
 
  }; }; }; }; };
 

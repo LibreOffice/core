@@ -39,11 +39,9 @@
 #include <com/sun/star/chart2/data/XDataProvider.idl>
 #include <com/sun/star/chart2/data/XRangeXMLConversion.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module chart2 { module data {
 
-//=============================================================================
 
 /** identifies a <type>XDataProvider</type> for result sets.
 
@@ -209,7 +207,6 @@ interface XDatabaseDataProvider
     [attribute,bound] string DataSourceName;
 };
 
-//=============================================================================
 
  }; }; }; };  };
 

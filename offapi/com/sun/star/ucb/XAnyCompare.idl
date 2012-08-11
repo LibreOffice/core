@@ -30,17 +30,14 @@
 
 #include <com/sun/star/uno/XInterface.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** compares two <atom>any</atom>s.
 */
 
 published interface XAnyCompare: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** allows comparison of two <atom>any</atom>s.
 
         @param Any1
@@ -66,7 +63,6 @@ published interface XAnyCompare: com::sun::star::uno::XInterface
     short   compare( [in] any Any1, [in] any Any2 );
 };
 
-//=============================================================================
 
 }; }; }; };
 

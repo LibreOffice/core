@@ -20,41 +20,34 @@
 #ifndef __com_sun_star_table_CellRangeAddress_idl__
 #define __com_sun_star_table_CellRangeAddress_idl__
 
-//=============================================================================
 
 module com {  module sun {  module star {  module table {
 
-//=============================================================================
 
 /** contains a cell range address within a spreadsheet document.
  */
 published struct CellRangeAddress
 {
-    //-------------------------------------------------------------------------
 
     /** is the index of the sheet that contains the cell range.
      */
     short Sheet;
 
-    //-------------------------------------------------------------------------
 
     /** is the index of the column of the left edge of the range.
      */
     long StartColumn;
 
-    //-------------------------------------------------------------------------
 
     /** is the index of the row of the top edge of the range.
      */
     long StartRow;
 
-    //-------------------------------------------------------------------------
 
     /** is the index of the column of the right edge of the range.
      */
     long EndColumn;
 
-    //-------------------------------------------------------------------------
 
     /** is the index of the row of the bottom edge of the range.
      */
@@ -62,7 +55,6 @@ published struct CellRangeAddress
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

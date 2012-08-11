@@ -26,11 +26,9 @@
 #include <com/sun/star/drawing/Alignment.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module drawing {
 
-//=============================================================================
 
 // DocMerge from xml: interface com::sun::star::drawing::XShapeAligner
 /** Objects implementing this interface can be used to align
@@ -40,7 +38,6 @@
  */
 published interface XShapeAligner: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::drawing::XShapeAligner::alignShapes
     /** aligns the specified <type>Shape</type>s.
@@ -50,7 +47,6 @@ published interface XShapeAligner: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

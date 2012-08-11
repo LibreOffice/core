@@ -22,11 +22,9 @@
 
 #include <com/sun/star/lang/XMultiServiceFactory.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module mozilla {
 
-//=============================================================================
 
 /** Allows creation of the remote service manager for given session.
     This interface is oriented for communication with browsers plugins.
@@ -35,7 +33,6 @@ module com { module sun { module star { module mozilla {
 */
 published interface XRemoteServiceManagerProvider: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** Returns the remote service manager for the given session
 
         @param sessionData  [in]: contains the sessiondata (host, user, ticket)
@@ -43,7 +40,6 @@ published interface XRemoteServiceManagerProvider: com::sun::star::uno::XInterfa
     com::sun::star::lang::XMultiServiceFactory getServiceManager( [in] any sessionData );
 };
 
-//=============================================================================
 
 }; }; }; };
 

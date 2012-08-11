@@ -25,11 +25,9 @@
 #include <com/sun/star/accessibility/XAccessibleText.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** The accessible object of the ruler in the CSV import dialog.
     @see ::com::sun::star::sheet::AccessibleCsvTable
@@ -38,26 +36,22 @@ module com {  module sun {  module star {  module sheet {
  */
 published service AccessibleCsvRuler
 {
-    //-------------------------------------------------------------------------
 
     /** This interface gives access to the whole content of the ruler.
      */
     interface ::com::sun::star::accessibility::XAccessibleContext;
 
-    //-------------------------------------------------------------------------
 
     /** This interface gives access to the visibility of the ruler.
      */
     interface ::com::sun::star::accessibility::XAccessibleComponent;
 
-    //-------------------------------------------------------------------------
 
     /** This interface gives access to the text representation of the ruler.
      */
     interface ::com::sun::star::accessibility::XAccessibleText;
 };
 
-//=============================================================================
 
 }; }; }; };
 

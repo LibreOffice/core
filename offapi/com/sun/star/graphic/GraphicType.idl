@@ -26,23 +26,19 @@ module com { module sun { module star { module graphic {
 */
 published constants GraphicType
 {
-    //-------------------------------------------------------------------------
     /** Graphic is empty
      */
      const byte EMPTY = 0;
 
-    //-------------------------------------------------------------------------
     /** Graphic is represented through single pixels
      */
      const byte PIXEL = 1;
 
-    //-------------------------------------------------------------------------
     /** Graphic is represented through vectors
      */
      const byte VECTOR = 2;
 };
 
-//=============================================================================
 
 }; }; }; };
 

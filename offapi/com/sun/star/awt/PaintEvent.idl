@@ -24,11 +24,9 @@
 #include <com/sun/star/awt/Rectangle.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module awt {
 
-//=============================================================================
 
 /** specifies the paint event for a component.
 
@@ -40,13 +38,11 @@
  */
 published struct PaintEvent: com::sun::star::lang::EventObject
 {
-    //-------------------------------------------------------------------------
 
     /** contains the rectangle area which needs to be repainted.
      */
     com::sun::star::awt::Rectangle UpdateRect;
 
-    //-------------------------------------------------------------------------
 
     /** contains the number of paint events that follows this event if
         it is a multiple PaintEvent. You can collect the PaintEvent
@@ -56,7 +52,6 @@ published struct PaintEvent: com::sun::star::lang::EventObject
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

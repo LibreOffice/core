@@ -4,11 +4,9 @@
 
 #include <com/sun/star/uno/XInterface.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module chart2 {
 
-//=============================================================================
 
 interface XScaling : ::com::sun::star::uno::XInterface
 {
@@ -24,7 +22,6 @@ interface XScaling : ::com::sun::star::uno::XInterface
     //... or better/additionally?: provide default values for Min&Max
 };
 
-//=============================================================================
 
 }; }; }; };
 

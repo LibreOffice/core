@@ -148,7 +148,6 @@ interface XCanvas : ::com::sun::star::uno::XInterface
     void                drawPoint( [in] ::com::sun::star::geometry::RealPoint2D aPoint, [in] ViewState aViewState, [in] RenderState aRenderState )
         raises (com::sun::star::lang::IllegalArgumentException);
 
-    //-------------------------------------------------------------------------
 
     /** Draw a line in device resolution width (i.e. one device pixel
         wide).
@@ -172,7 +171,6 @@ interface XCanvas : ::com::sun::star::uno::XInterface
     void                drawLine( [in] ::com::sun::star::geometry::RealPoint2D aStartPoint, [in] ::com::sun::star::geometry::RealPoint2D aEndPoint, [in] ViewState aViewState, [in] RenderState aRenderState )
         raises (com::sun::star::lang::IllegalArgumentException);
 
-    //-------------------------------------------------------------------------
 
     /** Draw a cubic Bezier curve in device resolution width (i.e. one
         device pixel wide).
@@ -196,7 +194,6 @@ interface XCanvas : ::com::sun::star::uno::XInterface
     void                drawBezier( [in] ::com::sun::star::geometry::RealBezierSegment2D aBezierSegment, [in] ::com::sun::star::geometry::RealPoint2D aEndPoint, [in] ViewState aViewState, [in] RenderState aRenderState )
         raises (com::sun::star::lang::IllegalArgumentException);
 
-    //-------------------------------------------------------------------------
 
     /** Draw a poly-polygon in device resolution line width (i.e. the
         lines are one device pixel wide).
@@ -219,7 +216,6 @@ interface XCanvas : ::com::sun::star::uno::XInterface
     XCachedPrimitive    drawPolyPolygon( [in] XPolyPolygon2D xPolyPolygon, [in] ViewState aViewState, [in] RenderState aRenderState )
         raises (com::sun::star::lang::IllegalArgumentException);
 
-    //-------------------------------------------------------------------------
 
     /** Stroke each polygon of the provided poly-polygon with the
         specified stroke attributes.<p>
@@ -252,7 +248,6 @@ interface XCanvas : ::com::sun::star::uno::XInterface
     XCachedPrimitive    strokePolyPolygon( [in] XPolyPolygon2D xPolyPolygon, [in] ViewState aViewState, [in] RenderState aRenderState, [in] StrokeAttributes aStrokeAttributes )
         raises (com::sun::star::lang::IllegalArgumentException);
 
-    //-------------------------------------------------------------------------
 
     /** Stroke each polygon of the provided poly-polygon with the
         specified stroke attributes, fill the stroked outline
@@ -295,7 +290,6 @@ interface XCanvas : ::com::sun::star::uno::XInterface
         raises (com::sun::star::lang::IllegalArgumentException,
                 VolatileContentDestroyedException);
 
-    //-------------------------------------------------------------------------
 
     /** Stroke each polygon of the provided poly-polygon with the
         specified stroke attributes, fill the stroked outline
@@ -343,7 +337,6 @@ interface XCanvas : ::com::sun::star::uno::XInterface
         raises (com::sun::star::lang::IllegalArgumentException,
                 VolatileContentDestroyedException);
 
-    //-------------------------------------------------------------------------
 
     //  [TODO: Method misplaced at this interface?]
 
@@ -375,7 +368,6 @@ interface XCanvas : ::com::sun::star::uno::XInterface
     XPolyPolygon2D      queryStrokeShapes( [in] XPolyPolygon2D xPolyPolygon, [in] ViewState aViewState, [in] RenderState aRenderState, [in] StrokeAttributes aStrokeAttributes )
         raises (com::sun::star::lang::IllegalArgumentException);
 
-    //-------------------------------------------------------------------------
 
     /** Fill the given poly-polygon.<p>
 
@@ -401,7 +393,6 @@ interface XCanvas : ::com::sun::star::uno::XInterface
     XCachedPrimitive    fillPolyPolygon( [in] XPolyPolygon2D xPolyPolygon, [in] ViewState aViewState, [in] RenderState aRenderState )
         raises (com::sun::star::lang::IllegalArgumentException);
 
-    //-------------------------------------------------------------------------
 
     /** Fill the given poly-polygon with a texture.<p>
 
@@ -436,7 +427,6 @@ interface XCanvas : ::com::sun::star::uno::XInterface
         raises (com::sun::star::lang::IllegalArgumentException,
                 VolatileContentDestroyedException);
 
-    //-------------------------------------------------------------------------
 
     /** Fill the given poly-polygon with a mapped texture.<p>
 
@@ -476,7 +466,6 @@ interface XCanvas : ::com::sun::star::uno::XInterface
         raises (com::sun::star::lang::IllegalArgumentException,
                 VolatileContentDestroyedException);
 
-    //-------------------------------------------------------------------------
 
     /** Create a suitable font for the specified font description.
 
@@ -522,7 +511,6 @@ interface XCanvas : ::com::sun::star::uno::XInterface
     XCanvasFont             createFont( [in] FontRequest aFontRequest, [in] sequence< ::com::sun::star::beans::PropertyValue > aExtraFontProperties, [in] ::com::sun::star::geometry::Matrix2D aFontMatrix )
         raises (com::sun::star::lang::IllegalArgumentException);
 
-    //-------------------------------------------------------------------------
 
     /** Query font information, specific to this canvas.<p>
 
@@ -546,7 +534,6 @@ interface XCanvas : ::com::sun::star::uno::XInterface
     sequence< FontInfo >    queryAvailableFonts( [in] FontInfo aFilter, [in] sequence< ::com::sun::star::beans::PropertyValue > aFontProperties )
         raises (com::sun::star::lang::IllegalArgumentException);
 
-    //-------------------------------------------------------------------------
 
     /** Draw the text given by the substring of the specified string
         with the given font.<p>
@@ -585,7 +572,6 @@ interface XCanvas : ::com::sun::star::uno::XInterface
     XCachedPrimitive        drawText( [in] StringContext aText, [in] XCanvasFont xFont, [in] ViewState aViewState, [in] RenderState aRenderState, [in] byte nTextDirection )
         raises (com::sun::star::lang::IllegalArgumentException);
 
-    //-------------------------------------------------------------------------
 
     /** Draw the formatted text given by the text layout.<p>
 
@@ -617,7 +603,6 @@ interface XCanvas : ::com::sun::star::uno::XInterface
     XCachedPrimitive        drawTextLayout( [in] XTextLayout xLayoutetText, [in] ViewState aViewState, [in] RenderState aRenderState )
         raises (com::sun::star::lang::IllegalArgumentException);
 
-    //-------------------------------------------------------------------------
 
     /** Render the given bitmap.<p>
 
@@ -690,7 +675,6 @@ interface XCanvas : ::com::sun::star::uno::XInterface
         raises (com::sun::star::lang::IllegalArgumentException,
                 VolatileContentDestroyedException);
 
-    //-------------------------------------------------------------------------
 
     /** Request the associated graphic device for this canvas.<p>
 

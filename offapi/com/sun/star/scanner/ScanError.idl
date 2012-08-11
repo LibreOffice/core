@@ -29,47 +29,39 @@
 #define __com_sun_star_scanner_ScanError_idl__
 
 
-//=============================================================================
 
 module com { module sun { module star { module scanner {
 
-//=============================================================================
 /** enum ScanError describes error codes of scanner component
 */
 published enum ScanError
 {
-    //-------------------------------------------------------------------------
     // DOCUMENTATION CHANGED FOR ScanError::    ScanErrorNone,
     /** ScanErrorNone: no error occurred
      */
     ScanErrorNone,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION CHANGED FOR ScanError::    ScannerNotAvailable,
     /** ScannerNotAvailable: the requested device could not be opened
      */
     ScannerNotAvailable,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION CHANGED FOR ScanError::    ScanFailed,
     /** ScanFailed: an error occurred during scanning
      */
     ScanFailed,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION CHANGED FOR ScanError::    ScanInProgress,
     /** ScanInProgress: a scan is already in progress on this device that has
         to end before a new one can be started
     */
     ScanInProgress,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION CHANGED FOR ScanError::    ScanCanceled,
     /** ScanCanceled: the scan was canceled by the user
      */
     ScanCanceled,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION CHANGED FOR ScanError::    InvalidContext
     /** InvalidContext: a device was requested that does not exist
      */
@@ -77,7 +69,6 @@ published enum ScanError
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

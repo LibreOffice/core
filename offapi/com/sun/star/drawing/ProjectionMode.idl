@@ -20,11 +20,9 @@
 #define __com_sun_star_drawing_ProjectionMode_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module drawing {
 
-//=============================================================================
 
 // DocMerge from xml: enum com::sun::star::drawing::ProjectionMode
 /** defines whether the 3D objects are to be
@@ -32,7 +30,6 @@
  */
 published enum ProjectionMode
 {
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR ProjectionMode::   PARALLEL,
 
     // DocMerge from xml: value com::sun::star::drawing::ProjectionMode::PARALLEL
@@ -40,7 +37,6 @@ published enum ProjectionMode
      */
     PARALLEL,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR ProjectionMode::   PERSPECTIVE
 
     // DocMerge from xml: value com::sun::star::drawing::ProjectionMode::PERSPECTIVE
@@ -50,7 +46,6 @@ published enum ProjectionMode
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

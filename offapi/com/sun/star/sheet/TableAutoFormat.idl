@@ -25,11 +25,9 @@
 #include <com/sun/star/container/XNamed.idl>
 #include <com/sun/star/beans/XPropertySet.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** represents an AutoFormat, containing exactly 16 AutoFormat fields.
 
@@ -44,14 +42,12 @@ module com {  module sun {  module star {  module sheet {
  */
 published service TableAutoFormat
 {
-    //-------------------------------------------------------------------------
 
 //! service com::sun::star::beans::PropertySet;
     /** provides access to the properties.
      */
     interface com::sun::star::beans::XPropertySet;
 
-    //=========================================================================
 
     /** provides methods to access the AutoFormat fields via index.
 
@@ -59,7 +55,6 @@ published service TableAutoFormat
      */
     interface com::sun::star::container::XIndexAccess;
 
-    //-------------------------------------------------------------------------
 
     /** creates an enumeration of all 16 AutoFormat fields.
 
@@ -67,45 +62,38 @@ published service TableAutoFormat
      */
     interface com::sun::star::container::XEnumerationAccess;
 
-    //-------------------------------------------------------------------------
 
     /** provides methods to access the name of the AutoFormat.
      */
     interface com::sun::star::container::XNamed;
 
-    //=========================================================================
 
     /** specifies whether the font settings from the fields are used.
      */
     [property] boolean IncludeFont;
 
-    //-------------------------------------------------------------------------
 
     /** specifies whether the justification settings from the fields
         are used.
      */
     [property] boolean IncludeJustify;
 
-    //-------------------------------------------------------------------------
 
     /** specifies whether the border settings from the fields are used.
      */
     [property] boolean IncludeBorder;
 
-    //-------------------------------------------------------------------------
 
     /** specifies whether the background settings from the fields are used.
      */
     [property] boolean IncludeBackground;
 
-    //-------------------------------------------------------------------------
 
     /** specifies whether the number format settings from the fields
         are used.
      */
     [property] boolean IncludeNumberFormat;
 
-    //-------------------------------------------------------------------------
 
     /** specifies whether the column widths and row heights should be
         updated after applying the format.
@@ -114,7 +102,6 @@ published service TableAutoFormat
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

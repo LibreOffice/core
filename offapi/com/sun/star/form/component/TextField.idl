@@ -26,11 +26,9 @@
 #include <com/sun/star/form/XReset.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module form {  module component {
 
-//=============================================================================
 
 /** specifies a component which allows the input of text, either single- or multi-line.
  */
@@ -64,7 +62,6 @@ published service TextField
     [property] string DefaultText;
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

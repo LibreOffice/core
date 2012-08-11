@@ -24,86 +24,72 @@
 #include <com/sun/star/awt/Rectangle.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module awt {
 
-//=============================================================================
 
 /** manages multiple rectangles which make up a region.
  */
 published interface XRegion: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** returns the bounding box of the shape.
      */
     Rectangle getBounds();
 
-    //-------------------------------------------------------------------------
 
     /** makes this region an empty region.
      */
     [oneway] void clear();
 
-    //-------------------------------------------------------------------------
 
     /** moves this region by the specified horizontal and vertical delta.
      */
     [oneway] void move( [in] long nHorzMove,
              [in] long nVertMove );
 
-    //-------------------------------------------------------------------------
 
     /** adds the specified rectangle to this region.
      */
     [oneway] void unionRectangle( [in] Rectangle Rect );
 
-    //-------------------------------------------------------------------------
 
     /** intersects the specified rectangle with the current region.
      */
     [oneway] void intersectRectangle( [in] Rectangle Region );
 
-    //-------------------------------------------------------------------------
 
     /** removes the area of the specified rectangle from this region.
      */
     [oneway] void excludeRectangle( [in] Rectangle Rect );
 
-    //-------------------------------------------------------------------------
 
     /** applies an exclusive-or operation with the specified rectangle
         to this region.
      */
     [oneway] void xOrRectangle( [in] Rectangle Rect );
 
-    //-------------------------------------------------------------------------
 
     /** adds the specified region to this region.
      */
     [oneway] void unionRegion( [in] XRegion Region );
 
-    //-------------------------------------------------------------------------
 
     /** intersects the specified region with the current region.
      */
     [oneway] void intersectRegion( [in] XRegion Region );
 
-    //-------------------------------------------------------------------------
 
     /** removes the area of the specified region from this region.
      */
     [oneway] void excludeRegion( [in] XRegion Region );
 
-    //-------------------------------------------------------------------------
 
     /** applies an exclusive-or operation with the specified region
         to this region.
      */
     [oneway] void xOrRegion( [in] XRegion Region );
 
-    //-------------------------------------------------------------------------
 
     /** returns all rectangles which are making up this region.
      */
@@ -111,7 +97,6 @@ published interface XRegion: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

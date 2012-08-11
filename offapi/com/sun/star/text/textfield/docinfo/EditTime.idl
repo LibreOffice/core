@@ -31,12 +31,10 @@
 
 #include <com/sun/star/text/TextField.idl>
 
-//=============================================================================
 
 module com { module sun { module star {
     module text { module textfield { module docinfo {
 
-//=============================================================================
 /** specifies service of a text field that provides information about the
     duration the document has been edited.
     @see com::sun::star::text::TextField
@@ -71,7 +69,6 @@ published service EditTime
     [optional, property] boolean IsFixedLanguage;
 };
 
-//=============================================================================
 
 }; }; }; }; }; };
 

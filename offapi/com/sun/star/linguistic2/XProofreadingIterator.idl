@@ -26,18 +26,15 @@
 #include <com/sun/star/lang/Locale.idl>
 #include <com/sun/star/linguistic2/ProofreadingResult.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module linguistic2 {
 
-//=============================================================================
 /** API for the proofreading iterator that mediates between the document and the proofreader.
 
     @since  OOo 3.0.1
 */
 interface XProofreadingIterator: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** start proofreading and automatically process the whole text
 
         @param  xDoc
@@ -53,7 +50,6 @@ interface XProofreadingIterator: com::sun::star::uno::XInterface
                     [in] com::sun::star::text::XFlatParagraphIteratorProvider xIteratorProvider )
             raises( com::sun::star::lang::IllegalArgumentException );
 
-    //-------------------------------------------------------------------------
     /** start proofreading from a given position
 
         @param  xDoc
@@ -78,12 +74,10 @@ interface XProofreadingIterator: com::sun::star::uno::XInterface
                     [in] long nErrorPositionInParagraph )
             raises( com::sun::star::lang::IllegalArgumentException );
 
-    //-------------------------------------------------------------------------
     /** clears the list of ignored rules for each proofreader
     */
     void resetIgnoreRules();
 
-    //-------------------------------------------------------------------------
     /** checks if the given document is currently being checked
 
         @param  xDoc
@@ -95,7 +89,6 @@ interface XProofreadingIterator: com::sun::star::uno::XInterface
     boolean isProofreading( [in] com::sun::star::uno::XInterface xDocument );
 };
 
-//=============================================================================
 
 }; }; }; };
 

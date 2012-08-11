@@ -24,11 +24,9 @@
 #include <com/sun/star/beans/XPropertySet.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module util {
 
-//=============================================================================
 
 /** describes what and how to search within a container.
  */
@@ -38,33 +36,27 @@ published service SearchDescriptor
 
     interface com::sun::star::beans::XPropertySet;
 
-    //-------------------------------------------------------------------------
     /** If <TRUE/>, the search is done backwards in the document.
      */
     [property] boolean SearchBackwards;
 
-    //-------------------------------------------------------------------------
     /** If <TRUE/>, the case of the letters is important for the match.
      */
     [property] boolean SearchCaseSensitive;
 
-    //-------------------------------------------------------------------------
     /** If <TRUE/>, only complete words will be found.
      */
     [property] boolean SearchWords;
 
-    //-------------------------------------------------------------------------
     /** If <TRUE/>, the search string is evaluated as a regular expression.
      */
     [property] boolean SearchRegularExpression;
 
-    //-------------------------------------------------------------------------
     /** If <TRUE/>, it is searched for positions where the paragraph style with
         the name of the search pattern is applied.
      */
     [property] boolean SearchStyles;
 
-    //-------------------------------------------------------------------------
     /** If <TRUE/>, a "similarity search" is performed.
 
         <p>In the case of a similarity search, the following properties
@@ -83,7 +75,6 @@ published service SearchDescriptor
      */
     [property] boolean SearchSimilarity;
 
-    //-------------------------------------------------------------------------
     /** If <TRUE/>, all similarity rules are applied together.
 
         <p>In the case of a relaxed similarity search, the following
@@ -101,19 +92,16 @@ published service SearchDescriptor
      */
     [property] boolean SearchSimilarityRelax;
 
-    //-------------------------------------------------------------------------
     /** This property specifies the number of characters that may be
         ignored to match the search pattern.
      */
     [property] short SearchSimilarityRemove;
 
-    //-------------------------------------------------------------------------
     /** specifies the number of characters that must be
         added to match the search pattern.
      */
     [property] short SearchSimilarityAdd;
 
-    //-------------------------------------------------------------------------
     /** This property specifies the number of characters that must
         be replaced to match the search pattern.
      */
@@ -121,7 +109,6 @@ published service SearchDescriptor
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

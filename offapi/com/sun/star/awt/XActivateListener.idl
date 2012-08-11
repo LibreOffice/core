@@ -33,11 +33,9 @@
 #include <com/sun/star/lang/EventObject.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module awt {
 
-//=============================================================================
 
 /** makes it possible to receive activate events.
 
@@ -46,7 +44,6 @@
  */
 published interface XActivateListener: com::sun::star::lang::XEventListener
 {
-    //-------------------------------------------------------------------------
 
     /** is invoked when a window is activated.
 
@@ -56,7 +53,6 @@ published interface XActivateListener: com::sun::star::lang::XEventListener
      */
     [oneway] void windowActivated( [in] com::sun::star::lang::EventObject e );
 
-    //-------------------------------------------------------------------------
 
     /** is invoked when a window is deactivated.
 
@@ -68,7 +64,6 @@ published interface XActivateListener: com::sun::star::lang::XEventListener
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

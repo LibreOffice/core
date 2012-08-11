@@ -22,31 +22,26 @@
 
 #include <com/sun/star/beans/XPropertySet.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** contributes properties to access the settings for all spreadsheets of
     a spreadsheet document.
  */
 published service GlobalSheetSettings
 {
-    //-------------------------------------------------------------------------
 
 //! service com::sun::star::beans::PropertySet;
     /** provides access to the properties.
      */
     interface com::sun::star::beans::XPropertySet;
 
-    //=========================================================================
 
     /** specifies whether the cursor is moved after entering into cells.
      */
     [property] boolean MoveSelection;
 
-    //-------------------------------------------------------------------------
 
     /** contains the direction the cursor moves after entering cells.
 
@@ -54,47 +49,40 @@ published service GlobalSheetSettings
      */
     [property] short MoveDirection;
 
-    //-------------------------------------------------------------------------
 
     /** specifies whether the enter key can be used to start editing a cell.
      */
     [property] boolean EnterEdit;
 
-    //-------------------------------------------------------------------------
 
     /** specifies whether cell formatting is extended when entering data.
      */
     [property] boolean ExtendFormat;
 
-    //-------------------------------------------------------------------------
 
     /** specifies whether ranges are highlighted on the sheet when
         editing a formula.
      */
     [property] boolean RangeFinder;
 
-    //-------------------------------------------------------------------------
 
     /** specifies whether formula references are extended when cells
         are inserted below or to the right of them.
      */
     [property] boolean ExpandReferences;
 
-    //-------------------------------------------------------------------------
 
     /** specifies whether the current selection is highlighted in
         column and row headers.
      */
     [property] boolean MarkHeader;
 
-    //-------------------------------------------------------------------------
 
     /** specifies whether the enter key moves the cursor to the column
         it was in before using the tab key to change columns.
      */
     [property] boolean UseTabCol;
 
-    //-------------------------------------------------------------------------
 
     /** contains the metric for all spreadsheet documents.
 
@@ -102,7 +90,6 @@ published service GlobalSheetSettings
      */
     [property] short Metric;
 
-    //-------------------------------------------------------------------------
 
     /** contains the default scale for new spreadsheet documents
         (in percent).
@@ -114,13 +101,11 @@ published service GlobalSheetSettings
      */
     [property] short Scale;
 
-    //-------------------------------------------------------------------------
 
     /** specifies whether automatic completion of text in a cell is used.
      */
     [property] boolean DoAutoComplete;
 
-    //-------------------------------------------------------------------------
 
     /** contains the function that is displayed in the status bar.
 
@@ -128,7 +113,6 @@ published service GlobalSheetSettings
      */
     [property] short StatusBarFunction;
 
-    //-------------------------------------------------------------------------
 
     /** contains the string lists used for sorting and filling.
 
@@ -137,7 +121,6 @@ published service GlobalSheetSettings
      */
     [property] sequence< string > UserLists;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the update mode for external linked data.
 
@@ -147,25 +130,21 @@ published service GlobalSheetSettings
      */
     [optional, property] short LinkUpdateMode;
 
-    //-------------------------------------------------------------------------
 
     /** specifies whether all sheets or only selected sheets are printed.
      */
     [optional, property] boolean PrintAllSheets;
 
-    //-------------------------------------------------------------------------
 
     /** specifies whether empty pages are printed.
      */
     [optional, property] boolean PrintEmptyPages;
 
-    //-------------------------------------------------------------------------
 
     /** specifies whether printer metrics are used for display.
      */
     [optional, property] boolean UsePrinterMetrics;
 
-    //-------------------------------------------------------------------------
 
     /** specifies whether a warning is shown before replacing cells
         (i.e. when pasting from clipboard).
@@ -174,7 +153,6 @@ published service GlobalSheetSettings
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

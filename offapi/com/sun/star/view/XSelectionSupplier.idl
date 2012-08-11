@@ -26,11 +26,9 @@
 #include <com/sun/star/view/XSelectionChangeListener.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module view {
 
-//=============================================================================
 
 /** makes it possible to access and change the selection in a view.
 
@@ -38,14 +36,12 @@ module com {  module sun {  module star {  module view {
  */
 published interface XSelectionSupplier: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** selects the object represented by <var>xSelection</var> if it is
         known and selectable in this object.
      */
     boolean select( [in] any xSelection )
             raises( com::sun::star::lang::IllegalArgumentException );
 
-    //-------------------------------------------------------------------------
     /** @returns
                 the current selection.
 
@@ -55,12 +51,10 @@ published interface XSelectionSupplier: com::sun::star::uno::XInterface
      */
     any getSelection();
 
-    //-------------------------------------------------------------------------
     /** registers an event listener, which is called when the selection changes.
      */
     void addSelectionChangeListener( [in] com::sun::star::view::XSelectionChangeListener xListener );
 
-    //-------------------------------------------------------------------------
     /** unregisters an event listener which was registered with
         <method>XSelectionSupplier::addSelectionChangeListener</method>.
      */
@@ -68,7 +62,6 @@ published interface XSelectionSupplier: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

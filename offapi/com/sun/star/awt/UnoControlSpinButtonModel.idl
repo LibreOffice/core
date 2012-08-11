@@ -32,11 +32,9 @@
 #include <com/sun/star/util/Color.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module awt {
 
-//=============================================================================
 
 /** specifies the standard model of an <type>UnoControlSpinButton</type>.
 
@@ -53,7 +51,6 @@ service UnoControlSpinButtonModel
 {
     service com::sun::star::awt::UnoControlModel;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the border style of the control.
 
@@ -65,7 +62,6 @@ service UnoControlSpinButtonModel
      */
     [property] short Border;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the color of the border, if present
 
@@ -76,82 +72,69 @@ service UnoControlSpinButtonModel
      */
     [optional, property] long BorderColor;
 
-    //-------------------------------------------------------------------------
 
     /** determines whether the control is enabled or disabled.
      */
     [property] boolean Enabled;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the help text of the control.
      */
     [property] string HelpText;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the help URL of the control.
      */
     [property] string HelpURL;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the increment by which the value is changed when using operating
         the spin button.
      */
     [property] long SpinIncrement;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the <type>ScrollBarOrientation</type> of the control.
      */
     [property] long Orientation;
 
-    //-------------------------------------------------------------------------
 
     /** specifies whether the control will be printed with the document.
      */
     [property] boolean Printable;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the current value of the control.
      */
     [property] long SpinValue;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the minimum value of the control.
     */
     [property] long SpinValueMin;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the maximum value of the control.
      */
     [property] long SpinValueMax;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the RGB color to be used for the control
     */
     [property] com::sun::star::util::Color BackgroundColor;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the RGB color to be used when painting symbols which are
         part of the control's appearance, such as the arrow buttons.
     */
     [property] com::sun::star::util::Color SymbolColor;
 
-    //-------------------------------------------------------------------------
 
     /** specifies whether the mouse should show repeating behavior, i.e.
         repeatedly trigger an action when keeping pressed.
     */
     [property] boolean Repeat;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the mouse repeat delay, in milliseconds.
 
@@ -172,7 +155,6 @@ service UnoControlSpinButtonModel
     [optional, property] short MouseWheelBehavior;
 };
 
-//=============================================================================
 
 }; }; }; };
 

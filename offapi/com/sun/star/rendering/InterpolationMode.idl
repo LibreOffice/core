@@ -49,7 +49,6 @@ constants InterpolationMode
      */
     const byte NEAREST_NEIGHBOR=1;
 
-    //-------------------------------------------------------------------------
 
     /** Perform a linear interpolation.<p>
 
@@ -59,7 +58,6 @@ constants InterpolationMode
      */
     const byte LINEAR=2;
 
-    //-------------------------------------------------------------------------
 
     /** Perform a cubic interpolation.<p>
 
@@ -70,7 +68,6 @@ constants InterpolationMode
      */
     const byte CUBIC=3;
 
-    //-------------------------------------------------------------------------
 
     /** Perform a cubic Bezier spline interpolation.<p>
 
@@ -81,7 +78,6 @@ constants InterpolationMode
      */
     const byte BEZIERSPLINE3=4;
 
-    //-------------------------------------------------------------------------
 
     /** Perform a quadric Bezier spline interpolation.<p>
 

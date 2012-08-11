@@ -26,11 +26,9 @@
 #include <com/sun/star/script/XEventAttacherManager.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module form {  module component {
 
-//=============================================================================
 
 /** This service specifies a form which is a group of FormComponents.
 
@@ -64,7 +62,6 @@ published service Form
     interface com::sun::star::awt::XTabControllerModel;
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

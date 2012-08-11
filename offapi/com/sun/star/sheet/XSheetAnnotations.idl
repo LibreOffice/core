@@ -32,11 +32,9 @@
 #include <com/sun/star/container/XIndexAccess.idl>
 #include <com/sun/star/table/CellAddress.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** provides methods to access cell annotations via index and to
     insert and remove annotations.
@@ -46,7 +44,6 @@ module com {  module sun {  module star {  module sheet {
  */
 published interface XSheetAnnotations: com::sun::star::container::XIndexAccess
 {
-    //-------------------------------------------------------------------------
 
     /** creates a new annotation.
 
@@ -64,7 +61,6 @@ published interface XSheetAnnotations: com::sun::star::container::XIndexAccess
             [in] com::sun::star::table::CellAddress aPosition,
             [in] string aText );
 
-    //-------------------------------------------------------------------------
 
     /** removes a cell annotation from the collection.
 
@@ -78,7 +74,6 @@ published interface XSheetAnnotations: com::sun::star::container::XIndexAccess
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

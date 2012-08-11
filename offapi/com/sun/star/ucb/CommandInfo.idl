@@ -22,36 +22,30 @@
 #include <com/sun/star/reflection/XIdlClass.idl>
 
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** describes a command.
 
     @see XCommandProcessor
 */
 published struct CommandInfo
 {
-    //-------------------------------------------------------------------------
     /** contains the name of a command.
     */
     string Name;
 
-    //-------------------------------------------------------------------------
     /** contains an implementation specific handle for the command.
 
         <p>It may be <code>-1</code> if the implementation has no handle.
     */
     long Handle;
 
-    //-------------------------------------------------------------------------
     /** contains the type of the command's argument.
     */
     type ArgType;
 };
 
-//=============================================================================
 
 }; }; }; };
 

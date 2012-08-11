@@ -19,13 +19,11 @@
 #ifndef __com_sun_star_bridge_UnoUrlResolver_idl__
 #define __com_sun_star_bridge_UnoUrlResolver_idl__
 
-//=============================================================================
 
  module com {  module sun {  module star {  module bridge {
 
 published interface XUnoUrlResolver;
 
-//=============================================================================
 
 /** provides the ability to access remote processes,
     resolving them by an UNO url.
@@ -33,7 +31,6 @@ published interface XUnoUrlResolver;
  */
 published service UnoUrlResolver: XUnoUrlResolver;
 
-//=============================================================================
 
 }; }; }; };
 

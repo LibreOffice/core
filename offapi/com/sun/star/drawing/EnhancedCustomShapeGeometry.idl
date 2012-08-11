@@ -25,11 +25,9 @@
 #include <com/sun/star/drawing/EnhancedCustomShapeHandle.idl>
 #include <com/sun/star/drawing/EnhancedCustomShapeAdjustmentValue.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module drawing {
 
-//=============================================================================
 /**
   This service may be represented by a ::com::sun::star::beans::PropertyValue [].
 */
@@ -93,7 +91,6 @@ service EnhancedCustomShapeGeometry
     [optional, property] sequence<::com::sun::star::beans::PropertyValues> Handles;
 };
 
-//=============================================================================
 
 }; }; }; };
 

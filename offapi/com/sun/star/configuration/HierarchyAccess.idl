@@ -36,11 +36,9 @@
 #include <com/sun/star/beans/XPropertyState.idl>
 #include <com/sun/star/beans/XMultiPropertyStates.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module configuration {
 
-//=============================================================================
 /** provides access to a hierarchy of descendant elements.
 
  <p>Subnodes are accessed by their name. Values that are direct or indirect
@@ -161,7 +159,6 @@ published service HierarchyAccess
     [optional] interface com::sun::star::beans::XMultiPropertyStates;
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -29,11 +29,9 @@
 #define __com_sun_star_ucb_ListAction_idl__
 
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** This struct contains information needed in the notifications of a
     <type>XDynamicResultSet</type>.
 
@@ -42,7 +40,6 @@ module com { module sun { module star { module ucb {
 
 published struct ListAction
 {
-    //-------------------------------------------------------------------------
     /** The position where something has happened (index begins with
         <code>1</code> as usual with JDBC ).
 
@@ -53,13 +50,11 @@ published struct ListAction
     */
     long Position;
 
-    //-------------------------------------------------------------------------
     /** The count of involved rows.
     */
     long Count;
 
 
-    //-------------------------------------------------------------------------
     /** specifies the kind of modification happened to all assigned rows.
 
         <p>The value of the other members of this struct depend on the value
@@ -107,7 +102,6 @@ published struct ListAction
     */
     long ListActionType;
 
-    //-------------------------------------------------------------------------
     /** depending on the content of <member>ListAction::ListActionType</member>
         the <member>ListAction::ActionInfo</member> could contain additional
         information about the changes happened (see table above).
@@ -116,7 +110,6 @@ published struct ListAction
     any ActionInfo;
 };
 
-//=============================================================================
 
 }; }; }; };
 

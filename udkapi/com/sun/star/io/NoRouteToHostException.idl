@@ -21,11 +21,9 @@
 
 #include <com/sun/star/io/SocketException.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module io {
 
-//=============================================================================
 
 // DocMerge from xml: exception com::sun::star::io::NoRouteToHostException
 /** Signals that an error occurred while attempting to connect a socket to
@@ -36,7 +34,6 @@ exception NoRouteToHostException: com::sun::star::io::SocketException
 {
 };
 
-//=============================================================================
 
 }; }; }; };
 

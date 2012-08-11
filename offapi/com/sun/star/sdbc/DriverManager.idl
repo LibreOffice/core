@@ -57,7 +57,6 @@ published service DriverManager
     interface com::sun::star::container::XEnumerationAccess;
 };
 
-//=============================================================================
 
 }; }; }; };
 

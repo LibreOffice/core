@@ -23,18 +23,15 @@
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/table/CellAddress.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** represents a cell which can be addressed with a
     <type scope="com::sun::star::table">CellAddress</type>.
  */
 published interface XCellAddressable: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** returns the address of the cell in the spreadsheet document.
 
@@ -45,7 +42,6 @@ published interface XCellAddressable: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

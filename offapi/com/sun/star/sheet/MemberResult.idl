@@ -20,11 +20,9 @@
 #ifndef __com_sun_star_sheet_MemberResult_idl__
 #define __com_sun_star_sheet_MemberResult_idl__
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** describes a result of a DataPilot member.
 
@@ -36,13 +34,11 @@ published struct MemberResult
      */
     string Name;
 
-    //-------------------------------------------------------------------------
 
     /** the visible name of the field.
      */
     string Caption;
 
-    //-------------------------------------------------------------------------
 
     /** contains flags describing the result.
 
@@ -52,7 +48,6 @@ published struct MemberResult
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

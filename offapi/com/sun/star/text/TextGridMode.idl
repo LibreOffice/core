@@ -20,34 +20,28 @@
 #define __com_sun_star_text_TextGridMode_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module text {
 
-//=============================================================================
 
 /** this set of constants describes different modes for text grids
  */
 published constants TextGridMode
 {
-    //-------------------------------------------------------------------------
 
     /** no text grid */
     const short NONE = 0;
 
-    //-------------------------------------------------------------------------
 
     /** line positions will be determined by the grid */
     const short LINES = 1;
 
-    //-------------------------------------------------------------------------
 
     /** character and line positions will be determined by the grid */
     const short LINES_AND_CHARS = 2;
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

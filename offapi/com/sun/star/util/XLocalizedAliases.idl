@@ -36,10 +36,8 @@
 
 #include <com/sun/star/util/AliasProgrammaticPair.idl>
 
-//=============================================================================
 module com {  module sun {  module star {  module util {
 
-//=============================================================================
 
 /** is the interface for binding programmatic names to aliases. Aliases
     can be provided in several locales for the same programmatic name.
@@ -53,37 +51,31 @@ published interface XLocalizedAliases: com::sun::star::uno::XInterface
                    [in]com::sun::star::lang::Locale locale,
                     [in]string alias)
         raises (com::sun::star::container::ElementExistException);
-    //-------------------------------------------------------------------------
     /** revokes an alias for a programmatic name.
      */
     void unbindAlias([in]com::sun::star::lang::Locale locale,
                      [in]string alias)
         raises (com::sun::star::container::NoSuchElementException);
-    //-------------------------------------------------------------------------
     /** retrieves a registered programmatic name identified by an alias.
      */
     string lookupAlias([in]com::sun::star::lang::Locale locale,
                          [in]string Alias)
         raises (com::sun::star::container::NoSuchElementException);
-    //-------------------------------------------------------------------------
     /** retrieves a given alias for a programmatic name.
      */
     string lookupProgrammatic([in]com::sun::star::lang::Locale locale,
                                 [in]string programmatic)
         raises (com::sun::star::container::NoSuchElementException);
-    //-------------------------------------------------------------------------
     /** removes all aliases for a programmatic name.
      */
     void unbindAliases([in]string programmaticName)
         raises (com::sun::star::container::NoSuchElementException);
-    //-------------------------------------------------------------------------
     /** rebinds all aliases registered to a given URL to a new one.
      */
     void rebindAliases([in]string currentProgrammatic,
                         [in]string newProgrammatic)
         raises (com::sun::star::container::NoSuchElementException,
                 com::sun::star::container::ElementExistException);
-    //-------------------------------------------------------------------------
     /** renames an alias for a programmatic name.
      */
     void renameAlias([in]com::sun::star::lang::Locale locale,
@@ -91,7 +83,6 @@ published interface XLocalizedAliases: com::sun::star::uno::XInterface
                      [in]string aNewName)
         raises (com::sun::star::container::NoSuchElementException,
                 com::sun::star::container::ElementExistException);
-    //-------------------------------------------------------------------------
     /** retrieves a list of all registered aliases for a certain language.
 
          @param locale
@@ -103,7 +94,6 @@ published interface XLocalizedAliases: com::sun::star::uno::XInterface
     sequence<AliasProgrammaticPair> listAliases([in]com::sun::star::lang::Locale locale);
 };
 
-//=============================================================================
 
 }; }; }; };
 

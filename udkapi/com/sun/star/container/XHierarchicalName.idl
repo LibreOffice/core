@@ -25,11 +25,9 @@
 
 #include <com/sun/star/lang/NoSupportException.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module container {
 
-//=============================================================================
 
 /** specifies the fully qualified name of the object within a hierarchy.
 
@@ -40,14 +38,12 @@ module com {  module sun {  module star {  module container {
  */
 published interface XHierarchicalName: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** @returns
                 the fully qualified hierarchical name of the object.
      */
     string getHierarchicalName();
 
-    //-------------------------------------------------------------------------
 
     /** builds the hierarchical name of an object, given a relative name
 
@@ -61,7 +57,6 @@ published interface XHierarchicalName: com::sun::star::uno::XInterface
                     com::sun::star::lang::NoSupportException );
 };
 
-//=============================================================================
 
 }; }; }; };
 

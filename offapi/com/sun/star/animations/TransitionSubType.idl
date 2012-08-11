@@ -19,11 +19,9 @@
 #ifndef __com_sun_star_animations_TransitionSubType_idl__
 #define __com_sun_star_animations_TransitionSubType_idl__
 
-//=============================================================================
 
  module com {  module sun {  module star {  module animations {
 
-//=============================================================================
 
 /** @see http://www.w3.org/TR/smil20/smil-transitions.html#Table%201:%20Taxonomy%20Table
 */
@@ -148,7 +146,6 @@ constants TransitionSubType
     const short FROMBOTTOMRIGHT = 119;
 };
 
-//=============================================================================
 
 }; }; }; };
 

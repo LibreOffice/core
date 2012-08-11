@@ -74,7 +74,6 @@ service UIConfigurationManager
     interface ::com::sun::star::lang::XComponent;
 };
 
-//=============================================================================
 
 }; }; }; };
 

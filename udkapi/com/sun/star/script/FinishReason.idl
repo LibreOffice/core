@@ -20,34 +20,28 @@
 #define __com_sun_star_script_FinishReason_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module script {
 
-//=============================================================================
 /** contains the response for a scripting engine termination.
     @deprecated
  */
 published enum FinishReason
 {
-    //-------------------------------------------------------------------------
     /** script in the engine terminated normally.
      */
     OK,
 
-    //-------------------------------------------------------------------------
     /** script in the engine was cancelled.
      */
     Cancel,
 
-    //-------------------------------------------------------------------------
     /** error occurred during script execution or compiling.
      */
     Error
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

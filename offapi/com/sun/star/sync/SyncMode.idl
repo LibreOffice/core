@@ -20,11 +20,9 @@
 #ifndef __com_sun_star_sync_SyncMode_idl__
 #define __com_sun_star_sync_SyncMode_idl__
 
-//=============================================================================
 
  module com {  module sun {  module star {  module sync {
 
-//=============================================================================
 
 /** contains a synchronization element
 
@@ -39,7 +37,6 @@ published constants SyncMode
     const unsigned long SERVER_TO_CLIENT    = 0x00000002;
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -22,11 +22,9 @@
 #include <com/sun/star/uno/XInterface.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module view {
 
-//=============================================================================
 
 /** makes it possible to move a cursor up/down/left/right within laid out text.
 
@@ -36,7 +34,6 @@ module com {  module sun {  module star {  module view {
  */
 published interface XViewCursor: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** moves the cursor the specified number of lines down.
 
         @param nCount
@@ -52,7 +49,6 @@ published interface XViewCursor: com::sun::star::uno::XInterface
      */
     boolean goDown( [in] short nCount, [in] boolean bExpand );
 
-    //-------------------------------------------------------------------------
     /** moves the cursor the specified number of lines up.
 
         @param nCount
@@ -67,7 +63,6 @@ published interface XViewCursor: com::sun::star::uno::XInterface
      */
     boolean goUp( [in] short nCount, [in] boolean bExpand );
 
-    //-------------------------------------------------------------------------
     /** moves the cursor the specified number of characters to the left.
 
         @param nCount
@@ -82,7 +77,6 @@ published interface XViewCursor: com::sun::star::uno::XInterface
      */
     boolean goLeft( [in] short nCount, [in] boolean bExpand );
 
-    //-------------------------------------------------------------------------
     /** moves the cursor the specified number of characters to the right.
 
         @param nCount
@@ -99,7 +93,6 @@ published interface XViewCursor: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

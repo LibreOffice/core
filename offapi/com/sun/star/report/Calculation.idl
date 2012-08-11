@@ -29,18 +29,15 @@
 #define __com_sun_star_report_Calculation_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module report {
 
-//=============================================================================
 
 /** Specifies how to calculate a value.
     @see XFormattedField
  */
 constants Calculation
 {
-    //-------------------------------------------------------------------------
 
     /** returns the average of a field.
      */
@@ -127,7 +124,6 @@ constants Calculation
     const short WEIGHTEDAVG = 20;
 };
 
-//=============================================================================
 
 }; }; }; };
 

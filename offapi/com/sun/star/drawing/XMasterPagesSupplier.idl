@@ -24,18 +24,15 @@
 #include <com/sun/star/drawing/XDrawPages.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module drawing {
 
-//=============================================================================
 
 /** must be supported to provide access to the
     <type>MasterPage</type>s of a multi-page drawing-layer.
  */
 published interface XMasterPagesSupplier: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** @returns
                 an indexed container with the service <type>MasterPages</type>.
@@ -44,7 +41,6 @@ published interface XMasterPagesSupplier: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

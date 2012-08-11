@@ -22,18 +22,15 @@
 #include <com/sun/star/text/XTextContent.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module text {
 
-//=============================================================================
 
 // DocMerge from xml: interface com::sun::star::text::XTextSection
 /** provide special data of a <type>TextSection</type>.@see TextSection
  */
 published interface XTextSection: com::sun::star::text::XTextContent
 {
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::text::XTextSection::getParentSection
     /** If the object is a child section, then this method returns
@@ -41,7 +38,6 @@ published interface XTextSection: com::sun::star::text::XTextContent
      */
     com::sun::star::text::XTextSection getParentSection();
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from idl: method com::sun::star::text::XTextSection::getChildSections
     /** @returns
@@ -51,7 +47,6 @@ published interface XTextSection: com::sun::star::text::XTextContent
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

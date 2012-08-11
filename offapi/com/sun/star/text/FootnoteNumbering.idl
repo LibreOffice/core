@@ -20,25 +20,21 @@
 #define __com_sun_star_text_FootnoteNumbering_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module text {
 
-//=============================================================================
 
 // DocMerge from idl: constants com::sun::star::text::FootnoteNumbering
 /** These constants are used to specify the footnote numbering.
  */
 published constants FootnoteNumbering
 {
-    //-------------------------------------------------------------------------
 
     // DocMerge from idl: value com::sun::star::text::FootnoteNumbering::PER_PAGE
     /** The counter of the automatic footnote numbering restarts each page.
      */
     const short PER_PAGE = 0;
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from idl: value com::sun::star::text::FootnoteNumbering::PER_CHAPTER
     /** The counter of the automatic footnote numbering restarts each
@@ -46,7 +42,6 @@ published constants FootnoteNumbering
      */
     const short PER_CHAPTER = 1;
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from idl: value com::sun::star::text::FootnoteNumbering::PER_DOCUMENT
     /** The counter of the automatic footnote numbering does not restart.
@@ -55,7 +50,6 @@ published constants FootnoteNumbering
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

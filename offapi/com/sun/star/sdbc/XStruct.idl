@@ -58,7 +58,6 @@ published interface XStruct: com::sun::star::uno::XInterface
      */
     string getSQLTypeName() raises (SQLException);
 
-      //-------------------------------------------------------------------------
 
     /** produces the ordered values of the attributes of the SQL
              structured type that this
@@ -90,7 +89,6 @@ published interface XStruct: com::sun::star::uno::XInterface
         raises (SQLException);
 };
 
-//=============================================================================
 
 }; }; }; };
 

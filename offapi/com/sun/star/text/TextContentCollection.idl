@@ -24,11 +24,9 @@
 #include <com/sun/star/container/XContainer.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module text {
 
-//=============================================================================
 
 // DocMerge from xml: service com::sun::star::text::TextContentCollection
 /** Objects of this type are collections of text contents of the same type.@see Text
@@ -52,7 +50,6 @@ published service TextContentCollection
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

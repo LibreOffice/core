@@ -23,11 +23,9 @@
 #include <com/sun/star/rdf/XResource.idl>
 
 
-//=============================================================================
 
 module com {   module sun {   module star {   module rdf {
 
-//=============================================================================
 /** represents a blank node that may occur in a RDF graph.
 
     <p>
@@ -43,7 +41,6 @@ interface XBlankNode : XResource
 {
 };
 
-//=============================================================================
 
 }; }; }; };
 

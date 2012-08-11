@@ -47,7 +47,6 @@ struct StrokeAttributes
      */
     double              StrokeWidth;
 
-    //-------------------------------------------------------------------------
 
     /** Determines the maximal length of the diagonal in mitered
         corners.<p>
@@ -68,7 +67,6 @@ struct StrokeAttributes
      */
     double              MiterLimit;
 
-    //-------------------------------------------------------------------------
 
     /** Array of ink on and off lengths, measured in user coordinate
         space.<p>
@@ -83,7 +81,6 @@ struct StrokeAttributes
      */
     sequence<double>    DashArray;
 
-    //-------------------------------------------------------------------------
 
     /** Array of line widths and spacings for multiple-line
         strokes.<p>
@@ -103,7 +100,6 @@ struct StrokeAttributes
      */
     sequence<double>    LineArray;
 
-    //-------------------------------------------------------------------------
 
     /** The start shape of the stroke.<p>
 
@@ -114,7 +110,6 @@ struct StrokeAttributes
      */
     byte                StartCapType;
 
-    //-------------------------------------------------------------------------
 
     /** The end shape of the stroke.<p>
 
@@ -125,7 +120,6 @@ struct StrokeAttributes
      */
     byte                EndCapType;
 
-    //-------------------------------------------------------------------------
 
     /** The join shape of the stroke.<p>
 

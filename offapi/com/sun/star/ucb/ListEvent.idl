@@ -22,17 +22,14 @@
 #include <com/sun/star/lang/EventObject.idl>
 #include <com/sun/star/ucb/ListAction.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** specifies the type of event fired by an <type>XDynamicResultSet</type>
 */
 
 published struct ListEvent: com::sun::star::lang::EventObject
 {
-    //-------------------------------------------------------------------------
     /** If you apply the given <type>ListAction</type>s one after the other
         to the old version of an result set in given order, you will get the
         positions in the new version.
@@ -40,7 +37,6 @@ published struct ListEvent: com::sun::star::lang::EventObject
     sequence<ListAction> Changes;
 };
 
-//=============================================================================
 
 }; }; }; };
 

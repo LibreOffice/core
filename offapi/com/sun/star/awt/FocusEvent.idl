@@ -33,11 +33,9 @@
 #include <com/sun/star/uno/XInterface.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module awt {
 
-//=============================================================================
 
 /** specifies a keyboard focus event.
 
@@ -57,7 +55,6 @@
  */
 published struct FocusEvent: com::sun::star::lang::EventObject
 {
-    //-------------------------------------------------------------------------
 
     /** specifies the reason for the focus change as an arithmetic-or
         combination of <type>FocusChangeReason</type>.
@@ -66,13 +63,11 @@ published struct FocusEvent: com::sun::star::lang::EventObject
      */
     short FocusFlags;
 
-    //-------------------------------------------------------------------------
 
     /** contains the window which gets the focus on a lose focus event.
      */
     com::sun::star::uno::XInterface NextFocus;
 
-    //-------------------------------------------------------------------------
 
     /** specifies if this focus change event is a temporary change.
      */
@@ -80,7 +75,6 @@ published struct FocusEvent: com::sun::star::lang::EventObject
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

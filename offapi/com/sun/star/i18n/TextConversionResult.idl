@@ -24,11 +24,9 @@
 #include <com/sun/star/i18n/Boundary.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module i18n {
 
-//=============================================================================
 
 /** Text conversion result to be used with <type>XTextConversion</type>.
 
@@ -50,7 +48,6 @@ published struct TextConversionResult
     sequence < string >     Candidates;
 };
 
-//=============================================================================
 
 }; }; }; };
 

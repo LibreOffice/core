@@ -33,11 +33,9 @@
 #include <com/sun/star/container/XContainer.idl>
 #include <com/sun/star/container/XIndexContainer.idl>
 #include <com/sun/star/report/XFormatCondition.idl>
-//=============================================================================
 
  module com {  module sun {  module star {  module report {
 
-//=============================================================================
 interface XReportControlModel
 {
     /** allows the creation of sub reports.
@@ -95,7 +93,6 @@ interface XReportControlModel
     };
 };
 
-//=============================================================================
 
 }; }; }; };
 

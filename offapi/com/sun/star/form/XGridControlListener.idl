@@ -22,11 +22,9 @@
 
 #include <com/sun/star/lang/XEventListener.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module form {
 
-//=============================================================================
 
 /** specifies a listener which is to be notified about state changes in a grid control
 
@@ -41,11 +39,9 @@ interface XGridControlListener : ::com::sun::star::lang::XEventListener
     void    columnChanged( [in] ::com::sun::star::lang::EventObject _event );
 };
 
-//=============================================================================
 
 }; }; }; };
 
-//=============================================================================
 
 #endif
 

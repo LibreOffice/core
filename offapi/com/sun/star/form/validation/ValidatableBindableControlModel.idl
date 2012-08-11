@@ -22,7 +22,6 @@
 
 #include <com/sun/star/form/validation/ValidatableControlModel.idl>
 #include <com/sun/star/form/binding/BindableControlModel.idl>
-//=============================================================================
 
 module com {  module sun {  module star {  module form { module validation {
 
@@ -59,7 +58,6 @@ service ValidatableBindableControlModel
     service com::sun::star::form::binding::BindableControlModel;
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

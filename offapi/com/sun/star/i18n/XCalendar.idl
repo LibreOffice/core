@@ -33,11 +33,9 @@
 #include <com/sun/star/i18n/Calendar.idl>
 #include <com/sun/star/i18n/CalendarItem.idl>
 
-//============================================================================
 
 module com { module sun { module star { module i18n {
 
-//============================================================================
 
 /**
     Access to locale specific calendar systems.
@@ -45,30 +43,24 @@ module com { module sun { module star { module i18n {
 
 published interface XCalendar : com::sun::star::uno::XInterface
 {
-    //------------------------------------------------------------------------
     /// Load the default calendar for the given locale.
     void    loadDefaultCalendar( [in] ::com::sun::star::lang::Locale rLocale );
 
-    //------------------------------------------------------------------------
     /// Load a specific calendar for the given locale.
     void    loadCalendar( [in] string uniqueID,
                           [in] ::com::sun::star::lang::Locale rLocale );
 
-    //------------------------------------------------------------------------
     /// Get the currently loaded <type>Calendar</type>.
     Calendar    getLoadedCalendar();
 
-    //------------------------------------------------------------------------
     /// Returns all available calendars for the given locale.
     sequence< string >  getAllCalendars( [in] ::com::sun::star::lang::Locale rLocale );
 
-    //------------------------------------------------------------------------
     /** Returns the ID string of the loaded calendar, for example,
         <b>"Gregorian"</b>
      */
     string  getUniqueID();
 
-    //------------------------------------------------------------------------
     /**
         Set the date/time as an offset to the start of the calendar at
         1-Jan-1970 00:00. The integer part represents the number of days
@@ -77,7 +69,6 @@ published interface XCalendar : com::sun::star::uno::XInterface
      */
     void    setDateTime( [in] double nTimeInDays );
 
-    //------------------------------------------------------------------------
     /**
         Get the date/time as an offset to the start of the calendar at
         1-Jan-1970 00:00. The integer part represents the number of days
@@ -86,7 +77,6 @@ published interface XCalendar : com::sun::star::uno::XInterface
      */
     double  getDateTime();
 
-    //------------------------------------------------------------------------
     /**
         Set the value of a field.
 
@@ -98,7 +88,6 @@ published interface XCalendar : com::sun::star::uno::XInterface
      */
     void    setValue( [in] short nCalendarFieldIndex, [in] short nValue );
 
-    //------------------------------------------------------------------------
     /**
         Get the value of a field.
 
@@ -107,7 +96,6 @@ published interface XCalendar : com::sun::star::uno::XInterface
      */
     short   getValue( [in] short nCalendarFieldIndex );
 
-    //------------------------------------------------------------------------
     /**
         Verify if the date fields set by a combination of
         <member>XCalendar::setValue()</member> calls is valid. It has a
@@ -116,7 +104,6 @@ published interface XCalendar : com::sun::star::uno::XInterface
      */
     boolean isValid();
 
-    //------------------------------------------------------------------------
     /**
         Add an amount to a field.
 
@@ -128,51 +115,42 @@ published interface XCalendar : com::sun::star::uno::XInterface
      */
     void    addValue( [in] short nCalendarFieldIndex, [in] long nAmount );
 
-    //------------------------------------------------------------------------
     /** returns the first day of a week, one of <type>Weekdays</type>
         values.
      */
     short   getFirstDayOfWeek();
 
-    //------------------------------------------------------------------------
     /** Set the first day of a week, one of <type>Weekdays</type>
         values.
       */
     void    setFirstDayOfWeek( [in] short nDay );
 
-    //------------------------------------------------------------------------
     /** Set how many days of a week must reside in the first week of a
         year.
      */
     void    setMinimumNumberOfDaysForFirstWeek( [in] short nDays );
 
-    //------------------------------------------------------------------------
     /** returns how many days of a week must reside in the first week of
         a year.
      */
     short   getMinimumNumberOfDaysForFirstWeek();
 
-    //------------------------------------------------------------------------
     /// returns the number of months in a year, e.g. <b>12</b>
     short   getNumberOfMonthsInYear();
 
-    //------------------------------------------------------------------------
     /// returns the number of days in a week, e.g. <b>7</b>
     short   getNumberOfDaysInWeek();
 
-    //------------------------------------------------------------------------
     /** returns a sequence of <type>CalendarItem</type> describing the
         month names.
      */
     sequence< CalendarItem >    getMonths();
 
-    //------------------------------------------------------------------------
     /** returns a sequence of <type>CalendarItem</type> describing the
         day names.
      */
     sequence< CalendarItem >    getDays();
 
-    //------------------------------------------------------------------------
     /**
         Returns a string (name to display) matching the given parameters.
 
@@ -235,7 +213,6 @@ published interface XCalendar : com::sun::star::uno::XInterface
                             [in] short nNameType );
 };
 
-//============================================================================
 }; }; }; };
 
 #endif

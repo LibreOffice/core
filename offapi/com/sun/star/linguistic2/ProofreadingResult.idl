@@ -24,14 +24,12 @@
 #include <com/sun/star/linguistic2/SingleProofreadingError.idl>
 #include <com/sun/star/beans/PropertyValue.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module linguistic2 {
 
 // forward declaration
 interface XProofreader;
 
-//=============================================================================
 /** holds the results from proofreading a sentence.
 
     @since  OOo 3.0.1
@@ -71,7 +69,6 @@ struct ProofreadingResult
     com::sun::star::linguistic2::XProofreader xProofreader;
 };
 
-//=============================================================================
 
 }; }; }; };
 

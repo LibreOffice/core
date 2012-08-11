@@ -22,21 +22,17 @@
 
 #include <com/sun/star/sheet/XSheetCellRange.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
  published interface XSheetCellCursor;
 
-//=============================================================================
 
 /** provides methods to create a cell range cursor.
  */
 published interface XSpreadsheet: com::sun::star::sheet::XSheetCellRange
 {
-    //-------------------------------------------------------------------------
 
     /** creates a cell cursor including the whole spreadsheet.
 
@@ -44,7 +40,6 @@ published interface XSpreadsheet: com::sun::star::sheet::XSheetCellRange
      */
     com::sun::star::sheet::XSheetCellCursor createCursor();
 
-    //-------------------------------------------------------------------------
 
     /** creates a cell cursor to travel in the given range context.
 
@@ -58,7 +53,6 @@ published interface XSpreadsheet: com::sun::star::sheet::XSheetCellRange
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

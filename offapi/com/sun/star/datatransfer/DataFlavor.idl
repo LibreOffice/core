@@ -20,36 +20,30 @@
 #ifndef __com_sun_star_datatransfer_DataFlavor_idl__
 #define __com_sun_star_datatransfer_DataFlavor_idl__
 
-//=============================================================================
 
 module com { module sun { module star { module datatransfer {
 
-//=============================================================================
 /** Each instance represents the concept of a data format as it would
     appear on a clipboard, or during drag and drop.
 */
 
 published struct DataFlavor
 {
-    //-------------------------------------------------------------------------
     /** The MIME content-type (type/subtype) string describing the data format
         of the object to transfer. MimeType must be conform to <a href="ftp://ftp.isi.edu/in-notes/rfc2045.txt">Rfc2045</a> and
         <a href="ftp://ftp.isi.edu/in-notes/rfc2046.txt">Rfc2046</a>)
     */
     string MimeType;
 
-    //-------------------------------------------------------------------------
     /** A human presentable name for the data format.
     */
     string HumanPresentableName;
 
-    //-------------------------------------------------------------------------
     /** The type of the object to transfer, for example, XOutputStream.
     */
     type DataType;
 };
 
-//=============================================================================
 
 }; }; }; };
 

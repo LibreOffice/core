@@ -21,11 +21,9 @@
 
 #include <com/sun/star/container/XEnumerationAccess.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module frame {
 
-//=============================================================================
 /** specifies a collection of components
 
     <p>
@@ -38,13 +36,11 @@ module com {  module sun {  module star {  module frame {
  */
 published service Components
 {
-    //-------------------------------------------------------------------------
     /** use it to get snapshot of current available components as an enumeration
      */
     interface com::sun::star::container::XEnumerationAccess;
 };
 
-//=============================================================================
 
 }; }; }; };
 

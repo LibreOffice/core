@@ -31,11 +31,9 @@
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/beans/PropertyValue.idl>
 
-//============================================================================
 
 module com { module sun { module star { module document {
 
-//============================================================================
 /** support "flat" and "deep" type detection of a given document
 
     <p>
@@ -51,7 +49,6 @@ module com { module sun { module star { module document {
  */
 published interface XTypeDetection: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** make a "flat" detection by using the URL of the document
 
         <p>
@@ -69,7 +66,6 @@ published interface XTypeDetection: com::sun::star::uno::XInterface
      */
     string queryTypeByURL( [in] string URL );
 
-    //-------------------------------------------------------------------------
     /** make a "deep" detection or optional a "flat" detection by using a
         <type>MediaDescriptor</type>
 
@@ -113,7 +109,6 @@ published interface XTypeDetection: com::sun::star::uno::XInterface
         [in] boolean AllowDeep );
 };
 
-//============================================================================
 
 }; }; }; };
 

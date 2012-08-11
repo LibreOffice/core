@@ -34,11 +34,9 @@
 #include <com/sun/star/configuration/backend/MalformedDataException.idl>
 #include <com/sun/star/lang/WrappedTargetException.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module configuration { module backend {
 
-//=============================================================================
 
 /** receives a description of a configuration schema as a sequence of events.
 
@@ -46,7 +44,6 @@ module com { module sun { module star { module configuration { module backend {
  */
 published interface XSchemaHandler: ::com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** receives notification that a schema description is started.
 
@@ -62,7 +59,6 @@ published interface XSchemaHandler: ::com::sun::star::uno::XInterface
     void startSchema( )
             raises( MalformedDataException,
                     com::sun::star::lang::WrappedTargetException );
-    //-------------------------------------------------------------------------
 
     /** receives notification that the current schema description is complete.
 
@@ -83,7 +79,6 @@ published interface XSchemaHandler: ::com::sun::star::uno::XInterface
     void endSchema(  )
             raises( MalformedDataException,
                     com::sun::star::lang::WrappedTargetException );
-    //-------------------------------------------------------------------------
 
     /** receives notification that the schema depends on templates
         from a different component.
@@ -106,7 +101,6 @@ published interface XSchemaHandler: ::com::sun::star::uno::XInterface
     void importComponent( [in] string aName )
             raises( MalformedDataException,
                     com::sun::star::lang::WrappedTargetException );
-    //-------------------------------------------------------------------------
 
     /** receives notification that a component description is started.
 
@@ -134,7 +128,6 @@ published interface XSchemaHandler: ::com::sun::star::uno::XInterface
     void startComponent( [in] string aName )
             raises( MalformedDataException,
                     com::sun::star::lang::WrappedTargetException );
-    //-------------------------------------------------------------------------
 
     /** receives notification that a component description is complete.
 
@@ -156,7 +149,6 @@ published interface XSchemaHandler: ::com::sun::star::uno::XInterface
     void endComponent(  )
             raises( MalformedDataException,
                     com::sun::star::lang::WrappedTargetException );
-    //-------------------------------------------------------------------------
 
     /** receives notification that a template description is started for a group.
 
@@ -199,7 +191,6 @@ published interface XSchemaHandler: ::com::sun::star::uno::XInterface
                              [in] short  aAttributes  )
             raises( MalformedDataException,
                     com::sun::star::lang::WrappedTargetException );
-    //-------------------------------------------------------------------------
 
     /** receives notification that a template description is started for a set.
 
@@ -247,7 +238,6 @@ published interface XSchemaHandler: ::com::sun::star::uno::XInterface
                             [in] TemplateIdentifier aItemType  )
             raises( MalformedDataException,
                     com::sun::star::lang::WrappedTargetException );
-    //-------------------------------------------------------------------------
 
     /** receives notification that a template description is complete.
 
@@ -270,7 +260,6 @@ published interface XSchemaHandler: ::com::sun::star::uno::XInterface
     void endTemplate(  )
             raises( MalformedDataException,
                     com::sun::star::lang::WrappedTargetException );
-    //-------------------------------------------------------------------------
 
     /** receives notification that a group description is started.
 
@@ -310,7 +299,6 @@ published interface XSchemaHandler: ::com::sun::star::uno::XInterface
                      [in] short  aAttributes )
             raises( MalformedDataException,
                     com::sun::star::lang::WrappedTargetException );
-    //-------------------------------------------------------------------------
 
     /** receives notification that a set description is started.
 
@@ -356,7 +344,6 @@ published interface XSchemaHandler: ::com::sun::star::uno::XInterface
                    [in] TemplateIdentifier aItemType )
             raises( MalformedDataException,
                     com::sun::star::lang::WrappedTargetException );
-    //-------------------------------------------------------------------------
 
     /** receives notification that a node description is complete.
 
@@ -378,7 +365,6 @@ published interface XSchemaHandler: ::com::sun::star::uno::XInterface
     void endNode(  )
             raises( MalformedDataException,
                     com::sun::star::lang::WrappedTargetException );
-    //-------------------------------------------------------------------------
 
     /** receives notification that a property is added to the current node.
 
@@ -420,7 +406,6 @@ published interface XSchemaHandler: ::com::sun::star::uno::XInterface
             raises( MalformedDataException,
                     com::sun::star::lang::WrappedTargetException );
 
-    //-------------------------------------------------------------------------
 
     /** receives notification that a property having a default value
         is added to the current node.
@@ -464,7 +449,6 @@ published interface XSchemaHandler: ::com::sun::star::uno::XInterface
             raises( MalformedDataException,
                     com::sun::star::lang::WrappedTargetException );
 
-    //-------------------------------------------------------------------------
 
     /** receives notification that the current group has a child node
         that is an instance of a specified template.
@@ -492,7 +476,6 @@ published interface XSchemaHandler: ::com::sun::star::uno::XInterface
             raises( MalformedDataException,
                     com::sun::star::lang::WrappedTargetException );
 
-    //-------------------------------------------------------------------------
 
     /** receives notification that the current set can contain items
         that are instances of a specified template.
@@ -516,15 +499,12 @@ published interface XSchemaHandler: ::com::sun::star::uno::XInterface
             raises( MalformedDataException,
                     com::sun::star::lang::WrappedTargetException );
 
-    //-------------------------------------------------------------------------
 
 };
 
-//=============================================================================
 
 }; }; }; }; };
 
-//=============================================================================
 
 #endif
 

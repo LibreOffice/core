@@ -20,11 +20,9 @@
 #ifndef __com_sun_star_sheet_DataPilotFieldLayoutMode_idl__
 #define __com_sun_star_sheet_DataPilotFieldLayoutMode_idl__
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** describes the layout mode of the data field
 
@@ -33,7 +31,6 @@ module com {  module sun {  module star {  module sheet {
  */
 constants DataPilotFieldLayoutMode
 {
-    //-------------------------------------------------------------------------
 
     /** Tabular layout mode is the layout, where each item's name is on the same
         row as the first item from the following field. Subtotals are always shown below
@@ -42,7 +39,6 @@ constants DataPilotFieldLayoutMode
 
     const long TABULAR_LAYOUT = 0;
 
-    //-------------------------------------------------------------------------
 
     /** In outline layout mode, the items from the following field start in the row
         below an item's name, like in traditional database reports.
@@ -55,7 +51,6 @@ constants DataPilotFieldLayoutMode
 
     const long OUTLINE_SUBTOTALS_TOP = 1;
 
-    //-------------------------------------------------------------------------
 
     /** In outline layout mode, the items from the following field start in the row
         below an item's name, like in traditional database reports.
@@ -70,7 +65,6 @@ constants DataPilotFieldLayoutMode
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

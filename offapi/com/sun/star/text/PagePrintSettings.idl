@@ -20,11 +20,9 @@
 #define __com_sun_star_text_PagePrintSettings_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module text {
 
-//=============================================================================
 
 // DocMerge from xml: service com::sun::star::text::PagePrintSettings
 /** These properties describe the way the <type>XPagePrintable</type> interface
@@ -32,63 +30,54 @@
  */
 published service PagePrintSettings
 {
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::text::PagePrintSettings::PageRows
     /** contains the number of pages per printed column of pages.
      */
     [property] short PageRows;
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::text::PagePrintSettings::PageColumns
     /** contains the number of pages per printed row of pages.
      */
     [property] short PageColumns;
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::text::PagePrintSettings::LeftMargin
     /** contains the left margin of the printer page.
      */
     [property] long LeftMargin;
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::text::PagePrintSettings::RightMargin
     /** contains the right margin of the printer page.
      */
     [property] long RightMargin;
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::text::PagePrintSettings::TopMargin
     /** contains the top margin of the printer page.
      */
     [property] long TopMargin;
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::text::PagePrintSettings::BottomMargin
     /** contains the right margin of the printer page.
      */
     [property] long BottomMargin;
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::text::PagePrintSettings::HoriMargin
     /** contains the margin between the rows of printed pages.
      */
     [property] long HoriMargin;
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::text::PagePrintSettings::VertMargin
     /** contains the margin between the columns of printed pages.
      */
     [property] long VertMargin;
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::text::PagePrintSettings::IsLandscape
     /** defines if the printer page is used in landscape format.
@@ -97,7 +86,6 @@ published service PagePrintSettings
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

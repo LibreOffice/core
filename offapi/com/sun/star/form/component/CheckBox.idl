@@ -24,11 +24,9 @@
 #include <com/sun/star/form/XReset.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module form {  module component {
 
-//=============================================================================
 
 /** specifies the model of a check box control
 
@@ -47,7 +45,6 @@ published service CheckBox
     */
     interface com::sun::star::form::XReset;
 
-    //-------------------------------------------------------------------------
 
     /** contains a default value for the control.
 
@@ -58,7 +55,6 @@ published service CheckBox
      */
     [property] short DefaultState;
 
-    //-------------------------------------------------------------------------
 
     /** contains a reference value which is used for submission in a HTML
         form
@@ -69,7 +65,6 @@ published service CheckBox
     [property] string RefValue;
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

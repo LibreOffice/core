@@ -23,11 +23,9 @@
 #include <com/sun/star/container/XIndexAccess.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module text {
 
-//=============================================================================
 
 /** provides access to all embedded objects in a document.
  */
@@ -51,7 +49,6 @@ published service TextEmbeddedObjects
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

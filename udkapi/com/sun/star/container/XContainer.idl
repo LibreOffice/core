@@ -24,11 +24,9 @@
 #include <com/sun/star/container/XContainerListener.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module container {
 
-//=============================================================================
 
 /** supports quick access to the information if a container currently
     contains elements.
@@ -48,7 +46,6 @@ module com {  module sun {  module star {  module container {
  */
 published interface XContainer: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** adds the specified listener to receive events when
         elements are inserted or removed.
@@ -60,7 +57,6 @@ published interface XContainer: com::sun::star::uno::XInterface
      */
     [oneway] void addContainerListener( [in] com::sun::star::container::XContainerListener xListener );
 
-    //-------------------------------------------------------------------------
 
     /** removes the specified listener so it does not receive
         any events from this container.
@@ -74,7 +70,6 @@ published interface XContainer: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

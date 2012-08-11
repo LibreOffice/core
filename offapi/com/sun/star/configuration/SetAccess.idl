@@ -23,11 +23,9 @@
 #include <com/sun/star/configuration/SimpleSetAccess.idl>
 #include <com/sun/star/container/XContainer.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module configuration {
 
-//=============================================================================
 /** provides access to a dynamic, homogeneous set of values or nested
  trees within a hierarchy.
 
@@ -82,7 +80,6 @@ published service SetAccess
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

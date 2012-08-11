@@ -29,24 +29,20 @@ published constants ChangeAction
      indicates that a insert will be performed.
      */
     const long INSERT   = 1;
-    //-------------------------------------------------------------------------
     /**
      indicates that a update will be performed.
      */
     const long UPDATE   = 2;
-    //-------------------------------------------------------------------------
     /**
      indicates that a delete will be performed.
      */
     const long DELETE   = 3;
-    //-------------------------------------------------------------------------
     /**
      indicates that a undo will be performed.
      */
     const long UNDO = 4;
 };
 
-//=============================================================================
 
 }; }; }; };
 

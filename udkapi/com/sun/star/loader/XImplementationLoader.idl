@@ -27,18 +27,15 @@
 
 #include <com/sun/star/loader/CannotActivateFactoryException.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module loader {
 
-//=============================================================================
 
 /** handles activation (loading) of a UNO component.
     @see        com::sun::star::registry::XImplementationRegistration
  */
 published interface XImplementationLoader: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** activates a concrete implementation within a component.
         @param implementationName The name of the implementation,
@@ -74,7 +71,6 @@ published interface XImplementationLoader: com::sun::star::uno::XInterface
              [in] com::sun::star::registry::XRegistryKey xKey )
             raises( com::sun::star::loader::CannotActivateFactoryException );
 
-    //-------------------------------------------------------------------------
     /** writes a list of all implementations hosted by this component into a registry key.
         <p>This method is called during registering a component.
         @param xKey The registry key, which shall be used to write for each
@@ -100,7 +96,6 @@ published interface XImplementationLoader: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

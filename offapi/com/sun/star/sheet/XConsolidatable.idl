@@ -23,11 +23,9 @@
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/sheet/XConsolidationDescriptor.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** provides methods to consolidate ranges in a spreadsheet document.
 
@@ -38,7 +36,6 @@ module com {  module sun {  module star {  module sheet {
  */
 published interface XConsolidatable: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** creates a consolidation descriptor.
 
@@ -51,7 +48,6 @@ published interface XConsolidatable: com::sun::star::uno::XInterface
     com::sun::star::sheet::XConsolidationDescriptor createConsolidationDescriptor(
             [in] boolean bEmpty );
 
-    //-------------------------------------------------------------------------
 
     /** consolidates data from several cell ranges, using the settings
         in the passed descriptor.
@@ -66,7 +62,6 @@ published interface XConsolidatable: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

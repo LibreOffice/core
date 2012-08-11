@@ -23,7 +23,6 @@
 
 #include <com/sun/star/util/DataEditorEvent.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module util {
 
@@ -37,7 +36,6 @@ published interface XDataEditorListener: com::sun::star::uno::XInterface
     void updateDataEditorState( [in] DataEditorEvent event );
 };
 
-//=============================================================================
 
 }; }; }; };
 

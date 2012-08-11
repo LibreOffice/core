@@ -44,11 +44,9 @@
 #include <com/sun/star/beans/UnknownPropertyException.idl>
 #include <com/sun/star/beans/PropertyVetoException.idl>
 
-//============================================================================
 
  module com {  module sun {  module star {  module embed {
 
-//============================================================================
 /** This is a temporary interface that is introduced to temporarily optimize
     the document storing process. PLEASE DO NOT USE IT, it might change in any
     time and will be deprecated soon!
@@ -56,7 +54,6 @@
  */
 published interface XOptimizedStorage
 {
-    // -----------------------------------------------------------------------
     /** allows to insert a raw stream representing non-encrypted stream with
         header.
      */
@@ -70,7 +67,6 @@ published interface XOptimizedStorage
                 ::com::sun::star::io::IOException,
                 ::com::sun::star::embed::StorageWrappedTargetException );
 
-    // -----------------------------------------------------------------------
     /** allows to insert a stream to the storage directly. The stream must
         stay alive till the storage is commited.
      */
@@ -84,7 +80,6 @@ published interface XOptimizedStorage
                 ::com::sun::star::io::IOException,
                 ::com::sun::star::embed::StorageWrappedTargetException );
 
-    // -----------------------------------------------------------------------
     /** allows to copy storage element directly, not guarantied to work.
      */
     void copyElementDirectlyTo(
@@ -98,7 +93,6 @@ published interface XOptimizedStorage
                 ::com::sun::star::io::IOException,
                 ::com::sun::star::embed::StorageWrappedTargetException );
 
-    // -----------------------------------------------------------------------
     /** allows to switch storage persistence to the provided stream. The stream
         will be filled by the storage. If an empty reference is provided, the
         storage will create a temporary stream to switch to itself.
@@ -111,7 +105,6 @@ published interface XOptimizedStorage
                 ::com::sun::star::io::IOException,
                 ::com::sun::star::embed::StorageWrappedTargetException );
 
-    // -----------------------------------------------------------------------
     /** allows to switch storage persistence to the provided URL. The caller is
         responsible to be sure that the file referenced by the URL contains the
         same contents as the stream the storage is based currently. Thus using
@@ -125,7 +118,6 @@ published interface XOptimizedStorage
                 ::com::sun::star::io::IOException,
                 ::com::sun::star::embed::StorageWrappedTargetException );
 
-    // -----------------------------------------------------------------------
     /** allows to get property of the child element with the specified name.
         The implementation of the method might allow to access only subset
         of the supported by element properties.
@@ -140,7 +132,6 @@ published interface XOptimizedStorage
                 ::com::sun::star::beans::PropertyVetoException,
                 ::com::sun::star::embed::StorageWrappedTargetException );
 
-    // -----------------------------------------------------------------------
     /** fills the provided stream with the last flushed version of data from
         the child stream of the storage.
 
@@ -175,7 +166,6 @@ published interface XOptimizedStorage
 
 };
 
-//============================================================================
 
 }; }; }; };
 

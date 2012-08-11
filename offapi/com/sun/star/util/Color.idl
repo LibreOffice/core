@@ -20,11 +20,9 @@
 #define __com_sun_star_util_color_idl__
 
 
-//=============================================================================
 
 module com { module sun { module star { module util {
 
-//=============================================================================
 /** describes an RGB color value with an optional alpha channel.
 
     <p>The byte order is from high to low:
@@ -36,7 +34,6 @@ module com { module sun { module star { module util {
 */
 published typedef long Color;
 
-//=============================================================================
 
 }; }; }; };
 

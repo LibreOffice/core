@@ -26,17 +26,14 @@
 #include <com/sun/star/drawing/XShapes.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module drawing {
 
-//=============================================================================
 
 /** specifies the group/ungroup functionality.
  */
 published interface XShapeGrouper: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** groups the <type>Shape</type>s inside a collection.
 
@@ -57,7 +54,6 @@ published interface XShapeGrouper: com::sun::star::uno::XInterface
      */
     com::sun::star::drawing::XShapeGroup group( [in] com::sun::star::drawing::XShapes xShapes );
 
-    //-------------------------------------------------------------------------
 
     /** ungroups a given <type>GroupShape</type>.
 
@@ -71,7 +67,6 @@ published interface XShapeGrouper: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

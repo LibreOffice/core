@@ -31,7 +31,6 @@
  */
 published interface XResultSetUpdate: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** inserts the contents of the insert row into the result set and
         the database. Must be on the insert row when this method is called.
@@ -39,7 +38,6 @@ published interface XResultSetUpdate: com::sun::star::uno::XInterface
                 if a database access error occurs.
      */
     void insertRow() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** updates the underlying database with the new contents of the
         current row. Cannot be called when on the insert row.
@@ -47,7 +45,6 @@ published interface XResultSetUpdate: com::sun::star::uno::XInterface
                 if a database access error occurs.
      */
     void updateRow() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** deletes the current row from the result set and the underlying
         database. Cannot be called when on the insert row.
@@ -55,7 +52,6 @@ published interface XResultSetUpdate: com::sun::star::uno::XInterface
                 if a database access error occurs.
      */
     void deleteRow() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** cancels the updates made to a row.
 
@@ -74,7 +70,6 @@ published interface XResultSetUpdate: com::sun::star::uno::XInterface
                 if a database access error occurs.
      */
     void cancelRowUpdates() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** moves the cursor to the insert row.  The current cursor position is
         remembered while the cursor is positioned on the insert row.
@@ -111,7 +106,6 @@ published interface XResultSetUpdate: com::sun::star::uno::XInterface
                 if a database access error occurs.
      */
     void moveToInsertRow() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** moves the cursor to the remembered cursor position, usually the
         current row. This method has no effect if the cursor is not on the insert
@@ -122,7 +116,6 @@ published interface XResultSetUpdate: com::sun::star::uno::XInterface
     void moveToCurrentRow() raises (SQLException);
 };
 
-//=============================================================================
 
 }; }; }; };
 

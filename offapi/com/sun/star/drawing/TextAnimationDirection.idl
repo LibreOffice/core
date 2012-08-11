@@ -20,36 +20,30 @@
 #define __com_sun_star_drawing_TextAnimationDirection_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module drawing {
 
-//=============================================================================
 
 // DocMerge from xml: enum com::sun::star::drawing::TextAnimationDirection
 /** This enumeration defines the movement direction of a scrolltext.
  */
 published enum TextAnimationDirection
 {
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR TextAnimationDirection::   LEFT,
 
     // DocMerge: empty anyway
     LEFT,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR TextAnimationDirection::   RIGHT,
 
     // DocMerge: empty anyway
     RIGHT,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR TextAnimationDirection::   UP,
 
     // DocMerge: empty anyway
     UP,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR TextAnimationDirection::   DOWN
 
     // DocMerge: empty anyway
@@ -57,7 +51,6 @@ published enum TextAnimationDirection
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

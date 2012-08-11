@@ -23,11 +23,9 @@
 #include <com/sun/star/frame/XFrame.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module frame {
 
-//=============================================================================
 /** manages and creates frames.
 
     <p>
@@ -40,7 +38,6 @@
  */
 published interface XFrames: com::sun::star::container::XIndexAccess
 {
-    //-------------------------------------------------------------------------
     /** appends the specified <type>Frame</type> to the list of sub-frames.
 
         @param xFrame
@@ -48,7 +45,6 @@ published interface XFrames: com::sun::star::container::XIndexAccess
      */
     void append( [in] XFrame xFrame );
 
-    //-------------------------------------------------------------------------
     /** provides access to the list of all currently existing
         frames inside this container and her sub frames
 
@@ -62,7 +58,6 @@ published interface XFrames: com::sun::star::container::XIndexAccess
      */
     sequence< XFrame > queryFrames( [in] long nSearchFlags );
 
-    //-------------------------------------------------------------------------
     /** removes the frame from its container.
 
         <p>
@@ -82,7 +77,6 @@ published interface XFrames: com::sun::star::container::XIndexAccess
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

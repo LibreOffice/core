@@ -32,11 +32,9 @@
 #include <com/sun/star/task/ClassifiedInteractionRequest.idl>
 
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** This request is used to indicate a name clash.
 
     <p>For example, when copying a file there might be another file in the
@@ -57,17 +55,14 @@ module com { module sun { module star { module ucb {
 */
 published exception NameClashResolveRequest : com::sun::star::task::ClassifiedInteractionRequest
 {
-    //-------------------------------------------------------------------------
     /** contains the URL of the folder that contains the clashing resource.
      */
     string TargetFolderURL;
 
-    //-------------------------------------------------------------------------
     /** contains the clashing name.
      */
     string ClashingName;
 
-    //-------------------------------------------------------------------------
     /** contains a proposal for a new new, non-clashing name.
         <p>This field may be left empty if the implementation is not able
         to suggest a new name.
@@ -75,7 +70,6 @@ published exception NameClashResolveRequest : com::sun::star::task::ClassifiedIn
     string ProposedNewName;
 };
 
-//=============================================================================
 
 }; }; }; };
 

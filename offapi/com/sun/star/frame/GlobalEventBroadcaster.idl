@@ -22,11 +22,9 @@
 #include <com/sun/star/document/XEventBroadcaster.idl>
 #include <com/sun/star/document/XEventsSupplier.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module frame {
 
-//=============================================================================
 /**
     This service offers the document event functionality that can be found at any
     <type scope="com::sun::star::document">OfficeDocument</type>, but it does it for all existing documents.
@@ -46,7 +44,6 @@ service GlobalEventBroadcaster
         interface ::com::sun::star::document::XEventBroadcaster;
 };
 
-//=============================================================================
 
 }; }; }; };
 

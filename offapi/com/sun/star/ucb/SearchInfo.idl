@@ -23,46 +23,38 @@
 #include <com/sun/star/ucb/SearchRecursion.idl>
 
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** information needed to (recursively) search an object.
 */
 published struct SearchInfo
 {
-    //-------------------------------------------------------------------------
     /** the search criteria.
     */
     sequence<com::sun::star::ucb::SearchCriterium> Criteria;
 
-    //-------------------------------------------------------------------------
     /** the mode of recursion to use.
     */
     com::sun::star::ucb::SearchRecursion Recursion;
 
-    //-------------------------------------------------------------------------
     /** whether to include the object itself in the search or only (some of)
         its sub-objects.
     */
     boolean IncludeBase;
 
-    //-------------------------------------------------------------------------
     /** whether to respect the "view restrictions" specified for the folders
         hierarchically contained within an object (e.g., only searches through
         subscribed folders).
     */
     boolean RespectFolderViewRestrictions;
 
-    //-------------------------------------------------------------------------
     /** whether to respect the "view restrictions" specified for the documents
         hierarchically contained within an object (e.g., only searches through
         marked documents).
     */
     boolean RespectDocViewRestrictions;
 
-    //-------------------------------------------------------------------------
     /** whether to follow indirections (link objects) and search through their
         respective targets also.
     */
@@ -70,7 +62,6 @@ published struct SearchInfo
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

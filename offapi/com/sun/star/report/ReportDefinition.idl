@@ -30,15 +30,12 @@
 
 #include <com/sun/star/report/XReportDefinition.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module report {
 
-//=============================================================================
 
 service ReportDefinition : XReportDefinition;
 
-//=============================================================================
 
 }; }; }; };
 

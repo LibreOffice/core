@@ -33,13 +33,11 @@
 #include <com/sun/star/frame/XDispatchProvider.idl>
 #include <com/sun/star/util/VetoException.idl>
 
-//=============================================================================
 module com {  module sun {  module star {  module inspection {
 
 interface XObjectInspectorModel;
 interface XObjectInspectorUI;
 
-//-----------------------------------------------------------------------------
 /** describes the main interface of an <type>ObjectInspector</type>.
 
     @see ObjectInspector
@@ -119,7 +117,6 @@ interface XObjectInspector
         raises (com::sun::star::util::VetoException);
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -21,13 +21,10 @@
 #define __com_sun_star_i18n_InputSequenceCheckMode_idl__
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module i18n {
 
-//=============================================================================
 
-//--------------------------------------------------------------------------
 /** Input check mode constants to use with
     <member>XInputSequenceChecker::checkInputSequence()</member>
 
@@ -46,7 +43,6 @@ published constants InputSequenceCheckMode
     const short STRICT      = 2;
 };
 
-//=============================================================================
 
 }; }; }; };
 

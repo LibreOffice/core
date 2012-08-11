@@ -31,11 +31,9 @@
 #include <com/sun/star/text/XTextFrame.idl>
 #include <com/sun/star/text/BaseFrame.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module text {
 
-//=============================================================================
 
 /** specifies a rectangular shape which contains a <type>Text</type> object
     and is attached to a piece of surrounding <type>Text</type>.
@@ -68,17 +66,14 @@ published service TextFrame
                 text frame.
      */
     interface com::sun::star::text::XTextFrame;
-    //-------------------------------------------------------------------------
     /** contains the metric height value of the frame.
      */
     [property] long FrameHeightAbsolute;
 
-    //-------------------------------------------------------------------------
     /** contains the metric width value of the frame.
      */
     [property] long FrameWidthAbsolute;
 
-    //-------------------------------------------------------------------------
 
     /** specifies a width relative to the width of the
         surrounding text.
@@ -87,7 +82,6 @@ published service TextFrame
      */
     [property] byte FrameWidthPercent;
 
-    //-------------------------------------------------------------------------
     /** specifies a width relative to the width of the
         surrounding text.
 
@@ -95,26 +89,22 @@ published service TextFrame
         is used.</p>
      */
     [property] byte FrameHeightPercent;
-    //-------------------------------------------------------------------------
     /** If "AutomaticHeight" is set, then the object grows if it is required
         by the frame content.
      */
     [property] boolean FrameIsAutomaticHeight;
-    //-------------------------------------------------------------------------
     /** determines the interpretation of the height and relative
         height properties.
 
             @see SizeType
      */
     [property] short SizeType;
-    //-------------------------------------------------------------------------
     /** determines if the text frame should be editable in a read-only document.
         (This is usually used in forms.)
 
      */
     [optional, property] boolean EditInReadonly;
 
-    //-------------------------------------------------------------------------
     /** determines the interpretation of the width and relative
         width properties.
 
@@ -123,13 +113,11 @@ published service TextFrame
      */
     [optional, property] short WidthType;
 
-    //-----------------------------------------------------------------------------
     /** contains the writing direction, as represented by the
         <type scope="com::sun::star::text">WritingMode2</type> constants
      */
     [optional, property] short WritingMode;
 
-    //-----------------------------------------------------------------------------
     /** controls, if the frame follows the text flow or can leave its layout environment
 
         <p>If set, the frame follows the text flow and doesn't leaves the layout
@@ -161,7 +149,6 @@ published service TextFrame
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

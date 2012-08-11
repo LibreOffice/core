@@ -41,7 +41,6 @@
  */
 published interface XRowSet: XResultSet
 {
-    //-------------------------------------------------------------------------
 
     /** populates a row set with data. The description of the data source and
         other important information for filling the row set with data.
@@ -50,7 +49,6 @@ published interface XRowSet: XResultSet
             if a database access error occurs.
      */
     void execute() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** adds the specified listener to receive the events "cursorMoved",
         "rowChanged", and "rowSetChanged".
@@ -58,7 +56,6 @@ published interface XRowSet: XResultSet
             the listener which should be registered
      */
     [oneway] void addRowSetListener([in]XRowSetListener listener );
-    //-------------------------------------------------------------------------
 
     /** removes the specified listener.
         @param listener
@@ -67,7 +64,6 @@ published interface XRowSet: XResultSet
     [oneway] void removeRowSetListener([in]XRowSetListener listener );
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -27,11 +27,9 @@
 
 #include <com/sun/star/beans/XPropertySet.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module text {
 
-//=============================================================================
 
 /** specifies the view of a <type>TextDocument</type>.
  */
@@ -58,7 +56,6 @@ published service TextDocumentView
     [optional] interface com::sun::star::beans::XPropertySet;
 
 
-    //-------------------------------------------------------------------------
     /** returns the number of pages in the document
 
         <p>Since the document needs to be formatted to get the result
@@ -68,7 +65,6 @@ published service TextDocumentView
      */
     [optional, property, readonly] long PageCount;
 
-    //-------------------------------------------------------------------------
     /** returns the number of lines in the document
 
         <p>Since the document needs to be formatted to get the result
@@ -80,24 +76,20 @@ published service TextDocumentView
      */
     [optional, property, readonly] long LineCount;
 
-    //-------------------------------------------------------------------------
     /** specifies if spell checking should be done while typing.
 
         @since OOo 2.0
      */
     [optional, property] boolean IsConstantSpellcheck;
 
-    //-------------------------------------------------------------------------
     /** specifies if the marks for misspelled text should be displayed.
 
         @since OOo 2.0
      */
     [optional, property] boolean IsHideSpellMarks;
 
-    //-------------------------------------------------------------------------
 };
 
-//=============================================================================
 
 }; }; }; };
 

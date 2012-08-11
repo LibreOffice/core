@@ -26,18 +26,15 @@
 #include <com/sun/star/lang/IllegalArgumentException.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module text {
 
-//=============================================================================
 
 /** makes it possible to attach this <type>TextField</type> to a
     <type>TextFieldMaster</type>.
  */
 published interface XDependentTextField: com::sun::star::text::XTextField
 {
-    //-------------------------------------------------------------------------
 
     /** method must be called to attach the
         <type>TextFieldMaster</type> to this <type>TextField</type>.
@@ -70,7 +67,6 @@ published interface XDependentTextField: com::sun::star::text::XTextField
     void attachTextFieldMaster( [in] com::sun::star::beans::XPropertySet xFieldMaster )
             raises( com::sun::star::lang::IllegalArgumentException );
 
-    //-------------------------------------------------------------------------
 
     /** @returns
                 the previously attached <type>TextFieldMaster</type>
@@ -79,7 +75,6 @@ published interface XDependentTextField: com::sun::star::text::XTextField
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

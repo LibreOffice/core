@@ -41,16 +41,13 @@
 #include <com/sun/star/packages/NoRawFormatException.idl>
 
 
-//============================================================================
 
  module com {  module sun {  module star {  module embed {
 
-//============================================================================
 /** This interface represents main storage functionality.
  */
 published interface XStorageRawAccess
 {
-    // -----------------------------------------------------------------------
     /** allows to get a plain raw stream representing a package stream.
 
         <p>
@@ -89,7 +86,6 @@ published interface XStorageRawAccess
                 ::com::sun::star::io::IOException,
                 ::com::sun::star::embed::StorageWrappedTargetException );
 
-    // -----------------------------------------------------------------------
     /** allows to get a raw stream representing encrypted stream with header.
 
         <p>
@@ -143,7 +139,6 @@ published interface XStorageRawAccess
                 ::com::sun::star::io::IOException,
                 ::com::sun::star::embed::StorageWrappedTargetException );
 
-    // -----------------------------------------------------------------------
     /** allows to insert a raw stream representing encrypted stream with
         header.
 
@@ -196,7 +191,6 @@ published interface XStorageRawAccess
                 ::com::sun::star::embed::StorageWrappedTargetException );
 };
 
-//============================================================================
 
 }; }; }; };
 

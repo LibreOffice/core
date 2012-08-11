@@ -27,11 +27,9 @@
 #include <com/sun/star/xml/UserDefinedAttributeSupplier.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module chart {
 
-//=============================================================================
 
 /** specifies the legend of a chart.
 
@@ -45,7 +43,6 @@ published service ChartLegend
 {
     service com::sun::star::drawing::Shape;
 
-    //-------------------------------------------------------------------------
 
     /** If this property is <TRUE/> the position is calculated by the application automatically.
         Setting this property to false will have no effect. Instead use the interface <type scope="com::sun::star::drawing">XShape</type>
@@ -53,11 +50,9 @@ published service ChartLegend
      */
     [optional, property] boolean AutomaticPosition;
 
-    //-------------------------------------------------------------------------
 
     service com::sun::star::style::CharacterProperties;
 
-    //-------------------------------------------------------------------------
 
     /** If a <type>ChartLegend</type> may be stored as XML file,
         this service should be supported in order to preserve unparsed
@@ -67,7 +62,6 @@ published service ChartLegend
      */
     [optional] service com::sun::star::xml::UserDefinedAttributeSupplier;
 
-    //-------------------------------------------------------------------------
 
     /** determines the alignment of the legend relative
         to the diagram.
@@ -76,7 +70,6 @@ published service ChartLegend
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

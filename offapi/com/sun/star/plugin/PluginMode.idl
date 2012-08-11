@@ -20,11 +20,9 @@
 #define __com_sun_star_plugin_PluginMode_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module plugin {
 
-//=============================================================================
 
 published constants PluginMode
 {
@@ -34,7 +32,6 @@ published constants PluginMode
     const short FULL = 2;
 };
 
-//=============================================================================
 
 }; }; }; };
 

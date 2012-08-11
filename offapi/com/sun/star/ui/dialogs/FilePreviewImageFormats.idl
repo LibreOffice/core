@@ -23,14 +23,12 @@
 
 module com { module sun { module star { module ui { module dialogs {
 
-//=============================================================================
 /** These constants are used to specify image formats supported by an implementation
     of the interface <type scope="com::sun::star::ui::dialogs">XFilePreview</type>.
  */
 
 published constants FilePreviewImageFormats
 {
-    //---------------------------------------------------------------------
     /** A OpenOffice bitmap which is similar to the device independent bitmap
         (DIB) format on windows.
         The bitmap data should be provided as a sequence of sal_Int8.
@@ -38,7 +36,6 @@ published constants FilePreviewImageFormats
     const short BITMAP     = 1;
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

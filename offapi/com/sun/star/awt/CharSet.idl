@@ -20,11 +20,9 @@
 #define __com_sun_star_awt_CharSet_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module awt {
 
-//=============================================================================
 
 /** These values are used to specify the characters which are available in
     a font and their codes.
@@ -40,67 +38,56 @@
  */
 published constants CharSet
 {
-    //-------------------------------------------------------------------------
 
     /** specifies an unknown character set.
      */
     const short DONTKNOW = 0;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the ANSI character set.
      */
     const short ANSI = 1;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the <regtm>Apple Macintosh</regtm> character set.
      */
     const short MAC = 2;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the IBM PC character set number 437.
      */
     const short IBMPC_437 = 3;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the IBM PC character set number 850.
      */
     const short IBMPC_850 = 4;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the IBM PC character set number 860.
      */
     const short IBMPC_860 = 5;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the IBM PC character set number 861.
      */
     const short IBMPC_861 = 6;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the IBM PC character set number 863.
      */
     const short IBMPC_863 = 7;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the IBM PC character set number 865.
      */
     const short IBMPC_865 = 8;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the system character set.
      */
     const short SYSTEM = 9;
 
-    //-------------------------------------------------------------------------
 
     /** specifies a set of symbols.
      */
@@ -108,7 +95,6 @@ published constants CharSet
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

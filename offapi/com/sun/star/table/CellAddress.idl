@@ -20,29 +20,24 @@
 #ifndef __com_sun_star_table_CellAddress_idl__
 #define __com_sun_star_table_CellAddress_idl__
 
-//=============================================================================
 
 module com {  module sun {  module star {  module table {
 
-//=============================================================================
 
 /** contains a cell address within a spreadsheet document.
  */
 published struct CellAddress
 {
-    //-------------------------------------------------------------------------
 
     /** is the index of the sheet that contains the cell.
      */
     short Sheet;
 
-    //-------------------------------------------------------------------------
 
     /** is the index of the column where the cell is located.
      */
     long Column;
 
-    //-------------------------------------------------------------------------
 
     /** is the index of the row where the cell is located.
      */
@@ -50,7 +45,6 @@ published struct CellAddress
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

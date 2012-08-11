@@ -22,11 +22,9 @@
 #include <com/sun/star/uno/Exception.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module lang {
 
-//=============================================================================
 
 // DocMerge from xml: exception com::sun::star::lang::IllegalArgumentException
 /** This exception is thrown to indicate that a method has
@@ -34,7 +32,6 @@
  */
 published exception IllegalArgumentException: com::sun::star::uno::Exception
 {
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: field com::sun::star::lang::IllegalArgumentException::ArgumentPosition
     /** identifies the position of the illegal argument.
@@ -45,7 +42,6 @@ published exception IllegalArgumentException: com::sun::star::uno::Exception
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

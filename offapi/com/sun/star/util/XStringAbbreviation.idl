@@ -28,7 +28,6 @@ module com { module sun { module star { module util {
 
 module com { module sun { module star { module util {
 
-//============================================================================
 /** Abbreviate arbitrary strings.
 
     <p>It is expected that there will be different implementations of this
@@ -41,7 +40,6 @@ module com { module sun { module star { module util {
  */
 published interface XStringAbbreviation: com::sun::star::uno::XInterface
 {
-    //------------------------------------------------------------------------
     /** Abbreviate a string, so that the resulting abbreviated string is not
         wider than some given width.
 

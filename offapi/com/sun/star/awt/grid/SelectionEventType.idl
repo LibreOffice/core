@@ -29,30 +29,25 @@
 #define __com_sun_star_awt_grid_SelectionEventType_idl__
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module awt {  module grid {
 
-//=============================================================================
 
 /** specifies the type of a selection event, as used by
     <type>GridSelectionEvent</type>.
  */
 enum SelectionEventType
 {
-    //-------------------------------------------------------------------------
 
     /** This value indicates that a selection was added to the grid control
      */
     ADD,
 
-    //-------------------------------------------------------------------------
 
     /** This value indicates that a selection was removed from the grid control
      */
     REMOVE,
 
-    //-------------------------------------------------------------------------
 
     /** This value indicates that a selection was changed
      */
@@ -60,7 +55,6 @@ enum SelectionEventType
 
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

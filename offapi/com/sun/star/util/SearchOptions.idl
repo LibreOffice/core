@@ -34,14 +34,11 @@
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/util/SearchAlgorithms.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module util {
 
-//=============================================================================
 
 published  struct SearchOptions  {
-    //-------------------------------------------------------------------------
     /** search type */
     SearchAlgorithms    algorithmType;
 
@@ -80,7 +77,6 @@ published  struct SearchOptions  {
     long            transliterateFlags;
 };
 
-//=============================================================================
 }; }; }; };
 
 #endif

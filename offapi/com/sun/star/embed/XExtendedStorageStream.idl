@@ -36,29 +36,23 @@
 #include <com/sun/star/embed/XTransactedObject.idl>
 #include <com/sun/star/embed/XTransactionBroadcaster.idl>
 
-//============================================================================
 
  module com {  module sun {  module star {  module embed {
 
-//============================================================================
 /** This interface allows access to an extended storage stream that might be
     transacted.
  */
 published interface XExtendedStorageStream
 {
     // INTERFACES
-    //
-    // -----------------------------------------------------------------------
     /** Stream access.
      */
     interface ::com::sun::star::io::XStream;
 
-    // -----------------------------------------------------------------------
     /** allows to control object lifetime.
      */
     interface ::com::sun::star::lang::XComponent;
 
-    // -----------------------------------------------------------------------
     /** allows to seek to a specified position within the stream.
 
         <p>
@@ -68,7 +62,6 @@ published interface XExtendedStorageStream
      */
     [optional] interface ::com::sun::star::io::XSeekable;
 
-    // -----------------------------------------------------------------------
     /** allows to set password to the stream.
 
         <p>
@@ -85,17 +78,14 @@ published interface XExtendedStorageStream
      */
     [optional] interface ::com::sun::star::embed::XEncryptionProtectedSource;
 
-    // -----------------------------------------------------------------------
     /** allows to get access to stream properties.
      */
     [optional] interface ::com::sun::star::beans::XPropertySet;
 
-    // -----------------------------------------------------------------------
     /** allows to have transacted access.
      */
     [optional] interface ::com::sun::star::embed::XTransactedObject;
 
-    // -----------------------------------------------------------------------
     /** allows to register a listener for transaction actions.
 
         <p>
@@ -107,7 +97,6 @@ published interface XExtendedStorageStream
 
 };
 
-//============================================================================
 
 }; }; }; };
 

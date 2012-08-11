@@ -34,11 +34,9 @@
 
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module awt {
 
-//=============================================================================
 
 /** specifies a Roadmap control. The model of the Roadmap control must be a
     <type>UnoControlRoadmapModel</type>
@@ -70,7 +68,6 @@ service UnoControlRoadmap
 
 
 };
-//=============================================================================
 
 }; }; }; };
 

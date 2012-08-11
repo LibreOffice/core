@@ -23,11 +23,9 @@
 #include <com/sun/star/sheet/RangeSelectionEvent.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** allows notification when range selection is completed or aborted.
 
@@ -44,7 +42,6 @@ published interface XRangeSelectionListener: com::sun::star::lang::XEventListene
     void aborted( [in] com::sun::star::sheet::RangeSelectionEvent aEvent );
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -23,11 +23,9 @@
 #include <com/sun/star/awt/UnoControlButtonModel.idl>
 #include <com/sun/star/form/submission/XSubmissionSupplier.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module form {  module component {
 
-//=============================================================================
 
 /** specifies the control model for a button, part of a form component hierarchy,
     which can be bound to external submissions.
@@ -49,7 +47,6 @@ service SubmitButton
     interface com::sun::star::form::submission::XSubmissionSupplier;
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

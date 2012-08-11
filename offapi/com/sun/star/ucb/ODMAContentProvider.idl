@@ -30,11 +30,9 @@
 
 #include <com/sun/star/ucb/XContentProvider.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** The ODMA Content Provider (OCP) implements a <type>ContentProvider</type>
     for the <type>UniversalContentBroker</type> (UCB).
 
@@ -49,7 +47,6 @@ module com { module sun { module star { module ucb {
 */
 published service ODMAContentProvider
 {
-    //-------------------------------------------------------------------------
     /** provides two types of content; the document and the Root Folder.
 
         <p>
@@ -82,7 +79,6 @@ published service ODMAContentProvider
     interface com::sun::star::ucb::XContentProvider;
 };
 
-//=============================================================================
 
 }; }; }; };
 

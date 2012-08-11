@@ -29,60 +29,49 @@
 #define __com_sun_star_text_ReferenceFieldPart_idl__
 
 
-//=============================================================================
 
 module com { module sun { module star { module text {
 
-//=============================================================================
 /** These constants define how the reference position is displayed in
     reference text fields.
 
 */
 published constants ReferenceFieldPart
 {
-    //-------------------------------------------------------------------------
     /** The page number is displayed using Arabic numbers.
     */
     const short PAGE = 0;
 
-    //-------------------------------------------------------------------------
     /** The number of the chapter is displayed.
     */
     const short CHAPTER = 1;
 
-    //-------------------------------------------------------------------------
     /** The reference text is displayed.
      <p>If the source of the reference is a sequence field, then the complete text
          of the paragraph is displayed. This is useful to reference to captions. </p>
     */
     const short TEXT = 2;
 
-    //-------------------------------------------------------------------------
     /** The reference is displayed as one of the (localized) words, "above" or "below".
     */
     const short UP_DOWN = 3;
 
-    //-------------------------------------------------------------------------
     /** The page number is displayed using the numbering type defined in
         the page style of the reference position.
     */
     const short PAGE_DESC = 4;
-    //-------------------------------------------------------------------------
     /** The category and the number of a caption is displayed.
      <p>This option is only valid if the source of the reference is a sequence field.</p>
     */
     const short CATEGORY_AND_NUMBER = 5;
-    //-------------------------------------------------------------------------
     /** The caption text of a caption is displayed.
      <p>This option is only valid if the source of the reference is a sequence field.</p>
     */
     const short ONLY_CAPTION = 6;
-    //-------------------------------------------------------------------------
     /** The number of a sequence field is displayed.
      <p>This option is only valid if the source of the reference is a sequence field.</p>
     */
     const short ONLY_SEQUENCE_NUMBER = 7;
-        //-------------------------------------------------------------------------
         /** The numbering label and depending of the reference field context numbering labels of
             superior list levels of the reference are displayed.
 
@@ -102,7 +91,6 @@ published constants ReferenceFieldPart
             @since OOo 3.0
         */
         const short NUMBER = 8;
-        //-------------------------------------------------------------------------
         /** The numbering label of the reference is displayed.
 
             <p>This option is only valid, if the source of the reference is a bookmark or a set reference.</p>
@@ -112,7 +100,6 @@ published constants ReferenceFieldPart
             @since OOo 3.0
         */
         const short NUMBER_NO_CONTEXT = 9;
-        //-------------------------------------------------------------------------
         /** The numbering label and numbering labels of superior list levels of the reference are displayed.
 
             <p>This option is only valid, if the source of the reference is a bookmark or a set reference.</p>
@@ -130,7 +117,6 @@ published constants ReferenceFieldPart
         const short NUMBER_FULL_CONTEXT = 10;
 };
 
-//=============================================================================
 
 }; }; }; };
 

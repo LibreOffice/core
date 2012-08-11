@@ -24,11 +24,9 @@
 #include <com/sun/star/rdf/XLiteral.idl>
 
 
-//=============================================================================
 
 module com {   module sun {   module star {   module rdf {
 
-//=============================================================================
 /** represents a literal that may occur in a RDF graph.
 
     @since OOo 3.0
@@ -38,7 +36,6 @@ module com {   module sun {   module star {   module rdf {
 service Literal : XLiteral
 {
 
-    //-------------------------------------------------------------------------
     /** creates a plain literal RDF node.
 
         @param Value
@@ -46,7 +43,6 @@ service Literal : XLiteral
      */
     create( [in] string Value );
 
-    //-------------------------------------------------------------------------
     /** creates a typed literal RDF node.
 
         @param Value
@@ -57,7 +53,6 @@ service Literal : XLiteral
      */
     createWithType( [in] string Value, [in] XURI Type );
 
-    //-------------------------------------------------------------------------
     /** creates a literal RDF node with a language.
 
         @param Value
@@ -72,7 +67,6 @@ service Literal : XLiteral
 };
 
 
-//=============================================================================
 
 }; }; }; };
 

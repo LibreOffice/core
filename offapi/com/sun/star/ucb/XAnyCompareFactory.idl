@@ -23,17 +23,14 @@
 #include <com/sun/star/ucb/XAnyCompare.idl>
 #include <com/sun/star/beans/Property.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** creates an <type>XAnyCompare</type> instance.
 */
 
 published interface XAnyCompareFactory: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** creates an <type>XAnyCompare</type> instance.
 
         @param PropertyName
@@ -46,7 +43,6 @@ published interface XAnyCompareFactory: com::sun::star::uno::XInterface
                                         [in] string PropertyName );
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -23,11 +23,9 @@
 #include <com/sun/star/awt/XTopWindow.idl>
 #include <com/sun/star/lang/IndexOutOfBoundsException.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module awt {
 
-//=============================================================================
 
 /** extends XTopWindow with additional functionality
  */
@@ -61,11 +59,9 @@ interface XTopWindow2 : XTopWindow
     };
 };
 
-//=============================================================================
 
 }; }; }; };
 
-//=============================================================================
 
 #endif
 

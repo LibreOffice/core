@@ -37,13 +37,11 @@
 #include <com/sun/star/lang/XComponent.idl>
 #include <com/sun/star/inspection/InteractiveSelectionResult.idl>
 
-//=============================================================================
 module com {  module sun {  module star {  module inspection {
 
 interface XObjectInspectorUI;
 interface XPropertyControlFactory;
 
-//-----------------------------------------------------------------------------
 /** is the basic interface for object inspection.
 
     <p>The <type>ObjectInspector</type> itself does not know anything about the object
@@ -446,7 +444,6 @@ interface XPropertyHandler
     boolean suspend( [in] boolean Suspend );
 };
 
-//=============================================================================
 
 }; }; }; };
 

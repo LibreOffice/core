@@ -32,11 +32,9 @@
 
 #include <com/sun/star/lang/Locale.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module util {
 
-//=============================================================================
 
 /** specifies the properties which can be used to describe
     a sort order applied to an XSortable.
@@ -49,12 +47,10 @@ published service SortDescriptor
 {
      interface com::sun::star::beans::XPropertySet;
 
-    //-------------------------------------------------------------------------
     /** specifies if the case of letters is important when comparing entries.
      */
         [property] boolean IsCaseSensitive;
 
-     //-------------------------------------------------------------------------
     /** specifies the sorting order.
 
             The sorting order may be defined for separate keys in specific
@@ -64,7 +60,6 @@ published service SortDescriptor
      */
         [optional, property] boolean SortAscending;
 
-     //-------------------------------------------------------------------------
     /** specifies if the columns are sorted.
 
         <dl>
@@ -83,12 +78,10 @@ published service SortDescriptor
      */
     [property] boolean SortColumns;
 
-     //-------------------------------------------------------------------------
     /** specifies the locale for the compare operator (collator).
      */
     [property] com::sun::star::lang::Locale CollatorLocale;
 
-     //-------------------------------------------------------------------------
     /** specifies the algorithm for the compare operator (collator).
 
             The collator algorithm may be defined for separate keys in specific
@@ -101,7 +94,6 @@ published service SortDescriptor
         [optional, property] string CollatorAlgorithm;
 };
 
-//=============================================================================
 
 }; }; }; };
 

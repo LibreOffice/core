@@ -19,11 +19,9 @@
 #ifndef __com_sun_star_i18n_FormatElement_idl__
 #define __com_sun_star_i18n_FormatElement_idl__
 
-//============================================================================
 
 module com {  module sun {  module star {  module i18n {
 
-//============================================================================
 
 /**
     One number format code and its attributes, returned in a sequence by
@@ -63,7 +61,6 @@ published struct FormatElement
     boolean isDefault;
 };
 
-//============================================================================
 }; }; }; };
 
 #endif

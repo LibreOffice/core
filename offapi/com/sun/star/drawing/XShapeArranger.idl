@@ -28,11 +28,9 @@
 #include <com/sun/star/drawing/XShape.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module drawing {
 
-//=============================================================================
 
 // DocMerge from xml: interface com::sun::star::drawing::XShapeArranger
 /** Objects implementing this interface can be used to arrange
@@ -42,7 +40,6 @@
  */
 published interface XShapeArranger: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::drawing::XShapeArranger::arrange
     /** applies the specified <type>Arrangement</type> to
@@ -51,7 +48,6 @@ published interface XShapeArranger: com::sun::star::uno::XInterface
     void arrange( [in] com::sun::star::drawing::XShapes xShapes,
              [in] com::sun::star::drawing::Arrangement eType );
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::drawing::XShapeArranger::bringToFront
     /** moves the specified <type>Shape</type>s by a specified number
@@ -60,7 +56,6 @@ published interface XShapeArranger: com::sun::star::uno::XInterface
     void bringToFront( [in] com::sun::star::drawing::XShapes xShapes,
              [in] short nSteps );
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::drawing::XShapeArranger::sendToBack
     /** moves the specified <type>Shape</type>s
@@ -69,7 +64,6 @@ published interface XShapeArranger: com::sun::star::uno::XInterface
     void sendToBack( [in] com::sun::star::drawing::XShapes xShapes,
              [in] short nSteps );
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::drawing::XShapeArranger::setBehindShape
     /** moves the specified collection of <type>Shape</type>s
@@ -78,7 +72,6 @@ published interface XShapeArranger: com::sun::star::uno::XInterface
     void setBehindShape( [in] com::sun::star::drawing::XShapes xShapes,
              [in] com::sun::star::drawing::XShape xShape );
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::drawing::XShapeArranger::setInFrontOf
     /** moves the specified collection of <type>Shape</type>s in
@@ -87,7 +80,6 @@ published interface XShapeArranger: com::sun::star::uno::XInterface
     void setInFrontOf( [in] com::sun::star::drawing::XShapes xShapes,
              [in] com::sun::star::drawing::XShape xShape );
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::drawing::XShapeArranger::reverseOrder
     /** reverses the order of the specified collection of
@@ -97,7 +89,6 @@ published interface XShapeArranger: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

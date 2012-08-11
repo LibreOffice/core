@@ -73,7 +73,6 @@ interface XGraphicDevice : ::com::sun::star::uno::XInterface
      */
     XBufferController                           getBufferController();
 
-    //-------------------------------------------------------------------------
 
     /** Query the color space interface for this graphic device.
 
@@ -82,7 +81,6 @@ interface XGraphicDevice : ::com::sun::star::uno::XInterface
      */
     XColorSpace                                 getDeviceColorSpace();
 
-    //-------------------------------------------------------------------------
 
     /** Query the physical resolution of the device in pixel per
         millimeter.
@@ -94,7 +92,6 @@ interface XGraphicDevice : ::com::sun::star::uno::XInterface
      */
     ::com::sun::star::geometry::RealSize2D  getPhysicalResolution();
 
-    //-------------------------------------------------------------------------
 
     /** Query the physical dimensions of the device in millimeter.
 
@@ -107,7 +104,6 @@ interface XGraphicDevice : ::com::sun::star::uno::XInterface
      */
     ::com::sun::star::geometry::RealSize2D  getPhysicalSize();
 
-    //-------------------------------------------------------------------------
 
     /** Create a line poly-polygon which can internally use
         device-optimized representations already.
@@ -117,7 +113,6 @@ interface XGraphicDevice : ::com::sun::star::uno::XInterface
      */
     XLinePolyPolygon2D              createCompatibleLinePolyPolygon( [in] sequence< sequence< ::com::sun::star::geometry::RealPoint2D > > points );
 
-    //-------------------------------------------------------------------------
 
     /** Create a Bezier poly-polygon which can internally use
         device-optimized representations already.
@@ -127,7 +122,6 @@ interface XGraphicDevice : ::com::sun::star::uno::XInterface
      */
     XBezierPolyPolygon2D            createCompatibleBezierPolyPolygon( [in] sequence< sequence< ::com::sun::star::geometry::RealBezierSegment2D > > points );
 
-    //-------------------------------------------------------------------------
 
     /** Create a bitmap whose memory layout and sample model is
         compatible to the graphic device.
@@ -139,7 +133,6 @@ interface XGraphicDevice : ::com::sun::star::uno::XInterface
     XBitmap                         createCompatibleBitmap( [in] ::com::sun::star::geometry::IntegerSize2D size )
         raises (com::sun::star::lang::IllegalArgumentException);
 
-    //-------------------------------------------------------------------------
 
     /** Create a volatile bitmap that is usable with this graphic device.
 
@@ -159,7 +152,6 @@ interface XGraphicDevice : ::com::sun::star::uno::XInterface
     XVolatileBitmap                 createVolatileBitmap( [in] ::com::sun::star::geometry::IntegerSize2D size )
         raises (com::sun::star::lang::IllegalArgumentException);
 
-    //-------------------------------------------------------------------------
 
     /** Create a bitmap with alpha channel whose memory layout and
         sample model is compatible to the graphic device.
@@ -171,7 +163,6 @@ interface XGraphicDevice : ::com::sun::star::uno::XInterface
     XBitmap                         createCompatibleAlphaBitmap( [in] ::com::sun::star::geometry::IntegerSize2D size )
         raises (com::sun::star::lang::IllegalArgumentException);
 
-    //-------------------------------------------------------------------------
 
     /** Create a volatile bitmap with alpha channel that is usable
         with this graphic device.
@@ -192,7 +183,6 @@ interface XGraphicDevice : ::com::sun::star::uno::XInterface
     XVolatileBitmap                 createVolatileAlphaBitmap( [in] ::com::sun::star::geometry::IntegerSize2D size )
         raises (com::sun::star::lang::IllegalArgumentException);
 
-    //-------------------------------------------------------------------------
 
     /** Get a reference to this device's parametric polygon factory.
 
@@ -264,14 +254,12 @@ interface XGraphicDevice : ::com::sun::star::uno::XInterface
      */
     com::sun::star::lang::XMultiServiceFactory getParametricPolyPolygonFactory();
 
-    //-------------------------------------------------------------------------
 
     /** Tells whether this graphic device has a full screen mode,
         i.e. whether a window can cover the whole screen exclusively.
      */
     boolean                         hasFullScreenMode();
 
-    //-------------------------------------------------------------------------
 
     /** Enter or leave the fullscreen mode, if possible. The return
         value denotes the success of the operation.

@@ -22,22 +22,18 @@
 #include <com/sun/star/uno/XInterface.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module util {
 
-//=============================================================================
 
 /** represents a range of cells that can be merged.
  */
 published interface XMergeable: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** merges/unmerges the area specified by this object.
      */
     void merge( [in] boolean bMerge );
 
-    //-------------------------------------------------------------------------
     /** @returns
             <TRUE/> if the area specified by this object is merged,
             or <FALSE/> otherwise.
@@ -46,7 +42,6 @@ published interface XMergeable: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

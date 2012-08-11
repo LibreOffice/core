@@ -31,7 +31,6 @@
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/lang/IllegalArgumentException.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module text {
 
@@ -52,7 +51,6 @@
  */
 published interface XRelativeTextContentInsert: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::text::XRelativeTextContentInsert::insertTextContentBefore
     /** inserts text the new text content before of the successor argument.
@@ -63,7 +61,6 @@ published interface XRelativeTextContentInsert: com::sun::star::uno::XInterface
             [in] XTextContent xNewContent,
             [in] XTextContent xSuccessor )
         raises( com::sun::star::lang::IllegalArgumentException );
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::text::XRelativeTextContentInsert::insertTextContentAfter
     /** inserts text the new text content after the predecessor argument.

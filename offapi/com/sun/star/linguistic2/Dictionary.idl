@@ -24,11 +24,9 @@
 #include <com/sun/star/util/XFlushable.idl>
 #include <com/sun/star/frame/XStorable.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module linguistic2 {
 
-//=============================================================================
 /** represents a dictionary used for spell checking and hyphenation.
 
 
@@ -56,7 +54,6 @@ service Dictionary
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

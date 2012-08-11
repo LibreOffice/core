@@ -44,12 +44,10 @@ struct IntegerRectangle2D
     /// X coordinate of upper left corner.
     long X1;
 
-    //-------------------------------------------------------------------------
 
     /// Y coordinate of upper left corner.
     long Y1;
 
-    //-------------------------------------------------------------------------
 
     /** X coordinate of lower right corner.<p>
 
@@ -57,7 +55,6 @@ struct IntegerRectangle2D
     */
     long X2;
 
-    //-------------------------------------------------------------------------
 
     /** Y coordinate of lower right corner.<p>
 

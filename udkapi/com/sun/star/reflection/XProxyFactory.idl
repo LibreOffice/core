@@ -22,11 +22,9 @@
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/uno/XAggregation.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module reflection {
 
-//=============================================================================
 
 /** Factory interface to produce proxy objects.
 
@@ -59,7 +57,6 @@ published interface XProxyFactory: com::sun::star::uno::XInterface
         [in] com::sun::star::uno::XInterface xTarget );
 };
 
-//=============================================================================
 
 }; }; }; };
 

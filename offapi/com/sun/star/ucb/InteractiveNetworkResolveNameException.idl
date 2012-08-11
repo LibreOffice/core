@@ -22,23 +22,19 @@
 #include <com/sun/star/ucb/InteractiveNetworkException.idl>
 
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** A network error specifying a name resolution failure.
 */
 published exception InteractiveNetworkResolveNameException: com::sun::star::ucb::InteractiveNetworkException
 {
-    //-------------------------------------------------------------------------
     /** The server name for which resolution failed.
     */
     string Server;
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -24,14 +24,12 @@
 
 module com { module sun { module star { module util {
 
-//============================================================================
 /** An interface that encapsulates the abstract notion of string width.
 
     @see XStringAbbreviation
  */
 published interface XStringWidth: com::sun::star::uno::XInterface
 {
-    //------------------------------------------------------------------------
     /** compute the width of a given string.
 
         <p>Depending on the implementation of this interface, the width of a

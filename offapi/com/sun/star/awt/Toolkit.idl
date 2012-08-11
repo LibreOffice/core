@@ -25,11 +25,9 @@
 #include <com/sun/star/awt/XMessageBoxFactory.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module awt {
 
-//=============================================================================
 
 /** describes a toolkit that creates windows on a screen.
 
@@ -50,7 +48,6 @@ published service Toolkit
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

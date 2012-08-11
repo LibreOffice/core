@@ -20,18 +20,15 @@
 #define __com_sun_star_chart_ChartAxisLabelPosition_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module chart {
 
-//=============================================================================
 
 /** Specifies the position of the axis labels with respect to the axis on the scale of the crossing axis.
 */
 
 published enum ChartAxisLabelPosition
 {
-    //-------------------------------------------------------------------------
 
     /** The labels are placed adjacent to the axis. When the axis itself is placed at the minimum or maximum of the scale ( that is when the property CrossoverPosition equals ChartAxisPosition_MINIMUM or ChartAxisPosition_MAXIMUM)
         the labels are placed outside the coordinate system. Otherwise the labels are placed adjacent to the axis on that side that belongs to the lower values on the crossing axis.
@@ -39,20 +36,17 @@ published enum ChartAxisLabelPosition
      */
     NEAR_AXIS,
 
-    //-------------------------------------------------------------------------
 
     /** The labels are placed adjacent to the axis on the opposite side as for NEAR_AXIS.
      */
     NEAR_AXIS_OTHER_SIDE,
 
-    //-------------------------------------------------------------------------
 
     /** The labels are placed outside the coordinate region on that side where the crossing axis has its minimum value.
         E.g. when this is set for an y axis the labels are placed outside the diagram on that side where to the x axis has its minimum value.
      */
     OUTSIDE_START,
 
-    //-------------------------------------------------------------------------
 
     /** The labels are placed outside the coordinate region on that side where the crossing axis has its maximum value.
         E.g. when this is set for an y axis the labels are placed outside the diagram on that side where to the x axis has its maximum value.
@@ -60,7 +54,6 @@ published enum ChartAxisLabelPosition
     OUTSIDE_END
 };
 
-//=============================================================================
 
 }; }; }; };
 

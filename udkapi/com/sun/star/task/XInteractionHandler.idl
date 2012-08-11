@@ -24,18 +24,15 @@
 #include <com/sun/star/task/XInteractionRequest.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module task {
 
-//=============================================================================
 
 // DocMerge from xml: interface com::sun::star::task::XInteractionHandler
 /** An interaction request handler.
  */
 published interface XInteractionHandler: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::task::XInteractionHandler::handle
     /** Handle an interaction request.
@@ -44,7 +41,6 @@ published interface XInteractionHandler: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

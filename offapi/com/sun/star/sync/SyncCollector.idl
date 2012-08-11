@@ -22,7 +22,6 @@
 
 #include <com/sun/star/sync/XSyncCollector.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sync {
 
@@ -32,7 +31,6 @@ published service SyncCollector
     interface com::sun::star::sync::XSyncCollector;
 };
 
-//=============================================================================
 
 }; }; }; };
 

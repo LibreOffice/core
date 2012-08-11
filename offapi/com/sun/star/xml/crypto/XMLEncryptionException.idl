@@ -27,17 +27,14 @@
 #include <com/sun/star/security/EncryptionException.idl>
 
 
-//=============================================================================
 
 module com { module sun { module star { module xml { module crypto {
 
-//=============================================================================
 
 exception XMLEncryptionException : com::sun::star::security::EncryptionException
 {
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

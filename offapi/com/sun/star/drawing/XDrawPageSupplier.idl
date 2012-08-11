@@ -24,11 +24,9 @@
 #include <com/sun/star/drawing/XDrawPage.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module drawing {
 
-//=============================================================================
 
 // DocMerge from xml: interface com::sun::star::drawing::XDrawPageSupplier
 /** represents something that provides a <type>DrawPage</type>.
@@ -42,7 +40,6 @@
  */
 published interface XDrawPageSupplier: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::drawing::XDrawPageSupplier::getDrawPage
     /** returns the <type>DrawPage</type>.
@@ -51,7 +48,6 @@ published interface XDrawPageSupplier: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

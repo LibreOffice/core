@@ -28,11 +28,9 @@
 #include <com/sun/star/drawing/XShape.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module drawing {
 
-//=============================================================================
 
 /** Objects implementing this interface can be used to mirror
     <type>Shape</type>s.
@@ -41,7 +39,6 @@
  */
 published interface XShapeMirror: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** mirrors the given <type>Shape</type>s
         at the given axis.
@@ -49,7 +46,6 @@ published interface XShapeMirror: com::sun::star::uno::XInterface
     void mirror( [inout] com::sun::star::drawing::XShapes aShapes,
              [in] com::sun::star::drawing::MirrorAxis eAxis );
 
-    //-------------------------------------------------------------------------
 
     /** mirrors the given <type>Shape</type>s at
         the given axis.
@@ -59,7 +55,6 @@ published interface XShapeMirror: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

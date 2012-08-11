@@ -88,7 +88,6 @@ published interface XOutParameters: com::sun::star::uno::XInterface
     void registerOutParameter([in]long parameterIndex, [in]long sqlType,
                               [in]string typeName)
         raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** registers the OUT parameter in ordinal position
         <code>parameterIndex</code>
@@ -127,7 +126,6 @@ published interface XOutParameters: com::sun::star::uno::XInterface
         raises (SQLException);
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -48,7 +48,6 @@ published interface XRowUpdate: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     void updateNull([in]long columnIndex) raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** updates a column with a boolean value.
         @param columnIndex
@@ -59,7 +58,6 @@ published interface XRowUpdate: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     void updateBoolean([in]long columnIndex, [in]boolean x) raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** updates a column with a byte value.
         @param columnIndex
@@ -70,7 +68,6 @@ published interface XRowUpdate: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     void updateByte([in]long columnIndex, [in]byte x) raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** updates a column with a short value.
         @param columnIndex
@@ -81,7 +78,6 @@ published interface XRowUpdate: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     void updateShort([in]long columnIndex, [in]short x) raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** updates a column with an long value.
         @param columnIndex
@@ -92,7 +88,6 @@ published interface XRowUpdate: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     void updateInt([in]long columnIndex, [in]long x) raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** updates a column with a hyper value.
         @param columnIndex
@@ -103,7 +98,6 @@ published interface XRowUpdate: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     void updateLong([in]long columnIndex, [in]hyper x) raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** updates a column with a float value.
         @param columnIndex
@@ -114,7 +108,6 @@ published interface XRowUpdate: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     void updateFloat([in]long columnIndex, [in]float x) raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** updates a column with a double value.
         @param columnIndex
@@ -125,7 +118,6 @@ published interface XRowUpdate: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     void updateDouble([in]long columnIndex, [in]double x) raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** updates a column with a string value.
         @param columnIndex
@@ -136,7 +128,6 @@ published interface XRowUpdate: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     void updateString([in]long columnIndex, [in]string x) raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** updates a column with a byte array value.
         @param columnIndex
@@ -147,7 +138,6 @@ published interface XRowUpdate: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     void updateBytes([in]long columnIndex, [in]sequence<byte> x) raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** updates a column with a date value.
         @param columnIndex
@@ -159,7 +149,6 @@ published interface XRowUpdate: com::sun::star::uno::XInterface
      */
     void updateDate([in]long columnIndex, [in]com::sun::star::util::Date x)
         raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** updates a column with a time value.
         @param columnIndex
@@ -171,7 +160,6 @@ published interface XRowUpdate: com::sun::star::uno::XInterface
      */
     void updateTime([in]long columnIndex, [in]com::sun::star::util::Time x)
         raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** updates a column with a timestamp value.
         @param columnIndex
@@ -184,7 +172,6 @@ published interface XRowUpdate: com::sun::star::uno::XInterface
     void updateTimestamp([in]long columnIndex,
                          [in]com::sun::star::util::DateTime x)
       raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** updates a column with a stream value.
         @param columnIndex
@@ -199,7 +186,6 @@ published interface XRowUpdate: com::sun::star::uno::XInterface
     void updateBinaryStream([in]long columnIndex,
                              [in]com::sun::star::io::XInputStream x,
                               [in]long length) raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** updates a column with a stream value.
         @param columnIndex
@@ -214,7 +200,6 @@ published interface XRowUpdate: com::sun::star::uno::XInterface
     void updateCharacterStream([in]long columnIndex,
                                 [in]com::sun::star::io::XInputStream x,
                                  [in]long length) raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** updates a column with an object value.
         @param columnIndex
@@ -226,7 +211,6 @@ published interface XRowUpdate: com::sun::star::uno::XInterface
      */
     void updateObject([in]long columnIndex, [in]any x)
       raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** updates a column with an object value.
         @param columnIndex
@@ -242,7 +226,6 @@ published interface XRowUpdate: com::sun::star::uno::XInterface
       raises (SQLException);
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -33,7 +33,6 @@
 
 module com { module sun { module star { module util {
 
-//============================================================================
 /** encapsulates access to the current office installation directory and
     office user data directory, provides functionality to create URLs
     containing relocatable (not absolute) references to the current office
@@ -48,7 +47,6 @@ module com { module sun { module star { module util {
  */
 published interface XOfficeInstallationDirectories : com::sun::star::uno::XInterface
 {
-    //------------------------------------------------------------------------
     /** returns the absolute URL containing the directory of the current office
         installation (e.g. "file:///opt/OpenOffice.org".)
 
@@ -58,7 +56,6 @@ published interface XOfficeInstallationDirectories : com::sun::star::uno::XInter
      */
     string getOfficeInstallationDirectoryURL();
 
-    //------------------------------------------------------------------------
     /** returns the absolute URL containing the directory where the current
         office installation expects its user data (e.g.
         "file:///home/kso/.openoffice.org".)
@@ -69,7 +66,6 @@ published interface XOfficeInstallationDirectories : com::sun::star::uno::XInter
      */
     string getOfficeUserDataDirectoryURL();
 
-    //------------------------------------------------------------------------
     /** calculates a relocatable URL from the given URL.
 
         <p>If the given URL contains an absolute reference to the current office
@@ -88,7 +84,6 @@ published interface XOfficeInstallationDirectories : com::sun::star::uno::XInter
      */
     string makeRelocatableURL( [in] string URL );
 
-    //------------------------------------------------------------------------
     /** the counterpart of <code>makeRelocatableURL</code>.
 
         <p>If the given URL contains a placeholder for an absolute reference to

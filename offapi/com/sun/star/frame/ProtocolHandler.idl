@@ -31,11 +31,9 @@
 #include <com/sun/star/frame/XDispatchProvider.idl>
 #include <com/sun/star/lang/XInitialization.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module frame {
 
-//=============================================================================
 /** special dispatch provider registered for URL protocols
 
     <p>
@@ -53,7 +51,6 @@
  */
 published service ProtocolHandler
 {
-        //-------------------------------------------------------------------------
         /** used from the generic dispatch mechanism of the frame, to ask ProtocolHandler
             for his agreement for the dispatched URL
 
@@ -64,7 +61,6 @@ published service ProtocolHandler
         */
         interface XDispatchProvider;
 
-        //-------------------------------------------------------------------------
         /** initialize the new handler instance with some context informations
 
         <p>
@@ -86,7 +82,6 @@ published service ProtocolHandler
         [optional] interface ::com::sun::star::lang::XInitialization;
 };
 
-//=============================================================================
 
 }; }; }; };
 

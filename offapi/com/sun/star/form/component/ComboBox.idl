@@ -26,11 +26,9 @@
 #include <com/sun/star/form/XReset.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module form {  module component {
 
-//=============================================================================
 
 /** specifies a component which allows the input of text or selection
     of text from a list of text values.
@@ -57,7 +55,6 @@ published service ComboBox
     [property] string DefaultText;
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

@@ -35,11 +35,9 @@
 
 #include <com/sun/star/awt/XItemList.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module awt {
 
-//=============================================================================
 
 /** specifies the standard model of an <type>UnoControlComboBox</type>.
  */
@@ -47,7 +45,6 @@ published service UnoControlComboBoxModel
 {
     service com::sun::star::awt::UnoControlModel;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the horizontal alignment of the text in the control.
 
@@ -59,19 +56,16 @@ published service UnoControlComboBoxModel
      */
     [optional, property] short Align;
 
-    //-------------------------------------------------------------------------
 
     /** specifies whether automatic completion of text is enabled.
      */
     [property] boolean Autocomplete;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the background color (RGB) of the control.
      */
     [property] com::sun::star::util::Color BackgroundColor;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the border style of the control.
 
@@ -83,7 +77,6 @@ published service UnoControlComboBoxModel
      */
     [property] short Border;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the color of the border, if present
 
@@ -94,51 +87,43 @@ published service UnoControlComboBoxModel
      */
     [optional, property] long BorderColor;
 
-    //-------------------------------------------------------------------------
 
     /** specifies if the control has a drop down button.
      */
     [property] boolean Dropdown;
 
-    //-------------------------------------------------------------------------
 
     /** determines whether the control is enabled or disabled.
      */
     [property] boolean Enabled;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the font attributes of the text in the control.
      */
     [property] com::sun::star::awt::FontDescriptor FontDescriptor;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the <type scope="com::sun::star::text">FontEmphasis</type>
         value of the text in the control.
      */
     [property] short FontEmphasisMark;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the <type scope="com::sun::star::text">FontRelief</type>
         value of the text in the control.
      */
     [property] short FontRelief;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the help text of the control.
      */
     [property] string HelpText;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the help URL of the control.
      */
     [property] string HelpURL;
 
-    //-------------------------------------------------------------------------
 
     /** specifies whether the selection in the control should be hidden when
         the control is not active (focused).
@@ -147,13 +132,11 @@ published service UnoControlComboBoxModel
      */
     [optional, property] boolean HideInactiveSelection;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the maximum line count displayed in the drop down box.
      */
     [property] short LineCount;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the maximum character count.
 
@@ -161,43 +144,36 @@ published service UnoControlComboBoxModel
      */
     [property] short MaxTextLen;
 
-    //-------------------------------------------------------------------------
 
     /** specifies that the control will be printed with the document.
      */
     [property] boolean Printable;
 
-    //-------------------------------------------------------------------------
 
     /** specifies that the content of the control cannot be modified by the user.
      */
     [property] boolean ReadOnly;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the list of items.
      */
     [property] sequence<string> StringItemList;
 
-    //-------------------------------------------------------------------------
 
     /** specifies that the control can be reached with the TAB key.
      */
     [property] boolean Tabstop;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the text displayed in the control.
      */
     [property] string Text;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the text color (RGB) of the control.
      */
     [property] com::sun::star::util::Color TextColor;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the text line color (RGB) of the control.
      */
@@ -227,7 +203,6 @@ published service UnoControlComboBoxModel
     [optional] interface XItemList;
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -37,11 +37,9 @@
 #include <com/sun/star/container/ElementExistException.idl>
 
 
-//=============================================================================
 
 module com { module sun { module star { module linguistic2 {
 
-//=============================================================================
 /** is used to manage and maintain a list of conversion dictionaries.
 
     <p>The dictionaries added to the list may or may not support the
@@ -53,7 +51,6 @@ module com { module sun { module star { module linguistic2 {
 */
 published interface XConversionDictionaryList : com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /**
         @returns
             the name container interface to the dictionaries in the list.
@@ -75,7 +72,6 @@ published interface XConversionDictionaryList : com::sun::star::uno::XInterface
     */
     com::sun::star::container::XNameContainer   getDictionaryContainer();
 
-    //-------------------------------------------------------------------------
     /** creates a new dictionary and adds it to the dictionary list.
 
         <p>The dictionary will be empty and active.</p>
@@ -107,7 +103,6 @@ published interface XConversionDictionaryList : com::sun::star::uno::XInterface
         raises( com::sun::star::lang::NoSupportException,
                 com::sun::star::container::ElementExistException );
 
-    //-------------------------------------------------------------------------
     /** searches for entries that match the given text.
 
         <p>All active dictionaries with matching locales and conversion
@@ -167,7 +162,6 @@ published interface XConversionDictionaryList : com::sun::star::uno::XInterface
         raises( com::sun::star::lang::IllegalArgumentException,
                 com::sun::star::lang::NoSupportException );
 
-    //-------------------------------------------------------------------------
     /** returns the maximum number of characters used as left or right text
         in entries.
 
@@ -195,7 +189,6 @@ published interface XConversionDictionaryList : com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

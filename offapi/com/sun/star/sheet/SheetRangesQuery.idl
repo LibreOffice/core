@@ -23,23 +23,19 @@
 #include <com/sun/star/sheet/XCellRangesQuery.idl>
 #include <com/sun/star/sheet/XFormulaQuery.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** provides interfaces to find cells with specific properties.
  */
 published service SheetRangesQuery
 {
-    //-------------------------------------------------------------------------
 
     /** provides methods to query for cell ranges with specific contents.
      */
     interface com::sun::star::sheet::XCellRangesQuery;
 
-    //-------------------------------------------------------------------------
 
     /** provides methods to find dependent cells of formula cells.
      */
@@ -47,7 +43,6 @@ published service SheetRangesQuery
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

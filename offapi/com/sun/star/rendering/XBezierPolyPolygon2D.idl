@@ -84,7 +84,6 @@ interface XBezierPolyPolygon2D : XPolyPolygon2D
     sequence< sequence < ::com::sun::star::geometry::RealBezierSegment2D > > getBezierSegments( [in] long nPolygonIndex, [in] long nNumberOfPolygons, [in] long nPointIndex, [in] long nNumberOfPoints )
         raises (com::sun::star::lang::IndexOutOfBoundsException);
 
-    //-------------------------------------------------------------------------
 
     /** Set the specified sequence of Bezier segments to the poly-polygon.
 
@@ -110,7 +109,6 @@ interface XBezierPolyPolygon2D : XPolyPolygon2D
     void setBezierSegments( [in] sequence< sequence< ::com::sun::star::geometry::RealBezierSegment2D > > points, [in] long nPolygonIndex )
         raises (com::sun::star::lang::IndexOutOfBoundsException);
 
-    //-------------------------------------------------------------------------
 
     /** Get a single point from the poly-polygon.
 
@@ -133,7 +131,6 @@ interface XBezierPolyPolygon2D : XPolyPolygon2D
     ::com::sun::star::geometry::RealBezierSegment2D getBezierSegment( [in] long nPolygonIndex, [in] long nPointIndex )
         raises (com::sun::star::lang::IndexOutOfBoundsException);
 
-    //-------------------------------------------------------------------------
 
     /** Set a single point on the poly-polygon.<p>
 

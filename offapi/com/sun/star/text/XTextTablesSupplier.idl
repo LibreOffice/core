@@ -24,17 +24,14 @@
 #include <com/sun/star/container/XNameAccess.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module text {
 
-//=============================================================================
 
 /** enables the object to handle text tables.
  */
 published interface XTextTablesSupplier: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** @returns
                 the collection of "TextTables" currently contained in the object.
 
@@ -45,7 +42,6 @@ published interface XTextTablesSupplier: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

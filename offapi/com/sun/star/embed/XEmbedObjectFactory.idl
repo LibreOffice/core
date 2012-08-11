@@ -26,11 +26,9 @@
 #include <com/sun/star/lang/IllegalArgumentException.idl>
 #include <com/sun/star/beans/PropertyValue.idl>
 
-//============================================================================
 
  module com {  module sun {  module star {  module embed {
 
-//============================================================================
 /** allows to create and initialize a new embedded object of specified type.
     <p>
     This interface provides user with full control over object creation.
@@ -38,7 +36,6 @@
  */
 published interface XEmbedObjectFactory: com::sun::star::uno::XInterface
 {
-    //------------------------------------------------------------------------
     /** creates a new object and transport parameters for persistent
         initialization.
 
@@ -101,7 +98,6 @@ published interface XEmbedObjectFactory: com::sun::star::uno::XInterface
                 ::com::sun::star::uno::Exception );
 };
 
-//============================================================================
 
 }; }; }; };
 

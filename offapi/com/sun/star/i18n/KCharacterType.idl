@@ -19,11 +19,9 @@
 #ifndef __com_sun_star_i18n_KCharacterType_idl__
 #define __com_sun_star_i18n_KCharacterType_idl__
 
-//============================================================================
 
 module com {  module sun {  module star {  module i18n {
 
-//============================================================================
 
 /**
     Constants to identify the character type.
@@ -64,7 +62,6 @@ published constants KCharacterType
     const long LETTER     = 0x00000080;
 };
 
-//============================================================================
 }; }; }; };
 
 #endif

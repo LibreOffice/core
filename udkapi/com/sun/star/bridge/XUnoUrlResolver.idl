@@ -24,11 +24,9 @@
 #include <com/sun/star/connection/ConnectionSetupException.idl>
 #include <com/sun/star/connection/NoConnectException.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module bridge {
 
-//=============================================================================
 
 /** allows to resolve an object using the uno-url.
  */
@@ -48,7 +46,6 @@ published interface XUnoUrlResolver: com::sun::star::uno::XInterface
                 com::sun::star::lang::IllegalArgumentException);
 };
 
-//=============================================================================
 
 }; }; }; };
 

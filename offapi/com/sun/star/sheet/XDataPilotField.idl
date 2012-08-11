@@ -23,11 +23,9 @@
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/container/XIndexAccess.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** provides methods to control a data pilot field which has already
     been created.
@@ -36,7 +34,6 @@ module com {  module sun {  module star {  module sheet {
  */
 published interface XDataPilotField: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** returns the collection of the data pilot items.
 
@@ -46,7 +43,6 @@ published interface XDataPilotField: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

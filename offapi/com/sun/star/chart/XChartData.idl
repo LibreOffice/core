@@ -24,11 +24,9 @@
 #include <com/sun/star/chart/XChartDataChangeEventListener.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module chart {
 
-//=============================================================================
 
 /** manages the data of the chart.
 
@@ -36,7 +34,6 @@
  */
 published interface XChartData: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** allows a component supporting the
         <type>XChartDataChangeEventListener</type> interface to
@@ -52,7 +49,6 @@ published interface XChartData: com::sun::star::uno::XInterface
      */
     void addChartDataChangeEventListener( [in] com::sun::star::chart::XChartDataChangeEventListener aListener );
 
-    //-------------------------------------------------------------------------
 
     /** removes a previously registered listener.
 
@@ -61,7 +57,6 @@ published interface XChartData: com::sun::star::uno::XInterface
      */
     void removeChartDataChangeEventListener( [in] com::sun::star::chart::XChartDataChangeEventListener aListener );
 
-    //-------------------------------------------------------------------------
 
     /** @returns
             the value which is to be used as an indicator for a
@@ -72,7 +67,6 @@ published interface XChartData: com::sun::star::uno::XInterface
      */
     double getNotANumber();
 
-    //-------------------------------------------------------------------------
 
     /** checks whether the value given is equal to the indicator value
         for a missing value.
@@ -97,7 +91,6 @@ published interface XChartData: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

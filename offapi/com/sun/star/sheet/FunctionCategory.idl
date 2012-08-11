@@ -20,79 +20,66 @@
 #ifndef __com_sun_star_sheet_FunctionCategory_idl__
 #define __com_sun_star_sheet_FunctionCategory_idl__
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** used to specify the category of a spreadsheet function.
  */
 published constants FunctionCategory
 {
-    //-------------------------------------------------------------------------
 
     /** specifies a database function.
      */
     const long DATABASE = 1;
 
-    //-------------------------------------------------------------------------
 
     /** specifies a function that calculates with dates and/or times.
      */
     const long DATETIME = 2;
 
-    //-------------------------------------------------------------------------
 
     /** specifies a financial function.
      */
     const long FINANCIAL = 3;
 
-    //-------------------------------------------------------------------------
 
     /** specifies a function that returns information about the cell,
         the cell contents or the current formula.
      */
     const long INFORMATION = 4;
 
-    //-------------------------------------------------------------------------
 
     /** specifies a boolean function.
      */
     const long LOGICAL = 5;
 
-    //-------------------------------------------------------------------------
 
     /** specifies a common mathematical function
      */
     const long MATHEMATICAL = 6;
 
-    //-------------------------------------------------------------------------
 
     /** specifies a matrix function.
      */
     const long MATRIX = 7;
 
-    //-------------------------------------------------------------------------
 
     /** specifies a statistical function
      */
     const long STATISTICAL = 8;
 
-    //-------------------------------------------------------------------------
 
     /** specifies a function that returns information using the spreadsheet
         contents or specific cell positions.
      */
     const long SPREADSHEET = 9;
 
-    //-------------------------------------------------------------------------
 
     /** specifies a text function.
      */
     const long TEXT = 10;
 
-    //-------------------------------------------------------------------------
 
     /** specifies a common add-in function.
      */
@@ -100,7 +87,6 @@ published constants FunctionCategory
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

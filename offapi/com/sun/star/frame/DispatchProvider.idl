@@ -31,11 +31,9 @@
 #include <com/sun/star/frame/XDispatchProvider.idl>
 #include <com/sun/star/frame/XDispatchProviderInterception.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module frame {
 
-//=============================================================================
 /** provides <type>XDispatch</type> objects for certain functions which
     are useful at the UI
 
@@ -52,7 +50,6 @@ module com {  module sun {  module star {  module frame {
  */
 published service DispatchProvider
 {
-    //-------------------------------------------------------------------------
     /** provides handling of dispatches with defined result state
 
         <p>
@@ -64,7 +61,6 @@ published service DispatchProvider
      */
     interface XDispatchProvider;
 
-    //-------------------------------------------------------------------------
     /** provides dispatch interception
 
         <p>
@@ -75,7 +71,6 @@ published service DispatchProvider
     [optional] interface XDispatchProviderInterception;
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -41,7 +41,6 @@ module com { module sun { module star { module ui {
 
 interface XUIConfigurationManagerSupplier : ::com::sun::star::uno::XInterface
 {
-    //----------------------------------------------------------------------
     /** returns the user interface configuration manager related to the
         object.
 
@@ -53,7 +52,6 @@ interface XUIConfigurationManagerSupplier : ::com::sun::star::uno::XInterface
     XUIConfigurationManager getUIConfigurationManager();
 };
 
-//=============================================================================
 
 }; }; }; };
 

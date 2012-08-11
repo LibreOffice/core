@@ -37,11 +37,9 @@
 
 
 
-//============================================================================
 
  module com {  module sun {  module star {  module embed {
 
-//============================================================================
 /**  This is a service that represents a stream that can be provided by
     <type>XStorage</type>::openStreamElement() call implemented by
     <type>Storage</type> service.
@@ -53,7 +51,6 @@
  */
 published service StorageStream
 {
-    // -----------------------------------------------------------------------
     /** allows to get access to <type scope="com::sun::star::io">XInputStream</type>
         and <type scope="com::sun::star::io">XOutputStream</type>
         implementations.
@@ -66,7 +63,6 @@ published service StorageStream
     */
     interface ::com::sun::star::io::XStream;
 
-    // -----------------------------------------------------------------------
     /** allows to control object lifetime.
 
         <p>
@@ -113,12 +109,10 @@ published service StorageStream
      */
     interface ::com::sun::star::lang::XComponent;
 
-    // -----------------------------------------------------------------------
     /** allows to get access to stream properties.
      */
     interface ::com::sun::star::beans::XPropertySet;
 
-    // -----------------------------------------------------------------------
     /** allows to seek to a specified position within the stream.
 
         <p>
@@ -129,7 +123,6 @@ published service StorageStream
     [optional]
     interface ::com::sun::star::io::XSeekable;
 
-    // -----------------------------------------------------------------------
     /** allows to set password to the stream.
 
         <p>
@@ -147,17 +140,14 @@ published service StorageStream
     [optional]
     interface ::com::sun::star::embed::XEncryptionProtectedSource;
 
-    // -----------------------------------------------------------------------
     /** allows to get and set media type of the stream.
      */
     [property] string MediaType;
 
-    // -----------------------------------------------------------------------
     /** specifies if the stream should be compressed next time it is stored.
      */
     [property] boolean IsCompressed;
 
-    // -----------------------------------------------------------------------
     /** allows to detect if the stream is encrypted.
 
         <p>
@@ -175,7 +165,6 @@ published service StorageStream
      */
     [property, readonly] boolean IsEncrypted;
 
-    // -----------------------------------------------------------------------
     /** specifies whether the stream will become encrypted next time the
         common storage password holder is commited.
 
@@ -212,13 +201,11 @@ published service StorageStream
      */
     [property] boolean UseCommonStoragePasswordEncryption;
 
-    // -----------------------------------------------------------------------
     /** allows to detect size of the stream in bytes.
      */
     [property, readonly] long Size;
 };
 
-//============================================================================
 
 }; }; }; };
 

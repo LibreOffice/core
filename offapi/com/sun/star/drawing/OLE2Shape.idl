@@ -32,18 +32,15 @@
 #include <com/sun/star/drawing/Shape.idl>
 #include <com/sun/star/frame/XModel.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module drawing {
 
-//=============================================================================
 /** This service is for an OLE shape.
 */
 published service OLE2Shape
 {
     service com::sun::star::drawing::Shape;
 
-    //-------------------------------------------------------------------------
 
     /** If you get this property you get the CLSID of the OLE2 document stream
         contained in this OLE2 shape. If you set it, an empty OLE2 document stream
@@ -51,13 +48,11 @@ published service OLE2Shape
     */
     [property] string CLSID;
 
-    //-------------------------------------------------------------------------
 
     /** this is the internal storage name that keeps this OLE2 persist.
     */
     [property] string PersistName;
 
-    //-------------------------------------------------------------------------
 
     /** This is the model for the OLE2 inside this shape.
         <p>This property returns an empty reference if the OLE2 is not an
@@ -66,7 +61,6 @@ published service OLE2Shape
     */
     [readonly, property] com::sun::star::frame::XModel Model;
 
-    //-------------------------------------------------------------------------
 
     /** This property returns <TRUE/> for all OLE2 that are internal
         Office components.
@@ -74,7 +68,6 @@ published service OLE2Shape
     [readonly, property] boolean IsInternal;
 };
 
-//=============================================================================
 
 }; }; }; };
 

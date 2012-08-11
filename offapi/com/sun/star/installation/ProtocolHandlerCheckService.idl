@@ -22,11 +22,9 @@
 #include <com/sun/star/installation/XProtocolHandlerCheck.idl>
 
 
-//=============================================================================
 
 module com { module sun { module star { module installation {
 
-//=============================================================================
 /** @deprecated
  */
 published service ProtocolHandlerCheckService
@@ -35,7 +33,6 @@ published service ProtocolHandlerCheckService
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

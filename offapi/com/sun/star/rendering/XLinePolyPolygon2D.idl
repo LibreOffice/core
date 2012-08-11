@@ -69,7 +69,6 @@ interface XLinePolyPolygon2D : XPolyPolygon2D
     sequence< sequence< ::com::sun::star::geometry::RealPoint2D > > getPoints( [in] long nPolygonIndex, [in] long nNumberOfPolygons, [in] long nPointIndex, [in] long nNumberOfPoints )
         raises (com::sun::star::lang::IndexOutOfBoundsException);
 
-    //-------------------------------------------------------------------------
 
     /** Set the specified sequence of points to the poly-polygon.
 
@@ -95,14 +94,12 @@ interface XLinePolyPolygon2D : XPolyPolygon2D
     void setPoints( [in] sequence< sequence< ::com::sun::star::geometry::RealPoint2D > > points, [in] long nPolygonIndex )
         raises (com::sun::star::lang::IndexOutOfBoundsException);
 
-    //-------------------------------------------------------------------------
 
     /** Get a single point from the poly-polygon
      */
     ::com::sun::star::geometry::RealPoint2D getPoint( [in] long nPolygonIndex, [in] long nPointIndex )
         raises (com::sun::star::lang::IndexOutOfBoundsException);
 
-    //-------------------------------------------------------------------------
 
     /** Set a single point on the poly-polygon. The remaining points of
         the poly-polygon will not be changed by this method.

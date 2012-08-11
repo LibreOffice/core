@@ -23,13 +23,11 @@
 #include <com/sun/star/lang/IllegalArgumentException.idl>
 #include <com/sun/star/uno/XInterface.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module datatransfer { module clipboard {
 
  published interface XClipboard;
 
-//=============================================================================
 /** Should be implemented by a clipboard factory that simplifies the creation of
     multiple clipboard instances.
 
@@ -38,7 +36,6 @@ module com { module sun { module star { module datatransfer { module clipboard {
 
 published interface XClipboardFactory: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** Creates a new named clipboard instance.
 
         @returns
@@ -55,7 +52,6 @@ published interface XClipboardFactory: com::sun::star::uno::XInterface
         raises ( com::sun::star::lang::IllegalArgumentException );
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

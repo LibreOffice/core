@@ -33,17 +33,14 @@
 #include <com/sun/star/lang/XComponent.idl>
 #include <com/sun/star/util/XModifyBroadcaster.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module form { module binding {
 
-//=============================================================================
 
 /** defines a component which provides a list of string entries
 */
 service ListEntrySource
 {
-    //-------------------------------------------------------------------------
     /** allows read access to the entries represented by this component
     */
     interface XListEntrySource;
@@ -62,7 +59,6 @@ service ListEntrySource
     interface com::sun::star::lang::XComponent;
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

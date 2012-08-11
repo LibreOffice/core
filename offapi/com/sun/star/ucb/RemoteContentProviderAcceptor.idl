@@ -34,19 +34,16 @@ module com { module sun { module star { module ucb {
  published interface XRemoteContentProviderAcceptor;
  published interface XRemoteContentProviderActivator;
 
-//============================================================================
 /** allows content providers running in remote processes to be registered at
     the local content provider broker.
  */
 published service RemoteContentProviderAcceptor
 {
-    //------------------------------------------------------------------------
     /** This interface provides the base functionality to register and
         deregister content providers running in remote processes.
      */
     interface XRemoteContentProviderAcceptor;
 
-    //------------------------------------------------------------------------
     /** This optional interface can be used to adopt a lazy implement strategy
         for this service, which can improve performance in certain situations.
 

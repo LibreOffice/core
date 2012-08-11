@@ -24,11 +24,9 @@
 #include <com/sun/star/form/XApproveActionListener.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module form {
 
-//=============================================================================
 
 /** allows to probably veto actions to be performed on components.
 
@@ -38,7 +36,6 @@
  */
 published interface XApproveActionBroadcaster: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** adds the specified listener to receive the <member>XApproveActionListener::approveAction</member>
         event.
@@ -48,7 +45,6 @@ published interface XApproveActionBroadcaster: com::sun::star::uno::XInterface
      */
     [oneway] void addApproveActionListener( [in] com::sun::star::form::XApproveActionListener aListener );
 
-    //-------------------------------------------------------------------------
 
     /** removes the specified listener
 
@@ -59,7 +55,6 @@ published interface XApproveActionBroadcaster: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

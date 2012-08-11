@@ -23,13 +23,11 @@
 #include <com/sun/star/uno/XInterface.idl>
 
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
  published interface XRemoteContentProviderDoneListener;
 
-//=============================================================================
 /** Accept remote content providers that want to make themselves known to the
     local process.
 
@@ -38,7 +36,6 @@ module com { module sun { module star { module ucb {
 */
 published interface XRemoteContentProviderAcceptor: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** Add a remote content provider.
 
         @param Identifier  An arbitrary identifier uniquely identifying the
@@ -72,7 +69,6 @@ published interface XRemoteContentProviderAcceptor: com::sun::star::uno::XInterf
                              [in] XRemoteContentProviderDoneListener
                                       DoneListener);
 
-    //-------------------------------------------------------------------------
     /** Remove a remote content provider.
 
         @param Identifier  An arbitrary identifier uniquely identifying the
@@ -85,7 +81,6 @@ published interface XRemoteContentProviderAcceptor: com::sun::star::uno::XInterf
     removeRemoteContentProvider([in] string Identifier);
 };
 
-//=============================================================================
 
 }; }; }; };
 

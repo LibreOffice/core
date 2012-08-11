@@ -22,18 +22,15 @@
 #include <com/sun/star/drawing/XShapeDescriptor.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module drawing {
 
-//=============================================================================
 
 // DocMerge from xml: interface com::sun::star::drawing::XUniversalShapeDescriptor
 /** @deprecated
  */
 published interface XUniversalShapeDescriptor: com::sun::star::drawing::XShapeDescriptor
 {
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR XUniversalShapeDescriptor::setShapeType
 
     // DocMerge: empty anyway
@@ -41,7 +38,6 @@ published interface XUniversalShapeDescriptor: com::sun::star::drawing::XShapeDe
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -21,11 +21,9 @@
 
 #include <com/sun/star/text/FootnoteSettings.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module text {
 
-//=============================================================================
 
 /** provides access to the settings of footnotes or endnotes in a
     (text) document.
@@ -35,7 +33,6 @@ published service EndnoteSettings
         service FootnoteSettings;
 };
 
-//=============================================================================
 
 }; }; }; };
 

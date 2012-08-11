@@ -22,11 +22,9 @@
 #include <com/sun/star/container/XIndexAccess.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module text {
 
-//=============================================================================
 
 // DocMerge from xml: service com::sun::star::text::TextRanges
 /** provides a container for <type>XTextRange</type> objects.
@@ -38,7 +36,6 @@ published service TextRanges
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -21,11 +21,9 @@
 
 #include <com/sun/star/ucb/HierarchyDataSource.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** is a concrete implementation of service <type>HierarchyDataSource</type>,
     which uses the service
     <type scope="com::sun::star::configuration">ConfigurationProvider</type>
@@ -33,7 +31,6 @@ module com { module sun { module star { module ucb {
 */
 published service DefaultHierarchyDataSource
 {
-    //-------------------------------------------------------------------------
     /** is a concrete implementation of service <type>HierarchyDataSource</type>,
         which uses the service
         <type scope="com::sun::star::configuration">ConfigurationProvider</type>
@@ -47,7 +44,6 @@ published service DefaultHierarchyDataSource
     service HierarchyDataSource;
 };
 
-//=============================================================================
 
 }; }; }; };
 

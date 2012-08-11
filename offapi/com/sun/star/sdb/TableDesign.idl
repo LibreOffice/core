@@ -26,7 +26,6 @@
 
 module com {  module sun {  module star {  module sdb {
 
-//=============================================================================
 /** implements a component which allows the creation of tables.
 
     <p>This service implements a user interface for creating tables through a graphical design interface.</p>
@@ -74,7 +73,6 @@ published service TableDesign
     interface com::sun::star::lang::XInitialization;
 };
 
-//=============================================================================
 }; }; }; };
 
 #endif

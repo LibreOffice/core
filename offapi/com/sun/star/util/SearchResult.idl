@@ -30,14 +30,11 @@
 #define __com_sun_star_lang_SearchResult_idl__
 
 
-//=============================================================================
 
 module com { module sun { module star { module util {
 
-//=============================================================================
 
 published  struct SearchResult  {
-    //-------------------------------------------------------------------------
     /** Number of subexpressions,
     if it is 0, then no match found; this value is 1 for ABSOLUTE and APPROXIMATE match.
     The start and endOffset are always dependent on the search direction.
@@ -58,7 +55,6 @@ published  struct SearchResult  {
     sequence<long> endOffset;          // exclusive
 };
 
-//=============================================================================
 }; }; }; };
 
 #endif

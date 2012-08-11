@@ -22,11 +22,9 @@
 
 #include <com/sun/star/sheet/XSheetCellRange.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** provides advanced methods to control the position of a cursor in a
     spreadsheet.
@@ -35,7 +33,6 @@ module com {  module sun {  module star {  module sheet {
  */
 published interface XSheetCellCursor: com::sun::star::sheet::XSheetCellRange
 {
-    //-------------------------------------------------------------------------
 
     /** expands the cursor into the region containing the cells to which
         it currently points.
@@ -44,7 +41,6 @@ published interface XSheetCellCursor: com::sun::star::sheet::XSheetCellRange
      */
     void collapseToCurrentRegion();
 
-    //-------------------------------------------------------------------------
 
     /** collapses the cursor into the range of the array formula to which
         it is currently pointing.
@@ -55,7 +51,6 @@ published interface XSheetCellCursor: com::sun::star::sheet::XSheetCellRange
      */
     void collapseToCurrentArray();
 
-    //-------------------------------------------------------------------------
 
     /** expands the cursor to merged cell ranges.
 
@@ -66,21 +61,18 @@ published interface XSheetCellCursor: com::sun::star::sheet::XSheetCellRange
      */
     void collapseToMergedArea();
 
-    //-------------------------------------------------------------------------
 
     /** expands the cursor to include the entire columns of the cells
         to which it is currently pointing.
      */
     void expandToEntireColumns();
 
-    //-------------------------------------------------------------------------
 
     /** expands the cursor to include the entire rows of the cells to
         which it is currently pointing.
      */
     void expandToEntireRows();
 
-    //-------------------------------------------------------------------------
 
     /** changes the size of a cursor range.
 
@@ -95,7 +87,6 @@ published interface XSheetCellCursor: com::sun::star::sheet::XSheetCellRange
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

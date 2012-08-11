@@ -21,23 +21,19 @@
 
 #include <com/sun/star/sheet/DataPilotFieldSortMode.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 /** describes how to sort a single DataPilotField
  */
 published struct DataPilotFieldSortInfo
 {
-    //-------------------------------------------------------------------------
 
     /** contains the data field to sort by if the Mode is DATA
      */
 
     string Field;
 
-    //-------------------------------------------------------------------------
 
     /** <TRUE/> if data are sorted in ascending order,
         <FALSE/> if in descending order.
@@ -45,7 +41,6 @@ published struct DataPilotFieldSortInfo
 
     boolean IsAscending;
 
-    //-------------------------------------------------------------------------
 
     /** contains the sort mode
 
@@ -57,7 +52,6 @@ published struct DataPilotFieldSortInfo
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

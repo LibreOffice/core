@@ -32,11 +32,9 @@
 #include <com/sun/star/util/XSortable.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module util {
 
-//=============================================================================
 
 /** provides an interface for sorting.
 
@@ -56,7 +54,6 @@ published service Sortable
         interface com::sun::star::util::XSortable;
 };
 
-//=============================================================================
 
 }; }; }; };
 

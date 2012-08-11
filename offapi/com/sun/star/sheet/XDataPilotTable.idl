@@ -23,11 +23,9 @@
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/table/CellRangeAddress.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** provides methods to control a data pilot table which has already
     been created.
@@ -36,14 +34,12 @@ module com {  module sun {  module star {  module sheet {
  */
 published interface XDataPilotTable: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** returns the address of the cell range that contains the data
         pilot table.
      */
     com::sun::star::table::CellRangeAddress getOutputRange();
 
-    //-------------------------------------------------------------------------
 
     /** recreates the data pilot table with current data from the source
         cell range.
@@ -52,7 +48,6 @@ published interface XDataPilotTable: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

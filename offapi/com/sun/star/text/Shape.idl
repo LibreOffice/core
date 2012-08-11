@@ -26,48 +26,40 @@
 #include <com/sun/star/text/TextContentAnchorType.idl>
 #include <com/sun/star/text/WrapTextMode.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module text {
 
-//=============================================================================
 
 /** specifies the service of shapes in a text document
  */
 published service Shape
 {
     service com::sun::star::drawing::Shape;
-    //-------------------------------------------------------------------------
     /** contains the number of the page where the objects are anchored.
         <p> The value is valid only if the
         AnchorType is
         <const>TextContentAnchorType::AT_PAGE</const>.</p>
      */
     [property] short AnchorPageNo;
-    //-------------------------------------------------------------------------
     /** contains the text frame the current frame is anchored to.
         <p> The value is valid only if the
         AnchorType is <const>TextContentAnchorType::AT_FRAME</const>.</p>
      */
     [property] com::sun::star::text::XTextFrame AnchorFrame;
-    //-------------------------------------------------------------------------
     /** specifies how the text content is attached to its surrounding
         <type>Text</type>.
     */
     [optional, property] com::sun::star::text::TextContentAnchorType AnchorType;
-    //-------------------------------------------------------------------------
     /** determines the horizontal orientation of the object.
 
         @see BaseFrame::HoriOrientation
      */
     [property] short HoriOrient;
-    //-------------------------------------------------------------------------
     /** contains the horizontal position of the object (1/100 mm).
         <p> It is only valid if "HoriOrient" is HoriOrientation_NONE.</p>
      */
     [property] long HoriOrientPosition;
 
-    //-------------------------------------------------------------------------
     /** determines the environment of the object to which the orientation
         is related.
 
@@ -75,14 +67,12 @@ published service Shape
      */
     [property] short HoriOrientRelation;
 
-    //-------------------------------------------------------------------------
     /** determines the vertical orientation of the object.
 
         @see BaseFrame::VertOrientation
      */
     [property] short VertOrient;
 
-    //-------------------------------------------------------------------------
     /** contains the vertical position of the object (1/100 mm).
 
         It is only valid if <member>TextEmbeddedObject::VertOrient</member> is
@@ -90,58 +80,47 @@ published service Shape
      */
     [property] long VertOrientPosition;
 
-    //-------------------------------------------------------------------------
 
     /** determines the environment of the object to which the orientation is related.
 
         @see BaseFrame::RelOrientation
      */
     [property] short VertOrientRelation;
-    //-------------------------------------------------------------------------
     /** contains the left margin of the object.
      */
     [property] long LeftMargin;
 
-    //-------------------------------------------------------------------------
     /** contains the right margin of the object.
      */
     [property] long RightMargin;
-    //-------------------------------------------------------------------------
 
     /** contains the top margin of the object.
      */
     [property] long TopMargin;
 
-    //-------------------------------------------------------------------------
     /** contains the bottom margin of the object.
      */
     [property] long BottomMargin;
-    //-------------------------------------------------------------------------
     /** determines the type of the surrounding text.
 
         @deprecated
      */
     [property] com::sun::star::text::WrapTextMode Surround;
-    //-------------------------------------------------------------------------
     /** determines if the text of the paragraph in which the object
         is anchored, wraps around the object.
      */
     [property] boolean SurroundAnchorOnly;
-    //-------------------------------------------------------------------------
 
     /** determines if the text wraps around the contour of the object.
      */
     [property] boolean SurroundContour;
-    //-------------------------------------------------------------------------
 
     /** the text flows only around the contour of the object.
      */
     [property] boolean ContourOutside;
-    //-------------------------------------------------------------------------
     /** determines if the object is opaque or transparent for text.
      */
     [property] boolean Opaque;
-    //-------------------------------------------------------------------------
     /** contains a text range where the shape should be anchored to.
      <p>There are two different ways to get newly created shapes into the
      text document. One of them is to use the insertTextContent() method of
@@ -156,7 +135,6 @@ published service Shape
      */
     [property] com::sun::star::text::XTextRange TextRange;
 
-    //-------------------------------------------------------------------------
         /** determines the influence of the text wrap on the positioning of the
             shape
 
@@ -168,7 +146,6 @@ published service Shape
          */
         [optional, property] short WrapInfluenceOnPosition;
 
-    //-------------------------------------------------------------------------
     /** determines the transformation of the shape in horizontal left-to-right
         layout
 
@@ -180,7 +157,6 @@ published service Shape
         @since OOo 2.0
     */
     [optional, readonly, property] com::sun::star::drawing::HomogenMatrix3 TransformationInHoriL2R;
-    //-------------------------------------------------------------------------
     /** determines layout direction the position attributes of the shape
         is given
 
@@ -189,7 +165,6 @@ published service Shape
         @since OOo 2.0
      */
     [optional, property] short PositionLayoutDir;
-    //-------------------------------------------------------------------------
     /** determines the start position of the shape in horizontal left-to-right
         layout
 
@@ -201,7 +176,6 @@ published service Shape
         @since OOo 2.0
     */
     [optional, readonly, property] com::sun::star::awt::Point StartPositionInHoriL2R;
-    //-------------------------------------------------------------------------
     /** determines the end position of the shape in horizontal left-to-right
         layout
 
@@ -215,7 +189,6 @@ published service Shape
     [optional, readonly, property] com::sun::star::awt::Point EndPositionInHoriL2R;
 };
 
-//=============================================================================
 
 }; }; }; };
 

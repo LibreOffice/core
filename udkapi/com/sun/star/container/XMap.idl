@@ -26,11 +26,9 @@
 #include <com/sun/star/lang/NoSupportException.idl>
 #include <com/sun/star/container/XElementAccess.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module container {
 
-//=============================================================================
 
 /** describes a map between keys and values.
 
@@ -186,11 +184,9 @@ interface XMap
                 ::com::sun::star::container::NoSuchElementException );
 };
 
-//=============================================================================
 
 }; }; }; };
 
-//=============================================================================
 
 #endif
 

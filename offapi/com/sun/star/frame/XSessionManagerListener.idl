@@ -20,7 +20,6 @@
 #define __com_sun_star_frame_XSessionManagerListener_idl__
 
 #include <com/sun/star/lang/XEventListener.idl>
-//=============================================================================
 
 module com {  module sun {  module star {  module frame {
 

@@ -20,22 +20,18 @@
 #define __com_sun_star_scanner_ScannerContext_idl__
 
 
-//=============================================================================
 
 module com { module sun { module star { module scanner {
 
-//=============================================================================
 /** a scanner context is an identifier for a specific scanner device
 */
 published struct ScannerContext
 {
-    //-------------------------------------------------------------------------
     // DOCUMENTATION CHANGED FOR ScannerContext::ScannerName
     /** ScannerName contains a user readable identification
      */
     string ScannerName;
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION CHANGED FOR ScannerContext::InternalData
     /** InternalData contains service private data and must not be changed
      */
@@ -43,7 +39,6 @@ published struct ScannerContext
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

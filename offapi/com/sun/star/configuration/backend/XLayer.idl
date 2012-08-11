@@ -25,11 +25,9 @@
 #include <com/sun/star/lang/WrappedTargetException.idl>
 #include <com/sun/star/configuration/backend/MalformedDataException.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module configuration { module backend {
 
-//=============================================================================
 
 /**
   provides read access to the data contained in a layer.
@@ -38,7 +36,6 @@ module com { module sun { module star { module configuration { module backend {
 */
 published interface XLayer : ::com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /**
       describes the contents of the layer to an <type>XLayerHandler</type>.
@@ -60,10 +57,8 @@ published interface XLayer : ::com::sun::star::uno::XInterface
                 com::sun::star::lang::WrappedTargetException,
                 MalformedDataException) ;
 
-    //-------------------------------------------------------------------------
 } ;
 
-//=============================================================================
 
 } ; } ; } ; } ; } ;
 #endif

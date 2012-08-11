@@ -32,13 +32,11 @@
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/lang/NullPointerException.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module form { module validation {
 
 interface XValidityConstraintListener;
 
-//=============================================================================
 
 /** specifies a component able to validate (the content of) other components
 
@@ -96,7 +94,6 @@ interface XValidator : com::sun::star::uno::XInterface
                 raises( com::sun::star::lang::NullPointerException );
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

@@ -20,17 +20,14 @@
 #ifndef __com_sun_star_security_SerialNumberAdapter_idl_
 #define __com_sun_star_security_SerialNumberAdapter_idl_
 
-//============================================================================
 
 module com { module sun { module star { module security {
         interface XSerialNumberAdapter; };
 }; }; };
 
-//============================================================================
 
 module com { module sun { module star { module security {
 
-//============================================================================
 
 /** provides conversion services for Serial Numbers.
 
@@ -42,7 +39,6 @@ module com { module sun { module star { module security {
 
 service SerialNumberAdapter : XSerialNumberAdapter;
 
-//============================================================================
 
 }; }; }; };
 

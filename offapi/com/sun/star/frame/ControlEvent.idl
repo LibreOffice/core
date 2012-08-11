@@ -32,11 +32,9 @@
 
 #include <com/sun/star/beans/NamedValue.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module frame {
 
-//=============================================================================
 
 /** describes a control event send by extended user interface
     controls.
@@ -45,7 +43,6 @@ module com {  module sun {  module star {  module frame {
  */
 struct ControlEvent
 {
-    //-------------------------------------------------------------------------
     /** fully parsed URL describing the control that sends this
         notification.
     */
@@ -55,7 +52,6 @@ struct ControlEvent
      */
     string Event;
 
-    //-------------------------------------------------------------------------
 
     /** specifies a sequence of named values which are used as
         additional values for the event. The number and types of
@@ -64,7 +60,6 @@ struct ControlEvent
     sequence< com::sun::star::beans::NamedValue > aInformation;
 };
 
-//=============================================================================
 
 }; }; }; };
 

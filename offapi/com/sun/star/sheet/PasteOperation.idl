@@ -20,42 +20,35 @@
 #ifndef __com_sun_star_sheet_PasteOperation_idl__
 #define __com_sun_star_sheet_PasteOperation_idl__
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** used to specify which operations are carried out when pasting cell
     values into a cell range.
  */
 published enum PasteOperation
 {
-    //-------------------------------------------------------------------------
 
     /** new values are used without changes.
      */
     NONE,
 
-    //-------------------------------------------------------------------------
 
     /** old and new values are added.
      */
     ADD,
 
-    //-------------------------------------------------------------------------
 
     /** new values are subtracted from the old values.
      */
     SUBTRACT,
 
-    //-------------------------------------------------------------------------
 
     /** old and new values are multiplied.
      */
     MULTIPLY,
 
-    //-------------------------------------------------------------------------
 
     /** new values are divided by the new values.
      */
@@ -63,7 +56,6 @@ published enum PasteOperation
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

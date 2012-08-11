@@ -36,11 +36,9 @@
 #include <com/sun/star/beans/PropertyBag.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module form {
 
-//=============================================================================
 
 /** specifies a component which can be part of a form.
 
@@ -97,7 +95,6 @@ published service FormComponent
     */
     [optional] service com::sun::star::beans::PropertyBag;
 
-    //-------------------------------------------------------------------------
 
     /** the name of the component.
 
@@ -108,7 +105,6 @@ published service FormComponent
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

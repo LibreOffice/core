@@ -22,11 +22,9 @@
 
 #include <com/sun/star/uno/XInterface.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** allows to get and set cell contents (values, text or formulas)
     for a cell range.
@@ -62,7 +60,6 @@ published interface XCellRangeFormula: com::sun::star::uno::XInterface
     void setFormulaArray( [in] sequence< sequence< string > > aArray );
 };
 
-//=============================================================================
 }; }; }; };
 
 #endif

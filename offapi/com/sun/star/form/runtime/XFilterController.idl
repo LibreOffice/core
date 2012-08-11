@@ -31,11 +31,9 @@
 #include <com/sun/star/awt/XControl.idl>
 #include <com/sun/star/lang/IndexOutOfBoundsException.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module form { module runtime {
 
-//=============================================================================
 
 interface XFilterControllerListener;
 
@@ -173,11 +171,9 @@ interface XFilterController
         appendEmptyDisjunctiveTerm();
 };
 
-//=============================================================================
 
 }; }; }; }; };
 
-//=============================================================================
 
 #endif
 

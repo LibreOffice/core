@@ -22,11 +22,9 @@
 #include <com/sun/star/beans/XPropertySet.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module drawing {
 
-//=============================================================================
 
 /** identifies the object as a <type>Layer</type>.
  */
@@ -34,7 +32,6 @@ published interface XLayer: com::sun::star::beans::XPropertySet
 {
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -93,7 +93,6 @@ interface XModuleUIConfigurationManager : ::com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

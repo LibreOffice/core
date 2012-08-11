@@ -31,17 +31,14 @@
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/lang/IllegalArgumentException.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module frame {
 
-//=============================================================================
 /** knows all currently used and all free numbers for using with untitled
     but counted objects.
  */
 interface XUntitledNumbers : com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** callee has to lease a number before he can use it within in its own title.
 
         Such number must be freed after using e.g. while the object was closed or
@@ -58,7 +55,6 @@ interface XUntitledNumbers : com::sun::star::uno::XInterface
     long leaseNumber ( [in] com::sun::star::uno::XInterface xComponent )
         raises (com::sun::star::lang::IllegalArgumentException);
 
-    //-------------------------------------------------------------------------
     /** has to be used to mark those number as "free for using".
 
         If the registered component does not use such leased number any longer
@@ -76,7 +72,6 @@ interface XUntitledNumbers : com::sun::star::uno::XInterface
     void releaseNumber ( [in] long nNumber )
         raises (com::sun::star::lang::IllegalArgumentException);
 
-    //-------------------------------------------------------------------------
     /** does the same then releaseNumber () but it searches the corresponding
         number for the specified component and deregister it.
 
@@ -89,7 +84,6 @@ interface XUntitledNumbers : com::sun::star::uno::XInterface
     void releaseNumberForComponent ( [in] com::sun::star::uno::XInterface xComponent )
         raises (com::sun::star::lang::IllegalArgumentException);
 
-    //-------------------------------------------------------------------------
     /** returns the localized string value to be used for untitled objects in
         combination with the leased number.
 
@@ -102,7 +96,6 @@ interface XUntitledNumbers : com::sun::star::uno::XInterface
     string getUntitledPrefix ();
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -24,41 +24,34 @@
 #include <com/sun/star/chart/ChartDataChangeType.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module chart {
 
-//=============================================================================
 
 /** describes a change that was applied to the data.
  */
 published struct ChartDataChangeEvent: com::sun::star::lang::EventObject
 {
-    //-------------------------------------------------------------------------
 
     /** specifies the type of change to the data.
      */
     com::sun::star::chart::ChartDataChangeType Type;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the column number in which the changes begin.
      */
     short StartColumn;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the column number in which the changes end.
      */
     short EndColumn;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the row number in which the changes begin.
      */
     short StartRow;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the row number in which the changes end.
      */
@@ -66,7 +59,6 @@ published struct ChartDataChangeEvent: com::sun::star::lang::EventObject
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -23,11 +23,9 @@
 #include <com/sun/star/text/TextFieldMaster.idl>
 #include <com/sun/star/beans/PropertyValues.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module text { module fieldmaster {
 
-//=============================================================================
 /** Specifies the service of a set expression field master.
     @see com::sun::star::text::TextFieldMaster
 */
@@ -35,23 +33,19 @@ published service SetExpression
 {
     service  com::sun::star::text::TextFieldMaster;
 
-    //------------------------------------------------------------------------
     /** determines the number of the chapter. This values is used if the field master
      is set as number sequence.
      */
     [property]  byte ChapterNumberingLevel;
-    //------------------------------------------------------------------------
     /** determines the numbering separator string if the field master
      is set as number sequence.
      */
     [property]  string NumberingSeparator;
-    //------------------------------------------------------------------------
     /** determines the type of the field as <type scope="com::sun::star::text"SetVariableType</type>
      */
     [property]  short SubType;
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

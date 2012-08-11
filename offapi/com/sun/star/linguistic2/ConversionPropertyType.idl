@@ -19,11 +19,9 @@
 #ifndef __com_sun_star_linguistic2_ConversionPropertyType_idl__
 #define __com_sun_star_linguistic2_ConversionPropertyType_idl__
 
-//=============================================================================
 
 module com { module sun { module star { module linguistic2 {
 
-//=============================================================================
 /** specifies the property type of an entry in a conversion dictionary.
 
     @see    com::sun::star::linguistic2::XConversionDictionary
@@ -99,7 +97,6 @@ constants ConversionPropertyType
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -22,11 +22,9 @@
 #include <com/sun/star/container/XIndexReplace.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module text {
 
-//=============================================================================
 
 // DocMerge from xml: service com::sun::star::text::DocumentIndexLevelFormat
 /** This service provides access to the structure of the levels of document indexes.
@@ -128,11 +126,9 @@ published service DocumentIndexLevelFormat
     // DocMerge: empty anyway
     interface com::sun::star::container::XIndexReplace;
 
-    //-------------------------------------------------------------------------
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

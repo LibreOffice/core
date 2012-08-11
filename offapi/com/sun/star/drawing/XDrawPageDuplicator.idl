@@ -24,17 +24,14 @@
 #include <com/sun/star/drawing/XDrawPage.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module drawing {
 
-//=============================================================================
 
 /** makes it possible to duplicate pages within the same document.
  */
 published interface XDrawPageDuplicator: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** creates a duplicate of a <type>DrawPage</type> or <type>MasterPage</type>,
         including the <type>Shape</type>s on that page and inserts it into the
@@ -53,7 +50,6 @@ published interface XDrawPageDuplicator: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -20,28 +20,23 @@
 #define __com_sun_star_ucb_SortingInfo_idl__
 
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** contains a sorting info.
 */
 published struct SortingInfo
 {
-    //-------------------------------------------------------------------------
     /**  specifies the name of a property to use for sorting ( e.g. "Title" ).
     */
     string PropertyName;
 
-    //-------------------------------------------------------------------------
     /** contains a flag indicating the sort mode (ascending or descending).
     */
     boolean Ascending;
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

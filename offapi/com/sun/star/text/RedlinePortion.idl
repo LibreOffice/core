@@ -23,11 +23,9 @@
 #include <com/sun/star/beans/PropertyValues.idl>
 #include <com/sun/star/util/DateTime.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module text {
 
-//=============================================================================
 /** A RedlinePortion is a TextPortion that marks a change that has been recorded by
 the change tracking.
 
@@ -77,7 +75,6 @@ published service RedlinePortion
     [readonly, property] boolean MergeLastPara;
 };
 
-//=============================================================================
 
 }; }; }; };
 #endif

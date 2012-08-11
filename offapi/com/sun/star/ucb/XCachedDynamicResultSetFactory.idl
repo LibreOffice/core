@@ -32,11 +32,9 @@
 #include <com/sun/star/ucb/XDynamicResultSet.idl>
 #include <com/sun/star/ucb/XContentIdentifierMapping.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** creates a <type>CachedDynamicResultSet</type>.
 
     <p>Pay attention to instantiate this helper on client side where your want
@@ -49,7 +47,6 @@ module com { module sun { module star { module ucb {
 
 published interface XCachedDynamicResultSetFactory: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** creates a remote optimizes <type>XDynamicResultSet</type>.
 
         @param SourceStub
@@ -72,7 +69,6 @@ published interface XCachedDynamicResultSetFactory: com::sun::star::uno::XInterf
         , [in] com::sun::star::ucb::XContentIdentifierMapping ContentIdentifierMapping );
 };
 
-//=============================================================================
 
 }; }; }; };
 

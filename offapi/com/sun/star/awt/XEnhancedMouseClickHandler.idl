@@ -23,11 +23,9 @@
 #include <com/sun/star/awt/EnhancedMouseEvent.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module awt {
 
-//=============================================================================
 
 /** makes it possible to receive enhanced events from the mouse.
 
@@ -36,13 +34,11 @@ module com {  module sun {  module star {  module awt {
  */
 published interface XEnhancedMouseClickHandler: ::com::sun::star::lang::XEventListener
 {
-    //-------------------------------------------------------------------------
 
     /** is invoked when a mouse button has been pressed on a window.
      */
     boolean mousePressed( [in] com::sun::star::awt::EnhancedMouseEvent e );
 
-    //-------------------------------------------------------------------------
 
     /** is invoked when a mouse button has been released on a window.
      */
@@ -50,7 +46,6 @@ published interface XEnhancedMouseClickHandler: ::com::sun::star::lang::XEventLi
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -22,11 +22,9 @@
 
 #include <com/sun/star/awt/XFont.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module awt {
 
-//=============================================================================
 
 /** extends the <type>XFont</type> interface and provides additional
     information for a font.
@@ -35,7 +33,6 @@ module com {  module sun {  module star {  module awt {
  */
 interface XFont2: com::sun::star::awt::XFont
 {
-    //-------------------------------------------------------------------------
 
     /** checks whether or not this font has all the glyphs for the text
         specified by aText.
@@ -51,7 +48,6 @@ interface XFont2: com::sun::star::awt::XFont
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

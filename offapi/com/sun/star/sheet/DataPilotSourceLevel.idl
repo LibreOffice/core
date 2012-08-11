@@ -26,11 +26,9 @@
 #include <com/sun/star/beans/XPropertySet.idl>
 #include <com/sun/star/sheet/GeneralFunction.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** represents a level in a data pilot source hierarchy.
 
@@ -39,32 +37,27 @@
  */
 published service DataPilotSourceLevel
 {
-    //-------------------------------------------------------------------------
 
     /** provides access to the name of the level, i.e. used in collections.
      */
     interface com::sun::star::container::XNamed;
 
-    //-------------------------------------------------------------------------
 
     /** provides access to the collection of members of this level.
      */
     interface com::sun::star::sheet::XMembersSupplier;
 
-    //-------------------------------------------------------------------------
 
     /** provides access to a sequence of results of this level.
      */
     interface com::sun::star::sheet::XDataPilotMemberResults;
 
-    //-------------------------------------------------------------------------
 
 //!published service PropertySet
     /** provides access to the properties.
      */
     interface com::sun::star::beans::XPropertySet;
 
-    //=========================================================================
 
     /** specifies the subtotals that are inserted for the level.
 
@@ -72,7 +65,6 @@ published service DataPilotSourceLevel
      */
     [property] sequence< com::sun::star::sheet::GeneralFunction > SubTotals;
 
-    //-------------------------------------------------------------------------
 
     /** specifies whether empty members are shown.
      */
@@ -80,7 +72,6 @@ published service DataPilotSourceLevel
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

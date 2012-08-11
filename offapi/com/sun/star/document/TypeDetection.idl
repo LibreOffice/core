@@ -33,11 +33,9 @@
 #include <com/sun/star/container/XContainerQuery.idl>
 #include <com/sun/star/util/XFlushable.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module document {
 
-//=============================================================================
 /** encapsulate a type detection service and provide read/write access on it's configuration data.
 
     <p>
@@ -49,7 +47,6 @@ module com { module sun { module star { module document {
  */
 published service TypeDetection
 {
-    //-------------------------------------------------------------------------
     /** can be used to make a flat or deep type detection.
 
         <p>
@@ -61,7 +58,6 @@ published service TypeDetection
      */
     interface XTypeDetection;
 
-    //-------------------------------------------------------------------------
     /** provides read access to the complete set of type configuration data.
 
         <p>
@@ -149,12 +145,10 @@ published service TypeDetection
      */
     interface com::sun::star::container::XNameAccess;
 
-    //-------------------------------------------------------------------------
     /** provides a write access to the configuration data.
      */
     [optional] interface com::sun::star::container::XNameContainer;
 
-    //-------------------------------------------------------------------------
     /** provides search on the configuration data set.
 
         <p>
@@ -164,7 +158,6 @@ published service TypeDetection
      */
     [optional] interface com::sun::star::container::XContainerQuery;
 
-    //-------------------------------------------------------------------------
     /** can be used to perform container changes.
 
         <p>
@@ -181,7 +174,6 @@ published service TypeDetection
     [optional] interface com::sun::star::util::XFlushable;
 };
 
-//=============================================================================
 
 }; }; }; };
 

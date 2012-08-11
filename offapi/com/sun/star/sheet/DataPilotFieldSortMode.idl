@@ -29,11 +29,9 @@
 #ifndef __com_sun_star_sheet_DataPilotFieldSortMode_idl__
 #define __com_sun_star_sheet_DataPilotFieldSortMode_idl__
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** describes the sort mode of the data field
 
@@ -42,28 +40,24 @@ module com {  module sun {  module star {  module sheet {
  */
 constants DataPilotFieldSortMode
 {
-    //-------------------------------------------------------------------------
 
     /** the data are taken as they come from the DataPilotSource.
      */
 
     const long NONE = 0;
 
-    //-------------------------------------------------------------------------
 
     /** the user can sort the fields
      */
 
     const long MANUAL = 1;
 
-    //-------------------------------------------------------------------------
 
     /** the field is sorted by its names
      */
 
     const long NAME = 2;
 
-    //-------------------------------------------------------------------------
 
     /** the field is sorted by the data in the given field
 
@@ -74,7 +68,6 @@ constants DataPilotFieldSortMode
     const long DATA = 3;
 };
 
-//=============================================================================
 
 }; }; }; };
 

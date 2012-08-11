@@ -23,11 +23,9 @@
 #include <com/sun/star/style/PageStyle.idl>
 #include <com/sun/star/sheet/XHeaderFooterContent.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** represents a page style for a spreadsheet.
 
@@ -37,73 +35,61 @@
  */
 published service TablePageStyle
 {
-    //-------------------------------------------------------------------------
 
     /** contains all common page style properties.
      */
     service com::sun::star::style::PageStyle;
 
-    //=========================================================================
 
     /** determines whether the table is centered horizontally on the page.
      */
     [property] boolean CenterHorizontally;
 
-    //-------------------------------------------------------------------------
 
     /** determines whether the table is centered vertically on the page.
      */
     [property] boolean CenterVertically;
 
-    //-------------------------------------------------------------------------
 
     /** enables printing of cell annotations.
      */
     [property] boolean PrintAnnotations;
 
-    //-------------------------------------------------------------------------
 
     /** enables printing of the cell grid.
      */
     [property] boolean PrintGrid;
 
-    //-------------------------------------------------------------------------
 
     /** enables printing of column and row headers.
      */
     [property] boolean PrintHeaders;
 
-    //-------------------------------------------------------------------------
 
     /** enables printing of charts.
      */
     [property] boolean PrintCharts;
 
-    //-------------------------------------------------------------------------
 
     /** enables printing of embedded objects.
      */
     [property] boolean PrintObjects;
 
-    //-------------------------------------------------------------------------
 
     /** enables printing of drawing objects.
      */
     [property] boolean PrintDrawing;
 
-    //-------------------------------------------------------------------------
 
     /** enables printing of formulas instead of their results.
      */
     [property] boolean PrintFormulas;
 
-    //-------------------------------------------------------------------------
 
     /** enables printing of zero-values.
      */
     [property] boolean PrintZeroValues;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the print order for the pages within each sheet.
 
@@ -115,7 +101,6 @@ published service TablePageStyle
      */
     [property] boolean PrintDownFirst;
 
-    //-------------------------------------------------------------------------
 
     /** contains the content of the header for left pages.
 
@@ -126,7 +111,6 @@ published service TablePageStyle
      */
     [property] com::sun::star::sheet::XHeaderFooterContent LeftPageHeaderContent;
 
-    //-------------------------------------------------------------------------
 
     /** contains the content of the footer for left pages.
 
@@ -137,7 +121,6 @@ published service TablePageStyle
      */
     [property] com::sun::star::sheet::XHeaderFooterContent LeftPageFooterContent;
 
-    //-------------------------------------------------------------------------
 
     /** contains the content of the header for right pages.
 
@@ -148,7 +131,6 @@ published service TablePageStyle
      */
     [property] com::sun::star::sheet::XHeaderFooterContent RightPageHeaderContent;
 
-    //-------------------------------------------------------------------------
 
     /** contains the content of the footer for right pages.
 
@@ -159,7 +141,6 @@ published service TablePageStyle
      */
     [property] com::sun::star::sheet::XHeaderFooterContent RightPageFooterContent;
 
-    //-------------------------------------------------------------------------
 
     /** contains the page number applied to the first page for this sheet.
 
@@ -168,19 +149,16 @@ published service TablePageStyle
      */
     [property] short FirstPageNumber;
 
-    //-------------------------------------------------------------------------
 
     /** contains the scaling factor (in percent) for printing the sheet.
      */
     [property] short PageScale;
 
-    //-------------------------------------------------------------------------
 
     /** contains the number of pages the sheet will printed.
      */
     [property] short ScaleToPages;
 
-    //-------------------------------------------------------------------------
 
     /** contains the number of horizontal pages the sheet will printed on.
 
@@ -189,7 +167,6 @@ published service TablePageStyle
      */
     [property, optional] short ScaleToPagesX;
 
-    //-------------------------------------------------------------------------
 
     /** contains the number of vertical pages the sheet will printed on.
 
@@ -200,7 +177,6 @@ published service TablePageStyle
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

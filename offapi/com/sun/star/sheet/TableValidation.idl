@@ -25,11 +25,9 @@
 #include <com/sun/star/sheet/ValidationType.idl>
 #include <com/sun/star/sheet/ValidationAlertStyle.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** represents the data validation settings for a cell or cell range.
  */
@@ -40,20 +38,17 @@ published service TableValidation
 
     interface com::sun::star::sheet::XSheetCondition;
 
-    //=========================================================================
 
     /** specifies the type of validation.
      */
     [property] com::sun::star::sheet::ValidationType Type;
 
-    //-------------------------------------------------------------------------
 
     /** specifies if an input message is shown when the cursor is in a
         cell with these validation settings.
      */
     [property] boolean ShowInputMessage;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the title of the window showing the input message.
 
@@ -62,7 +57,6 @@ published service TableValidation
      */
     [property] string InputTitle;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the text of the input message.
 
@@ -71,14 +65,12 @@ published service TableValidation
      */
     [property] string InputMessage;
 
-    //-------------------------------------------------------------------------
 
     /** specifies if an error message is displayed when invalid data
         is entered.
      */
     [property] boolean ShowErrorMessage;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the title of the window showing the error message.
 
@@ -87,7 +79,6 @@ published service TableValidation
      */
     [property] string ErrorTitle;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the text of the error message.
 
@@ -96,13 +87,11 @@ published service TableValidation
      */
     [property] string ErrorMessage;
 
-    //-------------------------------------------------------------------------
 
     /** specifies if blank cells should be allowed.
      */
     [property] boolean IgnoreBlankCells;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the style of the error message.
 
@@ -111,7 +100,6 @@ published service TableValidation
      */
     [property] com::sun::star::sheet::ValidationAlertStyle ErrorAlertStyle;
 
-    //-------------------------------------------------------------------------
 
     /** specifies if the list of possible values should be shown on the cell and how.
 
@@ -121,7 +109,6 @@ published service TableValidation
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

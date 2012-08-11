@@ -33,11 +33,9 @@
 #include <com/sun/star/lang/EventObject.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module awt {
 
-//=============================================================================
 
 /** makes it possible to receive window events.
 
@@ -45,13 +43,11 @@
  */
 published interface XTopWindowListener: com::sun::star::lang::XEventListener
 {
-    //-------------------------------------------------------------------------
 
     /** is invoked when a window has been opened.
      */
     [oneway] void windowOpened( [in] com::sun::star::lang::EventObject e );
 
-    //-------------------------------------------------------------------------
 
     /** is invoked when a window is in the process of being closed.
 
@@ -59,31 +55,26 @@ published interface XTopWindowListener: com::sun::star::lang::XEventListener
      */
     [oneway] void windowClosing( [in] com::sun::star::lang::EventObject e );
 
-    //-------------------------------------------------------------------------
 
     /** is invoked when a window has been closed.
      */
     [oneway] void windowClosed( [in] com::sun::star::lang::EventObject e );
 
-    //-------------------------------------------------------------------------
 
     /** is invoked when a window is iconified.
      */
     [oneway] void windowMinimized( [in] com::sun::star::lang::EventObject e );
 
-    //-------------------------------------------------------------------------
 
     /** is invoked when a window is deiconified.
      */
     [oneway] void windowNormalized( [in] com::sun::star::lang::EventObject e );
 
-    //-------------------------------------------------------------------------
 
     /** is invoked when a window is activated.
      */
     [oneway] void windowActivated( [in] com::sun::star::lang::EventObject e );
 
-    //-------------------------------------------------------------------------
 
     /** is invoked when a window is deactivated.
      */
@@ -91,7 +82,6 @@ published interface XTopWindowListener: com::sun::star::lang::XEventListener
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

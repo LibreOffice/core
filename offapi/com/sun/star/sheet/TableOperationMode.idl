@@ -20,18 +20,15 @@
 #ifndef __com_sun_star_sheet_TableOperationMode_idl__
 #define __com_sun_star_sheet_TableOperationMode_idl__
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** used to specify if a table operation is applied to
     columns, rows, or both columns and rows.
  */
 published enum TableOperationMode
 {
-    //-------------------------------------------------------------------------
 
     /** is applied to the columns.
 
@@ -40,7 +37,6 @@ published enum TableOperationMode
      */
     COLUMN,
 
-    //-------------------------------------------------------------------------
 
     /** is applied to the rows.
 
@@ -49,7 +45,6 @@ published enum TableOperationMode
      */
     ROW,
 
-    //-------------------------------------------------------------------------
 
     /** is applied to rows and columns.
 
@@ -60,7 +55,6 @@ published enum TableOperationMode
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

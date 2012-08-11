@@ -25,11 +25,9 @@
 
 #include <com/sun/star/lang/IndexOutOfBoundsException.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module chart {
 
-//=============================================================================
 
 /** manages the diagram of the chart document.
 
@@ -37,7 +35,6 @@
  */
 published interface XDiagram: com::sun::star::drawing::XShape
 {
-    //-------------------------------------------------------------------------
 
     /** @returns
             a string representing the diagram type. This string
@@ -46,7 +43,6 @@ published interface XDiagram: com::sun::star::drawing::XShape
      */
     string getDiagramType();
 
-    //-------------------------------------------------------------------------
 
     /** @returns
             the properties of the specified data row (series).
@@ -59,7 +55,6 @@ published interface XDiagram: com::sun::star::drawing::XShape
     com::sun::star::beans::XPropertySet getDataRowProperties( [in] long nRow )
         raises( com::sun::star::lang::IndexOutOfBoundsException );
 
-    //-------------------------------------------------------------------------
 
     /** @returns
             the properties of the specified data point.
@@ -77,7 +72,6 @@ published interface XDiagram: com::sun::star::drawing::XShape
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

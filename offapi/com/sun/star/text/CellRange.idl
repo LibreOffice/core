@@ -33,11 +33,9 @@
 #include <com/sun/star/style/GraphicLocation.idl>
 #include <com/sun/star/chart/XChartDataArray.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module text {
 
-//=============================================================================
 
 /** area of cells within a text table.
 
@@ -63,51 +61,43 @@ published service CellRange
 
     [optional] interface com::sun::star::chart::XChartDataArray;
 
-    //-----------------------------------------------------------------------------
 
     /** contains color of the background.
      */
     [property] com::sun::star::util::Color BackColor;
 
-    //-----------------------------------------------------------------------------
 
     /** contains the filter name of the background graphic.
      */
     [property] string BackGraphicFilter;
 
-    //-----------------------------------------------------------------------------
 
     /** determines the location of the background graphic.
      */
     [property] com::sun::star::style::GraphicLocation BackGraphicLocation;
 
-    //-----------------------------------------------------------------------------
 
     /** contains the URL of the background graphic.
      */
     [property] string BackGraphicURL;
 
-    //-----------------------------------------------------------------------------
 
     /** determines if the background color is transparent.
      */
     [property] boolean BackTransparent;
 
-    //-----------------------------------------------------------------------------
 
     /** determines if the first column of the table should be treated as
         axis labels when a chart is to be created.
      */
     [property] boolean ChartColumnAsLabel;
 
-    //-----------------------------------------------------------------------------
 
     /** determines if the first row of the table should be treated as
         axis labels when a chart is to be created.
      */
     [property] boolean ChartRowAsLabel;
 
-    //-----------------------------------------------------------------------------
 
     /** contains the number format.
     */
@@ -115,7 +105,6 @@ published service CellRange
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

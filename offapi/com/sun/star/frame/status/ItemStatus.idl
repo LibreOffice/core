@@ -19,11 +19,9 @@
 #ifndef __com_sun_star_frame_status_ItemState_idl__
 #define __com_sun_star_frame_status_ItemState_idl__
 
-//=============================================================================
 
 module com {  module sun {  module star {  module frame { module status {
 
-//=============================================================================
 
 /** describes a state of a property.
 
@@ -31,7 +29,6 @@ module com {  module sun {  module star {  module frame { module status {
  */
 struct ItemStatus
 {
-    //-------------------------------------------------------------------------
 
     /** numerical value which describes the current state of an item.
 
@@ -39,7 +36,6 @@ struct ItemStatus
      */
     short State;
 
-    //-------------------------------------------------------------------------
 
     /** optional data which can be used by an implementation to send additional
         information. The content is dependent on the specific implementation.
@@ -47,7 +43,6 @@ struct ItemStatus
     any aStateData;
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

@@ -22,11 +22,9 @@
 #include <com/sun/star/drawing/XShapes.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module drawing {
 
-//=============================================================================
 
 // DocMerge from xml: service com::sun::star::drawing::Shapes
 /** This service is for a generic collection of shapes.
@@ -38,7 +36,6 @@ published service Shapes
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

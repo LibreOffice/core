@@ -25,11 +25,9 @@
 #include <com/sun/star/beans/PropertyValue.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module frame {
 
-//=============================================================================
 /** offers a simple way to initialize a component or load it from an URL.
     <p>In case an object supports the interface the object must be initialized
        with either initNew() or load() call before any usage. In case the object
@@ -40,13 +38,11 @@
  */
 published interface XLoadable: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** creates a component from scratch
     */
     void initNew()
         raises( DoubleInitializationException, com::sun::star::io::IOException, com::sun::star::uno::Exception );
 
-    //-------------------------------------------------------------------------
     /** loads a component from an URL
         @param lArguments
             parameters for saving
@@ -59,7 +55,6 @@ published interface XLoadable: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

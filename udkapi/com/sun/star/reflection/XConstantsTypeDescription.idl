@@ -23,11 +23,9 @@
 #include <com/sun/star/reflection/XConstantTypeDescription.idl>
 #include <com/sun/star/reflection/XTypeDescription.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module reflection {
 
-//=============================================================================
 
 /** Reflects a constants group.
 
@@ -45,7 +43,6 @@ published interface XConstantsTypeDescription : com::sun::star::reflection::XTyp
     sequence< XConstantTypeDescription > getConstants();
 };
 
-//=============================================================================
 
 }; }; }; };
 

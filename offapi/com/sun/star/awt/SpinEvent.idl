@@ -22,17 +22,14 @@
 #include <com/sun/star/lang/EventObject.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module awt {
 
-//=============================================================================
 
 /** specifies a spin button event.
  */
 published struct SpinEvent: com::sun::star::lang::EventObject
 {
-    //-------------------------------------------------------------------------
 
     /** This is a dummy field only. Please ignore.
      */
@@ -40,7 +37,6 @@ published struct SpinEvent: com::sun::star::lang::EventObject
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

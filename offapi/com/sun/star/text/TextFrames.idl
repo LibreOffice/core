@@ -24,11 +24,9 @@
 #include <com/sun/star/container/XContainer.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module text {
 
-//=============================================================================
 
 // DocMerge from xml: service com::sun::star::text::TextFrames
 /** This is the collection of all <type>TextFrame</type> instances within a
@@ -64,7 +62,6 @@ published service TextFrames
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

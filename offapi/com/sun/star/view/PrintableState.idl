@@ -20,11 +20,9 @@
 #define __com_sun_star_view_PrintableState_idl__
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module view {
 
-//=============================================================================
 
 /** specifies the print progress of an <type>XPrintable</type>.
 
@@ -63,7 +61,6 @@ published enum PrintableState
     JOB_SPOOLING_FAILED
 };
 
-//=============================================================================
 
 }; }; }; };
 

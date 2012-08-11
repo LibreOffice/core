@@ -26,11 +26,9 @@
 #include <com/sun/star/form/XReset.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module form {  module component {
 
-//=============================================================================
 
 /** specifies a component which acts as a radio button as needed in <type>HTMLForm</type>s.
 
@@ -54,7 +52,6 @@ published service RadioButton
     */
     interface com::sun::star::form::XReset;
 
-    //-------------------------------------------------------------------------
 
     /** contains a default value for the control.
 
@@ -68,7 +65,6 @@ published service RadioButton
      */
     [property] short DefaultState;
 
-    //-------------------------------------------------------------------------
 
     /** contains a reference value which is used for submission in a HTML
         form.
@@ -91,7 +87,6 @@ published service RadioButton
     [optional, property] string UncheckedRefValue;
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

@@ -30,11 +30,9 @@
 
 #include <com/sun/star/uno/Exception.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module configuration { module backend {
 
-//=============================================================================
 
 /** is raised when the data of a component schema, layer or update
     is not well-formed, violates the schema or is otherwise invalid.
@@ -83,7 +81,6 @@ published exception MalformedDataException: ::com::sun::star::uno::Exception
     any ErrorDetails;
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

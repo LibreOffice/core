@@ -22,11 +22,9 @@
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/ucb/XContentProvider.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** a factory for a <type>XContentProvider</type>.
 
      @version  1.0
@@ -35,7 +33,6 @@ module com { module sun { module star { module ucb {
 */
 published interface XContentProviderFactory : com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** creates a <type>XContentProvider</type> implementation object.
 
         @param Service
@@ -48,7 +45,6 @@ published interface XContentProviderFactory : com::sun::star::uno::XInterface
     XContentProvider createContentProvider( [in] string Service );
 };
 
-//=============================================================================
 
 }; }; }; };
 

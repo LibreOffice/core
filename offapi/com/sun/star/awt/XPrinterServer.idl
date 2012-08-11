@@ -26,23 +26,19 @@
 #include <com/sun/star/awt/XInfoPrinter.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module awt {
 
-//=============================================================================
 
 /** manages several printers on one machine.
  */
 published interface XPrinterServer: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** returns a list of all available printer names.
      */
     sequence<string> getPrinterNames();
 
-    //-------------------------------------------------------------------------
 
     /** creates a new virtual printer.
 
@@ -52,7 +48,6 @@ published interface XPrinterServer: com::sun::star::uno::XInterface
      */
     com::sun::star::awt::XPrinter createPrinter( [in] string printerName );
 
-    //-------------------------------------------------------------------------
 
     /** creates a new information printer.
 
@@ -63,7 +58,6 @@ published interface XPrinterServer: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

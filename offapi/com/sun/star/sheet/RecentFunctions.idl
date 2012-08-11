@@ -31,17 +31,14 @@
 
 #include <com/sun/star/sheet/XRecentFunctions.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** contains the list of recently used spreadsheet functions.
  */
 published service RecentFunctions : XRecentFunctions;
 
-//=============================================================================
 
 }; }; }; };
 

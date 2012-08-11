@@ -20,11 +20,9 @@
 #define __com_sun_star_chart_MissingValueTreatment_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module chart {
 
-//=============================================================================
 
 /** This specifies how empty or invalid cells in the provided data should be handled when plotted.
  */
@@ -35,7 +33,6 @@ published constants MissingValueTreatment
     const long CONTINUE = 2;
 };
 
-//=============================================================================
 
 }; }; }; };
 

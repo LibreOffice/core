@@ -33,18 +33,15 @@
 #include <com/sun/star/lang/IllegalArgumentException.idl>
 #include <com/sun/star/system/SystemShellExecuteException.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module system {
 
-//=============================================================================
 /** Specifies an interface for executing a system command.
 */
 
 
 published interface XSystemShellExecute: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** Executes an arbitrary system command.
 
         @param aCommand
@@ -77,7 +74,6 @@ published interface XSystemShellExecute: com::sun::star::uno::XInterface
         raises( ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::system::SystemShellExecuteException );
 };
 
-//=============================================================================
 
 }; }; }; };
 

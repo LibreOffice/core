@@ -24,11 +24,9 @@
 #include <com/sun/star/text/TextColumn.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module text {
 
-//=============================================================================
 
 // DocMerge from xml: interface com::sun::star::text::XTextColumns
 /** manages columns within the object.
@@ -43,7 +41,6 @@
  */
 published interface XTextColumns: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     // DocMerge from idl: method com::sun::star::text::XTextColumns::getReferenceValue
     /** @returns
@@ -53,7 +50,6 @@ published interface XTextColumns: com::sun::star::uno::XInterface
      */
     long getReferenceValue();
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from idl: method com::sun::star::text::XTextColumns::getColumnCount
     /** @returns
@@ -61,7 +57,6 @@ published interface XTextColumns: com::sun::star::uno::XInterface
      */
     short getColumnCount();
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::text::XTextColumns::setColumnCount
     /** sets the number of columns.
@@ -72,7 +67,6 @@ published interface XTextColumns: com::sun::star::uno::XInterface
      */
     void setColumnCount( [in] short nColumns );
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from idl: method com::sun::star::text::XTextColumns::getColumns
     /** returns the column description of the object.
@@ -80,7 +74,6 @@ published interface XTextColumns: com::sun::star::uno::XInterface
      */
     sequence<com::sun::star::text::TextColumn> getColumns();
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::text::XTextColumns::setColumns
     /** sets the descriptors of all columns.
@@ -96,7 +89,6 @@ published interface XTextColumns: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

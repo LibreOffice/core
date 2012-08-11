@@ -25,7 +25,6 @@
 
 #include <com/sun/star/lang/WrappedTargetException.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module container {
 
@@ -44,7 +43,6 @@ published interface XUniqueIDAccess: com::sun::star::uno::XInterface
     void removeByUniqueID( [in] string ID ) raises( com::sun::star::container::NoSuchElementException );
 };
 
-//=============================================================================
 
 }; }; }; };
 

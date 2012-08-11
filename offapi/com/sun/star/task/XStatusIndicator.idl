@@ -30,11 +30,9 @@
 
 #include <com/sun/star/uno/XInterface.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module task {
 
-//=============================================================================
 /** controls a status indicator which displays progress of
     longer actions to the user
 
@@ -46,7 +44,6 @@
  */
 published interface XStatusIndicator: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** initialize and start the progress
 
         <p>
@@ -69,7 +66,6 @@ published interface XStatusIndicator: com::sun::star::uno::XInterface
         [in] string Text,
         [in] long Range);
 
-    //-------------------------------------------------------------------------
     /** stop the progress
 
         <p>
@@ -84,7 +80,6 @@ published interface XStatusIndicator: com::sun::star::uno::XInterface
      */
     [oneway] void end();
 
-    //-------------------------------------------------------------------------
     /** update progress description
 
         <p>
@@ -98,7 +93,6 @@ published interface XStatusIndicator: com::sun::star::uno::XInterface
      */
     [oneway] void setText( [in] string Text );
 
-    //-------------------------------------------------------------------------
     /** update progress value
 
         <p>
@@ -113,7 +107,6 @@ published interface XStatusIndicator: com::sun::star::uno::XInterface
      */
     [oneway] void setValue( [in] long Value );
 
-    //-------------------------------------------------------------------------
     /** clear progress value and description
 
         <p>

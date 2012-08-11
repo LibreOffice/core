@@ -33,11 +33,9 @@
 
 #include <com/sun/star/lang/IllegalArgumentException.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module beans {
 
-//=============================================================================
 
 /** makes it possible to add and remove properties to or from an object.
 
@@ -47,7 +45,6 @@ module com {  module sun {  module star {  module beans {
  */
 published interface XPropertyContainer: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** adds a property to the object.
 
@@ -74,7 +71,6 @@ published interface XPropertyContainer: com::sun::star::uno::XInterface
                     com::sun::star::beans::IllegalTypeException,
                     com::sun::star::lang::IllegalArgumentException );
 
-    //-------------------------------------------------------------------------
 
     /** removes a property from the object.
 
@@ -89,7 +85,6 @@ published interface XPropertyContainer: com::sun::star::uno::XInterface
                     com::sun::star::beans::NotRemoveableException );
 };
 
-//=============================================================================
 
 }; }; }; };
 

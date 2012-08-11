@@ -23,11 +23,9 @@
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/sheet/SheetLinkMode.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** enables a sheet to refer to another sheet in a different document.
 
@@ -43,7 +41,6 @@ module com {  module sun {  module star {  module sheet {
  */
 published interface XSheetLinkable: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** returns the link mode of the spreadsheet.
 
@@ -53,7 +50,6 @@ published interface XSheetLinkable: com::sun::star::uno::XInterface
      */
     com::sun::star::sheet::SheetLinkMode getLinkMode();
 
-    //-------------------------------------------------------------------------
 
     /** enables the linking of the sheet and controls whether formulas
         are copied.
@@ -67,13 +63,11 @@ published interface XSheetLinkable: com::sun::star::uno::XInterface
      */
     void setLinkMode( [in] com::sun::star::sheet::SheetLinkMode nLinkMode );
 
-    //-------------------------------------------------------------------------
 
     /** returns the target URL of the link.
      */
     string getLinkUrl();
 
-    //-------------------------------------------------------------------------
 
     /** sets the target URL of the link.
 
@@ -82,13 +76,11 @@ published interface XSheetLinkable: com::sun::star::uno::XInterface
      */
     void setLinkUrl( [in] string aLinkUrl );
 
-    //-------------------------------------------------------------------------
 
     /** returns the sheet name of the sheet in the source document.
      */
     string getLinkSheetName();
 
-    //-------------------------------------------------------------------------
 
     /** sets the name of the linked sheet in the source document.
 
@@ -97,7 +89,6 @@ published interface XSheetLinkable: com::sun::star::uno::XInterface
      */
     void setLinkSheetName( [in] string aLinkSheetName );
 
-    //-------------------------------------------------------------------------
 
     /** links the sheet to another sheet in another document.
 
@@ -113,7 +104,6 @@ published interface XSheetLinkable: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

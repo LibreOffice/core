@@ -32,11 +32,9 @@
 #include <com/sun/star/awt/grid/XGridSelectionListener.idl>
 #include <com/sun/star/view/SelectionType.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module awt { module grid {
 
-//=============================================================================
 
 /** This interfaces provides access to the selection of row for <type>UnoControlGrid</type>.
  */
@@ -90,7 +88,6 @@ interface XGridSelection
     */
     void addSelectionListener( [in] XGridSelectionListener  listener);
 
-    //-------------------------------------------------------------------------
 
     /** Removes a listener previously added with <method>addSelectionListener()</method>.
         @param listener
@@ -101,7 +98,6 @@ interface XGridSelection
 
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

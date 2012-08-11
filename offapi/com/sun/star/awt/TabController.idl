@@ -31,17 +31,14 @@
 #include <com/sun/star/awt/XTabController.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module awt {
 
-//=============================================================================
 
 /** specifies a standard tab controller.
  */
 published service TabController : XTabController;
 
-//=============================================================================
 
 }; }; }; };
 

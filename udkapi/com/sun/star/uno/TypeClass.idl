@@ -20,11 +20,9 @@
 #define __com_sun_star_uno_TypeClass_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module uno {
 
-//=============================================================================
 
 /** This enum describes all type classes of UNO.  Every specific type has a type
     class specifying the general context of the reflected type.
@@ -135,7 +133,6 @@ published enum TypeClass
     SINGLETON
 };
 
-//=============================================================================
 
 }; }; }; };
 

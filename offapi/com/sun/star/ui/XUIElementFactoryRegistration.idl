@@ -35,11 +35,9 @@
 #include <com/sun/star/container/NoSuchElementException.idl>
 #include <com/sun/star/beans/PropertyValue.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module ui {
 
-//=============================================================================
 
 /** is used to query, register and deregister user interface element factories.
 
@@ -164,7 +162,6 @@ interface XUIElementFactoryRegistration : com::sun::star::uno::XInterface
 
 }; }; }; };
 
-//=============================================================================
 
 #endif
 

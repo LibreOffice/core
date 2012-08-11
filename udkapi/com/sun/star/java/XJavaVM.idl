@@ -21,11 +21,9 @@
 
 #include <com/sun/star/uno/XInterface.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module java {
 
-//=============================================================================
 
 // DocMerge from xml: interface com::sun::star::java::XJavaVM
 /** must be implemented by the user of the XJavaVM.
@@ -40,7 +38,6 @@ module com {  module sun {  module star {  module java {
  */
 published interface XJavaVM: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::java::XJavaVM::getJavaVM
     /** returns the address of the Java Virtual Machine.
@@ -103,14 +100,12 @@ published interface XJavaVM: com::sun::star::uno::XInterface
      */
     any getJavaVM( [in] sequence<byte> processID );
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::java::XJavaVM::isVMStarted
     /** returns <true/> if the VM is started successfully, otherwise <false/>.
      */
     boolean isVMStarted();
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::java::XJavaVM::isVMEnabled
     /** Returns <true/> if the VM is enabled.
@@ -121,7 +116,6 @@ published interface XJavaVM: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -28,11 +28,9 @@
 #ifndef __com_sun_star_presentation_EffectNodeType_idl__
 #define __com_sun_star_presentation_EffectNodeType_idl__
 
-//=============================================================================
 
  module com {  module sun {  module star {  module presentation {
 
-//=============================================================================
 
 /** This constants defines a type for an animation effect node.
     <br>
@@ -75,7 +73,6 @@ constants EffectNodeType
     const short INTERACTIVE_SEQUENCE = 6;
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -23,11 +23,9 @@
 
 #include <com/sun/star/reflection/ParamMode.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module script {
 
-//=============================================================================
 
 /**
     This struct is used to specify information about object members
@@ -74,7 +72,6 @@ published struct InvocationInfo
     sequence< com::sun::star::reflection::ParamMode > aParamModes;
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -21,11 +21,9 @@
 
 #include <com/sun/star/animations/XAnimate.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module animations {
 
-//=============================================================================
 
 /**
     Base members <member>XAnimate::Values</member>, <member>XAnimate::From</member>,
@@ -82,7 +80,6 @@ interface XTransitionFilter : XAnimate
     [attribute] long FadeColor;
 };
 
-//=============================================================================
 
 }; }; }; };
 

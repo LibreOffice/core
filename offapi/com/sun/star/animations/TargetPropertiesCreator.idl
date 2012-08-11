@@ -32,11 +32,9 @@
 #include <com/sun/star/animations/XTargetPropertiesCreator.idl>
 #endif
 
-//=============================================================================
 
  module com {  module sun {  module star {  module animations {
 
-//=============================================================================
 
 service TargetPropertiesCreator: XTargetPropertiesCreator;
 

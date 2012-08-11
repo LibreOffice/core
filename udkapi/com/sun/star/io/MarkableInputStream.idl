@@ -28,7 +28,6 @@
 
 module com {  module sun {  module star {  module io {
 
-//==========================================================================
 /** allows to set marks in an inputstream and to later jump back to these
     marks.
     <p>The implementation reads the original data from the input stream,

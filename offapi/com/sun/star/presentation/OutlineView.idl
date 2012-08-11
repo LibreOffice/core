@@ -39,11 +39,9 @@
 
 #include <com/sun/star/awt/XWindow.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module presentation {
 
-//=============================================================================
 
 /** This component integrates an outline view to a presentation
     document into the desktop.
@@ -55,34 +53,29 @@
  */
 published service OutlineView
 {
-    //-------------------------------------------------------------------------
 
     /** this services offers the  integration of this component into the
         desktop.
     */
     service com::sun::star::frame::Controller;
 
-    //-------------------------------------------------------------------------
 
     /** lets you access the window for this view
     */
     interface com::sun::star::awt::XWindow;
 
-    //-------------------------------------------------------------------------
 
 
     /** lets you access the properties of this service.
      */
     interface com::sun::star::beans::XPropertySet;
 
-    //-------------------------------------------------------------------------
 
     /** provides the names of the services implemented by
                 this instance.
      */
     interface com::sun::star::lang::XServiceInfo;
 
-    //-------------------------------------------------------------------------
 
     /** This is the area that is currently visible.
      */
@@ -90,7 +83,6 @@ published service OutlineView
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

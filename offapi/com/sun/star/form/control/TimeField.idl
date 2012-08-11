@@ -23,11 +23,9 @@
 #include <com/sun/star/awt/UnoControlTimeField.idl>
 #include <com/sun/star/form/XBoundControl.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module form {  module control {
 
-//=============================================================================
 
 /** describes a control for inputting time values which can (but not necessarily has to) be bound
     to a database field.
@@ -45,7 +43,6 @@ published service TimeField
     interface com::sun::star::form::XBoundControl;
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

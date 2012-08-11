@@ -39,11 +39,9 @@
 #include <com/sun/star/beans/XPropertySet.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module form {
 
-//=============================================================================
 
 /** is an abstract service for specialized <type>FormControlModel</type>s
     which are data aware and thus can be bound to a data source.
@@ -101,7 +99,6 @@ published service DataAwareControlModel
     */
     interface com::sun::star::form::XReset;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the name of the bound database field.
 
@@ -129,7 +126,6 @@ published service DataAwareControlModel
     */
     [optional, property] boolean InputRequired;
 
-    //-------------------------------------------------------------------------
 
     /** references to the cursor field to which the control is bound.
         <p>Applies only if the form the control model belongs to is loaded and the control is valid bound.
@@ -139,7 +135,6 @@ published service DataAwareControlModel
      */
     [readonly, property] com::sun::star::beans::XPropertySet BoundField;
 
-    //-------------------------------------------------------------------------
 
     /** references to a control model within the same document which should be used as a label.
         <p>Any user interface action which needs to refer to the control is assumed to use this
@@ -179,7 +174,6 @@ published service DataAwareControlModel
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

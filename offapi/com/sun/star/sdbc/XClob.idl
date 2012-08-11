@@ -90,7 +90,6 @@
  */
 published interface XClob: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** returns the number of characters in the
         <code>CLOB</code>
@@ -105,7 +104,6 @@ published interface XClob: com::sun::star::uno::XInterface
      */
     hyper length() raises (SQLException);
 
-      //-------------------------------------------------------------------------
 
     /** returns a copy of the specified substring in the
         <code>Clob</code>
@@ -132,7 +130,6 @@ published interface XClob: com::sun::star::uno::XInterface
      */
     string getSubString([in]hyper pos, [in]long length) raises (SQLException);
 
-    //-------------------------------------------------------------------------
 
     /** gets the
         <code>Clob</code>
@@ -144,7 +141,6 @@ published interface XClob: com::sun::star::uno::XInterface
      */
     com::sun::star::io::XInputStream getCharacterStream() raises (SQLException);
 
-    //-------------------------------------------------------------------------
 
     /** determines the character position at which the specified substring
         <code>searchstr</code>
@@ -165,7 +161,6 @@ published interface XClob: com::sun::star::uno::XInterface
     hyper position([in]string searchstr, [in]long start)
         raises (SQLException);
 
-      //-------------------------------------------------------------------------
 
     /** determines the position at which the specified
         <code>Clob</code>
@@ -189,7 +184,6 @@ published interface XClob: com::sun::star::uno::XInterface
         raises (SQLException);
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -33,11 +33,9 @@
 #include <com/sun/star/task/XInteractionHandler.idl>
 
 
-//=============================================================================
 
 module com { module sun { module star { module resource {
 
-//=============================================================================
 /**
     Interface derived from XStringResourceManager containing
     basic persistence functionality limited to operations that
@@ -233,7 +231,6 @@ interface XStringResourcePersistence: com::sun::star::resource::XStringResourceM
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

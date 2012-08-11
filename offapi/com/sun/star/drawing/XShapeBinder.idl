@@ -35,17 +35,14 @@
 #include <com/sun/star/drawing/XShapes.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module drawing {
 
-//=============================================================================
 
 /** connects or breaks the lines of <type>Shape</type>s
  */
 published interface XShapeBinder: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** binds <type>Shape</type>s together.
 
@@ -62,7 +59,6 @@ published interface XShapeBinder: com::sun::star::uno::XInterface
      */
     com::sun::star::drawing::XShape bind( [in] com::sun::star::drawing::XShapes xShapes );
 
-    //-------------------------------------------------------------------------
 
     /** breaks a <type>Shape</type> into its line segments
 
@@ -76,7 +72,6 @@ published interface XShapeBinder: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

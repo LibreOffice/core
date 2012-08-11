@@ -20,18 +20,15 @@
 #define __com_sun_star_embed_EmbedUpdateModes_idl__
 
 
-//============================================================================
 
 module com { module sun { module star { module embed {
 
-//============================================================================
 /** The constant set specifies possible modes of object update.
 
     @see XEmbeddedObject
 */
 published constants EmbedUpdateModes
 {
-    // -----------------------------------------------------------------------
     /** An object representation should be updated as often as possible.
 
         <p>
@@ -41,7 +38,6 @@ published constants EmbedUpdateModes
      */
     const long ALWAYS_UPDATE = 0;
 
-    // -----------------------------------------------------------------------
     /** An object representation should be updated only in case of request.
 
         <p>
@@ -52,7 +48,6 @@ published constants EmbedUpdateModes
 
 };
 
-//============================================================================
 
 }; }; }; };
 

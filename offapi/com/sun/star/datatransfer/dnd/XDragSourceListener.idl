@@ -24,11 +24,9 @@
 #include <com/sun/star/datatransfer/dnd/DragSourceDropEvent.idl>
 #include <com/sun/star/lang/XEventListener.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module datatransfer { module dnd {
 
-//=============================================================================
 /** This interface must be implemented by any drag gesture recognizer
     implementation that a drag source supports.
 
@@ -38,7 +36,6 @@ module com { module sun { module star { module datatransfer { module dnd {
 
 published interface XDragSourceListener: com::sun::star::lang::XEventListener
 {
-    //-------------------------------------------------------------------------
     /** This method is invoked to signify that the Drag and Drop operation is
         complete.
 
@@ -48,7 +45,6 @@ published interface XDragSourceListener: com::sun::star::lang::XEventListener
 
     [oneway] void dragDropEnd( [in] DragSourceDropEvent dsde );
 
-      //-------------------------------------------------------------------------
     /** Called as the hotspot enters a platform dependent drop site.
 
         <p><strong>NOTE:</strong> currently this notification can not be ensured by all
@@ -60,7 +56,6 @@ published interface XDragSourceListener: com::sun::star::lang::XEventListener
 
     [oneway] void dragEnter( [in] DragSourceDragEvent dsde );
 
-      //-------------------------------------------------------------------------
     /** Called as the hotspot exits a platform dependent drop site.
 
         <p><strong>NOTE:</strong> Currently this notification can not be ensured by all
@@ -72,7 +67,6 @@ published interface XDragSourceListener: com::sun::star::lang::XEventListener
 
     [oneway] void dragExit( [in] DragSourceEvent dse );
 
-      //-------------------------------------------------------------------------
     /** Called as the hotspot moves over a platform dependent drop site.
 
         @param dsde
@@ -81,7 +75,6 @@ published interface XDragSourceListener: com::sun::star::lang::XEventListener
 
     [oneway] void dragOver( [in] DragSourceDragEvent dsde );
 
-      //-------------------------------------------------------------------------
     /** Called when the user has modified the drop gesture.
 
         @param dsde
@@ -91,7 +84,6 @@ published interface XDragSourceListener: com::sun::star::lang::XEventListener
     [oneway] void dropActionChanged( [in] DragSourceDragEvent dsde );
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

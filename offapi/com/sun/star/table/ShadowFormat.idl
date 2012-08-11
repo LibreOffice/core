@@ -23,35 +23,29 @@
 #include <com/sun/star/util/Color.idl>
 #include <com/sun/star/table/ShadowLocation.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module table {
 
-//=============================================================================
 
 /** describes the settings of a cell shadow.
  */
 published struct ShadowFormat
 {
-    //-------------------------------------------------------------------------
 
     /** contains the location of the shadow.
      */
     com::sun::star::table::ShadowLocation Location;
 
-    //-------------------------------------------------------------------------
 
     /** contains the size of the shadow.
      */
     short ShadowWidth;
 
-    //-------------------------------------------------------------------------
 
     /** is <TRUE/>, if shadow is transparent.
      */
     boolean IsTransparent;
 
-    //-------------------------------------------------------------------------
 
     /** contains the color value of the shadow.
      */
@@ -59,7 +53,6 @@ published struct ShadowFormat
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

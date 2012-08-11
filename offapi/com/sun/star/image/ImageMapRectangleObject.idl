@@ -32,11 +32,9 @@
 
 #include <com/sun/star/awt/Rectangle.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module image {
 
-//=============================================================================
 
 /** this service describes a rectangular-shaped region inside
     a HTML image map.
@@ -52,7 +50,6 @@ published service ImageMapRectangleObject
     [property] com::sun::star::awt::Rectangle Boundary;
 };
 
-//=============================================================================
 
 }; }; }; };
 

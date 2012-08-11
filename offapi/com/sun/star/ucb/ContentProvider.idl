@@ -24,21 +24,17 @@
 #include <com/sun/star/ucb/XParameterizedContentProvider.idl>
 #include <com/sun/star/ucb/XContentProviderSupplier.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** provides access to a set of <type>Content</type>s.
 */
 published service ContentProvider
 {
-    //-------------------------------------------------------------------------
     /** gives access to all contents provided by this provider.
      */
     interface com::sun::star::ucb::XContentProvider;
 
-    //-------------------------------------------------------------------------
     /** creates special <type>XContentIdentifier</type> implementation
         objects for the contents provided by this content provider.
 
@@ -48,7 +44,6 @@ published service ContentProvider
      */
     [optional] interface com::sun::star::ucb::XContentIdentifierFactory;
 
-    //-------------------------------------------------------------------------
     /** allows a <type>ContentProvider</type> to adjust itself to special
         needs.
 
@@ -62,7 +57,6 @@ published service ContentProvider
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

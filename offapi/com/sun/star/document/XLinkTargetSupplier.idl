@@ -24,11 +24,9 @@
 #include <com/sun/star/container/XNameAccess.idl>
 
 
-//=============================================================================
 
 module com {   module sun {   module star {   module document {
 
-//=============================================================================
 
 /** interface is supplied by objects inside a document object model that have
     children that can be the target of a link inside a document.
@@ -37,7 +35,6 @@ module com {   module sun {   module star {   module document {
  */
 published interface XLinkTargetSupplier: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** @returns
             the names of possible links to children of this object inside  a
             document object model. It implements the service  <type>LinkTargets</type>.
@@ -46,7 +43,6 @@ published interface XLinkTargetSupplier: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

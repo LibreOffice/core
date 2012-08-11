@@ -21,11 +21,9 @@
 
 #include <com/sun/star/container/XNameAccess.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module text {
 
-//=============================================================================
 
 // DocMerge from xml: service com::sun::star::text::TextFieldMasters
 /** This is a collection of instances of <type>TextFieldMaster</type>, defined
@@ -45,7 +43,6 @@ published service TextFieldMasters
     interface com::sun::star::container::XNameAccess;
 };
 
-//=============================================================================
 
 }; }; }; };
 

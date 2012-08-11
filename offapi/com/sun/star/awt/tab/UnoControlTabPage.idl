@@ -31,11 +31,9 @@
 #include <com/sun/star/awt/UnoControlContainer.idl>
 #include <com/sun/star/awt/tab/XTabPage.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module awt {  module tab {
 
-//=============================================================================
 
 /** specifies a TabPage control.
 
@@ -50,7 +48,6 @@ service UnoControlTabPage
 
 };
 
-//=============================================================================
 
  }; }; }; }; };
 

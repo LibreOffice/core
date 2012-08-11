@@ -24,11 +24,9 @@
 #include <com/sun/star/form/XReset.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module form {  module component {
 
-//=============================================================================
 
 /** specifies the model of a scroll bar control.
 */
@@ -42,7 +40,6 @@ service SpinButton
     */
     interface com::sun::star::form::XReset;
 
-    //-------------------------------------------------------------------------
 
     /** contains a default value for the control.
 
@@ -55,7 +52,6 @@ service SpinButton
 
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

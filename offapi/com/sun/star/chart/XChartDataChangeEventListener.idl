@@ -24,17 +24,14 @@
 #include <com/sun/star/chart/ChartDataChangeEvent.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module chart {
 
-//=============================================================================
 
 /** makes it possible to receive events when chart data changes.
  */
 published interface XChartDataChangeEventListener: com::sun::star::lang::XEventListener
 {
-    //-------------------------------------------------------------------------
 
     /** is called whenever chart data changes in value or structure.
 
@@ -52,7 +49,6 @@ published interface XChartDataChangeEventListener: com::sun::star::lang::XEventL
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

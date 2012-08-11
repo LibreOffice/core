@@ -40,7 +40,6 @@ published constants ProcedureResult
              </p>
      */
     const long UNKNOWN  = 0;
-    //-------------------------------------------------------------------------
 
     /** A possible value for column
             <code>PROCEDURE_TYPE</code>
@@ -55,7 +54,6 @@ published constants ProcedureResult
              </p>
      */
     const long NONE     = 1;
-    //-------------------------------------------------------------------------
 
     /** A possible value for column
             <code>PROCEDURE_TYPE</code>
@@ -72,7 +70,6 @@ published constants ProcedureResult
     const long RETURN   = 2;
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -21,14 +21,12 @@
 
 #include <com/sun/star/lang/XComponent.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module frame {
 
  published interface XFrame;
  published interface XModel;
 
-//=============================================================================
 /** With this interface, components viewed in a <type>Frame</type> can serve
     events (by supplying dispatches).
 
@@ -38,7 +36,6 @@
  */
 published interface XController: com::sun::star::lang::XComponent
 {
-    //-------------------------------------------------------------------------
     /** is called to attach the controller with its managing frame.
 
         @param Frame
@@ -46,7 +43,6 @@ published interface XController: com::sun::star::lang::XComponent
      */
     void attachFrame( [in] XFrame Frame );
 
-    //-------------------------------------------------------------------------
     /** is called to attach the controller to a new model.
 
         @param Model
@@ -59,7 +55,6 @@ published interface XController: com::sun::star::lang::XComponent
      */
     boolean attachModel( [in] XModel Model );
 
-    //-------------------------------------------------------------------------
     /** is called to prepare the controller for closing the view
 
         @param Suspend
@@ -73,7 +68,6 @@ published interface XController: com::sun::star::lang::XComponent
      */
     boolean suspend( [in] boolean Suspend );
 
-    //-------------------------------------------------------------------------
     /** provides access to current view status
 
         @returns
@@ -82,7 +76,6 @@ published interface XController: com::sun::star::lang::XComponent
      */
     any getViewData();
 
-    //-------------------------------------------------------------------------
     /** restores the view status using the data gotten from a previous call to
         <member>XController::getViewData()</member>.
 
@@ -91,7 +84,6 @@ published interface XController: com::sun::star::lang::XComponent
      */
     void restoreViewData( [in] any Data );
 
-    //-------------------------------------------------------------------------
     /** provides access to currently attached model
 
         @returns
@@ -99,7 +91,6 @@ published interface XController: com::sun::star::lang::XComponent
      */
     XModel getModel();
 
-    //-------------------------------------------------------------------------
     /** provides access to owner frame of this controller
 
         @returns
@@ -108,7 +99,6 @@ published interface XController: com::sun::star::lang::XComponent
     XFrame getFrame();
 };
 
-//=============================================================================
 
 }; }; }; };
 

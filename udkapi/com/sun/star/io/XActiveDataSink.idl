@@ -24,11 +24,9 @@
 #include <com/sun/star/io/XInputStream.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module io {
 
-//=============================================================================
 
 // DocMerge from xml: interface com::sun::star::io::XActiveDataSink
 /** makes it possible to read the corresponding object from an input stream.
@@ -38,7 +36,6 @@ module com {  module sun {  module star {  module io {
  */
 published interface XActiveDataSink: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::io::XActiveDataSink::setInputStream
     /** plugs the input stream.
@@ -49,7 +46,6 @@ published interface XActiveDataSink: com::sun::star::uno::XInterface
      */
     void setInputStream( [in] com::sun::star::io::XInputStream aStream );
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from idl: method com::sun::star::io::XActiveDataSink::getInputStream
     /** @returns
@@ -59,7 +55,6 @@ published interface XActiveDataSink: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

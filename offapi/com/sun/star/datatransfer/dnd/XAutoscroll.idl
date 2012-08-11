@@ -22,11 +22,9 @@
 
 #include <com/sun/star/uno/XInterface.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module datatransfer { module dnd {
 
-//=============================================================================
 /** Interface for autoscroll support.
 
     <p>During Drag and Drop operations it is possible that a user may wish to drop the
@@ -50,7 +48,6 @@ module com { module sun { module star { module datatransfer { module dnd {
 
 published interface XAutoscroll: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** Notify the component to autoscroll.
 
         @param cursorLocationX
@@ -62,7 +59,6 @@ published interface XAutoscroll: com::sun::star::uno::XInterface
 
     [oneway] void autoscroll( [in] long cursorLocationX, [in] long cursorLocationY );
 
-    //-------------------------------------------------------------------------
     /** Returns the regions describing the autoscrolling region.
 
         @returns
@@ -73,7 +69,6 @@ published interface XAutoscroll: com::sun::star::uno::XInterface
     any getAutoscrollRegion();
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

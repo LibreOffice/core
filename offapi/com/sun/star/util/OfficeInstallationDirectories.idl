@@ -31,11 +31,9 @@
 
 #include <com/sun/star/util/XOfficeInstallationDirectories.idl>
 
-//============================================================================
 
 module com {  module sun {  module star {  module  util {
 
-//============================================================================
 
 /** encapsulates access to the current office installation directory and
     office user data directory, provides functionality to create URLs
@@ -59,7 +57,6 @@ published service OfficeInstallationDirectories
   interface com::sun::star::util::XOfficeInstallationDirectories;
 };
 
-//============================================================================
 
 /** A singleton that provides access to the current office installation
     directories.
@@ -71,7 +68,6 @@ published singleton theOfficeInstallationDirectories
     service com::sun::star::util::OfficeInstallationDirectories;
 };
 
-//============================================================================
 
 }; }; }; };
 

@@ -20,32 +20,26 @@
 #define __com_sun_star_text_FontRelief_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module text {
 
-//=============================================================================
 /**  Determines the relief type of a font.
  */
 published constants FontRelief
 {
-    //-------------------------------------------------------------------------
     /** no relief is used.
      */
     const short NONE = 0;
 
-    //-------------------------------------------------------------------------
     /** the font relief is embossed.
      */
     const short EMBOSSED = 1;
 
-    //-------------------------------------------------------------------------
     /** the font relief is engraved.
      */
     const short ENGRAVED = 2;
 };
 
-//=============================================================================
 
 }; }; }; };
 #endif

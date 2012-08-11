@@ -31,11 +31,9 @@
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/io/XInputStream.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module mozilla {
 
-//=============================================================================
 
 
 // DocMerge from xml: method com::sun::star::mozilla::XPluginInstance::start
@@ -44,7 +42,6 @@
  */
 published interface XPluginInstance: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
 
     // DocMerge from xml: method com::sun::star::mozilla::XPluginInstance::start
@@ -53,7 +50,6 @@ published interface XPluginInstance: com::sun::star::uno::XInterface
      */
     [oneway] void start();
 
-    //-------------------------------------------------------------------------
 
 
     // DocMerge from xml: method com::sun::star::mozilla::XPluginInstance::stop
@@ -63,7 +59,6 @@ published interface XPluginInstance: com::sun::star::uno::XInterface
      */
     [oneway] void stop();
 
-    //-------------------------------------------------------------------------
 
 
     // DocMerge from xml: method com::sun::star::mozilla::XPluginInstance::destroy
@@ -73,7 +68,6 @@ published interface XPluginInstance: com::sun::star::uno::XInterface
      */
     [oneway] void destroy();
 
-    //-------------------------------------------------------------------------
 
 
     // DocMerge from xml: method com::sun::star::mozilla::XPluginInstance::createWindow
@@ -85,7 +79,6 @@ published interface XPluginInstance: com::sun::star::uno::XInterface
      */
     [oneway] void createWindow( [in] any PlatformParentData, [in] boolean embedded );
 
-    //-------------------------------------------------------------------------
 
 
     // DocMerge from xml: method com::sun::star::mozilla::XPluginInstance::newStream
@@ -106,7 +99,6 @@ published interface XPluginInstance: com::sun::star::uno::XInterface
         [in] any sessionData
     );
 
-    //-------------------------------------------------------------------------
 
 
     // DocMerge from xml: method com::sun::star::mozilla::XPluginInstance::newURL
@@ -120,7 +112,6 @@ published interface XPluginInstance: com::sun::star::uno::XInterface
      */
     [oneway] void newURL( [in] string MIMEDesc, [in] string theURL, [in] string filter, [in] any sessionData );
 
-    //-------------------------------------------------------------------------
 
 
     // DocMerge from idl: method com::sun::star::mozilla::XPluginInstance::getHttpServerURL
@@ -135,7 +126,6 @@ published interface XPluginInstance: com::sun::star::uno::XInterface
                            [out] string aPrefix);
 };
 
-//=============================================================================
 
 }; }; }; };
 

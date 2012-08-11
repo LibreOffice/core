@@ -21,11 +21,9 @@
 
 #include <com/sun/star/ucb/XContentProvider.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** The Hierarchy Content Provider (HCP) implements a
     <type>ContentProvider</type> for the <type>UniversalContentBroker</type>
     (UCB).
@@ -37,7 +35,6 @@ module com { module sun { module star { module ucb {
 */
 published service HierarchyContentProvider
 {
-    //-------------------------------------------------------------------------
     /** provides three types of contents: Link, Folder and Root Folder.
 
         <p>
@@ -95,7 +92,6 @@ published service HierarchyContentProvider
     interface com::sun::star::ucb::XContentProvider;
 };
 
-//=============================================================================
 
 }; }; }; };
 

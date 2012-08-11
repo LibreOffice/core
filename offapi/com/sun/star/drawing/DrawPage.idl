@@ -25,11 +25,9 @@
 #include <com/sun/star/form/XFormsSupplier.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module drawing {
 
-//=============================================================================
 
 // DocMerge from xml: service com::sun::star::drawing::DrawPage
 /** This service specifies a page for the actual draw pages to contain
@@ -65,7 +63,6 @@ published service DrawPage
     [optional] interface com::sun::star::form::XFormsSupplier;
 };
 
-//=============================================================================
 
 }; }; }; };
 

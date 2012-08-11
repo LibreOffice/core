@@ -32,33 +32,27 @@
 
 #include <com/sun/star/uno/XInterface.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module document {
 
-//=============================================================================
 //gives access to VBA method input/output parameters
-//
 //some OO objects need to implement this interface to support the passing of input/output parameters
 //for certain VBA events
 
 interface XVbaMethodParameter : com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** sets the value of the parameter with the specified name.
      */
     void setVbaMethodParameter( [in] string PropertyName,
              [in] any Value );
 
-    //-------------------------------------------------------------------------
 
     /** returns the value of the parameter with the specified name.
      */
     any getVbaMethodParameter( [in] string PropertyName );
 };
 
-//=============================================================================
 
 }; }; }; };
 #endif

@@ -25,15 +25,12 @@
 #include <com/sun/star/lang/XInitialization.idl>
 #include <com/sun/star/lang/XTypeProvider.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module datatransfer { module dnd {
 
-//=============================================================================
 
  published interface XDragSource;
 
-//=============================================================================
 /** This service connects the Java-like UNO Drag and Drop protocol to the
     X Drag and Drop protocol used on X-Servers to transfer data between
     applications via Drag and Drop operations.
@@ -43,35 +40,29 @@ module com { module sun { module star { module datatransfer { module dnd {
 
 published service X11DragSource
 {
-    //-------------------------------------------------------------------------
     /** Used to provide data to other applications via X Drag and Drop protocol.
     */
     interface XDragSource;
 
-    //-------------------------------------------------------------------------
     /** The service expects an instance of
         <type scope="com::sun::star::awt">XDisplayConnection</type>
         as the first parameter.
     */
     interface com::sun::star::lang::XInitialization;
 
-    //-------------------------------------------------------------------------
     /** For shutdown and listener support.
     */
     interface com::sun::star::lang::XComponent;
 
-    //-------------------------------------------------------------------------
     /** Service should always support this interface.
     */
     interface com::sun::star::lang::XServiceInfo;
 
-    //-------------------------------------------------------------------------
     /** Service should always support this interface.
     */
     interface com::sun::star::lang::XTypeProvider;
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

@@ -20,32 +20,26 @@
 #define __com_sun_star_ucb_OpenMode_idl__
 
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** These are the possible values for <member>OpenCommandArgument::Mode</member>.
 */
 published constants OpenMode
 {
-    //-------------------------------------------------------------------------
     /** open a folder, include all children in result set (documents and
         folders).
     */
     const short ALL = 0;
 
-    //-------------------------------------------------------------------------
     /** open a folder, include only children, that are folders, in result set.
     */
     const short FOLDERS = 1;
 
-    //-------------------------------------------------------------------------
     /** open a folder, include only children, that are documents, in result set.
     */
     const short DOCUMENTS = 3;
 
-    //-------------------------------------------------------------------------
     /** open a document. There are no special requirements for data access
         sharing.
 
@@ -56,7 +50,6 @@ published constants OpenMode
     */
     const short DOCUMENT = 2;
 
-    //-------------------------------------------------------------------------
     /** open a document. Allow shared read and write access.
 
         <p>Note: There must be a data sink supplied in the
@@ -66,7 +59,6 @@ published constants OpenMode
     */
     const short DOCUMENT_SHARE_DENY_NONE = 4;
 
-    //-------------------------------------------------------------------------
     /** open a document. Deny shared write access.
 
         <p>Note: There must be a data sink supplied in the
@@ -79,7 +71,6 @@ published constants OpenMode
 //  const short DOCUMENT_SHARE_DENY_READ = 6;
 };
 
-//=============================================================================
 
 }; }; }; };
 

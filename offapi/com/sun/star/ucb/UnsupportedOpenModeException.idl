@@ -31,11 +31,9 @@
 
 #include <com/sun/star/uno/Exception.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** This exception is used to indicate that the requested <type>OpenMode</type>
     is not supported.
 
@@ -48,13 +46,11 @@ module com { module sun { module star { module ucb {
 */
 published exception UnsupportedOpenModeException : com::sun::star::uno::Exception
 {
-    //-------------------------------------------------------------------------
     /** contains the <type>OpenMode</type> that is not supported.
      */
     short Mode;
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -19,11 +19,9 @@
 #ifndef __com_sun_star_presentation_ShapeAnimationSubType_idl__
 #define __com_sun_star_presentation_ShapeAnimationSubType_idl__
 
-//=============================================================================
 
  module com {  module sun {  module star {  module presentation {
 
-//=============================================================================
 
 /** Defines the whole shape or a subitem as a target for an
     effect.
@@ -51,7 +49,6 @@ constants ShapeAnimationSubType
     const short ONLY_TEXT = 2;
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -22,11 +22,9 @@
 #include <com/sun/star/document/DocumentInfo.idl>
 #include <com/sun/star/document/XStandaloneDocumentInfo.idl>
 
-//=============================================================================
 
   module com {   module sun {   module star {   module document {
 
-//=============================================================================
 /** extends the service <type>DocumentInfo</type> to have access on such
     document properties without loading the whole document
 
@@ -44,7 +42,6 @@
  */
 published service StandaloneDocumentInfo
 {
-    //-------------------------------------------------------------------------
     /** use it to specify resource or target of document info data
 
         <p>
@@ -53,13 +50,11 @@ published service StandaloneDocumentInfo
      */
     interface XStandaloneDocumentInfo;
 
-    //-------------------------------------------------------------------------
     /** access to document info data
      */
     service DocumentInfo;
 };
 
-//=============================================================================
 
 }; }; }; };
 

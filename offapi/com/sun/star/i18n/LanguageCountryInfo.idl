@@ -20,11 +20,9 @@
 #ifndef __com_sun_star_i18n_LanguageCountryInfo_idl__
 #define __com_sun_star_i18n_LanguageCountryInfo_idl__
 
-//============================================================================
 
 module com {  module sun {  module star {  module i18n {
 
-//============================================================================
 
 /**
     The language and country identifiers and descriptive names of the
@@ -49,7 +47,6 @@ published struct LanguageCountryInfo
     string Variant;
 };
 
-//============================================================================
 }; }; }; };
 
 #endif

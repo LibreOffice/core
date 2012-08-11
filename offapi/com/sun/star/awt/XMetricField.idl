@@ -22,121 +22,101 @@
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/util/MeasureUnit.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module awt {
 
-//=============================================================================
 
 /** gives access to the value and formatting of a metric field.
  */
 interface XMetricField: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** sets the value which is displayed in the metric field.
      */
     void setValue( [in] hyper Value, [in] short FieldUnit );
 
-    //-------------------------------------------------------------------------
 
     /** sets the user value which is displayed in the metric field.
      */
     void setUserValue( [in] hyper Value, [in] short FieldUnit );
 
-    //-------------------------------------------------------------------------
 
     /** returns the value which is currently displayed in the metric field.
      */
     hyper getValue( [in] short FieldUnit );
 
-    //-------------------------------------------------------------------------
 
     /** returns the corrected value which is displayed in the metric field.
      */
     hyper getCorrectedValue( [in] short FieldUnit );
 
-    //-------------------------------------------------------------------------
 
     /** sets the minimum value that can be entered by the user.
      */
     void setMin( [in] hyper Value, [in] short FieldUnit );
 
-    //-------------------------------------------------------------------------
 
     /** returns the currently set minimum value that can be entered by the
         user.
      */
     hyper getMin( [in] short FieldUnit );
 
-    //-------------------------------------------------------------------------
 
     /** sets the maximum value that can be entered by the user.
      */
     void setMax( [in] hyper Value, [in] short FieldUnit );
 
-    //-------------------------------------------------------------------------
 
     /** returns the currently set maximum value that can be entered by the
         user.
      */
     hyper getMax( [in] short FieldUnit );
 
-    //-------------------------------------------------------------------------
 
     /** sets the first value to be set on POS1 key.
      */
     void setFirst( [in] hyper Value, [in] short FieldUnit );
 
-    //-------------------------------------------------------------------------
 
     /** returns the currently set first value which is set on POS1 key.
      */
     hyper getFirst( [in] short FieldUnit );
 
-    //-------------------------------------------------------------------------
 
     /** sets the last value to be set on END key.
      */
     void setLast( [in] hyper Value, [in] short FieldUnit );
 
-    //-------------------------------------------------------------------------
 
     /** returns the currently set last value which is set on END key.
      */
     hyper getLast( [in] short FieldUnit );
 
-    //-------------------------------------------------------------------------
 
     /** sets the increment value for the spin button.
      */
     void setSpinSize( [in] hyper Value );
 
-    //-------------------------------------------------------------------------
 
     /** returns the currently set increment value for the spin button.
      */
     hyper getSpinSize();
 
-    //-------------------------------------------------------------------------
 
     /** sets the number of decimals.
      */
     void setDecimalDigits( [in] short nDigits );
 
-    //-------------------------------------------------------------------------
 
     /** returns the currently set number of decimals.
      */
     short getDecimalDigits();
 
-    //-------------------------------------------------------------------------
 
     /** determines if the format is checked during user input.
      */
     void setStrictFormat( [in] boolean bStrict );
 
-    //-------------------------------------------------------------------------
 
     /** returns whether the format is currently checked during user input.
      */
@@ -144,7 +124,6 @@ interface XMetricField: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

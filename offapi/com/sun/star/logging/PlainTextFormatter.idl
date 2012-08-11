@@ -20,13 +20,11 @@
 #ifndef __com_sun_star_logging_PlainTextFormatter_idl__
 #define __com_sun_star_logging_PlainTextFormatter_idl__
 
-//=============================================================================
 
 module com { module sun { module star { module logging {
 
 interface XLogFormatter;
 
-//=============================================================================
 
 /** specifies a service which formats log records as single line plain text
 
@@ -43,11 +41,9 @@ service PlainTextFormatter : XLogFormatter
     create();
 };
 
-//=============================================================================
 
 }; }; }; };
 
-//=============================================================================
 
 #endif
 

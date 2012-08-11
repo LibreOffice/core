@@ -24,11 +24,9 @@
 #include <com/sun/star/embed/XStorage.idl>
 #include <com/sun/star/security/DocumentSignatureInformation.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module task {
 
-//=============================================================================
 
 /** describes the request to approve or deny the execution of macros contained in
     a document.
@@ -62,11 +60,9 @@ exception DocumentMacroConfirmationRequest : ClassifiedInteractionRequest
             DocumentSignatureInformation;
 };
 
-//=============================================================================
 
 }; }; }; };
 
-//=============================================================================
 
 #endif
 

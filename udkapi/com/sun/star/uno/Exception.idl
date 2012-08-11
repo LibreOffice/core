@@ -22,11 +22,9 @@
 #include <com/sun/star/uno/XInterface.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module uno {
 
-//=============================================================================
 
 // DocMerge from xml: exception com::sun::star::uno::Exception
 /** the base of all UNO exceptions
@@ -42,7 +40,6 @@ published exception Exception
      */
     string Message;
 
-    //-------------------------------------------------------------------------
 
     /** should contain a reference to the original, which raised the exception.
         <p>May be NULL.</p>
@@ -51,7 +48,6 @@ published exception Exception
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -28,11 +28,9 @@
 #include <com/sun/star/awt/XDevice.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module awt {
 
-//=============================================================================
 
 /** represents a virtual printer.
 
@@ -45,7 +43,6 @@
  */
 published interface XPrinter: com::sun::star::awt::XPrinterPropertySet
 {
-    //-------------------------------------------------------------------------
 
     /** puts the job into the printer spooler.
 
@@ -58,7 +55,6 @@ published interface XPrinter: com::sun::star::awt::XPrinterPropertySet
             raises( com::sun::star::awt::PrinterException,
                     com::sun::star::lang::IllegalArgumentException );
 
-    //-------------------------------------------------------------------------
 
     /** notifies the printer spooler that the job is done and printing
         starts.
@@ -68,7 +64,6 @@ published interface XPrinter: com::sun::star::awt::XPrinterPropertySet
     void end()
             raises( com::sun::star::awt::PrinterException );
 
-    //-------------------------------------------------------------------------
 
     /** stops the current print job.
 
@@ -85,14 +80,12 @@ published interface XPrinter: com::sun::star::awt::XPrinterPropertySet
      */
     void terminate();
 
-    //-------------------------------------------------------------------------
 
     /** begins with a new page.
      */
     com::sun::star::awt::XDevice startPage()
             raises( com::sun::star::awt::PrinterException );
 
-    //-------------------------------------------------------------------------
 
     /** ends the current page.
      */
@@ -101,7 +94,6 @@ published interface XPrinter: com::sun::star::awt::XPrinterPropertySet
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

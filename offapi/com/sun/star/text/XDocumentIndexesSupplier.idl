@@ -24,11 +24,9 @@
 #include <com/sun/star/container/XIndexAccess.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module text {
 
-//=============================================================================
 
 // DocMerge from xml: interface com::sun::star::text::XDocumentIndexesSupplier
 /** gives access to the collection of document indexes.
@@ -39,7 +37,6 @@
  */
 published interface XDocumentIndexesSupplier: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     // DocMerge from idl: method com::sun::star::text::XDocumentIndexesSupplier::getDocumentIndexes
     /** @returns
@@ -49,7 +46,6 @@ published interface XDocumentIndexesSupplier: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

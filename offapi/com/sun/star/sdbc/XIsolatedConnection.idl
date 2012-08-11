@@ -64,7 +64,6 @@ published interface XIsolatedConnection: com::sun::star::uno::XInterface
         raises (SQLException);
 };
 
-//=============================================================================
 
 }; }; }; };
 

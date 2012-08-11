@@ -24,11 +24,9 @@
 #include <com/sun/star/container/XEnumerationAccess.idl>
 #include <com/sun/star/table/CellRangeAddress.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** provides methods to access cell ranges in a collection via index and
     other helper methods.
@@ -37,7 +35,6 @@ module com {  module sun {  module star {  module sheet {
  */
 published interface XSheetCellRanges: com::sun::star::container::XIndexAccess
 {
-    //-------------------------------------------------------------------------
 
     /** returns the collection of all used cells.
 
@@ -45,7 +42,6 @@ published interface XSheetCellRanges: com::sun::star::container::XIndexAccess
      */
     com::sun::star::container::XEnumerationAccess getCells();
 
-    //-------------------------------------------------------------------------
 
     /** creates a string with addresses of all contained cell ranges.
 
@@ -57,7 +53,6 @@ published interface XSheetCellRanges: com::sun::star::container::XIndexAccess
      */
     string getRangeAddressesAsString();
 
-    //-------------------------------------------------------------------------
 
     /** creates a sequence with addresses of all contained cell ranges.
 
@@ -68,7 +63,6 @@ published interface XSheetCellRanges: com::sun::star::container::XIndexAccess
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

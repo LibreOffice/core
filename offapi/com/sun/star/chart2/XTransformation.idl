@@ -43,7 +43,6 @@ module chart2
     // NOTES
 
     //... provide help for creating the right transformation
-    //
     // ... access to source and destination coordinate system ?
 
 /** allows the transformation of numeric values from one

@@ -25,11 +25,9 @@
 #include <com/sun/star/accessibility/XAccessibleEventBroadcaster.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module text {
 
-//=============================================================================
 
 /** The accessible page preview of a text document.
 
@@ -90,7 +88,6 @@ published service AccessibleTextDocumentPageView
     interface ::com::sun::star::accessibility::XAccessibleEventBroadcaster;
 };
 
-//=============================================================================
 
 }; }; }; };
 

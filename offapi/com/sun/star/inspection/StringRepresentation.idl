@@ -31,16 +31,13 @@
 
 #include <com/sun/star/inspection/XStringRepresentation.idl>
 
-//=============================================================================
 module com {  module sun {  module star {  module inspection {
 
-//-----------------------------------------------------------------------------
 service StringRepresentation : XStringRepresentation
 {
     create([in]com::sun::star::script::XTypeConverter TypeConverter)raises( com::sun::star::lang::IllegalArgumentException );
     createConstant([in]com::sun::star::script::XTypeConverter TypeConverter,[in] string Constant,[in] sequence<string> Values)raises( com::sun::star::lang::IllegalArgumentException );
 };
-//=============================================================================
 
 }; }; }; };
 

@@ -33,13 +33,11 @@
 #include <com/sun/star/form/binding/ListEntrySource.idl>
 #include <com/sun/star/form/validation/XValidator.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module xforms {
 
 interface XSubmission;
 
-//=============================================================================
 
 /** represent a binding to one or more nodes in the DOM tree of an <type>XModel</type>.
  */
@@ -74,7 +72,6 @@ service Binding
     interface com::sun::star::form::validation::XValidator;
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -24,11 +24,9 @@
 #include <com/sun/star/document/ImportFilter.idl>
 #include <com/sun/star/xml/sax/XDocumentHandler.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module xml {
 
-//=============================================================================
 /** describes an import filter for XML-based file formats.
 
     <p>It is an extension of <type scope="com::sun::star::document">ImportFilter</type>
@@ -44,7 +42,6 @@ published service XMLImportFilter
     interface com::sun::star::xml::sax::XDocumentHandler;
 };
 
-//=============================================================================
 
 }; }; }; };
 

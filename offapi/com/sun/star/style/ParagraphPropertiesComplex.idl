@@ -21,24 +21,20 @@
 
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module style {
 
-//=============================================================================
 
 /** contains settings for the style of paragraphs with complex text layout.
  */
 published service ParagraphPropertiesComplex
 {
-    //-----------------------------------------------------------------------------
     /** contains the writing direction, as represented by the
         <type scope="com::sun::star::text">WritingMode2</type> constants
      */
     [property] short WritingMode;
 };
 
-//=============================================================================
 
 }; }; }; };
 

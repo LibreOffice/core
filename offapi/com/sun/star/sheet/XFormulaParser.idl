@@ -33,17 +33,14 @@
 #include <com/sun/star/sheet/FormulaToken.idl>
 #include <com/sun/star/table/CellAddress.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** converts between text and token representations of formulas.
  */
 interface XFormulaParser
 {
-    //-------------------------------------------------------------------------
 
     /** parses a formula into a sequence of tokens.
      */
@@ -51,7 +48,6 @@ interface XFormulaParser
         [in] string aFormula,
         [in] ::com::sun::star::table::CellAddress aReferencePos );
 
-    //-------------------------------------------------------------------------
 
     /** converts a formula into a string.
      */
@@ -61,7 +57,6 @@ interface XFormulaParser
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

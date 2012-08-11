@@ -25,11 +25,9 @@
 #include <com/sun/star/awt/XLayoutConstrains.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module awt {
 
-//=============================================================================
 
 /** specifies a radio button control.
  */
@@ -43,7 +41,6 @@ published service UnoControlRadioButton
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

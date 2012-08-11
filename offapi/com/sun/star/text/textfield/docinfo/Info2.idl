@@ -31,12 +31,10 @@
 
 #include <com/sun/star/text/TextField.idl>
 
-//=============================================================================
 
 module com { module sun { module star {
     module text { module textfield { module docinfo {
 
-//=============================================================================
 /** specifies service of a text field that provides the Info2 field that is contained
     in the document information.
     @deprecated this service is no longer implemented as of OOo 3.0;
@@ -58,7 +56,6 @@ published service Info2
     [property]boolean IsFixed;
 };
 
-//=============================================================================
 
 }; }; }; }; }; };
 

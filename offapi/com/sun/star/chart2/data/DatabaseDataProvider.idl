@@ -30,17 +30,14 @@
 
 #include <com/sun/star/chart2/data/XDatabaseDataProvider.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module chart2 { module data {
 
-//=============================================================================
 
 service DatabaseDataProvider : XDatabaseDataProvider
 {
     createWithConnection([in] com::sun::star::sdbc::XConnection connection);
 };
-//=============================================================================
 
  }; }; }; };  };
 

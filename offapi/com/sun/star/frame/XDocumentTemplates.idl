@@ -31,11 +31,9 @@
 #include <com/sun/star/frame/XStorable.idl>
 #include <com/sun/star/ucb/XContent.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module frame {
 
-//=============================================================================
 /** provides a high level API to organize document templates
 
     <p>
@@ -49,7 +47,6 @@ module com {  module sun {  module star {  module frame {
  */
 published interface XDocumentTemplates:  com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** provides access to the root of internal used hierarchy
 
         <p>
@@ -61,7 +58,6 @@ published interface XDocumentTemplates:  com::sun::star::uno::XInterface
      */
     com::sun::star::ucb::XContent getContent();
 
-    //-------------------------------------------------------------------------
     /** creates the template with the given name in the given group using the
         data from the storable
 
@@ -86,7 +82,6 @@ published interface XDocumentTemplates:  com::sun::star::uno::XInterface
         [in] string TemplateName,
         [in] XStorable Storable);
 
-    //-------------------------------------------------------------------------
     /** creates the template with the given name in the given group using the
         given URL
 
@@ -111,7 +106,6 @@ published interface XDocumentTemplates:  com::sun::star::uno::XInterface
         [in] string TemplateName,
         [in] string SourceURL);
 
-    //-------------------------------------------------------------------------
     /** remove a template from specified group
 
         @param GroupName
@@ -129,7 +123,6 @@ published interface XDocumentTemplates:  com::sun::star::uno::XInterface
         [in] string GroupName,
         [in] string TemplateName);
 
-    //-------------------------------------------------------------------------
     /** rename a template inside specified group
 
         @param GroupName
@@ -148,7 +141,6 @@ published interface XDocumentTemplates:  com::sun::star::uno::XInterface
         [in] string OldTemplateName,
         [in] string NewTemplateName);
 
-    //-------------------------------------------------------------------------
     /** creates a new group
 
         @param GroupName
@@ -161,7 +153,6 @@ published interface XDocumentTemplates:  com::sun::star::uno::XInterface
     */
     boolean addGroup( [in] string GroupName );
 
-    //-------------------------------------------------------------------------
     /** remove an existing group
 
         @param GroupName
@@ -174,7 +165,6 @@ published interface XDocumentTemplates:  com::sun::star::uno::XInterface
      */
     boolean removeGroup( [in] string GroupName );
 
-    //-------------------------------------------------------------------------
     /** rename an existing group
 
         @param OldGroupName
@@ -192,7 +182,6 @@ published interface XDocumentTemplates:  com::sun::star::uno::XInterface
         [in] string OldGroupName,
         [in] string NewGroupName);
 
-    //-------------------------------------------------------------------------
     /** force an update for internal structures
 
         <p>
@@ -204,7 +193,6 @@ published interface XDocumentTemplates:  com::sun::star::uno::XInterface
     [oneway] void update();
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -24,11 +24,9 @@
 #include <com/sun/star/container/XNameAccess.idl>
 #include <com/sun/star/container/XEnumerationAccess.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** represents a collection of function descriptions for all built-in
     functions as well as add-in functions available in the spreadsheet
@@ -41,14 +39,12 @@ module com {  module sun {  module star {  module sheet {
  */
 published service FunctionDescriptions
 {
-    //-------------------------------------------------------------------------
 
     /** provides access to the property sequence of a function description
         via function index or identifier.
      */
     interface com::sun::star::sheet::XFunctionDescriptions;
 
-    //-------------------------------------------------------------------------
 
     /** provides access to the property sequence of a function description
         via function name.
@@ -58,7 +54,6 @@ published service FunctionDescriptions
      */
     interface com::sun::star::container::XNameAccess;
 
-    //-------------------------------------------------------------------------
 
     /** creates an enumeration of all function descriptions.
 
@@ -68,7 +63,6 @@ published service FunctionDescriptions
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

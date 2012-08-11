@@ -24,23 +24,19 @@
 #include <com/sun/star/awt/KeyEvent.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module awt {
 
-//=============================================================================
 
 /** makes it possible to receive keyboard events.
  */
 published interface XKeyListener: com::sun::star::lang::XEventListener
 {
-    //-------------------------------------------------------------------------
 
     /** is invoked when a key has been pressed.
      */
     [oneway] void keyPressed( [in] com::sun::star::awt::KeyEvent e );
 
-    //-------------------------------------------------------------------------
 
     /** is invoked when a key has been released.
      */
@@ -48,7 +44,6 @@ published interface XKeyListener: com::sun::star::lang::XEventListener
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

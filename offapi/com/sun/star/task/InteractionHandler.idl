@@ -36,7 +36,6 @@ module com { module sun { module star {
 
 module com { module sun { module star { module task {
 
-//============================================================================
 /** An interaction request handler that lets the user handle requests via GUI dialogs.
 
     <p>The interaction handler service has a number of <a href="#built_in_handler">built-in handlers</a>, responsible
@@ -159,12 +158,10 @@ module com { module sun { module star { module task {
  */
 published service InteractionHandler
 {
-    //------------------------------------------------------------------------
     /** Handle an interaction request.
      */
     interface com::sun::star::task::XInteractionHandler;
 
-    //------------------------------------------------------------------------
     /** Initialize the interaction handler.
 
         <P>The arguments must be a sequence of

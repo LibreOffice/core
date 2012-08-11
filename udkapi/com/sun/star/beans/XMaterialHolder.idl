@@ -22,11 +22,9 @@
 #include <com/sun/star/uno/XInterface.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module beans {
 
-//=============================================================================
 /** gives access to the material a (tool-) object is working on.
 
     <p>Example: The introspection service allows the inspection of an
@@ -40,7 +38,6 @@
  */
 published interface XMaterialHolder: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** returns the material that is connected to this (tool-) object
 
         @returns
@@ -50,7 +47,6 @@ published interface XMaterialHolder: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

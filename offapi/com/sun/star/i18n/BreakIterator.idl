@@ -22,13 +22,10 @@
 #include <com/sun/star/lang/XServiceInfo.idl>
 #include <com/sun/star/i18n/XBreakIterator.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module i18n {
 
-//=============================================================================
 
-//--------------------------------------------------------------------------
 /** contains the base routines for iteration in Unicode string. Iterates over
     characters, words, sentences and line breaks.
 
@@ -41,7 +38,6 @@ published service BreakIterator
     interface com::sun::star::lang::XServiceInfo;
 };
 
-//=============================================================================
 
 }; }; }; };
 

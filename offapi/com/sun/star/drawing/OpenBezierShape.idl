@@ -32,11 +32,9 @@
 #include <com/sun/star/drawing/RotationDescriptor.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module drawing {
 
-//=============================================================================
 
 /** This service is for an open Bezier shape.
  */
@@ -56,7 +54,6 @@ published service OpenBezierShape
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

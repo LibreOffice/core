@@ -33,7 +33,6 @@
 
 module com { module sun { module star { module awt {
 
-//============================================================================
 /** An implementation which uses the message queue to call the
     callback implementation asynchronously.
 

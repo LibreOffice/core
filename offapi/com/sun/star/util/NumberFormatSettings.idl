@@ -24,11 +24,9 @@
 #include <com/sun/star/util/Date.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module util {
 
-//=============================================================================
 
 /** specifies the settings for number formatting.
  */
@@ -38,7 +36,6 @@ published service NumberFormatSettings
      */
     interface com::sun::star::beans::XPropertySet;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the date which is represented by the value 0.
 
@@ -46,20 +43,17 @@ published service NumberFormatSettings
      */
     [property] com::sun::star::util::Date NullDate;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the maximum number of decimals used for the
         standard number format ("General").
      */
     [property] short StandardDecimals;
 
-    //-------------------------------------------------------------------------
 
     /** is set to indicate that a zero value should be formatted as an empty string.
      */
     [property] boolean NoZero;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the first year to be generated from a two-digit
         year input.
@@ -68,7 +62,6 @@ published service NumberFormatSettings
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

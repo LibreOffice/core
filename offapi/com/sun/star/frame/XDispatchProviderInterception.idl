@@ -32,11 +32,9 @@
 #include <com/sun/star/frame/XDispatchProviderInterceptor.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module frame {
 
-//=============================================================================
 /** makes it possible to register an <type>XDispatchProvider</type> which
     intercepts all requests of <type>XDispatch</type> to this instance.
 
@@ -52,7 +50,6 @@
  */
 published interface XDispatchProviderInterception: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** registers an <type>XDispatchProviderInterceptor</type>, which will become
         the first interceptor in the chain of registered interceptors.
 
@@ -63,7 +60,6 @@ published interface XDispatchProviderInterception: com::sun::star::uno::XInterfa
      */
     void registerDispatchProviderInterceptor( [in] XDispatchProviderInterceptor Interceptor );
 
-    //-------------------------------------------------------------------------
     /** removes an <type>XDispatchProviderInterceptor</type> which was previously registered
 
         <p>
@@ -79,7 +75,6 @@ published interface XDispatchProviderInterception: com::sun::star::uno::XInterfa
     void releaseDispatchProviderInterceptor( [in] XDispatchProviderInterceptor Interceptor );
 };
 
-//=============================================================================
 
 }; }; }; };
 

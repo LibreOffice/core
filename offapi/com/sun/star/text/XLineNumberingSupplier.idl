@@ -23,11 +23,9 @@
 
 #include <com/sun/star/beans/PropertyValue.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module text {
 
-//=============================================================================
 
 // DocMerge from xml: interface com::sun::star::text::XLineNumberingSupplier
 /** contains the settings of the line numbering in a text document.
@@ -36,14 +34,12 @@
  */
 published interface XLineNumberingSupplier: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     // DocMerge from idl: method com::sun::star::text::XLineNumberingSupplier::getLineNumberingRules
     /** @return the <type>LineNumberingSettings</type> of the object.
      */
     sequence< sequence<com::sun::star::beans::PropertyValue> > getLineNumberingRules();
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::text::XLineNumberingSupplier::setLineNumberingRules
     /** sets a sequence of numbering rules.
@@ -57,7 +53,6 @@ published interface XLineNumberingSupplier: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

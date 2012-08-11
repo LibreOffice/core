@@ -33,11 +33,9 @@
 #include <com/sun/star/lang/EventObject.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module form {
 
-//=============================================================================
 
 /** is the interface for receiving notifications about reset events.
 
@@ -55,7 +53,6 @@
  */
 published interface XResetListener: com::sun::star::lang::XEventListener
 {
-    //-------------------------------------------------------------------------
 
     /** is invoked before a component is reset.
 
@@ -67,7 +64,6 @@ published interface XResetListener: com::sun::star::lang::XEventListener
      */
     boolean approveReset( [in] com::sun::star::lang::EventObject rEvent );
 
-    //-------------------------------------------------------------------------
 
     /** is invoked when a component has been reset.
 
@@ -78,7 +74,6 @@ published interface XResetListener: com::sun::star::lang::XEventListener
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

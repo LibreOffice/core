@@ -25,11 +25,9 @@
 #include <com/sun/star/container/XContainer.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module awt {
 
-//=============================================================================
 
 /** specifies an abstract control which contains other controls.
  */
@@ -45,7 +43,6 @@ published service UnoControlContainer
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

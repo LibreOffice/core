@@ -85,7 +85,6 @@ published service QueryDescriptor
     [property] string UpdateSchemaName;
 };
 
-//=============================================================================
 
 }; }; }; };
 

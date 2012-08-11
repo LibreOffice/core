@@ -32,11 +32,9 @@
 #include <com/sun/star/table/TableSortFieldType.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module table {
 
-//=============================================================================
 /** describes how to sort a single field (row/column) in a tables
     sort descriptor.
 
@@ -46,23 +44,19 @@ module com {  module sun {  module star {  module table {
  */
 published struct TableSortField
 {
-    //-------------------------------------------------------------------------
     /** index of the row or column in the table to be sorted; 0-based.
      */
     long Field;
 
-    //-------------------------------------------------------------------------
     /** <TRUE/> if data are sorted in ascending order,
         <FALSE/> if in descending order.
      */
     boolean IsAscending;
 
-    //-------------------------------------------------------------------------
     /** specifies if the case of letters is important when comparing entries.
      */
     boolean IsCaseSensitive;
 
-    //-------------------------------------------------------------------------
     /** type of contents in the field.
 
         <p>If the value is
@@ -73,7 +67,6 @@ published struct TableSortField
      */
     com::sun::star::table::TableSortFieldType FieldType;
 
-    //-------------------------------------------------------------------------
     /** the locale used by the collator when comparing/sorting text.
 
         <p>This property will not be used when the "FieldType" is
@@ -84,7 +77,6 @@ published struct TableSortField
      */
     com::sun::star::lang::Locale CollatorLocale;
 
-    //-------------------------------------------------------------------------
     /** the algorithm used by the collator when comparing/sorting text.
 
         <p>This property will not be used when the "FieldType" is
@@ -97,7 +89,6 @@ published struct TableSortField
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

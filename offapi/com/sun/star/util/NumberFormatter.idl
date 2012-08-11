@@ -24,11 +24,9 @@
 #include <com/sun/star/util/XNumberFormatPreviewer.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module util {
 
-//=============================================================================
 
 /** represents an object which can format numbers and strings.
 
@@ -49,7 +47,6 @@ published service NumberFormatter
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

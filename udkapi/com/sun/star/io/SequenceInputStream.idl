@@ -24,11 +24,9 @@
 #include <com/sun/star/lang/IllegalArgumentException.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module io {
 
-//=============================================================================
 
 // DocMerge from xml: service com::sun::star::io::SequenceInputStream
 /** This service allows to wrap a sequence of bytes with a stream object.
@@ -40,7 +38,6 @@ published service SequenceInputStream : XSeekableInputStream
     createStreamFromSequence( [in] sequence<byte> aData );
 };
 
-//=============================================================================
 
 }; }; }; };
 

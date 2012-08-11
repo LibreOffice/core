@@ -20,47 +20,38 @@
 #define __com_sun_star_ucb_ContentCreationError_idl__
 
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** Codes for content creation errors.
 */
 published enum ContentCreationError
 {
-    //-------------------------------------------------------------------------
     /** Unknown.
     */
     UNKNOWN,
 
-    //-------------------------------------------------------------------------
     /** @deprecated
     */
     NO_CONTENT_BROKER,
 
-    //-------------------------------------------------------------------------
     /** @deprecated
     */
     NO_IDENTIFIER_FACTORY,
 
-    //-------------------------------------------------------------------------
     /** Creation of content identifier failed.
     */
     IDENTIFIER_CREATION_FAILED,
 
-    //-------------------------------------------------------------------------
     /** No Content Provider for given content identifier available.
     */
     NO_CONTENT_PROVIDER,
 
-    //-------------------------------------------------------------------------
     /** Provider was unable to create the content instance.
     */
     CONTENT_CREATION_FAILED
 };
 
-//=============================================================================
 
 }; }; }; };
 

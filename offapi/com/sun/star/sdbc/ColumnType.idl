@@ -38,7 +38,6 @@ published constants ColumnType
              .
      */
     const long UNKNOWN  = 0;
-    //-------------------------------------------------------------------------
 
     /** indicates that this column is NOT a pseudo-column.
              A possible value for the column
@@ -51,7 +50,6 @@ published constants ColumnType
              .
      */
     const long NOT_PSEUDO   = 1;
-    //-------------------------------------------------------------------------
 
     /** indicates that this column is a pseudo-column.
              A possible value for the column
@@ -66,7 +64,6 @@ published constants ColumnType
     const long PSEUDO   = 2;
 };
 
-//=============================================================================
 
 }; }; }; };
 

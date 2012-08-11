@@ -29,11 +29,9 @@
 #ifndef __com_sun_star_sheet_ExternalLinkType_idl__
 #define __com_sun_star_sheet_ExternalLinkType_idl__
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** Constants designating the link type in
     <type>ExternalLinkInfo</type>, used with
@@ -57,7 +55,6 @@ constants ExternalLinkType
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

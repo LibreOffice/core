@@ -33,35 +33,29 @@
 #include <com/sun/star/ucb/CookieRequest.idl>
 
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** An error requesting guidance on how to handle cookie requests.
 
 @deprecated
 */
 published exception HandleCookiesRequest: com::sun::star::task::ClassifiedInteractionRequest
 {
-    //-------------------------------------------------------------------------
     /** The URL for which one ore more cookies are requested.
     */
     string URL;
 
-    //-------------------------------------------------------------------------
     /** The requested cookies.
     */
     sequence<com::sun::star::ucb::Cookie> Cookies;
 
-    //-------------------------------------------------------------------------
     /** Whether to receive (store) or send the cookies.
      */
     com::sun::star::ucb::CookieRequest Request;
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

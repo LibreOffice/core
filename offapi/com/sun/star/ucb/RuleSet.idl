@@ -31,11 +31,9 @@
 #include <com/sun/star/ucb/Rule.idl>
 
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** describes a set of <type>Rule</type>s.
 
     <p>A RuleSet is applied to a folder. It consists of a sequence of rules.
@@ -45,19 +43,16 @@ module com { module sun { module star { module ucb {
 */
 published struct RuleSet
 {
-    //-------------------------------------------------------------------------
     /** contains a number of rules.
     */
     sequence<com::sun::star::ucb::Rule> Rules;
 
-    //-------------------------------------------------------------------------
     /** is a flag indicating whether the rules apply to folders, too.
     */
     boolean HandleFolder;
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

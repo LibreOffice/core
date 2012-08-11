@@ -33,18 +33,15 @@
 #include <com/sun/star/script/browse/XBrowseNode.idl>
 #include <com/sun/star/script/browse/BrowseNodeFactoryViewTypes.idl>
 
-//===========================================================================
 
 module com { module sun { module star { module script { module browse {
 
-//===========================================================================
 /**
     This interface provides a factory for obtaining objects implementing the
     XBrowseNode interface.
 */
 interface XBrowseNodeFactory : ::com::sun::star::uno::XInterface {
 
-    //----------------------------------------------------------------------
     /** a factory method for the creation of XBrowseNodes
         ( view ) <type scope="::com::sun::star::script::browse">BrowseNodeFactoryViewTypes</type> specifies the type of view to be returned
 
@@ -55,7 +52,6 @@ interface XBrowseNodeFactory : ::com::sun::star::uno::XInterface {
     com::sun::star::script::browse::XBrowseNode createView( [in] short viewType );
 };
 
-//===========================================================================
 }; }; }; }; }; // com::sun::star::script::provider
 
 #endif

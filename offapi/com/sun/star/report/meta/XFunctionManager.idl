@@ -35,7 +35,6 @@
 #include <com/sun/star/report/meta/XFunctionCategory.idl>
 #include <com/sun/star/report/meta/XFunctionDescription.idl>
 
-//=============================================================================
 module com {  module sun {  module star {  module report { module meta {
 /** identifies a <type>XFunctionManager</type> which allows to retrieve the meta data of all supported functions.
 
@@ -64,7 +63,6 @@ interface XFunctionManager
         raises( com::sun::star::container::NoSuchElementException);
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

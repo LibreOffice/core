@@ -25,11 +25,9 @@
 
 #include <com/sun/star/lang/WrappedTargetException.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module container {
 
-//=============================================================================
 
 /** provides access to the elements of a collection through a unique identifier.
  */
@@ -63,7 +61,6 @@ published interface XIdentifierAccess: com::sun::star::container::XElementAccess
 }
 ;
 
-//=============================================================================
 
 }; }; }; };
 

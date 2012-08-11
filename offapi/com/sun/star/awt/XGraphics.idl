@@ -30,7 +30,6 @@
 
 #include <com/sun/star/awt/Gradient.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module awt {
 
@@ -39,61 +38,51 @@
  published interface XFont;
  published interface XDevice;
 
-//=============================================================================
 
 /** provides the basic output operation of a device.
  */
 published interface XGraphics: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** returns the device of this graphics.
      */
     XDevice getDevice();
 
-    //-------------------------------------------------------------------------
 
     /** returns the font metric of the current font.
      */
     SimpleFontMetric getFontMetric();
 
-    //-------------------------------------------------------------------------
 
     /** sets the font used by text operations.
      */
     [oneway] void setFont( [in] XFont xNewFont );
 
-    //-------------------------------------------------------------------------
 
     /** creates a new font and sets the font.
      */
     [oneway] void selectFont( [in] FontDescriptor aDescription );
 
-    //-------------------------------------------------------------------------
 
     /** sets the text color used by text operations.
      */
     [oneway] void setTextColor( [in] com::sun::star::util::Color nColor );
 
-    //-------------------------------------------------------------------------
 
     /** sets the fill color used by text operations.
      */
     [oneway] void setTextFillColor( [in] com::sun::star::util::Color nColor );
 
-    //-------------------------------------------------------------------------
 
     /** sets the line color.
      */
     [oneway] void setLineColor( [in] com::sun::star::util::Color nColor );
 
-    //-------------------------------------------------------------------------
 
     /** sets the fill color.
      */
     [oneway] void setFillColor( [in] com::sun::star::util::Color nColor );
 
-    //-------------------------------------------------------------------------
 
     /** sets the raster operation.
 
@@ -102,32 +91,27 @@ published interface XGraphics: com::sun::star::uno::XInterface
      */
     [oneway] void setRasterOp( [in] RasterOperation ROP );
 
-    //-------------------------------------------------------------------------
 
     /** sets the clip region to specified clipping.
      */
     [oneway] void setClipRegion( [in] XRegion Clipping );
 
-    //-------------------------------------------------------------------------
 
     /** builds the intersection with the current region.
      */
     [oneway] void intersectClipRegion( [in] XRegion xClipping );
 
-    //-------------------------------------------------------------------------
 
     /** saves all current settings (Font, TextColor, TextFillColor,
         LineColor, FillColor, RasterOp, ClipRegion).
      */
     [oneway] void push();
 
-    //-------------------------------------------------------------------------
 
     /** restores all previous saved settings.
      */
     [oneway] void pop();
 
-    //-------------------------------------------------------------------------
 
     /** copies a rectangle of pixels from another device into this one.
      */
@@ -141,7 +125,6 @@ published interface XGraphics: com::sun::star::uno::XInterface
              [in] long nDestWidth,
              [in] long nDestHeight );
 
-    //-------------------------------------------------------------------------
 
     /** draws a part of the specified bitmap to the output device.
      */
@@ -155,14 +138,12 @@ published interface XGraphics: com::sun::star::uno::XInterface
              [in] long DestWidth,
              [in] long DestHeight );
 
-    //-------------------------------------------------------------------------
 
     /** sets a single pixel in the output device.
      */
     [oneway] void drawPixel( [in] long X,
              [in] long Y );
 
-    //-------------------------------------------------------------------------
 
     /** draws a line in the output device.
      */
@@ -171,7 +152,6 @@ published interface XGraphics: com::sun::star::uno::XInterface
              [in] long X2,
              [in] long Y2 );
 
-    //-------------------------------------------------------------------------
 
     /** draws a rectangle in the output device.
      */
@@ -180,7 +160,6 @@ published interface XGraphics: com::sun::star::uno::XInterface
              [in] long Width,
              [in] long Height );
 
-    //-------------------------------------------------------------------------
 
     /** draws a rectangle with rounded corners in the output device.
      */
@@ -191,28 +170,24 @@ published interface XGraphics: com::sun::star::uno::XInterface
              [in] long nHorzRound,
              [in] long nVertRound );
 
-    //-------------------------------------------------------------------------
 
     /** draws multiple lines in the output device at once.
      */
     [oneway] void drawPolyLine( [in] sequence<long> DataX,
              [in] sequence<long> DataY );
 
-    //-------------------------------------------------------------------------
 
     /** draws a polygon line in the output device.
      */
     [oneway] void drawPolygon( [in] sequence<long> DataX,
              [in] sequence<long> DataY );
 
-    //-------------------------------------------------------------------------
 
     /** draws multiple polygons in the output device at once.
      */
     [oneway] void drawPolyPolygon( [in] sequence< sequence<long> > DataX,
              [in] sequence< sequence<long> > DataY );
 
-    //-------------------------------------------------------------------------
 
     /** draws an ellipse in the output device.
      */
@@ -221,7 +196,6 @@ published interface XGraphics: com::sun::star::uno::XInterface
              [in] long Width,
              [in] long Height );
 
-    //-------------------------------------------------------------------------
 
     /** draws an arc (part of a circle) in the output device.
      */
@@ -234,7 +208,6 @@ published interface XGraphics: com::sun::star::uno::XInterface
              [in] long X2,
              [in] long Y2 );
 
-    //-------------------------------------------------------------------------
 
     /** draws a circular area in the output device.
      */
@@ -247,7 +220,6 @@ published interface XGraphics: com::sun::star::uno::XInterface
              [in] long X2,
              [in] long Y2 );
 
-    //-------------------------------------------------------------------------
 
     /** draws a chord of a circular area in the output device.
 
@@ -264,7 +236,6 @@ published interface XGraphics: com::sun::star::uno::XInterface
              [in] long nX2,
              [in] long nY2 );
 
-    //-------------------------------------------------------------------------
 
     /** draws a color dispersion in the output device.
      */
@@ -274,7 +245,6 @@ published interface XGraphics: com::sun::star::uno::XInterface
              [in] long Height,
              [in] Gradient aGradient );
 
-    //-------------------------------------------------------------------------
 
     /** draws text in the output device.
      */
@@ -282,7 +252,6 @@ published interface XGraphics: com::sun::star::uno::XInterface
              [in] long Y,
              [in] string Text );
 
-    //-------------------------------------------------------------------------
 
     /** draws texts in the output device using an explicit kerning table.
      */
@@ -293,7 +262,6 @@ published interface XGraphics: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

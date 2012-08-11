@@ -22,11 +22,9 @@
 
 #include <com/sun/star/sheet/DataPilotFieldFilter.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** This structure contains information on a cell within a DataPilot table.
 
@@ -44,7 +42,6 @@ module com {  module sun {  module star {  module sheet {
  */
 struct DataPilotTablePositionData
 {
-    //-------------------------------------------------------------------------
 
     /** This parameter specifies which sub-area of a DataPilot table a given
         cell is positioned.  See <type>DataPilotTablePositionType</type>
@@ -54,7 +51,6 @@ struct DataPilotTablePositionData
      */
     long    PositionType;
 
-    //-------------------------------------------------------------------------
 
     /** <p>This member contains a structure of different types depending on the
         position type specified in <member>PositionType</member> member.</p>
@@ -74,7 +70,6 @@ struct DataPilotTablePositionData
     any     PositionData;
 };
 
-//=============================================================================
 
 }; }; }; };
 

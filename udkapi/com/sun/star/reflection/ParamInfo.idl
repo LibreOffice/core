@@ -21,13 +21,11 @@
 
 #include <com/sun/star/reflection/ParamMode.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module reflection {
 
  published interface XIdlClass;
 
-//=============================================================================
 
 /** Provides information about a formal parameter of a method.
 */
@@ -46,7 +44,6 @@ published struct ParamInfo
     XIdlClass aType;
 };
 
-//=============================================================================
 
 }; }; }; };
 

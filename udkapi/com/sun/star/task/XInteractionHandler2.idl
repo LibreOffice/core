@@ -22,11 +22,9 @@
 #include <com/sun/star/task/XInteractionHandler.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module task {
 
-//=============================================================================
 
 /** An interaction request handler.
 
@@ -38,7 +36,6 @@
  */
 /* published */ interface XInteractionHandler2 : com::sun::star::task::XInteractionHandler
 {
-    //-------------------------------------------------------------------------
     /** Handle an interaction request.
 
         @param Request the inteaction request to handle.
@@ -50,7 +47,6 @@
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

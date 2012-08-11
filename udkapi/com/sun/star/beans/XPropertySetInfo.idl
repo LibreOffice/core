@@ -26,11 +26,9 @@
 #include <com/sun/star/beans/UnknownPropertyException.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module beans {
 
-//=============================================================================
 
 /** specifies a set of properties.
 
@@ -46,7 +44,6 @@ module com {  module sun {  module star {  module beans {
  */
 published interface XPropertySetInfo: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** @returns
             a sequence with all property descriptors which are specified
@@ -54,7 +51,6 @@ published interface XPropertySetInfo: com::sun::star::uno::XInterface
      */
     sequence<com::sun::star::beans::Property> getProperties();
 
-    //-------------------------------------------------------------------------
 
     /** @returns
             the property with the specified name from the object.
@@ -68,7 +64,6 @@ published interface XPropertySetInfo: com::sun::star::uno::XInterface
     com::sun::star::beans::Property getPropertyByName( [in] string aName )
             raises( com::sun::star::beans::UnknownPropertyException );
 
-    //-------------------------------------------------------------------------
 
     /** @returns
             <TRUE/> if a property with the specified name exist;
@@ -81,7 +76,6 @@ published interface XPropertySetInfo: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

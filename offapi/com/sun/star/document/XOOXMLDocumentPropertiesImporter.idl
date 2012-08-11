@@ -25,16 +25,13 @@
 #include <com/sun/star/lang/IllegalArgumentException.idl>
 #include <com/sun/star/uno/Exception.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module document {
 
-//=============================================================================
 /** allows to import the document properties from OOXML format
  */
 interface XOOXMLDocumentPropertiesImporter: com::sun::star::uno::XInterface
 {
-    // -----------------------------------------------------------------------
     /** allows to import the document properties from OOXML format
 
         <p>
@@ -75,7 +72,6 @@ interface XOOXMLDocumentPropertiesImporter: com::sun::star::uno::XInterface
                     com::sun::star::uno::Exception );
 };
 
-//=============================================================================
 
 }; }; }; };
 

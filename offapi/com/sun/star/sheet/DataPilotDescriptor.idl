@@ -25,11 +25,9 @@
 #include <com/sun/star/beans/XPropertySet.idl>
 #include <com/sun/star/beans/PropertyValue.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module sheet {
 
-//=============================================================================
 
 /** represents the description of the layout of a data pilot table.
 
@@ -37,26 +35,22 @@ module com { module sun { module star { module sheet {
 */
 published service DataPilotDescriptor
 {
-    //-------------------------------------------------------------------------
 
     /** provides access to the layout settings of the data pilot table.
      */
     interface XDataPilotDescriptor;
 
-    //-------------------------------------------------------------------------
 
     /** provides access to the layout settings of the data pilot table.
      */
     [optional] interface com::sun::star::beans::XPropertySet;
 
-    //-------------------------------------------------------------------------
 
     /** Provides access to the <type>DataPilotField</type> used to layout
         multiple data fields.
      */
     [optional] interface XDataPilotDataLayoutFieldSupplier;
 
-    //=========================================================================
 
     /** specifies parameters to create the data pilot table from a database.
 
@@ -66,7 +60,6 @@ published service DataPilotDescriptor
      */
     [optional, property] sequence< com::sun::star::beans::PropertyValue > ImportDescriptor;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the name of a <type>DataPilotSource</type> implementation
         for the data pilot table.
@@ -76,7 +69,6 @@ published service DataPilotDescriptor
      */
     [optional, property] string SourceServiceName;
 
-    //-------------------------------------------------------------------------
 
     /** specifies arguments that are passed to the implementation named by
         <member>SourceServiceName</member>.
@@ -86,44 +78,37 @@ published service DataPilotDescriptor
      */
     [optional, property] sequence< com::sun::star::beans::PropertyValue > ServiceArguments;
 
-    //-------------------------------------------------------------------------
 
     /** specifies if empty rows in the source data are ignored.
      */
     [optional, property] boolean IgnoreEmptyRows;
 
-    //-------------------------------------------------------------------------
 
     /** specifies if empty category cells in the source data should be treated
         as repetition of the content from the previous row.
      */
     [optional, property] boolean RepeatIfEmpty;
 
-    //-------------------------------------------------------------------------
 
     /** specifies if columns for grand total results are created.
      */
     [optional, property] boolean ColumnGrand;
 
-    //-------------------------------------------------------------------------
 
     /** specifies if rows for grand total results are created.
      */
     [optional, property] boolean RowGrand;
 
-    //-------------------------------------------------------------------------
 
     /** specifies whether the filter button is shown.
      */
     [optional, property] boolean ShowFilterButton;
 
-    //-------------------------------------------------------------------------
 
     /** specifies whether to drill down to details or go into edit mode.
      */
     [optional, property] boolean DrillDownOnDoubleClick;
 
-    //-------------------------------------------------------------------------
 
     /** specifies a label for grand total results.
 
@@ -131,10 +116,8 @@ published service DataPilotDescriptor
      */
     [optional, property] string GrandTotalName;
 
-    //-------------------------------------------------------------------------
 };
 
-//=============================================================================
 
 }; }; }; };
 

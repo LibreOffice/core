@@ -34,11 +34,9 @@
 #include <com/sun/star/table/XCell.idl>
 #include <com/sun/star/text/XText.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module text {
 
-//=============================================================================
 
 /** represents a singe cell within a text table.
 
@@ -46,12 +44,10 @@ module com {  module sun {  module star {  module text {
  */
 service Cell
 {
-    //-------------------------------------------------------------------------
     /** contains the properties of the text table cell.
        */
     service com::sun::star::text::CellProperties;
 
-    //-------------------------------------------------------------------------
     /** contains properties from table cells.
 
         <p>All of these properties are either already available in the
@@ -87,13 +83,11 @@ service Cell
      */
     service com::sun::star::table::CellProperties;
 
-    //-------------------------------------------------------------------------
 
     /** provides access to the cell contents.
      */
     interface com::sun::star::table::XCell;
 
-    //-------------------------------------------------------------------------
 
     /** provides access to formatted and unformatted text contents.
      */
@@ -101,7 +95,6 @@ service Cell
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -30,11 +30,9 @@
 
 #include <com/sun/star/beans/PropertyValue.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module drawing {
 
-//=============================================================================
 
 /** This service is for a CustomShape
  */
@@ -52,19 +50,16 @@ service CustomShape
 
     service com::sun::star::drawing::RotationDescriptor;
 
-    //-------------------------------------------------------------------------
     /** This property contains the CustomShapeEngine service name that has to
         be used for rendering.
     */
     [property] string CustomShapeEngine;
 
-    //-------------------------------------------------------------------------
     /** This property can be used to store data that the CustomShapeEngine may
         use for rendering
     */
     [optional, property] string CustomShapeData;
 
-    //-------------------------------------------------------------------------
     /** This property describes the geometry of the CustomShape. The CustomShapeEngine
         that is used should be able to get on with the content of this property.
 
@@ -74,16 +69,13 @@ service CustomShape
     */
     [optional, property] sequence<::com::sun::star::beans::PropertyValue> CustomShapeGeometry;
 
-    //-------------------------------------------------------------------------
     /** This property describes the URL to a replacement graphic that could
         be displayed if the CustomShape engine is not available.
     */
     [optional, property] string CustomShapeReplacementURL;
 
-    //-------------------------------------------------------------------------
 };
 
-//=============================================================================
 
 }; }; }; };
 

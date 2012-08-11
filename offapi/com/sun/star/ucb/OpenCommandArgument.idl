@@ -22,31 +22,26 @@
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/beans/Property.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** The argument for commands like "open", "update", and "synchronize".
 
     @see XCommandProcessor
 */
 published struct OpenCommandArgument
 {
-    //-------------------------------------------------------------------------
     /** A mode.
 
         <p>The value can be one of the <type>OpenMode</type> constants.
     */
     long Mode;
 
-    //-------------------------------------------------------------------------
     /** The command's priority, in the range <code>0</code> (highest) to
         <code>65535</code> (lowest).
     */
     long Priority;
 
-    //-------------------------------------------------------------------------
     /** The data sink to write the contents into (supporting either
         <type scope="com::sun::star::io">XActiveDataSink</type>,
         <type scope="com::sun::star::io">XOutputStream</type> or
@@ -66,14 +61,12 @@ published struct OpenCommandArgument
     */
     com::sun::star::uno::XInterface Sink;
 
-    //-------------------------------------------------------------------------
     /** The properties, for that the values shall be provided by the
         <type>DynamicResultSet</type> returned by the command).
     */
     sequence< com::sun::star::beans::Property > Properties;
 };
 
-//=============================================================================
 
 }; }; }; };
 

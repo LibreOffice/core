@@ -23,11 +23,9 @@
 #include <com/sun/star/beans/XPropertySet.idl>
 #include <com/sun/star/lang/IllegalArgumentException.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module awt {
 
-//=============================================================================
 
 /** specifies a service to load a dialog model and allows to access the control models inside
 
@@ -40,7 +38,6 @@ service UnoControlDialogModelProvider : com::sun::star::container::XNameContaine
     create([in] string URL)raises ( com::sun::star::lang::IllegalArgumentException );
 };
 
-//=============================================================================
 
 }; }; }; };
 

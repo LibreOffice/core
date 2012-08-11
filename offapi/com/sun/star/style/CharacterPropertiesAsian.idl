@@ -23,53 +23,42 @@
 #include <com/sun/star/awt/FontSlant.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module style {
 
-//=============================================================================
 /** This is a set of properties to describe the style of characters in Asian texts.
  */
 published service CharacterPropertiesAsian
 {
-    //-------------------------------------------------------------------------
     /** This value contains the height of the characters in point.
      */
     [property] float CharHeightAsian;
-    //-------------------------------------------------------------------------
     /** This property contains the value of the font weight.@see com::sun::star::awt::FontWeight
      */
     [property] float CharWeightAsian;
-    //-------------------------------------------------------------------------
     /** This property specifies the name of the font style.
         <p>It may contain more than one name separated by comma.</p>
      */
     [property] string CharFontNameAsian;
-    //-------------------------------------------------------------------------
     /** This property contains the name of the font style.
         <p>This property may be empty.</p>
      */
     [property] string CharFontStyleNameAsian;
-    //-------------------------------------------------------------------------
     /** This property contains font family as specified in
         com.sun.star.awt.FontFamily .
      */
     [property] short CharFontFamilyAsian;
-    //-------------------------------------------------------------------------
     /** This property contains the text encoding of the font as specified in
         com.sun.star.awt.CharSet.
      */
     [property] short CharFontCharSetAsian;
-    //-------------------------------------------------------------------------
     /** This property contains the font pitch as specified in com.sun.star.awt.FontPitch.
      */
     [property] short CharFontPitchAsian;
-    //-------------------------------------------------------------------------
     /** This property contains the value of the posture of the document.@see com::sun::star::awt::FontSlant
      */
     [property] com::sun::star::awt::FontSlant CharPostureAsian;
 
-    //-------------------------------------------------------------------------
     /** contains the value of the locale.
      */
     [property] com::sun::star::lang::Locale CharLocaleAsian;

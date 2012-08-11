@@ -22,28 +22,23 @@
 #include <com/sun/star/uno/XInterface.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module util {
 
-//=============================================================================
 /** allows indentation of the object to be changed.
  */
 published interface XIndent: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** shifts the indentation by one default step to the left.
      */
     void decrementIndent();
 
-    //-------------------------------------------------------------------------
     /** shifts the indentation by one default step to the right.
      */
     void incrementIndent();
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

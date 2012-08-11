@@ -21,11 +21,9 @@
 
 #include <com/sun/star/task/ClassifiedInteractionRequest.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** is thrown when the wrong medium is inserted into a removable drive during
     an operation.
 */
@@ -37,7 +35,6 @@ published exception InteractiveWrongMediumException: com::sun::star::task::Class
     any Medium;
 };
 
-//=============================================================================
 
 }; }; }; };
 

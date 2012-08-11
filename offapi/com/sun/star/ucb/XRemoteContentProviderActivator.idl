@@ -35,7 +35,6 @@ module com { module sun { module star { module ucb {
 
  published interface XContentProviderManager;
 
-//============================================================================
 /** This interface should be implemented together with
     <type>XRemoteContentProviderAcceptor</type> and allows for a lazy
     implementation of
@@ -48,7 +47,6 @@ module com { module sun { module star { module ucb {
  */
 published interface XRemoteContentProviderActivator: com::sun::star::uno::XInterface
 {
-    //------------------------------------------------------------------------
     /** Activate (i.e., register at the broker) the remote content providers
         that until now have only been remembered by
         <member>XRemoteContentProviderAcceptor::addRemoteContentProvider</member>,

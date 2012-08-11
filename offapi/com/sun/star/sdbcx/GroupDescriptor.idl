@@ -34,7 +34,6 @@ published service GroupDescriptor
     [property] string Name;
 };
 
-//=============================================================================
 
 }; }; }; };
 

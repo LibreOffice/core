@@ -24,38 +24,31 @@
 #include <com/sun/star/beans/XPropertyAccess.idl>
 #include <com/sun/star/container/XNamed.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** This service contains the interfaces to implement by objects
     returned by <member>XPropertySetRegistry::openPropertySet</member>.
   */
 published service PersistentPropertySet
 {
-    //-------------------------------------------------------------------------
     /** An interface implementing a persistent property set.
      */
     interface com::sun::star::ucb::XPersistentPropertySet;
 
-    //-------------------------------------------------------------------------
     /** An interface for getting/setting the name (key) of the property set.
      */
     interface com::sun::star::container::XNamed;
 
-    //-------------------------------------------------------------------------
     /** An interface for adding/removing a property to/from the set.
      */
     interface com::sun::star::beans::XPropertyContainer;
 
-    //-------------------------------------------------------------------------
     /** An interface for getting/setting multiple properties at once.
      */
     interface com::sun::star::beans::XPropertyAccess;
 };
 
-//=============================================================================
 
 }; }; }; };
 

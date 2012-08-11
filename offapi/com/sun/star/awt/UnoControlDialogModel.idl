@@ -28,11 +28,9 @@
 #include <com/sun/star/util/Color.idl>
 #include <com/sun/star/graphic/XGraphic.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module awt {
 
-//=============================================================================
 
 /** specifies the standard model of an <type>UnoControlDialog</type>.
  */
@@ -50,87 +48,73 @@ published service UnoControlDialogModel
 
     interface com::sun::star::container::XNameContainer;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the background color (RGB) of the dialog.
      */
     [property] com::sun::star::util::Color BackgroundColor;
 
-    //-------------------------------------------------------------------------
 
     /** specifies if the dialog is closeable.
      */
     [property] boolean Closeable;
 
-    //-------------------------------------------------------------------------
 
     /** determines whether a dialog is enabled or disabled.
      */
     [property] boolean Enabled;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the font attributes of the text in the caption bar of the dialog.
      */
     [property] com::sun::star::awt::FontDescriptor FontDescriptor;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the <type scope="com::sun::star::text">FontEmphasis</type>
         value of the text in the caption bar of the dialog.
      */
     [property] short FontEmphasisMark;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the <type scope="com::sun::star::text">FontRelief</type>
         value of the text in the caption bar of the dialog.
      */
     [property] short FontRelief;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the help text of the dialog.
      */
     [property] string HelpText;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the help URL of the dialog.
      */
     [property] string HelpURL;
 
-    //-------------------------------------------------------------------------
 
     /** specifies if the dialog is moveable.
      */
     [property] boolean Moveable;
 
-    //-------------------------------------------------------------------------
 
     /** specifies if the dialog is sizeable.
      */
     [property] boolean Sizeable;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the text color (RGB) of the dialog.
      */
     [property] com::sun::star::util::Color TextColor;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the text line color (RGB) of the dialog.
      */
     [property] com::sun::star::util::Color TextLineColor;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the text that is displayed in the caption bar of the dialog.
      */
     [property] string Title;
 
-    //-------------------------------------------------------------------------
 
     /** If set to true the dialog will have the desktop as parent.
 
@@ -163,7 +147,6 @@ published service UnoControlDialogModel
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

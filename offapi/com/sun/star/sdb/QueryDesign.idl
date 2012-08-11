@@ -35,7 +35,6 @@
 
 module com {  module sun {  module star {  module sdb {
 
-//=============================================================================
 /** implements a component which allows the creation of SQL statements.
 
     <p>This service implements a user interface for creating SQL statements either through a graphical design
@@ -188,7 +187,6 @@ published service QueryDesign
     [readonly, property, optional] boolean EscapeProcessing;
 };
 
-//=============================================================================
 }; }; }; };
 
 #endif

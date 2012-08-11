@@ -27,7 +27,6 @@
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** Primary interface for the <type scope="com::sun::star::sheet">ExternalDocLink</type> service.
 
@@ -41,7 +40,6 @@ interface XExternalDocLink
     interface com::sun::star::container::XIndexAccess;
     interface com::sun::star::container::XEnumerationAccess;
 
-    //-------------------------------------------------------------------------
 
     /** <p>This method adds a new sheet cache instance to the external document
         link for a specified sheet name.  If a sheet cache instance already
@@ -63,7 +61,6 @@ interface XExternalDocLink
      */
     com::sun::star::sheet::XExternalSheetCache addSheetCache( [in] string aSheetName, [in] boolean DynamicCache );
 
-    //-------------------------------------------------------------------------
 
     /** Index corresponding to the external document link.
 
@@ -83,7 +80,6 @@ interface XExternalDocLink
     [attribute, readonly] long TokenIndex;
 };
 
-//=============================================================================
 
 }; }; }; };
 

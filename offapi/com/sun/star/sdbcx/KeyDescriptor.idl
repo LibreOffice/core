@@ -58,7 +58,6 @@ published service KeyDescriptor
     [property] long DeleteRule;
 };
 
-//=============================================================================
 
 }; }; }; };
 

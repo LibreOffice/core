@@ -22,17 +22,14 @@
 
 #include <com/sun/star/uno/XInterface.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** provides auditing functions of a document.
  */
 published interface XDocumentAuditing: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** refreshes all existing auditing arrows on all sheets of the
         document.
@@ -44,7 +41,6 @@ published interface XDocumentAuditing: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

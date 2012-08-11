@@ -24,11 +24,9 @@
 #include <com/sun/star/util/Date.idl>
 #include <com/sun/star/util/DateTime.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module text { module textfield {
 
-//=============================================================================
 /** specifies service of an annotation text field.
     @see com::sun::star::text::TextField
 */
@@ -59,7 +57,6 @@ published service Annotation
     [optional, property]com::sun::star::util::DateTime DateTimeValue;
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

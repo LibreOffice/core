@@ -33,12 +33,10 @@
 #include <com/sun/star/table/CellRangeAddress.idl>
 #include <com/sun/star/lang/XInitialization.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module table {
 
 
-//=============================================================================
 
 /** defines the a source of list entries coming from a cell range in a table document
 
@@ -81,7 +79,6 @@ service CellRangeListSource
     interface com::sun::star::lang::XInitialization;
 };
 
-//=============================================================================
 
 }; }; }; };
 

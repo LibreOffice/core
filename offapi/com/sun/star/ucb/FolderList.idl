@@ -23,28 +23,23 @@
 #include <com/sun/star/ucb/FolderListEntry.idl>
 
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** A list of folders.
 */
 published struct FolderList
 {
-    //-------------------------------------------------------------------------
     /** The command to process on this list of folders.
     */
     FolderListCommand Command;
 
-    //-------------------------------------------------------------------------
     /** The list of folders (only used in conjunction with
         <member>FolderListCommand::SET</member>).
     */
     sequence<FolderListEntry> List;
 };
 
-//=============================================================================
 
 }; }; }; };
 

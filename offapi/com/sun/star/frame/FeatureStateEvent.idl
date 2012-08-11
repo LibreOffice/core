@@ -23,11 +23,9 @@
 #include <com/sun/star/util/URL.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module frame {
 
-//=============================================================================
 /** This event is broadcast by a <type>Controller</type> whenever the state of
     the feature changes
 
@@ -36,22 +34,18 @@
  */
 published struct FeatureStateEvent: com::sun::star::lang::EventObject
 {
-    //-------------------------------------------------------------------------
     /** contains the URL of the feature.
      */
     com::sun::star::util::URL FeatureURL;
 
-    //-------------------------------------------------------------------------
     /** contains a descriptor of the feature for the user interface.
      */
     string FeatureDescriptor;
 
-    //-------------------------------------------------------------------------
     /** specifies whether the feature is currently enabled or disabled.
      */
     boolean IsEnabled;
 
-    //-------------------------------------------------------------------------
     /** specifies whether the <type>XDispatch</type> has to be requeried.
 
         <p>
@@ -62,7 +56,6 @@ published struct FeatureStateEvent: com::sun::star::lang::EventObject
      */
     boolean Requery;
 
-    //-------------------------------------------------------------------------
     /** contains the state of the feature in this dispatch.
 
         <p>
@@ -75,7 +68,6 @@ published struct FeatureStateEvent: com::sun::star::lang::EventObject
     any State;
 };
 
-//=============================================================================
 
 }; }; }; };
 

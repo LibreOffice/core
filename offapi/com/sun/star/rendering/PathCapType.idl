@@ -35,12 +35,10 @@ constants PathCapType
     /// End the path at its start or end point, without any cap.
     const byte BUTT=0;
 
-    //-------------------------------------------------------------------------
 
     /// Extend the path with a half circle cap, diameter is the line width.
     const byte ROUND=1;
 
-    //-------------------------------------------------------------------------
 
     /// Extend the path with a rectangular cap, half the line width long.
     const byte SQUARE=2;

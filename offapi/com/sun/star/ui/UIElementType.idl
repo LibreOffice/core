@@ -28,53 +28,43 @@ module com {  module sun {  module star {  module ui {
  */
 constants UIElementType
 {
-    //-------------------------------------------------------------------------
     /** unknown user interface element type, which can be used as a wildcard
        to specify all types.
     */
     const short UNKNOWN         = 0;
 
-    //-------------------------------------------------------------------------
     /** specifies a menu bar.
     */
     const short MENUBAR         = 1;
 
-    //-------------------------------------------------------------------------
     /** specifies a pop-up menu.
     */
     const short POPUPMENU       = 2;
 
-    //-------------------------------------------------------------------------
     /** specifies a toolbar.
     */
     const short TOOLBAR         = 3;
 
-    //-------------------------------------------------------------------------
     /** specifies a statusbar.
     */
     const short STATUSBAR       = 4;
 
-    //-------------------------------------------------------------------------
     /** specifies a floating window, which can also be docked.
     */
     const short FLOATINGWINDOW  = 5;
 
-    //-------------------------------------------------------------------------
     /** specifies a floating window, which can also be docked.
     */
     const short PROGRESSBAR     = 6;
 
-    //-------------------------------------------------------------------------
     /** specifies a tool panel
     */
     const short TOOLPANEL       = 7;
 
-    //-------------------------------------------------------------------------
     /** specifies a window that can be docked.
     */
     const short DOCKINGWINDOW   = 7;
 
-    //-------------------------------------------------------------------------
     /** specifies the number of constants.
     */
     const short COUNT           = 8;

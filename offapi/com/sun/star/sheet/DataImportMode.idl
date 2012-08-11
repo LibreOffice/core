@@ -20,35 +20,29 @@
 #ifndef __com_sun_star_sheet_DataImportMode_idl__
 #define __com_sun_star_sheet_DataImportMode_idl__
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** used to specify which database contents are imported.
  */
 published enum DataImportMode
 {
-    //-------------------------------------------------------------------------
 
     /** nothing is imported.
      */
     NONE,
 
-    //-------------------------------------------------------------------------
 
     /** a SQL query string is supplied.
      */
     SQL,
 
-    //-------------------------------------------------------------------------
 
     /** the name of a database table is supplied.
      */
     TABLE,
 
-    //-------------------------------------------------------------------------
 
     /** the name of a database query is supplied.
      */
@@ -56,7 +50,6 @@ published enum DataImportMode
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

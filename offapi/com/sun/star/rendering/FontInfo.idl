@@ -46,7 +46,6 @@ struct FontInfo
      */
     Panose                              FontDescription;
 
-    //-------------------------------------------------------------------------
 
     /** The name of the font family.<p>
 
@@ -58,7 +57,6 @@ struct FontInfo
      */
     string                              FamilyName;
 
-    //-------------------------------------------------------------------------
 
     /** The name of the specific font style within its family.<p>
 
@@ -66,7 +64,6 @@ struct FontInfo
      */
     string                              StyleName;
 
-    //-------------------------------------------------------------------------
 
     /** This value specifies which Unicode ranges are supported by
         this font.<p>
@@ -94,7 +91,6 @@ struct FontInfo
     long                                UnicodeRanges2;
     long                                UnicodeRanges3;
 
-    //-------------------------------------------------------------------------
 
     /** Specifies whether the font is a symbol font.<p>
 
@@ -103,7 +99,6 @@ struct FontInfo
      */
     ::com::sun::star::util::TriState    IsSymbolFont;
 
-    //-------------------------------------------------------------------------
 
     /** Set to true, if the font is usable for vertical text
         output.<p>

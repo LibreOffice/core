@@ -30,11 +30,9 @@
 
 #include <com/sun/star/util/XTextSearch.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module util {
 
-//=============================================================================
 
 /** search a string with a defined algorithm in another string.
 
@@ -42,7 +40,6 @@ module com {  module sun {  module star {  module util {
 */
 published service TextSearch : XTextSearch;
 
-//=============================================================================
 
 }; }; }; };
 

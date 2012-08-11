@@ -32,11 +32,9 @@
 #include <com/sun/star/embed/XStorage.idl>
 
 
-//=============================================================================
 
 module com {   module sun {   module star {   module document {
 
-//=============================================================================
 /** through this interface documents can provide access to their substorages
 
     <p>
@@ -48,7 +46,6 @@ module com {   module sun {   module star {   module document {
  */
 interface XDocumentSubStorageSupplier: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** provides the access to a substorage with specified name
 
         @param sStorageName
@@ -64,7 +61,6 @@ interface XDocumentSubStorageSupplier: com::sun::star::uno::XInterface
                                         [in] string aStorageName,
                                         [in] long nMode );
 
-    //-------------------------------------------------------------------------
     /** provides the list of substorages
 
         @returns
@@ -75,7 +71,6 @@ interface XDocumentSubStorageSupplier: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

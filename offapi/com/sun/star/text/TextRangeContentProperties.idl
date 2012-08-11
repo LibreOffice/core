@@ -30,11 +30,9 @@
 #include <com/sun/star/text/XFootnote.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module text {
 
-//=============================================================================
 
 /** describes the structural properties to retrieve text contents.
 
@@ -42,49 +40,39 @@ module com {  module sun {  module star {  module text {
  */
 service TextRangeContentProperties
 {
-    //-------------------------------------------------------------------------
     /** may contain a document index. */
     [optional, readonly, property] com::sun::star::text::XDocumentIndex
         DocumentIndex;
 
-    //-------------------------------------------------------------------------
     /** may contain a text table. */
     [optional, readonly, property] com::sun::star::text::XTextTable
         TextTable;
 
-    //-------------------------------------------------------------------------
     /** may contain a table cell. */
     [optional, readonly, property] com::sun::star::table::XCell Cell;
 
-    //-------------------------------------------------------------------------
     /** may contain a text frame. */
     [optional, readonly, property] com::sun::star::text::XTextFrame
         TextFrame;
 
-    //-------------------------------------------------------------------------
     /** may contain a text section. */
     [optional, readonly, property] com::sun::star::text::XTextSection
         TextSection;
 
-    //-------------------------------------------------------------------------
     /** may contain a document index mark. */
     [optional, readonly, property] com::sun::star::text::XDocumentIndexMark
         DocumentIndexMark;
 
-    //-------------------------------------------------------------------------
     /** may contain a reference mark. */
     [optional, readonly, property] com::sun::star::text::XTextContent
         ReferenceMark;
 
-    //-------------------------------------------------------------------------
     /** may contain a footnote. */
     [optional, readonly, property] com::sun::star::text::XFootnote Footnote;
 
-    //-------------------------------------------------------------------------
     /** may contain a endnote. */
     [optional, readonly, property] com::sun::star::text::XFootnote Endnote;
 
-    //-------------------------------------------------------------------------
     /** may contain a nested text content.
 
         For example, may contain an <type>InContentMetadata</type> or a
@@ -95,7 +83,6 @@ service TextRangeContentProperties
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

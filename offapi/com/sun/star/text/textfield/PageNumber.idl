@@ -23,11 +23,9 @@
 #include <com/sun/star/text/TextField.idl>
 #include <com/sun/star/text/PageNumberType.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module text { module textfield {
 
-//=============================================================================
 /** specifies service of a page number text field.
     @see com::sun::star::text::TextField
 */
@@ -54,7 +52,6 @@ published service PageNumber
 
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

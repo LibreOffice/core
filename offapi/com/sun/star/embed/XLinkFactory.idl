@@ -26,16 +26,13 @@
 #include <com/sun/star/lang/IllegalArgumentException.idl>
 #include <com/sun/star/beans/PropertyValue.idl>
 
-//============================================================================
 
  module com {  module sun {  module star {  module embed {
 
-//============================================================================
 /** allows to create and initialize a new link of specified type.
  */
 published interface XLinkFactory: com::sun::star::uno::XInterface
 {
-    //------------------------------------------------------------------------
     /** creates a new link and transport parameters for persistent
         initialization.
 
@@ -86,7 +83,6 @@ published interface XLinkFactory: com::sun::star::uno::XInterface
                 ::com::sun::star::uno::Exception );
 };
 
-//============================================================================
 
 }; }; }; };
 

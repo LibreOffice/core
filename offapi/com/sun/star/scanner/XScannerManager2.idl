@@ -32,11 +32,9 @@
 
 #include <com/sun/star/scanner/ScannerManager.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module scanner {
 
-//=============================================================================
 
 /**
     Extension of <type>XScannerManager</type>.
@@ -45,7 +43,6 @@ module com { module sun { module star { module scanner {
 */
 published interface XScannerManager2: com::sun::star::scanner::XScannerManager
 {
-    //-------------------------------------------------------------------------
     /** produce some kind of User Interface to let the user have a preview,
         configure the scan area, etc., it, and scan it
         returns FALSE if user cancelled this process
@@ -56,7 +53,6 @@ published interface XScannerManager2: com::sun::star::scanner::XScannerManager
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

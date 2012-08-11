@@ -34,11 +34,9 @@
 #include <com/sun/star/rdf/XURI.idl>
 
 
-//=============================================================================
 
 module com {   module sun {   module star {   module rdf {
 
-//=============================================================================
 /** marks an object representing an ODF element that may have RDF meta data
     attached.
 
@@ -62,7 +60,6 @@ module com {   module sun {   module star {   module rdf {
  */
 interface XMetadatable : XURI
 {
-    //-------------------------------------------------------------------------
     /** a metadata reference, comprising the stream name and the XML ID.
 
         <p>
@@ -79,7 +76,6 @@ interface XMetadatable : XURI
         set raises ( com::sun::star::lang::IllegalArgumentException );
     };
 
-    //-------------------------------------------------------------------------
     /** creates a metadata reference for this object, if necessary.
 
         <p>
@@ -92,7 +88,6 @@ interface XMetadatable : XURI
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

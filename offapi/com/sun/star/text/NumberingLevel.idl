@@ -34,17 +34,14 @@
 #include <com/sun/star/awt/FontDescriptor.idl>
 #include <com/sun/star/awt/XBitmap.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module text {
 
-//=============================================================================
 
 /** provides access to a numbering level as part of the Numbering Rules.
  */
 published service NumberingLevel
 {
-    //-------------------------------------------------------------------------
 
     /** adjusts the numbering (HoriOrientation_LEFT/RIGHT/CENTER)
 
@@ -53,57 +50,48 @@ published service NumberingLevel
      */
     [property] short Adjust;
 
-    //-------------------------------------------------------------------------
 
     /** number of upper levels that are included in the current numbering symbol.
      */
     [optional, property] short ParentNumbering;
 
-    //-------------------------------------------------------------------------
 
     /** the prefix of the numbering symbol.
      */
     [property] string Prefix;
 
-    //-------------------------------------------------------------------------
 
     /** the suffix of the numbering symbol.
      */
     [property] string Suffix;
 
-    //-------------------------------------------------------------------------
 
     /** Name of the character style that is used for the numbering symbol.
      */
     [optional, property] string CharStyleName;
 
-    //-------------------------------------------------------------------------
 
     /** the ID of the symbol in the given font. This is only valid if the
         numbering type is <const scope="com::sun::star::style">NumberingType::CHAR_SPECIAL</const>.
           @deprecated
      */
     [optional, property] short BulletId;
-    //-------------------------------------------------------------------------
 
     /** contains the symbol in the given font. This is only valid if the
         numbering type is <const scope="com::sun::star::style">NumberingType::CHAR_SPECIAL</const>.
      */
     [property] string BulletChar;
-    //-------------------------------------------------------------------------
 
     /** the name of the font for the symbol. This is only valid if the
         numbering type is <const scope="com::sun::star::style">NumberingType::CHAR_SPECIAL</const>.
      */
     [property] string BulletFontName;
 
-    //-------------------------------------------------------------------------
 
     /** the font used to paint the bullet.
      */
     [optional, property] com::sun::star::awt::FontDescriptor BulletFont;
 
-    //-------------------------------------------------------------------------
 
     /** the URL of the graphic file that is used as the numbering symbol.
 
@@ -112,27 +100,22 @@ published service NumberingLevel
      */
     [property] string GraphicURL;
 
-    //-------------------------------------------------------------------------
 
     /** the bitmap containing the bullet.
      */
     [optional, property] com::sun::star::awt::XBitmap GraphicBitmap;
 
-    //-------------------------------------------------------------------------
 
     /** size of the graphic that is used as bullet.
      */
     [optional, property] com::sun::star::awt::Size    GraphicSize;
-    //-------------------------------------------------------------------------
 
-    //-------------------------------------------------------------------------
 
     /** contains the vertical orientation of a graphic.
 
         <p> It is set using com::sun::star::text::VertOrientation.</p>
      */
     [optional, property] short VertOrient;
-    //-------------------------------------------------------------------------
 
     /** specifies the start value for the numbering.
 
@@ -142,33 +125,28 @@ published service NumberingLevel
      */
     [optional, property] short StartWith;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the left margin of the numbering
      */
     [property] long LeftMargin;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the distance between the numbering symbol and the text of
         the paragraph.
      */
     [optional, property] long SymbolTextDistance;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the offset between the beginning of the first line and
         the beginning of the following lines of the paragraph.
      */
     [property] long FirstLineOffset;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the type of numbering.
      */
     [property] short NumberingType;
 
-    //-------------------------------------------------------------------------
 
     /** contains the name of the paragraph style that is interpreted as the
         header of this level. It is only contained in the levels of
@@ -256,7 +234,6 @@ published service NumberingLevel
         [optional, property] long IndentAt;
 };
 
-//=============================================================================
 
 }; }; }; };
 

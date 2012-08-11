@@ -19,47 +19,38 @@
 #ifndef __com_sun_star_frame_WindowArrange_idl__
 #define __com_sun_star_frame_WindowArrange_idl__
 
-//=============================================================================
 
  module com {  module sun {  module star {  module frame {
 
-//=============================================================================
 /** these constants are used to specify a style of window arrangement
  */
 published constants WindowArrange
 {
-    //-------------------------------------------------------------------------
     /** arranges the windows in tiles
      */
     const short TILE = 1;
 
-    //-------------------------------------------------------------------------
     /** arranges the windows vertically
      */
     const short VERTICAL = 2;
 
-    //-------------------------------------------------------------------------
     /** arranges the windows horizontally
      */
     const short HORIZONTAL = 3;
 
-    //-------------------------------------------------------------------------
     /** cascades the windows
      */
     const short CASCADE = 4;
 
-    //-------------------------------------------------------------------------
     /** maximizes all windows
      */
     const short MAXIMIZE = 5;
 
-    //-------------------------------------------------------------------------
     /** minimizes all windows
      */
     const short MINIMIZE = 6;
 };
 
-//=============================================================================
 
 }; }; }; };
 

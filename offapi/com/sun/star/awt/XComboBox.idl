@@ -26,84 +26,70 @@
 #include <com/sun/star/awt/XActionListener.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module awt {
 
-//=============================================================================
 
 /** gives access to the items of a combo box and makes it possible to
     register item and action event listeners.
  */
 published interface XComboBox: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** registers a listener for item events.
      */
     [oneway] void addItemListener( [in] com::sun::star::awt::XItemListener l );
 
-    //-------------------------------------------------------------------------
 
     /** unregisters a listener for item events.
      */
     [oneway] void removeItemListener( [in] com::sun::star::awt::XItemListener l );
 
-    //-------------------------------------------------------------------------
 
     /** registers a listener for action events.
      */
     [oneway] void addActionListener( [in] com::sun::star::awt::XActionListener l );
 
-    //-------------------------------------------------------------------------
 
     /** unregisters a listener for action events.
      */
     [oneway] void removeActionListener( [in] com::sun::star::awt::XActionListener l );
 
-    //-------------------------------------------------------------------------
 
     /** adds an item at the specified position.
      */
     [oneway] void addItem( [in] string aItem, [in] short nPos );
 
-    //-------------------------------------------------------------------------
 
     /** adds multiple items at the specified position.
      */
     [oneway] void addItems( [in] sequence<string> aItems, [in] short nPos );
 
-    //-------------------------------------------------------------------------
 
     /** removes a number of items at the specified position.
      */
     [oneway] void removeItems( [in] short nPos, [in] short nCount );
 
-    //-------------------------------------------------------------------------
 
     /** returns the number of items in the combo box.
      */
     short getItemCount();
 
-    //-------------------------------------------------------------------------
 
     /** returns the item at the specified position.
      */
     string getItem( [in] short nPos );
 
-    //-------------------------------------------------------------------------
 
     /** returns all items of the combo box.
      */
     sequence<string> getItems();
 
-    //-------------------------------------------------------------------------
 
     /** returns the number of visible lines in the drop down mode.
      */
     short getDropDownLineCount();
 
-    //-------------------------------------------------------------------------
 
     /** sets the number of visible lines for drop down mode.
      */
@@ -111,7 +97,6 @@ published interface XComboBox: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

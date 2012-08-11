@@ -24,11 +24,9 @@
 #include <com/sun/star/beans/XFastPropertySet.idl>
 #include <com/sun/star/beans/XMultiPropertySet.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module  util {
 
-//=============================================================================
 
 /** Supports read/write access and listener for the paths properties that
     the Office uses.
@@ -150,7 +148,6 @@ published service PathSettings
   [property] string Work;
 };
 
-//=============================================================================
 
 }; }; }; };
 

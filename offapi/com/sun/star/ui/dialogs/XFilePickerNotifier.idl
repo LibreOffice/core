@@ -23,18 +23,14 @@
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/ui/dialogs/XFilePickerListener.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module ui { module dialogs {
 
-//=============================================================================
 
-//=============================================================================
 /** Interface to be implemented in order to support listener management.
 */
 published interface XFilePickerNotifier: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** Interface for clients to register as XFilePickerListener
 
         @param xListener
@@ -44,7 +40,6 @@ published interface XFilePickerNotifier: com::sun::star::uno::XInterface
     */
     [oneway] void addFilePickerListener( [in] XFilePickerListener xListener );
 
-    //-------------------------------------------------------------------------
     /** Interface for clients to unregister as XFilePickerListener.
 
         @param xListener
@@ -55,7 +50,6 @@ published interface XFilePickerNotifier: com::sun::star::uno::XInterface
     [oneway] void removeFilePickerListener( [in] XFilePickerListener xListener );
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

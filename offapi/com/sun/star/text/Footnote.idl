@@ -23,11 +23,9 @@
 #include <com/sun/star/text/XText.idl>
 
 
-//=============================================================================
 
 module com { module sun { module star { module text {
 
-//=============================================================================
 /** This service specifies a footnote or an endnote in a
     <type>TextDocument</type>.
 */
@@ -51,7 +49,6 @@ published service Footnote
     [optional, readonly, property]short ReferenceId;
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -29,36 +29,30 @@
 #define __com_sun_star_chart_ChartSolidType_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module chart {
 
-//=============================================================================
 
 /** These values specify the type of solid shapes for data points of
     3D bar charts.
  */
 published constants ChartSolidType
 {
-    //-------------------------------------------------------------------------
 
     /** extruded rectangle, i.e., a cuboid
      */
     const long RECTANGULAR_SOLID = 0;
 
-    //-------------------------------------------------------------------------
 
     /** cylinder with a circle as base
      */
     const long CYLINDER = 1;
 
-    //-------------------------------------------------------------------------
 
     /** cone with a circle as base
      */
     const long CONE = 2;
 
-    //-------------------------------------------------------------------------
 
     /** pyramidal with a square as base
      */
@@ -66,7 +60,6 @@ published constants ChartSolidType
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

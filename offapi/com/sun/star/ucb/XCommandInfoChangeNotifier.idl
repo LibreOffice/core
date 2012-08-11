@@ -22,11 +22,9 @@
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/ucb/XCommandInfoChangeListener.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** a notifier for changes of <type>XCommandInfo</type>s.
 
     @version  1.0
@@ -36,7 +34,6 @@ module com { module sun { module star { module ucb {
 */
 published interface XCommandInfoChangeNotifier : com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** registers a listener for <type>CommandInfoChangeEvent</type>s.
 
         @param Listener
@@ -45,7 +42,6 @@ published interface XCommandInfoChangeNotifier : com::sun::star::uno::XInterface
     void addCommandInfoChangeListener(
                             [in] XCommandInfoChangeListener Listener );
 
-    //-------------------------------------------------------------------------
     /** removes a listener for <type>CommandInfoChangeEvent</type>s.
 
         @param Listener
@@ -55,7 +51,6 @@ published interface XCommandInfoChangeNotifier : com::sun::star::uno::XInterface
                             [in] XCommandInfoChangeListener Listener );
 };
 
-//=============================================================================
 
 }; }; }; };
 

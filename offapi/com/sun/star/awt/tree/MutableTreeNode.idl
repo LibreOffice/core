@@ -21,11 +21,9 @@
 
 #include <com/sun/star/awt/tree/XMutableTreeNode.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module awt { module tree {
 
-//=============================================================================
 
 /** Represents an editable tree node as used by the <type>MutableTreeDataModel</type>
  */
@@ -33,7 +31,6 @@ service MutableTreeNode : XMutableTreeNode
 {
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

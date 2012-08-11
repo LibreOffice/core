@@ -25,17 +25,14 @@
 #include <com/sun/star/form/binding/IncompatibleTypesException.idl>
 #include <com/sun/star/form/binding/InvalidBindingStateException.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module form { module binding {
 
-//=============================================================================
 
 /** specifies a binding to a value which can be read and written.
 */
 interface XValueBinding : com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** determines the types which are supported by this binding for value exchange
 
         @see supportsType
@@ -81,7 +78,6 @@ interface XValueBinding : com::sun::star::uno::XInterface
                 raises( IncompatibleTypesException, InvalidBindingStateException, com::sun::star::lang::NoSupportException );
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

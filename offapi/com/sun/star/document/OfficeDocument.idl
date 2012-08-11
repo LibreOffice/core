@@ -42,11 +42,9 @@
 #include <com/sun/star/document/XDocumentPropertiesSupplier.idl>
 #include <com/sun/star/document/XUndoManagerSupplier.idl>
 
-//=============================================================================
 
 module com {   module sun {   module star {   module document {
 
-//=============================================================================
 /** abstract service which specifies a storable and printable document
 
     <p>
@@ -59,7 +57,6 @@ module com {   module sun {   module star {   module document {
  */
 published service OfficeDocument
 {
-    //-------------------------------------------------------------------------
     /** represents a component which is created from an URL and arguments
 
         <p>
@@ -70,7 +67,6 @@ published service OfficeDocument
      */
     interface com::sun::star::frame::XModel;
 
-    //-------------------------------------------------------------------------
     /** a storable document should provide information about his modify state
 
         <p>
@@ -81,7 +77,6 @@ published service OfficeDocument
      */
     interface com::sun::star::util::XModifiable;
 
-    //-------------------------------------------------------------------------
     /** offers a simple way to store a component to an URL
 
         <p>
@@ -95,7 +90,6 @@ published service OfficeDocument
      */
     interface com::sun::star::frame::XStorable;
 
-    //-------------------------------------------------------------------------
     /** offers a way to print a component
 
         <p>
@@ -105,24 +99,20 @@ published service OfficeDocument
      */
     interface com::sun::star::view::XPrintable;
 
-    //-------------------------------------------------------------------------
     /** is an old and deprecated version of the <type>XDocumentEventBroadcaster</type> interface
         @deprecated
      */
     [optional] interface XEventBroadcaster;
 
-    //-------------------------------------------------------------------------
     /** makes it possible to register listeners which are called whenever
         a document event occurs
      */
     [optional] interface XDocumentEventBroadcaster;
 
-    //-------------------------------------------------------------------------
     /** access to bound event handlers
      */
     [optional] interface XEventsSupplier;
 
-    //-------------------------------------------------------------------------
     /** document can provide a <type>DocumentInfo</type>
 
         <p>
@@ -134,12 +124,10 @@ published service OfficeDocument
      */
     [optional] interface XDocumentInfoSupplier;
 
-    //-------------------------------------------------------------------------
     /** access to some properties describing all open views to a document
      */
     [optional] interface XViewDataSupplier;
 
-    //-------------------------------------------------------------------------
     /** allows for getting information about a print job
 
         @since OOo 1.1.2
@@ -152,7 +140,6 @@ published service OfficeDocument
     */
     [optional] interface XEmbeddedScripts;
 
-    //-------------------------------------------------------------------------
     /** access to the <type>DocumentProperties</type>.
 
         @since OOo 3.0
@@ -163,7 +150,6 @@ published service OfficeDocument
     */
     [optional] interface XUndoManagerSupplier;
 
-    //-------------------------------------------------------------------------
     /** controls the focus behavior of the form controls in the document
 
         <p>
@@ -174,7 +160,6 @@ published service OfficeDocument
     */
     [property, optional] boolean AutomaticControlFocus;
 
-    //-------------------------------------------------------------------------
     /** controls the initial (on-load) behavior of the form controls in the document
 
         <p>If set to <TRUE/>, upon loading the document, the form controls will be in design mode.<br/>
@@ -184,7 +169,6 @@ published service OfficeDocument
     */
     [property, optional] boolean ApplyFormDesignMode;
 
-    //-------------------------------------------------------------------------
     /** contains a unique id for the document
 
         <p>Once calculated, the id must not change until the document has been
@@ -194,7 +178,6 @@ published service OfficeDocument
     [property, optional, readonly] string RuntimeUID;
 };
 
-//=============================================================================
 
 }; }; }; };
 

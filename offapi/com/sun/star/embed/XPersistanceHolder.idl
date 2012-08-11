@@ -32,16 +32,13 @@
 #include <com/sun/star/io/IOException.idl>
 #include <com/sun/star/io/XStream.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module embed {
 
-//=============================================================================
 /** allows to disconnect an object from its persistence.
  */
 published interface XPersistanceHolder: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** disconnects the object from the persistence.
 
         @throws com::sun::star::io::IOException
@@ -54,7 +51,6 @@ published interface XPersistanceHolder: com::sun::star::uno::XInterface
         raises( ::com::sun::star::io::IOException,
                 ::com::sun::star::uno::Exception );
 
-    //-------------------------------------------------------------------------
     /** connects the object to a persistence.
 
         @param xStream
@@ -73,7 +69,6 @@ published interface XPersistanceHolder: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

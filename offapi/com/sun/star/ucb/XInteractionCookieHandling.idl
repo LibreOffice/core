@@ -33,11 +33,9 @@
 #include <com/sun/star/ucb/Cookie.idl>
 
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** An interaction continuation handing back some cookie request handling
     policy.
 
@@ -48,7 +46,6 @@ module com { module sun { module star { module ucb {
 */
 published interface XInteractionCookieHandling: com::sun::star::task::XInteractionContinuation
 {
-    //-------------------------------------------------------------------------
     /** Set a general policy to hand back.
 
         <p>This method should be called before select().
@@ -58,7 +55,6 @@ published interface XInteractionCookieHandling: com::sun::star::task::XInteracti
     */
     void setGeneralPolicy( [in] com::sun::star::ucb::CookiePolicy Policy );
 
-    //-------------------------------------------------------------------------
     /** Set a policy to hand back for a specific cookie.
 
         <p>This method should be called before select().
@@ -78,7 +74,6 @@ published interface XInteractionCookieHandling: com::sun::star::task::XInteracti
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

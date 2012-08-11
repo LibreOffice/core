@@ -22,11 +22,9 @@
 #include <com/sun/star/beans/XIntrospection.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module beans {
 
-//=============================================================================
 /** provides functionality to get information about an object's
     properties and methods.
     <p><strong>Important note:</strong>An object can only be
@@ -38,7 +36,6 @@
  */
 published service Introspection : com::sun::star::beans::XIntrospection;
 
-//=============================================================================
 
 }; }; }; };
 

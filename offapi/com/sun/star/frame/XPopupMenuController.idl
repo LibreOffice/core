@@ -31,11 +31,9 @@
 
 #include <com/sun/star/awt/XPopupMenu.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module frame {
 
-//=============================================================================
 
 /** provides data to a pop-up menu controller implementation to
     fill and update a pop-up menu dynamically.
@@ -75,7 +73,6 @@ interface XPopupMenuController : com::sun::star::uno::XInterface
 
 }; }; }; };
 
-//=============================================================================
 
 #endif
 

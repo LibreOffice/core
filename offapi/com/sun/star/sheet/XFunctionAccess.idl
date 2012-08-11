@@ -24,11 +24,9 @@
 #include <com/sun/star/container/NoSuchElementException.idl>
 #include <com/sun/star/lang/IllegalArgumentException.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** allows generic access to all spreadsheet functions.
 
@@ -36,7 +34,6 @@ module com {  module sun {  module star {  module sheet {
  */
 published interface XFunctionAccess: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** calls a function and returns the result of the call.
 
@@ -101,7 +98,6 @@ published interface XFunctionAccess: com::sun::star::uno::XInterface
                     com::sun::star::lang::IllegalArgumentException );
 };
 
-//=============================================================================
 
 }; }; }; };
 

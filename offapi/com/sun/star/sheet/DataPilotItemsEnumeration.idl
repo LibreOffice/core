@@ -22,11 +22,9 @@
 
 #include <com/sun/star/container/XEnumeration.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** represents an enumeration of data pilot items.
 
@@ -34,7 +32,6 @@ module com {  module sun {  module star {  module sheet {
  */
 service DataPilotItemsEnumeration
 {
-    //-------------------------------------------------------------------------
 
     /** provides methods to access the data pilot items in the enumeration.
 
@@ -44,7 +41,6 @@ service DataPilotItemsEnumeration
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

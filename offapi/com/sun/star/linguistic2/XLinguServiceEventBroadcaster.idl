@@ -32,11 +32,9 @@
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/linguistic2/XLinguServiceEventListener.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module linguistic2 {
 
-//=============================================================================
 /** is used to register a listener for LinguServiceEvents.
 
     <P>This interface may be used by spell checker or hyphenator
@@ -55,7 +53,6 @@ module com { module sun { module star { module linguistic2 {
 */
 published interface XLinguServiceEventBroadcaster : com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /**
          @returns
              <TRUE/> if the listener was successfully added,
@@ -67,7 +64,6 @@ published interface XLinguServiceEventBroadcaster : com::sun::star::uno::XInterf
     boolean addLinguServiceEventListener (
         [in] com::sun::star::linguistic2::XLinguServiceEventListener    xLstnr );
 
-    //-------------------------------------------------------------------------
     /**
          @returns
              <TRUE/> if the listener was successfully removed,
@@ -81,7 +77,6 @@ published interface XLinguServiceEventBroadcaster : com::sun::star::uno::XInterf
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

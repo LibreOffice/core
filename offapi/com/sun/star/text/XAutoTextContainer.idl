@@ -30,11 +30,9 @@
 #include <com/sun/star/container/NoSuchElementException.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module text {
 
-//=============================================================================
 
 // DocMerge from xml: interface com::sun::star::text::XAutoTextContainer
 /** handles blocks of <type>AutoTextEntry</type>.
@@ -62,7 +60,6 @@
  */
 published interface XAutoTextContainer: com::sun::star::container::XNameAccess
 {
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::text::XAutoTextContainer::insertNewByName
     /** creates a new AutoText group.
@@ -71,7 +68,6 @@ published interface XAutoTextContainer: com::sun::star::container::XNameAccess
             raises( com::sun::star::lang::IllegalArgumentException,
                     com::sun::star::container::ElementExistException );
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::text::XAutoTextContainer::removeByName
     /** deletes the specified AutoText group.
@@ -81,7 +77,6 @@ published interface XAutoTextContainer: com::sun::star::container::XNameAccess
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

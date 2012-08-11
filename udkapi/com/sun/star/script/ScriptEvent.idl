@@ -22,23 +22,19 @@
 #include <com/sun/star/script/AllEventObject.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module script {
 
-//=============================================================================
 /** script event that gets delivered whenever a script event takes place.
     <p>For that to happen, a "ScriptEventDescriptor" must be registered at
     and attached to an object by an <type>XEventAttacherManager</type>.</p>
  */
 published struct ScriptEvent: com::sun::star::script::AllEventObject
 {
-    //-------------------------------------------------------------------------
     /** type of the script language as string; for example, "Basic" or "StarScript".
      */
     string ScriptType;
 
-    //-------------------------------------------------------------------------
     /** script code as string.
 
         <p>The code has to correspond with the language
@@ -48,7 +44,6 @@ published struct ScriptEvent: com::sun::star::script::AllEventObject
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

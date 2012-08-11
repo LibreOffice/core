@@ -32,11 +32,9 @@
 #include <com/sun/star/lang/XInitialization.idl>
 #include <com/sun/star/container/XNamed.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module frame {
 
-//=============================================================================
 /** derivations of this abstract service are used to load components
     into <type>Frame</type>s of the environment
 
@@ -52,12 +50,10 @@
  */
 published service FrameLoader
 {
-    //-------------------------------------------------------------------------
     /** support asynchronous loading of the component
      */
     interface XFrameLoader;
 
-    //-------------------------------------------------------------------------
     /** support initialization of loader with its own configuration!
 
         <p>
@@ -68,7 +64,6 @@ published service FrameLoader
      */
     [optional] interface com::sun::star::lang::XInitialization;
 
-    //-------------------------------------------------------------------------
     /** provides access to the internal name of this frame loader
 
         <p>
@@ -85,7 +80,6 @@ published service FrameLoader
      [optional] interface com::sun::star::container::XNamed;
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -20,48 +20,40 @@
 #ifndef __com_sun_star_sheet_MemberResultFlags_idl__
 #define __com_sun_star_sheet_MemberResultFlags_idl__
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** used to give information about elements in data pilot member results.
  */
 published constants MemberResultFlags
 {
-    //-------------------------------------------------------------------------
 
     /** The element contains a member.
      */
     const long HASMEMBER = 1;
 
-    //-------------------------------------------------------------------------
 
     /** The element contains a subtotal.
      */
     const long SUBTOTAL = 2;
 
-    //-------------------------------------------------------------------------
 
     /** The element is a continuation of the previous one.
      */
     const long CONTINUE = 4;
 
-    //-------------------------------------------------------------------------
 
     /** The element contains a grand total.
      */
     const long GRANDTOTAL = 8;
 
-    //-------------------------------------------------------------------------
 
     /** The element is a numeric value.
      */
     const long NUMERIC = 16;
 };
 
-//=============================================================================
 
 }; }; }; };
 

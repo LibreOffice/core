@@ -32,11 +32,9 @@
 #include <com/sun/star/form/control/GridControl.idl>
 #include <com/sun/star/frame/XDispatch.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module form {  module control {
 
-//=============================================================================
 
 /** is an extended grid control, which allows the user to customize some of it's user interface's aspects.
 */
@@ -69,7 +67,6 @@ published service InteractionGridControl
     interface com::sun::star::frame::XDispatch;
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

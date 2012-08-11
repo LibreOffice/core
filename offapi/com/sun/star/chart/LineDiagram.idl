@@ -34,11 +34,9 @@
 #include <com/sun/star/chart/StackableDiagram.idl>
 #include <com/sun/star/awt/Size.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module chart {
 
-//=============================================================================
 
 /** specifies line, spline and symbol diagrams.
  */
@@ -52,7 +50,6 @@ published service LineDiagram
     service com::sun::star::chart::Dim3DDiagram;
     service com::sun::star::chart::StackableDiagram;
 
-    //-------------------------------------------------------------------------
 
     /** determines which type of symbols are displayed.
 
@@ -72,13 +69,11 @@ published service LineDiagram
      */
     [property] long SymbolType;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the size of symbols in 1/100th of a millimeter.
      */
     [optional, property] com::sun::star::awt::Size SymbolSize;
 
-    //-------------------------------------------------------------------------
 
     /** Set this property to any valid URL that points to a graphic
         file.  This graphic is then used as symbol for all series.
@@ -91,14 +86,12 @@ published service LineDiagram
      */
     [optional, property] string SymbolBitmapURL;
 
-    //-------------------------------------------------------------------------
 
     /** determines if the chart type has lines connecting the data
         points or contains just symbols.
      */
     [property] boolean Lines;
 
-    //-------------------------------------------------------------------------
 
     /** determines if the chart is a spline-chart type and specifies
         the type of splines.
@@ -113,7 +106,6 @@ published service LineDiagram
      */
     [property] long SplineType;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the power of the polynomials used for spline
         calculation
@@ -122,14 +114,12 @@ published service LineDiagram
      */
     [optional, property] long SplineOrder;
 
-    //-------------------------------------------------------------------------
 
     /** determines the number of sampling points of a spline
      */
     [optional, property] long SplineResolution;
 };
 
-//=============================================================================
 
 }; }; }; };
 

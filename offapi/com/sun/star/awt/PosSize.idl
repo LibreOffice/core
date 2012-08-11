@@ -20,53 +20,44 @@
 #define __com_sun_star_awt_PosSize_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module awt {
 
-//=============================================================================
 
 /** These constants are used to flag the parameters of a rectangle.
  */
 published constants PosSize
 {
-    //-------------------------------------------------------------------------
 
     /** flags the x-coordinate.
      */
     const short X = 1;
 
-    //-------------------------------------------------------------------------
 
     /** flags the y-coordinate.
      */
     const short Y = 2;
 
-    //-------------------------------------------------------------------------
 
     /** flags the width.
      */
     const short WIDTH = 4;
 
-    //-------------------------------------------------------------------------
 
     /** flags the height.
      */
     const short HEIGHT = 8;
 
-    //-------------------------------------------------------------------------
 
     /** flags the x- and y-coordinate.
      */
     const short POS = 3;
 
-    //-------------------------------------------------------------------------
 
     /** flags the width and height.
      */
     const short SIZE = 12;
 
-    //-------------------------------------------------------------------------
 
     /** flags the x- and y-coordinate, width and height.
      */
@@ -74,7 +65,6 @@ published constants PosSize
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

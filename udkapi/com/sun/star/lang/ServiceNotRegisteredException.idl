@@ -22,11 +22,9 @@
 #include <com/sun/star/uno/Exception.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module lang {
 
-//=============================================================================
 
 // DocMerge from xml: exception com::sun::star::lang::ServiceNotRegisteredException
 /** This exception is thrown when a needed service is not found.
@@ -38,7 +36,6 @@ published exception ServiceNotRegisteredException: com::sun::star::uno::Exceptio
 {
 };
 
-//=============================================================================
 
 }; }; }; };
 

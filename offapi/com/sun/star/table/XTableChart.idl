@@ -23,11 +23,9 @@
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/table/CellRangeAddress.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module table {
 
-//=============================================================================
 
 /** provides access to the settings of a chart object in a table or
     spreadsheet.
@@ -36,41 +34,35 @@ module com {  module sun {  module star {  module table {
  */
 published interface XTableChart: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** returns, whether the cells of the topmost row of the source data
         are interpreted as column headers.
      */
     boolean getHasColumnHeaders();
 
-    //-------------------------------------------------------------------------
 
     /** specifies whether the cells of the topmost row of the source data
         are interpreted as column headers.
      */
     void setHasColumnHeaders( [in] boolean bHasColumnHeaders );
 
-    //-------------------------------------------------------------------------
 
     /** returns, whether the cells of the leftmost column of the source
         data are interpreted as row headers.
      */
     boolean getHasRowHeaders();
 
-    //-------------------------------------------------------------------------
 
     /** specifies whether the cells of the leftmost column of the source
         data are interpreted as row headers.
      */
     void setHasRowHeaders( [in] boolean bHasRowHeaders );
 
-    //-------------------------------------------------------------------------
 
     /** returns the cell ranges that contain the data for the chart.
      */
     sequence<com::sun::star::table::CellRangeAddress> getRanges();
 
-    //-------------------------------------------------------------------------
 
     /** sets the cell ranges that contain the data for the chart.
      */
@@ -79,7 +71,6 @@ published interface XTableChart: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

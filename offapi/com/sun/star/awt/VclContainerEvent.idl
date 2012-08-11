@@ -24,11 +24,9 @@
 #include <com/sun/star/uno/XInterface.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module awt {
 
-//=============================================================================
 
 /** specifies a container event.
 
@@ -39,7 +37,6 @@
  */
 published struct VclContainerEvent: com::sun::star::lang::EventObject
 {
-    //-------------------------------------------------------------------------
 
     /** returns the child component that was added or removed.
      */
@@ -47,7 +44,6 @@ published struct VclContainerEvent: com::sun::star::lang::EventObject
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -48,11 +48,9 @@
 
 #include <com/sun/star/lang/IllegalArgumentException.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module xml {  module sax {
 
-//=============================================================================
 
 /** specifies a SAX parser that uses integer values for known XML names
     (elements, attributes and attribute values). The parser also handles
@@ -113,7 +111,6 @@ module com {  module sun {  module star {  module xml {  module sax {
 */
 interface XFastParser: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** parses an XML document from a stream.
 
         <p>Set the desired handlers before calling this method.</p>
@@ -121,20 +118,17 @@ interface XFastParser: com::sun::star::uno::XInterface
     void parseStream( [in] InputSource aInputSource )
             raises( SAXException, com::sun::star::io::IOException );
 
-    //-------------------------------------------------------------------------
 
     /** Application must register a document event handler to get
         sax events for the parsed stream.
      */
     void setFastDocumentHandler( [in] XFastDocumentHandler Handler );
 
-    //-------------------------------------------------------------------------
 
     /** must be registered to translate known XML names to integer tokens.
      */
     void setTokenHandler( [in] XFastTokenHandler Handler );
 
-    //-------------------------------------------------------------------------
 
     /** registers a known namespace url with the given integer token.<br>
         @param NamespaceToken
@@ -143,7 +137,6 @@ interface XFastParser: com::sun::star::uno::XInterface
     void registerNamespace( [in] string NamespaceURL, [in] long NamespaceToken )
         raises( com::sun::star::lang::IllegalArgumentException );
 
-    //-------------------------------------------------------------------------
     /** allows an application to register an error event handler.
 
         <p>Note that the error handler can throw an exception when an error or
@@ -152,12 +145,10 @@ interface XFastParser: com::sun::star::uno::XInterface
      */
     void setErrorHandler( [in] XErrorHandler Handler );
 
-    //-------------------------------------------------------------------------
     /** allows an application to register a DTD-Handler.
      */
     void setEntityResolver( [in] XEntityResolver Resolver );
 
-    //-------------------------------------------------------------------------
     /** sets a locale specified for localization of warnings and error messages.
 
         <p>Set the language of the error messages. Useful when the parsing
@@ -171,7 +162,6 @@ interface XFastParser: com::sun::star::uno::XInterface
         raises( com::sun::star::lang::IllegalArgumentException );
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

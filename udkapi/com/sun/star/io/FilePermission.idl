@@ -18,11 +18,9 @@
  */
 #ifndef __com_sun_star_io_FilePermission_idl__
 #define __com_sun_star_io_FilePermission_idl__
-//=============================================================================
 
 module com {  module sun {  module star {  module io {
 
-//=============================================================================
 
 /** This permission represents access to a file or directory.
     A FilePermission consists of a file url and a set of actions valid for that url.
@@ -69,7 +67,6 @@ published struct FilePermission
     string Actions;
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -32,17 +32,14 @@
 #include <com/sun/star/sheet/FormulaOpCodeMapEntry.idl>
 #include <com/sun/star/lang/IllegalArgumentException.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** gives access to spreadsheet compiler token interns.
  */
 interface XFormulaOpCodeMapper
 {
-    //-------------------------------------------------------------------------
 
     /** OpCode value used for external Add-In functions.
 
@@ -53,7 +50,6 @@ interface XFormulaOpCodeMapper
      */
     [attribute, readonly] long OpCodeExternal;
 
-    //-------------------------------------------------------------------------
 
     /** OpCode value used for unknown functions.
 
@@ -62,7 +58,6 @@ interface XFormulaOpCodeMapper
      */
     [attribute, readonly] long OpCodeUnknown;
 
-    //-------------------------------------------------------------------------
 
     /** returns a sequence of tokens matching the input sequence of
         strings in order.
@@ -108,7 +103,6 @@ interface XFormulaOpCodeMapper
             [in] long Language )
         raises( com::sun::star::lang::IllegalArgumentException );
 
-    //-------------------------------------------------------------------------
 
     /** returns a sequence of map entries for all available elements of
         a given formula language.
@@ -139,7 +133,6 @@ interface XFormulaOpCodeMapper
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

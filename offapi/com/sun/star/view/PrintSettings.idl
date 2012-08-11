@@ -29,11 +29,9 @@
 #define __com_sun_star_view_PrintSettings_idl__
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module view {
 
-//=============================================================================
 
 /** provides access to the settings for printing documents.
 
@@ -42,61 +40,50 @@ module com {  module sun {  module star {  module view {
  */
 published service PrintSettings
 {
-    //-------------------------------------------------------------------------
     /** If <TRUE/>, all characters are printed in black.
 
         <p>It is useful for printing colored text on a b/w printer.</p>
      */
     [property] boolean PrintBlackFonts;
 
-    //-------------------------------------------------------------------------
     /** If <TRUE/>, control shapes are included in printing.
      */
     [property] boolean PrintControls;
 
-    //-------------------------------------------------------------------------
     /** If <TRUE/>, drawing objects (shapes)  are included in printing.
      */
     [property] boolean PrintDrawings;
 
-    //-------------------------------------------------------------------------
     /** If <TRUE/>, graphic objects are included in printing.
      */
     [property] boolean PrintGraphics;
 
-    //-------------------------------------------------------------------------
     /** If <TRUE/>, left pages are included in printing.
      */
     [property] boolean PrintLeftPages;
 
-    //-------------------------------------------------------------------------
     /** If <TRUE/>, right pages are included in printing.
      */
     [property] boolean PrintRightPages;
 
-    //-------------------------------------------------------------------------
     /** If <TRUE/>, tables are included in printing.
      */
     [property] boolean PrintTables;
 
-    //-------------------------------------------------------------------------
     /** If <TRUE/>, the pages are printed in reverse order.
 
         <p>The last page is printed first.</p>
      */
     [property] boolean PrintReversed;
 
-    //-------------------------------------------------------------------------
     /** If <TRUE/>, the pages are printed in the order of prospects.
      */
     [property] boolean PrintProspect;
 
-    //-------------------------------------------------------------------------
     /** If <TRUE/>, the background of the page is printed.
      */
     [property] boolean PrintPageBackground;
 
-    //-------------------------------------------------------------------------
     /** determines how annotations are printed.
 
         @see NotePrintMode
@@ -105,7 +92,6 @@ published service PrintSettings
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

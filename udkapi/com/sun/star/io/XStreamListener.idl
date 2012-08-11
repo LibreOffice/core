@@ -22,25 +22,21 @@
 #include <com/sun/star/lang/XEventListener.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module io {
 
-//=============================================================================
 
 // DocMerge from xml: interface com::sun::star::io::XStreamListener
 /** makes it possible to receive events from an active data control.
  */
 published interface XStreamListener: com::sun::star::lang::XEventListener
 {
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::io::XStreamListener::started
     /** gets called as soon as data transfer has started.
      */
     void started();
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::io::XStreamListener::closed
     /** gets called when data transfer terminates normally or when data
@@ -51,14 +47,12 @@ published interface XStreamListener: com::sun::star::lang::XEventListener
      */
     void closed();
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::io::XStreamListener::terminated
     /** gets called when <member>XActiveDataControl::terminate()</member> is called.
      */
     void terminated();
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::io::XStreamListener::error
     /** gets called when an internal error in source or sink has occurred.
@@ -70,7 +64,6 @@ published interface XStreamListener: com::sun::star::lang::XEventListener
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

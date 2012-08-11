@@ -28,48 +28,40 @@
 #include <com/sun/star/lang/IllegalArgumentException.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module util {
 
-//=============================================================================
 
 /** makes it possible to search and replace properties.
  */
 published interface XPropertyReplace: com::sun::star::util::XReplaceDescriptor
 {
-    //-------------------------------------------------------------------------
     /** provides the information if specific property values are
         searched, or just the existence of the specified properties.
      */
     boolean getValueSearch();
 
-    //-------------------------------------------------------------------------
     /** specifies if specific property values are searched,
         or just the existence of the specified properties.
      */
     void setValueSearch( [in] boolean bValueSearch );
 
-    //-------------------------------------------------------------------------
     /** @returns
                     the attributes to search for.
      */
     sequence<com::sun::star::beans::PropertyValue> getSearchAttributes();
 
-    //-------------------------------------------------------------------------
     /** sets the properties to search for.
      */
     void setSearchAttributes( [in] sequence<com::sun::star::beans::PropertyValue> aSearchAttribs )
             raises( com::sun::star::beans::UnknownPropertyException,
                     com::sun::star::lang::IllegalArgumentException );
 
-    //-------------------------------------------------------------------------
     /** @returns
                     the attribute values which are used to replace the found occurrences.
      */
     sequence<com::sun::star::beans::PropertyValue> getReplaceAttributes();
 
-    //-------------------------------------------------------------------------
     /** sets the properties to replace the found occurrences.
      */
     void setReplaceAttributes( [in] sequence<com::sun::star::beans::PropertyValue> aSearchAttribs )
@@ -78,7 +70,6 @@ published interface XPropertyReplace: com::sun::star::util::XReplaceDescriptor
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

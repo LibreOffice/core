@@ -30,11 +30,9 @@
 
 #include <com/sun/star/configuration/backend/Backend.idl>
 #include <com/sun/star/lang/XInitialization.idl>
-//=============================================================================
 
 module com { module sun { module star { module configuration { module backend {
 
-//=============================================================================
 
 /**
     provides access to a configuration data composed of one or more
@@ -43,7 +41,6 @@ module com { module sun { module star { module configuration { module backend {
  */
 service SystemIntegration
 {
-    //-------------------------------------------------------------------------
      /**
            provides access to the layer data.
       */
@@ -59,10 +56,8 @@ service SystemIntegration
     */
 
     interface com::sun::star::lang::XInitialization ;
-    //-------------------------------------------------------------------------
 } ;
 
-//=============================================================================
 
 } ; } ; } ; } ; } ;
 #endif

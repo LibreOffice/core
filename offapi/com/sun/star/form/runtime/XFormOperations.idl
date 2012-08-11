@@ -38,13 +38,11 @@
 #include <com/sun/star/lang/WrappedTargetException.idl>
 #include <com/sun/star/beans/NamedValue.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module form { module runtime {
 
 interface XFeatureInvalidation;
 
-//=============================================================================
 
 /** encapsulates operations on a database form.
 
@@ -259,11 +257,9 @@ interface XFormOperations : ::com::sun::star::lang::XComponent
     [attribute] XFeatureInvalidation    FeatureInvalidation;
 };
 
-//=============================================================================
 
 }; }; }; }; };
 
-//=============================================================================
 
 #endif
 

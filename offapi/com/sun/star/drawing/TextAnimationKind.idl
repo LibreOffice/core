@@ -29,46 +29,39 @@
 #define __com_sun_star_drawing_TextAnimationKind_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module drawing {
 
-//=============================================================================
 
 // DocMerge from xml: enum com::sun::star::drawing::TextAnimationKind
 /** This enumeration specifies the type of animation for a text.
  */
 published enum TextAnimationKind
 {
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: value com::sun::star::drawing::TextAnimationKind::NONE
     /** Don't animate this text.
      */
     NONE,
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: value com::sun::star::drawing::TextAnimationKind::BLINK
     /** Let this text switch its state from visible to invisible continuously.
      */
     BLINK,
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: value com::sun::star::drawing::TextAnimationKind::SCROLL
     /** Let this text scroll.
      */
     SCROLL,
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: value com::sun::star::drawing::TextAnimationKind::ALTERNATE
     /** Scroll the text from one side to the other and back.
      */
     ALTERNATE,
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: value com::sun::star::drawing::TextAnimationKind::SLIDE
     /** Scroll the text from one side to the final position and stop there.
@@ -77,7 +70,6 @@ published enum TextAnimationKind
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

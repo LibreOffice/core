@@ -35,11 +35,9 @@
 #include <com/sun/star/form/ListSourceType.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module form {  module component {
 
-//=============================================================================
 
 /** This service specifies a combo box which is data-aware, and can be bound to a database field.
 
@@ -54,7 +52,6 @@ published service DatabaseComboBox
 
     service com::sun::star::form::DataAwareControlModel;
 
-    //-------------------------------------------------------------------------
 
     /** determines if an empty text should be treated as a <NULL/> value.
 
@@ -73,7 +70,6 @@ published service DatabaseComboBox
         <p>The concrete meaning of this property depends on the value of <member>ListSourceType</member></p>
      */
     [property] string ListSource;
-    //-------------------------------------------------------------------------
 
     /** specifies the kind of list source.
 
@@ -84,7 +80,6 @@ published service DatabaseComboBox
     [property] com::sun::star::form::ListSourceType ListSourceType;
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

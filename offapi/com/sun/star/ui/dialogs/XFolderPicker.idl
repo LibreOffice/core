@@ -32,17 +32,14 @@
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/ui/dialogs/XExecutableDialog.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module ui { module dialogs {
 
-//=============================================================================
 /** Specifies a FolderPicker interface.
 */
 
 published interface XFolderPicker: com::sun::star::ui::dialogs::XExecutableDialog
 {
-    //-------------------------------------------------------------------------
     /** Sets the root directory that the FolderPicker should display.
         It is not specified which root directory the FolderPicker
         chooses if the specified root directory doesn't exist.
@@ -56,7 +53,6 @@ published interface XFolderPicker: com::sun::star::ui::dialogs::XExecutableDialo
     void setDisplayDirectory( [in] string aDirectory )
         raises( ::com::sun::star::lang::IllegalArgumentException );
 
-    //-------------------------------------------------------------------------
     /** Returns the root directory that the FolderPicker is showing. The
         return value is undefined if the client did not choose a root directory
         or the previously specified root directory doesn't exist.
@@ -66,7 +62,6 @@ published interface XFolderPicker: com::sun::star::ui::dialogs::XExecutableDialo
      */
     string getDisplayDirectory();
 
-    //-------------------------------------------------------------------------
     /** Returns the selected directory as url conform to <a href="http://www.w3.org/Addressing/rfc1738.txt">Rfc1738</a>.
 
         @returns
@@ -75,7 +70,6 @@ published interface XFolderPicker: com::sun::star::ui::dialogs::XExecutableDialo
     */
     string getDirectory( );
 
-    //-------------------------------------------------------------------------
     /** The implementation may optionally show the given text as a description
         for the user within the dialog, e.g. "Please select a directory".
         If the client doesn't set a description the dialog may show a default
@@ -84,7 +78,6 @@ published interface XFolderPicker: com::sun::star::ui::dialogs::XExecutableDialo
     void setDescription( [in] string aDescription );
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

@@ -20,29 +20,24 @@
 #define __com_sun_star_awt_TextAlign_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module awt {
 
-//=============================================================================
 
 /** specifies the alignment of text.
  */
 published constants TextAlign
 {
-    //-------------------------------------------------------------------------
 
     /** specifies to left align text.
      */
     const long LEFT = 0;
 
-    //-------------------------------------------------------------------------
 
     /** specifies to center text.
      */
     const long CENTER = 1;
 
-    //-------------------------------------------------------------------------
 
     /** specifies to right align text.
      */
@@ -50,7 +45,6 @@ published constants TextAlign
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

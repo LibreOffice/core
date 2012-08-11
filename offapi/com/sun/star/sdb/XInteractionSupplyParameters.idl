@@ -41,7 +41,6 @@ published interface XInteractionSupplyParameters: com::sun::star::task::XInterac
     void setParameters( [in] sequence< com::sun::star::beans::PropertyValue > Values);
 };
 
-//=============================================================================
 
 }; }; }; };
 

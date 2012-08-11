@@ -35,11 +35,9 @@
 #include <com/sun/star/lang/IllegalArgumentException.idl>
 #include <com/sun/star/lang/NoSupportException.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module configuration { module backend {
 
-//=============================================================================
 
 /**
   Handles access to a stratum consisting of multiple layers
@@ -58,7 +56,6 @@ module com { module sun { module star { module configuration { module backend {
 */
 published interface XMultiLayerStratum : ::com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /**
       identifies the layers within this stratum which should be read and
@@ -98,7 +95,6 @@ published interface XMultiLayerStratum : ::com::sun::star::uno::XInterface
         raises (BackendAccessException,
                 com::sun::star::lang::IllegalArgumentException) ;
 
-    //-------------------------------------------------------------------------
 
     /**
       identifies the layer which should be modified
@@ -138,7 +134,6 @@ published interface XMultiLayerStratum : ::com::sun::star::uno::XInterface
                 com::sun::star::lang::NoSupportException,
                 com::sun::star::lang::IllegalArgumentException) ;
 
-    //-------------------------------------------------------------------------
 
     /**
       retrieves a layer associated to a layer id, if newer than indicated.
@@ -184,7 +179,6 @@ published interface XMultiLayerStratum : ::com::sun::star::uno::XInterface
         raises (BackendAccessException,
                 com::sun::star::lang::IllegalArgumentException) ;
 
-    //-------------------------------------------------------------------------
 
     /**
       retrieves the layers associated to a series of layer ids,
@@ -235,7 +229,6 @@ published interface XMultiLayerStratum : ::com::sun::star::uno::XInterface
         raises (BackendAccessException,
                 com::sun::star::lang::IllegalArgumentException) ;
 
-    //-------------------------------------------------------------------------
 
     /**
       retrieves the layers associated to a series of layer ids,
@@ -291,7 +284,6 @@ published interface XMultiLayerStratum : ::com::sun::star::uno::XInterface
         raises (BackendAccessException,
                 com::sun::star::lang::IllegalArgumentException) ;
 
-    //-------------------------------------------------------------------------
 
     /**
       retrieves a writable representation of the layer
@@ -321,10 +313,8 @@ published interface XMultiLayerStratum : ::com::sun::star::uno::XInterface
                 com::sun::star::lang::NoSupportException,
                 com::sun::star::lang::IllegalArgumentException) ;
 
-    //-------------------------------------------------------------------------
 } ;
 
-//=============================================================================
 
 } ; } ; } ; } ; } ;
 

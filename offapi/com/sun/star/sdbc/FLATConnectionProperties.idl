@@ -75,7 +75,6 @@ service FLATConnectionProperties
     [property] string Extension;
 };
 
-//=============================================================================
 
 }; }; }; };
 

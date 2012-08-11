@@ -33,21 +33,17 @@
 #include <com/sun/star/lang/XSingleServiceFactory.idl>
 #include <com/sun/star/util/XChangesBatch.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** provides read and write access to a fragment of the hierarchy data.
 */
 published service HierarchyDataReadWriteAccess
 {
-    //-------------------------------------------------------------------------
     /** provides read access to a fragment of the hierarchy data
      */
     service HierarchyDataReadAccess;
 
-    //-------------------------------------------------------------------------
     /** allows adding and removing of hierarchy data nodes, replacing of
         the value of hierarchy data node members, as well as obtaining the
         value of hierarchy data node members.
@@ -63,7 +59,6 @@ published service HierarchyDataReadWriteAccess
      */
     interface com::sun::star::container::XNameContainer;
 
-    //-------------------------------------------------------------------------
     /** gives access to all contents provided by this provider.
 
         <p><member scope="com::sun::star::lang">XSingleServiceFactory::createInstance</member>
@@ -77,7 +72,6 @@ published service HierarchyDataReadWriteAccess
      */
     interface com::sun::star::lang::XSingleServiceFactory;
 
-    //-------------------------------------------------------------------------
     /** allows managing changes within the hierarchy.
 
         <p><member scope="com::sun::star::util">XChangesBatch::getPendingChanges</member>
@@ -91,7 +85,6 @@ published service HierarchyDataReadWriteAccess
     interface com::sun::star::util::XChangesBatch;
 };
 
-//=============================================================================
 
 }; }; }; };
 

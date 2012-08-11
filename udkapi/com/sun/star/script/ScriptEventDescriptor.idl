@@ -20,11 +20,9 @@
 #define __com_sun_star_script_ScriptEventDescriptor_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module script {
 
-//=============================================================================
 /** describes an effect, especially a script to be executed,
     for a certain event given by the listener type and the name of the
     event method.
@@ -35,12 +33,10 @@ published struct ScriptEventDescriptor
      */
     string ListenerType;
 
-    //-------------------------------------------------------------------------
     /** event method as string.
      */
     string EventMethod;
 
-    //-------------------------------------------------------------------------
     /** data to be used if the addListener method needs an additional
         parameter.
         <p>If the type of this parameter is different from string,
@@ -48,12 +44,10 @@ published struct ScriptEventDescriptor
      */
     string AddListenerParam;
 
-    //-------------------------------------------------------------------------
     /** type of the script language as string; for example, "Basic" or "StarScript".
      */
     string ScriptType;
 
-    //-------------------------------------------------------------------------
     /** script code as string (the code has to correspond with the language
         defined by ScriptType).
      */
@@ -61,7 +55,6 @@ published struct ScriptEventDescriptor
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

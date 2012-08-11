@@ -35,10 +35,8 @@
 #include <com/sun/star/lang/IllegalArgumentException.idl>
 #include <com/sun/star/frame/DoubleInitializationException.idl>
 
-//=============================================================================
 module com {  module sun {  module star {  module embed {
 
-//-----------------------------------------------------------------------------
 /** The main task of this service is to close an office document frame embedded
     in an application running in another process correctly.
 
@@ -71,7 +69,6 @@ published service DocumentCloser : com::sun::star::lang::XComponent
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

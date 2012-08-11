@@ -23,24 +23,20 @@
 #include <com/sun/star/configuration/backend/XSingleLayerStratum.idl>
 
 
-//=============================================================================
 
 module com { module sun { module star { module configuration { module backend {
 
-//=============================================================================
 
 /**
    Provides access to a single layer of configuration data
 */
 service SingleLayerStratum
 {
-    //-------------------------------------------------------------------------
      /**
       provides access to single layer of configuration data.
       */
     interface XSingleLayerStratum ;
 
-    //-------------------------------------------------------------------------
 
 
     /**
@@ -49,10 +45,8 @@ service SingleLayerStratum
     [optional] interface XBackendEntities ;
 
 
-    //-------------------------------------------------------------------------
 } ;
 
-//=============================================================================
 
 } ; } ; } ; } ; } ;
 

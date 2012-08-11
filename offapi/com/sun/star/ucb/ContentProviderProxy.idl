@@ -32,11 +32,9 @@
 #include <com/sun/star/ucb/XContentProvider.idl>
 #include <com/sun/star/ucb/XParameterizedContentProvider.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** is a proxy for a content provider.
 
     <p>Implementing a content provider proxy can be useful if the creation of
@@ -49,7 +47,6 @@ module com { module sun { module star { module ucb {
 */
 published service ContentProviderProxy
 {
-    //-------------------------------------------------------------------------
     /** The implementation of
         <member scope="com::sun::star::uno">XInterface::queryInterface</member>
         must instantiate the real provider and return the return value
@@ -60,7 +57,6 @@ published service ContentProviderProxy
      */
     interface com::sun::star::uno::XInterface;
 
-    //-------------------------------------------------------------------------
     /** gives access to the original content provider behind the proxy.
 
         <p>The implementation will instantiate the real content provider only
@@ -69,19 +65,16 @@ published service ContentProviderProxy
      */
     interface com::sun::star::ucb::XContentProviderSupplier;
 
-    //-------------------------------------------------------------------------
     /** a content provider implementation that wraps the original provider.
      */
     interface com::sun::star::ucb::XContentProvider;
 
-    //-------------------------------------------------------------------------
     /** a parameterized content provider implementation that wraps the
         original provider.
      */
     interface com::sun::star::ucb::XParameterizedContentProvider;
 };
 
-//=============================================================================
 
 }; }; }; };
 

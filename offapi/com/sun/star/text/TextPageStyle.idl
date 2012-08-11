@@ -39,11 +39,9 @@
 #include <com/sun/star/text/XTextColumns.idl>
 #include <com/sun/star/container/XNameContainer.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module text {
 
-//=============================================================================
 
 /** represents a page style for a text document.
 
@@ -53,26 +51,22 @@ module com {  module sun {  module star {  module text {
  */
 published service TextPageStyle
 {
-    //-------------------------------------------------------------------------
 
     /** determines whether the register mode is active on that page.
       */
     [property] boolean RegisterModeActive;
 
-    //-------------------------------------------------------------------------
 
     /** contains the name of the paragraph style that is used as
         reference of the register mode.
       */
     [property] string RegisterParagraphStyle;
 
-    //-------------------------------------------------------------------------
 
     /** contains the column settings of the page.
       */
     [property] com::sun::star::text::XTextColumns TextColumns;
 
-    //-------------------------------------------------------------------------
 
     /** contains the interface to the text of the header.
 
@@ -80,7 +74,6 @@ published service TextPageStyle
       */
     [property] com::sun::star::text::XText HeaderText;
 
-    //-------------------------------------------------------------------------
 
     /** contains the interface to the text of the header of left pages.
 
@@ -88,7 +81,6 @@ published service TextPageStyle
       */
     [property] com::sun::star::text::XText HeaderTextLeft;
 
-    //-------------------------------------------------------------------------
 
     /** contains the interface to the text of the header of right pages.
 
@@ -96,7 +88,6 @@ published service TextPageStyle
       */
     [property] com::sun::star::text::XText HeaderTextRight;
 
-    //-------------------------------------------------------------------------
 
     /** contains the interface to the text of the header of first pages.
 
@@ -106,7 +97,6 @@ published service TextPageStyle
       */
     [optional, property] com::sun::star::text::XText HeaderTextFirst;
 
-    //-------------------------------------------------------------------------
 
     /** contains the interface to the text of the footer.
 
@@ -114,7 +104,6 @@ published service TextPageStyle
       */
     [property] com::sun::star::text::XText FooterText;
 
-    //-------------------------------------------------------------------------
 
     /** contains the interface to the text of the footer of a left page.
 
@@ -122,7 +111,6 @@ published service TextPageStyle
       */
     [property] com::sun::star::text::XText FooterTextLeft;
 
-    //-------------------------------------------------------------------------
 
     /** contains the interface to the text of the footer of a right page.
 
@@ -130,7 +118,6 @@ published service TextPageStyle
       */
     [property] com::sun::star::text::XText FooterTextRight;
 
-    //-------------------------------------------------------------------------
 
     /** contains the interface to the text of the footer of a first page.
 
@@ -140,7 +127,6 @@ published service TextPageStyle
       */
     [optional, property] com::sun::star::text::XText FooterTextFirst;
 
-    //-------------------------------------------------------------------------
 
     /** contains the maximum height of the footnote area (in 1/100 mm).
 
@@ -148,28 +134,24 @@ published service TextPageStyle
      */
     [property] long FootnoteHeight;
 
-    //-------------------------------------------------------------------------
 
     /** contains the weight of the separator line between the text and
         the footnote area (in 1/100 mm).
       */
     [property] short FootnoteLineWeight;
 
-    //-------------------------------------------------------------------------
 
     /** contains the color of the separator line between the text and
         the footnote area.
       */
     [property] com::sun::star::util::Color FootnoteLineColor;
 
-    //-------------------------------------------------------------------------
 
     /** contains the relative width of the separator line between the
         text and the footnote area (in percent).
       */
     [property] byte FootnoteLineRelativeWidth;
 
-    //-------------------------------------------------------------------------
 
     /** contains the adjustment of the separator line between the text
         and the footnote area.
@@ -178,14 +160,12 @@ published service TextPageStyle
       */
     [property] short FootnoteLineAdjust;
 
-    //-------------------------------------------------------------------------
 
     /** contains the distance between the text and the separator line
         between the text and the footnote area (in 1/100 mm).
       */
     [property] long FootnoteLineTextDistance;
 
-    //-------------------------------------------------------------------------
 
     /** contains the distance between the footnote area and the separator
         line between the text and the footnote area (in 1/100 mm).
@@ -194,7 +174,6 @@ published service TextPageStyle
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

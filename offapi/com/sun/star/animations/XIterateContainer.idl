@@ -30,11 +30,9 @@
 
 #include <com/sun/star/animations/XTimeContainer.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module animations {
 
-//=============================================================================
 
 /** An iterate container iterates over subitems of a given target object
     and animates them by subsequently executes the contained effects on them.
@@ -71,7 +69,6 @@ interface XIterateContainer : XTimeContainer
     [attribute] double IterateInterval;
 };
 
-//=============================================================================
 
 }; }; }; };
 

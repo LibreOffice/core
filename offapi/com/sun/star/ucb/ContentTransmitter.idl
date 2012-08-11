@@ -21,18 +21,15 @@
 
 #include <com/sun/star/ucb/XContentTransmitter.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** A <type>ContentTransmitter</type> is a service that provides
 
     @deprecated
 */
 published service ContentTransmitter
 {
-    //-------------------------------------------------------------------------
     /**
 
         This interface is required.
@@ -41,7 +38,6 @@ published service ContentTransmitter
 };
 
 
-//=============================================================================
 
 }; }; }; };
 

@@ -22,11 +22,9 @@
 #include <com/sun/star/lang/EventObject.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module awt {
 
-//=============================================================================
 
 /** the root event class for all component-level input events.
 
@@ -37,7 +35,6 @@
  */
 published struct InputEvent: com::sun::star::lang::EventObject
 {
-    //-------------------------------------------------------------------------
 
     /** contains the modifier keys which were pressed while the event occurred.
 
@@ -48,7 +45,6 @@ published struct InputEvent: com::sun::star::lang::EventObject
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

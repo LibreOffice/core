@@ -35,11 +35,9 @@
 #include <com/sun/star/table/TableOrientation.idl>
 #include <com/sun/star/table/CellAddress.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** represents a description of how a cell range is to be filtered.
 
@@ -49,13 +47,11 @@ module com {  module sun {  module star {  module sheet {
  */
 published service SheetFilterDescriptor
 {
-    //-------------------------------------------------------------------------
 
     /** provides access to the collection of filter fields.
      */
     interface XSheetFilterDescriptor;
 
-    //-------------------------------------------------------------------------
 
     /** provides access to the collection of filter fields.
 
@@ -68,33 +64,28 @@ published service SheetFilterDescriptor
      */
     [optional] interface XSheetFilterDescriptor2;
 
-    //-------------------------------------------------------------------------
 
 //!published service PropertySet
     /** provides access to the properties.
      */
     interface com::sun::star::beans::XPropertySet;
 
-    //=========================================================================
 
     /** specifies if the case of letters is important when comparing entries.
      */
     [property] boolean IsCaseSensitive;
 
-    //-------------------------------------------------------------------------
 
     /** specifies if duplicate entries are left out of the result.
      */
     [property] boolean SkipDuplicates;
 
-    //-------------------------------------------------------------------------
 
     /** specifies if the <member>TableFilterField::StringValue</member>
         strings are interpreted as regular expressions.
      */
     [property] boolean UseRegularExpressions;
 
-    //-------------------------------------------------------------------------
 
     /** specifies if the <member>SheetFilterDescriptor::OutputPosition</member>
         position is saved for future calls.
@@ -104,27 +95,23 @@ published service SheetFilterDescriptor
      */
     [property] boolean SaveOutputPosition;
 
-    //-------------------------------------------------------------------------
 
     /** specifies if columns or rows are filtered.
      */
     [property] com::sun::star::table::TableOrientation Orientation;
 
-    //-------------------------------------------------------------------------
 
     /** specifies if the first row (or column) contains headers which should
         not be filtered.
      */
     [property] boolean ContainsHeader;
 
-    //-------------------------------------------------------------------------
 
     /** specifies if the filtered data should be copied to another position
         in the document.
      */
     [property] boolean CopyOutputData;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the position where filtered data are to be copied.
 
@@ -133,7 +120,6 @@ published service SheetFilterDescriptor
      */
     [property] com::sun::star::table::CellAddress OutputPosition;
 
-    //-------------------------------------------------------------------------
 
     /** returns the maximum number of filter fields in the descriptor.
 
@@ -144,7 +130,6 @@ published service SheetFilterDescriptor
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

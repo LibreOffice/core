@@ -22,11 +22,9 @@
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/mozilla/XPluginInstance.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module mozilla {
 
-//=============================================================================
 
 // DocMerge from xml: interface com::sun::star::mozilla::XPluginInstanceSyncPeer
 /** This interface is an extension for <type>XPluginInstancePeer</type> interface.
@@ -34,7 +32,6 @@
  */
 published interface XPluginInstanceSyncPeer : com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
 
     // DocMerge from xml: method com::sun::star::mozilla::XPluginInstanceSyncPeer::openNewBrowserWindow
@@ -53,7 +50,6 @@ published interface XPluginInstanceSyncPeer : com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -20,39 +20,33 @@
 #define __com_sun_star_style_LineSpacingMode_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module style {
 
-//=============================================================================
 
 // DocMerge from idl: constants com::sun::star::style::LineSpacingMode
 /** These constants specify the interpretation of LineHeight.
  */
 published constants LineSpacingMode
 {
-    //-------------------------------------------------------------------------
 
     // DocMerge from idl: value com::sun::star::style::LineSpacingMode::PROP
     /** This constant specifies the height value as a proportional value.
      */
     const short PROP = 0;
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from idl: value com::sun::star::style::LineSpacingMode::MINIMUM
     /** This constant specifies the height as the minimum line height.
      */
     const short MINIMUM = 1;
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from idl: value com::sun::star::style::LineSpacingMode::LEADING
     /** This constant specifies the height value as the distance to the previous line.
      */
     const short LEADING = 2;
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from idl: value com::sun::star::style::LineSpacingMode::FIX
     /** This constant specifies the height value as a fixed line height.
@@ -61,7 +55,6 @@ published constants LineSpacingMode
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

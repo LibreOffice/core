@@ -21,11 +21,9 @@
 
 #include <com/sun/star/document/XFilterAdapter.idl>
 
-//=============================================================================
 
 module com {   module sun {   module star {   module document {
 
-//=============================================================================
     /* Provides access to user to filters written to use the FilterAdapter
         @author Aidan Butler
 

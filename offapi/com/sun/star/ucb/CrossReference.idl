@@ -20,11 +20,9 @@
 #define __com_sun_star_ucb_CrossReference_idl__
 
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** This struct contains information describing a cross reference.
 
     <p>Such references are kept by news servers for managing articles
@@ -33,12 +31,10 @@ module com { module sun { module star { module ucb {
 */
 published struct CrossReference
 {
-    //-------------------------------------------------------------------------
     /** The name of a news group.
     */
     string Group;
 
-    //-------------------------------------------------------------------------
     /** The unique identifier (relative to the server) of an article in the
         given group.
     */
@@ -46,7 +42,6 @@ published struct CrossReference
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

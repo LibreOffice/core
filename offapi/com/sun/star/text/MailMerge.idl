@@ -36,11 +36,9 @@
 #include <com/sun/star/text/XMailMergeBroadcaster.idl>
 #include <com/sun/star/sdb/DataAccessDescriptor.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module text {
 
-//=============================================================================
 
 /** Gives access to mail merge functionality.
 
@@ -70,11 +68,9 @@ published service MailMerge
      */
     [optional] interface com::sun::star::text::XMailMergeBroadcaster;
 
-    //=============================================================================
 
     /* database properties */
 
-    //=============================================================================
     /** allows to specify the data which the mail merge should be based on.
 
         <p>This service describe the interaction between all data access related properties,
@@ -91,7 +87,6 @@ published service MailMerge
      */
     [property] string DataSourceName;
 
-    //=============================================================================
 
     /** determines the type of the database command as
         described in <type scope="com::sun::star::sdb">CommandType</type>
@@ -101,7 +96,6 @@ published service MailMerge
      */
     [property] long CommandType;
 
-    //=============================================================================
 
     /** contains the database command.
 
@@ -110,7 +104,6 @@ published service MailMerge
      */
     [property] string Command;
 
-    //=============================================================================
 
     /** provides access to a
         <type scope="com::sun::star::sdbc">XResultSet</type> of
@@ -128,7 +121,6 @@ published service MailMerge
      */
     [property] com::sun::star::sdbc::XResultSet ResultSet;
 
-    //=============================================================================
 
     /** contains the connection to the database.
 
@@ -137,7 +129,6 @@ published service MailMerge
      */
     [property] com::sun::star::sdbc::XConnection ActiveConnection;
 
-    //=============================================================================
 
     /** contains a selection that refers to bookmarks of the ResultSet.
 
@@ -155,7 +146,6 @@ published service MailMerge
      */
     [property] sequence< any > Selection;
 
-    //=============================================================================
 
     /** returns if escape processing is on or off.
 
@@ -164,7 +154,6 @@ published service MailMerge
      */
     [property] boolean EscapeProcessing;
 
-    //=============================================================================
 
     /** contains a filter expression for an SQL statement.
 
@@ -173,11 +162,9 @@ published service MailMerge
      */
     [property] string Filter;
 
-    //=============================================================================
 
     /* input properties */
 
-    //=============================================================================
 
     /** contains the URL of a text document that is to be processed.
 
@@ -185,7 +172,6 @@ published service MailMerge
      */
     [property] string DocumentURL;
 
-    //=============================================================================
 
     /** provides access to the model of the document to be processed.
 
@@ -194,11 +180,9 @@ published service MailMerge
      */
     [property, readonly] com::sun::star::frame::XModel Model;
 
-    //=============================================================================
 
     /* output properties */
 
-    //=============================================================================
 
     /** determines the destination of the mail merge action.
 
@@ -206,7 +190,6 @@ published service MailMerge
      */
     [property] short OutputType;
 
-    //=============================================================================
 
     /** determines whether single print jobs will be generated per output document.
 
@@ -214,7 +197,6 @@ published service MailMerge
      */
     [property] boolean SinglePrintJobs;
 
-    //=============================================================================
 
     /** contains the path where generated files are created.
 
@@ -225,7 +207,6 @@ published service MailMerge
      */
     [property] string OutputURL;
 
-    //=============================================================================
 
     /** determines whether file names of created files are generated using
         the content of a database column.
@@ -234,7 +215,6 @@ published service MailMerge
      */
     [property] boolean FileNameFromColumn;
 
-    //=============================================================================
 
     /** contains the name of the column to generate the output file names.
 
@@ -247,7 +227,6 @@ published service MailMerge
      */
     [property] string FileNamePrefix;
 
-    //=============================================================================
 
     /** Contains the password of the outgoing mail server. It is necessary to set this
         if the password is not already stored in the configuration for security reasons.
@@ -257,7 +236,6 @@ published service MailMerge
         @since OOo 2.0
     */
     [property, optional] string OutServerPassword;
-    //=============================================================================
 
     /** Contains the password of the incoming mail server. It is necessary to set this
         if the mail server configuration is set to "SMTP after POP" authentication and
@@ -268,7 +246,6 @@ published service MailMerge
         @since OOo 2.0
     */
     [property, optional] string InServerPassword;
-    //=============================================================================
 
     /** contains the subject of the e-Mail message.
 
@@ -277,7 +254,6 @@ published service MailMerge
     */
     [property, optional] string Subject;
 
-    //=============================================================================
 
     /** contains the name of the data base column that contains the e-Mail address
         to the e-Mail to.
@@ -288,7 +264,6 @@ published service MailMerge
     */
     [property, optional] string AddressFromColumn;
 
-    //=============================================================================
 
     /** determines that the created mail merge document is sent as body in HTML format.
         This property is only valid if the property "SendAsAttachment" is set to <false/>.
@@ -299,7 +274,6 @@ published service MailMerge
     */
     [property, optional] boolean SendAsHTML;
 
-    //=============================================================================
 
 
     /** determines that the created mail merge document is sent as attachment.
@@ -310,7 +284,6 @@ published service MailMerge
     */
     [property, optional] boolean SendAsAttachment;
 
-    //=============================================================================
 
     /** contains the text of the mail body.
         This property is only valid if the property "SendAsAttachment" is set to <true/>
@@ -320,7 +293,6 @@ published service MailMerge
     */
     [property, optional] string MailBody;
 
-    //=============================================================================
 
     /** contains the name of the attachment.
         This property is only valid if "SendAsAttachment" is set to <true/>.
@@ -331,7 +303,6 @@ published service MailMerge
     */
     [property, optional] string AttachmentName;
 
-    //=============================================================================
 
     /** contains the name of the document filter to save the attached mail merge document.
         This property is only valid if "SendAsAttachment" is set to <true/>.
@@ -342,7 +313,6 @@ published service MailMerge
     */
     [property, optional] string AttachmentFilter;
 
-    //=============================================================================
 
     /** contains a list of e-Mail addresses to
         <p>This property is only evaluated for e-Mail output.</p>
@@ -351,7 +321,6 @@ published service MailMerge
     */
     [property, optional] sequence< string > CopiesTo;
 
-    //=============================================================================
 
     /**
         <p>This property is only evaluated for e-Mail output.</p>
@@ -361,7 +330,6 @@ published service MailMerge
     [property, optional] sequence< string > BlindCopiesTo;
 
 
-    //=============================================================================
 
     /** determines that the output of the mail merge is save in one single file.
         <p>This property is only evaluated for file output.</p>
@@ -370,7 +338,6 @@ published service MailMerge
     */
     [property, optional] boolean SaveAsSingleFile;
 
-    //=============================================================================
 
     /** contains the name of the document filter to save the output file(s).
         <p>This property is only evaluated for file output.</p>
@@ -379,7 +346,6 @@ published service MailMerge
     */
     [property, optional] string SaveFilter;
 
-    //=============================================================================
 
     /** contains the properties that are defined in <com::sun::star::view::PrintOptions>.
 
@@ -392,7 +358,6 @@ published service MailMerge
 };
 
 
-//=============================================================================
 
 }; }; }; };
 

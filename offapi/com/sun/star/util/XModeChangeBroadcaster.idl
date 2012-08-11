@@ -25,11 +25,9 @@
 #include <com/sun/star/util/XModeChangeListener.idl>
 #include <com/sun/star/util/XModeChangeApproveListener.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module util {
 
-//=============================================================================
 
 /** broadcasts changes in an object's internal mode.
 
@@ -70,7 +68,6 @@ published interface XModeChangeBroadcaster : com::sun::star::uno::XInterface
         raises( com::sun::star::lang::NoSupportException );
 };
 
-//=============================================================================
 
 }; }; }; };
 

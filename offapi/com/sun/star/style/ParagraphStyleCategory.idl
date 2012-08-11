@@ -20,47 +20,39 @@
 #ifndef __com_sun_star_style_ParagraphStyleCategory_idl__
 #define __com_sun_star_style_ParagraphStyleCategory_idl__
 
-//=============================================================================
 
  module com {  module sun {  module star {  module style {
-//=============================================================================
 
 // DocMerge from idl: constants com::sun::star::style::ParagraphStyleCategory
 /** These constants are used to specify the category of paragraph styles in text documents.
  */
 published constants ParagraphStyleCategory
 {
-    //-------------------------------------------------------------------------
 
     // DocMerge from idl: value com::sun::star::style::ParagraphStyleCategory::TEXT
     /** is applied to styles that are used for common text.
      */
     const short TEXT = 0;
-    //-------------------------------------------------------------------------
 
     // DocMerge from idl: value com::sun::star::style::ParagraphStyleCategory::CHAPTER
     /** is applied to styles that are used as headings.
      */
     const short CHAPTER = 1;
-    //-------------------------------------------------------------------------
 
     // DocMerge from idl: value com::sun::star::style::ParagraphStyleCategory::LIST
     /** is applied to styles that used in numberings and lists.
      */
     const short LIST = 2;
-    //-------------------------------------------------------------------------
 
     // DocMerge from idl: value com::sun::star::style::ParagraphStyleCategory::INDEX
     /** is applied to styles that are used in indexes.
      */
     const short INDEX = 3;
-    //-------------------------------------------------------------------------
 
     // DocMerge from idl: value com::sun::star::style::ParagraphStyleCategory::EXTRA
     /** is applied to styles that are used in special regions like headers, footers, and footnote text.
      */
     const short EXTRA = 4;
-    //-------------------------------------------------------------------------
 
     // DocMerge from idl: value com::sun::star::style::ParagraphStyleCategory::HTML
     /** is applied to styles that are used to support HTML.
@@ -68,7 +60,6 @@ published constants ParagraphStyleCategory
     const short HTML = 5;
 };
 
-//=============================================================================
 
 }; }; }; };
 

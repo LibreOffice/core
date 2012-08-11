@@ -67,7 +67,6 @@ interface XExternalSheetCache
     sequence< long > getAllColumns( [in] long nRow )
             raises (com::sun::star::lang::IllegalArgumentException);
 
-    //-------------------------------------------------------------------------
 
     /** Index corresponding to this instance of an external sheet cache for
         usage in formula tokens.

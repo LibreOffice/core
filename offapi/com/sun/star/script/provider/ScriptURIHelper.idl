@@ -23,11 +23,9 @@
 #include <com/sun/star/script/provider/XScriptURIHelper.idl>
 #include <com/sun/star/lang/IllegalArgumentException.idl>
 
-//===========================================================================
 
 module com { module sun { module star { module script { module provider {
 
-//===========================================================================
 /**
     This service is used to help transform Scripting Framework storage
     locations to Scripting Framework script URIs and vice versa.
@@ -54,7 +52,6 @@ service ScriptURIHelper : XScriptURIHelper {
         raises ( ::com::sun::star::lang::IllegalArgumentException );
 };
 
-//===========================================================================
 }; }; }; }; }; // ::com::sun::star::script::provider
 
 #endif

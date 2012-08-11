@@ -23,9 +23,7 @@
 #include <com/sun/star/io/XInputStream.idl>
 #include <com/sun/star/io/XStream.idl>
 
-//============================================================================
 module com { module sun { module star { module embed {
-//============================================================================
 /** This service provides a simple functionality to allow
     read/write the storages in OLE storage format.
 */
@@ -59,7 +57,6 @@ published service OLESimpleStorage: XOLESimpleStorage
     createFromStream ([in] ::com::sun::star::io::XStream xStream, [in] boolean bNoTempCopy);
 };
 
-//============================================================================
 
 }; }; }; };
 

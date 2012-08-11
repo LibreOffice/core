@@ -23,11 +23,9 @@
 #include <com/sun/star/lang/XInitialization.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module registry {
 
-//=============================================================================
 
 // DocMerge from xml: service com::sun::star::registry::NestedRegistry
 /** supports a shared view on two different registries. The registry
@@ -139,7 +137,6 @@ published service NestedRegistry
     interface com::sun::star::lang::XInitialization;
 };
 
-//=============================================================================
 
 }; }; }; };
 

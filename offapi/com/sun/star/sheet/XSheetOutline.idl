@@ -24,17 +24,14 @@
 #include <com/sun/star/table/CellRangeAddress.idl>
 #include <com/sun/star/table/TableOrientation.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** provides methods to access the outlines of a sheet.
  */
 published interface XSheetOutline: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** creates an outline group.
 
@@ -49,7 +46,6 @@ published interface XSheetOutline: com::sun::star::uno::XInterface
             [in] com::sun::star::table::CellRangeAddress aRange,
             [in] com::sun::star::table::TableOrientation nOrientation );
 
-    //-------------------------------------------------------------------------
 
     /** removes outline groups.
 
@@ -67,7 +63,6 @@ published interface XSheetOutline: com::sun::star::uno::XInterface
             [in] com::sun::star::table::CellRangeAddress aRange,
             [in] com::sun::star::table::TableOrientation nOrientation );
 
-    //-------------------------------------------------------------------------
 
     /** creates outline groups from formula references in a range.
 
@@ -76,13 +71,11 @@ published interface XSheetOutline: com::sun::star::uno::XInterface
      */
     void autoOutline( [in] com::sun::star::table::CellRangeAddress aRange );
 
-    //-------------------------------------------------------------------------
 
     /** removes all outline groups from the sheet.
      */
     void clearOutline();
 
-    //-------------------------------------------------------------------------
 
     /** collapses an outline group.
 
@@ -91,7 +84,6 @@ published interface XSheetOutline: com::sun::star::uno::XInterface
      */
     void hideDetail( [in] com::sun::star::table::CellRangeAddress aRange );
 
-    //-------------------------------------------------------------------------
 
     /** reopens an outline group.
 
@@ -100,7 +92,6 @@ published interface XSheetOutline: com::sun::star::uno::XInterface
      */
     void showDetail( [in] com::sun::star::table::CellRangeAddress aRange );
 
-    //-------------------------------------------------------------------------
 
     /** shows all outlined groups below a specific level.
 
@@ -117,7 +108,6 @@ published interface XSheetOutline: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

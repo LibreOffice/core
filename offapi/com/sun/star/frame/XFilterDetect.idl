@@ -22,26 +22,21 @@
 #include <com/sun/star/uno/XInterface.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module frame {
 
-//=============================================================================
 /** use <type scope="com::sun::star::document">XExtendedFilterDetection</type> instead of this
     @deprecated
  */
 published interface XFilterDetect: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
         /** - */
     string getContentType( [in] string URL );
 
-    //-------------------------------------------------------------------------
         /** - */
     boolean useExternBrowser( [in] string URL );
 };
 
-//=============================================================================
 
 }; }; }; };
 

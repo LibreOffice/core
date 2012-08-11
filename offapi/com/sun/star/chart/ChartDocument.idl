@@ -24,11 +24,9 @@
 #include <com/sun/star/xml/UserDefinedAttributeSupplier.idl>
 #include <com/sun/star/drawing/XDrawPageSupplier.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module chart {
 
-//=============================================================================
 
 /** is the service for a chart document.
 
@@ -56,26 +54,22 @@ published service ChartDocument
 
     [optional] interface ::com::sun::star::drawing::XDrawPageSupplier;
 
-    //-------------------------------------------------------------------------
 
     /** determines if the main title is shown or hidden.
      */
     [property] boolean HasMainTitle;
 
-    //-------------------------------------------------------------------------
 
     /** determines if the subtitle is shown or hidden.
      */
     [property] boolean HasSubTitle;
 
-    //-------------------------------------------------------------------------
 
     /** determines if the legend is shown or hidden.
      */
     [property] boolean HasLegend;
 };
 
-//=============================================================================
 
 }; }; }; };
 

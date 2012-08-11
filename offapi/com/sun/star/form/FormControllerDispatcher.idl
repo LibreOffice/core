@@ -21,11 +21,9 @@
 
 #include <com/sun/star/frame/XDispatchProvider.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module form {
 
-//=============================================================================
 
 /** is not used anymore, and superseded by <type scope="com::sun::star::form::runtime">FormController</type> and
     <type scope="com::sun::star::form::runtime">FormOperations</type>.
@@ -37,7 +35,6 @@ published service FormControllerDispatcher
     [optional] interface com::sun::star::frame::XDispatchProvider;
 };
 
-//=============================================================================
 
 }; }; }; };
 

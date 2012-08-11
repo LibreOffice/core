@@ -22,10 +22,8 @@
 
 #include <com/sun/star/xsd/XDataType.idl>
 
-//=============================================================================
 module com {  module sun {  module star {  module xsd {
 
-//-----------------------------------------------------------------------------
 /** specifies an <a href="http://www.w3.org/TR/xmlschema-2/#gMonth">XSD compliant gMonth type</a>
 */
 service Month
@@ -55,7 +53,6 @@ service Month
     [property, maybevoid] short MinExclusiveInt;
 };
 
-//=============================================================================
 
 }; }; }; };
 

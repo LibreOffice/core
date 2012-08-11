@@ -104,7 +104,6 @@ published interface XDriver: com::sun::star::uno::XInterface
                 [in]string url,
                 [in]sequence<com::sun::star::beans::PropertyValue> info)
         raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** returns <TRUE/> if the driver thinks that it can open a connection
         to the given URL.  Typically drivers will return <TRUE/> if they
@@ -119,7 +118,6 @@ published interface XDriver: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     boolean acceptsURL([in]string url) raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** gets information about the possible properties for this driver.
              <p>The getPropertyInfo method is intended to allow a generic GUI tool to
@@ -143,14 +141,12 @@ published interface XDriver: com::sun::star::uno::XInterface
     sequence<DriverPropertyInfo> getPropertyInfo([in]string url,
                     [in] sequence<com::sun::star::beans::PropertyValue> info)
         raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** gets the driver's major version number. Initially this should be 1.
         @returns
             this driver's major version number
      */
     long getMajorVersion();
-    //-------------------------------------------------------------------------
 
     /** gets the driver's minor version number. Initially this should be 0.
         @returns
@@ -159,7 +155,6 @@ published interface XDriver: com::sun::star::uno::XInterface
     long getMinorVersion();
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -29,11 +29,9 @@
 #define __com_sun_star_report_GroupKeepTogether_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module report {
 
-//=============================================================================
 
 /** Specifies if groups in a multi column report where the group has the property
     <member scope="XGroup">KeepTogether</member> set to WHOLE_GROUP or WITH_FIRST_DETAIL will keep together by page or column.
@@ -41,7 +39,6 @@
  */
 constants GroupKeepTogether
 {
-    //-------------------------------------------------------------------------
 
     /** Groups are kept together by page.
      */
@@ -52,7 +49,6 @@ constants GroupKeepTogether
     const short PER_COLUMN = 1;
 };
 
-//=============================================================================
 
 }; }; }; };
 

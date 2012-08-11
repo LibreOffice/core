@@ -33,11 +33,9 @@
 #include <com/sun/star/lang/XLocalizable.idl>
 #include <com/sun/star/util/XChangesNotifier.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module configuration {
 
-//=============================================================================
 /** provides information about the root element of a hierarchy and
     about the hierarchy as a whole.
 
@@ -158,7 +156,6 @@ published service AccessRootElement
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

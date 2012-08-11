@@ -20,11 +20,9 @@
 #ifndef __com_sun_star_sheet_SheetLinkMode_idl__
 #define __com_sun_star_sheet_SheetLinkMode_idl__
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** used to specify how a sheet is linked to another sheet.
 
@@ -34,19 +32,16 @@ module com {  module sun {  module star {  module sheet {
  */
 published enum SheetLinkMode
 {
-    //-------------------------------------------------------------------------
 
     /** sheet is not linked.
      */
     NONE,
 
-    //-------------------------------------------------------------------------
 
     /** all contents (values and formulas) are copied.
      */
     NORMAL,
 
-    //-------------------------------------------------------------------------
 
     /** instead of using formulas, the result values are copied.
      */
@@ -54,7 +49,6 @@ published enum SheetLinkMode
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

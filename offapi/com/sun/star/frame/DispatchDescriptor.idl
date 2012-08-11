@@ -31,11 +31,9 @@
 #include <com/sun/star/util/URL.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module frame {
 
-//=============================================================================
 /** describes a feature to be retrieved by a URL that
     has to be loaded into a specified frame
 
@@ -50,7 +48,6 @@
  */
 published struct DispatchDescriptor
 {
-    //-------------------------------------------------------------------------
     /** specifies the URL of the resource/function
 
         <p>
@@ -62,7 +59,6 @@ published struct DispatchDescriptor
      */
     com::sun::star::util::URL FeatureURL;
 
-    //-------------------------------------------------------------------------
     /** name of the target frame
 
         <p>
@@ -73,7 +69,6 @@ published struct DispatchDescriptor
      */
     string FrameName;
 
-    //-------------------------------------------------------------------------
     /** describes how the target frame is to be searched
 
         <p>
@@ -85,7 +80,6 @@ published struct DispatchDescriptor
     long SearchFlags;
 };
 
-//=============================================================================
 
 }; }; }; };
 

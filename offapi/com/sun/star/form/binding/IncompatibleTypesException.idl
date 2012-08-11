@@ -22,11 +22,9 @@
 #include <com/sun/star/uno/Exception.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module form { module binding {
 
-//=============================================================================
 
 /** thrown to indicate that the types of an <type>XValueBinding</type> and
     an <type>XBindableValue</type> are incompatible
@@ -35,11 +33,9 @@ exception IncompatibleTypesException: com::sun::star::uno::Exception
 {
 };
 
-//=============================================================================
 
 }; }; }; }; };
 
-//=============================================================================
 
 #endif
 

@@ -20,23 +20,19 @@
 #define __com_sun_star_awt_Selection_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module awt {
 
-//=============================================================================
 
 /** specifies a numerical range.
  */
 published struct Selection
 {
-    //-------------------------------------------------------------------------
 
     /** specifies the lower limit of the range.
      */
     long Min;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the upper limit of the range.
      */
@@ -44,7 +40,6 @@ published struct Selection
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

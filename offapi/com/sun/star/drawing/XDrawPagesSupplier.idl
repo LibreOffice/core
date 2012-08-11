@@ -24,11 +24,9 @@
 #include <com/sun/star/drawing/XDrawPages.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module drawing {
 
-//=============================================================================
 
 /** must be supported to provide access to a multi-page drawing-layer.
 */
@@ -42,7 +40,6 @@ published interface XDrawPagesSupplier: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

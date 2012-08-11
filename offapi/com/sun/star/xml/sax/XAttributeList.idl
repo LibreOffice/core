@@ -21,11 +21,9 @@
 
 #include <com/sun/star/uno/XInterface.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module xml {  module sax {
 
-//=============================================================================
 
 /** specifies an element's attributes.
 
@@ -40,21 +38,18 @@ module com {  module sun {  module star {  module xml {  module sax {
  */
 published interface XAttributeList: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** @returns
                     the number of attributes in this list.
      */
     short getLength();
 
-    //-------------------------------------------------------------------------
 
     /** @returns
                     the name of an attribute in this list (by position).
      */
     string getNameByIndex( [in] short i );
 
-    //-------------------------------------------------------------------------
 
     /** @returns
                     the type of an attribute in the list (by position).
@@ -62,7 +57,6 @@ published interface XAttributeList: com::sun::star::uno::XInterface
      */
     string getTypeByIndex( [in] short i );
 
-    //-------------------------------------------------------------------------
 
     /** @returns
                     the type of an attribute in the list (by name).
@@ -70,14 +64,12 @@ published interface XAttributeList: com::sun::star::uno::XInterface
      */
     string getTypeByName( [in] string aName );
 
-    //-------------------------------------------------------------------------
 
     /** @returns
                     the value of an attribute in the list (by position).
      */
     string getValueByIndex( [in] short i );
 
-    //-------------------------------------------------------------------------
 
     /** @returns
                     the value of an attribute in the list (by name).
@@ -85,7 +77,6 @@ published interface XAttributeList: com::sun::star::uno::XInterface
     string getValueByName( [in] string aName );
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

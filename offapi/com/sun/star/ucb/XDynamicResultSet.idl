@@ -35,11 +35,9 @@
 #include <com/sun/star/ucb/AlreadyInitializedException.idl>
 #include <com/sun/star/ucb/ServiceNotFoundException.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** Provides read access to a <type>ContentResultSet</type>.
 
     <p>
@@ -104,7 +102,6 @@ module com { module sun { module star { module ucb {
 
 published interface XDynamicResultSet: com::sun::star::lang::XComponent
 {
-    //-------------------------------------------------------------------------
     /** Call this, if you don't care about any changes.
 
         @returns
@@ -121,7 +118,6 @@ published interface XDynamicResultSet: com::sun::star::lang::XComponent
     com::sun::star::sdbc::XResultSet getStaticResultSet()
         raises( com::sun::star::ucb::ListenerAlreadySetException );
 
-    //-------------------------------------------------------------------------
     /** Call this, if you want to get notifications about changes.
 
         <p>The implementor has to call
@@ -143,7 +139,6 @@ published interface XDynamicResultSet: com::sun::star::lang::XComponent
     void setListener( [in] XDynamicResultSetListener Listener )
         raises( com::sun::star::ucb::ListenerAlreadySetException );
 
-    //-------------------------------------------------------------------------
     /** Connects this to a <type>CachedDynamicResultSet</type> for optimized
         remote data transport.
 
@@ -172,7 +167,6 @@ published interface XDynamicResultSet: com::sun::star::lang::XComponent
                 , com::sun::star::ucb::AlreadyInitializedException
                 , com::sun::star::ucb::ServiceNotFoundException );
 
-    //-------------------------------------------------------------------------
     /** Using this method you can get information, whether the offered
         <type>ContentResultSet</type>s are sorted or filtered etc correctly as
         demanded during the creation of the <type>XDynamicResultSet</type>.
@@ -184,7 +178,6 @@ published interface XDynamicResultSet: com::sun::star::lang::XComponent
     short getCapabilities();
 };
 
-//=============================================================================
 
 }; }; }; };
 

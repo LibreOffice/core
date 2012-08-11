@@ -35,11 +35,9 @@
 #include <com/sun/star/lang/WrappedTargetException.idl>
 #include <com/sun/star/lang/IllegalAccessException.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module configuration { module backend {
 
-//=============================================================================
 
 /** receives a description of a configuration update or layer
     as a sequence of events.
@@ -48,7 +46,6 @@ module com { module sun { module star { module configuration { module backend {
  */
 published interface XUpdateHandler: ::com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** receives notification that a update or description is started.
 
@@ -68,7 +65,6 @@ published interface XUpdateHandler: ::com::sun::star::uno::XInterface
             raises( MalformedDataException,
                     com::sun::star::lang::IllegalAccessException,
                     com::sun::star::lang::WrappedTargetException );
-    //-------------------------------------------------------------------------
 
     /** receives notification that the current update description is complete.
 
@@ -94,7 +90,6 @@ published interface XUpdateHandler: ::com::sun::star::uno::XInterface
             raises( MalformedDataException,
                     com::sun::star::lang::IllegalAccessException,
                     com::sun::star::lang::WrappedTargetException );
-    //-------------------------------------------------------------------------
 
     /** receives notification that a modification of a node is started.
 
@@ -152,7 +147,6 @@ published interface XUpdateHandler: ::com::sun::star::uno::XInterface
                       [in] boolean bReset )
             raises( MalformedDataException,
                     com::sun::star::lang::WrappedTargetException );
-    //-------------------------------------------------------------------------
 
     /** receives notification that a node is started as a new item.
 
@@ -199,7 +193,6 @@ published interface XUpdateHandler: ::com::sun::star::uno::XInterface
                             [in] short  aAttributes )
             raises( MalformedDataException,
                     com::sun::star::lang::WrappedTargetException );
-    //-------------------------------------------------------------------------
 
     /** receives notification that a node is started as a new item
         based on a particular template.
@@ -249,7 +242,6 @@ published interface XUpdateHandler: ::com::sun::star::uno::XInterface
                                         [in] TemplateIdentifier aTemplate )
             raises( MalformedDataException,
                     com::sun::star::lang::WrappedTargetException );
-    //-------------------------------------------------------------------------
 
     /** receives notification that a node modification is complete.
 
@@ -272,7 +264,6 @@ published interface XUpdateHandler: ::com::sun::star::uno::XInterface
     void endNode( )
             raises( MalformedDataException,
                     com::sun::star::lang::WrappedTargetException );
-    //-------------------------------------------------------------------------
 
     /** receives notification that an item is to be dropped from a set.
 
@@ -299,7 +290,6 @@ published interface XUpdateHandler: ::com::sun::star::uno::XInterface
     void removeNode( [in] string aName )
             raises( MalformedDataException,
                     com::sun::star::lang::WrappedTargetException );
-    //-------------------------------------------------------------------------
 
     /** receives notification that modification of an existing property is started. .
 
@@ -360,7 +350,6 @@ published interface XUpdateHandler: ::com::sun::star::uno::XInterface
                          [in] type aType )
             raises( MalformedDataException,
                     com::sun::star::lang::WrappedTargetException );
-    //-------------------------------------------------------------------------
 
     /** receives notification about a change to the value of
         the current property.
@@ -391,7 +380,6 @@ published interface XUpdateHandler: ::com::sun::star::uno::XInterface
     void setPropertyValue( [in] any aValue )
             raises( MalformedDataException,
                     com::sun::star::lang::WrappedTargetException );
-    //-------------------------------------------------------------------------
 
     /** receives notification about a change to the value of
         the current property for a specific locale.
@@ -427,7 +415,6 @@ published interface XUpdateHandler: ::com::sun::star::uno::XInterface
     void setPropertyValueForLocale( [in] any aValue, [in] string aLocale )
             raises( MalformedDataException,
                     com::sun::star::lang::WrappedTargetException );
-    //-------------------------------------------------------------------------
 
     /** receives notification that the value of the current property
         should be reset to its default.
@@ -447,7 +434,6 @@ published interface XUpdateHandler: ::com::sun::star::uno::XInterface
     void resetPropertyValue( )
             raises( MalformedDataException,
                     com::sun::star::lang::WrappedTargetException );
-    //-------------------------------------------------------------------------
 
     /** receives notification that the value of the current property
         for a specific locale should be reset to its default.
@@ -472,7 +458,6 @@ published interface XUpdateHandler: ::com::sun::star::uno::XInterface
     void resetPropertyValueForLocale( [in] string aLocale )
             raises( MalformedDataException,
                     com::sun::star::lang::WrappedTargetException );
-    //-------------------------------------------------------------------------
 
     /** receives notification that a property modification is complete.
 
@@ -493,7 +478,6 @@ published interface XUpdateHandler: ::com::sun::star::uno::XInterface
     void endProperty( )
             raises( MalformedDataException,
                     com::sun::star::lang::WrappedTargetException );
-    //-------------------------------------------------------------------------
 
     /** receives notification that a property is reset to its default state.
 
@@ -519,7 +503,6 @@ published interface XUpdateHandler: ::com::sun::star::uno::XInterface
     void resetProperty( [in] string aName )
             raises( MalformedDataException,
                     com::sun::star::lang::WrappedTargetException );
-    //-------------------------------------------------------------------------
 
     /** receives notification that a property having a value of <void/>
         is added to the current node.
@@ -569,7 +552,6 @@ published interface XUpdateHandler: ::com::sun::star::uno::XInterface
                                [in] type aType )
             raises( MalformedDataException,
                     com::sun::star::lang::WrappedTargetException );
-    //-------------------------------------------------------------------------
 
     /** receives notification that a property having a non-<NULL/> value
         is added to the current node.
@@ -624,7 +606,6 @@ published interface XUpdateHandler: ::com::sun::star::uno::XInterface
                                         [in] any aValue )
             raises( MalformedDataException,
                     com::sun::star::lang::WrappedTargetException );
-    //-------------------------------------------------------------------------
 
     /** receives notification that a property is dropped from the current node.
 
@@ -648,15 +629,12 @@ published interface XUpdateHandler: ::com::sun::star::uno::XInterface
     void removeProperty( [in] string aName )
             raises( MalformedDataException,
                     com::sun::star::lang::WrappedTargetException );
-    //-------------------------------------------------------------------------
 
 };
 
-//=============================================================================
 
 }; }; }; }; };
 
-//=============================================================================
 
 #endif
 

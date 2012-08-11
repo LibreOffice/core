@@ -29,11 +29,9 @@
 #define __com_sun_star_awt_FontFamily_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module awt {
 
-//=============================================================================
 
 /** These values are used to specify the general kind of font.
 
@@ -41,43 +39,36 @@
  */
 published constants FontFamily
 {
-    //-------------------------------------------------------------------------
 
     /** specifies an unknown font family.
      */
     const short DONTKNOW = 0;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the family of decorative fonts.
      */
     const short DECORATIVE = 1;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the family of modern fonts.
      */
     const short MODERN = 2;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the family roman fonts (with serifs).
      */
     const short ROMAN = 3;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the family of script fonts.
      */
     const short SCRIPT = 4;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the family roman fonts (without serifs).
      */
     const short SWISS = 5;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the family system fonts.
      */
@@ -85,7 +76,6 @@ published constants FontFamily
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

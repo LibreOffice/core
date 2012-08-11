@@ -23,13 +23,11 @@
 
 #include <com/sun/star/io/XDataOutputStream.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module io {
 
  published interface XPersistObject;
 
-//=============================================================================
 
 /** stores XPersistObject implementations into the stream
 
@@ -49,7 +47,6 @@ published interface XObjectOutputStream: XDataOutputStream
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -34,11 +34,9 @@
 #include <com/sun/star/ucb/Command.idl>
 #include <com/sun/star/ucb/CommandAbortedException.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** defines a processor for synchronous commands, which are executed in a
     specific execution environment.
 
@@ -54,7 +52,6 @@ module com { module sun { module star { module ucb {
 */
 published interface XCommandProcessor : com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** creates a unique identifier for a command.
 
         <p>This identifier can be used to abort the execution of the command
@@ -81,7 +78,6 @@ published interface XCommandProcessor : com::sun::star::uno::XInterface
     */
     long createCommandIdentifier();
 
-    //-------------------------------------------------------------------------
     /** executes a command.
 
         <p>Common command definitions can be found in the specification of the
@@ -121,7 +117,6 @@ published interface XCommandProcessor : com::sun::star::uno::XInterface
                  [in] XCommandEnvironment Environment )
         raises ( com::sun::star::uno::Exception, CommandAbortedException );
 
-    //-------------------------------------------------------------------------
     /** ends the command associated with the given id.
 
         <p>Not every command can be aborted. It's up to the implementation
@@ -136,7 +131,6 @@ published interface XCommandProcessor : com::sun::star::uno::XInterface
     [oneway] void abort( [in] long CommandId );
 };
 
-//=============================================================================
 
 }; }; }; };
 

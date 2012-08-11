@@ -24,11 +24,9 @@
 #include <com/sun/star/io/IOException.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module io {
 
-//=============================================================================
 /** Interface to read strings from a stream.
 
     <p>This interfaces allows to read strings seperated by
@@ -38,7 +36,6 @@ module com {  module sun {  module star {  module io {
  */
 published interface XTextInputStream: com::sun::star::io::XInputStream
 {
-    //-------------------------------------------------------------------------
     /** reads text until a line break (CR, LF, or CR/LF) or
         EOF is found and returns it as string (without CR, LF).
 
@@ -53,7 +50,6 @@ published interface XTextInputStream: com::sun::star::io::XInputStream
     string readLine()
             raises( com::sun::star::io::IOException );
 
-    //-------------------------------------------------------------------------
     /** reads text until one of the given delimiter characters
         or EOF is found and returns it as string (without delimiter).
 
@@ -70,7 +66,6 @@ published interface XTextInputStream: com::sun::star::io::XInputStream
     string readString( [in] sequence<char> Delimiters, [in] boolean bRemoveDelimiter )
             raises( com::sun::star::io::IOException );
 
-    //-------------------------------------------------------------------------
     /** Returns the EOF status.
 
         <p>This method has to be used to detect if the end
@@ -89,7 +84,6 @@ published interface XTextInputStream: com::sun::star::io::XInputStream
     boolean isEOF()
             raises( com::sun::star::io::IOException );
 
-    //-------------------------------------------------------------------------
     /** sets character encoding.
 
         @param Encoding
@@ -102,7 +96,6 @@ published interface XTextInputStream: com::sun::star::io::XInputStream
     void setEncoding( [in] string Encoding );
 };
 
-//=============================================================================
 
 }; }; }; };
 

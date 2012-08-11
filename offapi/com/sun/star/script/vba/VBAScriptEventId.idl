@@ -20,11 +20,9 @@
 #ifndef __com_sun_star_script_vba_VBAScriptEventId_idl__
 #define __com_sun_star_script_vba_VBAScriptEventId_idl__
 
-//=============================================================================
 
 module com {  module sun {  module star { module script { module vba {
 
-//=============================================================================
 
 /** Identifies a VBA script event fired via <member>XVBACompatibility::
     broadcastVBAScriptEvent</member>, and received by <member>
@@ -36,7 +34,6 @@ module com {  module sun {  module star { module script { module vba {
  */
 constants VBAScriptEventId
 {
-    //-------------------------------------------------------------------------
     /** This event is fired when a VBA script in the current document has been
         started.
 
@@ -53,7 +50,6 @@ constants VBAScriptEventId
      */
     const long SCRIPT_STARTED = 0;
 
-    //-------------------------------------------------------------------------
     /** This event is fired when a VBA script in the current document stops
         running.
 
@@ -71,7 +67,6 @@ constants VBAScriptEventId
      */
     const long SCRIPT_STOPPED = 1;
 
-    //-------------------------------------------------------------------------
     /** This event is fired when a VBA script in the current document tries to
         instanciate a userform.
 
@@ -80,14 +75,11 @@ constants VBAScriptEventId
      */
     const long INITIALIZE_USERFORM = 2;
 
-    //-------------------------------------------------------------------------
 };
 
-//=============================================================================
 
 }; }; }; }; };
 
-//=============================================================================
 
 #endif
 

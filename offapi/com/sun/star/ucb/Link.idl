@@ -19,29 +19,24 @@
 #ifndef __com_sun_star_ucb_Link_idl__
 #define __com_sun_star_ucb_Link_idl__
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** defines a link.
 
     @see XCommandProcessor
 */
 published struct Link
 {
-    //-------------------------------------------------------------------------
     /** contains the source URI of the link.
     */
     string Source;
 
-    //-------------------------------------------------------------------------
     /** contains the destination URI of the link.
     */
     string Destination;
 };
 
-//=============================================================================
 
 }; }; }; };
 

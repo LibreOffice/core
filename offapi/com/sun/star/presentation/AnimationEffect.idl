@@ -29,11 +29,9 @@
 #define __com_sun_star_presentation_AnimationEffect_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module presentation {
 
-//=============================================================================
 
 // DocMerge from xml: enum com::sun::star::presentation::AnimationEffect
 /** specifies the animation effects for animating
@@ -41,7 +39,6 @@
  */
 published enum AnimationEffect
 {
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR AnimationEffect::  NONE,
 
     // DocMerge from xml: value com::sun::star::presentation::AnimationEffect::NONE
@@ -49,7 +46,6 @@ published enum AnimationEffect
      */
     NONE,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR AnimationEffect::  FADE_FROM_LEFT,
 
     // DocMerge from xml: value com::sun::star::presentation::AnimationEffect::FADE_FROM_LEFT
@@ -57,7 +53,6 @@ published enum AnimationEffect
      */
     FADE_FROM_LEFT,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR AnimationEffect::  FADE_FROM_TOP,
 
     // DocMerge from xml: value com::sun::star::presentation::AnimationEffect::FADE_FROM_TOP
@@ -65,7 +60,6 @@ published enum AnimationEffect
      */
     FADE_FROM_TOP,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR AnimationEffect::  FADE_FROM_RIGHT,
 
     // DocMerge from xml: value com::sun::star::presentation::AnimationEffect::FADE_FROM_RIGHT
@@ -73,7 +67,6 @@ published enum AnimationEffect
      */
     FADE_FROM_RIGHT,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR AnimationEffect::  FADE_FROM_BOTTOM,
 
     // DocMerge from xml: value com::sun::star::presentation::AnimationEffect::FADE_FROM_BOTTOM
@@ -81,7 +74,6 @@ published enum AnimationEffect
      */
     FADE_FROM_BOTTOM,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR AnimationEffect::  FADE_TO_CENTER,
 
     // DocMerge from xml: value com::sun::star::presentation::AnimationEffect::FADE_TO_CENTER
@@ -89,7 +81,6 @@ published enum AnimationEffect
      */
     FADE_TO_CENTER,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR AnimationEffect::  FADE_FROM_CENTER,
 
     // DocMerge from xml: value com::sun::star::presentation::AnimationEffect::FADE_FROM_CENTER
@@ -97,7 +88,6 @@ published enum AnimationEffect
      */
     FADE_FROM_CENTER,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR AnimationEffect::  MOVE_FROM_LEFT,
 
     // DocMerge from xml: value com::sun::star::presentation::AnimationEffect::MOVE_FROM_LEFT
@@ -105,7 +95,6 @@ published enum AnimationEffect
      */
     MOVE_FROM_LEFT,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR AnimationEffect::  MOVE_FROM_TOP,
 
     // DocMerge from xml: value com::sun::star::presentation::AnimationEffect::MOVE_FROM_TOP
@@ -113,7 +102,6 @@ published enum AnimationEffect
      */
     MOVE_FROM_TOP,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR AnimationEffect::  MOVE_FROM_RIGHT,
 
     // DocMerge from xml: value com::sun::star::presentation::AnimationEffect::MOVE_FROM_RIGHT
@@ -121,7 +109,6 @@ published enum AnimationEffect
      */
     MOVE_FROM_RIGHT,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR AnimationEffect::  MOVE_FROM_BOTTOM,
 
     // DocMerge from xml: value com::sun::star::presentation::AnimationEffect::MOVE_FROM_BOTTOM
@@ -129,7 +116,6 @@ published enum AnimationEffect
      */
     MOVE_FROM_BOTTOM,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR AnimationEffect::  VERTICAL_STRIPES,
 
     // DocMerge from xml: value com::sun::star::presentation::AnimationEffect::VERTICAL_STRIPES
@@ -137,7 +123,6 @@ published enum AnimationEffect
      */
     VERTICAL_STRIPES,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR AnimationEffect::  HORIZONTAL_STRIPES,
 
     // DocMerge from xml: value com::sun::star::presentation::AnimationEffect::HORIZONTAL_STRIPES
@@ -145,7 +130,6 @@ published enum AnimationEffect
      */
     HORIZONTAL_STRIPES,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR AnimationEffect::  CLOCKWISE,
 
     // DocMerge from xml: value com::sun::star::presentation::AnimationEffect::CLOCKWISE
@@ -153,7 +137,6 @@ published enum AnimationEffect
      */
     CLOCKWISE,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR AnimationEffect::  COUNTERCLOCKWISE,
 
     // DocMerge from xml: value com::sun::star::presentation::AnimationEffect::COUNTERCLOCKWISE
@@ -161,7 +144,6 @@ published enum AnimationEffect
      */
     COUNTERCLOCKWISE,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR AnimationEffect::  FADE_FROM_UPPERLEFT,
 
     // DocMerge from xml: value com::sun::star::presentation::AnimationEffect::FADE_FROM_UPPERLEFT
@@ -169,7 +151,6 @@ published enum AnimationEffect
      */
     FADE_FROM_UPPERLEFT,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR AnimationEffect::  FADE_FROM_UPPERRIGHT,
 
     // DocMerge from xml: value com::sun::star::presentation::AnimationEffect::FADE_FROM_UPPERRIGHT
@@ -177,7 +158,6 @@ published enum AnimationEffect
      */
     FADE_FROM_UPPERRIGHT,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR AnimationEffect::  FADE_FROM_LOWERLEFT,
 
     // DocMerge from xml: value com::sun::star::presentation::AnimationEffect::FADE_FROM_LOWERLEFT
@@ -185,7 +165,6 @@ published enum AnimationEffect
      */
     FADE_FROM_LOWERLEFT,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR AnimationEffect::  FADE_FROM_LOWERRIGHT,
 
     // DocMerge from xml: value com::sun::star::presentation::AnimationEffect::FADE_FROM_LOWERRIGHT
@@ -193,7 +172,6 @@ published enum AnimationEffect
      */
     FADE_FROM_LOWERRIGHT,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR AnimationEffect::  CLOSE_VERTICAL,
 
     // DocMerge from xml: value com::sun::star::presentation::AnimationEffect::CLOSE_VERTICAL
@@ -201,7 +179,6 @@ published enum AnimationEffect
      */
     CLOSE_VERTICAL,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR AnimationEffect::  CLOSE_HORIZONTAL,
 
     // DocMerge from xml: value com::sun::star::presentation::AnimationEffect::CLOSE_HORIZONTAL
@@ -209,7 +186,6 @@ published enum AnimationEffect
      */
     CLOSE_HORIZONTAL,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR AnimationEffect::  OPEN_VERTICAL,
 
     // DocMerge from xml: value com::sun::star::presentation::AnimationEffect::OPEN_VERTICAL
@@ -217,7 +193,6 @@ published enum AnimationEffect
      */
     OPEN_VERTICAL,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR AnimationEffect::  OPEN_HORIZONTAL,
 
     // DocMerge from xml: value com::sun::star::presentation::AnimationEffect::OPEN_HORIZONTAL
@@ -225,7 +200,6 @@ published enum AnimationEffect
      */
     OPEN_HORIZONTAL,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR AnimationEffect::  PATH,
 
     // DocMerge from xml: value com::sun::star::presentation::AnimationEffect::PATH
@@ -233,7 +207,6 @@ published enum AnimationEffect
      */
     PATH,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR AnimationEffect::  MOVE_TO_LEFT,
 
     // DocMerge from xml: value com::sun::star::presentation::AnimationEffect::MOVE_TO_LEFT
@@ -241,7 +214,6 @@ published enum AnimationEffect
      */
     MOVE_TO_LEFT,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR AnimationEffect::  MOVE_TO_TOP,
 
     // DocMerge from xml: value com::sun::star::presentation::AnimationEffect::MOVE_TO_TOP
@@ -249,7 +221,6 @@ published enum AnimationEffect
      */
     MOVE_TO_TOP,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR AnimationEffect::  MOVE_TO_RIGHT,
 
     // DocMerge from xml: value com::sun::star::presentation::AnimationEffect::MOVE_TO_RIGHT
@@ -257,7 +228,6 @@ published enum AnimationEffect
      */
     MOVE_TO_RIGHT,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR AnimationEffect::  MOVE_TO_BOTTOM,
 
     // DocMerge from xml: value com::sun::star::presentation::AnimationEffect::MOVE_TO_BOTTOM
@@ -265,7 +235,6 @@ published enum AnimationEffect
      */
     MOVE_TO_BOTTOM,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR AnimationEffect::  SPIRALIN_LEFT,
 
     // DocMerge from xml: value com::sun::star::presentation::AnimationEffect::SPIRALIN_LEFT
@@ -273,7 +242,6 @@ published enum AnimationEffect
      */
     SPIRALIN_LEFT,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR AnimationEffect::  SPIRALIN_RIGHT,
 
     // DocMerge from xml: value com::sun::star::presentation::AnimationEffect::SPIRALIN_RIGHT
@@ -281,7 +249,6 @@ published enum AnimationEffect
      */
     SPIRALIN_RIGHT,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR AnimationEffect::  SPIRALOUT_LEFT,
 
     // DocMerge from xml: value com::sun::star::presentation::AnimationEffect::SPIRALOUT_LEFT
@@ -289,7 +256,6 @@ published enum AnimationEffect
      */
     SPIRALOUT_LEFT,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR AnimationEffect::  SPIRALOUT_RIGHT,
 
     // DocMerge from xml: value com::sun::star::presentation::AnimationEffect::SPIRALOUT_RIGHT
@@ -297,7 +263,6 @@ published enum AnimationEffect
      */
     SPIRALOUT_RIGHT,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR AnimationEffect::  DISSOLVE,
 
     // DocMerge from xml: value com::sun::star::presentation::AnimationEffect::DISSOLVE
@@ -305,7 +270,6 @@ published enum AnimationEffect
      */
     DISSOLVE,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR AnimationEffect::  WAVYLINE_FROM_LEFT,
 
     // DocMerge from xml: value com::sun::star::presentation::AnimationEffect::WAVYLINE_FROM_LEFT
@@ -313,7 +277,6 @@ published enum AnimationEffect
      */
     WAVYLINE_FROM_LEFT,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR AnimationEffect::  WAVYLINE_FROM_TOP,
 
     // DocMerge from xml: value com::sun::star::presentation::AnimationEffect::WAVYLINE_FROM_TOP
@@ -321,7 +284,6 @@ published enum AnimationEffect
      */
     WAVYLINE_FROM_TOP,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR AnimationEffect::  WAVYLINE_FROM_RIGHT,
 
     // DocMerge from xml: value com::sun::star::presentation::AnimationEffect::WAVYLINE_FROM_RIGHT
@@ -329,7 +291,6 @@ published enum AnimationEffect
      */
     WAVYLINE_FROM_RIGHT,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR AnimationEffect::  WAVYLINE_FROM_BOTTOM,
 
     // DocMerge from xml: value com::sun::star::presentation::AnimationEffect::WAVYLINE_FROM_BOTTOM
@@ -337,7 +298,6 @@ published enum AnimationEffect
      */
     WAVYLINE_FROM_BOTTOM,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR AnimationEffect::  RANDOM,
 
     // DocMerge from xml: value com::sun::star::presentation::AnimationEffect::RANDOM
@@ -345,7 +305,6 @@ published enum AnimationEffect
      */
     RANDOM,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR AnimationEffect::  VERTICAL_LINES,
 
     // DocMerge from xml: value com::sun::star::presentation::AnimationEffect::VERTICAL_LINES
@@ -353,7 +312,6 @@ published enum AnimationEffect
      */
     VERTICAL_LINES,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR AnimationEffect::  HORIZONTAL_LINES,
 
     // DocMerge from xml: value com::sun::star::presentation::AnimationEffect::HORIZONTAL_LINES
@@ -361,7 +319,6 @@ published enum AnimationEffect
      */
     HORIZONTAL_LINES,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR AnimationEffect::  LASER_FROM_LEFT,
 
     // DocMerge from xml: value com::sun::star::presentation::AnimationEffect::LASER_FROM_LEFT
@@ -369,7 +326,6 @@ published enum AnimationEffect
      */
     LASER_FROM_LEFT,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR AnimationEffect::  LASER_FROM_TOP,
 
     // DocMerge from xml: value com::sun::star::presentation::AnimationEffect::LASER_FROM_TOP
@@ -377,7 +333,6 @@ published enum AnimationEffect
      */
     LASER_FROM_TOP,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR AnimationEffect::  LASER_FROM_RIGHT,
 
     // DocMerge from xml: value com::sun::star::presentation::AnimationEffect::LASER_FROM_RIGHT
@@ -385,7 +340,6 @@ published enum AnimationEffect
      */
     LASER_FROM_RIGHT,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR AnimationEffect::  LASER_FROM_BOTTOM,
 
     // DocMerge from xml: value com::sun::star::presentation::AnimationEffect::LASER_FROM_BOTTOM
@@ -393,7 +347,6 @@ published enum AnimationEffect
      */
     LASER_FROM_BOTTOM,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR AnimationEffect::  LASER_FROM_UPPERLEFT,
 
     // DocMerge from xml: value com::sun::star::presentation::AnimationEffect::LASER_FROM_UPPERLEFT
@@ -401,7 +354,6 @@ published enum AnimationEffect
      */
     LASER_FROM_UPPERLEFT,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR AnimationEffect::  LASER_FROM_UPPERRIGHT,
 
     // DocMerge from xml: value com::sun::star::presentation::AnimationEffect::LASER_FROM_UPPERRIGHT
@@ -409,7 +361,6 @@ published enum AnimationEffect
      */
     LASER_FROM_UPPERRIGHT,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR AnimationEffect::  LASER_FROM_LOWERLEFT,
 
     // DocMerge from xml: value com::sun::star::presentation::AnimationEffect::LASER_FROM_LOWERLEFT
@@ -417,7 +368,6 @@ published enum AnimationEffect
      */
     LASER_FROM_LOWERLEFT,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR AnimationEffect::  LASER_FROM_LOWERRIGHT,
 
     // DocMerge from xml: value com::sun::star::presentation::AnimationEffect::LASER_FROM_LOWERRIGHT
@@ -425,7 +375,6 @@ published enum AnimationEffect
      */
     LASER_FROM_LOWERRIGHT,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR AnimationEffect::  APPEAR,
 
     // DocMerge from xml: value com::sun::star::presentation::AnimationEffect::APPEAR
@@ -433,7 +382,6 @@ published enum AnimationEffect
      */
     APPEAR,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR AnimationEffect::  HIDE
 
     // DocMerge from xml: value com::sun::star::presentation::AnimationEffect::HIDE
@@ -441,7 +389,6 @@ published enum AnimationEffect
      */
     HIDE,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR AnimationEffect::  MOVE_FROM_UPPERLEFT,
 
     // DocMerge from xml: value com::sun::star::presentation::AnimationEffect::MOVE_FROM_UPPERLEFT
@@ -449,7 +396,6 @@ published enum AnimationEffect
      */
     MOVE_FROM_UPPERLEFT,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR AnimationEffect::  MOVE_FROM_UPPERRIGHT,
 
     // DocMerge from xml: value com::sun::star::presentation::AnimationEffect::MOVE_FROM_UPPERRIGHT
@@ -457,7 +403,6 @@ published enum AnimationEffect
      */
     MOVE_FROM_UPPERRIGHT,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR AnimationEffect::  MOVE_FROM_LOWERRIGHT,
 
     // DocMerge from xml: value com::sun::star::presentation::AnimationEffect::MOVE_FROM_LOWERRIGHT
@@ -465,7 +410,6 @@ published enum AnimationEffect
      */
     MOVE_FROM_LOWERRIGHT,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR AnimationEffect::  MOVE_FROM_LOWERLEFT,
 
     // DocMerge from xml: value com::sun::star::presentation::AnimationEffect::MOVE_FROM_LOWERLEFT
@@ -473,7 +417,6 @@ published enum AnimationEffect
      */
     MOVE_FROM_LOWERLEFT,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR AnimationEffect::  MOVE_TO_UPPERLEFT,
 
     // DocMerge from xml: value com::sun::star::presentation::AnimationEffect::MOVE_TO_UPPERLEFT
@@ -481,7 +424,6 @@ published enum AnimationEffect
      */
     MOVE_TO_UPPERLEFT,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR AnimationEffect::  MOVE_TO_UPPERRIGHT,
 
     // DocMerge from xml: value com::sun::star::presentation::AnimationEffect::MOVE_TO_UPPERRIGHT
@@ -489,7 +431,6 @@ published enum AnimationEffect
      */
     MOVE_TO_UPPERRIGHT,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR AnimationEffect::  MOVE_TO_LOWERRIGHT,
 
     // DocMerge from xml: value com::sun::star::presentation::AnimationEffect::MOVE_TO_LOWERRIGHT
@@ -497,7 +438,6 @@ published enum AnimationEffect
      */
     MOVE_TO_LOWERRIGHT,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR AnimationEffect::  MOVE_TO_LOWERLEFT,
 
     // DocMerge from xml: value com::sun::star::presentation::AnimationEffect::MOVE_TO_LOWERLEFT
@@ -505,7 +445,6 @@ published enum AnimationEffect
      */
     MOVE_TO_LOWERLEFT,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR AnimationEffect::  MOVE_SHORT_FROM_LEFT
 
     // DocMerge from xml: value com::sun::star::presentation::AnimationEffect::MOVE_SHORT_FROM_LEFT
@@ -513,7 +452,6 @@ published enum AnimationEffect
      */
     MOVE_SHORT_FROM_LEFT,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR AnimationEffect::  MOVE_SHORT_FROM_UPPERLEFT
 
     // DocMerge from xml: value com::sun::star::presentation::AnimationEffect::MOVE_SHORT_FROM_UPPERLEFT
@@ -521,7 +459,6 @@ published enum AnimationEffect
      */
     MOVE_SHORT_FROM_UPPERLEFT,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR AnimationEffect::  MOVE_SHORT_FROM_TOP
 
     // DocMerge from xml: value com::sun::star::presentation::AnimationEffect::MOVE_SHORT_FROM_TOP
@@ -529,7 +466,6 @@ published enum AnimationEffect
      */
     MOVE_SHORT_FROM_TOP,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR AnimationEffect::  MOVE_SHORT_FROM_UPPERRIGHT
 
     // DocMerge from xml: value com::sun::star::presentation::AnimationEffect::MOVE_SHORT_FROM_UPPERRIGHT
@@ -537,7 +473,6 @@ published enum AnimationEffect
      */
     MOVE_SHORT_FROM_UPPERRIGHT,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR AnimationEffect::  MOVE_SHORT_FROM_RIGHT
 
     // DocMerge from xml: value com::sun::star::presentation::AnimationEffect::MOVE_SHORT_FROM_RIGHT
@@ -545,7 +480,6 @@ published enum AnimationEffect
      */
     MOVE_SHORT_FROM_RIGHT,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR AnimationEffect::  MOVE_SHORT_FROM_LOWERRIGHT
 
     // DocMerge from xml: value com::sun::star::presentation::AnimationEffect::MOVE_SHORT_FROM_LOWERRIGHT
@@ -553,7 +487,6 @@ published enum AnimationEffect
      */
     MOVE_SHORT_FROM_LOWERRIGHT,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR AnimationEffect::  MOVE_SHORT_FROM_BOTTOM
 
     // DocMerge from xml: value com::sun::star::presentation::AnimationEffect::MOVE_SHORT_FROM_BOTTOM
@@ -561,7 +494,6 @@ published enum AnimationEffect
      */
     MOVE_SHORT_FROM_BOTTOM,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR AnimationEffect::  MOVE_SHORT_FROM_LOWERLEFT
 
     // DocMerge from xml: value com::sun::star::presentation::AnimationEffect::MOVE_SHORT_FROM_LOWERLEFT
@@ -569,7 +501,6 @@ published enum AnimationEffect
      */
     MOVE_SHORT_FROM_LOWERLEFT,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR AnimationEffect::  MOVE_SHORT_TO_LEFT
 
     // DocMerge from xml: value com::sun::star::presentation::AnimationEffect::MOVE_SHORT_TO_LEFT
@@ -577,7 +508,6 @@ published enum AnimationEffect
      */
     MOVE_SHORT_TO_LEFT,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR AnimationEffect::  MOVE_SHORT_TO_UPPERLEFT
 
     // DocMerge from xml: value com::sun::star::presentation::AnimationEffect::MOVE_SHORT_TO_UPPERLEFT
@@ -585,7 +515,6 @@ published enum AnimationEffect
      */
     MOVE_SHORT_TO_UPPERLEFT,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR AnimationEffect::  MOVE_SHORT_TO_TOP
 
     // DocMerge from xml: value com::sun::star::presentation::AnimationEffect::MOVE_SHORT_TO_TOP
@@ -593,7 +522,6 @@ published enum AnimationEffect
      */
     MOVE_SHORT_TO_TOP,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR AnimationEffect::  MOVE_SHORT_TO_UPPERRIGHT
 
     // DocMerge from xml: value com::sun::star::presentation::AnimationEffect::MOVE_SHORT_TO_UPPERRIGHT
@@ -601,7 +529,6 @@ published enum AnimationEffect
      */
     MOVE_SHORT_TO_UPPERRIGHT,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR AnimationEffect::  MOVE_SHORT_TO_RIGHT
 
     // DocMerge from xml: value com::sun::star::presentation::AnimationEffect::MOVE_SHORT_TO_RIGHT
@@ -609,7 +536,6 @@ published enum AnimationEffect
      */
     MOVE_SHORT_TO_RIGHT,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR AnimationEffect::  MOVE_SHORT_TO_LOWERRIGHT
 
     // DocMerge from xml: value com::sun::star::presentation::AnimationEffect::MOVE_SHORT_TO_LOWERRIGHT
@@ -617,7 +543,6 @@ published enum AnimationEffect
      */
     MOVE_SHORT_TO_LOWERRIGHT,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR AnimationEffect::  MOVE_SHORT_TO_BOTTOM
 
     // DocMerge from xml: value com::sun::star::presentation::AnimationEffect::MOVE_SHORT_TO_BOTTOM
@@ -625,7 +550,6 @@ published enum AnimationEffect
      */
     MOVE_SHORT_TO_BOTTOM,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR AnimationEffect::  MOVE_SHORT_TO_LOWERLEFT
 
     // DocMerge from xml: value com::sun::star::presentation::AnimationEffect::MOVE_SHORT_TO_LOWERLEFT
@@ -633,7 +557,6 @@ published enum AnimationEffect
      */
     MOVE_SHORT_TO_LOWERLEFT,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR AnimationEffect::  VERTICAL_CHECKERBOARD
 
     // DocMerge from xml: value com::sun::star::presentation::AnimationEffect::VERTICAL_CHECKERBOARD
@@ -641,7 +564,6 @@ published enum AnimationEffect
      */
     VERTICAL_CHECKERBOARD,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR AnimationEffect::  HORIZONTAL_CHECKERBOARD
 
     // DocMerge from xml: value com::sun::star::presentation::AnimationEffect::HORIZONTAL_CHECKERBOARD
@@ -649,7 +571,6 @@ published enum AnimationEffect
      */
     HORIZONTAL_CHECKERBOARD,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR AnimationEffect::  HORIZONTAL_ROTATE
 
     // DocMerge from xml: value com::sun::star::presentation::AnimationEffect::HORIZONTAL_ROTATE
@@ -657,7 +578,6 @@ published enum AnimationEffect
      */
     HORIZONTAL_ROTATE,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR AnimationEffect::  VERTICAL_ROTATE
 
     // DocMerge from xml: value com::sun::star::presentation::AnimationEffect::VERTICAL_ROTATE
@@ -665,7 +585,6 @@ published enum AnimationEffect
      */
     VERTICAL_ROTATE,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR AnimationEffect::  HORIZONTAL_STRETCH
 
     // DocMerge from xml: value com::sun::star::presentation::AnimationEffect::HORIZONTAL_STRETCH
@@ -673,7 +592,6 @@ published enum AnimationEffect
      */
     HORIZONTAL_STRETCH,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR AnimationEffect::  VERTICAL_STRETCH
 
     // DocMerge from xml: value com::sun::star::presentation::AnimationEffect::VERTICAL_STRETCH
@@ -681,7 +599,6 @@ published enum AnimationEffect
      */
     VERTICAL_STRETCH,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR AnimationEffect::  STRETCH_FROM_LEFT
 
     // DocMerge from xml: value com::sun::star::presentation::AnimationEffect::STRETCH_FROM_LEFT
@@ -689,7 +606,6 @@ published enum AnimationEffect
      */
     STRETCH_FROM_LEFT,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR AnimationEffect::  STRETCH_FROM_UPPERLEFT
 
     // DocMerge from xml: value com::sun::star::presentation::AnimationEffect::STRETCH_FROM_UPPERLEFT
@@ -697,7 +613,6 @@ published enum AnimationEffect
      */
     STRETCH_FROM_UPPERLEFT,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR AnimationEffect::  STRETCH_FROM_TOP
 
     // DocMerge from xml: value com::sun::star::presentation::AnimationEffect::STRETCH_FROM_TOP
@@ -705,7 +620,6 @@ published enum AnimationEffect
      */
     STRETCH_FROM_TOP,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR AnimationEffect::  STRETCH_FROM_UPPERRIGHT
 
     // DocMerge from xml: value com::sun::star::presentation::AnimationEffect::STRETCH_FROM_UPPERRIGHT
@@ -713,7 +627,6 @@ published enum AnimationEffect
      */
     STRETCH_FROM_UPPERRIGHT,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR AnimationEffect::  STRETCH_FROM_RIGHT
 
     // DocMerge from xml: value com::sun::star::presentation::AnimationEffect::STRETCH_FROM_RIGHT
@@ -721,7 +634,6 @@ published enum AnimationEffect
      */
     STRETCH_FROM_RIGHT,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR AnimationEffect::  STRETCH_FROM_LOWERRIGHT
 
     // DocMerge from xml: value com::sun::star::presentation::AnimationEffect::STRETCH_FROM_LOWERRIGHT
@@ -729,7 +641,6 @@ published enum AnimationEffect
      */
     STRETCH_FROM_LOWERRIGHT,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR AnimationEffect::  STRETCH_FROM_BOTTOM
 
     // DocMerge from xml: value com::sun::star::presentation::AnimationEffect::STRETCH_FROM_BOTTOM
@@ -737,7 +648,6 @@ published enum AnimationEffect
      */
     STRETCH_FROM_BOTTOM,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR AnimationEffect::  STRETCH_FROM_LOWERLEFT
 
     // DocMerge from xml: value com::sun::star::presentation::AnimationEffect::STRETCH_FROM_LOWERLEFT
@@ -745,7 +655,6 @@ published enum AnimationEffect
      */
     STRETCH_FROM_LOWERLEFT,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR AnimationEffect:: ZOOM_IN
 
     // DocMerge from xml: value com::sun::star::presentation::AnimationEffect::ZOOM_IN
@@ -753,7 +662,6 @@ published enum AnimationEffect
      */
     ZOOM_IN,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR AnimationEffect:: ZOOM_IN_SMALL
 
     // DocMerge from xml: value com::sun::star::presentation::AnimationEffect::ZOOM_IN_SMALL
@@ -761,7 +669,6 @@ published enum AnimationEffect
      */
     ZOOM_IN_SMALL,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR AnimationEffect:: ZOOM_IN_SPIRAL
 
     // DocMerge from xml: value com::sun::star::presentation::AnimationEffect::ZOOM_IN_SPIRAL
@@ -769,7 +676,6 @@ published enum AnimationEffect
      */
     ZOOM_IN_SPIRAL,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR AnimationEffect:: ZOOM_OUT
 
     // DocMerge from xml: value com::sun::star::presentation::AnimationEffect::ZOOM_OUT
@@ -777,7 +683,6 @@ published enum AnimationEffect
      */
     ZOOM_OUT,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR AnimationEffect:: ZOOM_OUT_SMALL
 
     // DocMerge from xml: value com::sun::star::presentation::AnimationEffect::ZOOM_OUT_SMALL
@@ -785,7 +690,6 @@ published enum AnimationEffect
      */
     ZOOM_OUT_SMALL,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR AnimationEffect:: ZOOM_OUT_SPIRAL
 
     // DocMerge from xml: value com::sun::star::presentation::AnimationEffect::ZOOM_OUT_SPIRAL
@@ -793,7 +697,6 @@ published enum AnimationEffect
      */
     ZOOM_OUT_SPIRAL,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR AnimationEffect:: ZOOM_IN_FROM_LEFT
 
     // DocMerge from xml: value com::sun::star::presentation::AnimationEffect::ZOOM_IN_FROM_LEFT
@@ -801,7 +704,6 @@ published enum AnimationEffect
      */
     ZOOM_IN_FROM_LEFT,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR AnimationEffect:: ZOOM_IN_FROM_UPPERLEFT
 
     // DocMerge from xml: value com::sun::star::presentation::AnimationEffect::ZOOM_IN_FROM_UPPERLEFT
@@ -809,7 +711,6 @@ published enum AnimationEffect
      */
     ZOOM_IN_FROM_UPPERLEFT,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR AnimationEffect:: ZOOM_IN_FROM_TOP
 
     // DocMerge from xml: value com::sun::star::presentation::AnimationEffect::ZOOM_IN_FROM_TOP
@@ -817,7 +718,6 @@ published enum AnimationEffect
      */
     ZOOM_IN_FROM_TOP,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR AnimationEffect:: ZOOM_IN_FROM_UPPERRIGHT
 
     // DocMerge from xml: value com::sun::star::presentation::AnimationEffect::ZOOM_IN_FROM_UPPERRIGHT
@@ -825,7 +725,6 @@ published enum AnimationEffect
      */
     ZOOM_IN_FROM_UPPERRIGHT,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR AnimationEffect:: ZOOM_IN_FROM_RIGHT
 
     // DocMerge from xml: value com::sun::star::presentation::AnimationEffect::ZOOM_IN_FROM_RIGHT
@@ -833,7 +732,6 @@ published enum AnimationEffect
      */
     ZOOM_IN_FROM_RIGHT,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR AnimationEffect:: ZOOM_IN_FROM_LOWERRIGHT
 
     // DocMerge from xml: value com::sun::star::presentation::AnimationEffect::ZOOM_IN_FROM_LOWERRIGHT
@@ -841,7 +739,6 @@ published enum AnimationEffect
      */
     ZOOM_IN_FROM_LOWERRIGHT,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR AnimationEffect:: ZOOM_IN_FROM_BOTTOM
 
     // DocMerge from xml: value com::sun::star::presentation::AnimationEffect::ZOOM_IN_FROM_BOTTOM
@@ -849,7 +746,6 @@ published enum AnimationEffect
      */
     ZOOM_IN_FROM_BOTTOM,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR AnimationEffect:: ZOOM_IN_FROM_LOWERLEFT
 
     // DocMerge from xml: value com::sun::star::presentation::AnimationEffect::ZOOM_IN_FROM_LOWERLEFT
@@ -857,7 +753,6 @@ published enum AnimationEffect
      */
     ZOOM_IN_FROM_LOWERLEFT,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR AnimationEffect:: ZOOM_IN_FROM_CENTER
 
     // DocMerge from xml: value com::sun::star::presentation::AnimationEffect::ZOOM_IN_FROM_CENTER
@@ -865,7 +760,6 @@ published enum AnimationEffect
      */
     ZOOM_IN_FROM_CENTER,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR AnimationEffect:: ZOOM_OUT_FROM_LEFT
 
     // DocMerge from xml: value com::sun::star::presentation::AnimationEffect::ZOOM_OUT_FROM_LEFT
@@ -873,7 +767,6 @@ published enum AnimationEffect
      */
     ZOOM_OUT_FROM_LEFT,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR AnimationEffect:: ZOOM_OUT_FROM_UPPERLEFT
 
     // DocMerge from xml: value com::sun::star::presentation::AnimationEffect::ZOOM_OUT_FROM_UPPERLEFT
@@ -881,7 +774,6 @@ published enum AnimationEffect
      */
     ZOOM_OUT_FROM_UPPERLEFT,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR AnimationEffect:: ZOOM_OUT_FROM_TOP
 
     // DocMerge from xml: value com::sun::star::presentation::AnimationEffect::ZOOM_OUT_FROM_TOP
@@ -889,7 +781,6 @@ published enum AnimationEffect
      */
     ZOOM_OUT_FROM_TOP,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR AnimationEffect:: ZOOM_OUT_FROM_UPPERRIGHT
 
     // DocMerge from xml: value com::sun::star::presentation::AnimationEffect::ZOOM_OUT_FROM_UPPERRIGHT
@@ -897,7 +788,6 @@ published enum AnimationEffect
      */
     ZOOM_OUT_FROM_UPPERRIGHT,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR AnimationEffect:: ZOOM_OUT_FROM_RIGHT
 
     // DocMerge from xml: value com::sun::star::presentation::AnimationEffect::ZOOM_OUT_FROM_RIGHT
@@ -905,7 +795,6 @@ published enum AnimationEffect
      */
     ZOOM_OUT_FROM_RIGHT,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR AnimationEffect:: ZOOM_OUT_FROM_LOWERRIGHT
 
     // DocMerge from xml: value com::sun::star::presentation::AnimationEffect::ZOOM_OUT_FROM_LOWERRIGHT
@@ -913,7 +802,6 @@ published enum AnimationEffect
      */
     ZOOM_OUT_FROM_LOWERRIGHT,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR AnimationEffect:: ZOOM_OUT_FROM_BOTTOM
 
     // DocMerge from xml: value com::sun::star::presentation::AnimationEffect::ZOOM_OUT_FROM_BOTTOM
@@ -921,7 +809,6 @@ published enum AnimationEffect
      */
     ZOOM_OUT_FROM_BOTTOM,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR AnimationEffect:: ZOOM_OUT_FROM_LOWERLEFT
 
     // DocMerge from xml: value com::sun::star::presentation::AnimationEffect::ZOOM_OUT_FROM_LOWERLEFT
@@ -929,7 +816,6 @@ published enum AnimationEffect
      */
     ZOOM_OUT_FROM_LOWERLEFT,
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR AnimationEffect:: ZOOM_OUT_FROM_CENTER
 
     // DocMerge from xml: value com::sun::star::presentation::AnimationEffect::ZOOM_OUT_FROM_CENTER
@@ -938,7 +824,6 @@ published enum AnimationEffect
     ZOOM_OUT_FROM_CENTER
 };
 
-//=============================================================================
 
 }; }; }; };
 

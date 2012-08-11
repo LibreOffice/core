@@ -19,11 +19,9 @@
 #ifndef __com_sun_star_i18n_TransliterationModulesNew_idl__
 #define __com_sun_star_i18n_TransliterationModulesNew_idl__
 
-//=============================================================================
 
 module com {  module sun {  module star {  module i18n {
 
-//=============================================================================
 
 /** New transliteration module enumeration to use with
     <member>XTransliteration::loadModuleNew()</member>
@@ -161,7 +159,6 @@ published enum TransliterationModulesNew
     END_OF_MODULE                  = 0
 };
 
-//=============================================================================
 }; }; }; };
 
 #endif

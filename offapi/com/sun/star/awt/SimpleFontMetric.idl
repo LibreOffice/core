@@ -29,11 +29,9 @@
 #define __com_sun_star_awt_SimpleFontMetric_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module awt {
 
-//=============================================================================
 
 /** describes the general metrics of a certain font.
  */
@@ -50,7 +48,6 @@ published struct SimpleFontMetric
      */
     short Ascent;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the portion of a letter falling below the baseline.
 
@@ -62,7 +59,6 @@ published struct SimpleFontMetric
      */
     short Descent;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the vertical space between lines of this font;
         it is also called internal line spacing.
@@ -72,7 +68,6 @@ published struct SimpleFontMetric
      */
     short Leading;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the slant of the characters (italic).
 
@@ -80,13 +75,11 @@ published struct SimpleFontMetric
      */
     short Slant;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the code of the first printable character in the font.
      */
     char FirstChar;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the code of the last printable character in the font.
      */
@@ -94,7 +87,6 @@ published struct SimpleFontMetric
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

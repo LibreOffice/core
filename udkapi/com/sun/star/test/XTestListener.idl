@@ -23,16 +23,13 @@
 #include <com/sun/star/test/TestEvent.idl>
 
 
-//=============================================================================
 
 module com { module sun { module star { module test {
 
-//=============================================================================
 /** is used to handle errors/exceptions and warnings during tests.
 */
 published interface XTestListener: com::sun::star::lang::XEventListener
 {
-    //-------------------------------------------------------------------------
     /** gets called when an error occurs while performing an test.
         If the error results from an exception, the exception
         can be found in the Exception member of the TestEvent
@@ -43,7 +40,6 @@ published interface XTestListener: com::sun::star::lang::XEventListener
     */
     void notifyError( [in] com::sun::star::test::TestEvent evt );
 
-    //-------------------------------------------------------------------------
     /** gets called when an warning occurs while performing an test.
 
         @param evt
@@ -52,7 +48,6 @@ published interface XTestListener: com::sun::star::lang::XEventListener
     */
     void notifyWarning( [in] com::sun::star::test::TestEvent evt );
 
-    //-------------------------------------------------------------------------
     /** can be called by the broadcaster to inform the listener about
         the progress of the test. The listener can use this information
         for example to write it into a test protocol file.
@@ -65,7 +60,6 @@ published interface XTestListener: com::sun::star::lang::XEventListener
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

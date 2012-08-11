@@ -23,17 +23,14 @@
 #include <com/sun/star/linguistic2/XDictionaryEntry.idl>
 
 
-//=============================================================================
 
 module com { module sun { module star { module linguistic2 {
 
-//=============================================================================
 /** This interfaces allows to retrieve suggestions for spell checking from a dictionary.
 
 */
 interface XSearchableDictionary : com::sun::star::linguistic2::XDictionary
 {
-    //-------------------------------------------------------------------------
     /** search for similar entries in the dictionary.
 
         @param  aWord
@@ -50,7 +47,6 @@ interface XSearchableDictionary : com::sun::star::linguistic2::XDictionary
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

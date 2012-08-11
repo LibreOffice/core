@@ -25,18 +25,15 @@
 
 #include <com/sun/star/task/XInteractionRequest.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module task {
 
-//=============================================================================
 
 /** Obtains human readable strings from an <type>XInteractionRequest</type>.
  */
 /* published */
 interface XInteractionRequestStringResolver : com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** Obtains a string containing a human readable message from an
         informational interaction request.
@@ -58,7 +55,6 @@ interface XInteractionRequestStringResolver : com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

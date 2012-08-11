@@ -23,11 +23,9 @@
 #include <com/sun/star/container/XNamed.idl>
 #include <com/sun/star/sheet/XLevelsSupplier.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** represents a hierarchy in a data pilot source dimension.
 
@@ -36,14 +34,12 @@ module com {  module sun {  module star {  module sheet {
  */
 published service DataPilotSourceHierarchy
 {
-    //-------------------------------------------------------------------------
 
     /** provides access to the name of the hierarchy, i.e. used in
         collections.
      */
     interface com::sun::star::container::XNamed;
 
-    //-------------------------------------------------------------------------
 
     /** provides access to the collection of levels of this hierarchy.
      */
@@ -51,7 +47,6 @@ published service DataPilotSourceHierarchy
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

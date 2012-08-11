@@ -22,11 +22,9 @@
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/awt/Rectangle.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module chart {
 
-//=============================================================================
 
 /** allow for different positioning options for a diagram
 
@@ -85,7 +83,6 @@ interface XDiagramPositioning : com::sun::star::uno::XInterface
     com::sun::star::awt::Rectangle calculateDiagramPositionIncludingAxesAndAxisTitles();
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -31,11 +31,9 @@
 
 #include <com/sun/star/uno/Exception.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module system {
 
-//=============================================================================
 /** May be thrown in cases of errors executing a command using the <type>SystemShellExecute</type> service.
     <member scope="com::sun::star::uno">Exception::Message</member> may contain a
     system error message, but it is not mandatory.
@@ -44,13 +42,11 @@ module com { module sun { module star { module system {
  */
 published exception SystemShellExecuteException: com::sun::star::uno::Exception
 {
-    //=========================================================================
     /** A POSIX conforming error code or -1 for unknown errors.
     */
     long PosixError;
 };
 
-//=============================================================================
 
 }; }; }; };
 

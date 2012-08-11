@@ -24,11 +24,9 @@
 #include <com/sun/star/drawing/XDrawPage.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module drawing {
 
-//=============================================================================
 
 /** is implemented by objects that can be linked to a
     <type>MasterPage</type>.
@@ -37,13 +35,11 @@
  */
 published interface XMasterPageTarget: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** @returns the <type>MasterPage</type> linked to this object.
      */
     com::sun::star::drawing::XDrawPage getMasterPage();
 
-    //-------------------------------------------------------------------------
 
     /** links a <type>MasterPage</type> to this object.
 
@@ -54,7 +50,6 @@ published interface XMasterPageTarget: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

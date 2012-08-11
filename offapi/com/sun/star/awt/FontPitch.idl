@@ -20,11 +20,9 @@
 #define __com_sun_star_awt_FontPitch_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module awt {
 
-//=============================================================================
 
 /** These values are used to specify whether the width of a character is
     fixed or variable.
@@ -33,19 +31,16 @@
  */
 published constants FontPitch
 {
-    //-------------------------------------------------------------------------
 
     /** specifies that the pitch for this font is unknown.
      */
     const short DONTKNOW = 0;
 
-    //-------------------------------------------------------------------------
 
     /** specifies a font with a fixed character width.
      */
     const short FIXED = 1;
 
-    //-------------------------------------------------------------------------
 
     /** specifies a font with a variable character width.
      */
@@ -53,7 +48,6 @@ published constants FontPitch
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

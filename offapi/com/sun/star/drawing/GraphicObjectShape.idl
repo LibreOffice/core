@@ -42,11 +42,9 @@
 #include <com/sun/star/drawing/ColorMode.idl>
 #include <com/sun/star/container/XIndexContainer.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module drawing {
 
-//=============================================================================
 
 /** This service is for a graphic shape.
  */
@@ -60,83 +58,69 @@ published service GraphicObjectShape
 
     service com::sun::star::drawing::RotationDescriptor;
 
-    //-------------------------------------------------------------------------
     /** This is an url to the source bitmap for this graphic shape.
     */
     [property] string GraphicURL;
 
-    //-------------------------------------------------------------------------
     /** This is an url to the stream ("in document" or linked graphic) for this graphic shape.
     */
     [property] string GraphicStreamURL;
 
-    //-------------------------------------------------------------------------
     /** Deprecated. Use graphic property instead!
         This is the bitmap that represents this graphic shape.
     */
     [optional, property] com::sun::star::awt::XBitmap GraphicObjectFillBitmap;
 
-    //-------------------------------------------------------------------------
     /** If this property is set, the luminance of this graphic shape is adjusted
         by the given signed percent value.
     */
     [property] short AdjustLuminance;
 
-    //-------------------------------------------------------------------------
     /** If this property is set, the contrast of this graphic shape is adjusted
         by the given signed percent value.
     */
     [property] short AdjustContrast;
 
-    //-------------------------------------------------------------------------
     /** If this property is set, the red channel of this graphic shape is
         adjusted by the given signed percent value.
     */
     [property] short AdjustRed;
 
-    //-------------------------------------------------------------------------
     /** If this property is set, the green channel of this graphic shape is
         adjusted by the given signed percent value.
     */
     [property] short AdjustGreen;
 
-    //-------------------------------------------------------------------------
     /** If this property is set, the blue channel of this graphic shape is
         adjusted by the given signed percent value.
     */
     [property] short AdjustBlue;
 
-    //-------------------------------------------------------------------------
     /** If this property is set, the gamma value of this graphic shape is
         adjusted by the given value.
     */
     [property] double Gamma;
 
-    //-------------------------------------------------------------------------
     /** If this property is set, the transparency value of this graphic shape is
         adjusted by the given unsigned percent value.
         100% is fully transparent, 0 % is fully opaque.
     */
     [property] short Transparency;
 
-    //-------------------------------------------------------------------------
     /** This property selects the color mode that is used for rendering.
     */
     [property] ColorMode GraphicColorMode;
 
-    //-------------------------------------------------------------------------
     /** This property contains a image map for this graphic.
         @see com::sun::star::image::ImageMap
     */
     [optional, property] com::sun::star::container::XIndexContainer ImageMap;
 
-    //-------------------------------------------------------------------------
     /** This is the graphic that represents this graphic shape
     */
     [optional, property] com::sun::star::graphic::XGraphic Graphic;
 };
 
-//=============================================================================
 
 }; }; }; };
 

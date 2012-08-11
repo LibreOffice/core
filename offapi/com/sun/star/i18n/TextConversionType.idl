@@ -21,13 +21,10 @@
 #define __com_sun_star_i18n_TextConversionType_idl__
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module i18n {
 
-//=============================================================================
 
-//--------------------------------------------------------------------------
 /** These constants specify the conversion type to be used with
     <type>XTextConversion</type>.
 
@@ -49,7 +46,6 @@ published constants TextConversionType
     const short TO_TCHINESE     = 4;
 };
 
-//=============================================================================
 
 }; }; }; };
 

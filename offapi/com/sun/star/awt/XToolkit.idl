@@ -34,11 +34,9 @@
 #include <com/sun/star/awt/XRegion.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module awt {
 
-//=============================================================================
 
 /** specifies a factory interface for the window toolkit.
 
@@ -46,26 +44,22 @@
  */
 published interface XToolkit: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** returns the desktop window.
      */
     com::sun::star::awt::XWindowPeer getDesktopWindow();
 
-    //-------------------------------------------------------------------------
 
     /** returns the complete work area for this toolkit.
      */
     com::sun::star::awt::Rectangle getWorkArea();
 
-    //-------------------------------------------------------------------------
 
     /** creates a new window using the given descriptor.
      */
     com::sun::star::awt::XWindowPeer createWindow( [in] com::sun::star::awt::WindowDescriptor Descriptor )
             raises( com::sun::star::lang::IllegalArgumentException );
 
-    //-------------------------------------------------------------------------
 
     /** returns a sequence of windows which are newly created using the
         given descriptors.
@@ -74,14 +68,12 @@ published interface XToolkit: com::sun::star::uno::XInterface
             [in] sequence<com::sun::star::awt::WindowDescriptor> Descriptors )
         raises( com::sun::star::lang::IllegalArgumentException );
 
-    //-------------------------------------------------------------------------
 
     /** creates a virtual device that is compatible with the screen.
      */
     com::sun::star::awt::XDevice createScreenCompatibleDevice( [in] long Width,
              [in] long Height );
 
-    //-------------------------------------------------------------------------
 
     /** creates a region.
      */
@@ -89,7 +81,6 @@ published interface XToolkit: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

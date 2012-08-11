@@ -30,11 +30,9 @@
 
 #include <com/sun/star/frame/XDispatchHelper.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module frame {
 
-//=============================================================================
 /** provides an easy way to dispatch an URL using one call instead of multiple ones.
 
     <p>
@@ -52,7 +50,6 @@ module com {  module sun {  module star {  module frame {
  */
 published service DispatchHelper : XDispatchHelper;
 
-//=============================================================================
 
 }; }; }; };
 

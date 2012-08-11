@@ -20,11 +20,9 @@
 #ifndef __com_sun_star_awt_MouseWheelBehavior_idl__
 #define __com_sun_star_awt_MouseWheelBehavior_idl__
 
-//=============================================================================
 
 module com { module sun { module star { module awt {
 
-//=============================================================================
 
 /** describes the scroll behavior of the mouse wheel for a control
     @since OOo 3.2
@@ -46,11 +44,9 @@ constants MouseWheelBehavior
     const short SCROLL_ALWAYS = 2;
 };
 
-//=============================================================================
 
 }; }; }; };
 
-//=============================================================================
 
 #endif
 

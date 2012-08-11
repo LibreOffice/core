@@ -69,7 +69,6 @@ published service QueryDefinition
     [property] string UpdateSchemaName;
 };
 
-//=============================================================================
 
 }; }; }; };
 

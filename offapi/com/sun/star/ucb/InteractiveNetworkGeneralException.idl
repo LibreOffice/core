@@ -22,18 +22,15 @@
 #include <com/sun/star/ucb/InteractiveNetworkException.idl>
 
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** A network error specifying a general failure.
 */
 published exception InteractiveNetworkGeneralException: com::sun::star::ucb::InteractiveNetworkException
 {
 };
 
-//=============================================================================
 
 }; }; }; };
 

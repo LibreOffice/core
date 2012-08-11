@@ -24,11 +24,9 @@
 #include <com/sun/star/container/XNameAccess.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module text {
 
-//=============================================================================
 
 // DocMerge from xml: interface com::sun::star::text::XTextEmbeddedObjectsSupplier
 /** provides the collection of all embedded objects within this context
@@ -36,7 +34,6 @@
  */
 published interface XTextEmbeddedObjectsSupplier: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     // DocMerge from idl: method com::sun::star::text::XTextEmbeddedObjectsSupplier::getEmbeddedObjects
     /** @returns
@@ -46,7 +43,6 @@ published interface XTextEmbeddedObjectsSupplier: com::sun::star::uno::XInterfac
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

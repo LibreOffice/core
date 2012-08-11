@@ -26,11 +26,9 @@
 #include <com/sun/star/lang/WrappedTargetException.idl>
 #include <com/sun/star/configuration/backend/MalformedDataException.idl>
 
-//==============================================================================
 
 module com { module sun { module star { module configuration { module backend {
 
-//==============================================================================
 
 /**
   provides read access to layers that contain sublayers accessible through an
@@ -40,7 +38,6 @@ module com { module sun { module star { module configuration { module backend {
   */
 published interface XCompositeLayer : XLayer
 {
-    //--------------------------------------------------------------------------
 
     /**
       Returns a list of the criteria that can be used to access the
@@ -55,7 +52,6 @@ published interface XCompositeLayer : XLayer
     sequence<string> listSubLayerIds()
         raises (com::sun::star::lang::WrappedTargetException) ;
 
-    //--------------------------------------------------------------------------
 
     /**
       Describes the content of a particular sublayer to
@@ -87,10 +83,8 @@ published interface XCompositeLayer : XLayer
                 com::sun::star::lang::WrappedTargetException,
                 MalformedDataException) ;
 
-    //--------------------------------------------------------------------------
 } ;
 
-//==============================================================================
 
 } ; } ; } ; } ; } ;
 #endif

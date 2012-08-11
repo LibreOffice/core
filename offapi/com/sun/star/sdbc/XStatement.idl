@@ -56,7 +56,6 @@ published interface XStatement: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     XResultSet executeQuery([in]string sql) raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** executes an SQL INSERT, UPDATE, or DELETE statement. In addition,
         SQL statements that return nothing, such as SQL DDL statements,
@@ -70,7 +69,6 @@ published interface XStatement: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     long executeUpdate([in]string sql) raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** executes a SQL statement that may return multiple results.
 
@@ -104,7 +102,6 @@ published interface XStatement: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     boolean execute([in]string sql) raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** returns the
         <type scope="com::sun::star::sdbc">Connection</type>
@@ -121,7 +118,6 @@ published interface XStatement: com::sun::star::uno::XInterface
     XConnection getConnection() raises (SQLException);
 };
 
-//=============================================================================
 
 }; }; }; };
 

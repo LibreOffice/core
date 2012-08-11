@@ -21,17 +21,14 @@
 
 #include <com/sun/star/uno/XInterface.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module text {
 
-//=============================================================================
 
 /** enables a text object to copy attributed text from another text object.
  */
 published interface XTextCopy: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
         /** copies the content from another text object.
 
@@ -42,7 +39,6 @@ published interface XTextCopy: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

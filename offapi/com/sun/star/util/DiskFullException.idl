@@ -22,11 +22,9 @@
 #include <com/sun/star/util/FileIOException.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module util {
 
-//=============================================================================
 
 /** @deprecated
  */
@@ -34,7 +32,6 @@ published exception DiskFullException: com::sun::star::util::FileIOException
 {
 };
 
-//=============================================================================
 
 }; }; }; };
 

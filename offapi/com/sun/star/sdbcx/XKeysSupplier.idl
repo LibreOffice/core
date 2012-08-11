@@ -39,7 +39,6 @@ published interface XKeysSupplier: com::sun::star::uno::XInterface
     com::sun::star::container::XIndexAccess getKeys();
 };
 
-//=============================================================================
 
 }; }; }; };
 

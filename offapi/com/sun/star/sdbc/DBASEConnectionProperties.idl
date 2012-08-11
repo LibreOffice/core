@@ -55,7 +55,6 @@ service DBASEConnectionProperties
     [optional, property] boolean ShowDeleted;
 };
 
-//=============================================================================
 
 }; }; }; };
 

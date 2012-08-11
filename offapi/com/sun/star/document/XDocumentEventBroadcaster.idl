@@ -33,13 +33,11 @@
 #include <com/sun/star/lang/IllegalArgumentException.idl>
 #include <com/sun/star/lang/NoSupportException.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module document {
 
 interface XDocumentEventListener;
 
-//=============================================================================
 
 /** allows to be notified of events happening in an <type>OfficeDocument</type>, and to cause notification
     of such events.
@@ -106,11 +104,9 @@ interface XDocumentEventBroadcaster
                      ::com::sun::star::lang::NoSupportException );
 };
 
-//=============================================================================
 
 }; }; }; };
 
-//=============================================================================
 
 #endif
 

@@ -52,7 +52,6 @@ published interface XAppend: com::sun::star::uno::XInterface
                 com::sun::star::container::ElementExistException);
 };
 
-//=============================================================================
 
 }; }; }; };
 

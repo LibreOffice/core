@@ -24,11 +24,9 @@
 #include <com/sun/star/sheet/GeneralFunction.idl>
 #include <com/sun/star/uno/Exception.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** provides methods to execute operations on a cell range or ranges.
 
@@ -37,7 +35,6 @@ module com {  module sun {  module star {  module sheet {
  */
 published interface XSheetOperation: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** computes a general function based on all cells in the current
         cell range(s).
@@ -52,7 +49,6 @@ published interface XSheetOperation: com::sun::star::uno::XInterface
             [in] com::sun::star::sheet::GeneralFunction nFunction )
         raises( com::sun::star::uno::Exception );   //! unnecessary
 
-    //-------------------------------------------------------------------------
 
     /** clears the specified contents of the current cell range(s).
 
@@ -64,7 +60,6 @@ published interface XSheetOperation: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

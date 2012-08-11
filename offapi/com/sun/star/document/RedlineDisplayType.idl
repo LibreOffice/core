@@ -19,11 +19,9 @@
 #ifndef __com_sun_star_document_RedlineDisplayType_idl__
 #define __com_sun_star_document_RedlineDisplayType_idl__
 
-//=============================================================================
 
 module com {   module sun {   module star {   module document {
 
-//=============================================================================
 
 /** specifies which changes in a document are displayed.
  */

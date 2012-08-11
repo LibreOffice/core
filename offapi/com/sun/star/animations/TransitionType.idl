@@ -19,11 +19,9 @@
 #ifndef __com_sun_star_animations_TransitionType_idl__
 #define __com_sun_star_animations_TransitionType_idl__
 
-//=============================================================================
 
  module com {  module sun {  module star {  module animations {
 
-//=============================================================================
 
 /** @see http://www.w3.org/TR/smil20/smil-transitions.html#Table%201:%20Taxonomy%20Table
 */
@@ -76,7 +74,6 @@ constants TransitionType
     const short ZOOM = 43;
 };
 
-//=============================================================================
 
 }; }; }; };
 

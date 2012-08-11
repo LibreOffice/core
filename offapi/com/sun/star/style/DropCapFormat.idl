@@ -20,11 +20,9 @@
 #define __com_sun_star_style_DropCapFormat_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module style {
 
-//=============================================================================
 
 // DocMerge from xml: struct com::sun::star::style::DropCapFormat
 /** This struct describes drop caps at a paragraph object.
@@ -36,14 +34,12 @@ published struct DropCapFormat
      */
     byte Lines;
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: field com::sun::star::style::DropCapFormat::Count
     /** This is the number of characters in the drop cap.
      */
     byte Count;
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: field com::sun::star::style::DropCapFormat::Distance
     /** This is the distance between the drop cap in the following text.
@@ -52,7 +48,6 @@ published struct DropCapFormat
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

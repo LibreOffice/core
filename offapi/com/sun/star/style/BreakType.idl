@@ -20,11 +20,9 @@
 #define __com_sun_star_style_BreakType_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module style {
 
-//=============================================================================
 
 // DocMerge from xml: enum com::sun::star::style::BreakType
 /** These enumeration values are used to specify if and how a page or
@@ -32,14 +30,12 @@
  */
 published enum BreakType
 {
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: value com::sun::star::style::BreakType::NONE
     /** No column or page break is applied.
      */
     NONE,
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: value com::sun::star::style::BreakType::COLUMN_BEFORE
     /** A column break is applied before the object to which it belongs.
@@ -51,7 +47,6 @@ published enum BreakType
      */
     COLUMN_BEFORE,
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: value com::sun::star::style::BreakType::COLUMN_AFTER
     /** A column break is applied after the object to which it belongs.
@@ -63,7 +58,6 @@ published enum BreakType
      */
     COLUMN_AFTER,
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: value com::sun::star::style::BreakType::COLUMN_BOTH
     /** A column break is applied before and after the object to which
@@ -75,7 +69,6 @@ published enum BreakType
      */
     COLUMN_BOTH,
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: value com::sun::star::style::BreakType::PAGE_BEFORE
     /** A page break is applied before the object to which it belongs.
@@ -87,7 +80,6 @@ published enum BreakType
      */
     PAGE_BEFORE,
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: value com::sun::star::style::BreakType::PAGE_AFTER
     /** A page break is applied after the object to which it belongs.
@@ -99,7 +91,6 @@ published enum BreakType
      */
     PAGE_AFTER,
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: value com::sun::star::style::BreakType::PAGE_BOTH
     /** A page break is applied before and after the object to which
@@ -113,7 +104,6 @@ published enum BreakType
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

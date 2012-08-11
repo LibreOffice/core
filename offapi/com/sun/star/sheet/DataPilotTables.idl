@@ -23,23 +23,19 @@
 #include <com/sun/star/sheet/XDataPilotTables.idl>
 #include <com/sun/star/container/XEnumerationAccess.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** represents a collection of data pilot tables.
  */
 published service DataPilotTables
 {
-    //-------------------------------------------------------------------------
 
     /** provides access to the data pilot objects in this collection.
      */
     interface com::sun::star::sheet::XDataPilotTables;
 
-    //-------------------------------------------------------------------------
 
     /** creates an enumeration of all data pilot tables.
 
@@ -47,7 +43,6 @@ published service DataPilotTables
      */
     interface com::sun::star::container::XEnumerationAccess;
 
-    //-------------------------------------------------------------------------
 
     /** provides methods to access the contained data pilot tables by index.
 
@@ -57,7 +52,6 @@ published service DataPilotTables
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

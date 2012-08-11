@@ -20,7 +20,6 @@
 #ifndef __com_sun_star_ui_ItemStyle_idl__
 #define __com_sun_star_ui_ItemStyle_idl__
 
-//=============================================================================
 
 module com {  module sun {  module star {  module ui {
 
@@ -52,7 +51,6 @@ module com {  module sun {  module star {  module ui {
 */
 constants ItemStyle
 {
-    //-------------------------------------------------------------------------
     /** specifies how the output of the item is aligned in the bounding box of
         the user interface element.
         <p>This style is only valid for an item which describes a statusbar item.
@@ -74,7 +72,6 @@ constants ItemStyle
     */
     const short ALIGN_RIGHT  = 3;
 
-    //-------------------------------------------------------------------------
     /** specifies how the implementation should draw the item.
         <p>This style is only valid for an item which describes a statusbar item.
         Draw item with an embossed 3D effect.</p>
@@ -93,26 +90,22 @@ constants ItemStyle
     */
     const short DRAW_FLAT    = 12;
 
-    //-------------------------------------------------------------------------
     /** specifies whether or not a item is displayed using an external function.
         <p>This style is only valid if the item describes a statusbar item.</p>
     */
     const short OWNER_DRAW    = 16;
 
-    //-------------------------------------------------------------------------
     /** specifies whether or not the size of the item is set automatically by
         the parent user interface element.
         <p>This style is only valid if the item describes a toolbar or statusbar item.</p>
     */
     const short AUTO_SIZE     = 32;
 
-    //-------------------------------------------------------------------------
     /**  determines whether the item unchecks neighbor entries which have also this style set.
          <p>This style is only valid if the item describes a toolbar item.</p>
     */
     const short RADIO_CHECK   = 64;
 
-    //-------------------------------------------------------------------------
     /** specifies if an icon is placed on left side of the text, like an entry in a taskbar.
         <p>This style is only valid if the item describes a toolbar item and visible if
         style of the toolbar is set to symboltext.</p>
@@ -120,20 +113,17 @@ constants ItemStyle
     */
     const short ICON          = 128;
 
-    //-------------------------------------------------------------------------
     /** specifies that the item supports a dropdown menu or toolbar for additional functions.
         <p>This style is only valid if the item describes a toolbar item.</p>
     */
     const short DROP_DOWN     = 256;
 
-    //-------------------------------------------------------------------------
     /** indicates that the item continues to execute the command while you click and hold
         the mouse button.
         <p>This style is only valid if the item describes a toolbar item.</p>
     */
     const short REPEAT        = 512;
 
-    //-------------------------------------------------------------------------
     /** indicates that the item only supports a dropdown menu or toolbar for
         additional functions. There is no function on the button itself.
         <p>This style is only valid if the item describes a toolbar item.</p>

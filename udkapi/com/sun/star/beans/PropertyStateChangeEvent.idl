@@ -24,11 +24,9 @@
 #include <com/sun/star/beans/PropertyState.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module beans {
 
-//=============================================================================
 
 /** is delivered whenever the state of a "bound" property is changed.
 
@@ -43,7 +41,6 @@ module com {  module sun {  module star {  module beans {
  */
 published struct PropertyStateChangeEvent: com::sun::star::lang::EventObject
 {
-    //-------------------------------------------------------------------------
 
     /** specifies the name of the property which changes its value.
 
@@ -52,7 +49,6 @@ published struct PropertyStateChangeEvent: com::sun::star::lang::EventObject
      */
     string PropertyName;
 
-    //-------------------------------------------------------------------------
 
     /** contains the implementation handle for the property.
 
@@ -62,13 +58,11 @@ published struct PropertyStateChangeEvent: com::sun::star::lang::EventObject
      */
     long PropertyHandle;
 
-    //-------------------------------------------------------------------------
 
     /** contains the old value of the property.
      */
     com::sun::star::beans::PropertyState OldValue;
 
-    //-------------------------------------------------------------------------
 
     /** contains the new value of the property.
      */
@@ -76,7 +70,6 @@ published struct PropertyStateChangeEvent: com::sun::star::lang::EventObject
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

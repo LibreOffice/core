@@ -22,11 +22,9 @@
 #include <com/sun/star/sdbc/SQLException.idl>
 
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** This exception is thrown to propagate exceptions thrown by operations
     on <type>ContentResultSet</type>s.
 
@@ -37,7 +35,6 @@ published exception ResultSetException: com::sun::star::sdbc::SQLException
 {
 };
 
-//=============================================================================
 
 }; }; }; };
 

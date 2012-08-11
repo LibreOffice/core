@@ -29,17 +29,14 @@
 #ifndef __com_sun_star_sheet_FormulaToken_idl__
 #define __com_sun_star_sheet_FormulaToken_idl__
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** contains a single token within a formula.
  */
 struct FormulaToken
 {
-    //-------------------------------------------------------------------------
 
     /** is the OpCode of the token.
 
@@ -47,7 +44,6 @@ struct FormulaToken
      */
     long OpCode;
 
-    //-------------------------------------------------------------------------
 
     /** is additional data in the token, depending on the OpCode.
 
@@ -57,7 +53,6 @@ struct FormulaToken
     any Data;
 };
 
-//=============================================================================
 
 }; }; }; };
 

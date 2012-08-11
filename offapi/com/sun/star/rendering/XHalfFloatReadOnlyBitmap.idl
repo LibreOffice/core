@@ -67,7 +67,6 @@ interface XHalfFloatReadOnlyBitmap : XBitmap
         raises (com::sun::star::lang::IndexOutOfBoundsException,
                 VolatileContentDestroyedException);
 
-    //-------------------------------------------------------------------------
 
     /** Get a single pixel of the bitmap, returning its color
         value.<p>
@@ -79,7 +78,6 @@ interface XHalfFloatReadOnlyBitmap : XBitmap
         raises (com::sun::star::lang::IndexOutOfBoundsException,
                 VolatileContentDestroyedException);
 
-    //-------------------------------------------------------------------------
 
     /** Query the memory layout for this bitmap.<p>
      */

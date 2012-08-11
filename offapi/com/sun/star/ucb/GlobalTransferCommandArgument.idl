@@ -21,32 +21,26 @@
 
 #include <com/sun/star/ucb/TransferCommandOperation.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** This struct contains information needed to transfer objects from one
     location to another.
 */
 published struct GlobalTransferCommandArgument
 {
-    //-------------------------------------------------------------------------
     /** contains the action to perform ( COPY, MOVE, LINK ).
       */
     TransferCommandOperation Operation;
 
-    //-------------------------------------------------------------------------
     /** contains the URL of the source object.
       */
     string SourceURL;
 
-    //-------------------------------------------------------------------------
     /** contains the URL of the target folder.
       */
     string TargetURL;
 
-    //-------------------------------------------------------------------------
     /** contains the title of the transferred object, if it is different
         from the original one.
 
@@ -55,7 +49,6 @@ published struct GlobalTransferCommandArgument
       */
     string NewTitle;
 
-    //-------------------------------------------------------------------------
     /** describes how to act in case of title clashes while transferring
         the data.
 
@@ -67,7 +60,6 @@ published struct GlobalTransferCommandArgument
     long NameClash;
 };
 
-//=============================================================================
 
 }; }; }; };
 

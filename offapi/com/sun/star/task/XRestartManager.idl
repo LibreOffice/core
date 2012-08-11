@@ -24,18 +24,15 @@
 #include <com/sun/star/task/XInteractionHandler.idl>
 #include <com/sun/star/uno/Exception.idl>
 
-//============================================================================
 
 module com {  module sun {  module star {  module task {
 
-//=============================================================================
 /** allows to try to restart the office.
 
     @since OOo 3.3
 */
 published interface XRestartManager : com::sun::star::uno::XInterface
 {
-    //------------------------------------------------------------------------
     /** let the office restart asynchronously
         @param xInteractionHandler
             the <type scope="com::sun::star::task">InteractionHandler</type>
@@ -49,7 +46,6 @@ published interface XRestartManager : com::sun::star::uno::XInterface
         [in] com::sun::star::task::XInteractionHandler xInteractionHandler )
             raises( com::sun::star::uno::Exception );
 
-    //------------------------------------------------------------------------
     /** allows to get info whether the restart has been requested and provide
         the initialization status.
 

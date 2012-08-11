@@ -23,11 +23,9 @@
 #include <com/sun/star/text/XPageCursor.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module text {
 
-//=============================================================================
 
 // DocMerge from xml: service com::sun::star::text::TextLayoutCursor
 /** A <type>TextLayoutCursor</type> is a <type>TextRange</type> which can
@@ -43,7 +41,6 @@ published service TextLayoutCursor
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

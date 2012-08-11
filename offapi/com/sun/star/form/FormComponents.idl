@@ -34,11 +34,9 @@
 #include <com/sun/star/container/XContainer.idl>
 #include <com/sun/star/script/XEventAttacherManager.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module form {
 
-//=============================================================================
 
 /** specifies the capabilities of a collection of <type>FormComponent</type>s.
 
@@ -86,7 +84,6 @@ published service FormComponents
     interface com::sun::star::script::XEventAttacherManager;
 };
 
-//=============================================================================
 
 }; }; }; };
 

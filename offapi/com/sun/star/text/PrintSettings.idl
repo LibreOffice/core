@@ -22,67 +22,57 @@
 #include <com/sun/star/text/NotePrintMode.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module text {
 
-//=============================================================================
 
 // DocMerge from xml: service com::sun::star::text::PrintSettings
 /** These properties describe the printing of the content of a text document.
  */
 published service PrintSettings
 {
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::text::PrintSettings::PrintGraphics
     /** determines if graphic objects are printed
      */
     [property] boolean PrintGraphics;
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::text::PrintSettings::PrintTables
     /** determines if text tables are printed.
      */
     [property] boolean PrintTables;
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::text::PrintSettings::PrintDrawings
     /** determines if shapes are printed.
      */
     [property] boolean PrintDrawings;
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::text::PrintSettings::PrintLeftPage
     /** determines if left pages are printed.
      */
     [property] boolean PrintLeftPages;
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::text::PrintSettings::PrintRightPage
     /** determines if right pages are printed.
      */
     [property] boolean PrintRightPages;
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::text::PrintSettings::PrintControls
     /** determines if control shapes are printed.
      */
     [property] boolean PrintControls;
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::text::PrintSettings::PrintReverse
     /** determines if the pages are printed in the reverse order, starting with the last page.
      */
     [property] boolean PrintReversed;
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::text::PrintSettings::PaperFromSetup
     /** specifies if the printer paper tray selection of the system
@@ -95,49 +85,42 @@ published service PrintSettings
      */
     [property] boolean PrintPaperFromSetup;
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::text::PrintSettings::FaxName
     /** contains the name of the fax.
      */
     [property] string PrintFaxName;
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::text::PrintSettings::PrintNotes
     /** determines how notes are printed.@see NotePrintMode
      */
     [property] com::sun::star::text::NotePrintMode PrintAnnotationMode;
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::text::PrintSettings::PrintProspect
     /** determines if prospect printing is used.
      */
     [property] boolean PrintProspect;
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::text::PrintSettings::PrintBackground
     /** determines if the background color / background graphic of pages is printed.
      */
     [property] boolean PrintPageBackground;
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::text::PrintSettings::PrintBlackFont
     /** determines if characters are always printed in black.
      */
     [property] boolean PrintBlackFonts;
 
-        //-------------------------------------------------------------------------
 
         /** determines if automatically inserted empty pages are printed.
          */
         [optional, property] boolean PrintEmptyPages;
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -20,11 +20,9 @@
 #define __com_sun_star_text_PositionLayoutDir_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module text {
 
-//=============================================================================
 
 /** These values specify the layout direction, in which the position attributes
     of a shape are given
@@ -33,23 +31,19 @@
  */
 constants PositionLayoutDir
 {
-    //-------------------------------------------------------------------------
 
         /** position attributes are given in horizontal left-to-right direction
      */
         const short PositionInHoriL2R = 1;
 
-    //-------------------------------------------------------------------------
 
         /** position attributes are given in layout direction of the drawing
             objects anchor
      */
         const short PositionInLayoutDirOfAnchor = 2;
 
-    //-------------------------------------------------------------------------
 };
 
-//=============================================================================
 
 }; }; }; };
 

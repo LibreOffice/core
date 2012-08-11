@@ -31,11 +31,9 @@
 #include <com/sun/star/lang/EventObject.idl>
 #include <com/sun/star/frame/XController2.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module document {
 
-//=============================================================================
 
 /** describes an event happening in an <type>OfficeDocument</type>
 
@@ -73,11 +71,9 @@ struct DocumentEvent : ::com::sun::star::lang::EventObject
     any     Supplement;
 };
 
-//=============================================================================
 
 }; }; }; };
 
-//=============================================================================
 
 #endif
 

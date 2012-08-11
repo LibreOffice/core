@@ -22,11 +22,9 @@
 #include <com/sun/star/uno/XInterface.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module awt {
 
-//=============================================================================
 
 /** gives access to a file dialog.
 
@@ -34,32 +32,27 @@
  */
 published interface XFileDialog: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** sets the path.
      */
     [oneway] void setPath( [in] string Path );
 
-    //-------------------------------------------------------------------------
 
     /** returns the path.
      */
     string getPath();
 
-    //-------------------------------------------------------------------------
 
     /** sets the filters.
      */
     [oneway] void setFilters( [in] sequence<string> rFilterNames,
              [in] sequence<string> rMasks );
 
-    //-------------------------------------------------------------------------
 
     /** sets the current filter.
      */
     [oneway] void setCurrentFilter( [in] string Filter );
 
-    //-------------------------------------------------------------------------
 
     /** returns the currently selected filter.
      */
@@ -67,7 +60,6 @@ published interface XFileDialog: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

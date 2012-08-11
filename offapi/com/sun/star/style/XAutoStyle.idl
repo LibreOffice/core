@@ -28,11 +28,9 @@
 
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module style {
 
-//=============================================================================
 
 /** This interface allows access to a single automatic style.
  */
@@ -47,7 +45,6 @@ interface XAutoStyle
     com::sun::star::beans::PropertyValues getProperties();
 };
 
-//=============================================================================
 
 }; }; }; };
 #endif

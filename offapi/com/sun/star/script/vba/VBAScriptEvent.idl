@@ -22,11 +22,9 @@
 
 #include <com/sun/star/lang/EventObject.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star { module script { module vba {
 
-//=============================================================================
 
 /** Describes a VBA script event fired via <member>XVBACompatibility::
     broadcastVBAScriptEvent</member>, and received by <member>
@@ -37,7 +35,6 @@ module com {  module sun {  module star { module script { module vba {
  */
 struct VBAScriptEvent : ::com::sun::star::lang::EventObject
 {
-    //-------------------------------------------------------------------------
 
     /** Identifies the type of the event.
 
@@ -45,7 +42,6 @@ struct VBAScriptEvent : ::com::sun::star::lang::EventObject
      */
     long Identifier;
 
-    //-------------------------------------------------------------------------
 
     /** Contains the name of the involved VBA module.
 
@@ -53,14 +49,11 @@ struct VBAScriptEvent : ::com::sun::star::lang::EventObject
      */
     string ModuleName;
 
-    //-------------------------------------------------------------------------
 };
 
-//=============================================================================
 
 }; }; }; }; };
 
-//=============================================================================
 
 #endif
 

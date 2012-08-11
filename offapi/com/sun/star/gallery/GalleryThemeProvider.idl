@@ -23,11 +23,9 @@
 #include <com/sun/star/gallery/XGalleryThemeProvider.idl>
 #include <com/sun/star/lang/XInitialization.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module gallery {
 
-//=============================================================================
 
 /** provides access to a container of <type>GalleryTheme</type>s
     and makes it possible for you to manipulate them.
@@ -54,7 +52,6 @@ service GalleryThemeProvider
     interface com::sun::star::lang::XInitialization;
 };
 
-//=============================================================================
 
 }; }; }; };
 

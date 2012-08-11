@@ -31,22 +31,18 @@
 #include <com/sun/star/beans/NamedValue.idl>
 #include <com/sun/star/embed/XEmbeddedObject.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module embed {
 
-//=============================================================================
 
 /** is intended to provide result of creation of an embedded object by dialog.
  */
 published struct InsertedObjectInfo
 {
-    //-------------------------------------------------------------------------
     /** The new created embedded object.
      */
     XEmbeddedObject Object;
 
-     //-------------------------------------------------------------------------
     /** Container related options selected by user.
 
         <p>
@@ -59,7 +55,6 @@ published struct InsertedObjectInfo
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

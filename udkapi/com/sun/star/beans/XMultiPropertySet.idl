@@ -32,17 +32,14 @@
 #include <com/sun/star/beans/XPropertiesChangeListener.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module beans {
 
-//=============================================================================
 
 /** provides access to multiple properties with a single call.
  */
 published interface XMultiPropertySet: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** @returns
             the <type>XPropertySetInfo</type> interface, which describes
@@ -54,7 +51,6 @@ published interface XMultiPropertySet: com::sun::star::uno::XInterface
      */
     com::sun::star::beans::XPropertySetInfo getPropertySetInfo();
 
-    //-------------------------------------------------------------------------
 
     /** sets the values to the properties with the specified names.
 
@@ -85,7 +81,6 @@ published interface XMultiPropertySet: com::sun::star::uno::XInterface
                     com::sun::star::lang::IllegalArgumentException,
                     com::sun::star::lang::WrappedTargetException );
 
-    //-------------------------------------------------------------------------
 
     /** @returns
             a sequence of all values of the properties which are specified by their names.
@@ -99,7 +94,6 @@ published interface XMultiPropertySet: com::sun::star::uno::XInterface
      */
     sequence<any> getPropertyValues( [in] sequence<string> aPropertyNames );
 
-    //-------------------------------------------------------------------------
 
     /** adds an <type>XPropertiesChangeListener</type> to the
         specified property with the specified names.
@@ -121,7 +115,6 @@ published interface XMultiPropertySet: com::sun::star::uno::XInterface
     [oneway] void addPropertiesChangeListener( [in] sequence<string> aPropertyNames,
              [in] com::sun::star::beans::XPropertiesChangeListener xListener );
 
-    //-------------------------------------------------------------------------
 
     /** removes an <type>XPropertiesChangeListener</type> from the listener list.
 
@@ -137,7 +130,6 @@ published interface XMultiPropertySet: com::sun::star::uno::XInterface
      */
     [oneway] void removePropertiesChangeListener( [in] com::sun::star::beans::XPropertiesChangeListener xListener );
 
-    //-------------------------------------------------------------------------
 
     /** fires a sequence of <type>PropertyChangeEvent</type>s to the specified
         listener.
@@ -153,7 +145,6 @@ published interface XMultiPropertySet: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

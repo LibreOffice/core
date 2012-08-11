@@ -23,11 +23,9 @@
 #include <com/sun/star/container/XNamed.idl>
 #include <com/sun/star/beans/XPropertySet.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** represents a member in a data pilot source level.
 
@@ -41,7 +39,6 @@ module com {  module sun {  module star {  module sheet {
  */
 published service DataPilotSourceMember
 {
-    //-------------------------------------------------------------------------
 
     /** provides access to the name of the member.
 
@@ -49,26 +46,22 @@ published service DataPilotSourceMember
      */
     interface com::sun::star::container::XNamed;
 
-    //-------------------------------------------------------------------------
 
 //!published service PropertySet
     /** provides access to the properties.
      */
     interface com::sun::star::beans::XPropertySet;
 
-    //=========================================================================
 
     /** specifies whether the member is visible.
      */
     [property] boolean IsVisible;
 
-    //-------------------------------------------------------------------------
 
     /** specifies whether details for the member are shown.
      */
     [property] boolean ShowDetails;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the member's position in its hierarchy level if sorting
         is manual.
@@ -78,7 +71,6 @@ published service DataPilotSourceMember
     [optional, property] boolean Position;
 };
 
-//=============================================================================
 
 }; }; }; };
 

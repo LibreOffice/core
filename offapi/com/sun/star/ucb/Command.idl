@@ -22,23 +22,19 @@
 #include <com/sun/star/ucb/CommandInfo.idl>
 
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** contains a command.
 
     @see XCommandProcessor
 */
 published struct Command
 {
-    //-------------------------------------------------------------------------
     /** contains the name of the command.
     */
     string Name;
 
-    //-------------------------------------------------------------------------
     /** contains an implementation specific handle for the command.
 
         <p>It must be <code>-1</code> if the implementation has no handle.
@@ -46,14 +42,12 @@ published struct Command
     */
     long Handle;
 
-    //-------------------------------------------------------------------------
     /** contains the argument of the command
     */
     any Argument;
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

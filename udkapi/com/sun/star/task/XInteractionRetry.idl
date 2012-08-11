@@ -22,11 +22,9 @@
 #include <com/sun/star/task/XInteractionContinuation.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module task {
 
-//=============================================================================
 
 // DocMerge from xml: interface com::sun::star::task::XInteractionRetry
 /** An interaction continuation specifing to try to re-execute the process
@@ -36,7 +34,6 @@ published interface XInteractionRetry: com::sun::star::task::XInteractionContinu
 {
 };
 
-//=============================================================================
 
 }; }; }; };
 

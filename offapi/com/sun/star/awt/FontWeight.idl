@@ -20,11 +20,9 @@
 #define __com_sun_star_awt_FontWeight_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module awt {
 
-//=============================================================================
 
 /** These values are used to specify whether a font is thin or bold.
 
@@ -32,61 +30,51 @@
  */
 published constants FontWeight
 {
-    //-------------------------------------------------------------------------
 
     /** The font weight is not specified/known.
      */
     const float DONTKNOW = 0.000000;
 
-    //-------------------------------------------------------------------------
 
     /** specifies a 50% font weight.
      */
     const float THIN = 50.000000;
 
-    //-------------------------------------------------------------------------
 
     /** specifies a 60% font weight.
      */
     const float ULTRALIGHT = 60.000000;
 
-    //-------------------------------------------------------------------------
 
     /** specifies a 75% font weight.
      */
     const float LIGHT = 75.000000;
 
-    //-------------------------------------------------------------------------
 
     /** specifies a 90% font weight.
      */
     const float SEMILIGHT = 90.000000;
 
-    //-------------------------------------------------------------------------
 
     /** specifies a normal font weight.
      */
     const float NORMAL = 100.000000;
 
-    //-------------------------------------------------------------------------
 
     /** specifies a 110% font weight.
      */
     const float SEMIBOLD = 110.000000;
 
-    //-------------------------------------------------------------------------
 
     /** specifies a 150% font weight.
      */
     const float BOLD = 150.000000;
 
-    //-------------------------------------------------------------------------
 
     /** specifies a 175% font weight.
      */
     const float ULTRABOLD = 175.000000;
 
-    //-------------------------------------------------------------------------
 
     /** specifies a 200% font weight.
      */
@@ -94,7 +82,6 @@ published constants FontWeight
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

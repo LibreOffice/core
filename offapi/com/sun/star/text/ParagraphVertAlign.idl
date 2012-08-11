@@ -20,42 +20,34 @@
 #define __com_sun_star_text_ParagraphVertAlign_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module text {
 
-//=============================================================================
 
 /** These enumeration values are used to specify the vertical alignment of paragraphs.
  */
 published constants ParagraphVertAlign
 {
-    //-------------------------------------------------------------------------
     /** In automatic mode, horizontal text is aligned to the baseline. The same applies to
      text that is rotated 90&deg;. Text that is rotated 270 &deg; is aligned to the center.
      */
     const short AUTOMATIC = 0;
-    //-------------------------------------------------------------------------
     /** The text is aligned to the baseline.
      */
     const short BASELINE = 1;
-    //-------------------------------------------------------------------------
     /** The text is aligned to the top.
      */
     const short TOP = 2;
 
-    //-------------------------------------------------------------------------
     /** The text is aligned to the center.
      */
     const short CENTER = 3;
 
-    //-------------------------------------------------------------------------
     /** The text is aligned to bottom.
      */
     const short BOTTOM = 4;
 };
 
-//=============================================================================
 
 }; }; }; };
 #endif

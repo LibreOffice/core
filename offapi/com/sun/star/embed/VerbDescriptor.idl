@@ -20,27 +20,22 @@
 #define __com_sun_star_embed_VerbDescriptor_idl__
 
 
-//============================================================================
 
  module com {  module sun {  module star {  module embed {
 
-//============================================================================
 
 /** describes a verb.
  */
 published struct VerbDescriptor
 {
-    //------------------------------------------------------------------------
     /** specifies the id of the verb.
      */
     long VerbID;
 
-     //------------------------------------------------------------------------
     /** specifies the name of the verb.
      */
     string VerbName;
 
-     //------------------------------------------------------------------------
     /** specifies the flags that are set for the verb.
 
         <p>
@@ -49,7 +44,6 @@ published struct VerbDescriptor
      */
     long VerbFlags;
 
-     //------------------------------------------------------------------------
     /** specifies the attributes of the verb.
 
         <p>
@@ -60,7 +54,6 @@ published struct VerbDescriptor
 
 };
 
-//============================================================================
 
 }; }; }; };
 

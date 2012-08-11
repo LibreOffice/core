@@ -33,11 +33,9 @@
 #include <com/sun/star/document/XLinkTargetSupplier.idl>
 
 
-//=============================================================================
 
 module com {   module sun {   module star {   module document {
 
-//=============================================================================
 
 /** This service is implemented by objects inside a document object model that
     can be the target of a link inside a document
@@ -51,7 +49,6 @@ published service LinkTarget
      */
     [optional] interface com::sun::star::document::XLinkTargetSupplier;
 
-    //-------------------------------------------------------------------------
     /** contains a human readable name for this object that could be displayed in a user
         interface.
      */
@@ -59,7 +56,6 @@ published service LinkTarget
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

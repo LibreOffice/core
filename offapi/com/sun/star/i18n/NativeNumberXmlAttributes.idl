@@ -22,11 +22,9 @@
 
 #include <com/sun/star/lang/Locale.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module i18n {
 
-//=============================================================================
 
 /**
     Attributes describing a native number mode for a specific locale,
@@ -54,7 +52,6 @@ published struct NativeNumberXmlAttributes
 
 };
 
-//=============================================================================
 }; }; }; };
 
 #endif

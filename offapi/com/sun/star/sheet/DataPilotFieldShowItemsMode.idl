@@ -20,11 +20,9 @@
 #ifndef __com_sun_star_sheet_DataPilotFieldShowItemsMode_idl__
 #define __com_sun_star_sheet_DataPilotFieldShowItemsMode_idl__
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** These constants select different types of showing a selection of items.
 
@@ -33,13 +31,11 @@ module com {  module sun {  module star {  module sheet {
  */
 constants DataPilotFieldShowItemsMode
 {
-    //-------------------------------------------------------------------------
 
     /** The first items are shown.
      */
     const long FROM_TOP = 0;
 
-    //-------------------------------------------------------------------------
 
     /** The last items are shown.
     */
@@ -48,7 +44,6 @@ constants DataPilotFieldShowItemsMode
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -20,11 +20,9 @@
 #define __com_sun_star_registry_XImplementationRegistration2_idl__
 
 #include <com/sun/star/registry/XImplementationRegistration.idl>
-//=============================================================================
 
  module com {  module sun {  module star {  module registry {
 
-//=============================================================================
 
 /** extends the functionality of <type scope="com::sun::star::registry">XImplementationRegistration</type>. It can be useful to specify a complete Url to a component but register the components name only (library or jar name).
 
@@ -32,7 +30,6 @@
  */
 interface XImplementationRegistration2: com::sun::star::registry::XImplementationRegistration
 {
-    //-------------------------------------------------------------------------
 
     /** registers a component which provides one or more implementations.
 
@@ -54,7 +51,6 @@ interface XImplementationRegistration2: com::sun::star::registry::XImplementatio
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -25,11 +25,9 @@
 #include <com/sun/star/beans/XPropertySet.idl>
 #include <com/sun/star/io/XActiveDataSink.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {   module packages {
 
-//=============================================================================
 
 /**This service represents a stream contained within a Package. Instances of
 this class can only be constructed by the implementation of the Package

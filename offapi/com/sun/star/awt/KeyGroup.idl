@@ -20,11 +20,9 @@
 #define __com_sun_star_awt_KeyGroup_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module awt {
 
-//=============================================================================
 
 /** These values are used to specify functional groups of keys.
 
@@ -32,37 +30,31 @@
  */
 published constants KeyGroup
 {
-    //-------------------------------------------------------------------------
 
     /** specifies a numeric key.
      */
     const short NUM = 256;
 
-    //-------------------------------------------------------------------------
 
     /** specifies an alphabetic key.
      */
     const short ALPHA = 512;
 
-    //-------------------------------------------------------------------------
 
     /** specifies a function key.
      */
     const short FKEYS = 768;
 
-    //-------------------------------------------------------------------------
 
     /** specifies a cursor key.
      */
     const short CURSOR = 1024;
 
-    //-------------------------------------------------------------------------
 
     /** specifies other keys.
      */
     const short MISC = 1280;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the group mask.
      */
@@ -70,7 +62,6 @@ published constants KeyGroup
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

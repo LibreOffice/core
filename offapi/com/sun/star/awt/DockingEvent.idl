@@ -24,35 +24,29 @@
 #include <com/sun/star/awt/Rectangle.idl>
 #include <com/sun/star/awt/Point.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module awt {
 
-//=============================================================================
 
 /** specifies a docking event.
  */
 struct DockingEvent: com::sun::star::lang::EventObject
 {
-    //-------------------------------------------------------------------------
 
     /** specifies the current tracking rectangle
      */
     com::sun::star::awt::Rectangle TrackingRectangle;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the current mouse position in frame coordinates
      */
     com::sun::star::awt::Point MousePos;
 
-    //-------------------------------------------------------------------------
 
     /** specifies if the layout should be adjusted immediately
      */
     boolean bLiveMode;
 
-    //-------------------------------------------------------------------------
 
     /** specifies if the docking procedure is interactive which means that
         the user is currently dragging the window to a new position
@@ -63,7 +57,6 @@ struct DockingEvent: com::sun::star::lang::EventObject
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

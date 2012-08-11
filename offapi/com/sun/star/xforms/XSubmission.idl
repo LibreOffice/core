@@ -25,10 +25,8 @@
 #include <com/sun/star/container/XNamed.idl>
 #include <com/sun/star/form/submission/XSubmission.idl>
 
-//=============================================================================
 module com {  module sun {  module star {  module xforms {
 
-//-----------------------------------------------------------------------------
 /** specifies a submission object, associated with an <type>XModel</type>
 */
 interface XSubmission
@@ -53,7 +51,6 @@ interface XSubmission
     interface com::sun::star::form::submission::XSubmission;
 };
 
-//=============================================================================
 
 }; }; }; };
 

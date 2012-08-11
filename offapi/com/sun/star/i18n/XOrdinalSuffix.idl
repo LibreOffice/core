@@ -31,11 +31,9 @@
 
 #include <com/sun/star/lang/Locale.idl>
 
-//============================================================================
 
 module com { module sun { module star { module i18n {
 
-//============================================================================
 
 /** provides access to locale specific ordinal suffix systems.
 
@@ -50,7 +48,6 @@ module com { module sun { module star { module i18n {
 
 interface XOrdinalSuffix : com::sun::star::uno::XInterface
 {
-    //------------------------------------------------------------------------
     /** Returns all the possible ordinal suffixes for the number.
 
         This method will provide "<b>st</b>", "<b>nd</b>", "<b>rd</b>",
@@ -66,9 +63,7 @@ interface XOrdinalSuffix : com::sun::star::uno::XInterface
     sequence< string > getOrdinalSuffix( [in] long nNumber, [in] com::sun::star::lang::Locale aLocale );
 };
 
-//============================================================================
 }; }; }; };
-//============================================================================
 
 #endif
 

@@ -30,11 +30,9 @@
 #include <com/sun/star/beans/XPropertyStateChangeListener.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module beans {
 
-//=============================================================================
 
 /** makes it possible to query information about the state of
     one or more properties.
@@ -49,7 +47,6 @@ module com {  module sun {  module star {  module beans {
  */
 published interface XPropertyState: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** @returns
                 the state of the property.
@@ -63,7 +60,6 @@ published interface XPropertyState: com::sun::star::uno::XInterface
     com::sun::star::beans::PropertyState getPropertyState( [in] string PropertyName )
             raises( com::sun::star::beans::UnknownPropertyException );
 
-    //-------------------------------------------------------------------------
 
     /** @returns
             a sequence of the states of the properties which are specified
@@ -82,7 +78,6 @@ published interface XPropertyState: com::sun::star::uno::XInterface
             [in] sequence<string> aPropertyName )
         raises( com::sun::star::beans::UnknownPropertyException );
 
-    //-------------------------------------------------------------------------
 
     /** Sets the property to default value.
 
@@ -101,7 +96,6 @@ published interface XPropertyState: com::sun::star::uno::XInterface
     void setPropertyToDefault( [in] string PropertyName )
             raises( com::sun::star::beans::UnknownPropertyException );
 
-    //-------------------------------------------------------------------------
 
     /** @returns
             the default value of the property with the name PropertyName.
@@ -125,7 +119,6 @@ published interface XPropertyState: com::sun::star::uno::XInterface
                     com::sun::star::lang::WrappedTargetException );
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -22,11 +22,9 @@
 #include <com/sun/star/configuration/HierarchyElement.idl>
 #include <com/sun/star/container/XChild.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module configuration {
 
-//=============================================================================
 /** provides information about a predefined element contained in a
  heterogeneous group of elements within a hierarchy.
 
@@ -68,7 +66,6 @@ published service GroupElement
     interface com::sun::star::container::XChild;
 };
 
-//=============================================================================
 
 }; }; }; };
 

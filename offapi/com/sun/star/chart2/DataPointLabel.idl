@@ -59,7 +59,6 @@ struct DataPointLabel
     boolean                     ShowLegendSymbol;
 };
 
-//=============================================================================
 
 
 } ; // chart2

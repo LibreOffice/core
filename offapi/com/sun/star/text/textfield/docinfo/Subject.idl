@@ -31,12 +31,10 @@
 
 #include <com/sun/star/text/TextField.idl>
 
-//=============================================================================
 
 module com { module sun { module star {
     module text { module textfield { module docinfo {
 
-//=============================================================================
 /** specifies service of a text field that provides the subject that is contained
     in the document information.
     @see com::sun::star::text::TextField
@@ -58,7 +56,6 @@ published service Subject
     [property]boolean IsFixed;
 };
 
-//=============================================================================
 
 }; }; }; }; }; };
 

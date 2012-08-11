@@ -29,11 +29,9 @@
 #ifndef __com_sun_star_sheet_FillDateMode_idl__
 #define __com_sun_star_sheet_FillDateMode_idl__
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** used to specify how an arithmetic date series is calculated.
 
@@ -41,26 +39,22 @@ module com {  module sun {  module star {  module sheet {
  */
 published enum FillDateMode
 {
-    //-------------------------------------------------------------------------
 
     /** for every new value a single day is added.
      */
     FILL_DATE_DAY,
 
-    //-------------------------------------------------------------------------
 
     /** for every new value a single day is added, but Saturdays and
         Sundays are skipped.
      */
     FILL_DATE_WEEKDAY,
 
-    //-------------------------------------------------------------------------
 
     /** for every new value one month is added (day keeps unchanged).
      */
     FILL_DATE_MONTH,
 
-    //-------------------------------------------------------------------------
 
     /** for every new value one year is added (day and month keep unchanged).
      */
@@ -68,7 +62,6 @@ published enum FillDateMode
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

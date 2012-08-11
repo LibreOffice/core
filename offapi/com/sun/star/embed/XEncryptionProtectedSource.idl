@@ -22,16 +22,13 @@
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/io/IOException.idl>
 
-//============================================================================
 
  module com {  module sun {  module star {  module embed {
 
-//============================================================================
 /** This interface allows to set a password for an object.
  */
 published interface XEncryptionProtectedSource: com::sun::star::uno::XInterface
 {
-    // -----------------------------------------------------------------------
     /** sets a password for the object.
 
     @param sPassword
@@ -43,7 +40,6 @@ published interface XEncryptionProtectedSource: com::sun::star::uno::XInterface
     void setEncryptionPassword( [in] string sPassword )
         raises( ::com::sun::star::io::IOException );
 
-    // -----------------------------------------------------------------------
     /** removes encryption from the object.
 
     @throws ::com::sun::star::io::IOException
@@ -53,7 +49,6 @@ published interface XEncryptionProtectedSource: com::sun::star::uno::XInterface
         raises( ::com::sun::star::io::IOException );
 };
 
-//============================================================================
 
 }; }; }; };
 

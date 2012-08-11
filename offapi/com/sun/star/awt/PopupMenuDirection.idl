@@ -29,11 +29,9 @@
 #define __com_sun_star_awt_PopupMenuDirection_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module awt {
 
-//=============================================================================
 
 /** These values are used to specify the direction in which
     a pop-up menu will grow.
@@ -42,43 +40,36 @@
  */
 published constants PopupMenuDirection
 {
-    //-------------------------------------------------------------------------
 
     /** @deprecated
      */
     const short DEFAULT = 0;
 
-    //-------------------------------------------------------------------------
 
     /** @deprecated
      */
     const short DOWN = 1;
 
-    //-------------------------------------------------------------------------
 
     /** opens on execute in a default direction.
      */
     const short EXECUTE_DEFAULT = 0;
 
-    //-------------------------------------------------------------------------
 
     /** opens on execute downwards.
      */
     const short EXECUTE_DOWN = 1;
 
-    //-------------------------------------------------------------------------
 
     /** opens on execute upwards.
      */
     const short EXECUTE_UP = 2;
 
-    //-------------------------------------------------------------------------
 
     /** opens on execute to the left.
      */
     const short EXECUTE_LEFT = 4;
 
-    //-------------------------------------------------------------------------
 
     /** opens on execute to the right.
      */
@@ -86,7 +77,6 @@ published constants PopupMenuDirection
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -21,11 +21,9 @@
 
 #include <com/sun/star/container/XNameContainer.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module script {
 
-//=============================================================================
 
 /** Interface representing a library and provides access to its modules
 
@@ -33,14 +31,12 @@
  */
 published interface XStarBasicAccess: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** returns
         the library container giving access to the libraries stored in a document
         or basic library file.
      */
     com::sun::star::container::XNameContainer getLibraryContainer();
 
-    //-------------------------------------------------------------------------
     /**
         Creates an empty library. This method can be called alternatively to
         accessing directly the NameContainer returned by getLibraryContainer.
@@ -52,7 +48,6 @@ published interface XStarBasicAccess: com::sun::star::uno::XInterface
                         [in] string ExternalSourceURL, [in] string LinkTargetURL )
         raises( com::sun::star::container::ElementExistException );
 
-    //-------------------------------------------------------------------------
     /**
         Adds a module to an existing (e.g., created by createLibrary) library.
         By using this method together with createLibrary the caller does not have
@@ -65,7 +60,6 @@ published interface XStarBasicAccess: com::sun::star::uno::XInterface
                     [in] string Language, [in] string Source )
         raises( com::sun::star::container::NoSuchElementException );
 
-    //-------------------------------------------------------------------------
     /**
         Adds an old style basic dialog (SI controls) to an existing (e.g., created
         by createLibrary) library.
@@ -81,7 +75,6 @@ published interface XStarBasicAccess: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

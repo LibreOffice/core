@@ -39,17 +39,14 @@
 
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module text {
 
-//=============================================================================
 
 /** .
  */
 interface XTextConvert : com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
         /** moves the paragraphs from Start to End into a text frame.
 
@@ -94,7 +91,6 @@ interface XTextConvert : com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

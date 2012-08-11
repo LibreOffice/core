@@ -25,23 +25,19 @@
 #include <com/sun/star/linguistic2/XSpellAlternatives.idl>
 #include <com/sun/star/beans/PropertyValues.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module linguistic2 {
 
-//=============================================================================
 /** @deprecated
 */
 published interface XSpellChecker1 : com::sun::star::linguistic2::XSupportedLanguages
 {
-    //-------------------------------------------------------------------------
     boolean isValid(
             [in] string aWord,
             [in] short nLanguage,
             [in] com::sun::star::beans::PropertyValues aProperties )
         raises( com::sun::star::lang::IllegalArgumentException );
 
-    //-------------------------------------------------------------------------
     com::sun::star::linguistic2::XSpellAlternatives spell(
             [in] string aWord,
             [in] short nLanguage,
@@ -50,7 +46,6 @@ published interface XSpellChecker1 : com::sun::star::linguistic2::XSupportedLang
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

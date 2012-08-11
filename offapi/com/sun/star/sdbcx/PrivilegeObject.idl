@@ -31,19 +31,16 @@ published constants PrivilegeObject
     /** indicates a table.
      */
     const long TABLE    = 0;
-    //-------------------------------------------------------------------------
 
     /** indicates a view.
      */
     const long VIEW     = 1;
-    //-------------------------------------------------------------------------
 
     /** indicates a column of a table.
      */
     const long COLUMN   = 2;
 };
 
-//=============================================================================
 
 }; }; }; };
 

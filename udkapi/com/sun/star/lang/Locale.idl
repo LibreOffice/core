@@ -22,11 +22,9 @@
 #include <com/sun/star/uno/XInterface.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module lang {
 
-//=============================================================================
 
 // DocMerge from xml: struct com::sun::star::lang::Locale
 /** object represents a specific geographical, political, or cultural region.
@@ -70,7 +68,6 @@ published struct Locale
      */
     string Language;
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: field com::sun::star::lang::Locale::Country
     /** specifies an <strong>ISO Country Code.</strong>
@@ -87,7 +84,6 @@ published struct Locale
      */
     string Country;
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: field com::sun::star::lang::Locale::Variant
     /** contains a variant of the locale; codes are vendor and
@@ -104,7 +100,6 @@ published struct Locale
 };
 
 
-//=============================================================================
 
 }; }; }; };
 

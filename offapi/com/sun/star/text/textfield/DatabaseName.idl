@@ -23,11 +23,9 @@
 
 #include <com/sun/star/text/DependentTextField.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module text { module textfield {
 
-//=============================================================================
 /** specifies service of text field that displays the name of a database.
     @see com::sun::star::text::TextField
 
@@ -65,7 +63,6 @@ published service DatabaseName
 
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

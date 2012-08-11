@@ -31,11 +31,9 @@
 #include <com/sun/star/resource/XStringResourcePersistence.idl>
 
 
-//=============================================================================
 
 module com { module sun { module star { module resource {
 
-//=============================================================================
 /**
     Extends <type>XStringResourcePersistence</type> by methods to handle an
     associated location.
@@ -81,7 +79,6 @@ interface XStringResourceWithLocation: com::sun::star::resource::XStringResource
         raises( ::com::sun::star::lang::IllegalArgumentException );
 };
 
-//=============================================================================
 
 }; }; }; };
 

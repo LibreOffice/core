@@ -24,11 +24,9 @@
 #include <com/sun/star/style/PageProperties.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module style {
 
-//=============================================================================
 
 /** contributes common properties of page styles.
 
@@ -37,19 +35,16 @@ module com {  module sun {  module star {  module style {
  */
 published service PageStyle
 {
-    //-------------------------------------------------------------------------
 
     /** provides common functionality for styles.
      */
     service com::sun::star::style::Style;
-        //-------------------------------------------------------------------------
 
     /** gives access to the pages properties.
      */
     service com::sun::star::style::PageProperties;
 };
 
-//=============================================================================
 
 }; }; }; };
 

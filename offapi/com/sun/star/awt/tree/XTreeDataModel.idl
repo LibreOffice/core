@@ -33,11 +33,9 @@
 #include <com/sun/star/lang/XComponent.idl>
 #include <com/sun/star/awt/tree/XTreeNode.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module awt {  module tree {
 
-//=============================================================================
 
 /** An instance of this interface is used by the <type>TreeControl</type> to
     retrieve the hierarchical outline data that is displayed in the actual control.
@@ -75,7 +73,6 @@ interface XTreeDataModel : ::com::sun::star::lang::XComponent
 
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

@@ -23,11 +23,9 @@
 #include <com/sun/star/linguistic2/XDictionaryEntry.idl>
 
 
-//=============================================================================
 
 module com { module sun { module star { module linguistic2 {
 
-//=============================================================================
 /** represents a dictionary event.
 
     <P>This type of event is used by a dictionary to inform
@@ -41,7 +39,6 @@ module com { module sun { module star { module linguistic2 {
 */
 published struct DictionaryEvent : com::sun::star::lang::EventObject
 {
-    //-------------------------------------------------------------------------
     /** is the type of event.
 
          <p>This must be the value of a single flag. No combinations are
@@ -51,7 +48,6 @@ published struct DictionaryEvent : com::sun::star::lang::EventObject
     */
     short nEvent;
 
-    //-------------------------------------------------------------------------
     /** is the affected dictionary entry (if any).
 
          <p>It must be set if an entry was
@@ -63,7 +59,6 @@ published struct DictionaryEvent : com::sun::star::lang::EventObject
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

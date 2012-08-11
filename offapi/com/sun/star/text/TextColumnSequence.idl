@@ -21,16 +21,13 @@
 
 #include <com/sun/star/text/TextColumn.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module text {
 
-//=============================================================================
 /**
 */
 published typedef sequence<TextColumn> TextColumnSequence;
 
-//=============================================================================
 
 }; }; }; };
 

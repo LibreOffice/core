@@ -24,11 +24,9 @@
 #include <com/sun/star/lang/EventObject.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module form {
 
-//=============================================================================
 
 /** can be implemented to listen and probably veto actions to be performed on components.
 
@@ -41,7 +39,6 @@
  */
 published interface XApproveActionListener: com::sun::star::lang::XEventListener
 {
-    //-------------------------------------------------------------------------
 
     /** is invoked when an action is performed.
 
@@ -55,7 +52,6 @@ published interface XApproveActionListener: com::sun::star::lang::XEventListener
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

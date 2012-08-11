@@ -37,7 +37,6 @@
 
 module com {  module sun {  module star {  module ui {
 
-//-----------------------------------------------
 /** provides read/write access to an accelerator configuration set.
 
     <p>
@@ -65,7 +64,6 @@ module com {  module sun {  module star {  module ui {
 */
 interface XAcceleratorConfiguration
 {
-    //-------------------------------------------
     /** return the list of all key events, which
         are available at this configuration set.
 
@@ -85,7 +83,6 @@ interface XAcceleratorConfiguration
       */
     sequence< com::sun::star::awt::KeyEvent > getAllKeyEvents();
 
-    //-------------------------------------------
     /** return the registered command for the specified key event.
 
         <p>
@@ -110,7 +107,6 @@ interface XAcceleratorConfiguration
     string getCommandByKeyEvent( [in] com::sun::star::awt::KeyEvent aKeyEvent )
         raises(com::sun::star::container::NoSuchElementException);
 
-    //-------------------------------------------
     /** modify or create a key - command - binding.
 
         <p>
@@ -149,7 +145,6 @@ interface XAcceleratorConfiguration
                       [in] string                        sCommand )
         raises(com::sun::star::lang::IllegalArgumentException);
 
-    //-------------------------------------------
     /** remove a key-command-binding from this configuration set.
 
         @param  aKeyEvent
@@ -161,7 +156,6 @@ interface XAcceleratorConfiguration
     void removeKeyEvent( [in] com::sun::star::awt::KeyEvent aKeyEvent )
         raises(com::sun::star::container::NoSuchElementException);
 
-    //-------------------------------------------
     /** optimized access to the relation "command-key" instead
         of "key-command" which is provided normally by this interface.
 
@@ -190,7 +184,6 @@ interface XAcceleratorConfiguration
         raises(com::sun::star::lang::IllegalArgumentException   ,
                com::sun::star::container::NoSuchElementException);
 
-    //-------------------------------------------
     /** optimized function to map a list of commands to a corresponding
         list of key events.
 
@@ -230,7 +223,6 @@ interface XAcceleratorConfiguration
     sequence< any > getPreferredKeyEventsForCommandList( [in] sequence< string > lCommandList )
         raises(com::sun::star::lang::IllegalArgumentException);
 
-    //-------------------------------------------
     /** search for an key-command-binding inside this configuration set,
         where the specified command is used.
 
@@ -260,14 +252,12 @@ interface XAcceleratorConfiguration
         raises(com::sun::star::lang::IllegalArgumentException   ,
                com::sun::star::container::NoSuchElementException);
 
-    //-------------------------------------------
     /** specifies a persistence interface which supports to
         load/store accelerator configuration data to a storage
         and to retrieve information about the current state.
      */
     interface com::sun::star::ui::XUIConfigurationPersistence;
 
-    //-------------------------------------------
     /** connects this configuration to a new storage
         which must be used further on subsequent calls of
         <type scope="com::sun::star::util::">XConfigurationPersistence.load()</type>
@@ -275,7 +265,6 @@ interface XAcceleratorConfiguration
      */
     interface com::sun::star::ui::XUIConfigurationStorage;
 
-    //-------------------------------------------
     /** supports to notify other implementations about
         changes of this accelerator configuration.
      */

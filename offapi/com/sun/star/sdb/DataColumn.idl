@@ -57,7 +57,6 @@ published service DataColumn
     [optional, readonly, property] any OriginalValue;
 };
 
-//=============================================================================
 
 }; }; }; };
 

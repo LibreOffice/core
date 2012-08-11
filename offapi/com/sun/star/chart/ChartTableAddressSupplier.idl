@@ -21,11 +21,9 @@
 
 #include <com/sun/star/chart/ChartSeriesAddress.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module chart {
 
-//=============================================================================
 /** This is a helper service for access to table Address to
     cell ranges of the container document of a chart.
 
@@ -34,7 +32,6 @@ module com { module sun { module star { module chart {
 */
 published service ChartTableAddressSupplier
 {
-    //-------------------------------------------------------------------------
     /** contains the address to the cells containing
         the names of the categories.
 
@@ -42,7 +39,6 @@ published service ChartTableAddressSupplier
     */
     [property] string CategoriesRangeAddress;
 
-    //-------------------------------------------------------------------------
     /** contains the addresses to the elements of a series.
         This sequence should contain one element for each series in the chart.
 
@@ -50,12 +46,10 @@ published service ChartTableAddressSupplier
     */
     [property] sequence< com::sun::star::chart::ChartSeriesAddress > SeriesAddresses;
 
-    //-------------------------------------------------------------------------
     /** contains the address to the main title.
     */
     [optional, property] string MainTitleAddress;
 
-    //-------------------------------------------------------------------------
     /** contains the address to the sub title.
 
     <!-- Dennis: Does "Address" have a capital "A" or lowercase? -->
@@ -63,7 +57,6 @@ published service ChartTableAddressSupplier
     [optional, property] string SubTitleAddress;
 };
 
-//=============================================================================
 
 }; }; }; };
 

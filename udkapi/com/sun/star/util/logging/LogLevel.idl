@@ -20,11 +20,9 @@
 #ifndef __com_sun_star_util_logging_Level_idl__
 #define __com_sun_star_util_logging_Level_idl__
 
-//=============================================================================
 
 module com { module sun { module star { module util { module logging {
 
-//=============================================================================
 
 /** deprecated API - use <type scope="com::sun::star::logging">LogLevel</type> instead
 
@@ -44,7 +42,6 @@ published constants LogLevel
     const long  ALL       = -0x80000000;
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

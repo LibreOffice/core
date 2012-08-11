@@ -24,25 +24,21 @@
 #include <com/sun/star/io/DataTransferEvent.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module io {
 
-//=============================================================================
 
 // DocMerge from xml: interface com::sun::star::io::XDataTransferEventListener
 /** is used to receive callbacks from an importer or exporter.
  */
 published interface XDataTransferEventListener: com::sun::star::lang::XEventListener
 {
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::io::XDataTransferEventListener::finished
     /** is called when an import or export process has finished.
      */
     [oneway] void finished( [in] com::sun::star::io::DataTransferEvent aEvent );
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::io::XDataTransferEventListener::cancelled
     /** is called when an import or export process has been cancelled.
@@ -51,7 +47,6 @@ published interface XDataTransferEventListener: com::sun::star::lang::XEventList
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

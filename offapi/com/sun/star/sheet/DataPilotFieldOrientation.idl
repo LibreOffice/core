@@ -20,41 +20,34 @@
 #ifndef __com_sun_star_sheet_DataPilotFieldOrientation_idl__
 #define __com_sun_star_sheet_DataPilotFieldOrientation_idl__
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** used to specify where a field in a data pilot table is laid out.
  */
 published enum DataPilotFieldOrientation
 {
-    //-------------------------------------------------------------------------
 
     /** the field is not used in the table.
      */
     HIDDEN,
 
-    //-------------------------------------------------------------------------
 
     /** the field is used as a column field.
      */
     COLUMN,
 
-    //-------------------------------------------------------------------------
 
     /** the field is used as a row field.
      */
     ROW,
 
-    //-------------------------------------------------------------------------
 
     /** the field is used as a page field.
      */
     PAGE,
 
-    //-------------------------------------------------------------------------
 
     /** the field is used as a data field.
      */
@@ -62,7 +55,6 @@ published enum DataPilotFieldOrientation
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

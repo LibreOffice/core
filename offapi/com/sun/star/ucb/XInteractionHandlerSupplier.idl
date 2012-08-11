@@ -22,11 +22,9 @@
 #include <com/sun/star/uno/XInterface.idl>
 
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** This interface should be implemented by an internal
     <type>XCommandEnvironment</type> that can not supply an
     <type scope="com::sun::star::task">XInteractionHandler</type>, but instead
@@ -35,7 +33,6 @@ module com { module sun { module star { module ucb {
 */
 published interface XInteractionHandlerSupplier: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** Returns whether an
         <type scope="com::sun::star::task">XInteractionHandler</type> can be
         supplied.
@@ -48,7 +45,6 @@ published interface XInteractionHandlerSupplier: com::sun::star::uno::XInterface
     boolean hasInteractionHandler();
 };
 
-//=============================================================================
 
 }; }; }; };
 

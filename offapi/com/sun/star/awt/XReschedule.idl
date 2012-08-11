@@ -23,11 +23,9 @@
 #include <com/sun/star/uno/XInterface.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module awt {
 
-//=============================================================================
 
 /** The <type>XReschedule</type> interface can be used to give control to the main
     thread to allow events processing.

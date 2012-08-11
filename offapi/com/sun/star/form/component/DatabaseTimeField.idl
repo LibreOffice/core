@@ -24,11 +24,9 @@
 #include <com/sun/star/form/DataAwareControlModel.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module form {  module component {
 
-//=============================================================================
 
 /** This service specifies a data-aware field for inputting a time value.
  */
@@ -40,7 +38,6 @@ published service DatabaseTimeField
 
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

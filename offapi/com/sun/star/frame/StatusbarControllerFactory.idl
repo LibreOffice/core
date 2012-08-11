@@ -23,11 +23,9 @@
 #include <com/sun/star/lang/XMultiComponentFactory.idl>
 #include <com/sun/star/frame/XUIControllerRegistration.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module frame {
 
-//=============================================================================
 
 /** specifies a factory that creates instances of registered status bar
     controller.
@@ -73,7 +71,6 @@ service StatusbarControllerFactory
 
 }; }; }; };
 
-//=============================================================================
 
 #endif
 

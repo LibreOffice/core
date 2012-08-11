@@ -68,7 +68,6 @@ published service Query
     interface com::sun::star::sdbcx::XColumnsSupplier;
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -27,23 +27,19 @@
 #include <com/sun/star/lang/WrappedTargetException.idl>
 #include <com/sun/star/container/NoSuchElementException.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module script { module vba {
 
 interface XVBAModuleInfo
 {
-    //-------------------------------------------------------------------------
 
     com::sun::star::script::ModuleInfo getModuleInfo( [in] string ModuleName )
         raises( com::sun::star::container::NoSuchElementException,
                 com::sun::star::lang::WrappedTargetException );
 
-    //-------------------------------------------------------------------------
 
     boolean hasModuleInfo( [in] string ModuleName );
 
-    //-------------------------------------------------------------------------
 
     void insertModuleInfo( [in] string ModuleName,
                            [in] com::sun::star::script::ModuleInfo ModuleInfo )
@@ -51,18 +47,15 @@ interface XVBAModuleInfo
                 com::sun::star::container::ElementExistException,
                 com::sun::star::lang::WrappedTargetException );
 
-    //-------------------------------------------------------------------------
 
     void removeModuleInfo( [in] string ModuleName )
         raises( com::sun::star::container::NoSuchElementException,
                 com::sun::star::lang::WrappedTargetException );
 
-    //-------------------------------------------------------------------------
 };
 
 }; }; }; }; };
 
-//=============================================================================
 
 #endif
 

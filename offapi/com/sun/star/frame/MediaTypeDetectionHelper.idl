@@ -30,11 +30,9 @@
 
 #include <com/sun/star/util/XStringMapping.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module frame {
 
-//=============================================================================
 /** provides for mapping a given sequence of content identifier strings
     to a sequence of respective media (mime) types
 
@@ -47,7 +45,6 @@
 published service MediaTypeDetectionHelper
     : com::sun::star::util::XStringMapping;
 
-//=============================================================================
 
 }; }; }; };
 

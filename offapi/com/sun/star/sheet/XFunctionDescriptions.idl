@@ -24,11 +24,9 @@
 #include <com/sun/star/beans/PropertyValue.idl>
 #include <com/sun/star/lang/IllegalArgumentException.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** provides access to the property sequence of a function description
     via function index or identifier.
@@ -42,7 +40,6 @@ module com {  module sun {  module star {  module sheet {
  */
 published interface XFunctionDescriptions: com::sun::star::container::XIndexAccess
 {
-    //-------------------------------------------------------------------------
 
     /** finds a function description by the identifier of the function.
 
@@ -59,7 +56,6 @@ published interface XFunctionDescriptions: com::sun::star::container::XIndexAcce
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

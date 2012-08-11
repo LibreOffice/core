@@ -35,11 +35,9 @@
 #include <com/sun/star/frame/XFrame.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module frame {
 
-//=============================================================================
 /** This is the main interface of a desktop service.
 
     <p>
@@ -53,7 +51,6 @@
  */
 published interface XDesktop: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** tries to terminate the desktop.
 
         <p>
@@ -75,7 +72,6 @@ published interface XDesktop: com::sun::star::uno::XInterface
      */
     boolean terminate();
 
-    //-------------------------------------------------------------------------
     /** registers an event listener to the desktop, which is called
         when the desktop is queried to terminate, and when it really
         terminates.
@@ -87,7 +83,6 @@ published interface XDesktop: com::sun::star::uno::XInterface
      */
     [oneway] void addTerminateListener( [in] XTerminateListener Listener );
 
-    //-------------------------------------------------------------------------
     /** unregisters an event listener for termination events.
 
         @param Listener
@@ -97,7 +92,6 @@ published interface XDesktop: com::sun::star::uno::XInterface
      */
     [oneway] void removeTerminateListener( [in] XTerminateListener Listener );
 
-    //-------------------------------------------------------------------------
     /** provides read access to collection of all currently loaded components
         inside the frame tree
 
@@ -117,7 +111,6 @@ published interface XDesktop: com::sun::star::uno::XInterface
      */
     com::sun::star::container::XEnumerationAccess getComponents();
 
-    //-------------------------------------------------------------------------
     /** provides read access to the component inside the tree which has the UI focus
 
         <p>
@@ -133,7 +126,6 @@ published interface XDesktop: com::sun::star::uno::XInterface
      */
     com::sun::star::lang::XComponent getCurrentComponent();
 
-    //-------------------------------------------------------------------------
     /** provides read access to the frame which contains the current component
 
         @returns
@@ -145,7 +137,6 @@ published interface XDesktop: com::sun::star::uno::XInterface
     XFrame getCurrentFrame();
 };
 
-//=============================================================================
 
 }; }; }; };
 

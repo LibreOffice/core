@@ -20,35 +20,29 @@
 #ifndef __com_sun_star_table_CellContentType_idl__
 #define __com_sun_star_table_CellContentType_idl__
 
-//=============================================================================
 
 module com {  module sun {  module star {  module table {
 
-//=============================================================================
 
 /** is used to determine the type of contents in a cell.
  */
 published enum CellContentType
 {
-    //-------------------------------------------------------------------------
 
     /** cell is empty.
      */
     EMPTY,
 
-    //-------------------------------------------------------------------------
 
     /** cell contains a constant value.
      */
     VALUE,
 
-    //-------------------------------------------------------------------------
 
     /** cell contains text.
      */
     TEXT,
 
-    //-------------------------------------------------------------------------
 
     /** cell contains a formula.
      */
@@ -56,7 +50,6 @@ published enum CellContentType
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -31,41 +31,34 @@
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/awt/XActionListener.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module awt {
 
-//=============================================================================
 
 /** gives access to the text and formatting of a fixed hyperlink field.
  */
 interface XFixedHyperlink: com::sun::star::uno::XInterface
 {
-        //-------------------------------------------------------------------------
 
         /** sets the text of the control.
          */
         [oneway] void setText( [in] string Text );
 
-        //-------------------------------------------------------------------------
 
         /** returns the text of the control.
          */
         string getText();
 
-        //-------------------------------------------------------------------------
 
         /** sets the url of the control.
          */
         [oneway] void setURL( [in] string URL );
 
-        //-------------------------------------------------------------------------
 
         /** returns the url of the control.
          */
         string getURL();
 
-    //-------------------------------------------------------------------------
 
     /** sets the alignment of the text in the control.
 
@@ -77,19 +70,16 @@ interface XFixedHyperlink: com::sun::star::uno::XInterface
      */
     [oneway] void setAlignment( [in] short nAlign );
 
-    //-------------------------------------------------------------------------
 
     /** returns the alignment of the text in the control.
      */
     short getAlignment();
 
-        //-------------------------------------------------------------------------
 
         /** registers an event handler for click action event.
          */
         [oneway] void addActionListener( [in] com::sun::star::awt::XActionListener l );
 
-        //-------------------------------------------------------------------------
 
         /** unregisters an event handler for click action event.
          */
@@ -97,7 +87,6 @@ interface XFixedHyperlink: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

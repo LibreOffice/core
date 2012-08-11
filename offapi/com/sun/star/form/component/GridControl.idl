@@ -51,11 +51,9 @@
 #include <com/sun/star/awt/FontDescriptor.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module form {  module component {
 
-//=============================================================================
 
 /** specifies a model for a control which can display form data in a table-like way.
 
@@ -118,7 +116,6 @@ published service GridControl
     */
     interface com::sun::star::form::XReset;
 
-    //-------------------------------------------------------------------------
 
     /** returns the border style of the control.
 
@@ -130,7 +127,6 @@ published service GridControl
      */
     [property] short Border;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the color of the border, if present
 
@@ -141,19 +137,16 @@ published service GridControl
      */
     [optional, property] long BorderColor;
 
-    //-------------------------------------------------------------------------
 
     /** determines whether the control is enabled or disabled.
      */
     [property] boolean Enabled;
 
-    //-------------------------------------------------------------------------
 
     /** contains the font attributes of the text in the control.
      */
     [property] com::sun::star::awt::FontDescriptor FontDescriptor;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the height of a row of the grid.
 
@@ -164,13 +157,11 @@ published service GridControl
      */
     [property] long RowHeight;
 
-    //-------------------------------------------------------------------------
 
     /** determines whether the control can be reached by the tabulator key.
      */
     [property] boolean Tabstop;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the text color (RGB) of the control.
      */
@@ -178,7 +169,6 @@ published service GridControl
 
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

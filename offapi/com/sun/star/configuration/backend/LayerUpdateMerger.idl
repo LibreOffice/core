@@ -22,11 +22,9 @@
 #include <com/sun/star/lang/XInitialization.idl>
 #include <com/sun/star/configuration/backend/XUpdateHandler.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module configuration { module backend {
 
-//=============================================================================
 
 /**
     applies updates to a configuration layer.
@@ -43,13 +41,11 @@ module com { module sun { module star { module configuration { module backend {
 */
 published service LayerUpdateMerger
 {
-    //-------------------------------------------------------------------------
 
     /** accepts events describing the changes.
       */
     interface com::sun::star::configuration::backend::XUpdateHandler ;
 
-    //-------------------------------------------------------------------------
 
     /** allows initializing layer data source and target.
 
@@ -78,10 +74,8 @@ published service LayerUpdateMerger
       */
     interface com::sun::star::lang::XInitialization ;
 
-    //-------------------------------------------------------------------------
 } ;
 
-//=============================================================================
 
 } ; } ; } ; } ; } ;
 

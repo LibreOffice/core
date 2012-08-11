@@ -20,7 +20,6 @@
 #ifndef __com_sun_star_script_ModuleType_idl__
 #define __com_sun_star_script_ModuleType_idl__
 
-//=============================================================================
 
 module com {  module sun {  module star { module script {
 
@@ -33,7 +32,6 @@ published constants ModuleType
     const long DOCUMENT = 4;
 };
 
-//=============================================================================
 
 }; }; }; };
 

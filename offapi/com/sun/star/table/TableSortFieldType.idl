@@ -20,11 +20,9 @@
 #define __com_sun_star_table_TableSortFieldType_idl__
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module table {
 
-//=============================================================================
 
 /** enumeration used to specify the type of contents in a sort field
     (row/column) of a table.
@@ -33,24 +31,20 @@ module com {  module sun {  module star {  module table {
  */
 published enum TableSortFieldType
 {
-    //-------------------------------------------------------------------------
     /** type is determined automatically.
      */
     AUTOMATIC,
 
-    //-------------------------------------------------------------------------
     /** sort field contains numerical data.
      */
     NUMERIC,
 
-    //-------------------------------------------------------------------------
     /** sort field contains text data.
      */
     ALPHANUMERIC
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

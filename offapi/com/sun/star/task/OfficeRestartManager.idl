@@ -20,13 +20,11 @@
 #ifndef __com_sun_star_task_OfficeRestartManager_idl__
 #define __com_sun_star_task_OfficeRestartManager_idl__
 
-//=============================================================================
 
 module com { module sun { module star { module task {
 
 interface XRestartManager;
 
-//=============================================================================
 
 /** This singleton is intended to allow to restart the office asynchronously.
 
@@ -34,11 +32,9 @@ interface XRestartManager;
  */
 singleton OfficeRestartManager : XRestartManager;
 
-//=============================================================================
 
 }; }; }; };
 
-//=============================================================================
 
 
 #endif

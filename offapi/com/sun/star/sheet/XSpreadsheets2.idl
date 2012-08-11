@@ -30,11 +30,9 @@
 #include <com/sun/star/lang/IllegalArgumentException.idl>
 #include <com/sun/star/lang/IndexOutOfBoundsException.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** extends XSpreadsheets interface to import external sheets.
 
@@ -68,7 +66,6 @@ interface XSpreadsheets2: com::sun::star::sheet::XSpreadsheets
                     com::sun::star::lang::IndexOutOfBoundsException);
 };
 
-//=============================================================================
 
 }; }; }; };
 

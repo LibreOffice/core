@@ -23,17 +23,14 @@
 #include <com/sun/star/sheet/XDataPilotField.idl>
 #include <com/sun/star/container/XNameAccess.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** contains the grouping information of a <type>DataPilotField</type>.
  */
 published struct DataPilotFieldGroupInfo
 {
-    //-------------------------------------------------------------------------
 
     /** specifies whether the start value for the grouping is taken
         automatically from the minimum of the item values.
@@ -48,7 +45,6 @@ published struct DataPilotFieldGroupInfo
      */
     boolean HasAutoStart;
 
-    //-------------------------------------------------------------------------
 
     /** specifies whether the end value for the grouping is taken
         automatically from the maximum of the item values.
@@ -63,7 +59,6 @@ published struct DataPilotFieldGroupInfo
      */
     boolean HasAutoEnd;
 
-    //-------------------------------------------------------------------------
 
     /** specifies whether date values are grouped by ranges of days.
 
@@ -83,21 +78,18 @@ published struct DataPilotFieldGroupInfo
      */
     boolean HasDateValues;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the start value for the grouping if <member>HasAutoStart
         </member> is set to <FALSE/>.
      */
     double Start;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the end value for the grouping if <member>HasAutoEnd
         </member> is set to <FALSE/>.
      */
     double End;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the size of the ranges for numeric or day grouping.
 
@@ -109,7 +101,6 @@ published struct DataPilotFieldGroupInfo
      */
     double Step;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the grouping of the date values.
 
@@ -117,7 +108,6 @@ published struct DataPilotFieldGroupInfo
      */
     long GroupBy;
 
-    //-------------------------------------------------------------------------
 
     /** contains the source DataPilot field grouping is based on. Will be
         <NULL/> if this field is not grouped or contains numeric grouping.
@@ -126,7 +116,6 @@ published struct DataPilotFieldGroupInfo
      */
     XDataPilotField SourceField;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the named groups in this field if there are some.
 
@@ -144,7 +133,6 @@ published struct DataPilotFieldGroupInfo
     com::sun::star::container::XNameAccess Groups;
 };
 
-//=============================================================================
 
 }; }; }; };
 

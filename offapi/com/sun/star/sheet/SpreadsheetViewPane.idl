@@ -26,11 +26,9 @@
 #include <com/sun/star/view/XControlAccess.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** represents a single pane in a view of a spreadsheet document.
  */
@@ -49,7 +47,6 @@ published service SpreadsheetViewPane
     [optional] interface com::sun::star::view::XControlAccess;
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -23,11 +23,9 @@
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/script/provider/ScriptProvider.idl>
 
-//===========================================================================
 
 module com { module sun { module star { module script { module provider {
 
-//===========================================================================
 /**
     This service provides a means of browsing and invoking scripts in
     a single language.
@@ -36,7 +34,6 @@ service LanguageScriptProvider {
     service ::com::sun::star::script::provider::ScriptProvider;
 };
 
-//===========================================================================
 }; }; }; }; }; // ::com::sun::star::script::provider
 
 #endif

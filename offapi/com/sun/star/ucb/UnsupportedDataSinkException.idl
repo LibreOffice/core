@@ -32,11 +32,9 @@
 #include <com/sun/star/uno/Exception.idl>
 #include <com/sun/star/uno/XInterface.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** This exception is used to indicate that the requested type of data sink
     is not supported.
 
@@ -49,13 +47,11 @@ module com { module sun { module star { module ucb {
 */
 published exception UnsupportedDataSinkException : com::sun::star::uno::Exception
 {
-    //-------------------------------------------------------------------------
     /** contains the data sink that is not supported.
      */
     com::sun::star::uno::XInterface Sink;
 };
 
-//=============================================================================
 
 }; }; }; };
 

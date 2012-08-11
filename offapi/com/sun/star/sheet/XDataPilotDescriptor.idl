@@ -25,11 +25,9 @@
 #include <com/sun/star/sheet/XSheetFilterDescriptor.idl>
 #include <com/sun/star/container/XIndexAccess.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** provides access to the layout settings of a data pilot table.
 
@@ -42,45 +40,38 @@ module com {  module sun {  module star {  module sheet {
  */
 published interface XDataPilotDescriptor: com::sun::star::container::XNamed
 {
-    //-------------------------------------------------------------------------
 
     /** returns an additional string stored in the data pilot table.
      */
     string getTag();
 
-    //-------------------------------------------------------------------------
 
     /** sets an additional string stored in the data pilot table.
      */
     void setTag( [in] string aTag );
 
-    //-------------------------------------------------------------------------
 
     /** returns the cell range containing the data for the data pilot table.
      */
     com::sun::star::table::CellRangeAddress getSourceRange();
 
-    //-------------------------------------------------------------------------
 
     /** sets the cell range containing the data for the data pilot table.
      */
     void setSourceRange(
             [in] com::sun::star::table::CellRangeAddress aSourceRange );
 
-    //-------------------------------------------------------------------------
 
     /** returns the filter descriptor specifying which data from the
         source cell range are used for the data pilot table.
      */
     com::sun::star::sheet::XSheetFilterDescriptor getFilterDescriptor();
 
-    //-------------------------------------------------------------------------
 
     /** returns the collection of all the data pilot fields.
      */
     com::sun::star::container::XIndexAccess getDataPilotFields();
 
-    //-------------------------------------------------------------------------
 
     /** returns the collection of the data pilot fields used as column fields.
 
@@ -88,7 +79,6 @@ published interface XDataPilotDescriptor: com::sun::star::container::XNamed
      */
     com::sun::star::container::XIndexAccess getColumnFields();
 
-    //-------------------------------------------------------------------------
 
     /** returns the collection of the data pilot fields used as row fields.
 
@@ -96,7 +86,6 @@ published interface XDataPilotDescriptor: com::sun::star::container::XNamed
      */
     com::sun::star::container::XIndexAccess getRowFields();
 
-    //-------------------------------------------------------------------------
 
     /** returns the collection of the data pilot fields used as page fields.
 
@@ -104,7 +93,6 @@ published interface XDataPilotDescriptor: com::sun::star::container::XNamed
      */
     com::sun::star::container::XIndexAccess getPageFields();
 
-    //-------------------------------------------------------------------------
 
     /** returns the collection of the data pilot fields used as data fields.
 
@@ -112,7 +100,6 @@ published interface XDataPilotDescriptor: com::sun::star::container::XNamed
      */
     com::sun::star::container::XIndexAccess getDataFields();
 
-    //-------------------------------------------------------------------------
 
     /** returns the collection of the data pilot fields not used as
         column, row, page, or data fields.
@@ -123,7 +110,6 @@ published interface XDataPilotDescriptor: com::sun::star::container::XNamed
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

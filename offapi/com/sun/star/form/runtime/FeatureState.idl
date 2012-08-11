@@ -19,11 +19,9 @@
 #ifndef __com_sun_star_form_runtime_FeatureState_idl__
 #define __com_sun_star_form_runtime_FeatureState_idl__
 
-//=============================================================================
 
 module com { module sun { module star { module form { module runtime {
 
-//=============================================================================
 
 /** encapsulates the state of a FormFeature
 
@@ -44,11 +42,9 @@ struct FeatureState
     any State;
 };
 
-//=============================================================================
 
 }; }; }; }; };
 
-//=============================================================================
 
 #endif
 

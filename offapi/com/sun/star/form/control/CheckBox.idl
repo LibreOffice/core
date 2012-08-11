@@ -23,11 +23,9 @@
 #include <com/sun/star/awt/UnoControlCheckBox.idl>
 #include <com/sun/star/form/XBoundControl.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module form {  module control {
 
-//=============================================================================
 
 /** describes a check box control which can (but not necessarily has to) be bound to a database field.
 
@@ -44,7 +42,6 @@ published service CheckBox
     interface com::sun::star::form::XBoundControl;
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

@@ -20,11 +20,9 @@
 #define __com_sun_star_text_UserDataPart_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module text {
 
-//=============================================================================
 
 // DocMerge from idl: constants com::sun::star::text::UserDataPart
 /** These constants define which part of the user data is displayed in a
@@ -32,105 +30,90 @@
  */
 published constants UserDataPart
 {
-    //-------------------------------------------------------------------------
 
     // DocMerge from idl: value com::sun::star::text::UserDataPart::COMPANY
     /** The field shows the company name.
      */
     const short COMPANY = 0;
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from idl: value com::sun::star::text::UserDataPart::FIRSTNAME
     /** The field shows the first name.
      */
     const short FIRSTNAME = 1;
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from idl: value com::sun::star::text::UserDataPart::NAME
     /** The field shows the name.
      */
     const short NAME = 2;
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from idl: value com::sun::star::text::UserDataPart::SHORTCUT
     /** The field shows the initials.
      */
     const short SHORTCUT = 3;
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from idl: value com::sun::star::text::UserDataPart::STREET
     /** The field shows the street.
      */
     const short STREET = 4;
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from idl: value com::sun::star::text::UserDataPart::COUNTRY
     /** The field shows the country.
      */
     const short COUNTRY = 5;
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from idl: value com::sun::star::text::UserDataPart::ZIP
     /** The field shows the zip code.
      */
     const short ZIP = 6;
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from idl: value com::sun::star::text::UserDataPart::CITY
     /** The field shows the city.
      */
     const short CITY = 7;
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from idl: value com::sun::star::text::UserDataPart::TITLE
     /** The field shows the title.
      */
     const short TITLE = 8;
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from idl: value com::sun::star::text::UserDataPart::POSITION
     /** The field shows the position.
      */
     const short POSITION = 9;
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from idl: value com::sun::star::text::UserDataPart::PHONE_PRIVATE
     /** The field shows the no of the private phone.
      */
     const short PHONE_PRIVATE = 10;
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from idl: value com::sun::star::text::UserDataPart::PHONE_COMPANY
     /** The field shows the number of the business phone.
      */
     const short PHONE_COMPANY = 11;
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from idl: value com::sun::star::text::UserDataPart::FAX
     /** The field shows the fax no.
      */
     const short FAX = 12;
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from idl: value com::sun::star::text::UserDataPart::EMAIL
     /** The field shows the e-Mail.
      */
     const short EMAIL = 13;
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from idl: value com::sun::star::text::UserDataPart::STATE
     /** The field shows the state.
@@ -139,7 +122,6 @@ published constants UserDataPart
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -29,11 +29,9 @@
 #ifndef __com_sun_star_sheet_DataPilotFieldGroupBy_idl__
 #define __com_sun_star_sheet_DataPilotFieldGroupBy_idl__
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** These constants select different types for grouping members of a DataPilot
     field by date or time.
@@ -42,7 +40,6 @@ module com {  module sun {  module star {  module sheet {
  */
 published constants DataPilotFieldGroupBy
 {
-    // -----------------------------------------------------------------------
     /** Groups all members of a DataPilot field containing a date/time value
         by their current value for seconds.
 
@@ -53,7 +50,6 @@ published constants DataPilotFieldGroupBy
      */
     const long SECONDS = 1;
 
-    // -----------------------------------------------------------------------
     /** Groups all members of a DataPilot field containing a date/time value
         by their current value for minutes.
 
@@ -64,7 +60,6 @@ published constants DataPilotFieldGroupBy
      */
     const long MINUTES = 2;
 
-    // -----------------------------------------------------------------------
     /** Groups all members of a DataPilot field containing a date/time value
         by their current value for hours.
 
@@ -75,7 +70,6 @@ published constants DataPilotFieldGroupBy
      */
     const long HOURS = 4;
 
-    // -----------------------------------------------------------------------
     /** Groups all members of a DataPilot field containing a date/time value
         by their calendar day, or by ranges of days.
 
@@ -96,7 +90,6 @@ published constants DataPilotFieldGroupBy
      */
     const long DAYS = 8;
 
-    // -----------------------------------------------------------------------
     /** Groups all members of a DataPilot field containing a date/time value
         by their month.
 
@@ -107,7 +100,6 @@ published constants DataPilotFieldGroupBy
      */
     const long MONTHS = 16;
 
-    // -----------------------------------------------------------------------
     /** Groups all members of a DataPilot field containing a date/time value
         by their quarter.
 
@@ -119,7 +111,6 @@ published constants DataPilotFieldGroupBy
      */
     const long QUARTERS = 32;
 
-    // -----------------------------------------------------------------------
     /** Groups all members of a DataPilot field containing a date/time value
         by their year.
 
@@ -131,7 +122,6 @@ published constants DataPilotFieldGroupBy
     const long YEARS = 64;
 };
 
-//=============================================================================
 
 }; }; }; };
 

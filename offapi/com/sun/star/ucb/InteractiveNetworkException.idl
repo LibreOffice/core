@@ -22,11 +22,9 @@
 #include <com/sun/star/task/ClassifiedInteractionRequest.idl>
 
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** An error related to network operations.
 
     <p> Various meaningful errors are derived from this exception. </p>
@@ -35,7 +33,6 @@ published exception InteractiveNetworkException: com::sun::star::task::Classifie
 {
 };
 
-//=============================================================================
 
 }; }; }; };
 

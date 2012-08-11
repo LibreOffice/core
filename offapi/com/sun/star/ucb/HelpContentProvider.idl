@@ -22,11 +22,9 @@
 #include <com/sun/star/ucb/XContentProvider.idl>
 
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** The Help Content Provider (HCP) implements a <type>ContentProvider</type>
     for the <Type>UniversalContentBroker</type> (UCB).
 
@@ -38,7 +36,6 @@ module com { module sun { module star { module ucb {
 
 published service HelpContentProvider
 {
-    //-------------------------------------------------------------------------
     /** provides an object representing either a directory object allowing
         searching or a help content object providing access to the help content.
 
@@ -49,7 +46,6 @@ published service HelpContentProvider
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

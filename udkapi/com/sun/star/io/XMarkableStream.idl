@@ -26,18 +26,15 @@
 #include <com/sun/star/lang/IllegalArgumentException.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module io {
 
-//=============================================================================
 
 // DocMerge from xml: interface com::sun::star::io::XMarkableStream
 /** makes it possible to set and remove seekable marks to a stream.
  */
 published interface XMarkableStream: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::io::XMarkableStream::createMark
     /** creates a mark of the current postion and returns an identifier to it.
@@ -45,7 +42,6 @@ published interface XMarkableStream: com::sun::star::uno::XInterface
     long createMark()
             raises( com::sun::star::io::IOException );
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::io::XMarkableStream::deleteMark
     /** deletes the mark that you previously created with
@@ -60,7 +56,6 @@ published interface XMarkableStream: com::sun::star::uno::XInterface
             raises( com::sun::star::io::IOException,
                     com::sun::star::lang::IllegalArgumentException );
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::io::XMarkableStream::jumpToMark
     /** jumps to a previously created mark.
@@ -69,7 +64,6 @@ published interface XMarkableStream: com::sun::star::uno::XInterface
             raises( com::sun::star::io::IOException,
                     com::sun::star::lang::IllegalArgumentException );
 
-    //-------------------------------------------------------------------------
 
     /** jumps to the furthest position of the stream.
         <p> In the inputstream case, a subsequent read call returns
@@ -80,7 +74,6 @@ published interface XMarkableStream: com::sun::star::uno::XInterface
     void jumpToFurthest()
             raises( com::sun::star::io::IOException );
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from idl: method com::sun::star::io::XMarkableStream::offsetToMark
     /** @returns
@@ -103,7 +96,6 @@ published interface XMarkableStream: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

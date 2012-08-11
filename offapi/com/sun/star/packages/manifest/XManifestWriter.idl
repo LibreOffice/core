@@ -22,7 +22,6 @@
 #include <com/sun/star/beans/PropertyValue.idl>
 #include <com/sun/star/io/XOutputStream.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {   module packages {  module manifest {
 
@@ -31,7 +30,6 @@ module com {  module sun {  module star {   module packages {  module manifest {
     and the sequence of manifest entries to be written passed as parameters.
     Each manifest entry is represented by a sequence of PropertyValues.*/
 
-//=============================================================================
 published interface XManifestWriter: com::sun::star::uno::XInterface
 {
     /** Writes the supplied sequence of manifest entries to the supplied

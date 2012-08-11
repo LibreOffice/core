@@ -22,7 +22,6 @@
 
 module com { module sun { module star { module sheet {
 
-//============================================================================
 
 /** specifies in which sub-area a cell is positioned within a DataPilot table.
 
@@ -34,34 +33,28 @@ module com { module sun { module star { module sheet {
  */
 constants DataPilotTablePositionType
 {
-    //------------------------------------------------------------------------
 
     /** indicates that the specified cell is not in the DataPilot table. */
     const long NOT_IN_TABLE = 0;
 
-    //------------------------------------------------------------------------
 
     /** indicates that the specified cell is within the result area. */
     const long RESULT = 1;
 
-    //------------------------------------------------------------------------
 
     /** indicates that the specified cell is within the row header area. */
     const long ROW_HEADER = 2;
 
-    //------------------------------------------------------------------------
 
     /** indicates that the specified cell is within the column header area. */
     const long COLUMN_HEADER = 3;
 
-    //------------------------------------------------------------------------
 
     /** indicates that the specified cell is within the table but in areas
         other than the result or header areas. */
     const long OTHER = 4;
 };
 
-//============================================================================
 
 }; }; }; };
 

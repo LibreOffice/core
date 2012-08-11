@@ -20,11 +20,9 @@
 #define __com_sun_star_text_LineNumberingSettings_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module text {
 
-//=============================================================================
 
 /** provides access to the settings of the line numbering.
     @deprecated
@@ -33,63 +31,53 @@
  */
 published service LineNumberingSettings
 {
-    //-------------------------------------------------------------------------
 
     /** If <TRUE/>, line numbering is used.
      */
     [property] boolean On;
 
-    //-------------------------------------------------------------------------
 
     /** The name of the character style that is used for the line number.
      */
     [property] string CharStyle;
 
-    //-------------------------------------------------------------------------
 
     /** If <TRUE/>, empty lines are counted.
      */
     [property] boolean CountEmptyLines;
 
-    //-------------------------------------------------------------------------
 
     /** If <TRUE/>, lines in frames are included in counting.
      */
     [property] boolean CountLinesInFrames;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the distance between the line number and the start or
         end of the text area.
      */
     [property] long Distance;
 
-    //-------------------------------------------------------------------------
 
     /** Line numbers are shown on every <var>LineInterval</var>th line.
      */
     [property] short LineInterval;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the symbol that is shown between the line numbers.
      */
     [property] string LineSeparator;
 
-    //-------------------------------------------------------------------------
 
     /** The line separator is shown every <var>SeparatorLineDistance</var>th line.
      */
     [property] short SeparatorLineDistance;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the position of the line number
         (constant <type scope="com::sun::star::style::">LineNumberPosition</type> - left/right/inside/outside).
      */
     [property] short NumberPosition;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the type of the numbering.
      */
@@ -97,7 +85,6 @@ published service LineNumberingSettings
 
 };
 
-//=============================================================================
 
 }; }; }; };
 #endif

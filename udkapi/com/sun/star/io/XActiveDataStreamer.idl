@@ -24,11 +24,9 @@
 #include <com/sun/star/io/XStream.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module io {
 
-//=============================================================================
 
 // DocMerge from xml: interface com::sun::star::io::XActiveDataStreamer
 /** makes it possible to read and write the corresponding stream.
@@ -39,7 +37,6 @@ module com {  module sun {  module star {  module io {
  */
 published interface XActiveDataStreamer: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::io::XActiveDataStreamer::setStream
     /** plugs the input/output stream.
@@ -50,7 +47,6 @@ published interface XActiveDataStreamer: com::sun::star::uno::XInterface
      */
     void setStream( [in] com::sun::star::io::XStream aStream );
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from idl: method com::sun::star::io::XActiveDataStreamer::getStream
     /** @returns
@@ -60,7 +56,6 @@ published interface XActiveDataStreamer: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

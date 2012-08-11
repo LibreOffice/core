@@ -36,7 +36,6 @@ constants TexturingMode
        */
     const byte NONE=0;
 
-    //-------------------------------------------------------------------------
 
     /** Clamp texture coordinate.<p>
 
@@ -47,7 +46,6 @@ constants TexturingMode
        */
     const byte CLAMP=1;
 
-    //-------------------------------------------------------------------------
 
     /** Repeat the texture.<p>
 

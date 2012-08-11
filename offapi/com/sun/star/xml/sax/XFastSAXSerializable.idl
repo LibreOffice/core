@@ -36,7 +36,6 @@
 
 module com { module sun { module star { module xml { module sax {
 
-//=============================================================================
 /** serializes a DOM tree by generating FastSAX events.
 
     <p>
@@ -48,7 +47,6 @@ module com { module sun { module star { module xml { module sax {
 interface XFastSAXSerializable
 {
 
-    //-------------------------------------------------------------------------
     /** serializes an object (e.g. a DOM tree) that represents an XML document
         by generating fast SAX events.
 

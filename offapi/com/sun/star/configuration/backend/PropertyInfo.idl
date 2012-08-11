@@ -21,18 +21,15 @@
 #define __com_sun_star_configuration_backend_PropertyInfo_idl__
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module configuration {  module backend {
 
-//=============================================================================
 
 /** This structure contains all the information related to a property
     @see XLayerContentDescriber
 */
 struct PropertyInfo
 {
-    //-------------------------------------------------------------------------
     /** The full name of the Property
      *  for eg. org.openoffice.Inet/Settings/ooInetHTTPProxyName
     */
@@ -54,7 +51,6 @@ struct PropertyInfo
 
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

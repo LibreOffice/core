@@ -31,17 +31,14 @@
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/awt/Point.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module drawing {
 
-//=============================================================================
 
 /** The XCustomShapeHandle
  */
 interface XCustomShapeHandle: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** is getting the actual handle position
 
@@ -56,7 +53,6 @@ interface XCustomShapeHandle: com::sun::star::uno::XInterface
 
  };
 
-//=============================================================================
 
 }; }; }; };
 

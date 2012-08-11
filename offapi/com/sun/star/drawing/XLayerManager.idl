@@ -28,11 +28,9 @@
 #include <com/sun/star/drawing/XShape.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module drawing {
 
-//=============================================================================
 
 /** This interface makes it possible to access and manage the
     <type>Layer</type>s of a document.
@@ -41,7 +39,6 @@
  */
 published interface XLayerManager: com::sun::star::container::XIndexAccess
 {
-    //-------------------------------------------------------------------------
 
     /** creates a new <type>Layer</type>
 
@@ -53,7 +50,6 @@ published interface XLayerManager: com::sun::star::container::XIndexAccess
      */
     com::sun::star::drawing::XLayer insertNewByIndex( [in] long nIndex );
 
-    //-------------------------------------------------------------------------
 
     /** removes a <type>Layer</type> and all <type>Shape</type>s on
         this <type>Layer</type>.
@@ -64,7 +60,6 @@ published interface XLayerManager: com::sun::star::container::XIndexAccess
     void remove( [in] com::sun::star::drawing::XLayer xLayer )
             raises( com::sun::star::container::NoSuchElementException );
 
-    //-------------------------------------------------------------------------
 
     /** attaches a <type>Shape</type> to the given <type>Layer</type>.
 
@@ -77,7 +72,6 @@ published interface XLayerManager: com::sun::star::container::XIndexAccess
     void attachShapeToLayer( [in] com::sun::star::drawing::XShape xShape,
              [in] com::sun::star::drawing::XLayer xLayer );
 
-    //-------------------------------------------------------------------------
 
     /** queries the <type>Layer</type> that a <type>Shape</type> is attached to
 
@@ -93,7 +87,6 @@ published interface XLayerManager: com::sun::star::container::XIndexAccess
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

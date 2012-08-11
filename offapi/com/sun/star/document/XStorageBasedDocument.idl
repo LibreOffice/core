@@ -36,17 +36,14 @@
 #include <com/sun/star/lang/IllegalArgumentException.idl>
 #include <com/sun/star/beans/PropertyValue.idl>
 
-//============================================================================
 
  module com {  module sun {  module star {  module document {
 
-//============================================================================
 /** allows to initialize document with a storage, to store document to
     a storage, and to set document to be based on provided storage.
  */
 interface XStorageBasedDocument: com::sun::star::uno::XInterface
 {
-    //------------------------------------------------------------------------
     /** lets the document load itself using provided storage.
      */
     void loadFromStorage(
@@ -57,7 +54,6 @@ interface XStorageBasedDocument: com::sun::star::uno::XInterface
                 ::com::sun::star::io::IOException,
                 ::com::sun::star::uno::Exception );
 
-    //------------------------------------------------------------------------
     /** lets the document store itself to the provided storage.
      */
     void storeToStorage(
@@ -67,7 +63,6 @@ interface XStorageBasedDocument: com::sun::star::uno::XInterface
                 ::com::sun::star::io::IOException,
                 ::com::sun::star::uno::Exception );
 
-    //------------------------------------------------------------------------
     /** allows to switch the document to the provided storage.
      */
     void switchToStorage( [in] ::com::sun::star::embed::XStorage xStorage )
@@ -76,27 +71,23 @@ interface XStorageBasedDocument: com::sun::star::uno::XInterface
                 ::com::sun::star::uno::Exception );
 
 
-    //------------------------------------------------------------------------
     /** allows to get the storage the document is based on.
      */
     ::com::sun::star::embed::XStorage getDocumentStorage()
         raises( ::com::sun::star::io::IOException,
                 ::com::sun::star::uno::Exception );
 
-    //------------------------------------------------------------------------
     /** allows to register a listener that will be notified when another
         storage is set to the document.
      */
     void addStorageChangeListener( [in] XStorageChangeListener xListener );
 
-    //------------------------------------------------------------------------
     /** allows to deregister the listener.
      */
     void removeStorageChangeListener( [in] XStorageChangeListener xListener );
 
 };
 
-//============================================================================
 
 }; }; }; };
 

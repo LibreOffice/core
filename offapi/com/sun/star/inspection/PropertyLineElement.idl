@@ -29,10 +29,8 @@
 #ifndef __com_sun_star_inspection_PropertyLineElement_idl__
 #define __com_sun_star_inspection_PropertyLineElement_idl__
 
-//=============================================================================
 module com {  module sun {  module star {  module inspection {
 
-//-----------------------------------------------------------------------------
 /** describes elements of a single line in an object inspector, used to represent a
     single property
 
@@ -54,7 +52,6 @@ constants PropertyLineElement
     const short All             = 0xFF;
 };
 
-//=============================================================================
 
 }; }; }; };
 

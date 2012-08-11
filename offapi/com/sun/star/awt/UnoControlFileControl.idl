@@ -22,11 +22,9 @@
 #include <com/sun/star/awt/UnoControlEdit.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module awt {
 
-//=============================================================================
 
 /** specifies a file control.
 
@@ -39,7 +37,6 @@ published service UnoControlFileControl
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

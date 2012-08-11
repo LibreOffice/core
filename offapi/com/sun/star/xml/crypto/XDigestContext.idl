@@ -27,11 +27,9 @@
 #include <com/sun/star/lang/DisposedException.idl>
 #endif
 
-//============================================================================
 
  module com {  module sun {  module star {  module xml { module crypto {
 
-//============================================================================
 /** This interface allows to generate the digest.
     <p>
     The algorithm to generate the digest is specified on object creation.
@@ -42,7 +40,6 @@
  */
 interface XDigestContext : com::sun::star::uno::XInterface
 {
-    //------------------------------------------------------------------------
     /** update the digest with the given data.
 
         @param aData
@@ -51,14 +48,12 @@ interface XDigestContext : com::sun::star::uno::XInterface
     void updateDigest( [in] sequence< byte > aData )
         raises( ::com::sun::star::lang::DisposedException );
 
-    //------------------------------------------------------------------------
     /** finalizes digest and disposes context.
      */
     sequence<byte> finalizeDigestAndDispose()
         raises( ::com::sun::star::lang::DisposedException );
 };
 
-//============================================================================
 
 }; }; }; }; };
 

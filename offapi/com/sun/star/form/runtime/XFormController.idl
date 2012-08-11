@@ -44,14 +44,12 @@
 #include <com/sun/star/lang/IllegalArgumentException.idl>
 #include <com/sun/star/form/runtime/XFilterController.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module form { module runtime {
 
 interface XFormOperations;
 interface XFormControllerContext;
 
-//=============================================================================
 
 /** specifies a component controlling the interaction between the user and form functionality.
 
@@ -366,11 +364,9 @@ interface XFormController
         raises ( ::com::sun::star::lang::IllegalArgumentException );
 };
 
-//=============================================================================
 
 }; }; }; }; };
 
-//=============================================================================
 
 #endif
 

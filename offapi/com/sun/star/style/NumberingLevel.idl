@@ -20,11 +20,9 @@
 #define __com_sun_star_style_NumberingLevel_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module style {
 
-//=============================================================================
 
 // DocMerge from xml: service com::sun::star::style::NumberingLevel
 /** These properties describe the numbering of a paragraph.
@@ -37,14 +35,12 @@
  */
 published service NumberingLevel
 {
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::style::NumberingLevel::NumberingType
     /** specifies the type of numbering.@see NumberingType
      */
     [property] short NumberingType;
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::style::NumberingLevel::ParentNumbering
     /** specifies the number of higher numbering levels that
@@ -52,49 +48,42 @@ published service NumberingLevel
      */
     [property] short ParentNumbering;
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::style::NumberingLevel::Prefix
     /** This prefix is inserted in front of the numbering symbol(s).
      */
     [property] string Prefix;
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::style::NumberingLevel::Suffix
     /** This suffix is inserted after the numbering symbol(s).
      */
     [property] string Suffix;
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::style::NumberingLevel::CharStyleName
     /** This is the name of the character style that is used for the symbol(s).
      */
     [property] string CharStyleName;
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::style::NumberingLevel::BulletId
     /** The bullet symbol with this code in the assigned font is used.
      */
     [property] short BulletId;
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::style::NumberingLevel::BulletFontName
     /** This is the name of the font that is used for the bullet.
      */
     [property] string BulletFontName;
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::style::NumberingLevel::GraphicURL
     /** This is the URL of a graphic file to use as a symbol.
      */
     [property] string GraphicURL;
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::style::NumberingLevel::StartWith
     /** This specifies the start value for the numbering.
@@ -103,7 +92,6 @@ published service NumberingLevel
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

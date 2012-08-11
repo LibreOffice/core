@@ -30,16 +30,13 @@
 
 #include <com/sun/star/awt/XWindow.idl>
 
-//============================================================================
 
  module com {  module sun {  module star {  module embed {
 
-//============================================================================
 /** provides access to a VCL window implementation.
  */
 published interface XWindowSupplier: com::sun::star::uno::XInterface
 {
-    //------------------------------------------------------------------------
     /** allows to get access to a VCL window implementation.
 
         @return
@@ -48,7 +45,6 @@ published interface XWindowSupplier: com::sun::star::uno::XInterface
     ::com::sun::star::awt::XWindow getWindow();
 };
 
-//============================================================================
 
 }; }; }; };
 

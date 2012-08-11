@@ -33,11 +33,9 @@
 #include <com/sun/star/drawing/RotationDescriptor.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module drawing {
 
-//=============================================================================
 
 /** This service is for a <type>ConnectorShape</type>, a specialized <type>Shape</type>,
     which can be connected to other <type>Shape</type>s or <type>GluePoint</type>s.
@@ -56,7 +54,6 @@ published service ConnectorShape
 
     service com::sun::star::drawing::RotationDescriptor;
 
-    //-------------------------------------------------------------------------
 
     /** this property either holds the shape that the start point of this
         connector is connected to, or is empty when the start point of the
@@ -64,14 +61,12 @@ published service ConnectorShape
     */
     [property] com::sun::star::drawing::XShape StartShape;
 
-    //-------------------------------------------------------------------------
 
     /** this property holds the index of the glue point the start point of
         this connector is glued on.
     */
     [property] long StartGluePointIndex;
 
-    //-------------------------------------------------------------------------
 
     /** this is the position of the connectors start point in 100th/mm. For
         unconnected start points you can get and set the position. For
@@ -79,7 +74,6 @@ published service ConnectorShape
     */
     [property] com::sun::star::awt::Point StartPosition;
 
-    //-------------------------------------------------------------------------
 
     /** this property either holds the shape that the end point of this
         connector is connected to, or is empty when the end point of the
@@ -87,14 +81,12 @@ published service ConnectorShape
     */
     [property] com::sun::star::drawing::XShape EndShape;
 
-    //-------------------------------------------------------------------------
 
     /** this property holds the index of the glue point the end point of
         this connector is glued on.
     */
     [property] com::sun::star::awt::Point EndPosition;
 
-    //-------------------------------------------------------------------------
 
     /** this is the position of the connectors end point in 100th/mm. For
         unconnected end points you can get and set the position. For
@@ -102,26 +94,22 @@ published service ConnectorShape
     */
     [property] long EndGluePointIndex;
 
-    //-------------------------------------------------------------------------
 
     /** This property contains the distance of line 1.
      */
     [property] long EdgeLine1Delta;
 
-    //-------------------------------------------------------------------------
 
     /** This property contains the distance of line 2.
      */
     [property] long EdgeLine2Delta;
 
-    //-------------------------------------------------------------------------
 
     /** This property contains the distance of line 3.
      */
     [property] long EdgeLine3Delta;
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -21,10 +21,8 @@
 
 #include <com/sun/star/sdb/XSQLQueryComposer.idl>
 
-//=============================================================================
  module com {  module sun {  module star {  module sdb {
 
-//=============================================================================
 
 /** is a factory for instances of service
     <type scope="com::sun::star::sdb">SQLQueryComposer</type>
@@ -40,7 +38,6 @@ published interface XSQLQueryComposerFactory: com::sun::star::uno::XInterface
     com::sun::star::sdb::XSQLQueryComposer createQueryComposer();
 };
 
-//=============================================================================
 
 }; }; }; };
 

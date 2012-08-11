@@ -34,11 +34,9 @@
 #include <com/sun/star/lang/NullPointerException.idl>
 #include <com/sun/star/configuration/backend/MalformedDataException.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module configuration { module backend {
 
-//=============================================================================
 
 /**
    describe the contents of a layer to an XLayerHandler object. The contents of
@@ -48,7 +46,6 @@ module com { module sun { module star { module configuration { module backend {
 */
 interface XLayerContentDescriber : ::com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /**
       describes the contents of the layer to an <type>XLayerHandler</type>.
@@ -73,10 +70,8 @@ interface XLayerContentDescriber : ::com::sun::star::uno::XInterface
                 com::sun::star::lang::WrappedTargetException,
                 MalformedDataException) ;
 
-    //-------------------------------------------------------------------------
 } ;
 
-//=============================================================================
 
 } ; } ; } ; } ; } ;
 #endif

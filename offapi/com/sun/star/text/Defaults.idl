@@ -27,11 +27,9 @@
 #include <com/sun/star/style/ParagraphPropertiesComplex.idl>
 #include <com/sun/star/beans/XPropertySet.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module text {
 
-//=============================================================================
 
 /** provides default settings of a text component for paragraph and
     character properties.
@@ -53,13 +51,11 @@ published service Defaults
 
     interface com::sun::star::beans::XPropertySet;
 
-    //-----------------------------------------------------------------------------
     /** default tab-distance to be used.
      */
     [property] long TabStopDistance;
 };
 
-//=============================================================================
 
 }; }; }; };
 

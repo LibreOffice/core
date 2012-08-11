@@ -29,11 +29,9 @@
 #define __com_sun_star_drawing_ColorMode_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module drawing {
 
-//=============================================================================
 
 // DocMerge from xml: enum com::sun::star::drawing::ColorMode
 /** The <type>ColorMode</type> defines the output style of colors
@@ -41,7 +39,6 @@
  */
 published enum ColorMode
 {
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: value com::sun::star::drawing::ColorMode::STANDARD
     /** the graphic is rendered in the default color style of the output
@@ -49,21 +46,18 @@ published enum ColorMode
      */
     STANDARD,
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: value com::sun::star::drawing::ColorMode::GREYS
     /** the graphic is rendered in grayscale on the output device,
      */
     GREYS,
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: value com::sun::star::drawing::ColorMode::MONO
     /** the graphic is rendered in black and white only,
      */
     MONO,
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: value com::sun::star::drawing::ColorMode::WATERMARK
     /** the graphic is rendered in a watermark like style,
@@ -72,7 +66,6 @@ published enum ColorMode
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

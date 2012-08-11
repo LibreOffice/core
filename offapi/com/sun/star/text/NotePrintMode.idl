@@ -20,11 +20,9 @@
 #define __com_sun_star_text_NotePrintMode_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module text {
 
-//=============================================================================
 
 // DocMerge from xml: enum com::sun::star::text::NotePrintMode
 /** enumeration values are used to define the printing of notes in a
@@ -32,28 +30,24 @@
  */
 published enum NotePrintMode
 {
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: value com::sun::star::text::NotePrintMode::NOT
     /** Notes are not printed.
      */
     NOT,
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: value com::sun::star::text::NotePrintMode::ONLY
     /** Only notes are printed.
      */
     ONLY,
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: value com::sun::star::text::NotePrintMode::DOC_END
     /** Notes are collected at the end of the document.
      */
     DOC_END,
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: value com::sun::star::text::NotePrintMode::PAGE_END
     /** Notes are collected at the end of a page and printed on an inserted page.
@@ -62,7 +56,6 @@ published enum NotePrintMode
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

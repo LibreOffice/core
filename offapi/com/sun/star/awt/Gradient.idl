@@ -24,71 +24,59 @@
 #include <com/sun/star/util/Color.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module awt {
 
-//=============================================================================
 
 /** describes a color dispersion within an area.
  */
 published struct Gradient
 {
-    //-------------------------------------------------------------------------
 
     /** specifies the style of the gradient.
      */
     com::sun::star::awt::GradientStyle Style;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the color at the start point of the gradient.
      */
     com::sun::star::util::Color StartColor;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the color at the end point of the gradient.
      */
     com::sun::star::util::Color EndColor;
 
-    //-------------------------------------------------------------------------
 
     /** angle of the gradient in 1/10 degree.
      */
     short Angle;
 
-    //-------------------------------------------------------------------------
 
     /** per cent of the total width where just the start color is used.
      */
     short Border;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the X-coordinate, where the gradient begins.
      */
     short XOffset;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the Y-coordinate, where the gradient begins.
      */
     short YOffset;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the intensity at the start point of the gradient.
      */
     short StartIntensity;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the intensity at the end point of the gradient.
      */
     short EndIntensity;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the number of steps of change color.
      */
@@ -96,7 +84,6 @@ published struct Gradient
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

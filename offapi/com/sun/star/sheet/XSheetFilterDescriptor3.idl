@@ -46,13 +46,11 @@ module com {  module sun {  module star {  module sheet {
  */
 interface XSheetFilterDescriptor3: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** returns the collection of filter fields.
      */
     sequence<TableFilterField3> getFilterFields3();
 
-    //-------------------------------------------------------------------------
 
     /** sets a new collection of filter fields.
      */

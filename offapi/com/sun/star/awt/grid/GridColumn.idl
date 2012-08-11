@@ -21,11 +21,9 @@
 
 #include <com/sun/star/awt/grid/XGridColumn.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module awt {  module grid {
 
-//=============================================================================
 
 /** Represents a column as used by the <type>DefaultGridColumnModel</type>
 
@@ -36,7 +34,6 @@ service GridColumn
     interface com::sun::star::awt::grid::XGridColumn;
 };
 
-//=============================================================================
 
 }; }; }; };};
 

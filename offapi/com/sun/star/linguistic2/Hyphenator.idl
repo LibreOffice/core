@@ -24,14 +24,12 @@
 #include <com/sun/star/lang/XServiceInfo.idl>
 #include <com/sun/star/lang/XServiceDisplayName.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module linguistic2 {
 
  published interface XHyphenator;
  published interface XLinguServiceEventBroadcaster;
 
-//=============================================================================
 /** offers hyphenation functionality.
 */
 published service Hyphenator
@@ -44,7 +42,6 @@ published service Hyphenator
     interface com::sun::star::lang::XServiceDisplayName;
 };
 
-//=============================================================================
 
 }; }; }; };
 

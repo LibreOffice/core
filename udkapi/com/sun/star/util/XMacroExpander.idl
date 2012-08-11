@@ -23,11 +23,9 @@
 #include <com/sun/star/lang/IllegalArgumentException.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module util {
 
-//=============================================================================
 
 /** Expands macro in expressions, i.e. substitudes macro names.
 
@@ -48,7 +46,6 @@ published interface XMacroExpander : com::sun::star::uno::XInterface
         raises (com::sun::star::lang::IllegalArgumentException);
 };
 
-//=============================================================================
 
 }; }; }; };
 

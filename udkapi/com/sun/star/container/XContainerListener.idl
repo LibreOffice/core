@@ -24,29 +24,24 @@
 #include <com/sun/star/container/ContainerEvent.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module container {
 
-//=============================================================================
 
 /** receives events when the content of the related container changes.
  */
 published interface XContainerListener: com::sun::star::lang::XEventListener
 {
-    //-------------------------------------------------------------------------
 
     /** is invoked when a container has inserted an element.
      */
     [oneway] void elementInserted( [in] com::sun::star::container::ContainerEvent Event );
 
-    //-------------------------------------------------------------------------
 
     /** is invoked when a container has removed an element.
      */
     [oneway] void elementRemoved( [in] com::sun::star::container::ContainerEvent Event );
 
-    //-------------------------------------------------------------------------
 
     /** is invoked when a container has replaced an element.
      */
@@ -54,7 +49,6 @@ published interface XContainerListener: com::sun::star::lang::XEventListener
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

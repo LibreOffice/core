@@ -39,11 +39,9 @@
 #include <com/sun/star/beans/PropertyValue.idl>
 #include <com/sun/star/beans/Pair.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module sdb { module application {
 
-//=============================================================================
 
 /** provides access to the user interface of a database document
 
@@ -321,11 +319,9 @@ interface XDatabaseDocumentUI
                  ::com::sun::star::sdbc::SQLException );
 };
 
-//=============================================================================
 
 }; }; }; }; };
 
-//=============================================================================
 
 #endif
 

@@ -23,11 +23,9 @@
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/container/XNameAccess.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** provides access to the collection of dimensions of a data pilot source.
 
@@ -35,7 +33,6 @@ module com {  module sun {  module star {  module sheet {
  */
 published interface XDimensionsSupplier: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** returns the collection of dimensions.
 
@@ -45,7 +42,6 @@ published interface XDimensionsSupplier: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

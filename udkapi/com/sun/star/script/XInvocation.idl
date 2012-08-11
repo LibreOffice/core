@@ -32,11 +32,9 @@
 #include <com/sun/star/beans/UnknownPropertyException.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module script {
 
-//=============================================================================
 /** gives access to an object's methods and properties.
     Container access is available through
     <type scope="com::sun::star::container">XIndexContainer</type>,
@@ -46,13 +44,11 @@
  */
 published interface XInvocation: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** returns the introspection from this object or <NULL/>
         if the object does not provide this information.
      */
     com::sun::star::beans::XIntrospectionAccess getIntrospection();
 
-    //-------------------------------------------------------------------------
     /** provides access to methods exposed by an object.
 
         @param aParams all parameters; pure out params are undefined in sequence,
@@ -76,7 +72,6 @@ published interface XInvocation: com::sun::star::uno::XInterface
                     com::sun::star::script::CannotConvertException,
                     com::sun::star::reflection::InvocationTargetException );
 
-    //-------------------------------------------------------------------------
     /** sets a value to the property with the specified name.
 
         <p> If the underlying object implements an
@@ -92,7 +87,6 @@ published interface XInvocation: com::sun::star::uno::XInterface
                     com::sun::star::script::CannotConvertException,
                     com::sun::star::reflection::InvocationTargetException );
 
-    //-------------------------------------------------------------------------
     /** returns the value of the property with the specified name.
 
         @param aPropertyName
@@ -101,7 +95,6 @@ published interface XInvocation: com::sun::star::uno::XInterface
     any getValue( [in] string aPropertyName )
             raises( com::sun::star::beans::UnknownPropertyException );
 
-    //-------------------------------------------------------------------------
     /** returns <TRUE/> if the method with the specified name exists, else <FALSE/>.
 
         <p>This optimizes the calling sequence
@@ -113,7 +106,6 @@ published interface XInvocation: com::sun::star::uno::XInterface
      */
     boolean hasMethod( [in] string aName );
 
-    //-------------------------------------------------------------------------
     /** returns <TRUE/> if the property with the specified name exists, else <FALSE/>.
 
                 <p>This optimizes the calling sequence
@@ -130,7 +122,6 @@ published interface XInvocation: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

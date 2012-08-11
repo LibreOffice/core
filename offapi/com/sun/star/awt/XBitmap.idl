@@ -33,29 +33,24 @@
 #include <com/sun/star/awt/Size.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module awt {
 
-//=============================================================================
 
 /** provides a bitmap in the Microsoft DIB format.
  */
 published interface XBitmap: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** returns the size of the bitmap in pixel.
      */
     com::sun::star::awt::Size getSize();
 
-    //-------------------------------------------------------------------------
 
     /** returns the device independent bitmap.
      */
     sequence<byte> getDIB();
 
-    //-------------------------------------------------------------------------
 
     /** returns the transparency mask of the device independent bitmap.
      */
@@ -63,7 +58,6 @@ published interface XBitmap: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -25,11 +25,9 @@
 #include <com/sun/star/drawing/Shape.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module drawing {
 
-//=============================================================================
 
 /** This service is for a group of <type>Shape</type>s.
         @see XShapeGroup
@@ -53,7 +51,6 @@ published service GroupShape
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

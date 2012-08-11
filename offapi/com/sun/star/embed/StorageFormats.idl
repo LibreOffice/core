@@ -20,11 +20,9 @@
 #define __com_sun_star_embed_StorageFormats_idl__
 
 
-//============================================================================
 
 module com { module sun { module star { module embed {
 
-//============================================================================
 /** The constant set contains IDs of formats that are supported by
     <type>StorageFactory</type>.
 
@@ -33,23 +31,19 @@ module com { module sun { module star { module embed {
 */
 published constants StorageFormats
 {
-    //------------------------------------------------------------------------
     /** specifies package format
      */
     const long PACKAGE = 1;
 
-    //------------------------------------------------------------------------
     /** specifies zip format
      */
     const long ZIP = 2;
 
-    //------------------------------------------------------------------------
     /** specifies Office Open XML format
      */
     const long OFOPXML = 3;
 };
 
-//============================================================================
 
 }; }; }; };
 

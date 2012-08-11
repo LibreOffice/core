@@ -33,11 +33,9 @@
 
 #include <com/sun/star/util/Color.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** contains settings which are specific to each view of a spreadsheet
  */
@@ -47,96 +45,81 @@ published service SpreadsheetViewSettings
      */
     interface com::sun::star::beans::XPropertySet;
 
-    //-------------------------------------------------------------------------
 
     /** controls whether formulas are displayed instead of their
         results.
      */
     [property] boolean ShowFormulas;
 
-    //-------------------------------------------------------------------------
 
     /** enables display of zero-values.
      */
     [property] boolean ShowZeroValues;
 
-    //-------------------------------------------------------------------------
 
     /** controls whether strings, values, and formulas are
         displayed in different colors.
      */
     [property] boolean IsValueHighlightingEnabled;
 
-    //-------------------------------------------------------------------------
 
     /** controls whether a marker is shown for notes in cells.
      */
     [property] boolean ShowNotes;
 
-    //-------------------------------------------------------------------------
 
     /** enables the vertical scroll bar of the view.
      */
     [property] boolean HasVerticalScrollBar;
 
-    //-------------------------------------------------------------------------
 
     /** enables the horizontal scroll bar of the view.
      */
     [property] boolean HasHorizontalScrollBar;
 
-    //-------------------------------------------------------------------------
 
     /** enables the sheet tabs of the view.
      */
     [property] boolean HasSheetTabs;
 
-    //-------------------------------------------------------------------------
 
     /** enables the display of outline symbols.
      */
     [property] boolean IsOutlineSymbolsSet;
 
-    //-------------------------------------------------------------------------
 
     /** enables the column and row headers of the view.
      */
     [property] boolean HasColumnRowHeaders;
 
-    //-------------------------------------------------------------------------
 
     /** enables the display of the cell grid.
      */
     [property] boolean ShowGrid;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the color in which the cell grid is
         displayed.
      */
     [property] com::sun::star::util::Color GridColor;
 
-    //-------------------------------------------------------------------------
 
     /** enables display of help lines when moving drawing
         objects.
      */
     [property] boolean ShowHelpLines;
 
-    //-------------------------------------------------------------------------
 
     /** enables display of anchor symbols when drawing
         objects are selected.
      */
     [property] boolean ShowAnchor;
 
-    //-------------------------------------------------------------------------
 
     /** enables display of page breaks.
      */
     [property] boolean ShowPageBreaks;
 
-    //-------------------------------------------------------------------------
 
     /** enables display of embedded objects in the view.
 
@@ -144,7 +127,6 @@ published service SpreadsheetViewSettings
      */
     [property] short ShowObjects;
 
-    //-------------------------------------------------------------------------
 
     /** enables the display of charts in the view.
 
@@ -152,7 +134,6 @@ published service SpreadsheetViewSettings
      */
     [property] short ShowCharts;
 
-    //-------------------------------------------------------------------------
 
     /** enables the display of drawing objects in the view.
 
@@ -160,20 +141,17 @@ published service SpreadsheetViewSettings
      */
     [property] short ShowDrawing;
 
-    //-------------------------------------------------------------------------
 
     /** disables the display of marks from online spelling.
      */
     [property] boolean HideSpellMarks;
 
-    //-------------------------------------------------------------------------
     /** This property defines the zoom type for the document.
 
         @see com::sun::star::view::DocumentZoomType
     */
     [property] short ZoomType;
 
-        //-------------------------------------------------------------------------
         /** Defines the zoom value to use.
             Valid only if the ZoomType is set to
             <member scope="com::sun::star::view::DocumentZoomType">BY_VALUE</member>.
@@ -181,7 +159,6 @@ published service SpreadsheetViewSettings
     [property] short ZoomValue;
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -13,11 +13,9 @@
 #include <com/sun/star/container/XChild.idl>
 #include <com/sun/star/ucb/XContentCreator.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** A DCP Folder is a container for other DCP Folders or Documents.
 
     @see com::sun::star::ucb::GnomeVFSContentProvider
@@ -25,13 +23,11 @@ module com { module sun { module star { module ucb {
 */
 service GnomeVFSFolderContent
 {
-    //-------------------------------------------------------------------------
     /** This interface is implemented according to the specification of
         service <type>Content</type>.
      */
     interface com::sun::star::lang::XComponent;
 
-    //-------------------------------------------------------------------------
     /** This interface is implemented according to the specification of
         service <type>Content</type>.
      */
@@ -41,31 +37,26 @@ service GnomeVFSFolderContent
 
     [optional] interface com::sun::star::ucb::XCommandProcessor2;
 
-    //-------------------------------------------------------------------------
     /** This interface is implemented according to the specification of
         service <type>Content</type>.
      */
     interface com::sun::star::beans::XPropertiesChangeNotifier;
 
-    //-------------------------------------------------------------------------
     /** This interface is implemented according to the specification of
         service <type>Content</type>.
      */
     interface com::sun::star::beans::XPropertyContainer;
 
-    //-------------------------------------------------------------------------
     /** This interface is implemented according to the specification of
         service <type>Content</type>.
      */
     interface com::sun::star::beans::XPropertySetInfoChangeNotifier;
 
-    //-------------------------------------------------------------------------
     /** This interface is implemented according to the specification of
         service <type>Content</type>.
      */
     interface com::sun::star::ucb::XCommandInfoChangeNotifier;
 
-    //-------------------------------------------------------------------------
     /** This interface is implemented according to the specification of
         service <type>Content</type>.
      */
@@ -74,7 +65,6 @@ service GnomeVFSFolderContent
     interface com::sun::star::ucb::XContentCreator;
 };
 
-//=============================================================================
 
 }; }; }; };
 

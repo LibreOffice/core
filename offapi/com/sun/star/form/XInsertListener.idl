@@ -33,11 +33,9 @@
 #include <com/sun/star/lang/EventObject.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module form {
 
-//=============================================================================
 
 /** allows to receive notifications about insertions into a database form.
 
@@ -50,13 +48,11 @@
  */
 published interface XInsertListener: com::sun::star::lang::XEventListener
 {
-    //-------------------------------------------------------------------------
 
     /** is invoked when a database form starts inserting a record.
      */
     void inserting( [in] com::sun::star::lang::EventObject aEvent );
 
-    //-------------------------------------------------------------------------
 
     /** is invoked after a database form has inserted a record to a data source.
      */
@@ -64,7 +60,6 @@ published interface XInsertListener: com::sun::star::lang::XEventListener
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

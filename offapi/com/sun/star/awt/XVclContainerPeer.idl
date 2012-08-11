@@ -24,11 +24,9 @@
 #include <com/sun/star/awt/XWindow.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module awt {
 
-//=============================================================================
 
 /** gives access to the VCL container window implementation.
 
@@ -36,13 +34,11 @@
  */
 published interface XVclContainerPeer: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** enable as dialog control.
      */
     [oneway] void enableDialogControl( [in] boolean bEnable );
 
-    //-------------------------------------------------------------------------
 
     /** sets the tab order.
      */
@@ -50,7 +46,6 @@ published interface XVclContainerPeer: com::sun::star::uno::XInterface
              [in] sequence<any> Tabs,
              [in] boolean GroupControl );
 
-    //-------------------------------------------------------------------------
 
     /** sets a group.
      */
@@ -58,7 +53,6 @@ published interface XVclContainerPeer: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

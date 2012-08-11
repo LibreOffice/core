@@ -26,7 +26,6 @@
 
 module com {  module sun {  module star {  module sdb {
 
-//=============================================================================
 /** implements a component which allows the creation of relation.
 
     <p>This service implements a user interface for relations through a graphical design interface.</p>
@@ -71,7 +70,6 @@ published service RelationDesign
     interface com::sun::star::lang::XInitialization;
 };
 
-//=============================================================================
 }; }; }; };
 
 #endif

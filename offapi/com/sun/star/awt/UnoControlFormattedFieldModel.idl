@@ -34,11 +34,9 @@
 #include <com/sun/star/util/XNumberFormatsSupplier.idl>
 #include <com/sun/star/style/VerticalAlignment.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module awt {
 
-//=============================================================================
 
 /** specifies the standard model of an <type>UnoControlFormattedField </type>.
  */
@@ -46,7 +44,6 @@ published service UnoControlFormattedFieldModel
 {
     service com::sun::star::awt::UnoControlModel;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the horizontal alignment of the text in the control.
 
@@ -58,13 +55,11 @@ published service UnoControlFormattedFieldModel
      */
     [property] short Align;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the background color (RGB) of the control.
      */
     [property] com::sun::star::util::Color BackgroundColor;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the border style of the control.
 
@@ -76,7 +71,6 @@ published service UnoControlFormattedFieldModel
      */
     [property] short Border;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the color of the border, if present
 
@@ -87,7 +81,6 @@ published service UnoControlFormattedFieldModel
      */
     [optional, property] long BorderColor;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the default value of the formatted field.
 
@@ -96,7 +89,6 @@ published service UnoControlFormattedFieldModel
      */
     [property] any EffectiveDefault;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the maximum value that can be entered.
 
@@ -105,7 +97,6 @@ published service UnoControlFormattedFieldModel
      */
     [property] double EffectiveMax;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the minimum value that can be entered.
 
@@ -114,7 +105,6 @@ published service UnoControlFormattedFieldModel
      */
     [property] double EffectiveMin;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the current value of the formatted field.
 
@@ -123,33 +113,28 @@ published service UnoControlFormattedFieldModel
      */
     [property] double EffectiveValue;
 
-    //-------------------------------------------------------------------------
 
     /** determines whether the control is enabled or disabled.
      */
     [property] boolean Enabled;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the font attributes of the text in the control.
      */
     [property] com::sun::star::awt::FontDescriptor FontDescriptor;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the <type scope="com::sun::star::text">FontEmphasis</type>
         value of the text in the control.
      */
     [property] short FontEmphasisMark;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the <type scope="com::sun::star::text">FontRelief</type>
         value of the text in the control.
      */
     [property] short FontRelief;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the format to be used when formatting the field input
         and output.
@@ -159,26 +144,22 @@ published service UnoControlFormattedFieldModel
      */
     [property] long FormatKey;
 
-    //-------------------------------------------------------------------------
 
     /** supplies the formats the field should work with.
      */
     [property] com::sun::star::util::XNumberFormatsSupplier FormatsSupplier;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the help text of the control.
      */
     [property] string HelpText;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the help URL of the control.
      */
     [property] string HelpURL;
 
 
-    //-------------------------------------------------------------------------
 
     /** specifies whether the selection in the control should be hidden when
         the control is not active (focused).
@@ -187,7 +168,6 @@ published service UnoControlFormattedFieldModel
      */
     [optional, property] boolean HideInactiveSelection;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the maximum character count.
 
@@ -195,20 +175,17 @@ published service UnoControlFormattedFieldModel
      */
     [property] short MaxTextLen;
 
-    //-------------------------------------------------------------------------
 
     /** specifies that the control will be printed with the document.
      */
     [property] boolean Printable;
 
-    //-------------------------------------------------------------------------
 
     /** specifies that the content of the control cannot be modified by the
         user.
      */
     [property] boolean ReadOnly;
 
-    //-------------------------------------------------------------------------
 
     /** specifies whether the mouse should show repeating behavior, i.e.
         repeatedly trigger an action when keeping pressed.
@@ -217,7 +194,6 @@ published service UnoControlFormattedFieldModel
      */
     [optional, property] boolean Repeat;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the mouse repeat delay, in milliseconds.
 
@@ -231,13 +207,11 @@ published service UnoControlFormattedFieldModel
      */
     [optional, property] long RepeatDelay;
 
-    //-------------------------------------------------------------------------
 
     /** specifies that the control has a spin button.
      */
     [property] boolean Spin;
 
-    //-------------------------------------------------------------------------
 
     /** specifies that the text is checked during the user input.
 
@@ -247,31 +221,26 @@ published service UnoControlFormattedFieldModel
      */
     [optional, property] boolean StrictFormat;
 
-    //-------------------------------------------------------------------------
 
     /** specifies that the control can be reached with the TAB key.
      */
     [property] boolean Tabstop;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the text displayed in the control.
      */
     [property] string Text;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the text color (RGB) of the control.
      */
     [property] com::sun::star::util::Color TextColor;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the text line color (RGB) of the control.
      */
     [property] com::sun::star::util::Color TextLineColor;
 
-    //-------------------------------------------------------------------------
 
     /** specifies that the text is treated as a number.
      */
@@ -295,7 +264,6 @@ published service UnoControlFormattedFieldModel
     */
     [optional, property] short MouseWheelBehavior;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the vertical alignment of the text in the control.
 
@@ -304,7 +272,6 @@ published service UnoControlFormattedFieldModel
     [optional, property] com::sun::star::style::VerticalAlignment VerticalAlign;
 };
 
-//=============================================================================
 
 }; }; }; };
 

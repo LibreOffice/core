@@ -24,17 +24,14 @@
 #include <com/sun/star/beans/XPropertySet.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module chart {
 
-//=============================================================================
 
 /** gives access to both the primary and the secondary y-axis of a diagram.@see        XChartDocument
  */
 published interface XTwoAxisYSupplier: com::sun::star::chart::XAxisYSupplier
 {
-    //-------------------------------------------------------------------------
 
     /** @returns
             the properties of the secondary <i>y</i>-axis of the
@@ -49,7 +46,6 @@ published interface XTwoAxisYSupplier: com::sun::star::chart::XAxisYSupplier
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

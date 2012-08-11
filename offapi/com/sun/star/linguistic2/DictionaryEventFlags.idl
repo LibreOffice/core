@@ -20,11 +20,9 @@
 #define __com_sun_star_linguistic2_DictionaryEventFlags_idl__
 
 
-//=============================================================================
 
 module com { module sun { module star { module linguistic2 {
 
-//=============================================================================
 /** flags used for the event type in dictionary events.
 
     <P>These flags represent the type of events that a dictionary
@@ -34,44 +32,36 @@ module com { module sun { module star { module linguistic2 {
 */
 published constants DictionaryEventFlags
 {
-    //-------------------------------------------------------------------------
     /** indicates that at least one entry has been added.
     */
     const short ADD_ENTRY       = 1;
 
-    //-------------------------------------------------------------------------
     /** indicates that at least one entry has been deleted.
     */
     const short DEL_ENTRY       = 2;
 
-    //-------------------------------------------------------------------------
     /** the dictionary's name has changed.
     */
     const short CHG_NAME        = 4;
 
-    //-------------------------------------------------------------------------
     /** the dictionary's language has changed.
     */
     const short CHG_LANGUAGE    = 8;
 
-    //-------------------------------------------------------------------------
     /** all entries have been removed.
     */
     const short ENTRIES_CLEARED = 16;
 
-    //-------------------------------------------------------------------------
     /** used when the dictionary was activated.
     */
     const short ACTIVATE_DIC    = 32;
 
-    //-------------------------------------------------------------------------
     /** used when the dictionary was deactivated.
     */
     const short DEACTIVATE_DIC  = 64;
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

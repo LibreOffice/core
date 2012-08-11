@@ -33,11 +33,9 @@
 #include <com/sun/star/i18n/TransliterationModules.idl>
 #include <com/sun/star/i18n/TransliterationModulesNew.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module i18n {
 
-//=============================================================================
 
 /**
     Character conversions like case folding or Hiragana to Katakana.
@@ -104,7 +102,6 @@ module com { module sun { module star { module i18n {
 published interface XTransliteration: com::sun::star::uno::XInterface
 {
 
-    //------------------------------------------------------------------------
     /** Unique ASCII name to identify a module. This name is used
         to get its localized name for menus, dialogs etc. The behavior
         is undefined for <const>TransliterationType::CASCADE</const>
@@ -112,7 +109,6 @@ published interface XTransliteration: com::sun::star::uno::XInterface
      */
     string  getName();
 
-    //------------------------------------------------------------------------
     /** Return the attribute(s) associated with this transliteration
         object, as defined in <type>TransliterationType</type>. The
         value is determined by the transliteration modules. For example,
@@ -121,20 +117,17 @@ published interface XTransliteration: com::sun::star::uno::XInterface
      */
     short   getType();
 
-    //------------------------------------------------------------------------
     /** Load instance of predefined module - old style method.
      */
     void    loadModule( [in] TransliterationModules eModType,
                         [in] ::com::sun::star::lang::Locale aLocale );
 
-    //------------------------------------------------------------------------
     /** Load a sequence of instances of predefined modules - supersedes
         method <member>XTransliteration::loadModule()</member>.
      */
     void    loadModuleNew(  [in] sequence <TransliterationModulesNew> aModType,
                             [in] ::com::sun::star::lang::Locale aLocale );
 
-    //------------------------------------------------------------------------
     /** Load instance of UNO registered module.
 
         <p> Each transliteration module is registered under a different
@@ -157,7 +150,6 @@ published interface XTransliteration: com::sun::star::uno::XInterface
     void    loadModuleByImplName(   [in] string aImplName,
                                     [in] ::com::sun::star::lang::Locale aLocale );
 
-    //------------------------------------------------------------------------
     /** Load a sequence of instances of transliteration modules.
         Output of one module is fed as input to the next module in
         the sequence. The object created by this call has
@@ -169,7 +161,6 @@ published interface XTransliteration: com::sun::star::uno::XInterface
     void    loadModulesByImplNames( [in] sequence <string> aImplNameList,
                                     [in] ::com::sun::star::lang::Locale aLocale );
 
-    //------------------------------------------------------------------------
     /** List the available transliteration modules for a given locale.
         It can be filtered based on its type.
 
@@ -182,7 +173,6 @@ published interface XTransliteration: com::sun::star::uno::XInterface
                             [in] short nType );
 
 
-    //------------------------------------------------------------------------
     /** Transliterate a substring. This method can be called if the
         object doesn't have <type>TransliterationType</type> IGNORE
         attribute.
@@ -206,7 +196,6 @@ published interface XTransliteration: com::sun::star::uno::XInterface
     string  transliterate(  [in] string aInStr, [in] long nStartPos,
                             [in] long nCount, [out] sequence <long> rOffset );
 
-    //------------------------------------------------------------------------
     /** @deprecated
         For internal use, this method is supported to get the
         "transliteration", which equals() is based on.
@@ -214,7 +203,6 @@ published interface XTransliteration: com::sun::star::uno::XInterface
     string  folding(    [in] string aInStr, [in] long nStartPos,
                         [in] long nCount, [out] sequence <long> rOffset );
 
-    //------------------------------------------------------------------------
     /** Match two substrings and find if they are equivalent as per this
         transliteration.
 
@@ -263,7 +251,6 @@ published interface XTransliteration: com::sun::star::uno::XInterface
                     [in] string aStr2, [in] long nPos2, [in] long nCount2,
                     [out] long rMatch2 );
 
-    //------------------------------------------------------------------------
     /** Transliterate one set of characters to another.
 
         <p> This method is intended for getting corresponding ranges and
@@ -283,7 +270,6 @@ published interface XTransliteration: com::sun::star::uno::XInterface
      */
     sequence <string>   transliterateRange( [in] string aStr1, [in] string aStr2 );
 
-    //------------------------------------------------------------------------
     /** Compare 2 substrings as per this transliteration. It translates both
         substrings before comparing them.
 
@@ -313,7 +299,6 @@ published interface XTransliteration: com::sun::star::uno::XInterface
     long    compareSubstring(   [in] string aStr1, [in] long nOff1, [in] long nLen1,
                                 [in] string aStr2, [in] long nOff2, [in] long nLen2 );
 
-    //------------------------------------------------------------------------
     /** Compare 2 strings as per this transliteration. It translates both
         strings before comparing them.
 
@@ -326,7 +311,6 @@ published interface XTransliteration: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 }; }; }; };
 
 #endif

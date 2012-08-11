@@ -4,7 +4,6 @@
 
 #include <com/sun/star/ucb/XContentProvider.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
@@ -13,7 +12,6 @@ service GnomeVFSContentProvider
     interface com::sun::star::ucb::XContentProvider;
 };
 
-//=============================================================================
 
 }; }; }; };
 

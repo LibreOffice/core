@@ -24,11 +24,9 @@
 #include <com/sun/star/reflection/XIdlClass.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module script {
 
-//=============================================================================
 /** This event is a wrapper for an original event in a forwarding event.
 
     <p> Usually the original event is the first argument in the
@@ -36,7 +34,6 @@
  */
 published struct AllEventObject: com::sun::star::lang::EventObject
 {
-    //-------------------------------------------------------------------------
     /** A helper value for the implementation that can be used arbitrarily.
 
         <p>This field reflects the third parameter of the method
@@ -45,23 +42,19 @@ published struct AllEventObject: com::sun::star::lang::EventObject
      */
     any Helper;
 
-    //-------------------------------------------------------------------------
     /** contains the type of the original listener.
      */
     type ListenerType;
 
-    //-------------------------------------------------------------------------
     /** The original method name on which the event was fired.
      */
     string MethodName;
 
-    //-------------------------------------------------------------------------
     /** The arguments of the original method.
      */
     sequence<any> Arguments;
 };
 
-//=============================================================================
 
 }; }; }; };
 

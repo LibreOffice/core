@@ -23,11 +23,9 @@
 #include <com/sun/star/text/TextFieldMaster.idl>
 #include <com/sun/star/beans/PropertyValues.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module text { module fieldmaster {
 
-//=============================================================================
 /** Specifies the service of a user field master.
     @see com::sun::star::text::TextFieldMaster
 */
@@ -35,21 +33,17 @@ published service User
 {
     service  com::sun::star::text::TextFieldMaster;
 
-    //------------------------------------------------------------------------
     /** determines whether the field contains an expression.
      */
     [property]  boolean IsExpression;
-    //------------------------------------------------------------------------
     /** contains the value.
      */
     [property] double Value;
-    //------------------------------------------------------------------------
     /** contains the content.
      */
     [property]  string Content;
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

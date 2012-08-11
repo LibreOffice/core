@@ -33,13 +33,11 @@
 #include <com/sun/star/lang/NullPointerException.idl>
 #include <com/sun/star/lang/IndexOutOfBoundsException.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module form { module binding {
 
 interface XListEntryListener;
 
-//=============================================================================
 
 /** specifies a source of string list entries
 
@@ -88,7 +86,6 @@ interface XListEntrySource : com::sun::star::uno::XInterface
                 raises( com::sun::star::lang::NullPointerException );
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

@@ -24,14 +24,12 @@
 #include <com/sun/star/io/IOException.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module io {
 
  published interface XObjectInputStream;
  published interface XObjectOutputStream;
 
-//=============================================================================
 
 /** allows to make UNO objects persistent
 
@@ -55,7 +53,6 @@ module com {  module sun {  module star {  module io {
  */
 published interface XPersistObject: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** gives the service name of the object
 
@@ -70,7 +67,6 @@ published interface XPersistObject: com::sun::star::uno::XInterface
      */
     string getServiceName();
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::io::XPersistObject::write
     /** writes all the persistent data of the object to the stream.
@@ -82,7 +78,6 @@ published interface XPersistObject: com::sun::star::uno::XInterface
     void write( [in] com::sun::star::io::XObjectOutputStream OutStream )
             raises( com::sun::star::io::IOException );
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::io::XPersistObject::read
     /** reads all the persistent data of the object from the stream.
@@ -98,7 +93,6 @@ published interface XPersistObject: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

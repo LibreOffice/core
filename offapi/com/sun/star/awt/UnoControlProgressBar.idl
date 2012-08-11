@@ -24,11 +24,9 @@
 #include <com/sun/star/awt/XProgressBar.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module awt {
 
-//=============================================================================
 
 /** specifies a progress bar control.
  */
@@ -40,7 +38,6 @@ published service UnoControlProgressBar
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

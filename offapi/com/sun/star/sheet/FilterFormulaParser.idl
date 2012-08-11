@@ -23,11 +23,9 @@
 #include <com/sun/star/sheet/XFilterFormulaParser.idl>
 #include <com/sun/star/lang/XComponent.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** A service used to implement parsing and printing formula strings in a
     specific formula language.
@@ -36,7 +34,6 @@ service FilterFormulaParser : XFilterFormulaParser
 {
 };
 
-//=============================================================================
 
 }; }; }; };
 

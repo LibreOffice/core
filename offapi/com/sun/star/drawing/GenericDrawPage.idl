@@ -46,11 +46,9 @@
 
 #include <com/sun/star/container/XNameContainer.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module drawing {
 
-//=============================================================================
 
 // DocMerge from xml: service com::sun::star::drawing::GenericDrawPage
 /** This abstract service is implemented by every page of a
@@ -130,63 +128,54 @@ published service GenericDrawPage
      */
     [optional] interface com::sun::star::beans::XPropertySet;
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::drawing::GenericDrawPage::BorderBottom
     /** This is the border at the bottom.
      */
         [optional, property] long BorderBottom;
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::drawing::GenericDrawPage::BorderLeft
     /** This is the border at the left.
      */
         [optional, property] long BorderLeft;
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::drawing::GenericDrawPage::BorderRight
     /** This is the border at the right.
      */
         [optional, property] long BorderRight;
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::drawing::GenericDrawPage::BorderTop
     /** This is the border at the top.
      */
         [optional, property] long BorderTop;
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::drawing::GenericDrawPage::Height
     /** This is the height.
      */
         [optional, property] long Height;
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::drawing::GenericDrawPage::Width
     /** This is the width.
      */
         [optional, property] long Width;
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::drawing::GenericDrawPage::Number
     /** This is the number of this page, starting with 1.
      */
         [optional, readonly, property] short Number;
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::drawing::GenericDrawPage::Orientation
     /** This is the orientation of this page.
      */
         [optional, property] com::sun::star::view::PaperOrientation Orientation;
 
-    //-------------------------------------------------------------------------
 
     /** this property stores xml attributes.
         They will be saved to and restored from automatic styles inside xml files.
@@ -195,7 +184,6 @@ published service GenericDrawPage
     */
     [optional, property] com::sun::star::container::XNameContainer UserDefinedAttributes;
 
-    //-------------------------------------------------------------------------
 
     /** this property is true if the averaged background filling colors luminance
         is belove an application specified threshold value. This can be used to
@@ -203,7 +191,6 @@ published service GenericDrawPage
     */
     [readonly, optional, property] boolean IsBackgroundDark;
 
-    //-------------------------------------------------------------------------
 
     /** this index access defines a navigation order for the top level shapes
         inside this page.
@@ -213,7 +200,6 @@ published service GenericDrawPage
     [optional, property] com::sun::star::container::XIndexAccess NavigationOrder;
 };
 
-//=============================================================================
 
 }; }; }; };
 

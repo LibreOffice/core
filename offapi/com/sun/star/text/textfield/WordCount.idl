@@ -22,11 +22,9 @@
 
 #include <com/sun/star/text/TextField.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module text { module textfield {
 
-//=============================================================================
 /** specifies service of a text field that displays the number of words
  contained in the document.
     @see com::sun::star::text::TextField
@@ -41,7 +39,6 @@ published service WordCount
     [property]short NumberingType;
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

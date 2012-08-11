@@ -91,7 +91,6 @@ published interface XAtomServer : com::sun::star::uno::XInterface
     */
     sequence< string > getAtomDescriptions( [in] sequence< AtomClassRequest > atoms );
 
-    //-----------------------------------------------------------------------
     /** returns the atoms that have been registered to a class after an
         already known atom
 
@@ -110,7 +109,6 @@ published interface XAtomServer : com::sun::star::uno::XInterface
     */
     sequence< AtomDescription > getRecentAtoms( [in] long atomClass, [in] long atom );
 
-    //-----------------------------------------------------------------------
     /** registers or searches for a string
 
         @param atomClass

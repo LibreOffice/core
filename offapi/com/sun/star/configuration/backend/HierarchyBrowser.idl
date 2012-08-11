@@ -21,11 +21,9 @@
 
 #include <com/sun/star/task/XJob.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module configuration { module backend {
 
-//=============================================================================
 
 /**
     allows scanning a configuration data repository for available components .
@@ -34,7 +32,6 @@ module com { module sun { module star { module configuration { module backend {
 */
 published service HierarchyBrowser
 {
-    //-------------------------------------------------------------------------
 
     /** allows executing a scan of the repository
 
@@ -65,10 +62,8 @@ published service HierarchyBrowser
       */
     interface com::sun::star::task::XJob ;
 
-    //-------------------------------------------------------------------------
 } ;
 
-//=============================================================================
 
 } ; } ; } ; } ; } ;
 

@@ -22,27 +22,22 @@
 #include <com/sun/star/lang/XLocalizable.idl>
 #include <com/sun/star/frame/XDocumentTemplates.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module frame {
 
-//=============================================================================
 /** provides a high level API to organize document templates
  */
 published service TemplateAccess
 {
-    //-------------------------------------------------------------------------
     /** used to organize document templates
      */
     interface XDocumentTemplates;
 
-    //-------------------------------------------------------------------------
     /** provides selection of sets of localized templates
      */
     interface com::sun::star::lang::XLocalizable;
 };
 
-//=============================================================================
 
 }; }; }; };
 

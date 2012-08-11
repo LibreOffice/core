@@ -30,11 +30,9 @@
 
 #include <com/sun/star/ucb/XContentProvider.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** The WebDAV Content Provider (DCP) implements a <type>ContentProvider</type>
     for the <type>UniversalContentBroker</type> (UCB).
 
@@ -47,7 +45,6 @@ module com { module sun { module star { module ucb {
 */
 published service WebDAVContentProvider
 {
-    //-------------------------------------------------------------------------
     /** provides two types of content: a Folder or Document which corresponds
         to a collection or non-collection (nodes and leafs) in WebDAV
         respectively.
@@ -109,7 +106,6 @@ published service WebDAVContentProvider
     interface com::sun::star::ucb::XContentProvider;
 };
 
-//=============================================================================
 
 }; }; }; };
 

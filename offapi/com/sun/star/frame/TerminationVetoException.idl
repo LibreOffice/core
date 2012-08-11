@@ -30,11 +30,9 @@
 
 #include <com/sun/star/uno/Exception.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module frame {
 
-//=============================================================================
 /** can be thrown by a <type>XTerminateListener</type> to prevent the environment
     (e.g., desktop) from terminating
 
@@ -53,7 +51,6 @@ published exception TerminationVetoException: com::sun::star::uno::Exception
 {
 };
 
-//=============================================================================
 
 }; }; }; };
 

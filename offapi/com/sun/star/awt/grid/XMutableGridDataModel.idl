@@ -32,11 +32,9 @@
 #include <com/sun/star/lang/IllegalArgumentException.idl>
 #include <com/sun/star/lang/IndexOutOfBoundsException.idl>
 
-//==================================================================================================================
 
 module com { module sun { module star { module awt { module grid {
 
-//==================================================================================================================
 
 /** allows to modify the data represented by a <type>XGridDataModel</type>
  */
@@ -138,7 +136,6 @@ interface XMutableGridDataModel : XGridDataModel
     void updateRowToolTip( [in] long RowIndex, [in] any Value )
         raises ( ::com::sun::star::lang::IndexOutOfBoundsException );
 
-    //-------------------------------------------------------------------------
 
     /** registers listener to be notified of data changes in the model
         @param Listener
@@ -146,7 +143,6 @@ interface XMutableGridDataModel : XGridDataModel
     */
     void addGridDataListener( [in] XGridDataListener Listener );
 
-    //-------------------------------------------------------------------------
 
     /** revokes a listener which was previously registered via <member>addGridDataListener</member>
         @param Listener
@@ -155,11 +151,9 @@ interface XMutableGridDataModel : XGridDataModel
     void removeGridDataListener( [in] XGridDataListener Listener );
 };
 
-//==================================================================================================================
 
 }; }; }; }; };
 
-//==================================================================================================================
 
 #endif
 

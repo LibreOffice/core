@@ -23,11 +23,9 @@
 #include <com/sun/star/lang/XEventListener.idl>
 #include <com/sun/star/util/VetoException.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module form { module submission {
 
-//=============================================================================
 
 /** is implement by components which want to observe (and probably veto) the
     submission of data.
@@ -52,7 +50,6 @@ interface XSubmissionVetoListener : com::sun::star::lang::XEventListener
 
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

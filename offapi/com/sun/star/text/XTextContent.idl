@@ -33,18 +33,15 @@
 #include <com/sun/star/lang/IllegalArgumentException.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module text {
 
-//=============================================================================
 
 /** enables objects to be inserted into a text and to provide their
     location in a text once they are inserted into it.
  */
 published interface XTextContent: com::sun::star::lang::XComponent
 {
-    //-------------------------------------------------------------------------
 
     /** is called when this object gets embedded in a text.
 
@@ -67,7 +64,6 @@ published interface XTextContent: com::sun::star::lang::XComponent
     void attach( [in] com::sun::star::text::XTextRange xTextRange )
             raises( com::sun::star::lang::IllegalArgumentException );
 
-    //-------------------------------------------------------------------------
 
     /** @returns
                 the text range to which the content is attached.
@@ -86,7 +82,6 @@ published interface XTextContent: com::sun::star::lang::XComponent
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

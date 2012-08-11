@@ -30,11 +30,9 @@
 #include <com/sun/star/container/NoSuchElementException.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module text {
 
-//=============================================================================
 
 /** is the main interface for a distinct text unit, i.e. the main text of
     a document, the text for headers and footers or for single cells of a
@@ -42,7 +40,6 @@
  */
 published interface XSimpleText: com::sun::star::text::XTextRange
 {
-    //-------------------------------------------------------------------------
 
     /** @returns
                 a new instance of a <type>TextCursor</type> service which can
@@ -52,7 +49,6 @@ published interface XSimpleText: com::sun::star::text::XTextRange
      */
     com::sun::star::text::XTextCursor createTextCursor();
 
-    //-------------------------------------------------------------------------
 
     /** @returns
                 a new instance of a <type>TextCursor</type> which is located
@@ -69,7 +65,6 @@ published interface XSimpleText: com::sun::star::text::XTextRange
      */
     com::sun::star::text::XTextCursor createTextCursorByRange( [in] com::sun::star::text::XTextRange aTextPosition );
 
-    //-------------------------------------------------------------------------
 
     /** inserts a string of characters into the text.
 
@@ -114,7 +109,6 @@ published interface XSimpleText: com::sun::star::text::XTextRange
              [in] string aString,
              [in] boolean bAbsorb );
 
-    //-------------------------------------------------------------------------
 
     /** inserts a control character (like a paragraph break or a hard
         space) into the text.@see com::sun::star::text::ControlCharacter
@@ -126,7 +120,6 @@ published interface XSimpleText: com::sun::star::text::XTextRange
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

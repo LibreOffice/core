@@ -20,53 +20,44 @@
 #define __com_sun_star_awt_InvalidateStyle_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module awt {
 
-//=============================================================================
 
 /** specifies how to invalidate windows.
  */
 published constants InvalidateStyle
 {
-    //-------------------------------------------------------------------------
 
     /** The child windows are invalidated, too.
      */
     const short CHILDREN = 1;
 
-    //-------------------------------------------------------------------------
 
     /** The child windows are not invalidated.
      */
     const short NOCHILDREN = 2;
 
-    //-------------------------------------------------------------------------
 
     /** The invalidated area is painted with the background color/pattern.
      */
     const short NOERASE = 4;
 
-    //-------------------------------------------------------------------------
 
     /** The invalidated area is updated immediately.
      */
     const short UPDATE = 8;
 
-    //-------------------------------------------------------------------------
 
     /** The parent window is invalidated, too.
      */
     const short TRANSPARENT = 16;
 
-    //-------------------------------------------------------------------------
 
     /** The parent window is not invalidated.
      */
     const short NOTRANSPARENT = 32;
 
-    //-------------------------------------------------------------------------
 
     /** The area is invalidated regardless of overlapping child windows.
      */
@@ -74,7 +65,6 @@ published constants InvalidateStyle
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

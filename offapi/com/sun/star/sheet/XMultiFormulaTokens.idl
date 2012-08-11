@@ -24,11 +24,9 @@
 #include <com/sun/star/sheet/FormulaToken.idl>
 #include <com/sun/star/lang/IndexOutOfBoundsException.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** gives access to multiple sets of formula tokens.
 
@@ -42,7 +40,6 @@ module com {  module sun {  module star {  module sheet {
  */
 interface XMultiFormulaTokens
 {
-    //-------------------------------------------------------------------------
 
     /** returns the formula at specified index as sequence of tokens.
 
@@ -54,7 +51,6 @@ interface XMultiFormulaTokens
     sequence< FormulaToken > getTokens( [in] long nIndex )
         raises (::com::sun::star::lang::IndexOutOfBoundsException);
 
-    //-------------------------------------------------------------------------
 
     /** sets the formula at specified index as sequence of tokens.
 
@@ -66,7 +62,6 @@ interface XMultiFormulaTokens
     void setTokens( [in] long nIndex, [in] sequence< FormulaToken > aTokens )
         raises (::com::sun::star::lang::IndexOutOfBoundsException);
 
-    //-------------------------------------------------------------------------
 
     /** returns the number of formulas allowed in this formula token set.
 
@@ -75,7 +70,6 @@ interface XMultiFormulaTokens
     long getCount();
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -22,13 +22,11 @@
 
 #include <com/sun/star/datatransfer/dnd/DropTargetEvent.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module datatransfer { module dnd {
 
  published interface XDropTargetDragContext;
 
-//=============================================================================
 /** The <type>DropTargetDragEvent</type> is delivered from the drop target
     to the currently registered drop target listener.
 
@@ -41,7 +39,6 @@ module com { module sun { module star { module datatransfer { module dnd {
 
 published struct DropTargetDragEvent: com::sun::star::datatransfer::dnd::DropTargetEvent
 {
-    //-------------------------------------------------------------------------
     /** The drop target context of the current drag operation.
 
         @see com::sun::star::datatransfer::dnd::XDropTargetDragContext
@@ -49,7 +46,6 @@ published struct DropTargetDragEvent: com::sun::star::datatransfer::dnd::DropTar
 
     XDropTargetDragContext Context;
 
-    //-------------------------------------------------------------------------
     /** This value represents the currently selected drop action.
 
         @see com::sun::star::datatransfer::dnd::DNDConstants
@@ -57,19 +53,16 @@ published struct DropTargetDragEvent: com::sun::star::datatransfer::dnd::DropTar
 
     byte DropAction;
 
-    //-------------------------------------------------------------------------
     /** The cursor's current x location within the window's coordinates.
      */
 
     long LocationX;
 
-    //-------------------------------------------------------------------------
     /** The cursor's current y location within the window's coordinates.
      */
 
     long LocationY;
 
-    //-------------------------------------------------------------------------
     /** This value represents the action or actions supported by the source.
         This may be a combination of arbitrary source actions except ACTION_DEFAULT.
         <p>To combine different actions use a logical OR.</p>
@@ -80,7 +73,6 @@ published struct DropTargetDragEvent: com::sun::star::datatransfer::dnd::DropTar
     byte SourceActions;
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

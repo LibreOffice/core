@@ -23,11 +23,9 @@
 #include <com/sun/star/table/CellRangeAddress.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** provides enhanced access to the settings of a scenario sheet.
 
@@ -42,16 +40,13 @@ module com {  module sun {  module star {  module sheet {
  */
 interface XScenarioEnhanced: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** gets the ranges to the scenario.
      */
     sequence< com::sun::star::table::CellRangeAddress > getRanges();
 
-    //-------------------------------------------------------------------------
 };
 
-//=============================================================================
 
 }; }; }; };
 

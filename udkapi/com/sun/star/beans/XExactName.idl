@@ -22,11 +22,9 @@
 #include <com/sun/star/uno/XInterface.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module beans {
 
-//=============================================================================
 
 /** provides a method of changing names for converting
     an approximate name to an existing name.
@@ -44,7 +42,6 @@ module com {  module sun {  module star {  module beans {
  */
 published interface XExactName: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** @returns
             the exact name for a given aprroximate name.
@@ -56,7 +53,6 @@ published interface XExactName: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

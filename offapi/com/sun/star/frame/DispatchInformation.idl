@@ -21,11 +21,9 @@
 
 #include <com/sun/star/frame/CommandGroup.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module frame {
 
-//=============================================================================
 /** provides information about a supported command
 
     @see XDispatchInformationProvider
@@ -35,12 +33,10 @@ module com {  module sun {  module star {  module frame {
  */
 published struct DispatchInformation
 {
-    //-------------------------------------------------------------------------
     /** command URL of a supported command.
     */
     string Command;
 
-    //-------------------------------------------------------------------------
     /** group identifier to which the supported command belong.
 
         <p>
@@ -50,7 +46,6 @@ published struct DispatchInformation
     short GroupId;
 };
 
-//=============================================================================
 
 }; }; }; };
 

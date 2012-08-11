@@ -24,11 +24,9 @@
 #include <com/sun/star/awt/XControlModel.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module drawing {
 
-//=============================================================================
 
 /** is implemented by a <type>ControlShape</type> to access the controls model.
 
@@ -37,7 +35,6 @@
 */
 published interface XControlShape: com::sun::star::drawing::XShape
 {
-    //-------------------------------------------------------------------------
 
     /** returns the control model of this <type>Shape</type>.
 
@@ -48,7 +45,6 @@ published interface XControlShape: com::sun::star::drawing::XShape
      */
     com::sun::star::awt::XControlModel getControl();
 
-    //-------------------------------------------------------------------------
 
     /** sets the control model for this <type>Shape</type>.
 
@@ -63,7 +59,6 @@ published interface XControlShape: com::sun::star::drawing::XShape
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -62,7 +62,6 @@ published service ConnectionProperties
     [optional, property] string password;
 };
 
-//=============================================================================
 
 }; }; }; };
 

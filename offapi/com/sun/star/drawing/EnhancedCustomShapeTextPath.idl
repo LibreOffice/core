@@ -21,11 +21,9 @@
 
 #include <com/sun/star/drawing/EnhancedCustomShapeTextPathMode.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module drawing {
 
-//=============================================================================
 /**
   This service may be represented by a ::com::sun::star::beans::PropertyValue [].
 */
@@ -45,7 +43,6 @@ service EnhancedCustomShapeTextPath
     [optional, property] boolean ScaleX;
 };
 
-//=============================================================================
 
 }; }; }; };
 

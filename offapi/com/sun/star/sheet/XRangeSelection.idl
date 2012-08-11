@@ -22,14 +22,12 @@
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/beans/PropertyValue.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module sheet {
 
  published interface XRangeSelectionListener;
  published interface XRangeSelectionChangeListener;
 
-//=============================================================================
 
 /** allows to let the user to select a cell range.
 
@@ -73,7 +71,6 @@ published interface XRangeSelection: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

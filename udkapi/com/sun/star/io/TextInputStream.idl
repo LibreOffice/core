@@ -26,11 +26,9 @@
 #include <com/sun/star/io/XConnectable.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module io {
 
-//=============================================================================
 /** provides functionality to read text data from a
     <type scope="com::sun::star::io">XInputStream</type>
     that initially has to be passed to the method
@@ -49,7 +47,6 @@ published service TextInputStream
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

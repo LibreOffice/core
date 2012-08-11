@@ -34,16 +34,13 @@
 #include <com/sun/star/beans/PropertyValue.idl>
 #include <com/sun/star/embed/WrongStateException.idl>
 
-//============================================================================
 
  module com {  module sun {  module star {  module embed {
 
-//============================================================================
 /** specifies an additional implementation for linked embedded object support.
  */
 published interface XLinkageSupport: XCommonEmbedPersist
 {
-    //------------------------------------------------------------------------
     /** breaks the link and provides the object with a parent storage and a
         name for object's entry
 
@@ -95,7 +92,6 @@ published interface XLinkageSupport: XCommonEmbedPersist
                 ::com::sun::star::uno::Exception );
 
 
-    //------------------------------------------------------------------------
     /** allows to detect whether the object is a linked one.
         <p>
             Most of embedded objects will not support this interface, but some
@@ -114,7 +110,6 @@ published interface XLinkageSupport: XCommonEmbedPersist
     boolean isLink()
         raises( ::com::sun::star::embed::WrongStateException );
 
-    //------------------------------------------------------------------------
     /** returns the URL of the link object.
 
         @throws com::sun::star::embed::WrongStateException
@@ -125,7 +120,6 @@ published interface XLinkageSupport: XCommonEmbedPersist
                 ::com::sun::star::uno::Exception );
 };
 
-//============================================================================
 
 }; }; }; };
 

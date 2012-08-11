@@ -20,11 +20,9 @@
 #define __com_sun_star_linguistic2_DictionaryType_idl__
 
 
-//=============================================================================
 
 module com { module sun { module star { module linguistic2 {
 
-//=============================================================================
 /** describes the type of a personal dictionary.
 
     <P>This defines the type of a dictionary.
@@ -38,17 +36,14 @@ module com { module sun { module star { module linguistic2 {
 */
 published enum DictionaryType
 {
-    //-------------------------------------------------------------------------
     /** all entries in the dictionary are positive.
     */
     POSITIVE,
 
-    //-------------------------------------------------------------------------
     /** all entries in the dictionary are negative.
     */
     NEGATIVE,
 
-    //-------------------------------------------------------------------------
     /**
 @deprecated
      */
@@ -56,7 +51,6 @@ published enum DictionaryType
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

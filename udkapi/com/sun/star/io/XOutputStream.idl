@@ -26,11 +26,9 @@
 #include <com/sun/star/io/BufferSizeExceededException.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module io {
 
-//=============================================================================
 
 // DocMerge from xml: interface com::sun::star::io::XOutputStream
 /** This is the basic interface to write data to a stream.
@@ -40,7 +38,6 @@ module com {  module sun {  module star {  module io {
  */
 published interface XOutputStream: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::io::XOutputStream::writeBytes
     /** writes the whole sequence to the stream. (blocking call)
@@ -50,7 +47,6 @@ published interface XOutputStream: com::sun::star::uno::XInterface
                     com::sun::star::io::BufferSizeExceededException,
                     com::sun::star::io::IOException);
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::io::XOutputStream::flush
     /** flushes out of the stream any data that may exist in buffers.
@@ -65,7 +61,6 @@ published interface XOutputStream: com::sun::star::uno::XInterface
                     com::sun::star::io::BufferSizeExceededException,
                     com::sun::star::io::IOException);
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::io::XOutputStream::closeOutput
     /** gets called to indicate that all data has been written.
@@ -81,7 +76,6 @@ published interface XOutputStream: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

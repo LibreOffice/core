@@ -20,11 +20,9 @@
 #define __com_sun_star_text_DocumentIndexFormat_idl__
 
 
-//=============================================================================
 
 module com { module sun { module star { module text {
 
-//=============================================================================
 /** specifies the formatting of document indexes.
 
     @deprecated
@@ -33,14 +31,12 @@ module com { module sun { module star { module text {
 */
 published service DocumentIndexFormat
 {
-    //-------------------------------------------------------------------------
     /**     This property contains the name of the paragraph style that is
     used for the index title.
 
     */
     [property] string TitleStyle;
 
-    //-------------------------------------------------------------------------
     /**     This property contains the name of the paragraph style that is
     used for the separator. This entry is ignored for user indexes
     and content indexes.
@@ -48,30 +44,25 @@ published service DocumentIndexFormat
     */
     [property] string SeparatorStyle;
 
-    //-------------------------------------------------------------------------
     /** contains the number of levels in the document index.
     */
     [readonly, property] short LevelCount;
 
-    //-------------------------------------------------------------------------
     /** This sequence contains the names of the paragraph styles that are
          applied to the level corresponding to the position in the sequence.
      */
     [property] sequence<string> LevelStyles;
 
-    //-------------------------------------------------------------------------
     /** This method specifies whether the form supports hyperlinks.
     */
     [readonly, property] boolean HasHyperlinks;
 
-    //-------------------------------------------------------------------------
     /** return an object that provides the service "com.sun.star.text.DocumentIndexLevelFormat"
      @see com.sun.star.text.DocumentIndexLevelFormat
      */
     [property] sequence<string> LevelFormat;
 };
 
-//=============================================================================
 
 }; }; }; };
 

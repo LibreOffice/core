@@ -24,18 +24,15 @@
 #include <com/sun/star/beans/PropertyValue.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module util {
 
-//=============================================================================
 
 // DocMerge from xml: interface com::sun::star::util::XImportable
 /** makes it possible to import files into the object.
  */
 published interface XImportable: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     // DocMerge from idl: method com::sun::star::util::XImportable::createImportDescriptor
     /** @returns
@@ -43,7 +40,6 @@ published interface XImportable: com::sun::star::uno::XInterface
      */
     sequence<com::sun::star::beans::PropertyValue> createImportDescriptor( [in] boolean bEmpty );
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::util::XImportable::doImport
     /** imports data from an external database.
@@ -52,7 +48,6 @@ published interface XImportable: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

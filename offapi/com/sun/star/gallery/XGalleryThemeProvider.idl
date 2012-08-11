@@ -25,11 +25,9 @@
 #include <com/sun/star/container/ElementExistException.idl>
 #include <com/sun/star/container/NoSuchElementException.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module gallery {
 
-//=============================================================================
 
 /** provides access to the Gallery themes. It also allows inserting and
     removing of Gallery themes by name.
@@ -56,7 +54,6 @@ interface XGalleryThemeProvider : com::sun::star::container::XNameAccess
     XGalleryTheme insertNewByName( [in] string ThemeName )
         raises ( com::sun::star::container::ElementExistException );
 
-    //-------------------------------------------------------------------------
 
     /** deletes a Gallery theme from the collection.
 
@@ -71,7 +68,6 @@ interface XGalleryThemeProvider : com::sun::star::container::XNameAccess
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

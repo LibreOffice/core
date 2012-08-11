@@ -22,11 +22,9 @@
 
 #include <com/sun/star/uno/Exception.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module i18n {
 
-//=============================================================================
 
 /** Indicates transliteration generated multiple characters output but
     only single character return value was requested.
@@ -41,9 +39,7 @@ published exception MultipleCharsOutputException : ::com::sun::star::uno::Except
 {
 };
 
-//=============================================================================
 }; }; }; };
-//=============================================================================
 
 #endif
 

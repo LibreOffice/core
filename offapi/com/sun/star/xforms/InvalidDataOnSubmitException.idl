@@ -22,11 +22,9 @@
 
 #include <com/sun/star/util/VetoException.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module xforms {
 
-//=============================================================================
 
 /** thrown if the user triggers an XForms submission with invalid
     instance data
@@ -39,7 +37,6 @@ exception InvalidDataOnSubmitException : com::sun::star::util::VetoException
 {
 };
 
-//=============================================================================
 
 }; }; }; };
 

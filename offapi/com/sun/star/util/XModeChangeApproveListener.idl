@@ -24,11 +24,9 @@
 #include <com/sun/star/util/ModeChangeEvent.idl>
 #include <com/sun/star/util/VetoException.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module util {
 
-//=============================================================================
 
 /** allows to veto changes in an object's internal mode.
 
@@ -50,7 +48,6 @@ published interface XModeChangeApproveListener : com::sun::star::lang::XEventLis
         raises ( VetoException );
 };
 
-//=============================================================================
 
 }; }; }; };
 

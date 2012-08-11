@@ -64,7 +64,6 @@ interface XSprite : ::com::sun::star::uno::XInterface
     void setAlpha( [in] double nAlpha )
         raises (com::sun::star::lang::IllegalArgumentException);
 
-    //-------------------------------------------------------------------------
 
     /** Move sprite to the specified position.<p>
 
@@ -94,7 +93,6 @@ interface XSprite : ::com::sun::star::uno::XInterface
     void move( [in] ::com::sun::star::geometry::RealPoint2D aNewPos, [in] ViewState aViewState, [in] RenderState aRenderState )
         raises (com::sun::star::lang::IllegalArgumentException);
 
-    //-------------------------------------------------------------------------
 
     /** Apply a local transformation to the sprite.<p>
 
@@ -126,7 +124,6 @@ interface XSprite : ::com::sun::star::uno::XInterface
     void transform( [in] com::sun::star::geometry::AffineMatrix2D aTransformation )
         raises (com::sun::star::lang::IllegalArgumentException);
 
-    //-------------------------------------------------------------------------
 
     /** Apply a clipping to the shape output.<p>
 
@@ -162,7 +159,6 @@ interface XSprite : ::com::sun::star::uno::XInterface
      */
     void clip( [in] XPolyPolygon2D aClip );
 
-    //-------------------------------------------------------------------------
 
     /** Set sprite priority.<p>
 
@@ -179,7 +175,6 @@ interface XSprite : ::com::sun::star::uno::XInterface
      */
     void setPriority( [in] double nPriority );
 
-    //-------------------------------------------------------------------------
 
     /** Make the sprite visible.<p>
 
@@ -188,7 +183,6 @@ interface XSprite : ::com::sun::star::uno::XInterface
      */
     void show();
 
-    //-------------------------------------------------------------------------
 
     /** Make the sprite invisible.<p>
 

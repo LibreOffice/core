@@ -20,11 +20,9 @@
 #define __com_sun_star_text_HoriOrientationFormat_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module text {
 
-//=============================================================================
 
 // DocMerge from xml: struct com::sun::star::text::HoriOrientationFormat
 /** describes the horizontal orientation of an object.
@@ -48,7 +46,6 @@ published struct HoriOrientationFormat
      */
     long XPos;
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: field com::sun::star::text::HoriOrientationFormat::HorizontalOrientation
     /** determines the horizontal alignment of an object.
@@ -56,14 +53,12 @@ published struct HoriOrientationFormat
      */
     short HorizontalOrientation;
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: field com::sun::star::text::HoriOrientationFormat::HorizontalRelation
     /** determines the reference position of the horizontal alignment.@see com::sun::star::text::RelOrientation
      */
     short HorizontalRelation;
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: field com::sun::star::text::HoriOrientationFormat::PositionToggle
     /** determines if the orientation toggles between left and right pages.
@@ -72,7 +67,6 @@ published struct HoriOrientationFormat
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

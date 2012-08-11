@@ -23,13 +23,11 @@
 #include <com/sun/star/lang/IllegalArgumentException.idl>
 #include <com/sun/star/beans/NamedValue.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module logging {
 
 interface XConsoleHandler;
 
-//=============================================================================
 
 /** specifies a component implementing a log handler whose output
     channel is the processes console.
@@ -61,11 +59,9 @@ service ConsoleHandler : XConsoleHandler
         raises ( ::com::sun::star::lang::IllegalArgumentException );
 };
 
-//=============================================================================
 
 }; }; }; };
 
-//=============================================================================
 
 #endif
 

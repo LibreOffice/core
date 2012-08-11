@@ -24,11 +24,9 @@
 #include <com/sun/star/awt/XCurrencyField.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module awt {
 
-//=============================================================================
 
 /** specifies a currency field control.
 
@@ -50,7 +48,6 @@ published service UnoControlCurrencyField
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -32,11 +32,9 @@
 #include <com/sun/star/sheet/XActivationBroadcaster.idl>
 #include <com/sun/star/sheet/XEnhancedMouseClickBroadcaster.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** represents a view of a spreadsheet document.
  */
@@ -97,7 +95,6 @@ published service SpreadsheetView
     [optional] interface com::sun::star::sheet::XActivationBroadcaster;
 };
 
-//=============================================================================
 
 }; }; }; };
 

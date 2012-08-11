@@ -55,7 +55,6 @@ service DataPointProperties
     */
     service ::com::sun::star::beans::PropertySet;
 
-    // ----------------------------------------------------------------------
 
     /** points to a style that also supports this service (but not
         this property) that is used as default, if the PropertyState
@@ -64,7 +63,6 @@ service DataPointProperties
 //     [optional, property] ::com::sun::star::style::XStyle        Style;
 
     // Common Properties
-    // -----------------
 
 
     /** This is the main color of a data point.
@@ -93,7 +91,6 @@ service DataPointProperties
 
 
     // Fill Properties
-    // ---------------
 
     /** This enumeration selects the style with which the area will be filled.
     */
@@ -158,7 +155,6 @@ service DataPointProperties
 
 
     // Line Properties
-    // ---------------
     [property] ::com::sun::star::drawing::LineStyle   LineStyle;
     /** Is only used for line-chart types.
 
@@ -180,7 +176,6 @@ service DataPointProperties
      */
     [optional, property] string                       LineDashName;
 
-    //-------------------------------------------------------------------------
 
     // bitmap properties /copied from drawing::FillProperties
 
@@ -240,7 +235,6 @@ service DataPointProperties
     */
     [property] com::sun::star::drawing::BitmapMode FillBitmapMode;
 
-    //-------------------------------------------------------------------------
 
     /**
      */

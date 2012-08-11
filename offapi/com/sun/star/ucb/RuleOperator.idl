@@ -20,11 +20,9 @@
 #define __com_sun_star_ucb_RuleOperator_idl__
 
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** These are the possible values for <member>RuleTerm::RuleOperator</member>.
 
     @see RuleSet
@@ -32,52 +30,43 @@ module com { module sun { module star { module ucb {
 */
 published constants RuleOperator
 {
-    //-------------------------------------------------------------------------
     /** "Contains" - Object contains <member>RuleTerm::Operand</member>.
     */
     const short CONTAINS = 1;
 
-    //-------------------------------------------------------------------------
     /** "ContainsNot" - Object does not contain
         <member>RuleTerm::Operand</member>.
     */
     const short CONTAINSNOT = 2;
 
-    //-------------------------------------------------------------------------
     /** "GreaterEqual" - Object is greater than or equal to
         <member>RuleTerm::Operand</member>.
     */
     const short GREATEREQUAL = 3;
 
-    //-------------------------------------------------------------------------
     /** "LessEqual" - Object is less than or equal to
         <member>RuleTerm::Operand</member>.
     */
     const short LESSEQUAL = 4;
 
-    //-------------------------------------------------------------------------
     /** "Equal" - Object is equal to <member>RuleTerm::Operand</member>.
     */
     const short EQUAL = 5;
 
-    //-------------------------------------------------------------------------
     /** "NotEqual" - Object is not equal to <member>RuleTerm::Operand</member>.
     */
     const short NOTEQUAL = 6;
 
-    //-------------------------------------------------------------------------
     /** "True" - Object has the value <TRUE/>.
     */
     const short VALUE_TRUE = 7;
 
-    //-------------------------------------------------------------------------
     /** "False" - Object has the value <FALSE/>.
     */
     const short VALUE_FALSE = 8;
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

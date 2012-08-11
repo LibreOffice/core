@@ -24,7 +24,6 @@
 
 module com { module sun { module star { module util {
 
-//============================================================================
 /** Manage cancelable jobs
 
     @see XJobManager

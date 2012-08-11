@@ -20,34 +20,28 @@
 #define __com_sun_star_ucb_FolderListCommand_idl__
 
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** The various commands to process on a list of folders.
 
     @see FolderList
 */
 published enum FolderListCommand
 {
-    //-------------------------------------------------------------------------
     /** Get a list of all folders.
     */
     GET,
 
-    //-------------------------------------------------------------------------
     /** Get a list of subscribed folders.
     */
     GET_SUBSCRIBED,
 
-    //-------------------------------------------------------------------------
     /** Set a list of folders.
     */
     SET
 };
 
-//=============================================================================
 
 }; }; }; };
 

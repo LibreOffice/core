@@ -22,11 +22,9 @@
 #include <com/sun/star/util/SortFieldType.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module util {
 
-//=============================================================================
 /** describes a single field in a sort descriptor.
 
     @deprecated
@@ -37,20 +35,17 @@ published struct SortField
      */
     long Field;
 
-    //-------------------------------------------------------------------------
     /** <TRUE/> if data are sorted in ascending order,
         <FALSE/> if in descending order.
      */
     boolean SortAscending;
 
-    //-------------------------------------------------------------------------
     /** type of contents in the field.
      */
     com::sun::star::util::SortFieldType FieldType;
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

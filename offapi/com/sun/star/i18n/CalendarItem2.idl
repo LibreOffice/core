@@ -32,11 +32,9 @@
 
 #include <com/sun/star/i18n/CalendarItem.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module i18n {
 
-//=============================================================================
 
 
 /**
@@ -57,7 +55,6 @@ published struct CalendarItem2 : com::sun::star::i18n::CalendarItem
     string NarrowName;
 };
 
-//=============================================================================
 }; }; }; };
 
 #endif

@@ -22,11 +22,9 @@
 #include <com/sun/star/configuration/CorruptedConfigurationException.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module configuration {
 
-//=============================================================================
 
 /** This exception is thrown in case the global UI configuration
     (including menubars/toolbars and accelerators)
@@ -38,7 +36,6 @@ published exception CorruptedUIConfigurationException : ::com::sun::star::config
 {
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -23,11 +23,9 @@
 #include <com/sun/star/lang/XEventListener.idl>
 #include <com/sun/star/sheet/ResultEvent.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** allows notification when a new volatile function result is available.
 
@@ -35,7 +33,6 @@ module com {  module sun {  module star {  module sheet {
  */
 published interface XResultListener: com::sun::star::lang::XEventListener
 {
-    //-------------------------------------------------------------------------
 
     /** is called when a new value is available.
      */
@@ -43,7 +40,6 @@ published interface XResultListener: com::sun::star::lang::XEventListener
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

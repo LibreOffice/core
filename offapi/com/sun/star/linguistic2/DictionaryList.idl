@@ -22,13 +22,11 @@
 #include <com/sun/star/lang/XComponent.idl>
 #include <com/sun/star/lang/XServiceInfo.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module linguistic2 {
 
  published interface XSearchableDictionaryList;
 
-//=============================================================================
 /** is the list of personal dictionaries.
 
      <P>The active dictionaries of this list will be used for
@@ -45,7 +43,6 @@ published service DictionaryList
     interface com::sun::star::lang::XServiceInfo;
 };
 
-//=============================================================================
 
 }; }; }; };
 

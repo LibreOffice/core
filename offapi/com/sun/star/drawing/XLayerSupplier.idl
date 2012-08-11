@@ -24,11 +24,9 @@
 #include <com/sun/star/container/XNameAccess.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module drawing {
 
-//=============================================================================
 
 /** gives access to a <type>LayerManager</type>.
 
@@ -36,7 +34,6 @@
  */
 published interface XLayerSupplier: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** @returns
                 the <type>LayerManager</type>.
@@ -45,7 +42,6 @@ published interface XLayerSupplier: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

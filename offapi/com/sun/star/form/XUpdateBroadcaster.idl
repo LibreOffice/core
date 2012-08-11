@@ -24,11 +24,9 @@
 #include <com/sun/star/form/XUpdateListener.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module form {
 
-//=============================================================================
 
 /** is the broadcaster interface for sending "approveUpdate" and "updated" events.
 
@@ -41,7 +39,6 @@
  */
 published interface XUpdateBroadcaster: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** adds the specified listener to receive the events "approveUpdate"
         and "updated".
@@ -51,7 +48,6 @@ published interface XUpdateBroadcaster: com::sun::star::uno::XInterface
      */
     [oneway] void addUpdateListener( [in] com::sun::star::form::XUpdateListener aListener );
 
-    //-------------------------------------------------------------------------
 
     /** removes the specified listener.
         @param aListener
@@ -62,7 +58,6 @@ published interface XUpdateBroadcaster: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

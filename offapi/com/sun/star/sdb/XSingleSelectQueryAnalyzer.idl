@@ -35,11 +35,9 @@
 module com {  module sun {  module star {  module container {
 interface XIndexAccess;
 };};};};
-//=============================================================================
 
  module com {  module sun {  module star {  module sdb {
 
-//=============================================================================
 
 /** simplifies the analyzing of single select statements.
 
@@ -56,7 +54,6 @@ interface XSingleSelectQueryAnalyzer : com::sun::star::uno::XInterface
             the query
      */
     string getQuery();
-    //-------------------------------------------------------------------------
 
     /** sets a new query for the composer, which may be expanded by filters, group by, having
         and sort criteria.
@@ -70,9 +67,7 @@ interface XSingleSelectQueryAnalyzer : com::sun::star::uno::XInterface
      */
     void setQuery([in] string command )
             raises (com::sun::star::sdbc::SQLException);
-    //-------------------------------------------------------------------------
     // FILTER
-    //-------------------------------------------------------------------------
 
     /** returns the used filter.
         <p>
@@ -83,7 +78,6 @@ interface XSingleSelectQueryAnalyzer : com::sun::star::uno::XInterface
             the filter
      */
     string getFilter();
-    //-------------------------------------------------------------------------
 
     /** returns the currently used filter.
              <p>
@@ -98,9 +92,7 @@ interface XSingleSelectQueryAnalyzer : com::sun::star::uno::XInterface
     sequence< sequence<com::sun::star::beans::PropertyValue> >
         getStructuredFilter();
 
-    //-------------------------------------------------------------------------
     // GROUP BY
-    //-------------------------------------------------------------------------
 
     /** returns the currently used GROUP BY.
         <p>
@@ -112,7 +104,6 @@ interface XSingleSelectQueryAnalyzer : com::sun::star::uno::XInterface
      */
     string getGroup();
 
-    //-------------------------------------------------------------------------
     /** returns the currently used group.
         <p>
         The columns returned form the GROUP BY clause.
@@ -122,9 +113,7 @@ interface XSingleSelectQueryAnalyzer : com::sun::star::uno::XInterface
      */
     com::sun::star::container::XIndexAccess getGroupColumns();
 
-    //-------------------------------------------------------------------------
     // HAVING
-    //-------------------------------------------------------------------------
 
     /** returns the used HAVING filter.
         <p>
@@ -135,7 +124,6 @@ interface XSingleSelectQueryAnalyzer : com::sun::star::uno::XInterface
             the filter
      */
     string getHavingClause();
-    //-------------------------------------------------------------------------
 
     /** returns the currently used HAVING filter.
              <p>
@@ -150,9 +138,7 @@ interface XSingleSelectQueryAnalyzer : com::sun::star::uno::XInterface
     sequence< sequence<com::sun::star::beans::PropertyValue> >
         getStructuredHavingClause();
 
-    //-------------------------------------------------------------------------
     // ORDER BY
-    //-------------------------------------------------------------------------
     /** returns the currently used sort order.
         <p>
         The order criteria returned is part of the ORDER BY clause of the
@@ -163,7 +149,6 @@ interface XSingleSelectQueryAnalyzer : com::sun::star::uno::XInterface
      */
     string getOrder();
 
-    //-------------------------------------------------------------------------
     /** returns the currently used sort order.
         <p>
         The order criteria returned is part of the ORDER BY clause of the
@@ -174,7 +159,6 @@ interface XSingleSelectQueryAnalyzer : com::sun::star::uno::XInterface
      */
     com::sun::star::container::XIndexAccess getOrderColumns();
 
-    //-------------------------------------------------------------------------
     /** returns the query previously set at the analyzer, with all application-level
         features being substituted by their database-level counterparts.
 
@@ -244,7 +228,6 @@ interface XSingleSelectQueryAnalyzer : com::sun::star::uno::XInterface
             raises (com::sun::star::sdbc::SQLException);
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -24,11 +24,9 @@
 #include <com/sun/star/configuration/backend/XCompositeLayer.idl>
 #include <com/sun/star/util/XTimeStamped.idl>
 
-//==============================================================================
 
 module com { module sun { module star { module configuration { module backend {
 
-//==============================================================================
 
 /**
   provides read-only access to a configuration data layer.
@@ -48,14 +46,12 @@ module com { module sun { module star { module configuration { module backend {
   */
 published service Layer
 {
-    //--------------------------------------------------------------------------
 
     /**
       provides read access to the contents of the configuration layer.
       */
     interface XLayer ;
 
-    //--------------------------------------------------------------------------
 
     /**
       provides read access to sublayers accessible through an
@@ -63,7 +59,6 @@ published service Layer
       */
     [optional] interface XCompositeLayer ;
 
-    //--------------------------------------------------------------------------
 
     /**
       provides a way to detect changes to the layer.
@@ -81,7 +76,6 @@ published service Layer
       */
     [optional] interface com::sun::star::util::XTimeStamped ;
 
-    //--------------------------------------------------------------------------
 
     /**
       The URL of the layer data.
@@ -90,10 +84,8 @@ published service Layer
       */
     [property,optional,readonly] string URL ;
 
-    //--------------------------------------------------------------------------
 } ;
 
-//==============================================================================
 
 } ; } ; } ; } ; } ;
 

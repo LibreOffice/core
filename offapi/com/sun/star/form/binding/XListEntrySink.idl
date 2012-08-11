@@ -22,13 +22,11 @@
 
 #include <com/sun/star/uno/XInterface.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module form { module binding {
 
 interface XListEntrySource;
 
-//=============================================================================
 
 /** specifies support for indirect manipulation of of a string list
 */
@@ -51,7 +49,6 @@ interface XListEntrySink : com::sun::star::uno::XInterface
             getListEntrySource( );
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

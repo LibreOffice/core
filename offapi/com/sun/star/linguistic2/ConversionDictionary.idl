@@ -23,11 +23,9 @@
 #include <com/sun/star/util/XFlushable.idl>
 #include <com/sun/star/linguistic2/XConversionPropertyType.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module linguistic2 {
 
-//=============================================================================
 /** represents a dictionary used in a conversion dictionary list.
 
     <p>Specific implementations may put some restrictions for
@@ -58,7 +56,6 @@ published service ConversionDictionary
     [optional] interface com::sun::star::linguistic2::XConversionPropertyType;
 };
 
-//=============================================================================
 
 }; }; }; };
 

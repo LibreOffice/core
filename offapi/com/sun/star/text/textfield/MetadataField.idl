@@ -36,11 +36,9 @@
 #include <com/sun/star/rdf/XMetadatable.idl>
 
 
-//=============================================================================
 
 module com { module sun { module star { module text { module textfield {
 
-//=============================================================================
 /** is a <type scope="com::sun::star::text">TextField</type> whose content
     is specified by RDF metadata.
 
@@ -50,39 +48,32 @@ module com { module sun { module star { module text { module textfield {
 */
 service MetadataField
 {
-    //-------------------------------------------------------------------------
     /** None of the properties of
         <type scope="com::sun::star::text">TextContent</type> are supported. */
     service  com::sun::star::text::TextField;
 
-    //-------------------------------------------------------------------------
     /** The <type>MetadataField</type> can have RDF metadata attached. */
     interface com::sun::star::rdf::XMetadatable;
 
-    //-------------------------------------------------------------------------
     /** Allows for insertion of text content into, and creating cursors
         that are bound within, the <type>MetadataField</type>. */
     interface com::sun::star::text::XText;
 
-    //-------------------------------------------------------------------------
     /** The <type scope="com::sun::star::text">TextContent</type>s that are
         contained in the <type>MetadataField</type> can be enumerated. */
     interface com::sun::star::container::XEnumerationAccess;
 
-    //-------------------------------------------------------------------------
     /** The <type scope="com::sun::star::text">TextContent</type>
         that is the parent of this <type>MetadataField</type>.
         @since OOo 3.3
      */
     interface com::sun::star::container::XChild;
 
-    //-------------------------------------------------------------------------
     /** this is the number format for this field.
         @see com::sun::star::util::NumberFormatter
     */
     [optional, property] long NumberFormat;
 
-    //-------------------------------------------------------------------------
     /** determines whether changes in language attributes at the
         position of the text field also change the number format
         as appropriate for this language.
@@ -90,7 +81,6 @@ service MetadataField
     [optional, property] boolean IsFixedLanguage;
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

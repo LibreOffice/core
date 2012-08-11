@@ -24,7 +24,6 @@
 #include <com/sun/star/script/XInvocation.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module script {
 
@@ -49,7 +48,6 @@ published interface XInvocationAdapterFactory2 : com::sun::star::uno::XInterface
         [in] XInvocation Invocation,
         [in] sequence< type > aTypes );
 };
-//=============================================================================
 
 }; }; }; };
 

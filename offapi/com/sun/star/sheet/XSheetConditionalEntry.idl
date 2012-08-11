@@ -22,11 +22,9 @@
 
 #include <com/sun/star/uno/XInterface.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** provides methods to access the cell style name for a condition in a
     conditional format.
@@ -35,14 +33,12 @@ module com {  module sun {  module star {  module sheet {
  */
 published interface XSheetConditionalEntry: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** returns the name of the cell style that is used when the condition
         is fulfilled.
      */
     string getStyleName();
 
-    //-------------------------------------------------------------------------
 
     /** sets the name of the cell style that is used when the condition
         is fulfilled.
@@ -51,7 +47,6 @@ published interface XSheetConditionalEntry: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

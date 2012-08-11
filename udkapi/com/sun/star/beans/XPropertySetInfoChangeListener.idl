@@ -23,11 +23,9 @@
 
 #include <com/sun/star/beans/PropertySetInfoChangeEvent.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module beans {
 
-//=============================================================================
 
 /** a listener for events related to <type>XPropertySetInfo</type>s.
 
@@ -36,7 +34,6 @@ module com {  module sun {  module star {  module beans {
  */
 published interface XPropertySetInfoChangeListener: com::sun::star::lang::XEventListener
 {
-    //-------------------------------------------------------------------------
 
     /** is called whenever changes of a <type>XPropertySetInfo</type> shall
         be propagated.
@@ -44,7 +41,6 @@ published interface XPropertySetInfoChangeListener: com::sun::star::lang::XEvent
     void propertySetInfoChange( [in] PropertySetInfoChangeEvent evt );
 };
 
-//=============================================================================
 
 }; }; }; };
 

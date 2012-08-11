@@ -21,11 +21,9 @@
 
 #include <com/sun/star/uno/XInterface.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module frame {
 
-//=============================================================================
 /** is used to notify a toolbar controller about events
 
     @see com::sun::star::frame::ToolbarController
@@ -34,7 +32,6 @@
  */
 interface XToolbarControllerListener : com::sun::star::uno::XInterface
 {
-    //=============================================================================
     /** gets called to notify a controller that a toolbar function has been selected.
 
         @param aToolbarRes

@@ -24,30 +24,25 @@
 #include <com/sun/star/awt/XActionListener.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module awt {
 
-//=============================================================================
 
 /** makes it possible to register for action events of an image button
     and sets the action command.
  */
 published interface XImageButton: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** registers a listener for action events.
      */
     [oneway] void addActionListener( [in] com::sun::star::awt::XActionListener l );
 
-    //-------------------------------------------------------------------------
 
     /** unregisters a listener for action events.
      */
     [oneway] void removeActionListener( [in] com::sun::star::awt::XActionListener l );
 
-    //-------------------------------------------------------------------------
 
     /** sets the action command string.
      */
@@ -55,7 +50,6 @@ published interface XImageButton: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

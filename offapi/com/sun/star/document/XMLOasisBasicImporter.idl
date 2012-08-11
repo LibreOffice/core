@@ -23,11 +23,9 @@
 #include <com/sun/star/xml/sax/XDocumentHandler.idl>
 
 
-//=============================================================================
 
 module com { module sun { module star { module document {
 
-//=============================================================================
 
 /** Filter for importing Basic macros from the OASIS Open Office file format.
 
@@ -41,13 +39,11 @@ module com { module sun { module star { module document {
  */
 published service XMLOasisBasicImporter
 {
-    //-------------------------------------------------------------------------
 
     /** sets the target document for this filter.
      */
     interface com::sun::star::document::XImporter;
 
-    //-------------------------------------------------------------------------
 
     /** receives notification of general document events.
      */
@@ -55,7 +51,6 @@ published service XMLOasisBasicImporter
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -23,11 +23,9 @@
 
 #include <com/sun/star/drawing/TextProperties.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module drawing {
 
-//=============================================================================
 
 /** This abstract service specifies the general characteristics of an optional
     text inside a <type>Shape</type>.
@@ -45,7 +43,6 @@ published service Text
     service com::sun::star::drawing::TextProperties;
 };
 
-//=============================================================================
 
 }; }; }; };
 

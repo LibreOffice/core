@@ -31,11 +31,9 @@
 
 #include <com/sun/star/container/XNameAccess.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module ui {
 
-//=============================================================================
 
 /** a service which provides information about the user interface commands of
     a single module.

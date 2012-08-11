@@ -34,11 +34,9 @@
 #include <com/sun/star/configuration/backend/MalformedDataException.idl>
 #include <com/sun/star/lang/WrappedTargetException.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module configuration { module backend {
 
-//=============================================================================
 
 /** receives a description of a configuration layer
     as a sequence of events.
@@ -47,7 +45,6 @@ module com { module sun { module star { module configuration { module backend {
  */
 published interface XLayerHandler: ::com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** receives notification that a layer description is started
         for a component.
@@ -66,7 +63,6 @@ published interface XLayerHandler: ::com::sun::star::uno::XInterface
     void startLayer(  )
             raises( MalformedDataException,
                     com::sun::star::lang::WrappedTargetException );
-    //-------------------------------------------------------------------------
 
     /** receives notification that a layer description is complete.
 
@@ -88,7 +84,6 @@ published interface XLayerHandler: ::com::sun::star::uno::XInterface
     void endLayer(  )
             raises( MalformedDataException,
                     com::sun::star::lang::WrappedTargetException );
-    //-------------------------------------------------------------------------
 
     /** receives notification that a description of a node override is started.
 
@@ -136,7 +131,6 @@ published interface XLayerHandler: ::com::sun::star::uno::XInterface
                        [in] boolean bClear )
             raises( MalformedDataException,
                     com::sun::star::lang::WrappedTargetException );
-    //-------------------------------------------------------------------------
 
     /** receives notification that a new item is started.
 
@@ -184,7 +178,6 @@ published interface XLayerHandler: ::com::sun::star::uno::XInterface
                             [in] short  aAttributes )
             raises( MalformedDataException,
                     com::sun::star::lang::WrappedTargetException );
-    //-------------------------------------------------------------------------
 
     /** receives notification that a new item based on a particular template
         is started.
@@ -235,7 +228,6 @@ published interface XLayerHandler: ::com::sun::star::uno::XInterface
                                         [in] short  aAttributes )
             raises( MalformedDataException,
                     com::sun::star::lang::WrappedTargetException );
-    //-------------------------------------------------------------------------
 
     /** receives notification that a node description is complete.
 
@@ -258,7 +250,6 @@ published interface XLayerHandler: ::com::sun::star::uno::XInterface
     void endNode(  )
             raises( MalformedDataException,
                     com::sun::star::lang::WrappedTargetException );
-    //-------------------------------------------------------------------------
 
     /** receives notification that a node is dropped from a set.
 
@@ -285,7 +276,6 @@ published interface XLayerHandler: ::com::sun::star::uno::XInterface
     void dropNode( [in] string aName )
             raises( MalformedDataException,
                     com::sun::star::lang::WrappedTargetException );
-    //-------------------------------------------------------------------------
 
     /** receives notification that an existing property is modified.
 
@@ -354,7 +344,6 @@ published interface XLayerHandler: ::com::sun::star::uno::XInterface
             raises( MalformedDataException,
                     com::sun::star::lang::WrappedTargetException );
 
-    //-------------------------------------------------------------------------
 
     /** receives notification that the value of the current property
         is overridden. .
@@ -389,7 +378,6 @@ published interface XLayerHandler: ::com::sun::star::uno::XInterface
             raises( MalformedDataException,
                     com::sun::star::lang::WrappedTargetException );
 
-    //-------------------------------------------------------------------------
 
     /** receives notification that the value of the current localized property
         is overridden for a specific locale .
@@ -427,7 +415,6 @@ published interface XLayerHandler: ::com::sun::star::uno::XInterface
             raises( MalformedDataException,
                     com::sun::star::lang::WrappedTargetException );
 
-    //-------------------------------------------------------------------------
 
     /** receives notification that a property description is complete.
 
@@ -448,7 +435,6 @@ published interface XLayerHandler: ::com::sun::star::uno::XInterface
     void endProperty(  )
             raises( MalformedDataException,
                     com::sun::star::lang::WrappedTargetException );
-    //-------------------------------------------------------------------------
 
     /** receives notification that a property having a <void/> value is added
         to the current node.
@@ -495,7 +481,6 @@ published interface XLayerHandler: ::com::sun::star::uno::XInterface
             raises( MalformedDataException,
                     com::sun::star::lang::WrappedTargetException );
 
-    //-------------------------------------------------------------------------
 
     /** receives notification that a property having a non-<void/> value
         is added to the current node.
@@ -549,14 +534,11 @@ published interface XLayerHandler: ::com::sun::star::uno::XInterface
             raises( MalformedDataException,
                     com::sun::star::lang::WrappedTargetException );
 
-    //-------------------------------------------------------------------------
 };
 
-//=============================================================================
 
 }; }; }; }; };
 
-//=============================================================================
 
 #endif
 

@@ -21,11 +21,9 @@
 
 #include <com/sun/star/configuration/CannotLoadConfigurationException.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module configuration {
 
-//=============================================================================
 
 /** is thrown when creating a configuration provider fails because
     the user's installation for the is missing or incomplete
@@ -34,7 +32,6 @@ published exception InstallationIncompleteException: com::sun::star::configurati
 {
 };
 
-//=============================================================================
 
 }; }; }; };
 

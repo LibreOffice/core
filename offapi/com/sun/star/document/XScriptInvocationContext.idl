@@ -32,11 +32,9 @@
 
 #include <com/sun/star/document/XEmbeddedScripts.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module document {
 
-//=============================================================================
 
 /** indicates support for executing scripts contained in a, possibly foreign, document.
 
@@ -63,11 +61,9 @@ interface XScriptInvocationContext
     [attribute, readonly] XEmbeddedScripts ScriptContainer;
 };
 
-//=============================================================================
 
 }; }; }; };
 
-//=============================================================================
 
 #endif
 

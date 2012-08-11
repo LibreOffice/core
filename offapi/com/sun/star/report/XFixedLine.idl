@@ -34,11 +34,9 @@
 
 #include <com/sun/star/util/Color.idl>
 #include <com/sun/star/drawing/LineDash.idl>
-//=============================================================================
 
  module com {  module sun {  module star {  module report {
 
-//=============================================================================
 interface XFixedLine
 {
     interface XReportControlModel;
@@ -60,34 +58,28 @@ interface XFixedLine
      */
     [attribute,bound] com::sun::star::drawing::LineStyle LineStyle;
 
-    //-------------------------------------------------------------------------
 
     /** This property contains the dash of the line.
      */
     [attribute,bound] com::sun::star::drawing::LineDash LineDash;
 
-    //-------------------------------------------------------------------------
 
     /** This property contains the line color.
      */
     [attribute,bound] com::sun::star::util::Color LineColor;
 
-    //-------------------------------------------------------------------------
 
     /** This property contains the extent of transparency.
      */
     [attribute,bound] short LineTransparence;
 
-    //-------------------------------------------------------------------------
 
     /** This property contains the width of the line in 1/100th mm.
      */
     [attribute,bound] long LineWidth;
 
-    //-------------------------------------------------------------------------
 };
 
-//=============================================================================
 
 }; }; }; };
 

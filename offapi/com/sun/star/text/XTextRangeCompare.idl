@@ -23,14 +23,12 @@
 
 #include <com/sun/star/lang/IllegalArgumentException.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module text {
 
  published interface XText;
  published interface XTextRange;
 
-//=============================================================================
 
 // DocMerge from xml: interface com::sun::star::text::XTextRangeCompare
 /** compares the positions of two <type>TextRange</type>s within a
@@ -44,7 +42,6 @@
  */
 published interface XTextRangeCompare: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     // DocMerge from idl: method com::sun::star::text::XTextRangeCompare::compareRegionStarts
     /** @returns
@@ -59,7 +56,6 @@ published interface XTextRangeCompare: com::sun::star::uno::XInterface
     short compareRegionStarts( [in] XTextRange xR1, [in] XTextRange xR2 )
             raises( com::sun::star::lang::IllegalArgumentException );
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from idl: method com::sun::star::text::XTextRangeCompare::compareRegionEnds
     /** @returns
@@ -75,7 +71,6 @@ published interface XTextRangeCompare: com::sun::star::uno::XInterface
             raises( com::sun::star::lang::IllegalArgumentException );
 };
 
-//=============================================================================
 
 }; }; }; };
 

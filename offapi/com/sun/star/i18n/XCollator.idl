@@ -22,7 +22,6 @@
 #include <com/sun/star/uno/Exception.idl>
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/lang/Locale.idl>
-//=============================================================================
 
 module com { module sun { module star { module i18n {
 
@@ -31,7 +30,6 @@ module com { module sun { module star { module i18n {
 */
 published interface XCollator: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** Compare 2 substrings in specific locale and algorithm.
 
         @param aStr1
@@ -60,7 +58,6 @@ published interface XCollator: com::sun::star::uno::XInterface
     long compareSubstring(  [in] string aStr1, [in] long nOff1, [in] long nLen1,
                             [in] string aStr2, [in] long nOff2, [in] long nLen2 );
 
-    //-------------------------------------------------------------------------
     /** Compare 2 strings in specific locale and algorithm.
 
         @param aStr1
@@ -76,7 +73,6 @@ published interface XCollator: com::sun::star::uno::XInterface
     */
     long compareString( [in] string aStr1, [in] string aStr2 );
 
-    //-------------------------------------------------------------------------
     /** Load the collator with default algorithm defined in
         locale data.
 
@@ -94,7 +90,6 @@ published interface XCollator: com::sun::star::uno::XInterface
     long loadDefaultCollator(   [in] ::com::sun::star::lang::Locale aLocale,
                                 [in] long nCollatorOptions );
 
-    //-------------------------------------------------------------------------
     /** Load a particular collator algorithm for the locale.
 
         @param aAlgorithmName
@@ -114,7 +109,6 @@ published interface XCollator: com::sun::star::uno::XInterface
                                 [in] ::com::sun::star::lang::Locale aLocale,
                                 [in] long nCollatorOptions );
 
-    //-------------------------------------------------------------------------
     /** List all collator algorithms for a given locale.
 
         @param aLocale
@@ -126,7 +120,6 @@ published interface XCollator: com::sun::star::uno::XInterface
     sequence <string> listCollatorAlgorithms(
                                 [in] ::com::sun::star::lang::Locale aLocale );
 
-    //-------------------------------------------------------------------------
     /** Load a collator algorithm with options chosen by end user.
 
         @param aAlgorithmName
@@ -144,7 +137,6 @@ published interface XCollator: com::sun::star::uno::XInterface
                                 [in] ::com::sun::star::lang::Locale aLocale,
                                 [in] sequence<long> aCollatorOptions );
 
-    //-------------------------------------------------------------------------
     /** List all end user collator options for a given algorithm.
 
         @param aAlgorithmName
@@ -157,11 +149,9 @@ published interface XCollator: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 
-//=============================================================================
 
 #endif
 

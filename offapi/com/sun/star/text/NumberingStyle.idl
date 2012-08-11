@@ -22,24 +22,20 @@
 #include <com/sun/star/style/Style.idl>
 #include <com/sun/star/text/NumberingRules.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module text {
 
-//=============================================================================
 
 /** specifies a style sheet numberings within a
     <type scope="com::sun::star::text">Text</type>.
  */
 published service NumberingStyle
 {
-    //-------------------------------------------------------------------------
     /// specifies administrative properties.
     service com::sun::star::style::Style;
     service NumberingRules;
 };
 
-//=============================================================================
 
 }; }; }; };
 

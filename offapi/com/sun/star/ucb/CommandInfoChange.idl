@@ -20,11 +20,9 @@
 #define __com_sun_star_ucb_CommandInfoChange_idl__
 
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** specifies reasons for sending <type>CommandInfoChangeEvent</type>s.
 
     @see CommandInfoChangeEvent
@@ -32,18 +30,15 @@ module com { module sun { module star { module ucb {
 */
 published constants CommandInfoChange
 {
-    //-------------------------------------------------------------------------
     /** A command was inserted into a <type>XCommandInfo</type>.
     */
     const long COMMAND_INSERTED = 0;
 
-    //-------------------------------------------------------------------------
     /** A command was removed from a <type>XCommandInfo</type>.
     */
     const long COMMAND_REMOVED = 1;
 };
 
-//=============================================================================
 
 }; }; }; };
 

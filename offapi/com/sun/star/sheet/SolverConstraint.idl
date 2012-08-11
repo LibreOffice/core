@@ -23,11 +23,9 @@
 #include <com/sun/star/table/CellAddress.idl>
 #include <com/sun/star/sheet/SolverConstraintOperator.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** is used to specify a constraint for a solver model.
  */
@@ -45,7 +43,6 @@ struct SolverConstraint
     any Right;
 };
 
-//=============================================================================
 
 }; }; }; };
 

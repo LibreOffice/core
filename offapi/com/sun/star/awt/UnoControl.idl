@@ -26,11 +26,9 @@
 #include <com/sun/star/accessibility/XAccessible.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module awt {
 
-//=============================================================================
 
 /** specifies an abstract control.
 
@@ -65,7 +63,6 @@ published service UnoControl
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

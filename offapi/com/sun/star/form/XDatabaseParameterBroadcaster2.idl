@@ -21,11 +21,9 @@
 
 #include <com/sun/star/form/XDatabaseParameterBroadcaster.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module form {
 
-//=============================================================================
 
 /** provides the possibility of receiving an event for configuration of parameters.
 
@@ -40,7 +38,6 @@ module com {  module sun {  module star {  module form {
 */
 interface XDatabaseParameterBroadcaster2: XDatabaseParameterBroadcaster
 {
-    //-------------------------------------------------------------------------
     /** registers an XDatabaseParameterListener
 
         <p>This method behaves exactly as the <member>XDatabaseParameterBroadcaster::addParameterListener</member>
@@ -48,7 +45,6 @@ interface XDatabaseParameterBroadcaster2: XDatabaseParameterBroadcaster
     */
     [oneway] void addDatabaseParameterListener( [in] com::sun::star::form::XDatabaseParameterListener aListener );
 
-    //-------------------------------------------------------------------------
 
     /** revokes an XDatabaseParameterListener
 
@@ -59,7 +55,6 @@ interface XDatabaseParameterBroadcaster2: XDatabaseParameterBroadcaster
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

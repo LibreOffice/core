@@ -19,11 +19,9 @@
 #ifndef __com_sun_star_configuration_backend_SchemaAttribute_idl__
 #define __com_sun_star_configuration_backend_SchemaAttribute_idl__
 
-//=============================================================================
 
 module com { module sun { module star { module configuration { module backend {
 
-//=============================================================================
 
 /** These values are used to specify the behavior of a node or property
     in the schema.
@@ -35,39 +33,32 @@ module com { module sun { module star { module configuration { module backend {
  */
 published constants SchemaAttribute
 {
-    //-------------------------------------------------------------------------
 
     /** indicates that a property value can't be null.
      */
     const short REQUIRED = 1;
 
-    //-------------------------------------------------------------------------
 
     /** indicates that the content of the node or the value of the property
         may depend on the locale.
      */
     const short LOCALIZED = 2;
 
-    //-------------------------------------------------------------------------
 
     /** indicates that properties can be added to the node at runtime
      */
     const short EXTENSIBLE = 4;
 
-    //-------------------------------------------------------------------------
 
     /** can be used to mask the schema attributes from merged attributes
      */
     const short MASK = 255; // 0x00FF
 
-    //-------------------------------------------------------------------------
 };
 
-//=============================================================================
 
 }; }; }; }; };
 
-//=============================================================================
 
 #endif
 

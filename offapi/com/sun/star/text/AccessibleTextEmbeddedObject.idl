@@ -35,11 +35,9 @@
 
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module text {
 
-//=============================================================================
 
 /** The accessible view of an inactive embedded object. If an embedded
     object gets active, the active document gets an accessible object
@@ -119,7 +117,6 @@ published service AccessibleTextEmbeddedObject
     interface ::com::sun::star::accessibility::XAccessibleEventBroadcaster;
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -19,11 +19,9 @@
 #ifndef __com_sun_star_i18n_CharacterIteratorMode_idl__
 #define __com_sun_star_i18n_CharacterIteratorMode_idl__
 
-//=============================================================================
 
 module com {  module sun {  module star {  module i18n {
 
-//=============================================================================
 
 /** Constants to specify the type of character iteration.
 
@@ -42,7 +40,6 @@ published constants CharacterIteratorMode
     const short SKIPCONTROLCHARACTER    = 2;
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -21,18 +21,15 @@
 
 #include <com/sun/star/beans/PropertyValue.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module beans {
 
-//=============================================================================
 /** specifies a sequence of <type>PropertyValue</type> instances.
 
     <p>Such sequences are especially useful for remote interfaces. </p>
 */
 published typedef sequence<PropertyValue> PropertyValues;
 
-//=============================================================================
 
 }; }; }; };
 

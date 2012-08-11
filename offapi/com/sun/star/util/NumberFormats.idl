@@ -24,11 +24,9 @@
 #include <com/sun/star/util/XNumberFormatTypes.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module util {
 
-//=============================================================================
 
 /** specifies a container of number formats.
  */
@@ -44,7 +42,6 @@ published service NumberFormats
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

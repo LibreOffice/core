@@ -24,11 +24,9 @@
 #include <com/sun/star/util/SortField.idl>
 #include <com/sun/star/table/TableOrientation.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module table {
 
-//=============================================================================
 
 /** contains properties which describe sorting of rows or columns in a table.
 
@@ -40,25 +38,21 @@ module com {  module sun {  module star {  module table {
  */
 published service TableSortDescriptor
 {
-    //-------------------------------------------------------------------------
 
     /** contains common sorting properties.
      */
     service com::sun::star::util::SortDescriptor;
 
-    //=========================================================================
 
     /** specifies the descriptions of the individual sort fields.
      */
     [property] sequence<com::sun::star::util::SortField> SortFields;
 
-    //-------------------------------------------------------------------------
 
     /** contains the maximum number of sort fields the descriptor can hold.
      */
     [readonly, property] long MaxFieldCount;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the sorting orientation (sort rows or columns).
 
@@ -70,7 +64,6 @@ published service TableSortDescriptor
      */
     [property] com::sun::star::table::TableOrientation Orientation;
 
-    //-------------------------------------------------------------------------
 
     /** specifies whether the first row or column (depending on
         <member scope="com::sun::star::util">SortDescriptor::SortColumns</member>) is a
@@ -80,7 +73,6 @@ published service TableSortDescriptor
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

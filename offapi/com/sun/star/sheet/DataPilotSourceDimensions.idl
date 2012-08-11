@@ -22,11 +22,9 @@
 
 #include <com/sun/star/container/XNameAccess.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** represents the collection of dimensions in a data pilot source.
 
@@ -34,7 +32,6 @@ module com {  module sun {  module star {  module sheet {
  */
 published service DataPilotSourceDimensions
 {
-    //-------------------------------------------------------------------------
 
     /** provides access by name to the dimensions in the collection.
 
@@ -44,7 +41,6 @@ published service DataPilotSourceDimensions
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

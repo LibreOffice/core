@@ -21,11 +21,9 @@
 
 #include <com/sun/star/beans/NamedValue.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module animations {
 
-//=============================================================================
 
 /** Properties of an animated target.<p>
 
@@ -42,7 +40,6 @@ struct TargetProperties
     sequence< ::com::sun::star::beans::NamedValue > Properties;
 };
 
-//=============================================================================
 
 }; }; }; };
 

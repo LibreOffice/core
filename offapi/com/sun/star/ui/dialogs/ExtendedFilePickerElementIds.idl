@@ -23,7 +23,6 @@
 
 module com { module sun { module star { module ui { module dialogs {
 
-//=============================================================================
 /** <p>These constants are used to specify extended controls of a FilePicker dialog.
     A FilePicker service may be initialized so that it has additional controls
     extending the set of common controls a FilePicker usually supports.</p>
@@ -35,84 +34,68 @@ module com { module sun { module star { module ui { module dialogs {
 
 published constants ExtendedFilePickerElementIds
 {
-    //---------------------------------------------------------------------
     /**
     */
     const short CHECKBOX_AUTOEXTENSION = 100;
 
-    //---------------------------------------------------------------------
     /**
     */
     const short CHECKBOX_PASSWORD      = 101;
 
-    //---------------------------------------------------------------------
     /**
     */
     const short CHECKBOX_FILTEROPTIONS = 102;
 
-    //---------------------------------------------------------------------
     /**
     */
     const short CHECKBOX_READONLY      = 103;
 
-    //---------------------------------------------------------------------
     /**
     */
     const short CHECKBOX_LINK          = 104;
 
-    //---------------------------------------------------------------------
     /**
     */
     const short CHECKBOX_PREVIEW       = 105;
 
-    //---------------------------------------------------------------------
     /**
     */
     const short PUSHBUTTON_PLAY        = 106;
 
-    //---------------------------------------------------------------------
     /**
     */
     const short LISTBOX_VERSION        = 107;
 
-    //---------------------------------------------------------------------
     /**
     */
     const short LISTBOX_TEMPLATE       = 108;
 
 
-    //---------------------------------------------------------------------
     /**
     */
     const short LISTBOX_IMAGE_TEMPLATE = 109;
 
-    //---------------------------------------------------------------------
     /**
     */
     const short CHECKBOX_SELECTION     = 110;
 
-    //---------------------------------------------------------------------
     /**
     */
     const short LISTBOX_VERSION_LABEL  = 207;
 
-    //---------------------------------------------------------------------
     /**
     */
     const short LISTBOX_TEMPLATE_LABEL = 208;
 
-    //---------------------------------------------------------------------
     /**
     */
     const short LISTBOX_IMAGE_TEMPLATE_LABEL = 209;
 
-    //---------------------------------------------------------------------
     /**
     */
     const short LISTBOX_FILTER_SELECTOR = 210;
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

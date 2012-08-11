@@ -23,11 +23,9 @@
 #include <com/sun/star/container/XNameAccess.idl>
 
 
-//=============================================================================
 
 module com { module sun { module star { module text {
 
-//=============================================================================
 /** provides access to the reference marks in a document.
 */
 published service ReferenceMarks
@@ -37,7 +35,6 @@ published service ReferenceMarks
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

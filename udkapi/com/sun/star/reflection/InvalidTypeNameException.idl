@@ -22,11 +22,9 @@
 
 #include <com/sun/star/uno/Exception.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module reflection {
 
-//=============================================================================
 
 /** thrown in case that a certain type name does exist, but does not meet
     some other criteria.
@@ -38,7 +36,6 @@ published exception InvalidTypeNameException : com::sun::star::uno::Exception
 };
 
 
-//=============================================================================
 
 }; }; }; };
 

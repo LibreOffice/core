@@ -34,7 +34,6 @@ module com {  module sun {  module star {  module sdb {
 */
 published service InteractionHandler: com::sun::star::task::XInteractionHandler;
 
-//=============================================================================
 
 }; }; }; };
 

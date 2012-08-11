@@ -22,11 +22,9 @@
 #include <com/sun/star/io/IOException.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module io {
 
-//=============================================================================
 
 // DocMerge from xml: exception com::sun::star::io::AlreadyConnectedException
 /** is thrown when a client tries to connect to a resource to which he is
@@ -36,7 +34,6 @@ exception AlreadyConnectedException: com::sun::star::io::IOException
 {
 };
 
-//=============================================================================
 
 }; }; }; };
 

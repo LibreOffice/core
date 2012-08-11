@@ -23,11 +23,9 @@
 #include <com/sun/star/drawing/XShapeGrouper.idl>
 #include <com/sun/star/lang/XServiceInfo.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** This abstract service is implemented by every page of a
     <type>SpreadsheetDocument</type>.
@@ -74,7 +72,6 @@ published service SpreadsheetDrawPage
     interface com::sun::star::lang::XServiceInfo;
 };
 
-//=============================================================================
 
 }; }; }; };
 

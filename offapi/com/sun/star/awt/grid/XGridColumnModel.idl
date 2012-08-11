@@ -36,11 +36,9 @@
 #include <com/sun/star/lang/IndexOutOfBoundsException.idl>
 #include <com/sun/star/lang/IllegalArgumentException.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module awt { module grid {
 
-//=============================================================================
 
 /** An instance of this interface is used by the <type>UnoControlGrid</type> to
     retrieve the column structure that is displayed in the actual control.
@@ -138,7 +136,6 @@ interface XGridColumnModel
     void setDefaultColumns([in] long elements);
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

@@ -20,11 +20,9 @@
 #define __com_sun_star_util_SortDescriptor2_idl__
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module util {
 
-//=============================================================================
 
 /** gives access to the properties of a sort descriptor. The properties are
     given in a sequence of PropertyValue.
@@ -42,7 +40,6 @@ published service SortDescriptor2
 {
 };
 
-//=============================================================================
 
 }; }; }; };
 

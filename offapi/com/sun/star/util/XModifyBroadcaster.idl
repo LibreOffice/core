@@ -24,11 +24,9 @@
 #include <com/sun/star/util/XModifyListener.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module util {
 
-//=============================================================================
 
 /** broadcasts each modification made on the date data of the object which
     supports this interface.
@@ -38,19 +36,16 @@ module com {  module sun {  module star {  module util {
  */
 published interface XModifyBroadcaster: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** adds the specified listener to receive events "modified."
      */
     [oneway] void addModifyListener( [in] com::sun::star::util::XModifyListener aListener );
 
-    //-------------------------------------------------------------------------
     /** removes the specified listener.
      */
     [oneway] void removeModifyListener( [in] com::sun::star::util::XModifyListener aListener );
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

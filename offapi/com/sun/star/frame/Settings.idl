@@ -21,11 +21,9 @@
 
 #include <com/sun/star/container/XNameAccess.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module frame {
 
-//=============================================================================
 /** @deprecated
  */
 published service Settings
@@ -33,7 +31,6 @@ published service Settings
     interface com::sun::star::container::XNameAccess;
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -26,7 +26,6 @@
 #include <com/sun/star/sync/SyncInfo.idl>
 #include <com/sun/star/sync/SyncElement.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sync {
 
@@ -63,7 +62,6 @@ published interface XSyncCollector: com::sun::star::uno::XInterface
                                                             [in] unsigned long nEvent );
 };
 
-//=============================================================================
 
 }; }; }; };
 

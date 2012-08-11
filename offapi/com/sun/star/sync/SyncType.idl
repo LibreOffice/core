@@ -20,11 +20,9 @@
 #ifndef __com_sun_star_sync_SyncType_idl__
 #define __com_sun_star_sync_SyncType_idl__
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sync {
 
-//=============================================================================
 
 /// @deprecated
 published constants SyncType
@@ -44,7 +42,6 @@ published constants SyncType
     const unsigned long IMAP = 6;
 };
 
-//=============================================================================
 
 }; }; }; };
 

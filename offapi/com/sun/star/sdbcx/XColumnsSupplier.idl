@@ -50,7 +50,6 @@ published interface XColumnsSupplier: com::sun::star::uno::XInterface
     com::sun::star::container::XNameAccess getColumns();
 };
 
-//=============================================================================
 
 }; }; }; };
 

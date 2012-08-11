@@ -23,11 +23,9 @@
 #include <com/sun/star/sheet/XAreaLinks.idl>
 #include <com/sun/star/container/XEnumerationAccess.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** represents a collection of area links.
 
@@ -36,14 +34,12 @@ module com {  module sun {  module star {  module sheet {
  */
 published service CellAreaLinks
 {
-    //-------------------------------------------------------------------------
 
     /** provides access via index to a collection of area links and inserting
         and removing area links.
      */
     interface com::sun::star::sheet::XAreaLinks;
 
-    //-------------------------------------------------------------------------
 
     /** provides access to the area links via index.
 
@@ -52,7 +48,6 @@ published service CellAreaLinks
      */
     interface com::sun::star::container::XIndexAccess;
 
-    //-------------------------------------------------------------------------
 
     /** creates an enumeration of all area links.
 
@@ -63,7 +58,6 @@ published service CellAreaLinks
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

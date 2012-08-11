@@ -26,11 +26,9 @@
 #include <com/sun/star/lang/ArrayIndexOutOfBoundsException.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module reflection {
 
-//=============================================================================
 
 /** Reflects an IDL sequence and provides dynamic access to instances of
     that sequence.
@@ -110,7 +108,6 @@ published interface XIdlArray: com::sun::star::uno::XInterface
                 com::sun::star::lang::ArrayIndexOutOfBoundsException );
 };
 
-//=============================================================================
 
 }; }; }; };
 

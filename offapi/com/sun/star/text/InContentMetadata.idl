@@ -26,11 +26,9 @@
 #include <com/sun/star/rdf/XMetadatable.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module text {
 
-//=============================================================================
 
 /** is a <type>TextContent</type> that can be used to attach RDF metadata
     to a range of text.
@@ -39,21 +37,17 @@ module com {  module sun {  module star {  module text {
  */
 service InContentMetadata
 {
-    //-------------------------------------------------------------------------
     /** None of the properties of <type>TextContent</type> are
         supported. */
     service com::sun::star::text::TextContent;
 
-    //-------------------------------------------------------------------------
     /** The <type>InContentMetadata</type> can have RDF metadata attached. */
     interface com::sun::star::rdf::XMetadatable;
 
-    //-------------------------------------------------------------------------
     /** The <type>TextContent</type>s that are contained in the
         annotated range of text can be enumerated. */
     interface com::sun::star::container::XEnumerationAccess;
 
-    //-------------------------------------------------------------------------
     /** The <type>TextContent</type> that is the parent of this text range.
         @since OOo 3.3
      */
@@ -62,7 +56,6 @@ service InContentMetadata
 };
 
 
-//=============================================================================
 
 }; }; }; };
 

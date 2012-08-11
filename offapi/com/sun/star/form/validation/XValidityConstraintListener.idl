@@ -22,11 +22,9 @@
 
 #include <com/sun/star/lang/XEventListener.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module form { module validation {
 
-//=============================================================================
 
 /** specifies an interface for listening for changes in the validity constraints
     represented by an <type>XValidator</type>.
@@ -43,7 +41,6 @@ interface XValidityConstraintListener : com::sun::star::lang::XEventListener
     void    validityConstraintChanged( [in] com::sun::star::lang::EventObject Source );
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

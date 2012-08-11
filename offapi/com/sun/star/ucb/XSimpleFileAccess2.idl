@@ -24,17 +24,14 @@
 #include <com/sun/star/io/XInputStream.idl>
 #include <com/sun/star/uno/Exception.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** This is an extension to the interface <type>XSimpleFileAccess</type>.
 */
 published interface XSimpleFileAccess2 : com::sun::star::ucb::XSimpleFileAccess
 {
 
-    //-------------------------------------------------------------------------
     /** Overwrites the file content with the given data.
 
         <p>If the file does not exist, it will be created.
@@ -51,7 +48,6 @@ published interface XSimpleFileAccess2 : com::sun::star::ucb::XSimpleFileAccess
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

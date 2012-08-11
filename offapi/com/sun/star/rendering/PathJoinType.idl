@@ -38,21 +38,18 @@ constants PathJoinType
      */
     const byte NONE=0;
 
-    //-------------------------------------------------------------------------
 
     /** Join the path segment by extending the outer border until they
         intersect.
      */
     const byte MITER=1;
 
-    //-------------------------------------------------------------------------
 
     /** Join the path segment with a pie-like patch, such that the
         outer line of the meeting point is round.
      */
     const byte ROUND=2;
 
-    //-------------------------------------------------------------------------
 
     /** Join the path segment by connecting the outer ends of the
         abutting segments with a straight line.

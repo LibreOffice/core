@@ -38,11 +38,9 @@
 #include <com/sun/star/lang/Locale.idl>
 #include <com/sun/star/text/XTextSection.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module text {
 
-//=============================================================================
 
 // DocMerge from xml: service com::sun::star::text::BaseIndex
 /** specifies the basic service of different indexes within a document.@see com::sun::star::text::DocumentIndex
@@ -57,7 +55,6 @@ published service BaseIndex
     // DocMerge: empty anyway
     interface com::sun::star::text::XDocumentIndex;
 
-    //-------------------------------------------------------------------------
     /** contains the title of the index.*/
 
     // DocMerge: empty anyway
@@ -154,17 +151,12 @@ published service BaseIndex
          complete document content or from the current chapter only.
      <p> It is not available in the bibliography</p>*/
     [optional, property] boolean CreateFromChapter;
-    //------------------------------------------------------------------------
     /** the text section containing the content of the index */
     [property] com::sun::star::text::XTextSection ContentSection;
-    //------------------------------------------------------------------------
-    //------------------------------------------------------------------------
     /** the text section containing the header of the index */
     [property] com::sun::star::text::XTextSection HeaderSection;
-    //------------------------------------------------------------------------
 };
 
-//=============================================================================
 
 }; }; }; };
 

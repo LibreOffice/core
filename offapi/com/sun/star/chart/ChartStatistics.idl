@@ -34,11 +34,9 @@
 #include <com/sun/star/chart/ChartRegressionCurveType.idl>
 #include <com/sun/star/chart/ErrorBarStyle.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module chart {
 
-//=============================================================================
 
 /** offers statistical properties for the data in the chart. It is
     available for a single data row and for the whole diagram.
@@ -47,7 +45,6 @@ published service ChartStatistics
 {
     interface com::sun::star::beans::XPropertySet;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the lower limit of the error range of a
         data row.
@@ -61,7 +58,6 @@ published service ChartStatistics
      */
     [property] double ConstantErrorLow;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the upper limit of the error range of a
         data row.
@@ -75,14 +71,12 @@ published service ChartStatistics
      */
     [property] double ConstantErrorHigh;
 
-    //-------------------------------------------------------------------------
 
     /** determines if the mean value for a data row is
         displayed as a line.
      */
     [property] boolean MeanValue;
 
-    //-------------------------------------------------------------------------
 
     /** determines the type of error to indicate.
 
@@ -104,7 +98,6 @@ published service ChartStatistics
      */
     [optional, property] long ErrorBarStyle;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the percentage that is used to display error bars.
 
@@ -119,7 +112,6 @@ published service ChartStatistics
      */
     [property] double PercentageError;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the percentage for the margin of errors.
 
@@ -134,7 +126,6 @@ published service ChartStatistics
      */
     [property] double ErrorMargin;
 
-    //-------------------------------------------------------------------------
 
     /** determines how the error is indicated.
 
@@ -144,7 +135,6 @@ published service ChartStatistics
      */
     [property] com::sun::star::chart::ChartErrorIndicatorType ErrorIndicator;
 
-    //-------------------------------------------------------------------------
 
     /** determines a type of regression for the data row values.
 
@@ -165,7 +155,6 @@ published service ChartStatistics
     [optional, property] string ErrorBarRangeNegative;
 };
 
-//=============================================================================
 
 }; }; }; };
 

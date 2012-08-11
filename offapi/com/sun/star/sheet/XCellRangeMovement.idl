@@ -26,17 +26,14 @@
 #include <com/sun/star/sheet/CellDeleteMode.idl>
 #include <com/sun/star/table/CellAddress.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** provides methods for moving ranges of cells in a sheet.
  */
 published interface XCellRangeMovement: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** inserts cells, moving other cells down or right.
 
@@ -52,7 +49,6 @@ published interface XCellRangeMovement: com::sun::star::uno::XInterface
             [in] com::sun::star::table::CellRangeAddress aRange,
             [in] com::sun::star::sheet::CellInsertMode nMode );
 
-    //-------------------------------------------------------------------------
 
     /** deletes cells, moving other cells up or left.
 
@@ -66,7 +62,6 @@ published interface XCellRangeMovement: com::sun::star::uno::XInterface
             [in] com::sun::star::table::CellRangeAddress aRange,
             [in] com::sun::star::sheet::CellDeleteMode nMode );
 
-    //-------------------------------------------------------------------------
 
     /** moves a cell range to another position in the document.
 
@@ -83,7 +78,6 @@ published interface XCellRangeMovement: com::sun::star::uno::XInterface
             [in] com::sun::star::table::CellAddress aDestination,
             [in] com::sun::star::table::CellRangeAddress aSource );
 
-    //-------------------------------------------------------------------------
 
     /** copies a cell range to another position in the document.
 
@@ -101,7 +95,6 @@ published interface XCellRangeMovement: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

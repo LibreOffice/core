@@ -23,24 +23,19 @@
 #include <com/sun/star/lang/IllegalArgumentException.idl>
 
 
-//=============================================================================
 
 module com { module sun { module star { module linguistic2 {
 
-//=============================================================================
 /** @deprecated
 */
 published interface XSupportedLanguages : com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     sequence<short> getLanguages();
 
-    //-------------------------------------------------------------------------
     boolean hasLanguage( [in] short nLanguage );
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

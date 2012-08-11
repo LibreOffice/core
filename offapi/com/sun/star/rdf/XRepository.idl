@@ -39,11 +39,9 @@
 #include <com/sun/star/rdf/XNamedGraph.idl>
 
 
-//=============================================================================
 
 module com {   module sun {   module star {   module rdf {
 
-//=============================================================================
 /** provides access to a set of named RDF graphs.
 
     <p>
@@ -73,7 +71,6 @@ module com {   module sun {   module star {   module rdf {
 interface XRepository
 {
 
-    //-------------------------------------------------------------------------
     /** creates a fresh unique blank node.
 
         @returns
@@ -82,7 +79,6 @@ interface XRepository
     XBlankNode createBlankNode();
 
 
-    //-------------------------------------------------------------------------
     /** imports a named graph into the repository.
 
         <p>
@@ -143,7 +139,6 @@ interface XRepository
                 RepositoryException,
                 com::sun::star::io::IOException );
 
-    //-------------------------------------------------------------------------
     /** exports a named graph from the repository.
 
         <p>
@@ -193,7 +188,6 @@ interface XRepository
                 RepositoryException,
                 com::sun::star::io::IOException );
 
-    //-------------------------------------------------------------------------
     /** gets the names of all the graphs in the repository.
 
         @returns
@@ -205,7 +199,6 @@ interface XRepository
     sequence<XURI> getGraphNames()
         raises( RepositoryException );
 
-    //-------------------------------------------------------------------------
     /** gets a graph by its name.
 
         @param GraphName
@@ -224,7 +217,6 @@ interface XRepository
         raises( com::sun::star::lang::IllegalArgumentException,
                 RepositoryException );
 
-    //-------------------------------------------------------------------------
     /** creates a graph with the given name.
 
         <p>
@@ -251,7 +243,6 @@ interface XRepository
                 com::sun::star::container::ElementExistException,
                 RepositoryException );
 
-    //-------------------------------------------------------------------------
     /** destroys the graph with the given name, and removes it from the
         repository.
 
@@ -277,7 +268,6 @@ interface XRepository
                 com::sun::star::container::NoSuchElementException,
                 RepositoryException );
 
-    //-------------------------------------------------------------------------
     /** gets matching RDF statements from the repository.
 
         <p>
@@ -313,7 +303,6 @@ interface XRepository
         raises( RepositoryException );
 
 
-    //-------------------------------------------------------------------------
     /** executes a SPARQL "SELECT" query.
 
         <p>
@@ -346,7 +335,6 @@ interface XRepository
         raises( QueryException,
                 RepositoryException );
 
-    //-------------------------------------------------------------------------
     /** executes a SPARQL "CONSTRUCT" query.
 
         <p>
@@ -374,7 +362,6 @@ interface XRepository
         raises( QueryException,
                 RepositoryException );
 
-    //-------------------------------------------------------------------------
     /** executes a SPARQL "ASK" query.
 
         <p>
@@ -400,7 +387,6 @@ interface XRepository
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

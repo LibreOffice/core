@@ -30,11 +30,9 @@
 
 #include <com/sun/star/document/XExtendedFilterDetection.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module document {
 
-//=============================================================================
 /** describes a class of service which will be used for deep <type>TypeDetection</type>
     in a generic way
 
@@ -75,7 +73,6 @@ module com { module sun { module star { module document {
  */
 published service ExtendedTypeDetection
 {
-    //-------------------------------------------------------------------------
     /** makes the deep detection
 
         <p>
@@ -101,7 +98,6 @@ published service ExtendedTypeDetection
     interface XExtendedFilterDetection;
 };
 
-//=============================================================================
 
 }; }; }; };
 

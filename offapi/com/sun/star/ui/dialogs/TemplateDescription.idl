@@ -23,7 +23,6 @@
 
 module com { module sun { module star { module ui { module dialogs {
 
-//=============================================================================
 /** The implementation of a FilePicker service may support the usage of
     different templates. The following constants define the currently
     specified templates.
@@ -33,17 +32,14 @@ module com { module sun { module star { module ui { module dialogs {
 
 published constants TemplateDescription
 {
-    //---------------------------------------------------------------------
     /** A FileOpen dialog without any additional controls.
     */
     const short FILEOPEN_SIMPLE                                = 0;
 
-    //---------------------------------------------------------------------
     /** A FileSave dialog without any additional controls.
     */
     const short FILESAVE_SIMPLE                                = 1;
 
-    //---------------------------------------------------------------------
     /** A FileSave dialog with additional controls.
         <ul>
             <li>A checkbox "Auto Extension"</li>
@@ -52,7 +48,6 @@ published constants TemplateDescription
     */
     const short FILESAVE_AUTOEXTENSION_PASSWORD                = 2;
 
-    //---------------------------------------------------------------------
     /** A FileSave dialog with additional controls.
         <ul>
             <li>A checkbox "Auto Extension"</li>
@@ -62,7 +57,6 @@ published constants TemplateDescription
     */
     const short FILESAVE_AUTOEXTENSION_PASSWORD_FILTEROPTIONS  = 3;
 
-    //---------------------------------------------------------------------
     /** A FileSave dialog with additional controls.
         <ul>
             <li>A checkbox "Auto Extension"</li>
@@ -71,7 +65,6 @@ published constants TemplateDescription
     */
     const short FILESAVE_AUTOEXTENSION_SELECTION               = 4;
 
-    //---------------------------------------------------------------------
     /** A FileSave dialog with additional controls.
         <ul>
             <li>A checkbox "Auto Extension"</li>
@@ -80,7 +73,6 @@ published constants TemplateDescription
     */
     const short FILESAVE_AUTOEXTENSION_TEMPLATE                = 5;
 
-    //---------------------------------------------------------------------
     /** A FileOpen dialog with additional controls.
         <ul>
             <li>A checkbox "Insert as link"
@@ -91,7 +83,6 @@ published constants TemplateDescription
     */
     const short FILEOPEN_LINK_PREVIEW_IMAGE_TEMPLATE           = 6;
 
-    //---------------------------------------------------------------------
     /** A FileOpen dialog with additional controls.
         <ul>
             <li>A push button "Play"</li>
@@ -99,7 +90,6 @@ published constants TemplateDescription
     */
     const short FILEOPEN_PLAY                                  = 7;
 
-    //---------------------------------------------------------------------
     /** A FileOpen dialog with additional controls.
         <ul>
             <li>A checkbox "Read only"</li>
@@ -108,7 +98,6 @@ published constants TemplateDescription
     */
     const short FILEOPEN_READONLY_VERSION                      = 8;
 
-    //---------------------------------------------------------------------
     /** A FileOpen dialog with additional controls.
         <ul>
             <li>A checkbox "Insert as link"</li>
@@ -118,7 +107,6 @@ published constants TemplateDescription
     */
     const short FILEOPEN_LINK_PREVIEW                          = 9;
 
-    //---------------------------------------------------------------------
     /** A FileSave dialog with additional controls.
         <ul>
             <li>A checkbox "Auto Extension"</li>
@@ -128,7 +116,6 @@ published constants TemplateDescription
 
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

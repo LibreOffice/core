@@ -23,11 +23,9 @@
 #include <com/sun/star/sheet/XSpreadsheetDocument.idl>
 #include <com/sun/star/sheet/SolverConstraint.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** allows to call a solver for a model that is defined by spreadsheet cells.
  */
@@ -63,7 +61,6 @@ interface XSolver: com::sun::star::uno::XInterface
     [attribute, readonly] sequence< double > Solution;
 };
 
-//=============================================================================
 
 }; }; }; };
 

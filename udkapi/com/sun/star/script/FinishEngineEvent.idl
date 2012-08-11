@@ -24,30 +24,25 @@
 #include <com/sun/star/script/FinishReason.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module script {
 
-//=============================================================================
 /** event contains the reasons and the data for the
     <member>XEngineListener::finished()</member> method.
     @deprecated
  */
 published struct FinishEngineEvent: com::sun::star::lang::EventObject
 {
-    //-------------------------------------------------------------------------
     /** specifies why the script terminates.
      */
     com::sun::star::script::FinishReason Finish;
 
-    //-------------------------------------------------------------------------
     /** error message.
 
         <p>Only valid if Reason is RuntimeError or CompileError.</p>
      */
     string ErrorMessage;
 
-    //-------------------------------------------------------------------------
     /** contains the return value.
 
         <p>This field is only valid if <member>FinishEngineEvent::Finish</member> is
@@ -57,7 +52,6 @@ published struct FinishEngineEvent: com::sun::star::lang::EventObject
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

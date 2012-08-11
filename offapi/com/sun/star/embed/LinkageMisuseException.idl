@@ -22,11 +22,9 @@
 #include <com/sun/star/uno/Exception.idl>
 
 
-//============================================================================
 
  module com {  module sun {  module star {  module embed {
 
-//============================================================================
 
 /** This exception can be thrown in case a linked object is misused.
 
@@ -38,7 +36,6 @@ published exception LinkageMisuseException: com::sun::star::uno::Exception
 {
 };
 
-//============================================================================
 
 }; }; }; };
 

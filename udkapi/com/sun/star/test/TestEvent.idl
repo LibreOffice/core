@@ -22,30 +22,25 @@
 #include <com/sun/star/lang/EventObject.idl>
 
 
-//=============================================================================
 
 module com { module sun { module star { module test {
 
-//=============================================================================
 /** This event gets delivered whenever a test event (an error, an exception,
     a warning) takes place.
     @deprecated
 */
 published struct TestEvent: com::sun::star::lang::EventObject
 {
-    //-------------------------------------------------------------------------
     /** contains the error/warning message
     */
     string Message;
 
-    //-------------------------------------------------------------------------
     /** contains the exception notified by the <type>XTestListener</type>
         method notifyException. This value is not valid for other events.
     */
     any Exception;
 };
 
-//=============================================================================
 
 }; }; }; };
 

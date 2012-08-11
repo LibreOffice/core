@@ -29,11 +29,9 @@
 
 #include <com/sun/star/container/NoSuchElementException.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module container {
 
-//=============================================================================
 
 /** This is the generic interface for supporting the insertion and removal of
     named elements.
@@ -41,7 +39,6 @@ module com {  module sun {  module star {  module container {
  */
 published interface XNameContainer: com::sun::star::container::XNameReplace
 {
-    //-------------------------------------------------------------------------
 
     /** inserts the given element at the specified name.
      */
@@ -51,7 +48,6 @@ published interface XNameContainer: com::sun::star::container::XNameReplace
                     com::sun::star::container::ElementExistException,
                     com::sun::star::lang::WrappedTargetException );
 
-    //-------------------------------------------------------------------------
 
     /** removes the element with the specified name.
      */
@@ -61,7 +57,6 @@ published interface XNameContainer: com::sun::star::container::XNameReplace
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

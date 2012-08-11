@@ -22,11 +22,9 @@
 
 #include <com/sun/star/container/XEnumeration.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** represents an enumeration of members in a DataPilot field group.
 
@@ -35,7 +33,6 @@ module com {  module sun {  module star {  module sheet {
  */
 service DataPilotFieldGroupEnumeration
 {
-    //-------------------------------------------------------------------------
 
     /** provides methods to access the group members in the enumeration.
 
@@ -46,7 +43,6 @@ service DataPilotFieldGroupEnumeration
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

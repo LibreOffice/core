@@ -29,17 +29,14 @@
 #define __com_sun_star_embed_EmbedStates_idl__
 
 
-//============================================================================
 
 module com { module sun { module star { module embed {
 
-//============================================================================
 /** This constant set contains possible states for
 <type>EmbeddedObject</type>.
 */
 published constants EmbedStates
 {
-    //------------------------------------------------------------------------
     /** "Loaded" - the persistent representation of the object is loaded in
         memory.
 
@@ -51,7 +48,6 @@ published constants EmbedStates
      */
     const long LOADED = 0;
 
-    //------------------------------------------------------------------------
     /** "Running" - the object is connected and loaded.
 
         <p>
@@ -63,13 +59,11 @@ published constants EmbedStates
      */
     const long RUNNING = 1;
 
-    //------------------------------------------------------------------------
     /** "Active" - the object is activated in separate window
         ( outplace activation ).
      */
     const long ACTIVE = 2;
 
-    //------------------------------------------------------------------------
     /** "Inplace active" - the object has own window in the container's
         window.
 
@@ -81,7 +75,6 @@ published constants EmbedStates
      */
     const long INPLACE_ACTIVE = 3;
 
-    //------------------------------------------------------------------------
     /** "UI active" - the inplace active object that has user interface.
 
         <p>
@@ -92,7 +85,6 @@ published constants EmbedStates
     const long UI_ACTIVE = 4;
 };
 
-//============================================================================
 
 }; }; }; };
 

@@ -21,32 +21,26 @@
 
 #include <com/sun/star/util/DateTime.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module util {
 
-//=============================================================================
 
 /** represents the information that describes a revision of something, f.e. a document
  */
 struct RevisionTag
 {
-    //-------------------------------------------------------------------------
     /** contains the time when the revision was created ( can be invalid )
      */
     DateTime    TimeStamp;
 
-    //-------------------------------------------------------------------------
     /** contains an identifier for the author that created the revision( can be empty )
      */
     string      Author;
 
-    //-------------------------------------------------------------------------
     /** contains a comment that the author has left for this revision ( can be empty )
      */
     string      Comment;
 
-    //-------------------------------------------------------------------------
     /** contains a unique identifier for the revision and must not be empty
         <p>
         This identifier can have any form. It can be something like "1.2.3" or "Version 1" etc.
@@ -56,7 +50,6 @@ struct RevisionTag
     string      Identifier;
 };
 
-//=============================================================================
 
 }; }; }; };
 

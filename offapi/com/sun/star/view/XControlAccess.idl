@@ -28,11 +28,9 @@
 #include <com/sun/star/container/NoSuchElementException.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module view {
 
-//=============================================================================
 
 /** provides access to the controls in a view.
 
@@ -40,7 +38,6 @@ module com {  module sun {  module star {  module view {
  */
 published interface XControlAccess: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** is called to get the control from the specified control model.
      */
     com::sun::star::awt::XControl getControl( [in] com::sun::star::awt::XControlModel xModel )
@@ -48,7 +45,6 @@ published interface XControlAccess: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -21,11 +21,9 @@
 
 #include <com/sun/star/sheet/DDEItemInfo.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 /** describes all items of a DDE connection used in formulas.
 
     <p>A DDE connection consists of the DDE service name, the DDE topic and a
@@ -45,17 +43,14 @@ module com {  module sun {  module star {  module sheet {
  */
 struct DDELinkInfo
 {
-    //-------------------------------------------------------------------------
     /** The DDE service name.
      */
     string Service;
 
-    //-------------------------------------------------------------------------
     /** The DDE topic.
      */
     string Topic;
 
-    //-------------------------------------------------------------------------
     /** A list of DDE items. Each item may contain its results from the last
         update.
      */
@@ -63,7 +58,6 @@ struct DDELinkInfo
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -32,11 +32,9 @@
 #include <com/sun/star/form/component/DatabaseRadioButton.idl>
 #include <com/sun/star/form/binding/BindableDataAwareControlModel.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module form {  module binding {
 
-//=============================================================================
 
 /** This service specifies a radio button which is data-aware and thus can be bound to a
     database field, and additionally supports binding to arbitrary external values.
@@ -81,7 +79,6 @@ service BindableDatabaseRadioButton
     [property] string SecondaryRefValue;
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

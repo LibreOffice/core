@@ -25,11 +25,9 @@
 #include <com/sun/star/accessibility/XAccessibleText.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** The accessible view of a spreadsheet document
 
@@ -109,7 +107,6 @@ published service AccessibleCell
     interface ::com::sun::star::accessibility::XAccessibleText;
 };
 
-//=============================================================================
 
 }; }; }; };
 

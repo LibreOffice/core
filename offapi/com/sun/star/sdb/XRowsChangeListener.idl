@@ -38,7 +38,6 @@ interface XRowsChangeListener: com::sun::star::lang::XEventListener
     [oneway] void rowsChanged([in]com::sun::star::sdb::RowsChangeEvent event);
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -28,11 +28,9 @@
 #include <com/sun/star/xml/UserDefinedAttributesSupplier.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module text {
 
-//=============================================================================
 
 /** service that holds all cell properties of a text table cell in a text document.
 
@@ -40,105 +38,85 @@
  */
 published service CellProperties
 {
-    //-------------------------------------------------------------------------
     /** contains user defined attributes.
 
         @see    <type scope="com::sun::star::xml">UserDefinedAttributesSupplier</type>
      */
     service com::sun::star::xml::UserDefinedAttributesSupplier;
 
-    //-------------------------------------------------------------------------
 
     /** gives access to the objects properties
      */
     interface com::sun::star::beans::XPropertySet;
 
-    //-------------------------------------------------------------------------
     /** contains the cell name, see SwXTextTable::getCellByName for more information
      */
     [property] string CellName;
 
-    //-------------------------------------------------------------------------
     /** contains the background color.
      */
     [property] com::sun::star::util::Color BackColor;
 
-    //-------------------------------------------------------------------------
     /** contains the URL to the background graphic.
      */
     [property] string BackGraphicURL;
 
-    //-------------------------------------------------------------------------
     /** contains the name of the graphic filter of the background graphic.
      */
     [property] string BackGraphicFilter;
 
-    //-------------------------------------------------------------------------
     /** determines the position of the background graphic.
      */
     [property] com::sun::star::style::GraphicLocation BackGraphicLocation;
 
-    //-------------------------------------------------------------------------
     /** contains the number format.
      */
     [property] long NumberFormat;
 
-    //-------------------------------------------------------------------------
     /** determines whether the background is transparent.
      */
     [property] boolean BackTransparent;
 
-    //-------------------------------------------------------------------------
     /** contains the left border line.
      */
     [property] com::sun::star::table::BorderLine LeftBorder;
 
-    //-------------------------------------------------------------------------
     /** contains the right border line.
      */
     [property] com::sun::star::table::BorderLine RightBorder;
 
-    //-------------------------------------------------------------------------
     /** contains the top border line.
      */
     [property] com::sun::star::table::BorderLine TopBorder;
 
-    //-------------------------------------------------------------------------
     /** contains the bottom border line.
      */
     [property] com::sun::star::table::BorderLine BottomBorder;
 
-    //-------------------------------------------------------------------------
     /** contains the distance of the left border.
      */
     [property] long LeftBorderDistance;
 
-    //-------------------------------------------------------------------------
     /** contains the distance of the right border.
      */
     [property] long RightBorderDistance;
 
-    //-------------------------------------------------------------------------
     /** contains the distance of the top border.
      */
     [property] long TopBorderDistance;
 
-    //-------------------------------------------------------------------------
     /** contains the distance of the bottom border.
      */
     [property] long BottomBorderDistance;
 
-    //-------------------------------------------------------------------------
     /** contains the text section the text table is contained in if there is any.
      */
     [readonly, property]com::sun::star::text::XTextSection TextSection;
 
-    //-------------------------------------------------------------------------
     /** determines whether the cell is write protected or not.
      */
     [property] boolean IsProtected;
 
-    //-------------------------------------------------------------------------
     /** the vertical orientation of the text inside of the table cells in
         this row.@see VertOrientation
      */
@@ -146,7 +124,6 @@ published service CellProperties
 
 };
 
-//=============================================================================
 
 }; }; }; };
 #endif

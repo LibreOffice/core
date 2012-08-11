@@ -24,11 +24,9 @@
 #include <com/sun/star/drawing/XControlShape.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module drawing {
 
-//=============================================================================
 
 /** This service is for a <type>Shape</type> which contains a control.
     <p>
@@ -41,7 +39,6 @@ published service ControlShape
     interface com::sun::star::drawing::XControlShape;
 };
 
-//=============================================================================
 
 }; }; }; };
 

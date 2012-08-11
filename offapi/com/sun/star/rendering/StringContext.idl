@@ -46,7 +46,6 @@ struct StringContext
      */
     string  Text;
 
-    //-------------------------------------------------------------------------
 
     /** Start position within the string.<p>
 
@@ -54,7 +53,6 @@ struct StringContext
      */
     long    StartPosition;
 
-    //-------------------------------------------------------------------------
 
     /** Length of the substring to actually use.<p>
 

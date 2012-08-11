@@ -31,12 +31,10 @@
 
 #include <com/sun/star/lang/IllegalArgumentException.idl>
 
-//=============================================================================
 module com {  module sun {  module star {  module inspection {
 
 interface XPropertyControl;
 
-//-----------------------------------------------------------------------------
 /** a factory for <type>XPropertyControl</type>s
 
     @since OOo 2.0.3
@@ -72,7 +70,6 @@ interface XPropertyControlFactory
         raises ( com::sun::star::lang::IllegalArgumentException );
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -33,7 +33,6 @@
 #include <com/sun/star/awt/MenuItemType.idl>
 #include <com/sun/star/container/NoSuchElementException.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module awt {
 
@@ -52,7 +51,6 @@ interface XMenuExtended2
     interface com::sun::star::awt::XMenu;
 
 
-    //=========================================================================
 
     /** checks whether an <type>XMenu</type> is an <type>XPopupMenu</type>.
 

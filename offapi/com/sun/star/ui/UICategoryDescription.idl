@@ -23,7 +23,6 @@
 
 module com {  module sun {  module star {  module ui {
 
-//=============================================================================
 
 /** a service which provides information about user interface command
     categories.
@@ -39,7 +38,6 @@ module com {  module sun {  module star {  module ui {
     @since OOo 2.0
 */
 
-//=============================================================================
 
 service UICategoryDescription
 {

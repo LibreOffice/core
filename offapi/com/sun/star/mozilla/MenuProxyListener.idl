@@ -23,11 +23,9 @@
 
 #include <com/sun/star/mozilla/XMenuProxyListener.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module mozilla {
 
-//=============================================================================
 
 
 // DocMerge from xml: service com::sun::star::mozilla::MenuProxyListener
@@ -35,7 +33,6 @@
  */
 published service MenuProxyListener
 {
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: service com::sun::star::mozilla::MenuProxyListener: interface com::sun::star::mozilla::XMenuProxyListener
     /** @see XMenuProxyListener
@@ -43,7 +40,6 @@ published service MenuProxyListener
     interface XMenuProxyListener;
 };
 
-//=============================================================================
 
 }; }; }; };
 

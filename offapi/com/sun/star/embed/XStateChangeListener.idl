@@ -25,18 +25,15 @@
 
 #include <com/sun/star/embed/WrongStateException.idl>
 
-//============================================================================
 
 module com {  module sun {  module star {  module embed {
 
-//============================================================================
 
 /** makes it possible to receive events when an embedded object changes it's
     state.
  */
 published interface XStateChangeListener: com::sun::star::lang::XEventListener
 {
-    //------------------------------------------------------------------------
     /** is called just before the object changes state.
 
         <p>
@@ -63,7 +60,6 @@ published interface XStateChangeListener: com::sun::star::lang::XEventListener
                         [in] long nNewState )
         raises( ::com::sun::star::embed::WrongStateException );
 
-    //------------------------------------------------------------------------
     /** is called after the object has changed state.
 
         @param aEvent
@@ -80,7 +76,6 @@ published interface XStateChangeListener: com::sun::star::lang::XEventListener
                         [in] long nNewState );
 };
 
-//============================================================================
 
 }; }; }; };
 

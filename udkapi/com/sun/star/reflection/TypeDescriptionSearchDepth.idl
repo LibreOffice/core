@@ -21,11 +21,9 @@
 #define __com_sun_star_reflection_TypeDescriptionSearchDepth_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module reflection {
 
-//=============================================================================
 
 /** Defines depths for searching through type description collections.
 
@@ -44,7 +42,6 @@ published enum TypeDescriptionSearchDepth
 };
 
 
-//=============================================================================
 
 }; }; }; };
 

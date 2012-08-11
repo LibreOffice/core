@@ -20,11 +20,9 @@
 #define __com_sun_star_drawing_EnhancedCustomShapeGluePointType_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module drawing {
 
-//=============================================================================
 
 /** defines which glue points are being offered by the EnhancedCustomShape
  */
@@ -48,7 +46,6 @@ constants EnhancedCustomShapeGluePointType
     const short RECT = 3;
  };
 
-//=============================================================================
 
 }; }; }; };
 

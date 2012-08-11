@@ -35,11 +35,9 @@
 #include <com/sun/star/lang/IllegalArgumentException.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module frame {
 
-//=============================================================================
 /** this is a simple interface to load components by an URL into a
     frame environment
 
@@ -49,7 +47,6 @@ module com {  module sun {  module star {  module frame {
  */
 published interface XComponentLoader: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** loads a component specified by an URL into the specified
         new or existing frame.
 
@@ -172,7 +169,6 @@ published interface XComponentLoader: com::sun::star::uno::XInterface
                 com::sun::star::lang::IllegalArgumentException );
 };
 
-//=============================================================================
 
 }; }; }; };
 

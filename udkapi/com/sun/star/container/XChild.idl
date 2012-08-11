@@ -24,11 +24,9 @@
 #include <com/sun/star/lang/NoSupportException.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module container {
 
-//=============================================================================
 
 /** provides access to the parent of the object.
 
@@ -37,13 +35,11 @@ module com {  module sun {  module star {  module container {
  */
 published interface XChild: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** grants access to the object containing this content.
      */
     com::sun::star::uno::XInterface getParent();
 
-    //-------------------------------------------------------------------------
 
     /** sets the parent to this object.
 
@@ -55,7 +51,6 @@ published interface XChild: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

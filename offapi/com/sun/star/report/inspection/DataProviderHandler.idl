@@ -31,11 +31,9 @@
 
 #include <com/sun/star/inspection/XPropertyHandler.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module report { module inspection {
 
-//=============================================================================
 
 /** implements the default property handler for all known types of <type scope="com::sun::star::chart2::data">XDataProvider</type>s.
 
@@ -46,7 +44,6 @@ service DataProviderHandler
     interface com::sun::star::inspection::XPropertyHandler;
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

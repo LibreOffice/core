@@ -22,11 +22,9 @@
 #include <com/sun/star/lang/XServiceInfo.idl>
 #include <com/sun/star/i18n/XCollator.idl>
 
-//============================================================================
 
  module com {  module sun {  module star {  module i18n {
 
-//============================================================================
 
 /// Specific collator to sort chapter numbering.
 published service ChapterCollator
@@ -35,7 +33,6 @@ published service ChapterCollator
     interface com::sun::star::lang::XServiceInfo;
 };
 
-//============================================================================
 }; }; }; };
 
 #endif

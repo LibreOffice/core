@@ -29,35 +29,29 @@
 #define __com_sun_star_ucb_RememberAuthentication_idl__
 
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** A specification of how long to remember some authentication data.
 */
 published enum RememberAuthentication
 {
-    //-------------------------------------------------------------------------
     /** Do not remember the authentication data (use it once and immediately
         forget about it).
     */
     NO,
 
-    //-------------------------------------------------------------------------
     /** Remember the authentication data, but only until the end of the
         current session.
     */
     SESSION,
 
-    //-------------------------------------------------------------------------
     /** Remember the authentication data "forever".
     */
     PERSISTENT
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

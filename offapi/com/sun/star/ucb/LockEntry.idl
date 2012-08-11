@@ -22,27 +22,22 @@
 #include <com/sun/star/ucb/LockScope.idl>
 #include <com/sun/star/ucb/LockType.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** defines the types of locks that can be used with a resource.
 */
 published struct LockEntry
 {
-    //-------------------------------------------------------------------------
     /** defines the lock's scope.
     */
     LockScope Scope;
 
-    //-------------------------------------------------------------------------
     /** defines the type of the lock.
     */
     LockType Type;
 };
 
-//=============================================================================
 
 }; }; }; };
 

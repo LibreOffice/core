@@ -33,37 +33,31 @@
 #include <com/sun/star/installation/ProtDlgRes.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module installation {
 
-//=============================================================================
 
 /// @deprecated
 published interface XProtocolHandlerCheck: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::installation::XProtocolHandlerCheck::isSingleSettingAvailable
     /** checks if it is possible to set particular protocols.
      */
     boolean isSingleSettingAvailable();
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::installation::XProtocolHandlerCheck::isProtocolHandler
     /** checks if StarOffice is the protocol-handler, for the particular protocol
      */
     boolean isProtocolHandler( [in] short nWhich );
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::installation::XProtocolHandlerCheck::setProtocolHandler
     /** Make StarOffice the protocol-handler.@see isProtocolHandler
      */
     boolean setProtocolHandler( [in] short nWhich );
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::installation::XProtocolHandlerCheck::checkProtocolHandler
     /** First, the method checks if StarOffice is
@@ -81,7 +75,6 @@ published interface XProtocolHandlerCheck: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -20,11 +20,9 @@
 #ifndef __com_sun_star_sheet_AddressConvention_idl__
 #define __com_sun_star_sheet_AddressConvention_idl__
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** These constants specify which address convention to use in the formula
     parser.  Each variation specifies a different cell and cell range address
@@ -53,7 +51,6 @@ constants AddressConvention
     const short LOTUS_A1 = 4;
 };
 
-//=============================================================================
 
 }; }; }; };
 

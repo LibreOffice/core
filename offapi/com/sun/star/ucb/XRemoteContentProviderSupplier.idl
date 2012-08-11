@@ -23,11 +23,9 @@
 #include <com/sun/star/uno/XInterface.idl>
 
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** Provide access to a collection of remote content providers.
 
     @version 1.0
@@ -36,7 +34,6 @@ module com { module sun { module star { module ucb {
 */
 published interface XRemoteContentProviderSupplier: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** Get a factory through which a remote content provider's
         <type>UniversalContentBroker</type> service can be instantiated.
 
@@ -49,7 +46,6 @@ published interface XRemoteContentProviderSupplier: com::sun::star::uno::XInterf
     queryRemoteContentProvider([in] string Identifier);
 };
 
-//=============================================================================
 
 }; }; }; };
 

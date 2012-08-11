@@ -32,11 +32,9 @@
 
 #include <com/sun/star/sdb/RowChangeEvent.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module form {
 
-//=============================================================================
 
 /** allows to register a component for confirming deletions of
     rows in a <type scope="com::sun::star::form::component">DataForm</type>.
@@ -45,7 +43,6 @@
  */
 published interface XConfirmDeleteListener: com::sun::star::lang::XEventListener
 {
-    //-------------------------------------------------------------------------
 
     /** is invoked when the current record of a database form will be deleted.
 
@@ -58,7 +55,6 @@ published interface XConfirmDeleteListener: com::sun::star::lang::XEventListener
     boolean confirmDelete( [in] com::sun::star::sdb::RowChangeEvent aEvent );
 };
 
-//=============================================================================
 
 }; }; }; };
 

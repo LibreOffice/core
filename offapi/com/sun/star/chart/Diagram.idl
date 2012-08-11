@@ -30,11 +30,9 @@
 
 #include <com/sun/star/xml/UserDefinedAttributeSupplier.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module chart {
 
-//=============================================================================
 
 /** the base service for the diagram of the chart document.
 
@@ -66,7 +64,6 @@ published service Diagram
      */
     [optional] interface com::sun::star::chart::XDiagramPositioning;
 
-    //-------------------------------------------------------------------------
 
     /** If this property is <TRUE/> the position is calculated by the application automatically.
         Setting this property to false will have no effect. Instead use the interface <type scope="com::sun::star::drawing">XShape</type>
@@ -74,7 +71,6 @@ published service Diagram
      */
     [optional, property] boolean AutomaticPosition;
 
-    //-------------------------------------------------------------------------
 
     /** If this property is <TRUE/> the size is calculated by the application automatically.
         Setting this property to false will have no effect. Instead use the interface <type scope="com::sun::star::drawing">XShape</type>
@@ -82,11 +78,9 @@ published service Diagram
      */
     [optional, property] boolean AutomaticSize;
 
-    //-------------------------------------------------------------------------
 
     interface com::sun::star::beans::XPropertySet;
 
-    //-------------------------------------------------------------------------
 
     /** If a <type>Diagram</type> may be stored as XML file, this
         service should be supported in order to preserve unparsed XML
@@ -96,7 +90,6 @@ published service Diagram
      */
     [optional] service com::sun::star::xml::UserDefinedAttributeSupplier;
 
-    //-------------------------------------------------------------------------
 
     /** determines if the data for a data row is contained in the
         columns or in the rows of the data array.
@@ -106,7 +99,6 @@ published service Diagram
      */
     [property] com::sun::star::chart::ChartDataRowSource DataRowSource;
 
-    //-------------------------------------------------------------------------
 
     /** specifies how the caption of data points is displayed.
 
@@ -114,7 +106,6 @@ published service Diagram
      */
     [property] long DataCaption;
 
-    //-------------------------------------------------------------------------
 
     /** specifies how empty or invalid cells in the provided data should be handled when displayed
 
@@ -124,7 +115,6 @@ published service Diagram
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -32,12 +32,10 @@
 #include <com/sun/star/io/XActiveDataSource.idl>
 #include <com/sun/star/configuration/backend/XLayerHandler.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module configuration { module backend {
 module xml {
 
-//=============================================================================
 
 /**
     can be used to parse a stream of configuration layer XML.
@@ -54,19 +52,16 @@ module xml {
 */
 published service LayerWriter
 {
-    //-------------------------------------------------------------------------
 
     /** accepts events describing the layer data.
       */
     interface com::sun::star::configuration::backend::XLayerHandler ;
 
-    //-------------------------------------------------------------------------
 
     /** provides access to the target stream.
       */
     interface com::sun::star::io::XActiveDataSource ;
 
-    //-------------------------------------------------------------------------
 
     /** allows initializing target stream.
 
@@ -76,10 +71,8 @@ published service LayerWriter
       */
     interface com::sun::star::lang::XInitialization ;
 
-    //-------------------------------------------------------------------------
 } ;
 
-//=============================================================================
 } ;
 } ; } ; } ; } ; } ;
 

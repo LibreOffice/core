@@ -24,11 +24,9 @@
 #include <com/sun/star/container/XEnumerationAccess.idl>
 #include <com/sun/star/container/XIndexAccess.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** represents a collection of database ranges in a spreadsheet document.
 
@@ -36,13 +34,11 @@ module com {  module sun {  module star {  module sheet {
  */
 published service DatabaseRanges
 {
-    //-------------------------------------------------------------------------
 
     /** provides access to the database ranges and to insert and remove them.
      */
     interface com::sun::star::sheet::XDatabaseRanges;
 
-    //-------------------------------------------------------------------------
 
     /** creates an enumeration of all database ranges.
 
@@ -50,7 +46,6 @@ published service DatabaseRanges
      */
     interface com::sun::star::container::XEnumerationAccess;
 
-    //-------------------------------------------------------------------------
 
     /** provides access to the database ranges in the collection via index.
 
@@ -61,7 +56,6 @@ published service DatabaseRanges
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

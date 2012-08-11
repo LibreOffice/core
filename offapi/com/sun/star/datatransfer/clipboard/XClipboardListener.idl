@@ -23,18 +23,15 @@
 #include <com/sun/star/datatransfer/clipboard/ClipboardEvent.idl>
 #include <com/sun/star/lang/XEventListener.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module datatransfer { module clipboard {
 
-//=============================================================================
 /** Interface to be implemented to receive notifications on clipboard content
     changes.
 */
 
 published interface XClipboardListener: com::sun::star::lang::XEventListener
 {
-    //-------------------------------------------------------------------------
     /** The content of the clipboard has changed.
 
         @param event
@@ -45,7 +42,6 @@ published interface XClipboardListener: com::sun::star::lang::XEventListener
     [oneway] void changedContents( [in] ClipboardEvent event );
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

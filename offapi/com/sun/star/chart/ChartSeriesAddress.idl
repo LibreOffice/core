@@ -19,11 +19,9 @@
 #ifndef __com_sun_star_chart_ChartSeriesAddress_idl__
 #define __com_sun_star_chart_ChartSeriesAddress_idl__
 
-//=============================================================================
 
  module com {  module sun {  module star {  module chart {
 
-//=============================================================================
 
 /** This structure describes a single data row, specified by its name
     and a sequence of data points.
@@ -37,13 +35,11 @@ published struct ChartSeriesAddress
      */
     string DataRangeAddress;
 
-    //-------------------------------------------------------------------------
 
     /** contains the cell address of label (i.e. name) of this series.
      */
     string LabelAddress;
 
-    //-------------------------------------------------------------------------
 
     /** contains cell addresses for each domain of this series.
 
@@ -54,7 +50,6 @@ published struct ChartSeriesAddress
     sequence< string > DomainRangeAddresses;
 };
 
-//=============================================================================
 
 }; }; }; };
 

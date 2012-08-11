@@ -32,11 +32,9 @@
 #include <com/sun/star/drawing/RotationDescriptor.idl>
 #include <com/sun/star/drawing/CircleKind.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module drawing {
 
-//=============================================================================
 
 /** This service is for an ellipse or circle shape.
  */
@@ -54,19 +52,16 @@ published service EllipseShape
 
     service com::sun::star::drawing::RotationDescriptor;
 
-    //-------------------------------------------------------------------------
 
     /** This is the kind of circle.
      */
     [property] com::sun::star::drawing::CircleKind CircleKind;
 
-    //-------------------------------------------------------------------------
 
     /** If the kind specifies an open circle, this is the start angle.
      */
     [property] long CircleStartAngle;
 
-    //-------------------------------------------------------------------------
 
     /** If the kind specifies an open circle, this is the end angle.
      */
@@ -74,7 +69,6 @@ published service EllipseShape
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -24,42 +24,35 @@
 #include <com/sun/star/lang/NoSupportException.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module util {
 
-//=============================================================================
 
 /** is supported by objects which supply different modes.
  */
 published interface XModeSelector: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** sets a new mode for the implementing object.
      */
     void setMode( [in] string aMode )
             raises( com::sun::star::lang::NoSupportException );
 
-    //-------------------------------------------------------------------------
     /** @returns
                     the current mode.
      */
     string getMode();
 
-    //-------------------------------------------------------------------------
     /** @returns
                     a sequence of all supported modes.
      */
     sequence<string> getSupportedModes();
 
-    //-------------------------------------------------------------------------
     /** asks whether a mode is supported or not.
      */
     boolean supportsMode( [in] string aMode );
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

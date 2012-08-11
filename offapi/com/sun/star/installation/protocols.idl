@@ -29,11 +29,9 @@
 #define __com_sun_star_installation_protocols_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module installation {
 
-//=============================================================================
 
 /** A protocol-handler is a part of StarOffice which performs
         the communication on a particular protocol. This can be HTTP, FTP, HTTPS,
@@ -44,42 +42,36 @@
  */
 published constants protocols
 {
-    //-------------------------------------------------------------------------
 
     // DocMerge from idl: value com::sun::star::installation::protocols::ALL
     /** check/set all supported protocols
      */
     const short ALL = 0;
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from idl: value com::sun::star::installation::protocols::HTTP
     /** check/set the HTTP protocol
      */
     const short HTTP = 1;
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from idl: value com::sun::star::installation::protocols::FTP
     /** check/set the FTP protocol
      */
     const short FTP = 2;
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from idl: value com::sun::star::installation::protocols::HTTPS
     /** check/set the HTTPS protocol
      */
     const short HTTPS = 3;
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from idl: value com::sun::star::installation::protocols::MAIL
     /** check/set the MAIL protocol
      */
     const short MAIL = 4;
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from idl: value com::sun::star::installation::protocols::NEWS
     /** check/set the NEWS protocol
@@ -88,7 +80,6 @@ published constants protocols
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

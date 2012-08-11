@@ -31,11 +31,9 @@
 #include <com/sun/star/graphic/XGraphic.idl>
 #include <com/sun/star/util/Color.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module awt {
 
-//=============================================================================
 
 /** specifies a logo to be displayed on a menu, with a background gradient.
  */
@@ -45,13 +43,11 @@ struct MenuLogo
      */
     ::com::sun::star::graphic::XGraphic Graphic;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the color at the start point of the gradient.
      */
     ::com::sun::star::util::Color StartColor;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the color at the end point of the gradient.
      */
@@ -59,7 +55,6 @@ struct MenuLogo
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

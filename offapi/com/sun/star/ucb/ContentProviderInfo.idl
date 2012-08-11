@@ -22,30 +22,25 @@
 #include <com/sun/star/ucb/XContentProvider.idl>
 
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** A structure for content provider information.
 
     @see        XContentProviderManager
 */
 published struct ContentProviderInfo
 {
-    //-------------------------------------------------------------------------
     /** The content provider.
     */
     com::sun::star::ucb::XContentProvider ContentProvider;
 
-    //-------------------------------------------------------------------------
     /** The scheme the Provider is registered for.
     */
     string Scheme;
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

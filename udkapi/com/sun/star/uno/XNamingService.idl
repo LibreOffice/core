@@ -25,7 +25,6 @@
 
  module com {  module sun {  module star {  module uno {
 
-//=============================================================================
 
 /** allows to insert, remove and access named objects.
  */
@@ -57,7 +56,6 @@ published interface XNamingService: com::sun::star::uno::XInterface
 };
 
 
-//=============================================================================
 
 }; }; }; };
 

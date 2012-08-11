@@ -23,23 +23,19 @@
 
 #include <com/sun/star/container/NoSuchElementException.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module office {
 
-//=============================================================================
 
 /** An enumeration for a set of annotations.
  */
 interface XAnnotationEnumeration
 {
-    //-------------------------------------------------------------------------
 
     /** tests whether this enumeration contains more elements.
      */
     boolean hasMoreElements();
 
-    //-------------------------------------------------------------------------
 
     /** @returns
             the next element of this enumeration.
@@ -52,7 +48,6 @@ interface XAnnotationEnumeration
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

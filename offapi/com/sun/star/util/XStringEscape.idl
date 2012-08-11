@@ -23,7 +23,6 @@
 
 #include <com/sun/star/lang/IllegalArgumentException.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module util {
 
@@ -62,7 +61,6 @@ published interface XStringEscape: com::sun::star::uno::XInterface
 };
 
 
-//=============================================================================
 
 }; }; }; };
 

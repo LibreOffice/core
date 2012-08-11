@@ -30,11 +30,9 @@
 #include <com/sun/star/container/NoSuchElementException.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module container {
 
-//=============================================================================
 
 /**
  * Insertion and removal of hierarchical elements.
@@ -50,7 +48,6 @@ published interface XHierarchicalNameContainer : com::sun::star::container::XHie
                     com::sun::star::container::ElementExistException,
                     com::sun::star::lang::WrappedTargetException );
 
-    //-------------------------------------------------------------------------
 
     /** removes the element at the specified name.
      */
@@ -60,7 +57,6 @@ published interface XHierarchicalNameContainer : com::sun::star::container::XHie
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -34,11 +34,9 @@
 #include <com/sun/star/beans/PropertyValue.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module frame {
 
-//=============================================================================
 /** extends <type>XStorable</type>.
  */
 published interface XStorable2: XStorable
@@ -74,7 +72,6 @@ published interface XStorable2: XStorable
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

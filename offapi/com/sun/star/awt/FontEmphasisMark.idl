@@ -21,11 +21,9 @@
 #define __com_sun_star_awt_FontEmphasisMark_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module awt {
 
-//=============================================================================
 
 /** These values are used to specify the kind of emphasis mark.
 
@@ -33,44 +31,37 @@
  */
 published constants FontEmphasisMark
 {
-    //-------------------------------------------------------------------------
 
     /** specifies no emphasis mark.
      */
     const short NONE = 0x0000;
 
-    //-------------------------------------------------------------------------
 
     /** specifies emphasis mark dot.
      */
     const short DOT = 0x0001;
 
-    //-------------------------------------------------------------------------
 
     /** specifies emphasis mark circle.
      */
     const short CIRCLE = 0x0002;
 
-    //-------------------------------------------------------------------------
 
     /** specifies emphasis mark disc.
      */
     const short DISC = 0x0003;
 
-    //-------------------------------------------------------------------------
 
     /** specifies emphasis mark accent.
      */
     const short ACCENT = 0x0004;
 
-    //-------------------------------------------------------------------------
 
     /** specifies that the emphasis mark should be positioned above the
         characters.
      */
     const short ABOVE = 0x1000;
 
-    //-------------------------------------------------------------------------
 
     /** specifies that the emphasis mark should be positioned below the
         characters.
@@ -79,7 +70,6 @@ published constants FontEmphasisMark
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -50,9 +50,7 @@ module chart2
     // NOTES
 
     // kombinierbarkeit - data series combiner (andere Komponente?)
-    //
     // coordinatesystem-supplier
-    //
     // chart-type ? property string rendererServiceName
 
 
@@ -92,7 +90,6 @@ service DataSeries
      */
     service DataPointProperties;
 
-    // ----------------------------------------------------------------------
 
     /** allows setting a coordinate-system
      */
@@ -128,7 +125,6 @@ service DataSeries
      */
     [optional] interface XRegressionCurveContainer;
 
-    // ----------------------------------------------------------------------
 
     /** This service will be used to render this data series.
 

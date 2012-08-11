@@ -53,12 +53,10 @@ struct RealRectangle2D
     /// X coordinate of upper left corner .
     double X1;
 
-    //-------------------------------------------------------------------------
 
     /// Y coordinate of upper left corner.
     double Y1;
 
-    //-------------------------------------------------------------------------
 
     /** X coordinate of lower right corner.<p>
 
@@ -66,7 +64,6 @@ struct RealRectangle2D
     */
     double X2;
 
-    //-------------------------------------------------------------------------
 
     /** Y coordinate of lower right corner.<p>
 

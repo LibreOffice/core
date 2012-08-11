@@ -23,11 +23,9 @@
 #include <com/sun/star/datatransfer/DataFlavor.idl>
 #include <com/sun/star/uno/XInterface.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module datatransfer {
 
-//=============================================================================
 /** Interface to be implemented by objects used to provide data for a transfer
     operation.
 
@@ -38,7 +36,6 @@ module com { module sun { module star { module datatransfer {
 
 published interface XTransferableEx: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** @param requestedFlavors
         Sequence of <type>DataFlavor</type> of interest. Specify an empty sequence for interest
         in all data flavors with top-level MIME content-types. To get all MIME
@@ -51,7 +48,6 @@ published interface XTransferableEx: com::sun::star::uno::XInterface
     sequence < DataFlavor > queryTransferDataFlavors( [in] sequence< DataFlavor > requestedFlavors );
 };
 
-//=============================================================================
 
 }; }; }; };
 

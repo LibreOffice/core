@@ -24,11 +24,9 @@
 #include <com/sun/star/lang/EventObject.idl>
 #include <com/sun/star/frame/XModel.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module text {
 
-//=============================================================================
 /** represents a mail merge event.
 
     <p>This type of event is being send by the mail merge service
@@ -42,13 +40,11 @@ module com { module sun { module star { module text {
 */
 published struct MailMergeEvent : com::sun::star::lang::EventObject
 {
-    //-------------------------------------------------------------------------
     /** The model of the document to be processed next.
     */
     com::sun::star::frame::XModel Model;
 };
 
-//=============================================================================
 
 }; }; }; };
 

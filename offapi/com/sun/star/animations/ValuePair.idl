@@ -19,11 +19,9 @@
 #ifndef __com_sun_star_animations_ValuePair_idl__
 #define __com_sun_star_animations_ValuePair_idl__
 
-//=============================================================================
 
  module com {  module sun {  module star {  module animations {
 
-//=============================================================================
 
 /**
 */
@@ -33,7 +31,6 @@ struct ValuePair
     any Second;
 };
 
-//=============================================================================
 
 }; }; }; };
 

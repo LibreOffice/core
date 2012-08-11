@@ -20,36 +20,30 @@
 #define __com_sun_star_chart_ChartErrorCategory_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module chart {
 
-//=============================================================================
 
 /** specifies the category of error indicators.
  */
 published enum ChartErrorCategory
 {
-    //-------------------------------------------------------------------------
 
     /** error indicators are not displayed.
      */
     NONE,
 
-    //-------------------------------------------------------------------------
 
     /** displays error indicators for the variance of the data row.
      */
     VARIANCE,
 
-    //-------------------------------------------------------------------------
 
     /** displays error indicators for the standard deviation (square
         root of variance) of the data row.
      */
     STANDARD_DEVIATION,
 
-    //-------------------------------------------------------------------------
 
     /** The length of the error indicators is calculated for each data
         point by taking the percentage given as
@@ -60,7 +54,6 @@ published enum ChartErrorCategory
      */
     PERCENT,
 
-    //-------------------------------------------------------------------------
 
     /** The length of the error indicators for all data points is
         calculated by taking the percentage given as
@@ -71,7 +64,6 @@ published enum ChartErrorCategory
      */
     ERROR_MARGIN,
 
-    //-------------------------------------------------------------------------
 
     /** displays the same lower and upper error indicators for all
         data points.
@@ -86,7 +78,6 @@ published enum ChartErrorCategory
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

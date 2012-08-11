@@ -20,16 +20,13 @@
 #define __com_sun_star_ucb_TransferResult_idl__
 
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** Information about a transfer activity.
 */
 published struct TransferResult
 {
-    //-------------------------------------------------------------------------
     /** The URL of the source object.
     */
     string Source;
@@ -45,7 +42,6 @@ published struct TransferResult
     any Result;
 };
 
-//=============================================================================
 
 }; }; }; };
 

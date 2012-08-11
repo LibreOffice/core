@@ -32,11 +32,9 @@
 #include <com/sun/star/datatransfer/DataFlavor.idl>
 #include <com/sun/star/uno/XInterface.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module datatransfer {
 
-//=============================================================================
 /** This interface provides direct access to the data in all data flavors. It can
     be used by the clipboard implementation to optimize data transport on
     flush operations.
@@ -46,7 +44,6 @@ module com { module sun { module star { module datatransfer {
 
 published interface XTransferDataAccess: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** To query for the summarized data size in bytes of a sequence of <type>DataFlavor</type>.
 
         @param aFlavorList
@@ -58,7 +55,6 @@ published interface XTransferDataAccess: com::sun::star::uno::XInterface
     */
     hyper queryDataSize( [in] sequence < DataFlavor > aFlavorList );
 
-    //-------------------------------------------------------------------------
     /** To get all the data of a sequence of <type>DataFlavor</type>.
 
         @param aFlavorList
@@ -73,7 +69,6 @@ published interface XTransferDataAccess: com::sun::star::uno::XInterface
     sequence < any > getData( [in] sequence < DataFlavor > aFlavorList );
 };
 
-//=============================================================================
 
 }; }; }; };
 

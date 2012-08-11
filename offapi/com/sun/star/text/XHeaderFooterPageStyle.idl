@@ -23,11 +23,9 @@
 #include <com/sun/star/text/XHeaderFooter.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module text {
 
-//=============================================================================
 
 // DocMerge from xml: interface com::sun::star::text::XHeaderFooterPageStyle
 /** @deprecated     Use the properties of
@@ -35,7 +33,6 @@
  */
 published interface XHeaderFooterPageStyle: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     // DocMerge from idl: method com::sun::star::text::XHeaderFooterPageStyle::getHeader
     /** @returns
@@ -43,7 +40,6 @@ published interface XHeaderFooterPageStyle: com::sun::star::uno::XInterface
      */
     com::sun::star::text::XHeaderFooter getHeader();
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from idl: method com::sun::star::text::XHeaderFooterPageStyle::getFooter
     /** @returns
@@ -53,7 +49,6 @@ published interface XHeaderFooterPageStyle: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

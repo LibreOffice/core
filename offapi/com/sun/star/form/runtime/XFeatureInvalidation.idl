@@ -22,11 +22,9 @@
 
 #include <com/sun/star/uno/XInterface.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module form { module runtime {
 
-//=============================================================================
 
 /** implements a callback for a <type>XFormOperations</type> instance, which is called
     when the state of one or more <type>FormFeature</type>s might have changed.
@@ -57,11 +55,9 @@ interface XFeatureInvalidation
     void    invalidateAllFeatures();
 };
 
-//=============================================================================
 
 }; }; }; }; };
 
-//=============================================================================
 
 #endif
 

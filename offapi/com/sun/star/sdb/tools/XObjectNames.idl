@@ -32,11 +32,8 @@
 #include <com/sun/star/lang/IllegalArgumentException.idl>
 #include <com/sun/star/sdbc/SQLException.idl>
 
-//=============================================================================
 module com {  module sun {  module star {  module sdb { module tools {
-//=============================================================================
 
-//-----------------------------------------------------------------------------
 /** encapsulates functionality which you might find useful when writing a
     database application which deals with query and table names.
 
@@ -167,9 +164,7 @@ interface XObjectNames
             raises ( com::sun::star::sdbc::SQLException );
 };
 
-//=============================================================================
 }; }; }; }; };
-//=============================================================================
 
 #endif
 

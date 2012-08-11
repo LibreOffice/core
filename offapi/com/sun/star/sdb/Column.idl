@@ -38,7 +38,6 @@ published service Column
     service com::sun::star::sdb::ColumnSettings;
 };
 
-//=============================================================================
 
 }; }; }; };
 

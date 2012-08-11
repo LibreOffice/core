@@ -32,11 +32,9 @@
 #include <com/sun/star/uno/RuntimeException.idl>
 #include <com/sun/star/uno/XInterface.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module system {
 
-//=============================================================================
 /** Enables access to different proxy settings. If particular settings are not
     available an empty string will be returned.
 
@@ -45,77 +43,66 @@ module com { module sun { module star { module system {
 
 published interface XProxySettings: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** Access to the FTP proxy address.
         @returns
         The address of the FTP proxy server, if any has been specified.
     */
     string getFtpProxyAddress( );
 
-    //-------------------------------------------------------------------------
     /** Access to the FTP proxy port.
         @returns
         The port of the FTP proxy server, if any has been specified.
     */
     string getFtpProxyPort( );
 
-    //-------------------------------------------------------------------------
     /** Access to the Gopher proxy address.
         @returns
         The address of the gopher proxy server, if any has been specified.
     */
     string getGopherProxyAddress( );
 
-    //-------------------------------------------------------------------------
     /** Access to the Gopher proxy port.
         @returns
         The port of the gopher proxy server, if any has been specified.
     */
     string getGopherProxyPort( );
 
-    //-------------------------------------------------------------------------
     /** Access to the Http proxy address.
         @returns
         The address of the http proxy server, if any has been specified.
     */
     string getHttpProxyAddress( );
 
-    //-------------------------------------------------------------------------
     /** Access to the Http proxy port.
         @returns
         The port of the http proxy server, if any has been specified.
     */
     string getHttpProxyPort( );
 
-    //-------------------------------------------------------------------------
     /** Access to the HTTPS proxy address.
         @returns
         The address of the HTTPS proxy server, if any has been specified.
     */
     string getHttpsProxyAddress( );
 
-    //-------------------------------------------------------------------------
     /** Access to the HTTPS proxy port.
         @returns
         The port of the HTTPS proxy server, if any has been specified.
     */
     string getHttpsProxyPort( );
 
-    //-------------------------------------------------------------------------
     /** Access to the Socks proxy address.
         @returns
         The address of the socks proxy server, if any has been specified.
     */
     string getSocksProxyAddress( );
 
-    //-------------------------------------------------------------------------
     /** Access to the Socks proxy port.
         @returns
         The port of the socks proxy server, if any has been specified.
     */
     string getSocksProxyPort( );
 
-    //-------------------------------------------------------------------------
     /** Access to the Proxy-Bypass address.
         @returns
         A string of ";" separated addresses for which no proxy server
@@ -123,7 +110,6 @@ published interface XProxySettings: com::sun::star::uno::XInterface
     */
     string getProxyBypassAddress( );
 
-    //-------------------------------------------------------------------------
     /** Either a proxy is enabled or not.
         @returns
         A value of <TRUE/> if a proxy is enabled.
@@ -132,7 +118,6 @@ published interface XProxySettings: com::sun::star::uno::XInterface
     boolean isProxyEnabled( );
 };
 
-//=============================================================================
 
 }; }; }; };
 

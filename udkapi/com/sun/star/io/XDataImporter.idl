@@ -28,11 +28,9 @@
 #include <com/sun/star/io/XDataTransferEventListener.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module io {
 
-//=============================================================================
 
 // DocMerge from xml: interface com::sun::star::io::XDataImporter
 /** makes it possible to import data from a data source into a component.
@@ -41,7 +39,6 @@ module com {  module sun {  module star {  module io {
  */
 published interface XDataImporter: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::io::XDataImporter::importData
     /** imports data for a component from an active data source.
@@ -50,7 +47,6 @@ published interface XDataImporter: com::sun::star::uno::XInterface
              [in] com::sun::star::lang::XComponent Component,
              [in] com::sun::star::io::XDataTransferEventListener aListener );
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::io::XDataImporter::cancel
     /** cancels the import process.
@@ -59,7 +55,6 @@ published interface XDataImporter: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

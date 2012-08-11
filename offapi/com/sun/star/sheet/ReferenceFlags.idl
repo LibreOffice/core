@@ -20,11 +20,9 @@
 #ifndef __com_sun_star_sheet_ReferenceFlags_idl__
 #define __com_sun_star_sheet_ReferenceFlags_idl__
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** defines flags for references.
 
@@ -32,56 +30,47 @@ module com {  module sun {  module star {  module sheet {
  */
 constants ReferenceFlags
 {
-    //-------------------------------------------------------------------------
 
     /** selects a relative column reference.
      */
     const long COLUMN_RELATIVE = 1;
 
-    //-------------------------------------------------------------------------
 
     /** marks a deleted column reference.
      */
     const long COLUMN_DELETED = 2;
 
-    //-------------------------------------------------------------------------
 
     /** selects a relative row reference.
      */
     const long ROW_RELATIVE = 4;
 
-    //-------------------------------------------------------------------------
 
     /** marks a deleted row reference.
      */
     const long ROW_DELETED = 8;
 
-    //-------------------------------------------------------------------------
 
     /** selects a relative sheet reference.
      */
     const long SHEET_RELATIVE = 16;
 
-    //-------------------------------------------------------------------------
 
     /** marks a deleted sheet reference.
      */
     const long SHEET_DELETED = 32;
 
-    //-------------------------------------------------------------------------
 
     /** selects a 3D sheet reference.
      */
     const long SHEET_3D = 64;
 
-    //-------------------------------------------------------------------------
 
     /** marks a reference from a relative range name.
      */
     const long RELATIVE_NAME = 128;
 };
 
-//=============================================================================
 
 }; }; }; };
 

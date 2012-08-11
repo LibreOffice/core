@@ -25,11 +25,9 @@
 #include <com/sun/star/util/XRefreshable.idl>
 #include <com/sun/star/sheet/XDDELinkResults.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** represents a DDE link.
 
@@ -37,7 +35,6 @@ module com {  module sun {  module star {  module sheet {
  */
 published service DDELink
 {
-    //-------------------------------------------------------------------------
 
     /** provides access to the name of the DDE link.
 
@@ -45,19 +42,16 @@ published service DDELink
      */
     interface com::sun::star::container::XNamed;
 
-    //-------------------------------------------------------------------------
 
     /** provides methods to change the settings of the DDE link.
      */
     interface com::sun::star::sheet::XDDELink;
 
-    //-------------------------------------------------------------------------
 
     /** provides methods to reload the external linked data.
      */
     interface com::sun::star::util::XRefreshable;
 
-    //-------------------------------------------------------------------------
 
     /** provides access to the DDE link results.
 
@@ -67,7 +61,6 @@ published service DDELink
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

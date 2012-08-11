@@ -27,11 +27,9 @@
 #include <com/sun/star/chart/ChartAxisYSupplier.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module chart {
 
-//=============================================================================
 
 /** specifies filled net diagrams. @since OOo 3.2
 
@@ -45,7 +43,6 @@ published service FilledNetDiagram
     service com::sun::star::chart::StackableDiagram;
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -21,11 +21,9 @@
 
 #include <com/sun/star/drawing/XShape.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module presentation {
 
-//=============================================================================
 
 /** an event has a source that causes an event to be fired and a trigger
     that defines under which condition an event should be raised and
@@ -41,7 +39,6 @@ struct ParagraphTarget
     short Paragraph;
 };
 
-//=============================================================================
 
 }; }; }; };
 

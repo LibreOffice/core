@@ -77,7 +77,6 @@ published service DatabaseAccessConnection
     interface XQueriesSupplier;
 };
 
-//=============================================================================
 
 }; }; }; };
 

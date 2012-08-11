@@ -34,11 +34,9 @@
 #include <com/sun/star/awt/grid/XGridColumnListener.idl>
 #include <com/sun/star/util/XCloneable.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module awt {  module grid {
 
-//=============================================================================
 
 /** The <type>XGridColumn</types> defines the properties and behavior of a column in a grid control
     @since OOo 3.3
@@ -136,7 +134,6 @@ interface XGridColumn
     */
     void addGridColumnListener( [in] XGridColumnListener  listener);
 
-    //-------------------------------------------------------------------------
 
     /** Removes a listener previously added with <method>addColumnListener()</method>.
         @param Listener
@@ -145,7 +142,6 @@ interface XGridColumn
     void removeGridColumnListener( [in] XGridColumnListener listener);
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

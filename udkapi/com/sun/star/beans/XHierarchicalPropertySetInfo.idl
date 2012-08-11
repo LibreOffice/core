@@ -28,11 +28,9 @@
 #include <com/sun/star/lang/IllegalArgumentException.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module beans {
 
-//=============================================================================
 
 /** specifies a hierarchy of properties.
 
@@ -41,7 +39,6 @@ module com {  module sun {  module star {  module beans {
  */
 published interface XHierarchicalPropertySetInfo: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** @returns
                 the property with the specified name from the hierarchy.
@@ -62,7 +59,6 @@ published interface XHierarchicalPropertySetInfo: com::sun::star::uno::XInterfac
     com::sun::star::beans::Property getPropertyByHierarchicalName( [in] string aHierarchicalName )
             raises( com::sun::star::beans::UnknownPropertyException );
 
-    //-------------------------------------------------------------------------
 
     /** @returns
                 <TRUE/> if a property with the specified name exists;
@@ -81,7 +77,6 @@ published interface XHierarchicalPropertySetInfo: com::sun::star::uno::XInterfac
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

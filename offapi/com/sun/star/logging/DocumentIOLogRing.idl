@@ -23,13 +23,11 @@
 #include <com/sun/star/lang/IllegalArgumentException.idl>
 #include <com/sun/star/beans/NamedValue.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module logging {
 
 interface XSimpleLogRing;
 
-//=============================================================================
 
 /** This singleton is intended to log the IO events related to loading/storing
     of documents.
@@ -42,11 +40,9 @@ interface XSimpleLogRing;
  */
 singleton DocumentIOLogRing : XSimpleLogRing;
 
-//=============================================================================
 
 }; }; }; };
 
-//=============================================================================
 
 #endif
 

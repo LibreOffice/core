@@ -24,11 +24,9 @@
 #include <com/sun/star/sheet/ConditionOperator.idl>
 #include <com/sun/star/table/CellAddress.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** provides methods to access the settings of a condition in a
     conditional format or data validation.
@@ -38,20 +36,17 @@ module com {  module sun {  module star {  module sheet {
  */
 published interface XSheetCondition: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** returns the operator in the condition.
      */
     com::sun::star::sheet::ConditionOperator getOperator();
 
-    //-------------------------------------------------------------------------
 
     /** sets the operator in the condition.
      */
     void setOperator(
             [in] com::sun::star::sheet::ConditionOperator nOperator );
 
-    //-------------------------------------------------------------------------
 
     /** returns either the comparison value, which is used in the condition,
         or the first value if two values are needed for the operator.
@@ -61,7 +56,6 @@ published interface XSheetCondition: com::sun::star::uno::XInterface
      */
     string getFormula1();
 
-    //-------------------------------------------------------------------------
 
     /** sets either the comparison value, which is used in the condition,
         or the first value if two values are needed for the operator.
@@ -71,7 +65,6 @@ published interface XSheetCondition: com::sun::star::uno::XInterface
      */
     void setFormula1( [in] string aFormula1 );
 
-    //-------------------------------------------------------------------------
 
     /** if two values are needed for the operator, this method returns
         the second one.
@@ -81,7 +74,6 @@ published interface XSheetCondition: com::sun::star::uno::XInterface
      */
     string getFormula2();
 
-    //-------------------------------------------------------------------------
 
     /** if two values are needed for the operator, this method sets
         the second one.
@@ -91,14 +83,12 @@ published interface XSheetCondition: com::sun::star::uno::XInterface
      */
     void setFormula2( [in] string aFormula2 );
 
-    //-------------------------------------------------------------------------
 
     /** returns the position in the document which is used as a base for
         relative references in the formulas.
      */
     com::sun::star::table::CellAddress getSourcePosition();
 
-    //-------------------------------------------------------------------------
 
     /** sets the position in the document which is used as a base for
         relative references in the formulas.
@@ -108,7 +98,6 @@ published interface XSheetCondition: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

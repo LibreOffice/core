@@ -25,11 +25,9 @@
 
 #include <com/sun/star/util/ChangesSet.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module util {
 
-//=============================================================================
 
 /** This event is fired when a set of changes becomes effective on the source of the event.
 
@@ -42,21 +40,18 @@ module com {  module sun {  module star {  module util {
  */
 published struct ChangesEvent: com::sun::star::lang::EventObject
 {
-    //-------------------------------------------------------------------------
     /** contains the accessor to the common root of the changed elements.
 
         <p>Type and value of the accessor depend on the service.</p>
      */
     any Base;
 
-    //-------------------------------------------------------------------------
     /** contains the changes which occurred.
      */
     ChangesSet Changes;
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

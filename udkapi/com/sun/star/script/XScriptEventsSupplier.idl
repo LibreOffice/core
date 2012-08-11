@@ -24,11 +24,9 @@
 #include <com/sun/star/container/XNameContainer.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module script {
 
-//=============================================================================
 
 /**
     Gives access to an event container represented by an
@@ -43,7 +41,6 @@ published interface XScriptEventsSupplier: com::sun::star::uno::XInterface
     com::sun::star::container::XNameContainer getEvents();
 };
 
-//=============================================================================
 
 }; }; }; };
 

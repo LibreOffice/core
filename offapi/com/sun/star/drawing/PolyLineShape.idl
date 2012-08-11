@@ -32,11 +32,9 @@
 #include <com/sun/star/drawing/RotationDescriptor.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module drawing {
 
-//=============================================================================
 
 /** This service is for a polyline shape.
     <p>A polyline has one or more straight lines.</p>
@@ -56,7 +54,6 @@ published service PolyLineShape
     service com::sun::star::drawing::RotationDescriptor;
 };
 
-//=============================================================================
 
 }; }; }; };
 

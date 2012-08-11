@@ -28,11 +28,9 @@
 #include <com/sun/star/text/XTextTablesSupplier.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module text {
 
-//=============================================================================
 
 // DocMerge from xml: service com::sun::star::text::HypertextDocument
 /** is an extension of a text document which
@@ -58,7 +56,6 @@ published service HypertextDocument
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

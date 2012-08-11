@@ -20,11 +20,9 @@
 #define __com_sun_star_frame_status_Verb_idl__
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module frame { module status {
 
-//=============================================================================
 
 /** describes a command that can be send to an OLE object
 
@@ -34,19 +32,16 @@ module com {  module sun {  module star {  module frame { module status {
  */
 struct Verb
 {
-    //-------------------------------------------------------------------------
 
     /** specifies the Id of the command.
      */
     long VerbId;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the name of the command. The name is localized.
      */
     string VerbName;
 
-    //-------------------------------------------------------------------------
 
     /** specifies if the command should be visible in a menu.
      */
@@ -57,7 +52,6 @@ struct Verb
     boolean VerbIsConst;
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

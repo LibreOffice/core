@@ -23,10 +23,8 @@
 #include <com/sun/star/xsd/XDataType.idl>
 #include <com/sun/star/util/Date.idl>
 
-//=============================================================================
 module com {  module sun {  module star {  module xsd {
 
-//-----------------------------------------------------------------------------
 /** specifies an <a href="http://www.w3.org/TR/xmlschema-2/#date">XSD compliant date type</a>
 */
 service Date
@@ -56,7 +54,6 @@ service Date
     [property, maybevoid] com::sun::star::util::Date MinExclusiveDate;
 };
 
-//=============================================================================
 
 }; }; }; };
 

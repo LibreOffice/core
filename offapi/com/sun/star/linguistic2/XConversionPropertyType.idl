@@ -27,11 +27,9 @@
 #include <com/sun/star/container/NoSuchElementException.idl>
 
 
-//=============================================================================
 
 module com { module sun { module star { module linguistic2 {
 
-//=============================================================================
 /** allows set and retrieve the property type of an entry in a
     conversion dictionary
 
@@ -46,7 +44,6 @@ module com { module sun { module star { module linguistic2 {
 published interface XConversionPropertyType : com::sun::star::uno::XInterface
 {
 
-    //-------------------------------------------------------------------------
     /** sets the property type for the specified entry.
 
         <p>The conversion entry is specified by the pair
@@ -66,7 +63,6 @@ published interface XConversionPropertyType : com::sun::star::uno::XInterface
         raises( com::sun::star::container::NoSuchElementException,
                 com::sun::star::lang::IllegalArgumentException );
 
-    //-------------------------------------------------------------------------
     /** returns the property type for the specified entry.
 
         <p>The conversion entry is specified by the pair
@@ -87,7 +83,6 @@ published interface XConversionPropertyType : com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

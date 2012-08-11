@@ -21,11 +21,9 @@
 
 #include <com/sun/star/animations/XAnimate.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module animations {
 
-//=============================================================================
 
 /** Interface for animation by defining motion on a path.
 
@@ -48,7 +46,6 @@ interface XAnimateMotion : XAnimate
     [attribute] any Origin;
 };
 
-//=============================================================================
 
 }; }; }; };
 

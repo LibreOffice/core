@@ -32,12 +32,10 @@
 #include <com/sun/star/beans/IllegalTypeException.idl>
 #include <com/sun/star/awt/XWindow.idl>
 
-//=============================================================================
 module com {  module sun {  module star {  module inspection {
 
 interface XPropertyControlContext;
 
-//-----------------------------------------------------------------------------
 /** defines the interface for a single control in an <type>ObjectInspector</type>
 
     @since OOo 2.0.3
@@ -109,7 +107,6 @@ interface XPropertyControl
     [attribute, readonly] com::sun::star::awt::XWindow ControlWindow;
 };
 
-//=============================================================================
 
 }; }; }; };
 

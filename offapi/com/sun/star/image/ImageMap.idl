@@ -31,11 +31,9 @@
 #include <com/sun/star/container/XNamed.idl>
 #include <com/sun/star/container/XIndexContainer.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module image {
 
-//=============================================================================
 
 /** This service specifies a HTML image map.
  */
@@ -53,7 +51,6 @@ published service ImageMap
     interface ::com::sun::star::container::XIndexContainer;
 };
 
-//=============================================================================
 
 }; }; }; };
 

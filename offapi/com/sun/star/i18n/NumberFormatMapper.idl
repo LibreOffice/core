@@ -23,11 +23,9 @@
 #include <com/sun/star/i18n/XNumberFormatCode.idl>
 #include <com/sun/star/lang/XServiceInfo.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module i18n {
 
-//=============================================================================
 
 /** Access locale data number format codes to use with the
     number formatter
@@ -39,7 +37,6 @@ published service NumberFormatMapper
     interface com::sun::star::lang::XServiceInfo;
 };
 
-//=============================================================================
 }; }; }; };
 #endif
 

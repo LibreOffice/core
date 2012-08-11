@@ -23,11 +23,9 @@
 #include <com/sun/star/lang/IllegalArgumentException.idl>
 #include <com/sun/star/configuration/backend/BackendAccessException.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module configuration { module backend {
 
-//=============================================================================
 
 /**
   Provides functionality relating to common and supported entities
@@ -40,7 +38,6 @@ module com { module sun { module star { module configuration { module backend {
 */
 published interface XBackendEntities : ::com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /**
         provides the entity id of the owner entity of the backend.
@@ -57,7 +54,6 @@ published interface XBackendEntities : ::com::sun::star::uno::XInterface
     */
     string getOwnerEntity() ;
 
-    //-------------------------------------------------------------------------
 
     /**
         provides the entity id of an entity for general administrative access.
@@ -75,7 +71,6 @@ published interface XBackendEntities : ::com::sun::star::uno::XInterface
     */
     string getAdminEntity() ;
 
-    //-------------------------------------------------------------------------
 
     /**
         determines, if a given entity id exists in this backend.
@@ -93,7 +88,6 @@ published interface XBackendEntities : ::com::sun::star::uno::XInterface
     boolean supportsEntity([in] string aEntity)
         raises( BackendAccessException );
 
-    //-------------------------------------------------------------------------
 
     /**
         determines, if two given entity ids denote the same entity.
@@ -117,10 +111,8 @@ published interface XBackendEntities : ::com::sun::star::uno::XInterface
     boolean isEqualEntity([in] string aEntity, [in] string aOtherEntity)
         raises( BackendAccessException, com::sun::star::lang::IllegalArgumentException) ;
 
-    //-------------------------------------------------------------------------
 } ;
 
-//=============================================================================
 
 } ; } ; } ; } ; } ;
 

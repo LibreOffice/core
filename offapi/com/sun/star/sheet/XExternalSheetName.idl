@@ -23,11 +23,9 @@
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/container/ElementExistException.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** provides a method to set an external name at the sheet.
 
@@ -40,7 +38,6 @@ module com {  module sun {  module star {  module sheet {
  */
 interface XExternalSheetName: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** sets an external name at the sheet.
 
@@ -61,7 +58,6 @@ interface XExternalSheetName: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

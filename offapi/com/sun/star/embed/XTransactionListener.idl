@@ -25,41 +25,34 @@
 
 #include <com/sun/star/uno/Exception.idl>
 
-//============================================================================
 
 module com {  module sun {  module star {  module embed {
 
-//============================================================================
 
 /** makes it possible to receive events when a transacted object is commited
     or reverted.
  */
 published interface XTransactionListener: com::sun::star::lang::XEventListener
 {
-    //------------------------------------------------------------------------
     /** is called just before the object is commited.
      */
     void preCommit( [in] com::sun::star::lang::EventObject aEvent )
         raises( ::com::sun::star::uno::Exception );
 
-    //------------------------------------------------------------------------
     /** is called after the object is commited.
      */
     void commited( [in] com::sun::star::lang::EventObject aEvent );
 
-    //------------------------------------------------------------------------
     /** is called just before the object is reverted.
      */
     void preRevert( [in] com::sun::star::lang::EventObject aEvent )
         raises( ::com::sun::star::uno::Exception );
 
-    //------------------------------------------------------------------------
     /** is called after the object is reverted.
      */
     void reverted( [in] com::sun::star::lang::EventObject aEvent );
 };
 
-//============================================================================
 
 }; }; }; };
 

@@ -30,11 +30,9 @@
 
 #include <com/sun/star/io/IOException.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {   module packages {  module zip {
 
-//=============================================================================
 
 /** used to indicate that a ZIP exception has occurred.
     Usually can be thrown from XInputStream interface implementations.
@@ -47,7 +45,6 @@ published exception ZipIOException: com::sun::star::io::IOException
 {
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

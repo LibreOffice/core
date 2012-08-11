@@ -33,11 +33,9 @@
 #include <com/sun/star/beans/PropertyValue.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module frame {
 
-//=============================================================================
 /** offers a simple way to store a component to an URL.
 
     <p>
@@ -57,7 +55,6 @@
  */
 published interface XStorable: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** The object may know the location because it was loaded from there,
         or because it is stored there.
 
@@ -67,7 +64,6 @@ published interface XStorable: com::sun::star::uno::XInterface
      */
     boolean hasLocation();
 
-    //-------------------------------------------------------------------------
     /** After <member>XStorable::storeAsURL()</member> it returns the
         URL the object was stored to.
 
@@ -76,7 +72,6 @@ published interface XStorable: com::sun::star::uno::XInterface
      */
     string getLocation();
 
-    //-------------------------------------------------------------------------
     /** It is not possible to call <member>XStorable::store()</member> successfully
         when the data store is read-only.
 
@@ -86,7 +81,6 @@ published interface XStorable: com::sun::star::uno::XInterface
      */
     boolean isReadonly();
 
-    //-------------------------------------------------------------------------
     /** stores the data to the URL from which it was loaded.
 
         <p>Only objects which know their locations can be stored.</p>
@@ -101,7 +95,6 @@ published interface XStorable: com::sun::star::uno::XInterface
     void store()
             raises( com::sun::star::io::IOException );
 
-    //-------------------------------------------------------------------------
     /** stores the object's persistent data to a URL and
         makes this URL the new location of the object.
 
@@ -134,7 +127,6 @@ published interface XStorable: com::sun::star::uno::XInterface
         [in] sequence<com::sun::star::beans::PropertyValue> lArguments )
         raises( com::sun::star::io::IOException );
 
-    //-------------------------------------------------------------------------
     /** stores the object's persistent data to a URL and
         continues to be a representation of the old URL.
 
@@ -162,7 +154,6 @@ published interface XStorable: com::sun::star::uno::XInterface
         raises( com::sun::star::io::IOException );
 };
 
-//=============================================================================
 
 }; }; }; };
 

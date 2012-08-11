@@ -30,11 +30,9 @@
 
 #include <com/sun/star/configuration/backend/SingleBackend.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module configuration { module backend {
 
-//=============================================================================
 
 /**
     implements <type>SingleBackend</type> that stores data in an
@@ -44,16 +42,13 @@ module com { module sun { module star { module configuration { module backend {
 */
 published service LdapSingleBackend
 {
-    //-------------------------------------------------------------------------
 
     /** provides access to configuration data.
       */
     service SingleBackend ;
 
-    //-------------------------------------------------------------------------
 } ;
 
-//=============================================================================
 
 } ; } ; } ; } ; } ;
 

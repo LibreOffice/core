@@ -19,11 +19,9 @@
 #ifndef __com_sun_star_xsd_DataTypeClass_idl__
 #define __com_sun_star_xsd_DataTypeClass_idl__
 
-//=============================================================================
 
 module com {  module sun {  module star {  module xsd {
 
-//=============================================================================
 
 /** These constants specify the class used of an <type>XDataType</type>
 */
@@ -107,7 +105,6 @@ constants DataTypeClass
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

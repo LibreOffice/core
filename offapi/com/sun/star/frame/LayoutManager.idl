@@ -36,11 +36,9 @@
 #include <com/sun/star/frame/XMenuBarMergingAcceptor.idl>
 #include <com/sun/star/frame/XLayoutManagerEventBroadcaster.idl>
 
-//=============================================================================
 
  module com { module sun { module star { module frame {
 
-//=============================================================================
 /** controls the layout of user interface elements which are part of a frame.
 
     <p>

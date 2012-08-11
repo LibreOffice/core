@@ -33,11 +33,9 @@
 #include <com/sun/star/drawing/PolyPolygonBezierCoords.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module drawing {
 
-//=============================================================================
 
 /** This service describes a polypolygonbezier.
     <p>A polypolygonbezier consists of multiple Bezier polygons combined
@@ -45,26 +43,22 @@
  */
 published service PolyPolygonBezierDescriptor
 {
-    //-------------------------------------------------------------------------
 
     /** This is the type of this polygon.
      */
     [readonly, property] com::sun::star::drawing::PolygonKind PolygonKind;
 
-    //-------------------------------------------------------------------------
 
     /** These are the Bezier points of this polygon.
      */
     [property] com::sun::star::drawing::PolyPolygonBezierCoords PolyPolygonBezier;
 
-    //-------------------------------------------------------------------------
 
     /** These are the untransformed Bezier coordinates of this polygon.
      */
     [property] com::sun::star::drawing::PolyPolygonBezierCoords Geometry;
 };
 
-//=============================================================================
 
 }; }; }; };
 

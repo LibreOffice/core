@@ -32,11 +32,9 @@
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/sheet/XSheetCellRanges.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** provides methods to query cells for dependencies
     in formulas.
@@ -48,7 +46,6 @@ module com {  module sun {  module star {  module sheet {
  */
 published interface XFormulaQuery: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** queries all dependent formula cells.
 
@@ -67,7 +64,6 @@ published interface XFormulaQuery: com::sun::star::uno::XInterface
     com::sun::star::sheet::XSheetCellRanges queryDependents(
             [in] boolean bRecursive );
 
-    //-------------------------------------------------------------------------
 
     /** queries all precedent cells.
 
@@ -88,7 +84,6 @@ published interface XFormulaQuery: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

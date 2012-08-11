@@ -21,16 +21,13 @@
 
 #include <com/sun/star/container/XNameReplace.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module document {
 
-//=============================================================================
 /** gives access to a list of URLs bound to events of this object
  */
 published interface XEventsSupplier: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** offers a list of event handlers which are be bound to events of
         this object
 
@@ -40,7 +37,6 @@ published interface XEventsSupplier: com::sun::star::uno::XInterface
     com::sun::star::container::XNameReplace getEvents();
 };
 
-//=============================================================================
 
 }; }; }; };
 

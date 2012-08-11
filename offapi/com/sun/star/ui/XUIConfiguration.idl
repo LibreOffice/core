@@ -77,7 +77,6 @@ interface XUIConfiguration : ::com::sun::star::uno::XInterface
     void removeConfigurationListener( [in] ::com::sun::star::ui::XUIConfigurationListener Listener );
 };
 
-//=============================================================================
 
 }; }; }; };
 

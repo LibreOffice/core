@@ -21,11 +21,9 @@
 
 #include <com/sun/star/task/XInteractionContinuation.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** is an interaction continuation used to instruct the requester to replace
     existing data.
 
@@ -40,7 +38,6 @@ published interface XInteractionReplaceExistingData : com::sun::star::task::XInt
 {
 };
 
-//=============================================================================
 
 }; }; }; };
 

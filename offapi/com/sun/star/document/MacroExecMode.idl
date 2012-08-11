@@ -29,24 +29,20 @@
 #ifndef __com_sun_star_document_MacroExecMode_idl__
 #define __com_sun_star_document_MacroExecMode_idl__
 
-//=============================================================================
 
 module com { module sun { module star { module document {
 
-//=============================================================================
 /** Specify whether a macro can be executed.
 
     @since OOo 1.1.2
 */
 published constants MacroExecMode
 {
-    //-------------------------------------------------------------------------
     /** A macro should not be executed at all.
     */
 
     const short NEVER_EXECUTE = 0;
 
-    //-------------------------------------------------------------------------
     /** Execute macros from secure list quietly.
 
         <p>
@@ -57,7 +53,6 @@ published constants MacroExecMode
 
     const short FROM_LIST = 1;
 
-    //-------------------------------------------------------------------------
     /** Execute any macro, macros signed with trusted certificates and macros
         from secure list are executed quietly.
 
@@ -69,7 +64,6 @@ published constants MacroExecMode
 
     const short ALWAYS_EXECUTE = 2;
 
-    //-------------------------------------------------------------------------
     /** Use configuration to retrieve macro settings. In case a user
         confirmation is required a dialog is output.
     */
@@ -77,33 +71,28 @@ published constants MacroExecMode
     const short USE_CONFIG = 3;
 
 
-    //-------------------------------------------------------------------------
     /** A macro should be executed always no conformation should be provided.
     */
 
     const short ALWAYS_EXECUTE_NO_WARN = 4;
 
-    //-------------------------------------------------------------------------
     /** Use configuration to retrieve macro settings. Treat cases when user
         confirmation required as rejected.
     */
 
     const short USE_CONFIG_REJECT_CONFIRMATION = 5;
 
-    //-------------------------------------------------------------------------
     /** Use configuration to retrieve macro settings. Treat cases when user
         confirmation required as approved.
     */
 
     const short USE_CONFIG_APPROVE_CONFIRMATION = 6;
 
-    //-------------------------------------------------------------------------
     /** Execute only macros from secure list. Macros that are not from the list
         are not executed.
     */
     const short FROM_LIST_NO_WARN = 7;
 
-    //-------------------------------------------------------------------------
     /** Execute only macros from secure list or macros that are signed by
         trusted certificates.
 
@@ -118,7 +107,6 @@ published constants MacroExecMode
     */
     const short FROM_LIST_AND_SIGNED_WARN = 8;
 
-    //-------------------------------------------------------------------------
     /** Execute only macros from secure list or macros that are signed by
         trusted certificates. No warning/conformation should be shown.
     */
@@ -126,7 +114,6 @@ published constants MacroExecMode
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

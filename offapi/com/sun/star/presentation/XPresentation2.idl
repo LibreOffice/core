@@ -34,11 +34,9 @@
 #include <com/sun/star/presentation/XSlideShowListener.idl>
 #include <com/sun/star/presentation/XSlideShowController.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module presentation {
 
-//=============================================================================
 
 /** enhances the XPresentation interface to give access to
     a <type>XSlideShowController</type>  and
@@ -48,38 +46,32 @@
 */
 interface XPresentation2
 {
-    //-------------------------------------------------------------------------
 
     /** allows to start and stop the presentation.
     */
     interface XPresentation;
 
-    //-------------------------------------------------------------------------
 
     /** gives access to the properties of the slide show.
     */
     interface com::sun::star::beans::XPropertySet;
 
-    //-------------------------------------------------------------------------
 
     /** start the slide show with the given arguments.
         All arguments override the values from <service>Presentation</service>
     */
     void startWithArguments( [in] sequence< ::com::sun::star::beans::PropertyValue > Arguments );
 
-    //-------------------------------------------------------------------------
 
     /** returns true if the slide show is currently running */
     boolean isRunning();
 
-    //-------------------------------------------------------------------------
 
     /** if the slide show is running, this returns a controller object to
         control the running slide show. */
     XSlideShowController getController();
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -22,11 +22,9 @@
 
 #include <com/sun/star/sheet/XSubTotalField.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** represents a single field in a subtotal descriptor.
 
@@ -37,7 +35,6 @@ module com {  module sun {  module star {  module sheet {
  */
 published service SubTotalField
 {
-    //-------------------------------------------------------------------------
 
     /** provides access to the settings of the subtotal field.
      */
@@ -45,7 +42,6 @@ published service SubTotalField
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

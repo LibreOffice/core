@@ -25,11 +25,9 @@
 #include <com/sun/star/container/XEnumerationAccess.idl>
 #include <com/sun/star/sheet/XCellRangesAccess.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** represents the collection of spreadsheets in a spreadsheet document.
 
@@ -37,7 +35,6 @@ module com {  module sun {  module star {  module sheet {
  */
 published service Spreadsheets
 {
-    //-------------------------------------------------------------------------
 
     /** provides methods to access the spreadsheets by name and to insert,
         copy, remove and rearrange spreadsheets.
@@ -46,7 +43,6 @@ published service Spreadsheets
      */
     interface com::sun::star::sheet::XSpreadsheets;
 
-    //-------------------------------------------------------------------------
 
     /** provides methods to access the spreadsheets by index.
 
@@ -54,7 +50,6 @@ published service Spreadsheets
      */
     interface com::sun::star::container::XIndexAccess;
 
-    //-------------------------------------------------------------------------
 
     /** creates an enumeration of all spreadsheets.
 
@@ -62,13 +57,11 @@ published service Spreadsheets
      */
     interface com::sun::star::container::XEnumerationAccess;
 
-    //-------------------------------------------------------------------------
 
     [optional] interface com::sun::star::sheet::XCellRangesAccess;
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

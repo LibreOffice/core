@@ -23,11 +23,9 @@
 #include <com/sun/star/sheet/XSheetFilterDescriptor.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** represents something from which criteria for filtering can be read.
 
@@ -39,7 +37,6 @@ module com {  module sun {  module star {  module sheet {
  */
 published interface XSheetFilterableEx: com::sun::star::sheet::XSheetFilterable
 {
-    //-------------------------------------------------------------------------
 
     /** creates a filter descriptor for the specified filterable object from
         the contents of this object.
@@ -50,7 +47,6 @@ published interface XSheetFilterableEx: com::sun::star::sheet::XSheetFilterable
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

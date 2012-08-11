@@ -22,18 +22,15 @@
 #include <com/sun/star/uno/Exception.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module util {
 
-//=============================================================================
 
 /** is thrown when a NumberFormat string is syntactically
     incorrect.
  */
 published exception MalformedNumberFormatException: com::sun::star::uno::Exception
 {
-    //-------------------------------------------------------------------------
 
     /** contains the character position in the string where the malformation
         begins.
@@ -42,7 +39,6 @@ published exception MalformedNumberFormatException: com::sun::star::uno::Excepti
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

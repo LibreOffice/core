@@ -21,11 +21,9 @@
 
 #include <com/sun/star/uno/Exception.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module loader {
 
-//=============================================================================
 
 /** indicates an error during component activation
     <p> This exception is thrown when an application tries to
@@ -42,7 +40,6 @@ published exception CannotActivateFactoryException: com::sun::star::uno::Excepti
 {
 };
 
-//=============================================================================
 
 }; }; }; };
 

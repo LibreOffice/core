@@ -30,11 +30,9 @@
 
 #include <com/sun/star/util/XChangesListener.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module util {
 
-//=============================================================================
 
 /** broadcasts events about multiple changes that occur in bulk.
 
@@ -44,19 +42,16 @@ module com {  module sun {  module star {  module util {
  */
 published interface XChangesNotifier: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** adds the specified listener to receive events when changes occurred.
      */
     [oneway] void addChangesListener( [in] com::sun::star::util::XChangesListener aListener );
 
-    //-------------------------------------------------------------------------
     /** removes the specified listener.
      */
     [oneway] void removeChangesListener( [in] com::sun::star::util::XChangesListener aListener );
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

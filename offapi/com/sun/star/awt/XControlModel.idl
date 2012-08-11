@@ -22,11 +22,9 @@
 #include <com/sun/star/uno/XInterface.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module awt {
 
-//=============================================================================
 
 /** identifies a control model.
  */
@@ -34,7 +32,6 @@ published interface XControlModel: com::sun::star::uno::XInterface
 {
 };
 
-//=============================================================================
 
 }; }; }; };
 

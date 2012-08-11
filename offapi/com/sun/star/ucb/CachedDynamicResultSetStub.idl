@@ -22,11 +22,9 @@
 #include <com/sun/star/ucb/XDynamicResultSet.idl>
 #include <com/sun/star/ucb/XSourceInitialization.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** provides read access to a static or dynamically changing
     <type>ContentResultSet</type>.
 
@@ -37,7 +35,6 @@ module com { module sun { module star { module ucb {
 
 published service CachedDynamicResultSetStub
 {
-    //-------------------------------------------------------------------------
     /** In Combination with a <type>CachedDynamicResultSet</type> this provides
         remote optimized read access to a static or dynamically changing
         <type>ContentResultSet</type>.
@@ -51,7 +48,6 @@ published service CachedDynamicResultSetStub
     */
     interface com::sun::star::ucb::XDynamicResultSet;
 
-    //-------------------------------------------------------------------------
     /** provides the initialization of the <type>CachedDynamicResultSetStub</type>
         with a source object.
 
@@ -64,7 +60,6 @@ published service CachedDynamicResultSetStub
     interface com::sun::star::ucb::XSourceInitialization;
 };
 
-//=============================================================================
 
 }; }; }; };
 

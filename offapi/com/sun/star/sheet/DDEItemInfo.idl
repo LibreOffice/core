@@ -19,11 +19,9 @@
 #ifndef __com_sun_star_sheet_DDEItemInfo_idl__
 #define __com_sun_star_sheet_DDEItemInfo_idl__
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 /** describes an item of a DDE connection.
 
     A DDE connection consists of the DDE service name, the DDE topic and a
@@ -33,14 +31,12 @@ module com {  module sun {  module star {  module sheet {
  */
 struct DDEItemInfo
 {
-    //-------------------------------------------------------------------------
 
     /** The name of the DDE item.
      */
 
     string Item;
 
-    //-------------------------------------------------------------------------
 
     /** The results of the item cached from the last update of the DDE link if
         available. This sequence may be empty.
@@ -50,7 +46,6 @@ struct DDEItemInfo
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -21,11 +21,9 @@
 
 #include <com/sun/star/animations/XAnimationNode.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module animations {
 
-//=============================================================================
 
 /** Execution of the XCommand animation node causes the slide show component
     to call back the application to perform the command.
@@ -49,7 +47,6 @@ interface XCommand : XAnimationNode
     [attribute] any Parameter;
 };
 
-//=============================================================================
 
 }; }; }; };
 

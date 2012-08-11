@@ -22,11 +22,9 @@
 #include <com/sun/star/uno/Exception.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module xml {  module sax {
 
-//=============================================================================
 
 /** encapsulates the details of an XML parse error or warning.
 
@@ -41,7 +39,6 @@ module com {  module sun {  module star {  module xml {  module sax {
  */
 published exception SAXException: com::sun::star::uno::Exception
 {
-    //-------------------------------------------------------------------------
 
     /** This field may contain a  wrapped exception.
      */
@@ -49,7 +46,6 @@ published exception SAXException: com::sun::star::uno::Exception
 
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

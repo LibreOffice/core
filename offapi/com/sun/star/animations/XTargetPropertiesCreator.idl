@@ -31,11 +31,9 @@
 #include <com/sun/star/animations/TargetProperties.idl>
 #include <com/sun/star/animations/XAnimationNode.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module animations {
 
-//=============================================================================
 
 /** Factory interface to generate properties for all animated targets.<p>
 
@@ -66,7 +64,6 @@ interface XTargetPropertiesCreator : ::com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

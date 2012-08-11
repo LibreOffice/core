@@ -22,11 +22,9 @@
 #include <com/sun/star/lang/EventObject.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module form {
 
-//=============================================================================
 
 // DocMerge from xml: struct com::sun::star::form::ErrorEvent
 /** occurs in case of fired database exceptions triggered by
@@ -40,7 +38,6 @@ published struct ErrorEvent: com::sun::star::lang::EventObject
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

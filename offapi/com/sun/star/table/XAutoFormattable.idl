@@ -23,17 +23,14 @@
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/lang/IllegalArgumentException.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module table {
 
-//=============================================================================
 
 /** provides a method to apply TableAutoFormats to a cell range.
  */
 published interface XAutoFormattable: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** applies an AutoFormat to the cell range of the current context.
 
@@ -48,7 +45,6 @@ published interface XAutoFormattable: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -22,30 +22,25 @@
 #include <com/sun/star/util/XSearchDescriptor.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module util {
 
-//=============================================================================
 
 /** specifies a string replace operation.
  */
 published interface XReplaceDescriptor: com::sun::star::util::XSearchDescriptor
 {
-    //-------------------------------------------------------------------------
     /** @returns
                     the string which replaces the found occurrences.
      */
     string getReplaceString();
 
-    //-------------------------------------------------------------------------
     /** sets the string which replaces the found occurrences.
      */
     void setReplaceString( [in] string aReplaceString );
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

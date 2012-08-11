@@ -24,11 +24,9 @@
 #include <com/sun/star/chart/ChartAxisXSupplier.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module chart {
 
-//=============================================================================
 
 /** a helper service for chart documents which supply
     primary and secondary x-axes.
@@ -41,7 +39,6 @@ published service ChartTwoAxisXSupplier
 
     service com::sun::star::chart::ChartAxisXSupplier;
 
-    //-------------------------------------------------------------------------
 
     /** determines if the secondary x-axis is shown or hidden.
 
@@ -49,14 +46,12 @@ published service ChartTwoAxisXSupplier
      */
     [property] boolean HasSecondaryXAxis;
 
-    //-------------------------------------------------------------------------
 
     /** determines for the secondary x-axis
         if the labels at the tick marks are shown or hidden.
     */
     [property] boolean HasSecondaryXAxisDescription;
 
-    //-------------------------------------------------------------------------
 
     /** determines if the title of the secondary X-axis is shown or hidden.
 
@@ -68,7 +63,6 @@ published service ChartTwoAxisXSupplier
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -33,12 +33,10 @@
 #include <com/sun/star/container/NoSuchElementException.idl>
 #include <com/sun/star/lang/NoSupportException.idl>
 
-//=============================================================================
 module com {  module sun {  module star {  module inspection {
 
 interface XPropertyControlObserver;
 
-//-----------------------------------------------------------------------------
 /** grants access to certain aspects of the user interface of an object
     inspector
 
@@ -172,7 +170,6 @@ interface XObjectInspectorUI
         raises ( ::com::sun::star::lang::NoSupportException );
 };
 
-//=============================================================================
 
 }; }; }; };
 

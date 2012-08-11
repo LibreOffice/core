@@ -24,11 +24,9 @@
 #include <com/sun/star/awt/Rectangle.idl>
 #include <com/sun/star/table/CellRangeAddress.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module table {
 
-//=============================================================================
 
 /** provides methods to access charts via name and to insert and remove
     charts.
@@ -37,7 +35,6 @@ module com {  module sun {  module star {  module table {
  */
 published interface XTableCharts: com::sun::star::container::XNameAccess
 {
-    //-------------------------------------------------------------------------
 
     /** creates a chart and adds it to the collection.
 
@@ -67,7 +64,6 @@ published interface XTableCharts: com::sun::star::container::XNameAccess
             [in] boolean bColumnHeaders,
             [in] boolean bRowHeaders );
 
-    //-------------------------------------------------------------------------
 
     /** removes a chart from the collection.
 
@@ -78,7 +74,6 @@ published interface XTableCharts: com::sun::star::container::XNameAccess
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -25,11 +25,9 @@
 #include <com/sun/star/lang/XComponent.idl>
 #include <com/sun/star/reflection/XTypeDescriptionEnumerationAccess.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module reflection {
 
-//=============================================================================
 
 /** This service manages type descriptions and acts as a central access point
     to every type description.  It delegates calls for demanded types to
@@ -93,7 +91,6 @@ published service TypeDescriptionManager
     [optional] interface XTypeDescriptionEnumerationAccess;
 };
 
-//=============================================================================
 
 }; }; }; };
 

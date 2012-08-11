@@ -29,11 +29,9 @@
 #ifndef __com_sun_star_i18n_NumberFormatIndex_idl__
 #define __com_sun_star_i18n_NumberFormatIndex_idl__
 
-//=============================================================================
 
 module com { module sun { module star { module i18n {
 
-//=============================================================================
 
 //! Do NOT insert any new values!
 //! Locale data number format creation must match these values!
@@ -275,7 +273,6 @@ published constants NumberFormatIndex
 };
 
 
-//=============================================================================
 }; }; }; };
 #endif
 

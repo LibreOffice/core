@@ -24,29 +24,24 @@
 #include <com/sun/star/table/XCell.idl>
 #include <com/sun/star/text/XText.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module table {
 
-//=============================================================================
 
 /** represents a singe cell within a table.
  */
 published service Cell
 {
-    //-------------------------------------------------------------------------
 
     /** contains the properties of the table cell.
        */
     service com::sun::star::table::CellProperties;
 
-    //-------------------------------------------------------------------------
 
     /** provides access to the cell contents.
      */
     interface com::sun::star::table::XCell;
 
-    //-------------------------------------------------------------------------
 
     /** provides access to formatted and unformatted text contents.
      */
@@ -54,7 +49,6 @@ published service Cell
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

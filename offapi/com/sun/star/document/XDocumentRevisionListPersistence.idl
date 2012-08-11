@@ -26,17 +26,14 @@
 #include <com/sun/star/container/NoSuchElementException.idl>
 #include <com/sun/star/uno/Exception.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module document {
 
-//=============================================================================
 /** interface to load or store a list of document revisions from or to a document
     using the packed XML file format
  */
 interface XDocumentRevisionListPersistence: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
      /** Loads a list of available revisions from a storage
         <p>
         This method does not load any revision itself
@@ -47,7 +44,6 @@ interface XDocumentRevisionListPersistence: com::sun::star::uno::XInterface
                 com::sun::star::io::IOException,
                 com::sun::star::uno::Exception );
 
-    //-------------------------------------------------------------------------
      /** Stores a list of available revisions to a storage
         <p>
         This method does not store revisions themselves
@@ -58,7 +54,6 @@ interface XDocumentRevisionListPersistence: com::sun::star::uno::XInterface
                 com::sun::star::uno::Exception );
 };
 
-//=============================================================================
 
 }; }; }; };
 

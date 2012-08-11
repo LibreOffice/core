@@ -23,16 +23,13 @@
 #include <com/sun/star/frame/BorderWidths.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module frame {
 
-//=============================================================================
 /** allows to listen to border resize events of a controller.
  */
 interface XBorderResizeListener: com::sun::star::lang::XEventListener
 {
-    //-------------------------------------------------------------------------
     /** notifies the listener that the controller's border widths have been
         changed.
 
@@ -45,7 +42,6 @@ interface XBorderResizeListener: com::sun::star::lang::XEventListener
     void borderWidthsChanged( [in] ::com::sun::star::uno::XInterface aObject, [in] BorderWidths aNewSize );
 };
 
-//=============================================================================
 
 }; }; }; };
 

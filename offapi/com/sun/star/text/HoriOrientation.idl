@@ -20,18 +20,15 @@
 #define __com_sun_star_text_HoriOrientation_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module text {
 
-//=============================================================================
 
 // DocMerge from idl: constants com::sun::star::text::HoriOrientation
 /** These enumeration values specify the horizontal orientation.
  */
 published constants HoriOrientation
 {
-    //-------------------------------------------------------------------------
 
     // DocMerge from idl: value com::sun::star::text::HoriOrientation::NONE
     /** no hard alignment is applied.
@@ -44,49 +41,42 @@ published constants HoriOrientation
      */
     const short NONE = 0;
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from idl: value com::sun::star::text::HoriOrientation::RIGHT
     /** The object is aligned at the right side.
      */
     const short RIGHT = 1;
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from idl: value com::sun::star::text::HoriOrientation::CENTER
     /** The object is aligned at the middle.
      */
     const short CENTER = 2;
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from idl: value com::sun::star::text::HoriOrientation::LEFT
     /** The object is aligned at the left side.
      */
     const short LEFT = 3;
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from idl: value com::sun::star::text::HoriOrientation::INSIDE
     /** TODO
      */
     const short INSIDE = 4;
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from idl: value com::sun::star::text::HoriOrientation::OUTSIDE
     /** TODO
      */
     const short OUTSIDE = 5;
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from idl: value com::sun::star::text::HoriOrientation::FULL
     /** The object uses the full space (for text tables only).
      */
     const short FULL = 6;
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from idl: value com::sun::star::text::HoriOrientation::LEFT_AND_WIDTH
     /** The left offset and the width of the object are defined.
@@ -97,7 +87,6 @@ published constants HoriOrientation
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -33,11 +33,9 @@
 #include <com/sun/star/text/TextTable.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module text {
 
-//=============================================================================
 
 // DocMerge from xml: service com::sun::star::text::Paragraph
 /** is a piece of text which can take its own paragraph-specific
@@ -108,7 +106,6 @@ published service Paragraph
     [optional] interface ::com::sun::star::beans::XTolerantMultiPropertySet;
 };
 
-//=============================================================================
 
 }; }; }; };
 

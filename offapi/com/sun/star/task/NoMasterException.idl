@@ -23,23 +23,19 @@
 #include <com/sun/star/task/PasswordRequestMode.idl>
 
 
-//=============================================================================
 
 module com { module sun { module star { module task {
 
-//=============================================================================
 /** is thrown when a master password is needed but not available/correct.
  */
 published exception NoMasterException: com::sun::star::uno::RuntimeException
 {
-    //-------------------------------------------------------------------------
     /** specifies the mode in which password should be queried.
     */
     PasswordRequestMode Mode;
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -20,11 +20,9 @@
 #define __com_sun_star_chart_ChartAxisPosition_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module chart {
 
-//=============================================================================
 
 /** Specifies the position of the axis on the scale of the crossing axis.
 When the property is set at a x-axis it indicates a position on the scale of the primary y-axis.
@@ -33,32 +31,27 @@ When the property is set at a y-axis it indicates a position on the scale of the
 
 published enum ChartAxisPosition
 {
-    //-------------------------------------------------------------------------
 
     /** Cross the other axes at zero. If zero is not contained in the current scale the value is used which is nearest to zero.
      */
     ZERO,
 
-    //-------------------------------------------------------------------------
 
     /** Cross the other axes at their minimum scale value.
      */
     START,
 
-    //-------------------------------------------------------------------------
 
     /** Cross the other axes at their maximum scale value.
      */
     END,
 
-    //-------------------------------------------------------------------------
 
     /** Cross the other axes at the value specified in the property CrossoverValue.
      */
     VALUE
 };
 
-//=============================================================================
 
 }; }; }; };
 

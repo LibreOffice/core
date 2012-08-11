@@ -22,11 +22,9 @@
 
 #include <com/sun/star/style/Style.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module style {
 
-//=============================================================================
 
 /** is a common service for table cell styles.
 
@@ -34,7 +32,6 @@ module com {  module sun {  module star {  module style {
  */
 published service CellStyle
 {
-    //-------------------------------------------------------------------------
 
     /** provides common functionality for styles.
      */
@@ -42,7 +39,6 @@ published service CellStyle
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

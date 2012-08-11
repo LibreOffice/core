@@ -23,11 +23,9 @@
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/sheet/MemberResult.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** provides access to a sequence of results of a data pilot source level.
 
@@ -40,7 +38,6 @@ module com {  module sun {  module star {  module sheet {
  */
 published interface XDataPilotMemberResults: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** returns the sequence of results for the regarding data pilot
         source level.
@@ -49,7 +46,6 @@ published interface XDataPilotMemberResults: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

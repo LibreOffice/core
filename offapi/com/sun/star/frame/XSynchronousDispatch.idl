@@ -32,18 +32,15 @@
 #include <com/sun/star/util/URL.idl>
 #include <com/sun/star/beans/PropertyValue.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module frame {
 
-//=============================================================================
 /** additional interfaces for dispatch objects: allow to execute with return value
     @since OOo 2.0
     @see XDispatch
  */
 published interface XSynchronousDispatch: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** dispatches a URL synchronously and offers a return values
 
         <p>
@@ -63,7 +60,6 @@ published interface XSynchronousDispatch: com::sun::star::uno::XInterface
         [in] sequence<com::sun::star::beans::PropertyValue> Arguments);
 };
 
-//=============================================================================
 
 }; }; }; };
 

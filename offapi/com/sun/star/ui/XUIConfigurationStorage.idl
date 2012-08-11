@@ -22,11 +22,9 @@
 
 #include <com/sun/star/embed/XStorage.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module ui {
 
-//=============================================================================
 
 /** supplies functions to change or get information about the storage
     of a user interface configuration manager.
@@ -69,7 +67,6 @@ interface XUIConfigurationStorage : ::com::sun::star::uno::XInterface
     boolean hasStorage();
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -24,11 +24,9 @@
 #include <com/sun/star/uno/XInterface.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module text {
 
-//=============================================================================
 
 // DocMerge from xml: interface com::sun::star::text::XTextEmbeddedObject
 /** f t!
@@ -41,7 +39,6 @@
  */
 published interface XTextEmbeddedObject: com::sun::star::text::XTextContent
 {
-    //-------------------------------------------------------------------------
 
     // DocMerge from idl: method com::sun::star::text::XTextEmbeddedObject::getObject
     /** @returns an interface to the linked object that is contained in
@@ -49,7 +46,6 @@ published interface XTextEmbeddedObject: com::sun::star::text::XTextContent
      */
     com::sun::star::uno::XInterface getObject();
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::text::XTextEmbeddedObject::setObject
     /** sets an object into the TextEmbeddedObject.
@@ -58,7 +54,6 @@ published interface XTextEmbeddedObject: com::sun::star::text::XTextContent
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

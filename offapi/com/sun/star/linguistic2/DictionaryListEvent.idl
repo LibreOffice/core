@@ -23,11 +23,9 @@
 #include <com/sun/star/linguistic2/DictionaryEvent.idl>
 
 
-//=============================================================================
 
 module com { module sun { module star { module linguistic2 {
 
-//=============================================================================
 /** structure representing a dictionary-list event.
 
     <P>This structure is used by the dictionary-list to inform
@@ -47,7 +45,6 @@ module com { module sun { module star { module linguistic2 {
 */
 published struct DictionaryListEvent : com::sun::star::lang::EventObject
 {
-    //-------------------------------------------------------------------------
     /** the combined type of the accumulated events.
 
     <p>The value can be the combination of multiple
@@ -61,7 +58,6 @@ published struct DictionaryListEvent : com::sun::star::lang::EventObject
     */
     short nCondensedEvent;
 
-    //-------------------------------------------------------------------------
     /** list of accumulated dictionary events.
 
          <p>It will be empty if all
@@ -75,7 +71,6 @@ published struct DictionaryListEvent : com::sun::star::lang::EventObject
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

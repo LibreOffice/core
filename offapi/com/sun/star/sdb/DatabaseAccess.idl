@@ -96,7 +96,6 @@ published service DatabaseAccess
     [optional, property] sequence<string> TableTypeFilter;
 };
 
-//=============================================================================
 
 }; }; }; };
 

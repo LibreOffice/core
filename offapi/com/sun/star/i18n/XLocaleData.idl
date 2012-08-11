@@ -38,11 +38,9 @@
 #include <com/sun/star/i18n/FormatElement.idl>
 #include <com/sun/star/i18n/Implementation.idl>
 
-//============================================================================
 
 module com { module sun { module star { module i18n {
 
-//============================================================================
 
 /**
     Access locale specific data as it is defined in XML locale data
@@ -56,67 +54,56 @@ module com { module sun { module star { module i18n {
 
 published interface XLocaleData: com::sun::star::uno::XInterface
 {
-    //------------------------------------------------------------------------
     /** returns the LC_INFO locale information.
      */
     LanguageCountryInfo getLanguageCountryInfo(
                                 [in] com::sun::star::lang::Locale aLocale );
 
-    //------------------------------------------------------------------------
     /** returns LC_CTYPE separators and markers.
      */
     LocaleDataItem      getLocaleItem(
                                 [in] com::sun::star::lang::Locale aLocale );
 
-    //------------------------------------------------------------------------
     /** returns all LC_CALENDAR calendars for a locale.
      */
     sequence<Calendar>  getAllCalendars(
                                 [in] com::sun::star::lang::Locale aLocale );
 
-    //------------------------------------------------------------------------
     /** returns all LC_CURRENCY currencies for a locale.
      */
     sequence<Currency>  getAllCurrencies(
                                 [in] com::sun::star::lang::Locale aLocale );
 
-    //------------------------------------------------------------------------
     /** returns all LC_FORMAT format elements for a locale.
      */
     sequence<FormatElement> getAllFormats(
                                 [in] com::sun::star::lang::Locale aLocale );
 
-    //------------------------------------------------------------------------
     /** returns all LC_COLLATION collators for a locale.
      */
     sequence<Implementation> getCollatorImplementations(
                                 [in] com::sun::star::lang::Locale aLocale );
 
-    //------------------------------------------------------------------------
     /** returns all LC_SEARCH search options for a locale.
      */
     sequence<string>    getSearchOptions(
                                 [in] com::sun::star::lang::Locale aLocale );
 
-    //------------------------------------------------------------------------
     /** returns all LC_COLLATION collation options for a locale.
      */
     sequence<string>    getCollationOptions(
                                 [in] com::sun::star::lang::Locale aLocale );
 
-    //------------------------------------------------------------------------
     /** returns all LC_TRANSLITERATION transliterations for a locale.
      */
     sequence<string>    getTransliterations(
                                 [in] com::sun::star::lang::Locale aLocale );
 
-    //------------------------------------------------------------------------
     /** returns all LC_MISC forbidden characters for a locale.
      */
     ForbiddenCharacters getForbiddenCharacters (
                                 [in] com::sun::star::lang::Locale aLocale );
 
-    //------------------------------------------------------------------------
     /** returns all LC_MISC reserved words for a locale.
 
         @see reservedWords
@@ -124,13 +111,11 @@ published interface XLocaleData: com::sun::star::uno::XInterface
     sequence<string>    getReservedWord(
                                 [in] com::sun::star::lang::Locale aLocale );
 
-    //------------------------------------------------------------------------
     /** returns all available locales.
      */
     sequence<com::sun::star::lang::Locale> getAllInstalledLocaleNames();
 };
 
-//============================================================================
 }; }; }; };
 
 #endif

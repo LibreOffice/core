@@ -23,11 +23,9 @@
 #include <com/sun/star/frame/XFrame.idl>
 #include <com/sun/star/frame/FrameAction.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module frame {
 
-//=============================================================================
 /** this event struct is broadcast for actions which can happen to
     components within frames
 
@@ -35,18 +33,15 @@
  */
 published struct FrameActionEvent: com::sun::star::lang::EventObject
 {
-    //-------------------------------------------------------------------------
     /** contains the frame in which the event occurred
      */
     XFrame Frame;
 
-    //-------------------------------------------------------------------------
     /** specifies the concrete event
      */
     FrameAction Action;
 };
 
-//=============================================================================
 
 }; }; }; };
 

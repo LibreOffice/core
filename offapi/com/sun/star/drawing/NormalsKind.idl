@@ -20,11 +20,9 @@
 #define __com_sun_star_drawing_NormalsKind_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module drawing {
 
-//=============================================================================
 
 // DocMerge from xml: enum com::sun::star::drawing::NormalsKind
 /** specifies in which way the standard normals
@@ -32,7 +30,6 @@
  */
 published enum NormalsKind
 {
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: value com::sun::star::drawing::NormalsKind::SPECIFIC
     /** does not produce standard normals, but leaves
@@ -40,14 +37,12 @@ published enum NormalsKind
      */
     SPECIFIC,
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: value com::sun::star::drawing::NormalsKind::FLAT
     /** forces one normal per flat part.
      */
     FLAT,
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: value com::sun::star::drawing::NormalsKind::SPHERE
     /** forces normals to think that the object is a
@@ -57,7 +52,6 @@ published enum NormalsKind
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

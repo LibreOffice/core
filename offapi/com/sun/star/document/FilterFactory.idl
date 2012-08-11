@@ -33,11 +33,9 @@
 #include <com/sun/star/container/XContainerQuery.idl>
 #include <com/sun/star/util/XFlushable.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module document {
 
-//=============================================================================
 /** factory to create filter components.
 
     <p>
@@ -55,7 +53,6 @@ module com { module sun { module star { module document {
  */
 published service FilterFactory
 {
-    //-------------------------------------------------------------------------
     /** factory interface to create and initialize filter components.
 
         <p>
@@ -117,7 +114,6 @@ published service FilterFactory
      */
     interface com::sun::star::lang::XMultiServiceFactory;
 
-    //-------------------------------------------------------------------------
     /** provides read access to the complete set of configuration data.
 
         <p>
@@ -202,12 +198,10 @@ published service FilterFactory
      */
     interface com::sun::star::container::XNameAccess;
 
-    //-------------------------------------------------------------------------
     /** provides a write access to the configuration data.
      */
     [optional] interface com::sun::star::container::XNameContainer;
 
-    //-------------------------------------------------------------------------
     /** provides search on the configuration data set.
 
         <p>
@@ -217,7 +211,6 @@ published service FilterFactory
      */
     interface com::sun::star::container::XContainerQuery;
 
-    //-------------------------------------------------------------------------
     /** can be used to perform container changes.
 
         <p>
@@ -234,7 +227,6 @@ published service FilterFactory
     [optional] interface com::sun::star::util::XFlushable;
 };
 
-//=============================================================================
 
 }; }; }; };
 

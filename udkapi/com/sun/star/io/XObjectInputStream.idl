@@ -26,17 +26,14 @@
 #include <com/sun/star/io/IOException.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module io {
 
-//=============================================================================
 
 /** reads XPersistObject implementations from a stream
  */
 published interface XObjectInputStream: com::sun::star::io::XDataInputStream
 {
-    //-------------------------------------------------------------------------
 
     /** reads an object from the stream. In general, it
         reads the service name, instantiaties the object and
@@ -48,7 +45,6 @@ published interface XObjectInputStream: com::sun::star::io::XDataInputStream
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

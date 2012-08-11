@@ -22,11 +22,9 @@
 
 #include <com/sun/star/uno/Exception.idl>
 
-//=============================================================================
 
 module com {   module sun {   module star {   module rdf {
 
-//=============================================================================
 /** represents an error condition that is signaled on evaluating a query
     against an RDF Repository.
 
@@ -38,7 +36,6 @@ exception QueryException : com::sun::star::uno::Exception
 {
 };
 
-//=============================================================================
 
 }; }; }; };
 

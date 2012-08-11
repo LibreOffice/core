@@ -21,11 +21,9 @@
 
 #include <com/sun/star/uno/Exception.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module script {
 
-//=============================================================================
 /** Is used for interaction handle in case password protected modules exceed the size that can be stored in OpenOffice 2.x, 1.x formats
 
 */
@@ -37,7 +35,6 @@ exception ModuleSizeExceededRequest : ::com::sun::star::uno::Exception
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

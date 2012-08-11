@@ -24,11 +24,9 @@
 #include <com/sun/star/uno/TypeClass.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module script {
 
-//=============================================================================
 
 /** This exception is thrown to indicate that a type conversion can not be performed.
 */
@@ -50,7 +48,6 @@ published exception CannotConvertException: com::sun::star::uno::Exception
     long ArgumentIndex;
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -20,11 +20,9 @@
 #define __com_sun_star_awt_FontWidth_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module awt {
 
-//=============================================================================
 
 /** These values are used to specify the width of the characters of a font.
 
@@ -32,61 +30,51 @@
  */
 published constants FontWidth
 {
-    //-------------------------------------------------------------------------
 
     /** The width of the font is not specified/known.
      */
     const float DONTKNOW = 0.000000;
 
-    //-------------------------------------------------------------------------
 
     /** The width of the font is condensed to 50%.
      */
     const float ULTRACONDENSED = 50.000000;
 
-    //-------------------------------------------------------------------------
 
     /** The width of the font is condensed to 60%.
      */
     const float EXTRACONDENSED = 60.000000;
 
-    //-------------------------------------------------------------------------
 
     /** The width of the font is condensed to 75%.
      */
     const float CONDENSED = 75.000000;
 
-    //-------------------------------------------------------------------------
 
     /** The width of the font is condensed to 90%.
      */
     const float SEMICONDENSED = 90.000000;
 
-    //-------------------------------------------------------------------------
 
     /** The width of the font is normal.
      */
     const float NORMAL = 100.000000;
 
-    //-------------------------------------------------------------------------
 
     /** The width of the font is expanded to 110%.
      */
     const float SEMIEXPANDED = 110.000000;
 
-    //-------------------------------------------------------------------------
 
     /** The width of the font is expanded to 150%.
      */
     const float EXPANDED = 150.000000;
 
-    //-------------------------------------------------------------------------
 
     /** The width of the font is expanded to 175%.
      */
     const float EXTRAEXPANDED = 175.000000;
 
-    //-------------------------------------------------------------------------
 
     /** The width of the font is expanded to 200%.
      */
@@ -94,7 +82,6 @@ published constants FontWidth
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

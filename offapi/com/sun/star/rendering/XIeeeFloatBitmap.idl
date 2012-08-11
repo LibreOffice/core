@@ -35,7 +35,6 @@ module com { module sun { module star { module rendering {
  */
 interface XIeeeFloatBitmap : XIeeeFloatReadOnlyBitmap
 {
-    //-------------------------------------------------------------------------
 
     /** Set raw data of a bitmap.<p>
 
@@ -77,7 +76,6 @@ interface XIeeeFloatBitmap : XIeeeFloatReadOnlyBitmap
         raises (com::sun::star::lang::IllegalArgumentException,
                 com::sun::star::lang::IndexOutOfBoundsException);
 
-    //-------------------------------------------------------------------------
 
     /** Set a single pixel of the bitmap with the given color
         value.<p>

@@ -22,11 +22,9 @@
 
 #include <com/sun/star/datatransfer/clipboard/XClipboard.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module datatransfer { module clipboard {
 
-//=============================================================================
 /** The extended clipboard interface.
 
     @see com::sun::star::datatransfer::clipboard::XClipboard
@@ -34,7 +32,6 @@ module com { module sun { module star { module datatransfer { module clipboard {
 
 published interface XClipboardEx: com::sun::star::datatransfer::clipboard::XClipboard
 {
-    //-------------------------------------------------------------------------
     /** To determine the supported rendering capabilities of the clipboard instance.
 
         @returns
@@ -45,7 +42,6 @@ published interface XClipboardEx: com::sun::star::datatransfer::clipboard::XClip
     byte getRenderingCapabilities();
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

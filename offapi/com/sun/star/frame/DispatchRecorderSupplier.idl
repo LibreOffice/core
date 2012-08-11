@@ -30,11 +30,9 @@
 
 #include <com/sun/star/frame/XDispatchRecorderSupplier.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module frame {
 
-//=============================================================================
 /** provides a <type>DispatchRecorder</type>
 
     <p>
@@ -54,7 +52,6 @@
  */
 published service DispatchRecorderSupplier : XDispatchRecorderSupplier;
 
-//=============================================================================
 
 }; }; }; };
 

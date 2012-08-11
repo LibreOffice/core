@@ -22,11 +22,9 @@
 
 #include <com/sun/star/gallery/XGalleryTheme.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module gallery {
 
-//=============================================================================
 
 /** provides access to a container of Gallery items and makes it
     possible for you to manipulate them.
@@ -40,7 +38,6 @@ service GalleryTheme
     interface com::sun::star::gallery::XGalleryTheme;
 };
 
-//=============================================================================
 
 }; }; }; };
 

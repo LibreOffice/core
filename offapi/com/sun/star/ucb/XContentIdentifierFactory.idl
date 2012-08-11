@@ -23,11 +23,9 @@
 #include <com/sun/star/ucb/XContentIdentifier.idl>
 
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** A factory for content identifiers.
 
     @version  1.0
@@ -36,7 +34,6 @@ module com { module sun { module star { module ucb {
 */
 published interface XContentIdentifierFactory: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /**  creates an identifier.
 
         @param ContentId
@@ -49,7 +46,6 @@ published interface XContentIdentifierFactory: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

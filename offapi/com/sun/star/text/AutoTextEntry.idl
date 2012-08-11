@@ -23,11 +23,9 @@
 #include <com/sun/star/text/XText.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module text {
 
-//=============================================================================
 
 // DocMerge from xml: service com::sun::star::text::AutoTextEntry
 /** provides access to a text block in a group of
@@ -48,7 +46,6 @@ published service AutoTextEntry
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

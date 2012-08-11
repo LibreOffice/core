@@ -34,11 +34,9 @@
 #include <com/sun/star/beans/XFastPropertySet.idl>
 #include <com/sun/star/beans/XMultiPropertySet.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module form {
 
-//=============================================================================
 
 /** describes a controller which can be used to browse and modify properties of form controls.
 
@@ -130,7 +128,6 @@ published service PropertyBrowserController
     interface com::sun::star::beans::XMultiPropertySet;
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -23,11 +23,9 @@
 #include <com/sun/star/container/XNameAccess.idl>
 #include <com/sun/star/table/CellRangeAddress.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** provides functions to manage a collection of database ranges.
 
@@ -35,7 +33,6 @@ module com {  module sun {  module star {  module sheet {
  */
 published interface XDatabaseRanges: com::sun::star::container::XNameAccess
 {
-    //-------------------------------------------------------------------------
 
     /** adds a new database range to the collection.
      */
@@ -43,7 +40,6 @@ published interface XDatabaseRanges: com::sun::star::container::XNameAccess
             [in] string aName,
             [in] com::sun::star::table::CellRangeAddress aRange );
 
-    //-------------------------------------------------------------------------
 
     /** removes a database range from the collection.
      */
@@ -51,7 +47,6 @@ published interface XDatabaseRanges: com::sun::star::container::XNameAccess
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

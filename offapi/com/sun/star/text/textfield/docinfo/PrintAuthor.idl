@@ -31,12 +31,10 @@
 
 #include <com/sun/star/text/TextField.idl>
 
-//=============================================================================
 
 module com { module sun { module star {
     module text { module textfield { module docinfo {
 
-//=============================================================================
 /** specifies service of a text field that provides information about the author
   of the last print operation.
     @see com::sun::star::text::TextField
@@ -59,7 +57,6 @@ published service PrintAuthor
     [optional, property] boolean IsFixed;
 };
 
-//=============================================================================
 
 }; }; }; }; }; };
 

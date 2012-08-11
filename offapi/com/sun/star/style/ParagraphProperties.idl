@@ -40,54 +40,45 @@
 #include <com/sun/star/style/BreakType.idl>
 #include <com/sun/star/container/XNameContainer.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module style {
 
-//=============================================================================
 
 /** describes the style of paragraphs.
  */
 published service ParagraphProperties
 {
-    //-------------------------------------------------------------------------
 
     /** determines the adjustment of a paragraph.
      */
     [property] com::sun::star::style::ParagraphAdjust ParaAdjust;
 
-    //-------------------------------------------------------------------------
 
     /** contains the type of the line spacing of a paragraph.
      */
     [optional, property] com::sun::star::style::LineSpacing ParaLineSpacing;
 
-    //-------------------------------------------------------------------------
 
     /** contains the paragraph background color.
      */
     [optional, property] com::sun::star::util::Color ParaBackColor;
 
-    //-------------------------------------------------------------------------
 
     /** This value is <TRUE/> if the paragraph background color
         is set to transparent.
      */
     [optional, property] boolean ParaBackTransparent;
 
-    //-------------------------------------------------------------------------
 
     /** contains the value of a link for the background graphic of a paragraph.
      */
     [optional, property] string ParaBackGraphicURL;
 
-    //-------------------------------------------------------------------------
 
     /** contains the name of the graphic filter for the background graphic of a paragraph.
      */
     [optional, property] string ParaBackGraphicFilter;
 
-    //-------------------------------------------------------------------------
 
     /** contains the value for the position of a background graphic.
 
@@ -95,7 +86,6 @@ published service ParagraphProperties
      */
     [optional, property] com::sun::star::style::GraphicLocation ParaBackGraphicLocation;
 
-    //-------------------------------------------------------------------------
 
     /** determines the adjustment of the last line.
         <p>It is only valid if <member>ParagraphProperties::ParaAdjust</member>
@@ -103,7 +93,6 @@ published service ParagraphProperties
      */
     [property] short ParaLastLineAdjust;
 
-    //-------------------------------------------------------------------------
 
     /** determines if single words are stretched.
 
@@ -112,19 +101,16 @@ published service ParagraphProperties
      */
     [optional, property] boolean ParaExpandSingleWord;
 
-    //-------------------------------------------------------------------------
 
     /** determines the left margin of the paragraph in 100th mm.
      */
     [property] long ParaLeftMargin;
 
-    //-------------------------------------------------------------------------
 
     /** determines the right margin of the paragraph in 100th mm.
      */
     [property] long ParaRightMargin;
 
-    //-------------------------------------------------------------------------
 
     /** determines the top margin of the paragraph in 100th mm.
 
@@ -137,7 +123,6 @@ published service ParagraphProperties
      */
     [property] long ParaTopMargin;
 
-    //-------------------------------------------------------------------------
 
     /** determines the bottom margin of the paragraph in 100th mm.
 
@@ -161,20 +146,17 @@ published service ParagraphProperties
      */
     [optional, property] boolean ParaContextMargin;
 
-    //-------------------------------------------------------------------------
 
     /** determines if the paragraph is included in the
         line numbering.
      */
     [optional, property] boolean ParaLineNumberCount;
 
-    //-------------------------------------------------------------------------
 
     /** contains the start value for the line numbering.
      */
     [optional, property] long ParaLineNumberStartValue;
 
-    //-------------------------------------------------------------------------
 
     /** If this property is set, it creates a page break before the
         paragraph it belongs to and assigns the value as the name
@@ -182,13 +164,11 @@ published service ParagraphProperties
      */
     [optional, property] string PageDescName;
 
-    //-------------------------------------------------------------------------
 
     /** If a page break property is set at a paragraph, this property contains the new value for the page number.
      */
     [optional, property] short PageNumberOffset;
 
-    //-------------------------------------------------------------------------
 
     /** determines if the register mode is applied to a
         paragraph.
@@ -200,26 +180,22 @@ published service ParagraphProperties
      */
     [optional, property] boolean ParaRegisterModeActive;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the positions and kinds of the tab stops within this
                 paragraph.
      */
     [optional, property] sequence<com::sun::star::style::TabStop> ParaTabStops;
 
-    //-------------------------------------------------------------------------
 
     /** contains the name of the current paragraph style.
      */
     [optional, property] string ParaStyleName;
 
-        //-------------------------------------------------------------------------
 
         /** contains the name of the current page style.
          */
         [optional, property, maybevoid, readonly] string PageStyleName;
 
-        //-------------------------------------------------------------------------
 
     /** specifies whether the first characters of the
         paragraph are displayed in capital letters and how they are
@@ -227,14 +203,12 @@ published service ParagraphProperties
      */
     [optional, property] com::sun::star::style::DropCapFormat DropCapFormat;
 
-    //-------------------------------------------------------------------------
 
     /** specifies if the property <var>DropCapFormat</var>
         is applied to the whole first word.
      */
     [optional, property] boolean DropCapWholeWord;
 
-    //-------------------------------------------------------------------------
 
     /** Setting this property to <TRUE/> prevents page or column
         breaks between this and the following paragraph.
@@ -245,35 +219,29 @@ published service ParagraphProperties
      */
     [optional, property] boolean ParaKeepTogether;
 
-    //-------------------------------------------------------------------------
 
     /** Setting this property to <FALSE/> prevents the paragraph from
         getting split into two pages or columns.
      */
     [optional, property] boolean ParaSplit;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the numbering level of the    paragraph.
      */
     [optional, property] short NumberingLevel;
 
-    //-------------------------------------------------------------------------
     /** contains the numbering rules applied to this paragraph.
      */
         [optional, property] com::sun::star::container::XIndexReplace NumberingRules;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the start value for numbering if a new numbering starts at this paragraph.
      */
     [optional, property] short NumberingStartValue;
 
-    //-------------------------------------------------------------------------
     /** determines if the numbering rules restart, counting at the current paragraph.
      */
     [optional, property] boolean ParaIsNumberingRestart;
-    //-------------------------------------------------------------------------
 
     /** specifies the name of the style for the numbering.
 
@@ -282,121 +250,99 @@ published service ParagraphProperties
         <type>XStyleFamiliesSupplier</type>.</p>
      */
     [optional, property] string NumberingStyleName;
-    //-------------------------------------------------------------------------
 
     /** specifies the minimum number of lines of the paragraph that have
         to be at bottom of a page if the paragraph is spread over more than
         one page.
      */
     [optional, property] byte ParaOrphans;
-    //-------------------------------------------------------------------------
 
     /** specifies the minimum number of lines of the paragraph that have
         to be at top of a page if the paragraph is spread over more than
         one page.
      */
     [optional, property] byte ParaWidows;
-    //-------------------------------------------------------------------------
     /** determines the type, color, and size of the shadow.
      @see com.sun.star.table.ShadowFormat
      */
     [optional, property] com::sun::star::table::ShadowFormat ParaShadowFormat;
-    //-------------------------------------------------------------------------
     /** contains the left border of the object.
      */
         [property, optional] com::sun::star::table::BorderLine LeftBorder;
 
-    //-------------------------------------------------------------------------
     /** contains the right border of the object.
      */
         [property, optional] com::sun::star::table::BorderLine RightBorder;
 
-    //-------------------------------------------------------------------------
     /** contains the top border of the object.
      */
         [property, optional] com::sun::star::table::BorderLine TopBorder;
 
-    //-------------------------------------------------------------------------
     /** contains the bottom border of the object.
      */
         [property, optional] com::sun::star::table::BorderLine BottomBorder;
 
-    //-------------------------------------------------------------------------
     /** contains the distance from the border to the object.
      */
         [property, optional] long BorderDistance;
 
-    //-------------------------------------------------------------------------
     /** contains the distance from the left border to the object.
      */
         [property, optional] long LeftBorderDistance;
 
-    //-------------------------------------------------------------------------
     /** contains the distance from the right border to the object.
      */
         [property, optional] long RightBorderDistance;
 
-    //-------------------------------------------------------------------------
     /** contains the distance from the top border to the object.
      */
         [property, optional] long TopBorderDistance;
 
-    //-------------------------------------------------------------------------
     /** contains the distance from the bottom border to the object.
      */
         [property, optional] long BottomBorderDistance;
 
-    //-------------------------------------------------------------------------
         /** determines the type of break that is applied at the beginning of the table.
             @see com.sun.star.style.BreakType
          */
         [optional, property] com::sun::star::style::BreakType BreakType;
 
-        //-------------------------------------------------------------------------
         /** specifies the character style name for drop caps.
          */
         [optional, property] string DropCapCharStyleName;
 
-        //-------------------------------------------------------------------------
         /** specifies the indent for the first line.
          */
         [optional, property] long ParaFirstLineIndent;
 
-        //-------------------------------------------------------------------------
         /** determines if the first line should be indented automatically.
          */
         [optional, property] boolean ParaIsAutoFirstLineIndent;
 
-        //-------------------------------------------------------------------------
         /** specifies if automatic hyphenation is applied.
          */
         [property] boolean ParaIsHyphenation;
 
-        //-------------------------------------------------------------------------
         /** specifies the maximum number of consecutive hyphens.
          */
         [optional, property] short ParaHyphenationMaxHyphens;
 
-        //-------------------------------------------------------------------------
         /** specifies the maximum number of characters to remain before the
             hyphen character (when hyphenation is applied).
          */
         [optional, property] short ParaHyphenationMaxLeadingChars;
 
-        //-------------------------------------------------------------------------
         /** specifies the maximum number of characters to remain after the
             hyphen character (when hyphenation is applied).
          */
         [optional, property] short ParaHyphenationMaxTrailingChars;
 
-        //-------------------------------------------------------------------------
         /** specifies the vertical alignment of a paragraph.
 
             @see com::sun::star::text::ParagraphVertAlign
          */
         [optional, property] short ParaVertAlignment;
 
-        //-------------------------------------------------------------------------
         /** this property stores xml attributes.
             They will be saved to and restored from automatic styles inside xml files.
 
@@ -404,7 +350,6 @@ published service ParagraphProperties
          */
         [optional, property] com::sun::star::container::XNameContainer ParaUserDefinedAttributes;
 
-        //-------------------------------------------------------------------------
         /** returns <FALSE/> if the paragraph is part of a numbering, but has no
             numbering label.
 
@@ -414,20 +359,17 @@ published service ParagraphProperties
          */
         [optional, property, maybevoid] boolean NumberingIsNumber;
 
-        //-------------------------------------------------------------------------
         /** the property determines if borders set at a paragraph are merged with the
          next paragraph.
          <p>Borders are only merged if they are identical.</p>
          */
         [optional, property, maybevoid] boolean ParaIsConnectBorder;
 
-        //-------------------------------------------------------------------------
         /** specifies the id of the list to which the paragraph belongs
 
          */
         [optional, property] string ListId;
 
-        //-------------------------------------------------------------------------
         /** specifies the outline level to which the paragraph belongs
 
             @since OOo 3.1
@@ -438,7 +380,6 @@ published service ParagraphProperties
         [optional, property] short OutlineLevel;
 };
 
-//=============================================================================
 
 }; }; }; };
 

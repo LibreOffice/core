@@ -21,29 +21,24 @@
 
 #include <com/sun/star/datatransfer/DataFlavor.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module embed {
 
-//=============================================================================
 
 /** can contain a graphical representation in an arbitrary format.
  */
 published struct VisualRepresentation
 {
-    //-------------------------------------------------------------------------
     /** The format of the visual representation.
      */
     ::com::sun::star::datatransfer::DataFlavor Flavor;
 
-     //-------------------------------------------------------------------------
     /** The data in the format specified by <member>Flavor</member>.
      */
     any Data;
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

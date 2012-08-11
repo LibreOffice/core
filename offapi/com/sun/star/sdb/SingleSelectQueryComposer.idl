@@ -61,7 +61,6 @@ service SingleSelectQueryComposer
     [readonly, property] string Original;
 };
 
-//=============================================================================
 
 }; }; }; };
 

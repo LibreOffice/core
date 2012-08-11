@@ -20,11 +20,9 @@
 #define __com_sun_star_text_SectionFileLink_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module text {
 
-//=============================================================================
 
 // DocMerge from xml: struct com::sun::star::text::SectionFileLink
 /** describes the link for a text section.
@@ -52,7 +50,6 @@ published struct SectionFileLink
      */
     string FileURL;
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: field com::sun::star::text::SectionFileLink::FilterName
     /** contains the name of the file filter that is used to load the linked file.
@@ -61,7 +58,6 @@ published struct SectionFileLink
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

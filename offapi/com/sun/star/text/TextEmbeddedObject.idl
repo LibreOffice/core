@@ -33,11 +33,9 @@
 #include <com/sun/star/frame/XModel.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module text {
 
-//=============================================================================
 
 // DocMerge from xml: service com::sun::star::text::TextEmbeddedObject
 /** provides access to the properties and methods of an embedded object.
@@ -56,7 +54,6 @@ published service TextEmbeddedObject
             The property can only be set as long as the object is not inserted into the document.
         */
         [property] string CLSID;
-        //-------------------------------------------------------------------------
 
         /** This is the model for the OLE2 object.
             <p>This property if void if the OLE2 is not an
@@ -64,7 +61,6 @@ published service TextEmbeddedObject
 
         */
         [readonly, maybevoid, property] com::sun::star::frame::XModel Model;
-        //-------------------------------------------------------------------------
 
         /** This is the component for the OLE2 object.
 
@@ -72,7 +68,6 @@ published service TextEmbeddedObject
         [readonly, maybevoid, property] com::sun::star::lang::XComponent Component;
 };
 
-//=============================================================================
 
 }; }; }; };
 

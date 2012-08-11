@@ -22,16 +22,13 @@
 #include <com/sun/star/uno/XInterface.idl>
 
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** Handle a tasks notification that it has made some progress.
 */
 published interface XProgressHandler: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** The task notifies the handler that it has started some new activity
         (possibly a sub-activity of another activity already making progress;
         therefore, these notifications behave in a stack-like manner).
@@ -49,7 +46,6 @@ published interface XProgressHandler: com::sun::star::uno::XInterface
     */
     void push([in] any Status);
 
-    //-------------------------------------------------------------------------
     /** The task notifies the handler that its current activity is making
         progress.
 
@@ -59,14 +55,12 @@ published interface XProgressHandler: com::sun::star::uno::XInterface
     */
     void update([in] any Status);
 
-    //-------------------------------------------------------------------------
     /** The task notifies the handler that it has finished its current
         activity.
     */
     void pop();
 };
 
-//=============================================================================
 
 }; }; }; };
 

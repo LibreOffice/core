@@ -22,11 +22,9 @@
 
 #include <com/sun/star/container/XNamed.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** represents the member in a data pilot field group.
 
@@ -34,7 +32,6 @@ module com {  module sun {  module star {  module sheet {
  */
 published service DataPilotFieldGroupItem
 {
-    //-------------------------------------------------------------------------
 
     /** provides access to the name of the data pilot field group member.
      */
@@ -42,7 +39,6 @@ published service DataPilotFieldGroupItem
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

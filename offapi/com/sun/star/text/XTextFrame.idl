@@ -23,11 +23,9 @@
 #include <com/sun/star/text/XText.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module text {
 
-//=============================================================================
 
 // DocMerge from xml: interface com::sun::star::text::XTextFrame
 /** provides access to the <type>Text</type> of a <type>TextFrame</type>.
@@ -35,7 +33,6 @@
  */
 published interface XTextFrame: com::sun::star::text::XTextContent
 {
-    //-------------------------------------------------------------------------
 
     // DocMerge from idl: method com::sun::star::text::XTextFrame::getText
     /** @returns
@@ -46,7 +43,6 @@ published interface XTextFrame: com::sun::star::text::XTextContent
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

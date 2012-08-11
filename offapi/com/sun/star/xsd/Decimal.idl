@@ -22,10 +22,8 @@
 
 #include <com/sun/star/xsd/XDataType.idl>
 
-//=============================================================================
 module com {  module sun {  module star {  module xsd {
 
-//-----------------------------------------------------------------------------
 /** specifies an <a href="http://www.w3.org/TR/xmlschema-2/#decimal">XSD compliant decimal type</a>
 */
 service Decimal
@@ -73,7 +71,6 @@ service Decimal
     [property, maybevoid] double MinExclusiveDouble;
 };
 
-//=============================================================================
 
 }; }; }; };
 

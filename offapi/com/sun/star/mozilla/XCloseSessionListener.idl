@@ -21,11 +21,9 @@
 
 #include <com/sun/star/uno/XInterface.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module mozilla {
 
-//=============================================================================
 
 
 // DocMerge from xml: interface com::sun::star::mozilla::XCloseSessionListener
@@ -33,7 +31,6 @@
 */
 published interface XCloseSessionListener: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
 
     // DocMerge from xml: method com::sun::star::mozilla::XCloseSessionListener::sessionClosed
@@ -45,7 +42,6 @@ published interface XCloseSessionListener: com::sun::star::uno::XInterface
     [oneway] void sessionClosed( [in] any sessionData );
 };
 
-//=============================================================================
 
 }; }; }; };
 

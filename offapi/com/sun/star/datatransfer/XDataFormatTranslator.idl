@@ -35,7 +35,6 @@
 
 module com { module sun { module star { module datatransfer {
 
-//=============================================================================
 /** Interface to be implemented by objects used to translate a <type>DataFlavor</type> to
     a system dependent data transfer type and vice versa.
 
@@ -47,7 +46,6 @@ module com { module sun { module star { module datatransfer {
 
 published interface XDataFormatTranslator : com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** Converts a <type>DataFlavor</type> to system dependent data type.
 
         @param aDataFlavor
@@ -61,7 +59,6 @@ published interface XDataFormatTranslator : com::sun::star::uno::XInterface
     */
     any getSystemDataTypeFromDataFlavor( [in] DataFlavor aDataFlavor );
 
-    //-------------------------------------------------------------------------
     /** Converts a system dependent data type to a <type>DataFlavor</type>.
 
         @param aSysDataType

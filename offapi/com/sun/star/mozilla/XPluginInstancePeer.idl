@@ -27,15 +27,12 @@
 
 #include <com/sun/star/lang/XMultiServiceFactory.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module mozilla {
 
-//=============================================================================
 
  published interface XPluginInstanceNotifySink;
 
-//=============================================================================
 
 
 // DocMerge from xml: interface com::sun::star::mozilla::XPluginInstancePeer
@@ -44,7 +41,6 @@
  */
 published interface XPluginInstancePeer: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
 
     // DocMerge from xml: method com::sun::star::mozilla::XPluginInstancePeer::setWindowSize
@@ -57,7 +53,6 @@ published interface XPluginInstancePeer: com::sun::star::uno::XInterface
      */
     boolean setWindowSize( [in] long width, [in] long heigth );
 
-    //-------------------------------------------------------------------------
 
 
     // DocMerge from xml: method com::sun::star::mozilla::XPluginInstancePeer::showStatusMessage
@@ -67,7 +62,6 @@ published interface XPluginInstancePeer: com::sun::star::uno::XInterface
      */
     [oneway] void showStatusMessage( [in] string message );
 
-    //-------------------------------------------------------------------------
 
 
     // DocMerge from xml: method com::sun::star::mozilla::XPluginInstancePeer::enableScripting
@@ -80,7 +74,6 @@ published interface XPluginInstancePeer: com::sun::star::uno::XInterface
      */
     [oneway] void enableScripting( [in] com::sun::star::uno::XInterface document, [in] com::sun::star::lang::XMultiServiceFactory servicemanager );
 
-    //-------------------------------------------------------------------------
 
 
     // DocMerge from xml: method com::sun::star::mozilla::XPluginInstancePeer::newStream
@@ -98,7 +91,6 @@ published interface XPluginInstancePeer: com::sun::star::uno::XInterface
         [in] com::sun::star::io::XActiveDataSource data
     );
 
-    //-------------------------------------------------------------------------
 
 
     // DocMerge from xml: method com::sun::star::mozilla::XPluginInstancePeer::getURL
@@ -120,7 +112,6 @@ published interface XPluginInstancePeer: com::sun::star::uno::XInterface
         [in] XPluginInstanceNotifySink sink
     );
 
-    //-------------------------------------------------------------------------
 
 
     // DocMerge from xml: method com::sun::star::mozilla::XPluginInstancePeer::postURL
@@ -147,7 +138,6 @@ published interface XPluginInstancePeer: com::sun::star::uno::XInterface
     );
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -33,11 +33,9 @@
 #include <com/sun/star/xml/sax/InputSource.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module xml {  module sax {
 
-//=============================================================================
 
 /** makes it possible to modify the behavior of resolving external
     preferences.
@@ -48,7 +46,6 @@ module com {  module sun {  module star {  module xml {  module sax {
  */
 published interface XEntityResolver: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** @returns
                     <type>InputSource</type> for the external entity.
@@ -61,7 +58,6 @@ published interface XEntityResolver: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

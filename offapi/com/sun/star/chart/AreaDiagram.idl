@@ -34,11 +34,9 @@
 #include <com/sun/star/chart/StackableDiagram.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module chart {
 
-//=============================================================================
 
 /** This is a service for area diagrams.
  */
@@ -53,7 +51,6 @@ published service AreaDiagram
     service com::sun::star::chart::StackableDiagram;
 };
 
-//=============================================================================
 
 }; }; }; };
 

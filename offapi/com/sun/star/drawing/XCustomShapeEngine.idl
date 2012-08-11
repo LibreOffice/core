@@ -25,17 +25,14 @@
 #include <com/sun/star/drawing/XShape.idl>
 #include <com/sun/star/drawing/XCustomShapeHandle.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module drawing {
 
-//=============================================================================
 
 /** The XCustomShapeEngine
  */
 interface XCustomShapeEngine: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /**
         @returns
@@ -61,7 +58,6 @@ interface XCustomShapeEngine: com::sun::star::uno::XInterface
 
  };
 
-//=============================================================================
 
 }; }; }; };
 

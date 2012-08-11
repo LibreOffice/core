@@ -30,11 +30,9 @@
 
 #include <com/sun/star/lang/EventObject.idl>
 
-//==================================================================================================================
 
 module com { module sun { module star { module document {
 
-//==================================================================================================================
 
 /** is an event sent by an <type>XUndoManager</type> implementation when the Undo/Redo stacks of the manager are
     modified.
@@ -55,11 +53,9 @@ struct UndoManagerEvent : ::com::sun::star::lang::EventObject
     long    UndoContextDepth;
 };
 
-//==================================================================================================================
 
 }; }; }; };
 
-//==================================================================================================================
 
 #endif
 

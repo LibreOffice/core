@@ -20,29 +20,24 @@
 #ifndef __com_sun_star_sheet_FormulaResult_idl__
 #define __com_sun_star_sheet_FormulaResult_idl__
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** used to select different result types of cell formulas.
  */
 published constants FormulaResult
 {
-    //-------------------------------------------------------------------------
 
     /** selects numeric results.
      */
     const long VALUE = 1;
 
-    //-------------------------------------------------------------------------
 
     /** selects non-numeric results.
      */
     const long STRING = 2;
 
-    //-------------------------------------------------------------------------
 
     /** selects errors.
      */
@@ -50,7 +45,6 @@ published constants FormulaResult
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

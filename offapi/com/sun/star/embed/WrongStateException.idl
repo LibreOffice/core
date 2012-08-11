@@ -22,11 +22,9 @@
 #include <com/sun/star/uno/Exception.idl>
 
 
-//============================================================================
 
  module com {  module sun {  module star {  module embed {
 
-//============================================================================
 
 /** This exception can be thrown in case the object's state does not allow
     to call requested functionality.
@@ -35,7 +33,6 @@ published exception WrongStateException: com::sun::star::uno::Exception
 {
 };
 
-//============================================================================
 
 }; }; }; };
 

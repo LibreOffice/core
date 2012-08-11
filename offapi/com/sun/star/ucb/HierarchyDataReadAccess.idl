@@ -33,11 +33,9 @@
 #include <com/sun/star/util/XChangesNotifier.idl>
 #include <com/sun/star/lang/XComponent.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** provides read access to a fragment of the hierarchy data.
 
     <p>A hierarchy data source provides access to a tree of hierarchy data
@@ -58,7 +56,6 @@ module com { module sun { module star { module ucb {
 */
 published service HierarchyDataReadAccess
 {
-    //-------------------------------------------------------------------------
     /** gives access to the data members of a hierarchy data node.
 
         <p>Examples:
@@ -77,7 +74,6 @@ published service HierarchyDataReadAccess
      */
     interface com::sun::star::container::XNameAccess;
 
-    //-------------------------------------------------------------------------
     /** gives access to the data members of a hierarchy data node as well
         as to any child nodes or to the data members of child nodes using a
         hierarchical name.
@@ -137,7 +133,6 @@ published service HierarchyDataReadAccess
      */
     interface com::sun::star::container::XHierarchicalNameAccess;
 
-    //-------------------------------------------------------------------------
     /** allows registering listeners that observe the hierarchy data source.
 
         <p>A client can register an
@@ -150,14 +145,12 @@ published service HierarchyDataReadAccess
     */
     interface com::sun::star::util::XChangesNotifier;
 
-    //-------------------------------------------------------------------------
     /** allows controlling or observing the lifetime of the hierarchy data
         access object.
      */
     interface com::sun::star::lang::XComponent;
 };
 
-//=============================================================================
 
 }; }; }; };
 

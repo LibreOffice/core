@@ -27,7 +27,6 @@ module com { module sun { module star {
 
 module com { module sun { module star { module configuration { module backend {
 
-//============================================================================
 /** An interaction request handler that lets the user handle a number of well
     known requests via GUI dialogs.
 
@@ -65,12 +64,10 @@ module com { module sun { module star { module configuration { module backend {
  */
 published service InteractionHandler
 {
-    //------------------------------------------------------------------------
     /** Handle an interaction request.
      */
     interface com::sun::star::task::XInteractionHandler;
 
-    //------------------------------------------------------------------------
     /** Initialize the interaction handler.
 
         <P>The arguments must be a sequence of

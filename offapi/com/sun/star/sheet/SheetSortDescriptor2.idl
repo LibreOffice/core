@@ -22,11 +22,9 @@
 #include <com/sun/star/table/TableSortDescriptor2.idl>
 #include <com/sun/star/table/CellAddress.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** a description of how a cell range is to be sorted.
 
@@ -37,7 +35,6 @@ module com {  module sun {  module star {  module sheet {
  */
 published service SheetSortDescriptor2
 {
-    //-------------------------------------------------------------------------
 
     /** provides common sorting properties.
 
@@ -48,20 +45,17 @@ published service SheetSortDescriptor2
      */
     service com::sun::star::table::TableSortDescriptor2;
 
-    //=========================================================================
 
     /** specifies if cell formats are moved with the contents
         they belong to.
      */
     [property] boolean BindFormatsToContent;
 
-    //-------------------------------------------------------------------------
 
     /** specifies if a user defined sorting list is used.
      */
     [property] boolean IsUserListEnabled;
 
-    //-------------------------------------------------------------------------
 
     /** specifies which user defined sorting list is used.
 
@@ -70,14 +64,12 @@ published service SheetSortDescriptor2
      */
     [property] long UserListIndex;
 
-    //-------------------------------------------------------------------------
 
     /** specifies if the sorted data should be copied to another
         position in the document.
      */
     [property] boolean CopyOutputData;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the position where sorted data are to be copied.
 
@@ -86,7 +78,6 @@ published service SheetSortDescriptor2
      */
     [property] com::sun::star::table::CellAddress OutputPosition;
 
-    //-------------------------------------------------------------------------
 
     /** specifies whether the first row or column (depending on
         <member scope="com::sun::star::table">TableSortDescriptor::Orientation</member>) is a header which
@@ -95,7 +86,6 @@ published service SheetSortDescriptor2
     [property] boolean ContainsHeader;
 };
 
-//=============================================================================
 
 }; }; }; };
 

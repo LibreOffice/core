@@ -20,11 +20,9 @@
 #define __com_sun_star_drawing_EnhancedCustomShapeParameterType_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module drawing {
 
-//=============================================================================
 
 /** defines how a EnhancedCustomShapeParameter has to be interpreted
  */
@@ -91,7 +89,6 @@ constants EnhancedCustomShapeParameterType
     const short LOGHEIGHT = 14;
 };
 
-//=============================================================================
 
  }; }; }; };
 

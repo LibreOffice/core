@@ -41,7 +41,6 @@ module com { module sun { module star { module ucb {
 */
 published struct OpenCommandArgument3 : OpenCommandArgument2
 {
-    //-------------------------------------------------------------------------
     /** Flags to use for opening.
 
         <p>WebDav e.g. uses "KeepAlive" to enable/disable the respective http feature.

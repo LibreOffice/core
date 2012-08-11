@@ -32,11 +32,9 @@
 #include <com/sun/star/frame/XDispatchRecorder.idl>
 #include <com/sun/star/util/URL.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module frame {
 
-//=============================================================================
 /** extends an existing <type>XDispatch</type> implementation with functionality
     for dispatch recording
 
@@ -80,7 +78,6 @@
  */
 published interface XRecordableDispatch: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** dispatch and record it
 
         @param URL
@@ -100,7 +97,6 @@ published interface XRecordableDispatch: com::sun::star::uno::XInterface
         [in] XDispatchRecorder Recorder);
 };
 
-//=============================================================================
 
 }; }; }; };
 

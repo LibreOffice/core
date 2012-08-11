@@ -40,7 +40,6 @@ published constants ColumnValue
     const long NULLABLE_UNKNOWN =  2;
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -25,7 +25,6 @@
 
 module com { module sun { module star { module ucb {
 
-//============================================================================
 /** The description of a change to a
     <type scope="com::sun::star::ucb">XRemoteContentProviderSupplier</type>.
 
@@ -34,14 +33,12 @@ module com { module sun { module star { module ucb {
  */
 published struct RemoteContentProviderChangeEvent: com::sun::star::lang::EventObject
 {
-    //------------------------------------------------------------------------
     /** The identifier with which the remote content provider is registered
         at the
         <type scope="com::sun::star::ucb">XRemoteContentProviderSupplier</type>.
      */
     string Identifier;
 
-    //------------------------------------------------------------------------
     /** An indicator whether a remote content provider has been added or
         removed.
      */

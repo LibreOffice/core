@@ -24,23 +24,19 @@
 #include <com/sun/star/awt/AdjustmentType.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module awt {
 
-//=============================================================================
 
 /** adjustment event emitted by adjustable objects.
  */
 published struct AdjustmentEvent: com::sun::star::lang::EventObject
 {
-    //-------------------------------------------------------------------------
 
     /** contains the current value in the adjustment event.
      */
     long Value;
 
-    //-------------------------------------------------------------------------
 
     /** contains the type of the adjustment event.
      */
@@ -48,7 +44,6 @@ published struct AdjustmentEvent: com::sun::star::lang::EventObject
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

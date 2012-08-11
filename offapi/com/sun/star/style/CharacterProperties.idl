@@ -34,17 +34,14 @@
 #include <com/sun/star/container/XNameContainer.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module style {
 
-//=============================================================================
 
 /** This is a set of properties to describe the style of characters.@see ParagraphProperties
  */
 published service CharacterProperties
 {
-    //-------------------------------------------------------------------------
 
     /** This property specifies the name of the font style.
 
@@ -52,7 +49,6 @@ published service CharacterProperties
      */
     [property] string CharFontName;
 
-    //-------------------------------------------------------------------------
 
     /** This property contains the name of the font style.
 
@@ -60,34 +56,29 @@ published service CharacterProperties
      */
     [property] string CharFontStyleName;
 
-    //-------------------------------------------------------------------------
 
     /** This property contains font family.
         @see com::sun::star::awt::FontFamily
      */
     [property] short CharFontFamily;
 
-    //-------------------------------------------------------------------------
 
     /** This property contains the text encoding of the font.
         @see com::sun::star::awt::CharSet
      */
     [property] short CharFontCharSet;
 
-    //-------------------------------------------------------------------------
 
     /** This property contains the font pitch.
         @see com::sun::star::awt::FontPitch
      */
     [property] short CharFontPitch;
 
-    //-------------------------------------------------------------------------
 
     /** This property contains the value of the text color.
      */
     [property] com::sun::star::util::Color CharColor;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the percentage by which to raise/lower superscript/subscript
         characters.
@@ -98,34 +89,29 @@ published service CharacterProperties
      */
     [optional, property] short CharEscapement;
 
-    //-------------------------------------------------------------------------
 
     /** This value contains the height of the characters in point.
      */
     [property] float CharHeight;
 
-    //-------------------------------------------------------------------------
 
     /** This property contains the value for the character underline.
         @see com::sun::star::awt::FontUnderline
      */
     [property] short CharUnderline;
 
-    //-------------------------------------------------------------------------
 
     /** This property contains the value of the font weight.
         @see com::sun::star::awt::FontWeight
      */
     [property] float CharWeight;
 
-    //-------------------------------------------------------------------------
 
     /** This property contains the value of the posture of the document.
         @see com::sun::star::awt::FontSlant
      */
     [property] com::sun::star::awt::FontSlant CharPosture;
 
-    //-------------------------------------------------------------------------
 
     /** This optional property determines whether the kerning tables from the
         current font are used.
@@ -135,20 +121,17 @@ published service CharacterProperties
      */
     [optional, property] boolean CharAutoKerning;
 
-    //-------------------------------------------------------------------------
 
     /** This optional property contains the text background color.
      */
     [optional, property] com::sun::star::util::Color CharBackColor;
 
-    //-------------------------------------------------------------------------
 
     /** This property determines if the text background color is set to
         transparent.
      */
     [optional, property] boolean CharBackTransparent;
 
-    //-------------------------------------------------------------------------
 
     /** This optional property contains the value of the case-mapping of the
         text for formatting and displaying.
@@ -157,46 +140,39 @@ published service CharacterProperties
      */
     [optional, property] short CharCaseMap;
 
-    //-------------------------------------------------------------------------
 
     /** This property is <TRUE/> if the characters are crossed out.
      */
     [optional, property] boolean CharCrossedOut;
 
-    //-------------------------------------------------------------------------
 
     /** If this optional property is <TRUE/>, then the characters are flashing.
      */
     [optional, property] boolean CharFlash;
 
-    //-------------------------------------------------------------------------
 
     /** This property determines the type of the strike out of the character.
         @see com::sun::star::awt::FontStrikeout
     */
     [optional, property] short CharStrikeout;
 
-    //-------------------------------------------------------------------------
 
     /** If this property is <TRUE/>, the underline and strike-through
         properties are not applied to white spaces.
      */
     [optional, property] boolean CharWordMode;
 
-    //-------------------------------------------------------------------------
 
     /** This optional property contains the value of the kerning of the
         characters.
      */
     [optional, property] short CharKerning;
 
-    //-------------------------------------------------------------------------
 
     /** This property contains the value of the locale.
      */
     [property] com::sun::star::lang::Locale CharLocale;
 
-   //-------------------------------------------------------------------------
 
     /** This optional property marks a range of characters to prevent it from
         being broken into two lines.
@@ -206,7 +182,6 @@ published service CharacterProperties
     */
     [optional, property] boolean CharKeepTogether;
 
-    //-------------------------------------------------------------------------
 
     /** This optional property marks a range of characters to ignore a line
         break in this area.
@@ -217,34 +192,29 @@ published service CharacterProperties
      */
     [optional, property] boolean CharNoLineBreak;
 
-    //-------------------------------------------------------------------------
 
     /** This optional property specifies if the characters are formatted and
         displayed with a shadow effect.
      */
     [optional, property] boolean CharShadowed;
 
-    //-------------------------------------------------------------------------
 
     /** This optional property specifies the fundamental technology of the font.
         @see com::sun::star::awt::FontType
      */
     [optional, property] short CharFontType;
 
-    //-------------------------------------------------------------------------
 
     /** This optional property specifies the name of the style of the font.
      */
     [optional, property] string CharStyleName;
 
-    //-------------------------------------------------------------------------
 
     /** This optional property specifies if the characters are formatted and
         displayed with a contour effect.
      */
     [optional, property] boolean CharContoured;
 
-    //-------------------------------------------------------------------------
 
     /** This optional property determines whether text is formatted in two lines.
 
@@ -252,7 +222,6 @@ published service CharacterProperties
      */
     [optional, property] boolean CharCombineIsOn;
 
-    //-------------------------------------------------------------------------
 
     /** This optional property contains the prefix (usually parenthesis) before
         text that is formatted in two lines.
@@ -261,7 +230,6 @@ published service CharacterProperties
      */
     [optional, property] string CharCombinePrefix;
 
-    //-------------------------------------------------------------------------
 
     /** This optional property contains the suffix (usually parenthesis) after
         text that is formatted in two lines.
@@ -270,48 +238,41 @@ published service CharacterProperties
      */
     [optional, property] string CharCombineSuffix;
 
-    //-------------------------------------------------------------------------
 
     /** This optional property contains the font emphasis value.
         @see com::sun::star::text::FontEmphasis
      */
     [optional, property] short CharEmphasis;
 
-    //-------------------------------------------------------------------------
 
     /** This optional property contains the relief style of the characters.
         @see com::sun::star::text::FontRelief
      */
     [optional, property] short CharRelief;
 
-    //-------------------------------------------------------------------------
 
     /** This optional property contains the text that is set as ruby.
      */
     [optional, property] string RubyText;
 
-    //-------------------------------------------------------------------------
 
     /** This optional property determines the adjustment of the ruby .
         @see com::sun::star::text::RubyAdjust
      */
     [optional, property] short RubyAdjust;
 
-    //-------------------------------------------------------------------------
 
     /** This optional property contains the name of the character style that is
         applied to RubyText.
      */
     [optional, property] string RubyCharStyleName;
 
-    //-------------------------------------------------------------------------
 
     /** This optional property determines whether the ruby text is printed
         above/left or below/right of the text.
      */
     [optional, property] boolean RubyIsAbove;
 
-    //-------------------------------------------------------------------------
 
     /** This optional property determines the rotation of a character in tenths
         of a degree.
@@ -320,14 +281,12 @@ published service CharacterProperties
      */
     [optional, property] short CharRotation;
 
-    //-------------------------------------------------------------------------
 
     /** This optional property determines whether the text formatting tries to
         fit rotated text into the surrounded line height.
      */
     [optional, property] boolean CharRotationIsFitToLine;
 
-    //-------------------------------------------------------------------------
 
     /** This optional property determines the percentage value for scaling the
         width of characters.
@@ -337,39 +296,33 @@ published service CharacterProperties
    */
     [optional, property] short CharScaleWidth;
 
-    //-------------------------------------------------------------------------
 
     /** This optional property contains the URL of a hyperlink.
      */
     [optional, property] string HyperLinkURL;
 
-    //-------------------------------------------------------------------------
 
     /** This optional property contains the name of the target for a hyperlink.
      */
     [optional, property] string HyperLinkTarget;
 
-    //-------------------------------------------------------------------------
 
     /** This optional property contains the name of the hyperlink.
      */
     [optional, property] string HyperLinkName;
 
-    //-------------------------------------------------------------------------
 
     /** This optional property contains the character style name for visited
         hyperlinks.
      */
     [optional, property] string VisitedCharStyleName;
 
-    //-------------------------------------------------------------------------
 
     /** This optional property contains the character style name for unvisited
         hyperlinks.
      */
     [optional, property] string UnvisitedCharStyleName;
 
-    //-------------------------------------------------------------------------
 
     /** This is the relative height used for subscript or superscript
         characters in units of percent.
@@ -380,21 +333,18 @@ published service CharacterProperties
      */
     [optional, property] byte CharEscapementHeight;
 
-    //-------------------------------------------------------------------------
 
     /** This optional property determines if the word can be hyphenated at the
         character.
      */
     [optional, property] boolean CharNoHyphenation;
 
-    //-------------------------------------------------------------------------
 
     /** This property contains the color of the underline for the characters.
         @see CharUnderlineHasColor
      */
     [property] com::sun::star::util::Color CharUnderlineColor;
 
-    //-------------------------------------------------------------------------
 
     /** This property specifies if the property CharUnderlineColor is used for
         an underline.
@@ -402,7 +352,6 @@ published service CharacterProperties
      */
     [property] boolean CharUnderlineHasColor;
 
-    //-------------------------------------------------------------------------
 
     /** This optional property specifies the names of the all styles applied to
         the font.
@@ -414,7 +363,6 @@ published service CharacterProperties
      */
     [optional, property] sequence<string> CharStyleNames;
 
-    //-------------------------------------------------------------------------
 
     /** If this optional property is <TRUE/>, then the characters are invisible.
 
@@ -422,7 +370,6 @@ published service CharacterProperties
      */
     [optional, property] boolean CharHidden;
 
-    //-------------------------------------------------------------------------
 
     /** This property stores XML attributes. They will be saved to and restored
         from automatic styles inside XML files.
@@ -433,7 +380,6 @@ published service CharacterProperties
 
 };
 
-//=============================================================================
 }; }; }; };
 
 #endif

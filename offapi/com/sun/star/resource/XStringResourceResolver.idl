@@ -33,11 +33,9 @@
 #include <com/sun/star/lang/Locale.idl>
 
 
-//=============================================================================
 
 module com { module sun { module star { module resource {
 
-//=============================================================================
 /**
     Interface to access strings in a resource.
 
@@ -187,7 +185,6 @@ interface XStringResourceResolver: com::sun::star::util::XModifyBroadcaster
     sequence<com::sun::star::lang::Locale> getLocales();
 };
 
-//=============================================================================
 
 }; }; }; };
 

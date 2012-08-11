@@ -23,12 +23,10 @@
 
  module com {  module sun {  module star {  module uno {
 
-//=============================================================================
 /** a simple named object container.
  */
 published service NamingService : com::sun::star::uno::XNamingService;
 
-//=============================================================================
 
 }; }; }; };
 

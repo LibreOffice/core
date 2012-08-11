@@ -20,31 +20,26 @@
 #define __com_sun_star_form_FormSubmitEncoding_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module form {
 
-//=============================================================================
 
 /** specify the MIME encoding to be used when form data is submitted.
  */
 published enum FormSubmitEncoding
 {
-    //-------------------------------------------------------------------------
     /** Specifies to use "application/x-www-form-urlencoded" as submit encoding.
         <p>Usually used if the FormSubmitMethod attribute has the value POST.
         </p>
      */
     URL,
 
-    //-------------------------------------------------------------------------
 
     /** Specifies to use "multipart/form-data" as submit encoding.
         <p>Usually used when the form contains a file upload element.</p>
      */
     MULTIPART,
 
-    //-------------------------------------------------------------------------
 
     /** specifies to use "text/plain"
         <p>Usually used if the FormSubmitMethod attribute has the value POST and
@@ -53,7 +48,6 @@ published enum FormSubmitEncoding
     TEXT
 };
 
-//=============================================================================
 
 }; }; }; };
 

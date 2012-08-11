@@ -22,11 +22,9 @@
 #include <com/sun/star/lang/EventObject.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module beans {
 
-//=============================================================================
 
 /** gets delivered whenever an <type>XPropertySetInfo</type> is
     changed.
@@ -36,13 +34,11 @@ module com {  module sun {  module star {  module beans {
  */
 published struct PropertySetInfoChangeEvent: com::sun::star::lang::EventObject
 {
-    //-------------------------------------------------------------------------
 
     /** contains the name of the property.
      */
     string Name;
 
-    //-------------------------------------------------------------------------
 
     /** contains the implementation handle for the property.
 
@@ -50,7 +46,6 @@ published struct PropertySetInfoChangeEvent: com::sun::star::lang::EventObject
      */
     long   Handle;
 
-    //-------------------------------------------------------------------------
 
     /** contains the reason for the event.
 
@@ -59,7 +54,6 @@ published struct PropertySetInfoChangeEvent: com::sun::star::lang::EventObject
     long   Reason;
 };
 
-//=============================================================================
 
 }; }; }; };
 

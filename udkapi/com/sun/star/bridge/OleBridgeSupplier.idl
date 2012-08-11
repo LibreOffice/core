@@ -22,11 +22,9 @@
 #include <com/sun/star/bridge/XBridgeSupplier.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module bridge {
 
-//=============================================================================
 
 
 /** makes it possible to generate OLE bridges to UNO objects and vice versa.
@@ -43,7 +41,6 @@ published service OleBridgeSupplier
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

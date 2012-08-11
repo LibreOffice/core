@@ -23,11 +23,9 @@
 #include <com/sun/star/lang/XEventListener.idl>
 #include <com/sun/star/sdb/DatabaseRegistrationEvent.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module sdb {
 
-//=============================================================================
 
 /** implemented by components which want to be notified of changes in the application-wide registered
     databases.
@@ -55,11 +53,9 @@ interface XDatabaseRegistrationsListener : ::com::sun::star::lang::XEventListene
     void    changedDatabaseLocation( [in] DatabaseRegistrationEvent Event );
 };
 
-//=============================================================================
 
 }; }; }; };
 
-//=============================================================================
 
 #endif
 

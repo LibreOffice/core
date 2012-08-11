@@ -24,11 +24,9 @@
 #include <com/sun/star/rdf/XBlankNode.idl>
 
 
-//=============================================================================
 
 module com {   module sun {   module star {   module rdf {
 
-//=============================================================================
 /** represents a blank node that may occur in a RDF graph.
 
     @since OOo 3.0
@@ -38,7 +36,6 @@ module com {   module sun {   module star {   module rdf {
 service BlankNode : XBlankNode
 {
 
-    //-------------------------------------------------------------------------
     /** create a blank RDF node.
 
         <p>
@@ -62,7 +59,6 @@ service BlankNode : XBlankNode
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -24,11 +24,9 @@
 #include <com/sun/star/reflection/XIdlClass.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module reflection {
 
-//=============================================================================
 
 /** Interface to reflect types.
 
@@ -61,7 +59,6 @@ published interface XIdlReflection: com::sun::star::uno::XInterface
     com::sun::star::reflection::XIdlClass getType( [in] any aObj );
 };
 
-//=============================================================================
 
 }; }; }; };
 

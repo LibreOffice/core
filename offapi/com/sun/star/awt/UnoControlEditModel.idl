@@ -35,11 +35,9 @@
 
 #include <com/sun/star/style/VerticalAlignment.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module awt {
 
-//=============================================================================
 
 /** specifies the standard model of an <type>UnoControlEdit</type>.
  */
@@ -47,7 +45,6 @@ published service UnoControlEditModel
 {
     service com::sun::star::awt::UnoControlModel;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the horizontal alignment of the text in the control.
 
@@ -59,7 +56,6 @@ published service UnoControlEditModel
      */
     [property] short Align;
 
-    //-------------------------------------------------------------------------
 
     /** If set to true an horizontal scrollbar will be added automatically
         when needed.
@@ -68,7 +64,6 @@ published service UnoControlEditModel
      */
     [optional, property] boolean AutoHScroll;
 
-    //-------------------------------------------------------------------------
 
     /** If set to true an vertical scrollbar will be added automatically
         when needed.
@@ -77,13 +72,11 @@ published service UnoControlEditModel
      */
     [optional, property] boolean AutoVScroll;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the background color (RGB) of the control.
      */
     [property] com::sun::star::util::Color BackgroundColor;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the border style of the control.
 
@@ -95,7 +88,6 @@ published service UnoControlEditModel
      */
     [property] short Border;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the color of the border, if present
 
@@ -106,58 +98,49 @@ published service UnoControlEditModel
      */
     [optional, property] long BorderColor;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the echo character for a password edit field.
      */
     [optional, property] short EchoChar;
 
-    //-------------------------------------------------------------------------
 
     /** determines whether the control is enabled or disabled.
      */
     [property] boolean Enabled;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the font attributes of the text in the control.
      */
     [property] com::sun::star::awt::FontDescriptor FontDescriptor;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the <type scope="com::sun::star::text">FontEmphasis</type>
         value of the text in the control.
      */
     [property] short FontEmphasisMark;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the <type scope="com::sun::star::text">FontRelief</type>
         value of the text in the control.
      */
     [property] short FontRelief;
 
-    //-------------------------------------------------------------------------
 
     /** specifies if hard line breaks will be returned in the
         <member>XTextComponent::getText</member> method.
      */
     [property] boolean HardLineBreaks;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the help text of the control.
      */
     [property] string HelpText;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the help URL of the control.
      */
     [property] string HelpURL;
 
-    //-------------------------------------------------------------------------
 
     /** specifies whether the selection in the control should be hidden when
         the control is not active (focused).
@@ -166,14 +149,12 @@ published service UnoControlEditModel
      */
     [optional, property] boolean HideInactiveSelection;
 
-    //-------------------------------------------------------------------------
 
     /** specifies if the content of the control can be scrolled in
         the horizontal direction.
      */
     [property] boolean HScroll;
 
-    //-------------------------------------------------------------------------
 
     /** specifies which line end type should be used for multi line text
 
@@ -192,7 +173,6 @@ published service UnoControlEditModel
      */
     [optional, property] short LineEndFormat;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the maximum character count.
 
@@ -200,13 +180,11 @@ published service UnoControlEditModel
      */
     [property] short MaxTextLen;
 
-    //-------------------------------------------------------------------------
 
     /** specifies that the control may have more than one line.
      */
     [property] boolean MultiLine;
 
-    //-------------------------------------------------------------------------
 
     /** specifies whether the control paints it background or not.
 
@@ -214,43 +192,36 @@ published service UnoControlEditModel
      */
     [optional, property] boolean PaintTransparent;
 
-    //-------------------------------------------------------------------------
 
     /** specifies that the control will be printed with the document.
      */
     [property] boolean Printable;
 
-    //-------------------------------------------------------------------------
 
     /** specifies that the content of the control cannot be modified by the user.
      */
     [property] boolean ReadOnly;
 
-    //-------------------------------------------------------------------------
 
     /** specifies that the control can be reached with the TAB key.
      */
     [property] boolean Tabstop;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the text displayed in the control.
      */
     [property] string Text;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the text color (RGB) of the control.
      */
     [property] com::sun::star::util::Color TextColor;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the text line color (RGB) of the control.
      */
     [property] com::sun::star::util::Color TextLineColor;
 
-    //-------------------------------------------------------------------------
 
     /** specifies if the content of the control can be scrolled in
         the vertical direction.
@@ -267,7 +238,6 @@ published service UnoControlEditModel
     */
     [optional, property] short WritingMode;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the vertical alignment of the text in the control.
 
@@ -276,7 +246,6 @@ published service UnoControlEditModel
     [optional, property] com::sun::star::style::VerticalAlignment VerticalAlign;
 };
 
-//=============================================================================
 
 }; }; }; };
 

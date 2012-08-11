@@ -20,11 +20,9 @@
 #define __com_sun_star_linguistic2_LinguServiceEventFlags_idl__
 
 
-//=============================================================================
 
 module com { module sun { module star { module linguistic2 {
 
-//=============================================================================
 /** to be used in lingu-service events.
 
     <P>These values define the flags which may be logically combined
@@ -33,22 +31,18 @@ module com { module sun { module star { module linguistic2 {
 */
 published constants LinguServiceEventFlags
 {
-    //-------------------------------------------------------------------------
     /** The spelling of previously correct words should be checked again.
     */
     const short SPELL_CORRECT_WORDS_AGAIN = 1;
 
-    //-------------------------------------------------------------------------
     /** The spelling of previously misspelled words should be checked again.
     */
     const short SPELL_WRONG_WORDS_AGAIN = 2;
 
-    //-------------------------------------------------------------------------
     /** The hyphenation of words may have changed.
     */
     const short HYPHENATE_AGAIN = 4;
 
-    //-------------------------------------------------------------------------
     /** Request new proofreading of the document
 
         @since OOo 3.0.1
@@ -57,7 +51,6 @@ published constants LinguServiceEventFlags
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

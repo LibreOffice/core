@@ -25,11 +25,9 @@
 #include <com/sun/star/frame/XModel.idl>
 #include <com/sun/star/io/XInputStream.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module xml {  module sax {
 
-//=============================================================================
 
 /** receives notification of sax document events from a
     <type>XFastParser</type>.
@@ -46,7 +44,6 @@ interface XFastShapeContextHandler: com::sun::star::xml::sax::XFastContextHandle
     [attribute] long StartToken;
   };
 
-//=============================================================================
 
 }; }; }; }; };
 

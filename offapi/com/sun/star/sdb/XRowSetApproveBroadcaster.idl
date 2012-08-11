@@ -38,7 +38,6 @@ published interface XRowSetApproveBroadcaster: com::sun::star::uno::XInterface
      */
     [oneway] void addRowSetApproveListener(
             [in]XRowSetApproveListener listener );
-    //-------------------------------------------------------------------------
 
     /** removes the specified listener.
         @param com::sun::star::sdb::XRowSetApproveListener
@@ -47,7 +46,6 @@ published interface XRowSetApproveBroadcaster: com::sun::star::uno::XInterface
             [in]XRowSetApproveListener listener );
 };
 
-//=============================================================================
 
 }; }; }; };
 

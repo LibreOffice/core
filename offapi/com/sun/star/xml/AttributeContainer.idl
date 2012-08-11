@@ -21,11 +21,9 @@
 
 #include <com/sun/star/container/XNameContainer.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module xml {
 
-//=============================================================================
 /** This service describes a container for XML attributes.
 
     <p>Each attribute is accessed with its local name, or optionally, its local
@@ -39,7 +37,6 @@ published service AttributeContainer
     interface com::sun::star::container::XNameContainer;
 };
 
-//=============================================================================
 
 }; }; }; };
 

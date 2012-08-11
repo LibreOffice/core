@@ -37,11 +37,9 @@
 #include <com/sun/star/rdf/XRepositorySupplier.idl>
 
 
-//=============================================================================
 
 module com {   module sun {   module star {   module rdf {
 
-//=============================================================================
 /** document metadata functionality related to the "manifest.rdf".
 
     <p>
@@ -66,7 +64,6 @@ interface XDocumentMetadataAccess
     interface XURI;
     interface XRepositorySupplier;
 
-    //-------------------------------------------------------------------------
     /** get the unique ODF element with the given metadata reference.
 
         @param MetadataReference
@@ -80,7 +77,6 @@ interface XDocumentMetadataAccess
     XMetadatable getElementByMetadataReference(
         [in] com::sun::star::beans::StringPair MetadataReference);
 
-    //-------------------------------------------------------------------------
     /** get the ODF element that corresponds to an URI.
 
         @param URI
@@ -95,7 +91,6 @@ interface XDocumentMetadataAccess
     XMetadatable getElementByURI([in] XURI URI)
         raises( com::sun::star::lang::IllegalArgumentException );
 
-    //-------------------------------------------------------------------------
     /** get the names of all metadata files with a given type.
 
         @param Type
@@ -111,7 +106,6 @@ interface XDocumentMetadataAccess
     sequence<XURI> getMetadataGraphsWithType([in] XURI Type)
         raises( com::sun::star::lang::IllegalArgumentException );
 
-    //-------------------------------------------------------------------------
     /** add a metadata file to the manifest.
 
         <p>
@@ -147,7 +141,6 @@ interface XDocumentMetadataAccess
         raises( com::sun::star::lang::IllegalArgumentException,
                 com::sun::star::container::ElementExistException );
 
-    //-------------------------------------------------------------------------
     /** import a metadata file into the document repository, and add it to the
         manifest.
 
@@ -204,7 +197,6 @@ interface XDocumentMetadataAccess
                 ParseException,
                 com::sun::star::io::IOException );
 
-    //-------------------------------------------------------------------------
     /** remove a metadata file from the manifest and the repository.
 
         <p>
@@ -227,7 +219,6 @@ interface XDocumentMetadataAccess
         raises( com::sun::star::lang::IllegalArgumentException,
                 com::sun::star::container::NoSuchElementException );
 
-    //-------------------------------------------------------------------------
     /** add a content or styles file to the manifest.
 
         <p>
@@ -255,7 +246,6 @@ interface XDocumentMetadataAccess
         raises( com::sun::star::lang::IllegalArgumentException,
                 com::sun::star::container::ElementExistException );
 
-    //-------------------------------------------------------------------------
     /** remove a content or styles file from the manifest.
 
         <p>
@@ -276,7 +266,6 @@ interface XDocumentMetadataAccess
         raises( com::sun::star::lang::IllegalArgumentException,
                 com::sun::star::container::NoSuchElementException );
 
-    //-------------------------------------------------------------------------
     /** initialize document metadata from a storage.
 
         <p>
@@ -321,7 +310,6 @@ interface XDocumentMetadataAccess
         raises( com::sun::star::lang::IllegalArgumentException,
                 com::sun::star::lang::WrappedTargetException );
 
-    //-------------------------------------------------------------------------
     /** store document metadata to a storage.
 
         <p>
@@ -348,7 +336,6 @@ interface XDocumentMetadataAccess
         raises( com::sun::star::lang::IllegalArgumentException,
                 com::sun::star::lang::WrappedTargetException );
 
-    //-------------------------------------------------------------------------
     /** loads document metadata from a medium.
 
         <p>If the Medium contains an InteractionHandler, it will be used for
@@ -371,7 +358,6 @@ interface XDocumentMetadataAccess
         raises( com::sun::star::lang::IllegalArgumentException,
                 com::sun::star::lang::WrappedTargetException );
 
-    //-------------------------------------------------------------------------
     /** stores document metadata to a medium.
 
         @param Medium
@@ -393,7 +379,6 @@ interface XDocumentMetadataAccess
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

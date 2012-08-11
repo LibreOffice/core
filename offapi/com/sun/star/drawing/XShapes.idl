@@ -24,11 +24,9 @@
 #include <com/sun/star/drawing/XShape.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module drawing {
 
-//=============================================================================
 
 /** makes it possible to access, add, and remove the
     <type>Shape</type>s in a collection.
@@ -39,7 +37,6 @@
  */
 published interface XShapes: com::sun::star::container::XIndexAccess
 {
-    //-------------------------------------------------------------------------
 
     /** inserts a <type>Shape</type> into this collection.
 
@@ -48,7 +45,6 @@ published interface XShapes: com::sun::star::container::XIndexAccess
      */
     void add( [in] com::sun::star::drawing::XShape xShape );
 
-    //-------------------------------------------------------------------------
 
     /** removes a <type>Shape</type> from this collection.
 
@@ -60,7 +56,6 @@ published interface XShapes: com::sun::star::container::XIndexAccess
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -20,11 +20,9 @@
 #define __com_sun_star_embed_Aspects_idl__
 
 
-//============================================================================
 
 module com { module sun { module star { module embed {
 
-//============================================================================
 /** The constant set contains possible aspects for an embedded object.
 
     <p>
@@ -45,30 +43,25 @@ published constants Aspects
 {
     // MS OLE aspects
 
-    // -----------------------------------------------------------------------
     /** specifies view of the object to be displayed as an embedded object
         inside a container.
      */
     const hyper MSOLE_CONTENT = 1;
 
-    // -----------------------------------------------------------------------
     /** specifies view of the object to be displayed in a browsing tool.
      */
     const hyper MSOLE_THUMBNAIL = 2;
 
-    // -----------------------------------------------------------------------
     /** specifies view of the object when object is represented by Icon.
      */
     const hyper MSOLE_ICON = 4;
 
-    // -----------------------------------------------------------------------
     /** specifies view of the object for print preview.
      */
     const hyper MSOLE_DOCPRINT = 8;
 
 };
 
-//============================================================================
 
 }; }; }; };
 

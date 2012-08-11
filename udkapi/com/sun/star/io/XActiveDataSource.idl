@@ -24,11 +24,9 @@
 #include <com/sun/star/io/XOutputStream.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module io {
 
-//=============================================================================
 
 // DocMerge from xml: interface com::sun::star::io::XActiveDataSource
 /** has to be implemented if the class should be able to write into an output
@@ -37,7 +35,6 @@ module com {  module sun {  module star {  module io {
  */
 published interface XActiveDataSource: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::io::XActiveDataSource::setOutputStream
     /** plugs the output stream.
@@ -49,7 +46,6 @@ published interface XActiveDataSource: com::sun::star::uno::XInterface
      */
     void setOutputStream( [in] com::sun::star::io::XOutputStream aStream );
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from idl: method com::sun::star::io::XActiveDataSource::getOutputStream
     /** @returns
@@ -59,7 +55,6 @@ published interface XActiveDataSource: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

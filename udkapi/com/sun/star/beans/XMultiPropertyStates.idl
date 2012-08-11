@@ -26,11 +26,9 @@
 #include <com/sun/star/beans/XPropertyStateChangeListener.idl>
 
 
-//=============================================================================
 
 module com { module sun { module star { module beans {
 
-//=============================================================================
 /** makes it possible to query information about the state of
     one or more properties.
 
@@ -40,7 +38,6 @@ module com { module sun { module star { module beans {
 */
 published interface XMultiPropertyStates: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** @returns
             a sequence of the states of the properties which are specified
             by their names.
@@ -56,7 +53,6 @@ published interface XMultiPropertyStates: com::sun::star::uno::XInterface
             [in] sequence<string> aPropertyName )
         raises( com::sun::star::beans::UnknownPropertyException );
 
-    //-------------------------------------------------------------------------
     /** sets all properties to their default values.
 
         <p>Each value depends on the implementation of this interface.
@@ -67,7 +63,6 @@ published interface XMultiPropertyStates: com::sun::star::uno::XInterface
     */
     void setAllPropertiesToDefault();
 
-    //-------------------------------------------------------------------------
     /** sets the specified properties to their default values.
 
         <p>Each value depends on the implementation of this interface.
@@ -85,7 +80,6 @@ published interface XMultiPropertyStates: com::sun::star::uno::XInterface
     void setPropertiesToDefault( [in] sequence<string> aPropertyNames )
             raises( com::sun::star::beans::UnknownPropertyException );
 
-    //-------------------------------------------------------------------------
     /** @returns
             the default values of the propertes with the specified names.
 
@@ -111,7 +105,6 @@ published interface XMultiPropertyStates: com::sun::star::uno::XInterface
                     com::sun::star::lang::WrappedTargetException );
 };
 
-//=============================================================================
 
 }; }; }; };
 

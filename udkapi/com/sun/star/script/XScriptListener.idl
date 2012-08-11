@@ -26,23 +26,19 @@
 #include <com/sun/star/reflection/InvocationTargetException.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module script {
 
-//=============================================================================
 /** makes it possible to receive <type>ScriptEvent</type>s.
  */
 published interface XScriptListener: com::sun::star::lang::XEventListener
 {
-    //-------------------------------------------------------------------------
     /** gets called when an event takes place.  For that a
         <type>ScriptEventDescriptor</type> is registered at and
         attached to an object by an <type>XEventAttacherManager</type>.
      */
     void firing( [in] com::sun::star::script::ScriptEvent aEvent );
 
-    //-------------------------------------------------------------------------
     /** gets called when a "vetoable event" occurs at the object.
      */
     any approveFiring( [in] com::sun::star::script::ScriptEvent aEvent )
@@ -50,7 +46,6 @@ published interface XScriptListener: com::sun::star::lang::XEventListener
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -24,17 +24,14 @@
 #include <com/sun/star/container/XNameContainer.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module xforms {
 
-//=============================================================================
 
 /** provides access to the XForms models contained in the component
  */
 interface XFormsSupplier: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** access XForms model container.
         @returns a container for the XForms models contained in the component
@@ -43,7 +40,6 @@ interface XFormsSupplier: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

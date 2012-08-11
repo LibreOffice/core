@@ -77,7 +77,6 @@ published interface XParameters: com::sun::star::uno::XInterface
      */
     void setNull([in]long parameterIndex,
                  [in]long sqlType) raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** sets the designated parameter to SQL NULL.  This version of setNull should
         be used for user-named types and REF type parameters.  Examples
@@ -111,7 +110,6 @@ published interface XParameters: com::sun::star::uno::XInterface
     void setObjectNull([in]long parameterIndex,
                         [in]long sqlType,
                         [in]string typeName) raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** sets the designated parameter to a boolean value.  The driver converts this
         to a SQL BIT value when it sends it to the database.
@@ -124,7 +122,6 @@ published interface XParameters: com::sun::star::uno::XInterface
      */
     void setBoolean([in]long parameterIndex, [in]boolean x)
         raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** sets the designated parameter to a byte value.  The driver converts this
         to a SQL TINYINT value when it sends it to the database.
@@ -136,7 +133,6 @@ published interface XParameters: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     void setByte([in]long parameterIndex, [in]byte x) raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** sets the designated parameter to a short value.  The driver converts this
         to a SQL SMALLINT value when it sends it to the database.
@@ -148,7 +144,6 @@ published interface XParameters: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     void setShort([in]long parameterIndex, [in]short x) raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** sets the designated parameter to a long value.  The driver converts this
         to a SQL INTEGER value when it sends it to the database.
@@ -160,7 +155,6 @@ published interface XParameters: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     void setInt([in]long parameterIndex, [in]long x) raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** sets the designated parameter to a hyper value.  The driver converts this
         to a SQL BIGINT value when it sends it to the database.
@@ -172,7 +166,6 @@ published interface XParameters: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     void setLong([in]long parameterIndex, [in]hyper x) raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** sets the designated parameter to a float value. The driver converts this
         to a SQL FLOAT value when it sends it to the database.
@@ -184,7 +177,6 @@ published interface XParameters: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     void setFloat([in]long parameterIndex, [in]float x) raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** sets the designated parameter to a double value.  The driver converts this
         to a SQL DOUBLE value when it sends it to the database.
@@ -196,7 +188,6 @@ published interface XParameters: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     void setDouble([in]long parameterIndex, [in]double x) raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** sets the designated parameter to a string value. The driver converts this
         to a SQL VARCHAR or LONGVARCHAR value (depending on the argument's
@@ -210,7 +201,6 @@ published interface XParameters: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     void setString([in]long parameterIndex, [in]string x) raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** sets the designated parameter to a sequence of bytes.  The driver converts
         this to a SQL VARBINARY or LONGVARBINARY (depending on the
@@ -225,7 +215,6 @@ published interface XParameters: com::sun::star::uno::XInterface
      */
     void setBytes([in]long parameterIndex, [in]sequence<byte> x)
         raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** sets the designated parameter to a date value. The driver converts this
         to a SQL DATE value when it sends it to the database.
@@ -238,7 +227,6 @@ published interface XParameters: com::sun::star::uno::XInterface
      */
     void setDate([in]long parameterIndex, [in]com::sun::star::util::Date x)
         raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** sets the designated parameter to a time value. The driver converts this
         to a SQL TIME value when it sends it to the database.
@@ -251,7 +239,6 @@ published interface XParameters: com::sun::star::uno::XInterface
      */
     void setTime([in]long parameterIndex, [in]com::sun::star::util::Time x)
         raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** sets the designated parameter to a datetime value.  The driver
         converts this to a SQL TIMESTAMP value when it sends it to the
@@ -265,7 +252,6 @@ published interface XParameters: com::sun::star::uno::XInterface
      */
     void setTimestamp([in]long parameterIndex,
                       [in]com::sun::star::util::DateTime x) raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** sets the designated parameter to the given input stream, which will have
         the specified number of bytes.
@@ -285,7 +271,6 @@ published interface XParameters: com::sun::star::uno::XInterface
     void setBinaryStream([in]long parameterIndex,
                             [in]com::sun::star::io::XInputStream x,
                              [in]long length) raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** sets the designated parameter to the given input stream, which will have
         the specified number of bytes.
@@ -305,7 +290,6 @@ published interface XParameters: com::sun::star::uno::XInterface
     void setCharacterStream([in]long parameterIndex,
                              [in]com::sun::star::io::XInputStream x,
                              [in]long length) raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** sets the value of a parameter using an any.
 
@@ -331,7 +315,6 @@ published interface XParameters: com::sun::star::uno::XInterface
      */
     void setObject([in]long parameterIndex, [in]any x)
             raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** set a value from the Datatype ANY for a parameter.
 
@@ -369,7 +352,6 @@ published interface XParameters: com::sun::star::uno::XInterface
     void setObjectWithInfo([in]long parameterIndex,
                               [in]any x, [in]long targetSqlType, [in]long scale)
             raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** sets a REF(&amp;lt;structured-type&amp;gt;) parameter.
         @param parameterIndex
@@ -380,7 +362,6 @@ published interface XParameters: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     void setRef ([in]long parameterIndex, [in]XRef x) raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** sets a BLOB parameter.
         @param parameterIndex
@@ -391,7 +372,6 @@ published interface XParameters: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     void setBlob ([in]long parameterIndex, [in]XBlob x) raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** sets a CLOB parameter.
         @param parameterIndex
@@ -402,7 +382,6 @@ published interface XParameters: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     void setClob ([in]long parameterIndex, [in]XClob x) raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** sets an Array parameter.
         @param parameterIndex
@@ -414,7 +393,6 @@ published interface XParameters: com::sun::star::uno::XInterface
      */
     void setArray ([in]long parameterIndex, [in]XArray x) raises (SQLException);
 
-    //-------------------------------------------------------------------------
 
     /** clears the current parameter values immediately.
 
@@ -431,7 +409,6 @@ published interface XParameters: com::sun::star::uno::XInterface
     void clearParameters() raises (SQLException);
 };
 
-//=============================================================================
 
 }; }; }; };
 

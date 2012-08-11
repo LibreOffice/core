@@ -22,11 +22,9 @@
 #include <com/sun/star/installation/XInstallationCheck.idl>
 
 
-//=============================================================================
 
 module com { module sun { module star { module installation {
 
-//=============================================================================
 /** This service is a simple implementation of the interface XInstallationCheck.
 
     <p>This implementation only checks the fonts "StarBats" and "StarMath".
@@ -44,7 +42,6 @@ published service InstallationCheckService
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

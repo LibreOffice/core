@@ -32,11 +32,9 @@
 #include <com/sun/star/lang/WrappedTargetException.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module beans {
 
-//=============================================================================
 
 /** makes it possible to access all property values and to set them at once.
 
@@ -51,14 +49,12 @@ module com {  module sun {  module star {  module beans {
  */
 published interface XPropertyAccess: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** @returns
             a sequence of all property values within the object in a single call.
      */
     sequence<com::sun::star::beans::PropertyValue> getPropertyValues();
 
-    //-------------------------------------------------------------------------
 
     /** sets the values of given properties.
 
@@ -73,7 +69,6 @@ published interface XPropertyAccess: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

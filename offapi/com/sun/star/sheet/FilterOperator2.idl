@@ -20,11 +20,9 @@
 #ifndef __com_sun_star_sheet_FilterOperator2_idl__
 #define __com_sun_star_sheet_FilterOperator2_idl__
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** specifies the type of a single condition in a filter descriptor.
 
@@ -36,108 +34,90 @@ module com {  module sun {  module star {  module sheet {
 published constants FilterOperator2
 {
 
-    //-------------------------------------------------------------------------
 
     /** selects empty entries.
      */
     const long EMPTY = 0;
 
-    //-------------------------------------------------------------------------
 
     /** selects non-empty entries.
      */
     const long NOT_EMPTY = 1;
 
-    //-------------------------------------------------------------------------
 
     /** value has to be equal to the specified value.
      */
     const long EQUAL = 2;
 
-    //-------------------------------------------------------------------------
 
     /** value must not be equal to the specified value.
      */
     const long NOT_EQUAL = 3;
 
-    //-------------------------------------------------------------------------
 
     /** value has to be greater than the specified value.
      */
     const long GREATER = 4;
 
-    //-------------------------------------------------------------------------
 
     /** value has to be greater than or equal to the specified value.
      */
     const long GREATER_EQUAL = 5;
 
-    //-------------------------------------------------------------------------
 
     /** value has to be less than the specified value.
      */
     const long LESS = 6;
 
-    //-------------------------------------------------------------------------
 
     /** value has to be less than or equal to the specified value.
      */
     const long LESS_EQUAL = 7;
 
-    //-------------------------------------------------------------------------
 
     /** selects a specified number of entries with the greatest values.
      */
     const long TOP_VALUES = 8;
 
-    //-------------------------------------------------------------------------
 
     /** selects a specified percentage of entries with the greatest values.
      */
     const long TOP_PERCENT = 9;
 
-    //-------------------------------------------------------------------------
 
     /** selects a specified number of entries with the lowest values.
      */
     const long BOTTOM_VALUES = 10;
 
-    //-------------------------------------------------------------------------
 
     /** selects a specified percentage of entries with the lowest values.
      */
     const long BOTTOM_PERCENT = 11;
 
-    //-------------------------------------------------------------------------
 
     /** selects contains entries.
      */
     const long CONTAINS = 12;
 
-    //-------------------------------------------------------------------------
 
     /** selects does-not-contain entries.
      */
     const long DOES_NOT_CONTAIN = 13;
 
-    //-------------------------------------------------------------------------
 
     /** selects begins-with entries.
      */
     const long BEGINS_WITH = 14;
 
-    //-------------------------------------------------------------------------
 
     /** selects does-not-begin-with entries.
      */
     const long DOES_NOT_BEGIN_WITH = 15;
-    //-------------------------------------------------------------------------
 
     /** selects ends-with entries.
      */
     const long ENDS_WITH = 16;
 
-    //-------------------------------------------------------------------------
 
     /** selects does-not-end-with entries.
      */
@@ -145,7 +125,6 @@ published constants FilterOperator2
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

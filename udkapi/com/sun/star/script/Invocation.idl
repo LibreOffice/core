@@ -22,11 +22,9 @@
 #include <com/sun/star/lang/XSingleServiceFactory.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module script {
 
-//=============================================================================
 /** factory service that allows construction of Invocation objects.
 
     <p>Invoke createInstanceWithArguments() of XSingleServiceFactory
@@ -39,7 +37,6 @@
  */
 published service Invocation : com::sun::star::lang::XSingleServiceFactory;
 
-//=============================================================================
 
 }; }; }; };
 

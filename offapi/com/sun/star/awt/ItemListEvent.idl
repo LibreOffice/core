@@ -31,11 +31,9 @@
 #include <com/sun/star/lang/EventObject.idl>
 #include <com/sun/star/beans/Optional.idl>
 
-//==================================================================================================================
 
 module com { module sun { module star { module awt {
 
-//==================================================================================================================
 
 /** is the event broadcasted by a <type>XListItems</type> implementation for changes
     in its item list.
@@ -68,11 +66,9 @@ struct ItemListEvent : ::com::sun::star::lang::EventObject
             ItemImageURL;
 };
 
-//==================================================================================================================
 
 }; }; }; };
 
-//==================================================================================================================
 
 #endif
 

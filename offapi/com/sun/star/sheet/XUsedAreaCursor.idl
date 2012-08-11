@@ -22,11 +22,9 @@
 
 #include <com/sun/star/uno/XInterface.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** provides methods to find the used area of the entire sheet.
 
@@ -38,7 +36,6 @@ module com {  module sun {  module star {  module sheet {
  */
 published interface XUsedAreaCursor: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** points the cursor to the start of the used area.
 
@@ -48,7 +45,6 @@ published interface XUsedAreaCursor: com::sun::star::uno::XInterface
      */
     void gotoStartOfUsedArea( [in] boolean bExpand );
 
-    //-------------------------------------------------------------------------
 
     /** points the cursor to the end of the used area.
 
@@ -60,7 +56,6 @@ published interface XUsedAreaCursor: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -26,11 +26,9 @@
 #include <com/sun/star/chart/ChartTwoAxisYSupplier.idl>
 #include <com/sun/star/chart/ChartStatistics.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module chart {
 
-//=============================================================================
 
 /** a service for bubble diagrams. @since OOo 3.2
  */
@@ -42,7 +40,6 @@ published service BubbleDiagram
     [optional] service com::sun::star::chart::ChartStatistics;
 };
 
-//=============================================================================
 
 }; }; }; };
 

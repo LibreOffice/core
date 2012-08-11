@@ -24,11 +24,9 @@
 #include <com/sun/star/script/XLibraryContainer2.idl>
 #include <com/sun/star/lang/WrappedTargetException.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module script {
 
-//=============================================================================
 
 /** describes a container of script libraries which is persistent.
 
@@ -80,11 +78,9 @@ interface XPersistentLibraryContainer
 
 };
 
-//=============================================================================
 
 }; }; }; };
 
-//=============================================================================
 
 #endif
 

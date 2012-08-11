@@ -19,11 +19,9 @@
 #ifndef __com_sun_star_i18n_Boundary_idl__
 #define __com_sun_star_i18n_Boundary_idl__
 
-//=============================================================================
 
 module com {  module sun {  module star {  module i18n {
 
-//=============================================================================
 
 /** contains start and end position of a word.
 
@@ -42,7 +40,6 @@ published struct Boundary
     long endPos;
 };
 
-//=============================================================================
 }; }; }; };
 
 #endif

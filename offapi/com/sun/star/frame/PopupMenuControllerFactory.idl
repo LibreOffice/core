@@ -32,11 +32,9 @@
 #include <com/sun/star/lang/XMultiComponentFactory.idl>
 #include <com/sun/star/frame/XUIControllerRegistration.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module frame {
 
-//=============================================================================
 
 /** specifies a factory that creates instances of registered pop-up menu controller.
 
@@ -76,7 +74,6 @@ service PopupMenuControllerFactory
 
 }; }; }; };
 
-//=============================================================================
 
 #endif
 

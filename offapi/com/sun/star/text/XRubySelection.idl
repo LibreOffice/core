@@ -24,18 +24,15 @@
 
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module text {
 
-//=============================================================================
 
 /** This interface enables the object to handle list of ruby lines (aka Furigana lines).
 
  */
 published interface XRubySelection : com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** returns a sequence of ruby elements.
     <p>Each element contains at least a string that contains the selected text and the ruby text.
         Additional parameters can be the ruby adjustment, the name of a character style.</p>
@@ -45,7 +42,6 @@ published interface XRubySelection : com::sun::star::uno::XInterface
                 if Automatic is set the selection is parsed for words and applied ruby attributes
      */
     sequence<com::sun::star::beans::PropertyValues>  getRubyList( [in] boolean Automatic );
-    //-------------------------------------------------------------------------
     /** applies the RubyList to the current selection. The number of elements must be
         equal to the number of elements that are returned by getRubyList. Automatic must be
         set equally, too.
@@ -54,7 +50,6 @@ published interface XRubySelection : com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -21,14 +21,12 @@
 
 #include <com/sun/star/uno/XInterface.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
  published interface XContent;
  published interface XContentIdentifier;
 
-//=============================================================================
 /** specifies methods for obtaining information on a content in different
     levels.
 
@@ -46,7 +44,6 @@ module com { module sun { module star { module ucb {
 
 published interface XContentAccess : com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** returns the identifier string of the content ( "cheap method" ).
 
         <p>Note that this string can be used later to recreate the content.
@@ -56,7 +53,6 @@ published interface XContentAccess : com::sun::star::uno::XInterface
     */
     string queryContentIdentifierString();
 
-    //-------------------------------------------------------------------------
     /** returns the identifier object of the content.
 
         @returns
@@ -64,7 +60,6 @@ published interface XContentAccess : com::sun::star::uno::XInterface
     */
     XContentIdentifier queryContentIdentifier();
 
-    //-------------------------------------------------------------------------
     /** returns the content ( "most expensive method" ).
 
         @returns
@@ -73,7 +68,6 @@ published interface XContentAccess : com::sun::star::uno::XInterface
     XContent queryContent();
 };
 
-//=============================================================================
 
 }; }; }; };
 

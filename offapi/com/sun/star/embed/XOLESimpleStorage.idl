@@ -35,9 +35,7 @@
 #include <com/sun/star/embed/XClassifiedObject.idl>
 
 
-//============================================================================
 module com { module sun { module star { module embed {
-//============================================================================
 /** This interface allows to access and change contents of OLE storages.
 
     <p>
@@ -48,8 +46,6 @@ module com { module sun { module star { module embed {
 published interface XOLESimpleStorage
 {
     //INTERFACES
-    //
-    //------------------------------------------------------------------------
     /** interface <type>XNameContainer</type> is the generic interface for
         supporting the insertion and removal of named elements.
 
@@ -58,13 +54,11 @@ published interface XOLESimpleStorage
     */
     interface ::com::sun::star::container::XNameContainer;
 
-    //------------------------------------------------------------------------
     /** interface <type>XComponent</type> allows to explicitly free resources
         and break cyclic references.
     */
     interface ::com::sun::star::lang::XComponent;
 
-    //------------------------------------------------------------------------
     /** interface <type>XTransactedObject</type> allows transacted access to
         an object.
 
@@ -74,7 +68,6 @@ published interface XOLESimpleStorage
     */
     interface XTransactedObject;
 
-    //------------------------------------------------------------------------
     /** interface <type>XClassifiedObject</type> represents common
         functionality for embedded objects
 
@@ -85,7 +78,6 @@ published interface XOLESimpleStorage
 
 };
 
-//============================================================================
 
 }; }; }; };
 

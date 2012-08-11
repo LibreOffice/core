@@ -36,11 +36,9 @@
 #include <com/sun/star/beans/XPropertySet.idl>
 #include <com/sun/star/report/XReportDefinition.idl>
 #include <com/sun/star/report/XReportComponent.idl>
-//=============================================================================
 
  module com {  module sun {  module star {  module report {
  interface XGroup;
-//=============================================================================
 
 /** identifies a <type>XSection</type> inside a report.
 
@@ -76,7 +74,6 @@ interface XSection
      */
     interface com::sun::star::lang::XComponent;
 
-    //-------------------------------------------------------------------------
 
     /** Defines if the section should be visible in report.
     */
@@ -169,7 +166,6 @@ interface XSection
     [attribute,readonly] com::sun::star::report::XReportDefinition ReportDefinition;
 };
 
-//=============================================================================
 
 }; }; }; };
 

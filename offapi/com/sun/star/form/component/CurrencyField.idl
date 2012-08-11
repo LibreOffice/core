@@ -26,11 +26,9 @@
 #include <com/sun/star/form/XReset.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module form {  module component {
 
-//=============================================================================
 
 /** This service specifies the ControlModel for an edit field which
     contains a currency value.
@@ -56,7 +54,6 @@ published service CurrencyField
 
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

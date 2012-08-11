@@ -24,11 +24,9 @@
 #include <com/sun/star/uno/Exception.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module lang {
 
-//=============================================================================
 
 /** Factory interface to produce instances of an implementation
     of a service specification.
@@ -60,7 +58,6 @@ published interface XSingleServiceFactory: com::sun::star::uno::XInterface
         raises( com::sun::star::uno::Exception );
 };
 
-//=============================================================================
 
 }; }; }; };
 

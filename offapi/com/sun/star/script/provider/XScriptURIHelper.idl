@@ -24,18 +24,15 @@
 #include <com/sun/star/lang/IllegalArgumentException.idl>
 
 
-//===========================================================================
 
 module com { module sun { module star { module script { module provider {
 
-//===========================================================================
 /**
     This interface is used to help transform Scripting Framework storage
     locations to Scripting Framework script URIs and vice versa.
 */
 interface XScriptURIHelper : ::com::sun::star::uno::XInterface {
 
-    //----------------------------------------------------------------------
     /**
         Obtain the root storage URI for this ScriptURIHelper. The
         resulting string can be used to access the storage for this
@@ -69,7 +66,6 @@ interface XScriptURIHelper : ::com::sun::star::uno::XInterface {
         ( ::com::sun::star::lang::IllegalArgumentException );
 };
 
-//===========================================================================
 }; }; }; }; }; // ::com::sun::star::script::provider
 
 #endif

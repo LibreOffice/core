@@ -20,11 +20,9 @@
 #define __com_sun_star_xml_crypto_CipherID_idl__
 
 
-//============================================================================
 
 module com { module sun { module star { module xml { module crypto {
 
-//============================================================================
 /** The constant set contains identifiers of supported cipher-creation
     algorithms.
 
@@ -33,18 +31,15 @@ module com { module sun { module star { module xml { module crypto {
 */
 constants CipherID
 {
-    //------------------------------------------------------------------------
     /** identifier of AES algorithm in CBC mode with W3C padding
      */
     const long AES_CBC_W3C_PADDING = 1;
 
-    //------------------------------------------------------------------------
     /** identifier of the Blowfish algorithm in 8-bit CFB mode
      */
     const long BLOWFISH_CFB_8 = 2;
 };
 
-//============================================================================
 
 }; }; }; }; };
 

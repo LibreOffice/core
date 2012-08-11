@@ -28,17 +28,14 @@
 #ifndef __com_sun_star_embed_Actions_idl__
 #define __com_sun_star_embed_Actions_idl__
 
-//============================================================================
 
 module com { module sun { module star { module embed {
 
-//============================================================================
 /** This constant set contains possible actions that could be approved by
 <type>ActionsApproval</type> implementation.
 */
 published constants Actions
 {
-    //------------------------------------------------------------------------
     /** "Prevent Close" - throws veto exception if target object is going to
         close.
 
@@ -50,7 +47,6 @@ published constants Actions
      */
     const long PREVENT_CLOSE = 1;
 
-    //------------------------------------------------------------------------
     /** "Prevent Termination" - throws veto exception if target object is going
         to terminate.
 
@@ -63,7 +59,6 @@ published constants Actions
     const long PREVENT_TERMINATION = 2;
 };
 
-//============================================================================
 
 }; }; }; };
 

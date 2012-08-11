@@ -22,49 +22,41 @@
 #include <com/sun/star/uno/XInterface.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module awt {
 
-//=============================================================================
 
 /** gives access to the value and formatting of a pattern field.
  */
 published interface XPatternField: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** sets the pattern mask.
      */
     [oneway] void setMasks( [in] string EditMask,
              [in] string LiteralMask );
 
-    //-------------------------------------------------------------------------
 
     /** returns the currently set pattern mask.
      */
     void getMasks( [out] string EditMask,
              [out] string LiteralMask );
 
-    //-------------------------------------------------------------------------
 
     /** sets the string value of the pattern field.
      */
     [oneway] void setString( [in] string Str );
 
-    //-------------------------------------------------------------------------
 
     /** returns the currently set string value of the pattern field.
      */
     string getString();
 
-    //-------------------------------------------------------------------------
 
     /** determines if the format is checked during user input.
      */
     [oneway] void setStrictFormat( [in] boolean bStrict );
 
-    //-------------------------------------------------------------------------
 
     /** returns whether the format is currently checked during user input.
      */
@@ -72,7 +64,6 @@ published interface XPatternField: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

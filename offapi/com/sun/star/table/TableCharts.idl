@@ -24,11 +24,9 @@
 #include <com/sun/star/container/XIndexAccess.idl>
 #include <com/sun/star/container/XEnumerationAccess.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module table {
 
-//=============================================================================
 
 /** represents a collection of all charts based on data in a table.
 
@@ -36,19 +34,16 @@ module com {  module sun {  module star {  module table {
  */
 published service TableCharts
 {
-    //-------------------------------------------------------------------------
 
     /** provides methods to insert and remove charts.
      */
     interface com::sun::star::table::XTableCharts;
 
-    //-------------------------------------------------------------------------
 
     /** provides methods to access the charts via index.
      */
     interface com::sun::star::container::XIndexAccess;
 
-    //-------------------------------------------------------------------------
 
     /** creates an enumeration of all contained charts.
 
@@ -58,7 +53,6 @@ published service TableCharts
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

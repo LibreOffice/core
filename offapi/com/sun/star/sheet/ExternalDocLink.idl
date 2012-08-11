@@ -24,7 +24,6 @@
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** Represents a single external document link.
 
@@ -39,7 +38,6 @@ service ExternalDocLink : XExternalDocLink
 {
 };
 
-//=============================================================================
 
 }; }; }; };
 

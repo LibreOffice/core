@@ -22,18 +22,15 @@
 #include <com/sun/star/ucb/InteractiveLockingException.idl>
 
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** An error indicating that the resource is locked.
 
     @since OOo 3.3
 */
 /*published*/ exception InteractiveLockingLockedException : com::sun::star::ucb::InteractiveLockingException
 {
-    //-------------------------------------------------------------------------
     /** The owner of the lock.
 
         <true/>, the lock has been obtained by this OOo session.
@@ -42,7 +39,6 @@ module com { module sun { module star { module ucb {
     boolean SelfOwned;
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -84,7 +84,6 @@ published service Container
     [optional] interface XDrop;
 };
 
-//=============================================================================
 
 }; }; }; };
 

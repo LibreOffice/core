@@ -33,11 +33,9 @@
 #include <com/sun/star/awt/tree/TreeDataModelEvent.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module awt {  module tree {
 
-//=============================================================================
 
 /** An instance of this interface is used by the <type>TreeControl</type> to
     get notifications about data model changes.
@@ -85,7 +83,6 @@ interface XTreeDataModelListener: com::sun::star::lang::XEventListener
     void treeStructureChanged( [in] TreeDataModelEvent Event );
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

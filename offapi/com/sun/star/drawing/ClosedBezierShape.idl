@@ -34,11 +34,9 @@
 #include <com/sun/star/drawing/RotationDescriptor.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module drawing {
 
-//=============================================================================
 
 /** This service is for a closed Bezier shape.
  */
@@ -59,7 +57,6 @@ published service ClosedBezierShape
     service com::sun::star::drawing::RotationDescriptor;
 };
 
-//=============================================================================
 
 }; }; }; };
 

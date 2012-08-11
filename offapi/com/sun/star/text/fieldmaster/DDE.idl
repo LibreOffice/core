@@ -23,11 +23,9 @@
 #include <com/sun/star/text/TextFieldMaster.idl>
 #include <com/sun/star/beans/PropertyValues.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module text { module fieldmaster {
 
-//=============================================================================
 /** specifies service of a DDE field master.
     @see com::sun::star::text::TextField
 */
@@ -35,29 +33,23 @@ published service DDE
 {
     service  com::sun::star::text::TextFieldMaster;
 
-    //------------------------------------------------------------------------
     /** contains the element string of the DDE command.
      */
     [property]  string DDECommandElement;
-    //------------------------------------------------------------------------
     /** contains the file string of the DDE command.
      */
     [property]  string DDECommandFile;
-    //------------------------------------------------------------------------
     /** contains the type string of the DDE command.
      */
     [property]  string DDECommandType;
-    //------------------------------------------------------------------------
     /** determines whether DDE link is updated automatically.
      */
     [property]  boolean IsAutomaticUpdate;
-    //------------------------------------------------------------------------
     /** contains the content.
          */
     [optional, property]  string Content;
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

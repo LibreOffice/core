@@ -24,11 +24,9 @@
 #include <com/sun/star/form/XGridControlListener.idl>
 #include <com/sun/star/form/XGridFieldDataSupplier.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module form {
 
-//=============================================================================
 
 /** specifies (some) functionality provided by a grid control (aka table control)
 
@@ -53,11 +51,9 @@ interface XGridControl
     interface XGridFieldDataSupplier;
 };
 
-//=============================================================================
 
 }; }; }; };
 
-//=============================================================================
 
 #endif
 

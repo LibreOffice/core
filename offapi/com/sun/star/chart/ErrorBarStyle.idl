@@ -83,7 +83,6 @@ published constants ErrorBarStyle
     const long FROM_DATA = 7;
 };
 
-//=============================================================================
 
 }; }; }; };
 

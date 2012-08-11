@@ -20,11 +20,9 @@
 #define __com_sun_star_drawing_TextureProjectionMode_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module drawing {
 
-//=============================================================================
 
 // DocMerge from xml: enum com::sun::star::drawing::TextureProjectionMode
 /** defines how the texture is mapped to the object.
@@ -35,7 +33,6 @@
  */
 published enum TextureProjectionMode
 {
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: value com::sun::star::drawing::TextureProjectionMode::OBJECTSPECIFIC
     /** This value specifies that the standard object projection method is
@@ -43,7 +40,6 @@ published enum TextureProjectionMode
      */
     OBJECTSPECIFIC,
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: value com::sun::star::drawing::TextureProjectionMode::PARALLEL
     /** This value specifies a flat parallel projection in the specified
@@ -51,7 +47,6 @@ published enum TextureProjectionMode
      */
     PARALLEL,
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: value com::sun::star::drawing::TextureProjectionMode::SPHERE
     /** This value forces projection to wrapping in X and/or Y.
@@ -60,7 +55,6 @@ published enum TextureProjectionMode
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

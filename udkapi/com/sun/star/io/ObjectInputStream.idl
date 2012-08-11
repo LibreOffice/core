@@ -28,11 +28,9 @@
 #include <com/sun/star/io/XMarkableStream.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module io {
 
-//=============================================================================
 
 // DocMerge from xml: service com::sun::star::io::ObjectInputStream
 /** is a stream which allows reading the data of persistent objects.
@@ -83,7 +81,6 @@ published service ObjectInputStream
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

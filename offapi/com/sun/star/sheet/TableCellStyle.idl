@@ -27,11 +27,9 @@
 #include <com/sun/star/style/CharacterPropertiesComplex.idl>
 #include <com/sun/star/style/ParagraphProperties.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** contains the properties of a table cell style.
 
@@ -41,37 +39,31 @@ module com {  module sun {  module star {  module sheet {
  */
 published service TableCellStyle
 {
-    //-------------------------------------------------------------------------
 
     /** contributes cell specific properties.
        */
     service com::sun::star::table::CellProperties;
 
-    //-------------------------------------------------------------------------
 
     /** is the base service for table cells.
      */
     service com::sun::star::style::CellStyle;
 
-    //-------------------------------------------------------------------------
 
     /** contributes properties for character formatting of Western text.
      */
     service com::sun::star::style::CharacterProperties;
 
-    //-------------------------------------------------------------------------
 
     /** contributes properties for character formatting of Asian text.
      */
     service com::sun::star::style::CharacterPropertiesAsian;
 
-    //-------------------------------------------------------------------------
 
     /** contributes properties for character formatting of Complex text.
      */
     service com::sun::star::style::CharacterPropertiesComplex;
 
-    //-------------------------------------------------------------------------
 
     /** contributes properties for paragraph formatting.
      */
@@ -79,7 +71,6 @@ published service TableCellStyle
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

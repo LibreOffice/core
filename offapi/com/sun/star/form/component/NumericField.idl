@@ -26,11 +26,9 @@
 #include <com/sun/star/form/XReset.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module form {  module component {
 
-//=============================================================================
 
 /** specifies a component which allows the input of a numeric value.
  */
@@ -46,7 +44,6 @@ published service NumericField
     */
     interface com::sun::star::form::XReset;
 
-    //-------------------------------------------------------------------------
 
     /** contains a default value for the control.
 
@@ -59,7 +56,6 @@ published service NumericField
 
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

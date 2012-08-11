@@ -41,11 +41,9 @@
 #include <com/sun/star/sheet/DataPilotFieldSortInfo.idl>
 #include <com/sun/star/sheet/DataPilotFieldGroupInfo.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** represents a single field in a data pilot table.
 
@@ -55,28 +53,23 @@ module com {  module sun {  module star {  module sheet {
  */
 published service DataPilotField
 {
-    //-------------------------------------------------------------------------
 
     /** provides access to the name of the data pilot field.
      */
     interface com::sun::star::container::XNamed;
 
-    //-------------------------------------------------------------------------
 
 //!published service PropertySet
     /** provides access to the properties.
      */
     interface com::sun::star::beans::XPropertySet;
 
-    //-------------------------------------------------------------------------
 
     [optional] interface XDataPilotField;
 
-    //-------------------------------------------------------------------------
 
     [optional] interface XDataPilotFieldGrouping;
 
-    //=========================================================================
 
     /** specifies the orientation of the field.
 
@@ -86,7 +79,6 @@ published service DataPilotField
      */
     [property] DataPilotFieldOrientation Orientation;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the function used to calculate results for this field.
 
@@ -97,7 +89,6 @@ published service DataPilotField
      */
     [property] GeneralFunction Function;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the functions used to calculate subtotals for this field.
 
@@ -116,20 +107,17 @@ published service DataPilotField
      */
     [property, optional] sequence<GeneralFunction> Subtotals;
 
-    //-------------------------------------------------------------------------
 
     /** specifies the selected page which is used to filter the data pilot.
      */
     [property, optional] string SelectedPage;
 
-    //-------------------------------------------------------------------------
 
     /** specifies whether to use the selected page to filter the data pilot or
         show all.
      */
     [property, optional] boolean UseSelectedPage;
 
-    //-------------------------------------------------------------------------
 
     /** specifies which hierarchy of the dimension is used.
 
@@ -137,63 +125,53 @@ published service DataPilotField
      */
     [property, optional] string UsedHierarchy;
 
-    //-------------------------------------------------------------------------
 
     /** specifies whether this field has sorting information.
      */
     [property, optional] boolean HasSortInfo;
 
-    //-------------------------------------------------------------------------
 
     /** controls how the field's items are sorted.
      */
     [property, optional] DataPilotFieldSortInfo SortInfo;
 
-    //-------------------------------------------------------------------------
 
     /** specifies whether this field has layout information.
      */
     [property, optional] boolean HasLayoutInfo;
 
-    //-------------------------------------------------------------------------
 
     /** controls how the field's items are laid out in the result table.
      */
     [property, optional] DataPilotFieldLayoutInfo LayoutInfo;
 
-    //-------------------------------------------------------------------------
 
     /** specifies whether this field has auto show information.
      */
     [property, optional] boolean HasAutoShowInfo;
 
-    //-------------------------------------------------------------------------
 
     /** enables the automatic inclusion of only a number of items with
         the highest or lowest result values.
      */
     [property, optional] DataPilotFieldAutoShowInfo AutoShowInfo;
 
-    //-------------------------------------------------------------------------
 
     /** specifies whether this field has a reference.
      */
     [property, optional] boolean HasReference;
 
-    //-------------------------------------------------------------------------
 
     /** controls how the results are shown in relation to a selected
         reference result.
      */
     [property, optional] DataPilotFieldReference Reference;
 
-    //-------------------------------------------------------------------------
 
     /** specifies whether this field is a group field.
      */
     [property, optional] boolean IsGroupField;
 
-    //-------------------------------------------------------------------------
 
     /** contains the grouping information of the DataPilot field.
 
@@ -202,14 +180,12 @@ published service DataPilotField
      */
     [property, optional] DataPilotFieldGroupInfo GroupInfo;
 
-    //-------------------------------------------------------------------------
 
     /** specifies whether to show this field also if it is empty or not.
      */
     [property, optional] boolean ShowEmpty;
 };
 
-//=============================================================================
 
 }; }; }; };
 

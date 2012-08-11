@@ -52,7 +52,6 @@
  */
 published interface XResultSet: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** moves the cursor down one row from its current position.
 
@@ -74,7 +73,6 @@ published interface XResultSet: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     boolean next() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** indicates whether the cursor is before the first row in the result
         set.
@@ -84,7 +82,6 @@ published interface XResultSet: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     boolean isBeforeFirst() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** indicates whether the cursor is after the last row in the result
         set.
@@ -94,7 +91,6 @@ published interface XResultSet: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     boolean isAfterLast() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** indicates whether the cursor is on the first row of the result set.
         @returns
@@ -103,7 +99,6 @@ published interface XResultSet: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     boolean isFirst() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** indicates whether the cursor is on the last row of the result set.
 
@@ -123,7 +118,6 @@ published interface XResultSet: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     boolean isLast() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** moves the cursor to the front of the result set, just before the
         first row. Has no effect if the result set contains no rows.
@@ -131,7 +125,6 @@ published interface XResultSet: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     void beforeFirst() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** moves the cursor to the end of the result set, just after the last
         row. Has no effect if the result set contains no rows.
@@ -139,7 +132,6 @@ published interface XResultSet: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     void afterLast() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** moves the cursor to the first row in the result set.
         @returns
@@ -148,7 +140,6 @@ published interface XResultSet: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     boolean first() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** moves the cursor to the last row in the result set.
         @returns
@@ -157,7 +148,6 @@ published interface XResultSet: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     boolean last() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** retrieves the current row number. The first row is number 1, the
         second number 2, and so on.
@@ -167,7 +157,6 @@ published interface XResultSet: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     long getRow() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** moves the cursor to the given row number in the result set.
 
@@ -205,7 +194,6 @@ published interface XResultSet: com::sun::star::uno::XInterface
         </p>
      */
     boolean absolute([in] long row ) raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** moves the cursor a relative number of rows, either positive or negative.
 
@@ -235,7 +223,6 @@ published interface XResultSet: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     boolean relative([in]long rows) raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** moves the cursor to the previous row in the result set.
 
@@ -255,7 +242,6 @@ published interface XResultSet: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     boolean previous() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** refreshes the current row with its most recent value in
         the database. Cannot be called when on the insert row.
@@ -284,7 +270,6 @@ published interface XResultSet: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     void refreshRow() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** indicates whether the current row has been updated. The value returned
         depends on whether or not the result set can detect updates.
@@ -294,7 +279,6 @@ published interface XResultSet: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     boolean rowUpdated() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** indicates whether the current row has had an insertion.  The value returned
         depends on whether or not the result set can detect visible inserts.
@@ -304,7 +288,6 @@ published interface XResultSet: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     boolean rowInserted() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** indicates whether a row has been deleted.  A deleted row may leave
         a visible "hole" in a result set.  This method can be used to
@@ -316,7 +299,6 @@ published interface XResultSet: com::sun::star::uno::XInterface
             if a database access error occurs.
      */
     boolean rowDeleted() raises (SQLException);
-    //-------------------------------------------------------------------------
 
     /** returns the Statement that produced this
         <type scope="com::sun::star::sdbc">ResultSet</type>
@@ -333,7 +315,6 @@ published interface XResultSet: com::sun::star::uno::XInterface
     com::sun::star::uno::XInterface getStatement() raises (SQLException);
 };
 
-//=============================================================================
 
 }; }; }; };
 

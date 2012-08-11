@@ -34,11 +34,9 @@
 #include <com/sun/star/frame/XStatusListener.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module frame {
 
-//=============================================================================
 /** serves state information of objects which can be connected to
         controls (e.g. toolbox controls).
 
@@ -64,7 +62,6 @@ module com {  module sun {  module star {  module frame {
  */
 published interface XDispatch: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** dispatches (executes) an URL asynchronously.
 
         <p>
@@ -105,7 +102,6 @@ published interface XDispatch: com::sun::star::uno::XInterface
         [in] com::sun::star::util::URL URL,
         [in] sequence<com::sun::star::beans::PropertyValue> Arguments);
 
-    //-------------------------------------------------------------------------
         /** registers a listener of a control for a specific URL
         at this object to receive status events.
 
@@ -129,7 +125,6 @@ published interface XDispatch: com::sun::star::uno::XInterface
         [in] XStatusListener Control,
         [in] com::sun::star::util::URL URL);
 
-    //-------------------------------------------------------------------------
         /** unregisters a listener from a control.
 
         @param Control
@@ -147,7 +142,6 @@ published interface XDispatch: com::sun::star::uno::XInterface
         [in] com::sun::star::util::URL URL);
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -24,14 +24,12 @@
 #include <com/sun/star/lang/XServiceInfo.idl>
 #include <com/sun/star/lang/XServiceDisplayName.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module linguistic2 {
 
  published interface XSpellChecker;
  published interface XLinguServiceEventBroadcaster;
 
-//=============================================================================
 /** offers spell checking functionality.
 */
 published service SpellChecker
@@ -44,7 +42,6 @@ published service SpellChecker
     interface com::sun::star::lang::XServiceDisplayName;
 };
 
-//=============================================================================
 
 }; }; }; };
 

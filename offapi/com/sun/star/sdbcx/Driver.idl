@@ -61,7 +61,6 @@ published service Driver
     [optional] interface XDropCatalog;
 };
 
-//=============================================================================
 
 }; }; }; };
 

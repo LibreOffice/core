@@ -20,11 +20,9 @@
 #define __com_sun_star_drawing_TextAdjust_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module drawing {
 
-//=============================================================================
 
 // DocMerge from xml: enum com::sun::star::drawing::TextAdjust
 /** This enumeration specifies the position of a text inside a shape in
@@ -36,35 +34,30 @@
  */
 published enum TextAdjust
 {
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: value com::sun::star::drawing::TextAdjust::LEFT
     /** The left edge of the text is adjusted to the left edge of the shape.
      */
     LEFT,
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: value com::sun::star::drawing::TextAdjust::CENTER
     /** The text is centered inside the shape.
      */
     CENTER,
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: value com::sun::star::drawing::TextAdjust::RIGHT
     /** The right edge of the text is adjusted to the right edge of the shape.
      */
     RIGHT,
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: value com::sun::star::drawing::TextAdjust::BLOCK
     /** The text extends from the left to the right edge of the shape.
      */
     BLOCK,
 
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: value com::sun::star::drawing::TextAdjust::STRETCH
     /** The text is stretched so that the longest line goes from the left
@@ -74,7 +67,6 @@ published enum TextAdjust
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

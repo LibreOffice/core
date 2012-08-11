@@ -24,17 +24,14 @@
 #include <com/sun/star/awt/MouseEvent.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module awt {
 
-//=============================================================================
 
 /** makes it possible to receive mouse motion events on a window.
  */
 published interface XMouseMotionHandler: com::sun::star::lang::XEventListener
 {
-    //-------------------------------------------------------------------------
 
     /** is invoked when a mouse button is pressed on a window and then
         dragged.
@@ -54,7 +51,6 @@ published interface XMouseMotionHandler: com::sun::star::lang::XEventListener
      */
     boolean mouseDragged( [in] com::sun::star::awt::MouseEvent e );
 
-    //-------------------------------------------------------------------------
 
     /** is invoked when the mouse button has been moved on a window
         (with no buttons down).
@@ -71,7 +67,6 @@ published interface XMouseMotionHandler: com::sun::star::lang::XEventListener
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

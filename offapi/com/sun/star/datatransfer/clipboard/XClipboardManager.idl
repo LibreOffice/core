@@ -25,13 +25,11 @@
 #include <com/sun/star/container/NoSuchElementException.idl>
 #include <com/sun/star/uno/XInterface.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module datatransfer { module clipboard {
 
  published interface XClipboard;
 
-//=============================================================================
 /** This interface is used to retrieve, add, or remove clipboard instances.
 
     @see com::sun::star::datatransfer::clipboard::XClipboard
@@ -39,7 +37,6 @@ module com { module sun { module star { module datatransfer { module clipboard {
 
 published interface XClipboardManager: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** Get a clipboard instance by name.
 
         @returns
@@ -55,7 +52,6 @@ published interface XClipboardManager: com::sun::star::uno::XInterface
     XClipboard getClipboard( [in] string aName )
         raises ( com::sun::star::container::NoSuchElementException );
 
-    //-------------------------------------------------------------------------
     /** Add a clipboard instance to the manager's list.
 
         @param xClipboard
@@ -71,7 +67,6 @@ published interface XClipboardManager: com::sun::star::uno::XInterface
         raises ( com::sun::star::lang::IllegalArgumentException,
                  com::sun::star::container::ElementExistException );
 
-    //-------------------------------------------------------------------------
     /** Removes the clipboard with the specified name from the list.
 
         @param aName
@@ -79,7 +74,6 @@ published interface XClipboardManager: com::sun::star::uno::XInterface
     */
     void removeClipboard( [in] string aName );
 
-    //-------------------------------------------------------------------------
     /** Get a list of a managed clipboards.
 
         @returns
@@ -88,7 +82,6 @@ published interface XClipboardManager: com::sun::star::uno::XInterface
     sequence < string > listClipboardNames();
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

@@ -24,11 +24,9 @@
 #include <com/sun/star/script/ContextInformation.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module script {
 
-//=============================================================================
 
 // DocMerge from xml: interface com::sun::star::script::XDebugging
 /** makes it possible to set breakpoints in an interpreter.
@@ -36,7 +34,6 @@
  */
 published interface XDebugging: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** returns the source code line where the breakpoint was set.
 
                 <p>The value can differ from the parameter
@@ -48,12 +45,10 @@ published interface XDebugging: com::sun::star::uno::XInterface
              [in] long nSourceCodeLine,
              [in] boolean bOn );
 
-    //-------------------------------------------------------------------------
     /** clears all breakpoints in the module set by "setBreakPoint".
      */
     void clearAllBreakPoints( [in] string aModuleName );
 
-    //-------------------------------------------------------------------------
     /** Evaluates an expression.
 
         @returns the value of the expression as string.
@@ -65,12 +60,10 @@ published interface XDebugging: com::sun::star::uno::XInterface
     string eval( [in] string aSourceCode,
              [in] short nCallStackPos );
 
-    //-------------------------------------------------------------------------
     /** Returns the engine's stack trace of the current execute position. Line break is the delimiter.
      */
     sequence<string> getStackTrace();
 
-    //-------------------------------------------------------------------------
     /** returns more detailed information about a specified stack frame.
 
          @param nCallStackPos
@@ -79,13 +72,11 @@ published interface XDebugging: com::sun::star::uno::XInterface
      */
     com::sun::star::script::ContextInformation getContextInformation( [in] short nCallStackPos );
 
-    //-------------------------------------------------------------------------
     /** returns the value of the variable at the given stack position.
      */
     string dumpVariable( [in] string aVariableName,
              [in] short nCallStackPos );
 
-    //-------------------------------------------------------------------------
     /** sets the value of the specified variable within the specified
         stack frame.
      */
@@ -93,20 +84,17 @@ published interface XDebugging: com::sun::star::uno::XInterface
              [in] string aValue,
              [in] short nCallStackPos );
 
-    //-------------------------------------------------------------------------
     /** returns whether the given variable exists within the specified stack frame.
      */
     boolean isVariable( [in] string aVariableName,
              [in] short nCallStackPos );
 
-    //-------------------------------------------------------------------------
     /** stops the execution of the interpreter.
 
         <p>To continue with the execution, call <method>XDebugging::doContinue</method>.
      */
     void stop();
 
-    //-------------------------------------------------------------------------
     /** executes the next and only the next statement.
 
         <p>If the next statement is a function call, the function is
@@ -114,7 +102,6 @@ published interface XDebugging: com::sun::star::uno::XInterface
      */
     void stepOver();
 
-    //-------------------------------------------------------------------------
     /** executes the next and only the next statement.
 
         <p>If the next statement is a function call, only the function
@@ -122,19 +109,16 @@ published interface XDebugging: com::sun::star::uno::XInterface
      */
     void stepIn();
 
-    //-------------------------------------------------------------------------
     /** executes the program until the next return from this stack frame.
      */
     void stepOut();
 
-    //-------------------------------------------------------------------------
     /** continues the program execution.
      */
     void doContinue();
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

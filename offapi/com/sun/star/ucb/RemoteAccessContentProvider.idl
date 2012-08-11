@@ -22,24 +22,20 @@
 #include <com/sun/star/ucb/ContentProvider.idl>
 #include <com/sun/star/ucb/XParameterizedContentProvider.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** A <type>RemoteAccessContentProvider</type> is a
     <type>ContentProvider</type> that provides access to contents available at
     other (remote) UCBs.
 */
 published service RemoteAccessContentProvider
 {
-    //-------------------------------------------------------------------------
     /** A <type>RemoteAccessContentProvider</type> is a specialized
         <type>ContentProvider</type>.
      */
     service com::sun::star::ucb::ContentProvider;
 
-    //-------------------------------------------------------------------------
     /** allows configuration of the <type>RemoteAccessContentProvider</type>,
         to specify that certain <type>XContentIdentifier</type>s map to
         <type>XContent</type>s from a certain remote UCB.  The Arguments
@@ -55,7 +51,6 @@ published service RemoteAccessContentProvider
     interface com::sun::star::ucb::XParameterizedContentProvider;
 };
 
-//=============================================================================
 
 }; }; }; };
 

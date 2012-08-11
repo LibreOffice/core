@@ -29,11 +29,9 @@
 #ifndef __com_sun_star_sheet_FormulaLanguage_idl__
 #define __com_sun_star_sheet_FormulaLanguage_idl__
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** Constants designating the formula language used with
     <type>XFormulaOpCodeMapper</type> methods.
@@ -68,7 +66,6 @@ constants FormulaLanguage
     const long XL_ENGLISH = 4;
 };
 
-//=============================================================================
 
 }; }; }; };
 

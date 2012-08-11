@@ -22,11 +22,9 @@
 #include <com/sun/star/lang/XComponent.idl>
 #include <com/sun/star/lang/IllegalArgumentException.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module document {
 
-//=============================================================================
 /** makes it possible to connect a document with an <type>ImportFilter</type>
 
     <p>
@@ -41,7 +39,6 @@ module com { module sun { module star { module document {
  */
 published interface XImporter: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** sets the target document for the importer
 
         @param Document
@@ -56,7 +53,6 @@ published interface XImporter: com::sun::star::uno::XInterface
             raises( com::sun::star::lang::IllegalArgumentException );
 };
 
-//=============================================================================
 
 }; }; }; };
 

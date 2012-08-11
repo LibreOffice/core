@@ -24,11 +24,9 @@
 #include <com/sun/star/ucb/XContentIdentifierFactory.idl>
 #include <com/sun/star/beans/XPropertySet.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** The File Content Provider (FCP) implements a <type>ContentProvider</type>
     for the <Type>UniversalContentBroker</type> (UCB).
 
@@ -41,7 +39,6 @@ module com { module sun { module star { module ucb {
 */
 published service FileContentProvider
 {
-    //-------------------------------------------------------------------------
     /** provides an object representing either a directory or a file in the
         local file system.
 
@@ -50,14 +47,12 @@ published service FileContentProvider
 
     interface com::sun::star::ucb::XContentProvider;
 
-    //-------------------------------------------------------------------------
     /** This interface is implemented according to the specification of
         service <type>ContentProvider</type>.
     */
 
     interface com::sun::star::ucb::XContentIdentifierFactory;
 
-    //-------------------------------------------------------------------------
     /** provides access to properties supported by the UCP.
 
         <p> The supported properties give two kinds of meta-information about
@@ -84,7 +79,6 @@ published service FileContentProvider
 
     interface com::sun::star::beans::XPropertySet;
 
-    //-------------------------------------------------------------------------
     /** specifies methods to convert between (file) URLs and file paths in
         system dependent notation
     */
@@ -92,7 +86,6 @@ published service FileContentProvider
     interface com::sun::star::ucb::XFileIdentifierConverter;
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -31,11 +31,9 @@
 
 #include <com/sun/star/configuration/backend/XSchema.idl>
 
-//==============================================================================
 
 module com { module sun { module star { module configuration { module backend {
 
-//==============================================================================
 
 /**
   provides read only access to a configuration component schema.
@@ -56,7 +54,6 @@ module com { module sun { module star { module configuration { module backend {
   */
 published service Schema
 {
-    //--------------------------------------------------------------------------
 
     /**
       handles access to the schema data for a component.
@@ -66,7 +63,6 @@ published service Schema
       */
     interface XSchema ;
 
-    //--------------------------------------------------------------------------
 
     /**
       The URL of the layer data.
@@ -75,10 +71,8 @@ published service Schema
       */
     [property,optional,readonly] string URL ;
 
-    //--------------------------------------------------------------------------
 } ;
 
-//==============================================================================
 
 } ; } ; } ; } ; } ;
 

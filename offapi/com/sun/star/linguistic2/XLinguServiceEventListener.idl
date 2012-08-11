@@ -23,11 +23,9 @@
 #include <com/sun/star/lang/XEventListener.idl>
 #include <com/sun/star/linguistic2/LinguServiceEvent.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module linguistic2 {
 
-//=============================================================================
 /** is used to inform listeners about LinguServiceEvents.
 
     <P>The function of this interface is used by the
@@ -40,7 +38,6 @@ module com { module sun { module star { module linguistic2 {
 */
 published interface XLinguServiceEventListener : com::sun::star::lang::XEventListener
 {
-    //-------------------------------------------------------------------------
     /**
         @param aLngSvcEvent
             the event the listener will be informed about.
@@ -50,7 +47,6 @@ published interface XLinguServiceEventListener : com::sun::star::lang::XEventLis
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -24,11 +24,9 @@
 #include <com/sun/star/container/XEnumeration.idl>
 #include <com/sun/star/lang/NoSupportException.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module container {
 
-//=============================================================================
 
 /** extends <type>XMap</type> with enumeration capabilities.
 
@@ -93,11 +91,9 @@ interface XEnumerableMap : XMap
         raises ( ::com::sun::star::lang::NoSupportException );
 };
 
-//=============================================================================
 
 }; }; }; };
 
-//=============================================================================
 
 #endif
 

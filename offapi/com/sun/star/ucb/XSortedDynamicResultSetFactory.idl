@@ -24,18 +24,15 @@
 #include <com/sun/star/ucb/NumberedSortingInfo.idl>
 #include <com/sun/star/ucb/XAnyCompareFactory.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module ucb {
 
-//=============================================================================
 /** Provides a method to create an <type>XDynamicResultSet</type> which
     will be sorted according to the given sorting options.
 */
 
 published interface XSortedDynamicResultSetFactory: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** creates a sorted <type>XDynamicResultSet</type> depending on internal
         data, an (unsorted) XDynamicResultSet and the sorting info.
 
@@ -57,7 +54,6 @@ published interface XSortedDynamicResultSetFactory: com::sun::star::uno::XInterf
                 [in] com::sun::star::ucb::XAnyCompareFactory CompareFactory );
 };
 
-//=============================================================================
 
 }; }; }; };
 

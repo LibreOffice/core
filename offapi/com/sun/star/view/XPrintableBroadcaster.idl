@@ -22,11 +22,9 @@
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/view/XPrintableListener.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module view {
 
-//-----------------------------------------------------------------------------
 /** allows for getting information about a print job.
 
     <p><type>XPrintableBroadcaster</type> can be implemented by classes which

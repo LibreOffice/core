@@ -242,7 +242,6 @@ interface XUIConfigurationManager : ::com::sun::star::uno::XInterface
     com::sun::star::uno::XInterface getEventsManager();
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -33,11 +33,9 @@
 #include <com/sun/star/lang/EventObject.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module form {
 
-//=============================================================================
 
 /** receives load-related events from a loadable object.
 
@@ -50,7 +48,6 @@
  */
 published interface XLoadListener: com::sun::star::lang::XEventListener
 {
-    //-------------------------------------------------------------------------
 
     /** is invoked when the object has successfully connected to a datasource.
 
@@ -59,7 +56,6 @@ published interface XLoadListener: com::sun::star::lang::XEventListener
      */
     [oneway] void loaded( [in] com::sun::star::lang::EventObject aEvent );
 
-    //-------------------------------------------------------------------------
 
     /** is invoked when the object is about to be unloaded.
         <p>Components may use this to stop any other event processing related to
@@ -70,7 +66,6 @@ published interface XLoadListener: com::sun::star::lang::XEventListener
      */
     [oneway] void unloading( [in] com::sun::star::lang::EventObject aEvent );
 
-    //-------------------------------------------------------------------------
 
     /** is invoked after the object has disconnected from a datasource.
 
@@ -79,7 +74,6 @@ published interface XLoadListener: com::sun::star::lang::XEventListener
      */
     [oneway] void unloaded( [in] com::sun::star::lang::EventObject aEvent );
 
-    //-------------------------------------------------------------------------
 
     /** is invoked when the object is about to be reloaded.
 
@@ -91,7 +85,6 @@ published interface XLoadListener: com::sun::star::lang::XEventListener
      */
     [oneway] void reloading( [in] com::sun::star::lang::EventObject aEvent );
 
-    //-------------------------------------------------------------------------
 
     /** is invoked when the object has been reloaded.
 
@@ -101,7 +94,6 @@ published interface XLoadListener: com::sun::star::lang::XEventListener
     [oneway] void reloaded( [in] com::sun::star::lang::EventObject aEvent );
 };
 
-//=============================================================================
 
 }; }; }; };
 

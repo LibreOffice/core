@@ -22,11 +22,9 @@
 
 #include <com/sun/star/inspection/XPropertyHandler.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module form { module inspection {
 
-//=============================================================================
 
 /** implements the default property handler for all known types of <type scope="com::sun::star::form">FormComponent</type>s.
 
@@ -38,7 +36,6 @@ service FormComponentPropertyHandler
     interface com::sun::star::inspection::XPropertyHandler;
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

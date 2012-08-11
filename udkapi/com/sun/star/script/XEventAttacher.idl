@@ -34,17 +34,14 @@
 #include <com/sun/star/lang/ServiceNotRegisteredException.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module script {
 
-//=============================================================================
 /** makes it possible to attach script events given by a sequence of
     <type>ScriptEventDescriptor</type> structures to a given interface.
  */
 published interface XEventAttacher: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** registers the given "AllListener" object as a listener at the
         given interface by creating a suitable listener adapter and
         calling the "addListener" method corresponding to the
@@ -60,7 +57,6 @@ published interface XEventAttacher: com::sun::star::uno::XInterface
                     com::sun::star::script::CannotCreateAdapterException,
                     com::sun::star::lang::ServiceNotRegisteredException );
 
-    //-------------------------------------------------------------------------
     /** registers an object as a listener at the given interface by
         creating a suitable listener adapter and calling the method
         which corresponds to the listener type.
@@ -79,7 +75,6 @@ published interface XEventAttacher: com::sun::star::uno::XInterface
                     com::sun::star::script::CannotCreateAdapterException,
                     com::sun::star::lang::ServiceNotRegisteredException );
 
-    //-------------------------------------------------------------------------
     /** removes a listener object as a listener from the given interface.
 
         <p> This method can and should be used as a contrary method
@@ -94,7 +89,6 @@ published interface XEventAttacher: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

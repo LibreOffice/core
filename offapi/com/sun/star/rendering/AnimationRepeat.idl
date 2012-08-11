@@ -47,7 +47,6 @@ constants AnimationRepeat
     */
     const byte ONE_SHOT=0;
 
-    //-------------------------------------------------------------------------
 
     /** The [0,1] parameter range is swept through exactly twice.<p>
 
@@ -57,7 +56,6 @@ constants AnimationRepeat
     */
     const byte ONE_SHOT_PINGPONG=1;
 
-    //-------------------------------------------------------------------------
 
     /** The [0,1] parameter range is swept through infinitely.<p>
 
@@ -68,7 +66,6 @@ constants AnimationRepeat
     */
     const byte PINGPONG=2;
 
-    //-------------------------------------------------------------------------
 
     /** The [0,1] parameter range is swept through infinitely.<p>
 

@@ -33,11 +33,9 @@
 #include <com/sun/star/xml/FastAttribute.idl>
 #include <com/sun/star/xml/sax/SAXException.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module xml {  module sax {
 
-//=============================================================================
 
 /** a container for the attributes of an XML element.
 
@@ -163,7 +161,6 @@ interface XFastAttributeList: com::sun::star::uno::XInterface
     sequence< ::com::sun::star::xml::FastAttribute > getFastAttributes();
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

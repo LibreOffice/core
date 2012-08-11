@@ -36,7 +36,6 @@
 #include <com/sun/star/sdb/XCompletedExecution.idl>
 #include <com/sun/star/awt/TabControllerModel.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module form {
 
@@ -44,7 +43,6 @@ module com { module sun { module star { module form {
  published interface XDatabaseParameterBroadcaster;
 
 module component {
-//=============================================================================
 /** This service specifies a form which is connected to a database and
     displays the results of SQL queries. It provides the possibility of
     adding new data records, modifying existing ones, or deleting them.
@@ -124,7 +122,6 @@ published service DataForm
     */
     interface com::sun::star::form::XDatabaseParameterBroadcaster;
 
-    //-------------------------------------------------------------------------
     /** is used for subforms and contains the names of columns of the parent form.
 
         <p> These columns are typically the foreign key fields of the parent form.
@@ -137,7 +134,6 @@ published service DataForm
     */
     [property] sequence<string> MasterFields;
 
-    //-------------------------------------------------------------------------
     /** is used for subforms and contains the names of the columns of the subform
         which are related to the master fields of the parent form.
 
@@ -165,17 +161,14 @@ published service DataForm
     */
     [property] sequence<string> DetailFields;
 
-    //-------------------------------------------------------------------------
     /** returns the kind of tabulator controlling.
     */
     [property] com::sun::star::form::TabulatorCycle Cycle;
 
-    //-------------------------------------------------------------------------
     /** determines how an navigation bar for this form should act.
     */
     [property] com::sun::star::form::NavigationBarMode NavigationBarMode;
 
-    //-------------------------------------------------------------------------
     /** determines if insertions into the form's row set are allowed.
 
         <p>Note that this is a recommendation for user interface components displaying the
@@ -185,7 +178,6 @@ published service DataForm
     */
     [property] boolean AllowInserts;
 
-    //-------------------------------------------------------------------------
     /** determines if modifications of the current record of the form are allowed.
 
         <p>Note that this is a recommendation for user interface components displaying the
@@ -195,7 +187,6 @@ published service DataForm
     */
     [property] boolean AllowUpdates;
 
-    //-------------------------------------------------------------------------
     /** determines if deletions of records of the form are allowed.
 
         <p>Note that this is a recommendation for user interface components displaying the
@@ -206,7 +197,6 @@ published service DataForm
     [property] boolean AllowDeletes;
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

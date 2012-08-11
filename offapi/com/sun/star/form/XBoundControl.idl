@@ -22,18 +22,15 @@
 #include <com/sun/star/uno/XInterface.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module form {
 
-//=============================================================================
 
 /** allows locking the input on components.
  */
 
 published interface XBoundControl: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** determines whether the input is currently locked or not.
 
@@ -42,7 +39,6 @@ published interface XBoundControl: com::sun::star::uno::XInterface
      */
     boolean getLock();
 
-    //-------------------------------------------------------------------------
 
     /** is used for altering the current lock state of the
         component.
@@ -54,7 +50,6 @@ published interface XBoundControl: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

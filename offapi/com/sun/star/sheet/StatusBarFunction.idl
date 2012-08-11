@@ -20,54 +20,45 @@
 #ifndef __com_sun_star_sheet_StatusBarFunction_idl__
 #define __com_sun_star_sheet_StatusBarFunction_idl__
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** used to specify the function used to calculate a result in the
     spreadsheet's status bar.
  */
 published constants StatusBarFunction
 {
-    //-------------------------------------------------------------------------
 
     /** nothing is calculated.
      */
     const short NONE = 0;
 
-    //-------------------------------------------------------------------------
 
     /** average of all numerical values is calculated.
      */
     const short AVERAGE = 1;
 
-    //-------------------------------------------------------------------------
 
     /** all values, including non-numerical values, are counted.
      */
     const short COUNTNUMS = 2;
 
-    //-------------------------------------------------------------------------
 
     /** numerical values are counted.
      */
     const short COUNT = 3;
 
-    //-------------------------------------------------------------------------
 
     /** maximum value of all numerical values is calculated.
      */
     const short MAX = 4;
 
-    //-------------------------------------------------------------------------
 
     /** minimum value of all numerical values is calculated.
      */
     const short MIN = 5;
 
-    //-------------------------------------------------------------------------
 
     /** sum of all numerical values is calculated.
      */
@@ -75,7 +66,6 @@ published constants StatusBarFunction
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -32,11 +32,9 @@
 #include <com/sun/star/beans/XPropertySet.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module text {
 
-//=============================================================================
 
 /** provides access to the numbering rules.
     <p> Numbering rules may be set at a <type>Paragraph</type> object.  The numbering rules are
@@ -55,49 +53,40 @@ published service NumberingRules
         interface com::sun::star::container::XIndexReplace;
 
     [optional] interface com::sun::star::beans::XPropertySet;
-    //-------------------------------------------------------------------------
 
     /** determines if the margins are absolute or relative
         to the preceding numbering level.
      */
     [optional, property] boolean  IsAbsoluteMargins;
-    //-------------------------------------------------------------------------
 
     /** determines if the numbering rules are automatically created
         as opposed to numbering rules that are part of a numbering style.
      */
     [optional, property] boolean IsAutomatic;
-    //-------------------------------------------------------------------------
 
     /** determines if the numbering levels are counted continuously  or if
         each numbering level is counted separately.
      */
     [optional, property] boolean IsContinuousNumbering;
-    //-------------------------------------------------------------------------
 
     /** contains the name of the numbering rules. It is used to identify a certain
         numbering rules property
      */
     [optional, readonly, property] string Name;
-        //-------------------------------------------------------------------------
 
         /** This numbering is used in the outline of the document (e.g. headings).
          */
         [optional, property] boolean    NumberingIsOutline;
-        //-------------------------------------------------------------------------
 
         /** the type of numbering (Arabic, characters, roman numbers, etc.).
          */
         [optional, property] short    NumberingType;
-        //-------------------------------------------------------------------------
 
         /** id of default list for the numbering rules instance
          */
         [optional, readonly, property] string DefaultListId;
-        //-------------------------------------------------------------------------
 };
 
-//=============================================================================
 
 }; }; }; };
 

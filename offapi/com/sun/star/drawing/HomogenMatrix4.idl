@@ -22,35 +22,28 @@
 #include <com/sun/star/drawing/HomogenMatrixLine4.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module drawing {
 
-//=============================================================================
 
 // DocMerge from xml: struct com::sun::star::drawing::HomogenMatrix
 /** specifies a homogeneous matrix by four homogeneous lines.
  */
 published struct HomogenMatrix4
 {
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR HomogenMatrix4::Line1
     com::sun::star::drawing::HomogenMatrixLine4 Line1;
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR HomogenMatrix4::Line2
     com::sun::star::drawing::HomogenMatrixLine4 Line2;
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR HomogenMatrix4::Line3
     com::sun::star::drawing::HomogenMatrixLine4 Line3;
 
-    //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR HomogenMatrix4::Line4
     com::sun::star::drawing::HomogenMatrixLine4 Line4;
 };
 
-//=============================================================================
 
 }; }; }; };
 

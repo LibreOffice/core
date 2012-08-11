@@ -26,11 +26,9 @@
 #include <com/sun/star/container/XIndexAccess.idl>
 
 
-//=============================================================================
 
 module com {  module sun {  module star {  module util {
 
-//=============================================================================
 
 /** enables the object to look for specified contents of the object
     (in particular, for a text range which contains a specific string pattern).
@@ -54,18 +52,15 @@ module com {  module sun {  module star {  module util {
  */
 published interface XSearchable: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
     /** creates a <type>SearchDescriptor</type> which contains properties that
         specify a search in this container.@see SearchDescriptor
      */
     com::sun::star::util::XSearchDescriptor createSearchDescriptor();
 
-    //-------------------------------------------------------------------------
     /** searches the contained texts for all occurrences of whatever is specified.@see SearchDescriptor
      */
     com::sun::star::container::XIndexAccess findAll( [in] com::sun::star::util::XSearchDescriptor xDesc );
 
-    //-------------------------------------------------------------------------
     /** searches the contained texts for the next occurrence of whatever is specified.
 
         @returns
@@ -76,7 +71,6 @@ published interface XSearchable: com::sun::star::uno::XInterface
      */
     com::sun::star::uno::XInterface findFirst( [in] com::sun::star::util::XSearchDescriptor xDesc );
 
-    //-------------------------------------------------------------------------
     /** searches the contained texts for the next occurrence of whatever is specified.
 
         @param xStartAt
@@ -91,7 +85,6 @@ published interface XSearchable: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

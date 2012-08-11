@@ -33,11 +33,9 @@
 #include <com/sun/star/drawing/XDrawPage.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module drawing {
 
-//=============================================================================
 
 /** gives access to a container of <type>DrawPage</type>s or <type>MasterPage</type>s.
 
@@ -50,7 +48,6 @@
 */
 published interface XDrawPages: com::sun::star::container::XIndexAccess
 {
-    //-------------------------------------------------------------------------
 
     /** creates and inserts a new <type>DrawPage</type> or <type>MasterPage</type>
         into this container
@@ -65,7 +62,6 @@ published interface XDrawPages: com::sun::star::container::XIndexAccess
     */
     com::sun::star::drawing::XDrawPage insertNewByIndex( [in] long nIndex );
 
-    //-------------------------------------------------------------------------
 
     /** removes a <type>DrawPage</type> or <type>MasterPage</type> from this
         container.
@@ -79,7 +75,6 @@ published interface XDrawPages: com::sun::star::container::XIndexAccess
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -23,11 +23,9 @@
 #include <com/sun/star/awt/UnoControlButton.idl>
 #include <com/sun/star/form/submission/XSubmission.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module form {  module control {
 
-//=============================================================================
 
 /** specifies a button control which can execute external submissions
 
@@ -62,7 +60,6 @@ service SubmitButton
     interface com::sun::star::form::submission::XSubmission;
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

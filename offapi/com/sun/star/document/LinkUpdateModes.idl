@@ -28,11 +28,9 @@
 #ifndef __com_sun_star_document_LinkUpdateModes_idl__
 #define __com_sun_star_document_LinkUpdateModes_idl__
 
-//=============================================================================
 
 module com {   module sun {   module star {   module document {
 
-//=============================================================================
 
 published constants LinkUpdateModes
 {
@@ -55,7 +53,6 @@ published constants LinkUpdateModes
     const long GLOBAL_SETTING = 3;
 };
 
-//=============================================================================
 
 }; }; }; };
 

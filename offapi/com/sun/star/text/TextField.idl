@@ -24,11 +24,9 @@
 #include <com/sun/star/text/XTextField.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module text {
 
-//=============================================================================
 
 /** A <type>TextField</type> is a <type>TextContent</type> which fades its
     textual representation into the text range to which it is anchored.
@@ -47,7 +45,6 @@ published service TextField
     */
     [optional] interface com::sun::star::beans::XPropertySet;
 
-    //-------------------------------------------------------------------------
 
     /** specifies if the text field is actually used in the document.
 
@@ -58,7 +55,6 @@ published service TextField
      */
     [optional, property, readonly] boolean IsFieldUsed;
 
-    //-------------------------------------------------------------------------
 
     /** specifies if the text field is actually displayed.
 
@@ -70,12 +66,10 @@ published service TextField
      */
     [optional, property, readonly] boolean IsFieldDisplayed;
 
-    //-------------------------------------------------------------------------
 
 };
 
 
-//=============================================================================
 
 }; }; }; };
 

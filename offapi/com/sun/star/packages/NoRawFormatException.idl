@@ -22,11 +22,9 @@
 #include <com/sun/star/io/IOException.idl>
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module packages {
 
-//=============================================================================
 
 // DocMerge from xml: exception com::sun::star::packages::NoRawFormatException
 /** This exception can be thrown in case provided stream is not a raw stream
@@ -36,7 +34,6 @@ published exception NoRawFormatException: com::sun::star::io::IOException
 {
 };
 
-//=============================================================================
 
 }; }; }; };
 

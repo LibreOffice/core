@@ -21,11 +21,9 @@
 
 #include <com/sun/star/container/XNameContainer.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module drawing {
 
-//=============================================================================
 
 /** this is a container for URLs to bitmaps.
 
@@ -46,7 +44,6 @@ published service BitmapTable
     interface com::sun::star::container::XNameContainer;
 };
 
-//=============================================================================
 
 }; }; }; };
 

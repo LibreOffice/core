@@ -20,11 +20,9 @@
 #define __com_sun_star_plugin_PluginVariable_idl__
 
 
-//=============================================================================
 
  module com {  module sun {  module star {  module plugin {
 
-//=============================================================================
 
 /** Describes the possible parameters to XPluginContext::getValue.
     It describes what kind of object is requested.
@@ -42,7 +40,6 @@ published enum PluginVariable
     VxtAppContext
 };
 
-//=============================================================================
 
 }; }; }; };
 

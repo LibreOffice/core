@@ -30,11 +30,9 @@
 
 #include <com/sun/star/frame/XDocumentTemplates.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module frame {
 
-//=============================================================================
 /** is a service for accessing the document templates of the office
     and manipulate them ( add or rename or remove templates )
 
@@ -43,7 +41,6 @@ module com {  module sun {  module star {  module frame {
 */
 published service DocumentTemplates : XDocumentTemplates;
 
-//=============================================================================
 
 }; }; }; };
 

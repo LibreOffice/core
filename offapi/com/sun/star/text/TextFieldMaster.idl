@@ -22,11 +22,9 @@
 #include <com/sun/star/beans/XPropertySet.idl>
 #include <com/sun/star/text/XDependentTextField.idl>
 
-//=============================================================================
 
  module com {  module sun {  module star {  module text {
 
-//=============================================================================
 
 /** A <type>TextFieldMaster</type> specifies important data for its
     <type>DependentTextField</type>s.
@@ -37,25 +35,21 @@ published service TextFieldMaster
                 this field master, if any.
      */
     [optional] interface com::sun::star::beans::XPropertySet;
-    //------------------------------------------------------------------------
     /** determines the name of the field master. The name is void as long as the
      instance is not member of the document structure. When the value is being set
      the instance is inserted into the document and the name cannot be changed afterwards.
      That does not apply to the Database text field master.
      */
     [optional, property]  string Name;
-        //------------------------------------------------------------------------
     /** contains a sequence of all fields that depend on this master.
      */
     [readonly, property]  sequence< XDependentTextField> DependentTextFields;
-    //------------------------------------------------------------------------
     /** contains the instance name as it is used in the <type scope="::com::sun::star::text">
         XTextFieldsSupplier</type>.
      */
     [readonly, property]  string InstanceName;
 };
 
-//=============================================================================
 
 }; }; }; };
 

@@ -22,13 +22,10 @@
 
 #include <com/sun/star/uno/XInterface.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module i18n {
 
-//=============================================================================
 
-//--------------------------------------------------------------------------
 /**
     contains the help routines for layouting complex text
 
@@ -48,36 +45,30 @@ published interface XScriptTypeDetector : ::com::sun::star::uno::XInterface
     long beginOfScriptDirection( [in] string aText, [in] long nPos,
                   [in] short nScriptDirection );
 
-    //--------------------------------------------------------------------------
     /** @returns the position where the specified Script Direction ends.
     */
     long endOfScriptDirection( [in] string aText, [in] long nPos,
                   [in] short nScriptDirection );
 
-    //--------------------------------------------------------------------------
     /** @returns the Script Direction of the current position.
     */
     short   getScriptDirection  ([in] string aText, [in] long nPos,
                   [in] short nDefaultScriptDirection );
 
-    //--------------------------------------------------------------------------
     /** @returns the position where the specified CTL Script Type starts.
     */
     long beginOfCTLScriptType( [in] string aText, [in] long nPos);
 
-    //--------------------------------------------------------------------------
     /** @returns the position where the specified CTL Script Type ends.
     */
     long endOfCTLScriptType( [in] string aText, [in] long nPos);
 
-    //--------------------------------------------------------------------------
     /** @returns the CTL script type of the current position. <br/>
         One of <type>CTLScriptType</type> constants.
     */
     short   getCTLScriptType  ([in] string aText, [in] long nPos);
 };
 
-//=============================================================================
 }; }; }; };
 
 #endif

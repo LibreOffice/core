@@ -31,11 +31,9 @@
 #include <com/sun/star/util/VetoException.idl>
 #include <com/sun/star/awt/tree/TreeExpansionEvent.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module awt { module tree {
 
-//=============================================================================
 
 /** Exception used to stop an expand/collapse from happening.
     @see XTreeExpansionListener
@@ -47,7 +45,6 @@ exception ExpandVetoException : com::sun::star::util::VetoException
     TreeExpansionEvent Event;
 };
 
-//=============================================================================
 
 }; }; }; }; };
 

@@ -4,11 +4,9 @@
 
 #include <com/sun/star/beans/XPropertySet.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module chart2 {
 
-//=============================================================================
 /**
   <p>The properties of this service correspond to the similar named attributes
   and subelements of the XML element chart2:increment in the chart2 file format.</p>
@@ -35,7 +33,6 @@ service LogicTargetModel
     [ property ] sequence< ::com::sun::star::beans::XPropertySet > LogicTargetModels;
 };
 
-//=============================================================================
 
 }; }; }; };
 

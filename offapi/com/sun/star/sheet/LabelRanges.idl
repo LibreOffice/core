@@ -24,11 +24,9 @@
 #include <com/sun/star/sheet/XLabelRanges.idl>
 #include <com/sun/star/container/XEnumerationAccess.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** represents a collection of label ranges in a spreadsheet document.
 
@@ -37,14 +35,12 @@ module com {  module sun {  module star {  module sheet {
  */
 published service LabelRanges
 {
-    //-------------------------------------------------------------------------
 
     /** provides methods to access the members of the label range collection
         and to insert and remove them.
      */
     interface com::sun::star::sheet::XLabelRanges;
 
-    //-------------------------------------------------------------------------
 
     /** provides access to the label ranges via index.
 
@@ -53,7 +49,6 @@ published service LabelRanges
      */
     interface com::sun::star::container::XIndexAccess;
 
-    //-------------------------------------------------------------------------
 
     /** creates an enumeration of all label ranges.
 
@@ -64,7 +59,6 @@ published service LabelRanges
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

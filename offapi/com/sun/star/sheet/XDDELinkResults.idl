@@ -22,11 +22,9 @@
 
 #include <com/sun/star/uno/XInterface.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module sheet {
 
-//=============================================================================
 
 /** provides access to the DDE link results.
 
@@ -36,7 +34,6 @@ module com {  module sun {  module star {  module sheet {
  */
 published interface XDDELinkResults: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
     /** returns the DDE link results.
 
@@ -46,7 +43,6 @@ published interface XDDELinkResults: com::sun::star::uno::XInterface
      */
     sequence< sequence< any > > getResults();
 
-    //-------------------------------------------------------------------------
 
     /** sets the DDE link results.
 
@@ -60,7 +56,6 @@ published interface XDDELinkResults: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 

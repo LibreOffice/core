@@ -24,11 +24,9 @@
 #include <com/sun/star/io/IOException.idl>
 #include <com/sun/star/lang/IllegalArgumentException.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module io {
 
-//=============================================================================
 
 // DocMerge from xml: interface com::sun::star::io::XSeekable
 /** makes it possible to seek to a certain position within a stream.
@@ -73,7 +71,6 @@ published interface XSeekable: com::sun::star::uno::XInterface
         raises( com::sun::star::io::IOException );
 };
 
-//=============================================================================
 
 }; }; }; };
 #endif

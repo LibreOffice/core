@@ -33,11 +33,9 @@
 #include <com/sun/star/container/XNameContainer.idl>
 #include <com/sun/star/container/XContainerListener.idl>
 
-//=============================================================================
 
 module com {  module sun {  module star {  module  util {
 
-//=============================================================================
 
 /** A service to support the substitution and resubstitution of path variables.
 
@@ -90,7 +88,6 @@ module com {  module sun {  module star {  module  util {
 
 published service PathSubstitution : XStringSubstitution;
 
-//=============================================================================
 
 }; }; }; };
 

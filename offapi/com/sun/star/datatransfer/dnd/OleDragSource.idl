@@ -34,15 +34,12 @@
 #include <com/sun/star/lang/XInitialization.idl>
 #include <com/sun/star/lang/XTypeProvider.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module datatransfer { module dnd {
 
-//=============================================================================
 
  published interface XDragSource;
 
-//=============================================================================
 /** This service connects the Java-like UNO drag and drop protocol to the protocol
     used on window platforms. It realized the drag source.
 
@@ -51,12 +48,10 @@ module com { module sun { module star { module datatransfer { module dnd {
 
 published service OleDragSource
 {
-    //-------------------------------------------------------------------------
     /** Used to provide data to other applications via the Ole Drag & Drop protocol.
     */
     interface XDragSource;
 
-    //-------------------------------------------------------------------------
     /** The service expects a byte sequence uniquely identifying the machine as
         the first, and only, parameter. This identifier should be checked to
         ensure that the window ids used for creating DropTargets are valid for
@@ -69,23 +64,19 @@ published service OleDragSource
     */
     interface com::sun::star::lang::XInitialization;
 
-    //-------------------------------------------------------------------------
     /** For shutdown and listener support.
     */
     interface com::sun::star::lang::XComponent;
 
-    //-------------------------------------------------------------------------
     /** Service should always support this interface.
     */
     interface com::sun::star::lang::XServiceInfo;
 
-    //-------------------------------------------------------------------------
     /** Service should always support this interface.
     */
     interface com::sun::star::lang::XTypeProvider;
 };
 
-//=============================================================================
 
 }; }; }; }; };
 
