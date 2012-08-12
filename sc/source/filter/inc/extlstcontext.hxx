@@ -40,12 +40,16 @@ public:
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
     virtual void        onStartElement( const AttributeList& rAttribs );
 
+    void finalizeImport();
+
 private:
     void importDataBar( const AttributeList& rAttribs );
     void importNegativeFillColor( const AttributeList& rAttribs );
     void importAxisColor( const AttributeList& rAttribs );
+    void importCfvo( const AttributeList& rAttribs );
     void* mpTarget;
 
+    bool mbFirstEntry;
 };
 
 /**

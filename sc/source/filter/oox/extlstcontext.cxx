@@ -38,7 +38,8 @@ namespace xls {
 
 ExtCfRuleContext::ExtCfRuleContext( WorksheetContextBase& rFragment, void* pTarget ):
     WorksheetContextBase( rFragment ),
-    mpTarget( pTarget )
+    mpTarget( pTarget ),
+    mbFirstEntry(true)
 {
 }
 
@@ -59,6 +60,9 @@ void ExtCfRuleContext::onStartElement( const AttributeList& rAttribs )
             break;
         case XLS_EXT_TOKEN( axisColor ):
             importAxisColor( rAttribs );
+            break;
+        case XLS_EXT_TOKEN( cfvo ):
+            importCfvo( rAttribs );
             break;
 
         default:
@@ -110,6 +114,34 @@ void ExtCfRuleContext::importNegativeFillColor( const AttributeList& rAttribs )
     ::Color aColor = RgbToRgbComponents(nColor);
     ::Color* pColor = new Color(aColor.GetRed(), aColor.GetGreen(), aColor.GetBlue());
     static_cast<ScDataBarFormatData*>(mpTarget)->mpNegativeColor.reset(pColor);
+}
+
+void ExtCfRuleContext::importCfvo( const AttributeList& rAttribs )
+{
+    ScDataBarFormatData* pDataBar = static_cast<ScDataBarFormatData*>(mpTarget);
+    ScColorScaleEntry* pEntry = NULL;
+    if(mbFirstEntry)
+        pEntry = pDataBar->mpLowerLimit.get();
+    else
+        pEntry = pDataBar->mpUpperLimit.get();
+
+    rtl::OUString aColorScaleType = rAttribs.getString( XML_type, rtl::OUString() );
+    if(aColorScaleType == "min")
+        pEntry->SetType(COLORSCALE_MIN);
+    else if (aColorScaleType == "max")
+        pEntry->SetType(COLORSCALE_MAX);
+    else if (aColorScaleType == "autoMin")
+        pEntry->SetType(COLORSCALE_AUTOMIN);
+    else if (aColorScaleType == "autoMax")
+        pEntry->SetType(COLORSCALE_AUTOMAX);
+    else if (aColorScaleType == "percentile")
+        pEntry->SetType(COLORSCALE_PERCENTILE);
+    else if (aColorScaleType == "percent")
+        pEntry->SetType(COLORSCALE_PERCENT);
+    else if (aColorScaleType == "formula")
+        pEntry->SetType(COLORSCALE_FORMULA);
+
+    mbFirstEntry = false;
 }
 
 ExtLstLocalContext::ExtLstLocalContext( WorksheetContextBase& rFragment, void* pTarget ):
