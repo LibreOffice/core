@@ -33,15 +33,16 @@
 #include <vcl/bitmap.hxx>
 #include <unx/gtk/gtkframe.hxx>
 #include <unx/salmenu.h>
+
 #include <gio/gio.h>
+
+#include "glomenu.h"
 #include "gloactiongroup.h"
 
 #include <vector>
 
 
 class GtkSalMenuItem;
-
-typedef std::vector< GtkSalMenuItem* > GtkSalMenuSection;
 
 class GtkSalMenu : public SalMenu
 {
@@ -53,17 +54,25 @@ private:
     GtkSalMenuItem* GetSalMenuItem( sal_uInt16 nId );
 
 public:
-    std::vector< GtkSalMenuSection* >       maSections;
-    GtkSalMenuSection*                      mpCurrentSection;
+    std::vector< GMenuModel* >      maSections;
+    std::vector< GtkSalMenuItem* >  maItems;
 
-    Menu*                   mpVCLMenu;
-    GtkSalMenu*             mpParentSalMenu;
-    const GtkSalFrame*      mpFrame;
-    gchar*                  aDBusMenubarPath;
-    GDBusConnection*        pSessionBus;
-    sal_Int32               mBusId;
-    sal_Int32               mMenubarId;
-    sal_Int32               mActionGroupId;
+    Menu*                                   mpVCLMenu;
+    GtkSalMenu*                             mpParentSalMenu;
+    const GtkSalFrame*                      mpFrame;
+
+    // DBus variables
+    gchar*                                  aDBusMenubarPath;
+    GDBusConnection*                        pSessionBus;
+    sal_Int32                               mBusId;
+    sal_Int32                               mMenubarId;
+    sal_Int32                               mActionGroupId;
+
+    // GMenuModel attributes
+    GMenuModel*                             mpMenuModel;
+    GMenuModel*                             mpCurrentSection;
+//    GLOMenu*                                mpParentMenuModel;
+//    std::vector< GLOMenu* >                 maSectionMenus;
 
     GtkSalMenu( sal_Bool bMenuBar );
     virtual ~GtkSalMenu();
@@ -95,9 +104,11 @@ public:
     virtual ~GtkSalMenuItem();
 
     sal_uInt16          mnId;                 // Item ID
+    sal_uInt16          mnPos;                // Item position
     Menu*               mpVCLMenu;            // VCL Menu into which this MenuItem is inserted
     GtkSalMenu*         mpParentMenu;         // The menu in which this menu item is inserted
     GtkSalMenu*         mpSubMenu;            // Sub menu of this item (if defined)
+    GMenuModel*         mpParentSection;      // Section where this item is added.
     GMenuItem*          mpMenuItem;           // The GMenuItem
     GAction*            mpAction;             // The GAction associated with this item
 };
