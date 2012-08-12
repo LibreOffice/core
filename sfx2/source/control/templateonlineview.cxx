@@ -118,6 +118,11 @@ void TemplateOnlineView::showOverlay (bool bVisible)
     }
 }
 
+void TemplateOnlineView::setOverlayChangeNameHdl(const Link &rLink)
+{
+    maChangeNameHdl = rLink;
+}
+
 bool TemplateOnlineView::loadRepository (const sal_uInt16 nRepositoryId, bool bRefresh)
 {
     TemplateOnlineViewItem *pItem = NULL;
@@ -319,16 +324,18 @@ void TemplateOnlineView::setItemDimensions(long ItemWidth, long ThumbnailHeight,
 
 IMPL_LINK (TemplateOnlineView, ChangeNameHdl, TemplateView*, pView)
 {
-    bool bRet = true;
-    mbIsSynced = false;
+    bool bRet = false;
 
     // check if there isnt another repository with the same name.
     for (size_t i = 0, n = maRepositories.size(); i < n; ++i)
     {
-        if (maRepositories[i]->maTitle == pView->getName())
+        if (maRepositories[i]->mnId == pView->getId())
         {
-            bRet = false;
-            mbIsSynced = true;
+            maRepositories[i]->maTitle = pView->getName();
+
+            bRet = true;
+            mbIsSynced = false;
+            maChangeNameHdl.Call(this);
             break;
         }
     }

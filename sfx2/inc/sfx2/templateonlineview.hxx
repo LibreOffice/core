@@ -34,6 +34,8 @@ public:
 
     virtual void showOverlay (bool bVisible);
 
+    void setOverlayChangeNameHdl (const Link &rLink);
+
     bool loadRepository (const sal_uInt16 nRepositoryId, bool bRefresh);
 
     const std::vector<TemplateOnlineViewItem*>& getRepositories () const { return maRepositories; }
@@ -53,6 +55,7 @@ private:
 private:
 
     bool mbIsSynced;
+    Link maChangeNameHdl;
     std::vector<TemplateOnlineViewItem*> maRepositories;
     com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment > m_xCmdEnv;
 };

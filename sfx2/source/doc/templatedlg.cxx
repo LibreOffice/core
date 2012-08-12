@@ -222,6 +222,7 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg (Window *parent)
     mpOnlineView->setOverlayItemStateHdl(LINK(this,SfxTemplateManagerDlg,TVTemplateStateHdl));
     mpOnlineView->setOverlayDblClickHdl(LINK(this,SfxTemplateManagerDlg,OpenTemplateHdl));
     mpOnlineView->setOverlayCloseHdl(LINK(this,SfxTemplateManagerDlg,CloseOverlayHdl));
+    mpOnlineView->setOverlayChangeNameHdl(LINK(this,SfxTemplateManagerDlg,RepositoryChangeNameHdl));
 
     mpSearchView->SetSizePixel(aThumbSize);
     mpSearchView->setItemMaxTextLength(ITEM_MAX_TEXT_LENGTH);
@@ -689,6 +690,12 @@ IMPL_LINK_NOARG(SfxTemplateManagerDlg, SearchUpdateHdl)
         }
     }
 
+    return 0;
+}
+
+IMPL_LINK_NOARG (SfxTemplateManagerDlg, RepositoryChangeNameHdl)
+{
+    createRepositoryMenu();
     return 0;
 }
 

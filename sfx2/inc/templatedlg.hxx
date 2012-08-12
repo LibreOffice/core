@@ -70,6 +70,8 @@ private:
 
     DECL_LINK(SearchUpdateHdl, void*);
 
+    DECL_LINK(RepositoryChangeNameHdl, void*);
+
     void OnTemplateImport ();
     void OnTemplateSearch ();
     void OnTemplateEdit ();
