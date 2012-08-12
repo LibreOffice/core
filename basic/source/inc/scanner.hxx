@@ -56,7 +56,6 @@ protected:
     bool   bSymbol;                     // true: symbol scanned
     bool   bNumber;                     // true: number scanned
     bool   bSpaces;                     // true: whitespace before token
-    bool   bErrors;                     // true: generate errors
     bool   bAbort;
     bool   bHash;                       // true: # has been read in
     bool   bError;                      // true: generate error

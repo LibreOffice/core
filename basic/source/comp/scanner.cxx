@@ -46,8 +46,7 @@ SbiScanner::SbiScanner( const ::rtl::OUString& rBuf, StarBASIC* p ) : aBuf( rBuf
     bVBASupportOn =
     bInStatement =
     bPrevLineExtentsComment = false;
-    bHash    =
-    bErrors  = true;
+    bHash    = true;
 }
 
 SbiScanner::~SbiScanner()
@@ -72,7 +71,7 @@ void SbiScanner::GenError( SbError code )
         bAbort = true;
         return;
     }
-    if( !bError && bErrors )
+    if( !bError )
     {
         bool bRes = true;
         // report only one error per statement
@@ -96,8 +95,7 @@ void SbiScanner::GenError( SbError code )
         }
         bAbort = bAbort || !bRes  || ( code == SbERR_NO_MEMORY || code == SbERR_PROG_TOO_LARGE );
     }
-    if( bErrors )
-        nErrors++;
+    nErrors++;
 }
 
 
