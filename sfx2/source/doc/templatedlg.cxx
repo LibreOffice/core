@@ -773,10 +773,26 @@ void SfxTemplateManagerDlg::OnTemplateImport ()
             std::set<const ThumbnailViewItem*>::const_iterator pIter;
             for (pIter = maSelFolders.begin(); pIter != maSelFolders.end(); ++pIter)
             {
+                OUString aTemplateList;
                 TemplateLocalViewItem *pFolder = (TemplateLocalViewItem*)(*pIter);
 
                 for (size_t i = 0, n = aFiles.getLength(); i < n; ++i)
-                    maView->copyFrom(pFolder,aFiles[i]);
+                {
+                    if(!maView->copyFrom(pFolder,aFiles[i]))
+                    {
+                        if (aTemplateList.isEmpty())
+                            aTemplateList = aFiles[i];
+                        else
+                            aTemplateList = aTemplateList + "\n" + aFiles[i];
+                    }
+                }
+
+                if (!aTemplateList.isEmpty())
+                {
+                    OUString aMsg(SfxResId(STR_MSG_ERROR_IMPORT).toString());
+                    aMsg = aMsg.replaceFirst("$1",pFolder->maTitle);
+                    ErrorBox(this,WB_OK,aMsg.replaceFirst("$2",aTemplateList));
+                }
             }
 
             maView->Invalidate(INVALIDATE_NOERASE);

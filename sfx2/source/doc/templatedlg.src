@@ -60,6 +60,11 @@ String STR_MSG_ERROR_EXPORT
     Text [ en-US ] = "Error exporting the following templates:\n$1";
 };
 
+String STR_MSG_ERROR_IMPORT
+{
+    Text [ en-US ] = "Error importing the following templates to $1:\n$2";
+};
+
 String STR_MSG_ERROR_DELETE_TEMPLATE
 {
     Text [ en-US ] = "The following templates cannot be deleted:\n$1";
