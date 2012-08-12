@@ -200,11 +200,11 @@ sub print_msvs_productdir()
 
 sub print_csc_compiler_dir()
 {
-    my $dir = cygpath (reg_get_value ("HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/.NETFramework/InstallRoot"), 'w', $output_format);
-    my $csc_exe = `/bin/find "$dir" -iname csc.exe | grep "v3\.5\." | head -n 1` ||
-                  `/bin/find "$dir" -iname csc.exe | grep "v4\." | head -n 1` ||
-                  `/bin/find "$dir" -iname csc.exe | grep "v2\." | head -n 1`;
-    print `dirname $csc_exe`;
+	my $csc_exe =
+			reg_get_value ("HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/NET Framework Setup/NDP/v4/Client/InstallPath") ||
+			reg_get_value ("HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/NET Framework Setup/NDP/v3.5/InstallPath") ||
+			reg_get_value ("HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/.NETFramework/InstallRoot") . "v2.0.50727";
+	print cygpath ($csc_exe, 'w', $output_format);
 }
 
 sub print_dotnetsdk_dir()
