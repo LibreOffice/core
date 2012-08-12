@@ -14,6 +14,7 @@
 
 #include "connectivity/OSubComponent.hxx"
 #include "TConnection.hxx"
+#include "MColumnAlias.hxx"
 
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/sdbc/SQLWarning.hpp>
@@ -50,6 +51,7 @@ namespace connectivity
             ::com::sun::star::sdbc::SQLWarning      m_aLastWarning;
             MorkDriver*                             m_pDriver;      //  Pointer to the owning
                                                                     //  driver object
+            OColumnAlias    m_aColumnAlias;
             // Profile Access
             ProfileAccess* m_pProfileAccess;
             // Mork Parser
@@ -97,6 +99,8 @@ namespace connectivity
             // XWarningsSupplier
             virtual ::com::sun::star::uno::Any SAL_CALL getWarnings(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
             virtual void SAL_CALL clearWarnings() throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+
+            const OColumnAlias & getColumnAlias() const   { return (m_aColumnAlias); }
 
             static ::rtl::OUString getDriverImplementationName();
 

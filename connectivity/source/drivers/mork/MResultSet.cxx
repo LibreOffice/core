@@ -1056,16 +1056,18 @@ void OResultSet::analyseWhereClause( const OSQLParseNode*                 parseT
 void OResultSet::fillRowData()
     throw( ::com::sun::star::sdbc::SQLException )
 {
-    OSL_FAIL( "OResultSet::fillRowData() not implemented!" );
-/*
+    SAL_INFO("connectivity.mork", "=> OResultSet::fillRowData()" );
+
     OSL_ENSURE( m_pStatement, "Require a statement" );
 
-    MQueryExpression queryExpression;
 
-    OConnection* xConnection = static_cast<OConnection*>(m_pStatement->getConnection().get());
     m_xColumns = m_pSQLIterator->getSelectColumns();
 
     OSL_ENSURE(m_xColumns.is(), "Need the Columns!!");
+
+/*
+    OConnection* xConnection = static_cast<OConnection*>(m_pStatement->getConnection().get());
+    MQueryExpression queryExpression;
 
     OSQLColumns::Vector::const_iterator aIter = m_xColumns->get().begin();
     const ::rtl::OUString sProprtyName = OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME);
@@ -1194,8 +1196,8 @@ sal_Int32 OResultSet::getRowForCardNumber(sal_Int32 nCardNum)
 void SAL_CALL OResultSet::executeQuery() throw( ::com::sun::star::sdbc::SQLException,
                                                 ::com::sun::star::uno::RuntimeException)
 {
-    OSL_FAIL( "OResultSet::executeQuery() not implemented" );
-/*
+    SAL_INFO("connectivity.mork", "=> OResultSet::executeQuery()" );
+
     ResultSetEntryGuard aGuard( *this );
 
     OSL_ENSURE( m_pTable, "Need a Table object");
@@ -1217,6 +1219,7 @@ void SAL_CALL OResultSet::executeQuery() throw( ::com::sun::star::sdbc::SQLExcep
 
     OSL_ENSURE(m_xColumns.is(), "Need the Columns!!");
 
+/*
     switch( m_pSQLIterator->getStatementType() )
     {
         case SQL_STATEMENT_SELECT:
@@ -1524,7 +1527,7 @@ sal_Int32 OResultSet::deletedCount()
 // -----------------------------------------------------------------------------
 sal_Bool OResultSet::seekRow( eRowPosition /*pos*/, sal_Int32 /*nOffset*/ )
 {
-    OSL_FAIL( "OResultSet::seekRow() not omplemented" );
+    OSL_FAIL( "OResultSet::seekRow() not implemented" );
 /*
     ResultSetEntryGuard aGuard( *this );
     if ( !m_pKeySet.is() )

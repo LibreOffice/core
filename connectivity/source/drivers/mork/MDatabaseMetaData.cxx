@@ -131,9 +131,9 @@ ODatabaseMetaDataResultSet::ORows& SAL_CALL ODatabaseMetaData::getColumnRows(
             // TABLE_NAME
             aRow[3] = new ORowSetValueDecorator( tables[j] );
 
-            SAL_INFO("connectivity.mork", "\tTableName = : " << tables[j]);
+            const OColumnAlias& colNames = m_pConnection->getColumnAlias();
 
-#if 0
+            SAL_INFO("connectivity.mork", "\tTableName = : " << tables[j]);
             // Iterate over all collumns in the table.
             for (   OColumnAlias::AliasMap::const_iterator compare = colNames.begin();
                     compare != colNames.end();
@@ -142,7 +142,9 @@ ODatabaseMetaDataResultSet::ORows& SAL_CALL ODatabaseMetaData::getColumnRows(
             {
                 if ( match( columnNamePattern, compare->first, '\0' ) )
                 {
-                    OSL_TRACE( "\t\t\tColumnName = %s;", OUtoCStr( compare->first ) );
+//                    OSL_TRACE( "\t\t\tColumnName = %s;", OUtoCStr( compare->first ) );
+                    SAL_INFO("connectivity.mork", "\t\tColumnNam : " << compare->first);
+
                     // COLUMN_NAME
                     aRow[4] = new ORowSetValueDecorator( compare->first );
                     // ORDINAL_POSITION
@@ -150,15 +152,6 @@ ODatabaseMetaDataResultSet::ORows& SAL_CALL ODatabaseMetaData::getColumnRows(
                     aRows.push_back(aRow);
                 }
             }
-#endif
-            SAL_INFO("connectivity.mork", "\tTableName = : " << tables[j]);
-            std::string name = "name";
-            OUString ouName(name.c_str(), name.length(), RTL_TEXTENCODING_UTF8);
-            // COLUMN_NAME
-            aRow[4] = new ORowSetValueDecorator(ouName );
-            // ORDINAL_POSITION
-            aRow[17] = new ORowSetValueDecorator( static_cast< sal_Int32 >(0) + 1 );
-            aRows.push_back(aRow);
         }
     }
     return( aRows );
