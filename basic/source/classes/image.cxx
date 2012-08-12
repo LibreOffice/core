@@ -37,7 +37,7 @@ SbiImage::SbiImage()
     nLegacyCodeSize  =
     nDimBase   = 0;
     bInit      =
-    bError     = sal_False;
+    bError     = false;
     bFirstInit = sal_True;
     eCharSet   = osl_getThreadTextEncoding();
 }
@@ -63,7 +63,7 @@ void SbiImage::Clear()
     nCodeSize  = 0;
     eCharSet   = osl_getThreadTextEncoding();
     nDimBase   = 0;
-    bError     = sal_False;
+    bError     = false;
 }
 
 /**************************************************************************
@@ -225,7 +225,7 @@ sal_Bool SbiImage::Load( SvStream& r, sal_uInt32& nVersion )
 done:
     r.Seek( nLast );
     if( !SbiGood( r ) )
-        bError = sal_True;
+        bError = true;
     return sal_Bool( !bError );
 }
 
@@ -347,7 +347,7 @@ sal_Bool SbiImage::Save( SvStream& r, sal_uInt32 nVer )
     // Set overall length
     SbiCloseRecord( r, nStart );
     if( !SbiGood( r ) )
-        bError = sal_True;
+        bError = true;
     return sal_Bool( !bError );
 }
 
@@ -372,7 +372,7 @@ void SbiImage::MakeStrings( short nSize )
         memset( pStrings, 0, nStringSize * sizeof( sal_Unicode ) );
     }
     else
-        bError = sal_True;
+        bError = true;
 }
 
 // Add a string to StringPool. The String buffer is dynamically
@@ -380,13 +380,13 @@ void SbiImage::MakeStrings( short nSize )
 void SbiImage::AddString( const String& r )
 {
     if( nStringIdx >= nStrings )
-        bError = sal_True;
+        bError = true;
     if( !bError )
     {
         xub_StrLen  len = r.Len() + 1;
         sal_uInt32 needed = nStringOff + len;
         if( needed > 0xFFFFFF00L )
-            bError = sal_True;  // out of mem!
+            bError = true;  // out of mem!
         else if( needed > nStringSize )
         {
             sal_uInt32 nNewLen = needed + 1024;
@@ -402,7 +402,7 @@ void SbiImage::AddString( const String& r )
                 nStringSize = sal::static_int_cast< sal_uInt16 >(nNewLen);
             }
             else
-                bError = sal_True;
+                bError = true;
         }
         if( !bError )
         {

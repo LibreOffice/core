@@ -75,7 +75,7 @@ enum SbxBOOL ImpGetBool( const SbxValues* p )
                 else if( !p->pOUString->equalsIgnoreAsciiCase( SbxRes( STRING_FALSE ) ) )
                 {
                     // it can be convertable to a number
-                    sal_Bool bError = sal_True;
+                    bool bError = true;
                     double n;
                     SbxDataType t;
                     sal_uInt16 nLen = 0;
@@ -83,7 +83,7 @@ enum SbxBOOL ImpGetBool( const SbxValues* p )
                     {
                         if( nLen == p->pOUString->getLength() )
                         {
-                            bError = sal_False;
+                            bError = false;
                             if( n != 0.0 )
                                 nRes = SbxTRUE;
                         }

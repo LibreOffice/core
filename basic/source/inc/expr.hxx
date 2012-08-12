@@ -102,7 +102,7 @@ class SbiExprNode {                  // operators (and operands)
     SbiNodeType  eNodeType;
     SbxDataType eType;
     SbiToken     eTok;
-    sal_Bool  bError;                   // sal_True: error
+    bool  bError;                   // true: error
     void  FoldConstants();
     void  CollectBits();            // converting numbers to strings
     sal_Bool  IsOperand()
@@ -125,7 +125,7 @@ public:
     SbiExprNode( SbiParser*, sal_uInt16 );                  // new <type>
     virtual ~SbiExprNode();
 
-    sal_Bool IsValid()                  { return sal_Bool( !bError ); }
+    bool IsValid()                  { return !bError; }
     sal_Bool IsConstant()               // sal_True constant operand
         { return sal_Bool( eNodeType == SbxSTRVAL || eNodeType == SbxNUMVAL ); }
     sal_Bool IsIntConst();
@@ -163,7 +163,7 @@ protected:
     SbiExprType   eCurExpr;         // type of expression
     SbiExprMode   m_eMode;          // expression context
     sal_Bool          bBased;           // sal_True: easy DIM-part (+BASE)
-    sal_Bool          bError;
+    bool          bError;
     sal_Bool          bByVal;           // sal_True: ByVal-Parameter
     sal_Bool          bBracket;         // sal_True: Parameter list with brackets
     sal_uInt16        nParenLevel;
@@ -225,13 +225,13 @@ protected:
     SbiExpression* pFirst;
     short nExpr;
     short nDim;
-    sal_Bool  bError;
+    bool  bError;
     sal_Bool  bBracket;
 public:
     SbiExprList( SbiParser* );
     virtual ~SbiExprList();
     sal_Bool  IsBracket()               { return bBracket;        }
-    sal_Bool  IsValid()                 { return sal_Bool( !bError ); }
+    bool  IsValid()                 { return !bError; }
     short GetSize()                 { return nExpr;           }
     short GetDims()                 { return nDim;            }
     SbiExpression* Get( short );

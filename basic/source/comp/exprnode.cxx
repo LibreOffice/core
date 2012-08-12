@@ -103,7 +103,7 @@ void SbiExprNode::BaseInit( SbiParser* p )
     pLeft       = NULL;
     pRight      = NULL;
     pWithParent = NULL;
-    bError      = sal_False;
+    bError      = false;
 }
 
 SbiExprNode::~SbiExprNode()
@@ -224,12 +224,12 @@ void SbiExprNode::CollectBits()
     if( pLeft )
     {
         pLeft->CollectBits();
-        bError |= pLeft->bError;
+        bError = bError || pLeft->bError;
     }
     if( pRight )
     {
         pRight->CollectBits();
-        bError |= pRight->bError;
+        bError = bError || pRight->bError;
     }
 }
 
@@ -296,7 +296,7 @@ void SbiExprNode::FoldConstants()
                             break;
                         default:
                             pGen->GetParser()->Error( SbERR_CONVERSION );
-                            bError = sal_True;
+                            bError = true;
                     }
                 }
             }
@@ -323,7 +323,7 @@ void SbiExprNode::FoldConstants()
                     if( err )
                     {
                         pGen->GetParser()->Error( SbERR_MATH_OVERFLOW );
-                        bError = sal_True;
+                        bError = true;
                     }
                 }
                 sal_Bool bBothInt = sal_Bool( pLeft->eType < SbxSINGLE
@@ -345,7 +345,7 @@ void SbiExprNode::FoldConstants()
                         if( !nr )
                         {
                             pGen->GetParser()->Error( SbERR_ZERODIV ); nVal = HUGE_VAL;
-                            bError = sal_True;
+                            bError = true;
                         } else nVal = nl / nr;
                         break;
                     case PLUS:
@@ -376,14 +376,14 @@ void SbiExprNode::FoldConstants()
                         if( !lr )
                         {
                             pGen->GetParser()->Error( SbERR_ZERODIV ); nVal = HUGE_VAL;
-                            bError = sal_True;
+                            bError = true;
                         } else nVal = ll / lr;
                         eType = SbxLONG; break;
                     case MOD:
                         if( !lr )
                         {
                             pGen->GetParser()->Error( SbERR_ZERODIV ); nVal = HUGE_VAL;
-                            bError = sal_True;
+                            bError = true;
                         } else nVal = llMod % lrMod;
                         eType = SbxLONG; break;
                     case AND:
@@ -435,7 +435,7 @@ void SbiExprNode::FoldConstants()
                 if( err )
                 {
                     pGen->GetParser()->Error( SbERR_MATH_OVERFLOW );
-                    bError = sal_True;
+                    bError = true;
                 }
                 nVal = (double) ~((long) nVal);
                 eType = SbxLONG;

@@ -264,7 +264,7 @@ class SbiRuntime
     // #74254, one refSaveObj is not enough! new: pRefSaveList (see above)
     short         nArgc;
     sal_Bool          bRun;
-    sal_Bool          bError;           // sal_True: handle errors
+    bool          bError;           // true: handle errors
     sal_Bool          bInError;         // sal_True: in an error handler
     sal_Bool          bBlocked;         // sal_True: blocked by next call level, #i48868
     sal_Bool          bVBAEnabled;

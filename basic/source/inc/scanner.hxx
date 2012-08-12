@@ -53,16 +53,16 @@ protected:
     sal_Int32 nBufPos;
     sal_Int32 nLine;
     sal_Int32 nCol1, nCol2;
-    bool   bSymbol;                     // sal_True: symbol scanned
-    bool   bNumber;                     // sal_True: number scanned
-    bool   bSpaces;                     // sal_True: whitespace before token
-    bool   bErrors;                     // sal_True: generate errors
+    bool   bSymbol;                     // true: symbol scanned
+    bool   bNumber;                     // true: number scanned
+    bool   bSpaces;                     // true: whitespace before token
+    bool   bErrors;                     // true: generate errors
     bool   bAbort;
-    bool   bHash;                       // sal_True: # has been read in
-    bool   bError;                      // sal_True: generate error
-    bool   bCompatible;                 // sal_True: OPTION compatible
-    bool   bVBASupportOn;               // sal_True: OPTION VBASupport 1 otherwise default False
-    bool   bPrevLineExtentsComment;     // sal_True: Previous line is comment and ends on "... _"
+    bool   bHash;                       // true: # has been read in
+    bool   bError;                      // true: generate error
+    bool   bCompatible;                 // true: OPTION compatible
+    bool   bVBASupportOn;               // true: OPTION VBASupport 1 otherwise default False
+    bool   bPrevLineExtentsComment;     // true: Previous line is comment and ends on "... _"
 
     bool   bInStatement;
     void   GenError( SbError );
@@ -70,7 +70,7 @@ public:
     SbiScanner( const ::rtl::OUString&, StarBASIC* = NULL );
    ~SbiScanner();
 
-    void  EnableErrors()            { bError = sal_False; }
+    void  EnableErrors()            { bError = false; }
     bool  IsHash()                  { return bHash;   }
     bool  IsCompatible()            { return bCompatible; }
     void  SetCompatible( bool b )   { bCompatible = b; }        // #118206

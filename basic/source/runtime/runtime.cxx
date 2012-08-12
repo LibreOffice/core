@@ -526,7 +526,7 @@ SbiRuntime::SbiRuntime( SbModule* pm, SbMethod* pe, sal_uInt32 nStart )
     pCode     =
     pStmnt    = (const sal_uInt8* ) pImg->GetCode() + nStart;
     bRun      =
-    bError    = sal_True;
+    bError    = true;
     bInError  = sal_False;
     bBlocked  = sal_False;
     nLine     = 0;
@@ -775,7 +775,7 @@ sal_Bool SbiRuntime::Step()
                 SbiRuntime* pRt = this;
                 while( NULL != (pRt = pRt->pNext) )
                 {
-                    if( pRt->bError == sal_False || pRt->pError != NULL )
+                    if( !pRt->bError || pRt->pError != NULL )
                     {
                         pRtErrHdl = pRt;
                         break;

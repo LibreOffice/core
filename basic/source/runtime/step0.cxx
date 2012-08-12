@@ -1242,7 +1242,7 @@ void SbiRuntime::StepENDCASE()
 
 void SbiRuntime::StepSTDERROR()
 {
-    pError = NULL; bError = sal_True;
+    pError = NULL; bError = true;
     pInst->aErrorMsg = String();
     pInst->nErr = 0L;
     pInst->nErl = 0;
@@ -1257,7 +1257,7 @@ void SbiRuntime::StepNOERROR()
     pInst->nErl = 0;
     nError = 0L;
     SbxErrObject::getUnoErrObject()->Clear();
-    bError = sal_False;
+    bError = false;
 }
 
 // leave UP

@@ -32,7 +32,8 @@ SbiExpression::SbiExpression( SbiParser* p, SbiExprType t,
     SbiExprMode eMode, const KeywordSymbolInfo* pKeywordSymbolInfo )
 {
     pParser = p;
-    bError = bByVal = bBased = bBracket = sal_False;
+    bError = false;
+    bByVal = bBased = bBracket = sal_False;
     nParenLevel = 0;
     eCurExpr = t;
     m_eMode = eMode;
@@ -51,7 +52,8 @@ SbiExpression::SbiExpression( SbiParser* p, double n, SbxDataType t )
     pParser = p;
     eCurExpr = SbOPERAND;
     pNext = NULL;
-    bError = bByVal = bBased = bBracket = sal_False;
+    bError = false;
+    bByVal = bBased = bBracket = sal_False;
     pExpr = new SbiExprNode( pParser, n, t );
     pExpr->Optimize();
 }
@@ -60,7 +62,8 @@ SbiExpression::SbiExpression( SbiParser* p, const SbiSymDef& r, SbiExprList* pPa
 {
     pParser = p;
     pNext = NULL;
-    bError = bByVal = bBased = bBracket = sal_False;
+    bError = false;
+    bByVal = bBased = bBracket = sal_False;
     eCurExpr = SbOPERAND;
     pExpr = new SbiExprNode( pParser, r, SbxVARIANT, pPar );
 }
@@ -203,7 +206,7 @@ SbiExprNode* SbiExpression::Term( const KeywordSymbolInfo* pKeywordSymbolInfo )
         else
         {
             pParser->Error( SbERR_SYNTAX );
-            bError = sal_True;
+            bError = true;
         }
     }
 
@@ -211,7 +214,7 @@ SbiExprNode* SbiExpression::Term( const KeywordSymbolInfo* pKeywordSymbolInfo )
     {
         bool bStandaloneExpression = (m_eMode == EXPRMODE_STANDALONE);
         pPar = new SbiParameters( pParser, bStandaloneExpression );
-        bError |= !pPar->IsValid();
+        bError = bError || !pPar->IsValid();
         if( !bError )
             bBracket = pPar->IsBracket();
         eTok = pParser->Peek();
@@ -223,7 +226,7 @@ SbiExprNode* SbiExpression::Term( const KeywordSymbolInfo* pKeywordSymbolInfo )
                 pvMoreParLcl = new SbiExprListVector();
             SbiParameters* pAddPar = new SbiParameters( pParser );
             pvMoreParLcl->push_back( pAddPar );
-            bError |= !pAddPar->IsValid();
+            bError = bError || !pAddPar->IsValid();
             eTok = pParser->Peek();
         }
     }
@@ -241,7 +244,7 @@ SbiExprNode* SbiExpression::Term( const KeywordSymbolInfo* pKeywordSymbolInfo )
         {
             // Name%. really does not work!
             pParser->Error( SbERR_BAD_DECLARATION, aSym );
-            bError = sal_True;
+            bError = true;
         }
     }
     // Search:
@@ -296,7 +299,7 @@ SbiExprNode* SbiExpression::Term( const KeywordSymbolInfo* pKeywordSymbolInfo )
             {
                 // How? Define with AS first and take a Suffix then?
                 pParser->Error( SbERR_BAD_DECLARATION, aSym );
-                bError = sal_True;
+                bError = true;
             }
             else if ( eType == SbxVARIANT )
                 // if there's nothing named, take the type of the entry,
@@ -321,7 +324,7 @@ SbiExprNode* SbiExpression::Term( const KeywordSymbolInfo* pKeywordSymbolInfo )
             else
             {
                 pParser->Error( SbERR_BAD_DECLARATION, aSym );
-                bError = sal_True;
+                bError = true;
             }
         }
     }
@@ -343,7 +346,7 @@ SbiExprNode* SbiExpression::Term( const KeywordSymbolInfo* pKeywordSymbolInfo )
             if ( !pParser->IsVBASupportOn() )
             {
                 pParser->Error( SbERR_BAD_DECLARATION, aSym );
-                bError = sal_True;
+                bError = true;
             }
         }
         if( !bError )
@@ -369,7 +372,7 @@ SbiExprNode* SbiExpression::ObjTerm( SbiSymDef& rObj )
             eTok != XOR && eTok != EQV && eTok != IMP && eTok != IS )
         {
             pParser->Error( SbERR_VAR_EXPECTED );
-            bError = sal_True;
+            bError = true;
         }
     }
 
@@ -386,7 +389,7 @@ SbiExprNode* SbiExpression::ObjTerm( SbiSymDef& rObj )
     {
         bool bStandaloneExpression = false;
         pPar = new SbiParameters( pParser, bStandaloneExpression );
-        bError |= !pPar->IsValid();
+        bError = bError || !pPar->IsValid();
         eTok = pParser->Peek();
 
         // i109624 check for additional sets of parameters
@@ -396,7 +399,7 @@ SbiExprNode* SbiExpression::ObjTerm( SbiSymDef& rObj )
                 pvMoreParLcl = new SbiExprListVector();
             SbiParameters* pAddPar = new SbiParameters( pParser );
             pvMoreParLcl->push_back( pAddPar );
-            bError |= !pPar->IsValid();
+            bError = bError || !pPar->IsValid();
             eTok = pParser->Peek();
         }
 
@@ -410,7 +413,7 @@ SbiExprNode* SbiExpression::ObjTerm( SbiSymDef& rObj )
         {
             // Name%. does really not work!
             pParser->Error( SbERR_BAD_DECLARATION, aSym );
-            bError = sal_True;
+            bError = true;
         }
     }
 
@@ -435,7 +438,7 @@ SbiExprNode* SbiExpression::ObjTerm( SbiSymDef& rObj )
         if( pDef->GetType() != SbxOBJECT )
         {
             pParser->Error( SbERR_BAD_DECLARATION, aSym );
-            bError = sal_True;
+            bError = true;
         }
         if( !bError )
         {
@@ -724,7 +727,7 @@ SbiExprNode* SbiExpression::Like()
         if( nCount > 1 && !pParser->IsVBASupportOn() )
         {
             pParser->Error( SbERR_SYNTAX );
-            bError = sal_True;
+            bError = true;
         }
     }
     return pNd;
@@ -840,7 +843,7 @@ SbiExprList::SbiExprList( SbiParser* p )
     pFirst = NULL;
     nExpr  =
     nDim   = 0;
-    bError =
+    bError = false;
     bBracket = sal_False;
 }
 
@@ -1003,7 +1006,7 @@ SbiParameters::SbiParameters( SbiParser* p, sal_Bool bStandaloneExpression, sal_
         else
             pLast->pNext = pExpr, pLast = pExpr;
         nExpr++;
-        bError |= !pExpr->IsValid();
+        bError = bError || !pExpr->IsValid();
 
         if( bAssumeArrayMode )
             break;
@@ -1017,7 +1020,7 @@ SbiParameters::SbiParameters( SbiParser* p, sal_Bool bStandaloneExpression, sal_
             pParser->Error( bBracket
                             ? SbERR_BAD_BRACKETS
                             : SbERR_EXPECTED, COMMA );
-            bError = sal_True;
+            bError = true;
         }
         else
         {
@@ -1035,7 +1038,7 @@ SbiParameters::SbiParameters( SbiParser* p, sal_Bool bStandaloneExpression, sal_
         if( !bBracket )
         {
             pParser->Error( SbERR_BAD_BRACKETS );
-            bError = sal_True;
+            bError = true;
         }
     }
     nDim = nExpr;
@@ -1058,7 +1061,7 @@ SbiDimList::SbiDimList( SbiParser* p ) : SbiExprList( p )
     if( pParser->Next() != LPAREN )
     {
         pParser->Error( SbERR_EXPECTED, LPAREN );
-        bError = sal_True; return;
+        bError = true; return;
     }
 
     if( pParser->Peek() != RPAREN )
@@ -1074,8 +1077,7 @@ SbiDimList::SbiDimList( SbiParser* p ) : SbiExprList( p )
                 pExpr2 = new SbiExpression( pParser );
                 eTok = pParser->Next();
                 bConst &= pExpr1->IsIntConstant() & pExpr2->IsIntConstant();
-                bError |= !pExpr1->IsValid();
-                bError |= !pExpr2->IsValid();
+                bError = bError || !pExpr1->IsValid() || !pExpr2->IsValid();
                 pExpr1->pNext = pExpr2;
                 if( !pLast )
                     pFirst = pExpr1;
@@ -1089,7 +1091,7 @@ SbiDimList::SbiDimList( SbiParser* p ) : SbiExprList( p )
                 pExpr1->SetBased();
                 pExpr1->pNext = NULL;
                 bConst &= pExpr1->IsIntConstant();
-                bError |= !pExpr1->IsValid();
+                bError = bError || !pExpr1->IsValid();
                 if( !pLast )
                     pFirst = pLast = pExpr1;
                 else

@@ -36,7 +36,7 @@ class SbiImage {
     sal_Unicode*   pStrings;        // StringPool
     char*          pCode;           // Code-Image
     char*          pLegacyPCode;        // Code-Image
-    sal_Bool           bError;
+    bool           bError;
     sal_uInt16         nFlags;
     short          nStrings;
     sal_uInt32         nStringSize;
@@ -68,7 +68,7 @@ public:
                             // nVer is set to version
                             // of image
     sal_Bool Save( SvStream&, sal_uInt32 = B_CURVERSION );
-    sal_Bool IsError()                  { return bError;    }
+    bool IsError()                  { return bError;    }
 
     const char* GetCode() const     { return pCode;     }
     sal_uInt32      GetCodeSize() const { return nCodeSize; }
