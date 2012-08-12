@@ -87,8 +87,8 @@
 #include "cert.h"
 #include "hasht.h"
 #include "sechash.h"
-#include "pkcs7t.h"
-#include "secpkcs7.h"
+#include "cms.h"
+#include "cmst.h"
 
 using namespace vcl;
 
@@ -6160,21 +6160,9 @@ bool PDFWriterImpl::emitSignature()
     return true;
 }
 
-void PDFSigningPKCS7Callback(void *arg, const char *buf, unsigned long len)
+char *PDFSigningPKCS7PasswordCallback(PK11SlotInfo * /*slot*/, PRBool /*retry*/, void *arg)
 {
-    OStringBuffer outbuffer;
-
-    for (unsigned int i = 0; i < len ; i++)
-        appendHex(buf[i], outbuffer);
-
-    sal_uInt64 nWritten = 0;
-
-    osl_writeFile((oslFileHandle)arg, outbuffer.getStr(), outbuffer.getLength(), &nWritten);
-}
-
-void *PDFSigningPKCS7PasswordCallback(void *arg, void * /*handle*/)
-{
-    return arg;
+    return (char *)arg;
 }
 
 bool PDFWriterImpl::finalizeSignature()
@@ -6203,8 +6191,6 @@ bool PDFWriterImpl::finalizeSignature()
     }
 
     // 3- create the PKCS#7 object using NSS
-    // use  m_aContext.SignCertificate and m_aContext.SignPassword as certificate and private key password
-    // SignCertificate->getEncoded is DER encoded certificate
     com::sun::star::uno::Sequence< sal_Int8 > derEncoded = m_aContext.SignCertificate->getEncoded();
 
     if (!derEncoded.hasElements())
@@ -6215,14 +6201,6 @@ bool PDFWriterImpl::finalizeSignature()
 
     NSS_NoDB_Init(".");
 
-    /* An alternate method for certificate reconstruction
-    SECItem certitem;
-    certitem.data = reinterpret_cast<unsigned char *>(n_derArray);
-    certitem.len = n_derLength;
-    certitem.type = siDERCertBuffer;
-    CERTCertificate *cert = CERT_NewTempCertificate(CERT_GetDefaultCertDB(), &certitem, NULL, PR_FALSE, PR_TRUE);
-    */
-
     CERTCertificate *cert = CERT_DecodeCertFromPackage(reinterpret_cast<char *>(n_derArray), n_derLength);
 
     if (!cert)
@@ -6232,7 +6210,6 @@ bool PDFWriterImpl::finalizeSignature()
     }
 
     SAL_WARN("vcl.gdi", "PDF Signing: Certificate Subject: " <<  cert->subjectName << "\n\tCertificate Issuer: " << cert->issuerName);
-
 
     // Prepare buffer and calculate PDF file digest
     CHECK_RETURN( (osl_File_E_None == osl_setFilePos( m_aFile, osl_Pos_Absolut, 0) ) );
@@ -6252,11 +6229,11 @@ bool PDFWriterImpl::finalizeSignature()
 
     //FIXME: Check if SHA1 is calculated from the correct byterange
 
-    CHECK_RETURN( (osl_File_E_None == osl_readFile( m_aFile, buffer, m_nSignatureContentOffset, &bytesRead ) ) );
-    if (bytesRead != (sal_uInt64)m_nSignatureContentOffset)
+    CHECK_RETURN( (osl_File_E_None == osl_readFile( m_aFile, buffer, m_nSignatureContentOffset - 1 , &bytesRead ) ) );
+    if (bytesRead != (sal_uInt64)m_nSignatureContentOffset - 1)
         SAL_WARN("vcl.gdi", "PDF Signing: First buffer read failed!");
 
-    HASH_Update(hc, reinterpret_cast<const unsigned char*>(buffer), m_nSignatureContentOffset);
+    HASH_Update(hc, reinterpret_cast<const unsigned char*>(buffer), bytesRead);
     delete[] buffer;
 
     buffer = new char[nLastByteRangeNo + 1];
@@ -6265,7 +6242,7 @@ bool PDFWriterImpl::finalizeSignature()
     if (bytesRead != (sal_uInt64) nLastByteRangeNo)
         SAL_WARN("vcl.gdi", "PDF Signing: Second buffer read failed!");
 
-    HASH_Update(hc, reinterpret_cast<const unsigned char*>(buffer), nLastByteRangeNo);
+    HASH_Update(hc, reinterpret_cast<const unsigned char*>(buffer), bytesRead);
     delete[] buffer;
 
     SECItem digest;
@@ -6276,36 +6253,108 @@ bool PDFWriterImpl::finalizeSignature()
 
     const char *pass = OUStringToOString( m_aContext.SignPassword, RTL_TEXTENCODING_UTF8 ).getStr();
 
-    //FIXME: Check if password is passed correctly to SEC_PKCS7CreateSignedData function
-    //TODO: Create PKCS7 object even if the certificate is invalid
-    SEC_PKCS7ContentInfo *ci = SEC_PKCS7CreateSignedData(cert, certUsageEmailSigner, NULL, SEC_OID_SHA1, &digest, (SECKEYGetPasswordKey)::PDFSigningPKCS7PasswordCallback, (void *)pass);
-
-    if (!ci)
+    NSSCMSMessage *cms_msg = NSS_CMSMessage_Create(NULL);
+    if (!cms_msg)
     {
-        SAL_WARN("vcl.gdi", "PDF Signing: PKCS7 Creation failed: " << PORT_GetError());
+        SAL_WARN("vcl.gdi", "PDF signing: can't create new CMS message.");
+        return false;
+    }
+
+    NSSCMSSignedData *cms_sd = NSS_CMSSignedData_Create(cms_msg);
+    if (!cms_sd)
+    {
+        SAL_WARN("vcl.gdi", "PDF signing: can't create CMS SignedData.");
+        return false;
+    }
+
+    NSSCMSContentInfo *cms_cinfo = NSS_CMSMessage_GetContentInfo(cms_msg);
+    if (NSS_CMSContentInfo_SetContent_SignedData(cms_msg, cms_cinfo, cms_sd) != SECSuccess)
+    {
+        SAL_WARN("vcl.gdi", "PDF signing: Can't set CMS content signed data.");
+        return false;
+    }
+
+    cms_cinfo = NSS_CMSSignedData_GetContentInfo(cms_sd);
+    //attach NULL data as detached data
+    if (NSS_CMSContentInfo_SetContent_Data(cms_msg, cms_cinfo, NULL, PR_TRUE) != SECSuccess)
+    {
+        SAL_WARN("vcl.gdi", "PDF signing: Can't set CMS content data.");
+        return false;
+    }
+
+    NSSCMSSignerInfo *cms_signer = NSS_CMSSignerInfo_Create(cms_msg, cert, SEC_OID_SHA1);
+    if (!cms_signer)
+    {
+        SAL_WARN("vcl.gdi", "PDF signing: can't create CMS SignerInfo.");
+        return false;
+    }
+
+    if (NSS_CMSSignerInfo_IncludeCerts(cms_signer, NSSCMSCM_CertChain, certUsageEmailSigner) != SECSuccess)
+    {
+        SAL_WARN("vcl.gdi", "PDF signing: can't include cert chain.");
+        return false;
+    }
+
+    //NSS_CMSSignerInfo_AddSigningTime(cms_signer, PR_Now()); //TODO: Needs PDF 1.6?
+
+    if (NSS_CMSSignedData_AddCertificate(cms_sd, cert) != SECSuccess)
+    {
+        SAL_WARN("vcl.gdi", "PDF signing: can't add signer certificate.");
+        return false;
+    }
+
+    if (NSS_CMSSignedData_AddSignerInfo(cms_sd, cms_signer) != SECSuccess)
+    {
+        SAL_WARN("vcl.gdi", "PDF signing: can't add signer info.");
+        return false;
+    }
+
+    if (NSS_CMSSignedData_SetDigestValue(cms_sd, SEC_OID_SHA1, &digest) != SECSuccess)
+    {
+        SAL_WARN("vcl.gdi", "PDF signing: can't set PDF digest value.");
         return false;
     }
 
     SAL_WARN("vcl.gdi","PKCS7 Object created successfully!");
 
-    //SEC_PKCS7AddSigningTime(ci); //FIXME: Requires PDF 1.6 ?
+    SECItem cms_output;
+    cms_output.data = 0;
+    cms_output.len = 0;
+    PLArenaPool *arena = PORT_NewArena(MAX_SIGNATURE_CONTENT_LENGTH);
+    NSSCMSEncoderContext *cms_ecx;
 
-    // Set file pointer to the m_nSignatureContentOffset, we're ready to overwrite PKCS7 object
-    // Be careful! This is an asynchronous method, so signature may not be ready when the method returns back
-    CHECK_RETURN( (osl_File_E_None == osl_setFilePos( m_aFile, osl_Pos_Absolut, m_nSignatureContentOffset) ) );
-    SECStatus srv = SEC_PKCS7Encode(ci, (SEC_PKCS7EncoderOutputCallback)::PDFSigningPKCS7Callback, (void *)m_aFile, NULL, (SECKEYGetPasswordKey)::PDFSigningPKCS7PasswordCallback, (void *)pass);
+    //FIXME: Check if password is passed correctly to SEC_PKCS7CreateSignedData function
+    cms_ecx = NSS_CMSEncoder_Start(cms_msg, NULL, NULL, &cms_output, arena, (PK11PasswordFunc)::PDFSigningPKCS7PasswordCallback, (void *)pass, NULL, NULL, NULL, NULL);
 
-    if (srv != SECSuccess)
+    if (!cms_ecx)
     {
-        SAL_WARN("vcl.gdi", "PKCS encoding failed!");
+        SAL_WARN("vcl.gdi", "PDF Signing: can't start DER encoder.");
         return false;
     }
+    SAL_WARN("vcl.gdi", "PDF Signing: Started DER encoding.");
+
+    if (NSS_CMSEncoder_Finish(cms_ecx) != SECSuccess)
+    {
+        SAL_WARN("vcl.gdi", "PDF Signing: can't finish DER encoder.");
+        return false;
+    }
+    SAL_WARN("vcl.gdi", "PDF Signing: Finished DER encoding.");
+
+    OStringBuffer cms_hexbuffer;
+
+    for (unsigned int i = 0; i < cms_output.len ; i++)
+        appendHex(cms_output.data[i], cms_hexbuffer);
 
     SAL_WARN("vcl.gdi","PKCS7 object encoded successfully!");
 
-    SEC_PKCS7DestroyContentInfo(ci);
+    // Set file pointer to the m_nSignatureContentOffset, we're ready to overwrite PKCS7 object
+    nWritten = 0;
+    CHECK_RETURN( (osl_File_E_None == osl_setFilePos( m_aFile, osl_Pos_Absolut, m_nSignatureContentOffset) ) );
+    osl_writeFile(m_aFile, cms_hexbuffer.getStr(), cms_hexbuffer.getLength(), &nWritten);
 
-    //CHECK_RETURN( (osl_File_E_None == osl_setFilePos( m_aFile, osl_Pos_Absolut, nOffset ) ) );
+    NSS_CMSMessage_Destroy(cms_msg);
+
+    CHECK_RETURN( (osl_File_E_None == osl_setFilePos( m_aFile, osl_Pos_Absolut, nOffset ) ) );
     return true;
 }
 
