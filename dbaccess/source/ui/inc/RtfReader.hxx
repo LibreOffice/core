@@ -32,7 +32,6 @@ namespace dbaui
     {
         ::std::vector<sal_Int32>    m_vecColor;
 
-        //  void insertValueIntoColumn();
     protected:
         virtual sal_Bool        CreateTable(int nToken);
         virtual void            NextToken( int nToken ); // base class

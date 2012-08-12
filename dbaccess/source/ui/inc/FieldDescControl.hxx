@@ -177,10 +177,8 @@ namespace dbaui
         virtual ~OFieldDescControl();
 
         void                DisplayData(OFieldDescription* pFieldDescr );
-        //  void                DisplayData(const OColumn* pColumn);
 
         void                SaveData( OFieldDescription* pFieldDescr );
-        //  void                SaveData( OColumn* pColumn);
 
         void                SetControlText( sal_uInt16 nControlId, const String& rText );
         String              GetControlText( sal_uInt16 nControlId );
