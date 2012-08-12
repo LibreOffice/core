@@ -748,47 +748,42 @@ void Splitter::DataChanged( const DataChangedEvent& rDCEvt )
 
 void Splitter::Paint( const Rectangle& rPaintRect )
 {
-    if( HasFocus() || mbKbdSplitting )
+    Color oldFillCol = GetFillColor();
+    Color oldLineCol = GetLineColor();
+
+    SetLineColor();
+    SetFillColor( GetSettings().GetStyleSettings().GetShadowColor() );
+    DrawRect( rPaintRect );
+
+    Color aSelectionBorderCol( GetSettings().GetStyleSettings().GetShadowColor() );
+    SetFillColor( aSelectionBorderCol );
+    SetLineColor();
+
+    Polygon aPoly( rPaintRect );
+    PolyPolygon aPolyPoly( aPoly );
+    DrawTransparent( aPolyPoly, 85 );
+
+    SetLineColor( aSelectionBorderCol );
+    SetFillColor();
+
+    if( mbKbdSplitting )
     {
-        Color oldFillCol = GetFillColor();
-        Color oldLineCol = GetLineColor();
+        LineInfo aInfo( LINE_DASH );
+        //aInfo.SetDashLen( 2 );
+        //aInfo.SetDashCount( 1 );
+        aInfo.SetDistance( 1 );
+        aInfo.SetDotLen( 2 );
+        aInfo.SetDotCount( 3 );
 
-        SetLineColor();
-        SetFillColor( GetSettings().GetStyleSettings().GetFaceColor() );
-        DrawRect( rPaintRect );
-
-        Color aSelectionBorderCol( GetSettings().GetStyleSettings().GetActiveColor() );
-        SetFillColor( aSelectionBorderCol );
-        SetLineColor();
-
-        Polygon aPoly( rPaintRect );
-        PolyPolygon aPolyPoly( aPoly );
-        DrawTransparent( aPolyPoly, 85 );
-
-        SetLineColor( aSelectionBorderCol );
-        SetFillColor();
-
-        if( mbKbdSplitting )
-        {
-            LineInfo aInfo( LINE_DASH );
-            //aInfo.SetDashLen( 2 );
-            //aInfo.SetDashCount( 1 );
-            aInfo.SetDistance( 1 );
-            aInfo.SetDotLen( 2 );
-            aInfo.SetDotCount( 1 );
-
-            DrawPolyLine( aPoly, aInfo );
-        }
-        else
-            DrawRect( rPaintRect );
-
-        SetFillColor( oldFillCol);
-        SetLineColor( oldLineCol);
+        DrawPolyLine( aPoly, aInfo );
     }
     else
     {
-        Window::Paint( rPaintRect );
+        DrawRect( rPaintRect );
     }
+
+    SetFillColor( oldFillCol);
+    SetLineColor( oldLineCol);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
