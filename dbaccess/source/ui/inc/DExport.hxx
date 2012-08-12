@@ -130,6 +130,7 @@ namespace dbaui
                                                 const ::com::sun::star::awt::FontDescriptor& _rFont);
 
         virtual ~ODatabaseExport();
+
     public:
         ODatabaseExport(
             const SharedConnection& _rxConnection,
@@ -167,10 +168,6 @@ namespace dbaui
     };
 }
 
-#endif // DBAUI_DATABASEEXPORT_HXX
-
-
-
-
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

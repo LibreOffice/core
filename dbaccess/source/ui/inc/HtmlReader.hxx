@@ -25,12 +25,8 @@
 #include <tools/stream.hxx>
 #include <com/sun/star/awt/FontDescriptor.hpp>
 
-
 namespace dbaui
 {
-    //===============================================================================================
-    // OHTMLReader
-    //===============================================================================================
     class OHTMLReader : public HTMLParser, public ODatabaseExport
     {
         String              m_sCurrent;
@@ -52,6 +48,7 @@ namespace dbaui
         void                setTextEncoding();
         void                fetchOptions();
         virtual ~OHTMLReader();
+
     public:
         OHTMLReader(SvStream& rIn,
                     const SharedConnection& _rxConnection,
@@ -76,8 +73,6 @@ namespace dbaui
 
     SV_DECL_IMPL_REF( OHTMLReader );
 }
-#endif // DBAUI_HTMLREADER_HXX
-
-
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

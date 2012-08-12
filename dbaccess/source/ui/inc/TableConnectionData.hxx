@@ -35,12 +35,9 @@ namespace dbaui
     //  Conn        ---------->*    ConnLine
     //==================================================================
 
-
-    //==================================================================
     /** Contains all connection data which exists between two windows */
     class OTableConnectionData
     {
-
     protected:
         TTableWindowData::value_type m_pReferencingTable;
         TTableWindowData::value_type m_pReferencedTable;
@@ -103,7 +100,6 @@ namespace dbaui
     typedef ::std::vector< ::boost::shared_ptr<OTableConnectionData> >  TTableConnectionData;
 
 }
-#endif // DBAUI_TABLECONNECTIONDATA_HXX
-
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

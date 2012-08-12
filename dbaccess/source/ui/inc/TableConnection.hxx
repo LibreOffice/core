@@ -69,7 +69,6 @@ namespace dbaui
 
         OTableConnection& operator=( const OTableConnection& rConn );
 
-
         void        Select();
         void        Deselect();
         sal_Bool        IsSelected() const { return m_bSelected; }
@@ -101,6 +100,6 @@ namespace dbaui
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible();
     };
 }
-#endif // DBAUI_TABLECONNECTION_HXX
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

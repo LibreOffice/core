@@ -70,7 +70,6 @@ namespace dbaui
         virtual void lookForUiActivities();
     };
 }
-#endif // DBAUI_RELATION_TABLEVIEW_HXX
-
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

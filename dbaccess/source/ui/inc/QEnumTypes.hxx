@@ -61,7 +61,6 @@ namespace dbaui
         INNER_JOIN
     };
 
-    //==================================================================
     enum EControlType
     {
         tpDefault = 0,
@@ -78,7 +77,6 @@ namespace dbaui
         tpAutoIncrementValue
     };
 }
-#endif // DBAUI_ENUMTYPES_HXX
-
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

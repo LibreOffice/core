@@ -25,6 +25,7 @@
 #include "IClipBoardTest.hxx"
 
 class MultiLineEdit;
+
 namespace dbaui
 {
     // Deriving from TabPage is a trick to notice changes
@@ -60,6 +61,6 @@ namespace dbaui
         virtual void paste();
     };
 }
-#endif // DBAUI_TABLEDESIGNHELPBAR_HXX
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

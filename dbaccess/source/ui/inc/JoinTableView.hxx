@@ -35,6 +35,7 @@
 struct AcceptDropEvent;
 struct ExecuteDropEvent;
 class SfxUndoAction;
+
 namespace dbaui
 {
     class OTableConnection;
@@ -55,6 +56,7 @@ namespace dbaui
 
     protected:
         virtual void Resize();
+
     public:
         OScrollWindowHelper( Window* pParent);
         ~OScrollWindowHelper();
@@ -74,8 +76,10 @@ namespace dbaui
                             ,public DropTargetHelper
     {
         friend class OJoinMoveTabWinUndoAct;
+
     public:
         DECLARE_STL_USTRINGACCESS_MAP(OTableWindow*,OTableWindowMap);
+
     private:
         OTableWindowMap     m_aTableMap;
         ::std::vector<OTableConnection*>    m_vTableConnection;
@@ -248,8 +252,6 @@ namespace dbaui
 
         Size getRealOutputSize() const { return m_aOutputSize; }
 
-
-
         virtual void EnsureVisible(const OTableWindow* _pWin);
         virtual void EnsureVisible(const Point& _rPoint,const Size& _rSize);
 
@@ -315,6 +317,6 @@ namespace dbaui
         using Window::Scroll;
     };
 }
-#endif // DBAUI_JOINTABLEVIEW_HXX
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

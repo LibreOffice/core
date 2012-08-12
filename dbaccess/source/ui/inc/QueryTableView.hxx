@@ -25,7 +25,6 @@
 
 namespace dbaui
 {
-
     struct TabWinsChangeNotification
     {
         enum ACTION_TYPE    { AT_ADDED_WIN, AT_REMOVED_WIN };
@@ -35,11 +34,11 @@ namespace dbaui
         TabWinsChangeNotification(ACTION_TYPE at, const String& str) : atActionPerformed(at), strAffectedTable(str) { }
     };
 
-    //========================================================================
     class OQueryTabWinUndoAct;
     class OQueryTableConnection;
     class OQueryTableWindow;
     class OQueryDesignView;
+
     class OQueryTableView : public OJoinTableView
     {
         Link    m_lnkTabWinsChangeHandler;
@@ -56,6 +55,7 @@ namespace dbaui
         virtual void    onNoColumns_throw();
 
         virtual bool supressCrossNaturalJoin(const TTableConnectionData::value_type& _pData) const;
+
     public:
         OQueryTableView(Window* pParent,OQueryDesignView* pView);
         virtual ~OQueryTableView();
@@ -129,10 +129,6 @@ namespace dbaui
         using OJoinTableView::EnsureVisible;
     };
 }
-#endif // DBAUI_QUERYTABLEVIEW_HXX
-
-
-
-
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

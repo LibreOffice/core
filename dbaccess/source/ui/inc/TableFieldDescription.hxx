@@ -34,6 +34,7 @@ namespace comphelper
 }
 
 class Window;
+
 namespace dbaui
 {
     class OTableFieldDesc : public ::salhelper::SimpleReferenceObject
@@ -132,7 +133,6 @@ namespace dbaui
         void Save( ::comphelper::NamedValueCollection& o_rSettings, const bool i_bIncludingCriteria );
     };
 
-    //------------------------------------------------------------------
     inline sal_Bool OTableFieldDesc::IsEmpty()  const
     {
         sal_Bool bEmpty = (m_aTableName.isEmpty()     &&
@@ -143,10 +143,10 @@ namespace dbaui
                           !HasCriteria());
         return bEmpty;
     }
-    //------------------------------------------------------------------
+
     typedef ::rtl::Reference< OTableFieldDesc>      OTableFieldDescRef;
     typedef ::std::vector<OTableFieldDescRef>   OTableFields;
 }
-#endif //
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -25,7 +25,6 @@
 #include <com/sun/star/util/XNumberFormatter.hpp>
 #include "TypeInfo.hxx"
 
-//------------------------------------------------------------------
 // field description columns of a table
 #define FIELD_NAME                      1
 #define FIELD_TYPE                      2
@@ -56,14 +55,13 @@ class Control;
 
 namespace dbaui
 {
-
     class OTableDesignHelpBar;
     class OPropListBoxCtrl;
     class OPropEditCtrl;
     class OPropNumericEditCtrl;
     class OFieldDescription;
     class OPropColumnEditCtrl;
-    //==================================================================
+
     class OFieldDescControl : public TabPage
     {
     private:
@@ -213,7 +211,6 @@ namespace dbaui
         void    implFocusLost(Window* _pWhich);
     };
 }
-#endif // DBAUI_FIELDDESCRIPTIONCONTROL_HXX
-
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -28,7 +28,7 @@
 namespace dbaui
 {
     class OTableDesignView;
-    //==================================================================
+
     class OTableRowView : public ::svt::EditBrowseBox
                         ,public IClipboardTest
     {
@@ -40,6 +40,7 @@ namespace dbaui
 
     private:
         sal_uInt16  m_nCurUndoActId;
+
     protected:
         sal_Bool    m_bCurrentModified;
         sal_Bool    m_bUpdatable;
@@ -86,7 +87,6 @@ namespace dbaui
         virtual void Init();
     };
 }
-#endif // DBAUI_TABLEDESIGNCONTROL_HXX
-
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -40,6 +40,7 @@ namespace dbaui
                                 getTypeSelectionPageFactory();
 
         ~ORTFReader();
+
     public:
         ORTFReader( SvStream& rIn,
                     const SharedConnection& _rxConnection,
@@ -65,7 +66,6 @@ namespace dbaui
 
     SV_DECL_IMPL_REF( ORTFReader );
 }
-#endif // DBAUI_RTFREADER_HXX
-
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

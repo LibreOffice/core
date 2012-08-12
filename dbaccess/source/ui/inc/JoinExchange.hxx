@@ -28,10 +28,7 @@
 
 namespace dbaui
 {
-    //==================================================================
-    // OJoinExchObj :
-    // Additional data to create Joins in the JoinShell
-    //==================================================================
+    // OJoinExchObj: Additional data to create Joins in the JoinShell
 
     typedef ::cppu::ImplHelper1< ::com::sun::star::lang::XUnoTunnel > OJoinExchObj_Base;
     class OJoinExchObj
@@ -46,6 +43,7 @@ namespace dbaui
         IDragTransferableListener*  m_pDragListener;
 
         virtual ~OJoinExchObj();
+
     public:
         OJoinExchObj(const OJoinExchangeData& jxdSource,sal_Bool _bFirstEntry=sal_False);
 
@@ -74,7 +72,6 @@ namespace dbaui
         using TransferableHelper::StartDrag;
     };
 }
-#endif // DBAUI_JOINEXCHANGE_HXX
-
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
