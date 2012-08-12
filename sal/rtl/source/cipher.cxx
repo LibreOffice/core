@@ -722,7 +722,6 @@ static rtlCipherError __rtl_cipherBF_init (
         }
     }
 
-    D = DL = DR = 0;
     return rtl_Cipher_E_None;
 }
 
@@ -865,7 +864,6 @@ static void __rtl_cipherBF_updateCBC (
         ctx->m_iv.m_long[1] = IVR;
 
         RTL_CIPHER_HTONL64(DL, DR, pBuffer, nLength);
-        IVL = IVR = 0;
     }
     DL = DR = 0;
 }
@@ -944,7 +942,6 @@ static void __rtl_cipherBF_encode (
     *xl = XL;
     *xr = XR;
 
-    t = XL = XR = 0;
 }
 
 /*
@@ -979,7 +976,6 @@ static void __rtl_cipherBF_decode (
     *xl = XL;
     *xr = XR;
 
-    t = XL = XR = 0;
 }
 
 /*
