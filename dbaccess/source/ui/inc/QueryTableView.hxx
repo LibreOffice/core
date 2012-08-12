@@ -67,7 +67,7 @@ namespace dbaui
 
         // AddTabWin, setting an alias
         void    AddTabWin(const ::rtl::OUString& strDatabase, const ::rtl::OUString& strTableName, const ::rtl::OUString& strAlias, sal_Bool bNewTable = sal_False);
-        // TabWin suchen
+        /// search TabWin
         OQueryTableWindow*  FindTable(const String& rAliasName);
         sal_Bool            FindTableFromField(const String& rFieldName, OTableFieldDescRef& rInfo, sal_uInt16& rCnt);
 
@@ -96,7 +96,7 @@ namespace dbaui
         // how many tables with a certain alias do I already have?
         sal_Int32   CountTableAlias(const String& rName, sal_Int32& rMax);
 
-        // ein Feld einfuegen (wird einfach an das Elter weitergereicht
+        /// insert field (simply passed to parents)
         void InsertField(const OTableFieldDescRef& rInfo);
 
         // rebuild everything (TabWins, Connections)

@@ -164,7 +164,8 @@ namespace dbaui
         OTableWindow*               GetTabWindow( const String& rName );
 
         OTableConnection*           GetSelectedConn() { return m_pSelectedConn; }
-        void                        DeselectConn(OTableConnection* pConn);  // NULL ist ausdruecklich zugelassen, dann passiert nichts
+        /** @note NULL is explicitly allowed (then no-op) */
+        void                        DeselectConn(OTableConnection* pConn);
         void                        SelectConn(OTableConnection* pConn);
 
         OTableWindowMap*            GetTabWinMap() { return &m_aTableMap; }
