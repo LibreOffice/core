@@ -2049,19 +2049,6 @@ int _cdecl main( int argc, char * argv[] )
                     sal::static_int_cast< unsigned long >(nError));
         }
     }
-    else
-    {
-        if ( options.unoTypeCheck() )
-        {
-            fprintf(stdout, "%s: registries are compatible!\n",
-                    options.getProgramName().c_str());
-        }
-        else
-        {
-            fprintf(stdout, "%s: registries are equal!\n",
-                    options.getProgramName().c_str());
-        }
-    }
 
     key1.releaseKey();
     key2.releaseKey();
