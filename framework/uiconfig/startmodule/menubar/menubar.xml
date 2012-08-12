@@ -14,7 +14,6 @@
             <menu:menuitem menu:id=".uno:SaveAll"/>
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:SendMail"/>
-            <menu:menuitem menu:id=".uno:TemplateManager"/>
             <menu:menu menu:id=".uno:TemplateMenu">
                 <menu:menupopup>
                     <menu:menuitem menu:id=".uno:Organizer"/>
