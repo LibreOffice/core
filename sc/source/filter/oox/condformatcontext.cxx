@@ -75,11 +75,6 @@ void ColorScaleContext::onStartElement( const AttributeList& rAttribs )
     }
 }
 
-void ColorScaleContext::onCharacters( const OUString&  )
-{
-
-}
-
 // ============================================================================
 
 DataBarContext::DataBarContext( CondFormatContext& rFragment, CondFormatRuleRef xRule ) :

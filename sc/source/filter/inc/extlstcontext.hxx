@@ -100,8 +100,6 @@ public:
 
 protected:
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
-    virtual void        onStartElement( const AttributeList& rAttribs );
-    virtual void        onCharacters( const ::rtl::OUString& rChars );
 };
 
 } //namespace xls

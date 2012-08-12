@@ -238,14 +238,6 @@ ContextHandlerRef ExtLstGlobalContext::onCreateContext( sal_Int32 nElement, cons
     return this;
 }
 
-void ExtLstGlobalContext::onStartElement( const AttributeList& )
-{
-}
-
-void ExtLstGlobalContext::onCharacters( const rtl::OUString&)
-{
-}
-
 } //namespace oox
 } //namespace xls
 
