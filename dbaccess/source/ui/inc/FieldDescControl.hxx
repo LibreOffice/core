@@ -120,7 +120,7 @@ namespace dbaui
         DECL_LINK( FormatClickHdl, Button * );
         DECL_LINK( ChangeHdl, ListBox * );
 
-            // used by ActivatePropertyField
+        // used by ActivatePropertyField
         DECL_LINK( OnControlFocusLost, Control* );
         DECL_LINK( OnControlFocusGot, Control* );
 

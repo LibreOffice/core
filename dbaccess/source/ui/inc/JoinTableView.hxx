@@ -45,7 +45,8 @@ namespace dbaui
     class OTableWindowData;
     class OJoinDesignViewAccess;
 
-    // this class conatins only the scrollbars to avoid that the tablewindows clip the scrollbars
+    // this class conatins only the scrollbars to avoid that
+    // the tablewindows clip the scrollbars
     class OJoinTableView;
     class OScrollWindowHelper : public Window
     {
