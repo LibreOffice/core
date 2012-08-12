@@ -40,7 +40,7 @@ namespace dbaui
         virtual void        NextToken( int nToken ); // base class
         virtual sal_Bool    CreateTable(int nToken);
         virtual TypeSelectionPageFactory
-                             getTypeSelectionPageFactory();
+                            getTypeSelectionPageFactory();
 
         void                TableDataOn(SvxCellHorJustify& eVal);
         void                TableFontOn(::com::sun::star::awt::FontDescriptor& _rFont,sal_Int32 &_rTextColor);

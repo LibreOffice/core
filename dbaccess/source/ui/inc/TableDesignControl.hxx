@@ -29,8 +29,7 @@ namespace dbaui
 {
     class OTableDesignView;
 
-    class OTableRowView : public ::svt::EditBrowseBox
-                        ,public IClipboardTest
+    class OTableRowView : public ::svt::EditBrowseBox, public IClipboardTest
     {
         friend class OTableDesignUndoAct;
 

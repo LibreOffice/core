@@ -31,9 +31,7 @@ namespace dbaui
     // OJoinExchObj: Additional data to create Joins in the JoinShell
 
     typedef ::cppu::ImplHelper1< ::com::sun::star::lang::XUnoTunnel > OJoinExchObj_Base;
-    class OJoinExchObj
-                    :public TransferableHelper
-                    ,public OJoinExchObj_Base
+    class OJoinExchObj : public TransferableHelper, public OJoinExchObj_Base
     {
         static String           m_sJoinFormat;
         sal_Bool                m_bFirstEntry;

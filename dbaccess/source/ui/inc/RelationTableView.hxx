@@ -27,9 +27,10 @@
 namespace dbaui
 {
     class ORelationDesignView;
-    class ORelationTableView :  public ::cppu::BaseMutex
-                            ,   public OJoinTableView
-                            ,   public ::comphelper::OContainerListener
+
+    class ORelationTableView : public ::cppu::BaseMutex,
+                               public OJoinTableView,
+                               public ::comphelper::OContainerListener
     {
         OTableConnection*                m_pExistingConnection;   ///< is set when a connection was draged on an existing connection
         TTableConnectionData::value_type m_pCurrentlyTabConnData; ///< set when we creating a connection with more than one keycolumn

@@ -135,11 +135,11 @@ namespace dbaui
 
     inline sal_Bool OTableFieldDesc::IsEmpty()  const
     {
-        sal_Bool bEmpty = (m_aTableName.isEmpty()     &&
-                           m_aAliasName.isEmpty()       &&
-                           m_aFieldName.isEmpty()       &&
-                           m_aFieldAlias.isEmpty()      &&
-                           m_aFunctionName.isEmpty()    &&
+        sal_Bool bEmpty = (m_aTableName.isEmpty()    &&
+                           m_aAliasName.isEmpty()    &&
+                           m_aFieldName.isEmpty()    &&
+                           m_aFieldAlias.isEmpty()   &&
+                           m_aFunctionName.isEmpty() &&
                           !HasCriteria());
         return bEmpty;
     }

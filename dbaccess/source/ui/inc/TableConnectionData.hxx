@@ -53,7 +53,9 @@ namespace dbaui
         OTableConnectionData& operator=( const OTableConnectionData& rConnData );
     public:
         OTableConnectionData();
-        OTableConnectionData(const TTableWindowData::value_type& _pReferencingTable,const TTableWindowData::value_type& _pReferencedTable, const String& rConnName = String() );
+        OTableConnectionData( const TTableWindowData::value_type& _pReferencingTable,
+                              const TTableWindowData::value_type& _pReferencedTable,
+                              const String& rConnName = String() );
         OTableConnectionData( const OTableConnectionData& rConnData );
         virtual ~OTableConnectionData();
 

@@ -104,18 +104,18 @@ namespace dbaui
         bool                m_bAppendFirstLine;
 
 
-        virtual sal_Bool        CreateTable(int nToken)         = 0;
+        virtual sal_Bool    CreateTable(int nToken)         = 0;
         virtual TypeSelectionPageFactory
-                                getTypeSelectionPageFactory()   = 0;
+                            getTypeSelectionPageFactory()   = 0;
 
-        void                    CreateDefaultColumn(const ::rtl::OUString& _rColumnName);
-        sal_Int16               CheckString(const String& aToken, sal_Int16 _nOldNumberFormat);
-        void                    adjustFormat();
-        void                    eraseTokens();
-        void                    insertValueIntoColumn();
-        sal_Bool                createRowSet();
-        void                    showErrorDialog(const ::com::sun::star::sdbc::SQLException& e);
-        void                    ensureFormatter();
+        void                CreateDefaultColumn(const ::rtl::OUString& _rColumnName);
+        sal_Int16           CheckString(const String& aToken, sal_Int16 _nOldNumberFormat);
+        void                adjustFormat();
+        void                eraseTokens();
+        void                insertValueIntoColumn();
+        sal_Bool            createRowSet();
+        void                showErrorDialog(const ::com::sun::star::sdbc::SQLException& e);
+        void                ensureFormatter();
 
         /** executeWizard calls a wizard to create/append data
 
@@ -125,9 +125,9 @@ namespace dbaui
 
             @return true when an error occurs
         */
-        sal_Bool                executeWizard(  const ::rtl::OUString& _sTableName,
-                                                const ::com::sun::star::uno::Any& _aTextColor,
-                                                const ::com::sun::star::awt::FontDescriptor& _rFont);
+        sal_Bool            executeWizard( const ::rtl::OUString& _sTableName,
+                                           const ::com::sun::star::uno::Any& _aTextColor,
+                                           const ::com::sun::star::awt::FontDescriptor& _rFont);
 
         virtual ~ODatabaseExport();
 

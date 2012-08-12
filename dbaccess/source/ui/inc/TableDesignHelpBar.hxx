@@ -30,13 +30,12 @@ namespace dbaui
 {
     // Deriving from TabPage is a trick to notice changes
     // of the system colors
-    class OTableDesignHelpBar : public TabPage
-                                ,public IClipboardTest
+    class OTableDesignHelpBar : public TabPage, public IClipboardTest
     {
     private:
         String          m_sHelpText;
         MultiLineEdit*  m_pTextWin;
-        sal_uInt16          m_nDummy;
+        sal_uInt16      m_nDummy;
 
     protected:
         virtual void Resize();

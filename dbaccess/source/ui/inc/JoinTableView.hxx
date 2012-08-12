@@ -72,9 +72,9 @@ namespace dbaui
     };
 
 
-    class OJoinTableView :  public Window
-                            ,public IDragTransferableListener
-                            ,public DropTargetHelper
+    class OJoinTableView : public Window,
+                           public IDragTransferableListener,
+                           public DropTargetHelper
     {
         friend class OJoinMoveTabWinUndoAct;
 
