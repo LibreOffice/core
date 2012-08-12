@@ -58,9 +58,9 @@ namespace dbaui
                     sal_Bool _bAutoIncrementEnabled);
 
         virtual SvParserState   CallParser();// base class
+        /// @note Only recovers correct data if 2. CTOR has been used.
+        ///       Otherwise, the SbaColumnList will be returned without changes
         virtual void            release();
-        // Only recovers correct data if 2. CTOR has been used.
-        // Otherwise, the SbaColumnList will be returned without changes.
     };
 
     SV_DECL_IMPL_REF( ORTFReader );

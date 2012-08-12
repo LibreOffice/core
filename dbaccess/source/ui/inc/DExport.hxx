@@ -60,46 +60,46 @@ namespace dbaui
         typedef ::std::vector< ::std::pair<sal_Int32,sal_Int32> >   TPositions;
 
     protected:
-        TPositions                      m_vColumns;     // columns to be used
-        ::std::vector<sal_Int32>        m_vColumnTypes; // ColumnTypes for faster access
+        TPositions                      m_vColumns;     ///< columns to be used
+        ::std::vector<sal_Int32>        m_vColumnTypes; ///< ColumnTypes for faster access
         ::std::vector<sal_Int32>        m_vColumnSize;
         ::std::vector<sal_Int16>        m_vNumberFormat;
         ::com::sun::star::lang::Locale  m_aLocale;
 
-        TColumns                        m_aDestColumns; // container for new created columns
+        TColumns                        m_aDestColumns; ///< container for new created columns
         TColumnVector                   m_vDestVector;
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >       m_xTable;       // dest table
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>     m_xTables;      // container
-        SharedConnection                                                                m_xConnection;  // dest conn
+        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >       m_xTable;       ///< dest table
+        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>     m_xTables;      ///< container
+        SharedConnection                                                                m_xConnection;  ///< dest conn
 
         ::boost::shared_ptr<IUpdateHelper>                                              m_pUpdateHelper;
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet >          m_xResultSet;   //
-        ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >    m_xFormatter;   // a number formatter working with the connection's NumberFormatsSupplier
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet >          m_xResultSet;
+        ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >    m_xFormatter;   ///< a number formatter working with the connection's NumberFormatsSupplier
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory> m_xFactory;
         ::com::sun::star::util::Date                                                    m_aNullDate;
 
         SvNumberFormatter*  m_pFormatter;
         SvStream&           m_rInputStream;
-        //for save the selected tablename
+        /// for saving the selected tablename
         ::rtl::OUString     m_sDefaultTableName;
 
-        String              m_sTextToken;       /// cell content
-        String              m_sNumToken;        /// SDNUM value
-        String              m_sValToken;        /// SDVAL value
-        TOTypeInfoSP        m_pTypeInfo;    // contains the default type
+        String              m_sTextToken;   ///< cell content
+        String              m_sNumToken;    ///< SDNUM value
+        String              m_sValToken;    ///< SDVAL value
+        TOTypeInfoSP        m_pTypeInfo;    ///< contains the default type
         const TColumnVector* m_pColumnList;
         const OTypeInfoMap* m_pInfoMap;
-        sal_Int32           m_nColumnPos;       // current column position
-        sal_Int32           m_nRows;        // number of rows to be searched
-        sal_Int32           m_nRowCount;    // current count of rows
-        rtl_TextEncoding    m_nDefToken;        // language
-        sal_Bool            m_bError;           // error and termination code
-        sal_Bool            m_bInTbl;           // true, if parser is in RTF table
-        sal_Bool            m_bHead;        // true, if the header hasn't been read yet
-        sal_Bool            m_bDontAskAgain;// if there is an error when pasting, don't show it again
-        sal_Bool            m_bIsAutoIncrement; // if PKey is set by user
-        sal_Bool            m_bFoundTable;      // set to true when a table was found
+        sal_Int32           m_nColumnPos;   ///< current column position
+        sal_Int32           m_nRows;        ///< number of rows to be searched
+        sal_Int32           m_nRowCount;    ///< current count of rows
+        rtl_TextEncoding    m_nDefToken;    ///< language
+        sal_Bool            m_bError;       ///< error and termination code
+        sal_Bool            m_bInTbl;       ///< true, if parser is in RTF table
+        sal_Bool            m_bHead;        ///< true, if the header hasn't been read yet
+        sal_Bool            m_bDontAskAgain;///< if there is an error when pasting, don't show it again
+        sal_Bool            m_bIsAutoIncrement; ///< if PKey is set by user
+        sal_Bool            m_bFoundTable;  ///< set to true when a table was found
         sal_Bool            m_bCheckOnly;
         bool                m_bAppendFirstLine;
 
@@ -118,6 +118,7 @@ namespace dbaui
         void                    ensureFormatter();
 
         /** executeWizard calls a wizard to create/append data
+
             @param  _sTableName the tablename
             @param  _aTextColor the text color of the new created table
             @param  _rFont      the font of the new table

@@ -35,8 +35,9 @@ namespace dbaui
         friend class OTableDesignUndoAct;
 
     protected:
-        long    m_nDataPos;             // currently needed row
-        long    m_nCurrentPos;          // current position of selected column
+        long    m_nDataPos;    ///< currently needed row
+        long    m_nCurrentPos; ///< current position of selected column
+
     private:
         sal_uInt16  m_nCurUndoActId;
     protected:

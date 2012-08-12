@@ -31,8 +31,8 @@ namespace dbaui
                             ,   public OJoinTableView
                             ,   public ::comphelper::OContainerListener
     {
-        OTableConnection*                m_pExistingConnection; // is set when a connection was draged on an existing connection
-        TTableConnectionData::value_type m_pCurrentlyTabConnData; // set when we creating a connection with more than one keycolumn
+        OTableConnection*                m_pExistingConnection;   ///< is set when a connection was draged on an existing connection
+        TTableConnectionData::value_type m_pCurrentlyTabConnData; ///< set when we creating a connection with more than one keycolumn
         ::rtl::Reference< comphelper::OContainerListenerAdapter>
                                          m_pContainerListener;
         bool                             m_bInRemove;
@@ -42,8 +42,8 @@ namespace dbaui
 
         virtual OTableWindow* createWindow(const TTableWindowData::value_type& _pData);
 
-        /** determines whether the classes Init method should accept a query name, or only table names
-        */
+        /** determines whether the classes Init method should accept a query
+            name, or only table names */
         virtual bool    allowQueries() const;
 
         // OContainerListener
@@ -61,9 +61,10 @@ namespace dbaui
 
         virtual void ReSync();
 
+        /// Creates a dialogue for a completely new relation.
         void AddNewRelation();
-            // Creates a dialogue for a completely new relation.
-        // used by AddTabDlg to check if tables can be added
+
+        /// used by AddTabDlg to check if tables can be added
         virtual sal_Bool IsAddAllowed();
 
         virtual void lookForUiActivities();

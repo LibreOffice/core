@@ -47,8 +47,7 @@ namespace dbaui
         sal_Bool                            m_bSelected;
 
         void Init();
-        /** clearLineData loops through the vector and deletes all lines
-        */
+        /** loops through the vector and deletes all lines */
         void clearLineData();
 
     protected:
@@ -57,11 +56,15 @@ namespace dbaui
     public:
         OTableConnection( OJoinTableView* pContainer, const TTableConnectionData::value_type& pTabConnData );
         OTableConnection( const OTableConnection& rConn );
-        // IMPORTANT: Normally a pointer to OTableConnectionData is given but
-        // here, however, one has to create an instance (with
-        // OTableConnectionDate::NewInstance) which is never deleted (same like
-        // in other cases). Thus, the caller is responsible to check and save
-        // the data for deleting it eventually.
+        /** destructor
+
+            @attention Normally a pointer to OTableConnectionData is given but
+                       here, however, one has to create an instance (with
+                       OTableConnectionDate::NewInstance) which is never deleted
+                       (same like in other cases). Thus, the caller is
+                       responsible to check and save the data for deleting it
+                       eventually.
+         */
         virtual ~OTableConnection();
 
         OTableConnection& operator=( const OTableConnection& rConn );
@@ -79,8 +82,8 @@ namespace dbaui
 
         bool RecalcLines();
         /** isTableConnection
-            @param  _pTable the table where we should check if we belongs to it
 
+            @param  _pTable the table where we should check if we belongs to it
             @return true when the source or the destination window are equal
         */
         bool isTableConnection(const OTableWindow* _pTable)

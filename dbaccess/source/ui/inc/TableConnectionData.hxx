@@ -37,9 +37,7 @@ namespace dbaui
 
 
     //==================================================================
-    /*
-        the class OTableConnectionData contains all connection data which exists between    two windows
-    **/
+    /** Contains all connection data which exists between two windows */
     class OTableConnectionData
     {
 
@@ -62,23 +60,27 @@ namespace dbaui
         OTableConnectionData( const OTableConnectionData& rConnData );
         virtual ~OTableConnectionData();
 
-        // initialise from a source (more comfortable than a virtual assignment operator)
+        /// initialise from a source (more comfortable than a virtual assignment operator)
         virtual void CopyFrom(const OTableConnectionData& rSource);
 
-        // deliver a new instance of my own type (does NOT have to be initialised)
+        /** deliver a new instance of my own type
+
+            derived classes have to deliver an instance of their own type
+
+            @note does NOT have to be initialised
+         */
         virtual OTableConnectionData* NewInstance() const;
-            // classes derived from OTableConnectionData correspondingly
-            // have to deliver an instance of their own type
 
         sal_Bool SetConnLine( sal_uInt16 nIndex, const String& rSourceFieldName, const String& rDestFieldName );
         sal_Bool AppendConnLine( const ::rtl::OUString& rSourceFieldName, const ::rtl::OUString& rDestFieldName );
         void ResetConnLines( sal_Bool bUseDefaults = sal_True );
 
-        /** normalizeLines moves the empty lines to the back
+        /** moves the empty lines to the back
+
+            Deletes list of ConnLines; if bUseDefaults == true
+            MAX_CONN_COUNT new dummy lines will be inserted.
         */
         void normalizeLines();
-            // deletes list of ConnLines, if bUseDefaults == sal_True
-            // MAX_CONN_COUNT new dummy lines will be inserted
 
         OConnectionLineDataVec* GetConnLineDataList(){ return &m_vConnLineData; }
 

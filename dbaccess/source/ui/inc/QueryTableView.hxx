@@ -50,9 +50,9 @@ namespace dbaui
 
         virtual OTableWindow* createWindow(const TTableWindowData::value_type& _pData);
 
-        /** called when init fails at the tablewindowdata because the m_xTable object could not provide columns, but no
-            exception was thrown. Expected to throw.
-        */
+        /** called when init fails at the tablewindowdata because the m_xTable
+            object could not provide columns, but no exception was thrown.
+            Expected to throw. */
         virtual void    onNoColumns_throw();
 
         virtual bool supressCrossNaturalJoin(const TTableConnectionData::value_type& _pData) const;
@@ -60,60 +60,61 @@ namespace dbaui
         OQueryTableView(Window* pParent,OQueryDesignView* pView);
         virtual ~OQueryTableView();
 
-        // base class overwritten: create and delete windows
-        // (not really delete, as it becomes an UNDO action)
+        /// base class overwritten: create and delete windows
+        /// (not really delete, as it becomes an UndoAction)
         virtual void AddTabWin( const ::rtl::OUString& _rTableName, const ::rtl::OUString& _rAliasName, sal_Bool bNewTable = sal_False );
         virtual void RemoveTabWin(OTableWindow* pTabWin);
 
-        // AddTabWin, setting an alias
+        /// AddTabWin, setting an alias
         void    AddTabWin(const ::rtl::OUString& strDatabase, const ::rtl::OUString& strTableName, const ::rtl::OUString& strAlias, sal_Bool bNewTable = sal_False);
         /// search TabWin
         OQueryTableWindow*  FindTable(const String& rAliasName);
         sal_Bool            FindTableFromField(const String& rFieldName, OTableFieldDescRef& rInfo, sal_uInt16& rCnt);
 
-        // base class overwritten: create and delete Connections
+        /// base class overwritten: create and delete Connections
         virtual void AddConnection(const OJoinExchangeData& jxdSource, const OJoinExchangeData& jxdDest);
 
         virtual bool RemoveConnection( OTableConnection* _pConn ,sal_Bool _bDelete);
 
         // transfer of connections from and to UndoAction
-        void GetConnection(OQueryTableConnection* pConn);
-            // Inserting a connection into the structure
-        void DropConnection(OQueryTableConnection* pConn);
-            // Removing a connection from the structure
 
-            // results in complete reset of request form, as
-            // all windows are hidden, as are all Connections to these windows
-            // and all request columns based on those tables
+        /// Inserting a Connection the structure
+        void GetConnection(OQueryTableConnection* pConn);
+        /** Removing a Connection from the structure
+
+            This results effectively in complete reset of request form, as all
+            windows are hidden, as are all Connections to these windows and all
+            request columns based on those tables */
+        void DropConnection(OQueryTableConnection* pConn);
 
         // show and hide TabWin (NOT create or delete)
         sal_Bool    ShowTabWin(OQueryTableWindow* pTabWin, OQueryTabWinUndoAct* pUndoAction,sal_Bool _bAppend);
         void    HideTabWin(OQueryTableWindow* pTabWin, OQueryTabWinUndoAct* pUndoAction);
 
-        // ensure visibility of TabWins (+ and invalidate connections)
+        /// ensure visibility of TabWins (+ and invalidate connections)
         virtual void EnsureVisible(const OTableWindow* _pWin);
 
-        // how many tables with a certain alias do I already have?
+        /// how many tables with a certain alias do I already have?
         sal_Int32   CountTableAlias(const String& rName, sal_Int32& rMax);
 
         /// insert field (simply passed to parents)
         void InsertField(const OTableFieldDescRef& rInfo);
 
-        // rebuild everything (TabWins, Connections)
-        // (PRECONDITION: ClearAll was called previously)
+        /// rebuild everything (TabWins, Connections)
+        /// (PRECONDITION: ClearAll was called previously)
         virtual void ReSync();
 
-        // delete everything hard (TabWins, Connections), without any notifications
+        /// delete everything hard (TabWins, Connections), without any notifications
         virtual void ClearAll();
 
         // used by AddTabDlg to see if tables can still be added
         //virtual sal_Bool IsAddAllowed();
 
-        // announce new Connection and insert it, if not existant yet
+        /// announce new Connection and insert it, if not existant yet
         void NotifyTabConnection(const OQueryTableConnection& rNewConn, sal_Bool _bCreateUndoAction = sal_True);
 
+        /// @note the Handler receives a pointer to a TabWinsChangeNotification struct
         Link    SetTabWinsChangeHandler(const Link& lnk) { Link lnkRet = m_lnkTabWinsChangeHandler; m_lnkTabWinsChangeHandler = lnk; return lnkRet; }
-            // the Handler receives a pointer to a TabWinsChangeNotification struct
 
         sal_Bool ExistsAVisitedConn(const OQueryTableWindow* pFrom) const;
 
@@ -121,8 +122,7 @@ namespace dbaui
                                             ,const ::rtl::OUString& _sTableName
                                             ,const ::rtl::OUString& _rWinName);
 
-        /** createNewConnection opens the join dialog and allows to create a new join connection
-        */
+        /** opens the join dialog and allows to create a new join connection */
         void createNewConnection();
 
     private:

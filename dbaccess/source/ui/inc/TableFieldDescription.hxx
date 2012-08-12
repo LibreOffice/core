@@ -43,10 +43,10 @@ namespace dbaui
                                     m_aCriteria;
 
         ::rtl::OUString             m_aTableName;
-        ::rtl::OUString             m_aAliasName;       // table range
-        ::rtl::OUString             m_aFieldName;       // column
-        ::rtl::OUString             m_aFieldAlias;  // column alias
-        ::rtl::OUString             m_aFunctionName;    // contains the function name (only if m_eFunctionType != FKT_NONE)
+        ::rtl::OUString             m_aAliasName;   ///< table range
+        ::rtl::OUString             m_aFieldName;   ///< column
+        ::rtl::OUString             m_aFieldAlias;  ///< column alias
+        ::rtl::OUString             m_aFunctionName;///< contains the function name (only if m_eFunctionType != FKT_NONE)
 
         Window*                     m_pTabWindow;
 

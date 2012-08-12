@@ -36,8 +36,8 @@ namespace dbaui
         String              m_sCurrent;
         sal_Int32           m_nTableCount;
         sal_Int16           m_nWidth;
-        sal_Int16           m_nColumnWidth;     // maximum column width
-        sal_Bool            m_bMetaOptions;     // true when we scanned the meta information
+        sal_Int16           m_nColumnWidth; ///< maximum column width
+        sal_Bool            m_bMetaOptions; ///< true when we scanned the meta information
         sal_Bool            m_bSDNum;
 
     protected:
@@ -71,7 +71,7 @@ namespace dbaui
 
         virtual     SvParserState CallParser();// base class
         virtual     void          release();
-        // recovers only valid data if 1. CTOR has been used
+        ///< @attention recovers only valid data if 1. CTOR has been used
     };
 
     SV_DECL_IMPL_REF( OHTMLReader );
