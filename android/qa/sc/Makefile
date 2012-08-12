@@ -72,8 +72,6 @@ copy-stuff:
 		  frmlo \
 		  gcc3_uno \
 		  i18nisolang1gcc3 \
-		  i18npool.uno \
-		  i18nutilgcc3 \
 		  icudatalo \
 		  icui18nlo \
 		  iculelo \
@@ -90,7 +88,6 @@ copy-stuff:
 		  ooxlo \
 		  reflection.uno \
 		  reg \
-		  saxlo \
 		  sclo \
 		  scfiltlo \
 		  stocservices.uno \
@@ -106,7 +103,6 @@ copy-stuff:
 		  unoexceptionprotector \
 		  unotest \
 		  unoxmllo \
-		  utllo \
 		  vbahelperlo \
 		  xml2 \
 		  xmlreader \

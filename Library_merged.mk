@@ -34,19 +34,17 @@ $(eval $(call gb_Library_use_libraries,merged,\
 	cppu \
 	cppuhelper \
 	i18nisolang1 \
-    i18nutil \
     jvmfwk \
 	sal \
 	salhelper \
-	sax \
 	tl \
 	ucbhelper \
-	utl \
 	xmlreader \
 	$(gb_STDLIBS) \
 ))
 
 $(eval $(call gb_Library_use_externals,merged,\
+	icui18n \
 	icule \
 	icuuc \
 	jpeg \
@@ -118,6 +116,7 @@ $(eval $(call gb_Library_use_externals,merged,\
 	carbon \
 	cocoa \
 	corefoundation \
+	coreservices \
 	quicktime \
 ))
 endif
@@ -161,6 +160,13 @@ ifeq ($(ENABLE_TELEPATHY),TRUE)
 $(eval $(call gb_Library_use_externals,merged,\
 	gtk \
 	telepathy \
+))
+endif
+
+ifeq ($(ENABLE_LIBLANGTAG),YES)
+$(eval $(call gb_Library_use_externals,merged,\
+	glib \
+	liblangtag \
 ))
 endif
 

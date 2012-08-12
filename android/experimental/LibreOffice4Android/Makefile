@@ -42,8 +42,6 @@ copy-stuff:
 		   hwplo \
 		   hyphenlo \
 		   i18nisolang1gcc3 \
-		   i18npool.uno \
-		   i18nutilgcc3 \
 		   icudatalo \
 		   icui18nlo \
 		   iculelo \
@@ -57,7 +55,6 @@ copy-stuff:
 		   libotouchlo \
 		   lnthlo \
 		   lo-bootstrap \
-		   localebe1.uno \
 		   localedata_en \
 		   localedata_es \
 		   localedata_euro \
@@ -69,7 +66,6 @@ copy-stuff:
 		   ooxlo \
 		   reflection.uno \
 		   reg \
-		   saxlo \
 		   sclo \
 		   sclo \
 		   scdlo \
@@ -96,7 +92,6 @@ copy-stuff:
 		   uno_cppuhelpergcc3 \
 		   unordflo \
 		   unoxmllo \
-		   utllo \
 		   vbahelperlo \
 		   vbaswobj.uno \
 		   wpftdrawlo \

@@ -66,12 +66,12 @@ copy-stuff:
 		  comphelpgcc3 \
 		  gcc3_uno \
 		  i18nisolang1gcc3 \
-		  i18nutilgcc3 \
 		  icudatalo \
 		  icui18nlo \
 		  icuuclo \
 		  localedata_en \
 		  localedata_others \
+		  mergedlo \
 		  reg \
 		  store \
 		  ucbhelper4gcc3 \
@@ -82,7 +82,7 @@ copy-stuff:
 		  xml2 \
 		  xmlreader \
 		  bootstrap.uno \
-		  i18npool.uno); do \
+		  ); do \
 	    $(call COPY,$(OUTDIR)/lib/lib$${F}.so); \
 	done
 #

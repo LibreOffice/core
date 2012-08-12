@@ -103,8 +103,6 @@ copy-stuff: buildrcs
 		  gcc3_uno \
 		  hyphenlo \
 		  i18nisolang1gcc3 \
-		  i18npool.uno \
-		  i18nutilgcc3 \
 		  icudatalo \
 		  icui18nlo \
 		  iculelo \
@@ -114,7 +112,6 @@ copy-stuff: buildrcs
 		  libotouchlo \
 		  introspection.uno \
 		  lnthlo \
-		  localebe1.uno \
 		  localedata_en \
 		  localedata_es \
 		  localedata_euro \
@@ -124,7 +121,6 @@ copy-stuff: buildrcs
 		  ooxlo \
 		  reflection.uno \
 		  reg \
-		  saxlo \
 		  spelllo \
 		  stocservices.uno \
 		  store \
@@ -138,7 +134,6 @@ copy-stuff: buildrcs
 		  unordflo \
 		  unotest \
 		  unoxmllo \
-		  utllo \
 		  vbahelperlo \
 		  xml2 \
 		  xmlreader \

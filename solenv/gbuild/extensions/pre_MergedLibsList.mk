@@ -34,6 +34,7 @@ gb_MERGEDLIBS := \
 	configmgr \
 	cppcanvas \
 	deploymentmisc \
+	desktopbe1 \
 	drawinglayer \
 	editeng \
 	filterconfig \
@@ -41,8 +42,12 @@ gb_MERGEDLIBS := \
 	fwe \
 	fwi \
 	fwk \
+	i18npool \
+	i18nutil \
 	lng \
+	localebe1 \
 	package2 \
+	sax \
 	sb \
 	sfx \
 	sofficeapp \
@@ -55,6 +60,7 @@ gb_MERGEDLIBS := \
 	tk \
 	ucb1 \
 	ucpfile1 \
+	utl \
 	uui \
 	vcl \
 	xmlscript \

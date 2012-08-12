@@ -68,8 +68,6 @@ copy-stuff:
 		   gcc3_uno \
 		   hwplo \
 		   i18nisolang1gcc3 \
-		   i18npool.uno \
-		   i18nutilgcc3 \
 		   icudatalo \
 		   icui18nlo \
 		   iculelo \
@@ -82,7 +80,6 @@ copy-stuff:
 		   jvmfwk \
 		   libotouchlo \
 		   lo-bootstrap \
-		   localebe1.uno \
 		   localedata_en \
 		   localedata_others \
 		   lwpftlo \
@@ -92,7 +89,6 @@ copy-stuff:
 		   ooxlo \
 		   reflection.uno \
 		   reg \
-		   saxlo \
 		   sclo \
 		   scdlo \
 		   scfiltlo \
@@ -115,7 +111,6 @@ copy-stuff:
 		   uno_cppuhelpergcc3 \
 		   unordflo \
 		   unoxmllo \
-		   utllo \
 		   vbahelperlo \
 		   vbaswobj.uno \
 		   wpftdrawlo \
