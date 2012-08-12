@@ -70,7 +70,7 @@ using namespace ::com::sun::star::container;
 
 using ::std::vector;
 
-namespace io_FileAccess
+namespace
 {
 
 
@@ -858,8 +858,8 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL fileacc_component_getFactory(
         Reference< XSingleServiceFactory > xFactory( cppu::createSingleFactory(
             reinterpret_cast< XMultiServiceFactory * >( pServiceManager ),
             rtl::OUString::createFromAscii( pImplName ),
-            io_FileAccess::FileAccess_CreateInstance,
-            io_FileAccess::FileAccess_getSupportedServiceNames() ) );
+            FileAccess_CreateInstance,
+            FileAccess_getSupportedServiceNames() ) );
 
         if (xFactory.is())
         {
