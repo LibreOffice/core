@@ -73,9 +73,11 @@ protected:
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
     virtual void        onStartElement( const AttributeList& rAttribs );
     virtual void        onCharacters( const ::rtl::OUString& rChars );
+    virtual void        onEndElement();
 
     virtual ::oox::core::ContextHandlerRef onCreateRecordContext( sal_Int32 nRecId, SequenceInputStream& rStrm );
     virtual void        onStartRecord( SequenceInputStream& rStrm );
+    virtual void        onEndRecord();
 
 private:
     CondFormatRef       mxCondFmt;

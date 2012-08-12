@@ -954,7 +954,6 @@ void WorksheetGlobals::finalizeWorksheetImport()
     finalizeHyperlinkRanges();
     finalizeValidationRanges();
     maAutoFilters.finalizeImport( getSheetIndex() );
-    maCondFormats.finalizeImport();
     maQueryTables.finalizeImport();
     maSheetSett.finalizeImport();
     maPageSett.finalizeImport();

@@ -149,6 +149,17 @@ ContextHandlerRef CondFormatContext::onCreateContext( sal_Int32 nElement, const 
     return 0;
 }
 
+void CondFormatContext::onEndElement()
+{
+    switch( getCurrentElement() )
+    {
+        case XLS_TOKEN( conditionalFormatting ):
+            if(mxCondFmt.get())
+                mxCondFmt->finalizeImport();
+            break;
+    }
+}
+
 void CondFormatContext::onStartElement( const AttributeList& rAttribs )
 {
     switch( getCurrentElement() )
@@ -188,6 +199,17 @@ void CondFormatContext::onStartRecord( SequenceInputStream& rStrm )
         case BIFF12_ID_CFRULE:
             if( mxCondFmt.get() ) mxCondFmt->importCfRule( rStrm );
         break;
+    }
+}
+
+void CondFormatContext::onEndRecord()
+{
+    switch( getCurrentElement() )
+    {
+        case BIFF12_ID_CONDFORMATTING:
+            if( mxCondFmt.get() )
+                mxCondFmt->finalizeImport();
+            break;
     }
 }
 
