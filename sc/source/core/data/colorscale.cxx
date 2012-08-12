@@ -298,7 +298,7 @@ double ScColorScaleFormat::GetMinValue() const
 {
     const_iterator itr = maColorScales.begin();
 
-    if(itr->GetType() != COLORSCALE_MIN && itr->GetType() != COLORSCALE_AUTOMIN)
+    if(itr->GetType() == COLORSCALE_VALUE || itr->GetType() == COLORSCALE_FORMULA)
         return itr->GetValue();
     else
     {
@@ -310,7 +310,7 @@ double ScColorScaleFormat::GetMaxValue() const
 {
     ColorScaleEntries::const_reverse_iterator itr = maColorScales.rbegin();
 
-    if(itr->GetType() != COLORSCALE_MAX && itr->GetType() != COLORSCALE_AUTOMAX)
+    if(itr->GetType() == COLORSCALE_VALUE || itr->GetType() == COLORSCALE_FORMULA)
         return itr->GetValue();
     else
     {
