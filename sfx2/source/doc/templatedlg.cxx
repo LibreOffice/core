@@ -1243,16 +1243,32 @@ void SfxTemplateManagerDlg::remoteMoveTo(const sal_uInt16 nMenuId)
 
     if (nItemId)
     {
+        OUString aTemplateList;
+
         std::set<const ThumbnailViewItem*>::const_iterator aIter;
         for (aIter = maSelTemplates.begin(); aIter != maSelTemplates.end(); ++aIter)
         {
             const TemplateSearchViewItem *pItem =
                     static_cast<const TemplateSearchViewItem*>(*aIter);
 
-            maView->copyFrom(nItemId,pItem->maPreview1,pItem->getPath());
+            if(!maView->copyFrom(nItemId,pItem->maPreview1,pItem->getPath()))
+            {
+                if (aTemplateList.isEmpty())
+                    aTemplateList = pItem->maTitle;
+                else
+                    aTemplateList = aTemplateList + "\n" + pItem->maTitle;
+            }
         }
 
         maView->Invalidate(INVALIDATE_NOERASE);
+
+        if (!aTemplateList.isEmpty())
+        {
+            OUString aMsg(SfxResId(STR_MSG_ERROR_REMOTE_MOVE).toString());
+            aMsg = aMsg.replaceFirst("$1",mpOnlineView->getOverlayName());
+            aMsg = aMsg.replaceFirst("$2",maView->GetItemText(nItemId));
+            ErrorBox(this,WB_OK,aMsg.replaceFirst("$1",aTemplateList)).Execute();
+        }
     }
 }
 

@@ -528,7 +528,7 @@ bool TemplateLocalView::moveTemplates(std::set<const ThumbnailViewItem *> &rItem
     return ret;
 }
 
-void TemplateLocalView::copyFrom(const sal_uInt16 nRegionItemId, const BitmapEx &rThumbnail,
+bool TemplateLocalView::copyFrom(const sal_uInt16 nRegionItemId, const BitmapEx &rThumbnail,
                                   const OUString &rPath)
 {
     sal_uInt16 nRegionId = nRegionItemId - 1;
@@ -568,14 +568,18 @@ void TemplateLocalView::copyFrom(const sal_uInt16 nRegionItemId, const BitmapEx 
                 pItem->maTemplates.push_back(aTemplate);
 
                 lcl_updateThumbnails(pItem);
+
+                return true;
             }
 
             break;
         }
     }
+
+    return false;
 }
 
-void TemplateLocalView::copyFrom (TemplateLocalViewItem *pItem, const rtl::OUString &rPath)
+bool TemplateLocalView::copyFrom (TemplateLocalViewItem *pItem, const rtl::OUString &rPath)
 {
     sal_uInt16 nId = 0;
     sal_uInt16 nDocId = 0;
@@ -606,7 +610,11 @@ void TemplateLocalView::copyFrom (TemplateLocalViewItem *pItem, const rtl::OUStr
         lcl_updateThumbnails(pItem);
 
         CalculateItemPositions();
+
+        return true;
     }
+
+    return false;
 }
 
 bool TemplateLocalView::exportTo(const sal_uInt16 nItemId, const sal_uInt16 nRegionItemId, const OUString &rName)

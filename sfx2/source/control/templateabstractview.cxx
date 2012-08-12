@@ -80,6 +80,11 @@ sal_uInt16 TemplateAbstractView::getOverlayRegionId() const
     return mpItemView->getId();
 }
 
+const OUString &TemplateAbstractView::getOverlayName() const
+{
+    return mpItemView->getName();
+}
+
 bool TemplateAbstractView::isOverlayVisible () const
 {
     return mpItemView->IsVisible();

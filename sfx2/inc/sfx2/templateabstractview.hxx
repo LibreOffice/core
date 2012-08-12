@@ -76,6 +76,8 @@ public:
 
     sal_uInt16 getOverlayRegionId () const;
 
+    const OUString& getOverlayName () const;
+
     // Check if the overlay is visible or not.
     bool isOverlayVisible () const;
 
