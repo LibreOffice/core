@@ -95,29 +95,6 @@ namespace nullcanvas
         // TODO
         return sal_True;
     }
-
-    void SpriteCanvasHelper::backgroundPaint( const ::basegfx::B2DRange& /*rUpdateRect*/ )
-    {
-        // TODO
-    }
-
-    void SpriteCanvasHelper::scrollUpdate( const ::basegfx::B2DRange&                       /*rMoveStart*/,
-                                           const ::basegfx::B2DRange&                       /*rMoveEnd*/,
-                                           const ::canvas::SpriteRedrawManager::UpdateArea& /*rUpdateArea*/ )
-    {
-        // TODO
-    }
-
-    void SpriteCanvasHelper::opaqueUpdate( const ::canvas::SpriteRedrawManager::UpdateArea& /*rUpdateArea*/ )
-    {
-        // TODO
-    }
-
-    void SpriteCanvasHelper::genericUpdate( const ::canvas::SpriteRedrawManager::UpdateArea& /*rUpdateArea*/ )
-    {
-        // TODO
-    }
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

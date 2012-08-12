@@ -86,38 +86,6 @@ namespace nullcanvas
                                sal_Bool                   bUpdateAll,
                                bool&                      io_bSurfaceDirty );
 
-
-        // SpriteRedrawManager functor calls
-        // -------------------------------------------------
-
-        /** Gets called for simple background repaints
-         */
-        void backgroundPaint( const ::basegfx::B2DRange& rUpdateRect );
-
-        /** Gets called when area can be handled by scrolling.
-
-            Called method must copy screen content from rMoveStart to
-            rMoveEnd, and restore the background in the uncovered
-            areas.
-
-            @param rMoveStart
-            Source rect of the scroll
-
-            @param rMoveEnd
-            Dest rect of the scroll
-
-            @param rUpdateArea
-            All info necessary, should rMoveStart be partially or
-            fully outside the outdev
-         */
-        void scrollUpdate( const ::basegfx::B2DRange&                           rMoveStart,
-                           const ::basegfx::B2DRange&                           rMoveEnd,
-                           const ::canvas::SpriteRedrawManager::UpdateArea&     rUpdateArea );
-
-        void opaqueUpdate( const ::canvas::SpriteRedrawManager::UpdateArea& rUpdateArea );
-
-        void genericUpdate( const ::canvas::SpriteRedrawManager::UpdateArea& rUpdateArea );
-
     private:
         /// Set from the SpriteCanvas: instance coordinating sprite redraw
         ::canvas::SpriteRedrawManager*  mpRedrawManager;
