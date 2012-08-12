@@ -45,6 +45,31 @@ String STR_REPOSITORY_NEW
     Text [ en-US ] = "New Repository";
 };
 
+String STR_MSG_ERROR_LOCAL_MOVE
+{
+    Text [ en-US ] = "Error moving the following templates to $1.\n$2" ;
+};
+
+String STR_MSG_ERROR_REMOTE_MOVE
+{
+    Text [ en-US ] = "Error moving the following templates from repository $1 to folder $2.\n$3" ;
+};
+
+String STR_MSG_ERROR_EXPORT
+{
+    Text [ en-US ] = "Error exporting the following templates:\n$1";
+};
+
+String STR_MSG_ERROR_DELETE_TEMPLATE
+{
+    Text [ en-US ] = "The following templates cannot be deleted:\n$1";
+};
+
+String STR_MSG_ERROR_DELETE_FOLDER
+{
+    Text [ en-US ] = "The following folders cannot be deleted:\n$1";
+};
+
 ModelessDialog DLG_TEMPLATE_MANAGER
 {
     OutputSize = TRUE;

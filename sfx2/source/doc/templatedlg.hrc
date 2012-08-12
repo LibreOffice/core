@@ -55,6 +55,12 @@
 #define MNI_REPOSITORY_BASE         276
 
 #define STR_ACTION_DEFAULT          277
+#define STR_MSG_ERROR_LOCAL_MOVE            278
+#define STR_MSG_ERROR_REMOTE_MOVE           279
+#define STR_MSG_ERROR_IMPORT                280
+#define STR_MSG_ERROR_EXPORT                281
+#define STR_MSG_ERROR_DELETE_TEMPLATE       282
+#define STR_MSG_ERROR_DELETE_FOLDER         283
 
 #define IMG_ACTION_SORT             304
 #define IMG_ACTION_REFRESH          305

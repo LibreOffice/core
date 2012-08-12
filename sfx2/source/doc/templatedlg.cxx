@@ -788,6 +788,7 @@ void SfxTemplateManagerDlg::OnTemplateExport()
 
     if( nResult == ExecutableDialogResults::OK )
     {
+        OUString aTemplateList;
         INetURLObject aPathObj(xFolderPicker->getDirectory());
         aPathObj.setFinalSlash();
 
@@ -811,6 +812,10 @@ void SfxTemplateManagerDlg::OnTemplateExport()
 
                 if (!maView->exportTo(pItem->mnIdx+1,pItem->mnRegionId+1,aPath))
                 {
+                    if (aTemplateList.isEmpty())
+                        aTemplateList = pItem->maTitle;
+                    else
+                        aTemplateList = aTemplateList + "\n" + pItem->maTitle;
                 }
             }
 
@@ -839,10 +844,20 @@ void SfxTemplateManagerDlg::OnTemplateExport()
 
                 if (!maView->exportTo(pItem->mnId,nRegionItemId,aPath))
                 {
+                    if (aTemplateList.isEmpty())
+                        aTemplateList = pItem->maTitle;
+                    else
+                        aTemplateList = aTemplateList + "\n" + pItem->maTitle;
                 }
             }
 
             maView->deselectOverlayItems();
+        }
+
+        if (!aTemplateList.isEmpty())
+        {
+            OUString aText( SfxResId(STR_MSG_ERROR_EXPORT).toString() );
+            ErrorBox(this, WB_OK,aText.replaceFirst("$1",aTemplateList)).Execute();
         }
     }
 }
@@ -919,6 +934,8 @@ void SfxTemplateManagerDlg::OnTemplateProperties ()
 
 void SfxTemplateManagerDlg::OnTemplateDelete ()
 {
+    OUString aTemplateList;
+
     if (mpSearchView->IsVisible())
     {
         std::set<const ThumbnailViewItem*>::const_iterator pIter;
@@ -933,7 +950,14 @@ void SfxTemplateManagerDlg::OnTemplateDelete ()
             if (maView->removeTemplate(nItemId,nItemRegionId))
                 maSelTemplates.erase(pIter++);
             else
+            {
+                if (aTemplateList.isEmpty())
+                    aTemplateList = pItem->maTitle;
+                else
+                    aTemplateList = aTemplateList + "\n" + pItem->maTitle;
+
                 ++pIter;
+            }
         }
 
         // Update search results
@@ -954,7 +978,14 @@ void SfxTemplateManagerDlg::OnTemplateDelete ()
             if (maView->removeTemplate((*pIter)->mnId,maView->getOverlayRegionId()+1))
                 maSelTemplates.erase(pIter++);
             else
+            {
+                if (aTemplateList.isEmpty())
+                    aTemplateList = (*pIter)->maTitle;
+                else
+                    aTemplateList = aTemplateList + "\n" + (*pIter)->maTitle;
+
                 ++pIter;
+            }
         }
 
         if (maSelTemplates.empty())
@@ -964,6 +995,12 @@ void SfxTemplateManagerDlg::OnTemplateDelete ()
             mpViewBar->Show();
             mpActionBar->Show();
         }
+    }
+
+    if (!aTemplateList.isEmpty())
+    {
+        OUString aMsg( SfxResId(STR_MSG_ERROR_DELETE_TEMPLATE).toString() );
+        ErrorBox(this, WB_OK,aMsg.replaceFirst("$1",aTemplateList)).Execute();
     }
 }
 
@@ -987,19 +1024,34 @@ void SfxTemplateManagerDlg::OnTemplateAsDefault ()
 
 void SfxTemplateManagerDlg::OnFolderDelete()
 {
+    OUString aFolderList;
+
     std::set<const ThumbnailViewItem*>::const_iterator pIter;
     for (pIter = maSelFolders.begin(); pIter != maSelFolders.end();)
     {
         if (maView->removeRegion((*pIter)->mnId))
             maSelFolders.erase(pIter++);
         else
+        {
+            if (aFolderList.isEmpty())
+                aFolderList = (*pIter)->maTitle;
+            else
+                aFolderList = aFolderList + "\n" + (*pIter)->maTitle;
+
             ++pIter;
+        }
     }
 
     if (maSelFolders.empty())
     {
         mpViewBar->HideItem(TBI_TEMPLATE_IMPORT);
         mpViewBar->HideItem(TBI_TEMPLATE_FOLDER_DEL);
+    }
+
+    if (!aFolderList.isEmpty())
+    {
+        OUString aMsg( SfxResId(STR_MSG_ERROR_DELETE_FOLDER).toString() );
+        ErrorBox(this, WB_OK,aMsg.replaceFirst("$1",aFolderList)).Execute();
     }
 }
 
@@ -1140,6 +1192,21 @@ void SfxTemplateManagerDlg::localMoveTo(sal_uInt16 nMenuId)
         if (!maView->moveTemplates(maSelTemplates,nItemId,false) &&
                 !maView->moveTemplates(maSelTemplates,nItemId,true))
         {
+            OUString aTemplateList;
+
+            std::set<const ThumbnailViewItem*>::const_iterator pIter;
+            for (pIter = maSelFolders.begin(); pIter != maSelFolders.end(); ++pIter)
+            {
+                if (aTemplateList.isEmpty())
+                    aTemplateList = (*pIter)->maTitle;
+                else
+                    aTemplateList = aTemplateList + "\n" + (*pIter)->maTitle;
+            }
+
+            OUString aDst = maView->GetItemText(nItemId);
+            OUString aMsg(SfxResId(STR_MSG_ERROR_LOCAL_MOVE).toString());
+            aMsg = aMsg.replaceFirst("$1",aDst);
+            ErrorBox(this, WB_OK,aMsg.replaceFirst( "$2",aTemplateList)).Execute();
         }
     }
 }
@@ -1207,6 +1274,8 @@ void SfxTemplateManagerDlg::localSearchMoveTo(sal_uInt16 nMenuId)
 
     if (nItemId)
     {
+        OUString aTemplateList;
+
         // Move templates to desired folder if for some reason move fails
         // try copying them.
         std::set<const ThumbnailViewItem*>::const_iterator aIter;
@@ -1218,7 +1287,19 @@ void SfxTemplateManagerDlg::localSearchMoveTo(sal_uInt16 nMenuId)
             if(!maView->moveTemplate(pItem,pItem->mnRegionId+1,nItemId,false)
                     && !maView->moveTemplate(pItem,pItem->mnRegionId+1,nItemId,true))
             {
+                if (aTemplateList.isEmpty())
+                    aTemplateList = (*aIter)->maTitle;
+                else
+                    aTemplateList = aTemplateList + "\n" + (*aIter)->maTitle;
             }
+        }
+
+        if (!aTemplateList.isEmpty())
+        {
+            OUString aDst = maView->GetItemText(nItemId);
+            OUString aMsg(SfxResId(STR_MSG_ERROR_LOCAL_MOVE).toString());
+            aMsg = aMsg.replaceFirst("$1",aDst);
+            ErrorBox(this, WB_OK,aMsg.replaceFirst( "$2",aTemplateList)).Execute();
         }
     }
 
