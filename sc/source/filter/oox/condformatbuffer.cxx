@@ -946,11 +946,6 @@ CondFormatRef CondFormatBuffer::importCondFormatting( SequenceInputStream& rStrm
     return xCondFmt;
 }
 
-void CondFormatBuffer::finalizeImport()
-{
-    maCondFormats.forEachMem( &CondFormat::finalizeImport );
-}
-
 sal_Int32 CondFormatBuffer::convertToApiOperator( sal_Int32 nToken )
 {
     switch( nToken )

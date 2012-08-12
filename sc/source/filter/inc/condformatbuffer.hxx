@@ -235,9 +235,6 @@ public:
     /** Imports settings from the CONDFORMATTING record. */
     CondFormatRef       importCondFormatting( SequenceInputStream& rStrm );
 
-    /** Creates all conditional formatting in the Calc document. */
-    void                finalizeImport();
-
     /** Converts an OOXML condition operator token to the API constant. */
     static sal_Int32    convertToApiOperator( sal_Int32 nToken );
 
