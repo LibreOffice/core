@@ -243,6 +243,18 @@ void TemplateAbstractView::Resize()
     mpItemView->SetSizePixel(GetSizePixel());
 }
 
+void TemplateAbstractView::Paint(const Rectangle &rRect)
+{
+    if (!mpItemView->IsVisible())
+        ThumbnailView::Paint(rRect);
+}
+
+void TemplateAbstractView::DrawItem(ThumbnailViewItem *pItem)
+{
+    if (!mpItemView->IsVisible())
+        ThumbnailView::DrawItem(pItem);
+}
+
 void TemplateAbstractView::OnSelectionMode (bool bMode)
 {
     if (mpItemView->IsVisible())

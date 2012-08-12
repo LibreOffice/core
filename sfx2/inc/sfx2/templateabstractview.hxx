@@ -102,6 +102,10 @@ protected:
 
     virtual void Resize();
 
+    virtual void Paint( const Rectangle& rRect );
+
+    virtual void DrawItem (ThumbnailViewItem *pItem);
+
     virtual void OnSelectionMode (bool bMode);
 
     DECL_LINK(OverlayItemStateHdl, const ThumbnailViewItem*);
