@@ -40,7 +40,7 @@ public:
 
     const std::vector<TemplateOnlineViewItem*>& getRepositories () const { return maRepositories; }
 
-    void insertRepository (const OUString &rName, const OUString &rURL);
+    bool insertRepository (const OUString &rName, const OUString &rURL);
 
     bool deleteRepository (const sal_uInt16 nRepositoryId);
 

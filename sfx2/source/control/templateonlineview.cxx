@@ -259,8 +259,14 @@ bool TemplateOnlineView::loadRepository (const sal_uInt16 nRepositoryId, bool bR
     return true;
 }
 
-void TemplateOnlineView::insertRepository(const OUString &rName, const OUString &rURL)
+bool TemplateOnlineView::insertRepository(const OUString &rName, const OUString &rURL)
 {
+    for (size_t i = 0, n = maRepositories.size(); i < n; ++i)
+    {
+        if (maRepositories[i]->maTitle == rName)
+            return false;
+    }
+
     TemplateOnlineViewItem *pItem = new TemplateOnlineViewItem(*this,this);
 
     pItem->mnId = maRepositories.size()+1;
@@ -270,6 +276,7 @@ void TemplateOnlineView::insertRepository(const OUString &rName, const OUString 
     maRepositories.push_back(pItem);
 
     mbIsSynced = false;
+    return true;
 }
 
 bool TemplateOnlineView::deleteRepository(const sal_uInt16 nRepositoryId)

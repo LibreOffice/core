@@ -70,6 +70,11 @@ String STR_MSG_ERROR_DELETE_FOLDER
     Text [ en-US ] = "The following folders cannot be deleted:\n$1";
 };
 
+String STR_MSG_ERROR_REPOSITORY_NAME
+{
+    Text [ en-US ] = "Failed to create repository \"$1\".\nA repository with this name may already exist.";
+};
+
 ModelessDialog DLG_TEMPLATE_MANAGER
 {
     OutputSize = TRUE;

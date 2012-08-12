@@ -583,10 +583,17 @@ IMPL_LINK(SfxTemplateManagerDlg, RepositoryMenuSelectHdl, Menu*, pMenu)
         {
             boost::shared_ptr<Place> pPlace = dlg.GetPlace();
 
-            mpOnlineView->insertRepository(pPlace->GetName(),pPlace->GetUrl());
-
-            // update repository list menu.
-            createRepositoryMenu();
+            if (mpOnlineView->insertRepository(pPlace->GetName(),pPlace->GetUrl()))
+            {
+                // update repository list menu.
+                createRepositoryMenu();
+            }
+            else
+            {
+                OUString aMsg(SfxResId(STR_MSG_ERROR_REPOSITORY_NAME).toString());
+                aMsg = aMsg.replaceFirst("$1",pPlace->GetName());
+                ErrorBox(this,WB_OK,aMsg).Execute();
+            }
         }
     }
     else

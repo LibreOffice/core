@@ -61,6 +61,7 @@
 #define STR_MSG_ERROR_EXPORT                281
 #define STR_MSG_ERROR_DELETE_TEMPLATE       282
 #define STR_MSG_ERROR_DELETE_FOLDER         283
+#define STR_MSG_ERROR_REPOSITORY_NAME       284
 
 #define IMG_ACTION_SORT             304
 #define IMG_ACTION_REFRESH          305
