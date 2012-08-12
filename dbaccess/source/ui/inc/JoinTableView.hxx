@@ -232,13 +232,18 @@ namespace dbaui
         /** @note can be used for special ui handling after d&d */
         virtual void lookForUiActivities();
 
-        /// called after moving/resizing TabWins
-        /// (the standard implementation just passes the new data to the Wins)
+        /** Hook that is called after moving/resizing TabWins
+
+            The position is 'virtual': the container has a virtual area of
+            which only a part - changeable by scroll bar - is visible.
+            Therefore: ptOldPosition is always positive, even if it represents
+            a point with a negative physical ordinate above the visible area
+
+            @note The standard implementation just passes the new data to the
+                  Wins
+         */
         virtual void TabWinMoved(OTableWindow* ptWhich, const Point& ptOldPosition);
-            // the position is 'virtual': the container has a virtual area
-            // of which only a part - changeable by scroll bar - is visible
-            // therefore: ptOldPosition is always positive, even if it represents
-            // a point with a negative physical ordinate above the visible area
+
         virtual void TabWinSized(OTableWindow* ptWhich, const Point& ptOldPosition, const Size& szOldSize);
 
         void modified();
