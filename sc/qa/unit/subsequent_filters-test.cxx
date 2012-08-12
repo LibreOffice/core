@@ -130,6 +130,10 @@ public:
     void testRepeatedColumnsODS();
     void testDataValidityODS();
 
+    void testColorScale();
+    void testDataBar();
+    void testCondFormat();
+
     //change this test file only in excel and not in calc
     void testSharedFormulaXLSX();
     void testCellValueXLSX();
@@ -169,6 +173,10 @@ public:
     CPPUNIT_TEST(testSharedFormulaXLSX);
     CPPUNIT_TEST(testCellValueXLSX);
     CPPUNIT_TEST(testControlImport);
+
+    CPPUNIT_TEST(testColorScale);
+    CPPUNIT_TEST(testDataBar);
+    CPPUNIT_TEST(testCondFormat);
 
     //disable testPassword on MacOSX due to problems with libsqlite3
     //also crashes on DragonFly due to problems with nss/nspr headers
@@ -1170,6 +1178,45 @@ void ScFiltersTest::testControlImport()
 
     CPPUNIT_ASSERT(xControlShape.is());
     xDocSh->DoClose();
+}
+
+void ScFiltersTest::testColorScale()
+{
+    const rtl::OUString aFileNameBase(RTL_CONSTASCII_USTRINGPARAM("colorScale."));
+    rtl::OUString aFileExtension(aFileFormats[ODS].pName, strlen(aFileFormats[ODS].pName), RTL_TEXTENCODING_UTF8 );
+    rtl::OUString aFilterName(aFileFormats[ODS].pFilterName, strlen(aFileFormats[ODS].pFilterName), RTL_TEXTENCODING_UTF8) ;
+    rtl::OUString aFileName;
+    createFileURL(aFileNameBase, aFileExtension, aFileName);
+    rtl::OUString aFilterType(aFileFormats[ODS].pTypeName, strlen(aFileFormats[ODS].pTypeName), RTL_TEXTENCODING_UTF8);
+    std::cout << aFileFormats[ODS].pName << " Test" << std::endl;
+    ScDocShellRef xDocSh = load (aFilterName, aFileName, rtl::OUString(), aFilterType, aFileFormats[ODS].nFormatType);
+
+    CPPUNIT_ASSERT_MESSAGE("Failed to load colorScale.ods", xDocSh.Is());
+
+    ScDocument* pDoc = xDocSh->GetDocument();
+
+    const ScPatternAttr* pPattern = pDoc->GetPattern(1,1,0);
+    sal_uLong nIndex = static_cast<const SfxUInt32Item&>(pPattern->GetItem(ATTR_CONDITIONAL)).GetValue();
+    CPPUNIT_ASSERT(nIndex);
+    ScConditionalFormatList* pCondFormatList = pDoc->GetCondFormList(0);
+    const ScConditionalFormat* pFormat = pCondFormatList->GetFormat(nIndex);
+    CPPUNIT_ASSERT(pFormat);
+
+    pPattern = pDoc->GetPattern(1,5,0);
+    nIndex = static_cast<const SfxUInt32Item&>(pPattern->GetItem(ATTR_CONDITIONAL)).GetValue();
+    CPPUNIT_ASSERT(nIndex);
+    pFormat = pCondFormatList->GetFormat(nIndex);
+    CPPUNIT_ASSERT(pFormat);
+}
+
+void ScFiltersTest::testDataBar()
+{
+
+}
+
+void ScFiltersTest::testCondFormat()
+{
+
 }
 
 ScFiltersTest::ScFiltersTest()
