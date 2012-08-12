@@ -727,6 +727,7 @@ void SetColorScaleEntry( ScColorScaleEntry* pEntry, const ListBox& rType, const 
             break;
         case 3:
             pEntry->SetType(COLORSCALE_VALUE);
+            pEntry->SetValue(nVal);
             break;
         case 4:
             pEntry->SetType(COLORSCALE_PERCENT);
