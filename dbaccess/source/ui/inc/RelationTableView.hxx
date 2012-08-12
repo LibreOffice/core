@@ -32,11 +32,10 @@ namespace dbaui
                                public OJoinTableView,
                                public ::comphelper::OContainerListener
     {
-        OTableConnection*                m_pExistingConnection;   ///< is set when a connection was draged on an existing connection
+        OTableConnection* m_pExistingConnection; ///< is set when a connection was draged on an existing connection
         TTableConnectionData::value_type m_pCurrentlyTabConnData; ///< set when we creating a connection with more than one keycolumn
-        ::rtl::Reference< comphelper::OContainerListenerAdapter>
-                                         m_pContainerListener;
-        bool                             m_bInRemove;
+        ::rtl::Reference< comphelper::OContainerListenerAdapter> m_pContainerListener;
+        bool m_bInRemove;
 
         virtual void ConnDoubleClicked( OTableConnection* pConnection );
         virtual void AddTabWin(const ::rtl::OUString& _rComposedName, const ::rtl::OUString& rWinName, sal_Bool bNewTable = sal_False);

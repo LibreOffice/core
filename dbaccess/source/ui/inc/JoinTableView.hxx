@@ -137,7 +137,7 @@ namespace dbaui
         virtual void RemoveTabWin( OTableWindow* pTabWin );
 
         // hide all TabWins (does NOT delete them; they are put in an UNDO action)
-        virtual void    HideTabWins();
+        virtual void HideTabWins();
 
         virtual void AddConnection(const OJoinExchangeData& jxdSource, const OJoinExchangeData& jxdDest) = 0;
 
@@ -162,27 +162,27 @@ namespace dbaui
         */
         void addConnection(OTableConnection* _pConnection,sal_Bool _bAddData = sal_True);
 
-        sal_Bool            ScrollPane( long nDelta, sal_Bool bHoriz, sal_Bool bPaintScrollBars );
-        sal_uLong           GetTabWinCount();
-        Point           GetScrollOffset() const { return m_aScrollOffset; }
+        sal_Bool ScrollPane( long nDelta, sal_Bool bHoriz, sal_Bool bPaintScrollBars );
+        sal_uLong GetTabWinCount();
+        Point GetScrollOffset() const { return m_aScrollOffset; }
 
-        OJoinDesignView*            getDesignView() const { return m_pView; }
-        OTableWindow*               GetTabWindow( const String& rName );
+        OJoinDesignView* getDesignView() const { return m_pView; }
+        OTableWindow* GetTabWindow( const String& rName );
 
-        OTableConnection*           GetSelectedConn() { return m_pSelectedConn; }
+        OTableConnection* GetSelectedConn() { return m_pSelectedConn; }
         /** @note NULL is explicitly allowed (then no-op) */
-        void                        DeselectConn(OTableConnection* pConn);
-        void                        SelectConn(OTableConnection* pConn);
+        void DeselectConn(OTableConnection* pConn);
+        void SelectConn(OTableConnection* pConn);
 
-        OTableWindowMap*            GetTabWinMap() { return &m_aTableMap; }
-        const OTableWindowMap*      GetTabWinMap() const { return &m_aTableMap; }
+        OTableWindowMap* GetTabWinMap() { return &m_aTableMap; }
+        const OTableWindowMap* GetTabWinMap() const { return &m_aTableMap; }
 
         /** gives a read only access to the connection vector
         */
         const ::std::vector<OTableConnection*>* getTableConnections() const { return &m_vTableConnection; }
 
+        sal_Bool ExistsAConn(const OTableWindow* pFromWin) const;
 
-        sal_Bool                        ExistsAConn(const OTableWindow* pFromWin) const;
         /** search for all connections of a table
 
             @param  _pFromWin   the table for which connections should be found
@@ -225,9 +225,9 @@ namespace dbaui
         virtual long PreNotify(NotifyEvent& rNEvt);
 
         // DnD stuff
-        virtual void        StartDrag( sal_Int8 nAction, const Point& rPosPixel );
-        virtual sal_Int8    AcceptDrop( const AcceptDropEvent& rEvt );
-        virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& rEvt );
+        virtual void StartDrag( sal_Int8 nAction, const Point& rPosPixel );
+        virtual sal_Int8 AcceptDrop( const AcceptDropEvent& rEvt );
+        virtual sal_Int8 ExecuteDrop( const ExecuteDropEvent& rEvt );
 
         /** @note can be used for special ui handling after d&d */
         virtual void lookForUiActivities();
@@ -289,18 +289,18 @@ namespace dbaui
 
         /** determines whether the classes Init method should accept a query
             name, or only table names */
-        virtual bool    allowQueries() const;
+        virtual bool allowQueries() const;
 
         /** called when init fails at the tablewindowdata because the m_xTable
             object could not provide columns, but no exception was thrown.
             Expected to throw. */
-        virtual void    onNoColumns_throw();
+        virtual void onNoColumns_throw();
 
         virtual bool supressCrossNaturalJoin(const TTableConnectionData::value_type& _pData) const;
 
     private:
-        void    InitColors();
-        sal_Bool    ScrollWhileDragging();
+        void InitColors();
+        sal_Bool ScrollWhileDragging();
 
         /** opens the context menu to delate a connection
             @param _aPos the position where the popup menu should appear

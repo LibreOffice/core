@@ -88,14 +88,14 @@ namespace dbaui
         void DropConnection(OQueryTableConnection* pConn);
 
         // show and hide TabWin (NOT create or delete)
-        sal_Bool    ShowTabWin(OQueryTableWindow* pTabWin, OQueryTabWinUndoAct* pUndoAction,sal_Bool _bAppend);
-        void    HideTabWin(OQueryTableWindow* pTabWin, OQueryTabWinUndoAct* pUndoAction);
+        sal_Bool ShowTabWin(OQueryTableWindow* pTabWin, OQueryTabWinUndoAct* pUndoAction,sal_Bool _bAppend);
+        void HideTabWin(OQueryTableWindow* pTabWin, OQueryTabWinUndoAct* pUndoAction);
 
         /// ensure visibility of TabWins (+ and invalidate connections)
         virtual void EnsureVisible(const OTableWindow* _pWin);
 
         /// how many tables with a certain alias do I already have?
-        sal_Int32   CountTableAlias(const String& rName, sal_Int32& rMax);
+        sal_Int32 CountTableAlias(const String& rName, sal_Int32& rMax);
 
         /// insert field (simply passed to parents)
         void InsertField(const OTableFieldDescRef& rInfo);
@@ -114,7 +114,7 @@ namespace dbaui
         void NotifyTabConnection(const OQueryTableConnection& rNewConn, sal_Bool _bCreateUndoAction = sal_True);
 
         /// @note the Handler receives a pointer to a TabWinsChangeNotification struct
-        Link    SetTabWinsChangeHandler(const Link& lnk) { Link lnkRet = m_lnkTabWinsChangeHandler; m_lnkTabWinsChangeHandler = lnk; return lnkRet; }
+        Link SetTabWinsChangeHandler(const Link& lnk) { Link lnkRet = m_lnkTabWinsChangeHandler; m_lnkTabWinsChangeHandler = lnk; return lnkRet; }
 
         sal_Bool ExistsAVisitedConn(const OQueryTableWindow* pFrom) const;
 

@@ -66,8 +66,8 @@ namespace dbaui
                     const OTypeInfoMap* _pInfoMap,
                     sal_Bool _bAutoIncrementEnabled);
 
-        virtual     SvParserState CallParser();// base class
-        virtual     void          release();
+        virtual SvParserState CallParser();// base class
+        virtual void release();
         ///< @attention recovers only valid data if 1. CTOR has been used
     };
 

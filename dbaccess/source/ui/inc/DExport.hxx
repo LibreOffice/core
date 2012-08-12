@@ -153,9 +153,9 @@ namespace dbaui
             SvStream& _rInputStream
         );
 
-        void    SetColumnTypes(const TColumnVector* rList,const OTypeInfoMap* _pInfoMap);
+        void SetColumnTypes(const TColumnVector* rList,const OTypeInfoMap* _pInfoMap);
 
-        inline void                    SetTableName(const ::rtl::OUString &_sTableName){ m_sDefaultTableName = _sTableName ; }
+        inline void SetTableName(const ::rtl::OUString &_sTableName){ m_sDefaultTableName = _sTableName ; }
 
         virtual void release() = 0;
 
