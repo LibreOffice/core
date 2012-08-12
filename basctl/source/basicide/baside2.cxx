@@ -1397,6 +1397,15 @@ ModulWindowLayout::ModulWindowLayout( Window* pParent ) :
 {
     SetBackground(GetSettings().GetStyleSettings().GetWindowColor());
 
+    Color splitterColor(GetSettings().GetStyleSettings().GetShadowColor());
+
+    aLeftSplit.SetLineColor(splitterColor);
+    aLeftSplit.SetFillColor(splitterColor);
+    aBottomSplit.SetLineColor(splitterColor);
+    aBottomSplit.SetFillColor(splitterColor);
+    aVertSplit.SetLineColor(splitterColor);
+    aVertSplit.SetFillColor(splitterColor);
+
     aLeftSplit.Show();
     aBottomSplit.Show();
     aVertSplit.Show();
