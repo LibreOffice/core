@@ -171,6 +171,8 @@ namespace dbaui
 
         const OPropColumnEditCtrl*              getColumnCtrl() const { return m_pColumnName; }
 
+        void    implFocusLost(Window* _pWhich);
+
     public:
         OFieldDescControl( Window* pParent, OTableDesignHelpBar* pHelpBar);
         OFieldDescControl( Window* pParent, const ResId& rResId, OTableDesignHelpBar* pHelpBar);
@@ -205,8 +207,6 @@ namespace dbaui
         String              getControlDefault( const OFieldDescription* _pFieldDescr ,sal_Bool _bCheck = sal_True) const;
 
         inline void setEditWidth(sal_Int32 _nWidth) { m_nWidth = _nWidth; }
-    protected:
-        void    implFocusLost(Window* _pWhich);
     };
 }
 #endif
