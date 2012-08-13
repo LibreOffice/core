@@ -72,9 +72,6 @@ class VCL_DLLPUBLIC LineInfo
 private:
 
     ImplLineInfo*   mpImplLineInfo;
-    long            n1;
-    long            n2;
-    long            n3;
 
     SAL_DLLPRIVATE void ImplMakeUnique();
 

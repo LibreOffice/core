@@ -79,7 +79,6 @@ private:
     FontStrikeout       meStrikeout;
     FontRelief          meRelief;
     FontEmphasisMark    meEmphasisMark;
-    FontType            meType;         // used by metrics only
     short               mnOrientation;
     FontKerning         mnKerning;
     sal_Bool                mbWordLine:1,

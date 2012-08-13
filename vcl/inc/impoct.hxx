@@ -31,7 +31,6 @@ class ImpErrorQuad
     long                    nRed;
     long                    nGreen;
     long                    nBlue;
-    long                    nReserved;
 
 public:
 
@@ -124,10 +123,6 @@ inline BitmapColor ImpErrorQuad::ImplGetColor()
 class ImpNodeCache
 {
     OctreeNode*         pActNode;
-    sal_uLong               nNew;
-    sal_uLong               nDelete;
-    sal_uLong               nGet;
-    sal_uLong               nRelease;
 
 public:
 

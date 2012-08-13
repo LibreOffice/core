@@ -122,7 +122,6 @@ VclCanvasBitmap::VclCanvasBitmap( const BitmapEx& rBitmap ) :
     m_nAlphaIndex(-1),
     m_nIndexIndex(-1),
     m_nEndianness(0),
-    m_bSwap(false),
     m_bPalette(false)
 {
     if( m_aBmpEx.IsTransparent() )

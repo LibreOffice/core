@@ -98,8 +98,6 @@ private:
     sal_uLong               mnBBP;                  // bytes per pixel ( needed for filtering )
     sal_Bool                mbTrueAlpha;
     sal_uLong               mnCRC;
-    long                mnChunkDatSize;
-    sal_uLong               mnLastPercent;
 
     void                ImplWritepHYs( const BitmapEx& rBitmapEx );
     void                ImplWriteIDAT();
@@ -124,8 +122,7 @@ PNGWriterImpl::PNGWriterImpl( const BitmapEx& rBmpEx,
         mpAccess        ( NULL ),
         mpMaskAccess    ( NULL ),
         mpZCodec        ( new ZCodec( DEFAULT_IN_BUFSIZE, DEFAULT_OUT_BUFSIZE, MAX_MEM_USAGE ) ),
-        mnCRC(0UL),
-        mnLastPercent   ( 0UL )
+        mnCRC(0UL)
 {
     if ( !rBmpEx.IsEmpty() )
     {

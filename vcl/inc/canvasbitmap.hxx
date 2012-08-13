@@ -55,7 +55,6 @@ namespace unotools
         sal_Int32                                      m_nAlphaIndex;
         sal_Int32                                      m_nIndexIndex;
         sal_Int8                                       m_nEndianness;
-        bool                                           m_bSwap;
         bool                                           m_bPalette;
 
         SAL_DLLPRIVATE void setComponentInfo( sal_uLong redShift, sal_uLong greenShift, sal_uLong blueShift );

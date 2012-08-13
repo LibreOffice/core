@@ -321,7 +321,6 @@ private:
     Date                    maMax;
     Date                    maCorrectedDate;
     sal_Bool                    mbLongFormat;
-    sal_Bool                    mbEmptyDate;
     sal_Bool                    mbShowDateCentury;
     sal_uInt16                  mnDateFormat;
     sal_uLong                   mnExtDateFormat;
@@ -419,7 +418,6 @@ private:
     TimeFieldFormat         meFormat;
     sal_uInt16                  mnTimeFormat;
     sal_Bool                    mbDuration;
-    sal_Bool                    mbEmptyTime;
     sal_Bool                    mbEnforceValidValue;
 
     SAL_DLLPRIVATE void     ImplInit();

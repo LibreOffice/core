@@ -79,7 +79,6 @@ private:
     sal_uLong                           mnFollow;
     sal_uInt16                          mnMiddleButtonAction;
     sal_uInt16                          mnWheelBehavior;
-    sal_Bool                            mbAlign1;
 };
 
 // -----------------
@@ -226,8 +225,6 @@ class ImplStyleData
 
 private:
     sal_uLong                           mnRefCount;
-
-    void*                           mpStyleData_NotUsedYet;
 
     Color                           maActiveBorderColor;
     Color                           maActiveColor;
@@ -947,7 +944,6 @@ public:
 // -----------------------
 // - ImplAllSettingsData -
 // -----------------------
-class LocaleConfigurationListener;
 class ImplAllSettingsData
 {
     friend class    AllSettings;
@@ -972,7 +968,6 @@ private:
     LocaleDataWrapper*                      mpUILocaleDataWrapper;
     vcl::I18nHelper*                        mpI18nHelper;
     vcl::I18nHelper*                        mpUII18nHelper;
-    LocaleConfigurationListener*            mpLocaleCfgListener;
     SvtSysLocale                            maSysLocale;
 };
 

@@ -500,7 +500,7 @@ void FtFontInfo::AnnounceFont( ImplDevFontList* pFontList )
 // =======================================================================
 
 FreetypeManager::FreetypeManager()
-:   mnMaxFontId( 0 ), mnNextFontId( 0x1000 )
+:   mnMaxFontId( 0 )
 {
     /*FT_Error rcFT =*/ FT_Init_FreeType( &aLibFT );
 
@@ -2153,7 +2153,6 @@ private:
     sal_uInt16      mnMaxPoints;
     sal_uInt16      mnPoints;
     sal_uInt16      mnPoly;
-    long        mnHeight;
     bool        bHasOffline;
 };
 
@@ -2164,7 +2163,6 @@ PolyArgs::PolyArgs( PolyPolygon& rPolyPoly, sal_uInt16 nMaxPoints )
     mnMaxPoints(nMaxPoints),
     mnPoints(0),
     mnPoly(0),
-    mnHeight(0),
     bHasOffline(false)
 {
     mpPointAry  = new Point[ mnMaxPoints ];

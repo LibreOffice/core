@@ -123,7 +123,6 @@ private:
     sal_uInt32          mnYAdd;         // the increment for input images Y coords for the current pass
     int                 mnPreviewShift; // shift to convert orig image coords into preview image coords
     int                 mnPreviewMask;  // == ((1 << mnPreviewShift) - 1)
-    sal_uInt16              mnIStmOldMode;
     sal_uInt16              mnTargetDepth;      // pixel depth of target bitmap
     sal_uInt8               mnTransRed;
     sal_uInt8               mnTransGreen;

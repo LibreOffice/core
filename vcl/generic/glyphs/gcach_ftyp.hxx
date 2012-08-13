@@ -170,7 +170,6 @@ private:
     FontList            maFontList;
 
     sal_IntPtr          mnMaxFontId;
-    sal_IntPtr          mnNextFontId;
 };
 
 // -----------------------------------------------------------------------

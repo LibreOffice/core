@@ -52,7 +52,6 @@ private:
     sal_uLong           mnActPos;
     Disposal        meLastDisposal;
     sal_Bool            mbPause;
-    sal_Bool            mbFirst;
     sal_Bool            mbMarked;
     sal_Bool            mbHMirr;
     sal_Bool            mbVMirr;

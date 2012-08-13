@@ -62,7 +62,6 @@ private:
     sal_uLong               mnTimeout;
     sal_uLong               mnWheelMode;
     sal_uLong               mnMaxWidth;
-    sal_uLong               mnActWidth;
     sal_uLong               mnActDist;
     long                mnActDeltaX;
     long                mnActDeltaY;

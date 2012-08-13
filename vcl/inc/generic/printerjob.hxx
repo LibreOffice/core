@@ -78,7 +78,6 @@ private:            // private data
     double          mfXScale;
     double          mfYScale;
 
-    sal_Int32       mnErrorCode;
     bool            m_bQuickJob;
 
 private:            // private methods
