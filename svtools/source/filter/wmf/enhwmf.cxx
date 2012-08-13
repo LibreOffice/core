@@ -336,8 +336,6 @@ sal_Bool EnhWMFReader::ReadEnhWMF()
 
             case EMR_POLYPOLYLINE :
             {
-                sal_uInt16* pnPoints;
-
                 sal_Int32   i, nPoly;
                 pWMF->SeekRel( 0x10 );
 
@@ -349,9 +347,9 @@ sal_Bool EnhWMFReader::ReadEnhWMF()
                 {
                     if ( ( static_cast< sal_uInt32 >( nPoly ) * sizeof(sal_uInt16) ) <= ( nEndPos - pWMF->Tell() ) )
                     {
-                        pnPoints = new sal_uInt16[ nPoly ];
+                        sal_uInt16* pnPoints = new sal_uInt16[ nPoly ];
 
-                        for ( i = 0; i < nPoly; i++ )
+                        for ( i = 0; i < nPoly && !pWMF->IsEof(); i++ )
                         {
                             *pWMF >> nPoints;
                             pnPoints[ i ] = (sal_uInt16)nPoints;
@@ -377,45 +375,55 @@ sal_Bool EnhWMFReader::ReadEnhWMF()
 
             case EMR_POLYPOLYGON :
             {
-                sal_uInt16* pnPoints;
-                Point*  pPtAry;
-
-                sal_uInt32  i, nPoly, nGesPoints;
+                sal_uInt32 nPoly(0);
+                sal_uInt32 nGesPoints(0);
+                sal_uInt32 nReadPoints(0);
                 pWMF->SeekRel( 0x10 );
 
                 // Anzahl der Polygone:
                 *pWMF >> nPoly >> nGesPoints;
 
-                if ( ( nGesPoints < SAL_MAX_UINT32 / sizeof(Point) ) && ( nPoly < SAL_MAX_UINT32 / sizeof(sal_uInt16) ) )
+                if ( ( nGesPoints < SAL_MAX_UINT32 / sizeof(Point) ) && ( nPoly < SAL_MAX_UINT32 / sizeof(sal_uInt16) )  && !pWMF->IsEof() )
                 {
                     if ( ( nPoly * sizeof(sal_uInt16) ) <= ( nEndPos - pWMF->Tell() ) )
                     {
-                        pnPoints = new sal_uInt16[ nPoly ];
+                        sal_uInt32 i(0);
+                        sal_uInt16* pnPoints = new sal_uInt16[ nPoly ];
 
-                        for ( i = 0; i < nPoly; i++ )
+                        for ( i = 0; i < nPoly && !pWMF->IsEof(); i++ )
                         {
                             *pWMF >> nPoints;
                             pnPoints[ i ] = (sal_uInt16)nPoints;
                         }
 
-                        if ( ( nGesPoints * (sizeof(sal_uInt32)+sizeof(sal_uInt32)) ) <= ( nEndPos - pWMF->Tell() ) )
+                        if ( ( nGesPoints * (sizeof(sal_uInt32)+sizeof(sal_uInt32)) ) <= ( nEndPos - pWMF->Tell() ) && !pWMF->IsEof())
                         {
-                            // Polygonpunkte holen:
-                            pPtAry  = new Point[ nGesPoints ];
+                            PolyPolygon aPolyPoly(nPoly, nPoly);
 
-                            for ( i = 0; i < nGesPoints; i++ )
+                            for ( i = 0; i < nPoly && !pWMF->IsEof(); i++ )
                             {
-                                *pWMF >> nX32 >> nY32;
-                                pPtAry[ i ] = Point( nX32, nY32 );
+                                const sal_uInt16 nPointCount(pnPoints[i]);
+                                Point* pPtAry = new Point[nPointCount];
+
+                                for(sal_uInt16 j(0); j < nPointCount && !pWMF->IsEof(); j++)
+                                {
+                                    *pWMF >> nX32 >> nY32;
+                                    pPtAry[ j ] = Point( nX32, nY32 );
+                                    nReadPoints++;
+                                }
+
+                                aPolyPoly.Insert(Polygon(nPointCount, pPtAry));
+                                delete[] pPtAry;
                             }
-                            // PolyPolygon Actions erzeugen
-                            PolyPolygon aPolyPoly( (sal_uInt16)nPoly, pnPoints, pPtAry );
+
                             pOut->DrawPolyPolygon( aPolyPoly, bRecordPath );
-                            delete[] pPtAry;
                         }
+
                         delete[] pnPoints;
                     }
                 }
+
+                OSL_ENSURE(nReadPoints == nGesPoints, "The number Points processed from EMR_POLYPOLYGON is unequal imported number (!)");
             }
             break;
 
@@ -1204,41 +1212,55 @@ sal_Bool EnhWMFReader::ReadEnhWMF()
 
             case EMR_POLYPOLYGON16 :
             {
-                sal_uInt16* pnPoints;
-                Point*  pPtAry;
-
-                sal_uInt32  i, nPoly, nGesPoints;
+                sal_uInt32 nPoly(0);
+                sal_uInt32 nGesPoints(0);
                 pWMF->SeekRel( 0x10 );
                 // Anzahl der Polygone:
                 *pWMF >> nPoly >> nGesPoints;
-                if ( ( nGesPoints < SAL_MAX_UINT32 / sizeof(Point) ) && ( nPoly < SAL_MAX_UINT32 / sizeof(sal_uInt16) ) )
+                sal_uInt32 nReadPoints(0);
+
+                if ( ( nGesPoints < SAL_MAX_UINT32 / sizeof(Point) ) && ( nPoly < SAL_MAX_UINT32 / sizeof(sal_uInt16) )  && !pWMF->IsEof() )
                 {
                     if ( ( static_cast< sal_uInt32 >( nPoly ) * sizeof( sal_uInt16 ) ) <= ( nEndPos - pWMF->Tell() ) )
                     {
-                        pnPoints = new sal_uInt16[ nPoly ];
-                        for ( i = 0; i < nPoly; i++ )
+                        sal_uInt32 i(0);
+                        sal_uInt16* pnPoints = new sal_uInt16[ nPoly ];
+
+                        for ( i = 0; i < nPoly && !pWMF->IsEof(); i++ )
                         {
                             *pWMF >> nPoints;
                             pnPoints[ i ] = (sal_uInt16)nPoints;
                         }
-                        if ( ( nGesPoints * (sizeof(sal_uInt16)+sizeof(sal_uInt16)) ) <= ( nEndPos - pWMF->Tell() ) )
+
+                        if ( ( nGesPoints * (sizeof(sal_uInt16)+sizeof(sal_uInt16)) ) <= ( nEndPos - pWMF->Tell() )  && !pWMF->IsEof() )
                         {
-                            // Polygonpunkte holen:
-                            pPtAry  = new Point[ nGesPoints ];
-                            for ( i = 0; i < nGesPoints; i++ )
+                            PolyPolygon aPolyPoly(nPoly, nPoly);
+
+                            for ( i = 0; i < nPoly && !pWMF->IsEof(); i++ )
                             {
-                                *pWMF >> nX16 >> nY16;
-                                pPtAry[ i ] = Point( nX16, nY16 );
+                                const sal_uInt16 nPointCount(pnPoints[i]);
+                                Point* pPtAry = new Point[nPointCount];
+
+                                for(sal_uInt16 b(0); b < nPointCount && !pWMF->IsEof(); b++)
+                                {
+                                    *pWMF >> nX16 >> nY16;
+                                    pPtAry[b] = Point( nX16, nY16 );
+                                    nReadPoints++;
+                                }
+
+                                aPolyPoly.Insert(Polygon(nPointCount, pPtAry));
+                                delete[] pPtAry;
                             }
 
-                            // PolyPolygon Actions erzeugen
-                            PolyPolygon aPolyPoly( (sal_uInt16)nPoly, pnPoints, pPtAry );
+                            // create PolyPolygon actions
                             pOut->DrawPolyPolygon( aPolyPoly, bRecordPath );
-                            delete[] pPtAry;
                         }
+
                         delete[] pnPoints;
                     }
                 }
+
+                OSL_ENSURE(nReadPoints == nGesPoints, "The number Points processed from EMR_POLYPOLYGON16 is unequal imported number (!)");
             }
             break;
 

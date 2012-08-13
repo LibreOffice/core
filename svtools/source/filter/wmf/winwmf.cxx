@@ -330,28 +330,39 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
 
         case W_META_POLYPOLYGON:
         {
-            sal_uInt16  i, nPoly, nPoints;
-            sal_uInt16* pnPoints;
-            Point*  pPtAry;
-            // Anzahl der Polygone:
-            *pWMF >> nPoly;
-            // Anzahl der Punkte eines jeden Polygons holen, Gesammtzahl der Punkte ermitteln:
-            pnPoints = new sal_uInt16[ nPoly ];
-            nPoints = 0;
-            for( i = 0; i < nPoly; i++ )
+            sal_uInt16 nPolyCount(0);
+
+            // get number of polygons
+            *pWMF >> nPolyCount;
+
+            if(nPolyCount && !pWMF->IsEof())
             {
-                *pWMF >> pnPoints[i];
-                nPoints = nPoints + pnPoints[i];
+                sal_uInt16* pnPoints = new sal_uInt16[nPolyCount];
+                sal_uInt16 a(0);
+                PolyPolygon aPolyPoly(nPolyCount, nPolyCount);
+
+                for(a = 0; a < nPolyCount && !pWMF->IsEof(); a++)
+                {
+                    *pWMF >> pnPoints[a];
+                }
+
+                for(a = 0; a < nPolyCount && !pWMF->IsEof(); a++)
+                {
+                    const sal_uInt16 nPointCount(pnPoints[a]);
+                    Point* pPtAry = new Point[nPointCount];
+
+                    for(sal_uInt16 b(0); b < nPointCount && !pWMF->IsEof(); b++)
+                    {
+                        pPtAry[b] = ReadPoint();
+                    }
+
+                    aPolyPoly.Insert(Polygon(nPointCount, pPtAry));
+                    delete[] pPtAry;
+                }
+
+                delete[] pnPoints;
+                pOut->DrawPolyPolygon(aPolyPoly);
             }
-            // Polygonpunkte holen:
-            pPtAry  = (Point*) new char[ nPoints * sizeof(Point) ];
-            for ( i = 0; i < nPoints; i++ )
-                pPtAry[ i ] = ReadPoint();
-            // PolyPolygon Actions erzeugen
-            PolyPolygon aPolyPoly( nPoly, pnPoints, pPtAry );
-            pOut->DrawPolyPolygon( aPolyPoly );
-            delete[] (char*) pPtAry;
-            delete[] pnPoints;
         }
         break;
 
