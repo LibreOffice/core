@@ -163,7 +163,7 @@ TypeInfoDef mysqlc_types[] = {
     {
         "LONGBLOB",                                  // Typename
         com::sun::star::sdbc::DataType::LONGVARBINARY, // sdbc-type
-        0xFFFFFFFF,                                  // Precision
+        -1,                                          // Precision
         "'",                                          // Literal prefix
         "'",                                          // Literal suffix
         "",                                          // Create params
