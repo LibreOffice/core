@@ -73,7 +73,7 @@ case "$1" in
 	test)
 		if test -n "`ssh $GERRITHOST 2>&1|grep \"Welcome to Gerrit Code Review\"`"
 		then
-			echo "Your gerrit setup was succesfull!"
+			echo "Your gerrit setup was successful!"
 		else
 			echo "There seems to be trouble."
 			echo "please have the output of: ssh -vvvv logerrit"
@@ -90,7 +90,7 @@ case "$1" in
 	nextchange)
 		if test -n "`git status -s -uno`"
 		then
-			echo "You have uncommited changes. Please commit or stash these:"
+			echo "You have uncommitted changes. Please commit or stash these:"
 			git status
 			exit 1
 		fi
@@ -129,7 +129,7 @@ case "$1" in
 			echo "no Change-Id given on the command line, reviewing change$CHANGEID"
 		fi
 		MESSAGEREQ=""
-		read -p 'was the change verified to build sucessfully (+) or found not to build (-) or none of that ()? ' VERIFIED
+		read -p 'was the change verified to build successfully (+) or found not to build (-) or none of that ()? ' VERIFIED
 		ask_tristate $VERIFIED
 		case "$ANSWER" in
 			"y")
