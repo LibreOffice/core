@@ -1508,7 +1508,7 @@ $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS,\
 
 endif # SYSTEM_POSTGRESQL
 
-
+ifneq (,$(filter DESKTOP,$(BUILD_TYPE)))
 ifeq ($(SYSTEM_MOZILLA),YES)
 
 # Nothing needed here ATM
@@ -1582,7 +1582,7 @@ $(call gb_LinkTarget_add_libs,$(1),\
 	$(OUTDIR)/lib/mozreg_s.lib \
 )
 
-endif
+endif # !GCC
 
 else ifeq ($(GUI),UNX)
 
@@ -1609,7 +1609,7 @@ $(call gb_LinkTarget_add_cxxflags,$(1),\
 	$(if $(filter MACOSX NETBSD,$(OS)),-Wno-deprecated) \
 )
 
-endif
+endif # UNX
 
 endef
 
@@ -1624,6 +1624,7 @@ $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS,\
 ))
 
 endif # SYSTEM_MOZILLA
+endif # DESKTOP
 
 ifeq ($(ENABLE_KDE),TRUE)
 
@@ -1882,6 +1883,14 @@ $(call gb_LinkTarget_add_libs,$(1), \
 
 endef
 
+ifeq (,$(filter DESKTOP,$(BUILD_TYPE)))
+
+define gb_LinkTarget__use_nss3
+
+endef
+
+else
+
 ifeq ($(SYSTEM_NSS),YES)
 
 define gb_LinkTarget__use_nss3
@@ -1937,6 +1946,7 @@ $(call gb_LinkTarget_use_libraries,$(1),\
 endef
 
 endif
+endif # DESKTOP
 
 ### Jars ############################################################
 
