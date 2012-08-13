@@ -542,18 +542,16 @@ sub get_downloadname_addon
 # This has to be the only content of this file.
 #########################################################
 
-sub get_versionstring
+sub _get_versionstring
 {
     my ( $versionfile ) = @_;
 
     my $versionstring = "";
 
-    for ( my $i = 0; $i <= $#{$versionfile}; $i++ )
+    for ( @{$versionfile} )
     {
-        my $oneline = ${$versionfile}[$i];
-
-        if ( $oneline =~ /^\s*\#/ ) { next; } # comment line
-        if ( $oneline =~ /^\s*\"\s*(.*?)\s*\"\s*$/ )
+        next if /^\s*\#/; # comment line
+        if ( /^\s*\"\s*(.*?)\s*\"\s*$/ )
         {
             $versionstring = $1;
             last;
@@ -580,7 +578,7 @@ sub get_current_version
         $infoline = "File $filename exists. Trying to find current version.\n";
         push( @installer::globals::logfileinfo, $infoline);
         my $versionfile = installer::files::read_file($filename);
-        $versionstring = get_versionstring($versionfile);
+        $versionstring = _get_versionstring($versionfile);
         $infoline = "Setting version string: $versionstring\n";
         push( @installer::globals::logfileinfo, $infoline);
     }
