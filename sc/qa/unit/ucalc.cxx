@@ -219,7 +219,6 @@ public:
     void testFindAreaPosColRight();
 
     CPPUNIT_TEST_SUITE(Test);
-#if 0
     CPPUNIT_TEST(testCollator);
     CPPUNIT_TEST(testInput);
     CPPUNIT_TEST(testCellFunctions);
@@ -261,7 +260,6 @@ public:
     CPPUNIT_TEST(testAutoFill);
     CPPUNIT_TEST(testCopyPasteFormulas);
     CPPUNIT_TEST(testCopyPasteFormulasExternalDoc);
-#endif
     CPPUNIT_TEST(testFindAreaPosRowDown);
     CPPUNIT_TEST(testFindAreaPosColRight);
     CPPUNIT_TEST_SUITE_END();
