@@ -25,6 +25,7 @@
 #include <svtools/stdctrl.hxx>
 #include <vcl/group.hxx>
 #include <sfx2/ctrlitem.hxx>
+#include <tools/list.hxx>
 
 #include <vcl/button.hxx>
 #include <vcl/field.hxx>

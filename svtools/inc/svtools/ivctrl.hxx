@@ -33,7 +33,7 @@
 #include <tools/string.hxx>
 #include <vcl/ctrl.hxx>
 #include <tools/link.hxx>
-#include <tools/list.hxx>
+#include <tools/contnr.hxx>
 #include <vcl/image.hxx>
 #include <vcl/seleng.hxx>
 

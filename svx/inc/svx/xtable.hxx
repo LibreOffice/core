@@ -39,7 +39,7 @@
 
 #include <tools/color.hxx>
 #include <tools/string.hxx>
-#include <tools/list.hxx>
+#include <tools/contnr.hxx>
 
 #include <cppuhelper/weak.hxx>
 
