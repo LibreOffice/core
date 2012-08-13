@@ -439,11 +439,18 @@ void EmbeddedObjectRef::GetReplacement( bool bUpdate )
 
 const Graphic* EmbeddedObjectRef::GetGraphic( OUString* pMediaType ) const
 {
-    if ( mpImpl->bNeedUpdate )
-        // bNeedUpdate will be set to false while retrieving new replacement
-        const_cast < EmbeddedObjectRef* >(this)->GetReplacement( true );
-    else if ( !mpImpl->pGraphic )
-        const_cast < EmbeddedObjectRef* >(this)->GetReplacement( false );
+    try
+    {
+        if ( mpImpl->bNeedUpdate )
+            // bNeedUpdate will be set to false while retrieving new replacement
+            const_cast < EmbeddedObjectRef* >(this)->GetReplacement(true);
+        else if ( !mpImpl->pGraphic )
+            const_cast < EmbeddedObjectRef* >(this)->GetReplacement(false);
+    }
+    catch( const uno::Exception& ex )
+    {
+        SAL_WARN("svtools.misc", "Something went wrong on getting the graphic: " << ex.Message);
+    }
 
     if ( mpImpl->pGraphic && pMediaType )
         *pMediaType = mpImpl->aMediaType;
