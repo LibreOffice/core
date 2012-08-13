@@ -235,7 +235,6 @@ public:
     short GetSize()                 { return nExpr;           }
     short GetDims()                 { return nDim;            }
     SbiExpression* Get( short );
-    sal_Bool  Test( const SbiProcDef& );    // parameter checks
     void  Gen();                    // code generation
     void addExpression( SbiExpression* pExpr );
 };
