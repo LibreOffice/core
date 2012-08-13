@@ -274,7 +274,7 @@ SbiSymDef::SbiSymDef( const String& rName ) : aName( rName )
     bWithBrackets =
     bByVal   =
     bChained =
-    bGlobal  = sal_False;
+    bGlobal  = false;
     pIn      =
     pPool    = NULL;
     nDefaultId = 0;
@@ -344,7 +344,7 @@ sal_uInt32 SbiSymDef::Define()
     pIn->pParser->aGen.GenStmnt();
     if( nChain ) pIn->pParser->aGen.BackChain( nChain );
     nChain = n;
-    bChained = sal_True;
+    bChained = true;
     return nChain;
 }
 

@@ -158,7 +158,7 @@ SbiExprNode* SbiExprNode::GetRealNode()
 
 // This method transform the type, if it fits into the Integer range
 
-sal_Bool SbiExprNode::IsIntConst()
+bool SbiExprNode::IsIntConst()
 {
     if( eNodeType == SbxNUMVAL )
     {
@@ -169,24 +169,24 @@ sal_Bool SbiExprNode::IsIntConst()
             {
                 nVal = (double) (short) nVal;
                 eType = SbxINTEGER;
-                return sal_True;
+                return true;
             }
         }
     }
-    return sal_False;
+    return false;
 }
 
-sal_Bool SbiExprNode::IsNumber()
+bool SbiExprNode::IsNumber()
 {
-    return sal_Bool( eNodeType == SbxNUMVAL );
+    return eNodeType == SbxNUMVAL;
 }
 
-sal_Bool SbiExprNode::IsVariable()
+bool SbiExprNode::IsVariable()
 {
-    return sal_Bool( eNodeType == SbxVARVAL );
+    return eNodeType == SbxVARVAL;
 }
 
-sal_Bool SbiExprNode::IsLvalue()
+bool SbiExprNode::IsLvalue()
 {
     return IsVariable();
 }

@@ -104,7 +104,7 @@ void SbiRuntime::StepARGTYP( sal_uInt32 nOp1 )
         StarBASIC::FatalError( SbERR_INTERNAL_ERROR );
     else
     {
-        sal_Bool bByVal = (nOp1 & 0x8000) != 0;         // Ist BYVAL requested?
+        bool bByVal = (nOp1 & 0x8000) != 0;         // Ist BYVAL requested?
         SbxDataType t = (SbxDataType) (nOp1 & 0x7FFF);
         SbxVariable* pVar = refArgv->Get( refArgv->Count() - 1 );   // last Arg
 

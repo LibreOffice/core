@@ -32,8 +32,7 @@ SbiExpression::SbiExpression( SbiParser* p, SbiExprType t,
     SbiExprMode eMode, const KeywordSymbolInfo* pKeywordSymbolInfo )
 {
     pParser = p;
-    bError = false;
-    bByVal = bBased = bBracket = sal_False;
+    bBased = bError = bByVal = bBracket = false;
     nParenLevel = 0;
     eCurExpr = t;
     m_eMode = eMode;
@@ -52,8 +51,7 @@ SbiExpression::SbiExpression( SbiParser* p, double n, SbxDataType t )
     pParser = p;
     eCurExpr = SbOPERAND;
     pNext = NULL;
-    bError = false;
-    bByVal = bBased = bBracket = sal_False;
+    bBased = bError = bByVal = bBracket = false;
     pExpr = new SbiExprNode( pParser, n, t );
     pExpr->Optimize();
 }
@@ -62,8 +60,7 @@ SbiExpression::SbiExpression( SbiParser* p, const SbiSymDef& r, SbiExprList* pPa
 {
     pParser = p;
     pNext = NULL;
-    bError = false;
-    bByVal = bBased = bBracket = sal_False;
+    bBased = bError = bByVal = bBracket = false;
     eCurExpr = SbOPERAND;
     pExpr = new SbiExprNode( pParser, r, SbxVARIANT, pPar );
 }
@@ -237,7 +234,7 @@ SbiExprNode* SbiExpression::Term( const KeywordSymbolInfo* pKeywordSymbolInfo )
                     && !pParser->WhiteSpace() );
     if( bObj )
     {
-        bBracket = sal_False;   // Now the bracket for the first term is obsolete
+        bBracket = false;   // Now the bracket for the first term is obsolete
         if( eType == SbxVARIANT )
             eType = SbxOBJECT;
         else
@@ -844,7 +841,7 @@ SbiExprList::SbiExprList( SbiParser* p )
     nExpr  =
     nDim   = 0;
     bError = false;
-    bBracket = sal_False;
+    bBracket = false;
 }
 
 SbiExprList::~SbiExprList()
@@ -898,7 +895,7 @@ void SbiExprList::addExpression( SbiExpression* pExpr )
 // #i79918/#i80532: bConst has never been set to true
 // -> reused as bStandaloneExpression
 //SbiParameters::SbiParameters( SbiParser* p, sal_Bool bConst, sal_Bool bPar) :
-SbiParameters::SbiParameters( SbiParser* p, sal_Bool bStandaloneExpression, sal_Bool bPar) :
+SbiParameters::SbiParameters( SbiParser* p, bool bStandaloneExpression, bool bPar) :
     SbiExprList( p )
 {
     if( !bPar )
@@ -917,7 +914,7 @@ SbiParameters::SbiParameters( SbiParser* p, sal_Bool bStandaloneExpression, sal_
         }
         else
         {
-            bBracket = sal_True;
+            bBracket = true;
             pParser->Next();
             eTok = pParser->Peek();
         }
@@ -960,20 +957,20 @@ SbiParameters::SbiParameters( SbiParser* p, sal_Bool bStandaloneExpression, sal_
                 SbiExprMode eModeAfter = pExpr->m_eMode;
                 if( eModeAfter == EXPRMODE_LPAREN_NOT_NEEDED )
                 {
-                    bBracket = sal_True;
+                    bBracket = true;
                 }
                 else if( eModeAfter == EXPRMODE_ARRAY_OR_OBJECT )
                 {
                     // Expression "looks" like an array assignment
                     // a(...)[(...)] = ? or a(...).b(...)
                     // RPAREN is already parsed
-                    bBracket = sal_True;
+                    bBracket = true;
                     bAssumeArrayMode = true;
                     eTok = NIL;
                 }
                 else if( eModeAfter == EXPRMODE_EMPTY_PAREN )
                 {
-                    bBracket = sal_True;
+                    bBracket = true;
                     delete pExpr;
                     if( bByVal )
                         pParser->Error( SbERR_LVALUE_EXPECTED );
@@ -1056,7 +1053,7 @@ SbiParameters::SbiParameters( SbiParser* p, sal_Bool bStandaloneExpression, sal_
 
 SbiDimList::SbiDimList( SbiParser* p ) : SbiExprList( p )
 {
-    bConst = sal_True;
+    bConst = true;
 
     if( pParser->Next() != LPAREN )
     {
@@ -1076,7 +1073,7 @@ SbiDimList::SbiDimList( SbiParser* p ) : SbiExprList( p )
             {
                 pExpr2 = new SbiExpression( pParser );
                 eTok = pParser->Next();
-                bConst &= pExpr1->IsIntConstant() & pExpr2->IsIntConstant();
+                bConst = bConst && pExpr1->IsIntConstant() && pExpr2->IsIntConstant();
                 bError = bError || !pExpr1->IsValid() || !pExpr2->IsValid();
                 pExpr1->pNext = pExpr2;
                 if( !pLast )
@@ -1090,7 +1087,7 @@ SbiDimList::SbiDimList( SbiParser* p ) : SbiExprList( p )
             {
                 pExpr1->SetBased();
                 pExpr1->pNext = NULL;
-                bConst &= pExpr1->IsIntConstant();
+                bConst = bConst && pExpr1->IsIntConstant();
                 bError = bError || !pExpr1->IsValid();
                 if( !pLast )
                     pFirst = pLast = pExpr1;

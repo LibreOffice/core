@@ -867,21 +867,21 @@ SbiProcDef* SbiParser::ProcDecl( sal_Bool bDecl )
             Next();
         else
           for(;;) {
-            sal_Bool bByVal = sal_False;
-            sal_Bool bOptional = sal_False;
-            sal_Bool bParamArray = sal_False;
+            bool bByVal = false;
+            bool bOptional = false;
+            bool bParamArray = false;
             while( Peek() == BYVAL || Peek() == BYREF || Peek() == _OPTIONAL_ )
             {
-                if      ( Peek() == BYVAL )     Next(), bByVal = sal_True;
-                else if ( Peek() == BYREF )     Next(), bByVal = sal_False;
-                else if ( Peek() == _OPTIONAL_ )    Next(), bOptional = sal_True;
+                if      ( Peek() == BYVAL )     Next(), bByVal = true;
+                else if ( Peek() == BYREF )     Next(), bByVal = false;
+                else if ( Peek() == _OPTIONAL_ )    Next(), bOptional = true;
             }
             if( bCompatible && Peek() == PARAMARRAY )
             {
                 if( bByVal || bOptional )
                     Error( SbERR_UNEXPECTED, PARAMARRAY );
                 Next();
-                bParamArray = sal_True;
+                bParamArray = true;
             }
             SbiSymDef* pPar = VarDecl( NULL, sal_False, sal_False );
             if( !pPar )
