@@ -43,10 +43,8 @@ namespace comphelper
     class OContextHelper_Impl
     {
     private:
-        OAccessibleContextHelper*           m_pAntiImpl;        // the owning instance
         IMutex*                             m_pExternalLock;    // the optional additional external lock
 
-        ::cppu::OInterfaceContainerHelper*  m_pEventListeners;
         WeakReference< XAccessible >        m_aCreator;         // the XAccessible which created our XAccessibleContext
 
         AccessibleEventNotifier::TClientId  m_nClientId;
@@ -64,10 +62,8 @@ namespace comphelper
                                                                                 { m_nClientId = _nId; }
 
     public:
-        OContextHelper_Impl( OAccessibleContextHelper* _pAntiImpl )
-            :m_pAntiImpl( _pAntiImpl )
-            ,m_pExternalLock( NULL )
-            ,m_pEventListeners( NULL )
+        OContextHelper_Impl()
+            :m_pExternalLock( NULL )
             ,m_nClientId( 0 )
         {
         }
@@ -87,7 +83,7 @@ namespace comphelper
         :OAccessibleContextHelper_Base( GetMutex() )
         ,m_pImpl( NULL )
     {
-        m_pImpl = new OContextHelper_Impl( this );
+        m_pImpl = new OContextHelper_Impl();
     }
 
     //---------------------------------------------------------------------
@@ -95,7 +91,7 @@ namespace comphelper
         :OAccessibleContextHelper_Base( GetMutex() )
         ,m_pImpl( NULL )
     {
-        m_pImpl = new OContextHelper_Impl( this );
+        m_pImpl = new OContextHelper_Impl();
         m_pImpl->setExternalLock( _pExternalLock );
     }
 

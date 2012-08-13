@@ -157,7 +157,6 @@ class AttacherAllListener_Impl : public WeakImplHelper1< XAllListener >
     Reference< XEventAttacherManager >  xManager;
     OUString                            aScriptType;
     OUString                            aScriptCode;
-    sal_Int16                           nVersion;
 
     void convertToEventReturn( Any & rRet, const Type & rRetType )
         throw( CannotConvertException );
@@ -184,7 +183,6 @@ AttacherAllListener_Impl::AttacherAllListener_Impl
     , xManager( pManager_ )
     , aScriptType( rScriptType_ )
     , aScriptCode( rScriptCode_ )
-    , nVersion( 2 )
 {
 }
 
