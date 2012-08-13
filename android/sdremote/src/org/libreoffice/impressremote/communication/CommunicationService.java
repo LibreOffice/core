@@ -50,7 +50,8 @@ public class CommunicationService extends Service implements Runnable {
                 if (mStateDesired == State.CONNECTED) {
                     switch (mServerDesired.getProtocol()) {
                     case NETWORK:
-                        mClient = new NetworkClient(mServerDesired.getAddress());
+                        mClient = new NetworkClient(
+                                        mServerDesired.getAddress(), this);
                         mTransmitter = new Transmitter(mClient);
                         mClient.setReceiver(mReceiver);
                         break;
