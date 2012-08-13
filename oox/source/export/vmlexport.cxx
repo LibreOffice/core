@@ -34,6 +34,8 @@
 #include <rtl/ustring.hxx>
 
 #include <tools/stream.hxx>
+#include <svx/svdotext.hxx>
+#include <vcl/cvtgrf.hxx>
 
 #include <cstdio>
 
@@ -45,9 +47,11 @@ using rtl::OUStringBuffer;
 using namespace sax_fastparser;
 using namespace oox::vml;
 
-VMLExport::VMLExport( ::sax_fastparser::FSHelperPtr pSerializer )
+VMLExport::VMLExport( ::sax_fastparser::FSHelperPtr pSerializer, VMLTextExport* pTextExport )
     : EscherEx( EscherExGlobalRef(new EscherExGlobal(0)), 0 ),
       m_pSerializer( pSerializer ),
+      m_pTextExport( pTextExport ),
+      m_pSdrObject( 0 ),
       m_pShapeAttrList( NULL ),
       m_nShapeType( ESCHER_ShpInst_Nil ),
       m_pShapeStyle( new OStringBuffer( 200 ) ),
@@ -472,9 +476,13 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const Rectangle& rRect 
                                     aPath.append( "e" );
                                     break;
                                 default:
-#if OSL_DEBUG_LEVEL > 0
-                                    fprintf( stderr, "TODO: unhandled segment '%x' in the path\n", nSeg );
-#endif
+                                    // See EscherPropertyContainer::CreateCustomShapeProperties, by default nSeg is simply the number of points.
+                                    for (int i = 0; i < nSeg; ++i)
+                                    {
+                                        sal_Int32 nX = impl_GetPointComponent(pVerticesIt, nPointSize);
+                                        sal_Int32 nY = impl_GetPointComponent(pVerticesIt, nPointSize);
+                                        aPath.append("l").append(nX).append(",").append(nY);
+                                    }
                                     break;
                             }
                         }
@@ -494,6 +502,7 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const Rectangle& rRect 
             case ESCHER_Prop_fillType: // 384
             case ESCHER_Prop_fillColor: // 385
             case ESCHER_Prop_fillBackColor: // 387
+            case ESCHER_Prop_fillBlip: // 390
             case ESCHER_Prop_fNoFillHitTest: // 447
                 {
                     sal_uInt32 nValue;
@@ -506,7 +515,7 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const Rectangle& rRect 
                         {
                             case ESCHER_FillSolid:       pFillType = "solid"; break;
                             // TODO case ESCHER_FillPattern:     pFillType = ""; break;
-                            // TODO case ESCHER_FillTexture:     pFillType = ""; break;
+                            case ESCHER_FillTexture:     pFillType = "tile"; break;
                             // TODO case ESCHER_FillPicture:     pFillType = ""; break;
                             // TODO case ESCHER_FillShade:       pFillType = ""; break;
                             // TODO case ESCHER_FillShadeCenter: pFillType = ""; break;
@@ -530,6 +539,19 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const Rectangle& rRect 
                     if ( rProps.GetOpt( ESCHER_Prop_fillBackColor, nValue ) )
                         impl_AddColor( pAttrList, XML_color2, nValue );
 
+                    EscherPropSortStruct aStruct;
+                    if ( rProps.GetOpt( ESCHER_Prop_fillBlip, aStruct ) && m_pTextExport)
+                    {
+                        SvMemoryStream aStream;
+                        int nHeaderSize = 25; // The first bytes are WW8-specific, we're only interested in the PNG
+                        aStream.Write(aStruct.pBuf + nHeaderSize, aStruct.nPropSize - nHeaderSize);
+                        aStream.Seek(0);
+                        Graphic aGraphic;
+                        GraphicConverter::Import(aStream, aGraphic, CVT_PNG);
+                        OUString aImageId = m_pTextExport->GetDrawingML().WriteImage( aGraphic );
+                        pAttrList->add(FSNS(XML_r, XML_id), OUStringToOString(aImageId, RTL_TEXTENCODING_UTF8));
+                    }
+
                     if ( rProps.GetOpt( ESCHER_Prop_fNoFillHitTest, nValue ) )
                         impl_AddBool( pAttrList, XML_detectmouseclick, nValue );
 
@@ -538,6 +560,7 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const Rectangle& rRect 
                 bAlreadyWritten[ ESCHER_Prop_fillType ] = true;
                 bAlreadyWritten[ ESCHER_Prop_fillColor ] = true;
                 bAlreadyWritten[ ESCHER_Prop_fillBackColor ] = true;
+                bAlreadyWritten[ ESCHER_Prop_fillBlip ] = true;
                 bAlreadyWritten[ ESCHER_Prop_fNoFillHitTest ] = true;
                 break;
 
@@ -648,7 +671,7 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const Rectangle& rRect 
             default:
 #if OSL_DEBUG_LEVEL > 0
                 fprintf( stderr, "TODO VMLExport::Commit(), unimplemented id: %d, value: %" SAL_PRIuUINT32 ", data: [%" SAL_PRIuUINT32 ", %p]\n",
-                        it->nPropId, it->nPropValue, it->nPropSize, it->pBuf );
+                        nId, it->nPropValue, it->nPropSize, it->pBuf );
                 if ( it->nPropSize )
                 {
                     const sal_uInt8 *pIt = it->pBuf;
@@ -806,6 +829,37 @@ sal_Int32 VMLExport::StartShape()
         m_pSerializer->startElementNS( XML_v, nShapeElement, XFastAttributeListRef( m_pShapeAttrList ) );
     }
 
+    // now check if we have some text and we have a text exporter registered
+    const SdrTextObj* pTxtObj = PTR_CAST(SdrTextObj, m_pSdrObject);
+    if (pTxtObj && m_pTextExport)
+    {
+        const OutlinerParaObject* pParaObj = 0;
+        bool bOwnParaObj = false;
+
+        /*
+        #i13885#
+        When the object is actively being edited, that text is not set into
+        the objects normal text object, but lives in a seperate object.
+        */
+        if (pTxtObj->IsTextEditActive())
+        {
+            pParaObj = pTxtObj->GetEditOutlinerParaObject();
+            bOwnParaObj = true;
+        }
+        else
+        {
+            pParaObj = pTxtObj->GetOutlinerParaObject();
+        }
+
+        if( pParaObj )
+        {
+            // this is reached only in case some text is attached to the shape
+            m_pTextExport->WriteOutliner(*pParaObj);
+            if( bOwnParaObj )
+                delete pParaObj;
+        }
+    }
+
     return nShapeElement;
 }
 
@@ -816,6 +870,12 @@ void VMLExport::EndShape( sal_Int32 nShapeElement )
         // end of the shape
         m_pSerializer->endElementNS( XML_v, nShapeElement );
     }
+}
+
+sal_uInt32 VMLExport::AddSdrObject( const SdrObject& rObj )
+{
+    m_pSdrObject = &rObj;
+    return EscherEx::AddSdrObject(rObj);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

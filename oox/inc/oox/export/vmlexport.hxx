@@ -30,8 +30,10 @@
 #define _OOX_EXPORT_VMLEXPORT_HXX_
 
 #include <oox/dllapi.h>
+#include <oox/export/drawingml.hxx>
 #include <sax/fshelper.hxx>
 #include <filter/msfilter/escherex.hxx>
+#include <editeng/outlobj.hxx>
 
 namespace rtl {
     class OString;
@@ -42,10 +44,27 @@ namespace oox {
 
 namespace vml {
 
+/// Interface to be implemented by the parent exporter that knows how to handle shape text.
+class OOX_DLLPUBLIC VMLTextExport
+{
+public:
+    virtual void WriteOutliner(const OutlinerParaObject& rParaObj) = 0;
+    virtual oox::drawingml::DrawingML& GetDrawingML() = 0;
+protected:
+    VMLTextExport() {}
+    virtual ~VMLTextExport() {}
+};
+
 class OOX_DLLPUBLIC VMLExport : public EscherEx
 {
     /// Fast serializer to output the data
     ::sax_fastparser::FSHelperPtr m_pSerializer;
+
+    /// Parent exporter, used for text callback.
+    VMLTextExport* m_pTextExport;
+
+    /// The object we're exporting.
+    const SdrObject* m_pSdrObject;
 
     /// Fill the shape attributes as they come.
     ::sax_fastparser::FastAttributeList *m_pShapeAttrList;
@@ -63,7 +82,7 @@ class OOX_DLLPUBLIC VMLExport : public EscherEx
     bool *m_pShapeTypeWritten;
 
 public:
-                        VMLExport( ::sax_fastparser::FSHelperPtr pSerializer );
+                        VMLExport( ::sax_fastparser::FSHelperPtr pSerializer, VMLTextExport* pTextExport = 0 );
     virtual             ~VMLExport();
 
     ::sax_fastparser::FSHelperPtr
@@ -72,7 +91,7 @@ public:
     /// Export the sdr object as VML.
     ///
     /// Call this when you need to export the object as VML.
-    using EscherEx::AddSdrObject;
+    sal_uInt32 AddSdrObject( const SdrObject& rObj );
 
 protected:
     /// Add an attribute to the generated <v:shape/> element.

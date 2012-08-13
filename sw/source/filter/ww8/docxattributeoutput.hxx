@@ -42,6 +42,7 @@
 
 #include <vector>
 #include <boost/scoped_ptr.hpp>
+#include <oox/export/vmlexport.hxx>
 
 class SwGrfNode;
 class SdrObject;
@@ -68,7 +69,7 @@ enum DocxColBreakStatus
 };
 
 /// The class that has handlers for various resource types when exporting as DOCX.
-class DocxAttributeOutput : public AttributeOutputBase
+class DocxAttributeOutput : public AttributeOutputBase, public oox::vml::VMLTextExport
 {
 public:
     /// Export the state of RTL/CJK.
@@ -633,6 +634,10 @@ public:
 
     bool HasPostitFields() const;
     void WritePostitFields();
+
+    /// VMLTextExport
+    virtual void WriteOutliner(const OutlinerParaObject& rParaObj);
+    virtual oox::drawingml::DrawingML& GetDrawingML();
 };
 
 #endif // _DOCXATTRIBUTEOUTPUT_HXX_
