@@ -1021,6 +1021,13 @@ void BackendImpl::unorc_flush( Reference<XCommandEnvironment> const & xCmdEnv )
         buf.append(LF);
     }
 
+    // See refreshBundledExtensionsDir (desktop/source/app/app.cxx):
+    if (m_eContext == CONTEXT_BUNDLED)
+    {
+        buf.append("LIBO_NON_PREREG_BUNDLED_EXTENSIONS=TRUE");
+        buf.append(LF);
+    }
+
     // write unorc:
     const Reference<io::XInputStream> xData(
         ::xmlscript::createInputStream(

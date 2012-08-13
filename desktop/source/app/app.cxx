@@ -216,6 +216,18 @@ void removeTree(OUString const & url) {
 // detected here and lead to a removal of user/extensions/bundled, so that
 // Desktop::SynchronizeExtensionRepositories will then definitely resync
 // share/extensions.)
+// As a special case, if you create a UserInstallation with LO >= 3.6.1, then
+// run an old LO <= 3.5.x using share/prereg/bundled on the same
+// UserInstallation (so that it partially overwrites user/extensions/bundled,
+// potentially duplicating component information, but not touching
+// user/extensions/bundled/buildid), and then run the new LO >= 3.6.1 on the
+// same UserInstallation again, it can fail to start (due to the duplicated
+// component information).  Even though such downgrading scenarios at best work
+// by luck in general, the special token LIBO_NON_PREREG_BUNDLED_EXTENSIONS=TRUE
+// is used to detect and fix that problem:  The assumption is that if an old LO
+// <= 3.5.x messed with user/extensions/bundled in the meantime, then it would
+// have rewritten the unorc (dropping the token), and LO >= 3.6.1 can detect
+// that.
 void refreshBundledExtensionsDir() {
     OUString buildId(
         "${$BRAND_BASE_DIR/program/" SAL_CONFIGFILE("version") ":buildid}");
@@ -223,36 +235,44 @@ void refreshBundledExtensionsDir() {
     OUString dir("$BUNDLED_EXTENSIONS_USER");
     rtl::Bootstrap::expandMacros(dir); //TODO: detect failure
     OUString url(dir + "/buildid");
-    osl::File f(url);
-    switch (f.open(osl_File_OpenFlag_Read)) {
-    case osl::FileBase::E_None:
-        {
-            rtl::ByteSequence s1;
-            osl::FileBase::RC rc = f.readLine(s1);
-            if (f.close() != osl::FileBase::E_None) {
-                SAL_WARN("desktop", "cannot close " + url + " after reading");
+    OUString nonPrereg(
+        "${$BUNDLED_EXTENSIONS_USER/registry/"
+        "com.sun.star.comp.deployment.component.PackageRegistryBackend/unorc:"
+        "LIBO_NON_PREREG_BUNDLED_EXTENSIONS}");
+    rtl::Bootstrap::expandMacros(nonPrereg);
+    if (nonPrereg == "TRUE") {
+        osl::File f(url);
+        switch (f.open(osl_File_OpenFlag_Read)) {
+        case osl::FileBase::E_None:
+            {
+                rtl::ByteSequence s1;
+                osl::FileBase::RC rc = f.readLine(s1);
+                if (f.close() != osl::FileBase::E_None) {
+                    SAL_WARN(
+                        "desktop", "cannot close " + url + " after reading");
+                }
+                if (rc != osl::FileBase::E_None) {
+                    throw css::uno::RuntimeException(
+                        "cannot read from " + url,
+                        css::uno::Reference< css::uno::XInterface >());
+                }
+                OUString s2(
+                    reinterpret_cast< char const * >(s1.getConstArray()),
+                    s1.getLength(), RTL_TEXTENCODING_ISO_8859_1);
+                    // using ISO 8859-1 avoids any and all conversion errors;
+                    // the content should only be a subset of ASCII, anyway
+                if (s2 == buildId) {
+                    return;
+                }
+                break;
             }
-            if (rc != osl::FileBase::E_None) {
-                throw css::uno::RuntimeException(
-                    "cannot read from " + url,
-                    css::uno::Reference< css::uno::XInterface >());
-            }
-            OUString s2(
-                reinterpret_cast< char const * >(s1.getConstArray()),
-                s1.getLength(), RTL_TEXTENCODING_ISO_8859_1);
-                // using ISO 8859-1 avoids any and all conversion errors; the
-                // content should only be a subset of ASCII, anyway
-            if (s2 == buildId) {
-                return;
-            }
+        case osl::FileBase::E_NOENT:
             break;
+        default:
+            throw css::uno::RuntimeException(
+                "cannot open " + url + " for reading",
+                css::uno::Reference< css::uno::XInterface >());
         }
-    case osl::FileBase::E_NOENT:
-        break;
-    default:
-        throw css::uno::RuntimeException(
-            "cannot open " + url + " for reading",
-            css::uno::Reference< css::uno::XInterface >());
     }
     removeTree(dir);
     switch (osl::Directory::createPath(dir)) {
@@ -264,6 +284,7 @@ void refreshBundledExtensionsDir() {
             "cannot create path " + dir,
             css::uno::Reference< css::uno::XInterface >());
     }
+    osl::File f(url);
     if (f.open(osl_File_OpenFlag_Write | osl_File_OpenFlag_Create) !=
         osl::FileBase::E_None)
     {
