@@ -25,6 +25,7 @@
 #include <rtl/ustring.hxx>
 
 #include <tools/stream.hxx>
+#include <svx/svdotext.hxx>
 
 #include <cstdio>
 
@@ -36,9 +37,11 @@ using rtl::OUStringBuffer;
 using namespace sax_fastparser;
 using namespace oox::vml;
 
-VMLExport::VMLExport( ::sax_fastparser::FSHelperPtr pSerializer )
+VMLExport::VMLExport( ::sax_fastparser::FSHelperPtr pSerializer, VMLTextExport* pTextExport )
     : EscherEx( EscherExGlobalRef(new EscherExGlobal(0)), 0 ),
       m_pSerializer( pSerializer ),
+      m_pTextExport( pTextExport ),
+      m_pSdrObject( 0 ),
       m_pShapeAttrList( NULL ),
       m_nShapeType( ESCHER_ShpInst_Nil ),
       m_pShapeStyle( new OStringBuffer( 200 ) ),
@@ -824,6 +827,37 @@ sal_Int32 VMLExport::StartShape()
         m_pSerializer->startElementNS( XML_v, nShapeElement, XFastAttributeListRef( m_pShapeAttrList ) );
     }
 
+    // now check if we have some text and we have a text exporter registered
+    const SdrTextObj* pTxtObj = PTR_CAST(SdrTextObj, m_pSdrObject);
+    if (pTxtObj && m_pTextExport)
+    {
+        const OutlinerParaObject* pParaObj = 0;
+        bool bOwnParaObj = false;
+
+        /*
+        #i13885#
+        When the object is actively being edited, that text is not set into
+        the objects normal text object, but lives in a seperate object.
+        */
+        if (pTxtObj->IsTextEditActive())
+        {
+            pParaObj = pTxtObj->GetEditOutlinerParaObject();
+            bOwnParaObj = true;
+        }
+        else
+        {
+            pParaObj = pTxtObj->GetOutlinerParaObject();
+        }
+
+        if( pParaObj )
+        {
+            // this is reached only in case some text is attached to the shape
+            m_pTextExport->WriteOutliner(*pParaObj);
+            if( bOwnParaObj )
+                delete pParaObj;
+        }
+    }
+
     return nShapeElement;
 }
 
@@ -834,6 +868,12 @@ void VMLExport::EndShape( sal_Int32 nShapeElement )
         // end of the shape
         m_pSerializer->endElementNS( XML_v, nShapeElement );
     }
+}
+
+sal_uInt32 VMLExport::AddSdrObject( const SdrObject& rObj )
+{
+    m_pSdrObject = &rObj;
+    return EscherEx::AddSdrObject(rObj);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

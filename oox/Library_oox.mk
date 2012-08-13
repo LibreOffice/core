@@ -61,6 +61,7 @@ $(eval $(call gb_Library_use_libraries,oox,\
     comphelper \
     cppu \
     cppuhelper \
+    editeng \
     msfilter \
     sal \
     sax \
