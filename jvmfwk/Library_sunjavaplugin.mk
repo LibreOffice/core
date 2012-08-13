@@ -41,6 +41,10 @@ $(eval $(call gb_Library_use_api,sunjavaplugin,\
     udkapi \
 ))
 
+$(eval $(call gb_Library_use_package,sunjavaplugin,\
+    jvmfwk_inc \
+))
+
 $(eval $(call gb_Library_use_libraries,sunjavaplugin,\
     cppu \
     cppuhelper \
