@@ -566,7 +566,11 @@ void ThumbnailView::MouseButtonDown( const MouseEvent& rMEvt )
                     }
                     else
                     {
-                        if (pItem->isInsideTitle(rMEvt.GetPosPixel()))
+                        Rectangle aRect(pItem->getDrawArea());
+                        aRect.setY(aRect.getY()+mnItemPadding+mnThumbnailHeight);
+                        aRect.SetSize(Size(mnItemWidth,mnDisplayHeight+mnItemPadding));
+
+                        if (aRect.IsInside(rMEvt.GetPosPixel()))
                         {
                             pItem->setSelection(!pItem->isSelected());
 

@@ -106,8 +106,6 @@ public:
 
     void setSelectClickHdl (const Link &link);
 
-    bool isInsideTitle (const Point &pt) const;
-
     virtual void Paint (drawinglayer::processor2d::BaseProcessor2D *pProcessor,
                         const ThumbnailItemAttributes *pAttrs);
 
