@@ -1234,8 +1234,8 @@ uno::Reference< beans::XMaterialHolder > PDFWriterImpl::initEncryption( const rt
             xResult.clear();
 
         // trash temporary padded cleartext PWDs
-        rtl_zeroMemory( aPadOPW, sizeof(aPadOPW) );
-        rtl_zeroMemory( aPadUPW, sizeof(aPadUPW) );
+        memset( aPadOPW, 0, sizeof(aPadOPW) );
+        memset( aPadUPW, 0, sizeof(aPadUPW) );
 
     }
     return xResult;
@@ -1317,7 +1317,7 @@ void PDFWriterImpl::padPassword( const rtl::OUString& i_rPassword, sal_uInt8* o_
         o_pPaddedPW[i] = s_nPadString[y];
 
     // trash memory of temporary clear text password
-    rtl_zeroMemory( (sal_Char*)aString.getStr(), aString.getLength() );
+    memset( (sal_Char*)aString.getStr(), 0, aString.getLength() );
 }
 
 /**********************************

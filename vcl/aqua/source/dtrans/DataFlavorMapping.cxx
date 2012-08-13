@@ -36,10 +36,10 @@
 #include "com/sun/star/uno/Sequence.hxx"
 
 #include <rtl/ustring.hxx>
-#include <rtl/memory.h>
 #include <osl/endian.h>
 
 #include <stdio.h>
+#include <string.h>
 
 #include <premac.h>
 #include <Cocoa/Cocoa.h>
@@ -486,7 +486,7 @@ Any FileListDataProvider::getOOoData()
 
       Sequence<sal_Int8> oOOFileList(lenSeqRequired);
       unichar* pBuffer = reinterpret_cast<unichar*>(oOOFileList.getArray());
-      rtl_zeroMemory(pBuffer, lenSeqRequired);
+      memset(pBuffer, 0, lenSeqRequired);
 
       for (size_t i = 0; i < length; i++)
         {

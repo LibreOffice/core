@@ -71,7 +71,6 @@
 
 #include <sot/exchange.hxx>
 #include <sot/formats.hxx>
-#include <rtl/memory.h>
 #include <sal/macros.h>
 
 #include <vcl/unohelp.hxx>
@@ -172,7 +171,7 @@ void Impl_IMEInfos::CopyAttribs( const xub_StrLen* pA, xub_StrLen nL )
     nLen = nL;
     delete[] pAttribs;
     pAttribs = new sal_uInt16[ nL ];
-    rtl_copyMemory( pAttribs, pA, nL*sizeof(sal_uInt16) );
+    memcpy( pAttribs, pA, nL*sizeof(sal_uInt16) );
 }
 
 // -----------------------------------------------------------------------

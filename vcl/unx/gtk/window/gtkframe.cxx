@@ -1062,7 +1062,7 @@ void GtkSalFrame::askForXEmbedFocus( sal_Int32 i_nTimeCode )
 #if !GTK_CHECK_VERSION(3,0,0)
     XEvent aEvent;
 
-    rtl_zeroMemory( &aEvent, sizeof(aEvent) );
+    memset( &aEvent, 0, sizeof(aEvent) );
     aEvent.xclient.window = m_aForeignParentWindow;
     aEvent.xclient.type = ClientMessage;
     aEvent.xclient.message_type = getDisplay()->getWMAdaptor()->getAtom( vcl_sal::WMAdaptor::XEMBED );

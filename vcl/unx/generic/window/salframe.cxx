@@ -188,7 +188,7 @@ void X11SalFrame::askForXEmbedFocus( sal_Int32 i_nTimeCode )
 {
     XEvent aEvent;
 
-    rtl_zeroMemory( &aEvent, sizeof(aEvent) );
+    memset( &aEvent, 0, sizeof(aEvent) );
     aEvent.xclient.window = mhForeignParent;
     aEvent.xclient.type = ClientMessage;
     aEvent.xclient.message_type = pDisplay_->getWMAdaptor()->getAtom( WMAdaptor::XEMBED );

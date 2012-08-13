@@ -1071,9 +1071,9 @@ static HDC ImplCreateSalPrnIC( WinSalInfoPrinter* pPrinter, ImplJobSetup* pSetup
         return 0;
     sal_Unicode pDriverName[ 4096 ];
     sal_Unicode pDeviceName[ 4096 ];
-    rtl_copyMemory( pDriverName, pPrinter->maDriverName.getStr(), pPrinter->maDriverName.getLength()*sizeof(sal_Unicode));
+    memcpy( pDriverName, pPrinter->maDriverName.getStr(), pPrinter->maDriverName.getLength()*sizeof(sal_Unicode));
     memset( pDriverName+pPrinter->maDriverName.getLength(), 0, 32 );
-    rtl_copyMemory( pDeviceName, pPrinter->maDeviceName.getStr(), pPrinter->maDeviceName.getLength()*sizeof(sal_Unicode));
+    memcpy( pDeviceName, pPrinter->maDeviceName.getStr(), pPrinter->maDeviceName.getLength()*sizeof(sal_Unicode));
     memset( pDeviceName+pPrinter->maDeviceName.getLength(), 0, 32 );
     hDC = ImplCreateICW_WithCatch( reinterpret_cast< LPWSTR >(pDriverName),
                                    reinterpret_cast< LPCWSTR >(pDeviceName),
@@ -1557,8 +1557,8 @@ sal_Bool WinSalPrinter::StartJob( const rtl::OUString* pFileName,
     // #95347 some buggy drivers (eg, OKI) write to those buffers in CreateDC, although declared const - so provide some space
     sal_Unicode aDrvBuf[4096];
     sal_Unicode aDevBuf[4096];
-    rtl_copyMemory( aDrvBuf, mpInfoPrinter->maDriverName.getStr(), (mpInfoPrinter->maDriverName.getLength()+1)*sizeof(sal_Unicode));
-    rtl_copyMemory( aDevBuf, mpInfoPrinter->maDeviceName.getStr(), (mpInfoPrinter->maDeviceName.getLength()+1)*sizeof(sal_Unicode));
+    memcpy( aDrvBuf, mpInfoPrinter->maDriverName.getStr(), (mpInfoPrinter->maDriverName.getLength()+1)*sizeof(sal_Unicode));
+    memcpy( aDevBuf, mpInfoPrinter->maDeviceName.getStr(), (mpInfoPrinter->maDeviceName.getLength()+1)*sizeof(sal_Unicode));
     hDC = CreateDCW( reinterpret_cast<LPCWSTR>(aDrvBuf),
                      reinterpret_cast<LPCWSTR>(aDevBuf),
                      NULL,

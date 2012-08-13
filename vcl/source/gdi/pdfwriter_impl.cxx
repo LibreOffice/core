@@ -126,7 +126,7 @@ void PDFTestOutputStream::write( const com::sun::star::uno::Reference< com::sun:
 {
     OString aStr( "lalala\ntest\ntest\ntest" );
     com::sun::star::uno::Sequence< sal_Int8 > aData( aStr.getLength() );
-    rtl_copyMemory( aData.getArray(), aStr.getStr(), aStr.getLength() );
+    memcpy( aData.getArray(), aStr.getStr(), aStr.getLength() );
     xStream->writeBytes( aData );
 }
 
@@ -3151,7 +3151,7 @@ std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitSystemFont( const PhysicalFo
     aInfo.m_aFontBBox = Rectangle( Point( -200, -200 ), Size( 1700, 1700 ) );
     aInfo.m_aPSName = pFont->maName;
     sal_Int32 pWidths[256];
-    rtl_zeroMemory( pWidths, sizeof(pWidths) );
+    memset( pWidths, 0, sizeof(pWidths) );
     if( pFont->IsEmbeddable() )
     {
         const unsigned char* pFontData = NULL;
@@ -3304,10 +3304,10 @@ std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitEmbeddedFont( const Physical
     sal_Int32 pEncToUnicodeIndex[256];
     if( pEncoding )
     {
-        rtl_zeroMemory( nEncoding, sizeof(nEncoding) );
-        rtl_zeroMemory( nEncodedCodes, sizeof(nEncodedCodes) );
-        rtl_zeroMemory( pUnicodesPerGlyph, sizeof(pUnicodesPerGlyph) );
-        rtl_zeroMemory( pEncToUnicodeIndex, sizeof(pEncToUnicodeIndex) );
+        memset( nEncoding, 0, sizeof(nEncoding) );
+        memset( nEncodedCodes, 0, sizeof(nEncodedCodes) );
+        memset( pUnicodesPerGlyph, 0, sizeof(pUnicodesPerGlyph) );
+        memset( pEncToUnicodeIndex, 0, sizeof(pEncToUnicodeIndex) );
         for( Ucs2SIntMap::const_iterator it = pEncoding->begin(); it != pEncoding->end(); ++it )
         {
             if( it->second != -1 )
@@ -3599,7 +3599,7 @@ std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitEmbeddedFont( const Physical
                     else
                     {
                         boost::shared_array<unsigned char> pWriteBuffer( new unsigned char[ nLength2 ] );
-                        rtl_zeroMemory( pWriteBuffer.get(), nLength2 );
+                        memset( pWriteBuffer.get(), 0, nLength2 );
                         int nWriteIndex = 0;
 
                         int nNextSectionIndex = 0;
@@ -4085,10 +4085,10 @@ bool PDFWriterImpl::emitFonts()
             // fill arrays and prepare encoding index map
             sal_Int32 nToUnicodeStream = 0;
 
-            rtl_zeroMemory( pGlyphIDs, sizeof( pGlyphIDs ) );
-            rtl_zeroMemory( pEncoding, sizeof( pEncoding ) );
-            rtl_zeroMemory( pUnicodesPerGlyph, sizeof( pUnicodesPerGlyph ) );
-            rtl_zeroMemory( pEncToUnicodeIndex, sizeof( pEncToUnicodeIndex ) );
+            memset( pGlyphIDs, 0, sizeof( pGlyphIDs ) );
+            memset( pEncoding, 0, sizeof( pEncoding ) );
+            memset( pUnicodesPerGlyph, 0, sizeof( pUnicodesPerGlyph ) );
+            memset( pEncToUnicodeIndex, 0, sizeof( pEncToUnicodeIndex ) );
             for( FontEmitMapping::iterator fit = lit->m_aMapping.begin(); fit != lit->m_aMapping.end();++fit )
             {
                 sal_uInt8 nEnc = fit->second.getGlyphId();

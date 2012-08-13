@@ -108,9 +108,9 @@ Sequence<sal_Int8> SAL_CALL TextHtmlToHTMLFormat(Sequence<sal_Int8>& aTextHtml)
     htmlFormat += textHtml;
 
     Sequence<sal_Int8> byteSequence(htmlFormat.length() + 1); // space the trailing '\0'
-    rtl_zeroMemory(byteSequence.getArray(), byteSequence.getLength());
+    memset(byteSequence.getArray(), 0, byteSequence.getLength());
 
-    rtl_copyMemory(
+    memcpy(
         static_cast<void*>(byteSequence.getArray()),
         static_cast<const void*>(htmlFormat.c_str()),
         htmlFormat.length());
@@ -141,7 +141,7 @@ Sequence<sal_Int8> HTMLFormatToTextHtml(const Sequence<sal_Int8>& aHTMLFormat)
   sal_Int32 len = dataEnd - htmlStartTag;
   Sequence<sal_Int8> plainHtmlData(len);
 
-  rtl_copyMemory(static_cast<void*>(plainHtmlData.getArray()), htmlStartTag, len);
+  memcpy(static_cast<void*>(plainHtmlData.getArray()), htmlStartTag, len);
 
   return plainHtmlData;
 }

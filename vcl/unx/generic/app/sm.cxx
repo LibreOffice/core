@@ -637,7 +637,7 @@ void ICEConnectionWorker(void * data)
             nConnectionsBefore = pThis->m_nConnections;
             int nBytes = sizeof( struct pollfd )*(nConnectionsBefore+1);
             pLocalFD = (struct pollfd*)rtl_allocateMemory( nBytes );
-            rtl_copyMemory( pLocalFD, pThis->m_pFilehandles, nBytes );
+            memcpy( pLocalFD, pThis->m_pFilehandles, nBytes );
         }
 
         int nRet = poll( pLocalFD,nConnectionsBefore+1,-1 );

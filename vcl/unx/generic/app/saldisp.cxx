@@ -2391,7 +2391,7 @@ bool SalDisplay::XIfEventWithTimeout( XEvent* o_pEvent, XPointer i_pPredicateDat
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 SalVisual::SalVisual()
 {
-    rtl_zeroMemory( this, sizeof( SalVisual ) );
+    memset( this, 0, sizeof( SalVisual ) );
 }
 
 SalVisual::SalVisual( const XVisualInfo* pXVI )

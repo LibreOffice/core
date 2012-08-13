@@ -31,7 +31,6 @@
 
 #include <cmath>
 #include <rtl/crc.h>
-#include <rtl/memory.h>
 #include <rtl/alloc.h>
 #include <tools/zcodec.hxx>
 #include <tools/stream.hxx>
@@ -750,7 +749,7 @@ sal_Bool PNGReaderImpl::ImplReadTransparent()
                 if ( mnChunkLen == 2 )
                 {
                     mpTransTab = new sal_uInt8[ 256 ];
-                    rtl_fillMemory( mpTransTab, 256, 0xff );
+                    memset( mpTransTab, 0xff, 256);
                     // color type 0 and 4 is always greyscale,
                     // so the return value can be used as index
                     sal_uInt8 nIndex = ImplScaleColor();
@@ -778,10 +777,10 @@ sal_Bool PNGReaderImpl::ImplReadTransparent()
                 {
                     mbTransparent = true;
                     mpTransTab = new sal_uInt8 [ 256 ];
-                    rtl_fillMemory( mpTransTab, 256, 0xff );
+                    memset( mpTransTab, 0xff, 256 );
                     if (mnChunkLen > 0)
                     {
-                        rtl_copyMemory( mpTransTab, &(*maDataIter), mnChunkLen );
+                        memcpy( mpTransTab, &(*maDataIter), mnChunkLen );
                         maDataIter += mnChunkLen;
                         // need alpha transparency if not on/off masking
                         for( int i = 0; i < mnChunkLen; ++i )
@@ -1023,7 +1022,7 @@ bool PNGReaderImpl::ImplPreparePass()
     mnScansize = ( mnScansize*mnPngDepth + 7 ) >> 3;
 
     ++mnScansize; // scan size also needs room for the filtertype byte
-    rtl_zeroMemory( mpScanPrior, mnScansize );
+    memset( mpScanPrior, 0, mnScansize );
 
     return true;
 }
@@ -1132,7 +1131,7 @@ void PNGReaderImpl::ImplApplyFilter()
         break;
     }
 
-    rtl_copyMemory( mpScanPrior, mpInflateInBuf, mnScansize );
+    memcpy( mpScanPrior, mpInflateInBuf, mnScansize );
 }
 
 // ---------------------------------------------------------------------------------------------------

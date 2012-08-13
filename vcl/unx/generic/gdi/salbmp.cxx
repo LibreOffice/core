@@ -36,7 +36,6 @@
 #endif
 
 #include <osl/endian.h>
-#include <rtl/memory.h>
 
 #include <vcl/bitmap.hxx>
 #include <vcl/salbtype.hxx>

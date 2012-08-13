@@ -1685,7 +1685,7 @@ sal_Bool Bitmap::ImplReducePopular( sal_uInt16 nColCount )
         PopularColorCount*  pCountTable = new PopularColorCount[ nTotalColors ];
         long                nX, nY, nR, nG, nB, nIndex;
 
-        rtl_zeroMemory( pCountTable, nTotalColors * sizeof( PopularColorCount ) );
+        memset( pCountTable, 0, nTotalColors * sizeof( PopularColorCount ) );
 
         for( nR = 0, nIndex = 0; nR < 256; nR += nColorOffset )
         {

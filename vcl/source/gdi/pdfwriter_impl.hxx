@@ -294,7 +294,7 @@ public:
     public:
         GlyphEmit() : m_nUnicodes(0), m_nSubsetGlyphID(0)
         {
-            rtl_zeroMemory( m_aBufferedUnicodes, sizeof( m_aBufferedUnicodes ) );
+            memset( m_aBufferedUnicodes, 0, sizeof( m_aBufferedUnicodes ) );
             m_nMaxUnicodes = SAL_N_ELEMENTS(m_aBufferedUnicodes);
         }
         ~GlyphEmit()
@@ -310,9 +310,9 @@ public:
             {
                 sal_Ucs* pNew = new sal_Ucs[ 2 * m_nMaxUnicodes];
                 if( m_pUnicodes.get() )
-                    rtl_copyMemory( pNew, m_pUnicodes.get(), m_nMaxUnicodes * sizeof(sal_Ucs) );
+                    memcpy( pNew, m_pUnicodes.get(), m_nMaxUnicodes * sizeof(sal_Ucs) );
                 else
-                    rtl_copyMemory( pNew, m_aBufferedUnicodes, m_nMaxUnicodes * sizeof(sal_Ucs) );
+                    memcpy( pNew, m_aBufferedUnicodes, m_nMaxUnicodes * sizeof(sal_Ucs) );
                 m_pUnicodes.reset( pNew );
                 m_nMaxUnicodes *= 2;
             }

@@ -29,6 +29,7 @@
 #include <Carbon/Carbon.h>
 #include <QuickTime/QuickTime.h>
 #include <postmac.h>
+#include <string.h>
 
 #include "PictToBmpFlt.hxx"
 
@@ -68,7 +69,7 @@ bool PICTtoBMP(com::sun::star::uno::Sequence<sal_Int8>& aPict,
       aBmp.realloc(sz);
 
       HLock(hBmp);
-      rtl_copyMemory(aBmp.getArray(), ((sal_Int8*)*hBmp), sz);
+      memcpy(aBmp.getArray(), ((sal_Int8*)*hBmp), sz);
       HUnlock(hBmp);
 
       result = true;
@@ -130,7 +131,7 @@ bool BMPtoPICT(com::sun::star::uno::Sequence<sal_Int8>& aBmp,
       aPict.realloc(sz);
 
       HLock((Handle)hPict);
-      rtl_copyMemory(aPict.getArray(), ((sal_Int8*)*hPict), sz);
+      memcpy(aPict.getArray(), ((sal_Int8*)*hPict), sz);
       HUnlock((Handle)hPict);
 
       // Release the data associated with the picture

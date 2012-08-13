@@ -32,7 +32,6 @@
 #include <cmath>
 #include <limits>
 #include <rtl/crc.h>
-#include <rtl/memory.h>
 #include <rtl/alloc.h>
 #include <tools/zcodec.hxx>
 #include <tools/stream.hxx>
@@ -648,7 +647,7 @@ sal_uLong PNGWriterImpl::ImplGetFilter ( sal_uLong nY, sal_uLong nXStart, sal_uL
 void PNGWriterImpl::ImplClearFirstScanline()
 {
     if ( mnFilterType )
-        rtl_zeroMemory( mpPreviousScan, mnDeflateInSize );
+        memset( mpPreviousScan, 0, mnDeflateInSize );
 }
 
 // ------------------------------------------------------------------------
@@ -682,7 +681,7 @@ void PNGWriterImpl::ImplWriteChunk ( unsigned char* pSource, sal_uInt32 nDatSize
         vcl::PNGWriter::ChunkData& rChunkData = maChunkSeq.back();
         sal_uInt32 nSize = rChunkData.aData.size();
         rChunkData.aData.resize( nSize + nDatSize );
-        rtl_copyMemory( &rChunkData.aData[ nSize ], pSource, nDatSize );
+        memcpy( &rChunkData.aData[ nSize ], pSource, nDatSize );
     }
 }
 

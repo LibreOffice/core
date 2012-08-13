@@ -520,7 +520,7 @@ uno::Sequence< sal_Int8 > SAL_CALL VclCanvasBitmap::getData( rendering::IntegerB
         for( long y=aRequestedBytes.Top(); y<aRequestedBytes.Bottom(); ++y )
         {
             Scanline pScan = m_pBmpAcc->GetScanline(y);
-            rtl_copyMemory(pOutBuf, pScan+aRequestedBytes.Left(), aRequestedBytes.getWidth());
+            memcpy(pOutBuf, pScan+aRequestedBytes.Left(), aRequestedBytes.getWidth());
             pOutBuf += nScanlineStride;
         }
     }
@@ -605,7 +605,7 @@ uno::Sequence< sal_Int8 > SAL_CALL VclCanvasBitmap::getPixel( rendering::Integer
 
         // can return bitmap data as-is
         Scanline pScan = m_pBmpAcc->GetScanline(pos.Y);
-        rtl_copyMemory(pOutBuf, pScan+nScanlineLeftOffset, aRet.getLength() );
+        memcpy(pOutBuf, pScan+nScanlineLeftOffset, aRet.getLength() );
     }
     else
     {
@@ -629,7 +629,7 @@ uno::Sequence< sal_Int8 > SAL_CALL VclCanvasBitmap::getPixel( rendering::Integer
             Scanline  pScan = m_pBmpAcc->GetScanline(pos.Y);
 
             // input integer multiple of byte - copy directly
-            rtl_copyMemory(pOutBuf, pScan+nScanlineLeftOffset, nNonAlphaBytes );
+            memcpy(pOutBuf, pScan+nScanlineLeftOffset, nNonAlphaBytes );
             pOutBuf += nNonAlphaBytes;
             *pOutBuf++ = m_pAlphaAcc->GetPixel(pos.Y,pos.X);
         }

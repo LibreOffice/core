@@ -492,7 +492,7 @@ SalInstance* CreateSalInstance()
 
     // determine the windows version
     aSalShlData.mbWXP        = 0;
-    rtl_zeroMemory( &aSalShlData.maVersionInfo, sizeof(aSalShlData.maVersionInfo) );
+    memset( &aSalShlData.maVersionInfo, 0, sizeof(aSalShlData.maVersionInfo) );
     aSalShlData.maVersionInfo.dwOSVersionInfoSize = sizeof( aSalShlData.maVersionInfo );
     if ( GetVersionEx( &aSalShlData.maVersionInfo ) )
     {
