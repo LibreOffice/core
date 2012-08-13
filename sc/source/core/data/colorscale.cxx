@@ -30,6 +30,9 @@
 #include "document.hxx"
 #include "cell.hxx"
 #include "fillinfo.hxx"
+#if DUMP_FORMAT_INFO
+#include <iostream>
+#endif
 
 ScColorScaleEntry::ScColorScaleEntry():
     mnVal(0),
@@ -487,6 +490,30 @@ Color* ScColorScaleFormat::GetColor( const ScAddress& rAddr ) const
     return new Color(aColor);
 }
 
+#if DUMP_FORMAT_INFO
+void ScColorScaleFormat::dumpInfo() const
+{
+    std::cout << "Color Scale" << std::endl;
+    const ScRangeList& rRange = GetRange();
+    size_t n = rRange.size();
+    for(size_t i = 0; i < n; ++i)
+    {
+        const ScRange* pRange = rRange[i];
+        SCTAB nTab = pRange->aStart.Tab();
+        for( SCCOL nCol = pRange->aStart.Col(), nEndCol = pRange->aEnd.Col(); nCol <= nEndCol; ++nCol)
+        {
+            for( SCROW nRow = pRange->aStart.Row(), nEndRow = pRange->aEnd.Row(); nRow <= nEndRow; ++nRow)
+            {
+                boost::scoped_ptr<Color> pColor( GetColor(ScAddress(nCol, nRow, nTab)) );
+                std::cout << nCol << "," << nRow << "," << nTab << ",";
+                std::cout << ((int)pColor->GetRed()) << "," << ((int)pColor->GetGreen()) << "," << ((int)pColor->GetBlue());
+                std::cout << std::endl;
+            }
+        }
+    }
+}
+#endif
+
 void ScColorScaleFormat::UpdateMoveTab(SCTAB nOldTab, SCTAB nNewTab)
 {
     SCTAB nThisTab = GetRange().front()->aStart.Tab();
@@ -825,5 +852,28 @@ ScDataBarInfo* ScDataBarFormat::GetDataBarInfo(const ScAddress& rAddr) const
 
     return pInfo;
 }
+
+#if DUMP_FORMAT_INFO
+void ScDataBarFormat::dumpInfo() const
+{
+    const ScRangeList& rRange = GetRange();
+    size_t n = rRange.size();
+    for(size_t i = 0; i < n; ++i)
+    {
+        const ScRange* pRange = rRange[i];
+        SCTAB nTab = pRange->aStart.Tab();
+        for( SCCOL nCol = pRange->aStart.Col(), nEndCol = pRange->aEnd.Col(); nCol <= nEndCol; ++nCol)
+        {
+            for( SCROW nRow = pRange->aStart.Row(), nEndRow = pRange->aEnd.Row(); nRow <= nEndRow; ++nRow)
+            {
+                boost::scoped_ptr<ScDataBarInfo> pInfo( GetDataBarInfo(ScAddress(nCol, nRow, nTab)) );
+                std::cout << nCol << "," << nRow << "," << nTab << "," << pInfo->mnZero << ",";
+                std::cout << pInfo->mnLength << "," << pInfo->mbGradient << "," << pInfo->mbShowValue << std::endl;
+                std::cout << std::endl;
+            }
+        }
+    }
+}
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

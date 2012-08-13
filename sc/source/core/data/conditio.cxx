@@ -1425,6 +1425,17 @@ ScCondFormatData ScConditionalFormat::GetData( ScBaseCell* pCell, const ScAddres
     return aData;
 }
 
+
+#if DUMP_FORMAT_INFO
+void ScConditionalFormat::dumpInfo() const
+{
+    for(CondFormatContainer::const_iterator itr = maEntries.begin(); itr != maEntries.end(); ++itr)
+    {
+        itr->dumpInfo();
+    }
+}
+#endif
+
 void ScConditionalFormat::DoRepaint( const ScRange* pModified )
 {
     if(pModified)

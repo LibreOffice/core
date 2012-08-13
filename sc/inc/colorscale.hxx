@@ -223,6 +223,10 @@ public:
     const_iterator end() const;
 
     size_t size() const;
+
+#if DUMP_FORMAT_INFO
+    virtual void dumpInfo() const;
+#endif
 };
 
 class SC_DLLPUBLIC ScDataBarFormat : public ScColorFormat
@@ -243,6 +247,10 @@ public:
             const ScRange& rRange, SCsCOL nDx, SCsROW nDy, SCsTAB nDz );
 
     virtual condformat::ScFormatEntryType GetType() const;
+
+#if DUMP_FORMAT_INFO
+    virtual void dumpInfo() const;
+#endif
 private:
     double getMin(double nMin, double nMax) const;
     double getMax(double nMin, double nMax) const;

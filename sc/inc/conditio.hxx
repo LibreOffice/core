@@ -48,6 +48,8 @@ class ScTokenArray;
 //  nOptions Flags
 #define SC_COND_NOBLANKS    1
 
+#define DUMP_FORMAT_INFO 1
+
 
 // ordering of ScConditionMode and ScQueryOp is equal,
 // to facilitate the merging of both in the future
@@ -108,6 +110,10 @@ public:
     virtual ScFormatEntry* Clone( ScDocument* pDoc = NULL ) const = 0;
 
     virtual void SetParent( ScConditionalFormat* pNew ) = 0;
+
+#if DUMP_FORMAT_INFO
+    virtual void dumpInfo() const = 0;
+#endif
 protected:
     ScDocument* mpDoc;
 
@@ -203,6 +209,10 @@ public:
     virtual ScFormatEntry* Clone(ScDocument* pDoc = NULL) const;
 
     static ScConditionMode GetModeFromApi(sal_Int32 nOperator);
+
+#if DUMP_FORMAT_INFO
+    virtual void dumpInfo() const {}
+#endif
 
 protected:
     virtual void    DataChanged( const ScRange* pModified ) const;
@@ -302,6 +312,10 @@ public:
     bool            IsUsed() const          { return bIsUsed; }
 
     bool            MarkUsedExternalReferences() const;
+
+#if DUMP_FORMAT_INFO
+    void dumpInfo() const;
+#endif
 
     //  sorted (via PTRARR) by Index
     //  operator== only for sorting

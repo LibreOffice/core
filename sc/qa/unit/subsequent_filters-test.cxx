@@ -1264,6 +1264,7 @@ void ScFiltersTest::testColorScale()
     ScConditionalFormatList* pCondFormatList = pDoc->GetCondFormList(0);
     const ScConditionalFormat* pFormat = pCondFormatList->GetFormat(nIndex);
     CPPUNIT_ASSERT(pFormat);
+    pFormat->dumpInfo();
 
     pPattern = pDoc->GetPattern(1,5,0);
     nIndex = static_cast<const SfxUInt32Item&>(pPattern->GetItem(ATTR_CONDITIONAL)).GetValue();
