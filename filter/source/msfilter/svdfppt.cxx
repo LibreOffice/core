@@ -7940,6 +7940,9 @@ void    SdrPowerPointImport::ApplyTextAnchorAttributes( PPTTextObj& rTextObj, Sf
         case mso_anchorBottomCentered:
             eTHA = SDRTEXTHORZADJUST_LEFT;
             break;
+
+        default:
+            break;
         }
         // if there is a 100% use of following attributes, the textbox can been aligned also in vertical direction
         switch ( eTextAnchor )
@@ -7988,6 +7991,9 @@ void    SdrPowerPointImport::ApplyTextAnchorAttributes( PPTTextObj& rTextObj, Sf
         case mso_anchorBottom:
         case mso_anchorBottomCentered:
             eTVA = SDRTEXTVERTADJUST_BOTTOM;
+            break;
+
+        default:
             break;
         }
         // if there is a 100% usage of following attributes, the textbox can be aligned also in horizontal direction
