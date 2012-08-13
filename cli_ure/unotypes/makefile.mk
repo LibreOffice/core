@@ -49,8 +49,8 @@ $(OUT)$/bin$/cli_uretypes.dll : $(BIN)$/climaker.exe $(SOLARBINDIR)$/types.rdb $
         --out $@ \
         --keyfile $(BIN)$/cliuno.snk \
         --assembly-version $(CLI_URETYPES_NEW_VERSION) \
-        --assembly-description "This assembly contains metadata for the StarOffice/OpenOffice.org API." \
-        --assembly-company "OpenOffice.org" \
+        --assembly-description "This assembly contains metadata for the LibreOffice API." \
+        --assembly-company "LibreOffice" \
         $(SOLARBINDIR)$/udkapi.rdb
 
 #do not forget to deliver cli_uretypes.config. It is NOT embedded in the policy file.
