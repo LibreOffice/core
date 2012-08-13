@@ -75,6 +75,13 @@ TemplateAbstractView::~TemplateAbstractView ()
     delete mpItemView;
 }
 
+void TemplateAbstractView::setItemDimensions(long ItemWidth, long ThumbnailHeight, long DisplayHeight, int itemPadding)
+{
+    ThumbnailView::setItemDimensions(ItemWidth,ThumbnailHeight,DisplayHeight,itemPadding);
+
+    mpItemView->setItemDimensions(ItemWidth,ThumbnailHeight,DisplayHeight,itemPadding);
+}
+
 sal_uInt16 TemplateAbstractView::getOverlayRegionId() const
 {
     return mpItemView->getId();

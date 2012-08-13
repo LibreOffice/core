@@ -35,27 +35,26 @@ TemplateViewItem::~TemplateViewItem ()
 {
 }
 
-void TemplateViewItem::calculateItemsPosition(sal_uInt32 nMaxTextLength)
+void TemplateViewItem::calculateItemsPosition(const long nThumbnailHeight, const long nDisplayHeight,
+                                              const long nPadding, sal_uInt32 nMaxTextLenght)
 {
-    ThumbnailViewItem::calculateItemsPosition(nMaxTextLength);
+    ThumbnailViewItem::calculateItemsPosition(nThumbnailHeight,nDisplayHeight,nPadding,nMaxTextLenght);
 
     if (!maSubTitle.isEmpty())
     {
         Size aRectSize = maDrawArea.GetSize();
-        Size aImageSize = maPreview1.GetSizePixel();
-        aRectSize.Height() -= aImageSize.getHeight();
 
         drawinglayer::primitive2d::TextLayouterDevice aTextDev;
 
-        long nSpace = (aRectSize.getHeight() - 2*aTextDev.getTextHeight()) / 3;
+        long nSpace = (nDisplayHeight + nPadding - 2*aTextDev.getTextHeight()) / 3;
 
         // Set title position
-        maTextPos.setY(maPrev1Pos.getY() + aImageSize.getHeight() + nSpace);
+        maTextPos.setY(maDrawArea.getY() + nThumbnailHeight + nPadding + nSpace + aTextDev.getTextHeight());
 
         // Set subtitle position
-        maSubTitlePos.setY(maTextPos.getY() + nSpace);
+        maSubTitlePos.setY(maTextPos.getY() + nSpace + aTextDev.getTextHeight());
         maSubTitlePos.setX(maDrawArea.Left() +
-                           (aRectSize.Width() - aTextDev.getTextWidth(maSubTitle,0,nMaxTextLength)*SUBTITLE_SCALE_FACTOR)/2);
+                           (aRectSize.Width() - aTextDev.getTextWidth(maSubTitle,0,nMaxTextLenght)*SUBTITLE_SCALE_FACTOR)/2);
     }
 }
 

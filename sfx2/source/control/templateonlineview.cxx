@@ -26,12 +26,6 @@
 #include <com/sun/star/ucb/XContentAccess.hpp>
 #include <com/sun/star/ucb/XDynamicResultSet.hpp>
 
-#define ITEM_MAX_WIDTH 192
-#define ITEM_MAX_HEIGHT 192
-#define ITEM_PADDING 5
-#define THUMBNAIL_MAX_HEIGHT 128 - 2*ITEM_PADDING
-#define THUMBNAIL_MAX_WIDTH ITEM_MAX_WIDTH - 2*ITEM_PADDING
-
 using namespace com::sun::star;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::task;
@@ -214,8 +208,8 @@ bool TemplateOnlineView::loadRepository (const sal_uInt16 nRepositoryId, bool bR
                     aTemplateItem.nRegionId = pItem->mnId-1;
                     aTemplateItem.aPath = sRealURL;
                     aTemplateItem.aThumbnail = TemplateAbstractView::fetchThumbnail(sRealURL,
-                                                                                    THUMBNAIL_MAX_WIDTH,
-                                                                                    THUMBNAIL_MAX_HEIGHT);
+                                                                                    TEMPLATE_THUMBNAIL_MAX_WIDTH,
+                                                                                    TEMPLATE_THUMBNAIL_MAX_HEIGHT);
 //                    pData->mbIsRemote = xRow->getBoolean( ROW_IS_REMOTE ) && !xRow->wasNull();
 //                    pData->mbIsRemoveable = xRow->getBoolean( ROW_IS_REMOVEABLE ) && !xRow->wasNull();
                     aTemplateItem.aName = xRow->getString( ROW_TITLE );
@@ -320,13 +314,6 @@ void TemplateOnlineView::syncRepositories() const
         officecfg::Office::Common::Misc::TemplateRepositoryNames::set(aNames, batch, pContext);
         batch->commit();
     }
-}
-
-void TemplateOnlineView::setItemDimensions(long ItemWidth, long ThumbnailHeight, long DisplayHeight, int itemPadding)
-{
-    ThumbnailView::setItemDimensions(ItemWidth,ThumbnailHeight,DisplayHeight,itemPadding);
-
-    mpItemView->setItemDimensions(ItemWidth,ThumbnailHeight,DisplayHeight,itemPadding);
 }
 
 IMPL_LINK (TemplateOnlineView, ChangeNameHdl, TemplateView*, pView)

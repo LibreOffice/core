@@ -26,12 +26,6 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 
-#define ITEM_MAX_WIDTH 192
-#define ITEM_MAX_HEIGHT 192
-#define ITEM_PADDING 5
-#define THUMBNAIL_MAX_HEIGHT 128 - 2*ITEM_PADDING
-#define THUMBNAIL_MAX_WIDTH ITEM_MAX_WIDTH - 2*ITEM_PADDING
-
 void lcl_updateThumbnails (TemplateLocalViewItem *pItem);
 
 class FolderFilter_Application
@@ -108,10 +102,6 @@ TemplateLocalView::TemplateLocalView ( Window* pParent, const ResId& rResId, boo
       mpDocTemplates(new SfxDocumentTemplates)
 {
     mpItemView->SetColor(Color(COL_WHITE));
-    mpItemView->setItemDimensions(ITEM_MAX_WIDTH,THUMBNAIL_MAX_HEIGHT,
-                                  ITEM_MAX_HEIGHT-THUMBNAIL_MAX_HEIGHT,
-                                  ITEM_PADDING);
-
     mpItemView->setChangeNameHdl(LINK(this,TemplateLocalView,ChangeNameHdl));
 }
 
@@ -159,7 +149,9 @@ void TemplateLocalView::Populate ()
             aProperties.aName = aName;
             aProperties.aPath = aURL;
             aProperties.aType = aType;
-            aProperties.aThumbnail = TemplateAbstractView::fetchThumbnail(aURL,THUMBNAIL_MAX_WIDTH,THUMBNAIL_MAX_HEIGHT);
+            aProperties.aThumbnail = TemplateAbstractView::fetchThumbnail(aURL,
+                                                                          TEMPLATE_THUMBNAIL_MAX_WIDTH,
+                                                                          TEMPLATE_THUMBNAIL_MAX_HEIGHT);
 
             pItem->maTemplates.push_back(aProperties);
         }
@@ -600,8 +592,8 @@ bool TemplateLocalView::copyFrom (TemplateLocalViewItem *pItem, const rtl::OUStr
         aTemplate.nRegionId = nRegionId;
         aTemplate.aName = aPath;
         aTemplate.aThumbnail = TemplateAbstractView::fetchThumbnail(rPath,
-                                                                    THUMBNAIL_MAX_WIDTH,
-                                                                    THUMBNAIL_MAX_HEIGHT);
+                                                                    TEMPLATE_THUMBNAIL_MAX_WIDTH,
+                                                                    TEMPLATE_THUMBNAIL_MAX_HEIGHT);
         aTemplate.aPath = rPath;
         aTemplate.aType = SvFileInformationManager::GetDescription(INetURLObject(rPath));
 
@@ -678,7 +670,8 @@ IMPL_LINK(TemplateLocalView, ChangeNameHdl, TemplateView*, pView)
         if (mItemList[i]->mnId == nItemId)
         {
             mItemList[i]->maTitle = pView->getName();
-            mItemList[i]->calculateItemsPosition(mpItemAttrs->nMaxTextLenght);
+            mItemList[i]->calculateItemsPosition(mnThumbnailHeight,mnDisplayHeight,
+                                                 mnItemPadding,mpItemAttrs->nMaxTextLenght);
             Invalidate();
             break;
         }
@@ -698,14 +691,14 @@ void lcl_updateThumbnails (TemplateLocalViewItem *pItem)
         if (i == 0)
         {
             pItem->maPreview1 = TemplateAbstractView::scaleImg(pItem->maTemplates[i].aThumbnail,
-                                                               THUMBNAIL_MAX_WIDTH*0.75,
-                                                               THUMBNAIL_MAX_HEIGHT*0.75);
+                                                               TEMPLATE_THUMBNAIL_MAX_WIDTH*0.75,
+                                                               TEMPLATE_THUMBNAIL_MAX_HEIGHT*0.75);
         }
         else
         {
             pItem->maPreview2 = TemplateAbstractView::scaleImg(pItem->maTemplates[i].aThumbnail,
-                                                               THUMBNAIL_MAX_WIDTH*0.75,
-                                                               THUMBNAIL_MAX_HEIGHT*0.75);
+                                                               TEMPLATE_THUMBNAIL_MAX_WIDTH*0.75,
+                                                               TEMPLATE_THUMBNAIL_MAX_HEIGHT*0.75);
         }
     }
 }

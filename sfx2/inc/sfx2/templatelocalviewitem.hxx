@@ -26,8 +26,6 @@ public:
 
     virtual ~TemplateLocalViewItem ();
 
-    virtual void calculateItemsPosition (sal_uInt32 nMaxTextLenght);
-
     const Point& getPrev2Pos () const { return maPrev2Pos; }
 
     virtual void Paint (drawinglayer::processor2d::BaseProcessor2D *pProcessor,

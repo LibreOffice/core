@@ -50,13 +50,6 @@
 #include "doc.hrc"
 #include "templatedlg.hrc"
 
-#define ITEM_MAX_WIDTH 192
-#define ITEM_MAX_HEIGHT 192
-#define ITEM_PADDING 5
-#define ITEM_SPACE 30
-#define ITEM_MAX_TEXT_LENGTH 20
-#define THUMBNAIL_MAX_HEIGHT 128
-
 #define INIT_FOLDER_COLS 3
 #define INIT_FOLDER_LINES 2
 
@@ -142,7 +135,7 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg (Window *parent)
 
     // Calculate thumbnail view minimum size
     Size aThumbSize = maView->CalcWindowSizePixel(INIT_FOLDER_COLS,INIT_FOLDER_LINES,
-                                                  ITEM_MAX_WIDTH,ITEM_MAX_HEIGHT,ITEM_SPACE);
+                                                  TEMPLATE_ITEM_MAX_WIDTH,TEMPLATE_ITEM_MAX_HEIGHT,TEMPLATE_ITEM_SPACE);
 
     if (aWinSize.getWidth() < aThumbSize.getWidth() + 2*PADDING_DLG_BORDER)
         aWinSize.setWidth(aThumbSize.getWidth() + 2*PADDING_DLG_BORDER);
@@ -200,11 +193,11 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg (Window *parent)
 
     maView->SetStyle(WB_VSCROLL);
     maView->SetSizePixel(aThumbSize);
-    maView->setItemMaxTextLength(ITEM_MAX_TEXT_LENGTH);
+    maView->setItemMaxTextLength(TEMPLATE_ITEM_MAX_TEXT_LENGTH);
 
-    maView->setItemDimensions(ITEM_MAX_WIDTH,THUMBNAIL_MAX_HEIGHT,
-                              ITEM_MAX_HEIGHT-THUMBNAIL_MAX_HEIGHT,
-                              ITEM_PADDING);
+    maView->setItemDimensions(TEMPLATE_ITEM_MAX_WIDTH,TEMPLATE_ITEM_THUMBNAIL_MAX_HEIGHT,
+                              TEMPLATE_ITEM_MAX_HEIGHT-TEMPLATE_ITEM_THUMBNAIL_MAX_HEIGHT,
+                              TEMPLATE_ITEM_PADDING);
 
     maView->setItemStateHdl(LINK(this,SfxTemplateManagerDlg,TVFolderStateHdl));
     maView->setOverlayItemStateHdl(LINK(this,SfxTemplateManagerDlg,TVTemplateStateHdl));
@@ -213,11 +206,11 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg (Window *parent)
 
     // Set online view position and dimensions
     mpOnlineView->SetPosSizePixel(aViewPos,aThumbSize);
-    mpOnlineView->setItemMaxTextLength(ITEM_MAX_TEXT_LENGTH);
+    mpOnlineView->setItemMaxTextLength(TEMPLATE_ITEM_MAX_TEXT_LENGTH);
 
-    mpOnlineView->setItemDimensions(ITEM_MAX_WIDTH,THUMBNAIL_MAX_HEIGHT,
-                                    ITEM_MAX_HEIGHT-THUMBNAIL_MAX_HEIGHT,
-                                    ITEM_PADDING);
+    mpOnlineView->setItemDimensions(TEMPLATE_ITEM_MAX_WIDTH,TEMPLATE_ITEM_THUMBNAIL_MAX_HEIGHT,
+                                    TEMPLATE_ITEM_MAX_HEIGHT-TEMPLATE_ITEM_THUMBNAIL_MAX_HEIGHT,
+                                    TEMPLATE_ITEM_PADDING);
 
     mpOnlineView->setOverlayItemStateHdl(LINK(this,SfxTemplateManagerDlg,TVTemplateStateHdl));
     mpOnlineView->setOverlayDblClickHdl(LINK(this,SfxTemplateManagerDlg,OpenTemplateHdl));
@@ -225,11 +218,11 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg (Window *parent)
     mpOnlineView->setOverlayChangeNameHdl(LINK(this,SfxTemplateManagerDlg,RepositoryChangeNameHdl));
 
     mpSearchView->SetSizePixel(aThumbSize);
-    mpSearchView->setItemMaxTextLength(ITEM_MAX_TEXT_LENGTH);
+    mpSearchView->setItemMaxTextLength(TEMPLATE_ITEM_MAX_TEXT_LENGTH);
 
-    mpSearchView->setItemDimensions(ITEM_MAX_WIDTH,THUMBNAIL_MAX_HEIGHT,
-                                    ITEM_MAX_HEIGHT-THUMBNAIL_MAX_HEIGHT,
-                                    ITEM_PADDING);
+    mpSearchView->setItemDimensions(TEMPLATE_ITEM_MAX_WIDTH,TEMPLATE_ITEM_THUMBNAIL_MAX_HEIGHT,
+                                    TEMPLATE_ITEM_MAX_HEIGHT-TEMPLATE_ITEM_THUMBNAIL_MAX_HEIGHT,
+                                    TEMPLATE_ITEM_PADDING);
 
     mpSearchView->setItemStateHdl(LINK(this,SfxTemplateManagerDlg,TVTemplateStateHdl));
 

@@ -12,6 +12,18 @@
 
 #include <sfx2/thumbnailview.hxx>
 
+//template thumbnail item defines
+#define TEMPLATE_ITEM_MAX_WIDTH 192
+#define TEMPLATE_ITEM_MAX_HEIGHT 160
+#define TEMPLATE_ITEM_PADDING 5
+#define TEMPLATE_ITEM_SPACE 30
+#define TEMPLATE_ITEM_MAX_TEXT_LENGTH 20
+#define TEMPLATE_ITEM_THUMBNAIL_MAX_HEIGHT 128
+
+//template thumbnail image defines
+#define TEMPLATE_THUMBNAIL_MAX_HEIGHT 128 - 2*TEMPLATE_ITEM_PADDING
+#define TEMPLATE_THUMBNAIL_MAX_WIDTH TEMPLATE_ITEM_MAX_WIDTH - 2*TEMPLATE_ITEM_PADDING
+
 class TemplateView;
 class SfxDocumentTemplates;
 
@@ -73,6 +85,8 @@ public:
     virtual void filterTemplatesByApp (const FILTER_APPLICATION &eApp) = 0;
 
     virtual void showOverlay (bool bVisible) = 0;
+
+    void setItemDimensions (long ItemWidth, long ThumbnailHeight, long DisplayHeight, int itemPadding);
 
     sal_uInt16 getOverlayRegionId () const;
 

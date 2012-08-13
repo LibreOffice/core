@@ -34,11 +34,6 @@ TemplateLocalViewItem::~TemplateLocalViewItem ()
 {
 }
 
-void TemplateLocalViewItem::calculateItemsPosition (sal_uInt32 nMaxTextLenght)
-{
-    ThumbnailViewItem::calculateItemsPosition(nMaxTextLenght);
-}
-
 void TemplateLocalViewItem::Paint (drawinglayer::processor2d::BaseProcessor2D *pProcessor,
                                     const ThumbnailItemAttributes *pAttrs)
 {

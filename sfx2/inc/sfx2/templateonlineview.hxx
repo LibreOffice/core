@@ -46,8 +46,6 @@ public:
 
     void syncRepositories () const;
 
-    void setItemDimensions (long ItemWidth, long ThumbnailHeight, long DisplayHeight, int itemPadding);
-
 private:
 
     DECL_LINK(ChangeNameHdl, TemplateView*);
