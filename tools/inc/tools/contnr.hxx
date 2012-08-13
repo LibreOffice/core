@@ -35,6 +35,8 @@ class CBlock;
 #define CONTAINER_APPEND            ULONG_MAX
 #define CONTAINER_ENTRY_NOTFOUND    ULONG_MAX
 
+#define LIST_APPEND           CONTAINER_APPEND
+
 class TOOLS_DLLPUBLIC Container
 {
 private:

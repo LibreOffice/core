@@ -27,7 +27,6 @@
 // - List -
 // --------
 
-#define LIST_APPEND           CONTAINER_APPEND
 #define LIST_ENTRY_NOTFOUND   CONTAINER_ENTRY_NOTFOUND
 
 class List : private Container
