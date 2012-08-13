@@ -113,9 +113,6 @@ public:
 
 class VCLXVirtualDevice : public VCLXDevice
 {
-private:
-    VirtualDevice*  mpVDev;
-
 public:
                     ~VCLXVirtualDevice();
 

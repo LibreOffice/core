@@ -139,7 +139,6 @@ protected:
     virtual void        updateFromModel();
 private:
     TabPageListenerMultiplexer  m_aTabPageListeners;
-    sal_Int16 m_nActiveTabPageId;
 };
 
 #endif // _TOOLKIT_TABPAGE_CONTAINER_HXX

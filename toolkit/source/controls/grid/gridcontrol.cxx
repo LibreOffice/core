@@ -272,7 +272,6 @@ Reference< XPropertySetInfo > UnoGridModel::getPropertySetInfo(  ) throw(Runtime
 //======================================================================================================================
 UnoGridControl::UnoGridControl( const Reference< XMultiServiceFactory >& i_factory )
     :UnoGridControl_Base( i_factory )
-    ,mSelectionMode(SelectionType(1))
     ,m_aSelectionListeners( *this )
     ,m_pEventForwarder( new GridEventForwarder( *this ) )
 {

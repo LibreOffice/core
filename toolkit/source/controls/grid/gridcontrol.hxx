@@ -30,7 +30,6 @@
 #define TOOLKIT_GRID_CONTROL_HXX
 
 #include <com/sun/star/awt/grid/XGridControl.hpp>
-#include <com/sun/star/view/SelectionType.hpp>
 
 #include <toolkit/controls/unocontrolbase.hxx>
 #include <toolkit/controls/unocontrolmodel.hxx>
@@ -123,7 +122,6 @@ protected:
     ~UnoGridControl();
 
 private:
-    ::com::sun::star::view::SelectionType       mSelectionMode;
     SelectionListenerMultiplexer                m_aSelectionListeners;
     ::boost::scoped_ptr< GridEventForwarder >   m_pEventForwarder;
 };

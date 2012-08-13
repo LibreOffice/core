@@ -83,7 +83,6 @@ public:
 protected:
     virtual void    ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent );
 private:
-    sal_Int16 m_nActiveTabPageId;
     TabPageListenerMultiplexer m_aTabPageListeners;
     ::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::awt::tab::XTabPage > > m_aTabPages;
 };
