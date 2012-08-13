@@ -336,7 +336,7 @@ void ScEEImport::WriteToDocument( bool bSizeColsRows, double nOutputFactor, SvNu
                 ScSetStringParam aParam;
                 aParam.mpNumFormatter = pFormatter;
                 aParam.mbDetectNumberFormat = true;
-                aParam.mbSetTextCellFormat = true;
+                aParam.meSetTextNumFormat = ScSetStringParam::SpecialNumberOnly;
                 aParam.mbHandleApostrophe = false;
 
                 if (!aValStr.isEmpty())
