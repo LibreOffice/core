@@ -518,6 +518,17 @@ void doTestEncodeBase64(char const*const pis, const uno::Sequence<sal_Int8> aPas
     OSL_TRACE("%s", ::rtl::OUStringToOString(buf.getStr(), RTL_TEXTENCODING_UTF8).getStr());
     CPPUNIT_ASSERT_EQUAL(is, buf.makeStringAndClear());
 }
+
+void doTestDecodeBase64(const uno::Sequence<sal_Int8> aPass, char const*const pis)
+{
+    ::rtl::OUString const is(::rtl::OUString::createFromAscii(pis));
+    uno::Sequence< sal_Int8 > tempSequence;
+    Converter::decodeBase64(tempSequence, is);
+    OSL_TRACE("%s", ::rtl::OUStringToOString(is.getStr(), RTL_TEXTENCODING_UTF8).getStr());
+    bool b = (tempSequence==aPass);
+    CPPUNIT_ASSERT(b);
+}
+
 void ConverterTest::testBase64()
 {
     comphelper::SequenceAsVector< sal_Int8 > tempSeq(4);
@@ -525,17 +536,20 @@ void ConverterTest::testBase64()
         tempSeq.push_back(i);
     uno::Sequence< sal_Int8 > tempSequence = tempSeq.getAsConstList();
     doTestEncodeBase64("AAAAAAABAgM=", tempSequence);
+    doTestDecodeBase64(tempSequence, "AAAAAAABAgM=");
     tempSeq[0] = sal_Int8(5);
     tempSeq[1] = sal_Int8(2);
     tempSeq[2] = sal_Int8(3);
     tempSequence = tempSeq.getAsConstList();
     doTestEncodeBase64("BQIDAAABAgM=", tempSequence);
+    doTestDecodeBase64(tempSequence, "BQIDAAABAgM=");
     tempSeq[0] = sal_Int8(200);
     tempSeq[1] = sal_Int8(31);
     tempSeq[2] = sal_Int8(77);
     tempSeq[3] = sal_Int8(111);
     tempSequence = tempSeq.getAsConstList();
     doTestEncodeBase64("yB9NbwABAgM=", tempSequence);
+    doTestDecodeBase64(tempSequence, "yB9NbwABAgM=");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ConverterTest);
