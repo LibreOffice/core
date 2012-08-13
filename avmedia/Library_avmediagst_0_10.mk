@@ -35,7 +35,6 @@ $(eval $(call gb_Library_set_include,avmediagst_0_10,\
 	-I$(SRCDIR)/avmedia/source/inc \
 	$(GSTREAMER_0_10_CFLAGS) \
 ))
-$(eval $(call gb_Library_add_libs,avmediagst_0_10,$(GSTREAMER_0_10_LIBS)))
 
 $(eval $(call gb_Library_use_sdk_api,avmediagst_0_10))
 
@@ -53,6 +52,11 @@ $(eval $(call gb_Library_use_libraries,avmediagst_0_10,\
 	tl \
 	vcl \
 	$(gb_STDLIBS) \
+))
+
+$(eval $(call gb_Library_add_libs,avmediagst_0_10,\
+	$(GSTREAMER_0_10_LIBS) \
+	-lgstinterfaces-0.10 \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,avmediagst_0_10,\
