@@ -324,7 +324,6 @@ private:
     Mutex                           aMutex;
     HashSet_Ref                     aImplementationMap;
     HashSet_Ref::iterator           aIt;
-    sal_Int32                       nNext;
     Reference<XInterface >          xNext;
 };
 
