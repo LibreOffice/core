@@ -580,7 +580,13 @@ void ThumbnailView::MouseButtonDown( const MouseEvent& rMEvt )
                     }
                 }
                 else if ( rMEvt.GetClicks() == 2 )
-                    OnItemDblClicked(pItem);
+                {
+                    Rectangle aRect(pItem->getDrawArea());
+                    aRect.SetSize(Size(mnItemWidth,mnThumbnailHeight));
+
+                    if (!mbSelectionMode && aRect.IsInside(rMEvt.GetPosPixel()))
+                        OnItemDblClicked(pItem);
+                }
             }
 
             return;
