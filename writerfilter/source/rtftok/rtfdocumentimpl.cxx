@@ -3902,11 +3902,6 @@ int RTFDocumentImpl::getGroup() const
     return m_nGroup;
 }
 
-bool RTFDocumentImpl::isEmpty() const
-{
-    return m_aStates.empty();
-}
-
 void RTFDocumentImpl::setDestinationText(OUString& rString)
 {
     m_aStates.top().aDestinationText.setLength(0);

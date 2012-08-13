@@ -424,8 +424,7 @@ namespace writerfilter {
                 void seek(sal_uInt32 nPos);
                 uno::Reference<lang::XMultiServiceFactory> getModelFactory();
                 RTFParserState& getState();
-                /// If the stack of states is empty.
-                bool isEmpty() const;
+                /// Number of states on the stack.
                 int getGroup() const;
                 void setDestinationText(rtl::OUString& rString);
                 /// Resolve a picture: If not inline, then anchored.

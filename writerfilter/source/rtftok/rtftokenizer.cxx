@@ -95,7 +95,7 @@ int RTFTokenizer::resolveParse()
 
         if (m_rImport.getGroup() < 0)
             return ERROR_GROUP_UNDER;
-        if (!m_rImport.isEmpty() && m_rImport.getState().nInternalState == INTERNAL_BIN)
+        if (m_rImport.getGroup() > 0 && m_rImport.getState().nInternalState == INTERNAL_BIN)
         {
             ret = m_rImport.resolveChars(ch);
             if (ret)
@@ -130,7 +130,7 @@ int RTFTokenizer::resolveParse()
                 case 0x0a:
                     break; // ignore these
                 default:
-                    if (m_rImport.isEmpty())
+                    if (m_rImport.getGroup() == 0)
                         return ERROR_CHAR_OVER;
                     if (m_rImport.getState().nInternalState == INTERNAL_NORMAL)
                     {
