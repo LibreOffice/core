@@ -1202,7 +1202,7 @@ static bool lcl_PutString(
         ScSetStringParam aParam;
         aParam.mpNumFormatter = pFormatter;
         aParam.mbDetectNumberFormat = bDetectNumFormat;
-        aParam.mbSetTextCellFormat = false;
+        aParam.meSetTextNumFormat = ScSetStringParam::SpecialNumberOnly;
         aParam.mbHandleApostrophe = false;
         pDoc->SetString( nCol, nRow, nTab, rStr, &aParam );
     }
@@ -1494,7 +1494,7 @@ const sal_Unicode* ScImportExport::ScanNextFieldFromString( const sal_Unicode* p
     const sal_Unicode cBlank = ' ';
     if (!ScGlobal::UnicodeStrChr( pSeps, cBlank))
     {
-        // Cope with broken generators that put leading blanks before a quoted 
+        // Cope with broken generators that put leading blanks before a quoted
         // field, like "field1", "field2", "..."
         // NOTE: this is not in conformance with http://tools.ietf.org/html/rfc4180
         const sal_Unicode* pb = p;

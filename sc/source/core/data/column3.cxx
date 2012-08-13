@@ -1339,7 +1339,7 @@ bool ScColumn::SetString( SCROW nRow, SCTAB nTabP, const String& rString,
                         }
                     }
                 }
-                else if (!aParam.mbSetTextCellFormat)
+                else if (aParam.meSetTextNumFormat != ScSetStringParam::Always)
                 {
                     // Only check if the string is a regular number.
                     const LocaleDataWrapper* pLocale = aParam.mpNumFormatter->GetLocaleData();
@@ -1365,7 +1365,7 @@ bool ScColumn::SetString( SCROW nRow, SCTAB nTabP, const String& rString,
 
             if (!pNewCell)
             {
-                if (aParam.mbSetTextCellFormat && aParam.mpNumFormatter->IsNumberFormat(rString, nIndex, nVal))
+                if (aParam.meSetTextNumFormat != ScSetStringParam::Never && aParam.mpNumFormatter->IsNumberFormat(rString, nIndex, nVal))
                 {
                     // Set the cell format type to Text.
                     sal_uInt32 nFormat = aParam.mpNumFormatter->GetStandardFormat(NUMBERFORMAT_TEXT);

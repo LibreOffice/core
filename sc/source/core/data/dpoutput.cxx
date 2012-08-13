@@ -790,13 +790,13 @@ void ScDPOutput::HeaderCell( SCCOL nCol, SCROW nRow, SCTAB nTab,
         if (bNumeric)
         {
             aParam.mbDetectNumberFormat = true;
-            aParam.mbSetTextCellFormat = false;
+            aParam.meSetTextNumFormat = ScSetStringParam::Never;
             aParam.mbHandleApostrophe = true;
         }
         else
         {
             aParam.mbDetectNumberFormat = false;
-            aParam.mbSetTextCellFormat = true;
+            aParam.meSetTextNumFormat = ScSetStringParam::Always;
             aParam.mbHandleApostrophe = false;
         }
         pDoc->SetString(nCol, nRow, nTab, rData.Caption, &aParam);
@@ -834,7 +834,7 @@ void ScDPOutput::FieldCell(
     // Avoid unwanted automatic format detection.
     ScSetStringParam aParam;
     aParam.mbDetectNumberFormat = false;
-    aParam.mbSetTextCellFormat = true;
+    aParam.meSetTextNumFormat = ScSetStringParam::Always;
     aParam.mbHandleApostrophe = false;
     pDoc->SetString(nCol, nRow, nTab, rData.maCaption, &aParam);
 

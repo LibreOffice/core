@@ -41,6 +41,25 @@ class SvNumberFormatter;
  */
 struct SC_DLLPUBLIC ScSetStringParam
 {
+    enum TextFormatPolicy
+    {
+        /**
+         * Set Text number format no matter what the input string is.
+         */
+        Always,
+
+        /**
+         * Set Text number format only when the input string is considered a
+         * special number but we only want to detect a simple number.
+         */
+        SpecialNumberOnly,
+
+        /**
+         * Never set Text number format.
+         */
+        Never
+    };
+
     /**
      * Stores the pointer to the number formatter instance to be used during
      * number format detection.  The caller must manage the life cycle of the
@@ -56,11 +75,10 @@ struct SC_DLLPUBLIC ScSetStringParam
     bool mbDetectNumberFormat;
 
     /**
-     * When true, set the format of the cell to Text when a string cell is
-     * requested for a number input.  We may want to do this during text file
-     * import (csv, html etc).
+     * Determine when to set the 'Text' number format to the cell where the
+     * input string is being set.
      */
-    bool mbSetTextCellFormat;
+    TextFormatPolicy meSetTextNumFormat;
 
     /**
      * When true, treat input with a leading apostrophe / single quote special

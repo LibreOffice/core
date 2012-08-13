@@ -370,7 +370,7 @@ void Test::testInput()
     // Customized string handling policy.
     ScSetStringParam aParam;
     aParam.mbDetectNumberFormat = false;
-    aParam.mbSetTextCellFormat = true;
+    aParam.meSetTextNumFormat = ScSetStringParam::Always;
     aParam.mbHandleApostrophe = false;
     m_pDoc->SetString(0, 0, 0, "000123", &aParam);
     m_pDoc->GetString(0, 0, 0, test);
