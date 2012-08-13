@@ -37,6 +37,12 @@
 #pragma warning(pop)
 #endif
 #endif // #ifdef Py_PYTHON_H
+// Compatibility for older system Python (2.6 and previous)
+#ifndef PyVarObject_HEAD_INIT
+#define PyVarObject_HEAD_INIT(type, size) \
+    PyObject_HEAD_INIT(type) size,
+#endif
+
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/script/CannotConvertException.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
