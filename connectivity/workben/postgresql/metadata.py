@@ -85,7 +85,7 @@ class TestCase(unittest.TestCase):
 
       def setUp( self ):
           self.driver = self.ctx.ServiceManager.createInstanceWithContext(
-                   'org.openoffice.comp.connectivity.pq.Driver' , self.ctx )
+                   'org.openoffice.comp.connectivity.pq.Driver.noext' , self.ctx )
           self.connection = self.driver.connect( self.dburl, () )
           ddl.executeDDLs( self.connection )
 

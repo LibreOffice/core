@@ -106,7 +106,7 @@ OUString DriverGetImplementationName()
     {
         MutexGuard guard( osl::Mutex::getGlobalMutex() );
         static OUString instance(
-            RTL_CONSTASCII_USTRINGPARAM( "org.openoffice.comp.connectivity.pq.Driver" ) );
+            RTL_CONSTASCII_USTRINGPARAM( "org.openoffice.comp.connectivity.pq.Driver.noext" ) );
         p = &instance;
     }
     return *p;
@@ -137,7 +137,7 @@ Reference< XConnection > Driver::connect(
     seq[1] <<= info;
     return Reference< XConnection> (
         m_smgr->createInstanceWithArgumentsAndContext(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.comp.connectivity.pq.Connection" ) ),
+            OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.comp.connectivity.pq.Connection.noext" ) ),
             seq, m_ctx ),
         UNO_QUERY );
 }

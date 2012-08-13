@@ -160,7 +160,7 @@ public:
 
 OUString    ConnectionGetImplementationName()
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM( "org.openoffice.comp.connectivity.pq.Connection" ) );
+    return OUString( RTL_CONSTASCII_USTRINGPARAM( "org.openoffice.comp.connectivity.pq.Connection.noext" ) );
 }
 com::sun::star::uno::Sequence<rtl::OUString> ConnectionGetSupportedServiceNames(void)
 {

@@ -56,7 +56,7 @@
   <node oor:name="Installed" install:module="postgresql">
     <node oor:name="sdbc:postgresql:*" oor:op="replace">
       <prop oor:name="Driver">
-        <value>org.openoffice.comp.connectivity.pq.Driver</value>
+        <value>org.openoffice.comp.connectivity.pq.Driver.noext</value>
       </prop>
       <prop oor:name="DriverTypeDisplayName" oor:type="xs:string">
         <value xml:lang="en-US">PostgreSQL</value>
