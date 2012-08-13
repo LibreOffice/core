@@ -8,9 +8,13 @@
 #
 $(eval $(call gb_Module_Module,cosv))
 
+ifneq (,$(filter ODK,$(BUILD_TYPE)))
+
 $(eval $(call gb_Module_add_targets,cosv,\
     Package_inc \
     StaticLibrary_cosv \
 ))
+
+endif
 
 # vim:set shiftwidth=4 softtabstop=4 expandtab:

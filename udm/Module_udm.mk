@@ -8,9 +8,13 @@
 #
 $(eval $(call gb_Module_Module,udm))
 
+ifneq (,$(filter ODK,$(BUILD_TYPE)))
+
 $(eval $(call gb_Module_add_targets,udm,\
     Package_inc \
     StaticLibrary_udm \
 ))
+
+endif
 
 # vim:set shiftwidth=4 softtabstop=4 expandtab:

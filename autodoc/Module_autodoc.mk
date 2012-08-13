@@ -8,7 +8,7 @@
 #
 $(eval $(call gb_Module_Module,autodoc))
 
-ifneq (,$(filter DESKTOP,$(BUILD_TYPE)))
+ifneq (,$(filter ODK,$(BUILD_TYPE)))
 
 $(eval $(call gb_Module_add_targets,autodoc,\
     Executable_autodoc \
