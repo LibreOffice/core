@@ -46,7 +46,9 @@ PATCH_FILES=\
     hunspell-wntconfig.patch \
     hunspell-solaris.patch \
     hunspell-1.3.2-overflow.patch \
-    hunspell-android.patch
+    hunspell-android.patch \
+    hunspell-1.3.2-nullptr.patch \
+    hunspell-1.3.2-literal.patch
 
 .IF "$(GUI)"=="UNX"
 
