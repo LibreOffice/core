@@ -35,7 +35,6 @@
 #include <rtl/textenc.h>
 #include <com/sun/star/awt/FontDescriptor.hpp>
 #include <com/sun/star/lang/Locale.hpp>
-#include <tools/list.hxx>
 
 namespace com { namespace sun { namespace star {
 namespace awt { struct FontDescriptor; }
@@ -169,7 +168,7 @@ struct ParaFlags
                     ParaFlags() { bFirstParagraph = sal_True; bLastParagraph = sal_False; };
 };
 
-class ParagraphObj : public List, public PropStateValue, public SOParagraph
+class ParagraphObj : public std::vector<PortionObj*>, public PropStateValue, public SOParagraph
 {
     friend class TextObj;
     friend struct PPTExParaSheet;
@@ -234,7 +233,7 @@ struct ImplTextObj
     sal_uInt32      mnRefCount;
     sal_uInt32      mnTextSize;
     int             mnInstance;
-    List*           mpList;
+    std::vector<ParagraphObj*> maList;
     sal_Bool        mbHasExtendedBullets;
     sal_Bool        mbFixedCellHeightUsed;
 
@@ -253,8 +252,8 @@ class TextObj
                         TextObj( const TextObj& rTextObj );
                         ~TextObj();
 
-        ParagraphObj*   First(){ return (ParagraphObj*)mpImplTextObj->mpList->First(); };
-        ParagraphObj*   Next(){ return(ParagraphObj*)mpImplTextObj->mpList->Next(); };
+        ParagraphObj*   GetParagraph(int idx) { return mpImplTextObj->maList[idx]; };
+        sal_uInt32      ParagraphCount() const { return mpImplTextObj->maList.size(); };
         sal_uInt32      Count() const { return mpImplTextObj->mnTextSize; };
         int             GetInstance() const { return mpImplTextObj->mnInstance; };
         sal_Bool        HasExtendedBullets(){ return mpImplTextObj->mbHasExtendedBullets; };

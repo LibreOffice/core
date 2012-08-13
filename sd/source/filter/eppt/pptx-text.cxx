@@ -692,7 +692,7 @@ ParagraphObj::ParagraphObj( const ::com::sun::star::uno::Reference< ::com::sun::
                     {
                         PortionObj* pPortionObj = new PortionObj( aXCursorText, !aXTextPortionE->hasMoreElements(), rFontCollection );
                         if ( pPortionObj->Count() )
-                            Insert( pPortionObj, LIST_APPEND );
+                            push_back( pPortionObj );
                         else
                             delete pPortionObj;
                     }
@@ -704,7 +704,7 @@ ParagraphObj::ParagraphObj( const ::com::sun::star::uno::Reference< ::com::sun::
 }
 
 ParagraphObj::ParagraphObj( const ParagraphObj& rObj )
-: List()
+: std::vector<PortionObj*>()
 , PropStateValue()
 , SOParagraph()
 {
@@ -718,14 +718,14 @@ ParagraphObj::~ParagraphObj()
 
 void ParagraphObj::Write( SvStream* pStrm )
 {
-    for ( void* pPtr = First(); pPtr; pPtr = Next() )
-        ((PortionObj*)pPtr)->Write( pStrm, mbLastParagraph );
+    for ( const_iterator it = begin(); it != end(); ++it )
+        (*it)->Write( pStrm, mbLastParagraph );
 }
 
 void ParagraphObj::ImplClear()
 {
-    for ( void* pPtr = First(); pPtr; pPtr = Next() )
-        delete (PortionObj*)pPtr;
+    for ( const_iterator it = begin(); it != end(); ++it )
+        delete *it;
 }
 
 void ParagraphObj::CalculateGraphicBulletSize( sal_uInt16 nFontHeight )
@@ -884,7 +884,7 @@ void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider& rBuProv, sal_Int1
                     }
                 }
 
-                PortionObj* pPortion = (PortionObj*)First();
+                PortionObj* pPortion = front();
                 CalculateGraphicBulletSize( ( pPortion ) ? pPortion->mnCharHeight : 24 );
 
                 switch( (SvxExtNumType)nNumberingType )
@@ -1145,11 +1145,8 @@ void ParagraphObj::ImplConstruct( const ParagraphObj& rParagraphObj )
     mbForbiddenRules = rParagraphObj.mbForbiddenRules;
     mnBiDi = rParagraphObj.mnBiDi;
 
-    {
-        ParagraphObj& rConstApiLossage = const_cast<ParagraphObj&>(rParagraphObj);
-        for ( const void* pPtr = rConstApiLossage.First(); pPtr; pPtr = rConstApiLossage.Next() )
-            Insert( new PortionObj( *static_cast<const PortionObj*>(pPtr) ), LIST_APPEND );
-    }
+    for ( ParagraphObj::const_iterator it = rParagraphObj.begin(); it != rParagraphObj.end(); ++it )
+        push_back( new PortionObj( **it ) );
 
     maTabStop = rParagraphObj.maTabStop;
     bExtendedParameters = rParagraphObj.bExtendedParameters;
@@ -1177,8 +1174,8 @@ void ParagraphObj::ImplConstruct( const ParagraphObj& rParagraphObj )
 sal_uInt32 ParagraphObj::ImplCalculateTextPositions( sal_uInt32 nCurrentTextPosition )
 {
     mnTextSize = 0;
-    for ( void* pPtr = First(); pPtr; pPtr = Next() )
-        mnTextSize += ((PortionObj*)pPtr)->ImplCalculateTextPositions( nCurrentTextPosition + mnTextSize );
+    for ( const_iterator it = begin(); it != end(); ++it )
+        mnTextSize += (*it)->ImplCalculateTextPositions( nCurrentTextPosition + mnTextSize );
     return mnTextSize;
 }
 
@@ -1193,20 +1190,19 @@ ParagraphObj& ParagraphObj::operator=( const ParagraphObj& rParagraphObj )
 }
 
 ImplTextObj::ImplTextObj( int nInstance )
+  : maList()
 {
     mnRefCount = 1;
     mnTextSize = 0;
     mnInstance = nInstance;
-    mpList = new List;
     mbHasExtendedBullets = sal_False;
     mbFixedCellHeightUsed = sal_False;
 }
 
 ImplTextObj::~ImplTextObj()
 {
-    for ( ParagraphObj* pPtr = (ParagraphObj*)mpList->First(); pPtr; pPtr = (ParagraphObj*)mpList->Next() )
-        delete pPtr;
-    delete mpList;
+    for ( std::vector<ParagraphObj*>::const_iterator it = maList.begin(); it != maList.end(); ++it )
+        delete *it;
 }
 
 TextObj::TextObj( ::com::sun::star::uno::Reference< ::com::sun::star::text::XSimpleText > & rXTextRef,
@@ -1234,7 +1230,7 @@ TextObj::TextObj( ::com::sun::star::uno::Reference< ::com::sun::star::text::XSim
                         aParaFlags.bLastParagraph = sal_True;
                     ParagraphObj* pPara = new ParagraphObj( aXParagraph, aParaFlags, rFontCollection, rProv );
                     mpImplTextObj->mbHasExtendedBullets |= pPara->bExtendedBulletsUsed;
-                    mpImplTextObj->mpList->Insert( pPara, LIST_APPEND );
+                    mpImplTextObj->maList.push_back( pPara );
                     aParaFlags.bFirstParagraph = sal_False;
                 }
             }
@@ -1258,8 +1254,8 @@ TextObj::~TextObj()
 void TextObj::ImplCalculateTextPositions()
 {
     mpImplTextObj->mnTextSize = 0;
-    for ( void* pPtr = First(); pPtr; pPtr = Next() )
-        mpImplTextObj->mnTextSize += ((ParagraphObj*)pPtr)->ImplCalculateTextPositions( mpImplTextObj->mnTextSize );
+    for ( sal_uInt32 i = 0; i < ParagraphCount(); ++i )
+        mpImplTextObj->mnTextSize += GetParagraph(i)->ImplCalculateTextPositions( mpImplTextObj->mnTextSize );
 }
 
 TextObj& TextObj::operator=( TextObj& rTextObj )

@@ -36,6 +36,7 @@
 #include <vcl/graph.hxx>
 #include <unotools/fontcvt.hxx>
 #include <tools/string.hxx>
+#include <tools/list.hxx>
 #include "pptexanimations.hxx"
 #include <pptexsoundcollection.hxx>
 

@@ -739,10 +739,11 @@ void PPTWriter::ImplWriteParagraphs( SvStream& rOut, TextObj& rTextObj )
     sal_Int16           nLineSpacing;
     int                 nInstance = rTextObj.GetInstance();
 
-    for ( ParagraphObj* pPara = rTextObj.First() ; pPara; pPara = rTextObj.Next(), bFirstParagraph = sal_False )
+    for ( sal_uInt32 i = 0;  i < rTextObj.ParagraphCount(); ++i, bFirstParagraph = sal_False )
     {
-        PortionObj* pPortion = (PortionObj*)pPara->First();
-        nCharCount = pPara->Count();
+        ParagraphObj* pPara = rTextObj.GetParagraph(i);
+        PortionObj* pPortion = pPara->front();
+        nCharCount = pPara->size();
 
         nDepth = pPara->nDepth;
         if ( nDepth > 4)
@@ -866,13 +867,15 @@ void PPTWriter::ImplWriteParagraphs( SvStream& rOut, TextObj& rTextObj )
 
 void PPTWriter::ImplWritePortions( SvStream& rOut, TextObj& rTextObj )
 {
-    sal_uInt32  nPropertyFlags, i = 0;
+    sal_uInt32  nPropertyFlags;
     int nInstance = rTextObj.GetInstance();
 
-    for ( ParagraphObj* pPara = rTextObj.First(); pPara; pPara = rTextObj.Next(), i++ )
+    for ( sal_uInt32 i = 0; i < rTextObj.ParagraphCount(); ++i )
     {
-        for ( PortionObj* pPortion = (PortionObj*)pPara->First(); pPortion; pPortion = (PortionObj*)pPara->Next() )
+        ParagraphObj* pPara = rTextObj.GetParagraph(i);
+        for ( ParagraphObj::const_iterator it = pPara->begin(); it != pPara->end(); ++it )
         {
+            PortionObj* pPortion = *it;
             nPropertyFlags = 0;
             sal_uInt32 nCharAttr = pPortion->mnCharAttr;
             sal_uInt32 nCharColor = pPortion->mnCharColor;
@@ -1109,12 +1112,12 @@ void PPTWriter::ImplAdjustFirstLineLineSpacing( TextObj& rTextObj, EscherPropert
 {
     if ( !mbFontIndependentLineSpacing )
     {
-        ParagraphObj* pPara = rTextObj.First();
-        if ( pPara )
+        if ( rTextObj.ParagraphCount() )
         {
-            PortionObj* pPortion = (PortionObj*)pPara->First();
-            if ( pPortion )
+            ParagraphObj* pPara = rTextObj.GetParagraph(0);
+            if ( !pPara->empty() )
             {
+                PortionObj* pPortion = pPara->front();
                 sal_Int16 nLineSpacing = pPara->mnLineSpacing;
                 const FontCollectionEntry* pDesc = maFontCollection.GetById( pPortion->mnFont );
                 if ( pDesc )
@@ -1172,10 +1175,12 @@ void PPTWriter::ImplWriteTextStyleAtom( SvStream& rOut, int nTextInstance, sal_u
         rOut << (sal_uInt32)( nSize - 8 );
         rOut.SeekRel( nSize - 8 );
 
-        for ( pPara = aTextObj.First(); pPara; pPara = aTextObj.Next() )
+        for ( sal_uInt32 i = 0; i < aTextObj.ParagraphCount(); ++i )
         {
-            for ( PortionObj* pPortion = (PortionObj*)pPara->First(); pPortion; pPortion = (PortionObj*)pPara->Next() )
+            pPara = aTextObj.GetParagraph(i);
+            for ( ParagraphObj::const_iterator it = pPara->begin(); it != pPara->end(); ++it )
             {
+                PortionObj* pPortion = *it;
                 if ( pPortion->mpFieldEntry )
                 {
                     const FieldEntry* pFieldEntry = pPortion->mpFieldEntry;
@@ -1282,17 +1287,18 @@ void PPTWriter::ImplWriteTextStyleAtom( SvStream& rOut, int nTextInstance, sal_u
         aTextObj.WriteTextSpecInfo( &rOut );
 
         // Star Office Default TabSizes schreiben ( wenn noetig )
-        pPara = aTextObj.First();
-        if ( pPara )
+        if ( aTextObj.ParagraphCount() )
         {
+            pPara = aTextObj.GetParagraph(0);
             sal_uInt32  nParaFlags = 0x1f;
             sal_Int16   nDepth, nMask, nNumberingRule[ 10 ];
             sal_uInt32  nTextOfs = pPara->nTextOfs;
             sal_uInt32  nTabs = pPara->maTabStop.getLength();
             const ::com::sun::star::style::TabStop* pTabStop = ( const ::com::sun::star::style::TabStop* )pPara->maTabStop.getConstArray();
 
-            for ( ; pPara; pPara = aTextObj.Next() )
+            for ( sal_uInt32 i = 0; i < aTextObj.ParagraphCount(); ++i )
             {
+                pPara = aTextObj.GetParagraph(i);
                 if ( pPara->bExtendedParameters )
                 {
                     nDepth = pPara->nDepth;
@@ -1381,16 +1387,17 @@ void PPTWriter::ImplWriteTextStyleAtom( SvStream& rOut, int nTextInstance, sal_u
         }
         if ( aTextObj.HasExtendedBullets() )
         {
-            ParagraphObj* pBulletPara = aTextObj.First();
-            if ( pBulletPara )
+            if ( aTextObj.ParagraphCount() )
             {
+                ParagraphObj* pBulletPara = aTextObj.GetParagraph(0);
                 sal_uInt32  nBulletFlags = 0;
                 sal_uInt32  nNumberingType = 0, nPos2 = rExtBuStr.Tell();
 
                 rExtBuStr << (sal_uInt32)( EPP_PST_ExtendedParagraphAtom << 16 ) << (sal_uInt32)0;
 
-                for ( ; pBulletPara; pBulletPara = aTextObj.Next() )
+                for ( sal_uInt32 i = 0; i < aTextObj.ParagraphCount(); ++i )
                 {
+                    pBulletPara = aTextObj.GetParagraph(i);
                     nBulletFlags = 0;
                     sal_uInt16 nBulletId = pBulletPara->nBulletId;
                     if ( pBulletPara->bExtendedBulletsUsed )
@@ -2972,8 +2979,9 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                                 mnTextSize = aTextObj.Count();
                                 aTextObj.Write( mpStrm );
                                 mpPptEscherEx->BeginAtom();
-                                for ( ParagraphObj* pPara = aTextObj.First() ; pPara; pPara = aTextObj.Next() )
+                                for ( sal_uInt32 i = 0; i < aTextObj.ParagraphCount() ; ++i )
                                 {
+                                    ParagraphObj* pPara = aTextObj.GetParagraph(i);
                                     sal_uInt32 nCharCount = pPara->Count();
                                     sal_uInt16 nDepth = pPara->nDepth;
                                     if ( nDepth > 4)
@@ -3830,8 +3838,8 @@ void TextObjBinary::Write( SvStream* pStrm )
 {
     sal_uInt32 nSize, nPos = pStrm->Tell();
     *pStrm << (sal_uInt32)( EPP_TextCharsAtom << 16 ) << (sal_uInt32)0;
-    for ( void* pPtr = First(); pPtr; pPtr = Next() )
-        ((ParagraphObj*)pPtr)->Write( pStrm );
+    for ( sal_uInt32 i = 0; i < ParagraphCount(); ++i )
+        GetParagraph(i)->Write( pStrm );
     nSize = pStrm->Tell() - nPos;
     pStrm->SeekRel( - ( (sal_Int32)nSize - 4 ) );
     *pStrm << (sal_uInt32)( nSize - 8 );
@@ -3844,10 +3852,12 @@ void TextObjBinary::WriteTextSpecInfo( SvStream* pStrm )
     if ( nCharactersLeft >= 1 )
     {
         EscherExAtom aAnimationInfoAtom( *pStrm, EPP_TextSpecInfoAtom, 0, 0 );
-        for ( ParagraphObj* pPtr = static_cast < ParagraphObj * >( First() ); nCharactersLeft && pPtr; pPtr = static_cast< ParagraphObj* >( Next() ) )
+        for ( sal_uInt32 i = 0; nCharactersLeft && i < ParagraphCount(); ++i )
         {
-            for ( PortionObj* pPortion = static_cast< PortionObj* >( pPtr->First() ); nCharactersLeft && pPortion; pPortion = static_cast< PortionObj* >( pPtr->Next() ) )
+            ParagraphObj* pPtr = GetParagraph(i);
+            for ( ParagraphObj::const_iterator it = pPtr->begin(); nCharactersLeft && it != pPtr->end(); ++it )
             {
+                PortionObj* pPortion = *it;
                 sal_Int32 nPortionSize = pPortion->mnTextSize >= nCharactersLeft ? nCharactersLeft : pPortion->mnTextSize;
                 sal_Int32 nFlags = 7;
                 nCharactersLeft -= nPortionSize;
