@@ -139,6 +139,6 @@ inline sal_Bool Link::operator !() const
         return sal_False;
 }
 
-#endif  // _LINK_HXX
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

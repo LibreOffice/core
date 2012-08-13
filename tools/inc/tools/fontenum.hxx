@@ -161,6 +161,6 @@ enum FontAntiAlias { ANTIALIAS_DONTKNOW, ANTIALIAS_FALSE, ANTIALIAS_TRUE };
 
 #endif
 
-#endif  // _TOOLS_FONTENUM_HXX
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

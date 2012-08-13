@@ -645,6 +645,6 @@ inline Rectangle operator - ( const Rectangle& rRect, const Point& rPt )
     return aRect;
 }
 
-#endif // _GEN_HXX
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

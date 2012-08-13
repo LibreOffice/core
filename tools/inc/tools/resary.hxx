@@ -56,6 +56,6 @@ class TOOLS_DLLPUBLIC ResStringArray : private boost::noncopyable
     sal_uInt32          FindIndex( long nValue ) const;
 };
 
-#endif  // _TOOLS_RESARY_HXX
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -107,6 +107,6 @@ public:
     virtual void    BeginCompression( sal_uIntPtr nCompressMethod = ZCODEC_DEFAULT );
 };
 
-#endif // _ZCODEC_HXX
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

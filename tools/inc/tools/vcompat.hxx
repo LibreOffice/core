@@ -51,6 +51,6 @@ public:
     sal_uInt16          GetVersion() const { return mnVersion; }
 };
 
-#endif // _VCOMPAT_HXX
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1803,6 +1803,6 @@ inline rtl::OUString INetURLObject::decode(rtl::OUStringBuffer const & rText,
                   cEscapePrefix, eMechanism, eCharset);
 }
 
-#endif // _URLOBJ_HXX
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

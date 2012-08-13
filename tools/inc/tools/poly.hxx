@@ -82,7 +82,7 @@ namespace basegfx
 {
     class B2DPolygon;
     class B2DPolyPolygon;
-} // end of namespace basegfx
+}
 
 class TOOLS_DLLPUBLIC Polygon
 {
@@ -289,6 +289,6 @@ public:
 
 typedef std::vector< PolyPolygon > PolyPolyVector;
 
-#endif  // _SV_POLY_HXX
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

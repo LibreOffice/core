@@ -202,6 +202,6 @@ template<typename T> inline T Abs(T a) { return (a>=0?a:-a); }
     LIBRARY_CONCAT2( Base, __DLLEXTENSION )
 #endif
 
-#endif  /* _SOLAR_H */
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

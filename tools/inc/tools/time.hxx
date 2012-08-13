@@ -115,6 +115,6 @@ public:
     TOOLS_DLLPUBLIC friend Time     operator -( const Time& rTime1, const Time& rTime2 );
 };
 
-#endif // _TOOLS_TIME_HXX
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

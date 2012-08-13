@@ -63,7 +63,7 @@ class UniString;
 
 typedef rtl_TextEncoding CharSet;
 
-#endif // ENUM_CHARSET_DECLARED
+#endif
 
 // -----------------------------------------------------------------------
 
@@ -319,6 +319,6 @@ operator <<(
         // (stray surrogate halves) and embedded null characters
 }
 
-#endif // _STRING_HXX
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -210,6 +210,6 @@ typedef short RSWND_STYLE;
 #define DATE_MONTH                      0x02
 #define DATE_DAY                        0x04
 
-#endif // _TOOLS_RC_H
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

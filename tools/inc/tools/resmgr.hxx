@@ -211,6 +211,6 @@ inline sal_uInt32 RSHEADER_TYPE::GetLocalOff()
     return (sal_uInt32)ResMgr::GetLong( &nLocalOff );
 }
 
-#endif // _SV_RESMGR_HXX
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

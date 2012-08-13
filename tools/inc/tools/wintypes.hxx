@@ -318,6 +318,6 @@ typedef sal_uInt16 StandardButtonType;
 
 enum ProminentEntry { PROMINENT_TOP, PROMINENT_MIDDLE };
 
-#endif // _TOOLS_WINTYPES_HXX
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

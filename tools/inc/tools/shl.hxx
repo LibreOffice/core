@@ -101,6 +101,6 @@
 
 TOOLS_DLLPUBLIC void** GetAppData( sal_uInt16 nSharedLib );
 
-#endif // _SHL_HXX
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

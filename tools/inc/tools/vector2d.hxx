@@ -104,6 +104,6 @@ inline Vector2D& Vector2D::Normalize()
     return *this;
 }
 
-#endif //  _SV_VECTOR2D_HXX
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

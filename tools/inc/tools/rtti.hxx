@@ -126,6 +126,6 @@ typedef void* (*TypeId)();
 #define IS_TYPE(T,pObj) \
         ( pObj && (pObj)->Type() == TYPE(T) )
 
-#endif // _RTTI_HXX
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

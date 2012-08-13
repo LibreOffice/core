@@ -769,9 +769,9 @@ inline rtl_TextEncoding INetMIME::translateFromMIME(rtl_TextEncoding
 #if defined WNT
     return eEncoding == RTL_TEXTENCODING_ISO_8859_1 ?
                RTL_TEXTENCODING_MS_1252 : eEncoding;
-#else // WNT
+#else
     return eEncoding;
-#endif // WNT
+#endif
 }
 
 // static
@@ -1278,6 +1278,6 @@ private:
 };
 
 
-#endif // TOOLS_INETMIME_HXX
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

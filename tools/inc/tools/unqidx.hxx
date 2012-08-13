@@ -68,6 +68,6 @@ public:
     using UniqueIndexImpl::NextIndex;
 };
 
-#endif // _UNQIDX_HXX
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

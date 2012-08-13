@@ -27,6 +27,6 @@ TOOLS_DLLPUBLIC void InitTools();
 TOOLS_DLLPUBLIC void DeInitTools();
 TOOLS_DLLPUBLIC void GlobalDeInitTools();
 
-#endif // _TOOLS_H
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

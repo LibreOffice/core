@@ -185,6 +185,6 @@ public:
                                     );
 };
 
-#endif  // _SV_MULTISEL_HXX
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -53,6 +53,6 @@ TOOLS_DLLPUBLIC rtl_TextEncoding GetSOStoreTextEncoding( rtl_TextEncoding eEncod
  */
 TOOLS_DLLPUBLIC rtl_TextEncoding getBestMSEncodingByChar(sal_Unicode c);
 
-#endif  // _TOOLS_TENCCVT_HXX
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

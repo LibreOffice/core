@@ -102,6 +102,6 @@ public:
                     { return !(Container::operator==( rContainer )); }
 };
 
-#endif // _CONTNR_HXX
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

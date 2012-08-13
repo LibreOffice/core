@@ -781,6 +781,6 @@ public:
     virtual void    Assign( const SvDataCopyStream & );
 };
 
-#endif // _STREAM_HXX
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

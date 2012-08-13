@@ -152,6 +152,6 @@ class ResId
     TOOLS_DLLPUBLIC operator rtl::OUString() const { return toString(); }
 };
 
-#endif // _RESID_HXX
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

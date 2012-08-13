@@ -148,6 +148,6 @@ private:
 
 }
 
-#endif // _TOOLS_WEAKBASE_H_
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

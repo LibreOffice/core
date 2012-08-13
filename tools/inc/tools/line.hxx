@@ -56,6 +56,6 @@ public:
     double          GetDistance( const Point& rPoint ) const { return( GetDistance( rPoint.X(), rPoint.Y() ) ); }
 };
 
-#endif // _SV_LINE_HXX
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

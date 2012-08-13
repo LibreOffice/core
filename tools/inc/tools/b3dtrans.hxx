@@ -253,6 +253,6 @@ protected:
 };
 
 
-#endif          // _B3D_B3DTRANS_HXX
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

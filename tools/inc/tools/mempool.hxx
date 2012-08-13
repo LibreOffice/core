@@ -101,6 +101,6 @@ IMPL_FIXEDMEMPOOL_DEL_BODY( Class, aPool )
     DECL_FIXEDMEMPOOL_DEL_IMPL( Class ) \
     IMPL_FIXEDMEMPOOL_DEL_BODY( Class, aPool )
 
-#endif // _SVMEMPOOL_HXX
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

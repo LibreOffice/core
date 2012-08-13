@@ -76,6 +76,6 @@ private:
     TOOLS_DLLPRIVATE Config&            operator = ( const Config& rConfig );
 };
 
-#endif // _SV_CONFIG_HXX
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

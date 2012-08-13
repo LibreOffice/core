@@ -59,6 +59,6 @@ public:
                 { return Container::operator !=( rList ); }
 };
 
-#endif // _LIST_HXX
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

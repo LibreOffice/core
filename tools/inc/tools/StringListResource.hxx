@@ -44,7 +44,7 @@ namespace tools
             FreeResource();
         }
     };
-} // namespace tools
-#endif // TOOLS_STRINGLISTRESOURCE_HXX
+}
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

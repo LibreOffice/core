@@ -102,6 +102,6 @@ public:
     com::sun::star::uno::Sequence < sal_Int8 > GetByteSequence() const;
 };
 
-#endif // _GLOBNAME_HXX
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

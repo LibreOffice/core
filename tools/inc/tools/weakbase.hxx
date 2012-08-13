@@ -171,6 +171,6 @@ inline WeakConnection< reference_type >* WeakBase< reference_type >::getWeakConn
 
 }
 
-#endif // _TOOLS_WEAKBASE_HXX_
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

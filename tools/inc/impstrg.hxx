@@ -32,6 +32,6 @@ const char* DbgCheckUniString( const void* pString );
 xub_StrLen ImplStringLen( const sal_Char* pStr );
 xub_StrLen ImplStringLen( const sal_Unicode* pStr );
 
-#endif // _IMPSTRG_HXX
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

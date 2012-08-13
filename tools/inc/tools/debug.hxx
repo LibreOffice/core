@@ -499,6 +499,6 @@ typedef const sal_Char* (*DbgUsr)(const void* pThis );
 
 #endif
 
-#endif  // _TOOLS_DEBUG_HXX
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

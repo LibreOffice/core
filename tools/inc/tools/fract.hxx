@@ -138,6 +138,6 @@ inline bool operator >=( const Fraction& rVal1, const Fraction& rVal2 )
     return !(rVal1 < rVal2);
 }
 
-#endif // _FRACT_HXX
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -210,6 +210,6 @@ inline void Color::Merge( const Color& rMergeColor, sal_uInt8 cTransparency )
     SetBlue( COLOR_CHANNEL_MERGE( COLORDATA_BLUE( mnColor ), COLORDATA_BLUE( rMergeColor.mnColor ), cTransparency ) );
 }
 
-#endif // _TOOLS_COLOR_HXX
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

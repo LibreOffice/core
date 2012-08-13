@@ -91,6 +91,6 @@ class TOOLS_DLLPUBLIC Resource
     #endif
 };
 
-#endif // _SV_RC_HXX
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

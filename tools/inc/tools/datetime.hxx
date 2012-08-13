@@ -108,6 +108,6 @@ inline DateTime& DateTime::operator =( const DateTime& rDateTime )
     return *this;
 }
 
-#endif // _DATETIME_HXX
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

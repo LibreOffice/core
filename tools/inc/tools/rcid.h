@@ -121,6 +121,6 @@
 #define RT_SYS_FILE             (RSC_NOTYPE + 0xf4) // not implemented
 
 
-#endif // _RCID_H
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

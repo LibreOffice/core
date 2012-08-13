@@ -217,6 +217,6 @@ public:
     }
 };
 
-#endif /* !_TOOLS_INETSTRM_HXX */
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

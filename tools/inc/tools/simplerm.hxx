@@ -80,6 +80,6 @@ public:
     bool                    IsAvailable( RESOURCE_TYPE _resourceType, sal_uInt32 _resourceId );
 };
 
-#endif // _TOOLS_SIMPLERESMGR_HXX_
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

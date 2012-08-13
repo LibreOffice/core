@@ -102,6 +102,6 @@ inline void** Container::ImpGetOnlyNodes() const
         return NULL;
 }
 
-#endif // _IMPCONT_HXX
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

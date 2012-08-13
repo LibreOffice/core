@@ -66,6 +66,6 @@ public:
                     ~ImplPolyPolygon();
 };
 
-#endif // _SV_POLY_H
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
