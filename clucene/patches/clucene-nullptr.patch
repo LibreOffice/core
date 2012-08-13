@@ -1,0 +1,22 @@
+--- src/core/CLucene/index/DocumentsWriter.cpp	2011-03-16 20:21:07.000000000 -0400
++++ src/core/CLucene/index/DocumentsWriter.cpp	2012-07-31 18:52:09.000000000 -0400
+@@ -125,7 +125,7 @@
+   if (this->postingsFreeListDW.values){
+       if (this->postingsFreeCountDW < this->postingsFreeListDW.length) {
+           memset(this->postingsFreeListDW.values + this->postingsFreeCountDW
+-              , NULL
++              , 0
+               , sizeof(Posting*));
+       }
+       postingsFreeListDW.deleteUntilNULL();
+--- src/core/CLucene/util/VoidMap.h	2012-07-31 18:13:08.000000000 -0400
++++ src/core/CLucene/util/VoidMap.h	2012-07-31 18:42:54.000000000 -0400
+@@ -83,7 +83,7 @@
+ 	_vt get( _kt k) const {
+ 		const_iterator itr = base::find(k);
+ 		if ( itr==base::end() )
+-			return (_vt)NULL;
++			return static_cast<_vt>(0);
+ 		else
+ 			return itr->second;
+ 	}

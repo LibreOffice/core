@@ -69,6 +69,7 @@ $(clucene_DIR)/done : $(clucene_FIXED_TARFILE_LOCATION) \
 	$(GNUPATCH) -p0 < $(SRCDIR)/clucene/patches/clucene-debug.patch && \
 	$(GNUPATCH) -p0 < $(SRCDIR)/clucene/patches/clucene-narrowing-conversions.patch && \
 	$(GNUPATCH) -p0 < $(SRCDIR)/clucene/patches/clucene-multimap-put.patch && \
+	$(GNUPATCH) -p0 < $(SRCDIR)/clucene/patches/clucene-nullptr.patch && \
 	for i in `find $(clucene_DIR)/ -name "*.cpp"`; do mv $$i $${i%%cpp}cxx; done)
 	#FIXME ?, our rules expect .cxx
 ifneq ($(OS),WNT)
