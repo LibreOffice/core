@@ -24,14 +24,14 @@ RemoteDialog::RemoteDialog( Window *pWindow ) :
     mButtonCancel(      this, SdResId( BTN_CANCEL ) ),
     mClientBox(         this, NULL, SdResId( LB_SERVERS ) )
 {
-     FreeResource();
+    FreeResource();
 
     vector<ClientInfo*> aClients( RemoteServer::getClients() );
 
     for ( vector<ClientInfo*>::const_iterator aIt( aClients.begin() );
         aIt < aClients.end(); aIt++ )
     {
-        mClientBox.addEntry( **aIt );
+        mClientBox.addEntry( *aIt );
     }
 
     mButtonConnect.SetClickHdl( LINK( this, RemoteDialog, HandleConnectButton ) );
@@ -46,8 +46,15 @@ IMPL_LINK_NOARG(RemoteDialog, HandleConnectButton)
 {
 //     setBusy( true );
     // Fixme: Try and connect
-
-    return 1;
+    long aSelected = mClientBox.GetActiveEntryIndex();
+    if ( aSelected < 0 )
+        return 1;
+    TClientBoxEntry aEntry = mClientBox.GetEntryData(aSelected);
+    OUString aPin = mClientBox.getPin();
+    if ( RemoteServer::connectClient( aEntry->m_pClientInfo, aPin ) )
+        return 0;
+    else
+        return 1;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

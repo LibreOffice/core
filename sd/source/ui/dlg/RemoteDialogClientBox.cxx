@@ -47,9 +47,9 @@ namespace sd {
 //------------------------------------------------------------------------------
 //                          struct ClientBoxEntry
 //------------------------------------------------------------------------------
-ClientBoxEntry::ClientBoxEntry( const ClientInfo& rClientInfo ) :
+ClientBoxEntry::ClientBoxEntry( ClientInfo* pClientInfo ) :
     m_bActive( false ),
-    m_clientInfo( rClientInfo )
+    m_pClientInfo( pClientInfo )
 {
 }
 
@@ -232,6 +232,14 @@ void ClientBox::DeleteRemoved()
     m_bInDelete = false;
 }
 
+long ClientBox::GetActiveEntryIndex()
+{
+    if ( m_bHasActive )
+        return m_nActive;
+    else
+        return -1;
+}
+
 //------------------------------------------------------------------------------
 //This function may be called with nPos < 0
 void ClientBox::selectEntry( const long nPos )
@@ -329,20 +337,20 @@ void ClientBox::DrawRow( const Rectangle& rRect, const TClientBoxEntry pEntry )
     long nMaxTitleWidth = rRect.GetWidth() - ICON_OFFSET;
     nMaxTitleWidth -= ( 2 * SMALL_ICON_SIZE ) + ( 4 * SPACE_BETWEEN );
 
-    long aTitleWidth = GetTextWidth( String( pEntry->m_clientInfo.mName ) ) + (aTextHeight / 3);
+    long aTitleWidth = GetTextWidth( String( pEntry->m_pClientInfo->mName ) ) + (aTextHeight / 3);
 
     aPos = rRect.TopLeft() + Point( ICON_OFFSET, TOP_OFFSET );
 
     if ( aTitleWidth > nMaxTitleWidth )
     {
         aTitleWidth = nMaxTitleWidth - (aTextHeight / 3);
-        String aShortTitle = GetEllipsisString( pEntry->m_clientInfo.mName,
+        String aShortTitle = GetEllipsisString( pEntry->m_pClientInfo->mName,
                                                 aTitleWidth );
         DrawText( aPos, aShortTitle );
         aTitleWidth += (aTextHeight / 3);
     }
     else
-        DrawText( aPos, pEntry->m_clientInfo.mName );
+        DrawText( aPos, pEntry->m_pClientInfo->mName );
 
     SetFont( aStdFont );
 
@@ -572,6 +580,11 @@ long ClientBox::PointToPos( const Point& rPos )
     return nPos;
 }
 
+OUString ClientBox::getPin()
+{
+    return m_aPinBox.GetText();
+}
+
 //------------------------------------------------------------------------------
 void ClientBox::MouseButtonDown( const MouseEvent& rMEvt )
 {
@@ -632,13 +645,13 @@ long ClientBox::Notify( NotifyEvent& rNEvt )
 
 
 //------------------------------------------------------------------------------
-long ClientBox::addEntry( const ClientInfo& rClientInfo )
+long ClientBox::addEntry( ClientInfo* pClientInfo )
 {
     long         nPos = 0;
 //     PackageState eState = m_pManager->getPackageState( xPackage );
 //     bool         bLocked = m_pManager->isReadOnly( xPackage );
 
-    TClientBoxEntry pEntry( new ClientBoxEntry( rClientInfo ) );
+    TClientBoxEntry pEntry( new ClientBoxEntry( pClientInfo ) );
 
     bool bNewEntryInserted = false;
 
@@ -665,7 +678,8 @@ long ClientBox::addEntry( const ClientInfo& rClientInfo )
     //keep in sync with removeEventListener logic
     if (bNewEntryInserted)
     {
-//         pEntry->m_xPackage->addEventListener(uno::Reference< lang::XEventListener > ( m_xRemoveListener, uno::UNO_QUERY ) );
+
+        //         pEntry->m_xPackage->addEventListener(uno::Reference< lang::XEventListener > ( m_xRemoveListener, uno::UNO_QUERY ) );
     }
 
 
@@ -693,9 +707,9 @@ long ClientBox::addEntry( const ClientInfo& rClientInfo )
 }
 
 //------------------------------------------------------------------------------
-void ClientBox::updateEntry( const ClientInfo& rClientInfo )
+void ClientBox::updateEntry( const ClientInfo* pClientInfo )
 {
-    (void) rClientInfo;
+    (void) pClientInfo;
 //     typedef std::vector< TClientBoxEntry >::iterator ITER;
 //     for ( ITER iIndex = m_vEntries.begin(); iIndex < m_vEntries.end(); ++iIndex )
 //     {
@@ -724,9 +738,9 @@ void ClientBox::updateEntry( const ClientInfo& rClientInfo )
 }
 
 //------------------------------------------------------------------------------
-void ClientBox::removeEntry( const ClientInfo& rClientInfo )
+void ClientBox::removeEntry( const ClientInfo* pClientInfo )
 {
-    (void) rClientInfo;
+    (void) pClientInfo;
 //     if ( ! m_bInDelete )
 //     {
 //         ::osl::ClearableMutexGuard aGuard( m_entriesMutex );

@@ -65,10 +65,10 @@ typedef ::boost::shared_ptr< ClientBoxEntry > TClientBoxEntry;
 struct ClientBoxEntry
 {
     bool            m_bActive       :1;
-    ClientInfo     m_clientInfo;
+    ClientInfo*     m_pClientInfo;
 
 
-    ClientBoxEntry( const ClientInfo& rClientInfo );
+    ClientBoxEntry( ClientInfo* pClientInfo );
    ~ClientBoxEntry();
 
 };
@@ -167,6 +167,7 @@ public:
     const Size      GetMinOutputSizePixel() const;
     void            SetExtraSize( long nSize ) { m_nExtraHeight = nSize; }
     TClientBoxEntry     GetEntryData( long nPos ) { return m_vEntries[ nPos ]; }
+    long            GetActiveEntryIndex();
     long            GetEntryCount() { return (long) m_vEntries.size(); }
     Rectangle       GetEntryRect( const long nPos ) const;
     bool            HasActive() { return m_bHasActive; }
@@ -179,12 +180,14 @@ public:
 
     //-----------------
     void    selectEntry( const long nPos );
-    long            addEntry( const ClientInfo& rClientInfo );
-    void            updateEntry( const ClientInfo& rPackageInfo );
-    void            removeEntry( const ClientInfo& rPackageInfo );
+    long            addEntry( ClientInfo* pClientInfo );
+    void            updateEntry( const ClientInfo* rPackageInfo );
+    void            removeEntry( const ClientInfo* rPackageInfo );
 
     void            prepareChecking();
     void            checkEntries();
+
+    OUString getPin();
 
     RemoteServer*    getServer() const { return m_pServer; }
 };
