@@ -1162,7 +1162,8 @@ public:
                             );
                             PPTParagraphObj(
                                 PPTStyleTextPropReader&,
-                                sal_uInt32 nCurPos,
+                                size_t nCurParaPos,
+                                size_t& rnCurCharPos,
                                 const PPTStyleSheet&,
                                 sal_uInt32 nInstance,
                                 PPTTextRulerInterpreter& rRuler

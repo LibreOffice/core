@@ -5631,9 +5631,11 @@ PPTParagraphObj::PPTParagraphObj( const PPTStyleSheet& rStyleSheet, sal_uInt32 n
     pParaSet->mnDepth = nDepth;
 }
 
-PPTParagraphObj::PPTParagraphObj( PPTStyleTextPropReader& rPropReader, sal_uInt32 nCurPos, const PPTStyleSheet& rStyleSheet,
+PPTParagraphObj::PPTParagraphObj( PPTStyleTextPropReader& rPropReader,
+        size_t const nCurParaPos, size_t& rnCurCharPos,
+        const PPTStyleSheet& rStyleSheet,
                                     sal_uInt32 nInstance, PPTTextRulerInterpreter& rRuler ) :
-    PPTParaPropSet          ( *rPropReader.aParaPropList[nCurPos] ),
+    PPTParaPropSet          ( *rPropReader.aParaPropList[nCurParaPos] ),
     PPTNumberFormatCreator  ( NULL ),
     PPTTextRulerInterpreter ( rRuler ),
     mrStyleSheet            ( rStyleSheet ),
@@ -5643,18 +5645,18 @@ PPTParagraphObj::PPTParagraphObj( PPTStyleTextPropReader& rPropReader, sal_uInt3
     mnPortionCount          ( 0 ),
     mpPortionList           ( NULL )
 {
-    PPTCharPropSet* pCharPropSet = rPropReader.aCharPropList[nCurPos];
-    if ( pCharPropSet )
+    if (rnCurCharPos < rPropReader.aCharPropList.size())
     {
+        PPTCharPropSet* pCharPropSet = rPropReader.aCharPropList[rnCurCharPos];
         sal_uInt32 nCurrentParagraph = pCharPropSet->mnParagraph;
-        for ( sal_uInt32 n = nCurPos;
+        for (size_t n = rnCurCharPos;
               n < rPropReader.aCharPropList.size() && rPropReader.aCharPropList[n]->mnParagraph == nCurrentParagraph; ++n )
             mnPortionCount++;   // counting number of portions that are part of this paragraph
 
         mpPortionList = new PPTPortionObj*[ mnPortionCount ];
         for ( sal_uInt32 i = 0; i < mnPortionCount; i++ )
         {
-            pCharPropSet = rPropReader.aCharPropList[ nCurPos + i ];
+            pCharPropSet = rPropReader.aCharPropList[rnCurCharPos + i];
             if ( pCharPropSet )
             {
                 PPTPortionObj* pPPTPortion = new PPTPortionObj( *pCharPropSet, rStyleSheet, nInstance, pParaSet->mnDepth );
@@ -5668,6 +5670,7 @@ PPTParagraphObj::PPTParagraphObj( PPTStyleTextPropReader& rPropReader, sal_uInt3
                 mpPortionList[ i ] = NULL;
             }
         }
+        rnCurCharPos += mnPortionCount;
     }
 }
 
@@ -6838,7 +6841,7 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                                                                 {
                                                                     PPTCharPropSet* pNewCPS = new PPTCharPropSet( *pCurrent );
                                                                     pNewCPS->maString = String( pCurrent->maString, (sal_uInt16)nHyperLenLeft, (sal_uInt16)( nNextStringLen - nHyperLenLeft ) );
-                                                                    aCharPropList.insert( aCharPropList.begin() + n + 1, pNewCPS );
+                                                                    aCharPropList.insert( aCharPropList.begin() + nIdx + 1, pNewCPS );
                                                                     String aRepresentation( pCurrent->maString, 0, (sal_uInt16)nHyperLenLeft );
                                                                     pCurrent->mpFieldItem = new SvxFieldItem( SvxURLField( pField->GetURL(), aRepresentation, SVXURLFORMAT_REPR ), EE_FEATURE_FIELD );
                                                                     nHyperLenLeft = 0;
@@ -6854,7 +6857,7 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                                                         {
                                                             pBefCPS->maString = String( aString, (sal_uInt16)0, (sal_uInt16)nCount );
                                                             aCharPropList.insert( aCharPropList.begin() + n, pBefCPS );
-
+                                                            n++;
                                                         }
                                                     }
                                                 }
@@ -6869,9 +6872,14 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                                 }
                             }
                             mpImplTextObj->mpParagraphList = new PPTParagraphObj*[ nParagraphs ];
-                            for ( sal_uInt32 nCurPos = 0; nCurPos < aStyleTextPropReader.aParaPropList.size(); ++nCurPos )
+                            for (size_t nCurCharPos = 0, nCurPos = 0;
+                                nCurPos < aStyleTextPropReader.aParaPropList.size();
+                                ++nCurPos)
                             {
-                                PPTParagraphObj* pPara = new PPTParagraphObj( aStyleTextPropReader, nCurPos, *rSdrPowerPointImport.pPPTStyleSheet, nInstance, aTextRulerInterpreter );
+                                PPTParagraphObj* pPara = new PPTParagraphObj(
+                                    aStyleTextPropReader, nCurPos, nCurCharPos,
+                                    *rSdrPowerPointImport.pPPTStyleSheet,
+                                    nInstance, aTextRulerInterpreter );
                                 mpImplTextObj->mpParagraphList[ nCurPos ] = pPara;
 
                                 sal_uInt32 nParaAdjust, nFlags = 0;
