@@ -3233,6 +3233,15 @@ void Menu::HighlightItem( sal_uInt16 nItemPos )
     }
 }
 
+void Menu::Freeze() {
+    SalMenu *pSalMenu = ImplGetSalMenu();
+
+    if ( pSalMenu ) {
+        pSalMenu->Freeze();
+    }
+}
+
+
 // -----------
 // - MenuBar -
 // -----------
@@ -6043,65 +6052,6 @@ ImplMenuDelData::~ImplMenuDelData()
 {
     if( mpMenu )
         const_cast< Menu* >( mpMenu )->ImplRemoveDel( *this );
-}
-
-#include <iostream>
-
-using namespace std;
-
-void printMenu( AbstractMenu* pMenu ) {
-    if ( pMenu ) {
-        sal_uInt16 itemCount = pMenu->GetItemCount();
-        MenuItemList *items = ((Menu*)pMenu)->GetItemList();
-
-        for (int i=0; i < itemCount; i++) {
-            MenuItemData *itemData = items->GetDataFromPos(i);
-            sal_uInt16 itemId = pMenu->GetItemId(i);
-
-            if (itemData->eType == MENUITEM_SEPARATOR) {
-                cout << "---------------" << endl;
-            } else {
-                rtl::OUString itemText = itemData->aText;
-                rtl::OUString cmdString = itemData->aCommandStr;
-                cout << "Item ID: " << itemId << "  Text: " << itemText << "  CMD: " << cmdString << endl;
-
-                if (itemData->pSubMenu) {
-                    cout << ">> SUBMENU <<" << endl;
-                    //FIXME: This callback would introduce some noise in accessibility software.
-                    itemData->pSubMenu->Activate();
-                    printMenu( itemData->pSubMenu );
-                }
-            }
-        }
-    }
-}
-
-void generateMenuHierarchy( AbstractMenu* pMenu ) {
-    if ( pMenu ) {
-        sal_uInt16 itemCount = pMenu->GetItemCount();
-        MenuItemList *items = ((Menu*)pMenu)->GetItemList();
-
-        for (int i=0; i < itemCount; i++) {
-            MenuItemData *itemData = items->GetDataFromPos(i);
-
-            if (itemData->pSubMenu) {
-                itemData->pSubMenu->Activate();
-                generateMenuHierarchy( itemData->pSubMenu );
-            }
-        }
-    }
-}
-
-void Menu::Freeze() {
-//    printMenu( this );
-    generateMenuHierarchy( this );
-//    cout << "============================================================" << endl;
-
-    SalMenu *pSalMenu = ImplGetSalMenu();
-
-    if ( pSalMenu ) {
-        pSalMenu->Freeze();
-    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

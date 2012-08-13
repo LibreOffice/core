@@ -451,20 +451,32 @@ bool GtkSalMenu::ShowNativePopupMenu(FloatingWindow * pWin, const Rectangle& rRe
     return TRUE;
 }
 
+void updateNativeMenu( GtkSalMenu* pMenu ) {
+    if ( pMenu ) {
+        for (int i=0; i < pMenu->maItems.size(); i++) {
+            GtkSalMenuItem* pSalMenuItem = pMenu->maItems[ i ];
+            String aText = pSalMenuItem->mpVCLMenu->GetItemText( pSalMenuItem->mnId );
+
+            // Force updating of native menu labels.
+            pMenu->SetItemText( i, pSalMenuItem, aText );
+
+            if ( pSalMenuItem->mpSubMenu && pSalMenuItem->mpSubMenu->mpVCLMenu ) {
+                pSalMenuItem->mpSubMenu->mpVCLMenu->Activate();
+                updateNativeMenu( pSalMenuItem->mpSubMenu );
+            }
+        }
+    }
+}
 void GtkSalMenu::Freeze()
 {
-    cout << __FUNCTION__ << endl;
-    GLOActionGroup *mpActionGroup = g_lo_action_group_new();
+    updateNativeMenu( this );
 
-//    GMenuModel *pMenuModel = generateMenuModelAndActions( this, mpActionGroup );
+    GLOActionGroup *mpActionGroup = g_lo_action_group_new();
 
     generateActions( this, mpActionGroup );
 
-//    this->publishMenu( mpMenuModel, G_ACTION_GROUP( mpActionGroup ) );
-
     // Menubar would have one section only.
     this->publishMenu( mpMenuModel, G_ACTION_GROUP( mpActionGroup ) );
-//    g_object_unref( pMenuModel );
 }
 
 // =======================================================================
