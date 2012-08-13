@@ -68,14 +68,12 @@ public:
             throw( HelpProcessingException );
 
     HelpLinker()
-        : init(true)
-        , m_pIndexerPreProcessor(NULL)
+        : m_pIndexerPreProcessor(NULL)
     {}
     ~HelpLinker()
         { delete m_pIndexerPreProcessor; }
 
 private:
-    int locCount, totCount;
     Stringtable additionalFiles;
     HashSet helpFiles;
     fs::path sourceRoot;
@@ -93,7 +91,6 @@ private:
     bool bExtensionMode;
     fs::path indexDirName;
     fs::path indexDirParentName;
-    bool init;
     IndexerPreProcessor* m_pIndexerPreProcessor;
     void initIndexerPreProcessor();
     void link() throw( HelpProcessingException );

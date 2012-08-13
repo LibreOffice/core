@@ -56,8 +56,6 @@
 rtl::OString sInputFile;
 sal_Bool bEnableExport;
 sal_Bool bMergeMode;
-sal_Bool bErrorLog;
-sal_Bool bUTF8;
 rtl::OString sPrj;
 rtl::OString sPrjRoot;
 rtl::OString sOutputFile;
@@ -71,8 +69,6 @@ sal_Bool ParseCommandLine( int argc, char* argv[])
 {
     bEnableExport = sal_False;
     bMergeMode = sal_False;
-    bErrorLog = sal_True;
-    bUTF8 = sal_True;
     sPrj = "";
     sPrjRoot = "";
     Export::sLanguages = "";
@@ -104,7 +100,6 @@ sal_Bool ParseCommandLine( int argc, char* argv[])
         else if (aArg.equalsL(RTL_CONSTASCII_STRINGPARAM("-E" )))
         {
             nState = STATE_ERRORLOG;
-            bErrorLog = sal_False;
         }
         else if (aArg.equalsL(RTL_CONSTASCII_STRINGPARAM("-L" )))
             nState = STATE_LANGUAGES;
@@ -197,12 +192,12 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv) {
     bool hasNoError = true;
 
     if ( sOutputFile.getLength() ){                                               // Merge single file ?
-        HelpParser aParser( sInputFile, bUTF8 , false );
+        HelpParser aParser( sInputFile );
 
         if ( bMergeMode )
         {
             //sal_uInt64 startreadloc = Export::startMessure();
-            MergeDataFile aMergeDataFile(sSDFFile, sInputFile, sal_False);
+            MergeDataFile aMergeDataFile(sSDFFile, sInputFile, false);
 
             hasNoError = aParser.Merge( sSDFFile, sOutputFile , Export::sLanguages , aMergeDataFile );
         }
@@ -233,7 +228,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv) {
 
             aFStream.close();
             rtl::OString sHelpFile; // dummy
-            MergeDataFile aMergeDataFile( sSDFFile, sHelpFile, sal_False );
+            MergeDataFile aMergeDataFile( sSDFFile, sHelpFile, false );
 
             std::vector<rtl::OString> aLanguages;
             HelpParser::parse_languages( aLanguages , aMergeDataFile );
@@ -243,7 +238,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv) {
             {
                 sHelpFile = *pos;
 
-                HelpParser aParser( sHelpFile , bUTF8 , true );
+                HelpParser aParser( sHelpFile );
                 hasNoError = aParser.Merge( sSDFFile , sOutputFileX , sOutputFileY , true , aLanguages , aMergeDataFile , bCreateDir );
                 bCreateDir = false;
             }

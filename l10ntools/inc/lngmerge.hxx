@@ -50,9 +50,7 @@ private:
     sal_uInt16 nError;
     LngLineList *pLines;
     rtl::OString sSource;
-    sal_Bool bDBIsUTF8;
     sal_Bool bULF;
-    bool bQuiet;
     std::vector<rtl::OString> aLanguages;
 
     bool isNextGroup(rtl::OString &sGroup_out, rtl::OString &sLine_in);
@@ -62,7 +60,7 @@ private:
         const rtl::OString &rPrj, const rtl::OString &rRoot,
         const rtl::OString &rActFileName, const rtl::OString &rID);
 public:
-    LngParser(const rtl::OString &rLngFile, sal_Bool bUTF8,
+    LngParser(const rtl::OString &rLngFile,
         sal_Bool bULFFormat);
     ~LngParser();
 

@@ -47,12 +47,11 @@ rtl::OString getBracketedContent(rtl::OString text) {
 //
 // class LngParser
 //
-LngParser::LngParser(const rtl::OString &rLngFile, sal_Bool bUTF8,
+LngParser::LngParser(const rtl::OString &rLngFile,
     sal_Bool bULFFormat)
     : nError( LNG_OK )
     , pLines( NULL )
     , sSource( rLngFile )
-    , bDBIsUTF8( bUTF8 )
     , bULF( bULFFormat )
 {
     pLines = new LngLineList();
@@ -189,7 +188,7 @@ sal_Bool LngParser::Merge(
     }
     nError = LNG_OK;
 
-    MergeDataFile aMergeDataFile( rSDFFile, sSource, sal_False );
+    MergeDataFile aMergeDataFile( rSDFFile, sSource, false );
     rtl::OString sTmp( Export::sLanguages );
     if( sTmp.equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("ALL")) )
         Export::SetLanguages( aMergeDataFile.GetLanguages() );

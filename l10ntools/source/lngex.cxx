@@ -51,7 +51,6 @@
 rtl::OString sInputFile;
 sal_Bool bEnableExport;
 sal_Bool bMergeMode;
-sal_Bool bErrorLog;
 sal_Bool bUTF8;
 sal_Bool bULF; // ULF = Unicode Language File
 rtl::OString sPrj;
@@ -65,7 +64,6 @@ sal_Bool ParseCommandLine( int argc, char* argv[])
 {
     bEnableExport = sal_False;
     bMergeMode = sal_False;
-    bErrorLog = sal_True;
     bUTF8 = sal_True;
     bULF = sal_False;
     sPrj = "";
@@ -91,7 +89,6 @@ sal_Bool ParseCommandLine( int argc, char* argv[])
         else if (sSwitch.equalsL(RTL_CONSTASCII_STRINGPARAM("-E")))
         {
             nState = STATE_ERRORLOG;
-            bErrorLog = sal_False;
         }
         else if (sSwitch.equalsL(RTL_CONSTASCII_STRINGPARAM("-L")))
             nState = STATE_LANGUAGES;
@@ -166,7 +163,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv) {
 
     if (!sOutputFile.isEmpty())
     {
-        LngParser aParser( sInputFile, bUTF8, bULF );
+        LngParser aParser( sInputFile, bULF );
         if ( bMergeMode )
             aParser.Merge(sMergeSrc, sOutputFile);
         else

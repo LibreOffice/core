@@ -40,8 +40,6 @@ class HelpParser
 {
 private:
     rtl::OString sHelpFile;
-    bool       bUTF8;
-    bool       bHasInputList;
 
 #if OSL_DEBUG_LEVEL > 2
     /// Debugmethod, prints the content of the map to stdout
@@ -52,7 +50,7 @@ private:
 #endif
 
 public:
-    HelpParser( const rtl::OString &rHelpFile, bool bUTF8 , bool bHasInputList );
+    HelpParser( const rtl::OString &rHelpFile );
     ~HelpParser(){};
 
 /// Method creates/append a SDF file with the content of a parsed XML file

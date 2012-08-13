@@ -139,9 +139,7 @@ sal_Bool MergeData::operator==( ResData *pData )
 MergeDataFile::MergeDataFile(
     const rtl::OString &rFileName,
     const rtl::OString &rFile,
-    bool bErrLog,
     bool bCaseSensitive)
-    : bErrorLog( bErrLog )
 {
     std::ifstream aInputStream(rFileName.getStr());
     const ::rtl::OString sHACK(RTL_CONSTASCII_STRINGPARAM("HACK"));

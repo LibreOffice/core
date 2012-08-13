@@ -77,10 +77,8 @@ void HelpParser::Dump(LangHashMap* rElem_in,const rtl::OString & sKey_in)
 }
 #endif
 
-HelpParser::HelpParser( const rtl::OString &rHelpFile, bool rUTF8 , bool rHasInputList  )
-        : sHelpFile( rHelpFile ),
-          bUTF8    ( rUTF8     ),
-          bHasInputList( rHasInputList )
+HelpParser::HelpParser( const rtl::OString &rHelpFile )
+        : sHelpFile( rHelpFile )
           {};
 
 /*****************************************************************************/

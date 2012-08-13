@@ -435,7 +435,6 @@ public:
 class MergeDataFile
 {
     private:
-        sal_Bool bErrorLog;
         rtl::OString sErrorLog;
         MergeDataHashMap aMap;
         std::set<rtl::OString> aLanguageSet;
@@ -448,7 +447,7 @@ class MergeDataFile
             const rtl::OString &sFilename, bool bCaseSensitive);
     public:
         explicit MergeDataFile(const rtl::OString &rFileName,
-            const rtl::OString& rFile, bool bErrLog, bool bCaseSensitive = false);
+            const rtl::OString& rFile, bool bCaseSensitive);
         ~MergeDataFile();
 
 
@@ -497,7 +496,6 @@ private:
 
     Export& aExport;
     bool bStart;
-    bool bStartNext;
 
     inline void Pop( std::queue<QueueEntry>& aQueue );
 

@@ -43,8 +43,6 @@ private:
     sal_Bool bError;
     sal_Bool bText;
 
-    bool sLocalized;
-
     rtl::OString sCurrentOpenTag;
     rtl::OString sCurrentCloseTag;
     rtl::OString sCurrentText;

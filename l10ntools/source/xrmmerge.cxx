@@ -58,7 +58,6 @@ void YYWarning( const char * );
 // set of global variables
 sal_Bool bEnableExport;
 sal_Bool bMergeMode;
-sal_Bool bErrorLog;
 sal_Bool bUTF8;
 sal_Bool bDisplayName;
 sal_Bool bExtensionDescription;
@@ -81,7 +80,6 @@ extern char *GetOutputFile( int argc, char* argv[])
 {
     bEnableExport = sal_False;
     bMergeMode = sal_False;
-    bErrorLog = sal_True;
     bUTF8 = sal_True;
     bDisplayName = sal_False;
     bExtensionDescription = sal_False;
@@ -112,7 +110,6 @@ extern char *GetOutputFile( int argc, char* argv[])
         }
         else if ( rtl::OString( argv[ i ] ).toAsciiUpperCase() == "-E" ) {
             nState = STATE_ERRORLOG;
-            bErrorLog = sal_False;
         }
         else if ( rtl::OString( argv[ i ] ).toAsciiUpperCase() == "-L" ) {
             nState = STATE_LANGUAGES;
@@ -577,7 +574,7 @@ XRMResMerge::XRMResMerge(
 {
     if (!rMergeSource.isEmpty())
         pMergeDataFile = new MergeDataFile(
-            rMergeSource, sInputFileName, bErrorLog);
+            rMergeSource, sInputFileName, false);
     if( Export::sLanguages.equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("ALL")))
     {
         Export::SetLanguages( pMergeDataFile->GetLanguages() );

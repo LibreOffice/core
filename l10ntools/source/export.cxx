@@ -52,7 +52,6 @@ MergeDataFile * pMergeDataFile = 0; //TODO
 namespace global {
 
 bool mergeMode = false;
-bool errorLog = true;
 char const * prj = 0;
 char const * prjRoot = 0;
 char const * inputPathname = 0;
@@ -65,7 +64,7 @@ boost::scoped_ptr< Export > exporter;
 void handleArguments(int argc, char ** argv) {
     for (int i = 1; i != argc; ++i) {
         if (std::strcmp(argv[i], "-e") == 0) {
-            global::errorLog = false;
+            // ingored, used to be "Disable writing errorlog"
         } else if (std::strcmp(argv[i], "-i") == 0) {
             if (++i == argc) {
                 global::inputPathname = 0; // no valid command line
@@ -118,7 +117,7 @@ void handleArguments(int argc, char ** argv) {
              " FileIn:   Source files (*.src)\n"
              " FileOut:  Destination file (*.*)\n"
              " DataBase: Mergedata (*.sdf)\n"
-             " -e: Disable writing errorlog\n"
+             " -e: ignored\n"
              " -l: Restrict the handled languages; l1, l2, ... are elements of"
              " (de, en-US, ...)\n"));
         std::exit(EXIT_FAILURE);
@@ -321,7 +320,7 @@ Export::~Export()
 
     if ( bMergeMode ) {
         if ( !pMergeDataFile )
-            pMergeDataFile = new MergeDataFile(sMergeSrc, global::inputPathname, global::errorLog);
+            pMergeDataFile = new MergeDataFile(sMergeSrc, global::inputPathname, false);
 
         delete pMergeDataFile;
     }
@@ -1588,7 +1587,7 @@ sal_Bool Export::PrepareTextToMerge(rtl::OString &rText, sal_uInt16 nTyp,
 
     // search for merge data
     if ( !pMergeDataFile ){
-        pMergeDataFile = new MergeDataFile( sMergeSrc, global::inputPathname, global::errorLog );
+        pMergeDataFile = new MergeDataFile( sMergeSrc, global::inputPathname, false );
 
         // Init Languages
         if( Export::sLanguages.equalsIgnoreAsciiCase("ALL") )
@@ -1689,7 +1688,7 @@ void Export::MergeRest( ResData *pResData, sal_uInt16 nMode )
 /*****************************************************************************/
 {
     if ( !pMergeDataFile ){
-        pMergeDataFile = new MergeDataFile( sMergeSrc, global::inputPathname, global::errorLog );
+        pMergeDataFile = new MergeDataFile( sMergeSrc, global::inputPathname, false );
 
         // Init Languages
         if (Export::sLanguages.equalsIgnoreAsciiCase("ALL"))
@@ -2063,8 +2062,7 @@ ParserQueue::ParserQueue( Export& aExportObj )
           bLastWasM( false ),
           bMflag( false ) ,
           aExport( aExportObj ) ,
-          bStart( false ) ,
-          bStartNext( false )
+          bStart( false )
 {
           aQueueNext = new std::queue<QueueEntry>;
           aQueueCur  = new std::queue<QueueEntry>;
