@@ -45,7 +45,7 @@ private:
     css::uno::Reference< css::awt::XDevice > getDevice() throw (css::uno::RuntimeException);
 
 protected:
-    void SplitAtDefinedPosition(sal_Bool _bUnFreezePane);
+    void SplitAtDefinedPosition( sal_Int32 nColumns, sal_Int32 nRows );
 
 public:
     void Scroll( const css::uno::Any& Down, const css::uno::Any& Up, const css::uno::Any& ToRight, const css::uno::Any& ToLeft, bool bLargeScroll = false ) throw (css::uno::RuntimeException);
