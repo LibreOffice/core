@@ -482,11 +482,18 @@ void EmbeddedObjectRef::GetReplacement( sal_Bool bUpdate )
 
 Graphic* EmbeddedObjectRef::GetGraphic( ::rtl::OUString* pMediaType ) const
 {
-    if ( mpImp->bNeedUpdate )
-        // bNeedUpdate will be set to false while retrieving new replacement
-        const_cast < EmbeddedObjectRef* >(this)->GetReplacement( sal_True );
-    else if ( !mpImp->pGraphic )
-        const_cast < EmbeddedObjectRef* >(this)->GetReplacement( sal_False );
+    try
+    {
+        if ( mpImp->bNeedUpdate )
+            // bNeedUpdate will be set to false while retrieving new replacement
+            const_cast < EmbeddedObjectRef* >(this)->GetReplacement( sal_True );
+        else if ( !mpImp->pGraphic )
+            const_cast < EmbeddedObjectRef* >(this)->GetReplacement( sal_False );
+    }
+    catch( uno::Exception& )
+    {
+        OSL_ENSURE( sal_False, "Something went wrong on getting the graphic!" );
+    }
 
     if ( mpImp->pGraphic && pMediaType )
         *pMediaType = mpImp->aMediaType;
@@ -589,6 +596,7 @@ Graphic* EmbeddedObjectRef::GetHCGraphic() const
         }
         catch ( uno::Exception& )
         {
+            OSL_ENSURE( sal_False, "Something went wrong on getting the high contrast graphic!" );
         }
 
         if ( xInStream.is() )
