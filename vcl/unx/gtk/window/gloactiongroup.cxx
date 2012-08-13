@@ -25,7 +25,6 @@ G_DEFINE_TYPE_WITH_CODE (GLOActionGroup,
 static gchar **
 g_lo_action_group_list_actions (GActionGroup *group)
 {
-    puts(__FUNCTION__);
     GLOActionGroup *loGroup = G_LO_ACTION_GROUP (group);
     GHashTableIter iter;
     gint n, i = 0;
@@ -53,7 +52,6 @@ g_lo_action_group_query_action (GActionGroup        *group,
                                 GVariant           **state_hint,
                                 GVariant           **state)
 {
-    puts(__FUNCTION__);
     GLOActionGroup *loGroup = G_LO_ACTION_GROUP (group);
     GAction *action;
 
@@ -85,7 +83,6 @@ g_lo_action_group_change_state (GActionGroup *group,
                                 const gchar  *action_name,
                                 GVariant     *value)
 {
-    puts(__FUNCTION__);
     GLOActionGroup *loGroup = G_LO_ACTION_GROUP (group);
     GAction *action;
 
@@ -102,9 +99,6 @@ g_lo_action_group_activate (GActionGroup *group,
                             const gchar  *action_name,
                             GVariant     *parameter)
 {
-
-
-    puts(__FUNCTION__);
     GLOActionGroup *loGroup = G_LO_ACTION_GROUP (group);
     GAction *action;
 
@@ -114,8 +108,6 @@ g_lo_action_group_activate (GActionGroup *group,
         return;
 
     g_action_activate (action, parameter);
-
-
 }
 
 static void
@@ -123,7 +115,6 @@ action_enabled_notify (GAction     *action,
                        GParamSpec  *pspec,
                        gpointer     user_data)
 {
-    puts(__FUNCTION__);
     g_action_group_action_enabled_changed (G_ACTION_GROUP( user_data ),
                                            g_action_get_name (action),
                                            g_action_get_enabled (action));
@@ -134,7 +125,6 @@ action_state_notify (GAction    *action,
                      GParamSpec *pspec,
                      gpointer    user_data)
 {
-    puts(__FUNCTION__);
     GVariant *value;
 
     value = g_action_get_state (action);
@@ -149,7 +139,6 @@ g_lo_action_group_disconnect (gpointer key,
                               gpointer value,
                               gpointer user_data)
 {
-    puts(__FUNCTION__);
     g_signal_handlers_disconnect_by_func (value, (gpointer) action_enabled_notify,
                                           user_data);
     g_signal_handlers_disconnect_by_func (value, (gpointer) action_state_notify,
@@ -160,7 +149,6 @@ static GAction *
 g_lo_action_group_lookup_action (GActionMap     *action_map,
                                  const gchar    *action_name)
 {
-    puts(__FUNCTION__);
     GLOActionGroup *loGroup = G_LO_ACTION_GROUP (action_map);
 
     return G_ACTION( g_hash_table_lookup (loGroup->priv->table, action_name) );
@@ -170,7 +158,6 @@ static void
 g_lo_action_group_add_action (GActionMap *action_map,
                               GAction    *action)
 {
-    puts(__FUNCTION__);
     GLOActionGroup *loGroup = G_LO_ACTION_GROUP (action_map);
     const gchar *action_name;
     GAction *old_action;
@@ -206,7 +193,6 @@ static void
 g_lo_action_group_remove_action (GActionMap  *action_map,
                                  const gchar *action_name)
 {
-    puts(__FUNCTION__);
     GLOActionGroup *loGroup = G_LO_ACTION_GROUP (action_map);
     GAction *action;
 
@@ -223,7 +209,6 @@ g_lo_action_group_remove_action (GActionMap  *action_map,
 static void
 g_lo_action_group_finalize (GObject *object)
 {
-    puts(__FUNCTION__);
     GLOActionGroup *loGroup = G_LO_ACTION_GROUP (object);
 
     g_hash_table_foreach (loGroup->priv->table,
@@ -238,7 +223,6 @@ g_lo_action_group_finalize (GObject *object)
 static void
 g_lo_action_group_init (GLOActionGroup *group)
 {
-    puts(__FUNCTION__);
     group->priv = G_TYPE_INSTANCE_GET_PRIVATE (group,
                                                  G_TYPE_LO_ACTION_GROUP,
                                                  GLOActionGroupPrivate);
@@ -249,7 +233,6 @@ g_lo_action_group_init (GLOActionGroup *group)
 static void
 g_lo_action_group_class_init (GLOActionGroupClass *klass)
 {
-    puts(__FUNCTION__);
     GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
     object_class->finalize = g_lo_action_group_finalize;
@@ -260,7 +243,6 @@ g_lo_action_group_class_init (GLOActionGroupClass *klass)
 static void
 g_lo_action_group_iface_init (GActionGroupInterface *iface)
 {
-    puts(__FUNCTION__);
     iface->list_actions = g_lo_action_group_list_actions;
     iface->query_action = g_lo_action_group_query_action;
     iface->change_action_state = g_lo_action_group_change_state;
@@ -270,7 +252,6 @@ g_lo_action_group_iface_init (GActionGroupInterface *iface)
 static void
 g_lo_action_group_map_iface_init (GActionMapInterface *iface)
 {
-    puts(__FUNCTION__);
     iface->add_action = g_lo_action_group_add_action;
     iface->remove_action = g_lo_action_group_remove_action;
     iface->lookup_action = g_lo_action_group_lookup_action;
@@ -279,7 +260,6 @@ g_lo_action_group_map_iface_init (GActionMapInterface *iface)
 GLOActionGroup *
 g_lo_action_group_new (void)
 {
-    puts(__FUNCTION__);
     return G_LO_ACTION_GROUP( g_object_new (G_TYPE_LO_ACTION_GROUP, NULL) );
 }
 
@@ -287,7 +267,6 @@ GAction *
 g_lo_action_group_lookup (GLOActionGroup *group,
                           const gchar    *action_name)
 {
-    puts(__FUNCTION__);
     g_return_val_if_fail (G_IS_LO_ACTION_GROUP (group), NULL);
 
     return g_action_map_lookup_action (G_ACTION_MAP (group), action_name);
@@ -297,7 +276,6 @@ void
 g_lo_action_group_insert (GLOActionGroup *group,
                           GAction        *action)
 {
-    puts(__FUNCTION__);
     g_return_if_fail (G_IS_LO_ACTION_GROUP (group));
 
     g_action_map_add_action (G_ACTION_MAP (group), action);
@@ -307,7 +285,6 @@ void
 g_lo_action_group_remove (GLOActionGroup *group,
                           const gchar    *action_name)
 {
-    puts(__FUNCTION__);
     g_return_if_fail (G_IS_LO_ACTION_GROUP (group));
 
     g_action_map_remove_action (G_ACTION_MAP (group), action_name);
@@ -319,7 +296,6 @@ g_lo_action_group_add_entries (GLOActionGroup     *group,
                                gint                n_entries,
                                gpointer            user_data)
 {
-    puts(__FUNCTION__);
     g_action_map_add_action_entries (G_ACTION_MAP (group), entries, n_entries, user_data);
 }
 

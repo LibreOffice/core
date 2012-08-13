@@ -11,8 +11,32 @@
 
 using namespace std;
 
-#define GTK_MENU_BUS_NAME   "org.libreoffice"
-#define GTK_MENU_OBJ_PATH   "/org/libreoffice"
+#define GTK_MENU_BUS_NAME_PREFIX   "org.libreoffice"
+#define GTK_MENU_OBJ_PATH_PREFIX   "/org/libreoffice"
+
+//Some menus are special, this is the list of them
+gboolean
+isSpecialSubmenu (OUString command)
+{
+    const gchar * specialSubmenus[11] = {".uno:CharFontName",
+                                         ".uno:FontHeight",
+                                         ".uno:ObjectMenue",
+                                         ".uno:InsertPageHeader",
+                                         ".uno:InsertPageFooter",
+                                         ".uno:ChangeControlType",
+                                         ".uno:AvailableToolbars",
+                                         ".uno:ScriptOrganizer",
+                                         ".uno:RecentFileList",
+                                         ".uno:AddDirect",
+                                         ".uno:AutoPilotMenu"};
+
+    for (gint i = 0; i < 11; i++)
+    {
+        if (command.equals (OUString::createFromAscii (specialSubmenus[i])))
+            return TRUE;
+    }
+    return FALSE;
+}
 
 static void
 dispatchAction (GSimpleAction   *action,
@@ -58,11 +82,33 @@ dispatchAction (GSimpleAction   *action,
                         pParentMenu = pParentMenu->mpParentSalMenu;
                     }
 
-                    pPopupMenu->SetSelectedEntry( pSalMenuItem->mnId );
-                    pPopupMenu->ImplSelectWithStart( pCurMenu );
+//                    pPopupMenu->SetSelectedEntry( pSalMenuItem->mnId );
+//                    pPopupMenu->ImplSelectWithStart( pCurMenu );
+                    ((MenuBar*) pCurMenu)->HandleMenuCommandEvent( pCurMenu, pSalMenuItem->mnId );
                 }
                 else
                     OSL_FAIL( "menubar item without frame !" );
+            }
+        } else {
+            rtl::OUString aActionName = rtl::OUString::createFromAscii( g_action_get_name( G_ACTION( action ) ) );
+
+            if ( isSpecialSubmenu( aActionName ) ) {
+                PopupMenu * pPopupMenu = dynamic_cast<PopupMenu *>(pSalMenuItem->mpVCLMenu);
+                if( pPopupMenu )
+                {
+                    GtkSalMenu* pParentMenu = pSalMenuItem->mpParentMenu;
+                    Menu* pCurMenu = pSalMenuItem->mpVCLMenu;
+                    while( pParentMenu && pParentMenu->mpVCLMenu )
+                    {
+                        pCurMenu = pParentMenu->mpVCLMenu;
+                        pParentMenu = pParentMenu->mpParentSalMenu;
+                    }
+
+                    ((MenuBar*) pCurMenu)->HandleMenuActivateEvent( pSalMenuItem->mpVCLMenu );
+//                    pPopupMenu->SetSelectedEntry( pSalMenuItem->mnId );
+//                    pPopupMenu->ImplActivateWithStart( pCurMenu );
+//                    //                pSalMenuItem->mpVCLMenu->Activate();
+                }
             }
         }
     }
@@ -114,18 +160,24 @@ gdk_x11_window_set_utf8_property  (GdkWindow *window,
 
 void GtkSalMenu::publishMenu( GMenuModel *pMenu, GActionGroup *pActionGroup )
 {
-//        guint appmenuID = g_dbus_connection_export_menu_model (bus, "/org/libreoffice/menus/appmenu", mpMenuModel, NULL);
-//        if(!appmenuID) puts("Fail export appmenu");
-
     if ( mMenubarId ) {
         g_dbus_connection_unexport_menu_model( pSessionBus, mMenubarId );
-        mbMenuBar = 0;
+        mMenubarId = 0;
     }
 
-    mMenubarId = g_dbus_connection_export_menu_model (pSessionBus, "/org/libreoffice/menus/menubar", pMenu, NULL);
-    if(!mMenubarId) puts("Fail export menubar");
+    if ( mActionGroupId ) {
+        g_dbus_connection_unexport_action_group( pSessionBus, mActionGroupId );
+        mActionGroupId = 0;
+    }
 
-    g_dbus_connection_export_action_group( pSessionBus, GTK_MENU_OBJ_PATH, pActionGroup, NULL);
+    if ( aDBusMenubarPath ) {
+        mMenubarId = g_dbus_connection_export_menu_model (pSessionBus, aDBusMenubarPath, pMenu, NULL);
+        if(!mMenubarId) puts("Fail export menubar");
+    }
+
+    if ( aDBusPath ) {
+        mActionGroupId = g_dbus_connection_export_action_group( pSessionBus, aDBusPath, pActionGroup, NULL);
+    }
 }
 
 
@@ -157,40 +209,67 @@ GtkSalMenu::GtkSalMenu( sal_Bool bMenuBar ) :
     mpVCLMenu( NULL ),
     mpParentSalMenu( NULL ),
     mpFrame( NULL ),
+    aDBusPath( NULL ),
     aDBusMenubarPath( NULL ),
     pSessionBus( NULL ),
     mBusId( 0 ),
     mMenubarId( 0 ),
     mActionGroupId ( 0 )
 {
-    mpCurrentSection = G_MENU_MODEL( g_menu_new() );
+    mpCurrentSection = G_MENU_MODEL( g_lo_menu_new() );
     maSections.push_back( mpCurrentSection );
 
-    mpMenuModel = G_MENU_MODEL( g_menu_new() );
-    g_menu_append_section( G_MENU( mpMenuModel ), NULL, mpCurrentSection );
+    mpMenuModel = G_MENU_MODEL( g_lo_menu_new() );
+    g_lo_menu_append_section( G_LO_MENU( mpMenuModel ), NULL, mpCurrentSection );
 
     if (bMenuBar) {
         pSessionBus = g_bus_get_sync (G_BUS_TYPE_SESSION, NULL, NULL);
         if(!pSessionBus) puts ("Fail bus get");
 
-        mBusId = g_bus_own_name_on_connection (pSessionBus, GTK_MENU_BUS_NAME, G_BUS_NAME_OWNER_FLAGS_NONE, NULL, NULL, NULL, NULL);
-        if(!mBusId) puts ("Fail own name");
+//        mBusId = g_bus_own_name_on_connection (pSessionBus, "", G_BUS_NAME_OWNER_FLAGS_NONE, NULL, NULL, NULL, NULL);
+//        if(!mBusId) puts ("Fail own name");
     }
 }
 
 GtkSalMenu::~GtkSalMenu()
 {
-    if ( mMenubarId ) {
-        g_dbus_connection_unexport_menu_model( pSessionBus, mMenubarId );
+    if ( mpFrame ) {
+        GtkWidget *widget = GTK_WIDGET( mpFrame->getWindow() );
+        GdkWindow *gdkWindow = gtk_widget_get_window( widget );
+        if (gdkWindow) {
+            gdk_x11_window_set_utf8_property ( gdkWindow, "_GTK_UNIQUE_BUS_NAME", NULL );
+            gdk_x11_window_set_utf8_property ( gdkWindow, "_GTK_APPLICATION_OBJECT_PATH", NULL );
+            gdk_x11_window_set_utf8_property ( gdkWindow, "_GTK_WINDOW_OBJECT_PATH", NULL );
+            gdk_x11_window_set_utf8_property ( gdkWindow, "_GTK_MENUBAR_OBJECT_PATH", NULL );
+        }
     }
 
-    if ( mBusId ) {
-        g_bus_unown_name( mBusId );
+    if ( mMenubarId ) {
+        g_dbus_connection_unexport_menu_model( pSessionBus, mMenubarId );
+        mMenubarId = 0;
+    }
+
+    if ( mActionGroupId ) {
+        g_dbus_connection_unexport_action_group( pSessionBus, mActionGroupId );
+        mActionGroupId = 0;
     }
 
     if ( pSessionBus ) {
-        g_dbus_connection_close_sync( pSessionBus, NULL, NULL );
+        g_dbus_connection_flush_sync( pSessionBus, NULL, NULL );
     }
+
+//    if ( mBusId ) {
+//        g_bus_unown_name( mBusId );
+//    }
+
+//    if ( pSessionBus ) {
+//        g_dbus_connection_close_sync( pSessionBus, NULL, NULL );
+//        pSessionBus = NULL;
+//        mMenubarId = 0;
+//        mActionGroupId = 0;
+//    }
+
+    pSessionBus = NULL;
 
     maSections.clear();
     maItems.clear();
@@ -206,7 +285,6 @@ sal_Bool GtkSalMenu::VisibleMenuBar()
 
 void GtkSalMenu::InsertItem( SalMenuItem* pSalMenuItem, unsigned nPos )
 {
-    cout << __FUNCTION__ << "  pos: " << nPos << " item: " << pSalMenuItem << " menu: " << this << endl;
     GtkSalMenuItem *pGtkSalMenuItem = static_cast<GtkSalMenuItem*>( pSalMenuItem );
 
     if ( pGtkSalMenuItem->mpMenuItem ) {
@@ -216,14 +294,12 @@ void GtkSalMenu::InsertItem( SalMenuItem* pSalMenuItem, unsigned nPos )
 
         maItems.push_back( pGtkSalMenuItem );
 
-        g_menu_insert_item( G_MENU( mpCurrentSection ), pGtkSalMenuItem->mnPos, pGtkSalMenuItem->mpMenuItem );
-
-//        g_menu_append_item( G_MENU( mpCurrentSection ), pGtkSalMenuItem->mpMenuItem );
+        g_lo_menu_insert_item( G_LO_MENU( mpCurrentSection ), pGtkSalMenuItem->mnPos, pGtkSalMenuItem->mpMenuItem );
     } else {
         // If no mpMenuItem exists, then item is a separator.
-        mpCurrentSection = G_MENU_MODEL( g_menu_new() );
+        mpCurrentSection = G_MENU_MODEL( g_lo_menu_new() );
         maSections.push_back( mpCurrentSection );
-        g_menu_append_section( G_MENU( mpMenuModel ), NULL, mpCurrentSection );
+        g_lo_menu_append_section( G_LO_MENU( mpMenuModel ), NULL, mpCurrentSection );
     }
 
     pGtkSalMenuItem->mpParentMenu = this;
@@ -231,30 +307,17 @@ void GtkSalMenu::InsertItem( SalMenuItem* pSalMenuItem, unsigned nPos )
 
 void GtkSalMenu::RemoveItem( unsigned nPos )
 {
-    cout << __FUNCTION__ << " Item: " << nPos << endl;
-
-//    if (nPos < maItems.size()) {
-//        GtkSalMenuItem *pSalMenuItem = maItems[ nPos ];
-
-//        g_menu_remove( G_MENU( pSalMenuItem->mpParentSection ), nPos );
-
-//        std::vector< GtkSalMenuItem* >::iterator iterator;
-//        iterator = maItems.begin() + nPos;
-
-//        maItems.erase( iterator, iterator );
-//    }
+//    cout << __FUNCTION__ << " Item: " << nPos << endl;
 }
 
 void GtkSalMenu::SetSubMenu( SalMenuItem* pSalMenuItem, SalMenu* pSubMenu, unsigned nPos )
 {
-    cout << __FUNCTION__ << "  Pos: " << nPos << endl;
-
     GtkSalMenuItem *pGtkSalMenuItem = static_cast<GtkSalMenuItem*>( pSalMenuItem );
     GtkSalMenu *pGtkSubMenu = static_cast<GtkSalMenu*>( pSubMenu );
 
     if ( pGtkSubMenu ) {
         pGtkSalMenuItem->mpSubMenu = pGtkSubMenu;
-        g_menu_item_set_submenu( pGtkSalMenuItem->mpMenuItem, pGtkSubMenu->mpMenuModel );
+        g_lo_menu_item_set_submenu( pGtkSalMenuItem->mpMenuItem, pGtkSubMenu->mpMenuModel );
 
         if ( !pGtkSubMenu->mpParentSalMenu ) {
             pGtkSubMenu->mpParentSalMenu = this;
@@ -275,18 +338,27 @@ void GtkSalMenu::SetFrame( const SalFrame* pFrame )
     if (gdkWindow) {
         XLIB_Window windowId = GDK_WINDOW_XID( gdkWindow );
 
-        gchar *aWindowObjectPath = g_strdup_printf( "%s/window/%lu", GTK_MENU_OBJ_PATH, windowId );
-        gchar *aMenubarObjectPath = g_strconcat( GTK_MENU_OBJ_PATH, "/menus/menubar", NULL );
+//        gchar* aGtkMenuObjPath = GTK_MENU_OBJ_PATH_PREFIX;
+//        gchar* aGtkMenuObjPath = (gchar*) g_dbus_connection_get_unique_name( pSessionBus );
+        gchar *aGtkMenuObjPath = "";
 
-//        gdk_x11_window_set_utf8_property (gdkWindow, "_GTK_APPLICATION_ID", "org.libreoffice");
+        aDBusPath = g_strdup_printf("%s/window/%lu", aGtkMenuObjPath, windowId);
+        gchar* aDBusWindowPath = g_strdup_printf( "%s/window/%lu", aGtkMenuObjPath, windowId );
+        aDBusMenubarPath = g_strdup_printf( "%s/window/%lu/menus/menubar", aGtkMenuObjPath, windowId );
+
+        puts(aDBusPath);
+        puts(aDBusWindowPath);
+        puts(aDBusMenubarPath);
+
+        puts(g_dbus_connection_get_unique_name( pSessionBus ));
+
         gdk_x11_window_set_utf8_property ( gdkWindow, "_GTK_UNIQUE_BUS_NAME", g_dbus_connection_get_unique_name( pSessionBus ) );
-        gdk_x11_window_set_utf8_property ( gdkWindow, "_GTK_APPLICATION_OBJECT_PATH", GTK_MENU_OBJ_PATH );
-        gdk_x11_window_set_utf8_property ( gdkWindow, "_GTK_WINDOW_OBJECT_PATH", aWindowObjectPath );
-//        gdk_x11_window_set_utf8_property (gdkWindow, "_GTK_APP_MENU_OBJECT_PATH", "/org/libreoffice/menus/appmenu");
-        gdk_x11_window_set_utf8_property ( gdkWindow, "_GTK_MENUBAR_OBJECT_PATH", aMenubarObjectPath );
+        gdk_x11_window_set_utf8_property ( gdkWindow, "_GTK_APPLICATION_OBJECT_PATH", aGtkMenuObjPath );
+        gdk_x11_window_set_utf8_property ( gdkWindow, "_GTK_WINDOW_OBJECT_PATH", aDBusWindowPath );
+        gdk_x11_window_set_utf8_property ( gdkWindow, "_GTK_MENUBAR_OBJECT_PATH", aDBusMenubarPath );
 
-        g_free( aWindowObjectPath );
-        g_free( aMenubarObjectPath );
+        // Try to publish the menu with the right bus data.
+        Freeze();
     }
 }
 
@@ -300,13 +372,10 @@ const GtkSalFrame* GtkSalMenu::getFrame() const
 
 void GtkSalMenu::CheckItem( unsigned nPos, sal_Bool bCheck )
 {
-    cout << __FUNCTION__ << endl;
 }
 
 void GtkSalMenu::EnableItem( unsigned nPos, sal_Bool bEnable )
 {
-    cout << __FUNCTION__ << endl;
-
     sal_uInt16 itemId = mpVCLMenu->GetItemId( nPos );
 
     GtkSalMenuItem *pSalMenuItem = GetSalMenuItem( itemId );
@@ -319,40 +388,30 @@ void GtkSalMenu::EnableItem( unsigned nPos, sal_Bool bEnable )
 
 void GtkSalMenu::SetItemText( unsigned nPos, SalMenuItem* pSalMenuItem, const rtl::OUString& rText )
 {
-    cout << __FUNCTION__ << endl;
     // Replace the "~" character with "_".
     rtl::OUString aText = rText.replace( '~', '_' );
     rtl::OString aConvertedText = OUStringToOString(aText, RTL_TEXTENCODING_UTF8);
 
-    cout << "Setting label: " << aConvertedText.getStr() << endl;
+//    cout << "Setting label: " << aConvertedText.getStr() << endl;
 
     GtkSalMenuItem *pGtkSalMenuItem = static_cast<GtkSalMenuItem*>( pSalMenuItem );
 
-    GMenuItem *pMenuItem = G_MENU_ITEM( pGtkSalMenuItem->mpMenuItem );
+    GLOMenuItem *pMenuItem = G_LO_MENU_ITEM( pGtkSalMenuItem->mpMenuItem );
 
-    g_menu_item_set_label( pMenuItem, aConvertedText.getStr() );
+    g_lo_menu_item_set_label( pMenuItem, aConvertedText.getStr() );
 
     if ( pGtkSalMenuItem->mpParentSection ) {
-        g_menu_remove( G_MENU( pGtkSalMenuItem->mpParentSection ), pGtkSalMenuItem->mnPos );
-        g_menu_insert_item( G_MENU( pGtkSalMenuItem->mpParentSection ), pGtkSalMenuItem->mnPos, pGtkSalMenuItem->mpMenuItem );
+        g_lo_menu_remove( G_LO_MENU( pGtkSalMenuItem->mpParentSection ), pGtkSalMenuItem->mnPos );
+        g_lo_menu_insert_item( G_LO_MENU( pGtkSalMenuItem->mpParentSection ), pGtkSalMenuItem->mnPos, pGtkSalMenuItem->mpMenuItem );
     }
 }
 
 void GtkSalMenu::SetItemImage( unsigned nPos, SalMenuItem* pSalMenuItem, const Image& rImage)
 {
-    cout << __FUNCTION__ << endl;
 }
 
 void GtkSalMenu::SetAccelerator( unsigned nPos, SalMenuItem* pSalMenuItem, const KeyCode& rKeyCode, const rtl::OUString& rKeyName )
 {
-    cout << __FUNCTION__ << " KeyName: " << rKeyName << endl;
-
-//    GtkSalMenuItem *pMenuItem = static_cast< GtkSalMenuItem* >( pSalMenuItem );
-
-//    rtl::OString aConvertedKeyName = OUStringToOString( rKeyName, RTL_TEXTENCODING_UTF8 );
-
-//    GVariant *gaKeyCode = g_variant_new_string( aConvertedKeyName.getStr() );
-//    g_menu_item_set_attribute_value( pMenuItem->mpMenuItem, "accel", gaKeyCode );
 }
 
 void GtkSalMenu::SetItemCommand( unsigned nPos, SalMenuItem* pSalMenuItem, const rtl::OUString& aCommandStr )
@@ -374,23 +433,21 @@ void GtkSalMenu::SetItemCommand( unsigned nPos, SalMenuItem* pSalMenuItem, const
     pGtkSalMenuItem->mpAction = G_ACTION( pAction );
 
 
-    rtl::OString aItemCommand = "app." + aOCommandStr;
-    g_menu_item_set_action_and_target( pGtkSalMenuItem->mpMenuItem, aItemCommand.getStr(), NULL );
+    rtl::OString aItemCommand = "win." + aOCommandStr;
+    g_lo_menu_item_set_action_and_target( pGtkSalMenuItem->mpMenuItem, aItemCommand.getStr(), NULL );
 
     if ( pGtkSalMenuItem->mpParentSection ) {
-        g_menu_remove( G_MENU( pGtkSalMenuItem->mpParentSection ), pGtkSalMenuItem->mnPos );
-        g_menu_insert_item( G_MENU( pGtkSalMenuItem->mpParentSection ), pGtkSalMenuItem->mnPos, pGtkSalMenuItem->mpMenuItem );
+        g_lo_menu_remove( G_LO_MENU( pGtkSalMenuItem->mpParentSection ), pGtkSalMenuItem->mnPos );
+        g_lo_menu_insert_item( G_LO_MENU( pGtkSalMenuItem->mpParentSection ), pGtkSalMenuItem->mnPos, pGtkSalMenuItem->mpMenuItem );
     }
 }
 
 void GtkSalMenu::GetSystemMenuData( SystemMenuData* pData )
 {
-    cout << __FUNCTION__ << endl;
 }
 
 bool GtkSalMenu::ShowNativePopupMenu(FloatingWindow * pWin, const Rectangle& rRect, sal_uLong nFlags)
 {
-    cout << __FUNCTION__ << endl;
     return TRUE;
 }
 
@@ -425,10 +482,8 @@ GtkSalMenuItem::GtkSalMenuItem( const SalItemParams* pItemData ) :
     mpMenuItem( NULL ),
     mpAction( NULL )
 {
-    cout << __FUNCTION__ << "Type: " << (sal_uInt16) pItemData->eType << endl;
-
     if ( pItemData->eType != MENUITEM_SEPARATOR ) {
-        mpMenuItem = g_menu_item_new( "b", NULL );
+        mpMenuItem = g_lo_menu_item_new( "EMPTY STRING", NULL );
     }
 }
 

@@ -62,6 +62,7 @@ public:
     const GtkSalFrame*                      mpFrame;
 
     // DBus variables
+    gchar*                                  aDBusPath;
     gchar*                                  aDBusMenubarPath;
     GDBusConnection*                        pSessionBus;
     sal_Int32                               mBusId;
@@ -71,8 +72,6 @@ public:
     // GMenuModel attributes
     GMenuModel*                             mpMenuModel;
     GMenuModel*                             mpCurrentSection;
-//    GLOMenu*                                mpParentMenuModel;
-//    std::vector< GLOMenu* >                 maSectionMenus;
 
     GtkSalMenu( sal_Bool bMenuBar );
     virtual ~GtkSalMenu();
@@ -109,7 +108,7 @@ public:
     GtkSalMenu*         mpParentMenu;         // The menu in which this menu item is inserted
     GtkSalMenu*         mpSubMenu;            // Sub menu of this item (if defined)
     GMenuModel*         mpParentSection;      // Section where this item is added.
-    GMenuItem*          mpMenuItem;           // The GMenuItem
+    GLOMenuItem*        mpMenuItem;           // The GMenuItem
     GAction*            mpAction;             // The GAction associated with this item
 };
 

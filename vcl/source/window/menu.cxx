@@ -6067,6 +6067,7 @@ void printMenu( AbstractMenu* pMenu ) {
 
                 if (itemData->pSubMenu) {
                     cout << ">> SUBMENU <<" << endl;
+                    //FIXME: This callback would introduce some noise in accessibility software.
                     itemData->pSubMenu->Activate();
                     printMenu( itemData->pSubMenu );
                 }
@@ -6075,9 +6076,26 @@ void printMenu( AbstractMenu* pMenu ) {
     }
 }
 
+void generateMenuHierarchy( AbstractMenu* pMenu ) {
+    if ( pMenu ) {
+        sal_uInt16 itemCount = pMenu->GetItemCount();
+        MenuItemList *items = ((Menu*)pMenu)->GetItemList();
+
+        for (int i=0; i < itemCount; i++) {
+            MenuItemData *itemData = items->GetDataFromPos(i);
+
+            if (itemData->pSubMenu) {
+                itemData->pSubMenu->Activate();
+                generateMenuHierarchy( itemData->pSubMenu );
+            }
+        }
+    }
+}
+
 void Menu::Freeze() {
-    printMenu( this );
-    cout << "============================================================" << endl;
+//    printMenu( this );
+    generateMenuHierarchy( this );
+//    cout << "============================================================" << endl;
 
     SalMenu *pSalMenu = ImplGetSalMenu();
 

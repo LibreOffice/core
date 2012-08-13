@@ -2126,29 +2126,6 @@ void MenuBarManager::SetHdl()
                  ::comphelper::getComponentContext(mxServiceFactory)) );
 }
 
-void MenuBarManager::GenerateFullMenuHierarchy( AbstractMenu* pMenu )
-{
-    if (pMenu) {
-        for (int i=0; i < pMenu->GetItemCount(); i++)
-        {
-            sal_Int16 nId = pMenu->GetItemId( i );
-
-//            this->Activate( pMenu->GetPopupMenu( nId ) );
-//            this->Activate(pMenu);
-//            this->Deactivate(pMenu);
-
-            String aCommandLabel = pMenu->GetItemCommand( nId );
-            ::rtl::OUString aCommand( aCommandLabel );
-
-            String label = RetrieveLabelFromCommand( aCommandLabel );
-            pMenu->SetItemText( nId, label );
-
-            AddMenu( this, aCommand, nId );
-            GenerateFullMenuHierarchy( pMenu->GetPopupMenu( nId ) );
-        }
-    }
-}
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
