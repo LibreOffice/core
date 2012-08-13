@@ -220,7 +220,7 @@ void OCatalog::fillNames(Reference< XResultSet >& _xResult,TStringVector& _rName
 void ODescriptor::construct()
 {
     sal_Int32 nAttrib = isNew() ? 0 : ::com::sun::star::beans::PropertyAttribute::READONLY;
-    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME), PROPERTY_ID_NAME ,nAttrib,&m_Name,::getCppuType(reinterpret_cast< ::rtl::OUString*>(NULL)));
+    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME), PROPERTY_ID_NAME ,nAttrib,&m_Name,::getCppuType(static_cast< ::rtl::OUString*>(0)));
 }
 // -------------------------------------------------------------------------
 ODescriptor::~ODescriptor()

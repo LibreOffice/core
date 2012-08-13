@@ -579,7 +579,7 @@ Sequence< Type > SAL_CALL SbaXGridPeer::getTypes() throw (RuntimeException)
     Sequence< Type > aTypes = FmXGridPeer::getTypes();
     sal_Int32 nOldLen = aTypes.getLength();
     aTypes.realloc(nOldLen + 1);
-    aTypes.getArray()[nOldLen] = ::getCppuType( reinterpret_cast< Reference< ::com::sun::star::frame::XDispatch >* >(NULL) );
+    aTypes.getArray()[nOldLen] = ::getCppuType( static_cast< Reference< ::com::sun::star::frame::XDispatch >* >(0) );
 
     return aTypes;
 }

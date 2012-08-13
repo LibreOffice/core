@@ -113,7 +113,7 @@ public:
 
 //------------------------------------------------------------------------------
 #define DECL_PROP_IMPL(varname, type) \
-    *pProperties++ = com::sun::star::beans::Property(PROPERTY_##varname, PROPERTY_ID_##varname, ::getCppuType(reinterpret_cast< type* >(NULL)),
+    *pProperties++ = com::sun::star::beans::Property(PROPERTY_##varname, PROPERTY_ID_##varname, ::getCppuType(static_cast< type* >(0)),
 
 //------------------------------------------------------------------------------
 #define DECL_BOOL_PROP_IMPL(varname) \
@@ -121,7 +121,7 @@ public:
 
 //------------------------------------------------------------------------------
 #define DECL_IFACE_PROP_IMPL(varname, type) \
-    *pProperties++ = com::sun::star::beans::Property(PROPERTY_##varname, PROPERTY_ID_##varname, ::getCppuType(reinterpret_cast< com::sun::star::uno::Reference< type >* >(NULL)),
+    *pProperties++ = com::sun::star::beans::Property(PROPERTY_##varname, PROPERTY_ID_##varname, ::getCppuType(static_cast< com::sun::star::uno::Reference< type >* >(0)),
 
 //------------------------------------------------------------------------------
 #define BEGIN_DESCRIBE_PROPERTIES( count, baseclass )   \

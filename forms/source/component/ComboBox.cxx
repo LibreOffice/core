@@ -225,7 +225,7 @@ void OComboBoxModel::setFastPropertyValue_NoBroadcast(sal_Int32 _nHandle, const 
     switch (_nHandle)
     {
         case PROPERTY_ID_LISTSOURCETYPE :
-            DBG_ASSERT(_rValue.getValueType().equals(::getCppuType(reinterpret_cast<ListSourceType*>(NULL))),
+            DBG_ASSERT(_rValue.getValueType().equals(::getCppuType(static_cast<ListSourceType*>(0))),
                 "OComboBoxModel::setFastPropertyValue_NoBroadcast : invalid type !" );
             _rValue >>= m_eListSourceType;
             break;

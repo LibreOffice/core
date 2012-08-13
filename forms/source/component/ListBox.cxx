@@ -302,7 +302,7 @@ namespace frm
             break;
 
         case PROPERTY_ID_LISTSOURCETYPE :
-            DBG_ASSERT(_rValue.getValueType().equals(::getCppuType(reinterpret_cast<ListSourceType*>(NULL))),
+            DBG_ASSERT(_rValue.getValueType().equals(::getCppuType(static_cast<ListSourceType*>(0))),
                 "OComboBoxModel::setFastPropertyValue_NoBroadcast : invalid type !" );
             _rValue >>= m_eListSourceType;
             break;
@@ -341,7 +341,7 @@ namespace frm
             throw PropertyVetoException();
 
         case PROPERTY_ID_DEFAULT_SELECT_SEQ :
-            DBG_ASSERT(_rValue.getValueType().equals(::getCppuType(reinterpret_cast< Sequence<sal_Int16>*>(NULL))),
+            DBG_ASSERT(_rValue.getValueType().equals(::getCppuType(static_cast< Sequence<sal_Int16>*>(0))),
                 "OListBoxModel::setFastPropertyValue_NoBroadcast : invalid type !" );
             _rValue >>= m_aDefaultSelectSeq;
 
@@ -376,7 +376,7 @@ namespace frm
         switch (_nHandle)
         {
         case PROPERTY_ID_BOUNDCOLUMN :
-            bModified = tryPropertyValue(_rConvertedValue, _rOldValue, _rValue, m_aBoundColumn, ::getCppuType(reinterpret_cast<sal_Int16*>(NULL)));
+            bModified = tryPropertyValue(_rConvertedValue, _rOldValue, _rValue, m_aBoundColumn, ::getCppuType(static_cast<sal_Int16*>(0)));
             break;
 
         case PROPERTY_ID_LISTSOURCETYPE:

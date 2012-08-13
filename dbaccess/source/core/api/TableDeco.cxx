@@ -162,7 +162,7 @@ sal_Bool SAL_CALL ODBTableDecorator::convertFastPropertyValue(
             {
                 Any aValue;
                 getFastPropertyValue(aValue,nHandle);
-                bRet = ::comphelper::tryPropertyValue(rConvertedValue,rOldValue,rValue,aValue,::getCppuType(reinterpret_cast< ::rtl::OUString*>(NULL)));
+                bRet = ::comphelper::tryPropertyValue(rConvertedValue,rOldValue,rValue,aValue,::getCppuType(static_cast< ::rtl::OUString*>(0)));
             }
             break; // we assume that it works
     }
