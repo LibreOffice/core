@@ -211,12 +211,12 @@ private:
 class XclExpColScaleCol : public XclExpRecord, protected XclExpRoot
 {
 public:
-    explicit XclExpColScaleCol( const XclExpRoot& rRoot, const ScColorScaleEntry& rFormatEntry);
+    explicit XclExpColScaleCol( const XclExpRoot& rRoot, const Color& rColor);
     virtual ~XclExpColScaleCol();
 
     virtual void SaveXml( XclExpXmlStream& rStrm );
 private:
-    const ScColorScaleEntry& mrEntry;
+    const Color& mrColor;
 };
 
 // ----------------------------------------------------------------------------
@@ -243,7 +243,7 @@ private:
     virtual void        WriteBody( XclExpStream& rStrm );
 
 private:
-    typedef XclExpRecordList< XclExpCF > XclExpCFList;
+    typedef XclExpRecordList< XclExpRecord > XclExpCFList;
 
     XclExpCFList        maCFList;       /// List of CF records.
     XclRangeList        maXclRanges;    /// Cell ranges for this conditional format.
@@ -253,7 +253,7 @@ private:
 class XclExpColorScale: public XclExpRecord, protected XclExpRoot
 {
 public:
-    explicit XclExpColorScale( const XclExpRoot& rRoot, const ScColorScaleFormat& rFormat );
+    explicit XclExpColorScale( const XclExpRoot& rRoot, const ScColorScaleFormat& rFormat, sal_Int32 nPriority );
 
     virtual void SaveXml( XclExpXmlStream& rStrm );
 private:
@@ -263,6 +263,22 @@ private:
     XclExpCfvoList maCfvoList;
     XclExpColScaleColList maColList;
     const ScColorScaleFormat& mrFormat;
+    sal_Int32 mnPriority;
+};
+
+class XclExpDataBar : public XclExpRecord, protected XclExpRoot
+{
+public:
+    explicit XclExpDataBar( const XclExpRoot& rRoot, const ScDataBarFormat& rFormat, sal_Int32 nPriority );
+
+    virtual void SaveXml( XclExpXmlStream& rStrm );
+private:
+    boost::scoped_ptr<XclExpCfvo> mpCfvoLowerLimit;
+    boost::scoped_ptr<XclExpCfvo> mpCfvoUpperLimit;
+    boost::scoped_ptr<XclExpColScaleCol> mpCol;
+
+    const ScDataBarFormat& mrFormat;
+    sal_Int32 mnPriority;
 };
 
 // ----------------------------------------------------------------------------
@@ -280,9 +296,7 @@ public:
 
 private:
     typedef XclExpRecordList< XclExpCondfmt > XclExpCondfmtList;
-    typedef XclExpRecordList< XclExpColorScale > XclExpColorScaleList;
     XclExpCondfmtList   maCondfmtList;  /// List of CONDFMT records.
-    XclExpColorScaleList maColorScaleList; // Color scale entries
 };
 
 // Data Validation ============================================================

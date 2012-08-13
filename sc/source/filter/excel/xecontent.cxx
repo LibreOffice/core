@@ -908,6 +908,12 @@ rtl::OString getColorScaleType( const ScColorScaleEntry& rEntry )
             return "percent";
         case COLORSCALE_FORMULA:
             return "formula";
+        case COLORSCALE_AUTOMIN:
+            return "min";
+        case COLORSCALE_AUTOMAX:
+            return "max";
+        case COLORSCALE_PERCENTILE:
+            return "percentile";
         default:
             break;
     }
@@ -940,10 +946,10 @@ void XclExpCfvo::SaveXml( XclExpXmlStream& rStrm )
     rWorksheet->endElement( XML_cfvo );
 }
 
-XclExpColScaleCol::XclExpColScaleCol( const XclExpRoot& rRoot, const ScColorScaleEntry& rEntry ):
+XclExpColScaleCol::XclExpColScaleCol( const XclExpRoot& rRoot, const Color& rColor ):
     XclExpRecord(),
     XclExpRoot( rRoot ),
-    mrEntry( rEntry )
+    mrColor( rColor )
 {
 }
 
@@ -956,11 +962,12 @@ void XclExpColScaleCol::SaveXml( XclExpXmlStream& rStrm )
     sax_fastparser::FSHelperPtr& rWorksheet = rStrm.GetCurrentStream();
 
     rWorksheet->startElement( XML_color,
-            XML_rgb, XclXmlUtils::ToOString( mrEntry.GetColor() ).getStr(),
+            XML_rgb, XclXmlUtils::ToOString( mrColor ).getStr(),
             FSEND );
 
     rWorksheet->endElement( XML_color );
 }
+
 // ----------------------------------------------------------------------------
 
 XclExpCondfmt::XclExpCondfmt( const XclExpRoot& rRoot, const ScConditionalFormat& rCondFormat ) :
@@ -977,6 +984,10 @@ XclExpCondfmt::XclExpCondfmt( const XclExpRoot& rRoot, const ScConditionalFormat
             {
                 if(pFormatEntry->GetType() == condformat::CONDITION)
                     maCFList.AppendNewRecord( new XclExpCF( GetRoot(), static_cast<const ScCondFormatEntry&>(*pFormatEntry), nIndex ) );
+                else if(pFormatEntry->GetType() == condformat::COLORSCALE)
+                    maCFList.AppendNewRecord( new XclExpColorScale( GetRoot(), static_cast<const ScColorScaleFormat&>(*pFormatEntry), nIndex ) );
+                else if(pFormatEntry->GetType() == condformat::DATABAR)
+                    maCFList.AppendNewRecord( new XclExpDataBar( GetRoot(), static_cast<const ScDataBarFormat&>(*pFormatEntry), nIndex ) );
             }
         aScRanges.Format( msSeqRef, SCA_VALID, NULL, formula::FormulaGrammar::CONV_XL_A1 );
     }
@@ -1030,10 +1041,11 @@ void XclExpCondfmt::SaveXml( XclExpXmlStream& rStrm )
 
 // ----------------------------------------------------------------------------
 
-XclExpColorScale::XclExpColorScale( const XclExpRoot& rRoot, const ScColorScaleFormat& rFormat ):
+XclExpColorScale::XclExpColorScale( const XclExpRoot& rRoot, const ScColorScaleFormat& rFormat, sal_Int32 nPriority ):
     XclExpRecord(),
     XclExpRoot( rRoot ),
-    mrFormat( rFormat )
+    mrFormat( rFormat ),
+    mnPriority( nPriority )
 {
     const ScRange* pRange = rFormat.GetRange().front();
     ScAddress aAddr = pRange->aStart;
@@ -1044,23 +1056,18 @@ XclExpColorScale::XclExpColorScale( const XclExpRoot& rRoot, const ScColorScaleF
 
         XclExpCfvoList::RecordRefType xCfvo( new XclExpCfvo( GetRoot(), *itr, aAddr ) );
         maCfvoList.AppendRecord( xCfvo );
-        XclExpColScaleColList::RecordRefType xClo( new XclExpColScaleCol( GetRoot(), *itr ) );
+        XclExpColScaleColList::RecordRefType xClo( new XclExpColScaleCol( GetRoot(), itr->GetColor() ) );
         maColList.AppendRecord( xClo );
     }
 }
 
 void XclExpColorScale::SaveXml( XclExpXmlStream& rStrm )
 {
-    const ScRangeList& rRanges = mrFormat.GetRange();
-
     sax_fastparser::FSHelperPtr& rWorksheet = rStrm.GetCurrentStream();
-    rWorksheet->startElement( XML_conditionalFormatting,
-            XML_sqref, XclXmlUtils::ToOString(rRanges).getStr(),
-            FSEND );
 
     rWorksheet->startElement( XML_cfRule,
             XML_type, "colorScale",
-            XML_priority, "1",
+            XML_priority, OString::valueOf( mnPriority + 1 ).getStr(),
             FSEND );
 
     rWorksheet->startElement( XML_colorScale, FSEND );
@@ -1073,7 +1080,44 @@ void XclExpColorScale::SaveXml( XclExpXmlStream& rStrm )
     rWorksheet->endElement( XML_cfRule );
 
     // OOXTODO: XML_extLst
-    rWorksheet->endElement( XML_conditionalFormatting );
+}
+
+XclExpDataBar::XclExpDataBar( const XclExpRoot& rRoot, const ScDataBarFormat& rFormat, sal_Int32 nPriority ):
+    XclExpRecord(),
+    XclExpRoot( rRoot ),
+    mrFormat( rFormat ),
+    mnPriority( nPriority )
+{
+    const ScRange* pRange = rFormat.GetRange().front();
+    ScAddress aAddr = pRange->aStart;
+    // exact position is not important, we allow only absolute refs
+    mpCfvoLowerLimit.reset( new XclExpCfvo( GetRoot(), *mrFormat.GetDataBarData()->mpLowerLimit.get(), aAddr ) );
+    mpCfvoUpperLimit.reset( new XclExpCfvo( GetRoot(), *mrFormat.GetDataBarData()->mpUpperLimit.get(), aAddr ) );
+
+    mpCol.reset( new XclExpColScaleCol( GetRoot(), mrFormat.GetDataBarData()->maPositiveColor ) );
+}
+
+void XclExpDataBar::SaveXml( XclExpXmlStream& rStrm )
+{
+    sax_fastparser::FSHelperPtr& rWorksheet = rStrm.GetCurrentStream();
+
+    rWorksheet->startElement( XML_cfRule,
+            XML_type, "dataBar",
+            XML_priority, OString::valueOf( mnPriority + 1 ).getStr(),
+            FSEND );
+
+    rWorksheet->startElement( XML_dataBar, FSEND );
+
+    mpCfvoLowerLimit->SaveXml(rStrm);
+    mpCfvoUpperLimit->SaveXml(rStrm);
+    mpCol->SaveXml(rStrm);
+
+    rWorksheet->endElement( XML_dataBar );
+
+    rWorksheet->endElement( XML_cfRule );
+
+    // OOXTODO: XML_extLst
+
 }
 
 // ----------------------------------------------------------------------------
@@ -1100,10 +1144,7 @@ void XclExpCondFormatBuffer::Save( XclExpStream& rStrm )
 
 void XclExpCondFormatBuffer::SaveXml( XclExpXmlStream& rStrm )
 {
-
     maCondfmtList.SaveXml( rStrm );
-    maColorScaleList.SaveXml( rStrm );
-
 }
 
 // Validation =================================================================
