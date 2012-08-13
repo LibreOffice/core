@@ -102,13 +102,13 @@
     <FormatElement msgid="CurrencyFormatskey6" default="false" type="medium" usage="CURRENCY" formatindex="17">
       <FormatCode># ##0,-- [CURRENCY];[RED]-# ##0,-- [CURRENCY]</FormatCode>
     </FormatElement>
-    <FormatElement msgid="DateFormatskey1" default="true" type="short" usage="DATE" formatindex="18">
+    <FormatElement msgid="DateFormatskey1" default="true" type="medium" usage="DATE" formatindex="18">
       <FormatCode>YYYY-MM-DD</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey9" default="true" type="long" usage="DATE" formatindex="19">
       <FormatCode>D MMMM YYYY</FormatCode>
     </FormatElement>
-    <FormatElement msgid="DateFormatskey8" default="true" type="medium" usage="DATE" formatindex="20">
+    <FormatElement msgid="DateFormatskey8" default="true" type="short" usage="DATE" formatindex="20">
       <FormatCode>YY-MM-DD</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey7" default="false" type="medium" usage="DATE" formatindex="21">
