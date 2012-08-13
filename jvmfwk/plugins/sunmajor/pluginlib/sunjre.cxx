@@ -25,14 +25,11 @@
 
 using namespace std;
 
-using ::rtl::OUString;
-using ::rtl::Reference;
-
 #define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
 namespace jfw_plugin
 {
 
-Reference<VendorBase> SunInfo::createInstance()
+rtl::Reference<VendorBase> SunInfo::createInstance()
 {
     return new SunInfo;
 }
@@ -50,7 +47,7 @@ char const* const* SunInfo::getJavaExePaths(int * size)
         "jre/bin/java"
 #endif
     };
-        *size = SAL_N_ELEMENTS(ar);
+    *size = SAL_N_ELEMENTS(ar);
     return ar;
 }
 
@@ -68,7 +65,6 @@ char const* const* SunInfo::getRuntimePaths(int * size)
         "/lib/" JFW_PLUGIN_ARCH "/server/libjvm.so",
         "/lib/" JFW_PLUGIN_ARCH "/classic/libjvm.so"
 #endif
-
     };
     *size = SAL_N_ELEMENTS(ar);
     return ar;
@@ -78,12 +74,10 @@ char const* const* SunInfo::getLibraryPaths(int* size)
 {
 #ifdef UNX
     static char const * ar[] = {
-
         "/lib/" JFW_PLUGIN_ARCH "/client",
         "/lib/" JFW_PLUGIN_ARCH "/server",
         "/lib/" JFW_PLUGIN_ARCH "/native_threads",
         "/lib/" JFW_PLUGIN_ARCH
-
     };
     *size = SAL_N_ELEMENTS(ar);
     return ar;
@@ -95,7 +89,7 @@ char const* const* SunInfo::getLibraryPaths(int* size)
 
 int SunInfo::compareVersions(const rtl::OUString& sSecond) const
 {
-    OUString sFirst = getVersion();
+    rtl::OUString sFirst = getVersion();
 
     SunVersion version1(sFirst);
     JFW_ENSURE(version1, OUSTR("[Java framework] sunjavaplugin" SAL_DLLEXTENSION
@@ -105,9 +99,9 @@ int SunInfo::compareVersions(const rtl::OUString& sSecond) const
     if ( ! version2)
         throw MalformedVersionException();
 
-    if(version1 == version2)
+    if (version1 == version2)
         return 0;
-    if(version1 > version2)
+    if (version1 > version2)
         return 1;
     else
         return -1;

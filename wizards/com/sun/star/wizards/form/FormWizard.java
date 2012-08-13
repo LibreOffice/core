@@ -228,7 +228,10 @@ public class FormWizard extends DatabaseObjectWizard
         insertLabel("lblBinaryHelpText",
                 new String[]
                 {
-                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_MULTILINE, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_WIDTH
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL,
+		    PropertyNames.PROPERTY_MULTILINE, PropertyNames.PROPERTY_POSITION_X,
+		    PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP,
+		    PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -243,7 +246,10 @@ public class FormWizard extends DatabaseObjectWizard
         insertLabel("lblSubFormBinaryHelpText",
                 new String[]
                 {
-                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_MULTILINE, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_WIDTH
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL,
+		    PropertyNames.PROPERTY_MULTILINE, PropertyNames.PROPERTY_POSITION_X,
+		    PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP,
+		    PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -442,11 +448,11 @@ public class FormWizard extends DatabaseObjectWizard
         private boolean toggleSubFormSteps()
         {
             curSubFormFieldSelection.setModified(true);
-            boolean enabled = curSubFormFieldSelection.getSelectedFieldNames().length > 0;
-            enablefromStep(SOFIELDLINKER_PAGE, enabled);
-            if (enabled)
+            boolean benabled = curSubFormFieldSelection.getSelectedFieldNames().length > 0;
+            enablefromStep(SOFIELDLINKER_PAGE, benabled);
+            if (benabled)
                 curFieldLinker.enable(!curFormConfiguration.areexistingRelationsdefined());
-            return enabled;
+            return benabled;
         }
 
         private void toggleMainFormSteps()

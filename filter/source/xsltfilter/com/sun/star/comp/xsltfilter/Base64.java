@@ -1,5 +1,3 @@
-package com.sun.star.comp.xsltfilter;
-
 /*
  * This file is part of the LibreOffice project.
  *
@@ -17,6 +15,9 @@ package com.sun.star.comp.xsltfilter;
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+
+package com.sun.star.comp.xsltfilter;
+
 /**
  * <p>Encodes and decodes to and from Base64 notation.</p>
  * <p>Homepage: <a href="http://iharder.net/base64">http://iharder.net/base64</a>.</p>
@@ -44,7 +45,7 @@ package com.sun.star.comp.xsltfilter;
  *   Base64.InputStream class to encode and decode on the fly which uses
  *   less memory than encoding/decoding an entire file into memory before writing.</li>
  *  <li>v2.2.1 - Fixed bug using URL_SAFE and ORDERED encodings. Fixed bug
- *   when using very small files (~< 40 bytes).</li>
+ *   when using very small files (~&lt; 40 bytes).</li>
  *  <li>v2.2 - Added some helper methods for encoding/decoding directly from
  *   one file to the next. Also added a main() method to support command line
  *   encoding/decoding from one file to the next. Also added these Base64 dialects:

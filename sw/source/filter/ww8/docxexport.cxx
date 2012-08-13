@@ -364,7 +364,8 @@ void DocxExport::OutputEndNode( const SwEndNode& rEndNode )
         if ( rNd.IsEndNode() && rNd.StartOfSectionNode()->IsSectionNode() )
             return;
 
-        if ( !rNd.IsSectionNode() && IsInTable() ) // No sections in table
+        bool isInTable = IsInTable();
+        if ( !rNd.IsSectionNode() && isInTable ) // No sections in table
         {
             const SwSectionFmt* pParentFmt = rSect.GetFmt()->GetParent();
             if( !pParentFmt )

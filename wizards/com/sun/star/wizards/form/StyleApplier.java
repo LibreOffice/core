@@ -38,9 +38,7 @@ import com.sun.star.wizards.document.DatabaseControl;
 import com.sun.star.wizards.document.GridControl;
 import com.sun.star.wizards.document.TimeStampControl;
 import com.sun.star.wizards.text.TextStyleHandler;
-import com.sun.star.wizards.ui.UIConsts;
-import com.sun.star.wizards.ui.UnoDialog;
-import com.sun.star.wizards.ui.WizardDialog;
+import com.sun.star.wizards.ui.*;
 
 public class StyleApplier
 {
@@ -51,6 +49,7 @@ public class StyleApplier
     private short curtabindex;
     private XRadioButton optNoBorder;
     private XRadioButton opt3DLook;
+    private XRadioButton optFlat;
     private XListBox lstStyles;
     private FormDocument curFormDocument;
     private short iOldLayoutPos;
@@ -67,8 +66,6 @@ public class StyleApplier
 
     public StyleApplier(WizardDialog _CurUnoDialog, FormDocument _curFormDocument) throws NoValidPathException
     {
-//        try
-//        {
             this.curFormDocument = _curFormDocument;
             xMSF = curFormDocument.xMSF;
 
@@ -129,7 +126,7 @@ public class StyleApplier
                         UIConsts.INTEGERS[10], "HID:WIZARDS_HID_DLGFORM_CMD3DBORDER", s3DLook, 196, 53, new Short((short) 1), IStyleStep, new Short(curtabindex++), "1", 93
                     });
 
-            CurUnoDialog.insertRadioButton("otpFlat", SCHANGEBORDERTYPE, this,
+            optFlat = CurUnoDialog.insertRadioButton("otpFlat", SCHANGEBORDERTYPE, this,
                     new String[]
                     {
                         PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, "Tag", PropertyNames.PROPERTY_WIDTH
@@ -148,11 +145,6 @@ public class StyleApplier
                     {
                         UIConsts.INTEGERS[8], sFieldBorder, 192, 25, IStyleStep, new Short(curtabindex++), 98
                     });
-//        }
-//        catch (Exception e)
-//        {
-//            e.printStackTrace(System.err);
-//        }
     }
 
     private void setStyles()
@@ -202,7 +194,7 @@ public class StyleApplier
             if (iStyle > -1)
             {
                 iOldLayoutPos = iStyle;
-                String sFileName = FileNames[iStyle]; //Style =  lstStyles.getSelectedItem();
+                String sFileName = FileNames[iStyle];
                 int[] iStyles = getStyleColors(sFileName);
                 applyDBControlProperties(iStyles);
             }
@@ -215,7 +207,7 @@ public class StyleApplier
         if (iPos != iOldLayoutPos)
         {
             iOldLayoutPos = iPos;
-            String sFileName = FileNames[iPos]; //Style =  lstStyles.getSelectedItem();
+            String sFileName = FileNames[iPos];
             int[] iStyles = getStyleColors(sFileName);
             applyDBControlProperties(iStyles);
         }

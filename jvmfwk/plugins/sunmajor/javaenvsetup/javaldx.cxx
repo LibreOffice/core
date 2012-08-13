@@ -98,25 +98,17 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         }
     }
 
-    //Only do something if the sunjavaplugin created this JavaInfo
-    rtl::OUString sVendor1(RTL_CONSTASCII_USTRINGPARAM("Sun Microsystems Inc."));
-    rtl::OUString sVendor9(RTL_CONSTASCII_USTRINGPARAM("Oracle Corporation"));
-    rtl::OUString sVendor2(RTL_CONSTASCII_USTRINGPARAM("IBM Corporation"));
-    rtl::OUString sVendor3(RTL_CONSTASCII_USTRINGPARAM("Blackdown Java-Linux Team"));
-    rtl::OUString sVendor4(RTL_CONSTASCII_USTRINGPARAM("Apple Inc."));
-    rtl::OUString sVendor5(RTL_CONSTASCII_USTRINGPARAM("Apple Computer, Inc."));
-    rtl::OUString sVendor6(RTL_CONSTASCII_USTRINGPARAM("BEA Systems, Inc."));
-    rtl::OUString sVendor7(RTL_CONSTASCII_USTRINGPARAM("Free Software Foundation, Inc."));
-    rtl::OUString sVendor8(RTL_CONSTASCII_USTRINGPARAM("The FreeBSD Foundation"));
-    if ( ! (sVendor1.equals(pInfo->sVendor) == sal_True
-            || sVendor2.equals(pInfo->sVendor) == sal_True
-            || sVendor9.equals(pInfo->sVendor) == sal_True
-            || sVendor3.equals(pInfo->sVendor) == sal_True
-            || sVendor4.equals(pInfo->sVendor) == sal_True
-            || sVendor5.equals(pInfo->sVendor) == sal_True
-            || sVendor6.equals(pInfo->sVendor) == sal_True
-            || sVendor7.equals(pInfo->sVendor) == sal_True
-            || sVendor8.equals(pInfo->sVendor) == sal_True))
+    rtl::OUString aVendor( pInfo->sVendor );
+    // Only do something if the sunjavaplugin created this JavaInfo
+    if ( aVendor != "Sun Microsystems Inc." &&
+         aVendor != "Oracle Corporation" &&
+         aVendor != "IBM Corporation" &&
+         aVendor != "Blackdown Java-Linux Team" &&
+         aVendor != "Apple Inc." &&
+         aVendor != "Apple Computer, Inc." &&
+         aVendor != "BEA Systems, Inc." &&
+         aVendor != "Free Software Foundation, Inc." &&
+         aVendor != "The FreeBSD Foundation" )
         return 0;
 
     rtl::OString sPaths = getLD_LIBRARY_PATH(pInfo->arVendorData);
