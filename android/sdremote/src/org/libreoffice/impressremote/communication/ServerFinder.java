@@ -8,8 +8,6 @@ import java.net.InetAddress;
 import java.net.SocketException;
 import java.util.HashMap;
 
-import org.libreoffice.impressremote.communication.CommunicationService.Server;
-
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.content.LocalBroadcastManager;
@@ -66,8 +64,8 @@ public class ServerFinder {
             if (aName == null) {
                 return;
             }
-            Server aServer = new Server(CommunicationService.Protocol.NETWORK,
-                            aPacket.getAddress().toString(), aName,
+            Server aServer = new Server(Server.Protocol.NETWORK, aPacket
+                            .getAddress().toString(), aName,
                             System.currentTimeMillis());
             mServerList.put(aServer.getAddress(), aServer);
 

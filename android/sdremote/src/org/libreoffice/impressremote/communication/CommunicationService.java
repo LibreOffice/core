@@ -14,156 +14,160 @@ import android.os.Binder;
 import android.os.IBinder;
 import android.os.Messenger;
 
-public class CommunicationService extends Service {
+public class CommunicationService extends Service implements Runnable {
 
-	/**
-	 * Return the service to clients.
-	 */
-	public class CBinder extends Binder {
-		public CommunicationService getService() {
-			return CommunicationService.this;
-		}
-	}
+    public enum State {
+        DISCONNECTED, SEARCHING, CONNECTING, CONNECTED
+    };
 
-	private final IBinder mBinder = new CBinder();
+    /**
+     * Used to protect all writes to mState, mStateDesired, and mServerDesired.
+     */
+    private Object mConnectionVariableMutex = new Object();
 
-	public enum Protocol {
-		NETWORK, BLUETOOTH
-	};
+    private State mState = State.DISCONNECTED;
 
-	public static final int MSG_SLIDESHOW_STARTED = 1;
-	public static final int MSG_SLIDE_CHANGED = 2;
-	public static final int MSG_SLIDE_PREVIEW = 3;
-	public static final int MSG_SLIDE_NOTES = 4;
+    private State mStateDesired = State.DISCONNECTED;
 
-	public static final String MSG_SERVERLIST_CHANGED = "SERVERLIST_CHANGED";
+    private Server mServerDesired = null;
 
-	private Transmitter mTransmitter;
+    @Override
+    public void run() {
+        while (true) {
+            // Condition
+            try {
+                wait();
+            } catch (InterruptedException e) {
+                // We don't care.
+            }
+            // Work
+            synchronized (mConnectionVariableMutex) {
+                if ((mStateDesired == State.CONNECTED && mState == State.CONNECTED)
+                                || (mStateDesired == State.DISCONNECTED && mState == State.CONNECTED)) {
+                    mClient.closeConnection();
+                    mState = State.DISCONNECTED;
+                }
+                if (mStateDesired == State.CONNECTED) {
+                    switch (mServerDesired.getProtocol()) {
+                    case NETWORK:
+                        mClient = new NetworkClient(mServerDesired.getAddress());
+                        mTransmitter = new Transmitter(mClient);
+                        mClient.setReceiver(mReceiver);
+                        break;
+                    case BLUETOOTH:
+                        break;
+                    }
+                    mState = State.CONNECTED;
+                }
+            }
+        }
 
-	private Client mClient;
+    }
 
-	private Receiver mReceiver = new Receiver();
+    public void startSearching() {
+        synchronized (mConnectionVariableMutex) {
+            if (mState == State.CONNECTING || mState == State.CONNECTED) {
+                disconnect();
+            }
+            mFinder.startFinding();
+            mState = State.SEARCHING;
+        }
+    }
 
-	private ServerFinder mFinder = new ServerFinder(this);
+    public void stopSearching() {
+        synchronized (mConnectionVariableMutex) {
+            mFinder.stopFinding();
+            mState = State.DISCONNECTED;
+        }
+    }
 
-	public void setActivityMessenger(Messenger aActivityMessenger) {
-		mReceiver.setActivityMessenger(aActivityMessenger);
-	}
+    public void connectTo(Server aServer) {
+        synchronized (mConnectionVariableMutex) {
+            if (mState == State.SEARCHING) {
+                mFinder.stopFinding();
+                mState = State.DISCONNECTED;
+            }
+            mServerDesired = aServer;
+            mStateDesired = State.CONNECTED;
+            notify();
+        }
+        // TODO: connect
+    }
 
-	@Override
-	public IBinder onBind(Intent intent) {
-		// TODO Auto-generated method stub
-		return mBinder;
-	}
+    public void disconnect() {
+        synchronized (mConnectionVariableMutex) {
+            mStateDesired = State.DISCONNECTED;
+            notify();
+        }
+    }
 
-	@Override
-	public void onCreate() {
-		// TODO Create a notification (if configured).
-	}
+    /**
+     * Return the service to clients.
+     */
+    public class CBinder extends Binder {
+        public CommunicationService getService() {
+            return CommunicationService.this;
+        }
+    }
 
-	@Override
-	public void onDestroy() {
-		// TODO Destroy the notification (as necessary).
-	}
+    private final IBinder mBinder = new CBinder();
 
-	public Transmitter getTransmitter() {
-		return mTransmitter;
-	}
+    public static final int MSG_SLIDESHOW_STARTED = 1;
+    public static final int MSG_SLIDE_CHANGED = 2;
+    public static final int MSG_SLIDE_PREVIEW = 3;
+    public static final int MSG_SLIDE_NOTES = 4;
 
-	public Server[] getServers() {
-		return mFinder.getServerList();
-	}
+    public static final String MSG_SERVERLIST_CHANGED = "SERVERLIST_CHANGED";
+    public static final String MSG_PAIRING_STARTED = "PAIRING_STARTED";
+    public static final String MSG_PAIRING_SUCCESSFUL = "PAIRING_SUCCESSFUL";
 
-	public void startFindingServers() {
-		mFinder.startFinding();
-	}
+    private Transmitter mTransmitter;
 
-	public void stopFindingServers() {
-		mFinder.stopFinding();
-	}
+    private Client mClient;
 
-	/**
-	 * Connect to a specific server. This method cannot be called on the main
-	 * activity thread.
-	 *
-	 * @param aServer
-	 *            The Server to connect to.
-	 */
-	public void connectTo(Server aServer) {
-		connectTo(aServer.getProtocol(), aServer.getAddress());
-	}
+    private Receiver mReceiver = new Receiver();
 
-	/**
-	 * Connect to a specific server. This method cannot be called on the main
-	 * activity thread.
-	 *
-	 * @param aProtocol
-	 * @param address
-	 */
-	public void connectTo(Protocol aProtocol, String address) {
-		switch (aProtocol) {
-		case NETWORK:
-			mClient = new NetworkClient(address);
-			mTransmitter = new Transmitter(mClient);
-			mClient.setReceiver(mReceiver);
-			break;
-		case BLUETOOTH:
-			break;
-		default:
-			break;
+    private ServerFinder mFinder = new ServerFinder(this);
 
-		}
+    public void setActivityMessenger(Messenger aActivityMessenger) {
+        mReceiver.setActivityMessenger(aActivityMessenger);
+    }
 
-	}
+    @Override
+    public IBinder onBind(Intent intent) {
+        // TODO Auto-generated method stub
+        return mBinder;
+    }
 
-	public void disconnect() {
-		mClient.closeConnection();
-	}
+    @Override
+    public void onCreate() {
+        // TODO Create a notification (if configured).
+    }
 
-	public SlideShow getSlideShow() {
-		return mReceiver.getSlideShow();
-	}
+    @Override
+    public void onDestroy() {
+        // TODO Destroy the notification (as necessary).
+    }
 
-	// ---------------------------------------------------- SERVER -------------
-	/**
-	 * Class describing a remote server.
-	 */
-	public static class Server {
-		private Protocol mProtocol;
-		private String mAddress;
-		private String mName;
-		private long mTimeDiscovered;
+    public Transmitter getTransmitter() {
+        return mTransmitter;
+    }
 
-		protected Server(Protocol aProtocol, String aAddress, String aName,
-		                long aTimeDiscovered) {
-			mProtocol = aProtocol;
-			mAddress = aAddress;
-			mName = aName;
-			mTimeDiscovered = aTimeDiscovered;
-		}
+    public Server[] getServers() {
+        return mFinder.getServerList();
+    }
 
-		public Protocol getProtocol() {
-			return mProtocol;
-		}
+    public void startFindingServers() {
+        mFinder.startFinding();
+    }
 
-		public String getAddress() {
-			return mAddress;
-		}
+    public void stopFindingServers() {
+        mFinder.stopFinding();
+    }
 
-		/**
-		 * Get a human friendly name for the server.
-		 *
-		 * @return The name.
-		 */
-		public String getName() {
-			return mName;
-		}
-
-		public long getTimeDiscovered() {
-			return mTimeDiscovered;
-		}
-
-	}
+    public SlideShow getSlideShow() {
+        return mReceiver.getSlideShow();
+    }
 
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
