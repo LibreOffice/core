@@ -1918,9 +1918,9 @@ else
 
 $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO,\
     nspr4 \
-    smime3 \
     nss3 \
     plc4 \
+    smime3 \
 ))
 
 define gb_LinkTarget__use_nss3
