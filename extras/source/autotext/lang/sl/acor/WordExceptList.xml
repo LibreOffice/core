@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<block-list:block-list xmlns:block-list="http://openoffice.org/2001/block-list">
+  <block-list:block block-list:abbreviated-name="CD-je"/>
+  <block-list:block block-list:abbreviated-name="CD-jev"/>
+  <block-list:block block-list:abbreviated-name="CD-ji"/>
+  <block-list:block block-list:abbreviated-name="CD-jih"/>
+  <block-list:block block-list:abbreviated-name="DVD-je"/>
+  <block-list:block block-list:abbreviated-name="DVD-jev"/>
+  <block-list:block block-list:abbreviated-name="DVD-ji"/>
+  <block-list:block block-list:abbreviated-name="DVD-jih"/>
+  <block-list:block block-list:abbreviated-name="GHz"/>
+  <block-list:block block-list:abbreviated-name="LP-je"/>
+  <block-list:block block-list:abbreviated-name="LP-jev"/>
+  <block-list:block block-list:abbreviated-name="LP-ji"/>
+  <block-list:block block-list:abbreviated-name="LP-jih"/>
+  <block-list:block block-list:abbreviated-name="MHz"/>
+  <block-list:block block-list:abbreviated-name="OOo"/>
+  <block-list:block block-list:abbreviated-name="PC-je"/>
+  <block-list:block block-list:abbreviated-name="PC-jev"/>
+  <block-list:block block-list:abbreviated-name="PC-ji"/>
+  <block-list:block block-list:abbreviated-name="PC-jih"/>
+  <block-list:block block-list:abbreviated-name="THz"/>
+  <block-list:block block-list:abbreviated-name="TV-ja"/>
+  <block-list:block block-list:abbreviated-name="TV-ji"/>
+  <block-list:block block-list:abbreviated-name="TV-ju"/>
+</block-list:block-list>

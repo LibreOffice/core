@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<block-list:block-list xmlns:block-list="http://openoffice.org/2001/block-list">
+  <block-list:block block-list:abbreviated-name="(C)" block-list:name="©"/>
+  <block-list:block block-list:abbreviated-name="(R)" block-list:name="®"/>
+  <block-list:block block-list:abbreviated-name="(tm)" block-list:name="™"/>
+  <block-list:block block-list:abbreviated-name="&lt;&lt;" block-list:name="«"/>
+  <block-list:block block-list:abbreviated-name="&gt;&gt;" block-list:name="»"/>
+  <block-list:block block-list:abbreviated-name="odf" block-list:name="ODF"/>
+  <block-list:block block-list:abbreviated-name="желате" block-list:name="желаете"/>
+  <block-list:block block-list:abbreviated-name="пипилянка" block-list:name="пепелянка"/>
+  <block-list:block block-list:abbreviated-name="порграма" block-list:name="програма"/>
+  <block-list:block block-list:abbreviated-name="рекация" block-list:name="реакция"/>
+  <block-list:block block-list:abbreviated-name="серизоен" block-list:name="сериозен"/>
+  <block-list:block block-list:abbreviated-name="серизона" block-list:name="сериозна"/>
+  <block-list:block block-list:abbreviated-name="серизони" block-list:name="сериозни"/>
+  <block-list:block block-list:abbreviated-name="1/2" block-list:name="½"/>
+  <block-list:block block-list:abbreviated-name="1/4" block-list:name="¼"/>
+  <block-list:block block-list:abbreviated-name="3/4" block-list:name="¾"/>
+</block-list:block-list>

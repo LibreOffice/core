@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<block-list:block-list xmlns:block-list="http://openoffice.org/2001/block-list">
+  <block-list:block block-list:abbreviated-name="(c)" block-list:name="©"/>
+  <block-list:block block-list:abbreviated-name="(e)" block-list:name="€"/>
+  <block-list:block block-list:abbreviated-name="(r)" block-list:name="®"/>
+  <block-list:block block-list:abbreviated-name="(tm)" block-list:name="™"/>
+  <block-list:block block-list:abbreviated-name="abondone" block-list:name="abandone"/>
+  <block-list:block block-list:abbreviated-name="abonoz" block-list:name="abanoz"/>
+  <block-list:block block-list:abbreviated-name="açıcak" block-list:name="açacak"/>
+  <block-list:block block-list:abbreviated-name="afaroz" block-list:name="aforoz"/>
+  <block-list:block block-list:abbreviated-name="akordiyon" block-list:name="akordeon"/>
+  <block-list:block block-list:abbreviated-name="akşam üzeri" block-list:name="akşamüzeri"/>
+  <block-list:block block-list:abbreviated-name="almünyum" block-list:name="alüminyum"/>
+  <block-list:block block-list:abbreviated-name="Ana kara" block-list:name="anakara"/>
+  <block-list:block block-list:abbreviated-name="aritmatik" block-list:name="Aritmetik"/>
+  <block-list:block block-list:abbreviated-name="aşkolsun" block-list:name="Aşk olsun"/>
+  <block-list:block block-list:abbreviated-name="assubay" block-list:name="Astsubay"/>
+  <block-list:block block-list:abbreviated-name="Beyfendi" block-list:name="Beyefendi"/>
+  <block-list:block block-list:abbreviated-name="Bir kaç" block-list:name="Birkaç"/>
+  <block-list:block block-list:abbreviated-name="birşey" block-list:name="Bir şey"/>
+  <block-list:block block-list:abbreviated-name="Bujiteri" block-list:name="Bijuteri"/>
+  <block-list:block block-list:abbreviated-name="Bulüz" block-list:name="Bluz"/>
+  <block-list:block block-list:abbreviated-name="büyültmek" block-list:name="Büyütmek"/>
+  <block-list:block block-list:abbreviated-name="çalakalem" block-list:name="Çala kalem"/>
+  <block-list:block block-list:abbreviated-name="canbaz" block-list:name="cambaz"/>
+  <block-list:block block-list:abbreviated-name="çeçaron" block-list:name="Çaçaron"/>
+  <block-list:block block-list:abbreviated-name="çenber" block-list:name="çember"/>
+  <block-list:block block-list:abbreviated-name="Cimnastik" block-list:name="Jimnastik"/>
+  <block-list:block block-list:abbreviated-name="Civata" block-list:name="Cıvata"/>
+  <block-list:block block-list:abbreviated-name="cübbe" block-list:name="cüppe"/>
+  <block-list:block block-list:abbreviated-name="dekaratör" block-list:name="Dekoratör"/>
+  <block-list:block block-list:abbreviated-name="difransiyel" block-list:name="Diferansiyel"/>
+  <block-list:block block-list:abbreviated-name="döğmek" block-list:name="dövmek"/>
+  <block-list:block block-list:abbreviated-name="döküman" block-list:name="Doküman"/>
+  <block-list:block block-list:abbreviated-name="Egzantrik" block-list:name="Eksantrik"/>
+  <block-list:block block-list:abbreviated-name="entellektüel" block-list:name="Entelektüel"/>
+  <block-list:block block-list:abbreviated-name="eşkiya" block-list:name="Eşkıya"/>
+  <block-list:block block-list:abbreviated-name="faide" block-list:name="fayda"/>
+  <block-list:block block-list:abbreviated-name="fantazi" block-list:name="fantezi"/>
+  <block-list:block block-list:abbreviated-name="fiat" block-list:name="fiyat"/>
+  <block-list:block block-list:abbreviated-name="filim" block-list:name="Film"/>
+  <block-list:block block-list:abbreviated-name="Gider ayak" block-list:name="Giderayak"/>
+  <block-list:block block-list:abbreviated-name="hegamonya" block-list:name="hegemonya"/>
+  <block-list:block block-list:abbreviated-name="Hiç bir" block-list:name="Hiçbir"/>
+  <block-list:block block-list:abbreviated-name="hoşçakal" block-list:name="Hoşça kal"/>
+  <block-list:block block-list:abbreviated-name="hoşgeldin" block-list:name="Hoş geldin"/>
+  <block-list:block block-list:abbreviated-name="Htp" block-list:name="http"/>
+  <block-list:block block-list:abbreviated-name="Http" block-list:name="http"/>
+  <block-list:block block-list:abbreviated-name="http:\\" block-list:name="http://"/>
+  <block-list:block block-list:abbreviated-name="informasyon" block-list:name="Enformasyon"/>
+  <block-list:block block-list:abbreviated-name="isbat" block-list:name="ispat"/>
+  <block-list:block block-list:abbreviated-name="Jipon" block-list:name="Jüpon"/>
+  <block-list:block block-list:abbreviated-name="kapora" block-list:name="Kaparo"/>
+  <block-list:block block-list:abbreviated-name="Kare kök" block-list:name="Karekök"/>
+  <block-list:block block-list:abbreviated-name="karnıbahar" block-list:name="Karnabahar"/>
+  <block-list:block block-list:abbreviated-name="kazazade" block-list:name="Kazazede"/>
+  <block-list:block block-list:abbreviated-name="Kolleksiyon" block-list:name="Koleksiyon"/>
+  <block-list:block block-list:abbreviated-name="lohusa" block-list:name="Loğusa"/>
+  <block-list:block block-list:abbreviated-name="makina" block-list:name="Makine"/>
+  <block-list:block block-list:abbreviated-name="makosen" block-list:name="Mokasen"/>
+  <block-list:block block-list:abbreviated-name="malesef" block-list:name="Maalesef"/>
+  <block-list:block block-list:abbreviated-name="maystro" block-list:name="Maestro"/>
+  <block-list:block block-list:abbreviated-name="mazallah" block-list:name="Maazallah"/>
+  <block-list:block block-list:abbreviated-name="megoloman" block-list:name="Megaloman"/>
+  <block-list:block block-list:abbreviated-name="minisküs" block-list:name="Menüsküs"/>
+  <block-list:block block-list:abbreviated-name="müsade" block-list:name="Müsaade"/>
+  <block-list:block block-list:abbreviated-name="müsbet" block-list:name="müspet"/>
+  <block-list:block block-list:abbreviated-name="nermi" block-list:name="Mermi"/>
+  <block-list:block block-list:abbreviated-name="nisbet" block-list:name="nispet"/>
+  <block-list:block block-list:abbreviated-name="odf" block-list:name="ODF"/>
+  <block-list:block block-list:abbreviated-name="oğmak" block-list:name="ovmak"/>
+  <block-list:block block-list:abbreviated-name="orjinal" block-list:name="Orijinal"/>
+  <block-list:block block-list:abbreviated-name="pantalon" block-list:name="Pantolon"/>
+  <block-list:block block-list:abbreviated-name="pehriz" block-list:name="Perhiz"/>
+  <block-list:block block-list:abbreviated-name="Peştemal" block-list:name="Peştamal"/>
+  <block-list:block block-list:abbreviated-name="restorant" block-list:name="Restoran"/>
+  <block-list:block block-list:abbreviated-name="sarmısak" block-list:name="Sarımsak"/>
+  <block-list:block block-list:abbreviated-name="selilöz" block-list:name="Selüloz"/>
+  <block-list:block block-list:abbreviated-name="sne" block-list:name="Sen"/>
+  <block-list:block block-list:abbreviated-name="Su çiçeği" block-list:name="Suçiçeği"/>
+  <block-list:block block-list:abbreviated-name="Suç üstü" block-list:name="Suçüstü"/>
+  <block-list:block block-list:abbreviated-name="süpriz" block-list:name="Sürpriz"/>
+  <block-list:block block-list:abbreviated-name="tesbih" block-list:name="tespih"/>
+  <block-list:block block-list:abbreviated-name="turizim" block-list:name="Turizm"/>
+  <block-list:block block-list:abbreviated-name="uluslararası" block-list:name="Uluslar arası"/>
+  <block-list:block block-list:abbreviated-name="ünvan" block-list:name="Unvan"/>
+  <block-list:block block-list:abbreviated-name="Uyuya kal" block-list:name="Uyuyakal"/>
+  <block-list:block block-list:abbreviated-name="Ve ya" block-list:name="veya"/>
+  <block-list:block block-list:abbreviated-name="Yada" block-list:name="Ya da"/>
+  <block-list:block block-list:abbreviated-name="yalnış" block-list:name="Yanlış"/>
+  <block-list:block block-list:abbreviated-name="Yanlız" block-list:name="Yalnız"/>
+  <block-list:block block-list:abbreviated-name="yeldeğirmeni" block-list:name="Yel değirmeni"/>
+  <block-list:block block-list:abbreviated-name="Yeraltı" block-list:name="Yer altı"/>
+  <block-list:block block-list:abbreviated-name="1/2" block-list:name="½"/>
+  <block-list:block block-list:abbreviated-name="1/4" block-list:name="¼"/>
+  <block-list:block block-list:abbreviated-name="3/4" block-list:name="¾"/>
+</block-list:block-list>

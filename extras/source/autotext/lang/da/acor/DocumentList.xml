@@ -1,0 +1,624 @@
+<?xml version="1.0" encoding="utf-8"?>
+<block-list:block-list xmlns:block-list="http://openoffice.org/2001/block-list">
+  <block-list:block block-list:abbreviated-name="--" block-list:name="–"/>
+  <block-list:block block-list:abbreviated-name="--&gt;" block-list:name="→"/>
+  <block-list:block block-list:abbreviated-name="-&gt;" block-list:name="→"/>
+  <block-list:block block-list:abbreviated-name="..." block-list:name="…"/>
+  <block-list:block block-list:abbreviated-name="(c)" block-list:name="©"/>
+  <block-list:block block-list:abbreviated-name="(r)" block-list:name="®"/>
+  <block-list:block block-list:abbreviated-name="(tm)" block-list:name="™"/>
+  <block-list:block block-list:abbreviated-name="&lt;-" block-list:name="←"/>
+  <block-list:block block-list:abbreviated-name="&lt;--" block-list:name="←"/>
+  <block-list:block block-list:abbreviated-name="&lt;--&gt;" block-list:name="↔"/>
+  <block-list:block block-list:abbreviated-name="&lt;-&gt;" block-list:name="↔"/>
+  <block-list:block block-list:abbreviated-name="a fde" block-list:name="af de"/>
+  <block-list:block block-list:abbreviated-name="a fden" block-list:name="af den"/>
+  <block-list:block block-list:abbreviated-name="a fdet" block-list:name="af det"/>
+  <block-list:block block-list:abbreviated-name="a fen" block-list:name="af en"/>
+  <block-list:block block-list:abbreviated-name="a fet" block-list:name="af et"/>
+  <block-list:block block-list:abbreviated-name="a fnogen" block-list:name="af nogen"/>
+  <block-list:block block-list:abbreviated-name="a fnoget" block-list:name="af noget"/>
+  <block-list:block block-list:abbreviated-name="a fnogle" block-list:name="af nogle"/>
+  <block-list:block block-list:abbreviated-name="abbonement" block-list:name="abonnement"/>
+  <block-list:block block-list:abbreviated-name="abbonere" block-list:name="abonnere"/>
+  <block-list:block block-list:abbreviated-name="abbonnement" block-list:name="abonnement"/>
+  <block-list:block block-list:abbreviated-name="abbonnere" block-list:name="abonnere"/>
+  <block-list:block block-list:abbreviated-name="åbentbart" block-list:name="åbenbart"/>
+  <block-list:block block-list:abbreviated-name="åbentlys" block-list:name="åbenlys"/>
+  <block-list:block block-list:abbreviated-name="åbnt" block-list:name="åbent"/>
+  <block-list:block block-list:abbreviated-name="accelere" block-list:name="accelerere"/>
+  <block-list:block block-list:abbreviated-name="accellerere" block-list:name="accelerere"/>
+  <block-list:block block-list:abbreviated-name="addresere" block-list:name="adressere"/>
+  <block-list:block block-list:abbreviated-name="addresse" block-list:name="adresse"/>
+  <block-list:block block-list:abbreviated-name="addressere" block-list:name="adressere"/>
+  <block-list:block block-list:abbreviated-name="adgagn" block-list:name="adgang"/>
+  <block-list:block block-list:abbreviated-name="adgnag" block-list:name="adgang"/>
+  <block-list:block block-list:abbreviated-name="adlrig" block-list:name="aldrig"/>
+  <block-list:block block-list:abbreviated-name="advocado" block-list:name="avocado"/>
+  <block-list:block block-list:abbreviated-name="ærgelig" block-list:name="ærgerlig"/>
+  <block-list:block block-list:abbreviated-name="ærgelse" block-list:name="ærgrelse"/>
+  <block-list:block block-list:abbreviated-name="afd e" block-list:name="af de"/>
+  <block-list:block block-list:abbreviated-name="afd en" block-list:name="af den"/>
+  <block-list:block block-list:abbreviated-name="afd et" block-list:name="af det"/>
+  <block-list:block block-list:abbreviated-name="afd et " block-list:name="af det"/>
+  <block-list:block block-list:abbreviated-name="afe n" block-list:name="af en"/>
+  <block-list:block block-list:abbreviated-name="afe t" block-list:name="af et"/>
+  <block-list:block block-list:abbreviated-name="afn ogen" block-list:name="af nogen"/>
+  <block-list:block block-list:abbreviated-name="afn oget" block-list:name="af noget"/>
+  <block-list:block block-list:abbreviated-name="afn ogle" block-list:name="af nogle"/>
+  <block-list:block block-list:abbreviated-name="aggresiv" block-list:name="aggressiv"/>
+  <block-list:block block-list:abbreviated-name="agresiv" block-list:name="aggressiv"/>
+  <block-list:block block-list:abbreviated-name="agressiv" block-list:name="aggressiv"/>
+  <block-list:block block-list:abbreviated-name="akceptere" block-list:name="acceptere"/>
+  <block-list:block block-list:abbreviated-name="akumulere" block-list:name="akkumulere"/>
+  <block-list:block block-list:abbreviated-name="akumullere" block-list:name="akkumulere"/>
+  <block-list:block block-list:abbreviated-name="aldrigt" block-list:name="aldrig"/>
+  <block-list:block block-list:abbreviated-name="alerede" block-list:name="allerede"/>
+  <block-list:block block-list:abbreviated-name="aligevel" block-list:name="alligevel"/>
+  <block-list:block block-list:abbreviated-name="allene" block-list:name="alene"/>
+  <block-list:block block-list:abbreviated-name="allesammen" block-list:name="alle sammen"/>
+  <block-list:block block-list:abbreviated-name="alrdig" block-list:name="aldrig"/>
+  <block-list:block block-list:abbreviated-name="alså" block-list:name="altså"/>
+  <block-list:block block-list:abbreviated-name="altsammen" block-list:name="alt sammen"/>
+  <block-list:block block-list:abbreviated-name="anmasende" block-list:name="anmassende"/>
+  <block-list:block block-list:abbreviated-name="annulere" block-list:name="annullere"/>
+  <block-list:block block-list:abbreviated-name="ansvarhavende" block-list:name="ansvarshavende"/>
+  <block-list:block block-list:abbreviated-name="antiparti" block-list:name="antipati"/>
+  <block-list:block block-list:abbreviated-name="anulere" block-list:name="annullere"/>
+  <block-list:block block-list:abbreviated-name="anullere" block-list:name="annullere"/>
+  <block-list:block block-list:abbreviated-name="apperat" block-list:name="apparat"/>
+  <block-list:block block-list:abbreviated-name="apropo" block-list:name="apropos"/>
+  <block-list:block block-list:abbreviated-name="arangement" block-list:name="arrangement"/>
+  <block-list:block block-list:abbreviated-name="argentur" block-list:name="agentur"/>
+  <block-list:block block-list:abbreviated-name="asistance" block-list:name="assistance"/>
+  <block-list:block block-list:abbreviated-name="avenu" block-list:name="avenue"/>
+  <block-list:block block-list:abbreviated-name="ba gde" block-list:name="bag de"/>
+  <block-list:block block-list:abbreviated-name="ba gden" block-list:name="bag den"/>
+  <block-list:block block-list:abbreviated-name="ba gdet" block-list:name="bag det"/>
+  <block-list:block block-list:abbreviated-name="ba gnogen" block-list:name="bag nogen"/>
+  <block-list:block block-list:abbreviated-name="ba gnoget" block-list:name="bag noget"/>
+  <block-list:block block-list:abbreviated-name="ba gnogle" block-list:name="bag nogle"/>
+  <block-list:block block-list:abbreviated-name="bagd e" block-list:name="bag de"/>
+  <block-list:block block-list:abbreviated-name="bagd en" block-list:name="bag den"/>
+  <block-list:block block-list:abbreviated-name="bagd et" block-list:name="bag det"/>
+  <block-list:block block-list:abbreviated-name="bagn ogen" block-list:name="bag nogen"/>
+  <block-list:block block-list:abbreviated-name="bagn oget" block-list:name="bag noget"/>
+  <block-list:block block-list:abbreviated-name="bagn ogle" block-list:name="bag nogle"/>
+  <block-list:block block-list:abbreviated-name="begydnte" block-list:name="begyndte"/>
+  <block-list:block block-list:abbreviated-name="bekræftige" block-list:name="bekræfte"/>
+  <block-list:block block-list:abbreviated-name="bekræftigelse" block-list:name="bekræftelse"/>
+  <block-list:block block-list:abbreviated-name="besigte" block-list:name="besigtige"/>
+  <block-list:block block-list:abbreviated-name="beskade" block-list:name="beskadige"/>
+  <block-list:block block-list:abbreviated-name="beskadelse" block-list:name="beskadigelse"/>
+  <block-list:block block-list:abbreviated-name="betødning" block-list:name="betydning"/>
+  <block-list:block block-list:abbreviated-name="betragted" block-list:name="betragtet"/>
+  <block-list:block block-list:abbreviated-name="blir" block-list:name="bliver"/>
+  <block-list:block block-list:abbreviated-name="brædt" block-list:name="bræt"/>
+  <block-list:block block-list:abbreviated-name="bronce" block-list:name="bronze"/>
+  <block-list:block block-list:abbreviated-name="bundtmager" block-list:name="buntmager"/>
+  <block-list:block block-list:abbreviated-name="burau" block-list:name="bureau"/>
+  <block-list:block block-list:abbreviated-name="bureu" block-list:name="bureau"/>
+  <block-list:block block-list:abbreviated-name="byro" block-list:name="bureau"/>
+  <block-list:block block-list:abbreviated-name="celloid" block-list:name="celluloid"/>
+  <block-list:block block-list:abbreviated-name="celluid" block-list:name="celluloid"/>
+  <block-list:block block-list:abbreviated-name="charteque" block-list:name="chartek"/>
+  <block-list:block block-list:abbreviated-name="coutume" block-list:name="kutyme"/>
+  <block-list:block block-list:abbreviated-name="Damnark" block-list:name="Danmark"/>
+  <block-list:block block-list:abbreviated-name="debatere" block-list:name="debattere"/>
+  <block-list:block block-list:abbreviated-name="debatør" block-list:name="debattør"/>
+  <block-list:block block-list:abbreviated-name="dejg" block-list:name="dej"/>
+  <block-list:block block-list:abbreviated-name="dekadance" block-list:name="dekadence"/>
+  <block-list:block block-list:abbreviated-name="dene" block-list:name="denne"/>
+  <block-list:block block-list:abbreviated-name="der med ikke sagt" block-list:name="dermed ikke sagt"/>
+  <block-list:block block-list:abbreviated-name="detaille" block-list:name="detalje"/>
+  <block-list:block block-list:abbreviated-name="dete" block-list:name="dette"/>
+  <block-list:block block-list:abbreviated-name="diaglo" block-list:name="dialog"/>
+  <block-list:block block-list:abbreviated-name="diamentral" block-list:name="diametral"/>
+  <block-list:block block-list:abbreviated-name="diciplin" block-list:name="disciplin"/>
+  <block-list:block block-list:abbreviated-name="diciplineret" block-list:name="disciplineret"/>
+  <block-list:block block-list:abbreviated-name="differance" block-list:name="difference"/>
+  <block-list:block block-list:abbreviated-name="direktørene" block-list:name="direktørerne"/>
+  <block-list:block block-list:abbreviated-name="dise" block-list:name="disse"/>
+  <block-list:block block-list:abbreviated-name="diskution" block-list:name="diskussion"/>
+  <block-list:block block-list:abbreviated-name="dislog" block-list:name="dialog"/>
+  <block-list:block block-list:abbreviated-name="distrait" block-list:name="distræt"/>
+  <block-list:block block-list:abbreviated-name="dødsstille" block-list:name="dødstille"/>
+  <block-list:block block-list:abbreviated-name="dødsyg" block-list:name="dødssyg"/>
+  <block-list:block block-list:abbreviated-name="dokunemt" block-list:name="dokument"/>
+  <block-list:block block-list:abbreviated-name="een" block-list:name="én"/>
+  <block-list:block block-list:abbreviated-name="efte rde" block-list:name="efter de"/>
+  <block-list:block block-list:abbreviated-name="efte rden" block-list:name="efter den"/>
+  <block-list:block block-list:abbreviated-name="efte rdet" block-list:name="efter det"/>
+  <block-list:block block-list:abbreviated-name="efte ren" block-list:name="efter en"/>
+  <block-list:block block-list:abbreviated-name="efte rnogen" block-list:name="efter nogen"/>
+  <block-list:block block-list:abbreviated-name="efte rnoget" block-list:name="efter noget"/>
+  <block-list:block block-list:abbreviated-name="efte rnogle" block-list:name="efter nogle"/>
+  <block-list:block block-list:abbreviated-name="efterd e" block-list:name="efter de"/>
+  <block-list:block block-list:abbreviated-name="efterd en" block-list:name="efter den"/>
+  <block-list:block block-list:abbreviated-name="efterd et" block-list:name="efter det"/>
+  <block-list:block block-list:abbreviated-name="eftere n" block-list:name="efter en"/>
+  <block-list:block block-list:abbreviated-name="eftern ogen" block-list:name="efter nogen"/>
+  <block-list:block block-list:abbreviated-name="eftern oget" block-list:name="efter noget"/>
+  <block-list:block block-list:abbreviated-name="eftern ogle" block-list:name="efter nogle"/>
+  <block-list:block block-list:abbreviated-name="egenlig" block-list:name="egentlig"/>
+  <block-list:block block-list:abbreviated-name="ensuisasme" block-list:name="entusiasme"/>
+  <block-list:block block-list:abbreviated-name="ensusiasme" block-list:name="entusiasme"/>
+  <block-list:block block-list:abbreviated-name="EUs" block-list:name="EU's"/>
+  <block-list:block block-list:abbreviated-name="exempel" block-list:name="eksempel"/>
+  <block-list:block block-list:abbreviated-name="f.ex." block-list:name="f.eks."/>
+  <block-list:block block-list:abbreviated-name="fabriken" block-list:name="fabrikken"/>
+  <block-list:block block-list:abbreviated-name="fædrende" block-list:name="fædrene"/>
+  <block-list:block block-list:abbreviated-name="fåes" block-list:name="fås"/>
+  <block-list:block block-list:abbreviated-name="familje" block-list:name="familie"/>
+  <block-list:block block-list:abbreviated-name="fasade" block-list:name="facade"/>
+  <block-list:block block-list:abbreviated-name="fejg" block-list:name="fej"/>
+  <block-list:block block-list:abbreviated-name="financiel" block-list:name="finansiel"/>
+  <block-list:block block-list:abbreviated-name="flrer" block-list:name="flere"/>
+  <block-list:block block-list:abbreviated-name="fo rde" block-list:name="for de"/>
+  <block-list:block block-list:abbreviated-name="fø rde" block-list:name="før de"/>
+  <block-list:block block-list:abbreviated-name="fo rden" block-list:name="for den"/>
+  <block-list:block block-list:abbreviated-name="fø rden" block-list:name="før den"/>
+  <block-list:block block-list:abbreviated-name="fo rdet" block-list:name="for det"/>
+  <block-list:block block-list:abbreviated-name="fø rdet" block-list:name="før det"/>
+  <block-list:block block-list:abbreviated-name="fo rnogen" block-list:name="for nogen"/>
+  <block-list:block block-list:abbreviated-name="fø rnogen" block-list:name="før nogen"/>
+  <block-list:block block-list:abbreviated-name="fo rnoget" block-list:name="for noget"/>
+  <block-list:block block-list:abbreviated-name="fø rnoget" block-list:name="før noget"/>
+  <block-list:block block-list:abbreviated-name="fo rnogle" block-list:name="for nogle"/>
+  <block-list:block block-list:abbreviated-name="fø rnogle" block-list:name="før nogle"/>
+  <block-list:block block-list:abbreviated-name="følgeligt" block-list:name="følgelig"/>
+  <block-list:block block-list:abbreviated-name="fora nde" block-list:name="foran de"/>
+  <block-list:block block-list:abbreviated-name="fora nden" block-list:name="foran den"/>
+  <block-list:block block-list:abbreviated-name="fora ndet" block-list:name="foran det"/>
+  <block-list:block block-list:abbreviated-name="fora nen" block-list:name="foran en"/>
+  <block-list:block block-list:abbreviated-name="fora net" block-list:name="foran et"/>
+  <block-list:block block-list:abbreviated-name="fora nnogen" block-list:name="foran nogen"/>
+  <block-list:block block-list:abbreviated-name="fora nnoget" block-list:name="foran noget"/>
+  <block-list:block block-list:abbreviated-name="fora nnogle" block-list:name="foran nogle"/>
+  <block-list:block block-list:abbreviated-name="forand e" block-list:name="foran de"/>
+  <block-list:block block-list:abbreviated-name="forand en" block-list:name="foran den"/>
+  <block-list:block block-list:abbreviated-name="forand et" block-list:name="foran det"/>
+  <block-list:block block-list:abbreviated-name="forane n" block-list:name="foran en"/>
+  <block-list:block block-list:abbreviated-name="forane t" block-list:name="foran et"/>
+  <block-list:block block-list:abbreviated-name="forann ogen" block-list:name="foran nogen"/>
+  <block-list:block block-list:abbreviated-name="forann oget" block-list:name="foran noget"/>
+  <block-list:block block-list:abbreviated-name="forann ogle" block-list:name="foran nogle"/>
+  <block-list:block block-list:abbreviated-name="ford e" block-list:name="for de"/>
+  <block-list:block block-list:abbreviated-name="førd e" block-list:name="før de"/>
+  <block-list:block block-list:abbreviated-name="ford en" block-list:name="for den"/>
+  <block-list:block block-list:abbreviated-name="førd en" block-list:name="før den"/>
+  <block-list:block block-list:abbreviated-name="ford et" block-list:name="for det"/>
+  <block-list:block block-list:abbreviated-name="førd et" block-list:name="før det"/>
+  <block-list:block block-list:abbreviated-name="forhåbenlig" block-list:name="forhåbentlig"/>
+  <block-list:block block-list:abbreviated-name="forlængst" block-list:name="for længst"/>
+  <block-list:block block-list:abbreviated-name="formandsskab" block-list:name="formandskab"/>
+  <block-list:block block-list:abbreviated-name="formenlig" block-list:name="formentlig"/>
+  <block-list:block block-list:abbreviated-name="formodenlig" block-list:name="formodentlig"/>
+  <block-list:block block-list:abbreviated-name="forn ogen" block-list:name="for nogen"/>
+  <block-list:block block-list:abbreviated-name="førn ogen" block-list:name="før nogen"/>
+  <block-list:block block-list:abbreviated-name="forn oget" block-list:name="for noget"/>
+  <block-list:block block-list:abbreviated-name="førn oget" block-list:name="før noget"/>
+  <block-list:block block-list:abbreviated-name="forn ogle" block-list:name="for nogle"/>
+  <block-list:block block-list:abbreviated-name="førn ogle" block-list:name="før nogle"/>
+  <block-list:block block-list:abbreviated-name="forøvrigt" block-list:name="for øvrigt"/>
+  <block-list:block block-list:abbreviated-name="forrædder" block-list:name="forræder"/>
+  <block-list:block block-list:abbreviated-name="forsåvidt" block-list:name="for så vidt"/>
+  <block-list:block block-list:abbreviated-name="fr ade" block-list:name="fra de"/>
+  <block-list:block block-list:abbreviated-name="fr aden" block-list:name="fra den"/>
+  <block-list:block block-list:abbreviated-name="fr adet" block-list:name="fra det"/>
+  <block-list:block block-list:abbreviated-name="fr aen" block-list:name="fra en"/>
+  <block-list:block block-list:abbreviated-name="fr aet" block-list:name="fra et"/>
+  <block-list:block block-list:abbreviated-name="fr anogen" block-list:name="fra nogen"/>
+  <block-list:block block-list:abbreviated-name="fr anoget" block-list:name="fra noget"/>
+  <block-list:block block-list:abbreviated-name="fr anogle" block-list:name="fra nogle"/>
+  <block-list:block block-list:abbreviated-name="frad e" block-list:name="fra de"/>
+  <block-list:block block-list:abbreviated-name="frad en" block-list:name="fra den"/>
+  <block-list:block block-list:abbreviated-name="frad et" block-list:name="fra det"/>
+  <block-list:block block-list:abbreviated-name="frae n" block-list:name="fra en"/>
+  <block-list:block block-list:abbreviated-name="frae t" block-list:name="fra et"/>
+  <block-list:block block-list:abbreviated-name="fran ogen" block-list:name="fra nogen"/>
+  <block-list:block block-list:abbreviated-name="fran oget" block-list:name="fra noget"/>
+  <block-list:block block-list:abbreviated-name="fran ogle" block-list:name="fra nogle"/>
+  <block-list:block block-list:abbreviated-name="fremfor" block-list:name="frem for"/>
+  <block-list:block block-list:abbreviated-name="fungere aldrig" block-list:name="fungerer aldrig"/>
+  <block-list:block block-list:abbreviated-name="fungere gerne" block-list:name="fungerer gerne"/>
+  <block-list:block block-list:abbreviated-name="fungere ikke" block-list:name="fungerer ikke"/>
+  <block-list:block block-list:abbreviated-name="fungere ofte" block-list:name="fungerer ofte"/>
+  <block-list:block block-list:abbreviated-name="fx." block-list:name="fx"/>
+  <block-list:block block-list:abbreviated-name="gallionsfigur" block-list:name="galionsfigur"/>
+  <block-list:block block-list:abbreviated-name="gemmen" block-list:name="gennem"/>
+  <block-list:block block-list:abbreviated-name="genenm" block-list:name="gennem"/>
+  <block-list:block block-list:abbreviated-name="gengæl" block-list:name="gengæld"/>
+  <block-list:block block-list:abbreviated-name="gibs" block-list:name="gips"/>
+  <block-list:block block-list:abbreviated-name="gjordt" block-list:name="gjort"/>
+  <block-list:block block-list:abbreviated-name="gladeligt" block-list:name="gladelig"/>
+  <block-list:block block-list:abbreviated-name="gnemen" block-list:name="gennem"/>
+  <block-list:block block-list:abbreviated-name="gnenem" block-list:name="gennem"/>
+  <block-list:block block-list:abbreviated-name="gøre gengæl" block-list:name="gøre gengæld"/>
+  <block-list:block block-list:abbreviated-name="grundliggende" block-list:name="grundlæggende"/>
+  <block-list:block block-list:abbreviated-name="halvtres" block-list:name="halvtreds"/>
+  <block-list:block block-list:abbreviated-name="heiraki" block-list:name="hierarki"/>
+  <block-list:block block-list:abbreviated-name="heldigvist" block-list:name="heldigvis"/>
+  <block-list:block block-list:abbreviated-name="henholdsvist" block-list:name="henholdsvis"/>
+  <block-list:block block-list:abbreviated-name="hianden" block-list:name="hinanden"/>
+  <block-list:block block-list:abbreviated-name="hieraki" block-list:name="hierarki"/>
+  <block-list:block block-list:abbreviated-name="hinadnen" block-list:name="hinanden"/>
+  <block-list:block block-list:abbreviated-name="hirarki" block-list:name="hierarki"/>
+  <block-list:block block-list:abbreviated-name="hisle" block-list:name="hilse"/>
+  <block-list:block block-list:abbreviated-name="hislen" block-list:name="hilsen"/>
+  <block-list:block block-list:abbreviated-name="hivs" block-list:name="hvis"/>
+  <block-list:block block-list:abbreviated-name="hjælpe gerne" block-list:name="hjælper gerne"/>
+  <block-list:block block-list:abbreviated-name="højre sidde" block-list:name="højre side"/>
+  <block-list:block block-list:abbreviated-name="høre aldrig" block-list:name="hører aldrig"/>
+  <block-list:block block-list:abbreviated-name="høre gerne" block-list:name="hører gerne"/>
+  <block-list:block block-list:abbreviated-name="hovede" block-list:name="hoved"/>
+  <block-list:block block-list:abbreviated-name="hovedkuls" block-list:name="hovedkulds"/>
+  <block-list:block block-list:abbreviated-name="hovedsagentlig" block-list:name="hovedsagelig"/>
+  <block-list:block block-list:abbreviated-name="hovedsaglig" block-list:name="hovedsagelig"/>
+  <block-list:block block-list:abbreviated-name="Htp" block-list:name="http"/>
+  <block-list:block block-list:abbreviated-name="Http" block-list:name="http"/>
+  <block-list:block block-list:abbreviated-name="Http:" block-list:name="http:"/>
+  <block-list:block block-list:abbreviated-name="http:\" block-list:name="http://"/>
+  <block-list:block block-list:abbreviated-name="hvadsomhelst" block-list:name="hvad som helst"/>
+  <block-list:block block-list:abbreviated-name="hvemsomhelst" block-list:name="hvem som helst"/>
+  <block-list:block block-list:abbreviated-name="hveranden" block-list:name="hver anden"/>
+  <block-list:block block-list:abbreviated-name="hvilkensomhelst" block-list:name="hvilken som helst"/>
+  <block-list:block block-list:abbreviated-name="hvilkesomhelst" block-list:name="hvilke som helst"/>
+  <block-list:block block-list:abbreviated-name="hvilketsomhelst" block-list:name="hvilket som helst"/>
+  <block-list:block block-list:abbreviated-name="hvor imod" block-list:name="hvorimod"/>
+  <block-list:block block-list:abbreviated-name="hvormeget" block-list:name="hvor meget"/>
+  <block-list:block block-list:abbreviated-name="hvorsomhelst" block-list:name="hvor som helst"/>
+  <block-list:block block-list:abbreviated-name="i følge" block-list:name="ifølge"/>
+  <block-list:block block-list:abbreviated-name="ialt" block-list:name="i alt"/>
+  <block-list:block block-list:abbreviated-name="ialtfald" block-list:name="i alt fald"/>
+  <block-list:block block-list:abbreviated-name="idag" block-list:name="i dag"/>
+  <block-list:block block-list:abbreviated-name="ie n" block-list:name="i en"/>
+  <block-list:block block-list:abbreviated-name="ie t" block-list:name="i et"/>
+  <block-list:block block-list:abbreviated-name="ifærd" block-list:name="i færd"/>
+  <block-list:block block-list:abbreviated-name="igang" block-list:name="i gang"/>
+  <block-list:block block-list:abbreviated-name="igår" block-list:name="i går"/>
+  <block-list:block block-list:abbreviated-name="ihvertfald" block-list:name="i hvert fald"/>
+  <block-list:block block-list:abbreviated-name="imorgen" block-list:name="i morgen"/>
+  <block-list:block block-list:abbreviated-name="imperie" block-list:name="imperium"/>
+  <block-list:block block-list:abbreviated-name="impressario" block-list:name="impresario"/>
+  <block-list:block block-list:abbreviated-name="imun" block-list:name="immun"/>
+  <block-list:block block-list:abbreviated-name="in ogen" block-list:name="i noget"/>
+  <block-list:block block-list:abbreviated-name="in oget" block-list:name="i noget"/>
+  <block-list:block block-list:abbreviated-name="in ogle" block-list:name="i nogle"/>
+  <block-list:block block-list:abbreviated-name="inddirekte" block-list:name="indirekte"/>
+  <block-list:block block-list:abbreviated-name="indholder" block-list:name="indeholder"/>
+  <block-list:block block-list:abbreviated-name="indkludere" block-list:name="inkludere"/>
+  <block-list:block block-list:abbreviated-name="indkluderer" block-list:name="inkluderer"/>
+  <block-list:block block-list:abbreviated-name="indklusiv" block-list:name="inklusiv"/>
+  <block-list:block block-list:abbreviated-name="indkorporere" block-list:name="inkorporere"/>
+  <block-list:block block-list:abbreviated-name="indstallere" block-list:name="installere"/>
+  <block-list:block block-list:abbreviated-name="infeksion" block-list:name="infektion"/>
+  <block-list:block block-list:abbreviated-name="inflydelse" block-list:name="indflydelse"/>
+  <block-list:block block-list:abbreviated-name="informatin" block-list:name="information"/>
+  <block-list:block block-list:abbreviated-name="ingeniøer" block-list:name="ingeniører"/>
+  <block-list:block block-list:abbreviated-name="inhold" block-list:name="indhold"/>
+  <block-list:block block-list:abbreviated-name="initiv" block-list:name="intiativ"/>
+  <block-list:block block-list:abbreviated-name="institutet" block-list:name="instituttet"/>
+  <block-list:block block-list:abbreviated-name="intelektuel" block-list:name="intellektuel"/>
+  <block-list:block block-list:abbreviated-name="intensioner" block-list:name="intentioner"/>
+  <block-list:block block-list:abbreviated-name="interresse" block-list:name="interesse"/>
+  <block-list:block block-list:abbreviated-name="involde" block-list:name="indvolde"/>
+  <block-list:block block-list:abbreviated-name="iøjeblikket" block-list:name="i øjeblikket"/>
+  <block-list:block block-list:abbreviated-name="iøvrigt" block-list:name="i øvrigt"/>
+  <block-list:block block-list:abbreviated-name="irationel" block-list:name="irrationel"/>
+  <block-list:block block-list:abbreviated-name="irelevant" block-list:name="irrelevant"/>
+  <block-list:block block-list:abbreviated-name="istedet" block-list:name="i stedet"/>
+  <block-list:block block-list:abbreviated-name="jjeg" block-list:name="jeg"/>
+  <block-list:block block-list:abbreviated-name="jvf." block-list:name="jf."/>
+  <block-list:block block-list:abbreviated-name="kakave" block-list:name="kakao"/>
+  <block-list:block block-list:abbreviated-name="karussel" block-list:name="karrusel"/>
+  <block-list:block block-list:abbreviated-name="kasere" block-list:name="kassere"/>
+  <block-list:block block-list:abbreviated-name="kassere aldrig" block-list:name="kasserer aldrig"/>
+  <block-list:block block-list:abbreviated-name="kassere altid" block-list:name="kasserer altid"/>
+  <block-list:block block-list:abbreviated-name="kassere gerne" block-list:name="kasserer gerne"/>
+  <block-list:block block-list:abbreviated-name="kauktion" block-list:name="kaution"/>
+  <block-list:block block-list:abbreviated-name="kavalleri" block-list:name="kavaleri"/>
+  <block-list:block block-list:abbreviated-name="klasifikation" block-list:name="klassifikation"/>
+  <block-list:block block-list:abbreviated-name="klogeligt" block-list:name="klogelig"/>
+  <block-list:block block-list:abbreviated-name="klokkeslet" block-list:name="klokkeslæt"/>
+  <block-list:block block-list:abbreviated-name="kmomer" block-list:name="kommer"/>
+  <block-list:block block-list:abbreviated-name="kna" block-list:name="kan"/>
+  <block-list:block block-list:abbreviated-name="kokurent" block-list:name="konkurrent"/>
+  <block-list:block block-list:abbreviated-name="kolision" block-list:name="kollision"/>
+  <block-list:block block-list:abbreviated-name="kollosal" block-list:name="kolossal"/>
+  <block-list:block block-list:abbreviated-name="kolosal" block-list:name="kolossal"/>
+  <block-list:block block-list:abbreviated-name="komemer" block-list:name="kommer"/>
+  <block-list:block block-list:abbreviated-name="komission" block-list:name="kommission"/>
+  <block-list:block block-list:abbreviated-name="kommision" block-list:name="kommission"/>
+  <block-list:block block-list:abbreviated-name="kommr" block-list:name="kommer"/>
+  <block-list:block block-list:abbreviated-name="kompetance" block-list:name="kompetence"/>
+  <block-list:block block-list:abbreviated-name="konferance" block-list:name="komference"/>
+  <block-list:block block-list:abbreviated-name="konklution" block-list:name="konklusion"/>
+  <block-list:block block-list:abbreviated-name="konkurence" block-list:name="konkurrence"/>
+  <block-list:block block-list:abbreviated-name="konkurent" block-list:name="konkurrent"/>
+  <block-list:block block-list:abbreviated-name="konstantere" block-list:name="konstatere"/>
+  <block-list:block block-list:abbreviated-name="kontrolere" block-list:name="kontrollere"/>
+  <block-list:block block-list:abbreviated-name="køre aldrig" block-list:name="kører aldrig"/>
+  <block-list:block block-list:abbreviated-name="køre gerne" block-list:name="kører gerne"/>
+  <block-list:block block-list:abbreviated-name="korespondance" block-list:name="korrespondance"/>
+  <block-list:block block-list:abbreviated-name="korespondent" block-list:name="korrespondent"/>
+  <block-list:block block-list:abbreviated-name="krusus" block-list:name="kursus"/>
+  <block-list:block block-list:abbreviated-name="låd" block-list:name="lod"/>
+  <block-list:block block-list:abbreviated-name="lådden" block-list:name="lodden"/>
+  <block-list:block block-list:abbreviated-name="lækkerbidsken" block-list:name="lækkerbisken"/>
+  <block-list:block block-list:abbreviated-name="lære gerne" block-list:name="lærer gerne"/>
+  <block-list:block block-list:abbreviated-name="leve vilkår" block-list:name="levevilkår"/>
+  <block-list:block block-list:abbreviated-name="linolium" block-list:name="linoleum"/>
+  <block-list:block block-list:abbreviated-name="lissom" block-list:name="ligesom"/>
+  <block-list:block block-list:abbreviated-name="luxus" block-list:name="luksus"/>
+  <block-list:block block-list:abbreviated-name="mading" block-list:name="madding"/>
+  <block-list:block block-list:abbreviated-name="magge ret" block-list:name="makke ret"/>
+  <block-list:block block-list:abbreviated-name="manuskrift" block-list:name="manuskript"/>
+  <block-list:block block-list:abbreviated-name="markulering" block-list:name="makulering"/>
+  <block-list:block block-list:abbreviated-name="marteriale" block-list:name="materiale"/>
+  <block-list:block block-list:abbreviated-name="me dde" block-list:name="med de"/>
+  <block-list:block block-list:abbreviated-name="me dden" block-list:name="med den"/>
+  <block-list:block block-list:abbreviated-name="me ddet" block-list:name="med det"/>
+  <block-list:block block-list:abbreviated-name="me dnogen" block-list:name="med nogen"/>
+  <block-list:block block-list:abbreviated-name="me dnoget" block-list:name="med noget"/>
+  <block-list:block block-list:abbreviated-name="me dnogle" block-list:name="med nogle"/>
+  <block-list:block block-list:abbreviated-name="medaille" block-list:name="medalje"/>
+  <block-list:block block-list:abbreviated-name="medd e" block-list:name="med de"/>
+  <block-list:block block-list:abbreviated-name="medd en" block-list:name="med den"/>
+  <block-list:block block-list:abbreviated-name="medd et" block-list:name="med det"/>
+  <block-list:block block-list:abbreviated-name="meddelse" block-list:name="meddelelse"/>
+  <block-list:block block-list:abbreviated-name="medlemsskab" block-list:name="medlemskab"/>
+  <block-list:block block-list:abbreviated-name="medn ogen" block-list:name="med nogen"/>
+  <block-list:block block-list:abbreviated-name="medn oget" block-list:name="med noget"/>
+  <block-list:block block-list:abbreviated-name="medn ogle" block-list:name="med nogle"/>
+  <block-list:block block-list:abbreviated-name="melelm" block-list:name="mellem"/>
+  <block-list:block block-list:abbreviated-name="meneske" block-list:name="menneske"/>
+  <block-list:block block-list:abbreviated-name="menesker" block-list:name="mennesker"/>
+  <block-list:block block-list:abbreviated-name="midaldrene" block-list:name="midaldrende"/>
+  <block-list:block block-list:abbreviated-name="mlelem" block-list:name="mellem"/>
+  <block-list:block block-list:abbreviated-name="mo dde" block-list:name="mod de"/>
+  <block-list:block block-list:abbreviated-name="mo dden" block-list:name="mod den"/>
+  <block-list:block block-list:abbreviated-name="mo ddet" block-list:name="mod det"/>
+  <block-list:block block-list:abbreviated-name="mo dnogen" block-list:name="mod nogen"/>
+  <block-list:block block-list:abbreviated-name="mo dnoget" block-list:name="mod noget"/>
+  <block-list:block block-list:abbreviated-name="mo dnogle" block-list:name="mod nogle"/>
+  <block-list:block block-list:abbreviated-name="modd e" block-list:name="mod de"/>
+  <block-list:block block-list:abbreviated-name="modd en" block-list:name="mod den"/>
+  <block-list:block block-list:abbreviated-name="modd et" block-list:name="mod det"/>
+  <block-list:block block-list:abbreviated-name="modn ogen" block-list:name="mod nogen"/>
+  <block-list:block block-list:abbreviated-name="modn oget" block-list:name="mod noget"/>
+  <block-list:block block-list:abbreviated-name="modn ogle" block-list:name="mod nogle"/>
+  <block-list:block block-list:abbreviated-name="molestrere" block-list:name="molestere"/>
+  <block-list:block block-list:abbreviated-name="monotom" block-list:name="monoton"/>
+  <block-list:block block-list:abbreviated-name="muliggører" block-list:name="muliggør"/>
+  <block-list:block block-list:abbreviated-name="muligtvis" block-list:name="muligvis"/>
+  <block-list:block block-list:abbreviated-name="muligvist" block-list:name="muligvis"/>
+  <block-list:block block-list:abbreviated-name="mysterie" block-list:name="mysterium"/>
+  <block-list:block block-list:abbreviated-name="nædste" block-list:name="næste"/>
+  <block-list:block block-list:abbreviated-name="nåes" block-list:name="nås"/>
+  <block-list:block block-list:abbreviated-name="nætsen" block-list:name="næsten"/>
+  <block-list:block block-list:abbreviated-name="naturligtvis" block-list:name="naturligvis"/>
+  <block-list:block block-list:abbreviated-name="naturligvist" block-list:name="naturligvis"/>
+  <block-list:block block-list:abbreviated-name="navnligt" block-list:name="navnlig"/>
+  <block-list:block block-list:abbreviated-name="nde" block-list:name="ned"/>
+  <block-list:block block-list:abbreviated-name="nemligt" block-list:name="nemlig"/>
+  <block-list:block block-list:abbreviated-name="ngoet" block-list:name="noget"/>
+  <block-list:block block-list:abbreviated-name="nievau" block-list:name="niveau"/>
+  <block-list:block block-list:abbreviated-name="noegle" block-list:name="nogle"/>
+  <block-list:block block-list:abbreviated-name="noegt" block-list:name="noget"/>
+  <block-list:block block-list:abbreviated-name="nogele" block-list:name="nogle"/>
+  <block-list:block block-list:abbreviated-name="nogensomhelst" block-list:name="nogen som helst"/>
+  <block-list:block block-list:abbreviated-name="nogetsomhelst" block-list:name="noget som helst"/>
+  <block-list:block block-list:abbreviated-name="nsæten" block-list:name="næsten"/>
+  <block-list:block block-list:abbreviated-name="nummerede" block-list:name="nummererede"/>
+  <block-list:block block-list:abbreviated-name="nummerisk" block-list:name="numerisk"/>
+  <block-list:block block-list:abbreviated-name="o mde" block-list:name="om de"/>
+  <block-list:block block-list:abbreviated-name="o mden" block-list:name="om den"/>
+  <block-list:block block-list:abbreviated-name="o mdet" block-list:name="om det"/>
+  <block-list:block block-list:abbreviated-name="o met" block-list:name="om et"/>
+  <block-list:block block-list:abbreviated-name="o mnogen" block-list:name="om nogen"/>
+  <block-list:block block-list:abbreviated-name="o mnoget" block-list:name="om noget"/>
+  <block-list:block block-list:abbreviated-name="o mnogle" block-list:name="om nogle"/>
+  <block-list:block block-list:abbreviated-name="odf" block-list:name="ODF"/>
+  <block-list:block block-list:abbreviated-name="offenlig" block-list:name="offentlig"/>
+  <block-list:block block-list:abbreviated-name="okmring" block-list:name="omkring"/>
+  <block-list:block block-list:abbreviated-name="omd e" block-list:name="om de"/>
+  <block-list:block block-list:abbreviated-name="omd en" block-list:name="om den"/>
+  <block-list:block block-list:abbreviated-name="omd et" block-list:name="om det"/>
+  <block-list:block block-list:abbreviated-name="ome t" block-list:name="om et"/>
+  <block-list:block block-list:abbreviated-name="omgåes" block-list:name="omgås"/>
+  <block-list:block block-list:abbreviated-name="omn ogen" block-list:name="om nogen"/>
+  <block-list:block block-list:abbreviated-name="omn oget" block-list:name="om noget"/>
+  <block-list:block block-list:abbreviated-name="omn ogle" block-list:name="om nogle"/>
+  <block-list:block block-list:abbreviated-name="opføre gerne" block-list:name="opfører gerne"/>
+  <block-list:block block-list:abbreviated-name="oplysniger" block-list:name="oplysninger"/>
+  <block-list:block block-list:abbreviated-name="oplysnigner" block-list:name="oplysninger"/>
+  <block-list:block block-list:abbreviated-name="opnåes" block-list:name="opnås"/>
+  <block-list:block block-list:abbreviated-name="oprørs tendenser" block-list:name="oprørstendenser"/>
+  <block-list:block block-list:abbreviated-name="opsumere" block-list:name="opsummere"/>
+  <block-list:block block-list:abbreviated-name="opsumering" block-list:name="opsummering"/>
+  <block-list:block block-list:abbreviated-name="optræde aldrig" block-list:name="optræder aldrig"/>
+  <block-list:block block-list:abbreviated-name="optræde altid" block-list:name="optræder altid"/>
+  <block-list:block block-list:abbreviated-name="optræde gerne" block-list:name="optræder gerne"/>
+  <block-list:block block-list:abbreviated-name="ordenlig" block-list:name="ordentlig"/>
+  <block-list:block block-list:abbreviated-name="ove rde" block-list:name="over de"/>
+  <block-list:block block-list:abbreviated-name="ove rden" block-list:name="over den"/>
+  <block-list:block block-list:abbreviated-name="ove rdet" block-list:name="over det"/>
+  <block-list:block block-list:abbreviated-name="ove rnogen" block-list:name="over nogen"/>
+  <block-list:block block-list:abbreviated-name="ove rnoget" block-list:name="over noget"/>
+  <block-list:block block-list:abbreviated-name="ove rnogle" block-list:name="over nogle"/>
+  <block-list:block block-list:abbreviated-name="overd e" block-list:name="over de"/>
+  <block-list:block block-list:abbreviated-name="overd en" block-list:name="over den"/>
+  <block-list:block block-list:abbreviated-name="overd et" block-list:name="over det"/>
+  <block-list:block block-list:abbreviated-name="overe t" block-list:name="over et"/>
+  <block-list:block block-list:abbreviated-name="overenskomst situationen" block-list:name="overenskomstsituationen"/>
+  <block-list:block block-list:abbreviated-name="overn ogen" block-list:name="over nogen"/>
+  <block-list:block block-list:abbreviated-name="overn oget" block-list:name="over noget"/>
+  <block-list:block block-list:abbreviated-name="overn ogle" block-list:name="over nogle"/>
+  <block-list:block block-list:abbreviated-name="p åde" block-list:name="på de"/>
+  <block-list:block block-list:abbreviated-name="p åden" block-list:name="på den"/>
+  <block-list:block block-list:abbreviated-name="p ådet" block-list:name="på det"/>
+  <block-list:block block-list:abbreviated-name="p åen" block-list:name="på en"/>
+  <block-list:block block-list:abbreviated-name="p ået" block-list:name="på et"/>
+  <block-list:block block-list:abbreviated-name="p åete" block-list:name="på et"/>
+  <block-list:block block-list:abbreviated-name="p ånogen" block-list:name="på nogen"/>
+  <block-list:block block-list:abbreviated-name="p ånoget" block-list:name="på noget"/>
+  <block-list:block block-list:abbreviated-name="p ånogle" block-list:name="på nogle"/>
+  <block-list:block block-list:abbreviated-name="påd e" block-list:name="på de"/>
+  <block-list:block block-list:abbreviated-name="påd en" block-list:name="på den"/>
+  <block-list:block block-list:abbreviated-name="påd et" block-list:name="på det"/>
+  <block-list:block block-list:abbreviated-name="påe n" block-list:name="på en"/>
+  <block-list:block block-list:abbreviated-name="påe t" block-list:name="på et"/>
+  <block-list:block block-list:abbreviated-name="påe te" block-list:name="på et"/>
+  <block-list:block block-list:abbreviated-name="pån ogen" block-list:name="på nogen"/>
+  <block-list:block block-list:abbreviated-name="pån oget" block-list:name="på noget"/>
+  <block-list:block block-list:abbreviated-name="pån ogle" block-list:name="på nogle"/>
+  <block-list:block block-list:abbreviated-name="påny" block-list:name="på ny"/>
+  <block-list:block block-list:abbreviated-name="papirene" block-list:name="papirerne"/>
+  <block-list:block block-list:abbreviated-name="paralel" block-list:name="parallel"/>
+  <block-list:block block-list:abbreviated-name="paralelle" block-list:name="parallelle"/>
+  <block-list:block block-list:abbreviated-name="paralellitet" block-list:name="parallellitet"/>
+  <block-list:block block-list:abbreviated-name="parallellitet" block-list:name="parallelitet"/>
+  <block-list:block block-list:abbreviated-name="parantes" block-list:name="parentes"/>
+  <block-list:block block-list:abbreviated-name="pasivisere" block-list:name="passivisere"/>
+  <block-list:block block-list:abbreviated-name="pc'ere" block-list:name="pc'er"/>
+  <block-list:block block-list:abbreviated-name="PC'ere" block-list:name="PC'er"/>
+  <block-list:block block-list:abbreviated-name="petrolium" block-list:name="petroleum"/>
+  <block-list:block block-list:abbreviated-name="pludslig" block-list:name="pludselig"/>
+  <block-list:block block-list:abbreviated-name="plyds" block-list:name="plys"/>
+  <block-list:block block-list:abbreviated-name="polonaise" block-list:name="polonæse"/>
+  <block-list:block block-list:abbreviated-name="porgram" block-list:name="program"/>
+  <block-list:block block-list:abbreviated-name="præferance" block-list:name="præference"/>
+  <block-list:block block-list:abbreviated-name="pristalregulering" block-list:name="pristalsregulering"/>
+  <block-list:block block-list:abbreviated-name="priviligeret" block-list:name="privilegeret"/>
+  <block-list:block block-list:abbreviated-name="profesion" block-list:name="profession"/>
+  <block-list:block block-list:abbreviated-name="progam" block-list:name="program"/>
+  <block-list:block block-list:abbreviated-name="radisse" block-list:name="radise"/>
+  <block-list:block block-list:abbreviated-name="rædselslagen" block-list:name="rædselsslagen"/>
+  <block-list:block block-list:abbreviated-name="række faktore" block-list:name="række faktorer"/>
+  <block-list:block block-list:abbreviated-name="redigere aldrig" block-list:name="redigerer aldrig"/>
+  <block-list:block block-list:abbreviated-name="redigere altid" block-list:name="redigerer altid"/>
+  <block-list:block block-list:abbreviated-name="redigere gerne" block-list:name="redigerer gerne"/>
+  <block-list:block block-list:abbreviated-name="referance" block-list:name="reference"/>
+  <block-list:block block-list:abbreviated-name="reflektion" block-list:name="refleksion"/>
+  <block-list:block block-list:abbreviated-name="registere" block-list:name="registrere"/>
+  <block-list:block block-list:abbreviated-name="reperation" block-list:name="reparation"/>
+  <block-list:block block-list:abbreviated-name="reperere" block-list:name="reparere"/>
+  <block-list:block block-list:abbreviated-name="resource" block-list:name="ressource"/>
+  <block-list:block block-list:abbreviated-name="retteligt" block-list:name="rettelig"/>
+  <block-list:block block-list:abbreviated-name="rødmusset" block-list:name="rødmosset"/>
+  <block-list:block block-list:abbreviated-name="sædvanelig" block-list:name="sædvanlig"/>
+  <block-list:block block-list:abbreviated-name="sædvaneligvist" block-list:name="sædvanligvis"/>
+  <block-list:block block-list:abbreviated-name="sædvanligvist" block-list:name="sædvanligvis"/>
+  <block-list:block block-list:abbreviated-name="sakl" block-list:name="skal"/>
+  <block-list:block block-list:abbreviated-name="sålænge" block-list:name="så længe"/>
+  <block-list:block block-list:abbreviated-name="sandsynligvist" block-list:name="sandsynligvis"/>
+  <block-list:block block-list:abbreviated-name="sansynlig" block-list:name="sandsynlig"/>
+  <block-list:block block-list:abbreviated-name="sansynligvis" block-list:name="sandsynligvis"/>
+  <block-list:block block-list:abbreviated-name="sansynligvist" block-list:name="sandsynligvis"/>
+  <block-list:block block-list:abbreviated-name="satdig" block-list:name="stadig"/>
+  <block-list:block block-list:abbreviated-name="score gerne" block-list:name="scorer gerne"/>
+  <block-list:block block-list:abbreviated-name="score ikke" block-list:name="scorer ikke"/>
+  <block-list:block block-list:abbreviated-name="sejg" block-list:name="sej"/>
+  <block-list:block block-list:abbreviated-name="seperat" block-list:name="separat"/>
+  <block-list:block block-list:abbreviated-name="seperation" block-list:name="saparation"/>
+  <block-list:block block-list:abbreviated-name="shok" block-list:name="chok"/>
+  <block-list:block block-list:abbreviated-name="silhouet" block-list:name="silhuet"/>
+  <block-list:block block-list:abbreviated-name="sindsyg" block-list:name="sindssyg"/>
+  <block-list:block block-list:abbreviated-name="sindsygdom" block-list:name="sindssygdom"/>
+  <block-list:block block-list:abbreviated-name="skræder" block-list:name="skrædder"/>
+  <block-list:block block-list:abbreviated-name="skrevte" block-list:name="skrevet"/>
+  <block-list:block block-list:abbreviated-name="skrfit" block-list:name="skrift"/>
+  <block-list:block block-list:abbreviated-name="skruppe af" block-list:name="skrubbe af"/>
+  <block-list:block block-list:abbreviated-name="som værrende" block-list:name="som værende"/>
+  <block-list:block block-list:abbreviated-name="spetakel" block-list:name="spektakel"/>
+  <block-list:block block-list:abbreviated-name="sporenstrengs" block-list:name="sporenstregs"/>
+  <block-list:block block-list:abbreviated-name="spørsmål" block-list:name="spørgsmål"/>
+  <block-list:block block-list:abbreviated-name="stadgi" block-list:name="stadig"/>
+  <block-list:block block-list:abbreviated-name="staidg" block-list:name="stadig"/>
+  <block-list:block block-list:abbreviated-name="staniol" block-list:name="stanniol"/>
+  <block-list:block block-list:abbreviated-name="statistiken" block-list:name="statistikken"/>
+  <block-list:block block-list:abbreviated-name="supleant" block-list:name="suppleant"/>
+  <block-list:block block-list:abbreviated-name="suplement" block-list:name="supplement"/>
+  <block-list:block block-list:abbreviated-name="svedske" block-list:name="sveske"/>
+  <block-list:block block-list:abbreviated-name="systemt" block-list:name="systemet"/>
+  <block-list:block block-list:abbreviated-name="tage afsted" block-list:name="tage af sted"/>
+  <block-list:block block-list:abbreviated-name="tatse" block-list:name="taste"/>
+  <block-list:block block-list:abbreviated-name="telf" block-list:name="tlf."/>
+  <block-list:block block-list:abbreviated-name="temmeligt" block-list:name="temmelig"/>
+  <block-list:block block-list:abbreviated-name="terorisere" block-list:name="terrorisere"/>
+  <block-list:block block-list:abbreviated-name="terrænnet" block-list:name="terrænet"/>
+  <block-list:block block-list:abbreviated-name="ti lde" block-list:name="til de"/>
+  <block-list:block block-list:abbreviated-name="ti lden" block-list:name="til den"/>
+  <block-list:block block-list:abbreviated-name="ti ldet" block-list:name="til det"/>
+  <block-list:block block-list:abbreviated-name="ti lnogen" block-list:name="til nogen"/>
+  <block-list:block block-list:abbreviated-name="ti lnoget" block-list:name="til noget"/>
+  <block-list:block block-list:abbreviated-name="ti lnogle" block-list:name="til nogle"/>
+  <block-list:block block-list:abbreviated-name="tiblage" block-list:name="tilbage"/>
+  <block-list:block block-list:abbreviated-name="til gengæl" block-list:name="til gengæld"/>
+  <block-list:block block-list:abbreviated-name="tild e" block-list:name="til de"/>
+  <block-list:block block-list:abbreviated-name="tild en" block-list:name="til den"/>
+  <block-list:block block-list:abbreviated-name="tild et" block-list:name="til det"/>
+  <block-list:block block-list:abbreviated-name="tile n" block-list:name="til en"/>
+  <block-list:block block-list:abbreviated-name="tile t" block-list:name="til et"/>
+  <block-list:block block-list:abbreviated-name="tilfældigtvis" block-list:name="tilfældigvis"/>
+  <block-list:block block-list:abbreviated-name="tilfældigvist" block-list:name="tilfældigvis"/>
+  <block-list:block block-list:abbreviated-name="tilhøre altid" block-list:name="tilhører altid"/>
+  <block-list:block block-list:abbreviated-name="tilhøre gerne" block-list:name="tilhører gerne"/>
+  <block-list:block block-list:abbreviated-name="tiln ogen" block-list:name="til nogen"/>
+  <block-list:block block-list:abbreviated-name="tiln oget" block-list:name="til noget"/>
+  <block-list:block block-list:abbreviated-name="tiln ogle" block-list:name="til nogle"/>
+  <block-list:block block-list:abbreviated-name="tlibage" block-list:name="tilbage"/>
+  <block-list:block block-list:abbreviated-name="tredie" block-list:name="tredje"/>
+  <block-list:block block-list:abbreviated-name="uadskillige" block-list:name="uadskillelige"/>
+  <block-list:block block-list:abbreviated-name="udemærket" block-list:name="udmærket"/>
+  <block-list:block block-list:abbreviated-name="udiciplineret" block-list:name="udisciplineret"/>
+  <block-list:block block-list:abbreviated-name="udngå" block-list:name="undgå"/>
+  <block-list:block block-list:abbreviated-name="uheldigtvis" block-list:name="uheldigvis"/>
+  <block-list:block block-list:abbreviated-name="uheldigvist" block-list:name="uheldigvis"/>
+  <block-list:block block-list:abbreviated-name="unægteligt" block-list:name="unægtelig"/>
+  <block-list:block block-list:abbreviated-name="unde rde" block-list:name="under de"/>
+  <block-list:block block-list:abbreviated-name="unde rden" block-list:name="under den"/>
+  <block-list:block block-list:abbreviated-name="unde rdet" block-list:name="under det"/>
+  <block-list:block block-list:abbreviated-name="unde rnogen" block-list:name="under nogen"/>
+  <block-list:block block-list:abbreviated-name="unde rnoget" block-list:name="under noget"/>
+  <block-list:block block-list:abbreviated-name="unde rnogle" block-list:name="under nogle"/>
+  <block-list:block block-list:abbreviated-name="underd e" block-list:name="under de"/>
+  <block-list:block block-list:abbreviated-name="underd en" block-list:name="under den"/>
+  <block-list:block block-list:abbreviated-name="underd et" block-list:name="under det"/>
+  <block-list:block block-list:abbreviated-name="undern ogen" block-list:name="under nogen"/>
+  <block-list:block block-list:abbreviated-name="undern oget" block-list:name="under noget"/>
+  <block-list:block block-list:abbreviated-name="undern ogle" block-list:name="under nogle"/>
+  <block-list:block block-list:abbreviated-name="undgåes" block-list:name="undgås"/>
+  <block-list:block block-list:abbreviated-name="USAs" block-list:name="USA's"/>
+  <block-list:block block-list:abbreviated-name="vædske" block-list:name="væske"/>
+  <block-list:block block-list:abbreviated-name="værdibegræb" block-list:name="værdibegreb"/>
+  <block-list:block block-list:abbreviated-name="væsenlig" block-list:name="væsentlig"/>
+  <block-list:block block-list:abbreviated-name="ve dde" block-list:name="ved de"/>
+  <block-list:block block-list:abbreviated-name="ve dden" block-list:name="ved den"/>
+  <block-list:block block-list:abbreviated-name="ve ddet" block-list:name="ved det"/>
+  <block-list:block block-list:abbreviated-name="ve dnogen" block-list:name="ved nogen"/>
+  <block-list:block block-list:abbreviated-name="ve dnoget" block-list:name="ved noget"/>
+  <block-list:block block-list:abbreviated-name="ve dnogle" block-list:name="ved nogle"/>
+  <block-list:block block-list:abbreviated-name="vedd e" block-list:name="ved de"/>
+  <block-list:block block-list:abbreviated-name="vedd en" block-list:name="ved den"/>
+  <block-list:block block-list:abbreviated-name="vedd et" block-list:name="ved det"/>
+  <block-list:block block-list:abbreviated-name="vede n" block-list:name="ved en"/>
+  <block-list:block block-list:abbreviated-name="vede t" block-list:name="ved et"/>
+  <block-list:block block-list:abbreviated-name="vedn ogen" block-list:name="ved nogen"/>
+  <block-list:block block-list:abbreviated-name="vedn oget" block-list:name="ved noget"/>
+  <block-list:block block-list:abbreviated-name="vedn ogle" block-list:name="ved nogle"/>
+  <block-list:block block-list:abbreviated-name="velbekommen" block-list:name="velbekomme"/>
+  <block-list:block block-list:abbreviated-name="venstre sidde" block-list:name="venstre side"/>
+  <block-list:block block-list:abbreviated-name="verj" block-list:name="vejr"/>
+  <block-list:block block-list:abbreviated-name="viderekommende" block-list:name="viderekomne"/>
+  <block-list:block block-list:abbreviated-name="viktig" block-list:name="vigtig"/>
+  <block-list:block block-list:abbreviated-name="vudere" block-list:name="vurdere"/>
+  <block-list:block block-list:abbreviated-name="vudering" block-list:name="vurdering"/>
+  <block-list:block block-list:abbreviated-name="ydeligere" block-list:name="yderligere"/>
+  <block-list:block block-list:abbreviated-name="yderliger" block-list:name="yderligere"/>
+  <block-list:block block-list:abbreviated-name="zigeuner" block-list:name="sigøjner"/>
+  <block-list:block block-list:abbreviated-name="1/2" block-list:name="½"/>
+  <block-list:block block-list:abbreviated-name="1/4" block-list:name="¼"/>
+  <block-list:block block-list:abbreviated-name="3/4" block-list:name="¾"/>
+</block-list:block-list>

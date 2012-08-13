@@ -1,0 +1,491 @@
+<?xml version="1.0" encoding="utf-8"?>
+<block-list:block-list xmlns:block-list="http://openoffice.org/2001/block-list">
+  <block-list:block block-list:abbreviated-name="--" block-list:name="–"/>
+  <block-list:block block-list:abbreviated-name="--&gt;" block-list:name="→"/>
+  <block-list:block block-list:abbreviated-name="-&gt;" block-list:name="→"/>
+  <block-list:block block-list:abbreviated-name="..." block-list:name="…"/>
+  <block-list:block block-list:abbreviated-name="(c)" block-list:name="©"/>
+  <block-list:block block-list:abbreviated-name="(r)" block-list:name="®"/>
+  <block-list:block block-list:abbreviated-name="(tm)" block-list:name="™"/>
+  <block-list:block block-list:abbreviated-name="&lt;-" block-list:name="←"/>
+  <block-list:block block-list:abbreviated-name="&lt;--" block-list:name="←"/>
+  <block-list:block block-list:abbreviated-name="&lt;--&gt;" block-list:name="↔"/>
+  <block-list:block block-list:abbreviated-name="&lt;-&gt;" block-list:name="↔"/>
+  <block-list:block block-list:abbreviated-name="Hong Kong" block-list:name="Hongkong"/>
+  <block-list:block block-list:abbreviated-name="Ka-ce" block-list:name="Katow."/>
+  <block-list:block block-list:abbreviated-name="aż nad to" block-list:name="aż nadto"/>
+  <block-list:block block-list:abbreviated-name="a nóż" block-list:name="a nuż"/>
+  <block-list:block block-list:abbreviated-name="a nad to" block-list:name="a nadto"/>
+  <block-list:block block-list:abbreviated-name="a pro po" block-list:name="à propos"/>
+  <block-list:block block-list:abbreviated-name="a pro po" block-list:name="a propos"/>
+  <block-list:block block-list:abbreviated-name="absorbcja" block-list:name="absorpcja"/>
+  <block-list:block block-list:abbreviated-name="absorbcji" block-list:name="absorpcji"/>
+  <block-list:block block-list:abbreviated-name="ad." block-list:name="ad"/>
+  <block-list:block block-list:abbreviated-name="aleji" block-list:name="alei"/>
+  <block-list:block block-list:abbreviated-name="alternatywana" block-list:name="alternatywna"/>
+  <block-list:block block-list:abbreviated-name="bądx" block-list:name="bądź"/>
+  <block-list:block block-list:abbreviated-name="będa" block-list:name="będą"/>
+  <block-list:block block-list:abbreviated-name="badź" block-list:name="bądź"/>
+  <block-list:block block-list:abbreviated-name="badz" block-list:name="bądź"/>
+  <block-list:block block-list:abbreviated-name="bedę" block-list:name="będę"/>
+  <block-list:block block-list:abbreviated-name="bede" block-list:name="będę"/>
+  <block-list:block block-list:abbreviated-name="bedzie" block-list:name="będzie"/>
+  <block-list:block block-list:abbreviated-name="bedziecie" block-list:name="będziecie"/>
+  <block-list:block block-list:abbreviated-name="bedziemy" block-list:name="będziemy"/>
+  <block-list:block block-list:abbreviated-name="bedziesz" block-list:name="będziesz"/>
+  <block-list:block block-list:abbreviated-name="bieże" block-list:name="bierze"/>
+  <block-list:block block-list:abbreviated-name="biegnął" block-list:name="biegł"/>
+  <block-list:block block-list:abbreviated-name="biegnęła" block-list:name="biegła"/>
+  <block-list:block block-list:abbreviated-name="biegnęło" block-list:name="biegło"/>
+  <block-list:block block-list:abbreviated-name="biegnęli" block-list:name="biegli"/>
+  <block-list:block block-list:abbreviated-name="bierząco" block-list:name="bieżąco"/>
+  <block-list:block block-list:abbreviated-name="bieze" block-list:name="bierze"/>
+  <block-list:block block-list:abbreviated-name="biznes plan" block-list:name="biznesplan"/>
+  <block-list:block block-list:abbreviated-name="bratowi" block-list:name="bratu"/>
+  <block-list:block block-list:abbreviated-name="brożka" block-list:name="broszka"/>
+  <block-list:block block-list:abbreviated-name="brut" block-list:name="brud"/>
+  <block-list:block block-list:abbreviated-name="byc" block-list:name="być"/>
+  <block-list:block block-list:abbreviated-name="byl" block-list:name="był"/>
+  <block-list:block block-list:abbreviated-name="byla" block-list:name="była"/>
+  <block-list:block block-list:abbreviated-name="bylem" block-list:name="byłem"/>
+  <block-list:block block-list:abbreviated-name="byliscie" block-list:name="byliście"/>
+  <block-list:block block-list:abbreviated-name="bylismy" block-list:name="byliśmy"/>
+  <block-list:block block-list:abbreviated-name="bylo" block-list:name="było"/>
+  <block-list:block block-list:abbreviated-name="byly" block-list:name="były"/>
+  <block-list:block block-list:abbreviated-name="chłopcowi" block-list:name="chłopcu"/>
+  <block-list:block block-list:abbreviated-name="chłopowi" block-list:name="chłopu"/>
+  <block-list:block block-list:abbreviated-name="chart ducha" block-list:name="hart ducha"/>
+  <block-list:block block-list:abbreviated-name="chba" block-list:name="chyba"/>
+  <block-list:block block-list:abbreviated-name="chor" block-list:name="chór"/>
+  <block-list:block block-list:abbreviated-name="chyab" block-list:name="chyba"/>
+  <block-list:block block-list:abbreviated-name="cibie" block-list:name="ciebie"/>
+  <block-list:block block-list:abbreviated-name="co i róż" block-list:name="co rusz"/>
+  <block-list:block block-list:abbreviated-name="co nie co" block-list:name="co nieco"/>
+  <block-list:block block-list:abbreviated-name="co nie miara" block-list:name="co niemiara"/>
+  <block-list:block block-list:abbreviated-name="codzień" block-list:name="co dzień"/>
+  <block-list:block block-list:abbreviated-name="conajmniej" block-list:name="co najmniej"/>
+  <block-list:block block-list:abbreviated-name="coprawda" block-list:name="co prawda"/>
+  <block-list:block block-list:abbreviated-name="cudzysłowiu" block-list:name="cudzysłowie"/>
+  <block-list:block block-list:abbreviated-name="cudzysłowia" block-list:name="cudzysłowu"/>
+  <block-list:block block-list:abbreviated-name="częśc" block-list:name="część"/>
+  <block-list:block block-list:abbreviated-name="częsci" block-list:name="części"/>
+  <block-list:block block-list:abbreviated-name="czegos" block-list:name="czegoś"/>
+  <block-list:block block-list:abbreviated-name="czesc" block-list:name="część"/>
+  <block-list:block block-list:abbreviated-name="czesta" block-list:name="częsta"/>
+  <block-list:block block-list:abbreviated-name="czeste" block-list:name="częste"/>
+  <block-list:block block-list:abbreviated-name="czesto" block-list:name="często"/>
+  <block-list:block block-list:abbreviated-name="czesty" block-list:name="częsty"/>
+  <block-list:block block-list:abbreviated-name="czestych" block-list:name="częstych"/>
+  <block-list:block block-list:abbreviated-name="czyms" block-list:name="czymś"/>
+  <block-list:block block-list:abbreviated-name="dżwięk" block-list:name="dźwięk"/>
+  <block-list:block block-list:abbreviated-name="d/s" block-list:name="ds."/>
+  <block-list:block block-list:abbreviated-name="dla czego" block-list:name="dlaczego"/>
+  <block-list:block block-list:abbreviated-name="dla tego że" block-list:name="dlatego że"/>
+  <block-list:block block-list:abbreviated-name="dla tego żeby" block-list:name="dlatego żeby"/>
+  <block-list:block block-list:abbreviated-name="dlatego bo" block-list:name="bo"/>
+  <block-list:block block-list:abbreviated-name="do nie dawna" block-list:name="do niedawna"/>
+  <block-list:block block-list:abbreviated-name="do niech" block-list:name="do nich"/>
+  <block-list:block block-list:abbreviated-name="do okoła" block-list:name="dookoła"/>
+  <block-list:block block-list:abbreviated-name="do póki" block-list:name="dopóki"/>
+  <block-list:block block-list:abbreviated-name="do póty" block-list:name="dopóty"/>
+  <block-list:block block-list:abbreviated-name="do tych czas" block-list:name="dotychczas"/>
+  <block-list:block block-list:abbreviated-name="dobzre" block-list:name="dobrze"/>
+  <block-list:block block-list:abbreviated-name="doczynienia" block-list:name="do czynienia"/>
+  <block-list:block block-list:abbreviated-name="dokumnety" block-list:name="dokumenty"/>
+  <block-list:block block-list:abbreviated-name="domniemuję" block-list:name="domniemywam"/>
+  <block-list:block block-list:abbreviated-name="domniemuje" block-list:name="domniemywa"/>
+  <block-list:block block-list:abbreviated-name="domniemujesz" block-list:name="domniemywasz"/>
+  <block-list:block block-list:abbreviated-name="dosc" block-list:name="dość"/>
+  <block-list:block block-list:abbreviated-name="dosiego" block-list:name="do siego"/>
+  <block-list:block block-list:abbreviated-name="dostawają" block-list:name="dostają"/>
+  <block-list:block block-list:abbreviated-name="dostep" block-list:name="dostęp"/>
+  <block-list:block block-list:abbreviated-name="dosyc" block-list:name="dosyć"/>
+  <block-list:block block-list:abbreviated-name="dozowolone" block-list:name="dozwolone"/>
+  <block-list:block block-list:abbreviated-name="dróżba" block-list:name="drużba"/>
+  <block-list:block block-list:abbreviated-name="drzem" block-list:name="dżem"/>
+  <block-list:block block-list:abbreviated-name="drzemy" block-list:name="dżemy"/>
+  <block-list:block block-list:abbreviated-name="duł" block-list:name="dół"/>
+  <block-list:block block-list:abbreviated-name="duzo" block-list:name="dużo"/>
+  <block-list:block block-list:abbreviated-name="dwa kroć" block-list:name="dwakroć"/>
+  <block-list:block block-list:abbreviated-name="działac" block-list:name="działać"/>
+  <block-list:block block-list:abbreviated-name="dzieciami" block-list:name="dziećmi"/>
+  <block-list:block block-list:abbreviated-name="dzis" block-list:name="dziś"/>
+  <block-list:block block-list:abbreviated-name="dzisiej" block-list:name="dzisiaj"/>
+  <block-list:block block-list:abbreviated-name="dziubek" block-list:name="dzióbek"/>
+  <block-list:block block-list:abbreviated-name="dzwiek" block-list:name="dźwięk"/>
+  <block-list:block block-list:abbreviated-name="ecru" block-list:name="écru"/>
+  <block-list:block block-list:abbreviated-name="ejst" block-list:name="jest"/>
+  <block-list:block block-list:abbreviated-name="ekri" block-list:name="écru"/>
+  <block-list:block block-list:abbreviated-name="fekalii" block-list:name="fekaliów"/>
+  <block-list:block block-list:abbreviated-name="głownie" block-list:name="głównie"/>
+  <block-list:block block-list:abbreviated-name="głowny" block-list:name="główny"/>
+  <block-list:block block-list:abbreviated-name="gdyz" block-list:name="gdyż"/>
+  <block-list:block block-list:abbreviated-name="gdzie nie gdzie" block-list:name="gdzieniegdzie"/>
+  <block-list:block block-list:abbreviated-name="genitalii" block-list:name="genitaliów"/>
+  <block-list:block block-list:abbreviated-name="glos" block-list:name="głos"/>
+  <block-list:block block-list:abbreviated-name="hab" block-list:name="hab."/>
+  <block-list:block block-list:abbreviated-name="histori" block-list:name="historii"/>
+  <block-list:block block-list:abbreviated-name="hukło" block-list:name="huknęło"/>
+  <block-list:block block-list:abbreviated-name="imie" block-list:name="imię"/>
+  <block-list:block block-list:abbreviated-name="iloci" block-list:name="ilości"/>
+  <block-list:block block-list:abbreviated-name="informcje" block-list:name="informacje"/>
+  <block-list:block block-list:abbreviated-name="itd" block-list:name="itd."/>
+  <block-list:block block-list:abbreviated-name="itp" block-list:name="itp."/>
+  <block-list:block block-list:abbreviated-name="iwem" block-list:name="wiem"/>
+  <block-list:block block-list:abbreviated-name="j.w." block-list:name="jw."/>
+  <block-list:block block-list:abbreviated-name="jakąs" block-list:name="jakąś"/>
+  <block-list:block block-list:abbreviated-name="jakies" block-list:name="jakieś"/>
+  <block-list:block block-list:abbreviated-name="jakis" block-list:name="jakiś"/>
+  <block-list:block block-list:abbreviated-name="jescze" block-list:name="jeszcze"/>
+  <block-list:block block-list:abbreviated-name="jesli" block-list:name="jeśli"/>
+  <block-list:block block-list:abbreviated-name="jeszzce" block-list:name="jeszcze"/>
+  <block-list:block block-list:abbreviated-name="jezeli" block-list:name="jeżeli"/>
+  <block-list:block block-list:abbreviated-name="jezyk" block-list:name="język"/>
+  <block-list:block block-list:abbreviated-name="jezyka" block-list:name="języka"/>
+  <block-list:block block-list:abbreviated-name="jezyku" block-list:name="języku"/>
+  <block-list:block block-list:abbreviated-name="juz" block-list:name="już"/>
+  <block-list:block block-list:abbreviated-name="kórz" block-list:name="kurz"/>
+  <block-list:block block-list:abbreviated-name="k/" block-list:name="k."/>
+  <block-list:block block-list:abbreviated-name="kalumni" block-list:name="kalumnii"/>
+  <block-list:block block-list:abbreviated-name="kims" block-list:name="kimś"/>
+  <block-list:block block-list:abbreviated-name="klineta" block-list:name="klienta"/>
+  <block-list:block block-list:abbreviated-name="klinięcie" block-list:name="kliknięcie"/>
+  <block-list:block block-list:abbreviated-name="klinij" block-list:name="kliknij"/>
+  <block-list:block block-list:abbreviated-name="kocy" block-list:name="koców"/>
+  <block-list:block block-list:abbreviated-name="kogos" block-list:name="kogoś"/>
+  <block-list:block block-list:abbreviated-name="koleji" block-list:name="kolei"/>
+  <block-list:block block-list:abbreviated-name="książe" block-list:name="książę"/>
+  <block-list:block block-list:abbreviated-name="ksiązka" block-list:name="książka"/>
+  <block-list:block block-list:abbreviated-name="ktora" block-list:name="która"/>
+  <block-list:block block-list:abbreviated-name="ktore" block-list:name="które"/>
+  <block-list:block block-list:abbreviated-name="ktorego" block-list:name="którego"/>
+  <block-list:block block-list:abbreviated-name="ktorej" block-list:name="której"/>
+  <block-list:block block-list:abbreviated-name="ktory" block-list:name="który"/>
+  <block-list:block block-list:abbreviated-name="ktorych" block-list:name="których"/>
+  <block-list:block block-list:abbreviated-name="ktorzy" block-list:name="którzy"/>
+  <block-list:block block-list:abbreviated-name="leprze" block-list:name="lepsze"/>
+  <block-list:block block-list:abbreviated-name="lini" block-list:name="linii"/>
+  <block-list:block block-list:abbreviated-name="lubieć" block-list:name="lubić"/>
+  <block-list:block block-list:abbreviated-name="łać." block-list:name="łac."/>
+  <block-list:block block-list:abbreviated-name="łacznie" block-list:name="łącznie"/>
+  <block-list:block block-list:abbreviated-name="mógł by" block-list:name="mógłby"/>
+  <block-list:block block-list:abbreviated-name="m. in." block-list:name="m.in."/>
+  <block-list:block block-list:abbreviated-name="m.in" block-list:name="m.in."/>
+  <block-list:block block-list:abbreviated-name="mażę o" block-list:name="marzę o"/>
+  <block-list:block block-list:abbreviated-name="maił" block-list:name="miał"/>
+  <block-list:block block-list:abbreviated-name="mase" block-list:name="masę"/>
+  <block-list:block block-list:abbreviated-name="mass-media" block-list:name="mass media"/>
+  <block-list:block block-list:abbreviated-name="między czasie" block-list:name="międzyczasie"/>
+  <block-list:block block-list:abbreviated-name="miec" block-list:name="mieć"/>
+  <block-list:block block-list:abbreviated-name="miedzy" block-list:name="między"/>
+  <block-list:block block-list:abbreviated-name="miejsce zamieszania" block-list:name="miejsce zamieszkania"/>
+  <block-list:block block-list:abbreviated-name="milosc" block-list:name="miłość"/>
+  <block-list:block block-list:abbreviated-name="mimo, że" block-list:name="mimo że"/>
+  <block-list:block block-list:abbreviated-name="mimo, iż" block-list:name="mimo iż"/>
+  <block-list:block block-list:abbreviated-name="możnaby" block-list:name="można by"/>
+  <block-list:block block-list:abbreviated-name="mogła by" block-list:name="mogłaby"/>
+  <block-list:block block-list:abbreviated-name="moga" block-list:name="mogą"/>
+  <block-list:block block-list:abbreviated-name="moj" block-list:name="mój"/>
+  <block-list:block block-list:abbreviated-name="mowić" block-list:name="mówić"/>
+  <block-list:block block-list:abbreviated-name="mowic" block-list:name="mówić"/>
+  <block-list:block block-list:abbreviated-name="moze" block-list:name="może"/>
+  <block-list:block block-list:abbreviated-name="mozna" block-list:name="można"/>
+  <block-list:block block-list:abbreviated-name="moznaby" block-list:name="można by"/>
+  <block-list:block block-list:abbreviated-name="musza" block-list:name="muszą"/>
+  <block-list:block block-list:abbreviated-name="musze" block-list:name="muszę"/>
+  <block-list:block block-list:abbreviated-name="n/" block-list:name="n."/>
+  <block-list:block block-list:abbreviated-name="na dal" block-list:name="nadal"/>
+  <block-list:block block-list:abbreviated-name="na niech" block-list:name="na nich"/>
+  <block-list:block block-list:abbreviated-name="na poziome" block-list:name="na poziomie"/>
+  <block-list:block block-list:abbreviated-name="na prawdę" block-list:name="naprawdę"/>
+  <block-list:block block-list:abbreviated-name="na przeciw" block-list:name="naprzeciw"/>
+  <block-list:block block-list:abbreviated-name="na przeciwko" block-list:name="naprzeciwko"/>
+  <block-list:block block-list:abbreviated-name="na raz" block-list:name="naraz"/>
+  <block-list:block block-list:abbreviated-name="na tych miast" block-list:name="natychmiast"/>
+  <block-list:block block-list:abbreviated-name="na w pół" block-list:name="na wpół"/>
+  <block-list:block block-list:abbreviated-name="na wzajem" block-list:name="nawzajem"/>
+  <block-list:block block-list:abbreviated-name="nad zwyczaj" block-list:name="nadzwyczaj"/>
+  <block-list:block block-list:abbreviated-name="nadzieji" block-list:name="nadziei"/>
+  <block-list:block block-list:abbreviated-name="najczęsciej" block-list:name="najczęściej"/>
+  <block-list:block block-list:abbreviated-name="najwiecej" block-list:name="najwięcej"/>
+  <block-list:block block-list:abbreviated-name="nalezy" block-list:name="należy"/>
+  <block-list:block block-list:abbreviated-name="napewno" block-list:name="na pewno"/>
+  <block-list:block block-list:abbreviated-name="naprawde" block-list:name="naprawdę"/>
+  <block-list:block block-list:abbreviated-name="naprzemian" block-list:name="na przemian"/>
+  <block-list:block block-list:abbreviated-name="naprzykład" block-list:name="na przykład"/>
+  <block-list:block block-list:abbreviated-name="narazie" block-list:name="na razie"/>
+  <block-list:block block-list:abbreviated-name="nast" block-list:name="nast."/>
+  <block-list:block block-list:abbreviated-name="nastepna" block-list:name="następna"/>
+  <block-list:block block-list:abbreviated-name="nastepne" block-list:name="następne"/>
+  <block-list:block block-list:abbreviated-name="nastepni" block-list:name="następni"/>
+  <block-list:block block-list:abbreviated-name="nastepnie" block-list:name="następnie"/>
+  <block-list:block block-list:abbreviated-name="nastepny" block-list:name="następny"/>
+  <block-list:block block-list:abbreviated-name="nastepnych" block-list:name="następnych"/>
+  <block-list:block block-list:abbreviated-name="natomist" block-list:name="natomiast"/>
+  <block-list:block block-list:abbreviated-name="nei" block-list:name="nie"/>
+  <block-list:block block-list:abbreviated-name="nie musze" block-list:name="nie muszę"/>
+  <block-list:block block-list:abbreviated-name="nie omal" block-list:name="nieomal"/>
+  <block-list:block block-list:abbreviated-name="nie opodal" block-list:name="nieopodal"/>
+  <block-list:block block-list:abbreviated-name="niecałkiem" block-list:name="nie całkiem"/>
+  <block-list:block block-list:abbreviated-name="nielada" block-list:name="nie lada"/>
+  <block-list:block block-list:abbreviated-name="niema" block-list:name="nie ma"/>
+  <block-list:block block-list:abbreviated-name="niemożna" block-list:name="nie można"/>
+  <block-list:block block-list:abbreviated-name="nietylko" block-list:name="nie tylko"/>
+  <block-list:block block-list:abbreviated-name="niewolno" block-list:name="nie wolno"/>
+  <block-list:block block-list:abbreviated-name="niezawsze" block-list:name="nie zawsze"/>
+  <block-list:block block-list:abbreviated-name="niz" block-list:name="niż"/>
+  <block-list:block block-list:abbreviated-name="nmie" block-list:name="mnie"/>
+  <block-list:block block-list:abbreviated-name="np" block-list:name="np."/>
+  <block-list:block block-list:abbreviated-name="nr." block-list:name="nr"/>
+  <block-list:block block-list:abbreviated-name="o prócz" block-list:name="oprócz"/>
+  <block-list:block block-list:abbreviated-name="od niech" block-list:name="od nich"/>
+  <block-list:block block-list:abbreviated-name="odpowiedż" block-list:name="odpowiedź"/>
+  <block-list:block block-list:abbreviated-name="odrazu" block-list:name="od razu"/>
+  <block-list:block block-list:abbreviated-name="okres czasu" block-list:name="czas"/>
+  <block-list:block block-list:abbreviated-name="okresie czasu" block-list:name="czasie"/>
+  <block-list:block block-list:abbreviated-name="oprocz" block-list:name="oprócz"/>
+  <block-list:block block-list:abbreviated-name="organiźmie" block-list:name="organizmie"/>
+  <block-list:block block-list:abbreviated-name="orginalny" block-list:name="oryginalny"/>
+  <block-list:block block-list:abbreviated-name="osobą trzecim" block-list:name="osobom trzecim"/>
+  <block-list:block block-list:abbreviated-name="ot jest" block-list:name="to jest"/>
+  <block-list:block block-list:abbreviated-name="oto chodziło" block-list:name="o to chodziło"/>
+  <block-list:block block-list:abbreviated-name="oto chodzi" block-list:name="o to chodzi"/>
+  <block-list:block block-list:abbreviated-name="otrzymywac" block-list:name="otrzymywać"/>
+  <block-list:block block-list:abbreviated-name="póżniej" block-list:name="później"/>
+  <block-list:block block-list:abbreviated-name="p.n.e" block-list:name="p.n.e."/>
+  <block-list:block block-list:abbreviated-name="p.n.e.." block-list:name="p.n.e."/>
+  <block-list:block block-list:abbreviated-name="p.w." block-list:name="pw."/>
+  <block-list:block block-list:abbreviated-name="pażdziernik" block-list:name="październik"/>
+  <block-list:block block-list:abbreviated-name="pażdziernika" block-list:name="października"/>
+  <block-list:block block-list:abbreviated-name="pare" block-list:name="parę"/>
+  <block-list:block block-list:abbreviated-name="piatek" block-list:name="piątek"/>
+  <block-list:block block-list:abbreviated-name="pne" block-list:name="p.n.e."/>
+  <block-list:block block-list:abbreviated-name="pożądek" block-list:name="porządek"/>
+  <block-list:block block-list:abbreviated-name="pożądkiem" block-list:name="porządkiem"/>
+  <block-list:block block-list:abbreviated-name="pożądku" block-list:name="porządku"/>
+  <block-list:block block-list:abbreviated-name="po środku" block-list:name="pośrodku"/>
+  <block-list:block block-list:abbreviated-name="po kątem" block-list:name="pod kątem"/>
+  <block-list:block block-list:abbreviated-name="po między" block-list:name="pomiędzy"/>
+  <block-list:block block-list:abbreviated-name="po mimo" block-list:name="pomimo"/>
+  <block-list:block block-list:abbreviated-name="po nad" block-list:name="ponad"/>
+  <block-list:block block-list:abbreviated-name="po nadto" block-list:name="ponadto"/>
+  <block-list:block block-list:abbreviated-name="po pod" block-list:name="popod"/>
+  <block-list:block block-list:abbreviated-name="po porostu" block-list:name="po prostu"/>
+  <block-list:block block-list:abbreviated-name="po przez" block-list:name="poprzez"/>
+  <block-list:block block-list:abbreviated-name="po woli" block-list:name="powoli"/>
+  <block-list:block block-list:abbreviated-name="po za" block-list:name="poza"/>
+  <block-list:block block-list:abbreviated-name="pobież" block-list:name="pobierz"/>
+  <block-list:block block-list:abbreviated-name="poczatku" block-list:name="początku"/>
+  <block-list:block block-list:abbreviated-name="poczym" block-list:name="po czym"/>
+  <block-list:block block-list:abbreviated-name="pod katem" block-list:name="pod kątem"/>
+  <block-list:block block-list:abbreviated-name="podczas, gdy" block-list:name="podczas gdy"/>
+  <block-list:block block-list:abbreviated-name="pojecie" block-list:name="pojęcie"/>
+  <block-list:block block-list:abbreviated-name="pojedyńcza" block-list:name="pojedyncza"/>
+  <block-list:block block-list:abbreviated-name="pojedyńcze" block-list:name="pojedyncze"/>
+  <block-list:block block-list:abbreviated-name="pojedyńczego" block-list:name="pojedynczego"/>
+  <block-list:block block-list:abbreviated-name="pojedyńczej" block-list:name="pojedynczej"/>
+  <block-list:block block-list:abbreviated-name="pojedyńczy" block-list:name="pojedynczy"/>
+  <block-list:block block-list:abbreviated-name="pojedyńczych" block-list:name="pojedynczych"/>
+  <block-list:block block-list:abbreviated-name="pokarz" block-list:name="pokaż"/>
+  <block-list:block block-list:abbreviated-name="pokolei" block-list:name="po kolei"/>
+  <block-list:block block-list:abbreviated-name="pokryjomu" block-list:name="po kryjomu"/>
+  <block-list:block block-list:abbreviated-name="pokuj" block-list:name="pokój"/>
+  <block-list:block block-list:abbreviated-name="pomimo, że" block-list:name="pomimo że"/>
+  <block-list:block block-list:abbreviated-name="pomimo, iż" block-list:name="pomimo iż"/>
+  <block-list:block block-list:abbreviated-name="ponad to" block-list:name="ponadto"/>
+  <block-list:block block-list:abbreviated-name="poniewaz" block-list:name="ponieważ"/>
+  <block-list:block block-list:abbreviated-name="poprostu" block-list:name="po prostu"/>
+  <block-list:block block-list:abbreviated-name="porzadek" block-list:name="porządek"/>
+  <block-list:block block-list:abbreviated-name="posiadaja" block-list:name="posiadają"/>
+  <block-list:block block-list:abbreviated-name="posrod" block-list:name="pośród"/>
+  <block-list:block block-list:abbreviated-name="poszłem" block-list:name="poszedłem"/>
+  <block-list:block block-list:abbreviated-name="pot wpływem" block-list:name="pod wpływem"/>
+  <block-list:block block-list:abbreviated-name="pozatym" block-list:name="poza tym"/>
+  <block-list:block block-list:abbreviated-name="prez" block-list:name="przez"/>
+  <block-list:block block-list:abbreviated-name="prof" block-list:name="prof."/>
+  <block-list:block block-list:abbreviated-name="prosba" block-list:name="prośba"/>
+  <block-list:block block-list:abbreviated-name="prosze" block-list:name="proszę"/>
+  <block-list:block block-list:abbreviated-name="prpopzucja" block-list:name="propozycja"/>
+  <block-list:block block-list:abbreviated-name="pryz" block-list:name="przy"/>
+  <block-list:block block-list:abbreviated-name="przecierz" block-list:name="przecież"/>
+  <block-list:block block-list:abbreviated-name="przed pokój" block-list:name="przedpokój"/>
+  <block-list:block block-list:abbreviated-name="przed wczoraj" block-list:name="przedwczoraj"/>
+  <block-list:block block-list:abbreviated-name="przede dniu" block-list:name="przededniu"/>
+  <block-list:block block-list:abbreviated-name="przedewszystkim" block-list:name="przede wszystkim"/>
+  <block-list:block block-list:abbreviated-name="przekonywujący" block-list:name=" przekonywający"/>
+  <block-list:block block-list:abbreviated-name="przyjażń" block-list:name="przyjaźń"/>
+  <block-list:block block-list:abbreviated-name="przyklad" block-list:name="przykład"/>
+  <block-list:block block-list:abbreviated-name="pzrez" block-list:name="przez"/>
+  <block-list:block block-list:abbreviated-name="rónież" block-list:name="również"/>
+  <block-list:block block-list:abbreviated-name="równierz" block-list:name="również"/>
+  <block-list:block block-list:abbreviated-name="równiez" block-list:name="również"/>
+  <block-list:block block-list:abbreviated-name="rąby" block-list:name="romby"/>
+  <block-list:block block-list:abbreviated-name="raz wraz" block-list:name="raz w raz"/>
+  <block-list:block block-list:abbreviated-name="rożno" block-list:name="rożen"/>
+  <block-list:block block-list:abbreviated-name="rownież" block-list:name="również"/>
+  <block-list:block block-list:abbreviated-name="rowniez" block-list:name="również"/>
+  <block-list:block block-list:abbreviated-name="rozumię" block-list:name="rozumiem"/>
+  <block-list:block block-list:abbreviated-name="rozwoj" block-list:name="rozwój"/>
+  <block-list:block block-list:abbreviated-name="rządana" block-list:name="żądana"/>
+  <block-list:block block-list:abbreviated-name="rządane" block-list:name="żądane"/>
+  <block-list:block block-list:abbreviated-name="rządania" block-list:name="żądania"/>
+  <block-list:block block-list:abbreviated-name="rządanie" block-list:name="żądanie"/>
+  <block-list:block block-list:abbreviated-name="rządany" block-list:name="żądany"/>
+  <block-list:block block-list:abbreviated-name="rzeczywiscie" block-list:name="rzeczywiście"/>
+  <block-list:block block-list:abbreviated-name="sa" block-list:name="są"/>
+  <block-list:block block-list:abbreviated-name="samochod" block-list:name="samochód"/>
+  <block-list:block block-list:abbreviated-name="sciśle" block-list:name="ściśle"/>
+  <block-list:block block-list:abbreviated-name="sei" block-list:name="się"/>
+  <block-list:block block-list:abbreviated-name="sie" block-list:name="się"/>
+  <block-list:block block-list:abbreviated-name="sierpien" block-list:name="sierpień"/>
+  <block-list:block block-list:abbreviated-name="sklada" block-list:name="składa"/>
+  <block-list:block block-list:abbreviated-name="skladają" block-list:name="składają"/>
+  <block-list:block block-list:abbreviated-name="skladaja" block-list:name="składają"/>
+  <block-list:block block-list:abbreviated-name="skladano" block-list:name="składano"/>
+  <block-list:block block-list:abbreviated-name="sp-nia" block-list:name="spółdz."/>
+  <block-list:block block-list:abbreviated-name="spowrotem" block-list:name="z powrotem"/>
+  <block-list:block block-list:abbreviated-name="standart" block-list:name="standard"/>
+  <block-list:block block-list:abbreviated-name="styli" block-list:name="stylów"/>
+  <block-list:block block-list:abbreviated-name="struj" block-list:name="strój"/>
+  <block-list:block block-list:abbreviated-name="styczen" block-list:name="styczeń"/>
+  <block-list:block block-list:abbreviated-name="sytem" block-list:name="system"/>
+  <block-list:block block-list:abbreviated-name="sytemie" block-list:name="systemie"/>
+  <block-list:block block-list:abbreviated-name="sytemu" block-list:name="systemu"/>
+  <block-list:block block-list:abbreviated-name="tak na prawdę" block-list:name="tak naprawdę"/>
+  <block-list:block block-list:abbreviated-name="takze" block-list:name="także"/>
+  <block-list:block block-list:abbreviated-name="tam tędy" block-list:name="tamtędy"/>
+  <block-list:block block-list:abbreviated-name="tournee" block-list:name="tournée"/>
+  <block-list:block block-list:abbreviated-name="trzcionka" block-list:name="czcionka"/>
+  <block-list:block block-list:abbreviated-name="trzy kroć" block-list:name="trzykroć"/>
+  <block-list:block block-list:abbreviated-name="tu dzież" block-list:name="tudzież"/>
+  <block-list:block block-list:abbreviated-name="twoj" block-list:name="twój"/>
+  <block-list:block block-list:abbreviated-name="tyś." block-list:name="tys."/>
+  <block-list:block block-list:abbreviated-name="tym czasem" block-list:name="tymczasem"/>
+  <block-list:block block-list:abbreviated-name="tzreba" block-list:name="trzeba"/>
+  <block-list:block block-list:abbreviated-name="umię" block-list:name="umiem"/>
+  <block-list:block block-list:abbreviated-name="v-ce" block-list:name="wice"/>
+  <block-list:block block-list:abbreviated-name="vzęsto" block-list:name="często"/>
+  <block-list:block block-list:abbreviated-name="własnie" block-list:name="właśnie"/>
+  <block-list:block block-list:abbreviated-name="w śród" block-list:name="wśród"/>
+  <block-list:block block-list:abbreviated-name="w brew" block-list:name="wbrew"/>
+  <block-list:block block-list:abbreviated-name="w cale" block-list:name="wcale"/>
+  <block-list:block block-list:abbreviated-name="w jak sposób" block-list:name="w jaki sposób"/>
+  <block-list:block block-list:abbreviated-name="w koło" block-list:name="wkoło"/>
+  <block-list:block block-list:abbreviated-name="w krótce" block-list:name="wkrótce"/>
+  <block-list:block block-list:abbreviated-name="w linię" block-list:name="w linie"/>
+  <block-list:block block-list:abbreviated-name="w między czasie" block-list:name="w międzyczasie"/>
+  <block-list:block block-list:abbreviated-name="w niwecz" block-list:name="wniwecz"/>
+  <block-list:block block-list:abbreviated-name="w odróżnieniu do" block-list:name="w odróżnieniu od"/>
+  <block-list:block block-list:abbreviated-name="w ogule" block-list:name="w ogóle"/>
+  <block-list:block block-list:abbreviated-name="w okół" block-list:name="wokół"/>
+  <block-list:block block-list:abbreviated-name="w oka mgnieniu" block-list:name="w okamgnieniu"/>
+  <block-list:block block-list:abbreviated-name="w pół do" block-list:name="wpół do"/>
+  <block-list:block block-list:abbreviated-name="w pław" block-list:name="wpław"/>
+  <block-list:block block-list:abbreviated-name="w pośród" block-list:name="wpośród"/>
+  <block-list:block block-list:abbreviated-name="w przeciwieństwie od" block-list:name="w przeciwieństwie do"/>
+  <block-list:block block-list:abbreviated-name="w raz z" block-list:name="wraz z"/>
+  <block-list:block block-list:abbreviated-name="w skutek" block-list:name="wskutek"/>
+  <block-list:block block-list:abbreviated-name="w tak sposób" block-list:name="w taki sposób"/>
+  <block-list:block block-list:abbreviated-name="w tedy" block-list:name="wtedy"/>
+  <block-list:block block-list:abbreviated-name="w/g" block-list:name="wg"/>
+  <block-list:block block-list:abbreviated-name="warzy" block-list:name="waży"/>
+  <block-list:block block-list:abbreviated-name="wciaż" block-list:name="wciąż"/>
+  <block-list:block block-list:abbreviated-name="wciaz" block-list:name="wciąż"/>
+  <block-list:block block-list:abbreviated-name="wedlug" block-list:name="według"/>
+  <block-list:block block-list:abbreviated-name="wgłąb" block-list:name="w głąb"/>
+  <block-list:block block-list:abbreviated-name="wg." block-list:name="wg"/>
+  <block-list:block block-list:abbreviated-name="wieżę w" block-list:name="wierzę w"/>
+  <block-list:block block-list:abbreviated-name="wieży w" block-list:name="wierzy w"/>
+  <block-list:block block-list:abbreviated-name="wiec" block-list:name="więc"/>
+  <block-list:block block-list:abbreviated-name="wiecej" block-list:name="więcej"/>
+  <block-list:block block-list:abbreviated-name="wiedze" block-list:name="wiedzę"/>
+  <block-list:block block-list:abbreviated-name="wiekszą" block-list:name="większą"/>
+  <block-list:block block-list:abbreviated-name="wieksze" block-list:name="większe"/>
+  <block-list:block block-list:abbreviated-name="wiekszego" block-list:name="większego"/>
+  <block-list:block block-list:abbreviated-name="wiekszej" block-list:name="większej"/>
+  <block-list:block block-list:abbreviated-name="wiekszość" block-list:name="większość"/>
+  <block-list:block block-list:abbreviated-name="wiekszośc" block-list:name="większość"/>
+  <block-list:block block-list:abbreviated-name="wiekszości" block-list:name="większości"/>
+  <block-list:block block-list:abbreviated-name="wiekszosc" block-list:name="większość"/>
+  <block-list:block block-list:abbreviated-name="wiekszosci" block-list:name="większości"/>
+  <block-list:block block-list:abbreviated-name="wiekszy" block-list:name="większy"/>
+  <block-list:block block-list:abbreviated-name="wiekszych" block-list:name="większych"/>
+  <block-list:block block-list:abbreviated-name="wiekszym" block-list:name="większym"/>
+  <block-list:block block-list:abbreviated-name="wiekszymi" block-list:name="większymi"/>
+  <block-list:block block-list:abbreviated-name="wiele kroć" block-list:name="wielekroć"/>
+  <block-list:block block-list:abbreviated-name="wkoło Macieju" block-list:name="w koło Macieju"/>
+  <block-list:block block-list:abbreviated-name="wlasciwosci" block-list:name="właściwości"/>
+  <block-list:block block-list:abbreviated-name="wlasnie" block-list:name="właśnie"/>
+  <block-list:block block-list:abbreviated-name="wogóle" block-list:name="w ogóle"/>
+  <block-list:block block-list:abbreviated-name="wogle" block-list:name="w ogóle"/>
+  <block-list:block block-list:abbreviated-name="wogule" block-list:name="w ogóle"/>
+  <block-list:block block-list:abbreviated-name="wokol" block-list:name="wokół"/>
+  <block-list:block block-list:abbreviated-name="wowczas" block-list:name="wówczas"/>
+  <block-list:block block-list:abbreviated-name="wplyw" block-list:name="wpływ"/>
+  <block-list:block block-list:abbreviated-name="wraz tym" block-list:name="wraz z tym"/>
+  <block-list:block block-list:abbreviated-name="wrzesnia" block-list:name="września"/>
+  <block-list:block block-list:abbreviated-name="wspomieć" block-list:name="wspomnieć"/>
+  <block-list:block block-list:abbreviated-name="wsród" block-list:name="wśród"/>
+  <block-list:block block-list:abbreviated-name="wszech obecny" block-list:name="wszechobecny"/>
+  <block-list:block block-list:abbreviated-name="wszechczasów" block-list:name="wszech czasów"/>
+  <block-list:block block-list:abbreviated-name="wszytkich" block-list:name="wszystkich"/>
+  <block-list:block block-list:abbreviated-name="wszytkie" block-list:name="wszystkie"/>
+  <block-list:block block-list:abbreviated-name="wszytkim" block-list:name="wszystkim"/>
+  <block-list:block block-list:abbreviated-name="wszytko" block-list:name="wszystko"/>
+  <block-list:block block-list:abbreviated-name="wszytskich" block-list:name="wszystkich"/>
+  <block-list:block block-list:abbreviated-name="wszytskie" block-list:name="wszystkie"/>
+  <block-list:block block-list:abbreviated-name="wszytskim" block-list:name="wszystkim"/>
+  <block-list:block block-list:abbreviated-name="wszytsko" block-list:name="wszystko"/>
+  <block-list:block block-list:abbreviated-name="wyłacznie" block-list:name="wyłącznie"/>
+  <block-list:block block-list:abbreviated-name="wymyśleć" block-list:name="wymyślić"/>
+  <block-list:block block-list:abbreviated-name="wywolana" block-list:name="wywołana"/>
+  <block-list:block block-list:abbreviated-name="wywolane" block-list:name="wywołane"/>
+  <block-list:block block-list:abbreviated-name="wzamian" block-list:name="w zamian"/>
+  <block-list:block block-list:abbreviated-name="wzdłóż" block-list:name="wzdłuż"/>
+  <block-list:block block-list:abbreviated-name="wzgledu" block-list:name="względu"/>
+  <block-list:block block-list:abbreviated-name="wziąść" block-list:name="wziąć"/>
+  <block-list:block block-list:abbreviated-name="wziąźć" block-list:name="wziąć"/>
+  <block-list:block block-list:abbreviated-name="wzięłem" block-list:name="wziąłem"/>
+  <block-list:block block-list:abbreviated-name="wzystko" block-list:name="wszystko"/>
+  <block-list:block block-list:abbreviated-name="z dużej litery" block-list:name="dużą literą"/>
+  <block-list:block block-list:abbreviated-name="z goła" block-list:name="zgoła"/>
+  <block-list:block block-list:abbreviated-name="z małej litery" block-list:name="małą literą"/>
+  <block-list:block block-list:abbreviated-name="z nad" block-list:name="znad"/>
+  <block-list:block block-list:abbreviated-name="z niech" block-list:name="z nich"/>
+  <block-list:block block-list:abbreviated-name="z pośród" block-list:name="spośród"/>
+  <block-list:block block-list:abbreviated-name="z po między" block-list:name="spomiędzy"/>
+  <block-list:block block-list:abbreviated-name="z pod" block-list:name="spod"/>
+  <block-list:block block-list:abbreviated-name="z pomiędzy" block-list:name="spomiędzy"/>
+  <block-list:block block-list:abbreviated-name="z powody" block-list:name="z powodu itp."/>
+  <block-list:block block-list:abbreviated-name="z powody" block-list:name="z powodu"/>
+  <block-list:block block-list:abbreviated-name="z poza" block-list:name="spoza"/>
+  <block-list:block block-list:abbreviated-name="z przed" block-list:name="sprzed"/>
+  <block-list:block block-list:abbreviated-name="z resztą" block-list:name="zresztą"/>
+  <block-list:block block-list:abbreviated-name="z wielkiej litery" block-list:name="wielką literą"/>
+  <block-list:block block-list:abbreviated-name="z za" block-list:name="zza"/>
+  <block-list:block block-list:abbreviated-name="za miast" block-list:name="zamiast"/>
+  <block-list:block block-list:abbreviated-name="za nad to" block-list:name="zanadto"/>
+  <block-list:block block-list:abbreviated-name="za nadto" block-list:name="zanadto"/>
+  <block-list:block block-list:abbreviated-name="za równo" block-list:name="zarówno"/>
+  <block-list:block block-list:abbreviated-name="za raz" block-list:name="zaraz"/>
+  <block-list:block block-list:abbreviated-name="za zwyczaj" block-list:name="zazwyczaj"/>
+  <block-list:block block-list:abbreviated-name="zaden" block-list:name="żaden"/>
+  <block-list:block block-list:abbreviated-name="zdechnął" block-list:name="zdechł"/>
+  <block-list:block block-list:abbreviated-name="zemną" block-list:name="ze mną"/>
+  <block-list:block block-list:abbreviated-name="ziemii" block-list:name="ziemi"/>
+  <block-list:block block-list:abbreviated-name="znaleść" block-list:name="znaleźć"/>
+  <block-list:block block-list:abbreviated-name="znowóż" block-list:name="znowuż"/>
+  <block-list:block block-list:abbreviated-name="zostal" block-list:name="został"/>
+  <block-list:block block-list:abbreviated-name="zpoza" block-list:name="spoza"/>
+  <block-list:block block-list:abbreviated-name="zwiazek" block-list:name="związek"/>
+  <block-list:block block-list:abbreviated-name="zwiazku" block-list:name="związku"/>
+  <block-list:block block-list:abbreviated-name="zwlaszcza" block-list:name="zwłaszcza"/>
+  <block-list:block block-list:abbreviated-name="zycie" block-list:name="życie"/>
+  <block-list:block block-list:abbreviated-name="żadaj" block-list:name="żądaj"/>
+  <block-list:block block-list:abbreviated-name="żadko" block-list:name="rzadko"/>
+  <block-list:block block-list:abbreviated-name="żle" block-list:name="źle"/>
+  <block-list:block block-list:abbreviated-name="żródło" block-list:name="źródło"/>
+  <block-list:block block-list:abbreviated-name="1/2" block-list:name="½"/>
+  <block-list:block block-list:abbreviated-name="1/4" block-list:name="¼"/>
+  <block-list:block block-list:abbreviated-name="3/4" block-list:name="¾"/>
+</block-list:block-list>

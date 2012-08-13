@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<block-list:block-list xmlns:block-list="http://openoffice.org/2001/block-list">
+  <block-list:block block-list:abbreviated-name="GHz"/>
+  <block-list:block block-list:abbreviated-name="MHz"/>
+  <block-list:block block-list:abbreviated-name="OOo"/>
+  <block-list:block block-list:abbreviated-name="THz"/>
+</block-list:block-list>

@@ -1,0 +1,818 @@
+<?xml version="1.0" encoding="utf-8"?>
+<block-list:block-list xmlns:block-list="http://openoffice.org/2001/block-list">
+  <block-list:block block-list:abbreviated-name=".5" block-list:name="½"/>
+  <block-list:block block-list:abbreviated-name="(C)" block-list:name="©"/>
+  <block-list:block block-list:abbreviated-name="(R)" block-list:name="®"/>
+  <block-list:block block-list:abbreviated-name="1/2" block-list:name="½"/>
+  <block-list:block block-list:abbreviated-name="1/4" block-list:name="¼"/>
+  <block-list:block block-list:abbreviated-name="3/4" block-list:name="¾"/>
+  <block-list:block block-list:abbreviated-name="abbout" block-list:name="about"/>
+  <block-list:block block-list:abbreviated-name="abotu" block-list:name="about"/>
+  <block-list:block block-list:abbreviated-name="abouta" block-list:name="about a"/>
+  <block-list:block block-list:abbreviated-name="aboutit" block-list:name="about it"/>
+  <block-list:block block-list:abbreviated-name="abscence" block-list:name="absence"/>
+  <block-list:block block-list:abbreviated-name="accesories" block-list:name="accessories"/>
+  <block-list:block block-list:abbreviated-name="accidant" block-list:name="accident"/>
+  <block-list:block block-list:abbreviated-name="accomodate" block-list:name="accommodate"/>
+  <block-list:block block-list:abbreviated-name="accordingto" block-list:name="according to"/>
+  <block-list:block block-list:abbreviated-name="accross" block-list:name="across"/>
+  <block-list:block block-list:abbreviated-name="acheive" block-list:name="achieve"/>
+  <block-list:block block-list:abbreviated-name="acheived" block-list:name="achieved"/>
+  <block-list:block block-list:abbreviated-name="acheiving" block-list:name="achieving"/>
+  <block-list:block block-list:abbreviated-name="acn" block-list:name="can"/>
+  <block-list:block block-list:abbreviated-name="acommodate" block-list:name="accommodate"/>
+  <block-list:block block-list:abbreviated-name="acomodate" block-list:name="accommodate"/>
+  <block-list:block block-list:abbreviated-name="actualyl" block-list:name="actually"/>
+  <block-list:block block-list:abbreviated-name="additinal" block-list:name="additional"/>
+  <block-list:block block-list:abbreviated-name="addtional" block-list:name="additional"/>
+  <block-list:block block-list:abbreviated-name="adequit" block-list:name="adequate"/>
+  <block-list:block block-list:abbreviated-name="adequite" block-list:name="adequate"/>
+  <block-list:block block-list:abbreviated-name="adn" block-list:name="and"/>
+  <block-list:block block-list:abbreviated-name="advanage" block-list:name="advantage"/>
+  <block-list:block block-list:abbreviated-name="affraid" block-list:name="afraid"/>
+  <block-list:block block-list:abbreviated-name="afterthe" block-list:name="after the"/>
+  <block-list:block block-list:abbreviated-name="againstt he" block-list:name="against the"/>
+  <block-list:block block-list:abbreviated-name="aggresive" block-list:name="aggressive"/>
+  <block-list:block block-list:abbreviated-name="agian" block-list:name="again"/>
+  <block-list:block block-list:abbreviated-name="agreemeent" block-list:name="agreement"/>
+  <block-list:block block-list:abbreviated-name="agreemeents" block-list:name="agreements"/>
+  <block-list:block block-list:abbreviated-name="agreemnet" block-list:name="agreement"/>
+  <block-list:block block-list:abbreviated-name="agreemnets" block-list:name="agreements"/>
+  <block-list:block block-list:abbreviated-name="agressive" block-list:name="aggressive"/>
+  <block-list:block block-list:abbreviated-name="ahppen" block-list:name="happen"/>
+  <block-list:block block-list:abbreviated-name="ahve" block-list:name="have"/>
+  <block-list:block block-list:abbreviated-name="allready" block-list:name="already"/>
+  <block-list:block block-list:abbreviated-name="allwasy" block-list:name="always"/>
+  <block-list:block block-list:abbreviated-name="allwyas" block-list:name="always"/>
+  <block-list:block block-list:abbreviated-name="almots" block-list:name="almost"/>
+  <block-list:block block-list:abbreviated-name="almsot" block-list:name="almost"/>
+  <block-list:block block-list:abbreviated-name="alomst" block-list:name="almost"/>
+  <block-list:block block-list:abbreviated-name="alot" block-list:name="a lot"/>
+  <block-list:block block-list:abbreviated-name="alraedy" block-list:name="already"/>
+  <block-list:block block-list:abbreviated-name="alreayd" block-list:name="already"/>
+  <block-list:block block-list:abbreviated-name="alreday" block-list:name="already"/>
+  <block-list:block block-list:abbreviated-name="alwasy" block-list:name="always"/>
+  <block-list:block block-list:abbreviated-name="alwats" block-list:name="always"/>
+  <block-list:block block-list:abbreviated-name="alway" block-list:name="always"/>
+  <block-list:block block-list:abbreviated-name="alwyas" block-list:name="always"/>
+  <block-list:block block-list:abbreviated-name="amde" block-list:name="made"/>
+  <block-list:block block-list:abbreviated-name="Ameria" block-list:name="America"/>
+  <block-list:block block-list:abbreviated-name="amke" block-list:name="make"/>
+  <block-list:block block-list:abbreviated-name="amkes" block-list:name="makes"/>
+  <block-list:block block-list:abbreviated-name="anbd" block-list:name="and"/>
+  <block-list:block block-list:abbreviated-name="andone" block-list:name="and one"/>
+  <block-list:block block-list:abbreviated-name="andteh" block-list:name="and the"/>
+  <block-list:block block-list:abbreviated-name="andthe" block-list:name="and the"/>
+  <block-list:block block-list:abbreviated-name="andt he" block-list:name="and the"/>
+  <block-list:block block-list:abbreviated-name="anothe" block-list:name="another"/>
+  <block-list:block block-list:abbreviated-name="anual" block-list:name="annual"/>
+  <block-list:block block-list:abbreviated-name="apparant" block-list:name="apparent"/>
+  <block-list:block block-list:abbreviated-name="apparrent" block-list:name="apparent"/>
+  <block-list:block block-list:abbreviated-name="appearence" block-list:name="appearance"/>
+  <block-list:block block-list:abbreviated-name="appeares" block-list:name="appears"/>
+  <block-list:block block-list:abbreviated-name="applicaiton" block-list:name="application"/>
+  <block-list:block block-list:abbreviated-name="applicaitons" block-list:name="applications"/>
+  <block-list:block block-list:abbreviated-name="applyed" block-list:name="applied"/>
+  <block-list:block block-list:abbreviated-name="appointiment" block-list:name="appointment"/>
+  <block-list:block block-list:abbreviated-name="approrpiate" block-list:name="appropriate"/>
+  <block-list:block block-list:abbreviated-name="approrpriate" block-list:name="appropriate"/>
+  <block-list:block block-list:abbreviated-name="aquisition" block-list:name="acquisition"/>
+  <block-list:block block-list:abbreviated-name="aquisitions" block-list:name="acquisitions"/>
+  <block-list:block block-list:abbreviated-name="arguement" block-list:name="argument"/>
+  <block-list:block block-list:abbreviated-name="arguements" block-list:name="arguments"/>
+  <block-list:block block-list:abbreviated-name="arond" block-list:name="around"/>
+  <block-list:block block-list:abbreviated-name="artical" block-list:name="article"/>
+  <block-list:block block-list:abbreviated-name="articel" block-list:name="article"/>
+  <block-list:block block-list:abbreviated-name="asdvertising" block-list:name="advertising"/>
+  <block-list:block block-list:abbreviated-name="askt he" block-list:name="ask the"/>
+  <block-list:block block-list:abbreviated-name="atention" block-list:name="attention"/>
+  <block-list:block block-list:abbreviated-name="atmospher" block-list:name="atmosphere"/>
+  <block-list:block block-list:abbreviated-name="attentioin" block-list:name="attention"/>
+  <block-list:block block-list:abbreviated-name="atthe" block-list:name="at the"/>
+  <block-list:block block-list:abbreviated-name="audeince" block-list:name="audience"/>
+  <block-list:block block-list:abbreviated-name="audiance" block-list:name="audience"/>
+  <block-list:block block-list:abbreviated-name="availalbe" block-list:name="available"/>
+  <block-list:block block-list:abbreviated-name="awya" block-list:name="away"/>
+  <block-list:block block-list:abbreviated-name="aywa" block-list:name="away"/>
+  <block-list:block block-list:abbreviated-name="bakc" block-list:name="back"/>
+  <block-list:block block-list:abbreviated-name="balence" block-list:name="balance"/>
+  <block-list:block block-list:abbreviated-name="ballance" block-list:name="balance"/>
+  <block-list:block block-list:abbreviated-name="baout" block-list:name="about"/>
+  <block-list:block block-list:abbreviated-name="bcak" block-list:name="back"/>
+  <block-list:block block-list:abbreviated-name="beacuse" block-list:name="because"/>
+  <block-list:block block-list:abbreviated-name="becasue" block-list:name="because"/>
+  <block-list:block block-list:abbreviated-name="becaus" block-list:name="because"/>
+  <block-list:block block-list:abbreviated-name="becausea" block-list:name="because a"/>
+  <block-list:block block-list:abbreviated-name="becauseof" block-list:name="because of"/>
+  <block-list:block block-list:abbreviated-name="becausethe" block-list:name="because the"/>
+  <block-list:block block-list:abbreviated-name="becauseyou" block-list:name="because you"/>
+  <block-list:block block-list:abbreviated-name="becomeing" block-list:name="becoming"/>
+  <block-list:block block-list:abbreviated-name="becomming" block-list:name="becoming"/>
+  <block-list:block block-list:abbreviated-name="becuase" block-list:name="because"/>
+  <block-list:block block-list:abbreviated-name="becuse" block-list:name="because"/>
+  <block-list:block block-list:abbreviated-name="befoer" block-list:name="before"/>
+  <block-list:block block-list:abbreviated-name="beggining" block-list:name="beginning"/>
+  <block-list:block block-list:abbreviated-name="begining" block-list:name="beginning"/>
+  <block-list:block block-list:abbreviated-name="beginining" block-list:name="beginning"/>
+  <block-list:block block-list:abbreviated-name="beleiev" block-list:name="believe"/>
+  <block-list:block block-list:abbreviated-name="beleieve" block-list:name="believe"/>
+  <block-list:block block-list:abbreviated-name="beleif" block-list:name="belief"/>
+  <block-list:block block-list:abbreviated-name="beleive" block-list:name="believe"/>
+  <block-list:block block-list:abbreviated-name="beleived" block-list:name="believed"/>
+  <block-list:block block-list:abbreviated-name="beleives" block-list:name="believes"/>
+  <block-list:block block-list:abbreviated-name="benifit" block-list:name="benefit"/>
+  <block-list:block block-list:abbreviated-name="benifits" block-list:name="benefits"/>
+  <block-list:block block-list:abbreviated-name="betwen" block-list:name="between"/>
+  <block-list:block block-list:abbreviated-name="beutiful" block-list:name="beautiful"/>
+  <block-list:block block-list:abbreviated-name="blase" block-list:name="blasé"/>
+  <block-list:block block-list:abbreviated-name="boxs" block-list:name="boxes"/>
+  <block-list:block block-list:abbreviated-name="brodcast" block-list:name="broadcast"/>
+  <block-list:block block-list:abbreviated-name="butthe" block-list:name="but the"/>
+  <block-list:block block-list:abbreviated-name="bve" block-list:name="be"/>
+  <block-list:block block-list:abbreviated-name="byt he" block-list:name="by the"/>
+  <block-list:block block-list:abbreviated-name="caharcter" block-list:name="character"/>
+  <block-list:block block-list:abbreviated-name="calcullated" block-list:name="calculated"/>
+  <block-list:block block-list:abbreviated-name="calulated" block-list:name="calculated"/>
+  <block-list:block block-list:abbreviated-name="candidtae" block-list:name="candidate"/>
+  <block-list:block block-list:abbreviated-name="candidtaes" block-list:name="candidates"/>
+  <block-list:block block-list:abbreviated-name="catagory" block-list:name="category"/>
+  <block-list:block block-list:abbreviated-name="categiory" block-list:name="category"/>
+  <block-list:block block-list:abbreviated-name="certian" block-list:name="certain"/>
+  <block-list:block block-list:abbreviated-name="challange" block-list:name="challenge"/>
+  <block-list:block block-list:abbreviated-name="challanges" block-list:name="challenges"/>
+  <block-list:block block-list:abbreviated-name="chaneg" block-list:name="change"/>
+  <block-list:block block-list:abbreviated-name="chanegs" block-list:name="changes"/>
+  <block-list:block block-list:abbreviated-name="changable" block-list:name="changeable"/>
+  <block-list:block block-list:abbreviated-name="changeing" block-list:name="changing"/>
+  <block-list:block block-list:abbreviated-name="changng" block-list:name="changing"/>
+  <block-list:block block-list:abbreviated-name="charachter" block-list:name="character"/>
+  <block-list:block block-list:abbreviated-name="charachters" block-list:name="characters"/>
+  <block-list:block block-list:abbreviated-name="charactor" block-list:name="character"/>
+  <block-list:block block-list:abbreviated-name="charecter" block-list:name="character"/>
+  <block-list:block block-list:abbreviated-name="charector" block-list:name="character"/>
+  <block-list:block block-list:abbreviated-name="cheif" block-list:name="chief"/>
+  <block-list:block block-list:abbreviated-name="chekc" block-list:name="check"/>
+  <block-list:block block-list:abbreviated-name="chnage" block-list:name="change"/>
+  <block-list:block block-list:abbreviated-name="cieling" block-list:name="ceiling"/>
+  <block-list:block block-list:abbreviated-name="circut" block-list:name="circuit"/>
+  <block-list:block block-list:abbreviated-name="claer" block-list:name="clear"/>
+  <block-list:block block-list:abbreviated-name="claered" block-list:name="cleared"/>
+  <block-list:block block-list:abbreviated-name="claerly" block-list:name="clearly"/>
+  <block-list:block block-list:abbreviated-name="cliant" block-list:name="client"/>
+  <block-list:block block-list:abbreviated-name="cliche" block-list:name="cliché"/>
+  <block-list:block block-list:abbreviated-name="cna" block-list:name="can"/>
+  <block-list:block block-list:abbreviated-name="colection" block-list:name="collection"/>
+  <block-list:block block-list:abbreviated-name="comanies" block-list:name="companies"/>
+  <block-list:block block-list:abbreviated-name="comany" block-list:name="company"/>
+  <block-list:block block-list:abbreviated-name="comapnies" block-list:name="companies"/>
+  <block-list:block block-list:abbreviated-name="comapny" block-list:name="company"/>
+  <block-list:block block-list:abbreviated-name="combintation" block-list:name="combination"/>
+  <block-list:block block-list:abbreviated-name="comited" block-list:name="committed"/>
+  <block-list:block block-list:abbreviated-name="comittee" block-list:name="committee"/>
+  <block-list:block block-list:abbreviated-name="commadn" block-list:name="command"/>
+  <block-list:block block-list:abbreviated-name="comming" block-list:name="coming"/>
+  <block-list:block block-list:abbreviated-name="commitee" block-list:name="committee"/>
+  <block-list:block block-list:abbreviated-name="committe" block-list:name="committee"/>
+  <block-list:block block-list:abbreviated-name="committment" block-list:name="commitment"/>
+  <block-list:block block-list:abbreviated-name="committments" block-list:name="commitments"/>
+  <block-list:block block-list:abbreviated-name="committy" block-list:name="committee"/>
+  <block-list:block block-list:abbreviated-name="comntain" block-list:name="contain"/>
+  <block-list:block block-list:abbreviated-name="comntains" block-list:name="contains"/>
+  <block-list:block block-list:abbreviated-name="compair" block-list:name="compare"/>
+  <block-list:block block-list:abbreviated-name="compleated" block-list:name="completed"/>
+  <block-list:block block-list:abbreviated-name="compleatly" block-list:name="completely"/>
+  <block-list:block block-list:abbreviated-name="compleatness" block-list:name="completeness"/>
+  <block-list:block block-list:abbreviated-name="completly" block-list:name="completely"/>
+  <block-list:block block-list:abbreviated-name="completness" block-list:name="completeness"/>
+  <block-list:block block-list:abbreviated-name="composate" block-list:name="composite"/>
+  <block-list:block block-list:abbreviated-name="comtain" block-list:name="contain"/>
+  <block-list:block block-list:abbreviated-name="comtains" block-list:name="contains"/>
+  <block-list:block block-list:abbreviated-name="comunicate" block-list:name="communicate"/>
+  <block-list:block block-list:abbreviated-name="comunity" block-list:name="community"/>
+  <block-list:block block-list:abbreviated-name="condolances" block-list:name="condolences"/>
+  <block-list:block block-list:abbreviated-name="conected" block-list:name="connected"/>
+  <block-list:block block-list:abbreviated-name="conferance" block-list:name="conference"/>
+  <block-list:block block-list:abbreviated-name="confirmmation" block-list:name="confirmation"/>
+  <block-list:block block-list:abbreviated-name="considerit" block-list:name="considerate"/>
+  <block-list:block block-list:abbreviated-name="considerite" block-list:name="considerate"/>
+  <block-list:block block-list:abbreviated-name="consonent" block-list:name="consonant"/>
+  <block-list:block block-list:abbreviated-name="conspiricy" block-list:name="conspiracy"/>
+  <block-list:block block-list:abbreviated-name="consultent" block-list:name="consultant"/>
+  <block-list:block block-list:abbreviated-name="convertable" block-list:name="convertible"/>
+  <block-list:block block-list:abbreviated-name="cooparate" block-list:name="cooperate"/>
+  <block-list:block block-list:abbreviated-name="cooporate" block-list:name="cooperate"/>
+  <block-list:block block-list:abbreviated-name="corproation" block-list:name="corporation"/>
+  <block-list:block block-list:abbreviated-name="corproations" block-list:name="corporations"/>
+  <block-list:block block-list:abbreviated-name="corruptable" block-list:name="corruptible"/>
+  <block-list:block block-list:abbreviated-name="cotten" block-list:name="cotton"/>
+  <block-list:block block-list:abbreviated-name="coudl" block-list:name="could"/>
+  <block-list:block block-list:abbreviated-name="could of been" block-list:name="could have been"/>
+  <block-list:block block-list:abbreviated-name="could of had" block-list:name="could have had"/>
+  <block-list:block block-list:abbreviated-name="couldthe" block-list:name="could the"/>
+  <block-list:block block-list:abbreviated-name="cpoy" block-list:name="copy"/>
+  <block-list:block block-list:abbreviated-name="creme" block-list:name="crème"/>
+  <block-list:block block-list:abbreviated-name="ctaegory" block-list:name="category"/>
+  <block-list:block block-list:abbreviated-name="cusotmer" block-list:name="customer"/>
+  <block-list:block block-list:abbreviated-name="cusotmers" block-list:name="customers"/>
+  <block-list:block block-list:abbreviated-name="cutsomer" block-list:name="customer"/>
+  <block-list:block block-list:abbreviated-name="cutsomers" block-list:name="customer"/>
+  <block-list:block block-list:abbreviated-name="cxan" block-list:name="can"/>
+  <block-list:block block-list:abbreviated-name="danceing" block-list:name="dancing"/>
+  <block-list:block block-list:abbreviated-name="dcument" block-list:name="document"/>
+  <block-list:block block-list:abbreviated-name="deatils" block-list:name="details"/>
+  <block-list:block block-list:abbreviated-name="decison" block-list:name="decision"/>
+  <block-list:block block-list:abbreviated-name="decisons" block-list:name="decisions"/>
+  <block-list:block block-list:abbreviated-name="decor" block-list:name="décor"/>
+  <block-list:block block-list:abbreviated-name="defendent" block-list:name="defendant"/>
+  <block-list:block block-list:abbreviated-name="definately" block-list:name="definitely"/>
+  <block-list:block block-list:abbreviated-name="deptartment" block-list:name="department"/>
+  <block-list:block block-list:abbreviated-name="desicion" block-list:name="decision"/>
+  <block-list:block block-list:abbreviated-name="desicions" block-list:name="decisions"/>
+  <block-list:block block-list:abbreviated-name="desision" block-list:name="decision"/>
+  <block-list:block block-list:abbreviated-name="desisions" block-list:name="decisions"/>
+  <block-list:block block-list:abbreviated-name="develeoprs" block-list:name="developers"/>
+  <block-list:block block-list:abbreviated-name="devellop" block-list:name="develop"/>
+  <block-list:block block-list:abbreviated-name="develloped" block-list:name="developed"/>
+  <block-list:block block-list:abbreviated-name="develloper" block-list:name="developer"/>
+  <block-list:block block-list:abbreviated-name="devellopers" block-list:name="developers"/>
+  <block-list:block block-list:abbreviated-name="develloping" block-list:name="developing"/>
+  <block-list:block block-list:abbreviated-name="devellopment" block-list:name="development"/>
+  <block-list:block block-list:abbreviated-name="devellopments" block-list:name="developments"/>
+  <block-list:block block-list:abbreviated-name="devellops" block-list:name="develop"/>
+  <block-list:block block-list:abbreviated-name="develope" block-list:name="develop"/>
+  <block-list:block block-list:abbreviated-name="developement" block-list:name="development"/>
+  <block-list:block block-list:abbreviated-name="developements" block-list:name="developments"/>
+  <block-list:block block-list:abbreviated-name="developor" block-list:name="developer"/>
+  <block-list:block block-list:abbreviated-name="developors" block-list:name="developers"/>
+  <block-list:block block-list:abbreviated-name="develpment" block-list:name="development"/>
+  <block-list:block block-list:abbreviated-name="diaplay" block-list:name="display"/>
+  <block-list:block block-list:abbreviated-name="didnot" block-list:name="did not"/>
+  <block-list:block block-list:abbreviated-name="difefrent" block-list:name="different"/>
+  <block-list:block block-list:abbreviated-name="diferences" block-list:name="differences"/>
+  <block-list:block block-list:abbreviated-name="differance" block-list:name="difference"/>
+  <block-list:block block-list:abbreviated-name="differances" block-list:name="differences"/>
+  <block-list:block block-list:abbreviated-name="differant" block-list:name="different"/>
+  <block-list:block block-list:abbreviated-name="differemt" block-list:name="different"/>
+  <block-list:block block-list:abbreviated-name="differnt" block-list:name="different"/>
+  <block-list:block block-list:abbreviated-name="diffrent" block-list:name="different"/>
+  <block-list:block block-list:abbreviated-name="directer" block-list:name="director"/>
+  <block-list:block block-list:abbreviated-name="directers" block-list:name="directors"/>
+  <block-list:block block-list:abbreviated-name="directiosn" block-list:name="direction"/>
+  <block-list:block block-list:abbreviated-name="disatisfied" block-list:name="dissatisfied"/>
+  <block-list:block block-list:abbreviated-name="discoverd" block-list:name="discovered"/>
+  <block-list:block block-list:abbreviated-name="disign" block-list:name="design"/>
+  <block-list:block block-list:abbreviated-name="dispaly" block-list:name="display"/>
+  <block-list:block block-list:abbreviated-name="dissonent" block-list:name="dissonant"/>
+  <block-list:block block-list:abbreviated-name="distribusion" block-list:name="distribution"/>
+  <block-list:block block-list:abbreviated-name="divsion" block-list:name="division"/>
+  <block-list:block block-list:abbreviated-name="docuement" block-list:name="documents"/>
+  <block-list:block block-list:abbreviated-name="docuemnt" block-list:name="document"/>
+  <block-list:block block-list:abbreviated-name="documetn" block-list:name="document"/>
+  <block-list:block block-list:abbreviated-name="documnet" block-list:name="document"/>
+  <block-list:block block-list:abbreviated-name="documnets" block-list:name="documents"/>
+  <block-list:block block-list:abbreviated-name="doese" block-list:name="does"/>
+  <block-list:block block-list:abbreviated-name="doe snot" block-list:name="does not"/>
+  <block-list:block block-list:abbreviated-name="doign" block-list:name="doing"/>
+  <block-list:block block-list:abbreviated-name="doimg" block-list:name="doing"/>
+  <block-list:block block-list:abbreviated-name="doind" block-list:name="doing"/>
+  <block-list:block block-list:abbreviated-name="dollers" block-list:name="dollars"/>
+  <block-list:block block-list:abbreviated-name="donig" block-list:name="doing"/>
+  <block-list:block block-list:abbreviated-name="driveing" block-list:name="driving"/>
+  <block-list:block block-list:abbreviated-name="drnik" block-list:name="drink"/>
+  <block-list:block block-list:abbreviated-name="efel" block-list:name="feel"/>
+  <block-list:block block-list:abbreviated-name="effecient" block-list:name="efficient"/>
+  <block-list:block block-list:abbreviated-name="efort" block-list:name="effort"/>
+  <block-list:block block-list:abbreviated-name="eforts" block-list:name="efforts"/>
+  <block-list:block block-list:abbreviated-name="ehr" block-list:name="her"/>
+  <block-list:block block-list:abbreviated-name="eligable" block-list:name="eligible"/>
+  <block-list:block block-list:abbreviated-name="embarass" block-list:name="embarrass"/>
+  <block-list:block block-list:abbreviated-name="enought" block-list:name="enough"/>
+  <block-list:block block-list:abbreviated-name="equippment" block-list:name="equipment"/>
+  <block-list:block block-list:abbreviated-name="equivalant" block-list:name="equivalent"/>
+  <block-list:block block-list:abbreviated-name="esle" block-list:name="else"/>
+  <block-list:block block-list:abbreviated-name="especally" block-list:name="especially"/>
+  <block-list:block block-list:abbreviated-name="especialyl" block-list:name="especially"/>
+  <block-list:block block-list:abbreviated-name="espesially" block-list:name="especially"/>
+  <block-list:block block-list:abbreviated-name="excellant" block-list:name="excellent"/>
+  <block-list:block block-list:abbreviated-name="excercise" block-list:name="exercise"/>
+  <block-list:block block-list:abbreviated-name="exchagne" block-list:name="exchange"/>
+  <block-list:block block-list:abbreviated-name="exchagnes" block-list:name="exchanges"/>
+  <block-list:block block-list:abbreviated-name="excitment" block-list:name="excitement"/>
+  <block-list:block block-list:abbreviated-name="exhcange" block-list:name="exchange"/>
+  <block-list:block block-list:abbreviated-name="exhcanges" block-list:name="exchanges"/>
+  <block-list:block block-list:abbreviated-name="experiance" block-list:name="experience"/>
+  <block-list:block block-list:abbreviated-name="experienc" block-list:name="experience"/>
+  <block-list:block block-list:abbreviated-name="exprience" block-list:name="experience"/>
+  <block-list:block block-list:abbreviated-name="exprienced" block-list:name="experienced"/>
+  <block-list:block block-list:abbreviated-name="eyt" block-list:name="yet"/>
+  <block-list:block block-list:abbreviated-name="faeture" block-list:name="feature"/>
+  <block-list:block block-list:abbreviated-name="faetures" block-list:name="feature"/>
+  <block-list:block block-list:abbreviated-name="familair" block-list:name="familiar"/>
+  <block-list:block block-list:abbreviated-name="familar" block-list:name="familiar"/>
+  <block-list:block block-list:abbreviated-name="familliar" block-list:name="familiar"/>
+  <block-list:block block-list:abbreviated-name="fammiliar" block-list:name="familiar"/>
+  <block-list:block block-list:abbreviated-name="feild" block-list:name="field"/>
+  <block-list:block block-list:abbreviated-name="feilds" block-list:name="fields"/>
+  <block-list:block block-list:abbreviated-name="fianlly" block-list:name="finally"/>
+  <block-list:block block-list:abbreviated-name="fidn" block-list:name="find"/>
+  <block-list:block block-list:abbreviated-name="finalyl" block-list:name="finally"/>
+  <block-list:block block-list:abbreviated-name="firends" block-list:name="friends"/>
+  <block-list:block block-list:abbreviated-name="firts" block-list:name="first"/>
+  <block-list:block block-list:abbreviated-name="follwo" block-list:name="follow"/>
+  <block-list:block block-list:abbreviated-name="follwoing" block-list:name="following"/>
+  <block-list:block block-list:abbreviated-name="fora" block-list:name="for a"/>
+  <block-list:block block-list:abbreviated-name="foriegn" block-list:name="foreign"/>
+  <block-list:block block-list:abbreviated-name="forthe" block-list:name="for the"/>
+  <block-list:block block-list:abbreviated-name="forwrd" block-list:name="forward"/>
+  <block-list:block block-list:abbreviated-name="forwrds" block-list:name="forwards"/>
+  <block-list:block block-list:abbreviated-name="foudn" block-list:name="found"/>
+  <block-list:block block-list:abbreviated-name="foward" block-list:name="forward"/>
+  <block-list:block block-list:abbreviated-name="fowards" block-list:name="forwards"/>
+  <block-list:block block-list:abbreviated-name="freind" block-list:name="friend"/>
+  <block-list:block block-list:abbreviated-name="freindly" block-list:name="friendly"/>
+  <block-list:block block-list:abbreviated-name="freinds" block-list:name="friends"/>
+  <block-list:block block-list:abbreviated-name="frmo" block-list:name="from"/>
+  <block-list:block block-list:abbreviated-name="fromthe" block-list:name="from the"/>
+  <block-list:block block-list:abbreviated-name="fromt he" block-list:name="from the"/>
+  <block-list:block block-list:abbreviated-name="furneral" block-list:name="funeral"/>
+  <block-list:block block-list:abbreviated-name="fwe" block-list:name="few"/>
+  <block-list:block block-list:abbreviated-name="garantee" block-list:name="guarantee"/>
+  <block-list:block block-list:abbreviated-name="gaurd" block-list:name="guard"/>
+  <block-list:block block-list:abbreviated-name="gemeral" block-list:name="general"/>
+  <block-list:block block-list:abbreviated-name="gerat" block-list:name="great"/>
+  <block-list:block block-list:abbreviated-name="geting" block-list:name="getting"/>
+  <block-list:block block-list:abbreviated-name="gettin" block-list:name="getting"/>
+  <block-list:block block-list:abbreviated-name="gievn" block-list:name="given"/>
+  <block-list:block block-list:abbreviated-name="giveing" block-list:name="giving"/>
+  <block-list:block block-list:abbreviated-name="gloabl" block-list:name="global"/>
+  <block-list:block block-list:abbreviated-name="goign" block-list:name="going"/>
+  <block-list:block block-list:abbreviated-name="gonig" block-list:name="going"/>
+  <block-list:block block-list:abbreviated-name="govenment" block-list:name="government"/>
+  <block-list:block block-list:abbreviated-name="goverment" block-list:name="government"/>
+  <block-list:block block-list:abbreviated-name="gruop" block-list:name="group"/>
+  <block-list:block block-list:abbreviated-name="gruops" block-list:name="groups"/>
+  <block-list:block block-list:abbreviated-name="grwo" block-list:name="grow"/>
+  <block-list:block block-list:abbreviated-name="guidlines" block-list:name="guidelines"/>
+  <block-list:block block-list:abbreviated-name="hadbeen" block-list:name="had been"/>
+  <block-list:block block-list:abbreviated-name="haev" block-list:name="have"/>
+  <block-list:block block-list:abbreviated-name="hapen" block-list:name="happen"/>
+  <block-list:block block-list:abbreviated-name="hapened" block-list:name="happened"/>
+  <block-list:block block-list:abbreviated-name="hapening" block-list:name="happening"/>
+  <block-list:block block-list:abbreviated-name="hapens" block-list:name="happens"/>
+  <block-list:block block-list:abbreviated-name="happend" block-list:name="happened"/>
+  <block-list:block block-list:abbreviated-name="hasbeen" block-list:name="has been"/>
+  <block-list:block block-list:abbreviated-name="havebeen" block-list:name="have been"/>
+  <block-list:block block-list:abbreviated-name="haveing" block-list:name="having"/>
+  <block-list:block block-list:abbreviated-name="hearign" block-list:name="hearing"/>
+  <block-list:block block-list:abbreviated-name="helpfull" block-list:name="helpful"/>
+  <block-list:block block-list:abbreviated-name="herat" block-list:name="heart"/>
+  <block-list:block block-list:abbreviated-name="hesaid" block-list:name="he said"/>
+  <block-list:block block-list:abbreviated-name="hewas" block-list:name="he was"/>
+  <block-list:block block-list:abbreviated-name="hge" block-list:name="he"/>
+  <block-list:block block-list:abbreviated-name="hismelf" block-list:name="himself"/>
+  <block-list:block block-list:abbreviated-name="hlep" block-list:name="help"/>
+  <block-list:block block-list:abbreviated-name="hsa" block-list:name="has"/>
+  <block-list:block block-list:abbreviated-name="hsi" block-list:name="his"/>
+  <block-list:block block-list:abbreviated-name="hte" block-list:name="the"/>
+  <block-list:block block-list:abbreviated-name="htere" block-list:name="there"/>
+  <block-list:block block-list:abbreviated-name="htese" block-list:name="these"/>
+  <block-list:block block-list:abbreviated-name="htey" block-list:name="they"/>
+  <block-list:block block-list:abbreviated-name="hting" block-list:name="thing"/>
+  <block-list:block block-list:abbreviated-name="htink" block-list:name="think"/>
+  <block-list:block block-list:abbreviated-name="htis" block-list:name="this"/>
+  <block-list:block block-list:abbreviated-name="hvae" block-list:name="have"/>
+  <block-list:block block-list:abbreviated-name="hvaing" block-list:name="having"/>
+  <block-list:block block-list:abbreviated-name="hwich" block-list:name="which"/>
+  <block-list:block block-list:abbreviated-name="idae" block-list:name="idea"/>
+  <block-list:block block-list:abbreviated-name="idaes" block-list:name="ideas"/>
+  <block-list:block block-list:abbreviated-name="identofy" block-list:name="identify"/>
+  <block-list:block block-list:abbreviated-name="ihs" block-list:name="his"/>
+  <block-list:block block-list:abbreviated-name="imediate" block-list:name="immediate"/>
+  <block-list:block block-list:abbreviated-name="imediatly" block-list:name="immediately"/>
+  <block-list:block block-list:abbreviated-name="immediatly" block-list:name="immediately"/>
+  <block-list:block block-list:abbreviated-name="importent" block-list:name="important"/>
+  <block-list:block block-list:abbreviated-name="importnat" block-list:name="important"/>
+  <block-list:block block-list:abbreviated-name="impossable" block-list:name="impossible"/>
+  <block-list:block block-list:abbreviated-name="improvemnt" block-list:name="improvement"/>
+  <block-list:block block-list:abbreviated-name="improvment" block-list:name="improvement"/>
+  <block-list:block block-list:abbreviated-name="includ" block-list:name="include"/>
+  <block-list:block block-list:abbreviated-name="indecate" block-list:name="indicate"/>
+  <block-list:block block-list:abbreviated-name="indenpendence" block-list:name="independence"/>
+  <block-list:block block-list:abbreviated-name="indenpendent" block-list:name="independent"/>
+  <block-list:block block-list:abbreviated-name="indepedent" block-list:name="independent"/>
+  <block-list:block block-list:abbreviated-name="independance" block-list:name="independence"/>
+  <block-list:block block-list:abbreviated-name="independant" block-list:name="independent"/>
+  <block-list:block block-list:abbreviated-name="influance" block-list:name="influence"/>
+  <block-list:block block-list:abbreviated-name="infomation" block-list:name="information"/>
+  <block-list:block block-list:abbreviated-name="informatoin" block-list:name="information"/>
+  <block-list:block block-list:abbreviated-name="inital" block-list:name="initial"/>
+  <block-list:block block-list:abbreviated-name="instaleld" block-list:name="installed"/>
+  <block-list:block block-list:abbreviated-name="insted" block-list:name="instead"/>
+  <block-list:block block-list:abbreviated-name="insurence" block-list:name="insurance"/>
+  <block-list:block block-list:abbreviated-name="inteh" block-list:name="in the"/>
+  <block-list:block block-list:abbreviated-name="interum" block-list:name="interim"/>
+  <block-list:block block-list:abbreviated-name="inthe" block-list:name="in the"/>
+  <block-list:block block-list:abbreviated-name="int he" block-list:name="in the"/>
+  <block-list:block block-list:abbreviated-name="inwhich" block-list:name="in which"/>
+  <block-list:block block-list:abbreviated-name="i snot" block-list:name="is not"/>
+  <block-list:block block-list:abbreviated-name="isthe" block-list:name="is the"/>
+  <block-list:block block-list:abbreviated-name="itis" block-list:name="it is"/>
+  <block-list:block block-list:abbreviated-name="ititial" block-list:name="initial"/>
+  <block-list:block block-list:abbreviated-name="itnerest" block-list:name="interest"/>
+  <block-list:block block-list:abbreviated-name="itnerested" block-list:name="interested"/>
+  <block-list:block block-list:abbreviated-name="itneresting" block-list:name="interesting"/>
+  <block-list:block block-list:abbreviated-name="itnerests" block-list:name="interests"/>
+  <block-list:block block-list:abbreviated-name="iwll" block-list:name="will"/>
+  <block-list:block block-list:abbreviated-name="iwth" block-list:name="with"/>
+  <block-list:block block-list:abbreviated-name="jsut" block-list:name="just"/>
+  <block-list:block block-list:abbreviated-name="jugment" block-list:name="judgment"/>
+  <block-list:block block-list:abbreviated-name="knowldge" block-list:name="knowledge"/>
+  <block-list:block block-list:abbreviated-name="knowlege" block-list:name="knowledge"/>
+  <block-list:block block-list:abbreviated-name="knwo" block-list:name="know"/>
+  <block-list:block block-list:abbreviated-name="knwon" block-list:name="known"/>
+  <block-list:block block-list:abbreviated-name="knwos" block-list:name="knows"/>
+  <block-list:block block-list:abbreviated-name="konwn" block-list:name="known"/>
+  <block-list:block block-list:abbreviated-name="konws" block-list:name="knows"/>
+  <block-list:block block-list:abbreviated-name="labratory" block-list:name="laboratory"/>
+  <block-list:block block-list:abbreviated-name="lastyear" block-list:name="last year"/>
+  <block-list:block block-list:abbreviated-name="learnign" block-list:name="learning"/>
+  <block-list:block block-list:abbreviated-name="lenght" block-list:name="length"/>
+  <block-list:block block-list:abbreviated-name="levle" block-list:name="level"/>
+  <block-list:block block-list:abbreviated-name="libary" block-list:name="library"/>
+  <block-list:block block-list:abbreviated-name="librarry" block-list:name="library"/>
+  <block-list:block block-list:abbreviated-name="librery" block-list:name="library"/>
+  <block-list:block block-list:abbreviated-name="liek" block-list:name="like"/>
+  <block-list:block block-list:abbreviated-name="liekd" block-list:name="liked"/>
+  <block-list:block block-list:abbreviated-name="lieutenent" block-list:name="lieutenant"/>
+  <block-list:block block-list:abbreviated-name="liev" block-list:name="live"/>
+  <block-list:block block-list:abbreviated-name="likly" block-list:name="likely"/>
+  <block-list:block block-list:abbreviated-name="lisense" block-list:name="license"/>
+  <block-list:block block-list:abbreviated-name="littel" block-list:name="little"/>
+  <block-list:block block-list:abbreviated-name="litttle" block-list:name="little"/>
+  <block-list:block block-list:abbreviated-name="liuke" block-list:name="like"/>
+  <block-list:block block-list:abbreviated-name="liveing" block-list:name="living"/>
+  <block-list:block block-list:abbreviated-name="loev" block-list:name="love"/>
+  <block-list:block block-list:abbreviated-name="lonly" block-list:name="lonely"/>
+  <block-list:block block-list:abbreviated-name="lookign" block-list:name="looking"/>
+  <block-list:block block-list:abbreviated-name="maintenence" block-list:name="maintenance"/>
+  <block-list:block block-list:abbreviated-name="makeing" block-list:name="making"/>
+  <block-list:block block-list:abbreviated-name="managment" block-list:name="management"/>
+  <block-list:block block-list:abbreviated-name="mantain" block-list:name="maintain"/>
+  <block-list:block block-list:abbreviated-name="marraige" block-list:name="marriage"/>
+  <block-list:block block-list:abbreviated-name="may of been" block-list:name="may have been"/>
+  <block-list:block block-list:abbreviated-name="may of had" block-list:name="may have had"/>
+  <block-list:block block-list:abbreviated-name="memeber" block-list:name="member"/>
+  <block-list:block block-list:abbreviated-name="merchent" block-list:name="merchant"/>
+  <block-list:block block-list:abbreviated-name="mesage" block-list:name="message"/>
+  <block-list:block block-list:abbreviated-name="mesages" block-list:name="messages"/>
+  <block-list:block block-list:abbreviated-name="might of been" block-list:name="might have been"/>
+  <block-list:block block-list:abbreviated-name="might of had" block-list:name="might have had"/>
+  <block-list:block block-list:abbreviated-name="mispell" block-list:name="misspell"/>
+  <block-list:block block-list:abbreviated-name="mispelling" block-list:name="misspelling"/>
+  <block-list:block block-list:abbreviated-name="mispellings" block-list:name="misspellings"/>
+  <block-list:block block-list:abbreviated-name="mkae" block-list:name="make"/>
+  <block-list:block block-list:abbreviated-name="mkaes" block-list:name="makes"/>
+  <block-list:block block-list:abbreviated-name="mkaing" block-list:name="making"/>
+  <block-list:block block-list:abbreviated-name="moeny" block-list:name="money"/>
+  <block-list:block block-list:abbreviated-name="morgage" block-list:name="mortgage"/>
+  <block-list:block block-list:abbreviated-name="mroe" block-list:name="more"/>
+  <block-list:block block-list:abbreviated-name="must of been" block-list:name="must have been"/>
+  <block-list:block block-list:abbreviated-name="must of had" block-list:name="must have had"/>
+  <block-list:block block-list:abbreviated-name="mysefl" block-list:name="myself"/>
+  <block-list:block block-list:abbreviated-name="myu" block-list:name="my"/>
+  <block-list:block block-list:abbreviated-name="naive" block-list:name="naïve"/>
+  <block-list:block block-list:abbreviated-name="necassarily" block-list:name="necessarily"/>
+  <block-list:block block-list:abbreviated-name="necassary" block-list:name="necessary"/>
+  <block-list:block block-list:abbreviated-name="neccessarily" block-list:name="necessarily"/>
+  <block-list:block block-list:abbreviated-name="neccessary" block-list:name="necessary"/>
+  <block-list:block block-list:abbreviated-name="necesarily" block-list:name="necessarily"/>
+  <block-list:block block-list:abbreviated-name="necesary" block-list:name="necessary"/>
+  <block-list:block block-list:abbreviated-name="negotiaing" block-list:name="negotiating"/>
+  <block-list:block block-list:abbreviated-name="nkow" block-list:name="know"/>
+  <block-list:block block-list:abbreviated-name="nothign" block-list:name="nothing"/>
+  <block-list:block block-list:abbreviated-name="nver" block-list:name="never"/>
+  <block-list:block block-list:abbreviated-name="nwe" block-list:name="new"/>
+  <block-list:block block-list:abbreviated-name="nwo" block-list:name="now"/>
+  <block-list:block block-list:abbreviated-name="obediant" block-list:name="obedient"/>
+  <block-list:block block-list:abbreviated-name="ocasion" block-list:name="occasion"/>
+  <block-list:block block-list:abbreviated-name="occassion" block-list:name="occasion"/>
+  <block-list:block block-list:abbreviated-name="occured" block-list:name="occurred"/>
+  <block-list:block block-list:abbreviated-name="occurence" block-list:name="occurrence"/>
+  <block-list:block block-list:abbreviated-name="occurrance" block-list:name="occurrence"/>
+  <block-list:block block-list:abbreviated-name="ocur" block-list:name="occur"/>
+  <block-list:block block-list:abbreviated-name="oeprator" block-list:name="operator"/>
+  <block-list:block block-list:abbreviated-name="ofits" block-list:name="of its"/>
+  <block-list:block block-list:abbreviated-name="ofthe" block-list:name="of the"/>
+  <block-list:block block-list:abbreviated-name="oft he" block-list:name="of the"/>
+  <block-list:block block-list:abbreviated-name="oging" block-list:name="going"/>
+  <block-list:block block-list:abbreviated-name="ohter" block-list:name="other"/>
+  <block-list:block block-list:abbreviated-name="omre" block-list:name="more"/>
+  <block-list:block block-list:abbreviated-name="oneof" block-list:name="one of"/>
+  <block-list:block block-list:abbreviated-name="onepoint" block-list:name="one point"/>
+  <block-list:block block-list:abbreviated-name="onthe" block-list:name="on the"/>
+  <block-list:block block-list:abbreviated-name="ont he" block-list:name="on the"/>
+  <block-list:block block-list:abbreviated-name="onyl" block-list:name="only"/>
+  <block-list:block block-list:abbreviated-name="oppasite" block-list:name="opposite"/>
+  <block-list:block block-list:abbreviated-name="opperation" block-list:name="operation"/>
+  <block-list:block block-list:abbreviated-name="oppertunity" block-list:name="opportunity"/>
+  <block-list:block block-list:abbreviated-name="opposate" block-list:name="opposite"/>
+  <block-list:block block-list:abbreviated-name="opposible" block-list:name="opposable"/>
+  <block-list:block block-list:abbreviated-name="opposit" block-list:name="opposite"/>
+  <block-list:block block-list:abbreviated-name="oppotunities" block-list:name="opportunities"/>
+  <block-list:block block-list:abbreviated-name="oppotunity" block-list:name="opportunity"/>
+  <block-list:block block-list:abbreviated-name="orginization" block-list:name="organization"/>
+  <block-list:block block-list:abbreviated-name="orginized" block-list:name="organized"/>
+  <block-list:block block-list:abbreviated-name="otehr" block-list:name="other"/>
+  <block-list:block block-list:abbreviated-name="otu" block-list:name="out"/>
+  <block-list:block block-list:abbreviated-name="outof" block-list:name="out of"/>
+  <block-list:block block-list:abbreviated-name="overthe" block-list:name="over the"/>
+  <block-list:block block-list:abbreviated-name="owrk" block-list:name="work"/>
+  <block-list:block block-list:abbreviated-name="owuld" block-list:name="would"/>
+  <block-list:block block-list:abbreviated-name="oxident" block-list:name="oxidant"/>
+  <block-list:block block-list:abbreviated-name="papaer" block-list:name="paper"/>
+  <block-list:block block-list:abbreviated-name="parliment" block-list:name="parliament"/>
+  <block-list:block block-list:abbreviated-name="partof" block-list:name="part of"/>
+  <block-list:block block-list:abbreviated-name="paymetn" block-list:name="payment"/>
+  <block-list:block block-list:abbreviated-name="paymetns" block-list:name="payments"/>
+  <block-list:block block-list:abbreviated-name="pciture" block-list:name="picture"/>
+  <block-list:block block-list:abbreviated-name="peice" block-list:name="piece"/>
+  <block-list:block block-list:abbreviated-name="peices" block-list:name="pieces"/>
+  <block-list:block block-list:abbreviated-name="peolpe" block-list:name="people"/>
+  <block-list:block block-list:abbreviated-name="peopel" block-list:name="people"/>
+  <block-list:block block-list:abbreviated-name="percentof" block-list:name="percent of"/>
+  <block-list:block block-list:abbreviated-name="percentto" block-list:name="percent to"/>
+  <block-list:block block-list:abbreviated-name="performence" block-list:name="performance"/>
+  <block-list:block block-list:abbreviated-name="perhasp" block-list:name="perhaps"/>
+  <block-list:block block-list:abbreviated-name="perhpas" block-list:name="perhaps"/>
+  <block-list:block block-list:abbreviated-name="permanant" block-list:name="permanent"/>
+  <block-list:block block-list:abbreviated-name="perminent" block-list:name="permanent"/>
+  <block-list:block block-list:abbreviated-name="personalyl" block-list:name="personally"/>
+  <block-list:block block-list:abbreviated-name="pleasent" block-list:name="pleasant"/>
+  <block-list:block block-list:abbreviated-name="poeple" block-list:name="people"/>
+  <block-list:block block-list:abbreviated-name="porblem" block-list:name="problem"/>
+  <block-list:block block-list:abbreviated-name="porblems" block-list:name="problems"/>
+  <block-list:block block-list:abbreviated-name="porvide" block-list:name="provide"/>
+  <block-list:block block-list:abbreviated-name="possable" block-list:name="possible"/>
+  <block-list:block block-list:abbreviated-name="postition" block-list:name="position"/>
+  <block-list:block block-list:abbreviated-name="potentialy" block-list:name="potentially"/>
+  <block-list:block block-list:abbreviated-name="pregnent" block-list:name="pregnant"/>
+  <block-list:block block-list:abbreviated-name="presance" block-list:name="presence"/>
+  <block-list:block block-list:abbreviated-name="probelm" block-list:name="problem"/>
+  <block-list:block block-list:abbreviated-name="probelms" block-list:name="problems"/>
+  <block-list:block block-list:abbreviated-name="prominant" block-list:name="prominent"/>
+  <block-list:block block-list:abbreviated-name="psoition" block-list:name="position"/>
+  <block-list:block block-list:abbreviated-name="ptogress" block-list:name="progress"/>
+  <block-list:block block-list:abbreviated-name="puting" block-list:name="putting"/>
+  <block-list:block block-list:abbreviated-name="pwoer" block-list:name="power"/>
+  <block-list:block block-list:abbreviated-name="quater" block-list:name="quarter"/>
+  <block-list:block block-list:abbreviated-name="quaters" block-list:name="quarters"/>
+  <block-list:block block-list:abbreviated-name="quesion" block-list:name="question"/>
+  <block-list:block block-list:abbreviated-name="quesions" block-list:name="questions"/>
+  <block-list:block block-list:abbreviated-name="questioms" block-list:name="questions"/>
+  <block-list:block block-list:abbreviated-name="questiosn" block-list:name="questions"/>
+  <block-list:block block-list:abbreviated-name="questoin" block-list:name="question"/>
+  <block-list:block block-list:abbreviated-name="quetion" block-list:name="question"/>
+  <block-list:block block-list:abbreviated-name="quetions" block-list:name="questions"/>
+  <block-list:block block-list:abbreviated-name="realyl" block-list:name="really"/>
+  <block-list:block block-list:abbreviated-name="reccomend" block-list:name="recommend"/>
+  <block-list:block block-list:abbreviated-name="reccommend" block-list:name="recommend"/>
+  <block-list:block block-list:abbreviated-name="receieve" block-list:name="receive"/>
+  <block-list:block block-list:abbreviated-name="recieve" block-list:name="receive"/>
+  <block-list:block block-list:abbreviated-name="recieved" block-list:name="received"/>
+  <block-list:block block-list:abbreviated-name="recieving" block-list:name="receiving"/>
+  <block-list:block block-list:abbreviated-name="recomend" block-list:name="recommend"/>
+  <block-list:block block-list:abbreviated-name="recomendation" block-list:name="recommendation"/>
+  <block-list:block block-list:abbreviated-name="recomendations" block-list:name="recommendations"/>
+  <block-list:block block-list:abbreviated-name="recomended" block-list:name="recommended"/>
+  <block-list:block block-list:abbreviated-name="reconize" block-list:name="recognize"/>
+  <block-list:block block-list:abbreviated-name="recrod" block-list:name="record"/>
+  <block-list:block block-list:abbreviated-name="religous" block-list:name="religious"/>
+  <block-list:block block-list:abbreviated-name="reluctent" block-list:name="reluctant"/>
+  <block-list:block block-list:abbreviated-name="remeber" block-list:name="remember"/>
+  <block-list:block block-list:abbreviated-name="reommend" block-list:name="recommend"/>
+  <block-list:block block-list:abbreviated-name="representativs" block-list:name="representatives"/>
+  <block-list:block block-list:abbreviated-name="representives" block-list:name="representatives"/>
+  <block-list:block block-list:abbreviated-name="represetned" block-list:name="represented"/>
+  <block-list:block block-list:abbreviated-name="represnt" block-list:name="represent"/>
+  <block-list:block block-list:abbreviated-name="reserach" block-list:name="research"/>
+  <block-list:block block-list:abbreviated-name="resollution" block-list:name="resolution"/>
+  <block-list:block block-list:abbreviated-name="resorces" block-list:name="resources"/>
+  <block-list:block block-list:abbreviated-name="respomd" block-list:name="respond"/>
+  <block-list:block block-list:abbreviated-name="respomse" block-list:name="response"/>
+  <block-list:block block-list:abbreviated-name="responce" block-list:name="response"/>
+  <block-list:block block-list:abbreviated-name="responsability" block-list:name="responsibility"/>
+  <block-list:block block-list:abbreviated-name="responsable" block-list:name="responsible"/>
+  <block-list:block block-list:abbreviated-name="responsibile" block-list:name="responsible"/>
+  <block-list:block block-list:abbreviated-name="responsiblity" block-list:name="responsibility"/>
+  <block-list:block block-list:abbreviated-name="restaraunt" block-list:name="restaurant"/>
+  <block-list:block block-list:abbreviated-name="restuarant" block-list:name="restaurant"/>
+  <block-list:block block-list:abbreviated-name="reult" block-list:name="result"/>
+  <block-list:block block-list:abbreviated-name="reveiw" block-list:name="review"/>
+  <block-list:block block-list:abbreviated-name="reveiwing" block-list:name="reviewing"/>
+  <block-list:block block-list:abbreviated-name="rumers" block-list:name="rumors"/>
+  <block-list:block block-list:abbreviated-name="rwite" block-list:name="write"/>
+  <block-list:block block-list:abbreviated-name="rythm" block-list:name="rhythm"/>
+  <block-list:block block-list:abbreviated-name="saidhe" block-list:name="said he"/>
+  <block-list:block block-list:abbreviated-name="saidit" block-list:name="said it"/>
+  <block-list:block block-list:abbreviated-name="saidthat" block-list:name="said that"/>
+  <block-list:block block-list:abbreviated-name="saidthe" block-list:name="said the"/>
+  <block-list:block block-list:abbreviated-name="saidt he" block-list:name="said the"/>
+  <block-list:block block-list:abbreviated-name="scedule" block-list:name="schedule"/>
+  <block-list:block block-list:abbreviated-name="sceduled" block-list:name="scheduled"/>
+  <block-list:block block-list:abbreviated-name="seance" block-list:name="séance"/>
+  <block-list:block block-list:abbreviated-name="secratary" block-list:name="secretary"/>
+  <block-list:block block-list:abbreviated-name="sectino" block-list:name="section"/>
+  <block-list:block block-list:abbreviated-name="seh" block-list:name="she"/>
+  <block-list:block block-list:abbreviated-name="selectoin" block-list:name="selection"/>
+  <block-list:block block-list:abbreviated-name="sentance" block-list:name="sentence"/>
+  <block-list:block block-list:abbreviated-name="separeate" block-list:name="separate"/>
+  <block-list:block block-list:abbreviated-name="sercumstances" block-list:name="circumstances"/>
+  <block-list:block block-list:abbreviated-name="shcool" block-list:name="school"/>
+  <block-list:block block-list:abbreviated-name="shesaid" block-list:name="she said"/>
+  <block-list:block block-list:abbreviated-name="shineing" block-list:name="shining"/>
+  <block-list:block block-list:abbreviated-name="shiped" block-list:name="shipped"/>
+  <block-list:block block-list:abbreviated-name="shoudl" block-list:name="should"/>
+  <block-list:block block-list:abbreviated-name="should of been" block-list:name="should have been"/>
+  <block-list:block block-list:abbreviated-name="should of had" block-list:name="should have had"/>
+  <block-list:block block-list:abbreviated-name="showinf" block-list:name="showing"/>
+  <block-list:block block-list:abbreviated-name="signifacnt" block-list:name="significant"/>
+  <block-list:block block-list:abbreviated-name="simalar" block-list:name="similar"/>
+  <block-list:block block-list:abbreviated-name="similiar" block-list:name="similar"/>
+  <block-list:block block-list:abbreviated-name="simpyl" block-list:name="simply"/>
+  <block-list:block block-list:abbreviated-name="sincerly" block-list:name="sincerely"/>
+  <block-list:block block-list:abbreviated-name="sitll" block-list:name="still"/>
+  <block-list:block block-list:abbreviated-name="smae" block-list:name="same"/>
+  <block-list:block block-list:abbreviated-name="smoe" block-list:name="some"/>
+  <block-list:block block-list:abbreviated-name="soem" block-list:name="some"/>
+  <block-list:block block-list:abbreviated-name="sohw" block-list:name="show"/>
+  <block-list:block block-list:abbreviated-name="soical" block-list:name="social"/>
+  <block-list:block block-list:abbreviated-name="somethign" block-list:name="something"/>
+  <block-list:block block-list:abbreviated-name="someting" block-list:name="something"/>
+  <block-list:block block-list:abbreviated-name="somewaht" block-list:name="somewhat"/>
+  <block-list:block block-list:abbreviated-name="somthing" block-list:name="something"/>
+  <block-list:block block-list:abbreviated-name="somtimes" block-list:name="sometimes"/>
+  <block-list:block block-list:abbreviated-name="sot hat" block-list:name="so that"/>
+  <block-list:block block-list:abbreviated-name="soudn" block-list:name="sound"/>
+  <block-list:block block-list:abbreviated-name="soudns" block-list:name="sounds"/>
+  <block-list:block block-list:abbreviated-name="speach" block-list:name="speech"/>
+  <block-list:block block-list:abbreviated-name="specificaly" block-list:name="specifically"/>
+  <block-list:block block-list:abbreviated-name="specificalyl" block-list:name="specifically"/>
+  <block-list:block block-list:abbreviated-name="statment" block-list:name="statement"/>
+  <block-list:block block-list:abbreviated-name="statments" block-list:name="statements"/>
+  <block-list:block block-list:abbreviated-name="stnad" block-list:name="stand"/>
+  <block-list:block block-list:abbreviated-name="stopry" block-list:name="story"/>
+  <block-list:block block-list:abbreviated-name="stoyr" block-list:name="story"/>
+  <block-list:block block-list:abbreviated-name="stpo" block-list:name="stop"/>
+  <block-list:block block-list:abbreviated-name="strentgh" block-list:name="strength"/>
+  <block-list:block block-list:abbreviated-name="stroy" block-list:name="story"/>
+  <block-list:block block-list:abbreviated-name="struggel" block-list:name="struggle"/>
+  <block-list:block block-list:abbreviated-name="strugle" block-list:name="struggle"/>
+  <block-list:block block-list:abbreviated-name="studnet" block-list:name="student"/>
+  <block-list:block block-list:abbreviated-name="successfull" block-list:name="successful"/>
+  <block-list:block block-list:abbreviated-name="successfuly" block-list:name="successfully"/>
+  <block-list:block block-list:abbreviated-name="successfulyl" block-list:name="successfully"/>
+  <block-list:block block-list:abbreviated-name="sucess" block-list:name="success"/>
+  <block-list:block block-list:abbreviated-name="sucessfull" block-list:name="successful"/>
+  <block-list:block block-list:abbreviated-name="sufficiant" block-list:name="sufficient"/>
+  <block-list:block block-list:abbreviated-name="suposed" block-list:name="supposed"/>
+  <block-list:block block-list:abbreviated-name="suppossed" block-list:name="supposed"/>
+  <block-list:block block-list:abbreviated-name="suprised" block-list:name="surprised"/>
+  <block-list:block block-list:abbreviated-name="swiming" block-list:name="swimming"/>
+  <block-list:block block-list:abbreviated-name="tahn" block-list:name="than"/>
+  <block-list:block block-list:abbreviated-name="taht" block-list:name="that"/>
+  <block-list:block block-list:abbreviated-name="talekd" block-list:name="talked"/>
+  <block-list:block block-list:abbreviated-name="talkign" block-list:name="talking"/>
+  <block-list:block block-list:abbreviated-name="tath" block-list:name="that"/>
+  <block-list:block block-list:abbreviated-name="tecnical" block-list:name="technical"/>
+  <block-list:block block-list:abbreviated-name="teh" block-list:name="the"/>
+  <block-list:block block-list:abbreviated-name="tehy" block-list:name="they"/>
+  <block-list:block block-list:abbreviated-name="tellt he" block-list:name="tell the"/>
+  <block-list:block block-list:abbreviated-name="termoil" block-list:name="turmoil"/>
+  <block-list:block block-list:abbreviated-name="tets" block-list:name="test"/>
+  <block-list:block block-list:abbreviated-name="tghe" block-list:name="the"/>
+  <block-list:block block-list:abbreviated-name="tghis" block-list:name="this"/>
+  <block-list:block block-list:abbreviated-name="thansk" block-list:name="thanks"/>
+  <block-list:block block-list:abbreviated-name="thatthe" block-list:name="that the"/>
+  <block-list:block block-list:abbreviated-name="thatt he" block-list:name="that the"/>
+  <block-list:block block-list:abbreviated-name="thecompany" block-list:name="the company"/>
+  <block-list:block block-list:abbreviated-name="thefirst" block-list:name="the first"/>
+  <block-list:block block-list:abbreviated-name="thegovernment" block-list:name="the government"/>
+  <block-list:block block-list:abbreviated-name="their are" block-list:name="there are"/>
+  <block-list:block block-list:abbreviated-name="their is" block-list:name="there is"/>
+  <block-list:block block-list:abbreviated-name="themself" block-list:name="themselves"/>
+  <block-list:block block-list:abbreviated-name="themselfs" block-list:name="themselves"/>
+  <block-list:block block-list:abbreviated-name="thenew" block-list:name="the new"/>
+  <block-list:block block-list:abbreviated-name="theri" block-list:name="their"/>
+  <block-list:block block-list:abbreviated-name="thesame" block-list:name="the same"/>
+  <block-list:block block-list:abbreviated-name="thetwo" block-list:name="the two"/>
+  <block-list:block block-list:abbreviated-name="thgat" block-list:name="that"/>
+  <block-list:block block-list:abbreviated-name="thge" block-list:name="the"/>
+  <block-list:block block-list:abbreviated-name="thier" block-list:name="their"/>
+  <block-list:block block-list:abbreviated-name="thigsn" block-list:name="things"/>
+  <block-list:block block-list:abbreviated-name="thisyear" block-list:name="this year"/>
+  <block-list:block block-list:abbreviated-name="thme" block-list:name="them"/>
+  <block-list:block block-list:abbreviated-name="thna" block-list:name="than"/>
+  <block-list:block block-list:abbreviated-name="thne" block-list:name="then"/>
+  <block-list:block block-list:abbreviated-name="thnig" block-list:name="thing"/>
+  <block-list:block block-list:abbreviated-name="thnigs" block-list:name="things"/>
+  <block-list:block block-list:abbreviated-name="threatend" block-list:name="threatened"/>
+  <block-list:block block-list:abbreviated-name="thsi" block-list:name="this"/>
+  <block-list:block block-list:abbreviated-name="thsoe" block-list:name="those"/>
+  <block-list:block block-list:abbreviated-name="thta" block-list:name="that"/>
+  <block-list:block block-list:abbreviated-name="tihs" block-list:name="this"/>
+  <block-list:block block-list:abbreviated-name="timne" block-list:name="time"/>
+  <block-list:block block-list:abbreviated-name="tiogether" block-list:name="together"/>
+  <block-list:block block-list:abbreviated-name="tje" block-list:name="the"/>
+  <block-list:block block-list:abbreviated-name="tjhe" block-list:name="the"/>
+  <block-list:block block-list:abbreviated-name="tkae" block-list:name="take"/>
+  <block-list:block block-list:abbreviated-name="tkaes" block-list:name="takes"/>
+  <block-list:block block-list:abbreviated-name="tkaing" block-list:name="taking"/>
+  <block-list:block block-list:abbreviated-name="tlaking" block-list:name="talking"/>
+  <block-list:block block-list:abbreviated-name="todya" block-list:name="today"/>
+  <block-list:block block-list:abbreviated-name="togehter" block-list:name="together"/>
+  <block-list:block block-list:abbreviated-name="toldt he" block-list:name="told the"/>
+  <block-list:block block-list:abbreviated-name="tomorow" block-list:name="tomorrow"/>
+  <block-list:block block-list:abbreviated-name="tongiht" block-list:name="tonight"/>
+  <block-list:block block-list:abbreviated-name="tonihgt" block-list:name="tonight"/>
+  <block-list:block block-list:abbreviated-name="totaly" block-list:name="totally"/>
+  <block-list:block block-list:abbreviated-name="totalyl" block-list:name="totally"/>
+  <block-list:block block-list:abbreviated-name="tothe" block-list:name="to the"/>
+  <block-list:block block-list:abbreviated-name="towrad" block-list:name="toward"/>
+  <block-list:block block-list:abbreviated-name="traditionalyl" block-list:name="traditionally"/>
+  <block-list:block block-list:abbreviated-name="transfered" block-list:name="transferred"/>
+  <block-list:block block-list:abbreviated-name="truely" block-list:name="truly"/>
+  <block-list:block block-list:abbreviated-name="truley" block-list:name="truly"/>
+  <block-list:block block-list:abbreviated-name="tryed" block-list:name="tried"/>
+  <block-list:block block-list:abbreviated-name="tthe" block-list:name="the"/>
+  <block-list:block block-list:abbreviated-name="tyhat" block-list:name="that"/>
+  <block-list:block block-list:abbreviated-name="tyhe" block-list:name="the"/>
+  <block-list:block block-list:abbreviated-name="udnerstand" block-list:name="understand"/>
+  <block-list:block block-list:abbreviated-name="understnad" block-list:name="understand"/>
+  <block-list:block block-list:abbreviated-name="undert he" block-list:name="under the"/>
+  <block-list:block block-list:abbreviated-name="UnitedStates" block-list:name="United States"/>
+  <block-list:block block-list:abbreviated-name="unliek" block-list:name="unlike"/>
+  <block-list:block block-list:abbreviated-name="unpleasently" block-list:name="unpleasantly"/>
+  <block-list:block block-list:abbreviated-name="untill" block-list:name="until"/>
+  <block-list:block block-list:abbreviated-name="untilll" block-list:name="until"/>
+  <block-list:block block-list:abbreviated-name="useing" block-list:name="using"/>
+  <block-list:block block-list:abbreviated-name="usualyl" block-list:name="usually"/>
+  <block-list:block block-list:abbreviated-name="veyr" block-list:name="very"/>
+  <block-list:block block-list:abbreviated-name="virtualyl" block-list:name="virtually"/>
+  <block-list:block block-list:abbreviated-name="vrey" block-list:name="very"/>
+  <block-list:block block-list:abbreviated-name="vulnerible" block-list:name="vulnerable"/>
+  <block-list:block block-list:abbreviated-name="waht" block-list:name="what"/>
+  <block-list:block block-list:abbreviated-name="warrent" block-list:name="warrant"/>
+  <block-list:block block-list:abbreviated-name="wa snot" block-list:name="was not"/>
+  <block-list:block block-list:abbreviated-name="watn" block-list:name="want"/>
+  <block-list:block block-list:abbreviated-name="wehn" block-list:name="when"/>
+  <block-list:block block-list:abbreviated-name="werre" block-list:name="were"/>
+  <block-list:block block-list:abbreviated-name="whcih" block-list:name="which"/>
+  <block-list:block block-list:abbreviated-name="whent he" block-list:name="when the"/>
+  <block-list:block block-list:abbreviated-name="wherre" block-list:name="where"/>
+  <block-list:block block-list:abbreviated-name="whic" block-list:name="which"/>
+  <block-list:block block-list:abbreviated-name="whicht he" block-list:name="which the"/>
+  <block-list:block block-list:abbreviated-name="whihc" block-list:name="which"/>
+  <block-list:block block-list:abbreviated-name="who;ve" block-list:name="who’ve"/>
+  <block-list:block block-list:abbreviated-name="whta" block-list:name="what"/>
+  <block-list:block block-list:abbreviated-name="wief" block-list:name="wife"/>
+  <block-list:block block-list:abbreviated-name="wierd" block-list:name="weird"/>
+  <block-list:block block-list:abbreviated-name="wihch" block-list:name="which"/>
+  <block-list:block block-list:abbreviated-name="wiht" block-list:name="with"/>
+  <block-list:block block-list:abbreviated-name="willbe" block-list:name="will be"/>
+  <block-list:block block-list:abbreviated-name="will of been" block-list:name="will have been"/>
+  <block-list:block block-list:abbreviated-name="windoes" block-list:name="windows"/>
+  <block-list:block block-list:abbreviated-name="witha" block-list:name="with a"/>
+  <block-list:block block-list:abbreviated-name="withe" block-list:name="with"/>
+  <block-list:block block-list:abbreviated-name="withthe" block-list:name="with the"/>
+  <block-list:block block-list:abbreviated-name="witht he" block-list:name="with the"/>
+  <block-list:block block-list:abbreviated-name="wiull" block-list:name="will"/>
+  <block-list:block block-list:abbreviated-name="wnat" block-list:name="want"/>
+  <block-list:block block-list:abbreviated-name="wnated" block-list:name="wanted"/>
+  <block-list:block block-list:abbreviated-name="wnats" block-list:name="wants"/>
+  <block-list:block block-list:abbreviated-name="woh" block-list:name="who"/>
+  <block-list:block block-list:abbreviated-name="wohle" block-list:name="whole"/>
+  <block-list:block block-list:abbreviated-name="wokr" block-list:name="work"/>
+  <block-list:block block-list:abbreviated-name="woudl" block-list:name="would"/>
+  <block-list:block block-list:abbreviated-name="wouldbe" block-list:name="would be"/>
+  <block-list:block block-list:abbreviated-name="would of been" block-list:name="would have been"/>
+  <block-list:block block-list:abbreviated-name="would of had" block-list:name="would have had"/>
+  <block-list:block block-list:abbreviated-name="wriet" block-list:name="write"/>
+  <block-list:block block-list:abbreviated-name="writting" block-list:name="writing"/>
+  <block-list:block block-list:abbreviated-name="wrod" block-list:name="word"/>
+  <block-list:block block-list:abbreviated-name="wroet" block-list:name="wrote"/>
+  <block-list:block block-list:abbreviated-name="wroking" block-list:name="working"/>
+  <block-list:block block-list:abbreviated-name="wtih" block-list:name="with"/>
+  <block-list:block block-list:abbreviated-name="wuould" block-list:name="would"/>
+  <block-list:block block-list:abbreviated-name="wya" block-list:name="way"/>
+  <block-list:block block-list:abbreviated-name="yera" block-list:name="year"/>
+  <block-list:block block-list:abbreviated-name="yeras" block-list:name="years"/>
+  <block-list:block block-list:abbreviated-name="yersa" block-list:name="years"/>
+  <block-list:block block-list:abbreviated-name="yoiu" block-list:name="you"/>
+  <block-list:block block-list:abbreviated-name="youare" block-list:name="you are"/>
+  <block-list:block block-list:abbreviated-name="ytou" block-list:name="you"/>
+  <block-list:block block-list:abbreviated-name="yuo" block-list:name="you"/>
+  <block-list:block block-list:abbreviated-name="yuor" block-list:name="your"/>
+  <block-list:block block-list:abbreviated-name="1/2" block-list:name="½"/>
+  <block-list:block block-list:abbreviated-name="1/4" block-list:name="¼"/>
+  <block-list:block block-list:abbreviated-name="3/4" block-list:name="¾"/>
+</block-list:block-list>

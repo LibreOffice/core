@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<block-list:block-list xmlns:block-list="http://openoffice.org/2001/block-list" block-list:list-name="acor_ru-RU">
+  <block-list:block block-list:abbreviated-name="--&gt;" block-list:package-name="+AC0ALQA+-" block-list:name="--&gt;" block-list:unformatted-text="false"/>
+  <block-list:block block-list:abbreviated-name="-&gt;" block-list:package-name="+AC0APg-" block-list:name="-&gt;" block-list:unformatted-text="false"/>
+  <block-list:block block-list:abbreviated-name="&lt;-" block-list:package-name="+ADwALQ-" block-list:name="&lt;-" block-list:unformatted-text="false"/>
+  <block-list:block block-list:abbreviated-name="&lt;--" block-list:package-name="+ADwALQAt-" block-list:name="&lt;--" block-list:unformatted-text="false"/>
+  <block-list:block block-list:abbreviated-name="&lt;--&gt;" block-list:package-name="+ADwALQAtAD4-" block-list:name="&lt;--&gt;" block-list:unformatted-text="false"/>
+  <block-list:block block-list:abbreviated-name="&lt;-&gt;" block-list:package-name="+ADwALQA+-" block-list:name="&lt;-&gt;" block-list:unformatted-text="false"/>
+</block-list:block-list>

@@ -1,0 +1,572 @@
+<?xml version="1.0" encoding="utf-8"?>
+<block-list:block-list xmlns:block-list="http://openoffice.org/2001/block-list">
+  <block-list:block block-list:abbreviated-name="--" block-list:name="–"/>
+  <block-list:block block-list:abbreviated-name="--&gt;" block-list:name="→"/>
+  <block-list:block block-list:abbreviated-name="-&gt;" block-list:name="→"/>
+  <block-list:block block-list:abbreviated-name="..." block-list:name="…"/>
+  <block-list:block block-list:abbreviated-name="(c)" block-list:name="©"/>
+  <block-list:block block-list:abbreviated-name="(r)" block-list:name="®"/>
+  <block-list:block block-list:abbreviated-name="(tm)" block-list:name="™"/>
+  <block-list:block block-list:abbreviated-name="&lt;-" block-list:name="←"/>
+  <block-list:block block-list:abbreviated-name="&lt;--" block-list:name="←"/>
+  <block-list:block block-list:abbreviated-name="&lt;--&gt;" block-list:name="↔"/>
+  <block-list:block block-list:abbreviated-name="&lt;-&gt;" block-list:name="↔"/>
+  <block-list:block block-list:abbreviated-name="a pod." block-list:name="apod."/>
+  <block-list:block block-list:abbreviated-name="a t.d." block-list:name="atd."/>
+  <block-list:block block-list:abbreviated-name="a t.p." block-list:name="atp."/>
+  <block-list:block block-list:abbreviated-name="a t.pod." block-list:name="atp."/>
+  <block-list:block block-list:abbreviated-name="a td." block-list:name="atd."/>
+  <block-list:block block-list:abbreviated-name="a tomu pod" block-list:name="atp."/>
+  <block-list:block block-list:abbreviated-name="aby jsem" block-list:name="abych"/>
+  <block-list:block block-list:abbreviated-name="aby jsi" block-list:name="abys"/>
+  <block-list:block block-list:abbreviated-name="aby jsi se" block-list:name="aby ses"/>
+  <block-list:block block-list:abbreviated-name="aby jsme" block-list:name="abychom"/>
+  <block-list:block block-list:abbreviated-name="abysme" block-list:name="abychom"/>
+  <block-list:block block-list:abbreviated-name="ajko" block-list:name="jako"/>
+  <block-list:block block-list:abbreviated-name="akco" block-list:name="akce"/>
+  <block-list:block block-list:abbreviated-name="ako" block-list:name="jako"/>
+  <block-list:block block-list:abbreviated-name="ap." block-list:name="apod."/>
+  <block-list:block block-list:abbreviated-name="bdou" block-list:name="budou"/>
+  <block-list:block block-list:abbreviated-name="behem" block-list:name="během"/>
+  <block-list:block block-list:abbreviated-name="besplatný" block-list:name="bezplatný"/>
+  <block-list:block block-list:abbreviated-name="beze mně" block-list:name="beze mě"/>
+  <block-list:block block-list:abbreviated-name="bezohledu" block-list:name="bez ohledu"/>
+  <block-list:block block-list:abbreviated-name="bezzřetele" block-list:name="bez zřetele"/>
+  <block-list:block block-list:abbreviated-name="blíže mně" block-list:name="blíže mě"/>
+  <block-list:block block-list:abbreviated-name="blíže tě" block-list:name="blíže tebe"/>
+  <block-list:block block-list:abbreviated-name="blízko mně" block-list:name="blízko mě"/>
+  <block-list:block block-list:abbreviated-name="blízko tě" block-list:name="blízko tebe"/>
+  <block-list:block block-list:abbreviated-name="budle" block-list:name="bude"/>
+  <block-list:block block-list:abbreviated-name="byhc" block-list:name="bych"/>
+  <block-list:block block-list:abbreviated-name="byl jsme" block-list:name="byl jsem"/>
+  <block-list:block block-list:abbreviated-name="byla jsme" block-list:name="byla jsem"/>
+  <block-list:block block-list:abbreviated-name="byli jsem" block-list:name="byli jsme"/>
+  <block-list:block block-list:abbreviated-name="byly jsem" block-list:name="byly jsme"/>
+  <block-list:block block-list:abbreviated-name="bze" block-list:name="bez"/>
+  <block-list:block block-list:abbreviated-name="bzla" block-list:name="byla"/>
+  <block-list:block block-list:abbreviated-name="bzlo" block-list:name="bylo"/>
+  <block-list:block block-list:abbreviated-name="čast" block-list:name="část"/>
+  <block-list:block block-list:abbreviated-name="casto" block-list:name="často"/>
+  <block-list:block block-list:abbreviated-name="čeksá" block-list:name="česká"/>
+  <block-list:block block-list:abbreviated-name="čeksé" block-list:name="české"/>
+  <block-list:block block-list:abbreviated-name="čeksý" block-list:name="český"/>
+  <block-list:block block-list:abbreviated-name="cennina" block-list:name="cenina"/>
+  <block-list:block block-list:abbreviated-name="cený" block-list:name="cenný"/>
+  <block-list:block block-list:abbreviated-name="ceske" block-list:name="české"/>
+  <block-list:block block-list:abbreviated-name="českýhc" block-list:name="českých"/>
+  <block-list:block block-list:abbreviated-name="cestujicí" block-list:name="cestující"/>
+  <block-list:block block-list:abbreviated-name="chtěl jsme" block-list:name="chtěl jsem"/>
+  <block-list:block block-list:abbreviated-name="chtěla jsme" block-list:name="chtěla jsem"/>
+  <block-list:block block-list:abbreviated-name="chtěli jsem" block-list:name="chtěli jsme"/>
+  <block-list:block block-list:abbreviated-name="chtěly jsem" block-list:name="chtěly jsme"/>
+  <block-list:block block-list:abbreviated-name="cíkrev" block-list:name="církev"/>
+  <block-list:block block-list:abbreviated-name="cirkve" block-list:name="církve"/>
+  <block-list:block block-list:abbreviated-name="cirkvi" block-list:name="církvi"/>
+  <block-list:block block-list:abbreviated-name="čislo" block-list:name="číslo"/>
+  <block-list:block block-list:abbreviated-name="clen" block-list:name="člen"/>
+  <block-list:block block-list:abbreviated-name="človek" block-list:name="člověk"/>
+  <block-list:block block-list:abbreviated-name="cloveka" block-list:name="člověka"/>
+  <block-list:block block-list:abbreviated-name="colý" block-list:name="celý"/>
+  <block-list:block block-list:abbreviated-name="čtyri" block-list:name="čtyři"/>
+  <block-list:block block-list:abbreviated-name="čtyří" block-list:name="čtyři"/>
+  <block-list:block block-list:abbreviated-name="čvrtletí" block-list:name="čtvrtletí"/>
+  <block-list:block block-list:abbreviated-name="čy" block-list:name="či"/>
+  <block-list:block block-list:abbreviated-name="čýst" block-list:name="část"/>
+  <block-list:block block-list:abbreviated-name="daleko mně" block-list:name="daleko mě"/>
+  <block-list:block block-list:abbreviated-name="daleko tě" block-list:name="daleko tebe"/>
+  <block-list:block block-list:abbreviated-name="dalsi" block-list:name="další"/>
+  <block-list:block block-list:abbreviated-name="dalši" block-list:name="další"/>
+  <block-list:block block-list:abbreviated-name="datumem" block-list:name="datem"/>
+  <block-list:block block-list:abbreviated-name="dcou" block-list:name="dvou"/>
+  <block-list:block block-list:abbreviated-name="denni" block-list:name="denní"/>
+  <block-list:block block-list:abbreviated-name="dens" block-list:name="dnes"/>
+  <block-list:block block-list:abbreviated-name="devet" block-list:name="devět"/>
+  <block-list:block block-list:abbreviated-name="dkyž" block-list:name="když"/>
+  <block-list:block block-list:abbreviated-name="dnos" block-list:name="dnes"/>
+  <block-list:block block-list:abbreviated-name="do mně" block-list:name="do mě"/>
+  <block-list:block block-list:abbreviated-name="do prostřed" block-list:name="doprostřed"/>
+  <block-list:block block-list:abbreviated-name="do tě" block-list:name="do tebe"/>
+  <block-list:block block-list:abbreviated-name="do vnitř" block-list:name="dovnitř"/>
+  <block-list:block block-list:abbreviated-name="dobe" block-list:name="době"/>
+  <block-list:block block-list:abbreviated-name="dobre" block-list:name="dobře"/>
+  <block-list:block block-list:abbreviated-name="dokumetny" block-list:name="dokumenty"/>
+  <block-list:block block-list:abbreviated-name="doprostřed mně" block-list:name="doprostřed mě"/>
+  <block-list:block block-list:abbreviated-name="doprostřed tě" block-list:name="doprostřed tebe"/>
+  <block-list:block block-list:abbreviated-name="doubré" block-list:name="dobré"/>
+  <block-list:block block-list:abbreviated-name="dovnitř mně" block-list:name="dovnitř mě"/>
+  <block-list:block block-list:abbreviated-name="dovnitř tě" block-list:name="dovnitř tebe"/>
+  <block-list:block block-list:abbreviated-name="druhe" block-list:name="druhé"/>
+  <block-list:block block-list:abbreviated-name="dset" block-list:name="deset"/>
+  <block-list:block block-list:abbreviated-name="dsik" block-list:name="disk"/>
+  <block-list:block block-list:abbreviated-name="dsud" block-list:name="dosud"/>
+  <block-list:block block-list:abbreviated-name="duhré" block-list:name="druhé"/>
+  <block-list:block block-list:abbreviated-name="dum" block-list:name="dům"/>
+  <block-list:block block-list:abbreviated-name="durhé" block-list:name="druhé"/>
+  <block-list:block block-list:abbreviated-name="dylší" block-list:name="další"/>
+  <block-list:block block-list:abbreviated-name="eal" block-list:name="ale"/>
+  <block-list:block block-list:abbreviated-name="eventual." block-list:name="event."/>
+  <block-list:block block-list:abbreviated-name="forámt" block-list:name="formát"/>
+  <block-list:block block-list:abbreviated-name="hce" block-list:name="chce"/>
+  <block-list:block block-list:abbreviated-name="hodína" block-list:name="hodina"/>
+  <block-list:block block-list:abbreviated-name="Htp" block-list:name="http"/>
+  <block-list:block block-list:abbreviated-name="Http" block-list:name="http"/>
+  <block-list:block block-list:abbreviated-name="Http:" block-list:name="http:"/>
+  <block-list:block block-list:abbreviated-name="http:\\" block-list:name="http://"/>
+  <block-list:block block-list:abbreviated-name="informaco" block-list:name="informace"/>
+  <block-list:block block-list:abbreviated-name="jaště" block-list:name="ještě"/>
+  <block-list:block block-list:abbreviated-name="jden" block-list:name="jeden"/>
+  <block-list:block block-list:abbreviated-name="jednotlivy" block-list:name="jednotlivý"/>
+  <block-list:block block-list:abbreviated-name="jehoz" block-list:name="jehož"/>
+  <block-list:block block-list:abbreviated-name="jejech" block-list:name="jejich"/>
+  <block-list:block block-list:abbreviated-name="jejichš" block-list:name="jejichž"/>
+  <block-list:block block-list:abbreviated-name="jejihc" block-list:name="jejich"/>
+  <block-list:block block-list:abbreviated-name="jejoch" block-list:name="jejich"/>
+  <block-list:block block-list:abbreviated-name="jemom" block-list:name="jenom"/>
+  <block-list:block block-list:abbreviated-name="jenak" block-list:name="jinak"/>
+  <block-list:block block-list:abbreviated-name="jendání" block-list:name="jednání"/>
+  <block-list:block block-list:abbreviated-name="jende" block-list:name="jeden"/>
+  <block-list:block block-list:abbreviated-name="jendoduchý" block-list:name="jednoduchý"/>
+  <block-list:block block-list:abbreviated-name="jenojm" block-list:name="jenom"/>
+  <block-list:block block-list:abbreviated-name="jeste" block-list:name="ještě"/>
+  <block-list:block block-list:abbreviated-name="jine" block-list:name="jiné"/>
+  <block-list:block block-list:abbreviated-name="jiti" block-list:name="jíti"/>
+  <block-list:block block-list:abbreviated-name="jko" block-list:name="jako"/>
+  <block-list:block block-list:abbreviated-name="jménem mně" block-list:name="mým jménem"/>
+  <block-list:block block-list:abbreviated-name="jménem tě" block-list:name="tvým jménem"/>
+  <block-list:block block-list:abbreviated-name="joden" block-list:name="jeden"/>
+  <block-list:block block-list:abbreviated-name="jojí" block-list:name="její"/>
+  <block-list:block block-list:abbreviated-name="jojich" block-list:name="jejich"/>
+  <block-list:block block-list:abbreviated-name="josu" block-list:name="jsou"/>
+  <block-list:block block-list:abbreviated-name="jsam" block-list:name="jsem"/>
+  <block-list:block block-list:abbreviated-name="jsem byli" block-list:name="jsme byli"/>
+  <block-list:block block-list:abbreviated-name="jsem byly" block-list:name="jsme byly"/>
+  <block-list:block block-list:abbreviated-name="jsem chtěli" block-list:name="jsme chtěli"/>
+  <block-list:block block-list:abbreviated-name="jsem chtěly" block-list:name="jsme chtěly"/>
+  <block-list:block block-list:abbreviated-name="jsem mohli" block-list:name="jsme mohli"/>
+  <block-list:block block-list:abbreviated-name="jsem mohly" block-list:name="jsme mohly"/>
+  <block-list:block block-list:abbreviated-name="jsme byl" block-list:name="jsem byl"/>
+  <block-list:block block-list:abbreviated-name="jsme byla" block-list:name="jsem byla"/>
+  <block-list:block block-list:abbreviated-name="jsme chtěl" block-list:name="jsem chtěl"/>
+  <block-list:block block-list:abbreviated-name="jsme chtěla" block-list:name="jsem chtěla"/>
+  <block-list:block block-list:abbreviated-name="jsme mohl" block-list:name="jsem mohl"/>
+  <block-list:block block-list:abbreviated-name="jsme mohla" block-list:name="jsem mohla"/>
+  <block-list:block block-list:abbreviated-name="jsuo" block-list:name="jsou"/>
+  <block-list:block block-list:abbreviated-name="jyko" block-list:name="jako"/>
+  <block-list:block block-list:abbreviated-name="k ti" block-list:name="k tobě"/>
+  <block-list:block block-list:abbreviated-name="kamený" block-list:name="kamenný"/>
+  <block-list:block block-list:abbreviated-name="kařdý" block-list:name="každý"/>
+  <block-list:block block-list:abbreviated-name="kazdy" block-list:name="každý"/>
+  <block-list:block block-list:abbreviated-name="kčs" block-list:name="Kč"/>
+  <block-list:block block-list:abbreviated-name="kdyby jsem" block-list:name="kdybych"/>
+  <block-list:block block-list:abbreviated-name="kdyby jsi" block-list:name="kdybys"/>
+  <block-list:block block-list:abbreviated-name="kdyby jsi se" block-list:name="kdyby ses"/>
+  <block-list:block block-list:abbreviated-name="kdyby jsme" block-list:name="kdybychom"/>
+  <block-list:block block-list:abbreviated-name="kdybysme" block-list:name="kdybychom"/>
+  <block-list:block block-list:abbreviated-name="kdyz" block-list:name="když"/>
+  <block-list:block block-list:abbreviated-name="ke mě" block-list:name="ke mně"/>
+  <block-list:block block-list:abbreviated-name="ked" block-list:name="kde"/>
+  <block-list:block block-list:abbreviated-name="ketrá" block-list:name="která"/>
+  <block-list:block block-list:abbreviated-name="ketří" block-list:name="kteří"/>
+  <block-list:block block-list:abbreviated-name="ketrý" block-list:name="který"/>
+  <block-list:block block-list:abbreviated-name="kja" block-list:name="jak"/>
+  <block-list:block block-list:abbreviated-name="kodonce" block-list:name="dokonce"/>
+  <block-list:block block-list:abbreviated-name="kolem mně" block-list:name="kolem mě"/>
+  <block-list:block block-list:abbreviated-name="kolem tě" block-list:name="kolem tebe"/>
+  <block-list:block block-list:abbreviated-name="komel" block-list:name="kolem"/>
+  <block-list:block block-list:abbreviated-name="konoc" block-list:name="konec"/>
+  <block-list:block block-list:abbreviated-name="kotun" block-list:name="korun"/>
+  <block-list:block block-list:abbreviated-name="ktaré" block-list:name="které"/>
+  <block-list:block block-list:abbreviated-name="ktera" block-list:name="která"/>
+  <block-list:block block-list:abbreviated-name="ktere" block-list:name="které"/>
+  <block-list:block block-list:abbreviated-name="kteri" block-list:name="kteří"/>
+  <block-list:block block-list:abbreviated-name="ktery" block-list:name="který"/>
+  <block-list:block block-list:abbreviated-name="kteté" block-list:name="které"/>
+  <block-list:block block-list:abbreviated-name="ktotou" block-list:name="kterou"/>
+  <block-list:block block-list:abbreviated-name="ktrý" block-list:name="který"/>
+  <block-list:block block-list:abbreviated-name="ku př." block-list:name="kupř."/>
+  <block-list:block block-list:abbreviated-name="ku přikl." block-list:name="kupř."/>
+  <block-list:block block-list:abbreviated-name="kvůli mě" block-list:name="kvůli mně"/>
+  <block-list:block block-list:abbreviated-name="kvůli ti" block-list:name="kvůli tobě"/>
+  <block-list:block block-list:abbreviated-name="kžesťanství" block-list:name="křesťanství"/>
+  <block-list:block block-list:abbreviated-name="lídé" block-list:name="lidé"/>
+  <block-list:block block-list:abbreviated-name="lídí" block-list:name="lidí"/>
+  <block-list:block block-list:abbreviated-name="lotech" block-list:name="letech"/>
+  <block-list:block block-list:abbreviated-name="maji" block-list:name="mají"/>
+  <block-list:block block-list:abbreviated-name="meli" block-list:name="měli"/>
+  <block-list:block block-list:abbreviated-name="melo" block-list:name="mělo"/>
+  <block-list:block block-list:abbreviated-name="měsic" block-list:name="měsíc"/>
+  <block-list:block block-list:abbreviated-name="mesta" block-list:name="města"/>
+  <block-list:block block-list:abbreviated-name="mesto" block-list:name="město"/>
+  <block-list:block block-list:abbreviated-name="meti" block-list:name="mezi"/>
+  <block-list:block block-list:abbreviated-name="mezi mně" block-list:name="mezi mě"/>
+  <block-list:block block-list:abbreviated-name="mezi tě" block-list:name="mezi tebe"/>
+  <block-list:block block-list:abbreviated-name="mimo j." block-list:name="mj."/>
+  <block-list:block block-list:abbreviated-name="mimo mně" block-list:name="mimo mě"/>
+  <block-list:block block-list:abbreviated-name="mimo tě" block-list:name="mimo tebe"/>
+  <block-list:block block-list:abbreviated-name="mínuta" block-list:name="minuta"/>
+  <block-list:block block-list:abbreviated-name="misto" block-list:name="místo"/>
+  <block-list:block block-list:abbreviated-name="místo mně" block-list:name="místo mě"/>
+  <block-list:block block-list:abbreviated-name="místo tě" block-list:name="místo tebe"/>
+  <block-list:block block-list:abbreviated-name="misty" block-list:name="místy"/>
+  <block-list:block block-list:abbreviated-name="miti" block-list:name="míti"/>
+  <block-list:block block-list:abbreviated-name="mítso" block-list:name="místo"/>
+  <block-list:block block-list:abbreviated-name="mlě" block-list:name="měl"/>
+  <block-list:block block-list:abbreviated-name="mohl jsme" block-list:name="mohl jsem"/>
+  <block-list:block block-list:abbreviated-name="mohla jsme" block-list:name="mohla jsem"/>
+  <block-list:block block-list:abbreviated-name="mohli jsem" block-list:name="mohli jsme"/>
+  <block-list:block block-list:abbreviated-name="mohly jsem" block-list:name="mohly jsme"/>
+  <block-list:block block-list:abbreviated-name="molh" block-list:name="mohl"/>
+  <block-list:block block-list:abbreviated-name="mouhou" block-list:name="mohou"/>
+  <block-list:block block-list:abbreviated-name="mozno" block-list:name="možno"/>
+  <block-list:block block-list:abbreviated-name="musi" block-list:name="musí"/>
+  <block-list:block block-list:abbreviated-name="můsí" block-list:name="musí"/>
+  <block-list:block block-list:abbreviated-name="mzdovy" block-list:name="mzdový"/>
+  <block-list:block block-list:abbreviated-name="na př." block-list:name="např."/>
+  <block-list:block block-list:abbreviated-name="na příč" block-list:name="napříč"/>
+  <block-list:block block-list:abbreviated-name="na přikl." block-list:name="např."/>
+  <block-list:block block-list:abbreviated-name="na proti" block-list:name="naproti"/>
+  <block-list:block block-list:abbreviated-name="na úseku" block-list:name="na úseku"/>
+  <block-list:block block-list:abbreviated-name="na vzdory" block-list:name="navzdory"/>
+  <block-list:block block-list:abbreviated-name="nabo" block-list:name="nebo"/>
+  <block-list:block block-list:abbreviated-name="naboť" block-list:name="neboť"/>
+  <block-list:block block-list:abbreviated-name="najsme" block-list:name="nejsme"/>
+  <block-list:block block-list:abbreviated-name="nakladatelstvi" block-list:name="nakladatelství"/>
+  <block-list:block block-list:abbreviated-name="napříč mě" block-list:name="napříč mně"/>
+  <block-list:block block-list:abbreviated-name="napříč mne" block-list:name="napříč mně"/>
+  <block-list:block block-list:abbreviated-name="napříč tě" block-list:name="napříč tebe"/>
+  <block-list:block block-list:abbreviated-name="napřikl." block-list:name="např."/>
+  <block-list:block block-list:abbreviated-name="napriklad" block-list:name="například"/>
+  <block-list:block block-list:abbreviated-name="naproti mě" block-list:name="naproti mně"/>
+  <block-list:block block-list:abbreviated-name="naproti mne" block-list:name="naproti mně"/>
+  <block-list:block block-list:abbreviated-name="naproti ti" block-list:name="naproti tobě"/>
+  <block-list:block block-list:abbreviated-name="narozdíl" block-list:name="na rozdíl"/>
+  <block-list:block block-list:abbreviated-name="nasi" block-list:name="naší"/>
+  <block-list:block block-list:abbreviated-name="naúkor" block-list:name="na úkor"/>
+  <block-list:block block-list:abbreviated-name="naúrovni" block-list:name="na úrovni"/>
+  <block-list:block block-list:abbreviated-name="navic" block-list:name="navíc"/>
+  <block-list:block block-list:abbreviated-name="navrub" block-list:name="na vrub"/>
+  <block-list:block block-list:abbreviated-name="nazákladě" block-list:name="na základě"/>
+  <block-list:block block-list:abbreviated-name="nazávěr" block-list:name="na závěr"/>
+  <block-list:block block-list:abbreviated-name="nazpůsob" block-list:name="na způsob"/>
+  <block-list:block block-list:abbreviated-name="nebot" block-list:name="neboť"/>
+  <block-list:block block-list:abbreviated-name="neco" block-list:name="něco"/>
+  <block-list:block block-list:abbreviated-name="nedaleko mně" block-list:name="nedaleko mě"/>
+  <block-list:block block-list:abbreviated-name="nedaleko tě" block-list:name="nedaleko tebe"/>
+  <block-list:block block-list:abbreviated-name="nehleděk" block-list:name="nehledě k"/>
+  <block-list:block block-list:abbreviated-name="nejbo" block-list:name="nebo"/>
+  <block-list:block block-list:abbreviated-name="nejem" block-list:name="nejen"/>
+  <block-list:block block-list:abbreviated-name="nekdo" block-list:name="někdo"/>
+  <block-list:block block-list:abbreviated-name="nekolik" block-list:name="několik"/>
+  <block-list:block block-list:abbreviated-name="nekterých" block-list:name="některých"/>
+  <block-list:block block-list:abbreviated-name="nelza" block-list:name="nelze"/>
+  <block-list:block block-list:abbreviated-name="nema" block-list:name="nemá"/>
+  <block-list:block block-list:abbreviated-name="nemůze" block-list:name="nemůže"/>
+  <block-list:block block-list:abbreviated-name="neni" block-list:name="není"/>
+  <block-list:block block-list:abbreviated-name="neob" block-list:name="nebo"/>
+  <block-list:block block-list:abbreviated-name="nepaltné" block-list:name="neplatné"/>
+  <block-list:block block-list:abbreviated-name="neplytné" block-list:name="neplatné"/>
+  <block-list:block block-list:abbreviated-name="neuveld" block-list:name="neuvedl"/>
+  <block-list:block block-list:abbreviated-name="nezákoný" block-list:name="nezákonný"/>
+  <block-list:block block-list:abbreviated-name="nezávislena" block-list:name="nezávisle na"/>
+  <block-list:block block-list:abbreviated-name="nezle" block-list:name="nelze"/>
+  <block-list:block block-list:abbreviated-name="nezli" block-list:name="nežli"/>
+  <block-list:block block-list:abbreviated-name="nichz" block-list:name="nichž"/>
+  <block-list:block block-list:abbreviated-name="nihc" block-list:name="nich"/>
+  <block-list:block block-list:abbreviated-name="nihcž" block-list:name="nichž"/>
+  <block-list:block block-list:abbreviated-name="nylezeno" block-list:name="nalezeno"/>
+  <block-list:block block-list:abbreviated-name="nyni" block-list:name="nyní"/>
+  <block-list:block block-list:abbreviated-name="nypříklad" block-list:name="například"/>
+  <block-list:block block-list:abbreviated-name="o proti" block-list:name="oproti"/>
+  <block-list:block block-list:abbreviated-name="obasti" block-list:name="oblasti"/>
+  <block-list:block block-list:abbreviated-name="obdoubí" block-list:name="období"/>
+  <block-list:block block-list:abbreviated-name="objkt" block-list:name="objekt"/>
+  <block-list:block block-list:abbreviated-name="oboc" block-list:name="obec"/>
+  <block-list:block block-list:abbreviated-name="obsahuej" block-list:name="obsahuje"/>
+  <block-list:block block-list:abbreviated-name="obsyhuje" block-list:name="obsahuje"/>
+  <block-list:block block-list:abbreviated-name="od tě" block-list:name="od tebe"/>
+  <block-list:block block-list:abbreviated-name="odací" block-list:name="oddací"/>
+  <block-list:block block-list:abbreviated-name="odaný" block-list:name="oddaný"/>
+  <block-list:block block-list:abbreviated-name="ode mně" block-list:name="ode mě"/>
+  <block-list:block block-list:abbreviated-name="odělení" block-list:name="oddělení"/>
+  <block-list:block block-list:abbreviated-name="odf" block-list:name="ODF"/>
+  <block-list:block block-list:abbreviated-name="odíl" block-list:name="oddíl"/>
+  <block-list:block block-list:abbreviated-name="ohledemk" block-list:name="ohledem k"/>
+  <block-list:block block-list:abbreviated-name="ohledemna" block-list:name="ohledem na"/>
+  <block-list:block block-list:abbreviated-name="ohleduna" block-list:name="ohledu na"/>
+  <block-list:block block-list:abbreviated-name="okolo mně" block-list:name="okolo mě"/>
+  <block-list:block block-list:abbreviated-name="okolo tě" block-list:name="okolo tebe"/>
+  <block-list:block block-list:abbreviated-name="opodál mně" block-list:name="opodál mě"/>
+  <block-list:block block-list:abbreviated-name="opodál tě" block-list:name="opodál tebe"/>
+  <block-list:block block-list:abbreviated-name="osobni" block-list:name="osobní"/>
+  <block-list:block block-list:abbreviated-name="ostatni" block-list:name="ostatní"/>
+  <block-list:block block-list:abbreviated-name="otevřte" block-list:name="otevřete"/>
+  <block-list:block block-list:abbreviated-name="oublast" block-list:name="oblast"/>
+  <block-list:block block-list:abbreviated-name="oublasti" block-list:name="oblasti"/>
+  <block-list:block block-list:abbreviated-name="ovsem" block-list:name="ovšem"/>
+  <block-list:block block-list:abbreviated-name="pdle" block-list:name="podle"/>
+  <block-list:block block-list:abbreviated-name="pdopis" block-list:name="podpis"/>
+  <block-list:block block-list:abbreviated-name="penize" block-list:name="peníze"/>
+  <block-list:block block-list:abbreviated-name="pikud" block-list:name="pokud"/>
+  <block-list:block block-list:abbreviated-name="pka" block-list:name="pak"/>
+  <block-list:block block-list:abbreviated-name="po popříp." block-list:name="popř."/>
+  <block-list:block block-list:abbreviated-name="po př." block-list:name="popř."/>
+  <block-list:block block-list:abbreviated-name="poblíž mně" block-list:name="poblíž mě"/>
+  <block-list:block block-list:abbreviated-name="poblíž tě" block-list:name="poblíž tebe"/>
+  <block-list:block block-list:abbreviated-name="pocasi" block-list:name="počasí"/>
+  <block-list:block block-list:abbreviated-name="pocet" block-list:name="počet"/>
+  <block-list:block block-list:abbreviated-name="poddojmem" block-list:name="pod dojmem"/>
+  <block-list:block block-list:abbreviated-name="podél mně" block-list:name="podél mě"/>
+  <block-list:block block-list:abbreviated-name="podél tě" block-list:name="podél tebe"/>
+  <block-list:block block-list:abbreviated-name="podil" block-list:name="podíl"/>
+  <block-list:block block-list:abbreviated-name="podkníkový" block-list:name="podnikový"/>
+  <block-list:block block-list:abbreviated-name="podle mně" block-list:name="podle mě"/>
+  <block-list:block block-list:abbreviated-name="podle tě" block-list:name="podle tebe"/>
+  <block-list:block block-list:abbreviated-name="podminka" block-list:name="podmínka"/>
+  <block-list:block block-list:abbreviated-name="podník" block-list:name="podnik"/>
+  <block-list:block block-list:abbreviated-name="podtlakem" block-list:name="pod tlakem"/>
+  <block-list:block block-list:abbreviated-name="podvlivem" block-list:name="pod vlivem"/>
+  <block-list:block block-list:abbreviated-name="podzáminkou" block-list:name="pod záminkou"/>
+  <block-list:block block-list:abbreviated-name="politicke" block-list:name="politické"/>
+  <block-list:block block-list:abbreviated-name="porava" block-list:name="oprava"/>
+  <block-list:block block-list:abbreviated-name="posledni" block-list:name="poslední"/>
+  <block-list:block block-list:abbreviated-name="posměru" block-list:name="po směru"/>
+  <block-list:block block-list:abbreviated-name="postránce" block-list:name="po stránce"/>
+  <block-list:block block-list:abbreviated-name="poudklad" block-list:name="podklad"/>
+  <block-list:block block-list:abbreviated-name="poudle" block-list:name="podle"/>
+  <block-list:block block-list:abbreviated-name="poukud" block-list:name="pokud"/>
+  <block-list:block block-list:abbreviated-name="použe" block-list:name="pouze"/>
+  <block-list:block block-list:abbreviated-name="povzoru" block-list:name="po vzoru"/>
+  <block-list:block block-list:abbreviated-name="prace" block-list:name="práce"/>
+  <block-list:block block-list:abbreviated-name="praconví" block-list:name="pracovní"/>
+  <block-list:block block-list:abbreviated-name="pracovnik" block-list:name="pracovník"/>
+  <block-list:block block-list:abbreviated-name="pravě" block-list:name="právě"/>
+  <block-list:block block-list:abbreviated-name="pred" block-list:name="před"/>
+  <block-list:block block-list:abbreviated-name="předeším" block-list:name="především"/>
+  <block-list:block block-list:abbreviated-name="predevsim" block-list:name="především"/>
+  <block-list:block block-list:abbreviated-name="predmet" block-list:name="předmět"/>
+  <block-list:block block-list:abbreviated-name="předpos" block-list:name="předpis"/>
+  <block-list:block block-list:abbreviated-name="pri" block-list:name="při"/>
+  <block-list:block block-list:abbreviated-name="při mě" block-list:name="při mně"/>
+  <block-list:block block-list:abbreviated-name="při tě" block-list:name="při tobě"/>
+  <block-list:block block-list:abbreviated-name="příhlaška" block-list:name="přihlášky"/>
+  <block-list:block block-list:abbreviated-name="přihlížejek" block-list:name="přihlížeje k"/>
+  <block-list:block block-list:abbreviated-name="přílis" block-list:name="příliš"/>
+  <block-list:block block-list:abbreviated-name="přiloha" block-list:name="příloha"/>
+  <block-list:block block-list:abbreviated-name="připadě" block-list:name="případě"/>
+  <block-list:block block-list:abbreviated-name="přípravuje" block-list:name="připravuje"/>
+  <block-list:block block-list:abbreviated-name="pro mně" block-list:name="pro mě"/>
+  <block-list:block block-list:abbreviated-name="pro tě" block-list:name="pro tebe"/>
+  <block-list:block block-list:abbreviated-name="propřípad" block-list:name="pro případ"/>
+  <block-list:block block-list:abbreviated-name="přos" block-list:name="přes"/>
+  <block-list:block block-list:abbreviated-name="protí" block-list:name="proti"/>
+  <block-list:block block-list:abbreviated-name="proti mě" block-list:name="proti mně"/>
+  <block-list:block block-list:abbreviated-name="proti mne" block-list:name="proti mně"/>
+  <block-list:block block-list:abbreviated-name="proti ti" block-list:name="proti tobě"/>
+  <block-list:block block-list:abbreviated-name="protoze" block-list:name="protože"/>
+  <block-list:block block-list:abbreviated-name="provdedení" block-list:name="provedení"/>
+  <block-list:block block-list:abbreviated-name="prti" block-list:name="proti"/>
+  <block-list:block block-list:abbreviated-name="prvni" block-list:name="první"/>
+  <block-list:block block-list:abbreviated-name="pryha" block-list:name="Praha"/>
+  <block-list:block block-list:abbreviated-name="psolečnost" block-list:name="společnost"/>
+  <block-list:block block-list:abbreviated-name="puda" block-list:name="půda"/>
+  <block-list:block block-list:abbreviated-name="puoze" block-list:name="pouze"/>
+  <block-list:block block-list:abbreviated-name="pvní" block-list:name="první"/>
+  <block-list:block block-list:abbreviated-name="pzemí" block-list:name="území"/>
+  <block-list:block block-list:abbreviated-name="ramení" block-list:name="ramenní"/>
+  <block-list:block block-list:abbreviated-name="rekl" block-list:name="řekl"/>
+  <block-list:block block-list:abbreviated-name="řelk" block-list:name="řekl"/>
+  <block-list:block block-list:abbreviated-name="replubiky" block-list:name="republiky"/>
+  <block-list:block block-list:abbreviated-name="republeka" block-list:name="republika"/>
+  <block-list:block block-list:abbreviated-name="řiká" block-list:name="říká"/>
+  <block-list:block block-list:abbreviated-name="ronvež" block-list:name="rovněž"/>
+  <block-list:block block-list:abbreviated-name="roschod" block-list:name="rozchod"/>
+  <block-list:block block-list:abbreviated-name="rozdílod" block-list:name="rozdíl od"/>
+  <block-list:block block-list:abbreviated-name="rpáce" block-list:name="práce"/>
+  <block-list:block block-list:abbreviated-name="rpacovní" block-list:name="pracovní"/>
+  <block-list:block block-list:abbreviated-name="rpaha" block-list:name="Praha"/>
+  <block-list:block block-list:abbreviated-name="rpoti" block-list:name="proti"/>
+  <block-list:block block-list:abbreviated-name="rpoto" block-list:name="proto"/>
+  <block-list:block block-list:abbreviated-name="rpto" block-list:name="proto"/>
+  <block-list:block block-list:abbreviated-name="senzam" block-list:name="seznam"/>
+  <block-list:block block-list:abbreviated-name="serial" block-list:name="seriál"/>
+  <block-list:block block-list:abbreviated-name="seríál" block-list:name="seriál"/>
+  <block-list:block block-list:abbreviated-name="sest" block-list:name="šest"/>
+  <block-list:block block-list:abbreviated-name="setuace" block-list:name="situace"/>
+  <block-list:block block-list:abbreviated-name="setuaci" block-list:name="situaci"/>
+  <block-list:block block-list:abbreviated-name="seznym" block-list:name="seznam"/>
+  <block-list:block block-list:abbreviated-name="sezoní" block-list:name="sezónní"/>
+  <block-list:block block-list:abbreviated-name="sezřetelem" block-list:name="se zřetelem"/>
+  <block-list:block block-list:abbreviated-name="síce" block-list:name="sice"/>
+  <block-list:block block-list:abbreviated-name="sjme" block-list:name="jsme"/>
+  <block-list:block block-list:abbreviated-name="sjou" block-list:name="jsou"/>
+  <block-list:block block-list:abbreviated-name="skola" block-list:name="škola"/>
+  <block-list:block block-list:abbreviated-name="skrze mně" block-list:name="skrze mě"/>
+  <block-list:block block-list:abbreviated-name="skrze tě" block-list:name="skrze tebe"/>
+  <block-list:block block-list:abbreviated-name="sluný" block-list:name="slunný"/>
+  <block-list:block block-list:abbreviated-name="smer" block-list:name="směr"/>
+  <block-list:block block-list:abbreviated-name="sobor" block-list:name="soubor"/>
+  <block-list:block block-list:abbreviated-name="sohledem" block-list:name="s ohledem"/>
+  <block-list:block block-list:abbreviated-name="solva" block-list:name="slova"/>
+  <block-list:block block-list:abbreviated-name="soubr" block-list:name="souhlas"/>
+  <block-list:block block-list:abbreviated-name="spiše" block-list:name="spíše"/>
+  <block-list:block block-list:abbreviated-name="spolecnost" block-list:name="společnost"/>
+  <block-list:block block-list:abbreviated-name="společnots" block-list:name="společnost"/>
+  <block-list:block block-list:abbreviated-name="spoločností" block-list:name="společnosti"/>
+  <block-list:block block-list:abbreviated-name="sr." block-list:name="srov."/>
+  <block-list:block block-list:abbreviated-name="srovn." block-list:name="srov."/>
+  <block-list:block block-list:abbreviated-name="stale" block-list:name="stále"/>
+  <block-list:block block-list:abbreviated-name="státni" block-list:name="státní"/>
+  <block-list:block block-list:abbreviated-name="stojně" block-list:name="stejně"/>
+  <block-list:block block-list:abbreviated-name="stryny" block-list:name="strany"/>
+  <block-list:block block-list:abbreviated-name="stupen" block-list:name="stupeň"/>
+  <block-list:block block-list:abbreviated-name="sveho" block-list:name="svého"/>
+  <block-list:block block-list:abbreviated-name="svem" block-list:name="svém"/>
+  <block-list:block block-list:abbreviated-name="sveta" block-list:name="světa"/>
+  <block-list:block block-list:abbreviated-name="svuj" block-list:name="svůj"/>
+  <block-list:block block-list:abbreviated-name="svuo" block-list:name="svou"/>
+  <block-list:block block-list:abbreviated-name="svych" block-list:name="svých"/>
+  <block-list:block block-list:abbreviated-name="svýjimkou" block-list:name="s výjimkou"/>
+  <block-list:block block-list:abbreviated-name="svym" block-list:name="svým"/>
+  <block-list:block block-list:abbreviated-name="system" block-list:name="systém"/>
+  <block-list:block block-list:abbreviated-name="t.j." block-list:name="tj."/>
+  <block-list:block block-list:abbreviated-name="t.zv." block-list:name="tzv."/>
+  <block-list:block block-list:abbreviated-name="tak zv." block-list:name="tzv."/>
+  <block-list:block block-list:abbreviated-name="take" block-list:name="také"/>
+  <block-list:block block-list:abbreviated-name="talčítko" block-list:name="tlačítko"/>
+  <block-list:block block-list:abbreviated-name="těchot" block-list:name="těchto"/>
+  <block-list:block block-list:abbreviated-name="techto" block-list:name="těchto"/>
+  <block-list:block block-list:abbreviated-name="tedhy" block-list:name="tehdy"/>
+  <block-list:block block-list:abbreviated-name="tedz" block-list:name="tedy"/>
+  <block-list:block block-list:abbreviated-name="televizni" block-list:name="televizní"/>
+  <block-list:block block-list:abbreviated-name="temer" block-list:name="téměř"/>
+  <block-list:block block-list:abbreviated-name="tesíc" block-list:name="tisíc"/>
+  <block-list:block block-list:abbreviated-name="tetno" block-list:name="tento"/>
+  <block-list:block block-list:abbreviated-name="tetono" block-list:name="tento"/>
+  <block-list:block block-list:abbreviated-name="tisic" block-list:name="tisíc"/>
+  <block-list:block block-list:abbreviated-name="tísíc" block-list:name="tisíc"/>
+  <block-list:block block-list:abbreviated-name="TM" block-list:name="(tm)"/>
+  <block-list:block block-list:abbreviated-name="to zn." block-list:name="tzn."/>
+  <block-list:block block-list:abbreviated-name="to znam." block-list:name="tzn."/>
+  <block-list:block block-list:abbreviated-name="tohto" block-list:name="tohoto"/>
+  <block-list:block block-list:abbreviated-name="tosíc" block-list:name="tisíc"/>
+  <block-list:block block-list:abbreviated-name="totiz" block-list:name="totiž"/>
+  <block-list:block block-list:abbreviated-name="totíž" block-list:name="totiž"/>
+  <block-list:block block-list:abbreviated-name="totmo" block-list:name="tomto"/>
+  <block-list:block block-list:abbreviated-name="totom" block-list:name="tomto"/>
+  <block-list:block block-list:abbreviated-name="treba" block-list:name="třeba"/>
+  <block-list:block block-list:abbreviated-name="třeby" block-list:name="třeba"/>
+  <block-list:block block-list:abbreviated-name="třeva" block-list:name="třeba"/>
+  <block-list:block block-list:abbreviated-name="tuot" block-list:name="tuto"/>
+  <block-list:block block-list:abbreviated-name="tzto" block-list:name="tyto"/>
+  <block-list:block block-list:abbreviated-name="u mně" block-list:name="u mě"/>
+  <block-list:block block-list:abbreviated-name="u prostřed" block-list:name="uprostřed"/>
+  <block-list:block block-list:abbreviated-name="u tě" block-list:name="u tebe"/>
+  <block-list:block block-list:abbreviated-name="u vnitř" block-list:name="uvnitř"/>
+  <block-list:block block-list:abbreviated-name="účinný" block-list:name="účinný"/>
+  <block-list:block block-list:abbreviated-name="úhemí" block-list:name="území"/>
+  <block-list:block block-list:abbreviated-name="ukol" block-list:name="úkol"/>
+  <block-list:block block-list:abbreviated-name="úměrněk" block-list:name="úměrně k"/>
+  <block-list:block block-list:abbreviated-name="uprostřed mně" block-list:name="uprostřed mě"/>
+  <block-list:block block-list:abbreviated-name="uveld" block-list:name="uvedl"/>
+  <block-list:block block-list:abbreviated-name="uvnitř mně" block-list:name="uvnitř mě"/>
+  <block-list:block block-list:abbreviated-name="uvnitř tě" block-list:name="uvnitř tebe"/>
+  <block-list:block block-list:abbreviated-name="ůzemí" block-list:name="území"/>
+  <block-list:block block-list:abbreviated-name="uživání" block-list:name="užívání"/>
+  <block-list:block block-list:abbreviated-name="v četně" block-list:name="včetně"/>
+  <block-list:block block-list:abbreviated-name="v prostřed" block-list:name="vprostřed"/>
+  <block-list:block block-list:abbreviated-name="valky" block-list:name="války"/>
+  <block-list:block block-list:abbreviated-name="valstní" block-list:name="vlastní"/>
+  <block-list:block block-list:abbreviated-name="vcera" block-list:name="včera"/>
+  <block-list:block block-list:abbreviated-name="včery" block-list:name="včera"/>
+  <block-list:block block-list:abbreviated-name="vdoucí" block-list:name="vedoucí"/>
+  <block-list:block block-list:abbreviated-name="vdůsledku" block-list:name="v důsledku"/>
+  <block-list:block block-list:abbreviated-name="ve mě" block-list:name="ve mně"/>
+  <block-list:block block-list:abbreviated-name="ve tě" block-list:name="v tobě"/>
+  <block-list:block block-list:abbreviated-name="vec" block-list:name="věc"/>
+  <block-list:block block-list:abbreviated-name="veci" block-list:name="věci"/>
+  <block-list:block block-list:abbreviated-name="vedle mně" block-list:name="vedle mě"/>
+  <block-list:block block-list:abbreviated-name="vedle tě" block-list:name="vedle tebe"/>
+  <block-list:block block-list:abbreviated-name="veformě" block-list:name="ve formě"/>
+  <block-list:block block-list:abbreviated-name="vejménu" block-list:name="ve jménu"/>
+  <block-list:block block-list:abbreviated-name="velíký" block-list:name="veliký"/>
+  <block-list:block block-list:abbreviated-name="veloký" block-list:name="veliký"/>
+  <block-list:block block-list:abbreviated-name="vemli" block-list:name="velmi"/>
+  <block-list:block block-list:abbreviated-name="veprospěch" block-list:name="ve prospěch"/>
+  <block-list:block block-list:abbreviated-name="veshodě" block-list:name="ve shodě"/>
+  <block-list:block block-list:abbreviated-name="vesměru" block-list:name="ve směru"/>
+  <block-list:block block-list:abbreviated-name="vesmyslu" block-list:name="ve smyslu"/>
+  <block-list:block block-list:abbreviated-name="vespojení" block-list:name="ve spojení"/>
+  <block-list:block block-list:abbreviated-name="vestředu" block-list:name="ve středu"/>
+  <block-list:block block-list:abbreviated-name="vevěci" block-list:name="ve věci"/>
+  <block-list:block block-list:abbreviated-name="vevztahu" block-list:name="ve vztahu"/>
+  <block-list:block block-list:abbreviated-name="víco" block-list:name="více"/>
+  <block-list:block block-list:abbreviated-name="vinník" block-list:name="viník"/>
+  <block-list:block block-list:abbreviated-name="vlady" block-list:name="vlády"/>
+  <block-list:block block-list:abbreviated-name="vlemli" block-list:name="velmi"/>
+  <block-list:block block-list:abbreviated-name="vobdobí" block-list:name="v období"/>
+  <block-list:block block-list:abbreviated-name="voblasti" block-list:name="v oblasti"/>
+  <block-list:block block-list:abbreviated-name="votázce" block-list:name="v otázce"/>
+  <block-list:block block-list:abbreviated-name="vpodobě" block-list:name="v podobě"/>
+  <block-list:block block-list:abbreviated-name="vpoměru" block-list:name="v poměru"/>
+  <block-list:block block-list:abbreviated-name="vporovnání" block-list:name="v porovnání"/>
+  <block-list:block block-list:abbreviated-name="vpřípadě" block-list:name="v případě"/>
+  <block-list:block block-list:abbreviated-name="vprocesu" block-list:name="v procesu"/>
+  <block-list:block block-list:abbreviated-name="vprotikladu" block-list:name="v protikladu"/>
+  <block-list:block block-list:abbreviated-name="vprůběhu" block-list:name="v průběhu"/>
+  <block-list:block block-list:abbreviated-name="vrelaci" block-list:name="v relaci"/>
+  <block-list:block block-list:abbreviated-name="vrozporu" block-list:name="v rozporu"/>
+  <block-list:block block-list:abbreviated-name="vsak" block-list:name="však"/>
+  <block-list:block block-list:abbreviated-name="vsech" block-list:name="všech"/>
+  <block-list:block block-list:abbreviated-name="všechny" block-list:name="všechny"/>
+  <block-list:block block-list:abbreviated-name="všoch" block-list:name="všech"/>
+  <block-list:block block-list:abbreviated-name="všochen" block-list:name="všechen"/>
+  <block-list:block block-list:abbreviated-name="vsouhlase" block-list:name="v souhlase"/>
+  <block-list:block block-list:abbreviated-name="vsouladu" block-list:name="v souladu"/>
+  <block-list:block block-list:abbreviated-name="vsouvislosti" block-list:name="v souvislosti"/>
+  <block-list:block block-list:abbreviated-name="všyk" block-list:name="však"/>
+  <block-list:block block-list:abbreviated-name="vůbec" block-list:name="vůbec"/>
+  <block-list:block block-list:abbreviated-name="vůči" block-list:name="vůči"/>
+  <block-list:block block-list:abbreviated-name="vyjímka" block-list:name="výjimka"/>
+  <block-list:block block-list:abbreviated-name="vytovřeno" block-list:name="vytvořeno"/>
+  <block-list:block block-list:abbreviated-name="vzájmu" block-list:name="v zájmu"/>
+  <block-list:block block-list:abbreviated-name="vzávěru" block-list:name="v závěru"/>
+  <block-list:block block-list:abbreviated-name="vzávislosti" block-list:name="v závislosti"/>
+  <block-list:block block-list:abbreviated-name="vzdy" block-list:name="vždy"/>
+  <block-list:block block-list:abbreviated-name="vzhledemk" block-list:name="vzhledem k"/>
+  <block-list:block block-list:abbreviated-name="yby" block-list:name="aby"/>
+  <block-list:block block-list:abbreviated-name="z venčí" block-list:name="zvenčí"/>
+  <block-list:block block-list:abbreviated-name="zakon" block-list:name="zákon"/>
+  <block-list:block block-list:abbreviated-name="zakona" block-list:name="zákona"/>
+  <block-list:block block-list:abbreviated-name="zákoný" block-list:name="zákonný"/>
+  <block-list:block block-list:abbreviated-name="zapomoci" block-list:name="za pomoci"/>
+  <block-list:block block-list:abbreviated-name="zasada" block-list:name="zásada"/>
+  <block-list:block block-list:abbreviated-name="zatim" block-list:name="zatím"/>
+  <block-list:block block-list:abbreviated-name="zaúčelem" block-list:name="za účelem"/>
+  <block-list:block block-list:abbreviated-name="zavod" block-list:name="závod"/>
+  <block-list:block block-list:abbreviated-name="zazraničí" block-list:name="zahraničí"/>
+  <block-list:block block-list:abbreviated-name="zboži" block-list:name="zboží"/>
+  <block-list:block block-list:abbreviated-name="zcely" block-list:name="zcela"/>
+  <block-list:block block-list:abbreviated-name="zdůvodu" block-list:name="z důvodu"/>
+  <block-list:block block-list:abbreviated-name="ze mně" block-list:name="ze mě"/>
+  <block-list:block block-list:abbreviated-name="ze tě" block-list:name="z tebe"/>
+  <block-list:block block-list:abbreviated-name="zejmena" block-list:name="zejména"/>
+  <block-list:block block-list:abbreviated-name="zeme" block-list:name="země"/>
+  <block-list:block block-list:abbreviated-name="ževota" block-list:name="života"/>
+  <block-list:block block-list:abbreviated-name="zhlediska" block-list:name="z hlediska"/>
+  <block-list:block block-list:abbreviated-name="zítra" block-list:name="zítra"/>
+  <block-list:block block-list:abbreviated-name="zivot" block-list:name="život"/>
+  <block-list:block block-list:abbreviated-name="žívot" block-list:name="život"/>
+  <block-list:block block-list:abbreviated-name="zlavní" block-list:name="hlavní"/>
+  <block-list:block block-list:abbreviated-name="zmena" block-list:name="změna"/>
+  <block-list:block block-list:abbreviated-name="znedostatku" block-list:name="z nedostatku"/>
+  <block-list:block block-list:abbreviated-name="zpoza mně" block-list:name="zpoza mě"/>
+  <block-list:block block-list:abbreviated-name="zpoza tě" block-list:name="zpoza tebe"/>
+  <block-list:block block-list:abbreviated-name="zprávce" block-list:name="správce"/>
+  <block-list:block block-list:abbreviated-name="zpravy" block-list:name="zprávy"/>
+  <block-list:block block-list:abbreviated-name="zřetelek" block-list:name="zřetele k"/>
+  <block-list:block block-list:abbreviated-name="zřetelemna" block-list:name="zřetelem na"/>
+  <block-list:block block-list:abbreviated-name="ztitulu" block-list:name="z titulu"/>
+  <block-list:block block-list:abbreviated-name="1/2" block-list:name="½"/>
+  <block-list:block block-list:abbreviated-name="1/4" block-list:name="¼"/>
+  <block-list:block block-list:abbreviated-name="3/4" block-list:name="¾"/>
+</block-list:block-list>

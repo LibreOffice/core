@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<block-list:block-list xmlns:block-list="http://openoffice.org/2001/block-list">
+  <block-list:block block-list:abbreviated-name="--" block-list:name="–"/>
+  <block-list:block block-list:abbreviated-name="--&gt;" block-list:name="→"/>
+  <block-list:block block-list:abbreviated-name="-&gt;" block-list:name="→"/>
+  <block-list:block block-list:abbreviated-name="..." block-list:name="…"/>
+  <block-list:block block-list:abbreviated-name="&lt;-" block-list:name="←"/>
+  <block-list:block block-list:abbreviated-name="&lt;--" block-list:name="←"/>
+  <block-list:block block-list:abbreviated-name="&lt;--&gt;" block-list:name="↔"/>
+  <block-list:block block-list:abbreviated-name="&lt;-&gt;" block-list:name="↔"/>
+  <block-list:block block-list:abbreviated-name="1/2" block-list:name="½"/>
+  <block-list:block block-list:abbreviated-name="1/4" block-list:name="¼"/>
+  <block-list:block block-list:abbreviated-name="3/4" block-list:name="¾"/>
+</block-list:block-list>

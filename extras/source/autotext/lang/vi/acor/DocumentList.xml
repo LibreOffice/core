@@ -1,0 +1,872 @@
+<?xml version="1.0" encoding="utf-8"?>
+<block-list:block-list xmlns:block-list="http://openoffice.org/2001/block-list">
+  <block-list:block block-list:abbreviated-name="--" block-list:name="–"/>
+  <block-list:block block-list:abbreviated-name="--&gt;" block-list:name="→"/>
+  <block-list:block block-list:abbreviated-name="-&gt;" block-list:name="→"/>
+  <block-list:block block-list:abbreviated-name="..." block-list:name="…"/>
+  <block-list:block block-list:abbreviated-name="(C)" block-list:name="©"/>
+  <block-list:block block-list:abbreviated-name="(R)" block-list:name="®"/>
+  <block-list:block block-list:abbreviated-name="(tm)" block-list:name="™"/>
+  <block-list:block block-list:abbreviated-name="&lt;-" block-list:name="←"/>
+  <block-list:block block-list:abbreviated-name="&lt;--" block-list:name="←"/>
+  <block-list:block block-list:abbreviated-name="&lt;--&gt;" block-list:name="↔"/>
+  <block-list:block block-list:abbreviated-name="&lt;-&gt;" block-list:name="↔"/>
+  <block-list:block block-list:abbreviated-name="kng" block-list:name="không"/>
+  <block-list:block block-list:abbreviated-name="kôhng" block-list:name="không"/>
+  <block-list:block block-list:abbreviated-name="khôgn" block-list:name="không"/>
+  <block-list:block block-list:abbreviated-name="dãn" block-list:name="giãn"/>
+  <block-list:block block-list:abbreviated-name="sản suất" block-list:name="sản xuất"/>
+  <block-list:block block-list:abbreviated-name="đc" block-list:name="được"/>
+  <block-list:block block-list:abbreviated-name="ko" block-list:name="không"/>
+  <block-list:block block-list:abbreviated-name="dùm" block-list:name="giùm"/>
+  <block-list:block block-list:abbreviated-name="tròng tréo" block-list:name="chồng chéo"/>
+  <block-list:block block-list:abbreviated-name="dỹ nhiên" block-list:name="dĩ nhiên"/>
+  <block-list:block block-list:abbreviated-name="buồn bả" block-list:name="buồn bã"/>
+  <block-list:block block-list:abbreviated-name="cặn bả" block-list:name="cặn bã"/>
+  <block-list:block block-list:abbreviated-name="bay bỗng" block-list:name="bay bổng"/>
+  <block-list:block block-list:abbreviated-name="trầm bỗng" block-list:name="trầm bổng"/>
+  <block-list:block block-list:abbreviated-name="cãi lương" block-list:name="cải lương"/>
+  <block-list:block block-list:abbreviated-name="cãi bẹ xanh" block-list:name="cải bẹ xanh"/>
+  <block-list:block block-list:abbreviated-name="cãi ngọt" block-list:name="cải ngọt"/>
+  <block-list:block block-list:abbreviated-name="cải nhau" block-list:name="cãi nhau"/>
+  <block-list:block block-list:abbreviated-name="cải cọ" block-list:name="cãi cọ"/>
+  <block-list:block block-list:abbreviated-name="cứng cõi" block-list:name="cứng cỏi"/>
+  <block-list:block block-list:abbreviated-name="cỏi lòng" block-list:name="cõi lòng"/>
+  <block-list:block block-list:abbreviated-name="cũ khoai" block-list:name="củ khoai"/>
+  <block-list:block block-list:abbreviated-name="đồ củ" block-list:name="đồ cũ"/>
+  <block-list:block block-list:abbreviated-name="xe củ" block-list:name="xe cũ"/>
+  <block-list:block block-list:abbreviated-name="cữ nhân" block-list:name="cử nhân"/>
+  <block-list:block block-list:abbreviated-name="cữ tạ" block-list:name="cử tạ"/>
+  <block-list:block block-list:abbreviated-name="kiêng cử" block-list:name="kiêng cữ"/>
+  <block-list:block block-list:abbreviated-name="dãi lụa" block-list:name="dải lụa"/>
+  <block-list:block block-list:abbreviated-name="dễ dải" block-list:name="dễ dãi"/>
+  <block-list:block block-list:abbreviated-name="dỡ dang" block-list:name="dở dang"/>
+  <block-list:block block-list:abbreviated-name="dỡ tay" block-list:name="dở tay"/>
+  <block-list:block block-list:abbreviated-name="dỡ thậm tệ" block-list:name="dở thậm tệ"/>
+  <block-list:block block-list:abbreviated-name="bốc dở" block-list:name="bốc dỡ"/>
+  <block-list:block block-list:abbreviated-name="tháo dở" block-list:name="tháo dỡ"/>
+  <block-list:block block-list:abbreviated-name="tháo gở" block-list:name="tháo gỡ"/>
+  <block-list:block block-list:abbreviated-name="đỗi thay" block-list:name="đổi thay"/>
+  <block-list:block block-list:abbreviated-name="trao đỗi" block-list:name="trao đổi"/>
+  <block-list:block block-list:abbreviated-name="ngạc nhiên quá đổi" block-list:name="ngạc nhiên quá đỗi"/>
+  <block-list:block block-list:abbreviated-name="một đổi" block-list:name="một đỗi"/>
+  <block-list:block block-list:abbreviated-name="gã con cho ai" block-list:name="gả con cho ai"/>
+  <block-list:block block-list:abbreviated-name="đồ giã mạo" block-list:name="đồ giả mạo"/>
+  <block-list:block block-list:abbreviated-name="giã vờ" block-list:name="giả vờ"/>
+  <block-list:block block-list:abbreviated-name="giả gạo" block-list:name="giã gạo"/>
+  <block-list:block block-list:abbreviated-name="giả biệ" block-list:name="giã biệ"/>
+  <block-list:block block-list:abbreviated-name="từ giả" block-list:name="từ giã"/>
+  <block-list:block block-list:abbreviated-name="điềm gỡ" block-list:name="điềm gở"/>
+  <block-list:block block-list:abbreviated-name="quái gỡ" block-list:name="quái gở"/>
+  <block-list:block block-list:abbreviated-name="gở rối" block-list:name="gỡ rối"/>
+  <block-list:block block-list:abbreviated-name="gở gạc" block-list:name="gỡ gạc"/>
+  <block-list:block block-list:abbreviated-name="lễ giác" block-list:name="lể giác"/>
+  <block-list:block block-list:abbreviated-name="kể lễ" block-list:name="kể lể"/>
+  <block-list:block block-list:abbreviated-name="lể hội" block-list:name="lễ hội"/>
+  <block-list:block block-list:abbreviated-name="tuần lể" block-list:name="tuần lễ"/>
+  <block-list:block block-list:abbreviated-name="lể mễ" block-list:name="lễ mễ"/>
+  <block-list:block block-list:abbreviated-name="sụp lỡ" block-list:name="sụp lở"/>
+  <block-list:block block-list:abbreviated-name="sạt lỡ" block-list:name="sạt lở"/>
+  <block-list:block block-list:abbreviated-name="ghẻ lỡ" block-list:name="ghẻ lở"/>
+  <block-list:block block-list:abbreviated-name="lầm lở" block-list:name="lầm lỡ"/>
+  <block-list:block block-list:abbreviated-name="lở làng" block-list:name="lỡ làng"/>
+  <block-list:block block-list:abbreviated-name="lở dại" block-list:name="lỡ dại"/>
+  <block-list:block block-list:abbreviated-name="làm mẩu" block-list:name="làm mẫu"/>
+  <block-list:block block-list:abbreviated-name="kiểu mẩu" block-list:name="kiểu mẫu"/>
+  <block-list:block block-list:abbreviated-name="người mẩu" block-list:name="người mẫu"/>
+  <block-list:block block-list:abbreviated-name="thân mẩu" block-list:name="thân mẫu"/>
+  <block-list:block block-list:abbreviated-name="mẩu hệ" block-list:name="mẫu hệ"/>
+  <block-list:block block-list:abbreviated-name="ngã nghiêng" block-list:name="ngả nghiêng"/>
+  <block-list:block block-list:abbreviated-name="ngã đầu" block-list:name="ngả đầu"/>
+  <block-list:block block-list:abbreviated-name="ngã ngớn" block-list:name="ngả ngớn"/>
+  <block-list:block block-list:abbreviated-name="ngả rẽ" block-list:name="ngã rẽ"/>
+  <block-list:block block-list:abbreviated-name="ngả ba lòng" block-list:name="ngã ba lòng"/>
+  <block-list:block block-list:abbreviated-name="té ngả" block-list:name="té ngã"/>
+  <block-list:block block-list:abbreviated-name="nghiệt ngả" block-list:name="nghiệt ngã"/>
+  <block-list:block block-list:abbreviated-name="nghỉ ngợi" block-list:name="nghĩ ngợi"/>
+  <block-list:block block-list:abbreviated-name="suy nghỉ" block-list:name="suy nghĩ"/>
+  <block-list:block block-list:abbreviated-name="nghĩ ngơi" block-list:name="nghỉ ngơi"/>
+  <block-list:block block-list:abbreviated-name="nghĩ hè" block-list:name="nghỉ hè"/>
+  <block-list:block block-list:abbreviated-name="nghĩ phép" block-list:name="nghỉ phép"/>
+  <block-list:block block-list:abbreviated-name="đi ngũ" block-list:name="đi ngủ"/>
+  <block-list:block block-list:abbreviated-name="ngủ lục" block-list:name="ngũ lục"/>
+  <block-list:block block-list:abbreviated-name="hàng ngủ" block-list:name="hàng ngũ"/>
+  <block-list:block block-list:abbreviated-name="đội ngủ" block-list:name="đội ngũ"/>
+  <block-list:block block-list:abbreviated-name="nhắc nhỡ" block-list:name="nhắc nhở"/>
+  <block-list:block block-list:abbreviated-name="nhở tay" block-list:name="nhỡ tay"/>
+  <block-list:block block-list:abbreviated-name="ngộ nhở" block-list:name="ngộ nhỡ"/>
+  <block-list:block block-list:abbreviated-name="trôi nỗi" block-list:name="trôi nổi"/>
+  <block-list:block block-list:abbreviated-name="chịu nỗi" block-list:name="chịu nổi"/>
+  <block-list:block block-list:abbreviated-name="kham nỗi" block-list:name="kham nổi"/>
+  <block-list:block block-list:abbreviated-name="nổi lòng" block-list:name="nỗi lòng"/>
+  <block-list:block block-list:abbreviated-name="nổi nhớ" block-list:name="nỗi nhớ"/>
+  <block-list:block block-list:abbreviated-name="một nữa" block-list:name="một nửa"/>
+  <block-list:block block-list:abbreviated-name="lần nửa" block-list:name="lần nữa"/>
+  <block-list:block block-list:abbreviated-name="tí nửa" block-list:name="tí nữa"/>
+  <block-list:block block-list:abbreviated-name="sinh nỡ" block-list:name="sinh nở"/>
+  <block-list:block block-list:abbreviated-name="hoa nỡ" block-list:name="hoa nở"/>
+  <block-list:block block-list:abbreviated-name="nở lòng" block-list:name="nỡ lòng"/>
+  <block-list:block block-list:abbreviated-name="qủy" block-list:name="quỷ"/>
+  <block-list:block block-list:abbreviated-name="quỹ quái" block-list:name="quỷ quái"/>
+  <block-list:block block-list:abbreviated-name="ma quỹ" block-list:name="ma quỷ"/>
+  <block-list:block block-list:abbreviated-name="quỷ từ thiện" block-list:name="quỹ từ thiện"/>
+  <block-list:block block-list:abbreviated-name="công quỷ" block-list:name="công quỹ"/>
+  <block-list:block block-list:abbreviated-name="chỉnh sữa" block-list:name="chỉnh sửa"/>
+  <block-list:block block-list:abbreviated-name="sữa soạn" block-list:name="sửa soạn"/>
+  <block-list:block block-list:abbreviated-name="sữa sang" block-list:name="sửa sang"/>
+  <block-list:block block-list:abbreviated-name="sữa sắc đẹp" block-list:name="sửa sắc đẹp"/>
+  <block-list:block block-list:abbreviated-name="sữa chữa" block-list:name="sửa chữa"/>
+  <block-list:block block-list:abbreviated-name="sửa bò" block-list:name="sữa bò"/>
+  <block-list:block block-list:abbreviated-name="sửa dê" block-list:name="sữa dê"/>
+  <block-list:block block-list:abbreviated-name="sửa hộp" block-list:name="sữa hộp"/>
+  <block-list:block block-list:abbreviated-name="tĩnh táo" block-list:name="tỉnh táo"/>
+  <block-list:block block-list:abbreviated-name="tỉnh vật" block-list:name="tĩnh vật"/>
+  <block-list:block block-list:abbreviated-name="bình tỉnh" block-list:name="bình tĩnh"/>
+  <block-list:block block-list:abbreviated-name="tỉnh tâm" block-list:name="tĩnh tâm"/>
+  <block-list:block block-list:abbreviated-name="tỉnh điện" block-list:name="tĩnh điện"/>
+  <block-list:block block-list:abbreviated-name="yên tỉnh" block-list:name="yên tĩnh"/>
+  <block-list:block block-list:abbreviated-name="trãi" block-list:name="trải"/>
+  <block-list:block block-list:abbreviated-name="vẽ vang" block-list:name="vẻ vang"/>
+  <block-list:block block-list:abbreviated-name="tỏ vẽ" block-list:name="tỏ vẻ"/>
+  <block-list:block block-list:abbreviated-name="có vẽ" block-list:name="có vẻ"/>
+  <block-list:block block-list:abbreviated-name="dáng vẽ" block-list:name="dáng vẻ"/>
+  <block-list:block block-list:abbreviated-name="vẻ tranh" block-list:name="vẽ tranh"/>
+  <block-list:block block-list:abbreviated-name="vẻ hình" block-list:name="vẽ hình"/>
+  <block-list:block block-list:abbreviated-name="tô vẻ" block-list:name="tô vẽ"/>
+  <block-list:block block-list:abbreviated-name="vẻ vời" block-list:name="vẽ vời"/>
+  <block-list:block block-list:abbreviated-name="biễn" block-list:name="biển"/>
+  <block-list:block block-list:abbreviated-name="cữa" block-list:name="cửa"/>
+  <block-list:block block-list:abbreviated-name="đễ" block-list:name="để"/>
+  <block-list:block block-list:abbreviated-name="đở buồn" block-list:name="đỡ buồn"/>
+  <block-list:block block-list:abbreviated-name="nâng đở" block-list:name="nâng đỡ"/>
+  <block-list:block block-list:abbreviated-name="hẵn" block-list:name="hẳn"/>
+  <block-list:block block-list:abbreviated-name="hõi" block-list:name="hỏi"/>
+  <block-list:block block-list:abbreviated-name="khõi" block-list:name="khỏi"/>
+  <block-list:block block-list:abbreviated-name="thỡ" block-list:name="thở"/>
+  <block-list:block block-list:abbreviated-name="trỡ" block-list:name="trở"/>
+  <block-list:block block-list:abbreviated-name="xãy" block-list:name="xảy"/>
+  <block-list:block block-list:abbreviated-name="chử viết" block-list:name="chữ viết"/>
+  <block-list:block block-list:abbreviated-name="phông chử" block-list:name="phông chữ"/>
+  <block-list:block block-list:abbreviated-name="cở" block-list:name="cỡ"/>
+  <block-list:block block-list:abbreviated-name="dẩn" block-list:name="dẫn"/>
+  <block-list:block block-list:abbreviated-name="dể" block-list:name="dễ"/>
+  <block-list:block block-list:abbreviated-name="dỏi" block-list:name="dõi"/>
+  <block-list:block block-list:abbreviated-name="dổi" block-list:name="dỗi"/>
+  <block-list:block block-list:abbreviated-name="hung dử" block-list:name="hung dữ"/>
+  <block-list:block block-list:abbreviated-name="đở" block-list:name="đỡ"/>
+  <block-list:block block-list:abbreviated-name="hảy" block-list:name="hãy"/>
+  <block-list:block block-list:abbreviated-name="hẳng" block-list:name="hẵng"/>
+  <block-list:block block-list:abbreviated-name="lổi" block-list:name="lỗi"/>
+  <block-list:block block-list:abbreviated-name="lưởng" block-list:name="lưỡng"/>
+  <block-list:block block-list:abbreviated-name="mổi" block-list:name="mỗi"/>
+  <block-list:block block-list:abbreviated-name="muổi" block-list:name="muỗi"/>
+  <block-list:block block-list:abbreviated-name="nghỉa" block-list:name="nghĩa"/>
+  <block-list:block block-list:abbreviated-name="ngở" block-list:name="ngỡ"/>
+  <block-list:block block-list:abbreviated-name="nử" block-list:name="nữ"/>
+  <block-list:block block-list:abbreviated-name="rổng" block-list:name="rỗng"/>
+  <block-list:block block-list:abbreviated-name="tiển" block-list:name="tiễn"/>
+  <block-list:block block-list:abbreviated-name="vủ" block-list:name="vũ"/>
+  <block-list:block block-list:abbreviated-name="tiền bạt" block-list:name="tiền bạc"/>
+  <block-list:block block-list:abbreviated-name="vàng bạt" block-list:name="vàng bạc"/>
+  <block-list:block block-list:abbreviated-name="bạt màu" block-list:name="bạc màu"/>
+  <block-list:block block-list:abbreviated-name="bạt tình" block-list:name="bạc tình"/>
+  <block-list:block block-list:abbreviated-name="phụ bạt" block-list:name="phụ bạc"/>
+  <block-list:block block-list:abbreviated-name="lang bạc" block-list:name="lang bạt"/>
+  <block-list:block block-list:abbreviated-name="phiêu bạc" block-list:name="phiêu bạt"/>
+  <block-list:block block-list:abbreviated-name="đặc hàng" block-list:name="đặt hàng"/>
+  <block-list:block block-list:abbreviated-name="đặc cọc" block-list:name="đặt cọc"/>
+  <block-list:block block-list:abbreviated-name="đông đặt" block-list:name="đông đặc"/>
+  <block-list:block block-list:abbreviated-name="ngào ngạc" block-list:name="ngào ngạt"/>
+  <block-list:block block-list:abbreviated-name="ngạt nhiên" block-list:name="ngạc nhiên"/>
+  <block-list:block block-list:abbreviated-name="kinh ngạt" block-list:name="kinh ngạc"/>
+  <block-list:block block-list:abbreviated-name="gắng bó" block-list:name="gắn bó"/>
+  <block-list:block block-list:abbreviated-name="hàn gắng" block-list:name="hàn gắn"/>
+  <block-list:block block-list:abbreviated-name="gắn sức" block-list:name="gắng sức"/>
+  <block-list:block block-list:abbreviated-name="cố gắn" block-list:name="cố gắng"/>
+  <block-list:block block-list:abbreviated-name="cổ gắng" block-list:name="cố gắng"/>
+  <block-list:block block-list:abbreviated-name="cố gng" block-list:name="cố gắng"/>
+  <block-list:block block-list:abbreviated-name="lãng mạng" block-list:name="lãng mạn"/>
+  <block-list:block block-list:abbreviated-name="ngạo mạng" block-list:name="ngạo mạn"/>
+  <block-list:block block-list:abbreviated-name="xúc xắc" block-list:name="súc sắc"/>
+  <block-list:block block-list:abbreviated-name="tính mạn" block-list:name="tính mạng"/>
+  <block-list:block block-list:abbreviated-name="sanh mạn" block-list:name="sanh mạng"/>
+  <block-list:block block-list:abbreviated-name="số mạn" block-list:name="số mạng"/>
+  <block-list:block block-list:abbreviated-name="muôn vàng" block-list:name="muôn vàn"/>
+  <block-list:block block-list:abbreviated-name="vàn bạc" block-list:name="vàng bạc"/>
+  <block-list:block block-list:abbreviated-name="vàn óng" block-list:name="vàng óng"/>
+  <block-list:block block-list:abbreviated-name="vàn vọt" block-list:name="vàng vọt"/>
+  <block-list:block block-list:abbreviated-name="màu vàn" block-list:name="màu vàng"/>
+  <block-list:block block-list:abbreviated-name="cầng" block-list:name="cần"/>
+  <block-list:block block-list:abbreviated-name="giòng" block-list:name="dòng"/>
+  <block-list:block block-list:abbreviated-name="dặt giũ" block-list:name="giặt giũ"/>
+  <block-list:block block-list:abbreviated-name="giàn cảnh" block-list:name="dàn cảnh"/>
+  <block-list:block block-list:abbreviated-name="giàn xếp" block-list:name="dàn xếp"/>
+  <block-list:block block-list:abbreviated-name="xai" block-list:name="sai"/>
+  <block-list:block block-list:abbreviated-name="xang" block-list:name="sang"/>
+  <block-list:block block-list:abbreviated-name="xan bằng" block-list:name="san bằng"/>
+  <block-list:block block-list:abbreviated-name="xan sẻ" block-list:name="san sẻ"/>
+  <block-list:block block-list:abbreviated-name="xung sức" block-list:name="sung sức"/>
+  <block-list:block block-list:abbreviated-name="sung đột" block-list:name="xung đột"/>
+  <block-list:block block-list:abbreviated-name="xung sướng" block-list:name="sung sướng"/>
+  <block-list:block block-list:abbreviated-name="xung xướng" block-list:name="sung sướng"/>
+  <block-list:block block-list:abbreviated-name="xung túc" block-list:name="sung túc"/>
+  <block-list:block block-list:abbreviated-name="soa bóp" block-list:name="xoa bóp"/>
+  <block-list:block block-list:abbreviated-name="soa dịu" block-list:name="xoa dịu"/>
+  <block-list:block block-list:abbreviated-name="sích" block-list:name="xích"/>
+  <block-list:block block-list:abbreviated-name="suân" block-list:name="xuân"/>
+  <block-list:block block-list:abbreviated-name="xuất ăn" block-list:name="suất ăn"/>
+  <block-list:block block-list:abbreviated-name="suất xứ" block-list:name="xuất xứ"/>
+  <block-list:block block-list:abbreviated-name="sác xuất" block-list:name="xác xuất"/>
+  <block-list:block block-list:abbreviated-name="sác suất" block-list:name="xác xuất"/>
+  <block-list:block block-list:abbreviated-name="sản suất" block-list:name="sản xuất"/>
+  <block-list:block block-list:abbreviated-name="suất nhập khẩu" block-list:name="xuất nhập khẩu"/>
+  <block-list:block block-list:abbreviated-name="định kỷ" block-list:name="định kỳ"/>
+  <block-list:block block-list:abbreviated-name="thắt mắt" block-list:name="thắc mắc"/>
+  <block-list:block block-list:abbreviated-name="thắc chặt" block-list:name="thắt chặt)"/>
+  <block-list:block block-list:abbreviated-name="nghĩ học" block-list:name="nghỉ học"/>
+  <block-list:block block-list:abbreviated-name="củng được" block-list:name="cũng được"/>
+  <block-list:block block-list:abbreviated-name="lũng củng," block-list:name="lủng củng"/>
+  <block-list:block block-list:abbreviated-name="lủng cũng" block-list:name="lủng củng"/>
+  <block-list:block block-list:abbreviated-name="lũng lẵng" block-list:name="lủng lẳng"/>
+  <block-list:block block-list:abbreviated-name="nghành nghề" block-list:name="ngành nghề"/>
+  <block-list:block block-list:abbreviated-name="sữa chửa" block-list:name="sửa chữa"/>
+  <block-list:block block-list:abbreviated-name="sửa bò" block-list:name="sữa bò"/>
+  <block-list:block block-list:abbreviated-name="chân trọng" block-list:name="trân trọng"/>
+  <block-list:block block-list:abbreviated-name="thước tha" block-list:name="thướt tha"/>
+  <block-list:block block-list:abbreviated-name="cách nhau cả thướt" block-list:name="cách nhau cả thước"/>
+  <block-list:block block-list:abbreviated-name="quộc sống" block-list:name="cuộc sống"/>
+  <block-list:block block-list:abbreviated-name="dã man" block-list:name="giã man"/>
+  <block-list:block block-list:abbreviated-name="rễ ràng" block-list:name="dễ dàng"/>
+  <block-list:block block-list:abbreviated-name="chơi bời" block-list:name="trơi bời"/>
+  <block-list:block block-list:abbreviated-name="bổ xung" block-list:name="bổ sung"/>
+  <block-list:block block-list:abbreviated-name="riệu" block-list:name="rượu"/>
+  <block-list:block block-list:abbreviated-name="con hiêu" block-list:name="con hươu"/>
+  <block-list:block block-list:abbreviated-name="trêu trọc" block-list:name="trêu chọc"/>
+  <block-list:block block-list:abbreviated-name="trùng da mắt" block-list:name="chùng da mắt"/>
+  <block-list:block block-list:abbreviated-name="giứt" block-list:name="giựt"/>
+  <block-list:block block-list:abbreviated-name="đóng giấu" block-list:name="đóng dấu"/>
+  <block-list:block block-list:abbreviated-name="con giấu" block-list:name="con dấu"/>
+  <block-list:block block-list:abbreviated-name="giấu hiệu" block-list:name="dấu hiệu"/>
+  <block-list:block block-list:abbreviated-name="che dấu" block-list:name="che giấu"/>
+  <block-list:block block-list:abbreviated-name="dấu giếm" block-list:name="giấu giếm"/>
+  <block-list:block block-list:abbreviated-name="dấu nhẹm" block-list:name="giấu nhẹm"/>
+  <block-list:block block-list:abbreviated-name="làm giầu" block-list:name="làm giàu"/>
+  <block-list:block block-list:abbreviated-name="giầu rĩ" block-list:name="rầu rĩ"/>
+  <block-list:block block-list:abbreviated-name="giầu lòng" block-list:name="rầu lòng"/>
+  <block-list:block block-list:abbreviated-name="giầu hoả" block-list:name="dầu hoả"/>
+  <block-list:block block-list:abbreviated-name="giầu ăn" block-list:name="dầu ăn"/>
+  <block-list:block block-list:abbreviated-name="giầu máy" block-list:name="dầu máy"/>
+  <block-list:block block-list:abbreviated-name="nhà máy lọc giầu" block-list:name="nhà máy lọc dầu"/>
+  <block-list:block block-list:abbreviated-name="mặc dầu" block-list:name="mặc dù"/>
+  <block-list:block block-list:abbreviated-name="dàn khoan" block-list:name="giàn khoan"/>
+  <block-list:block block-list:abbreviated-name="dàn giáo" block-list:name="giàn giáo"/>
+  <block-list:block block-list:abbreviated-name="dàn thiên lý" block-list:name="giàn thiên lý"/>
+  <block-list:block block-list:abbreviated-name="dàn nho" block-list:name="giàn nho"/>
+  <block-list:block block-list:abbreviated-name="dàn lửa" block-list:name="giàn lửa"/>
+  <block-list:block block-list:abbreviated-name="dàn thiêu" block-list:name="giàn thiêu"/>
+  <block-list:block block-list:abbreviated-name="dàn hỏa tiễn" block-list:name="giàn hỏa tiễn"/>
+  <block-list:block block-list:abbreviated-name="nước mắt dàn giụa" block-list:name="nước mắt giàn giụa"/>
+  <block-list:block block-list:abbreviated-name="giàn dựng" block-list:name="dàn dựng"/>
+  <block-list:block block-list:abbreviated-name="giàn trải" block-list:name="dàn trải"/>
+  <block-list:block block-list:abbreviated-name="giàn hàng" block-list:name="dàn hàng"/>
+  <block-list:block block-list:abbreviated-name="giàn đội" block-list:name="dàn đội"/>
+  <block-list:block block-list:abbreviated-name="giàn nhạc" block-list:name="dàn nhạc"/>
+  <block-list:block block-list:abbreviated-name="xung mãn" block-list:name="sung mãn"/>
+  <block-list:block block-list:abbreviated-name="xung công" block-list:name="sung công"/>
+  <block-list:block block-list:abbreviated-name="ăn xung mặc sướng" block-list:name="ăn sung mặc sướng"/>
+  <block-list:block block-list:abbreviated-name="cây sung" block-list:name="cây sung"/>
+  <block-list:block block-list:abbreviated-name="quả xung" block-list:name="quả sung"/>
+  <block-list:block block-list:abbreviated-name="sung phong" block-list:name="xung phong"/>
+  <block-list:block block-list:abbreviated-name="sung trận" block-list:name="xung trận"/>
+  <block-list:block block-list:abbreviated-name="sung kích" block-list:name="xung kích"/>
+  <block-list:block block-list:abbreviated-name="bung sung" block-list:name="bung xung"/>
+  <block-list:block block-list:abbreviated-name="sung lực" block-list:name="xung lực"/>
+  <block-list:block block-list:abbreviated-name="sung động" block-list:name="xung động"/>
+  <block-list:block block-list:abbreviated-name="sung khắc" block-list:name="xung khắc"/>
+  <block-list:block block-list:abbreviated-name="năm sung tháng hạn" block-list:name="năm xung tháng hạn"/>
+  <block-list:block block-list:abbreviated-name="trải đầu" block-list:name="chải đầu"/>
+  <block-list:block block-list:abbreviated-name="bàn trải" block-list:name="bàn chải"/>
+  <block-list:block block-list:abbreviated-name="trải chuốt" block-list:name="chải chuốt"/>
+  <block-list:block block-list:abbreviated-name="chải khăn" block-list:name="trải khăn"/>
+  <block-list:block block-list:abbreviated-name="chải chiếu" block-list:name="trải chiếu"/>
+  <block-list:block block-list:abbreviated-name="chải thảm" block-list:name="trải thảm"/>
+  <block-list:block block-list:abbreviated-name="chải ga" block-list:name="trải ga"/>
+  <block-list:block block-list:abbreviated-name="dàn chải" block-list:name="dàn trải"/>
+  <block-list:block block-list:abbreviated-name="từng chải" block-list:name="từng trải"/>
+  <block-list:block block-list:abbreviated-name="chải nghiệm" block-list:name="trải nghiệm"/>
+  <block-list:block block-list:abbreviated-name="bơi chải," block-list:name="bơi trải,"/>
+  <block-list:block block-list:abbreviated-name="chải qua" block-list:name="trải qua"/>
+  <block-list:block block-list:abbreviated-name="cuốn chuyện" block-list:name="câu chuyện"/>
+  <block-list:block block-list:abbreviated-name="câu truyện" block-list:name="cuốn truyện"/>
+  <block-list:block block-list:abbreviated-name="nói truyện" block-list:name="nói chuyện"/>
+  <block-list:block block-list:abbreviated-name="kể truyện" block-list:name="kể chuyện"/>
+  <block-list:block block-list:abbreviated-name="truyện nọ truyện kia" block-list:name="chuyện nọ chuyện kia"/>
+  <block-list:block block-list:abbreviated-name="lắm truyện" block-list:name="lắm chuyện"/>
+  <block-list:block block-list:abbreviated-name="chuyện chuyền kỳ" block-list:name="truyện truyền kỳ"/>
+  <block-list:block block-list:abbreviated-name="chuyện truyền kỳ" block-list:name="truyện truyền kỳ"/>
+  <block-list:block block-list:abbreviated-name="chuyện cổ tích" block-list:name="truyện cổ tích"/>
+  <block-list:block block-list:abbreviated-name="truyện bịa" block-list:name="chuyện bịa"/>
+  <block-list:block block-list:abbreviated-name="truyện lạ đó đâ" block-list:name="chuyện lạ đó đâ"/>
+  <block-list:block block-list:abbreviated-name="phân giã" block-list:name="phân rã"/>
+  <block-list:block block-list:abbreviated-name="giã đông" block-list:name="rã đông"/>
+  <block-list:block block-list:abbreviated-name="giã nhóm" block-list:name="rã nhóm"/>
+  <block-list:block block-list:abbreviated-name="giã rượi" block-list:name="rã rượi"/>
+  <block-list:block block-list:abbreviated-name="rời giã" block-list:name="rời rã"/>
+  <block-list:block block-list:abbreviated-name="tròng ghẹo" block-list:name="chòng ghẹo"/>
+  <block-list:block block-list:abbreviated-name="dơm dớm" block-list:name="rơm rớm"/>
+  <block-list:block block-list:abbreviated-name="giơm giớm" block-list:name="rơm rớm"/>
+  <block-list:block block-list:abbreviated-name="xẩy" block-list:name="sẩy"/>
+  <block-list:block block-list:abbreviated-name="Thứ bẩy" block-list:name="Thứ bảy"/>
+  <block-list:block block-list:abbreviated-name="thứ bẩy" block-list:name="thứ bảy"/>
+  <block-list:block block-list:abbreviated-name="Thứ Bẩy" block-list:name="Thứ Bảy"/>
+  <block-list:block block-list:abbreviated-name="sớn xác" block-list:name="sớn sác"/>
+  <block-list:block block-list:abbreviated-name="xớn xác" block-list:name="sớn sác"/>
+  <block-list:block block-list:abbreviated-name="giẫy nẩy" block-list:name="giãy nảy"/>
+  <block-list:block block-list:abbreviated-name="thủy chiều" block-list:name="thủy triều"/>
+  <block-list:block block-list:abbreviated-name="tháo vác" block-list:name="tháo vát"/>
+  <block-list:block block-list:abbreviated-name="ràu ràu" block-list:name="dàu dàu"/>
+  <block-list:block block-list:abbreviated-name="giàu giàu" block-list:name="dàu dàu"/>
+  <block-list:block block-list:abbreviated-name="buồn dầu" block-list:name="buồn rầu"/>
+  <block-list:block block-list:abbreviated-name="rầu thơm" block-list:name="dầu thơm"/>
+  <block-list:block block-list:abbreviated-name="rầu đèn" block-list:name="dầu đèn"/>
+  <block-list:block block-list:abbreviated-name="buồn giầu" block-list:name="buồn rầu"/>
+  <block-list:block block-list:abbreviated-name="giầu thơm" block-list:name="dầu thơm"/>
+  <block-list:block block-list:abbreviated-name="giầu vậy" block-list:name="dầu vậy"/>
+  <block-list:block block-list:abbreviated-name="rầu vậy" block-list:name="dầu vậy"/>
+  <block-list:block block-list:abbreviated-name="mưa giầm" block-list:name="mưa dầm"/>
+  <block-list:block block-list:abbreviated-name="đái giầm" block-list:name="đái dầm"/>
+  <block-list:block block-list:abbreviated-name="lầm giầm" block-list:name="lầm dầm"/>
+  <block-list:block block-list:abbreviated-name="giãi nắng" block-list:name="dãi nắng"/>
+  <block-list:block block-list:abbreviated-name="nước giãi" block-list:name="nước dãi"/>
+  <block-list:block block-list:abbreviated-name="dễ giãi" block-list:name="dễ dãi"/>
+  <block-list:block block-list:abbreviated-name="dì rầm" block-list:name="rì rầm"/>
+  <block-list:block block-list:abbreviated-name="rãi rác" block-list:name="rải rác"/>
+  <block-list:block block-list:abbreviated-name="cơm xuất" block-list:name="cơm suất"/>
+  <block-list:block block-list:abbreviated-name="dồng" block-list:name="giồng"/>
+  <block-list:block block-list:abbreviated-name="vồng" block-list:name="giồng"/>
+  <block-list:block block-list:abbreviated-name="rặt dìu" block-list:name="dặt dìu"/>
+  <block-list:block block-list:abbreviated-name="sả thân" block-list:name="xả thân"/>
+  <block-list:block block-list:abbreviated-name="sổ số" block-list:name="xổ số"/>
+  <block-list:block block-list:abbreviated-name="xổ cái" block-list:name="sổ cái"/>
+  <block-list:block block-list:abbreviated-name="xổ sách" block-list:name="sổ sách"/>
+  <block-list:block block-list:abbreviated-name="xổ tay" block-list:name="sổ tay"/>
+  <block-list:block block-list:abbreviated-name="xổ toẹt" block-list:name="sổ toẹt"/>
+  <block-list:block block-list:abbreviated-name="to sụ" block-list:name="to xụ"/>
+  <block-list:block block-list:abbreviated-name="to sù" block-list:name="to xù"/>
+  <block-list:block block-list:abbreviated-name="mổ sẻ" block-list:name="mổ xẻ"/>
+  <block-list:block block-list:abbreviated-name="mải mải" block-list:name="mãi mãi"/>
+  <block-list:block block-list:abbreviated-name="nói chiện" block-list:name="nói chuyện"/>
+  <block-list:block block-list:abbreviated-name="ép buột" block-list:name="ép buộc"/>
+  <block-list:block block-list:abbreviated-name="bắt buột" block-list:name="bắt buộc"/>
+  <block-list:block block-list:abbreviated-name="buộc miệng nói" block-list:name="buột miệng nói"/>
+  <block-list:block block-list:abbreviated-name="buột dây" block-list:name="buộc dây"/>
+  <block-list:block block-list:abbreviated-name="một nữa" block-list:name="một nửa"/>
+  <block-list:block block-list:abbreviated-name="thêm mửa" block-list:name="thêm nữa"/>
+  <block-list:block block-list:abbreviated-name="củng vậy" block-list:name="cũng vậy"/>
+  <block-list:block block-list:abbreviated-name="nữa đêm" block-list:name="nửa đêm"/>
+  <block-list:block block-list:abbreviated-name="nữa chừng" block-list:name="nửa chừng"/>
+  <block-list:block block-list:abbreviated-name="chút nửa" block-list:name="chút nữa"/>
+  <block-list:block block-list:abbreviated-name="ngoãn nửa" block-list:name="ngoãn nữa"/>
+  <block-list:block block-list:abbreviated-name="mổi" block-list:name="mỗi"/>
+  <block-list:block block-list:abbreviated-name="bỗi" block-list:name="bổi"/>
+  <block-list:block block-list:abbreviated-name="cổi" block-list:name="cỗi"/>
+  <block-list:block block-list:abbreviated-name="dổi" block-list:name="dỗi"/>
+  <block-list:block block-list:abbreviated-name="quá đổi" block-list:name="quá đỗi"/>
+  <block-list:block block-list:abbreviated-name="thay đỗi" block-list:name="thay đổi"/>
+  <block-list:block block-list:abbreviated-name="sửa đỗi" block-list:name="sửa đổi"/>
+  <block-list:block block-list:abbreviated-name="hỗi" block-list:name="hổi"/>
+  <block-list:block block-list:abbreviated-name="lổi" block-list:name="lỗi"/>
+  <block-list:block block-list:abbreviated-name="trời nỗi" block-list:name="trời nổi"/>
+  <block-list:block block-list:abbreviated-name="nổi đau khổ" block-list:name="nỗi đau khổ"/>
+  <block-list:block block-list:abbreviated-name="nổi buồn" block-list:name="nỗi buồn"/>
+  <block-list:block block-list:abbreviated-name="nổi lòng" block-list:name="nỗi lòng"/>
+  <block-list:block block-list:abbreviated-name="rổi việc" block-list:name="rỗi việc"/>
+  <block-list:block block-list:abbreviated-name="rổi tay" block-list:name="rỗi tay"/>
+  <block-list:block block-list:abbreviated-name="đi rỗi" block-list:name="đi rổi"/>
+  <block-list:block block-list:abbreviated-name="sỗi" block-list:name="sổi"/>
+  <block-list:block block-list:abbreviated-name="đả rồi" block-list:name="đã rồi"/>
+  <block-list:block block-list:abbreviated-name="đả làm" block-list:name="đã làm"/>
+  <block-list:block block-list:abbreviated-name="đả đành" block-list:name="đã đành"/>
+  <block-list:block block-list:abbreviated-name="đả nghe" block-list:name="đã nghe"/>
+  <block-list:block block-list:abbreviated-name="đã đảo" block-list:name="đả đảo"/>
+  <block-list:block block-list:abbreviated-name="dùm" block-list:name="giùm"/>
+  <block-list:block block-list:abbreviated-name="diúp" block-list:name="giúp"/>
+  <block-list:block block-list:abbreviated-name="dấu đi" block-list:name="giấu đi"/>
+  <block-list:block block-list:abbreviated-name="đánh giấu" block-list:name="đánh dấu"/>
+  <block-list:block block-list:abbreviated-name="giấu vết" block-list:name="dấu vết"/>
+  <block-list:block block-list:abbreviated-name="giấu chân" block-list:name="dấu chân"/>
+  <block-list:block block-list:abbreviated-name="giấu câu" block-list:name="dấu câu"/>
+  <block-list:block block-list:abbreviated-name="khuôn giấu" block-list:name="khuôn dấu"/>
+  <block-list:block block-list:abbreviated-name="yêu giấu" block-list:name="yêu dấu"/>
+  <block-list:block block-list:abbreviated-name="cũ su hào" block-list:name="củ su hào"/>
+  <block-list:block block-list:abbreviated-name="cũ khoai" block-list:name="củ khoai"/>
+  <block-list:block block-list:abbreviated-name="áo củ" block-list:name="áo cũ"/>
+  <block-list:block block-list:abbreviated-name="quá củ" block-list:name="quá cũ"/>
+  <block-list:block block-list:abbreviated-name="chuyện củ" block-list:name="chuyện cũ"/>
+  <block-list:block block-list:abbreviated-name="quê củ" block-list:name="quê cũ"/>
+  <block-list:block block-list:abbreviated-name="bạn củ" block-list:name="bạn cũ"/>
+  <block-list:block block-list:abbreviated-name="thưở xưa" block-list:name="thuở xưa"/>
+  <block-list:block block-list:abbreviated-name="thưở mới" block-list:name="thuở mới"/>
+  <block-list:block block-list:abbreviated-name="thưở nào" block-list:name="thuở nào"/>
+  <block-list:block block-list:abbreviated-name="sữa xe" block-list:name="sửa xe"/>
+  <block-list:block block-list:abbreviated-name="ngã nào" block-list:name="ngả nào"/>
+  <block-list:block block-list:abbreviated-name="ngã vàng" block-list:name="ngả vàng"/>
+  <block-list:block block-list:abbreviated-name="ngả tư" block-list:name="ngã tư"/>
+  <block-list:block block-list:abbreviated-name="ngả xuống" block-list:name="ngã xuống"/>
+  <block-list:block block-list:abbreviated-name="ngã người" block-list:name="ngả người"/>
+  <block-list:block block-list:abbreviated-name="ngã màu" block-list:name="ngả màu"/>
+  <block-list:block block-list:abbreviated-name="ngã mũ" block-list:name="ngả mũ"/>
+  <block-list:block block-list:abbreviated-name="bị ngả" block-list:name="bị ngã"/>
+  <block-list:block block-list:abbreviated-name="ngả gục" block-list:name="ngã gục"/>
+  <block-list:block block-list:abbreviated-name="bản ngả" block-list:name="bản ngã"/>
+  <block-list:block block-list:abbreviated-name="ngả lẽ" block-list:name="ngã lẽ"/>
+  <block-list:block block-list:abbreviated-name="khuỷn sông" block-list:name="khuỷu sông"/>
+  <block-list:block block-list:abbreviated-name="nghuệch ngoặc" block-list:name="nguệch ngoạc"/>
+  <block-list:block block-list:abbreviated-name="lỏm bỏm" block-list:name="lõm bõm"/>
+  <block-list:block block-list:abbreviated-name="ngã ngớn" block-list:name="ngả ngớn"/>
+  <block-list:block block-list:abbreviated-name="sát nhập" block-list:name="sáp nhập"/>
+  <block-list:block block-list:abbreviated-name="dành nhau" block-list:name="giành nhau"/>
+  <block-list:block block-list:abbreviated-name="giành tiền mua" block-list:name="dành tiền mua"/>
+  <block-list:block block-list:abbreviated-name="giành thời gian" block-list:name="dành thời gian"/>
+  <block-list:block block-list:abbreviated-name="dành lấy" block-list:name="giành lấy"/>
+  <block-list:block block-list:abbreviated-name="dành khó" block-list:name="giành khó"/>
+  <block-list:block block-list:abbreviated-name="đũ" block-list:name="đủ"/>
+  <block-list:block block-list:abbreviated-name="bẽ ra" block-list:name="bẻ ra"/>
+  <block-list:block block-list:abbreviated-name="bẻ mặt" block-list:name="bẽ mặt"/>
+  <block-list:block block-list:abbreviated-name="lổ đổ" block-list:name="lỗ đỗ"/>
+  <block-list:block block-list:abbreviated-name="lổ đỗ" block-list:name="lỗ đỗ"/>
+  <block-list:block block-list:abbreviated-name="lỗ đổ" block-list:name="lỗ đỗ"/>
+  <block-list:block block-list:abbreviated-name="lở dở" block-list:name="lỡ dở"/>
+  <block-list:block block-list:abbreviated-name="lỡ dỡ" block-list:name="lỡ dở"/>
+  <block-list:block block-list:abbreviated-name="lở dỡ" block-list:name="lỡ dở"/>
+  <block-list:block block-list:abbreviated-name="lể mể" block-list:name="lễ mễ"/>
+  <block-list:block block-list:abbreviated-name="lể mễ" block-list:name="lễ mễ"/>
+  <block-list:block block-list:abbreviated-name="lễ mể" block-list:name="lễ mễ"/>
+  <block-list:block block-list:abbreviated-name="lảng đảng" block-list:name="lãng đãng"/>
+  <block-list:block block-list:abbreviated-name="lảng đãng" block-list:name="lãng đãng"/>
+  <block-list:block block-list:abbreviated-name="lãng đảng" block-list:name="lãng đãng"/>
+  <block-list:block block-list:abbreviated-name="moại" block-list:name="mọi"/>
+  <block-list:block block-list:abbreviated-name="hơn nửa" block-list:name="hơn nữa"/>
+  <block-list:block block-list:abbreviated-name="nhìu" block-list:name="nhiều"/>
+  <block-list:block block-list:abbreviated-name="thỉng thoảng" block-list:name="thỉnh thoảng"/>
+  <block-list:block block-list:abbreviated-name="nhiều nửa" block-list:name="nhiều nữa"/>
+  <block-list:block block-list:abbreviated-name="cuối rạp" block-list:name="cúi rạp"/>
+  <block-list:block block-list:abbreviated-name="cuối đầu" block-list:name="cúi đầu"/>
+  <block-list:block block-list:abbreviated-name="cúi bài" block-list:name="cuối bài"/>
+  <block-list:block block-list:abbreviated-name="cúi cùng" block-list:name="cuối cùng"/>
+  <block-list:block block-list:abbreviated-name="cúi con đường" block-list:name="cuối con đường"/>
+  <block-list:block block-list:abbreviated-name="cuối chào" block-list:name="cúi chào"/>
+  <block-list:block block-list:abbreviated-name="cuối mặt" block-list:name="cúi mặt"/>
+  <block-list:block block-list:abbreviated-name="dẩy" block-list:name="dẫy"/>
+  <block-list:block block-list:abbreviated-name="hẫy" block-list:name="hẩy"/>
+  <block-list:block block-list:abbreviated-name="khẫy" block-list:name="khẩy"/>
+  <block-list:block block-list:abbreviated-name="mẫy" block-list:name="mẩy"/>
+  <block-list:block block-list:abbreviated-name="rẩy" block-list:name="rẫy"/>
+  <block-list:block block-list:abbreviated-name="sẫy" block-list:name="sẩy"/>
+  <block-list:block block-list:abbreviated-name="tẫy" block-list:name="tẩy"/>
+  <block-list:block block-list:abbreviated-name="vẩy" block-list:name="vẫy"/>
+  <block-list:block block-list:abbreviated-name="bỗi" block-list:name="bổi"/>
+  <block-list:block block-list:abbreviated-name="cổi" block-list:name="cỗi"/>
+  <block-list:block block-list:abbreviated-name="dổi" block-list:name="dỗi"/>
+  <block-list:block block-list:abbreviated-name="hỗi" block-list:name="hổi"/>
+  <block-list:block block-list:abbreviated-name="lỗi" block-list:name="lổi"/>
+  <block-list:block block-list:abbreviated-name="mổi" block-list:name="mỗi"/>
+  <block-list:block block-list:abbreviated-name="thỗi" block-list:name="thổi"/>
+  <block-list:block block-list:abbreviated-name="vãi" block-list:name="vải"/>
+  <block-list:block block-list:abbreviated-name="phảy" block-list:name="phải"/>
+  <block-list:block block-list:abbreviated-name="xoát" block-list:name="soát"/>
+  <block-list:block block-list:abbreviated-name="xoạn" block-list:name="soạn"/>
+  <block-list:block block-list:abbreviated-name="xoán" block-list:name="soán"/>
+  <block-list:block block-list:abbreviated-name="xoạt" block-list:name="soạt"/>
+  <block-list:block block-list:abbreviated-name="bờm sờm" block-list:name="bờm xờm"/>
+  <block-list:block block-list:abbreviated-name="lao sao" block-list:name="lao xao"/>
+  <block-list:block block-list:abbreviated-name="sích" block-list:name="xích"/>
+  <block-list:block block-list:abbreviated-name="lụp sụp" block-list:name="lụp xụp"/>
+  <block-list:block block-list:abbreviated-name="phở sào" block-list:name="phở xào"/>
+  <block-list:block block-list:abbreviated-name="cây xen" block-list:name="cân sen"/>
+  <block-list:block block-list:abbreviated-name="xim" block-list:name="sim"/>
+  <block-list:block block-list:abbreviated-name="cây xắn" block-list:name="cây sắn"/>
+  <block-list:block block-list:abbreviated-name="vô giuyên" block-list:name="vô duyên"/>
+  <block-list:block block-list:abbreviated-name="gioạng" block-list:name="doạng"/>
+  <block-list:block block-list:abbreviated-name="giọa" block-list:name="doạ"/>
+  <block-list:block block-list:abbreviated-name="mặt lỗ" block-list:name="mặt rỗ"/>
+  <block-list:block block-list:abbreviated-name="lỗ chằng" block-list:name="rỗ chằng"/>
+  <block-list:block block-list:abbreviated-name="rỗ chỗ" block-list:name="lỗ chỗ"/>
+  <block-list:block block-list:abbreviated-name="rỗ hổng" block-list:name="lỗ hổng"/>
+  <block-list:block block-list:abbreviated-name="rỗ lãi" block-list:name="lỗ lãi"/>
+  <block-list:block block-list:abbreviated-name="riết chặt" block-list:name="siết chặt"/>
+  <block-list:block block-list:abbreviated-name="làm siết" block-list:name="làm riết"/>
+  <block-list:block block-list:abbreviated-name="siết ráo" block-list:name="riết ráo"/>
+  <block-list:block block-list:abbreviated-name="siết róng" block-list:name="riết róng"/>
+  <block-list:block block-list:abbreviated-name="bám siết" block-list:name="bám riết"/>
+  <block-list:block block-list:abbreviated-name="sìu" block-list:name="xìu"/>
+  <block-list:block block-list:abbreviated-name="xiều" block-list:name="xìu"/>
+  <block-list:block block-list:abbreviated-name="xừu" block-list:name="xìu"/>
+  <block-list:block block-list:abbreviated-name="nhiếu" block-list:name="nhíu"/>
+  <block-list:block block-list:abbreviated-name="nhứu" block-list:name="nhíu"/>
+  <block-list:block block-list:abbreviated-name="biễu" block-list:name="bĩu"/>
+  <block-list:block block-list:abbreviated-name="bữu" block-list:name="bĩu"/>
+  <block-list:block block-list:abbreviated-name="nhìu" block-list:name="nhiều"/>
+  <block-list:block block-list:abbreviated-name="nhừu" block-list:name="nhiều"/>
+  <block-list:block block-list:abbreviated-name="nhứt óc" block-list:name="nhức óc"/>
+  <block-list:block block-list:abbreviated-name="nhứt đầu" block-list:name="nhức đầu"/>
+  <block-list:block block-list:abbreviated-name="nhứt răng" block-list:name="nhức răng"/>
+  <block-list:block block-list:abbreviated-name="nhứt nhối" block-list:name="nhức nhối"/>
+  <block-list:block block-list:abbreviated-name="rươu" block-list:name="rượu"/>
+  <block-list:block block-list:abbreviated-name="phíu" block-list:name="phiếu"/>
+  <block-list:block block-list:abbreviated-name="miu" block-list:name="miêu"/>
+  <block-list:block block-list:abbreviated-name="xa xá" block-list:name="sa sá"/>
+  <block-list:block block-list:abbreviated-name="sơi" block-list:name="xơi"/>
+  <block-list:block block-list:abbreviated-name="soài" block-list:name="xoài"/>
+  <block-list:block block-list:abbreviated-name="xoái" block-list:name="soái"/>
+  <block-list:block block-list:abbreviated-name="soay" block-list:name="xoay"/>
+  <block-list:block block-list:abbreviated-name="chiu" block-list:name="chiêu"/>
+  <block-list:block block-list:abbreviated-name="chiếu chít" block-list:name="chíu chít"/>
+  <block-list:block block-list:abbreviated-name="chìu" block-list:name="chiều"/>
+  <block-list:block block-list:abbreviated-name="bíu xén" block-list:name="biếu xén"/>
+  <block-list:block block-list:abbreviated-name="biều" block-list:name="bìu"/>
+  <block-list:block block-list:abbreviated-name="chiệu" block-list:name="chịu"/>
+  <block-list:block block-list:abbreviated-name="chiu" block-list:name="chiêu"/>
+  <block-list:block block-list:abbreviated-name="chỉu" block-list:name="chiểu"/>
+  <block-list:block block-list:abbreviated-name="bỉu" block-list:name="biểu"/>
+  <block-list:block block-list:abbreviated-name="biễu" block-list:name="bĩu"/>
+  <block-list:block block-list:abbreviated-name="diu cữu" block-list:name="diêu cữu"/>
+  <block-list:block block-list:abbreviated-name="diu đường" block-list:name="diêu đường"/>
+  <block-list:block block-list:abbreviated-name="diều diệu" block-list:name="dìu dịu"/>
+  <block-list:block block-list:abbreviated-name="dìu hâu" block-list:name="diều hâu"/>
+  <block-list:block block-list:abbreviated-name="dìu mướp" block-list:name="diều mướp"/>
+  <block-list:block block-list:abbreviated-name="dĩu" block-list:name="diễu"/>
+  <block-list:block block-list:abbreviated-name="diếu" block-list:name="díu"/>
+  <block-list:block block-list:abbreviated-name="diệu giọng" block-list:name="dịu giọng"/>
+  <block-list:block block-list:abbreviated-name="diệu hiền" block-list:name="dịu hiền"/>
+  <block-list:block block-list:abbreviated-name="diệu ngọt" block-list:name="dịu ngọt"/>
+  <block-list:block block-list:abbreviated-name="dịu kế" block-list:name="diệu kế"/>
+  <block-list:block block-list:abbreviated-name="dịu vợi" block-list:name="diệu vợi"/>
+  <block-list:block block-list:abbreviated-name="hiêu" block-list:name="hiu"/>
+  <block-list:block block-list:abbreviated-name="hỉu" block-list:name="hiểu"/>
+  <block-list:block block-list:abbreviated-name="híu" block-list:name="hiếu"/>
+  <block-list:block block-list:abbreviated-name="hịu" block-list:name="hiệu"/>
+  <block-list:block block-list:abbreviated-name="kiu" block-list:name="kiêu"/>
+  <block-list:block block-list:abbreviated-name="kìu" block-list:name="kiều"/>
+  <block-list:block block-list:abbreviated-name="kỉu" block-list:name="kiểu"/>
+  <block-list:block block-list:abbreviated-name="kíu" block-list:name="kiếu"/>
+  <block-list:block block-list:abbreviated-name="kiễu" block-list:name="kĩu"/>
+  <block-list:block block-list:abbreviated-name="kịu" block-list:name="kiệu"/>
+  <block-list:block block-list:abbreviated-name="khiêu gan" block-list:name="khêu gan"/>
+  <block-list:block block-list:abbreviated-name="khiu" block-list:name="khiêu"/>
+  <block-list:block block-list:abbreviated-name="liêu điêu" block-list:name="liu điu"/>
+  <block-list:block block-list:abbreviated-name="liu hữu" block-list:name="liêu hữu"/>
+  <block-list:block block-list:abbreviated-name="liu thuộc" block-list:name="liêu thuộc"/>
+  <block-list:block block-list:abbreviated-name="lìu" block-list:name="liều"/>
+  <block-list:block block-list:abbreviated-name="lĩu" block-list:name="liễu"/>
+  <block-list:block block-list:abbreviated-name="liếu" block-list:name="líu"/>
+  <block-list:block block-list:abbreviated-name="nói liệu" block-list:name="nói lịu"/>
+  <block-list:block block-list:abbreviated-name="lịu pháp" block-list:name="liệu pháp"/>
+  <block-list:block block-list:abbreviated-name="lịu chừng" block-list:name="liệu chừng"/>
+  <block-list:block block-list:abbreviated-name="lịu lí" block-list:name="liệu lí"/>
+  <block-list:block block-list:abbreviated-name="mĩu" block-list:name="miễu"/>
+  <block-list:block block-list:abbreviated-name="míu" block-list:name="miếu"/>
+  <block-list:block block-list:abbreviated-name="nịu" block-list:name="niệu"/>
+  <block-list:block block-list:abbreviated-name="nhiu" block-list:name="nhiêu"/>
+  <block-list:block block-list:abbreviated-name="nhỉu" block-list:name="nhiểu"/>
+  <block-list:block block-list:abbreviated-name="nhĩu" block-list:name="nhiễu"/>
+  <block-list:block block-list:abbreviated-name="nhiệu" block-list:name="nhịu"/>
+  <block-list:block block-list:abbreviated-name="piêu" block-list:name="piu"/>
+  <block-list:block block-list:abbreviated-name="phiu" block-list:name="phiêu"/>
+  <block-list:block block-list:abbreviated-name="phìu" block-list:name="phiều"/>
+  <block-list:block block-list:abbreviated-name="phiệu" block-list:name="phịu"/>
+  <block-list:block block-list:abbreviated-name="riêu riêu" block-list:name="riu riu"/>
+  <block-list:block block-list:abbreviated-name="riều" block-list:name="rìu"/>
+  <block-list:block block-list:abbreviated-name="riếu" block-list:name="ríu"/>
+  <block-list:block block-list:abbreviated-name="siu loại" block-list:name="siêu loại"/>
+  <block-list:block block-list:abbreviated-name="sịu dữ liệu" block-list:name="siêu dữ liệu"/>
+  <block-list:block block-list:abbreviated-name="siu tự nhiên" block-list:name="siêu tự nhiên"/>
+  <block-list:block block-list:abbreviated-name="tiêu nguỷu" block-list:name="tiu nguỷu"/>
+  <block-list:block block-list:abbreviated-name="tiu chuẩn" block-list:name="tiêu chuẩn"/>
+  <block-list:block block-list:abbreviated-name="tiu bỉu" block-list:name="tiêu biểu"/>
+  <block-list:block block-list:abbreviated-name="tiu xài" block-list:name="tiêu xài"/>
+  <block-list:block block-list:abbreviated-name="tìu" block-list:name="tiều"/>
+  <block-list:block block-list:abbreviated-name="tỉu" block-list:name="tiểu"/>
+  <block-list:block block-list:abbreviated-name="tĩu" block-list:name="tiễu"/>
+  <block-list:block block-list:abbreviated-name="tiếu tít" block-list:name="tíu tít"/>
+  <block-list:block block-list:abbreviated-name="tíu lâm" block-list:name="tiếu lâm"/>
+  <block-list:block block-list:abbreviated-name="tíu mạ" block-list:name="tiếu mạ"/>
+  <block-list:block block-list:abbreviated-name="thiêu thiêu" block-list:name="thiu thiu"/>
+  <block-list:block block-list:abbreviated-name="thiêu thối" block-list:name="thiu thối"/>
+  <block-list:block block-list:abbreviated-name="thiu huỷ" block-list:name="thiêu huỷ"/>
+  <block-list:block block-list:abbreviated-name="hủy" block-list:name="huỷ"/>
+  <block-list:block block-list:abbreviated-name="thìu" block-list:name="thiều"/>
+  <block-list:block block-list:abbreviated-name="thỉu" block-list:name="thiểu"/>
+  <block-list:block block-list:abbreviated-name="thiễu" block-list:name="thiểu"/>
+  <block-list:block block-list:abbreviated-name="thíu" block-list:name="thiếu"/>
+  <block-list:block block-list:abbreviated-name="thịu" block-list:name="thiệu"/>
+  <block-list:block block-list:abbreviated-name="bãy" block-list:name="bãi"/>
+  <block-list:block block-list:abbreviated-name="chủm" block-list:name="chũm"/>
+  <block-list:block block-list:abbreviated-name="chỉa" block-list:name="chĩa"/>
+  <block-list:block block-list:abbreviated-name="chỏi" block-list:name="chõi"/>
+  <block-list:block block-list:abbreviated-name="lãng mạng" block-list:name="lãng mạn"/>
+  <block-list:block block-list:abbreviated-name="bãi hoải" block-list:name="bải hoải"/>
+  <block-list:block block-list:abbreviated-name="bãy" block-list:name="bãi"/>
+  <block-list:block block-list:abbreviated-name="cãy" block-list:name="cãi"/>
+  <block-list:block block-list:abbreviated-name="xớm" block-list:name="sớm"/>
+  <block-list:block block-list:abbreviated-name="sám sịt" block-list:name="xám xịt"/>
+  <block-list:block block-list:abbreviated-name="xám hối" block-list:name="sám hối"/>
+  <block-list:block block-list:abbreviated-name="xôi" block-list:name="sôi"/>
+  <block-list:block block-list:abbreviated-name="bàn hoàn" block-list:name="bàng hoàng"/>
+  <block-list:block block-list:abbreviated-name="sem" block-list:name="xem"/>
+  <block-list:block block-list:abbreviated-name="xây xát" block-list:name="sây sát"/>
+  <block-list:block block-list:abbreviated-name="sây sẩm" block-list:name="xây xẩm"/>
+  <block-list:block block-list:abbreviated-name="xầy" block-list:name="sầy"/>
+  <block-list:block block-list:abbreviated-name="xẩy" block-list:name="sẩy"/>
+  <block-list:block block-list:abbreviated-name="sẫy" block-list:name="sẩy"/>
+  <block-list:block block-list:abbreviated-name="xấy" block-list:name="sấy"/>
+  <block-list:block block-list:abbreviated-name="xậy" block-list:name="sậy"/>
+  <block-list:block block-list:abbreviated-name="xuy nghỉ" block-list:name="suy nghĩ"/>
+  <block-list:block block-list:abbreviated-name="xuy nghĩ" block-list:name="suy nghĩ"/>
+  <block-list:block block-list:abbreviated-name="xuyễn" block-list:name="suyễn"/>
+  <block-list:block block-list:abbreviated-name="suyên" block-list:name="xuyên"/>
+  <block-list:block block-list:abbreviated-name="suyến" block-list:name="xuyến"/>
+  <block-list:block block-list:abbreviated-name="truyển" block-list:name="chuyển"/>
+  <block-list:block block-list:abbreviated-name="truyễn" block-list:name="chuyển"/>
+  <block-list:block block-list:abbreviated-name="chuyễn" block-list:name="chuyển"/>
+  <block-list:block block-list:abbreviated-name="sác nhận" block-list:name="xác nhận"/>
+  <block-list:block block-list:abbreviated-name="sác sơ" block-list:name="xác xơ"/>
+  <block-list:block block-list:abbreviated-name="sanh sao" block-list:name="xanh xao"/>
+  <block-list:block block-list:abbreviated-name="tuyễn" block-list:name="tuyển"/>
+  <block-list:block block-list:abbreviated-name="mô tã" block-list:name="mô tả"/>
+  <block-list:block block-list:abbreviated-name="dầy" block-list:name="rầy"/>
+  <block-list:block block-list:abbreviated-name="giầy" block-list:name="rầy"/>
+  <block-list:block block-list:abbreviated-name="dây lát" block-list:name="giây lát"/>
+  <block-list:block block-list:abbreviated-name="giây điện" block-list:name="dây điện"/>
+  <block-list:block block-list:abbreviated-name="chỗng" block-list:name="chổng"/>
+  <block-list:block block-list:abbreviated-name="xình" block-list:name="sình"/>
+  <block-list:block block-list:abbreviated-name="xính" block-list:name="sính"/>
+  <block-list:block block-list:abbreviated-name="xụt xịt" block-list:name="sụt sịt"/>
+  <block-list:block block-list:abbreviated-name="sỉu" block-list:name="xỉu"/>
+  <block-list:block block-list:abbreviated-name="xóc vọng" block-list:name="sóc vọng"/>
+  <block-list:block block-list:abbreviated-name="séo" block-list:name="xéo"/>
+  <block-list:block block-list:abbreviated-name="xeo" block-list:name="seo"/>
+  <block-list:block block-list:abbreviated-name="sấu sí" block-list:name="xấu xí"/>
+  <block-list:block block-list:abbreviated-name="xấu sí" block-list:name="xấu xí"/>
+  <block-list:block block-list:abbreviated-name="sấp sỉ" block-list:name="xấp xỉ"/>
+  <block-list:block block-list:abbreviated-name="xấp sỉ" block-list:name="xấp xỉ"/>
+  <block-list:block block-list:abbreviated-name="sấc" block-list:name="xấc"/>
+  <block-list:block block-list:abbreviated-name="xượt" block-list:name="sượt"/>
+  <block-list:block block-list:abbreviated-name="xấp mặt" block-list:name="sấp mặt"/>
+  <block-list:block block-list:abbreviated-name="xắc" block-list:name="sắc"/>
+  <block-list:block block-list:abbreviated-name="sắt xon" block-list:name="sắt son"/>
+  <block-list:block block-list:abbreviated-name="xắt xon" block-list:name="sắt son"/>
+  <block-list:block block-list:abbreviated-name="xơn" block-list:name="sơn"/>
+  <block-list:block block-list:abbreviated-name="xắp xếp" block-list:name="sắp xếp"/>
+  <block-list:block block-list:abbreviated-name="xỉa chân" block-list:name="sỉa chân"/>
+  <block-list:block block-list:abbreviated-name="sôn sao" block-list:name="xôn xao"/>
+  <block-list:block block-list:abbreviated-name="sôn xao" block-list:name="xôn xao"/>
+  <block-list:block block-list:abbreviated-name="sáo trộn" block-list:name="xáo trộn"/>
+  <block-list:block block-list:abbreviated-name="xáo ngữ" block-list:name="sáo ngữ"/>
+  <block-list:block block-list:abbreviated-name="sào sạc" block-list:name="xào xạc"/>
+  <block-list:block block-list:abbreviated-name="xào sạc" block-list:name="xào xạc"/>
+  <block-list:block block-list:abbreviated-name="xọc" block-list:name="sọc"/>
+  <block-list:block block-list:abbreviated-name="xào xạo" block-list:name="sào sạo"/>
+  <block-list:block block-list:abbreviated-name="sào xạo" block-list:name="sào sạo"/>
+  <block-list:block block-list:abbreviated-name="xục xạo" block-list:name="sục sạo"/>
+  <block-list:block block-list:abbreviated-name="sục xạo" block-list:name="sục sạo"/>
+  <block-list:block block-list:abbreviated-name="sụt sùi" block-list:name="xụt xùi"/>
+  <block-list:block block-list:abbreviated-name="xụt sùi" block-list:name="xụt xùi"/>
+  <block-list:block block-list:abbreviated-name="xụt xùi" block-list:name="sụt sùi"/>
+  <block-list:block block-list:abbreviated-name="sụt xùi" block-list:name="sụt sùi"/>
+  <block-list:block block-list:abbreviated-name="xút" block-list:name="sút"/>
+  <block-list:block block-list:abbreviated-name="xát xao" block-list:name="sát sao"/>
+  <block-list:block block-list:abbreviated-name="sát xao" block-list:name="sát sao"/>
+  <block-list:block block-list:abbreviated-name="xát xạt" block-list:name="sát sạt"/>
+  <block-list:block block-list:abbreviated-name="sát xạt" block-list:name="sát sạt"/>
+  <block-list:block block-list:abbreviated-name="xườn" block-list:name="sườn"/>
+  <block-list:block block-list:abbreviated-name="xương mù" block-list:name="sương mù"/>
+  <block-list:block block-list:abbreviated-name="xương giá" block-list:name="sương giá"/>
+  <block-list:block block-list:abbreviated-name="xương muối" block-list:name="sương muối"/>
+  <block-list:block block-list:abbreviated-name="sương xẩu" block-list:name="xương xẩu"/>
+  <block-list:block block-list:abbreviated-name="sương sẩu" block-list:name="xương xẩu"/>
+  <block-list:block block-list:abbreviated-name="sương sườn" block-list:name="xương sườn"/>
+  <block-list:block block-list:abbreviated-name="sương sống" block-list:name="xương sống"/>
+  <block-list:block block-list:abbreviated-name="sường xượng" block-list:name="sường sượng"/>
+  <block-list:block block-list:abbreviated-name="xường xượng" block-list:name="sường sượng"/>
+  <block-list:block block-list:abbreviated-name="sưởng" block-list:name="xưởng"/>
+  <block-list:block block-list:abbreviated-name="sướng danh" block-list:name="xướng danh"/>
+  <block-list:block block-list:abbreviated-name="xướng mắt" block-list:name="sướng mắt"/>
+  <block-list:block block-list:abbreviated-name="xượng" block-list:name="sượng"/>
+  <block-list:block block-list:abbreviated-name="suống" block-list:name="xuống"/>
+  <block-list:block block-list:abbreviated-name="xuôn" block-list:name="suôn"/>
+  <block-list:block block-list:abbreviated-name="suồng xã" block-list:name="suồng sã"/>
+  <block-list:block block-list:abbreviated-name="xuồng xã" block-list:name="suồng sã"/>
+  <block-list:block block-list:abbreviated-name="suổng" block-list:name="xuổng"/>
+  <block-list:block block-list:abbreviated-name="xướt" block-list:name="sướt"/>
+  <block-list:block block-list:abbreviated-name="sước" block-list:name="xước"/>
+  <block-list:block block-list:abbreviated-name="xuốt" block-list:name="suốt"/>
+  <block-list:block block-list:abbreviated-name="suề" block-list:name="xuề"/>
+  <block-list:block block-list:abbreviated-name="xuối" block-list:name="suối"/>
+  <block-list:block block-list:abbreviated-name="suân" block-list:name="xuân"/>
+  <block-list:block block-list:abbreviated-name="suôi" block-list:name="xuôi"/>
+  <block-list:block block-list:abbreviated-name="xuy suyễn" block-list:name="suy suyễn"/>
+  <block-list:block block-list:abbreviated-name="xuy xuyễn" block-list:name="suy suyễn"/>
+  <block-list:block block-list:abbreviated-name="suy xuyển" block-list:name="suy suyển"/>
+  <block-list:block block-list:abbreviated-name="xuy xuyển" block-list:name="suy suyển"/>
+  <block-list:block block-list:abbreviated-name="suy sét" block-list:name="suy xét"/>
+  <block-list:block block-list:abbreviated-name="xuy xét" block-list:name="suy xét"/>
+  <block-list:block block-list:abbreviated-name="xáp" block-list:name="sáp"/>
+  <block-list:block block-list:abbreviated-name="xàn xàn" block-list:name="sàn sàn"/>
+  <block-list:block block-list:abbreviated-name="sàn xạn" block-list:name="sàn sạn"/>
+  <block-list:block block-list:abbreviated-name="sàn xạt" block-list:name="sàn sạt"/>
+  <block-list:block block-list:abbreviated-name="xàn xạt" block-list:name="sàn sạt"/>
+  <block-list:block block-list:abbreviated-name="xành" block-list:name="sành"/>
+  <block-list:block block-list:abbreviated-name="sán lạn" block-list:name="xán lạn"/>
+  <block-list:block block-list:abbreviated-name="sán rạn" block-list:name="xán lạn"/>
+  <block-list:block block-list:abbreviated-name="xánh" block-list:name="sánh"/>
+  <block-list:block block-list:abbreviated-name="xạn" block-list:name="sạn"/>
+  <block-list:block block-list:abbreviated-name="sít xao" block-list:name="sít sao"/>
+  <block-list:block block-list:abbreviated-name="xít xao" block-list:name="sít sao"/>
+  <block-list:block block-list:abbreviated-name="xít sao" block-list:name="sít sao"/>
+  <block-list:block block-list:abbreviated-name="xít xịt" block-list:name="sít sịt"/>
+  <block-list:block block-list:abbreviated-name="xì xì" block-list:name="sì sì"/>
+  <block-list:block block-list:abbreviated-name="xì xụp" block-list:name="sì sụp"/>
+  <block-list:block block-list:abbreviated-name="xì sụt" block-list:name="sì sụt"/>
+  <block-list:block block-list:abbreviated-name="xì xụt" block-list:name="sì sụt"/>
+  <block-list:block block-list:abbreviated-name="sì sào" block-list:name="xì xào"/>
+  <block-list:block block-list:abbreviated-name="xì sào" block-list:name="xì xào"/>
+  <block-list:block block-list:abbreviated-name="sì xào" block-list:name="xì xào"/>
+  <block-list:block block-list:abbreviated-name="sí nghiệp" block-list:name="xí nghiệp"/>
+  <block-list:block block-list:abbreviated-name="xỉ nhục" block-list:name="sỉ nhục"/>
+  <block-list:block block-list:abbreviated-name="xĩ diện" block-list:name="sĩ diện"/>
+  <block-list:block block-list:abbreviated-name="sĩ xiện" block-list:name="sĩ diện"/>
+  <block-list:block block-list:abbreviated-name="xĩ số" block-list:name="sĩ số"/>
+  <block-list:block block-list:abbreviated-name="xĩ xố" block-list:name="sĩ số"/>
+  <block-list:block block-list:abbreviated-name="sô bồ" block-list:name="xô bồ"/>
+  <block-list:block block-list:abbreviated-name="sô đẩy" block-list:name="xô đẩy"/>
+  <block-list:block block-list:abbreviated-name="xô vanh" block-list:name="sô vanh"/>
+  <block-list:block block-list:abbreviated-name="xồ xề" block-list:name="sồ sề"/>
+  <block-list:block block-list:abbreviated-name="sồ xề" block-list:name="sồ sề"/>
+  <block-list:block block-list:abbreviated-name="xồ sề" block-list:name="sồ sề"/>
+  <block-list:block block-list:abbreviated-name="xổ xố" block-list:name="xổ số"/>
+  <block-list:block block-list:abbreviated-name="sổ số" block-list:name="xổ số"/>
+  <block-list:block block-list:abbreviated-name="xỗ sàng" block-list:name="sỗ sàng"/>
+  <block-list:block block-list:abbreviated-name="xỗ xàng" block-list:name="sỗ sàng"/>
+  <block-list:block block-list:abbreviated-name="sỗ xàng" block-list:name="sỗ sàng"/>
+  <block-list:block block-list:abbreviated-name="xẽ sàng" block-list:name="sẽ sàng"/>
+  <block-list:block block-list:abbreviated-name="sẽ xàng" block-list:name="sẽ sàng"/>
+  <block-list:block block-list:abbreviated-name="xẽ xàng" block-list:name="sẽ sàng"/>
+  <block-list:block block-list:abbreviated-name="sót dạ" block-list:name="xót dạ"/>
+  <block-list:block block-list:abbreviated-name="su hướng" block-list:name="xu hướng"/>
+  <block-list:block block-list:abbreviated-name="xu sẽ" block-list:name="su sẽ"/>
+  <block-list:block block-list:abbreviated-name="xu xẽ" block-list:name="su sẽ"/>
+  <block-list:block block-list:abbreviated-name="su thời" block-list:name="xu thời"/>
+  <block-list:block block-list:abbreviated-name="xù xụ" block-list:name="sù sụ"/>
+  <block-list:block block-list:abbreviated-name="sù xụ" block-list:name="sù sụ"/>
+  <block-list:block block-list:abbreviated-name="xè xè" block-list:name="sè sè"/>
+  <block-list:block block-list:abbreviated-name="xa xầm" block-list:name="sa sầm"/>
+  <block-list:block block-list:abbreviated-name="xa sầm" block-list:name="sa sầm"/>
+  <block-list:block block-list:abbreviated-name="sa xẩy" block-list:name="sa sẩy"/>
+  <block-list:block block-list:abbreviated-name="xa xả" block-list:name="sa sả"/>
+  <block-list:block block-list:abbreviated-name="sa xả" block-list:name="sa sả"/>
+  <block-list:block block-list:abbreviated-name="xa sả" block-list:name="sa sả"/>
+  <block-list:block block-list:abbreviated-name="sa lộ" block-list:name="xa lộ"/>
+  <block-list:block block-list:abbreviated-name="sa cách" block-list:name="xa cách"/>
+  <block-list:block block-list:abbreviated-name="sa hoa" block-list:name="xa hoa"/>
+  <block-list:block block-list:abbreviated-name="sa lánh" block-list:name="xa lánh"/>
+  <block-list:block block-list:abbreviated-name="sa lạ" block-list:name="xa lạ"/>
+  <block-list:block block-list:abbreviated-name="xa săm" block-list:name="xa xăm"/>
+  <block-list:block block-list:abbreviated-name="sa săm" block-list:name="xa xăm"/>
+  <block-list:block block-list:abbreviated-name="sa sỉ he" block-list:name="xa xỉ"/>
+  <block-list:block block-list:abbreviated-name="xa sỉ" block-list:name="xa xỉ"/>
+  <block-list:block block-list:abbreviated-name="sa xỉ" block-list:name="xa xỉ"/>
+  <block-list:block block-list:abbreviated-name="xa xĩ" block-list:name="xa xỉ"/>
+  <block-list:block block-list:abbreviated-name="sà lách" block-list:name="xà lách"/>
+  <block-list:block block-list:abbreviated-name="xà lúp" block-list:name="sà lúp"/>
+  <block-list:block block-list:abbreviated-name="sả thân" block-list:name="xả thân"/>
+  <block-list:block block-list:abbreviated-name="xã cánh" block-list:name="sã cánh"/>
+  <block-list:block block-list:abbreviated-name="sã hội" block-list:name="xã hội"/>
+  <block-list:block block-list:abbreviated-name="sã tắc" block-list:name="xã tắc"/>
+  <block-list:block block-list:abbreviated-name="sá tội" block-list:name="xá tội"/>
+  <block-list:block block-list:abbreviated-name="xá kể" block-list:name="sá kể"/>
+  <block-list:block block-list:abbreviated-name="xá quản" block-list:name="sá quản"/>
+  <block-list:block block-list:abbreviated-name="sạ hương" block-list:name="xạ hương"/>
+  <block-list:block block-list:abbreviated-name="sạ kích" block-list:name="xạ kích"/>
+  <block-list:block block-list:abbreviated-name="sú uế" block-list:name="xú uế"/>
+  <block-list:block block-list:abbreviated-name="xo sánh" block-list:name="so sanh"/>
+  <block-list:block block-list:abbreviated-name="xo xánh" block-list:name="so sánh"/>
+  <block-list:block block-list:abbreviated-name="sọ xừa" block-list:name="sọ dừa"/>
+  <block-list:block block-list:abbreviated-name="xọ dừa" block-list:name="sọ dừa"/>
+  <block-list:block block-list:abbreviated-name="phủ phàng" block-list:name="phũ phàng"/>
+  <block-list:block block-list:abbreviated-name="phũ định" block-list:name="phủ định"/>
+  <block-list:block block-list:abbreviated-name="phã" block-list:name="phả"/>
+  <block-list:block block-list:abbreviated-name="phõng" block-list:name="phỏng"/>
+  <block-list:block block-list:abbreviated-name="thĩnh" block-list:name="thỉnh"/>
+  <block-list:block block-list:abbreviated-name="thã" block-list:name="thả"/>
+  <block-list:block block-list:abbreviated-name="thõ" block-list:name="thỏ"/>
+  <block-list:block block-list:abbreviated-name="thũng thẳng" block-list:name="thủng thẳng"/>
+  <block-list:block block-list:abbreviated-name="thũng thĩnh" block-list:name="thủng thỉnh"/>
+  <block-list:block block-list:abbreviated-name="thãng" block-list:name="thảng"/>
+  <block-list:block block-list:abbreviated-name="phỉnh mủi" block-list:name="phỉnh mũi"/>
+  <block-list:block block-list:abbreviated-name="phỉnh bụng" block-list:name="phĩnh bụng"/>
+  <block-list:block block-list:abbreviated-name="thẽ" block-list:name="thẻ"/>
+  <block-list:block block-list:abbreviated-name="phe phẫy" block-list:name="phe phẩy"/>
+  <block-list:block block-list:abbreviated-name="mủi tên" block-list:name="mũi tên"/>
+  <block-list:block block-list:abbreviated-name="mũi lòng" block-list:name="mủi lòng"/>
+  <block-list:block block-list:abbreviated-name="phũi" block-list:name="phủi"/>
+  <block-list:block block-list:abbreviated-name="phẩu" block-list:name="phẫu"/>
+  <block-list:block block-list:abbreviated-name="mẩm mạp" block-list:name="mẫm mạp"/>
+  <block-list:block block-list:abbreviated-name="nẩu" block-list:name="nẫu"/>
+  <block-list:block block-list:abbreviated-name="khẫu" block-list:name="khẩu"/>
+  <block-list:block block-list:abbreviated-name="lẩy lừng" block-list:name="lẫy lừng"/>
+  <block-list:block block-list:abbreviated-name="cgx" block-list:name="cũng"/>
+  <block-list:block block-list:abbreviated-name="ko" block-list:name="không"/>
+  <block-list:block block-list:abbreviated-name="ngf" block-list:name="người"/>
+  <block-list:block block-list:abbreviated-name="nx" block-list:name="những"/>
+  <block-list:block block-list:abbreviated-name="nf" block-list:name="nhiều"/>
+  <block-list:block block-list:abbreviated-name="nhg" block-list:name="nhưng"/>
+  <block-list:block block-list:abbreviated-name="bcs" block-list:name="bước"/>
+  <block-list:block block-list:abbreviated-name="bcj" block-list:name="buộc"/>
+  <block-list:block block-list:abbreviated-name="hgf" block-list:name="hàng"/>
+  <block-list:block block-list:abbreviated-name="hgj" block-list:name="hạng"/>
+  <block-list:block block-list:abbreviated-name="bgf" block-list:name="buồng"/>
+  <block-list:block block-list:abbreviated-name="chg" block-list:name="chương"/>
+  <block-list:block block-list:abbreviated-name="chgs" block-list:name="chướng"/>
+  <block-list:block block-list:abbreviated-name="dg" block-list:name="dương"/>
+  <block-list:block block-list:abbreviated-name="dgj" block-list:name="dượng"/>
+  <block-list:block block-list:abbreviated-name="dgx" block-list:name="dưỡng"/>
+  <block-list:block block-list:abbreviated-name="lg" block-list:name="lương"/>
+  <block-list:block block-list:abbreviated-name="lgj" block-list:name="lượng"/>
+  <block-list:block block-list:abbreviated-name="lgx" block-list:name="lưỡng"/>
+  <block-list:block block-list:abbreviated-name="hg" block-list:name="hương"/>
+  <block-list:block block-list:abbreviated-name="hgs" block-list:name="hướng"/>
+  <block-list:block block-list:abbreviated-name="phg" block-list:name="phương"/>
+  <block-list:block block-list:abbreviated-name="phgf" block-list:name="phường"/>
+  <block-list:block block-list:abbreviated-name="phgj" block-list:name="phượng"/>
+  <block-list:block block-list:abbreviated-name="tg" block-list:name="tương"/>
+  <block-list:block block-list:abbreviated-name="tgf" block-list:name="tường"/>
+  <block-list:block block-list:abbreviated-name="tgj" block-list:name="tượng"/>
+  <block-list:block block-list:abbreviated-name="tgr" block-list:name="tưởng"/>
+  <block-list:block block-list:abbreviated-name="thg" block-list:name="thương"/>
+  <block-list:block block-list:abbreviated-name="thgr" block-list:name="thưỏng"/>
+  <block-list:block block-list:abbreviated-name="thgj" block-list:name="thượng"/>
+  <block-list:block block-list:abbreviated-name="thgf" block-list:name="thường"/>
+  <block-list:block block-list:abbreviated-name="xg" block-list:name="xương"/>
+  <block-list:block block-list:abbreviated-name="trgf" block-list:name="trường"/>
+  <block-list:block block-list:abbreviated-name="trg" block-list:name="trang"/>
+  <block-list:block block-list:abbreviated-name="trgr" block-list:name="trưởng"/>
+  <block-list:block block-list:abbreviated-name="trgj" block-list:name="trượng"/>
+  <block-list:block block-list:abbreviated-name="t/g" block-list:name="thời gian"/>
+  <block-list:block block-list:abbreviated-name="lkết" block-list:name="liên kết"/>
+  <block-list:block block-list:abbreviated-name="xh" block-list:name="xã hội"/>
+  <block-list:block block-list:abbreviated-name="kthúc" block-list:name="kết thúc"/>
+  <block-list:block block-list:abbreviated-name="t/y" block-list:name="tình yêu"/>
+  <block-list:block block-list:abbreviated-name="SG" block-list:name="Sài Gòn"/>
+  <block-list:block block-list:abbreviated-name="HN" block-list:name="Hà Nội"/>
+  <block-list:block block-list:abbreviated-name="HCM" block-list:name="Hồ Chí Minh"/>
+  <block-list:block block-list:abbreviated-name="ddg" block-list:name="đương"/>
+  <block-list:block block-list:abbreviated-name="ddgf" block-list:name="đường"/>
+  <block-list:block block-list:abbreviated-name="ddcj" block-list:name="được"/>
+  <block-list:block block-list:abbreviated-name="đg" block-list:name="đương"/>
+  <block-list:block block-list:abbreviated-name="đgf" block-list:name="đường"/>
+  <block-list:block block-list:abbreviated-name="đcj" block-list:name="được"/>
+  <block-list:block block-list:abbreviated-name="1/2" block-list:name="½"/>
+  <block-list:block block-list:abbreviated-name="1/4" block-list:name="¼"/>
+  <block-list:block block-list:abbreviated-name="3/4" block-list:name="¾"/>
+</block-list:block-list>

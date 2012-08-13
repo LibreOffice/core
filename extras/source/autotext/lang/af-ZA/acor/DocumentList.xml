@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<block-list:block-list xmlns:block-list="http://openoffice.org/2001/block-list">
+  <block-list:block block-list:abbreviated-name="`n" block-list:name="'n"/>
+  <block-list:block block-list:abbreviated-name="`N" block-list:name="'n"/>
+  <block-list:block block-list:abbreviated-name="‘’n" block-list:name="‘'n"/>
+  <block-list:block block-list:abbreviated-name="‘’N" block-list:name="‘'n"/>
+  <block-list:block block-list:abbreviated-name="‘n" block-list:name="'n"/>
+  <block-list:block block-list:abbreviated-name="‘N" block-list:name="'n"/>
+  <block-list:block block-list:abbreviated-name="’n" block-list:name="'n"/>
+  <block-list:block block-list:abbreviated-name="’N" block-list:name="'n"/>
+  <block-list:block block-list:abbreviated-name="‛n" block-list:name="'n"/>
+  <block-list:block block-list:abbreviated-name="‛N" block-list:name="'n"/>
+  <block-list:block block-list:abbreviated-name="(C)" block-list:name="©"/>
+  <block-list:block block-list:abbreviated-name="(R)" block-list:name="®"/>
+  <block-list:block block-list:abbreviated-name="adt" block-list:name="dat"/>
+  <block-list:block block-list:abbreviated-name="aggresie" block-list:name="aggressie"/>
+  <block-list:block block-list:abbreviated-name="aggresies" block-list:name="aggressies"/>
+  <block-list:block block-list:abbreviated-name="agresie" block-list:name="aggressie"/>
+  <block-list:block block-list:abbreviated-name="agresies" block-list:name="aggressies"/>
+  <block-list:block block-list:abbreviated-name="agressie" block-list:name="aggressie"/>
+  <block-list:block block-list:abbreviated-name="agressies" block-list:name="aggressies"/>
+  <block-list:block block-list:abbreviated-name="basseer" block-list:name="baseer"/>
+  <block-list:block block-list:abbreviated-name="behorot" block-list:name="behoort"/>
+  <block-list:block block-list:abbreviated-name="behort" block-list:name="behoort"/>
+  <block-list:block block-list:abbreviated-name="daroor" block-list:name="daaroor"/>
+  <block-list:block block-list:abbreviated-name="díe" block-list:name="dié"/>
+  <block-list:block block-list:abbreviated-name="díé" block-list:name="dié"/>
+  <block-list:block block-list:abbreviated-name="dta" block-list:name="dat"/>
+  <block-list:block block-list:abbreviated-name="duuur" block-list:name="duur"/>
+  <block-list:block block-list:abbreviated-name="endie" block-list:name="en die"/>
+  <block-list:block block-list:abbreviated-name="erstens" block-list:name="eerstens"/>
+  <block-list:block block-list:abbreviated-name="gebasseer" block-list:name="gebaseer"/>
+  <block-list:block block-list:abbreviated-name="gebasseerd" block-list:name="gebaseerd"/>
+  <block-list:block block-list:abbreviated-name="gebasseerde" block-list:name="gebaseerde"/>
+  <block-list:block block-list:abbreviated-name="gebuirk" block-list:name="gebruik"/>
+  <block-list:block block-list:abbreviated-name="heir" block-list:name="hier"/>
+  <block-list:block block-list:abbreviated-name="heiraan" block-list:name="hieraan"/>
+  <block-list:block block-list:abbreviated-name="heirby" block-list:name="hierby"/>
+  <block-list:block block-list:abbreviated-name="heirdie" block-list:name="hierdie"/>
+  <block-list:block block-list:abbreviated-name="heirdies" block-list:name="hierdies"/>
+  <block-list:block block-list:abbreviated-name="heirheen" block-list:name="hierheen"/>
+  <block-list:block block-list:abbreviated-name="heirmee" block-list:name="hiermee"/>
+  <block-list:block block-list:abbreviated-name="heirna" block-list:name="hierna"/>
+  <block-list:block block-list:abbreviated-name="heiroor" block-list:name="hieroor"/>
+  <block-list:block block-list:abbreviated-name="heirop" block-list:name="hierop"/>
+  <block-list:block block-list:abbreviated-name="heirso" block-list:name="hierso"/>
+  <block-list:block block-list:abbreviated-name="heirvan" block-list:name="hiervan"/>
+  <block-list:block block-list:abbreviated-name="heo" block-list:name="hoe"/>
+  <block-list:block block-list:abbreviated-name="hierdei" block-list:name="hierdie"/>
+  <block-list:block block-list:abbreviated-name="hierdeis" block-list:name="hierdies"/>
+  <block-list:block block-list:abbreviated-name="hieride" block-list:name="hierdie"/>
+  <block-list:block block-list:abbreviated-name="indie" block-list:name="in die"/>
+  <block-list:block block-list:abbreviated-name="interesant " block-list:name="interessant"/>
+  <block-list:block block-list:abbreviated-name="interresant" block-list:name="interessant"/>
+  <block-list:block block-list:abbreviated-name="interressant" block-list:name="interessant"/>
+  <block-list:block block-list:abbreviated-name="klien" block-list:name="klein"/>
+  <block-list:block block-list:abbreviated-name="maaak" block-list:name="maak"/>
+  <block-list:block block-list:abbreviated-name="maaar" block-list:name="maar"/>
+  <block-list:block block-list:abbreviated-name="menes" block-list:name="mense"/>
+  <block-list:block block-list:abbreviated-name="meot" block-list:name="moet"/>
+  <block-list:block block-list:abbreviated-name="mesn" block-list:name="mens"/>
+  <block-list:block block-list:abbreviated-name="mesne" block-list:name="mense"/>
+  <block-list:block block-list:abbreviated-name="midde ooste" block-list:name="Midde-Ooste"/>
+  <block-list:block block-list:abbreviated-name="nadta" block-list:name="nadat"/>
+  <block-list:block block-list:abbreviated-name="nadtat" block-list:name="nadat"/>
+  <block-list:block block-list:abbreviated-name="nei" block-list:name="nie"/>
+  <block-list:block block-list:abbreviated-name="neimand" block-list:name="niemand"/>
+  <block-list:block block-list:abbreviated-name="nisk" block-list:name="niks"/>
+  <block-list:block block-list:abbreviated-name="noord amerika" block-list:name="Noord-Amerika"/>
+  <block-list:block block-list:abbreviated-name="odf" block-list:name="ODF"/>
+  <block-list:block block-list:abbreviated-name="onmiddelik" block-list:name="onmiddellik"/>
+  <block-list:block block-list:abbreviated-name="onmiddelike" block-list:name="onmiddellike"/>
+  <block-list:block block-list:abbreviated-name="onmiddeliker" block-list:name="onmiddelliker"/>
+  <block-list:block block-list:abbreviated-name="onmiddelikste" block-list:name="onmiddellikste"/>
+  <block-list:block block-list:abbreviated-name="onmidelik" block-list:name="onmiddellik"/>
+  <block-list:block block-list:abbreviated-name="onmidelike" block-list:name="onmiddellike"/>
+  <block-list:block block-list:abbreviated-name="onmideliker" block-list:name="onmiddelliker"/>
+  <block-list:block block-list:abbreviated-name="onmidelikset" block-list:name="onmiddellikste"/>
+  <block-list:block block-list:abbreviated-name="onmidellik" block-list:name="onmiddellik"/>
+  <block-list:block block-list:abbreviated-name="onmidellike" block-list:name="onmiddellike"/>
+  <block-list:block block-list:abbreviated-name="onmidelliker" block-list:name="onmiddelliker"/>
+  <block-list:block block-list:abbreviated-name="onmidellikste" block-list:name="onmiddellikste"/>
+  <block-list:block block-list:abbreviated-name="ookal" block-list:name="ook al"/>
+  <block-list:block block-list:abbreviated-name="oook" block-list:name="ook"/>
+  <block-list:block block-list:abbreviated-name="ooor" block-list:name="oor"/>
+  <block-list:block block-list:abbreviated-name="saaam" block-list:name="saam"/>
+  <block-list:block block-list:abbreviated-name="selg" block-list:name="sleg"/>
+  <block-list:block block-list:abbreviated-name="si" block-list:name="is"/>
+  <block-list:block block-list:abbreviated-name="sla" block-list:name="sal"/>
+  <block-list:block block-list:abbreviated-name="slaë" block-list:name="slae"/>
+  <block-list:block block-list:abbreviated-name="slef" block-list:name="self"/>
+  <block-list:block block-list:abbreviated-name="snoder" block-list:name="sonder"/>
+  <block-list:block block-list:abbreviated-name="sondre" block-list:name="sonder"/>
+  <block-list:block block-list:abbreviated-name="sooos" block-list:name="soos"/>
+  <block-list:block block-list:abbreviated-name="sos" block-list:name="soos"/>
+  <block-list:block block-list:abbreviated-name="staaan" block-list:name="staan"/>
+  <block-list:block block-list:abbreviated-name="suid afrika" block-list:name="Suid-Afrika"/>
+  <block-list:block block-list:abbreviated-name="suid amerika" block-list:name="Suid-Amerika"/>
+  <block-list:block block-list:abbreviated-name="suid asie" block-list:name="Suid-Asië"/>
+  <block-list:block block-list:abbreviated-name="suid asië" block-list:name="Suid-Asië"/>
+  <block-list:block block-list:abbreviated-name="teeen" block-list:name="teen"/>
+  <block-list:block block-list:abbreviated-name="terywl" block-list:name="terwyl"/>
+  <block-list:block block-list:abbreviated-name="trug" block-list:name="terug"/>
+  <block-list:block block-list:abbreviated-name="uo" block-list:name="ou"/>
+  <block-list:block block-list:abbreviated-name="veir" block-list:name="vier"/>
+  <block-list:block block-list:abbreviated-name="veol" block-list:name="voel"/>
+  <block-list:block block-list:abbreviated-name="verinneweer" block-list:name="verrinneweer"/>
+  <block-list:block block-list:abbreviated-name="verrineweer" block-list:name="verrinneweer"/>
+  <block-list:block block-list:abbreviated-name="weeer" block-list:name="weer"/>
+  <block-list:block block-list:abbreviated-name="weees" block-list:name="wees"/>
+  <block-list:block block-list:abbreviated-name="weeet" block-list:name="weet"/>
+  <block-list:block block-list:abbreviated-name="wli" block-list:name="wil"/>
+  <block-list:block block-list:abbreviated-name="wrod" block-list:name="hier"/>
+  <block-list:block block-list:abbreviated-name="1/2" block-list:name="½"/>
+  <block-list:block block-list:abbreviated-name="1/4" block-list:name="¼"/>
+  <block-list:block block-list:abbreviated-name="3/4" block-list:name="¾"/>
+</block-list:block-list>

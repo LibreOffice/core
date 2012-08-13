@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest>
+  <file-entry media-type="" full-path="/"/>
+  <file-entry media-type="" full-path="META-INF/"/>
+  <file-entry media-type="" full-path="MIMETYPE"/>
+  <file-entry media-type="text/xml" full-path="DocumentList.xml"/>
+  <file-entry media-type="" full-path="WordExceptList.xml"/>
+  <file-entry media-type="" full-path="BlockList.xml"/>
+</manifest>

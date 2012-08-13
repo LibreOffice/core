@@ -17,7 +17,6 @@
 #
 PRJ=..$/..$/..
 
-
 PRJNAME=extras
 TARGET=autotext
 
@@ -28,14 +27,9 @@ ZIP1TARGET      = $(AUTOTEXT_SHARE_TARGET)
 
 ZIP1LIST        = $(LANGDIR)$/standar?.bau $(LANGDIR)$/templat?.bau $(LANGDIR)$/crd*.bau
 
-ZIP2FORCEALLLANG = TRUE
-
 ZIP2TARGET      = $(AUTOCORR_TARGET)
 
-ZIP2LIST        = .$/*$/acor*.dat
+ZIP2LIST        = $(MISC)/acor*.dat
 
 
 .INCLUDE : target.mk
-
-
-

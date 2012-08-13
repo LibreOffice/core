@@ -17,28 +17,13 @@
 #
 PRJ=..$/..
 
-
-
 PRJNAME=extras
 TARGET=autotextnolang
 
 .INCLUDE : settings.mk
-
 .INCLUDE : $(PRJ)$/util$/target.pmk
 
-
-
 ZIP1TARGET      = $(AUTOTEXT_USER_TARGET)
-
 ZIP1LIST        = mytexts.bau
 
-
-
-
-
 .INCLUDE : target.mk
-
-
-
-
-

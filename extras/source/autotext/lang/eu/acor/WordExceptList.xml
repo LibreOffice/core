@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<block-list:block-list xmlns:block-list="http://openoffice.org/2001/block-list">
+  <block-list:block block-list:abbreviated-name="CDs"/>
+  <block-list:block block-list:abbreviated-name="ICs"/>
+  <block-list:block block-list:abbreviated-name="LPs"/>
+  <block-list:block block-list:abbreviated-name="MCs"/>
+  <block-list:block block-list:abbreviated-name="OOo"/>
+  <block-list:block block-list:abbreviated-name="PCs"/>
+  <block-list:block block-list:abbreviated-name="TVs"/>
+</block-list:block-list>

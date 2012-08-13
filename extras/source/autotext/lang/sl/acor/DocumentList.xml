@@ -1,0 +1,452 @@
+<?xml version="1.0" encoding="utf-8"?>
+<block-list:block-list xmlns:block-list="http://openoffice.org/2001/block-list">
+  <block-list:block block-list:abbreviated-name="..." block-list:name="…"/>
+  <block-list:block block-list:abbreviated-name="(c)" block-list:name="©"/>
+  <block-list:block block-list:abbreviated-name="(e)" block-list:name="€"/>
+  <block-list:block block-list:abbreviated-name="(r)" block-list:name="®"/>
+  <block-list:block block-list:abbreviated-name="(tm)" block-list:name="™"/>
+  <block-list:block block-list:abbreviated-name="ail" block-list:name="ali"/>
+  <block-list:block block-list:abbreviated-name="anti delca" block-list:name="antidelca"/>
+  <block-list:block block-list:abbreviated-name="anti delcem" block-list:name="antidelcem"/>
+  <block-list:block block-list:abbreviated-name="anti delcev" block-list:name="antidelcev"/>
+  <block-list:block block-list:abbreviated-name="anti delci" block-list:name="antidelci"/>
+  <block-list:block block-list:abbreviated-name="anti delcih" block-list:name="antidelcih"/>
+  <block-list:block block-list:abbreviated-name="anti delcu" block-list:name="antidelcu"/>
+  <block-list:block block-list:abbreviated-name="anti delec" block-list:name="antidelec"/>
+  <block-list:block block-list:abbreviated-name="avto cesta" block-list:name="avtocesta"/>
+  <block-list:block block-list:abbreviated-name="avto cestah" block-list:name="avtocestah"/>
+  <block-list:block block-list:abbreviated-name="avto cestama" block-list:name="avtocestama"/>
+  <block-list:block block-list:abbreviated-name="avto cestami" block-list:name="avtocestami"/>
+  <block-list:block block-list:abbreviated-name="avto ceste" block-list:name="avtoceste"/>
+  <block-list:block block-list:abbreviated-name="avto cesti" block-list:name="avtocesti"/>
+  <block-list:block block-list:abbreviated-name="avto cesto" block-list:name="avtocesto"/>
+  <block-list:block block-list:abbreviated-name="bijologija" block-list:name="biologija"/>
+  <block-list:block block-list:abbreviated-name="bijologije" block-list:name="biologije"/>
+  <block-list:block block-list:abbreviated-name="bijologiji" block-list:name="biologiji"/>
+  <block-list:block block-list:abbreviated-name="bijologijo" block-list:name="biologijo"/>
+  <block-list:block block-list:abbreviated-name="bližnic" block-list:name="bljižnic"/>
+  <block-list:block block-list:abbreviated-name="bližnica" block-list:name="bližnjica"/>
+  <block-list:block block-list:abbreviated-name="bližnicah" block-list:name="bližnjicah"/>
+  <block-list:block block-list:abbreviated-name="bližnicam" block-list:name="bližnjicam"/>
+  <block-list:block block-list:abbreviated-name="bližnicama" block-list:name="bližnjicama"/>
+  <block-list:block block-list:abbreviated-name="bližnicami" block-list:name="bližnjicami"/>
+  <block-list:block block-list:abbreviated-name="bližnice" block-list:name="bližnjice"/>
+  <block-list:block block-list:abbreviated-name="bližnici" block-list:name="bližnjici"/>
+  <block-list:block block-list:abbreviated-name="bližnico" block-list:name="bližnjico"/>
+  <block-list:block block-list:abbreviated-name="bljižnjic" block-list:name="bližnjic"/>
+  <block-list:block block-list:abbreviated-name="bljižnjica" block-list:name="bližnjica"/>
+  <block-list:block block-list:abbreviated-name="bljižnjicah" block-list:name="bližnjicah"/>
+  <block-list:block block-list:abbreviated-name="bljižnjicam" block-list:name="bližnjicam"/>
+  <block-list:block block-list:abbreviated-name="bljižnjicama" block-list:name="bližnjicama"/>
+  <block-list:block block-list:abbreviated-name="bljižnjicami" block-list:name="bližnjicami"/>
+  <block-list:block block-list:abbreviated-name="bljižnjice" block-list:name="bližnjice"/>
+  <block-list:block block-list:abbreviated-name="bljižnjici" block-list:name="bližnjici"/>
+  <block-list:block block-list:abbreviated-name="bljižnjico" block-list:name="bližnjico"/>
+  <block-list:block block-list:abbreviated-name="bogatstev" block-list:name="bogastev"/>
+  <block-list:block block-list:abbreviated-name="bogatstva" block-list:name="bogastva"/>
+  <block-list:block block-list:abbreviated-name="bogatstvi" block-list:name="bogastvi"/>
+  <block-list:block block-list:abbreviated-name="bogatstvih" block-list:name="bogastvih"/>
+  <block-list:block block-list:abbreviated-name="bogatstvo" block-list:name="bogastvo"/>
+  <block-list:block block-list:abbreviated-name="bogatstvom" block-list:name="bogastvom"/>
+  <block-list:block block-list:abbreviated-name="bogatstvoma" block-list:name="bogastvoma"/>
+  <block-list:block block-list:abbreviated-name="bogatstvu" block-list:name="bogastvu"/>
+  <block-list:block block-list:abbreviated-name="bolana" block-list:name="bolna"/>
+  <block-list:block block-list:abbreviated-name="bolane" block-list:name="bolane"/>
+  <block-list:block block-list:abbreviated-name="brezob" block-list:name="brezzob"/>
+  <block-list:block block-list:abbreviated-name="cik cak" block-list:name="cikcak"/>
+  <block-list:block block-list:abbreviated-name="čtre" block-list:name="črte"/>
+  <block-list:block block-list:abbreviated-name="decemberska" block-list:name="decembrska"/>
+  <block-list:block block-list:abbreviated-name="decemberske" block-list:name="decembrske"/>
+  <block-list:block block-list:abbreviated-name="decemberskega" block-list:name="decembrskega"/>
+  <block-list:block block-list:abbreviated-name="decemberskem" block-list:name="decembrskem"/>
+  <block-list:block block-list:abbreviated-name="decemberskemu" block-list:name="decembrskemu"/>
+  <block-list:block block-list:abbreviated-name="decemberski" block-list:name="decembrski"/>
+  <block-list:block block-list:abbreviated-name="decemberskih" block-list:name="decembrskih"/>
+  <block-list:block block-list:abbreviated-name="decemberskim" block-list:name="decembrskim"/>
+  <block-list:block block-list:abbreviated-name="decemberskima" block-list:name="decembrskima"/>
+  <block-list:block block-list:abbreviated-name="decemberskimi" block-list:name="decembrskimi"/>
+  <block-list:block block-list:abbreviated-name="decembersko" block-list:name="decembrsko"/>
+  <block-list:block block-list:abbreviated-name="dokmnet" block-list:name="dokument"/>
+  <block-list:block block-list:abbreviated-name="dokumnet" block-list:name="dokument"/>
+  <block-list:block block-list:abbreviated-name="gdaj" block-list:name="kdaj"/>
+  <block-list:block block-list:abbreviated-name="gdo" block-list:name="kdo"/>
+  <block-list:block block-list:abbreviated-name="hiper povezav" block-list:name="hiperpovezav"/>
+  <block-list:block block-list:abbreviated-name="hiper povezava" block-list:name="hiperpovezava"/>
+  <block-list:block block-list:abbreviated-name="hiper povezavah" block-list:name="hiperpovezavah"/>
+  <block-list:block block-list:abbreviated-name="hiper povezavama" block-list:name="hiperpovezavama"/>
+  <block-list:block block-list:abbreviated-name="hiper povezavami" block-list:name="hiperpovezavami"/>
+  <block-list:block block-list:abbreviated-name="hiper povezave" block-list:name="hiperpovezave"/>
+  <block-list:block block-list:abbreviated-name="hiper povezavi" block-list:name="hiperpovezavi"/>
+  <block-list:block block-list:abbreviated-name="hiper povezavo" block-list:name="hiperpovezavo"/>
+  <block-list:block block-list:abbreviated-name="Htp" block-list:name="http"/>
+  <block-list:block block-list:abbreviated-name="Http" block-list:name="http"/>
+  <block-list:block block-list:abbreviated-name="Http:\\" block-list:name="http://"/>
+  <block-list:block block-list:abbreviated-name="infromacije" block-list:name="informacije"/>
+  <block-list:block block-list:abbreviated-name="iza" block-list:name="izza"/>
+  <block-list:block block-list:abbreviated-name="jaboljk" block-list:name="jaboljk"/>
+  <block-list:block block-list:abbreviated-name="jaboljka" block-list:name="jaboljka"/>
+  <block-list:block block-list:abbreviated-name="jaboljki" block-list:name="jabolki"/>
+  <block-list:block block-list:abbreviated-name="jaboljko" block-list:name="jabolko"/>
+  <block-list:block block-list:abbreviated-name="jaboljkom" block-list:name="jabolkom"/>
+  <block-list:block block-list:abbreviated-name="jajcom" block-list:name="jajcem"/>
+  <block-list:block block-list:abbreviated-name="jugo vzhod" block-list:name="jugovzhod"/>
+  <block-list:block block-list:abbreviated-name="jugo vzhoda" block-list:name="jugovzhoda"/>
+  <block-list:block block-list:abbreviated-name="jugo vzhodom" block-list:name="jugovzhodom"/>
+  <block-list:block block-list:abbreviated-name="jugo vzhodu" block-list:name="jugovzhodu"/>
+  <block-list:block block-list:abbreviated-name="jugo zahod" block-list:name="jugozahod"/>
+  <block-list:block block-list:abbreviated-name="jugo zahoda" block-list:name="jugozahoda"/>
+  <block-list:block block-list:abbreviated-name="jugo zahodom" block-list:name="jugozahodom"/>
+  <block-list:block block-list:abbreviated-name="jugo zahodu" block-list:name="jugozahodu"/>
+  <block-list:block block-list:abbreviated-name="kejr" block-list:name="kjer"/>
+  <block-list:block block-list:abbreviated-name="knižna" block-list:name="knjižna"/>
+  <block-list:block block-list:abbreviated-name="knižne" block-list:name="knjižne"/>
+  <block-list:block block-list:abbreviated-name="knižnega" block-list:name="knjižnega"/>
+  <block-list:block block-list:abbreviated-name="knižnem" block-list:name="knjižnem"/>
+  <block-list:block block-list:abbreviated-name="knižnemu" block-list:name="knjižnemu"/>
+  <block-list:block block-list:abbreviated-name="knižni" block-list:name="knjižni"/>
+  <block-list:block block-list:abbreviated-name="knižnim" block-list:name="knjižnim"/>
+  <block-list:block block-list:abbreviated-name="knižnimi" block-list:name="knjižnimi"/>
+  <block-list:block block-list:abbreviated-name="knižno" block-list:name="knjižno"/>
+  <block-list:block block-list:abbreviated-name="košarkaš" block-list:name="košarkar"/>
+  <block-list:block block-list:abbreviated-name="košarkaša" block-list:name="košarkarja"/>
+  <block-list:block block-list:abbreviated-name="košarkašem" block-list:name="košarkarjem"/>
+  <block-list:block block-list:abbreviated-name="košarkašema" block-list:name="košarkarjema"/>
+  <block-list:block block-list:abbreviated-name="košarkašev" block-list:name="košarkarjev"/>
+  <block-list:block block-list:abbreviated-name="košarkaši" block-list:name="košarkarji"/>
+  <block-list:block block-list:abbreviated-name="košarkaših" block-list:name="košarkarjih"/>
+  <block-list:block block-list:abbreviated-name="košarkašu" block-list:name="košarkarju"/>
+  <block-list:block block-list:abbreviated-name="lai" block-list:name="ali"/>
+  <block-list:block block-list:abbreviated-name="lar" block-list:name="kar"/>
+  <block-list:block block-list:abbreviated-name="ler" block-list:name="ker"/>
+  <block-list:block block-list:abbreviated-name="malo katerega" block-list:name="malokaterega"/>
+  <block-list:block block-list:abbreviated-name="malo kateremu" block-list:name="malokateremu"/>
+  <block-list:block block-list:abbreviated-name="malo kateri" block-list:name="malokateri"/>
+  <block-list:block block-list:abbreviated-name="malo katerim" block-list:name="malokaterim"/>
+  <block-list:block block-list:abbreviated-name="malo kdo" block-list:name="malokdo"/>
+  <block-list:block block-list:abbreviated-name="malo koga" block-list:name="malokoga"/>
+  <block-list:block block-list:abbreviated-name="malo kom" block-list:name="malokom"/>
+  <block-list:block block-list:abbreviated-name="malo komu" block-list:name="malokomu"/>
+  <block-list:block block-list:abbreviated-name="malo številen" block-list:name="maloštevilen"/>
+  <block-list:block block-list:abbreviated-name="malo številna" block-list:name="maloštevilna"/>
+  <block-list:block block-list:abbreviated-name="malo številnega" block-list:name="maloštevilnega"/>
+  <block-list:block block-list:abbreviated-name="malo številnemu" block-list:name="maloštevilnemu"/>
+  <block-list:block block-list:abbreviated-name="malo številni" block-list:name="maloštevilni"/>
+  <block-list:block block-list:abbreviated-name="malo številnih" block-list:name="maloštevilnih"/>
+  <block-list:block block-list:abbreviated-name="malo številnim" block-list:name="maloštevilnim"/>
+  <block-list:block block-list:abbreviated-name="malo številnima" block-list:name="maloštevilnima"/>
+  <block-list:block block-list:abbreviated-name="malo številnimi" block-list:name="maloštevilnimi"/>
+  <block-list:block block-list:abbreviated-name="malo številno" block-list:name="maloštevilno"/>
+  <block-list:block block-list:abbreviated-name="marerijaloma" block-list:name="materialoma"/>
+  <block-list:block block-list:abbreviated-name="marsi katerega" block-list:name="marsikaterega"/>
+  <block-list:block block-list:abbreviated-name="marsi kateremu" block-list:name="marsikateremu"/>
+  <block-list:block block-list:abbreviated-name="marsi kateri" block-list:name="marsikateri"/>
+  <block-list:block block-list:abbreviated-name="marsi katerih" block-list:name="marsikaterih"/>
+  <block-list:block block-list:abbreviated-name="marsi katerim" block-list:name="marsikaterim"/>
+  <block-list:block block-list:abbreviated-name="marsi katerimi" block-list:name="marsikaterimi"/>
+  <block-list:block block-list:abbreviated-name="marsi kdo" block-list:name="marsikdo"/>
+  <block-list:block block-list:abbreviated-name="marsi koga" block-list:name="marsikoga"/>
+  <block-list:block block-list:abbreviated-name="marsi kom" block-list:name="marsikom"/>
+  <block-list:block block-list:abbreviated-name="marsi komu" block-list:name="marsikomu"/>
+  <block-list:block block-list:abbreviated-name="materijal" block-list:name="material"/>
+  <block-list:block block-list:abbreviated-name="materijala" block-list:name="materiala"/>
+  <block-list:block block-list:abbreviated-name="materijalih" block-list:name="materialih"/>
+  <block-list:block block-list:abbreviated-name="materijalom" block-list:name="materialom"/>
+  <block-list:block block-list:abbreviated-name="materijalov" block-list:name="materialov"/>
+  <block-list:block block-list:abbreviated-name="materijalu" block-list:name="materialu"/>
+  <block-list:block block-list:abbreviated-name="materski" block-list:name="metrski"/>
+  <block-list:block block-list:abbreviated-name="meta datotek" block-list:name="metadatotek"/>
+  <block-list:block block-list:abbreviated-name="meta datoteka" block-list:name="metadatoteka"/>
+  <block-list:block block-list:abbreviated-name="meta datotekah" block-list:name="metadatotekah"/>
+  <block-list:block block-list:abbreviated-name="meta datotekama" block-list:name="metadatotekama"/>
+  <block-list:block block-list:abbreviated-name="meta datotekami" block-list:name="metadatotekami"/>
+  <block-list:block block-list:abbreviated-name="meta datoteke" block-list:name="metadatoteke"/>
+  <block-list:block block-list:abbreviated-name="meta datoteki" block-list:name="metadatoteki"/>
+  <block-list:block block-list:abbreviated-name="meta datoteko" block-list:name="metadatoteko"/>
+  <block-list:block block-list:abbreviated-name="meterska" block-list:name="metrska"/>
+  <block-list:block block-list:abbreviated-name="meterske" block-list:name="metrske"/>
+  <block-list:block block-list:abbreviated-name="meterskega" block-list:name="metrskega"/>
+  <block-list:block block-list:abbreviated-name="meterskem" block-list:name="metrskem"/>
+  <block-list:block block-list:abbreviated-name="meterskemu" block-list:name="metrskemu"/>
+  <block-list:block block-list:abbreviated-name="meterskih" block-list:name="metrskih"/>
+  <block-list:block block-list:abbreviated-name="meterskim" block-list:name="metrskim"/>
+  <block-list:block block-list:abbreviated-name="meterskimi" block-list:name="metrskimi"/>
+  <block-list:block block-list:abbreviated-name="metersko" block-list:name="metrsko"/>
+  <block-list:block block-list:abbreviated-name="nadobudnež" block-list:name="nadebudnež"/>
+  <block-list:block block-list:abbreviated-name="nadobudneža" block-list:name="nadebudneža"/>
+  <block-list:block block-list:abbreviated-name="nadobudnežem" block-list:name="nadebudnežem"/>
+  <block-list:block block-list:abbreviated-name="nadobudnežema" block-list:name="nadebudnežema"/>
+  <block-list:block block-list:abbreviated-name="nadobudnežev" block-list:name="nadebudnežev"/>
+  <block-list:block block-list:abbreviated-name="nadobudneži" block-list:name="nadebudneži"/>
+  <block-list:block block-list:abbreviated-name="nadobudnežih" block-list:name="nadebudnežih"/>
+  <block-list:block block-list:abbreviated-name="nadobudnežu" block-list:name="nadebudnežu"/>
+  <block-list:block block-list:abbreviated-name="ne navaden" block-list:name="nenavaden"/>
+  <block-list:block block-list:abbreviated-name="ne navadna" block-list:name="nenavadna"/>
+  <block-list:block block-list:abbreviated-name="ne navadnega" block-list:name="nenavadnega"/>
+  <block-list:block block-list:abbreviated-name="ne navadno" block-list:name="nenavadno"/>
+  <block-list:block block-list:abbreviated-name="novemberska" block-list:name="novembrska"/>
+  <block-list:block block-list:abbreviated-name="novemberske" block-list:name="novembrske"/>
+  <block-list:block block-list:abbreviated-name="novemberskega" block-list:name="novembrskega"/>
+  <block-list:block block-list:abbreviated-name="novemberskem" block-list:name="novembrskem"/>
+  <block-list:block block-list:abbreviated-name="novemberskemu" block-list:name="novembrskemu"/>
+  <block-list:block block-list:abbreviated-name="novemberski" block-list:name="novembrski"/>
+  <block-list:block block-list:abbreviated-name="novemberskih" block-list:name="novembrskih"/>
+  <block-list:block block-list:abbreviated-name="novemberskim" block-list:name="novembrskim"/>
+  <block-list:block block-list:abbreviated-name="novemberskima" block-list:name="novembrskima"/>
+  <block-list:block block-list:abbreviated-name="novemberskimi" block-list:name="novembrskimi"/>
+  <block-list:block block-list:abbreviated-name="novembersko" block-list:name="novembrsko"/>
+  <block-list:block block-list:abbreviated-name="novo ustanovljen" block-list:name="novoustanovljen"/>
+  <block-list:block block-list:abbreviated-name="novo ustanovljena" block-list:name="novoustanovljena"/>
+  <block-list:block block-list:abbreviated-name="novo ustanovljene" block-list:name="novoustanovljene"/>
+  <block-list:block block-list:abbreviated-name="novo ustanovljenega" block-list:name="novoustanovljenega"/>
+  <block-list:block block-list:abbreviated-name="novo ustanovljenemu" block-list:name="novoustanovljenemu"/>
+  <block-list:block block-list:abbreviated-name="novo ustanovljeni" block-list:name="novoustanovljeni"/>
+  <block-list:block block-list:abbreviated-name="novo ustanovljenih" block-list:name="novoustanovljenih"/>
+  <block-list:block block-list:abbreviated-name="novo ustanovljenim" block-list:name="novoustanovljenim"/>
+  <block-list:block block-list:abbreviated-name="novo ustanovljenimi" block-list:name="novoustanovljenimi"/>
+  <block-list:block block-list:abbreviated-name="novo ustanovljeno" block-list:name="novoustanovljeno"/>
+  <block-list:block block-list:abbreviated-name="obejitve" block-list:name="omejitve"/>
+  <block-list:block block-list:abbreviated-name="odaja" block-list:name="oddaja"/>
+  <block-list:block block-list:abbreviated-name="odaljen" block-list:name="oddaljen"/>
+  <block-list:block block-list:abbreviated-name="odaljene" block-list:name="oddaljene"/>
+  <block-list:block block-list:abbreviated-name="odaljenih" block-list:name="oddaljenih"/>
+  <block-list:block block-list:abbreviated-name="odaljeno" block-list:name="oddaljeno"/>
+  <block-list:block block-list:abbreviated-name="odf" block-list:name="ODF"/>
+  <block-list:block block-list:abbreviated-name="oktoberska" block-list:name="oktobrska"/>
+  <block-list:block block-list:abbreviated-name="oktoberske" block-list:name="oktobrske"/>
+  <block-list:block block-list:abbreviated-name="oktoberskega" block-list:name="oktobrskega"/>
+  <block-list:block block-list:abbreviated-name="oktoberskem" block-list:name="oktobrskem"/>
+  <block-list:block block-list:abbreviated-name="oktoberskemu" block-list:name="oktobrskemu"/>
+  <block-list:block block-list:abbreviated-name="oktoberski" block-list:name="oktobrski"/>
+  <block-list:block block-list:abbreviated-name="oktoberskih" block-list:name="oktobrskih"/>
+  <block-list:block block-list:abbreviated-name="oktoberskim" block-list:name="oktobrskim"/>
+  <block-list:block block-list:abbreviated-name="oktoberskima" block-list:name="oktobrskima"/>
+  <block-list:block block-list:abbreviated-name="oktoberskimi" block-list:name="oktobrskimi"/>
+  <block-list:block block-list:abbreviated-name="oktobersko" block-list:name="oktobrsko"/>
+  <block-list:block block-list:abbreviated-name="OOo" block-list:name="OpenOffice.org"/>
+  <block-list:block block-list:abbreviated-name="pečite" block-list:name="pecite"/>
+  <block-list:block block-list:abbreviated-name="pedeset" block-list:name="petdeset"/>
+  <block-list:block block-list:abbreviated-name="pedeseta" block-list:name="petdeseta"/>
+  <block-list:block block-list:abbreviated-name="pedeseti" block-list:name="petdeseti"/>
+  <block-list:block block-list:abbreviated-name="pedesetih" block-list:name="petdesetih"/>
+  <block-list:block block-list:abbreviated-name="pedesetim" block-list:name="petdesetim"/>
+  <block-list:block block-list:abbreviated-name="pedesetimi" block-list:name="petdesetimi"/>
+  <block-list:block block-list:abbreviated-name="pedeseto" block-list:name="petdeseto"/>
+  <block-list:block block-list:abbreviated-name="peš pot" block-list:name="pešpot"/>
+  <block-list:block block-list:abbreviated-name="peš poti" block-list:name="pešpoti"/>
+  <block-list:block block-list:abbreviated-name="ploica" block-list:name="polica"/>
+  <block-list:block block-list:abbreviated-name="poljudno znanstven" block-list:name="poljudnoznanstven"/>
+  <block-list:block block-list:abbreviated-name="poljudno znanstvena" block-list:name="poljudnoznanstvena"/>
+  <block-list:block block-list:abbreviated-name="poljudno znanstvene" block-list:name="poljudnoznanstvene"/>
+  <block-list:block block-list:abbreviated-name="poljudno znanstvenega" block-list:name="poljudnoznanstvenega"/>
+  <block-list:block block-list:abbreviated-name="poljudno znanstvenemu" block-list:name="poljudnoznanstvenemu"/>
+  <block-list:block block-list:abbreviated-name="poljudno znanstveneno" block-list:name="poljudnoznanstveno"/>
+  <block-list:block block-list:abbreviated-name="poljudno znanstveni" block-list:name="poljudnoznanstveni"/>
+  <block-list:block block-list:abbreviated-name="posebaj" block-list:name="posebej"/>
+  <block-list:block block-list:abbreviated-name="postreži" block-list:name="postrezi"/>
+  <block-list:block block-list:abbreviated-name="postrežite" block-list:name="postrezite"/>
+  <block-list:block block-list:abbreviated-name="poterbujem" block-list:name="potrebujem"/>
+  <block-list:block block-list:abbreviated-name="povdarek" block-list:name="poudarek"/>
+  <block-list:block block-list:abbreviated-name="povdari" block-list:name="poudari"/>
+  <block-list:block block-list:abbreviated-name="povdarijo" block-list:name="poudarijo"/>
+  <block-list:block block-list:abbreviated-name="povdaril" block-list:name="poudaril"/>
+  <block-list:block block-list:abbreviated-name="povdarila" block-list:name="poudarila"/>
+  <block-list:block block-list:abbreviated-name="povdarile" block-list:name="poudarile"/>
+  <block-list:block block-list:abbreviated-name="povdarilo" block-list:name="poudarilo"/>
+  <block-list:block block-list:abbreviated-name="povdarim" block-list:name="poudarim"/>
+  <block-list:block block-list:abbreviated-name="povdarimo" block-list:name="poudarimo"/>
+  <block-list:block block-list:abbreviated-name="povdariš" block-list:name="poudariš"/>
+  <block-list:block block-list:abbreviated-name="povdarita" block-list:name="poudarita"/>
+  <block-list:block block-list:abbreviated-name="povdarite" block-list:name="poudarite"/>
+  <block-list:block block-list:abbreviated-name="povdariti" block-list:name="poudariti"/>
+  <block-list:block block-list:abbreviated-name="povdariva" block-list:name="poudariva"/>
+  <block-list:block block-list:abbreviated-name="povdarka" block-list:name="poudarka"/>
+  <block-list:block block-list:abbreviated-name="povdarke" block-list:name="poudarke"/>
+  <block-list:block block-list:abbreviated-name="povdarki" block-list:name="poudarki"/>
+  <block-list:block block-list:abbreviated-name="povdarkih" block-list:name="poudarkih"/>
+  <block-list:block block-list:abbreviated-name="povdarkom" block-list:name="poudarkom"/>
+  <block-list:block block-list:abbreviated-name="povdarkoma" block-list:name="poudarkoma"/>
+  <block-list:block block-list:abbreviated-name="povdarkov" block-list:name="poudarkov"/>
+  <block-list:block block-list:abbreviated-name="povdarku" block-list:name="poudarku"/>
+  <block-list:block block-list:abbreviated-name="pre malo" block-list:name="premalo"/>
+  <block-list:block block-list:abbreviated-name="precednik" block-list:name="predsednik"/>
+  <block-list:block block-list:abbreviated-name="precednika" block-list:name="predsednika"/>
+  <block-list:block block-list:abbreviated-name="precedniki" block-list:name="predsedniki"/>
+  <block-list:block block-list:abbreviated-name="precednikih" block-list:name="predsednikih"/>
+  <block-list:block block-list:abbreviated-name="precednikom" block-list:name="predsednikom"/>
+  <block-list:block block-list:abbreviated-name="precednikoma" block-list:name="predsednikoma"/>
+  <block-list:block block-list:abbreviated-name="precednikov" block-list:name="predsednikov"/>
+  <block-list:block block-list:abbreviated-name="precedniku" block-list:name="predsedniku"/>
+  <block-list:block block-list:abbreviated-name="pred potopen" block-list:name="predpotopen"/>
+  <block-list:block block-list:abbreviated-name="pred potopna" block-list:name="predpotopna"/>
+  <block-list:block block-list:abbreviated-name="pred potopni" block-list:name="predpotopni"/>
+  <block-list:block block-list:abbreviated-name="pred potopno" block-list:name="predpotopno"/>
+  <block-list:block block-list:abbreviated-name="prenešen" block-list:name="prenesen"/>
+  <block-list:block block-list:abbreviated-name="prenešena" block-list:name="prenesena"/>
+  <block-list:block block-list:abbreviated-name="prenešene" block-list:name="prenesene"/>
+  <block-list:block block-list:abbreviated-name="prenešenega" block-list:name="prenesenega"/>
+  <block-list:block block-list:abbreviated-name="prenešenem" block-list:name="prenesenem"/>
+  <block-list:block block-list:abbreviated-name="prenešenemu" block-list:name="prenesenemu"/>
+  <block-list:block block-list:abbreviated-name="prenešeni" block-list:name="preneseni"/>
+  <block-list:block block-list:abbreviated-name="prenešenih" block-list:name="prenesenih"/>
+  <block-list:block block-list:abbreviated-name="prenešenim" block-list:name="prenesenim"/>
+  <block-list:block block-list:abbreviated-name="prenešenimi" block-list:name="prenesenimi"/>
+  <block-list:block block-list:abbreviated-name="prirave" block-list:name="priprave"/>
+  <block-list:block block-list:abbreviated-name="proti delec" block-list:name="protidelec"/>
+  <block-list:block block-list:abbreviated-name="računajne" block-list:name="računanje"/>
+  <block-list:block block-list:abbreviated-name="radija" block-list:name="radia"/>
+  <block-list:block block-list:abbreviated-name="radijem" block-list:name="radiem"/>
+  <block-list:block block-list:abbreviated-name="radijev" block-list:name="radiev"/>
+  <block-list:block block-list:abbreviated-name="radiji" block-list:name="radii"/>
+  <block-list:block block-list:abbreviated-name="radijo" block-list:name="radio"/>
+  <block-list:block block-list:abbreviated-name="radiju" block-list:name="radiu"/>
+  <block-list:block block-list:abbreviated-name="sanes" block-list:name="danes"/>
+  <block-list:block block-list:abbreviated-name="septemberska" block-list:name="septembrska"/>
+  <block-list:block block-list:abbreviated-name="septemberske" block-list:name="septembrske"/>
+  <block-list:block block-list:abbreviated-name="septemberskega" block-list:name="septembrskega"/>
+  <block-list:block block-list:abbreviated-name="septemberskem" block-list:name="septembrskem"/>
+  <block-list:block block-list:abbreviated-name="septemberskemu" block-list:name="septembrskemu"/>
+  <block-list:block block-list:abbreviated-name="septemberski" block-list:name="septembrski"/>
+  <block-list:block block-list:abbreviated-name="septemberskih" block-list:name="septembrskih"/>
+  <block-list:block block-list:abbreviated-name="septemberskim" block-list:name="septembrskim"/>
+  <block-list:block block-list:abbreviated-name="septemberskima" block-list:name="septembrskima"/>
+  <block-list:block block-list:abbreviated-name="septemberskimi" block-list:name="septembrskimi"/>
+  <block-list:block block-list:abbreviated-name="septembersko" block-list:name="septembrsko"/>
+  <block-list:block block-list:abbreviated-name="šesdeset" block-list:name="šestdeset"/>
+  <block-list:block block-list:abbreviated-name="šesdeseta" block-list:name="šestdeseta"/>
+  <block-list:block block-list:abbreviated-name="šesdesete" block-list:name="šestdesete"/>
+  <block-list:block block-list:abbreviated-name="šesdesetega" block-list:name="šestdesetega"/>
+  <block-list:block block-list:abbreviated-name="šesdesetemu" block-list:name="šestdesetemu"/>
+  <block-list:block block-list:abbreviated-name="šesdeseti" block-list:name="šestdeseti"/>
+  <block-list:block block-list:abbreviated-name="šesdesetih" block-list:name="šestdesetih"/>
+  <block-list:block block-list:abbreviated-name="šesdesetim" block-list:name="šestdesetim"/>
+  <block-list:block block-list:abbreviated-name="šesdesetimi" block-list:name="šestdesetimi"/>
+  <block-list:block block-list:abbreviated-name="šesdeseto" block-list:name="šestdeseto"/>
+  <block-list:block block-list:abbreviated-name="severo vzhod" block-list:name="severovzhod"/>
+  <block-list:block block-list:abbreviated-name="severo vzhoda" block-list:name="severovzhoda"/>
+  <block-list:block block-list:abbreviated-name="severo vzhodom" block-list:name="severovzhodom"/>
+  <block-list:block block-list:abbreviated-name="severo vzhodu" block-list:name="severovzhodu"/>
+  <block-list:block block-list:abbreviated-name="severo zahod" block-list:name="severozahod"/>
+  <block-list:block block-list:abbreviated-name="severo zahoda" block-list:name="severozahoda"/>
+  <block-list:block block-list:abbreviated-name="severo zahodom" block-list:name="severozahodom"/>
+  <block-list:block block-list:abbreviated-name="severo zahodu" block-list:name="severozahodu"/>
+  <block-list:block block-list:abbreviated-name="skald" block-list:name="sklad"/>
+  <block-list:block block-list:abbreviated-name="sni" block-list:name="sin"/>
+  <block-list:block block-list:abbreviated-name="številks" block-list:name="številka"/>
+  <block-list:block block-list:abbreviated-name="stolpična" block-list:name="stolpčna"/>
+  <block-list:block block-list:abbreviated-name="stolpične" block-list:name="stolpčne"/>
+  <block-list:block block-list:abbreviated-name="stolpičnega" block-list:name="stolpčnega"/>
+  <block-list:block block-list:abbreviated-name="stolpičnem" block-list:name="stolpčnem"/>
+  <block-list:block block-list:abbreviated-name="stolpičnemu" block-list:name="stolpčnemu"/>
+  <block-list:block block-list:abbreviated-name="stolpični" block-list:name="stolpčni"/>
+  <block-list:block block-list:abbreviated-name="stolpičnih" block-list:name="stolpčnih"/>
+  <block-list:block block-list:abbreviated-name="stolpičnim" block-list:name="stolpčnim"/>
+  <block-list:block block-list:abbreviated-name="stolpičnima" block-list:name="stolpčnima"/>
+  <block-list:block block-list:abbreviated-name="stolpičnimi" block-list:name="stolpčnimi"/>
+  <block-list:block block-list:abbreviated-name="stolpično" block-list:name="stolpčno"/>
+  <block-list:block block-list:abbreviated-name="stožščna" block-list:name="stožčna"/>
+  <block-list:block block-list:abbreviated-name="stožščni" block-list:name="stožčna"/>
+  <block-list:block block-list:abbreviated-name="stožščno" block-list:name="stožčno"/>
+  <block-list:block block-list:abbreviated-name="stricom" block-list:name="stricem"/>
+  <block-list:block block-list:abbreviated-name="stricov" block-list:name="stricev"/>
+  <block-list:block block-list:abbreviated-name="tečite" block-list:name="tecite"/>
+  <block-list:block block-list:abbreviated-name="tehnic" block-list:name="tehtnic"/>
+  <block-list:block block-list:abbreviated-name="tehnica" block-list:name="tehtnic"/>
+  <block-list:block block-list:abbreviated-name="tehnicah" block-list:name="tehtnicah"/>
+  <block-list:block block-list:abbreviated-name="tehnicam" block-list:name="tehtnicam"/>
+  <block-list:block block-list:abbreviated-name="tehnicama" block-list:name="tehtnicama"/>
+  <block-list:block block-list:abbreviated-name="tehnicami" block-list:name="tehtnicami"/>
+  <block-list:block block-list:abbreviated-name="tehnice" block-list:name="tehtnice"/>
+  <block-list:block block-list:abbreviated-name="tehnici" block-list:name="tehtnici"/>
+  <block-list:block block-list:abbreviated-name="tehnico" block-list:name="tehtnico"/>
+  <block-list:block block-list:abbreviated-name="terapeut" block-list:name="terapevt"/>
+  <block-list:block block-list:abbreviated-name="terapeuta" block-list:name="terapevta"/>
+  <block-list:block block-list:abbreviated-name="terapeuti" block-list:name="terapevti"/>
+  <block-list:block block-list:abbreviated-name="terapeutih" block-list:name="terapevtih"/>
+  <block-list:block block-list:abbreviated-name="terapeutom" block-list:name="terapevtom"/>
+  <block-list:block block-list:abbreviated-name="terapeutoma" block-list:name="terapevtoma"/>
+  <block-list:block block-list:abbreviated-name="terapeutov" block-list:name="terapevtov"/>
+  <block-list:block block-list:abbreviated-name="terapeutu" block-list:name="terapevtu"/>
+  <block-list:block block-list:abbreviated-name="ultra maratonca" block-list:name="ultramaratonca"/>
+  <block-list:block block-list:abbreviated-name="ultra maratoncem" block-list:name="ultramaratoncem"/>
+  <block-list:block block-list:abbreviated-name="ultra maratoncema" block-list:name="ultramaratoncema"/>
+  <block-list:block block-list:abbreviated-name="ultra maratoncev" block-list:name="ultramaratoncev"/>
+  <block-list:block block-list:abbreviated-name="ultra maratonci" block-list:name="ultramaratonci"/>
+  <block-list:block block-list:abbreviated-name="ultra maratoncih" block-list:name="ultramaratoncih"/>
+  <block-list:block block-list:abbreviated-name="ultra maratoncu" block-list:name="ultramaratoncu"/>
+  <block-list:block block-list:abbreviated-name="ultra maratonec" block-list:name="ultramaratonec"/>
+  <block-list:block block-list:abbreviated-name="ultra vijoličen" block-list:name="ultravijoličen"/>
+  <block-list:block block-list:abbreviated-name="ultra vijolična" block-list:name="ultravijolična"/>
+  <block-list:block block-list:abbreviated-name="ultra vijolične" block-list:name="ultravijolične"/>
+  <block-list:block block-list:abbreviated-name="ultra vijoličnega" block-list:name="ultravijoličnega"/>
+  <block-list:block block-list:abbreviated-name="ultra vijoličnem" block-list:name="ultravijoličnem"/>
+  <block-list:block block-list:abbreviated-name="ultra vijolični" block-list:name="ultravijolični"/>
+  <block-list:block block-list:abbreviated-name="ultra vijolično" block-list:name="ultravijolično"/>
+  <block-list:block block-list:abbreviated-name="ustavriti" block-list:name="ustvariti"/>
+  <block-list:block block-list:abbreviated-name="vgnezdi" block-list:name="ugnezdi"/>
+  <block-list:block block-list:abbreviated-name="vgnezdijo" block-list:name="ugnezdijo"/>
+  <block-list:block block-list:abbreviated-name="vgnezdil" block-list:name="ugnezdil"/>
+  <block-list:block block-list:abbreviated-name="vgnezdila" block-list:name="ugnezdila"/>
+  <block-list:block block-list:abbreviated-name="vgnezdile" block-list:name="ugnezdile"/>
+  <block-list:block block-list:abbreviated-name="vgnezdili" block-list:name="ugnezdili"/>
+  <block-list:block block-list:abbreviated-name="vgnezdim" block-list:name="ugnezdim"/>
+  <block-list:block block-list:abbreviated-name="vgnezdimo" block-list:name="ugnezdimo"/>
+  <block-list:block block-list:abbreviated-name="vgnezdiš" block-list:name="ugnezdiš"/>
+  <block-list:block block-list:abbreviated-name="vgnezdita" block-list:name="ugnezdita"/>
+  <block-list:block block-list:abbreviated-name="vgnezdite" block-list:name="ugnezdite"/>
+  <block-list:block block-list:abbreviated-name="vgnezditi" block-list:name="ugnezditi"/>
+  <block-list:block block-list:abbreviated-name="vgnezdiva" block-list:name="ugnezdiva"/>
+  <block-list:block block-list:abbreviated-name="vnešen" block-list:name="vnesen"/>
+  <block-list:block block-list:abbreviated-name="vnešena" block-list:name="vnesena"/>
+  <block-list:block block-list:abbreviated-name="vnešene" block-list:name="vnesene"/>
+  <block-list:block block-list:abbreviated-name="vnešenega" block-list:name="vnesenega"/>
+  <block-list:block block-list:abbreviated-name="vnešenem" block-list:name="vnesenem"/>
+  <block-list:block block-list:abbreviated-name="vnešenemu" block-list:name="vnesenemu"/>
+  <block-list:block block-list:abbreviated-name="vnešeni" block-list:name="vneseni"/>
+  <block-list:block block-list:abbreviated-name="vnešenih" block-list:name="vnesenih"/>
+  <block-list:block block-list:abbreviated-name="vnešenim" block-list:name="vnesenim"/>
+  <block-list:block block-list:abbreviated-name="vnešenima" block-list:name="vnesenima"/>
+  <block-list:block block-list:abbreviated-name="vnešenimi" block-list:name="vnesenimi"/>
+  <block-list:block block-list:abbreviated-name="vnešeno" block-list:name="vneseno"/>
+  <block-list:block block-list:abbreviated-name="vrstiv" block-list:name="vrstic"/>
+  <block-list:block block-list:abbreviated-name="vseno" block-list:name="vseeno"/>
+  <block-list:block block-list:abbreviated-name="žabs" block-list:name="žaba"/>
+  <block-list:block block-list:abbreviated-name="željen" block-list:name="želen"/>
+  <block-list:block block-list:abbreviated-name="željena" block-list:name="želena"/>
+  <block-list:block block-list:abbreviated-name="željene" block-list:name="želene"/>
+  <block-list:block block-list:abbreviated-name="željenega" block-list:name="želenega"/>
+  <block-list:block block-list:abbreviated-name="željenemu" block-list:name="želenemu"/>
+  <block-list:block block-list:abbreviated-name="željeni" block-list:name="želeni"/>
+  <block-list:block block-list:abbreviated-name="željenih" block-list:name="želenih"/>
+  <block-list:block block-list:abbreviated-name="željenim" block-list:name="želenim"/>
+  <block-list:block block-list:abbreviated-name="željenimi" block-list:name="želenimi"/>
+  <block-list:block block-list:abbreviated-name="željeno" block-list:name="želeno"/>
+  <block-list:block block-list:abbreviated-name="zhrajena" block-list:name="zgrajena"/>
+  <block-list:block block-list:abbreviated-name="živlen" block-list:name="življenj"/>
+  <block-list:block block-list:abbreviated-name="živlena" block-list:name="življenja"/>
+  <block-list:block block-list:abbreviated-name="živlenj" block-list:name="življenj"/>
+  <block-list:block block-list:abbreviated-name="živlenja" block-list:name="življenja"/>
+  <block-list:block block-list:abbreviated-name="živlenje" block-list:name="življenje"/>
+  <block-list:block block-list:abbreviated-name="živlenjem" block-list:name="življenjem"/>
+  <block-list:block block-list:abbreviated-name="živlenji" block-list:name="življenji"/>
+  <block-list:block block-list:abbreviated-name="živlenjih" block-list:name="življenjih"/>
+  <block-list:block block-list:abbreviated-name="živlenjska" block-list:name="življenjska"/>
+  <block-list:block block-list:abbreviated-name="živlenjske" block-list:name="življenjske"/>
+  <block-list:block block-list:abbreviated-name="živlenjskem" block-list:name="življenjskem"/>
+  <block-list:block block-list:abbreviated-name="živlenjski" block-list:name="življenjski"/>
+  <block-list:block block-list:abbreviated-name="živlenjskih" block-list:name="življenjskih"/>
+  <block-list:block block-list:abbreviated-name="živlenska" block-list:name="življenjska"/>
+  <block-list:block block-list:abbreviated-name="živlenske" block-list:name="življenjske"/>
+  <block-list:block block-list:abbreviated-name="živlenskem" block-list:name="življenjskem"/>
+  <block-list:block block-list:abbreviated-name="živlenski" block-list:name="življenjski"/>
+  <block-list:block block-list:abbreviated-name="živlenskih" block-list:name="življenjskih"/>
+  <block-list:block block-list:abbreviated-name="življen" block-list:name="življenj"/>
+  <block-list:block block-list:abbreviated-name="življena" block-list:name="življenja"/>
+  <block-list:block block-list:abbreviated-name="življenska" block-list:name="življenjska"/>
+  <block-list:block block-list:abbreviated-name="življenske" block-list:name="življenjske"/>
+  <block-list:block block-list:abbreviated-name="življenskem" block-list:name="življenjskem"/>
+  <block-list:block block-list:abbreviated-name="življenski" block-list:name="življenjski"/>
+  <block-list:block block-list:abbreviated-name="življenskih" block-list:name="življenjskih"/>
+  <block-list:block block-list:abbreviated-name="1/2" block-list:name="½"/>
+  <block-list:block block-list:abbreviated-name="1/4" block-list:name="¼"/>
+  <block-list:block block-list:abbreviated-name="3/4" block-list:name="¾"/>
+</block-list:block-list>

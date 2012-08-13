@@ -1,0 +1,607 @@
+<?xml version="1.0" encoding="utf-8"?>
+<block-list:block-list xmlns:block-list="http://openoffice.org/2001/block-list">
+  <block-list:block block-list:abbreviated-name="--" block-list:name="–"/>
+  <block-list:block block-list:abbreviated-name="--&gt;" block-list:name="→"/>
+  <block-list:block block-list:abbreviated-name="-," block-list:name="–,"/>
+  <block-list:block block-list:abbreviated-name="-&gt;" block-list:name="→"/>
+  <block-list:block block-list:abbreviated-name="..." block-list:name="…"/>
+  <block-list:block block-list:abbreviated-name="(c)" block-list:name="©"/>
+  <block-list:block block-list:abbreviated-name="(cc)" block-list:name=""/>
+  <block-list:block block-list:abbreviated-name="(e)" block-list:name="€"/>
+  <block-list:block block-list:abbreviated-name="(p)" block-list:name="℗"/>
+  <block-list:block block-list:abbreviated-name="(r)" block-list:name="®"/>
+  <block-list:block block-list:abbreviated-name="(tm)" block-list:name="™"/>
+  <block-list:block block-list:abbreviated-name="%-al" block-list:name="%-kal"/>
+  <block-list:block block-list:abbreviated-name="°C-szal" block-list:name="°C-kal"/>
+  <block-list:block block-list:abbreviated-name="&lt;-" block-list:name="←"/>
+  <block-list:block block-list:abbreviated-name="&lt;--" block-list:name="←"/>
+  <block-list:block block-list:abbreviated-name="&lt;--&gt;" block-list:name="↔"/>
+  <block-list:block block-list:abbreviated-name="&lt;-&gt;" block-list:name="↔"/>
+  <block-list:block block-list:abbreviated-name="0-ás" block-list:name="0-s"/>
+  <block-list:block block-list:abbreviated-name="1-e" block-list:name="1-je"/>
+  <block-list:block block-list:abbreviated-name="1-éig" block-list:name="1-jéig"/>
+  <block-list:block block-list:abbreviated-name="1-én" block-list:name="1-jén"/>
+  <block-list:block block-list:abbreviated-name="1-ére" block-list:name="1-jére"/>
+  <block-list:block block-list:abbreviated-name="1-étől" block-list:name="1-jétől"/>
+  <block-list:block block-list:abbreviated-name="1-vel" block-list:name="1-jével"/>
+  <block-list:block block-list:abbreviated-name="1/2" block-list:name="½"/>
+  <block-list:block block-list:abbreviated-name="1/4" block-list:name="¼"/>
+  <block-list:block block-list:abbreviated-name="3/4" block-list:name="¾"/>
+  <block-list:block block-list:abbreviated-name="A vitamin" block-list:name="A-vitamin"/>
+  <block-list:block block-list:abbreviated-name="A0-ás" block-list:name="A0-s"/>
+  <block-list:block block-list:abbreviated-name="abbéli" block-list:name="abbeli"/>
+  <block-list:block block-list:abbreviated-name="abszolut" block-list:name="abszolút"/>
+  <block-list:block block-list:abbreviated-name="adatbáziskezelő" block-list:name="adatbázis-kezelő"/>
+  <block-list:block block-list:abbreviated-name="affelett" block-list:name="afelett"/>
+  <block-list:block block-list:abbreviated-name="alíg" block-list:name="alig"/>
+  <block-list:block block-list:abbreviated-name="allá" block-list:name="alá"/>
+  <block-list:block block-list:abbreviated-name="allatt" block-list:name="alatt"/>
+  <block-list:block block-list:abbreviated-name="amig" block-list:name="amíg"/>
+  <block-list:block block-list:abbreviated-name="amikoris" block-list:name="amikor is"/>
+  <block-list:block block-list:abbreviated-name="amúgyis" block-list:name="amúgy is"/>
+  <block-list:block block-list:abbreviated-name="angstrom" block-list:name="ångström"/>
+  <block-list:block block-list:abbreviated-name="Angstrom" block-list:name="Ångström"/>
+  <block-list:block block-list:abbreviated-name="angström" block-list:name="ångström"/>
+  <block-list:block block-list:abbreviated-name="Angström" block-list:name="Ångström"/>
+  <block-list:block block-list:abbreviated-name="annakidején" block-list:name="annak idején"/>
+  <block-list:block block-list:abbreviated-name="Árpádházi" block-list:name="Árpád-házi"/>
+  <block-list:block block-list:abbreviated-name="asszimetrikus" block-list:name="aszimmetrikus"/>
+  <block-list:block block-list:abbreviated-name="asszimmetrikus" block-list:name="aszimmetrikus"/>
+  <block-list:block block-list:abbreviated-name="ay" block-list:name="az"/>
+  <block-list:block block-list:abbreviated-name="ayt" block-list:name="azt"/>
+  <block-list:block block-list:abbreviated-name="B vitamin" block-list:name="B-vitamin"/>
+  <block-list:block block-list:abbreviated-name="bajbajutott" block-list:name="bajba jutott"/>
+  <block-list:block block-list:abbreviated-name="betü" block-list:name="betű"/>
+  <block-list:block block-list:abbreviated-name="billentyü" block-list:name="billentyű"/>
+  <block-list:block block-list:abbreviated-name="billiárd asztal" block-list:name="biliárdasztal"/>
+  <block-list:block block-list:abbreviated-name="bisztos" block-list:name="biztos"/>
+  <block-list:block block-list:abbreviated-name="bíztatás" block-list:name="biztatás"/>
+  <block-list:block block-list:abbreviated-name="box" block-list:name="boksz"/>
+  <block-list:block block-list:abbreviated-name="boyler" block-list:name="bojler"/>
+  <block-list:block block-list:abbreviated-name="börönd" block-list:name="bőrönd"/>
+  <block-list:block block-list:abbreviated-name="brilliáns" block-list:name="briliáns"/>
+  <block-list:block block-list:abbreviated-name="brutto" block-list:name="bruttó"/>
+  <block-list:block block-list:abbreviated-name="buza" block-list:name="búza"/>
+  <block-list:block block-list:abbreviated-name="C vitamin" block-list:name="C-vitamin"/>
+  <block-list:block block-list:abbreviated-name="C-on" block-list:name="°C-on"/>
+  <block-list:block block-list:abbreviated-name="C-os" block-list:name="°C-os"/>
+  <block-list:block block-list:abbreviated-name="centirozás" block-list:name="centrírozás"/>
+  <block-list:block block-list:abbreviated-name="centírozás" block-list:name="centrírozás"/>
+  <block-list:block block-list:abbreviated-name="cigányasszony" block-list:name="cigány asszony"/>
+  <block-list:block block-list:abbreviated-name="cim" block-list:name="cím"/>
+  <block-list:block block-list:abbreviated-name="cimke" block-list:name="címke"/>
+  <block-list:block block-list:abbreviated-name="Citroen" block-list:name="Citroën"/>
+  <block-list:block block-list:abbreviated-name="csakazértis" block-list:name="csak azért is"/>
+  <block-list:block block-list:abbreviated-name="csevely" block-list:name="csevej"/>
+  <block-list:block block-list:abbreviated-name="D vitamin" block-list:name="D-vitamin"/>
+  <block-list:block block-list:abbreviated-name="dehát" block-list:name="de hát"/>
+  <block-list:block block-list:abbreviated-name="dícsér" block-list:name="dicsér"/>
+  <block-list:block block-list:abbreviated-name="dícséret" block-list:name="dicséret"/>
+  <block-list:block block-list:abbreviated-name="dienstag" block-list:name="Dienstag"/>
+  <block-list:block block-list:abbreviated-name="diszcont" block-list:name="diszkont"/>
+  <block-list:block block-list:abbreviated-name="divatárú" block-list:name="divatáru"/>
+  <block-list:block block-list:abbreviated-name="donnerstag" block-list:name="Donnerstag"/>
+  <block-list:block block-list:abbreviated-name="Duna-Tisza" block-list:name="Duna–Tisza"/>
+  <block-list:block block-list:abbreviated-name="Dvorak" block-list:name="Dvořák"/>
+  <block-list:block block-list:abbreviated-name="Dvorák" block-list:name="Dvořák"/>
+  <block-list:block block-list:abbreviated-name="E vitamin" block-list:name="E-vitamin"/>
+  <block-list:block block-list:abbreviated-name="e-mail-ben" block-list:name="e-mailben"/>
+  <block-list:block block-list:abbreviated-name="e-mail-en" block-list:name="e-mailen"/>
+  <block-list:block block-list:abbreviated-name="e-mail-t" block-list:name="e-mailt"/>
+  <block-list:block block-list:abbreviated-name="eccer csak" block-list:name="egyszer csak"/>
+  <block-list:block block-list:abbreviated-name="eFt" block-list:name="E Ft"/>
+  <block-list:block block-list:abbreviated-name="eFt-ot" block-list:name="E Ft-ot"/>
+  <block-list:block block-list:abbreviated-name="egésznapos" block-list:name="egész napos"/>
+  <block-list:block block-list:abbreviated-name="eggy" block-list:name="egy"/>
+  <block-list:block block-list:abbreviated-name="eggy csapásra" block-list:name="egy csapásra"/>
+  <block-list:block block-list:abbreviated-name="eggy helyben" block-list:name="egy helyben"/>
+  <block-list:block block-list:abbreviated-name="eggyütt" block-list:name="együtt"/>
+  <block-list:block block-list:abbreviated-name="egz" block-list:name="egy"/>
+  <block-list:block block-list:abbreviated-name="egzes" block-list:name="egyes"/>
+  <block-list:block block-list:abbreviated-name="egyátalán" block-list:name="egyáltalán"/>
+  <block-list:block block-list:abbreviated-name="egydarabig" block-list:name="egy darabig"/>
+  <block-list:block block-list:abbreviated-name="egyhelyben" block-list:name="egy helyben"/>
+  <block-list:block block-list:abbreviated-name="egyhónapos" block-list:name="egy hónapos"/>
+  <block-list:block block-list:abbreviated-name="egyidőben" block-list:name="egy időben"/>
+  <block-list:block block-list:abbreviated-name="egyösszegben" block-list:name="egy összegben"/>
+  <block-list:block block-list:abbreviated-name="egyszemélyben" block-list:name="egy személyben"/>
+  <block-list:block block-list:abbreviated-name="egyszercsak" block-list:name="egyszer csak"/>
+  <block-list:block block-list:abbreviated-name="együttélő" block-list:name="együtt élő"/>
+  <block-list:block block-list:abbreviated-name="együttérző" block-list:name="együtt érző"/>
+  <block-list:block block-list:abbreviated-name="együttjáró" block-list:name="együtt járó"/>
+  <block-list:block block-list:abbreviated-name="ehelyütt" block-list:name="e helyütt"/>
+  <block-list:block block-list:abbreviated-name="életbevágó" block-list:name="életbe vágó"/>
+  <block-list:block block-list:abbreviated-name="elipszis" block-list:name="ellipszis"/>
+  <block-list:block block-list:abbreviated-name="előli" block-list:name="elöli"/>
+  <block-list:block block-list:abbreviated-name="előlről" block-list:name="elölről"/>
+  <block-list:block block-list:abbreviated-name="előrelátható" block-list:name="előre látható"/>
+  <block-list:block block-list:abbreviated-name="előszőr" block-list:name="először"/>
+  <block-list:block block-list:abbreviated-name="elött" block-list:name="előtt"/>
+  <block-list:block block-list:abbreviated-name="elsőfokon" block-list:name="első fokon"/>
+  <block-list:block block-list:abbreviated-name="elsőszámú" block-list:name="első számú"/>
+  <block-list:block block-list:abbreviated-name="email-ben" block-list:name="e-mailben"/>
+  <block-list:block block-list:abbreviated-name="emailben" block-list:name="e-mailben"/>
+  <block-list:block block-list:abbreviated-name="emailen" block-list:name="e-mailen"/>
+  <block-list:block block-list:abbreviated-name="emeltszintű" block-list:name="emelt szintű"/>
+  <block-list:block block-list:abbreviated-name="éppenhogy" block-list:name="éppen hogy"/>
+  <block-list:block block-list:abbreviated-name="érdekképviseleti" block-list:name="érdek-képviseleti"/>
+  <block-list:block block-list:abbreviated-name="észszerű" block-list:name="ésszerű"/>
+  <block-list:block block-list:abbreviated-name="eufórikus" block-list:name="euforikus"/>
+  <block-list:block block-list:abbreviated-name="euro" block-list:name="euró"/>
+  <block-list:block block-list:abbreviated-name="évközben" block-list:name="év közben"/>
+  <block-list:block block-list:abbreviated-name="évközbeni" block-list:name="év közbeni"/>
+  <block-list:block block-list:abbreviated-name="évvége" block-list:name="év vége"/>
+  <block-list:block block-list:abbreviated-name="évvégi" block-list:name="év végi"/>
+  <block-list:block block-list:abbreviated-name="ey" block-list:name="ez"/>
+  <block-list:block block-list:abbreviated-name="eyt" block-list:name="ezt"/>
+  <block-list:block block-list:abbreviated-name="ezévi" block-list:name="ez évi"/>
+  <block-list:block block-list:abbreviated-name="ezideig" block-list:name="ez ideig"/>
+  <block-list:block block-list:abbreviated-name="ezidőtájt" block-list:name="ez idő tájt"/>
+  <block-list:block block-list:abbreviated-name="ezirányú" block-list:name="ez irányú"/>
+  <block-list:block block-list:abbreviated-name="ezügyben" block-list:name="ez ügyben"/>
+  <block-list:block block-list:abbreviated-name="faárú" block-list:name="faáru"/>
+  <block-list:block block-list:abbreviated-name="fejjebb" block-list:name="feljebb"/>
+  <block-list:block block-list:abbreviated-name="féle" block-list:name="-féle"/>
+  <block-list:block block-list:abbreviated-name="felelőség" block-list:name="felelősség"/>
+  <block-list:block block-list:abbreviated-name="felelőséget" block-list:name="felelősséget"/>
+  <block-list:block block-list:abbreviated-name="félévközben" block-list:name="félév közben"/>
+  <block-list:block block-list:abbreviated-name="félévközbeni" block-list:name="félév közbeni"/>
+  <block-list:block block-list:abbreviated-name="felöl" block-list:name="felől"/>
+  <block-list:block block-list:abbreviated-name="felöli" block-list:name="felőli"/>
+  <block-list:block block-list:abbreviated-name="felsővezetői" block-list:name="felső vezetői"/>
+  <block-list:block block-list:abbreviated-name="figyelembevéve" block-list:name="figyelembe véve"/>
+  <block-list:block block-list:abbreviated-name="figyelembevevő" block-list:name="figyelembe vevő"/>
+  <block-list:block block-list:abbreviated-name="file" block-list:name="fájl"/>
+  <block-list:block block-list:abbreviated-name="file-okat" block-list:name="fájlokat"/>
+  <block-list:block block-list:abbreviated-name="fitness" block-list:name="fitnesz"/>
+  <block-list:block block-list:abbreviated-name="foglakoznak" block-list:name="foglalkoznak"/>
+  <block-list:block block-list:abbreviated-name="foglakozni" block-list:name="foglalkozni"/>
+  <block-list:block block-list:abbreviated-name="follyék" block-list:name="folyjék"/>
+  <block-list:block block-list:abbreviated-name="follyon" block-list:name="folyjon"/>
+  <block-list:block block-list:abbreviated-name="föllé" block-list:name="fölé"/>
+  <block-list:block block-list:abbreviated-name="főműve" block-list:name="fő műve"/>
+  <block-list:block block-list:abbreviated-name="freitag" block-list:name="Freitag"/>
+  <block-list:block block-list:abbreviated-name="friday" block-list:name="Friday"/>
+  <block-list:block block-list:abbreviated-name="ft" block-list:name="Ft"/>
+  <block-list:block block-list:abbreviated-name="ftp" block-list:name="FTP"/>
+  <block-list:block block-list:abbreviated-name="gombamódra" block-list:name="gomba módra"/>
+  <block-list:block block-list:abbreviated-name="gömbalakú" block-list:name="gömb alakú"/>
+  <block-list:block block-list:abbreviated-name="gyanu" block-list:name="gyanú"/>
+  <block-list:block block-list:abbreviated-name="gyengénlátók" block-list:name="gyengén látók"/>
+  <block-list:block block-list:abbreviated-name="gyepp" block-list:name="gyep"/>
+  <block-list:block block-list:abbreviated-name="had legyek" block-list:name="hadd legyek"/>
+  <block-list:block block-list:abbreviated-name="Handel" block-list:name="Händel"/>
+  <block-list:block block-list:abbreviated-name="harmónikus" block-list:name="harmonikus"/>
+  <block-list:block block-list:abbreviated-name="háromhónapos" block-list:name="három hónapos"/>
+  <block-list:block block-list:abbreviated-name="határmenti" block-list:name="határ menti"/>
+  <block-list:block block-list:abbreviated-name="határontúli" block-list:name="határon túli"/>
+  <block-list:block block-list:abbreviated-name="hathónapos" block-list:name="hat hónapos"/>
+  <block-list:block block-list:abbreviated-name="házasságkötőterem" block-list:name="házasságkötő terem"/>
+  <block-list:block block-list:abbreviated-name="házhoz-szállítás" block-list:name="házhoz szállítás"/>
+  <block-list:block block-list:abbreviated-name="házhozszállítás" block-list:name="házhoz szállítás"/>
+  <block-list:block block-list:abbreviated-name="hazsnált" block-list:name="használt"/>
+  <block-list:block block-list:abbreviated-name="hejes" block-list:name="helyes"/>
+  <block-list:block block-list:abbreviated-name="hejesírás" block-list:name="helyesírás"/>
+  <block-list:block block-list:abbreviated-name="hejesírásellenőrző" block-list:name="helyesírás-ellenőrző"/>
+  <block-list:block block-list:abbreviated-name="hektóliter" block-list:name="hektoliter"/>
+  <block-list:block block-list:abbreviated-name="héthónapos" block-list:name="hét hónapos"/>
+  <block-list:block block-list:abbreviated-name="hétközben" block-list:name="hét közben"/>
+  <block-list:block block-list:abbreviated-name="hétközbeni" block-list:name="hét közbeni"/>
+  <block-list:block block-list:abbreviated-name="hid" block-list:name="híd"/>
+  <block-list:block block-list:abbreviated-name="hidegvizes" block-list:name="hideg vizes"/>
+  <block-list:block block-list:abbreviated-name="hidegvizet" block-list:name="hideg vizet"/>
+  <block-list:block block-list:abbreviated-name="higyje" block-list:name="higgye"/>
+  <block-list:block block-list:abbreviated-name="higyjen" block-list:name="higgyen"/>
+  <block-list:block block-list:abbreviated-name="higyjük" block-list:name="higgyük"/>
+  <block-list:block block-list:abbreviated-name="hírdetés" block-list:name="hirdetés"/>
+  <block-list:block block-list:abbreviated-name="hírdetmény" block-list:name="hirdetmény"/>
+  <block-list:block block-list:abbreviated-name="hivő" block-list:name="hívő"/>
+  <block-list:block block-list:abbreviated-name="hivők" block-list:name="hívők"/>
+  <block-list:block block-list:abbreviated-name="hogz" block-list:name="hogy"/>
+  <block-list:block block-list:abbreviated-name="hóközben" block-list:name="hó közben"/>
+  <block-list:block block-list:abbreviated-name="hóközbeni" block-list:name="hó közbeni"/>
+  <block-list:block block-list:abbreviated-name="holocaust" block-list:name="holokauszt"/>
+  <block-list:block block-list:abbreviated-name="honfoglaláskori" block-list:name="honfoglalás kori"/>
+  <block-list:block block-list:abbreviated-name="hosszantartó" block-list:name="hosszan tartó"/>
+  <block-list:block block-list:abbreviated-name="hosszútávú" block-list:name="hosszú távú"/>
+  <block-list:block block-list:abbreviated-name="hóvége" block-list:name="hó vége"/>
+  <block-list:block block-list:abbreviated-name="hóvégén" block-list:name="hó végén"/>
+  <block-list:block block-list:abbreviated-name="hóvégi" block-list:name="hó végi"/>
+  <block-list:block block-list:abbreviated-name="hrsz-ú" block-list:name="hrsz.-ú"/>
+  <block-list:block block-list:abbreviated-name="Htp" block-list:name="http"/>
+  <block-list:block block-list:abbreviated-name="Http" block-list:name="http"/>
+  <block-list:block block-list:abbreviated-name="http:\\" block-list:name="http://"/>
+  <block-list:block block-list:abbreviated-name="humánerőforrás" block-list:name="humán erőforrás"/>
+  <block-list:block block-list:abbreviated-name="husvét" block-list:name="húsvét"/>
+  <block-list:block block-list:abbreviated-name="husvéti" block-list:name="húsvéti"/>
+  <block-list:block block-list:abbreviated-name="huszas" block-list:name="húszas"/>
+  <block-list:block block-list:abbreviated-name="huszat" block-list:name="húszat"/>
+  <block-list:block block-list:abbreviated-name="hüje" block-list:name="hülye"/>
+  <block-list:block block-list:abbreviated-name="i.e." block-list:name="i. e."/>
+  <block-list:block block-list:abbreviated-name="i.sz." block-list:name="i. sz."/>
+  <block-list:block block-list:abbreviated-name="idegennyelvi" block-list:name="idegen nyelvi"/>
+  <block-list:block block-list:abbreviated-name="idegennyelvű" block-list:name="idegen nyelvű"/>
+  <block-list:block block-list:abbreviated-name="igazságügyminiszter" block-list:name="igazságügy-miniszter"/>
+  <block-list:block block-list:abbreviated-name="igénybevehető" block-list:name="igénybe vehető"/>
+  <block-list:block block-list:abbreviated-name="igénybevett" block-list:name="igénybe vett"/>
+  <block-list:block block-list:abbreviated-name="igénybevevő" block-list:name="igénybe vevő"/>
+  <block-list:block block-list:abbreviated-name="igéret" block-list:name="ígéret"/>
+  <block-list:block block-list:abbreviated-name="ígz" block-list:name="így"/>
+  <block-list:block block-list:abbreviated-name="igy" block-list:name="így"/>
+  <block-list:block block-list:abbreviated-name="íly" block-list:name="ily"/>
+  <block-list:block block-list:abbreviated-name="ilymódon" block-list:name="ily módon"/>
+  <block-list:block block-list:abbreviated-name="imígyen" block-list:name="imigyen"/>
+  <block-list:block block-list:abbreviated-name="infrastruktúrális" block-list:name="infrastrukturális"/>
+  <block-list:block block-list:abbreviated-name="ird" block-list:name="írd"/>
+  <block-list:block block-list:abbreviated-name="írtás" block-list:name="irtás"/>
+  <block-list:block block-list:abbreviated-name="itélet" block-list:name="ítélet"/>
+  <block-list:block block-list:abbreviated-name="itéletet" block-list:name="ítéletet"/>
+  <block-list:block block-list:abbreviated-name="izület" block-list:name="ízület"/>
+  <block-list:block block-list:abbreviated-name="izületek" block-list:name="ízületek"/>
+  <block-list:block block-list:abbreviated-name="izületet" block-list:name="ízületet"/>
+  <block-list:block block-list:abbreviated-name="izületi" block-list:name="ízületi"/>
+  <block-list:block block-list:abbreviated-name="játsza" block-list:name="játssza"/>
+  <block-list:block block-list:abbreviated-name="játszák" block-list:name="játsszák"/>
+  <block-list:block block-list:abbreviated-name="javarésze" block-list:name="java része"/>
+  <block-list:block block-list:abbreviated-name="jelentősség" block-list:name="jelentőség"/>
+  <block-list:block block-list:abbreviated-name="jelentőssége" block-list:name="jelentősége"/>
+  <block-list:block block-list:abbreviated-name="jelentősséggel" block-list:name="jelentőséggel"/>
+  <block-list:block block-list:abbreviated-name="jó akaratú" block-list:name="jóakaratú"/>
+  <block-list:block block-list:abbreviated-name="jóbarát" block-list:name="jó barát"/>
+  <block-list:block block-list:abbreviated-name="jónéhány" block-list:name="jó néhány"/>
+  <block-list:block block-list:abbreviated-name="jónevű" block-list:name="jó nevű"/>
+  <block-list:block block-list:abbreviated-name="jópár" block-list:name="jó pár"/>
+  <block-list:block block-list:abbreviated-name="jórészét" block-list:name="jó részét"/>
+  <block-list:block block-list:abbreviated-name="jószándék" block-list:name="jó szándék"/>
+  <block-list:block block-list:abbreviated-name="jószándékú" block-list:name="jó szándékú"/>
+  <block-list:block block-list:abbreviated-name="jótanács" block-list:name="jó tanács"/>
+  <block-list:block block-list:abbreviated-name="képviselőtestület" block-list:name="képviselő-testület"/>
+  <block-list:block block-list:abbreviated-name="későbarokk" block-list:name="késő barokk"/>
+  <block-list:block block-list:abbreviated-name="késöbb" block-list:name="később"/>
+  <block-list:block block-list:abbreviated-name="késség" block-list:name="készség"/>
+  <block-list:block block-list:abbreviated-name="kéthónapos" block-list:name="két hónapos"/>
+  <block-list:block block-list:abbreviated-name="kevésbbé" block-list:name="kevésbé"/>
+  <block-list:block block-list:abbreviated-name="kézenfogva" block-list:name="kézen fogva"/>
+  <block-list:block block-list:abbreviated-name="kézpénz" block-list:name="készpénz"/>
+  <block-list:block block-list:abbreviated-name="keztyű" block-list:name="kesztyű"/>
+  <block-list:block block-list:abbreviated-name="kézség" block-list:name="készség"/>
+  <block-list:block block-list:abbreviated-name="kigyó" block-list:name="kígyó"/>
+  <block-list:block block-list:abbreviated-name="kilenchónapos" block-list:name="kilenc hónapos"/>
+  <block-list:block block-list:abbreviated-name="kilógram" block-list:name="kilogramm"/>
+  <block-list:block block-list:abbreviated-name="kilógramm" block-list:name="kilogramm"/>
+  <block-list:block block-list:abbreviated-name="kilóméter" block-list:name="kilométer"/>
+  <block-list:block block-list:abbreviated-name="kinálat" block-list:name="kínálat"/>
+  <block-list:block block-list:abbreviated-name="kiséri" block-list:name="kíséri"/>
+  <block-list:block block-list:abbreviated-name="kisérleti" block-list:name="kísérleti"/>
+  <block-list:block block-list:abbreviated-name="kislétszámú" block-list:name="kis létszámú"/>
+  <block-list:block block-list:abbreviated-name="kissebb" block-list:name="kisebb"/>
+  <block-list:block block-list:abbreviated-name="kíváló" block-list:name="kiváló"/>
+  <block-list:block block-list:abbreviated-name="kiváncsi" block-list:name="kíváncsi"/>
+  <block-list:block block-list:abbreviated-name="kiváncsiak" block-list:name="kíváncsiak"/>
+  <block-list:block block-list:abbreviated-name="kivánság" block-list:name="kívánság"/>
+  <block-list:block block-list:abbreviated-name="kivánt" block-list:name="kívánt"/>
+  <block-list:block block-list:abbreviated-name="kivül" block-list:name="kívül"/>
+  <block-list:block block-list:abbreviated-name="kívűl" block-list:name="kívül"/>
+  <block-list:block block-list:abbreviated-name="koléga" block-list:name="kolléga"/>
+  <block-list:block block-list:abbreviated-name="kompakt lemez" block-list:name="kompaktlemez"/>
+  <block-list:block block-list:abbreviated-name="kompatíbilis" block-list:name="kompatibilis"/>
+  <block-list:block block-list:abbreviated-name="kölni víz" block-list:name="kölnivíz"/>
+  <block-list:block block-list:abbreviated-name="köralakú" block-list:name="kör alakú"/>
+  <block-list:block block-list:abbreviated-name="körut" block-list:name="körút"/>
+  <block-list:block block-list:abbreviated-name="kőrut" block-list:name="körút"/>
+  <block-list:block block-list:abbreviated-name="kőrút" block-list:name="körút"/>
+  <block-list:block block-list:abbreviated-name="közgazdaságtudomány" block-list:name="közgazdaság-tudomány"/>
+  <block-list:block block-list:abbreviated-name="közgazdaságtudományi" block-list:name="közgazdaság-tudományi"/>
+  <block-list:block block-list:abbreviated-name="közös lónak túrós" block-list:name="közös lónak túros"/>
+  <block-list:block block-list:abbreviated-name="közvéleménykutatás" block-list:name="közvélemény-kutatás"/>
+  <block-list:block block-list:abbreviated-name="közvéleménykutatások" block-list:name="közvélemény-kutatások"/>
+  <block-list:block block-list:abbreviated-name="kultura" block-list:name="kultúra"/>
+  <block-list:block block-list:abbreviated-name="kultúrális" block-list:name="kulturális"/>
+  <block-list:block block-list:abbreviated-name="kultúrált" block-list:name="kulturált"/>
+  <block-list:block block-list:abbreviated-name="kultúráltan" block-list:name="kulturáltan"/>
+  <block-list:block block-list:abbreviated-name="kúpalakú" block-list:name="kúp alakú"/>
+  <block-list:block block-list:abbreviated-name="L-alakú" block-list:name="L alakú"/>
+  <block-list:block block-list:abbreviated-name="ld." block-list:name="l."/>
+  <block-list:block block-list:abbreviated-name="legalább is" block-list:name="legalábbis"/>
+  <block-list:block block-list:abbreviated-name="legelől" block-list:name="legelöl"/>
+  <block-list:block block-list:abbreviated-name="legmagasabbrendű" block-list:name="legmagasabb rendű"/>
+  <block-list:block block-list:abbreviated-name="legújabbkori" block-list:name="legújabb kori"/>
+  <block-list:block block-list:abbreviated-name="légyszíves" block-list:name="légy szíves"/>
+  <block-list:block block-list:abbreviated-name="lelkiismeret furdalás" block-list:name="lelkiismeret-furdalás"/>
+  <block-list:block block-list:abbreviated-name="lelkiismeretfurdalás" block-list:name="lelkiismeret-furdalás"/>
+  <block-list:block block-list:abbreviated-name="lelyebb" block-list:name="lejjebb"/>
+  <block-list:block block-list:abbreviated-name="lényegretörő" block-list:name="lényegre törő"/>
+  <block-list:block block-list:abbreviated-name="lessz" block-list:name="lesz"/>
+  <block-list:block block-list:abbreviated-name="licensz" block-list:name="licenc"/>
+  <block-list:block block-list:abbreviated-name="Lodz" block-list:name="Łódź"/>
+  <block-list:block block-list:abbreviated-name="Lódz" block-list:name="Łódź"/>
+  <block-list:block block-list:abbreviated-name="logo" block-list:name="logó"/>
+  <block-list:block block-list:abbreviated-name="M0-ás" block-list:name="M0-s"/>
+  <block-list:block block-list:abbreviated-name="magasabbrendű" block-list:name="magasabb rendű"/>
+  <block-list:block block-list:abbreviated-name="magasfokú" block-list:name="magas fokú"/>
+  <block-list:block block-list:abbreviated-name="magno" block-list:name="magnó"/>
+  <block-list:block block-list:abbreviated-name="magyarnyelvű" block-list:name="magyar nyelvű"/>
+  <block-list:block block-list:abbreviated-name="mammut" block-list:name="mamut"/>
+  <block-list:block block-list:abbreviated-name="márcsak" block-list:name="már csak"/>
+  <block-list:block block-list:abbreviated-name="másfélezer" block-list:name="másfél ezer"/>
+  <block-list:block block-list:abbreviated-name="másfélmillió" block-list:name="másfél millió"/>
+  <block-list:block block-list:abbreviated-name="másfélszáz" block-list:name="másfél száz"/>
+  <block-list:block block-list:abbreviated-name="médiák" block-list:name="média"/>
+  <block-list:block block-list:abbreviated-name="médiákban" block-list:name="médiában"/>
+  <block-list:block block-list:abbreviated-name="mégcsak" block-list:name="még csak"/>
+  <block-list:block block-list:abbreviated-name="mégegyszer" block-list:name="még egyszer"/>
+  <block-list:block block-list:abbreviated-name="megfed" block-list:name="megfedd"/>
+  <block-list:block block-list:abbreviated-name="megfedi" block-list:name="megfeddi"/>
+  <block-list:block block-list:abbreviated-name="mégha" block-list:name="még ha"/>
+  <block-list:block block-list:abbreviated-name="meghírdetett" block-list:name="meghirdetett"/>
+  <block-list:block block-list:abbreviated-name="méginkább" block-list:name="még inkább"/>
+  <block-list:block block-list:abbreviated-name="megintcsak" block-list:name="megint csak"/>
+  <block-list:block block-list:abbreviated-name="mégsincs" block-list:name="még sincs"/>
+  <block-list:block block-list:abbreviated-name="megszünt" block-list:name="megszűnt"/>
+  <block-list:block block-list:abbreviated-name="megszűntetése" block-list:name="megszüntetése"/>
+  <block-list:block block-list:abbreviated-name="megszűntetésére" block-list:name="megszüntetésére"/>
+  <block-list:block block-list:abbreviated-name="megszűntetni" block-list:name="megszüntetni"/>
+  <block-list:block block-list:abbreviated-name="megtalálha" block-list:name="megtalálja"/>
+  <block-list:block block-list:abbreviated-name="melegvizes" block-list:name="meleg vizes"/>
+  <block-list:block block-list:abbreviated-name="melegvizet" block-list:name="meleg vizet"/>
+  <block-list:block block-list:abbreviated-name="melegvizű" block-list:name="meleg vizű"/>
+  <block-list:block block-list:abbreviated-name="melz" block-list:name="mely"/>
+  <block-list:block block-list:abbreviated-name="melzik" block-list:name="melyik"/>
+  <block-list:block block-list:abbreviated-name="mélyvízbe" block-list:name="mély vízbe"/>
+  <block-list:block block-list:abbreviated-name="menetközben" block-list:name="menet közben"/>
+  <block-list:block block-list:abbreviated-name="menetközbeni" block-list:name="menet közbeni"/>
+  <block-list:block block-list:abbreviated-name="menetrendszerinti" block-list:name="menetrend szerinti"/>
+  <block-list:block block-list:abbreviated-name="menű" block-list:name="menü"/>
+  <block-list:block block-list:abbreviated-name="mFt" block-list:name="M Ft"/>
+  <block-list:block block-list:abbreviated-name="mig" block-list:name="míg"/>
+  <block-list:block block-list:abbreviated-name="miliméter" block-list:name="milliméter"/>
+  <block-list:block block-list:abbreviated-name="milió" block-list:name="millió"/>
+  <block-list:block block-list:abbreviated-name="mindenegyes" block-list:name="minden egyes"/>
+  <block-list:block block-list:abbreviated-name="mindenestre" block-list:name="mindenesetre"/>
+  <block-list:block block-list:abbreviated-name="mindezidáig" block-list:name="mindez idáig"/>
+  <block-list:block block-list:abbreviated-name="mindíg" block-list:name="mindig"/>
+  <block-list:block block-list:abbreviated-name="minnél" block-list:name="minél"/>
+  <block-list:block block-list:abbreviated-name="minőségellenőrzés" block-list:name="minőség-ellenőrzés"/>
+  <block-list:block block-list:abbreviated-name="minusz" block-list:name="mínusz"/>
+  <block-list:block block-list:abbreviated-name="mirelitáru" block-list:name="mirelit áru"/>
+  <block-list:block block-list:abbreviated-name="mittwoch" block-list:name="Mittwoch"/>
+  <block-list:block block-list:abbreviated-name="modernkori" block-list:name="modern kori"/>
+  <block-list:block block-list:abbreviated-name="Moliere" block-list:name="Molière"/>
+  <block-list:block block-list:abbreviated-name="Moliére" block-list:name="Molière"/>
+  <block-list:block block-list:abbreviated-name="monday" block-list:name="Monday"/>
+  <block-list:block block-list:abbreviated-name="montag" block-list:name="Montag"/>
+  <block-list:block block-list:abbreviated-name="mostmár" block-list:name="most már"/>
+  <block-list:block block-list:abbreviated-name="MrdFt" block-list:name="Mrd Ft"/>
+  <block-list:block block-list:abbreviated-name="munkaegészségügyi" block-list:name="munka-egészségügyi"/>
+  <block-list:block block-list:abbreviated-name="munkaerőpiaci" block-list:name="munkaerő-piaci"/>
+  <block-list:block block-list:abbreviated-name="munkaközben" block-list:name="munka közben"/>
+  <block-list:block block-list:abbreviated-name="munkaközbeni" block-list:name="munka közbeni"/>
+  <block-list:block block-list:abbreviated-name="muszály" block-list:name="muszáj"/>
+  <block-list:block block-list:abbreviated-name="nagz" block-list:name="nagy"/>
+  <block-list:block block-list:abbreviated-name="nagzon" block-list:name="nagyon"/>
+  <block-list:block block-list:abbreviated-name="nagzszemű" block-list:name="nagy szemű"/>
+  <block-list:block block-list:abbreviated-name="nagyértékű" block-list:name="nagy értékű"/>
+  <block-list:block block-list:abbreviated-name="nagyfelbontású" block-list:name="nagy felbontású"/>
+  <block-list:block block-list:abbreviated-name="nagyforgalmú" block-list:name="nagy forgalmú"/>
+  <block-list:block block-list:abbreviated-name="nagyformátumú" block-list:name="nagy formátumú"/>
+  <block-list:block block-list:abbreviated-name="nagyhatalmú" block-list:name="nagy hatalmú"/>
+  <block-list:block block-list:abbreviated-name="nagyhatású" block-list:name="nagy hatású"/>
+  <block-list:block block-list:abbreviated-name="nagyhírű" block-list:name="nagy hírű"/>
+  <block-list:block block-list:abbreviated-name="nagyjelentőségű" block-list:name="nagy jelentőségű"/>
+  <block-list:block block-list:abbreviated-name="nagykiterjedésű" block-list:name="nagy kiterjedésű"/>
+  <block-list:block block-list:abbreviated-name="nagyléptékű" block-list:name="nagy léptékű"/>
+  <block-list:block block-list:abbreviated-name="nagymennyiségű" block-list:name="nagy mennyiségű"/>
+  <block-list:block block-list:abbreviated-name="nagymúltú" block-list:name="nagy múltú"/>
+  <block-list:block block-list:abbreviated-name="nagyrabecsült" block-list:name="nagyra becsült"/>
+  <block-list:block block-list:abbreviated-name="nagyrésze" block-list:name="nagy része"/>
+  <block-list:block block-list:abbreviated-name="nagyrészét" block-list:name="nagy részét"/>
+  <block-list:block block-list:abbreviated-name="nagyritkán" block-list:name="nagy ritkán"/>
+  <block-list:block block-list:abbreviated-name="nagysebességű" block-list:name="nagy sebességű"/>
+  <block-list:block block-list:abbreviated-name="nagysikerű" block-list:name="nagy sikerű"/>
+  <block-list:block block-list:abbreviated-name="nagyszámban" block-list:name="nagy számban"/>
+  <block-list:block block-list:abbreviated-name="nagyszemű" block-list:name="nagy szemű"/>
+  <block-list:block block-list:abbreviated-name="nagytekintélyű" block-list:name="nagy tekintélyű"/>
+  <block-list:block block-list:abbreviated-name="nagyteljesítményű" block-list:name="nagy teljesítményű"/>
+  <block-list:block block-list:abbreviated-name="nagytestű" block-list:name="nagy testű"/>
+  <block-list:block block-list:abbreviated-name="nagytömegű" block-list:name="nagy tömegű"/>
+  <block-list:block block-list:abbreviated-name="nagyvonalakban" block-list:name="nagy vonalakban"/>
+  <block-list:block block-list:abbreviated-name="naív" block-list:name="naiv"/>
+  <block-list:block block-list:abbreviated-name="négz" block-list:name="négy"/>
+  <block-list:block block-list:abbreviated-name="négyhónapos" block-list:name="négy hónapos"/>
+  <block-list:block block-list:abbreviated-name="négyzetalakú" block-list:name="négyzet alakú"/>
+  <block-list:block block-list:abbreviated-name="nejlon harisnya" block-list:name="nejlonharisnya"/>
+  <block-list:block block-list:abbreviated-name="nem utolsó sorban" block-list:name="nem utolsósorban"/>
+  <block-list:block block-list:abbreviated-name="németajkú" block-list:name="német ajkú"/>
+  <block-list:block block-list:abbreviated-name="nemlétező" block-list:name="nem létező"/>
+  <block-list:block block-list:abbreviated-name="nemmindennapi" block-list:name="nem mindennapi"/>
+  <block-list:block block-list:abbreviated-name="nemnagyon" block-list:name="nem nagyon"/>
+  <block-list:block block-list:abbreviated-name="netto" block-list:name="nettó"/>
+  <block-list:block block-list:abbreviated-name="neylon" block-list:name="nejlon"/>
+  <block-list:block block-list:abbreviated-name="növényvédőszerek" block-list:name="növényvédő szerek"/>
+  <block-list:block block-list:abbreviated-name="nyárvégi" block-list:name="nyár végi"/>
+  <block-list:block block-list:abbreviated-name="nyil" block-list:name="nyíl"/>
+  <block-list:block block-list:abbreviated-name="nyílat" block-list:name="nyilat"/>
+  <block-list:block block-list:abbreviated-name="nyílt szívű" block-list:name="nyíltszívű"/>
+  <block-list:block block-list:abbreviated-name="nyir" block-list:name="nyír"/>
+  <block-list:block block-list:abbreviated-name="nyitvatartás" block-list:name="nyitva tartás"/>
+  <block-list:block block-list:abbreviated-name="nyitvatartása" block-list:name="nyitva tartása"/>
+  <block-list:block block-list:abbreviated-name="nyolchónapos" block-list:name="nyolc hónapos"/>
+  <block-list:block block-list:abbreviated-name="nyomonkövet" block-list:name="nyomon követ"/>
+  <block-list:block block-list:abbreviated-name="nyomonkövetése" block-list:name="nyomon követése"/>
+  <block-list:block block-list:abbreviated-name="nyujt" block-list:name="nyújt"/>
+  <block-list:block block-list:abbreviated-name="nyul" block-list:name="nyúl"/>
+  <block-list:block block-list:abbreviated-name="oda-visszaút" block-list:name="oda-vissza út"/>
+  <block-list:block block-list:abbreviated-name="oda-visszautazás" block-list:name="oda-vissza utazás"/>
+  <block-list:block block-list:abbreviated-name="odf" block-list:name="ODF"/>
+  <block-list:block block-list:abbreviated-name="olymódon" block-list:name="oly módon"/>
+  <block-list:block block-list:abbreviated-name="orvadász" block-list:name="orvvadász"/>
+  <block-list:block block-list:abbreviated-name="ovoda" block-list:name="óvoda"/>
+  <block-list:block block-list:abbreviated-name="örökéletű" block-list:name="örök életű"/>
+  <block-list:block block-list:abbreviated-name="örökérvényű" block-list:name="örök érvényű"/>
+  <block-list:block block-list:abbreviated-name="öszes" block-list:name="összes"/>
+  <block-list:block block-list:abbreviated-name="őszhajú" block-list:name="ősz hajú"/>
+  <block-list:block block-list:abbreviated-name="öthónapos" block-list:name="öt hónapos"/>
+  <block-list:block block-list:abbreviated-name="paciens" block-list:name="páciens"/>
+  <block-list:block block-list:abbreviated-name="papir" block-list:name="papír"/>
+  <block-list:block block-list:abbreviated-name="papir zsebkendő" block-list:name="papír zsebkendő"/>
+  <block-list:block block-list:abbreviated-name="papíralapú" block-list:name="papír alapú"/>
+  <block-list:block block-list:abbreviated-name="papirzsebkendő" block-list:name="papír zsebkendő"/>
+  <block-list:block block-list:abbreviated-name="papírzsebkendő" block-list:name="papír zsebkendő"/>
+  <block-list:block block-list:abbreviated-name="paraolimpia" block-list:name="paralimpia"/>
+  <block-list:block block-list:abbreviated-name="párszáz" block-list:name="pár száz"/>
+  <block-list:block block-list:abbreviated-name="partició" block-list:name="partíció"/>
+  <block-list:block block-list:abbreviated-name="partícionál" block-list:name="particionál"/>
+  <block-list:block block-list:abbreviated-name="patkóalakú" block-list:name="patkó alakú"/>
+  <block-list:block block-list:abbreviated-name="pehes" block-list:name="peches"/>
+  <block-list:block block-list:abbreviated-name="pehhes" block-list:name="peches"/>
+  <block-list:block block-list:abbreviated-name="pekkes" block-list:name="peches"/>
+  <block-list:block block-list:abbreviated-name="penicilin" block-list:name="penicillin"/>
+  <block-list:block block-list:abbreviated-name="pennicilin" block-list:name="penicillin"/>
+  <block-list:block block-list:abbreviated-name="pennicillin" block-list:name="penicillin"/>
+  <block-list:block block-list:abbreviated-name="Ph.D" block-list:name="PhD"/>
+  <block-list:block block-list:abbreviated-name="ping-pong" block-list:name="pingpong"/>
+  <block-list:block block-list:abbreviated-name="plussz" block-list:name="plusz"/>
+  <block-list:block block-list:abbreviated-name="portfolió" block-list:name="portfólió"/>
+  <block-list:block block-list:abbreviated-name="pósta" block-list:name="posta"/>
+  <block-list:block block-list:abbreviated-name="pozició" block-list:name="pozíció"/>
+  <block-list:block block-list:abbreviated-name="pozicíó" block-list:name="pozíció"/>
+  <block-list:block block-list:abbreviated-name="pozícíó" block-list:name="pozíció"/>
+  <block-list:block block-list:abbreviated-name="Poznan" block-list:name="Poznań"/>
+  <block-list:block block-list:abbreviated-name="pro és kontra" block-list:name="pró és kontra"/>
+  <block-list:block block-list:abbreviated-name="project" block-list:name="projekt"/>
+  <block-list:block block-list:abbreviated-name="projectek" block-list:name="projektek"/>
+  <block-list:block block-list:abbreviated-name="rádióaktív" block-list:name="radioaktív"/>
+  <block-list:block block-list:abbreviated-name="raggaszt" block-list:name="ragaszt"/>
+  <block-list:block block-list:abbreviated-name="rákövetkező" block-list:name="rá következő"/>
+  <block-list:block block-list:abbreviated-name="résztvenni" block-list:name="részt venni"/>
+  <block-list:block block-list:abbreviated-name="résztvesz" block-list:name="részt vesz"/>
+  <block-list:block block-list:abbreviated-name="résztvesznek" block-list:name="részt vesznek"/>
+  <block-list:block block-list:abbreviated-name="résztvett" block-list:name="részt vett"/>
+  <block-list:block block-list:abbreviated-name="résztvettek" block-list:name="részt vettek"/>
+  <block-list:block block-list:abbreviated-name="robosztus" block-list:name="robusztus"/>
+  <block-list:block block-list:abbreviated-name="románkori" block-list:name="román kori"/>
+  <block-list:block block-list:abbreviated-name="rövidtávú" block-list:name="rövid távú"/>
+  <block-list:block block-list:abbreviated-name="rublika" block-list:name="rubrika"/>
+  <block-list:block block-list:abbreviated-name="S-alakú" block-list:name="S alakú"/>
+  <block-list:block block-list:abbreviated-name="sajátkezű" block-list:name="saját kezű"/>
+  <block-list:block block-list:abbreviated-name="sajátkezűleg" block-list:name="saját kezűleg"/>
+  <block-list:block block-list:abbreviated-name="samstag" block-list:name="Samstag"/>
+  <block-list:block block-list:abbreviated-name="saturday" block-list:name="Saturday"/>
+  <block-list:block block-list:abbreviated-name="sehogyse" block-list:name="sehogy se"/>
+  <block-list:block block-list:abbreviated-name="sehogysem" block-list:name="sehogy sem"/>
+  <block-list:block block-list:abbreviated-name="semifelé" block-list:name="semmifelé"/>
+  <block-list:block block-list:abbreviated-name="semiféle" block-list:name="semmiféle"/>
+  <block-list:block block-list:abbreviated-name="semijen" block-list:name="semmilyen"/>
+  <block-list:block block-list:abbreviated-name="semikor" block-list:name="semmikor"/>
+  <block-list:block block-list:abbreviated-name="semilyen" block-list:name="semmilyen"/>
+  <block-list:block block-list:abbreviated-name="semis" block-list:name="semmis"/>
+  <block-list:block block-list:abbreviated-name="semmeddig" block-list:name="semeddig"/>
+  <block-list:block block-list:abbreviated-name="semmejik" block-list:name="semelyik"/>
+  <block-list:block block-list:abbreviated-name="semmekkora" block-list:name="semekkora"/>
+  <block-list:block block-list:abbreviated-name="semmelyik" block-list:name="semelyik"/>
+  <block-list:block block-list:abbreviated-name="semmennyi" block-list:name="semennyi"/>
+  <block-list:block block-list:abbreviated-name="semmenyi" block-list:name="semennyi"/>
+  <block-list:block block-list:abbreviated-name="semmere" block-list:name="semerre"/>
+  <block-list:block block-list:abbreviated-name="semmerre" block-list:name="semerre"/>
+  <block-list:block block-list:abbreviated-name="síma" block-list:name="sima"/>
+  <block-list:block block-list:abbreviated-name="sip" block-list:name="síp"/>
+  <block-list:block block-list:abbreviated-name="siserehad" block-list:name="siserahad"/>
+  <block-list:block block-list:abbreviated-name="Skoda" block-list:name="Škoda"/>
+  <block-list:block block-list:abbreviated-name="skodás" block-list:name="škodás"/>
+  <block-list:block block-list:abbreviated-name="sokezer" block-list:name="sok ezer"/>
+  <block-list:block block-list:abbreviated-name="sokhelyütt" block-list:name="sok helyütt"/>
+  <block-list:block block-list:abbreviated-name="sokmillió" block-list:name="sok millió"/>
+  <block-list:block block-list:abbreviated-name="sokminden" block-list:name="sok minden"/>
+  <block-list:block block-list:abbreviated-name="sokmindent" block-list:name="sok mindent"/>
+  <block-list:block block-list:abbreviated-name="sokszáz" block-list:name="sok száz"/>
+  <block-list:block block-list:abbreviated-name="sonntag" block-list:name="Sonntag"/>
+  <block-list:block block-list:abbreviated-name="soronkivűl" block-list:name="soron kívül"/>
+  <block-list:block block-list:abbreviated-name="soronkívül" block-list:name="soron kívül"/>
+  <block-list:block block-list:abbreviated-name="soronkívűl" block-list:name="soron kívül"/>
+  <block-list:block block-list:abbreviated-name="struktura" block-list:name="struktúra"/>
+  <block-list:block block-list:abbreviated-name="struktúrális" block-list:name="strukturális"/>
+  <block-list:block block-list:abbreviated-name="studió" block-list:name="stúdió"/>
+  <block-list:block block-list:abbreviated-name="sunday" block-list:name="Sunday"/>
+  <block-list:block block-list:abbreviated-name="szabaddemokraták" block-list:name="szabad demokraták"/>
+  <block-list:block block-list:abbreviated-name="számit" block-list:name="számít"/>
+  <block-list:block block-list:abbreviated-name="számonkérhető" block-list:name="számon kérhető"/>
+  <block-list:block block-list:abbreviated-name="számontartott" block-list:name="számon tartott"/>
+  <block-list:block block-list:abbreviated-name="számottartó" block-list:name="számot tartó"/>
+  <block-list:block block-list:abbreviated-name="szeint" block-list:name="szerint"/>
+  <block-list:block block-list:abbreviated-name="szembenálló" block-list:name="szemben álló"/>
+  <block-list:block block-list:abbreviated-name="szennyezőanyagok" block-list:name="szennyező anyagok"/>
+  <block-list:block block-list:abbreviated-name="szentéletű" block-list:name="szent életű"/>
+  <block-list:block block-list:abbreviated-name="Szentivánéji" block-list:name="Szent Iván-éji"/>
+  <block-list:block block-list:abbreviated-name="szervesanyagok" block-list:name="szerves anyagok"/>
+  <block-list:block block-list:abbreviated-name="szervíz" block-list:name="szerviz"/>
+  <block-list:block block-list:abbreviated-name="szeszesitalok" block-list:name="szeszes italok"/>
+  <block-list:block block-list:abbreviated-name="szimbólikus" block-list:name="szimbolikus"/>
+  <block-list:block block-list:abbreviated-name="szines" block-list:name="színes"/>
+  <block-list:block block-list:abbreviated-name="szinoníma" block-list:name="szinonima"/>
+  <block-list:block block-list:abbreviated-name="színtű" block-list:name="szintű"/>
+  <block-list:block block-list:abbreviated-name="színusz" block-list:name="szinusz"/>
+  <block-list:block block-list:abbreviated-name="szívalakú" block-list:name="szív alakú"/>
+  <block-list:block block-list:abbreviated-name="szivem" block-list:name="szívem"/>
+  <block-list:block block-list:abbreviated-name="szivesen" block-list:name="szívesen"/>
+  <block-list:block block-list:abbreviated-name="szobahőmérsékletű" block-list:name="szoba-hőmérsékletű"/>
+  <block-list:block block-list:abbreviated-name="szóbanforgó" block-list:name="szóban forgó"/>
+  <block-list:block block-list:abbreviated-name="szokják" block-list:name="szokták"/>
+  <block-list:block block-list:abbreviated-name="szószerint" block-list:name="szó szerint"/>
+  <block-list:block block-list:abbreviated-name="szószerinti" block-list:name="szó szerinti"/>
+  <block-list:block block-list:abbreviated-name="T-alakú" block-list:name="T alakú"/>
+  <block-list:block block-list:abbreviated-name="táj jellegű" block-list:name="tájjellegű"/>
+  <block-list:block block-list:abbreviated-name="tanu" block-list:name="tanú"/>
+  <block-list:block block-list:abbreviated-name="teljes-körű" block-list:name="teljes körű"/>
+  <block-list:block block-list:abbreviated-name="teljeskörű" block-list:name="teljes körű"/>
+  <block-list:block block-list:abbreviated-name="teljeskörűen" block-list:name="teljes körűen"/>
+  <block-list:block block-list:abbreviated-name="teltház" block-list:name="telt ház"/>
+  <block-list:block block-list:abbreviated-name="télvégi" block-list:name="tél végi"/>
+  <block-list:block block-list:abbreviated-name="tennisz" block-list:name="tenisz"/>
+  <block-list:block block-list:abbreviated-name="természetadta" block-list:name="természet adta"/>
+  <block-list:block block-list:abbreviated-name="thursday" block-list:name="Thursday"/>
+  <block-list:block block-list:abbreviated-name="tipusú" block-list:name="típusú"/>
+  <block-list:block block-list:abbreviated-name="tisztántartása" block-list:name="tisztán tartása"/>
+  <block-list:block block-list:abbreviated-name="tízegynéhány" block-list:name="tíz-egynéhány"/>
+  <block-list:block block-list:abbreviated-name="tizes" block-list:name="tízes"/>
+  <block-list:block block-list:abbreviated-name="tizet" block-list:name="tízet"/>
+  <block-list:block block-list:abbreviated-name="tízhónapos" block-list:name="tíz hónapos"/>
+  <block-list:block block-list:abbreviated-name="továbbtanul" block-list:name="tovább tanul"/>
+  <block-list:block block-list:abbreviated-name="továbbtart" block-list:name="tovább tart"/>
+  <block-list:block block-list:abbreviated-name="többezer" block-list:name="több ezer"/>
+  <block-list:block block-list:abbreviated-name="többszáz" block-list:name="több száz"/>
+  <block-list:block block-list:abbreviated-name="többszázezer" block-list:name="több százezer"/>
+  <block-list:block block-list:abbreviated-name="tradícionális" block-list:name="tradicionális"/>
+  <block-list:block block-list:abbreviated-name="tuesday" block-list:name="Tuesday"/>
+  <block-list:block block-list:abbreviated-name="túrista" block-list:name="turista"/>
+  <block-list:block block-list:abbreviated-name="túrós a háta" block-list:name="túros a háta"/>
+  <block-list:block block-list:abbreviated-name="tüzoltó" block-list:name="tűzoltó"/>
+  <block-list:block block-list:abbreviated-name="U-alakú" block-list:name="U alakú"/>
+  <block-list:block block-list:abbreviated-name="ugy" block-list:name="úgy"/>
+  <block-list:block block-list:abbreviated-name="újkeletű" block-list:name="új keletű"/>
+  <block-list:block block-list:abbreviated-name="újraelosztó" block-list:name="újra elosztó"/>
+  <block-list:block block-list:abbreviated-name="utánna" block-list:name="utána"/>
+  <block-list:block block-list:abbreviated-name="utján" block-list:name="útján"/>
+  <block-list:block block-list:abbreviated-name="útmenti" block-list:name="út menti"/>
+  <block-list:block block-list:abbreviated-name="utóljára" block-list:name="utoljára"/>
+  <block-list:block block-list:abbreviated-name="utólsó" block-list:name="utolsó"/>
+  <block-list:block block-list:abbreviated-name="üzembehelyezése" block-list:name="üzembe helyezése"/>
+  <block-list:block block-list:abbreviated-name="üzemközben" block-list:name="üzem közben"/>
+  <block-list:block block-list:abbreviated-name="üzemközbeni" block-list:name="üzem közbeni"/>
+  <block-list:block block-list:abbreviated-name="V-alakú" block-list:name="V alakú"/>
+  <block-list:block block-list:abbreviated-name="vajjon" block-list:name="vajon"/>
+  <block-list:block block-list:abbreviated-name="valószínüleg" block-list:name="valószínűleg"/>
+  <block-list:block block-list:abbreviated-name="valszeg" block-list:name="valószínűleg"/>
+  <block-list:block block-list:abbreviated-name="végefelé" block-list:name="vége felé"/>
+  <block-list:block block-list:abbreviated-name="végetért" block-list:name="véget ért"/>
+  <block-list:block block-list:abbreviated-name="végsőfokon" block-list:name="végső fokon"/>
+  <block-list:block block-list:abbreviated-name="végsősoron" block-list:name="végső soron"/>
+  <block-list:block block-list:abbreviated-name="végülis" block-list:name="végül is"/>
+  <block-list:block block-list:abbreviated-name="ventillátor" block-list:name="ventilátor"/>
+  <block-list:block block-list:abbreviated-name="vérszerinti" block-list:name="vér szerinti"/>
+  <block-list:block block-list:abbreviated-name="villamosenergia" block-list:name="villamos energia"/>
+  <block-list:block block-list:abbreviated-name="vizen" block-list:name="vízen"/>
+  <block-list:block block-list:abbreviated-name="vizi" block-list:name="vízi"/>
+  <block-list:block block-list:abbreviated-name="zártsorú" block-list:name="zárt sorú"/>
+  <block-list:block block-list:abbreviated-name="zloty" block-list:name="złoty"/>
+  <block-list:block block-list:abbreviated-name="zsüri" block-list:name="zsűri"/>
+</block-list:block-list>

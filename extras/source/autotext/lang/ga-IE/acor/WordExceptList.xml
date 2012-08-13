@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<block-list:block-list xmlns:block-list="http://openoffice.org/2001/block-list">
+  <block-list:block block-list:abbreviated-name="CDanna"/>
+  <block-list:block block-list:abbreviated-name="CVanna"/>
+  <block-list:block block-list:abbreviated-name="DVDanna"/>
+  <block-list:block block-list:abbreviated-name="EGTeo"/>
+  <block-list:block block-list:abbreviated-name="GHz"/>
+  <block-list:block block-list:abbreviated-name="HEANet"/>
+  <block-list:block block-list:abbreviated-name="LEDanna"/>
+  <block-list:block block-list:abbreviated-name="MHz"/>
+  <block-list:block block-list:abbreviated-name="MLAanna"/>
+  <block-list:block block-list:abbreviated-name="MPanna"/>
+  <block-list:block block-list:abbreviated-name="OOo"/>
+  <block-list:block block-list:abbreviated-name="PDFanna"/>
+  <block-list:block block-list:abbreviated-name="PRSAanna"/>
+  <block-list:block block-list:abbreviated-name="SMSanna"/>
+  <block-list:block block-list:abbreviated-name="SPCanna"/>
+  <block-list:block block-list:abbreviated-name="SUVanna"/>
+  <block-list:block block-list:abbreviated-name="TDanna"/>
+  <block-list:block block-list:abbreviated-name="URLanna"/>
+</block-list:block-list>
