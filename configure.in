@@ -2472,7 +2472,7 @@ dnl Check / find MacOSX SDK and compiler, version checks
 dnl ===================================================================
 if test "$_os" = "Darwin"; then
 
-    # If no --with-macox-sdk option is given, first look for the 10.4u
+    # If no --with-macosx-sdk option is given, first look for the 10.4u
     # SDK (which is distributed with the obsolete Xcode 3), then the
     # 10.6, 10.7 and 10.8 SDKs, in that order. (Don't bother looking
     # for the 10.5 SDK, unlikely somebody would have that but not
@@ -2513,7 +2513,7 @@ if test "$_os" = "Darwin"; then
                 with_macosx_sdk=10.8
             fi
         fi
-        if test -z "with_$macosx_sdk"; then
+        if test -z "$with_macosx_sdk"; then
             AC_MSG_ERROR([Could not figure out the location of a Mac OS X SDK and its version])
         fi
     fi
