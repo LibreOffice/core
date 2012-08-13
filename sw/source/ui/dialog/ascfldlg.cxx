@@ -149,67 +149,8 @@ SwAsciiFilterDlg::SwAsciiFilterDlg( Window* pParent, SwDocShell& rDocSh,
             }
         }
 
-        SwDoc* pDoc = rDocSh.GetDoc();
-
         sal_uInt16 nAppScriptType = GetI18NScriptTypeOfLanguage( (sal_uInt16)GetAppLanguage() );
-        {
-            sal_Bool bDelPrinter = sal_False;
-            SfxPrinter* pPrt = pDoc ? pDoc->getPrinter(false) : 0;
-            if( !pPrt )
-            {
-                SfxItemSet* pSet = new SfxItemSet( rDocSh.GetPool(),
-                            SID_PRINTER_NOTFOUND_WARN, SID_PRINTER_NOTFOUND_WARN,
-                            SID_PRINTER_CHANGESTODOC, SID_PRINTER_CHANGESTODOC,
-                            0 );
-                pPrt = new SfxPrinter( pSet );
-                bDelPrinter = sal_True;
-            }
-
-
-            // get the set of disctinct available family names
-            std::set< String > aFontNames;
-            int nFontNames = pPrt->GetDevFontCount();
-            for( int i = 0; i < nFontNames; i++ )
-            {
-                FontInfo aInf( pPrt->GetDevFont( i ) );
-                aFontNames.insert( aInf.GetName() );
-            }
-
-            // insert to listbox
-            for( std::set< String >::const_iterator it = aFontNames.begin();
-                 it != aFontNames.end(); ++it )
-            {
-                aFontLB.InsertEntry( *it );
-            }
-
-            if( !aOpt.GetFontName().Len() )
-            {
-                if(pDoc)
-                {
-                    sal_uInt16 nFontRes = RES_CHRATR_FONT;
-                    if(SCRIPTTYPE_ASIAN == nAppScriptType)
-                        nFontRes = RES_CHRATR_CJK_FONT;
-                    else if(SCRIPTTYPE_COMPLEX == nAppScriptType)
-                        nFontRes = RES_CHRATR_CTL_FONT;
-
-                    aOpt.SetFontName( ((SvxFontItem&)pDoc->GetDefault(
-                                    nFontRes )).GetFamilyName() );
-                }
-                else
-                {
-                    sal_uInt16 nFontType = FONT_STANDARD;
-                    if(SCRIPTTYPE_ASIAN == nAppScriptType)
-                        nFontType = FONT_STANDARD_CJK;
-                    else if(SCRIPTTYPE_COMPLEX == nAppScriptType)
-                        nFontType = FONT_STANDARD_CTL;
-                    aOpt.SetFontName(SW_MOD()->GetStdFontConfig()->GetFontFor(nFontType));
-                }
-            }
-            aFontLB.SelectEntry( aOpt.GetFontName() );
-
-            if( bDelPrinter )
-                delete pPrt;
-        }
+        SwDoc* pDoc = rDocSh.GetDoc();
 
         // initialise language
         {
@@ -243,6 +184,50 @@ SwAsciiFilterDlg::SwAsciiFilterDlg( Window* pParent, SwDocShell& rDocSh,
             aLanguageLB.SetLanguageList( LANG_LIST_ALL, sal_True, sal_False );
             aLanguageLB.SelectLanguage( aOpt.GetLanguage() );
         }
+
+        {
+            bool bDelPrinter = false;
+            SfxPrinter* pPrt = pDoc ? pDoc->getPrinter(false) : 0;
+            if( !pPrt )
+            {
+                SfxItemSet* pSet = new SfxItemSet( rDocSh.GetPool(),
+                            SID_PRINTER_NOTFOUND_WARN, SID_PRINTER_NOTFOUND_WARN,
+                            SID_PRINTER_CHANGESTODOC, SID_PRINTER_CHANGESTODOC,
+                            0 );
+                pPrt = new SfxPrinter( pSet );
+                bDelPrinter = true;
+            }
+
+            // get the set of disctinct available family names
+            std::set< String > aFontNames;
+            int nFontNames = pPrt->GetDevFontCount();
+            for( int i = 0; i < nFontNames; i++ )
+            {
+                FontInfo aInf( pPrt->GetDevFont( i ) );
+                aFontNames.insert( aInf.GetName() );
+            }
+
+            // insert to listbox
+            for( std::set< String >::const_iterator it = aFontNames.begin();
+                 it != aFontNames.end(); ++it )
+            {
+                aFontLB.InsertEntry( *it );
+            }
+
+            if( !aOpt.GetFontName().Len() )
+            {
+                LanguageType eLang = aOpt.GetLanguage();
+                Font aTmpFont(OutputDevice::GetDefaultFont(DEFAULTFONT_FIXED, eLang, DEFAULTFONT_FLAGS_ONLYONE, pPrt));
+                aOpt.SetFontName(aTmpFont.GetName());
+            }
+
+            aFontLB.SelectEntry( aOpt.GetFontName() );
+
+            if( bDelPrinter )
+                delete pPrt;
+        }
+
+
     }
     else
     {
