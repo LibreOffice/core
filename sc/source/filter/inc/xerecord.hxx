@@ -336,9 +336,7 @@ class XclExpRecordList : public XclExpRecordBase
 public:
     typedef boost::shared_ptr< RecType > RecordRefType;
 
-    /** Returns pointer to an existing record or 0 on error. */
     inline bool         IsEmpty() const { return maRecs.empty(); }
-    /** Returns pointer to an existing record or 0 on error. */
     inline size_t       GetSize() const { return maRecs.size(); }
 
     /** Returns true, if the passed index points to an exiting record. */
