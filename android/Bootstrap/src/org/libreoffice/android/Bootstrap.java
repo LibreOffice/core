@@ -124,10 +124,17 @@ public class Bootstrap extends NativeActivity
 
     public static native void delete_byte_buffer_wrapper(long bbw);
 
+    static boolean setup_done = false;
+
     // This setup() method is called 1) in apps that use *this* class as their activity from onCreate(),
     // and 2) should be called from other kinds of LO code using apps.
-    public static void setup(Activity activity)
+    public static synchronized void setup(Activity activity)
     {
+        if (setup_done)
+            return;
+
+        setup_done = true;
+
         String dataDir = null;
 
         ApplicationInfo ai = activity.getApplicationInfo();
