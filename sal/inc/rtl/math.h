@@ -135,7 +135,7 @@ enum rtl_math_DecimalPlaces
         In fact the same value as rtl_math_DecimalPlaces_Max, just an alias for
         better understanding.
      */
-    rtl_math_DecimalPlaces_DefaultSignificance = 0x7ffffff
+    rtl_math_DecimalPlaces_DefaultSignificance = rtl_math_DecimalPlaces_Max
 };
 
 
