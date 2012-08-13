@@ -3408,7 +3408,8 @@ int RTFDocumentImpl::popState()
         bFaltEnd = true;
     }
     else if (m_aStates.top().nDestinationState == DESTINATION_FLYMAINCONTENT
-            || m_aStates.top().nDestinationState == DESTINATION_SHPPICT)
+            || m_aStates.top().nDestinationState == DESTINATION_SHPPICT
+            || aState.nDestinationState == DESTINATION_SHAPE)
         bPopFrame = true;
     else if (m_aStates.top().nDestinationState == DESTINATION_DRAWINGOBJECT && m_aStates.top().aDrawingObject.xShape.is())
     {
@@ -3433,6 +3434,8 @@ int RTFDocumentImpl::popState()
     {
         m_aStates.top().resetFrame();
         parBreak();
+        // Save this state for later use, so we only reset frame status only for the first shape inside a frame.
+        aState = m_aStates.top();
         m_bNeedPap = true;
     }
 
