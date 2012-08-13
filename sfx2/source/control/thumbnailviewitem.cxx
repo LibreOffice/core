@@ -35,6 +35,7 @@
 #include <basegfx/vector/b2dsize.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <drawinglayer/attribute/fillbitmapattribute.hxx>
+#include <drawinglayer/primitive2d/borderlineprimitive2d.hxx>
 #include <drawinglayer/primitive2d/fillbitmapprimitive2d.hxx>
 #include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
 #include <drawinglayer/primitive2d/textlayoutdevice.hxx>
@@ -160,7 +161,7 @@ void ThumbnailViewItem::Paint (drawinglayer::processor2d::BaseProcessor2D *pProc
                                const ThumbnailItemAttributes *pAttrs)
 {
     BColor aFillColor = pAttrs->aFillColor;
-    Primitive2DSequence aSeq(3);
+    Primitive2DSequence aSeq(7);
 
     // Draw background
     if ( mbSelected || mbHover )
@@ -182,6 +183,21 @@ void ThumbnailViewItem::Paint (drawinglayer::processor2d::BaseProcessor2D *pProc
                                                             false)
                                         ));
 
+    // draw thumbnail borders
+    float fWidth = aImageSize.Width();
+    float fHeight = aImageSize.Height();
+    float fPosX = maPrev1Pos.getX();
+    float fPosY = maPrev1Pos.getY();
+
+    aSeq[2] = Primitive2DReference(createBorderLine(B2DPoint(fPosX,fPosY),
+                                                           B2DPoint(fPosX+fWidth,fPosY)));
+    aSeq[3] = Primitive2DReference(createBorderLine(B2DPoint(fPosX+fWidth,fPosY),
+                                                           B2DPoint(fPosX+fWidth,fPosY+fHeight)));
+    aSeq[4] = Primitive2DReference(createBorderLine(B2DPoint(fPosX+fWidth,fPosY+fHeight),
+                                                           B2DPoint(fPosX,fPosY+fHeight)));
+    aSeq[5] = Primitive2DReference(createBorderLine(B2DPoint(fPosX,fPosY+fHeight),
+                                                           B2DPoint(fPosX,fPosY)));
+
     // Draw centered text below thumbnail
     aPos = maTextPos;
 
@@ -190,7 +206,7 @@ void ThumbnailViewItem::Paint (drawinglayer::processor2d::BaseProcessor2D *pProc
                 pAttrs->aFontSize.getX(), pAttrs->aFontSize.getY(),
                 double( aPos.X() ), double( aPos.Y() ) ) );
 
-    aSeq[2] = Primitive2DReference(
+    aSeq[6] = Primitive2DReference(
                 new TextSimplePortionPrimitive2D(aTextMatrix,
                                                  maTitle,0,pAttrs->nMaxTextLenght,
                                                  std::vector< double >( ),
@@ -202,6 +218,14 @@ void ThumbnailViewItem::Paint (drawinglayer::processor2d::BaseProcessor2D *pProc
 
     if (mbMode || mbHover || mbSelected)
         mpSelectBox->Paint(maDrawArea);
+}
+
+drawinglayer::primitive2d::BorderLinePrimitive2D*
+ThumbnailViewItem::createBorderLine (const basegfx::B2DPoint &rStart, const basegfx::B2DPoint &rEnd)
+{
+    return new BorderLinePrimitive2D(rStart,rEnd,0.5,0,0,0,0,0,0,
+                                     BColor(),Color(COL_BLACK).getBColor(),BColor(),
+                                     false,STYLE_SOLID);
 }
 
 IMPL_LINK (ThumbnailViewItem, OnClick, CheckBox*, )

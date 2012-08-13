@@ -44,9 +44,17 @@ class Font;
 class Window;
 class ThumbnailView;
 
+namespace basegfx {
+    class B2DPoint;
+}
+
 namespace drawinglayer {
     namespace processor2d {
         class BaseProcessor2D;
+    }
+
+    namespace primitive2d {
+        class BorderLinePrimitive2D;
     }
 }
 
@@ -108,6 +116,9 @@ public:
 
     virtual void Paint (drawinglayer::processor2d::BaseProcessor2D *pProcessor,
                         const ThumbnailItemAttributes *pAttrs);
+
+    static drawinglayer::primitive2d::BorderLinePrimitive2D*
+        createBorderLine (const basegfx::B2DPoint &rStart, const basegfx::B2DPoint &rEnd);
 
 private:
 

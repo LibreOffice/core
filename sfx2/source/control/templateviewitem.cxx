@@ -12,6 +12,7 @@
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <drawinglayer/attribute/fillbitmapattribute.hxx>
+#include <drawinglayer/primitive2d/borderlineprimitive2d.hxx>
 #include <drawinglayer/primitive2d/fillbitmapprimitive2d.hxx>
 #include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
 #include <drawinglayer/primitive2d/textlayoutdevice.hxx>
@@ -63,7 +64,7 @@ void TemplateViewItem::Paint(drawinglayer::processor2d::BaseProcessor2D *pProces
 {
     BColor aFillColor = pAttrs->aFillColor;
 
-    int nCount = maSubTitle.isEmpty() ? 3 : 4;
+    int nCount = maSubTitle.isEmpty() ? 7 : 8;
     Primitive2DSequence aSeq(nCount);
 
     // Draw background
@@ -85,6 +86,21 @@ void TemplateViewItem::Paint(drawinglayer::processor2d::BaseProcessor2D *pProces
                                                             false)
                                         ));
 
+    // draw thumbnail borders
+    float fWidth = aImageSize.Width();
+    float fHeight = aImageSize.Height();
+    float fPosX = maPrev1Pos.getX();
+    float fPosY = maPrev1Pos.getY();
+
+    aSeq[2] = Primitive2DReference(createBorderLine(B2DPoint(fPosX,fPosY),
+                                                           B2DPoint(fPosX+fWidth,fPosY)));
+    aSeq[3] = Primitive2DReference(createBorderLine(B2DPoint(fPosX+fWidth,fPosY),
+                                                           B2DPoint(fPosX+fWidth,fPosY+fHeight)));
+    aSeq[4] = Primitive2DReference(createBorderLine(B2DPoint(fPosX+fWidth,fPosY+fHeight),
+                                                           B2DPoint(fPosX,fPosY+fHeight)));
+    aSeq[5] = Primitive2DReference(createBorderLine(B2DPoint(fPosX,fPosY+fHeight),
+                                                           B2DPoint(fPosX,fPosY)));
+
     // Draw centered text below thumbnail
 
     // Create the text primitive
@@ -92,7 +108,7 @@ void TemplateViewItem::Paint(drawinglayer::processor2d::BaseProcessor2D *pProces
                 pAttrs->aFontSize.getX(), pAttrs->aFontSize.getY(),
                 double( maTextPos.X() ), double( maTextPos.Y() ) ) );
 
-    aSeq[2] = Primitive2DReference(
+    aSeq[6] = Primitive2DReference(
                 new TextSimplePortionPrimitive2D(aTitleMatrix,
                                                  maTitle,0,pAttrs->nMaxTextLenght,
                                                  std::vector< double >( ),
@@ -106,7 +122,7 @@ void TemplateViewItem::Paint(drawinglayer::processor2d::BaseProcessor2D *pProces
                     pAttrs->aFontSize.getX()*SUBTITLE_SCALE_FACTOR, pAttrs->aFontSize.getY()*SUBTITLE_SCALE_FACTOR,
                     double( maSubTitlePos.X() ), double( maSubTitlePos.Y() ) ) );
 
-        aSeq[3] = Primitive2DReference(
+        aSeq[8] = Primitive2DReference(
                     new TextSimplePortionPrimitive2D(aSubTitleMatrix,
                                                      maSubTitle,0,pAttrs->nMaxTextLenght,
                                                      std::vector< double >( ),

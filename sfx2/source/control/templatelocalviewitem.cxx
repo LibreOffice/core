@@ -12,6 +12,7 @@
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <drawinglayer/attribute/fillbitmapattribute.hxx>
+#include <drawinglayer/primitive2d/borderlineprimitive2d.hxx>
 #include <drawinglayer/primitive2d/fillbitmapprimitive2d.hxx>
 #include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
 #include <drawinglayer/primitive2d/textlayoutdevice.hxx>
@@ -38,10 +39,10 @@ void TemplateLocalViewItem::Paint (drawinglayer::processor2d::BaseProcessor2D *p
                                     const ThumbnailItemAttributes *pAttrs)
 {
     int nCount = 0;
-    int nSeqSize = 3;
+    int nSeqSize = 7;
 
     if (!maPreview2.IsEmpty())
-        ++nSeqSize;
+        nSeqSize += 5;
 
     BColor aFillColor = pAttrs->aFillColor;
     Primitive2DSequence aSeq(nSeqSize);
@@ -73,6 +74,21 @@ void TemplateLocalViewItem::Paint (drawinglayer::processor2d::BaseProcessor2D *p
                                                                 B2DVector(aImageSize.Width(),aImageSize.Height()),
                                                                 false)
                                             ));
+
+        // draw thumbnail borders
+        float fWidth = aImageSize.Width()*fScaleX;
+        float fHeight = aImageSize.Height()*fScaleY;
+        float fPosX = aPos.getX()+35*fScaleX;
+        float fPosY = aPos.getY()+20*fScaleY;
+
+        aSeq[nCount++] = Primitive2DReference(createBorderLine(B2DPoint(fPosX,fPosY),
+                                                               B2DPoint(fPosX+fWidth,fPosY)));
+        aSeq[nCount++] = Primitive2DReference(createBorderLine(B2DPoint(fPosX+fWidth,fPosY),
+                                                               B2DPoint(fPosX+fWidth,fPosY+fHeight)));
+        aSeq[nCount++] = Primitive2DReference(createBorderLine(B2DPoint(fPosX+fWidth,fPosY+fHeight),
+                                                               B2DPoint(fPosX,fPosY+fHeight)));
+        aSeq[nCount++] = Primitive2DReference(createBorderLine(B2DPoint(fPosX,fPosY+fHeight),
+                                                               B2DPoint(fPosX,fPosY)));
     }
 
     aSeq[nCount++] = Primitive2DReference( new FillBitmapPrimitive2D(
@@ -82,6 +98,21 @@ void TemplateLocalViewItem::Paint (drawinglayer::processor2d::BaseProcessor2D *p
                                                             B2DVector(aImageSize.Width(),aImageSize.Height()),
                                                             false)
                                         ));
+
+    // draw thumbnail borders
+    float fWidth = aImageSize.Width()*fScaleX;
+    float fHeight = aImageSize.Height()*fScaleY;
+    float fPosX = aPos.getX();
+    float fPosY = aPos.getY();
+
+    aSeq[nCount++] = Primitive2DReference(createBorderLine(B2DPoint(fPosX,fPosY),
+                                                           B2DPoint(fPosX+fWidth,fPosY)));
+    aSeq[nCount++] = Primitive2DReference(createBorderLine(B2DPoint(fPosX+fWidth,fPosY),
+                                                           B2DPoint(fPosX+fWidth,fPosY+fHeight)));
+    aSeq[nCount++] = Primitive2DReference(createBorderLine(B2DPoint(fPosX+fWidth,fPosY+fHeight),
+                                                           B2DPoint(fPosX,fPosY+fHeight)));
+    aSeq[nCount++] = Primitive2DReference(createBorderLine(B2DPoint(fPosX,fPosY+fHeight),
+                                                           B2DPoint(fPosX,fPosY)));
 
     // Draw centered text below thumbnail
     aPos = maTextPos;
