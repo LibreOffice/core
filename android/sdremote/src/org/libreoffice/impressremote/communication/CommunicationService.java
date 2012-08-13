@@ -33,32 +33,36 @@ public class CommunicationService extends Service implements Runnable {
 
     @Override
     public void run() {
-        while (true) {
-            // Condition
-            try {
-                wait();
-            } catch (InterruptedException e) {
-                // We don't care.
-            }
-            // Work
-            synchronized (mConnectionVariableMutex) {
-                if ((mStateDesired == State.CONNECTED && mState == State.CONNECTED)
-                                || (mStateDesired == State.DISCONNECTED && mState == State.CONNECTED)) {
-                    mClient.closeConnection();
-                    mState = State.DISCONNECTED;
+        synchronized (this) {
+            while (true) {
+                // Condition
+                try {
+
+                    wait();
+                } catch (InterruptedException e) {
+                    // We have finished
+                    return;
                 }
-                if (mStateDesired == State.CONNECTED) {
-                    switch (mServerDesired.getProtocol()) {
-                    case NETWORK:
-                        mClient = new NetworkClient(
-                                        mServerDesired.getAddress(), this);
-                        mTransmitter = new Transmitter(mClient);
-                        mClient.setReceiver(mReceiver);
-                        break;
-                    case BLUETOOTH:
-                        break;
+                // Work
+                synchronized (mConnectionVariableMutex) {
+                    if ((mStateDesired == State.CONNECTED && mState == State.CONNECTED)
+                                    || (mStateDesired == State.DISCONNECTED && mState == State.CONNECTED)) {
+                        mClient.closeConnection();
+                        mState = State.DISCONNECTED;
                     }
-                    mState = State.CONNECTED;
+                    if (mStateDesired == State.CONNECTED) {
+                        switch (mServerDesired.getProtocol()) {
+                        case NETWORK:
+                            mClient = new NetworkClient(
+                                            mServerDesired.getAddress(), this);
+                            mTransmitter = new Transmitter(mClient);
+                            mClient.setReceiver(mReceiver);
+                            break;
+                        case BLUETOOTH:
+                            break;
+                        }
+                        mState = State.CONNECTED;
+                    }
                 }
             }
         }
@@ -90,7 +94,10 @@ public class CommunicationService extends Service implements Runnable {
             }
             mServerDesired = aServer;
             mStateDesired = State.CONNECTED;
-            notify();
+            synchronized (this) {
+                notify();
+            }
+
         }
         // TODO: connect
     }
@@ -98,7 +105,9 @@ public class CommunicationService extends Service implements Runnable {
     public void disconnect() {
         synchronized (mConnectionVariableMutex) {
             mStateDesired = State.DISCONNECTED;
-            notify();
+            synchronized (this) {
+                notify();
+            }
         }
     }
 
@@ -140,14 +149,20 @@ public class CommunicationService extends Service implements Runnable {
         return mBinder;
     }
 
+    private Thread mThread = null;
+
     @Override
     public void onCreate() {
         // TODO Create a notification (if configured).
+        mThread = new Thread(this);
+        mThread.start();
     }
 
     @Override
     public void onDestroy() {
         // TODO Destroy the notification (as necessary).
+        mThread.interrupt();
+        mThread = null;
     }
 
     public Transmitter getTransmitter() {

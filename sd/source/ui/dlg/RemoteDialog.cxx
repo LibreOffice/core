@@ -50,9 +50,12 @@ IMPL_LINK_NOARG(RemoteDialog, HandleConnectButton)
     if ( aSelected < 0 )
         return 1;
     TClientBoxEntry aEntry = mClientBox.GetEntryData(aSelected);
-    OUString aPin = mClientBox.getPin();
+    OUString aPin ( mClientBox.getPin() );
     if ( RemoteServer::connectClient( aEntry->m_pClientInfo, aPin ) )
+    {
+        Close();
         return 0;
+    }
     else
         return 1;
 }

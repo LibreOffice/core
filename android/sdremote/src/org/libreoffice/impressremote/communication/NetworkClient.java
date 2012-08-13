@@ -50,8 +50,15 @@ public class NetworkClient extends Client {
                             CommunicationService.MSG_PAIRING_STARTED);
             aIntent.putExtra("PIN", aPin);
             LocalBroadcastManager.getInstance(mContext).sendBroadcast(aIntent);
+            // Send out
+            String aName = "Bob"; // TODO: get the proper name
+            sendCommand("LO_SERVER_CLIENT_PAIR\n" + aName + "\n" + aPin
+                            + "\n\n");
+
             // Wait until we get the appropriate string back...
+            System.out.println("SF:waiting");
             String aTemp = mReader.readLine();
+            System.out.println("SF:waited");
             if (!aTemp.equals("LO_SERVER_SERVER_PAIRED")) {
                 return;
             } else {
@@ -60,9 +67,11 @@ public class NetworkClient extends Client {
                 LocalBroadcastManager.getInstance(mContext).sendBroadcast(
                                 aIntent);
             }
-            while ((aTemp = mReader.readLine()).length() != 0) {
+            while (mReader.readLine().length() != 0) {
                 // Get rid of extra lines
+                System.out.println("SF: empty line");
             }
+            System.out.println("SD: empty");
             startListening();
         } catch (UnknownHostException e) {
             // TODO Tell the user we have a problem

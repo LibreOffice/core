@@ -97,6 +97,8 @@ ClientBox::ClientBox( Dialog* pParent, RemoteServer *pServer,
     m_pScrollBar->SetScrollHdl( LINK( this, ClientBox, ScrollHdl ) );
     m_pScrollBar->EnableDrag();
 
+    m_aPinBox.SetUseThousandSep(false);
+
     SetPaintTransparent( true );
     SetPosPixel( Point( RSC_SP_DLG_INNERBORDER_LEFT, RSC_SP_DLG_INNERBORDER_TOP ) );
     long nIconHeight = 2*TOP_OFFSET + SMALL_ICON_SIZE;
@@ -582,7 +584,7 @@ long ClientBox::PointToPos( const Point& rPos )
 
 OUString ClientBox::getPin()
 {
-    return m_aPinBox.GetText();
+    return OUString::valueOf( m_aPinBox.GetValue() );
 }
 
 //------------------------------------------------------------------------------

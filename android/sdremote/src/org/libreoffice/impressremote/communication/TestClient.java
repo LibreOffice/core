@@ -6,9 +6,11 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-package org.libreoffice.impressremote;
+package org.libreoffice.impressremote.communication;
 
-import org.libreoffice.impressremote.communication.CommunicationService;
+import org.libreoffice.impressremote.PresentationActivity;
+import org.libreoffice.impressremote.R;
+import org.libreoffice.impressremote.communication.Server.Protocol;
 
 import android.app.Activity;
 import android.content.ComponentName;
@@ -84,7 +86,8 @@ public class TestClient extends Activity {
                         IBinder aService) {
             mCommunicationService = ((CommunicationService.CBinder) aService)
                             .getService();
-            //            mCommunicationService.connectTo(Protocol.NETWORK, "192.168.0.18");
+            mCommunicationService.connectTo(new Server(Protocol.NETWORK,
+                            "10.0.2.2", "TestServer", 0l));
             mCommunicationService.setActivityMessenger(mMessenger);
             enableButtons(true);
         }

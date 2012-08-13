@@ -27,21 +27,9 @@ sal_Int32 BufferedStreamSocket::readLine( OString& aLine )
 {
     while ( true )
     {
-        aBuffer.resize( aRead + 100 );
-        aRet = recv( &aBuffer[aRead], 100 );
-        if ( aRet == 0 )
-        {
-                return aRet;
-        }
-        // Prevent buffer from growing massively large.
-        if ( aRead > MAX_LINE_LENGTH )
-        {
-            aBuffer.erase( aBuffer.begin(), aBuffer.end() );
-            return 0;
-        }
-        aRead += aRet;
+        // Process buffer first incase data already present.
         vector<char>::iterator aIt;
-        while ( (aIt = find( aBuffer.begin(), aBuffer.end(), '\n' ))
+        if ( (aIt = find( aBuffer.begin(), aBuffer.end(), '\n' ))
             != aBuffer.end() )
         {
             sal_uInt64 aLocation = aIt - aBuffer.begin();
@@ -53,6 +41,22 @@ sal_Int32 BufferedStreamSocket::readLine( OString& aLine )
 
             return aLine.getLength();
         }
+
+        // Then try and receive if nothing present
+        aBuffer.resize( aRead + 100 );
+        aRet = recv( &aBuffer[aRead], 100 );
+
+        if ( aRet == 0 )
+        {
+                return aRet;
+        }
+        // Prevent buffer from growing massively large.
+        if ( aRead > MAX_LINE_LENGTH )
+        {
+            aBuffer.erase( aBuffer.begin(), aBuffer.end() );
+            return 0;
+        }
+        aRead += aRet;
     }
 
 

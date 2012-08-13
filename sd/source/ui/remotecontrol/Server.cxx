@@ -82,6 +82,7 @@ void RemoteServer::execute()
 
             if ( ! pSocket->readLine( aLine ) ) delete pSocket;
             OString aPin( aLine );
+            fprintf( stderr, "Pin:%s\n", aPin.getStr() );
 
             SocketAddr aClientAddr;
             pSocket->getPeerAddr( aClientAddr );
@@ -191,6 +192,7 @@ sal_Bool RemoteServer::connectClient( ClientInfo* pClient, rtl::OUString aPin )
             break;
             }
         }
+        pCommunicator->launch();
         return true;
     }
     else
