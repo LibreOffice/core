@@ -149,6 +149,7 @@ public:
     void testControlImport();
 
     void testNumberFormatHTML();
+    void testNumberFormatCSV();
 
     CPPUNIT_TEST_SUITE(ScFiltersTest);
     CPPUNIT_TEST(testRangeNameXLS);
@@ -184,6 +185,7 @@ public:
     CPPUNIT_TEST(testCondFormat);
 
     CPPUNIT_TEST(testNumberFormatHTML);
+    CPPUNIT_TEST(testNumberFormatCSV);
 
     //disable testPassword on MacOSX due to problems with libsqlite3
     //also crashes on DragonFly due to problems with nss/nspr headers
@@ -1209,6 +1211,34 @@ void ScFiltersTest::testNumberFormatHTML()
     // B2 should be imported as a value cell.
     bool bHasValue = pDoc->HasValueData(1, 1, 0);
     CPPUNIT_ASSERT_MESSAGE("Fail to import number as a value cell.", bHasValue);
+    CPPUNIT_ASSERT_MESSAGE("Incorrect value.", pDoc->GetValue(1, 1, 0) == 199.98);
+
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testNumberFormatCSV()
+{
+    OUString aFileNameBase("numberformat.");
+    OUString aFileExt = OUString::createFromAscii(aFileFormats[CSV].pName);
+    OUString aFilterName = OUString::createFromAscii(aFileFormats[CSV].pFilterName);
+    OUString aFilterType = OUString::createFromAscii(aFileFormats[CSV].pTypeName);
+
+    rtl::OUString aFileName;
+    createFileURL(aFileNameBase, aFileExt, aFileName);
+    ScDocShellRef xDocSh = load (aFilterName, aFileName, rtl::OUString(), aFilterType, aFileFormats[CSV].nFormatType);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load numberformat.html", xDocSh.Is());
+
+    ScDocument* pDoc = xDocSh->GetDocument();
+
+    // Check the header just in case.
+    CPPUNIT_ASSERT_MESSAGE("Cell value is not as expected", pDoc->GetString(0, 0, 0) == "Product");
+    CPPUNIT_ASSERT_MESSAGE("Cell value is not as expected", pDoc->GetString(1, 0, 0) == "Price");
+    CPPUNIT_ASSERT_MESSAGE("Cell value is not as expected", pDoc->GetString(2, 0, 0) == "Note");
+
+    // B2 should be imported as a value cell.
+    bool bHasValue = pDoc->HasValueData(1, 1, 0);
+    CPPUNIT_ASSERT_MESSAGE("Fail to import number as a value cell.", bHasValue);
+    CPPUNIT_ASSERT_MESSAGE("Incorrect value.", pDoc->GetValue(1, 1, 0) == 199.98);
 
     xDocSh->DoClose();
 }
