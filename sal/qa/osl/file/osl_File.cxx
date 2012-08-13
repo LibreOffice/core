@@ -690,7 +690,6 @@ namespace osl_FileBase
         //::osl::FileBase  aFileBase;
         ::rtl::OUString  aResultURL1, aResultURL2, aResultURL3, aResultURL4, aResultURL5, aResultURL6;
             // ::osl::FileBase::RC nError;
-        sal_Bool  bOk;
 
         public:
 
@@ -1592,7 +1591,7 @@ namespace osl_VolumeInfo
     {
         ::osl::VolumeDevice aVolumeDevice;
         ::rtl::OUString aUStr;
-        ::osl::FileBase::RC nError1, nError2;
+        ::osl::FileBase::RC nError1;
 
         public:
         // initialization
@@ -1670,7 +1669,7 @@ namespace osl_VolumeInfo
     {
         ::osl::VolumeDevice aVolumeDevice;
         ::rtl::OUString aUStr;
-        ::osl::FileBase::RC nError1, nError2;
+        ::osl::FileBase::RC nError1;
 
         public:
         // test code.
@@ -1718,7 +1717,7 @@ namespace osl_VolumeInfo
     //---------------------------------------------------------------------
     class  getRemoveableFlag : public CppUnit::TestFixture
     {
-        ::osl::FileBase::RC nError1, nError2;
+        ::osl::FileBase::RC nError1;
 
         public:
         // test code.
@@ -2391,7 +2390,7 @@ namespace osl_FileStatus
     class  ctors : public CppUnit::TestFixture
     {
         ::rtl::OUString         aUStr;
-        ::osl::FileBase::RC     nError1, nError2;
+        ::osl::FileBase::RC     nError1;
         ::osl::DirectoryItem    rItem;
 
         public:
@@ -2665,7 +2664,7 @@ namespace osl_FileStatus
     class  getFileType : public CppUnit::TestFixture
     {
         ::rtl::OUString         aUStr;
-        ::osl::FileBase::RC     nError1, nError2;
+        ::osl::FileBase::RC     nError1;
 
         ::osl::DirectoryItem    m_aItem_1, m_aItem_2, m_aVolumeItem, m_aFifoItem;
         ::osl::DirectoryItem    m_aLinkItem, m_aSocketItem, m_aSpecialItem;
@@ -3612,7 +3611,7 @@ namespace osl_File
     class  getPos : public CppUnit::TestFixture
     {
         ::osl::FileBase::RC      nError1;
-        sal_uInt64 nCount_write, nCount_read;
+        sal_uInt64 nCount_write;
 
         public:
         // initialization
@@ -3677,7 +3676,7 @@ namespace osl_File
     class  isEndOfFile : public CppUnit::TestFixture
     {
         ::osl::FileBase::RC      nError1;
-        sal_uInt64 nCount_write, nCount_read;
+        sal_uInt64 nCount_write;
 
         public:
         // initialization
@@ -3771,7 +3770,7 @@ namespace osl_File
     class  setSize : public CppUnit::TestFixture
     {
         ::osl::FileBase::RC      nError1;
-        sal_uInt64 nCount_write, nCount_read;
+        sal_uInt64 nCount_write;
 
         public:
         // initialization
@@ -4017,7 +4016,7 @@ namespace osl_File
     class  readLine : public CppUnit::TestFixture
     {
         ::osl::FileBase::RC      nError1;
-        sal_uInt64 nCount_write, nCount_read;
+        sal_uInt64 nCount_write;
         ::rtl::ByteSequence      aSequence;
 
         public:
@@ -4129,7 +4128,7 @@ namespace osl_File
     class  copy : public CppUnit::TestFixture
     {
         ::osl::FileBase::RC      nError1;
-        sal_uInt64 nCount_write, nCount_read;
+        sal_uInt64 nCount_write;
 
         public:
         // initialization
@@ -4263,7 +4262,7 @@ namespace osl_File
     class  move : public CppUnit::TestFixture
     {
         ::osl::FileBase::RC      nError1, nError2;
-        sal_uInt64 nCount_write, nCount_read;
+        sal_uInt64 nCount_write;
 
         public:
         // initialization
@@ -4424,7 +4423,7 @@ namespace osl_File
     class  remove : public CppUnit::TestFixture
     {
         ::osl::FileBase::RC      nError1, nError2;
-        sal_uInt64 nCount_write, nCount_read;
+        sal_uInt64 nCount_write;
 
         public:
         // initialization
@@ -4775,7 +4774,7 @@ namespace osl_DirectoryItem
     //---------------------------------------------------------------------
     class  ctors : public CppUnit::TestFixture
     {
-        ::osl::FileBase::RC     nError1, nError2;
+        ::osl::FileBase::RC     nError1;
 
         public:
         // initialization
@@ -4816,7 +4815,7 @@ namespace osl_DirectoryItem
     //---------------------------------------------------------------------
     class  copy_assin_Ctors : public CppUnit::TestFixture
     {
-        ::osl::FileBase::RC     nError1, nError2;
+        ::osl::FileBase::RC     nError1;
 
         public:
         // initialization
@@ -4878,7 +4877,7 @@ namespace osl_DirectoryItem
     //---------------------------------------------------------------------
     class  is : public CppUnit::TestFixture
     {
-        ::osl::FileBase::RC     nError1, nError2;
+        ::osl::FileBase::RC     nError1;
 
         public:
         // initialization
@@ -5646,7 +5645,7 @@ namespace osl_Directory
     //---------------------------------------------------------------------
     class  getVolumeInfo : public CppUnit::TestFixture
     {
-        ::osl::FileBase::RC     nError1, nError2;
+        ::osl::FileBase::RC     nError1;
 
         public:
 
