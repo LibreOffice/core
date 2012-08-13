@@ -82,6 +82,7 @@
 
 #include "cppuhelper/implbase1.hxx"
 
+#if !defined(ANDROID) && !defined(IOS)
 // NSS header files for PDF signing support
 #include "nss.h"
 #include "cert.h"
@@ -89,6 +90,7 @@
 #include "sechash.h"
 #include "cms.h"
 #include "cmst.h"
+#endif
 
 using namespace vcl;
 
@@ -5916,12 +5918,14 @@ bool PDFWriterImpl::emitCatalog()
     else
         aInitPageRef.append( "0" );
 
+#if !defined(ANDROID) && !defined(IOS)
     if (m_nSignatureObject != -1) // Document will be signed
     {
         aLine.append("/Perms<</DocMDP ");
         aLine.append(m_nSignatureObject);
         aLine.append(" 0 R>>");
     }
+#endif
 
     switch( m_aContext.PDFDocumentAction )
     {
@@ -6049,14 +6053,20 @@ bool PDFWriterImpl::emitCatalog()
         }
         aLine.append( "\n]" );
 
+#if !defined(ANDROID) && !defined(IOS)
         if (m_nSignatureObject != -1)
             aLine.append( "/SigFlags 3");
+#endif
 
         aLine.append( "/DR " );
         aLine.append( getResourceDictObj() );
         aLine.append( " 0 R" );
         // /NeedAppearances must not be used if PDF is signed
-        if( m_bIsPDF_A1 || ( m_nSignatureObject != -1 ) )
+        if( m_bIsPDF_A1
+#if !defined(ANDROID) && !defined(IOS)
+            || ( m_nSignatureObject != -1 )
+#endif
+            )
             aLine.append( ">>\n" );
         else
             aLine.append( "/NeedAppearances true>>\n" );
@@ -6082,6 +6092,8 @@ bool PDFWriterImpl::emitCatalog()
 
     return true;
 }
+
+#if !defined(ANDROID) && !defined(IOS)
 
 bool PDFWriterImpl::emitSignature()
 {
@@ -6357,6 +6369,8 @@ bool PDFWriterImpl::finalizeSignature()
     CHECK_RETURN( (osl_File_E_None == osl_setFilePos( m_aFile, osl_Pos_Absolut, nOffset ) ) );
     return true;
 }
+
+#endif
 
 sal_Int32 PDFWriterImpl::emitInfoDict( )
 {
@@ -7139,6 +7153,7 @@ bool PDFWriterImpl::emit()
     // needed for widget tab order
     sortWidgets();
 
+#if !defined(ANDROID) && !defined(IOS)
     if( m_aContext.SignPDF )
     {
         // sign the document
@@ -7146,6 +7161,7 @@ bool PDFWriterImpl::emit()
         aSignature.Name = OUString("Signature1");
         createControl( aSignature, 0 );
     }
+#endif
 
     // emit additional streams
     CHECK_RETURN( emitAdditionalStreams() );
@@ -7153,14 +7169,18 @@ bool PDFWriterImpl::emit()
     // emit catalog
     CHECK_RETURN( emitCatalog() );
 
+#if !defined(ANDROID) && !defined(IOS)
     if (m_nSignatureObject != -1) // if document is signed, emit sigdict
         CHECK_RETURN( emitSignature() );
+#endif
 
     // emit trailer
     CHECK_RETURN( emitTrailer() );
 
+#if !defined(ANDROID) && !defined(IOS)
     if (m_nSignatureObject != -1) // finalize the signature
         CHECK_RETURN( finalizeSignature() );
+#endif
 
     osl_closeFile( m_aFile );
     m_bOpen = false;
@@ -12058,6 +12078,7 @@ sal_Int32 PDFWriterImpl::createControl( const PDFWriter::AnyWidget& rControl, sa
 
         createDefaultEditAppearance( rNewWidget, rEdit );
     }
+#if !defined(ANDROID) && !defined(IOS)
     else if( rControl.getType() == PDFWriter::Signature)
     {
         const PDFWriter::SignatureWidget& rSig = static_cast<const PDFWriter::SignatureWidget&>(rControl);
@@ -12073,7 +12094,7 @@ sal_Int32 PDFWriterImpl::createControl( const PDFWriter::AnyWidget& rControl, sa
         // let's add a fake appearance
         rNewWidget.m_aAppearances[ "N" ][ "Standard" ] = new SvMemoryStream();
     }
-
+#endif
 
     // if control is a hidden signature, do not convert coordinates since we
     // need /Rect [ 0 0 0 0 ]
