@@ -244,11 +244,6 @@ TempFile::~TempFile()
     delete pImp;
 }
 
-sal_Bool TempFile::IsValid() const
-{
-    return pImp->aName.Len() != 0;
-}
-
 String TempFile::GetName() const
 {
     rtl::OUString aTmp;

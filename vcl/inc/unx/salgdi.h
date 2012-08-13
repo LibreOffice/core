@@ -186,13 +186,6 @@ protected:
                                 unsigned int &nDY,
                                 int          &nSrcX,
                                 int          &nSrcY ) const;
-    GC              SetMask   ( int          &nX,
-                                int          &nY,
-                                unsigned int &nDX,
-                                unsigned int &nDY,
-                                int          &nSrcX,
-                                int          &nSrcY,
-                                Pixmap        hClipMask );
     using SalGraphics::DrawBitmap;
     void            DrawBitmap( const SalTwoRect *pPosAry,
                                 SalGraphics      *pThis,

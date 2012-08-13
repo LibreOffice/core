@@ -322,67 +322,6 @@ int X11SalGraphics::Clip( int          &nX,
            : RectanglePart;
 }
 
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-GC X11SalGraphics::SetMask( int           &nX,
-                                   int           &nY,
-                                   unsigned int &nDX,
-                                   unsigned int &nDY,
-                                   int          &nSrcX,
-                                   int          &nSrcY,
-                                   Pixmap        hClipMask )
-{
-    int n = Clip( nX, nY, nDX, nDY, nSrcX, nSrcY );
-    if( RectangleOut == n )
-        return NULL;
-
-    Display *pDisplay = GetXDisplay();
-
-    if( !pMaskGC_ )
-        pMaskGC_ = CreateGC( GetDrawable() );
-
-    if( RectangleIn == n )
-    {
-        XSetClipMask( pDisplay, pMaskGC_, hClipMask );
-        XSetClipOrigin( pDisplay, pMaskGC_, nX - nSrcX, nY - nSrcY );
-        return pMaskGC_;
-    }
-
-    // - - - - create alternate clip pixmap for region clipping - - - -
-    Pixmap hPixmap = limitXCreatePixmap( pDisplay, hClipMask, nDX, nDY, 1 );
-
-    if( !hPixmap )
-    {
-#if (OSL_DEBUG_LEVEL > 1) || defined DBG_UTIL
-        fprintf( stderr, "X11SalGraphics::SetMask !hPixmap\n" );
-#endif
-        return NULL;
-    }
-
-    // - - - - reset pixmap; all 0 - - - - - - - - - - - - - - - - - - -
-    XFillRectangle( pDisplay,
-                    hPixmap,
-                    GetDisplay()->GetMonoGC( m_nXScreen ),
-                    0,   0,
-                    nDX, nDY );
-
-    // - - - - copy pixmap only within region - - - - - - - - - - - - -
-    GC pMonoGC = GetMonoGC( hPixmap );
-    XSetClipOrigin( pDisplay, pMonoGC, -nX, -nY );
-    XCopyArea( pDisplay,
-               hClipMask,           // Source
-               hPixmap,             // Destination
-               pMonoGC,
-               nSrcX, nSrcY,        // Source
-               nDX,   nDY,          // Width & Height
-               0,     0 );          // Destination
-
-    XSetClipMask( pDisplay, pMaskGC_, hPixmap );
-    XSetClipOrigin( pDisplay, pMaskGC_, nX, nY );
-
-    XFreePixmap( pDisplay, hPixmap );
-    return pMaskGC_;
-}
-
 // -=-= SalGraphics =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 

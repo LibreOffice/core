@@ -2197,13 +2197,6 @@ sal_Bool TransferableDataHelper::GetInputStream( const DataFlavor& rFlavor, Refe
 
 // -----------------------------------------------------------------------------
 
-sal_Bool TransferableDataHelper::GetInterface( const DataFlavor& rFlavor, Reference< XInterface >& rIf )
-{
-    const Any aAny( GetAny( rFlavor ) );
-    return( aAny.hasValue() && ( aAny >>= rIf ) );
-}
-
-// -----------------------------------------------------------------------------
 void TransferableDataHelper::Rebind( const Reference< XTransferable >& _rxNewContent )
 {
     mxTransfer = _rxNewContent;

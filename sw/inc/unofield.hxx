@@ -108,7 +108,6 @@ public:
     SwDoc*      GetDoc() {return m_pDoc;}
 
     sal_Bool        IsDescriptor()const  {return m_bIsDescriptor;}
-    sal_uInt16      GetResId() const {return nResTypeId;}
 };
 
 struct SwFieldProperties_Impl;

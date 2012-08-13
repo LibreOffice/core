@@ -159,11 +159,6 @@ rtl::OUString PlaceEditDialog::GetServerUrl()
     return sUrl;
 }
 
-ResId PlaceEditDialog::GetResId(sal_uInt16 nId)
-{
-    return SvtResId( nId );
-}
-
 boost::shared_ptr<Place> PlaceEditDialog::GetPlace()
 {
     boost::shared_ptr<Place> newPlace( new Place( m_aEDServerName.GetText(), GetServerUrl(), true ) );

@@ -100,8 +100,6 @@ public :
      rtl::OUString GetServerName() 	{ return m_aEDServerName.GetText(); }
      rtl::OUString GetServerUrl();
 
-     ResId GetResId( sal_uInt16 nId );
-
 private:
 
     void InitDetails( );
