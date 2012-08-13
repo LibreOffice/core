@@ -677,9 +677,7 @@ XclExpCFImpl::XclExpCFImpl( const XclExpRoot& rRoot, const ScCondFormatEntry& rF
 
     XclExpFormulaCompiler& rFmlaComp = GetFormulaCompiler();
 
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    ::std::auto_ptr< ScTokenArray > xScTokArr( mrFormatEntry.CreateTokenArry( 0 ) );
-    SAL_WNODEPRECATED_DECLARATIONS_POP
+    boost::scoped_ptr< ScTokenArray > xScTokArr( mrFormatEntry.CreateTokenArry( 0 ) );
     mxTokArr1 = rFmlaComp.CreateFormula( EXC_FMLATYPE_CONDFMT, *xScTokArr );
 
     if( bFmla2 )
@@ -1284,9 +1282,7 @@ XclExpDV::XclExpDV( const XclExpRoot& rRoot, sal_uLong nScHandle ) :
 
         // formulas
         XclExpFormulaCompiler& rFmlaComp = GetFormulaCompiler();
-        SAL_WNODEPRECATED_DECLARATIONS_PUSH
-        ::std::auto_ptr< ScTokenArray > xScTokArr;
-        SAL_WNODEPRECATED_DECLARATIONS_POP
+        boost::scoped_ptr< ScTokenArray > xScTokArr;
 
         // first formula
         xScTokArr.reset( pValData->CreateTokenArry( 0 ) );
