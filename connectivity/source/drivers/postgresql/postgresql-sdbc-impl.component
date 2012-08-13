@@ -29,7 +29,7 @@
 
 <component loader="com.sun.star.loader.SharedLibrary"
     xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="org.openoffice.comp.connectivity.pq.Connection">
+  <implementation name="org.openoffice.comp.connectivity.pq.Connection.noext">
     <service name="com.sun.star.sdbc.Connection"/>
   </implementation>
 </component>
