@@ -159,6 +159,9 @@
     <FormatElement msgid="DateTimeFormatskey2" default="false" type="medium" usage="DATE_TIME"  formatindex="47">
       <FormatCode>DD-MM-AAAA HH:MM:SS</FormatCode>
     </FormatElement>
+    <FormatElement msgid="DateTimeFormatskey3" default="false" type="medium" usage="DATE_TIME"  formatindex="55">
+      <FormatCode>AAAA-MM-DD HH:MM</FormatCode>
+    </FormatElement>
     <FormatElement msgid="FixedFormatskey1" default="true" type="medium" usage="FIXED_NUMBER"  formatindex="0">
       <FormatCode>Geral</FormatCode>
     </FormatElement>
