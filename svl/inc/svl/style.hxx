@@ -179,7 +179,6 @@ private:
     SVL_DLLPRIVATE sal_Bool                     IsTrivialSearch();
     SVL_DLLPRIVATE sal_Bool                     DoesStyleMatch(SfxStyleSheetBase *pStyle);
 
-    void*                   pImp;
     SfxStyleSheetBase*      pAktStyle;
     sal_uInt16                  nAktPosition;
     sal_Bool                    bSearchUsed;

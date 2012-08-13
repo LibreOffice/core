@@ -71,11 +71,10 @@ class SVL_DLLPUBLIC SvLockBytesInputStream: public cppu::OWeakObject,
 {
     SvLockBytesRef m_xLockBytes;
     sal_Int64 m_nPosition;
-    bool m_bDone;
 
 public:
     SvLockBytesInputStream(SvLockBytes * pTheLockBytes):
-        m_xLockBytes(pTheLockBytes), m_nPosition(0), m_bDone(false) {}
+        m_xLockBytes(pTheLockBytes), m_nPosition(0) {}
 
     virtual com::sun::star::uno::Any SAL_CALL
     queryInterface(const com::sun::star::uno::Type & rType)
