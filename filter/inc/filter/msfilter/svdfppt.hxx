@@ -46,6 +46,7 @@
 #include <vcl/font.hxx>
 #include <vector>
 #include <boost/optional.hpp>
+#include <boost/ptr_container/ptr_vector.hpp>
 
 class SdrModel;
 class SdPage;
@@ -1100,7 +1101,7 @@ class MSFILTER_DLLPUBLIC PPTPortionObj : public PPTCharPropSet
 
 public:
 
-    sal_Bool        GetAttrib( sal_uInt32 nAttr, sal_uInt32& nVal, sal_uInt32 nInstanceInSheet );
+    sal_Bool        GetAttrib( sal_uInt32 nAttr, sal_uInt32& nVal, sal_uInt32 nInstanceInSheet ) const;
     SvxFieldItem*   GetTextField();
 
                     PPTPortionObj( const PPTStyleSheet&, sal_uInt32 nInstance, sal_uInt32 nDepth );
@@ -1149,8 +1150,7 @@ public:
     sal_Bool                mbTab;          // if true, this paragraph has tabulators in text
 
     sal_uInt32              mnCurrentObject;
-    sal_uInt32              mnPortionCount;
-    PPTPortionObj**         mpPortionList;
+    ::boost::ptr_vector<PPTPortionObj> m_PortionList;
 
     void                    UpdateBulletRelSize( sal_uInt32& nBulletRelSize ) const;
     sal_Bool                GetAttrib( sal_uInt32 nAttr, sal_uInt32& nVal, sal_uInt32 nInstanceInSheet );
