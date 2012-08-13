@@ -38,7 +38,7 @@
 #include <ndgrf.hxx>
 #include <ndole.hxx>
 #include <ndindex.hxx>
-#include <hints.hxx>            // fuer SwFmtChg
+#include <hints.hxx>
 #include <istyleaccess.hxx>
 #include <SwStyleNameMapper.hxx>
 
@@ -54,23 +54,21 @@ SwNoTxtNode::SwNoTxtNode( const SwNodeIndex & rWhere,
     bContourMapModeValid( sal_True ),
     bPixelContour( sal_False )
 {
-    // soll eine Harte-Attributierung gesetzt werden?
+    // Should this set a hard attribute?
     if( pAutoAttr )
         SetAttr( *pAutoAttr );
 }
-
 
 SwNoTxtNode::~SwNoTxtNode()
 {
     delete pContour;
 }
 
-
-// erzeugt fuer alle Ableitungen einen AttrSet mit Bereichen
-// fuer Frame- und Grafik-Attributen
+/// Creates an AttrSet for all derivations with ranges for frame-
+/// and graphics-attributes.
 void SwNoTxtNode::NewAttrSet( SwAttrPool& rPool )
 {
-    OSL_ENSURE( !mpAttrSet.get(), "AttrSet ist doch gesetzt" );
+    OSL_ENSURE( !mpAttrSet.get(), "AttrSet is already set" );
     SwAttrSet aNewAttrSet( rPool, aNoTxtNodeSetRange );
 
     // put names of parent style and conditional style:
@@ -84,21 +82,17 @@ void SwNoTxtNode::NewAttrSet( SwAttrPool& rPool )
     mpAttrSet = GetDoc()->GetIStyleAccess().getAutomaticStyle( aNewAttrSet, IStyleAccess::AUTO_STYLE_NOTXT );
 }
 
-// Dummies fuer das Laden/Speichern von persistenten Daten
-// bei Grafiken und OLE-Objekten
-
-
+/// Dummies for loading/saving of persistent data
+/// when working with graphics and OLE objects
 sal_Bool SwNoTxtNode::RestorePersistentData()
 {
     return sal_True;
 }
 
-
 sal_Bool SwNoTxtNode::SavePersistentData()
 {
     return sal_True;
 }
-
 
 void SwNoTxtNode::SetContour( const PolyPolygon *pPoly, sal_Bool bAutomatic )
 {
@@ -111,7 +105,6 @@ void SwNoTxtNode::SetContour( const PolyPolygon *pPoly, sal_Bool bAutomatic )
     bContourMapModeValid = sal_True;
     bPixelContour = sal_False;
 }
-
 
 void SwNoTxtNode::CreateContour()
 {
@@ -261,7 +254,6 @@ sal_Bool SwNoTxtNode::IsPixelContour() const
 
     return bRet;
 }
-
 
 Graphic SwNoTxtNode::GetGraphic() const
 {
