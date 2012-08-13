@@ -67,6 +67,10 @@ $(eval $(call gb_Library_add_defs,vcl,\
 
 $(eval $(call gb_Library_use_sdk_api,vcl))
 
+$(eval $(call gb_Library_use_externals,vcl,\
+	nss3 \
+))
+
 $(eval $(call gb_Library_use_libraries,vcl,\
     svl \
     tl \
@@ -82,38 +86,6 @@ $(eval $(call gb_Library_use_libraries,vcl,\
     sal \
     $(gb_STDLIBS) \
 ))
-
-ifeq ($(SYSTEM_NSS),YES)
-
-$(eval $(call gb_Library_set_include,vcl,\
-	$$(INCLUDE) \
-	$(NSS_CFLAGS) \
-))
-
-$(eval $(call gb_Library_add_defs,vcl,\
-	-DSYSTEM_MOZILLA \
-))
-
-$(eval $(call gb_Library_add_libs,vcl,\
-	$(NSS_LIBS) \
-))
-
-else
-
-$(eval $(call gb_Library_set_include,vcl,\
-	$$(INCLUDE) \
-	-I$(OUTDIR)/inc/mozilla/nspr \
-	-I$(OUTDIR)/inc/mozilla/nss \
-))
-
-$(eval $(call gb_Library_use_libraries,vcl,\
-	nspr4 \
-	nss3 \
-	smime3 \
-))
-
-endif # ifeq ($(SYSTEM_NSS),YES)
-
 
 ifneq ($(OS),IOS)
 $(eval $(call gb_Library_use_libraries,vcl,\

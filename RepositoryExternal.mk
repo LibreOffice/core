@@ -1884,7 +1884,11 @@ endef
 
 ifeq ($(SYSTEM_NSS),YES)
 
-define gb_LinkTarget__use_plc4
+define gb_LinkTarget__use_nss3
+$(call gb_LinkTarget_add_defs,$(1),\
+	-DSYSTEM_MOZILLA \
+)
+
 $(call gb_LinkTarget_set_include,$(1),\
     $$(INCLUDE) \
     $(NSS_CFLAGS) \
@@ -1896,6 +1900,11 @@ $(call gb_LinkTarget_add_libs,$(1),\
 
 endef
 
+define gb_LinkTarget__use_plc4
+$(call gb_LinkTarget__use_nss3,$(1))
+
+endef
+
 else
 
 $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO,\
@@ -1904,6 +1913,21 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO,\
     nss3 \
     plc4 \
 ))
+
+define gb_LinkTarget__use_nss3
+$(call gb_LinkTarget_set_include,$(1),\
+	$$(INCLUDE) \
+	-I$(OUTDIR)/inc/mozilla/nspr \
+	-I$(OUTDIR)/inc/mozilla/nss \
+)
+
+$(call gb_LinkTarget_use_libraries,$(1),\
+	nspr4 \
+	nss3 \
+	smime3 \
+)
+
+endef
 
 define gb_LinkTarget__use_plc4
 $(call gb_LinkTarget_use_libraries,$(1),\
