@@ -1541,9 +1541,14 @@ bool PrintFontManager::analyzeTrueTypeFile( PrintFont* pFont ) const
         if( aInfo.usubfamily )
             pFont->m_aStyleName = OUString( aInfo.usubfamily );
 
-        pFont->m_nPSName = m_pAtoms->getAtom( ATOM_PSNAME,
-            rtl::OUString(aInfo.psname, rtl_str_getLength(aInfo.psname), aEncoding),
-            sal_True );
+        SAL_WARN_IF( !aInfo.psname, "vcl", "No PostScript name in font:" << aFile.getStr() );
+
+        rtl::OUString sPSName = aInfo.psname ?
+            rtl::OUString(aInfo.psname, rtl_str_getLength(aInfo.psname), aEncoding) :
+            m_pAtoms->getString(ATOM_FAMILYNAME, pFont->m_nFamilyName); // poor font does not have a postscript name
+
+        pFont->m_nPSName = m_pAtoms->getAtom( ATOM_PSNAME, sPSName, sal_True );
+
         switch( aInfo.weight )
         {
             case FW_THIN:           pFont->m_eWeight = WEIGHT_THIN; break;
