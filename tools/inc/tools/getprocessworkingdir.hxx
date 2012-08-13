@@ -21,7 +21,6 @@
 #define INCLUDED_TOOLS_GETPROCESSWORKINGDIR_HXX
 
 #include "sal/config.h"
-
 #include "tools/toolsdllapi.h"
 
 namespace rtl { class OUString; }

@@ -248,7 +248,6 @@ inline sal_uIntPtr ERRCODE_TOERROR( sal_uIntPtr x )
                                          ERRCODE_AREA_IO)
 
 // FsysErrorCodes
-
 #define FSYS_ERR_OK                     ERRCODE_NONE
 #define FSYS_ERR_MISPLACEDCHAR          ERRCODE_IO_MISPLACEDCHAR
 #define FSYS_ERR_INVALIDCHAR            ERRCODE_IO_INVALIDCHAR
@@ -265,7 +264,6 @@ inline sal_uIntPtr ERRCODE_TOERROR( sal_uIntPtr x )
 #define FSYS_ERR_UNKNOWN                ERRCODE_IO_UNKNOWN
 
 // StreamErrorCodes
-
 #define SVSTREAM_OK                     ERRCODE_NONE
 
 #define SVSTREAM_GENERALERROR           ERRCODE_IO_GENERAL

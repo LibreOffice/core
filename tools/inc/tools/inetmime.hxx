@@ -35,7 +35,6 @@ class INetContentTypeParameterList;
 class INetMIMECharsetList_Impl;
 class INetMIMEOutputSink;
 
-//============================================================================
 class TOOLS_DLLPUBLIC INetMIME
 {
 public:
@@ -824,7 +823,6 @@ inline sal_Unicode * INetMIME::putUTF32Character(sal_Unicode * pBuffer,
     return pBuffer;
 }
 
-//============================================================================
 class INetMIMEOutputSink
 {
 public:
@@ -1063,7 +1061,6 @@ inline void INetMIME::writeEscapeSequence(INetMIMEOutputSink & rSink,
           << sal_uInt8(getHexDigit(nChar & 15));
 }
 
-//============================================================================
 class INetMIMEStringOutputSink: public INetMIMEOutputSink
 {
     rtl::OStringBuffer m_aBuffer;
@@ -1087,7 +1084,6 @@ public:
     }
 };
 
-//============================================================================
 class INetMIMEEncodedWordOutputSink
 {
 public:
@@ -1191,7 +1187,6 @@ inline bool INetMIMEEncodedWordOutputSink::flush()
     return m_ePrevCoding != CODING_NONE;
 }
 
-//============================================================================
 struct INetContentTypeParameter
 {
     /** The name of the attribute, in US-ASCII encoding and converted to lower
@@ -1248,7 +1243,6 @@ struct INetContentTypeParameter
     }
 };
 
-//============================================================================
 class TOOLS_DLLPUBLIC INetContentTypeParameterList
 {
 public:
@@ -1276,7 +1270,6 @@ private:
 
     boost::ptr_vector<INetContentTypeParameter> maEntries;
 };
-
 
 #endif
 

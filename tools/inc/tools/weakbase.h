@@ -16,7 +16,6 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-
 #ifndef _TOOLS_WEAKBASE_H_
 #define _TOOLS_WEAKBASE_H_
 
@@ -55,8 +54,6 @@
 namespace tools
 {
 
-// --------------------------------------------------------------------
-
 /** private connection helper, do not use directly */
 template <class reference_type>
 struct WeakConnection
@@ -68,8 +65,6 @@ struct WeakConnection
     void acquire() { mnRefCount++; }
     void release() { mnRefCount--; if( mnRefCount == 0 ) delete this; }
 };
-
-// --------------------------------------------------------------------
 
 /** template implementation to hold a weak reference to an instance of type reference_type */
 template <class reference_type>
@@ -120,8 +115,6 @@ public:
 private:
     WeakConnection< reference_type >* mpWeakConnection;
 };
-
-// --------------------------------------------------------------------
 
 /** derive your implementation classes from this class if you want them to support weak references */
 template <class reference_type>

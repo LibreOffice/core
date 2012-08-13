@@ -27,7 +27,6 @@ class Link;
 class TOOLS_DLLPUBLIC Line
 {
 private:
-
     Point           maStart;
     Point           maEnd;
 

@@ -55,7 +55,6 @@ class SvStream;
 class TOOLS_DLLPUBLIC ZCodec
 {
 private:
-
     sal_uIntPtr         mbInit;
     sal_Bool            mbStatus;
     sal_Bool            mbFinish;
@@ -100,7 +99,6 @@ public:
 
 class GZCodec : public ZCodec
 {
-
 public:
                     GZCodec(){};
                     ~GZCodec(){};

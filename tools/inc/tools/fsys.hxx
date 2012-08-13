@@ -133,6 +133,7 @@ enum FSysExact
 
 // FileStat
 struct dirent;
+
 class TOOLS_DLLPUBLIC FileStat
 {
     friend class    Dir;
@@ -150,6 +151,7 @@ class TOOLS_DLLPUBLIC FileStat
     Time            aTimeModified;
     Date            aDateAccessed;
     Time            aTimeAccessed;
+
 private:
     TOOLS_DLLPRIVATE void           ImpInit( void* );
 
@@ -230,6 +232,7 @@ protected:
 protected:
     void                SetError( sal_uIntPtr nErr ) { nError = nErr; }
     DirEntry*           GetParent() { return pParent; }
+
 public:
                         DirEntry( DirEntryFlag aDirFlag = FSYS_FLAG_CURRENT );
                         DirEntry( const DirEntry& rEntry );

@@ -33,7 +33,6 @@ private:
     sal_uInt32      nDate;
 
 public:
-
     enum DateInitSystem
     {
         SYSTEM

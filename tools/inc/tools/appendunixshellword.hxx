@@ -23,7 +23,6 @@
 #include "sal/config.h"
 
 #if defined UNX
-
 #include "tools/toolsdllapi.h"
 
 namespace rtl {
@@ -45,7 +44,6 @@ TOOLS_DLLPUBLIC void appendUnixShellWord(
     rtl::OStringBuffer * accumulator, rtl::OString const & text);
 
 }
-
 #endif
 
 #endif

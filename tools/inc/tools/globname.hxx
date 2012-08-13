@@ -25,8 +25,6 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <tools/string.hxx>
 
-/*************************************************************************
-*************************************************************************/
 struct ImpSvGlobalName
 {
     sal_uInt8       szData[ 16 ];
@@ -50,12 +48,15 @@ typedef struct _GUID GUID;
 #else
 struct GUID;
 #endif
+
 typedef GUID CLSID;
 class SvStream;
+
 class TOOLS_DLLPUBLIC SvGlobalName
 {
     ImpSvGlobalName * pImp;
     void    NewImp();
+
 public:
             SvGlobalName();
             SvGlobalName( const SvGlobalName & rObj )

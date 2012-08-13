@@ -16,7 +16,6 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-
 #ifndef _TOOLS_DEBUG_HXX
 #define _TOOLS_DEBUG_HXX
 
@@ -164,6 +163,7 @@ inline void DbgSetAbort( DbgPrintLine pProc )
 }
 
 typedef sal_uInt16 DbgChannelId;
+
 /** registers a user-defined channel for emitting the diagnostic messages
 
     Note that such a user-defined channel cannot be revoked during the lifetime

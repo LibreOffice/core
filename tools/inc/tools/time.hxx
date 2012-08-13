@@ -36,11 +36,11 @@ private:
     sal_Int32           nTime;
 
 public:
-
     enum TimeInitSystem
     {
         SYSTEM
     };
+
     // temporary until all uses are inspected and resolved
     enum TimeInitEmpty
     {

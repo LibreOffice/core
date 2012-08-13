@@ -16,7 +16,6 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-
 #ifndef _TOOLS_FONTENUM_HXX
 #define _TOOLS_FONTENUM_HXX
 
@@ -25,69 +24,44 @@
 
 #ifndef ENUM_FONTFAMILY_DECLARED
 #define ENUM_FONTFAMILY_DECLARED
-
 enum FontFamily { FAMILY_DONTKNOW, FAMILY_DECORATIVE, FAMILY_MODERN,
                   FAMILY_ROMAN, FAMILY_SCRIPT, FAMILY_SWISS, FAMILY_SYSTEM, FontFamily_FORCE_EQUAL_SIZE=SAL_MAX_ENUM };
-
 #endif
-
-// ------------------------------------------------------------
 
 #ifndef ENUM_FONTPITCH_DECLARED
 #define ENUM_FONTPITCH_DECLARED
-
 enum FontPitch { PITCH_DONTKNOW, PITCH_FIXED, PITCH_VARIABLE, FontPitch_FORCE_EQUAL_SIZE=SAL_MAX_ENUM };
-
 #endif
-
-// ------------------------------------------------------------
 
 #ifndef ENUM_TEXTALIGN_DECLARED
 #define ENUM_TEXTALIGN_DECLARED
-
 enum TextAlign { ALIGN_TOP, ALIGN_BASELINE, ALIGN_BOTTOM, TextAlign_FORCE_EQUAL_SIZE=SAL_MAX_ENUM };
-
 #endif
-
-// ------------------------------------------------------------
 
 #ifndef ENUM_FONTWEIGHT_DECLARED
 #define ENUM_FONTWEIGHT_DECLARED
-
 enum FontWeight { WEIGHT_DONTKNOW, WEIGHT_THIN, WEIGHT_ULTRALIGHT,
                   WEIGHT_LIGHT, WEIGHT_SEMILIGHT, WEIGHT_NORMAL,
                   WEIGHT_MEDIUM, WEIGHT_SEMIBOLD, WEIGHT_BOLD,
                   WEIGHT_ULTRABOLD, WEIGHT_BLACK, FontWeight_FORCE_EQUAL_SIZE=SAL_MAX_ENUM };
-
 #endif
-
-// ------------------------------------------------------------
 
 #ifndef ENUM_FONTWIDTH_DECLARED
 #define ENUM_FONTWIDTH_DECLARED
-
 enum FontWidth { WIDTH_DONTKNOW, WIDTH_ULTRA_CONDENSED, WIDTH_EXTRA_CONDENSED,
                  WIDTH_CONDENSED, WIDTH_SEMI_CONDENSED, WIDTH_NORMAL,
                  WIDTH_SEMI_EXPANDED, WIDTH_EXPANDED, WIDTH_EXTRA_EXPANDED,
                  WIDTH_ULTRA_EXPANDED,
                  FontWidth_FORCE_EQUAL_SIZE=SAL_MAX_ENUM };
-
 #endif
-
-// ------------------------------------------------------------
 
 #ifndef ENUM_FONTITALIC_DECLARED
 #define ENUM_FONTITALIC_DECLARED
-
 enum FontItalic { ITALIC_NONE, ITALIC_OBLIQUE, ITALIC_NORMAL, ITALIC_DONTKNOW, FontItalic_FORCE_EQUAL_SIZE=SAL_MAX_ENUM };
-
 #endif
-
-// ------------------------------------------------------------
 
 #ifndef ENUM_FONTUNDERLINE_DECLARED
 #define ENUM_FONTUNDERLINE_DECLARED
-
 enum FontUnderline { UNDERLINE_NONE, UNDERLINE_SINGLE, UNDERLINE_DOUBLE,
                      UNDERLINE_DOTTED, UNDERLINE_DONTKNOW,
                      UNDERLINE_DASH, UNDERLINE_LONGDASH,
@@ -99,22 +73,15 @@ enum FontUnderline { UNDERLINE_NONE, UNDERLINE_SINGLE, UNDERLINE_DOUBLE,
                      UNDERLINE_BOLDDASHDOT, UNDERLINE_BOLDDASHDOTDOT,
                      UNDERLINE_BOLDWAVE,
                      FontUnderline_FORCE_EQUAL_SIZE=SAL_MAX_ENUM };
-
 #endif
-
-// ------------------------------------------------------------
 
 #ifndef ENUM_FONTSTRIKEOUT_DECLARED
 #define ENUM_FONTSTRIKEOUT_DECLARED
-
 enum FontStrikeout { STRIKEOUT_NONE, STRIKEOUT_SINGLE, STRIKEOUT_DOUBLE,
                      STRIKEOUT_DONTKNOW, STRIKEOUT_BOLD,
                      STRIKEOUT_SLASH, STRIKEOUT_X,
                      FontStrikeout_FORCE_EQUAL_SIZE=SAL_MAX_ENUM };
-
 #endif
-
-// ------------------------------------------------------------
 
 #ifndef ENUM_FONTEMPHASISMARK_DECLARED
 #define ENUM_FONTEMPHASISMARK_DECLARED
@@ -137,28 +104,20 @@ typedef sal_uInt16 FontEmphasisMark;
 
 #endif
 
-// ------------------------------------------------------------
-
 #ifndef ENUM_FONTTYPE_DECLARED
 #define ENUM_FONTTYPE_DECLARED
-
 enum FontType { TYPE_DONTKNOW, TYPE_RASTER, TYPE_VECTOR, TYPE_SCALABLE,
                 FontType_FORCE_EQUAL_SIZE=SAL_MAX_ENUM };
-
 #endif
 
 #ifndef ENUM_FONTEMBEDDEDBITMAP_DECLARED
 #define ENUM_FONTEMBEDDEDBITMAP_DECLARED
-
 enum FontEmbeddedBitmap { EMBEDDEDBITMAP_DONTKNOW, EMBEDDEDBITMAP_FALSE, EMBEDDEDBITMAP_TRUE };
-
 #endif
 
 #ifndef ENUM_FONTANTIALIAS_DECLARED
 #define ENUM_FONTANTIALIAS_DECLARED
-
 enum FontAntiAlias { ANTIALIAS_DONTKNOW, ANTIALIAS_FALSE, ANTIALIAS_TRUE };
-
 #endif
 
 #endif

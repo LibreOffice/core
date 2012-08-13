@@ -120,7 +120,6 @@
 #define RT_SYS_STRING           (RSC_NOTYPE + 0xf3) // special case
 #define RT_SYS_FILE             (RSC_NOTYPE + 0xf4) // not implemented
 
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

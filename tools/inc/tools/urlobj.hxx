@@ -30,13 +30,11 @@ namespace com { namespace sun { namespace star { namespace util {
     class XStringWidth;
 } } } }
 
-//============================================================================
 // Special tokens:
 #define INET_PATH_TOKEN '/'
 #define INET_MARK_TOKEN '#'
 #define INET_HEX_ESCAPE '%'
 
-//============================================================================
 // Common URL prefixes for various schemes:
 #define INET_FTP_SCHEME "ftp://"
 #define INET_HTTP_SCHEME "http://"
@@ -66,7 +64,6 @@ enum
     URL_PREFIX_PRIV_EXTERN_LEN = RTL_CONSTASCII_LENGTH(URL_PREFIX_PRIV_EXTERN)
 };
 
-//============================================================================
 // Schemes:
 enum INetProtocol
 {
@@ -109,11 +106,9 @@ enum INetProtocol
     INET_PROT_END = 35
 };
 
-//============================================================================
 class TOOLS_DLLPUBLIC INetURLObject
 {
 public:
-    //========================================================================
     // Get- and Set-Methods:
 
     /** The way input strings that represent (parts of) URIs are interpreted
@@ -190,7 +185,6 @@ public:
         DECODE_UNAMBIGUOUS
     };
 
-    //========================================================================
     // General Structure:
 
     inline INetURLObject():
@@ -230,7 +224,6 @@ public:
     inline bool operator >(INetURLObject const & rObject) const
     { return rObject < *this; }
 
-    //========================================================================
     // Strict Parsing:
 
     inline INetURLObject(const rtl::OString& rTheAbsURIRef,
@@ -256,7 +249,6 @@ public:
                     EncodeMechanism eMechanism = WAS_ENCODED,
                     rtl_TextEncoding eCharset = RTL_TEXTENCODING_UTF8);
 
-    //========================================================================
     // Smart Parsing:
 
     /** The supported notations for file system paths.
@@ -395,7 +387,6 @@ public:
                  bool bRelativeNonURIs = false,
                  FSysStyle eStyle = FSYS_DETECT) const;
 
-    //========================================================================
     // Relative URLs:
 
     inline bool
@@ -446,7 +437,6 @@ public:
               rtl_TextEncoding eCharset = RTL_TEXTENCODING_UTF8,
               FSysStyle eStyle = FSYS_DETECT);
 
-    //========================================================================
     // External URLs:
 
     rtl::OUString getExternalURL(DecodeMechanism eMechanism = DECODE_TO_IURI,
@@ -481,7 +471,6 @@ public:
                                            rtl_TextEncoding eCharset
                                                = RTL_TEXTENCODING_UTF8);
 
-    //========================================================================
     // Scheme:
 
     struct SchemeInfo;
@@ -503,7 +492,6 @@ public:
     static INetProtocol CompareProtocolScheme(rtl::OUString const &
                                                   rTheAbsURIRef);
 
-    //========================================================================
     // User Info:
 
     inline bool HasUserData() const { return m_aUser.isPresent(); }
@@ -551,7 +539,6 @@ public:
                                rtl_TextEncoding eCharset
                                    = RTL_TEXTENCODING_UTF8);
 
-    //========================================================================
     // Host and Port:
 
     inline bool HasPort() const { return m_aPort.isPresent(); }
@@ -578,7 +565,6 @@ public:
 
     bool SetPort(sal_uInt32 nThePort);
 
-    //========================================================================
     // Path:
 
     inline bool HasURLPath() const { return !m_aPath.isEmpty(); }
@@ -598,7 +584,6 @@ public:
                            rtl_TextEncoding eCharset = RTL_TEXTENCODING_UTF8)
     { return setPath(rThePath, false, eMechanism, eCharset); }
 
-    //========================================================================
     // Hierarchical Path:
 
     /** A constant to address the last segment in various methods dealing with
@@ -885,7 +870,6 @@ public:
      */
     bool removeFinalSlash();
 
-    //========================================================================
     // Query:
 
     inline bool HasParam() const { return m_aQuery.isPresent(); }
@@ -903,7 +887,6 @@ public:
                          EncodeMechanism eMechanism = WAS_ENCODED,
                          rtl_TextEncoding eCharset = RTL_TEXTENCODING_UTF8);
 
-    //========================================================================
     // Fragment:
 
     inline bool HasMark() const { return m_aFragment.isPresent(); }
@@ -921,7 +904,6 @@ public:
                         EncodeMechanism eMechanism = WAS_ENCODED,
                         rtl_TextEncoding eCharset = RTL_TEXTENCODING_UTF8);
 
-    //========================================================================
     // File URLs:
 
     /** Create an INetURLObject from a file system path.
@@ -964,14 +946,12 @@ public:
     rtl::OUString getFSysPath(FSysStyle eStyle, sal_Unicode * pDelimiter = 0)
         const;
 
-    //========================================================================
     // POP3 and URLs:
 
     rtl::OUString GetMsgId(DecodeMechanism eMechanism = DECODE_TO_IURI,
                        rtl_TextEncoding eCharset = RTL_TEXTENCODING_UTF8)
         const;
 
-    //========================================================================
     // Coding:
 
     enum Part
@@ -1108,14 +1088,12 @@ public:
                                rtl_TextEncoding eCharset,
                                EscapeType & rEscapeType);
 
-    //========================================================================
     // Specialized helpers:
 
     static sal_uInt32 scanDomain(sal_Unicode const *& rBegin,
                                  sal_Unicode const * pEnd,
                                  bool bEager = true);
 
-    //========================================================================
     // OBSOLETE Hierarchical Path:
 
     rtl::OUString GetPartBeforeLastName(DecodeMechanism eMechanism
@@ -1164,7 +1142,6 @@ public:
 
     bool CutLastName();
 
-    //========================================================================
     // OBSOLETE File URLs:
 
     rtl::OUString PathToFileName() const;
@@ -1201,7 +1178,6 @@ public:
 
     bool IsCaseSensitive() const;
 
-    //========================================================================
 
 private:
     // General Structure:

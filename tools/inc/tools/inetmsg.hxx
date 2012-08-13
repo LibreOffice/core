@@ -21,12 +21,11 @@
 
 #include "tools/toolsdllapi.h"
 #include <sal/types.h>
-
 #include <rtl/textenc.h>
-
 #include <tools/inetmime.hxx>
 #include <tools/stream.hxx>
 #include <tools/string.hxx>
+
 #include <vector>
 
 class DateTime;
@@ -81,6 +80,7 @@ public:
 };
 
  typedef ::std::vector< INetMessageHeader* > HeaderList_impl;
+
 class INetMessage
 {
     HeaderList_impl m_aHeaderList;
@@ -221,10 +221,8 @@ public:
 #define INETMSG_RFC822_SENDER             11
 #define INETMSG_RFC822_SUBJECT            12
 #define INETMSG_RFC822_TO                 13
-
 #define INETMSG_RFC822_X_MAILER           14
 #define INETMSG_RFC822_RETURN_RECEIPT_TO  15
-
 #define INETMSG_RFC822_NUMHDR             16
 
 class TOOLS_DLLPUBLIC INetRFC822Message : public INetMessage
@@ -379,7 +377,6 @@ public:
 #define INETMSG_MIME_CONTENT_ID                 3
 #define INETMSG_MIME_CONTENT_TYPE               4
 #define INETMSG_MIME_CONTENT_TRANSFER_ENCODING  5
-
 #define INETMSG_MIME_NUMHDR                     6
 
 enum INetMessageContainerType
@@ -395,10 +392,10 @@ enum INetMessageContainerType
 
 class INetMIMEMessage;
 typedef ::std::vector< INetMIMEMessage* > INetMIMEMessgeList_impl;
+
 class TOOLS_DLLPUBLIC INetMIMEMessage : public INetRFC822Message
 {
     sal_uIntPtr             m_nIndex[INETMSG_MIME_NUMHDR];
-
     INetMIMEMessage*        pParent;
     INetMIMEMessgeList_impl aChildren;
     rtl::OString            m_aBoundary;

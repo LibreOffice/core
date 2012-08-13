@@ -42,19 +42,13 @@
  * There will not be any fixes to the code here.
  ******************************************************************************/
 
-// -----------------------------------------------------------------------
-
 class ResId;
 class String;
 class UniString;
 
-// -----------------------------------------------------------------------
-
 #define BYTESTRING_TO_UNISTRING_CVTFLAGS    (RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_MAPTOPRIVATE |\
                                              RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_DEFAULT |\
                                              RTL_TEXTTOUNICODE_FLAGS_INVALID_DEFAULT)
-
-// -----------------------------------------------------------------------
 
 // CharSet
 
@@ -64,8 +58,6 @@ class UniString;
 typedef rtl_TextEncoding CharSet;
 
 #endif
-
-// -----------------------------------------------------------------------
 
 // String-Types
 
@@ -82,8 +74,6 @@ typedef rtl_TextEncoding CharSet;
 #endif
 
 enum StringCompare { COMPARE_LESS = -1, COMPARE_EQUAL = 0, COMPARE_GREATER = 1 };
-
-// -----------------------------------------------------------------------
 
 //Internal String data
 

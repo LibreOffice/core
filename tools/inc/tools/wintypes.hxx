@@ -270,7 +270,6 @@ typedef sal_Int64 WinBits;
 // DO NOT USE: 0x008000000000, that's WB_SYSTEMCHILDWINDOW
 #define WB_QUICK_SEARCH         ((WinBits)SAL_CONST_INT64(0x010000000000))
 
-
 // For FileOpen Dialog
 #define WB_PATH                 ((WinBits)0x00100000)
 #define WB_OPEN                 ((WinBits)0x00200000)

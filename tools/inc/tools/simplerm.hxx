@@ -31,6 +31,7 @@
 #include "tools/toolsdllapi.h"
 
 class InternalResMgr;
+
 class TOOLS_DLLPUBLIC SimpleResMgr
 {
 protected:

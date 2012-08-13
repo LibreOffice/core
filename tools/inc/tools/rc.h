@@ -27,6 +27,7 @@
 #define RSC_EXTRAMAPUNIT                0xFFFF // do not change that value!
 
 typedef short RSWND_STYLE;
+
 #define RSWND_DISABLED                  0x01
 #define RSWND_CLIENTSIZE                0x02
 

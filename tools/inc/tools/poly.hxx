@@ -28,8 +28,6 @@
 #define POLY_APPEND             (0xFFFF)
 #define POLYPOLY_APPEND         (0xFFFF)
 
-// ------------------------------------------------------------------------
-
 #define POLY_OPTIMIZE_NONE      0x00000000UL
 #define POLY_OPTIMIZE_OPEN      0x00000001UL
 #define POLY_OPTIMIZE_CLOSE     0x00000002UL
@@ -64,7 +62,6 @@ private:
     union           { sal_uIntPtr mnAbsolut; sal_uInt16 mnPercent; };
 
 public:
-
                     PolyOptimizeData() : eType( DATA_NONE ) {}
                     PolyOptimizeData( sal_uIntPtr nAbsolut ) : eType( DATA_ABSOLUT ), mnAbsolut( nAbsolut ) {}
                     PolyOptimizeData( sal_uInt16 nPercent ) : eType( DATA_PERCENT ), mnPercent( nPercent ) {}
@@ -87,13 +84,11 @@ namespace basegfx
 class TOOLS_DLLPUBLIC Polygon
 {
 private:
-
     ImplPolygon*        mpImplPolygon;
 
     TOOLS_DLLPRIVATE inline void ImplMakeUnique();
 
 public:
-
     static void         ImplReduceEdges( Polygon& rPoly, const double& rArea, sal_uInt16 nPercent );
     void                ImplRead( SvStream& rIStream );
     void                ImplWrite( SvStream& rOStream ) const;
@@ -202,7 +197,6 @@ public:
 class TOOLS_DLLPUBLIC PolyPolygon
 {
 private:
-
     ImplPolyPolygon*    mpImplPolyPolygon;
 
     TOOLS_DLLPRIVATE void  ImplDoOperation( const PolyPolygon& rPolyPoly, PolyPolygon& rResult, sal_uIntPtr nOperation ) const;
@@ -210,7 +204,6 @@ private:
     TOOLS_DLLPRIVATE void  ImplSetFromArtVpath( void *pVpath );
 
 public:
-
                         PolyPolygon( sal_uInt16 nInitSize = 16, sal_uInt16 nResize = 16 );
                         PolyPolygon( const Polygon& rPoly );
                         PolyPolygon( sal_uInt16 nPoly, const sal_uInt16* pPointCountAry,

@@ -92,8 +92,6 @@ public:
     inline sal_Bool         IsNegative( Vector2D& rVec ) const { return !IsPositive( rVec ); }
 };
 
-// -----------------------------------------------------------------------------
-
 inline Vector2D& Vector2D::Normalize()
 {
     double fLen = Scalar( *this );

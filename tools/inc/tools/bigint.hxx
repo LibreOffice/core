@@ -25,6 +25,7 @@
 #include <tools/solar.h>
 
 class SvStream;
+
 #ifdef _TLBIGINT_INT64
 struct SbxINT64;
 struct SbxUINT64;

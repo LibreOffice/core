@@ -25,8 +25,6 @@
 
 typedef void* (*TypeId)();
 
-//-------------------------------------------------------------------------
-
 #define TYPEINFO() \
         static  void*  CreateType(); \
         static  TypeId StaticType(); \
@@ -51,8 +49,6 @@ typedef void* (*TypeId)();
                 return sal_True
 
 #define STATICTYPE(sType) (sType::StaticType())
-
-//-------------------------------------------------------------------------
 
 #define SUPERTYPE(sSuper) \
             if ( sSuper::IsOf(aSameOrSuperType ) ) \
@@ -102,8 +98,6 @@ typedef void* (*TypeId)();
 #define ISA(sType) IsA(sType::StaticType())
 #define ISOF(sType) IsOf(sType::StaticType())
 #define CREATE(TypeId) (TypeId())
-
-//-------------------------------------------------------------------------
 
 /** Exemplary application macros for pointers
     (can be extended for use with references)

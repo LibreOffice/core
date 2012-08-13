@@ -26,13 +26,9 @@
 #include <vector>
 #include <set>
 
-//------------------------------------------------------------------
-
 typedef ::std::vector< Range* > ImpSelList;
 
 #define SFX_ENDOFSELECTION      ULONG_MAX
-
-//------------------------------------------------------------------
 
 class TOOLS_DLLPUBLIC MultiSelection
 {
@@ -127,6 +123,7 @@ public:
                   sal_Int32 i_nCurrent )
         : pEnumerator( i_pEnum ), pPossibleValues( i_pPossibleValues )
         , nRangeIndex( i_nRange ), nCurrent( i_nCurrent ) {}
+
     public:
         Iterator() : pEnumerator( NULL ), pPossibleValues( NULL ), nRangeIndex( -1 ), nCurrent( -1 ) {}
         Iterator& operator++();
@@ -150,7 +147,6 @@ public:
 
     bool isValidInput() const { return mbValidInput; }
     bool hasValue( sal_Int32 nValue, const std::set< sal_Int32 >* i_pPossibleValues = NULL ) const;
-
 
     /**
     i_rPageRange:     the string to be changed into a sequence of numbers

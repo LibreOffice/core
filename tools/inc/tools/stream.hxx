@@ -92,6 +92,7 @@ typedef sal_uInt16 StreamMode;
 #define ID_PERSISTSTREAM                6
 
 class SvStream;
+
 typedef SvStream& (*SvStrPtr)( SvStream& );
 
 inline SvStream& operator<<( SvStream& rStr, SvStrPtr f );
@@ -131,12 +132,10 @@ public:
     virtual const SvStream * GetStream() const { return m_pStream; }
 
     virtual void SetSynchronMode(sal_Bool bTheSync = sal_True) { m_bSync = bTheSync; }
-
     virtual sal_Bool IsSynchronMode() const { return m_bSync; }
 
     virtual ErrCode ReadAt(sal_Size nPos, void * pBuffer, sal_Size nCount,
                            sal_Size * pRead) const;
-
     virtual ErrCode WriteAt(sal_Size nPos, const void * pBuffer, sal_Size nCount,
                             sal_Size * pWritten);
 
@@ -145,7 +144,6 @@ public:
     virtual ErrCode SetSize(sal_Size nSize);
 
     virtual ErrCode LockRegion(sal_Size, sal_Size, LockType);
-
     virtual ErrCode UnlockRegion(sal_Size, sal_Size, LockType);
 
     virtual ErrCode Stat(SvLockBytesStat * pStat, SvLockBytesStatFlag) const;
@@ -161,7 +159,6 @@ public:
     TYPEINFO();
 
     SvOpenLockBytes(): SvLockBytes(0, sal_False) {}
-
     SvOpenLockBytes(SvStream * pStream, sal_Bool bOwner):
         SvLockBytes(pStream, bOwner) {}
 
@@ -192,7 +189,6 @@ public:
 
     virtual ErrCode ReadAt(sal_Size nPos, void * pBuffer, sal_Size nCount,
                            sal_Size * pRead) const;
-
     virtual ErrCode WriteAt(sal_Size nPos, const void * pBuffer, sal_Size nCount,
                             sal_Size * pWritten);
 

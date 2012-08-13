@@ -55,6 +55,7 @@ class ResId
         m_pResource = pRes; m_nResId = nId; m_nRT = RSC_NOTYPE; m_pResMgr = &rMgr; m_nRT2 = RSC_NOTYPE; m_nWinBits = 0;
         OSL_ENSURE( m_pResMgr != NULL, "ResId without ResMgr created" );
     }
+
     public:
     ResId( RSHEADER_TYPE * pRc, ResMgr& rMgr )
     {

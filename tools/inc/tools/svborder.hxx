@@ -26,6 +26,7 @@
 class TOOLS_DLLPUBLIC SvBorder
 {
     long nTop, nRight, nBottom, nLeft;
+
 public:
     SvBorder()
     { nTop = nRight = nBottom = nLeft = 0; }
@@ -81,8 +82,6 @@ public:
 
 TOOLS_DLLPUBLIC Rectangle & operator += ( Rectangle & rRect, const SvBorder & rBorder );
 TOOLS_DLLPUBLIC Rectangle & operator -= ( Rectangle & rRect, const SvBorder & rBorder );
-
-//=========================================================================
 
 #endif
 

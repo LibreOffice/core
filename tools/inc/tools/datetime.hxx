@@ -27,7 +27,6 @@
 class TOOLS_DLLPUBLIC DateTime : public Date, public Time
 {
 public:
-
     enum DateTimeInitSystem
     {
         SYSTEM

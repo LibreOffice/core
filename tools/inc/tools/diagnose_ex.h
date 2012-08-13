@@ -16,7 +16,6 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-
 #ifndef TOOLS_DIAGNOSE_EX_H
 #define TOOLS_DIAGNOSE_EX_H
 
@@ -28,12 +27,10 @@
 
 #include <boost/current_function.hpp>
 
-
 #define OSL_UNUSED( expression ) \
     (void)(expression)
 
 #if OSL_DEBUG_LEVEL > 0
-
     #include <com/sun/star/configuration/CorruptedConfigurationException.hpp>
     #include <com/sun/star/task/ErrorCodeIOException.hpp>
     #include <cppuhelper/exc_hlp.hxx>
@@ -89,11 +86,8 @@
         OSL_ENSURE( false, sMessage.getStr() )
 
 #else   // OSL_DEBUG_LEVEL
-
     #define DBG_UNHANDLED_EXCEPTION()
-
 #endif  // OSL_DEBUG_LEVEL
-
 
 /** This macro asserts the given condition (in debug mode), and throws
     an IllegalArgumentException afterwards.

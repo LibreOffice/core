@@ -16,23 +16,19 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-
 #ifndef INCLUDED_TOOLS_PATHUTILS_HXX
 #define INCLUDED_TOOLS_PATHUTILS_HXX
 
 #include "sal/config.h"
 
 #if defined WNT
-
 #include <cstddef>
-
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 
 // The compiled code is not part of the tl dynamic library, but is delivered as
 // pathutils-obj and pathutils-slo objects (it is linked into special
 // executables and dynamic libraries that do not link against OOo libraries):
-
 namespace tools {
 
 /** Determine the filename part of a path.
@@ -86,7 +82,6 @@ WCHAR * resolveLink(WCHAR * path);
 }
 
 #endif
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

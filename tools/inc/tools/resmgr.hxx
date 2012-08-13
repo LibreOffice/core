@@ -59,6 +59,7 @@ typedef rtl::OUString (*ResHookProc)( const rtl::OUString& rStr );
 
 class Resource;
 class ResMgr;
+
 struct ImpRCStack
 {
     // pResource and pClassRes equal NULL: resource was not loaded
@@ -121,6 +122,7 @@ private:
     // no copying
     ResMgr(const ResMgr&);
     ResMgr& operator=(const ResMgr&);
+
 public:
     static void         DestroyAllResMgr();  ///< Called upon app shutdown
 
@@ -198,14 +200,17 @@ inline sal_uInt32 RSHEADER_TYPE::GetId()
 {
     return (sal_uInt32)ResMgr::GetLong( &nId );
 }
+
 inline RESOURCE_TYPE RSHEADER_TYPE::GetRT()
 {
     return (RESOURCE_TYPE)ResMgr::GetLong( &nRT );
 }
+
 inline sal_uInt32 RSHEADER_TYPE::GetGlobOff()
 {
     return (sal_uInt32)ResMgr::GetLong( &nGlobOff );
 }
+
 inline sal_uInt32 RSHEADER_TYPE::GetLocalOff()
 {
     return (sal_uInt32)ResMgr::GetLong( &nLocalOff );

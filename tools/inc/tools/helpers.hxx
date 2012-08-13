@@ -6,8 +6,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-
-
 #ifndef _TOOLS_HELPERS_HXX
 #define _TOOLS_HELPERS_HXX
 
@@ -16,12 +14,10 @@ inline long MinMax( long nVal, long nMin, long nMax )
     return nVal >= nMin ? ( nVal <= nMax ? nVal : nMax ) : nMin;
 }
 
-
 inline long AlignedWidth4Bytes( long nWidthBits )
 {
     return ( ( nWidthBits + 31 ) >> 5 ) << 2;
 }
-
 
 inline long FRound( double fVal )
 {
