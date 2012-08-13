@@ -52,7 +52,6 @@ $(call gb_Executable__Executable_impl,$(1),Executable/$(1)$(gb_Executable_EXT))
 endef
 
 define gb_Executable__Executable_impl
-$(call gb_Executable_set_targettype_gui,$(2))
 $(call gb_LinkTarget_LinkTarget,$(2))
 $(call gb_LinkTarget_set_targettype,$(2),Executable)
 $(call gb_Executable_get_target,$(1)) : $(call gb_LinkTarget_get_target,$(2)) \
