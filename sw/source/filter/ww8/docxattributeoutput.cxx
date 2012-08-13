@@ -36,7 +36,6 @@
 #include <oox/token/tokens.hxx>
 #include <oox/export/drawingml.hxx>
 #include <oox/export/utils.hxx>
-#include <oox/export/vmlexport.hxx>
 #include <oox/mathml/export.hxx>
 
 #include <i18npool/mslangid.hxx>
@@ -85,6 +84,7 @@
 #include <editeng/blnkitem.hxx>
 #include <editeng/charhiddenitem.hxx>
 #include <editeng/opaqitem.hxx>
+#include <editeng/editobj.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/svdobj.hxx>
 
@@ -2366,6 +2366,50 @@ void DocxAttributeOutput::OutputFlyFrame_Impl( const sw::Frame &rFrame, const Po
     }
 
     m_pSerializer->mergeTopMarks( sax_fastparser::MERGE_MARKS_POSTPONE );
+}
+
+void DocxAttributeOutput::WriteOutliner(const OutlinerParaObject& rParaObj)
+{
+    const EditTextObject& rEditObj = rParaObj.GetTextObject();
+    MSWord_SdrAttrIter aAttrIter( m_rExport, rEditObj, TXT_HFTXTBOX );
+
+    sal_uInt16 nPara = rEditObj.GetParagraphCount();
+
+    m_pSerializer->startElementNS( XML_w, XML_textbox, FSEND );
+    m_pSerializer->startElementNS( XML_w, XML_txbxContent, FSEND );
+    for (sal_uInt16 n = 0; n < nPara; ++n)
+    {
+        if( n )
+            aAttrIter.NextPara( n );
+
+        String aStr( rEditObj.GetText( n ));
+        xub_StrLen nAktPos = 0;
+        xub_StrLen nEnd = aStr.Len();
+
+        m_pSerializer->startElementNS( XML_w, XML_p, FSEND );
+        do {
+            xub_StrLen nNextAttr = aAttrIter.WhereNext();
+            if( nNextAttr > nEnd )
+                nNextAttr = nEnd;
+
+            m_pSerializer->startElementNS( XML_w, XML_r, FSEND );
+            bool bTxtAtr = aAttrIter.IsTxtAttr( nAktPos );
+            if( !bTxtAtr )
+            {
+                String aOut( aStr.Copy( nAktPos, nNextAttr - nAktPos ) );
+                RunText(aOut);
+            }
+
+            m_pSerializer->endElementNS( XML_w, XML_r );
+
+            nAktPos = nNextAttr;
+            aAttrIter.NextPos();
+        }
+        while( nAktPos < nEnd );
+        m_pSerializer->endElementNS( XML_w, XML_p );
+    }
+    m_pSerializer->endElementNS( XML_w, XML_txbxContent );
+    m_pSerializer->endElementNS( XML_w, XML_textbox );
 }
 
 void DocxAttributeOutput::StartStyle( const String& rName, bool bPapFmt,

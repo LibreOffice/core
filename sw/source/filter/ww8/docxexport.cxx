@@ -813,7 +813,7 @@ DocxExport::DocxExport( DocxExportFilter *pFilter, SwDoc *pDocument, SwPaM *pCur
     m_pAttrOutput = new DocxAttributeOutput( *this, m_pDocumentFS, m_pDrawingML );
 
     // the related VMLExport
-    m_pVMLExport = new VMLExport( m_pDocumentFS );
+    m_pVMLExport = new VMLExport( m_pDocumentFS, m_pAttrOutput );
 }
 
 DocxExport::~DocxExport()
