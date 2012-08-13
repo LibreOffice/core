@@ -25,18 +25,11 @@
 #include <tools/string.hxx>
 #include <tools/resid.hxx>
 
-// ------------------
-// - ResStringArray -
-// ------------------
-
 #define RESARRAY_INDEX_NOTFOUND (0xffffffff)
 
 class TOOLS_DLLPUBLIC ResStringArray : private boost::noncopyable
 {
     private:
-    // ---------------------
-    // - ImplResStringItem -
-    // ---------------------
     struct ImplResStringItem
     {
         rtl::OUString m_aStr;

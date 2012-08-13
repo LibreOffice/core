@@ -25,10 +25,6 @@
 struct ImplConfigData;
 struct ImplGroupData;
 
-// ----------
-// - Config -
-// ----------
-
 class TOOLS_DLLPUBLIC Config
 {
 private:

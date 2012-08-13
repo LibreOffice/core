@@ -25,10 +25,6 @@
 #include "tools/toolsdllapi.h"
 #include "tools/solar.h"
 
-// ----------------
-// - FixedMemPool -
-// ----------------
-
 struct FixedMemPool_Impl;
 
 class TOOLS_DLLPUBLIC FixedMemPool
@@ -44,10 +40,6 @@ public:
     void*           Alloc();
     void            Free( void* p );
 };
-
-// ----------------------------
-// - DECL_FIXEDMEMPOOL_NEWDEL -
-// ----------------------------
 
 #define DECL_FIXEDMEMPOOL_NEW_DECL() \
 static void * operator new( size_t n )

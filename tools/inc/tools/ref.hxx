@@ -22,8 +22,6 @@
 #include "tools/toolsdllapi.h"
 #include <vector>
 
-//=========================================================================
-
 #define PRV_SV_IMPL_REF_COUNTERS( ClassName, Ref, AddRef, AddNextRef, ReleaseRef, Init, pRefbase ) \
 inline ClassName##Ref::ClassName##Ref( const ClassName##Ref & rObj )        \
     { pObj = rObj.pObj; if( pObj ) { Init pRefbase->AddNextRef; } }         \
@@ -63,7 +61,7 @@ public:                                         \
     inline               ~ClassName##Ref();                             \
     inline ClassName##Ref & operator = ( const ClassName##Ref & rObj ); \
     inline ClassName##Ref & operator = ( ClassName * pObj );            \
-    inline sal_Bool            Is() const { return pObj != NULL; }          \
+    inline sal_Bool        Is() const { return pObj != NULL; }          \
     inline ClassName *     operator &  () const { return pObj; }        \
     inline ClassName *     operator -> () const { return pObj; }        \
     inline ClassName &     operator *  () const { return *pObj; }       \
@@ -99,13 +97,12 @@ PRV_SV_IMPL_REF_COUNTERS( ClassName, Lock, OwnerLock( sal_True ),       \
     SV_DECL_REF(ClassName)                      \
     SV_IMPL_REF(ClassName)
 
-
-/************************** S v R e f L i s t ****************************/
 template<typename T>
 class SvRefMemberList : private std::vector<T>
 {
 private:
     typedef typename std::vector<T> base_t;
+
 public:
     using base_t::size;
     using base_t::front;
@@ -122,46 +119,50 @@ public:
 
     inline ~SvRefMemberList() { clear(); }
     inline void clear()
+    {
+        for( typename base_t::const_iterator it = base_t::begin(); it != base_t::end(); ++it )
         {
-            for( typename base_t::const_iterator it = base_t::begin(); it != base_t::end(); ++it )
-            {
-                  T p = *it;
-                  if( p )
-                      p->ReleaseReference();
-            }
-            base_t::clear();
+              T p = *it;
+              if( p )
+                  p->ReleaseReference();
         }
+        base_t::clear();
+    }
+
     inline void push_back( T p )
-        {
-            base_t::push_back( p );
-            p->AddRef();
-        }
+    {
+        base_t::push_back( p );
+        p->AddRef();
+    }
+
     inline void insert(const SvRefMemberList& rOther)
+    {
+       for( typename base_t::const_iterator it = rOther.begin(); it != rOther.end(); ++it )
        {
-           for( typename base_t::const_iterator it = rOther.begin(); it != rOther.end(); ++it )
-           {
-               push_back(*it);
-           }
+           push_back(*it);
        }
+    }
+
     inline T pop_back()
-        {
-            T p = base_t::back();
-            base_t::pop_back();
-            if( p )
-                p->ReleaseReference();
-            return p;
-        }
+    {
+        T p = base_t::back();
+        base_t::pop_back();
+        if( p )
+            p->ReleaseReference();
+        return p;
+    }
 };
 
-
-/************************** S v R e f B a s e ****************************/
 #define SV_NO_DELETE_REFCOUNT  0x80000000
+
 class TOOLS_DLLPUBLIC SvRefBase
 {
     sal_uIntPtr nRefCount;
+
 protected:
     virtual         ~SvRefBase();
     virtual void    QueryDelete();
+
 public:
                     SvRefBase() { nRefCount = SV_NO_DELETE_REFCOUNT; }
                     SvRefBase( const SvRefBase & /* rObj */ )
@@ -173,9 +174,9 @@ public:
                         if( nRefCount < SV_NO_DELETE_REFCOUNT )
                             nRefCount += SV_NO_DELETE_REFCOUNT;
                     }
-    sal_uIntPtr          AddMulRef( sal_uIntPtr n ) { return nRefCount += n; }
-    sal_uIntPtr          AddNextRef() { return ++nRefCount; }
-    sal_uIntPtr          AddRef()
+    sal_uIntPtr     AddMulRef( sal_uIntPtr n ) { return nRefCount += n; }
+    sal_uIntPtr     AddNextRef() { return ++nRefCount; }
+    sal_uIntPtr     AddRef()
                     {
                         if( nRefCount >= SV_NO_DELETE_REFCOUNT )
                             nRefCount -= SV_NO_DELETE_REFCOUNT;
@@ -186,14 +187,14 @@ public:
                         if( !--nRefCount )
                             QueryDelete();
                     }
-    sal_uIntPtr          ReleaseRef()
+    sal_uIntPtr     ReleaseRef()
                     {
                         sal_uIntPtr n = --nRefCount;
                         if( !n )
                             QueryDelete();
                         return n;
                     }
-    sal_uIntPtr          GetRefCount() const { return nRefCount; }
+    sal_uIntPtr     GetRefCount() const { return nRefCount; }
 };
 
 #ifndef EMPTYARG
@@ -207,6 +208,7 @@ class SvCompatWeakHdl : public SvRefBase
     friend class SvCompatWeakBase;
     void* _pObj;
     SvCompatWeakHdl( void* pObj ) : _pObj( pObj ) {}
+
 public:
     void ResetWeakBase( ) { _pObj = 0; }
     void* GetObj() { return _pObj; }
@@ -217,6 +219,7 @@ SV_DECL_IMPL_REF( SvCompatWeakHdl )
 class SvCompatWeakBase
 {
     SvCompatWeakHdlRef _xHdl;
+
 public:
     SvCompatWeakHdl* GetHdl() { return _xHdl; }
 
@@ -248,6 +251,6 @@ public:                                                             \
         return (ClassName*) (_xHdl.Is() ? _xHdl->GetObj() : 0 ); }  \
 };
 
-#endif // _Weak_HXX
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

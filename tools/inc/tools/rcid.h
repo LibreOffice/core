@@ -43,7 +43,7 @@
 #define RSC_KEYCODE             (RSC_NOTYPE + 0x1f)
 #define RSC_TIME                (RSC_NOTYPE + 0x20)
 #define RSC_DATE                (RSC_NOTYPE + 0x21)
-//#define RSC_INTERNATIONAL     (RSC_NOTYPE + 0x22) // erAck: got rid of class International (2005-06-17)
+//#define RSC_INTERNATIONAL     (RSC_NOTYPE + 0x22) // removed (2005-06-17)
 #define RSC_IMAGE               (RSC_NOTYPE + 0x23)
 #define RSC_IMAGELIST           (RSC_NOTYPE + 0x24)
 

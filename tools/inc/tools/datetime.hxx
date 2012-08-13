@@ -24,10 +24,6 @@
 #include <tools/date.hxx>
 #include <tools/time.hxx>
 
-// ------------
-// - DateTime -
-// ------------
-
 class TOOLS_DLLPUBLIC DateTime : public Date, public Time
 {
 public:
@@ -36,7 +32,8 @@ public:
     {
         SYSTEM
     };
-    // temporary until all uses are inspected and resolved
+
+    // TODO temporary until all uses are inspected and resolved
     enum DateTimeInitEmpty
     {
         EMPTY

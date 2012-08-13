@@ -23,10 +23,6 @@
 #include <tools/string.hxx>
 #include <osl/thread.h>
 
-// ------------
-// - WildCard -
-// ------------
-
 class TOOLS_DLLPUBLIC WildCard
 {
 private:

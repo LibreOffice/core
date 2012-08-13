@@ -31,11 +31,6 @@
 
 class DateTime;
 
-/*=======================================================================
- *
- * INetMessageHeader Interface.
- *
- *=====================================================================*/
 class INetMessageHeader
 {
     rtl::OString m_aName;
@@ -85,11 +80,6 @@ public:
     }
 };
 
-/*=======================================================================
- *
- * INetMessage Interface.
- *
- *=====================================================================*/
  typedef ::std::vector< INetMessageHeader* > HeaderList_impl;
 class INetMessage
 {
@@ -217,11 +207,6 @@ public:
     }
 };
 
-/*=======================================================================
- *
- * INetRFC822Message Interface.
- *
- *=====================================================================*/
 #define INETMSG_RFC822_BCC                 0
 #define INETMSG_RFC822_CC                  1
 #define INETMSG_RFC822_COMMENTS            2
@@ -266,8 +251,8 @@ public:
         sal_uIntPtr nIndex = ((sal_uIntPtr)-1)
     );
 
-    /** Header fields.
-     */
+    // Header fields.
+
     rtl::OUString GetBCC() const
     {
         return GetHeaderValue_Impl (
@@ -373,8 +358,8 @@ public:
             INetMIME::HEADER_FIELD_TEXT);
     }
 
-    /** Stream operators.
-     */
+    // Stream operators.
+
     friend SvStream& operator<< (
         SvStream& rStrm, const INetRFC822Message& rMsg)
     {
@@ -388,11 +373,6 @@ public:
     }
 };
 
-/*=======================================================================
- *
- * INetMIMEMessage Interface.
- *
- *=====================================================================*/
 #define INETMSG_MIME_VERSION                    0
 #define INETMSG_MIME_CONTENT_DESCRIPTION        1
 #define INETMSG_MIME_CONTENT_DISPOSITION        2
@@ -455,8 +435,8 @@ public:
         sal_uIntPtr nIndex = ((sal_uIntPtr)-1)
     );
 
-    /** Header fields.
-     */
+    // Header fields.
+
     void      SetMIMEVersion (const UniString& rVersion);
     UniString GetMIMEVersion() const
     {
@@ -493,8 +473,8 @@ public:
 
     rtl::OUString GetDefaultContentType ();
 
-    /** Message container methods.
-     */
+    // Message container methods.
+
     sal_Bool IsContainer() const
     {
         return (IsMessage() || IsMultipart());
@@ -521,8 +501,8 @@ public:
     sal_Bool AttachChild (
         INetMIMEMessage& rChildMsg, sal_Bool bOwner = sal_True);
 
-    /** Stream operators.
-     */
+    // Stream operators.
+
     friend SvStream& operator<< (
         SvStream& rStrm, const INetMIMEMessage& rMsg)
     {

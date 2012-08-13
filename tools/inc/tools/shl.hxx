@@ -23,9 +23,7 @@
 #include <tools/solar.h>
 #include "tools/toolsdllapi.h"
 
-// ----------------
-// - GetAppData() -
-// ----------------
+// GetAppData()
 
 #define SHL_SHL1        0
 #define SHL_SHL2        1
@@ -84,7 +82,7 @@
 // #110743#
 // #define SHL_COUNT        53
 // the following added for binary filter project
-// Sice an array is created for that values, it is necessary to
+// Since an array is created for that values, it is necessary to
 // put them directly behind the defined ones. Else, some space is
 // wasted.
 #define BF_SHL_SVX      53

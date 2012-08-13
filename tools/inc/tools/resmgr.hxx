@@ -30,10 +30,6 @@
 class SvStream;
 class InternalResMgr;
 
-// -----------------
-// - RSHEADER_TYPE -
-// -----------------
-
 /// Defines structure used to build resource
 struct RSHEADER_TYPE
 {
@@ -50,15 +46,7 @@ public:
     inline sal_uInt32       GetLocalOff(); ///< Local offset
 };
 
-// ----------
-// - ResMgr -
-// ----------
-
 typedef rtl::OUString (*ResHookProc)( const rtl::OUString& rStr );
-
-// ----------
-// - ResMgr -
-// ----------
 
 // Initialization
 #define RC_NOTYPE               0x00
@@ -130,7 +118,7 @@ private:
 
     static ResMgr* ImplCreateResMgr( InternalResMgr* pImpl ) { return new ResMgr( pImpl ); }
 
-    //No copying
+    // no copying
     ResMgr(const ResMgr&);
     ResMgr& operator=(const ResMgr&);
 public:

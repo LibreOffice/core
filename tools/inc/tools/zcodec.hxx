@@ -23,22 +23,17 @@
 #include "tools/toolsdllapi.h"
 #include <tools/solar.h>
 
-// -----------
-// - Defines -
-// -----------
+// Defines
 
 #define DEFAULT_IN_BUFSIZE          (0x00008000UL)
 #define DEFAULT_OUT_BUFSIZE         (0x00008000UL)
 
 #define MAX_MEM_USAGE 8
 
-//
 // memory requirement using compress:
 //  [ INBUFFER ] + [ OUTBUFFER ] + 128KB + 1 << (MEM_USAGE+9)
-//
 // memory requirement using decompress:
 //  [ INBUFFER ] + [ OUTBUFFER ] + 32KB
-//
 
 #define ZCODEC_NO_COMPRESSION       (0x00000000UL)
 #define ZCODEC_BEST_SPEED           (0x00000001UL)
@@ -54,10 +49,6 @@
 
 #define ZCODEC_PNG_DEFAULT ( ZCODEC_NO_COMPRESSION | ZCODEC_DEFAULT_STRATEGY | ZCODEC_UPDATE_CRC )
 #define ZCODEC_DEFAULT  ( ZCODEC_DEFAULT_COMPRESSION | ZCODEC_DEFAULT_STRATEGY )
-
-// ----------
-// - ZCodec -
-// ----------
 
 class SvStream;
 

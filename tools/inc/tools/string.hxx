@@ -56,9 +56,7 @@ class UniString;
 
 // -----------------------------------------------------------------------
 
-// -----------
-// - CharSet -
-// -----------
+// CharSet
 
 #ifndef ENUM_CHARSET_DECLARED
 #define ENUM_CHARSET_DECLARED
@@ -69,9 +67,7 @@ typedef rtl_TextEncoding CharSet;
 
 // -----------------------------------------------------------------------
 
-// ----------------
-// - String-Types -
-// ----------------
+// String-Types
 
 #ifdef STRING32
 #define STRING_NOTFOUND    ((xub_StrLen)0x7FFFFFFF)
@@ -89,9 +85,7 @@ enum StringCompare { COMPARE_LESS = -1, COMPARE_EQUAL = 0, COMPARE_GREATER = 1 }
 
 // -----------------------------------------------------------------------
 
-// ------------------------
-// Internal String data
-// ------------------------
+//Internal String data
 
 // Data used for the management of this String
 // use only for debugging purposes (never assign to String directly!)
@@ -111,9 +105,7 @@ typedef struct _UniStringData
 #pragma pack(pop)
 #endif
 
-// -------------
-// - UniString -
-// -------------
+// UniString
 
 class TOOLS_DLLPUBLIC UniString
 {

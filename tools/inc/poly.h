@@ -22,10 +22,6 @@
 
 #include <tools/gen.hxx>
 
-// -------------------
-// - ImplPolygonData -
-// -------------------
-
 class ImplPolygonData
 {
 public:
@@ -34,10 +30,6 @@ public:
     sal_uInt16          mnPoints;
     sal_uIntPtr           mnRefCount;
 };
-
-// ---------------
-// - ImplPolygon -
-// ---------------
 
 class ImplPolygon  : public ImplPolygonData
 {
@@ -51,10 +43,6 @@ public:
     void            ImplCreateFlagArray();
     void            ImplSplit( sal_uInt16 nPos, sal_uInt16 nSpace, ImplPolygon* pInitPoly = NULL );
 };
-
-// -------------------
-// - ImplPolyPolygon -
-// -------------------
 
 #define MAX_POLYGONS        ((sal_uInt16)0x3FF0)
 

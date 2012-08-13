@@ -32,14 +32,10 @@ class EDcr_Impl;
 class ErrHdl_Impl;
 class Window;
 
-// -------------
-// - ErrorInfo -
-// -------------
-
 class ErrorInfo
 {
 private:
-    sal_uIntPtr                   lUserId;
+    sal_uIntPtr             lUserId;
 
 public:
                             TYPEINFO();
@@ -48,15 +44,10 @@ public:
                                 lUserId( lArgUserId ){}
     virtual                 ~ErrorInfo(){}
 
-    sal_uIntPtr                   GetErrorCode() const { return lUserId; }
+    sal_uIntPtr             GetErrorCode() const { return lUserId; }
 
     static ErrorInfo*       GetErrorInfo(sal_uIntPtr);
 };
-
-
-// --------------------
-// - DynamicErrorInfo -
-// --------------------
 
 class TOOLS_DLLPUBLIC DynamicErrorInfo : public ErrorInfo
 {
@@ -72,13 +63,8 @@ public:
     virtual                 ~DynamicErrorInfo();
 
     operator                sal_uIntPtr() const;
-    sal_uInt16                  GetDialogMask() const;
+    sal_uInt16              GetDialogMask() const;
 };
-
-
-// -------------------
-// - StringErrorInfo -
-// -------------------
 
 class TOOLS_DLLPUBLIC StringErrorInfo : public DynamicErrorInfo
 {
@@ -94,7 +80,6 @@ public:
     const String&           GetErrorString() const { return aString; }
 };
 
-//=============================================================================
 class TOOLS_DLLPUBLIC TwoStringErrorInfo: public DynamicErrorInfo
 {
 private:
@@ -113,14 +98,9 @@ public:
     String GetArg2() const { return aArg2; }
 };
 
-// -------------------
-// - MessageInfo -
-// -------------------
-
 class TOOLS_DLLPUBLIC MessageInfo : public DynamicErrorInfo
 {
-  public:
-
+public:
                             TYPEINFO();
                             MessageInfo(sal_uIntPtr UserId, sal_uInt16 nFlags = 0) :
                                 DynamicErrorInfo(UserId, nFlags){}
@@ -129,15 +109,9 @@ class TOOLS_DLLPUBLIC MessageInfo : public DynamicErrorInfo
                                 DynamicErrorInfo(UserId, nFlags), aArg(rArg) {}
     const String&           GetMessageArg() const { return aArg; }
 
-  private:
-
+private:
     String           aArg;
 };
-
-
-// ----------------
-// - ErrorContext -
-// ----------------
 
 class TOOLS_DLLPUBLIC ErrorContext
 {
@@ -151,16 +125,11 @@ public:
                             ErrorContext(Window *pWin=0);
     virtual                 ~ErrorContext();
 
-    virtual sal_Bool            GetString( sal_uIntPtr nErrId, String& rCtxStr ) = 0;
+    virtual sal_Bool        GetString( sal_uIntPtr nErrId, String& rCtxStr ) = 0;
     Window*                 GetParent() { return pWin; }
 
     static ErrorContext*    GetContext();
 };
-
-
-// ----------------
-// - ErrorHandler -
-// ----------------
 
 typedef sal_uInt16 WindowDisplayErrorFunc(
     Window *, sal_uInt16 nMask, const String &rErr, const String &rAction);
@@ -187,27 +156,21 @@ public:
                         ErrorHandler();
     virtual             ~ErrorHandler();
 
-    static sal_uInt16       HandleError ( sal_uIntPtr lId, sal_uInt16 nMask = USHRT_MAX );
-    static sal_Bool         GetErrorString( sal_uIntPtr lId, String& rStr );
+    static sal_uInt16   HandleError ( sal_uIntPtr lId, sal_uInt16 nMask = USHRT_MAX );
+    static sal_Bool     GetErrorString( sal_uIntPtr lId, String& rStr );
 
     static void         RegisterDisplay( BasicDisplayErrorFunc* );
     static void         RegisterDisplay( WindowDisplayErrorFunc* );
 };
 
-
-// ----------------------
-// - SimpleErrorHandler -
-// ----------------------
-
 class TOOLS_DLLPUBLIC SimpleErrorHandler : private ErrorHandler
 {
 protected:
-    virtual sal_Bool        CreateString( const ErrorInfo*, String &,
+    virtual sal_Bool    CreateString( const ErrorInfo*, String &,
                                       sal_uInt16 &nMask ) const;
 
 public:
                         SimpleErrorHandler();
-
 };
 
 #endif

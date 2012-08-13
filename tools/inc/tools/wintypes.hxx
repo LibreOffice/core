@@ -22,9 +22,7 @@
 #include <tools/solar.h>
 #include <sal/types.h>
 
-// ----------------
-// - Window-Types -
-// ----------------
+// Window-Types
 
 typedef sal_uInt16 WindowType;
 #define WINDOW_BASE                 0x0100
@@ -112,10 +110,7 @@ typedef sal_uInt16 WindowType;
 #define WINDOW_CALCINPUTLINE        (WINDOW_FIRST + 0x52)
 #define WINDOW_LAST                 (WINDOW_CALCINPUTLINE)
 
-
-// ---------------
-// - Window-Bits -
-// ---------------
+// Window-Bits
 
 typedef sal_Int64 WinBits;
 
@@ -138,11 +133,11 @@ typedef sal_Int64 WinBits;
 #define WB_PINABLE              ((WinBits)0x00002000)
 #define WB_SYSTEMWINDOW         ((WinBits)SAL_CONST_INT64(0x40000000))
 // warning: do not confuse WB_SYSTEMCHILDWINDOW with the SystemChildWindow class
-
+//
 // the SystemChildWindow class was there first and is a very specialized
 // sytem child window type for plugged applications. The SystemChildWindow class
 // explicitly should never use the WB_SYSTEMCHILDWINDOW WinBit
-
+//
 // WB_SYSTEMCHILDWINDOW on the other hand is to be used on system windows
 // which should be created as system child windows with (more or less)
 // normal event handling
@@ -285,16 +280,11 @@ typedef sal_Int64 WinBits;
 // Window-Bits for TabControl
 #define WB_SLIDERSET            ((WinBits)0x02000000)
 
-
-// --------------------
-// - extended WinBits -
-// --------------------
+// extended WinBits
 #define WB_EXT_DOCUMENT         ((WinBits)0x00000001)
 #define WB_EXT_DOCMODIFIED      ((WinBits)0x00000002)
 
-// ---------------
-// - WindowAlign -
-// ---------------
+// WindowAlign
 
 enum WindowAlign { WINDOWALIGN_LEFT, WINDOWALIGN_TOP, WINDOWALIGN_RIGHT, WINDOWALIGN_BOTTOM };
 enum ImageAlign { IMAGEALIGN_LEFT, IMAGEALIGN_TOP, IMAGEALIGN_RIGHT, IMAGEALIGN_BOTTOM,
@@ -303,16 +293,12 @@ enum ImageAlign { IMAGEALIGN_LEFT, IMAGEALIGN_TOP, IMAGEALIGN_RIGHT, IMAGEALIGN_
                   IMAGEALIGN_BOTTOM_LEFT, IMAGEALIGN_BOTTOM_RIGHT, IMAGEALIGN_CENTER };
 enum SymbolAlign { SYMBOLALIGN_LEFT, SYMBOLALIGN_RIGHT };
 
-// ------------
-// - TriState -
-// ------------
+// TriState
 
 enum TriState { STATE_NOCHECK, STATE_CHECK, STATE_DONTKNOW };
 
 
-// ----------------------
-// - ButtonDialog-Types -
-// ----------------------
+// ButtonDialog-Types
 
 typedef sal_uInt16 StandardButtonType;
 #define BUTTON_OK           ((StandardButtonType)0)
@@ -328,9 +314,7 @@ typedef sal_uInt16 StandardButtonType;
 #define BUTTON_LESS         ((StandardButtonType)10)
 #define BUTTON_COUNT        11
 
-// --------------------------------------------
-// - prominent place for ListBox window types -
-// --------------------------------------------
+// prominent place for ListBox window types
 
 enum ProminentEntry { PROMINENT_TOP, PROMINENT_MIDDLE };
 

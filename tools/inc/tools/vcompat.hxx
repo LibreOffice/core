@@ -22,19 +22,11 @@
 #include "tools/toolsdllapi.h"
 #include <tools/solar.h>
 
-// -----------
-// - Defines -
-// -----------
-
 #define COMPAT_FORMAT( char1, char2, char3, char4 ) \
     ((sal_uInt32)((((sal_uInt32)(char)(char1)))|                \
     (((sal_uInt32)(char)(char2))<<8UL)|                 \
     (((sal_uInt32)(char)(char3))<<16UL)|                    \
     ((sal_uInt32)(char)(char4))<<24UL))
-
-// --------------
-// - ImplCompat -
-// --------------
 
 class SvStream;
 

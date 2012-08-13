@@ -23,9 +23,6 @@
 #include <tools/solar.h>
 
 class SvStream;
-// ------------
-// - Fraction -
-// ------------
 
 class TOOLS_DLLPUBLIC Fraction
 {

@@ -32,10 +32,6 @@ typedef sal_uInt32 RESOURCE_TYPE;
 
 class ResMgr;
 
-//---------
-//- ResId -
-//---------
-
 class ResId
 {
     /*

@@ -40,10 +40,6 @@
     SAL_INFO.
 */
 
-// ------------
-// - DBG_UITL -
-// ------------
-
 #ifdef DBG_UTIL
 
 typedef void (*DbgPrintLine)( const sal_Char* pLine );
@@ -460,10 +456,7 @@ do                                          \
 } while(0)
 
 #else
-
-// ---------------
-// - NO DBG_UITL -
-// ---------------
+// NO DBG_UITL
 
 struct DbgData;
 struct DbgDataType;

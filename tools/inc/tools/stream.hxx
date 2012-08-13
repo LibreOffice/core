@@ -31,10 +31,6 @@
 class FileCopier;
 class StreamData;
 
-// ------------------------
-// - FileFormat-Functions -
-// ------------------------
-
 inline rtl_TextEncoding GetStoreCharSet( rtl_TextEncoding eEncoding )
 {
     if ( eEncoding == RTL_TEXTENCODING_ISO_8859_1 )
@@ -43,9 +39,7 @@ inline rtl_TextEncoding GetStoreCharSet( rtl_TextEncoding eEncoding )
         return eEncoding;
 }
 
-// ---------------
-// - StreamTypes -
-// ---------------
+// StreamTypes
 
 typedef sal_uInt16 StreamMode;
 
@@ -100,12 +94,9 @@ typedef sal_uInt16 StreamMode;
 class SvStream;
 typedef SvStream& (*SvStrPtr)( SvStream& );
 
-// forward declaration with internal linkage
 inline SvStream& operator<<( SvStream& rStr, SvStrPtr f );
 
-// ---------------
-// - SvLockBytes -
-// ---------------
+// SvLockBytes
 
 enum LockType {};
 
@@ -162,9 +153,7 @@ public:
 
 SV_DECL_IMPL_REF(SvLockBytes);
 
-// -------------------
-// - SvOpenLockBytes -
-// -------------------
+// SvOpenLockBytes
 
 class TOOLS_DLLPUBLIC SvOpenLockBytes: public SvLockBytes
 {
@@ -188,9 +177,7 @@ public:
 
 SV_DECL_IMPL_REF(SvOpenLockBytes);
 
-// --------------------
-// - SvAsyncLockBytes -
-// --------------------
+// SvAsyncLockBytes
 
 class SvAsyncLockBytes: public SvOpenLockBytes
 {
@@ -221,9 +208,7 @@ public:
 
 SV_DECL_IMPL_REF(SvAsyncLockBytes);
 
-// ----------
-// - Stream -
-// ----------
+// SvStream
 
 class TOOLS_DLLPUBLIC SvStream
 {
@@ -241,7 +226,7 @@ private:
                                 // = nBufSize, if EOF did not occur
     sal_uInt16  nBufActualPos;  // current position in buffer (0..nBufSize-1)
     sal_uInt16  nBufFree;       // number of free slots in buffer to IO of type eIOMode
-    unsigned int    eIOMode:2;      // STREAM_IO_*
+    unsigned int    eIOMode : 2;// STREAM_IO_*
 
     // Error codes, conversion, compression, ...
     int             bIsDirty:1;     // sal_True: Stream != buffer content
@@ -257,11 +242,11 @@ private:
     CharSet         eStreamCharSet;
 
     // Encryption
-    rtl::OString m_aCryptMaskKey;   // aCryptMaskKey.getLength != 0  -> Encryption used
+    rtl::OString m_aCryptMaskKey;// aCryptMaskKey.getLength != 0  -> Encryption used
     unsigned char   nCryptMask;
 
     // Userdata
-    long            nVersion;       // for external use
+    long            nVersion;   // for external use
 
     // helper methods
     TOOLS_DLLPRIVATE void           ImpInit();
@@ -363,112 +348,116 @@ public:
     sal_Size        Seek( sal_Size nPos );
     sal_Size        SeekRel( sal_sSize nPos );
     sal_Size        Tell() const { return nBufFilePos+nBufActualPos;  }
-    //length between current (Tell()) pos and end of stream
+    // length between current (Tell()) pos and end of stream
     virtual sal_Size remainingSize();
     void            Flush();
     sal_Bool        IsEof() const { return bIsEof; }
     // next Tell() <= nSize
     sal_Bool        SetStreamSize( sal_Size nSize );
 
-                /** Read a line of bytes.
+    /** Read a line of bytes.
 
-                    @param nMaxBytesToRead
-                        Maximum of bytes to read, if line is longer it will be
-                        truncated.
+        @param nMaxBytesToRead
+                   Maximum of bytes to read, if line is longer it will be
+                   truncated.
 
-                        NOTE that the default is one character less than
-                        STRING_MAXLEN to prevent problems after conversion to
-                        String that may be lurking in various places doing
-                        something like
-                        for (sal_uInt16 i=0; i < aString.Len(); ++i)
-                        causing endless loops ...
-                 */
+        @note NOTE that the default is one character less than STRING_MAXLEN to
+              prevent problems after conversion to String that may be lurking
+              in various places doing something like
+              @code
+                for (sal_uInt16 i=0; i < aString.Len(); ++i)
+              @endcode
+              causing endless loops ...
+    */
     sal_Bool        ReadLine( rtl::OString& rStr, sal_Int32 nMaxBytesToRead = 0xFFFE );
     sal_Bool        WriteLine( const rtl::OString& rStr );
 
-                /** Read a line of bytes.
+    /** Read a line of bytes.
 
-                    @param nMaxBytesToRead
-                        Maximum of bytes to read, if line is longer it will be
-                        truncated.
+        @param nMaxBytesToRead
+                   Maximum of bytes to read, if line is longer it will be
+                   truncated.
 
-                        NOTE that the default is one character less than
-                        STRING_MAXLEN to prevent problems after conversion to
-                        String that may be lurking in various places doing
-                        something like
-                        for (sal_uInt16 i=0; i < aString.Len(); ++i)
-                        causing endless loops ...
-                 */
+        @note NOTE that the default is one character less than STRING_MAXLEN to
+              prevent problems after conversion to String that may be lurking
+              in various places doing something like
+              @code
+                for (sal_uInt16 i=0; i < aString.Len(); ++i)
+              @endcode
+              causing endless loops ...
+    */
     sal_Bool        ReadByteStringLine( rtl::OUString& rStr, rtl_TextEncoding eSrcCharSet,
                                         sal_Int32 nMaxBytesToRead = 0xFFFE );
     sal_Bool        ReadByteStringLine( String& rStr, rtl_TextEncoding eSrcCharSet );
     sal_Bool        WriteByteStringLine( const String& rStr, rtl_TextEncoding eDestCharSet );
 
-                /// Switch to no endian swapping and write 0xfeff
+    /// Switch to no endian swapping and write 0xfeff
     sal_Bool        StartWritingUnicodeText();
 
-                /** If eReadBomCharSet==RTL_TEXTENCODING_DONTKNOW: read 16bit,
-                    if 0xfeff do nothing (UTF-16), if 0xfffe switch endian
-                    swapping (UTF-16), if 0xefbb or 0xbbef read another byte
-                    and check for UTF-8. If no UTF-* BOM was detected put all
-                    read bytes back. This means that if 2 bytes were read it
-                    was an UTF-16 BOM, if 3 bytes were read it was an UTF-8
-                    BOM. There is no UTF-7, UTF-32 or UTF-EBCDIC BOM detection!
+    /** If eReadBomCharSet==RTL_TEXTENCODING_DONTKNOW: read 16bit, if 0xfeff do
+        nothing (UTF-16), if 0xfffe switch endian swapping (UTF-16), if 0xefbb
+        or 0xbbef read another byte and check for UTF-8. If no UTF-* BOM was
+        detected put all read bytes back. This means that if 2 bytes were read
+        it was an UTF-16 BOM, if 3 bytes were read it was an UTF-8 BOM. There
+        is no UTF-7, UTF-32 or UTF-EBCDIC BOM detection!
 
-                    If eReadBomCharSet!=RTL_TEXTENCODING_DONTKNOW: only read a
-                    BOM of that encoding and switch endian swapping if UTF-16
-                    and 0xfffe.
-                 */
+        If eReadBomCharSet!=RTL_TEXTENCODING_DONTKNOW: only read a BOM of that
+        encoding and switch endian swapping if UTF-16 and 0xfffe. */
     sal_Bool        StartReadingUnicodeText( rtl_TextEncoding eReadBomCharSet );
 
-                /** Read a line of Unicode.
+    /** Read a line of Unicode.
 
-                    @param nMaxCodepointsToRead
-                        Maximum of codepoints (UCS-2 or UTF-16 pairs, not
-                        bytes) to read, if line is longer it will be truncated.
+        @param nMaxCodepointsToRead
+                   Maximum of codepoints (UCS-2 or UTF-16 pairs, not bytes) to
+                   read, if line is longer it will be truncated.
 
-                        NOTE that the default is one character less than
-                        STRING_MAXLEN to prevent problems after conversion to
-                        String that may be lurking in various places doing
-                        something like
-                        for (sal_uInt16 i=0; i < aString.Len(); ++i)
-                        causing endless loops ...
-                 */
+        @note NOTE that the default is one character less than STRING_MAXLEN to
+              prevent problems after conversion to String that may be lurking in
+              various places doing something like
+              @code
+                for (sal_uInt16 i=0; i < aString.Len(); ++i)
+              @endcode
+              causing endless loops ...
+    */
     sal_Bool        ReadUniStringLine( rtl::OUString& rStr, sal_Int32 nMaxCodepointsToRead = 0xFFFE );
-                /// Read a 32bit length prefixed sequence of utf-16 if eSrcCharSet==RTL_TEXTENCODING_UNICODE,
-                /// otherwise read a 16bit length prefixed sequence of bytes and convert from eSrcCharSet
+    /** Read a 32bit length prefixed sequence of utf-16 if
+        eSrcCharSet==RTL_TEXTENCODING_UNICODE, otherwise read a 16bit length
+        prefixed sequence of bytes and convert from eSrcCharSet */
     rtl::OUString   ReadUniOrByteString(rtl_TextEncoding eSrcCharSet);
-                /// Write a 32bit length prefixed sequence of utf-16 if eSrcCharSet==RTL_TEXTENCODING_UNICODE,
-                /// otherwise convert to eSrcCharSet and write a 16bit length prefixed sequence of bytes
+    /** Write a 32bit length prefixed sequence of utf-16 if
+        eSrcCharSet==RTL_TEXTENCODING_UNICODE, otherwise convert to eSrcCharSet
+        and write a 16bit length prefixed sequence of bytes */
     SvStream&       WriteUniOrByteString( const rtl::OUString& rStr, rtl_TextEncoding eDestCharSet );
 
-                /** Read a line of Unicode if eSrcCharSet==RTL_TEXTENCODING_UNICODE,
-                    otherwise read a line of Bytecode and convert from eSrcCharSet
+    /** Read a line of Unicode if eSrcCharSet==RTL_TEXTENCODING_UNICODE,
+        otherwise read a line of Bytecode and convert from eSrcCharSet
 
-                    @param nMaxCodepointsToRead
-                        Maximum of codepoints (2 bytes if Unicode, bytes if not
-                        Unicode) to read, if line is longer it will be
-                        truncated.
+        @param nMaxCodepointsToRead
+                   Maximum of codepoints (2 bytes if Unicode, bytes if not
+                   Unicode) to read, if line is longer it will be truncated.
 
-                        NOTE that the default is one character less than
-                        STRING_MAXLEN to prevent problems after conversion to
-                        String that may be lurking in various places doing
-                        something like
-                        for (sal_uInt16 i=0; i < aString.Len(); ++i)
-                        causing endless loops ...
-                 */
+        @note NOTE that the default is one character less than STRING_MAXLEN to
+              prevent problems after conversion to String that may be lurking in
+              various places doing something like
+              @code
+                for (sal_uInt16 i=0; i < aString.Len(); ++i)
+              @endcode
+              causing endless loops ...
+    */
     sal_Bool        ReadUniOrByteStringLine( rtl::OUString& rStr, rtl_TextEncoding eSrcCharSet,
                                              sal_Int32 nMaxCodepointsToRead = 0xFFFE );
-                /// Write a sequence of Unicode characters if eDestCharSet==RTL_TEXTENCODING_UNICODE,
-                /// otherwise write a sequence of Bytecodes converted to eDestCharSet
+    /** Write a sequence of Unicode characters if
+        eDestCharSet==RTL_TEXTENCODING_UNICODE, otherwise write a sequence of
+        Bytecodes converted to eDestCharSet */
     sal_Bool        WriteUnicodeOrByteText( const String& rStr, rtl_TextEncoding eDestCharSet );
     sal_Bool        WriteUnicodeOrByteText( const String& rStr )
                     { return WriteUnicodeOrByteText( rStr, GetStreamCharSet() ); }
 
-                /// Write a Unicode character if eDestCharSet==RTL_TEXTENCODING_UNICODE,
-                /// otherwise write as Bytecode converted to eDestCharSet.
-                /// This may result in more than one byte being written
-                /// if a multi byte encoding (e.g. UTF7, UTF8) is chosen.
+    /** Write a Unicode character if eDestCharSet==RTL_TEXTENCODING_UNICODE,
+        otherwise write as Bytecode converted to eDestCharSet.
+
+        This may result in more than one byte being written if a multi byte
+        encoding (e.g. UTF7, UTF8) is chosen. */
     sal_Bool        WriteUniOrByteChar( sal_Unicode ch, rtl_TextEncoding eDestCharSet );
     sal_Bool        WriteUniOrByteChar( sal_Unicode ch )
                     { return WriteUniOrByteChar( ch, GetStreamCharSet() ); }
@@ -488,22 +477,25 @@ public:
 
     friend SvStream& operator<<( SvStream& rStr, SvStrPtr f ); // for Manips
 
-    //end of input seen during previous i/o operation
+    /// end of input seen during previous i/o operation
     bool eof() const { return bIsEof; }
 
-    // stream is broken
+    /// stream is broken
     bool bad() const { return GetError() != 0; }
 
-    //If the state is good() the previous i/o operation succeeded.
-    //
-    //If the state is good(), the next input operation might succeed;
-    //otherwise, it will fail.
-    //
-    //Applying an input operation to a stream that is not in the good() state
-    //is a null operation as far as the variable being read into is concerned.
-    //
-    //If we try to read into a variable v and the operation fails, the value of
-    //v should be unchanged,
+    /** Get state
+
+        If the state is good() the previous i/o operation succeeded.
+
+        If the state is good(), the next input operation might succeed;
+        otherwise, it will fail.
+
+        Applying an input operation to a stream that is not in the good() state
+        is a null operation as far as the variable being read into is concerned.
+
+        If we try to read into a variable v and the operation fails, the value
+        of v should be unchanged,
+    */
     bool good() const { return !(eof() || bad()); }
 };
 
@@ -643,27 +635,25 @@ TOOLS_DLLPUBLIC inline sal_Size write_uInt8s_FromOString(SvStream& rStrm, const 
     return write_uInt8s_FromOString(rStrm, rStr, rStr.getLength());
 }
 
-//Attempt to write a pascal-style length (of type prefix) prefixed sequence of
-//8bit units from an OString, returned value is number of bytes written (including
-//byte-count of prefix)
+/// Attempt to write a pascal-style length (of type prefix) prefixed sequence
+/// of 8bit units from an OString, returned value is number of bytes written
+/// (including byte-count of prefix)
 template<typename prefix> sal_Size write_lenPrefixed_uInt8s_FromOString(SvStream& rStrm,
     const rtl::OString &rStr)
 {
     return streamdetail::write_lenPrefixed_seq_From_str<prefix, rtl::OString, write_uInt8s_FromOString>(rStrm, rStr);
 }
 
-//Attempt to write a pascal-style length (of type prefix) prefixed sequence of
-//8bit units from an OUString, returned value is number of bytes written (including
-//byte-count of prefix)
+/// Attempt to write a pascal-style length (of type prefix) prefixed sequence
+/// of 8bit units from an OUString, returned value is number of bytes written
+/// (including byte-count of prefix)
 template<typename prefix> sal_Size write_lenPrefixed_uInt8s_FromOUString(SvStream& rStrm,
     const rtl::OUString &rStr, rtl_TextEncoding eEnc)
 {
     return write_lenPrefixed_uInt8s_FromOString<prefix>(rStrm, rtl::OUStringToOString(rStr, eEnc));
 }
 
-// --------------
-// - FileStream -
-// --------------
+// FileStream
 
 class TOOLS_DLLPUBLIC SvFileStream : public SvStream
 {
@@ -709,9 +699,7 @@ public:
     const String&   GetFileName() const { return aFilename; }
 };
 
-// ----------------
-// - MemoryStream -
-// ----------------
+// MemoryStream
 
 class TOOLS_DLLPUBLIC SvMemoryStream : public SvStream
 {

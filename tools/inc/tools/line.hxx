@@ -24,10 +24,6 @@
 
 class Link;
 
-// --------
-// - Line -
-// --------
-
 class TOOLS_DLLPUBLIC Line
 {
 private:

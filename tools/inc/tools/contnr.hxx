@@ -26,12 +26,7 @@
 
 class CBlock;
 
-// -------------
-// - Container -
-// -------------
-
 #define CONTAINER_MAXBLOCKSIZE      ((sal_uInt16)0x3FF0)
-
 #define CONTAINER_APPEND            ULONG_MAX
 #define CONTAINER_ENTRY_NOTFOUND    ULONG_MAX
 

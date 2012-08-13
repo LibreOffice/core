@@ -25,10 +25,6 @@
 
 typedef void* PVOID;
 
-// ----------
-// - CBlock -
-// ----------
-
 class CBlock
 {
 private:

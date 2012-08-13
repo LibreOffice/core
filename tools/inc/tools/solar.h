@@ -24,8 +24,6 @@
 #include <osl/endian.h>
 #include <comphelper/fileformat.h>
 
-/*** common solar defines ***********************************/
-
 #ifdef _SOLAR__PRIVATE
 #undef _SOLAR__PRIVATE
 #endif
@@ -38,7 +36,7 @@
  used for data exchange or for similiar method args. */
 typedef sal_uIntPtr    sal_uLong; /* Replaces type ULONG */
 
-/*** misc. macros to leverage platform and compiler differences ********/
+// misc. macros to leverage platform and compiler differences
 
 #define DELETEZ( p )    ( delete p,p = 0 )
 
@@ -58,7 +56,7 @@ typedef sal_uIntPtr    sal_uLong; /* Replaces type ULONG */
 #define ILLEGAL_POINTER NULL
 #endif
 
-/*** solar binary types **********************************************/
+// solar binary types
 
 /* Solar (portable) Binary (exchange) Type; OSI 6 subset
    always little endian;
@@ -130,8 +128,6 @@ inline void     DoubleToSVBT64( double n, SVBT64 p ) { p[0] = ((sal_uInt8*)&n)[7
 #endif
 #endif
 
-/*** standard macros *****************************************/
-
 #ifndef __cplusplus
 #ifndef min
 #define min(a,b)    (((a) < (b)) ? (a) : (b))
@@ -141,27 +137,17 @@ inline void     DoubleToSVBT64( double n, SVBT64 p ) { p[0] = ((sal_uInt8*)&n)[7
 #endif
 #endif
 
-
-
-/*** standard inline functions *****************************************/
-
 #ifdef __cplusplus
 template<typename T> inline T Min(T a, T b) { return (a<b?a:b); }
 template<typename T> inline T Max(T a, T b) { return (a>b?a:b); }
 template<typename T> inline T Abs(T a) { return (a>=0?a:-a); }
 #endif
 
-
-/*** C / C++ - macros **************************************************/
-
 #ifdef __cplusplus
 #define EXTERN_C    extern "C"
 #else
 #define EXTERN_C
 #endif
-
-
-/*** macros ************************************************************/
 
 #ifdef NOHACKS
 #define HACK( comment ) #error hack: comment
@@ -172,8 +158,7 @@ template<typename T> inline T Abs(T a) { return (a>=0?a:-a); }
 #define _LF     ((char)0x0A)
 #define _CR     ((char)0x0D)
 
-
-/*** pragmas ************************************************************/
+// pragmas
 
 #if defined _MSC_VER
 /* deletion of pointer to incomplete type '...'; no destructor called
@@ -184,8 +169,7 @@ template<typename T> inline T Abs(T a) { return (a>=0?a:-a); }
 #pragma warning(error : 4002 4003)
 #endif
 
-
-/* dll file extensions *******************************************************/
+// dll file extensions
 
 #if defined WNT
   #define __DLLEXTENSION "lo"
@@ -197,14 +181,10 @@ template<typename T> inline T Abs(T a) { return (a>=0?a:-a); }
   #error unknown platform
 #endif
 
-// -----------------------------------------------------------------------
-
 #define UniString       String
 #define XubString       String
 #define xub_Unicode     sal_Unicode
 #define xub_StrLen      sal_uInt16
-
-// -- moved here from libcall.hxx ----------------------------------------
 
 #define LIBRARY_CONCAT3( s1, s2, s3 ) \
     s1 s2 s3

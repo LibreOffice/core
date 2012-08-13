@@ -24,10 +24,6 @@
 #include <tools/string.hxx>
 #include <tools/resmgr.hxx>
 
-// ------------
-// - Resource -
-// ------------
-
 class TOOLS_DLLPUBLIC Resource
 {
     protected:

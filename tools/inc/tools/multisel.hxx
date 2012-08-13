@@ -34,10 +34,6 @@ typedef ::std::vector< Range* > ImpSelList;
 
 //------------------------------------------------------------------
 
-// ------------------
-// - MultiSelection -
-// ------------------
-
 class TOOLS_DLLPUBLIC MultiSelection
 {
 private:

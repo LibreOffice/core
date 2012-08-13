@@ -28,11 +28,6 @@ class INetMIMEMessage;
 class SvMemoryStream;
 class SvStream;
 
-/*=========================================================================
- *
- * INetStream Interface.
- *
- *=======================================================================*/
 enum INetStreamStatus
 {
     INETSTREAM_STATUS_LOADED     = -4,
@@ -41,9 +36,6 @@ enum INetStreamStatus
     INETSTREAM_STATUS_ERROR      = -1
 };
 
-/*
- * INetIStream.
- */
 class TOOLS_DLLPUBLIC INetIStream
 {
     // Not implemented.
@@ -60,9 +52,6 @@ public:
     int Read (sal_Char *pData, sal_uIntPtr nSize);
 };
 
-/*
- * INetOStream.
- */
 class INetOStream
 {
     // Not implemented.
@@ -80,11 +69,6 @@ public:
     int Write (const sal_Char *pData, sal_uIntPtr nSize);
 };
 
-/*=========================================================================
- *
- * INetMessageStream Interface.
- *
- *=======================================================================*/
 enum INetMessageStreamState
 {
     INETMSG_EOL_BEGIN,
@@ -162,9 +146,6 @@ public:
     sal_Bool IsHeaderParsed (void) const { return bHeaderParsed; }
 };
 
-/*
- * INetMessageIOStream Interface.
- */
 class INetMessageIOStream
     : public INetMessageIStream,
       public INetMessageOStream
@@ -178,11 +159,6 @@ public:
     virtual ~INetMessageIOStream (void);
 };
 
-/*=========================================================================
- *
- * INetMIMEMessageStream Interface.
- *
- *=======================================================================*/
 enum INetMessageEncoding
 {
     INETMSG_ENCODING_7BIT,

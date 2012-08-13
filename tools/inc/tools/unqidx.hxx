@@ -24,10 +24,6 @@
 #include <tools/contnr.hxx>
 #include <map>
 
-// ---------------
-// - UniqueIndex -
-// ---------------
-
 #define UNIQUEINDEX_ENTRY_NOTFOUND   CONTAINER_ENTRY_NOTFOUND
 
 class TOOLS_DLLPUBLIC UniqueIndexImpl : public std::map<sal_uInt32, void*>

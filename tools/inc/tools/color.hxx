@@ -27,10 +27,7 @@ class ResId;
 
 #include <basegfx/color/bcolor.hxx>
 
-// ---------------
-// - Color-Types -
-// ---------------
-
+// Color types
 typedef sal_uInt32 ColorData;
 #define RGB_COLORDATA( r,g,b )      ((ColorData)(((sal_uInt32)((sal_uInt8)(b))))|(((sal_uInt32)((sal_uInt8)(g)))<<8)|(((sal_uInt32)((sal_uInt8)(r)))<<16))
 #define TRGB_COLORDATA( t,r,g,b )   ((ColorData)(((sal_uInt32)((sal_uInt8)(b))))|(((sal_uInt32)((sal_uInt8)(g)))<<8)|(((sal_uInt32)((sal_uInt8)(r)))<<16)|(((sal_uInt32)((sal_uInt8)(t)))<<24))
@@ -90,9 +87,7 @@ typedef sal_uInt32 ColorData;
 #define COLOR_CHANNEL_MERGE( _def_cDst, _def_cSrc, _def_cSrcTrans ) \
     ((sal_uInt8)((((long)(_def_cDst)-(_def_cSrc))*(_def_cSrcTrans)+(((_def_cSrc)<<8L)|(_def_cDst)))>>8L))
 
-// ---------
-// - Color -
-// ---------
+// Color
 
 class TOOLS_DLLPUBLIC Color
 {

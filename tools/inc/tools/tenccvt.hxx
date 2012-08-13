@@ -22,9 +22,7 @@
 #include <rtl/textenc.h>
 #include "tools/toolsdllapi.h"
 
-// ----------------------------------------
-// - Functions for handling Import/Export -
-// ----------------------------------------
+// Functions for handling Import/Export
 
 /// return an encoding which has more defined Characters as the given
 /// encoding, but have the same definition for the defined characters

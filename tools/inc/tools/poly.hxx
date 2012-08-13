@@ -25,10 +25,6 @@
 
 #include <vector>
 
-// -----------
-// - Defines -
-// -----------
-
 #define POLY_APPEND             (0xFFFF)
 #define POLYPOLY_APPEND         (0xFFFF)
 
@@ -41,20 +37,12 @@
 #define POLY_OPTIMIZE_REDUCE    0x00000008UL
 #define POLY_OPTIMIZE_EDGES     0x00000010UL
 
-// -------------
-// - PolyStyle -
-// -------------
-
 enum PolyStyle
 {
     POLY_ARC = 1,
     POLY_PIE = 2,
     POLY_CHORD = 3
 };
-
-// -------------
-// - PolyFlags -
-// -------------
 
 #ifndef ENUM_POLYFLAGS_DECLARED
 #define ENUM_POLYFLAGS_DECLARED
@@ -66,10 +54,6 @@ enum PolyFlags
     POLY_SYMMTR
 };
 #endif
-
-// ----------------
-// - PolyOptimize -
-// ----------------
 
 class PolyOptimizeData
 {
@@ -88,10 +72,6 @@ public:
     sal_uIntPtr         GetAbsValue() const { DBG_ASSERT( eType == DATA_ABSOLUT, "Wrong data type" ); return mnAbsolut; }
     sal_uInt16          GetPercentValue() const { DBG_ASSERT( eType == DATA_PERCENT, "Wrong data type" ); return mnPercent; }
 };
-
-// -----------
-// - Polygon -
-// -----------
 
 class SvStream;
 class ImplPolygon;
@@ -218,10 +198,6 @@ public:
     // #i76339# made explicit
     explicit Polygon(const ::basegfx::B2DPolygon& rPolygon);
 };
-
-// ---------------
-// - PolyPolygon -
-// ---------------
 
 class TOOLS_DLLPUBLIC PolyPolygon
 {

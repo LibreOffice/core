@@ -26,10 +26,7 @@
 
 class SvStream;
 
-
-// --------
-// - Pair -
-// --------
+// Pair
 
 class Pair
 {
@@ -74,9 +71,7 @@ inline sal_Bool Pair::operator != ( const Pair& rPair ) const
     return ((nA != rPair.nA) || (nB != rPair.nB));
 }
 
-// ---------
-// - Point -
-// ---------
+// Point
 
 class Point : public Pair
 {
@@ -194,9 +189,7 @@ inline Point operator/( const Point &rVal1, const long nVal2 )
     return Point( rVal1.nA/nVal2, rVal1.nB/nVal2 );
 }
 
-// --------
-// - Size -
-// --------
+// Size
 
 class Size : public Pair
 {
@@ -225,9 +218,7 @@ inline Size::Size( long nWidth, long nHeight ) :
 {
 }
 
-// ---------
-// - Range -
-// ---------
+// Range
 
 #define RANGE_MAX   LONG_MAX
 
@@ -272,9 +263,7 @@ inline void Range::Justify()
     }
 }
 
-// -------------
-// - Selection -
-// -------------
+// Selection
 
 #define SELECTION_MIN   LONG_MIN
 #define SELECTION_MAX   LONG_MAX
@@ -333,9 +322,7 @@ inline void Selection::Justify()
     }
 }
 
-// -------------
-// - Rectangle -
-// -------------
+// Rectangle
 
 #define RECT_EMPTY  ((short)-32767)
 

@@ -24,10 +24,6 @@
 #include "sal/types.h"
 #include <tools/solar.h>
 
-// ---------------
-// - Link-Makros -
-// ---------------
-
 typedef long (*PSTUB)( void*, void* );
 
 #define DECL_LINK( Method, ArgType ) \
@@ -88,10 +84,6 @@ typedef long (*PSTUB)( void*, void* );
     IMPL_STUB( Class, Method, ArgType )
 
 #define EMPTYARG
-
-// --------
-// - Link -
-// --------
 
 class TOOLS_DLLPUBLIC Link
 {

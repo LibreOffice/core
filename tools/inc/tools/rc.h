@@ -89,7 +89,7 @@ typedef short RSWND_STYLE;
 #define NUMERICFORMATTER_MIN            0x01
 #define NUMERICFORMATTER_MAX            0x02
 #define NUMERICFORMATTER_STRICTFORMAT   0x04
-//#define NUMERICFORMATTER_I12          0x08    // erAck: got rid of class International (2005-06-17)
+//#define NUMERICFORMATTER_I12          0x08 // removed (2005-06-17)
 #define NUMERICFORMATTER_DECIMALDIGITS  0x10
 #define NUMERICFORMATTER_VALUE          0x20
 #define NUMERICFORMATTER_NOTHOUSANDSEP  0x40
@@ -101,7 +101,7 @@ typedef short RSWND_STYLE;
 #define DATEFORMATTER_MAX               0x02
 #define DATEFORMATTER_LONGFORMAT        0x04
 #define DATEFORMATTER_STRICTFORMAT      0x08
-//#define DATEFORMATTER_I12             0x10    // erAck: got rid of class International (2005-06-17)
+//#define DATEFORMATTER_I12             0x10 // removed (2005-06-17)
 #define DATEFORMATTER_VALUE             0x20
 
 #define TIMEFORMATTER_MIN               0x01
@@ -109,7 +109,7 @@ typedef short RSWND_STYLE;
 #define TIMEFORMATTER_TIMEFIELDFORMAT   0x04
 #define TIMEFORMATTER_DURATION          0x08
 #define TIMEFORMATTER_STRICTFORMAT      0x10
-//#define TIMEFORMATTER_I12             0x20    // erAck: got rid of class International (2005-06-17)
+//#define TIMEFORMATTER_I12             0x20 // removed (2005-06-17)
 #define TIMEFORMATTER_VALUE             0x40
 
 #define NUMERICFIELD_FIRST              0x01
@@ -200,7 +200,7 @@ typedef short RSWND_STYLE;
 #define RSC_IMAGELIST_IDLIST            0x08
 #define RSC_IMAGELIST_IDCOUNT           0x10
 
-// obsolete, should be removed by MM
+// FIXME obsolete, should be removed by MM
 #define RSC_COLOR                       (RSC_NOTYPE + 0x16)
 #define TIME_HOUR                       0x01
 #define TIME_MINUTE                     0x02

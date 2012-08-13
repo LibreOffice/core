@@ -23,10 +23,6 @@
 #include <math.h>
 #include <tools/gen.hxx>
 
-// ------------
-// - Vector2D -
-// ------------
-
 class Vector2D
 {
 private:

@@ -24,16 +24,8 @@
 
 class ResId;
 
-// --------------
-// - Date-Types -
-// --------------
-
 enum DayOfWeek { MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY,
                  SATURDAY, SUNDAY };
-
-// --------
-// - Date -
-// --------
 
 class TOOLS_DLLPUBLIC Date
 {
@@ -46,7 +38,8 @@ public:
     {
         SYSTEM
     };
-    // temporary until all uses are inspected and resolved
+
+    // TODO temporary until all uses are inspected and resolved
     enum DateInitEmpty
     {
         EMPTY

@@ -17,10 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-// ----------------
-// - SimpleResMgr -
-// ----------------
-
 // a simple resource manager : no stacks, no sharing of the impl class, only loading of strings and blobs
 // but thread-safety !! :)
 
@@ -44,10 +40,11 @@ protected:
 public:
                             /** creates a new SimpleResManager
                                 @param pPrefixName
-                                    denotes the prefix of the resource file name, in ThreadTextEncoding
+                                    denotes the prefix of the resource file name,
+                                    in ThreadTextEncoding
                                 @param rLocale
-                                    denotes the locale of the resource file to load. If empty, a default locale
-                                    will be used.
+                                    denotes the locale of the resource file to
+                                    load. If empty, a default locale will be used.
                             */
                             SimpleResMgr( const sal_Char* pPrefixName,
                                           const ::com::sun::star::lang::Locale& _rLocale);

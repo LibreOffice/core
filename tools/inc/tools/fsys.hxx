@@ -32,10 +32,7 @@
 
 #define FEAT_FSYS_DOUBLESPEED
 
-// --------------
-// - FSys-Types -
-// --------------
-
+// FSys-Types
 class DirEntry;
 class FileStat;
 struct FileCopier_Impl;
@@ -134,10 +131,7 @@ enum FSysExact
     FSYS_EXACT
 };
 
-// ------------
-// - FileStat -
-// ------------
-
+// FileStat
 struct dirent;
 class TOOLS_DLLPUBLIC FileStat
 {
@@ -191,9 +185,7 @@ public:
     static sal_Bool     GetReadOnlyFlag( const DirEntry &rEntry );
 };
 
-// ------------
-// - DirEntry -
-// ------------
+// DirEntry
 
 class DirEntryStack;
 
@@ -314,9 +306,7 @@ public:
     static String       GetSearchDelimiter( FSysPathStyle eFormatter = FSYS_STYLE_HOST );
 };
 
-// -----------------------------------------------------
-// - FileCopier - a private impl. detail of tools/ ... -
-// -----------------------------------------------------
+// FileCopier (a private impl. detail of tools/)
 
 class FileCopier
 {
@@ -364,9 +354,7 @@ public:
     const Link&         GetProgressHdl() const { return aProgressLink; }
 };
 
-// -------
-// - Dir -
-// -------
+// Dir
 
 struct DirReader_Impl;
 class TOOLS_DLLPUBLIC Dir : public DirEntry
