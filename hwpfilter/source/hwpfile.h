@@ -267,7 +267,6 @@ class DLLEXPORT HWPFile
 
     private:
 /* hwp 파일 이름 */
-        char      fname[256];
           int           m_nCurrentPage;
           int m_nMaxSettedPage;
         HIODev    *hiodev;
