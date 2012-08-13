@@ -231,9 +231,9 @@ AnimationWindow::~AnimationWindow()
     aBmpExList.Clear();
 
     // Timeliste bereinigen
-    for( i = 0, nCount = aTimeList.Count(); i < nCount; i++ )
-        delete static_cast< Time* >( aTimeList.GetObject( i ) );
-    aTimeList.Clear();
+    for( i = 0, nCount = aTimeList.size(); i < nCount; i++ )
+        delete aTimeList[ i ];
+    aTimeList.clear();
 
     // die Clones loeschen
     delete pMyDoc;
@@ -280,7 +280,7 @@ IMPL_LINK( AnimationWindow, ClickPlayHdl, void *, p )
     if( aRbtBitmap.IsChecked() )
     {
         for( sal_uLong i = 0; i < nCount; i++ )
-            aTime += *static_cast< Time* >( aTimeList.GetObject( i ) );
+            aTime += *aTimeList[ i ];
         nFullTime  = aTime.GetMSFromTime();
     }
     else
@@ -318,7 +318,7 @@ IMPL_LINK( AnimationWindow, ClickPlayHdl, void *, p )
 
         if( aRbtBitmap.IsChecked() )
         {
-            Time* pTime = static_cast< Time* >( aTimeList.GetObject( i ) );
+            Time* pTime = aTimeList[i];
             DBG_ASSERT( pTime, "Keine Zeit gefunden!" );
 
             aTimeField.SetTime( *pTime );
@@ -400,7 +400,7 @@ IMPL_LINK( AnimationWindow, ClickRbtHdl, void *, p )
         sal_uLong n = static_cast<sal_uLong>(aNumFldBitmap.GetValue());
         if( n > 0 )
         {
-            Time* pTime = static_cast< Time* >( aTimeList.GetObject( n - 1 ) );
+            Time* pTime = aTimeList[ n - 1 ];
             if( pTime )
                 aTimeField.SetTime( *pTime );
         }
@@ -442,11 +442,11 @@ IMPL_LINK( AnimationWindow, ClickRemoveBitmapHdl, void *, pBtn )
             aBmpExList.Remove();
             pBitmapEx = static_cast< BitmapEx* >( aBmpExList.GetCurObject() );
         }
-        Time* pTime = static_cast< Time* >( aTimeList.GetObject( nPos ) );
+        Time* pTime = aTimeList[ nPos ];
         if( pTime )
         {
             delete pTime;
-            aTimeList.Remove( nPos );
+            aTimeList.erase( aTimeList.begin() + nPos );
         }
 
         pObject = pPage->GetObj( nPos );
@@ -490,12 +490,12 @@ IMPL_LINK( AnimationWindow, ClickRemoveBitmapHdl, void *, pBtn )
             aBmpExList.Clear();
 
             // Timeliste bereinigen
-            nCount = aTimeList.Count();
+            nCount = aTimeList.size();
             for( i = 0; i < nCount; i++ )
             {
-                delete static_cast< Time* >( aTimeList.GetObject( i ) );
+                delete aTimeList[ i ];
             }
-            aTimeList.Clear();
+            aTimeList.clear();
         }
     }
 
@@ -554,7 +554,7 @@ IMPL_LINK_NOARG(AnimationWindow, ModifyTimeHdl)
 {
     sal_uLong nPos = static_cast<sal_uLong>(aNumFldBitmap.GetValue() - 1);
 
-    Time* pTime = static_cast< Time* >( aTimeList.GetObject( nPos ) );
+    Time* pTime = aTimeList[ nPos ];
     DBG_ASSERT( pTime, "Zeit nicht gefunden!" );
 
     *pTime = aTimeField.GetTime();
@@ -919,7 +919,7 @@ void AnimationWindow::AddObj (::sd::View& rView )
                         // Time
                         long nTime = rAnimBmp.nWait;
                         Time* pTime = new Time( 0, 0, nTime / 100, nTime % 100 );
-                        aTimeList.Insert( pTime, aBmpExList.GetCurPos() + 1 );
+                        aTimeList.insert( aTimeList.begin() + aBmpExList.GetCurPos() + 1, pTime );
 
                         // Weiterschalten der BitmapListe
                         aBmpExList.Next();
@@ -944,7 +944,7 @@ void AnimationWindow::AddObj (::sd::View& rView )
 
                     // Time
                     Time* pTime = new Time( aTimeField.GetTime() );
-                    aTimeList.Insert( pTime, aBmpExList.GetCurPos() + 1 );
+                    aTimeList.insert( aTimeList.begin() + aBmpExList.GetCurPos() + 1, pTime );
 
                     // Clone
                     pPage->InsertObject( pSnapShot->Clone(), aBmpExList.GetCurPos() + 1 );
@@ -963,7 +963,7 @@ void AnimationWindow::AddObj (::sd::View& rView )
 
             // Time
             Time* pTime = new Time( aTimeField.GetTime() );
-            aTimeList.Insert( pTime, aBmpExList.GetCurPos() + 1 );
+            aTimeList.insert( aTimeList.begin() + aBmpExList.GetCurPos() + 1, pTime );
 
         }
 
@@ -991,7 +991,7 @@ void AnimationWindow::AddObj (::sd::View& rView )
 
                     // Time
                     Time* pTime = new Time( aTimeField.GetTime() );
-                    aTimeList.Insert( pTime, aBmpExList.GetCurPos() + 1 );
+                    aTimeList.insert( aTimeList.begin() + aBmpExList.GetCurPos() + 1, pTime );
 
                     pPage->InsertObject( pObject->Clone(), aBmpExList.GetCurPos() + 1 );
 
@@ -1075,7 +1075,7 @@ void AnimationWindow::CreateAnimObj (::sd::View& rView )
 
         for( i = 0; i < nCount; i++ )
         {
-            Time* pTime = static_cast< Time* >( aTimeList.GetObject( i ) );
+            Time* pTime = aTimeList[i];
             long  nTime = pTime->Get100Sec();
             nTime += pTime->GetSec() * 100;
 

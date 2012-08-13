@@ -130,7 +130,7 @@ private:
 
     ::Window*       pWin;
     List            aBmpExList;
-    List            aTimeList;
+    std::vector<Time*> aTimeList;
     SdDrawDocument* pMyDoc;
     BitmapEx*       pBitmapEx;
 
