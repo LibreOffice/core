@@ -32,22 +32,22 @@ typedef void* PVOID;
 class CBlock
 {
 private:
-    CBlock*         pPrev;              // Previous block
-    CBlock*         pNext;              // Next block
-    sal_uInt16      nSize;              // block size
-    sal_uInt16      nCount;             // number of pointers
-    void**          pNodes;             // stores node pointers
+    CBlock*         pPrev;  ///< Previous block
+    CBlock*         pNext;  ///< Next block
+    sal_uInt16      nSize;  ///< block size
+    sal_uInt16      nCount; ///< number of pointers
+    void**          pNodes; ///< stores node pointers
 
 #if defined DBG_UTIL
     static char const * DbgCheckCBlock(void const *);
 #endif
 
 public:
-                    // used for list container
+                    /// used for list container
                     CBlock( sal_uInt16 nSize, CBlock* pPrev, CBlock* pNext );
-                    // used for array container
+                    /// used for array container
                     CBlock( sal_uInt16 nSize, CBlock* pPrev );
-                    // Copy-Ctor
+                    /// Copy-Ctor
                     CBlock( const CBlock& r, CBlock* pPrev );
                     ~CBlock();
 
@@ -74,28 +74,15 @@ private:
     friend class Container;
 };
 
-/*************************************************************************
-|*
-|*    CBlock::GetObject()
-|*
-|*    Description      Returns a node pointer given a block index
-|*
-*************************************************************************/
-
+/// @return a node pointer given a block index
 inline void* CBlock::GetObject( sal_uInt16 nIndex ) const
 {
     return pNodes[nIndex];
 }
 
-/*************************************************************************
-|*
-|*    Container::ImpGetObject()
-|*
-|*    Description       A pointer is often located in the first block,
-|*                      thus check this position before calling GetObject
-|*
-*************************************************************************/
-
+/** A pointer is often located in the first block, thus check this position
+    before calling GetObject.
+ */
 inline void* Container::ImpGetObject( sal_uIntPtr nIndex ) const
 {
     if ( pFirstBlock && (nIndex < pFirstBlock->Count()) )
@@ -105,19 +92,12 @@ inline void* Container::ImpGetObject( sal_uIntPtr nIndex ) const
         return GetObject( nIndex );
 }
 
-/*************************************************************************
-|*
-|*    Container::ImpGetOnlyNodes()
-|*
-|*    Description       If only one block exists, return its data array
-|*
-*************************************************************************/
-
 // #i70651#: Prevent warnings on Mac OS X
 #ifdef MACOSX
 #pragma GCC system_header
 #endif
 
+/// If only one block exists, return its data array.
 inline void** Container::ImpGetOnlyNodes() const
 {
     if ( (pFirstBlock == pLastBlock) && pFirstBlock )

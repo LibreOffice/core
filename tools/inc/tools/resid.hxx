@@ -88,9 +88,8 @@ class ResId
     { m_nWinBits = nBits; }
 
     RESOURCE_TYPE   GetRT() const { return( m_nRT ); }
-    const ResId &   SetRT( RESOURCE_TYPE nType ) const
-    /*
-    Set the type if not already set. Ask for tye with GetRT()
+
+    /** Set the type if not already set. Ask for tye with GetRT()
 
     [Example]
     ResId aId( 1000 );
@@ -101,28 +100,29 @@ class ResId
     @see
     ResId::GetRT2(), ResId::GetRT()
     */
+    const ResId &   SetRT( RESOURCE_TYPE nType ) const
     {
         if( RSC_NOTYPE == m_nRT )
             m_nRT = nType;
         return *this;
     }
-    RESOURCE_TYPE   GetRT2() const
-    /*
-    Get the effective type (m_nRT2 or m_nRT1)
+
+    /** Get the effective type (m_nRT2 or m_nRT1)
 
     A second resource type is used to supercede settings
     of the base class ( e.g. Window )
     */
+    RESOURCE_TYPE   GetRT2() const
     {
         return (RSC_NOTYPE == m_nRT2) ? m_nRT : m_nRT2;
     }
-    const ResId &   SetRT2( RESOURCE_TYPE nTyp ) const
-    /*
-    Set the superceding type. Ask spcifically for it with GetRT2()
+
+    /** Set the superceding type. Ask spcifically for it with GetRT2()
 
     SetRT2() may only be called if no derived class calls SetRT in its
     Resource constructor.
     */
+    const ResId &   SetRT2( RESOURCE_TYPE nTyp ) const
     {
         if( RSC_NOTYPE == m_nRT2 )
             m_nRT2 = nTyp;

@@ -24,12 +24,7 @@
 #include <tools/stream.hxx>
 #include <rtl/string.hxx>
 
-/*********************************************************************
-*
-*   This class can be used for extracting tokens from a file
-*
-*********************************************************************/
-
+/// This class can be used for extracting tokens from a file
 class SimpleConfig
 {
     SvFileStream aFileStream;

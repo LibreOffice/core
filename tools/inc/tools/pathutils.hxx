@@ -35,55 +35,52 @@
 
 namespace tools {
 
-// Determine the filename part of a path.
-//
-// @param path
-// A non-NULL pointer to a null-terminated path.
-//
-// @return
-// A pointer to the trailing filename part of the given path.
+/** Determine the filename part of a path.
+    @param path
+        A non-NULL pointer to a null-terminated path.
+    @return
+        A pointer to the trailing filename part of the given path.
+*/
 WCHAR * filename(WCHAR * path);
 
-// Concatenate two paths.
-//
-// Either the first path is empty and the second path is an absolute path.  Or
-// the first path is an absolute path that ends in a backslash and the second
-// path is a relative path.  In the latter case, to avoid paths that grow too
-// long, leading .. segments of the second path are removed together with
-// trailing segments from the first path.  This should not cause problems as
-// long as there are no symbolic links on Windows (as with symbolic links,
-// x\y\.. and x might denote different directories).
-//
-// @param path
-// An output paremeter taking the resulting path; must point at a valid range of
-// memory of size at least MAX_PATH.  If NULL is returned, the content is
-// unspecified.
-//
-// @param frontBegin, frontEnd
-// Forms a valid range [frontBegin .. frontEnd) of less than MAX_PATH size.
-//
-// @param backBegin, backLength
-// Forms a valid range [backBeghin .. backBegin + backLength) of less than
-// MAX_PATH size.
-//
-// @return
-// A pointer to the terminating null character of the concatenation, or NULL if
-// a failure occurred.
+/** Concatenate two paths.
+
+    Either the first path is empty and the second path is an absolute path. Or
+    the first path is an absolute path that ends in a backslash and the second
+    path is a relative path.  In the latter case, to avoid paths that grow too
+    long, leading .. segments of the second path are removed together with
+    trailing segments from the first path. This should not cause problems as long
+    as there are no symbolic links on Windows (as with symbolic links, x\y\.. and
+    x might denote different directories).
+
+    @param path
+        An output paremeter taking the resulting path; must point at a valid
+        range of memory of size at least MAX_PATH.  If NULL is returned, the
+        content is unspecified.
+    @param frontBegin, frontEnd
+        Forms a valid range [frontBegin .. frontEnd) of less than MAX_PATH size.
+    @param backBegin, backLength
+        Forms a valid range [backBeghin .. backBegin + backLength) of less than
+        MAX_PATH size.
+    @return
+        A pointer to the terminating null character of the concatenation, or NULL
+        if a failure occurred.
+*/
 WCHAR * buildPath(
     WCHAR * path, WCHAR const * frontBegin, WCHAR const * frontEnd,
     WCHAR const * backBegin, std::size_t backLength);
 
-// Resolve a link file.
-//
-// @param path
-// An input/output parameter taking the path; must point at a valid range of
-// memory of size at least MAX_PATH.  On input, contains the null-terminated
-// full path of the link file.  On output, contains the null-terminated full
-// path of the resolved link; if NULL is returned, the content is unspecified.
-//
-// @return
-// A pointer to the terminating null character of path, or NULL if a failure
-// occurred.
+/** Resolve a link file.
+
+    @param path
+        An input/output parameter taking the path; must point at a valid range of
+        memory of size at least MAX_PATH.  On input, contains the null-terminated
+        full path of the link file.  On output, contains the null-terminated full
+        path of the resolved link; if NULL is returned, the content is unspecified.
+    @return
+        A pointer to the terminating null character of path, or NULL if a failure
+        occurred.
+*/
 WCHAR * resolveLink(WCHAR * path);
 
 }

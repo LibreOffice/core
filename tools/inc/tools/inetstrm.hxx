@@ -96,9 +96,7 @@ enum INetMessageStreamState
     INETMSG_EOL_FESC
 };
 
-/*
- * INetMessageIStream (Message Generator) Interface.
- */
+/// Message Generator Interface.
 class INetMessageIStream : public INetIStream
 {
     INetMessage    *pSourceMsg;
@@ -134,9 +132,7 @@ public:
     sal_Bool IsHeaderGenerated (void) const { return bHeaderGenerated; }
 };
 
-/*
- * INetMessageOStream (Message Parser) Interface.
- */
+/// Message Parser Interface.
 class INetMessageOStream : public INetOStream
 {
     INetMessage            *pTargetMsg;

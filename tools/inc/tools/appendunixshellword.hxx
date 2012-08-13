@@ -33,14 +33,14 @@ namespace rtl {
 
 namespace tools {
 
-// append arbitrary bytes as a properly quoted Unix-style shell word
-//
-// @param accumulator
-// the string buffer to which the word is appended (without any surrounding
-// whitespace); must not be null
-//
-// @param text
-// the text to add
+/** append arbitrary bytes as a properly quoted Unix-style shell word
+
+    @param accumulator
+        the string buffer to which the word is appended (without any surrounding
+        whitespace); must not be null
+    @param text
+        the text to add
+*/
 TOOLS_DLLPUBLIC void appendUnixShellWord(
     rtl::OStringBuffer * accumulator, rtl::OString const & text);
 

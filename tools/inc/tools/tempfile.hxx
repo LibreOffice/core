@@ -29,32 +29,38 @@ class TOOLS_DLLPUBLIC TempFile
     sal_Bool        bKillingFileEnabled;
 
 public:
-                    // Create a temporary file or directory in a given folder or the default tempfile folder
+    /** Create a temporary file or directory in a given folder or the default
+        tempfile folder. */
                     TempFile( const String* pParent=NULL, sal_Bool bDirectory=sal_False );
 
-                    // Create a temporary file or directory in a given folder or the default tempfile folder; its name starts
-                    // with some given characters followed by a counter ( example: rLeadingChars="abc" means "abc0","abc1"
-                    // and so on, depending on existing files in that folder ).
-                    // The extension string may be f.e. ".txt" or "", if no extension string is given, ".tmp" is used
+    /** Create a temporary file or directory in a given folder or the default
+        tempfile folder; its name starts with some given characters followed by
+        a counter ( example: rLeadingChars="abc" means "abc0","abc1" and so on,
+        depending on existing files in that folder ).
+
+        The extension string may be f.e. ".txt" or "", if no extension string is
+        given, ".tmp" is used.
+    */
                     TempFile( const String& rLeadingChars, const String* pExtension=NULL, const String* pParent=NULL, sal_Bool bDirectory=sal_False );
 
-                    // TempFile will be removed from disk in dtor if EnableKillingTempFile was called before.
-                    // TempDirs will be removed recursively in that case.
+    /** TempFile will be removed from disk in dtor if EnableKillingTempFile was
+        called before. TempDirs will be removed recursively in that case. */
                     ~TempFile();
 
     sal_Bool        IsValid() const;
 
-                    // Returns the real name of the tempfile in file URL scheme.
+    /** Returns the real name of the tempfile in file URL scheme. */
     String          GetName() const;
 
-                    // If enabled the file will be removed from disk when the dtor is called ( default is not enabled )
+    /** If enabled the file will be removed from disk when the dtor is called
+        (default is not enabled) */
     void            EnableKillingFile( sal_Bool bEnable=sal_True )
                     { bKillingFileEnabled = bEnable; }
 
     sal_Bool        IsKillingFileEnabled() const
                     { return bKillingFileEnabled; }
 
-                    // Only create a name for a temporary file that would be valid at that moment.
+    /** Only create a name for a temporary file that would be valid at that moment. */
     static String   CreateTempName( const String* pParent=NULL );
 };
 

@@ -50,12 +50,12 @@ inline rtl_TextEncoding GetStoreCharSet( rtl_TextEncoding eEncoding )
 typedef sal_uInt16 StreamMode;
 
 // read, write, create,... options
-#define STREAM_READ                     0x0001  // allow read accesses
-#define STREAM_WRITE                    0x0002  // allow write accesses
+#define STREAM_READ                     0x0001  ///< allow read accesses
+#define STREAM_WRITE                    0x0002  ///< allow write accesses
 // file i/o
-#define STREAM_NOCREATE                 0x0004  // 1 == Dont create file
-#define STREAM_TRUNC                    0x0008  // Truncate _existing_ file to zero length
-#define STREAM_COPY_ON_SYMLINK          0x0010  // copy-on-write for symlinks (UNX)
+#define STREAM_NOCREATE                 0x0004  ///< 1 == Dont create file
+#define STREAM_TRUNC                    0x0008  ///< Truncate _existing_ file to zero length
+#define STREAM_COPY_ON_SYMLINK          0x0010  ///< copy-on-write for symlinks (UNX)
 
 #define STREAM_READWRITEBITS            (STREAM_READ | STREAM_WRITE | \
                                          STREAM_NOCREATE | STREAM_TRUNC)
@@ -270,7 +270,7 @@ private:
     SvStream&       operator=( const SvStream& rStream ); // not implemented
 
 protected:
-    sal_Size            nBufFilePos;    // File position of pBuf[0]
+    sal_Size            nBufFilePos;    ///< File position of pBuf[0]
     sal_uInt16          eStreamMode;
     sal_Bool            bIsWritable;
 
@@ -287,8 +287,8 @@ protected:
     sal_Size            CryptAndWriteBuffer( const void* pStart, sal_Size nLen );
     sal_Bool            EncryptBuffer( void* pStart, sal_Size nLen );
 
-    void            SyncSvStream( sal_Size nNewStreamPos ); // SvStream <- Medium
-    void            SyncSysStream(); // SvStream -> Medium
+    void            SyncSvStream( sal_Size nNewStreamPos ); ///< SvStream <- Medium
+    void            SyncSysStream(); ///< SvStream -> Medium
 
 public:
                     SvStream();
@@ -307,7 +307,7 @@ public:
     sal_uInt16          GetNumberFormatInt() const { return nNumberFormatInt; }
                     /// Enable/disable swapping of endians, may be needed for Unicode import/export
     inline void     SetEndianSwap( sal_Bool bVal );
-                    // returns status of endian swap flag
+    /// returns status of endian swap flag
     sal_Bool            IsEndianSwap() const { return 0 != bSwap; }
 
     void            SetCompressMode( sal_uInt16 nNewMode )
@@ -528,26 +528,26 @@ TOOLS_DLLPUBLIC SvStream& endlu( SvStream& rStr );
 /// call endlu() if eStreamCharSet==RTL_TEXTECODING_UNICODE otherwise endl()
 TOOLS_DLLPUBLIC SvStream& endlub( SvStream& rStr );
 
-//Attempt to read nUnits 8bit units to an OString, returned rtl::OString's
-//length is number of units successfully read
+/// Attempt to read nUnits 8bit units to an OString, returned rtl::OString's
+/// length is number of units successfully read
 TOOLS_DLLPUBLIC rtl::OString read_uInt8s_ToOString(SvStream& rStrm,
     sal_Size nUnits);
 
-//Attempt to read nUnits 8bit units to an OUString
+/// Attempt to read nUnits 8bit units to an OUString
 TOOLS_DLLPUBLIC inline rtl::OUString read_uInt8s_ToOUString(SvStream& rStrm,
     sal_Size nUnits, rtl_TextEncoding eEnc)
 {
     return rtl::OStringToOUString(read_uInt8s_ToOString(rStrm, nUnits), eEnc);
 }
 
-//Attempt to read nUnits 16bit units to an OUString, returned
-//rtl::OUString's length is number of units successfully read
+/// Attempt to read nUnits 16bit units to an OUString, returned
+/// rtl::OUString's length is number of units successfully read
 TOOLS_DLLPUBLIC rtl::OUString read_uInt16s_ToOUString(SvStream& rStrm,
     sal_Size nUnits);
 
-//Attempt to read a pascal-style length (of type prefix) prefixed sequence of
-//16bit units to an OUString, returned rtl::OString's length is number of units
-//successfully read.
+/// Attempt to read a pascal-style length (of type prefix) prefixed sequence of
+/// 16bit units to an OUString, returned rtl::OString's length is number of
+/// units successfully read.
 template<typename prefix>
 rtl::OUString read_lenPrefixed_uInt16s_ToOUString(SvStream& rStrm)
 {
@@ -556,8 +556,8 @@ rtl::OUString read_lenPrefixed_uInt16s_ToOUString(SvStream& rStrm)
     return read_uInt16s_ToOUString(rStrm, nUnits);
 }
 
-//Attempt to write a prefixed sequence of nUnits 16bit units from an OUString,
-//returned value is number of bytes written
+/// Attempt to write a prefixed sequence of nUnits 16bit units from an OUString,
+/// returned value is number of bytes written
 TOOLS_DLLPUBLIC sal_Size write_uInt16s_FromOUString(SvStream& rStrm,
     const rtl::OUString& rStr, sal_Size nUnits);
 
@@ -569,9 +569,9 @@ TOOLS_DLLPUBLIC inline sal_Size write_uInt16s_FromOUString(SvStream& rStrm,
 
 namespace streamdetail
 {
-    //Attempt to write a pascal-style length (of type prefix) prefixed sequence of
-    //units from a string-type, returned value is number of bytes written (including
-    //byte-count of prefix)
+    /// Attempt to write a pascal-style length (of type prefix) prefixed
+    /// sequence of units from a string-type, returned value is number of bytes
+    /// written (including byte-count of prefix)
     template<typename prefix, typename S, sal_Size (*writeOper)(SvStream&, const S&, sal_Size)>
         sal_Size write_lenPrefixed_seq_From_str(SvStream& rStrm, const S &rStr)
     {
@@ -590,29 +590,29 @@ namespace streamdetail
     }
 }
 
-//Attempt to write a pascal-style length (of type prefix) prefixed sequence of
-//16bit units from an OUString, returned value is number of bytes written (including
-//byte-count of prefix)
+/// Attempt to write a pascal-style length (of type prefix) prefixed sequence
+/// of 16bit units from an OUString, returned value is number of bytes written
+/// (including byte-count of prefix)
 template<typename prefix> sal_Size write_lenPrefixed_uInt16s_FromOUString(SvStream& rStrm,
     const rtl::OUString &rStr)
 {
     return streamdetail::write_lenPrefixed_seq_From_str<prefix, rtl::OUString, write_uInt16s_FromOUString>(rStrm, rStr);
 }
 
-//Attempt to read 8bit units to an OString until a zero terminator is
-//encountered, returned rtl::OString's length is number of units *definitely*
-//successfully read, check SvStream::good() to see if null terminator was
-//sucessfully read
+/// Attempt to read 8bit units to an OString until a zero terminator is
+/// encountered, returned rtl::OString's length is number of units *definitely*
+/// successfully read, check SvStream::good() to see if null terminator was
+/// sucessfully read
 TOOLS_DLLPUBLIC rtl::OString read_zeroTerminated_uInt8s_ToOString(SvStream& rStrm);
 
-//Attempt to read 8bit units assuming source encoding eEnc to an OUString until
-//a zero terminator is encountered. Check SvStream::good() to see if null
-//terminator was sucessfully read
+/// Attempt to read 8bit units assuming source encoding eEnc to an OUString
+/// until a zero terminator is encountered. Check SvStream::good() to see if
+/// null terminator was sucessfully read
 TOOLS_DLLPUBLIC rtl::OUString read_zeroTerminated_uInt8s_ToOUString(SvStream& rStrm, rtl_TextEncoding eEnc);
 
-//Attempt to read a pascal-style length (of type prefix) prefixed sequence of
-//8bit units to an OString, returned rtl::OString's length is number of units
-//successfully read.
+/// Attempt to read a pascal-style length (of type prefix) prefixed sequence of
+/// 8bit units to an OString, returned rtl::OString's length is number of units
+/// successfully read.
 template<typename prefix>
 rtl::OString read_lenPrefixed_uInt8s_ToOString(SvStream& rStrm)
 {
@@ -621,8 +621,8 @@ rtl::OString read_lenPrefixed_uInt8s_ToOString(SvStream& rStrm)
     return read_uInt8s_ToOString(rStrm, nUnits);
 }
 
-//Attempt to read a pascal-style length (of type prefix) prefixed sequence of
-//8bit units to an OUString
+/// Attempt to read a pascal-style length (of type prefix) prefixed sequence of
+/// 8bit units to an OUString
 template<typename prefix>
 rtl::OUString read_lenPrefixed_uInt8s_ToOUString(SvStream& rStrm,
     rtl_TextEncoding eEnc)
@@ -630,8 +630,8 @@ rtl::OUString read_lenPrefixed_uInt8s_ToOUString(SvStream& rStrm,
     return rtl::OStringToOUString(read_lenPrefixed_uInt8s_ToOString<prefix>(rStrm), eEnc);
 }
 
-//Attempt to write a prefixed sequence of nUnits 8bit units from an OString,
-//returned value is number of bytes written
+/// Attempt to write a prefixed sequence of nUnits 8bit units from an OString,
+/// returned value is number of bytes written
 TOOLS_DLLPUBLIC inline sal_Size write_uInt8s_FromOString(SvStream& rStrm, const rtl::OString& rStr,
     sal_Size nUnits)
 {
@@ -736,21 +736,20 @@ protected:
     virtual void    SetSize( sal_Size nSize );
     virtual void    FlushData();
 
-    // AllocateMemory must update pBuf accordingly
-    // - pBuf: Address of new block
-    virtual sal_Bool    AllocateMemory( sal_Size nSize );
+    /// AllocateMemory must update pBuf accordingly
+    /// - pBuf: Address of new block
+    virtual sal_Bool AllocateMemory( sal_Size nSize );
 
-    // ReAllocateMemory must update the following variables:
-    // - pBuf: Address of new block
-    // - nEndOfData: Set to nNewSize-1L if outside of block
-    //               Set to 0 if new block size is 0 bytes
-    // - nSize: New block size
-    // - nPos: Set to 0 if position outside of block
-    virtual sal_Bool    ReAllocateMemory( long nDiff );
+    /// ReAllocateMemory must update the following variables:
+    /// - pBuf: Address of new block
+    /// - nEndOfData: Set to nNewSize-1L , if outside of block
+    ///               Set to 0 , if new block size is 0 bytes
+    /// - nSize: New block size
+    /// - nPos: Set to 0 if position outside of block
+    virtual sal_Bool ReAllocateMemory( long nDiff );
 
-    // is called when this stream allocated the buffer
-    // or the buffer is resized.
-    // FreeMemory may need to NULL handles in derived classes
+    /// Is called when this stream allocated the buffer or the buffer is
+    /// resized. FreeMemory may need to NULLify handles in derived classes.
     virtual void    FreeMemory();
 
                     SvMemoryStream(void*) { }   // for sub-classes
@@ -778,13 +777,11 @@ public:
     virtual sal_Size remainingSize() { return GetSize() - Tell(); }
 };
 
-// --------------------
-// - SvDataCopyStream -
-// --------------------
+/** Data Copy Stream
 
-// This class is the foundation for all classes that use SvData for
-// transportation (e.g., graphics).
-
+    This class is the foundation for all classes, using SvData
+    (SO2\DTRANS.HXX/CXX) for transportation (e.g., graphics).
+*/
 class TOOLS_DLLPUBLIC SvDataCopyStream
 {
 public:

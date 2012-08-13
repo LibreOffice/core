@@ -29,9 +29,7 @@
 #include <basegfx/point/b2dpoint.hxx>
 #include <tools/toolsdllapi.h>
 
-
-// Supported methods for setting/keeping the aspect ratio
-
+/// Supported methods for setting the aspect ratio
 enum Base3DRatio
 {
     Base3DRatioGrow = 1,
@@ -39,16 +37,14 @@ enum Base3DRatio
     Base3DRatioMiddle
 };
 
-// Supported projection types
-
+/// Supported projection types
 enum Base3DProjectionType
 {
     Base3DProjectionTypeParallel = 1,
     Base3DProjectionTypePerspective
 };
 
-// Transformation sets for 3D output
-
+/// Transformation sets for 3D output
 class TOOLS_DLLPUBLIC B3dTransformationSet
 {
 private:
@@ -188,13 +184,11 @@ protected:
     virtual void DeviceRectangleChange();
 };
 
-/*************************************************************************
-|* Viewport for B3D
-|*
-|* Uses a simplified model, in which a point
-|* is described using a View Reference Point (VRP)
-\************************************************************************/
+/** Viewport for B3D
 
+    Uses a simplified model, in which a point is described using a View
+    Reference Point (VRP).
+*/
 class TOOLS_DLLPUBLIC B3dViewport : public B3dTransformationSet
 {
 private:

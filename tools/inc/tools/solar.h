@@ -31,13 +31,11 @@
 #endif
 #define _SOLAR__PRIVATE 1
 
-/************************************************************
- Intermediate type to solve type clash with Windows headers.
+/** Intermediate type to solve type clash with Windows headers.
  Should be removed as soon as all code parts have been reviewed
  and the correct type is known. Most of the times ULONG is meant
  to be a 32-Bit unsigned integer type as sal_uInt32 is often
- used for data exchange or for similiar method args.
-*************************************************************/
+ used for data exchange or for similiar method args. */
 typedef sal_uIntPtr    sal_uLong; /* Replaces type ULONG */
 
 /*** misc. macros to leverage platform and compiler differences ********/
