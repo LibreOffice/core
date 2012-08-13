@@ -139,6 +139,7 @@ gb_Library_NOILIBFILENAMES += \
     nspr4 \
     nss3 \
     shlwapi \
+    smime3 \
     uwinapi \
     version \
 
