@@ -86,9 +86,9 @@ enum StringCompare { COMPARE_LESS = -1, COMPARE_EQUAL = 0, COMPARE_GREATER = 1 }
 
 typedef struct _UniStringData
 {
-    sal_Int32               mnRefCount;     // reference counter
-    sal_Int32               mnLen;          // Length of the String
-    sal_Unicode             maStr[1];       // CharArray (String)
+    sal_Int32           mnRefCount;     // reference counter
+    sal_Int32           mnLen;          // Length of the String
+    sal_Unicode         maStr[1];       // CharArray (String)
 } UniStringData;
 
 #ifdef SAL_W32
@@ -123,7 +123,7 @@ private:
     //detect and reject wrong way to attempt to create a UniString from a substring of
     //a rtl::OString
     TOOLS_DLLPRIVATE UniString(const rtl::OString& rByteStr, xub_StrLen nPos, xub_StrLen nLen,
-        sal_uInt32 nCvtFlags = BYTESTRING_TO_UNISTRING_CVTFLAGS);
+    sal_uInt32       nCvtFlags = BYTESTRING_TO_UNISTRING_CVTFLAGS);
 
     //no longer implemented
     TOOLS_DLLPRIVATE UniString( const rtl::OString& rByteStr,
@@ -229,20 +229,20 @@ public:
                                                   xub_StrLen nLen = STRING_LEN ) const;
     StringCompare       CompareIgnoreCaseToAscii( const sal_Char* pAsciiStr,
                                                   xub_StrLen nLen = STRING_LEN ) const;
-    sal_Bool                Equals( const UniString& rStr ) const;
-    sal_Bool                EqualsAscii( const sal_Char* pAsciiStr ) const;
-    sal_Bool                EqualsIgnoreCaseAscii( const UniString& rStr ) const;
-    sal_Bool                EqualsIgnoreCaseAscii( const sal_Unicode* pCharStr ) const;
-    sal_Bool                EqualsIgnoreCaseAscii( const sal_Char* pAsciiStr ) const;
-    sal_Bool                Equals( const UniString& rStr,
+    sal_Bool            Equals( const UniString& rStr ) const;
+    sal_Bool            EqualsAscii( const sal_Char* pAsciiStr ) const;
+    sal_Bool            EqualsIgnoreCaseAscii( const UniString& rStr ) const;
+    sal_Bool            EqualsIgnoreCaseAscii( const sal_Unicode* pCharStr ) const;
+    sal_Bool            EqualsIgnoreCaseAscii( const sal_Char* pAsciiStr ) const;
+    sal_Bool            Equals( const UniString& rStr,
                                 xub_StrLen nIndex, xub_StrLen nLen ) const;
-    sal_Bool                Equals( const sal_Unicode* pCharStr,
+    sal_Bool            Equals( const sal_Unicode* pCharStr,
                                 xub_StrLen nIndex, xub_StrLen nLen ) const;
-    sal_Bool                EqualsAscii( const sal_Char* pAsciiStr,
+    sal_Bool            EqualsAscii( const sal_Char* pAsciiStr,
                                      xub_StrLen nIndex, xub_StrLen nLen ) const;
-    sal_Bool                EqualsIgnoreCaseAscii( const UniString& rStr,
+    sal_Bool            EqualsIgnoreCaseAscii( const UniString& rStr,
                                                xub_StrLen nIndex, xub_StrLen nLen ) const;
-    sal_Bool                EqualsIgnoreCaseAscii( const sal_Char* pAsciiStr,
+    sal_Bool            EqualsIgnoreCaseAscii( const sal_Char* pAsciiStr,
                                                xub_StrLen nIndex, xub_StrLen nLen ) const;
 
     xub_StrLen          Match( const UniString& rStr ) const;
@@ -274,17 +274,17 @@ public:
     void                ReleaseBufferAccess( xub_StrLen nLen = STRING_LEN );
     sal_Unicode*        AllocBuffer( xub_StrLen nLen );
 
-    friend sal_Bool         operator == ( const UniString& rStr1,   const UniString& rStr2 )
+    friend sal_Bool     operator == ( const UniString& rStr1,   const UniString& rStr2 )
                             { return rStr1.Equals( rStr2 ); }
-    friend sal_Bool         operator != ( const UniString& rStr1,   const UniString& rStr2 )
+    friend sal_Bool     operator != ( const UniString& rStr1,   const UniString& rStr2 )
                             { return !(operator == ( rStr1, rStr2 )); }
-    friend sal_Bool         operator <  ( const UniString& rStr1,   const UniString& rStr2 )
+    friend sal_Bool     operator <  ( const UniString& rStr1,   const UniString& rStr2 )
                             { return (rStr1.CompareTo( rStr2 ) == COMPARE_LESS); }
-    friend sal_Bool         operator >  ( const UniString& rStr1,   const UniString& rStr2 )
+    friend sal_Bool     operator >  ( const UniString& rStr1,   const UniString& rStr2 )
                             { return (rStr1.CompareTo( rStr2 ) == COMPARE_GREATER); }
-    friend sal_Bool         operator <= ( const UniString& rStr1,   const UniString& rStr2 )
+    friend sal_Bool     operator <= ( const UniString& rStr1,   const UniString& rStr2 )
                             { return !(operator > ( rStr1, rStr2 )); }
-    friend sal_Bool         operator >= ( const UniString& rStr1,   const UniString& rStr2 )
+    friend sal_Bool     operator >= ( const UniString& rStr1,   const UniString& rStr2 )
                             { return !(operator < ( rStr1, rStr2 )); }
 };
 

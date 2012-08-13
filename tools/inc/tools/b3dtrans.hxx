@@ -49,68 +49,68 @@ class TOOLS_DLLPUBLIC B3dTransformationSet
 {
 private:
     // Object Matrix Object -> World
-    basegfx::B3DHomMatrix           maObjectTrans;
-    basegfx::B3DHomMatrix           maInvObjectTrans;
+    basegfx::B3DHomMatrix maObjectTrans;
+    basegfx::B3DHomMatrix maInvObjectTrans;
 
     // Orientation Matrix
-    basegfx::B3DHomMatrix           maOrientation;
-    basegfx::B3DHomMatrix           maInvOrientation;
+    basegfx::B3DHomMatrix maOrientation;
+    basegfx::B3DHomMatrix maInvOrientation;
 
     // Projection Matrix
-    basegfx::B3DHomMatrix           maProjection;
-    basegfx::B3DHomMatrix           maInvProjection;
+    basegfx::B3DHomMatrix maProjection;
+    basegfx::B3DHomMatrix maInvProjection;
 
     // Texture Matrices
-    basegfx::B2DHomMatrix           maTexture;
+    basegfx::B2DHomMatrix maTexture;
 
     // Special transformation set for converting Object -> Device
-    basegfx::B3DHomMatrix           maObjectToDevice;
+    basegfx::B3DHomMatrix maObjectToDevice;
 
     // Transposed and inversed matrix for vector transformations
-    basegfx::B3DHomMatrix           maInvTransObjectToEye;
+    basegfx::B3DHomMatrix maInvTransObjectToEye;
 
     // Transformation for World->View
-    basegfx::B3DHomMatrix           maMatFromWorldToView;
-    basegfx::B3DHomMatrix           maInvMatFromWorldToView;
+    basegfx::B3DHomMatrix maMatFromWorldToView;
+    basegfx::B3DHomMatrix maInvMatFromWorldToView;
 
     // Parameters for ViewportTransformation
-    basegfx::B3DVector          maScale;
-    basegfx::B3DVector          maTranslate;
+    basegfx::B3DVector    maScale;
+    basegfx::B3DVector    maTranslate;
 
     // ViewPlane DeviceRectangle (user-defined)
-    double                          mfLeftBound;
-    double                          mfRightBound;
-    double                          mfBottomBound;
-    double                          mfTopBound;
+    double                mfLeftBound;
+    double                mfRightBound;
+    double                mfBottomBound;
+    double                mfTopBound;
 
     // Near and far clipping planes
-    double                          mfNearBound;
-    double                          mfFarBound;
+    double                mfNearBound;
+    double                mfFarBound;
 
     // Aspect ratio of 3D transformation (Y / X)
     // default: 1:1 -> 1.0
     // Disable with value 0.0
-    double                          mfRatio;
+    double                mfRatio;
 
     // Viewport area in logical coordinates
-    Rectangle                       maViewportRectangle;
+    Rectangle             maViewportRectangle;
     // Visible area within viewport
-    Rectangle                       maVisibleRectangle;
+    Rectangle             maVisibleRectangle;
 
     // Actual coordinates as set by CalcViewport
     // of visible viewport area (logical coordinates)
-    Rectangle                       maSetBound;
+    Rectangle             maSetBound;
 
     // Method of keeping defined aspect ratio
     // default: Base3DRatioGrow
-    Base3DRatio                     meRatio;
+    Base3DRatio           meRatio;
 
     // Flags
-    unsigned                        mbPerspective               : 1;
-    unsigned                        mbWorldToViewValid          : 1;
-    unsigned                        mbInvTransObjectToEyeValid  : 1;
-    unsigned                        mbObjectToDeviceValid       : 1;
-    unsigned                        mbProjectionValid           : 1;
+    unsigned              mbPerspective              : 1;
+    unsigned              mbWorldToViewValid         : 1;
+    unsigned              mbInvTransObjectToEyeValid : 1;
+    unsigned              mbObjectToDeviceValid      : 1;
+    unsigned              mbProjectionValid          : 1;
 
 public:
     B3dTransformationSet();
@@ -143,7 +143,9 @@ public:
     Base3DRatio GetRatioMode() { return meRatio; }
 
     // Parameters of ViewportTransformation
-    void SetDeviceRectangle(double fL=-1.0, double fR=1.0, double fB=-1.0, double fT=1.0, sal_Bool bBroadCastChange=sal_True);
+    void SetDeviceRectangle(double fL=-1.0, double fR=1.0,
+                            double fB=-1.0, double fT=1.0,
+                            sal_Bool bBroadCastChange=sal_True);
     double GetDeviceRectangleWidth() const { return mfRightBound - mfLeftBound; }
     double GetDeviceRectangleHeight() const { return mfTopBound - mfBottomBound; }
     double GetFrontClippingPlane() { return mfNearBound; }
@@ -192,9 +194,9 @@ protected:
 class TOOLS_DLLPUBLIC B3dViewport : public B3dTransformationSet
 {
 private:
-    basegfx::B3DPoint               aVRP;           // View Reference Point
-    basegfx::B3DVector          aVPN;           // View Plane Normal
-    basegfx::B3DVector          aVUV;           // View Up Vector
+    basegfx::B3DPoint           aVRP;   // View Reference Point
+    basegfx::B3DVector          aVPN;   // View Plane Normal
+    basegfx::B3DVector          aVUV;   // View Up Vector
 
 public:
     B3dViewport();

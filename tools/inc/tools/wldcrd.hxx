@@ -29,7 +29,7 @@ private:
     rtl::OString aWildString;
     char cSepSymbol;
 
-    sal_uInt16          ImpMatch( const char *pWild, const char *pStr ) const;
+    sal_uInt16 ImpMatch( const char *pWild, const char *pStr ) const;
 
 public:
     WildCard()
@@ -54,7 +54,7 @@ public:
         aWildString = rtl::OUStringToOString(rString, osl_getThreadTextEncoding());
     }
 
-    sal_Bool            Matches( const String& rStr ) const;
+    sal_Bool Matches( const String& rStr ) const;
 };
 
 #endif

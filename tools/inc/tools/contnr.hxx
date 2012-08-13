@@ -38,11 +38,11 @@ private:
     CBlock*     pFirstBlock;
     CBlock*     pCurBlock;
     CBlock*     pLastBlock;
-    sal_uInt16      nCurIndex;
-    sal_uInt16      nBlockSize;
-    sal_uInt16      nInitSize;
-    sal_uInt16      nReSize;
-    sal_uIntPtr       nCount;
+    sal_uInt16  nCurIndex;
+    sal_uInt16  nBlockSize;
+    sal_uInt16  nInitSize;
+    sal_uInt16  nReSize;
+    sal_uIntPtr nCount;
 
     TOOLS_DLLPRIVATE void ImpCopyContainer(Container const *);
 #if defined DBG_UTIL
@@ -97,8 +97,8 @@ public:
 
     Container&  operator =( const Container& rContainer );
 
-    sal_Bool        operator ==( const Container& rContainer ) const;
-    sal_Bool        operator !=( const Container& rContainer ) const
+    sal_Bool    operator ==( const Container& rContainer ) const;
+    sal_Bool    operator !=( const Container& rContainer ) const
                     { return !(Container::operator==( rContainer )); }
 };
 

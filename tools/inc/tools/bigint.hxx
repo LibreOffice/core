@@ -87,15 +87,15 @@ public:
     void            Set( sal_Bool bSet ) { bIsSet = bSet; }
     rtl::OUString   GetString() const;
 
-    sal_Bool            IsSet() const { return bIsSet; }
-    sal_Bool            IsNeg() const;
-    sal_Bool            IsZero() const;
-    sal_Bool            IsOne() const;
-    sal_Bool            IsLong() const { return !bIsBig; }
+    sal_Bool        IsSet() const { return bIsSet; }
+    sal_Bool        IsNeg() const;
+    sal_Bool        IsZero() const;
+    sal_Bool        IsOne() const;
+    sal_Bool        IsLong() const { return !bIsBig; }
     void            Abs();
 #ifdef _TLBIGINT_INT64
-    sal_Bool            INT64 ( SbxINT64  *p ) const;
-    sal_Bool            UINT64( SbxUINT64 *p ) const;
+    sal_Bool        INT64 ( SbxINT64  *p ) const;
+    sal_Bool        UINT64( SbxUINT64 *p ) const;
 #endif
 
     BigInt&         operator  =( const BigInt& rVal );

@@ -57,7 +57,7 @@ typedef sal_uInt16 StreamMode;
 // sharing options
 #define STREAM_SHARE_DENYNONE           0x0100
 #define STREAM_SHARE_DENYREAD           0x0200  // overrides denynone
-#define STREAM_SHARE_DENYWRITE      0x0400  // overrides denynone
+#define STREAM_SHARE_DENYWRITE          0x0400  // overrides denynone
 #define STREAM_SHARE_DENYALL            0x0800  // overrides denyread,write,none
 
 #define STREAM_SHAREBITS                (STREAM_SHARE_DENYNONE | STREAM_SHARE_DENYREAD |\
@@ -76,12 +76,12 @@ typedef sal_uInt16 StreamMode;
 #define NUMBERFORMAT_INT_BIGENDIAN      (sal_uInt16)0x0000
 #define NUMBERFORMAT_INT_LITTLEENDIAN   (sal_uInt16)0xFFFF
 
-#define COMPRESSMODE_NONE           (sal_uInt16)0x0000
+#define COMPRESSMODE_NONE               (sal_uInt16)0x0000
 #define COMPRESSMODE_ZBITMAP            (sal_uInt16)0x0001
 #define COMPRESSMODE_NATIVE             (sal_uInt16)0x0010
 
-#define STREAM_IO_DONTKNOW          0
-#define STREAM_IO_READ              1
+#define STREAM_IO_DONTKNOW              0
+#define STREAM_IO_READ                  1
 #define STREAM_IO_WRITE                 2
 
 #define ID_STREAM                       1
@@ -105,7 +105,7 @@ struct SvLockBytesStat
 {
     sal_Size nSize;
 
-    SvLockBytesStat(): nSize(0) {}
+    SvLockBytesStat() : nSize(0) {}
 };
 
 enum SvLockBytesStatFlag { SVSTATFLAG_DEFAULT };
@@ -122,9 +122,9 @@ protected:
 public:
     TYPEINFO();
 
-    SvLockBytes(): m_pStream(0), m_bOwner(sal_False), m_bSync(sal_False) {}
+    SvLockBytes() : m_pStream(0), m_bOwner(sal_False), m_bSync(sal_False) {}
 
-    SvLockBytes(SvStream * pTheStream, sal_Bool bTheOwner = sal_False):
+    SvLockBytes(SvStream * pTheStream, sal_Bool bTheOwner = sal_False) :
         m_pStream(pTheStream), m_bOwner(bTheOwner), m_bSync(sal_False) {}
 
     virtual ~SvLockBytes() { close(); }
@@ -158,7 +158,7 @@ class TOOLS_DLLPUBLIC SvOpenLockBytes: public SvLockBytes
 public:
     TYPEINFO();
 
-    SvOpenLockBytes(): SvLockBytes(0, sal_False) {}
+    SvOpenLockBytes() : SvLockBytes(0, sal_False) {}
     SvOpenLockBytes(SvStream * pStream, sal_Bool bOwner):
         SvLockBytes(pStream, bOwner) {}
 
@@ -211,8 +211,8 @@ class TOOLS_DLLPUBLIC SvStream
 private:
     // LockBytes Interface
     void*       pImp;           // unused
-    SvLockBytesRef  xLockBytes;     // Default implementation
-    sal_Size        nActPos;        //
+    SvLockBytesRef xLockBytes;  // Default implementation
+    sal_Size    nActPos;
 
     // Puffer-Verwaltung
     sal_uInt8*  pRWBuf;         // Points to read/write buffer
@@ -225,17 +225,17 @@ private:
     unsigned int    eIOMode : 2;// STREAM_IO_*
 
     // Error codes, conversion, compression, ...
-    int             bIsDirty:1;     // sal_True: Stream != buffer content
-    int             bIsConsistent:1;// sal_False: Buffer contains data, which were
-                                    // NOT allowed to be written by PutData
-                                    // into the derived stream (cf. PutBack)
-    int             bSwap:1;
-    int             bIsEof:1;
+    int             bIsDirty : 1; // sal_True: Stream != buffer content
+    int             bIsConsistent : 1;// sal_False: Buffer contains data, which were
+                                // NOT allowed to be written by PutData
+                                // into the derived stream (cf. PutBack)
+    int             bSwap  : 1;
+    int             bIsEof : 1;
     sal_uInt32  nError;
     sal_uInt16  nNumberFormatInt;
     sal_uInt16  nCompressMode;
-    LineEnd         eLineDelimiter;
-    CharSet         eStreamCharSet;
+    LineEnd     eLineDelimiter;
+    CharSet     eStreamCharSet;
 
     // Encryption
     rtl::OString m_aCryptMaskKey;// aCryptMaskKey.getLength != 0  -> Encryption used
@@ -245,19 +245,19 @@ private:
     long            nVersion;   // for external use
 
     // helper methods
-    TOOLS_DLLPRIVATE void           ImpInit();
+    TOOLS_DLLPRIVATE void ImpInit();
 
-                     SvStream ( const SvStream& rStream ); // not implemented
+                    SvStream ( const SvStream& rStream ); // not implemented
     SvStream&       operator=( const SvStream& rStream ); // not implemented
 
 protected:
-    sal_Size            nBufFilePos;    ///< File position of pBuf[0]
-    sal_uInt16          eStreamMode;
-    sal_Bool            bIsWritable;
+    sal_Size        nBufFilePos;///< File position of pBuf[0]
+    sal_uInt16      eStreamMode;
+    sal_Bool        bIsWritable;
 
-    virtual sal_Size    GetData( void* pData, sal_Size nSize );
-    virtual sal_Size    PutData( const void* pData, sal_Size nSize );
-    virtual sal_Size    SeekPos( sal_Size nPos );
+    virtual sal_Size GetData( void* pData, sal_Size nSize );
+    virtual sal_Size PutData( const void* pData, sal_Size nSize );
+    virtual sal_Size SeekPos( sal_Size nPos );
     virtual void    FlushData();
     virtual void    SetSize( sal_Size nSize );
 
@@ -265,8 +265,8 @@ protected:
     void            ClearBuffer();
 
     // encrypt and write in blocks
-    sal_Size            CryptAndWriteBuffer( const void* pStart, sal_Size nLen );
-    sal_Bool            EncryptBuffer( void* pStart, sal_Size nLen );
+    sal_Size        CryptAndWriteBuffer( const void* pStart, sal_Size nLen );
+    sal_Bool        EncryptBuffer( void* pStart, sal_Size nLen );
 
     void            SyncSvStream( sal_Size nNewStreamPos ); ///< SvStream <- Medium
     void            SyncSysStream(); ///< SvStream -> Medium
@@ -285,15 +285,15 @@ public:
     virtual void    ResetError();
 
     void            SetNumberFormatInt( sal_uInt16 nNewFormat );
-    sal_uInt16          GetNumberFormatInt() const { return nNumberFormatInt; }
-                    /// Enable/disable swapping of endians, may be needed for Unicode import/export
+    sal_uInt16      GetNumberFormatInt() const { return nNumberFormatInt; }
+    /// Enable/disable swapping of endians, may be needed for Unicode import/export
     inline void     SetEndianSwap( sal_Bool bVal );
     /// returns status of endian swap flag
-    sal_Bool            IsEndianSwap() const { return 0 != bSwap; }
+    sal_Bool        IsEndianSwap() const { return 0 != bSwap; }
 
     void            SetCompressMode( sal_uInt16 nNewMode )
                         { nCompressMode = nNewMode; }
-    sal_uInt16          GetCompressMode() const { return nCompressMode; }
+    sal_uInt16      GetCompressMode() const { return nCompressMode; }
 
     void SetCryptMaskKey(const rtl::OString& rCryptMaskKey);
     const rtl::OString& GetCryptMaskKey() const { return m_aCryptMaskKey; }
@@ -670,11 +670,11 @@ private:
     sal_Bool UnlockRange( sal_Size nByteOffset, sal_Size nBytes );
     sal_Bool LockFile();
     sal_Bool UnlockFile();
-protected:
 
-    virtual sal_Size    GetData( void* pData, sal_Size nSize );
-    virtual sal_Size    PutData( const void* pData, sal_Size nSize );
-    virtual sal_Size    SeekPos( sal_Size nPos );
+protected:
+    virtual sal_Size GetData( void* pData, sal_Size nSize );
+    virtual sal_Size PutData( const void* pData, sal_Size nSize );
+    virtual sal_Size SeekPos( sal_Size nPos );
     virtual void    SetSize( sal_Size nSize );
     virtual void    FlushData();
 
@@ -688,9 +688,9 @@ public:
 
     void            Open( const String& rFileName, StreamMode eOpenMode );
     void            Close();
-    sal_Bool            IsOpen() const { return bIsOpen; }
-    sal_Bool            IsLocked() const { return ( nLockCounter!=0 ); }
-    virtual sal_uInt16  IsA() const;
+    sal_Bool        IsOpen() const { return bIsOpen; }
+    sal_Bool        IsLocked() const { return ( nLockCounter!=0 ); }
+    virtual sal_uInt16 IsA() const;
 
     const String&   GetFileName() const { return aFilename; }
 };
@@ -704,19 +704,19 @@ class TOOLS_DLLPUBLIC SvMemoryStream : public SvStream
     SvMemoryStream & operator= (const SvMemoryStream&);
 
     friend class SvCacheStream;
-    sal_Size            GetSize() const { return nSize; }
+    sal_Size        GetSize() const { return nSize; }
 
 protected:
-    sal_Size            nSize;
-    sal_Size            nResize;
-    sal_Size            nPos;
-    sal_Size            nEndOfData;
-    sal_uInt8*          pBuf;
-    sal_Bool            bOwnsData;
+    sal_Size        nSize;
+    sal_Size        nResize;
+    sal_Size        nPos;
+    sal_Size        nEndOfData;
+    sal_uInt8*      pBuf;
+    sal_Bool        bOwnsData;
 
-    virtual sal_Size    GetData( void* pData, sal_Size nSize );
-    virtual sal_Size    PutData( const void* pData, sal_Size nSize );
-    virtual sal_Size    SeekPos( sal_Size nPos );
+    virtual sal_Size GetData( void* pData, sal_Size nSize );
+    virtual sal_Size PutData( const void* pData, sal_Size nSize );
+    virtual sal_Size SeekPos( sal_Size nPos );
     virtual void    SetSize( sal_Size nSize );
     virtual void    FlushData();
 
@@ -736,7 +736,7 @@ protected:
     /// resized. FreeMemory may need to NULLify handles in derived classes.
     virtual void    FreeMemory();
 
-                    SvMemoryStream(void*) { }   // for sub-classes
+                    SvMemoryStream(void*) { } // for sub-classes
 
 public:
                     SvMemoryStream( void* pBuf, sal_Size nSize, StreamMode eMode);
@@ -755,9 +755,9 @@ public:
                                sal_Bool bOwnsData=sal_True, sal_Size nEOF=0 );
 
     void            ObjectOwnsMemory( sal_Bool bOwn ) { bOwnsData = bOwn; }
-    sal_Bool            IsObjectMemoryOwner() { return bOwnsData; }
+    sal_Bool        IsObjectMemoryOwner() { return bOwnsData; }
     void            SetResizeOffset( sal_Size nNewResize ) { nResize = nNewResize; }
-    sal_Size            GetResizeOffset() const { return nResize; }
+    sal_Size        GetResizeOffset() const { return nResize; }
     virtual sal_Size remainingSize() { return GetSize() - Tell(); }
 };
 

@@ -38,7 +38,7 @@ private:
     sal_Bool            mbDummy1;
 
 #ifdef _CONFIG_CXX
-    TOOLS_DLLPRIVATE sal_Bool               ImplUpdateConfig() const;
+    TOOLS_DLLPRIVATE sal_Bool           ImplUpdateConfig() const;
     TOOLS_DLLPRIVATE ImplGroupData*     ImplGetGroup() const;
 #endif
 
@@ -52,7 +52,7 @@ public:
     const rtl::OString& GetGroup() const { return maGroupName; }
     void DeleteGroup(const rtl::OString& rGroup);
     rtl::OString GetGroupName(sal_uInt16 nGroup) const;
-    sal_uInt16              GetGroupCount() const;
+    sal_uInt16 GetGroupCount() const;
     sal_Bool HasGroup(const rtl::OString& rGroup) const;
 
     rtl::OString ReadKey(const rtl::OString& rKey) const;
@@ -64,7 +64,7 @@ public:
     rtl::OString ReadKey(sal_uInt16 nKey) const;
     sal_uInt16              GetKeyCount() const;
 
-    sal_Bool                IsLocked() const { return (mnLockCount != 0); }
+    sal_Bool            IsLocked() const { return (mnLockCount != 0); }
     void                Flush();
 
     void                EnablePersistence( sal_Bool bPersistence = sal_True )
@@ -72,7 +72,7 @@ public:
     sal_Bool                IsPersistenceEnabled() const { return mbPersistence; }
 
 private:
-    TOOLS_DLLPRIVATE                Config( const Config& rConfig );
+    TOOLS_DLLPRIVATE    Config( const Config& rConfig );
     TOOLS_DLLPRIVATE Config&            operator = ( const Config& rConfig );
 };
 

@@ -56,7 +56,7 @@ class ResId
         OSL_ENSURE( m_pResMgr != NULL, "ResId without ResMgr created" );
     }
 
-    public:
+public:
     ResId( RSHEADER_TYPE * pRc, ResMgr& rMgr )
     {
         ImplInit( 0, rMgr, pRc );
@@ -79,10 +79,8 @@ class ResId
         ImplInit( sal_uInt32(nId), rMgr, NULL );
     }
 
-    sal_uInt32 GetWinBits() const
-    { return m_nWinBits; }
-    void SetWinBits( sal_uInt32 nBits ) const
-    { m_nWinBits = nBits; }
+    sal_uInt32 GetWinBits() const { return m_nWinBits; }
+    void SetWinBits( sal_uInt32 nBits ) const { m_nWinBits = nBits; }
 
     RESOURCE_TYPE   GetRT() const { return( m_nRT ); }
 
@@ -143,11 +141,11 @@ class ResId
         return *this;
     }
 
-    sal_Bool           IsAutoRelease()  const
+    sal_Bool        IsAutoRelease()  const
     { return !(m_nResId & RSC_DONTRELEASE); }
 
-    sal_uInt32     GetId()          const { return m_nResId & ~RSC_DONTRELEASE; }
-    RSHEADER_TYPE* GetpResource()   const { return m_pResource; }
+    sal_uInt32      GetId()        const { return m_nResId & ~RSC_DONTRELEASE; }
+    RSHEADER_TYPE*  GetpResource() const { return m_pResource; }
 
     TOOLS_DLLPUBLIC rtl::OUString toString() const;
     TOOLS_DLLPUBLIC operator rtl::OUString() const { return toString(); }

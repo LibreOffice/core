@@ -29,7 +29,7 @@
 
 class TOOLS_DLLPUBLIC ResStringArray : private boost::noncopyable
 {
-    private:
+private:
     struct ImplResStringItem
     {
         rtl::OUString m_aStr;
@@ -43,7 +43,7 @@ class TOOLS_DLLPUBLIC ResStringArray : private boost::noncopyable
 
     std::vector< ImplResStringItem >    m_aStrings;
 
-    public:
+public:
     ResStringArray( const ResId& rResId );
     ~ResStringArray();
 

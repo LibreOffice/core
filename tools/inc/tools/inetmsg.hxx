@@ -79,7 +79,7 @@ public:
     }
 };
 
- typedef ::std::vector< INetMessageHeader* > HeaderList_impl;
+typedef ::std::vector< INetMessageHeader* > HeaderList_impl;
 
 class INetMessage
 {

@@ -101,8 +101,8 @@ public:
                             { mnColor = RGB_COLORDATA( nRed, nGreen, nBlue ); }
                         Color( sal_uInt8 nTransparency, sal_uInt8 nRed, sal_uInt8 nGreen, sal_uInt8 nBlue )
                             { mnColor = TRGB_COLORDATA( nTransparency, nRed, nGreen, nBlue ); }
+                        // This ctor is defined in svtools, not tools!
                         Color( const ResId& rResId );
-                         // This ctor is defined in svtools, not tools!
 
                         // constructor to create a tools-Color from ::basegfx::BColor
                         explicit Color(const ::basegfx::BColor& rBColor)
@@ -114,21 +114,21 @@ public:
                         }
 
     void                SetRed( sal_uInt8 nRed );
-    sal_uInt8               GetRed() const { return COLORDATA_RED( mnColor ); }
+    sal_uInt8           GetRed() const { return COLORDATA_RED( mnColor ); }
     void                SetGreen( sal_uInt8 nGreen );
-    sal_uInt8               GetGreen() const { return COLORDATA_GREEN( mnColor ); }
+    sal_uInt8           GetGreen() const { return COLORDATA_GREEN( mnColor ); }
     void                SetBlue( sal_uInt8 nBlue );
-    sal_uInt8               GetBlue() const { return COLORDATA_BLUE( mnColor ); }
+    sal_uInt8           GetBlue() const { return COLORDATA_BLUE( mnColor ); }
     void                SetTransparency( sal_uInt8 nTransparency );
-    sal_uInt8               GetTransparency() const { return COLORDATA_TRANSPARENCY( mnColor ); }
+    sal_uInt8           GetTransparency() const { return COLORDATA_TRANSPARENCY( mnColor ); }
 
     void                SetColor( ColorData nColor ) { mnColor = nColor; }
     ColorData           GetColor() const { return mnColor; }
     ColorData           GetRGBColor() const { return COLORDATA_RGB( mnColor ); }
 
-    sal_uInt8               GetColorError( const Color& rCompareColor ) const;
+    sal_uInt8           GetColorError( const Color& rCompareColor ) const;
 
-    sal_uInt8               GetLuminance() const;
+    sal_uInt8           GetLuminance() const;
     void                IncreaseLuminance( sal_uInt8 cLumInc );
     void                DecreaseLuminance( sal_uInt8 cLumDec );
 
@@ -138,11 +138,11 @@ public:
 
     void                Merge( const Color& rMergeColor, sal_uInt8 cTransparency );
 
-    sal_Bool                IsRGBEqual( const Color& rColor ) const;
+    sal_Bool            IsRGBEqual( const Color& rColor ) const;
 
     // comparison with luminance thresholds
-    sal_Bool                IsDark()    const;
-    sal_Bool                IsBright()  const;
+    sal_Bool            IsDark()    const;
+    sal_Bool            IsBright()  const;
 
     // color space conversion tools
     // the range for h/s/b is:

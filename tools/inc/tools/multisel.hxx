@@ -35,17 +35,17 @@ class TOOLS_DLLPUBLIC MultiSelection
 private:
     ImpSelList      aSels;      // array of SV-selections
     Range           aTotRange;  // total range of indexes
-    sal_uIntPtr         nCurSubSel; // index in aSels of current selected index
+    sal_uIntPtr     nCurSubSel; // index in aSels of current selected index
     long            nCurIndex;  // current selected entry
-    sal_uIntPtr         nSelCount;  // number of selected indexes
-    sal_Bool            bInverseCur;// inverse cursor
-    sal_Bool            bCurValid;  // are nCurIndex and nCurSubSel valid
-    sal_Bool            bSelectNew; // auto-select newly inserted indexes
+    sal_uIntPtr     nSelCount;  // number of selected indexes
+    sal_Bool        bInverseCur;// inverse cursor
+    sal_Bool        bCurValid;  // are nCurIndex and nCurSubSel valid
+    sal_Bool        bSelectNew; // auto-select newly inserted indexes
 
 #ifdef _SV_MULTISEL_CXX
     TOOLS_DLLPRIVATE void           ImplClear();
     TOOLS_DLLPRIVATE size_t         ImplFindSubSelection( long nIndex ) const;
-    TOOLS_DLLPRIVATE sal_Bool           ImplMergeSubSelections( size_t nPos1, size_t nPos2 );
+    TOOLS_DLLPRIVATE sal_Bool       ImplMergeSubSelections( size_t nPos1, size_t nPos2 );
     TOOLS_DLLPRIVATE long           ImplFwdUnselected();
 #endif
 
@@ -56,17 +56,17 @@ public:
                     ~MultiSelection();
 
     MultiSelection& operator= ( const MultiSelection& rOrig );
-    sal_Bool            operator== ( MultiSelection& rOrig );
-    sal_Bool            operator!= ( MultiSelection& rOrig )
+    sal_Bool        operator== ( MultiSelection& rOrig );
+    sal_Bool        operator!= ( MultiSelection& rOrig )
                         { return !operator==( rOrig ); }
-    sal_Bool            operator !() const
+    sal_Bool        operator !() const
                         { return nSelCount == 0; }
 
     void            SelectAll( sal_Bool bSelect = sal_True );
-    sal_Bool            Select( long nIndex, sal_Bool bSelect = sal_True );
+    sal_Bool        Select( long nIndex, sal_Bool bSelect = sal_True );
     void            Select( const Range& rIndexRange, sal_Bool bSelect = sal_True );
-    sal_Bool            IsSelected( long nIndex ) const;
-    sal_Bool            IsAllSelected() const
+    sal_Bool        IsSelected( long nIndex ) const;
+    sal_Bool        IsAllSelected() const
                         { return nSelCount == sal_uIntPtr(aTotRange.Len()); }
     long            GetSelectCount() const { return nSelCount; }
 
@@ -75,7 +75,7 @@ public:
     void            Remove( long nIndex );
 
     const Range&    GetTotalRange() const { return aTotRange; }
-    sal_Bool            IsCurValid() const { return bCurValid; }
+    sal_Bool        IsCurValid() const { return bCurValid; }
     long            GetCurSelected() const { return nCurIndex; }
     long            FirstSelected( sal_Bool bInverse = sal_False );
     long            LastSelected();

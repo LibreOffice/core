@@ -336,7 +336,7 @@ private:
     DbgDataType*    pDbgData;
     const void*     pThis;
     DbgUsr          fDbgUsr;
-    sal_uInt16          nAction;
+    sal_uInt16      nAction;
 
 public:
                     DbgXtorObj( DbgDataType* pData,

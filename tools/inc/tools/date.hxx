@@ -62,33 +62,33 @@ public:
     void            SetDay( sal_uInt16 nNewDay );
     void            SetMonth( sal_uInt16 nNewMonth );
     void            SetYear( sal_uInt16 nNewYear );
-    sal_uInt16          GetDay() const { return (sal_uInt16)(nDate % 100); }
-    sal_uInt16          GetMonth() const { return (sal_uInt16)((nDate / 100) % 100); }
-    sal_uInt16          GetYear() const { return (sal_uInt16)(nDate / 10000); }
+    sal_uInt16      GetDay() const { return (sal_uInt16)(nDate % 100); }
+    sal_uInt16      GetMonth() const { return (sal_uInt16)((nDate / 100) % 100); }
+    sal_uInt16      GetYear() const { return (sal_uInt16)(nDate / 10000); }
 
     /// Internally normalizes a copy of values.
     DayOfWeek       GetDayOfWeek() const;
 
     /// Internally normalizes a copy of values.
-    sal_uInt16          GetDayOfYear() const;
+    sal_uInt16      GetDayOfYear() const;
 
     /** nMinimumNumberOfDaysInWeek: how many days of a week must reside in the
         first week of a year.
         Internally normalizes a copy of values. */
-    sal_uInt16          GetWeekOfYear( DayOfWeek eStartDay = MONDAY,
+    sal_uInt16      GetWeekOfYear( DayOfWeek eStartDay = MONDAY,
                                    sal_Int16 nMinimumNumberOfDaysInWeek = 4 ) const;
 
     /// Internally normalizes a copy of values.
-    sal_uInt16          GetDaysInMonth() const;
+    sal_uInt16      GetDaysInMonth() const;
 
-    sal_uInt16          GetDaysInYear() const { return (IsLeapYear()) ? 366 : 365; }
-    sal_Bool            IsLeapYear() const;
+    sal_uInt16      GetDaysInYear() const { return (IsLeapYear()) ? 366 : 365; }
+    sal_Bool        IsLeapYear() const;
 
     /** If the represented date is valid (1<=month<=12, 1<=day<=(28,29,30,31)
         depending on month/year) AND is of the Gregorian calendar (1582-10-15
         <= date) (AND implicitly date <= 9999-12-31 due to internal
         representation) */
-    sal_Bool            IsValidAndGregorian() const;
+    sal_Bool        IsValidAndGregorian() const;
 
     /** If the represented date is valid (1<=month<=12, 1<=day<=(28,29,30,31)
         depending on month/year) */
@@ -108,21 +108,21 @@ public:
      */
     bool            Normalize();
 
-    sal_Bool            IsBetween( const Date& rFrom, const Date& rTo ) const
+    sal_Bool        IsBetween( const Date& rFrom, const Date& rTo ) const
                         { return ((nDate >= rFrom.nDate) &&
                                  (nDate <= rTo.nDate)); }
 
-    sal_Bool            operator ==( const Date& rDate ) const
+    sal_Bool        operator ==( const Date& rDate ) const
                         { return (nDate == rDate.nDate); }
-    sal_Bool            operator !=( const Date& rDate ) const
+    sal_Bool        operator !=( const Date& rDate ) const
                         { return (nDate != rDate.nDate); }
-    sal_Bool            operator  >( const Date& rDate ) const
+    sal_Bool        operator  >( const Date& rDate ) const
                         { return (nDate > rDate.nDate); }
-    sal_Bool            operator  <( const Date& rDate ) const
+    sal_Bool        operator  <( const Date& rDate ) const
                         { return (nDate < rDate.nDate); }
-    sal_Bool            operator >=( const Date& rDate ) const
+    sal_Bool        operator >=( const Date& rDate ) const
                         { return (nDate >= rDate.nDate); }
-    sal_Bool            operator <=( const Date& rDate ) const
+    sal_Bool        operator <=( const Date& rDate ) const
                         { return (nDate <= rDate.nDate); }
 
     Date&           operator =( const Date& rDate )

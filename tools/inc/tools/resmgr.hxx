@@ -86,25 +86,29 @@ private:
     ResMgr*         pOriginalResMgr;   ///< the res mgr that fell back to this
                                        ///< stack level
 
-    TOOLS_DLLPRIVATE void         incStack();
-    TOOLS_DLLPRIVATE void         decStack();
+    TOOLS_DLLPRIVATE void incStack();
+    TOOLS_DLLPRIVATE void decStack();
 
     TOOLS_DLLPRIVATE const ImpRCStack * StackTop( sal_uInt32 nOff = 0 ) const
     {
         return (((int)nOff >= nCurStack) ? NULL : &aStack[nCurStack-nOff]);
     }
-    TOOLS_DLLPRIVATE void               Init( const rtl::OUString& rFileName );
+    TOOLS_DLLPRIVATE void  Init( const rtl::OUString& rFileName );
 
     TOOLS_DLLPRIVATE ResMgr( InternalResMgr * pImp );
 
     #ifdef DBG_UTIL
-    TOOLS_DLLPRIVATE static void RscError_Impl( const sal_Char* pMessage, ResMgr* pResMgr,
-                               RESOURCE_TYPE nRT, sal_uInt32 nId,
-                               std::vector< ImpRCStack >& rResStack, int nDepth );
+    TOOLS_DLLPRIVATE static void RscError_Impl( const sal_Char* pMessage,
+                                                ResMgr* pResMgr,
+                                                RESOURCE_TYPE nRT,
+                                                sal_uInt32 nId,
+                                                std::vector< ImpRCStack >& rResStack,
+                                                int nDepth );
     #endif
 
     // called from within GetResource() if a resource could not be found
-    TOOLS_DLLPRIVATE ResMgr* CreateFallbackResMgr( const ResId& rId, const Resource* pResource );
+    TOOLS_DLLPRIVATE ResMgr* CreateFallbackResMgr( const ResId& rId,
+                                                   const Resource* pResource );
     // creates a 1k sized buffer set to zero for unfound resources
     // used in case RC_NOTFOUND
     static void* pEmptyBuffer;
@@ -113,9 +117,10 @@ private:
     // the next two methods are needed to prevent the string hook called
     // with the res mgr mutex locked
     // like GetString, but doesn't call the string hook
-    TOOLS_DLLPRIVATE static sal_uInt32  GetStringWithoutHook( UniString& rStr, const sal_uInt8* pStr );
+    TOOLS_DLLPRIVATE static sal_uInt32 GetStringWithoutHook( UniString& rStr,
+                                                             const sal_uInt8* pStr );
     // like ReadString but doesn't call the string hook
-    TOOLS_DLLPRIVATE UniString          ReadStringWithoutHook();
+    TOOLS_DLLPRIVATE UniString ReadStringWithoutHook();
 
     static ResMgr* ImplCreateResMgr( InternalResMgr* pImpl ) { return new ResMgr( pImpl ); }
 
@@ -141,11 +146,11 @@ public:
     void                TestStack( const Resource * );
 
     /// Check whether resource is available
-    sal_Bool                IsAvailable( const ResId& rId,
+    sal_Bool            IsAvailable( const ResId& rId,
                                      const Resource* = NULL) const;
 
     /// Search and load resource, given its ID
-    sal_Bool                GetResource( const ResId& rId, const Resource * = NULL );
+    sal_Bool            GetResource( const ResId& rId, const Resource * = NULL );
     static void *       GetResourceSkipHeader( const ResId& rResId, ResMgr ** ppResMgr );
     /// Free resource context
     void                PopContext( const Resource* = NULL );
@@ -170,9 +175,9 @@ public:
     /// Return a int64
     static sal_uInt64   GetUInt64( void* pDatum );
     /// Return a long
-    static sal_Int32        GetLong( void * pLong );
+    static sal_Int32    GetLong( void * pLong );
     /// Return a short
-    static sal_Int16        GetShort( void * pShort );
+    static sal_Int16    GetShort( void * pShort );
 
     /// Return a pointer to the resource
     void *              GetClass();
@@ -183,8 +188,8 @@ public:
 
     const rtl::OUString&GetFileName() const;
 
-    sal_Int16               ReadShort();
-    sal_Int32               ReadLong();
+    sal_Int16           ReadShort();
+    sal_Int32           ReadLong();
     UniString           ReadString();
     rtl::OString        ReadByteString();
 

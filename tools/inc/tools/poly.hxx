@@ -66,8 +66,8 @@ public:
                     PolyOptimizeData( sal_uIntPtr nAbsolut ) : eType( DATA_ABSOLUT ), mnAbsolut( nAbsolut ) {}
                     PolyOptimizeData( sal_uInt16 nPercent ) : eType( DATA_PERCENT ), mnPercent( nPercent ) {}
 
-    sal_uIntPtr         GetAbsValue() const { DBG_ASSERT( eType == DATA_ABSOLUT, "Wrong data type" ); return mnAbsolut; }
-    sal_uInt16          GetPercentValue() const { DBG_ASSERT( eType == DATA_PERCENT, "Wrong data type" ); return mnPercent; }
+    sal_uIntPtr     GetAbsValue() const { DBG_ASSERT( eType == DATA_ABSOLUT, "Wrong data type" ); return mnAbsolut; }
+    sal_uInt16      GetPercentValue() const { DBG_ASSERT( eType == DATA_PERCENT, "Wrong data type" ); return mnPercent; }
 };
 
 class SvStream;
@@ -122,17 +122,17 @@ public:
     PolyFlags           GetFlags( sal_uInt16 nPos ) const;
     sal_Bool            HasFlags() const;
 
-    sal_Bool                IsRect() const;
+    sal_Bool            IsRect() const;
 
     void                SetSize( sal_uInt16 nNewSize );
-    sal_uInt16              GetSize() const;
+    sal_uInt16          GetSize() const;
 
     void                Clear();
 
     Rectangle           GetBoundRect() const;
     double              GetSignedArea() const;
-    sal_Bool                IsInside( const Point& rPt ) const;
-    sal_Bool                IsRightOrientated() const;
+    sal_Bool            IsInside( const Point& rPt ) const;
+    sal_Bool            IsRightOrientated() const;
     double              CalcDistance( sal_uInt16 nPt1, sal_uInt16 nPt2 );
     void                Clip( const Rectangle& rRect, sal_Bool bPolygon = sal_True );
     void                Optimize( sal_uIntPtr nOptimizeFlags, const PolyOptimizeData* pData = NULL );
@@ -170,8 +170,8 @@ public:
     Point&              operator[]( sal_uInt16 nPos );
 
     Polygon&            operator=( const Polygon& rPoly );
-    sal_Bool                operator==( const Polygon& rPoly ) const;
-    sal_Bool                operator!=( const Polygon& rPoly ) const
+    sal_Bool            operator==( const Polygon& rPoly ) const;
+    sal_Bool            operator!=( const Polygon& rPoly ) const
                             { return !(Polygon::operator==( rPoly )); }
     sal_Bool            IsEqual( const Polygon& rPoly ) const;
 
@@ -184,7 +184,7 @@ public:
     void                Write( SvStream& rOStream ) const;
 
     const Point*        GetConstPointAry() const;
-    const sal_uInt8*         GetConstFlagAry() const;
+    const sal_uInt8*    GetConstFlagAry() const;
 
     // convert to ::basegfx::B2DPolygon and return
     ::basegfx::B2DPolygon getB2DPolygon() const;
@@ -216,11 +216,11 @@ public:
     void                Replace( const Polygon& rPoly, sal_uInt16 nPos );
     const Polygon&      GetObject( sal_uInt16 nPos ) const;
 
-    sal_Bool                IsRect() const;
+    sal_Bool            IsRect() const;
 
     void                Clear();
 
-    sal_uInt16              Count() const;
+    sal_uInt16          Count() const;
     Rectangle           GetBoundRect() const;
     void                Clip( const Rectangle& rRect );
     void                Optimize( sal_uIntPtr nOptimizeFlags, const PolyOptimizeData* pData = NULL );

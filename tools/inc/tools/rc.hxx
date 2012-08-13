@@ -26,7 +26,7 @@
 
 class TOOLS_DLLPUBLIC Resource
 {
-    protected:
+protected:
     ResMgr* m_pResMgr;
 
     // check availability of Resource
@@ -83,12 +83,12 @@ class TOOLS_DLLPUBLIC Resource
     Resource() : m_pResMgr( NULL ) {}
     Resource( const ResId& rResId );
 
-    public:
-    #ifdef DBG_UTIL
+public:
+#ifdef DBG_UTIL
     ~Resource() { TestRes(); }
-    #else
+#else
     ~Resource() {}
-    #endif
+#endif
 };
 
 #endif

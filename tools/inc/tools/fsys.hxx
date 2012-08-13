@@ -140,9 +140,9 @@ class TOOLS_DLLPUBLIC FileStat
     friend struct   DirReader_Impl;
     friend void     ImpInitFileStat( FileStat&, dirent* );
 
-    sal_uIntPtr         nError;
+    sal_uIntPtr     nError;
     DirEntryKind    nKindFlags;
-    sal_uIntPtr         nSize;
+    sal_uIntPtr     nSize;
     String          aCreator;
     String          aType;
     Date            aDateCreated;
@@ -153,7 +153,7 @@ class TOOLS_DLLPUBLIC FileStat
     Time            aTimeAccessed;
 
 private:
-    TOOLS_DLLPRIVATE void           ImpInit( void* );
+    TOOLS_DLLPRIVATE void ImpInit( void* );
 
 protected:
                     // Implementation
@@ -162,16 +162,16 @@ protected:
 public:
                     FileStat( const DirEntry& rDirEntry,
                               FSysAccess nAccess = FSYS_ACCESS_FLOPPY );
-    sal_Bool            Update( const DirEntry& rDirEntry,
-                              sal_Bool bForceAccess = sal_True );
+    sal_Bool        Update( const DirEntry& rDirEntry,
+                            sal_Bool bForceAccess = sal_True );
 
-    sal_uIntPtr         GetError() const { return ERRCODE_TOERROR(nError); }
-    sal_uIntPtr         GetErrorCode() const { return nError; }
+    sal_uIntPtr     GetError() const { return ERRCODE_TOERROR(nError); }
+    sal_uIntPtr     GetErrorCode() const { return nError; }
 
-    sal_uIntPtr         GetSize() const { return nSize; }
+    sal_uIntPtr     GetSize() const { return nSize; }
 
     DirEntryKind    GetKind() const { return nKindFlags; }
-    sal_Bool            IsKind( DirEntryKind nKind ) const;
+    sal_Bool        IsKind( DirEntryKind nKind ) const;
 
     String          GetType() const { return aType; }
     String          GetCreator() const { return aCreator; }
@@ -183,8 +183,8 @@ public:
     Date            DateAccessed() const { return aDateAccessed; }
     Time            TimeAccessed() const { return aTimeAccessed; }
 
-    static sal_uIntPtr  SetReadOnlyFlag( const DirEntry &rEntry, sal_Bool bRO = sal_True );
-    static sal_Bool     GetReadOnlyFlag( const DirEntry &rEntry );
+    static sal_uIntPtr SetReadOnlyFlag( const DirEntry &rEntry, sal_Bool bRO = sal_True );
+    static sal_Bool GetReadOnlyFlag( const DirEntry &rEntry );
 };
 
 // DirEntry
@@ -203,20 +203,20 @@ friend class FileCopier;
 #endif
     rtl::OString        aName;
     DirEntry*           pParent;
-    sal_uIntPtr             nError;
+    sal_uIntPtr         nError;
     DirEntryFlag        eFlag;
 
 private:
-    TOOLS_DLLPRIVATE            DirEntry( const rtl::OString& rInitName,
+    TOOLS_DLLPRIVATE    DirEntry( const rtl::OString& rInitName,
                                   DirEntryFlag aDirFlag );
 
     friend class Dir;
     friend class FileStat;
     friend const char* ImpCheckDirEntry( const void* p );
 
-    TOOLS_DLLPRIVATE FSysError          ImpParseName( const rtl::OString& rIntiName );
-    TOOLS_DLLPRIVATE const DirEntry*    ImpGetTopPtr() const;
-    TOOLS_DLLPRIVATE DirEntry*          ImpGetTopPtr();
+    TOOLS_DLLPRIVATE FSysError       ImpParseName( const rtl::OString& rIntiName );
+    TOOLS_DLLPRIVATE const DirEntry* ImpGetTopPtr() const;
+    TOOLS_DLLPRIVATE DirEntry*       ImpGetTopPtr();
 
 protected:
     void                ImpTrim();
@@ -242,8 +242,8 @@ public:
                                    FSysPathStyle eParser = FSYS_STYLE_HOST );
                         ~DirEntry();
 
-    sal_uIntPtr             GetError() const { return nError; }
-    sal_Bool                IsValid() const;
+    sal_uIntPtr         GetError() const { return nError; }
+    sal_Bool            IsValid() const;
     DirEntryFlag        GetFlag() const { return eFlag; };
 
     void                SetExtension( const String& rExt, char cSep = '.' );
@@ -264,23 +264,23 @@ public:
                                  sal_uInt16 nMaxChars = STRING_MAXLEN ) const;
 
     DirEntry            TempName( DirEntryKind = FSYS_KIND_NONE ) const;
-    sal_Bool                MakeShortName( const String& rLongName,
+    sal_Bool            MakeShortName( const String& rLongName,
                                        DirEntryKind eCreateKind = FSYS_KIND_NONE,
                                        sal_Bool bUseTilde = sal_True,
                                        FSysPathStyle eStyle = FSYS_STYLE_DETECT );
 
     bool                IsAbs() const;
-    sal_Bool                ToAbs();
-    sal_Bool                Find( const String& rPfad, char cDelim = 0 );
+    sal_Bool            ToAbs();
+    sal_Bool            Find( const String& rPfad, char cDelim = 0 );
 
-    sal_Bool                SetCWD( sal_Bool bSloppy = sal_False ) const;
-    sal_Bool                MakeDir( sal_Bool bSloppy = sal_False ) const;
-    sal_Bool                Exists( FSysAccess nAccess = FSYS_ACCESS_FLOPPY ) const;
-    sal_Bool                First();
+    sal_Bool            SetCWD( sal_Bool bSloppy = sal_False ) const;
+    sal_Bool            MakeDir( sal_Bool bSloppy = sal_False ) const;
+    sal_Bool            Exists( FSysAccess nAccess = FSYS_ACCESS_FLOPPY ) const;
+    sal_Bool            First();
 
-    sal_uInt16              Level() const;
+    sal_uInt16          Level() const;
     const DirEntry&     operator []( sal_uInt16 nParentLevel ) const;
-    sal_Bool                Contains( const DirEntry &rSubEntry ) const;
+    sal_Bool            Contains( const DirEntry &rSubEntry ) const;
 
     FSysError           CopyTo( const DirEntry& rDestDir,
                                 FSysAction nActions = FSYS_ACTION_STANDARD ) const;
@@ -290,8 +290,8 @@ public:
     DirEntry&           operator =( const DirEntry& rOrigDir );
     DirEntry            operator +( const DirEntry& rSubDir ) const;
     DirEntry&           operator +=( const DirEntry& rSubDir );
-    sal_Bool                operator ==( const DirEntry& rAnotherDir ) const;
-    sal_Bool                operator !=( const DirEntry& rAnotherDir ) const
+    sal_Bool            operator ==( const DirEntry& rAnotherDir ) const;
+    sal_Bool            operator !=( const DirEntry& rAnotherDir ) const
                             { return !(DirEntry::operator==( rAnotherDir )); }
 
     inline sal_Int32 NameCompareDirect( const DirEntry &rWith ) const
@@ -315,18 +315,18 @@ class FileCopier
 {
     DirEntry            aSource;
     DirEntry            aTarget;
-    sal_uIntPtr             nBytesTotal;
-    sal_uIntPtr             nBytesCopied;
+    sal_uIntPtr         nBytesTotal;
+    sal_uIntPtr         nBytesCopied;
     Link                aProgressLink;
-    sal_uInt16              nBlockSize;
+    sal_uInt16          nBlockSize;
     FileCopier_Impl*    pImp;
 
 private:
-    TOOLS_DLLPRIVATE FSysError          DoCopy_Impl(
+    TOOLS_DLLPRIVATE FSysError DoCopy_Impl(
         const DirEntry &rSource, const DirEntry &rTarget );
 
 protected:
-    virtual sal_Bool        Progress();
+    virtual sal_Bool    Progress();
     virtual ErrCode     Error( ErrCode eErr,
                                const DirEntry *pSource, const DirEntry *pTarget );
 
@@ -336,13 +336,13 @@ public:
                         FileCopier( const FileCopier &rCopier );
                         virtual ~FileCopier();
 
-    FileCopier&         operator = ( const FileCopier &rCopier );
+    FileCopier&         operator =( const FileCopier &rCopier );
 
     void                SetBlockSize( sal_uInt16 nBytes ) { nBlockSize = nBytes; }
-    sal_uInt16              GetBlockSize() const { return nBlockSize; }
+    sal_uInt16          GetBlockSize() const { return nBlockSize; }
 
-    sal_uIntPtr             GetBytesTotal() const { return nBytesTotal; }
-    sal_uIntPtr             GetBytesCopied() const { return nBytesCopied; }
+    sal_uIntPtr         GetBytesTotal() const { return nBytesTotal; }
+    sal_uIntPtr         GetBytesCopied() const { return nBytesCopied; }
 
     void                SetSource( const DirEntry &rSource ) { aSource = rSource; }
     void                SetTarget( const DirEntry &rTarget ) { aTarget = rTarget; }
@@ -351,7 +351,7 @@ public:
 
     FSysError           Execute( FSysAction nActions = FSYS_ACTION_STANDARD );
     FSysError           ExecuteExact( FSysAction nActions = FSYS_ACTION_STANDARD,
-                                                                 FSysExact  eExact = FSYS_NOTEXACT);
+                                      FSysExact  eExact = FSYS_NOTEXACT);
 
     void                SetProgressHdl( const Link& rLink ) { aProgressLink = rLink; }
     const Link&         GetProgressHdl() const { return aProgressLink; }
@@ -362,7 +362,7 @@ public:
 struct DirReader_Impl;
 class TOOLS_DLLPUBLIC Dir : public DirEntry
 {
-friend struct DirReader_Impl;
+    friend struct DirReader_Impl;
 
     DirReader_Impl* pReader;        // is system-dependent
     DirEntryList*   pLst;
@@ -372,11 +372,11 @@ friend struct DirReader_Impl;
     DirEntryKind eAttrMask;
 
 private:
-    TOOLS_DLLPRIVATE            Dir( const Dir& );          // not allowed
-    TOOLS_DLLPRIVATE Dir&           operator=( const Dir& );    // not allowed
+    TOOLS_DLLPRIVATE        Dir( const Dir& );        // not allowed
+    TOOLS_DLLPRIVATE Dir&   operator =( const Dir& ); // not allowed
 
 #ifdef _DIR_CXX
-    TOOLS_DLLPRIVATE void           Construct( DirEntryKind nKind = FSYS_KIND_DIR|FSYS_KIND_FILE );
+    TOOLS_DLLPRIVATE void   Construct( DirEntryKind nKind = FSYS_KIND_DIR|FSYS_KIND_FILE );
 #endif
 
 #ifndef _TOOLS_HXX

@@ -29,9 +29,9 @@
 class TOOLS_DLLPUBLIC UniqueIndexImpl : public std::map<sal_uInt32, void*>
 {
 private:
-    sal_uIntPtr           nStartIndex;
-    sal_uIntPtr           nUniqIndex;
-    sal_uIntPtr           nCount;
+    sal_uIntPtr   nStartIndex;
+    sal_uIntPtr   nUniqIndex;
+    sal_uIntPtr   nCount;
 
 public:
     UniqueIndexImpl( sal_uIntPtr _nStartIndex = 0 )
