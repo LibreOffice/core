@@ -61,30 +61,9 @@ namespace xmlsearch {
             static RoleFiller roleFiller_;
 
             sal_uInt32     m_nRefcount;
-            sal_uInt8      fixedRole_;
-            sal_Int16      filled_;
-            sal_Int32      begin_,end_,parentContext_,limit_;
 
-            RoleFiller*    next_;
             std::vector< RoleFiller* > fillers_;
         };
-
-
-        class GeneratorHeap
-        {
-        public:
-
-            GeneratorHeap()
-                : heapSize_( 0 ),
-                  free_( 0 )
-            { }
-        private:
-
-            sal_Int32   heapSize_,free_;
-        };
-
-
-
     }
 }
 

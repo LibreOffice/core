@@ -121,10 +121,9 @@ namespace xmlsearch {
         {
         public:
 
-            QueryHitData( double penalty,const rtl::OUString& document,sal_Int32 termsL, rtl::OUString* terms )
+            QueryHitData( double penalty,const rtl::OUString& document, rtl::OUString* terms )
                 : penalty_( penalty ),
                   document_( document ),
-                  termsL_( termsL ),
                   terms_( terms )      { }
 
             ~QueryHitData() { delete[] terms_; }
@@ -140,7 +139,6 @@ namespace xmlsearch {
 
             const rtl::OUString document_;
 
-            sal_Int32      termsL_;
             rtl::OUString* terms_;
 
         };  // end class QueryHitData

@@ -47,7 +47,6 @@ namespace chelp {
 
     private:
 
-        Databases*   m_pDatabases;
         URLParameter m_aURLParameter;
     };
 

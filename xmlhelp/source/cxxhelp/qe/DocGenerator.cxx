@@ -33,13 +33,6 @@ RoleFiller RoleFiller::roleFiller_;
 
 RoleFiller::RoleFiller()
     : m_nRefcount( 0 ),
-      fixedRole_( 0 ),
-      filled_( 0 ),
-      begin_( 0 ),
-      end_( 0 ),
-      parentContext_( 0 ),
-      limit_( 0 ),
-      next_( 0 ),
       fillers_( 0 )
 {
 }

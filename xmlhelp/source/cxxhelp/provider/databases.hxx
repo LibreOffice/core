@@ -296,7 +296,6 @@ namespace chelp {
         com::sun::star::uno::Reference< com::sun::star::ucb::XSimpleFileAccess2 >      m_xSFA;
 
         sal_Bool m_bShowBasic;
-        int    m_nErrorDocLength;
         char*  m_pErrorDoc;
 
         int    m_nCustomCSSDocLength;

@@ -146,7 +146,6 @@ Databases::Databases( sal_Bool showBasic,
                       Reference< uno::XComponentContext > xContext )
     : m_xContext( xContext ),
       m_bShowBasic(showBasic),
-      m_nErrorDocLength( 0 ),
       m_pErrorDoc( 0 ),
       m_nCustomCSSDocLength( 0 ),
       m_pCustomCSSDoc( 0 ),
@@ -782,7 +781,6 @@ void KeywordInfo::KeywordElement::init( Databases *pDatabases,Db* pDb,const rtl:
     listAnchor.realloc( id.size() );
     listTitle.realloc( id.size() );
 
-    int nSize = 0;
     Dbt data;
     DBData aDBData;
     const sal_Char* pData = NULL;
@@ -793,7 +791,6 @@ void KeywordInfo::KeywordElement::init( Databases *pDatabases,Db* pDb,const rtl:
         listId[i] = id[i];
         listAnchor[i] = anchor[i];
 
-        nSize = 0;
         pData = pEmpty;
         if( pDb )
         {
@@ -804,7 +801,6 @@ void KeywordInfo::KeywordElement::init( Databases *pDatabases,Db* pDb,const rtl:
                 bool bSuccess = pDBHelp->getValueForKey( idi, aDBData );
                 if( bSuccess )
                 {
-                    nSize = aDBData.getSize();
                     pData = aDBData.getData();
                 }
             }
@@ -813,12 +809,11 @@ void KeywordInfo::KeywordElement::init( Databases *pDatabases,Db* pDb,const rtl:
                 Dbt key_( static_cast< void* >( const_cast< sal_Char* >( idi.getStr() ) ),
                          idi.getLength() );
                 pDb->get( 0,&key_,&data,0 );
-                nSize = data.get_size();
                 pData = static_cast<sal_Char*>( data.get_data() );
             }
         }
 
-        DbtToStringConverter converter( pData, nSize );
+        DbtToStringConverter converter( pData );
 
         rtl::OUString title = converter.getTitle();
         pDatabases->replaceName( title );

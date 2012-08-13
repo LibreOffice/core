@@ -290,7 +290,6 @@ void URLParameter::readBerkeley()
     DataBaseIterator aDbIt( *m_pDatabases, aModule, aLanguage, false );
     bool bSuccess = false;
 
-    int nSize = 0;
     const sal_Char* pData = NULL;
 
     Dbt data;
@@ -311,7 +310,6 @@ void URLParameter::readBerkeley()
             bSuccess = pDBHelp->getValueForKey( keyStr, aDBData );
             if( bSuccess )
             {
-                nSize = aDBData.getSize();
                 pData = aDBData.getData();
                 break;
             }
@@ -324,7 +322,6 @@ void URLParameter::readBerkeley()
             if( err == 0 )
             {
                 bSuccess = true;
-                nSize = data.get_size();
                 pData = static_cast<sal_Char*>( data.get_data() );
                 break;
             }
@@ -333,7 +330,7 @@ void URLParameter::readBerkeley()
 
     if( bSuccess )
     {
-        DbtToStringConverter converter( pData, nSize );
+        DbtToStringConverter converter( pData );
         m_aTitle = converter.getTitle();
         m_pDatabases->replaceName( m_aTitle );
         m_aPath  = converter.getFile();

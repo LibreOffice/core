@@ -90,7 +90,6 @@ ResultSetForQuery::ResultSetForQuery( const uno::Reference< lang::XMultiServiceF
                                       URLParameter& aURLParameter,
                                       Databases* pDatabases )
     : ResultSetBase( xMSF,xProvider,nOpenMode,seq,seqSort ),
-      m_pDatabases( pDatabases ),
       m_aURLParameter( aURLParameter )
 {
     Reference< XTransliteration > xTrans(

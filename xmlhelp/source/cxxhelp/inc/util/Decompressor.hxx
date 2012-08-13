@@ -42,8 +42,7 @@ namespace xmlsearch {
         public:
 
             Decompressor()
-                : toRead_( 0 ),
-                  path_( 0 )
+                : toRead_( 0 )
             {
             }
 
@@ -61,7 +60,7 @@ namespace xmlsearch {
             static const sal_Int32 BitsInByte;
             static const sal_Int32 NBits;
 
-            sal_Int32 readByte_, toRead_, path_;
+            sal_Int32 toRead_;
         };
 
 

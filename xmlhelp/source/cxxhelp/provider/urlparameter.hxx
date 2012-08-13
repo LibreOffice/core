@@ -48,9 +48,8 @@ namespace chelp {
     {
     public:
 
-        DbtToStringConverter( const sal_Char* ptr,sal_Int32 len )
-            : m_len( len ),
-              m_ptr( ptr )
+        DbtToStringConverter( const sal_Char* ptr )
+            : m_ptr( ptr )
         {
         }
 
@@ -108,8 +107,6 @@ namespace chelp {
 
 
     private:
-
-        sal_Int32 m_len;
 
         const sal_Char* m_ptr;
 
