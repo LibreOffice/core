@@ -211,6 +211,9 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/gdi/outmap \
     vcl/source/gdi/pdfextoutdevdata \
     vcl/source/gdi/pdffontcache \
+    vcl/source/gdi/pdfwriter \
+    vcl/source/gdi/pdfwriter_impl2 \
+    vcl/source/gdi/pdfwriter_impl \
     vcl/source/gdi/pngread \
     vcl/source/gdi/pngwrite \
     vcl/source/gdi/print2 \
@@ -283,14 +286,6 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
 ))
 
 # optional parts
-
-ifneq (,$(filter DESKTOP,$(BUILD_TYPE)))
-$(eval $(call gb_Library_add_exception_objects,vcl,\
-    vcl/source/gdi/pdfwriter \
-    vcl/source/gdi/pdfwriter_impl2 \
-    vcl/source/gdi/pdfwriter_impl \
-))
-endif
 
 ## handle Graphite
 ifneq ($(ENABLE_GRAPHITE),)
