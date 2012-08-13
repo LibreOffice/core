@@ -60,12 +60,14 @@
 #define ODS_FORMAT_TYPE 50331943
 #define XLS_FORMAT_TYPE 318767171
 #define XLSX_FORMAT_TYPE 268959811
-#define CSV_FORMAT_TYPE 195
+#define CSV_FORMAT_TYPE  (SFX_FILTER_IMPORT | SFX_FILTER_EXPORT | SFX_FILTER_ALIEN | SFX_FILTER_USESOPTIONS)
+#define HTML_FORMAT_TYPE (SFX_FILTER_IMPORT | SFX_FILTER_EXPORT | SFX_FILTER_ALIEN | SFX_FILTER_USESOPTIONS)
 
 #define ODS     0
 #define XLS     1
 #define XLSX    2
 #define CSV     3
+#define HTML    4
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -80,7 +82,8 @@ FileFormat aFileFormats[] = {
     { "ods" , "calc8", "", ODS_FORMAT_TYPE },
     { "xls" , "MS Excel 97", "calc_MS_EXCEL_97", XLS_FORMAT_TYPE },
     { "xlsx", "Calc MS Excel 2007 XML" , "MS Excel 2007 XML", XLSX_FORMAT_TYPE },
-    { "csv" , "Text - txt - csv (StarCalc)", "generic_Text", CSV_FORMAT_TYPE }
+    { "csv" , "Text - txt - csv (StarCalc)", "generic_Text", CSV_FORMAT_TYPE },
+    { "html" , "calc_HTML_WebQuery", "generic_HTML", HTML_FORMAT_TYPE }
 };
 
 }
@@ -145,6 +148,8 @@ public:
     //test shape import
     void testControlImport();
 
+    void testNumberFormatHTML();
+
     CPPUNIT_TEST_SUITE(ScFiltersTest);
     CPPUNIT_TEST(testRangeNameXLS);
     CPPUNIT_TEST(testRangeNameXLSX);
@@ -177,6 +182,8 @@ public:
     CPPUNIT_TEST(testColorScale);
     CPPUNIT_TEST(testDataBar);
     CPPUNIT_TEST(testCondFormat);
+
+    CPPUNIT_TEST(testNumberFormatHTML);
 
     //disable testPassword on MacOSX due to problems with libsqlite3
     //also crashes on DragonFly due to problems with nss/nspr headers
@@ -1177,6 +1184,32 @@ void ScFiltersTest::testControlImport()
     uno::Reference< drawing::XControlShape > xControlShape(xIA_DrawPage->getByIndex(0), UNO_QUERY_THROW);
 
     CPPUNIT_ASSERT(xControlShape.is());
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testNumberFormatHTML()
+{
+    OUString aFileNameBase("numberformat.");
+    OUString aFileExt = OUString::createFromAscii(aFileFormats[HTML].pName);
+    OUString aFilterName = OUString::createFromAscii(aFileFormats[HTML].pFilterName);
+    OUString aFilterType = OUString::createFromAscii(aFileFormats[HTML].pTypeName);
+
+    rtl::OUString aFileName;
+    createFileURL(aFileNameBase, aFileExt, aFileName);
+    ScDocShellRef xDocSh = load (aFilterName, aFileName, rtl::OUString(), aFilterType, aFileFormats[HTML].nFormatType);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load numberformat.html", xDocSh.Is());
+
+    ScDocument* pDoc = xDocSh->GetDocument();
+
+    // Check the header just in case.
+    CPPUNIT_ASSERT_MESSAGE("Cell value is not as expected", pDoc->GetString(0, 0, 0) == "Product");
+    CPPUNIT_ASSERT_MESSAGE("Cell value is not as expected", pDoc->GetString(1, 0, 0) == "Price");
+    CPPUNIT_ASSERT_MESSAGE("Cell value is not as expected", pDoc->GetString(2, 0, 0) == "Note");
+
+    // B2 should be imported as a value cell.
+    bool bHasValue = pDoc->HasValueData(1, 1, 0);
+    CPPUNIT_ASSERT_MESSAGE("Fail to import number as a value cell.", bHasValue);
+
     xDocSh->DoClose();
 }
 
