@@ -328,7 +328,7 @@ sal_Bool Bitmap::Convert( BmpConversion eConversion )
         case( BMP_CONVERSION_24BIT ):
         {
             if( nBitCount < 24 )
-                bRet = ImplConvertUp( 24, sal_False );
+                bRet = ImplConvertUp( 24, NULL );
             else
                 bRet = sal_True;
         }
