@@ -94,7 +94,7 @@ TabDialog RID_OFA_AUTOCORR_DLG
     ListBox LB_LANG
     {
         Pos = MAP_APPFONT ( 150 , 3 ) ;
-        Size = MAP_APPFONT ( 60 , 100 ) ;
+        Size = MAP_APPFONT ( 80 , 100 ) ;
         DropDown = TRUE;
         TabStop = TRUE ;
         Border = TRUE ;
