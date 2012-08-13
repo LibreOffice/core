@@ -162,6 +162,21 @@ protected:
         return data;
     }
 
+    /// Get number of paragraphs of the document.
+    int getParagraphs()
+    {
+        uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+        uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xTextDocument->getText(), uno::UNO_QUERY);
+        uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
+        int nRet = 0;
+        while (xParaEnum->hasMoreElements())
+        {
+            xParaEnum->nextElement();
+            nRet++;
+        }
+        return nRet;
+    }
+
     // Get paragraph (counted from 1), optionally check it contains the given text.
     uno::Reference< text::XTextRange > getParagraph( int number, OUString content = OUString() ) const
     {

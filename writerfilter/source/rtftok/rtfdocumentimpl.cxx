@@ -3621,6 +3621,8 @@ int RTFDocumentImpl::popState()
     {
         m_aStates.top().resetFrame();
         parBreak();
+        // Save this state for later use, so we only reset frame status only for the first shape inside a frame.
+        aState = m_aStates.top();
         m_bNeedPap = true;
     }
     break;
@@ -3863,7 +3865,8 @@ int RTFDocumentImpl::popState()
         m_aStates.top().aCharacterAttributes = aState.aCharacterAttributes;
     }
     else if (aState.nDestinationState == DESTINATION_FLYMAINCONTENT ||
-            aState.nDestinationState == DESTINATION_SHPPICT)
+            aState.nDestinationState == DESTINATION_SHPPICT ||
+            aState.nDestinationState == DESTINATION_SHAPE)
         m_aStates.top().aFrame = aState.aFrame;
     if (m_pCurrentBuffer == &m_aSuperBuffer)
     {

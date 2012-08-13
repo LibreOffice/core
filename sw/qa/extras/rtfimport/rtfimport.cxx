@@ -103,6 +103,7 @@ public:
     void testFdo36089();
     void testFdo49892();
     void testFdo48446();
+    void testFdo47495();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -148,6 +149,7 @@ public:
     CPPUNIT_TEST(testFdo36089);
     CPPUNIT_TEST(testFdo49892);
     CPPUNIT_TEST(testFdo48446);
+    CPPUNIT_TEST(testFdo47495);
 #endif
     CPPUNIT_TEST_SUITE_END();
 
@@ -894,6 +896,13 @@ void Test::testFdo48446()
 
     OUString aExpected("Имя", 6, RTL_TEXTENCODING_UTF8);
     getParagraph(1, aExpected);
+}
+
+void Test::testFdo47495()
+{
+    load("fdo47495.rtf");
+    // Used to have 4 paragraphs, as a result the original bugdoc had 2 pages instead of 1.
+    CPPUNIT_ASSERT_EQUAL(2, getParagraphs());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
