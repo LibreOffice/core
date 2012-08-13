@@ -451,21 +451,18 @@ void PPTWriter::ImplWriteSlideMaster( sal_uInt32 nPageNum, Reference< XPropertyS
 
 PPTWriter::~PPTWriter()
 {
-    void*  pPtr;
     delete mpExEmbed;
     delete mpPptEscherEx;
     delete mpCurUserStrm;
     delete mpPicStrm;
     delete mpStrm;
 
-
-
     std::vector< PPTExStyleSheet* >::iterator aStyleSheetIter( maStyleSheetList.begin() );
     while( aStyleSheetIter < maStyleSheetList.end() )
         delete *aStyleSheetIter++;
 
-    for ( pPtr = maExOleObj.First(); pPtr; pPtr = maExOleObj.Next() )
-        delete (PPTExOleObjEntry*)pPtr;
+    for ( std::vector<PPTExOleObjEntry*>::const_iterator it = maExOleObj.begin(); it != maExOleObj.end(); ++it )
+        delete *it;
 
     if ( mbStatusIndicator )
         mXStatusIndicator->end();
@@ -1287,13 +1284,12 @@ void PPTWriter::ImplWriteVBA()
 
 void PPTWriter::ImplWriteOLE( )
 {
-    PPTExOleObjEntry* pPtr;
 
     SvxMSExportOLEObjects aOleExport( mnCnvrtFlags );
 
-    for ( pPtr = (PPTExOleObjEntry*)maExOleObj.First(); pPtr;
-        pPtr = (PPTExOleObjEntry*)maExOleObj.Next() )
+    for ( std::vector<PPTExOleObjEntry*>::const_iterator it = maExOleObj.begin(); it != maExOleObj.end(); ++it )
     {
+        PPTExOleObjEntry* pPtr = *it;
         SvMemoryStream* pStrm = NULL;
         pPtr->nOfsB = mpStrm->Tell();
         switch ( pPtr->eType )
@@ -1419,9 +1415,9 @@ sal_Bool PPTWriter::ImplWriteAtomEnding()
         }
     }
     // Ole persists
-    PPTExOleObjEntry* pPtr;
-    for ( pPtr = (PPTExOleObjEntry*)maExOleObj.First(); pPtr; pPtr = (PPTExOleObjEntry*)maExOleObj.Next() )
+    for ( std::vector<PPTExOleObjEntry*>::const_iterator it = maExOleObj.begin(); it != maExOleObj.end(); ++it )
     {
+        PPTExOleObjEntry* pPtr = *it;
         nOfs = mpPptEscherEx->PtGetOffsetByID( EPP_Persist_ExObj );
         if ( nOfs )
         {

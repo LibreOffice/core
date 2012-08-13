@@ -36,7 +36,6 @@
 #include <vcl/graph.hxx>
 #include <unotools/fontcvt.hxx>
 #include <tools/string.hxx>
-#include <tools/list.hxx>
 #include "pptexanimations.hxx"
 #include <pptexsoundcollection.hxx>
 
@@ -197,7 +196,7 @@ class PPTWriter : public PPTWriterBase, public PPTExBulletProvider
         SvStream*           mpPicStrm;
         PptEscherEx*        mpPptEscherEx;
 
-        List                maExOleObj;
+        std::vector<PPTExOleObjEntry*> maExOleObj;
         sal_uInt32          mnVBAOleOfs;
         SvMemoryStream*     mpVBA;
         sal_uInt32          mnExEmbed;

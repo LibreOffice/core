@@ -2559,7 +2559,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                             << nPageId;
                 PPTExOleObjEntry* pEntry = new PPTExOleObjEntry( OCX_CONTROL, mpExEmbed->Tell() );
                 pEntry->xControlModel = aXControlModel;
-                maExOleObj.Insert( pEntry );
+                maExOleObj.push_back( pEntry );
 
                 mnExEmbed++;
 
@@ -3075,7 +3075,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
 
                     PPTExOleObjEntry* pE = new PPTExOleObjEntry( NORMAL_OLE_OBJECT, mpExEmbed->Tell() );
                     pE->xShape = mXShape;
-                    maExOleObj.Insert( pE );
+                    maExOleObj.push_back( pE );
 
                     mnExEmbed++;
 
