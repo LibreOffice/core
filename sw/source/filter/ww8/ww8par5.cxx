@@ -2598,7 +2598,7 @@ eF_ResT SwWW8ImplReader::Read_F_Equation( WW8FieldDesc*, String& rStr )
 {
     WW8ReadFieldParams aReadParam( rStr );
     long cChar = aReadParam.SkipToNextToken();
-    if ('o' == cChar)
+    if ('o' == cChar || 'O' == cChar)
         Read_SubF_Combined(aReadParam);
     else if ('*' == cChar)
         Read_SubF_Ruby(aReadParam);
@@ -2608,45 +2608,95 @@ eF_ResT SwWW8ImplReader::Read_F_Equation( WW8FieldDesc*, String& rStr )
 void SwWW8ImplReader::Read_SubF_Combined( WW8ReadFieldParams& rReadParam)
 {
     String sCombinedCharacters;
-    if ((-2 == rReadParam.SkipToNextToken()) &&
-            rReadParam.GetResult().EqualsIgnoreCaseAscii(OUString('('), 1, 0))
+    WW8ReadFieldParams aOriFldParam = rReadParam;
+    long cGetChar = rReadParam.SkipToNextToken();
+    switch( cGetChar )
     {
-        for (int i=0;i<2;i++)
+    case 'a':
+    case 'A':
         {
-            if ('s' == rReadParam.SkipToNextToken())
+            String sTemp = rReadParam.GetResult();
+            if ( !sTemp.EqualsIgnoreCaseAscii("d", 1, 0) )
             {
-                long cChar = rReadParam.SkipToNextToken();
-                if (-2 != rReadParam.SkipToNextToken())
-                    break;
-                String sF = rReadParam.GetResult();
-                if ((('u' == cChar) && sF.EqualsIgnoreCaseAscii(OUString('p'), 1, 0))
-                || (('d' == cChar) && sF.EqualsIgnoreCaseAscii(OUString('o'), 1, 0)))
+                break;
+            }
+            rReadParam.SkipToNextToken();
+        }
+    case -2:
+        {
+            if ( rReadParam.GetResult().EqualsIgnoreCaseAscii('(', 1, 0) )
+            {
+                for (int i=0;i<2;i++)
                 {
-                    if (-2 == rReadParam.SkipToNextToken())
+                    if ('s' == rReadParam.SkipToNextToken())
                     {
-                        String sPart = rReadParam.GetResult();
-                        xub_StrLen nBegin = sPart.Search('(');
-
-                        //Word disallows brackets in this field, which
-                        //aids figuring out the case of an end of )) vs )
-                        xub_StrLen nEnd = sPart.Search(')');
-
-                        if ((nBegin != STRING_NOTFOUND) &&
-                            (nEnd != STRING_NOTFOUND))
+                        long cChar = rReadParam.SkipToNextToken();
+                        if (-2 != rReadParam.SkipToNextToken())
+                            break;
+                        String sF = rReadParam.GetResult();
+                        if ((('u' == cChar) && sF.EqualsIgnoreCaseAscii('p', 1, 0))
+                            || (('d' == cChar) && sF.EqualsIgnoreCaseAscii('o', 1, 0)))
                         {
-                            sCombinedCharacters +=
-                                sPart.Copy(nBegin+1,nEnd-nBegin-1);
+                            if (-2 == rReadParam.SkipToNextToken())
+                            {
+                                String sPart = rReadParam.GetResult();
+                                xub_StrLen nBegin = sPart.Search('(');
+
+                                //Word disallows brackets in this field, which
+                                //aids figuring out the case of an end of )) vs )
+                                xub_StrLen nEnd = sPart.Search(')');
+
+                                if ((nBegin != STRING_NOTFOUND) &&
+                                    (nEnd != STRING_NOTFOUND))
+                                {
+                                    sCombinedCharacters +=
+                                        sPart.Copy(nBegin+1,nEnd-nBegin-1);
+                                }
+                            }
+                        }
+                    }
+                }
+                if (sCombinedCharacters.Len())
+                {
+                    SwCombinedCharField aFld((SwCombinedCharFieldType*)
+                        rDoc.GetSysFldType(RES_COMBINED_CHARS),sCombinedCharacters);
+                    rDoc.InsertPoolItem(*pPaM, SwFmtFld(aFld), 0);
+                }
+                else
+                {
+                    const String sPart = aOriFldParam.GetResult();
+                    xub_StrLen nBegin = sPart.Search('(');
+                    xub_StrLen nEnd = sPart.Search(',');
+                    if ( nEnd == STRING_NOTFOUND )
+                    {
+                        nEnd = sPart.Search(')');
+                    }
+                    if ( (nBegin != STRING_NOTFOUND) && (nEnd != STRING_NOTFOUND) )
+                    {
+                        // skip certain leading characters
+                        for (int i = nBegin;i < nEnd-1;i++)
+                        {
+                            const sal_Unicode cC = sPart.GetChar(nBegin+1);
+                            if ( cC < 32 )
+                            {
+                                nBegin++;
+                            }
+                            else
+                                break;
+                        }
+                        sCombinedCharacters = sPart.Copy( nBegin+1, nEnd-nBegin-1 );
+                        if ( sCombinedCharacters.Len() )
+                        {
+                            SwInputField aFld( (SwInputFieldType*)rDoc.GetSysFldType( RES_INPUTFLD ),
+                                sCombinedCharacters, sCombinedCharacters, INP_TXT, 0 );
+                            rDoc.InsertPoolItem( *pPaM, SwFmtFld( aFld ), 0 ); // insert input field
                         }
                     }
                 }
             }
         }
-    }
-    if (sCombinedCharacters.Len())
-    {
-        SwCombinedCharField aFld((SwCombinedCharFieldType*)
-            rDoc.GetSysFldType(RES_COMBINED_CHARS),sCombinedCharacters);
-        rDoc.InsertPoolItem(*pPaM, SwFmtFld(aFld), 0);
+    default:
+        break;
     }
 }
 
