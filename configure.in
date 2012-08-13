@@ -7977,9 +7977,8 @@ AC_SUBST(MOZ_LIB)
 AC_SUBST(MOZ_LIB_XPCOM)
 
 dnl ===================================================================
-dnl Check for system NSS only with xmlsec or mozilla build enabled
+dnl Check for system NSS
 dnl ===================================================================
-if test "x$enable_xmlsec" != "xno" -o "x$enable_mozilla" != "xno"; then
 AC_MSG_CHECKING([which NSS to use])
 if test "$with_system_nss" = "yes"; then
     AC_MSG_RESULT([external])
@@ -8013,7 +8012,6 @@ from http://ftp.mozilla.org/pub/mozilla.org/mozilla/libraries/win32])
         fi
     fi
 fi # system nss
-fi # enable xmlsec || enable mozilla
 AC_SUBST(SYSTEM_NSS)
 AC_SUBST(NSS_CFLAGS)
 AC_SUBST(NSS_LIBS)
