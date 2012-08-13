@@ -22,7 +22,7 @@
 #include <tools/inetmime.hxx>
 #include <tools/inetmsg.hxx>
 #include <tools/inetstrm.hxx>
-#include <tools/list.hxx>
+#include <tools/contnr.hxx>
 #include <rtl/instance.hxx>
 #include <rtl/strbuf.hxx>
 #include <comphelper/string.hxx>
@@ -239,7 +239,7 @@ INetRFC822Message::INetRFC822Message()
     : INetMessage()
 {
     for (sal_uInt16 i = 0; i < INETMSG_RFC822_NUMHDR; i++)
-        m_nIndex[i] = LIST_ENTRY_NOTFOUND;
+        m_nIndex[i] = CONTAINER_ENTRY_NOTFOUND;
 }
 
 INetRFC822Message::INetRFC822Message (const INetRFC822Message& rMsg)
@@ -751,7 +751,7 @@ INetMIMEMessage::INetMIMEMessage()
       bHeaderParsed (sal_False)
 {
     for (sal_uInt16 i = 0; i < INETMSG_MIME_NUMHDR; i++)
-        m_nIndex[i] = LIST_ENTRY_NOTFOUND;
+        m_nIndex[i] = CONTAINER_ENTRY_NOTFOUND;
 }
 
 INetMIMEMessage::INetMIMEMessage (const INetMIMEMessage& rMsg)
