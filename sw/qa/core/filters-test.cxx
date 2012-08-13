@@ -38,8 +38,12 @@
 #include <sfx2/docfilt.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/sfxmodelfactory.hxx>
+#include <sfx2/sfxsids.hrc>
+
+#include <svl/stritem.hxx>
 
 #include "init.hxx"
+#include "iodetect.hxx"
 #include "swtypes.hxx"
 #include "doc.hxx"
 #include "docsh.hxx"
@@ -83,6 +87,13 @@ bool SwFiltersTest::load(const rtl::OUString &rFilter, const rtl::OUString &rURL
     SwDocShellRef xDocShRef = new SwDocShell;
     SfxMedium* pSrcMed = new SfxMedium(rURL, STREAM_STD_READ);
     pSrcMed->SetFilter(pFilter);
+
+    if (rUserData == FILTER_TEXT_DLG)
+    {
+        pSrcMed->GetItemSet()->Put(
+            SfxStringItem(SID_FILE_FILTEROPTIONS, rtl::OUString("UTF8,LF,Liberation Mono,en-US")));
+    }
+
     bool bLoaded = xDocShRef->DoLoad(pSrcMed);
     if (xDocShRef.Is())
         xDocShRef->DoClose();
@@ -91,13 +102,17 @@ bool SwFiltersTest::load(const rtl::OUString &rFilter, const rtl::OUString &rURL
 
 void SwFiltersTest::testCVEs()
 {
-    testDir(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Staroffice XML (Writer)")),
+    testDir(rtl::OUString("Staroffice XML (Writer)"),
             getURLFromSrc("/sw/qa/core/data/xml/"),
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CXML")));
+            rtl::OUString(FILTER_XML));
 
-    testDir(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MS Word 97")),
+    testDir(rtl::OUString("MS Word 97"),
             getURLFromSrc("/sw/qa/core/data/ww8/"),
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CWW8")));
+            rtl::OUString(FILTER_WW8));
+
+    testDir(rtl::OUString("Text (encoded)"),
+            getURLFromSrc("/sw/qa/core/data/txt/"),
+            rtl::OUString(FILTER_TEXT_DLG));
 }
 
 void SwFiltersTest::setUp()
