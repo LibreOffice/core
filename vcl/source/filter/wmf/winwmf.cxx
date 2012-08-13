@@ -348,54 +348,64 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
         case W_META_POLYPOLYGON:
         {
             bool bRecordOk = true;
-            sal_uInt16  nPoly = 0;
-            Point*  pPtAry;
+            sal_uInt16 nPolyCount(0);
             // Number of polygons:
-            *pWMF >> nPoly;
-            // Number of points of each polygon. Determine total number of points
-            boost::scoped_array<sal_uInt16> xPolygonPointCounts(new sal_uInt16[nPoly]);
-            sal_uInt16* pnPoints = xPolygonPointCounts.get();
-            sal_uInt16 nPoints = 0;
-            for(sal_uInt16 i = 0; i < nPoly; i++ )
+            *pWMF >> nPolyCount;
+            if (nPolyCount && pWMF->good())
             {
-                *pWMF >> pnPoints[i];
-
-                if (pnPoints[i] > SAL_MAX_UINT16 - nPoints)
+                // Number of points of each polygon. Determine total number of points
+                boost::scoped_array<sal_uInt16> xPolygonPointCounts(new sal_uInt16[nPolyCount]);
+                sal_uInt16* pnPoints = xPolygonPointCounts.get();
+                PolyPolygon aPolyPoly(nPolyCount, nPolyCount);
+                sal_uInt16 nPoints = 0;
+                for (sal_uInt16 a = 0; a < nPolyCount && pWMF->good(); ++a)
                 {
-                    bRecordOk = false;
+                    *pWMF >> pnPoints[a];
+
+                    if (pnPoints[a] > SAL_MAX_UINT16 - nPoints)
+                    {
+                        bRecordOk = false;
+                        break;
+                    }
+
+                    nPoints += pnPoints[a];
+                }
+
+                SAL_WARN_IF(!bRecordOk, "svtools.filter", "polypolygon record has more polygons than we can handle");
+
+                bRecordOk &= pWMF->good();
+
+                if (!bRecordOk)
+                {
+                    pWMF->SetError( SVSTREAM_FILEFORMAT_ERROR );
                     break;
                 }
 
-                nPoints += pnPoints[i];
+                // Polygon points are:
+                for (sal_uInt16 a = 0; a < nPolyCount && pWMF->good(); ++a)
+                {
+                    const sal_uInt16 nPointCount(pnPoints[a]);
+                    boost::scoped_array<Point> xPolygonPoints(new Point[nPointCount]);
+                    Point* pPtAry = xPolygonPoints.get();
+
+                    for(sal_uInt16 b(0); b < nPointCount && pWMF->good(); ++b)
+                    {
+                        pPtAry[b] = ReadPoint();
+                    }
+
+                    aPolyPoly.Insert(Polygon(nPointCount, pPtAry));
+                }
+
+                bRecordOk &= pWMF->good();
+
+                if (!bRecordOk)
+                {
+                    pWMF->SetError( SVSTREAM_FILEFORMAT_ERROR );
+                    break;
+                }
+
+                pOut->DrawPolyPolygon( aPolyPoly );
             }
-
-            SAL_WARN_IF(!bRecordOk, "svtools.filter", "polypolygon record has more polygons than we can handle");
-
-            bRecordOk &= pWMF->good();
-
-            if (!bRecordOk)
-            {
-                pWMF->SetError( SVSTREAM_FILEFORMAT_ERROR );
-                break;
-            }
-
-            // Polygon points are:
-            boost::scoped_array<Point> xPolygonPoints(new Point[nPoints]);
-            pPtAry = xPolygonPoints.get();
-            for (sal_uInt16 i = 0; i < nPoints; i++ )
-                pPtAry[ i ] = ReadPoint();
-
-            bRecordOk &= pWMF->good();
-
-            if (!bRecordOk)
-            {
-                pWMF->SetError( SVSTREAM_FILEFORMAT_ERROR );
-                break;
-            }
-
-            // Produce PolyPolygon Actions
-            PolyPolygon aPolyPoly( nPoly, pnPoints, pPtAry );
-            pOut->DrawPolyPolygon( aPolyPoly );
         }
         break;
 

@@ -399,7 +399,7 @@ void EnhWMFReader::ReadAndDrawPolyLine()
 template <class T>
 void EnhWMFReader::ReadAndDrawPolyPolygon()
 {
-    sal_uInt32  i, nPoly, nGesPoints, nPoints;
+    sal_uInt32 nPoly(0), nGesPoints(0), nReadPoints(0);
     pWMF->SeekRel( 0x10 );
     // Number of polygons
     *pWMF >> nPoly >> nGesPoints;
@@ -410,27 +410,38 @@ void EnhWMFReader::ReadAndDrawPolyPolygon()
     {
         // Get number of points in each polygon
         sal_uInt16 * pnPoints = new sal_uInt16[ nPoly ];
-        for ( i = 0; i < nPoly && pWMF->good(); i++ )
+        for (sal_uInt32 i = 0; i < nPoly && pWMF->good(); ++i)
         {
+            sal_uInt32 nPoints(0);
             *pWMF >> nPoints;
             pnPoints[ i ] = (sal_uInt16)nPoints;
         }
         if ( pWMF->good() && ( nGesPoints * (sizeof(T)+sizeof(T)) ) <= ( nEndPos - pWMF->Tell() ) )
         {
             // Get polygon points
-            Point * pPtAry  = new Point[ nGesPoints ];
-            for ( i = 0; i < nGesPoints && pWMF->good(); i++ )
+            PolyPolygon aPolyPoly(nPoly, nPoly);
+            for (sal_uInt32 i = 0; i < nPoly && pWMF->good(); ++i)
             {
-                T nX, nY;
-                *pWMF >> nX >> nY;
-                pPtAry[ i ] = Point( nX, nY );
+                const sal_uInt16 nPointCount(pnPoints[i]);
+                Point* pPtAry = new Point[nPointCount];
+                for (sal_uInt16 j = 0; j < nPointCount && pWMF->good(); ++j)
+                {
+                    T nX(0), nY(0);
+                    *pWMF >> nX >> nY;
+                    pPtAry[ i ] = Point( nX, nY );
+                    ++nReadPoints;
+                }
+
+                aPolyPoly.Insert(Polygon(nPointCount, pPtAry));
+                delete[] pPtAry;
             }
-            // Create PolyPolygon Actions
-            PolyPolygon aPolyPoly( (sal_uInt16)nPoly, pnPoints, pPtAry );
+
             pOut->DrawPolyPolygon( aPolyPoly, bRecordPath );
-            delete[] pPtAry;
         }
         delete[] pnPoints;
+
+        OSL_ENSURE(nReadPoints == nGesPoints, "The number Points processed from EMR_POLYPOLYGON is unequal imported number (!)");
+
     }
 }
 

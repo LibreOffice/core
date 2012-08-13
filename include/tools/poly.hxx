@@ -206,8 +206,6 @@ private:
 public:
                         PolyPolygon( sal_uInt16 nInitSize = 16, sal_uInt16 nResize = 16 );
                         PolyPolygon( const Polygon& rPoly );
-                        PolyPolygon( sal_uInt16 nPoly, const sal_uInt16* pPointCountAry,
-                                     const Point* pPtAry );
                         PolyPolygon( const PolyPolygon& rPolyPoly );
                         ~PolyPolygon();
 

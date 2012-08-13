@@ -99,23 +99,6 @@ PolyPolygon::PolyPolygon( const Polygon& rPoly )
         mpImplPolyPolygon = new ImplPolyPolygon( 16, 16 );
 }
 
-PolyPolygon::PolyPolygon( sal_uInt16 nPoly, const sal_uInt16* pPointCountAry,
-                          const Point* pPtAry )
-{
-    DBG_CTOR( PolyPolygon, NULL );
-
-    if ( nPoly > MAX_POLYGONS )
-        nPoly = MAX_POLYGONS;
-
-    mpImplPolyPolygon = new ImplPolyPolygon( nPoly );
-    for ( sal_uInt16 i = 0; i < nPoly; i++ )
-    {
-        mpImplPolyPolygon->mpPolyAry[i] = new Polygon( *pPointCountAry, pPtAry );
-        pPtAry += *pPointCountAry;
-        pPointCountAry++;
-    }
-}
-
 PolyPolygon::PolyPolygon( const PolyPolygon& rPolyPoly )
 {
     DBG_CTOR( PolyPolygon, NULL );
