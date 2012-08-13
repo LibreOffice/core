@@ -26,12 +26,12 @@
     <property file="build.properties" />
     <property environment="env" />
 
-    <property name="out" value="output"/>
-    <property name="classes" value="${out}/class" />
-    <property name="dist" value="${out}/dist" />
+    <property name="env.INPATH" value="output"/>
+    <property name="classes" value="${env.INPATH}/class" />
+    <property name="dist" value="${env.INPATH}/dist" />
 
     <property name="env.TESTSPACE" value="testspace" />
-    <property name="env.JUNIT_HOME" value="${out}/junit" />
+    <property name="env.JUNIT_HOME" value="${env.INPATH}/junit" />
     <property name="junit.home" value="${env.JUNIT_HOME}" />
     <property name="testspace" value="${env.TESTSPACE}" />
     <property name="test.classes" value="testsuite/gui/BVT.class" />
@@ -43,33 +43,6 @@
     <path id="junit.classpath">
         <fileset dir="${junit.home}" erroronmissingdir="false">
             <include name="*.jar" />
-        </fileset>
-    </path>
-
-    <path id="testgui.classpath">
-        <pathelement location="${classes}" />
-        <path refid="junit.classpath"/>
-    </path>
-
-    <path id="testuno.classpath">
-        <pathelement location="${classes}" />
-        <path refid="junit.classpath"/>
-        <fileset dir="${openoffice.home}/../" erroronmissingdir="false">
-            <include name="**/juh.jar" />
-            <include name="**/unoil.jar" />
-            <include name="**/ridl.jar" />
-            <include name="**/jurt.jar" />
-        </fileset>
-    </path>
-
-    <path id="test.classpath">
-        <pathelement location="${classes}" />
-        <path refid="junit.classpath" />
-        <fileset dir="${openoffice.home}/../" erroronmissingdir="false">
-            <include name="**/juh.jar" />
-            <include name="**/unoil.jar" />
-            <include name="**/ridl.jar" />
-            <include name="**/jurt.jar" />
         </fileset>
     </path>
 
@@ -106,7 +79,10 @@
         <javac destdir="${classes}" debug="on" source="1.6" includeantruntime="false">
             <src path="testgui/source"/>
             <src path="testgui/data"/>
-            <classpath refid="testgui.classpath"/>
+            <classpath>
+                <pathelement location="${classes}" />
+                <path refid="junit.classpath"/>
+            </classpath>
         </javac>
     </target>
 
@@ -120,9 +96,22 @@
     </target>
 
     <target name="testuno.compile" depends="testuno.init, prepare.junit">
+        <property name="uno.jar.dir" location="${openoffice.home}/../" />
+        <path id="uno.classpath">
+            <fileset dir="${uno.jar.dir}" erroronmissingdir="false">
+                <include name="**/juh.jar" />
+                <include name="**/unoil.jar" />
+                <include name="**/ridl.jar" />
+                <include name="**/jurt.jar" />
+            </fileset>
+        </path>
         <javac destdir="${classes}" debug="on" source="1.6" includeantruntime="false">
             <src path="testuno/source"/>
-            <classpath refid="testuno.classpath"/>
+            <classpath>
+                <pathelement location="${classes}" />
+                <path refid="junit.classpath"/>
+                <path refid="uno.classpath"/>
+            </classpath>
         </javac>
     </target>
 
@@ -152,16 +141,11 @@
 
     <target name="check.build" description="Check the build context">
         <condition property="openoffice.archive.dir" value="${env.SRC_ROOT}/instsetoo_native/${env.INPATH}/OpenOffice/archive/install/en-US">
-            <and>
-                <isset property="env.SRC_ROOT" />
-                <isset property="env.INPATH" />
-            </and>
+            <isset property="env.SRC_ROOT" />
         </condition>
-
         <condition property="openoffice.build" value="localbuild">
             <isset property="openoffice.archive.dir" />
         </condition>
-
         <condition property="find.build.skip">
             <or>
                 <isset property="openoffice.build" />
@@ -177,9 +161,7 @@
             </or>
         </condition>
         <condition property="install.build.skip">
-            <or>
-                <isset property="openoffice.home" />
-            </or>
+            <isset property="openoffice.home" />
         </condition>
     </target>
 
@@ -210,12 +192,12 @@
         <mkdir dir="${openoffice.installation.dir}" />
         <unzip dest="${openoffice.installation.dir}">
             <fileset dir="${openoffice.archive.dir}">
-                <include name="**/*.zip" />
+                <include name="**/Apache_OpenOffice*.zip" />
             </fileset>
         </unzip>
         <pathconvert property="gz.files" pathsep=" " setonempty="false">
             <path>
-                <fileset dir="${openoffice.archive.dir}" includes="*.gz" />
+                <fileset dir="${openoffice.archive.dir}" includes="Apache_OpenOffice*.gz" />
             </path>
         </pathconvert>
         <exec dir="${openoffice.installation.dir}" executable="tar" failifexecutionfails="false">
@@ -254,7 +236,11 @@
             </batchtest>
 
             <formatter type="xml" />
-            <classpath refid="test.classpath" />
+            <classpath>
+                <pathelement location="${classes}" />
+                <path refid="junit.classpath"/>
+                <path refid="uno.classpath"/>
+            </classpath>
         </junit>
 
         <junitreport todir="${test.report}">
@@ -265,6 +251,8 @@
                 <param name="TITLE" expression="GUI Test Result" />
             </report>
         </junitreport>
+        <property name="test.report.index" location="${test.report}/index.html" />
+        <echo>Open ${test.report.index} in browser to view the test report.</echo>
     </target>
 
     <target name="test" depends="check.build,find.build,download.build,install.build,run.test" description="Run testing on the specified build. The build is automatically downloaded and installed according to the context.">
