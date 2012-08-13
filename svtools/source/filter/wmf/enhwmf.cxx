@@ -866,8 +866,8 @@ sal_Bool EnhWMFReader::ReadEnhWMF()
                         // test if it is sensible to crop
                         if ( ( cxSrc > 0 ) && ( cySrc > 0 ) &&
                             ( xSrc >= 0 ) && ( ySrc >= 0 ) &&
-                                ( xSrc + cxSrc <= aBitmap.GetSizePixel().Width() ) &&
-                                    ( ySrc + cySrc <= aBitmap.GetSizePixel().Height() ) )
+                                ( xSrc + cxSrc <= static_cast< sal_Int32 >(aBitmap.GetSizePixel().Width()) ) &&
+                                    ( ySrc + cySrc <= static_cast< sal_Int32 >(aBitmap.GetSizePixel().Height()) ) )
                         {
                             Rectangle aCropRect( Point( xSrc, ySrc ), Size( cxSrc, cySrc ) );
                             aBitmap.Crop( aCropRect );
