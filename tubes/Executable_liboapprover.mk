@@ -26,18 +26,14 @@
 
 $(eval $(call gb_Executable_Executable,liboapprover))
 
-$(eval $(call gb_Executable_set_targettype_gui,liboapprover,YES))
-
 $(eval $(call gb_Executable_set_include,liboapprover,\
+    -I$(SRCDIR)/tubes/inc \
     $$(INCLUDE) \
-    $(GTK_CFLAGS) \
-    $(TELEPATHY_CFLAGS) \
-    -I$(realpath $(SRCDIR)/tubes/inc) \
 ))
 
-$(eval $(call gb_Executable_add_libs,liboapprover,\
-    $(GTK_LIBS) \
-    $(TELEPATHY_LIBS) \
+$(eval $(call gb_Executable_use_externals,liboapprover,\
+    gtk \
+    telepathy \
 ))
 
 $(eval $(call gb_Executable_add_cobjects,liboapprover,\
