@@ -1,3 +1,2 @@
-ft     freetype      :       NULL
-ft     freetype              usr1    -       u ft_mkout NULL
+ft     freetype      :       solenv NULL
 ft     freetype              nmake   -       u ft_libfreetype NULL
