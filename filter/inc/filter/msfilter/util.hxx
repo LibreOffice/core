@@ -70,6 +70,24 @@ MSFILTER_DLLPUBLIC rtl::OString DateTimeToOString( const DateTime& rDateTime );
 MSFILTER_DLLPUBLIC sal_Unicode bestFitOpenSymbolToMSFont(sal_Unicode cBullet,
     rtl_TextEncoding& r_ioChrSet, rtl::OUString& r_ioFontName, bool bDisableUnicodeSupport = false);
 
+
+enum TextCategory
+{
+    latin,      //Latin
+    cs,         //Complex Script
+    ea,         //East Asian
+    sym         //Symbol
+};
+
+/** Categorize codepoints according to how MS seems to do it.
+
+  It's been bugging me for ages as to what codepoint MS considers in
+  what category. Tom Jebo has a post suggesting the criteria used here
+  and indicating its been submitting to the standards working group
+  as a proposed resolution.
+*/
+MSFILTER_DLLPUBLIC TextCategory categorizeCodePoint(sal_uInt32 codePoint, const rtl::OUString &rBcp47LanguageTag);
+
 }
 }
 

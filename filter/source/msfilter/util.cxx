@@ -179,6 +179,133 @@ sal_Unicode bestFitOpenSymbolToMSFont(sal_Unicode cChar,
     return cChar;
 }
 
+/*
+  http://social.msdn.microsoft.com/Forums/hu-HU/os_openXML-ecma/thread/1bf1f185-ee49-4314-94e7-f4e1563b5c00
+
+  The following information is being submitted to the standards working group as
+  a proposed resolution to a defect report and is not yet part of ISO 29500-1.
+  ...
+  For each Unicode character in DrawingML text, the font face can be any of four
+  font “slots”: latin (§21.1.2.3.7), cs (§21.1.2.3.1), ea (§21.1.2.3.3), or sym
+  (§21.1.2.3.10), as specified in the following table. For all ranges not
+  explicitly called out below, the ea font shall be used.
+
+  U+0000–U+007F Use latin font
+  U+0080–U+00A6 Use latin font
+  U+00A9–U+00AF Use latin font
+  U+00B2–U+00B3 Use latin font
+  U+00B5–U+00D6 Use latin font
+  U+00D8–U+00F6 Use latin font
+  U+00F8–U+058F Use latin font
+  U+0590–U+074F Use cs font
+  U+0780–U+07BF Use cs font
+  U+0900–U+109F Use cs font
+  U+10A0–U+10FF Use latin font
+  U+1200–U+137F Use latin font
+  U+13A0–U+177F Use latin font
+  U+1D00–U+1D7F Use latin font
+  U+1E00–U+1FFF Use latin font
+  U+1780–U+18AF Use cs font
+  U+2000–U+200B Use latin font
+  U+200C–U+200F Use cs font
+  U+2010–U+2029 Use latin font Except, for the quote characters in the range
+    2018 – 201E, use ea font if the text has one of the following language
+    identifiers: ii-CN, ja-JP, ko-KR, zh-CN, zh-HK, zh-MO, zh-SG, zh-TW.
+  U+202A–U+202F Use cs font
+  U+2030–U+2046 Use latin font
+  U+204A–U+245F Use latin font
+  U+2670–U+2671 Use cs font
+  U+27C0–U+2BFF Use latin font
+  U+3099–U+309A Use ea font
+  U+D835 Use latin font
+  U+F000–U+F0FF Symbol, use sym font
+  U+FB00–U+FB17 Use latin font
+  U+FB1D–U+FB4F Use cs font
+  U+FE50–U+FE6F Use latin font
+  Otherwise Use ea font
+*/
+TextCategory categorizeCodePoint(sal_uInt32 codePoint, const rtl::OUString &rBcp47LanguageTag)
+{
+    TextCategory eRet = ea;
+    if (codePoint <= 0x007F)
+        eRet = latin;
+    else if (0x0080 <= codePoint && codePoint <= 0x00A6)
+        eRet = latin;
+    else if (0x00A9 <= codePoint && codePoint <= 0x00AF)
+        eRet = latin;
+    else if (0x00B2 <= codePoint && codePoint <= 0x00B3)
+        eRet = latin;
+    else if (0x00B5 <= codePoint && codePoint <= 0x00D6)
+        eRet = latin;
+    else if (0x00D8 <= codePoint && codePoint <= 0x00F6)
+        eRet = latin;
+    else if (0x00F8 <= codePoint && codePoint <= 0x058F)
+        eRet = latin;
+    else if (0x0590 <= codePoint && codePoint <= 0x074F)
+        eRet = cs;
+    else if (0x0780 <= codePoint && codePoint <= 0x07BF)
+        eRet = cs;
+    else if (0x0900 <= codePoint && codePoint <= 0x109F)
+        eRet = cs;
+    else if (0x10A0 <= codePoint && codePoint <= 0x10FF)
+        eRet = latin;
+    else if (0x1200 <= codePoint && codePoint <= 0x137F)
+        eRet = latin;
+    else if (0x13A0 <= codePoint && codePoint <= 0x177F)
+        eRet = latin;
+    else if (0x1D00 <= codePoint && codePoint <= 0x1D7F)
+        eRet = latin;
+    else if (0x1E00 <= codePoint && codePoint <= 0x1FFF)
+        eRet = latin;
+    else if (0x1780 <= codePoint && codePoint <= 0x18AF)
+        eRet = cs;
+    else if (0x2000 <= codePoint && codePoint <= 0x200B)
+        eRet = latin;
+    else if (0x200C <= codePoint && codePoint <= 0x200F)
+        eRet = cs;
+    else if (0x2010 <= codePoint && codePoint <= 0x2029)
+    {
+        eRet = latin;
+        if (0x2018 <= codePoint && codePoint <= 0x201E)
+        {
+            if (rBcp47LanguageTag == "ii-CN" ||
+                rBcp47LanguageTag == "ja-JP" ||
+                rBcp47LanguageTag == "ko-KR" ||
+                rBcp47LanguageTag == "zh-CN" ||
+                rBcp47LanguageTag == "zh-HK" ||
+                rBcp47LanguageTag == "zh-MO" ||
+                rBcp47LanguageTag == "zh-SG" ||
+                rBcp47LanguageTag == "zh-TW")
+            {
+                eRet = ea;
+            }
+        }
+    }
+    else if (0x202A <= codePoint && codePoint <= 0x202F)
+        eRet = cs;
+    else if (0x2030 <= codePoint && codePoint <= 0x2046)
+        eRet = latin;
+    else if (0x204A <= codePoint && codePoint <= 0x245F)
+        eRet = latin;
+    else if (0x2670 <= codePoint && codePoint <= 0x2671)
+        eRet = latin;
+    else if (0x27C0 <= codePoint && codePoint <= 0x2BFF)
+        eRet = latin;
+    else if (0x3099 <= codePoint && codePoint <= 0x309A)
+        eRet = ea;
+    else if (0xD835 == codePoint)
+        eRet = latin;
+    else if (0xF000 <= codePoint && codePoint <= 0xF0FF)
+        eRet = sym;
+    else if (0xFB00 <= codePoint && codePoint <= 0xFB17)
+        eRet = latin;
+    else if (0xFB1D <= codePoint && codePoint <= 0xFB4F)
+        eRet = cs;
+    else if (0xFE50 <= codePoint && codePoint <= 0xFE6F)
+        eRet = latin;
+    return eRet;
+}
+
 }
 }
 
