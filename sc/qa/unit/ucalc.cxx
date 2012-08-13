@@ -168,6 +168,7 @@ public:
     void testPivotTableNumberGrouping();
     void testPivotTableDateGrouping();
     void testPivotTableEmptyRows();
+    void testPivotTableTextNumber();
 
     void testSheetCopy();
     void testSheetMove();
@@ -239,6 +240,7 @@ public:
     CPPUNIT_TEST(testPivotTableNumberGrouping);
     CPPUNIT_TEST(testPivotTableDateGrouping);
     CPPUNIT_TEST(testPivotTableEmptyRows);
+    CPPUNIT_TEST(testPivotTableTextNumber);
     CPPUNIT_TEST(testSheetCopy);
     CPPUNIT_TEST(testSheetMove);
     CPPUNIT_TEST(testExternalRef);
@@ -2832,6 +2834,85 @@ void Test::testPivotTableEmptyRows()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("There should be no more tables.", pDPs->GetCount(), static_cast<size_t>(0));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("There shouldn't be any more cache stored.",
                            pDPs->GetSheetCaches().size(), static_cast<size_t>(0));
+
+    m_pDoc->DeleteTab(1);
+    m_pDoc->DeleteTab(0);
+}
+
+void Test::testPivotTableTextNumber()
+{
+    m_pDoc->InsertTab(0, OUString("Data"));
+    m_pDoc->InsertTab(1, OUString("Table"));
+
+    // Raw data
+    const char* aData[][2] = {
+        { "Name", "Value" },
+        { "0001", "1" },
+        { "0002", "2" },
+        { "0003", "3" },
+        { "0004", "4" },
+    };
+
+    // Dimension definition
+    DPFieldDef aFields[] = {
+        { "Name", sheet::DataPilotFieldOrientation_ROW, 0 },
+        { "Value", sheet::DataPilotFieldOrientation_DATA, sheet::GeneralFunction_SUM },
+    };
+
+    // Insert raw data such that the first column values are entered as text.
+    size_t nRowCount = SAL_N_ELEMENTS(aData);
+    for (size_t nRow = 0; nRow < nRowCount; ++nRow)
+    {
+        ScSetStringParam aParam;
+        aParam.mbDetectNumberFormat = false;
+        aParam.meSetTextNumFormat = ScSetStringParam::Always;
+        m_pDoc->SetString(0, nRow, 0, OUString::createFromAscii(aData[nRow][0]), &aParam);
+        aParam.meSetTextNumFormat = ScSetStringParam::Never;
+        m_pDoc->SetString(1, nRow, 0, OUString::createFromAscii(aData[nRow][1]), &aParam);
+
+        if (nRow == 0)
+            // Don't check the header row.
+            continue;
+
+        // Check the data rows.
+        CPPUNIT_ASSERT_MESSAGE("This cell is supposed to be text.", m_pDoc->HasStringData(0, nRow, 0));
+        CPPUNIT_ASSERT_MESSAGE("This cell is supposed to be numeric.", m_pDoc->HasValueData(1, nRow, 0));
+    }
+
+    ScRange aDataRange(0, 0, 0, 1, 4, 0);
+
+    ScDPObject* pDPObj = createDPFromRange(
+        m_pDoc, aDataRange, aFields, SAL_N_ELEMENTS(aFields), false);
+
+    ScDPCollection* pDPs = m_pDoc->GetDPCollection();
+    bool bSuccess = pDPs->InsertNewTable(pDPObj);
+
+    CPPUNIT_ASSERT_MESSAGE("failed to insert a new pivot table object into document.", bSuccess);
+    CPPUNIT_ASSERT_MESSAGE("there should be only one data pilot table.",
+                           pDPs->GetCount() == 1);
+    pDPObj->SetName(pDPs->CreateNewName());
+
+    ScRange aOutRange = refresh(pDPObj);
+
+    {
+        // Expected output table content.  0 = empty cell
+        const char* aOutputCheck[][2] = {
+            { "Name", 0 },
+            { "0001", "1" },
+            { "0002", "2" },
+            { "0003", "3" },
+            { "0004", "4" },
+            { "Total Result", "10" },
+        };
+
+        bSuccess = checkDPTableOutput<2>(m_pDoc, aOutRange, aOutputCheck, "Text number field members");
+        CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
+    }
+
+    pDPs->FreeTable(pDPObj);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("There should be no more tables.", pDPs->GetCount(), static_cast<size_t>(0));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("There shouldn't be any more cache stored.",
+                                 pDPs->GetSheetCaches().size(), static_cast<size_t>(0));
 
     m_pDoc->DeleteTab(1);
     m_pDoc->DeleteTab(0);
