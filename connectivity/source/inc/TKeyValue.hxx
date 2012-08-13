@@ -31,7 +31,6 @@ namespace connectivity
         sal_Int32 m_nValue;
 
     protected:
-        OKeyValue();
         OKeyValue(sal_Int32 nVal);
     public:
 

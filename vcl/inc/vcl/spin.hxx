@@ -57,7 +57,6 @@ private:
 
 public:
                     SpinButton( Window* pParent, WinBits nStyle = 0 );
-                    SpinButton( Window* pParent, const ResId& rResId );
                     ~SpinButton();
 
     virtual void    Up();

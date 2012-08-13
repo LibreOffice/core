@@ -131,7 +131,6 @@ class ScXMLExport : public SvXMLExport
     bool                        mbShowProgress;
 
     sal_Int32       GetNumberFormatStyleIndex(sal_Int32 nNumFmt) const;
-    bool            HasDrawPages(com::sun::star::uno::Reference <com::sun::star::sheet::XSpreadsheetDocument>& xDoc);
     void            CollectSharedData(sal_Int32& nTableCount, sal_Int32& nShapesCount);
     void            CollectShapesAutoStyles(const sal_Int32 nTableCount);
     void            WriteTablesView(const com::sun::star::uno::Any& aTableView);

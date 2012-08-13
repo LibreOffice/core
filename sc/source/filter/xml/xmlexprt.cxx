@@ -599,12 +599,6 @@ sal_Int32 ScXMLExport::GetNumberFormatStyleIndex(sal_Int32 nNumFmt) const
     return itr->second;
 }
 
-bool ScXMLExport::HasDrawPages(uno::Reference <sheet::XSpreadsheetDocument>& xDoc)
-{
-    uno::Reference <beans::XPropertySet> xDocProps( xDoc, uno::UNO_QUERY );
-    return (xDocProps.is() && ::cppu::any2bool( xDocProps->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_HASDRAWPAGES))) ));
-}
-
 namespace {
 
 /**

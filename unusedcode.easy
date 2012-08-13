@@ -7,10 +7,8 @@ ScVbaFormat<ooo::vba::excel::XRange>::setNumberFormat(com::sun::star::lang::Loca
 ScVbaFormat<ooo::vba::excel::XStyle>::getAddIndent()
 ScVbaFormat<ooo::vba::excel::XStyle>::setAddIndent(com::sun::star::uno::Any const&)
 ScVbaFormat<ooo::vba::excel::XStyle>::setNumberFormat(com::sun::star::lang::Locale, rtl::OUString const&)
-ScXMLExport::HasDrawPages(com::sun::star::uno::Reference<com::sun::star::sheet::XSpreadsheetDocument>&)
 SecurityEnvironment_NssImpl::getImplementation(com::sun::star::uno::Reference<com::sun::star::uno::XInterface>)
 SotStorage::GetProperty(String const&, String const&, com::sun::star::uno::Any&)
-SpinButton::SpinButton(Window*, ResId const&)
 StgCache::Pos2Page(int)
 SvtSlideSorterBarOptions::AddListenerLink(Link const&)
 SvtSlideSorterBarOptions::RemoveListenerLink(Link const&)
@@ -82,7 +80,6 @@ cmis::Content::exchangeIdentity(com::sun::star::uno::Reference<com::sun::star::u
 comphelper::detail::ConfigurationWrapper::getGroupReadWrite(boost::shared_ptr<comphelper::ConfigurationChanges> const&, rtl::OUString const&) const
 comphelper::detail::ConfigurationWrapper::getLocalizedPropertyValue(rtl::OUString const&) const
 comphelper::detail::ConfigurationWrapper::setLocalizedPropertyValue(boost::shared_ptr<comphelper::ConfigurationChanges> const&, rtl::OUString const&, com::sun::star::uno::Any const&) const
-connectivity::OKeyValue::OKeyValue()
 connectivity::file::OStatement_Base::reset()
 connectivity::mozab::MQueryHelper::next()
 connectivity::sdbcx::OGroup::OGroup(rtl::OUString const&, unsigned char)
@@ -93,10 +90,19 @@ formula::FormulaTokenIterator::First()
 jfw_plugin::VendorBase::createInstance()
 oox::drawingml::TextParagraphProperties::dump() const
 oox::xls::BiffDrawingObjectBase::BiffDrawingObjectBase(oox::xls::WorksheetHelper const&)
+sd::ClientBox::GetMinOutputSizePixel() const
+sd::ClientBox::RemoveUnlocked()
+sd::ClientBox::SetScrollHdl(Link const&)
+sd::ClientBox::checkEntries()
+sd::ClientBox::checkIndex(int) const
+sd::ClientBox::prepareChecking()
+sd::ClientBox::removeEntry(sd::ClientInfo const&)
+sd::ClientBox::updateEntry(sd::ClientInfo const&)
+sd::Communicator::getTransmitter()
 sd::ImagePreparer::notesToHtml(unsigned int)
 sd::LeftDrawPaneShell::RegisterInterface(SfxModule*)
 sd::LeftImpressPaneShell::RegisterInterface(SfxModule*)
-sd::RemoteServer::pairClient()
+sd::RemoteServer::connectClient(sd::ClientInfo*, rtl::OUString)
 sd::ToolPanelPaneShell::RegisterInterface(SfxModule*)
 sd::ViewShellBase::RegisterFactory(unsigned short)
 std::__cxx1998::vector<SfxFilter*, std::allocator<SfxFilter*> >::~vector()

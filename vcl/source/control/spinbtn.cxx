@@ -69,18 +69,6 @@ SpinButton::SpinButton( Window* pParent, WinBits nStyle )
 
 // -----------------------------------------------------------------------
 
-SpinButton::SpinButton( Window* pParent, const ResId& rResId )
-    :Control( WINDOW_SPINBUTTON )
-    ,mbUpperIsFocused( sal_False )
-{
-    rResId.SetRT( RSC_SPINBUTTON );
-    ImplInit( pParent, ImplInitRes( rResId ) );
-    ImplLoadRes( rResId );
-    Resize();
-}
-
-// -----------------------------------------------------------------------
-
 SpinButton::~SpinButton()
 {
 }

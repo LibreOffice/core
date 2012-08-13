@@ -419,44 +419,6 @@ inline void** CBlock::GetObjectPtr( sal_uInt16 nIndex )
     return &(pNodes[nIndex]);
 }
 
-/*************************************************************************
-|*
-|*    CBlock::SetSize()
-|*
-|*    Beschreibung      Aendert die Groesse des Blocks
-|*
-*************************************************************************/
-
-void CBlock::SetSize( sal_uInt16 nNewSize )
-{
-    DBG_CHKTHIS( CBlock, DbgCheckCBlock );
-    DBG_ASSERT( nNewSize, "CBlock::SetSize(): nNewSize == 0" );
-
-    // Unterscheidet sich die Groesse
-    if ( nNewSize != nCount )
-    {
-        // Array erweitern
-        void** pNewNodes = new PVOID[nNewSize];
-
-        // Alte Tabelle in die Neue kopieren
-        if ( nNewSize < nCount )
-            memcpy( pNewNodes, pNodes, nNewSize*sizeof(PVOID) );
-        else
-        {
-            memcpy( pNewNodes, pNodes, nCount*sizeof(PVOID) );
-
-            // Array mit 0 initialisieren
-            memset( pNewNodes+nCount, 0, (nNewSize-nCount)*sizeof(PVOID) );
-        }
-
-        // Altes Array loeschen und neue Werte setzen
-        nSize  = nNewSize;
-        nCount = nSize;
-        delete[] pNodes;
-        pNodes = pNewNodes;
-    }
-}
-
 //------------------------------------------------------------------------
 
 /*************************************************************************

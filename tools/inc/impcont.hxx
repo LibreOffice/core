@@ -60,8 +60,6 @@ public:
     void**          GetObjectPtr( sal_uInt16 nIndex );
     void*           GetObject( sal_uInt16 nIndex ) const;
 
-    void            SetSize( sal_uInt16 nNewSize );
-
     sal_uInt16          GetSize() const               { return nCount; }
     sal_uInt16          Count() const                 { return nCount; }
     void            SetPrevBlock( CBlock* p )     { pPrev = p;     }
