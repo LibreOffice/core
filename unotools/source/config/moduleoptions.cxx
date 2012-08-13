@@ -322,7 +322,7 @@ class SvtModuleOptions_Impl : public ::utl::ConfigItem
         //---------------------------------------------------------------------------------------------------------
         //  constructor / destructor
         //---------------------------------------------------------------------------------------------------------
-         SvtModuleOptions_Impl(SvtModuleOptions* pOutsideClass);
+         SvtModuleOptions_Impl();
         ~SvtModuleOptions_Impl();
 
         //---------------------------------------------------------------------------------------------------------
@@ -369,7 +369,6 @@ class SvtModuleOptions_Impl : public ::utl::ConfigItem
     private:
         FactoryInfoList     m_lFactories;
         sal_Bool            m_bReadOnlyStatesWellKnown;
-        SvtModuleOptions*   m_pOutsideClass;
 };
 
 /*-************************************************************************************************************//**
@@ -386,10 +385,9 @@ class SvtModuleOptions_Impl : public ::utl::ConfigItem
     @onerror    -
     @threadsafe no
 *//*-*************************************************************************************************************/
-SvtModuleOptions_Impl::SvtModuleOptions_Impl(SvtModuleOptions* pOutsideClass)
+SvtModuleOptions_Impl::SvtModuleOptions_Impl()
     :   ::utl::ConfigItem( ROOTNODE_FACTORIES )
     ,   m_bReadOnlyStatesWellKnown( sal_False )
-    ,   m_pOutsideClass( pOutsideClass )
 {
     // First initialize list of factory infos! Otherwise we couldnt gurantee right working of these class.
     for( sal_Int32 nFactory=0; nFactory<FACTORYCOUNT; ++nFactory )
@@ -1021,7 +1019,7 @@ SvtModuleOptions::SvtModuleOptions()
     if( m_nRefCount == 1 )
     {
         RTL_LOGFILE_CONTEXT(aLog, "unotools ( ??? ) ::SvtModuleOptions_Impl::ctor()");
-        m_pDataContainer = new SvtModuleOptions_Impl(this);
+        m_pDataContainer = new SvtModuleOptions_Impl();
 
         ItemHolder1::holdConfigItem(E_MODULEOPTIONS);
     }

@@ -77,7 +77,6 @@ class SvtSysLocaleOptions_Impl : public utl::ConfigItem
         OUString                m_aLocaleString;    // en-US or de-DE or empty for SYSTEM
         OUString                m_aUILocaleString;    // en-US or de-DE or empty for SYSTEM
         OUString                m_aCurrencyString;  // USD-en-US or EUR-de-DE
-        sal_uLong                   m_nBlockedHint;     // pending hints
         sal_Bool                m_bDecimalSeparator; //use decimal separator same as locale
 
         sal_Bool                m_bROLocale;
@@ -150,7 +149,6 @@ const Sequence< OUString > SvtSysLocaleOptions_Impl::GetPropertyNames()
 
 SvtSysLocaleOptions_Impl::SvtSysLocaleOptions_Impl()
     : ConfigItem( ROOTNODE_SYSLOCALE )
-    , m_nBlockedHint( 0 )
     , m_bDecimalSeparator( sal_True )
     , m_bROLocale(CFG_READONLY_DEFAULT)
     , m_bROUILocale(CFG_READONLY_DEFAULT)
