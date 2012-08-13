@@ -32,7 +32,6 @@ class RscFileInst
     ERRTYPE             aFirstError;// Erster Fehler
     sal_uInt32              nErrorLine; // Zeile des ersten Fehlers
     sal_uInt32              nErrorPos;  // Position des ersten Fehlers
-    sal_Bool                bIncLine;   // Muss Zeilennummer incrementiert werden
     sal_uInt32              nLineNo;    // Zeile in der Eingabedatei
     sal_uLong               lFileIndex; // Index auf Eingabedatei
     sal_uLong               lSrcIndex;  // Index auf Basisdatei
