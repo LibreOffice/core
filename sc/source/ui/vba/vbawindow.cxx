@@ -597,25 +597,33 @@ ScVbaWindow::getFreezePanes() throw (uno::RuntimeException)
 }
 
 void SAL_CALL
-ScVbaWindow::setFreezePanes( ::sal_Bool /*_bFreezePanes*/ ) throw (uno::RuntimeException)
+ScVbaWindow::setFreezePanes( ::sal_Bool _bFreezePanes ) throw (uno::RuntimeException)
 {
     uno::Reference< sheet::XViewPane > xViewPane( getController(), uno::UNO_QUERY_THROW );
     uno::Reference< sheet::XViewSplitable > xViewSplitable( xViewPane, uno::UNO_QUERY_THROW );
     uno::Reference< sheet::XViewFreezable > xViewFreezable( xViewPane, uno::UNO_QUERY_THROW );
-    if( xViewSplitable->getIsWindowSplit() )
+    if( _bFreezePanes )
     {
-        // if there is a split we freeze at the split
-        sal_Int32 nColumn = getSplitColumn();
-        sal_Int32 nRow = getSplitRow();
-        xViewFreezable->freezeAtPosition( nColumn, nRow );
+        if( xViewSplitable->getIsWindowSplit() )
+        {
+            // if there is a split we freeze at the split
+            sal_Int32 nColumn = getSplitColumn();
+            sal_Int32 nRow = getSplitRow();
+            xViewFreezable->freezeAtPosition( nColumn, nRow );
+        }
+        else
+        {
+            // otherwise we freeze in the center of the visible sheet
+            table::CellRangeAddress aCellRangeAddress = xViewPane->getVisibleRange();
+            sal_Int32 nColumn = aCellRangeAddress.StartColumn + (( aCellRangeAddress.EndColumn - aCellRangeAddress.StartColumn )/2 );
+            sal_Int32 nRow = aCellRangeAddress.StartRow + (( aCellRangeAddress.EndRow - aCellRangeAddress.StartRow )/2 );
+            xViewFreezable->freezeAtPosition( nColumn, nRow );
+        }
     }
     else
     {
-        // otherwise we freeze in the center of the visible sheet
-        table::CellRangeAddress aCellRangeAddress = xViewPane->getVisibleRange();
-        sal_Int32 nColumn = aCellRangeAddress.StartColumn + (( aCellRangeAddress.EndColumn - aCellRangeAddress.StartColumn )/2 );
-        sal_Int32 nRow = aCellRangeAddress.StartRow + (( aCellRangeAddress.EndRow - aCellRangeAddress.StartRow )/2 );
-        xViewFreezable->freezeAtPosition( nColumn, nRow );
+        //remove the freeze panes
+        xViewSplitable->splitAtPosition(0,0);
     }
 }
 
@@ -640,8 +648,7 @@ ScVbaWindow::setSplit( ::sal_Bool _bSplit ) throw (uno::RuntimeException)
         uno::Reference< excel::XRange > xRange = ActiveCell();
         sal_Int32 nRow = xRange->getRow();
         sal_Int32 nColumn = xRange->getColumn();
-        xViewFreezable->freezeAtPosition( nColumn-1, nRow-1 );
-        SplitAtDefinedPosition( sal_True );
+        SplitAtDefinedPosition( nColumn-1, nRow-1 );
     }
 }
 
@@ -658,10 +665,8 @@ ScVbaWindow::setSplitColumn( sal_Int32 _splitcolumn ) throw (uno::RuntimeExcepti
     if( getSplitColumn() != _splitcolumn )
     {
         uno::Reference< sheet::XViewFreezable > xViewFreezable( getController(), uno::UNO_QUERY_THROW );
-        sal_Bool bFrozen = getFreezePanes();
         sal_Int32 nRow = getSplitRow();
-        xViewFreezable->freezeAtPosition( _splitcolumn, nRow );
-        SplitAtDefinedPosition( !bFrozen );
+        SplitAtDefinedPosition( _splitcolumn, nRow );
     }
 }
 
@@ -684,8 +689,7 @@ sal_Int32 SAL_CALL
 ScVbaWindow::getSplitRow() throw (uno::RuntimeException)
 {
     uno::Reference< sheet::XViewSplitable > xViewSplitable( getController(), uno::UNO_QUERY_THROW );
-    sal_Int32 nValue = xViewSplitable->getSplitRow();
-    return nValue ? nValue - 1 : nValue;
+    return xViewSplitable->getSplitRow();
 }
 
 void SAL_CALL
@@ -694,10 +698,8 @@ ScVbaWindow::setSplitRow( sal_Int32 _splitrow ) throw (uno::RuntimeException)
     if( getSplitRow() != _splitrow )
     {
         uno::Reference< sheet::XViewFreezable > xViewFreezable( getController(), uno::UNO_QUERY_THROW );
-        sal_Bool bFrozen = getFreezePanes();
         sal_Int32 nColumn = getSplitColumn();
-        xViewFreezable->freezeAtPosition( nColumn , _splitrow );
-        SplitAtDefinedPosition( !bFrozen );
+        SplitAtDefinedPosition( nColumn, _splitrow );
     }
 }
 
@@ -716,15 +718,30 @@ ScVbaWindow::setSplitVertical(double _splitvertical ) throw (uno::RuntimeExcepti
     xViewSplitable->splitAtPosition( 0, static_cast<sal_Int32>( fVertiPixels ) );
 }
 
-void ScVbaWindow::SplitAtDefinedPosition(sal_Bool _bUnFreezePane)
+void ScVbaWindow::SplitAtDefinedPosition( sal_Int32 nColumns, sal_Int32 nRows )
 {
     uno::Reference< sheet::XViewSplitable > xViewSplitable( getController(), uno::UNO_QUERY_THROW );
     uno::Reference< sheet::XViewFreezable > xViewFreezable( xViewSplitable, uno::UNO_QUERY_THROW );
-    sal_Int32 nVertSplit = xViewSplitable->getSplitVertical();
-    sal_Int32 nHoriSplit = xViewSplitable->getSplitHorizontal();
-    if( _bUnFreezePane )
-        xViewFreezable->freezeAtPosition(0,0);
-    xViewSplitable->splitAtPosition(nHoriSplit, nVertSplit);
+    // nColumns and nRows means split columns/rows
+    if( nColumns == 0 && nRows == 0 )
+        return;
+
+    sal_Int32 cellColumn = nColumns + 1;
+    sal_Int32 cellRow = nRows + 1;
+
+    ScTabViewShell* pViewShell = excel::getBestViewShell( m_xModel );
+    if ( pViewShell )
+    {
+        //firstly remove the old splitter
+        xViewSplitable->splitAtPosition(0,0);
+
+        uno::Reference< excel::XApplication > xApplication( Application(), uno::UNO_QUERY_THROW );
+        uno::Reference< excel::XWorksheet > xSheet( xApplication->getActiveSheet(), uno::UNO_QUERY_THROW );
+        xSheet->Cells(uno::makeAny(cellRow), uno::makeAny(cellColumn))->Select();
+
+        //pViewShell->FreezeSplitters( FALSE );
+        dispatchExecute( pViewShell, SID_WINDOW_SPLIT );
+    }
 }
 
 uno::Any SAL_CALL
@@ -773,8 +790,18 @@ ScVbaWindow::ActiveSheet(  ) throw (script::BasicErrorException, uno::RuntimeExc
 uno::Any SAL_CALL
 ScVbaWindow::getView() throw (uno::RuntimeException)
 {
-    // not supported now
+    sal_Bool bPageBreak = sal_False;
     sal_Int32 nWindowView = excel::XlWindowView::xlNormalView;
+
+    ScTabViewShell* pViewShell = excel::getBestViewShell( m_xModel );
+    if (pViewShell)
+        bPageBreak = pViewShell->GetViewData()->IsPagebreakMode();
+
+    if( bPageBreak )
+        nWindowView = excel::XlWindowView::xlPageBreakPreview;
+    else
+        nWindowView = excel::XlWindowView::xlNormalView;
+
     return uno::makeAny( nWindowView );
 }
 
