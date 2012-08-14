@@ -17,6 +17,9 @@ namespace svtools {
     class ODocumentInfoPreview;
 }
 
+namespace com{ namespace sun { namespace star { namespace awt   { class XWindow; } } } }
+namespace com{ namespace sun { namespace star { namespace frame { class XFrame; } } } }
+
 class SfxTemplateInfoDlg : public ModalDialog
 {
 public:
@@ -31,8 +34,11 @@ private:
 
     PushButton maBtnClose;
 
-    Window *mpPreviewView;
+    Window *mpPreviewView;  // gets released when xWindows get destroyed (dont delete in constructor)
     svtools::ODocumentInfoPreview *mpInfoView;
+
+    ::com::sun::star::uno::Reference < ::com::sun::star::frame::XFrame > xFrame;
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > xWindow;
 };
 
 #endif // __SFX2_TEMPLATEINFODLG_HXX__
