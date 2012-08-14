@@ -11,9 +11,6 @@
 
 using namespace std;
 
-#define GTK_MENU_BUS_NAME_PREFIX   "org.libreoffice"
-#define GTK_MENU_OBJ_PATH_PREFIX   "/org/libreoffice"
-
 //Some menus are special, this is the list of them
 gboolean
 isSpecialSubmenu (OUString command)
@@ -43,14 +40,13 @@ dispatchAction (GSimpleAction   *action,
                 GVariant        *parameter,
                 gpointer        user_data)
 {
-    cout << "ACTION: " << g_action_get_name( G_ACTION( action ) ) << " triggered." << endl;
     GTK_YIELD_GRAB();
 
     if ( user_data ) {
         GtkSalMenuItem *pSalMenuItem = static_cast< GtkSalMenuItem* >( user_data );
 
         if ( !pSalMenuItem->mpSubMenu ) {
-            const GtkSalFrame *pFrame = pSalMenuItem->mpParentMenu ? pSalMenuItem->mpParentMenu->getFrame() : NULL;
+            const GtkSalFrame *pFrame = pSalMenuItem->mpParentMenu ? pSalMenuItem->mpParentMenu->GetFrame() : NULL;
 
             if ( pFrame && !pFrame->GetParent() ) {
                 ((PopupMenu*) pSalMenuItem->mpVCLMenu)->SetSelectedEntry( pSalMenuItem->mnId );
@@ -76,39 +72,17 @@ dispatchAction (GSimpleAction   *action,
                     // get started from hierarchy in vcl menus
                     GtkSalMenu* pParentMenu = pSalMenuItem->mpParentMenu;
                     Menu* pCurMenu = pSalMenuItem->mpVCLMenu;
-                    while( pParentMenu && pParentMenu->mpVCLMenu )
+                    while( pParentMenu && pParentMenu->GetMenu() )
                     {
-                        pCurMenu = pParentMenu->mpVCLMenu;
-                        pParentMenu = pParentMenu->mpParentSalMenu;
+                        pCurMenu = pParentMenu->GetMenu();
+                        pParentMenu = pParentMenu->GetParentSalMenu();
                     }
 
-//                    pPopupMenu->SetSelectedEntry( pSalMenuItem->mnId );
-//                    pPopupMenu->ImplSelectWithStart( pCurMenu );
-                    ((MenuBar*) pCurMenu)->HandleMenuCommandEvent( pCurMenu, pSalMenuItem->mnId );
+                    pPopupMenu->SetSelectedEntry( pSalMenuItem->mnId );
+                    pPopupMenu->ImplSelectWithStart( pCurMenu );
                 }
                 else
                     OSL_FAIL( "menubar item without frame !" );
-            }
-        } else {
-            rtl::OUString aActionName = rtl::OUString::createFromAscii( g_action_get_name( G_ACTION( action ) ) );
-
-            if ( isSpecialSubmenu( aActionName ) ) {
-                PopupMenu * pPopupMenu = dynamic_cast<PopupMenu *>(pSalMenuItem->mpVCLMenu);
-                if( pPopupMenu )
-                {
-                    GtkSalMenu* pParentMenu = pSalMenuItem->mpParentMenu;
-                    Menu* pCurMenu = pSalMenuItem->mpVCLMenu;
-                    while( pParentMenu && pParentMenu->mpVCLMenu )
-                    {
-                        pCurMenu = pParentMenu->mpVCLMenu;
-                        pParentMenu = pParentMenu->mpParentSalMenu;
-                    }
-
-                    ((MenuBar*) pCurMenu)->HandleMenuActivateEvent( pSalMenuItem->mpVCLMenu );
-//                    pPopupMenu->SetSelectedEntry( pSalMenuItem->mnId );
-//                    pPopupMenu->ImplActivateWithStart( pCurMenu );
-//                    //                pSalMenuItem->mpVCLMenu->Activate();
-                }
             }
         }
     }
@@ -116,11 +90,11 @@ dispatchAction (GSimpleAction   *action,
 
 void generateActions( GtkSalMenu* pMenu, GLOActionGroup* pActionGroup )
 {
-    if ( !pMenu || !pMenu->mpMenuModel )
+    if ( !pMenu || !pMenu->GetMenuModel() )
         return;
 
-    for (sal_uInt16 i = 0; i < pMenu->maItems.size(); i++) {
-        GtkSalMenuItem *pSalMenuItem = pMenu->maItems[ i ];
+    for (sal_uInt16 i = 0; i < pMenu->GetItemCount(); i++) {
+        GtkSalMenuItem *pSalMenuItem = pMenu->GetItemAtPos( i );
 
         if ( pSalMenuItem->mpAction ) {
             g_lo_action_group_insert( pActionGroup, pSalMenuItem->mpAction );
@@ -181,7 +155,6 @@ void GtkSalMenu::publishMenu( GMenuModel *pMenu, GActionGroup *pActionGroup )
 }
 
 
-// FIXME: HIGHLY IMPROVABLE CODE
 GtkSalMenuItem* GtkSalMenu::GetSalMenuItem( sal_uInt16 nId )
 {
     for ( sal_uInt16 i = 0; i < maItems.size(); i++ )
@@ -212,7 +185,6 @@ GtkSalMenu::GtkSalMenu( sal_Bool bMenuBar ) :
     aDBusPath( NULL ),
     aDBusMenubarPath( NULL ),
     pSessionBus( NULL ),
-    mBusId( 0 ),
     mMenubarId( 0 ),
     mActionGroupId ( 0 )
 {
@@ -225,9 +197,6 @@ GtkSalMenu::GtkSalMenu( sal_Bool bMenuBar ) :
     if (bMenuBar) {
         pSessionBus = g_bus_get_sync (G_BUS_TYPE_SESSION, NULL, NULL);
         if(!pSessionBus) puts ("Fail bus get");
-
-//        mBusId = g_bus_own_name_on_connection (pSessionBus, "", G_BUS_NAME_OWNER_FLAGS_NONE, NULL, NULL, NULL, NULL);
-//        if(!mBusId) puts ("Fail own name");
     }
 }
 
@@ -258,18 +227,10 @@ GtkSalMenu::~GtkSalMenu()
         g_dbus_connection_flush_sync( pSessionBus, NULL, NULL );
     }
 
-//    if ( mBusId ) {
-//        g_bus_unown_name( mBusId );
-//    }
-
-//    if ( pSessionBus ) {
-//        g_dbus_connection_close_sync( pSessionBus, NULL, NULL );
-//        pSessionBus = NULL;
-//        mMenubarId = 0;
-//        mActionGroupId = 0;
-//    }
-
     pSessionBus = NULL;
+
+    g_free( aDBusPath );
+    g_free( aDBusMenubarPath );
 
     maSections.clear();
     maItems.clear();
@@ -288,7 +249,6 @@ void GtkSalMenu::InsertItem( SalMenuItem* pSalMenuItem, unsigned nPos )
     GtkSalMenuItem *pGtkSalMenuItem = static_cast<GtkSalMenuItem*>( pSalMenuItem );
 
     if ( pGtkSalMenuItem->mpMenuItem ) {
-        sal_uInt16 position = pGtkSalMenuItem->mpVCLMenu->GetItemPos( pGtkSalMenuItem->mnId );
         pGtkSalMenuItem->mpParentSection = mpCurrentSection;
         pGtkSalMenuItem->mnPos = g_menu_model_get_n_items( mpCurrentSection );
 
@@ -307,7 +267,6 @@ void GtkSalMenu::InsertItem( SalMenuItem* pSalMenuItem, unsigned nPos )
 
 void GtkSalMenu::RemoveItem( unsigned nPos )
 {
-//    cout << __FUNCTION__ << " Item: " << nPos << endl;
 }
 
 void GtkSalMenu::SetSubMenu( SalMenuItem* pSalMenuItem, SalMenu* pSubMenu, unsigned nPos )
@@ -327,8 +286,6 @@ void GtkSalMenu::SetSubMenu( SalMenuItem* pSalMenuItem, SalMenu* pSubMenu, unsig
 
 void GtkSalMenu::SetFrame( const SalFrame* pFrame )
 {
-    cout << __FUNCTION__ << endl;
-
     mpFrame = static_cast<const GtkSalFrame*>( pFrame );
 
     GtkWidget *widget = GTK_WIDGET( mpFrame->getWindow() );
@@ -338,22 +295,12 @@ void GtkSalMenu::SetFrame( const SalFrame* pFrame )
     if (gdkWindow) {
         XLIB_Window windowId = GDK_WINDOW_XID( gdkWindow );
 
-//        gchar* aGtkMenuObjPath = GTK_MENU_OBJ_PATH_PREFIX;
-//        gchar* aGtkMenuObjPath = (gchar*) g_dbus_connection_get_unique_name( pSessionBus );
-        gchar *aGtkMenuObjPath = "";
-
-        aDBusPath = g_strdup_printf("%s/window/%lu", aGtkMenuObjPath, windowId);
-        gchar* aDBusWindowPath = g_strdup_printf( "%s/window/%lu", aGtkMenuObjPath, windowId );
-        aDBusMenubarPath = g_strdup_printf( "%s/window/%lu/menus/menubar", aGtkMenuObjPath, windowId );
-
-        puts(aDBusPath);
-        puts(aDBusWindowPath);
-        puts(aDBusMenubarPath);
-
-        puts(g_dbus_connection_get_unique_name( pSessionBus ));
+        aDBusPath = g_strdup_printf("/window/%lu", windowId);
+        gchar* aDBusWindowPath = g_strdup_printf( "/window/%lu", windowId );
+        aDBusMenubarPath = g_strdup_printf( "/window/%lu/menus/menubar", windowId );
 
         gdk_x11_window_set_utf8_property ( gdkWindow, "_GTK_UNIQUE_BUS_NAME", g_dbus_connection_get_unique_name( pSessionBus ) );
-        gdk_x11_window_set_utf8_property ( gdkWindow, "_GTK_APPLICATION_OBJECT_PATH", aGtkMenuObjPath );
+        gdk_x11_window_set_utf8_property ( gdkWindow, "_GTK_APPLICATION_OBJECT_PATH", "" );
         gdk_x11_window_set_utf8_property ( gdkWindow, "_GTK_WINDOW_OBJECT_PATH", aDBusWindowPath );
         gdk_x11_window_set_utf8_property ( gdkWindow, "_GTK_MENUBAR_OBJECT_PATH", aDBusMenubarPath );
 
@@ -362,7 +309,7 @@ void GtkSalMenu::SetFrame( const SalFrame* pFrame )
     }
 }
 
-const GtkSalFrame* GtkSalMenu::getFrame() const
+const GtkSalFrame* GtkSalMenu::GetFrame() const
 {
     const GtkSalMenu* pMenu = this;
     while( pMenu && ! pMenu->mpFrame )
@@ -391,8 +338,6 @@ void GtkSalMenu::SetItemText( unsigned nPos, SalMenuItem* pSalMenuItem, const rt
     // Replace the "~" character with "_".
     rtl::OUString aText = rText.replace( '~', '_' );
     rtl::OString aConvertedText = OUStringToOString(aText, RTL_TEXTENCODING_UTF8);
-
-//    cout << "Setting label: " << aConvertedText.getStr() << endl;
 
     GtkSalMenuItem *pGtkSalMenuItem = static_cast<GtkSalMenuItem*>( pSalMenuItem );
 
@@ -453,15 +398,15 @@ bool GtkSalMenu::ShowNativePopupMenu(FloatingWindow * pWin, const Rectangle& rRe
 
 void updateNativeMenu( GtkSalMenu* pMenu ) {
     if ( pMenu ) {
-        for (int i=0; i < pMenu->maItems.size(); i++) {
-            GtkSalMenuItem* pSalMenuItem = pMenu->maItems[ i ];
+        for ( sal_uInt16 i = 0; i < pMenu->GetItemCount(); i++ ) {
+            GtkSalMenuItem* pSalMenuItem = pMenu->GetItemAtPos( i );
             String aText = pSalMenuItem->mpVCLMenu->GetItemText( pSalMenuItem->mnId );
 
             // Force updating of native menu labels.
             pMenu->SetItemText( i, pSalMenuItem, aText );
 
-            if ( pSalMenuItem->mpSubMenu && pSalMenuItem->mpSubMenu->mpVCLMenu ) {
-                pSalMenuItem->mpSubMenu->mpVCLMenu->Activate();
+            if ( pSalMenuItem->mpSubMenu && pSalMenuItem->mpSubMenu->GetMenu() ) {
+                pSalMenuItem->mpSubMenu->GetMenu()->Activate();
                 updateNativeMenu( pSalMenuItem->mpSubMenu );
             }
         }

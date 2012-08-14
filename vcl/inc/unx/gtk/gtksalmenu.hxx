@@ -47,53 +47,57 @@ class GtkSalMenuItem;
 class GtkSalMenu : public SalMenu
 {
 private:
-    sal_Bool                mbMenuBar;
+    sal_Bool                        mbMenuBar;
+    Menu*                           mpVCLMenu;
+    GtkSalMenu*                     mpParentSalMenu;
+    const GtkSalFrame*              mpFrame;
 
-    virtual void publishMenu( GMenuModel*, GActionGroup* );
-
-    GtkSalMenuItem* GetSalMenuItem( sal_uInt16 nId );
-
-public:
     std::vector< GMenuModel* >      maSections;
     std::vector< GtkSalMenuItem* >  maItems;
 
-    Menu*                                   mpVCLMenu;
-    GtkSalMenu*                             mpParentSalMenu;
-    const GtkSalFrame*                      mpFrame;
-
-    // DBus variables
-    gchar*                                  aDBusPath;
-    gchar*                                  aDBusMenubarPath;
-    GDBusConnection*                        pSessionBus;
-    sal_Int32                               mBusId;
-    sal_Int32                               mMenubarId;
-    sal_Int32                               mActionGroupId;
+    // DBus attributes
+    gchar*                          aDBusPath;
+    gchar*                          aDBusMenubarPath;
+    GDBusConnection*                pSessionBus;
+    sal_Int32                       mMenubarId;
+    sal_Int32                       mActionGroupId;
 
     // GMenuModel attributes
-    GMenuModel*                             mpMenuModel;
-    GMenuModel*                             mpCurrentSection;
+    GMenuModel*                     mpMenuModel;
+    GMenuModel*                     mpCurrentSection;
 
+    virtual void    publishMenu( GMenuModel*, GActionGroup* );
+    GtkSalMenuItem* GetSalMenuItem( sal_uInt16 nId );
+
+public:
     GtkSalMenu( sal_Bool bMenuBar );
     virtual ~GtkSalMenu();
 
-    virtual sal_Bool VisibleMenuBar();  // must return TRUE to actually DISPLAY native menu bars
-                                        // otherwise only menu messages are processed (eg, OLE on Windows)
+    virtual sal_Bool            VisibleMenuBar();   // must return TRUE to actually DISPLAY native menu bars
+                                                    // otherwise only menu messages are processed (eg, OLE on Windows)
 
-    virtual void InsertItem( SalMenuItem* pSalMenuItem, unsigned nPos );
-    virtual void RemoveItem( unsigned nPos );
-    virtual void SetSubMenu( SalMenuItem* pSalMenuItem, SalMenu* pSubMenu, unsigned nPos );
-    virtual void SetFrame( const SalFrame* pFrame );
-    virtual void CheckItem( unsigned nPos, sal_Bool bCheck );
-    virtual void EnableItem( unsigned nPos, sal_Bool bEnable );
-    virtual void SetItemText( unsigned nPos, SalMenuItem* pSalMenuItem, const rtl::OUString& rText );
-    virtual void SetItemImage( unsigned nPos, SalMenuItem* pSalMenuItem, const Image& rImage);
-    virtual void SetAccelerator( unsigned nPos, SalMenuItem* pSalMenuItem, const KeyCode& rKeyCode, const rtl::OUString& rKeyName );
-    virtual void GetSystemMenuData( SystemMenuData* pData );
-    virtual void SetItemCommand( unsigned nPos, SalMenuItem* pSalMenuItem, const rtl::OUString& aCommandStr );
-    virtual bool ShowNativePopupMenu(FloatingWindow * pWin, const Rectangle& rRect, sal_uLong nFlags);
-    virtual void Freeze();
+    virtual void                InsertItem( SalMenuItem* pSalMenuItem, unsigned nPos );
+    virtual void                RemoveItem( unsigned nPos );
+    virtual void                SetSubMenu( SalMenuItem* pSalMenuItem, SalMenu* pSubMenu, unsigned nPos );
+    virtual void                SetFrame( const SalFrame* pFrame );
+    virtual const GtkSalFrame*  GetFrame() const;
+    virtual void                CheckItem( unsigned nPos, sal_Bool bCheck );
+    virtual void                EnableItem( unsigned nPos, sal_Bool bEnable );
+    virtual void                SetItemText( unsigned nPos, SalMenuItem* pSalMenuItem, const rtl::OUString& rText );
+    virtual void                SetItemImage( unsigned nPos, SalMenuItem* pSalMenuItem, const Image& rImage);
+    virtual void                SetAccelerator( unsigned nPos, SalMenuItem* pSalMenuItem, const KeyCode& rKeyCode, const rtl::OUString& rKeyName );
+    virtual void                GetSystemMenuData( SystemMenuData* pData );
+    virtual void                SetItemCommand( unsigned nPos, SalMenuItem* pSalMenuItem, const rtl::OUString& aCommandStr );
+    virtual bool                ShowNativePopupMenu(FloatingWindow * pWin, const Rectangle& rRect, sal_uLong nFlags);
+    virtual void                Freeze();
 
-    virtual const GtkSalFrame* getFrame() const;
+    virtual void                SetMenu( Menu* pMenu ) { mpVCLMenu = pMenu; }
+    virtual Menu*               GetMenu() { return mpVCLMenu; }
+    virtual GtkSalMenu*         GetParentSalMenu() { return mpParentSalMenu; }
+    virtual GMenuModel*         GetMenuModel() { return mpMenuModel; }
+    virtual GMenuModel*         GetCurrentSection() { return mpCurrentSection; }
+    virtual unsigned            GetItemCount() { return maItems.size(); }
+    virtual GtkSalMenuItem*     GetItemAtPos( unsigned nPos ) { return maItems[ nPos ]; }
 };
 
 class GtkSalMenuItem : public SalMenuItem

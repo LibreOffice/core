@@ -513,7 +513,7 @@ SalBitmap* GtkInstance::CreateSalBitmap()
 SalMenu* GtkInstance::CreateMenu( sal_Bool bMenuBar, Menu* pVCLMenu )
 {
     GtkSalMenu *pSalMenu = new GtkSalMenu( bMenuBar );
-    pSalMenu->mpVCLMenu = pVCLMenu;
+    pSalMenu->SetMenu( pVCLMenu );
 
     return static_cast<SalMenu*>( pSalMenu );
 }
