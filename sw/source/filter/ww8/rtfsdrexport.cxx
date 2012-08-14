@@ -372,6 +372,19 @@ void RtfSdrExport::Commit( EscherPropertyContainer& rProps, const Rectangle& rRe
             case ESCHER_Prop_fillType:
                 m_aShapeProps.insert(std::pair<OString,OString>(OString("fillType"), OString::valueOf(sal_Int32(it->nPropValue))));
                 break;
+            case ESCHER_Prop_fillOpacity:
+                m_aShapeProps.insert(std::pair<OString,OString>(OString("fillOpacity"), OString::valueOf(sal_Int32(it->nPropValue))));
+                break;
+            case ESCHER_Prop_fillBlip:
+                {
+                    OStringBuffer aBuf;
+                    aBuf.append('{').append(OOO_STRING_SVTOOLS_RTF_PICT).append(OOO_STRING_SVTOOLS_RTF_PNGBLIP).append(RtfExport::sNewLine);
+                    int nHeaderSize = 25; // The first bytes are WW8-specific, we're only interested in the PNG
+                    aBuf.append(RtfAttributeOutput::WriteHex(it->pBuf + nHeaderSize, it->nPropSize - nHeaderSize));
+                    aBuf.append('}');
+                    m_aShapeProps.insert(std::pair<OString,OString>(OString("fillBlip"), aBuf.makeStringAndClear()));
+                }
+                break;
             default:
                 SAL_INFO("sw.rtf", OSL_THIS_FUNC << ": unhandled property: " << nId << " (value: " << it->nPropValue << ")");
                 break;
