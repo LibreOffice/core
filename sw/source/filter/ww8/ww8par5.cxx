@@ -2585,7 +2585,7 @@ void SwWW8ImplReader::Read_SubF_Combined( _ReadFieldParams& rReadParam)
                         for (int i = nBegin;i < nEnd-1;i++)
                         {
                             const sal_Unicode cC = sPart.GetChar(nBegin+1);
-                            if ( (-1 < cC) && (cC < 32) )
+                            if ( cC < 32 )
                             {
                                 nBegin++;
                             }
