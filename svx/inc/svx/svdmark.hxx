@@ -45,106 +45,8 @@ class SdrObject;
 class SdrPageView;
 
 // Ein Container fuer USHORTs (im Prinzip ein dynamisches Array)
-class SVX_DLLPUBLIC SdrUShortCont
-{
-    Container                                           maArray;
-    sal_Bool                                            mbSorted;
+class SVX_DLLPUBLIC SdrUShortCont : public std::set<sal_uInt16> {};
 
-private:
-    void CheckSort(sal_uLong nPos);
-
-public:
-    SdrUShortCont(sal_uInt16 nBlock, sal_uInt16 nInit, sal_uInt16 nResize)
-    :   maArray(nBlock, nInit, nResize),
-    mbSorted(sal_True)
-    {}
-
-    SdrUShortCont(const SdrUShortCont& rCont)
-    :   maArray(rCont.maArray),
-        mbSorted(rCont.mbSorted)
-    {}
-
-    /** helper to migrate to stl containers */
-    std::set< sal_uInt16 > getContainer();
-
-    SdrUShortCont& operator=(const SdrUShortCont& rCont)
-    {
-        maArray = rCont.maArray;
-        mbSorted = rCont.mbSorted;
-        return *this;
-    }
-
-    sal_Bool operator==(const SdrUShortCont& rCont) const
-    {
-        return maArray == rCont.maArray;
-    }
-
-    sal_Bool operator!=(const SdrUShortCont& rCont) const
-    {
-        return maArray != rCont.maArray;
-    }
-
-    void Clear()
-    {
-        maArray.Clear();
-        mbSorted = sal_True;
-    }
-
-    void Sort() const;
-
-    void ForceSort() const
-    {
-        if(!mbSorted)
-        {
-            Sort();
-        }
-    }
-
-    void Insert(sal_uInt16 nElem, sal_uLong nPos = CONTAINER_APPEND)
-    {
-        maArray.Insert((void*)sal_uLong(nElem),nPos);
-
-        if(mbSorted)
-        {
-            CheckSort(nPos);
-        }
-    }
-
-    void Remove(sal_uLong nPos)
-    {
-        maArray.Remove(nPos);
-    }
-
-    void Replace(sal_uInt16 nElem, sal_uLong nPos)
-    {
-        maArray.Replace((void*)sal_uLong(nElem), nPos);
-
-        if(mbSorted)
-        {
-            CheckSort(nPos);
-        }
-    }
-
-    sal_uInt16 GetObject(sal_uLong nPos) const
-    {
-        return sal_uInt16(sal_uIntPtr(maArray.GetObject(nPos)));
-    }
-
-    sal_uLong GetPos(sal_uInt16 nElem) const
-    {
-        return maArray.GetPos((void*)(sal_uLong)nElem);
-    }
-
-    sal_uLong GetCount() const
-    {
-        return maArray.Count();
-    }
-
-    sal_Bool Exist(sal_uInt16 nElem) const
-    {
-        return (CONTAINER_ENTRY_NOTFOUND != maArray.GetPos((void*)(sal_uLong)nElem));
-    }
-};
 
 // Alles was eine View ueber ein markiertes Objekt wissen muss
 class SVX_DLLPUBLIC SdrMark : public sdr::ObjectUser
@@ -250,7 +152,7 @@ public:
     SdrUShortCont* ForceMarkedPoints()
     {
         if(!mpPoints)
-            mpPoints = new SdrUShortCont(1024, 32, 32);
+            mpPoints = new SdrUShortCont;
 
         return mpPoints;
     }
@@ -258,7 +160,7 @@ public:
     SdrUShortCont* ForceMarkedLines()
     {
         if(!mpLines)
-            mpLines = new SdrUShortCont(1024, 32, 32);
+            mpLines = new SdrUShortCont;
 
         return mpLines;
     }
@@ -266,7 +168,7 @@ public:
     SdrUShortCont* ForceMarkedGluePoints()
     {
         if(!mpGluePoints)
-            mpGluePoints = new SdrUShortCont(1024, 32, 32);
+            mpGluePoints = new SdrUShortCont;
 
         return mpGluePoints;
     }

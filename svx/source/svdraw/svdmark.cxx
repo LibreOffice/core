@@ -47,92 +47,6 @@
 #include <svl/brdcst.hxx>
 #include <svx/svdoedge.hxx>
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
-class ImpSdrUShortContSorter: public ContainerSorter
-{
-public:
-    ImpSdrUShortContSorter(Container& rNewCont)
-    :   ContainerSorter(rNewCont)
-    {}
-
-    virtual ~ImpSdrUShortContSorter() {}
-
-    virtual int Compare(const void* pElem1, const void* pElem2) const;
-};
-
-int ImpSdrUShortContSorter::Compare(const void* pElem1, const void* pElem2) const
-{
-    sal_uInt16 n1((sal_uInt16)((sal_uIntPtr)pElem1));
-    sal_uInt16 n2((sal_uInt16)((sal_uIntPtr)pElem2));
-
-    return ((n1 < n2) ? (-1) : (n1 > n2) ? (1) : (0));
-}
-
-void SdrUShortCont::Sort() const
-{
-    ImpSdrUShortContSorter aSort(*((Container*)(&maArray)));
-    aSort.DoSort();
-    ((SdrUShortCont*)this)->mbSorted = sal_True;
-
-    sal_uLong nNum(GetCount());
-
-    if(nNum > 1)
-    {
-        nNum--;
-        sal_uInt16 nVal0 = GetObject(nNum);
-
-        while(nNum > 0)
-        {
-            nNum--;
-            sal_uInt16 nVal1 = GetObject(nNum);
-
-            if(nVal1 == nVal0)
-            {
-                ((SdrUShortCont*)this)->Remove(nNum);
-            }
-
-            nVal0 = nVal1;
-        }
-    }
-}
-
-void SdrUShortCont::CheckSort(sal_uLong nPos)
-{
-    sal_uLong nAnz(maArray.Count());
-
-    if(nPos > nAnz)
-        nPos = nAnz;
-
-    sal_uInt16 nAktVal = GetObject(nPos);
-
-    if(nPos > 0)
-    {
-        sal_uInt16 nPrevVal = GetObject(nPos - 1);
-
-        if(nPrevVal >= nAktVal)
-            mbSorted = sal_False;
-    }
-
-    if(nPos < nAnz - 1)
-    {
-        sal_uInt16 nNextVal = GetObject(nPos + 1);
-
-        if(nNextVal <= nAktVal)
-            mbSorted = sal_False;
-    }
-}
-
-std::set< sal_uInt16 > SdrUShortCont::getContainer()
-{
-    std::set< sal_uInt16 > aSet;
-
-    sal_uInt32 nAnz = maArray.Count();
-    while(nAnz)
-        aSet.insert( GetObject(--nAnz) );
-
-    return aSet;
-}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -718,7 +632,7 @@ const XubString& SdrMarkList::GetPointMarkDescription(sal_Bool bGlue) const
     {
         const SdrMark* pMark = GetMark(nMarkNum);
         const SdrUShortCont* pPts = bGlue ? pMark->GetMarkedGluePoints() : pMark->GetMarkedPoints();
-        sal_uLong nAnz(pPts ? pPts->GetCount() : 0);
+        sal_uLong nAnz(pPts ? pPts->size() : 0);
 
         if(nAnz)
         {
@@ -782,7 +696,7 @@ const XubString& SdrMarkList::GetPointMarkDescription(sal_Bool bGlue) const
                 const SdrMark* pMark2 = GetMark(i);
                 const SdrUShortCont* pPts = bGlue ? pMark2->GetMarkedGluePoints() : pMark2->GetMarkedPoints();
 
-                if(pPts && pPts->GetCount() && pMark2->GetMarkedSdrObj())
+                if(pPts && !pPts->empty() && pMark2->GetMarkedSdrObj())
                 {
                     pMark2->GetMarkedSdrObj()->TakeObjNamePlural(aStr1);
                     bEq = aNam.Equals(aStr1);

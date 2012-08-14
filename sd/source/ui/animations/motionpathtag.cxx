@@ -846,7 +846,7 @@ sal_uLong MotionPathTag::GetMarkedPointCount() const
     if( mpMark )
     {
         const SdrUShortCont* pPts=mpMark->GetMarkedPoints();
-        return pPts ? pPts->GetCount() : 0;
+        return pPts ? pPts->size() : 0;
     }
     else
     {
@@ -864,11 +864,9 @@ sal_Bool MotionPathTag::MarkPoint(SdrHdl& rHdl, sal_Bool bUnmark )
         SmartHdl* pSmartHdl = dynamic_cast< SmartHdl* >( &rHdl );
         if( pSmartHdl && pSmartHdl->getTag().get() == this )
         {
-            SdrUShortCont* pPts=mpMark->ForceMarkedPoints();
-            pPts->ForceSort();
+            mpMark->ForceMarkedPoints();
             if (mrView.MarkPointHelper(&rHdl,mpMark,bUnmark))
             {
-                pPts->ForceSort();
                 mrView.MarkListHasChanged();
                 bRet=sal_True;
             }
@@ -1002,7 +1000,7 @@ void MotionPathTag::addCustomHandles( SdrHdlList& rHandlerList )
 
                     rHandlerList.AddHdl( pSmartHdl );
 
-                    const bool bSelected= pMrkPnts && pMrkPnts->Exist(sal::static_int_cast< sal_uInt16 >(nHandle));
+                    const bool bSelected= pMrkPnts && pMrkPnts->find( sal_uInt16(nHandle) ) != pMrkPnts->end();
                     pSmartHdl->SetSelected(bSelected);
 
                     if( mrView.IsPlusHandlesAlwaysVisible() || bSelected )
@@ -1102,7 +1100,7 @@ void MotionPathTag::deselect()
         SdrUShortCont* pPts = mpMark->GetMarkedPoints();
 
         if( pPts )
-            pPts->Clear();
+            pPts->clear();
     }
 
     selectionChanged();
@@ -1131,7 +1129,7 @@ void MotionPathTag::DeleteMarkedPoints()
         if( pPts )
         {
             PolyPolygonEditor aEditor( mpPathObj->GetPathPoly(), mpPathObj->IsClosed() );
-            if( aEditor.DeletePoints( pPts->getContainer() ) )
+            if( aEditor.DeletePoints( *pPts ) )
             {
                 if( aEditor.GetPolyPolygon().count() )
                 {
@@ -1186,7 +1184,7 @@ void MotionPathTag::SetMarkedSegmentsKind(SdrPathSegmentKind eKind)
         if(pPts)
         {
             PolyPolygonEditor aEditor( mpPathObj->GetPathPoly(), mpPathObj->IsClosed() );
-            if(aEditor.SetSegmentsKind( eKind, pPts->getContainer()) )
+            if(aEditor.SetSegmentsKind( eKind, *pPts ) )
             {
                 mpPathObj->SetPathPoly(aEditor.GetPolyPolygon());
                 mrView.MarkListHasChanged();
@@ -1239,7 +1237,7 @@ void MotionPathTag::SetMarkedPointsSmooth(SdrPathSmoothKind eKind)
         if(pPts)
         {
             PolyPolygonEditor aEditor( mpPathObj->GetPathPoly(), mpPathObj->IsClosed() );
-            if(aEditor.SetPointsSmooth( eFlags, pPts->getContainer() ) )
+            if(aEditor.SetPointsSmooth( eFlags, *pPts ) )
             {
                 mpPathObj->SetPathPoly(aEditor.GetPolyPolygon());
                 mrView.MarkListHasChanged();

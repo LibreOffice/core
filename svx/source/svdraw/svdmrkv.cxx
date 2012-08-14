@@ -709,7 +709,8 @@ void SdrMarkView::SetMarkHandles()
                     pHdl->SetObjHdlNum(sal_uInt16(i-nSiz0));
                     if (bPoly)
                     {
-                        sal_Bool bSelected=pMrkPnts!=NULL && pMrkPnts->Exist(sal_uInt16(i-nSiz0));
+                        sal_Bool bSelected=pMrkPnts!=NULL
+                                  && pMrkPnts->find( sal_uInt16(i-nSiz0) ) != pMrkPnts->end();
                         pHdl->SetSelected(bSelected);
                         if (bPlusHdlAlways || bSelected)
                         {
@@ -743,10 +744,9 @@ void SdrMarkView::SetMarkHandles()
                 const SdrGluePointList* pGPL=pObj->GetGluePointList();
                 if (pGPL!=NULL)
                 {
-                    sal_uInt16 nAnz=(sal_uInt16)pMrkGlue->GetCount();
-                    for (sal_uInt16 nNum=0; nNum<nAnz; nNum++)
+                    for(SdrUShortCont::const_iterator it = pMrkGlue->begin(); it != pMrkGlue->end(); ++it)
                     {
-                        sal_uInt16 nId=pMrkGlue->GetObject(nNum);
+                        sal_uInt16 nId=*it;
                         //nNum changed to nNumGP because already used in for loop
                         sal_uInt16 nNumGP=pGPL->FindGluePoint(nId);
                         if (nNumGP!=SDRGLUEPOINT_NOTFOUND)
@@ -1147,8 +1147,8 @@ void SdrMarkView::CheckMarked()
         {
             if (!IsGluePointEditMode()) { // selected glue points only in GlueEditMode
                 SdrUShortCont* pPts=pM->GetMarkedGluePoints();
-                if (pPts!=NULL && pPts->GetCount()!=0) {
-                    pPts->Clear();
+                if (pPts!=NULL) {
+                    pPts->clear();
                 }
             }
         }
