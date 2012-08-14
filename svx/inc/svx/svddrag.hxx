@@ -30,7 +30,6 @@
 #define _SVDDRAG_HXX
 
 
-#include <tools/contnr.hxx>
 #include <tools/gen.hxx>
 #include <tools/fract.hxx>
 #include "svx/svxdllapi.h"
@@ -54,7 +53,7 @@ protected:
     SdrHdl*  pHdl;      // Der Handle an dem der User zottelt
     SdrView* pView;
     SdrPageView* pPageView;
-    Container aPnts;    // Alle bisherigen Punkte: [0]=Start, [Count()-2]=Prev
+    std::vector<Point*> aPnts;    // Alle bisherigen Punkte: [0]=Start, [Count()-2]=Prev
     Point     aRef1;     // Referenzpunkt: Resize-Fixpunkt, (Drehachse,
     Point     aRef2;     // Spiegelachse, ...)
     Point     aPos0;     // Position beim letzten Event
@@ -99,19 +98,19 @@ protected:
 
 protected:
     void Clear(bool bLeaveOne);
-    Point& Pnt(sal_uIntPtr nNum)                           { return *((Point*)aPnts.GetObject(nNum)); }
+    Point& Pnt(sal_uIntPtr nNum)                           { return *aPnts[nNum]; }
 //public:
     SdrDragStatUserData*    pUser;     // Userdata
 public:
-    SdrDragStat(): aPnts(1024,16,16)                 { pUser=NULL; Reset(); }
+    SdrDragStat(): aPnts()                           { pUser=NULL; Reset(); }
     ~SdrDragStat()                                   { Clear(sal_False); }
     void         Reset();
     SdrView*     GetView() const                     { return pView; }
     void         SetView(SdrView* pV)                { pView=pV; }
     SdrPageView* GetPageView() const                 { return pPageView; }
     void         SetPageView(SdrPageView* pPV)       { pPageView=pPV; }
-    const Point& GetPoint(sal_uIntPtr nNum) const          { return *((Point*)aPnts.GetObject(nNum)); }
-    sal_uIntPtr        GetPointAnz() const                 { return aPnts.Count(); }
+    const Point& GetPoint(sal_uIntPtr nNum) const    { return *aPnts[nNum]; }
+    sal_uIntPtr        GetPointAnz() const           { return aPnts.size(); }
     const Point& GetStart() const                    { return GetPoint(0); }
     Point&       Start()                             { return Pnt(0); }
     const Point& GetPrev() const                     { return GetPoint(GetPointAnz()-(GetPointAnz()>=2 ? 2:1)); }

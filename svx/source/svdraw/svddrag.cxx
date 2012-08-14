@@ -31,16 +31,15 @@
 
 void SdrDragStat::Clear(bool bLeaveOne)
 {
-    void* pP=aPnts.First();
-    while (pP!=NULL) {
-        delete (Point*)pP;
-        pP=aPnts.Next();
+    while (!aPnts.empty()) {
+        delete aPnts.back();
+        aPnts.pop_back();
     }
     if (pUser!=NULL) delete pUser;
     pUser=NULL;
-    aPnts.Clear();
+    aPnts.clear();
     if (bLeaveOne) {
-        aPnts.Insert(new Point,CONTAINER_APPEND);
+        aPnts.push_back(new Point);
     }
 }
 
@@ -87,15 +86,15 @@ void SdrDragStat::NextPoint(bool bSaveReal)
 {
     Point aPnt(GetNow());
     if (bSaveReal) aPnt=aRealNow;
-    aPnts.Insert(new Point(KorregPos(GetRealNow(),aPnt)),CONTAINER_APPEND);
+    aPnts.push_back(new Point(KorregPos(GetRealNow(),aPnt)));
     Prev()=aPnt;
 }
 
 void SdrDragStat::PrevPoint()
 {
-    if (aPnts.Count()>=2) { // one has to remain at all times
-        Point* pPnt=(Point*)(aPnts.GetObject(aPnts.Count()-2));
-        aPnts.Remove(aPnts.Count()-2);
+    if (aPnts.size()>=2) { // one has to remain at all times
+        Point* pPnt=aPnts[aPnts.size()-2];
+        aPnts.erase(aPnts.begin()+aPnts.size()-2);
         delete pPnt;
         Now()=KorregPos(GetRealNow(),GetPrev());
     }
