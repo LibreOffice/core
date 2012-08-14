@@ -366,7 +366,6 @@ void ClientBox::DrawRow( const Rectangle& rRect, const TClientBoxEntry pEntry )
         m_aPinBox.SetSizePixel( aSize );
         const Rectangle aRect( GetEntryRect( m_nActive ) );
         Size  aBtnSize( m_aPinBox.GetSizePixel() );
-        Size aTextSize( m_aPinDescription.GetSizePixel() );
         Point aBtnPos( aRect.Left(),
                    aRect.Bottom() - TOP_OFFSET - aBtnSize.Height() );
 //         m_aPinDescription.SetPosPixel( aBtnPos );
