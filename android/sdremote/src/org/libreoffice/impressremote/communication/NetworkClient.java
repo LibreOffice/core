@@ -17,7 +17,6 @@ import java.util.Random;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.StrictMode;
 import android.support.v4.content.LocalBroadcastManager;
 
 /**
@@ -33,10 +32,6 @@ public class NetworkClient extends Client {
 
     public NetworkClient(String ipAddress, Context aContext) {
         super(aContext);
-        // FIXME: eventually networking will be fully threaded.
-        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
-                        .permitAll().build();
-        StrictMode.setThreadPolicy(policy);
         try {
             mSocket = new Socket(ipAddress, PORT);
             mInputStream = mSocket.getInputStream();
@@ -45,10 +40,14 @@ public class NetworkClient extends Client {
             mOutputStream = mSocket.getOutputStream();
             // Pairing.
             Random aRandom = new Random();
-            String aPin = "" + aRandom.nextInt(10000);
+            String aPin = "" + (aRandom.nextInt(9000) + 1000);
+            while (aPin.length() < 4) {
+                aPin = "0" + aPin; // Add leading zeros if necessary
+            }
             Intent aIntent = new Intent(
                             CommunicationService.MSG_PAIRING_STARTED);
             aIntent.putExtra("PIN", aPin);
+            mPin = aPin;
             LocalBroadcastManager.getInstance(mContext).sendBroadcast(aIntent);
             // Send out
             String aName = "Bob"; // TODO: get the proper name

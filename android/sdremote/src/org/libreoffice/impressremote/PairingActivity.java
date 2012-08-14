@@ -8,26 +8,36 @@
  */
 package org.libreoffice.impressremote;
 
+import java.text.MessageFormat;
+
 import org.libreoffice.impressremote.communication.CommunicationService;
+import org.libreoffice.impressremote.communication.CommunicationService.State;
 
 import android.app.Activity;
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.support.v4.content.LocalBroadcastManager;
 import android.widget.TextView;
 
 public class PairingActivity extends Activity {
-
+    private CommunicationService mCommunicationService;
+    private boolean mIsBound = false;
     private TextView mPinText;
 
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_pairing);
+
+        bindService(new Intent(this, CommunicationService.class), mConnection,
+                        Context.BIND_IMPORTANT);
+        mIsBound = true;
 
         mPinText = (TextView) findViewById(R.id.pairing_pin);
 
@@ -45,6 +55,33 @@ public class PairingActivity extends Activity {
         //
         //        refreshLists();
     }
+
+    private ServiceConnection mConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName aClassName,
+                        IBinder aService) {
+            setContentView(R.layout.activity_pairing);
+
+            ((TextView) findViewById(R.id.pairing_instruction2_deviceName))
+                            .setText(MessageFormat
+                                            .format(getResources()
+                                                            .getString(R.string.pairing_instructions_2_deviceName),
+                                                            mCommunicationService
+                                                                            .getDeviceName()));
+
+            mCommunicationService = ((CommunicationService.CBinder) aService)
+                            .getService();
+            if (mCommunicationService.getState() == State.CONNECTING) {
+                mPinText.setText(mCommunicationService.getPairingPin());
+            }
+
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName aClassName) {
+            mCommunicationService = null;
+        }
+    };
 
     private BroadcastReceiver mListener = new BroadcastReceiver() {
 

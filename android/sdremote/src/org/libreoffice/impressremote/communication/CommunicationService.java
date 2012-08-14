@@ -27,6 +27,22 @@ public class CommunicationService extends Service implements Runnable {
 
     private State mState = State.DISCONNECTED;
 
+    public State getState() {
+        return mState;
+    }
+
+    public String getPairingPin() {
+        if (mClient != null)
+            return mClient.getPin();
+        else
+            return "";
+    }
+
+    public String getDeviceName() {
+        return "Bob";
+        // FIXME: get the device name somehow.
+    }
+
     private State mStateDesired = State.DISCONNECTED;
 
     private Server mServerDesired = null;

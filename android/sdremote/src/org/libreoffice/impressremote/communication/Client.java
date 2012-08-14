@@ -32,6 +32,7 @@ public abstract class Client {
     protected InputStream mInputStream;
     protected BufferedReader mReader;
     protected OutputStream mOutputStream;
+    protected String mPin = "";
 
     public abstract void closeConnection();
 
@@ -77,6 +78,10 @@ public abstract class Client {
             e1.printStackTrace();
         }
 
+    }
+
+    public String getPin() {
+        return mPin;
     }
 
     /**

@@ -158,9 +158,9 @@ public class SelectorActivity extends Activity {
                                                     aLayout);
                     TextView aText = (TextView) aView
                                     .findViewById(R.id.selector_sub_label);
-                    aView.setOnClickListener(mClickListener);
+                    aText.setOnClickListener(mClickListener);
                     aText.setText(aServer.getName());
-                    aMap.put(aServer, aView);
+                    aMap.put(aServer, aText);
                 }
 
             }
@@ -182,7 +182,6 @@ public class SelectorActivity extends Activity {
 
         @Override
         public void onClick(View aView) {
-            // TODO Auto-generated method stub
             mCommunicationService.stopFindingServers();
 
             Server aDesiredServer = null;
