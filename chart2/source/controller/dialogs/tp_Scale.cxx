@@ -559,14 +559,13 @@ int ScaleTabPage::DeactivatePage(SfxItemSet* pItemSet)
 
     bool bDateAxis = chart2::AxisType::DATE == m_nAxisType;
 
-    sal_uInt32 nIndex = pNumFormatter->GetStandardIndex(LANGUAGE_SYSTEM);
-    const SfxPoolItem *pPoolItem = NULL;
-    if( GetItemSet().GetItemState( SID_ATTR_NUMBERFORMAT_VALUE, sal_True, &pPoolItem ) == SFX_ITEM_SET )
-        nIndex = static_cast< sal_uInt32 >( static_cast< const SfxInt32Item* >(pPoolItem)->GetValue());
-    else
-    {
-        OSL_FAIL( "Using Standard Language" );
-    }
+    sal_uInt32 nMinMaxOriginFmt = aFmtFldMax.GetFormatKey();
+    if ((pNumFormatter->GetType(nMinMaxOriginFmt) &~ NUMBERFORMAT_DEFINED) == NUMBERFORMAT_TEXT)
+        nMinMaxOriginFmt = 0;
+    // numberformat_text cause numbers to fail being numbers...  Shouldn't happen, but can.
+    sal_uInt32 nStepFmt = aFmtFldStepMain.GetFormatKey();
+    if ((pNumFormatter->GetType(nStepFmt) &~NUMBERFORMAT_DEFINED) == NUMBERFORMAT_TEXT)
+        nStepFmt = 0;
 
     Control* pControl = NULL;
     sal_uInt16 nErrStrId = 0;
@@ -593,42 +592,30 @@ int ScaleTabPage::DeactivatePage(SfxItemSet* pItemSet)
         pControl = &aFmtFldMin;
         nErrStrId = STR_BAD_LOGARITHM;
     }
-    else if (!aCbxAutoMax.IsChecked() && !aCbxAutoMin.IsChecked() &&
-             fMin >= fMax)
-    {
-        pControl = &aFmtFldMin;
-        nErrStrId = STR_MIN_GREATER_MAX;
-    }
-    else if (!aCbxAutoStepMain.IsChecked() && fStepMain <= 0)
-    {
-        pControl = &aFmtFldStepMain;
-        nErrStrId = STR_STEP_GT_ZERO;
-    }
     // check for entries that cannot be parsed for the current number format
     else if ( aFmtFldMin.IsModified()
-        && !aCbxAutoMin.IsChecked()
-        && !pNumFormatter->IsNumberFormat(aFmtFldMin.GetText(), nIndex, fDummy))
+              && !aCbxAutoMin.IsChecked()
+              && !pNumFormatter->IsNumberFormat( aFmtFldMin.GetText(), nMinMaxOriginFmt, fDummy))
     {
         pControl = &aFmtFldMin;
         nErrStrId = STR_INVALID_NUMBER;
     }
-    else if (aFmtFldMax.IsModified() && !aCbxAutoMax.IsChecked() &&
-             !pNumFormatter->IsNumberFormat(aFmtFldMax.GetText(),
-                                            nIndex, fDummy))
+    else if ( aFmtFldMax.IsModified()
+              && !aCbxAutoMax.IsChecked()
+              && !pNumFormatter->IsNumberFormat( aFmtFldMax.GetText(), nMinMaxOriginFmt, fDummy))
     {
         pControl = &aFmtFldMax;
         nErrStrId = STR_INVALID_NUMBER;
     }
-    else if ( !bDateAxis && aFmtFldStepMain.IsModified() && !aCbxAutoStepMain.IsChecked() &&
-             !pNumFormatter->IsNumberFormat(aFmtFldStepMain.GetText(),
-                                            nIndex, fDummy))
+    else if ( !bDateAxis && aFmtFldStepMain.IsModified()
+              && !aCbxAutoStepMain.IsChecked()
+              && !pNumFormatter->IsNumberFormat( aFmtFldStepMain.GetText(), nStepFmt, fDummy))
     {
         pControl = &aFmtFldStepMain;
-        nErrStrId = STR_STEP_GT_ZERO;
+        nErrStrId = STR_INVALID_NUMBER;
     }
     else if (aFmtFldOrigin.IsModified() && !aCbxAutoOrigin.IsChecked() &&
-             !pNumFormatter->IsNumberFormat(aFmtFldOrigin.GetText(),
-                                            nIndex, fDummy))
+             !pNumFormatter->IsNumberFormat( aFmtFldOrigin.GetText(), nMinMaxOriginFmt, fDummy))
     {
         pControl = &aFmtFldOrigin;
         nErrStrId = STR_INVALID_NUMBER;
@@ -637,6 +624,12 @@ int ScaleTabPage::DeactivatePage(SfxItemSet* pItemSet)
     {
         pControl = &aFmtFldStepMain;
         nErrStrId = STR_STEP_GT_ZERO;
+    }
+    else if (!aCbxAutoMax.IsChecked() && !aCbxAutoMin.IsChecked() &&
+             fMin >= fMax)
+    {
+        pControl = &aFmtFldMin;
+        nErrStrId = STR_MIN_GREATER_MAX;
     }
     else if( bDateAxis )
     {
