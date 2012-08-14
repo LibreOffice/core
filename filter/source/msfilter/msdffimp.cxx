@@ -4143,7 +4143,7 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                 ApplyAttributes( rSt, aSet, aObjData );
                 pRet->SetMergedItemSet(aSet);
             }
-            else if ( aObjData.eShapeType == mso_sptLine )
+            else if ( aObjData.eShapeType == mso_sptLine && !( GetPropertyValue( DFF_Prop_fc3DLightFace ) & 8 ) )
             {
                 basegfx::B2DPolygon aPoly;
                 aPoly.append(basegfx::B2DPoint(aObjData.aBoundRect.Left(), aObjData.aBoundRect.Top()));
@@ -4560,6 +4560,11 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
 
                         ((SdrEdgeObj*)pRet)->SetEdgeTrackPath( aPoly );
                         pRet->SetMergedItemSet( aSet );
+                    }
+                    if ( aObjData.eShapeType == mso_sptLine )
+                    {
+                        pRet->SetMergedItemSet(aSet);
+                        ((SdrObjCustomShape*)pRet)->MergeDefaultAttributes();
                     }
                 }
             }

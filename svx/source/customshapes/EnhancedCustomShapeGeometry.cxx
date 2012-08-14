@@ -8271,6 +8271,7 @@ const mso_CustomShape* GetCustomShapeContent( MSO_SPT eSpType )
     switch( eSpType )
     {
         case mso_sptArc :                       pCustomShape = &msoArc; break;
+        case mso_sptLine:                       pCustomShape = &msoStraightConnector1; break;
         case mso_sptRectangle :                 pCustomShape = &msoRectangle; break;
         case mso_sptParallelogram :             pCustomShape = &msoParallelogram; break;
         case mso_sptTrapezoid :                 pCustomShape = &msoTrapezoid; break;
