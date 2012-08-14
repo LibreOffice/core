@@ -191,6 +191,16 @@ namespace basegfx
         double fTargetOffsetY(rTargetRange.getMinY());
 
         // add object expansion
+        if(bSquare)
+        {
+            const double fOriginalDiag(sqrt((fTargetSizeX * fTargetSizeX) + (fTargetSizeY * fTargetSizeY)));
+            fTargetOffsetX -= (fOriginalDiag - fTargetSizeX) / 2.0;
+            fTargetOffsetY -= (fOriginalDiag - fTargetSizeY) / 2.0;
+            fTargetSizeX = fOriginalDiag;
+            fTargetSizeY = fOriginalDiag;
+        }
+
+        // add object expansion
         if(0.0 != fAngle)
         {
             const double fAbsCos(fabs(cos(fAngle)));
@@ -230,10 +240,7 @@ namespace basegfx
         o_rGradientInfo.maTextureTransform.translate(fTargetOffsetX, fTargetOffsetY);
 
         // prepare aspect for texture
-        if( bSquare )
-            o_rGradientInfo.mfAspectRatio = 1.0; // since we want a square
-        else
-            o_rGradientInfo.mfAspectRatio = (0.0 != fTargetSizeY) ?  fTargetSizeX / fTargetSizeY : 1.0;
+        o_rGradientInfo.mfAspectRatio = (0.0 != fTargetSizeY) ? fTargetSizeX / fTargetSizeY : 1.0;
 
         // build transform from u,v to [0.0 .. 1.0]. As base, use inverse texture transform
         o_rGradientInfo.maBackTextureTransform = o_rGradientInfo.maTextureTransform;
