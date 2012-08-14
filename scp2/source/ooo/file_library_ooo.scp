@@ -1342,8 +1342,8 @@ SPECIAL_LIB_FILE(gid_File_Lib_Ucpdav1,ucpdav1)
  #endif
 #endif
 
-//we need the nss libs of libxmlsec is enabled, or if the internal mozilla is enabled
-#if defined(ENABLE_XMLSEC) || !defined(SYSTEM_MOZILLA) && !defined(WITHOUT_MOZILLA)
+#if !defined(ANDROID) && !defined(IOS) //FIXME: get nss&xmlsec building
+//we need the nss libs for libxmlsec (or if the internal mozilla is enabled)
 #ifndef SYSTEM_NSS
 SPECIAL_LIB_FILE(gid_File_Lib_Freebl3,freebl3)
 SPECIAL_LIB_FILE(gid_File_Lib_Nss3,nss3)
@@ -1374,7 +1374,19 @@ End
 #endif //WNT
 SPECIAL_LIB_FILE(gid_File_Lib_Ssl3,ssl3)
 #endif //SYSTEM_NSS
-#endif //defined(ENABLE_XMLSEC) || !defined(SYSTEM_MOZILLA) && !defined(WITHOUT_MOZILLA)
+
+File gid_File_Lib_XSec_XmlSec
+    LIB_FILE_BODY;
+    #ifdef UNX
+        Name = STRING(CONCAT2(libxsec_xmlsec,UNXSUFFIX));
+    #else
+        Name = "xsec_xmlsec.dll";
+    #endif
+    Dir = SCP2_OOO_BIN_DIR;
+    Styles = (PACKED);
+End
+
+#endif
 
 SPECIAL_LIB_FILE(gid_File_Lib_Ucpfile1,ucpfile1)
 
@@ -1508,18 +1520,6 @@ File gid_File_Lib_XSec_Framework
     Styles = (PACKED);
 End
 
-#if defined(ENABLE_XMLSEC)
-File gid_File_Lib_XSec_XmlSec
-    LIB_FILE_BODY;
-    #ifdef UNX
-        Name = STRING(CONCAT2(libxsec_xmlsec,UNXSUFFIX));
-    #else
-        Name = "xsec_xmlsec.dll";
-    #endif
-    Dir = SCP2_OOO_BIN_DIR;
-    Styles = (PACKED);
-End
-
 #ifdef WNT
 File gid_File_Lib_LibXMLSec_xmlseccore
     LIB_FILE_BODY;
@@ -1542,7 +1542,6 @@ File gid_File_Lib_LibXMLSec_xmlsecmscrypto
     Dir = SCP2_OOO_BIN_DIR;
     Styles = (PACKED);
 End
-#endif
 #endif
 
 File gid_File_Lib_Migrationoo2

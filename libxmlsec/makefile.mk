@@ -35,9 +35,9 @@ EXTERNAL_WARNINGS_NOT_ERRORS := TRUE
 
 .INCLUDE :	settings.mk
 
-.IF "$(ENABLE_XMLSEC)" != "YES"
+.IF "$(OS)" == "ANDROID" || "$(OS)" == "IOS"
 @all:
-    @echo "XMLSec module disabled"
+	@echo "FIXME: XMLSec module not buildable yet on this platform"
 .ENDIF
 
 # --- Files --------------------------------------------------------

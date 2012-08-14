@@ -32,8 +32,10 @@ $(eval $(call gb_Module_add_targets,xmlsecurity,\
 	AllLangResTarget_xsec \
 	Library_xmlsecurity \
 	Library_xsec_fw \
-	$(if $(filter YES,$(ENABLE_XMLSEC)),Library_xsec_xmlsec) \
+    $(ifneq ($(filter-out IOS ANDROID,$(OS)),),Library_xsec_xmlsec) \
 ))
+
+#FIXME: ^^^, get nss&libxmlsec building on ios and android
 
 # failing
 #$(eval $(call gb_Module_add_check_targets,xmlsecurity,\

@@ -39,7 +39,12 @@ TARGET=nss
 .IF "$(SYSTEM_NSS)"=="YES"
 all:
 	@echo "NSS will not be built. Using system one instead."
-.ENDIF	
+.ENDIF
+
+.IF "$(OS)" == "ANDROID" || "$(OS)" == "IOS"
+@all:
+	@echo "FIXME: NSS module not buildable yet on this platform"
+.ENDIF
 
 VER_MAJOR=3
 VER_MINOR=13

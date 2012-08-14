@@ -119,12 +119,12 @@ $(eval $(call gb_CppunitTest_use_components,sc_subsequent_filters_test,\
     xmlsecurity/util/xmlsecurity \
 ))
 
-ifeq ($(ENABLE_XMLSEC),YES)
 ifeq ($(OS),WNT)
 $(eval $(call gb_CppunitTest_use_components,sc_subsequent_filters_test,\
     xmlsecurity/util/xsec_xmlsec.windows \
 ))
 else
+ifneq ($(filter-out IOS ANDROID,$(OS)),) #FIXME: get nss&xmlsec building
 $(eval $(call gb_CppunitTest_use_components,sc_subsequent_filters_test,\
     xmlsecurity/util/xsec_xmlsec \
 ))

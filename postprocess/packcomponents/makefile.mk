@@ -313,12 +313,10 @@ my_components += \
 my_components += component/extensions/source/plugin/pl
 .END
 
-.IF "$(ENABLE_XMLSEC)" == "YES"
 .IF "$(OS)" == "WNT"
 my_components += component/xmlsecurity/util/xsec_xmlsec.windows
-.ELSE
+.ELIF "$(OS)" != "ANDROID" && "$(OS)" != "IOS" #FIXME, get nss&xmlsec building
 my_components += component/xmlsecurity/util/xsec_xmlsec
-.END
 .END
 
 .IF "$(OS)" == "MACOSX"

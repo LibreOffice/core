@@ -850,12 +850,6 @@ AC_ARG_ENABLE(build-mozilla,
          the Mozilla source code but take precompiled zips.]),
 ,)
 
-AC_ARG_ENABLE(xmlsec,
-    AS_HELP_STRING([--disable-xmlsec],
-        [Whether to enable XMLsec for open document signing. Be warned,
-         building without XML Security will likely give you test failures.]),
-)
-
 AC_ARG_ENABLE(tde,
     AS_HELP_STRING([--enable-tde],
         [Determines whether to use TQt/TDE vclplug on platforms where TQt and
@@ -7709,17 +7703,6 @@ elif test "$with_system_mozilla" = "yes"; then
 else
     AC_MSG_RESULT([yes])
 fi
-
-AC_MSG_CHECKING([whether to build XML Security support])
-if test "$enable_xmlsec" = "no"; then
-    AC_MSG_RESULT([no])
-    ENABLE_XMLSEC=
-else
-    ENABLE_XMLSEC="YES"
-    BUILD_TYPE="$BUILD_TYPE LIBXMLSEC"
-    AC_MSG_RESULT([yes])
-fi
-AC_SUBST(ENABLE_XMLSEC)
 
 dnl ===================================================================
 dnl Check for system openldap

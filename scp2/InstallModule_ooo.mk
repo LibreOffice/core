@@ -48,7 +48,6 @@ $(eval $(call gb_InstallModule_define_if_set,scp2/ooo,\
 	ENABLE_ONLINE_UPDATE \
 	ENABLE_OPENGL \
 	ENABLE_TELEPATHY \
-	ENABLE_XMLSEC \
 	MERGELIBS \
 	SYSTEM_BOOST \
 	SYSTEM_CAIRO \
