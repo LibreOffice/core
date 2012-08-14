@@ -656,8 +656,6 @@ bool NeedUpdate(ScColorScaleEntry* pEntry)
         default:
             return false;
     }
-
-    return false;
 }
 
 }
