@@ -244,4 +244,5 @@ build-ant: copy-stuff properties
 
 run:
 # /data/local/tmp/sample-document.odt
-	adb shell am start -n $(APP_PACKAGE)/.ui.LibreOfficeUIActivity -e input /assets/test1.odt -e lo-main-delay 20
+# add -e lo-strace to strace
+	adb shell am start -n $(APP_PACKAGE)/.ui.LibreOfficeUIActivity  -e lo-strace -e input /assets/test1.odt

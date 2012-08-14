@@ -132,7 +132,7 @@ public class LibreOfficeUIActivity extends SherlockActivity implements ActionBar
         //Set the "home" - top level - directory.
         homeDirectory  = new File(Environment.getExternalStorageDirectory(),"LibreOffice");
         homeDirectory.mkdirs();
-        currentDirectory = homeDirectory;        
+        currentDirectory = homeDirectory;
         //Load default settings
         
 
@@ -819,6 +819,9 @@ class ListItemAdapter implements ListAdapter{
                     toolkit = (XToolkit2) UnoRuntime.queryInterface(XToolkit2.class, toolkitService);
 
                     renderable = (XRenderable) UnoRuntime.queryInterface(XRenderable.class, doc);
+		    if (renderable == null)
+			// some serious error with the rendering backend
+			return new Integer(0);
 
                     // Set up dummySmallDevice and use it to find out the number
                     // of pages ("renderers").
@@ -851,6 +854,12 @@ class ListItemAdapter implements ListAdapter{
         }
 
             protected void onPostExecute(Integer result){
+
+		if (renderable == null) {
+                    Log.i(TAG, "Document is un-renderable");
+		    return; // TODO: check if this falls-back to a sensible image
+		}
+
                 int widthInPx = dpToPx( 100 );
                 int heightInPx = dpToPx( (int)( 100*Math.sqrt(2) ) );
                 ByteBuffer bb = renderPage( 0 , widthInPx , heightInPx);
