@@ -202,6 +202,7 @@ GtkSalMenu::GtkSalMenu( sal_Bool bMenuBar ) :
 
 GtkSalMenu::~GtkSalMenu()
 {
+    // FIXME: Not sure if we need to unset X Properties.
     if ( mpFrame ) {
         GtkWidget *widget = GTK_WIDGET( mpFrame->getWindow() );
         GdkWindow *gdkWindow = gtk_widget_get_window( widget );
@@ -241,7 +242,7 @@ GtkSalMenu::~GtkSalMenu()
 
 sal_Bool GtkSalMenu::VisibleMenuBar()
 {
-    return sal_False;
+    return sal_True;
 }
 
 void GtkSalMenu::InsertItem( SalMenuItem* pSalMenuItem, unsigned nPos )
@@ -284,6 +285,16 @@ void GtkSalMenu::SetSubMenu( SalMenuItem* pSalMenuItem, SalMenu* pSubMenu, unsig
     }
 }
 
+void updateNativeMenu( GtkSalMenu* pMenu );
+
+gboolean GenerateMenu(gpointer user_data) {
+    cout << "Generating menu..." << endl;
+    GtkSalMenu* pSalMenu = static_cast< GtkSalMenu* >( user_data );
+    updateNativeMenu( pSalMenu );
+
+    return TRUE;
+}
+
 void GtkSalMenu::SetFrame( const SalFrame* pFrame )
 {
     mpFrame = static_cast<const GtkSalFrame*>( pFrame );
@@ -306,6 +317,10 @@ void GtkSalMenu::SetFrame( const SalFrame* pFrame )
 
         // Try to publish the menu with the right bus data.
         Freeze();
+
+        // Refresh the menu every second.
+        // This code is a workaround until required modifications in Gtk+ are available.
+//        g_timeout_add( 1000, GenerateMenu, this );
     }
 }
 
@@ -389,11 +404,6 @@ void GtkSalMenu::SetItemCommand( unsigned nPos, SalMenuItem* pSalMenuItem, const
 
 void GtkSalMenu::GetSystemMenuData( SystemMenuData* pData )
 {
-}
-
-bool GtkSalMenu::ShowNativePopupMenu(FloatingWindow * pWin, const Rectangle& rRect, sal_uLong nFlags)
-{
-    return TRUE;
 }
 
 void updateNativeMenu( GtkSalMenu* pMenu ) {

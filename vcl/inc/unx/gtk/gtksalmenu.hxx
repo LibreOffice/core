@@ -88,7 +88,6 @@ public:
     virtual void                SetAccelerator( unsigned nPos, SalMenuItem* pSalMenuItem, const KeyCode& rKeyCode, const rtl::OUString& rKeyName );
     virtual void                GetSystemMenuData( SystemMenuData* pData );
     virtual void                SetItemCommand( unsigned nPos, SalMenuItem* pSalMenuItem, const rtl::OUString& aCommandStr );
-    virtual bool                ShowNativePopupMenu(FloatingWindow * pWin, const Rectangle& rRect, sal_uLong nFlags);
     virtual void                Freeze();
 
     virtual void                SetMenu( Menu* pMenu ) { mpVCLMenu = pMenu; }
