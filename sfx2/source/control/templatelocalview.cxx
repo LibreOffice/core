@@ -63,7 +63,7 @@ public:
             }
         }
 
-        return nVisCount;
+        return meApp != FILTER_APP_NONE ? nVisCount : true ;
     }
 
     bool isValid (const rtl::OUString &rType) const
