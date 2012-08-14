@@ -38,6 +38,7 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/sfxmodelfactory.hxx>
 #include <svl/stritem.hxx>
+#include "svx/svdpage.hxx"
 
 #include <editeng/brshitem.hxx>
 #include <editeng/justifyitem.hxx>
@@ -45,6 +46,8 @@
 #include <dbdata.hxx>
 #include "validat.hxx"
 #include "cell.hxx"
+#include "drwlayer.hxx"
+#include "userdat.hxx"
 
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/drawing/XControlShape.hpp>
@@ -151,6 +154,8 @@ public:
     void testNumberFormatHTML();
     void testNumberFormatCSV();
 
+    void testCellAnchoredShapesODS();
+
     CPPUNIT_TEST_SUITE(ScFiltersTest);
     CPPUNIT_TEST(testRangeNameXLS);
     CPPUNIT_TEST(testRangeNameXLSX);
@@ -186,6 +191,8 @@ public:
 
     CPPUNIT_TEST(testNumberFormatHTML);
     CPPUNIT_TEST(testNumberFormatCSV);
+
+    CPPUNIT_TEST(testCellAnchoredShapesODS);
 
     //disable testPassword on MacOSX due to problems with libsqlite3
     //also crashes on DragonFly due to problems with nss/nspr headers
@@ -1239,6 +1246,40 @@ void ScFiltersTest::testNumberFormatCSV()
     bool bHasValue = pDoc->HasValueData(1, 1, 0);
     CPPUNIT_ASSERT_MESSAGE("Fail to import number as a value cell.", bHasValue);
     CPPUNIT_ASSERT_MESSAGE("Incorrect value.", pDoc->GetValue(1, 1, 0) == 199.98);
+
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testCellAnchoredShapesODS()
+{
+    OUString aFileNameBase("cell-anchored-shapes.");
+    OUString aFileExt = OUString::createFromAscii(aFileFormats[ODS].pName);
+    OUString aFilterName = OUString::createFromAscii(aFileFormats[ODS].pFilterName);
+    OUString aFilterType = OUString::createFromAscii(aFileFormats[ODS].pTypeName);
+
+    rtl::OUString aFileName;
+    createFileURL(aFileNameBase, aFileExt, aFileName);
+    ScDocShellRef xDocSh = load (aFilterName, aFileName, rtl::OUString(), aFilterType, aFileFormats[ODS].nFormatType);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load cell-anchored-shapes.ods", xDocSh.Is());
+
+    // There are two cell-anchored objects on the first sheet.
+    ScDocument* pDoc = xDocSh->GetDocument();
+
+    CPPUNIT_ASSERT_MESSAGE("There should be at least one sheet.", pDoc->GetTableCount() > 0);
+
+    ScDrawLayer* pDrawLayer = pDoc->GetDrawLayer();
+    SdrPage* pPage = pDrawLayer->GetPage(0);
+    CPPUNIT_ASSERT_MESSAGE("draw page for sheet 1 should exist.", pPage);
+    sal_uIntPtr nCount = pPage->GetObjCount();
+    CPPUNIT_ASSERT_MESSAGE("There should be 2 objects.", nCount == 2);
+    for (sal_uIntPtr i = 0; i < nCount; ++i)
+    {
+        SdrObject* pObj = pPage->GetObj(i);
+        CPPUNIT_ASSERT_MESSAGE("Failed to get drawing object.", pObj);
+        ScDrawObjData* pData = ScDrawLayer::GetObjData(pObj, false);
+        CPPUNIT_ASSERT_MESSAGE("Failed to retrieve user data for this object.", pData);
+        CPPUNIT_ASSERT_MESSAGE("Bounding rectangle should have been calculated upon import.", !pData->maLastRect.IsEmpty());
+    }
 
     xDocSh->DoClose();
 }
