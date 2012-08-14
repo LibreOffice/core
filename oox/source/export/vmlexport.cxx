@@ -466,9 +466,13 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const Rectangle& rRect 
                                     aPath.append( "e" );
                                     break;
                                 default:
-#if OSL_DEBUG_LEVEL > 0
-                                    fprintf( stderr, "TODO: unhandled segment '%x' in the path\n", nSeg );
-#endif
+                                    // See EscherPropertyContainer::CreateCustomShapeProperties, by default nSeg is simply the number of points.
+                                    for (int i = 0; i < nSeg; ++i)
+                                    {
+                                        sal_Int32 nX = impl_GetPointComponent(pVerticesIt, nPointSize);
+                                        sal_Int32 nY = impl_GetPointComponent(pVerticesIt, nPointSize);
+                                        aPath.append("l").append(nX).append(",").append(nY);
+                                    }
                                     break;
                             }
                         }
