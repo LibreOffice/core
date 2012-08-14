@@ -98,6 +98,7 @@ ClientBox::ClientBox( Dialog* pParent, RemoteServer *pServer,
     m_pScrollBar->EnableDrag();
 
     m_aPinBox.SetUseThousandSep(false);
+//     m_aPinDescription.SetText( String( SdResId( STR_ENTER_PIN ) ) );
 
     SetPaintTransparent( true );
     SetPosPixel( Point( RSC_SP_DLG_INNERBORDER_LEFT, RSC_SP_DLG_INNERBORDER_TOP ) );
@@ -180,8 +181,9 @@ void ClientBox::CalcActiveHeight( const long nPos )
 
     aSize.Width() -= ICON_OFFSET;
 
-
-    aTextHeight += m_aPinBox.GetOutputHeightPixel();
+    aSize = LogicToPixel( Size( RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT ),
+                               MapMode( MAP_APPFONT ) );
+    aTextHeight += aSize.Height();
 
     if ( aTextHeight < m_nStdHeight )
         aTextHeight = m_nStdHeight;
@@ -359,16 +361,27 @@ void ClientBox::DrawRow( const Rectangle& rRect, const TClientBoxEntry pEntry )
     aPos.Y() += aTextHeight;
     if ( pEntry->m_bActive )
     {
+        Size aSize = LogicToPixel( Size( RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT ),
+                               MapMode( MAP_APPFONT ) );
+        m_aPinBox.SetSizePixel( aSize );
         const Rectangle aRect( GetEntryRect( m_nActive ) );
         Size  aBtnSize( m_aPinBox.GetSizePixel() );
-        Point aBtnPos( aRect.Left() + ICON_OFFSET,
+        Size aTextSize( m_aPinDescription.GetSizePixel() );
+        Point aBtnPos( aRect.Left(),
+                   aRect.Bottom() - TOP_OFFSET - aBtnSize.Height() );
+//         m_aPinDescription.SetPosPixel( aBtnPos );
+        DrawText( Rectangle( aBtnPos.X(), aBtnPos.Y(), rRect.Right(), rRect.Bottom() - TOP_OFFSET),
+                  String( SdResId( STR_ENTER_PIN ) ), 0 );
+
+        aBtnPos = Point( aRect.Left() + GetTextWidth( String( SdResId( STR_ENTER_PIN ) ) ),
                    aRect.Bottom() - TOP_OFFSET - aBtnSize.Height() );
 
         m_aPinBox.SetPosPixel( aBtnPos );
 
-        Size aSize = LogicToPixel( Size( RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT ),
-                               MapMode( MAP_APPFONT ) );
-    m_aPinBox.SetSizePixel( aSize );
+
+
+
+
 //         long nExtraHeight = 0;
 //
 //         if ( pEntry->m_bHasButtons )

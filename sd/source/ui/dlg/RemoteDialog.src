@@ -47,6 +47,10 @@ ModalDialog DLG_PAIR_REMOTE
         TabStop = TRUE ;
     };
 
+    String STR_ENTER_PIN
+    {
+        Text [ en-US ] = "Enter PIN:";
+    };
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

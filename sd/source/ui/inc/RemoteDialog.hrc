@@ -15,3 +15,4 @@
 #define LB_SERVERS      3
 #define INPUT_PIN       4
 #define TEXT_PIN        5
+#define STR_ENTER_PIN   6
