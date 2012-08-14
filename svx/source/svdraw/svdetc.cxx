@@ -270,22 +270,6 @@ void ContainerSorter::ImpSubSort(long nL, long nR) const
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-class ImpUShortContainerSorter: public ContainerSorter {
-public:
-    ImpUShortContainerSorter(Container& rNewCont): ContainerSorter(rNewCont) {}
-    virtual ~ImpUShortContainerSorter() {}
-    virtual int Compare(const void* pElem1, const void* pElem2) const;
-};
-
-int ImpUShortContainerSorter::Compare(const void* pElem1, const void* pElem2) const
-{
-    sal_uInt16 n1=sal_uInt16(sal_uIntPtr(pElem1));
-    sal_uInt16 n2=sal_uInt16(sal_uIntPtr(pElem2));
-    return n1<n2 ? -1 : n1>n2 ? 1 : 0;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
 void SdrLinkList::Clear()
 {
     unsigned nAnz=GetLinkCount();
