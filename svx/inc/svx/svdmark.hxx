@@ -31,7 +31,6 @@
 
 #include <vector>
 
-#include <tools/contnr.hxx>
 #include <tools/string.hxx>
 #include "svx/svxdllapi.h"
 #include <svx/sdrobjectuser.hxx>
@@ -177,7 +176,7 @@ public:
 class SVX_DLLPUBLIC SdrMarkList
 {
 protected:
-    Container                                           maList;
+    std::vector<SdrMark*>                               maList;
 
     String                                              maMarkName;
     String                                              maPointName;
@@ -197,7 +196,7 @@ private:
 
 public:
     SdrMarkList()
-    :   maList(1024, 64, 64),
+    :   maList(),
         mbPointNameOk(sal_False),
         mbGluePointNameOk(sal_False),
         mbNameOk(sal_False),
@@ -206,7 +205,7 @@ public:
     }
 
     SdrMarkList(const SdrMarkList& rLst)
-    :   maList(1024, 64, 64)
+    :   maList()
     {
         *this = rLst;
     }
@@ -225,12 +224,12 @@ public:
 
     sal_uLong GetMarkCount() const
     {
-        return maList.Count();
+        return maList.size();
     }
 
     SdrMark* GetMark(sal_uLong nNum) const
     {
-        return (SdrMark*)(maList.GetObject(nNum));
+        return maList[nNum];
     }
 
     sal_uLong FindObject(const SdrObject* pObj) const;
