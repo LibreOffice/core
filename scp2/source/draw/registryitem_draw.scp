@@ -822,27 +822,6 @@ End
 
 // .fodg
 
-RegistryItem gid_Regitem_Fodg_PersistentHandler
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    ModuleID = gid_Module_Prg_Draw_Bin;
-    Subkey = ".fodg\PersistentHandler";
-    Value = "{7BC0E713-5703-45BE-A29D-5D46D8B39262}";
-End
-
-RegistryItem gid_Regitem_Fodg_Shellex_00021500_0000_0000_C000_000000000046
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    ModuleID = gid_Module_Prg_Draw_Bin;
-    Subkey = ".fodg\shellex\{00021500-0000-0000-C000-000000000046}";
-    Value = "{087B3AE3-E237-4467-B8DB-5A38AB959AC9}";
-End
-
-RegistryItem gid_Regitem_Fodg_Shellex_BB2E617C_0920_11D1_9A0B_00C04FC2D6C1
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    ModuleID = gid_Module_Prg_Draw_Bin;
-    Subkey = ".fodg\shellex\{BB2E617C-0920-11D1-9A0B-00C04FC2D6C1}";
-    Value = "{3B092F0C-7696-40E3-A80F-68D74DA84210}";
-End
-
 RegistryItem gid_Regitem_Fodg_Contenttype
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Draw_Bin;
