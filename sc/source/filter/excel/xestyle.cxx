@@ -2902,7 +2902,12 @@ XclExpDxfs::XclExpDxfs( const XclExpRoot& rRoot )
                     {
                         maStyleNameToDxfId.insert(std::pair<rtl::OUString, sal_Int32>(aStyleName, nIndex));
 
-                        SfxItemSet& rSet = rRoot.GetDoc().GetStyleSheetPool()->Find(aStyleName)->GetItemSet();
+                        std::cout << "Style" << aStyleName << std::endl;
+                        SfxStyleSheetBase* pStyle = rRoot.GetDoc().GetStyleSheetPool()->Find(aStyleName);
+                        if(!pStyle)
+                            continue;
+
+                        SfxItemSet& rSet = pStyle->GetItemSet();
 
                         XclExpCellBorder* pBorder = new XclExpCellBorder;
                         if (!pBorder->FillFromItemSet( rSet, GetPalette(), GetBiff()) )
