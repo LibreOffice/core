@@ -27,6 +27,9 @@
 
 package installer::download;
 
+use strict;
+use warnings;
+
 use File::Spec;
 use installer::exiter;
 use installer::files;
@@ -644,7 +647,7 @@ sub create_tar_gz_file_from_directory
     $installer::globals::downloadfilename = $downloadfilename . $installer::globals::downloadfileextension;
     my $targzname = $downloaddir . $installer::globals::separator . $installer::globals::downloadfilename;
 
-    $systemcall = "cd $changedir; $ldpreloadstring tar -cf - $packdir | gzip > $targzname";
+    my $systemcall = "cd $changedir; $ldpreloadstring tar -cf - $packdir | gzip > $targzname";
 
     my $returnvalue = system($systemcall);
 
@@ -679,7 +682,7 @@ sub resolve_variables_in_downloadname
     if ( $allvariables->{'PRODUCTVERSION'} ) { $productversion = $allvariables->{'PRODUCTVERSION'}; }
     $downloadname =~ s/\{productversion\}/$productversion/;
 
-    my $ppackageversion = "";
+    my $packageversion = "";
     if ( $allvariables->{'PACKAGEVERSION'} ) { $packageversion = $allvariables->{'PACKAGEVERSION'}; }
     $downloadname =~ s/\{packageversion\}/$packageversion/;
 
