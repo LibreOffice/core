@@ -121,18 +121,21 @@ static void load_Separators( OUString &sFieldSeparators, OUString &sTextSeparato
 {
     Sequence<Any>aValues;
     const Any *pProperties;
-    Sequence<OUString> aNames(9);
+    Sequence<OUString> aNames( eCall == SC_TEXTTOCOLUMNS ? 4 : 9 );
     OUString* pNames = aNames.getArray();
     OUString aSepPath;
     switch(eCall)
     {
-     case SC_IMPORTFILE : aSepPath=OUString(RTL_CONSTASCII_USTRINGPARAM(SEP_PATH));
-                          break;
-     case SC_PASTETEXT  : aSepPath=OUString(RTL_CONSTASCII_USTRINGPARAM(SEP_PATH_CLPBRD));
-                          break;
-     case SC_TEXTTOCOLUMNS :
-     default            : aSepPath=OUString(RTL_CONSTASCII_USTRINGPARAM(SEP_PATH_TEXT2COL));
-                          break;
+        case SC_IMPORTFILE:
+            aSepPath = SEP_PATH;
+            break;
+        case SC_PASTETEXT:
+            aSepPath = SEP_PATH_CLPBRD;
+            break;
+        case SC_TEXTTOCOLUMNS:
+        default:
+            aSepPath = SEP_PATH_TEXT2COL;
+            break;
     }
     ScLinkConfigItem aItem( aSepPath );
 
@@ -140,61 +143,72 @@ static void load_Separators( OUString &sFieldSeparators, OUString &sTextSeparato
     pNames[1] = OUString(RTL_CONSTASCII_USTRINGPARAM( SEPARATORS ));
     pNames[2] = OUString(RTL_CONSTASCII_USTRINGPARAM( TEXT_SEPARATORS ));
     pNames[3] = OUString(RTL_CONSTASCII_USTRINGPARAM( FIXED_WIDTH ));
-    pNames[4] = OUString(RTL_CONSTASCII_USTRINGPARAM( FROM_ROW ));
-    pNames[5] = OUString(RTL_CONSTASCII_USTRINGPARAM( CHAR_SET ));
-    pNames[6] = OUString(RTL_CONSTASCII_USTRINGPARAM( QUOTED_AS_TEXT ));
-    pNames[7] = OUString(RTL_CONSTASCII_USTRINGPARAM( DETECT_SPECIAL_NUM ));
-    pNames[8] = OUString(RTL_CONSTASCII_USTRINGPARAM( LANGUAGE ));
+    if (eCall != SC_TEXTTOCOLUMNS)
+    {
+        pNames[4] = OUString(RTL_CONSTASCII_USTRINGPARAM( FROM_ROW ));
+        pNames[5] = OUString(RTL_CONSTASCII_USTRINGPARAM( CHAR_SET ));
+        pNames[6] = OUString(RTL_CONSTASCII_USTRINGPARAM( QUOTED_AS_TEXT ));
+        pNames[7] = OUString(RTL_CONSTASCII_USTRINGPARAM( DETECT_SPECIAL_NUM ));
+        pNames[8] = OUString(RTL_CONSTASCII_USTRINGPARAM( LANGUAGE ));
+    }
     aValues = aItem.GetProperties( aNames );
     pProperties = aValues.getConstArray();
+
+    if( pProperties[0].hasValue() )
+        bMergeDelimiters = ScUnoHelpFunctions::GetBoolFromAny( pProperties[0] );
+
     if( pProperties[1].hasValue() )
         pProperties[1] >>= sFieldSeparators;
 
     if( pProperties[2].hasValue() )
         pProperties[2] >>= sTextSeparators;
 
-    if( pProperties[0].hasValue() )
-        bMergeDelimiters = ScUnoHelpFunctions::GetBoolFromAny( pProperties[0] );
-
     if( pProperties[3].hasValue() )
         bFixedWidth = ScUnoHelpFunctions::GetBoolFromAny( pProperties[3] );
 
-    if( pProperties[4].hasValue() )
-        pProperties[4] >>= nFromRow;
+    if (eCall != SC_TEXTTOCOLUMNS)
+    {
+        if( pProperties[4].hasValue() )
+            pProperties[4] >>= nFromRow;
 
-    if( pProperties[5].hasValue() )
-        pProperties[5] >>= nCharSet;
+        if( pProperties[5].hasValue() )
+            pProperties[5] >>= nCharSet;
 
-    if ( pProperties[6].hasValue() )
-        pProperties[6] >>= bQuotedAsText;
+        if ( pProperties[6].hasValue() )
+            pProperties[6] >>= bQuotedAsText;
 
-    if ( pProperties[7].hasValue() )
-        pProperties[7] >>= bDetectSpecialNum;
+        if ( pProperties[7].hasValue() )
+            pProperties[7] >>= bDetectSpecialNum;
 
-    if ( pProperties[8].hasValue() )
-        pProperties[8] >>= nLanguage;
+        if ( pProperties[8].hasValue() )
+            pProperties[8] >>= nLanguage;
+    }
 }
 
 static void save_Separators(
     String maSeparators, String maTxtSep, bool bMergeDelimiters, bool bQuotedAsText,
-    bool bDetectSpecialNum, bool bFixedWidth, sal_Int32 nFromRow, sal_Int32 nCharSet, sal_Int32 nLanguage, ScImportAsciiCall eCall )
+    bool bDetectSpecialNum, bool bFixedWidth, sal_Int32 nFromRow,
+    sal_Int32 nCharSet, sal_Int32 nLanguage, ScImportAsciiCall eCall )
 {
     OUString sFieldSeparators = OUString( maSeparators );
     OUString sTextSeparators = OUString( maTxtSep );
     Sequence<Any> aValues;
     Any *pProperties;
-    Sequence<OUString> aNames(9);
+    Sequence<OUString> aNames( eCall == SC_TEXTTOCOLUMNS ? 4 : 9 );
     OUString* pNames = aNames.getArray();
     OUString aSepPath;
     switch(eCall)
     {
-     case SC_IMPORTFILE : aSepPath=OUString(RTL_CONSTASCII_USTRINGPARAM(SEP_PATH));
-                          break;
-     case SC_PASTETEXT  : aSepPath=OUString(RTL_CONSTASCII_USTRINGPARAM(SEP_PATH_CLPBRD));
-                          break;
-     case SC_TEXTTOCOLUMNS :
-     default            : aSepPath=OUString(RTL_CONSTASCII_USTRINGPARAM(SEP_PATH_TEXT2COL));
-                          break;
+        case SC_IMPORTFILE:
+            aSepPath = SEP_PATH;
+            break;
+        case SC_PASTETEXT:
+            aSepPath = SEP_PATH_CLPBRD;
+            break;
+        case SC_TEXTTOCOLUMNS:
+        default:
+            aSepPath = SEP_PATH_TEXT2COL;
+            break;
     }
     ScLinkConfigItem aItem( aSepPath );
 
@@ -202,22 +216,28 @@ static void save_Separators(
     pNames[1] = OUString(RTL_CONSTASCII_USTRINGPARAM( SEPARATORS ));
     pNames[2] = OUString(RTL_CONSTASCII_USTRINGPARAM( TEXT_SEPARATORS ));
     pNames[3] = OUString(RTL_CONSTASCII_USTRINGPARAM( FIXED_WIDTH ));
-    pNames[4] = OUString(RTL_CONSTASCII_USTRINGPARAM( FROM_ROW ));
-    pNames[5] = OUString(RTL_CONSTASCII_USTRINGPARAM( CHAR_SET ));
-    pNames[6] = OUString(RTL_CONSTASCII_USTRINGPARAM( QUOTED_AS_TEXT ));
-    pNames[7] = OUString(RTL_CONSTASCII_USTRINGPARAM( DETECT_SPECIAL_NUM ));
-    pNames[8] = OUString(RTL_CONSTASCII_USTRINGPARAM( LANGUAGE ));
+    if (eCall != SC_TEXTTOCOLUMNS)
+    {
+        pNames[4] = OUString(RTL_CONSTASCII_USTRINGPARAM( FROM_ROW ));
+        pNames[5] = OUString(RTL_CONSTASCII_USTRINGPARAM( CHAR_SET ));
+        pNames[6] = OUString(RTL_CONSTASCII_USTRINGPARAM( QUOTED_AS_TEXT ));
+        pNames[7] = OUString(RTL_CONSTASCII_USTRINGPARAM( DETECT_SPECIAL_NUM ));
+        pNames[8] = OUString(RTL_CONSTASCII_USTRINGPARAM( LANGUAGE ));
+    }
     aValues = aItem.GetProperties( aNames );
     pProperties = aValues.getArray();
+    ScUnoHelpFunctions::SetBoolInAny( pProperties[0], bMergeDelimiters );
     pProperties[1] <<= sFieldSeparators;
     pProperties[2] <<= sTextSeparators;
-    ScUnoHelpFunctions::SetBoolInAny( pProperties[0], bMergeDelimiters );
     ScUnoHelpFunctions::SetBoolInAny( pProperties[3], bFixedWidth );
-    pProperties[4] <<= nFromRow;
-    pProperties[5] <<= nCharSet;
-    pProperties[6] <<= static_cast<sal_Bool>(bQuotedAsText);
-    pProperties[7] <<= static_cast<sal_Bool>(bDetectSpecialNum);
-    pProperties[8] <<= nLanguage;
+    if (eCall != SC_TEXTTOCOLUMNS)
+    {
+        pProperties[4] <<= nFromRow;
+        pProperties[5] <<= nCharSet;
+        pProperties[6] <<= static_cast<sal_Bool>(bQuotedAsText);
+        pProperties[7] <<= static_cast<sal_Bool>(bDetectSpecialNum);
+        pProperties[8] <<= nLanguage;
+    }
 
     aItem.PutProperties(aNames, aValues);
 }
@@ -281,19 +301,18 @@ ScImportAsciiDlg::ScImportAsciiDlg( Window* pParent,String aDatName,
     FreeResource();
 
     String aName = GetText();
-    if (meCall==SC_IMPORTFILE)
+    switch (meCall)
     {
-        aName.AppendAscii(RTL_CONSTASCII_STRINGPARAM(" - ["));
-        aName += aDatName;
-        aName += ']';
-    }
-    if(meCall == SC_TEXTTOCOLUMNS)
-    {
-     SetText( maStrTextToColumns );
-    }
-    else
-    {
-     SetText( aName );
+        case SC_IMPORTFILE:
+            aName.AppendAscii(RTL_CONSTASCII_STRINGPARAM(" - ["));
+            aName += aDatName;
+            aName += ']';
+            break;
+        case SC_TEXTTOCOLUMNS:
+            SetText( maStrTextToColumns );
+            break;
+        default:
+            SetText( aName );
     }
 
     // Default options are set in officecfg/registry/schema/org/openoffice/Office/Calc.xcs
@@ -439,23 +458,23 @@ ScImportAsciiDlg::ScImportAsciiDlg( Window* pParent,String aDatName,
     aEdOther.SetAccessibleName(aCkbOther.GetText());
     aEdOther.SetAccessibleRelationLabeledBy(&aCkbOther);
 
-    if(meCall == SC_TEXTTOCOLUMNS)
+    if (meCall == SC_TEXTTOCOLUMNS)
     {
-     aFtCharSet.Disable();
-     aLbCharSet.Disable();
-     aFtCustomLang.Disable();
-     aLbCustomLang.SelectLanguage(LANGUAGE_SYSTEM);
-     aLbCustomLang.Disable();
-     aFtRow.Disable();
-     aNfRow.Disable();
+        aFtCharSet.Disable();
+        aLbCharSet.Disable();
+        aFtCustomLang.Disable();
+        aLbCustomLang.SelectLanguage(LANGUAGE_SYSTEM);
+        aLbCustomLang.Disable();
+        aFtRow.Disable();
+        aNfRow.Disable();
 
-    // Quoted field as text option is not used for text-to-columns mode.
-     aCkbQuotedAsText.Check(false);
-     aCkbQuotedAsText.Disable();
+        // Quoted field as text option is not used for text-to-columns mode.
+        aCkbQuotedAsText.Check(false);
+        aCkbQuotedAsText.Disable();
 
-    // Always detect special numbers for text-to-columns mode.
-     aCkbDetectNumber.Check();
-     aCkbDetectNumber.Disable();
+        // Always detect special numbers for text-to-columns mode.
+        aCkbDetectNumber.Check();
+        aCkbDetectNumber.Disable();
     }
 }
 
