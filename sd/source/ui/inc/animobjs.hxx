@@ -25,7 +25,6 @@
 #include <svtools/stdctrl.hxx>
 #include <vcl/group.hxx>
 #include <sfx2/ctrlitem.hxx>
-#include <tools/list.hxx>
 
 #include <vcl/button.hxx>
 #include <vcl/field.hxx>
@@ -129,8 +128,9 @@ private:
     PushButton      aBtnCreateGroup;
 
     ::Window*       pWin;
-    List            aBmpExList;
-    std::vector<Time*> aTimeList;
+    ::std::vector< ::std::pair<BitmapEx*, Time*> > m_FrameList;
+    static const size_t EMPTY_FRAMELIST = ULONG_MAX;
+    size_t          m_nCurrentFrame;
     SdDrawDocument* pMyDoc;
     BitmapEx*       pBitmapEx;
 
