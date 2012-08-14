@@ -20,6 +20,7 @@
 #include <sfx2/fcontnr.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <sfx2/sfxresid.hxx>
+#include <sfx2/templateinfodlg.hxx>
 #include <sfx2/templatelocalview.hxx>
 #include <sfx2/templatelocalviewitem.hxx>
 #include <sfx2/templateonlineview.hxx>
@@ -946,6 +947,8 @@ void SfxTemplateManagerDlg::OnTemplateEdit ()
 
 void SfxTemplateManagerDlg::OnTemplateProperties ()
 {
+    SfxTemplateInfoDlg aDlg;
+    aDlg.Execute();
 }
 
 void SfxTemplateManagerDlg::OnTemplateDelete ()

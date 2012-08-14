@@ -171,6 +171,7 @@ $(eval $(call gb_Library_add_exception_objects,sfx,\
     sfx2/source/dialog/styledlg \
     sfx2/source/dialog/tabdlg \
     sfx2/source/dialog/taskpane \
+    sfx2/source/dialog/templateinfodlg \
     sfx2/source/dialog/templdlg \
     sfx2/source/dialog/titledockwin \
     sfx2/source/dialog/tplcitem \

@@ -64,6 +64,7 @@ $(eval $(call gb_SrsTarget_add_files,sfx/res,\
     sfx2/source/dialog/securitypage.src \
     sfx2/source/dialog/srchdlg.src \
     sfx2/source/dialog/taskpane.src \
+    sfx2/source/dialog/templateinfodlg.src \
     sfx2/source/dialog/templdlg.src \
     sfx2/source/dialog/titledockwin.src \
     sfx2/source/dialog/versdlg.src \

@@ -17,6 +17,7 @@
 
 class Edit;
 class PopupMenu;
+class SfxTemplateInfoDlg;
 class TemplateAbstractView;
 class TemplateLocalView;
 class TemplateOnlineView;
