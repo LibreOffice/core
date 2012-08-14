@@ -33,6 +33,7 @@
 #include <cppuhelper/compbase12.hxx>
 #include <comphelper/proparrhlp.hxx>
 #include "MStatement.hxx"
+#include "MQueryHelper.hxx"
 #include "connectivity/CommonTools.hxx"
 #include "connectivity/FValue.hxx"
 #include "connectivity/sqliterator.hxx"
@@ -220,6 +221,7 @@ namespace connectivity
 
 protected:
             //MQuery                   m_aQuery;
+            MQueryHelper             m_aQueryHelper;
             OTable*                  m_pTable;
             sal_Int32                   m_CurrentRowCount;
             ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >

@@ -49,6 +49,7 @@ $(eval $(call gb_Library_add_exception_objects,mork, \
     connectivity/source/drivers/mork/MResultSet \
     connectivity/source/drivers/mork/MResultSetMetaData \
     connectivity/source/drivers/mork/MPreparedStatement \
+    connectivity/source/drivers/mork/MQueryHelper \
     connectivity/source/drivers/mork/MServices \
     connectivity/source/drivers/mork/MTable \
     connectivity/source/drivers/mork/MTables \

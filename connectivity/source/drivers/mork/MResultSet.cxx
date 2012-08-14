@@ -101,6 +101,7 @@ OResultSet::OResultSet(OCommonStatement* pStmt, const ::boost::shared_ptr< conne
     ,m_pParseTree( _pSQLIterator->getParseTree() )
       // TODO
       //,m_aQuery( pStmt->getOwnConnection()->getColumnAlias() )
+    ,m_aQueryHelper(pStmt->getOwnConnection()->getColumnAlias())
     ,m_pTable(NULL)
     ,m_CurrentRowCount(0)
     ,m_nParamIndex(0)
@@ -311,11 +312,13 @@ void OResultSet::checkIndex(sal_Int32 columnIndex ) throw(::com::sun::star::sdbc
         ::dbtools::throwInvalidIndexException(*this);
 }
 // -------------------------------------------------------------------------
-sal_uInt32  OResultSet::currentRowCount()
+sal_uInt32 OResultSet::currentRowCount()
 {
     if ( m_bIsAlwaysFalseQuery )
         return 0;
-    return 0;//m_aQuery.getRealRowCount() - deletedCount();
+    //return 0;//m_aQuery.getRealRowCount() - deletedCount();
+    // new implementation
+    return m_aQueryHelper.getResultCount();
 }
 
 // -------------------------------------------------------------------------
@@ -329,7 +332,7 @@ sal_Bool OResultSet::fetchCurrentRow( ) throw(SQLException, RuntimeException)
 // -------------------------------------------------------------------------
 sal_Bool OResultSet::pushCard(sal_uInt32 /*cardNumber*/) throw(SQLException, RuntimeException)
 {
-    SAL_WARN("connectivity.mork", "OResultSet::pushCard() NOT IMPLEMENTED!");
+    SAL_INFO("connectivity.mork", "=> OResultSet::pushCard()" );
     return sal_True;
 /*
     if (cardNumber == 0)
@@ -357,11 +360,10 @@ sal_Bool OResultSet::pushCard(sal_uInt32 /*cardNumber*/) throw(SQLException, Run
 */
 }
 // -------------------------------------------------------------------------
-sal_Bool OResultSet::fetchRow(sal_Int32 /*cardNumber*/,sal_Bool /*bForceReload*/) throw(SQLException, RuntimeException)
+sal_Bool OResultSet::fetchRow(sal_Int32 cardNumber,sal_Bool bForceReload) throw(SQLException, RuntimeException)
 {
-    SAL_WARN("connectivity.mork", "OResultSet::fetchRow() NOT IMPLEMENTED!");
-    return sal_True;
-/*
+    SAL_INFO("connectivity.mork", "=> OResultSet::fetchRow()" );
+
     OSL_TRACE("fetchRow, cardNumber = %u", cardNumber );
     if (!bForceReload)
     {
@@ -376,15 +378,15 @@ sal_Bool OResultSet::fetchRow(sal_Int32 /*cardNumber*/,sal_Bool /*bForceReload*/
                 throw SQLException();
         }
     }
-    else
-        m_aQuery.resyncRow(cardNumber);
+//    else
+//        m_aQuery.resyncRow(cardNumber);
 
     if ( validRow( cardNumber ) == sal_False )
         return sal_False;
 
     (m_aRow->get())[0] = (sal_Int32)cardNumber;
     sal_Int32 nCount = m_aColumnNames.getLength();
-    m_RowStates = m_aQuery.getRowStates(cardNumber);
+    //m_RowStates = m_aQuery.getRowStates(cardNumber);
     for( sal_Int32 i = 1; i <= nCount; i++ )
     {
         if ( (m_aRow->get())[i].isBound() )
@@ -392,14 +394,15 @@ sal_Bool OResultSet::fetchRow(sal_Int32 /*cardNumber*/,sal_Bool /*bForceReload*/
             //
             // Everything in the addressbook is a string!
             //
-            if ( !m_aQuery.getRowValue( (m_aRow->get())[i], cardNumber, m_aColumnNames[i-1], DataType::VARCHAR ))
-            {
-                m_pStatement->getOwnConnection()->throwSQLException( m_aQuery.getError(), *this );
-            }
+            if ( !m_aQueryHelper.getRowValue( (m_aRow->get())[i], cardNumber, m_aColumnNames[i-1], DataType::VARCHAR ))
+                OSL_FAIL( "getRowValue: failed!" );
+//            {
+//                m_pStatement->getOwnConnection()->throwSQLException( m_aQuery.getError(), *this );
+//            }
         }
     }
     return sal_True;
-*/
+
 }
 // -------------------------------------------------------------------------
 
@@ -1057,16 +1060,22 @@ void OResultSet::fillRowData()
     throw( ::com::sun::star::sdbc::SQLException )
 {
     SAL_INFO("connectivity.mork", "=> OResultSet::fillRowData()" );
-
     OSL_ENSURE( m_pStatement, "Require a statement" );
-
 
     m_xColumns = m_pSQLIterator->getSelectColumns();
 
     OSL_ENSURE(m_xColumns.is(), "Need the Columns!!");
 
-/*
     OConnection* xConnection = static_cast<OConnection*>(m_pStatement->getConnection().get());
+    sal_Int32 rv = m_aQueryHelper.executeQuery(xConnection);
+
+    if (rv == -1)
+    {
+        OSL_FAIL( "Error in executeQuery!" );
+    }
+
+
+/*
     MQueryExpression queryExpression;
 
     OSQLColumns::Vector::const_iterator aIter = m_xColumns->get().begin();
@@ -1144,6 +1153,7 @@ void OResultSet::fillRowData()
     OSL_TRACE( "\tOUT OResultSet::fillRowData()" );
 #endif
 */
+
 }
 
 #if 0
@@ -1216,6 +1226,10 @@ void SAL_CALL OResultSet::executeQuery() throw( ::com::sun::star::sdbc::SQLExcep
     m_nRowPos = 0;
 
     fillRowData();
+
+    m_pKeySet = new OKeySet();
+    //m_pSortIndex = new OSortIndex(SQL_ORDERBYKEY_DOUBLE, m_aOrderbyAscending);
+    //m_pKeySet = m_pSortIndex->CreateKeySet();
 
     OSL_ENSURE(m_xColumns.is(), "Need the Columns!!");
 
@@ -1525,16 +1539,16 @@ sal_Int32 OResultSet::deletedCount()
 
 }
 // -----------------------------------------------------------------------------
-sal_Bool OResultSet::seekRow( eRowPosition /*pos*/, sal_Int32 /*nOffset*/ )
+sal_Bool OResultSet::seekRow( eRowPosition pos, sal_Int32 nOffset )
 {
-    OSL_FAIL( "OResultSet::seekRow() not implemented" );
-/*
+    SAL_INFO("connectivity.mork", "=> OResultSet::seekRow()" );
+
     ResultSetEntryGuard aGuard( *this );
     if ( !m_pKeySet.is() )
         OSL_FAIL( "OResultSet::STR_ILLEGAL_MOVEMENT" );
 //        m_pStatement->getOwnConnection()->throwSQLException( STR_ILLEGAL_MOVEMENT, *this );
 
-    sal_Int32  nNumberOfRecords = m_aQuery.getRealRowCount();
+    sal_Int32  nNumberOfRecords = m_aQueryHelper.getResultCount();
     sal_Int32  nRetrivedRows = currentRowCount();
     sal_Int32  nCurPos = m_nRowPos;
 
@@ -1582,16 +1596,18 @@ sal_Bool OResultSet::seekRow( eRowPosition /*pos*/, sal_Int32 /*nOffset*/ )
     else    //The requested row has not been retrived until now. We should get the right card for it.
         nCurCard = nCurPos + deletedCount();
 
-    while ( nCurCard > nNumberOfRecords && !m_aQuery.queryComplete() ) {
+    while ( nCurCard > nNumberOfRecords ) {
+/*
             m_aQuery.checkRowAvailable( nCurCard );
             if ( m_aQuery.hadError() )
             {
                 m_pStatement->getOwnConnection()->throwSQLException( m_aQuery.getError(), *this );
             }
-            nNumberOfRecords = m_aQuery.getRealRowCount();
+*/
+            nNumberOfRecords = m_aQueryHelper.getResultCount();
     }
 
-    if ( nCurCard > nNumberOfRecords && m_aQuery.queryComplete()) {
+    if ( nCurCard > nNumberOfRecords) {
         fillKeySet(nNumberOfRecords);
         m_nRowPos = static_cast<sal_uInt32>(m_pKeySet->get().size() + 1);
         OSL_TRACE("seekRow: return False, m_nRowPos = %u", m_nRowPos );
@@ -1602,7 +1618,6 @@ sal_Bool OResultSet::seekRow( eRowPosition /*pos*/, sal_Int32 /*nOffset*/ )
     m_nRowPos = (sal_uInt32)nCurPos;
     OSL_TRACE("seekRow: return True, m_nRowPos = %u", m_nRowPos );
     fetchCurrentRow();
-*/
     return sal_True;
 }
 // -----------------------------------------------------------------------------
