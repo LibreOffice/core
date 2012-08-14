@@ -312,10 +312,20 @@ SmFilterDetect::~SmFilterDetect()
                         {
                             if (0 == strncmp( "<?xml",aBuffer,nSize))
                             {
-                                static const sal_Char sFltrNm_2[] = MATHML_XML;
-                                static const sal_Char sTypeNm_2[] = "math_MathML_XML_Math";
-                                aFilterName.AssignAscii( sFltrNm_2 );
-                                aTypeName.AssignAscii( sTypeNm_2 );
+                                // 200 should be enough for the XML
+                                // version, encoding and !DOCTYPE
+                                // stuff I hope?
+                                sal_Char aBuffer2[200];
+                                nBytesRead = pStrm->Read( aBuffer2, sizeof(aBuffer2) - 1);
+                                aBuffer2[nBytesRead] = 0;
+                                if (strstr( aBuffer2, "<math>" ) != NULL ||
+                                    strstr( aBuffer2, "<math " ) != NULL)
+                                {
+                                    static const sal_Char sFltrNm_2[] = MATHML_XML;
+                                    static const sal_Char sTypeNm_2[] = "math_MathML_XML_Math";
+                                    aFilterName.AssignAscii( sFltrNm_2 );
+                                    aTypeName.AssignAscii( sTypeNm_2 );
+                                }
                             }
                         }
                     }
