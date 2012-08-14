@@ -947,7 +947,10 @@ void SfxTemplateManagerDlg::OnTemplateEdit ()
 
 void SfxTemplateManagerDlg::OnTemplateProperties ()
 {
+    const TemplateViewItem *pItem = static_cast<const TemplateViewItem*>(*maSelTemplates.begin());
+
     SfxTemplateInfoDlg aDlg;
+    aDlg.loadDocument(pItem->getPath());
     aDlg.Execute();
 }
 

@@ -25,6 +25,8 @@ public:
 
     ~SfxTemplateInfoDlg ();
 
+    void loadDocument (const OUString &rURL);
+
 private:
 
     PushButton maBtnClose;
