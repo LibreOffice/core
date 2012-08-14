@@ -40,6 +40,9 @@ TARFILE_NAME=hunspell-1.3.2
 TARFILE_MD5=3121aaf3e13e5d88dfff13fb4a5f1ab8
 ADDITIONAL_FILES+=config.h
 
+# hunspell-1.3.2-nullptr.patch, hunspell-1.3.2-literal.patch: reported upstream
+#  as <https://sourceforge.net/tracker/?func=detail&aid=3557292&group_id=143754&
+#  atid=756395> "Some C++11 related fixes"
 PATCH_FILES=\
     hunspell-twoaffixcompound.patch \
     hunspell-static.patch \
