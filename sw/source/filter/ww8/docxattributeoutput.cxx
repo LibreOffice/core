@@ -2412,6 +2412,11 @@ void DocxAttributeOutput::WriteOutliner(const OutlinerParaObject& rParaObj)
     m_pSerializer->endElementNS( XML_w, XML_textbox );
 }
 
+oox::drawingml::DrawingML& DocxAttributeOutput::GetDrawingML()
+{
+    return m_rDrawingML;
+}
+
 void DocxAttributeOutput::StartStyle( const String& rName, bool bPapFmt,
         sal_uInt16 nBase, sal_uInt16 nNext, sal_uInt16 /*nWwId*/, sal_uInt16 nId, bool bAutoUpdate )
 {

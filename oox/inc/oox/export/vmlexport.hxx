@@ -21,6 +21,7 @@
 #define _OOX_EXPORT_VMLEXPORT_HXX_
 
 #include <oox/dllapi.h>
+#include <oox/export/drawingml.hxx>
 #include <sax/fshelper.hxx>
 #include <filter/msfilter/escherex.hxx>
 #include <editeng/outlobj.hxx>
@@ -39,6 +40,7 @@ class OOX_DLLPUBLIC VMLTextExport
 {
 public:
     virtual void WriteOutliner(const OutlinerParaObject& rParaObj) = 0;
+    virtual oox::drawingml::DrawingML& GetDrawingML() = 0;
 protected:
     VMLTextExport() {}
     virtual ~VMLTextExport() {}

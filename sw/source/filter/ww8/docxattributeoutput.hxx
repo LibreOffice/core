@@ -637,6 +637,7 @@ public:
 
     /// VMLTextExport
     virtual void WriteOutliner(const OutlinerParaObject& rParaObj);
+    virtual oox::drawingml::DrawingML& GetDrawingML();
 };
 
 #endif // _DOCXATTRIBUTEOUTPUT_HXX_
