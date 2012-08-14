@@ -92,8 +92,13 @@ void TextParagraph::insertAt(
         {
             for( TextRunVector::const_iterator aIt = maRuns.begin(), aEnd = maRuns.end(); aIt != aEnd; ++aIt )
             {
+                sal_Int32 nLen = (*aIt)->getText().getLength();
+                // n#759180: Force use, maEndProperties for the last segment
+                // This is currently applied to only empty runs
+                if( !nLen && ( ( aIt + 1 ) == aEnd ) )
+                    (*aIt)->getTextCharacterProperties().assignUsed( maEndProperties );
                 nCharHeight = std::max< sal_Int32 >( nCharHeight, (*aIt)->insertAt( rFilterBase, xText, xAt, aTextCharacterStyle ) );
-                nParagraphSize += (*aIt)->getText().getLength();
+                nParagraphSize += nLen;
             }
         }
         xAt->gotoEnd( sal_True );
