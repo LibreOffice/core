@@ -106,21 +106,15 @@ oslModule SAL_CALL osl_loadModule(rtl_uString *ustrModuleName, sal_Int32 nRtldMo
 #if OSL_DEBUG_LEVEL>10
             debug_printf("osl_loadModule module %s", buffer);
 #endif
-            //rc = _DosLoadModule( szErrorMessage, sizeof( szErrorMessage), (PCSZ)buffer, &hModule);
-        //if (rc == NO_ERROR )
             hModule = dlopen( buffer, RTLD_LOCAL);
             if (hModule != NULL )
                 pModule = (oslModule)hModule;
             else
             {
-                if (rc == NO_ERROR )
-                    pModule = (oslModule)hModule;
-                else
-                {
                     sal_Char szError[ PATH_MAX*2 ];
-                    sprintf( szError, "Module: %s; rc: %d;\nReason: %s;\n"
+                    sprintf( szError, "Module: %s; errno: %d;\n"
                             "Please contact technical support and report above informations.\n\n",
-                            buffer, rc, szErrorMessage );
+                            buffer, errno );
 #if OSL_DEBUG_LEVEL>0
                     fprintf( stderr, szError);
 #endif
@@ -131,7 +125,6 @@ oslModule SAL_CALL osl_loadModule(rtl_uString *ustrModuleName, sal_Int32 nRtldMo
                         szError, "Critical error: DosLoadModule failed",
                         0, MB_ERROR | MB_OK | MB_MOVEABLE);
 #endif
-                }
             }
         }
     }
