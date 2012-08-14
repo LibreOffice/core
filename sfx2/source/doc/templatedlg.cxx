@@ -347,6 +347,9 @@ IMPL_LINK_NOARG(SfxTemplateManagerDlg,TBXViewHdl)
         else
             OnRepositoryDelete();
         break;
+    case TBI_TEMPLATE_SAVE:
+        OnTemplateSaveAs();
+        break;
     default:
         break;
     }
@@ -1093,6 +1096,25 @@ void SfxTemplateManagerDlg::OnRepositoryDelete()
         switchMainView(true);
 
         createRepositoryMenu();
+    }
+}
+
+void SfxTemplateManagerDlg::OnTemplateSaveAs()
+{
+    if (!maView->isOverlayVisible() && maSelFolders.empty())
+    {
+        return;
+    }
+
+    InputDialog aDlg(SfxResId(STR_INPUT_TEMPLATE_NEW).toString(),this);
+
+    if (aDlg.Execute())
+    {
+        OUString aName = aDlg.getEntryText();
+
+        if (!aName.isEmpty())
+        {
+        }
     }
 }
 

@@ -82,6 +82,7 @@ private:
     void OnTemplateExport ();
     void OnFolderDelete ();
     void OnRepositoryDelete ();
+    void OnTemplateSaveAs ();
 
     void centerTopButtons ();
 

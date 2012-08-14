@@ -80,6 +80,11 @@ String STR_MSG_ERROR_REPOSITORY_NAME
     Text [ en-US ] = "Failed to create repository \"$1\".\nA repository with this name may already exist.";
 };
 
+String STR_INPUT_TEMPLATE_NEW
+{
+    Text [ en-US ] = "Enter template name:";
+};
+
 ModelessDialog DLG_TEMPLATE_MANAGER
 {
     OutputSize = TRUE;
@@ -200,6 +205,12 @@ ModelessDialog DLG_TEMPLATE_MANAGER
                 Identifier = TBI_TEMPLATE_FOLDER_DEL;
                 Hide = TRUE;
                 Text [ en-US ] = "Delete";
+            };
+
+            ToolBoxItem
+            {
+                Identifier = TBI_TEMPLATE_SAVE;
+                Text [ en-US ] = "Save";
             };
         };
     };
