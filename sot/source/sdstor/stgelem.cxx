@@ -114,7 +114,7 @@ void StgHeader::Init()
 
     SetTOCStart( STG_EOF );
     SetDataFATStart( STG_EOF );
-    for( short i = 0; i < 109; i++ )
+    for( short i = 0; i < cFATPagesInHeader; i++ )
         SetFATPage( i, STG_FREE );
 }
 
@@ -149,7 +149,7 @@ sal_Bool StgHeader::Load( SvStream& r )
       >> nDataFATSize               // 40 # of data FATpages
       >> nMasterChain               // 44 chain to the next master block
       >> nMaster;                   // 48 # of additional master blocks
-    for( short i = 0; i < 109; i++ )
+    for( short i = 0; i < cFATPagesInHeader; i++ )
         r >> nMasterFAT[ i ];
 
     return ( r.GetErrorCode() == ERRCODE_NONE && Check() );
@@ -175,7 +175,7 @@ sal_Bool StgHeader::Store( StgIo& rIo )
       << nDataFATSize               // 40 # of data FAT pages
       << nMasterChain               // 44 chain to the next master block
       << nMaster;                   // 48 # of additional master blocks
-    for( short i = 0; i < 109; i++ )
+    for( short i = 0; i < cFATPagesInHeader; i++ )
         r << nMasterFAT[ i ];
     bDirty = !rIo.Good();
     return sal_Bool( !bDirty );
@@ -197,14 +197,14 @@ sal_Bool StgHeader::Check()
             && nFATSize > 0
             && nTOCstrm >= 0
             && nThreshold > 0
-            && ( nDataFAT == -2 || ( nDataFAT >= 0 && nDataFATSize > 0 ) )
-            && ( nMasterChain == -2 || ( nMasterChain >=0 && nMaster > 109 ) )
+            && ( nDataFAT == STG_EOF || ( nDataFAT >= 0 && nDataFATSize > 0 ) )
+            && ( nMasterChain == STG_EOF || ( nMasterChain >=0 && nMaster > 0 ) )
             && nMaster >= 0;
 }
 
 sal_Int32 StgHeader::GetFATPage( short n ) const
 {
-    if( n >= 0 && n < 109 )
+    if( n >= 0 && n < cFATPagesInHeader )
         return nMasterFAT[ n ];
     else
         return STG_EOF;
@@ -212,7 +212,7 @@ sal_Int32 StgHeader::GetFATPage( short n ) const
 
 void StgHeader::SetFATPage( short n, sal_Int32 nb )
 {
-    if( n >= 0 && n < 109 )
+    if( n >= 0 && n < cFATPagesInHeader )
     {
         if( nMasterFAT[ n ] != nb )
             bDirty = sal_True, nMasterFAT[ n ] = nb;
@@ -436,7 +436,9 @@ sal_Bool StgEntry::Load( const void* pFrom, sal_uInt32 nBufSize )
     sal_uInt16 n = nNameLen;
     if( n )
         n = ( n >> 1 ) - 1;
-    if( n > 31 || (nSize < 0 && cType != STG_STORAGE) || ( nPage1 < 0 && nPage1 != -2 ) )
+    if ( n > 31 ||
+         (nSize < 0 && cType != STG_STORAGE) ||
+         ( nPage1 < 0 && nPage1 != STG_EOF ) )
     {
         // the size makes no sence for the substorage
         // TODO/LATER: actually the size should be an unsigned value, but in this case it would mean a stream of more than 2Gb
