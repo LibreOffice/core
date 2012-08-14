@@ -4323,7 +4323,7 @@ PPTCharPropSet::PPTCharPropSet( sal_uInt32 nParagraph ) :
     mnLanguage[ 0 ] = mnLanguage[ 1 ] = mnLanguage[ 2 ] = 0;
 }
 
-PPTCharPropSet::PPTCharPropSet( PPTCharPropSet& rCharPropSet )
+PPTCharPropSet::PPTCharPropSet( const PPTCharPropSet& rCharPropSet )
 {
     pCharSet = rCharPropSet.pCharSet;
     pCharSet->mnRefCount++;
@@ -4337,7 +4337,7 @@ PPTCharPropSet::PPTCharPropSet( PPTCharPropSet& rCharPropSet )
     mnLanguage[ 2 ] = rCharPropSet.mnLanguage[ 2 ];
 }
 
-PPTCharPropSet::PPTCharPropSet( PPTCharPropSet& rCharPropSet, sal_uInt32 nParagraph )
+PPTCharPropSet::PPTCharPropSet( const PPTCharPropSet& rCharPropSet, sal_uInt32 nParagraph )
 {
     pCharSet = rCharPropSet.pCharSet;
     pCharSet->mnRefCount++;
@@ -4356,7 +4356,7 @@ PPTCharPropSet::~PPTCharPropSet()
     delete mpFieldItem;
 }
 
-PPTCharPropSet& PPTCharPropSet::operator=( PPTCharPropSet& rCharPropSet )
+PPTCharPropSet& PPTCharPropSet::operator=( const PPTCharPropSet& rCharPropSet )
 {
     if ( this != &rCharPropSet )
     {
@@ -5247,7 +5247,7 @@ PPTPortionObj::PPTPortionObj( const PPTStyleSheet& rStyleSheet, sal_uInt32 nInst
 {
 }
 
-PPTPortionObj::PPTPortionObj( PPTCharPropSet& rCharPropSet, const PPTStyleSheet& rStyleSheet, sal_uInt32 nInstance, sal_uInt32 nDepth ) :
+PPTPortionObj::PPTPortionObj( const PPTCharPropSet& rCharPropSet, const PPTStyleSheet& rStyleSheet, sal_uInt32 nInstance, sal_uInt32 nDepth ) :
     PPTCharPropSet  ( rCharPropSet ),
     mrStyleSheet    ( rStyleSheet ),
     mnInstance      ( nInstance ),
@@ -5255,7 +5255,7 @@ PPTPortionObj::PPTPortionObj( PPTCharPropSet& rCharPropSet, const PPTStyleSheet&
 {
 }
 
-PPTPortionObj::PPTPortionObj( PPTPortionObj& rPortionObj ) :
+PPTPortionObj::PPTPortionObj( const PPTPortionObj& rPortionObj ) :
     PPTCharPropSet      ( rPortionObj ),
     mrStyleSheet        ( rPortionObj.mrStyleSheet ),
     mnInstance          ( rPortionObj.mnInstance ),

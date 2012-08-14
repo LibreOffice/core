@@ -945,11 +945,11 @@ struct PPTCharPropSet
     void                SetColor( sal_uInt32 nColor );
 
                         explicit PPTCharPropSet( sal_uInt32 nParagraph );
-                        PPTCharPropSet( PPTCharPropSet& rCharPropSet );
-                        PPTCharPropSet( PPTCharPropSet& rCharPropSet, sal_uInt32 nParagraph );
+                        PPTCharPropSet( const PPTCharPropSet& rCharPropSet );
+                        PPTCharPropSet( const PPTCharPropSet& rCharPropSet, sal_uInt32 nParagraph );
                         ~PPTCharPropSet();
 
-    PPTCharPropSet&     operator=( PPTCharPropSet& rCharPropSet );
+    PPTCharPropSet&     operator=( const PPTCharPropSet& rCharPropSet );
 
 private:
     void                ImplMakeUnique();
@@ -1106,12 +1106,12 @@ public:
 
                     PPTPortionObj( const PPTStyleSheet&, sal_uInt32 nInstance, sal_uInt32 nDepth );
                     PPTPortionObj(
-                        PPTCharPropSet&,
+                        const PPTCharPropSet&,
                         const PPTStyleSheet&,
                         sal_uInt32 nInstance,
                         sal_uInt32 nDepth
                     );
-                    PPTPortionObj( PPTPortionObj& );
+                    PPTPortionObj( const PPTPortionObj& );
                     ~PPTPortionObj();
 
     // the following function should be removed during next full update
