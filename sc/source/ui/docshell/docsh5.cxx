@@ -364,10 +364,8 @@ ScDBData* ScDocShell::GetDBDataAdd( const ScRange& rMarked, ScGetDBMode eMode, S
 
     SCCOL nStartCol = nCol;
     SCROW nStartRow = nRow;
-    SCTAB nStartTab = nTab;
     SCCOL nEndCol = rMarked.aEnd.Col();
     SCROW nEndRow = rMarked.aEnd.Row();
-    SCTAB nEndTab = rMarked.aEnd.Tab();
 
     ScDBData* pData = NULL;
     ScDBData* pCursorData;
