@@ -493,7 +493,11 @@ IMPL_LINK(SfxTemplateManagerDlg, TVTemplateStateHdl, const ThumbnailViewItem*, p
             mpTemplateBar->Show();
         }
         else
+        {
+            mpTemplateBar->HideItem(TBI_TEMPLATE_EDIT);
+            mpTemplateBar->HideItem(TBI_TEMPLATE_PROPERTIES);
             mpTemplateBar->HideItem(TBI_TEMPLATE_DEFAULT);
+        }
 
         maSelTemplates.insert(pItem);
     }
@@ -510,7 +514,11 @@ IMPL_LINK(SfxTemplateManagerDlg, TVTemplateStateHdl, const ThumbnailViewItem*, p
                 mpActionBar->Show();
             }
             else if (maSelTemplates.size() == 1)
+            {
+                mpTemplateBar->ShowItem(TBI_TEMPLATE_EDIT);
+                mpTemplateBar->ShowItem(TBI_TEMPLATE_PROPERTIES);
                 mpTemplateBar->ShowItem(TBI_TEMPLATE_DEFAULT);
+            }
         }
     }
 
