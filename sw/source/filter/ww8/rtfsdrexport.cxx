@@ -314,7 +314,14 @@ void RtfSdrExport::Commit( EscherPropertyContainer& rProps, const Rectangle& rRe
                                 case 0x8000: // end
                                     break;
                                 default:
-                                    SAL_INFO("sw.rtf", OSL_THIS_FUNC << ": unhandled segment '" << nSeg << "' in the path");
+                                    // See EscherPropertyContainer::CreateCustomShapeProperties, by default nSeg is simply the number of points.
+                                    for (int i = 0; i < nSeg; ++i)
+                                    {
+                                        sal_Int32 nX = impl_GetPointComponent(pVerticesIt, nPointSize);
+                                        sal_Int32 nY = impl_GetPointComponent(pVerticesIt, nPointSize);
+                                        aVerticies.append(";(").append(nX).append(",").append(nY).append(")");
+                                        ++nVertices;
+                                    }
                                     break;
                             }
                         }

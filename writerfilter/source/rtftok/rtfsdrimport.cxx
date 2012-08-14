@@ -251,8 +251,9 @@ void RTFSdrImport::resolve(RTFShape& rShape)
                             aSegments[nIndex].Command = drawing::EnhancedCustomShapeSegmentCommand::ENDSUBPATH;
                             aSegments[nIndex].Count = sal_Int32(0);
                             break;
-                        default:
-                            SAL_INFO("writerfilter", OSL_THIS_FUNC << ": unhandled segment '" << hex << nSeg << "' in the path");
+                        default: // given number of lineto elements
+                            aSegments[nIndex].Command = drawing::EnhancedCustomShapeSegmentCommand::LINETO;
+                            aSegments[nIndex].Count = nSeg;
                             break;
                     }
                     nIndex++;
