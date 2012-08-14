@@ -391,10 +391,10 @@ void SAL_CALL SdrLightEmbeddedClient_Impl::activatingUI()
         xParentFrame->setActiveFrame( xOwnFrame );
 
     OLEObjCache& rObjCache = GetSdrGlobalData().GetOLEObjCache();
-    const sal_uIntPtr nCount = rObjCache.Count();
+    const sal_uIntPtr nCount = rObjCache.size();
     for(sal_Int32 i = nCount-1 ; i >= 0;--i)
     {
-        SdrOle2Obj* pObj = reinterpret_cast<SdrOle2Obj*>(rObjCache.GetObject(i));
+        SdrOle2Obj* pObj = rObjCache[i];
         if ( pObj != mpObj )
         {
             // only deactivate ole objects which belongs to the same frame

@@ -103,7 +103,7 @@ const LocaleDataWrapper*    SdrGlobalData::GetLocaleData()
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 OLEObjCache::OLEObjCache()
-:   Container( 0 )
+:   std::vector<SdrOle2Obj*>()
 {
     nSize = officecfg::Office::Common::Cache::DrawingEngine::OLE_Objects::get();
     pTimer = new AutoTimer();
@@ -124,15 +124,15 @@ OLEObjCache::~OLEObjCache()
 
 void OLEObjCache::UnloadOnDemand()
 {
-    if ( nSize < Count() )
+    if ( nSize < size() )
     {
         // more objects than configured cache size try to remove objects
         // of course not the freshly inserted one at nIndex=0
-        sal_uIntPtr nCount2 = Count();
+        sal_uIntPtr nCount2 = size();
         sal_uIntPtr nIndex = nCount2-1;
         while( nIndex && nCount2 > nSize )
         {
-            SdrOle2Obj* pUnloadObj = (SdrOle2Obj*) GetObject(nIndex--);
+            SdrOle2Obj* pUnloadObj = (*this)[nIndex--];
             if ( pUnloadObj )
             {
                 try
@@ -148,9 +148,9 @@ void OLEObjCache::UnloadOnDemand()
                         uno::Reference< frame::XModel > xUnloadModel( xUnloadObj->getComponent(), uno::UNO_QUERY );
                         if ( xUnloadModel.is() )
                         {
-                            for ( sal_uIntPtr nCheckInd = 0; nCheckInd < Count(); nCheckInd++ )
+                            for ( sal_uIntPtr nCheckInd = 0; nCheckInd < size(); nCheckInd++ )
                             {
-                                SdrOle2Obj* pCacheObj = (SdrOle2Obj*) GetObject(nCheckInd);
+                                SdrOle2Obj* pCacheObj = (*this)[nCheckInd];
                                 if ( pCacheObj && pCacheObj != pUnloadObj )
                                 {
                                     uno::Reference< frame::XModel > xParentModel = pCacheObj->GetParentXModel();
@@ -174,22 +174,24 @@ void OLEObjCache::UnloadOnDemand()
 
 void OLEObjCache::InsertObj(SdrOle2Obj* pObj)
 {
-    if ( Count() )
+    if ( !empty() )
     {
-        SdrOle2Obj* pExistingObj = (SdrOle2Obj*)GetObject( 0 );
+        SdrOle2Obj* pExistingObj = front();
         if ( pObj == pExistingObj )
             // the object is already on the top, nothing has to be changed
             return;
     }
 
     // get the old position of the object to know whether it is already in container
-    sal_uIntPtr nOldPos = GetPos( pObj );
+    iterator it = std::find( begin(), end(), pObj );
+    bool bFound = it != end();
 
+    if( it != end() )
+        erase( it );
     // insert object into first position
-    Remove( nOldPos );
-    Insert(pObj, (sal_uIntPtr) 0L);
+    insert(begin(), pObj);
 
-    if ( nOldPos == CONTAINER_ENTRY_NOTFOUND )
+    if ( !bFound )
     {
         // a new object was inserted, recalculate the cache
         UnloadOnDemand();
@@ -198,7 +200,9 @@ void OLEObjCache::InsertObj(SdrOle2Obj* pObj)
 
 void OLEObjCache::RemoveObj(SdrOle2Obj* pObj)
 {
-    Remove(pObj);
+    iterator it = std::find( begin(), end(), pObj );
+    if( it != end() )
+        erase( it );
 }
 
 sal_Bool OLEObjCache::UnloadObj(SdrOle2Obj* pObj)

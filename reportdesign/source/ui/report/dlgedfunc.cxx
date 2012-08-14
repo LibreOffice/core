@@ -442,10 +442,10 @@ void DlgEdFunc::deactivateOle(bool _bSelect)
 {
     OLEObjCache& rObjCache = GetSdrGlobalData().GetOLEObjCache();
     OReportController& rController = m_pParent->getSectionWindow()->getViewsWindow()->getView()->getReportView()->getController();
-    const sal_uLong nCount = rObjCache.Count();
+    const sal_uLong nCount = rObjCache.size();
     for(sal_uLong i = 0 ; i< nCount;++i)
     {
-        SdrOle2Obj* pObj = reinterpret_cast<SdrOle2Obj*>(rObjCache.GetObject(i));
+        SdrOle2Obj* pObj = rObjCache[i];
         if ( m_pParent->getPage() == pObj->GetPage() )
         {
             uno::Reference< embed::XEmbeddedObject > xObj = pObj->GetObjRef();
