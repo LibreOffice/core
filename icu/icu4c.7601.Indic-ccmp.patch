@@ -1,0 +1,43 @@
+--- misc/icu/source/layout/IndicReordering.cpp	2009-07-01 20:51:26.000000000 +0200
++++ misc/build/icu/source/layout/IndicReordering.cpp	2011-01-08 11:12:49.950566538 +0100
+@@ -13,6 +13,7 @@
+ 
+ U_NAMESPACE_BEGIN
+ 
++#define ccmpFeatureTag LE_CCMP_FEATURE_TAG
+ #define loclFeatureTag LE_LOCL_FEATURE_TAG
+ #define initFeatureTag LE_INIT_FEATURE_TAG
+ #define nuktFeatureTag LE_NUKT_FEATURE_TAG
+@@ -35,6 +36,7 @@
+ #define caltFeatureTag LE_CALT_FEATURE_TAG
+ #define kernFeatureTag LE_KERN_FEATURE_TAG
+ 
++#define ccmpFeatureMask 0x00000001UL
+ #define loclFeatureMask 0x80000000UL
+ #define rphfFeatureMask 0x40000000UL
+ #define blwfFeatureMask 0x20000000UL
+@@ -73,7 +75,7 @@
+ 
+ #define repositionedGlyphMask   0x00000002UL
+ 
+-#define basicShapingFormsMask ( loclFeatureMask | nuktFeatureMask | akhnFeatureMask | rkrfFeatureMask | blwfFeatureMask | halfFeatureMask | vatuFeatureMask | cjctFeatureMask )
++#define basicShapingFormsMask ( ccmpFeatureMask | loclFeatureMask | nuktFeatureMask | akhnFeatureMask | rkrfFeatureMask | blwfFeatureMask | halfFeatureMask | vatuFeatureMask | cjctFeatureMask )
+ #define positioningFormsMask ( kernFeatureMask | distFeatureMask | abvmFeatureMask | blwmFeatureMask )
+ #define presentationFormsMask ( presFeatureMask | abvsFeatureMask | blwsFeatureMask | pstsFeatureMask | halnFeatureMask | caltFeatureMask )
+ 
+@@ -480,6 +482,7 @@
+ #define tagArray0 (rphfFeatureMask | tagArray1)
+ 
+ static const FeatureMap featureMap[] = {
++    {ccmpFeatureTag, ccmpFeatureMask},
+     {loclFeatureTag, loclFeatureMask},
+     {initFeatureTag, initFeatureMask},
+     {nuktFeatureTag, nuktFeatureMask},
+@@ -502,6 +505,7 @@
+ static const le_int32 featureCount = LE_ARRAY_SIZE(featureMap);
+ 
+ static const FeatureMap v2FeatureMap[] = {
++    {ccmpFeatureTag, ccmpFeatureMask},
+ 	{loclFeatureTag, loclFeatureMask},
+     {nuktFeatureTag, nuktFeatureMask},
+     {akhnFeatureTag, akhnFeatureMask},

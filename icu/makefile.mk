@@ -42,9 +42,17 @@ TARFILE_ROOTDIR=icu
 #icu4c.8320.freeserif.crash.patch, see
 #http://bugs.icu-project.org/trac/ticket/8320 for crash with FreeSerif
 
+#icu4c.7601.Indic-ccmp.patch
+#http://bugs.icu-project.org/trac/ticket/7601 ccmp feature for Indic Languages
+
+#icu4c.8198.revert.icu5431.patch
+#http://bugs.icu-project.org/trac/ticket/8198 rendering with 0D30 and 0D31
+
 PATCH_FILES=\
     icu4c-build.patch \
     icu4c.8320.freeserif.crash.patch \
+    icu4c.8198.revert.icu5431.patch \
+    icu4c.7601.Indic-ccmp.patch \
     icu4c-aix.patch \
     icu4c-wchar_t.patch \
     icu4c-warnings.patch \
