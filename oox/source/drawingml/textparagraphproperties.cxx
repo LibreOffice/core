@@ -381,7 +381,8 @@ void TextParagraphProperties::apply( const TextParagraphProperties& rSourceProps
 }
 
 void TextParagraphProperties::pushToPropSet( const ::oox::core::XmlFilterBase* pFilterBase,
-    const Reference < XPropertySet >& xPropSet, PropertyMap& rioBulletMap, const BulletList* pMasterBuList, sal_Bool bApplyBulletMap, float fCharacterSize ) const
+    const Reference < XPropertySet >& xPropSet, PropertyMap& rioBulletMap, const BulletList* pMasterBuList, sal_Bool bApplyBulletMap, float fCharacterSize,
+    bool bPushDefaultValues ) const
 {
     PropertySet aPropSet( xPropSet );
     aPropSet.setProperties( maTextParagraphPropertyMap );
@@ -396,9 +397,9 @@ void TextParagraphProperties::pushToPropSet( const ::oox::core::XmlFilterBase* p
 
     maBulletList.pushToPropMap( pFilterBase, rioBulletMap );
 
-    if ( maParaTopMargin.bHasValue )
+    if ( maParaTopMargin.bHasValue || bPushDefaultValues )
         aPropSet.setProperty( PROP_ParaTopMargin, maParaTopMargin.toMargin( fCharacterSize != 0.0 ? fCharacterSize : getCharHeightPoints ( 18.0 ) ) );
-    if ( maParaBottomMargin.bHasValue )
+    if ( maParaBottomMargin.bHasValue || bPushDefaultValues )
         aPropSet.setProperty( PROP_ParaBottomMargin, maParaBottomMargin.toMargin( fCharacterSize != 0.0 ? fCharacterSize : getCharHeightPoints ( 18.0 ) ) );
     if ( nNumberingType == NumberingType::BITMAP )
     {

@@ -103,7 +103,7 @@ void TextParagraph::insertAt(
         float fCharacterSize = nCharHeight > 0 ? GetFontHeight( nCharHeight ) :  18;
         if ( pTextParagraphStyle.get() )
         {
-            pTextParagraphStyle->pushToPropSet( &rFilterBase, xProps, aioBulletList, NULL, sal_True, fCharacterSize );
+            pTextParagraphStyle->pushToPropSet( &rFilterBase, xProps, aioBulletList, NULL, sal_True, fCharacterSize, true );
             fCharacterSize = pTextParagraphStyle->getCharHeightPoints( fCharacterSize );
 
             // bullets have same color as following texts by default
