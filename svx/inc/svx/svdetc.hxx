@@ -119,20 +119,6 @@ class SfxItemSet;
 // Bei XFILL_NONE gibt's sal_False und rCol bleibt unveraendert.
 SVX_DLLPUBLIC bool GetDraftFillColor(const SfxItemSet& rSet, Color& rCol);
 
-// Ein Container fuer USHORTs (im Prinzip ein dynamisches Array)
-class UShortCont {
-    Container aArr;
-public:
-    UShortCont(sal_uInt16 nBlock, sal_uInt16 nInit, sal_uInt16 nResize): aArr(nBlock,nInit,nResize) {}
-    void   Clear()                                           { aArr.Clear(); }
-    void   Insert(sal_uInt16 nElem, sal_uIntPtr nPos=CONTAINER_APPEND) { aArr.Insert((void*)sal_uIntPtr(nElem),nPos); }
-    void   Remove(sal_uIntPtr nPos)                                { aArr.Remove(nPos); }
-    void   Replace(sal_uInt16 nElem, sal_uIntPtr nPos)                 { aArr.Replace((void*)sal_uIntPtr(nElem),nPos); }
-    sal_uInt16 GetObject(sal_uIntPtr nPos)                       const { return sal_uInt16(sal_uIntPtr(aArr.GetObject(nPos))); }
-    sal_uIntPtr  GetPos(sal_uInt16 nElem)                        const { return aArr.GetPos((void*)(sal_uIntPtr)nElem); }
-    sal_uIntPtr  GetCount()                                  const { return aArr.Count(); }
-};
-
 class ContainerSorter {
 protected:
     Container& rCont;
