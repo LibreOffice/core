@@ -427,6 +427,15 @@ struct XclExpCellArea : public XclCellArea
     void                SaveXml( XclExpXmlStream& rStrm ) const;
 };
 
+struct XclExpColor
+{
+    Color maColor;
+
+    bool FillFromItemSet( const SfxItemSet& rItemSet );
+
+    void SaveXml( XclExpXmlStream& rStrm ) const;
+};
+
 // ----------------------------------------------------------------------------
 
 /** A combination of unique XF identifier with real Excel XF index. */
@@ -733,7 +742,7 @@ class XclExpDxf : public XclExpRecordBase, protected XclExpRoot
 {
 public:
     XclExpDxf( const XclExpRoot& rRoot, XclExpCellAlign* pAlign, XclExpCellBorder* pBorder,
-            XclExpFont* pFont, XclExpNumFmt* pNumberFmt, XclExpCellProt* pProt, XclExpCellArea* pCellArea);
+            XclExpFont* pFont, XclExpNumFmt* pNumberFmt, XclExpCellProt* pProt, XclExpColor* pColor);
     virtual ~XclExpDxf();
 
     virtual void SaveXml( XclExpXmlStream& rStrm );
@@ -744,7 +753,7 @@ private:
     XclExpFont* mpFont;
     XclExpNumFmt* mpNumberFmt;
     XclExpCellProt* mpProt;
-    XclExpCellArea* mpCellArea;
+    XclExpColor* mpColor;
 };
 
 class XclExpDxfs : public XclExpRecordBase, protected XclExpRoot

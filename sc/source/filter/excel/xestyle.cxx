@@ -1885,6 +1885,33 @@ void XclExpCellArea::SaveXml( XclExpXmlStream& rStrm ) const
     rStyleSheet->endElement( XML_fill );
 }
 
+
+bool XclExpColor::FillFromItemSet( const SfxItemSet& rItemSet )
+{
+    if( !ScfTools::CheckItem( rItemSet, ATTR_BACKGROUND, true ) )
+        return false;
+
+    const SvxBrushItem& rBrushItem = GETITEM( rItemSet, SvxBrushItem, ATTR_BACKGROUND );
+    maColor = rBrushItem.GetColor();
+
+    return true;
+}
+
+void XclExpColor::SaveXml( XclExpXmlStream& rStrm ) const
+{
+    sax_fastparser::FSHelperPtr& rStyleSheet = rStrm.GetCurrentStream();
+    rStyleSheet->startElement( XML_fill,
+            FSEND );
+    rStyleSheet->startElement( XML_patternFill,
+            FSEND );
+    rStyleSheet->singleElement( XML_bgColor,
+            XML_rgb, XclXmlUtils::ToOString(maColor).getStr(),
+            FSEND );
+
+    rStyleSheet->endElement( XML_patternFill );
+    rStyleSheet->endElement( XML_fill );
+}
+
 // ----------------------------------------------------------------------------
 
 XclExpXFId::XclExpXFId() :
@@ -2898,11 +2925,11 @@ XclExpDxfs::XclExpDxfs( const XclExpRoot& rRoot )
                             pCellProt = NULL;
                         }
 
-                        XclExpCellArea* pCellArea = new XclExpCellArea;
-                        if(!pCellArea->FillFromItemSet( rSet, GetPalette(), GetBiff() ))
+                        XclExpColor* pColor = new XclExpColor();
+                        if(!pColor->FillFromItemSet( rSet ))
                         {
-                            delete pCellArea;
-                            pCellArea = NULL;
+                            delete pColor;
+                            pColor = NULL;
                         }
 
                         XclExpFont* pFont = NULL;
@@ -2923,7 +2950,7 @@ XclExpDxfs::XclExpDxfs( const XclExpRoot& rRoot )
                             ++nNumFmtIndex;
                         }
 
-                        maDxf.push_back(new XclExpDxf( rRoot, pAlign, pBorder, pFont, pNumFormat, pCellProt, pCellArea ));
+                        maDxf.push_back(new XclExpDxf( rRoot, pAlign, pBorder, pFont, pNumFormat, pCellProt, pColor ));
                         ++nIndex;
                     }
 
@@ -2962,16 +2989,15 @@ void XclExpDxfs::SaveXml( XclExpXmlStream& rStrm )
 // ============================================================================
 
 XclExpDxf::XclExpDxf( const XclExpRoot& rRoot, XclExpCellAlign* pAlign, XclExpCellBorder* pBorder,
-            XclExpFont* pFont, XclExpNumFmt* pNumberFmt, XclExpCellProt* pProt, XclExpCellArea* pCellArea)
+            XclExpFont* pFont, XclExpNumFmt* pNumberFmt, XclExpCellProt* pProt, XclExpColor* pColor)
     : XclExpRoot( rRoot ),
     mpAlign(pAlign),
     mpBorder(pBorder),
     mpFont(pFont),
     mpNumberFmt(pNumberFmt),
     mpProt(pProt),
-    mpCellArea(pCellArea)
+    mpColor(pColor)
 {
-
 }
 
 XclExpDxf::~XclExpDxf()
@@ -2981,7 +3007,7 @@ XclExpDxf::~XclExpDxf()
     delete mpFont;
     delete mpNumberFmt;
     delete mpProt;
-    delete mpCellArea;
+    delete mpColor;
 }
 
 void XclExpDxf::SaveXml( XclExpXmlStream& rStrm )
@@ -2999,8 +3025,8 @@ void XclExpDxf::SaveXml( XclExpXmlStream& rStrm )
         mpNumberFmt->SaveXml(rStrm);
     if (mpProt)
         mpProt->SaveXml(rStrm);
-    if (mpCellArea)
-        mpCellArea->SaveXml(rStrm);
+    if (mpColor)
+        mpColor->SaveXml(rStrm);
     rStyleSheet->endElement( XML_dxf );
 }
 
