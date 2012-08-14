@@ -183,7 +183,8 @@ namespace basegfx
                                      const B2DVector& rOffset,
                                      sal_uInt32       nSteps,
                                      double           fBorder,
-                                     double           fAngle)
+                                     double           fAngle,
+                                     bool             bSquare)
     {
         o_rGradientInfo.maTextureTransform.identity();
         o_rGradientInfo.maBackTextureTransform.identity();
@@ -195,6 +196,16 @@ namespace basegfx
         double fTargetSizeY(rTargetRange.getHeight());
         double fTargetOffsetX(rTargetRange.getMinX());
         double fTargetOffsetY(rTargetRange.getMinY());
+
+        // add object expansion
+        if(bSquare)
+        {
+            const double fOriginalDiag(sqrt((fTargetSizeX * fTargetSizeX) + (fTargetSizeY * fTargetSizeY)));
+            fTargetOffsetX -= (fOriginalDiag - fTargetSizeX) / 2.0;
+            fTargetOffsetY -= (fOriginalDiag - fTargetSizeY) / 2.0;
+            fTargetSizeX = fOriginalDiag;
+            fTargetSizeY = fOriginalDiag;
+        }
 
         // add object expansion
         if(0.0 != fAngle)
@@ -320,7 +331,8 @@ namespace basegfx
                                  rOffset,
                                  nSteps,
                                  fBorder,
-                                 fAngle);
+                                 fAngle,
+                                 true);
             return o_rGradientInfo;
         }
 
@@ -336,7 +348,8 @@ namespace basegfx
                                  rOffset,
                                  nSteps,
                                  fBorder,
-                                 fAngle);
+                                 fAngle,
+                                 false);
             return o_rGradientInfo;
         }
 
