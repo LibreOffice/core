@@ -3101,8 +3101,11 @@ throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeE
 
             SCTAB nTabCount = pDoc->GetTableCount();
             for (SCTAB nTab=0; nTab<nTabCount; ++nTab)
+            {
+                pDoc->SetDrawPageSize(nTab);
                 if (!pSheetData->IsSheetBlocked( nTab ))
                     pDoc->SetStreamValid( nTab, true );
+            }
         }
         aTables.FixupOLEs();
     }
