@@ -134,8 +134,10 @@ public class PresentationFragment extends Fragment {
 
                 boolean aPortrait = (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT);
 
-                int aFlowSize = mTopView.getHeight();
-                int aViewSize = mLayout.getHeight();
+                int aFlowSize = aPortrait ? mTopView.getHeight() : mTopView
+                                .getWidth();
+                int aViewSize = aPortrait ? mLayout.getHeight() : mLayout
+                                .getWidth();
 
                 // Calculate height change, taking limits into account
                 int aDiff = (int) (aPortrait ? aEvent.getY() : aEvent.getX());
@@ -163,12 +165,12 @@ public class PresentationFragment extends Fragment {
                         aDiff = (int) (aHeightNew - mTopView.getImageHeight());
                     }
                 } else {
-                    aWidthNew = mTopView.getImageWidth();
+                    aWidthNew = mTopView.getImageWidth() + aDiff;
                     aHeightNew = (float) (aWidthNew / aRatio);
                     //              Too High -- so scale down
                     if (aHeightNew > mLayout.getHeight() - 50) {
                         aHeightNew = mLayout.getHeight() - 50;
-                        aWidthNew = (float) (aHeightNew / aRatio);
+                        aWidthNew = (float) (aHeightNew * aRatio);
                         aDiff = (int) (aWidthNew - mTopView.getImageWidth());
                     }
                 }
