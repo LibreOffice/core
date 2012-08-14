@@ -60,6 +60,11 @@
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <drawinglayer/XShapeDumper.hxx>
 
+#include <editeng/editobj.hxx>
+#include <editeng/outlobj.hxx>
+#include <editeng/ulspitem.hxx>
+#include <editeng/fhgtitem.hxx>
+
 /* Implementation of Filters test */
 
 using namespace ::com::sun::star;
@@ -78,9 +83,11 @@ public:
     virtual void tearDown();
 
     void test();
+    void testN759180();
 
     CPPUNIT_TEST_SUITE(SdFiltersTest);
     CPPUNIT_TEST(test);
+    CPPUNIT_TEST(testN759180);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -150,6 +157,44 @@ void SdFiltersTest::test()
     ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/odp/text-test.odp"));
     testStuff(xDocShRef);
     }*/
+}
+
+void SdFiltersTest::testN759180()
+{
+    ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/n759180.pptx"));
+    CPPUNIT_ASSERT_MESSAGE( "failed to load", xDocShRef.Is() );
+    CPPUNIT_ASSERT_MESSAGE( "not in destruction", !xDocShRef->IsInDestruction() );
+
+    SdDrawDocument *pDoc = xDocShRef->GetDoc();
+    CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
+    const SdrPage *pPage = pDoc->GetPage (1);
+    CPPUNIT_ASSERT_MESSAGE( "no page", pPage != NULL );
+
+    //sal_uIntPtr nObjs = pPage->GetObjCount();
+    //for (sal_uIntPtr i = 0; i < nObjs; i++)
+    {
+        // Get the object
+        SdrObject *pObj = pPage->GetObj(0);
+        SdrTextObj *pTxtObj = dynamic_cast<SdrTextObj *>( pObj );
+        CPPUNIT_ASSERT(pTxtObj);
+        std::vector<EECharAttrib> rLst;
+        const EditTextObject& aEdit = pTxtObj->GetOutlinerParaObject()->GetTextObject();
+        const SvxULSpaceItem *pULSpace = dynamic_cast<const SvxULSpaceItem *>(aEdit.GetParaAttribs(0).GetItem(EE_PARA_ULSPACE));
+        CPPUNIT_ASSERT(pULSpace);
+        CPPUNIT_ASSERT_MESSAGE( "Para bottom spacing is wrong!", pULSpace->GetLower() == 0 );
+        aEdit.GetCharAttribs(1, rLst);
+        for( std::vector<EECharAttrib>::reverse_iterator it = rLst.rbegin(); it!=rLst.rend(); it++)
+        {
+            const SvxFontHeightItem * pFontHeight = dynamic_cast<const SvxFontHeightItem *>((*it).pAttr);
+            if(pFontHeight)
+            {
+                // nStart == 9
+                // font height = 5 => 5*2540/72
+                CPPUNIT_ASSERT_MESSAGE( "Font height is wrong", pFontHeight->GetHeight() == 176 );
+                break;
+            }
+        }
+    }
 }
 
 void SdFiltersTest::testStuff(::sd::DrawDocShellRef xDocShRef, const rtl::OString& fileNameBase)
