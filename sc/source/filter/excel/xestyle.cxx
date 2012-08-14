@@ -3002,12 +3002,6 @@ XclExpDxf::XclExpDxf( const XclExpRoot& rRoot, XclExpCellAlign* pAlign, XclExpCe
 
 XclExpDxf::~XclExpDxf()
 {
-    delete mpAlign;
-    delete mpBorder;
-    delete mpFont;
-    delete mpNumberFmt;
-    delete mpProt;
-    delete mpColor;
 }
 
 void XclExpDxf::SaveXml( XclExpXmlStream& rStrm )

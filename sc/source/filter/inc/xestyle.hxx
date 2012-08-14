@@ -748,12 +748,12 @@ public:
     virtual void SaveXml( XclExpXmlStream& rStrm );
 
 private:
-    XclExpCellAlign* mpAlign;
-    XclExpCellBorder* mpBorder;
-    XclExpFont* mpFont;
-    XclExpNumFmt* mpNumberFmt;
-    XclExpCellProt* mpProt;
-    XclExpColor* mpColor;
+    boost::scoped_ptr<XclExpCellAlign> mpAlign;
+    boost::scoped_ptr<XclExpCellBorder> mpBorder;
+    boost::scoped_ptr<XclExpFont> mpFont;
+    boost::scoped_ptr<XclExpNumFmt> mpNumberFmt;
+    boost::scoped_ptr<XclExpCellProt> mpProt;
+    boost::scoped_ptr<XclExpColor> mpColor;
 };
 
 class XclExpDxfs : public XclExpRecordBase, protected XclExpRoot
