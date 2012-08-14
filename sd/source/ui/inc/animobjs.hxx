@@ -132,7 +132,6 @@ private:
     static const size_t EMPTY_FRAMELIST = ULONG_MAX;
     size_t          m_nCurrentFrame;
     SdDrawDocument* pMyDoc;
-    BitmapEx*       pBitmapEx;
 
     Size            aSize;
     Size            aFltWinSize;
@@ -158,7 +157,7 @@ private:
     DECL_LINK( ModifyBitmapHdl, void * );
     DECL_LINK( ModifyTimeHdl, void * );
 
-    void            UpdateControl( sal_uLong nPos, sal_Bool bDisableCtrls = sal_False );
+    void            UpdateControl(bool bDisableCtrls = false);
     void            ResetAttrs();
     void            WaitInEffect( sal_uLong nMilliSeconds, sal_uLong nTime,
                                         SfxProgress* pStbMgr ) const;

@@ -163,7 +163,6 @@ AnimationWindow::AnimationWindow( SfxBindings* pInBindings,
 
         pWin                ( pParent ),
         m_nCurrentFrame     ( EMPTY_FRAMELIST ),
-        pBitmapEx           ( NULL ),
 
         bMovie              ( sal_False ),
         bAllObjects         ( sal_False ),
@@ -240,9 +239,8 @@ AnimationWindow::~AnimationWindow()
 
 IMPL_LINK_NOARG(AnimationWindow, ClickFirstHdl)
 {
-    pBitmapEx = (m_FrameList.empty()) ? 0 : m_FrameList.front().first;
-    m_nCurrentFrame = (pBitmapEx) ? 0 : EMPTY_FRAMELIST;
-    UpdateControl(m_nCurrentFrame);
+    m_nCurrentFrame = (m_FrameList.empty()) ? EMPTY_FRAMELIST : 0;
+    UpdateControl();
 
     return( 0L );
 }
@@ -311,9 +309,8 @@ IMPL_LINK( AnimationWindow, ClickPlayHdl, void *, p )
         // make list and view consistent
         assert(0 < i && i < m_FrameList.size());
         m_nCurrentFrame = i;
-        pBitmapEx = m_FrameList[i].first;
 
-        UpdateControl( i, bDisableCtrls );
+        UpdateControl(bDisableCtrls);
 
         if( aRbtBitmap.IsChecked() )
         {
@@ -359,7 +356,10 @@ IMPL_LINK( AnimationWindow, ClickPlayHdl, void *, p )
     // Um die Controls wieder zu enablen
     bMovie = sal_False;
     if (nCount > 0)
-        UpdateControl(i);
+    {
+        assert(i == m_nCurrentFrame);
+        UpdateControl();
+    }
 
     if( pProgress )
     {
@@ -378,9 +378,9 @@ IMPL_LINK( AnimationWindow, ClickPlayHdl, void *, p )
 
 IMPL_LINK_NOARG(AnimationWindow, ClickLastHdl)
 {
-    pBitmapEx = (m_FrameList.empty()) ? 0 : m_FrameList.back().first;
-    m_nCurrentFrame = (pBitmapEx) ? m_FrameList.size() - 1 : EMPTY_FRAMELIST;
-    UpdateControl(m_nCurrentFrame);
+    m_nCurrentFrame =
+        (m_FrameList.empty()) ? EMPTY_FRAMELIST : m_FrameList.size() - 1 ;
+    UpdateControl();
 
     return( 0L );
 }
@@ -389,7 +389,7 @@ IMPL_LINK_NOARG(AnimationWindow, ClickLastHdl)
 
 IMPL_LINK( AnimationWindow, ClickRbtHdl, void *, p )
 {
-    if( !pBitmapEx || p == &aRbtGroup || aRbtGroup.IsChecked() )
+    if (m_FrameList.empty() || p == &aRbtGroup || aRbtGroup.IsChecked())
     {
         aTimeField.SetText( String() );
         aTimeField.Enable( sal_False );
@@ -434,10 +434,8 @@ IMPL_LINK( AnimationWindow, ClickRemoveBitmapHdl, void *, pBtn )
 
     if( pBtn == &aBtnRemoveBitmap )
     {
-        pBitmapEx = m_FrameList[m_nCurrentFrame].first;
-        delete pBitmapEx;
-        Time *const pTime = m_FrameList[m_nCurrentFrame].second;
-        delete pTime;
+        delete m_FrameList[m_nCurrentFrame].first;
+        delete m_FrameList[m_nCurrentFrame].second;
         m_FrameList.erase(m_FrameList.begin() + m_nCurrentFrame);
 
         pObject = pPage->GetObj(m_nCurrentFrame);
@@ -468,8 +466,7 @@ IMPL_LINK( AnimationWindow, ClickRemoveBitmapHdl, void *, pBtn )
             for (size_t i = m_FrameList.size(); i > 0; )
             {
                 --i;
-                pBitmapEx = m_FrameList[i].first;
-                delete pBitmapEx;
+                delete m_FrameList[i].first;
 
                 pObject = pPage->GetObj( i );
                 if( pObject )
@@ -500,7 +497,7 @@ IMPL_LINK( AnimationWindow, ClickRemoveBitmapHdl, void *, pBtn )
     Fraction aFrac( GetScale() );
     aCtlDisplay.SetScale( aFrac );
 
-    UpdateControl(m_nCurrentFrame);
+    UpdateControl();
 
     return( 0L );
 }
@@ -529,9 +526,8 @@ IMPL_LINK_NOARG(AnimationWindow, ModifyBitmapHdl)
     }
 
     m_nCurrentFrame = nBmp - 1;
-    pBitmapEx = m_FrameList[m_nCurrentFrame].first;
 
-    UpdateControl(m_nCurrentFrame);
+    UpdateControl();
 
     return( 0L );
 }
@@ -551,16 +547,17 @@ IMPL_LINK_NOARG(AnimationWindow, ModifyTimeHdl)
 
 // -----------------------------------------------------------------------
 
-void AnimationWindow::UpdateControl( sal_uLong nListPos, sal_Bool bDisableCtrls )
+void AnimationWindow::UpdateControl(bool const bDisableCtrls)
 {
     String aString;
 
-    if( pBitmapEx )
+    if (!m_FrameList.empty())
     {
-        BitmapEx aBmp( *pBitmapEx );
+        BitmapEx aBmp(*m_FrameList[m_nCurrentFrame].first);
 
         SdPage* pPage = pMyDoc->GetSdPage(0, PK_STANDARD);
-        SdrObject* pObject = (SdrObject*) pPage->GetObj( (sal_uLong) nListPos );
+        SdrObject *const pObject =
+            static_cast<SdrObject*>(pPage->GetObj(m_nCurrentFrame));
         if( pObject )
         {
             VirtualDevice   aVD;
@@ -587,7 +584,7 @@ void AnimationWindow::UpdateControl( sal_uLong nListPos, sal_Bool bDisableCtrls 
     }
     else
     {
-        aCtlDisplay.SetBitmapEx( pBitmapEx );
+        aCtlDisplay.SetBitmapEx(0);
     }
     aCtlDisplay.Invalidate();
     aCtlDisplay.Update();
@@ -595,9 +592,9 @@ void AnimationWindow::UpdateControl( sal_uLong nListPos, sal_Bool bDisableCtrls 
     aFiCount.SetText(rtl::OUString::valueOf(
                 static_cast<sal_Int64>(m_FrameList.size())));
 
-    if( pBitmapEx && !bMovie )
+    if (!m_FrameList.empty() && !bMovie)
     {
-        aNumFldBitmap.SetValue( nListPos + 1 );
+        aNumFldBitmap.SetValue(m_nCurrentFrame + 1);
 
         // Wenn mind. 1 Objekt in der Liste ist
         aBtnFirst.Enable();
@@ -663,7 +660,7 @@ void AnimationWindow::ResetAttrs()
     // LoopCount
     aLbLoopCount.SelectEntryPos( aLbLoopCount.GetEntryCount() - 1);
 
-    UpdateControl( 0 );
+    UpdateControl();
 }
 
 // -----------------------------------------------------------------------
@@ -889,7 +886,8 @@ void AnimationWindow::AddObj (::sd::View& rView )
                     {
                         const AnimationBitmap& rAnimBmp = aAnimation.Get( i );
 
-                        pBitmapEx = new BitmapEx( rAnimBmp.aBmpEx );
+                        BitmapEx *const pBitmapEx =
+                            new BitmapEx(rAnimBmp.aBmpEx);
 
                         // LoopCount
                         if( i == 0 )
@@ -926,7 +924,9 @@ void AnimationWindow::AddObj (::sd::View& rView )
                 {
                     SdrObject* pSnapShot = (SdrObject*) pObjList->GetObj( (sal_uLong) nObject );
 
-                    pBitmapEx = new BitmapEx( SdrExchangeView::GetObjGraphic( pSnapShot->GetModel(), pSnapShot ).GetBitmapEx() );
+                    BitmapEx *const pBitmapEx = new BitmapEx(
+                        SdrExchangeView::GetObjGraphic(
+                            pSnapShot->GetModel(), pSnapShot).GetBitmapEx() );
 
                     Time* pTime = new Time( aTimeField.GetTime() );
 
@@ -946,7 +946,8 @@ void AnimationWindow::AddObj (::sd::View& rView )
         // Auch ein einzelnes animiertes Objekt
         if( !bAnimObj && !( bAllObjects && nMarkCount > 1 ) )
         {
-            pBitmapEx = new BitmapEx( rView.GetAllMarkedGraphic().GetBitmapEx() );
+            BitmapEx *const pBitmapEx =
+                new BitmapEx(rView.GetAllMarkedGraphic().GetBitmapEx());
 
             Time* pTime = new Time( aTimeField.GetTime() );
 
@@ -974,7 +975,9 @@ void AnimationWindow::AddObj (::sd::View& rView )
                     // Clone
                     SdrObject* pObject = rMarkList.GetMark( nObject )->GetMarkedSdrObj();
 
-                    pBitmapEx = new BitmapEx( SdrExchangeView::GetObjGraphic( pObject->GetModel(), pObject ).GetBitmapEx() );
+                    BitmapEx *const pBitmapEx = new BitmapEx(
+                        SdrExchangeView::GetObjGraphic(
+                            pObject->GetModel(), pObject).GetBitmapEx() );
 
                     Time* pTime = new Time( aTimeField.GetTime() );
 
@@ -1017,7 +1020,7 @@ void AnimationWindow::AddObj (::sd::View& rView )
         Fraction aFrac( GetScale() );
         aCtlDisplay.SetScale( aFrac );
 
-        UpdateControl(m_nCurrentFrame);
+        UpdateControl();
     }
 }
 
@@ -1072,7 +1075,7 @@ void AnimationWindow::CreateAnimObj (::sd::View& rView )
             long  nTime = pTime->Get100Sec();
             nTime += pTime->GetSec() * 100;
 
-            pBitmapEx = m_FrameList[i].first;
+            BitmapEx const*const pBitmapEx = m_FrameList[i].first;
 
             // Offset fuer die gewuenschte Ausrichtung bestimmen
             const Size aBitmapSize( pBitmapEx->GetSizePixel() );
@@ -1247,7 +1250,7 @@ void AnimationWindow::DataChanged( const DataChangedEvent& rDCEvt )
 
     if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) && (rDCEvt.GetFlags() & SETTINGS_STYLE) )
     {
-        UpdateControl(m_nCurrentFrame);
+        UpdateControl();
     }
 }
 
