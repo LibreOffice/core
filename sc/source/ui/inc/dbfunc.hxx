@@ -75,6 +75,7 @@ public:
                     // DB-Bereich vom Cursor
     ScDBData*       GetDBData( sal_Bool bMarkArea = sal_True, ScGetDBMode eMode = SC_DB_MAKE, ScGetDBSelection eSel = SC_DBSEL_KEEP );
 
+    //ScRange         GetDBRange( BOOL bMark, bool bIgnoreNotes );
     void            NotifyCloseDbNameDlg( const ScDBCollection& rNewColl, const List& rDelAreaList );
 
     void            Consolidate( const ScConsolidateParam& rParam, sal_Bool bRecord = sal_True );

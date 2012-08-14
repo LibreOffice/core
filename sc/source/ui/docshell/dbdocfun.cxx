@@ -592,7 +592,7 @@ sal_Bool ScDBDocFunc::Sort( SCTAB nTab, const ScSortParam& rSortParam,
         if (pDestData)
             pNewData = pDestData;               // Bereich vorhanden -> anpassen
         else                                    // Bereich ab Cursor/Markierung wird angelegt
-            pNewData = rDocShell.GetDBData(aDestPos, SC_DB_MAKE, SC_DBSEL_FORCE_MARK );
+            pNewData = rDocShell.GetDBData(aDestPos, SC_DB_MAKE_SORT, SC_DBSEL_FORCE_MARK );
         if (pNewData)
         {
             pNewData->SetArea( nTab,
@@ -919,7 +919,7 @@ sal_Bool ScDBDocFunc::Query( SCTAB nTab, const ScQueryParam& rQueryParam,
             pNewData = rDocShell.GetDBData(
                             ScRange( aLocalParam.nCol1, aLocalParam.nRow1, nDestTab,
                                      aLocalParam.nCol2, aLocalParam.nRow2, nDestTab ),
-                            SC_DB_MAKE, SC_DBSEL_FORCE_MARK );
+                            SC_DB_MAKE_FILTER, SC_DBSEL_FORCE_MARK );
 
         if (pNewData)
         {

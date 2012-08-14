@@ -36,6 +36,7 @@
 #include "queryparam.hxx"
 #include "globstr.hrc"
 
+#define SC_DBNAME_UNNAMED "__Anonymous_Sheet_DB__"
 
 //---------------------------------------------------------------------------------------
 
@@ -690,7 +691,12 @@ ScDataObject*   ScDBData::Clone() const
 {
     return new ScDBData(*this);
 }
-
+sal_Bool    ScDBData::IsBuildin()
+{
+    String  aNoName = String::CreateFromAscii(SC_DBNAME_UNNAMED);
+    String  aBeginName = aName.Copy(0,22);
+    return  (sal_Bool)(!ScGlobal::GetpTransliteration()->compareString( aNoName, aBeginName ));
+}
 
 //---------------------------------------------------------------------------------------
 //  Compare zum Sortieren
@@ -714,13 +720,12 @@ ScDBData* ScDBCollection::GetDBAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab, sal_
     ScDBData* pNoNameData = NULL;
     if (pItems)
     {
-        const String& rNoName = ScGlobal::GetRscString( STR_DB_NONAME );
 
         for (sal_uInt16 i = 0; i < nCount; i++)
             if (((ScDBData*)pItems[i])->IsDBAtCursor(nCol, nRow, nTab, bStartOnly))
             {
                 ScDBData* pDB = (ScDBData*)pItems[i];
-                if ( pDB->GetName() == rNoName )
+                if ( pDB->IsBuildin() )
                     pNoNameData = pDB;
                 else
                     return pDB;
@@ -734,13 +739,12 @@ ScDBData* ScDBCollection::GetDBAtArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCO
     ScDBData* pNoNameData = NULL;
     if (pItems)
     {
-        const String& rNoName = ScGlobal::GetRscString( STR_DB_NONAME );
 
         for (sal_uInt16 i = 0; i < nCount; i++)
             if (((ScDBData*)pItems[i])->IsDBAtArea(nTab, nCol1, nRow1, nCol2, nRow2))
             {
                 ScDBData* pDB = (ScDBData*)pItems[i];
-                if ( pDB->GetName() == rNoName )
+                if ( pDB->IsBuildin() )
                     pNoNameData = pDB;
                 else
                     return pDB;
@@ -903,6 +907,67 @@ sal_Bool ScDBCollection::Insert(ScDataObject* pScDataObject)
     return bInserted;
 }
 
+String ScDBCollection::GetNewDefaultDBName()
+{
+    String  aNoName = String::CreateFromAscii(SC_DBNAME_UNNAMED);
+    String  aNewName;
+    unsigned short  nDummy;
+    int     i = 1;
+    do
+    {
+        aNewName = aNoName;
+        aNewName += String::CreateFromInt32( i++ );
+    }while(SearchName(aNewName,nDummy));
+    return  aNewName;
+}
+/*
+sal_Bool ScDBCollection::IsFiltered(SCTAB nTab, SCROW nRow)
+{
+    SCCOL   nLastCol;
+    SCROW   nLastRow;
+    pDoc->GetLastAttrCellArea(nTab, nLastCol, nLastRow);
 
+    if ( pItems )
+    {
+        for (unsigned short i = 0; i < nCount; i++)
+        {
+            ScDBData*   pData = (ScDBData*)pItems[i];
+            if ( pData->nTable == nTab && pData->HasQueryParam() && pData->bQueryInplace )
+                if ( nRow >= (pData->nStartRow + (pData->HasHeader()?1:0)) && nRow <= pData->nEndRow && nRow <= nLastRow )
+                    return sal_True;
+        }
+    }
+    return sal_False;
+}
+*/
+ScDBData* ScDBCollection::GetDBAtTable(SCTAB nTab, ScGetDBMode eMode) const
+{
+    ScDBData* pDataEmpty = NULL;
+    if (pItems)
+    {
+        for (unsigned short i = 0; i < nCount; i++)
+        {
+            ScDBData* pDBTemp = (ScDBData*)pItems[i];
+            if ( pDBTemp->nTable == nTab )                      //Sym2_7885 mod
+            {
+                sal_Bool bImport = pDBTemp->HasImportParam();
+                sal_Bool bFilter = pDBTemp->HasAutoFilter() || pDBTemp->HasQueryParam();
+                sal_Bool bSort = pDBTemp->HasSortParam();
+                sal_Bool bSubtotal = pDBTemp->HasSubTotalParam();
+                sal_Bool bAnyParam = bImport || bFilter || bSort || bSubtotal;
+                if ( ((eMode == SC_DB_MAKE_SORT)    && bSort && !bFilter) ||      //Sym2_7334 mod 20100420
+                    ((eMode == SC_DB_MAKE_SUBTOTAL) && bSubtotal && !bFilter ) ||
+                    ((eMode == SC_DB_MAKE_FILTER || eMode == SC_DB_OLD_FILTER) && bFilter ) )
+                {
+                    return pDBTemp;
+                }
+                else if ( pDBTemp->IsBuildin() && !bAnyParam )  //Sym2_7885 mod
+                {
+                    pDataEmpty = pDBTemp;
+                }
+            }
+        }
+    }
 
-
+    return pDataEmpty;
+}

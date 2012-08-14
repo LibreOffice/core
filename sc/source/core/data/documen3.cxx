@@ -192,6 +192,13 @@ ScDBData* ScDocument::GetDBAtArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nC
     else
         return NULL;
 }
+ScDBData* ScDocument::GetDBAtTable(SCTAB nTab, ScGetDBMode eMode) const
+{
+    if (pDBCollection)
+        return pDBCollection->GetDBAtTable(nTab, eMode);
+    else
+        return NULL;
+}
 
 ScDBData* ScDocument::GetFilterDBAtTable(SCTAB nTab) const
 {
@@ -1291,7 +1298,8 @@ sal_Bool ScDocument::CreateQueryParam(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCR
 
 sal_Bool ScDocument::HasAutoFilter( SCCOL nCurCol, SCROW nCurRow, SCTAB nCurTab )
 {
-    ScDBData*       pDBData         = GetDBAtCursor( nCurCol, nCurRow, nCurTab );
+    //ScDBData*     pDBData         = GetDBAtCursor( nCurCol, nCurRow, nCurTab );
+    ScDBData*       pDBData         = GetDBAtTable(nCurTab, SC_DB_OLD_FILTER);
     sal_Bool            bHasAutoFilter  = ( pDBData != NULL );
 
     if ( pDBData )

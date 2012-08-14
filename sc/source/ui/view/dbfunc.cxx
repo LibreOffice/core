@@ -334,35 +334,37 @@ void ScDBFunc::ToggleAutoFilter()
 
     ScQueryParam    aParam;
     ScDocument*     pDoc    = GetViewData()->GetDocument();
-    ScDBData*       pDBData = GetDBData( sal_False, SC_DB_MAKE, SC_DBSEL_ROW_DOWN );
+    ScDBData*       pDBData = GetDBData( sal_False, SC_DB_OLD_FILTER, SC_DBSEL_ROW_DOWN );
 
-    pDBData->SetByRow( sal_True );              //! Undo, vorher abfragen ??
-    pDBData->GetQueryParam( aParam );
+
 
 
     SCCOL  nCol;
-    SCROW  nRow = aParam.nRow1;
+    SCROW  nRow;
     SCTAB  nTab = GetViewData()->GetTabNo();
     sal_Int16   nFlag;
-    sal_Bool    bHasAuto = sal_True;
-    sal_Bool    bHeader  = pDBData->HasHeader();
+    //sal_Bool  bHasAuto = sal_True;
+    sal_Bool    bHeader;
     sal_Bool    bPaint   = sal_False;
 
     //!     stattdessen aus DB-Bereich abfragen?
 
-    for (nCol=aParam.nCol1; nCol<=aParam.nCol2 && bHasAuto; nCol++)
+    /*for (nCol=aParam.nCol1; nCol<=aParam.nCol2 && bHasAuto; nCol++)
     {
         nFlag = ((ScMergeFlagAttr*) pDoc->
                 GetAttr( nCol, nRow, nTab, ATTR_MERGE_FLAG ))->GetValue();
 
         if ( (nFlag & SC_MF_AUTO) == 0 )
             bHasAuto = sal_False;
-    }
+    }*/
 
-    if (bHasAuto)                               // aufheben
+    if (pDBData && pDBData->HasAutoFilter())                                // aufheben
     {
         //  Filterknoepfe ausblenden
-
+        pDBData->SetByRow( sal_True );              //! Undo, vorher abfragen ??
+        pDBData->GetQueryParam( aParam );
+        nRow = aParam.nRow1;
+        bHeader = pDBData->HasHeader();
         for (nCol=aParam.nCol1; nCol<=aParam.nCol2; nCol++)
         {
             nFlag = ((ScMergeFlagAttr*) pDoc->
@@ -396,6 +398,12 @@ void ScDBFunc::ToggleAutoFilter()
     }
     else                                    // Filterknoepfe einblenden
     {
+        pDBData = GetDBData(sal_False, SC_DB_MAKE_FILTER);
+        pDBData->SetByRow(sal_True);
+        pDBData->GetQueryParam(aParam);
+        nRow = aParam.nRow1;
+        bHeader = pDBData->HasHeader();
+
         if ( !pDoc->IsBlockEmpty( nTab,
                                   aParam.nCol1, aParam.nRow1,
                                   aParam.nCol2, aParam.nRow2 ) )
@@ -457,7 +465,8 @@ void ScDBFunc::HideAutoFilter()
     ScDocument* pDoc = pDocSh->GetDocument();
 
     ScQueryParam aParam;
-    ScDBData* pDBData = GetDBData( sal_False );
+    //ScDBData* pDBData = GetDBData( FALSE );
+    ScDBData* pDBData = GetDBData(sal_False, SC_DB_OLD_FILTER);
 
     SCTAB nTab;
     SCCOL nCol1, nCol2;

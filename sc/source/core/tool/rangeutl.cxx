@@ -1032,7 +1032,8 @@ sal_Bool ScAreaNameIterator::Next( String& rName, ScRange& rRange )
             if ( pDBCollection && nPos < pDBCollection->GetCount() )
             {
                 ScDBData* pData = (*pDBCollection)[nPos++];
-                if (pData && pData->GetName() != aStrNoName)
+//              if (pData && pData->GetName() != aStrNoName)
+                if (pData && !pData->IsBuildin())
                 {
                     pData->GetArea( rRange );
                     rName = pData->GetName();

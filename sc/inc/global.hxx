@@ -406,7 +406,11 @@ enum ScGetDBMode
 {
     SC_DB_MAKE,     // wenn noetig, "unbenannt" anlegen
     SC_DB_IMPORT,   // wenn noetig, "Importx" anlegen
-    SC_DB_OLD       // nicht neu anlegen
+    SC_DB_OLD,      // nicht neu anlegen
+    SC_DB_MAKE_FILTER,   // to create a new filter/sort/subtotal
+    SC_DB_MAKE_SORT,
+    SC_DB_MAKE_SUBTOTAL,
+    SC_DB_OLD_FILTER   //to find a existed filter
 };
 
 /// For ScDBFunc::GetDBData()

@@ -734,7 +734,8 @@ void ScContentTree::GetDbNames()
         {
             ScDBData* pData = (*pDbNames)[i];
             String aStrName = pData->GetName();
-            if ( aStrName != aStrNoName )
+            //if ( aStrName != aStrNoName )
+            if ( !pData->IsBuildin() )
                 InsertContent( SC_CONTENT_DBAREA, aStrName );
         }
     }

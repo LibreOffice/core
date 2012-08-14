@@ -150,6 +150,8 @@ ScDBData* lcl_GetDBNearCursor( ScDBCollection* pColl, SCCOL nCol, SCROW nRow, SC
 
 ScDBData* ScDocShell::GetDBData( const ScRange& rMarked, ScGetDBMode eMode, ScGetDBSelection eSel )
 {
+    if ( eMode == SC_DB_MAKE_FILTER || eMode == SC_DB_MAKE_SORT || eMode == SC_DB_MAKE_SUBTOTAL || eMode == SC_DB_OLD_FILTER )
+        return GetDBDataAdd(rMarked, eMode, eSel);
     SCCOL nCol = rMarked.aStart.Col();
     SCROW nRow = rMarked.aStart.Row();
     SCTAB nTab = rMarked.aStart.Tab();
@@ -184,7 +186,8 @@ ScDBData* ScDocShell::GetDBData( const ScRange& rMarked, ScGetDBMode eMode, ScGe
         SCCOL nOldCol2;
         SCROW nOldRow2;
         pData->GetArea( nDummy, nOldCol1,nOldRow1, nOldCol2,nOldRow2 );
-        sal_Bool bIsNoName = ( pData->GetName() == ScGlobal::GetRscString( STR_DB_NONAME ) );
+//      sal_Bool bIsNoName = ( pData->GetName() == ScGlobal::GetRscString( STR_DB_NONAME ) );
+        sal_Bool bIsNoName = pData->IsBuildin();
 
         if (!bSelected)
         {
@@ -322,7 +325,9 @@ ScDBData* ScDocShell::GetDBData( const ScRange& rMarked, ScGetDBMode eMode, ScGe
                 while (pColl->SearchName( aNewName, nDummy ));
             }
             else
-                aNewName = ScGlobal::GetRscString( STR_DB_NONAME );
+                //aNewName = ScGlobal::GetRscString( STR_DB_NONAME );
+                aNewName = pColl->GetNewDefaultDBName();
+
             pNoNameData = new ScDBData( aNewName, nTab,
                                 nStartCol,nStartRow, nEndCol,nEndRow,
                                 sal_True, bHasHeader );
@@ -350,6 +355,170 @@ ScDBData* ScDocShell::GetDBData( const ScRange& rMarked, ScGetDBMode eMode, ScGe
 
     return pData;
 }
+
+ScDBData* ScDocShell::GetDBDataAdd( const ScRange& rMarked, ScGetDBMode eMode, ScGetDBSelection eSel )
+{
+    SCCOL nCol = rMarked.aStart.Col();
+    SCROW nRow = rMarked.aStart.Row();
+    SCTAB nTab = rMarked.aStart.Tab();
+
+    SCCOL nStartCol = nCol;
+    SCROW nStartRow = nRow;
+    SCTAB nStartTab = nTab;
+    SCCOL nEndCol = rMarked.aEnd.Col();
+    SCROW nEndRow = rMarked.aEnd.Row();
+    SCTAB nEndTab = rMarked.aEnd.Tab();
+
+    ScDBData* pData = NULL;
+    ScDBData* pCursorData;
+    pCursorData = aDocument.GetDBAtArea( nTab, nStartCol, nStartRow, nEndCol, nEndRow );
+    if ( !pCursorData )
+        pCursorData = aDocument.GetDBAtCursor( nStartCol, nStartRow, nTab );
+
+    //Get DBData at current table
+    ScDBData* pTableData = aDocument.GetDBAtTable( nTab, eMode );
+
+    if ( eMode == SC_DB_OLD_FILTER )
+        return pTableData;
+
+    sal_Bool bSelected = ( eSel == SC_DBSEL_FORCE_MARK || rMarked.aStart != rMarked.aEnd );
+    bool bOnlyDown = (!bSelected && eSel == SC_DBSEL_ROW_DOWN && rMarked.aStart.Row() == rMarked.aEnd.Row());
+
+    sal_Bool bUseThis = sal_False;
+    if (pCursorData)
+    {
+        SCTAB nDummy;
+        SCCOL nOldCol1;
+        SCROW nOldRow1;
+        SCCOL nOldCol2;
+        SCROW nOldRow2;
+        pCursorData->GetArea( nDummy, nOldCol1,nOldRow1, nOldCol2,nOldRow2 );
+        if ( !bSelected )
+        {
+              ScRange tmpRange;
+              if ( !pCursorData->IsBuildin() && pCursorData->GetAdvancedQuerySource(tmpRange))
+                   bUseThis = sal_True;
+              else
+             {
+                 nStartCol = nCol;
+                 nStartRow = nRow;
+                 nEndCol = nStartCol;
+                 nEndRow = nStartRow;
+                aDocument.GetDataArea( nTab, nStartCol, nStartRow, nEndCol, nEndRow, sal_False, bOnlyDown );
+                 if ( nOldCol1 != nStartCol || nOldCol2 != nEndCol || nOldRow1 != nStartRow )
+                     bUseThis = sal_False;
+                 else
+                 {
+                     bUseThis = sal_True;
+                     if ( nOldRow2 != nEndRow )// Range of new end-line expand
+                     pCursorData->SetArea( nTab, nOldCol1,nOldRow1, nOldCol2,nEndRow );
+                 }
+            }
+
+        }
+        else
+        {
+            if ( nOldCol1 == nStartCol && nOldRow1 == nStartRow && nOldCol2 == nEndCol && nOldRow2 == nEndRow )
+                bUseThis = sal_True;
+            else
+                bUseThis = sal_False;           // Always take mark (Bug 11964)
+        }
+    }
+
+    if ( bUseThis )
+    {
+        pData = pCursorData;
+        if ( pTableData && eMode == SC_DB_MAKE_FILTER && !(*pTableData == *pCursorData ) )
+        {
+            if ( !pOldAutoDBRange )
+                pOldAutoDBRange = new ScDBData(*pTableData);
+            SCCOL nOldX1;
+            SCROW nOldY1;
+            SCCOL nOldX2;
+            SCROW nOldY2;
+            SCTAB nOldTab;
+            pTableData->GetArea( nOldTab, nOldX1, nOldY1, nOldX2, nOldY2 );
+
+            if (pTableData->HasQueryParam())
+            {
+                ScQueryParam    aParam;
+                pTableData->GetQueryParam(aParam);
+                SCSIZE nEC = aParam.GetEntryCount();
+                for (SCSIZE i=0; i<nEC; i++)
+                    aParam.GetEntry(i).bDoQuery = sal_False;
+                aParam.bDuplicate = sal_True;
+                ScDBDocFunc aDBDocFunc( *this );
+                aDBDocFunc.Query( nTab, aParam, NULL, sal_False, sal_False );
+            }
+
+            DBAreaDeleted( nOldTab, nOldX1, nOldY1, nOldX2, nOldY2 );
+            pTableData->SetQueryParam( ScQueryParam() );
+            pTableData->SetAutoFilter( sal_False );
+        }
+
+    }
+    else
+    {
+        if ( bSelected )
+        {
+//          bMark = sal_False;
+        }
+        else
+        {
+            nStartCol = nCol;
+            nStartRow = nRow;
+            nEndCol = nStartCol;
+            nEndRow = nStartRow;
+            aDocument.GetDataArea( nTab, nStartCol, nStartRow, nEndCol, nEndRow, sal_False, bOnlyDown );
+        }
+        sal_Bool bHasHeader = aDocument.HasColHeader( nStartCol,nStartRow, nEndCol,nEndRow, nTab );
+        ScDBCollection* pColl = aDocument.GetDBCollection();
+        if ( pTableData )
+        {
+            if ( !pOldAutoDBRange )
+                pOldAutoDBRange = new ScDBData(*pTableData);
+            SCCOL nOldX1;
+            SCROW nOldY1;
+            SCCOL nOldX2;
+            SCROW nOldY2;
+            SCTAB nOldTab;
+            pTableData->GetArea( nOldTab, nOldX1, nOldY1, nOldX2, nOldY2 );
+
+            if (pTableData->HasQueryParam())
+            {
+                ScQueryParam    aParam;
+                pTableData->GetQueryParam(aParam);
+                SCSIZE nEC = aParam.GetEntryCount();
+                for (SCSIZE i=0; i<nEC; i++)
+                    aParam.GetEntry(i).bDoQuery = sal_False;
+                aParam.bDuplicate = sal_True;
+                ScDBDocFunc aDBDocFunc( *this );
+                aDBDocFunc.Query( nTab, aParam, NULL, sal_False, sal_False );
+            }
+
+                DBAreaDeleted( nOldTab, nOldX1, nOldY1, nOldX2, nOldY2 );
+
+            pTableData->SetSortParam( ScSortParam() );
+            pTableData->SetQueryParam( ScQueryParam() );
+            pTableData->SetSubTotalParam( ScSubTotalParam() );
+
+            pTableData->SetArea( nTab, nStartCol, nStartRow, nEndCol, nEndRow );
+            pTableData->SetByRow( sal_True );
+            pTableData->SetHeader( bHasHeader );
+            pTableData->SetAutoFilter( sal_False );
+        }
+        else
+        {
+            String aNewName = pColl->GetNewDefaultDBName();
+            pTableData = new ScDBData( aNewName, nTab, nStartCol,nStartRow, nEndCol,nEndRow, sal_True, bHasHeader );
+            pColl->Insert( pTableData );
+        }
+        pData = pTableData;
+    }
+
+    return pData;
+}
+
 
 ScDBData* ScDocShell::GetOldAutoDBRange()
 {

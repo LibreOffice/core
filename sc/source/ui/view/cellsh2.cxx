@@ -357,7 +357,8 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                     ScSubTotalParam aSubTotalParam;
                     SfxItemSet      aArgSet( GetPool(), SCITEM_SUBTDATA, SCITEM_SUBTDATA );
 
-                    ScDBData* pDBData = pTabViewShell->GetDBData();
+                    //ScDBData* pDBData = pTabViewShell->GetDBData();
+                    ScDBData* pDBData = pTabViewShell->GetDBData(sal_True, SC_DB_MAKE_SUBTOTAL);
                     pDBData->GetSubTotalParam( aSubTotalParam );
                     aSubTotalParam.bRemoveOnly = sal_False;
 
@@ -411,7 +412,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                 //#i60401 ux-ctest: Calc does not support all users' strategies regarding sorting data
                 //the patch comes from maoyg
                 ScSortParam aSortParam;
-                ScDBData*   pDBData = pTabViewShell->GetDBData();
+                ScDBData*   pDBData = pTabViewShell->GetDBData(sal_True, SC_DB_MAKE_SORT);
                 ScViewData* pData   = GetViewData();
 
                 pDBData->GetSortParam( aSortParam );
@@ -462,7 +463,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                 if ( pArgs )        // Basic
                 {
                     ScSortParam aSortParam;
-                    ScDBData*   pDBData = pTabViewShell->GetDBData();
+                    ScDBData*   pDBData = pTabViewShell->GetDBData(sal_True, SC_DB_MAKE_SORT);
                     ScViewData* pData   = GetViewData();
 
                     pDBData->GetSortParam( aSortParam );
@@ -525,7 +526,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                 else
                 {
                     ScSortParam aSortParam;
-                    ScDBData*   pDBData = pTabViewShell->GetDBData();
+                    ScDBData*   pDBData = pTabViewShell->GetDBData(sal_True, SC_DB_MAKE_SORT);
                     ScViewData* pData   = GetViewData();
 
                     pDBData->GetSortParam( aSortParam );
@@ -680,7 +681,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
         case SID_UNFILTER:
             {
                 ScQueryParam aParam;
-                ScDBData*    pDBData = pTabViewShell->GetDBData();
+                ScDBData*    pDBData = pTabViewShell->GetDBData(sal_True, SC_DB_OLD_FILTER);
 
                 pDBData->GetQueryParam( aParam );
                 SCSIZE nEC = aParam.GetEntryCount();

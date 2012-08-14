@@ -33,6 +33,7 @@
 #include "undobase.hxx"
 #include "refundo.hxx"
 #include "docsh.hxx"
+#include "dbdocfun.hxx"
 #include "tabvwsh.hxx"
 #include "undoolk.hxx"
 #include "undodraw.hxx"
@@ -390,7 +391,7 @@ void ScDBFuncUndo::EndUndo()
         sal_uInt16 nNoNameIndex;
         ScDocument* pDoc = pDocShell->GetDocument();
         ScDBCollection* pColl = pDoc->GetDBCollection();
-        if ( pColl->SearchName( ScGlobal::GetRscString( STR_DB_NONAME ), nNoNameIndex ) )
+        if ( pColl->SearchName( pAutoDBRange->GetName(), nNoNameIndex ) )
         {
             ScDBData* pNoNameData = (*pColl)[nNoNameIndex];
 
@@ -403,6 +404,13 @@ void ScDBFuncUndo::EndUndo()
             pDocShell->DBAreaDeleted( nRangeTab, nRangeX1, nRangeY1, nRangeX2, nRangeY2 );
 
             *pNoNameData = *pAutoDBRange;
+            /*if (pAutoDBRange->HasQueryParam())   //maybe conflict with AOO
+            {
+                ScQueryParam    aParam;
+                pAutoDBRange->GetQueryParam(aParam);
+                ScDBDocFunc aDBDocFunc( *pDocShell );
+                aDBDocFunc.Query( nRangeTab, aParam, NULL, sal_False, sal_False );
+            }*/
 
             if ( pAutoDBRange->HasAutoFilter() )
             {
@@ -425,7 +433,7 @@ void ScDBFuncUndo::BeginRedo()
         sal_uInt16 nNoNameIndex;
         ScDocument* pDoc = pDocShell->GetDocument();
         ScDBCollection* pColl = pDoc->GetDBCollection();
-        if ( pColl->SearchName( ScGlobal::GetRscString( STR_DB_NONAME ), nNoNameIndex ) )
+        if ( pColl->SearchName( pAutoDBRange->GetName(), nNoNameIndex ) )
         {
             ScDBData* pNoNameData = (*pColl)[nNoNameIndex];
 
@@ -435,6 +443,17 @@ void ScDBFuncUndo::BeginRedo()
             SCROW nRangeY2;
             SCTAB nRangeTab;
             pNoNameData->GetArea( nRangeTab, nRangeX1, nRangeY1, nRangeX2, nRangeY2 );
+            /*if (pAutoDBRange->HasQueryParam())
+            {
+                ScQueryParam    aParam;
+                pAutoDBRange->GetQueryParam(aParam);
+                SCSIZE nEC = aParam.GetEntryCount();
+                for (SCSIZE i=0; i<nEC; i++)
+                    aParam.GetEntry(i).bDoQuery = sal_False;
+                aParam.bDuplicate = sal_True;
+                ScDBDocFunc aDBDocFunc( *pDocShell );
+                aDBDocFunc.Query( nRangeTab, aParam, NULL, sal_False, sal_False );
+            }*/
             pDocShell->DBAreaDeleted( nRangeTab, nRangeX1, nRangeY1, nRangeX2, nRangeY2 );
 
             pNoNameData->SetSortParam( ScSortParam() );

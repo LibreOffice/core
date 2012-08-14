@@ -93,7 +93,8 @@ ScDBData* ScUndoUtil::GetOldDBData( ScDBData* pUndoData, ScDocument* pDoc, SCTAB
         {
             String aName;
             pUndoData->GetName( aName );
-            if ( aName == ScGlobal::GetRscString( STR_DB_NONAME ) )
+//          if ( aName == ScGlobal::GetRscString( STR_DB_NONAME ) )
+            if (pUndoData->IsBuildin())
                 bWasTemp = sal_True;
         }
         DBG_ASSERT(bWasTemp, "Undo: didn't find database range");
@@ -104,7 +105,8 @@ ScDBData* ScUndoUtil::GetOldDBData( ScDBData* pUndoData, ScDocument* pDoc, SCTAB
             pRet = (*pColl)[nIndex];
         else
         {
-            pRet = new ScDBData( ScGlobal::GetRscString( STR_DB_NONAME ), nTab,
+            String  aNoNamed = pColl->GetNewDefaultDBName();
+            pRet = new ScDBData( aNoNamed/*ScGlobal::GetRscString( STR_DB_NONAME )*/, nTab,
                                 nCol1,nRow1, nCol2,nRow2, sal_True,
                                 pDoc->HasColHeader( nCol1,nRow1,nCol2,nRow2,nTab ) );
             pColl->Insert( pRet );

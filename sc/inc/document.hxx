@@ -505,6 +505,7 @@ public:
 //UNUSED2008-05  ScRangeData*   GetRangeAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab,
 //UNUSED2008-05                                      sal_Bool bStartOnly = sal_False) const;
     SC_DLLPUBLIC ScRangeData*   GetRangeAtBlock( const ScRange& rBlock, String* pName=NULL ) const;
+    ScDBData*       GetDBAtTable(SCTAB nTab, ScGetDBMode eMode) const;
 
     SC_DLLPUBLIC ScDPCollection*        GetDPCollection();
     ScDPObject*         GetDPAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab) const;
