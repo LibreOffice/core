@@ -2731,6 +2731,20 @@ namespace
 
         return nScript;
     }
+
+    bool samePitchIgnoreUnknown(FontPitch eA, FontPitch eB)
+    {
+        return (eA == eB || eA == PITCH_DONTKNOW || eB == PITCH_DONTKNOW);
+    }
+
+    bool sameFontIgnoringIrrelevantFields(const SvxFontItem &rA, const SvxFontItem &rB)
+    {
+        //Ignoring CharSet, and ignoring unknown pitch
+        return rA.GetFamilyName() == rB.GetFamilyName() &&
+            rA.GetStyleName() == rB.GetStyleName() &&
+            rA.GetFamily() == rB.GetFamily() &&
+            samePitchIgnoreUnknown(rA.GetPitch(), rB.GetPitch());
+    }
 }
 
 //In writer we categorize text into CJK, CTL and "Western" for everything else.
@@ -2826,13 +2840,23 @@ void SwWW8ImplReader::emulateMSWordAddTextToParagraph(const rtl::OUString& rAddS
 
             bool bWriterWillUseSameFontAsWordAutomatically = false;
 
-            if (
-                 (nWriterScript == i18n::ScriptType::ASIAN && nForceFromFontId == RES_CHRATR_CJK_FONT) ||
-                 (nWriterScript == i18n::ScriptType::COMPLEX && nForceFromFontId == RES_CHRATR_CTL_FONT) ||
-                 (nWriterScript == i18n::ScriptType::LATIN && nForceFromFontId == RES_CHRATR_FONT)
-               )
+            if (nWriterScript != i18n::ScriptType::WEAK)
             {
-                bWriterWillUseSameFontAsWordAutomatically = true;
+                if (
+                     (nWriterScript == i18n::ScriptType::ASIAN && nForceFromFontId == RES_CHRATR_CJK_FONT) ||
+                     (nWriterScript == i18n::ScriptType::COMPLEX && nForceFromFontId == RES_CHRATR_CTL_FONT) ||
+                     (nWriterScript == i18n::ScriptType::LATIN && nForceFromFontId == RES_CHRATR_FONT)
+                   )
+                {
+                    bWriterWillUseSameFontAsWordAutomatically = true;
+                }
+                else
+                {
+                    const SvxFontItem *pSourceFont = (const SvxFontItem*)GetFmtAttr(nForceFromFontId);
+                    sal_uInt16 nDestId = aIds[nWriterScript-1];
+                    const SvxFontItem *pDestFont = (const SvxFontItem*)GetFmtAttr(nDestId);
+                    bWriterWillUseSameFontAsWordAutomatically = sameFontIgnoringIrrelevantFields(*pSourceFont, *pDestFont);
+                }
             }
 
             //Writer won't use the same font as word, so force the issue
@@ -2873,7 +2897,6 @@ void SwWW8ImplReader::emulateMSWordAddTextToParagraph(const rtl::OUString& rAddS
         if (nPos < nLen)
             nScript = lcl_getScriptType(xBI, rAddString, nPos);
     }
-
 }
 
 void SwWW8ImplReader::simpleAddTextToParagraph(const String& rAddString)
