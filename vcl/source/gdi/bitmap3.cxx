@@ -2325,7 +2325,7 @@ sal_Bool Bitmap::ScaleCropRotate(
     }
     else
     {
-        bRet =  ImplTransformBilinearFiltering( rScaleX, rScaleY, rRectPixel, nAngle10, rFillColor);
+        bRet = ImplTransformBilinearFiltering( rScaleX, rScaleY, rRectPixel, nAngle10, rFillColor);
     }
 
     return bRet;
@@ -2384,9 +2384,9 @@ bool Bitmap::ImplTransformAveraging( const double& rScaleX, const double& rScale
             double unrotatedY = fSinAngle * x + fCosAngle * y;
 
             if (   unrotatedX < 0
-                || unrotatedX >= nScaledWidth
+                || unrotatedX > nScaledWidth
                 || unrotatedY < 0
-                || unrotatedY >= nScaledHeight)
+                || unrotatedY > nScaledHeight)
             {
                  pWriteAccess->SetPixel( yOut, xOut, aFillColor );
             }

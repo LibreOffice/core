@@ -270,43 +270,43 @@ sal_Bool GraphicManager::ImplCreateOutput( OutputDevice* pOutputDevice,
                                        const sal_uLong nFlags, BitmapEx* pResultBitmapEx )
 {
     bool        bRet = false;
-    Point       aOutPointInPixels;
-    Size        aOutSizeInPixels;
-    int         nRotation = rAttributes.GetRotation() % 3600;
 
     Point       aUnrotatedPointInPixels( pOutputDevice->LogicToPixel( rPoint ) );
     Size        aUnrotatedSizeInPixels(  pOutputDevice->LogicToPixel( rSize ) );
 
-    BitmapEx    aBitmapEx( rBitmapEx );
-
-    if( !aUnrotatedSizeInPixels.Width() || !aUnrotatedSizeInPixels.Height() )
+    if( aUnrotatedSizeInPixels.Width() <= 0  || aUnrotatedSizeInPixels.Height() <= 0)
         return false;
 
-    if( nRotation )
+    Point       aOutPointInPixels;
+    Size        aOutSizeInPixels;
+    BitmapEx    aBitmapEx( rBitmapEx );
+    int         nRotation = rAttributes.GetRotation() % 3600;
+
+    if( nRotation != 0 )
     {
         Polygon aPoly( Rectangle( rPoint, rSize ) );
         aPoly.Rotate( rPoint, nRotation );
         const Rectangle aRotationBoundRect( aPoly.GetBoundRect() );
         aOutPointInPixels = pOutputDevice->LogicToPixel( aRotationBoundRect.TopLeft() );
-        aOutSizeInPixels = pOutputDevice->LogicToPixel( aRotationBoundRect.GetSize() );
+        aOutSizeInPixels  = pOutputDevice->LogicToPixel( aRotationBoundRect.GetSize() );
     }
     else
     {
         aOutPointInPixels = aUnrotatedPointInPixels;
-        aOutSizeInPixels = aUnrotatedSizeInPixels;
+        aOutSizeInPixels  = aUnrotatedSizeInPixels;
     }
 
     Point       aOutPoint;
     Size        aOutSize;
 
     const Size& rBitmapSizePixels = rBitmapEx.GetSizePixel();
-    Rectangle   aCropRectangle(-1, -1, -1, -1);
+    Rectangle   aCropRectangle(0, 0, 0, 0);
+
     bool        isHorizontalMirrored = ( rAttributes.GetMirrorFlags() & BMP_MIRROR_HORZ ) != 0;
     bool        isVerticalMirrored   = ( rAttributes.GetMirrorFlags() & BMP_MIRROR_VERT ) != 0;
 
-
     // calculate output sizes
-    if( !pResultBitmapEx )
+    if( true || !pResultBitmapEx )
     {
         Rectangle aBitmapRectangle( aOutPointInPixels, aOutSizeInPixels );
         Rectangle aOutRect( Point(), pOutputDevice->GetOutputSizePixel() );
@@ -316,9 +316,7 @@ sal_Bool GraphicManager::ImplCreateOutput( OutputDevice* pOutputDevice,
             const Region aPaintRegion( ( (Window*) pOutputDevice )->GetPaintRegion() );
 
             if( !aPaintRegion.IsNull() )
-            {
                 aOutRect.Intersection( pOutputDevice->LogicToPixel( aPaintRegion.GetBoundRect() ) );
-            }
         }
         aOutRect.Intersection( aBitmapRectangle );
 
@@ -346,31 +344,28 @@ sal_Bool GraphicManager::ImplCreateOutput( OutputDevice* pOutputDevice,
     }
 
 
-    if( aCropRectangle.GetWidth() <= 0 && aCropRectangle.GetHeight() <= 0)
+    if( aCropRectangle.GetWidth() <= 0 && aCropRectangle.GetHeight() <= 0 )
         return false;
 
     // do transformation
-
     if( !isHorizontalMirrored &&
         !isVerticalMirrored &&
         !nRotation &&
         aOutSizeInPixels == rBitmapSizePixels)
     {
+        // simple copy thorugh
         aOutPoint = pOutputDevice->PixelToLogic( aOutPointInPixels );
         aOutSize = pOutputDevice->PixelToLogic( aOutSizeInPixels );
         bRet = true;
     }
     else
     {
-        // calculate scaling factors
-        double fScaleX = aUnrotatedSizeInPixels.Width()  / (double) rBitmapSizePixels.Width();
-        double fScaleY = aUnrotatedSizeInPixels.Height() / (double) rBitmapSizePixels.Height();
-
         // mirror the image - this should not impact the picture dimenstions
         if( isHorizontalMirrored || isVerticalMirrored )
             bRet = aBitmapEx.Mirror( rAttributes.GetMirrorFlags() );
 
-        if (nRotation)
+        // prepare rotation if needed
+        if (nRotation != 0)
         {
             Polygon aPoly( Rectangle( Point(), aUnrotatedSizeInPixels) );
             aPoly.Rotate( Point(), nRotation );
@@ -382,7 +377,12 @@ sal_Bool GraphicManager::ImplCreateOutput( OutputDevice* pOutputDevice,
                                 aCropRectangle.Right()  + aNewBound.Left(),
                                 aCropRectangle.Bottom() + aNewBound.Top() );
         }
-        if( nFlags & GRFMGR_DRAW_SMOOTHSCALE)
+
+        // calculate scaling factors
+        double fScaleX = aUnrotatedSizeInPixels.Width()  / (double) rBitmapSizePixels.Width();
+        double fScaleY = aUnrotatedSizeInPixels.Height() / (double) rBitmapSizePixels.Height();
+
+        if( nFlags & GRFMGR_DRAW_SMOOTHSCALE )
         {
             bRet = aBitmapEx.ScaleCropRotate( fScaleX, fScaleY, aCropRectangle, nRotation, COL_TRANSPARENT );
         }
@@ -390,12 +390,12 @@ sal_Bool GraphicManager::ImplCreateOutput( OutputDevice* pOutputDevice,
         {
             aCropRectangle = Rectangle (
                                 aCropRectangle.Left()   / fScaleX,
-                                aCropRectangle.Right()  / fScaleX,
                                 aCropRectangle.Top()    / fScaleY,
+                                aCropRectangle.Right()  / fScaleX,
                                 aCropRectangle.Bottom() / fScaleY );
 
             bRet = aBitmapEx.Crop( aCropRectangle );
-            if (bRet)
+            if ( bRet )
                 bRet = aBitmapEx.Scale( fScaleX, fScaleY );
         }
     }
@@ -403,17 +403,17 @@ sal_Bool GraphicManager::ImplCreateOutput( OutputDevice* pOutputDevice,
     if( bRet )
     {
         // attribute adjustment if neccessary
-        if(     rAttributes.IsSpecialDrawMode()
-          ||    rAttributes.IsAdjusted()
-          ||    rAttributes.IsTransparent() )
+        if(  rAttributes.IsSpecialDrawMode()
+          || rAttributes.IsAdjusted()
+          || rAttributes.IsTransparent() )
         {
             ImplAdjust( aBitmapEx, rAttributes, ADJUSTMENT_DRAWMODE | ADJUSTMENT_COLORS | ADJUSTMENT_TRANSPARENCY );
         }
 
         // OutDev adjustment if neccessary
-        if(     pOutputDevice->GetOutDevType() != OUTDEV_PRINTER
-            &&  pOutputDevice->GetBitCount() <= 8
-            &&  aBitmapEx.GetBitCount() >= 8 )
+        if(   pOutputDevice->GetOutDevType() != OUTDEV_PRINTER
+          &&  pOutputDevice->GetBitCount() <= 8
+          &&  aBitmapEx.GetBitCount() >= 8 )
         {
             aBitmapEx.Dither( BMP_DITHER_MATRIX );
         }

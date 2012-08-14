@@ -52,104 +52,107 @@ private:
 
 public:
 
-                            AlphaMask();
-                            AlphaMask( const Bitmap& rBitmap );
-                            AlphaMask( const AlphaMask& rAlphaMask );
-                            AlphaMask( const Size& rSizePixel, sal_uInt8* pEraseTransparency = NULL );
-                            ~AlphaMask();
+    AlphaMask();
+    AlphaMask( const Bitmap& rBitmap );
+    AlphaMask( const AlphaMask& rAlphaMask );
+    AlphaMask( const Size& rSizePixel, sal_uInt8* pEraseTransparency = NULL );
+    ~AlphaMask();
 
-    AlphaMask&              operator=( const Bitmap& rBitmap );
-    AlphaMask&              operator=( const AlphaMask& rAlphaMask )
-                            {
-                                return (AlphaMask&) Bitmap::operator=( rAlphaMask );
-                            }
-    sal_Bool                operator!() const
-                            {
-                                return Bitmap::operator!();
-                            }
-    sal_Bool                operator==( const AlphaMask& rAlphaMask ) const
-                            {
-                                return Bitmap::operator==( rAlphaMask );
-                            }
-    sal_Bool                operator!=( const AlphaMask& rAlphaMask ) const
-                            {
-                                return Bitmap::operator!=( rAlphaMask );
-                            }
+    AlphaMask&  operator=( const Bitmap& rBitmap );
+    AlphaMask&  operator=( const AlphaMask& rAlphaMask )
+    {
+        return (AlphaMask&) Bitmap::operator=( rAlphaMask );
+    }
 
-    const MapMode&          GetPrefMapMode() const
-                            {
-                                return Bitmap::GetPrefMapMode();
-                            }
-    void                    SetPrefMapMode( const MapMode& rMapMode )
-                            {
-                                Bitmap::SetPrefMapMode( rMapMode );
-                            }
+    sal_Bool operator!() const
+    {
+        return Bitmap::operator!();
+    }
 
-    const Size&             GetPrefSize() const
-                            {
-                                return Bitmap::GetPrefSize();
-                            }
-    void                    SetPrefSize( const Size& rSize )
-                            {
-                                Bitmap::SetPrefSize( rSize );
-                            }
+    sal_Bool operator==( const AlphaMask& rAlphaMask ) const
+    {
+        return Bitmap::operator==( rAlphaMask );
+    }
 
-    Size                    GetSizePixel() const
-                            {
-                                return Bitmap::GetSizePixel();
-                            }
+    sal_Bool operator!=( const AlphaMask& rAlphaMask ) const
+    {
+        return Bitmap::operator!=( rAlphaMask );
+    }
 
-    sal_uLong               GetSizeBytes() const
-                            {
-                                return Bitmap::GetSizeBytes();
-                            }
-    sal_uLong               GetChecksum() const
-                            {
-                                return Bitmap::GetChecksum();
-                            }
+    const MapMode&  GetPrefMapMode() const
+    {
+        return Bitmap::GetPrefMapMode();
+    }
 
-    Bitmap                  GetBitmap() const;
+    void    SetPrefMapMode( const MapMode& rMapMode )
+    {
+        Bitmap::SetPrefMapMode( rMapMode );
+    }
 
-    sal_Bool                CopyPixel(
-                                const Rectangle& rRectDst,
-                                const Rectangle& rRectSrc,
-                                const AlphaMask* pAlphaSrc = NULL
-                            );
-    sal_Bool                Erase( sal_uInt8 cTransparency );
-    sal_Bool                Replace( const Bitmap& rMask, sal_uInt8 rReplaceTransparency );
-    sal_Bool                Replace(
-                                sal_uInt8 cSearchTransparency,
-                                sal_uInt8 cReplaceTransparency,
-                                sal_uLong nTol = 0UL
-                            );
+    const Size& GetPrefSize() const
+    {
+        return Bitmap::GetPrefSize();
+    }
 
-    BitmapReadAccess*       AcquireReadAccess()
-                            {
-                                return Bitmap::AcquireReadAccess();
-                            }
-    BitmapWriteAccess*      AcquireWriteAccess()
-                            {
-                                return Bitmap::AcquireWriteAccess();
-                            }
-    void                    ReleaseAccess( BitmapReadAccess* pAccess );
+    void    SetPrefSize( const Size& rSize )
+    {
+        Bitmap::SetPrefSize( rSize );
+    }
+
+    Size    GetSizePixel() const
+    {
+        return Bitmap::GetSizePixel();
+    }
+
+    sal_uLong   GetSizeBytes() const
+    {
+        return Bitmap::GetSizeBytes();
+    }
+    sal_uLong   GetChecksum() const
+    {
+        return Bitmap::GetChecksum();
+    }
+
+    Bitmap  GetBitmap() const;
+
+    sal_Bool    CopyPixel( const Rectangle& rRectDst, const Rectangle& rRectSrc,
+                           const AlphaMask* pAlphaSrc = NULL);
+
+    sal_Bool    Erase( sal_uInt8 cTransparency );
+    sal_Bool    Replace( const Bitmap& rMask, sal_uInt8 rReplaceTransparency );
+    sal_Bool    Replace( sal_uInt8 cSearchTransparency, sal_uInt8 cReplaceTransparency,
+                         sal_uLong nTol = 0UL );
+
+    sal_Bool Scale( const Size& rNewSize, sal_uLong nScaleFlag );
+    sal_Bool Scale( const double& rScaleX, const double& rScaleY, sal_uLong nScaleFlag = BMP_SCALE_DEFAULT );
+    sal_Bool ScaleCropRotate( const double& rScaleX, const double& rScaleY, const Rectangle& rRectPixel, long nAngle10,
+                              const Color& rFillColor, sal_uLong nScaleFlag = BMP_SCALE_DEFAULT );
+
+    BitmapReadAccess*   AcquireReadAccess()
+    {
+        return Bitmap::AcquireReadAccess();
+    }
+
+    BitmapWriteAccess*  AcquireWriteAccess()
+    {
+        return Bitmap::AcquireWriteAccess();
+    }
+
+    void    ReleaseAccess( BitmapReadAccess* pAccess );
 
     typedef vcl::ScopedBitmapAccess< BitmapReadAccess, AlphaMask, &AlphaMask::AcquireReadAccess >
         ScopedReadAccess;
     typedef vcl::ScopedBitmapAccess< BitmapWriteAccess, AlphaMask, &AlphaMask::AcquireWriteAccess >
         ScopedWriteAccess;
 
-    sal_Bool                Read( SvStream& rIStm, sal_Bool bFileHeader = sal_True )
-                            {
-                                return Bitmap::Read( rIStm, bFileHeader );
-                            }
-    sal_Bool                Write(
-                                SvStream& rOStm,
-                                sal_Bool bCompressed = sal_True,
-                                sal_Bool bFileHeader = sal_True
-                            ) const
-                            {
-                                return Bitmap::Write( rOStm, bCompressed, bFileHeader );
-                            }
+    sal_Bool    Read( SvStream& rIStm, sal_Bool bFileHeader = sal_True )
+    {
+        return Bitmap::Read( rIStm, bFileHeader );
+    }
+    sal_Bool    Write( SvStream& rOStm, sal_Bool bCompressed = sal_True, sal_Bool bFileHeader = sal_True ) const
+    {
+        return Bitmap::Write( rOStm, bCompressed, bFileHeader );
+    }
 
     friend VCL_DLLPUBLIC SvStream& operator<<( SvStream& rOStm, const BitmapEx& rBitmapEx );
     friend VCL_DLLPUBLIC SvStream& operator>>( SvStream& rIStm, BitmapEx& rBitmapEx );

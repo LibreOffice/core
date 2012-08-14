@@ -39,8 +39,6 @@ AlphaMask::AlphaMask()
 {
 }
 
-// -----------------------------------------------------------------------------
-
 AlphaMask::AlphaMask( const Bitmap& rBitmap ) :
     Bitmap( rBitmap )
 {
@@ -48,14 +46,10 @@ AlphaMask::AlphaMask( const Bitmap& rBitmap ) :
         Bitmap::Convert( BMP_CONVERSION_8BIT_GREYS );
 }
 
-// -----------------------------------------------------------------------------
-
 AlphaMask::AlphaMask( const AlphaMask& rAlphaMask ) :
     Bitmap( rAlphaMask )
 {
 }
-
-// -----------------------------------------------------------------------------
 
 AlphaMask::AlphaMask( const Size& rSizePixel, sal_uInt8* pEraseTransparency ) :
     Bitmap( rSizePixel, 8, &Bitmap::GetGreyPalette( 256 ) )
@@ -64,13 +58,9 @@ AlphaMask::AlphaMask( const Size& rSizePixel, sal_uInt8* pEraseTransparency ) :
         Bitmap::Erase( Color( *pEraseTransparency, *pEraseTransparency, *pEraseTransparency ) );
 }
 
-// -----------------------------------------------------------------------------
-
 AlphaMask::~AlphaMask()
 {
 }
-
-// -----------------------------------------------------------------------------
 
 AlphaMask& AlphaMask::operator=( const Bitmap& rBitmap )
 {
@@ -82,14 +72,10 @@ AlphaMask& AlphaMask::operator=( const Bitmap& rBitmap )
     return *this;
 }
 
-// -----------------------------------------------------------------------------
-
 const Bitmap& AlphaMask::ImplGetBitmap() const
 {
     return( (const Bitmap&) *this );
 }
-
-// -----------------------------------------------------------------------------
 
 void AlphaMask::ImplSetBitmap( const Bitmap& rBitmap )
 {
@@ -97,14 +83,10 @@ void AlphaMask::ImplSetBitmap( const Bitmap& rBitmap )
     *(Bitmap*) this = rBitmap;
 }
 
-// -----------------------------------------------------------------------------
-
 Bitmap AlphaMask::GetBitmap() const
 {
     return ImplGetBitmap();
 }
-
-// -----------------------------------------------------------------------------
 
 sal_Bool AlphaMask::CopyPixel( const Rectangle& rRectDst, const Rectangle& rRectSrc,
                            const AlphaMask* pAlphaSrc )
@@ -215,14 +197,10 @@ sal_Bool AlphaMask::CopyPixel( const Rectangle& rRectDst, const Rectangle& rRect
 
 }
 
-// -----------------------------------------------------------------------------
-
 sal_Bool AlphaMask::Erase( sal_uInt8 cTransparency )
 {
     return Bitmap::Erase( Color( cTransparency, cTransparency, cTransparency ) );
 }
-
-// -----------------------------------------------------------------------------
 
 sal_Bool AlphaMask::Replace( const Bitmap& rMask, sal_uInt8 cReplaceTransparency )
 {
@@ -248,8 +226,6 @@ sal_Bool AlphaMask::Replace( const Bitmap& rMask, sal_uInt8 cReplaceTransparency
 
     return bRet;
 }
-
-// -----------------------------------------------------------------------------
 
 sal_Bool AlphaMask::Replace( sal_uInt8 cSearchTransparency, sal_uInt8 cReplaceTransparency, sal_uLong
 #ifdef DBG_UTIL
@@ -302,8 +278,6 @@ nTol
     return bRet;
 }
 
-// -----------------------------------------------------------------------------
-
 void AlphaMask::ReleaseAccess( BitmapReadAccess* pAccess )
 {
     if( pAccess )
@@ -311,6 +285,37 @@ void AlphaMask::ReleaseAccess( BitmapReadAccess* pAccess )
         Bitmap::ReleaseAccess( pAccess );
         Bitmap::Convert( BMP_CONVERSION_8BIT_GREYS );
     }
+}
+
+sal_Bool AlphaMask::Scale( const Size& rNewSize, sal_uLong nScaleFlag )
+{
+    sal_Bool bRet = Bitmap::Scale( rNewSize, nScaleFlag );
+
+    if( bRet )
+        Bitmap::Convert( BMP_CONVERSION_8BIT_GREYS );
+
+    return bRet;
+}
+
+sal_Bool AlphaMask::Scale( const double& rScaleX, const double& rScaleY, sal_uLong nScaleFlag )
+{
+    sal_Bool bRet = Bitmap::Scale( rScaleX, rScaleY, nScaleFlag );
+
+    if( bRet )
+        Bitmap::Convert( BMP_CONVERSION_8BIT_GREYS );
+
+    return bRet;
+}
+
+sal_Bool AlphaMask::ScaleCropRotate(
+        const double& rScaleX, const double& rScaleY, const Rectangle& rRectPixel, long nAngle10,
+        const Color& rFillColor, sal_uLong  nScaleFlag  )
+{
+    sal_Bool bRet = Bitmap::ScaleCropRotate( rScaleX, rScaleY, rRectPixel, nAngle10, rFillColor, nScaleFlag );
+    if( bRet )
+        Bitmap::Convert( BMP_CONVERSION_8BIT_GREYS );
+
+    return bRet;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
