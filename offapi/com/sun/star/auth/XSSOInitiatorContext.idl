@@ -29,8 +29,11 @@
 #ifndef __com_sun_star_auth_XSSOInitiatorContext_idl__
 #define __com_sun_star_auth_XSSOInitiatorContext_idl__
 
+#include <com/sun/star/auth/AuthenticationFailedException.idl>
+#include <com/sun/star/auth/InvalidArgumentException.idl>
+#include <com/sun/star/auth/InvalidContextException.idl>
+#include <com/sun/star/auth/InvalidCredentialException.idl>
 #include <com/sun/star/auth/XSSOContext.idl>
-#include <com/sun/star/auth/SSOExceptions.idl>
 
 module com { module sun { module star { module auth {
 

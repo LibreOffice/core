@@ -31,7 +31,9 @@
 
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/auth/InvalidArgumentException.idl>
-#include <com/sun/star/auth/SSOExceptions.idl>
+#include <com/sun/star/auth/InvalidCredentialException.idl>
+#include <com/sun/star/auth/InvalidPrincipalException.idl>
+#include <com/sun/star/auth/UnsupportedException.idl>
 #include <com/sun/star/auth/XSSOAcceptorContext.idl>
 #include <com/sun/star/auth/XSSOInitiatorContext.idl>
 

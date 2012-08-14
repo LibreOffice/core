@@ -299,9 +299,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/accessi
 	Accessible \
 	AccessibleContext \
 ))
-$(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/auth,\
-	SSOExceptions \
-))
 $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/awt,\
 	AccessibleButton \
 	AccessibleCheckBox \
