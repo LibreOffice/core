@@ -186,7 +186,8 @@ GtkSalMenu::GtkSalMenu( sal_Bool bMenuBar ) :
     aDBusMenubarPath( NULL ),
     pSessionBus( NULL ),
     mMenubarId( 0 ),
-    mActionGroupId ( 0 )
+    mActionGroupId ( 0 ),
+    mpActionGroup( NULL )
 {
     mpCurrentSection = G_MENU_MODEL( g_lo_menu_new() );
     maSections.push_back( mpCurrentSection );
@@ -195,6 +196,8 @@ GtkSalMenu::GtkSalMenu( sal_Bool bMenuBar ) :
     g_lo_menu_append_section( G_LO_MENU( mpMenuModel ), NULL, mpCurrentSection );
 
     if (bMenuBar) {
+        mpActionGroup = G_ACTION_GROUP( g_lo_action_group_new() );
+
         pSessionBus = g_bus_get_sync (G_BUS_TYPE_SESSION, NULL, NULL);
         if(!pSessionBus) puts ("Fail bus get");
     }
@@ -202,6 +205,8 @@ GtkSalMenu::GtkSalMenu( sal_Bool bMenuBar ) :
 
 GtkSalMenu::~GtkSalMenu()
 {
+    g_source_remove_by_user_data( this );
+
     // FIXME: Not sure if we need to unset X Properties.
     if ( mpFrame ) {
         GtkWidget *widget = GTK_WIDGET( mpFrame->getWindow() );
@@ -238,11 +243,15 @@ GtkSalMenu::~GtkSalMenu()
 
     g_object_unref( mpMenuModel );
     g_object_unref( mpCurrentSection );
+
+    if ( mpActionGroup ) {
+        g_object_unref( mpActionGroup );
+    }
 }
 
 sal_Bool GtkSalMenu::VisibleMenuBar()
 {
-    return sal_True;
+    return sal_False;
 }
 
 void GtkSalMenu::InsertItem( SalMenuItem* pSalMenuItem, unsigned nPos )
@@ -268,6 +277,13 @@ void GtkSalMenu::InsertItem( SalMenuItem* pSalMenuItem, unsigned nPos )
 
 void GtkSalMenu::RemoveItem( unsigned nPos )
 {
+    // FIXME: This method makes the application crash.
+//    if ( nPos < maItems.size() ) {
+//        GtkSalMenuItem* pSalMenuItem = maItems[ nPos ];
+
+//        g_lo_menu_remove( G_LO_MENU( pSalMenuItem->mpParentSection ), pSalMenuItem->mnPos );
+//        maItems.erase( maItems.begin() + nPos, maItems.begin() + nPos );
+//    }
 }
 
 void GtkSalMenu::SetSubMenu( SalMenuItem* pSalMenuItem, SalMenu* pSubMenu, unsigned nPos )
@@ -287,13 +303,31 @@ void GtkSalMenu::SetSubMenu( SalMenuItem* pSalMenuItem, SalMenu* pSubMenu, unsig
 
 void updateNativeMenu( GtkSalMenu* pMenu );
 
+void updateSpecialMenus( GtkSalMenu *pMenu ) {
+    if ( pMenu ) {
+        for ( sal_uInt16 i = 0; i < pMenu->GetItemCount(); i++ ) {
+            GtkSalMenuItem* pSalMenuItem = pMenu->GetItemAtPos( i );
+
+            rtl::OUString aCommand = pSalMenuItem->mpVCLMenu->GetItemCommand( pSalMenuItem->mnId );
+
+            if ( isSpecialSubmenu( aCommand ) ) {
+                updateNativeMenu( pSalMenuItem->mpSubMenu );
+            }
+
+            updateSpecialMenus( pSalMenuItem->mpSubMenu );
+        }
+    }
+}
+
 gboolean GenerateMenu(gpointer user_data) {
     cout << "Generating menu..." << endl;
     GtkSalMenu* pSalMenu = static_cast< GtkSalMenu* >( user_data );
-    updateNativeMenu( pSalMenu );
+//    updateNativeMenu( pSalMenu );
+    updateSpecialMenus( pSalMenu );
 
     return TRUE;
 }
+
 
 void GtkSalMenu::SetFrame( const SalFrame* pFrame )
 {
@@ -315,12 +349,12 @@ void GtkSalMenu::SetFrame( const SalFrame* pFrame )
         gdk_x11_window_set_utf8_property ( gdkWindow, "_GTK_WINDOW_OBJECT_PATH", aDBusWindowPath );
         gdk_x11_window_set_utf8_property ( gdkWindow, "_GTK_MENUBAR_OBJECT_PATH", aDBusMenubarPath );
 
-        // Try to publish the menu with the right bus data.
-        Freeze();
+        // Publish the menu.
+        this->publishMenu( mpMenuModel, mpActionGroup );
 
         // Refresh the menu every second.
         // This code is a workaround until required modifications in Gtk+ are available.
-//        g_timeout_add( 1000, GenerateMenu, this );
+        g_timeout_add_seconds( 1, GenerateMenu, this );
     }
 }
 
@@ -378,27 +412,29 @@ void GtkSalMenu::SetItemCommand( unsigned nPos, SalMenuItem* pSalMenuItem, const
 {
     GtkSalMenuItem* pGtkSalMenuItem = static_cast< GtkSalMenuItem* >( pSalMenuItem );
 
-    if ( pGtkSalMenuItem->mpAction ) {
-        g_object_unref( pGtkSalMenuItem->mpAction );
-    }
+    if ( pGtkSalMenuItem && pGtkSalMenuItem->mpMenuItem ) {
+        if ( pGtkSalMenuItem->mpAction ) {
+            g_object_unref( pGtkSalMenuItem->mpAction );
+            pGtkSalMenuItem->mpAction = NULL;
+        }
 
-    rtl::OString aOCommandStr = rtl::OUStringToOString( aCommandStr, RTL_TEXTENCODING_UTF8 );
+        rtl::OString aOCommandStr = rtl::OUStringToOString( aCommandStr, RTL_TEXTENCODING_UTF8 );
 
-    GSimpleAction *pAction = g_simple_action_new( aOCommandStr.getStr(), NULL );
+        GSimpleAction *pAction = g_simple_action_new( aOCommandStr.getStr(), NULL );
 
-//    if ( !pGtkSalMenuItem->mpVCLMenu->GetPopupMenu( pGtkSalMenuItem->mnId ) ) {
+        //    if ( !pGtkSalMenuItem->mpVCLMenu->GetPopupMenu( pGtkSalMenuItem->mnId ) ) {
         g_signal_connect(pAction, "activate", G_CALLBACK( dispatchAction ), pGtkSalMenuItem);
-//    }
+        //    }
 
-    pGtkSalMenuItem->mpAction = G_ACTION( pAction );
+        pGtkSalMenuItem->mpAction = G_ACTION( pAction );
 
+        rtl::OString aItemCommand = "win." + aOCommandStr;
+        g_lo_menu_item_set_action_and_target( pGtkSalMenuItem->mpMenuItem, aItemCommand.getStr(), NULL );
 
-    rtl::OString aItemCommand = "win." + aOCommandStr;
-    g_lo_menu_item_set_action_and_target( pGtkSalMenuItem->mpMenuItem, aItemCommand.getStr(), NULL );
-
-    if ( pGtkSalMenuItem->mpParentSection ) {
-        g_lo_menu_remove( G_LO_MENU( pGtkSalMenuItem->mpParentSection ), pGtkSalMenuItem->mnPos );
-        g_lo_menu_insert_item( G_LO_MENU( pGtkSalMenuItem->mpParentSection ), pGtkSalMenuItem->mnPos, pGtkSalMenuItem->mpMenuItem );
+        if ( pGtkSalMenuItem->mpParentSection ) {
+            g_lo_menu_remove( G_LO_MENU( pGtkSalMenuItem->mpParentSection ), pGtkSalMenuItem->mnPos );
+            g_lo_menu_insert_item( G_LO_MENU( pGtkSalMenuItem->mpParentSection ), pGtkSalMenuItem->mnPos, pGtkSalMenuItem->mpMenuItem );
+        }
     }
 }
 
@@ -425,13 +461,7 @@ void updateNativeMenu( GtkSalMenu* pMenu ) {
 void GtkSalMenu::Freeze()
 {
     updateNativeMenu( this );
-
-    GLOActionGroup *mpActionGroup = g_lo_action_group_new();
-
-    generateActions( this, mpActionGroup );
-
-    // Menubar would have one section only.
-    this->publishMenu( mpMenuModel, G_ACTION_GROUP( mpActionGroup ) );
+    generateActions( this, G_LO_ACTION_GROUP( mpActionGroup ) );
 }
 
 // =======================================================================

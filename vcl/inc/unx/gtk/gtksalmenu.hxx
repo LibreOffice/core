@@ -62,9 +62,10 @@ private:
     sal_Int32                       mMenubarId;
     sal_Int32                       mActionGroupId;
 
-    // GMenuModel attributes
+    // GMenuModel and GActionGroup attributes
     GMenuModel*                     mpMenuModel;
     GMenuModel*                     mpCurrentSection;
+    GActionGroup*                   mpActionGroup;
 
     virtual void    publishMenu( GMenuModel*, GActionGroup* );
     GtkSalMenuItem* GetSalMenuItem( sal_uInt16 nId );
