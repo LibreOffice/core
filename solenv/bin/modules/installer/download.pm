@@ -778,64 +778,6 @@ sub get_language_string_from_language_block
     return $newstring;
 }
 
-##################################################################
-# Converting utf 16 file to utf 8
-##################################################################
-
-sub convert_utf16_to_utf8
-{
-    my ( $filename ) = @_;
-
-    my @localfile = ();
-
-    my $savfilename = $filename . "_before.utf16";
-    installer::systemactions::copy_one_file($filename, $savfilename);
-
-    open( IN, "<:encoding(UTF16-LE)", $filename ) || installer::exiter::exit_program("ERROR: Cannot open file $filename for reading", "convert_utf16_to_utf8");
-    while ( $line = <IN> ) {
-        push @localfile, $line;
-    }
-    close( IN );
-
-    if ( open( OUT, ">:utf8", $filename ) )
-    {
-        print OUT @localfile;
-        close(OUT);
-    }
-
-    $savfilename = $filename . "_before.utf8";
-    installer::systemactions::copy_one_file($filename, $savfilename);
-}
-
-##################################################################
-# Converting utf 8 file to utf 16
-##################################################################
-
-sub convert_utf8_to_utf16
-{
-    my ( $filename ) = @_;
-
-    my @localfile = ();
-
-    my $savfilename = $filename . "_after.utf8";
-    installer::systemactions::copy_one_file($filename, $savfilename);
-
-    open( IN, "<:utf8", $filename ) || installer::exiter::exit_program("ERROR: Cannot open file $filename for reading", "convert_utf8_to_utf16");
-    while ( $line = <IN> ) {
-        push @localfile, $line;
-    }
-    close( IN );
-
-    if ( open( OUT, ">:raw:encoding(UTF16-LE):crlf:utf8", $filename ) )
-    {
-        print OUT @localfile;
-        close(OUT);
-    }
-
-    $savfilename = $filename . "_after.utf16";
-    installer::systemactions::copy_one_file($filename, $savfilename);
-}
-
 ####################################################
 # Creating link tree for upload
 ####################################################
