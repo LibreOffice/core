@@ -126,6 +126,18 @@ protected:
     void renderBitmap( SlideBitmapSharedPtr const&                 pSlideBitmap,
                        boost::shared_ptr<cppcanvas::Canvas> const& pCanvas );
 
+    /** Called on derived classes to perform actions before first run.
+
+        This typically involves rendering of the initial slide content.
+
+        @param rViewEntry the view entry
+
+        @param rDestinationCanvas the canvas to render on
+     */
+    virtual void prepareForRun(
+            const ViewEntry& rViewEntry,
+            const cppcanvas::CanvasSharedPtr& rDestinationCanvas );
+
     /** Called on derived classes to implement actual slide change.
 
         This method is called with the sprite of the slide coming 'in'

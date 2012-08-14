@@ -393,9 +393,12 @@ public:
                            rViewContainer,
                            rScreenUpdater,
                            rEventMultiplexer ),
-          maFadeColor( rFadeColor ),
-          mbFirstTurn( true )
+          maFadeColor( rFadeColor )
         {}
+
+    virtual void prepareForRun(
+        const ViewEntry& rViewEntry,
+        const cppcanvas::CanvasSharedPtr& rDestinationCanvas );
 
     virtual void performIn(
         const ::cppcanvas::CustomSpriteSharedPtr&   rSprite,
@@ -411,8 +414,18 @@ public:
 
 private:
     const boost::optional< RGBColor >               maFadeColor;
-    bool                                            mbFirstTurn;
 };
+
+void FadingSlideChange::prepareForRun(
+    const ViewEntry& rViewEntry,
+    const cppcanvas::CanvasSharedPtr& rDestinationCanvas )
+{
+    // clear page to given fade color. 'Leaving' slide is
+    // painted atop of that, but slowly fading out.
+    fillPage( rDestinationCanvas,
+              ::basegfx::B2DSize( getEnteringSlideSizePixel( rViewEntry.mpView ) ),
+              *maFadeColor );
+}
 
 void FadingSlideChange::performIn(
     const ::cppcanvas::CustomSpriteSharedPtr&   rSprite,
@@ -434,7 +447,7 @@ void FadingSlideChange::performIn(
 
 void FadingSlideChange::performOut(
     const ::cppcanvas::CustomSpriteSharedPtr&  rSprite,
-    const ViewEntry&                           rViewEntry,
+    const ViewEntry&                           /* rViewEntry */,
     const ::cppcanvas::CanvasSharedPtr&        rDestinationCanvas,
     double                                     t )
 {
@@ -448,17 +461,6 @@ void FadingSlideChange::performOut(
     // only needed for color fades
     if( maFadeColor )
     {
-        if( mbFirstTurn )
-        {
-            mbFirstTurn = false;
-
-            // clear page to given fade color. 'Leaving' slide is
-            // painted atop of that, but slowly fading out.
-            fillPage( rDestinationCanvas,
-                      ::basegfx::B2DSize( getEnteringSlideSizePixel( rViewEntry.mpView ) ),
-                      *maFadeColor );
-        }
-
         // Until half of the active time, fade out old
         // slide. After half of the active time, old slide
         // will be invisible.
@@ -486,9 +488,12 @@ public:
                            rViewContainer,
                            rScreenUpdater,
                            rEventMultiplexer ),
-          maFadeColor( rFadeColor ),
-          mbFirstTurn( true )
+          maFadeColor( rFadeColor )
         {}
+
+    virtual void prepareForRun(
+        const ViewEntry& rViewEntry,
+        const cppcanvas::CanvasSharedPtr& rDestinationCanvas );
 
     virtual void performIn(
         const ::cppcanvas::CustomSpriteSharedPtr&   rSprite,
@@ -504,8 +509,18 @@ public:
 
 private:
     RGBColor maFadeColor;
-    bool    mbFirstTurn;
 };
+
+void CutSlideChange::prepareForRun(
+    const ViewEntry& rViewEntry,
+    const cppcanvas::CanvasSharedPtr& rDestinationCanvas )
+{
+    // clear page to given fade color. 'Leaving' slide is
+    // painted atop of that
+    fillPage( rDestinationCanvas,
+              ::basegfx::B2DSize( getEnteringSlideSizePixel( rViewEntry.mpView ) ),
+              maFadeColor );
+}
 
 void CutSlideChange::performIn(
     const ::cppcanvas::CustomSpriteSharedPtr&   rSprite,
@@ -523,7 +538,7 @@ void CutSlideChange::performIn(
 
 void CutSlideChange::performOut(
     const ::cppcanvas::CustomSpriteSharedPtr&  rSprite,
-    const ViewEntry&                           rViewEntry,
+    const ViewEntry&                           /* rViewEntry */,
     const ::cppcanvas::CanvasSharedPtr&        rDestinationCanvas,
     double                                     t )
 {
@@ -533,17 +548,6 @@ void CutSlideChange::performOut(
     ENSURE_OR_THROW(
         rDestinationCanvas,
         "FadingSlideChange::performOut(): Invalid dest canvas" );
-
-    if( mbFirstTurn )
-    {
-        mbFirstTurn = false;
-
-        // clear page to given fade color. 'Leaving' slide is
-        // painted atop of that
-        fillPage( rDestinationCanvas,
-                  ::basegfx::B2DSize( getEnteringSlideSizePixel( rViewEntry.mpView ) ),
-                  maFadeColor );
-    }
 
     // Until 1/3rd of the active time, display old slide.
     rSprite->setAlpha( t > 1/3.0 ? 0.0 : 1.0 );
@@ -556,8 +560,6 @@ class MovingSlideChange : public SlideChangeBase
 
     /// Direction vector for entering slide,
     const ::basegfx::B2DVector  maEnteringDirection;
-
-    bool                        mbFirstPerformCall;
 
 public:
     /** Create a new SlideChanger, for the given entering slide
@@ -600,9 +602,12 @@ public:
           // TODO(F1): calc correct length of direction
           // vector. Directions not strictly horizontal or vertical
           // must travel a longer distance.
-          maEnteringDirection( rEnteringDirection ),
-          mbFirstPerformCall( true )
+          maEnteringDirection( rEnteringDirection )
         {}
+
+    virtual void prepareForRun(
+        const ViewEntry& rViewEntry,
+        const cppcanvas::CanvasSharedPtr& rDestinationCanvas );
 
     virtual void performIn(
         const ::cppcanvas::CustomSpriteSharedPtr&   rSprite,
@@ -616,6 +621,16 @@ public:
         const ::cppcanvas::CanvasSharedPtr&        rDestinationCanvas,
         double                                     t );
 };
+
+void MovingSlideChange::prepareForRun(
+    const ViewEntry& rViewEntry,
+    const cppcanvas::CanvasSharedPtr& rDestinationCanvas )
+{
+    if ( maLeavingDirection.equalZero() )
+        renderBitmap( getLeavingBitmap( rViewEntry ), rDestinationCanvas );
+    else if ( maEnteringDirection.equalZero() )
+        renderBitmap( getEnteringBitmap( rViewEntry ), rDestinationCanvas );
+}
 
 void MovingSlideChange::performIn(
     const ::cppcanvas::CustomSpriteSharedPtr&   rSprite,
@@ -631,12 +646,6 @@ void MovingSlideChange::performIn(
     ENSURE_OR_THROW(
         rDestinationCanvas,
         "MovingSlideChange::performIn(): Invalid dest canvas" );
-
-    if (mbFirstPerformCall && maLeavingDirection.equalZero())
-    {
-        mbFirstPerformCall = false;
-        renderBitmap( getLeavingBitmap(rViewEntry), rDestinationCanvas );
-    }
 
     // TODO(F1): This does not account for non-translational
     // transformations! If the canvas is rotated, we still
@@ -669,12 +678,6 @@ void MovingSlideChange::performOut(
     ENSURE_OR_THROW(
         rDestinationCanvas,
         "MovingSlideChange::performOut(): Invalid dest canvas" );
-
-    if (mbFirstPerformCall && maEnteringDirection.equalZero())
-    {
-        mbFirstPerformCall = false;
-        renderBitmap( getEnteringBitmap(rViewEntry), rDestinationCanvas );
-    }
 
     // TODO(F1): This does not account for non-translational
     // transformations! If the canvas is rotated, we still

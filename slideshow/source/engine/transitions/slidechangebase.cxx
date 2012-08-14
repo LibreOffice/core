@@ -199,6 +199,10 @@ void SlideChangeBase::start( const AnimatableShapeSharedPtr&     rShape,
 
     prefetch(rShape,rLayer); // no-op, if already done
 
+    // get the subclasses a chance to do any specific initialization before run
+    for ( ViewsVecT::const_iterator aCurr( beginViews() ), aEnd( endViews() ); aCurr != aEnd; ++aCurr )
+        prepareForRun( *aCurr, aCurr->mpView->getCanvas() );
+
     // start accompanying sound effect, if any
     if( mpSoundPlayer )
     {
@@ -354,6 +358,12 @@ bool SlideChangeBase::operator()( double nValue )
     mrScreenUpdater.notifyUpdate();
 
     return true;
+}
+
+void SlideChangeBase::prepareForRun(
+    const ViewEntry& /* rViewEntry */,
+    const boost::shared_ptr<cppcanvas::Canvas>& /* rDestinationCanvas */ )
+{
 }
 
 void SlideChangeBase::performIn(
