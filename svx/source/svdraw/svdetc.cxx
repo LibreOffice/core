@@ -290,9 +290,9 @@ void SdrLinkList::Clear()
 {
     unsigned nAnz=GetLinkCount();
     for (unsigned i=0; i<nAnz; i++) {
-        delete (Link*)aList.GetObject(i);
+        delete aList[i];
     }
-    aList.Clear();
+    aList.clear();
 }
 
 unsigned SdrLinkList::FindEntry(const Link& rLink) const
@@ -309,7 +309,10 @@ void SdrLinkList::InsertLink(const Link& rLink, unsigned nPos)
     unsigned nFnd=FindEntry(rLink);
     if (nFnd==0xFFFF) {
         if (rLink.IsSet()) {
-            aList.Insert(new Link(rLink),nPos);
+            if(nPos==0xFFFF)
+                aList.push_back(new Link(rLink));
+            else
+                aList.insert(aList.begin() + nPos, new Link(rLink));
         } else {
             OSL_FAIL("SdrLinkList::InsertLink(): Tried to insert a link that was not set already.");
         }
@@ -322,7 +325,8 @@ void SdrLinkList::RemoveLink(const Link& rLink)
 {
     unsigned nFnd=FindEntry(rLink);
     if (nFnd!=0xFFFF) {
-        Link* pLink=(Link*)aList.Remove(nFnd);
+        Link* pLink = aList[nFnd];
+        aList.erase( aList.begin() + nFnd );
         delete pLink;
     } else {
         OSL_FAIL("SdrLinkList::RemoveLink(): Link not found.");

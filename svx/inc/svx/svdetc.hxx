@@ -219,16 +219,16 @@ public:
 
 class SdrLinkList
 {
-    Container aList;
+    std::vector<Link*> aList;
 protected:
     unsigned FindEntry(const Link& rLink) const;
 public:
-    SdrLinkList(): aList(1024,4,4)        {}
-    ~SdrLinkList()                        { Clear(); }
+    SdrLinkList(): aList()                   {}
+    ~SdrLinkList()                           { Clear(); }
     SVX_DLLPUBLIC void Clear();
-    unsigned GetLinkCount() const            { return (unsigned)aList.Count(); }
-    Link& GetLink(unsigned nNum)             { return *((Link*)(aList.GetObject(nNum))); }
-    const Link& GetLink(unsigned nNum) const { return *((Link*)(aList.GetObject(nNum))); }
+    unsigned GetLinkCount() const            { return (unsigned)aList.size(); }
+    Link& GetLink(unsigned nNum)             { return *aList[nNum]; }
+    const Link& GetLink(unsigned nNum) const { return *aList[nNum]; }
     void InsertLink(const Link& rLink, unsigned nPos=0xFFFF);
     void RemoveLink(const Link& rLink);
     bool HasLink(const Link& rLink) const { return FindEntry(rLink)!=0xFFFF; }
