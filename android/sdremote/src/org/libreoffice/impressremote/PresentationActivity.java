@@ -7,7 +7,6 @@ import java.util.TimeZone;
 import org.libreoffice.impressremote.communication.CommunicationService;
 import org.libreoffice.impressremote.communication.SlideShow.Timer;
 
-import android.annotation.SuppressLint;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.FragmentManager;
@@ -20,8 +19,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
-import android.os.Message;
-import android.os.Messenger;
 import android.preference.PreferenceManager;
 import android.text.format.DateFormat;
 import android.view.KeyEvent;
@@ -38,446 +35,450 @@ import android.widget.TextView;
 import android.widget.ToggleButton;
 
 public class PresentationActivity extends Activity {
-	private CommunicationService mCommunicationService;
-	private boolean mIsBound = false;
-	private FrameLayout mLayout;
-	private FrameLayout mOuterLayout;
-	private ThumbnailFragment mThumbnailFragment;
-	private PresentationFragment mPresentationFragment;
-	private ActionBarManager mActionBarManager;
+    private CommunicationService mCommunicationService;
+    private boolean mIsBound = false;
+    private FrameLayout mLayout;
+    private FrameLayout mOuterLayout;
+    private ThumbnailFragment mThumbnailFragment;
+    private PresentationFragment mPresentationFragment;
+    private ActionBarManager mActionBarManager;
 
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
-		bindService(new Intent(this, CommunicationService.class), mConnection,
-		                Context.BIND_IMPORTANT);
-		mIsBound = true;
+        bindService(new Intent(this, CommunicationService.class), mConnection,
+                        Context.BIND_IMPORTANT);
+        mIsBound = true;
 
-		setContentView(R.layout.activity_presentation);
-		mOuterLayout = (FrameLayout) findViewById(R.id.framelayout);
-		mLayout = new InterceptorLayout(this);
-		mOuterLayout.addView(mLayout);
-		mLayout.setId(R.id.presentation_innerFrame);
-		//		((FrameLayout) findViewById(R.id.framelayout)).addView(mLayout);
-		mThumbnailFragment = new ThumbnailFragment();
-		mPresentationFragment = new PresentationFragment();
+        setContentView(R.layout.activity_presentation);
+        mOuterLayout = (FrameLayout) findViewById(R.id.framelayout);
+        mOuterLayout.removeAllViews();
+        mLayout = new InterceptorLayout(this);
+        mOuterLayout.addView(mLayout);
+        mLayout.setId(R.id.presentation_innerFrame);
 
-		FragmentManager fragmentManager = getFragmentManager();
-		FragmentTransaction fragmentTransaction = fragmentManager
-		                .beginTransaction();
-		fragmentTransaction.add(R.id.presentation_innerFrame,
-		                mPresentationFragment, "fragment_presentation");
-		fragmentTransaction.commit();
-	}
+        //((FrameLayout) findViewById(R.id.framelayout)).addView(mLayout);
+        mThumbnailFragment = new ThumbnailFragment();
+        mPresentationFragment = new PresentationFragment();
 
-	@Override
-	public boolean dispatchKeyEvent(KeyEvent event) {
-		SharedPreferences aPref = PreferenceManager
-		                .getDefaultSharedPreferences(this);
-		boolean aVolumeSwitching = aPref.getBoolean("option_volumeswitching",
-		                false);
-		boolean aRelevantFragmentVisible = mPresentationFragment.isVisible()
-		                || mThumbnailFragment.isVisible();
-		if (aVolumeSwitching && aRelevantFragmentVisible) {
+        FragmentManager fragmentManager = getFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager
+                        .beginTransaction();
+        fragmentTransaction.add(R.id.presentation_innerFrame,
+                        mPresentationFragment, "fragment_presentation");
+        fragmentTransaction.commit();
 
-			int action = event.getAction();
-			int keyCode = event.getKeyCode();
-			switch (keyCode) {
-			case KeyEvent.KEYCODE_VOLUME_UP:
-				if (action == KeyEvent.ACTION_UP) {
-					mCommunicationService.getTransmitter().nextTransition();
-				}
-				return true;
-			case KeyEvent.KEYCODE_VOLUME_DOWN:
-				if (action == KeyEvent.ACTION_DOWN) {
-					mCommunicationService.getTransmitter().previousTransition();
-				}
-				return true;
-			}
-		}
-		return super.dispatchKeyEvent(event);
-	}
+    }
 
-	private ServiceConnection mConnection = new ServiceConnection() {
-		@Override
-		public void onServiceConnected(ComponentName aClassName,
-		                IBinder aService) {
-			mCommunicationService = ((CommunicationService.CBinder) aService)
-			                .getService();
-			mCommunicationService.setActivityMessenger(mMessenger);
+    @Override
+    protected void onDestroy() {
+        mActionBarManager.stop();
+        super.onDestroy();
+    }
 
-			mPresentationFragment
-			                .setCommunicationService(mCommunicationService);
-			mThumbnailFragment.setCommunicationService(mCommunicationService);
+    @Override
+    public boolean dispatchKeyEvent(KeyEvent event) {
+        SharedPreferences aPref = PreferenceManager
+                        .getDefaultSharedPreferences(this);
+        boolean aVolumeSwitching = aPref.getBoolean("option_volumeswitching",
+                        false);
+        boolean aRelevantFragmentVisible = mPresentationFragment.isVisible()
+                        || mThumbnailFragment.isVisible();
+        if (aVolumeSwitching && aRelevantFragmentVisible) {
 
-		}
+            int action = event.getAction();
+            int keyCode = event.getKeyCode();
+            switch (keyCode) {
+            case KeyEvent.KEYCODE_VOLUME_UP:
+                if (action == KeyEvent.ACTION_UP) {
+                    mCommunicationService.getTransmitter().nextTransition();
+                }
+                return true;
+            case KeyEvent.KEYCODE_VOLUME_DOWN:
+                if (action == KeyEvent.ACTION_DOWN) {
+                    mCommunicationService.getTransmitter().previousTransition();
+                }
+                return true;
+            }
+        }
+        return super.dispatchKeyEvent(event);
+    }
 
-		@Override
-		public void onServiceDisconnected(ComponentName aClassName) {
-			mCommunicationService = null;
-		}
-	};
+    private ServiceConnection mConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName aClassName,
+                        IBinder aService) {
+            mCommunicationService = ((CommunicationService.CBinder) aService)
+                            .getService();
 
-	final Messenger mMessenger = new Messenger(new MessageHandler());
+            mPresentationFragment
+                            .setCommunicationService(mCommunicationService);
+            mThumbnailFragment.setCommunicationService(mCommunicationService);
 
-	@SuppressLint("HandlerLeak")
-	protected class MessageHandler extends Handler {
-		@Override
-		public void handleMessage(Message aMessage) {
-			mPresentationFragment.handleMessage(aMessage);
-			mThumbnailFragment.handleMessage(aMessage);
-		}
-	}
+        }
 
-	// ---------------------------------------------- ACTION BAR ---------------
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.actionbar_presentation, menu);
-		mActionBarManager = new ActionBarManager();
-		return true;
-	}
+        @Override
+        public void onServiceDisconnected(ComponentName aClassName) {
+            mCommunicationService = null;
+        }
+    };
 
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		Intent aIntent;
-		switch (item.getItemId()) {
-		case R.id.actionbar_presentation_submenu_options:
+    // ---------------------------------------------- ACTION BAR ---------------
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.actionbar_presentation, menu);
+        mActionBarManager = new ActionBarManager();
+        return true;
+    }
 
-			aIntent = new Intent(this, SettingsActivity.class);
-			startActivity(aIntent);
-			return true;
-		case R.id.actionbar_presentation_submenu_blank:
-			boolean aRelevantFragmentVisible = mPresentationFragment
-			                .isVisible() || mThumbnailFragment.isVisible();
-			if (aRelevantFragmentVisible) {
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        Intent aIntent;
+        switch (item.getItemId()) {
+        case R.id.actionbar_presentation_submenu_options:
 
-				BlankScreenFragment aFragment = new BlankScreenFragment(
-				                mCommunicationService);
+            aIntent = new Intent(this, SettingsActivity.class);
+            startActivity(aIntent);
+            return true;
+        case R.id.actionbar_presentation_submenu_blank:
+            boolean aRelevantFragmentVisible = mPresentationFragment
+                            .isVisible() || mThumbnailFragment.isVisible();
+            if (aRelevantFragmentVisible) {
 
-				FragmentTransaction ft = getFragmentManager()
-				                .beginTransaction();
-				ft.replace(R.id.presentation_innerFrame, aFragment);
-				ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-				ft.addToBackStack(null);
-				ft.commit();
-			}
-			return true;
-		default:
-			return super.onOptionsItemSelected(item);
-		}
-	}
+                BlankScreenFragment aFragment = new BlankScreenFragment(
+                                mCommunicationService);
 
-	private class ActionBarManager implements OnClickListener,
-	                FragmentManager.OnBackStackChangedListener,
-	                TextView.OnEditorActionListener {
+                FragmentTransaction ft = getFragmentManager()
+                                .beginTransaction();
+                ft.replace(R.id.presentation_innerFrame, aFragment);
+                ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+                ft.addToBackStack(null);
+                ft.commit();
+            }
+            return true;
+        default:
+            return super.onOptionsItemSelected(item);
+        }
+    }
 
-		private ToggleButton mTimeLabel;
-		private ToggleButton mThumbnailButton;
+    private class ActionBarManager implements OnClickListener,
+                    FragmentManager.OnBackStackChangedListener,
+                    TextView.OnEditorActionListener {
 
-		private View mDropdownOptions;
-		private View mDropdownBlank;
+        private Handler timerHandler = new Handler();
 
-		// ------- CLOCKBAR
-		private View mClockBar;
-		private ToggleButton mClockBar_clockButton;
-		private ToggleButton mClockBar_stopwatchButton;
-		private ToggleButton mClockBar_countdownButton;
+        private ToggleButton mTimeLabel;
+        private ToggleButton mThumbnailButton;
 
-		// ------- STOPWATCH BAR
-		private View mStopwatchBar;
-		private Button mStopwatchButtonRun;
-		private Button mStopwatchButtonReset;
+        private View mDropdownOptions;
+        private View mDropdownBlank;
 
-		// ------- COUNTDOWN BAR
-		private View mCountdownBar;
-		private EditText mCountdownEntry;
-		private Button mCountdownButton;
+        // ------- CLOCKBAR
+        private View mClockBar;
+        private ToggleButton mClockBar_clockButton;
+        private ToggleButton mClockBar_stopwatchButton;
+        private ToggleButton mClockBar_countdownButton;
 
-		private String aTimeFormat = getResources().getString(
-		                R.string.actionbar_timeformat);
-		private String aTimerFormat = getResources().getString(
-		                R.string.actionbar_timerformat);
-		/*
-		 * True if the timer is being used as a timer, false if we are showing a
-		 * clock.
-		 */
-		private boolean mTimerOn = false;
+        // ------- STOPWATCH BAR
+        private View mStopwatchBar;
+        private Button mStopwatchButtonRun;
+        private Button mStopwatchButtonReset;
 
-		public ActionBarManager() {
+        // ------- COUNTDOWN BAR
+        private View mCountdownBar;
+        private EditText mCountdownEntry;
+        private Button mCountdownButton;
 
-			ActionBar aBar = getActionBar();
-			aBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
-			aBar.setCustomView(R.layout.presentation_actionbar);
+        private String aTimeFormat = getResources().getString(
+                        R.string.actionbar_timeformat);
+        private String aTimerFormat = getResources().getString(
+                        R.string.actionbar_timerformat);
+        /*
+         * True if the timer is being used as a timer, false if we are showing a
+         * clock.
+         */
+        private boolean mTimerOn = false;
 
-			mThumbnailButton = (ToggleButton) aBar.getCustomView()
-			                .findViewById(R.id.actionbar_thumbnailtoggle);
-			mThumbnailButton.setOnClickListener(this);
+        public void stop() {
+            timerHandler.removeCallbacks(timerUpdateThread);
+        }
 
-			mTimeLabel = (ToggleButton) aBar.getCustomView().findViewById(
-			                R.id.actionbar_time);
-			mTimeLabel.setOnClickListener(this);
+        public ActionBarManager() {
 
-			setupClockBar();
+            ActionBar aBar = getActionBar();
+            aBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+            aBar.setCustomView(R.layout.presentation_actionbar);
 
-			getFragmentManager().addOnBackStackChangedListener(this);
+            mThumbnailButton = (ToggleButton) aBar.getCustomView()
+                            .findViewById(R.id.actionbar_thumbnailtoggle);
+            mThumbnailButton.setOnClickListener(this);
 
-			timerHandler.removeCallbacks(timerUpdateThread);
-			timerHandler.postDelayed(timerUpdateThread, 50);
+            mTimeLabel = (ToggleButton) aBar.getCustomView().findViewById(
+                            R.id.actionbar_time);
+            mTimeLabel.setOnClickListener(this);
 
-		}
+            setupClockBar();
 
-		public void hidePopups() {
-			if (mClockBar.getVisibility() == View.VISIBLE) {
-				mClockBar.setVisibility(View.INVISIBLE);
-				mStopwatchBar.setVisibility(View.INVISIBLE);
-				mCountdownBar.setVisibility(View.INVISIBLE);
-				mTimeLabel.setChecked(false);
-			}
-		}
+            getFragmentManager().addOnBackStackChangedListener(this);
 
-		private void setupClockBar() {
-			// ClockBar
-			LayoutInflater aInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-			aInflater.inflate(R.layout.presentation_clockbar, mOuterLayout);
-			mClockBar = mOuterLayout.findViewById(R.id.clockbar);
+            timerHandler.removeCallbacks(timerUpdateThread);
+            timerHandler.postDelayed(timerUpdateThread, 50);
 
-			mClockBar_clockButton = (ToggleButton) mClockBar
-			                .findViewById(R.id.clockbar_toggle_clockmode);
-			mClockBar_stopwatchButton = (ToggleButton) mClockBar
-			                .findViewById(R.id.clockbar_toggle_stopwatchmode);
-			mClockBar_countdownButton = (ToggleButton) mClockBar
-			                .findViewById(R.id.clockbar_toggle_countdownmode);
-			mClockBar_clockButton.setOnClickListener(this);
-			mClockBar_stopwatchButton.setOnClickListener(this);
-			mClockBar_countdownButton.setOnClickListener(this);
+        }
 
-			// Stopwatch bar
-			aInflater.inflate(R.layout.presentation_clockbar_stopwatchbar,
-			                mOuterLayout);
-			mStopwatchBar = mOuterLayout
-			                .findViewById(R.id.clockbar_stopwatchbar);
+        public void hidePopups() {
+            if (mClockBar.getVisibility() == View.VISIBLE) {
+                mClockBar.setVisibility(View.INVISIBLE);
+                mStopwatchBar.setVisibility(View.INVISIBLE);
+                mCountdownBar.setVisibility(View.INVISIBLE);
+                mTimeLabel.setChecked(false);
+            }
+        }
 
-			mStopwatchButtonRun = (Button) mStopwatchBar
-			                .findViewById(R.id.clockbar_stopwatch_run);
-			mStopwatchButtonReset = (Button) mStopwatchBar
-			                .findViewById(R.id.clockbar_stopwatch_reset);
-			mStopwatchButtonRun.setOnClickListener(this);
-			mStopwatchButtonReset.setOnClickListener(this);
+        private void setupClockBar() {
+            // ClockBar
+            LayoutInflater aInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            aInflater.inflate(R.layout.presentation_clockbar, mOuterLayout);
+            mClockBar = mOuterLayout.findViewById(R.id.clockbar);
 
-			// Countdown bar
-			aInflater.inflate(R.layout.presentation_clockbar_countdownbar,
-			                mOuterLayout);
-			mCountdownBar = mOuterLayout
-			                .findViewById(R.id.clockbar_countdownbar);
+            mClockBar_clockButton = (ToggleButton) mClockBar
+                            .findViewById(R.id.clockbar_toggle_clockmode);
+            mClockBar_stopwatchButton = (ToggleButton) mClockBar
+                            .findViewById(R.id.clockbar_toggle_stopwatchmode);
+            mClockBar_countdownButton = (ToggleButton) mClockBar
+                            .findViewById(R.id.clockbar_toggle_countdownmode);
+            mClockBar_clockButton.setOnClickListener(this);
+            mClockBar_stopwatchButton.setOnClickListener(this);
+            mClockBar_countdownButton.setOnClickListener(this);
 
-			mCountdownEntry = (EditText) mCountdownBar
-			                .findViewById(R.id.clockbar_countdown_time);
-			mCountdownButton = (Button) mCountdownBar
-			                .findViewById(R.id.clockbar_countdown_button);
-			mCountdownButton.setOnClickListener(this);
-			mCountdownEntry.setOnEditorActionListener(this);
+            // Stopwatch bar
+            aInflater.inflate(R.layout.presentation_clockbar_stopwatchbar,
+                            mOuterLayout);
+            mStopwatchBar = mOuterLayout
+                            .findViewById(R.id.clockbar_stopwatchbar);
 
-			updateClockBar();
-			hidePopups();
+            mStopwatchButtonRun = (Button) mStopwatchBar
+                            .findViewById(R.id.clockbar_stopwatch_run);
+            mStopwatchButtonReset = (Button) mStopwatchBar
+                            .findViewById(R.id.clockbar_stopwatch_reset);
+            mStopwatchButtonRun.setOnClickListener(this);
+            mStopwatchButtonReset.setOnClickListener(this);
 
-		}
+            // Countdown bar
+            aInflater.inflate(R.layout.presentation_clockbar_countdownbar,
+                            mOuterLayout);
+            mCountdownBar = mOuterLayout
+                            .findViewById(R.id.clockbar_countdownbar);
 
-		private void updateClockBar() {
-			mClockBar_clockButton.setChecked(!mTimerOn);
+            mCountdownEntry = (EditText) mCountdownBar
+                            .findViewById(R.id.clockbar_countdown_time);
+            mCountdownButton = (Button) mCountdownBar
+                            .findViewById(R.id.clockbar_countdown_button);
+            mCountdownButton.setOnClickListener(this);
+            mCountdownEntry.setOnEditorActionListener(this);
 
-			mCountdownBar.setY(mClockBar.getHeight());
-			mStopwatchBar.setY(mClockBar.getHeight());
+            updateClockBar();
+            hidePopups();
 
-			boolean aIsCountdown = mCommunicationService.getSlideShow()
-			                .getTimer().isCountdown();
-			// Stopwatch
-			boolean aStopwatchMode = mTimerOn && !aIsCountdown;
-			mClockBar_stopwatchButton.setChecked(aStopwatchMode);
-			mStopwatchBar.setVisibility(aStopwatchMode ? View.VISIBLE
-			                : View.INVISIBLE);
-			mStopwatchBar.bringToFront();
-			if (aStopwatchMode) {
-				Timer aTimer = mCommunicationService.getSlideShow().getTimer();
-				if (aTimer.isRunning()) {
-					mStopwatchButtonRun.setText(R.string.clock_timer_pause);
-					mStopwatchButtonReset.setText(R.string.clock_timer_restart);
-				} else {
-					mStopwatchButtonRun.setText(R.string.clock_timer_start);
-					mStopwatchButtonReset.setText(R.string.clock_timer_reset);
-				}
-			}
+        }
 
-			// Countdown
-			boolean aCountdownMode = mTimerOn && aIsCountdown;
-			mClockBar_countdownButton.setChecked(mTimerOn && aIsCountdown);
-			mCountdownBar.setVisibility(mTimerOn && aIsCountdown ? View.VISIBLE
-			                : View.INVISIBLE);
-			mCountdownBar.bringToFront();
-			if (aCountdownMode) {
-				Timer aTimer = mCommunicationService.getSlideShow().getTimer();
-				if (aTimer.isRunning()) {
-					mCountdownButton.setText(R.string.clock_timer_pause);
-				} else {
-					mCountdownButton.setText(R.string.clock_timer_resume);
-				}
-			}
+        private void updateClockBar() {
+            if (mCommunicationService == null) {
+                return;
+            }
+            mClockBar_clockButton.setChecked(!mTimerOn);
 
-		}
+            mCountdownBar.setY(mClockBar.getHeight());
+            mStopwatchBar.setY(mClockBar.getHeight());
 
-		private Handler timerHandler = new Handler();
+            boolean aIsCountdown = mCommunicationService.getSlideShow()
+                            .getTimer().isCountdown();
+            // Stopwatch
+            boolean aStopwatchMode = mTimerOn && !aIsCountdown;
+            mClockBar_stopwatchButton.setChecked(aStopwatchMode);
+            mStopwatchBar.setVisibility(aStopwatchMode ? View.VISIBLE
+                            : View.INVISIBLE);
+            mStopwatchBar.bringToFront();
+            if (aStopwatchMode) {
+                Timer aTimer = mCommunicationService.getSlideShow().getTimer();
+                if (aTimer.isRunning()) {
+                    mStopwatchButtonRun.setText(R.string.clock_timer_pause);
+                    mStopwatchButtonReset.setText(R.string.clock_timer_restart);
+                } else {
+                    mStopwatchButtonRun.setText(R.string.clock_timer_start);
+                    mStopwatchButtonReset.setText(R.string.clock_timer_reset);
+                }
+            }
 
-		private Thread timerUpdateThread = new Thread() {
+            // Countdown
+            boolean aCountdownMode = mTimerOn && aIsCountdown;
+            mClockBar_countdownButton.setChecked(mTimerOn && aIsCountdown);
+            mCountdownBar.setVisibility(mTimerOn && aIsCountdown ? View.VISIBLE
+                            : View.INVISIBLE);
+            mCountdownBar.bringToFront();
+            if (aCountdownMode) {
+                Timer aTimer = mCommunicationService.getSlideShow().getTimer();
+                if (aTimer.isRunning()) {
+                    mCountdownButton.setText(R.string.clock_timer_pause);
+                } else {
+                    mCountdownButton.setText(R.string.clock_timer_resume);
+                }
+            }
 
-			@Override
-			public void run() {
-				//			invalidateOptionsMenu();
-				CharSequence aTimeString;
-				long aTime = mCommunicationService.getSlideShow().getTimer()
-				                .getTimeMillis();
-				if (mTimerOn) {
-					aTimeString = DateFormat.format(aTimerFormat, aTime);
-				} else {
-					aTimeString = DateFormat.format(aTimeFormat,
-					                System.currentTimeMillis());
-				}
-				mTimeLabel.setText(aTimeString);
-				// TODO: set the string
-				timerHandler.postDelayed(this, 50);
+        }
 
-			}
+        private Thread timerUpdateThread = new Thread() {
 
-		};
+            @Override
+            public void run() {
+                //invalidateOptionsMenu();
+                CharSequence aTimeString;
+                long aTime = mCommunicationService.getSlideShow().getTimer()
+                                .getTimeMillis();
+                if (mTimerOn) {
+                    aTimeString = DateFormat.format(aTimerFormat, aTime);
+                } else {
+                    aTimeString = DateFormat.format(aTimeFormat,
+                                    System.currentTimeMillis());
+                }
+                mTimeLabel.setText(aTimeString);
+                // TODO: set the string
+                timerHandler.postDelayed(this, 50);
 
-		@Override
-		public void onClick(View aSource) {
-			Timer aTimer = mCommunicationService.getSlideShow().getTimer();
-			// --------------------------------- ACTIONBAR BUTTONS -------------
-			if (aSource == mThumbnailButton) {
-				if (!mThumbnailFragment.isVisible()) {
-					FragmentTransaction ft = getFragmentManager()
-					                .beginTransaction();
-					ft.replace(R.id.presentation_innerFrame, mThumbnailFragment);
-					ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-					ft.addToBackStack(null);
-					ft.commit();
-				} else {
-					getFragmentManager().popBackStack();
-				}
-			} else if (aSource == mTimeLabel) {
-				if (mClockBar.getVisibility() == View.VISIBLE) {
-					hidePopups();
-				} else {
-					mClockBar.setVisibility(View.VISIBLE);
-					updateClockBar();
-					mClockBar.bringToFront();
-				}
-			}
-			// ------------------------------------ CLOCKBAR BUTTONS -----------
-			else if (aSource == mClockBar_clockButton) {
-				mTimerOn = false;
-				updateClockBar();
-			} else if (aSource == mClockBar_stopwatchButton) {
-				mTimerOn = true;
-				if (aTimer.isCountdown()) { // Changing mode.
-					aTimer.reset();
-				}
-				aTimer.setCountdown(false);
-				updateClockBar();
-			} else if (aSource == mClockBar_countdownButton) {
-				mTimerOn = true;
-				if (!aTimer.isCountdown()) { // Changing mode
-					aTimer.reset();
-				}
-				aTimer.setCountdown(true);
-				updateClockBar();
-			}
-			// ------------------------------------- TIMER BUTTONS
-			else if (aSource == mStopwatchButtonRun) {
-				if (aTimer.isRunning()) {
-					aTimer.stopTimer();
-				} else {
-					aTimer.startTimer();
-				}
-				updateClockBar();
-			} else if (aSource == mStopwatchButtonReset) {
-				if (aTimer.isRunning()) {
-					aTimer.reset();
-					aTimer.startTimer();
-				} else {
-					aTimer.reset();
-				}
-				updateClockBar();
-			} else if (aSource == mCountdownButton) {
-				if (aTimer.isRunning()) {
-					aTimer.stopTimer();
-				} else {
-					aTimer.startTimer();
-				}
-				updateClockBar();
-			}
+            }
 
-		}
+        };
 
-		@Override
-		public void onBackStackChanged() {
-			if (getFragmentManager().getBackStackEntryCount() == 0) {
-				mThumbnailButton.setChecked(false);
-			}
-		}
+        @Override
+        public void onClick(View aSource) {
+            Timer aTimer = mCommunicationService.getSlideShow().getTimer();
+            // --------------------------------- ACTIONBAR BUTTONS -------------
+            if (aSource == mThumbnailButton) {
+                if (!mThumbnailFragment.isVisible()) {
+                    FragmentTransaction ft = getFragmentManager()
+                                    .beginTransaction();
+                    ft.replace(R.id.presentation_innerFrame, mThumbnailFragment);
+                    ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+                    ft.addToBackStack(null);
+                    ft.commit();
+                } else {
+                    getFragmentManager().popBackStack();
+                }
+            } else if (aSource == mTimeLabel) {
+                if (mClockBar.getVisibility() == View.VISIBLE) {
+                    hidePopups();
+                } else {
+                    mClockBar.setVisibility(View.VISIBLE);
+                    updateClockBar();
+                    mClockBar.bringToFront();
+                }
+            }
+            // ------------------------------------ CLOCKBAR BUTTONS -----------
+            else if (aSource == mClockBar_clockButton) {
+                mTimerOn = false;
+                updateClockBar();
+            } else if (aSource == mClockBar_stopwatchButton) {
+                mTimerOn = true;
+                if (aTimer.isCountdown()) { // Changing mode.
+                    aTimer.reset();
+                }
+                aTimer.setCountdown(false);
+                updateClockBar();
+            } else if (aSource == mClockBar_countdownButton) {
+                mTimerOn = true;
+                if (!aTimer.isCountdown()) { // Changing mode
+                    aTimer.reset();
+                }
+                aTimer.setCountdown(true);
+                updateClockBar();
+            }
+            // ------------------------------------- TIMER BUTTONS
+            else if (aSource == mStopwatchButtonRun) {
+                if (aTimer.isRunning()) {
+                    aTimer.stopTimer();
+                } else {
+                    aTimer.startTimer();
+                }
+                updateClockBar();
+            } else if (aSource == mStopwatchButtonReset) {
+                if (aTimer.isRunning()) {
+                    aTimer.reset();
+                    aTimer.startTimer();
+                } else {
+                    aTimer.reset();
+                }
+                updateClockBar();
+            } else if (aSource == mCountdownButton) {
+                if (aTimer.isRunning()) {
+                    aTimer.stopTimer();
+                } else {
+                    aTimer.startTimer();
+                }
+                updateClockBar();
+            }
 
-		@Override
-		public boolean onEditorAction(TextView tv, int aID, KeyEvent aEvent) {
-			if (aEvent.getKeyCode() == KeyEvent.KEYCODE_ENTER) {
+        }
 
-				long aTime = 0;
-				try {
-					SimpleDateFormat aFormat = new SimpleDateFormat("HH:mm:ss");
-					aFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
-					aTime = aFormat.parse(mCountdownEntry.getText().toString())
-					                .getTime();
-				} catch (ParseException e) {
-				}
-				if (aTime == 0) {
-					try {
-						SimpleDateFormat aFormat = new SimpleDateFormat("mm:ss");
-						aFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
-						aTime = aFormat.parse(
-						                mCountdownEntry.getText().toString())
-						                .getTime();
-					} catch (ParseException e) {
-					}
-				}
-				mCommunicationService.getSlideShow().getTimer()
-				                .setCountdownTime(aTime);
-				return true;
-			}
-			return false;
-		}
-	}
+        @Override
+        public void onBackStackChanged() {
+            if (getFragmentManager().getBackStackEntryCount() == 0) {
+                mThumbnailButton.setChecked(false);
+            }
+        }
 
-	/**
-	 * Intermediate layout that catches all touches, used in order to hide
-	 * the clock menu as appropriate.
-	 * @author andy
-	 *
-	 */
-	private class InterceptorLayout extends FrameLayout {
+        @Override
+        public boolean onEditorAction(TextView tv, int aID, KeyEvent aEvent) {
+            if (aEvent.getKeyCode() == KeyEvent.KEYCODE_ENTER) {
 
-		public InterceptorLayout(Context context) {
-			super(context);
-		}
+                long aTime = 0;
+                try {
+                    SimpleDateFormat aFormat = new SimpleDateFormat("HH:mm:ss");
+                    aFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+                    aTime = aFormat.parse(mCountdownEntry.getText().toString())
+                                    .getTime();
+                } catch (ParseException e) {
+                }
+                if (aTime == 0) {
+                    try {
+                        SimpleDateFormat aFormat = new SimpleDateFormat("mm:ss");
+                        aFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+                        aTime = aFormat.parse(
+                                        mCountdownEntry.getText().toString())
+                                        .getTime();
+                    } catch (ParseException e) {
+                    }
+                }
+                mCommunicationService.getSlideShow().getTimer()
+                                .setCountdownTime(aTime);
+                return true;
+            }
+            return false;
+        }
+    }
 
-		@Override
-		public boolean onInterceptTouchEvent(MotionEvent aEvent) {
-			mActionBarManager.hidePopups();
-			return super.onInterceptTouchEvent(aEvent);
-		}
+    /**
+     * Intermediate layout that catches all touches, used in order to hide
+     * the clock menu as appropriate.
+     * @author andy
+     *
+     */
+    private class InterceptorLayout extends FrameLayout {
 
-		@Override
-		public boolean onTouchEvent(MotionEvent aEvent) {
-			return super.onTouchEvent(aEvent);
-		}
+        public InterceptorLayout(Context context) {
+            super(context);
+        }
 
-	}
+        @Override
+        public boolean onInterceptTouchEvent(MotionEvent aEvent) {
+            mActionBarManager.hidePopups();
+            return super.onInterceptTouchEvent(aEvent);
+        }
+
+        @Override
+        public boolean onTouchEvent(MotionEvent aEvent) {
+            return super.onTouchEvent(aEvent);
+        }
+
+    }
 }

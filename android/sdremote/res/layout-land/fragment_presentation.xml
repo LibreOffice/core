@@ -13,8 +13,8 @@
         <pl.polidea.coverflow.CoverFlow
             xmlns:coverflow="http://schemas.android.com/apk/res/org.libreoffice.impressremote"
             android:id="@+id/presentation_coverflow"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
             android:layout_marginTop="5dip"
             coverflow:imageHeight="150dip"
             coverflow:imageWidth="180dip"
@@ -42,8 +42,8 @@
 
     <ScrollView
         android:id="@+id/presentation_scrollview"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent" >
 
         <WebView
             android:id="@+id/presentation_notes"

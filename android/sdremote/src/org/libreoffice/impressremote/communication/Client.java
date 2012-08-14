@@ -34,6 +34,8 @@ public abstract class Client {
     protected OutputStream mOutputStream;
     protected String mPin = "";
 
+    private static Client latestInstance = null;
+
     public abstract void closeConnection();
 
     private Receiver mReceiver;
@@ -42,6 +44,7 @@ public abstract class Client {
 
     public Client(Context aContext) {
         mContext = aContext;
+        latestInstance = this;
     }
 
     public void setReceiver(Receiver aReceiver) {
@@ -77,11 +80,16 @@ public abstract class Client {
             // TODO stream couldn't be opened.
             e1.printStackTrace();
         }
+        latestInstance = null;
 
     }
 
-    public String getPin() {
-        return mPin;
+    public static String getPin() {
+        if (latestInstance != null) {
+            return latestInstance.mPin;
+        } else {
+            return "";
+        }
     }
 
     /**

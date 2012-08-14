@@ -12,11 +12,14 @@ import org.libreoffice.impressremote.communication.CommunicationService;
 import org.libreoffice.impressremote.communication.SlideShow;
 
 import android.app.Fragment;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.os.Message;
+import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,194 +32,204 @@ import android.widget.TextView;
 
 public class ThumbnailFragment extends Fragment {
 
-	private CommunicationService mCommunicationService;
+    private CommunicationService mCommunicationService;
 
-	private GridView mGrid;
-	private ImageView mCurrentImage;
-	private TextView mCurrentText;
+    private GridView mGrid;
+    private ImageView mCurrentImage;
+    private TextView mCurrentText;
 
-	private SlideShow mSlideShow;
-	private Context mContext;
+    private SlideShow mSlideShow;
+    private Context mContext;
 
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-	                Bundle savedInstanceState) {
-		// Inflate the layout for this fragment
-		View v = inflater
-		                .inflate(R.layout.fragment_thumbnail, container, false);
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                    Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        container.removeAllViews();
+        View v = inflater
+                        .inflate(R.layout.fragment_thumbnail, container, false);
 
-		mGrid = (GridView) v.findViewById(R.id.thumbnail_grid);
+        mGrid = (GridView) v.findViewById(R.id.thumbnail_grid);
 
-		mGrid.setOnItemClickListener(new ClickListener());
-		mContext = container.getContext();
+        mGrid.setOnItemClickListener(new ClickListener());
+        mContext = getActivity().getApplicationContext();
 
-		if (mCommunicationService != null && mSlideShow != null) {
-			mGrid.setAdapter(new ThumbnailAdapter(mContext, mSlideShow));
-		}
+        if (mCommunicationService != null && mSlideShow != null) {
+            mGrid.setAdapter(new ThumbnailAdapter(mContext, mSlideShow));
+        }
 
-		return v;
-	}
+        IntentFilter aFilter = new IntentFilter(
+                        CommunicationService.MSG_SLIDE_CHANGED);
+        aFilter.addAction(CommunicationService.MSG_SLIDE_PREVIEW);
+        LocalBroadcastManager
+                        .getInstance(getActivity().getApplicationContext())
+                        .registerReceiver(mListener, aFilter);
 
-	@Override
-	public void onDestroyView() {
-		super.onDestroyView();
-		mGrid = null;
-		mContext = null;
-		mCurrentImage = null;
-		mCurrentText = null;
-	}
+        return v;
+    }
 
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        LocalBroadcastManager
+                        .getInstance(getActivity().getApplicationContext())
+                        .unregisterReceiver(mListener);
+        mGrid = null;
+        mContext = null;
+        mCurrentImage = null;
+        mCurrentText = null;
+    }
 
-	}
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
-	@Override
-	public void onPause() {
-		super.onPause();
-	}
+    }
 
-	private void setSelected(int position) {
-		formatUnselected(mCurrentImage, mCurrentText);
+    @Override
+    public void onPause() {
+        super.onPause();
+    }
 
-		if (mGrid == null) {
-			return;
-		}
+    private void setSelected(int position) {
+        formatUnselected(mCurrentImage, mCurrentText);
 
-		View aV = mGrid.getChildAt(position);
-		if (aV != null) {
-			mCurrentImage = (ImageView) aV.findViewById(R.id.sub_thumbnail);
-			mCurrentText = (TextView) aV.findViewById(R.id.sub_number);
+        if (mGrid == null) {
+            return;
+        }
 
-			formatSelected(mCurrentImage, mCurrentText);
-		}
-	}
+        View aV = mGrid.getChildAt(position);
+        if (aV != null) {
+            mCurrentImage = (ImageView) aV.findViewById(R.id.sub_thumbnail);
+            mCurrentText = (TextView) aV.findViewById(R.id.sub_number);
 
-	private void formatUnselected(ImageView aImage, TextView aText) {
-		if (aImage != null) {
-			aImage.setBackgroundColor(getResources().getColor(
-			                R.color.thumbnail_border));
-		}
-		if (aText != null) {
-			aText.setTypeface(Typeface.create(aText.getTypeface(),
-			                Typeface.NORMAL));
-		}
-	}
+            formatSelected(mCurrentImage, mCurrentText);
+        }
+    }
 
-	private void formatSelected(ImageView aImage, TextView aText) {
-		if (aImage != null) {
-			aImage.setBackgroundColor(getResources().getColor(
-			                R.color.thumbnail_border_selected));
-		}
-		if (aText != null) {
-			aText.setTypeface(Typeface.create(aText.getTypeface(),
-			                Typeface.BOLD));
-		}
-	}
+    private void formatUnselected(ImageView aImage, TextView aText) {
+        if (aImage != null) {
+            aImage.setBackgroundColor(getResources().getColor(
+                            R.color.thumbnail_border));
+        }
+        if (aText != null) {
+            aText.setTypeface(Typeface.create(aText.getTypeface(),
+                            Typeface.NORMAL));
+        }
+    }
 
-	// ----------------------------------------------------- CLICK LISTENER ----
-	protected class ClickListener implements AdapterView.OnItemClickListener {
-		public void onItemClick(AdapterView<?> parent, View v, int position,
-		                long id) {
-			if (mCommunicationService != null)
-				mCommunicationService.getTransmitter().gotoSlide(position);
-		}
-	}
+    private void formatSelected(ImageView aImage, TextView aText) {
+        if (aImage != null) {
+            aImage.setBackgroundColor(getResources().getColor(
+                            R.color.thumbnail_border_selected));
+        }
+        if (aText != null) {
+            aText.setTypeface(Typeface.create(aText.getTypeface(),
+                            Typeface.BOLD));
+        }
+    }
 
-	// ---------------------------------------------------- MESSAGE HANDLER ----
+    // ----------------------------------------------------- CLICK LISTENER ----
+    protected class ClickListener implements AdapterView.OnItemClickListener {
+        public void onItemClick(AdapterView<?> parent, View v, int position,
+                        long id) {
+            if (mCommunicationService != null)
+                mCommunicationService.getTransmitter().gotoSlide(position);
+        }
+    }
 
-	public void setCommunicationService(
-	                CommunicationService aCommunicationService) {
-		mCommunicationService = aCommunicationService;
-		mSlideShow = mCommunicationService.getSlideShow();
-		if (mGrid != null) {
-			mGrid.setAdapter(new ThumbnailAdapter(mContext, mSlideShow));
-		}
-	}
+    // ---------------------------------------------------- MESSAGE HANDLER ----
 
-	public void handleMessage(Message aMessage) {
-		if (!isVisible()) {
-			return;
-		}
+    public void setCommunicationService(
+                    CommunicationService aCommunicationService) {
+        mCommunicationService = aCommunicationService;
+        mSlideShow = mCommunicationService.getSlideShow();
+        if (mGrid != null) {
+            mGrid.setAdapter(new ThumbnailAdapter(mContext, mSlideShow));
+        }
+    }
 
-		Bundle aData = aMessage.getData();
-		switch (aMessage.what) {
-		case CommunicationService.MSG_SLIDE_CHANGED:
-			int aSlide = aData.getInt("slide_number");
-			break;
-		case CommunicationService.MSG_SLIDE_PREVIEW:
-			mGrid.invalidateViews();
-			break;
+    private BroadcastReceiver mListener = new BroadcastReceiver() {
 
-		}
-	}
+        @Override
+        public void onReceive(Context aContext, Intent aIntent) {
+            if (aIntent.getAction().equals(
+                            CommunicationService.MSG_SLIDE_CHANGED)) {
+                int aSlide = aIntent.getExtras().getInt("slide_number");
+                setSelected(aSlide);
+            } else if (aIntent.getAction().equals(
+                            CommunicationService.MSG_SLIDE_PREVIEW)) {
+                mGrid.invalidateViews();
+            }
 
-	// ------------------------------------------------- THUMBNAIL ADAPTER ----
-	protected class ThumbnailAdapter extends BaseAdapter {
+        }
+    };
 
-		private Context mContext;
+    // ------------------------------------------------- THUMBNAIL ADAPTER ----
+    protected class ThumbnailAdapter extends BaseAdapter {
 
-		private SlideShow mSlideShow;
+        private Context mContext;
 
-		public ThumbnailAdapter(Context aContext, SlideShow aSlideShow) {
-			mContext = aContext;
-			mSlideShow = aSlideShow;
-		}
+        private SlideShow mSlideShow;
 
-		@Override
-		public int getCount() {
-			return mSlideShow.getSize();
-		}
+        public ThumbnailAdapter(Context aContext, SlideShow aSlideShow) {
+            mContext = aContext;
+            mSlideShow = aSlideShow;
+        }
 
-		@Override
-		public Object getItem(int arg0) {
-			return null;
-		}
+        @Override
+        public int getCount() {
+            return mSlideShow.getSize();
+        }
 
-		@Override
-		public long getItemId(int position) {
-			return 0;
-		}
+        @Override
+        public Object getItem(int arg0) {
+            return null;
+        }
 
-		@Override
-		public View getView(int position, View convertView, ViewGroup parent) {
-			LayoutInflater aInflater = (LayoutInflater) mContext
-			                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-			View v = aInflater.inflate(R.layout.slide_thumbnail, null);
+        @Override
+        public long getItemId(int position) {
+            return 0;
+        }
 
-			ImageView aImage = (ImageView) v.findViewById(R.id.sub_thumbnail);
-			TextView aText = (TextView) v.findViewById(R.id.sub_number);
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            LayoutInflater aInflater = (LayoutInflater) mContext
+                            .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            View v = aInflater.inflate(R.layout.slide_thumbnail, null);
 
-			// Do the image & number styling
-			int aBorderWidth = getResources().getInteger(
-			                R.integer.thumbnail_border_width);
-			aImage.setPadding(aBorderWidth, aBorderWidth, aBorderWidth,
-			                aBorderWidth);
+            ImageView aImage = (ImageView) v.findViewById(R.id.sub_thumbnail);
+            TextView aText = (TextView) v.findViewById(R.id.sub_number);
 
-			if ((mSlideShow != null)
-			                && (position == mSlideShow.getCurrentSlide())) {
-				formatSelected(aImage, aText);
-				mCurrentImage = aImage;
-				mCurrentText = aText;
-			} else {
-				formatUnselected(aImage, aText);
-			}
+            // Do the image & number styling
+            int aBorderWidth = getResources().getInteger(
+                            R.integer.thumbnail_border_width);
+            aImage.setPadding(aBorderWidth, aBorderWidth, aBorderWidth,
+                            aBorderWidth);
 
-			Bitmap aBitmap = mSlideShow.getImage(position);
-			// Width
-			int aWidth = (mGrid.getWidth()) / 3 - 20;
-			aImage.setMaxWidth(aWidth);
-			aImage.setScaleType(ScaleType.FIT_CENTER);
+            if ((mSlideShow != null)
+                            && (position == mSlideShow.getCurrentSlide())) {
+                formatSelected(aImage, aText);
+                mCurrentImage = aImage;
+                mCurrentText = aText;
+            } else {
+                formatUnselected(aImage, aText);
+            }
 
-			if (aBitmap != null) {
-				aImage.setImageBitmap(aBitmap);
-			}
+            Bitmap aBitmap = mSlideShow.getImage(position);
+            // Width
+            int aWidth = (mGrid.getWidth()) / 3 - 20;
+            aImage.setMaxWidth(aWidth);
+            aImage.setScaleType(ScaleType.FIT_CENTER);
 
-			aText.setText(String.valueOf(position + 1));
+            if (aBitmap != null) {
+                aImage.setImageBitmap(aBitmap);
+            }
 
-			return v;
-		}
-	}
+            aText.setText(String.valueOf(position + 1));
+
+            return v;
+        }
+    }
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

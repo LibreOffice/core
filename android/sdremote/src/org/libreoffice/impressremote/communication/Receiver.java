@@ -10,112 +10,87 @@ package org.libreoffice.impressremote.communication;
 
 import java.util.ArrayList;
 
-import android.os.Bundle;
-import android.os.Message;
-import android.os.Messenger;
-import android.os.RemoteException;
+import android.content.Context;
+import android.content.Intent;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Base64;
 
 public class Receiver {
 
-	private Messenger mActivityMessenger;
+    public Receiver(Context aContext) {
+        mContext = aContext;
+        mSlideShow = new SlideShow(mContext);
+    }
 
-	private SlideShow mSlideShow = new SlideShow();
+    private Context mContext;
 
-	public SlideShow getSlideShow() {
-		return mSlideShow;
-	}
+    private SlideShow mSlideShow;
 
-	public void setActivityMessenger(Messenger aActivityMessenger) {
-		mActivityMessenger = aActivityMessenger;
-	}
+    public SlideShow getSlideShow() {
+        return mSlideShow;
+    }
 
-	public void parseCommand(ArrayList<String> aCommand) {
-		if (mActivityMessenger == null) {
-			return;
-		}
-		String aInstruction = aCommand.get(0);
-		if (aInstruction.equals("slideshow_started")) {
-			int aSlideShowlength = Integer.parseInt(aCommand.get(1));
-			int aCurrentSlide = Integer.parseInt(aCommand.get(2));
-			mSlideShow.setLength(aSlideShowlength);
-			mSlideShow.setCurrentSlide(aCurrentSlide);
+    public boolean isSlideShowRunning() {
+        return (mSlideShow.getSize() > 0);
+    }
 
-			Message aMessage = Message.obtain(null,
-			                CommunicationService.MSG_SLIDESHOW_STARTED);
-			Bundle aData = new Bundle();
-			aMessage.setData(aData);
-			try {
-				mActivityMessenger.send(aMessage);
-			} catch (RemoteException e) {
-				// Dead Handler -- i.e. Activity gone.
-			}
-		} else {
-			if (mSlideShow == null)
-				return;
+    public void parseCommand(ArrayList<String> aCommand) {
+        String aInstruction = aCommand.get(0);
+        if (aInstruction.equals("slideshow_started")) {
+            int aSlideShowlength = Integer.parseInt(aCommand.get(1));
+            int aCurrentSlide = Integer.parseInt(aCommand.get(2));
+            mSlideShow.setLength(aSlideShowlength);
+            mSlideShow.setCurrentSlide(aCurrentSlide);
+            Intent aIntent = new Intent(
+                            CommunicationService.MSG_SLIDESHOW_STARTED);
+            LocalBroadcastManager.getInstance(mContext).sendBroadcast(aIntent);
+        } else {
+            if (mSlideShow == null)
+                return;
 
-			if (aInstruction.equals("slide_updated")) {
+            if (aInstruction.equals("slide_updated")) {
 
-				int aSlideNumber = Integer.parseInt(aCommand.get(1));
+                int aSlideNumber = Integer.parseInt(aCommand.get(1));
 
-				mSlideShow.setCurrentSlide(aSlideNumber);
+                mSlideShow.setCurrentSlide(aSlideNumber);
 
-				Message aMessage = Message.obtain(null,
-				                CommunicationService.MSG_SLIDE_CHANGED);
-				Bundle aData = new Bundle();
-				aData.putInt("slide_number", aSlideNumber);
-				aMessage.setData(aData);
-				try {
-					mActivityMessenger.send(aMessage);
-				} catch (RemoteException e) {
-					// Dead Handler -- i.e. Activity gone.
-				}
-			} else if (aInstruction.equals("slide_preview")) {
-				int aSlideNumber = Integer.parseInt(aCommand.get(1));
-				String aImageString = aCommand.get(2);
-				byte[] aImage = Base64.decode(aImageString, Base64.DEFAULT);
+                Intent aIntent = new Intent(
+                                CommunicationService.MSG_SLIDE_CHANGED);
+                aIntent.putExtra("slide_number", aSlideNumber);
+                LocalBroadcastManager.getInstance(mContext).sendBroadcast(
+                                aIntent);
+            } else if (aInstruction.equals("slide_preview")) {
+                int aSlideNumber = Integer.parseInt(aCommand.get(1));
+                String aImageString = aCommand.get(2);
+                byte[] aImage = Base64.decode(aImageString, Base64.DEFAULT);
 
-				// Store image internally
-				mSlideShow.putImage(aSlideNumber, aImage);
+                // Store image internally
+                mSlideShow.putImage(aSlideNumber, aImage);
 
-				// Notify the frontend
-				Message aMessage = Message.obtain(null,
-				                CommunicationService.MSG_SLIDE_PREVIEW);
-				Bundle aData = new Bundle();
-				aData.putInt("slide_number", aSlideNumber);
-				aMessage.setData(aData);
-				try {
-					mActivityMessenger.send(aMessage);
-				} catch (RemoteException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			} else if (aInstruction.equals("slide_notes")) {
-				int aSlideNumber = Integer.parseInt(aCommand.get(1));
-				String aNotes = new String();
-				for (int i = 2; i < aCommand.size(); i++) {
-					aNotes += aCommand.get(i);
-				}
+                Intent aIntent = new Intent(
+                                CommunicationService.MSG_SLIDE_PREVIEW);
+                aIntent.putExtra("slide_number", aSlideNumber);
+                LocalBroadcastManager.getInstance(mContext).sendBroadcast(
+                                aIntent);
+            } else if (aInstruction.equals("slide_notes")) {
+                int aSlideNumber = Integer.parseInt(aCommand.get(1));
+                String aNotes = new String();
+                for (int i = 2; i < aCommand.size(); i++) {
+                    aNotes += aCommand.get(i);
+                }
 
-				// Store image internally
-				mSlideShow.putNotes(aSlideNumber, aNotes);
+                // Store image internally
+                mSlideShow.putNotes(aSlideNumber, aNotes);
 
-				// Notify the frontend
-				Message aMessage = Message.obtain(null,
-				                CommunicationService.MSG_SLIDE_NOTES);
-				Bundle aData = new Bundle();
-				aData.putInt("slide_number", aSlideNumber);
-				aMessage.setData(aData);
-				try {
-					mActivityMessenger.send(aMessage);
-				} catch (RemoteException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
+                Intent aIntent = new Intent(
+                                CommunicationService.MSG_SLIDE_NOTES);
+                aIntent.putExtra("slide_number", aSlideNumber);
+                LocalBroadcastManager.getInstance(mContext).sendBroadcast(
+                                aIntent);
+            }
 
-		}
+        }
 
-	}
+    }
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

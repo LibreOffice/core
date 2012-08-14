@@ -12,7 +12,6 @@ import android.app.Service;
 import android.content.Intent;
 import android.os.Binder;
 import android.os.IBinder;
-import android.os.Messenger;
 
 public class CommunicationService extends Service implements Runnable {
 
@@ -32,10 +31,7 @@ public class CommunicationService extends Service implements Runnable {
     }
 
     public String getPairingPin() {
-        if (mClient != null)
-            return mClient.getPin();
-        else
-            return "";
+        return Client.getPin();
     }
 
     public String getDeviceName() {
@@ -67,6 +63,7 @@ public class CommunicationService extends Service implements Runnable {
                         mState = State.DISCONNECTED;
                     }
                     if (mStateDesired == State.CONNECTED) {
+                        mState = State.CONNECTING;
                         switch (mServerDesired.getProtocol()) {
                         case NETWORK:
                             mClient = new NetworkClient(
@@ -138,10 +135,10 @@ public class CommunicationService extends Service implements Runnable {
 
     private final IBinder mBinder = new CBinder();
 
-    public static final int MSG_SLIDESHOW_STARTED = 1;
-    public static final int MSG_SLIDE_CHANGED = 2;
-    public static final int MSG_SLIDE_PREVIEW = 3;
-    public static final int MSG_SLIDE_NOTES = 4;
+    public static final String MSG_SLIDESHOW_STARTED = "SLIDESHOW_STARTED";
+    public static final String MSG_SLIDE_CHANGED = "SLIDE_CHANGED";
+    public static final String MSG_SLIDE_PREVIEW = "SLIDE_PREVIEW";
+    public static final String MSG_SLIDE_NOTES = "SLIDE_NOTES";
 
     public static final String MSG_SERVERLIST_CHANGED = "SERVERLIST_CHANGED";
     public static final String MSG_PAIRING_STARTED = "PAIRING_STARTED";
@@ -151,13 +148,9 @@ public class CommunicationService extends Service implements Runnable {
 
     private Client mClient;
 
-    private Receiver mReceiver = new Receiver();
+    private Receiver mReceiver = new Receiver(this);
 
     private ServerFinder mFinder = new ServerFinder(this);
-
-    public void setActivityMessenger(Messenger aActivityMessenger) {
-        mReceiver.setActivityMessenger(aActivityMessenger);
-    }
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -199,6 +192,10 @@ public class CommunicationService extends Service implements Runnable {
 
     public SlideShow getSlideShow() {
         return mReceiver.getSlideShow();
+    }
+
+    public boolean isSlideShowRunning() {
+        return mReceiver.isSlideShowRunning();
     }
 
 }

@@ -62,6 +62,12 @@ public class SelectorActivity extends Activity {
     }
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mListener);
+    }
+
+    @Override
     public void onBackPressed() {
         mCommunicationService.stopFindingServers();
         Intent aIntent = new Intent(this, CommunicationService.class);

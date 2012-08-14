@@ -6,7 +6,10 @@ import org.libreoffice.impressremote.communication.SlideShow;
 import pl.polidea.coverflow.AbstractCoverFlowImageAdapter;
 import pl.polidea.coverflow.CoverFlow;
 import android.app.Fragment;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -14,7 +17,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
 import android.os.Bundle;
-import android.os.Message;
+import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -47,8 +50,8 @@ public class PresentationFragment extends Fragment {
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                     Bundle savedInstanceState) {
-        mContext = container.getContext();
-
+        mContext = getActivity().getApplicationContext();
+        container.removeAllViews();
         View v = inflater.inflate(R.layout.fragment_presentation, container,
                         false);
 
@@ -85,7 +88,24 @@ public class PresentationFragment extends Fragment {
             // We need to update the view now
             aAdapter.notifyDataSetChanged();
         }
+
+        IntentFilter aFilter = new IntentFilter(
+                        CommunicationService.MSG_SLIDE_CHANGED);
+        aFilter.addAction(CommunicationService.MSG_SLIDE_NOTES);
+        aFilter.addAction(CommunicationService.MSG_SLIDE_PREVIEW);
+        LocalBroadcastManager
+                        .getInstance(getActivity().getApplicationContext())
+                        .registerReceiver(mListener, aFilter);
         return v;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        LocalBroadcastManager
+                        .getInstance(getActivity().getApplicationContext())
+                        .unregisterReceiver(mListener);
+
     }
 
     private void updateSlideNumberDisplay() {
@@ -204,23 +224,28 @@ public class PresentationFragment extends Fragment {
         updateSlideNumberDisplay();
     }
 
-    public void handleMessage(Message aMessage) {
-        Bundle aData = aMessage.getData();
-        switch (aMessage.what) {
-        case CommunicationService.MSG_SLIDE_CHANGED:
-            int aSlide = aData.getInt("slide_number");
-            mTopView.setSelection(aSlide, true);
-            updateSlideNumberDisplay();
-            break;
-        case CommunicationService.MSG_SLIDE_PREVIEW:
-            int aNSlide = aData.getInt("slide_number");
-            if (mTopView.getSelectedItemPosition() == aNSlide) {
-                // mTopView. // TODO: update the current item
+    private BroadcastReceiver mListener = new BroadcastReceiver() {
+
+        @Override
+        public void onReceive(Context aContext, Intent aIntent) {
+            if (aIntent.getAction().equals(
+                            CommunicationService.MSG_SLIDE_CHANGED)) {
+                int aSlide = aIntent.getExtras().getInt("slide_number");
+                mTopView.setSelection(aSlide, true);
+                updateSlideNumberDisplay();
+            } else if (aIntent.getAction().equals(
+                            CommunicationService.MSG_SLIDE_PREVIEW)) {
+                int aNSlide = aIntent.getExtras().getInt("slide_number");
+                if (mTopView.getSelectedItemPosition() == aNSlide) {
+                    mTopView.setSelection(aNSlide);
+                }
+            } else if (aIntent.getAction().equals(
+                            CommunicationService.MSG_SLIDE_NOTES)) {
+                // TODO: update me
             }
-            break;
 
         }
-    }
+    };
 
     // ------------------------------------------------- THUMBNAIL ADAPTER ----
     protected class ThumbnailAdapter extends AbstractCoverFlowImageAdapter {

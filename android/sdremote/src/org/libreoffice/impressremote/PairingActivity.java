@@ -39,21 +39,12 @@ public class PairingActivity extends Activity {
                         Context.BIND_IMPORTANT);
         mIsBound = true;
 
-        mPinText = (TextView) findViewById(R.id.pairing_pin);
-
         IntentFilter aFilter = new IntentFilter(
                         CommunicationService.MSG_PAIRING_STARTED);
         aFilter.addAction(CommunicationService.MSG_PAIRING_SUCCESSFUL);
         LocalBroadcastManager.getInstance(this).registerReceiver(mListener,
                         aFilter);
 
-        //        mBluetoothContainer = findViewById(R.id.selector_container_bluetooth);
-        //        mBluetoothList = (LinearLayout) findViewById(R.id.selector_list_bluetooth);
-        //        mNetworkContainer = findViewById(R.id.selector_container_network);
-        //        mNetworkList = (LinearLayout) findViewById(R.id.selector_list_network);
-        //        mNoServerLabel = (TextView) findViewById(R.id.selector_label_none);
-        //
-        //        refreshLists();
     }
 
     private ServiceConnection mConnection = new ServiceConnection() {
@@ -61,7 +52,9 @@ public class PairingActivity extends Activity {
         public void onServiceConnected(ComponentName aClassName,
                         IBinder aService) {
             setContentView(R.layout.activity_pairing);
-
+            mPinText = (TextView) findViewById(R.id.pairing_pin);
+            mCommunicationService = ((CommunicationService.CBinder) aService)
+                            .getService();
             ((TextView) findViewById(R.id.pairing_instruction2_deviceName))
                             .setText(MessageFormat
                                             .format(getResources()
@@ -69,8 +62,6 @@ public class PairingActivity extends Activity {
                                                             mCommunicationService
                                                                             .getDeviceName()));
 
-            mCommunicationService = ((CommunicationService.CBinder) aService)
-                            .getService();
             if (mCommunicationService.getState() == State.CONNECTING) {
                 mPinText.setText(mCommunicationService.getPairingPin());
             }
@@ -94,7 +85,9 @@ public class PairingActivity extends Activity {
                 //                refreshLists();
             } else if (aIntent.getAction().equals(
                             CommunicationService.MSG_PAIRING_SUCCESSFUL)) {
-                mPinText.setText("Paired!");
+                Intent nIntent = new Intent(PairingActivity.this,
+                                StartPresentationActivity.class);
+                startActivity(nIntent);
             }
 
         }
