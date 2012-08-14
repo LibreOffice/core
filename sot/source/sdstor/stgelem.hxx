@@ -36,8 +36,10 @@ SvStream& operator<<( SvStream&, const ClsId& );
 
 class StgHeader
 {
+    static const sal_uInt8 cFATPagesInHeader = 109;
+
     sal_uInt8   cSignature[ 8 ];            // 00 signature (see below)
-    ClsId   aClsId;                     // 08 Class ID
+    ClsId       aClsId;                     // 08 Class ID
     sal_Int32   nVersion;                   // 18 version number
     sal_uInt16  nByteOrder;                 // 1C Unicode byte order indicator
     sal_Int16   nPageSize;                  // 1E 1 << nPageSize = block size
@@ -52,7 +54,7 @@ class StgHeader
     sal_Int32   nDataFATSize;               // 40 # of data fat blocks
     sal_Int32   nMasterChain;               // 44 chain to the next master block
     sal_Int32   nMaster;                    // 48 # of additional master blocks
-    sal_Int32   nMasterFAT[ 109 ];          // 4C first 109 master FAT pages
+    sal_Int32   nMasterFAT[ cFATPagesInHeader ];            // 4C first [cFATPagesInHeader] master FAT pages
 public:
     StgHeader();
 
@@ -61,23 +63,23 @@ public:
     sal_Bool  Load( SvStream& );
     sal_Bool  Store( StgIo& );
     sal_Bool  Check();                      // check the signature and version
-    short GetByteOrder() const          { return nByteOrder;    }
-    sal_Int32 GetTOCStart() const           { return nTOCstrm;      }
+    short GetByteOrder() const          { return nByteOrder; }
+    sal_Int32 GetTOCStart() const           { return nTOCstrm; }
     void  SetTOCStart( sal_Int32 n );
-    sal_Int32 GetDataFATStart() const       { return nDataFAT;      }
+    sal_Int32 GetDataFATStart() const       { return nDataFAT; }
     void  SetDataFATStart( sal_Int32 n );
-    sal_Int32 GetDataFATSize() const        { return nDataFATSize;  }
+    sal_Int32 GetDataFATSize() const        { return nDataFATSize; }
     void  SetDataFATSize( sal_Int32 n );
-    sal_Int32 GetThreshold() const          { return nThreshold;    }
-    short GetPageSize() const           { return nPageSize;     }
+    sal_Int32 GetThreshold() const          { return nThreshold; }
+    short GetPageSize() const           { return nPageSize; }
     short GetDataPageSize() const       { return nDataPageSize; }
-    sal_Int32 GetFATSize() const            { return nFATSize;      }
+    sal_Int32 GetFATSize() const            { return nFATSize; }
     void  SetFATSize( sal_Int32 n );
-    sal_Int32 GetFATChain() const           { return nMasterChain;  }
+    sal_Int32 GetFATChain() const           { return nMasterChain; }
     void  SetFATChain( sal_Int32 n );
-    sal_Int32 GetMasters() const            { return nMaster;       }
+    sal_Int32 GetMasters() const            { return nMaster; }
     void  SetMasters( sal_Int32 n );
-    short GetFAT1Size() const           { return 109;           }
+    short GetFAT1Size() const           { return cFATPagesInHeader; }
     const ClsId& GetClassId() const     { return aClsId;        }
     sal_Int32 GetFATPage( short ) const;
     void  SetFATPage( short, sal_Int32 );

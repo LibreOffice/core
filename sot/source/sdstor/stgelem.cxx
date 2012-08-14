@@ -110,7 +110,7 @@ void StgHeader::Init()
 
     SetTOCStart( STG_EOF );
     SetDataFATStart( STG_EOF );
-    for( short i = 0; i < 109; i++ )
+    for( short i = 0; i < cFATPagesInHeader; i++ )
         SetFATPage( i, STG_FREE );
 }
 
@@ -145,7 +145,7 @@ sal_Bool StgHeader::Load( SvStream& r )
       >> nDataFATSize               // 40 # of data FATpages
       >> nMasterChain               // 44 chain to the next master block
       >> nMaster;                   // 48 # of additional master blocks
-    for( short i = 0; i < 109; i++ )
+    for( short i = 0; i < cFATPagesInHeader; i++ )
         r >> nMasterFAT[ i ];
 
     return ( r.GetErrorCode() == ERRCODE_NONE && Check() );
@@ -172,7 +172,7 @@ sal_Bool StgHeader::Store( StgIo& rIo )
       << nDataFATSize               // 40 # of data FAT pages
       << nMasterChain               // 44 chain to the next master block
       << nMaster;                   // 48 # of additional master blocks
-    for( short i = 0; i < 109; i++ )
+    for( short i = 0; i < cFATPagesInHeader; i++ )
         r << nMasterFAT[ i ];
     bDirty = !rIo.Good();
     return sal_Bool( !bDirty );
@@ -209,7 +209,7 @@ sal_Bool StgHeader::Check()
 
 sal_Int32 StgHeader::GetFATPage( short n ) const
 {
-    if( n >= 0 && n < 109 )
+    if( n >= 0 && n < cFATPagesInHeader )
         return nMasterFAT[ n ];
     else
         return STG_EOF;
@@ -217,7 +217,7 @@ sal_Int32 StgHeader::GetFATPage( short n ) const
 
 void StgHeader::SetFATPage( short n, sal_Int32 nb )
 {
-    if( n >= 0 && n < 109 )
+    if( n >= 0 && n < cFATPagesInHeader )
     {
         if( nMasterFAT[ n ] != nb )
             bDirty = sal_True, nMasterFAT[ n ] = nb;
