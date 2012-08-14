@@ -247,7 +247,10 @@ xpdf\
 xsltml\
 zlib\
 
+ifneq ($(wildcard dictionaries/Module_dictionaries.mk),)
 gb_TAILBUILDMODULES := $(shell $(GNUMAKE) -r -f $(SRCDIR)/tail_build/Makefile showmodules)
+endif
+
 export gb_TAILBUILDTARGET=all slowcheck
 
 define gbuild_module_rules
