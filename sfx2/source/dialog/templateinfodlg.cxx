@@ -42,6 +42,8 @@ SfxTemplateInfoDlg::SfxTemplateInfoDlg (Window *pParent)
       mpPreviewView(new Window(this)),
       mpInfoView(new svtools::ODocumentInfoPreview(this,WB_LEFT | WB_VSCROLL | WB_READONLY | WB_BORDER | WB_3DLOOK))
 {
+    maBtnClose.SetClickHdl(LINK(this,SfxTemplateInfoDlg,CloseHdl));
+
     Size aWinSize = GetOutputSizePixel();
     aWinSize.setHeight( aWinSize.getHeight() - 3*DLG_BORDER_SIZE - maBtnClose.GetOutputHeightPixel() );
     aWinSize.setWidth( (aWinSize.getWidth() - 3*DLG_BORDER_SIZE)/2 );
@@ -125,6 +127,12 @@ void SfxTemplateInfoDlg::loadDocument(const OUString &rURL)
     catch ( uno::Exception& )
     {
     }
+}
+
+IMPL_LINK_NOARG (SfxTemplateInfoDlg, CloseHdl)
+{
+    Close();
+    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

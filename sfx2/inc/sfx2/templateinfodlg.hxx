@@ -30,6 +30,10 @@ public:
 
     void loadDocument (const OUString &rURL);
 
+protected:
+
+    DECL_LINK (CloseHdl, void*);
+
 private:
 
     PushButton maBtnClose;
