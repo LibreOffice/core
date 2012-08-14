@@ -781,32 +781,6 @@ sub get_language_string_from_language_block
     return $newstring;
 }
 
-####################################################
-# Creating link tree for upload
-####################################################
-
-sub create_link_tree
-{
-    my ($sourcedownloadfile, $destfilename, $versionstring) = @_;
-
-    if ( ! $installer::globals::ooouploaddir ) { installer::exiter::exit_program("ERROR: Directory for LO upload not defined!", "create_link_tree"); }
-    my $versiondir = $installer::globals::ooouploaddir . $installer::globals::separator . $versionstring;
-    my $infoline = "Directory for the link: $versiondir\n";
-    push(@installer::globals::logfileinfo, $infoline);
-
-    if ( ! -d $versiondir ) { installer::systemactions::create_directory_structure($versiondir); }
-
-    # inside directory $versiondir all links have to be created
-    my $linkdestination = $versiondir . $installer::globals::separator . $destfilename;
-
-    # If there is an older version of this file (link), it has to be removed
-    if ( -f $linkdestination ) { unlink($linkdestination); }
-
-    $infoline = "Creating hard link from $sourcedownloadfile to $linkdestination\n";
-    push(@installer::globals::logfileinfo, $infoline);
-    installer::systemactions::hardlink_one_file($sourcedownloadfile, $linkdestination);
-}
-
 #######################################################
 # Setting supported platform for LibreOffice
 # builds
