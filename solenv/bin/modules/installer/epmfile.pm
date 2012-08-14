@@ -2943,31 +2943,6 @@ sub analyze_rootpath
 }
 
 ######################################################
-# Including license and readme into
-# Unix installation sets.
-######################################################
-
-sub put_installsetfiles_into_installset
-{
-    my ($destdir) = @_;
-
-    # All files for the installation set are saved in the global
-    # array @installer::globals::installsetfiles
-
-    for ( my $i = 0; $i <= $#installer::globals::installsetfiles; $i++ )
-    {
-        my $onefile = $installer::globals::installsetfiles[$i];
-        my $sourcefile = $onefile->{'sourcepath'};
-        my $destfile = "";
-        $destfile = $destdir . $installer::globals::separator . $onefile->{'Name'};
-        installer::systemactions::copy_one_file($sourcefile, $destfile);
-
-        my $infoline = "Adding to installation set \"$destfile\" from source \"$sourcefile\".\n";
-        push( @installer::globals::logfileinfo, $infoline);
-    }
-}
-
-######################################################
 # Replacing one variable in patchinfo file
 ######################################################
 

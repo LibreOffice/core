@@ -57,21 +57,6 @@ sub remove_leading_and_ending_slashes
     $$stringref =~ s/\/\s*$//g;
 }
 
-sub remove_ending_slashes
-{
-    my ( $stringref ) = @_;
-
-    $$stringref =~ s/\/\s*$//g;
-}
-
-sub remove_leading_and_ending_pathseparators
-{
-    my ( $stringref ) = @_;
-
-    $$stringref =~ s/^\s*\Q$installer::globals::separator\E//;
-    $$stringref =~ s/\Q$installer::globals::separator\E\s*$//;
-}
-
 sub remove_ending_pathseparator
 {
     my ( $stringref ) = @_;

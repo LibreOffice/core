@@ -283,21 +283,6 @@ sub tar_package
 }
 
 #########################################################
-# Setting type of installation
-#########################################################
-
-sub get_installation_type
-{
-    my $type = "";
-
-    if ( $installer::globals::languagepack ) { $type = "langpack"; }
-    elsif ( $installer::globals::helppack ) { $type = "helppack"; }
-    else { $type = "install"; }
-
-    return $type;
-}
-
-#########################################################
 # Setting installation languages
 #########################################################
 
@@ -525,77 +510,6 @@ sub get_install_type
     return $type;
 }
 
-#########################################################
-# Setting installation addons
-#########################################################
-
-sub get_downloadname_addon
-{
-    my $addon = "";
-
-    if ( $installer::globals::isdebbuild ) { $addon = $addon . "_deb"; }
-
-    if ( $installer::globals::product =~ /_wJRE\s*$/ ) { $addon = "_wJRE"; }
-
-    return $addon;
-}
-
-#########################################################
-# Looking for versionstring in version.info
-# This has to be the only content of this file.
-#########################################################
-
-sub _get_versionstring
-{
-    my ( $versionfile ) = @_;
-
-    my $versionstring = "";
-
-    for ( @{$versionfile} )
-    {
-        next if /^\s*\#/; # comment line
-        if ( /^\s*\"\s*(.*?)\s*\"\s*$/ )
-        {
-            $versionstring = $1;
-            last;
-        }
-    }
-
-    return $versionstring;
-}
-
-#########################################################
-# Returning the current product version
-# This has to be defined in file "version.info"
-# in directory $installer::globals::ooouploaddir
-#########################################################
-
-sub get_current_version
-{
-    my $infoline = "";
-    my $versionstring = "";
-    my $filename = "version.info";
-
-    if ( -f $filename )
-    {
-        $infoline = "File $filename exists. Trying to find current version.\n";
-        push( @installer::globals::logfileinfo, $infoline);
-        my $versionfile = installer::files::read_file($filename);
-        $versionstring = _get_versionstring($versionfile);
-        $infoline = "Setting version string: $versionstring\n";
-        push( @installer::globals::logfileinfo, $infoline);
-    }
-    else
-    {
-        $infoline = "File $filename does not exist. No version setting in download file name.\n";
-        push( @installer::globals::logfileinfo, $infoline);
-    }
-
-    $installer::globals::oooversionstring = $versionstring;
-
-    return $versionstring;
-}
-
 ###############################################################################################
 # Setting the download file name
 # Syntax:
@@ -779,26 +693,6 @@ sub get_language_string_from_language_block
     }
 
     return $newstring;
-}
-
-#######################################################
-# Setting supported platform for LibreOffice
-# builds
-#######################################################
-
-sub is_supported_platform
-{
-    my $is_supported = 0;
-
-    if (( $installer::globals::isrpmbuild ) ||
-        ( $installer::globals::issolarissparcbuild ) ||
-        ( $installer::globals::issolarisx86build ) ||
-        ( $installer::globals::iswindowsbuild ))
-    {
-        $is_supported = 1;
-    }
-
-    return $is_supported;
 }
 
 ####################################################

@@ -150,47 +150,6 @@ sub remove_old_installation_sets
 }
 
 ###############################################################
-# Removing all non successful installation sets on ship
-###############################################################
-
-sub remove_old_ship_installation_sets
-{
-    my ($fulldir, $counter) = @_;
-
-    installer::logger::print_message( "... removing old installation directories ...\n" );
-
-    my $basedir = $fulldir;
-    installer::pathanalyzer::get_path_from_fullqualifiedname(\$basedir);
-
-    # collecting all directories next to the new installation directory
-    my $alldirs = installer::systemactions::get_all_directories($basedir);
-
-    if ( $fulldir =~ /^\s*(.*?inprogress\-)(\d+)(.*?)\s*$/ )
-    {
-        my $pre_inprogress = $1;        # $pre still contains "inprogress"
-        my $number = $2;
-        my $post = $3;
-        my $pre_witherror = $pre_inprogress;
-        $pre_witherror =~ s/inprogress/witherror/;
-
-        for ( my $i = 0; $i <= $#{$alldirs}; $i++ )
-        {
-            if ( ${$alldirs}[$i] eq $fulldir ) { next; }    # do not delete the newly created directory
-
-            if ( ${$alldirs}[$i] =~ /^\s*\Q$pre_inprogress\E\d+\Q$post\E\s*$/ ) # removing old "inprogress" directories
-            {
-                installer::systemactions::remove_complete_directory(${$alldirs}[$i], 1);
-            }
-
-            if ( ${$alldirs}[$i] =~ /^\s*\Q$pre_witherror\E\d+\Q$post\E\s*$/ )  # removing old "witherror" directories
-            {
-                installer::systemactions::remove_complete_directory(${$alldirs}[$i], 1);
-            }
-        }
-    }
-}
-
-###############################################################
 # Creating the installation directory structure
 ###############################################################
 
@@ -1036,32 +995,6 @@ sub analyze_patch_files
 }
 
 ###########################################################
-# Sorting an array
-###########################################################
-
-sub sort_array
-{
-    my ( $arrayref ) = @_;
-
-    for ( my $i = 0; $i <= $#{$arrayref}; $i++ )
-    {
-        my $under = ${$arrayref}[$i];
-
-        for ( my $j = $i + 1; $j <= $#{$arrayref}; $j++ )
-        {
-            my $over = ${$arrayref}[$j];
-
-            if ( $under gt $over)
-            {
-                ${$arrayref}[$i] = $over;
-                ${$arrayref}[$j] = $under;
-                $under = $over;
-            }
-        }
-    }
-}
-
-###########################################################
 # Renaming linux files with flag LINUXLINK
 ###########################################################
 
@@ -1466,167 +1399,6 @@ sub replace_variables_in_string
     return $string;
 }
 
-###########################################################
-# Replacing %-variables with the content
-# of $allvariableshashref
-###########################################################
-
-sub replace_dollar_variables_in_string
-{
-    my ( $string, $variableshashref ) = @_;
-
-    if ( $string =~ /^.*\$\{\w+\}.*$/ )
-    {
-        my $key;
-
-        foreach $key (keys %{$variableshashref})
-        {
-            my $value = $variableshashref->{$key};
-            $key = "\$\{" . $key . "\}";
-            $string =~ s/\Q$key\E/$value/g;
-        }
-    }
-
-    return $string;
-}
-
-###########################################################
-# The list file contains the list of packages/RPMs that
-# have to be copied.
-###########################################################
-
-sub get_all_files_from_filelist
-{
-    my ( $listfile, $section ) = @_;
-
-    my @allpackages = ();
-
-    for (@{$listfile}) {
-        next unless /^\s*([^#].*?)\s*$/;
-        push @allpackages, $1;
-    }
-
-    return \@allpackages;
-}
-
-###########################################################
-# Getting one section from a file. Section begins with
-# [xyz] and ends with file end or next [abc].
-###########################################################
-
-sub get_section_from_file
-{
-    my ($file, $sectionname) = @_;
-
-    my @section = ();
-    my $record = 0;
-
-    for ( my $i = 0; $i <= $#{$file}; $i++ )
-    {
-        my $line = ${$file}[$i];
-
-        if (( $record ) && ( $line =~ /^\s*\[/ ))
-        {
-            $record = 0;
-            last;
-        }
-
-        if ( $line =~ /^\s*\[\Q$sectionname\E\]\s*$/ ) { $record = 1; }
-
-        if ( $line =~ /^\s*\[/ ) { next; } # this is a section line
-        if ( $line =~ /^\s*\#/ ) { next; } # this is a comment line
-        if ( $line =~ /^\s*$/ ) { next; }  # empty line
-        $line =~ s/^\s*//;
-        $line =~ s/\s*$//;
-        if ( $record ) { push(@section, $line); }
-    }
-
-    return \@section;
-
-}
-
-#######################################################
-# Substituting one variable in the xml file
-#######################################################
-
-sub replace_one_dollar_variable
-{
-    my ($file, $variable, $searchstring) = @_;
-
-    for ( my $i = 0; $i <= $#{$file}; $i++ )
-    {
-        ${$file}[$i] =~ s/\$\{$searchstring\}/$variable/g;
-    }
-}
-
-#######################################################
-# Substituting the variables in the xml file
-#######################################################
-
-sub substitute_dollar_variables
-{
-    my ($file, $variableshashref) = @_;
-
-    my $key;
-
-    foreach $key (keys %{$variableshashref})
-    {
-        my $value = $variableshashref->{$key};
-        replace_one_dollar_variable($file, $value, $key);
-    }
-}
-
-#############################################################################
-# Collecting all packages or rpms located in the installation directory
-#############################################################################
-
-sub get_all_packages_in_installdir
-{
-    my ($directory) = @_;
-
-    my $infoline = "";
-
-    my @allpackages = ();
-    my $allpackages = \@allpackages;
-
-    if ( $installer::globals::isrpmbuild )
-    {
-        $allpackages = installer::systemactions::find_file_with_file_extension("rpm", $directory);
-    }
-
-    if ( $installer::globals::issolarisbuild )
-    {
-        $allpackages = installer::systemactions::get_all_directories($directory);
-    }
-
-    return $allpackages;
-}
-
-###############################################################
-# The list of exclude packages can contain the
-# beginning of the package name, not the complete name.
-###############################################################
-
-sub is_matching
-{
-    my ($onepackage, $allexcludepackages ) = @_;
-
-    my $matches = 0;
-
-    for ( my $i = 0; $i <= $#{$allexcludepackages}; $i++ )
-    {
-        my $oneexcludepackage = ${$allexcludepackages}[$i];
-
-        if ( $onepackage =~ /^\s*$oneexcludepackage/ )
-        {
-            $matches = 1;
-            last;
-        }
-    }
-
-    return $matches;
-}
-
 ######################################################
 # Making systemcall
 ######################################################
@@ -1717,54 +1489,6 @@ sub collect_scpactions
     {
         push(@installer::globals::allscpactions, ${$allscpactions}[$i]);
     }
-}
-
-#################################################################
-# Setting the platform name for download
-#################################################################
-
-sub get_platform_name
-{
-    my $platformname = "";
-
-    if (( $installer::globals::islinuxintelrpmbuild ) || ( $installer::globals::islinuxinteldebbuild ))
-    {
-        $platformname = "LinuxIntel";
-    }
-    elsif (( $installer::globals::islinuxppcrpmbuild ) || ( $installer::globals::islinuxppcdebbuild ))
-    {
-        $platformname = "LinuxPowerPC";
-    }
-    elsif (( $installer::globals::islinuxx86_64rpmbuild ) || ( $installer::globals::islinuxx86_64debbuild ))
-    {
-        $platformname = "LinuxX86-64";
-    }
-    elsif ( $installer::globals::issolarissparcbuild )
-    {
-        $platformname = "SolarisSparc";
-    }
-    elsif ( $installer::globals::issolarisx86build )
-    {
-        $platformname = "Solarisx86";
-    }
-    elsif ( $installer::globals::iswindowsbuild )
-    {
-        $platformname = "Win32Intel";
-    }
-    elsif ( $installer::globals::compiler =~ /^unxmacxi/ )
-    {
-        $platformname = "MacOSXIntel";
-    }
-    elsif ( $installer::globals::compiler =~ /^unxmacxp/ )
-    {
-        $platformname = "MacOSXPowerPC";
-    }
-    else
-    {
-        $platformname = $installer::globals::compiler;
-    }
-
-    return $platformname;
 }
 
 ###########################################################
@@ -1902,33 +1626,6 @@ sub find_file_by_id
     return $onefile;
 }
 
-##############################################
-# Searching for an item with the gid
-##############################################
-
-sub find_item_by_gid
-{
-    my ( $itemsref, $gid ) = @_;
-
-    my $founditem = 0;
-    my $oneitem = "";
-
-    for ( my $i = 0; $i <= $#{$itemsref}; $i++ )
-    {
-        my $localitem = ${$itemsref}[$i];
-        my $itemgid = $localitem->{'gid'};
-
-        if ( $itemgid eq $gid )
-        {
-            $oneitem = $localitem;
-            $founditem = 1;
-            last;
-        }
-    }
-
-    return $oneitem;
-}
-
 #########################################################
 # Calling sum
 #########################################################
@@ -2009,86 +1706,6 @@ sub call_wc
 }
 
 ##############################################
-# Setting architecture ARCH=i86pc
-# instead of ARCH=i386.
-##############################################
-
-sub set_old_architecture_string
-{
-    my ($pkginfofile) = @_;
-
-    for ( my $i = 0; $i <= $#{$pkginfofile}; $i++ )
-    {
-        if ( ${$pkginfofile}[$i] =~ /^\s*ARCH=i386\s*$/ )
-        {
-            ${$pkginfofile}[$i] =~ s/i386/i86pc/;
-            last;
-        }
-    }
-}
-
-##############################################
-# For the new copied package, it is necessary
-# that a value for the key SUNW_REQUIRES
-# is set. Otherwise this copied package
-# with ARCH=i86pc would be useless.
-##############################################
-
-sub check_requires_setting
-{
-    my ($pkginfofile) = @_;
-
-    my $found = 0;
-    my $patchid = "";
-
-    for ( my $i = 0; $i <= $#{$pkginfofile}; $i++ )
-    {
-        if ( ${$pkginfofile}[$i] =~ /^\s*SUNW_REQUIRES=(\S*?)\s*$/ )
-        {
-            $patchid = $1;
-            $found = 1;
-            last;
-        }
-    }
-
-    if (( ! $found ) || ( $patchid eq "" )) { installer::exiter::exit_program("ERROR: No patch id defined for SUNW_REQUIRES in patch pkginfo file!", "check_requires_setting"); }
-}
-
-##############################################
-# Setting checksum and wordcount for changed
-# pkginfo file into pkgmap.
-##############################################
-
-sub set_pkginfo_line
-{
-    my ($pkgmapfile, $pkginfofilename) = @_;
-
-    # 1 i pkginfo 442 34577 1166716297
-    # ->
-    # 1 i pkginfo 443 34737 1166716297
-    #
-    # wc -c pkginfo | cut -f6 -d' '  -> 442  (variable)
-    # sum pkginfo | cut -f1 -d' '  -> 34577  (variable)
-    # grep 'pkginfo' pkgmap | cut -f6 -d' '  -> 1166716297  (fix)
-
-    my $checksum = call_sum($pkginfofilename);
-    if ( $checksum =~ /^\s*(\d+)\s+.*$/ ) { $checksum = $1; }
-
-    my $wordcount = call_wc($pkginfofilename);
-    if ( $wordcount =~ /^\s*(\d+)\s+.*$/ ) { $wordcount = $1; }
-
-    for ( my $i = 0; $i <= $#{$pkgmapfile}; $i++ )
-    {
-        if ( ${$pkgmapfile}[$i] =~ /(^.*\bpkginfo\b\s+)(\d+)(\s+)(\d+)(\s+)(\d+)(\s*$)/ )
-        {
-            my $newline = $1 . $wordcount . $3 . $checksum . $5 . $6 . $7;
-            ${$pkgmapfile}[$i] = $newline;
-            last;
-        }
-    }
-}
-
-##############################################
 # Setting time stamp of copied files to avoid
 # errors from pkgchk.
 ##############################################
@@ -2120,33 +1737,6 @@ sub set_time_stamp
             push( @installer::globals::logfileinfo, $infoline);
         }
     }
-}
-
-############################################################
-# Generating paths for cygwin (first version)
-# This function has problems with cygwin, if $tmpfilename
-# contains many thousand files (OpenOffice SDK).
-############################################################
-
-sub generate_cygwin_paths_old
-{
-    my ($filesref) = @_;
-
-    my ($tmpfilehandle, $tmpfilename) = tmpnam();
-    open SOURCEPATHLIST, ">$tmpfilename" or die "oops...\n";
-    for ( my $i = 0; $i <= $#{$filesref}; $i++ )
-    {
-        print SOURCEPATHLIST "${$filesref}[$i]->{'sourcepath'}\n";
-    }
-    close SOURCEPATHLIST;
-    my @cyg_sourcepathlist = qx{cygpath -w -f "$tmpfilename"};
-    chomp @cyg_sourcepathlist;
-    unlink "$tmpfilename" or die "oops\n";
-    for ( my $i = 0; $i <= $#{$filesref}; $i++ )
-    {
-        ${$filesref}[$i]->{'cyg_sourcepath'} = $cyg_sourcepathlist[$i];
-    }
-
 }
 
 #################################################
@@ -2233,29 +1823,6 @@ sub generate_cygwin_paths
     }
 
     installer::logger::include_timestamp_into_logfile("Ending generating cygwin paths");
-}
-
-##############################################
-# Include only files from install directory
-# in pkgmap file.
-##############################################
-
-sub filter_pkgmapfile
-{
-    my ($pkgmapfile) = @_;
-
-    my @pkgmap = ();
-
-    my $line = ": 1 10\n";
-    push(@pkgmap, $line);
-
-    for ( my $i = 0; $i <= $#{$pkgmapfile}; $i++ )
-    {
-        $line = ${$pkgmapfile}[$i];
-        if ( $line =~ /^\s*1\si\s/ ) { push(@pkgmap, $line); }
-    }
-
-    return \@pkgmap;
 }
 
 ################################################
@@ -2490,22 +2057,6 @@ sub put_license_into_setup
     installer::files::save_file($setupfilename, $setupfile);
 }
 
-################################################
-# Setting global path to getuid.so library
-################################################
-
-sub set_getuid_path
-{
-    my ($includepatharrayref) = @_;
-
-    my $getuidlibraryname = "getuid.so";
-    my $getuidlibraryref = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$getuidlibraryname, $includepatharrayref, 0);
-    if ($$getuidlibraryref eq "") { installer::exiter::exit_program("ERROR: Could not find $getuidlibraryname!", "set_getuid_path"); }
-
-    $installer::globals::getuidpath = $$getuidlibraryref;
-    $installer::globals::getuidpathset = 1;
-}
-
 #########################################################
 # Create a tar file from the binary package
 #########################################################
@@ -2541,38 +2092,6 @@ sub tar_package
     my $filesize = ( -s $fulltarfile );
 
     return $filesize;
-}
-
-#########################################################
-# Create a tar file from the binary package
-#########################################################
-
-sub untar_package
-{
-    my ( $installdir, $tarfilename, $getuidlibrary) = @_;
-
-    my $ldpreloadstring = "";
-    if ( $getuidlibrary ne "" ) { $ldpreloadstring = "LD_PRELOAD=" . $getuidlibrary; }
-
-    my $systemcall = "cd $installdir; $ldpreloadstring tar -xf $tarfilename";
-
-    my $returnvalue = system($systemcall);
-
-    my $infoline = "Systemcall: $systemcall\n";
-    push( @installer::globals::logfileinfo, $infoline);
-
-    if ($returnvalue)
-    {
-        $infoline = "ERROR: Could not execute \"$systemcall\"!\n";
-        push( @installer::globals::logfileinfo, $infoline);
-    }
-    else
-    {
-        $infoline = "Success: Executed \"$systemcall\" successfully!\n";
-        push( @installer::globals::logfileinfo, $infoline);
-    }
-
-    chmod 0775, $tarfilename;
 }
 
 #########################################################

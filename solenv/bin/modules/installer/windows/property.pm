@@ -596,35 +596,6 @@ sub set_codes_in_property_table
 }
 
 ############################################################
-# Setting the variable REGKEYPRODPATH, that is used
-# by the language packs.
-############################################################
-
-sub set_regkeyprodpath_in_property_table
-{
-    my ($basedir, , $allvariables) = @_;
-
-    # Reading the property file
-
-    my $properyfilename = $basedir . $installer::globals::separator . "Property.idt";
-    my $propertyfile = installer::files::read_file($properyfilename);
-
-    my $name = $allvariables->{'PRODUCTNAME'};
-    my $version = $allvariables->{'PRODUCTVERSION'};
-
-    my $onepropertyline = "REGKEYPRODPATH" . "\t" . "Software" . "\\" . $installer::globals::manufacturer . "\\". $name;
-
-    push(@{$propertyfile}, $onepropertyline);
-
-    # Saving the property file
-
-    installer::files::save_file($properyfilename ,$propertyfile);
-    my $infoline = "Added language content into idt file: $properyfilename\n";
-    push(@installer::globals::logfileinfo, $infoline);
-
-}
-
-############################################################
 # Changing default for MS file type registration
 # in Beta products.
 ############################################################

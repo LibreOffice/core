@@ -289,22 +289,6 @@ sub getlangfilename
     return $pre2par::globals::langfilename;
 }
 
-###################################################
-# Creating the ulf file name from the
-# corresponding pre file name
-###################################################
-
-sub getulffilename
-{
-    my ($prefilename) = @_;
-
-    my $ulffilename = $prefilename;
-    $ulffilename =~ s/\.pre\s*$/\.ulf/;
-    pre2par::pathanalyzer::make_absolute_filename_to_relative_filename(\$ulffilename);
-
-    return $ulffilename;
-}
-
 ############################################
 # Checking if a file exists
 ############################################

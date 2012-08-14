@@ -75,35 +75,4 @@ sub create_font_table
 
 }
 
-#################################################################################
-# Reading the Font version from the ttf file, to avoid installation
-# of older files over newer files.
-#################################################################################
-
-sub get_font_version
-{
-    my ( $fontfile ) = @_;
-
-    if ( ! -f $fontfile ) { installer::exiter::exit_program("ERROR: Font file does not exist: \"$fontfile\"", "get_font_version"); }
-
-    my $fontversion = 0;
-    my $infoline = "";
-
-    my $onefile = installer::files::read_binary_file($fontfile);
-
-    if ( $onefile =~ /Version\s+(\d+\.\d+\.*\d*)/ )
-    {
-        $fontversion = $1;
-        $infoline = "FONT: Font \"$fontfile\" version: $fontversion\n";
-        push(@installer::globals::logfileinfo, $infoline);
-    }
-    else
-    {
-        $infoline = "FONT: Could not determine font version: \"$fontfile\"\n";
-        push(@installer::globals::logfileinfo, $infoline);
-    }
-
-    return $fontversion;
-}
-
 1;

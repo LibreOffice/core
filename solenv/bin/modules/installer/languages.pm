@@ -204,18 +204,4 @@ sub get_default_language
     return ${$languagesref}[0];     # ToDo, only returning the first language
 }
 
-################################################################
-# Determining the language used by the Java installer
-################################################################
-
-sub get_java_language
-{
-    my ( $language ) = @_;
-
-    $javalanguage = $language;
-    $javalanguage =~ s/\-/\_/;
-
-    return $javalanguage;
-}
-
 1;

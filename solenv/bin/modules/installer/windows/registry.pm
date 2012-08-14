@@ -286,28 +286,6 @@ sub get_registry_value
 }
 
 ##############################################################
-# Returning 64 bit value for registry table.
-##############################################################
-
-sub get_registry_val64
-{
-    my ($registry, $allvariableshashref) = @_;
-
-    my $value = "";
-
-    if ( $registry->{'Val64'} ) { $value = $registry->{'Val64'}; }
-
-    $value =~ s/\\\"/\"/g;  # no more masquerading of '"'
-    $value =~ s/\\\\\s*$/\\/g;  # making "\\" at end of value to "\"
-    $value =~ s/\<progpath\>/\[INSTALLLOCATION\]/;
-    $value =~ s/\[INSTALLLOCATION\]\\/\[INSTALLLOCATION\]/; # removing "\" after "[INSTALLLOCATION]"
-
-    if ( $value =~ /\%/ ) { $value = installer::worker::replace_variables_in_string($value, $allvariableshashref); }
-
-    return $value;
-}
-
-##############################################################
 # Returning component for registry table.
 ##############################################################
 

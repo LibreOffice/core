@@ -48,23 +48,6 @@ sub convert_array_to_hash
     return \%newhash;
 }
 
-sub convert_hash_into_array
-{
-    my ($hashref) = @_;
-
-    my @array = ();
-    my ($key, $value, $input);
-
-    foreach $key (keys %{$hashref})
-    {
-        $value = $hashref->{$key};
-        $input = "$key = $value\n";
-        push(@array ,$input);
-    }
-
-    return \@array
-}
-
 sub convert_stringlist_into_array_2
 {
     my ( $input, $separator ) = @_;

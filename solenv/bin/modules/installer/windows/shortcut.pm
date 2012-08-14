@@ -33,34 +33,6 @@ use installer::globals;
 use installer::windows::idtglobal;
 
 ##############################################################
-# Returning the file object for the msiassembly table.
-##############################################################
-
-sub get_file_by_name
-{
-    my ( $filesref, $filename ) = @_;
-
-    my $foundfile = 0;
-    my $onefile;
-
-    for ( my $i = 0; $i <= $#{$filesref}; $i++ )
-    {
-        $onefile = ${$filesref}[$i];
-        my $name = $onefile->{'Name'};
-
-        if ( $name eq $filename )
-        {
-            $foundfile = 1;
-            last;
-        }
-    }
-
-    if (! $foundfile ) { $onefile  = ""; }
-
-    return $onefile;
-}
-
-##############################################################
 # Returning identifier for shortcut table.
 ##############################################################
 

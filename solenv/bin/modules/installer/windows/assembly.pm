@@ -143,35 +143,6 @@ sub get_msiassembly_file
     return $onefile;
 }
 
-##############################################################
-# Returning the file object for the msiassembly table.
-##############################################################
-
-sub get_msiassembly_file_by_gid
-{
-    my ( $filesref, $gid ) = @_;
-
-    my $foundfile = 0;
-    my $onefile;
-
-    for ( my $i = 0; $i <= $#{$filesref}; $i++ )
-    {
-        $onefile = ${$filesref}[$i];
-        my $filegid = $onefile->{'gid'};
-
-        if ( $filegid eq $gid )
-        {
-            $foundfile = 1;
-            last;
-        }
-    }
-
-    # It does not need to exist. For example products that do not contain the libraries.
-    if (! $foundfile ) { $onefile  = ""; }
-
-    return $onefile;
-}
-
 ####################################################################################
 # Creating the file MsiAssembly.idt dynamically
 # Content:
@@ -217,24 +188,6 @@ sub create_msiassembly_table
     installer::files::save_file($msiassemblytablename ,\@msiassemblytable);
     my $infoline = "Created idt file: $msiassemblytablename\n";
     push(@installer::globals::logfileinfo, $infoline);
-}
-
-####################################################################################
-# Returning the name for the table MsiAssemblyName
-####################################################################################
-
-sub get_msiassemblyname_name
-{
-    ( $number ) = @_;
-
-    my $name = "";
-
-    if ( $number == 1 ) { $name = "name"; }
-    elsif ( $number == 2 ) { $name = "publicKeyToken"; }
-    elsif ( $number == 3 ) { $name = "version"; }
-    elsif ( $number == 4 ) { $name = "culture"; }
-
-    return $name;
 }
 
 ####################################################################################

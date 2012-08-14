@@ -733,38 +733,6 @@ sub changing_name_of_language_dependent_keys
 }
 
 ################################################################################
-# Collecting language specific names for language packs
-################################################################################
-
-sub collect_language_specific_names
-{
-    my ($itemsarrayref) = @_;
-
-    for ( my $i = 0; $i <= $#{$itemsarrayref}; $i++ )
-    {
-        my $oneitem = ${$itemsarrayref}[$i];
-        my $styles = "";
-        if ( $oneitem->{'Styles'} ) { $styles = $oneitem->{'Styles'}; }
-
-        if ( $styles =~ /\bUSELANGUAGENAME\b/ )
-        {
-            my $language = "";
-            if ( $oneitem->{'Language'} ) { $language = $oneitem->{'Language'}; }
-            my $specificlanguage = "";
-            if ( $oneitem->{'specificlanguage'} ) { $specificlanguage = $oneitem->{'specificlanguage'}; }
-
-            if (( $language ne "" ) && ( $language eq $specificlanguage ))
-            {
-                if (! grep {$_ eq $oneitem->{'Name'}} @installer::globals::languagenames )
-                {
-                    push(@installer::globals::languagenames, $oneitem->{'Name'});
-                }
-            }
-        }
-    }
-}
-
-################################################################################
 # Replacement of setup variables in ConfigurationItems and ProfileItems
 # <productkey>, <buildid>, <sequence_languages>, <productcode>, <upgradecode>, <productupdate>
 ################################################################################
@@ -2696,47 +2664,6 @@ sub select_required_language_strings
             }
         }
     }
-}
-
-#####################################################################################
-# Unixlinks are not always required. For Linux RPMs and Solaris Packages they are
-# created dynamically. Exception: For package formats "installed" or "archive".
-# In scp2 this unixlinks have the flag LAYERLINK.
-#####################################################################################
-
-sub filter_layerlinks_from_unixlinks
-{
-    my ( $unixlinksref ) = @_;
-
-    my @alllinks = ();
-
-    for ( my $i = 0; $i <= $#{$unixlinksref}; $i++ )
-    {
-        my $isrequired = 1;
-
-        my $onelink = ${$unixlinksref}[$i];
-        my $styles = "";
-        if ( $onelink->{'Styles'} ) { $styles = $onelink->{'Styles'}; }
-
-        if ( $styles =~ /\bLAYERLINK\b/ )
-        {
-            # Platforms, that do not need the layer links
-            if (( $installer::globals::isrpmbuild ) || ( $installer::globals::issolarispkgbuild ))
-            {
-                $isrequired = 0;
-            }
-
-            # Package formats, that need the layer link (platform independent)
-            if (( $installer::globals::packageformat eq "installed" ) || ( $installer::globals::packageformat eq "archive" ))
-            {
-                $isrequired = 1;
-            }
-        }
-
-        if ( $isrequired ) { push(@alllinks, $onelink); }
-    }
-
-    return \@alllinks;
 }
 
 1;

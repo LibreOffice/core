@@ -580,35 +580,6 @@ sub generate_cab_file_list
 }
 
 ########################################################################
-# Returning the file sequence of a specified file.
-########################################################################
-
-sub get_file_sequence
-{
-    my ($filesref, $uniquefilename) = @_;
-
-    my $sequence = "";
-    my $found_sequence = 0;
-
-    for ( my $i = 0; $i <= $#{$filesref}; $i++ )
-    {
-        my $onefile = ${$filesref}[$i];
-        my $uniquename = $onefile->{'uniquename'};
-
-        if ( $uniquename eq $uniquefilename )
-        {
-            $sequence = $onefile->{'sequencenumber'};
-            $found_sequence = 1;
-            last;
-        }
-    }
-
-    if ( ! $found_sequence ) { installer::exiter::exit_program("ERROR: No sequence found for $uniquefilename !", "get_file_sequence"); }
-
-    return $sequence;
-}
-
-########################################################################
 # For update and patch reasons the pack order needs to be saved.
 # The pack order is saved in the ddf files; the names and locations
 # of the ddf files are saved in @installer::globals::allddffiles.
@@ -1219,37 +1190,6 @@ sub rename_msi_database_in_installset
 }
 
 #################################################################
-# Copying the files defined as ScpActions into the
-# installation set.
-#################################################################
-
-sub copy_scpactions_into_installset
-{
-    my ($defaultlanguage, $installdir, $allscpactions) = @_;
-
-    installer::logger::include_header_into_logfile("Copying ScpAction files into installation set");
-
-    for ( my $i = 0; $i <= $#{$allscpactions}; $i++ )
-    {
-        my $onescpaction = ${$allscpactions}[$i];
-
-        if ( $onescpaction->{'Name'} eq "loader.exe" ) { next; }    # do not copy this ScpAction loader
-
-        # only copying language independent files or files with the correct language (the defaultlanguage)
-
-        my $filelanguage = $onescpaction->{'specificlanguage'};
-
-        if ( ($filelanguage eq $defaultlanguage) || ($filelanguage eq "") )
-        {
-            my $sourcefile = $onescpaction->{'sourcepath'};
-            my $destfile = $installdir . $installer::globals::separator . $onescpaction->{'DestinationName'};
-
-            installer::systemactions::copy_one_file($sourcefile, $destfile);
-        }
-    }
-}
-
-#################################################################
 # Copying MergeModules for the Windows installer into the
 # installation set. The list of MergeModules is located
 # in %installer::globals::copy_msm_files
@@ -1358,55 +1298,6 @@ sub calculate_guid
     $guid = "$first-$second-$third-$fourth-$fifth";
 
     return $guid;
-}
-
-#################################################################
-# Filling the component hash with the values of the
-# component file.
-#################################################################
-
-sub fill_component_hash
-{
-    my ($componentfile) = @_;
-
-    my %components = ();
-
-    for ( my $i = 0; $i <= $#{$componentfile}; $i++ )
-    {
-        my $line = ${$componentfile}[$i];
-
-        if ( $line =~ /^\s*(.*?)\t(.*?)\s*$/ )
-        {
-            my $key = $1;
-            my $value = $2;
-
-            $components{$key} = $value;
-        }
-    }
-
-    return \%components;
-}
-
-#################################################################
-# Creating a new component file, if new guids were generated.
-#################################################################
-
-sub create_new_component_file
-{
-    my ($componenthash) = @_;
-
-    my @componentfile = ();
-
-    my $key;
-
-    foreach $key (keys %{$componenthash})
-    {
-        my $value = $componenthash->{$key};
-        my $input = "$key\t$value\n";
-        push(@componentfile ,$input);
-    }
-
-    return \@componentfile;
 }
 
 #################################################################

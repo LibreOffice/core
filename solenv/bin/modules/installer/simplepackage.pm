@@ -60,22 +60,6 @@ sub check_simple_packager_project
     }
 }
 
-########################################################################
-# Getting the translation file for the Mac Language Pack installer
-########################################################################
-
-sub get_mac_translation_file
-{
-    my $translationfilename = $installer::globals::maclangpackfilename;
-    if ( ! -f $translationfilename ) { installer::exiter::exit_program("ERROR: Could not find language file $translationfilename!", "get_mac_translation_file"); }
-    my $translationfile = installer::files::read_file($translationfilename);
-
-    my $infoline = "Reading translation file: $translationfilename\n";
-    push( @installer::globals::logfileinfo, $infoline);
-
-    return $translationfile;
-}
-
 ##################################################################
 # Collecting all identifier from ulf file
 ##################################################################

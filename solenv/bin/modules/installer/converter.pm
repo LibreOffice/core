@@ -104,25 +104,6 @@ sub convert_whitespace_stringlist_into_array
 }
 
 #############################################################################
-# Converting an array into a comma separated string
-#############################################################################
-
-sub convert_array_to_comma_separated_string
-{
-    my ( $arrayref ) = @_;
-
-    my $newstring;
-    for (@{$arrayref}) {
-        my $tmp = $_;
-        $tmp =~ s/\s+$//;
-        $newstring .= "$tmp,";
-    }
-    $newstring =~ s/\,$//;
-
-    return $newstring;
-}
-
-#############################################################################
 # Converting an array into a space separated string
 #############################################################################
 

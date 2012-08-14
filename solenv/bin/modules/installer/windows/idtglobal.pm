@@ -851,37 +851,6 @@ sub get_rtflicensefilesource
 }
 
 ##############################################################
-# Returning the source path of the licensefile for
-# a specified language
-##############################################################
-
-sub get_licensefilesource
-{
-    my ($language, $filesref) = @_;
-
-    my $licensefilename = "license_" . $language . ".txt";
-    my $sourcepath = "";
-    my $foundlicensefile = 0;
-
-    for ( my $i = 0; $i <= $#{$filesref}; $i++ )
-    {
-        my $onefile = ${$filesref}[$i];
-        my $filename = $onefile->{'Name'};
-
-        if ($filename eq $licensefilename)
-        {
-            $sourcepath = $onefile->{'sourcepath'};
-            $foundlicensefile = 1;
-            last;
-        }
-    }
-
-    if ( ! $foundlicensefile ) { installer::exiter::exit_program("ERROR: Did not find file $licensefilename in file collector!", "get_licensefilesource"); }
-
-    return $sourcepath;
-}
-
-##############################################################
 # A simple converter to create the license text
 # in rtf format
 ##############################################################
@@ -981,50 +950,6 @@ sub make_string_licensetext
     }
 
     return $rtf_licensetext;
-}
-
-##############################################################
-# Setting the path, where the soffice.exe is installed, into
-# the CustomAction table
-##############################################################
-
-sub add_officedir_to_database
-{
-    my ($basedir, $allvariables) = @_;
-
-    my $customactionfilename = $basedir . $installer::globals::separator . "CustomAc.idt";
-
-    my $customacfile = installer::files::read_file($customactionfilename);
-
-    my $found = 0;
-
-    # Updating the values
-
-    if ( $installer::globals::officeinstalldirectoryset )
-    {
-        $found = 0;
-
-        for ( my $i = 0; $i <= $#{$customacfile}; $i++ )
-        {
-            if ( ${$customacfile}[$i] =~ /\bOFFICEDIRECTORYGID\b/ )
-            {
-                ${$customacfile}[$i] =~ s/\bOFFICEDIRECTORYGID\b/$installer::globals::officeinstalldirectory/;
-                $found = 1;
-            }
-        }
-
-        if (( ! $found ) && ( ! $allvariables->{'IGNOREDIRECTORYLAYER'} ))
-        {
-            installer::exiter::exit_program("ERROR: \"OFFICEDIRECTORYGID\" not found in \"$customactionfilename\" !", "add_officedir_to_database");
-        }
-    }
-
-    # Saving the file
-
-    installer::files::save_file($customactionfilename ,$customacfile);
-    my $infoline = "Updated idt file: $customactionfilename\n";
-    push(@installer::globals::logfileinfo, $infoline);
-
 }
 
 ##############################################################
