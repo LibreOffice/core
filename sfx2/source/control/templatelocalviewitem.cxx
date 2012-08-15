@@ -39,7 +39,10 @@ void TemplateLocalViewItem::Paint (drawinglayer::processor2d::BaseProcessor2D *p
                                     const ThumbnailItemAttributes *pAttrs)
 {
     int nCount = 0;
-    int nSeqSize = 7;
+    int nSeqSize = 2;
+
+    if (!maPreview1.IsEmpty())
+        nSeqSize += 5;
 
     if (!maPreview2.IsEmpty())
         nSeqSize += 5;
@@ -91,28 +94,31 @@ void TemplateLocalViewItem::Paint (drawinglayer::processor2d::BaseProcessor2D *p
                                                                B2DPoint(fPosX,fPosY)));
     }
 
-    aSeq[nCount++] = Primitive2DReference( new FillBitmapPrimitive2D(
-                                        createScaleTranslateB2DHomMatrix(fScaleX,fScaleY,aPos.X(),aPos.Y()),
-                                        FillBitmapAttribute(maPreview1,
-                                                            B2DPoint(0,0),
-                                                            B2DVector(aImageSize.Width(),aImageSize.Height()),
-                                                            false)
-                                        ));
+    if (!maPreview1.IsEmpty())
+    {
+        aSeq[nCount++] = Primitive2DReference( new FillBitmapPrimitive2D(
+                                            createScaleTranslateB2DHomMatrix(fScaleX,fScaleY,aPos.X(),aPos.Y()),
+                                            FillBitmapAttribute(maPreview1,
+                                                                B2DPoint(0,0),
+                                                                B2DVector(aImageSize.Width(),aImageSize.Height()),
+                                                                false)
+                                            ));
 
-    // draw thumbnail borders
-    float fWidth = aImageSize.Width()*fScaleX;
-    float fHeight = aImageSize.Height()*fScaleY;
-    float fPosX = aPos.getX();
-    float fPosY = aPos.getY();
+        // draw thumbnail borders
+        float fWidth = aImageSize.Width()*fScaleX;
+        float fHeight = aImageSize.Height()*fScaleY;
+        float fPosX = aPos.getX();
+        float fPosY = aPos.getY();
 
-    aSeq[nCount++] = Primitive2DReference(createBorderLine(B2DPoint(fPosX,fPosY),
-                                                           B2DPoint(fPosX+fWidth,fPosY)));
-    aSeq[nCount++] = Primitive2DReference(createBorderLine(B2DPoint(fPosX+fWidth,fPosY),
-                                                           B2DPoint(fPosX+fWidth,fPosY+fHeight)));
-    aSeq[nCount++] = Primitive2DReference(createBorderLine(B2DPoint(fPosX+fWidth,fPosY+fHeight),
-                                                           B2DPoint(fPosX,fPosY+fHeight)));
-    aSeq[nCount++] = Primitive2DReference(createBorderLine(B2DPoint(fPosX,fPosY+fHeight),
-                                                           B2DPoint(fPosX,fPosY)));
+        aSeq[nCount++] = Primitive2DReference(createBorderLine(B2DPoint(fPosX,fPosY),
+                                                               B2DPoint(fPosX+fWidth,fPosY)));
+        aSeq[nCount++] = Primitive2DReference(createBorderLine(B2DPoint(fPosX+fWidth,fPosY),
+                                                               B2DPoint(fPosX+fWidth,fPosY+fHeight)));
+        aSeq[nCount++] = Primitive2DReference(createBorderLine(B2DPoint(fPosX+fWidth,fPosY+fHeight),
+                                                               B2DPoint(fPosX,fPosY+fHeight)));
+        aSeq[nCount++] = Primitive2DReference(createBorderLine(B2DPoint(fPosX,fPosY+fHeight),
+                                                               B2DPoint(fPosX,fPosY)));
+    }
 
     // Draw centered text below thumbnail
     aPos = maTextPos;
