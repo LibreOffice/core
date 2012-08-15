@@ -34,9 +34,9 @@ class OutputDevice;
 class SvStream;
 class SdrObject;
 
-#include <tools/contnr.hxx>
 #include <tools/gen.hxx>
 #include "svx/svxdllapi.h"
+#include <vector>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -116,20 +116,25 @@ public:
 #define SDRGLUEPOINT_NOTFOUND 0xFFFF
 
 class SVX_DLLPUBLIC SdrGluePointList {
-    Container aList;
+    std::vector<SdrGluePoint*> aList;
 protected:
-    SdrGluePoint* GetObject(sal_uInt16 i) const { return (SdrGluePoint*)(aList.GetObject(i)); }
+    SdrGluePoint* GetObject(sal_uInt16 i) const { return aList[i]; }
 public:
-    SdrGluePointList(): aList(1024,4,4) {}
-    SdrGluePointList(const SdrGluePointList& rSrcList): aList(1024,4,4)     { *this=rSrcList; }
+    SdrGluePointList(): aList() {}
+    SdrGluePointList(const SdrGluePointList& rSrcList): aList()     { *this=rSrcList; }
     ~SdrGluePointList()                                                     { Clear(); }
     void                Clear();
     void                operator=(const SdrGluePointList& rSrcList);
-    sal_uInt16              GetCount() const                                    { return sal_uInt16(aList.Count()); }
+    sal_uInt16              GetCount() const                                    { return sal_uInt16(aList.size()); }
     // Beim Insert wird dem Objekt (also dem GluePoint) automatisch eine Id zugewiesen.
     // ReturnCode ist der Index des neuen GluePoints in der Liste
     sal_uInt16              Insert(const SdrGluePoint& rGP);
-    void                Delete(sal_uInt16 nPos)                                 { delete (SdrGluePoint*)aList.Remove(nPos); }
+    void                Delete(sal_uInt16 nPos)
+    {
+        SdrGluePoint* p = aList[nPos];
+        aList.erase(aList.begin()+nPos);
+        delete p;
+    }
     SdrGluePoint&       operator[](sal_uInt16 nPos)                             { return *GetObject(nPos); }
     const SdrGluePoint& operator[](sal_uInt16 nPos) const                       { return *GetObject(nPos); }
     sal_uInt16          FindGluePoint(sal_uInt16 nId) const;

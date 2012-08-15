@@ -29,6 +29,7 @@
 #ifndef _SVDFMTF_HXX
 #define _SVDFMTF_HXX
 
+#include <tools/contnr.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/virdev.hxx>
 #include <svx/svdobj.hxx>
