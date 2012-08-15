@@ -33,16 +33,12 @@ $(eval $(call gb_Jar_set_packageroot,mediawiki,com))
 
 $(eval $(call gb_Jar_set_manifest,mediawiki,$(SRCDIR)/swext/mediawiki/src/com/sun/star/wiki/MANIFEST.MF))
 
-ifeq ($(SYSTEM_APACHE_COMMONS),YES)
-# FIXME: use gb_Jar_use_externals?
-# for the build
-$(eval $(call gb_Jar_use_jars,mediawiki,\
-	$(COMMONS_CODEC_JAR) \
-	$(COMMONS_LANG_JAR) \
-	$(COMMONS_HTTPCLIENT_JAR) \
-	$(COMMONS_LOGGING_JAR) \
+$(eval $(call gb_Jar_use_externals,mediawiki,\
+	commons-codec \
+	commons-lang \
+	commons-httpclient \
+	commons-logging \
 ))
-endif
 
 $(eval $(call gb_Jar_use_jars,mediawiki,\
 	$(OUTDIR)/bin/juh.jar \
@@ -50,15 +46,6 @@ $(eval $(call gb_Jar_use_jars,mediawiki,\
 	$(OUTDIR)/bin/ridl.jar \
 	$(OUTDIR)/bin/unoil.jar \
 ))
-
-ifneq ($(SYSTEM_APACHE_COMMONS),YES)
-$(eval $(call gb_Jar_use_jars,mediawiki,\
-	$(OUTDIR)/bin/commons-codec-1.3.jar \
-	$(OUTDIR)/bin/commons-lang-2.3.jar \
-	$(OUTDIR)/bin/commons-httpclient-3.1.jar \
-	$(OUTDIR)/bin/commons-logging-1.1.1.jar \
-))
-endif
 
 $(eval $(call gb_Jar_add_sourcefiles,mediawiki,\
 	swext/mediawiki/src/com/sun/star/wiki/EditPageParser \
