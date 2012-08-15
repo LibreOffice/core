@@ -440,11 +440,15 @@ struct WW8LFOInfo   // unsortiert, d.h. Reihenfolge genau wie im WW8 Stream
 };
 
 WW8LFOInfo::WW8LFOInfo(const WW8LFO& rLFO)
-    : maParaSprms(WW8ListManager::nMaxLevel),
-    maOverrides(WW8ListManager::nMaxLevel), pNumRule(rLFO.pNumRule),
-    nIdLst(rLFO.nIdLst), nLfoLvl(rLFO.nLfoLvl),
-    bOverride(rLFO.nLfoLvl ? true : false), bSimpleList(rLFO.bSimpleList),
-    bUsedInDoc(0), bLSTbUIDSet(0)
+    : maParaSprms(WW8ListManager::nMaxLevel)
+    , maOverrides(WW8ListManager::nMaxLevel)
+    , pNumRule(rLFO.pNumRule)
+    , nIdLst(rLFO.nIdLst)
+    , nLfoLvl(rLFO.nLfoLvl)
+    , bOverride(rLFO.nLfoLvl ? true : false)
+    , bSimpleList(rLFO.bSimpleList)
+    , bUsedInDoc(0)
+    , bLSTbUIDSet(0)
 {
 }
 

@@ -74,8 +74,6 @@ sal_uInt16 SwLineInfo::NumberOfTabStops() const
  *************************************************************************/
 SwTabPortion *SwTxtFormatter::NewTabPortion( SwTxtFormatInfo &rInf, bool bAuto ) const
 {
-    SwTabPortion *pTabPor = 0;
-
     sal_Unicode cFill = 0;
     sal_Unicode cDec = 0;
     SvxTabAdjust eAdj;
@@ -137,7 +135,7 @@ SwTabPortion *SwTxtFormatter::NewTabPortion( SwTxtFormatInfo &rInf, bool bAuto )
             nMyRight = aRightTop.Y();
         }
 
-        SwTwips nNextPos;
+        SwTwips nNextPos = 0;
 
         // #i24363# tab stops relative to indent
         // nSearchPos: The current position relative to the tabs origin.
@@ -152,9 +150,8 @@ SwTabPortion *SwTxtFormatter::NewTabPortion( SwTxtFormatInfo &rInf, bool bAuto )
         // Note: If there are no user defined tab stops, there is always a
         // default tab stop.
         //
-        const SvxTabStop* pTabStop =
-            aLineInf.GetTabStop( nSearchPos, nMyRight );
-        if( pTabStop )
+        const SvxTabStop* pTabStop = aLineInf.GetTabStop( nSearchPos, nMyRight );
+        if ( pTabStop )
         {
             cFill = ' ' != pTabStop->GetFill() ? pTabStop->GetFill() : 0;
             cDec = pTabStop->GetDecimal();
@@ -183,12 +180,14 @@ SwTabPortion *SwTxtFormatter::NewTabPortion( SwTxtFormatInfo &rInf, bool bAuto )
             }
             SwTwips nCount = nSearchPos;
 
-            //Minimum tab stop width is 1
+            // Minimum tab stop width is 1
             if (nDefTabDist <= 0)
                 nDefTabDist = 1;
 
             nCount /= nDefTabDist;
-            nNextPos = nCount < 0 || (!nCount && nSearchPos <= 0)? nCount * nDefTabDist :( nCount + 1 ) * nDefTabDist ;
+            nNextPos = ( nCount < 0 || ( !nCount && nSearchPos <= 0 ) )
+                       ? ( nCount * nDefTabDist )
+                       : ( ( nCount + 1 ) * nDefTabDist );
             // --> FME 2004-09-21 #117919 Minimum tab stop width is 1 or 51 twips:
             const SwTwips nMinimumTabWidth = pFrm->GetTxtNode()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::TAB_COMPAT) ? 0 : 50;
             if( (  bRTL && nTabLeft - nNextPos >= nCurrentAbsPos - nMinimumTabWidth ) ||
@@ -271,6 +270,7 @@ SwTabPortion *SwTxtFormatter::NewTabPortion( SwTxtFormatInfo &rInf, bool bAuto )
         nNewTabPos = KSHORT(nNextPos);
     }
 
+    SwTabPortion *pTabPor = 0;
     if ( bAuto )
     {
         if ( SVX_TAB_ADJUST_DECIMAL == eAdj &&
@@ -282,36 +282,31 @@ SwTabPortion *SwTxtFormatter::NewTabPortion( SwTxtFormatInfo &rInf, bool bAuto )
     {
         switch( eAdj )
         {
-            case SVX_TAB_ADJUST_RIGHT :
-               {
+        case SVX_TAB_ADJUST_RIGHT :
+            {
                 pTabPor = new SwTabRightPortion( nNewTabPos, cFill );
                 break;
             }
-            case SVX_TAB_ADJUST_CENTER :
+        case SVX_TAB_ADJUST_CENTER :
             {
-                   pTabPor = new SwTabCenterPortion( nNewTabPos, cFill );
+                pTabPor = new SwTabCenterPortion( nNewTabPos, cFill );
                 break;
             }
-            case SVX_TAB_ADJUST_DECIMAL :
+        case SVX_TAB_ADJUST_DECIMAL :
             {
-                   pTabPor = new SwTabDecimalPortion( nNewTabPos, cDec, cFill );
+                pTabPor = new SwTabDecimalPortion( nNewTabPos, cDec, cFill );
                 break;
             }
-            default:
+        default:
             {
-                   OSL_ENSURE( SVX_TAB_ADJUST_LEFT == eAdj || SVX_TAB_ADJUST_DEFAULT == eAdj,
-                        "+SwTxtFormatter::NewTabPortion: unknown adjustment" );
+                OSL_ENSURE( SVX_TAB_ADJUST_LEFT == eAdj || SVX_TAB_ADJUST_DEFAULT == eAdj,
+                    "+SwTxtFormatter::NewTabPortion: unknown adjustment" );
                 pTabPor = new SwTabLeftPortion( nNewTabPos, cFill, bAutoTabStop );
                 break;
             }
         }
     }
 
-    // Show existence of tabs "..." is not necessary anymore
-    // pCurr->SetTabulation();
-    // We calculate the data as a precaution
-    // pTabPor->Height( pLast->Height() );
-    // pTabPor->SetAscent( pLast->GetAscent() );
     return pTabPor;
 }
 

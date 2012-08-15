@@ -466,7 +466,7 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
             SfxItemSet aSet( pSdrModel->GetItemPool() );
 
             //Originally anything that as a mso_sptTextBox was created as a
-            //textbox, this was changed for #88277# to be created as a simple
+            //textbox, this was changed to be created as a simple
             //rect to keep impress happy. For the rest of us we'd like to turn
             //it back into a textbox again.
             bool bIsSimpleDrawingTextBox = (pImpRec->eShapeType == mso_sptTextBox);
@@ -1001,6 +1001,17 @@ void SyncIndentWithList( SvxLRSpaceItem &rLR,
         {
             rLR.SetTxtLeft( rFmt.GetIndentAt() );
         }
+        else if (!bFirstLineOfstSet && !bLeftIndentSet )
+        {
+            if ( rFmt.GetFirstLineIndent() != 0 )
+            {
+                rLR.SetTxtFirstLineOfst( rFmt.GetFirstLineIndent() );
+            }
+            if ( rFmt.GetIndentAt() != 0 )
+            {
+                rLR.SetTxtLeft( rFmt.GetIndentAt() );
+            }
+        }
     }
 }
 
@@ -1074,14 +1085,12 @@ void SwWW8FltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
                             continue;
 
                         SwCntntNode* pNd = (SwCntntNode*)pNode;
-                        SvxLRSpaceItem aOldLR = (const SvxLRSpaceItem&)
-                                pNd->GetAttr(RES_LR_SPACE);
+                        SvxLRSpaceItem aOldLR = (const SvxLRSpaceItem&)pNd->GetAttr(RES_LR_SPACE);
 
                         SwTxtNode *pTxtNode = (SwTxtNode*)pNode;
 
                         const SwNumFmt *pNum = 0;
-                        pNum = GetNumFmtFromStack(*aRegion.GetPoint(),
-                            *pTxtNode);
+                        pNum = GetNumFmtFromStack( *aRegion.GetPoint(), *pTxtNode );
                         if (!pNum)
                         {
                             pNum = GetNumFmtFromTxtNode(*pTxtNode);
@@ -1261,7 +1270,6 @@ void SwWW8FltRefStack::SetAttrInDoc(const SwPosition& rTmpPos,
             SwFmtFld& rFmtFld   = *(SwFmtFld*)rEntry.pAttr;
             SwField* pFld = rFmtFld.GetFld();
 
-            // <NOT> got lost from revision 1.128 to 1.129
             if (!RefToVar(pFld, rEntry))
             {
                 sal_uInt16 nBkmNo;
@@ -1496,7 +1504,7 @@ void SwWW8ImplReader::ImportDop()
     // COMPATIBILITY FLAGS START
     //
 
-    // i#78951, remember the unknown compatability options
+    // #i78951# - remember the unknown compatability options
     // so as to export them out
     rDoc.Setn32DummyCompatabilityOptions1( pWDop->GetCompatabilityOptions());
     rDoc.Setn32DummyCompatabilityOptions2( pWDop->GetCompatabilityOptions2());
@@ -3072,7 +3080,7 @@ bool SwWW8ImplReader::HandlePageBreakChar()
         */
         //xushanchuan add for issue106569
         if (!bWasParaEnd && IsTemp)
-        //xushanchuan end
+            //xushanchuan end
         {
             bParaEndAdded = true;
             if (0 >= pPaM->GetPoint()->nContent.GetIndex())
@@ -3208,7 +3216,7 @@ bool SwWW8ImplReader::ReadChar(long nPosCp, long nCpOfs)
                     else if (bSpec)
                         pResult = ImportGraf();
 
-                    //#102160# If we have a bad 0x1 insert a space instead.
+                    // If we have a bad 0x1 insert a space instead.
                     if (!pResult)
                     {
                         cInsert = ' ';
@@ -5309,7 +5317,7 @@ public:
 void SwWW8ImplReader::SetOutLineStyles()
 {
     /*
-    #i3674# & #101291# Load new document and insert document cases.
+    #i3674# - Load new document and insert document cases.
     */
     SwNumRule aOutlineRule(*rDoc.GetOutlineNumRule());
     // #i53044,i53213#
@@ -5336,7 +5344,7 @@ void SwWW8ImplReader::SetOutLineStyles()
         for ( sw::ParaStyles::reverse_iterator aIter = aOutLined.rbegin(); aIter < aEnd; ++aIter)
         {
             if ((*aIter)->IsAssignedToListLevelOfOutlineStyle())
-                nFlagsStyleOutlLevel |= 1 << (*aIter)->GetAssignedOutlineStyleLevel();//<-end,zhaojianwei
+                nFlagsStyleOutlLevel |= 1 << (*aIter)->GetAssignedOutlineStyleLevel();
             else
                 break;
         }
@@ -5398,7 +5406,7 @@ void SwWW8ImplReader::SetOutLineStyles()
             for ( sw::ParaStyles::reverse_iterator aIter = aOutLined.rbegin(); aIter < aEnd; ++aIter)
             {
                 if((*aIter)->IsAssignedToListLevelOfOutlineStyle())
-                    (*aIter)->DeleteAssignmentToListLevelOfOutlineStyle();  //<-end
+                    (*aIter)->DeleteAssignmentToListLevelOfOutlineStyle();
 
                 else
                     break;
@@ -5868,8 +5876,7 @@ bool SwWW8ImplReader::InEqualOrHigherApo(int nLvl) const
 {
     if (nLvl)
         --nLvl;
-    // #i60827#
-    // check size of <maApos> to assure that <maApos.begin() + nLvl> can be performed.
+    // #i60827# - check size of <maApos> to assure that <maApos.begin() + nLvl> can be performed.
     if ( sal::static_int_cast< sal_Int32>(nLvl) >= sal::static_int_cast< sal_Int32>(maApos.size()) )
     {
         return false;
