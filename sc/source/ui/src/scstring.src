@@ -203,12 +203,12 @@ String SCSTR_NONAME
 
 String SCSTR_COLUMN
 {
-    Text [ en-US ] = "Column" ;
+    Text [ en-US ] = "Column %1" ;
 };
 
 String SCSTR_ROW
 {
-    Text [ en-US ] = "Row" ;
+    Text [ en-US ] = "Row %1" ;
 };
 
 String SCSTR_NEW

@@ -288,11 +288,9 @@ void ScTpSubTotalGroup::FillListBoxes()
             pDoc->GetString( col, nFirstRow, nTab, aFieldName );
             if ( aFieldName.isEmpty() )
             {
-                rtl::OUStringBuffer aBuf;
+               rtl::OUStringBuffer aBuf;
                 aBuf.append(aStrColumn);
-                aBuf.append(sal_Unicode(' '));
-                aBuf.append(ScColToAlpha(col));
-                aFieldName = aBuf.makeStringAndClear();
+                aFieldName = aBuf.makeStringAndClear().replaceAll("%1", ScColToAlpha( col ));
             }
             nFieldArr[i] = col;
             aLbGroup.InsertEntry( aFieldName, i+1 );

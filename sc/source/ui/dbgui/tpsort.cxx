@@ -361,9 +361,7 @@ void ScTabPageSortFields::FillFieldLists( sal_uInt16 nStartField )
                     {
                         rtl::OUStringBuffer aBuf;
                         aBuf.append(aStrColumn);
-                        aBuf.append(sal_Unicode(' '));
-                        aBuf.append(ScColToAlpha(col));
-                        aFieldName = aBuf.makeStringAndClear();
+                        aFieldName = aBuf.makeStringAndClear().replaceAll("%1", ScColToAlpha( col ));
                     }
                     nFieldArr.push_back( col );
 
@@ -385,10 +383,11 @@ void ScTabPageSortFields::FillFieldLists( sal_uInt16 nStartField )
                     if ( !bHasHeader || aFieldName.isEmpty() )
                     {
                         rtl::OUStringBuffer aBuf;
+                        rtl::OUStringBuffer tempBuf;
+
                         aBuf.append(aStrRow);
-                        aBuf.append(sal_Unicode(' '));
-                        aBuf.append(row+1);
-                        aFieldName = aBuf.makeStringAndClear();
+                        tempBuf.append(row+1 );
+                        aFieldName = aBuf.makeStringAndClear().replaceAll("%1", tempBuf.makeStringAndClear());
                     }
                     nFieldArr.push_back( row );
 
