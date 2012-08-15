@@ -42,20 +42,6 @@ $(eval $(call gb_Jar_use_jars,mediawiki,\
 	$(COMMONS_HTTPCLIENT_JAR) \
 	$(COMMONS_LOGGING_JAR) \
 ))
-# Class-Path: in MANIFEST.MF
-$(eval $(call gb_Jar_set_jarclasspath,mediawiki,\
-	$(COMMONS_CODEC_JAR) \
-	$(COMMONS_LANG_JAR) \
-	$(COMMONS_HTTPCLIENT_JAR) \
-	$(COMMONS_LOGGING_JAR) \
-))
-else
-$(eval $(call gb_Jar_set_jarclasspath,mediawiki,\
-	commons-codec-1.3.jar \
-	commons-lang-2.3.jar \
-	commons-httpclient-3.1.jar \
-	commons-logging-1.1.1.jar \
-))
 endif
 
 $(eval $(call gb_Jar_use_jars,mediawiki,\

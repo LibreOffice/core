@@ -40,10 +40,6 @@ $(eval $(call gb_Jar_set_manifest,query,$(SRCDIR)/wizards/com/sun/star/wizards/q
 
 $(eval $(call gb_Jar_set_packageroot,query,com))
 
-$(eval $(call gb_Jar_set_jarclasspath,query,\
-	commonwizards.jar \
-))
-
 $(eval $(call gb_Jar_add_sourcefiles,query,\
 	wizards/com/sun/star/wizards/query/CallQueryWizard \
 	wizards/com/sun/star/wizards/query/Finalizer \

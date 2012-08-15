@@ -40,7 +40,8 @@ $(eval $(call gb_Jar_set_packageroot,commonwizards,com))
 
 $(eval $(call gb_Jar_set_manifest,commonwizards,$(SRCDIR)/wizards/com/sun/star/wizards/common/MANIFEST.MF))
 
-$(eval $(call gb_Jar_set_jarclasspath,commonwizards,saxon9.jar))
+# FIXME: what is this doing here?
+$(eval $(call gb_Jar_add_manifest_classpath,commonwizards,saxon9.jar))
 
 $(eval $(call gb_Jar_add_sourcefiles,commonwizards,\
 	wizards/com/sun/star/wizards/common/HelpIds	                		\

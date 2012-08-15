@@ -27,7 +27,7 @@
 
 $(eval $(call gb_Jar_Jar,test-tools))
 
-$(eval $(call gb_Jar_set_jarclasspath,test-tools,\
+$(eval $(call gb_Jar_add_manifest_classpath,test-tools,\
 	juh.jar \
 	ridl.jar \
 	unoil.jar \

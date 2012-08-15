@@ -41,10 +41,6 @@ $(eval $(call gb_Jar_set_packageroot,web,com))
 
 $(eval $(call gb_Jar_set_manifest,web,$(SRCDIR)/wizards/com/sun/star/wizards/web/MANIFEST.MF))
 
-$(eval $(call gb_Jar_set_jarclasspath,web,\
-	commonwizards.jar \
-))
-
 $(eval $(call gb_Jar_add_sourcefiles,web,\
 	wizards/com/sun/star/wizards/web/AbstractErrorHandler \
 	wizards/com/sun/star/wizards/web/BackgroundsDialog \

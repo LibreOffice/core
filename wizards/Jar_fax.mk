@@ -41,10 +41,6 @@ $(eval $(call gb_Jar_set_packageroot,fax,com))
 
 $(eval $(call gb_Jar_set_manifest,fax,$(SRCDIR)/wizards/com/sun/star/wizards/fax/MANIFEST.MF))
 
-$(eval $(call gb_Jar_set_jarclasspath,fax,\
-	commonwizards.jar \
-))
-
 $(eval $(call gb_Jar_add_sourcefiles,fax,\
 	wizards/com/sun/star/wizards/fax/CallWizard \
 	wizards/com/sun/star/wizards/fax/CGFax \

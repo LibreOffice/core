@@ -42,11 +42,6 @@ $(eval $(call gb_Jar_use_externals,ScriptProviderForJavaScript,\
 
 $(eval $(call gb_Jar_set_manifest,ScriptProviderForJavaScript,$(SRCDIR)/scripting/java/com/sun/star/script/framework/provider/javascript/MANIFEST.MF))
 
-$(eval $(call gb_Jar_set_jarclasspath,ScriptProviderForJavaScript, \
-	ScriptFramework.jar \
-	$(if $(filter-out YES,$(SYSTEM_RHINO)),js.jar) \
-))
-
 $(eval $(call gb_Jar_set_componentfile,ScriptProviderForJavaScript,scripting/java/ScriptProviderForJavaScript,OOO))
 
 $(eval $(call gb_Jar_set_packageroot,ScriptProviderForJavaScript,com))

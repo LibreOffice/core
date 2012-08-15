@@ -36,7 +36,7 @@ $(eval $(call gb_Jar_set_packageroot,jurt,com))
 
 $(eval $(call gb_Jar_set_manifest,jurt,$(SRCDIR)/jurt/util/manifest))
 
-$(eval $(call gb_Jar_set_jarclasspath,jurt, \
+$(eval $(call gb_Jar_add_manifest_classpath,jurt, \
     ridl.jar unoloader.jar ../../lib/ ../bin/))
 
 $(eval $(call gb_Jar_add_sourcefiles,jurt,\

@@ -39,10 +39,6 @@ $(eval $(call gb_Jar_use_jars,agenda,\
 
 $(eval $(call gb_Jar_set_manifest,agenda,$(SRCDIR)/wizards/com/sun/star/wizards/agenda/MANIFEST.MF))
 
-$(eval $(call gb_Jar_set_jarclasspath,agenda,\
-	commonwizards.jar \
-))
-
 $(eval $(call gb_Jar_set_packageroot,agenda,com))
 
 $(eval $(call gb_Jar_add_sourcefiles,agenda,\

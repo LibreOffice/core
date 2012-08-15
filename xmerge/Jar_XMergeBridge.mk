@@ -35,10 +35,6 @@ $(eval $(call gb_Jar_set_manifest,XMergeBridge,$(SRCDIR)/xmerge/source/bridge/ma
 
 $(eval $(call gb_Jar_set_packageroot,XMergeBridge,*.class))
 
-$(eval $(call gb_Jar_set_jarclasspath,XMergeBridge,\
-	xmerge.jar \
-))
-
 $(eval $(call gb_Jar_use_jars,XMergeBridge,\
 	$(OUTDIR)/bin/xmerge.jar \
 	$(OUTDIR)/bin/unoil.jar \

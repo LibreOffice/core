@@ -41,10 +41,6 @@ $(eval $(call gb_Jar_set_packageroot,table,com))
 
 $(eval $(call gb_Jar_set_manifest,table,$(SRCDIR)/wizards/com/sun/star/wizards/table/MANIFEST.MF))
 
-$(eval $(call gb_Jar_set_jarclasspath,table,\
-	commonwizards.jar \
-))
-
 $(eval $(call gb_Jar_add_sourcefiles,table,\
 	wizards/com/sun/star/wizards/table/CallTableWizard \
 	wizards/com/sun/star/wizards/table/CGCategory \

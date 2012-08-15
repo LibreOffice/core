@@ -38,10 +38,6 @@ $(eval $(call gb_Jar_set_packageroot,java_uno_accessbridge,org))
 
 $(eval $(call gb_Jar_set_manifest,java_uno_accessbridge,$(SRCDIR)/accessibility/bridge/org/openoffice/accessibility/manifest))
 
-$(eval $(call gb_Jar_set_jarclasspath,java_uno_accessbridge,\
-    $$(JARCLASSPATH) \
-))
-
 $(eval $(call gb_Jar_set_componentfile,java_uno_accessbridge,accessibility/bridge/org/openoffice/accessibility/java_uno_accessbridge,OOO))
 
 $(eval $(call gb_Jar_add_sourcefiles,java_uno_accessbridge,\

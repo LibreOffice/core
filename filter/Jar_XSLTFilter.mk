@@ -31,8 +31,6 @@ $(eval $(call gb_Jar_set_componentfile,XSLTFilter,filter/source/xsltfilter/XSLTF
 
 $(eval $(call gb_Jar_set_manifest,XSLTFilter,$(SRCDIR)/filter/source/xsltfilter/Manifest))
 
-$(eval $(call gb_Jar_set_jarclasspath,XSLTFilter,saxon9.jar))
-
 $(eval $(call gb_Jar_set_packageroot,XSLTFilter,com))
 
 $(eval $(call gb_Jar_add_sourcefiles,XSLTFilter,\

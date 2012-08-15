@@ -50,40 +50,6 @@ $(eval $(call gb_Jar_use_externals,sun-report-builder,\
 	sac \
 ))
 
-$(eval $(call gb_Jar_set_jarclasspath,sun-report-builder,\
-	$(if $(filter YES,$(SYSTEM_APACHE_COMMONS)),\
-		$(call gb_Helper_make_url,$(COMMONS_LOGGING_JAR)),\
-		commons-logging-1.1.1.jar \
-	) \
-	$(if $(filter YES,$(SYSTEM_JFREEREPORT)),\
-		$(foreach jar,\
-			$(FLUTE_JAR) \
-			$(JFREEREPORT_JAR) \
-			$(LIBBASE_JAR) \
-			$(LIBFONTS_JAR) \
-			$(LIBFORMULA_JAR) \
-			$(LIBLAYOUT_JAR) \
-			$(LIBLOADER_JAR) \
-			$(LIBREPOSITORY_JAR) \
-			$(LIBSERIALIZER_JAR) \
-			$(LIBXML_JAR) \
-			$(SAC_JAR) \
-			,$(call gb_Helper_make_url,$(jar)) \
-		),\
-		flow-engine-0.9.4.jar \
-		flute-1.1.6.jar \
-		libbase-1.1.6.jar \
-		libfonts-1.1.6.jar \
-		libformula-1.1.7.jar \
-		liblayout-0.2.10.jar \
-		libloader-1.1.6.jar \
-		librepository-1.1.6.jar \
-		libserializer-1.1.6.jar \
-		libxml-1.1.7.jar \
-		sac.jar \
-	) \
-))
-
 $(eval $(call gb_Jar_set_manifest,sun-report-builder,$(SRCDIR)/reportbuilder/util/manifest.mf))
 
 $(eval $(call gb_Jar_set_packageroot,sun-report-builder,com))

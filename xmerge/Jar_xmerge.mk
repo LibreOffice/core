@@ -38,7 +38,8 @@ $(eval $(call gb_Jar_use_jars,xmerge,\
 	$(OUTDIR)/bin/juh.jar \
 ))
 
-$(eval $(call gb_Jar_set_jarclasspath,xmerge,\
+# FIXME: what is this stuff good for???
+$(eval $(call gb_Jar_add_manifest_classpath,xmerge,\
 	xml-apis.jar \
 	xercesImpl.jar \
 	serializer.jar \

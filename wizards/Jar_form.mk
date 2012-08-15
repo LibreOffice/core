@@ -41,10 +41,6 @@ $(eval $(call gb_Jar_set_manifest,form,$(SRCDIR)/wizards/com/sun/star/wizards/fo
 
 $(eval $(call gb_Jar_set_packageroot,form,com))
 
-$(eval $(call gb_Jar_set_jarclasspath,form,\
-	commonwizards.jar \
-))
-
 $(eval $(call gb_Jar_add_sourcefiles,form,\
 	wizards/com/sun/star/wizards/form/CallFormWizard \
 	wizards/com/sun/star/wizards/form/DataEntrySetter \

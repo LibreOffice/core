@@ -41,10 +41,6 @@ $(eval $(call gb_Jar_set_manifest,letter,$(SRCDIR)/wizards/com/sun/star/wizards/
 
 $(eval $(call gb_Jar_set_packageroot,letter,com))
 
-$(eval $(call gb_Jar_set_jarclasspath,letter,\
-	commonwizards.jar \
-))
-
 $(eval $(call gb_Jar_add_sourcefiles,letter,\
 	wizards/com/sun/star/wizards/letter/CallWizard \
 	wizards/com/sun/star/wizards/letter/CGLetter \

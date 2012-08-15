@@ -162,7 +162,8 @@ endef
 
 # JARCLASSPATH is the class path that is written to the manifest of the jar
 define gb_Jar_set_jarclasspath
-$(call gb_Jar_get_target,$(1)) : JARCLASSPATH := $(2)
+$$(call gb_Output_error,\
+ gb_Jar_set_jarclasspath: use gb_Jar_add_manifest_classpath instead.)
 
 endef
 
@@ -185,10 +186,14 @@ $$(call gb_Output_error,\
  gb_Jar_add_jar: use gb_Jar_use_jar instead.)
 endef
 
+# these are not added to manifest classpath
+gb_Jar_default_jars := unoloader ridl jurt unoil juh java_uno
+
 # remember: classpath is "inherited" to ClassSet
 define gb_Jar_use_jar
 $(call gb_JavaClassSet_use_jar,$(call gb_Jar_get_classsetname,$(1)),$(2))
-$(call gb_Jar_add_manifest_classpath,$(1),$(notdir $(2)))
+$(if $(filter-out $(gb_Jar_default_jars),$(basename $(notdir $(2)))),\
+  $(call gb_Jar_add_manifest_classpath,$(1),$(notdir $(2))))
 
 endef
 

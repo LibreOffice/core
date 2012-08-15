@@ -37,9 +37,8 @@ $(eval $(call gb_Jar_use_jars,sdbc_hsqldb,\
 ))
 endif
 
-$(eval $(call gb_Jar_set_jarclasspath,sdbc_hsqldb,\
-	hsqldb.jar \
-	$(HSQLDB_JAR) \
+# FIXME: is this really necessary?
+$(eval $(call gb_Jar_add_manifest_classpath,sdbc_hsqldb,\
 	.. \
 ))
 

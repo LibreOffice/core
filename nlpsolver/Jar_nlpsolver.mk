@@ -41,10 +41,6 @@ $(eval $(call gb_Jar_set_packageroot,nlpsolver,com))
 
 $(eval $(call gb_Jar_set_manifest,nlpsolver,$(SRCDIR)/nlpsolver/src/com/sun/star/comp/Calc/NLPSolver/Manifest.mf))
 
-$(eval $(call gb_Jar_set_jarclasspath,nlpsolver,\
-	EvolutionarySolver.jar \
-))
-
 $(eval $(call gb_Jar_add_sourcefiles,nlpsolver,\
     nlpsolver/src/com/sun/star/comp/Calc/NLPSolver/Registration \
     nlpsolver/src/com/sun/star/comp/Calc/NLPSolver/PropertyInfo \

@@ -32,7 +32,7 @@ gb_JavaClassSet_JAVACDEBUG := -g
 
 $(eval $(call gb_Jar_Jar,OOoRunnerLight))
 
-$(eval $(call gb_Jar_set_jarclasspath,OOoRunnerLight,\
+$(eval $(call gb_Jar_add_manifest_classpath,OOoRunnerLight,\
 	ridl.jar \
 	unoil.jar \
 ))
