@@ -172,13 +172,9 @@ $(call gb_JavaClassSet_get_target,$(1)) : T_CP := $$(if $$(T_CP),$$(T_CP)$$(gb_C
 
 endef
 
-# this forwards to functions that must be defined in RepositoryExternal.mk.
-# $(eval $(call gb_LinkTarget_use_external,library,external))
 define gb_JavaClassSet_use_external
-$(if $(value gb_JavaClassSet__use_$(2)),\
-  $(call gb_JavaClassSet__use_$(2),$(1)),\
-  $(error gb_JavaClassSet_use_external: unknown external: $(2)))
-
+$$(call gb_Output_error,\
+ gb_JavaClassSet_use_external: use gb_Jar_use_external instead.)
 endef
 
 define gb_JavaClassSet_use_externals

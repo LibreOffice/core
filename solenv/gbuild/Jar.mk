@@ -166,6 +166,11 @@ $(call gb_Jar_get_target,$(1)) : JARCLASSPATH := $(2)
 
 endef
 
+define gb_Jar_add_manifest_classpath
+$(call gb_Jar_get_target,$(1)) : JARCLASSPATH += $(2)
+
+endef
+
 # provide a manifest template containing jar specific information to be written into the manifest
 # it will be appended to the standard content that is written in the build command explicitly
 # the jar file gets a dependency to the manifest template
@@ -183,6 +188,7 @@ endef
 # remember: classpath is "inherited" to ClassSet
 define gb_Jar_use_jar
 $(call gb_JavaClassSet_use_jar,$(call gb_Jar_get_classsetname,$(1)),$(2))
+$(call gb_Jar_add_manifest_classpath,$(1),$(notdir $(2)))
 
 endef
 
@@ -193,6 +199,7 @@ endef
 
 define gb_Jar_use_system_jar
 $(call gb_JavaClassSet_use_system_jar,$(call gb_Jar_get_classsetname,$(1)),$(2))
+$(call gb_Jar_add_manifest_classpath,$(1),$(call gb_Helper_make_url,$(2)))
 
 endef
 
@@ -203,7 +210,7 @@ endef
 
 # specify jars with imported modules
 define gb_Jar_use_jars
-$(call gb_JavaClassSet_use_jars,$(call gb_Jar_get_classsetname,$(1)),$(2))
+$(foreach jar,$(2),$(call gb_Jar_use_jar,$(1),$(jar)))
 
 endef
 
@@ -217,13 +224,17 @@ $(call gb_JavaClassSet_use_system_jars,$(call gb_Jar_get_classsetname,$(1)),$(2)
 
 endef
 
+# this forwards to functions that must be defined in RepositoryExternal.mk.
+# $(eval $(call gb_Jar_use_external,jar,external))
 define gb_Jar_use_external
-$(call gb_JavaClassSet_use_external,$(call gb_Jar_get_classsetname,$(1)),$(2))
+$(if $(value gb_Jar__use_$(2)),\
+  $(call gb_Jar__use_$(2),$(1)),\
+  $(error gb_Jar_use_external: unknown external: $(2)))
 
 endef
 
 define gb_Jar_use_externals
-$(call gb_JavaClassSet_use_externals,$(call gb_Jar_get_classsetname,$(1)),$(2))
+$(foreach external,$(2),$(call gb_Jar_use_external,$(1),$(external)))
 
 endef
 
