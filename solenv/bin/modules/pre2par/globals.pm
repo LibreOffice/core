@@ -46,14 +46,6 @@ BEGIN
     $pathseparator = "\:";
     $isunix = 1;
     $iswin = 0;
-
-    $islinux = 0;
-    $issolaris = 0;
-
-    if ( $plat =~ /linux/i ) { $islinux = 1; }
-    if ( $plat =~ /kfreebsd/i ) { $islinux = 1; }
-    if ( $plat =~ /solaris/i ) { $issolaris = 1; }
-
 }
 
 1;

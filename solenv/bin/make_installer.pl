@@ -517,7 +517,6 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
 {
     my $languagesarrayref = installer::languages::get_all_languages_for_one_product($installer::globals::languageproducts[$n], $allvariableshashref);
 
-    $installer::globals::alllanguagesinproductarrayref = $languagesarrayref;
     my $languagestringref = installer::languages::get_language_string($languagesarrayref);
     installer::logger::print_message( "------------------------------------\n" );
     installer::logger::print_message( "... languages $$languagestringref ... \n" );

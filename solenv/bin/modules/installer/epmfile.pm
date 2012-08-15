@@ -2360,10 +2360,6 @@ sub create_packages_without_epm
         my $rpmcommand = $installer::globals::rpm;
         my $rpmversion = determine_rpm_version();
 
-        # saving globally for later usage
-        $installer::globals::rpmcommand = $rpmcommand;
-        $installer::globals::rpmquerycommand = "rpm";
-
         my $target = "";
         if ( $installer::globals::compiler =~ /unxlngi/) { $target = "i586"; }
         elsif ( $installer::globals::compiler =~ /unxaigppc/) { $target = "ppc"; }

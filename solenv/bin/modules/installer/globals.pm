@@ -108,7 +108,6 @@ BEGIN
     $languagelist = "";
     $added_english = 0;
     $set_office_start_language = 0;
-    $solarjavaset = 0;
 
     $destdir = "";
     $rootpath = "";
@@ -124,19 +123,10 @@ BEGIN
     $dounzip = 1;
     $languages_defined_in_productlist = 0;
     $setupscript_defined_in_productlist = 0;
-    $islinux = 0;
-    $issolaris = 0;
-    $ismacosx = 0;
     $iswindowsbuild = 0;
     $islinuxbuild = 0;
     $isrpmbuild = 0;
     $isdebbuild = 0;
-    $islinuxintelrpmbuild = 0;
-    $islinuxppcrpmbuild = 0;
-    $islinuxinteldebbuild = 0;
-    $islinuxppcdebbuild = 0;
-    $islinuxx86_64rpmbuild = 0;
-    $islinuxx86_64debbuild = 0;
     $issolarisbuild = 0;
     $issolarispkgbuild = 0;
     $issolarissparcbuild = 0;
@@ -149,13 +139,11 @@ BEGIN
     $idttemplatepath = "";
     $idtlanguagepath = "";
     $buildid = "Not set";
-    $guidcounter = 1000; # for uniqueness of guids
     $fontsfolder = "FontsFolder";
     $fontsfoldername = "Fonts";
     $fontsdirparent = "";
     $fontsdirname = "";
     $fontsdirhostname = "truetype";
-    $officefolder = "OfficeFolder";
     $officemenufolder = "OfficeMenuFolder";
     $startupfolder = "StartupFolder";
     $startmenufolder = "StartMenuFolder";
@@ -180,12 +168,10 @@ BEGIN
     $packagerevision = 1;
     $rpm = "";
     $rpmcommand = "";
-    $rpmquerycommand = "";
     $rpminfologged = 0;
     $debian = "";
     $installertypedir = "";
     $controlledmakecabversion = "5";
-    $saved_packages_path = "";
     $max_lang_length = 50;
     $globalblock = "Globals";
     $rootmodulegid = "";
@@ -206,11 +192,6 @@ BEGIN
     $packageformat = "";
     $packagename = "";
     $packagelist = "";
-    $addpackagelist = "";
-    $is_unix_multi = 0;
-    $unixmultipath = "";
-    $unixmultipath_orig = "";
-    $alllanguagesinproductarrayref = "";
     $shiptestdirectory = "";
     $makelinuxlinkrpm = 0;
     $linuxlinkrpmprocess = 0;
@@ -245,17 +226,8 @@ BEGIN
     $exitlog = "";
     $globalinfo_copied = 0;
     $quiet = 0;
-    $nodownload = 0;
-    $writetotemp = 0;
-    $useminor = 0;
-    $followme_from_directory = 0;
-    $internal_cabinet_signing = 0;
-
-    $checksumfilename = "checksum.txt";
 
     $ismultilingual = 0;
-    @multilanguagemodules = ();
-    $languagemodulesbase = "gid_Module_Root_";
     %alluniquefilenames = ();
     %alllcuniquefilenames = ();
     %uniquefilenamesequence = ();
@@ -268,16 +240,8 @@ BEGIN
     $upgradecode = "";
     $msiproductversion = "";
     $msimajorproductversion = "";
-    $created_new_component_guid = 0;
     @allddffiles = ();
     $infodirectory = "";
-    @currentcontent = ();
-    @installsetcontent = ();
-    $signfiles_checked = 0;
-    $dosign = 0;
-    $pwfile = "";
-    $pwfile = "";
-    $pfxfile = "";
 
     %mergemodules = ();
     %merge_media_line = ();
@@ -291,27 +255,20 @@ BEGIN
 
     $defaultlanguage = "";
     $javalanguagepath = "";
-    $javasettozero = 0;
     $addlicensefile = 1;
     $addsystemintegration = 0;
-    $added_directories = 0;
     $makedownload = 1;
     @installsetfiles = ();
     @binarytableonlyfiles = ();
     @allscpactions = ();
     $languagepackaddon = "LanguagePack";
-    $helppackaddon = "HelpPack";
     $patchaddon = "Patch";
     $ooodownloadfilename = "";
     $downloadfilename = "";
     $downloadfileextension = "";
-    $followmeinfofilename = "";
-    $oooversionstring = "";
     $shellnewfilesadded = 0;
     %multilingual_only_modules = ();
     %application_modules = ();
-    $defaultinstallorder = 1000;
-    $defaultsystemintinstallorder = 1200;
 
     $is_copy_only_project = 0;
     $is_simple_packager_project = 0;
@@ -324,23 +281,10 @@ BEGIN
     $patchincludepath = "";
     $refresh_includepaths = 0;
     $include_paths_read = 0;
-    $patchfilelistname = "patchfilelist.txt";
     @patchfilecollector = ();
     $nopatchfilecollector = "";
     @userregistrycollector = ();
     $addeduserregitrykeys = 0;
-    %createpackages = ();
-    $newpcfcontentcalculated = 0;
-    $sessionid = 0;
-    $sessionidset = 0;
-    $savelockfilecontent = "";
-    $savelockfilename = "";
-    $getuidpath = "";
-    $getuidpathset = 0;
-    $newpcfcontent = "";
-    %pcfdifflist = ();
-    @pcfdiffcomment = ();
-    @epmdifflist = ();
     $desktoplinkexists = 0;
     $analyze_spellcheckerlanguage = 0;
     %spellcheckerlanguagehash = ();
@@ -353,30 +297,17 @@ BEGIN
     %allregistrycomponents_ = ();
     %allregistrycomponents_in_this_database_ = ();
     %allshortregistrycomponents = ();
-    %allregistryidentifier = ();
 
     $installlocationdirectory = "";
     $installlocationdirectoryset = 0;
     $vendordirectory = "";
-    $vendordirectoryset = 0;
     $officeinstalldirectory = "";
-    $officeinstalldirectoryset = 0;
-    $basisinstalldirectory = "";
-    $basisinstalldirectoryset = 0;
-    $ureinstalldirectory = "";
-    $ureinstalldirectoryset = 0;
     $rootbrandpackage = "";
     $rootbrandpackageset = 0;
     $officedirhostname = "";
-    $basisdirhostname = "";
-    $uredirhostname = "";
     $officedirgid = "";
-    $basisdirgid = "";
-    $uredirgid = "";
 
-    %sign_extensions = ("dll" => "1", "exe" => "1", "cab" => "1");
     %treestyles = ();
-    %installlocations = ("INSTALLLOCATION" => "1");
     %treelayername = ();
     %hostnametreestyles = ();
     %treeconditions = ();
@@ -393,7 +324,6 @@ BEGIN
     $msidatabasename = "";
     $prepare_winpatch = 0;
     $previous_idt_dir = "";
-    $updatepack = 0;
     $msitranpath = "";
     $insert_file_at_end = 0;
     $newfilesexist = 0;
@@ -448,17 +378,14 @@ BEGIN
     @removedirs = ();
     @removefiletable = ();
     @emptypackages = ();
-    %fontpackageexists = ();
 
     $plat = $^O;
 
     if ( $plat =~ /cygwin/i )
     {
         $zippath = "zip";                   # Has to be in the path: /usr/bin/zip
-        $checksumfile = "so_checksum";
         $separator = "/";
         $pathseparator = "\:";
-        $libextension = "\.dll";
         $isunix = 0;
         $iswin = 1;
         $archiveformat = ".zip";
@@ -470,28 +397,12 @@ BEGIN
     else
     {
         $zippath = "zip";                   # Has to be in the path: /usr/bin/zip
-        $checksumfile = "so_checksum";
         $separator = "/";
         $pathseparator = "\:";
-        if ( $plat =~ /darwin/i )
-        {
-            $libextension = "\.dylib";
-        }
-        else
-        {
-            $libextension = "\.so";
-        }
         $archiveformat = ".tar.gz";
         $isunix = 1;
         $iswin = 0;
     }
-
-    if ( $plat =~ /linux/i ) { $islinux = 1; }
-    if ( $plat =~ /kfreebsd/i ) { $islinux = 1; }
-    if ( $plat =~ /solaris/i ) { $issolaris = 1; }
-    if ( $plat =~ /darwin/i ) { $ismacosx = 1; }
-
-    # ToDo: Needs to be expanded for additional platforms
 
 }
 

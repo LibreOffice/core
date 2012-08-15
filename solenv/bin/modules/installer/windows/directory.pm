@@ -139,8 +139,6 @@ sub create_unique_directorynames
 {
     my ($directoryref, $allvariables) = @_;
 
-    $installer::globals::officeinstalldirectoryset = 0;
-
     my %conversionhash = ();
     my $infoline = "";
     my $errorcount = 0;

@@ -323,18 +323,6 @@ sub setglobalvariables
         {
             $installer::globals::isrpmbuild = 1;
             $installer::globals::epmoutpath = "RPMS";
-            if ( $installer::globals::compiler =~ /unxlngi/ )
-            {
-                $installer::globals::islinuxintelrpmbuild = 1;
-            }
-            if ( $installer::globals::compiler =~ /unxlngppc/ )
-            {
-                $installer::globals::islinuxppcrpmbuild = 1;
-            }
-            if ( $installer::globals::compiler =~ /unxlngx/ )
-            {
-                $installer::globals::islinuxx86_64rpmbuild = 1;
-            }
 
             if ( $installer::globals::rpm eq "" ) { installer::exiter::exit_program("ERROR: Environment variable \"\$RPM\" has to be defined!", "setglobalvariables"); }
         }
@@ -350,18 +338,6 @@ sub setglobalvariables
             $installer::globals::isrpmbuild = 0;
             $installer::globals::isdebbuild = 1;
             $installer::globals::epmoutpath = "DEBS";
-            if ( $installer::globals::compiler =~ /unxlngi/ )
-            {
-                $installer::globals::islinuxinteldebbuild = 1;
-            }
-            if ( $installer::globals::compiler =~ /unxlngppc/ )
-            {
-                $installer::globals::islinuxppcdebbuild = 1;
-            }
-            if ( $installer::globals::compiler =~ /unxlngx/ )
-            {
-                $installer::globals::islinuxx86_64debbuild = 1;
-            }
         }
     }
 
