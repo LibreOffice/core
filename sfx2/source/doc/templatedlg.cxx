@@ -659,21 +659,24 @@ IMPL_LINK(SfxTemplateManagerDlg, DefaultTemplateMenuSelectHdl, Menu*, pMenu)
 
 IMPL_LINK(SfxTemplateManagerDlg, OpenTemplateHdl, ThumbnailViewItem*, pItem)
 {
-    uno::Sequence< PropertyValue > aArgs(1);
-    aArgs[0].Name = "AsTemplate";
-    aArgs[0].Value <<= sal_True;
-
-    TemplateViewItem *pTemplateItem = static_cast<TemplateViewItem*>(pItem);
-
-    try
+    if (!mbIsSaveMode)
     {
-        mxDesktop->loadComponentFromURL(pTemplateItem->getPath(),rtl::OUString("_default"), 0, aArgs );
-    }
-    catch( const uno::Exception& )
-    {
-    }
+        uno::Sequence< PropertyValue > aArgs(1);
+        aArgs[0].Name = "AsTemplate";
+        aArgs[0].Value <<= sal_True;
 
-    Close();
+        TemplateViewItem *pTemplateItem = static_cast<TemplateViewItem*>(pItem);
+
+        try
+        {
+            mxDesktop->loadComponentFromURL(pTemplateItem->getPath(),rtl::OUString("_default"), 0, aArgs );
+        }
+        catch( const uno::Exception& )
+        {
+        }
+
+        Close();
+    }
 
     return 0;
 }
