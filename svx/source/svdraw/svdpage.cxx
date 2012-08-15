@@ -1088,7 +1088,7 @@ void SdrPageGridFrameList::Clear()
     for (sal_uInt16 i=0; i<nAnz; i++) {
         delete GetObject(i);
     }
-    aList.Clear();
+    aList.clear();
 }
 
 //////////////////////////////////////////////////////////////////////////////

@@ -33,7 +33,6 @@
 #include <vcl/print.hxx>
 #include <vcl/gdimtf.hxx>
 #include <tools/weakbase.hxx>
-#include <tools/contnr.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <svx/svdtypes.hxx>
 #include <svx/svdlayer.hxx>
@@ -133,10 +132,10 @@ public:
     // Neuberechnung der Objekt-Ordnungsnummern
     void     RecalcObjOrdNums();
     bool IsObjOrdNumsDirty() const        { return bObjOrdNumsDirty; }
-    virtual void NbcInsertObject(SdrObject* pObj, sal_uIntPtr nPos=CONTAINER_APPEND
+    virtual void NbcInsertObject(SdrObject* pObj, sal_uIntPtr nPos=0xFFFF
                                  , const SdrInsertReason* pReason=NULL
                                                                       );
-    virtual void InsertObject(SdrObject* pObj, sal_uIntPtr nPos=CONTAINER_APPEND
+    virtual void InsertObject(SdrObject* pObj, sal_uIntPtr nPos=0xFFFF
                               , const SdrInsertReason* pReason=NULL
                                                                      );
     // aus Liste entfernen ohne delete
@@ -338,20 +337,37 @@ public:
 };
 
 class SVX_DLLPUBLIC SdrPageGridFrameList {
-    Container aList;
+    std::vector<SdrPageGridFrame*> aList;
 private:
     SVX_DLLPRIVATE SdrPageGridFrameList(const SdrPageGridFrameList& rSrcList);      // never implemented
     SVX_DLLPRIVATE void           operator=(const SdrPageGridFrameList& rSrcList);  // never implemented
 protected:
-    SdrPageGridFrame* GetObject(sal_uInt16 i) const { return (SdrPageGridFrame*)(aList.GetObject(i)); }
+    SdrPageGridFrame* GetObject(sal_uInt16 i) const { return aList[i]; }
 public:
-    SdrPageGridFrameList(): aList(1024,4,4)                            {}
+    SdrPageGridFrameList(): aList()                                    {}
     ~SdrPageGridFrameList()                                            { Clear(); }
     void           Clear();
-    sal_uInt16         GetCount() const                                    { return sal_uInt16(aList.Count()); }
-    void           Insert(const SdrPageGridFrame& rGF, sal_uInt16 nPos=0xFFFF) { aList.Insert(new SdrPageGridFrame(rGF),nPos); }
-    void           Delete(sal_uInt16 nPos)                                 { delete (SdrPageGridFrame*)aList.Remove(nPos); }
-    void           Move(sal_uInt16 nPos, sal_uInt16 nNewPos)                   { aList.Insert(aList.Remove(nPos),nNewPos); }
+    sal_uInt16         GetCount() const                                    { return sal_uInt16(aList.size()); }
+    void           Insert(const SdrPageGridFrame& rGF) { aList.push_back(new SdrPageGridFrame(rGF)); }
+    void           Insert(const SdrPageGridFrame& rGF, sal_uInt16 nPos)
+    {
+        if(nPos==0xFFFF)
+            aList.push_back(new SdrPageGridFrame(rGF));
+        else
+            aList.insert(aList.begin()+nPos,new SdrPageGridFrame(rGF));
+    }
+    void           Delete(sal_uInt16 nPos)
+    {
+        SdrPageGridFrame* p = aList[nPos];
+        aList.erase(aList.begin()+nPos);
+        delete p;
+    }
+    void           Move(sal_uInt16 nPos, sal_uInt16 nNewPos)
+    {
+        SdrPageGridFrame* p = aList[nPos];
+        aList.erase(aList.begin()+nPos);
+        aList.insert(aList.begin()+nNewPos,p);
+    }
     SdrPageGridFrame&       operator[](sal_uInt16 nPos)                    { return *GetObject(nPos); }
     const SdrPageGridFrame& operator[](sal_uInt16 nPos) const              { return *GetObject(nPos); }
 };
