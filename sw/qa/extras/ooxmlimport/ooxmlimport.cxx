@@ -83,7 +83,6 @@ public:
     void testNumbering1();
     void testBnc773061();
     void testAllGapsWord();
-    void testBordersOoo33();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -111,7 +110,6 @@ public:
     CPPUNIT_TEST(testNumbering1);
     CPPUNIT_TEST(testBnc773061);
     CPPUNIT_TEST(testAllGapsWord);
-    CPPUNIT_TEST(testBordersOoo33);
 #endif
     CPPUNIT_TEST_SUITE_END();
 
@@ -719,13 +717,6 @@ void Test::testAllGapsWord()
     load("all_gaps_word.docx");
     BorderTest borderTest;
     borderTest.testTheBorders(mxComponent);
-}
-
-void Test::testBordersOoo33()
-{
-    load("borders_ooo33.odt");
-    BorderTest borderTest;
-    borderTest.testOdtBorders(mxComponent);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
