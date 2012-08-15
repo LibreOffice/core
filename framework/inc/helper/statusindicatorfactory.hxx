@@ -215,9 +215,6 @@ class StatusIndicatorFactory : public  css::lang::XTypeProvider
         /** prevent recursive calling of Application::Reschedule(). */
         static sal_Int32 m_nInReschedule;
 
-        /** time where there last start call was made. */
-        sal_Int32 m_nStartTime;
-
     //-------------------------------------------
     // interface
 

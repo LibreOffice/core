@@ -47,8 +47,6 @@ class FrameworkStatusBar : public StatusBar
 
     private:
         StatusBarManager*       m_pMgr;
-        sal_Bool                m_bShow : 1,
-                                m_bLock : 1;
 };
 
 }

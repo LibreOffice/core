@@ -37,9 +37,7 @@ FrameworkStatusBar::FrameworkStatusBar(
     Window*           pParent,
     WinBits           nWinBits ) :
     StatusBar( pParent, nWinBits ),
-    m_pMgr( NULL ),
-    m_bShow( sal_False ),
-    m_bLock( sal_False )
+    m_pMgr( NULL )
 {
     // set optimal size
     SetOutputSizePixel( CalcWindowSizePixel() );

@@ -182,7 +182,6 @@ namespace framework
             UIElementTypesVector                                                            m_aUIElements;
             com::sun::star::uno::Reference< com::sun::star::embed::XStorage >               m_xDocConfigStorage;
             bool                                                                            m_bReadOnly;
-            bool                                                                            m_bInitialized;
             bool                                                                            m_bModified;
             bool                                                                            m_bConfigRead;
             bool                                                                            m_bDisposed;

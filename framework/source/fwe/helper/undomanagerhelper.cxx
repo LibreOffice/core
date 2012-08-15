@@ -222,7 +222,6 @@ namespace framework
         ::cppu::OInterfaceContainerHelper   m_aUndoListeners;
         ::cppu::OInterfaceContainerHelper   m_aModifyListeners;
         IUndoManagerImplementation&         m_rUndoManagerImplementation;
-        UndoManagerHelper&                  m_rAntiImpl;
         ::std::stack< bool >                m_aContextVisibilities;
 #if OSL_DEBUG_LEVEL > 0
         ::std::stack< bool >                m_aContextAPIFlags;
@@ -234,7 +233,7 @@ namespace framework
         ::osl::Mutex&   getMutex() { return m_aMutex; }
 
     public:
-        UndoManagerHelper_Impl( UndoManagerHelper& i_antiImpl, IUndoManagerImplementation& i_undoManagerImpl )
+        UndoManagerHelper_Impl( IUndoManagerImplementation& i_undoManagerImpl )
             :m_aMutex()
             ,m_aQueueMutex()
             ,m_disposed( false )
@@ -244,7 +243,6 @@ namespace framework
             ,m_aUndoListeners( m_aMutex )
             ,m_aModifyListeners( m_aMutex )
             ,m_rUndoManagerImplementation( i_undoManagerImpl )
-            ,m_rAntiImpl( i_antiImpl )
         {
             getUndoManager().AddUndoListener( *this );
         }
@@ -938,7 +936,7 @@ namespace framework
     //==================================================================================================================
     //------------------------------------------------------------------------------------------------------------------
     UndoManagerHelper::UndoManagerHelper( IUndoManagerImplementation& i_undoManagerImpl )
-        :m_pImpl( new UndoManagerHelper_Impl( *this, i_undoManagerImpl ) )
+        :m_pImpl( new UndoManagerHelper_Impl( i_undoManagerImpl ) )
     {
     }
 

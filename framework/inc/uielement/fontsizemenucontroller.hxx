@@ -68,7 +68,6 @@ namespace framework
             rtl::OUString retrievePrinterName( com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rFrame );
 
             long*                                                               m_pHeightArray;
-            sal_Bool                                                            m_bRebuildMenu;
             com::sun::star::awt::FontDescriptor                                 m_aFontDescriptor;
             ::com::sun::star::frame::status::FontHeight                   m_aFontHeight;
             com::sun::star::uno::Reference< com::sun::star::frame::XDispatch >  m_xCurrentFontDispatch;

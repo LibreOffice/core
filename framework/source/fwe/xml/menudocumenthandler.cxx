@@ -289,7 +289,7 @@ throw( SAXException, RuntimeException )
     {
         ++m_nElementDepth;
         m_bMenuBarMode = sal_True;
-        m_xReader = Reference< XDocumentHandler >( new OReadMenuBarHandler( getServiceFactory(), m_xMenuBarContainer, m_xContainerFactory ));
+        m_xReader = Reference< XDocumentHandler >( new OReadMenuBarHandler( m_xMenuBarContainer, m_xContainerFactory ));
 
         m_xReader->startDocument();
     }
@@ -328,14 +328,12 @@ void SAL_CALL OReadMenuDocumentHandler::endElement( const ::rtl::OUString& aName
 // -----------------------------------------------------------------------------
 
 OReadMenuBarHandler::OReadMenuBarHandler(
-    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
     const Reference< XIndexContainer >& rMenuBarContainer,
     const Reference< XSingleComponentFactory >& rFactory          )
 :   m_nElementDepth( 0 ),
     m_bMenuMode( sal_False ),
     m_xMenuBarContainer( rMenuBarContainer ),
-      m_xContainerFactory( rFactory ),
-    mxServiceFactory( xServiceFactory )
+      m_xContainerFactory( rFactory )
 {
 }
 

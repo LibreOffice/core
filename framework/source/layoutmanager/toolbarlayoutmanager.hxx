@@ -321,7 +321,6 @@ class ToolbarLayoutManager : public ::cppu::WeakImplHelper3< ::com::sun::star::a
         std::auto_ptr< GlobalSettings >                                      m_pGlobalSettings;
 
         bool                                                                 m_bComponentAttached;
-        bool                                                                 m_bMustLayout;
         bool                                                                 m_bLayoutDirty;
         bool                                                                 m_bStoreWindowState;
         bool                                                                 m_bGlobalSettings;

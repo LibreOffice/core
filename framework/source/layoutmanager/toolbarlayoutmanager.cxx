@@ -64,7 +64,6 @@ ToolbarLayoutManager::ToolbarLayoutManager(
     m_eDockOperation( DOCKOP_ON_COLROW ),
     m_ePreviewDetection( PREVIEWFRAME_UNKNOWN ),
     m_bComponentAttached( false ),
-    m_bMustLayout( false ),
     m_bLayoutDirty( false ),
     m_bStoreWindowState( false ),
     m_bGlobalSettings( false ),

@@ -106,7 +106,6 @@ namespace framework
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >     m_xConfigAccess;
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerListener > m_xConfigListener;
         sal_Bool                          m_bConfigAccessInitialized;
-        bool                              m_bConfigDirty;
 };
 
 

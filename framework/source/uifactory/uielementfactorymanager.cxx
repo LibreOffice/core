@@ -89,8 +89,7 @@ ConfigurationAccess_FactoryManager::ConfigurationAccess_FactoryManager( Referenc
     m_aPropFactory( RTL_CONSTASCII_USTRINGPARAM( "FactoryImplementation" )),
     m_sRoot(_sRoot),
     m_xServiceManager( rServiceManager ),
-    m_bConfigAccessInitialized( sal_False ),
-    m_bConfigDirty(true)
+    m_bConfigAccessInitialized( sal_False )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "UIElementFactoryManager::ConfigurationAccess_FactoryManager" );
     m_xConfigProvider = Reference< XMultiServiceFactory >( rServiceManager->createInstance( SERVICENAME_CFGPROVIDER),UNO_QUERY );

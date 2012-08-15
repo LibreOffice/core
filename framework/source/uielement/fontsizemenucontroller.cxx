@@ -71,8 +71,7 @@ DEFINE_INIT_SERVICE                     (   FontSizeMenuController, {} )
 
 FontSizeMenuController::FontSizeMenuController( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceManager ) :
     svt::PopupMenuControllerBase( xServiceManager ),
-    m_pHeightArray( 0 ),
-    m_bRebuildMenu( sal_True )
+    m_pHeightArray( 0 )
 {
 }
 

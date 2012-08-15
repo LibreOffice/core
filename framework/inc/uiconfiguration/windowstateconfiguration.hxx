@@ -110,7 +110,6 @@ class WindowStateConfiguration :  private ThreadHelpBase                        
                                  ::std::equal_to< ::rtl::OUString > > ModuleToWindowStateConfigHashMap;
 
     private:
-        sal_Bool                                                                            m_bConfigRead;
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >    m_xServiceManager;
         ModuleToWindowStateFileMap                                                          m_aModuleToFileHashMap;
         ModuleToWindowStateConfigHashMap                                                    m_aModuleToWindowStateHashMap;

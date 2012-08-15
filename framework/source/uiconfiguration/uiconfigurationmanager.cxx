@@ -590,7 +590,6 @@ UIConfigurationManager::UIConfigurationManager( com::sun::star::uno::Reference< 
     ThreadHelpBase( &Application::GetSolarMutex() )
     , m_xDocConfigStorage( 0 )
     , m_bReadOnly( true )
-    , m_bInitialized( false )
     , m_bModified( false )
     , m_bConfigRead( false )
     , m_bDisposed( false )
