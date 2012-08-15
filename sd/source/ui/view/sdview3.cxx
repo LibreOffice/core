@@ -112,12 +112,12 @@ struct ImpRememberOrigAndClone
     SdrObject*      pClone;
 };
 
-SdrObject* ImpGetClone(Container& aConnectorContainer, SdrObject* pConnObj)
+SdrObject* ImpGetClone(std::vector<ImpRememberOrigAndClone*>& aConnectorContainer, SdrObject* pConnObj)
 {
-    for(sal_uInt32 a(0); a < aConnectorContainer.Count(); a++)
+    for(sal_uInt32 a(0); a < aConnectorContainer.size(); a++)
     {
-        if(pConnObj == ((ImpRememberOrigAndClone*)aConnectorContainer.GetObject(a))->pOrig)
-            return ((ImpRememberOrigAndClone*)aConnectorContainer.GetObject(a))->pClone;
+        if(pConnObj == aConnectorContainer[a]->pOrig)
+            return aConnectorContainer[a]->pClone;
     }
     return 0L;
 }
@@ -438,7 +438,7 @@ sal_Bool View::InsertData( const TransferableDataHelper& rDataHelper,
                                 pMarkList->ForceSort();
 
                                 // stuff to remember originals and clones
-                                Container   aConnectorContainer(0);
+                                std::vector<ImpRememberOrigAndClone*> aConnectorContainer;
                                 sal_uInt32  a, nConnectorCount(0L);
                                 Point       aCurPos;
 
@@ -483,7 +483,7 @@ sal_Bool View::InsertData( const TransferableDataHelper& rDataHelper,
                                         ImpRememberOrigAndClone* pRem = new ImpRememberOrigAndClone;
                                         pRem->pOrig = pM->GetMarkedSdrObj();
                                         pRem->pClone = pObj;
-                                        aConnectorContainer.Insert(pRem, CONTAINER_APPEND);
+                                        aConnectorContainer.push_back(pRem);
 
                                         if(pObj->ISA(SdrEdgeObj))
                                             nConnectorCount++;
@@ -493,9 +493,9 @@ sal_Bool View::InsertData( const TransferableDataHelper& rDataHelper,
                                 // try to re-establish connections at clones
                                 if(nConnectorCount)
                                 {
-                                    for(a = 0; a < aConnectorContainer.Count(); a++)
+                                    for(a = 0; a < aConnectorContainer.size(); a++)
                                     {
-                                        ImpRememberOrigAndClone* pRem = (ImpRememberOrigAndClone*)aConnectorContainer.GetObject(a);
+                                        ImpRememberOrigAndClone* pRem = aConnectorContainer[a];
 
                                         if(pRem->pClone->ISA(SdrEdgeObj))
                                         {
@@ -570,8 +570,8 @@ sal_Bool View::InsertData( const TransferableDataHelper& rDataHelper,
                                 }
 
                                 // cleanup remember classes
-                                for(a = 0; a < aConnectorContainer.Count(); a++)
-                                    delete (ImpRememberOrigAndClone*)aConnectorContainer.GetObject(a);
+                                for(a = 0; a < aConnectorContainer.size(); a++)
+                                    delete aConnectorContainer[a];
 
                                 if( pMarkList != mpDragSrcMarkList )
                                     delete pMarkList;
