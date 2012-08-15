@@ -235,39 +235,6 @@ IMPL_LINK(OLEObjCache, UnloadCheckHdl, AutoTimer*, /*pTim*/)
     return 0;
 }
 
-void ContainerSorter::DoSort(sal_uIntPtr a, sal_uIntPtr b) const
-{
-    sal_uIntPtr nAnz=rCont.Count();
-    if (b>nAnz) b=nAnz;
-    if (b>0) b--;
-    if (a<b) ImpSubSort(a,b);
-}
-
-void ContainerSorter::ImpSubSort(long nL, long nR) const
-{
-    long i,j;
-    const void* pX;
-    void* pI;
-    void* pJ;
-    i=nL;
-    j=nR;
-    pX=rCont.GetObject((nL+nR)/2);
-    do {
-        pI=rCont.Seek(i);
-        while (pI!=pX && Compare(pI,pX)<0) { i++; pI=rCont.Next(); }
-        pJ=rCont.Seek(j);
-        while (pJ!=pX && Compare(pX,pJ)<0) { j--; pJ=rCont.Prev(); }
-        if (i<=j) {
-            rCont.Replace(pJ,i);
-            rCont.Replace(pI,j);
-            i++;
-            j--;
-        }
-    } while (i<=j);
-    if (nL<j) ImpSubSort(nL,j);
-    if (i<nR) ImpSubSort(i,nR);
-}
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void SdrLinkList::Clear()

@@ -30,7 +30,6 @@
 #define _SVDETC_HXX
 
 #include <tools/string.hxx>
-#include <tools/contnr.hxx>
 
 #include <vcl/outdev.hxx>
 #include <tools/shl.hxx>
@@ -118,25 +117,6 @@ class SfxItemSet;
 // Liefert eine Ersatzdarstellung fuer einen XFillStyle
 // Bei XFILL_NONE gibt's sal_False und rCol bleibt unveraendert.
 SVX_DLLPUBLIC bool GetDraftFillColor(const SfxItemSet& rSet, Color& rCol);
-
-class ContainerSorter {
-protected:
-    Container& rCont;
-private:
-    void ImpSubSort(long nL, long nR) const;
-public:
-    ContainerSorter(Container& rNewCont): rCont(rNewCont) {}
-    void DoSort(sal_uIntPtr a=0, sal_uIntPtr b=0xFFFFFFFF) const;
-
-    // Compare() has to return:
-    //  -1 if *pElem1<*pElem2
-    //   0 if *pElem1=*pElem2
-    //  +1 if *pElem1>*pElem2
-    virtual int Compare(const void* pElem1, const void* pElem2) const=0;
-
-protected:
-    ~ContainerSorter() {}
-};
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
