@@ -257,21 +257,6 @@ ErrCode SvLockBytes::SetSize(sal_Size nSize)
 }
 
 //============================================================================
-ErrCode SvLockBytes::LockRegion(sal_Size, sal_Size, LockType)
-{
-    OSL_FAIL("SvLockBytes::LockRegion(): Not implemented");
-    return ERRCODE_NONE;
-}
-
-//============================================================================
-
-ErrCode SvLockBytes::UnlockRegion(sal_Size, sal_Size, LockType)
-{
-    OSL_FAIL("SvLockBytes::UnlockRegion(): Not implemented");
-    return ERRCODE_NONE;
-}
-
-//============================================================================
 ErrCode SvLockBytes::Stat(SvLockBytesStat * pStat, SvLockBytesStatFlag) const
 {
     if (!m_pStream)

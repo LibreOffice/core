@@ -143,9 +143,6 @@ public:
 
     virtual ErrCode SetSize(sal_Size nSize);
 
-    virtual ErrCode LockRegion(sal_Size, sal_Size, LockType);
-    virtual ErrCode UnlockRegion(sal_Size, sal_Size, LockType);
-
     virtual ErrCode Stat(SvLockBytesStat * pStat, SvLockBytesStatFlag) const;
 };
 
