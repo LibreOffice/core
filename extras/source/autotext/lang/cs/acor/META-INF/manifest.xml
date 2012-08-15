@@ -1,13 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest>
   <file-entry media-type="" full-path="/"/>
-  <file-entry media-type="" full-path="META-INF/MANIFEST.MF"/>
   <file-entry media-type="" full-path="META-INF/"/>
-  <file-entry media-type="" full-path="CVS/Entries"/>
-  <file-entry media-type="" full-path="CVS/Repository"/>
-  <file-entry media-type="" full-path="CVS/Root"/>
-  <file-entry media-type="" full-path="CVS/"/>
-  <file-entry media-type="" full-path="DocumentList.xml.~1.2.~"/>
-  <file-entry media-type="text/xml" full-path="DocumentList.xml"/>
   <file-entry media-type="text/xml" full-path="BlockList.xml"/>
+  <file-entry media-type="text/xml" full-path="DocumentList.xml"/>
 </manifest>

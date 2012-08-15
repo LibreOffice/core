@@ -2,6 +2,6 @@
 <manifest>
   <file-entry media-type="" full-path="/"/>
   <file-entry media-type="" full-path="META-INF/"/>
-  <file-entry media-type="" full-path="DocumentList.xml"/>
+  <file-entry media-type="text/xml" full-path="DocumentList.xml"/>
   <file-entry media-type="text/xml" full-path="WordExceptList.xml"/>
 </manifest>
