@@ -322,47 +322,73 @@ void ThumbnailView::CalculateItemPositions ()
     {
         ThumbnailViewItem *const pItem = mItemList[i];
 
-        if ((i >= nFirstItem) && (i < nLastItem) && maFilterFunc(pItem) && nCurCount < nTotalItems)
+        if (maFilterFunc(pItem))
         {
-            if( !pItem->isVisible() && ImplHasAccessibleListeners() )
+            if ((nCurCount >= nFirstItem) && (nCurCount < nLastItem))
             {
-                ::com::sun::star::uno::Any aOldAny, aNewAny;
+                if( !pItem->isVisible())
+                {
+                    if ( ImplHasAccessibleListeners() )
+                    {
+                        ::com::sun::star::uno::Any aOldAny, aNewAny;
 
-                aNewAny <<= pItem->GetAccessible( mbIsTransientChildrenDisabled );
-                ImplFireAccessibleEvent( ::com::sun::star::accessibility::AccessibleEventId::CHILD, aOldAny, aNewAny );
-            }
+                        aNewAny <<= pItem->GetAccessible( mbIsTransientChildrenDisabled );
+                        ImplFireAccessibleEvent( ::com::sun::star::accessibility::AccessibleEventId::CHILD, aOldAny, aNewAny );
+                    }
 
-            if (!mItemList[i]->isVisible())
-                maItemStateHdl.Call(mItemList[i]);
+                    pItem->show(true);
 
-            pItem->show(true);
-            pItem->setDrawArea(Rectangle( Point(x,y), Size(mnItemWidth, mnItemHeight) ));
-            pItem->calculateItemsPosition(mnThumbnailHeight,mnDisplayHeight,mnItemPadding,mpItemAttrs->nMaxTextLenght);
+                    maItemStateHdl.Call(pItem);
+                }
 
-            if ( !((nCurCount+1) % mnCols) )
-            {
-                x = nStartX;
-                y += mnItemHeight+nVItemSpace;
+                pItem->setDrawArea(Rectangle( Point(x,y), Size(mnItemWidth, mnItemHeight) ));
+                pItem->calculateItemsPosition(mnThumbnailHeight,mnDisplayHeight,mnItemPadding,mpItemAttrs->nMaxTextLenght);
+
+                if ( !((nCurCount+1) % mnCols) )
+                {
+                    x = nStartX;
+                    y += mnItemHeight+nVItemSpace;
+                }
+                else
+                    x += mnItemWidth+nHItemSpace;
             }
             else
-                x += mnItemWidth+nHItemSpace;
+            {
+                if( pItem->isVisible())
+                {
+                    if ( ImplHasAccessibleListeners() )
+                    {
+                        ::com::sun::star::uno::Any aOldAny, aNewAny;
+
+                        aOldAny <<= pItem->GetAccessible( mbIsTransientChildrenDisabled );
+                        ImplFireAccessibleEvent( ::com::sun::star::accessibility::AccessibleEventId::CHILD, aOldAny, aNewAny );
+                    }
+
+                    pItem->show(false);
+
+                    maItemStateHdl.Call(pItem);
+                }
+
+            }
 
             ++nCurCount;
         }
         else
         {
-            if( pItem->isVisible() && ImplHasAccessibleListeners() )
+            if( pItem->isVisible())
             {
-                ::com::sun::star::uno::Any aOldAny, aNewAny;
+                if ( ImplHasAccessibleListeners() )
+                {
+                    ::com::sun::star::uno::Any aOldAny, aNewAny;
 
-                aOldAny <<= pItem->GetAccessible( mbIsTransientChildrenDisabled );
-                ImplFireAccessibleEvent( ::com::sun::star::accessibility::AccessibleEventId::CHILD, aOldAny, aNewAny );
+                    aOldAny <<= pItem->GetAccessible( mbIsTransientChildrenDisabled );
+                    ImplFireAccessibleEvent( ::com::sun::star::accessibility::AccessibleEventId::CHILD, aOldAny, aNewAny );
+                }
+
+                pItem->show(false);
+
+                maItemStateHdl.Call(pItem);
             }
-
-            if (mItemList[i]->isVisible())
-                maItemStateHdl.Call(mItemList[i]);
-
-            pItem->show(false);
         }
     }
 
