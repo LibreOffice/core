@@ -77,9 +77,9 @@ protected:
     virtual int         DeactivatePage  ( SfxItemSet* pSet = 0);
 
 private:
-    String          aStrUndefined;
-    String          aStrColumn;
-    String          aStrRow;
+    rtl::OUString          aStrUndefined;
+    rtl::OUString          aStrColumn;
+    rtl::OUString          aStrRow;
 
     const sal_uInt16    nWhichSort;
     ScSortDlg*          pDlg;
@@ -161,10 +161,10 @@ private:
     RadioButton         aBtnTopDown;
     RadioButton         aBtnLeftRight;
 
-    String              aStrRowLabel;
-    String              aStrColLabel;
-    String              aStrUndefined;
-    String              aStrAreaLabel;
+    rtl::OUString              aStrRowLabel;
+    rtl::OUString              aStrColLabel;
+    rtl::OUString              aStrUndefined;
+    rtl::OUString              aStrAreaLabel;
 
     const sal_uInt16    nWhichSort;
     ScSortParam         aSortData;

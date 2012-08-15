@@ -162,7 +162,7 @@ void ScPivotFilterDlg::Init( const SfxItemSet& rArgSet )
 
     if ( pViewData && pDoc )
     {
-        String          theAreaStr;
+        rtl::OUString          theAreaStr;
         ScRange         theCurArea ( ScAddress( theQueryData.nCol1,
                                                 theQueryData.nRow1,
                                                 nSrcTab ),
@@ -290,7 +290,7 @@ void ScPivotFilterDlg::FillFieldLists()
 
     if ( pDoc )
     {
-        String  aFieldName;
+        rtl::OUString  aFieldName;
         SCTAB   nTab        = nSrcTab;
         SCCOL   nFirstCol   = theQueryData.nCol1;
         SCROW   nFirstRow   = theQueryData.nRow1;
@@ -301,11 +301,13 @@ void ScPivotFilterDlg::FillFieldLists()
         for ( col=nFirstCol; col<=nMaxCol; col++ )
         {
             pDoc->GetString( col, nFirstRow, nTab, aFieldName );
-            if ( aFieldName.Len() == 0 )
+            if ( aFieldName.isEmpty() )
             {
-                aFieldName  = aStrColumn;
-                aFieldName += ' ';
-                aFieldName += ScColToAlpha( col );
+               rtl::OUStringBuffer aBuf;
+                aBuf.append(aStrColumn);
+                aBuf.append(sal_Unicode(' '));
+                aBuf.append(ScColToAlpha(col));
+                aFieldName = aBuf.makeStringAndClear();
             }
             aLbField1.InsertEntry( aFieldName, i );
             aLbField2.InsertEntry( aFieldName, i );
@@ -325,7 +327,7 @@ void ScPivotFilterDlg::UpdateValueList( sal_uInt16 nList )
         ComboBox*   pValList        = aValueEdArr[nList-1];
         sal_uInt16      nFieldSelPos    = aFieldLbArr[nList-1]->GetSelectEntryPos();
         sal_uInt16      nListPos        = 0;
-        String      aCurValue       = pValList->GetText();
+        rtl::OUString     aCurValue       = pValList->GetText();
 
         pValList->Clear();
         pValList->InsertEntry( aStrNotEmpty, 0 );
@@ -565,9 +567,9 @@ IMPL_LINK( ScPivotFilterDlg, CheckBoxHdl, CheckBox*, pBox )
         for (sal_uInt16 i=0; i<=MAXCOL; i++)
             DELETEZ( pEntryLists[i] );
 
-        String aCurVal1 = aEdVal1.GetText();
-        String aCurVal2 = aEdVal2.GetText();
-        String aCurVal3 = aEdVal3.GetText();
+        rtl::OUString aCurVal1 = aEdVal1.GetText();
+        rtl::OUString aCurVal2 = aEdVal2.GetText();
+        rtl::OUString aCurVal3 = aEdVal3.GetText();
         UpdateValueList( 1 );
         UpdateValueList( 2 );
         UpdateValueList( 3 );

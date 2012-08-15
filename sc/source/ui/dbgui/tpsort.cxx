@@ -91,9 +91,9 @@ ScTabPageSortFields::ScTabPageSortFields( Window*           pParent,
                           ScResId( RID_SCPAGE_SORT_FIELDS ),
                           rArgSet ),
         //
-        aStrUndefined   ( ScResId( SCSTR_UNDEFINED ) ),
-        aStrColumn      ( ScResId( SCSTR_COLUMN ) ),
-        aStrRow         ( ScResId( SCSTR_ROW ) ),
+        aStrUndefined   ( SC_RESSTR( SCSTR_UNDEFINED ) ),
+        aStrColumn      ( SC_RESSTR( SCSTR_COLUMN ) ),
+        aStrRow         ( SC_RESSTR( SCSTR_ROW ) ),
         //
         nWhichSort      ( rArgSet.GetPool()->GetWhich( SID_SORT ) ),
         pDlg            ( (ScSortDlg*)(GetParent()->GetParent()) ),
@@ -350,18 +350,20 @@ void ScTabPageSortFields::FillFieldLists( sal_uInt16 nStartField )
 
             if ( bSortByRows )
             {
-                String  aFieldName;
+                rtl::OUString  aFieldName;
                 SCCOL   nMaxCol = aSortData.nCol2;
                 SCCOL   col;
 
                 for ( col=nFirstSortCol; col<=nMaxCol && i<SC_MAXFIELDS; col++ )
                 {
                     pDoc->GetString( col, nFirstSortRow, nTab, aFieldName );
-                    if ( !bHasHeader || (aFieldName.Len() == 0) )
+                    if ( !bHasHeader || aFieldName.isEmpty() )
                     {
-                        aFieldName  = aStrColumn;
-                        aFieldName += ' ';
-                        aFieldName += ScColToAlpha( col );
+                        rtl::OUStringBuffer aBuf;
+                        aBuf.append(aStrColumn);
+                        aBuf.append(sal_Unicode(' '));
+                        aBuf.append(ScColToAlpha(col));
+                        aFieldName = aBuf.makeStringAndClear();
                     }
                     nFieldArr.push_back( col );
 
@@ -373,18 +375,20 @@ void ScTabPageSortFields::FillFieldLists( sal_uInt16 nStartField )
             }
             else
             {
-                String  aFieldName;
+                rtl::OUString  aFieldName;
                 SCROW   nMaxRow = aSortData.nRow2;
                 SCROW   row;
 
                 for ( row=nFirstSortRow; row<=nMaxRow && i<SC_MAXFIELDS; row++ )
                 {
                     pDoc->GetString( nFirstSortCol, row, nTab, aFieldName );
-                    if ( !bHasHeader || (aFieldName.Len() == 0) )
+                    if ( !bHasHeader || aFieldName.isEmpty() )
                     {
-                        aFieldName  = aStrRow;
-                        aFieldName += ' ';
-                        aFieldName += String::CreateFromInt32( row+1 );
+                        rtl::OUStringBuffer aBuf;
+                        aBuf.append(aStrRow);
+                        aBuf.append(sal_Unicode(' '));
+                        aBuf.append(row+1);
+                        aFieldName = aBuf.makeStringAndClear();
                     }
                     nFieldArr.push_back( row );
 
@@ -424,7 +428,7 @@ sal_uInt16 ScTabPageSortFields::GetFieldSelPos( SCCOLROW nField )
 
 IMPL_LINK( ScTabPageSortFields, SelectHdl, ListBox *, pLb )
 {
-    String aSelEntry = pLb->GetSelectEntry();
+    rtl::OUString aSelEntry = pLb->GetSelectEntry();
     ScSortKeyItems::iterator pIter;
     sal_uInt16 nSortKeyIndex = nSortKeyCount;
 
@@ -506,9 +510,9 @@ ScTabPageSortOptions::ScTabPageSortOptions( Window*             pParent,
         aBtnTopDown     ( this, ScResId( BTN_TOP_DOWN ) ),
         aBtnLeftRight   ( this, ScResId( BTN_LEFT_RIGHT ) ),
         //
-        aStrRowLabel    ( ScResId( STR_ROW_LABEL ) ),
-        aStrColLabel    ( ScResId( STR_COL_LABEL ) ),
-        aStrUndefined   ( ScResId( SCSTR_UNDEFINED ) ),
+        aStrRowLabel    ( SC_RESSTR( STR_ROW_LABEL ) ),
+        aStrColLabel    ( SC_RESSTR( STR_COL_LABEL ) ),
+        aStrUndefined   ( SC_RESSTR( SCSTR_UNDEFINED ) ),
         //
         nWhichSort      ( rArgSet.GetPool()->GetWhich( SID_SORT ) ),
         aSortData       ( ((const ScSortItem&)
@@ -538,7 +542,7 @@ ScTabPageSortOptions::~ScTabPageSortOptions()
     sal_uInt16 nEntries = aLbOutPos.GetEntryCount();
 
     for ( sal_uInt16 i=1; i<nEntries; i++ )
-        delete (String*)aLbOutPos.GetEntryData( i );
+        delete (rtl::OUString*)aLbOutPos.GetEntryData( i );
 
     delete pColRes;
     delete pColWrap;        //! not if from document
@@ -574,9 +578,9 @@ void ScTabPageSortOptions::Init()
     {
         String          theArea;
         ScDBCollection* pDBColl     = pDoc->GetDBCollection();
-        String          theDbArea;
+        rtl::OUString          theDbArea;
         const SCTAB     nCurTab     = pViewData->GetTabNo();
-        String          theDbName   = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(STR_DB_LOCAL_NONAME));
+        rtl::OUString          theDbName   = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(STR_DB_LOCAL_NONAME));
         const formula::FormulaGrammar::AddressConvention eConv = pDoc->GetAddressConvention();
 
         aLbOutPos.Clear();
@@ -584,15 +588,15 @@ void ScTabPageSortOptions::Init()
         aLbOutPos.Disable();
 
         ScAreaNameIterator aIter( pDoc );
-        String aName;
+        rtl::OUString aName;
         ScRange aRange;
-        String aRefStr;
+        rtl::OUString aRefStr;
         while ( aIter.Next( aName, aRange ) )
         {
             sal_uInt16 nInsert = aLbOutPos.InsertEntry( aName );
 
             aRange.aStart.Format( aRefStr, SCA_ABS_3D, pDoc, eConv );
-            aLbOutPos.SetEntryData( nInsert, new String( aRefStr ) );
+            aLbOutPos.SetEntryData( nInsert, new rtl::OUString( aRefStr ) );
         }
 
         aLbOutPos.SelectEntryPos( 0 );
@@ -685,7 +689,7 @@ void ScTabPageSortOptions::Reset( const SfxItemSet& /* rArgSet */ )
 
     if ( pDoc && !aSortData.bInplace )
     {
-        String aStr;
+        rtl::OUString aStr;
         sal_uInt16 nFormat = (aSortData.nDestTab != pViewData->GetTabNo())
                             ? SCR_ABS_3D
                             : SCR_ABS;
@@ -745,7 +749,7 @@ sal_Bool ScTabPageSortOptions::FillItemSet( SfxItemSet& rArgSet )
     aNewSortData.aCollatorLocale = MsLangId::convertLanguageToLocale( eLang, false );
 
     // get algorithm
-    String sAlg;
+    rtl::OUString sAlg;
     if ( eLang != LANGUAGE_SYSTEM )
     {
         uno::Sequence<rtl::OUString> aAlgos = pColWrap->listCollatorAlgorithms(
@@ -893,7 +897,7 @@ IMPL_LINK( ScTabPageSortOptions, SelOutPosHdl, ListBox *, pLb )
 {
     if ( pLb == &aLbOutPos )
     {
-        String  aString;
+        rtl::OUString  aString;
         sal_uInt16  nSelPos = aLbOutPos.GetSelectEntryPos();
 
         if ( nSelPos > 0 )
@@ -925,7 +929,7 @@ void ScTabPageSortOptions::EdOutPosModHdl( Edit* pEd )
 {
     if ( pEd == &aEdOutPos )
     {
-        String  theCurPosStr = aEdOutPos.GetText();
+       String  theCurPosStr = aEdOutPos.GetText();
         sal_uInt16  nResult = ScAddress().Parse( theCurPosStr, pDoc, pDoc->GetAddressConvention() );
 
         if ( SCA_VALID == (nResult & SCA_VALID) )
