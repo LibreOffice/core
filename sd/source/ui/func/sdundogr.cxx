@@ -30,12 +30,12 @@ TYPEINIT1(SdUndoGroup, SdUndoAction);
 
 SdUndoGroup::~SdUndoGroup()
 {
-    sal_uLong nLast = aCtn.Count();
-    for (sal_uLong nAction = 0; nAction < nLast; nAction++)
+    size_t nLast = aCtn.size();
+    for (size_t nAction = 0; nAction < nLast; nAction++)
     {
-        delete (SdUndoAction*) aCtn.GetObject(nAction);
+        delete aCtn[nAction];
     }
-    aCtn.Clear();
+    aCtn.clear();
 }
 
 /*************************************************************************
@@ -70,10 +70,10 @@ sal_Bool SdUndoGroup::Merge( SfxUndoAction* pNextAction )
 
 void SdUndoGroup::Undo()
 {
-    long nLast = aCtn.Count();
+    long nLast = aCtn.size();
     for (long nAction = nLast - 1; nAction >= 0; nAction--)
     {
-        ((SdUndoAction*)aCtn.GetObject((sal_uLong)nAction))->Undo();
+        aCtn[nAction]->Undo();
     }
 
 }
@@ -86,10 +86,10 @@ void SdUndoGroup::Undo()
 
 void SdUndoGroup::Redo()
 {
-    sal_uLong nLast = aCtn.Count();
-    for (sal_uLong nAction = 0; nAction < nLast; nAction++)
+    size_t nLast = aCtn.size();
+    for (size_t nAction = 0; nAction < nLast; nAction++)
     {
-        ((SdUndoAction*)aCtn.GetObject(nAction))->Redo();
+        aCtn[nAction]->Redo();
     }
 
 }
@@ -102,7 +102,7 @@ void SdUndoGroup::Redo()
 
 void SdUndoGroup::AddAction(SdUndoAction* pAction)
 {
-    aCtn.Insert(pAction, CONTAINER_APPEND);
+    aCtn.push_back(pAction);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -26,12 +26,12 @@
 
 class SD_DLLPUBLIC SdUndoGroup : public SdUndoAction
 {
-    Container      aCtn;
+    std::vector<SdUndoAction*>  aCtn;
 public:
     TYPEINFO();
                    SdUndoGroup(SdDrawDocument* pSdDrawDocument)
                               : SdUndoAction(pSdDrawDocument),
-                                aCtn(16, 16, 16) {}
+                                aCtn() {}
     virtual       ~SdUndoGroup();
 
     virtual sal_Bool   Merge( SfxUndoAction* pNextAction );
@@ -40,7 +40,7 @@ public:
     virtual void   Redo();
 
     void           AddAction(SdUndoAction* pAction);
-    sal_uLong          Count() const { return aCtn.Count(); }
+    sal_uLong          Count() const { return aCtn.size(); }
 
 };
 
