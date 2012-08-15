@@ -20,11 +20,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.prefs.Preferences;
 
-//import android.app.ActionBar;
-//import android.view.Menu;
-//import android.view.MenuInflater;
-//import android.view.MenuItem;
-
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
@@ -33,6 +28,10 @@ import com.actionbarsherlock.app.SherlockActivity;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
 import android.graphics.Shader.TileMode;
+import android.graphics.BlurMaskFilter;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.Color;
 
 import android.app.ActionBar.OnNavigationListener;
 import android.app.Activity;
@@ -81,6 +80,7 @@ import com.sun.star.view.XRenderable;
 
 import java.io.*;
 import java.nio.ByteBuffer;
+import java.nio.IntBuffer;
 import java.nio.ByteOrder;
 
 public class LibreOfficeUIActivity extends SherlockActivity implements ActionBar.OnNavigationListener {
@@ -734,16 +734,6 @@ class ListItemAdapter implements ListAdapter{
                 return null;
             }
 
-            protected void onPreExecute ()
-            {
-                try{
-
-                }
-                catch (Exception e) {
-                    e.printStackTrace(System.err);
-                }
-            }
-
             protected Integer doInBackground(String... params)
             {
                 try {
@@ -869,11 +859,32 @@ class ListItemAdapter implements ListAdapter{
                 Matrix m = new Matrix();
                 m.preScale( 1.0f , -1.0f );
                 Bitmap bmp = Bitmap.createBitmap( bm, 0, 0, bm.getWidth(), bm.getHeight(), m, true);
+
+                BlurMaskFilter blurFilter = new BlurMaskFilter( 3 , BlurMaskFilter.Blur.OUTER);
+                Paint shadowPaint = new Paint();
+                shadowPaint.setMaskFilter(blurFilter);
+
+                int[] offsetXY = new int[2];
+                Bitmap shadowImage = bmp.extractAlpha(shadowPaint, offsetXY);
+                Bitmap shadowImage32 = shadowImage.copy(Bitmap.Config.ARGB_8888, true);
+
+                ByteBuffer pxBuffer = ByteBuffer.allocate( shadowImage32.getByteCount() );
+                IntBuffer intPxBuffer = IntBuffer.allocate( shadowImage32.getByteCount()/4 );
+                shadowImage32.copyPixelsToBuffer( pxBuffer );
+                for( int i = 0 ; i < shadowImage32.getByteCount()/4 ; i++ ){
+                    int pxA = (int)( pxBuffer.get( i*4 + 3) );
+                    intPxBuffer.put( i , Color.argb( (int)( pxA*0.25f) ,  0 ,  0 , 0 ) );
+                }
+                shadowImage32.copyPixelsFromBuffer( intPxBuffer );
+                //Draw the image onto the shadow bitmap.
+                Canvas c = new Canvas(shadowImage32);
+                c.drawBitmap(bmp, -offsetXY[0], -offsetXY[1], null);
+
                 File dir = file.getParentFile();
                 File thumbnailFile = new File( dir , "." + file.getName().split("[.]")[0] + ".png");
                 try {
                     ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-                    bmp.compress(Bitmap.CompressFormat.PNG, 40, bytes);
+                    shadowImage32.compress(Bitmap.CompressFormat.PNG, 40, bytes);
                     thumbnailFile.createNewFile();
                     FileOutputStream fo = new FileOutputStream( thumbnailFile );
                     fo.write(bytes.toByteArray());

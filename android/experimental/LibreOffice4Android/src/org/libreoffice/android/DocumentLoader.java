@@ -35,6 +35,10 @@ import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.graphics.Color;
+import android.graphics.BitmapFactory;
+import android.graphics.BlurMaskFilter;
+import android.graphics.Canvas;
+import android.graphics.Paint;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -91,6 +95,7 @@ import com.sun.star.view.XRenderable;
 
 import java.io.*;
 import java.nio.ByteBuffer;
+import java.nio.IntBuffer;
 import java.nio.ByteOrder;
 import java.util.ArrayList;
 
@@ -1050,10 +1055,6 @@ public class DocumentLoader
     protected void onDestroy()
     {
         super.onDestroy();
-        //Save the thumbnail of the first page as the grid image.
-        // Could easily make a new (larger) thumb but recycling
-        // should be faster & more efficient, better for the environment ;-)
-        //ll = (LinearLayout)findViewById( R.id.navigator);
 
         Bitmap bmpAlpha = ( (ThumbnailView)ll.getChildAt( 0 ) ).getBitmap();
         //For now use these 3 lines to turn the bitmap right way up.
@@ -1061,13 +1062,34 @@ public class DocumentLoader
         m.preScale( 1.0f , -1.0f );
         Bitmap bmp = Bitmap.createBitmap( bmpAlpha, 0, 0, bmpAlpha.getWidth(), bmpAlpha.getHeight(), m, true);
 
+        BlurMaskFilter blurFilter = new BlurMaskFilter( 3 , BlurMaskFilter.Blur.OUTER);
+        Paint shadowPaint = new Paint();
+        shadowPaint.setMaskFilter(blurFilter);
+
+        int[] offsetXY = new int[2];
+        Bitmap shadowImage = bmp.extractAlpha(shadowPaint, offsetXY);
+        Bitmap shadowImage32 = shadowImage.copy(Bitmap.Config.ARGB_8888, true);
+
+        ByteBuffer pxBuffer = ByteBuffer.allocate( shadowImage32.getByteCount() );
+        IntBuffer intPxBuffer = IntBuffer.allocate( shadowImage32.getByteCount()/4 );
+        shadowImage32.copyPixelsToBuffer( pxBuffer );
+        for( int i = 0 ; i < shadowImage32.getByteCount()/4 ; i++ ){
+            int pxA = (int)( pxBuffer.get( i*4 + 3) );//TODO make sure byte0 is A
+            intPxBuffer.put( i , Color.argb( (int)( pxA*0.25f) ,  0 ,  0 , 0 ) );
+        }
+        shadowImage32.copyPixelsFromBuffer( intPxBuffer );
+
+        Canvas c = new Canvas(shadowImage32);
+        c.drawBitmap(bmp, -offsetXY[0], -offsetXY[1], null);
+
         File file = new File(extras.getString("input"));
         Log.i(TAG ,"onDestroy " + extras.getString("input"));
         File dir = file.getParentFile();
         File thumbnailFile = new File( dir , "." + file.getName().split("[.]")[0] + ".png");
         try {
+            Log.i( TAG , Integer.toString( shadowImage32.getWidth() - bmp.getWidth() ) );
             ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-            bmp.compress(Bitmap.CompressFormat.PNG, 40, bytes);
+            shadowImage32.compress(Bitmap.CompressFormat.PNG, 40, bytes);
             thumbnailFile.createNewFile();
             FileOutputStream fo = new FileOutputStream( thumbnailFile );
             fo.write(bytes.toByteArray());

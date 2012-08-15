@@ -12,6 +12,8 @@ import org.libreoffice.R;
 
 
 import java.io.File;
+import java.nio.ByteBuffer;
+import java.nio.IntBuffer;
 
 import android.content.Context;
 import android.util.Log;
@@ -23,18 +25,22 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.graphics.BitmapFactory;
 import android.graphics.Bitmap;
+import android.graphics.BlurMaskFilter;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.Color;
 
 public class GridItemAdapter extends BaseAdapter{
 	Context mContext;
 	File[] filePaths;
 	File currentDirectory;
-	String tag = "GridItemAdapter";
+    String TAG = "GridItemAdapter";
 
 	public GridItemAdapter(Context mContext, File[] filePaths) {
 		this.mContext = mContext;
 		this.filePaths = filePaths;
 		for(File fn : filePaths){
-			Log.d(tag, fn.getName());
+            Log.d(TAG, fn.getName());
 		}
 	}
 
