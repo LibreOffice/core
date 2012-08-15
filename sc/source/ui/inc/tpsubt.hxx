@@ -66,8 +66,8 @@ protected:
     SvxCheckListBox aLbColumns;
     FixedText       aFtFunctions;
     ListBox         aLbFunctions;
-    const String    aStrNone;
-    const String    aStrColumn;
+    const rtl::OUString    aStrNone;
+    const rtl::OUString    aStrColumn;
 
     ScViewData*             pViewData;
     ScDocument*             pDoc;

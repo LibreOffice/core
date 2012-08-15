@@ -55,8 +55,8 @@ ScTpSubTotalGroup::ScTpSubTotalGroup( Window* pParent, sal_uInt16 nResId,
             aLbColumns      ( this, ScResId( WND_COLUMNS ) ),
             aFtFunctions    ( this, ScResId( FT_FUNCTIONS ) ),
             aLbFunctions    ( this, ScResId( LB_FUNCTIONS ) ),
-            aStrNone        ( ScResId( SCSTR_NONE ) ),
-            aStrColumn      ( ScResId( SCSTR_COLUMN ) ),
+            aStrNone        ( SC_RESSTR( SCSTR_NONE ) ),
+            aStrColumn      ( SC_RESSTR( SCSTR_COLUMN ) ),
             pViewData       ( NULL ),
             pDoc            ( NULL ),
             nWhichSubTotals ( rArgSet.GetPool()->GetWhich( SID_SUBTOTALS ) ),
@@ -276,7 +276,7 @@ void ScTpSubTotalGroup::FillListBoxes()
         SCCOL   nMaxCol     = rSubTotalData.nCol2;
         SCCOL   col;
         sal_uInt16  i=0;
-        String  aFieldName;
+        rtl::OUString  aFieldName;
 
         aLbGroup.Clear();
         aLbColumns.Clear();
@@ -286,11 +286,13 @@ void ScTpSubTotalGroup::FillListBoxes()
         for ( col=nFirstCol; col<=nMaxCol && i<SC_MAXFIELDS; col++ )
         {
             pDoc->GetString( col, nFirstRow, nTab, aFieldName );
-            if ( aFieldName.Len() == 0 )
+            if ( aFieldName.isEmpty() )
             {
-                aFieldName = aStrColumn;
-                aFieldName += ' ';
-                aFieldName += ::ScColToAlpha( col );  // from global.hxx
+                rtl::OUStringBuffer aBuf;
+                aBuf.append(aStrColumn);
+                aBuf.append(sal_Unicode(' '));
+                aBuf.append(ScColToAlpha(col));
+                aFieldName = aBuf.makeStringAndClear();
             }
             nFieldArr[i] = col;
             aLbGroup.InsertEntry( aFieldName, i+1 );
