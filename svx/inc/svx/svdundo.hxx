@@ -31,7 +31,6 @@
 
 #include <svl/solar.hrc>
 #include <svl/undo.hxx>
-#include <tools/contnr.hxx>
 #include <tools/gen.hxx>
 #include <svx/svdtypes.hxx> // fuer enum RepeatFuncts
 #include <svx/svdsob.hxx>
@@ -96,7 +95,7 @@ public:
 class SVX_DLLPUBLIC SdrUndoGroup : public SdrUndoAction
 {
 protected:
-    Container                   aBuf;
+    std::vector<SdrUndoAction*> aBuf;
 
     // Beschreibung der Action, nicht expandiert (beinhaltet %O)
     String                      aComment;
@@ -109,8 +108,8 @@ public:
     virtual ~SdrUndoGroup();
 
     void Clear();
-    sal_uIntPtr GetActionCount() const { return aBuf.Count(); }
-    SdrUndoAction* GetAction(sal_uIntPtr nNum) const { return (SdrUndoAction*)(aBuf.GetObject(nNum)); }
+    sal_uIntPtr GetActionCount() const { return aBuf.size(); }
+    SdrUndoAction* GetAction(sal_uIntPtr nNum) const { return aBuf[nNum]; }
     void AddAction(SdrUndoAction* pAct);
 
     void SetComment(const String& rStr) { aComment=rStr; }

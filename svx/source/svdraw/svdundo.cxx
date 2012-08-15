@@ -103,7 +103,7 @@ XubString SdrUndoAction::GetSdrRepeatComment(SdrView& /*rView*/) const
 
 SdrUndoGroup::SdrUndoGroup(SdrModel& rNewMod)
 :   SdrUndoAction(rNewMod),
-    aBuf(1024,32,32),
+    aBuf(),
     eFunction(SDRREPFUNC_OBJ_NONE)
 {}
 
@@ -118,12 +118,12 @@ void SdrUndoGroup::Clear()
         SdrUndoAction* pAct=GetAction(nu);
         delete pAct;
     }
-    aBuf.Clear();
+    aBuf.clear();
 }
 
 void SdrUndoGroup::AddAction(SdrUndoAction* pAct)
 {
-    aBuf.Insert(pAct,CONTAINER_APPEND);
+    aBuf.push_back(pAct);
 }
 
 void SdrUndoGroup::Undo()
