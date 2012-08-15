@@ -193,7 +193,7 @@ TabPage RID_SVXPAGE_KEYBOARD
     };
     String STR_FILTERNAME_CFG
     {
-        Text [ en-US ] = "Configuration" ;
+        Text [ en-US ] = "Configuration (*.cfg)" ;
     };
 };
 
