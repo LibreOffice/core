@@ -29,7 +29,6 @@
 #ifndef _SVDIBROW_HXX
 #define _SVDIBROW_HXX
 
-#include <tools/contnr.hxx>
 #include <svtools/brwbox.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/floatwin.hxx>
@@ -41,7 +40,7 @@ class BrowserMouseEvent;
 class _SdrItemBrowserControl: public BrowseBox
 {
 friend class ImpItemEdit;
-    Container aList;
+    std::vector<ImpItemListRow*> aList;
     long nAktPaintRow;
     Edit* pEditControl;
     XubString aWNamMerk;
@@ -61,7 +60,7 @@ private:
 #if _SOLAR__PRIVATE
     void ImpCtor();
     void ImpSetEntry(const ImpItemListRow& rEntry, sal_uIntPtr nEntryNum);
-    ImpItemListRow* ImpGetEntry(sal_uIntPtr nPos) const { return (ImpItemListRow*)aList.GetObject(nPos); }
+    ImpItemListRow* ImpGetEntry(sal_uIntPtr nPos) const { return aList[nPos]; }
     void ImpSaveWhich();
     void ImpRestoreWhich();
 #endif // __PRIVATE

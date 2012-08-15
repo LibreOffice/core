@@ -219,7 +219,7 @@ void ImpItemEdit::KeyInput(const KeyEvent& rKEvt)
 
 _SdrItemBrowserControl::_SdrItemBrowserControl(Window* pParent, WinBits nBits):
     BrowseBox(pParent,nBits,MYBROWSEMODE),
-    aList(1024,16,16)
+    aList()
 {
     ImpCtor();
 }
@@ -290,17 +290,17 @@ void _SdrItemBrowserControl::ImpCtor()
 
 void _SdrItemBrowserControl::Clear()
 {
-    sal_uIntPtr nAnz=aList.Count();
+    sal_uIntPtr nAnz=aList.size();
     for (sal_uIntPtr nNum=0; nNum<nAnz; nNum++) {
         delete ImpGetEntry(nNum);
     }
-    aList.Clear();
+    aList.clear();
     BrowseBox::Clear();
 }
 
 long _SdrItemBrowserControl::GetRowCount() const
 {
-    return aList.Count();
+    return aList.size();
 }
 
 sal_Bool _SdrItemBrowserControl::SeekRow(long nRow)
@@ -312,7 +312,7 @@ sal_Bool _SdrItemBrowserControl::SeekRow(long nRow)
 String _SdrItemBrowserControl::GetCellText(long _nRow, sal_uInt16 _nColId) const
 {
     String sRet;
-    if ( _nRow >= 0 && _nRow < (sal_Int32)aList.Count() )
+    if ( _nRow >= 0 && _nRow < (sal_Int32)aList.size() )
     {
         ImpItemListRow* pEntry = ImpGetEntry(_nRow);
         if ( pEntry )
@@ -354,7 +354,7 @@ String _SdrItemBrowserControl::GetCellText(long _nRow, sal_uInt16 _nColId) const
 
 void _SdrItemBrowserControl::PaintField(OutputDevice& rDev, const Rectangle& rRect, sal_uInt16 nColumnId) const
 {
-    if (nAktPaintRow<0 || (sal_uIntPtr)nAktPaintRow>=aList.Count()) {
+    if (nAktPaintRow<0 || (sal_uIntPtr)nAktPaintRow>=aList.size()) {
         return;
     }
     Rectangle aR(rRect);
@@ -383,7 +383,7 @@ sal_uIntPtr _SdrItemBrowserControl::GetCurrentPos() const
     sal_uIntPtr nRet=CONTAINER_ENTRY_NOTFOUND;
     if (GetSelectRowCount()==1) {
         long nPos=((BrowseBox*)this)->FirstSelectedRow();
-        if (nPos>=0 && (sal_uIntPtr)nPos<aList.Count()) {
+        if (nPos>=0 && (sal_uIntPtr)nPos<aList.size()) {
             nRet=(sal_uIntPtr)nPos;
         }
     }
@@ -470,7 +470,7 @@ void _SdrItemBrowserControl::ImpSaveWhich()
         nLastWhich=nWh;
         nLastWhichOfs=nPos-nTop;
         if (nTop<0) nTop=0;
-        if (nBtm>=(long)aList.Count()) nBtm=aList.Count()-1;
+        if (nBtm>=(long)aList.size()) nBtm=aList.size()-1;
         nLastWhichOben=ImpGetEntry(nTop)->nWhichId;
         nLastWhichUnten=ImpGetEntry(nBtm)->nWhichId;
     }
@@ -480,7 +480,7 @@ void _SdrItemBrowserControl::ImpRestoreWhich()
 {
     if (nLastWhich!=0) {
         bool bFnd = false;
-        sal_uIntPtr nAnz=aList.Count();
+        sal_uIntPtr nAnz=aList.size();
         sal_uIntPtr nNum;
         for (nNum=0; nNum<nAnz && !bFnd; nNum++) {
             ImpItemListRow* pEntry=ImpGetEntry(nNum);
@@ -573,7 +573,7 @@ void _SdrItemBrowserControl::ImpSetEntry(const ImpItemListRow& rEntry, sal_uIntP
 {
     ImpItemListRow* pAktEntry=ImpGetEntry(nEntryNum);
     if (pAktEntry==NULL) {
-        aList.Insert(new ImpItemListRow(rEntry),CONTAINER_APPEND);
+        aList.push_back(new ImpItemListRow(rEntry));
         RowInserted(nEntryNum);
     } else if (*pAktEntry!=rEntry) {
         bool bStateDiff=rEntry.eState!=pAktEntry->eState;
@@ -1042,12 +1042,12 @@ void _SdrItemBrowserControl::SetAttributes(const SfxItemSet* pSet, const SfxItem
             nWhich=aIter.NextWhich();
         } // while
 
-        if (aList.Count()>nEntryNum) { // maybe still too many entries
-            sal_uIntPtr nTooMuch=aList.Count()-nEntryNum;
+        if (aList.size()>nEntryNum) { // maybe still too many entries
+            sal_uIntPtr nTooMuch=aList.size()-nEntryNum;
             for (sal_uIntPtr nNum=0; nNum<nTooMuch; nNum++) {
                 delete ImpGetEntry(nEntryNum);
-                aList.Remove(nEntryNum);
             }
+            aList.erase(aList.begin(), aList.begin() + nTooMuch);
             RowRemoved(nEntryNum,nTooMuch);
         }
     } else {
