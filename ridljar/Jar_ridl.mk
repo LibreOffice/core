@@ -31,14 +31,10 @@ $(eval $(call gb_Jar_use_customtargets,ridl,\
     ridljar/javamaker \
 ))
 
-$(eval $(call gb_Jar_use_jars,ridl,\
-    $(WORKDIR)/CustomTarget/ridljar/javamaker/class \
-))
-
 $(eval $(call gb_Jar_set_packageroot,ridl,com))
 
 $(eval $(call gb_Jar_add_packagedirs,ridl,\
-    $(WORKDIR)/CustomTarget/ridljar/javamaker/class/com \
+    $(call gb_CustomTarget_get_workdir,ridljar/javamaker)/com \
 ))
 
 $(eval $(call gb_Jar_add_sourcefiles,ridl,\

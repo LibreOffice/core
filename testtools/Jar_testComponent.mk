@@ -36,10 +36,6 @@ $(eval $(call gb_Jar_use_customtargets,testComponent,\
     testtools/bridgetest_javamaker \
 ))
 
-$(eval $(call gb_Jar_use_jars,testComponent,\
-    $(WORKDIR)/CustomTarget/testtools/bridgetest_javamaker/class \
-))
-
 $(eval $(call gb_Jar_set_packageroot,testComponent,com))
 
 $(eval $(call gb_Jar_set_manifest,testComponent,$(SRCDIR)/testtools/com/sun/star/comp/bridge/manifest))
@@ -47,7 +43,7 @@ $(eval $(call gb_Jar_set_manifest,testComponent,$(SRCDIR)/testtools/com/sun/star
 $(eval $(call gb_Jar_set_componentfile,testComponent,testtools/source/bridgetest/testComponent,URE))
 
 $(eval $(call gb_Jar_add_packagedirs,testComponent,\
-    $(WORKDIR)/CustomTarget/testtools/bridgetest_javamaker/class/test \
+    $(call gb_CustomTarget_get_workdir,testtools/bridgetest_javamaker)/test \
 ))
 
 $(eval $(call gb_Jar_add_sourcefiles,testComponent,\
