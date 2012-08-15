@@ -1387,8 +1387,7 @@ AC_ARG_WITH(libpq-path,
 
 AC_ARG_WITH(system-hsqldb,
     AS_HELP_STRING([--with-system-hsqldb],
-        [Use hsqldb already on system.]),,
-    [with_system_hsqldb="$with_system_jars"])
+        [Use hsqldb already on system.]))
 
 AC_ARG_WITH(hsqldb-jar,
     AS_HELP_STRING([--with-hsqldb-jar=JARFILE],
@@ -1515,8 +1514,7 @@ AC_ARG_WITH(libbase-jar,
 
 AC_ARG_WITH(system-saxon,
     AS_HELP_STRING([--with-system-saxon],
-        [Use saxon already on system.]),,
-    [with_system_saxon="$with_system_jars"])
+        [Use saxon already on system.]))
 
 AC_ARG_WITH(saxon-jar,
     AS_HELP_STRING([--with-saxon-jar=JARFILE],
