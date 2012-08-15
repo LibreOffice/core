@@ -47,7 +47,6 @@ public class StartPresentationActivity extends Activity {
         @Override
         public void onServiceConnected(ComponentName aClassName,
                         IBinder aService) {
-
             mCommunicationService = ((CommunicationService.CBinder) aService)
                             .getService();
 
@@ -62,6 +61,7 @@ public class StartPresentationActivity extends Activity {
         @Override
         public void onServiceDisconnected(ComponentName aClassName) {
             mCommunicationService = null;
+            mIsBound = false;
         }
     };
 

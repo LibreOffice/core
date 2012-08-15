@@ -7,6 +7,7 @@ import com.actionbarsherlock.app.SherlockPreferenceActivity;
 public class SettingsActivity extends SherlockPreferenceActivity {
 
     // We use addPreferencesFromResource as we need sdk-9 compatibility
+    // but build with sdk 15
     @SuppressWarnings("deprecation")
     @Override
     protected void onCreate(Bundle savedInstanceState) {

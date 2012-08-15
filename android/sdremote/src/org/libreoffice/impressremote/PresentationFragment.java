@@ -23,7 +23,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
-import android.view.ViewGroup.LayoutParams;
 import android.webkit.WebView;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
@@ -128,7 +127,6 @@ public class PresentationFragment extends Fragment {
                 mHandle.setImageResource(R.drawable.handle_default);
                 break;
             case MotionEvent.ACTION_MOVE:
-                LayoutParams aParams = mTopView.getLayoutParams();
 
                 final int DRAG_MARGIN = 120;
 
@@ -188,7 +186,6 @@ public class PresentationFragment extends Fragment {
 
                 break;
             }
-            // TODO Auto-generated method stub
             return true;
         }
     }
@@ -237,10 +234,10 @@ public class PresentationFragment extends Fragment {
                 updateSlideNumberDisplay();
             } else if (aIntent.getAction().equals(
                             CommunicationService.MSG_SLIDE_PREVIEW)) {
-                int aNSlide = aIntent.getExtras().getInt("slide_number");
-                if (mTopView.getSelectedItemPosition() == aNSlide) {
-                    mTopView.setSelection(aNSlide);
-                }
+                // int aNSlide = aIntent.getExtras().getInt("slide_number");
+                ((ThumbnailAdapter) mTopView.getAdapter())
+                                .notifyDataSetChanged();
+                //                mTopView.requestLayout();
             } else if (aIntent.getAction().equals(
                             CommunicationService.MSG_SLIDE_NOTES)) {
                 // TODO: update me

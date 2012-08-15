@@ -177,9 +177,6 @@ public class PresentationActivity extends FragmentActivity {
         private ToggleButton mTimeLabel;
         private ToggleButton mThumbnailButton;
 
-        private View mDropdownOptions;
-        private View mDropdownBlank;
-
         // ------- CLOCKBAR
         private View mClockBar;
         private ToggleButton mClockBar_clockButton;
@@ -338,7 +335,6 @@ public class PresentationActivity extends FragmentActivity {
 
             @Override
             public void run() {
-                //invalidateOptionsMenu();
                 CharSequence aTimeString;
                 long aTime = mCommunicationService.getSlideShow().getTimer()
                                 .getTimeMillis();
@@ -349,7 +345,6 @@ public class PresentationActivity extends FragmentActivity {
                                     System.currentTimeMillis());
                 }
                 mTimeLabel.setText(aTimeString);
-                // TODO: set the string
                 timerHandler.postDelayed(this, 50);
 
             }
