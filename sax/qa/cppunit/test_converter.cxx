@@ -369,9 +369,9 @@ void ConverterTest::testMeasure()
     doTestStringToMeasure(555, "666", MeasureUnit::MM, -1000, 555);
     doTestStringToMeasure(-1000, "-1001", MeasureUnit::MM, -1000, 555);
     doTestStringToMeasure(0, "-0", MeasureUnit::MM, -1, 0);
-    doTestStringToMeasure(-539222987, "1234567890mm", MeasureUnit::MM_10TH, 12, 12345678901);
+    doTestStringToMeasure(2147483647, "1234567890mm", MeasureUnit::MM_10TH, 12, ::std::numeric_limits<sal_Int32>::max());
     doTestStringToMeasure(-300, "-300", MeasureUnit::MM, -1000, 555);
-    doTestStringToMeasure(1305424328, "-999999999999999px", MeasureUnit::PIXEL, -88888888888, 555);   //really crazy numbers...
+    doTestStringToMeasure(-2147483648, "-999999999999999px", MeasureUnit::PIXEL, ::std::numeric_limits<sal_Int32>::min(), 555);   //really crazy numbers...
 
     doTestMeasureToString("6mm", 600, MeasureUnit::MM_100TH, MeasureUnit::MM);
     doTestMeasureToString("0.005cm", 000000005, MeasureUnit::MM_100TH, MeasureUnit::CM);    // zeros in the front doesn't count
