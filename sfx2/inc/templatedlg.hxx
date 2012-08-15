@@ -41,6 +41,8 @@ public:
 
     ~SfxTemplateManagerDlg ();
 
+    void setSaveMode (bool bMode);
+
     void setDocumentModel (const com::sun::star::uno::Reference<com::sun::star::frame::XModel> &rModel);
 
     DECL_LINK(ViewAllHdl, void*);
@@ -138,6 +140,7 @@ private:
     std::set<const ThumbnailViewItem*> maSelTemplates;
     std::set<const ThumbnailViewItem*> maSelFolders;
 
+    bool mbIsSaveMode;  ///< Flag that indicates if we are in save mode or not.
     com::sun::star::uno::Reference< com::sun::star::frame::XModel > m_xModel;
     com::sun::star::uno::Reference< com::sun::star::frame::XComponentLoader > mxDesktop;
 };

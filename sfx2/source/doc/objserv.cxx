@@ -805,6 +805,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
             {
                 SfxTemplateManagerDlg aDlg(NULL);
                 aDlg.setDocumentModel(GetModel());
+                aDlg.setSaveMode(true);
                 aDlg.Execute();
             }
             else

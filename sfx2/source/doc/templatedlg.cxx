@@ -114,6 +114,7 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg (Window *parent)
       mpSearchView(new TemplateSearchView(this)),
       maView(new TemplateLocalView(this,SfxResId(TEMPLATE_VIEW))),
       mpOnlineView(new TemplateOnlineView(this, WB_VSCROLL,false)),
+      mbIsSaveMode(false),
       mxDesktop(comphelper::getProcessServiceFactory()->createInstance( "com.sun.star.frame.Desktop" ),uno::UNO_QUERY )
 {
     maButtonSelMode.SetStyle(maButtonSelMode.GetStyle() | WB_TOGGLE);
@@ -269,6 +270,24 @@ SfxTemplateManagerDlg::~SfxTemplateManagerDlg ()
     delete mpActionMenu;
     delete mpRepositoryMenu;
     delete mpTemplateDefaultMenu;
+}
+
+void SfxTemplateManagerDlg::setSaveMode(bool bMode)
+{
+    mbIsSaveMode = bMode;
+
+    if (bMode)
+    {
+        mpViewBar->ShowItem(TBI_TEMPLATE_SAVE);
+        mpViewBar->HideItem(TBI_TEMPLATE_IMPORT);
+        mpViewBar->HideItem(TBI_TEMPLATE_REPOSITORY);
+    }
+    else
+    {
+        mpViewBar->HideItem(TBI_TEMPLATE_SAVE);
+        mpViewBar->ShowItem(TBI_TEMPLATE_IMPORT);
+        mpViewBar->ShowItem(TBI_TEMPLATE_REPOSITORY);
+    }
 }
 
 void SfxTemplateManagerDlg::setDocumentModel(const uno::Reference<frame::XModel> &rModel)
@@ -468,7 +487,7 @@ IMPL_LINK(SfxTemplateManagerDlg, TVFolderStateHdl, const ThumbnailViewItem*, pIt
 {
     if (pItem->isSelected())
     {
-        if (maSelFolders.empty())
+        if (maSelFolders.empty() && !mbIsSaveMode)
         {
             mpViewBar->ShowItem(TBI_TEMPLATE_IMPORT);
             mpViewBar->ShowItem(TBI_TEMPLATE_FOLDER_DEL);
@@ -480,7 +499,7 @@ IMPL_LINK(SfxTemplateManagerDlg, TVFolderStateHdl, const ThumbnailViewItem*, pIt
     {
         maSelFolders.erase(pItem);
 
-        if (maSelFolders.empty())
+        if (maSelFolders.empty() && !mbIsSaveMode)
         {
             mpViewBar->HideItem(TBI_TEMPLATE_IMPORT);
             mpViewBar->HideItem(TBI_TEMPLATE_FOLDER_DEL);
@@ -494,17 +513,20 @@ IMPL_LINK(SfxTemplateManagerDlg, TVTemplateStateHdl, const ThumbnailViewItem*, p
 {
     if (pItem->isSelected())
     {
-        if (maSelTemplates.empty())
+        if (!mbIsSaveMode)
         {
-            mpViewBar->Show(false);
-            mpActionBar->Show(false);
-            mpTemplateBar->Show();
-        }
-        else
-        {
-            mpTemplateBar->HideItem(TBI_TEMPLATE_EDIT);
-            mpTemplateBar->HideItem(TBI_TEMPLATE_PROPERTIES);
-            mpTemplateBar->HideItem(TBI_TEMPLATE_DEFAULT);
+            if (maSelTemplates.empty())
+            {
+                mpViewBar->Show(false);
+                mpActionBar->Show(false);
+                mpTemplateBar->Show();
+            }
+            else
+            {
+                mpTemplateBar->HideItem(TBI_TEMPLATE_EDIT);
+                mpTemplateBar->HideItem(TBI_TEMPLATE_PROPERTIES);
+                mpTemplateBar->HideItem(TBI_TEMPLATE_DEFAULT);
+            }
         }
 
         maSelTemplates.insert(pItem);
@@ -515,17 +537,20 @@ IMPL_LINK(SfxTemplateManagerDlg, TVTemplateStateHdl, const ThumbnailViewItem*, p
         {
             maSelTemplates.erase(pItem);
 
-            if (maSelTemplates.empty())
+            if (!mbIsSaveMode)
             {
-                mpTemplateBar->Show(false);
-                mpViewBar->Show();
-                mpActionBar->Show();
-            }
-            else if (maSelTemplates.size() == 1)
-            {
-                mpTemplateBar->ShowItem(TBI_TEMPLATE_EDIT);
-                mpTemplateBar->ShowItem(TBI_TEMPLATE_PROPERTIES);
-                mpTemplateBar->ShowItem(TBI_TEMPLATE_DEFAULT);
+                if (maSelTemplates.empty())
+                {
+                    mpTemplateBar->Show(false);
+                    mpViewBar->Show();
+                    mpActionBar->Show();
+                }
+                else if (maSelTemplates.size() == 1)
+                {
+                    mpTemplateBar->ShowItem(TBI_TEMPLATE_EDIT);
+                    mpTemplateBar->ShowItem(TBI_TEMPLATE_PROPERTIES);
+                    mpTemplateBar->ShowItem(TBI_TEMPLATE_DEFAULT);
+                }
             }
         }
     }
