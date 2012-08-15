@@ -423,8 +423,9 @@ namespace drawinglayer
 
                 if(pLineAttribute)
                 {
-                    // pre-fill fLineWidth
-                    fLineWidth = pLineAttribute->getWidth();
+                    // pre-fill fLineWidth #119198# Need to apply maCurrentTransformation, too (!)
+                    const basegfx::B2DVector aDiscreteUnit(maCurrentTransformation * basegfx::B2DVector(pLineAttribute->getWidth(), 0.0));
+                    fLineWidth = aDiscreteUnit.getLength();
 
                     // pre-fill fMiterLength
                     fMiterLength = fLineWidth;
