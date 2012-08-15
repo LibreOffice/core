@@ -8,6 +8,7 @@ import org.libreoffice.impressremote.communication.CommunicationService;
 import org.libreoffice.impressremote.communication.SlideShow.Timer;
 
 import android.app.ActionBar;
+import android.app.AlertDialog;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -156,6 +157,11 @@ public class PresentationActivity extends FragmentActivity {
                 ft.addToBackStack(null);
                 ft.commit();
             }
+            return true;
+        case R.id.actionbar_presentation_submenu_about:
+            AboutDialogBuilder aBuilder = new AboutDialogBuilder(this);
+            AlertDialog aDialog = aBuilder.create();
+            aDialog.show();
             return true;
         default:
             return super.onOptionsItemSelected(item);

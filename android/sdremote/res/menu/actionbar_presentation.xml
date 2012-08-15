@@ -12,6 +12,9 @@
             <item
                 android:id="@+id/actionbar_presentation_submenu_options"
                 android:title="@string/options"/>
+            <item
+                android:id="@+id/actionbar_presentation_submenu_about"
+                android:title="@string/about"/>
         </menu>
     </item>
 
