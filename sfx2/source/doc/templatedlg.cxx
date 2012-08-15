@@ -1131,7 +1131,7 @@ void SfxTemplateManagerDlg::OnRepositoryDelete()
 
 void SfxTemplateManagerDlg::OnTemplateSaveAs()
 {
-    assert(m_xModel);
+    assert(m_xModel.is());
 
     if (!maView->isOverlayVisible() && maSelFolders.empty())
     {
