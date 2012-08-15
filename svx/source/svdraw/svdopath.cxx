@@ -120,7 +120,7 @@ struct ImpSdrPathDragData  : public SdrDragStatUserData
     sal_Bool                        mbMultiPointDrag;
     const XPolyPolygon          maOrig;
     XPolyPolygon                maMove;
-    Container                   maHandles;
+    std::vector<SdrHdl*>        maHandles;
 
 public:
     ImpSdrPathDragData(const SdrPathObj& rPO, const SdrHdl& rHdl, sal_Bool bMuPoDr, const SdrDragStat& rDrag);
@@ -147,7 +147,7 @@ ImpSdrPathDragData::ImpSdrPathDragData(const SdrPathObj& rPO, const SdrHdl& rHdl
 
             if(pTestHdl && pTestHdl->IsSelected() && pTestHdl->GetObj() == pInteractionObject)
             {
-                maHandles.Insert(pTestHdl, CONTAINER_APPEND);
+                maHandles.push_back(pTestHdl);
             }
         }
 
@@ -611,9 +611,9 @@ bool ImpPathForDragAndCreate::movePathDrag( SdrDragStat& rDrag ) const
 
         if(aDelta.X() || aDelta.Y())
         {
-            for(sal_uInt32 a(0); a < mpSdrPathDragData->maHandles.Count(); a++)
+            for(sal_uInt32 a(0); a < mpSdrPathDragData->maHandles.size(); a++)
             {
-                SdrHdl* pHandle = (SdrHdl*)mpSdrPathDragData->maHandles.GetObject(a);
+                SdrHdl* pHandle = mpSdrPathDragData->maHandles[a];
                 const sal_uInt16 nPolyIndex((sal_uInt16)pHandle->GetPolyNum());
                 const sal_uInt16 nPointIndex((sal_uInt16)pHandle->GetPointNum());
                 const XPolygon& rOrig = mpSdrPathDragData->maOrig[nPolyIndex];
