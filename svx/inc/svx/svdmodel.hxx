@@ -52,6 +52,7 @@ class OutputDevice;
 #include "svx/svxdllapi.h"
 
 #include <rtl/ref.hxx>
+#include <deque>
 
 #if defined(UNX) || defined(WNT)
 #define DEGREE_CHAR ((sal_Unicode)176)   /* 0xB0 = Ansi */
@@ -191,7 +192,7 @@ protected:
     rtl::Reference< SfxStyleSheetBasePool > mxStyleSheetPool;
     SfxStyleSheet*  pDefaultStyleSheet;
     sfx2::LinkManager* pLinkManager;   // LinkManager
-    Container*      pUndoStack;
+    std::deque<SfxUndoAction*>* pUndoStack;
     Container*      pRedoStack;
     SdrUndoGroup*   pAktUndoGroup;  // Fuer mehrstufige
     sal_uInt16          nUndoLevel;     // Undo-Klammerung
@@ -575,8 +576,8 @@ public:
     sal_uIntPtr GetMaxUndoActionCount() const { return nMaxUndoCount; }
     void  ClearUndoBuffer();
     // UndoAction(0) ist die aktuelle (also die zuletzt eingegangene)
-    sal_uIntPtr GetUndoActionCount() const                      { return pUndoStack!=NULL ? pUndoStack->Count() : 0; }
-    const SfxUndoAction* GetUndoAction(sal_uIntPtr nNum) const  { return (SfxUndoAction*)(pUndoStack!=NULL ? pUndoStack->GetObject(nNum) : NULL); }
+    sal_uIntPtr GetUndoActionCount() const                      { return pUndoStack!=NULL ? pUndoStack->size() : 0; }
+    const SfxUndoAction* GetUndoAction(sal_uIntPtr nNum) const  { return (SfxUndoAction*)(pUndoStack!=NULL ? (*pUndoStack)[nNum] : NULL); }
     // RedoAction(0) ist die aktuelle (also die des letzten Undo)
     sal_uIntPtr GetRedoActionCount() const                      { return pRedoStack!=NULL ? pRedoStack->Count() : 0; }
     const SfxUndoAction* GetRedoAction(sal_uIntPtr nNum) const  { return (SfxUndoAction*)(pRedoStack!=NULL ? pRedoStack->GetObject(nNum) : NULL); }

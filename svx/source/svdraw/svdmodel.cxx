@@ -404,8 +404,9 @@ void SdrModel::SetMaxUndoActionCount(sal_uIntPtr nAnz)
     if (nAnz<1) nAnz=1;
     nMaxUndoCount=nAnz;
     if (pUndoStack!=NULL) {
-        while (pUndoStack->Count()>nMaxUndoCount) {
-            delete (SfxUndoAction*) pUndoStack->Remove(pUndoStack->Count());
+        while (pUndoStack->size()>nMaxUndoCount) {
+            delete pUndoStack->back();
+            pUndoStack->pop_back();
         }
     }
 }
@@ -413,8 +414,9 @@ void SdrModel::SetMaxUndoActionCount(sal_uIntPtr nAnz)
 void SdrModel::ClearUndoBuffer()
 {
     if (pUndoStack!=NULL) {
-        while (pUndoStack->Count()!=0) {
-            delete (SfxUndoAction*) pUndoStack->Remove(pUndoStack->Count()-1);
+        while (!pUndoStack->empty()) {
+            delete pUndoStack->back();
+            pUndoStack->pop_back();
         }
         delete pUndoStack;
         pUndoStack=NULL;
@@ -445,7 +447,9 @@ bool SdrModel::Undo()
             pDo->Undo();
             if(pRedoStack==NULL)
                 pRedoStack=new Container(1024,16,16);
-            pRedoStack->Insert(pUndoStack->Remove((sal_uIntPtr)0),(sal_uIntPtr)0);
+            SfxUndoAction* p = pUndoStack->front();
+            pUndoStack->pop_front();
+            pRedoStack->Insert(p,(sal_uIntPtr)0);
             mbUndoEnabled = bWasUndoEnabled;
         }
     }
@@ -468,8 +472,8 @@ bool SdrModel::Redo()
             mbUndoEnabled = false;
             pDo->Redo();
             if(pUndoStack==NULL)
-                pUndoStack=new Container(1024,16,16);
-            pUndoStack->Insert(pRedoStack->Remove((sal_uIntPtr)0),(sal_uIntPtr)0);
+                pUndoStack=new std::deque<SfxUndoAction*>;
+            pUndoStack->push_front((SfxUndoAction*) pRedoStack->Remove((sal_uIntPtr)0));
             mbUndoEnabled = bWasUndoEnabled;
         }
     }
@@ -510,11 +514,12 @@ void SdrModel::ImpPostUndoAction(SdrUndoAction* pUndo)
         else
         {
             if (pUndoStack==NULL)
-                pUndoStack=new Container(1024,16,16);
-            pUndoStack->Insert(pUndo,(sal_uIntPtr)0);
-            while (pUndoStack->Count()>nMaxUndoCount)
+                pUndoStack=new std::deque<SfxUndoAction*>;
+            pUndoStack->push_front(pUndo);
+            while (pUndoStack->size()>nMaxUndoCount)
             {
-                delete (SfxUndoAction*)pUndoStack->Remove(pUndoStack->Count()-1);
+                delete pUndoStack->back();
+                pUndoStack->pop_back();
             }
             if (pRedoStack!=NULL)
                 pRedoStack->Clear();
