@@ -3716,9 +3716,12 @@ if test "$cross_compiling" = "yes"; then
     test -n "$with_system_libxml_for_build" && sub_conf_opts="$sub_conf_opts --with-system-libxml"
     test "$WITH_MINGW" = "yes" && sub_conf_opts="$sub_conf_opts --enable-winegcc"
     sub_conf_opts="$sub_conf_opts $with_build_platform_configure_options"
+    # Don't bother having configure look for stuff not needed for the build platform anyway
     ./configure \
-        --disable-mozilla \
+        --disable-graphite \
         --disable-build-mozilla \
+        --disable-mozilla \
+        --disable-postgresql-sdbc \
         --disable-zenity \
         --with-num-cpus="$with_num_cpus" \
         --with-max-jobs="$with_max_jobs" \
