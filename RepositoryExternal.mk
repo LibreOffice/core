@@ -411,15 +411,33 @@ $(call gb_LinkTarget_add_libs,$(1),$(LIBXSLT_LIBS))
 
 endef
 
+define gb_LinkTarget__use_libexslt
+$(call gb_LinkTarget_set_include,$(1),\
+	$$(INCLUDE) \
+	$(LIBEXSLT_CFLAGS) \
+)
+
+$(call gb_LinkTarget_add_libs,$(1),$(LIBEXSLT_LIBS))
+
+endef
+
 else # !SYSTEM_LIBXSLT
 
 $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
+	exslt \
 	xslt \
 ))
 
 define gb_LinkTarget__use_libxslt
 $(call gb_LinkTarget_use_libraries,$(1),\
 	xslt \
+)
+
+endef
+
+define gb_LinkTarget__use_libexslt
+$(call gb_LinkTarget_use_libraries,$(1),\
+	exslt \
 )
 
 endef

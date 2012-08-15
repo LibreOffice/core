@@ -6721,10 +6721,13 @@ if test "$with_system_libxml" = "yes"; then
     if test "$_os" = "Darwin"; then
         dnl make sure to use SDK path
         LIBXSLT_CFLAGS="-I$MACOSX_SDK_PATH/usr/include/libxml2"
+        LIBEXSLT_CFLAGS="$LIBXSLT_CFLAGS"
         dnl omit -L/usr/lib
         LIBXSLT_LIBS="-lxslt -lxml2 -lz -lpthread -liconv -lm"
+        LIBEXSLT_LIBS="-lexslt $LIBXSLT_LIBS"
     else
         PKG_CHECK_MODULES(LIBXSLT, libxslt)
+        PKG_CHECK_MODULES(LIBEXSLT, libexslt)
     fi
 
     dnl Check for xsltproc
@@ -6734,6 +6737,7 @@ if test "$with_system_libxml" = "yes"; then
     fi
 
     libo_MINGW_CHECK_DLL([LIBXSLT], [libxslt])
+    libo_MINGW_CHECK_DLL([LIBEXSLT], [libexslt])
     libo_MINGW_TRY_DLL([ICONV], [iconv])
 else
     AC_MSG_RESULT([internal])
@@ -6753,9 +6757,12 @@ if test -z "$SYSTEM_LIBXSLT_FOR_BUILD"; then
 fi
 AC_SUBST(SYSTEM_LIBXSLT_FOR_BUILD)
 
+AC_SUBST(LIBEXSLT_CFLAGS)
+AC_SUBST(LIBEXSLT_LIBS)
 AC_SUBST(LIBXSLT_CFLAGS)
 AC_SUBST(LIBXSLT_LIBS)
 AC_SUBST(XSLTPROC)
+AC_SUBST([MINGW_LIBEXSLT_DLL])
 AC_SUBST([MINGW_LIBXSLT_DLL])
 AC_SUBST([MINGW_ICONV_DLL])
 

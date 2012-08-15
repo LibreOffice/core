@@ -115,6 +115,7 @@ $(eval $(call gb_InstallModule_define_mingw_dll_if_set,scp2/ooo,\
 	MINGW_INTL_DLL \
 	MINGW_JPEG_DLL \
 	MINGW_LCMS2_DLL \
+	MINGW_LIBEXSLT_DLL \
 	MINGW_LIBXML_DLL \
 	MINGW_LIBXSLT_DLL \
 	MINGW_LPSOLVE_DLL \
