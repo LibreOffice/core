@@ -1968,6 +1968,20 @@ endif # DESKTOP
 
 ### Jars ############################################################
 
+ifeq ($(SYSTEM_HSQLDB),YES)
+
+define gb_Jar__use_hsqldb
+$(call gb_Jar_use_system_jar,$(1),$(HSQLDB_JAR))
+endef
+
+else # !SYSTEM_HSQLDB
+
+define gb_Jar__use_hsqldb
+$(call gb_Jar_use_jar,$(1),$(OUTDIR)/bin/hsqldb.jar)
+endef
+
+endif # SYSTEM_HSQLDB
+
 ifeq ($(SYSTEM_SAXON),YES)
 
 define gb_Jar__use_saxon

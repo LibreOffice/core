@@ -27,15 +27,9 @@
 
 $(eval $(call gb_Jar_Jar,sdbc_hsqldb))
 
-ifeq ($(SYSTEM_HSQLDB),YES)
-$(eval $(call gb_Jar_use_jars,sdbc_hsqldb,\
-	$(HSQLDB_JAR) \
+$(eval $(call gb_Jar_use_externals,sdbc_hsqldb,\
+	hsqldb \
 ))
-else
-$(eval $(call gb_Jar_use_jars,sdbc_hsqldb,\
-	$(OUTDIR)/bin/hsqldb.jar \
-))
-endif
 
 # FIXME: is this really necessary?
 $(eval $(call gb_Jar_add_manifest_classpath,sdbc_hsqldb,\
