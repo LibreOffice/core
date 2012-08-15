@@ -20,8 +20,6 @@
 #ifndef _SVDGLOB_HXX
 #define _SVDGLOB_HXX
 
-#include <tools/contnr.hxx>
-
 #include <tools/resid.hxx>
 #include <tools/string.hxx>
 
