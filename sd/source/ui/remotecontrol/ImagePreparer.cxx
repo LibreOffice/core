@@ -68,7 +68,6 @@ ImagePreparer::~ImagePreparer()
 
 void ImagePreparer::execute()
 {
-    fprintf( stderr, "ImagePreparer running\n" );
     sal_uInt32 aSlides = xController->getSlideCount();
     for ( sal_uInt32 i = 0; i < aSlides; i++ )
     {
@@ -78,7 +77,6 @@ void ImagePreparer::execute()
         }
         sendPreview( i );
     }
-    fprintf( stderr, "Preparing slide notes\n" );
     for ( sal_uInt32 i = 0; i < aSlides; i++ )
     {
         if ( !xController->isRunning() ) // stopped/disposed of.
@@ -273,7 +271,7 @@ OString ImagePreparer::notesToHtml( sal_uInt32 aSlideNumber )
 // Code copied from sdremote/source/presenter/PresenterNotesView.cxx
 OString ImagePreparer::prepareNotes( sal_uInt32 aSlideNumber )
 {
-    OUString aRet("");
+    OUStringBuffer aRet;
 
     if ( !xController->isRunning() )
         return "";
@@ -312,7 +310,8 @@ OString ImagePreparer::prepareNotes( sal_uInt32 aSlideNumber )
                 uno::Reference<text::XTextRange> xText (xServiceName, UNO_QUERY);
                 if (xText.is())
                 {
-                    aRet += xText->getString();
+                    aRet.append(xText->getString());
+                    aRet.append("<br/>");
                 }
             }
             else
@@ -328,15 +327,25 @@ OString ImagePreparer::prepareNotes( sal_uInt32 aSlideNumber )
                             xIndexAccess->getByIndex(nIndex), UNO_QUERY);
                         if (xText.is())
                         {
-                            aRet += xText->getString();
+                            aRet.append(xText->getString());
+                            aRet.append("<br/>");
                         }
                     }
                 }
             }
         }
     }
+    // Replace all newlines with <br\> tags
+    for ( sal_Int32 i = 0; i < aRet.getLength(); i++ )
+    {
+        if ( aRet[i] == '\n' )
+        {
+            aRet[i]=  '<';
+            aRet.insert( i+1, "br/>" );
+        }
+    }
     return OUStringToOString(
-        aRet, RTL_TEXTENCODING_UTF8 );
+        aRet.makeStringAndClear(), RTL_TEXTENCODING_UTF8 );
 }
 
 sal_Bool ExportTo( uno::Reference< drawing::XDrawPage>& aNotesPage, String aUrl )
@@ -381,11 +390,6 @@ sal_Bool ExportTo( uno::Reference< drawing::XDrawPage>& aNotesPage, String aUrl 
                 }
         }
     }
-
-    if (xExporter.is())
-        fprintf( stderr, "Is!\n" );
-    else
-        fprintf( stderr, "Isn't\n" );
 
     if ( xExporter.is() )
     {

@@ -23,7 +23,6 @@ public class AboutDialogBuilder extends AlertDialog.Builder {
         View aLayout = aInflater.inflate(R.layout.dialog_about, null);
 
         setView(aLayout);
-        //        setContentView(R.layout.dialog_about);
 
         //        setTitle(R.string.about);
         setPositiveButton(
