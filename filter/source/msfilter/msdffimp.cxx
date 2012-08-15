@@ -4434,6 +4434,10 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                         }
                         if ( GetPropertyValue( DFF_Prop_gtextFStrikethrough, 0 ) & 0x1000 ) // SJ: Font Kerning On ?
                             aSet.Put( SvxKerningItem( 1, EE_CHAR_KERNING ) );
+
+                        // #119496# the resize autoshape to fit text attr of word art in MS PPT is always false
+                        aSet.Put( SdrTextAutoGrowHeightItem( sal_False ) );
+                        aSet.Put( SdrTextAutoGrowWidthItem( sal_False ) );
                     }
                     pRet->SetMergedItemSet( aSet );
 
