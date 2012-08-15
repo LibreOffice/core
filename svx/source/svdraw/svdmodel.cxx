@@ -227,7 +227,7 @@ void SdrModel::ImpCtor(SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* _pEmbe
 SdrModel::SdrModel(SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* pPers, sal_Bool bLoadRefCounts):
     aReadDate( DateTime::EMPTY ),
     maMaPag(),
-    maPages(1024,32,32)
+    maPages()
 {
 #ifdef TIMELOG
     RTL_LOGFILE_CONTEXT_AUTHOR ( aLog, "svx", "aw93748", "SdrModel::SdrModel(...)" );
@@ -240,7 +240,7 @@ SdrModel::SdrModel(SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* pPers, sal
 SdrModel::SdrModel(const String& rPath, SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* pPers, sal_Bool bLoadRefCounts):
     aReadDate( DateTime::EMPTY ),
     maMaPag(),
-    maPages(1024,32,32),
+    maPages(),
     aTablePath(rPath)
 {
 #ifdef TIMELOG
@@ -254,7 +254,7 @@ SdrModel::SdrModel(const String& rPath, SfxItemPool* pPool, ::comphelper::IEmbed
 SdrModel::SdrModel(SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* pPers, bool bUseExtColorTable, sal_Bool bLoadRefCounts):
     aReadDate( DateTime::EMPTY ),
     maMaPag(),
-    maPages(1024,32,32)
+    maPages()
 {
 #ifdef TIMELOG
     RTL_LOGFILE_CONTEXT_AUTHOR ( aLog, "svx", "aw93748", "SdrModel::SdrModel(...)" );
@@ -267,7 +267,7 @@ SdrModel::SdrModel(SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* pPers, boo
 SdrModel::SdrModel(const String& rPath, SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* pPers, bool bUseExtColorTable, sal_Bool bLoadRefCounts):
     aReadDate( DateTime::EMPTY ),
     maMaPag(),
-    maPages(1024,32,32),
+    maPages(),
     aTablePath(rPath)
 {
 #ifdef TIMELOG
@@ -283,7 +283,7 @@ SdrModel::SdrModel(const SdrModel& /*rSrcModel*/):
     tools::WeakBase< SdrModel >(),
     aReadDate( DateTime::EMPTY ),
     maMaPag(),
-    maPages(1024,32,32)
+    maPages()
 {
 #ifdef TIMELOG
     RTL_LOGFILE_CONTEXT_AUTHOR ( aLog, "svx", "aw93748", "SdrModel::SdrModel(...)" );
@@ -732,7 +732,7 @@ void SdrModel::ClearModel(sal_Bool bCalledFromDestructor)
     {
         DeletePage( (sal_uInt16)i );
     }
-    maPages.Clear();
+    maPages.clear();
     PageListChanged();
 
     // delete all Masterpages
@@ -1427,11 +1427,10 @@ void SdrModel::RecalcPageNums(bool bMaster)
     }
     else
     {
-        Container& rPL=maPages;
-        sal_uInt16 nAnz=sal_uInt16(rPL.Count());
+        sal_uInt16 nAnz=sal_uInt16(maPages.size());
         sal_uInt16 i;
         for (i=0; i<nAnz; i++) {
-            SdrPage* pPg=(SdrPage*)(rPL.GetObject(i));
+            SdrPage* pPg=maPages[i];
             pPg->SetPageNum(i);
         }
         bPagNumsDirty=sal_False;
@@ -1442,7 +1441,7 @@ void SdrModel::InsertPage(SdrPage* pPage, sal_uInt16 nPos)
 {
     sal_uInt16 nAnz=GetPageCount();
     if (nPos>nAnz) nPos=nAnz;
-    maPages.Insert(pPage,nPos);
+    maPages.insert(maPages.begin()+nPos,pPage);
     PageListChanged();
     pPage->SetInserted(sal_True);
     pPage->SetPageNum(nPos);
@@ -1462,7 +1461,8 @@ void SdrModel::DeletePage(sal_uInt16 nPgNum)
 
 SdrPage* SdrModel::RemovePage(sal_uInt16 nPgNum)
 {
-    SdrPage* pPg=(SdrPage*)maPages.Remove(nPgNum);
+    SdrPage* pPg=maPages[nPgNum];
+    maPages.erase(maPages.begin()+nPgNum);
     PageListChanged();
     if (pPg!=NULL) {
         pPg->SetInserted(sal_False);
@@ -1477,7 +1477,8 @@ SdrPage* SdrModel::RemovePage(sal_uInt16 nPgNum)
 
 void SdrModel::MovePage(sal_uInt16 nPgNum, sal_uInt16 nNewPos)
 {
-    SdrPage* pPg=(SdrPage*)maPages.Remove(nPgNum);
+    SdrPage* pPg=maPages[nPgNum];
+    maPages.erase(maPages.begin()+nPgNum);
     PageListChanged();
     if (pPg!=NULL) {
         pPg->SetInserted(sal_False);
@@ -1986,19 +1987,19 @@ SvxNumType SdrModel::GetPageNumType() const
 
 const SdrPage* SdrModel::GetPage(sal_uInt16 nPgNum) const
 {
-    DBG_ASSERT(nPgNum < maPages.Count(), "SdrModel::GetPage: Access out of range (!)");
-    return (SdrPage*)(maPages.GetObject(nPgNum));
+    DBG_ASSERT(nPgNum < maPages.size(), "SdrModel::GetPage: Access out of range (!)");
+    return maPages[nPgNum];
 }
 
 SdrPage* SdrModel::GetPage(sal_uInt16 nPgNum)
 {
-    DBG_ASSERT(nPgNum < maPages.Count(), "SdrModel::GetPage: Access out of range (!)");
-    return (SdrPage*)(maPages.GetObject(nPgNum));
+    DBG_ASSERT(nPgNum < maPages.size(), "SdrModel::GetPage: Access out of range (!)");
+    return maPages[nPgNum];
 }
 
 sal_uInt16 SdrModel::GetPageCount() const
 {
-    return sal_uInt16(maPages.Count());
+    return sal_uInt16(maPages.size());
 }
 
 void SdrModel::PageListChanged()

@@ -33,7 +33,6 @@
 #include <cppuhelper/weakref.hxx>
 #include <sot/storage.hxx>
 #include <tools/link.hxx>
-#include <tools/contnr.hxx>
 #include <tools/weakbase.hxx>
 #include <vcl/mapmod.hxx>
 #include <svl/brdcst.hxx>
@@ -165,7 +164,7 @@ class SVX_DLLPUBLIC SdrModel : public SfxBroadcaster, public tools::WeakBase< Sd
 protected:
     DateTime       aReadDate;  // Datum des Einstreamens
     std::vector<SdrPage*> maMaPag;     // StammSeiten (Masterpages)
-    Container      maPages;
+    std::vector<SdrPage*> maPages;
     Link           aUndoLink;  // Link fuer einen NotifyUndo-Handler
     Link           aIOProgressLink;
     String         aTablePath;
