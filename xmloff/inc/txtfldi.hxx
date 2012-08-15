@@ -1077,7 +1077,6 @@ class XMLMacroFieldImportContext : public XMLTextFieldImportContext
 
     ::rtl::OUString sMacro; // macro for old documents (pre 638i)
 
-    sal_Bool bMacroOK;
     sal_Bool bDescriptionOK;
 
 public:
@@ -1122,11 +1121,9 @@ class XMLReferenceFieldImportContext : public XMLTextFieldImportContext
     sal_uInt16 nElementToken;
     sal_Int16 nSource;
     sal_Int16 nType;
-    sal_Int16 nSequenceNumber;
 
     sal_Bool bNameOK;
     sal_Bool bTypeOK;
-    sal_Bool bSeqNumberOK;
 
 public:
 
@@ -1402,7 +1399,6 @@ class XMLScriptImportContext : public XMLTextFieldImportContext
 
     sal_Bool bContentOK;
     sal_Bool bScriptTypeOK;
-    sal_Bool bUrlContent;
 
 public:
 

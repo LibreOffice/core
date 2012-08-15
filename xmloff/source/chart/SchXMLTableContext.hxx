@@ -108,12 +108,10 @@ public:
 class SchXMLTableColumnsContext : public SvXMLImportContext
 {
 private:
-    SchXMLImportHelper& mrImportHelper;
     SchXMLTable& mrTable;
 
 public:
-    SchXMLTableColumnsContext( SchXMLImportHelper& rImpHelper,
-                               SvXMLImport& rImport,
+    SchXMLTableColumnsContext( SvXMLImport& rImport,
                                const rtl::OUString& rLocalName,
                                SchXMLTable& aTable );
     virtual ~SchXMLTableColumnsContext();
@@ -129,12 +127,10 @@ public:
 class SchXMLTableColumnContext : public SvXMLImportContext
 {
 private:
-    SchXMLImportHelper& mrImportHelper;
     SchXMLTable& mrTable;
 
 public:
-    SchXMLTableColumnContext( SchXMLImportHelper& rImpHelper,
-                              SvXMLImport& rImport,
+    SchXMLTableColumnContext( SvXMLImport& rImport,
                               const rtl::OUString& rLocalName,
                               SchXMLTable& aTable );
     virtual ~SchXMLTableColumnContext();

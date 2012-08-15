@@ -2870,7 +2870,6 @@ XMLReferenceFieldImportContext::XMLReferenceFieldImportContext(
 ,   nType(ReferenceFieldPart::PAGE_DESC)
 ,   bNameOK(sal_False)
 ,   bTypeOK(sal_False)
-,   bSeqNumberOK(sal_False)
 {
 }
 
@@ -3869,7 +3868,6 @@ XMLScriptImportContext::XMLScriptImportContext(
 ,   sPropertyContent(sAPI_content)
 ,   bContentOK(sal_False)
 ,   bScriptTypeOK(sal_False)
-,   bUrlContent(sal_False)
 {
 }
 

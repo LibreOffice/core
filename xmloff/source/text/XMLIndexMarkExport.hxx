@@ -25,7 +25,6 @@
 #include <com/sun/star/uno/Sequence.h>
 
 class SvXMLExport;
-class XMLTextParagraphExport;
 namespace com { namespace sun { namespace star {
     namespace beans { class XPropertySet; }
  } } }
@@ -59,11 +58,9 @@ class XMLIndexMarkExport
 
 
     SvXMLExport& rExport;
-    XMLTextParagraphExport& rParaExport;
 
 public:
-    XMLIndexMarkExport(SvXMLExport& rExp,
-                       XMLTextParagraphExport& rParaExp);
+    XMLIndexMarkExport(SvXMLExport& rExp);
 
     ~XMLIndexMarkExport();
 

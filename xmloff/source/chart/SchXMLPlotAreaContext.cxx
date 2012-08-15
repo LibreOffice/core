@@ -147,7 +147,6 @@ SchXMLPlotAreaContext::SchXMLPlotAreaContext(
     SchXMLImportHelper& rImpHelper,
     SvXMLImport& rImport, const rtl::OUString& rLocalName,
     const rtl::OUString& rXLinkHRefAttributeToIndicateDataProvider,
-    uno::Sequence< chart::ChartSeriesAddress >& rSeriesAddresses,
     ::rtl::OUString& rCategoriesAddress,
     ::rtl::OUString& rChartAddress,
     bool& rbHasRangeAtPlotArea,
@@ -161,7 +160,6 @@ SchXMLPlotAreaContext::SchXMLPlotAreaContext(
     const awt::Size & rChartSize ) :
         SvXMLImportContext( rImport, XML_NAMESPACE_CHART, rLocalName ),
         mrImportHelper( rImpHelper ),
-        mrSeriesAddresses( rSeriesAddresses ),
         mrCategoriesAddress( rCategoriesAddress ),
         mrSeriesDefaultsAndStyles( rSeriesDefaultsAndStyles ),
         mnNumOfLinesProp( 0 ),
@@ -654,15 +652,13 @@ void SchXMLPlotAreaContext::EndElement()
 
 // ========================================
 
-SchXMLDataPointContext::SchXMLDataPointContext(  SchXMLImportHelper& rImpHelper,
-                                                 SvXMLImport& rImport, const rtl::OUString& rLocalName,
+SchXMLDataPointContext::SchXMLDataPointContext(  SvXMLImport& rImport, const rtl::OUString& rLocalName,
                                                  ::std::list< DataRowPointStyle >& rStyleList,
                                                  const ::com::sun::star::uno::Reference<
                                                     ::com::sun::star::chart2::XDataSeries >& xSeries,
                                                  sal_Int32& rIndex,
                                                  bool bSymbolSizeForSeriesIsMissingInFile ) :
         SvXMLImportContext( rImport, XML_NAMESPACE_CHART, rLocalName ),
-        mrImportHelper( rImpHelper ),
         mrStyleList( rStyleList ),
         m_xSeries( xSeries ),
         mrIndex( rIndex ),

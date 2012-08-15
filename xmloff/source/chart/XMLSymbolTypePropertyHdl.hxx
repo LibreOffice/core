@@ -32,7 +32,6 @@ public:
 
 private:
     bool m_bIsNamedSymbol;
-    sal_Int32 nSymbolType;
 };
 
 #endif  // _XMLSYMBOLTYPEPROPERTYHDL_HXX_

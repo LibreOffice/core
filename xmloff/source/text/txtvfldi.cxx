@@ -115,7 +115,7 @@ XMLVarFieldImportContext::XMLVarFieldImportContext(
     SvXMLImport& rImport, XMLTextImportHelper& rHlp,
     const sal_Char* pServiceName, sal_uInt16 nPrfx,
     const OUString& rLocalName,
-    sal_Bool bName, sal_Bool bFormula, sal_Bool bFormulaDefault,
+    sal_Bool bFormula, sal_Bool bFormulaDefault,
     sal_Bool bDescription, sal_Bool bHelp, sal_Bool bHint, sal_Bool bVisible,
     sal_Bool bIsDisplayFormula,
     sal_Bool bType, sal_Bool bStyle, sal_Bool bValue,
@@ -137,7 +137,6 @@ XMLVarFieldImportContext::XMLVarFieldImportContext(
         bHelpOK(sal_False),
         bHintOK(sal_False),
         bDisplayOK(sal_False),
-        bSetName(bName),
         bSetFormula(bFormula),
         bSetFormulaDefault(bFormulaDefault),
         bSetDescription(bDescription),
@@ -310,12 +309,12 @@ XMLSetVarFieldImportContext::XMLSetVarFieldImportContext(
     SvXMLImport& rImport, XMLTextImportHelper& rHlp,
     const sal_Char* pServiceName, sal_uInt16 nPrfx,
     const OUString& rLocalName, VarType eVarType,
-    sal_Bool bName, sal_Bool bFormula, sal_Bool bFormulaDefault,
+    sal_Bool bFormula, sal_Bool bFormulaDefault,
     sal_Bool bDescription, sal_Bool bHelp, sal_Bool bHint, sal_Bool bVisible, sal_Bool bIsDisplayFormula,
     sal_Bool bType, sal_Bool bStyle, sal_Bool bValue, sal_Bool bPresentation) :
         XMLVarFieldImportContext(rImport, rHlp, pServiceName,
                                  nPrfx, rLocalName,
-                                 bName, bFormula, bFormulaDefault,
+                                 bFormula, bFormulaDefault,
                                  bDescription, bHelp, bHint, bVisible, bIsDisplayFormula,
                                  bType, bStyle, bValue, bPresentation),
         eFieldType(eVarType)
@@ -399,8 +398,8 @@ XMLSequenceFieldImportContext::XMLSequenceFieldImportContext(
     sal_uInt16 nPrfx, const OUString& rLocalName) :
         XMLSetVarFieldImportContext(rImport, rHlp, sAPI_set_expression,
                                     nPrfx, rLocalName, VarTypeSequence,
-                                    // name, formula
-                                    sal_True, sal_True, sal_True,
+                                    // formula
+                                    sal_True, sal_True,
                                     sal_False, sal_False, sal_False, sal_False,
                                     sal_False,
                                     sal_False, sal_False, sal_False, sal_True),
@@ -472,9 +471,9 @@ XMLVariableSetFieldImportContext::XMLVariableSetFieldImportContext(
     sal_uInt16 nPrfx, const OUString& rLocalName) :
         XMLSetVarFieldImportContext(rImport, rHlp, sAPI_set_expression,
                                     nPrfx, rLocalName, VarTypeSimple,
-                                    // name, formula, value&type, style,
+                                    // formula, value&type, style,
                                     // display none
-                                    sal_True, sal_True, sal_True,
+                                    sal_True, sal_True,
                                     sal_False, sal_False, sal_False,
                                     sal_True, sal_False,
                                     sal_True, sal_True, sal_True,
@@ -508,9 +507,9 @@ XMLVariableInputFieldImportContext::XMLVariableInputFieldImportContext(
     const OUString& rLocalName) :
         XMLSetVarFieldImportContext(rImport, rHlp, sAPI_set_expression,
                                     nPrfx, rLocalName, VarTypeSimple,
-                                    // name, description, display none/formula,
+                                    // description, display none/formula,
                                     // value&type, style, formula
-                                    sal_True, sal_True, sal_True,
+                                    sal_True, sal_True,
                                     sal_True, sal_True, sal_True,
                                     sal_True, sal_False,
                                     sal_True, sal_True, sal_True,
@@ -550,8 +549,8 @@ XMLUserFieldImportContext::XMLUserFieldImportContext(
     sal_uInt16 nPrfx, const OUString& rLocalName) :
         XMLSetVarFieldImportContext(rImport, rHlp, sAPI_user, nPrfx,
                                     rLocalName, VarTypeUserField,
-                                    // name, display none/formula, style
-                                    sal_True, sal_False, sal_False,
+                                    // display none/formula, style
+                                    sal_False, sal_False,
                                     sal_False, sal_False, sal_False, sal_True,
                                     sal_True,
                                     sal_False, sal_True, sal_False,
@@ -573,8 +572,8 @@ XMLUserFieldInputImportContext::XMLUserFieldInputImportContext(
     const OUString& rLocalName) :
         XMLVarFieldImportContext(rImport, rHlp, sAPI_input_user,
                                  nPrfx, rLocalName,
-                                 // name, description, style
-                                 sal_True, sal_False, sal_False,
+                                 // description, style
+                                 sal_False, sal_False,
                                  sal_True, sal_False, sal_False,
                                  sal_False, sal_False,
                                  sal_False /*???*/, sal_True, sal_False,
@@ -605,8 +604,8 @@ XMLVariableGetFieldImportContext::XMLVariableGetFieldImportContext(
     sal_uInt16 nPrfx, const OUString& rLocalName) :
         XMLVarFieldImportContext(rImport, rHlp, sAPI_get_expression,
                                  nPrfx, rLocalName,
-                                 // name, style, display formula
-                                 sal_True, sal_False, sal_False,
+                                 // style, display formula
+                                 sal_False, sal_False,
                                  sal_False, sal_False, sal_False,
                                  sal_False, sal_True,
                                  sal_True, sal_True, sal_False,
@@ -641,7 +640,7 @@ XMLExpressionFieldImportContext::XMLExpressionFieldImportContext(
         XMLVarFieldImportContext(rImport, rHlp, sAPI_get_expression,
                                  nPrfx, rLocalName,
                                  // formula, type, style, display formula
-                                 sal_False, sal_True, sal_True,
+                                 sal_True, sal_True,
                                  sal_False, sal_False, sal_False,
                                  sal_False, sal_True,
                                  sal_True, sal_True, sal_False,
@@ -678,7 +677,7 @@ XMLTextInputFieldImportContext::XMLTextInputFieldImportContext(
         XMLVarFieldImportContext(rImport, rHlp, sAPI_input,
                                  nPrfx, sLocalName,
                                  // description
-                                 sal_False, sal_False, sal_False,
+                                 sal_False, sal_False,
                                  sal_True, sal_True, sal_True,
                                  sal_False, sal_False,
                                  sal_False, sal_False, sal_False,

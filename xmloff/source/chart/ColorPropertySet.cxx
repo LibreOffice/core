@@ -56,13 +56,11 @@ protected:
     virtual sal_Bool SAL_CALL hasPropertyByName( const OUString& Name )  throw (RuntimeException);
 
 private:
-    bool m_bIsFillColor;
     OUString m_aColorPropName;
     Property m_aColorProp;
 };
 
 lcl_ColorPropertySetInfo::lcl_ColorPropertySetInfo( bool bFillColor ) :
-        m_bIsFillColor( bFillColor ),
         // note: length of FillColor and LineColor is 9
         m_aColorPropName( (bFillColor ? "FillColor" : "LineColor"), 9, RTL_TEXTENCODING_ASCII_US ),
         m_aColorProp( m_aColorPropName, -1,

@@ -1368,8 +1368,7 @@ SdXMLPathShapeContext::SdXMLPathShapeContext(
     const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
     uno::Reference< drawing::XShapes >& rShapes,
     sal_Bool bTemporaryShape)
-:   SdXMLShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes, bTemporaryShape ),
-    mbClosed( sal_True )
+:   SdXMLShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes, bTemporaryShape )
 {
 }
 

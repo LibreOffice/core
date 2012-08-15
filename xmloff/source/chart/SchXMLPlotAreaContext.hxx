@@ -32,8 +32,6 @@
 #include "SchXMLChartContext.hxx"
 #include <xmloff/xmlictxt.hxx>
 #include <xmloff/shapeimport.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
-#include <com/sun/star/chart/ChartSeriesAddress.hpp>
 #include <com/sun/star/chart/ChartDataRowSource.hpp>
 
 #include "transporttypes.hxx"
@@ -108,8 +106,6 @@ public:
     SchXMLPlotAreaContext( SchXMLImportHelper& rImpHelper,
                            SvXMLImport& rImport, const rtl::OUString& rLocalName,
                            const rtl::OUString& rXLinkHRefAttributeToIndicateDataProvider,
-                           ::com::sun::star::uno::Sequence<
-                               ::com::sun::star::chart::ChartSeriesAddress >& rSeriesAddresses,
                            ::rtl::OUString& rCategoriesAddress,
                            ::rtl::OUString& rChartAddress,
                            bool& bHasRangeAtPlotArea,
@@ -135,7 +131,6 @@ private:
     ::com::sun::star::uno::Reference< com::sun::star::chart::XDiagram > mxDiagram;
     ::com::sun::star::uno::Reference< com::sun::star::chart2::XChartDocument > mxNewDoc;
     ::std::vector< SchXMLAxis > maAxes;
-    ::com::sun::star::uno::Sequence< ::com::sun::star::chart::ChartSeriesAddress >& mrSeriesAddresses;
     rtl::OUString& mrCategoriesAddress;
     SeriesDefaultsAndStyles& mrSeriesDefaultsAndStyles;
     sal_Int32 mnNumOfLinesProp;
@@ -168,7 +163,6 @@ private:
 class SchXMLDataPointContext : public SvXMLImportContext
 {
 private:
-    SchXMLImportHelper& mrImportHelper;
     ::std::list< DataRowPointStyle >& mrStyleList;
     ::com::sun::star::uno::Reference<
                 ::com::sun::star::chart2::XDataSeries > m_xSeries;
@@ -176,8 +170,7 @@ private:
     bool mbSymbolSizeForSeriesIsMissingInFile;
 
 public:
-    SchXMLDataPointContext(  SchXMLImportHelper& rImpHelper,
-                             SvXMLImport& rImport, const rtl::OUString& rLocalName,
+    SchXMLDataPointContext(  SvXMLImport& rImport, const rtl::OUString& rLocalName,
                              ::std::list< DataRowPointStyle >& rStyleList,
                              const ::com::sun::star::uno::Reference<
                                 ::com::sun::star::chart2::XDataSeries >& xSeries, sal_Int32& rIndex,

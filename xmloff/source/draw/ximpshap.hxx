@@ -229,7 +229,6 @@ class SdXMLPathShapeContext : public SdXMLShapeContext
 {
     rtl::OUString               maD;
     rtl::OUString               maViewBox;
-    sal_Bool                    mbClosed;
 
 public:
     TYPEINFO();

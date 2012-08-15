@@ -50,8 +50,7 @@ using ::com::sun::star::uno::Any;
 
 
 XMLIndexMarkExport::XMLIndexMarkExport(
-    SvXMLExport& rExp,
-    XMLTextParagraphExport& rParaExp)
+    SvXMLExport& rExp)
 :   sLevel(RTL_CONSTASCII_USTRINGPARAM("Level"))
 ,   sUserIndexName(RTL_CONSTASCII_USTRINGPARAM("UserIndexName"))
 ,   sPrimaryKey(RTL_CONSTASCII_USTRINGPARAM("PrimaryKey"))
@@ -65,7 +64,6 @@ XMLIndexMarkExport::XMLIndexMarkExport(
 ,   sSecondaryKeyReading(RTL_CONSTASCII_USTRINGPARAM("SecondaryKeyReading"))
 ,   sMainEntry(RTL_CONSTASCII_USTRINGPARAM("IsMainEntry"))
 ,   rExport(rExp)
-,   rParaExport(rParaExp)
 {
 }
 

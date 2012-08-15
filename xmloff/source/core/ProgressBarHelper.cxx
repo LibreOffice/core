@@ -41,7 +41,6 @@
 using namespace ::com::sun::star;
 
 const sal_Int32 nDefaultProgressBarRange = 1000000;
-const float fProgressStep = 0.5;
 
 ProgressBarHelper::ProgressBarHelper(const ::com::sun::star::uno::Reference < ::com::sun::star::task::XStatusIndicator>& xTempStatusIndicator,
                                     const sal_Bool bTempStrict)
@@ -49,7 +48,6 @@ ProgressBarHelper::ProgressBarHelper(const ::com::sun::star::uno::Reference < ::
 , nRange(nDefaultProgressBarRange)
 , nReference(100)
 , nValue(0)
-, fOldPercent(0.0)
 , bStrict(bTempStrict)
 , bRepeat(sal_True)
 #ifdef DBG_UTIL

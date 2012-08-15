@@ -201,13 +201,10 @@ class SdXMLImport: public SvXMLImport
     SvXMLTokenMap*              mpDocElemTokenMap;
     SvXMLTokenMap*              mpBodyElemTokenMap;
     SvXMLTokenMap*              mpStylesElemTokenMap;
-    SvXMLTokenMap*              mpAutoStylesElemTokenMap;
     SvXMLTokenMap*              mpMasterPageElemTokenMap;
     SvXMLTokenMap*              mpMasterPageAttrTokenMap;
     SvXMLTokenMap*              mpPageMasterAttrTokenMap;
     SvXMLTokenMap*              mpPageMasterStyleAttrTokenMap;
-    SvXMLTokenMap*              mpDocStyleAttrTokenMap;
-    SvXMLTokenMap*              mpDocStyleElemTokenMap;
     SvXMLTokenMap*              mpDrawPageAttrTokenMap;
     SvXMLTokenMap*              mpDrawPageElemTokenMap;
     SvXMLTokenMap*              mpPresentationPlaceholderAttrTokenMap;

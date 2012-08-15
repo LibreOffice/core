@@ -36,7 +36,6 @@ class XMLOFF_DLLPUBLIC ProgressBarHelper
             sal_Int32                                                                       nRange;
             sal_Int32                                                                       nReference;
             sal_Int32                                                                       nValue;
-            double                                                                          fOldPercent;
             sal_Bool                                                                        bStrict;
             // #96469#; if the value goes over the Range the progressbar starts again
             sal_Bool                                                                        bRepeat;

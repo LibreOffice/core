@@ -261,11 +261,11 @@ SvXMLImportContext *SchXMLTableContext::CreateChildContext(
             mrTable.bHasHeaderColumn = true;
             // fall through intended
         case XML_TOK_TABLE_COLUMNS:
-            pContext = new SchXMLTableColumnsContext( mrImportHelper, GetImport(), rLocalName, mrTable );
+            pContext = new SchXMLTableColumnsContext( GetImport(), rLocalName, mrTable );
             break;
 
         case XML_TOK_TABLE_COLUMN:
-            pContext = new SchXMLTableColumnContext( mrImportHelper, GetImport(), rLocalName, mrTable );
+            pContext = new SchXMLTableColumnContext( GetImport(), rLocalName, mrTable );
             break;
 
         case XML_TOK_TABLE_HEADER_ROWS:
@@ -430,12 +430,10 @@ void SchXMLTableContext::setColumnPermutation( const uno::Sequence< sal_Int32 > 
 // ----------------------------------------
 
 SchXMLTableColumnsContext::SchXMLTableColumnsContext(
-    SchXMLImportHelper& rImpHelper,
     SvXMLImport& rImport,
     const rtl::OUString& rLocalName,
     SchXMLTable& aTable ) :
         SvXMLImportContext( rImport, XML_NAMESPACE_TABLE, rLocalName ),
-        mrImportHelper( rImpHelper ),
         mrTable( aTable )
 {
 }
@@ -454,7 +452,7 @@ SvXMLImportContext* SchXMLTableColumnsContext::CreateChildContext(
     if( nPrefix == XML_NAMESPACE_TABLE &&
         IsXMLToken( rLocalName, XML_TABLE_COLUMN ) )
     {
-        pContext = new SchXMLTableColumnContext( mrImportHelper, GetImport(), rLocalName, mrTable );
+        pContext = new SchXMLTableColumnContext( GetImport(), rLocalName, mrTable );
     }
     else
         pContext = new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
@@ -467,12 +465,10 @@ SvXMLImportContext* SchXMLTableColumnsContext::CreateChildContext(
 // ----------------------------------------
 
 SchXMLTableColumnContext::SchXMLTableColumnContext(
-    SchXMLImportHelper& rImpHelper,
     SvXMLImport& rImport,
     const rtl::OUString& rLocalName,
     SchXMLTable& aTable ) :
         SvXMLImportContext( rImport, XML_NAMESPACE_TABLE, rLocalName ),
-        mrImportHelper( rImpHelper ),
         mrTable( aTable )
 {
 }

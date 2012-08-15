@@ -77,12 +77,10 @@ namespace
 class SchXMLDomain2Context : public SvXMLImportContext
 {
 private:
-    SchXMLImportHelper& mrImportHelper;
     ::std::vector< OUString > & mrAddresses;
 
 public:
-    SchXMLDomain2Context( SchXMLImportHelper& rImpHelper,
-                          SvXMLImport& rImport,
+    SchXMLDomain2Context( SvXMLImport& rImport,
                           sal_uInt16 nPrefix,
                           const rtl::OUString& rLocalName,
                           ::std::vector< OUString > & rAddresses );
@@ -91,13 +89,11 @@ public:
 };
 
 SchXMLDomain2Context::SchXMLDomain2Context(
-    SchXMLImportHelper& rImpHelper,
     SvXMLImport& rImport,
     sal_uInt16 nPrefix,
     const rtl::OUString& rLocalName,
     ::std::vector< ::rtl::OUString > & rAddresses ) :
         SvXMLImportContext( rImport, nPrefix, rLocalName ),
-        mrImportHelper( rImpHelper ),
         mrAddresses( rAddresses )
 {
 }
@@ -649,7 +645,7 @@ SvXMLImportContext* SchXMLSeries2Context::CreateChildContext(
             {
                 m_bHasDomainContext = true;
                 pContext = new SchXMLDomain2Context(
-                    mrImportHelper, GetImport(),
+                    GetImport(),
                     nPrefix, rLocalName,
                     maDomainAddresses );
             }
@@ -681,7 +677,7 @@ SvXMLImportContext* SchXMLSeries2Context::CreateChildContext(
             break;
 
         case XML_TOK_SERIES_DATA_POINT:
-            pContext = new SchXMLDataPointContext( mrImportHelper, GetImport(), rLocalName,
+            pContext = new SchXMLDataPointContext( GetImport(), rLocalName,
                                                    mrStyleList, m_xSeries, mnDataPointIndex, mbSymbolSizeIsMissingInFile );
             break;
 

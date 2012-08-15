@@ -456,7 +456,7 @@ void SAL_CALL SdXMLExport::setSourceDocument( const Reference< lang::XComponent 
         // construct PropertySetMapper
         UniReference < XMLPropertySetMapper > xMapper = new XMLShapePropertySetMapper( aFactoryRef);
 
-        mpPropertySetMapper = new XMLShapeExportPropertyMapper( xMapper, (XMLTextListAutoStylePool*)&GetTextParagraphExport()->GetListAutoStylePool(), *this );
+        mpPropertySetMapper = new XMLShapeExportPropertyMapper( xMapper, *this );
         // set lock to avoid deletion
         mpPropertySetMapper->acquire();
 

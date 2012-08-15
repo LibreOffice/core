@@ -600,7 +600,6 @@ TYPEINIT1( SdXMLNumberFormatImportContext, SvXMLImportContext );
 
 SdXMLNumberFormatImportContext::SdXMLNumberFormatImportContext( SdXMLImport& rImport, sal_uInt16 nPrfx, const rtl::OUString& rLocalName, SvXMLNumImpData* pNewData, sal_uInt16 nNewType, const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList, SvXMLStylesContext& rStyles)
 :   SvXMLNumFormatContext(rImport, nPrfx, rLocalName, pNewData, nNewType, xAttrList, rStyles),
-    mrImport( rImport ),
     mbAutomatic( sal_False ),
     mnIndex(0),
     mnKey( -1 )

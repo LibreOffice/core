@@ -1303,7 +1303,7 @@ XMLTextParagraphExport::XMLTextParagraphExport(
                                                               GetExport() );
 
     pSectionExport = new XMLSectionExport( rExp, *this );
-    pIndexMarkExport = new XMLIndexMarkExport( rExp, *this );
+    pIndexMarkExport = new XMLIndexMarkExport( rExp );
 
     if( ! IsBlockMode() &&
         Reference<XRedlinesSupplier>( GetExport().GetModel(), UNO_QUERY ).is())

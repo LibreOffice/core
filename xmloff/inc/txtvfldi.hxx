@@ -160,7 +160,6 @@ private:
     sal_Bool bHintOK;                   /// sHint was set
     sal_Bool bDisplayOK;                /// sDisplayFormula/-None were set
 
-    sal_Bool bSetName;                  /// set sName with ???-property
     sal_Bool bSetFormula;               /// set Formula property
     sal_Bool bSetFormulaDefault;        /// use content as default for formula
     sal_Bool bSetDescription;           /// set sDescription with Hint-property
@@ -182,7 +181,6 @@ public:
         sal_uInt16 nPrfx,               /// namespace prefix
         const ::rtl::OUString& rLocalName,  /// element name w/o prefix
         // config variables for PrepareField behavior:
-        sal_Bool bName,                 /// set sName with ???-property
         sal_Bool bFormula,              /// set Formula property
         sal_Bool bFormulaDefault,       /// use content as default for formula
         sal_Bool bDescription,          /// set sDescription with Hint-property
@@ -310,7 +308,6 @@ public:
         // for finding appropriate field master (see EndElement())
         VarType eVarType,               /// variable type
         // config variables:
-        sal_Bool bName,                 /// see XMLTextFieldImportContext
         sal_Bool bFormula,              /// see XMLTextFieldImportContext
         sal_Bool bFormulaDefault,       /// see XMLTextFieldImportContext
         sal_Bool bDescription,          /// see XMLTextFieldImportContext
@@ -542,7 +539,6 @@ class XMLTableFormulaImportContext : public XMLTextFieldImportContext
     XMLValueImportHelper aValueHelper;
 
     ::rtl::OUString sFormula;
-    sal_Bool bFormulaOK;
 
     sal_Bool bIsShowFormula;
 

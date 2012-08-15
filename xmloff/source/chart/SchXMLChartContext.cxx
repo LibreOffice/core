@@ -54,6 +54,7 @@
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/chart/ChartDataRowSource.hpp>
+#include <com/sun/star/chart/ChartSeriesAddress.hpp>
 #include <com/sun/star/awt/PosSize.hpp>
 #include <com/sun/star/embed/Aspects.hpp>
 #include <com/sun/star/embed/XVisualObject.hpp>
@@ -1013,7 +1014,7 @@ SvXMLImportContext* SchXMLChartContext::CreateChildContext(
         case XML_TOK_CHART_PLOT_AREA:
             pContext = new SchXMLPlotAreaContext( mrImportHelper, GetImport(), rLocalName,
                                                   m_aXLinkHRefAttributeToIndicateDataProvider,
-                                                  maSeriesAddresses, msCategoriesAddress,
+                                                  msCategoriesAddress,
                                                   msChartAddress, m_bHasRangeAtPlotArea, mbAllRangeAddressesAvailable,
                                                   mbColHasLabels, mbRowHasLabels,
                                                   meDataRowSource,

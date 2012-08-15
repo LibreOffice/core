@@ -87,12 +87,10 @@ static SvXMLEnumMapEntry aXMLAxisTypeMap[] =
 class SchXMLCategoriesContext : public SvXMLImportContext
 {
 private:
-    SchXMLImportHelper& m_rImportHelper;
     OUString& mrAddress;
 
 public:
-    SchXMLCategoriesContext( SchXMLImportHelper& rImpHelper,
-                                   SvXMLImport& rImport,
+    SchXMLCategoriesContext( SvXMLImport& rImport,
                                    sal_uInt16 nPrefix,
                                    const OUString& rLocalName,
                                    OUString& rAddress );
@@ -107,7 +105,7 @@ public:
 class DateScaleContext : public SvXMLImportContext
 {
 public:
-    DateScaleContext( SchXMLImportHelper& rImpHelper, SvXMLImport& rImport,
+    DateScaleContext( SvXMLImport& rImport,
                         sal_uInt16 nPrefix, const OUString& rLocalName,
                         const Reference< beans::XPropertySet > xAxisProps );
 
@@ -115,7 +113,6 @@ public:
     virtual void StartElement( const Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
 
 private:
-    SchXMLImportHelper& m_rImportHelper;
     Reference< beans::XPropertySet > m_xAxisProps;
 };
 
@@ -673,7 +670,7 @@ SvXMLImportContext* SchXMLAxisContext::CreateChildContext(
         break;
 
         case XML_TOK_AXIS_CATEGORIES:
-            pContext = new SchXMLCategoriesContext( m_rImportHelper, GetImport(),
+            pContext = new SchXMLCategoriesContext( GetImport(),
                                                           p_nPrefix, rLocalName,
                                                           m_rCategoriesAddress );
             m_aCurrentAxis.bHasCategories = true;
@@ -681,7 +678,7 @@ SvXMLImportContext* SchXMLAxisContext::CreateChildContext(
 
         case XML_TOK_AXIS_DATE_SCALE:
         case XML_TOK_AXIS_DATE_SCALE_EXT:
-            pContext = new DateScaleContext( m_rImportHelper, GetImport(),
+            pContext = new DateScaleContext( GetImport(),
                             p_nPrefix, rLocalName, m_xAxisProps );
             m_bDateScaleImported = true;
             break;
@@ -883,13 +880,11 @@ void SchXMLAxisContext::CorrectAxisPositions( const Reference< chart2::XChartDoc
 // ========================================
 
 SchXMLCategoriesContext::SchXMLCategoriesContext(
-    SchXMLImportHelper& rImpHelper,
     SvXMLImport& rImport,
     sal_uInt16 nPrefix,
     const OUString& rLocalName,
     OUString& rAddress ) :
         SvXMLImportContext( rImport, nPrefix, rLocalName ),
-        m_rImportHelper( rImpHelper ),
         mrAddress( rAddress )
 {
 }
@@ -920,13 +915,11 @@ void SchXMLCategoriesContext::StartElement( const Reference< xml::sax::XAttribut
 // ========================================
 
 DateScaleContext::DateScaleContext(
-    SchXMLImportHelper& rImpHelper,
     SvXMLImport& rImport,
     sal_uInt16 nPrefix,
     const OUString& rLocalName,
     const Reference< beans::XPropertySet > xAxisProps ) :
         SvXMLImportContext( rImport, nPrefix, rLocalName ),
-        m_rImportHelper( rImpHelper ),
         m_xAxisProps( xAxisProps )
 {
 }

@@ -36,7 +36,6 @@
 #include <xmloff/xmlement.hxx>
 #include <xmloff/prhdlfac.hxx>
 #include <xmloff/xmlprmap.hxx>
-#include "xmloff/XMLTextListAutoStylePool.hxx"
 #include <xmloff/xmlexppr.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
@@ -260,8 +259,6 @@ public:
 class XMLShapeExportPropertyMapper : public SvXMLExportPropertyMapper
 {
 private:
-    XMLTextListAutoStylePool *mpListAutoPool;
-    SvXMLExport& mrExport;
     SvxXMLNumRuleExport maNumRuleExp;
     sal_Bool mbIsInAutoStyles;
 
@@ -275,7 +272,7 @@ protected:
         ::com::sun::star::uno::Reference<
             ::com::sun::star::beans::XPropertySet > rPropSet ) const;
 public:
-    XMLShapeExportPropertyMapper( const UniReference< XMLPropertySetMapper >& rMapper, XMLTextListAutoStylePool *pListAutoPool, SvXMLExport& rExport );
+    XMLShapeExportPropertyMapper( const UniReference< XMLPropertySetMapper >& rMapper, SvXMLExport& rExport );
     virtual ~XMLShapeExportPropertyMapper();
 
     virtual void        handleElementItem(

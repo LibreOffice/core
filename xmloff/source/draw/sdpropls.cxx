@@ -1186,10 +1186,8 @@ XMLShapePropertySetMapper::~XMLShapePropertySetMapper()
 
 // ----------------------------------------
 
-XMLShapeExportPropertyMapper::XMLShapeExportPropertyMapper( const UniReference< XMLPropertySetMapper >& rMapper, XMLTextListAutoStylePool *pListAutoPool, SvXMLExport& rExport )
+XMLShapeExportPropertyMapper::XMLShapeExportPropertyMapper( const UniReference< XMLPropertySetMapper >& rMapper, SvXMLExport& rExport )
 : SvXMLExportPropertyMapper( rMapper )
-, mpListAutoPool( pListAutoPool )
-, mrExport( rExport )
 , maNumRuleExp( rExport )
 , mbIsInAutoStyles( sal_True )
 , msCDATA( GetXMLToken(XML_CDATA))

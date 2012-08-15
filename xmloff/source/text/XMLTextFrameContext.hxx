@@ -36,7 +36,6 @@ namespace com { namespace sun { namespace star {
     namespace text { class XTextCursor; class XTextContent; }
 } } }
 
-class SvXMLAttributeList;
 class XMLTextFrameContextHyperlink_Impl;
 
 class XMLTextFrameContext : public SvXMLImportContext
@@ -46,7 +45,6 @@ class XMLTextFrameContext : public SvXMLImportContext
 
     SvXMLImportContextRef m_xImplContext;
     SvXMLImportContextRef m_xReplImplContext;
-    SvXMLAttributeList *m_pAttrList;
 
     XMLTextFrameContextHyperlink_Impl   *m_pHyperlink;
     // Implement Title/Description Elements UI (#i73249#)

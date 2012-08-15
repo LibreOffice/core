@@ -1025,9 +1025,7 @@ SvXMLExportPropertyMapper* XMLShapeExport::CreateShapePropMapper(
     UniReference< XMLPropertyHandlerFactory > xFactory = new XMLSdPropHdlFactory( rExport.GetModel(), rExport );
     UniReference < XMLPropertySetMapper > xMapper = new XMLShapePropertySetMapper( xFactory );
     SvXMLExportPropertyMapper* pResult =
-        new XMLShapeExportPropertyMapper( xMapper,
-                                          (XMLTextListAutoStylePool*)&rExport.GetTextParagraphExport()->GetListAutoStylePool(),
-                                          rExport );
+        new XMLShapeExportPropertyMapper( xMapper, rExport );
     // chain text attributes
     return pResult;
 }
@@ -1275,7 +1273,7 @@ const rtl::Reference< XMLTableExport >& XMLShapeExport::GetShapeTableExport()
     {
         rtl::Reference< XMLPropertyHandlerFactory > xFactory( new XMLSdPropHdlFactory( mrExport.GetModel(), mrExport ) );
         UniReference < XMLPropertySetMapper > xMapper( new XMLShapePropertySetMapper( xFactory.get() ) );
-        rtl::Reference< SvXMLExportPropertyMapper > xPropertySetMapper( new XMLShapeExportPropertyMapper( xMapper, (XMLTextListAutoStylePool*)&mrExport.GetTextParagraphExport()->GetListAutoStylePool(), mrExport ) );
+        rtl::Reference< SvXMLExportPropertyMapper > xPropertySetMapper( new XMLShapeExportPropertyMapper( xMapper, mrExport ) );
         mxShapeTableExport = new XMLTableExport( mrExport, xPropertySetMapper, xFactory );
     }
 

@@ -34,8 +34,6 @@ class SdXMLNumberFormatImportContext : public SvXMLNumFormatContext
 private:
     friend class SdXMLNumberFormatMemberImportContext;
 
-    SdXMLImport& mrImport;
-
     sal_Bool    mbTimeStyle;
     sal_Bool    mbAutomatic;
     sal_uInt8   mnElements[16];
