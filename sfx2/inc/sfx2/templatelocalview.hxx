@@ -18,6 +18,12 @@
 class SfxDocumentTemplates;
 class TemplateLocalViewItem;
 
+namespace com {
+    namespace sun { namespace star { namespace frame {
+        class XModel;
+    }   }   }
+}
+
 class SFX2_DLLPUBLIC TemplateLocalView : public TemplateAbstractView
 {
 public:
@@ -56,6 +62,10 @@ public:
     bool copyFrom(TemplateLocalViewItem *pItem, const rtl::OUString &rPath);
 
     bool exportTo (const sal_uInt16 nItemId, const sal_uInt16 nRegionItemId, const OUString &rName);
+
+    bool saveTemplateAs (const TemplateLocalViewItem *pDstItem,
+                         com::sun::star::uno::Reference<com::sun::star::frame::XModel> &rModel,
+                         const OUString &rName);
 
 private:
 

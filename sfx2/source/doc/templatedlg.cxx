@@ -271,6 +271,11 @@ SfxTemplateManagerDlg::~SfxTemplateManagerDlg ()
     delete mpTemplateDefaultMenu;
 }
 
+void SfxTemplateManagerDlg::setDocumentModel(const uno::Reference<frame::XModel> &rModel)
+{
+    m_xModel = rModel;
+}
+
 IMPL_LINK_NOARG(SfxTemplateManagerDlg,ViewAllHdl)
 {
     mpCurView->filterTemplatesByApp(FILTER_APP_NONE);
@@ -1101,6 +1106,8 @@ void SfxTemplateManagerDlg::OnRepositoryDelete()
 
 void SfxTemplateManagerDlg::OnTemplateSaveAs()
 {
+    assert(m_xModel);
+
     if (!maView->isOverlayVisible() && maSelFolders.empty())
     {
         ErrorBox(this, WB_OK,SfxResId(STR_MSG_ERROR_SELECT_FOLDER).toString()).Execute();
@@ -1115,6 +1122,32 @@ void SfxTemplateManagerDlg::OnTemplateSaveAs()
 
         if (!aName.isEmpty())
         {
+            OUString aFolderList;
+
+            if (maView->isOverlayVisible())
+            {
+            }
+            else
+            {
+                std::set<const ThumbnailViewItem*>::const_iterator pIter;
+                for (pIter = maSelFolders.begin(); pIter != maSelFolders.end(); ++pIter)
+                {
+                    TemplateLocalViewItem *pItem = (TemplateLocalViewItem*)(*pIter);
+                    if (!maView->saveTemplateAs(pItem,m_xModel,aName))
+                    {
+                        if (aFolderList.isEmpty())
+                            aFolderList = (*pIter)->maTitle;
+                        else
+                            aFolderList = aFolderList + "\n" + (*pIter)->maTitle;
+                    }
+                }
+            }
+
+            maView->reload();
+
+            if (!aFolderList.isEmpty())
+            {
+            }
         }
     }
 }

@@ -29,6 +29,7 @@ class ToolBox;
 namespace com {
     namespace sun { namespace star { namespace frame {
         class XComponentLoader;
+        class XModel;
     }   }   }
 }
 
@@ -39,6 +40,8 @@ public:
     SfxTemplateManagerDlg (Window *parent = NULL);
 
     ~SfxTemplateManagerDlg ();
+
+    void setDocumentModel (const com::sun::star::uno::Reference<com::sun::star::frame::XModel> &rModel);
 
     DECL_LINK(ViewAllHdl, void*);
     DECL_LINK(ViewDocsHdl, void*);
@@ -135,6 +138,7 @@ private:
     std::set<const ThumbnailViewItem*> maSelTemplates;
     std::set<const ThumbnailViewItem*> maSelFolders;
 
+    com::sun::star::uno::Reference< com::sun::star::frame::XModel > m_xModel;
     com::sun::star::uno::Reference< com::sun::star::frame::XComponentLoader > mxDesktop;
 };
 

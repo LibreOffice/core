@@ -22,9 +22,14 @@
 
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
+#include <com/sun/star/frame/DocumentTemplates.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
+#include <com/sun/star/frame/XDocumentTemplates.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
+
+using namespace ::com::sun::star;
+using namespace ::com::sun::star::frame;
 
 void lcl_updateThumbnails (TemplateLocalViewItem *pItem);
 
@@ -637,6 +642,23 @@ bool TemplateLocalView::exportTo(const sal_uInt16 nItemId, const sal_uInt16 nReg
     }
 
     return false;
+}
+
+bool TemplateLocalView::saveTemplateAs(const TemplateLocalViewItem *pDstItem,
+                                       com::sun::star::uno::Reference<com::sun::star::frame::XModel> &rModel,
+                                       const OUString &rName)
+{
+    uno::Reference< frame::XStorable > xStorable(rModel, uno::UNO_QUERY_THROW );
+
+    uno::Reference< frame::XDocumentTemplates > xTemplates(
+                    frame::DocumentTemplates::create(comphelper::getProcessComponentContext()) );
+
+    sal_uInt16 nRegionId = pDstItem->mnId-1;
+
+    if (!xTemplates->storeTemplate(mpDocTemplates->GetRegionName(nRegionId),rName, xStorable ))
+        return false;
+
+    return true;
 }
 
 void TemplateLocalView::OnItemDblClicked (ThumbnailViewItem *pRegionItem)

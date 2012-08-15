@@ -804,6 +804,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
             if ( aMiscOptions.IsExperimentalMode() )
             {
                 SfxTemplateManagerDlg aDlg(NULL);
+                aDlg.setDocumentModel(GetModel());
                 aDlg.Execute();
             }
             else
