@@ -589,7 +589,6 @@ class SvInplaceEdit2
     Edit*       pEdit;
     sal_Bool        bCanceled;
     sal_Bool        bAlreadyInCallBack;
-    sal_Bool        bMultiLine;
 
     void        CallCallBackHdl_Impl();
     DECL_LINK( Timeout_Impl, void * );

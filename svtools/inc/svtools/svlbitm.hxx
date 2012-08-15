@@ -169,7 +169,6 @@ class SVT_DLLPUBLIC SvLBoxButton : public SvLBoxItem
     SvLBoxButtonData*   pData;
     SvLBoxButtonKind eKind;
     sal_uInt16 nItemFlags;
-    sal_uInt16 nImgArrOffs;
     sal_uInt16 nBaseOffs;
 
     void ImplAdjustBoxSize( Size& io_rCtrlSize, ControlType i_eType, Window* pParent );

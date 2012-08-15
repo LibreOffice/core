@@ -97,8 +97,6 @@ class SVT_DLLPUBLIC GraphicAttr
 {
 private:
 
-    long            mnDummy1;
-    long            mnDummy2;
     double          mfGamma;
     sal_uInt32      mnMirrFlags;
     long            mnLeftCrop;
@@ -114,8 +112,6 @@ private:
     sal_Bool        mbInvert;
     sal_uInt8       mcTransparency;
     GraphicDrawMode meDrawMode;
-
-    void*           mpDummy;
 
 public:
 

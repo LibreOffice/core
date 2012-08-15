@@ -130,8 +130,7 @@ SvInplaceEdit2::SvInplaceEdit2
 
      aCallBackHdl       ( rNotifyEditEnd ),
     bCanceled           ( sal_False ),
-    bAlreadyInCallBack  ( sal_False ),
-    bMultiLine          ( bMulti )
+    bAlreadyInCallBack  ( sal_False )
 
 {
     DBG_CTOR(SvInplaceEdit2,0);

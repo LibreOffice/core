@@ -57,8 +57,6 @@ class SVTXGridControl : public SVTXGridControl_Base
 {
 private:
     ::boost::shared_ptr< UnoControlTableModel >                                         m_pTableModel;
-    bool                                                                                m_bHasColumnHeaders;
-    bool                                                                                m_bHasRowHeaders;
     bool                                                                                m_bTableModelInitCompleted;
     sal_Int32                                                                           m_nSelectedRowCount;
     SelectionListenerMultiplexer                                                        m_aSelectionListeners;

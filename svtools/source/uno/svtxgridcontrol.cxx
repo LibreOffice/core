@@ -58,8 +58,6 @@ using namespace ::com::sun::star::accessibility;
 
 SVTXGridControl::SVTXGridControl()
     :m_pTableModel( new UnoControlTableModel() )
-    ,m_bHasColumnHeaders( false )
-    ,m_bHasRowHeaders( false )
     ,m_bTableModelInitCompleted( false )
     ,m_nSelectedRowCount( 0 )
     ,m_aSelectionListeners( *this )

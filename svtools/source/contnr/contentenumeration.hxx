@@ -32,7 +32,6 @@
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <com/sun/star/document/XStandaloneDocumentInfo.hpp>
 #include <salhelper/thread.hxx>
-#include <rtl/ref.hxx>
 #include <ucbhelper/content.hxx>
 #include <rtl/ustring.hxx>
 #include <tools/datetime.hxx>
@@ -198,7 +197,6 @@ namespace svt
         ContentData&                    m_rContent;
         ::osl::Mutex&                   m_rContentMutex;
 
-        oslInterlockedCount             m_refCount;
         mutable ::osl::Mutex            m_aMutex;
 
         FolderDescriptor                m_aFolder;

@@ -28,6 +28,7 @@
 
 
 #include <salhelper/timer.hxx>
+#include <svtools/grfmgr.hxx>
 #include <tools/debug.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/outdev.hxx>
@@ -850,8 +851,7 @@ void GraphicDisplayCacheEntry::Draw( OutputDevice* pOut, const Point& rPt, const
 // - GraphicCache -
 // -----------------------
 
-GraphicCache::GraphicCache( GraphicManager& rMgr, sal_uLong nDisplayCacheSize, sal_uLong nMaxObjDisplayCacheSize ) :
-    mrMgr                   ( rMgr ),
+GraphicCache::GraphicCache( sal_uLong nDisplayCacheSize, sal_uLong nMaxObjDisplayCacheSize ) :
     mnReleaseTimeoutSeconds ( 0UL ),
     mnMaxDisplaySize        ( nDisplayCacheSize ),
     mnMaxObjDisplaySize     ( nMaxObjDisplayCacheSize ),

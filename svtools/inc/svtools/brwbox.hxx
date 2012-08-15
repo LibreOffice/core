@@ -106,9 +106,6 @@ typedef sal_uLong BrowserMode;
     // but shown otherwise. This does not affect other situations which require to temporarily hide the
     // cursor (such as scrolling).
 
-typedef int BrowserColumnMode;
-#define BROWSER_COLUMN_TITLEABBREVATION   1
-
 #define BROWSER_NONE                      0
 #define BROWSER_SELECT                  720
 #define BROWSER_ENHANCESELECTION        722
@@ -501,7 +498,6 @@ public:
 
     // access to dynamic values of cursor row
     String          GetColumnTitle( sal_uInt16 nColumnId ) const;
-    BrowserColumnMode GetColumnMode( sal_uInt16 nColumnId ) const;
     Rectangle       GetFieldRect( sal_uInt16 nColumnId ) const;
     sal_uLong           GetColumnWidth( sal_uInt16 nColumnId ) const;
     sal_uInt16          GetColumnId( sal_uInt16 nPos ) const;

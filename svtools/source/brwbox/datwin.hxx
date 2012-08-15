@@ -51,23 +51,20 @@ class ButtonFrame
     String      aText;
     sal_Bool        bPressed;
     sal_Bool        bCurs;
-    sal_Bool        bAbbr;
     sal_Bool        m_bDrawDisabled;
 
 public:
                ButtonFrame( const Point& rPt, const Size& rSz,
                             const String &rText,
-                            sal_Bool bPress = sal_False,
-                            sal_Bool bCursor = sal_False,
-                            sal_Bool bAbbreviate = sal_True,
-                            sal_Bool _bDrawDisabled = sal_False)
+                            sal_Bool bPress,
+                            sal_Bool bCursor,
+                            sal_Bool _bDrawDisabled)
                 :aRect( rPt, rSz )
                 ,aInnerRect( Point( aRect.Left()+1, aRect.Top()+1 ),
                             Size( aRect.GetWidth()-2, aRect.GetHeight()-2 ) )
                 ,aText(rText)
                 ,bPressed(bPress)
                 ,bCurs(bCursor)
-                ,bAbbr(bAbbreviate)
                 ,m_bDrawDisabled(_bDrawDisabled)
             {
             }
@@ -85,12 +82,10 @@ class BrowserColumn
     Image               _aImage;
     String              _aTitle;
     sal_Bool                _bFrozen;
-    HeaderBarItemBits   _nFlags;
 
 public:
                         BrowserColumn( sal_uInt16 nItemId, const Image &rImage,
-                                        const String& rTitle, sal_uLong nWidthPixel, const Fraction& rCurrentZoom,
-                                        HeaderBarItemBits nFlags );
+                                        const String& rTitle, sal_uLong nWidthPixel, const Fraction& rCurrentZoom );
     virtual            ~BrowserColumn();
 
     sal_uInt16              GetId() const { return _nId; }
@@ -98,7 +93,6 @@ public:
     sal_uLong               Width() { return _nWidth; }
     Image&              GetImage() { return _aImage; }
     String&             Title() { return _aTitle; }
-    HeaderBarItemBits&  Flags() { return _nFlags; }
 
     sal_Bool                IsFrozen() const { return _bFrozen; }
     void                Freeze( sal_Bool bFreeze = sal_True ) { _bFrozen = bFreeze; }

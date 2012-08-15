@@ -67,7 +67,6 @@ class GIFReader : public GraphicReader
     BitmapPalette       aGPalette;
     BitmapPalette       aLPalette;
     SvStream&           rIStm;
-    void*               pCallerData;
     HPBYTE              pSrcBuf;
     GIFLZWDecompressor* pDecomp;
     BitmapWriteAccess*  pAcc8;

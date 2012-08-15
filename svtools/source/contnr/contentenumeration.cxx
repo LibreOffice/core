@@ -95,7 +95,6 @@ namespace svt
         :Thread                  ( "FileViewContentEnumerator" )
         ,m_rContent              ( _rContentToFill )
         ,m_rContentMutex         ( _rContentMutex  )
-        ,m_refCount              ( 0               )
         ,m_xCommandEnv           ( _rxCommandEnv   )
         ,m_pFilter               ( NULL            )
         ,m_pTranslator           ( _pTranslator    )

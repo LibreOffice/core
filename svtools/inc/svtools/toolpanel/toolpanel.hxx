@@ -127,9 +127,6 @@ namespace svt
 
     public:
         DECLARE_IREFERENCE()
-
-    private:
-        oslInterlockedCount m_refCount;
     };
 
 //........................................................................

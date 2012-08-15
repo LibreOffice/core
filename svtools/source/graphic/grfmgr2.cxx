@@ -52,7 +52,7 @@
 // ------------------
 
 GraphicManager::GraphicManager( sal_uLong nCacheSize, sal_uLong nMaxObjCacheSize ) :
-        mpCache( new GraphicCache( *this, nCacheSize, nMaxObjCacheSize ) )
+        mpCache( new GraphicCache( nCacheSize, nMaxObjCacheSize ) )
 {
 }
 

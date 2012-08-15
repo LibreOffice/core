@@ -203,9 +203,6 @@ private:
     long            mnDayWidth;
     long            mnDayHeight;
     long            mnWeekWidth;
-    long            mnDummy2;
-    long            mnDummy3;
-    long            mnDummy4;
     WinBits         mnWinStyle;
     sal_uInt16          mnFirstYear;
     sal_uInt16          mnLastYear;

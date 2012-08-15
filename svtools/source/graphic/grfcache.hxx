@@ -31,15 +31,16 @@
 
 #include <vcl/graph.hxx>
 #include <vcl/timer.hxx>
-#include <svtools/grfmgr.hxx>
 #include <list>
 
 // -----------------------
 // - GraphicManagerCache -
 // -----------------------
 
+class GraphicAttr;
 class GraphicCacheEntry;
 class GraphicDisplayCacheEntry;
+class GraphicObject;
 
 class GraphicCache
 {
@@ -47,7 +48,6 @@ private:
     typedef std::list< GraphicCacheEntry* > GraphicCacheEntryList;
     typedef std::list< GraphicDisplayCacheEntry* > GraphicDisplayCacheEntryList;
 
-    GraphicManager&         mrMgr;
     Timer                   maReleaseTimer;
     GraphicCacheEntryList   maGraphicCache;
     GraphicDisplayCacheEntryList maDisplayCache;
@@ -65,7 +65,6 @@ private:
 public:
 
                             GraphicCache(
-                                GraphicManager& rMgr,
                                 sal_uLong nDisplayCacheSize = 10000000UL,
                                 sal_uLong nMaxObjDisplayCacheSize = 2400000UL
                             );

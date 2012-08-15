@@ -173,7 +173,6 @@ private:
     private:
 
         TransferableHelper& mrParent;
-        void*               mpDummy;
 
     private:
 
@@ -201,7 +200,6 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XTerminateListener >                     mxTerminateListener;
     DataFlavorExVector*                                                                                 mpFormats;
     TransferableObjectDescriptor*                                                                       mpObjDesc;
-    void*                                                                                               mpDummy1;
 
 protected:
     inline const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboard >&
@@ -420,8 +418,6 @@ private:
     private:
 
         DragSourceHelper&   mrParent;
-        void*               mpDummy1;
-        void*               mpDummy2;
 
     private:
 
@@ -475,9 +471,6 @@ private:
 
         DropTargetHelper&   mrParent;
         AcceptDropEvent*    mpLastDragOverEvent;
-        void*               mpDummy2;
-        void*               mpDummy3;
-        void*               mpDummy4;
 
     private:
 

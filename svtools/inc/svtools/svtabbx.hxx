@@ -58,8 +58,6 @@ private:
     SvLBoxTab*                  pTabList;
     sal_uInt16                      nTabCount;
     XubString                   aCurEntry;
-    sal_uLong                       nDummy1;
-    sal_uLong                       nDummy2;
 
 protected:
     SvLBoxEntry*                pViewParent;

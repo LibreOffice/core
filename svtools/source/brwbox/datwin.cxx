@@ -112,14 +112,12 @@ void ButtonFrame::Draw( OutputDevice& rDev )
 //-------------------------------------------------------------------
 
 BrowserColumn::BrowserColumn( sal_uInt16 nItemId, const class Image &rImage,
-                              const String& rTitle, sal_uLong nWidthPixel, const Fraction& rCurrentZoom,
-                              HeaderBarItemBits nFlags )
+                              const String& rTitle, sal_uLong nWidthPixel, const Fraction& rCurrentZoom )
 :   _nId( nItemId ),
     _nWidth( nWidthPixel ),
     _aImage( rImage ),
     _aTitle( rTitle ),
-    _bFrozen( sal_False ),
-    _nFlags( nFlags )
+    _bFrozen( sal_False )
 {
     double n = (double)_nWidth;
     n *= (double)rCurrentZoom.GetDenominator();
@@ -150,8 +148,7 @@ void BrowserColumn::Draw( BrowseBox& rBox, OutputDevice& rDev, const Point& rPos
     {
         // paint handle column
         ButtonFrame( rPos, Size( Width()-1, rBox.GetDataRowHeight()-1 ),
-                     String(), sal_False, bCurs,
-                     0 != (BROWSER_COLUMN_TITLEABBREVATION&_nFlags) ).Draw( rDev );
+                     String(), sal_False, bCurs, false ).Draw( rDev );
         Color aOldLineColor = rDev.GetLineColor();
         rDev.SetLineColor( Color( COL_BLACK ) );
         rDev.DrawLine(
