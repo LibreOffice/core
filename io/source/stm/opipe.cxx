@@ -114,8 +114,6 @@ private:
 
     sal_Int32 m_nBytesToSkip;
 
-    sal_Int8  *m_p;
-
     sal_Bool m_bOutputStreamClosed;
     sal_Bool m_bInputStreamClosed;
 
