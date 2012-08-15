@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAANX///98\u003d",
+        "filename": "oowintool",
+        "patchSetId": 1
+      },
+      "lineNbr": 204,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2012-08-15T05:56:59Z",
+      "side": 1,
+      "message": "Hmm, I never liked out use of the \"find\" command here; do you think you could investigate whether there is some way to figure out the path to csc.exe more directly?",
+      "revId": "0bc84aa9e4104ff2e7fb348de81102520ce4c5ce",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
