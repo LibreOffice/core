@@ -615,7 +615,7 @@ namespace sfx2 {
 
 void IndexTabPage_Impl::InitializeIndex()
 {
-    WaitObject( this );
+    WaitObject aWaitCursor( this );
 
     // By now more than 256 equal entries are not allowed
     sal_Unicode append[256];
