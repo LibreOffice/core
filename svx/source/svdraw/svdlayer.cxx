@@ -160,7 +160,6 @@ bool SdrLayer::operator==(const SdrLayer& rCmpLayer) const
 
 SdrLayerAdmin::SdrLayerAdmin(SdrLayerAdmin* pNewParent):
     aLayer(),
-    aLSets(1024,16,16),
     pModel(NULL)
 {
     aControlLayerName = String(RTL_CONSTASCII_USTRINGPARAM("Controls"));
@@ -169,7 +168,6 @@ SdrLayerAdmin::SdrLayerAdmin(SdrLayerAdmin* pNewParent):
 
 SdrLayerAdmin::SdrLayerAdmin(const SdrLayerAdmin& rSrcLayerAdmin):
     aLayer(),
-    aLSets(1024,16,16),
     pParent(NULL),
     pModel(NULL)
 {
@@ -204,8 +202,8 @@ const SdrLayerAdmin& SdrLayerAdmin::operator=(const SdrLayerAdmin& rSrcLayerAdmi
 bool SdrLayerAdmin::operator==(const SdrLayerAdmin& rCmpLayerAdmin) const
 {
     if (pParent!=rCmpLayerAdmin.pParent ||
-        aLayer.size()!=rCmpLayerAdmin.aLayer.size() ||
-        aLSets.Count()!=rCmpLayerAdmin.aLSets.Count()) return sal_False;
+        aLayer.size()!=rCmpLayerAdmin.aLayer.size())
+        return sal_False;
     bool bOk = true;
     sal_uInt16 nAnz=GetLayerCount();
     sal_uInt16 i=0;

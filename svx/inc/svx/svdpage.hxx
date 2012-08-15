@@ -33,6 +33,7 @@
 #include <vcl/print.hxx>
 #include <vcl/gdimtf.hxx>
 #include <tools/weakbase.hxx>
+#include <tools/contnr.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <svx/svdtypes.hxx>
 #include <svx/svdlayer.hxx>

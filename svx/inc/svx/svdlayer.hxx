@@ -31,7 +31,6 @@
 
 #include <tools/string.hxx>
 #include <tools/stream.hxx>
-#include <tools/contnr.hxx>
 #include <svx/svdsob.hxx>
 #include <svx/svdtypes.hxx> // fuer typedef SdrLayerID
 #include "svx/svxdllapi.h"
@@ -86,7 +85,6 @@ friend class SdrPage;
 
 protected:
     std::vector<SdrLayer*> aLayer;
-    Container      aLSets;
     SdrLayerAdmin* pParent; // Der Admin der Seite kennt den Admin des Docs
     SdrModel*      pModel; // zum Broadcasten
     String         aControlLayerName;
