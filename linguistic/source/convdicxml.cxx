@@ -149,16 +149,13 @@ class ConvDicXMLEntryTextContext_Impl :
 {
     OUString    aLeftText;
     sal_Int16   nPropertyType;  // used for Chinese simplified/traditional conversion
-    ConvDicXMLDictionaryContext_Impl    &rDicContext;
 
 public:
     ConvDicXMLEntryTextContext_Impl(
             ConvDicXMLImport &rImport,
-            sal_uInt16 nPrefix, const OUString& rLName,
-            ConvDicXMLDictionaryContext_Impl &rParentContext ) :
+            sal_uInt16 nPrefix, const OUString& rLName ) :
         ConvDicXMLImportContext( rImport, nPrefix, rLName ),
-        nPropertyType( ConversionPropertyType::NOT_DEFINED ),
-        rDicContext( rParentContext )
+        nPropertyType( ConversionPropertyType::NOT_DEFINED )
     {
     }
 
@@ -252,7 +249,7 @@ SvXMLImportContext * ConvDicXMLDictionaryContext_Impl::CreateChildContext(
 {
     SvXMLImportContext *pContext = 0;
     if ( nPrefix == XML_NAMESPACE_TCD && rLocalName == "entry" )
-        pContext = new ConvDicXMLEntryTextContext_Impl( GetConvDicImport(), nPrefix, rLocalName, *this );
+        pContext = new ConvDicXMLEntryTextContext_Impl( GetConvDicImport(), nPrefix, rLocalName );
     else
         pContext = new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
     return pContext;
