@@ -244,7 +244,7 @@ public:
     XPropertyListType   Type() const { return eType; }
     long                Count() const;
 
-    void                Insert( XPropertyEntry* pEntry, long nIndex = LIST_APPEND );
+    void                Insert( XPropertyEntry* pEntry, long nIndex = CONTAINER_APPEND );
     XPropertyEntry*     Replace( XPropertyEntry* pEntry, long nIndex );
     XPropertyEntry*     Remove( long nIndex );
 
