@@ -545,7 +545,7 @@ void ConverterTest::testBase64()
     tempSequence = tempSeq.getAsConstList();
     doTestEncodeBase64("BQIDAAABAgM=", tempSequence);
     doTestDecodeBase64(tempSequence, "BQIDAAABAgM=");
-    tempSeq[0] = sal_Int8(200);
+    tempSeq[0] = sal_Int8(sal_uInt8(200));
     tempSeq[1] = sal_Int8(31);
     tempSeq[2] = sal_Int8(77);
     tempSeq[3] = sal_Int8(111);
