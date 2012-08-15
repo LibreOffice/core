@@ -25,6 +25,7 @@
 #define INCLUDED_SDR_PRIMITIVE2D_SDRATTRIBUTECREATOR_HXX
 
 #include <sal/types.h>
+#include <svx/svxdllapi.h>
 
 //////////////////////////////////////////////////////////////////////////////
 // predefines
@@ -59,10 +60,10 @@ namespace drawinglayer
     namespace primitive2d
     {
         // SdrAttribute creators
-        attribute::SdrLineAttribute createNewSdrLineAttribute(
+        attribute::SdrLineAttribute SVX_DLLPUBLIC createNewSdrLineAttribute(
             const SfxItemSet& rSet);
 
-        attribute::SdrLineStartEndAttribute createNewSdrLineStartEndAttribute(
+        attribute::SdrLineStartEndAttribute SVX_DLLPUBLIC createNewSdrLineStartEndAttribute(
             const SfxItemSet& rSet,
             double fWidth);
 
