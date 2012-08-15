@@ -57,16 +57,8 @@ class TeleManager
 {
     TeleManager();
     ~TeleManager();
+
 public:
-
-    enum AccountManagerStatus
-    {
-        AMS_UNINITIALIZED = 0,
-        AMS_INPREPARATION,
-        AMS_UNPREPARABLE,
-        AMS_PREPARED
-    };
-
     /** Prepare tube manager with account and service to be offered/listened
         to.
      */
@@ -80,22 +72,11 @@ public:
     /** Get a conference with current UUID to set a session. */
     TUBES_DLLPUBLIC static TeleConference*  getConference();
 
-    /** Connect to DBus and create AccountManager. */
+    /** Connect to DBus, create and prepare the Telepathy Account Manager. */
     static bool             createAccountManager();
 
     /** Setup client handlers. */
     static bool             registerClients();
-
-    /** Prepare the Telepathy Account Manager.
-        Requires createAccountManager() to have succeeded.
-
-        Invokes an async call that is not ready until meAccountManagerStatus is
-        set! Until that is AMS_PREPARED nothing else will work.
-
-        TODO: this needs some signalling mechanism
-     */
-    static void             prepareAccountManager();
-    static AccountManagerStatus getAccountManagerStatus();
 
     /** Fetches the contact list. Returns 0 before connect() is called successfully.
         Is non-functional until prepareAccountManager().
@@ -151,11 +132,9 @@ public:
     static void             addConference( TeleConference* pConference );
     static void             setChannelReadyHandlerInvoked( bool b );
     static bool             isChannelReadyHandlerInvoked();
+    static void             setAccountManagerReady( bool bPrepared);
     static void             setAccountManagerReadyHandlerInvoked( bool b );
     static bool             isAccountManagerReadyHandlerInvoked();
-
-    /** Only the callback of prepareAccountManager() is to set this. */
-    static void             setAccountManagerReady( bool bPrepared);
 
     /// "LibreOfficeWhatEver"
     static rtl::OString     getFullClientName();

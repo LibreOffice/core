@@ -40,29 +40,6 @@ ContactList::ContactList(TpAccountManager *pAccountManager)
     SAL_WARN_IF( !mpAccountManager, "tubes",
         "ContactList::ContactList: passed a null account manager");
     g_object_ref( mpAccountManager);
-
-    /* Tell the client factory (which creates and prepares proxy objects) to
-     * get the features we need ready before giving us any objects.
-     */
-    TpSimpleClientFactory *factory = tp_proxy_get_factory (mpAccountManager);
-    /* We need every online account's connection object to be available... */
-    tp_simple_client_factory_add_account_features_varargs (factory,
-        TP_ACCOUNT_FEATURE_CONNECTION,
-        0);
-    /* ...and we want those connection objects to have the contact list
-     * available... */
-    tp_simple_client_factory_add_connection_features_varargs (factory,
-        TP_CONNECTION_FEATURE_CONTACT_LIST,
-        0);
-    /* ...and those contacts should have their alias and their capabilities
-     * available.
-     */
-    tp_simple_client_factory_add_contact_features_varargs (factory,
-        TP_CONTACT_FEATURE_ALIAS,
-        TP_CONTACT_FEATURE_AVATAR_DATA,
-        TP_CONTACT_FEATURE_CAPABILITIES,
-        TP_CONTACT_FEATURE_PRESENCE,
-        TP_CONTACT_FEATURE_INVALID);
 }
 
 ContactList::~ContactList()

@@ -55,7 +55,6 @@ public:
     void testCreateAccountManager();
     void testRegisterClients();
     void testContactList();
-    void testPrepareAccountManager();
     void testStartBuddySession();
     void testSendPacket();
     void testReceivePacket();
@@ -70,7 +69,6 @@ public:
     CPPUNIT_TEST( testInitialize );
     CPPUNIT_TEST( testCreateAccountManager );
     CPPUNIT_TEST( testRegisterClients );
-    CPPUNIT_TEST( testPrepareAccountManager );
     CPPUNIT_TEST( testContactList );
     CPPUNIT_TEST( testStartBuddySession );
     CPPUNIT_TEST( testSendPacket );
@@ -129,8 +127,6 @@ void TestTeleTubes::testInitialize()
 
 void TestTeleTubes::testContactList()
 {
-    CPPUNIT_ASSERT( TeleManager::getAccountManagerStatus() == TeleManager::AMS_PREPARED);
-
     ContactList *cl = TeleManager::getContactList();
 
     AccountContactPairV pairs;
@@ -170,13 +166,6 @@ void TestTeleTubes::testContactList()
         "Make sure both your test accounts are signed in "
         "and are on each other's contact lists",
         mpAccepterContact);
-}
-
-void TestTeleTubes::testPrepareAccountManager()
-{
-    TeleManager::prepareAccountManager();
-    TeleManager::AccountManagerStatus eStatus = TeleManager::getAccountManagerStatus();
-    CPPUNIT_ASSERT( eStatus == TeleManager::AMS_PREPARED);
 }
 
 void TestTeleTubes::testStartBuddySession()

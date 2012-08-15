@@ -83,11 +83,11 @@ using namespace osl;
 class TeleManagerImpl
 {
 public:
-    TpAutomaticClientFactory*           mpFactory;
+    TpSimpleClientFactory*              mpFactory;
     TpBaseClient*                       mpClient;
     TpBaseClient*                       mpFileTransferClient;
     TpAccountManager*                   mpAccountManager;
-    TeleManager::AccountManagerStatus   meAccountManagerStatus;
+    bool                                mbAccountManagerReady : 1;
     bool                                mbAccountManagerReadyHandlerInvoked : 1;
     bool                                mbChannelReadyHandlerInvoked : 1;
     ContactList*                        mpContactList;
@@ -441,7 +441,6 @@ bool TeleManager::init( bool bListen )
 {
     if (createAccountManager())
     {
-        prepareAccountManager();
         if (bListen && !registerClients())
             SAL_WARN( "tubes", "TeleManager::init: Could not register client handlers." );
 
@@ -478,22 +477,41 @@ bool TeleManager::createAccountManager()
         return false;
     }
 
-    pImpl->mpFactory = tp_automatic_client_factory_new( pDBus);
+    pImpl->mpFactory = TP_SIMPLE_CLIENT_FACTORY( tp_automatic_client_factory_new( pDBus));
     g_object_unref( pDBus);
     SAL_WARN_IF( !pImpl->mpFactory, "tubes", "TeleManager::createAccountManager: no client factory");
     if (!pImpl->mpFactory)
         return false;
 
-    TpAccountManager* pAccountManager = tp_account_manager_new_with_factory (
-        TP_SIMPLE_CLIENT_FACTORY (pImpl->mpFactory));
-    tp_account_manager_set_default( pAccountManager);
+    /* Tell the client factory (which creates and prepares proxy objects) to
+     * get the features we need ready before giving us any objects.
+     */
+    /* We need every online account's connection object to be available... */
+    tp_simple_client_factory_add_account_features_varargs (pImpl->mpFactory,
+        TP_ACCOUNT_FEATURE_CONNECTION,
+        0);
+    /* ...and we want those connection objects to have the contact list
+     * available... */
+    tp_simple_client_factory_add_connection_features_varargs (pImpl->mpFactory,
+        TP_CONNECTION_FEATURE_CONTACT_LIST,
+        0);
+    /* ...and those contacts should have their alias and their capabilities
+     * available.
+     */
+    tp_simple_client_factory_add_contact_features_varargs (pImpl->mpFactory,
+        TP_CONTACT_FEATURE_ALIAS,
+        TP_CONTACT_FEATURE_AVATAR_DATA,
+        TP_CONTACT_FEATURE_CAPABILITIES,
+        TP_CONTACT_FEATURE_PRESENCE,
+        TP_CONTACT_FEATURE_INVALID);
 
-    /* Takes our ref. */
-    pImpl->mpAccountManager = pAccountManager;
+    pImpl->mpAccountManager = tp_account_manager_new_with_factory (pImpl->mpFactory);
+    tp_account_manager_set_default (pImpl->mpAccountManager);
 
-    pImpl->mpContactList = new ContactList(pAccountManager);
-
-    return true;
+    setAccountManagerReadyHandlerInvoked( false);
+    tp_proxy_prepare_async( pImpl->mpAccountManager, NULL, TeleManager_AccountManagerReadyHandler, NULL);
+    lcl_iterateLoop( &TeleManager::isAccountManagerReadyHandlerInvoked);
+    return pImpl->mbAccountManagerReady;
 }
 
 bool TeleManager::registerClients()
@@ -508,7 +526,7 @@ bool TeleManager::registerClients()
         return true;
 
     pImpl->mpClient = tp_simple_handler_new_with_factory(
-            TP_SIMPLE_CLIENT_FACTORY (pImpl->mpFactory), // factory
+            pImpl->mpFactory,               // factory
             FALSE,                          // bypass_approval
             FALSE,                          // requests
             getFullClientName().getStr(),   // name
@@ -556,7 +574,7 @@ bool TeleManager::registerClients()
      * user isn't prompted before the channel gets passed to us.
      */
     pImpl->mpFileTransferClient = tp_simple_handler_new_with_factory (
-            TP_SIMPLE_CLIENT_FACTORY( pImpl->mpFactory),            // factory
+            pImpl->mpFactory,                               // factory
             TRUE,                                           // bypass_approval
             FALSE,                                          // requests
             getFullClientName().getStr(),                   // name
@@ -731,45 +749,6 @@ TeleConference* TeleManager::startBuddySession( TpAccount *pAccount, TpContact *
     return pConference;
 }
 
-void TeleManager::prepareAccountManager()
-{
-    INFO_LOGGER_F( "TeleManager::prepareAccountManager");
-
-    MutexGuard aGuard( GetMutex());
-
-    SAL_INFO_IF( pImpl->meAccountManagerStatus == AMS_PREPARED, "tubes",
-            "TeleManager::prepareAccountManager: already prepared");
-    if (pImpl->meAccountManagerStatus == AMS_PREPARED)
-        return;
-
-    SAL_WARN_IF( pImpl->meAccountManagerStatus == AMS_INPREPARATION, "tubes",
-            "TeleManager::prepareAccountManager: already in preparation");
-    if (pImpl->meAccountManagerStatus == AMS_INPREPARATION)
-        return;
-
-    SAL_WARN_IF( pImpl->meAccountManagerStatus != AMS_UNINITIALIZED, "tubes",
-            "TeleManager::prepareAccountManager: yet another attempt");
-
-    SAL_WARN_IF( !pImpl->mpAccountManager, "tubes",
-            "TeleManager::prepareAccountManager: called before ::connect()");
-    if (!pImpl->mpAccountManager)
-        return;
-
-    pImpl->meAccountManagerStatus = AMS_INPREPARATION;
-    setAccountManagerReadyHandlerInvoked( false);
-
-    tp_proxy_prepare_async( pImpl->mpAccountManager, NULL, TeleManager_AccountManagerReadyHandler, NULL);
-
-    lcl_iterateLoop( &TeleManager::isAccountManagerReadyHandlerInvoked);
-}
-
-
-TeleManager::AccountManagerStatus TeleManager::getAccountManagerStatus()
-{
-    return pImpl->meAccountManagerStatus;
-}
-
-
 void TeleManager::setAccountManagerReadyHandlerInvoked( bool b )
 {
     pImpl->mbAccountManagerReadyHandlerInvoked = b;
@@ -792,6 +771,9 @@ bool TeleManager::isChannelReadyHandlerInvoked()
 
 ContactList* TeleManager::getContactList()
 {
+    if (!pImpl->mpContactList)
+        pImpl->mpContactList = new ContactList (pImpl->mpAccountManager);
+
     return pImpl->mpContactList;
 }
 
@@ -799,9 +781,9 @@ TpAccount* TeleManager::getAccount( const rtl::OString& rAccountID )
 {
     INFO_LOGGER_F( "TeleManager::getMyAccount");
 
-    SAL_WARN_IF( pImpl->meAccountManagerStatus != AMS_PREPARED, "tubes",
+    SAL_WARN_IF( !pImpl->mbAccountManagerReady, "tubes",
             "TeleManager::getMyAccount: Account Manager not prepared");
-    if (pImpl->meAccountManagerStatus != AMS_PREPARED)
+    if (!pImpl->mbAccountManagerReady)
         return NULL;
 
     GList* pAccounts = tp_account_manager_get_valid_accounts( pImpl->mpAccountManager);
@@ -832,7 +814,7 @@ TpAccount* TeleManager::getAccount( const rtl::OString& rAccountID )
 
 void TeleManager::setAccountManagerReady( bool bPrepared)
 {
-    pImpl->meAccountManagerStatus = (bPrepared ? AMS_PREPARED : AMS_UNPREPARABLE);
+    pImpl->mbAccountManagerReady = bPrepared;
 }
 
 
@@ -898,9 +880,10 @@ TeleManagerImpl::TeleManagerImpl()
         mpClient( NULL),
         mpFileTransferClient( NULL),
         mpAccountManager( NULL),
-        meAccountManagerStatus( TeleManager::AMS_UNINITIALIZED),
+        mbAccountManagerReady( false),
         mbAccountManagerReadyHandlerInvoked( false),
-        mbChannelReadyHandlerInvoked( false)
+        mbChannelReadyHandlerInvoked( false),
+        mpContactList( NULL)
 {
     g_type_init();
 }
