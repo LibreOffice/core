@@ -1103,6 +1103,7 @@ void SfxTemplateManagerDlg::OnTemplateSaveAs()
 {
     if (!maView->isOverlayVisible() && maSelFolders.empty())
     {
+        ErrorBox(this, WB_OK,SfxResId(STR_MSG_ERROR_SELECT_FOLDER).toString()).Execute();
         return;
     }
 

@@ -80,6 +80,11 @@ String STR_MSG_ERROR_REPOSITORY_NAME
     Text [ en-US ] = "Failed to create repository \"$1\".\nA repository with this name may already exist.";
 };
 
+String STR_MSG_ERROR_SELECT_FOLDER
+{
+    Text [ en-US ] = "Select the destination folder(s) to save the template.";
+};
+
 String STR_INPUT_TEMPLATE_NEW
 {
     Text [ en-US ] = "Enter template name:";

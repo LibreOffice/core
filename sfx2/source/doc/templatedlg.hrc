@@ -65,6 +65,7 @@
 #define STR_MSG_ERROR_DELETE_FOLDER         283
 #define STR_MSG_ERROR_REPOSITORY_NAME       284
 #define STR_MSG_ERROR_SAVE_SELECT           285
+#define STR_MSG_ERROR_SELECT_FOLDER         286
 
 #define STR_INPUT_TEMPLATE_NEW              288
 
