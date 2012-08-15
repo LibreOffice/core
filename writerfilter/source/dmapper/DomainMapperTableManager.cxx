@@ -23,6 +23,7 @@
 #include <CellMarginHandler.hxx>
 #include <ConversionHelper.hxx>
 #include <MeasureHandler.hxx>
+#include <TablePositionHandler.hxx>
 #include <TDefTableHandler.hxx>
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <com/sun/star/text/SizeType.hpp>
@@ -297,6 +298,17 @@ bool DomainMapperTableManager::sprm(Sprm & rSprm)
                     cellProps( pProps );
                 }
                 break;
+            case NS_ooxml::LN_CT_TblPrBase_tblpPr:
+                {
+                    writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
+                    if (pProperties.get())
+                    {
+                        TablePositionHandlerPtr pHandler( new TablePositionHandler );
+                        pProperties->resolve(*pHandler);
+                        m_sTableVertAnchor = pHandler->getVertAnchor();
+                    }
+                }
+                break;
             default:
                 bRet = false;
 
@@ -316,6 +328,11 @@ boost::shared_ptr< vector<sal_Int32> > DomainMapperTableManager::getCurrentGrid(
 boost::shared_ptr< vector< sal_Int32 > > DomainMapperTableManager::getCurrentSpans( )
 {
     return m_aGridSpans.back( );
+}
+
+const OUString& DomainMapperTableManager::getTableVertAnchor() const
+{
+    return m_sTableVertAnchor;
 }
 
 void DomainMapperTableManager::startLevel( )
@@ -512,6 +529,7 @@ void DomainMapperTableManager::clearData()
 {
     m_nRow = m_nCell = m_nCellBorderIndex = m_nHeaderRepeat = m_nTableWidth = 0;
     m_sTableStyleName = OUString();
+    m_sTableVertAnchor = OUString();
     m_pTableStyleTextProperies.reset();
 }
 

@@ -22825,6 +22825,9 @@
       <attribute name="w" tokenid="ooxml:CT_TblWidth_w"/>
       <attribute name="type" tokenid="ooxml:CT_TblWidth_type"/>
     </resource>
+    <resource name="CT_TblPPr" resource="Properties" tag="table">
+      <attribute name="vertAnchor" tokenid="ooxml:CT_TblPPr_vertAnchor"/>
+    </resource>
     <resource name="CT_TblGridCol" resource="Value" tag="table">
       <attribute name="w" tokenid="ooxml:CT_TblGridCol_w" action="setValue"/>
       <action name="start" action="setDefaultIntegerValue"/>
