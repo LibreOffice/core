@@ -164,7 +164,7 @@ class SVX_DLLPUBLIC SdrModel : public SfxBroadcaster, public tools::WeakBase< Sd
 {
 protected:
     DateTime       aReadDate;  // Datum des Einstreamens
-    Container      maMaPag;     // StammSeiten (Masterpages)
+    std::vector<SdrPage*> maMaPag;     // StammSeiten (Masterpages)
     Container      maPages;
     Link           aUndoLink;  // Link fuer einen NotifyUndo-Handler
     Link           aIOProgressLink;
