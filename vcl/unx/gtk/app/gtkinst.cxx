@@ -522,7 +522,7 @@ void GtkInstance::DestroyMenu( SalMenu* pMenu )
 {
     (void)pMenu;
     delete pMenu;
-    OSL_ENSURE( pMenu == 0, "DestroyMenu called with non-native menus" );
+//    OSL_ENSURE( pMenu == 0, "DestroyMenu called with non-native menus" );
 }
 
 SalMenuItem* GtkInstance::CreateMenuItem( const SalItemParams* pItemData )

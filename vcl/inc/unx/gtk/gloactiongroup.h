@@ -52,6 +52,9 @@ void                g_lo_action_group_insert                    (GLOActionGroup 
 void                g_lo_action_group_remove                    (GLOActionGroup     *group,
                                                                  const gchar        *action_name);
 
+// This function has been added to make current implementation of GtkSalMenu work.
+void                g_lo_action_group_clear                     (GLOActionGroup     *group);
+
 void                g_lo_action_group_add_entries               (GLOActionGroup     *group,
                                                                  const GActionEntry *entries,
                                                                  gint                n_entries,

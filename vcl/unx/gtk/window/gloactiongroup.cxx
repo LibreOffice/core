@@ -290,6 +290,29 @@ g_lo_action_group_remove (GLOActionGroup *group,
     g_action_map_remove_action (G_ACTION_MAP (group), action_name);
 }
 
+// This function has been added to make current implementation of GtkSalMenu work.
+void
+g_lo_action_group_clear (GLOActionGroup  *group)
+{
+    g_return_if_fail (G_IS_LO_ACTION_GROUP (group));
+
+    GAction *action;
+
+    GList* keys = g_hash_table_get_keys(group->priv->table);
+
+    for ( GList* list = g_list_first(keys); list; list = g_list_next(list)) {
+        gchar* action_name = (gchar*) list->data;
+        action = G_ACTION( g_hash_table_lookup (group->priv->table, action_name) );
+
+        if (action != NULL)
+        {
+            g_action_group_action_removed (G_ACTION_GROUP (group), action_name);
+            g_lo_action_group_disconnect (NULL, action, group);
+            g_hash_table_remove (group->priv->table, action_name);
+        }
+    }
+}
+
 void
 g_lo_action_group_add_entries (GLOActionGroup     *group,
                                const GActionEntry *entries,
