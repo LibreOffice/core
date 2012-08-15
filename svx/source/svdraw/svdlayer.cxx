@@ -159,7 +159,7 @@ bool SdrLayer::operator==(const SdrLayer& rCmpLayer) const
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 SdrLayerAdmin::SdrLayerAdmin(SdrLayerAdmin* pNewParent):
-    aLayer(1024,16,16),
+    aLayer(),
     aLSets(1024,16,16),
     pModel(NULL)
 {
@@ -168,7 +168,7 @@ SdrLayerAdmin::SdrLayerAdmin(SdrLayerAdmin* pNewParent):
 }
 
 SdrLayerAdmin::SdrLayerAdmin(const SdrLayerAdmin& rSrcLayerAdmin):
-    aLayer(1024,16,16),
+    aLayer(),
     aLSets(1024,16,16),
     pParent(NULL),
     pModel(NULL)
@@ -184,13 +184,9 @@ SdrLayerAdmin::~SdrLayerAdmin()
 
 void SdrLayerAdmin::ClearLayer()
 {
-    SdrLayer* pL;
-    pL=(SdrLayer*)aLayer.First();
-    while (pL!=NULL) {
-        delete pL;
-        pL=(SdrLayer*)aLayer.Next();
-    }
-    aLayer.Clear();
+    for( std::vector<SdrLayer*>::const_iterator it = aLayer.begin(); it != aLayer.end(); ++it )
+        delete *it;
+    aLayer.clear();
 }
 
 const SdrLayerAdmin& SdrLayerAdmin::operator=(const SdrLayerAdmin& rSrcLayerAdmin)
@@ -200,7 +196,7 @@ const SdrLayerAdmin& SdrLayerAdmin::operator=(const SdrLayerAdmin& rSrcLayerAdmi
     sal_uInt16 i;
     sal_uInt16 nAnz=rSrcLayerAdmin.GetLayerCount();
     for (i=0; i<nAnz; i++) {
-        aLayer.Insert(new SdrLayer(*rSrcLayerAdmin.GetLayer(i)),CONTAINER_APPEND);
+        aLayer.push_back(new SdrLayer(*rSrcLayerAdmin.GetLayer(i)));
     }
     return *this;
 }
@@ -208,7 +204,7 @@ const SdrLayerAdmin& SdrLayerAdmin::operator=(const SdrLayerAdmin& rSrcLayerAdmi
 bool SdrLayerAdmin::operator==(const SdrLayerAdmin& rCmpLayerAdmin) const
 {
     if (pParent!=rCmpLayerAdmin.pParent ||
-        aLayer.Count()!=rCmpLayerAdmin.aLayer.Count() ||
+        aLayer.size()!=rCmpLayerAdmin.aLayer.size() ||
         aLSets.Count()!=rCmpLayerAdmin.aLSets.Count()) return sal_False;
     bool bOk = true;
     sal_uInt16 nAnz=GetLayerCount();
@@ -243,7 +239,8 @@ void SdrLayerAdmin::Broadcast() const
 
 SdrLayer* SdrLayerAdmin::RemoveLayer(sal_uInt16 nPos)
 {
-    SdrLayer* pRetLayer=(SdrLayer*)(aLayer.Remove(nPos));
+    SdrLayer* pRetLayer=aLayer[nPos];
+    aLayer.erase(aLayer.begin()+nPos);
     Broadcast();
     return pRetLayer;
 }
@@ -253,7 +250,10 @@ SdrLayer* SdrLayerAdmin::NewLayer(const XubString& rName, sal_uInt16 nPos)
     SdrLayerID nID=GetUniqueLayerID();
     SdrLayer* pLay=new SdrLayer(nID,rName);
     pLay->SetModel(pModel);
-    aLayer.Insert(pLay,nPos);
+    if(nPos==0xFFFF)
+        aLayer.push_back(pLay);
+    else
+        aLayer.insert(aLayer.begin() + nPos, pLay);
     Broadcast();
     return pLay;
 }
@@ -264,7 +264,10 @@ SdrLayer* SdrLayerAdmin::NewStandardLayer(sal_uInt16 nPos)
     SdrLayer* pLay=new SdrLayer(nID,String());
     pLay->SetStandardLayer();
     pLay->SetModel(pModel);
-    aLayer.Insert(pLay,nPos);
+    if(nPos==0xFFFF)
+        aLayer.push_back(pLay);
+    else
+        aLayer.insert(aLayer.begin() + nPos, pLay);
     Broadcast();
     return pLay;
 }
@@ -273,9 +276,11 @@ sal_uInt16 SdrLayerAdmin::GetLayerPos(SdrLayer* pLayer) const
 {
     sal_uIntPtr nRet=SDRLAYER_NOTFOUND;
     if (pLayer!=NULL) {
-        nRet=aLayer.GetPos(pLayer);
-        if (nRet==CONTAINER_ENTRY_NOTFOUND) {
+        std::vector<SdrLayer*>::const_iterator it = std::find(aLayer.begin(), aLayer.end(), pLayer);
+        if (it==aLayer.end()) {
             nRet=SDRLAYER_NOTFOUND;
+        } else {
+            nRet=it - aLayer.begin();
         }
     }
     return sal_uInt16(nRet);

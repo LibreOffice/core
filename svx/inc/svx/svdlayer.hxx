@@ -35,6 +35,7 @@
 #include <svx/svdsob.hxx>
 #include <svx/svdtypes.hxx> // fuer typedef SdrLayerID
 #include "svx/svxdllapi.h"
+#include <algorithm>
 
 class SdrModel;
 
@@ -84,7 +85,7 @@ friend class SdrModel;
 friend class SdrPage;
 
 protected:
-    Container      aLayer;
+    std::vector<SdrLayer*> aLayer;
     Container      aLSets;
     SdrLayerAdmin* pParent; // Der Admin der Seite kennt den Admin des Docs
     SdrModel*      pModel; // zum Broadcasten
@@ -107,20 +108,42 @@ public:
     void                 SetParent(SdrLayerAdmin* pNewParent)                        { pParent=pNewParent; }
     void                 SetModel(SdrModel* pNewModel);
     SdrModel*            GetModel() const                                            { return pModel; }
-    void                 InsertLayer(SdrLayer* pLayer, sal_uInt16 nPos=0xFFFF)           { aLayer.Insert(pLayer,nPos); pLayer->SetModel(pModel); Broadcast(); }
+    void                 InsertLayer(SdrLayer* pLayer)
+    {
+        aLayer.push_back(pLayer);
+        pLayer->SetModel(pModel);
+        Broadcast();
+    }
+    void                 InsertLayer(SdrLayer* pLayer, sal_uInt16 nPos)
+    {
+        if(nPos==0xFFFF)
+            aLayer.push_back(pLayer);
+        else
+            aLayer.insert(aLayer.begin() + nPos, pLayer);
+        pLayer->SetModel(pModel);
+        Broadcast();
+    }
     SdrLayer*            RemoveLayer(sal_uInt16 nPos);
     // Alle Layer loeschen
     void               ClearLayer();
     // Neuer Layer wird angelegt und eingefuegt
     SdrLayer*          NewLayer(const String& rName, sal_uInt16 nPos=0xFFFF);
-    void               DeleteLayer(SdrLayer* pLayer)                                 { aLayer.Remove(pLayer); delete pLayer; Broadcast(); }
+    void               DeleteLayer(SdrLayer* pLayer)
+    {
+        std::vector<SdrLayer*>::iterator it = std::find(aLayer.begin(), aLayer.end(), pLayer);
+        if( it == aLayer.end() )
+            return;
+        aLayer.erase(it);
+        delete pLayer;
+        Broadcast();
+    }
     // Neuer Layer, Name wird aus der Resource geholt
     SdrLayer*          NewStandardLayer(sal_uInt16 nPos=0xFFFF);
 
     // Iterieren ueber alle Layer
-    sal_uInt16             GetLayerCount() const                                         { return sal_uInt16(aLayer.Count()); }
-    SdrLayer*          GetLayer(sal_uInt16 i)                                            { return (SdrLayer*)(aLayer.GetObject(i)); }
-    const SdrLayer*    GetLayer(sal_uInt16 i) const                                      { return (SdrLayer*)(aLayer.GetObject(i)); }
+    sal_uInt16             GetLayerCount() const                                         { return sal_uInt16(aLayer.size()); }
+    SdrLayer*          GetLayer(sal_uInt16 i)                                            { return aLayer[i]; }
+    const SdrLayer*    GetLayer(sal_uInt16 i) const                                      { return aLayer[i]; }
 
     sal_uInt16             GetLayerPos(SdrLayer* pLayer) const;
 
