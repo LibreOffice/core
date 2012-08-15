@@ -72,7 +72,6 @@ $(eval $(call gb_Library_add_exception_objects,tl,\
     tools/source/inet/inetmime \
     tools/source/inet/inetmsg \
     tools/source/inet/inetstrm \
-    tools/source/memtools/contnr \
     tools/source/memtools/mempool \
     tools/source/memtools/multisel \
     tools/source/memtools/unqidx \
