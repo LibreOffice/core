@@ -28,6 +28,7 @@
 #include "../swmodeltestbase.hxx"
 
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
+#include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/text/XPageCursor.hpp>
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
@@ -68,6 +69,7 @@ public:
     void testMathSubscripts();
     void testMathVerticalstacks();
     void testMathRuns();
+    void testFdo53113();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -99,6 +101,7 @@ public:
     CPPUNIT_TEST(testMathVerticalstacks);
     CPPUNIT_TEST(testMathRuns);
 #endif
+    CPPUNIT_TEST(testFdo53113);
 #endif
     CPPUNIT_TEST_SUITE_END();
 
@@ -404,6 +407,40 @@ void Test::testMathRuns()
     roundtrip("math-runs.rtf");
     // was [](){}, i.e. first curly bracket had an incorrect position
     CPPUNIT_ASSERT_EQUAL(OUString("\\{ left [ right ] left ( right ) \\}"), getFormula(getRun(getParagraph(1), 1)));
+}
+
+void Test::testFdo53113()
+{
+    /*
+     * The problem was that a custom shape was missings its second (and all the other remaining) coordinates.
+     *
+     * oShape = ThisComponent.DrawPage(0)
+     * oPathPropVec = oShape.CustomShapeGeometry(1).Value
+     * oCoordinates = oPathPropVec(0).Value
+     * xray oCoordinates(1).First.Value ' 535
+     * xray oCoordinates(1).Second.Value ' 102
+     */
+
+    roundtrip("fdo53113.odt");
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
+    uno::Sequence<beans::PropertyValue> aProps = getProperty< uno::Sequence<beans::PropertyValue> >(xDraws->getByIndex(0), "CustomShapeGeometry");
+    for (int i = 0; i < aProps.getLength(); ++i)
+    {
+        const beans::PropertyValue& rProp = aProps[i];
+        if (rProp.Name == "Path")
+            rProp.Value >>= aProps;
+    }
+    uno::Sequence<drawing::EnhancedCustomShapeParameterPair> aPairs;
+    for (int i = 0; i < aProps.getLength(); ++i)
+    {
+        const beans::PropertyValue& rProp = aProps[i];
+        if (rProp.Name == "Coordinates")
+            rProp.Value >>= aPairs;
+    }
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(16), aPairs.getLength());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(535), aPairs[1].First.Value.get<sal_Int32>());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(102), aPairs[1].Second.Value.get<sal_Int32>());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
