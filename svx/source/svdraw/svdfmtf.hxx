@@ -51,19 +51,26 @@ class SvdProgressInfo;
 
 class SdrObjRefList
 {
-    Container                   aList;
+    std::vector<SdrObject*>            aList;
 public:
 
     SdrObjRefList()
-    :   aList(1024,64,64)
+    :   aList()
     {}
 
-    void Clear() { aList.Clear(); }
-    sal_uLong GetObjCount() const { return aList.Count(); }
-    SdrObject* GetObj(sal_uLong nNum) const { return (SdrObject*)aList.GetObject(nNum); }
-    SdrObject* operator[](sal_uLong nNum) const { return (SdrObject*)aList.GetObject(nNum); }
-    void InsertObject(SdrObject* pObj, sal_uLong nPos=CONTAINER_APPEND) { aList.Insert(pObj,nPos); }
-    void RemoveObject(sal_uLong nPos) { aList.Remove(nPos); }
+    void Clear() { aList.clear(); }
+    sal_uLong GetObjCount() const { return aList.size(); }
+    SdrObject* GetObj(sal_uLong nNum) const { return aList[nNum]; }
+    SdrObject* operator[](sal_uLong nNum) const { return aList[nNum]; }
+    void InsertObject(SdrObject* pObj) { aList.push_back(pObj); }
+    void InsertObject(SdrObject* pObj, sal_uLong nPos)
+    {
+        if(nPos==CONTAINER_APPEND)
+            aList.push_back(pObj);
+        else
+            aList.insert(aList.begin() + nPos, pObj);
+    }
+    void RemoveObject(sal_uLong nPos) { aList.erase(aList.begin()+nPos); }
 };
 
 //************************************************************
