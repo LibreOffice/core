@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
@@ -52,6 +53,18 @@ public class BlankScreenFragment extends Fragment {
                         .findViewById(R.id.blankscreen_slidepreview);
         aImage.setImageBitmap(aOut);
 
+        OnClickListener aListener = new OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                getFragmentManager().popBackStackImmediate();
+            }
+
+        };
+
+        v.findViewById(R.id.blankscreen_slidepreview).setOnClickListener(
+                        aListener);
+        v.findViewById(R.id.blankscreen_return).setOnClickListener(aListener);
         mCommunicationService.getTransmitter().blankScreen();
         // TODO Auto-generated method stub
         return v;

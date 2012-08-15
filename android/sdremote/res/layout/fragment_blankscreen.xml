@@ -39,6 +39,7 @@
         android:layout_alignParentRight="true"
         android:gravity="center"
         android:layout_below="@id/blankscreen_divider"
-        android:text="@string/blankscreen_return" />
+        android:text="@string/blankscreen_return"
+        android:layout_margin="5dip" />
 
 </RelativeLayout>
