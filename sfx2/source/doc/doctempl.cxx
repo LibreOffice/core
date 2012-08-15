@@ -1547,7 +1547,7 @@ SfxObjectShellRef DocTempl_EntryData_Impl::CreateObjectShell()
         {
             mbIsOwner = sal_True;
             SfxMedium *pMed=new SfxMedium(
-                aTargetURL,(STREAM_STD_READWRITE | STREAM_SHARE_DENYALL),  sal_False, 0 );
+                aTargetURL,(STREAM_STD_READWRITE | STREAM_SHARE_DENYALL) );
             const SfxFilter* pFilter = NULL;
             pMed->UseInteractionHandler(sal_True);
             if( pSfxApp->GetFilterMatcher().GuessFilter(

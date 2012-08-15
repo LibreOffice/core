@@ -270,7 +270,7 @@ SfxObjectShellRef SfxOrganizeMgr::CreateObjectShell( sal_uInt16 nIdx )
         {
             pEntry->bOwner = sal_True;
             SfxMedium* pMed = new SfxMedium(
-                aFilePath, ( STREAM_READ | STREAM_SHARE_DENYWRITE ), sal_False, 0 );
+                aFilePath, ( STREAM_READ | STREAM_SHARE_DENYWRITE ) );
             const SfxFilter* pFilter = NULL;
             pMed->UseInteractionHandler(sal_True);
             if (
