@@ -60,8 +60,6 @@ class SvIdlDataBase
     sal_uInt32                  nUniqueId;
     sal_uInt32                  nVerbosity;
     String                      aDataBaseFile;
-    SvFileStream *              pStm;
-    sal_Bool                        bIsModified;
     SvPersistStream             aPersStream;
     StringList                  aIdFileList;
     SvStringHashTable *         pIdTable;

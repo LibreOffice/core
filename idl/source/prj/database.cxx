@@ -31,7 +31,6 @@ SvIdlDataBase::SvIdlDataBase( const SvCommand& rCmd )
     : bExport( sal_False )
     , nUniqueId( 0 )
     , nVerbosity( rCmd.nVerbosity )
-    , bIsModified( sal_False )
     , aPersStream( *IDLAPP->pClassMgr, NULL )
     , pIdTable( NULL )
 {
