@@ -1367,7 +1367,7 @@ IMPL_LINK( SfxAcceleratorConfigPage, SaveHdl, sfx2::FileDialogHelper*, EMPTYARG 
 void SfxAcceleratorConfigPage::StartFileDialog( WinBits nBits, const String& rTitle )
 {
     bool bSave = ( ( nBits & WB_SAVEAS ) == WB_SAVEAS );
-    short nDialogType = bSave ? css::ui::dialogs::TemplateDescription::FILESAVE_SIMPLE
+    short nDialogType = bSave ? css::ui::dialogs::TemplateDescription::FILESAVE_AUTOEXTENSION
                               : css::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE;
     if ( m_pFileDlg )
         delete m_pFileDlg;
@@ -1376,6 +1376,7 @@ void SfxAcceleratorConfigPage::StartFileDialog( WinBits nBits, const String& rTi
     m_pFileDlg->SetTitle( rTitle );
     m_pFileDlg->AddFilter( aFilterAllStr, DEFINE_CONST_UNICODE( FILEDIALOG_FILTER_ALL ) );
     m_pFileDlg->AddFilter( aFilterCfgStr, DEFINE_CONST_UNICODE( "*.cfg" ) );
+    m_pFileDlg->SetCurrentFilter( aFilterCfgStr );
 
     Link aDlgClosedLink = bSave ? LINK( this, SfxAcceleratorConfigPage, SaveHdl )
                                 : LINK( this, SfxAcceleratorConfigPage, LoadHdl );
