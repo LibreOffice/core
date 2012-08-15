@@ -1126,6 +1126,8 @@ void SfxTemplateManagerDlg::OnTemplateSaveAs()
 
             if (maView->isOverlayVisible())
             {
+                if (!maView->saveTemplateAs(maView->getOverlayRegionId()+1,m_xModel,aName))
+                    aFolderList = maView->getOverlayName();
             }
             else
             {

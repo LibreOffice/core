@@ -644,6 +644,24 @@ bool TemplateLocalView::exportTo(const sal_uInt16 nItemId, const sal_uInt16 nReg
     return false;
 }
 
+bool TemplateLocalView::saveTemplateAs (sal_uInt16 nItemId,
+                                        com::sun::star::uno::Reference<com::sun::star::frame::XModel> &rModel,
+                                        const OUString &rName)
+{
+    bool bRet = false;
+
+    for (size_t i = 0, n = mItemList.size(); i < n; ++i)
+    {
+        if (mItemList[i]->mnId == nItemId)
+        {
+            bRet = saveTemplateAs((const TemplateLocalViewItem*)mItemList[i],rModel,rName);
+            break;
+        }
+    }
+
+    return bRet;
+}
+
 bool TemplateLocalView::saveTemplateAs(const TemplateLocalViewItem *pDstItem,
                                        com::sun::star::uno::Reference<com::sun::star::frame::XModel> &rModel,
                                        const OUString &rName)
