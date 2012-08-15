@@ -181,7 +181,7 @@ sal_uInt32 SwMSDffManager::GetFilterFlags()
  *
  * cmc
  */
-// --> OD 2004-12-14 #i32596# - consider new parameter <_nCalledByGroup>
+// #i32596# - consider new parameter <_nCalledByGroup>
 SdrObject* SwMSDffManager::ImportOLE( long nOLEId,
                                       const Graphic& rGrf,
                                       const Rectangle& rBoundRect,
@@ -189,14 +189,13 @@ SdrObject* SwMSDffManager::ImportOLE( long nOLEId,
                                       const int _nCalledByGroup,
                                       sal_Int64 nAspect ) const
 {
-    // --> OD 2004-12-14 #i32596# - no import of OLE object, if it's inside a group.
+    // #i32596# - no import of OLE object, if it's inside a group.
     // NOTE: This can be undone, if grouping of Writer fly frames is possible or
     // if drawing OLE objects are allowed in Writer.
     if ( _nCalledByGroup > 0 )
     {
         return 0L;
     }
-    // <--
 
     SdrObject* pRet = 0;
     String sStorageName;
@@ -298,10 +297,8 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
 
 
         // process user (== Winword) defined parameters in 0xF122 record
-        // --> OD 2008-04-10 #i84783#
-        // set special value to determine, if property is provided or not.
+        // #i84783# - set special value to determine, if property is provided or not.
         pImpRec->nLayoutInTableCell = 0xFFFFFFFF;
-        // <--
         if(    maShapeRecords.SeekToContent( rSt,
                                              DFF_msofbtUDefProp,
                                              SEEK_FROM_CURRENT_AND_RESTART )
@@ -338,7 +335,7 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
             SfxItemSet aSet( pSdrModel->GetItemPool() );
 
             //Originally anything that as a mso_sptTextBox was created as a
-            //textbox, this was changed for #88277# to be created as a simple
+            //textbox, this was changed to be created as a simple
             //rect to keep impress happy. For the rest of us we'd like to turn
             //it back into a textbox again.
             sal_Bool bIsSimpleDrawingTextBox = (pImpRec->eShapeType == mso_sptTextBox);
@@ -715,13 +712,11 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
                                     DFF_Prop_cropFromRight, 0 );
 
         sal_uInt32 nLineFlags = GetPropertyValue( DFF_Prop_fNoLineDrawDash );
-        // --> OD 2008-06-16 #156765#
         if ( !IsHardAttribute( DFF_Prop_fLine ) &&
              pImpRec->eShapeType == mso_sptPictureFrame )
         {
             nLineFlags &= ~0x08;
         }
-        // <--
         pImpRec->eLineStyle = (nLineFlags & 8)
                               ? (MSO_LineStyle)GetPropertyValue(
                                                     DFF_Prop_lineStyle,
@@ -851,8 +846,6 @@ long lcl_GetTrueMargin(const SvxLRSpaceItem &rLR, const SwNumFmt &rFmt,
     return nExtraListIndent > 0 ? nExtraListIndent : 0;
 }
 
-// --> OD 2010-05-06 #i103711#
-// --> OD 2010-05-11 #i105414#
 void SyncIndentWithList( SvxLRSpaceItem &rLR,
                          const SwNumFmt &rFmt,
                          const bool bFirstLineOfstSet,
@@ -877,9 +870,19 @@ void SyncIndentWithList( SvxLRSpaceItem &rLR,
         {
             rLR.SetTxtLeft( rFmt.GetIndentAt() );
         }
+        else if (!bFirstLineOfstSet && !bLeftIndentSet )
+        {
+            if ( rFmt.GetFirstLineIndent() != 0 )
+            {
+                rLR.SetTxtFirstLineOfst( rFmt.GetFirstLineIndent() );
+            }
+            if ( rFmt.GetIndentAt() != 0 )
+            {
+                rLR.SetTxtLeft( rFmt.GetIndentAt() );
+            }
+        }
     }
 }
-// <--
 
 const SwNumFmt* SwWW8FltControlStack::GetNumFmtFromStack(const SwPosition &rPos,
     const SwTxtNode &rTxtNode)
@@ -927,14 +930,12 @@ void SwWW8FltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
                             continue;
 
                         SwCntntNode* pNd = (SwCntntNode*)pNode;
-                        SvxLRSpaceItem aOldLR = (const SvxLRSpaceItem&)
-                                pNd->GetAttr(RES_LR_SPACE);
+                        SvxLRSpaceItem aOldLR = (const SvxLRSpaceItem&)pNd->GetAttr(RES_LR_SPACE);
 
                         SwTxtNode *pTxtNode = (SwTxtNode*)pNode;
 
                         const SwNumFmt *pNum = 0;
-                        pNum = GetNumFmtFromStack(*aRegion.GetPoint(),
-                            *pTxtNode);
+                        pNum = GetNumFmtFromStack( *aRegion.GetPoint(), *pTxtNode );
                         if (!pNum)
                         {
                             pNum = GetNumFmtFromTxtNode(*pTxtNode);
@@ -942,18 +943,15 @@ void SwWW8FltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
 
                         if ( pNum )
                         {
-                            // --> OD 2010-05-06 #i103711#
                             const bool bFirstLineIndentSet =
                                 ( rReader.maTxtNodesHavingFirstLineOfstSet.end() !=
                                     rReader.maTxtNodesHavingFirstLineOfstSet.find( pNode ) );
-                            // --> OD 2010-05-11 #i105414#
                             const bool bLeftIndentSet =
                                 (  rReader.maTxtNodesHavingLeftIndentSet.end() !=
                                     rReader.maTxtNodesHavingLeftIndentSet.find( pNode ) );
                             SyncIndentWithList( aNewLR, *pNum,
                                                 bFirstLineIndentSet,
                                                 bLeftIndentSet );
-                            // <--
                         }
 
                         if (aNewLR == aOldLR)
@@ -1095,7 +1093,6 @@ void SwWW8FltRefStack::SetAttrInDoc(const SwPosition& rTmpPos,
             SwFmtFld& rFmtFld   = *(SwFmtFld*)pEntry->pAttr;
             SwField* pFld = rFmtFld.GetFld();
 
-            // OD 2004-03-19 - <NOT> got lost from revision 1.128 to 1.129
             if (!RefToVar(pFld,pEntry))
             {
                 sal_uInt16 nBkmNo;
@@ -1319,7 +1316,7 @@ void SwWW8ImplReader::ImportDop()
     // COMPATIBILITY FLAGS START
     //
 
-    // i#78951, remember the unknown compatability options
+    // #i78951# - remember the unknown compatability options
     // so as to export them out
     rDoc.Setn32DummyCompatabilityOptions1( pWDop->GetCompatabilityOptions());
     rDoc.Setn32DummyCompatabilityOptions2( pWDop->GetCompatabilityOptions2());
@@ -1334,7 +1331,7 @@ void SwWW8ImplReader::ImportDop()
     // #i24363# tab stops relative to indent
     rDoc.set(IDocumentSettingAccess::TABS_RELATIVE_TO_INDENT, false);
     maTracer.Log(sw::log::eTabStopDistance);
-    // OD 14.10.2003 #i18732# - adjust default of option 'FollowTextFlow'
+    // #i18732# - adjust default of option 'FollowTextFlow'
     rDoc.SetDefault( SwFmtFollowTextFlow( sal_False ) );
 
     // Import Default-Tabs
@@ -1359,44 +1356,34 @@ void SwWW8ImplReader::ImportDop()
     rDoc.set(IDocumentSettingAccess::ADD_FLY_OFFSETS, true );
     rDoc.set(IDocumentSettingAccess::ADD_EXT_LEADING, !pWDop->fNoLeading);
 
-    // -> #111955#
     rDoc.set(IDocumentSettingAccess::OLD_NUMBERING, false);
-    // <- #111955#
 
-    // --> FME 2005-05-27 #i47448#
+    // #i47448#
     rDoc.set(IDocumentSettingAccess::IGNORE_FIRST_LINE_INDENT_IN_NUMBERING, false);
-    // <--
 
-    // --> FME 2005-06-08 #i49277#
+    // #i49277#
     rDoc.set(IDocumentSettingAccess::DO_NOT_JUSTIFY_LINES_WITH_MANUAL_BREAK, !pWDop->fExpShRtn); // #i56856#
-    // --> FME 2005-08-11 #i53199#
+    // #i53199#
     rDoc.set(IDocumentSettingAccess::DO_NOT_RESET_PARA_ATTRS_FOR_NUM_FONT, false);
 
     rDoc.set(IDocumentSettingAccess::OLD_LINE_SPACING, false);
 
-    // OD, MMAHER 2004-03-01 #i25901#- set new compatibility option
-    //      'Add paragraph and table spacing at bottom of table cells'
+    // #i25901#- set new compatibility option 'Add paragraph and table spacing at bottom of table cells'
     rDoc.set(IDocumentSettingAccess::ADD_PARA_SPACING_TO_TABLE_CELLS, true);
 
-    // OD 2004-03-17 #i11860# - set new compatibility option
-    //      'Use former object positioning' to <sal_False>
+    // #i11860# - set new compatibility option 'Use former object positioning' to <sal_False>
     rDoc.set(IDocumentSettingAccess::USE_FORMER_OBJECT_POS, false);
 
-    // OD 2004-05-10 #i27767# - set new compatibility option
-    //      'Conder Wrapping mode when positioning object' to <sal_True>
+    // #i27767# - set new compatibility option 'Conder Wrapping mode when positioning object' to <sal_True>
     rDoc.set(IDocumentSettingAccess::CONSIDER_WRAP_ON_OBJECT_POSITION, true);
 
-    // --> FME 2004-04-22 # #108724#, #i13832#, #i24135#
+    // #i13832#, #i24135#
     rDoc.set(IDocumentSettingAccess::USE_FORMER_TEXT_WRAPPING, false);
-    // <--
 
-    // --> FME 2006-02-10 #131283#
-    rDoc.set(IDocumentSettingAccess::TABLE_ROW_KEEP, true); //SetTableRowKeep( true );
-    // <--
+    rDoc.set(IDocumentSettingAccess::TABLE_ROW_KEEP, true);
 
-    // --> FME 2006-03-01 #i3952#
+    // #i3952#
     rDoc.set(IDocumentSettingAccess::IGNORE_TABS_AND_BLANKS_FOR_LINE_CALCULATION, true);
-    // <--
 
     //
     // COMPATIBILITY FLAGS END
@@ -1409,9 +1396,8 @@ void SwWW8ImplReader::ImportDop()
     if (pWwFib->nFib > 105)
         ImportDopTypography(pWDop->doptypography);
 
-    // #110055# disable form design mode to be able to use imported controls directly
+    // disable form design mode to be able to use imported controls directly
     // #i31239# always disable form design mode, not only in protected docs
-//    if (pWDop->fProtEnabled)
     {
         using namespace com::sun::star;
 
@@ -1699,7 +1685,7 @@ void SwWW8ImplReader::Read_HdFtTextAsHackedFrame(long nStart, long nLen,
     pFrame->SetFmtAttr(SwFmtSurround(SURROUND_THROUGHT));
     pFrame->SetFmtAttr(SwFmtHoriOrient(0, text::HoriOrientation::LEFT)); //iFOO
 
-    // --> OD 2005-02-28 #i43427# - send frame for header/footer into background.
+    // #i43427# - send frame for header/footer into background.
     pFrame->SetFmtAttr( SvxOpaqueItem( RES_OPAQUE, false ) );
     SdrObject* pFrmObj = CreateContactObject( pFrame );
     ASSERT( pFrmObj,
@@ -1708,7 +1694,6 @@ void SwWW8ImplReader::Read_HdFtTextAsHackedFrame(long nStart, long nLen,
     {
         pFrmObj->SetOrdNum( 0L );
     }
-    // <--
     MoveInsideFly(pFrame);
 
     const SwNodeIndex* pHackIdx = pFrame->GetCntnt().GetCntntIdx();
@@ -1781,12 +1766,8 @@ void SwWW8ImplReader::Read_HdFt(bool bIsTitle, int nSect,
     }
     else
     {
-        // --> OD 2008-08-06 #150965#
         // Always read title page header/footer data - it could be used by following sections
-//        nWhichItems =
-//            rSection.maSep.grpfIhdt & (WW8_HEADER_FIRST | WW8_FOOTER_FIRST),
         nWhichItems = ( WW8_HEADER_FIRST | WW8_FOOTER_FIRST );
-        // <--
         pPD = rSection.mpTitlePage;
     }
 
@@ -2659,14 +2640,13 @@ bool SwWW8ImplReader::HandlePageBreakChar()
         bPgSecBreak = true;
         pCtrlStck->KillUnlockedAttrs(*pPaM->GetPoint());
         /*
-        #74468#
         If its a 0x0c without a paragraph end before it, act like a
         paragraph end, but nevertheless, numbering (and perhaps other
         similiar constructs) do not exist on the para.
         */
         //xushanchuan add for issue106569
         if (!bWasParaEnd && IsTemp)
-        //xushanchuan end
+            //xushanchuan end
         {
             bParaEndAdded = true;
             if (0 >= pPaM->GetPoint()->nContent.GetIndex())
@@ -2718,8 +2698,7 @@ bool SwWW8ImplReader::ReadChar(long nPosCp, long nCpOfs)
             }
             break;
         case 0xe:
-            //#108817# if there is only one column word treats a column
-            //break like a pagebreak.
+            // if there is only one column word treats a column break like a pagebreak.
             if (maSectionManager.CurrentSectionColCount() < 2)
                 bRet = HandlePageBreakChar();
             else if (!nInTable)
@@ -2800,7 +2779,7 @@ bool SwWW8ImplReader::ReadChar(long nPosCp, long nCpOfs)
                     else if (bSpec)
                         pResult = ImportGraf();
 
-                    //#102160# If we have a bad 0x1 insert a space instead.
+                    // If we have a bad 0x1 insert a space instead.
                     if (!pResult)
                     {
                         cInsert = ' ';
@@ -3232,16 +3211,13 @@ bool SwWW8ImplReader::ReadText(long nStartCp, long nTextLen, ManTypes nType)
                 pPlcxMan->GetSepPLCF()->GetSprms(&aTemp);
             if ((aTemp.nStartPos != l) && (aTemp.nEndPos != l))
             {
-                // --> OD 2005-01-07 #i39251# - insert text node for page break,
-                // if no one inserted.
-                // --> OD 2005-02-28 #i43118# - refine condition: the anchor
-                // control stack has to have entries, otherwise it's not needed
-                // to insert a text node.
+                // #i39251# - insert text node for page break, if no one inserted.
+                // #i43118# - refine condition: the anchor control stack has to have entries,
+                // otherwise it's not needed to insert a text node.
                 if ( !bStartLine && pAnchorStck->Count() > 0 )
                 {
                     AppendTxtNode(*pPaM->GetPoint());
                 }
-                // <--
                 rDoc.InsertPoolItem(*pPaM,
                     SvxFmtBreakItem(SVX_BREAK_PAGE_BEFORE, RES_BREAK), 0);
                 bFirstParaOfPage = true;//xushanchuan add for issue106569
@@ -3268,36 +3244,32 @@ bool SwWW8ImplReader::ReadText(long nStartCp, long nTextLen, ManTypes nType)
 #**************************************************************************/
 
 SwWW8ImplReader::SwWW8ImplReader(sal_uInt8 nVersionPara, SvStorage* pStorage,
-    SvStream* pSt, SwDoc& rD, const String& rBaseURL, bool bNewDoc) :
-    mpDocShell(rD.GetDocShell()),
-    maTracer(*(mpDocShell->GetMedium())),
-    pStg(pStorage),
-    pStrm(pSt),
-    pTableStream(0),
-    pDataStream(0),
-    rDoc(rD),
-    maSectionManager(*this),
-    maInsertedTables(rD),
-    maSectionNameGenerator(rD,CREATE_CONST_ASC("WW")),
-    maGrfNameGenerator(bNewDoc,String('G')),
-    maParaStyleMapper(rD),
-    maCharStyleMapper(rD),
-    // --> OD 2010-05-06 #i103711#
-    maTxtNodesHavingFirstLineOfstSet(),
-    // <--
-    // --> OD 2010-05-11 #i105414#
-    maTxtNodesHavingLeftIndentSet(),
-    // <--
-    pMSDffManager(0),
-    mpAtnNames(0),
-    pAuthorInfos(0),
-    sBaseURL(rBaseURL),
-    m_bRegardHindiDigits( false ),
-    mbNewDoc(bNewDoc),
-    nDropCap(0),
-    nIdctHint(0),
-    bBidi(false),
-    bReadTable(false)
+    SvStream* pSt, SwDoc& rD, const String& rBaseURL, bool bNewDoc)
+    : mpDocShell(rD.GetDocShell()),
+      maTracer(*(mpDocShell->GetMedium())),
+      pStg(pStorage),
+      pStrm(pSt),
+      pTableStream(0),
+      pDataStream(0),
+      rDoc(rD),
+      maSectionManager(*this),
+      maInsertedTables(rD),
+      maSectionNameGenerator(rD,CREATE_CONST_ASC("WW")),
+      maGrfNameGenerator(bNewDoc,String('G')),
+      maParaStyleMapper(rD),
+      maCharStyleMapper(rD),
+      maTxtNodesHavingFirstLineOfstSet(),
+      maTxtNodesHavingLeftIndentSet(),
+      pMSDffManager(0),
+      mpAtnNames(0),
+      pAuthorInfos(0),
+      sBaseURL(rBaseURL),
+      m_bRegardHindiDigits( false ),
+      mbNewDoc(bNewDoc),
+      nDropCap(0),
+      nIdctHint(0),
+      bBidi(false),
+      bReadTable(false)
 {
     pStrm->SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
     nWantedVersion = nVersionPara;
@@ -3519,10 +3491,7 @@ SwFmtPageDesc wwSectionManager::SetSwFmtPageDesc(mySegIter &rIter,
     mySegIter &rStart, bool bIgnoreCols)
 {
     SwFmtPageDesc aEmpty;
-    // --> OD 2008-08-06 #150965#
     // Always read title page header/footer data - it could be used by following sections
-//    if (rIter->HasTitlePage())
-    // <--
     {
         if (IsNewDoc() && rIter == rStart)
         {
@@ -3713,7 +3682,6 @@ void wwSectionManager::InsertSegments()
 
             bool bHasOwnHdFt = false;
             /*
-             #112027# #110379#
              In this nightmare scenario the continuous section has its own
              headers and footers so we will try and find a hard page break
              between here and the end of the section and put the headers and
@@ -4009,7 +3977,7 @@ sal_uLong SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss, const SwPosition &rPos)
             aLinkStrings[i];
     }
 
-    ReadDocVars(); // #129053# import document variables as meta information.
+    ReadDocVars(); // import document variables as meta information.
 
     ::SetProgressState(nProgress, mpDocShell);    // Update
 
@@ -4677,22 +4645,19 @@ public:
 void SwWW8ImplReader::SetOutLineStyles()
 {
     /*
-    #i3674# & #101291# Load new document and insert document cases.
+    #i3674# - Load new document and insert document cases.
     */
     SwNumRule aOutlineRule(*rDoc.GetOutlineNumRule());
-    // --> OD 2005-10-14 #i53044,i53213#
+    // #i53044,i53213#
     // <mpChosenOutlineNumRule> has to be set to point to local variable
     // <aOutlineRule>, because its used below to be compared this <&aOutlineRule>.
     // But at the end of the method <mpChosenOutlineNumRule> has to be set to
     // <rDoc.GetOutlineNumRule()>, because <aOutlineRule> will be destroyed.
-//    mpChosenOutlineNumRule = rDoc.GetOutlineNumRule();
     mpChosenOutlineNumRule = &aOutlineRule;
-    // <--
 
     sw::ParaStyles aOutLined(sw::util::GetParaStyles(rDoc));
-    // --> OD 2009-02-04 #i98791# - sorting algorithm adjusted
+    // #i98791# - sorting algorithm adjusted
     sw::util::SortByAssignedOutlineStyleListLevel(aOutLined);
-    // <--
 
     typedef sw::ParaStyleIter myParaStyleIter;
     /*
@@ -4702,16 +4667,12 @@ void SwWW8ImplReader::SetOutLineStyles()
     sal_uInt16 nFlagsStyleOutlLevel = 0;
     if (!mbNewDoc)
     {
-        // --> OD 2008-12-16 #i70748#
-        // backward iteration needed due to the outline level attribute
+        // #i70748# - backward iteration needed due to the outline level attribute
         sw::ParaStyles::reverse_iterator aEnd = aOutLined.rend();
         for ( sw::ParaStyles::reverse_iterator aIter = aOutLined.rbegin(); aIter < aEnd; ++aIter)
-        // <--
         {
-            //if ((*aIter)->GetOutlineLevel() < MAXLEVEL)   //#outline level,zhaojianwei,
-            //nFlagsStyleOutlLevel |= 1 << (*aIter)->GetOutlineLevel();
             if ((*aIter)->IsAssignedToListLevelOfOutlineStyle())
-                nFlagsStyleOutlLevel |= 1 << (*aIter)->GetAssignedOutlineStyleLevel();//<-end,zhaojianwei
+                nFlagsStyleOutlLevel |= 1 << (*aIter)->GetAssignedOutlineStyleLevel();
             else
                 break;
         }
@@ -4719,12 +4680,11 @@ void SwWW8ImplReader::SetOutLineStyles()
     else
     {
         /*
-        #111955#
         Only import *one* of the possible multiple outline numbering rules, so
         pick the one that affects most styles. If we're not importing a new
         document, we got to stick with what is already there.
         */
-        // --> OD 2005-11-07 #127520# - use index in text format collection
+        // use index in text format collection
         // array <pCollA> as key of the outline numbering map <aRuleMap>
         // instead of the memory pointer of the outline numbering rule
         // to assure that, if two outline numbering rule affect the same
@@ -4739,14 +4699,10 @@ void SwWW8ImplReader::SetOutLineStyles()
                 rSI.pFmt
                )
             {
-                // --> OD 2005-11-07 #127520#
                 myIter aIter = aRuleMap.find(nI);
-                // <--
                 if (aIter == aRuleMap.end())
                 {
-                    // --> OD 2005-11-07 #127520#
                     aRuleMap[nI] = 1;
-                    // <--
                 }
                 else
                     ++(aIter->second);
@@ -4760,12 +4716,9 @@ void SwWW8ImplReader::SetOutLineStyles()
             if (aIter->second > nMax)
             {
                 nMax = aIter->second;
-                // --> OD 2005-11-07 #127520#
                 mpChosenOutlineNumRule = pCollA[ aIter->first ].pOutlineNumrule;
-                // <--
             }
         }
-        // <--
 
         ASSERT(mpChosenOutlineNumRule, "Impossible");
         if (mpChosenOutlineNumRule)
@@ -4773,16 +4726,12 @@ void SwWW8ImplReader::SetOutLineStyles()
 
         if (mpChosenOutlineNumRule != &aOutlineRule)
         {
-            // --> OD 2008-12-16 #i70748#
-            // backward iteration needed due to the outline level attribute
+            // #i70748# - backward iteration needed due to the outline level attribute
             sw::ParaStyles::reverse_iterator aEnd = aOutLined.rend();
             for ( sw::ParaStyles::reverse_iterator aIter = aOutLined.rbegin(); aIter < aEnd; ++aIter)
-            // <--
             {
-                //if ((*aIter)->GetOutlineLevel() < MAXLEVEL)//#outline level,zhaojianwei
-                //    (*aIter)->SetOutlineLevel(NO_NUMBERING);
                 if((*aIter)->IsAssignedToListLevelOfOutlineStyle())
-                    (*aIter)->DeleteAssignmentToListLevelOfOutlineStyle();  //<-end
+                    (*aIter)->DeleteAssignmentToListLevelOfOutlineStyle();
 
                 else
                     break;
@@ -4862,12 +4811,10 @@ void SwWW8ImplReader::SetOutLineStyles()
     }
     if (nOldFlags != nFlagsStyleOutlLevel)
         rDoc.SetOutlineNumRule(aOutlineRule);
-    // --> OD 2005-10-14 #i53044,i53213#
     if ( mpChosenOutlineNumRule == &aOutlineRule )
     {
         mpChosenOutlineNumRule = rDoc.GetOutlineNumRule();
     }
-    // <--
 }
 
 const String* SwWW8ImplReader::GetAnnotationAuthor(sal_uInt16 nIdx)
@@ -5108,7 +5055,7 @@ sal_Bool SwMSDffManager::GetOLEStorageName(long nOLEId, String& rStorageName,
         // sein. Wir brauchen hier aber nur das Sprm fuer die Picture Id
         long nOldPos = rReader.pStrm->Tell();
         {
-            // --> OD 2004-12-08 #i32596# - consider return value of method
+            // #i32596# - consider return value of method
             // <rReader.GetTxbxTextSttEndCp(..)>. If it returns false, method
             // wasn't successful. Thus, continue in this case.
             // Note: Ask MM for initialization of <nStartCp> and <nEndCp>.
@@ -5160,7 +5107,6 @@ sal_Bool SwMSDffManager::GetOLEStorageName(long nOLEId, String& rStorageName,
 
                 rReader.pPlcxMan->RestoreAllPLCFx( aSave );
             }
-            // <--
         }
         rReader.pStrm->Seek( nOldPos );
     }
@@ -5192,13 +5138,11 @@ bool SwWW8ImplReader::InEqualOrHigherApo(int nLvl) const
 {
     if (nLvl)
         --nLvl;
-    // --> OD 2006-01-19 #i60827#
-    // check size of <maApos> to assure that <maApos.begin() + nLvl> can be performed.
+    // #i60827# - check size of <maApos> to assure that <maApos.begin() + nLvl> can be performed.
     if ( sal::static_int_cast< sal_Int32>(nLvl) >= sal::static_int_cast< sal_Int32>(maApos.size()) )
     {
         return false;
     }
-    // <--
     mycApoIter aIter = std::find(maApos.begin() + nLvl, maApos.end(), true);
     if (aIter != maApos.end())
         return true;
