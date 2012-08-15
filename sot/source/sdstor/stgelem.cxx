@@ -194,7 +194,7 @@ sal_Bool StgHeader::Check()
             && nTOCstrm >= 0
             && nThreshold > 0
             && ( nDataFAT == -2 || ( nDataFAT >= 0 && nDataFATSize > 0 ) )
-            && ( nMasterChain == -2 || ( nMasterChain >=0 && nMaster > 109 ) )
+            && ( nMasterChain == -2 || nMasterChain >=0 )
             && nMaster >= 0;
 }
 
