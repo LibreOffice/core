@@ -76,6 +76,17 @@ void XMLTableShapeImportHelper::SetLayer(uno::Reference<drawing::XShape>& rShape
     }
 }
 
+// Attempt to find the topmost parent of the group, this is the one we apply
+// offsets to
+uno::Reference< drawing::XShape > lcl_getTopLevelParent( const uno::Reference< drawing::XShape >& rShape )
+{
+    uno::Reference< container::XChild > xChild( rShape, uno::UNO_QUERY );
+    uno::Reference< drawing::XShape > xParent( xChild->getParent(), uno::UNO_QUERY );
+    if ( xParent.is() )
+        return lcl_getTopLevelParent( xParent );
+    return rShape;
+}
+
 void XMLTableShapeImportHelper::finishShape(
     uno::Reference< drawing::XShape >& rShape,
     const uno::Reference< xml::sax::XAttributeList >& xAttrList,
@@ -192,22 +203,28 @@ void XMLTableShapeImportHelper::finishShape(
     }
     else //this are grouped shapes which should also get the layerid
     {
-        if ( !bOnTable )
+        uno::Reference< drawing::XShapes > xGroup( rShape, uno::UNO_QUERY );
+        // ignore the group ( within group ) object it it exists
+        if ( !bOnTable && !xGroup.is() )
         {
             // For cell anchored grouped shape we need to set the start
-            // position from the most top left positioned shape within
+            // position from the most top and left positioned shape(s) within
             // the group
             Point aStartPoint( rShape->getPosition().X,rShape->getPosition().Y );
             awt::Size aSize(rShape->getSize() );
-            if (SvxShape* pGroupShapeImp = SvxShape::getImplementation(rShapes))
+            uno::Reference< drawing::XShape > xChild( rShapes, uno::UNO_QUERY );
+            if (SvxShape* pGroupShapeImp = SvxShape::getImplementation( lcl_getTopLevelParent( xChild ) ))
             {
                 if (SdrObject *pSdrObj = pGroupShapeImp->GetSdrObject())
                 {
                     if ( ScDrawObjData* pAnchor = ScDrawLayer::GetObjData( pSdrObj ) )
                     {
-                        if ( ( pAnchor->maStartOffset.getX() == 0 && pAnchor->maStartOffset.getY() == 0 )
-                           || ( aStartPoint.IsAbove( pAnchor->maStartOffset ) && aStartPoint.IsLeft( pAnchor->maStartOffset ) ) )
+                        if ( pAnchor->maStartOffset.getX() == 0 && pAnchor->maStartOffset.getY() == 0 )
                             pAnchor->maStartOffset = aStartPoint;
+                       if ( aStartPoint.getX() < pAnchor->maStartOffset.getX() )
+                             pAnchor->maStartOffset.setX( aStartPoint.getX() );
+                       if ( aStartPoint.getY() < pAnchor->maStartOffset.getY() )
+                           pAnchor->maStartOffset.setY( aStartPoint.getY() );
                     }
                 }
             }
