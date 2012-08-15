@@ -8,9 +8,6 @@ import org.libreoffice.impressremote.communication.CommunicationService;
 import org.libreoffice.impressremote.communication.SlideShow.Timer;
 
 import android.app.ActionBar;
-import android.app.Activity;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -20,6 +17,9 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.text.format.DateFormat;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -34,7 +34,7 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
-public class PresentationActivity extends Activity {
+public class PresentationActivity extends FragmentActivity {
     private CommunicationService mCommunicationService;
     private boolean mIsBound = false;
     private FrameLayout mLayout;
@@ -62,7 +62,7 @@ public class PresentationActivity extends Activity {
         mThumbnailFragment = new ThumbnailFragment();
         mPresentationFragment = new PresentationFragment();
 
-        FragmentManager fragmentManager = getFragmentManager();
+        FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager
                         .beginTransaction();
         fragmentTransaction.add(R.id.presentation_innerFrame,
@@ -149,7 +149,7 @@ public class PresentationActivity extends Activity {
                 BlankScreenFragment aFragment = new BlankScreenFragment(
                                 mCommunicationService);
 
-                FragmentTransaction ft = getFragmentManager()
+                FragmentTransaction ft = getSupportFragmentManager()
                                 .beginTransaction();
                 ft.replace(R.id.presentation_innerFrame, aFragment);
                 ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
@@ -220,7 +220,7 @@ public class PresentationActivity extends Activity {
 
             setupClockBar();
 
-            getFragmentManager().addOnBackStackChangedListener(this);
+            getSupportFragmentManager().addOnBackStackChangedListener(this);
 
             timerHandler.removeCallbacks(timerUpdateThread);
             timerHandler.postDelayed(timerUpdateThread, 50);
@@ -356,14 +356,14 @@ public class PresentationActivity extends Activity {
             // --------------------------------- ACTIONBAR BUTTONS -------------
             if (aSource == mThumbnailButton) {
                 if (!mThumbnailFragment.isVisible()) {
-                    FragmentTransaction ft = getFragmentManager()
+                    FragmentTransaction ft = getSupportFragmentManager()
                                     .beginTransaction();
                     ft.replace(R.id.presentation_innerFrame, mThumbnailFragment);
                     ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
                     ft.addToBackStack(null);
                     ft.commit();
                 } else {
-                    getFragmentManager().popBackStack();
+                    getSupportFragmentManager().popBackStack();
                 }
             } else if (aSource == mTimeLabel) {
                 if (mClockBar.getVisibility() == View.VISIBLE) {
@@ -422,7 +422,7 @@ public class PresentationActivity extends Activity {
 
         @Override
         public void onBackStackChanged() {
-            if (getFragmentManager().getBackStackEntryCount() == 0) {
+            if (getSupportFragmentManager().getBackStackEntryCount() == 0) {
                 mThumbnailButton.setChecked(false);
             }
         }

@@ -5,7 +5,6 @@ import org.libreoffice.impressremote.communication.SlideShow;
 
 import pl.polidea.coverflow.AbstractCoverFlowImageAdapter;
 import pl.polidea.coverflow.CoverFlow;
-import android.app.Fragment;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -17,6 +16,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
