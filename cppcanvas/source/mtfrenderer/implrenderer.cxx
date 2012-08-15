@@ -1324,7 +1324,7 @@ namespace cppcanvas
                 // - SetFont to process font metric specific actions
                 pCurrAct->Execute( &rVDev );
 
-                EMFP_DEBUG(printf("MTF\trecord type: %x\n", pCurrAct->GetType()));
+                EMFP_DEBUG(printf("MTF\trecord type: 0x%x (%d)\n", pCurrAct->GetType(), pCurrAct->GetType()));
 
                 switch( pCurrAct->GetType() )
                 {
