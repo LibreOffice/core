@@ -788,9 +788,9 @@ void FitTextOutlinesToShapeOutlines( const PolyPolygon& aOutlines2d, FWData& rFW
 SdrObject* CreateSdrObjectFromParagraphOutlines( const FWData& rFWData, const SdrObject* pCustomShape )
 {
     SdrObject* pRet = NULL;
+    basegfx::B2DPolyPolygon aPolyPoly;
     if ( !rFWData.vTextAreas.empty() )
     {
-        pRet = new SdrObjGroup();
         std::vector< FWTextArea >::const_iterator aTextAreaIter = rFWData.vTextAreas.begin();
         std::vector< FWTextArea >::const_iterator aTextAreaIEnd = rFWData.vTextAreas.end();
         while ( aTextAreaIter != aTextAreaIEnd )
@@ -807,8 +807,7 @@ SdrObject* CreateSdrObjectFromParagraphOutlines( const FWData& rFWData, const Sd
                     std::vector< PolyPolygon >::const_iterator aOutlineIEnd = aCharacterIter->vOutlines.end();
                     while( aOutlineIter != aOutlineIEnd )
                     {
-                        SdrObject* pPathObj = new SdrPathObj( OBJ_POLY, aOutlineIter->getB2DPolyPolygon() );
-                        ((SdrObjGroup*)pRet)->GetSubList()->NbcInsertObject( pPathObj );
+                        aPolyPoly.append( aOutlineIter->getB2DPolyPolygon() );
                         ++aOutlineIter;
                     }
                     ++aCharacterIter;
@@ -817,6 +816,8 @@ SdrObject* CreateSdrObjectFromParagraphOutlines( const FWData& rFWData, const Sd
             }
             ++aTextAreaIter;
         }
+
+        pRet = new SdrPathObj( OBJ_POLY, aPolyPoly );
 
         Point aP( pCustomShape->GetSnapRect().Center() );
         Size aS( pCustomShape->GetLogicRect().GetSize() );
