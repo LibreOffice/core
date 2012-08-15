@@ -36,7 +36,6 @@
 #include <cppuhelper/implbase4.hxx>
 #include <svx/sdr/overlay/overlaymanager.hxx>
 #include <svx/svdtypes.hxx> // for SdrLayerID
-#include <tools/contnr.hxx>
 #include <svx/sdrpagewindow.hxx>
 #include "svx/svxdllapi.h"
 
