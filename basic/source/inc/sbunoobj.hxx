@@ -281,7 +281,6 @@ class SbUnoServiceCtor : public SbxMethod
 
     ::com::sun::star::uno::Reference< ::com::sun::star::reflection::XServiceConstructorDescription > m_xServiceCtorDesc;
 
-    SbUnoServiceCtor* pPrev;
     SbUnoServiceCtor* pNext;
 
 public:

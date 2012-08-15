@@ -200,12 +200,8 @@ public:
 // SbxDimArray is an array that can dimensioned using BASIC conventions.
 struct SbxDim;
 
-class SbxDimArrayImpl;
-
 class BASIC_DLLPUBLIC SbxDimArray : public SbxArray
 {
-    SbxDimArrayImpl* mpSbxDimArrayImpl;   // Impl data
-
     SbxDim* pFirst, *pLast;               // Links to Dimension table
     short   nDim;                         // Number of dimensions
     BASIC_DLLPRIVATE void AddDimImpl32( sal_Int32, sal_Int32, sal_Bool bAllowSize0 );

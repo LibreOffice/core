@@ -302,7 +302,6 @@ sal_Bool hasUno( void )
 class OslStream : public SvStream
 {
     osl::File maFile;
-    short mnStrmMode;
 
 public:
                     OslStream( const String& rName, short nStrmMode );
@@ -316,7 +315,6 @@ public:
 
 OslStream::OslStream( const String& rName, short nStrmMode )
     : maFile( rName )
-    , mnStrmMode( nStrmMode )
 {
     sal_uInt32 nFlags;
 

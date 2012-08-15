@@ -54,12 +54,8 @@ class SbxObject;
 
 DBG_NAMEEX_VISIBILITY(SbxBase, BASIC_DLLPUBLIC)
 
-class SbxBaseImpl;
-
 class BASIC_DLLPUBLIC SbxBase : virtual public SvRefBase
 {
-    SbxBaseImpl* mpSbxBaseImpl; // Impl data
-
     virtual sal_Bool LoadData( SvStream&, sal_uInt16 );
     virtual sal_Bool StoreData( SvStream& ) const;
 protected:

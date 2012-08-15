@@ -148,13 +148,9 @@ SV_DECL_IMPL_REF(SbModule)
 
 #endif
 
-class SbClassModuleImpl;
-
 // Object class for instances of class modules
 class BASIC_DLLPUBLIC SbClassModuleObject : public SbModule
 {
-    SbClassModuleImpl* mpSbClassModuleImpl;
-
     SbModule*   mpClassModule;
     bool        mbInitializeEventDone;
 

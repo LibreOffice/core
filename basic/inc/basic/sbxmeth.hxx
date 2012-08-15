@@ -23,12 +23,8 @@
 #include <basic/sbxvar.hxx>
 #include "basicdllapi.h"
 
-class SbxMethodImpl;
-
 class BASIC_DLLPUBLIC SbxMethod : public SbxVariable
 {
-    SbxMethodImpl* mpSbxMethodImpl; // Impl data
-
 public:
     SBX_DECL_PERSIST_NODATA(SBXCR_SBX,SBXID_METHOD,1);
     TYPEINFO();
