@@ -173,7 +173,7 @@
 #define ID_FILETP_READONLY                      (ID_FILETP_START + 0)
 #define ID_FILETP_TITLE                     (ID_FILETP_START + 1)
 
-#define SID_ATTR_ZOOM                      (SID_SVX_START + 1419)
+#define SID_ATTR_ZOOM                      (SID_SVX_START + 0)
 
 #define SID_EXPLORER_PROPS_START            (SID_SFX_START + 1410)
 //      SID_EXPLORER_PROPS_END              (SID_SFX_START + 1499)
