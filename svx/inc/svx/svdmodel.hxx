@@ -193,7 +193,7 @@ protected:
     SfxStyleSheet*  pDefaultStyleSheet;
     sfx2::LinkManager* pLinkManager;   // LinkManager
     std::deque<SfxUndoAction*>* pUndoStack;
-    Container*      pRedoStack;
+    std::deque<SfxUndoAction*>* pRedoStack;
     SdrUndoGroup*   pAktUndoGroup;  // Fuer mehrstufige
     sal_uInt16          nUndoLevel;     // Undo-Klammerung
     sal_uInt16          nProgressPercent; // fuer den ProgressBar-Handler
@@ -579,8 +579,8 @@ public:
     sal_uIntPtr GetUndoActionCount() const                      { return pUndoStack!=NULL ? pUndoStack->size() : 0; }
     const SfxUndoAction* GetUndoAction(sal_uIntPtr nNum) const  { return (SfxUndoAction*)(pUndoStack!=NULL ? (*pUndoStack)[nNum] : NULL); }
     // RedoAction(0) ist die aktuelle (also die des letzten Undo)
-    sal_uIntPtr GetRedoActionCount() const                      { return pRedoStack!=NULL ? pRedoStack->Count() : 0; }
-    const SfxUndoAction* GetRedoAction(sal_uIntPtr nNum) const  { return (SfxUndoAction*)(pRedoStack!=NULL ? pRedoStack->GetObject(nNum) : NULL); }
+    sal_uIntPtr GetRedoActionCount() const                      { return pRedoStack!=NULL ? pRedoStack->size() : 0; }
+    const SfxUndoAction* GetRedoAction(sal_uIntPtr nNum) const  { return (SfxUndoAction*)(pRedoStack!=NULL ? (*pRedoStack)[nNum] : NULL); }
 
     bool Undo();
     bool Redo();

@@ -422,8 +422,9 @@ void SdrModel::ClearUndoBuffer()
         pUndoStack=NULL;
     }
     if (pRedoStack!=NULL) {
-        while (pRedoStack->Count()!=0) {
-            delete (SfxUndoAction*) pRedoStack->Remove(pRedoStack->Count()-1);
+        while (!pRedoStack->empty()) {
+            delete pRedoStack->back();
+            pRedoStack->pop_back();
         }
         delete pRedoStack;
         pRedoStack=NULL;
@@ -446,10 +447,10 @@ bool SdrModel::Undo()
             mbUndoEnabled = false;
             pDo->Undo();
             if(pRedoStack==NULL)
-                pRedoStack=new Container(1024,16,16);
+                pRedoStack=new std::deque<SfxUndoAction*>;
             SfxUndoAction* p = pUndoStack->front();
             pUndoStack->pop_front();
-            pRedoStack->Insert(p,(sal_uIntPtr)0);
+            pRedoStack->push_front(p);
             mbUndoEnabled = bWasUndoEnabled;
         }
     }
@@ -473,7 +474,9 @@ bool SdrModel::Redo()
             pDo->Redo();
             if(pUndoStack==NULL)
                 pUndoStack=new std::deque<SfxUndoAction*>;
-            pUndoStack->push_front((SfxUndoAction*) pRedoStack->Remove((sal_uIntPtr)0));
+            SfxUndoAction* p = pRedoStack->front();
+            pRedoStack->pop_front();
+            pUndoStack->push_front(p);
             mbUndoEnabled = bWasUndoEnabled;
         }
     }
@@ -522,7 +525,7 @@ void SdrModel::ImpPostUndoAction(SdrUndoAction* pUndo)
                 pUndoStack->pop_back();
             }
             if (pRedoStack!=NULL)
-                pRedoStack->Clear();
+                pRedoStack->clear();
         }
     }
     else
