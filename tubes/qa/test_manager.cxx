@@ -36,12 +36,13 @@
 #include <rtl/string.hxx>
 #include <rtl/ustring.hxx>
 #include <tubes/collaboration.hxx>
-#include <tubes/conference.hxx>
 #include <tubes/contact-list.hxx>
 #include <tubes/manager.hxx>
 #include <unotools/localfilehelper.hxx>
 
 #include <telepathy-glib/telepathy-glib.h>
+
+class TeleConference;
 
 namespace {
 
@@ -53,24 +54,20 @@ public:
     ~TestTeleTubes() {}
     // This could happen in costructor wasn't there TestTeleTubes instance for each test:
     void testInitialize();
-    void testCreateAccountManager();
-    void testRegisterClients();
+    void testInitTeleManager();
     void testContactList();
     void testStartBuddySession();
     void testSendPacket();
-    void testReceivePacket();
     void testDestroyTeleTubes();
     void testFailAlways();
 
     // Order is significant.
     CPPUNIT_TEST_SUITE( TestTeleTubes );
     CPPUNIT_TEST( testInitialize );
-    CPPUNIT_TEST( testCreateAccountManager );
-    CPPUNIT_TEST( testRegisterClients );
+    CPPUNIT_TEST( testInitTeleManager );
     CPPUNIT_TEST( testContactList );
     CPPUNIT_TEST( testStartBuddySession );
     CPPUNIT_TEST( testSendPacket );
-    CPPUNIT_TEST( testReceivePacket );
     CPPUNIT_TEST( testDestroyTeleTubes );
 #if 0
     CPPUNIT_TEST( testFailAlways );     // test failure displays SAL_LOG, uncomment for debugging
@@ -80,12 +77,11 @@ public:
 
 class TestCollaboration;
 // static, not members, so they actually survive cppunit test iteration
-static TestCollaboration*  mpCollaboration = NULL;
-static TeleConference*      mpConference1 = NULL;
-static TeleConference*      mpConference2 = NULL;
+static TestCollaboration*   mpCollaboration1 = NULL;
+static TestCollaboration*   mpCollaboration2 = NULL;
 static TpAccount*           mpOffererAccount = NULL;
 static TpContact*           mpAccepterContact = NULL;
-static bool                 mbFileSentSuccess = false;
+//static bool                 mbFileSentSuccess = false;
 static bool                 mbPacketReceived = false;
 static OUString             maTestConfigIniURL;
 static OString              maOffererIdentifier;
@@ -130,19 +126,13 @@ void TestTeleTubes::testInitialize()
     maAccepterIdentifier = OUStringToOString( aAccepterIdentifier, RTL_TEXTENCODING_UTF8);
 
     g_timeout_add_seconds (10, timed_out, NULL);
-    mpCollaboration = new TestCollaboration();
+    mpCollaboration1 = new TestCollaboration();
+    mpCollaboration2 = new TestCollaboration();
 }
 
-void TestTeleTubes::testCreateAccountManager()
+void TestTeleTubes::testInitTeleManager()
 {
-    bool bConnected = TeleManager::createAccountManager();
-    CPPUNIT_ASSERT( bConnected == true);
-}
-
-void TestTeleTubes::testRegisterClients()
-{
-    bool bRegistered = TeleManager::registerClients();
-    CPPUNIT_ASSERT( bRegistered == true);
+    CPPUNIT_ASSERT( TeleManager::init( true));
 }
 
 void TestTeleTubes::testContactList()
@@ -185,41 +175,39 @@ void TestTeleTubes::testContactList()
         mpAccepterContact);
 }
 
+/* FIXME: do we need the possibility to pass function to Collaboration::SendFile() ?
 static void lcl_FileSent( bool success, void * )
 {
     mbFileSentSuccess = success;
 }
+*/
 
 void TestTeleTubes::testStartBuddySession()
 {
+    TeleConference* pConference = NULL;
     CPPUNIT_ASSERT( mpOffererAccount != 0);
     CPPUNIT_ASSERT( mpAccepterContact != 0);
-    mpConference1 = TeleManager::startBuddySession( mpOffererAccount, mpAccepterContact);
-    CPPUNIT_ASSERT( mpConference1 != NULL);
-    mpConference1->sendFile( mpAccepterContact, maTestConfigIniURL, lcl_FileSent, NULL);
+    pConference = TeleManager::startBuddySession( mpOffererAccount, mpAccepterContact);
+    CPPUNIT_ASSERT( pConference != NULL);
+    mpCollaboration1->SetConference( pConference );
+    mpCollaboration1->SendFile( mpAccepterContact, maTestConfigIniURL );
 
-    while (!mbFileSentSuccess)
-        g_main_context_iteration( NULL, TRUE);
+    //while (!mbFileSentSuccess)
+    //    g_main_context_iteration( NULL, TRUE);
 
     // This checks that the file was received and msCurrentUUID set (see manager.cxx)
     while (!TeleManager::hasWaitingConference())
         g_main_context_iteration( NULL, TRUE);
 
-    mpConference2 = TeleManager::getConference();
-    CPPUNIT_ASSERT( mpConference2 != NULL);
-    mpCollaboration->SetConference( mpConference2 );
+    pConference = TeleManager::getConference();
+    CPPUNIT_ASSERT( pConference != NULL);
+    mpCollaboration2->SetConference( pConference );
 }
 
 void TestTeleTubes::testSendPacket()
 {
-    bool bSentPacket = false;
-    if (mpConference1)
-        bSentPacket = mpConference1->sendPacket( "from 1 to 2");
-    CPPUNIT_ASSERT( bSentPacket);
-}
+    mpCollaboration1->SendPacket( "from 1 to 2");
 
-void TestTeleTubes::testReceivePacket()
-{
     while (!mbPacketReceived)
         g_main_context_iteration( NULL, TRUE);
 }
@@ -234,14 +222,9 @@ void TestTeleTubes::testDestroyTeleTubes()
         g_object_unref(mpAccepterContact);
         mpAccepterContact = NULL;
     }
-
-    if (mpConference1)
-        mpConference1->close();
-    delete mpConference1;
-
-    if (mpConference2)
-        mpConference2->close();
-    delete mpConference2;
+    // Closes the TeleConference in destructor:
+    delete mpCollaboration1;
+    delete mpCollaboration2;
 
     TeleManager::finalize();
 }

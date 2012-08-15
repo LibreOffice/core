@@ -42,12 +42,14 @@ void Collaboration::Invite( TpContact* pContact ) const
 
 void Collaboration::SendFile( TpContact* pContact, const OUString& rURL ) const
 {
-    mpConference->sendFile( pContact, rURL, NULL, NULL );
+    if (mpConference)
+        mpConference->sendFile( pContact, rURL, NULL, NULL );
 }
 
 void Collaboration::SendPacket( const OString& rPacket ) const
 {
-    mpConference->sendPacket( rPacket );
+    if (mpConference)
+        mpConference->sendPacket( rPacket );
 }
 
 void Collaboration::SetConference( TeleConference* pConference )

@@ -35,24 +35,14 @@ $(eval $(call gb_CppunitTest_set_include,tubes_test, \
 	$$(INCLUDE) \
 ))
 
-$(eval $(call gb_CppunitTest_use_packages,tubes_test,tubes_inc))
-
-$(eval $(call gb_CppunitTest_use_library_objects,tubes_test,tubes))
-
 $(eval $(call gb_CppunitTest_use_libraries,tubes_test, \
-	comphelper \
-	cppu \
 	sal \
-	svt \
-	svxcore \
-	tl \
+	tubes \
 	utl \
-	vcl \
 	$(gb_STDLIBS) \
 ))
 
 $(eval $(call gb_CppunitTest_use_externals,tubes_test,\
-	gtk \
 	telepathy \
 ))
 

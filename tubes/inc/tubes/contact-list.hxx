@@ -29,6 +29,8 @@
 #ifndef INCLUDED_TUBES_CONTACT_LIST_HXX
 #define INCLUDED_TUBES_CONTACT_LIST_HXX
 
+#include <tubes/tubesdllapi.h>
+
 #include <set>
 #include <utility>
 #include <vector>
@@ -46,7 +48,8 @@ public:
     ContactList(TpAccountManager *pAccountManager);
     ~ContactList();
 
-    AccountContactPairV     getContacts();
+    // exported for unit test
+    TUBES_DLLPUBLIC AccountContactPairV getContacts();
 
 private:
     TpAccountManager*       mpAccountManager;

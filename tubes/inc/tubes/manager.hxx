@@ -81,7 +81,8 @@ public:
     /** Fetches the contact list. Returns 0 before connect() is called successfully.
         Is non-functional until prepareAccountManager().
      */
-    static ContactList*     getContactList();
+    // exported for unit test
+    TUBES_DLLPUBLIC static ContactList*     getContactList();
 
     /** Start a demo session where all local documents are shared to each other */
     static TeleConference*  startDemoSession();
@@ -112,7 +113,8 @@ public:
         @param pBuddy
             The buddy to be connected. Must be a contact of pAccount.
      */
-    static TeleConference*  startBuddySession( TpAccount *pAccount, TpContact *pBuddy );
+    // exported for unit test
+    TUBES_DLLPUBLIC static TeleConference* startBuddySession( TpAccount *pAccount, TpContact *pBuddy );
 
     static void             registerCollaboration( Collaboration* pCollaboration );
     static void             unregisterCollaboration( Collaboration* pCollaboration );
@@ -154,7 +156,8 @@ public:
         used it must be called before the first TeleManager is instanciated and
         connects.
      */
-    static void             addSuffixToNames( const char* pName );
+    // exported for unit test
+    TUBES_DLLPUBLIC static void addSuffixToNames( const char* pName );
 
 private:
     static TeleManagerImpl* pImpl;
