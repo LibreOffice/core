@@ -453,7 +453,7 @@ linux-androideabi*)
         AC_MSG_ERROR([the --with-android-ndk option does not point to an Android NDK])
     fi
 
-    if test ! -f "$ANDROID_SDK_HOME/platforms/android-14/android.jar"; then
+    if test ! -d "$ANDROID_SDK_HOME/platforms"; then
         AC_MSG_ERROR([the --with-android-sdk option does not point to an Android SDK])
     fi
 
