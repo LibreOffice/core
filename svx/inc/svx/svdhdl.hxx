@@ -32,7 +32,6 @@
 #include <tools/gen.hxx>
 
 #include <vcl/pointr.hxx>
-#include <tools/contnr.hxx>
 
 #include <svl/solar.hrc>
 
@@ -449,15 +448,15 @@ class SVX_DLLPUBLIC SdrHdlList
 protected:
     sal_uIntPtr                 mnFocusIndex;
     SdrMarkView*                pView;
-    Container                   aList;
-    sal_uInt16                      nHdlSize;
+    std::deque<SdrHdl*>         aList;
+    sal_uInt16                  nHdlSize;
 
     unsigned                    bRotateShear : 1;
     unsigned                    bDistortShear : 1;
     unsigned                    bMoveOutside : 1;      // Handles nach aussen ruecken (fuer TextEdit)
 
 private:
-    SVX_DLLPRIVATE SdrHdlList(const SdrHdlList&): aList(1024,64,64)  {}
+    SVX_DLLPRIVATE SdrHdlList(const SdrHdlList&): aList()  {}
     SVX_DLLPRIVATE void operator=(const SdrHdlList&)                 {}
     SVX_DLLPRIVATE sal_Bool operator==(const SdrHdlList&) const      { return sal_False; }
     SVX_DLLPRIVATE sal_Bool operator!=(const SdrHdlList&) const      { return sal_False; }
@@ -480,8 +479,8 @@ public:
     //             2.Level PageView (Pointer)
     //             3.Level Position (x+y)
     void     Sort();
-    sal_uIntPtr    GetHdlCount() const                       { return aList.Count(); }
-    SdrHdl*  GetHdl(sal_uIntPtr nNum) const                  { return (SdrHdl*)(aList.GetObject(nNum)); }
+    sal_uIntPtr    GetHdlCount() const                       { return aList.size(); }
+    SdrHdl*  GetHdl(sal_uIntPtr nNum) const                  { return aList[nNum]; }
     sal_uIntPtr    GetHdlNum(const SdrHdl* pHdl) const;
     void     SetHdlSize(sal_uInt16 nSiz);
     sal_uInt16   GetHdlSize() const                        { return nHdlSize; }

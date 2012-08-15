@@ -1666,17 +1666,10 @@ void ImpTextframeHdl::CreateB2dIAObject()
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-class ImpSdrHdlListSorter: public ContainerSorter {
-public:
-    ImpSdrHdlListSorter(Container& rNewCont): ContainerSorter(rNewCont) {}
-    virtual ~ImpSdrHdlListSorter() {}
-    virtual int Compare(const void* pElem1, const void* pElem2) const;
-};
-
-int ImpSdrHdlListSorter::Compare(const void* pElem1, const void* pElem2) const
+static bool ImpSdrHdlListSorter(SdrHdl* const& lhs, SdrHdl* const& rhs)
 {
-    SdrHdlKind eKind1=((SdrHdl*)pElem1)->GetKind();
-    SdrHdlKind eKind2=((SdrHdl*)pElem2)->GetKind();
+    SdrHdlKind eKind1=lhs->GetKind();
+    SdrHdlKind eKind2=rhs->GetKind();
     // Level 1: first normal handles, then Glue, then User, then Plus handles, then reference point handles
     unsigned n1=1;
     unsigned n2=1;
@@ -1691,44 +1684,44 @@ int ImpSdrHdlListSorter::Compare(const void* pElem1, const void* pElem2) const
         else if (eKind2==HDL_USER) n2=3;
         else if (eKind2==HDL_SMARTTAG) n2=0;
     }
-    if (((SdrHdl*)pElem1)->IsPlusHdl()) n1=4;
-    if (((SdrHdl*)pElem2)->IsPlusHdl()) n2=4;
+    if (lhs->IsPlusHdl()) n1=4;
+    if (rhs->IsPlusHdl()) n2=4;
     if (n1==n2)
     {
         // Level 2: PageView (Pointer)
-        SdrPageView* pPV1=((SdrHdl*)pElem1)->GetPageView();
-        SdrPageView* pPV2=((SdrHdl*)pElem2)->GetPageView();
+        SdrPageView* pPV1=lhs->GetPageView();
+        SdrPageView* pPV2=rhs->GetPageView();
         if (pPV1==pPV2)
         {
             // Level 3: Position (x+y)
-            SdrObject* pObj1=((SdrHdl*)pElem1)->GetObj();
-            SdrObject* pObj2=((SdrHdl*)pElem2)->GetObj();
+            SdrObject* pObj1=lhs->GetObj();
+            SdrObject* pObj2=rhs->GetObj();
             if (pObj1==pObj2)
             {
-                sal_uInt32 nNum1=((SdrHdl*)pElem1)->GetObjHdlNum();
-                sal_uInt32 nNum2=((SdrHdl*)pElem2)->GetObjHdlNum();
+                sal_uInt32 nNum1=lhs->GetObjHdlNum();
+                sal_uInt32 nNum2=rhs->GetObjHdlNum();
                 if (nNum1==nNum2)
                 {
                     if (eKind1==eKind2)
-                        return (long)pElem1<(long)pElem2 ? -1 : 1; // Hack, to always get to the same sorting
-                    return (sal_uInt16)eKind1<(sal_uInt16)eKind2 ? -1 : 1;
+                        return (long)lhs<(long)rhs; // Hack, to always get to the same sorting
+                    return (sal_uInt16)eKind1<(sal_uInt16)eKind2;
                 }
                 else
-                    return nNum1<nNum2 ? -1 : 1;
+                    return nNum1<nNum2;
             }
             else
             {
-                return (long)pObj1<(long)pObj2 ? -1 : 1;
+                return (long)pObj1<(long)pObj2;
             }
         }
         else
         {
-            return (long)pPV1<(long)pPV2 ? -1 : 1;
+            return (long)pPV1<(long)pPV2;
         }
     }
     else
     {
-        return n1<n2 ? -1 : 1;
+        return n1<n2;
     }
 }
 
@@ -1828,7 +1821,7 @@ void SdrHdlList::TravelFocusHdl(sal_Bool bForward)
     if(mnFocusIndex != CONTAINER_ENTRY_NOTFOUND && mnFocusIndex >= GetHdlCount())
         mnFocusIndex = CONTAINER_ENTRY_NOTFOUND;
 
-    if(aList.Count())
+    if(!aList.empty())
     {
         // take care of old handle
         const sal_uIntPtr nOldHdlNum(mnFocusIndex);
@@ -1842,24 +1835,24 @@ void SdrHdlList::TravelFocusHdl(sal_Bool bForward)
         }
 
         // allocate pointer array for sorted handle list
-        ImplHdlAndIndex* pHdlAndIndex = new ImplHdlAndIndex[aList.Count()];
+        ImplHdlAndIndex* pHdlAndIndex = new ImplHdlAndIndex[aList.size()];
 
         // build sorted handle list
         sal_uInt32 a;
-        for( a = 0; a < aList.Count(); a++)
+        for( a = 0; a < aList.size(); a++)
         {
-            pHdlAndIndex[a].mpHdl = (SdrHdl*)aList.GetObject(a);
+            pHdlAndIndex[a].mpHdl = aList[a];
             pHdlAndIndex[a].mnIndex = a;
         }
 
-        qsort(pHdlAndIndex, aList.Count(), sizeof(ImplHdlAndIndex), ImplSortHdlFunc);
+        qsort(pHdlAndIndex, aList.size(), sizeof(ImplHdlAndIndex), ImplSortHdlFunc);
 
         // look for old num in sorted array
         sal_uIntPtr nOldHdl(nOldHdlNum);
 
         if(nOldHdlNum != CONTAINER_ENTRY_NOTFOUND)
         {
-            for(a = 0; a < aList.Count(); a++)
+            for(a = 0; a < aList.size(); a++)
             {
                 if(pHdlAndIndex[a].mpHdl == pOld)
                 {
@@ -1877,7 +1870,7 @@ void SdrHdlList::TravelFocusHdl(sal_Bool bForward)
         {
             if(nOldHdl != CONTAINER_ENTRY_NOTFOUND)
             {
-                if(nOldHdl == aList.Count() - 1)
+                if(nOldHdl == aList.size() - 1)
                 {
                     // end forward run
                     nNewHdl = CONTAINER_ENTRY_NOTFOUND;
@@ -1899,7 +1892,7 @@ void SdrHdlList::TravelFocusHdl(sal_Bool bForward)
             if(nOldHdl == CONTAINER_ENTRY_NOTFOUND)
             {
                 // start backward run at last entry
-                nNewHdl = aList.Count() - 1;
+                nNewHdl = aList.size() - 1;
 
             }
             else
@@ -1925,9 +1918,9 @@ void SdrHdlList::TravelFocusHdl(sal_Bool bForward)
         {
             SdrHdl* pNew = pHdlAndIndex[nNewHdl].mpHdl;
 
-            for(a = 0; a < aList.Count(); a++)
+            for(a = 0; a < aList.size(); a++)
             {
-                if((SdrHdl*)aList.GetObject(a) == pNew)
+                if(aList[a] == pNew)
                 {
                     nNewHdlNum = a;
                     break;
@@ -2006,7 +1999,7 @@ void SdrHdlList::ResetFocusHdl()
 SdrHdlList::SdrHdlList(SdrMarkView* pV)
 :   mnFocusIndex(CONTAINER_ENTRY_NOTFOUND),
     pView(pV),
-    aList(1024,32,32)
+    aList()
 {
     nHdlSize = 3;
     bRotateShear = sal_False;
@@ -2063,28 +2056,24 @@ void SdrHdlList::SetDistortShear(sal_Bool bOn)
 
 SdrHdl* SdrHdlList::RemoveHdl(sal_uIntPtr nNum)
 {
-    SdrHdl* pRetval = (SdrHdl*)aList.Remove(nNum);
+    SdrHdl* pRetval = aList[nNum];
+    aList.erase(aList.begin() + nNum);
 
     return pRetval;
 }
 
 void SdrHdlList::RemoveAllByKind(SdrHdlKind eKind)
 {
-    SdrHdl* p = static_cast<SdrHdl*>(aList.Last());
-    while (p)
+    for(std::deque<SdrHdl*>::iterator it = aList.begin(); it != aList.end(); )
     {
+        SdrHdl* p = *it;
         if (p->GetKind() == eKind)
         {
-            // If removing an item doesn't invalidate the current position,
-            // then perhaps it's safe to keep calling Prev here.  But then I'm
-            // too lazy to find out & this Container needs to be replaced by
-            // STL anyways... :-P
-            aList.Remove(p);
+            it = aList.erase( it );
             delete p;
-            p = static_cast<SdrHdl*>(aList.Last()); // start from the back again.
         }
         else
-            p = static_cast<SdrHdl*>(aList.Prev());
+            ++it;
     }
 }
 
@@ -2095,7 +2084,7 @@ void SdrHdlList::Clear()
         SdrHdl* pHdl=GetHdl(i);
         delete pHdl;
     }
-    aList.Clear();
+    aList.clear();
 
     bRotateShear=sal_False;
     bDistortShear=sal_False;
@@ -2106,8 +2095,7 @@ void SdrHdlList::Sort()
     // remember currently focused handle
     SdrHdl* pPrev = GetFocusHdl();
 
-    ImpSdrHdlListSorter aSort(aList);
-    aSort.DoSort();
+    std::sort( aList.begin(), aList.end(), ImpSdrHdlListSorter );
 
     // get now and compare
     SdrHdl* pNow = GetFocusHdl();
@@ -2131,8 +2119,10 @@ sal_uIntPtr SdrHdlList::GetHdlNum(const SdrHdl* pHdl) const
 {
     if (pHdl==NULL)
         return CONTAINER_ENTRY_NOTFOUND;
-    sal_uIntPtr nPos=aList.GetPos(pHdl);
-    return nPos;
+    std::deque<SdrHdl*>::const_iterator it = std::find( aList.begin(), aList.end(), pHdl);
+    if( it == aList.end() )
+        return CONTAINER_ENTRY_NOTFOUND;
+    return it - aList.begin();
 }
 
 void SdrHdlList::AddHdl(SdrHdl* pHdl, sal_Bool bAtBegin)
@@ -2141,11 +2131,11 @@ void SdrHdlList::AddHdl(SdrHdl* pHdl, sal_Bool bAtBegin)
     {
         if (bAtBegin)
         {
-            aList.Insert(pHdl,sal_uIntPtr(0));
+            aList.push_front(pHdl);
         }
         else
         {
-            aList.Insert(pHdl,CONTAINER_APPEND);
+            aList.push_back(pHdl);
         }
         pHdl->SetHdlList(this);
     }
