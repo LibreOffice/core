@@ -948,7 +948,7 @@ ShapeExport& ShapeExport::WriteConnectorShape( Reference< XShape > xShape )
 
     // visual shape properties
     pFS->startElementNS( mnXmlNamespace, XML_spPr, FSEND );
-    WriteTransformation( aRect, mnXmlNamespace, bFlipH, bFlipV );
+    WriteTransformation( aRect, XML_a, bFlipH, bFlipV );
     // TODO: write adjustments (ppt export doesn't work well there either)
     WritePresetShape( sGeometry );
     Reference< XPropertySet > xShapeProps( xShape, UNO_QUERY );
