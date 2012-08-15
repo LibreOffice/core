@@ -43,7 +43,6 @@ use installer::environment;
 use installer::epmfile;
 use installer::exiter;
 use installer::files;
-use installer::followme;
 use installer::globals;
 use installer::helppack;
 use installer::languagepack;
@@ -1502,7 +1501,6 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
         installer::worker::clean_output_tree(); # removing directories created in the output tree
         ($is_success, $finalinstalldir) = installer::worker::analyze_and_save_logfile($loggingdir, $installdir, $installlogdir, $allsettingsarrayref, $languagestringref, $current_install_number);
         my $downloadname = installer::ziplist::getinfofromziplist($allsettingsarrayref, "downloadname");
-        if ( $is_success ) { installer::followme::save_followme_info($finalinstalldir, $includepatharrayref, $allvariableshashref, $$downloadname, $languagestringref, $languagesarrayref, $current_install_number, $loggingdir, $installlogdir); }
 
         #######################################################
         # Creating download installation set
@@ -1916,8 +1914,6 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
         if ( $installer::globals::languagepack ) { $downloadname = installer::ziplist::getinfofromziplist($allsettingsarrayref, "langpackdownloadname"); }
         if ( $installer::globals::helppack ) { $downloadname = installer::ziplist::getinfofromziplist($allsettingsarrayref, "helppackdownloadname"); }
         if ( $installer::globals::patch ) { $downloadname = installer::ziplist::getinfofromziplist($allsettingsarrayref, "patchdownloadname"); }
-
-        if ( $is_success ) { installer::followme::save_followme_info($finalinstalldir, $includepatharrayref, $allvariableshashref, $$downloadname, $languagestringref, $languagesarrayref, $current_install_number, $loggingdir, $installlogdir); }
 
         if ( $$downloadname ne "" ) { $create_download = 1; }
         if ( $installer::globals::iswindowsbuild )
