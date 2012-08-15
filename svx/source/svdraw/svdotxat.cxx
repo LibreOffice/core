@@ -231,7 +231,7 @@ void SdrTextObj::ImpSetTextStyleSheetListeners()
     SfxStyleSheetBasePool* pStylePool=pModel!=NULL ? pModel->GetStyleSheetPool() : NULL;
     if (pStylePool!=NULL)
     {
-        Container aStyles(1024,64,64);
+        std::vector<XubString*> aStyleNames;
         OutlinerParaObject* pOutlinerParaObject = GetOutlinerParaObject();
         if (pOutlinerParaObject!=NULL)
         {
@@ -256,28 +256,28 @@ void SdrTextObj::ImpSetTextStyleSheetListeners()
                     aStyleName += aFam;
 
                     sal_Bool bFnd(sal_False);
-                    sal_uInt32 nNum(aStyles.Count());
+                    sal_uInt32 nNum(aStyleNames.size());
 
                     while(!bFnd && nNum > 0)
                     {
                         // we don't want duplicate stylesheets
                         nNum--;
-                        bFnd = (aStyleName.Equals(*(XubString*)aStyles.GetObject(nNum)));
+                        bFnd = aStyleName.Equals(*aStyleNames[nNum]);
                     }
 
                     if(!bFnd)
                     {
-                        aStyles.Insert(new XubString(aStyleName), CONTAINER_APPEND);
+                        aStyleNames.push_back(new XubString(aStyleName));
                     }
                 }
             }
         }
 
-        // now replace the strings in the container by StyleSheet*
-        sal_uIntPtr nNum=aStyles.Count();
-        while (nNum>0) {
-            nNum--;
-            XubString* pName=(XubString*)aStyles.GetObject(nNum);
+        // now convert the strings in the vector from names to StyleSheet*
+        std::set<SfxStyleSheet*> aStyleSheets;
+        while (!aStyleNames.empty()) {
+            XubString* pName=aStyleNames.back();
+            aStyleNames.pop_back();
 
             String aFam = pName->Copy(0, pName->Len() - 6);
 
@@ -291,28 +291,24 @@ void SdrTextObj::ImpSetTextStyleSheetListeners()
             SfxStyleSheet* pStyle=PTR_CAST(SfxStyleSheet,pStyleBase);
             delete pName;
             if (pStyle!=NULL && pStyle!=GetStyleSheet()) {
-                aStyles.Replace(pStyle,nNum);
-            } else {
-                aStyles.Remove(nNum);
+                aStyleSheets.insert(pStyle);
             }
         }
         // now remove all superfluous stylesheets
-        nNum=GetBroadcasterCount();
+        sal_uIntPtr nNum=GetBroadcasterCount();
         while (nNum>0) {
             nNum--;
             SfxBroadcaster* pBroadcast=GetBroadcasterJOE((sal_uInt16)nNum);
             SfxStyleSheet* pStyle=PTR_CAST(SfxStyleSheet,pBroadcast);
             if (pStyle!=NULL && pStyle!=GetStyleSheet()) { // special case for stylesheet of the object
-                if (aStyles.GetPos(pStyle)==CONTAINER_ENTRY_NOTFOUND) {
+                if (aStyleSheets.find(pStyle)==aStyleSheets.end()) {
                     EndListening(*pStyle);
                 }
             }
         }
         // and finally, merge all stylesheets that are contained in aStyles with previous broadcasters
-        nNum=aStyles.Count();
-        while (nNum>0) {
-            nNum--;
-            SfxStyleSheet* pStyle=(SfxStyleSheet*)aStyles.GetObject(nNum);
+        for(std::set<SfxStyleSheet*>::const_iterator it = aStyleSheets.begin(); it != aStyleSheets.end(); ++it) {
+            SfxStyleSheet* pStyle=*it;
             // let StartListening see for itself if there's already a listener registered
             StartListening(*pStyle,sal_True);
         }
