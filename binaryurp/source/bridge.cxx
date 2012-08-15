@@ -669,7 +669,24 @@ void Bridge::sendRequestChangeRequest() {
 void Bridge::handleRequestChangeReply(
     bool exception, BinaryAny const & returnValue)
 {
-    throwException(exception, returnValue);
+    try {
+        throwException(exception, returnValue);
+    } catch (css::uno::RuntimeException & e) {
+        // Before OOo 2.2, Java URP would throw a RuntimeException when
+        // receiving a requestChange message (see i#35277 "Java URP: Support
+        // Manipulation of Protocol Properties"):
+        if (mode_ != MODE_REQUESTED) {
+            throw;
+        }
+        SAL_WARN(
+            "binaryurp",
+            "requestChange caught RuntimeException \'" << e.Message
+                << "' in state 'requested'");
+        mode_ = MODE_NORMAL;
+        getWriter()->unblock();
+        decrementCalls();
+        return;
+    }
     sal_Int32 n = *static_cast< sal_Int32 * >(
         returnValue.getValue(
             css::uno::TypeDescription(cppu::UnoType< sal_Int32 >::get())));
