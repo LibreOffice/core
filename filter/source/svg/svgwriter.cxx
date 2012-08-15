@@ -457,6 +457,7 @@ SVGTextWriter::SVGTextWriter( SVGExport& rExport, SVGFontExport& rFontExport )
         mpVDev( NULL ),
         mrTextShape(),
         mrParagraphEnumeration(),
+        mrCurrentTextParagraph(),
         mrTextPortionEnumeration(),
         mrCurrentTextPortion(),
         mpTextEmbeddedBitmapMtf( NULL ),
@@ -468,7 +469,7 @@ SVGTextWriter::SVGTextWriter( SVGExport& rExport, SVGFontExport& rFontExport )
         maTextPos(0,0),
         mnTextWidth(0),
         mbPositioningNeeded( sal_False ),
-        mbIsNumbering( sal_False ),
+        mbIsNewListItem( sal_False ),
         maBulletListItemMap(),
         mbIsListLevelStyleImage( sal_False ),
         mbLineBreak( sal_False ),
@@ -575,6 +576,17 @@ sal_Bool SVGTextWriter::implGetTextPosition<MetaTextRectAction>( const MetaActio
 
 // -----------------------------------------------------------------------------
 
+template<>
+sal_Bool SVGTextWriter::implGetTextPosition<MetaBmpExScaleAction>( const MetaAction* pAction, Point& raPos, sal_Bool& rbEmpty )
+{
+    const MetaBmpExScaleAction* pA = (const MetaBmpExScaleAction*) pAction;
+    raPos = pA->GetPoint();
+    rbEmpty = sal_False;
+    return sal_True;
+}
+
+// -----------------------------------------------------------------------------
+
 /** setTextPosition
  *  Set the start position of the next line of text. In case no text is found
  *  the current action index is updated to the index value we reached while
@@ -628,6 +640,12 @@ sal_Int32 SVGTextWriter::setTextPosition( const GDIMetaFile& rMtf, sal_uLong& nC
             }
             break;
 
+            case( META_BMPEXSCALE_ACTION ):
+            {
+                bConfigured = implGetTextPosition<MetaBmpExScaleAction>( pAction, aPos, bEmpty );
+            }
+            break;
+
             // If we reach the end of the current line, paragraph or text shape
             // without finding any text we stop searching
             case( META_COMMENT_ACTION ):
@@ -641,6 +659,37 @@ sal_Int32 SVGTextWriter::setTextPosition( const GDIMetaFile& rMtf, sal_uLong& nC
                 else if( rsComment.equalsIgnoreAsciiCaseL( RTL_CONSTASCII_STRINGPARAM( "XTEXT_EOP" ) ) )
                 {
                     bEOP = true;
+
+                    ::rtl::OUString sContent;
+                    while( nextTextPortion() )
+                    {
+                        sContent = mrCurrentTextPortion->getString();
+                        if( sContent.isEmpty() )
+                        {
+                            continue;
+                        }
+                        else
+                        {
+                            if( sContent.equalsAscii( "\n" ) )
+                                mbLineBreak = sal_True;
+                        }
+                    }
+                    if( nextParagraph() )
+                    {
+                        while( nextTextPortion() )
+                        {
+                            sContent = mrCurrentTextPortion->getString();
+                            if( sContent.isEmpty() )
+                            {
+                                continue;
+                            }
+                            else
+                            {
+                                if( sContent.equalsAscii( "\n" ) )
+                                    mbLineBreak = sal_True;
+                            }
+                        }
+                    }
                 }
                 else if( rsComment.equalsIgnoreAsciiCaseL( RTL_CONSTASCII_STRINGPARAM( "XTEXT_PAINTSHAPE_END" ) ) )
                 {
@@ -858,9 +907,37 @@ void SVGTextWriter::implSetFontFamily()
 
 // -----------------------------------------------------------------------------
 
+sal_Bool SVGTextWriter::createParagraphEnumeration()
+{
+    if( mrTextShape.is() )
+    {
+        Reference< XEnumerationAccess > xEnumerationAccess( mrTextShape, UNO_QUERY_THROW );
+        Reference< XEnumeration > xEnumeration( xEnumerationAccess->createEnumeration(), UNO_QUERY_THROW );
+        if( xEnumeration.is() )
+        {
+            mrParagraphEnumeration.set( xEnumeration );
+            return sal_True;
+        }
+        else
+        {
+            OSL_FAIL( "SVGTextWriter::createParagraphEnumeration: no valid xEnumeration interface found." );
+        }
+    }
+    else
+    {
+        OSL_FAIL( "SVGTextWriter::createParagraphEnumeration: no valid XText interface found." );
+    }
+    return sal_False;
+}
+
+// -----------------------------------------------------------------------------
+
 sal_Bool SVGTextWriter::nextParagraph()
 {
     mrTextPortionEnumeration.clear();
+    mrCurrentTextParagraph.clear();
+    mbIsNewListItem = sal_False;
+    mbIsListLevelStyleImage = sal_False;
     if( mrParagraphEnumeration.is() && mrParagraphEnumeration->hasMoreElements() )
     {
         Reference < XTextContent >  xTextContent( mrParagraphEnumeration->nextElement(), UNO_QUERY_THROW );
@@ -872,16 +949,30 @@ sal_Bool SVGTextWriter::nextParagraph()
                 OUString sInfo;
                 if( xServiceInfo->supportsService( B2UCONST( "com.sun.star.text.Paragraph" ) ) )
                 {
+//                    {
+//                        Reference < XEnumeration> xContentEnum;
+//                        Reference < XContentEnumerationAccess > xCEA( xTextContent, UNO_QUERY );
+//                        if( xCEA.is() )
+//                            xContentEnum.set(xCEA->createContentEnumeration( B2UCONST( "com.sun.star.text.Paragraph" ) ));
+//                        const sal_Bool bHasContentEnum = xContentEnum.is() &&
+//                                                            xContentEnum->hasMoreElements();
+//
+//                        if( bHasContentEnum )
+//                        {
+//                            sInfo = B2UCONST( "true" );
+//                            mrExport.AddAttribute( XML_NAMESPACE_NONE, "has-content-enum", sInfo );
+//                        }
+//                    }
+
+                    mrCurrentTextParagraph.set( xTextContent );
                     Reference< XPropertySet > xPropSet( xTextContent, UNO_QUERY_THROW );
                     Reference< XPropertySetInfo > xPropSetInfo = xPropSet->getPropertySetInfo();
-                    mbIsNumbering = sal_False;
-                    mbIsListLevelStyleImage = sal_False;
                     if( xPropSetInfo->hasPropertyByName( B2UCONST( "NumberingLevel" ) ) )
                     {
                         sal_Int16 nListLevel = 0;
                         if( xPropSet->getPropertyValue( B2UCONST( "NumberingLevel" ) ) >>= nListLevel )
                         {
-                            mbIsNumbering = sal_True;
+                            mbIsNewListItem = sal_True;
                             sInfo = B2UCONST( "NumberingLevel: " );
                             sInfo += OUString::valueOf( (sal_Int32)nListLevel );
                             mrExport.AddAttribute( XML_NAMESPACE_NONE, "style", sInfo );
@@ -893,46 +984,66 @@ sal_Bool SVGTextWriter::nextParagraph()
                             }
                             if( xNumRules.is() && ( nListLevel < xNumRules->getCount() ) )
                             {
-                                Sequence<PropertyValue> aProps;
-                                if( xNumRules->getByIndex( nListLevel ) >>= aProps )
+                                sal_Bool bIsNumbered = sal_True;
+                                OUString msNumberingIsNumber(RTL_CONSTASCII_USTRINGPARAM("NumberingIsNumber"));
+                                if( xPropSetInfo->hasPropertyByName( msNumberingIsNumber ) )
                                 {
-                                    sal_Int16 eType = NumberingType::CHAR_SPECIAL;
-                                    sal_Unicode cBullet = 0xf095;
-                                    const sal_Int32 nCount = aProps.getLength();
-                                    const PropertyValue* pPropArray = aProps.getConstArray();
-                                    for( sal_Int32 i = 0; i < nCount; ++i )
+                                    if( !(xPropSet->getPropertyValue( msNumberingIsNumber ) >>= bIsNumbered ) )
                                     {
-                                        const PropertyValue& rProp = pPropArray[i];
-                                        if( rProp.Name.equalsAsciiL( XML_UNO_NAME_NRULE_NUMBERINGTYPE, sizeof(XML_UNO_NAME_NRULE_NUMBERINGTYPE)-1 ) )
-                                        {
-                                            rProp.Value >>= eType;
-                                        }
-                                        else if( rProp.Name.equalsAsciiL( XML_UNO_NAME_NRULE_BULLET_CHAR, sizeof(XML_UNO_NAME_NRULE_BULLET_CHAR)-1 ) )
-                                        {
-                                            OUString sValue;
-                                            rProp.Value >>= sValue;
-                                            if( !sValue.isEmpty() )
-                                            {
-                                                cBullet = (sal_Unicode)sValue[0];
-                                            }
-                                        }
+                                        OSL_FAIL( "numbered paragraph without number info" );
+                                        bIsNumbered = sal_False;
                                     }
-                                    meNumberingType = eType;
-                                    mbIsListLevelStyleImage = ( NumberingType::BITMAP == meNumberingType );
-                                    if( NumberingType::CHAR_SPECIAL == meNumberingType )
+                                    if( bIsNumbered )
                                     {
-                                        if( cBullet )
-                                        {
-                                            if( cBullet < ' ' )
-                                            {
-                                                cBullet = 0xF000 + 149;
-                                            }
-                                            mcBulletChar = cBullet;
-                                            // text:bullet-char="..."
-                                            sInfo = OUString::valueOf( (sal_Int32) cBullet );
-                                            mrExport.AddAttribute( XML_NAMESPACE_NONE, "bullet-char", sInfo );
-                                        }
+                                        sInfo = B2UCONST( "true" );
+                                        mrExport.AddAttribute( XML_NAMESPACE_NONE, "is-numbered", sInfo );
+                                    }
+                                }
+                                mbIsNewListItem = bIsNumbered;
 
+                                if( bIsNumbered )
+                                {
+                                    Sequence<PropertyValue> aProps;
+                                    if( xNumRules->getByIndex( nListLevel ) >>= aProps )
+                                    {
+                                        sal_Int16 eType = NumberingType::CHAR_SPECIAL;
+                                        sal_Unicode cBullet = 0xf095;
+                                        const sal_Int32 nCount = aProps.getLength();
+                                        const PropertyValue* pPropArray = aProps.getConstArray();
+                                        for( sal_Int32 i = 0; i < nCount; ++i )
+                                        {
+                                            const PropertyValue& rProp = pPropArray[i];
+                                            if( rProp.Name.equalsAsciiL( XML_UNO_NAME_NRULE_NUMBERINGTYPE, sizeof(XML_UNO_NAME_NRULE_NUMBERINGTYPE)-1 ) )
+                                            {
+                                                rProp.Value >>= eType;
+                                            }
+                                            else if( rProp.Name.equalsAsciiL( XML_UNO_NAME_NRULE_BULLET_CHAR, sizeof(XML_UNO_NAME_NRULE_BULLET_CHAR)-1 ) )
+                                            {
+                                                OUString sValue;
+                                                rProp.Value >>= sValue;
+                                                if( !sValue.isEmpty() )
+                                                {
+                                                    cBullet = (sal_Unicode)sValue[0];
+                                                }
+                                            }
+                                        }
+                                        meNumberingType = eType;
+                                        mbIsListLevelStyleImage = ( NumberingType::BITMAP == meNumberingType );
+                                        if( NumberingType::CHAR_SPECIAL == meNumberingType )
+                                        {
+                                            if( cBullet )
+                                            {
+                                                if( cBullet < ' ' )
+                                                {
+                                                    cBullet = 0xF000 + 149;
+                                                }
+                                                mcBulletChar = cBullet;
+                                                // text:bullet-char="..."
+                                                sInfo = OUString::valueOf( (sal_Int32) cBullet );
+                                                mrExport.AddAttribute( XML_NAMESPACE_NONE, "bullet-char", sInfo );
+                                            }
+
+                                        }
                                     }
                                 }
                             }
@@ -960,6 +1071,11 @@ sal_Bool SVGTextWriter::nextParagraph()
                 mrExport.AddAttribute( XML_NAMESPACE_NONE, "class", sInfo );
                 SvXMLElementExport aParaElem( mrExport, XML_NAMESPACE_NONE, "desc", mbIWS, mbIWS );
             }
+            else
+            {
+                OSL_FAIL( "SVGTextWriter::nextParagraph: no XServiceInfo interface available for text content." );
+                return sal_False;
+            }
 
             Reference< XInterface > xRef( xTextContent, UNO_QUERY );
             const OUString& rParagraphId = implGetValidIDFromInterface( xRef );
@@ -979,6 +1095,7 @@ sal_Bool SVGTextWriter::nextTextPortion()
 {
     mrCurrentTextPortion.clear();
     mbIsURLField = sal_False;
+    mbIsPlacehlolderShape = sal_False;
     if( mrTextPortionEnumeration.is() && mrTextPortionEnumeration->hasMoreElements() )
     {
         OUString sInfo;
@@ -1010,8 +1127,11 @@ sal_Bool SVGTextWriter::nextTextPortion()
                     if( xTextField.is() )
                     {
                         const ::rtl::OUString sServicePrefix( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.textfield.") );
+                        const ::rtl::OUString sPresentationServicePrefix( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.TextField.") );
+
                         Reference< XServiceInfo > xService( xTextField, UNO_QUERY );
                         const Sequence< OUString > aServices = xService->getSupportedServiceNames();
+
                         const OUString* pNames = aServices.getConstArray();
                         sal_Int32 nCount = aServices.getLength();
 
@@ -1026,6 +1146,12 @@ sal_Bool SVGTextWriter::nextTextPortion()
                                 sFieldName = pNames->copy( sServicePrefix.getLength() );
                                 break;
                             }
+                            else if( 0 == pNames->compareTo( sPresentationServicePrefix, sPresentationServicePrefix.getLength() ) )
+                            {
+                                // TextField found => postfix is field type!
+                                sFieldName = pNames->copy( sPresentationServicePrefix.getLength() );
+                                break;
+                            }
 
                             ++pNames;
                         }
@@ -1034,29 +1160,38 @@ sal_Bool SVGTextWriter::nextTextPortion()
                         sInfo += sFieldName;
                         sInfo += B2UCONST( "; " );
 
-                        mbIsURLField = sFieldName.equalsAscii( "URL" );
-                        if( mbIsURLField )
+                        if( sFieldName.equalsAscii( "DateTime" ) || sFieldName.equalsAscii( "Header" )
+                                || sFieldName.equalsAscii( "Footer" ) || sFieldName.equalsAscii( "PageNumber" ) )
                         {
-                            Reference<XPropertySet> xTextFieldPropSet(xTextField, UNO_QUERY);
-                            if( xTextFieldPropSet.is() )
+                            mbIsPlacehlolderShape = sal_True;
+                        }
+                        else
+                        {
+                            mbIsURLField = sFieldName.equalsAscii( "URL" );
+
+                            if( mbIsURLField )
                             {
-                                OUString sURL;
-                                if( ( xTextFieldPropSet->getPropertyValue( sFieldName ) ) >>= sURL )
+                                Reference<XPropertySet> xTextFieldPropSet(xTextField, UNO_QUERY);
+                                if( xTextFieldPropSet.is() )
                                 {
-                                    sInfo += B2UCONST( "url: " );
-                                    sInfo += mrExport.GetRelativeReference( sURL );
-
-                                    msUrl = mrExport.GetRelativeReference( sURL );
-                                    if( !msUrl.isEmpty() )
+                                    OUString sURL;
+                                    if( ( xTextFieldPropSet->getPropertyValue( sFieldName ) ) >>= sURL )
                                     {
-                                        implRegisterInterface( xPortionTextRange );
+                                        sInfo += B2UCONST( "url: " );
+                                        sInfo += mrExport.GetRelativeReference( sURL );
 
-                                        Reference< XInterface > xRef( xPortionTextRange, UNO_QUERY );
-                                        const OUString& rTextPortionId = implGetValidIDFromInterface( xRef );
-                                        if( !rTextPortionId.isEmpty() )
+                                        msUrl = mrExport.GetRelativeReference( sURL );
+                                        if( !msUrl.isEmpty() )
                                         {
-                                            msHyperlinkIdList += rTextPortionId;
-                                            msHyperlinkIdList += B2UCONST( " " );
+                                            implRegisterInterface( xPortionTextRange );
+
+                                            Reference< XInterface > xRef( xPortionTextRange, UNO_QUERY );
+                                            const OUString& rTextPortionId = implGetValidIDFromInterface( xRef );
+                                            if( !rTextPortionId.isEmpty() )
+                                            {
+                                                msHyperlinkIdList += rTextPortionId;
+                                                msHyperlinkIdList += B2UCONST( " " );
+                                            }
                                         }
                                     }
                                 }
@@ -1078,21 +1213,11 @@ sal_Bool SVGTextWriter::nextTextPortion()
 
 void SVGTextWriter::startTextShape()
 {
-    if( mrTextShape.is() )
-    {
-        Reference< XEnumerationAccess > xEnumerationAccess( mrTextShape, UNO_QUERY_THROW );
-        Reference< XEnumeration > xEnumeration( xEnumerationAccess->createEnumeration(), UNO_QUERY_THROW );
-        if( xEnumeration.is() && xEnumeration->hasMoreElements() )
-        {
-            mrParagraphEnumeration.set( xEnumeration );
-        }
-    }
-
     if( mpTextShapeElem )
     {
         OSL_FAIL( "SVGTextWriter::startTextShape: text shape already defined." );
     }
-    else
+
     {
         maParentFont = Font();
         mrExport.AddAttribute( XML_NAMESPACE_NONE, "class", B2UCONST( "TextShape" ) );
@@ -1110,6 +1235,8 @@ void SVGTextWriter::endTextShape()
         mrTextShape.clear();
     if( mrParagraphEnumeration.is() )
         mrParagraphEnumeration.clear();
+    if( mrCurrentTextParagraph.is() )
+        mrCurrentTextParagraph.clear();
     if( mpTextShapeElem )
     {
         delete mpTextShapeElem;
@@ -1128,7 +1255,7 @@ void SVGTextWriter::startTextParagraph()
 {
     endTextParagraph();
     nextParagraph();
-    if( mbIsNumbering )
+    if( mbIsNewListItem )
     {
         OUString sNumberingType;
         switch( meNumberingType )
@@ -1163,8 +1290,9 @@ void SVGTextWriter::startTextParagraph()
 
 void SVGTextWriter::endTextParagraph()
 {
+    mrCurrentTextPortion.clear();
     endTextPosition();
-    mbIsNumbering = sal_False;
+    mbIsNewListItem = sal_False;
     mbIsListLevelStyleImage = sal_False;
     mbPositioningNeeded = sal_False;
 
@@ -1237,6 +1365,7 @@ void SVGTextWriter::implWriteBulletChars()
             sId += it->first;
             sId += B2UCONST( ")" );
             mrExport.AddAttribute( XML_NAMESPACE_NONE, "id", sId );
+            mrExport.AddAttribute( XML_NAMESPACE_NONE, "class", B2UCONST( "BulletChar" ) );
             SvXMLElementExport aBulletCharElem( mrExport, XML_NAMESPACE_NONE, aXMLElemG, sal_True, sal_True );
 
             // <g transform="translate(x,y)" >
@@ -1291,9 +1420,9 @@ void SVGTextWriter::writeBitmapPlaceholder( const MetaBmpExScaleAction* pAction 
     implMap( rPos, maTextPos );
     startTextPosition();
     mbPositioningNeeded = sal_True;
-    if( mbIsNumbering )
+    if( mbIsNewListItem )
     {
-        mbIsNumbering = sal_False;
+        mbIsNewListItem = sal_False;
         mbIsListLevelStyleImage = sal_False;
     }
 
@@ -1302,10 +1431,13 @@ void SVGTextWriter::writeBitmapPlaceholder( const MetaBmpExScaleAction* pAction 
     OUString sId = B2UCONST( "bitmap-placeholder(" );
     sId += OUString::valueOf( (sal_Int64)nId );
     sId += B2UCONST( ")" );
-    mrExport.AddAttribute( XML_NAMESPACE_NONE, "id", sId );
 
-    mrExport.AddAttribute( XML_NAMESPACE_NONE, "class", B2UCONST( "BitmapPlaceholder" ) );
-    SvXMLElementExport aSVGTspanElem( mrExport, XML_NAMESPACE_NONE, aXMLElemTspan, mbIWS, mbIWS );
+    {
+        mrExport.AddAttribute( XML_NAMESPACE_NONE, "id", sId );
+        mrExport.AddAttribute( XML_NAMESPACE_NONE, "class", B2UCONST( "BitmapPlaceholder" ) );
+        SvXMLElementExport aSVGTspanElem( mrExport, XML_NAMESPACE_NONE, aXMLElemTspan, mbIWS, mbIWS );
+    }
+    endTextPosition();
 }
 
 // -----------------------------------------------------------------------------
@@ -1334,6 +1466,7 @@ void SVGTextWriter::implWriteEmbeddedBitmaps()
                 sId += OUString::valueOf( (sal_Int64)nId );
                 sId += B2UCONST( ")" );
                 mrExport.AddAttribute( XML_NAMESPACE_NONE, "id", sId );
+                mrExport.AddAttribute( XML_NAMESPACE_NONE, "class", B2UCONST( "EmbeddedBitmap" ) );
 
                 SvXMLElementExport aEmbBitmapElem( mrExport, XML_NAMESPACE_NONE, aXMLElemG, sal_True, sal_True );
 
@@ -1374,13 +1507,13 @@ void SVGTextWriter::writeTextPortion( const Point& rPos,
 
     mbLineBreak = sal_False;
 
-    if( !mbIsNumbering || mbIsListLevelStyleImage )
+    if( !mbIsNewListItem || mbIsListLevelStyleImage )
     {
         bool bNotSync = true;
         OUString sContent;
         sal_Int32 nStartPos;
-        do
-        {
+//        do
+//        {
             while( bNotSync )
             {
                 if( mnLeftTextPortionLength <= 0 )
@@ -1409,7 +1542,7 @@ void SVGTextWriter::writeTextPortion( const Point& rPos,
                 if( sContent.match( rText, nStartPos ) )
                     bNotSync = false;
             }
-        } while( bNotSync && nextParagraph() );
+//        } while( bNotSync && nextParagraph() );
     }
 
     if( !mpVDev )
@@ -1552,29 +1685,30 @@ void SVGTextWriter::implWriteTextPortion( const Point& rPos,
         }
     }
     // we are dealing with a bullet, so set up this for the next text portion
-    if( mbIsNumbering )
+    if( mbIsNewListItem )
     {
-        mbIsNumbering = sal_False;
+        mbIsNewListItem = sal_False;
         mbPositioningNeeded = sal_True;
 
         if( meNumberingType == NumberingType::CHAR_SPECIAL )
         {
             // Create an id for the current text portion
-            implRegisterInterface( mrCurrentTextPortion );
+            implRegisterInterface( mrCurrentTextParagraph );
 
             // Add the needed info to the BulletListItemMap
-            Reference< XInterface > xRef( mrCurrentTextPortion, UNO_QUERY );
-            const OUString& rId = implGetValidIDFromInterface( xRef );
-            if( !rId.isEmpty() )
+            Reference< XInterface > xRef( mrCurrentTextParagraph, UNO_QUERY );
+            OUString sId = implGetValidIDFromInterface( xRef );
+            if( !sId.isEmpty() )
             {
-                BulletListItemInfo& aBulletListItemInfo = maBulletListItemMap[ rId ];
+                sId += ".bp";
+                BulletListItemInfo& aBulletListItemInfo = maBulletListItemMap[ sId ];
                 aBulletListItemInfo.nFontSize = rFont.GetHeight();
                 aBulletListItemInfo.aColor = aTextColor;
                 aBulletListItemInfo.aPos = maTextPos;
                 aBulletListItemInfo.cBulletChar = mcBulletChar;
 
                 // Make this text portion a bullet placeholder
-                mrExport.AddAttribute( XML_NAMESPACE_NONE, "id", rId );
+                mrExport.AddAttribute( XML_NAMESPACE_NONE, "id", sId );
                 mrExport.AddAttribute( XML_NAMESPACE_NONE, "class", B2UCONST( "BulletPlaceholder" ) );
                 SvXMLElementExport aSVGTspanElem( mrExport, XML_NAMESPACE_NONE, aXMLElemTspan, mbIWS, mbIWS );
                 return;
@@ -1589,9 +1723,15 @@ void SVGTextWriter::implWriteTextPortion( const Point& rPos,
         mrExport.AddAttribute( XML_NAMESPACE_NONE, "id", rTextPortionId );
     }
 
-    if( mbIsURLField && !msUrl.isEmpty() )
+    if( mbIsPlacehlolderShape )
+    {
+        mrExport.AddAttribute( XML_NAMESPACE_NONE, "class", B2UCONST( "PlaceholderText" ) );
+        mbIsPlacehlolderShape = sal_False;
+    }
+    else if( mbIsURLField && !msUrl.isEmpty() )
     {
         mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrXLinkHRef, msUrl );
+        mbIsURLField = sal_False;
     }
 
 
@@ -1599,40 +1739,9 @@ void SVGTextWriter::implWriteTextPortion( const Point& rPos,
     mpContext->AddPaintAttr( COL_TRANSPARENT, aTextColor );
 
     SvXMLElementExport aSVGTspanElem( mrExport, XML_NAMESPACE_NONE, aXMLElemTspan, mbIWS, mbIWS );
-
-    sal_Bool bIsPlaceholderField = sal_False;
-
-    if( false && mbIsPlacehlolderShape )
-    {
-        OUString sTextContent = rText;
-        bIsPlaceholderField = sTextContent.match( sPlaceholderTag );
-        // for a placeholder text field we export only one <text> svg element
-        if( bIsPlaceholderField )
-        {
-            OUString sCleanTextContent;
-            static const sal_Int32 nFrom = sPlaceholderTag.getLength();
-            if( sTextContent.getLength() > nFrom )
-            {
-                sCleanTextContent = sTextContent.copy( nFrom );
-            }
-            mrExport.AddAttribute( XML_NAMESPACE_NONE, "class", B2UCONST( "PlaceholderText" ) );
-            mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrX, ::rtl::OUString::valueOf( aPos.X() ) );
-            mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrY, ::rtl::OUString::valueOf( aPos.Y() ) );
-            {
-                //SvXMLElementExport aElem( mrExport, XML_NAMESPACE_NONE, aXMLElemSpan, sal_True, sal_False );
-                // At least for the single slide case we need really to  export placeholder text
-                mrExport.GetDocHandler()->characters( sCleanTextContent );
-            }
-        }
-    }
-
-    if( !bIsPlaceholderField )
-    {
-        OUString sTextContent = rText;
-        mrExport.GetDocHandler()->characters( sTextContent );
-        mnTextWidth += mpVDev->GetTextWidth( sTextContent );
-    }
-
+    OUString sTextContent = rText;
+    mrExport.GetDocHandler()->characters( sTextContent );
+    mnTextWidth += mpVDev->GetTextWidth( sTextContent );
 }
 
 // -------------------
@@ -2648,11 +2757,9 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
     }
 
     mbIsPlacehlolderShape = false;
-    maTextWriter.setPlaceholderShapeFlag( false );
     if( ( pElementId != NULL ) && ( *pElementId == sPlaceholderTag ) )
     {
         mbIsPlacehlolderShape = true;
-        maTextWriter.setPlaceholderShapeFlag( true );
         // since we utilize pElementId in an improper way we reset it to NULL before to go on
         pElementId = NULL;
     }
@@ -3118,29 +3225,31 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                 {
                     if( ( pA->GetComment().equalsIgnoreAsciiCaseL( RTL_CONSTASCII_STRINGPARAM( "XTEXT_PAINTSHAPE_BEGIN" ) ) ) )
                     {
-                        // nTextFound == -1 => no text found
-                        // nTextFound ==  0 => no text found and end of text shape reached
-                        // nTextFound ==  1 => text found!
-                        sal_Int32 nTextFound = -1;
-                        while( ( nTextFound < 0 ) && ( nCurAction < nCount ) )
+                        maTextWriter.createParagraphEnumeration();
                         {
-                            nTextFound = maTextWriter.setTextPosition( rMtf, nCurAction );
-                        }
-                        // We found some text in the current text shape.
-                        if( nTextFound > 0 )
-                        {
-                            maTextWriter.setTextProperties( rMtf, nCurAction );
-                            //ImplSetCorrectFontHeight();
-                            maTextWriter.startTextShape();
-                        }
-                        // We reached the end of the current text shape
-                        // without finding any text. So we need to go back
-                        // by one action in order to handle the
-                        // XTEXT_PAINTSHAPE_END action because on the next
-                        // loop the nCurAction is incremented by one.
-                        else
-                        {
-                            --nCurAction;
+                            // nTextFound == -1 => no text found
+                            // nTextFound ==  0 => no text found and end of text shape reached
+                            // nTextFound ==  1 => text found!
+                            sal_Int32 nTextFound = -1;
+                            while( ( nTextFound < 0 ) && ( nCurAction < nCount ) )
+                            {
+                                nTextFound = maTextWriter.setTextPosition( rMtf, nCurAction );
+                            }
+                            // We found some text in the current text shape.
+                            if( nTextFound > 0 )
+                            {
+                                maTextWriter.setTextProperties( rMtf, nCurAction );
+                                maTextWriter.startTextShape();
+                            }
+                            // We reached the end of the current text shape
+                            // without finding any text. So we need to go back
+                            // by one action in order to handle the
+                            // XTEXT_PAINTSHAPE_END action because on the next
+                            // loop the nCurAction is incremented by one.
+                            else
+                            {
+                                --nCurAction;
+                            }
                         }
                     }
                     else if( ( pA->GetComment().equalsIgnoreAsciiCaseL( RTL_CONSTASCII_STRINGPARAM( "XTEXT_PAINTSHAPE_END" ) ) ) )
@@ -3166,7 +3275,6 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                             if( nTextFound > 0 )
                             {
                                 maTextWriter.setTextProperties( rMtf, nCurAction );
-                                //ImplSetCorrectFontHeight();
                                 maTextWriter.startTextParagraph();
                             }
                             // We reached the end of the current text shape
@@ -3199,8 +3307,6 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                             // paragraph.
                             if( nTextFound > 0 )
                             {
-                                //maTextWriter.setTextProperties( rMtf, nCurAction );
-                                //ImplSetCorrectFontHeight();
                                 maTextWriter.startTextPosition();
                             }
                             // We reached the end of the current paragraph
