@@ -104,7 +104,12 @@ $(foreach sourcefile,$(2),$(call gb_JavaClassSet_add_generated_sourcefile,$(1),$
 endef
 
 define gb_JavaClassSet_set_classpath
-$(call gb_JavaClassSet_get_target,$(1)) : T_CP := $(2)
+$$(call gb_Output_error,\
+ gb_JavaClassSet_set_classpath: use gb_JavaClassSet_add_classpath instead.)
+endef
+
+define gb_JavaClassSet_add_classpath
+$(call gb_JavaClassSet_get_target,$(1)) : T_CP := $$(if $$(T_CP),$$(T_CP)$$(gb_CLASSPATHSEP))$(strip $(2))
 
 endef
 
@@ -118,7 +123,7 @@ endef
 define gb_JavaClassSet_use_jar
 $(call gb_JavaClassSet_get_target,$(1)) : $(2)
 $(call gb_JavaClassSet_get_target,$(1)) : JARDEPS += $(2)
-$(call gb_JavaClassSet_get_target,$(1)) : T_CP := $$(if $$(T_CP),$$(T_CP)$$(gb_CLASSPATHSEP))$(strip $(2))
+$(call gb_JavaClassSet_add_classpath,$(1),$(2))
 $(2) :| $(gb_Helper_PHONY)
 
 endef
@@ -130,7 +135,7 @@ $$(call gb_Output_error,\
 endef
 
 define gb_JavaClassSet_use_system_jar
-$(call gb_JavaClassSet_get_target,$(1)) : T_CP := $$(if $$(T_CP),$$(T_CP)$$(gb_CLASSPATHSEP))$(strip $(2))
+$(call gb_JavaClassSet_add_classpath,$(1),$(2))
 
 endef
 
@@ -168,7 +173,7 @@ endef
 define gb_JavaClassSet_use_jar_classset
 $(call gb_JavaClassSet_get_target,$(1)) : $(call gb_JavaClassSet_get_target,$(call gb_Jar_get_classsetname,$(2)))
 $(call gb_JavaClassSet_get_target,$(1)) : JARDEPS += $(call gb_JavaClassSet_get_target,$(call gb_Jar_get_classsetname,$(2)))
-$(call gb_JavaClassSet_get_target,$(1)) : T_CP := $$(if $$(T_CP),$$(T_CP)$$(gb_CLASSPATHSEP))$(call gb_JavaClassSet_get_classdir,$(call gb_Jar_get_classsetname,$(2)))
+$(call gb_JavaClassSet_add_classpath,$(1),$(call gb_JavaClassSet_get_classdir,$(call gb_Jar_get_classsetname,$(2))))
 
 endef
 

@@ -94,7 +94,7 @@ $(call gb_Jar_get_target,$(1)) : PACKAGEROOTS :=
 $(call gb_Jar_get_target,$(1)) : PACKAGEDIRS :=
 $(call gb_Jar_get_target,$(1)) : PACKAGEFILES :=
 $(call gb_JavaClassSet_JavaClassSet,$(call gb_Jar_get_classsetname,$(1)))
-$(call gb_JavaClassSet_set_classpath,$(call gb_Jar_get_classsetname,$(1)),$(value XCLASSPATH))
+$(call gb_JavaClassSet_add_classpath,$(call gb_Jar_get_classsetname,$(1)),$(value XCLASSPATH))
 $(eval $(call gb_Module_register_target,$(call gb_Jar_get_outdir_target,$(1)),$(call gb_Jar_get_clean_target,$(1))))
 $(call gb_Deliver_add_deliverable,$(call gb_Jar_get_outdir_target,$(1)),$(call gb_Jar_get_target,$(1)),$(1))
 $(call gb_Jar_get_outdir_target,$(1)) : $(call gb_Jar_get_target,$(1))
@@ -156,8 +156,8 @@ $(foreach sourcefile,$(2),$(call gb_Jar_add_generated_sourcefile,$(1),$(sourcefi
 endef
 
 define gb_JarTest_set_classpath
-$(call gb_JavaClassSet_set_classpath,$(call gb_Jar_get_classsetname,$(1)),$(2))
-
+$$(call gb_Output_error,\
+ gb_JarTest_set_classpath: use gb_JavaClassSet_add_classpath instead.)
 endef
 
 # JARCLASSPATH is the class path that is written to the manifest of the jar
