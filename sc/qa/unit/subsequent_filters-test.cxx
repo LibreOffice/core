@@ -775,10 +775,10 @@ struct Border
 {
     sal_Int16 column;
     sal_Int32 row;
-    sal_Int32 leftWidth;
-    sal_Int32 topWidth;
-    sal_Int32 rightWidth;
-    sal_Int32 bottomWidth;
+    long leftWidth;
+    long topWidth;
+    long rightWidth;
+    long bottomWidth;
     sal_uInt16 lOutWidth;
     sal_uInt16 lInWidth;
     sal_uInt16 lDistance;
