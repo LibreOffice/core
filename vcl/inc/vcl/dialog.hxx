@@ -43,7 +43,6 @@
 // - Dialog -
 // ----------
 struct DialogImpl;
-class VclBuilder;
 class VclContainer;
 
 class VCL_DLLPUBLIC Dialog

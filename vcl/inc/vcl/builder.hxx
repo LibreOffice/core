@@ -165,7 +165,14 @@ private:
 
 //allows retro fitting existing dialogs/tabpages that load a resource
 //to load a .ui file instead
-
+//
+//vcl requires the Window Children of a Parent Window to be destroyed before
+//the Parent Window.  VclBuilderContainer owns the VclBuilder which owns the
+//Children Window. So the VclBuilderContainer dtor must be called before
+//the Parent Window dtor.
+//
+//i.e.  class Dialog : public SystemWindow, public VclBuilderContainer
+//not   class Dialog : public VclBuilderContainer, public SystemWindow
 class ResId;
 
 class VCL_DLLPUBLIC VclBuilderContainer
@@ -174,6 +181,7 @@ protected:
     VclBuilder *m_pUIBuilder;
 public:
     VclBuilderContainer();
+    virtual ~VclBuilderContainer();
     static VclBuilder* overrideResourceWithUIXML(Window *pWindow, const ResId& rResId);
     static bool replace_buildable(Window *pParent, sal_Int32 nID, Window &rReplacement);
 };

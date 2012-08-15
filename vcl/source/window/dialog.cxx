@@ -581,6 +581,7 @@ WinBits Dialog::init(Window *pParent, const ResId& rResId)
 
 Dialog::~Dialog()
 {
+    maLayoutTimer.Stop();
     delete mpDialogImpl;
     mpDialogImpl = NULL;
 }
@@ -1163,8 +1164,8 @@ void Dialog::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal
 
 bool Dialog::isLayoutEnabled() const
 {
-    //Single child is a container => we're layout enabled
-    const Window *pChild = GetWindow(WINDOW_FIRSTCHILD);
+    //pre dtor called, and single child is a container => we're layout enabled
+    const Window *pChild = mpDialogImpl ? GetWindow(WINDOW_FIRSTCHILD) : NULL;
     return pChild && pChild->GetType() == WINDOW_CONTAINER && !pChild->GetWindow(WINDOW_NEXT);
 }
 
@@ -1198,8 +1199,6 @@ void Dialog::setPosSizeOnContainee(Size aSize, VclContainer &rBox)
 
 IMPL_LINK( Dialog, ImplHandleLayoutTimerHdl, void*, EMPTYARG )
 {
-    fprintf(stderr, "ImplHandleLayoutTimerHdl\n");
-
     if (!isLayoutEnabled())
     {
         fprintf(stderr, "Dialog has become non-layout because extra children have been added directly to it!\n");
@@ -1235,6 +1234,11 @@ bool Dialog::set_property(const rtl::OString &rKey, const rtl::OString &rValue)
 VclBuilderContainer::VclBuilderContainer()
     : m_pUIBuilder(NULL)
 {
+}
+
+VclBuilderContainer::~VclBuilderContainer()
+{
+    delete m_pUIBuilder;
 }
 
 bool VclBuilderContainer::replace_buildable(Window *pParent, sal_Int32 nID, Window &rReplacement)
