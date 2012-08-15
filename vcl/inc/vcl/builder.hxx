@@ -48,10 +48,12 @@ private:
     {
         rtl::OString m_sID;
         Window *m_pWindow;
+        sal_Int32 m_nPosition;
         bool m_bOwned;
         WinAndId(const rtl::OString &rId, Window *pWindow)
             : m_sID(rId)
             , m_pWindow(pWindow)
+            , m_nPosition(-1)
             , m_bOwned(true)
         {
         }
@@ -126,7 +128,7 @@ public:
     ~VclBuilder();
     Window *get_widget_root();
     Window *get_by_name(rtl::OString sID);
-    rtl::OString get_by_window(const Window *pWindow);
+    rtl::OString get_by_window(const Window *pWindow) const;
     //for the purposes of retrofitting this to the existing code
     //look up sID, clone its properties into replacement and
     //splice replacement into the tree instead of it, without
@@ -150,6 +152,9 @@ private:
     void handleListStore(xmlreader::XmlReader &reader, const rtl::OString &rID);
     void handleAdjustment(const rtl::OString &rID, stringmap &rProperties);
     void handleTabChild(Window *pParent, xmlreader::XmlReader &reader);
+
+    sal_Int32 get_window_packing_position(const Window *pWindow) const;
+    void set_window_packing_position(const Window *pWindow, sal_Int32 nPosition);
 
     //Helpers to retrofit all the existing code the the builder
     static void swapGuts(Window &rOrig, Window &rReplacement);

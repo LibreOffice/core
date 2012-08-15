@@ -200,6 +200,12 @@ enum VclAlign
     VCL_ALIGN_CENTER
 };
 
+enum VclPackType
+{
+    VCL_PACK_START = 0,
+    VCL_PACK_END = 1
+};
+
 #endif  // _VCL_VCLENUM_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

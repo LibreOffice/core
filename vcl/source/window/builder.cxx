@@ -599,8 +599,8 @@ void VclBuilder::handleChild(Window *pParent, xmlreader::XmlReader &reader)
 
                         for (size_t i = 0; i < aChilds.size(); ++i)
                         {
-                            sal_uInt16 nPosition = aChilds[i]->getWidgetProperty<sal_uInt16>(sPosition, 0xFFFF);
-                            if (nPosition == 0xFFFF)
+                            sal_Int32 nPosition = get_window_packing_position(aChilds[i]);
+                            if (nPosition == -1)
                                 continue;
                             reorderWithinParent(*aChilds[i], nPosition);
                         }
@@ -832,29 +832,44 @@ void VclBuilder::applyPackingProperty(Window *pCurrent,
                 xmlreader::XmlReader::TEXT_NORMALIZED, &name, &nsId);
             rtl::OString sValue(name.begin, name.length);
 
-            if ( sKey.equalsL(RTL_CONSTASCII_STRINGPARAM("expand")) ||
-                 sKey.equalsL(RTL_CONSTASCII_STRINGPARAM("fill")) )
+            if (sKey.equalsL(RTL_CONSTASCII_STRINGPARAM("expand")))
             {
                 bool bTrue = (sValue[0] == 't' || sValue[0] == 'T' || sValue[0] == '1');
-                pCurrent->setChildProperty(sKey, bTrue);
+                pCurrent->set_expand(bTrue);
             }
-            else if (sKey.equalsL(RTL_CONSTASCII_STRINGPARAM("position")))
+            else if (sKey.equalsL(RTL_CONSTASCII_STRINGPARAM("fill")))
             {
-                pCurrent->setChildProperty(sKey, static_cast<sal_uInt16>(sValue.toInt32()));
+                bool bTrue = (sValue[0] == 't' || sValue[0] == 'T' || sValue[0] == '1');
+                pCurrent->set_fill(bTrue);
             }
             else if (sKey.equalsL(RTL_CONSTASCII_STRINGPARAM("pack-type")))
             {
-                sal_Int32 nPackType = (sValue[0] == 'e' || sValue[0] == 'e') ? VCL_PACK_END : VCL_PACK_START;
-                pCurrent->setChildProperty(sKey, nPackType);
+                VclPackType ePackType = (sValue[0] == 'e' || sValue[0] == 'e') ? VCL_PACK_END : VCL_PACK_START;
+                pCurrent->set_pack_type(ePackType);
             }
-            else if (
-                      sKey.equalsL(RTL_CONSTASCII_STRINGPARAM("left-attach")) ||
-                      sKey.equalsL(RTL_CONSTASCII_STRINGPARAM("top-attach")) ||
-                      sKey.equalsL(RTL_CONSTASCII_STRINGPARAM("width")) ||
-                      sKey.equalsL(RTL_CONSTASCII_STRINGPARAM("height"))
-                    )
+            else if (sKey.equalsL(RTL_CONSTASCII_STRINGPARAM("left-attach")))
             {
-                pCurrent->setChildProperty(sKey, sValue.toInt32());
+                pCurrent->set_grid_left_attach(sValue.toInt32());
+            }
+            else if (sKey.equalsL(RTL_CONSTASCII_STRINGPARAM("top-attach")))
+            {
+                pCurrent->set_grid_top_attach(sValue.toInt32());
+            }
+            else if (sKey.equalsL(RTL_CONSTASCII_STRINGPARAM("width")))
+            {
+                pCurrent->set_grid_width(sValue.toInt32());
+            }
+            else if (sKey.equalsL(RTL_CONSTASCII_STRINGPARAM("height")))
+            {
+                pCurrent->set_grid_height(sValue.toInt32());
+            }
+            else if (sKey.equalsL(RTL_CONSTASCII_STRINGPARAM("padding")))
+            {
+                pCurrent->set_padding(sValue.toInt32());
+            }
+            else if (sKey.equalsL(RTL_CONSTASCII_STRINGPARAM("position")))
+            {
+                set_window_packing_position(pCurrent, sValue.toInt32());
             }
             else
                 fprintf(stderr, "unknown packing %s\n", sKey.getStr());
@@ -934,9 +949,9 @@ Window *VclBuilder::get_by_name(rtl::OString sID)
     return NULL;
 }
 
-rtl::OString VclBuilder::get_by_window(const Window *pWindow)
+rtl::OString VclBuilder::get_by_window(const Window *pWindow) const
 {
-    for (std::vector<WinAndId>::iterator aI = m_aChildren.begin(),
+    for (std::vector<WinAndId>::const_iterator aI = m_aChildren.begin(),
          aEnd = m_aChildren.end(); aI != aEnd; ++aI)
     {
         if (aI->m_pWindow == pWindow)
@@ -944,6 +959,28 @@ rtl::OString VclBuilder::get_by_window(const Window *pWindow)
     }
 
     return rtl::OString();
+}
+
+sal_Int32 VclBuilder::get_window_packing_position(const Window *pWindow) const
+{
+    for (std::vector<WinAndId>::const_iterator aI = m_aChildren.begin(),
+         aEnd = m_aChildren.end(); aI != aEnd; ++aI)
+    {
+        if (aI->m_pWindow == pWindow)
+            return aI->m_nPosition;
+    }
+
+    return -1;
+}
+
+void VclBuilder::set_window_packing_position(const Window *pWindow, sal_Int32 nPosition)
+{
+    for (std::vector<WinAndId>::iterator aI = m_aChildren.begin(),
+         aEnd = m_aChildren.end(); aI != aEnd; ++aI)
+    {
+        if (aI->m_pWindow == pWindow)
+            aI->m_nPosition = nPosition;
+    }
 }
 
 VclBuilder::ListStore *VclBuilder::get_model_by_name(rtl::OString sID)
@@ -994,7 +1031,6 @@ void VclBuilder::swapGuts(Window &rOrig, Window &rReplacement)
     Window *pOrigsNext = rOrig.mpWindowImpl->mpNext;
     Window *pOrigsPrev = rOrig.mpWindowImpl->mpPrev;
     std::swap(rOrig.mpWindowImpl, rReplacement.mpWindowImpl);
-    std::swap(rOrig.m_aWidgetProperties, rReplacement.m_aWidgetProperties);
     assert(rReplacement.mpWindowImpl->mpPrev == pOrigsPrev);
     assert(rReplacement.mpWindowImpl->mpNext == pOrigsNext);
     if (pOrigsNext)

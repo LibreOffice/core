@@ -47,8 +47,6 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <boost/shared_ptr.hpp>
 
-#include <map>
-
 class VirtualDevice;
 struct ImplDelData;
 struct ImplWinData;
@@ -385,10 +383,6 @@ private:
     //       but use class WindowImpl instead
     //
     WindowImpl* mpWindowImpl;
-
-    //^^^la la la, I can't hear you^^^
-    typedef std::map< ::rtl::OString, ::com::sun::star::uno::Any > ChildPropertyMap;
-    ChildPropertyMap m_aWidgetProperties;
 
     SAL_DLLPRIVATE void ImplInitWindowData( WindowType nType );
 
@@ -1164,45 +1158,96 @@ public:
     void set_vexpand(bool bExpand);
 
     /*
+     * Gets whether the widget would like to use any available extra space.
+     */
+    bool get_expand() const;
+
+    /*
+     * Sets whether the widget would like to use any available extra space.
+     */
+    void set_expand(bool bExpand);
+
+    /*
+     * Gets whether the widget should receive extra space when the parent grows
+     */
+    bool get_fill() const;
+
+    /*
+     * Sets whether the widget should receive extra space when the parent grows
+     */
+    void set_fill(bool bFill);
+
+    /*
+     * Gets how the widget is packed with reference to the start or end of the parent
+     */
+    VclPackType get_pack_type() const;
+
+    /*
+     * Sets how the widget is packed with reference to the start or end of the parent
+     */
+    void set_pack_type(VclPackType ePackType);
+
+    /*
+     * Sets extra space to put between the widget and its neighbors
+     */
+    sal_Int32 get_padding() const;
+
+    /*
+     * Sets extra space to put between the widget and its neighbors
+     */
+    void set_padding(sal_Int32 nPadding);
+
+    /*
+     * Gets the number of columns that the widget spans
+     */
+    sal_Int32 get_grid_width() const;
+
+    /*
+     * Sets the number of columns that the widget spans
+     */
+    void set_grid_width(sal_Int32 nCols);
+
+    /*
+     * Gets the column number to attach the left side of the widget to
+     */
+    sal_Int32 get_grid_left_attach() const;
+
+    /*
+     * Sets the column number to attach the left side of the widget to
+     */
+    void set_grid_left_attach(sal_Int32 nAttach);
+
+    /*
+     * Gets the number of row that the widget spans
+     */
+    sal_Int32 get_grid_height() const;
+
+    /*
+     * Sets the number of row that the widget spans
+     */
+    void set_grid_height(sal_Int32 nRows);
+
+    /*
+     * Gets the row number to attach the top side of the widget to
+     */
+    sal_Int32 get_grid_top_attach() const;
+
+    /*
+     * Sets the row number to attach the top side of the widget to
+     */
+    void set_grid_top_attach(sal_Int32 nAttach);
+
+
+    /*
      * Sets a widget property
      *
      * @return false if property is unknown
      */
     virtual bool set_property(const rtl::OString &rKey, const rtl::OString &rValue);
 
-    virtual void setChildAnyProperty(const rtl::OString &rString, const ::com::sun::star::uno::Any &rValue);
-    virtual ::com::sun::star::uno::Any getWidgetAnyProperty(const rtl::OString &rString) const;
-
-    template <typename T> T getWidgetProperty(const rtl::OString &rString, const T &rDefaultValue = T()) const
-    {
-        T nValue = rDefaultValue;
-        ::com::sun::star::uno::Any aAny = getWidgetAnyProperty(rString);
-        if (aAny.hasValue())
-            aAny >>= nValue;
-        return nValue;
-    }
-    template <typename T> void setChildProperty(const rtl::OString &rString, const T &rValue)
-    {
-        ::com::sun::star::uno::Any aAny;
-        aAny <<= rValue;
-        setChildAnyProperty(rString, aAny);
-    }
-    void setChildProperty(const rtl::OString &rString, const bool &rValue)
-    {
-        setChildProperty<sal_Bool>(rString, rValue);
-    }
-    bool getWidgetProperty(const rtl::OString &rString, const bool &rValue = false) const
-    {
-        return getWidgetProperty<sal_Bool>(rString, rValue);
-    }
-
-    //does nothing yet
-    template <typename T> T getWidgetStyleProperty(const rtl::OString &, const T &rDefaultValue = T()) const
-    {
-        T nValue = rDefaultValue;
-        return nValue;
-    }
-
+    /*
+     * Move this widget to be the nNewPosition'd child of its parent
+     */
     void reorderWithinParent(sal_uInt16 nNewPosition);
 
     /*

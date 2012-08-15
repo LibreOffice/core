@@ -170,7 +170,7 @@ void VclBox::setAllocation(const Size &rAllocation)
         if (!pChild->IsVisible())
             continue;
         ++nVisibleChildren;
-        bool bExpand = pChild->getWidgetProperty<sal_Bool>(sExpand);
+        bool bExpand = pChild->get_expand();
         if (bExpand)
             ++nExpandChildren;
     }
@@ -210,12 +210,12 @@ void VclBox::setAllocation(const Size &rAllocation)
             if (!pChild->IsVisible())
                 continue;
 
-            sal_Int32 ePacking = pChild->getWidgetProperty<sal_Int32>(sPackType);
+            sal_Int32 ePacking = pChild->get_pack_type();
 
             if (ePacking != ePackType)
                 continue;
 
-            long nPadding = pChild->getWidgetProperty<sal_Int32>(sPadding);
+            long nPadding = pChild->get_padding();
 
             Size aBoxSize;
             if (m_bHomogeneous)
@@ -225,7 +225,7 @@ void VclBox::setAllocation(const Size &rAllocation)
                 aBoxSize = pChild->get_preferred_size();
                 long nPrimaryDimension = getPrimaryDimension(aBoxSize);
                 nPrimaryDimension += nPadding;
-                bool bExpand = pChild->getWidgetProperty<bool>(sExpand);
+                bool bExpand = pChild->get_expand();
                 if (bExpand)
                     setPrimaryDimension(aBoxSize, nPrimaryDimension + nExtraSpace);
             }
@@ -235,7 +235,7 @@ void VclBox::setAllocation(const Size &rAllocation)
             Size aChildSize(aBoxSize);
             long nPrimaryCoordinate = getPrimaryCoordinate(aPos);
 
-            bool bFill = pChild->getWidgetProperty<sal_Bool>(sFill, sal_True);
+            bool bFill = pChild->get_fill();
             if (bFill)
             {
                 setPrimaryDimension(aChildSize, std::max(static_cast<long>(1),
@@ -287,10 +287,8 @@ Size VclButtonBox::calculateRequisition() const
 {
     sal_uInt16 nVisibleChildren = 0;
 
-    rtl::OString sChildMinWidth(RTL_CONSTASCII_STRINGPARAM("child-min-width"));
-    sal_Int32 nChildMinWidth = getWidgetStyleProperty<sal_Int32>(sChildMinWidth, DEFAULT_CHILD_MIN_WIDTH);
-    rtl::OString sChildMinHeight(RTL_CONSTASCII_STRINGPARAM("child-min-height"));
-    sal_Int32 nChildMinHeight = getWidgetStyleProperty<sal_Int32>(sChildMinHeight, DEFAULT_CHILD_MIN_HEIGHT);
+    sal_Int32 nChildMinWidth = DEFAULT_CHILD_MIN_WIDTH; //to-do, pull from theme
+    sal_Int32 nChildMinHeight = DEFAULT_CHILD_MIN_HEIGHT; //to-do, pull from theme
     Size aSize(nChildMinWidth, nChildMinHeight);
 
     for (Window *pChild = GetWindow(WINDOW_FIRSTCHILD); pChild; pChild = pChild->GetWindow(WINDOW_NEXT))
@@ -413,12 +411,12 @@ VclGrid::array_type VclGrid::assembleGrid() const
         if (!pChild->IsVisible())
             continue;
 
-        sal_Int32 nLeftAttach = pChild->getWidgetProperty<sal_Int32>(sLeftAttach);
-        sal_Int32 nWidth = pChild->getWidgetProperty<sal_Int32>(sWidth, 1);
+        sal_Int32 nLeftAttach = pChild->get_grid_left_attach();
+        sal_Int32 nWidth = pChild->get_grid_width();
         sal_Int32 nMaxXPos = nLeftAttach+nWidth-1;
 
-        sal_Int32 nTopAttach = pChild->getWidgetProperty<sal_Int32>(sTopAttach);
-        sal_Int32 nHeight = pChild->getWidgetProperty<sal_Int32>(sHeight, 1);
+        sal_Int32 nTopAttach = pChild->get_grid_top_attach();
+        sal_Int32 nHeight = pChild->get_grid_height();
         sal_Int32 nMaxYPos = nTopAttach+nHeight-1;
 
         sal_Int32 nCurrentMaxXPos = A.shape()[0]-1;
@@ -448,11 +446,11 @@ VclGrid::array_type VclGrid::assembleGrid() const
             const Window *pChild = A[x][y];
             if (pChild)
             {
-                sal_Int32 nWidth = pChild->getWidgetProperty<sal_Int32>(sWidth, 1);
+                sal_Int32 nWidth = pChild->get_grid_width();
                 for (sal_Int32 nSpanX = 0; nSpanX < nWidth; ++nSpanX)
                     aNonEmptyCols[x+nSpanX] = true;
 
-                sal_Int32 nHeight = pChild->getWidgetProperty<sal_Int32>(sHeight, 1);
+                sal_Int32 nHeight = pChild->get_grid_height();
                 for (sal_Int32 nSpanY = 0; nSpanY < nHeight; ++nSpanY)
                     aNonEmptyRows[y+nSpanY] = true;
             }
@@ -514,11 +512,11 @@ void VclGrid::calcMaxs(const array_type &A, std::vector<long> &rWidths, std::vec
                 continue;
             Size aChildSize = pChild->get_preferred_size();
 
-            sal_Int32 nWidth = pChild->getWidgetProperty<sal_Int32>(sWidth, 1);
+            sal_Int32 nWidth = pChild->get_grid_width();
             for (sal_Int32 nSpanX = 0; nSpanX < nWidth; ++nSpanX)
                 rWidths[x+nSpanX] = std::max(rWidths[x+nSpanX], aChildSize.Width()/nWidth);
 
-            sal_Int32 nHeight = pChild->getWidgetProperty<sal_Int32>(sHeight, 1);
+            sal_Int32 nHeight = pChild->get_grid_height();
             for (sal_Int32 nSpanY = 0; nSpanY < nHeight; ++nSpanY)
                 rHeights[y+nSpanY] = std::max(rHeights[y+nSpanY], aChildSize.Height()/nHeight);
         }
@@ -619,12 +617,12 @@ void VclGrid::setAllocation(const Size& rAllocation)
             {
                 Size aChildAlloc(0, 0);
 
-                sal_Int32 nWidth = pChild->getWidgetProperty<sal_Int32>(sWidth, 1);
+                sal_Int32 nWidth = pChild->get_grid_width();
                 for (sal_Int32 nSpanX = 0; nSpanX < nWidth; ++nSpanX)
                     aChildAlloc.Width() += aWidths[x+nSpanX];
                 aChildAlloc.Width() += get_column_spacing()*(nWidth-1);
 
-                sal_Int32 nHeight = pChild->getWidgetProperty<sal_Int32>(sHeight, 1);
+                sal_Int32 nHeight = pChild->get_grid_height();
                 for (sal_Int32 nSpanY = 0; nSpanY < nHeight; ++nSpanY)
                     aChildAlloc.Height() += aHeights[y+nSpanY];
                 aChildAlloc.Height() += get_row_spacing()*(nHeight-1);
@@ -715,14 +713,10 @@ bool VclGrid::set_property(const rtl::OString &rKey, const rtl::OString &rValue)
 
 void setGridAttach(Window &rWidget, sal_Int32 nLeft, sal_Int32 nTop, sal_Int32 nWidth, sal_Int32 nHeight)
 {
-    rtl::OString sLeftAttach(RTL_CONSTASCII_STRINGPARAM("left-attach"));
-    rWidget.setChildProperty<sal_Int32>(sLeftAttach, nLeft);
-    rtl::OString sTopAttach(RTL_CONSTASCII_STRINGPARAM("top-attach"));
-    rWidget.setChildProperty<sal_Int32>(sTopAttach, nTop);
-    rtl::OString sWidth(RTL_CONSTASCII_STRINGPARAM("width"));
-    rWidget.setChildProperty<sal_Int32>(sWidth, nWidth);
-    rtl::OString sHeight(RTL_CONSTASCII_STRINGPARAM("height"));
-    rWidget.setChildProperty<sal_Int32>(sHeight, nHeight);
+    rWidget.set_grid_left_attach(nLeft);
+    rWidget.set_grid_top_attach(nTop);
+    rWidget.set_grid_width(nWidth);
+    rWidget.set_grid_height(nHeight);
 }
 
 const Window *VclBin::get_child() const

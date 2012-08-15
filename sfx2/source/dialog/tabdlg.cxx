@@ -515,18 +515,13 @@ void SfxTabDialog::Init_Impl( sal_Bool bFmtFlag, const String* pUserButtonText, 
 */
 
 {
-    rtl::OString sFill(RTL_CONSTASCII_STRINGPARAM("fill"));
-    rtl::OString sExpand(RTL_CONSTASCII_STRINGPARAM("expand"));
-    rtl::OString sPackType(RTL_CONSTASCII_STRINGPARAM("pack-type"));
-
     fprintf(stderr, "BUILDER is %p\n", m_pUIBuilder);
     m_pVBox = m_pUIBuilder ? static_cast<VclVBox*>(m_pUIBuilder->get_by_name("dialog-vbox1")) : NULL;
     m_bOwnsVBox = m_pVBox == NULL;
     if (m_bOwnsVBox)
     {
         m_pVBox = new VclVBox(this, false, 7);
-        m_pVBox->setChildProperty(sFill, true);
-        m_pVBox->setChildProperty(sExpand, true);
+        m_pVBox->set_expand(true);
     }
 
     m_pTabCtrl = m_pUIBuilder ? static_cast<TabControl*>(m_pUIBuilder->get_by_name(SAL_STRINGIFY(ID_TABCONTROL))) : NULL;
@@ -534,17 +529,13 @@ void SfxTabDialog::Init_Impl( sal_Bool bFmtFlag, const String* pUserButtonText, 
     if (m_bOwnsTabCtrl)
     {
         m_pTabCtrl = new TabControl(m_pVBox, ResId(ID_TABCONTROL, *rResId.GetResMgr()));
-        m_pTabCtrl->setChildProperty(sFill, true);
-        m_pTabCtrl->setChildProperty(sExpand, true);
+        m_pTabCtrl->set_expand(true);
     }
 
     m_pActionArea = m_pUIBuilder ? static_cast<VclHButtonBox*>(m_pUIBuilder->get_by_name("dialog-action_area1")) : NULL;
     m_bOwnsActionArea = m_pActionArea == NULL;
     if (m_bOwnsActionArea)
-    {
         m_pActionArea = new VclHButtonBox(m_pVBox);
-        m_pActionArea->setChildProperty(sFill, true);
-    }
 
     m_pOKBtn = m_pUIBuilder ? static_cast<OKButton*>(m_pUIBuilder->get_by_name("ok")) : NULL;
     m_bOwnsOKBtn = m_pOKBtn == NULL;

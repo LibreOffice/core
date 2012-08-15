@@ -58,12 +58,6 @@ private:
     int m_nBorderWidth;
 };
 
-enum VclPackType
-{
-    VCL_PACK_START = 0,
-    VCL_PACK_END = 1
-};
-
 class VCL_DLLPUBLIC VclBox : public VclContainer
 {
 protected:

@@ -199,11 +199,7 @@ void SvxCharBasePage::makeWidgets(Window *pParent, const ResId& rResId,
     m_pFontTypeFT = new FixedInfo(pParent, ResId( nResIdFontTypeFT, *rResId.GetResMgr()));
     m_pPreviewWin = new SvxFontPrevWindow(pParent, ResId( nResIdPrewievWin, *rResId.GetResMgr()));
 
-    rtl::OString sFill(RTL_CONSTASCII_STRINGPARAM("fill"));
-    rtl::OString sExpand(RTL_CONSTASCII_STRINGPARAM("expand"));
-
-    m_pPreviewWin->setChildProperty(sFill, true);
-    m_pPreviewWin->setChildProperty(sExpand, true);
+    m_pPreviewWin->set_expand(true);
 }
 
 // -----------------------------------------------------------------------
@@ -295,11 +291,7 @@ SvxCharNamePage::SvxCharNamePage( Window* pParent, const SfxItemSet& rInSet )
     , m_aGrid(&m_aBox)
     , m_pImpl(new SvxCharNamePage_Impl)
 {
-    rtl::OString sFill(RTL_CONSTASCII_STRINGPARAM("fill"));
-    rtl::OString sExpand(RTL_CONSTASCII_STRINGPARAM("expand"));
-
-    m_aBox.setChildProperty(sFill, true);
-    m_aBox.setChildProperty(sExpand, true);
+    m_aBox.set_expand(true);
 
     m_pImpl->m_aNoStyleText = String( CUI_RES( STR_CHARNAME_NOSTYLE ) );
     m_pImpl->m_aTransparentText = String( CUI_RES( STR_CHARNAME_TRANSPARENT ) );
@@ -1534,11 +1526,7 @@ SvxCharEffectsPage::SvxCharEffectsPage( Window* pParent, const SfxItemSet& rInSe
     , m_aPositionLB(&m_aGrid, CUI_RES(LB_POSITION))
     , m_aTransparentColorName(CUI_RES(STR_CHARNAME_TRANSPARENT))
 {
-    rtl::OString sFill(RTL_CONSTASCII_STRINGPARAM("fill"));
-    rtl::OString sExpand(RTL_CONSTASCII_STRINGPARAM("expand"));
-
-    m_aBox.setChildProperty(sFill, true);
-    m_aBox.setChildProperty(sExpand, true);
+    m_aBox.set_expand(true);
 
     m_aGrid.set_column_spacing(7);
     m_aGrid.set_row_spacing(2);
@@ -2838,11 +2826,7 @@ SvxCharPositionPage::SvxCharPositionPage( Window* pParent, const SfxItemSet& rIn
     , m_nSuperProp((sal_uInt8)DFLT_ESC_PROP)
     , m_nSubProp((sal_uInt8)DFLT_ESC_PROP)
 {
-    rtl::OString sFill(RTL_CONSTASCII_STRINGPARAM("fill"));
-    rtl::OString sExpand(RTL_CONSTASCII_STRINGPARAM("expand"));
-
-    m_aBox.setChildProperty(sFill, true);
-    m_aBox.setChildProperty(sExpand, true);
+    m_aBox.set_expand(true);
 
     m_aPositionGrid.set_column_spacing(7);
     m_aPositionGrid.set_row_spacing(2);
@@ -3609,11 +3593,7 @@ SvxCharTwoLinesPage::SvxCharTwoLinesPage(Window* pParent, const SfxItemSet& rInS
     , m_nStartBracketPosition( 0 )
     , m_nEndBracketPosition( 0 )
 {
-    rtl::OString sFill(RTL_CONSTASCII_STRINGPARAM("fill"));
-    rtl::OString sExpand(RTL_CONSTASCII_STRINGPARAM("expand"));
-
-    m_aBox.setChildProperty(sFill, true);
-    m_aBox.setChildProperty(sExpand, true);
+    m_aBox.set_expand(true);
 
     m_aGrid.set_column_spacing(7);
     m_aGrid.set_row_spacing(2);

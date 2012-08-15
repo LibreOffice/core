@@ -317,6 +317,12 @@ public:
     AlwaysInputMode     meAlwaysInputMode;
     VclAlign            meHalign;
     VclAlign            meValign;
+    VclPackType         mePackType;
+    sal_Int32           mnPadding;
+    sal_Int32           mnGridHeight;
+    sal_Int32           mnGridLeftAttach;
+    sal_Int32           mnGridTopAttach;
+    sal_Int32           mnGridWidth;
     sal_uInt8           mbFrame:1,
                         mbBorderWin:1,
                         mbOverlapWin:1,
@@ -392,7 +398,9 @@ public:
                         mbHelpTextDynamic:1,
                         mbFakeFocusSet:1,
                         mbHexpand:1,
-                        mbVexpand:1;
+                        mbVexpand:1,
+                        mbExpand:1,
+                        mbFill:1;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > mxDNDListenerContainer;
 };

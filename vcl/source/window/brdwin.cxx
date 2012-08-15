@@ -2354,20 +2354,4 @@ Size ImplBorderWindow::GetOptimalSize(WindowSizeType eType) const
     return Size(0, 0);
 }
 
-void ImplBorderWindow::setChildAnyProperty(const rtl::OString &rString, const ::com::sun::star::uno::Any &rValue)
-{
-    Window* pClientWindow = ImplGetClientWindow();
-    if (pClientWindow)
-        pClientWindow->setChildAnyProperty(rString, rValue);
-}
-
-::com::sun::star::uno::Any ImplBorderWindow::getWidgetAnyProperty(const rtl::OString &rString) const
-{
-    ::com::sun::star::uno::Any aAny;
-    Window* pClientWindow = ImplGetClientWindow();
-    if (pClientWindow)
-        aAny = pClientWindow->getWidgetAnyProperty(rString);
-    return aAny;
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

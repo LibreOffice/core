@@ -634,6 +634,14 @@ void Window::ImplInitWindowData( WindowType nType )
     mpWindowImpl->mnDlgCtrlFlags      = 0;            // DialogControl-Flags
     mpWindowImpl->mnLockCount         = 0;            // LockCount
     mpWindowImpl->meAlwaysInputMode   = AlwaysInputNone; // neither AlwaysEnableInput nor AlwaysDisableInput called
+    mpWindowImpl->meHalign            = VCL_ALIGN_FILL;
+    mpWindowImpl->meValign            = VCL_ALIGN_FILL;
+    mpWindowImpl->mePackType          = VCL_PACK_START;
+    mpWindowImpl->mnPadding           = 0;
+    mpWindowImpl->mnGridHeight        = 1;
+    mpWindowImpl->mnGridLeftAttach    = 0;
+    mpWindowImpl->mnGridTopAttach     = 0;
+    mpWindowImpl->mnGridWidth         = 1;
     mpWindowImpl->mbFrame             = sal_False;        // sal_True: Window is a frame window
     mpWindowImpl->mbBorderWin         = sal_False;        // sal_True: Window is a border window
     mpWindowImpl->mbOverlapWin        = sal_False;        // sal_True: Window is a overlap window
@@ -711,8 +719,8 @@ void Window::ImplInitWindowData( WindowType nType )
     mpWindowImpl->mbFakeFocusSet = sal_False; // sal_True: pretend as if the window has focus.
     mpWindowImpl->mbHexpand = false;
     mpWindowImpl->mbVexpand = false;
-    mpWindowImpl->meHalign = VCL_ALIGN_FILL;
-    mpWindowImpl->meValign = VCL_ALIGN_FILL;
+    mpWindowImpl->mbExpand = false;
+    mpWindowImpl->mbFill = true;
 
 
     mbEnableRTL         = Application::GetSettings().GetLayoutRTL();         // sal_True: this outdev will be mirrored if RTL window layout (UI mirroring) is globally active
@@ -5408,28 +5416,6 @@ void Window::SetStyle( WinBits nStyle )
         mpWindowImpl->mnPrevStyle = mpWindowImpl->mnStyle;
         mpWindowImpl->mnStyle = nStyle;
         StateChanged( STATE_CHANGE_STYLE );
-    }
-}
-
-void Window::set_height_request(sal_Int32 nHeightRequest)
-{
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
-
-    if ( mpWindowImpl->mnHeightRequest != nHeightRequest )
-    {
-        mpWindowImpl->mnHeightRequest = nHeightRequest;
-        queue_resize();
-    }
-}
-
-void Window::set_width_request(sal_Int32 nWidthRequest)
-{
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
-
-    if ( mpWindowImpl->mnWidthRequest != nWidthRequest )
-    {
-        mpWindowImpl->mnWidthRequest = nWidthRequest;
-        queue_resize();
     }
 }
 

@@ -82,82 +82,36 @@ SwWordCountDialog::SwWordCountDialog(Dialog* pParent)
     aDocCharacterFI.SetText(sForceInitialSize);
     aDocCharacterExcludingSpacesFI.SetText(sForceInitialSize);
 
-    rtl::OString sFill(RTL_CONSTASCII_STRINGPARAM("fill"));
-    rtl::OString sExpand(RTL_CONSTASCII_STRINGPARAM("expand"));
-    rtl::OString sPackType(RTL_CONSTASCII_STRINGPARAM("pack-type"));
+    content_area.set_expand(true);
 
-    vbox.setChildProperty(sFill, true);
+    aCurrentSelectionLine.set_expand(true);
 
-    action_area.setChildProperty(sFill, true);
-
-    content_area.setChildProperty(sFill, true);
-    content_area.setChildProperty(sExpand, true);
-
-    aCurrentSelection.setChildProperty(sFill, true);
-    aCurrentSelectionText.setChildProperty(sFill, true);
-    aCurrentSelectionLine.setChildProperty(sFill, true);
-    aCurrentSelectionLine.setChildProperty(sExpand, true);
-
-    aSelectionBox.setChildProperty(sFill, true);
     aSelectionBox.set_border_width(7);
 
-    aSelectionRow1.setChildProperty(sFill, true);
-    aSelectionRow1.setChildProperty(sExpand, true);
-    aCurrentWordFT.setChildProperty(sFill, true);
-    aCurrentWordFI.setChildProperty(sFill, true);
-    aCurrentWordFI.setChildProperty(sExpand, true);
+    aSelectionRow1.set_expand(true);
+    aCurrentWordFI.set_expand(true);
 
-    aSelectionRow2.setChildProperty(sFill, true);
-    aSelectionRow2.setChildProperty(sExpand, true);
-    aCurrentCharacterFT.setChildProperty(sFill, true);
-    aCurrentCharacterFI.setChildProperty(sFill, true);
-    aCurrentCharacterFI.setChildProperty(sExpand, true);
-    aSelectionRow3.setChildProperty(sFill, true);
-    aSelectionRow3.setChildProperty(sExpand, true);
-    aCurrentCharacterExcludingSpacesFT.setChildProperty(sFill, true);
-    aCurrentCharacterExcludingSpacesFI.setChildProperty(sFill, true);
-    aCurrentCharacterExcludingSpacesFI.setChildProperty(sExpand, true);
+    aSelectionRow2.set_expand(true);
+    aCurrentCharacterFI.set_expand(true);
+    aSelectionRow3.set_expand(true);
+    aCurrentCharacterExcludingSpacesFI.set_expand(true);
 
-    aDoc.setChildProperty(sFill, true);
-    aDocText.setChildProperty(sFill, true);
-    aDocLine.setChildProperty(sFill, true);
-    aDocLine.setChildProperty(sExpand, true);
+    aDocLine.set_expand(true);
 
-    aDocBox.setChildProperty(sFill, true);
     aDocBox.set_border_width(7);
 
-    aDocRow1.setChildProperty(sFill, true);
-    aDocRow1.setChildProperty(sExpand, true);
-    aDocWordFT.setChildProperty(sFill, true);
-    aDocWordFI.setChildProperty(sFill, true);
-    aDocWordFI.setChildProperty(sExpand, true);
+    aDocRow1.set_expand(true);
+    aDocWordFT.set_expand(true);
 
-    aDocRow2.setChildProperty(sFill, true);
-    aDocRow2.setChildProperty(sExpand, true);
-    aDocCharacterFT.setChildProperty(sFill, true);
-    aDocCharacterFI.setChildProperty(sFill, true);
-    aDocCharacterFI.setChildProperty(sExpand, true);
-    aDocRow3.setChildProperty(sFill, true);
-    aDocRow3.setChildProperty(sExpand, true);
-    aDocCharacterExcludingSpacesFT.setChildProperty(sFill, true);
-    aDocCharacterExcludingSpacesFI.setChildProperty(sFill, true);
-    aDocCharacterExcludingSpacesFI.setChildProperty(sExpand, true);
+    aDocRow2.set_expand(true);
+    aDocCharacterFI.set_expand(true);
+    aDocRow3.set_expand(true);
+    aDocCharacterExcludingSpacesFI.set_expand(true);
 
-    aBottomFL.setChildProperty(sFill, true);
-    aBottomFL.setChildProperty(sFill, true);
-
-    aOK.setChildProperty<sal_Int32>(sPackType, VCL_PACK_END);
-    aHelp.setChildProperty<sal_Int32>(sPackType, VCL_PACK_END);
+    aOK.set_pack_type(VCL_PACK_END);
+    aHelp.set_pack_type(VCL_PACK_END);
 
     aOK.SetClickHdl(LINK(this, SwWordCountDialog, OkHdl));
-
-    fprintf(stderr, "aOk is %p\n", &aOK);
-    fprintf(stderr, "aHelp is %p\n", &aHelp);
-    fprintf(stderr, "action_area is is %p\n", &action_area);
-    fprintf(stderr, "aCurrentSelectionLine is is %p\n", &aCurrentSelectionLine);
-    fprintf(stderr, "aCurrentSelectionText is is %p\n", &aCurrentSelectionText);
-    fprintf(stderr, "aCurrentSelection is is %p\n", &aCurrentSelection);
-    fprintf(stderr, "vbox is is %p\n", &vbox);
 
     pParent->SetMinOutputSizePixel(vbox.GetOptimalSize(WINDOWSIZE_PREFERRED));
 

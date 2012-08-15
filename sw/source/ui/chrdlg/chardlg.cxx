@@ -173,11 +173,7 @@ SwCharURLPage::SwCharURLPage(Window* pParent, const SfxItemSet& rCoreSet)
 {
     FreeResource();
 
-    rtl::OString sFill(RTL_CONSTASCII_STRINGPARAM("fill"));
-    rtl::OString sExpand(RTL_CONSTASCII_STRINGPARAM("expand"));
-
-    m_aBox.setChildProperty(sFill, true);
-    m_aBox.setChildProperty(sExpand, true);
+    m_aBox.set_expand(true);
 
     m_aGrid.set_column_spacing(7);
     m_aGrid.set_row_spacing(2);
