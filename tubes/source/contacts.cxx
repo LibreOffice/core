@@ -230,6 +230,9 @@ public:
                 // FIXME: ref the TpAccount, TpContact ...
                 maACs.push_back( AccountContactPair( it->first, it->second ) );
                 pEntry->SetUserData( &maACs.back() );
+
+                g_object_unref (it->first);
+                g_object_unref (it->second);
             }
         }
         Show();

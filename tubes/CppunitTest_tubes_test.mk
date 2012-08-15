@@ -52,6 +52,7 @@ $(eval $(call gb_CppunitTest_use_libraries,tubes_test, \
 ))
 
 $(eval $(call gb_CppunitTest_use_externals,tubes_test,\
+	gtk \
 	telepathy \
 ))
 

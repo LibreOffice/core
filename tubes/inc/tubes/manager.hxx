@@ -156,8 +156,6 @@ public:
      */
     static void             addSuffixToNames( const char* pName );
 
-    static TpAccount*       getAccount( const rtl::OString& rAccountID );
-
 private:
     static TeleManagerImpl* pImpl;
 

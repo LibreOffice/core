@@ -266,6 +266,10 @@ void TeleManager_fileReceived( const OUString& rStr, const OString& rUuid )
     css::uno::Reference< css::lang::XMultiServiceFactory > rFactory =
         ::comphelper::getProcessServiceFactory();
 
+    // Should happen only for unit test
+    if (rFactory == NULL)
+        return;
+
     css::uno::Sequence < css::beans::PropertyValue > args(0);
     try
     {
@@ -336,6 +340,7 @@ static void lcl_IncomingHandlerReady (
 
     g_signal_connect( pHandler, "transfer-done", G_CALLBACK (TeleManager_TransferDone), NULL);
     g_signal_connect( pHandler, "transfer-error", G_CALLBACK (TeleManager_TransferError), NULL);
+    SAL_INFO ("tubes", "lcl_IncomingHandlerReady: starting file transfer..");
     empathy_ft_handler_start_transfer( pHandler);
 }
 
@@ -777,46 +782,10 @@ ContactList* TeleManager::getContactList()
     return pImpl->mpContactList;
 }
 
-TpAccount* TeleManager::getAccount( const rtl::OString& rAccountID )
-{
-    INFO_LOGGER_F( "TeleManager::getMyAccount");
-
-    SAL_WARN_IF( !pImpl->mbAccountManagerReady, "tubes",
-            "TeleManager::getMyAccount: Account Manager not prepared");
-    if (!pImpl->mbAccountManagerReady)
-        return NULL;
-
-    GList* pAccounts = tp_account_manager_get_valid_accounts( pImpl->mpAccountManager);
-    SAL_WARN_IF( !pAccounts, "tubes", "TeleManager::getMyAccount: no valid accounts");
-    if (!pAccounts)
-        return NULL;
-
-    // Find our account to use.
-    TpAccount* pAccount = NULL;
-    for (GList* pA = pAccounts; pA; pA = pA->next)
-    {
-        TpAccount* pAcc = TP_ACCOUNT( pA->data);
-        const gchar* pID = tp_account_get_normalized_name( pAcc);
-        if (pID && rAccountID == pID)
-        {
-            pAccount = pAcc;
-            break;  // for
-        }
-    }
-    g_list_free( pAccounts);
-
-    SAL_WARN_IF( !pAccount, "tubes", "TeleManager::getMyAccount: no account");
-    if (!pAccount)
-        return NULL;
-
-    return pAccount;
-}
-
 void TeleManager::setAccountManagerReady( bool bPrepared)
 {
     pImpl->mbAccountManagerReady = bPrepared;
 }
-
 
 rtl::OString TeleManager::getFullClientName()
 {
@@ -825,14 +794,12 @@ rtl::OString TeleManager::getFullClientName()
     return aBuf.makeStringAndClear();
 }
 
-
 rtl::OString TeleManager::getFullServiceName()
 {
     OStringBuffer aBuf(64);
     aBuf.append( RTL_CONSTASCII_STRINGPARAM( LIBO_DTUBE_SERVICE)).append( pImpl->msNameSuffix);
     return aBuf.makeStringAndClear();
 }
-
 
 rtl::OString TeleManager::getFullObjectPath()
 {

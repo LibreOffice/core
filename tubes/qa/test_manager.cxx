@@ -58,11 +58,8 @@ public:
     void testStartBuddySession();
     void testSendPacket();
     void testReceivePacket();
-    void testSendFile();
     void testDestroyTeleTubes();
     void testFailAlways();
-
-    static void FileSent( bool success, void *user_data);
 
     // Order is significant.
     CPPUNIT_TEST_SUITE( TestTeleTubes );
@@ -71,9 +68,8 @@ public:
     CPPUNIT_TEST( testRegisterClients );
     CPPUNIT_TEST( testContactList );
     CPPUNIT_TEST( testStartBuddySession );
-    CPPUNIT_TEST( testSendPacket );
-    CPPUNIT_TEST( testReceivePacket );
-    CPPUNIT_TEST( testSendFile );
+    //CPPUNIT_TEST( testSendPacket );
+    //CPPUNIT_TEST( testReceivePacket );
     CPPUNIT_TEST( testDestroyTeleTubes );
 #if 0
     CPPUNIT_TEST( testFailAlways );     // test failure displays SAL_LOG, uncomment for debugging
@@ -83,22 +79,18 @@ public:
 
 // static, not members, so they actually survive cppunit test iteration
 static TeleConference*      mpConference1 = NULL;
+static TeleConference*      mpConference2 = NULL;
+static TpAccount*           mpOffererAccount = NULL;
 static TpContact*           mpAccepterContact = NULL;
-static GMainLoop*           mpMainLoop = NULL;
-static bool                 maFileSentSuccess = false;
-static sal_uInt32           mnSentPackets = 0;
+static bool                 mbFileSentSuccess = false;
 static OUString             maTestConfigIniURL;
 static OString              maOffererIdentifier;
 static OString              maAccepterIdentifier;
 
-static gboolean
-timed_out (void *user_data)
+static gboolean timed_out( void * )
 {
     CPPUNIT_ASSERT_MESSAGE( "Test took longer than ten seconds!", false);
 
-    GMainLoop *loop = reinterpret_cast<GMainLoop *>(user_data);
-
-    g_main_loop_quit (loop);
     return FALSE;
 }
 
@@ -121,61 +113,7 @@ void TestTeleTubes::testInitialize()
         aTestConfig.getFrom("accepter", aAccepterIdentifier));
     maAccepterIdentifier = OUStringToOString( aAccepterIdentifier, RTL_TEXTENCODING_UTF8);
 
-    mpMainLoop = g_main_loop_new (NULL, FALSE);
-    g_timeout_add_seconds (10, timed_out, mpMainLoop);
-}
-
-void TestTeleTubes::testContactList()
-{
-    ContactList *cl = TeleManager::getContactList();
-
-    AccountContactPairV pairs;
-
-    pairs = cl->getContacts();
-    guint i;
-
-    /* FIXME: this is racy, because we can't be 100% sure that MC has finished
-     * discovering what we support and passing that on to the connection
-     * manager...
-     */
-
-    /* Both our accounts are meant to be signed in, and they both should be
-     * capable of LibreOffice tubes because this test runs after we register
-     * our handler. */
-    CPPUNIT_ASSERT_MESSAGE(
-        "Make sure both your test accounts are signed in "
-        "and are on each other's contact lists",
-        pairs.size() > 0 );
-    CPPUNIT_ASSERT(!mpAccepterContact);
-
-    for (i = 0; i < pairs.size(); i++)
-    {
-        AccountContactPair pair = pairs[i];
-
-        /* FIXME: verify that pair.first is the offerer account */
-        if (tp_contact_get_identifier(pair.second) == maAccepterIdentifier) {
-            mpAccepterContact = pair.second;
-            g_object_ref(mpAccepterContact);
-        }
-        g_object_unref (pair.first);
-        g_object_unref (pair.second);
-    }
-
-    CPPUNIT_ASSERT_MESSAGE(
-        "Couldn't find accepter contact. "
-        "Make sure both your test accounts are signed in "
-        "and are on each other's contact lists",
-        mpAccepterContact);
-}
-
-void TestTeleTubes::testStartBuddySession()
-{
-    TpAccount *pAcc1 = TeleManager::getAccount(maOffererIdentifier);
-    CPPUNIT_ASSERT( pAcc1 != 0);
-    /* This has to run after testContactList has run successfully. */
-    CPPUNIT_ASSERT( mpAccepterContact != 0);
-    mpConference1 = TeleManager::startBuddySession( pAcc1, mpAccepterContact);
-    CPPUNIT_ASSERT( mpConference1 != NULL);
+    g_timeout_add_seconds (10, timed_out, NULL);
 }
 
 void TestTeleTubes::testCreateAccountManager()
@@ -190,55 +128,102 @@ void TestTeleTubes::testRegisterClients()
     CPPUNIT_ASSERT( bRegistered == true);
 }
 
+void TestTeleTubes::testContactList()
+{
+    AccountContactPairV pairs = TeleManager::getContactList()->getContacts();
+    /* Both our accounts are meant to be signed in, and they both should be
+     * capable of LibreOffice tubes because this test runs after we register
+     * our handler. */
+    CPPUNIT_ASSERT_MESSAGE(
+        "Make sure both your test accounts are signed in "
+        "and are on each other's contact lists",
+        pairs.size() > 0 );
+    CPPUNIT_ASSERT(!mpAccepterContact);
+
+    for (guint i = 0; i < pairs.size(); i++)
+    {
+        AccountContactPair pair = pairs[i];
+
+        if (tp_account_get_normalized_name (pair.first) == maOffererIdentifier &&
+            tp_contact_get_identifier (pair.second) == maAccepterIdentifier)
+        {
+            mpOffererAccount = pair.first;
+            g_object_ref (mpOffererAccount);
+            mpAccepterContact = pair.second;
+            g_object_ref (mpAccepterContact);
+        }
+        g_object_unref (pair.first);
+        g_object_unref (pair.second);
+    }
+
+    CPPUNIT_ASSERT_MESSAGE(
+        "Couldn't find offerer account. "
+        "Make sure both your test accounts are signed in "
+        "and are on each other's contact lists",
+        mpOffererAccount);
+    CPPUNIT_ASSERT_MESSAGE(
+        "Couldn't find accepter contact. "
+        "Make sure both your test accounts are signed in "
+        "and are on each other's contact lists",
+        mpAccepterContact);
+}
+
+static void lcl_FileSent( bool success, void * )
+{
+    mbFileSentSuccess = success;
+}
+
+void TestTeleTubes::testStartBuddySession()
+{
+    CPPUNIT_ASSERT( mpOffererAccount != 0);
+    CPPUNIT_ASSERT( mpAccepterContact != 0);
+    mpConference1 = TeleManager::startBuddySession( mpOffererAccount, mpAccepterContact);
+    CPPUNIT_ASSERT( mpConference1 != NULL);
+    mpConference1->sendFile( mpAccepterContact, maTestConfigIniURL, lcl_FileSent, NULL);
+
+    while (!mbFileSentSuccess)
+        g_main_context_iteration( NULL, TRUE);
+
+    // This checks that the file was received and msCurrentUUID set (see manager.cxx)
+    while (!TeleManager::hasWaitingConference())
+        g_main_context_iteration( NULL, TRUE);
+
+    mpConference2 = TeleManager::getConference();
+    CPPUNIT_ASSERT( mpConference2 != NULL);
+}
+
 void TestTeleTubes::testSendPacket()
 {
-    OString aPacket( "from 1 to 2" );
-
-    bool bSentPacket = mpConference1->sendPacket( aPacket );
-    CPPUNIT_ASSERT( bSentPacket );
-    mnSentPackets++;
+    bool bSentPacket = false;
+    if (mpConference1)
+        bSentPacket = mpConference1->sendPacket( "from 1 to 2");
+    CPPUNIT_ASSERT( bSentPacket);
 }
 
 void TestTeleTubes::testReceivePacket()
 {
-    /* We can't get to the TeleConference accepting our packets.
-     * It's stored in TeleManager but available only after receiving file
-     * and extracting UUID from the name.
-     */
-
     // TODO implement me
-}
-
-void TestTeleTubes::FileSent( bool success, void * )
-{
-    maFileSentSuccess = success;
-    g_main_loop_quit (mpMainLoop);
-}
-
-void TestTeleTubes::testSendFile()
-{
-    /* This has to run after testContactList has run successfully. */
-    CPPUNIT_ASSERT( mpAccepterContact != 0);
-
-    mpConference1->sendFile( mpAccepterContact, maTestConfigIniURL,
-        &TestTeleTubes::FileSent, NULL);
-    /* Waiting for event: FileSent quits the mainloop */
-    g_main_loop_run( mpMainLoop);
-
-    CPPUNIT_ASSERT( maFileSentSuccess);
-    // Currently there is no way to check that the file was received !
 }
 
 void TestTeleTubes::testDestroyTeleTubes()
 {
+    if (mpOffererAccount) {
+        g_object_unref(mpOffererAccount);
+        mpOffererAccount = NULL;
+    }
     if (mpAccepterContact) {
         g_object_unref(mpAccepterContact);
         mpAccepterContact = NULL;
     }
-    g_main_loop_unref( mpMainLoop );
+
     if (mpConference1)
         mpConference1->close();
     delete mpConference1;
+
+    if (mpConference2)
+        mpConference2->close();
+    delete mpConference2;
+
     TeleManager::finalize();
 }
 
@@ -246,7 +231,6 @@ void TestTeleTubes::testFailAlways()
 {
     CPPUNIT_ASSERT( false);
 }
-
 
 CPPUNIT_TEST_SUITE_REGISTRATION( TestTeleTubes);
 
