@@ -38,7 +38,7 @@ SbiImage::SbiImage()
     nDimBase   = 0;
     bInit      =
     bError     = false;
-    bFirstInit = sal_True;
+    bFirstInit = true;
     eCharSet   = osl_getThreadTextEncoding();
 }
 
@@ -72,9 +72,9 @@ void SbiImage::Clear()
 *
 **************************************************************************/
 
-sal_Bool SbiGood( SvStream& r )
+bool SbiGood( SvStream& r )
 {
-    return sal_Bool( !r.IsEof() && r.GetError() == SVSTREAM_OK );
+    return !r.IsEof() && r.GetError() == SVSTREAM_OK;
 }
 
 // Open Record
@@ -100,7 +100,7 @@ void SbiCloseRecord( SvStream& r, sal_uIntPtr nOff )
 *
 **************************************************************************/
 
-sal_Bool SbiImage::Load( SvStream& r, sal_uInt32& nVersion )
+bool SbiImage::Load( SvStream& r, sal_uInt32& nVersion )
 {
 
     sal_uInt16 nSign, nCount;
@@ -226,10 +226,10 @@ done:
     r.Seek( nLast );
     if( !SbiGood( r ) )
         bError = true;
-    return sal_Bool( !bError );
+    return !bError;
 }
 
-sal_Bool SbiImage::Save( SvStream& r, sal_uInt32 nVer )
+bool SbiImage::Save( SvStream& r, sal_uInt32 nVer )
 {
     bool bLegacy = ( nVer < B_EXT_IMG_VERSION );
 
@@ -240,7 +240,7 @@ sal_Bool SbiImage::Save( SvStream& r, sal_uInt32 nVer )
         SbiImage aEmptyImg;
         aEmptyImg.aName = aName;
         aEmptyImg.Save( r, B_LEGACYVERSION );
-        return sal_True;
+        return true;
     }
     // First of all the header
     sal_uIntPtr nStart = SbiOpenRecord( r, B_MODULE, 1 );
@@ -348,7 +348,7 @@ sal_Bool SbiImage::Save( SvStream& r, sal_uInt32 nVer )
     SbiCloseRecord( r, nStart );
     if( !SbiGood( r ) )
         bError = true;
-    return sal_Bool( !bError );
+    return !bError;
 }
 
 /**************************************************************************
@@ -498,11 +498,9 @@ void  SbiImage::ReleaseLegacyBuffer()
     nLegacyCodeSize = 0;
 }
 
-sal_Bool SbiImage::ExceedsLegacyLimits()
+bool SbiImage::ExceedsLegacyLimits()
 {
-    if ( ( nStringSize > 0xFF00L ) || ( CalcLegacyOffset( nCodeSize ) > 0xFF00L ) )
-        return sal_True;
-    return sal_False;
+    return ( nStringSize > 0xFF00L ) || ( CalcLegacyOffset( nCodeSize ) > 0xFF00L );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

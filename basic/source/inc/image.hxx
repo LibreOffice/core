@@ -58,16 +58,16 @@ public:
     String aName;                   // macro name
     ::rtl::OUString aOUSource;      // source code
     String aComment;
-    sal_Bool   bInit;
-    sal_Bool   bFirstInit;
+    bool   bInit;
+    bool   bFirstInit;
 
     SbiImage();
    ~SbiImage();
     void Clear();
-    sal_Bool Load( SvStream&, sal_uInt32& nVer );
+    bool Load( SvStream&, sal_uInt32& nVer );
                             // nVer is set to version
                             // of image
-    sal_Bool Save( SvStream&, sal_uInt32 = B_CURVERSION );
+    bool Save( SvStream&, sal_uInt32 = B_CURVERSION );
     bool IsError()                  { return bError;    }
 
     const char* GetCode() const     { return pCode;     }
@@ -84,7 +84,7 @@ public:
     sal_uInt16      CalcLegacyOffset( sal_Int32 nOffset );
     sal_uInt32      CalcNewOffset( sal_Int16 nOffset );
     void        ReleaseLegacyBuffer();
-    sal_Bool        ExceedsLegacyLimits();
+    bool        ExceedsLegacyLimits();
 
 };
 

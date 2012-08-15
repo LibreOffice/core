@@ -1314,8 +1314,8 @@ void SbModule::RunInit()
         GetSbData()->pInst->pRun = pRt->pNext;
         delete pRt;
         GetSbData()->pMod = pOldMod;
-        pImage->bInit = sal_True;
-        pImage->bFirstInit = sal_False;
+        pImage->bInit = true;
+        pImage->bFirstInit = false;
 
         // RunInit is not activ anymore
         GetSbData()->bRunInit = sal_False;
@@ -1714,7 +1714,7 @@ sal_Bool SbModule::LoadData( SvStream& rStrm, sal_uInt16 nVer )
 
 sal_Bool SbModule::StoreData( SvStream& rStrm ) const
 {
-    sal_Bool bFixup = ( pImage && !pImage->ExceedsLegacyLimits() );
+    bool bFixup = ( pImage && !pImage->ExceedsLegacyLimits() );
     if ( bFixup )
         fixUpMethodStart( true );
     sal_Bool bRet = SbxObject::StoreData( rStrm );
@@ -1815,7 +1815,7 @@ sal_Bool SbModule::StoreBinaryData( SvStream& rStrm, sal_uInt16 nVer )
     sal_Bool bRet = Compile();
     if( bRet )
     {
-        sal_Bool bFixup = ( !nVer && !pImage->ExceedsLegacyLimits() );// save in old image format, fix up method starts
+        bool bFixup = ( !nVer && !pImage->ExceedsLegacyLimits() );// save in old image format, fix up method starts
 
         if ( bFixup ) // save in old image format, fix up method starts
             fixUpMethodStart( true );
