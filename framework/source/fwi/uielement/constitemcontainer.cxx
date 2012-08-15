@@ -149,7 +149,7 @@ ConstItemContainer::ConstItemContainer() : ::cppu::OWeakObject()
 
 ConstItemContainer::ConstItemContainer( const ItemContainer& rItemContainer )
 {
-    ShareGuard( rItemContainer.m_aShareMutex );
+    ShareGuard aLock( rItemContainer.m_aShareMutex );
     copyItemContainer( rItemContainer.m_aItemVector );
 }
 
