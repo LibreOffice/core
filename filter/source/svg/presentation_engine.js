@@ -1098,6 +1098,7 @@ var aPresentationClipPathId = 'presentation_clip_path';
 var aOOOAttrNumberOfSlides = 'number-of-slides';
 var aOOOAttrStartSlideNumber= 'start-slide-number';
 var aOOOAttrNumberingType = 'page-numbering-type';
+var aOOOAttrListItemNumberingType= 'numbering-type';
 
 var aOOOAttrSlide = 'slide';
 var aOOOAttrMaster = 'master';
@@ -5708,6 +5709,7 @@ function AnimationBaseNode( aAnimElem, aParentNode, aNodeContext )
     this.sClassName = 'AnimationBaseNode';
     this.bIsContainer = false;
     this.aTargetElement = null;
+    this.bIsTargetTextElement = false
     this.aAnimatedElement = null;
     this.aActivity = null;
 
@@ -5735,6 +5737,10 @@ AnimationBaseNode.prototype.parseElement = function()
         this.eCurrentState = INVALID_NODE;
         log( 'AnimationBaseNode.parseElement: target element not found: ' + sTargetElementAttr );
     }
+
+    // sub-item attribute for text animated element
+    var sSubItemAttr = aAnimElem.getAttribute( 'sub-item' );
+    this.bIsTargetTextElement = ( sSubItemAttr && ( sSubItemAttr === 'text' ) );
 
     // additive attribute
     var sAdditiveAttr = aAnimElem.getAttribute( 'additive' );
@@ -5765,8 +5771,16 @@ AnimationBaseNode.prototype.parseElement = function()
         // create animated element
         if( !this.aNodeContext.aAnimatedElementMap[ sTargetElementAttr ] )
         {
-            this.aNodeContext.aAnimatedElementMap[ sTargetElementAttr ]
+            if( this.bIsTargetTextElement )
+            {
+                this.aNodeContext.aAnimatedElementMap[ sTargetElementAttr ]
+                    = new AnimatedTextElement( this.aTargetElement );
+            }
+            else
+            {
+                this.aNodeContext.aAnimatedElementMap[ sTargetElementAttr ]
                     = new AnimatedElement( this.aTargetElement );
+            }
         }
         this.aAnimatedElement = this.aNodeContext.aAnimatedElementMap[ sTargetElementAttr ];
 
@@ -7414,6 +7428,7 @@ ClippingAnimation.prototype.end = function()
     {
         this.aAnimatableElement.cleanClipPath();
         this.bAnimationStarted = false;
+        this.aAnimatableElement.notifyAnimationEnd();
     }
 };
 
@@ -7468,7 +7483,10 @@ GenericAnimation.prototype.start = function( aAnimatableElement )
 GenericAnimation.prototype.end = function()
 {
     if( this.bAnimationStarted )
+    {
         this.bAnimationStarted = false;
+        this.aAnimatableElement.notifyAnimationEnd();
+    }
 };
 
 GenericAnimation.prototype.perform = function( aValue )
@@ -9203,6 +9221,229 @@ AnimatedElement.prototype.DBG = function( sMessage, nTime )
     aAnimatedElementDebugPrinter.print( 'AnimatedElement(' + this.getId() + ')' + sMessage, nTime );
 };
 
+// ------------------------------------------------------------------------------------------ //
+function AnimatedTextElement( aElement )
+{
+    var theDocument = document;
+
+    var sTextType = aElement.getAttribute( 'class' );
+    var bIsListItem = ( sTextType === 'ListItem' );
+    if( ( sTextType !== 'TextParagraph' ) && !bIsListItem )
+    {
+        log( 'AnimatedTextElement: passed element is not a paragraph.' );
+        return;
+    }
+    var aTextShapeElement = aElement.parentNode;
+    sTextType = aTextShapeElement.getAttribute( 'class' );
+    if( sTextType !== 'TextShape' )
+    {
+        log( 'AnimatedTextElement: element parent is not a text shape.' );
+        return;
+    }
+    var aTextShapeGroup = aTextShapeElement.parentNode;
+    // We search for the helper group element used for inserting
+    // the element copy to be animated; if it doesn't exist we create it.
+    var aAnimatedElementGroup = getElementByClassName( aTextShapeGroup, 'AnimatedElements' );
+    if( !aAnimatedElementGroup )
+    {
+        aAnimatedElementGroup = theDocument.createElementNS( NSS['svg'], 'g' );
+        aAnimatedElementGroup.setAttribute( 'class', 'AnimatedElements' );
+        aTextShapeGroup.appendChild( aAnimatedElementGroup );
+    }
+
+    // Create element used on animating
+    var aAnimatableElement = theDocument.createElementNS( NSS['svg'], 'g' );
+    var aTextElement = theDocument.createElementNS( NSS['svg'], 'text' );
+    // Clone paragraph element <tspan>
+    var aParagraphElement = aElement.cloneNode( true );
+
+    // In case we are dealing with a list item that utilizes a bullet char
+    // we need to clone the related bullet char too.
+    var aBulletCharClone = null;
+    var aBulletCharElem = null;
+    var bIsBulletCharStyle =
+        ( aElement.getAttributeNS( NSS['ooo'], aOOOAttrListItemNumberingType ) === 'bullet-style' );
+    if( bIsBulletCharStyle )
+    {
+        var aBulletCharGroupElem = getElementByClassName( aTextShapeGroup, 'BulletChars' );
+        if( aBulletCharGroupElem )
+        {
+            var aBulletPlaceholderElem = getElementByClassName( aElement.firstElementChild, 'BulletPlaceholder' );
+            if( aBulletPlaceholderElem )
+            {
+                var sId = aBulletPlaceholderElem.getAttribute( 'id' );
+                sId = 'bullet-char(' + sId + ')';
+                aBulletCharElem = theDocument.getElementById( sId );
+                if( aBulletCharElem )
+                {
+                    aBulletCharClone = aBulletCharElem.cloneNode( true );
+                }
+                else
+                {
+                    log( 'AnimatedTextElement: ' + sId + ' not found.' );
+                }
+            }
+            else
+            {
+                log( 'AnimatedTextElement: no bullet placeholder found' );
+            }
+        }
+        else
+        {
+            log( 'AnimatedTextElement: no bullet char group found' );
+        }
+    }
+
+    var aBitmapElemSet = new Array();
+    var aBitmapCloneSet = new Array();
+    var aBitmapPlaceholderSet = getElementsByClassName( aElement, 'BitmapPlaceholder' );
+    if( aBitmapPlaceholderSet )
+    {
+        var i;
+        for( i = 0; i < aBitmapPlaceholderSet.length; ++i )
+        {
+            sId = aBitmapPlaceholderSet[i].getAttribute( 'id' );
+            var sBitmapChecksum = sId.substring( 'bitmap-placeholder'.length + 1, sId.length - 1 );
+            sId = 'embedded-bitmap(' + sBitmapChecksum + ')';
+            aBitmapElemSet[i] = theDocument.getElementById( sId );
+            if( aBitmapElemSet[i] )
+            {
+                aBitmapCloneSet[i] = aBitmapElemSet[i].cloneNode( true );
+            }
+            else
+            {
+                log( 'AnimatedTextElement: ' + sId + ' not found.' );
+            }
+        }
+    }
+
+
+    // Change clone element id.
+    this.sParagraphId = sId = aParagraphElement.getAttribute( 'id' );
+    aParagraphElement.setAttribute( 'id', sId +'.a' );
+    if( aBulletCharClone )
+        aBulletCharClone.removeAttribute( 'id' );
+    for( i = 0; i < aBitmapCloneSet.length; ++i )
+    {
+        if( aBitmapCloneSet[i] )
+            aBitmapCloneSet[i].removeAttribute( 'id' );
+    }
+
+    // Hide original text paragraph.
+    var sVisibilityAttr = aElement.getAttribute( 'visibility' );
+    if( sVisibilityAttr === 'hidden' )
+    {
+        aAnimatableElement.setAttribute( 'visibility', 'hidden' );
+        this.eInitialVisibility = HIDDEN;
+    }
+    else
+    {
+        aElement.setAttribute( 'visibility', 'hidden' );
+        this.eInitialVisibility = VISIBLE;
+    }
+    aParagraphElement.setAttribute( 'visibility', 'inherit' );
+    if( aBulletCharClone )
+        aBulletCharClone.setAttribute( 'visibility', 'inherit' );
+    if( aBulletCharElem )
+        aBulletCharElem.setAttribute( 'visibility', 'hidden' );
+    for( i = 0; i < aBitmapCloneSet.length; ++i )
+    {
+        if( aBitmapElemSet[i] )
+            aBitmapElemSet[i].setAttribute( 'visibility', 'hidden' );
+        if( aBitmapCloneSet[i] )
+            aBitmapCloneSet[i].setAttribute( 'visibility', 'inherit' );
+    }
+
+
+    // Append each element to its parent.
+    // <g class='AnimatedElements'>
+    //   <g>
+    //     <text>
+    //       <tspan class='TextParagraph'> ... </tspan>
+    //     </text>
+    //     [<g class='BulletChar'>...</g>]
+    //     [<g class='EmbeddedBitmap'>...</g>]
+    //     .
+    //     .
+    //     [<g class='EmbeddedBitmap'>...</g>]
+    //   </g>
+    // </g>
+
+    aTextElement.appendChild( aParagraphElement );
+    aAnimatableElement.appendChild( aTextElement );
+    if( aBulletCharClone )
+        aAnimatableElement.appendChild( aBulletCharClone );
+    for( i = 0; i < aBitmapCloneSet.length; ++i )
+    {
+        if( aBitmapCloneSet[i] )
+            aAnimatableElement.appendChild( aBitmapCloneSet[i] );
+    }
+    aAnimatedElementGroup.appendChild( aAnimatableElement );
+
+    this.aParentTextElement = aElement.parentNode;
+    this.aParagraphElement = aElement;
+    this.aAnimatedElementGroup = aAnimatedElementGroup;
+    this.nRunningAnimations = 0;
+
+    AnimatedTextElement.superclass.constructor.call( this, aAnimatableElement );
+
+}
+extend( AnimatedTextElement, AnimatedElement );
+
+/*
+AnimatedTextElement.prototype.notifySlideStart = function()
+{
+    var aClone = this.aBaseElement.cloneNode( true );
+    this.aActiveElement.parentNode.replaceChild( aClone, this.aActiveElement );
+    this.aActiveElement = aClone;
+
+    var aAnimatedParagraphElement = this.aActiveElement.firstElementChild.firstElementChild;
+    if( aAnimatedParagraphElement )
+    {
+        var aParagraphElement = aAnimatedParagraphElement.cloneNode( true );
+        aParagraphElement.setAttribute( 'id', this.sParagraphId );
+        aParagraphElement.setAttribute( 'visibility', aVisibilityAttributeValue[ this.eInitialVisibility  ] );
+        this.aParentTextElement.replaceChild( aParagraphElement, this.aParagraphElement  );
+        this.aParagraphElement = aParagraphElement;
+    }
+    this.aActiveElement.setAttribute( 'visibility', 'hidden' );
+
+
+    this.initElement();
+    this.DBG( '.notifySlideStart invoked' );
+};
+
+AnimatedTextElement.prototype.notifyAnimationStart = function()
+{
+    log( 'AnimatedTextElement.notifyAnimationStart' );
+    if( this.nRunningAnimations === 0 )
+    {
+        this.aParagraphElement.setAttribute( 'visibility', 'hidden' );
+        this.aActiveElement.setAttribute( 'visibility', aVisibilityAttributeValue[ this.eInitialVisibility  ] );
+    }
+    ++this.nRunningAnimations;
+};
+
+AnimatedTextElement.prototype.notifyAnimationEnd = function()
+{
+    log( 'AnimatedTextElement.notifyAnimationEnd' );
+    --this.nRunningAnimations;
+    if( this.nRunningAnimations === 0 )
+    {
+        var sVisibilityAttr = this.aActiveElement.getAttribute( 'visibility' );
+        var aAnimatedParagraphElement = this.aActiveElement.firstElementChild.firstElementChild;
+        if( aAnimatedParagraphElement )
+        {
+            var aParagraphElement = aAnimatedParagraphElement.cloneNode( true );
+            aParagraphElement.setAttribute( 'visibility', sVisibilityAttr );
+            aParagraphElement.setAttribute( 'id', this.sParagraphId );
+            this.aParentTextElement.replaceChild( aParagraphElement, this.aParagraphElement  );
+            this.aParagraphElement = aParagraphElement;
+        }
+        this.aActiveElement.setAttribute( 'visibility', 'hidden' );
+    }
+};
+*/
 
 
 // ------------------------------------------------------------------------------------------ //

@@ -46,6 +46,7 @@
 
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
+#include <com/sun/star/container/XContentEnumerationAccess.hpp>
 #include <com/sun/star/container/XEnumeration.hpp>
 #include <com/sun/star/container/XIndexReplace.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -67,6 +68,7 @@
 #include <com/sun/star/text/XTextRange.hpp>
 #include <com/sun/star/text/XTextField.hpp>
 #include <com/sun/star/style/NumberingType.hpp>
+
 
 // -----------------------------------------------------------------------------
 
@@ -204,6 +206,7 @@ class SVGTextWriter
     VirtualDevice*                              mpVDev;
     Reference<XText>                            mrTextShape;
     Reference<XEnumeration>                     mrParagraphEnumeration;
+    Reference<XTextContent>                     mrCurrentTextParagraph;
     Reference<XEnumeration>                     mrTextPortionEnumeration;
     Reference<XTextRange>                       mrCurrentTextPortion;
     const GDIMetaFile*                          mpTextEmbeddedBitmapMtf;
@@ -215,7 +218,7 @@ class SVGTextWriter
     Point                                       maTextPos;
     long int                                    mnTextWidth;
     sal_Bool                                    mbPositioningNeeded;
-    sal_Bool                                    mbIsNumbering;
+    sal_Bool                                    mbIsNewListItem;
     sal_Int16                                   meNumberingType;
     sal_Unicode                                 mcBulletChar;
     BulletListItemInfoMap                       maBulletListItemMap;
@@ -237,6 +240,7 @@ class SVGTextWriter
     void setTextProperties( const GDIMetaFile& rMtf, sal_uLong nCurAction );
     void addFontAttributes( sal_Bool bIsTextContainer );
 
+    sal_Bool createParagraphEnumeration();
     sal_Bool nextParagraph();
     sal_Bool nextTextPortion();
 
