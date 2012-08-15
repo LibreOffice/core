@@ -35,6 +35,7 @@
 #include <rtl/bootstrap.hxx>
 #include <rtl/string.hxx>
 #include <rtl/ustring.hxx>
+#include <tubes/collaboration.hxx>
 #include <tubes/conference.hxx>
 #include <tubes/contact-list.hxx>
 #include <tubes/manager.hxx>
@@ -68,8 +69,8 @@ public:
     CPPUNIT_TEST( testRegisterClients );
     CPPUNIT_TEST( testContactList );
     CPPUNIT_TEST( testStartBuddySession );
-    //CPPUNIT_TEST( testSendPacket );
-    //CPPUNIT_TEST( testReceivePacket );
+    CPPUNIT_TEST( testSendPacket );
+    CPPUNIT_TEST( testReceivePacket );
     CPPUNIT_TEST( testDestroyTeleTubes );
 #if 0
     CPPUNIT_TEST( testFailAlways );     // test failure displays SAL_LOG, uncomment for debugging
@@ -77,15 +78,30 @@ public:
     CPPUNIT_TEST_SUITE_END();
 };
 
+class TestCollaboration;
 // static, not members, so they actually survive cppunit test iteration
+static TestCollaboration*  mpCollaboration = NULL;
 static TeleConference*      mpConference1 = NULL;
 static TeleConference*      mpConference2 = NULL;
 static TpAccount*           mpOffererAccount = NULL;
 static TpContact*           mpAccepterContact = NULL;
 static bool                 mbFileSentSuccess = false;
+static bool                 mbPacketReceived = false;
 static OUString             maTestConfigIniURL;
 static OString              maOffererIdentifier;
 static OString              maAccepterIdentifier;
+
+class TestCollaboration : public Collaboration
+{
+    virtual void EndCollaboration() const {}
+    virtual void PacketReceived( const OString& rPacket ) const
+    {
+        CPPUNIT_ASSERT( rPacket == "from 1 to 2");
+        mbPacketReceived = true;
+    }
+    virtual void SaveAndSendFile( TpContact* ) const {}
+    virtual void StartCollaboration( TeleConference* ) {}
+};
 
 static gboolean timed_out( void * )
 {
@@ -114,6 +130,7 @@ void TestTeleTubes::testInitialize()
     maAccepterIdentifier = OUStringToOString( aAccepterIdentifier, RTL_TEXTENCODING_UTF8);
 
     g_timeout_add_seconds (10, timed_out, NULL);
+    mpCollaboration = new TestCollaboration();
 }
 
 void TestTeleTubes::testCreateAccountManager()
@@ -190,6 +207,7 @@ void TestTeleTubes::testStartBuddySession()
 
     mpConference2 = TeleManager::getConference();
     CPPUNIT_ASSERT( mpConference2 != NULL);
+    mpCollaboration->SetConference( mpConference2 );
 }
 
 void TestTeleTubes::testSendPacket()
@@ -202,7 +220,8 @@ void TestTeleTubes::testSendPacket()
 
 void TestTeleTubes::testReceivePacket()
 {
-    // TODO implement me
+    while (!mbPacketReceived)
+        g_main_context_iteration( NULL, TRUE);
 }
 
 void TestTeleTubes::testDestroyTeleTubes()
