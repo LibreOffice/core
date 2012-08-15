@@ -1123,16 +1123,17 @@ void PowerPointExport::WriteAnimationNodeCommonPropsStart( FSHelperPtr pFS, cons
     if( xEnumeration.is() ) {
         DBG(printf ("-----\n"));
 
-        pFS->startElementNS( XML_p, XML_childTnLst, FSEND );
+        if( xEnumeration->hasMoreElements() ) {
+            pFS->startElementNS( XML_p, XML_childTnLst, FSEND );
 
-        while( xEnumeration->hasMoreElements() ) {
-        Reference< XAnimationNode > xChildNode( xEnumeration->nextElement(), UNO_QUERY );
-        if( xChildNode.is() )
-            WriteAnimationNode( pFS, xChildNode, nType == EffectNodeType::MAIN_SEQUENCE );
+            while( xEnumeration->hasMoreElements() ) {
+                Reference< XAnimationNode > xChildNode( xEnumeration->nextElement(), UNO_QUERY );
+                if( xChildNode.is() )
+                    WriteAnimationNode( pFS, xChildNode, nType == EffectNodeType::MAIN_SEQUENCE );
+            }
+
+            pFS->endElementNS( XML_p, XML_childTnLst );
         }
-
-        pFS->endElementNS( XML_p, XML_childTnLst );
-
         DBG(printf ("-----\n"));
     }
     }
