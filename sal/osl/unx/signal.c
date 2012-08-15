@@ -593,13 +593,13 @@ static int ReportCrash( int Signal )
                 int fdxml, fdstk, fdchksum;
 
                 strncpy( szXMLTempNameBuffer, P_tmpdir, sizeof(szXMLTempNameBuffer) );
-                strncat( szXMLTempNameBuffer, "/crxmlXXXXXX", sizeof(szXMLTempNameBuffer) );
+                strncat( szXMLTempNameBuffer, "/crxmlXXXXXX", sizeof(szXMLTempNameBuffer) - strlen(szXMLTempNameBuffer) - 1 );
 
                 strncpy( szStackTempNameBuffer, P_tmpdir, sizeof(szStackTempNameBuffer) );
-                strncat( szStackTempNameBuffer, "/crstkXXXXXX", sizeof(szStackTempNameBuffer) );
+                strncat( szStackTempNameBuffer, "/crstkXXXXXX", sizeof(szStackTempNameBuffer) - strlen(szStackTempNameBuffer) - 1 );
 
                 strncpy( szChecksumTempNameBuffer, P_tmpdir, sizeof(szChecksumTempNameBuffer) );
-                strncat( szChecksumTempNameBuffer, "/crchkXXXXXX", sizeof(szChecksumTempNameBuffer) );
+                strncat( szChecksumTempNameBuffer, "/crchkXXXXXX", sizeof(szChecksumTempNameBuffer) - strlen(szChecksumTempNameBuffer) - 1 );
 
                 fdxml = mkstemp(szXMLTempNameBuffer);
                 fdstk = mkstemp(szStackTempNameBuffer);
