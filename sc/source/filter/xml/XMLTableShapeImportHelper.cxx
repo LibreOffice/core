@@ -192,6 +192,26 @@ void XMLTableShapeImportHelper::finishShape(
     }
     else //this are grouped shapes which should also get the layerid
     {
+        if ( !bOnTable )
+        {
+            // For cell anchored grouped shape we need to set the start
+            // position from the most top left positioned shape within
+            // the group
+            Point aStartPoint( rShape->getPosition().X,rShape->getPosition().Y );
+            awt::Size aSize(rShape->getSize() );
+            if (SvxShape* pGroupShapeImp = SvxShape::getImplementation(rShapes))
+            {
+                if (SdrObject *pSdrObj = pGroupShapeImp->GetSdrObject())
+                {
+                    if ( ScDrawObjData* pAnchor = ScDrawLayer::GetObjData( pSdrObj ) )
+                    {
+                        if ( ( pAnchor->maStartOffset.getX() == 0 && pAnchor->maStartOffset.getY() == 0 )
+                           || ( aStartPoint.IsAbove( pAnchor->maStartOffset ) && aStartPoint.IsLeft( pAnchor->maStartOffset ) ) )
+                            pAnchor->maStartOffset = aStartPoint;
+                    }
+                }
+            }
+        }
         sal_Int16 nAttrCount(xAttrList.is() ? xAttrList->getLength() : 0);
         sal_Int16 nLayerID(-1);
         for( sal_Int16 i=0; i < nAttrCount; ++i )
