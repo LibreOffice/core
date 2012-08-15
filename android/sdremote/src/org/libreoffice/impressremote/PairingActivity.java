@@ -13,7 +13,6 @@ import java.text.MessageFormat;
 import org.libreoffice.impressremote.communication.CommunicationService;
 import org.libreoffice.impressremote.communication.CommunicationService.State;
 
-import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -25,7 +24,9 @@ import android.os.IBinder;
 import android.support.v4.content.LocalBroadcastManager;
 import android.widget.TextView;
 
-public class PairingActivity extends Activity {
+import com.actionbarsherlock.app.SherlockActivity;
+
+public class PairingActivity extends SherlockActivity {
     private CommunicationService mCommunicationService;
     private boolean mIsBound = false;
     private TextView mPinText;

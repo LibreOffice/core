@@ -1,27 +1,30 @@
 package org.libreoffice.impressremote;
 
-import android.app.Activity;
 import android.os.Bundle;
-import android.view.MenuItem;
 
-public class SettingsActivity extends Activity {
+import com.actionbarsherlock.app.SherlockPreferenceActivity;
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_settings);
-		getActionBar().setDisplayHomeAsUpEnabled(true);
-	}
+public class SettingsActivity extends SherlockPreferenceActivity {
 
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-		case android.R.id.home:
-			finish();
-			return true;
-		default:
-			return super.onOptionsItemSelected(item);
-		}
-	}
+    // We use addPreferencesFromResource as we need sdk-9 compatibility
+    @SuppressWarnings("deprecation")
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        // TODO Auto-generated method stub
+        super.onCreate(savedInstanceState);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        addPreferencesFromResource(R.xml.preferences);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(
+                    com.actionbarsherlock.view.MenuItem item) {
+        switch (item.getItemId()) {
+        case android.R.id.home:
+            finish();
+            return true;
+        default:
+            return super.onOptionsItemSelected(item);
+        }
+    }
 }
