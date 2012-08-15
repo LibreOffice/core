@@ -77,11 +77,6 @@ namespace drawinglayer
 
             short                                           mnStyle;
 
-            /// bitfield
-            /// flags to influence inside/outside creation
-            unsigned                                        mbCreateInside : 1;
-            unsigned                                        mbCreateOutside : 1;
-
             /// local helpers
             double getWidth(
                     const geometry::ViewInformation2D& rViewInformation) const;
