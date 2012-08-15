@@ -50,6 +50,12 @@
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/range/b2drange.hxx>
+#include <svx/sdr/primitive2d/sdrattributecreator.hxx>
+#include <drawinglayer/attribute/sdrlineattribute.hxx>
+#include <drawinglayer/attribute/sdrlinestartendattribute.hxx>
+#include <svx/xlnwtit.hxx>
+#include <svx/xlntrit.hxx>
+#include <svx/xfltrit.hxx>
 
 #define ITEMVALUE(ItemSet,Id,Cast)  ((const Cast&)(ItemSet).Get(Id)).GetValue()
 using namespace com::sun::star;
@@ -373,14 +379,60 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
             bool bIsPlaceholderObject = (((XFillStyleItem&)pNext->GetMergedItem( XATTR_FILLSTYLE )).GetValue() == XFILL_NONE )
                                         && (((XLineStyleItem&)pNext->GetMergedItem( XATTR_LINESTYLE )).GetValue() == XLINE_NONE );
             basegfx::B2DPolyPolygon aPolyPoly;
+            SfxItemSet aLocalSet(aSet);
+            XFillStyle aLocalFillStyle(eFillStyle);
 
             if ( pNext->ISA( SdrPathObj ) )
             {
-                aPolyPoly = ((SdrPathObj*)pNext)->GetPathPoly();
+                const SfxItemSet& rSet = pNext->GetMergedItemSet();
+                const drawinglayer::attribute::SdrLineAttribute aLine(
+                    drawinglayer::primitive2d::createNewSdrLineAttribute(rSet));
+                bool bNeedToConvertToContour(0.0 <= aLine.getWidth() || 0.0 != aLine.getFullDotDashLen());
 
-                if(aPolyPoly.areControlPointsUsed())
+                if(!bNeedToConvertToContour && !aLine.isDefault())
                 {
-                    aPolyPoly = basegfx::tools::adaptiveSubdivideByAngle(aPolyPoly);
+                    const drawinglayer::attribute::SdrLineStartEndAttribute aLineStartEnd(
+                        drawinglayer::primitive2d::createNewSdrLineStartEndAttribute(rSet, aLine.getWidth()));
+
+                    if((aLineStartEnd.getStartWidth() && aLineStartEnd.isStartActive())
+                        || (aLineStartEnd.getEndWidth() && aLineStartEnd.isEndActive()))
+                    {
+                        bNeedToConvertToContour = true;
+                    }
+                }
+
+                if(bNeedToConvertToContour)
+                {
+                    SdrObject* pNewObj = pNext->ConvertToContourObj(const_cast< SdrObject* >(pNext));
+                    SdrPathObj* pNewPathObj = dynamic_cast< SdrPathObj* >(pNewObj);
+
+                    if(pNewPathObj)
+                    {
+                        aPolyPoly = pNewPathObj->GetPathPoly();
+
+                        if(aPolyPoly.isClosed())
+                        {
+                            // correct item properties from line to fill style
+                            aLocalSet.Put(XLineWidthItem(0));
+                            aLocalSet.Put(XLineStyleItem(XLINE_NONE));
+                            aLocalSet.Put(XFillColorItem(XubString(), ((const XLineColorItem&)(aLocalSet.Get(XATTR_LINECOLOR))).GetColorValue()));
+                            aLocalSet.Put(XFillStyleItem(XFILL_SOLID));
+                            aLocalSet.Put(XFillTransparenceItem(((const XLineTransparenceItem&)(aLocalSet.Get(XATTR_LINETRANSPARENCE))).GetValue()));
+                            aLocalFillStyle = XFILL_SOLID;
+                        }
+                        else
+                        {
+                            // correct item properties to hairlines
+                            aLocalSet.Put(XLineWidthItem(0));
+                            aLocalSet.Put(XLineStyleItem(XLINE_SOLID));
+                        }
+                    }
+
+                    SdrObject::Free(pNewObj);
+                }
+                else
+                {
+                    aPolyPoly = ((SdrPathObj*)pNext)->GetPathPoly();
                 }
             }
             else
@@ -394,13 +446,18 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
 
             if( aPolyPoly.count() )
             {
+                if(aPolyPoly.areControlPointsUsed())
+                {
+                    aPolyPoly = basegfx::tools::adaptiveSubdivideByAngle(aPolyPoly);
+                }
+
                 const basegfx::B2DRange aTempRange(basegfx::tools::getRange(aPolyPoly));
                 const Rectangle aBoundRect(basegfx::fround(aTempRange.getMinX()), basegfx::fround(aTempRange.getMinY()), basegfx::fround(aTempRange.getMaxX()), basegfx::fround(aTempRange.getMaxY()));
                 aBoundRect2d.Union( aBoundRect );
 
                 E3dCompoundObject* p3DObj = new E3dExtrudeObj( a3DDefaultAttr, aPolyPoly, bUseTwoFillStyles ? 10 : fDepth );
                 p3DObj->NbcSetLayer( pShape2d->GetLayer() );
-                p3DObj->SetMergedItemSet( aSet );
+                p3DObj->SetMergedItemSet( aLocalSet );
                 if ( bIsPlaceholderObject )
                     aPlaceholderObjectList.push_back( p3DObj );
                 else if ( bUseTwoFillStyles )
@@ -444,7 +501,7 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
                     pScene->Insert3DObj( p3DObj );
                     p3DObj = new E3dExtrudeObj( a3DDefaultAttr, aPolyPoly, fDepth );
                     p3DObj->NbcSetLayer( pShape2d->GetLayer() );
-                    p3DObj->SetMergedItemSet( aSet );
+                    p3DObj->SetMergedItemSet( aLocalSet );
                     if ( bUseExtrusionColor )
                         p3DObj->SetMergedItem( XFillColorItem( String(), ((XSecondaryFillColorItem&)pCustomShape->GetMergedItem( XATTR_SECONDARYFILLCOLOR )).GetColorValue() ) );
                     p3DObj->SetMergedItem( XFillStyleItem( XFILL_SOLID ) );
@@ -453,18 +510,18 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
                     pScene->Insert3DObj( p3DObj );
                     p3DObj = new E3dExtrudeObj( a3DDefaultAttr, aPolyPoly, 10 );
                     p3DObj->NbcSetLayer( pShape2d->GetLayer() );
-                    p3DObj->SetMergedItemSet( aSet );
+                    p3DObj->SetMergedItemSet( aLocalSet );
 
                     basegfx::B3DHomMatrix aFrontTransform( p3DObj->GetTransform() );
                     aFrontTransform.translate( 0.0, 0.0, fDepth );
                     p3DObj->NbcSetTransform( aFrontTransform );
 
-                    if ( ( eFillStyle == XFILL_BITMAP ) && !aFillBmp.IsEmpty() )
+                    if ( ( aLocalFillStyle == XFILL_BITMAP ) && !aFillBmp.IsEmpty() )
                     {
                         p3DObj->SetMergedItem(XFillBitmapItem(String(), Graphic(aFillBmp)));
                     }
                 }
-                else if ( eFillStyle == XFILL_NONE )
+                else if ( aLocalFillStyle == XFILL_NONE )
                 {
                     XLineColorItem& rLineColor = (XLineColorItem&)p3DObj->GetMergedItem( XATTR_LINECOLOR );
                     p3DObj->SetMergedItem( XFillColorItem( String(), rLineColor.GetColorValue() ) );
