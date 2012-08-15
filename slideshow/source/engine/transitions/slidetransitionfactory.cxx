@@ -547,7 +547,7 @@ void CutSlideChange::performOut(
         "CutSlideChange::performOut(): Invalid sprite" );
     ENSURE_OR_THROW(
         rDestinationCanvas,
-        "FadingSlideChange::performOut(): Invalid dest canvas" );
+        "CutSlideChange::performOut(): Invalid dest canvas" );
 
     // Until 1/3rd of the active time, display old slide.
     rSprite->setAlpha( t > 1/3.0 ? 0.0 : 1.0 );
