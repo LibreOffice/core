@@ -43,8 +43,7 @@ class SdrObjList;
 class SdrObject;
 class SdrPageView;
 
-// Ein Container fuer USHORTs (im Prinzip ein dynamisches Array)
-class SVX_DLLPUBLIC SdrUShortCont : public std::set<sal_uInt16> {};
+class SdrUShortCont : public std::set<sal_uInt16> {};
 
 
 // Alles was eine View ueber ein markiertes Objekt wissen muss
