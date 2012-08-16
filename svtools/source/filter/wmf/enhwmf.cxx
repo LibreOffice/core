@@ -1290,7 +1290,7 @@ sal_Bool EnhWMFReader::ReadEnhWMF()
 
                 *pWMF >> nTmp32;
                 *pWMF >> nOffset;
-                for ( sal_Int32 i = 0; i < (nOffset - 20)/4; i ++ )
+                for ( sal_uInt32 i = 0; i < (nOffset - 20)/4; i ++ )
                 {
                     *pWMF >> nTmp32;
                 }
