@@ -370,7 +370,7 @@ void SdrMarkView::UndirtyMrkPnt() const
                 {
                     sal_uInt16 nId=*it;
                     if (pGPL->FindGluePoint(nId)==SDRGLUEPOINT_NOTFOUND) {
-                        it = pPts->erase(it);
+                        pPts->erase(it++);
                         bChg=sal_True;
                     }
                     else
