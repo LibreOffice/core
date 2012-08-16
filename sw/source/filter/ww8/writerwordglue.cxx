@@ -807,8 +807,12 @@ namespace sw
                     }
                     if (nChar == '/')
                     {
-                        // MM We have to escape '/' in case it's used as a char
-                        rParams.Replace(nI, 1, rtl::OUString("\\/"));
+                        // MM: We have to escape '/' in case it's used as a char.
+                        // But not if it's a '/' inside AM/PM
+                        if (!(IsPreviousAM(rParams, nI) && IsNextPM(rParams, nI)))
+                        {
+                            rParams.Replace(nI, 1, rtl::OUString("\\/"));
+                        }
                         nI++;
                         nLen++;
                     }
@@ -950,6 +954,34 @@ namespace sw
             return nKey;
         }
 
+        sal_Bool IsPreviousAM(String& rParams, xub_StrLen nPos){
+            xub_StrLen nPos1 = nPos - 1;
+            xub_StrLen nPos2 = nPos - 2;
+
+            if(nPos1 > nPos || nPos2 > nPos){
+                return sal_False;
+            }else{
+                return (
+                    (rParams.GetChar(nPos1) == 'M'||rParams.GetChar(nPos1) == 'm')&&
+                    (rParams.GetChar(nPos2) == 'A'||rParams.GetChar(nPos2) == 'a')
+                    );
+            }
+        }
+        sal_Bool IsNextPM(String& rParams, xub_StrLen nPos){
+            xub_StrLen nPos1 = nPos + 1;
+            xub_StrLen nPos2 = nPos + 2;
+
+
+            if(nPos1 >= rParams.Len() - 1 || nPos2 > rParams.Len() - 1){
+                return sal_False;
+            }else{
+                return (
+                    (rParams.GetChar(nPos1) == 'P'||rParams.GetChar(nPos1) == 'p')&&
+                    (rParams.GetChar(nPos2) == 'M'||rParams.GetChar(nPos2) == 'm')
+                    );
+            }
+
+        }
         bool IsNotAM(String& rParams, xub_StrLen nPos)
         {
             return (
