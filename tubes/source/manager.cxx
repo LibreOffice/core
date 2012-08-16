@@ -87,9 +87,9 @@ public:
     TpBaseClient*                       mpClient;
     TpBaseClient*                       mpFileTransferClient;
     TpAccountManager*                   mpAccountManager;
-    bool                                mbAccountManagerReady : 1;
-    bool                                mbAccountManagerReadyHandlerInvoked : 1;
-    bool                                mbChannelReadyHandlerInvoked : 1;
+    static bool                         mbAccountManagerReady;
+    static bool                         mbAccountManagerReadyHandlerInvoked;
+    static bool                         mbChannelReadyHandlerInvoked;
     ContactList*                        mpContactList;
     OString                             msCurrentUUID;
     OString                             msNameSuffix;
@@ -102,9 +102,14 @@ public:
 
                             TeleManagerImpl();
                             ~TeleManagerImpl();
+    static void AccountManagerReadyHandler( GObject* pSourceObject, GAsyncResult* pResult, gpointer pUserData );
+    static void ChannelReadyHandler( GObject* pSourceObject, GAsyncResult* pResult, gpointer pUserData );
 };
 
 TeleManagerImpl* TeleManager::pImpl = new TeleManagerImpl();
+bool TeleManagerImpl::mbAccountManagerReady;
+bool TeleManagerImpl::mbAccountManagerReadyHandlerInvoked;
+bool TeleManagerImpl::mbChannelReadyHandlerInvoked;
 
 static void TeleManager_DBusChannelHandler(
         TpSimpleHandler*            /*handler*/,
@@ -307,14 +312,6 @@ static void TeleManager_TransferError( EmpathyFTHandler *handler, const GError *
     g_object_unref( handler);
 }
 
-static void lcl_iterateLoop( bool (*pFunc)() )
-{
-    while (!(*pFunc)())
-    {
-        g_main_context_iteration( NULL, TRUE );
-    }
-}
-
 static void lcl_IncomingHandlerReady (
     EmpathyFTHandler*   pHandler,
     GError*             pError,
@@ -389,20 +386,20 @@ static void TeleManager_FileTransferHandler(
     }
 }
 
-static void TeleManager_ChannelReadyHandler(
+void TeleManagerImpl::ChannelReadyHandler(
         GObject*        pSourceObject,
         GAsyncResult*   pResult,
         gpointer        pUserData
         )
 {
-    INFO_LOGGER_F( "TeleManager_ChannelReadyHandler");
+    INFO_LOGGER_F( "TeleManagerImpl::ChannelReadyHandler");
 
     TeleConference* pConference = reinterpret_cast<TeleConference*>(pUserData);
-    SAL_WARN_IF( !pConference, "tubes", "TeleManager_ChannelReadyHandler: no conference");
+    SAL_WARN_IF( !pConference, "tubes", "TeleManagerImpl::ChannelReadyHandler: no conference");
     if (!pConference)
         return;
 
-    TeleManager::setChannelReadyHandlerInvoked( true );
+    mbChannelReadyHandlerInvoked = true;
 
     TpAccountChannelRequest* pChannelRequest = TP_ACCOUNT_CHANNEL_REQUEST( pSourceObject);
     GError* pError = NULL;
@@ -412,7 +409,7 @@ static void TeleManager_ChannelReadyHandler(
     {
         // "account isn't Enabled" means just that..
         /* FIXME: detect and handle, domain=132, code=3 */
-        SAL_WARN( "tubes", "TeleManager_ChannelReadyHandler: no channel: " << pError->message);
+        SAL_WARN( "tubes", "TeleManagerImpl::ChannelReadyHandler: no channel: " << pError->message);
         g_error_free( pError);
         return;
     }
@@ -421,25 +418,25 @@ static void TeleManager_ChannelReadyHandler(
     pConference->offerTube();
 }
 
-static void TeleManager_AccountManagerReadyHandler(
+void TeleManagerImpl::AccountManagerReadyHandler(
         GObject*        pSourceObject,
         GAsyncResult*   pResult,
         gpointer        /*pUserData*/
         )
 {
-    INFO_LOGGER_F( "TeleManager_AccountManagerReadyHandler");
+    INFO_LOGGER_F( "TeleManagerImpl::AccountManagerReadyHandler");
 
     GError* pError = NULL;
     gboolean bPrepared = tp_proxy_prepare_finish( pSourceObject, pResult, &pError);
-    SAL_WARN_IF( !bPrepared, "tubes", "TeleManager_AccountManagerReadyHandler: not prepared");
+    SAL_WARN_IF( !bPrepared, "tubes", "TeleManagerImpl::AccountManagerReadyHandler: not prepared");
     if (!bPrepared || pError)
     {
-        SAL_WARN_IF( pError, "tubes", "TeleManager_AccountManagerReadyHandler: error: " << pError->message);
+        SAL_WARN_IF( pError, "tubes", "TeleManagerImpl::AccountManagerReadyHandler: error: " << pError->message);
         g_error_free( pError);
     }
 
-    TeleManager::setAccountManagerReady( bPrepared);
-    TeleManager::setAccountManagerReadyHandlerInvoked( true);
+    mbAccountManagerReady = bPrepared;
+    mbAccountManagerReadyHandlerInvoked = true;
 }
 
 bool TeleManager::init( bool bListen )
@@ -513,9 +510,11 @@ bool TeleManager::createAccountManager()
     pImpl->mpAccountManager = tp_account_manager_new_with_factory (pImpl->mpFactory);
     tp_account_manager_set_default (pImpl->mpAccountManager);
 
-    setAccountManagerReadyHandlerInvoked( false);
-    tp_proxy_prepare_async( pImpl->mpAccountManager, NULL, TeleManager_AccountManagerReadyHandler, NULL);
-    lcl_iterateLoop( &TeleManager::isAccountManagerReadyHandlerInvoked);
+    pImpl->mbAccountManagerReadyHandlerInvoked = false;
+    tp_proxy_prepare_async( pImpl->mpAccountManager, NULL, TeleManagerImpl::AccountManagerReadyHandler, NULL);
+    while (!pImpl->mbAccountManagerReadyHandlerInvoked)
+        g_main_context_iteration( NULL, TRUE);
+
     return pImpl->mbAccountManagerReady;
 }
 
@@ -661,14 +660,15 @@ TeleConference* TeleManager::startGroupSession( TpAccount *pAccount,
         return NULL;
     }
 
-    setChannelReadyHandlerInvoked( false);
+    pImpl->mbChannelReadyHandlerInvoked = false;
 
     TeleConference* pConference = new TeleConference( NULL, NULL, aSessionId );
 
     tp_account_channel_request_create_and_handle_channel_async(
-            pChannelRequest, NULL, TeleManager_ChannelReadyHandler, pConference);
+            pChannelRequest, NULL, TeleManagerImpl::ChannelReadyHandler, pConference);
 
-    lcl_iterateLoop( &TeleManager::isChannelReadyHandlerInvoked);
+    while (!pImpl->mbChannelReadyHandlerInvoked)
+        g_main_context_iteration( NULL, TRUE );
 
     g_object_unref( pChannelRequest);
     g_hash_table_unref( pRequest);
@@ -736,14 +736,15 @@ TeleConference* TeleManager::startBuddySession( TpAccount *pAccount, TpContact *
         return NULL;
     }
 
-    setChannelReadyHandlerInvoked( false);
+    pImpl->mbChannelReadyHandlerInvoked = false;
 
     TeleConference* pConference = new TeleConference( NULL, NULL, createUuid(), true );
 
     tp_account_channel_request_create_and_handle_channel_async(
-            pChannelRequest, NULL, TeleManager_ChannelReadyHandler, pConference );
+            pChannelRequest, NULL, TeleManagerImpl::ChannelReadyHandler, pConference );
 
-    lcl_iterateLoop( &TeleManager::isChannelReadyHandlerInvoked);
+    while (!pImpl->mbChannelReadyHandlerInvoked)
+        g_main_context_iteration( NULL, TRUE );
 
     g_object_unref( pChannelRequest);
     g_hash_table_unref( pRequest);
@@ -754,37 +755,12 @@ TeleConference* TeleManager::startBuddySession( TpAccount *pAccount, TpContact *
     return pConference;
 }
 
-void TeleManager::setAccountManagerReadyHandlerInvoked( bool b )
-{
-    pImpl->mbAccountManagerReadyHandlerInvoked = b;
-}
-
-bool TeleManager::isAccountManagerReadyHandlerInvoked()
-{
-    return pImpl->mbAccountManagerReadyHandlerInvoked;
-}
-
-void TeleManager::setChannelReadyHandlerInvoked( bool b )
-{
-    pImpl->mbChannelReadyHandlerInvoked = b;
-}
-
-bool TeleManager::isChannelReadyHandlerInvoked()
-{
-    return pImpl->mbChannelReadyHandlerInvoked;
-}
-
 ContactList* TeleManager::getContactList()
 {
     if (!pImpl->mpContactList)
         pImpl->mpContactList = new ContactList (pImpl->mpAccountManager);
 
     return pImpl->mpContactList;
-}
-
-void TeleManager::setAccountManagerReady( bool bPrepared)
-{
-    pImpl->mbAccountManagerReady = bPrepared;
 }
 
 rtl::OString TeleManager::getFullClientName()
@@ -847,9 +823,6 @@ TeleManagerImpl::TeleManagerImpl()
         mpClient( NULL),
         mpFileTransferClient( NULL),
         mpAccountManager( NULL),
-        mbAccountManagerReady( false),
-        mbAccountManagerReadyHandlerInvoked( false),
-        mbChannelReadyHandlerInvoked( false),
         mpContactList( NULL)
 {
     g_type_init();

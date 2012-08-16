@@ -132,11 +132,6 @@ public:
 
     // Only for callbacks.
     static void             addConference( TeleConference* pConference );
-    static void             setChannelReadyHandlerInvoked( bool b );
-    static bool             isChannelReadyHandlerInvoked();
-    static void             setAccountManagerReady( bool bPrepared);
-    static void             setAccountManagerReadyHandlerInvoked( bool b );
-    static bool             isAccountManagerReadyHandlerInvoked();
 
     /// "LibreOfficeWhatEver"
     static rtl::OString     getFullClientName();
