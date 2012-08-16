@@ -897,7 +897,6 @@ Reference< XResultSet > getGeneratedValuesFromLastInsert(
 sal_Bool Statement::execute( const OUString& sql )
         throw (SQLException, RuntimeException)
 {
-    printf("--- Statement::execute\n");
     osl::MutexGuard guard( m_refMutex->mutex );
     checkClosed();
     OString cmd = OUStringToOString( sql, m_pSettings );

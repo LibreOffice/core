@@ -615,7 +615,6 @@ IMPLEMENT_FORWARD_XTYPEPROVIDER2( OStatement, OCommonStatement, OStatement_IBase
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL OStatement::execute( const ::rtl::OUString& _sql ) throw(SQLException, RuntimeException)
 {
-    printf("OStatement::execute()\n");
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OCommonStatement_IBase::rBHelper.bDisposed);
 

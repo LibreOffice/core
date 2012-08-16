@@ -140,7 +140,6 @@ void OPredicateCompiler::start(OSQLParseNode* pSQLParseNode)
 //------------------------------------------------------------------
 OOperand* OPredicateCompiler::execute(OSQLParseNode* pPredicateNode)
 {
-    printf("OPredicateCompiler::execute()\n");
     OOperand* pOperand = NULL;
     if (pPredicateNode->count() == 3 &&                         // Expression is bracketed
         SQL_ISPUNCTUATION(pPredicateNode->getChild(0),"(") &&

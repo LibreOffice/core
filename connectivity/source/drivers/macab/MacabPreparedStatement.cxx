@@ -155,7 +155,6 @@ void SAL_CALL MacabPreparedStatement::close() throw(SQLException, RuntimeExcepti
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL MacabPreparedStatement::execute() throw(SQLException, RuntimeException)
 {
-    printf("MacabPreparedStatement::execute\n");
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabCommonStatement_BASE::rBHelper.bDisposed);
 

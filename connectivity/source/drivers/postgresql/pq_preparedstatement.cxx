@@ -388,7 +388,6 @@ sal_Int32 PreparedStatement::executeUpdate( )
 sal_Bool PreparedStatement::execute( )
         throw (SQLException, RuntimeException)
 {
-    printf("--- PreparedStatement::execute\n");
     osl::MutexGuard guard( m_refMutex->mutex );
 
     OStringBuffer buf( m_stmt.getLength() *2 );

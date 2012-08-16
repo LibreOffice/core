@@ -142,7 +142,6 @@ void SAL_CALL KabPreparedStatement::close() throw(SQLException, RuntimeException
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL KabPreparedStatement::execute() throw(SQLException, RuntimeException)
 {
-    printf("KabPreparedStatement::execute() #4\n");
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(KabCommonStatement_BASE::rBHelper.bDisposed);
 
