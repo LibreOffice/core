@@ -86,8 +86,6 @@ private:
 
     MediaWindow*            mpMediaWindow;
     Size                    maLastSize;
-    long                    mnDummy1;
-    long                    mnDummy2;
 
     AVMEDIA_DLLPRIVATE void implInit();
 };
