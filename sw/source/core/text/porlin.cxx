@@ -395,7 +395,7 @@ sal_Bool SwLinePortion::GetExpTxt( const SwTxtSizeInfo &, XubString & ) const
 void SwLinePortion::HandlePortion( SwPortionHandler& rPH ) const
 {
     String aString;
-    rPH.Special( GetLen(), aString, GetWhichPor() );
+    rPH.Special( GetLen(), aString, GetWhichPor(), Height(), Width() );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

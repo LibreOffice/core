@@ -160,7 +160,8 @@ class XmlPortionDumper:public SwPortionHandler
     virtual void Special( sal_uInt16 nLength,
                           const String & rText,
                           sal_uInt16 nType,
-                          sal_Int32 nHeight = 0 )
+                          sal_Int32 nHeight,
+                          sal_Int32 nWidth )
     {
         xmlTextWriterStartElement( writer, BAD_CAST( "Special" ) );
         xmlTextWriterWriteFormatAttribute( writer,
@@ -177,6 +178,9 @@ class XmlPortionDumper:public SwPortionHandler
 
         if (nHeight > 0)
             xmlTextWriterWriteFormatAttribute(writer, BAD_CAST("nHeight"), "%i", (int)nHeight);
+
+        if (nWidth > 0)
+            xmlTextWriterWriteFormatAttribute(writer, BAD_CAST("nWidth"), "%i", (int)nWidth);
 
         xmlTextWriterEndElement( writer );
         ofs += nLength;
