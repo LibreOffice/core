@@ -88,6 +88,9 @@ allhelplangiso:=$(foreach,i,$(alllangiso) $(foreach,j,$(help_exist) $(eq,$i,$j  
 xxxx:
     echo $(PERL) -w $(SOLARENV)$/bin$/gen_update_info.pl --buildid $(BUILD) --arch "$(RTL_ARCH)" --os "$(RTL_OS)" --lstfile $(PRJ)$/util$/openoffice.lst --product LibreOffice --languages $(subst,$(@:s/_/ /:1)_, $(@:b)) $(PRJ)$/util$/update.xml
 
+.IF "$(LIBO_DEV_INSTALL)" == "TRUE"
+ALLTAR: openoffice_$(defaultlangiso).archive
+.ELSE
 .IF "$(GUI)"!="WNT" && "$(EPM)"=="NO"
 ALLTAR  : $(LOCALPYFILES)
     @echo "No EPM: do no packaging at this stage"
@@ -122,15 +125,11 @@ ALLTAR : openofficedev_$(defaultlangiso) ooodevlanguagepack $(eq,$(OS),MACOSX $(
 .ENDIF
 .ENDIF # "$(ENABLE_RELEASE_BUILD)"=="TRUE"
 .ENDIF			# "$(GUI)"!="WNT" && "$(EPM)"=="NO"
+.ENDIF # "$(LIBO_DEV_INSTALL)" == "TRUE"
 
 .IF "$(MAKETARGETS:e)"!=""
 PKGFORMAT+=$(MAKETARGETS:e:s/.//)
 .ENDIF			# "$(MAKETARGETS:e)"!=""
-
-# Independent of PKGFORMAT, always build a default-language openoffice product
-# also in archive format, so that tests that require an OOo installation (like
-# smoketestoo_native) have one available:
-openoffice_$(defaultlangiso) : $$@.archive
 
 .IF "$(VERBOSE)"=="TRUE"
 VERBOSESWITCH=-verbose
