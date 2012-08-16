@@ -1043,11 +1043,11 @@ void _SdrItemBrowserControl::SetAttributes(const SfxItemSet* pSet, const SfxItem
         } // while
 
         if (aList.size()>nEntryNum) { // maybe still too many entries
-            sal_uIntPtr nTooMuch=aList.size()-nEntryNum;
-            for (sal_uIntPtr nNum=0; nNum<nTooMuch; nNum++) {
-                delete ImpGetEntry(nEntryNum);
+            size_t const nTooMuch = aList.size() - nEntryNum;
+            for (size_t n = nEntryNum; n < aList.size(); ++n) {
+                delete aList[n];
             }
-            aList.erase(aList.begin(), aList.begin() + nTooMuch);
+            aList.erase(aList.begin() + nEntryNum, aList.end());
             RowRemoved(nEntryNum,nTooMuch);
         }
     } else {
