@@ -66,16 +66,15 @@ void ScDocFuncSend::RecvMessage( const rtl::OString &rString )
             mpDirect->RenameTable( aReader.getInt( 1 ), aReader.getString( 2 ),
                                   aReader.getBool( 3 ), aReader.getBool( 4 ) );
         else
-            fprintf( stderr, "Error: unknown message '%s' (%d)\n",
-                     rString.getStr(), (int)aReader.getArgCount() );
+            SAL_WARN( "sc.tubes", "Error: unknown message '" << rString.getStr()
+                    << "' (" << aReader.getArgCount() << ")" );
     } catch (const ProtocolError &e) {
-        fprintf( stderr, "Error: protocol twisting '%s'\n", e.message );
+        SAL_WARN( "sc.tubes", "Error: protocol twisting: " << e.message );
     }
 }
 
 void ScDocFuncSend::SendMessage( ScChangeOpWriter &rOp )
 {
-    fprintf( stderr, "Op: '%s'\n", rOp.toString().getStr() );
     mpCollaboration->SendPacket( rOp.toString() );
 }
 
@@ -86,12 +85,10 @@ ScDocFuncSend::ScDocFuncSend( ScDocShell& rDocSh, ScDocFuncDirect *pDirect, ScCo
         mpDirect( pDirect ),
         mpCollaboration( pCollaboration )
 {
-    fprintf( stderr, "Sender created !\n" );
 }
 
 ScDocFuncSend::~ScDocFuncSend()
 {
-    fprintf( stderr, "Sender destroyed !\n" );
     delete mpDirect;
 }
 
@@ -131,7 +128,6 @@ sal_Bool ScDocFuncSend::SetNormalString( bool& o_rbNumFmtSet, const ScAddress& r
 
 sal_Bool ScDocFuncSend::PutCell( const ScAddress& rPos, ScBaseCell* pNewCell, sal_Bool bApi )
 {
-    fprintf( stderr, "put cell '%p' type %d %d\n", pNewCell, pNewCell->GetCellType(), bApi );
     ScChangeOpWriter aOp( "putCell" );
     aOp.appendAddress( rPos );
     aOp.appendCell( pNewCell );
@@ -143,7 +139,7 @@ sal_Bool ScDocFuncSend::PutCell( const ScAddress& rPos, ScBaseCell* pNewCell, sa
 sal_Bool ScDocFuncSend::PutData( const ScAddress& rPos, ScEditEngineDefaulter& rEngine,
                           sal_Bool bInterpret, sal_Bool bApi )
 {
-    fprintf( stderr, "put data\n" );
+    SAL_INFO( "sc.tubes", "PutData not implemented!" );
     return ScDocFunc::PutData( rPos, rEngine, bInterpret, bApi );
 }
 
@@ -152,8 +148,7 @@ sal_Bool ScDocFuncSend::SetCellText( const ScAddress& rPos, const String& rText,
                               const String& rFormulaNmsp,
                               const formula::FormulaGrammar::Grammar eGrammar )
 {
-    fprintf( stderr, "set cell text '%s'\n",
-             rtl::OUStringToOString( rText, RTL_TEXTENCODING_UTF8 ).getStr() );
+    SAL_INFO( "sc.tubes", "SetCellText not implemented!" );
     return ScDocFunc::SetCellText( rPos, rText, bInterpret, bEnglish, bApi, rFormulaNmsp, eGrammar );
 }
 
@@ -191,22 +186,21 @@ sal_Bool ScDocFuncSend::RenameTable( SCTAB nTab, const String& rName,
 sal_Bool ScDocFuncSend::ApplyAttributes( const ScMarkData& rMark, const ScPatternAttr& rPattern,
                                   sal_Bool bRecord, sal_Bool bApi )
 {
-    fprintf( stderr, "Apply Attributes\n" );
+    SAL_INFO( "sc.tubes", "ApplyAttributes not implemented!" );
     return ScDocFunc::ApplyAttributes( rMark, rPattern, bRecord, bApi );
 }
 
 sal_Bool ScDocFuncSend::ApplyStyle( const ScMarkData& rMark, const String& rStyleName,
                              sal_Bool bRecord, sal_Bool bApi )
 {
-    fprintf( stderr, "Apply Style '%s'\n",
-             rtl::OUStringToOString( rStyleName, RTL_TEXTENCODING_UTF8 ).getStr() );
+    SAL_INFO( "sc.tubes", "ApplyStyle not implemented!" );
     return ScDocFunc::ApplyStyle( rMark, rStyleName, bRecord, bApi );
 }
 
 sal_Bool ScDocFuncSend::MergeCells( const ScCellMergeOption& rOption, sal_Bool bContents,
                              sal_Bool bRecord, sal_Bool bApi )
 {
-    fprintf( stderr, "Merge cells\n" );
+    SAL_INFO( "sc.tubes", "MergeCells not implemented!" );
     return ScDocFunc::MergeCells( rOption, bContents, bRecord, bApi );
 }
 

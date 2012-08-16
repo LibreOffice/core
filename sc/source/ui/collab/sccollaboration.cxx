@@ -61,11 +61,8 @@ void ScCollaboration::SaveAndSendFile( TpContact* pContact ) const
 
         xDocRecovery->storeToRecoveryFile( aFileURL, aDescriptor.getAsConstPropertyValueList() );
     } catch (const css::uno::Exception &ex) {
-        fprintf( stderr, "exception foo !\n" );
+        SAL_WARN( "sc.tubes", "Exception when saving file " << aFileURL );
     }
-
-    fprintf( stderr, "Temp file is '%s'\n",
-             rtl::OUStringToOString( aFileURL, RTL_TEXTENCODING_UTF8 ).getStr() );
 
     SendFile( pContact, aFileURL );
 

@@ -91,7 +91,7 @@ class TubeContacts : public ModelessDialog
     void Listen()
     {
         if (!TeleManager::registerClients())
-            SAL_INFO( "sc.tubes", "Could not register client handlers." );
+            SAL_INFO( "tubes", "Could not register client handlers." );
     }
 
     void StartDemoSession()
@@ -193,7 +193,7 @@ public:
 
     void Populate()
     {
-        SAL_INFO( "sc.tubes", "Populating contact list dialog" );
+        SAL_INFO( "tubes", "Populating contact list dialog" );
         maList.Clear();
         maACs.clear();
         ContactList *pContacts = TeleManager::getContactList();

@@ -152,10 +152,6 @@ public:
         }
         if ( nStart < rString.getLength())
             maArgs.push_back( rString.copy( nStart, rString.getLength() - nStart ) );
-
-        for (size_t i = 0; i < maArgs.size(); i++)
-            fprintf( stderr, "arg %d: '%s'\n", (int)i,
-                     rtl::OUStringToOString( maArgs[i], RTL_TEXTENCODING_UTF8).getStr() );
     }
     ~ScChangeOpReader() {}
 
