@@ -52,10 +52,9 @@ String SfxViewFactory::GetAPIViewName() const
 
 // CTOR / DTOR -----------------------------------------------------------
 
-SfxViewFactory::SfxViewFactory( SfxViewCtor fnC, SfxViewInit fnI,
+SfxViewFactory::SfxViewFactory( SfxViewCtor fnC,
                                 sal_uInt16 nOrdinal, const sal_Char* asciiViewName ):
     fnCreate(fnC),
-    fnInit(fnI),
     nOrd(nOrdinal),
     m_sViewName( rtl::OUString::createFromAscii( asciiViewName ) )
 {

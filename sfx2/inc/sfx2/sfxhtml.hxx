@@ -39,7 +39,6 @@ class SFX2_DLLPUBLIC SfxHTMLParser : public HTMLParser
     SfxMedium*              pMedium;
     SfxMedium *pDLMedium;   // Medium for Download Files
 
-    sal_uInt16 nMetaTags;       // Number of previously read Meta-Tags
     ScriptType eScriptType;
 
     SAL_DLLPRIVATE void GetScriptType_Impl( SvKeyValueIterator* );

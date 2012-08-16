@@ -39,7 +39,6 @@ class SFX2_DLLPUBLIC SfxMenuControl: public SfxControllerItem
     SfxVirtualMenu*         pOwnMenu;
     SfxVirtualMenu*         pSubMenu;
     sal_Bool                    b_ShowStrings;
-    sal_Bool                    b_UnusedDummy;
 
 public:
                             SfxMenuControl();

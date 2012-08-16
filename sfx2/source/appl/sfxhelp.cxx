@@ -298,21 +298,19 @@ void SfxHelpOptions_Impl::Commit()
 class SfxHelp_Impl
 {
 private:
-    sal_Bool                            m_bIsDebug;     // environment variable "help_debug=1"
     SfxHelpOptions_Impl*                m_pOpt;         // the options
     ::std::vector< ::rtl::OUString >    m_aModulesList; // list of all installed modules
 
 public:
-    SfxHelp_Impl( sal_Bool bDebug );
+    SfxHelp_Impl();
     ~SfxHelp_Impl();
 
     SfxHelpOptions_Impl*    GetOptions();
     static String           GetHelpText( const rtl::OUString& aCommandURL, const String& rModule );
 };
 
-SfxHelp_Impl::SfxHelp_Impl( sal_Bool bDebug ) :
+SfxHelp_Impl::SfxHelp_Impl() :
 
-    m_bIsDebug      ( bDebug ),
     m_pOpt          ( NULL )
 
 {
@@ -356,7 +354,7 @@ SfxHelp::SfxHelp() :
         bIsDebug = !sHelpDebug.isEmpty();
     }
 
-    pImp = new SfxHelp_Impl( bIsDebug );
+    pImp = new SfxHelp_Impl();
 
     ::rtl::OUString aLocaleStr = HelpLocaleString();
 

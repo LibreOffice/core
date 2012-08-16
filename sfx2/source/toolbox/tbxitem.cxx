@@ -1399,7 +1399,6 @@ void SfxPopupWindow::Delete()
 
 SfxAppToolBoxControl_Impl::SfxAppToolBoxControl_Impl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rBox )
     : SfxToolBoxControl( nSlotId, nId, rBox )
-    , bBigImages( sal_False )
     , pMenu( 0 )
 {
     rBox.SetHelpId( nId, HID_TBXCONTROL_FILENEW );

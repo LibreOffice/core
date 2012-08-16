@@ -61,7 +61,7 @@ SfxViewShell* PresentationViewShellBase::CreateInstance (
 void PresentationViewShellBase::RegisterFactory( sal_uInt16 nPrio )
 {
     pFactory = new SfxViewFactory(
-        &CreateInstance,&InitFactory,nPrio,"FullScreenPresentation");
+        &CreateInstance,nPrio,"FullScreenPresentation");
     InitFactory();
 }
 void PresentationViewShellBase::InitFactory()

@@ -52,8 +52,7 @@ SfxViewShell* OutlineViewShellBase::CreateInstance (
 }
 void OutlineViewShellBase::RegisterFactory( sal_uInt16 nPrio )
 {
-    pFactory = new SfxViewFactory(
-        &CreateInstance,&InitFactory,nPrio,"Outline");
+    pFactory = new SfxViewFactory(&CreateInstance,nPrio,"Outline");
     InitFactory();
 }
 void OutlineViewShellBase::InitFactory()

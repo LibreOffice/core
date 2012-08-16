@@ -768,11 +768,10 @@ SV_IMPL_REF(SfxObjectShell)
 class AutoReloadTimer_Impl : public Timer
 {
     String          aUrl;
-    sal_Bool            bReload;
     SfxObjectShell*   pObjSh;
 
 public:
-    AutoReloadTimer_Impl( const String& rURL, sal_uInt32 nTime, sal_Bool bReloadP,
+    AutoReloadTimer_Impl( const String& rURL, sal_uInt32 nTime,
                           SfxObjectShell* pSh );
     virtual void Timeout();
 };

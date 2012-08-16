@@ -323,15 +323,13 @@ void SAL_CALL SfxStatusIndicator::disposing( const com::sun::star::lang::EventOb
 class IMPL_SfxBaseController_ListenerHelper : public ::cppu::WeakImplHelper1< ::com::sun::star::frame::XFrameActionListener >
 {
 public:
-    IMPL_SfxBaseController_ListenerHelper(  MUTEX&              aMutex      ,
-                                            SfxBaseController*  pController ) ;
+    IMPL_SfxBaseController_ListenerHelper(  SfxBaseController*  pController ) ;
     virtual ~IMPL_SfxBaseController_ListenerHelper() ;
     virtual void SAL_CALL frameAction( const FRAMEACTIONEVENT& aEvent ) throw (RUNTIMEEXCEPTION) ;
     virtual void SAL_CALL disposing( const EVENTOBJECT& aEvent ) throw (RUNTIMEEXCEPTION) ;
 
 private:
 
-    MUTEX&                  m_aMutex        ;
     SfxBaseController*      m_pController   ;
 
 } ; // class IMPL_SfxBaseController_ListenerContainer
@@ -339,8 +337,7 @@ private:
 class IMPL_SfxBaseController_CloseListenerHelper : public ::cppu::WeakImplHelper1< ::com::sun::star::util::XCloseListener >
 {
 public:
-    IMPL_SfxBaseController_CloseListenerHelper( MUTEX&              aMutex      ,
-                                            SfxBaseController*  pController ) ;
+    IMPL_SfxBaseController_CloseListenerHelper( SfxBaseController*  pController ) ;
     virtual ~IMPL_SfxBaseController_CloseListenerHelper() ;
     virtual void SAL_CALL queryClosing( const EVENTOBJECT& aEvent, sal_Bool bDeliverOwnership )
         throw (RUNTIMEEXCEPTION, com::sun::star::util::CloseVetoException) ;
@@ -349,15 +346,12 @@ public:
 
 private:
 
-    MUTEX&                  m_aMutex;
     SfxBaseController*      m_pController;
 
 } ; // class IMPL_SfxBaseController_ListenerContainer
 
-IMPL_SfxBaseController_CloseListenerHelper::IMPL_SfxBaseController_CloseListenerHelper( MUTEX&              aMutex      ,
-                                                                                SfxBaseController*  pController )
-        : m_aMutex      ( aMutex        )
-        , m_pController ( pController   )
+IMPL_SfxBaseController_CloseListenerHelper::IMPL_SfxBaseController_CloseListenerHelper( SfxBaseController*  pController )
+        : m_pController ( pController   )
 {
 }
 
@@ -421,8 +415,8 @@ struct IMPL_SfxBaseController_DataContainer
     IMPL_SfxBaseController_DataContainer(   MUTEX&              aMutex      ,
                                             SfxViewShell*       pViewShell  ,
                                             SfxBaseController*  pController )
-            :   m_xListener                     ( new IMPL_SfxBaseController_ListenerHelper( aMutex, pController ) )
-            ,   m_xCloseListener                ( new IMPL_SfxBaseController_CloseListenerHelper( aMutex, pController ) )
+            :   m_xListener                     ( new IMPL_SfxBaseController_ListenerHelper( pController ) )
+            ,   m_xCloseListener                ( new IMPL_SfxBaseController_CloseListenerHelper( pController ) )
             ,   m_aUserInputInterception        ( *pController, aMutex                                  )
             ,   m_aListenerContainer            ( aMutex                                                )
             ,   m_aInterceptorContainer         ( aMutex                                                )
@@ -439,10 +433,8 @@ struct IMPL_SfxBaseController_DataContainer
 //  IMPL_SfxBaseController_ListenerHelper constructor
 //________________________________________________________________________________________________________
 
-IMPL_SfxBaseController_ListenerHelper::IMPL_SfxBaseController_ListenerHelper(   MUTEX&              aMutex      ,
-                                                                                SfxBaseController*  pController )
-        : m_aMutex      ( aMutex        )
-        , m_pController ( pController   )
+IMPL_SfxBaseController_ListenerHelper::IMPL_SfxBaseController_ListenerHelper(   SfxBaseController*  pController )
+        : m_pController ( pController   )
 {
 }
 

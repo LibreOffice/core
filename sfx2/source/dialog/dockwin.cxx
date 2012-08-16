@@ -61,19 +61,16 @@ extern sal_Bool GetSplitSizeFromString( const String& rStr, Size& rSize );
 // - Add new slot definitions to sfx.sdi
 static const int NUM_OF_DOCKINGWINDOWS = 10;
 
-class SfxTitleDockingWindow;
 class SfxTitleDockingWindow : public SfxDockingWindow
 {
     Window*             m_pWrappedWindow;
-    sal_uInt16              m_nID;
 
 public:
                         SfxTitleDockingWindow(
                             SfxBindings* pBindings ,
                             SfxChildWindow* pChildWin ,
                             Window* pParent ,
-                            WinBits nBits,
-                            sal_uInt16  nID);
+                            WinBits nBits);
     virtual             ~SfxTitleDockingWindow();
 
     Window*             GetWrappedWindow() const { return m_pWrappedWindow; }
@@ -134,7 +131,7 @@ SfxDockingWrapper::SfxDockingWrapper( Window* pParentWnd ,
     const rtl::OUString aDockWindowResourceURL( RTL_CONSTASCII_USTRINGPARAM( "private:resource/dockingwindow/" ));
 
     SfxTitleDockingWindow* pTitleDockWindow = new SfxTitleDockingWindow( pBindings, this, pParentWnd,
-        WB_STDDOCKWIN | WB_CLIPCHILDREN | WB_SIZEABLE | WB_3DLOOK | WB_ROLLABLE, nId);
+        WB_STDDOCKWIN | WB_CLIPCHILDREN | WB_SIZEABLE | WB_3DLOOK | WB_ROLLABLE);
     pWindow = pTitleDockWindow;
     eChildAlignment = SFX_ALIGN_NOALIGNMENT;
 
@@ -266,14 +263,12 @@ SfxChildWinInfo  SfxDockingWrapper::GetInfo() const
 SfxTitleDockingWindow::SfxTitleDockingWindow( SfxBindings* pBind ,
                                               SfxChildWindow* pChildWin ,
                                               Window* pParent ,
-                                              WinBits nBits,
-                                              sal_uInt16  nID ) :
+                                              WinBits nBits ) :
                           SfxDockingWindow( pBind ,
                                             pChildWin ,
                                             pParent ,
                                             nBits ),
-                          m_pWrappedWindow(0),
-                          m_nID(nID)
+                          m_pWrappedWindow(0)
 {
 }
 

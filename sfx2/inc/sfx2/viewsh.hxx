@@ -113,7 +113,7 @@ public: \
     { return new Class(pFrame, pOldView); } \
     void Class::RegisterFactory( sal_uInt16 nPrio ) \
     { \
-        pFactory = new SfxViewFactory(&CreateInstance,&InitFactory,nPrio,AsciiViewName);\
+        pFactory = new SfxViewFactory(&CreateInstance,nPrio,AsciiViewName);\
         InitFactory(); \
     } \
     void Class::InitFactory()

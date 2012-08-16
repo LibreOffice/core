@@ -420,7 +420,6 @@ private:
     SfxViewShell*           _pViewSh;
     PrinterSetupDialog*     _pSetupParent;
     SfxItemSet*             _pOptions;
-    sal_Bool                _bModified;
     sal_Bool                _bHelpDisabled;
 
     DECL_LINK( Execute, void * );
@@ -441,7 +440,6 @@ SfxDialogExecutor_Impl::SfxDialogExecutor_Impl( SfxViewShell* pViewSh, PrinterSe
     _pViewSh        ( pViewSh ),
     _pSetupParent   ( pParent ),
     _pOptions       ( NULL ),
-    _bModified      ( sal_False ),
     _bHelpDisabled  ( sal_False )
 
 {

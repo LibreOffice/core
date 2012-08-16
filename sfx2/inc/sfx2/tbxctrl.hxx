@@ -347,7 +347,6 @@ protected:
                             DECL_LINK( Activate, Menu * );
 private:
     String                  aLastURL;
-    sal_Bool                    bBigImages;
     PopupMenu*              pMenu;
     sal_uIntPtr                   m_nSymbolsStyle;
     sal_Bool                    m_bShowMenuImages;

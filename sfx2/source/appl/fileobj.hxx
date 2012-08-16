@@ -46,7 +46,6 @@ class SvFileObject : public sfx2::SvLinkSource
     sal_Bool bWaitForData : 1;
     sal_Bool bInNewData : 1;
     sal_Bool bDataReady : 1;
-    sal_Bool bMedUseCache : 1;
     sal_Bool bNativFormat : 1;
     sal_Bool bClearMedium : 1;
     sal_Bool bStateChangeCalled : 1;

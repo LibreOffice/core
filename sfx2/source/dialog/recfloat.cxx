@@ -178,7 +178,6 @@ SfxRecordingFloat_Impl::SfxRecordingFloat_Impl(
                          pChildWin,
                          pParent,
                          SfxResId( SID_RECORDING_FLOATWINDOW ) )
-    , pWrapper( pChildWin )
     , aTbx( this, SfxResId(SID_RECORDING_FLOATWINDOW) )
 {
     // Retrieve label from helper function

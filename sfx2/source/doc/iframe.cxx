@@ -43,7 +43,6 @@ namespace sfx2
 class IFrameWindow_Impl : public Window
 {
     uno::Reference < frame::XFrame > mxFrame;
-    sal_Bool                bActive;
     sal_Bool                bBorder;
 
 public:
@@ -57,7 +56,6 @@ public:
 
 IFrameWindow_Impl::IFrameWindow_Impl( Window *pParent, sal_Bool bHasBorder, WinBits nWinBits )
     : Window( pParent, nWinBits | WB_CLIPCHILDREN | WB_NODIALOGCONTROL | WB_DOCKBORDER )
-    , bActive(sal_False)
     , bBorder(bHasBorder)
 {
     if ( !bHasBorder )

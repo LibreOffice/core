@@ -1166,7 +1166,7 @@ void SfxObjectShell::SetAutoLoad(
     {
         pImp->pReloadTimer = new AutoReloadTimer_Impl(
                                 rUrl.GetMainURL( INetURLObject::DECODE_TO_IURI ),
-                                nTime, bReload, this );
+                                nTime, this );
         pImp->pReloadTimer->Start();
     }
 }
@@ -1442,8 +1442,8 @@ void SfxObjectShell::CancelTransfers()
 //-------------------------------------------------------------------------
 
 AutoReloadTimer_Impl::AutoReloadTimer_Impl(
-    const String& rURL, sal_uInt32 nTime, sal_Bool bReloadP, SfxObjectShell* pSh )
-    : aUrl( rURL ), bReload( bReloadP ), pObjSh( pSh )
+    const String& rURL, sal_uInt32 nTime, SfxObjectShell* pSh )
+    : aUrl( rURL ), pObjSh( pSh )
 {
     SetTimeout( nTime );
 }

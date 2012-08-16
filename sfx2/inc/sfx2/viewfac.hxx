@@ -29,13 +29,12 @@ class SfxViewShell;
 class Window;
 
 typedef SfxViewShell* (*SfxViewCtor)(SfxViewFrame*, SfxViewShell*);
-typedef void (*SfxViewInit)();
 
 // CLASS -----------------------------------------------------------------
 class SFX2_DLLPUBLIC SfxViewFactory
 {
 public:
-    SfxViewFactory( SfxViewCtor fnC, SfxViewInit fnI,
+    SfxViewFactory( SfxViewCtor fnC,
                     sal_uInt16 nOrdinal, const sal_Char* asciiViewName );
 
     SfxViewShell *CreateInstance(SfxViewFrame *pViewFrame, SfxViewShell *pOldSh);
@@ -53,7 +52,6 @@ public:
 
 private:
     SfxViewCtor fnCreate;
-    SfxViewInit fnInit;
     sal_uInt16      nOrd;
     const String    m_sViewName;
 };

@@ -54,8 +54,7 @@ SfxViewShell* GraphicViewShellBase::CreateInstance (
 }
 void GraphicViewShellBase::RegisterFactory( sal_uInt16 nPrio )
 {
-    pFactory = new SfxViewFactory(
-        &CreateInstance,&InitFactory,nPrio,"Default");
+    pFactory = new SfxViewFactory(&CreateInstance,nPrio,"Default");
     InitFactory();
 }
 void GraphicViewShellBase::InitFactory()

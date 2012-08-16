@@ -71,13 +71,11 @@ struct SfxViewFrame_Impl
 
 class SfxFrameViewWindow_Impl : public Window
 {
-    sal_Bool            bActive;
     SfxViewFrame*   pFrame;
 
 public:
                         SfxFrameViewWindow_Impl( SfxViewFrame* p, Window& rParent, WinBits nBits=0 ) :
                             Window( &rParent, nBits | WB_BORDER | WB_CLIPCHILDREN ),
-                            bActive( sal_False ),
                             pFrame( p )
                         {
                             SetBorderStyle( WINDOW_BORDER_TOPBOTTOM );

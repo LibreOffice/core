@@ -240,7 +240,7 @@ SfxViewShell* ViewShellBase::CreateInstance (
 }
 void ViewShellBase::RegisterFactory( sal_uInt16 nPrio )
 {
-    pFactory = new SfxViewFactory( &CreateInstance,&InitFactory,nPrio,"Default" );
+    pFactory = new SfxViewFactory( &CreateInstance,nPrio,"Default" );
     InitFactory();
 }
 void ViewShellBase::InitFactory()

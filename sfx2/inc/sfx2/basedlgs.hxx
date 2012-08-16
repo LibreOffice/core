@@ -187,7 +187,6 @@ public:
 
 private:
     GetTabPageRanges    fnGetRanges;
-    sal_uInt16*             pRanges;
 
     OKButton*           pOKBtn;
     CancelButton*       pCancelBtn;

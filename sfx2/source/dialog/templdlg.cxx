@@ -421,7 +421,6 @@ class StyleTreeListBox_Impl : public DropListBox_Impl
 {
 private:
     SvLBoxEntry*                    pCurEntry;
-    SfxCommonTemplateDialog_Impl*   pCommon;
     Link                            aDoubleClickLink;
     Link                            aDropLink;
     String                          aParent;
@@ -589,8 +588,7 @@ void  StyleTreeListBox_Impl::ExpandedHdl()
 StyleTreeListBox_Impl::StyleTreeListBox_Impl(
     SfxCommonTemplateDialog_Impl* pParent, WinBits nWinStyle) :
     DropListBox_Impl(pParent->GetWindow(), nWinStyle, pParent),
-    pCurEntry(0),
-    pCommon(pParent)
+    pCurEntry(0)
 
 /*  [Description]
 
