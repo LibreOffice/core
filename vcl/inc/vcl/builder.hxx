@@ -43,7 +43,6 @@ class VCL_DLLPUBLIC VclBuilder
 public:
     typedef std::map<rtl::OString, rtl::OString> stringmap;
 private:
-    //todo merge into Windows UniqueID/HelpID ?
     struct WinAndId
     {
         rtl::OString m_sID;
@@ -122,9 +121,10 @@ private:
     rtl::OString getTranslation(const rtl::OString &rId, const rtl::OString &rProperty) const;
 
     rtl::OString m_sID;
+    rtl::OString m_sHelpRoot;
     Window *m_pParent;
 public:
-    VclBuilder(Window *pParent, rtl::OUString sUIFile, rtl::OString sID = rtl::OString());
+    VclBuilder(Window *pParent, rtl::OUString sUIRootDir, rtl::OUString sUIFile, rtl::OString sID = rtl::OString());
     ~VclBuilder();
     Window *get_widget_root();
     Window *get_by_name(rtl::OString sID);

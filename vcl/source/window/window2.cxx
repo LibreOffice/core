@@ -1761,6 +1761,9 @@ void Window::queue_resize()
         pParent->Resize();
 }
 
+//We deliberately do not overwrite our maHelpId here
+//so that the .res loaded id is not overwritten
+//by the .ui loaded one
 void Window::take_properties(Window &rOther)
 {
     if (!mpWindowImpl)
@@ -1791,7 +1794,6 @@ void Window::take_properties(Window &rOther)
     mpWindowImpl->mnY = pWindowImpl->mnY;
     mpWindowImpl->mnAbsScreenX = pWindowImpl->mnAbsScreenX;
     mpWindowImpl->maPos = pWindowImpl->maPos;
-    mpWindowImpl->maHelpId = pWindowImpl->maHelpId;
     mpWindowImpl->maUniqId = pWindowImpl->maUniqId;
     mpWindowImpl->maHelpText = pWindowImpl->maHelpText;
     mpWindowImpl->maQuickHelpText = pWindowImpl->maQuickHelpText;

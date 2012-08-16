@@ -39,10 +39,18 @@
 #include <vcl/tabpage.hxx>
 #include <window.h>
 
-VclBuilder::VclBuilder(Window *pParent, rtl::OUString sUri, rtl::OString sID)
+VclBuilder::VclBuilder(Window *pParent, rtl::OUString sUIDir, rtl::OUString sUIFile, rtl::OString sID)
     : m_sID(sID)
+    , m_sHelpRoot(rtl::OUStringToOString(sUIFile, RTL_TEXTENCODING_UTF8))
     , m_pParent(pParent)
 {
+    sal_Int32 nIdx = m_sHelpRoot.lastIndexOf('.');
+    if (nIdx != -1)
+        m_sHelpRoot = m_sHelpRoot.copy(0, nIdx);
+    m_sHelpRoot = m_sHelpRoot + rtl::OString('/');
+
+    rtl::OUString sUri = sUIDir + sUIFile;
+
     ::com::sun::star::lang::Locale aLocale = Application::GetSettings().GetUILocale();
     for (int i = aLocale.Country.isEmpty() ? 1 : 0; i < 2; ++i)
     {
@@ -375,7 +383,8 @@ Window *VclBuilder::makeObject(Window *pParent, const rtl::OString &name, const 
         fprintf(stderr, "TO-DO, implement %s\n", name.getStr());
     if (pWindow)
     {
-        fprintf(stderr, "for %s, created %p child of %p (%p/%p/%p)\n", name.getStr(), pWindow, pParent, pWindow->mpWindowImpl->mpParent, pWindow->mpWindowImpl->mpRealParent, pWindow->mpWindowImpl->mpBorderWindow);
+        pWindow->SetHelpId(m_sHelpRoot + id);
+        fprintf(stderr, "for %s, created %p child of %p (%p/%p/%p) with helpid %s\n", name.getStr(), pWindow, pParent, pWindow->mpWindowImpl->mpParent, pWindow->mpWindowImpl->mpRealParent, pWindow->mpWindowImpl->mpBorderWindow, pWindow->GetHelpId().getStr());
         m_aChildren.push_back(WinAndId(id, pWindow));
     }
     return pWindow;

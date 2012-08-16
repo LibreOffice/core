@@ -510,7 +510,7 @@ Dialog::Dialog(Window* pParent, const rtl::OString& rID, const rtl::OUString& rU
 {
     ImplInitDialogData();
     ImplInit(pParent, WB_SIZEMOVE|WB_3DLOOK|WB_CLOSEABLE);
-    m_pUIBuilder = new VclBuilder(this, getUIRootDir() + rUIXMLDescription, rID);
+    m_pUIBuilder = new VclBuilder(this, getUIRootDir(), rUIXMLDescription, rID);
 }
 
 Dialog::Dialog(Window* pParent, const rtl::OString& rID, const rtl::OUString& rUIXMLDescription, WindowType nType)
@@ -518,7 +518,7 @@ Dialog::Dialog(Window* pParent, const rtl::OString& rID, const rtl::OUString& rU
 {
     ImplInitDialogData();
     ImplInit(pParent, WB_SIZEMOVE|WB_3DLOOK|WB_CLOSEABLE);
-    m_pUIBuilder = new VclBuilder(this, getUIRootDir() + rUIXMLDescription, rID);
+    m_pUIBuilder = new VclBuilder(this, getUIRootDir(), rUIXMLDescription, rID);
 }
 
 
@@ -544,19 +544,22 @@ Dialog::Dialog( Window* pParent, const ResId& rResId ) :
 VclBuilder* VclBuilderContainer::overrideResourceWithUIXML(Window *pWindow, const ResId& rResId)
 {
     sal_Int32 nUIid = static_cast<sal_Int32>(rResId.GetId());
-    rtl::OUString sPath = rtl::OUStringBuffer(getUIRootDir()).
-        append(rResId.GetResMgr()->getPrefixName()).
+
+    rtl::OUString sRoot = getUIRootDir();
+    rtl::OUString sPath = rtl::OUStringBuffer(
+        rResId.GetResMgr()->getPrefixName()).
         append("/ui/").
         append(nUIid).
         appendAscii(".ui").
         makeStringAndClear();
-    fprintf(stderr, "path %s id %d\n", rtl::OUStringToOString(sPath, RTL_TEXTENCODING_UTF8).getStr(), nUIid);
 
-    osl::File aUIFile(sPath);
+    fprintf(stderr, "path %s id %d\n", rtl::OUStringToOString(sRoot+sPath, RTL_TEXTENCODING_UTF8).getStr(), nUIid);
+
+    osl::File aUIFile(sRoot + sPath);
     osl::File::RC error = aUIFile.open(osl_File_OpenFlag_Read);
     //good, use the preferred GtkBuilder xml
     if (error == osl::File::E_None)
-        return new VclBuilder(pWindow, sPath, rtl::OString::valueOf(nUIid));
+        return new VclBuilder(pWindow, sRoot, sPath, rtl::OString::valueOf(nUIid));
     return NULL;
 }
 
