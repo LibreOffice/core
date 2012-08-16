@@ -694,6 +694,11 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                 nErrorCode = ( lErr != ERRCODE_IO_ABORT ) && ( nErrorCode == ERRCODE_NONE ) ? nErrorCode : lErr;
             }
 
+            if (nId == SID_SAVEASDOC && nErrorCode == ERRCODE_NONE)
+            {
+                SetReadOnlyUI(false);
+            }
+
             rReq.SetReturnValue( SfxBoolItem(0, nErrorCode == ERRCODE_NONE ) );
 
             ResetError();
