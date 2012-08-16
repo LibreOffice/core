@@ -1351,8 +1351,7 @@ BaseContent::cPSL( void )
     osl::MutexGuard aGuard( m_aMutex );
     PropertySetInfoChangeNotifier* p = 0;
     if( m_pPropertySetInfoChangeListeners  )
-        p = new PropertySetInfoChangeNotifier( m_pMyShell,
-                                               this,
+        p = new PropertySetInfoChangeNotifier( this,
                                                m_xContentIdentifier,
                                                m_pPropertySetInfoChangeListeners->getElements() );
 
@@ -1383,8 +1382,7 @@ BaseContent::cPCL( void )
             (*listener)[seqNames[i]] = m_pPropertyListener->getContainer( seqNames[i] )->getElements();
         }
 
-        p = new PropertyChangeNotifier( m_pMyShell,
-                                        this,
+        p = new PropertyChangeNotifier( this,
                                         m_xContentIdentifier,
                                         listener );
     }

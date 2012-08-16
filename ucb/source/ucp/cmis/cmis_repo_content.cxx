@@ -62,7 +62,6 @@ namespace cmis
             throw ( ucb::ContentCreationException )
         : ContentImplHelper( rxSMgr, pProvider, Identifier ),
         m_pProvider( pProvider ),
-        m_pSession( NULL ),
         m_aURL( Identifier->getContentIdentifier( ) ),
         m_sRepositoryId( ),
         m_aRepositories( aRepos )

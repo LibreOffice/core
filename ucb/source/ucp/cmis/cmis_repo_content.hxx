@@ -39,7 +39,7 @@
 #include <com/sun/star/ucb/TransferInfo.hpp>
 #include <com/sun/star/ucb/XContentCreator.hpp>
 #include <ucbhelper/contenthelper.hxx>
-#include <libcmis/session-factory.hxx>
+#include <libcmis/repository.hxx>
 
 #include <list>
 
@@ -68,7 +68,6 @@ class RepoContent : public ::ucbhelper::ContentImplHelper,
 {
 private:
     ContentProvider*       m_pProvider;
-    libcmis::Session*      m_pSession;
     URL                    m_aURL;
     rtl::OUString          m_sRepositoryId;
 

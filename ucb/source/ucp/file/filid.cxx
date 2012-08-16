@@ -38,8 +38,7 @@ FileContentIdentifier::FileContentIdentifier(
     shell* pMyShell,
     const rtl::OUString& aUnqPath,
     sal_Bool IsNormalized )
-    : m_pMyShell( pMyShell ),
-      m_bNormalized( IsNormalized )
+    : m_pMyShell( pMyShell )
 {
     if( IsNormalized )
     {

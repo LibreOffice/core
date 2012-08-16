@@ -75,13 +75,11 @@ namespace fileaccess {
     class PropertySetInfoChangeNotifier
     {
     private:
-        shell* m_pMyShell;
         com::sun::star::uno::Reference< com::sun::star::ucb::XContent > m_xCreatorContent;
         com::sun::star::uno::Reference< com::sun::star::ucb::XContentIdentifier > m_xCreatorId;
         com::sun::star::uno::Sequence< com::sun::star::uno::Reference< com::sun::star::uno::XInterface > > m_sListeners;
     public:
         PropertySetInfoChangeNotifier(
-            shell* pMyShell,
             const com::sun::star::uno::Reference< com::sun::star::ucb::XContent >& xCreatorContent,
             const com::sun::star::uno::Reference< com::sun::star::ucb::XContentIdentifier >& xCreatorId,
             const com::sun::star::uno::Sequence<
@@ -100,13 +98,11 @@ namespace fileaccess {
     class PropertyChangeNotifier
     {
     private:
-        shell* m_pMyShell;
         com::sun::star::uno::Reference< com::sun::star::ucb::XContent > m_xCreatorContent;
         com::sun::star::uno::Reference< com::sun::star::ucb::XContentIdentifier > m_xCreatorId;
         ListenerMap* m_pListeners;
     public:
         PropertyChangeNotifier(
-            shell* pMyShell,
             const com::sun::star::uno::Reference< com::sun::star::ucb::XContent >& xCreatorContent,
             const com::sun::star::uno::Reference< com::sun::star::ucb::XContentIdentifier >& xCreatorId,
             ListenerMap* pListeners );

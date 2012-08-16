@@ -148,12 +148,10 @@ void ContentEventNotifier::notifyExchanged()
 
 
 PropertySetInfoChangeNotifier::PropertySetInfoChangeNotifier(
-    shell* pMyShell,
     const uno::Reference< XContent >& xCreatorContent,
     const uno::Reference< XContentIdentifier >& xCreatorId,
     const uno::Sequence< uno::Reference< uno::XInterface > >& sListeners )
-    : m_pMyShell( pMyShell ),
-      m_xCreatorContent( xCreatorContent ),
+    : m_xCreatorContent( xCreatorContent ),
       m_xCreatorId( xCreatorId ),
       m_sListeners( sListeners )
 {
@@ -203,12 +201,10 @@ PropertySetInfoChangeNotifier::notifyPropertyRemoved( const rtl::OUString & aPro
 
 
 PropertyChangeNotifier::PropertyChangeNotifier(
-    shell* pMyShell,
     const com::sun::star::uno::Reference< XContent >& xCreatorContent,
     const com::sun::star::uno::Reference< com::sun::star::ucb::XContentIdentifier >& xCreatorId,
     ListenerMap* pListeners )
-    : m_pMyShell( pMyShell ),
-      m_xCreatorContent( xCreatorContent ),
+    : m_xCreatorContent( xCreatorContent ),
       m_xCreatorId( xCreatorId ),
       m_pListeners( pListeners )
 {

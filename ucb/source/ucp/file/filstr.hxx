@@ -211,8 +211,6 @@ namespace fileaccess {
         com::sun::star::uno::Reference< com::sun::star::ucb::XContentProvider > m_xProvider;
         sal_Bool     m_nIsOpen;
 
-        sal_Bool     m_bLock;
-
         ReconnectingFile    m_aFile;
 
         sal_Int32                                          m_nErrorCode;

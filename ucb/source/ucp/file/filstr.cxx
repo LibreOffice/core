@@ -103,7 +103,6 @@ XStream_impl::XStream_impl( shell* pMyShell,const rtl::OUString& aUncPath, sal_B
       m_bOutputStreamCalled( false ),
       m_pMyShell( pMyShell ),
       m_xProvider( m_pMyShell->m_pProvider ),
-      m_bLock( bLock ),
       m_aFile( aUncPath ),
       m_nErrorCode( TASKHANDLER_NO_ERROR ),
       m_nMinorErrorCode( TASKHANDLER_NO_ERROR )

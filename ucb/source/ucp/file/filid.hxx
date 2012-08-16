@@ -85,7 +85,6 @@ namespace fileaccess {
         rtl::OUString m_aContentId;              // The URL string
         rtl::OUString m_aNormalizedId;           // The somehow normalized string
         rtl::OUString m_aProviderScheme;
-        sal_Bool      m_bNormalized;
     };
 
 } // end namespace fileaccess
