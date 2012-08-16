@@ -315,7 +315,15 @@ private:
 
     array_type assembleGrid() const;
     bool isNullGrid(const array_type& A) const;
-    void calcMaxs(const array_type &A, std::vector<long> &rWidths, std::vector<long> &rHeights) const;
+public:
+    struct Value
+    {
+        long m_nValue;
+        bool m_bExpand;
+        Value() : m_nValue(0), m_bExpand(false) {}
+    };
+private:
+    void calcMaxs(const array_type &A, std::vector<Value> &rWidths, std::vector<Value> &rHeights) const;
 
     virtual Size calculateRequisition() const;
     virtual void setAllocation(const Size &rAllocation);

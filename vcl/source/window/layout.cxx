@@ -400,11 +400,6 @@ VclGrid::array_type VclGrid::assembleGrid() const
 {
     array_type A;
 
-    rtl::OString sLeftAttach(RTL_CONSTASCII_STRINGPARAM("left-attach"));
-    rtl::OString sWidth(RTL_CONSTASCII_STRINGPARAM("width"));
-    rtl::OString sTopAttach(RTL_CONSTASCII_STRINGPARAM("top-attach"));
-    rtl::OString sHeight(RTL_CONSTASCII_STRINGPARAM("height"));
-
     for (Window* pChild = GetWindow(WINDOW_FIRSTCHILD); pChild;
         pChild = pChild->GetWindow(WINDOW_NEXT))
     {
@@ -492,16 +487,13 @@ bool VclGrid::isNullGrid(const array_type &A) const
     return false;
 }
 
-void VclGrid::calcMaxs(const array_type &A, std::vector<long> &rWidths, std::vector<long> &rHeights) const
+void VclGrid::calcMaxs(const array_type &A, std::vector<Value> &rWidths, std::vector<Value> &rHeights) const
 {
     sal_Int32 nMaxX = A.shape()[0];
     sal_Int32 nMaxY = A.shape()[1];
 
     rWidths.resize(nMaxX);
     rHeights.resize(nMaxY);
-
-    rtl::OString sWidth(RTL_CONSTASCII_STRINGPARAM("width"));
-    rtl::OString sHeight(RTL_CONSTASCII_STRINGPARAM("height"));
 
     for (sal_Int32 x = 0; x < nMaxX; ++x)
     {
@@ -514,13 +506,32 @@ void VclGrid::calcMaxs(const array_type &A, std::vector<long> &rWidths, std::vec
 
             sal_Int32 nWidth = pChild->get_grid_width();
             for (sal_Int32 nSpanX = 0; nSpanX < nWidth; ++nSpanX)
-                rWidths[x+nSpanX] = std::max(rWidths[x+nSpanX], aChildSize.Width()/nWidth);
+            {
+                rWidths[x+nSpanX].m_nValue = std::max(rWidths[x+nSpanX].m_nValue, aChildSize.Width()/nWidth);
+                rWidths[x+nSpanX].m_bExpand = rWidths[x+nSpanX].m_bExpand | pChild->get_hexpand();
+            }
 
             sal_Int32 nHeight = pChild->get_grid_height();
             for (sal_Int32 nSpanY = 0; nSpanY < nHeight; ++nSpanY)
-                rHeights[y+nSpanY] = std::max(rHeights[y+nSpanY], aChildSize.Height()/nHeight);
+            {
+                rHeights[y+nSpanY].m_nValue = std::max(rHeights[y+nSpanY].m_nValue, aChildSize.Height()/nHeight);
+                rHeights[y+nSpanY].m_bExpand = rHeights[y+nSpanY].m_bExpand | pChild->get_vexpand();
+            }
         }
     }
+}
+
+bool compareValues(const VclGrid::Value &i, const VclGrid::Value &j)
+{
+    return i.m_nValue < j.m_nValue;
+}
+
+VclGrid::Value accumulateValues(const VclGrid::Value &i, const VclGrid::Value &j)
+{
+    VclGrid::Value aRet;
+    aRet.m_nValue = i.m_nValue + j.m_nValue;
+    aRet.m_bExpand = i.m_bExpand | j.m_bExpand;
+    return aRet;
 }
 
 Size VclGrid::calculateRequisition() const
@@ -530,19 +541,19 @@ Size VclGrid::calculateRequisition() const
     if (isNullGrid(A))
         return Size();
 
-    std::vector<long> aWidths;
-    std::vector<long> aHeights;
+    std::vector<Value> aWidths;
+    std::vector<Value> aHeights;
     calcMaxs(A, aWidths, aHeights);
 
     long nTotalWidth = 0;
     if (get_column_homogeneous())
     {
-        nTotalWidth = *std::max_element(aWidths.begin(), aWidths.end());
+        nTotalWidth = std::max_element(aWidths.begin(), aWidths.end(), compareValues)->m_nValue;
         nTotalWidth *= aWidths.size();
     }
     else
     {
-        nTotalWidth = std::accumulate(aWidths.begin(), aWidths.end(), 0);
+        nTotalWidth = std::accumulate(aWidths.begin(), aWidths.end(), Value(), accumulateValues).m_nValue;
     }
 
     nTotalWidth += get_column_spacing() * (aWidths.size()-1);
@@ -550,12 +561,12 @@ Size VclGrid::calculateRequisition() const
     long nTotalHeight = 0;
     if (get_row_homogeneous())
     {
-        nTotalHeight = *std::max_element(aHeights.begin(), aHeights.end());
+        nTotalHeight = std::max_element(aHeights.begin(), aHeights.end(), compareValues)->m_nValue;
         nTotalHeight *= aHeights.size();
     }
     else
     {
-        nTotalHeight = std::accumulate(aHeights.begin(), aHeights.end(), 0);
+        nTotalHeight = std::accumulate(aHeights.begin(), aHeights.end(), Value(), accumulateValues).m_nValue;
     }
 
     nTotalHeight += get_row_spacing() * (aHeights.size()-1);
@@ -576,8 +587,8 @@ void VclGrid::setAllocation(const Size& rAllocation)
     sal_Int32 nMaxY = A.shape()[1];
 
     Size aRequisition;
-    std::vector<long> aWidths(nMaxX);
-    std::vector<long> aHeights(nMaxY);
+    std::vector<Value> aWidths(nMaxX);
+    std::vector<Value> aHeights(nMaxY);
     if (!get_column_homogeneous() || !get_row_homogeneous())
     {
         aRequisition = calculateRequisition();
@@ -586,26 +597,57 @@ void VclGrid::setAllocation(const Size& rAllocation)
 
     long nAvailableWidth = rAllocation.Width() - (get_column_spacing() * nMaxX);
     if (get_column_homogeneous())
-        std::fill(aWidths.begin(), aWidths.end(), nAvailableWidth/nMaxX);
+    {
+        for (sal_Int32 x = 0; x < nMaxX; ++x)
+            aWidths[x].m_nValue = nAvailableWidth/nMaxX;
+    }
     else
     {
-        long nExtraWidth = (rAllocation.Width() - aRequisition.Width()) / nMaxX;
-        for (sal_Int32 x = 0; x < nMaxX; ++x)
-            aWidths[x] += nExtraWidth;
+        long nExtraWidth = 0;
+        if (rAllocation.Width() < aRequisition.Width())
+            nExtraWidth = (rAllocation.Width() - aRequisition.Width()) / nMaxX;
+        else
+        {
+            sal_Int32 nExpandables = 0;
+            for (sal_Int32 x = 0; x < nMaxX; ++x)
+                if (aWidths[x].m_bExpand)
+                    ++nExpandables;
+            nExtraWidth = nExpandables ? (rAllocation.Width() - aRequisition.Width()) / nExpandables : 0;
+        }
+        if (nExtraWidth)
+        {
+            for (sal_Int32 x = 0; x < nMaxX; ++x)
+                if (aWidths[x].m_bExpand)
+                    aWidths[x].m_nValue += nExtraWidth;
+        }
     }
 
     long nAvailableHeight = rAllocation.Height() - (get_row_spacing() * nMaxY);
     if (get_row_homogeneous())
-        std::fill(aHeights.begin(), aHeights.end(), nAvailableHeight/nMaxY);
+    {
+        for (sal_Int32 y = 0; y < nMaxY; ++y)
+            aHeights[y].m_nValue = nAvailableHeight/nMaxY;
+    }
     else
     {
-        long nExtraHeight = (rAllocation.Height() - aRequisition.Height()) / nMaxY;
-        for (sal_Int32 y = 0; y < nMaxY; ++y)
-            aHeights[y] += nExtraHeight;
+        long nExtraHeight = 0;
+        if (rAllocation.Height() < aRequisition.Height())
+            nExtraHeight = (rAllocation.Height() - aRequisition.Height()) / nMaxY;
+        else
+        {
+            sal_Int32 nExpandables = 0;
+            for (sal_Int32 y = 0; y < nMaxY; ++y)
+                if (aHeights[y].m_bExpand)
+                    ++nExpandables;
+            nExtraHeight = nExpandables ? (rAllocation.Height() - aRequisition.Height()) / nExpandables : 0;
+        }
+        if (nExtraHeight)
+        {
+            for (sal_Int32 y = 0; y < nMaxY; ++y)
+                if (aHeights[y].m_bExpand)
+                    aHeights[y].m_nValue += nExtraHeight;
+        }
     }
-
-    rtl::OString sWidth(RTL_CONSTASCII_STRINGPARAM("width"));
-    rtl::OString sHeight(RTL_CONSTASCII_STRINGPARAM("height"));
 
     Point aAllocPos(0, 0);
     for (sal_Int32 x = 0; x < nMaxX; ++x)
@@ -619,12 +661,12 @@ void VclGrid::setAllocation(const Size& rAllocation)
 
                 sal_Int32 nWidth = pChild->get_grid_width();
                 for (sal_Int32 nSpanX = 0; nSpanX < nWidth; ++nSpanX)
-                    aChildAlloc.Width() += aWidths[x+nSpanX];
+                    aChildAlloc.Width() += aWidths[x+nSpanX].m_nValue;
                 aChildAlloc.Width() += get_column_spacing()*(nWidth-1);
 
                 sal_Int32 nHeight = pChild->get_grid_height();
                 for (sal_Int32 nSpanY = 0; nSpanY < nHeight; ++nSpanY)
-                    aChildAlloc.Height() += aHeights[y+nSpanY];
+                    aChildAlloc.Height() += aHeights[y+nSpanY].m_nValue;
                 aChildAlloc.Height() += get_row_spacing()*(nHeight-1);
 
                 Point aChildPos(aAllocPos);
@@ -682,9 +724,9 @@ void VclGrid::setAllocation(const Size& rAllocation)
 
                 setPosSizePixel(*pChild, aChildPos, aChildSize);
             }
-            aAllocPos.Y() += aHeights[y] + get_row_spacing();
+            aAllocPos.Y() += aHeights[y].m_nValue + get_row_spacing();
         }
-        aAllocPos.X() += aWidths[x] + get_column_spacing();
+        aAllocPos.X() += aWidths[x].m_nValue + get_column_spacing();
         aAllocPos.Y() = 0;
     }
 }
