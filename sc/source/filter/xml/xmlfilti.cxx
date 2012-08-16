@@ -61,7 +61,6 @@ ScXMLFilterContext::ScXMLFilterContext( ScXMLImport& rImport,
     pDatabaseRangeContext(pTempDatabaseRangeContext),
     bSkipDuplicates(false),
     bCopyOutputData(false),
-    bUseRegularExpressions(false),
     bConditionSourceRange(false)
 {
     ScDocument* pDoc(GetScImport().GetDocument());
@@ -152,7 +151,6 @@ SvXMLImportContext *ScXMLFilterContext::CreateChildContext( sal_uInt16 nPrefix,
 
 void ScXMLFilterContext::EndElement()
 {
-    mrQueryParam.bRegExp = bUseRegularExpressions;
     mrQueryParam.bInplace = !bCopyOutputData;
     mrQueryParam.bDuplicate = !bSkipDuplicates;
 
