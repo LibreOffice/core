@@ -1,0 +1,2 @@
+Put msvcp110.dll, msvcr110.dll in this directory for Windows builds using a
+VS 2012 / VC 11.0 compiler.

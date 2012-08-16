@@ -151,10 +151,22 @@ my %msvc_2010 = (
     'dll_path' => 'redist/x86/Microsoft.VC100.CRT',
     'dll_suffix' => '100'
 );
+my %msvs_2012 = (
+    'ver' => '11.0',
+    'key' => 'Microsoft/VisualStudio/11.0/Setup/VS/ProductDir',
+    'dll_path' => 'VC/redist/x86/Microsoft.VC110.CRT',
+    'dll_suffix' => '110'
+);
+my %msvc_2012 = (
+    'ver' => '11.0',
+    'key' => 'Microsoft/VisualStudio/11.0/Setup/VC/ProductDir',
+    'dll_path' => 'redist/x86/Microsoft.VC110.CRT',
+    'dll_suffix' => '110'
+);
 
 sub find_msvs()
 {
-    my @ms_versions = ( \%msvs_2008, \%msvs_express_2008, \%msvs_2010 );
+    my @ms_versions = ( \%msvs_2008, \%msvs_express_2008, \%msvs_2012, \%msvs_2010 );
 
     for $ver (@ms_versions) {
         my $install = reg_get_value ("HKEY_LOCAL_MACHINE/SOFTWARE/" . $ver->{'key'});
@@ -168,7 +180,7 @@ sub find_msvs()
 
 sub find_msvc()
 {
-    my @ms_versions = ( \%msvc_2008, \%msvc_express_2008, \%msvc_2010 );
+    my @ms_versions = ( \%msvc_2008, \%msvc_express_2008, \%msvc_2012, \%msvc_2010 );
 
     for $ver (@ms_versions) {
         my $install = reg_get_value ("HKEY_LOCAL_MACHINE/SOFTWARE/" . $ver->{'key'});

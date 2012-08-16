@@ -2969,13 +2969,13 @@ if test "$_os" = "WINNT"; then
         AC_MSG_RESULT([$with_cl_home])
 
         dnl ===========================================================
-        dnl  Check for mspdb80.dll/mspdb100.dll
+        dnl  Check for mspdb80.dll/mspdb100.dll/mspdb110.dll
         dnl ===========================================================
-        dnl MSVS 2008/10 Compiler
+        dnl MSVS 2008/10/12 Compiler
         if test -n "$with_mspdb_path";then
             with_mspdb_path=`cygpath -u "$with_mspdb_path"`
         fi
-        if test -e "$with_mspdb_path/mspdb80.dll" -o -e "$with_mspdb_path/mspdb100.dll"; then
+        if test -e "$with_mspdb_path/mspdb80.dll" -o -e "$with_mspdb_path/mspdb100.dll" -o -e "$with_mspdb_path/mspdb110.dll"; then
             MSPDB_PATH="$with_mspdb_path"
         fi
         dnl MSVS 2008 case
@@ -2990,16 +2990,21 @@ if test "$_os" = "WINNT"; then
         if test -z "$MSPDB_PATH" -a -e "$with_cl_home/../Common7/IDE/mspdb100.dll"; then
             MSPDB_PATH="$with_cl_home/../Common7/IDE"
         fi
+		dnl MSVS 2012 case
+        if test -z "$MSPDB_PATH" -a -e "$with_cl_home/../Common7/IDE/mspdb110.dll"; then
+            MSPDB_PATH="$with_cl_home/../Common7/IDE"
+        fi
 
         if test -z "$MSPDB_PATH";then
             dnl AC_PATH_PROG only checks if MSPDB_PATH is still empty
             AC_PATH_PROG(MSPDB_PATH, mspdb80.dll)
             AC_PATH_PROG(MSPDB_PATH, mspdb100.dll)
+			AC_PATH_PROG(MSPDB_PATH, mspdb110.dll)
             MSPDB_PATH=`dirname "$MSPDB_PATH"`
         fi
 
         if test -z "$MSPDB_PATH"; then
-            AC_MSG_ERROR([You need a mspdb80.dllor mspdb100.dll, make sure it is in the path or use --with-mspdb-path])
+            AC_MSG_ERROR([You need a mspdb80.dll or mspdb100.dll or mspdb110.dll, make sure it is in the path or use --with-mspdb-path])
         fi
         MSPDB_PATH=`cygpath -d "$MSPDB_PATH"`
         MSPDB_PATH=`cygpath -u "$MSPDB_PATH"`
@@ -3047,7 +3052,10 @@ if test "$_os" = "WINNT"; then
                                 printf (\"%04d\",vertoken[[i]] )
                             }
                             }"`
-            if test "$CCNUMVER" -ge "001600000000"; then
+			if test "$CCNUMVER" -ge "001700000000"; then
+                COMEX=14
+                MSVSVER=2012
+            elif test "$CCNUMVER" -ge "001600000000"; then
                 COMEX=13
                 MSVSVER=2010
             elif test "$CCNUMVER" -ge "001500000000"; then
