@@ -1222,9 +1222,10 @@ class MSFILTER_DLLPUBLIC EscherPropertyContainer
         static sal_uInt32 GetGradientColor( const ::com::sun::star::awt::Gradient* pGradient, sal_uInt32 nStartColor );
 
         void        CreateGradientProperties( const ::com::sun::star::awt::Gradient & rGradient );
-        void        CreateGradientProperties( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & );
+        void        CreateGradientProperties( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & , sal_Bool bTransparentGradient = sal_False );
         void        CreateLineProperties( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > &, sal_Bool bEdge );
-        void        CreateFillProperties( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > &, sal_Bool bEdge );
+        void        CreateFillProperties( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > &, sal_Bool bEdge , sal_Bool bTransparentGradient = sal_False );
+        void        CreateFillProperties( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > &, sal_Bool bEdge ,  const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > & rXShape );
         void        CreateTextProperties( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > &, sal_uInt32 nText,
                         const sal_Bool bIsCustomShape = sal_False, const sal_Bool bIsTextFrame = sal_True );
 
