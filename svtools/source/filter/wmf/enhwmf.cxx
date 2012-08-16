@@ -1280,7 +1280,45 @@ sal_Bool EnhWMFReader::ReadEnhWMF()
                 }
             }
             break;
+            case EMR_CREATEDIBPATTERNBRUSHPT :
+                sal_uInt32  nTmp32;
+                sal_uInt32  nOffset;
+                *pWMF >> nIndex;
+                Bitmap  aBmp;
+                BitmapReadAccess* pBmp;
+                sal_uInt32  nRed = 0, nGreen = 0, nBlue = 0, nCount = 1;
 
+                *pWMF >> nTmp32;
+                *pWMF >> nOffset;
+                for ( sal_Int32 i = 0; i < (nOffset - 20)/4; i ++ )
+                {
+                    *pWMF >> nTmp32;
+                }
+
+                aBmp.Read( *pWMF, sal_False );
+                pBmp = aBmp.AcquireReadAccess();
+                if ( pBmp )
+                {
+                    for ( sal_Int32 y = 0; y < pBmp->Height(); y++ )
+                    {
+                        for ( sal_Int32 x = 0; x < pBmp->Width(); x++ )
+                        {
+                            const BitmapColor aColor( pBmp->GetColor( y, x ) );
+
+                            nRed += aColor.GetRed();
+                            nGreen += aColor.GetGreen();
+                            nBlue += aColor.GetBlue();
+                        }
+                    }
+                    nCount = pBmp->Height() * pBmp->Width();
+                    if ( !nCount )
+                        nCount++;
+                    aBmp.ReleaseAccess( pBmp );
+                }
+                Color aColor( (sal_Char)( nRed / nCount ), (sal_Char)( nGreen / nCount ), (sal_Char)( nBlue / nCount ) );
+                pOut->CreateObject( nIndex, GDI_BRUSH, new WinMtfFillStyle( aColor, sal_False ) );
+
+            break;
 
 #ifdef WIN_MTF_ASSERT
             default :                           WinMtfAssertHandler( "Unknown Meta Action" );       break;
