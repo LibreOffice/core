@@ -4671,12 +4671,25 @@ dnl Testing for required Perl modules
 dnl ===================================================================
 
 AC_MSG_CHECKING([for required Perl modules])
-if `$PERL -e 'use Archive::Zip; use Cwd; use Digest::MD5'`; then
+if `$PERL -e 'use Archive::Zip; use Cwd; use Digest::MD5'>/dev/null 2>&1`; then
     AC_MSG_RESULT([all modules found])
 else
     AC_MSG_ERROR([Failed to find some modules])
+    # Find out which modules are missing.
+    missing_perl_modules=
+    if ! `$PERL -e 'use Archive::Zip;'>/dev/null 2>&1`; then
+       missing_perl_modules=Archive::Zip
+    fi
+    if ! `$PERL -e 'use Cwd;'>/dev/null 2>&1`; then
+       missing_perl_modules="$missing_perl_modules Cwd"
+    fi
+    if ! `$PERL -e 'use Digest::MD5;'>/dev/null 2>&1`; then
+       missing_perl_modules="$missing_perl_modules Digest::MD5"
+    fi
+       AC_MSG_ERROR([
+    The missing Perl modules are: $missing_perl_modules
+    Install them as superuser/administrator with "cpan -i $missing_perl_modules"])
 fi
-
 
 dnl ===================================================================
 dnl Check for pkg-config
