@@ -81,8 +81,6 @@ if [ -x $checkdll ]; then
         mv $library $realname
     fi
 else
-    echo "WARNING: checkdll not found!" 1>&2
-
     for parameter in $*; do
         library=$parameter;
     done
