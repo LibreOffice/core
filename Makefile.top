@@ -247,10 +247,6 @@ xpdf\
 xsltml\
 zlib\
 
-ifneq ($(wildcard dictionaries/Module_dictionaries.mk),)
-gb_TAILBUILDMODULES := $(shell $(GNUMAKE) -r -f $(SRCDIR)/tail_build/Makefile showmodules)
-endif
-
 export gb_TAILBUILDTARGET=all slowcheck
 
 define gbuild_module_rules
@@ -259,16 +255,14 @@ define gbuild_module_rules
 $(1): bootstrap fetch
 	cd $(1) && $(GNUMAKE) -j $(GMAKE_PARALLELISM) $(GMAKE_OPTIONS) gb_PARTIALBUILD=T
 
-ifeq ($(filter $(1),$(gb_TAILBUILDMODULES)),)
 $(1).all: bootstrap fetch
-	cd $(1) && unset MAKEFLAGS && \
-        $(SOLARENV)/bin/build.pl -P$(BUILD_NCPUS) --all -- -P$(GMAKE_PARALLELISM)
-else
-$(1).all: bootstrap fetch
-	cd tail_build && unset MAKEFLAGS && \
-	export gb_TAILBUILDTARGET="$(WORKDIR)/Module/$(1) $(WORKDIR)/Module/check/$(1) $(WORKDIR)/Module/slowcheck/$(1)" && \
-        $(SOLARENV)/bin/build.pl -P$(BUILD_NCPUS) --all -- -P$(GMAKE_PARALLELISM)
-endif
+	$$(if $$(filter $(1),$$(shell $(GNUMAKE) -r -f $(SRCDIR)/tail_build/Makefile showmodules)), \
+		cd tail_build && unset MAKEFLAGS && \
+		export gb_TAILBUILDTARGET="$(WORKDIR)/Module/$(1) $(WORKDIR)/Module/check/$(1) $(WORKDIR)/Module/slowcheck/$(1)" && \
+	, \
+		cd $(1) && unset MAKEFLAGS && \
+	) \
+	$(SOLARENV)/bin/build.pl -P$(BUILD_NCPUS) --all -- -P$(GMAKE_PARALLELISM)
 
 $(1).clean:
 	cd $(1) && $(GNUMAKE) -j $(GMAKE_PARALLELISM) $(GMAKE_OPTIONS) clean gb_PARTIALBUILD=T
