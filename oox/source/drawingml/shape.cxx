@@ -525,7 +525,10 @@ Reference< XShape > Shape::createAndInsert(
 
         // add properties from textbody to shape properties
         if( mpTextBody.get() )
+        {
+            mpTextBody->getTextProperties().pushRotationAdjustments( mnRotation );
             aShapeProps.assignUsed( mpTextBody->getTextProperties().maPropertyMap );
+        }
 
         // applying properties
         aShapeProps.assignUsed( getShapeProperties() );
