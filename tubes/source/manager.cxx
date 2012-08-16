@@ -45,6 +45,7 @@
 #include <rtl/uuid.h>
 
 #include <telepathy-glib/telepathy-glib.h>
+#include <stdio.h>
 #include <map>
 #include <set>
 
