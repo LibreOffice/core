@@ -62,7 +62,6 @@ class ScXMLFilterContext : public SvXMLImportContext
     sal_Int16   nUserListIndex;
     bool        bSkipDuplicates;
     bool        bCopyOutputData;
-    bool        bUseRegularExpressions;
     bool        bEnabledUserList;
     bool        bConditionSourceRange;
     std::vector<ConnStackItem> maConnStack;
