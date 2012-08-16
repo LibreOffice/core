@@ -522,7 +522,8 @@ throw ( RuntimeException )
                 // Can be removed if follow up task will be fixed directly within applications.
                 if (
                     ( pMenuItemHandler->aMenuItemURL.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(".uno:Paste"))) ||
-                    ( pMenuItemHandler->aMenuItemURL.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(".uno:PasteSpecial"))) ||
+                    // Note: PasteSpecial is handled specifically by calc
+                    (  !m_aModuleIdentifier.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.sheet.SpreadsheetDocument")) && pMenuItemHandler->aMenuItemURL.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(".uno:PasteSpecial"))) ||
                     ( pMenuItemHandler->aMenuItemURL.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(".uno:PasteClipboard")))      // special for draw/impress
                    )
                     bEnabledItem = sal_True;
