@@ -218,8 +218,8 @@ void Impl_OlePres::Write( SvStream & rStm )
 
 DffPropertyReader::DffPropertyReader( const SvxMSDffManager& rMan ) :
     rManager( rMan ),
-    mbRotateGranientFillWithAngle ( 0 ),
-    pDefaultPropSet( NULL )
+    pDefaultPropSet( NULL ),
+    mbRotateGranientFillWithAngle ( 0 )
 {
     InitializePropSet( DFF_msofbtOPT );
 }
@@ -2656,7 +2656,7 @@ void DffPropertyReader::ApplyAttributes( SvStream& rIn, SfxItemSet& rSet, DffObj
     if ( nFontAttributes & 0x08 )
         rSet.Put( SvxUnderlineItem( nFontAttributes & 0x08 ? UNDERLINE_SINGLE : UNDERLINE_NONE, EE_CHAR_UNDERLINE ) );
     if ( nFontAttributes & 0x40 )
-        rSet.Put( SvxShadowedItem( nFontAttributes & 0x40 != 0, EE_CHAR_SHADOW ) );
+        rSet.Put( SvxShadowedItem( (nFontAttributes & 0x40) != 0, EE_CHAR_SHADOW ) );
 //  if ( nFontAttributes & 0x02 )
 //      rSet.Put( SvxCaseMapItem( nFontAttributes & 0x02 ? SVX_CASEMAP_KAPITAELCHEN : SVX_CASEMAP_NOT_MAPPED ) );
     if ( nFontAttributes & 0x01 )
@@ -2917,6 +2917,7 @@ void DffPropertyReader::ImportGradientColor( SfxItemSet& aSet,MSO_FillType eMSO_
             nChgColors ^= 1;
         }
         break;
+        default: break;
     }
 
     Color aCol1( rManager.MSO_CLR_ToColor( GetPropertyValue( DFF_Prop_fillColor, COL_WHITE ), DFF_Prop_fillColor ) );
