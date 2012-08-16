@@ -4876,9 +4876,15 @@ void PPTStyleTextPropReader::ReadParaProps( SvStream& rIn, SdrPowerPointImport& 
             if ( nMask & 0x4000 )   // pfSpaceAfter
                 rIn >> aSet.mpArry[ PPT_ParaAttr_LowerDist ];
             if ( nMask & 0x100 )    // pfLeftMargin
-                rIn >> nDummy16;
+            {
+                rIn >> aSet.mpArry[ PPT_ParaAttr_TextOfs ];
+                aSet.mnAttrSet |= 1 << PPT_ParaAttr_TextOfs;
+            }
             if ( nMask & 0x400 )    // pfIndent
-                rIn >> nDummy16;
+            {
+                rIn >> aSet.mpArry[ PPT_ParaAttr_BulletOfs ];
+                aSet.mnAttrSet |= 1 << PPT_ParaAttr_BulletOfs;
+            }
             if ( nMask & 0x8000 )   // pfDefaultTabSize
                 rIn >> nDummy16;
             if ( nMask & 0x100000 ) // pfTabStops
@@ -4910,9 +4916,10 @@ void PPTStyleTextPropReader::ReadParaProps( SvStream& rIn, SdrPowerPointImport& 
         else
             nCharCount = nStringLen;
 
-        if ( rRuler.GetTextOfs( aParaPropSet.pParaSet->mnDepth, aSet.mpArry[ PPT_ParaAttr_TextOfs ] ) )
+        //if the textofs attr has been read at above, need not to reset.
+        if ( ( !( aSet.mnAttrSet & 1 << PPT_ParaAttr_TextOfs ) ) && rRuler.GetTextOfs( aParaPropSet.pParaSet->mnDepth, aSet.mpArry[ PPT_ParaAttr_TextOfs ] ) )
             aSet.mnAttrSet |= 1 << PPT_ParaAttr_TextOfs;
-        if ( rRuler.GetBulletOfs( aParaPropSet.pParaSet->mnDepth, aSet.mpArry[ PPT_ParaAttr_BulletOfs ] ) )
+        if ( ( !( aSet.mnAttrSet & 1 << PPT_ParaAttr_BulletOfs ) ) && rRuler.GetBulletOfs( aParaPropSet.pParaSet->mnDepth, aSet.mpArry[ PPT_ParaAttr_BulletOfs ] ) )
             aSet.mnAttrSet |= 1 << PPT_ParaAttr_BulletOfs;
         if ( rRuler.GetDefaultTab( aParaPropSet.pParaSet->mnDepth, aSet.mpArry[ PPT_ParaAttr_DefaultTab ] ) )
             aSet.mnAttrSet |= 1 << PPT_ParaAttr_DefaultTab;

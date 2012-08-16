@@ -798,6 +798,13 @@ void PPTWriter::ImplWriteParagraphs( SvStream& rOut, TextObj& rTextObj )
             nPropertyFlags |= 1;            // turn off bullet explicit
             nBulletFlags = 0;
         }
+
+        // Write nTextOfs and nBullets
+        if ( mpStyleSheet->IsHardAttribute( nInstance, nDepth, ParaAttr_TextOfs, pPara->nTextOfs ) )
+            nPropertyFlags |= 0x100;
+        if ( mpStyleSheet->IsHardAttribute( nInstance, nDepth, ParaAttr_BulletOfs, pPara->nBulletOfs ))
+            nPropertyFlags |= 0x400;
+
         FontCollectionEntry aFontDescEntry( pPara->aFontDesc.Name, pPara->aFontDesc.Family, pPara->aFontDesc.Pitch, pPara->aFontDesc.CharSet );
         sal_uInt16  nFontId = (sal_uInt16)maFontCollection.GetId( aFontDescEntry );
 
@@ -836,6 +843,10 @@ void PPTWriter::ImplWriteParagraphs( SvStream& rOut, TextObj& rTextObj )
             rOut << (sal_uInt16)( pPara->mnLineSpacingTop );
         if ( nPropertyFlags & 0x00004000 )
             rOut << (sal_uInt16)( pPara->mnLineSpacingBottom );
+        if ( nPropertyFlags & 0x100 )
+            rOut << (sal_uInt16)(pPara->nTextOfs);
+        if (  nPropertyFlags & 0x400 )
+            rOut << (sal_uInt16)(pPara->nBulletOfs);
         if ( nPropertyFlags & 0x000e0000 )
         {
             sal_uInt16 nAsianSettings = 0;
