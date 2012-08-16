@@ -3004,14 +3004,18 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                                 *mpStrm << (sal_Int16)maRect.Top() << (sal_Int16)maRect.Left() << (sal_Int16)maRect.Right() << (sal_Int16)maRect.Bottom();  // top, left, right, bottom ????
                                 mpPptEscherEx->OpenContainer( ESCHER_ClientData );
                                 mpPptEscherEx->AddAtom( 8, EPP_OEPlaceholderAtom );
+                                sal_uInt8 PlaceHolderID = ( mType == "presentation.Subtitle") ? EPP_PLACEHOLDER_MASTERSUBTITLE:EPP_PLACEHOLDER_MASTERBODY;
                                 *mpStrm << (sal_uInt32)1                                                        // PlacementID
-                                        << (sal_uInt8)EPP_PLACEHOLDER_MASTERBODY                                    // PlaceHolderID
+                                        << PlaceHolderID/*(sal_uInt8)EPP_PLACEHOLDER_MASTERBODY */                                   // PlaceHolderID
                                         << (sal_uInt8)0                                                         // Size of PlaceHolder ( 0 = FULL, 1 = HALF, 2 = QUARTER )
                                         << (sal_uInt16)0;                                                       // padword
                                 mpPptEscherEx->CloseContainer();    // ESCHER_ClientData
                                 mpPptEscherEx->OpenContainer( ESCHER_ClientTextbox );       // printf
                                 mpPptEscherEx->AddAtom( 4, EPP_TextHeaderAtom );
-                                *mpStrm << (sal_uInt32)EPP_TEXTTYPE_Body;
+                                if ( mType == "presentation.Subtitle")
+                                    *mpStrm << (sal_uInt32)EPP_TEXTTYPE_CenterBody;
+                                else
+                                    *mpStrm << (sal_uInt32)EPP_TEXTTYPE_Body;
                                 mnTextSize = aTextObj.Count();
                                 aTextObj.Write( mpStrm );
                                 mpPptEscherEx->BeginAtom();
