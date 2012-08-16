@@ -225,7 +225,10 @@ void DialogWindow::Command( const CommandEvent& rCEvt )
 
 IMPL_LINK( DialogWindow, NotifyUndoActionHdl, SfxUndoAction *, pUndoAction )
 {
-    (void)pUndoAction;
+    // #i120515# pUndoAction needs to be deleted, this hand over is an ownership
+    // change. As long as it does not get added to the undo manager, it needs at
+    // least to be deleted.
+    delete pUndoAction;
 
     return 0;
 }
