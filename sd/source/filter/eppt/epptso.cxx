@@ -3701,15 +3701,27 @@ void PPTWriter::ImplCreateTable( uno::Reference< drawing::XShape >& rXShape, Esc
 
                             ImplWriteTextStyleAtom( aClientTextBox, EPP_TEXTTYPE_Other, 0, NULL, aExtBu, &aPropOptSp );
 
+                            // need write client data for extend bullet
+                            if ( aExtBu.Tell() )
+                            {
+                                SvMemoryStream* pClientData = new SvMemoryStream( 0x200, 0x200 );
+                                ImplProgTagContainer( pClientData, &aExtBu );
+                                *mpStrm << (sal_uInt32)( ( ESCHER_ClientData << 16 ) | 0xf )
+                                    << (sal_uInt32)pClientData->Tell();
+
+                                mpStrm->Write( pClientData->GetData(), pClientData->Tell() );
+                                delete pClientData, pClientData = NULL;
+                            }
+
                             aPropOptSp.Commit( *mpStrm );
                             mpPptEscherEx->AddAtom( 16, ESCHER_ChildAnchor );
                             *mpStrm     << nLeft
-                                        << nTop
-                                        << nRight
-                                        << nBottom;
+                                << nTop
+                                << nRight
+                                << nBottom;
 
                             *mpStrm << (sal_uInt32)( ( ESCHER_ClientTextbox << 16 ) | 0xf )
-                                    << (sal_uInt32)aClientTextBox.Tell();
+                                << (sal_uInt32)aClientTextBox.Tell();
 
                             mpStrm->Write( aClientTextBox.GetData(), aClientTextBox.Tell() );
                             mpPptEscherEx->CloseContainer();
