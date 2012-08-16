@@ -137,7 +137,6 @@ private:
     Link                maSelectHdl;
     GalleryTheme*       mpTheme;
     sal_uIntPtr               mnCurRow;
-    sal_Bool                mbInit;
 
     void                InitSettings();
 

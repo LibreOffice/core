@@ -33,8 +33,6 @@
 #include <svx/scene3d.hxx>
 #include "svx/svxdllapi.h"
 
-class E3dView;
-
 /************************************************************************\
 |*
 |* Base class for all 3D undo actions.
@@ -99,19 +97,16 @@ class SVX_DLLPUBLIC E3dAttributesUndoAction : public SdrUndoAction
     using SdrUndoAction::Repeat;
 
     SdrObject*  pObject;
-    E3dView*    pView;
-    sal_Bool        bUseSubObjects;
 
     const SfxItemSet aNewSet;
     const SfxItemSet aOldSet;
 
  public:
         TYPEINFO();
-        E3dAttributesUndoAction( SdrModel &rModel, E3dView* pView,
+        E3dAttributesUndoAction( SdrModel &rModel,
             E3dObject* pInObject,
             const SfxItemSet& rNewSet,
-            const SfxItemSet& rOldSet,
-            sal_Bool bUseSubObj);
+            const SfxItemSet& rOldSet);
 
         virtual ~E3dAttributesUndoAction();
 

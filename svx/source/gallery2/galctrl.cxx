@@ -471,8 +471,7 @@ void GalleryIconView::StartDrag( sal_Int8, const Point& )
 GalleryListView::GalleryListView( GalleryBrowser2* pParent, GalleryTheme* pTheme ) :
     BrowseBox( pParent, WB_TABSTOP | WB_3DLOOK | WB_BORDER ),
     mpTheme( pTheme ),
-    mnCurRow( 0 ),
-    mbInit( sal_False )
+    mnCurRow( 0 )
 {
     SetHelpId( HID_GALLERY_WINDOW );
 

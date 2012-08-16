@@ -150,7 +150,7 @@ SvxIMapDlg::SvxIMapDlg( SfxBindings *_pBindings, SfxChildWindow *pCW,
 
     FreeResource();
 
-    pOwnData = new IMapOwnData( this );
+    pOwnData = new IMapOwnData;
 
     pIMapWnd->SetInfoLink( LINK( this, SvxIMapDlg, InfoHdl ) );
     pIMapWnd->SetMousePosLink( LINK( this, SvxIMapDlg, MousePosHdl ) );

@@ -199,7 +199,6 @@ private:
     std::vector<sal_uInt32> aAddList;
     std::vector<sal_uInt32> aDelList;
     std::vector<sal_uInt32> aCurEntryList;
-    sal_uInt32              nInitFormatKey;
     sal_uInt32              nCurFormatKey;
     short                   nCurCategory;
     LanguageType            eCurLanguage;

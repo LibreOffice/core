@@ -40,8 +40,6 @@ class SVX_DLLPUBLIC XFillFloatTransparenceItem : public XFillGradientItem
 {
 private:
 
-    long                    nDummy1;
-    long                    nDummy2;
     sal_Bool                    bEnabled;
 
 public:

@@ -210,10 +210,7 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > m_xBoundItems[MAX_FAMILIES];
     SfxTemplateItem*                    pFamilyState[MAX_FAMILIES];
     sal_uInt16                              nActFamily; // Id in the ToolBox = Position - 1
-    sal_uInt16                              nActFilter; // FilterIdx
-    sal_uInt16                              nAppFilter; // Filter, that the App has set
     String                              aCurSel;
-    sal_Bool                                bListening;
     Impl*                               pImpl;
 
     SVX_DLLPRIVATE void Update();

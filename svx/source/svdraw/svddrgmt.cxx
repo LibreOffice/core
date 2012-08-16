@@ -868,8 +868,7 @@ drawinglayer::primitive2d::Primitive2DSequence SdrDragMethod::AddConnectorOverla
 TYPEINIT1(SdrDragMovHdl,SdrDragMethod);
 
 SdrDragMovHdl::SdrDragMovHdl(SdrDragView& rNewView)
-:   SdrDragMethod(rNewView),
-    bMirrObjShown(false)
+:   SdrDragMethod(rNewView)
 {
 }
 

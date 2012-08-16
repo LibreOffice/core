@@ -761,7 +761,7 @@ sal_Bool View::InsertData( const TransferableDataHelper& rDataHelper,
                                 aNewSet.Put( pObj->GetMergedItemSet() );
 
                                 if( bUndo )
-                                    AddUndo( new E3dAttributesUndoAction( mrDoc, this, (E3dObject*) pPickObj, aNewSet, aOldSet, sal_False ) );
+                                    AddUndo( new E3dAttributesUndoAction( mrDoc, (E3dObject*) pPickObj, aNewSet, aOldSet ) );
                                 pPickObj->SetMergedItemSetAndBroadcast( aNewSet );
                             }
 

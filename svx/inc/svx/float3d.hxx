@@ -53,7 +53,6 @@ enum ViewType3D
 
 class SdrModel;
 class FmFormModel;
-class FmFormPage;
 class VirtualDevice;
 class E3dView;
 class SdrPageView;
@@ -201,7 +200,6 @@ private:
 
     // Model, Page, View etc. for favourites
     FmFormModel*        pModel;
-    FmFormPage*         pFmPage;
     VirtualDevice*      pVDev;
     E3dView*            p3DView;
 
@@ -270,14 +268,12 @@ public:
 
 class Svx3DCtrlItem : public SfxControllerItem
 {
-    Svx3DWin* p3DWin;
-
  protected:
     virtual void StateChanged( sal_uInt16 nSId, SfxItemState eState,
                                 const SfxPoolItem* pState );
 
  public:
-    Svx3DCtrlItem( sal_uInt16, Svx3DWin*, SfxBindings* );
+    Svx3DCtrlItem( sal_uInt16, SfxBindings* );
 };
 
 /*************************************************************************

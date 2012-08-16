@@ -36,10 +36,6 @@
 
 class IMapOwnData
 {
-private:
-
-    SvxIMapDlg*     pIMap;
-
 public:
 
     Timer           aTimer;
@@ -50,7 +46,7 @@ public:
     void*           pUpdateEditingObject;
     sal_Bool            bExecState;
 
-                    IMapOwnData( SvxIMapDlg* pIMapDlg ) : pIMap ( pIMapDlg ), pUpdateEditingObject( NULL )  {}
+                    IMapOwnData() : pUpdateEditingObject( NULL )  {}
 };
 
 

@@ -226,7 +226,6 @@ Svx3DWin::Svx3DWin( SfxBindings* pInBindings,
         eViewType           ( VIEWTYPE_GEO ),
 
         pModel              ( NULL ),
-        pFmPage             ( NULL ),
         pVDev               ( NULL ),
         p3DView             ( NULL ),
 
@@ -253,7 +252,7 @@ Svx3DWin::Svx3DWin( SfxBindings* pInBindings,
     aMtrDistance.SetUnit( eFUnit );
     aMtrFocalLength.SetUnit( eFUnit );
 
-    pControllerItem = new Svx3DCtrlItem(SID_3D_STATE, this, pBindings);
+    pControllerItem = new Svx3DCtrlItem(SID_3D_STATE, pBindings);
     pConvertTo3DItem = new SvxConvertTo3DItem(SID_CONVERT_TO_3D, pBindings);
     pConvertTo3DLatheItem = new SvxConvertTo3DItem(SID_CONVERT_TO_3D_LATHE_FAST, pBindings);
 
@@ -3259,10 +3258,8 @@ Svx3DChildWindow::Svx3DChildWindow( Window* _pParent,
 }
 
 Svx3DCtrlItem::Svx3DCtrlItem( sal_uInt16 _nId,
-                                Svx3DWin* pWin,
                                 SfxBindings* _pBindings) :
-    SfxControllerItem( _nId, *_pBindings ),
-    p3DWin( pWin )
+    SfxControllerItem( _nId, *_pBindings )
 {
 }
 

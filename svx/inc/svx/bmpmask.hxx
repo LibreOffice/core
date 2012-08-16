@@ -90,7 +90,6 @@ class SVX_DLLPUBLIC SvxBmpMask : public SfxDockingWindow
     friend class MaskData;
     friend class MaskSet;
 
-    Window*             pParentWin;
     Size                aLastSize;
     ToolBox             aTbxPipette;
     ColorWindow*        pCtlPipette;

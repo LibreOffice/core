@@ -44,9 +44,6 @@ class SdrDragView;
 
 class SdrDragMovHdl : public SdrDragMethod
 {
-private:
-    bool                    bMirrObjShown;
-
 protected:
     // define nothing, overload to do so
     virtual void createSdrDragEntries();

@@ -49,7 +49,6 @@
 class SdrOutliner;
 class SdrModel;
 class SvtSysLocale;
-class CharClass;
 class LocaleDataWrapper;
 
 namespace com { namespace sun { namespace star { namespace lang {
@@ -263,7 +262,6 @@ public:
 class SVX_DLLPUBLIC SdrGlobalData
 {
     const SvtSysLocale*         pSysLocale;     // follows always locale settings
-    const CharClass*            pCharClass;     // follows always SysLocale
     const LocaleDataWrapper*    pLocaleData;    // follows always SysLocale
 public:
     SdrLinkList         aUserMakeObjHdl;

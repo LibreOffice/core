@@ -59,7 +59,6 @@
 #include <unotools/localedatawrapper.hxx>
 #include <com/sun/star/lang/Locale.hpp>
 #include <i18npool/lang.h>
-#include <unotools/charclass.hxx>
 #include <unotools/syslocale.hxx>
 #include <svx/xflbckit.hxx>
 #include <svx/extrusionbar.hxx>
@@ -78,7 +77,6 @@ using namespace ::com::sun::star;
 
 SdrGlobalData::SdrGlobalData() :
     pSysLocale(NULL),
-    pCharClass(NULL),
     pLocaleData(NULL),
     pOutliner(NULL),
     pDefaults(NULL),

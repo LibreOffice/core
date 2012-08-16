@@ -121,7 +121,6 @@ class SVX_DLLPUBLIC SvxFontWorkDialog : public SfxDockingWindow
 
     SfxBindings&    rBindings;
     Timer           aInputTimer;
-    sal_Bool            bUserZoomedIn;
 
     sal_uInt16          nLastStyleTbxId;
     sal_uInt16          nLastAdjustTbxId;

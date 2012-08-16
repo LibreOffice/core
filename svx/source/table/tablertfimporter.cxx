@@ -115,7 +115,6 @@ private:
     RTFCellDefaultVector::iterator maDefaultIterator;
 
     int             mnLastToken;
-    sal_Int32       mnLastWidth;
     bool            mbNewDef;
 
     sal_uInt16          mnStartPara;
@@ -140,7 +139,6 @@ SdrTableRTFParser::SdrTableRTFParser( SdrTableObj& rTableObj )
 , mpOutliner( SdrMakeOutliner( OUTLINERMODE_TEXTOBJECT, rTableObj.GetModel() ) )
 , mrItemPool( rTableObj.GetModel()->GetItemPool() )
 , mnLastToken( 0 )
-, mnLastWidth( 0 )
 , mbNewDef( false )
 , mnStartPara( 0 )
 , mnColCnt( 0 )

@@ -88,7 +88,6 @@ class SVX_DLLPUBLIC SdrPageWindow
     SdrPaintWindow*                                     mpOriginalPaintWindow;
 
     // UNO stuff for xControls
-    void*                                               mpDummy;
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer > mxControlContainer;
 
     sdr::contact::ObjectContact* CreateViewSpecificObjectContact();

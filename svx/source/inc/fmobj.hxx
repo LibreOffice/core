@@ -32,8 +32,6 @@
 #include <com/sun/star/script/ScriptEventDescriptor.hpp>
 #include <com/sun/star/container/XIndexContainer.hpp>
 
-class FmFormView;
-
 //==================================================================
 // FmFormObj
 //==================================================================
@@ -43,9 +41,6 @@ class FmFormObj: public SdrUnoObj
     ::com::sun::star::uno::Sequence< ::com::sun::star::script::ScriptEventDescriptor>   m_aEventsHistory;
                 // valid if and only if m_pEnvironmentHistory != NULL, this are the events which we're set when
                 // m_pEnvironmentHistory was created
-
-    FmFormView*     m_pControlCreationView;
-    sal_uLong       m_nControlCreationEvent;
 
     // Informationen fuer die Controlumgebung
     // werden nur vorgehalten, wenn ein Object sich nicht in einer Objectliste befindet

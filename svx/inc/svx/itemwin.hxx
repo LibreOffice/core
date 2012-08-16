@@ -78,7 +78,6 @@ class SvxColorBox : public ColorLB
     using Window::Update;
 
     sal_uInt16          nCurPos;
-    sal_uInt16          nId;
     Timer           aDelayTimer;
     Size            aLogicalSize;
     sal_Bool            bRelease;

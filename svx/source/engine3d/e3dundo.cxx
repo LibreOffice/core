@@ -83,15 +83,11 @@ void E3dRotateUndoAction::Redo ()
 TYPEINIT1(E3dAttributesUndoAction, SdrUndoAction);
 
 E3dAttributesUndoAction::E3dAttributesUndoAction( SdrModel &rModel,
-    E3dView*    p3dView,
     E3dObject*  pInObject,
     const SfxItemSet& rNewSet,
-    const SfxItemSet& rOldSet,
-    sal_Bool bUseSubObj)
+    const SfxItemSet& rOldSet)
 :   SdrUndoAction( rModel ),
     pObject      ( pInObject ),
-    pView        ( p3dView ),
-    bUseSubObjects(bUseSubObj),
     aNewSet      ( rNewSet ),
     aOldSet      ( rOldSet )
 {

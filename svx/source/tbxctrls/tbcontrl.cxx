@@ -128,7 +128,7 @@ class SvxStyleBox_Impl : public ComboBox
 {
     using Window::IsVisible;
 public:
-    SvxStyleBox_Impl( Window* pParent, sal_uInt16 nSlot, const OUString& rCommand, SfxStyleFamily eFamily, const Reference< XDispatchProvider >& rDispatchProvider,
+    SvxStyleBox_Impl( Window* pParent, const OUString& rCommand, SfxStyleFamily eFamily, const Reference< XDispatchProvider >& rDispatchProvider,
                         const Reference< XFrame >& _xFrame,const String& rClearFormatKey, const String& rMoreKey, sal_Bool bInSpecialMode );
     ~SvxStyleBox_Impl();
 
@@ -150,7 +150,6 @@ protected:
     virtual void    Select();
 
 private:
-    sal_uInt16                          nSlotId;
     SfxStyleFamily                  eStyleFamily;
     sal_uInt16                          nCurSel;
     sal_Bool                            bRelease;
@@ -322,7 +321,6 @@ class SfxStyleControllerItem_Impl : public SfxStatusListener
 
 SvxStyleBox_Impl::SvxStyleBox_Impl(
     Window*                                 pParent,
-    sal_uInt16                                  nSlot,
     const rtl::OUString&                    rCommand,
     SfxStyleFamily                          eFamily,
     const Reference< XDispatchProvider >&   rDispatchProvider,
@@ -333,7 +331,6 @@ SvxStyleBox_Impl::SvxStyleBox_Impl(
 
     ComboBox( pParent, SVX_RES( RID_SVXTBX_STYLE ) ),
 
-    nSlotId     ( nSlot ),
     eStyleFamily( eFamily ),
     bRelease    ( sal_True ),
     bVisible(sal_False),
@@ -1617,7 +1614,6 @@ SvxStyleToolBoxControl::SvxStyleToolBoxControl(
     :   SfxToolBoxControl   ( nSlotId, nId, rTbx ),
         pStyleSheetPool     ( NULL ),
         nActFamily          ( 0xffff ),
-        bListening          ( sal_False ),
         pImpl               ( new Impl )
 {
     for ( sal_uInt16 i=0; i<MAX_FAMILIES; i++ )
@@ -1996,7 +1992,6 @@ void SvxStyleToolBoxControl::StateChanged(
 Window* SvxStyleToolBoxControl::CreateItemWindow( Window *pParent )
 {
     SvxStyleBox_Impl* pBox = new SvxStyleBox_Impl( pParent,
-                                                   SID_STYLE_APPLY,
                                                    OUString( ".uno:StyleApply" ),
                                                    SFX_STYLE_FAMILY_PARA,
                                                    Reference< XDispatchProvider >( m_xFrame->getController(), UNO_QUERY ),

@@ -56,8 +56,6 @@ class SvxSuperContourDlg : public SvxContourDlg
     StatusBar           aStbStatus;
     sal_uIntPtr             nGrfChanged;
     sal_Bool                bExecState;
-    sal_Bool                bPipetteMode;
-    sal_Bool                bWorkplaceMode;
     sal_Bool                bUpdateGraphicLinked;
     sal_Bool                bGraphicLinked;
     ImageList           maImageList;

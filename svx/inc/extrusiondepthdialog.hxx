@@ -37,8 +37,6 @@ class ExtrusionDepthDialog : public ModalDialog
     CancelButton        maCancelButton;
     HelpButton          maHelpButton;
 
-    FieldUnit           meDefaultUnit;
-
 public:
     ExtrusionDepthDialog( Window* pParent, double fDepth, FieldUnit eDefaultUnit );
     ~ExtrusionDepthDialog();
