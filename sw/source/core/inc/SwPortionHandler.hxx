@@ -55,7 +55,9 @@ public:
      */
     virtual void Text(
         sal_uInt16 nLength,      /// length of this portion in the model string
-        sal_uInt16 nType         /// type of this portion
+        sal_uInt16 nType,         /// type of this portion
+        sal_Int32 nHeight = 0,   /// height of this portion
+        sal_Int32 nWidth = 0     /// width of this portion
         ) = 0;
 
     /** special portion. This method is called for every non-text

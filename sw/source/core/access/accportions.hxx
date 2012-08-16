@@ -94,7 +94,7 @@ public:
     virtual ~SwAccessiblePortionData();
 
     // SwPortionHandler methods
-    virtual void Text(sal_uInt16 nLength, sal_uInt16 nType);
+    virtual void Text(sal_uInt16 nLength, sal_uInt16 nType, sal_Int32 nHeight = 0, sal_Int32 nWidth = 0);
     virtual void Special(sal_uInt16 nLength, const String& rText, sal_uInt16 nType, sal_Int32 nHeight = 0, sal_Int32 nWidth = 0);
     virtual void LineBreak();
     virtual void Skip(sal_uInt16 nLength);

@@ -697,7 +697,7 @@ long SwTxtPortion::CalcSpacing( long nSpaceAdd, const SwTxtSizeInfo &rInf ) cons
 
 void SwTxtPortion::HandlePortion( SwPortionHandler& rPH ) const
 {
-    rPH.Text( GetLen(), GetWhichPor() );
+    rPH.Text( GetLen(), GetWhichPor(), Height(), Width() );
 }
 
 /*************************************************************************

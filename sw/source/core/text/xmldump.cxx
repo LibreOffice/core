@@ -134,7 +134,9 @@ class XmlPortionDumper:public SwPortionHandler
                 text which is painted on-screen
       */
     virtual void Text( sal_uInt16 nLength,
-                       sal_uInt16 nType )
+                       sal_uInt16 nType,
+                       sal_Int32 nHeight,
+                       sal_Int32 nWidth)
     {
         ofs += nLength;
         xmlTextWriterStartElement( writer, BAD_CAST( "Text" ) );
@@ -144,6 +146,11 @@ class XmlPortionDumper:public SwPortionHandler
         xmlTextWriterWriteFormatAttribute( writer,
                                            BAD_CAST( "nType" ),
                                            "%s", getTypeName( nType ) );
+        if (nHeight > 0)
+            xmlTextWriterWriteFormatAttribute(writer, BAD_CAST("nHeight"), "%i", (int)nHeight);
+        if (nWidth > 0)
+            xmlTextWriterWriteFormatAttribute(writer, BAD_CAST("nWidth"), "%i", (int)nWidth);
+
         xmlTextWriterEndElement( writer );
     }
 

@@ -112,7 +112,7 @@ SwAccessiblePortionData::~SwAccessiblePortionData()
     delete pSentences;
 }
 
-void SwAccessiblePortionData::Text(sal_uInt16 nLength, sal_uInt16 nType)
+void SwAccessiblePortionData::Text(sal_uInt16 nLength, sal_uInt16 nType, sal_Int32 /*nHeight*/, sal_Int32 /*nWidth*/)
 {
     OSL_ENSURE( (nModelPosition + nLength) <= pTxtNode->GetTxt().Len(),
                 "portion exceeds model string!" );
