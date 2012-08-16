@@ -205,6 +205,7 @@ sal_Int32 MQueryHelper::executeQuery(OConnection* xConnection)
                 // Iterate all rows
                 for ( rowIter = Rows->begin(); rowIter != Rows->end(); rowIter++ )
                 {
+                    MQueryHelperResultEntry* entry = new MQueryHelperResultEntry();
                     for (MorkCells::iterator CellsIter = rowIter->second.begin();
                          CellsIter != rowIter->second.end(); CellsIter++ )
                     {
@@ -213,14 +214,12 @@ sal_Int32 MQueryHelper::executeQuery(OConnection* xConnection)
 
                         //SAL_INFO("connectivity.mork", "key: " << column << " value: " << value);
 
-                        MQueryHelperResultEntry* entry = new MQueryHelperResultEntry();
-
                         OString key(column.c_str(), static_cast<sal_Int32>(column.size()));
                         OString valueOString(value.c_str(), static_cast<sal_Int32>(value.size()));
                         rtl::OUString valueOUString = ::rtl::OStringToOUString( valueOString, RTL_TEXTENCODING_UTF8 );
                         entry->setValue(key, valueOUString);
-                        append(entry);
                     }
+                    append(entry);
                 }
             }
         }
