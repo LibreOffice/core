@@ -232,8 +232,8 @@ public:
 
 private:
     SCTAB           nTab;
-    ScSubTotalParam aParam;                         // Original uebergebener Parameter
-    SCROW           nNewEndRow;                     // Ergebnis-Groesse
+    ScSubTotalParam aParam;                         // The original passed parameter
+    SCROW           nNewEndRow;                     // Size of result
     ScDocument*     pUndoDoc;
     ScOutlineTable* pUndoTable;
 //  ScDBData*       pUndoDBData;
@@ -264,7 +264,7 @@ private:
     ScSortParam     aSortParam;
     sal_Bool            bRepeatQuery;
     ScDocument*     pUndoDoc;
-    ScDBCollection* pUndoDB;                // wegen Quell- und Zielbereich
+    ScDBCollection* pUndoDB;                // due to source and target range
     sal_Bool            bDestArea;
     ScRange         aDestRange;
 };
@@ -292,7 +292,7 @@ private:
     SCTAB           nTab;
     ScQueryParam    aQueryParam;
     ScDocument*     pUndoDoc;
-    ScDBCollection* pUndoDB;                // wegen Quell- und Zielbereich
+    ScDBCollection* pUndoDB;                // due to source and target range
     ScRange         aOldDest;
     ScRange         aAdvSource;
     sal_Bool            bIsAdvanced;

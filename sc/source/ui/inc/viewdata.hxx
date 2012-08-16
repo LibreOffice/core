@@ -57,10 +57,10 @@ inline ScVSplitPos WhichV( ScSplitPos ePos );
 inline ScSplitPos Which( ScHSplitPos eHPos );
 inline ScSplitPos Which( ScVSplitPos eVPos );
 
-//  Bildschirmverhalten bei Cursorbewegungen:
+/**  Screen behavior related to cursor movements */
 enum ScFollowMode { SC_FOLLOW_NONE, SC_FOLLOW_LINE, SC_FOLLOW_FIX, SC_FOLLOW_JUMP };
 
-//  Mausmodi um Bereiche zu selektieren
+/** Mouse mode to select areas */
 enum ScRefType { SC_REFTYPE_NONE, SC_REFTYPE_REF, SC_REFTYPE_FILL,
                     SC_REFTYPE_EMBED_LT, SC_REFTYPE_EMBED_RB };
 
@@ -115,7 +115,7 @@ class ScMarkData;
 
 //--------------------------------------------------------------------------
 
-class ScViewDataTable                           // Daten pro Tabelle
+class ScViewDataTable                           // per-sheet data
 {
 friend class ScViewData;
 private:
@@ -129,7 +129,7 @@ private:
     long            nTPosY[2];
     long            nMPosX[2];                  // MapMode - Offset (1/100 mm)
     long            nMPosY[2];
-    long            nPixPosX[2];                // Offset in Pixeln
+    long            nPixPosX[2];                // Offset in Pixels
     long            nPixPosY[2];
     long            nHSplitPos;
     long            nVSplitPos;
@@ -138,7 +138,7 @@ private:
     ScSplitMode     eVSplitMode;
     ScSplitPos      eWhichActive;
 
-    SCCOL           nFixPosX;                   // Zellposition des Splitters beim Fixieren
+    SCCOL           nFixPosX;                   // Cell position of the splitter when freeze pane
     SCROW           nFixPosY;
 
     SCCOL           nCurX;
@@ -148,9 +148,8 @@ private:
     SCCOL           nPosX[2];
     SCROW           nPosY[2];
 
-    bool            bShowGrid;                  // per-sheet show grid-lines option.
-    bool            mbOldCursorValid;           // "virtuelle" Cursorpos. bei zusammengefassten
-
+    bool            bShowGrid;                  // per sheet show grid lines option.
+    bool            mbOldCursorValid;           // "virtual" Cursor position when combined
                     ScViewDataTable();
 
     void            WriteUserDataSequence(
@@ -169,22 +168,22 @@ public:
 class SC_DLLPUBLIC ScViewData
 {
 private:
-    double              nPPTX, nPPTY;               // Scaling-Faktoren
+    double              nPPTX, nPPTY;               // Scaling factors
 
     ::std::vector<ScViewDataTable*> maTabData;
     boost::scoped_ptr<ScMarkData> mpMarkData;
-    ScViewDataTable*    pThisTab;                   // Daten der angezeigten Tabelle
+    ScViewDataTable*    pThisTab;                   // Data of the displayed sheet
     ScDocShell*         pDocShell;
     ScDocument*         pDoc;
     ScDBFunc*           pView;
     ScTabViewShell*     pViewShell;
-    EditView*           pEditView[4];               // gehoert dem Fenster
+    EditView*           pEditView[4];               // Belongs to the window
     ScViewOptions*      pOptions;
     EditView*           pSpellingView;
 
     long                nEditMargin;
 
-    Size                aScenButSize;               // Groesse eines Szenario-Buttons
+    Size                aScenButSize;
 
     Size                aScrSize;
     MapMode             aLogicMode;                 // skalierter 1/100mm-MapMode
@@ -197,35 +196,35 @@ private:
 
     ScRefType           eRefType;
 
-    SCTAB               nTabNo;                     // angezeigte Tabelle
-    SCTAB               nRefTabNo;                  // Tabelle auf die sich RefInput bezieht
+    SCTAB               nTabNo;                     // displayed sheet
+    SCTAB               nRefTabNo;                  // sheet which contains RefInput
     SCCOL               nRefStartX;
     SCROW               nRefStartY;
     SCTAB               nRefStartZ;
     SCCOL               nRefEndX;
     SCROW               nRefEndY;
     SCTAB               nRefEndZ;
-    SCCOL               nFillStartX;                // Fill-Cursor
+    SCCOL               nFillStartX;                // Fill Cursor
     SCROW               nFillStartY;
     SCCOL               nFillEndX;
     SCROW               nFillEndY;
-    SCCOL               nEditCol;                   // Position dazu
+    SCCOL               nEditCol;                   // Related position
     SCROW               nEditRow;
     SCCOL               nEditStartCol;
-    SCCOL               nEditEndCol;                // Ende der Edit-View
+    SCCOL               nEditEndCol;                // End of Edit View
     SCROW               nEditEndRow;
-    SCCOL               nTabStartCol;               // fuer Enter nach Tab
-    ScRange             aDelRange;                  // fuer AutoFill-Loeschen
+    SCCOL               nTabStartCol;               // for Enter after Tab
+    ScRange             aDelRange;                  // for delete AutoFill
 
     ScPasteFlags        nPasteFlags;
 
     ScSplitPos          eEditActivePart;            // the part that was active when edit mode was started
-    sal_uInt8           nFillMode;                  // Modus
-    bool                bEditActive[4];             // aktiv?
-    bool                bActive:1;                  // aktives Fenster ?
-    bool                bIsRefMode:1;               // Referenzeingabe
-    bool                bDelMarkValid:1;            // nur gueltig bei SC_REFTYPE_FILL
-    bool                bPagebreak:1;               // Seitenumbruch-Vorschaumodus
+    sal_uInt8           nFillMode;
+    bool                bEditActive[4];             // Active?
+    bool                bActive:1;                  // Active Window ?
+    bool                bIsRefMode:1;               // Reference input
+    bool                bDelMarkValid:1;            // Only valid at SC_REFTYPE_FILL
+    bool                bPagebreak:1;               // Page break preview mode
     bool                bSelCtrlMouseClick:1;       // special selection handling for ctrl-mouse-click
 
     SC_DLLPRIVATE DECL_LINK (EmptyEditHdl, void*);
@@ -257,10 +256,10 @@ public:
     ScMarkData&     GetMarkData();
     const ScMarkData& GetMarkData() const;
 
-    Window*         GetDialogParent();          // von tabvwsh weitergeleitet
-    Window*         GetActiveWin();             // von View
-    ScDrawView*     GetScDrawView();            // von View
-    sal_Bool            IsMinimized();              // von View
+    Window*         GetDialogParent();          // forwarded from tabvwsh
+    Window*         GetActiveWin();             // from View
+    ScDrawView*     GetScDrawView();            // from View
+    sal_Bool        IsMinimized();              // from View
 
     void            UpdateInputHandler( sal_Bool bForce = false, sal_Bool bStopEditing = sal_True );
 
@@ -366,7 +365,7 @@ public:
     sal_Bool            IsFillMode()                { return nFillMode == SC_FILL_FILL; }
     sal_uInt8           GetFillMode()               { return nFillMode; }
 
-                    // TRUE: Zelle ist zusammengefasst
+                    // TRUE: Cell is merged
     sal_Bool            GetMergeSizePixel( SCCOL nX, SCROW nY, long& rSizeXPix, long& rSizeYPix );
     sal_Bool            GetPosFromPixel( long nClickX, long nClickY, ScSplitPos eWhich,
                                         SCsCOL& rPosX, SCsROW& rPosY,
@@ -455,9 +454,9 @@ public:
     SCCOL           CellsAtX( SCsCOL nPosX, SCsCOL nDir, ScHSplitPos eWhichX, sal_uInt16 nScrSizeY = SC_SIZE_NONE ) const;
     SCROW           CellsAtY( SCsROW nPosY, SCsROW nDir, ScVSplitPos eWhichY, sal_uInt16 nScrSizeX = SC_SIZE_NONE ) const;
 
-    SCCOL           VisibleCellsX( ScHSplitPos eWhichX ) const;     // angezeigte komplette Zellen
+    SCCOL           VisibleCellsX( ScHSplitPos eWhichX ) const;     // Completely visible cell
     SCROW           VisibleCellsY( ScVSplitPos eWhichY ) const;
-    SCCOL           PrevCellsX( ScHSplitPos eWhichX ) const;        // Zellen auf der vorgehenden Seite
+    SCCOL           PrevCellsX( ScHSplitPos eWhichX ) const;        // Cells on the preceding page
     SCROW           PrevCellsY( ScVSplitPos eWhichY ) const;
 
     sal_Bool            IsOle();

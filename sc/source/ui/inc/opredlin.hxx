@@ -43,10 +43,6 @@
 #include <svx/fntctrl.hxx>
 #include <svx/strarray.hxx>
 
-/*-----------------------------------------------------------------------
-    Beschreibung: Redlining-Optionen
- -----------------------------------------------------------------------*/
-
 class ScRedlineOptionsTabPage : public SfxTabPage
 {
     FixedText           aContentFT;

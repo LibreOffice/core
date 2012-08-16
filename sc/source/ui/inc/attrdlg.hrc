@@ -28,7 +28,7 @@
 #define TP_ASIAN        8
 
 //================================================
-// Zellschutz-TabPage:
+// Protected cell TabPage:
 
 #define BTN_PROTECTED           1
 #define BTN_HIDE_FORMULAR       2

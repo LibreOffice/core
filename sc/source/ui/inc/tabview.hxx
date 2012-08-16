@@ -67,7 +67,7 @@ namespace chart2 { namespace data {
 #define SC_FORCEMODE_NONE   0xff
 
 // ---------------------------------------------------------------------------
-//      Hilfs - Fenster
+//      Help - Window
 
 class ScCornerButton : public Window
 {
@@ -95,8 +95,8 @@ class ScTabView : boost::noncopyable
 private:
     enum BlockMode { None = 0, Normal = 1, Own = 2 };
 
-    Window*             pFrameWin;              // als erstes !!!
-    ScViewData          aViewData;              // muss ganz vorne stehen !
+    Window*             pFrameWin;              // First !!!
+    ScViewData          aViewData;              // must be at the front !
 
     ScViewSelectionEngine*  pSelEngine;
     ScViewFunctionSet       aFunctionSet;
@@ -108,7 +108,7 @@ private:
 
     ScDrawView*         pDrawView;
 
-    Size                aFrameSize;             // wie bei DoResize uebergeben
+    Size                aFrameSize;             // passed on as for DoResize
     Point               aBorderPos;
 
     FuPoor*             pDrawActual;
@@ -123,8 +123,8 @@ private:
     ScTabSplitter*      pVSplitter;
     ScTabControl*       pTabControl;
     ScrollBar           aVScrollTop;
-    ScrollBar           aVScrollBottom;         // anfangs sichtbar
-    ScrollBar           aHScrollLeft;           // anfangs sichtbar
+    ScrollBar           aVScrollBottom;         // initially visible
+    ScrollBar           aHScrollLeft;           // initially visible
     ScrollBar           aHScrollRight;
     ScCornerButton      aCornerButton;
     ScCornerButton      aTopButton;
@@ -132,7 +132,7 @@ private:
 
     boost::scoped_ptr<ScHintWindow> mpInputHintWindow; // popup window for data validation
 
-    ScPageBreakData*    pPageBreakData;         // fuer Seitenumbruch-Modus
+    ScPageBreakData*    pPageBreakData;
     std::vector<ScHighlightEntry>   maHighlightRanges;
 
     ScDocument*         pBrushDocument;         // cell formats for format paint brush
@@ -146,7 +146,7 @@ private:
 
     long                nPrevDragPos;
 
-    BlockMode           meBlockMode;           // Block markieren
+    BlockMode           meBlockMode;           // Marks block
 
     SCCOL               nBlockStartX;
     SCCOL               nBlockStartXOrig;
@@ -169,12 +169,12 @@ private:
     bool                bInActivatePart:1;
     bool                bInZoomUpdate:1;
     bool                bMoveIsShift:1;
-    bool                bDrawSelMode:1;           // nur Zeichenobjekte selektieren ?
+    bool                bDrawSelMode:1;           // Only select draw objects ?
     bool                bLockPaintBrush:1;        // keep for more than one use?
-    bool                bDragging:1;              // fuer Scrollbars
-    bool                bBlockNeg:1;              // wird Markierung aufgehoben?
-    bool                bBlockCols:1;             // werden ganze Spalten markiert?
-    bool                bBlockRows:1;             // werden ganze Zeilen markiert?
+    bool                bDragging:1;              // for scroll bars
+    bool                bBlockNeg:1;              // is no longer highlighted?
+    bool                bBlockCols:1;             // are whole columns selected?
+    bool                bBlockRows:1;             // are whole rows selected?
 
     void            Init();
 
@@ -372,11 +372,11 @@ public:
     bool            HasPageFieldDataAtCursor() const;
     void            StartDataSelect();
 
-                    //  MoveCursorAbs       - absolut
-                    //  MoveCursorRel       - einzelne Zellen
-                    //  MoveCursorPage      - Bildschirmseite
-                    //  MoveCursorArea      - Datenblock
-                    //  MoveCursorEnd       - links oben / benutzter Bereich
+                    //  MoveCursorAbs       - absolute
+                    //  MoveCursorRel       - single cells
+                    //  MoveCursorPage      - screen
+                    //  MoveCursorArea      - Data block
+                    //  MoveCursorEnd       - top left / user range
 
     SC_DLLPUBLIC void MoveCursorAbs( SCsCOL nCurX, SCsROW nCurY, ScFollowMode eMode,
                                      bool bShift, bool bControl,
@@ -391,7 +391,7 @@ public:
                                    bool bShift, bool bKeepSel = false );
     void            MoveCursorScreen( SCsCOL nMovX, SCsROW nMovY, ScFollowMode eMode, bool bShift );
 
-    void            MoveCursorEnter( bool bShift );     // Shift fuer Richtung (kein Markieren)
+    void            MoveCursorEnter( bool bShift );     // Shift for direction (select nothing)
 
     bool            MoveCursorKeyInput( const KeyEvent& rKeyEvent );
 
@@ -409,7 +409,7 @@ public:
 
     void            ScrollX( long nDeltaX, ScHSplitPos eWhich, bool bUpdBars = true );
     void            ScrollY( long nDeltaY, ScVSplitPos eWhich, bool bUpdBars = true );
-    SC_DLLPUBLIC void           ScrollLines( long nDeltaX, long nDeltaY );              // aktives
+    SC_DLLPUBLIC void           ScrollLines( long nDeltaX, long nDeltaY );              // active
 
     bool            ScrollCommand( const CommandEvent& rCEvt, ScSplitPos ePos );
 
@@ -464,7 +464,7 @@ public:
     void            UpdateEditView();
 
 
-                                    //  Bloecke
+                                    //  Blocks
 
     void            SelectAll( bool bContinue = false );
     void            SelectAllTables();

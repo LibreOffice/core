@@ -27,13 +27,7 @@
 
 #define MIN_FREEHAND_DISTANCE   10
 
-
-/*************************************************************************
-|*
-|* Rechteck zeichnen
-|*
-\************************************************************************/
-
+/** Draw rectangle */
 class FuConstruct : public FuDraw
 {
  public:
@@ -50,8 +44,8 @@ class FuConstruct : public FuDraw
 
             sal_Bool SimpleMouseButtonUp(const MouseEvent& rMEvt);
 
-    virtual void Activate();           // Function aktivieren
-    virtual void Deactivate();         // Function deaktivieren
+    virtual void Activate();
+    virtual void Deactivate();
 };
 
 

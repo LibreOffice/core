@@ -53,7 +53,7 @@ class ScPreviewShell: public SfxViewShell
     ScDocShell*     pDocShell;
 
     SystemWindow*   mpFrameWindow;
-    ScPreview*      pPreview;               // Ausgabe-Fenster
+    ScPreview*      pPreview;               // Output window
     ScrollBar*      pHorScroll;
     ScrollBar*      pVerScroll;
     Window*         pCorner;

@@ -68,7 +68,7 @@ namespace com { namespace sun { namespace star { namespace datatransfer { class 
 class ScViewFunc : public ScTabView
 {
 private:
-    ScAddress   aFormatSource;      // fuer automatisches Erweitern von Formatierung
+    ScAddress   aFormatSource;      // for automatic extension of formatting
     ScRange     aFormatArea;
     sal_Bool        bFormatValid;
 
@@ -96,7 +96,7 @@ public:
     void            EnterMatrix( const String& rString, ::formula::FormulaGrammar::Grammar eGram );
     void            EnterBlock( const String& rString, const EditTextObject* pData );
 
-    void            EnterDataAtCursor( const String& rString );         //! nicht benutzt ?
+    void            EnterDataAtCursor( const String& rString );         //! Not used?
 
     SC_DLLPUBLIC void           CutToClip( ScDocument* pClipDoc = NULL, sal_Bool bIncludeObjects = false );
     SC_DLLPUBLIC sal_Bool           CopyToClip( ScDocument* pClipDoc = NULL, sal_Bool bCut = false, sal_Bool bApi = false,
@@ -330,14 +330,13 @@ public:
     void            ForgetFormatArea()      { bFormatValid = false; }
     sal_Bool            SelectionEditable( bool* pOnlyNotBecauseOfMatrix = NULL );
 
-        // Amelia Wang
         SC_DLLPUBLIC void                   DataFormPutData( SCROW nCurrentRow ,
                                                              SCROW nStartRow , SCCOL nStartCol ,
                                                              SCROW nEndRow , SCCOL nEndCol ,
                                                              boost::ptr_vector<boost::nullable<Edit> >& aEdits,
                                                              sal_uInt16 aColLength );
 
-                                                // interne Hilfsfunktionen
+                                                // Internal helper functions
 protected:
     void            UpdateLineAttrs( ::editeng::SvxBorderLine&        rLine,
                                      const ::editeng::SvxBorderLine* pDestLine,

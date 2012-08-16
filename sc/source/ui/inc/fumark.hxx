@@ -24,12 +24,7 @@
 #include "rangelst.hxx"         // ScRangeListRef
 
 
-/*************************************************************************
-|*
-|* Funktion zum Aufziehen eines Rechtecks
-|*
-\************************************************************************/
-
+/** Function for drawing a rectangle */
 class FuMarkRect : public FuPoor
 {
  protected:

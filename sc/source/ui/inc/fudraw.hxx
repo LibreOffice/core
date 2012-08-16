@@ -32,12 +32,7 @@
 #include "fupoor.hxx"
 #include <vcl/pointr.hxx>
 
-/*************************************************************************
-|*
-|* Basisklasse fuer alle Drawmodul-spezifischen Funktionen
-|*
-\************************************************************************/
-
+/** Base class for all Drawmodule specific functions */
 class FuDraw : public FuPoor
 {
  protected:

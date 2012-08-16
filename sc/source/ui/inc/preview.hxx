@@ -43,34 +43,34 @@ class ScPreview : public Window
 {
 private:
     ScMarkData::MarkedTabsType maSelectedTabs;
-                                        // eingestellt:
-    long            nPageNo;            // Seite im Dokument
-    sal_uInt16          nZoom;              // eingestellter Zoom
-    Point           aOffset;            // positiv
+                                        // set:
+    long            nPageNo;            // Pages in document
+    sal_uInt16          nZoom;              // set Zoom
+    Point           aOffset;            // positive
 
-                                        // berechnet:
+                                        // calculated:
     SCTAB           nTabCount;
-    SCTAB           nTabsTested;        // fuer wieviele Tabellen ist nPages gueltig?
+    SCTAB           nTabsTested;        // for how many sheets is nPages valid?
     std::vector<long>       nPages;
     std::vector<long>       nFirstAttr;
-    SCTAB           nTab;               // Tabelle
-    long            nTabPage;           // Seite von Tabelle
-    long            nTabStart;          // erste Seite der Tabelle (wirklich)
-    long            nDisplayStart;      // dito, relativ zum Anfang der Zaehlung
+    SCTAB           nTab;               // Sheet
+    long            nTabPage;           // Page of sheet
+    long            nTabStart;          // First (real) page of the sheet
+    long            nDisplayStart;      // same as above, relative to the start of counting
     Date            aDate;
     Time            aTime;
     long            nTotalPages;
-    Size            aPageSize;          // fuer GetOptimalZoom
+    Size            aPageSize;          // for GetOptimalZoom
     ScPrintState    aState;
     ScPreviewLocationData* pLocationData;   // stores table layout for accessibility API
     FmFormView*     pDrawView;
 
-                                        // intern:
+                                        // internal:
     ScDocShell*     pDocShell;
     ScPreviewShell* pViewShell;
 
     bool            bInGetState:1;
-    bool            bValid:1;             // folgende Werte gueltig
+    bool            bValid:1;             // the following values true
     bool            bStateValid:1;
     bool            bLocationValid:1;
     bool            bInPaint:1;
@@ -130,7 +130,7 @@ public:
 
     virtual void DataChanged( const DataChangedEvent& rDCEvt );
 
-    SC_DLLPUBLIC void    DataChanged(bool bNewTime = false);             // statt Invalidate rufen
+    SC_DLLPUBLIC void    DataChanged(bool bNewTime = false);             //  Instead of calling Invalidate
     void    DoInvalidate();
 
     void    SetXOffset( long nX );

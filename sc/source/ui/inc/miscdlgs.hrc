@@ -27,7 +27,7 @@
                     // -> RID_SCDLG_FILLSERIES
                     // -> RID_SCDLG_AUTOFORMAT
 
-// allgemein
+// General
 #define BTN_OK          100
 #define BTN_CANCEL      102
 #define BTN_HELP        103
@@ -38,7 +38,7 @@
 #define FL_FRAME        112
 #define STR_BTN_CLOSE   200
 
-// Zellen loeschen/einfuegen Dialog
+// Insert/Delete Cell Dialog
 #define BTN_CELLSUP     10
 #define BTN_CELLSDOWN   11
 #define BTN_CELLSRIGHT  12
@@ -48,7 +48,7 @@
 #define BTN_INSROWS     16
 #define BTN_INSCOLS     17
 
-// Inhalte loeschen/einfuegen Dialog
+// Insert/Delete Contents Dialog
 #define BTN_DELALL      10
 #define BTN_DELSTRINGS  11
 #define BTN_DELNUMBERS  12
@@ -88,7 +88,7 @@
 #define CTRL_TABLE      63
 #define FL_DIV          64
 
-// Tabelle einfuegen/loeschen
+// Insert/Delete Sheet
 #define FT_DEST         1
 #define LB_DEST         2
 #define FT_INSERT       3
@@ -106,18 +106,18 @@
 #define STR_TABNAME_WARN_EMPTY   16
 #define STR_TABNAME_WARN_INVALID 17
 
-// Eingabe eines Strings
+// String input
 #define ED_INPUT        10
 
-// Eingabe einer Metrik
+// Metrics input
 #define ED_VALUE        1
 #define BTN_DEFVAL      1
 
-// Auswahl aus einer (String-)ListBox
+// Selection from a (String-)ListBox
 #define FL_ENTRYLIST    10
 #define LB_ENTRYLIST    11
 
-// Reihen fuellen
+// Row fillers
 #define FL_DIRECTION    1
 #define BTN_LEFT        2
 #define BTN_RIGHT       3
@@ -141,7 +141,7 @@
 #define FT_START_VALUE  51
 #define ED_START_VALUES 52
 
-// Autoformat
+// Auto format
 #define LB_FORMAT           1
 #define FL_FORMAT           9
 #define WND_PREVIEW         19
@@ -158,7 +158,7 @@
 #define STR_DEL_TITLE       102
 #define STR_DEL_MSG         103
 #define STR_RENAME_TITLE    104
-    // Autoformat-Preview:
+    // Auto format Preview:
 #define STR_JAN         121
 #define STR_FEB         122
 #define STR_MAR         123
@@ -167,7 +167,7 @@
 #define STR_SOUTH       126
 #define STR_SUM         127
 
-// Gruppierung setzen/aufheben:
+// Set/Reset Grouping:
 #define BTN_GROUP_COLS  1
 #define BTN_GROUP_ROWS  3
 #define STR_GROUP       1

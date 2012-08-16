@@ -52,25 +52,21 @@ class ScAreaLink;
 
 const sal_uLong SC_CONTENT_NOCHILD  = ~0UL;
 
-//
-//  TreeListBox fuer Inhalte
-//
-
 class ScContentTree : public SvTreeListBox
 {
     ScNavigatorDlg*     pParentWindow;
     ImageList           aEntryImages;
     SvLBoxEntry*        pRootNodes[SC_CONTENT_COUNT];
-    sal_uInt16              nRootType;          // als Root eingestellt
-    String              aManualDoc;         // im Navigator umgeschaltet (Title)
-    sal_Bool                bHiddenDoc;         // verstecktes aktiv?
-    String              aHiddenName;        // URL zum Laden
-    String              aHiddenTitle;       // fuer Anzeige
-    ScDocument*         pHiddenDocument;    // temporaer
+    sal_uInt16              nRootType;          // set as Root
+    String              aManualDoc;         // Switched in Navigator (Title)
+    sal_Bool                bHiddenDoc;         // Hidden active?
+    String              aHiddenName;        // URL to load
+    String              aHiddenTitle;       // for display
+    ScDocument*         pHiddenDocument;    // temporary
 
-    sal_uInt16              pPosList[SC_CONTENT_COUNT];     // fuer die Reihenfolge
+    sal_uInt16              pPosList[SC_CONTENT_COUNT];     // for the sequence
 
-    static sal_Bool bIsInDrag;      // static, falls der Navigator im ExecuteDrag geloescht wird
+    static sal_Bool bIsInDrag;      // static, if the Navigator is deleted in ExecuteDrag
 
     ScDocShell* GetManualOrCurrent();
 

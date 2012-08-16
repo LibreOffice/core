@@ -131,7 +131,7 @@ private:
 
     FmFormShell*            pFormShell;
 
-    ScInputHandler*         pInputHandler;              // fuer OLE-Eingabezeile
+    ScInputHandler*         pInputHandler;              // for OLE input cell
 
     ::editeng::SvxBorderLine*           pCurFrameLine;
 
@@ -164,15 +164,15 @@ private:
     sal_Bool                    bFormShellAtTop;            // does the FormShell need to be on top?
 
 
-    sal_Bool                    bDontSwitch;                // EditShell nicht abschalten
-    sal_Bool                    bInFormatDialog;            // fuer GetSelectionText
+    sal_Bool                    bDontSwitch;                // Don't turn off EditShell
+    sal_Bool                    bInFormatDialog;            // for GetSelectionText
     sal_Bool                    bPrintSelected;             // for result of SvxPrtQryBox
 
-    sal_Bool                    bReadOnly;                  // um Status-Aenderungen zu erkennen
+    sal_Bool                    bReadOnly;                  // to detect status changes
 
     SbxObject*              pScSbxObject;
 
-    sal_Bool                    bChartAreaValid;            // wenn Chart aufgezogen wird
+    sal_Bool                    bChartAreaValid;            // if chart is drawn
     String                  aEditChartName;
     ScRangeListRef          aChartSource;
     Rectangle               aChartPos;
@@ -245,11 +245,8 @@ public:
                     SFX_DECL_VIEWFACTORY(ScTabViewShell);
 
 
-                    // -> Clone-Methode fuer Factory
-
-                    // aus einer allgemeinen Shell konstruieren und
-                    // soviel wie moeglich uebernehmen (SliderPos etc.):
-
+                    /** -> Clone Method for Factory
+                        Created from a general shell and inherit as much as possible */
                     ScTabViewShell( SfxViewFrame*           pViewFrame,
                                     SfxViewShell*           pOldSh );
 

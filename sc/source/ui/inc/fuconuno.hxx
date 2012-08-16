@@ -32,12 +32,7 @@
 #include "fuconstr.hxx"
 
 
-/*************************************************************************
-|*
-|* Control zeichnen
-|*
-\************************************************************************/
-
+/** Draw Control */
 class FuConstUnoControl : public FuConstruct
 {
 protected:
@@ -55,8 +50,8 @@ public:
     virtual sal_Bool MouseButtonUp(const MouseEvent& rMEvt);
     virtual sal_Bool MouseButtonDown(const MouseEvent& rMEvt);
 
-    virtual void Activate();           // Function aktivieren
-    virtual void Deactivate();         // Function deaktivieren
+    virtual void Activate();
+    virtual void Deactivate();
 
     // Create default drawing objects via keyboard
     virtual SdrObject* CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rRectangle);

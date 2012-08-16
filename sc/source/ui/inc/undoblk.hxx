@@ -282,12 +282,12 @@ public:
 private:
     ScRange         aRange;
     ScMarkData      aMarkData;
-    ScDocument*     pUndoDoc;       // Blockmarkierung und geloeschte Daten
-    SdrUndoAction*  pDrawUndo;      // geloeschte Objekte
+    ScDocument*     pUndoDoc;       // Block mark and deleted data
+    SdrUndoAction*  pDrawUndo;      // Deleted objects
     sal_uLong           nStartChangeAction;
     sal_uLong           nEndChangeAction;
     sal_uInt16          nFlags;
-    sal_Bool            bMulti;         // Mehrfachselektion
+    sal_Bool            bMulti;         // Multi selection
 
     void            DoChange( const sal_Bool bUndo );
     void            SetChangeTrack();
@@ -316,13 +316,13 @@ public:
 private:
     ScRange         aRange;
     ScMarkData      aMarkData;
-    ScDocument*     pUndoDoc;       // Blockmarkierung und geloeschte Daten
+    ScDocument*     pUndoDoc;       // Block mark and deleted data
     sal_uLong           nStartChangeAction;
     sal_uLong           nEndChangeAction;
     sal_uInt16          nFlags;
     sal_uInt16          nFunction;
     SCTAB           nSrcTab;
-    sal_Bool            bMulti;         // Mehrfachselektion
+    sal_Bool            bMulti;         // Multi selection
     sal_Bool            bSkipEmpty;
     sal_Bool            bAsLink;
 
@@ -461,7 +461,7 @@ public:
 private:
     ScCellMergeOption maOption;
     bool            mbMergeContents;        // Merge contents in Redo().
-    ScDocument*     mpUndoDoc;              // wenn Daten zusammengefasst
+    ScDocument*     mpUndoDoc;              // when data is merged
     SdrUndoAction*  mpDrawUndo;
 
     void            DoChange( bool bUndo ) const;
@@ -486,7 +486,7 @@ public:
     virtual rtl::OUString GetComment() const;
 
 private:
-    ScDocument*     pUndoDoc;       // geloeschte Daten
+    ScDocument*     pUndoDoc;       // deleted data
     ScMarkData      aMarkData;
     sal_Bool            bSize;
     sal_uInt16          nFormatNo;
@@ -514,8 +514,8 @@ public:
 private:
     ScAddress       aCursorPos;
     ScMarkData      aMarkData;
-    String          aUndoStr;           // Daten bei Einfachmarkierung
-    ScDocument*     pUndoDoc;           // Blockmarkierung und geloeschte Daten
+    String          aUndoStr;           // Data at single selection
+    ScDocument*     pUndoDoc;           // Block mark and deleted data
     SvxSearchItem*  pSearchItem;
     sal_uLong           nStartChangeAction;
     sal_uLong           nEndChangeAction;
@@ -548,7 +548,7 @@ public:
 
 private:
     ScRange         aRange;
-    ScDocument*     pUndoDoc;       // geloeschte Daten
+    ScDocument*     pUndoDoc;       // Deleted data
     ScRefAddress    theFormulaCell;
     ScRefAddress    theFormulaEnd;
     ScRefAddress    theRowCell;
@@ -579,9 +579,9 @@ public:
 private:
     ScMarkData              aMarkData;
     ScAddress               aCursorPos;
-    ScDocument*             pUndoDoc;           // Blockmarkierung und geloeschte Daten
+    ScDocument*             pUndoDoc;           // Block mark and deleted data
     ScAddress               aNewCursorPos;
-    ScDocument*             pRedoDoc;           // Blockmarkierung und neue Daten
+    ScDocument*             pRedoDoc;           // Block mark and new data
     sal_uLong                   nStartChangeAction;
     sal_uLong                   nEndChangeAction;
     ScConversionParam       maConvParam;        /// Conversion type and parameters.
@@ -803,7 +803,7 @@ private:
 };
 
 
-class ScUndoUpdateAreaLink : public ScSimpleUndo        //! auch BlockUndo umstellen?
+class ScUndoUpdateAreaLink : public ScSimpleUndo        //! also change BlockUndo?
 {
 public:
                     TYPEINFO();

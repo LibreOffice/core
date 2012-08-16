@@ -26,7 +26,7 @@
 
 #include "shellids.hxx"
 
-sal_uInt16 ScGetFontWorkId();       // statt SvxFontWorkChildWindow::GetChildWindowId()
+sal_uInt16 ScGetFontWorkId();       // instead of SvxFontWorkChildWindow::GetChildWindowId()
 
 class ScViewData;
 class TransferableDataHelper;
@@ -66,7 +66,7 @@ public:
     void GetFormTextState(SfxItemSet& rSet);
 
 private:
-    void ExecuteGlobal( SfxRequest &rReq );         // von Execute gerufen fuer ganze Objekte
+    void ExecuteGlobal( SfxRequest &rReq );         // called by Execute for all objects
     void GetGlobalClipState( SfxItemSet& rSet );
     void ExecutePasteContents( SfxRequest &rReq );
     sal_Bool IsNoteEdit();

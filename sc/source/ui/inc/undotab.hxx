@@ -112,7 +112,7 @@ private:
 };
 
 
-class ScUndoDeleteTab: public ScMoveUndo    // Draw vom Move fuer geloeschte Tabelle
+class ScUndoDeleteTab: public ScMoveUndo
 {
 public:
                     TYPEINFO();
@@ -315,7 +315,7 @@ class ScUndoRemoveLink : public ScSimpleUndo
 {
 public:
                     TYPEINFO();
-                    ScUndoRemoveLink(               // vor dem Loeschen aufrufen!
+                    ScUndoRemoveLink(               // Call before delete!
                             ScDocShell* pShell,
                             const String& rDoc );
     virtual         ~ScUndoRemoveLink();

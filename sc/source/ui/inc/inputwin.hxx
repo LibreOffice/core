@@ -79,7 +79,7 @@ public:
     sal_Bool            IsInputActive();
     virtual EditView*       GetEditView();
 
-                        // fuer FunktionsAutopiloten
+                        // for function autopilots
     virtual void            MakeDialogEditView();
 
     virtual void            StartEditEngine();
@@ -123,7 +123,7 @@ protected:
 
     String      aString;
     Font        aTextFont;
-    ScEditEngineDefaulter*  pEditEngine;            // erst bei Bedarf angelegt
+    ScEditEngineDefaulter*  pEditEngine;            // only created when needed
     EditView*   pEditView;
     AccTextDataVector maAccTextDatas;   // #i105267# text datas may be cloned, remember all copies
     sal_Bool        bIsRTL;
@@ -140,7 +140,7 @@ private:
 
 //========================================================================
 
-class ScPosWnd : public ComboBox, public SfxListener        // Positionsanzeige
+class ScPosWnd : public ComboBox, public SfxListener        // Display position
 {
 private:
     String          aPosStr;
@@ -153,7 +153,7 @@ public:
                     ScPosWnd( Window* pParent );
     virtual         ~ScPosWnd();
 
-    void            SetPos( const String& rPosStr );        // angezeigter Text
+    void            SetPos( const String& rPosStr );        // Displayed Text
     void            SetFormulaMode( sal_Bool bSet );
 
 protected:
@@ -248,7 +248,7 @@ private:
 };
 
 
-class ScInputWindow : public ToolBox                        // Parent-Toolbox
+class ScInputWindow : public ToolBox                        // Parent toolbox
 {
 public:
                     ScInputWindow( Window* pParent, SfxBindings* pBind );
@@ -276,7 +276,7 @@ public:
 
     void            PosGrabFocus();
 
-    // Fuer FunktionsAutopiloten
+    // For function autopilots
     void            MakeDialogEditView();
 
     void            StopEditEngine( sal_Bool bAll );

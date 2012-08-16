@@ -140,7 +140,7 @@ public:
         void            SetArgument(sal_uInt16 no, const String& aString);
         void            SetArgumentFonts(const Font&aBoldFont,const Font&aLightFont);
 
-        void            SetEdFocus(sal_uInt16 nEditLine); //Sichtbare Editzeilen
+        void            SetEdFocus(sal_uInt16 nEditLine); // Visable edit lines
         sal_uInt16          GetSliderPos();
         void            SetSliderPos(sal_uInt16 nSliderPos);
 

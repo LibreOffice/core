@@ -52,7 +52,7 @@ public:
 };
 
 
-class ScViewFunctionSet : public FunctionSet            // View (Gridwin / Tastatur)
+class ScViewFunctionSet : public FunctionSet            // View (Gridwin / keyboard)
 {
 private:
     ScViewData*             pViewData;
@@ -90,7 +90,7 @@ public:
 // ---------------------------------------------------------------------------
 
 
-class ScHeaderFunctionSet : public FunctionSet          // Spalten- / Zeilenkoepfe
+class ScHeaderFunctionSet : public FunctionSet          // Column / row headers
 {
 private:
     ScViewData*     pViewData;

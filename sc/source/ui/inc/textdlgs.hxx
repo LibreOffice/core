@@ -24,10 +24,6 @@
 
 class SfxObjectShell;
 
-//
-//      Zeichen-Tab-Dialog
-//
-
 class ScCharDlg : public SfxTabDialog
 {
 private:
@@ -41,10 +37,6 @@ public:
                         const SfxObjectShell* pDocShell );
             ~ScCharDlg() {}
 };
-
-//
-//      Absatz-Tab-Dialog
-//
 
 class ScParagraphDlg : public SfxTabDialog
 {

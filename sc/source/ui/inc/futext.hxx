@@ -35,15 +35,12 @@ class SdrObject;
 class SdrTextObj;
 class SdrOutliner;
 
-/*************************************************************************
-|*
-|* Basisklasse fuer Textfunktionen
-|*
-\************************************************************************/
+
+
+/** Base class for Text functions */
 class FuText : public FuConstruct
 {
 protected:
-//  sal_uInt16          nOldObjectBar;
     SdrTextObj*     pTextObj;
 
 public:
@@ -57,8 +54,8 @@ public:
     virtual sal_Bool MouseButtonUp(const MouseEvent& rMEvt);
     virtual sal_Bool MouseButtonDown(const MouseEvent& rMEvt);
 
-    virtual void Activate();           // Function aktivieren
-    virtual void Deactivate();         // Function deaktivieren
+    virtual void Activate();
+    virtual void Deactivate();
 
     virtual void ForcePointer(const MouseEvent* pMEvt);
 

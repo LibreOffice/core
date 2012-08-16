@@ -50,7 +50,7 @@ public:
                                 { return bDoc ? nDocLevel : nLevel; }
     sal_Bool                    GetModified() const             { return bModified; }
 
-                    // fuer Wiederherstellen nach Reset
+    /** for recovery after reset */
     void            SetLevel(sal_uInt16 nNew, sal_Bool bDoc)
                         { if (bDoc) nDocLevel = nNew; else nLevel = nNew; }
 };

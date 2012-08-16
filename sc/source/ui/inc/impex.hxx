@@ -65,21 +65,21 @@ class SC_DLLPUBLIC ScImportExport
     sal_uLong   nSizeLimit;
     sal_Unicode cSep;                   // Separator
     sal_Unicode cStr;                   // String Delimiter
-    bool        bFormulas;              // Formeln im Text?
+    bool        bFormulas;              // Formula in Text?
     bool        bIncludeFiltered;       // include filtered rows? (default true)
-    bool        bAll;                   // keine Selektion
-    bool        bSingle;                // Einfachselektion
-    bool        bUndo;                  // Mit Undo?
+    bool        bAll;                   // no selection
+    bool        bSingle;                // Single selection
+    bool        bUndo;                  // with Undo?
     bool        bOverflowRow;           // too many rows
     bool        bOverflowCol;           // too many columns
     bool        bOverflowCell;          // too much data for a cell
     bool        mbApi;
     ScExportTextOptions mExportTextOptions;
 
-    ScAsciiOptions* pExtOptions;        // erweiterte Optionen
+    ScAsciiOptions* pExtOptions;        // extended options
 
-    bool StartPaste();                  // Protect-Check, Undo einrichten
-    void EndPaste();                    // Undo/Redo-Aktionen, Repaint
+    bool StartPaste();                  // Protect check, set up Undo
+    void EndPaste();                    // Undo/Redo actions, Repaint
     bool Doc2Text( SvStream& );
     bool Text2Doc( SvStream& );
     bool Doc2Sylk( SvStream& );
@@ -88,13 +88,13 @@ class SC_DLLPUBLIC ScImportExport
     bool Doc2RTF( SvStream& );
     bool Doc2Dif( SvStream& );
     bool Dif2Doc( SvStream& );
-    bool ExtText2Doc( SvStream& );      // mit pExtOptions
+    bool ExtText2Doc( SvStream& );      // with pExtOptions
     bool RTF2Doc( SvStream&, const String& rBaseURL );
     bool HTML2Doc( SvStream&, const String& rBaseURL );
 
 public:
-    ScImportExport( ScDocument* );                  // Gesamtdokument
-    ScImportExport( ScDocument*, const String& );   // Bereichs/Zellangabe
+    ScImportExport( ScDocument* );                  // the whole document
+    ScImportExport( ScDocument*, const String& );   // Range/cell input
     ScImportExport( ScDocument*, const ScAddress& );
     ScImportExport( ScDocument*, const ScRange& );
    ~ScImportExport();
@@ -131,7 +131,7 @@ public:
     bool IsIncludeFiltered() const { return bIncludeFiltered; }
     void SetIncludeFiltered( bool b ) { bIncludeFiltered = b; }
 
-    void SetSizeLimit( sal_uLong nNew ) { nSizeLimit = nNew; }  // momentan nur fuer Ascii
+    void SetSizeLimit( sal_uLong nNew ) { nSizeLimit = nNew; }  // for the moment only for Ascii
 
     void            SetStreamPath( const String& rPath ) { aStreamPath = rPath; }
     const String&   GetStreamPath() const { return aStreamPath; }

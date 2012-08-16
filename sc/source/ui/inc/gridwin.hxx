@@ -87,7 +87,7 @@ namespace sdr { namespace overlay { class OverlayObjectList; }}
 
 class ScGridWindow : public Window, public DropTargetHelper, public DragSourceHelper
 {
-    //  ScFilterListBox wird immer fuer Auswahlliste benutzt
+    // ScFilterListBox is always used for selection list
     friend class ScFilterListBox;
 
 private:
@@ -146,7 +146,7 @@ private:
     SCsCOL                  nRFAddX;
     SCsROW                  nRFAddY;
 
-    sal_uInt16              nPagebreakMouse;        // Pagebreak-Modus Drag
+    sal_uInt16              nPagebreakMouse;        // Page break mode, Drag
     SCCOLROW                nPagebreakBreak;
     SCCOLROW                nPagebreakPrev;
     ScRange                 aPagebreakSource;
@@ -178,9 +178,9 @@ private:
 
     Rectangle               aInvertRect;
 
-    bool                    bEEMouse:1;               // Edit-Engine hat Maus
-    bool                    bDPMouse:1;               // DataPilot-D&D (neue Pivottabellen)
-    bool                    bRFMouse:1;               // RangeFinder-Drag
+    bool                    bEEMouse:1;               // Edit Engine has mouse
+    bool                    bDPMouse:1;               // DataPilot D&D (new Pivot table)
+    bool                    bRFMouse:1;               // RangeFinder drag
     bool                    bRFSize:1;
     bool                    bPagebreakDrawn:1;
     bool                    bDragRect:1;

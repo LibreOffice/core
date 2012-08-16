@@ -27,7 +27,6 @@
 #include <svx/zoomslideritem.hxx>
 
 
-//class ScZoomSliderControl define
 class ScZoomSliderControl: public SfxToolBoxControl
 {
 public:
@@ -39,9 +38,6 @@ public:
     virtual Window* CreateItemWindow( Window *pParent );
 };
 
-//========================================================================
-// class ScZoomSliderWnd define---------------------------------------
-//========================================================================
 class ScZoomSliderWnd: public Window
 {
 private:

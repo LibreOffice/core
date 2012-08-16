@@ -33,7 +33,7 @@
 #define HDR_SIZE_OPTIMUM    0xFFFF
 
 
-                                    // Groesse des Sliders
+                                    // Size of the sliders
 #define HDR_SLIDERSIZE      2
 
 class ScHeaderControl : public Window
@@ -45,7 +45,7 @@ private:
     sal_Bool                bBoldSet;
 
     sal_uInt16          nFlags;
-    sal_Bool            bVertical;              // Vertikal = Zeilenheader
+    sal_Bool            bVertical;              // Vertical = Row header
 
     long            nWidth;
     long            nSmallWidth;
@@ -57,7 +57,7 @@ private:
     SCCOLROW        nMarkEnd;
     sal_Bool            bMarkRange;
 
-    sal_Bool            bDragging;              // Groessen aendern
+    sal_Bool            bDragging;              // Change size
     SCCOLROW        nDragNo;
     long            nDragStart;
     long            nDragPos;
@@ -75,7 +75,7 @@ private:
     void            DrawShadedRect( long nStart, long nEnd, const Color& rBaseColor );
 
 protected:
-                    //  von Window ueberladen
+                    // Overloaded by Window
 
     virtual void    Paint( const Rectangle& rRect );
 
@@ -86,10 +86,10 @@ protected:
 
     virtual void    RequestHelp( const HelpEvent& rHEvt );
 
-                    //  neue Methoden
+                    // new methods
 
-    virtual SCCOLROW    GetPos() = 0;                               // aktuelle Position (Scrolling)
-    virtual sal_uInt16  GetEntrySize( SCCOLROW nEntryNo ) = 0;      // Breite / Hoehe (Pixel)
+    virtual SCCOLROW    GetPos() = 0;                               // current position (Scrolling)
+    virtual sal_uInt16  GetEntrySize( SCCOLROW nEntryNo ) = 0;      // width / height (Pixel)
     virtual String  GetEntryText( SCCOLROW nEntryNo ) = 0;
 
     virtual SCCOLROW GetHiddenCount( SCCOLROW nEntryNo );

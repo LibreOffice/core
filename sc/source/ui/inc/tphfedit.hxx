@@ -37,7 +37,7 @@
 #include <vcl/timer.hxx>
 #include <vcl/virdev.hxx>
 #include "scdllapi.h"
-#include "scitems.hxx"          // wegen enum SvxNumType
+#include "scitems.hxx"          // due to enum SvxNumType
 #include "popmenu.hxx"
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <cppuhelper/weakref.hxx>

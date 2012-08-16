@@ -55,10 +55,10 @@ private:
     TriStateBox aBtnHidePrint;
     FixedInfo   aTxtHint2;
 
-                                    // aktueller Status:
-    sal_Bool        bTriEnabled;        //  wenn vorher Dont-Care
-    sal_Bool        bDontCare;          //  alles auf TriState
-    sal_Bool        bProtect;           //  einzelne Einstellungen ueber TriState sichern
+                                    // current status:
+    sal_Bool        bTriEnabled;        //  if before - DontCare
+    sal_Bool        bDontCare;          //  all in  TriState
+    sal_Bool        bProtect;           //  secure individual settings for TriState
     sal_Bool        bHideForm;
     sal_Bool        bHideCell;
     sal_Bool        bHidePrint;
