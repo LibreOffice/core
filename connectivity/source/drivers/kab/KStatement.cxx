@@ -394,6 +394,7 @@ void SAL_CALL KabCommonStatement::close(  ) throw(SQLException, RuntimeException
 sal_Bool SAL_CALL KabCommonStatement::execute(
         const ::rtl::OUString& sql ) throw(SQLException, RuntimeException)
 {
+    printf("KabCommonStatement::execute() #4\n");
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(KabCommonStatement_BASE::rBHelper.bDisposed);
 

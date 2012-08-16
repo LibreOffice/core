@@ -220,6 +220,7 @@ void SAL_CALL java_sql_Statement::clearBatch(  ) throw(::com::sun::star::sdbc::S
 
 sal_Bool SAL_CALL java_sql_Statement_Base::execute( const ::rtl::OUString& sql ) throw(SQLException, RuntimeException)
 {
+    printf("java_sql_Statement_Base::execute() #2\n");
     m_aLogger.log( LogLevel::FINE, STR_LOG_EXECUTE_STATEMENT, sql );
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(java_sql_Statement_BASE::rBHelper.bDisposed);

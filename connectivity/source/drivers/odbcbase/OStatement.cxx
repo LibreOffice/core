@@ -331,6 +331,7 @@ sal_Int32 OStatement_Base::getColumnCount () throw( SQLException)
 
 sal_Bool SAL_CALL OStatement_Base::execute( const ::rtl::OUString& sql ) throw(SQLException, RuntimeException)
 {
+    printf("--- OStatement_Base::execute\n");
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
     m_sSqlStatement = sql;

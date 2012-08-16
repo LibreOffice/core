@@ -305,6 +305,7 @@ void OCommonStatement::cacheResultSet( const ::rtl::Reference< OResultSet >& _pR
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL OCommonStatement::execute( const ::rtl::OUString& sql ) throw(SQLException, RuntimeException)
 {
+    printf("--- OCommentStatement::execute\n");
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OCommonStatement_IBASE::rBHelper.bDisposed);
 

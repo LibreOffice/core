@@ -252,6 +252,7 @@ void OStatement_Base::assignRecordSet( ADORecordset* _pRS )
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL OStatement_Base::execute( const ::rtl::OUString& sql ) throw(SQLException, RuntimeException)
 {
+    printf("OStatement_Base::execute\n");
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
 

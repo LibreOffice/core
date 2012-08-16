@@ -402,6 +402,7 @@ void SAL_CALL MacabCommonStatement::close(  ) throw(SQLException, RuntimeExcepti
 sal_Bool SAL_CALL MacabCommonStatement::execute(
         const ::rtl::OUString& sql ) throw(SQLException, RuntimeException)
 {
+    printf("MacabCommonStatement::execute\n");
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabCommonStatement_BASE::rBHelper.bDisposed);
 

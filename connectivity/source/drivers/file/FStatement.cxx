@@ -285,6 +285,7 @@ void SAL_CALL OStatement::release() throw()
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL OStatement::execute( const ::rtl::OUString& sql ) throw(SQLException, RuntimeException)
 {
+    printf("OStatement::execute() #2\n");
     ::osl::MutexGuard aGuard( m_aMutex );
 
     executeQuery(sql);

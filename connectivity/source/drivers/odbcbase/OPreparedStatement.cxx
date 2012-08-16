@@ -144,6 +144,7 @@ void SAL_CALL OPreparedStatement::close(  ) throw(SQLException, RuntimeException
 
 sal_Bool SAL_CALL OPreparedStatement::execute(  ) throw(SQLException, RuntimeException)
 {
+    printf("--- OPreparedStatement::execute\n");
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
 

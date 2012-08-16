@@ -169,6 +169,7 @@ void SAL_CALL OPreparedStatement::close(  ) throw(SQLException, RuntimeException
 
 sal_Bool SAL_CALL OPreparedStatement::execute(  ) throw(SQLException, RuntimeException)
 {
+    printf("OPreparedStatement::execute() #2\n");
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OPreparedStatement::execute" );
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);

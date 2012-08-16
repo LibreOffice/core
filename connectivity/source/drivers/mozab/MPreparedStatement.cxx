@@ -174,6 +174,7 @@ Reference< XResultSetMetaData > SAL_CALL OPreparedStatement::getMetaData(  ) thr
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL OPreparedStatement::execute(  ) throw(SQLException, RuntimeException)
 {
+    printf("--- OPreparedStatement::execute\n");
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OCommonStatement_IBASE::rBHelper.bDisposed);
 

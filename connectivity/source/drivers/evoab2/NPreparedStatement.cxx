@@ -128,6 +128,7 @@ void SAL_CALL OEvoabPreparedStatement::close(  ) throw(SQLException, RuntimeExce
 
 sal_Bool SAL_CALL OEvoabPreparedStatement::execute(  ) throw(SQLException, RuntimeException)
 {
+    printf("OEvoabPreparedStatement::execute()\n");
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OCommonStatement_IBase::rBHelper.bDisposed);
 
