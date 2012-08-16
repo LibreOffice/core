@@ -1412,12 +1412,13 @@ void SwHTMLParser::StripTrailingPara()
 
     if( bSetSmallFont )
     {
+        //Added default to CJK and CTL
         SvxFontHeightItem aFontHeight( 40, 100, RES_CHRATR_FONTSIZE );
         pCNd->SetAttr( aFontHeight );
-        aFontHeight.SetWhich( RES_CHRATR_CJK_FONTSIZE );
-        pCNd->SetAttr( aFontHeight );
-        aFontHeight.SetWhich( RES_CHRATR_CTL_FONTSIZE );
-        pCNd->SetAttr( aFontHeight );
+        SvxFontHeightItem aFontHeightCJK( 40, 100, RES_CHRATR_CJK_FONTSIZE );
+        pCNd->SetAttr( aFontHeightCJK );
+        SvxFontHeightItem aFontHeightCTL( 40, 100, RES_CHRATR_CTL_FONTSIZE );
+        pCNd->SetAttr( aFontHeightCTL );
     }
 }
 

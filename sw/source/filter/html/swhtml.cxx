@@ -157,14 +157,15 @@ HTMLReader::HTMLReader()
 
 String HTMLReader::GetTemplateName() const
 {
-    String sTemplate(rtl::OUString("internal"));
-    sTemplate += INET_PATH_TOKEN;
-    sTemplate.AppendAscii( TOOLS_CONSTASCII_STRINGPARAM("html") );
+    String sTemplate(rtl::OUString("html"));
     String sTemplateWithoutExt( sTemplate );
     // first search for OpenDocument Writer/Web template
     sTemplate.AppendAscii( TOOLS_CONSTASCII_STRINGPARAM(".oth") );
 
+    //Added path for the common HTML template
     SvtPathOptions aPathOpt;
+    const String sCommonTemplatePath("share/template/common/internal");
+    aPathOpt.SetTemplatePath(sCommonTemplatePath);
     // OpenDocument Writer/Web template (extension .oth)
     sal_Bool bSet = aPathOpt.SearchFile( sTemplate, SvtPathOptions::PATH_TEMPLATE );
 
@@ -337,12 +338,14 @@ SwHTMLParser::SwHTMLParser( SwDoc* pD, const SwPaM& rCrsr, SvStream& rIn,
 
     if(bReadNewDoc)
     {
+        //CJK has different defaults, so a different object should be used for this
+        //RES_CHARTR_CJK_FONTSIZE is a valid value
         SvxFontHeightItem aFontHeight(aFontHeights[2], 100, RES_CHRATR_FONTSIZE);
         pDoc->SetDefault( aFontHeight );
-        aFontHeight.SetWhich( RES_CHRATR_CJK_FONTSIZE );
-        pDoc->SetDefault( aFontHeight );
-        aFontHeight.SetWhich( RES_CHRATR_CTL_FONTSIZE );
-        pDoc->SetDefault( aFontHeight );
+        SvxFontHeightItem aFontHeightCJK(aFontHeights[2], 100, RES_CHRATR_CJK_FONTSIZE);
+        pDoc->SetDefault( aFontHeightCJK );
+        SvxFontHeightItem aFontHeightCTL(aFontHeights[2], 100, RES_CHRATR_CTL_FONTSIZE);
+        pDoc->SetDefault( aFontHeightCTL );
     }
 
     // Waehrend des Imports in den HTML-Modus schalten, damit die
@@ -2293,7 +2296,7 @@ sal_Bool SwHTMLParser::AppendTxtNode( SwHTMLAppendMode eMode, sal_Bool bUpdateNu
     {
         // These are the end position of all script depenent hints.
         // If we find a hint that starts before the current end position,
-        // we have to set it. If we finf a hint that start behind or at
+        // we have to set it. If we find a hint that start behind or at
         // that position, we have to take the hint's value into account.
         // If it is equal to the style, or in fact the paragarph's value
         // for that hint, the hint is removed. Otherwise it's end position
@@ -2306,10 +2309,43 @@ sal_Bool SwHTMLParser::AppendTxtNode( SwHTMLAppendMode eMode, sal_Bool bUpdateNu
             SwTxtAttr *pHt = rHints.GetTextHint( i );
             sal_uInt16 nWhich = pHt->Which();
             sal_Int16 nIdx = -1;
+            //In 'hintids.hxx', the following five attributes don't follow
+            //each other in the Latin attributes as they do among CJK and
+            //CTL attributes, so the old code just made a mess, IMHO.
+            //E.g. 29-22=7, which should be LANGUAGE, but it's FONT.
+            //Moreover, it should occur between 0 and 4.
+            //Since it would be too risky to change the attribute codes,
+            //I repaired the following source code the 'brute force' way.
+
+            //Old code:
+            /*
             if( RES_CHRATR_CJK_FONT <= nWhich &&
                     nWhich <= RES_CHRATR_CTL_WEIGHT )
             {
                 nIdx = static_cast< sal_uInt16 >(nWhich - RES_CHRATR_CJK_FONT + 5);
+            }
+            else switch...
+            */
+
+            if( RES_CHRATR_CJK_FONT == nWhich || RES_CHRATR_CTL_FONT == nWhich )
+            {
+                nIdx = static_cast< sal_uInt16 >(0);
+            }
+            else if( RES_CHRATR_CJK_FONTSIZE == nWhich || RES_CHRATR_CTL_FONTSIZE == nWhich )
+            {
+                nIdx = static_cast< sal_uInt16 >(1);
+            }
+            else if( RES_CHRATR_CJK_LANGUAGE == nWhich || RES_CHRATR_CTL_LANGUAGE == nWhich )
+            {
+                nIdx = static_cast< sal_uInt16 >(2);
+            }
+            else if( RES_CHRATR_CJK_POSTURE == nWhich || RES_CHRATR_CTL_POSTURE == nWhich )
+            {
+                nIdx = static_cast< sal_uInt16 >(3);
+            }
+            else if( RES_CHRATR_CJK_WEIGHT == nWhich || RES_CHRATR_CTL_WEIGHT == nWhich )
+            {
+                nIdx = static_cast< sal_uInt16 >(4);
             }
             else switch( nWhich )
             {
@@ -2331,7 +2367,7 @@ sal_Bool SwHTMLParser::AppendTxtNode( SwHTMLAppendMode eMode, sal_Bool bUpdateNu
                               : rItem == pHt->GetAttr() )
                     {
                         // The hint is the same as set in the paragraph and
-                        // therfor, it can be deleted
+                        // therefore, it can be deleted
                         // CAUTION!!! This WILL delete the hint and it MAY
                         // also delete the SwpHints!!! To avoid any trouble
                         // we leave the loop immediately if this is the last
@@ -2344,7 +2380,7 @@ sal_Bool SwHTMLParser::AppendTxtNode( SwHTMLAppendMode eMode, sal_Bool bUpdateNu
                     }
                     else
                     {
-                        // The hint is deifferent. Therfor all hints within that
+                        // The hint is different. Therefore all hints within that
                         // hint have to be ignored.
                         aEndPos[nIdx] = pHt->GetEnd() ? *pHt->GetEnd() : nStt;
                     }
@@ -2369,6 +2405,7 @@ sal_Bool SwHTMLParser::AppendTxtNode( SwHTMLAppendMode eMode, sal_Bool bUpdateNu
 
 void SwHTMLParser::AddParSpace()
 {
+    //If it already has ParSpace, return
     if( !bNoParSpace )
         return;
 
@@ -2393,8 +2430,50 @@ void SwHTMLParser::AddParSpace()
         }
         else
         {
-            pTxtNode->SetAttr(
-                SvxULSpaceItem( rULSpace.GetUpper(), HTML_PARSPACE, RES_UL_SPACE )  );
+            //What I do here, is that I examine the attributes, and if
+            //I find out, that it's CJK/CTL, then I set the paragraph space
+            //to the value set in HTML_CJK_PARSPACE/HTML_CTL_PARSPACE.
+
+            sal_Bool bIsCJK = false;
+            sal_Bool bIsCTL = false;
+            SwpHints& rHints = pTxtNode->GetSwpHints();
+            sal_uInt16 nWhich;
+            SwTxtAttr *pHt;
+
+            sal_uInt16 nCntAttr = (pTxtNode  && pTxtNode->GetpSwpHints())
+                            ? pTxtNode->GetSwpHints().Count() : 0;
+
+            for(sal_uInt16 i = 0; (i < nCntAttr) && !bIsCJK; ++i)
+            {
+               pHt = rHints.GetTextHint(i);
+               nWhich = pHt->Which();
+               if( RES_CHRATR_CJK_FONT == nWhich ||
+                   RES_CHRATR_CJK_FONTSIZE == nWhich ||
+                   RES_CHRATR_CJK_LANGUAGE == nWhich ||
+                   RES_CHRATR_CJK_POSTURE == nWhich ||
+                   RES_CHRATR_CJK_WEIGHT == nWhich )
+                       bIsCJK = true;
+               if( RES_CHRATR_CTL_FONT == nWhich ||
+                   RES_CHRATR_CTL_FONTSIZE == nWhich ||
+                   RES_CHRATR_CTL_LANGUAGE == nWhich ||
+                   RES_CHRATR_CTL_POSTURE == nWhich ||
+                   RES_CHRATR_CTL_WEIGHT == nWhich )
+                       bIsCJK = false;
+            }
+
+            if( bIsCTL )
+            {
+                pTxtNode->SetAttr(
+                    SvxULSpaceItem( rULSpace.GetUpper(), HTML_CTL_PARSPACE, RES_UL_SPACE )  );
+            }
+            else if( bIsCJK )
+            {
+                pTxtNode->SetAttr(
+                    SvxULSpaceItem( rULSpace.GetUpper(), HTML_CJK_PARSPACE, RES_UL_SPACE )  );
+            } else {
+                pTxtNode->SetAttr(
+                    SvxULSpaceItem( rULSpace.GetUpper(), HTML_PARSPACE, RES_UL_SPACE )  );
+            }
         }
     }
 }
@@ -3539,12 +3618,16 @@ void SwHTMLParser::NewBasefontAttr()
         SfxItemSet aItemSet( pDoc->GetAttrPool(), pCSS1Parser->GetWhichMap() );
         SvxCSS1PropertyInfo aPropInfo;
 
+        //CJK has different defaults
         SvxFontHeightItem aFontHeight( aFontHeights[nSize-1], 100, RES_CHRATR_FONTSIZE );
         aItemSet.Put( aFontHeight );
-        aFontHeight.SetWhich( RES_CHRATR_CJK_FONTSIZE );
-        aItemSet.Put( aFontHeight );
-        aFontHeight.SetWhich( RES_CHRATR_CTL_FONTSIZE );
-        aItemSet.Put( aFontHeight );
+        SvxFontHeightItem aFontHeightCJK( aFontHeights[nSize-1], 100, RES_CHRATR_CJK_FONTSIZE );
+        aItemSet.Put( aFontHeightCJK );
+        //Complex type can contain so many types of letters,
+        //that it's not really worthy to bother, IMO.
+        //Still, I have set a default.
+        SvxFontHeightItem aFontHeightCTL( aFontHeights[nSize-1], 100, RES_CHRATR_CTL_FONTSIZE );
+        aItemSet.Put( aFontHeightCTL );
 
         if( ParseStyleOptions( aStyle, aId, aClass, aItemSet, aPropInfo, &aLang, &aDir ) )
             DoPositioning( aItemSet, aPropInfo, pCntxt );
@@ -3555,10 +3638,10 @@ void SwHTMLParser::NewBasefontAttr()
     {
         SvxFontHeightItem aFontHeight( aFontHeights[nSize-1], 100, RES_CHRATR_FONTSIZE );
         InsertAttr( &aAttrTab.pFontHeight, aFontHeight, pCntxt );
-        aFontHeight.SetWhich( RES_CHRATR_CJK_FONTSIZE );
-        InsertAttr( &aAttrTab.pFontHeightCJK, aFontHeight, pCntxt );
-        aFontHeight.SetWhich( RES_CHRATR_CTL_FONTSIZE );
-        InsertAttr( &aAttrTab.pFontHeightCTL, aFontHeight, pCntxt );
+        SvxFontHeightItem aFontHeightCJK( aFontHeights[nSize-1], 100, RES_CHRATR_CJK_FONTSIZE );
+        InsertAttr( &aAttrTab.pFontHeightCJK, aFontHeightCJK, pCntxt );
+        SvxFontHeightItem aFontHeightCTL( aFontHeights[nSize-1], 100, RES_CHRATR_CTL_FONTSIZE );
+        InsertAttr( &aAttrTab.pFontHeightCJK, aFontHeightCTL, pCntxt );
     }
 
     // den Kontext merken
@@ -3743,10 +3826,10 @@ void SwHTMLParser::NewFontAttr( int nToken )
         {
             SvxFontHeightItem aFontHeight( nFontHeight, 100, RES_CHRATR_FONTSIZE );
             aItemSet.Put( aFontHeight );
-            aFontHeight.SetWhich( RES_CHRATR_CJK_FONTSIZE );
-            aItemSet.Put( aFontHeight );
-            aFontHeight.SetWhich( RES_CHRATR_CTL_FONTSIZE );
-            aItemSet.Put( aFontHeight );
+            SvxFontHeightItem aFontHeightCJK( nFontHeight, 100, RES_CHRATR_CJK_FONTSIZE );
+            aItemSet.Put( aFontHeightCJK );
+            SvxFontHeightItem aFontHeightCTL( nFontHeight, 100, RES_CHRATR_CTL_FONTSIZE );
+            aItemSet.Put( aFontHeightCTL );
         }
         if( bColor )
             aItemSet.Put( SvxColorItem(aColor, RES_CHRATR_COLOR) );
@@ -3754,10 +3837,10 @@ void SwHTMLParser::NewFontAttr( int nToken )
         {
             SvxFontItem aFont( eFamily, aFontName, aStyleName, ePitch, eEnc, RES_CHRATR_FONT );
             aItemSet.Put( aFont );
-            aFont.SetWhich( RES_CHRATR_CJK_FONT );
-            aItemSet.Put( aFont );
-            aFont.SetWhich( RES_CHRATR_CTL_FONT );
-            aItemSet.Put( aFont );
+            SvxFontItem aFontCJK( eFamily, aFontName, aStyleName, ePitch, eEnc, RES_CHRATR_CJK_FONT );
+            aItemSet.Put( aFontCJK );
+            SvxFontItem aFontCTL( eFamily, aFontName, aStyleName, ePitch, eEnc, RES_CHRATR_CTL_FONT );
+            aItemSet.Put( aFontCTL );
         }
 
 
@@ -3772,10 +3855,10 @@ void SwHTMLParser::NewFontAttr( int nToken )
         {
             SvxFontHeightItem aFontHeight( nFontHeight, 100, RES_CHRATR_FONTSIZE );
             InsertAttr( &aAttrTab.pFontHeight, aFontHeight, pCntxt );
-            aFontHeight.SetWhich( RES_CHRATR_CJK_FONTSIZE );
-            InsertAttr( &aAttrTab.pFontHeightCJK, aFontHeight, pCntxt );
-            aFontHeight.SetWhich( RES_CHRATR_CTL_FONTSIZE );
-            InsertAttr( &aAttrTab.pFontHeightCTL, aFontHeight, pCntxt );
+            SvxFontHeightItem aFontHeightCJK( nFontHeight, 100, RES_CHRATR_CJK_FONTSIZE );
+            InsertAttr( &aAttrTab.pFontHeight, aFontHeightCJK, pCntxt );
+            SvxFontHeightItem aFontHeightCTL( nFontHeight, 100, RES_CHRATR_CTL_FONTSIZE );
+            InsertAttr( &aAttrTab.pFontHeight, aFontHeightCTL, pCntxt );
         }
         if( bColor )
             InsertAttr( &aAttrTab.pFontColor, SvxColorItem(aColor, RES_CHRATR_COLOR), pCntxt );
@@ -3783,10 +3866,10 @@ void SwHTMLParser::NewFontAttr( int nToken )
         {
             SvxFontItem aFont( eFamily, aFontName, aStyleName, ePitch, eEnc, RES_CHRATR_FONT );
             InsertAttr( &aAttrTab.pFont, aFont, pCntxt );
-            aFont.SetWhich( RES_CHRATR_CJK_FONT );
-            InsertAttr( &aAttrTab.pFontCJK, aFont, pCntxt );
-            aFont.SetWhich( RES_CHRATR_CTL_FONT );
-            InsertAttr( &aAttrTab.pFontCTL, aFont, pCntxt );
+            SvxFontItem aFontCJK( eFamily, aFontName, aStyleName, ePitch, eEnc, RES_CHRATR_CJK_FONT );
+            InsertAttr( &aAttrTab.pFont, aFontCJK, pCntxt );
+            SvxFontItem aFontCTL( eFamily, aFontName, aStyleName, ePitch, eEnc, RES_CHRATR_CTL_FONT );
+            InsertAttr( &aAttrTab.pFont, aFontCTL, pCntxt );
         }
     }
 

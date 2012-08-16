@@ -57,6 +57,8 @@ struct SwPendingStack;
 class SvxCSS1PropertyInfo;
 
 #define HTML_PARSPACE (MM50)
+#define HTML_CJK_PARSPACE (MM50/2)
+#define HTML_CTL_PARSPACE (MM50/2)
 
 #define HTML_DFLT_IMG_WIDTH (MM50*4)
 #define HTML_DFLT_IMG_HEIGHT (MM50*2)

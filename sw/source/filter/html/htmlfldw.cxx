@@ -335,9 +335,11 @@ static Writer& OutHTML_SwField( Writer& rWrt, const SwField* pFld,
     {
         SfxItemSet aScriptItemSet( rWrt.pDoc->GetAttrPool(),
                                    RES_CHRATR_FONT, RES_CHRATR_FONTSIZE,
-                                   RES_CHRATR_POSTURE, RES_CHRATR_POSTURE,
-                                   RES_CHRATR_WEIGHT, RES_CHRATR_WEIGHT,
-                                   RES_CHRATR_CJK_FONT, RES_CHRATR_CTL_WEIGHT,
+                                   RES_CHRATR_POSTURE, RES_CHRATR_WEIGHT,
+                                   RES_CHRATR_CJK_FONT, RES_CHRATR_CJK_FONTSIZE,
+                                   RES_CHRATR_CJK_POSTURE, RES_CHRATR_CJK_WEIGHT,
+                                   RES_CHRATR_CTL_FONT, RES_CHRATR_CTL_FONTSIZE,
+                                   RES_CHRATR_CTL_POSTURE, RES_CHRATR_CTL_WEIGHT,
                                    0 );
         rTxtNd.GetAttr( aScriptItemSet, nFldPos, nFldPos+1 );
 

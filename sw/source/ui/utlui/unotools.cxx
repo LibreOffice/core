@@ -76,9 +76,7 @@ SwOneExampleFrame::SwOneExampleFrame( Window& rWin,
     aTopWindow( rWin.GetParent(), 0, this ),
     rWindow(rWin),
     aMenuRes(SW_RES(RES_FRMEX_MENU)),
-
     pModuleView(SW_MOD()->GetView()),
-
     nStyleFlags(nFlags),
     bIsInitialized(sal_False),
     bServiceAvailable(sal_False)
@@ -268,6 +266,60 @@ IMPL_LINK( SwOneExampleFrame, TimeoutHdl, Timer*, pTimer )
         uno::Reference< text::XTextDocument >  xDoc(_xModel, uno::UNO_QUERY);
         uno::Reference< text::XText >  xText = xDoc->getText();
         _xCursor = xText->createTextCursor();
+
+        //From here, a cursor is defined, which goes trough the template,
+        //and overwrites the template words where it is necessary.
+
+        uno::Reference< lang::XUnoTunnel> xTunnel( _xCursor, uno::UNO_QUERY);
+        if( xTunnel.is() )
+        {
+            OTextCursorHelper* pCrsr = reinterpret_cast<OTextCursorHelper*>( xTunnel->getSomething(
+                                        OTextCursorHelper::getUnoTunnelId() ));
+            if( pCrsr )
+            {
+                SwEditShell* pSh = pCrsr->GetDoc()->GetEditShell();
+
+                do
+                {
+                  if (pSh->GetCurWord() == String("HEADING1"))
+                  {
+                    pSh->Overwrite(SW_RESSTR(STR_IDXEXAMPLE_IDXTXT_HEADING1));
+                  }
+                  else if (pSh->GetCurWord() == String("ENTRY1"))
+                  {
+                    pSh->Overwrite(SW_RESSTR(STR_IDXEXAMPLE_IDXTXT_ENTRY1));
+                  }
+                  else if (pSh->GetCurWord() == String("HEADING11"))
+                  {
+                    pSh->Overwrite(SW_RESSTR(STR_IDXEXAMPLE_IDXTXT_HEADING11));
+                  }
+                  else if (pSh->GetCurWord() == String("ENTRY11"))
+                  {
+                    pSh->Overwrite(SW_RESSTR(STR_IDXEXAMPLE_IDXTXT_ENTRY11));
+                  }
+                  else if (pSh->GetCurWord() == String("HEADING12"))
+                  {
+                    pSh->Overwrite(SW_RESSTR(STR_IDXEXAMPLE_IDXTXT_HEADING12));
+                  }
+                  else if (pSh->GetCurWord() == String("ENTRY12"))
+                  {
+                    pSh->Overwrite(SW_RESSTR(STR_IDXEXAMPLE_IDXTXT_ENTRY12));
+                  }
+                  else if (pSh->GetCurWord() == String("TABLE1"))
+                  {
+                    pSh->Overwrite(SW_RESSTR(STR_IDXEXAMPLE_IDXTXT_TABLE1));
+                  }
+                  else if (pSh->GetCurWord() == String("IMAGE1"))
+                  {
+                    pSh->Overwrite(SW_RESSTR(STR_IDXEXAMPLE_IDXTXT_IMAGE1));
+                  }
+                  else
+                  {;}
+                }
+                while(pSh->Right(sal_uInt16(1), sal_uInt16(1), sal_True) == sal_True);
+            }
+        }
+
         uno::Reference< beans::XPropertySet >  xCrsrProp(_xCursor, uno::UNO_QUERY);
         uno::Any aPageStyle = xCrsrProp->getPropertyValue(
                                             rtl::OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_PAGE_STYLE_NAME)));
@@ -318,7 +370,6 @@ IMPL_LINK( SwOneExampleFrame, TimeoutHdl, Timer*, pTimer )
         xWin->setVisible( sal_True );
         rWindow.Show();
 
-        uno::Reference< lang::XUnoTunnel> xTunnel( _xCursor, uno::UNO_QUERY);
         if( xTunnel.is() )
         {
             OTextCursorHelper* pCrsr = reinterpret_cast<OTextCursorHelper*>( xTunnel->getSomething(

@@ -510,6 +510,7 @@ IMPL_LINK( SwMultiTOXTabDialog, ShowPreviewHdl, CheckBox *, pBox )
             sTemplate.AppendAscii( RTL_CONSTASCII_STRINGPARAM(".odt") );
 
             SvtPathOptions aOpt;
+            aOpt.SetTemplatePath(String("share/template/common"));
             // 6.0 (extension .sxw)
             sal_Bool bExist = aOpt.SearchFile( sTemplate, SvtPathOptions::PATH_TEMPLATE );
 

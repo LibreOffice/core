@@ -1044,11 +1044,6 @@ Directory gid_Dir_Template_Wizard_Styles
     DIR_IDENT_ALL_LANG(styles);
 End
 
-Directory gid_Dir_Template_Internal
-    ParentID = gid_Dir_Template_Language;
-    DIR_IDENT_ALL_LANG(internal);
-End
-
 Directory gid_Dir_Share_Database
     ParentID = gid_Brand_Dir_Share;
     DosName = "database";
@@ -1448,6 +1443,11 @@ End
 Directory gid_Dir_Template_Common_Forms
     ParentID = gid_Dir_Template_Common;
     DosName = "forms";
+End
+
+Directory gid_Dir_Template_Common_Internal
+    ParentID = gid_Dir_Template_Common;
+    DosName = "internal";
 End
 
 Directory gid_Dir_Template_Common_Labels

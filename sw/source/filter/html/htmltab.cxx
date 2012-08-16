@@ -2874,13 +2874,14 @@ const SwStartNode *SwHTMLParser::InsertTableSection
         pTable->IncBoxCount();
     }
 
+    //Added defaults to CJK and CTL
     SwCntntNode *pCNd = pDoc->GetNodes()[pStNd->GetIndex()+1] ->GetCntntNode();
     SvxFontHeightItem aFontHeight( 40, 100, RES_CHRATR_FONTSIZE );
     pCNd->SetAttr( aFontHeight );
-    aFontHeight.SetWhich( RES_CHRATR_CJK_FONTSIZE );
-    pCNd->SetAttr( aFontHeight );
-    aFontHeight.SetWhich( RES_CHRATR_CTL_FONTSIZE );
-    pCNd->SetAttr( aFontHeight );
+    SvxFontHeightItem aFontHeightCJK( 40, 100, RES_CHRATR_CJK_FONTSIZE );
+    pCNd->SetAttr( aFontHeightCJK );
+    SvxFontHeightItem aFontHeightCTL( 40, 100, RES_CHRATR_CTL_FONTSIZE );
+    pCNd->SetAttr( aFontHeightCTL );
 
     return pStNd;
 }
@@ -3630,6 +3631,7 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, sal_Bool bReadOptions,
                 {
                     if( !pPam->GetPoint()->nContent.GetIndex() )
                     {
+                        //Set default to CJK and CTL
                         pDoc->SetTxtFmtColl( *pPam,
                             pCSS1Parser->GetTxtCollFromPool(RES_POOLCOLL_STANDARD) );
                         SvxFontHeightItem aFontHeight( 40, 100, RES_CHRATR_FONTSIZE );
@@ -3638,12 +3640,14 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, sal_Bool bReadOptions,
                             new _HTMLAttr( *pPam->GetPoint(), aFontHeight );
                         aSetAttrTab.push_back( pTmp );
 
-                        aFontHeight.SetWhich( RES_CHRATR_CJK_FONTSIZE );
-                        pTmp = new _HTMLAttr( *pPam->GetPoint(), aFontHeight );
+                        SvxFontHeightItem aFontHeightCJK( 40, 100, RES_CHRATR_CJK_FONTSIZE );
+                        pTmp =
+                            new _HTMLAttr( *pPam->GetPoint(), aFontHeightCJK );
                         aSetAttrTab.push_back( pTmp );
 
-                        aFontHeight.SetWhich( RES_CHRATR_CTL_FONTSIZE );
-                        pTmp = new _HTMLAttr( *pPam->GetPoint(), aFontHeight );
+                        SvxFontHeightItem aFontHeightCTL( 40, 100, RES_CHRATR_CTL_FONTSIZE );
+                        pTmp =
+                            new _HTMLAttr( *pPam->GetPoint(), aFontHeightCTL );
                         aSetAttrTab.push_back( pTmp );
 
                         pTmp = new _HTMLAttr( *pPam->GetPoint(),
@@ -4153,12 +4157,13 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, sal_Bool bReadOptions,
                                         : RES_POOLCOLL_TABLE ));
         const SwEndNode *pEndNd = pStNd->EndOfSectionNode();
         SwCntntNode *pCNd = pDoc->GetNodes()[pEndNd->GetIndex()-1] ->GetCntntNode();
+        //Added defaults to CJK and CTL
         SvxFontHeightItem aFontHeight( 40, 100, RES_CHRATR_FONTSIZE );
         pCNd->SetAttr( aFontHeight );
-        aFontHeight.SetWhich( RES_CHRATR_CJK_FONTSIZE );
-        pCNd->SetAttr( aFontHeight );
-        aFontHeight.SetWhich( RES_CHRATR_CTL_FONTSIZE );
-        pCNd->SetAttr( aFontHeight );
+        SvxFontHeightItem aFontHeightCJK( 40, 100, RES_CHRATR_CJK_FONTSIZE );
+        pCNd->SetAttr( aFontHeightCJK );
+        SvxFontHeightItem aFontHeightCTL( 40, 100, RES_CHRATR_CTL_FONTSIZE );
+        pCNd->SetAttr( aFontHeightCTL );
 
         pSaveStruct->AddContents( new HTMLTableCnts(pStNd) );
         pSaveStruct->ClearIsInSection();

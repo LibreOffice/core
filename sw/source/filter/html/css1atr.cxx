@@ -1356,14 +1356,11 @@ sal_Bool SwHTMLWriter::HasScriptDependentItems( const SfxItemSet& rItemSet,
         const SwCharFmt *pDCCharFmt = pDrop->GetCharFmt();
         if( pDCCharFmt )
         {
+            //Some items occured twice, and I have no idea why.
             SfxItemSet aTstItemSet( *pDCCharFmt->GetAttrSet().GetPool(),
-                RES_CHRATR_FONT,        RES_CHRATR_FONT,
-                RES_CHRATR_POSTURE,     RES_CHRATR_POSTURE,
-                RES_CHRATR_WEIGHT,      RES_CHRATR_WEIGHT,
-                RES_CHRATR_CJK_FONT,    RES_CHRATR_CJK_FONT,
-                RES_CHRATR_CJK_POSTURE, RES_CHRATR_CJK_WEIGHT,
-                RES_CHRATR_CTL_FONT,    RES_CHRATR_CTL_FONT,
-                RES_CHRATR_CTL_POSTURE, RES_CHRATR_CTL_WEIGHT,
+                RES_CHRATR_FONT,        RES_CHRATR_POSTURE,     RES_CHRATR_WEIGHT,
+                RES_CHRATR_CJK_FONT,    RES_CHRATR_CJK_POSTURE, RES_CHRATR_CJK_WEIGHT,
+                RES_CHRATR_CTL_FONT,    RES_CHRATR_CTL_POSTURE, RES_CHRATR_CTL_WEIGHT,
                 0 );
             aTstItemSet.Set( pDCCharFmt->GetAttrSet(), sal_True );
             return HasScriptDependentItems( aTstItemSet, sal_False );
@@ -1408,8 +1405,13 @@ static sal_Bool OutCSS1Rule( SwHTMLWriter& rHTMLWrt, const String& rSelector,
             SfxItemSet aScriptItemSet( *rItemSet.GetPool(),
                                        RES_CHRATR_FONT, RES_CHRATR_FONTSIZE,
                                        RES_CHRATR_LANGUAGE, RES_CHRATR_POSTURE,
-                                       RES_CHRATR_WEIGHT, RES_CHRATR_WEIGHT,
-                                       RES_CHRATR_CJK_FONT, RES_CHRATR_CTL_WEIGHT,
+                                       RES_CHRATR_WEIGHT,
+                                       RES_CHRATR_CJK_FONT, RES_CHRATR_CJK_FONTSIZE,
+                                       RES_CHRATR_CJK_LANGUAGE, RES_CHRATR_CJK_POSTURE,
+                                       RES_CHRATR_CJK_WEIGHT,
+                                       RES_CHRATR_CTL_FONT, RES_CHRATR_CTL_FONTSIZE,
+                                       RES_CHRATR_CTL_LANGUAGE, RES_CHRATR_CTL_POSTURE,
+                                       RES_CHRATR_CTL_WEIGHT,
                                        0 );
             aScriptItemSet.Put( rItemSet );
 

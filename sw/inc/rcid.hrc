@@ -68,6 +68,7 @@
 #define RC_UNOCORE                  (RC_BASE + 4050)
 #define RC_ANNOTATION               (RC_BASE + 4150)
 #define RC_PAGEFRM                  (RC_BASE + 4250)
+#define RC_IDXTXT                   (RC_BASE + 4350)
 
 /*--------------------------------------------------------------------
     Beschreibung:   Bereiche ausspannen
@@ -248,5 +249,9 @@
 // unocore
 #define RC_UNOCORE_BEGIN            RC_UNOCORE
 #define RC_UNOCORE_END              (RC_UNOCORE + 10)
+
+//idxexample
+#define RC_IDXTXT_BEGIN             RC_IDXTXT
+#define RC_IDXTXT_END               (RC_IDXTXT + 10)
 
 #endif

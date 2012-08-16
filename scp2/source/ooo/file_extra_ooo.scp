@@ -358,11 +358,11 @@ File gid_File_Extra_Tplwizbitmap
     Name = "tplwizbitmap.zip";
 End
 
-File gid_File_Extra_Tplwizdesktop_Lang
-    Dir = gid_Dir_Template_Internal;
+File gid_File_Extra_Tplwizdesktop
+    Dir = gid_Dir_Template_Common_Internal;
     TXT_FILE_BODY;
     Styles = (ARCHIVE, DONT_OVERWRITE);
-    EXTRA_ALL_LANG(tplwizdesktop,zip);
+    Name = "tplwizdesktop.zip";
 End
 
 File gid_File_Extra_Tplwizletter

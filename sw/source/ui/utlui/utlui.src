@@ -229,6 +229,38 @@ String STR_CONTENT_TYPE_POSTIT
 {
     Text [ en-US ] = "Comments" ;
 };
+String STR_IDXEXAMPLE_IDXTXT_HEADING1
+{
+    Text [ en-US ] = "Heading 1" ;
+};
+String STR_IDXEXAMPLE_IDXTXT_ENTRY1
+{
+    Text [ en-US ] = "This is the content from the first chapter. This is a user directory entry." ;
+};
+String STR_IDXEXAMPLE_IDXTXT_HEADING11
+{
+    Text [ en-US ] = "Heading 1.1" ;
+};
+String STR_IDXEXAMPLE_IDXTXT_ENTRY11
+{
+    Text [ en-US ] = "This is the content from chapter 1.1. This is the entry for the table of contents." ;
+};
+String STR_IDXEXAMPLE_IDXTXT_HEADING12
+{
+    Text [ en-US ] = "Heading 1.2" ;
+};
+String STR_IDXEXAMPLE_IDXTXT_ENTRY12
+{
+    Text [ en-US ] = "This is the content from chapter 1.2. This keyword is a main entry." ;
+};
+String STR_IDXEXAMPLE_IDXTXT_TABLE1
+{
+    Text [ en-US ] = "Table 1: This is table 1" ;
+};
+String STR_IDXEXAMPLE_IDXTXT_IMAGE1
+{
+    Text [ en-US ] = "Image 1: This is image 1" ;
+};
 String STR_CONTENT_TYPE_SINGLE_OUTLINE
 {
     Text [ en-US ] = "Heading" ;

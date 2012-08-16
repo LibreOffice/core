@@ -116,7 +116,7 @@ er      extras\source\templates\layout                          nmake   -       
 er      extras\source\templates\presnt\lang                     nmake   -       all     er_tprel NULL
 er      extras\source\templates\wizard\agenda\lang              nmake   -       all     er_twagl NULL
 er      extras\source\templates\wizard\bitmap                   nmake   -       all     er_twbmp NULL
-er      extras\source\templates\wizard\desktop\lang             nmake   -       all     er_twdkl NULL
+er      extras\source\templates\wizard\desktop                  nmake   -       all     er_twdkl NULL
 er      extras\source\templates\wizard\fax\lang                 nmake   -       all     er_twfal NULL
 er      extras\source\templates\wizard\letter\lang              nmake   -       all     er_twlel NULL
 er      extras\source\templates\wizard\report\lang              nmake   -       all     er_twrel NULL
