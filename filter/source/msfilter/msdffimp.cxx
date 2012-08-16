@@ -4945,6 +4945,7 @@ Rectangle SvxMSDffManager::GetGlobalChildAnchor( const DffRecordHeader& rHd, SvS
 {
     Rectangle aChildAnchor;
     rHd.SeekToContent( rSt );
+    sal_Bool bIsClientRectRead = sal_False;
     while ( ( rSt.GetError() == 0 ) && ( rSt.Tell() < rHd.GetRecEndFilePos() ) )
     {
         DffRecordHeader aShapeHd;
@@ -4979,7 +4980,16 @@ Rectangle SvxMSDffManager::GetGlobalChildAnchor( const DffRecordHeader& rHd, SvS
                         Scale( t );
                         Scale( r );
                         Scale( b );
-                        aClientRect = Rectangle( l, t, r, b );
+                        if ( bIsClientRectRead )
+                        {
+                            Rectangle aChild( l, t, r, b );
+                            aChildAnchor.Union( aChild );
+                        }
+                        else
+                        {
+                            aClientRect = Rectangle( l, t, r, b );
+                            bIsClientRectRead = sal_True;
+                        }
                     }
                     break;
                 }
