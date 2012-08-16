@@ -652,7 +652,6 @@ public class AgendaTemplate extends TextDocument implements TemplateConsts, Data
 
     private void writeTitle(TextElement te, XTextRange tr, String text)
     {
-        System.out.println("yeeep");
         te.text = (text == null ? PropertyNames.EMPTY_STRING : text);
         te.write(tr);
     }
