@@ -2,7 +2,6 @@
 #define GLOACTIONGROUP_H
 
 #include <gio/gio.h>
-//#include "gactionmap.h"
 
 G_BEGIN_DECLS
 
@@ -39,26 +38,22 @@ struct _GLOActionGroupClass
     gpointer padding[12];
 };
 
-GType               g_lo_action_group_get_type                  (void) G_GNUC_CONST;
+GType               g_lo_action_group_get_type              (void) G_GNUC_CONST;
 
-GLOActionGroup *    g_lo_action_group_new                       (void);
+GLOActionGroup *    g_lo_action_group_new                   (void);
 
-GAction *           g_lo_action_group_lookup                    (GLOActionGroup     *group,
-                                                                 const gchar        *action_name);
+void                g_lo_action_group_insert                (GLOActionGroup *group,
+                                                             const gchar    *action_name,
+                                                             gpointer        action_info);
 
-void                g_lo_action_group_insert                    (GLOActionGroup     *group,
-                                                                 GAction            *action);
+void                g_lo_action_group_set_action_enabled    (GLOActionGroup *group,
+                                                             const gchar    *action_name,
+                                                             gboolean        enabled);
 
-void                g_lo_action_group_remove                    (GLOActionGroup     *group,
-                                                                 const gchar        *action_name);
+void                g_lo_action_group_remove                (GLOActionGroup *group,
+                                                             const gchar    *action_name);
 
-// This function has been added to make current implementation of GtkSalMenu work.
-void                g_lo_action_group_clear                     (GLOActionGroup     *group);
-
-void                g_lo_action_group_add_entries               (GLOActionGroup     *group,
-                                                                 const GActionEntry *entries,
-                                                                 gint                n_entries,
-                                                                 gpointer            user_data);
+void                g_lo_action_group_clear                 (GLOActionGroup *group);
 
 G_END_DECLS
 

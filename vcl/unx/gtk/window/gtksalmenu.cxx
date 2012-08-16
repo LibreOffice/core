@@ -35,59 +35,6 @@ isSpecialSubmenu (OUString command)
     return FALSE;
 }
 
-static void
-dispatchAction (GSimpleAction   *action,
-                GVariant        *parameter,
-                gpointer        user_data)
-{
-    GTK_YIELD_GRAB();
-
-    if ( user_data ) {
-        GtkSalMenuItem *pSalMenuItem = static_cast< GtkSalMenuItem* >( user_data );
-
-        if ( !pSalMenuItem->mpSubMenu ) {
-            const GtkSalFrame *pFrame = pSalMenuItem->mpParentMenu ? pSalMenuItem->mpParentMenu->GetFrame() : NULL;
-
-            if ( pFrame && !pFrame->GetParent() ) {
-                ((PopupMenu*) pSalMenuItem->mpVCLMenu)->SetSelectedEntry( pSalMenuItem->mnId );
-                SalMenuEvent aMenuEvt( pSalMenuItem->mnId, pSalMenuItem->mpVCLMenu );
-                pFrame->CallCallback( SALEVENT_MENUCOMMAND, &aMenuEvt );
-            }
-            else if ( pSalMenuItem->mpVCLMenu )
-            {
-                // if an item from submenu was selected. the corresponding Window does not exist because
-                // we use native popup menus, so we have to set the selected menuitem directly
-                // incidentally this of course works for top level popup menus, too
-                PopupMenu * pPopupMenu = dynamic_cast<PopupMenu *>(pSalMenuItem->mpVCLMenu);
-                if( pPopupMenu )
-                {
-                    // FIXME: revise this ugly code
-
-                    // select handlers in vcl are dispatch on the original menu
-                    // if not consumed by the select handler of the current menu
-                    // however since only the starting menu ever came into Execute
-                    // the hierarchy is not build up. Workaround this by getting
-                    // the menu it should have been
-
-                    // get started from hierarchy in vcl menus
-                    GtkSalMenu* pParentMenu = pSalMenuItem->mpParentMenu;
-                    Menu* pCurMenu = pSalMenuItem->mpVCLMenu;
-                    while( pParentMenu && pParentMenu->GetMenu() )
-                    {
-                        pCurMenu = pParentMenu->GetMenu();
-                        pParentMenu = pParentMenu->GetParentSalMenu();
-                    }
-
-                    pPopupMenu->SetSelectedEntry( pSalMenuItem->mnId );
-                    pPopupMenu->ImplSelectWithStart( pCurMenu );
-                }
-                else
-                    OSL_FAIL( "menubar item without frame !" );
-            }
-        }
-    }
-}
-
 void generateActions( GtkSalMenu* pMenu, GLOActionGroup* pActionGroup )
 {
     if ( !pMenu || !pActionGroup )
@@ -96,8 +43,8 @@ void generateActions( GtkSalMenu* pMenu, GLOActionGroup* pActionGroup )
     for (sal_uInt16 i = 0; i < pMenu->GetItemCount(); i++) {
         GtkSalMenuItem *pSalMenuItem = pMenu->GetItemAtPos( i );
 
-        if ( pSalMenuItem->mpAction ) {
-            g_lo_action_group_insert( pActionGroup, pSalMenuItem->mpAction );
+        if ( pSalMenuItem->maCommand ) {
+            g_lo_action_group_insert( pActionGroup, pSalMenuItem->maCommand, pSalMenuItem );
         }
 
         generateActions( pSalMenuItem->mpSubMenu, pActionGroup );
@@ -116,6 +63,7 @@ void updateNativeMenu( GtkSalMenu* pMenu ) {
             if ( pSalMenuItem->mpSubMenu && pSalMenuItem->mpSubMenu->GetMenu() ) {
                 pSalMenuItem->mpSubMenu->GetMenu()->Activate();
                 updateNativeMenu( pSalMenuItem->mpSubMenu );
+                pSalMenuItem->mpSubMenu->GetMenu()->Deactivate();
             }
         }
     }
@@ -246,8 +194,6 @@ GtkSalMenu::GtkSalMenu( sal_Bool bMenuBar ) :
     maSections.push_back( mpCurrentSection );
 
     if (bMenuBar) {
-//        mpActionGroup = G_ACTION_GROUP( g_lo_action_group_new() );
-
         pSessionBus = g_bus_get_sync (G_BUS_TYPE_SESSION, NULL, NULL);
         if(!pSessionBus) puts ("Fail bus get");
     } else {
@@ -317,7 +263,14 @@ void GtkSalMenu::RemoveItem( unsigned nPos )
 //    if ( nPos < maItems.size() ) {
 //        GtkSalMenuItem* pSalMenuItem = maItems[ nPos ];
 
-//        g_lo_menu_remove( G_LO_MENU( pSalMenuItem->mpParentSection ), pSalMenuItem->mnPos );
+//        if ( pSalMenuItem->mpParentSection ) {
+//            g_lo_menu_remove( G_LO_MENU( pSalMenuItem->mpParentSection ), pSalMenuItem->mnPos );
+//        }
+
+//        if ( mpActionGroup ) {
+//            g_lo_action_group_remove( G_LO_ACTION_GROUP( mpActionGroup ), pSalMenuItem->maCommand );
+//        }
+
 //        maItems.erase( maItems.begin() + nPos, maItems.begin() + nPos );
 //    }
 }
@@ -397,18 +350,33 @@ const GtkSalFrame* GtkSalMenu::GetFrame() const
 
 void GtkSalMenu::CheckItem( unsigned nPos, sal_Bool bCheck )
 {
+    if ( mpActionGroup ) {
+        GtkSalMenuItem* pSalMenuItem = maItems[ nPos ];
+        MenuItemBits itemBits = pSalMenuItem->mpVCLMenu->GetItemBits( pSalMenuItem->mnId );
+
+        GVariant *pCheckValue = NULL;
+
+        if ( itemBits & MIB_CHECKABLE ) {
+            gboolean bCheckedValue = ( bCheck == sal_True ) ? TRUE : FALSE;
+            pCheckValue = g_variant_new_boolean( bCheckedValue );
+        }
+
+        g_action_group_change_action_state( mpActionGroup, pSalMenuItem->maCommand, pCheckValue );
+    }
 }
 
 void GtkSalMenu::EnableItem( unsigned nPos, sal_Bool bEnable )
 {
-    sal_uInt16 itemId = mpVCLMenu->GetItemId( nPos );
+//    if ( mpActionGroup ) {
+//        sal_uInt16 itemId = mpVCLMenu->GetItemId( nPos );
 
-    GtkSalMenuItem *pSalMenuItem = GetSalMenuItem( itemId );
+//        GtkSalMenuItem *pSalMenuItem = GetSalMenuItem( itemId );
 
-    if ( pSalMenuItem && pSalMenuItem->mpAction ) {
-        gboolean bItemEnabled = (bEnable == sal_True) ? TRUE : FALSE;
-        g_simple_action_set_enabled( G_SIMPLE_ACTION( pSalMenuItem->mpAction ), bItemEnabled );
-    }
+//        if ( pSalMenuItem ) {
+//            gboolean bItemEnabled = (bEnable == sal_True) ? TRUE : FALSE;
+//            g_lo_action_group_set_action_enabled( G_LO_ACTION_GROUP( mpActionGroup ), pSalMenuItem->maCommand, bItemEnabled );
+//        }
+//    }
 }
 
 void GtkSalMenu::SetItemText( unsigned nPos, SalMenuItem* pSalMenuItem, const rtl::OUString& rText )
@@ -454,23 +422,22 @@ void GtkSalMenu::SetItemCommand( unsigned nPos, SalMenuItem* pSalMenuItem, const
     GtkSalMenuItem* pGtkSalMenuItem = static_cast< GtkSalMenuItem* >( pSalMenuItem );
 
     if ( pGtkSalMenuItem && pGtkSalMenuItem->mpMenuItem ) {
-        if ( pGtkSalMenuItem->mpAction ) {
-            g_object_unref( pGtkSalMenuItem->mpAction );
-            pGtkSalMenuItem->mpAction = NULL;
-        }
-
         rtl::OString aOCommandStr = rtl::OUStringToOString( aCommandStr, RTL_TEXTENCODING_UTF8 );
 
-        GSimpleAction *pAction = g_simple_action_new( aOCommandStr.getStr(), NULL );
+        if ( pGtkSalMenuItem->maCommand )
+            g_free( pGtkSalMenuItem->maCommand );
 
-        //    if ( !pGtkSalMenuItem->mpVCLMenu->GetPopupMenu( pGtkSalMenuItem->mnId ) ) {
-        g_signal_connect(pAction, "activate", G_CALLBACK( dispatchAction ), pGtkSalMenuItem);
-        //    }
+        pGtkSalMenuItem->maCommand = g_strdup( aOCommandStr.getStr() );
 
-        pGtkSalMenuItem->mpAction = G_ACTION( pAction );
+        if ( !pGtkSalMenuItem->mpVCLMenu->GetPopupMenu( pGtkSalMenuItem->mnId ) && mpActionGroup ) {
+            g_lo_action_group_insert( G_LO_ACTION_GROUP( mpActionGroup ), pGtkSalMenuItem->maCommand, pGtkSalMenuItem );
+        }
 
-        rtl::OString aItemCommand = "win." + aOCommandStr;
-        g_lo_menu_item_set_action_and_target( pGtkSalMenuItem->mpMenuItem, aItemCommand.getStr(), NULL );
+        gchar* aItemCommand = g_strconcat("win.", pGtkSalMenuItem->maCommand, NULL );
+
+        g_lo_menu_item_set_action_and_target( pGtkSalMenuItem->mpMenuItem, aItemCommand, NULL );
+
+        g_free( aItemCommand );
 
         if ( pGtkSalMenuItem->mpParentSection ) {
             g_lo_menu_remove( G_LO_MENU( pGtkSalMenuItem->mpParentSection ), pGtkSalMenuItem->mnPos );
@@ -498,14 +465,22 @@ void GtkSalMenu::Freeze()
 GtkSalMenuItem::GtkSalMenuItem( const SalItemParams* pItemData ) :
     mnId( pItemData->nId ),
     mnPos( 0 ),
+    maCommand( NULL ),
     mpVCLMenu( pItemData->pMenu ),
     mpParentMenu( NULL ),
     mpSubMenu( NULL ),
     mpMenuItem( NULL ),
-    mpAction( NULL )
+    mpStateType( NULL ),
+    mpState( NULL )
 {
     if ( pItemData->eType != MENUITEM_SEPARATOR ) {
         mpMenuItem = g_lo_menu_item_new( "EMPTY STRING", NULL );
+
+        maCommand = g_strdup( rtl::OUStringToOString( mpVCLMenu->GetItemCommand( mnId ), RTL_TEXTENCODING_UTF8 ).getStr() );
+        gchar* aActionCommand = g_strconcat( "win.", maCommand, NULL );
+        g_lo_menu_item_set_action_and_target( mpMenuItem, aActionCommand, NULL );
+
+        g_free( aActionCommand );
     }
 }
 
@@ -513,5 +488,6 @@ GtkSalMenuItem::~GtkSalMenuItem()
 {
     if ( mpMenuItem ) {
         g_object_unref( mpMenuItem );
+        g_free( maCommand );
     }
 }

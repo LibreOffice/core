@@ -98,6 +98,7 @@ public:
     virtual GMenuModel*         GetCurrentSection() { return mpCurrentSection; }
     virtual unsigned            GetItemCount() { return maItems.size(); }
     virtual GtkSalMenuItem*     GetItemAtPos( unsigned nPos ) { return maItems[ nPos ]; }
+    virtual GActionGroup*       GetActionGroup() { return mpActionGroup; }
 };
 
 class GtkSalMenuItem : public SalMenuItem
@@ -106,14 +107,16 @@ public:
     GtkSalMenuItem( const SalItemParams* );
     virtual ~GtkSalMenuItem();
 
-    sal_uInt16          mnId;                 // Item ID
-    sal_uInt16          mnPos;                // Item position
-    Menu*               mpVCLMenu;            // VCL Menu into which this MenuItem is inserted
-    GtkSalMenu*         mpParentMenu;         // The menu in which this menu item is inserted
-    GtkSalMenu*         mpSubMenu;            // Sub menu of this item (if defined)
-    GMenuModel*         mpParentSection;      // Section where this item is added.
-    GLOMenuItem*        mpMenuItem;           // The GMenuItem
-    GAction*            mpAction;             // The GAction associated with this item
+    sal_uInt16          mnId;               // Item ID
+    sal_uInt16          mnPos;              // Item position
+    gchar*              maCommand;          // Item command
+    Menu*               mpVCLMenu;          // VCL Menu into which this MenuItem is inserted
+    GtkSalMenu*         mpParentMenu;       // The menu in which this menu item is inserted
+    GtkSalMenu*         mpSubMenu;          // Sub menu of this item (if defined)
+    GMenuModel*         mpParentSection;    // Section where this item is added.
+    GLOMenuItem*        mpMenuItem;         // The GMenuItem
+    GVariantType*       mpStateType;        // A GVariantType with item state type
+    GVariant*           mpState;            // A GVariant with current item state
 };
 
 #endif // GTKSALMENU_HXX
