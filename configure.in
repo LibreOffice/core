@@ -126,13 +126,15 @@ if test -n "$with_android_ndk"; then
 
     if test $host_cpu = arm; then
         android_cpu=arm
+    elif test $host_cpu = mips; then
+        android_cpu=mips
     else
         # host_cpu is something like "i386" or "i686" I guess, NDK uses
         # "x86" in some contexts
         android_cpu=x86
     fi
 
-    ANDROID_ABI_PREBUILT_BIN=`echo $ANDROID_NDK_HOME/toolchains/$android_cpu-*$with_android_ndk_toolchain_version/prebuilt/*/bin`
+    ANDROID_ABI_PREBUILT_BIN=`echo $ANDROID_NDK_HOME/toolchains/$android_cpu*-*$with_android_ndk_toolchain_version/prebuilt/*/bin`
     # Check if there are several toolchain versions
     case "$ANDROID_ABI_PREBUILT_BIN" in
     */bin\ */bin*)
@@ -141,7 +143,7 @@ if test -n "$with_android_ndk"; then
 
     # This stays empty if there is just one version of the toolchain in the NDK
     ANDROID_NDK_TOOLCHAIN_VERSION_SUBDIR=
-    case "`echo $ANDROID_NDK_HOME/toolchains/$android_cpu-*/prebuilt/*/bin`" in
+    case "`echo $ANDROID_NDK_HOME/toolchains/$android_cpu*-*/prebuilt/*/bin`" in
     */bin\ */bin*)
         # Trailing slash intentional and necessary, compare to how this is used
         ANDROID_NDK_TOOLCHAIN_VERSION_SUBDIR="${with_android_ndk_toolchain_version}/"
@@ -150,6 +152,8 @@ if test -n "$with_android_ndk"; then
 
     if test $host_cpu = arm; then
        android_gcc_prefix=arm-linux-androideabi
+    elif test $host_cpu = mips; then
+       android_gcc_prefix=mipsel-linux-android
     elif test -f $ANDROID_ABI_PREBUILT_BIN/i686-android-linux-gcc; then
         android_gcc_prefix=i686-android-linux
     elif test -f $ANDROID_ABI_PREBUILT_BIN/i686-linux-android-gcc; then
@@ -167,6 +171,8 @@ if test -n "$with_android_ndk"; then
 
     if test $host_cpu = arm; then
         ANDROIDCFLAGS="-Wno-psabi -march=armv7-a -mfloat-abi=softfp -mfpu=neon -Wl,--fix-cortex-a8 --sysroot $ANDROID_NDK_HOME/platforms/android-9/arch-arm -L$ANDROID_NDK_HOME/sources/cxx-stl/gnu-libstdc++/${ANDROID_NDK_TOOLCHAIN_VERSION_SUBDIR}libs/armeabi-v7a"
+    elif test $host_cpu = mips; then
+        ANDROIDCFLAGS="-Wno-psabi --sysroot $ANDROID_NDK_HOME/platforms/android-9/arch-mips -L$ANDROID_NDK_HOME/sources/cxx-stl/gnu-libstdc++/${ANDROID_NDK_TOOLCHAIN_VERSION_SUBDIR}libs/mips"
     else # x86
         ANDROIDCFLAGS="-Wno-psabi -march=atom --sysroot $ANDROID_NDK_HOME/platforms/android-9/arch-x86 -L$ANDROID_NDK_HOME/sources/cxx-stl/gnu-libstdc++/${ANDROID_NDK_TOOLCHAIN_VERSION_SUBDIR}libs/x86"
     fi
@@ -174,7 +180,10 @@ if test -n "$with_android_ndk"; then
     # When using the 4.6 or newer toolchain, use the gold linker
     case "$with_android_ndk_toolchain_version" in
     4.[[6789]]*|[[56789]].*)
-        ANDROIDCFLAGS="$ANDROIDCFLAGS -fuse-ld=gold"
+        # The NDK doesn't have ld.gold for MIPS for some reason
+        if test "$host_cpu" != mips; then
+            ANDROIDCFLAGS="$ANDROIDCFLAGS -fuse-ld=gold"
+        fi
         ;;
     esac
 
@@ -189,6 +198,8 @@ if test -n "$with_android_ndk"; then
 
     if test $host_cpu = arm; then
         ANDROIDCXXFLAGS="$ANDROIDCFLAGS -I $ANDROID_NDK_HOME/sources/cxx-stl/gnu-libstdc++/${ANDROID_NDK_TOOLCHAIN_VERSION_SUBDIR}include -I$ANDROID_NDK_HOME/sources/cxx-stl/gnu-libstdc++/${ANDROID_NDK_TOOLCHAIN_VERSION_SUBDIR}libs/armeabi-v7a/include"
+    elif test $host_cpu = mips; then
+        ANDROIDCXXFLAGS="$ANDROIDCFLAGS -I $ANDROID_NDK_HOME/sources/cxx-stl/gnu-libstdc++/${ANDROID_NDK_TOOLCHAIN_VERSION_SUBDIR}include -I$ANDROID_NDK_HOME/sources/cxx-stl/gnu-libstdc++/${ANDROID_NDK_TOOLCHAIN_VERSION_SUBDIR}libs/mips/include"
     else # x86
         ANDROIDCXXFLAGS="$ANDROIDCFLAGS -I $ANDROID_NDK_HOME/sources/cxx-stl/gnu-libstdc++/${ANDROID_NDK_TOOLCHAIN_VERSION_SUBDIR}include -I$ANDROID_NDK_HOME/sources/cxx-stl/gnu-libstdc++/${ANDROID_NDK_TOOLCHAIN_VERSION_SUBDIR}libs/x86/include"
     fi
@@ -425,7 +436,7 @@ dragonfly*)
     _os=DragonFly
     ;;
 
-linux-androideabi*)
+linux-android*)
     build_gstreamer=no
     build_gstreamer_0_10=no
     test_cups=no
@@ -3461,7 +3472,7 @@ linux-gnu*)
     SOLARLIB="$SOLARLIB -L$SRC_ROOT/solenv/$OUTPATH/lib"
     ;;
 
-linux-androideabi*)
+linux-android*)
     COM=GCC
     GUI=UNX
     GUIBASE=android
@@ -3476,6 +3487,12 @@ linux-androideabi*)
         CPUNAME=ARM
         RTL_ARCH=ARM_EABI
         OUTPATH=unxandr
+        ;;
+    mips|mipsel)
+        CPU=M
+        CPUNAME=GODSON # Weird, but maybe that's the LO convention?
+        RTL_ARCH=MIPS_EL
+        OUTPATH=unxandm
         ;;
     i*86)
         CPU=I

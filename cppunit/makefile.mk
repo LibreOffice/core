@@ -116,7 +116,7 @@ MY_LIBS = -lm
 .END
 
 .IF "$(OS)" == "ANDROID"
-MY_LIBS= -lgnustl_shared
+MY_LIBS= -lgnustl_shared -lm
 .ENDIF
 
 CONFIGURE_ACTION = ./configure

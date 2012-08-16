@@ -51,7 +51,14 @@ using namespace ::std;
 using namespace ::osl;
 using namespace ::rtl;
 #endif
+
+#ifndef ANDROID
 #include <sys/sysmips.h>
+#endif
+
+#ifdef ANDROID
+#include <unistd.h>
+#endif
 
 #ifdef OSL_BIGENDIAN
 #define IS_BIG_ENDIAN 1
@@ -619,7 +626,9 @@ namespace
 
       case typelib_TypeClass_DOUBLE:
           { register double dret asm("$f0");
-        dret = (*((double*)nRegReturn)); }
+            dret = (*((double*)nRegReturn));
+            (void) dret;
+          }
         break;
 
       case typelib_TypeClass_HYPER:
@@ -710,9 +719,15 @@ namespace
 }
 
 
-void bridges::cpp_uno::shared::VtableFactory::flushCode(unsigned char const * /*bptr*/, unsigned char const * /*eptr*/)
+void bridges::cpp_uno::shared::VtableFactory::flushCode(unsigned char const *bptr, unsigned char const *eptr)
 {
+#ifndef ANDROID
+  (void) bptr;
+  (void) eptr;
   sysmips(FLUSH_CACHE,0,0,0);
+#else
+   cacheflush((long) bptr, (long) eptr, 0);
+#endif
 }
 
 struct bridges::cpp_uno::shared::VtableFactory::Slot { void * fn; };

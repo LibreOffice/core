@@ -91,12 +91,8 @@
 .INCLUDE : unxlngr.mk
 .ENDIF
 
-.IF "$(COM)$(OS)$(CPU)" == "GCCANDROIDR"
-.INCLUDE : unxandr.mk
-.ENDIF
-
-.IF "$(COM)$(OS)$(CPU)" == "GCCANDROIDI"
-.INCLUDE : unxandr.mk
+.IF "$(COM)$(OS)" == "GCCANDROID"
+.INCLUDE : unxand.mk
 .ENDIF
 
 .IF "$(COM)$(OS)$(CPU)" == "GCCLINUXA"

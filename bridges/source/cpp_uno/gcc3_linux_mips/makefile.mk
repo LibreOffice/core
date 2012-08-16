@@ -37,7 +37,7 @@ ENABLE_EXCEPTIONS=TRUE
 
 # --- Files --------------------------------------------------------
 
-.IF "$(COM)$(OS)$(CPU)" == "GCCLINUXM"
+.IF "$(COM)$(OS)$(CPU)" == "GCCLINUXM" || "$(COM)$(OS)$(CPU)" == "GCCANDROIDM"
 
 # In case someone enabled the non-standard -fomit-frame-pointer which does not
 # work with the .cxx sources in this directory:

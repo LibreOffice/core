@@ -31,6 +31,8 @@ CDEFAULTOPT=-Os
 .INCLUDE : unxgcc.mk
 .IF "$(CPU)" == "I"
 CDEFS+=-DX86
+.ELIF "$(CPU)" == "M"
+CDEFS+=-DMIPS
 .ELSE
 CDEFS+=-DARM32
 .ENDIF

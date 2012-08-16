@@ -153,7 +153,7 @@ BUILD_AND_HOST=--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM) --with-cross-bu
 
 .IF "$(OS)"=="ANDROID"
 LIBRARY_SUFFIX= --with-library-suffix=lo
-icu_LDFLAGS+=-lgnustl_shared
+icu_LDFLAGS+=-lgnustl_shared -lm
 .ENDIF
 
 CONFIGURE_ACTION+=sh -c 'CPPFLAGS="$(EXTRA_CDEFS)" CFLAGS="$(icu_CFLAGS)" CXXFLAGS="$(icu_CXXFLAGS)" LDFLAGS="$(icu_LDFLAGS) $(LDFLAGSADD)" \

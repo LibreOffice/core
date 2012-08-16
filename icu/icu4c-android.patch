@@ -34,7 +34,7 @@
      # wchar_t can be used
      CHECK_UTF16_STRING_RESULT="available"
      ;;
-+*-*-*-androideabi*)
++*-*-*-androideabi|mips-unknown-linux-android)
 +    # no UTF-16 strings thanks, I think, this is to avoid the -std=c++0x which causes trouble with uint64_t
 +    CHECK_UTF16_STRING_RESULT="nope"
 +    ;;
