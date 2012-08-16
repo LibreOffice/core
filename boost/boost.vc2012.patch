@@ -1,0 +1,14 @@
+--- misc/build/boost_1_44_0/boost/config/compiler/visualc.hpp
++++ misc/build/boost_1_44_0/boost/config/compiler/visualc.hpp
+@@ -101,6 +101,11 @@
+ #  define BOOST_NO_ADL_BARRIER
+ #endif
+ 
++#if _MSC_VER >= 1700  // 1700 == VC++ 11.0
++   // Removed in VC11:
++#  define BOOST_NO_0X_HDR_INITIALIZER_LIST
++#endif
++
+ 
+ #if (_MSC_VER <= 1600)
+ // MSVC (including the latest checked version) has not yet completely 

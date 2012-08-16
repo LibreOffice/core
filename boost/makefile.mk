@@ -69,6 +69,7 @@ PATCH_FILES+=boost.6397.warnings.patch
 PATCH_FILES+=boost.mipsbackport.patch
 
 PATCH_FILES+=boost.windows.patch
+PATCH_FILES+=boost.vc2012.patch
 
 # Help static analysis tools (see SAL_UNUSED_PARAMETER in sal/types.h):
 .IF "$(COM)" == "GCC"
