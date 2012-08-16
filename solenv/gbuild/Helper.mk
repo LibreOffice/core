@@ -26,8 +26,6 @@
 #
 #*************************************************************************
 
-gb_Helper_NULLFILE := /dev/null
-
 gb_Helper_MISC := $(WORKDIR)/Misc
 
 # general purpose phony target
