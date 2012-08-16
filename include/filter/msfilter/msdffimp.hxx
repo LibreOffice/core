@@ -86,6 +86,8 @@ class MSFILTER_DLLPUBLIC DffPropertyReader : public DffPropSet
 
 public:
     sal_Int32 mnFix16Angle;
+    sal_Bool mbRotateGranientFillWithAngle;
+
     explicit DffPropertyReader( const SvxMSDffManager& rManager );
     ~DffPropertyReader();
     sal_Int32 Fix16ToAngle( sal_Int32 nAngle ) const;
@@ -99,6 +101,7 @@ public:
     void SetDefaultPropSet( SvStream& rIn, sal_uInt32 nOffDgg ) const;
     void ApplyAttributes( SvStream& rIn, SfxItemSet& rSet ) const;
     void ApplyAttributes( SvStream& rIn, SfxItemSet& rSet, DffObjData& rObjData ) const;
+    void ImportGradientColor( SfxItemSet& aSet, MSO_FillType eMSO_FillType, double dTrans = 1.0 , double dBackTrans = 1.0 ) const;
 };
 
 #define COL_DEFAULT RGB_COLORDATA( 0xFA, 0xFB, 0xFC )

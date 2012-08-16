@@ -1270,13 +1270,22 @@ public:
 
     void        CreateGradientProperties( const ::com::sun::star::awt::Gradient & rGradient );
     void        CreateGradientProperties(
-                    const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > &
+                    const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > &,
+                    sal_Bool bTransparentGradient = sal_False
                 );
+
     void        CreateLineProperties(
                     const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > &,
                     sal_Bool bEdge
                 );
-    void        CreateFillProperties( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > &, sal_Bool bEdge );
+    void        CreateFillProperties(
+                    const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > &,
+                    sal_Bool bEdge,
+                    sal_Bool bTransparentGradient = sal_False );
+    void        CreateFillProperties(
+                    const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > &,
+                    sal_Bool bEdge,
+                    const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > & rXShape );
     void        CreateTextProperties(
                     const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > &,
                     sal_uInt32 nText,

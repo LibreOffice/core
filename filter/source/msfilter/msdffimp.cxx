@@ -199,7 +199,8 @@ void Impl_OlePres::Write( SvStream & rStm )
 
 DffPropertyReader::DffPropertyReader( const SvxMSDffManager& rMan ) :
     rManager( rMan ),
-    pDefaultPropSet( NULL )
+    pDefaultPropSet( NULL ),
+    mbRotateGranientFillWithAngle ( 0 )
 {
     InitializePropSet( DFF_msofbtOPT );
 }
@@ -1267,6 +1268,9 @@ void DffPropertyReader::ApplyFillAttributes( SvStream& rIn, SfxItemSet& rSet, co
             break;
             case mso_fillShadeCenter :      // Shade from bounding rectangle to end point
             {
+                //If it is imported as a bitmap, it will not work well with transparecy especially 100
+                //But the gradient look well comparing with imported as gradient. And rotate with shape
+                //also works better. So here just keep it.
                 if ( rObjData.aBoundRect.IsEmpty() )// size of object needed to be able
                     eXFill = XFILL_GRADIENT;        // to create a bitmap substitution
                 else
@@ -1284,13 +1288,21 @@ void DffPropertyReader::ApplyFillAttributes( SvStream& rIn, SfxItemSet& rSet, co
         }
         rSet.Put( XFillStyleItem( eXFill ) );
 
+        double dTrans  = 1.0;
+        double dBackTrans = 1.0;
         if (IsProperty(DFF_Prop_fillOpacity))
         {
-            double nTrans = GetPropertyValue(DFF_Prop_fillOpacity);
-            nTrans = (nTrans * 100) / 65536;
-            rSet.Put(XFillTransparenceItem(
-                sal_uInt16(100 - ::rtl::math::round(nTrans))));
+            dTrans = GetPropertyValue(DFF_Prop_fillOpacity) / 65536.0;
+            if ( eXFill != XFILL_GRADIENT )
+            {
+                dTrans = dTrans * 100;
+                rSet.Put(XFillTransparenceItem(
+                    sal_uInt16(100 - ::rtl::math::round(dTrans))));
+            }
         }
+
+        if ( IsProperty(DFF_Prop_fillBackOpacity) )
+            dBackTrans = GetPropertyValue(DFF_Prop_fillBackOpacity) / 65536.0;
 
         if ( ( eMSO_FillType == mso_fillShadeCenter ) && ( eXFill == XFILL_BITMAP ) )
         {
@@ -1298,63 +1310,7 @@ void DffPropertyReader::ApplyFillAttributes( SvStream& rIn, SfxItemSet& rSet, co
         }
         else if ( eXFill == XFILL_GRADIENT )
         {
-            sal_Int32 nAngle = 3600 - ( ( Fix16ToAngle( GetPropertyValue( DFF_Prop_fillAngle, 0 ) ) + 5 ) / 10 );
-
-            // force rotation angle to be within a certain range
-            while ( nAngle >= 3600 )
-                nAngle -= 3600;
-            while ( nAngle < 0 )
-                nAngle += 3600;
-
-            sal_Int32 nFocus = GetPropertyValue( DFF_Prop_fillFocus, 0 );
-            XGradientStyle eGrad = XGRAD_LINEAR;
-            sal_Int32 nChgColors = 0;
-
-            if ( nFocus < 0 )       // If the focus is negative the colors need to be swapped
-            {
-                nFocus = -nFocus;
-                nChgColors ^= 1;
-            }
-            if( nFocus > 40 && nFocus < 60 )
-            {
-                eGrad = XGRAD_AXIAL;    // Unfortunately there's no better solution
-            }
-
-            sal_uInt16 nFocusX = (sal_uInt16)nFocus;
-            sal_uInt16 nFocusY = (sal_uInt16)nFocus;
-
-            switch( eMSO_FillType )
-            {
-                case mso_fillShadeShape :
-                {
-                    eGrad = XGRAD_RECT;
-                    nFocusY = nFocusX = 50;
-                    nChgColors ^= 1;
-                }
-                break;
-                case mso_fillShadeCenter :
-                {
-                    eGrad = XGRAD_RECT;
-                    nFocusX = ( IsProperty( DFF_Prop_fillToRight ) ) ? 100 : 0;
-                    nFocusY = ( IsProperty( DFF_Prop_fillToBottom ) ) ? 100 : 0;
-                    nChgColors ^= 1;
-                }
-                break;
-                default: break;
-            }
-            Color aCol1( rManager.MSO_CLR_ToColor( GetPropertyValue( DFF_Prop_fillColor, COL_WHITE ), DFF_Prop_fillColor ) );
-            Color aCol2( rManager.MSO_CLR_ToColor( GetPropertyValue( DFF_Prop_fillBackColor, COL_WHITE ), DFF_Prop_fillBackColor ) );
-
-            if ( nChgColors )
-            {
-                Color aZwi( aCol1 );
-                aCol1 = aCol2;
-                aCol2 = aZwi;
-            }
-            XGradient aGrad( aCol2, aCol1, eGrad, nAngle, nFocusX, nFocusY );
-            aGrad.SetStartIntens( 100 );
-            aGrad.SetEndIntens( 100 );
-            rSet.Put( XFillGradientItem( OUString(), aGrad ) );
+            ImportGradientColor ( rSet, eMSO_FillType, dTrans , dBackTrans );
         }
         else if ( eXFill == XFILL_BITMAP )
         {
@@ -2579,7 +2535,7 @@ void DffPropertyReader::ApplyAttributes( SvStream& rIn, SfxItemSet& rSet, DffObj
     if ( nFontAttributes & 0x08 )
         rSet.Put( SvxUnderlineItem( nFontAttributes & 0x08 ? UNDERLINE_SINGLE : UNDERLINE_NONE, EE_CHAR_UNDERLINE ) );
     if ( nFontAttributes & 0x40 )
-        rSet.Put( SvxShadowedItem( ( nFontAttributes & 0x40 ) != 0, EE_CHAR_SHADOW ) );
+        rSet.Put( SvxShadowedItem( (nFontAttributes & 0x40) != 0, EE_CHAR_SHADOW ) );
 //    if ( nFontAttributes & 0x02 )
 //        rSet.Put( SvxCaseMapItem( nFontAttributes & 0x02 ? SVX_CASEMAP_KAPITAELCHEN : SVX_CASEMAP_NOT_MAPPED ) );
     if ( nFontAttributes & 0x01 )
@@ -2768,6 +2724,114 @@ void DffPropertyReader::CheckAndCorrectExcelTextRotation( SvStream& rIn, SfxItem
         aTextRotateAngle.Value <<= fExtraTextRotateAngle;
         aGeometryItem.SetPropertyValue( aTextRotateAngle );
         rSet.Put( aGeometryItem );
+    }
+}
+
+
+void DffPropertyReader::ImportGradientColor( SfxItemSet& aSet,MSO_FillType eMSO_FillType, double dTrans , double dBackTrans) const
+{
+    //MS Focus prop will impact the start and end color position. And AOO does not
+    //support this prop. So need some swap for the two color to keep fidelity with AOO and MS shape.
+    //So below var is defined.
+    sal_Int32 nChgColors = 0;
+    sal_Int32 nAngle = GetPropertyValue( DFF_Prop_fillAngle, 0 );
+    sal_Int32 nRotateAngle = 0;
+    if(nAngle >= 0)
+        nChgColors ^= 1;
+
+    //Translate a MS clockwise(+) or count clockwise angle(-) into a AOO count clock wise angle
+    nAngle=3600 - ( ( Fix16ToAngle(nAngle) + 5 ) / 10 );
+    //Make sure this angle belongs to 0~3600
+    while ( nAngle >= 3600 ) nAngle -= 3600;
+    while ( nAngle < 0 ) nAngle += 3600;
+
+    //Rotate angle
+    if ( mbRotateGranientFillWithAngle )
+    {
+        nRotateAngle = GetPropertyValue( DFF_Prop_Rotation, 0 );
+        if(nRotateAngle)//fixed point number
+            nRotateAngle = ( (sal_Int16)( nRotateAngle >> 16) * 100L ) + ( ( ( nRotateAngle & 0x0000ffff) * 100L ) >> 16 );
+        nRotateAngle = ( nRotateAngle + 5 ) / 10 ;//round up
+        //nAngle is a clockwise angle. If nRotateAngle is a clockwise angle, then gradient need be rotated a little less
+        //Or it need be rotated a little more
+        nAngle -=  nRotateAngle;
+    }
+    while ( nAngle >= 3600 ) nAngle -= 3600;
+    while ( nAngle < 0 ) nAngle += 3600;
+
+    XGradientStyle eGrad = XGRAD_LINEAR;
+
+    sal_Int32 nFocus = GetPropertyValue( DFF_Prop_fillFocus, 0 );
+    if ( !nFocus )
+        nChgColors ^= 1;
+    else if ( nFocus < 0 )//If it is a negative focus, the color will be swapped
+    {
+        nFocus =- nFocus;
+        nChgColors ^= 1;
+    }
+
+    if( nFocus > 40 && nFocus < 60 )
+    {
+        eGrad = XGRAD_AXIAL;//A axial gradient other than linear
+        nChgColors ^= 1;
+    }
+    //if the type is linear or axial, just save focus to nFocusX and nFocusY for export
+    //Core function does no need them. They serves for rect gradient(CenterXY).
+    sal_uInt16 nFocusX = (sal_uInt16)nFocus;
+    sal_uInt16 nFocusY = (sal_uInt16)nFocus;
+
+    switch( eMSO_FillType )
+    {
+    case mso_fillShadeShape :
+        {
+            eGrad = XGRAD_RECT;
+            nFocusY = nFocusX = 50;
+            nChgColors ^= 1;
+        }
+        break;
+    case mso_fillShadeCenter :
+        {
+            eGrad = XGRAD_RECT;
+            //A MS fillTo prop specifies the relative position of the left boundary
+            //of the center rectangle in a concentric shaded fill. Use 100 or 0 to keep fidelity
+            nFocusX=(GetPropertyValue( DFF_Prop_fillToRight, 0 )==0x10000) ? 100 : 0;
+            nFocusY=(GetPropertyValue( DFF_Prop_fillToBottom,0 )==0x10000) ? 100 : 0;
+            nChgColors ^= 1;
+        }
+        break;
+        default: break;
+    }
+
+    Color aCol1( rManager.MSO_CLR_ToColor( GetPropertyValue( DFF_Prop_fillColor, COL_WHITE ), DFF_Prop_fillColor ) );
+    Color aCol2( rManager.MSO_CLR_ToColor( GetPropertyValue( DFF_Prop_fillBackColor, COL_WHITE ), DFF_Prop_fillBackColor ) );
+    if ( nChgColors )
+    {
+        //Swap start and end color
+        Color aZwi( aCol1 );
+        aCol1 = aCol2;
+        aCol2 = aZwi;
+        //Swap two colors' transparency
+        double dTemp = dTrans;
+        dTrans = dBackTrans;
+        dBackTrans = dTemp;
+    }
+
+    //Construct gradient item
+    XGradient aGrad( aCol2, aCol1, eGrad, nAngle, nFocusX, nFocusY );
+    //Intensity has been merged into color. So here just set is as 100
+    aGrad.SetStartIntens( 100 );
+    aGrad.SetEndIntens( 100 );
+    aSet.Put( XFillGradientItem( String(), aGrad ) );
+    //Construct tranparency item. This item can coodinate with both solid and gradient.
+    if ( dTrans < 1.0 || dBackTrans < 1.0 )
+    {
+        sal_uInt8 nStartCol = (sal_uInt8)( (1 - dTrans )* 255 );
+        sal_uInt8 nEndCol = (sal_uInt8)( ( 1- dBackTrans ) * 255 );
+        aCol1 = Color(nStartCol, nStartCol, nStartCol);
+        aCol2 = Color(nEndCol, nEndCol, nEndCol);
+
+        XGradient aGrad2( aCol2 ,  aCol1 , eGrad, nAngle, nFocusX, nFocusY );
+        aSet.Put( XFillFloatTransparenceItem( String(), aGrad2 ) );
     }
 }
 
@@ -4018,6 +4082,29 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
     DffObjData aObjData( rHd, rClientRect, nCalledByGroup );
     aObjData.bRotateTextWithShape = ( GetSvxMSDffSettings() & SVXMSDFF_SETTINGS_IMPORT_EXCEL ) == 0;
     maShapeRecords.Consume( rSt, sal_False );
+    if( maShapeRecords.SeekToContent( rSt,
+        DFF_msofbtUDefProp,
+        SEEK_FROM_BEGINNING ) )
+    {
+        sal_uInt32  nBytesLeft = maShapeRecords.Current()->nRecLen;
+        sal_uInt32  nUDData;
+        sal_uInt16  nPID;
+        while( 5 < nBytesLeft )
+        {
+            rSt >> nPID;
+            if ( rSt.GetError() != 0 )
+                break;
+            rSt >> nUDData;
+            if ( rSt.GetError() != 0 )
+                break;
+            if ( nPID == 447 ) //
+            {
+                mbRotateGranientFillWithAngle = nUDData & 0x20;
+                break;
+            }
+            nBytesLeft  -= 6;
+        }
+    }
     aObjData.bShapeType = maShapeRecords.SeekToContent( rSt, DFF_msofbtSp, SEEK_FROM_BEGINNING );
     if ( aObjData.bShapeType )
     {

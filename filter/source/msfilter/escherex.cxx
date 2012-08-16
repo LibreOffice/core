@@ -18,6 +18,7 @@
  */
 
 #include "eschesdo.hxx"
+#include <svx/xflftrit.hxx>
 #include <filter/msfilter/escherex.hxx>
 #include <svx/unoapi.hxx>
 #include <svx/svdobj.hxx>
@@ -426,20 +427,159 @@ void EscherPropertyContainer::CreateGradientProperties(
 }
 
 void EscherPropertyContainer::CreateGradientProperties(
-    const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rXPropSet )
+    const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rXPropSet , sal_Bool bTransparentGradient)
 {
-    ::com::sun::star::uno::Any aAny;
-    ::com::sun::star::awt::Gradient aGradient;
-    if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, OUString( "FillGradient" ), sal_False ) )
+    ::com::sun::star::uno::Any          aAny;
+    ::com::sun::star::awt::Gradient*    pGradient = NULL;
+
+    sal_uInt32  nFillType = ESCHER_FillShadeScale;
+    sal_Int32  nAngle = 0;
+    sal_uInt32  nFillFocus = 0;
+    sal_uInt32  nFillLR = 0;
+    sal_uInt32  nFillTB = 0;
+    sal_uInt32  nFirstColor = 0;//like the control var nChgColors in import logic
+    bool        bWriteFillTo = false;
+
+    //Transparency gradient: Means the third setting in transparency page is set
+    if (bTransparentGradient &&  EscherPropertyValueHelper::GetPropertyValue(
+        aAny, rXPropSet, OUString( "FillTransparenceGradient" ), sal_False ) )
     {
-        aGradient = *static_cast< const ::com::sun::star::awt::Gradient* >( aAny.getValue() );
+        pGradient = (::com::sun::star::awt::Gradient*)aAny.getValue();
+
+        ::com::sun::star::uno::Any          aAnyTemp;
+        const rtl::OUString aPropName( "FillStyle" );
+        if ( EscherPropertyValueHelper::GetPropertyValue(
+            aAnyTemp, rXPropSet, aPropName, sal_False ) )
+        {
+            ::com::sun::star::drawing::FillStyle eFS;
+            if ( ! ( aAnyTemp >>= eFS ) )
+                eFS = ::com::sun::star::drawing::FillStyle_SOLID;
+            //solid and transparency
+            if ( eFS == ::com::sun::star::drawing::FillStyle_SOLID)
+            {
+                if ( EscherPropertyValueHelper::GetPropertyValue(
+                    aAnyTemp, rXPropSet, OUString( "FillColor" ), sal_False ) )
+                {
+                    pGradient->StartColor = ImplGetColor( *((sal_uInt32*)aAnyTemp.getValue()), sal_False );
+                    pGradient->EndColor = ImplGetColor( *((sal_uInt32*)aAnyTemp.getValue()), sal_False );
+                }
+            }
+            //gradient and transparency.
+            else if( eFS == ::com::sun::star::drawing::FillStyle_GRADIENT )
+            {
+                if ( EscherPropertyValueHelper::GetPropertyValue(
+                    aAny, rXPropSet, OUString( "FillGradient" ), sal_False ) )
+                    pGradient = (::com::sun::star::awt::Gradient*)aAny.getValue();
+            }
+        }
+
     }
-    CreateGradientProperties( aGradient );
-};
+    //Not transparency gradient
+    else if ( EscherPropertyValueHelper::GetPropertyValue(
+        aAny, rXPropSet, OUString( "FillGradient" ), sal_False ) )
+    {
+        pGradient = (::com::sun::star::awt::Gradient*)aAny.getValue();
+    }
+
+    if ( pGradient )
+    {
+        switch ( pGradient->Style )
+        {
+        case ::com::sun::star::awt::GradientStyle_LINEAR :
+        case ::com::sun::star::awt::GradientStyle_AXIAL :
+            {
+                nFillType = ESCHER_FillShadeScale;
+                nAngle = pGradient->Angle;
+                while ( nAngle > 0 ) nAngle -= 3600;
+                while ( nAngle <= -3600 ) nAngle += 3600;
+                //Value of the real number = Integral + (Fractional / 65536.0)
+                nAngle = ( nAngle * 0x10000) / 10;
+
+                nFillFocus = (pGradient->Style == ::com::sun::star::awt::GradientStyle_LINEAR) ?
+                            ( pGradient->XOffset + pGradient->YOffset )/2 : -50;
+                if( !nFillFocus )
+                    nFirstColor=nFirstColor ^ 1;
+                if ( !nAngle )
+                    nFirstColor=nFirstColor ^ 1;
+            }
+            break;
+        case ::com::sun::star::awt::GradientStyle_RADIAL :
+        case ::com::sun::star::awt::GradientStyle_ELLIPTICAL :
+        case ::com::sun::star::awt::GradientStyle_SQUARE :
+        case ::com::sun::star::awt::GradientStyle_RECT :
+            {
+                //according to the import logic and rect type fill** value
+                nFillLR = (pGradient->XOffset * 0x10000) / 100;
+                nFillTB = (pGradient->YOffset * 0x10000) / 100;
+                if ( ((nFillLR > 0) && (nFillLR < 0x10000)) || ((nFillTB > 0) && (nFillTB < 0x10000)) )
+                    nFillType = ESCHER_FillShadeShape;
+                else
+                    nFillType = ESCHER_FillShadeCenter;
+                nFirstColor = 1;
+                bWriteFillTo = true;
+            }
+            break;
+        default: break;
+        }
+    }
+
+    AddOpt( ESCHER_Prop_fillType, nFillType );
+    AddOpt( ESCHER_Prop_fillAngle, nAngle );
+    AddOpt( ESCHER_Prop_fillColor, GetGradientColor( pGradient, nFirstColor ) );
+    AddOpt( ESCHER_Prop_fillBackColor, GetGradientColor( pGradient, nFirstColor ^ 1 ) );
+    AddOpt( ESCHER_Prop_fillFocus, nFillFocus );
+    if ( bWriteFillTo )
+    {
+        //according to rect type fillTo** value
+        if(nFillLR)
+        {
+            AddOpt( ESCHER_Prop_fillToLeft, nFillLR );
+            AddOpt( ESCHER_Prop_fillToRight, nFillLR );
+        }
+        if(nFillTB)
+        {
+            AddOpt( ESCHER_Prop_fillToTop, nFillTB );
+            AddOpt( ESCHER_Prop_fillToBottom, nFillTB );
+        }
+    }
+
+    //Transparency gradient
+    if (bTransparentGradient &&  EscherPropertyValueHelper::GetPropertyValue(
+        aAny, rXPropSet, OUString( "FillTransparenceGradient" ), sal_False ) )
+    {
+        pGradient = (::com::sun::star::awt::Gradient*)aAny.getValue();
+        if ( pGradient )
+        {
+            sal_uInt32  nBlue =  GetGradientColor( pGradient, nFirstColor ) >> 16;
+            AddOpt( ESCHER_Prop_fillOpacity,( ( 100 - ( nBlue * 100 / 255 ) ) << 16 ) / 100 );
+            nBlue =  GetGradientColor( pGradient, nFirstColor ^ 1 ) >>16 ;
+            AddOpt( ESCHER_Prop_fillBackOpacity,( ( 100 - ( nBlue * 100 / 255 ) ) << 16 )/ 100 );
+        }
+    }
+}
+
+void    EscherPropertyContainer::CreateFillProperties(
+    const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rXPropSet,
+    sal_Bool bEdge ,  const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > & rXShape )
+{
+    if ( rXShape.is() )
+    {
+        SdrObject* pObj = GetSdrObjectFromXShape( rXShape );
+        if ( pObj )
+        {
+            SfxItemSet aAttr( pObj->GetMergedItemSet() );
+            //tranparency with gradient. Means the third setting in transparency page is set
+            sal_Bool bTransparentGradient =  ( aAttr.GetItemState( XATTR_FILLFLOATTRANSPARENCE ) == SFX_ITEM_SET ) &&
+                ( (const XFillFloatTransparenceItem&) aAttr.Get( XATTR_FILLFLOATTRANSPARENCE ) ).IsEnabled();
+            CreateFillProperties(  rXPropSet, bEdge, bTransparentGradient );
+        }
+    }
+}
 
 void EscherPropertyContainer::CreateFillProperties(
-    const uno::Reference< beans::XPropertySet > & rXPropSet,
-        sal_Bool bEdge )
+    const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rXPropSet,
+    sal_Bool bEdge , sal_Bool bTransparentGradient)
+
 {
     ::com::sun::star::uno::Any aAny;
     AddOpt( ESCHER_Prop_WrapText, ESCHER_WrapNone );
@@ -457,7 +597,7 @@ void EscherPropertyContainer::CreateFillProperties(
         {
             case ::com::sun::star::drawing::FillStyle_GRADIENT :
             {
-                CreateGradientProperties( rXPropSet );
+                CreateGradientProperties( rXPropSet , bTransparentGradient );
                 AddOpt( ESCHER_Prop_fNoFillHitTest, 0x140014 );
             }
             break;
@@ -477,19 +617,25 @@ void EscherPropertyContainer::CreateFillProperties(
             case ::com::sun::star::drawing::FillStyle_SOLID :
             default:
             {
-                ::com::sun::star::beans::PropertyState ePropState = EscherPropertyValueHelper::GetPropertyState(
-                    rXPropSet, aPropName );
-                if ( ePropState == ::com::sun::star::beans::PropertyState_DIRECT_VALUE )
-                    AddOpt( ESCHER_Prop_fillType, ESCHER_FillSolid );
-
-                if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, OUString( "FillColor" ), sal_False ) )
+                if ( bTransparentGradient )
+                    CreateGradientProperties( rXPropSet , bTransparentGradient );
+                else
                 {
-                    sal_uInt32 nFillColor = ImplGetColor( *((sal_uInt32*)aAny.getValue()) );
-                    nFillBackColor = nFillColor ^ 0xffffff;
-                    AddOpt( ESCHER_Prop_fillColor, nFillColor );
+                    ::com::sun::star::beans::PropertyState ePropState = EscherPropertyValueHelper::GetPropertyState(
+                        rXPropSet, aPropName );
+                    if ( ePropState == ::com::sun::star::beans::PropertyState_DIRECT_VALUE )
+                        AddOpt( ESCHER_Prop_fillType, ESCHER_FillSolid );
+
+                    if ( EscherPropertyValueHelper::GetPropertyValue(
+                            aAny, rXPropSet, OUString( "FillColor" ), sal_False ) )
+                    {
+                        sal_uInt32 nFillColor = ImplGetColor( *((sal_uInt32*)aAny.getValue()) );
+                        nFillBackColor = nFillColor ^ 0xffffff;
+                        AddOpt( ESCHER_Prop_fillColor, nFillColor );
+                    }
+                    AddOpt( ESCHER_Prop_fNoFillHitTest, 0x100010 );
+                    AddOpt( ESCHER_Prop_fillBackColor, nFillBackColor );
                 }
-                AddOpt( ESCHER_Prop_fNoFillHitTest, 0x100010 );
-                AddOpt( ESCHER_Prop_fillBackColor, nFillBackColor );
                 break;
             }
             case ::com::sun::star::drawing::FillStyle_NONE :
@@ -1358,27 +1504,27 @@ sal_Bool EscherPropertyContainer::CreateGraphicProperties(
 
         // #121074# transparency of graphic is not supported in MS formats, get and apply it
         // in the GetTransformedGraphic call in GetBlibID
-        if(EscherPropertyValueHelper::GetPropertyValue(aAny, rXPropSet, String(RTL_CONSTASCII_USTRINGPARAM("Transparency"))))
+        if(EscherPropertyValueHelper::GetPropertyValue(aAny, rXPropSet, OUString("Transparency")))
         {
             aAny >>= nTransparency;
         }
 
-        if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "AdjustRed" ) ) ) )
+        if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, OUString("AdjustRed") ) )
         {
             aAny >>= nRed;
         }
 
-        if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "AdjustGreen" ) ) ) )
+        if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, OUString("AdjustGreen" ) ) )
         {
             aAny >>= nGreen;
         }
 
-        if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "AdjustBlue" ) ) ) )
+        if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, OUString("AdjustBlue" ) ) )
         {
             aAny >>= nBlue;
         }
 
-        if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "Gamma" ) ) ) )
+        if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, OUString( "Gamma" ) ) )
         {
             aAny >>= fGamma;
         }
