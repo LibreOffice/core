@@ -40,7 +40,7 @@ protected:
     virtual void    PageCreated( sal_uInt16 nPageId, SfxTabPage& rTabPage );
 
 private:
-    DECL_LINK( OkHandler, void* ); // fuer DoppelClick-Beenden in TabPages
+    DECL_LINK( OkHandler, void* ); // for closing by double clicking in TabPages
 };
 
 #endif // SC_ATTRDLG_HXX

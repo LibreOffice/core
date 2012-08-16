@@ -65,9 +65,9 @@ class ScInputHandler : boost::noncopyable
 private:
     ScInputWindow*          pInputWin;
 
-    ScEditEngineDefaulter*  pEngine;                // editierte Daten in der Tabelle
-    EditView*               pTableView;                 // aktive EditView dazu
-    EditView*               pTopView;                   // EditView in der Eingabezeile
+    ScEditEngineDefaulter*  pEngine;                // edited data in the sheet
+    EditView*               pTableView;                 // associated active EditView
+    EditView*               pTopView;                   // EditView in dthe input row
 
     ScTypedCaseStrSet* pColumnData;
     ScTypedCaseStrSet* pFormulaData;
@@ -84,16 +84,16 @@ private:
 
     rtl::OUString           aCurrentText;
 
-    rtl::OUString           aFormText;                  // fuer Funktions-Autopilot
-    xub_StrLen              nFormSelStart;              // Selektion fuer Funktions-Autopilot
+    rtl::OUString           aFormText;                  // for autopilot function
+    xub_StrLen              nFormSelStart;              // Selection for autopilot function
     xub_StrLen              nFormSelEnd;
 
     sal_uInt16                  nAutoPar;                   // autom.parentheses than can be overwritten
 
     ScAddress               aCursorPos;
     ScInputMode             eMode;
-    bool                    bUseTab:1;                    // Blaettern moeglich
-    bool                    bTextValid:1;                 // Text noch nicht in Edit-Engine
+    bool                    bUseTab:1;                    // Scrolling possible
+    bool                    bTextValid:1;                 // Text is not in edit engine
     bool                    bModified:1;
     bool                    bSelIsRef:1;
     bool                    bFormulaMode:1;
@@ -110,7 +110,7 @@ private:
     sal_uLong                   nValidation;
     SvxCellHorJustify       eAttrAdjust;
 
-    Fraction                aScaleX;                    // fuer Ref-MapMode
+    Fraction                aScaleX;                    // for ref MapMode
     Fraction                aScaleY;
 
     ScTabViewShell*         pRefViewSh;
@@ -124,7 +124,7 @@ private:
 
     ScRangeFindList*        pRangeFindList;
 
-    static bool             bAutoComplete;              // aus App-Optionen
+    static bool             bAutoComplete;              // from app options
     static bool             bOptLoaded;
 
 #ifdef _INPUTHDL_CXX
@@ -212,7 +212,7 @@ public:
     void            HideTip();
     void            HideTipBelow();
     void            ShowTipCursor();
-    void            ShowTip( const String& rText );     // am Cursor
+    void            ShowTip( const String& rText );     // at Cursor
     void            ShowTipBelow( const String& rText );
 
     void            SetRefScale( const Fraction& rX, const Fraction& rY );
@@ -238,7 +238,7 @@ public:
 
     void            UpdateRange( sal_uInt16 nIndex, const ScRange& rNew );
 
-    // Kommunikation mit Funktionsautopilot
+    // Communication with the autopilot function
     void            InputGetSelection       ( xub_StrLen& rStart, xub_StrLen& rEnd );
     void            InputSetSelection       ( xub_StrLen nStart, xub_StrLen nEnd );
     void            InputReplaceSelection   ( const rtl::OUString& rStr );
@@ -261,7 +261,7 @@ public:
 
     Size            GetTextSize();      // in 1/100mm
 
-                    // eigentlich private, fuer SID_INPUT_SUM public
+                    // actually private, public for SID_INPUT_SUM
     void            InitRangeFinder( const String& rFormula );
 
     static void     SetAutoComplete(bool bSet)  { bAutoComplete = bSet; }

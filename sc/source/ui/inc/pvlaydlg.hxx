@@ -45,22 +45,21 @@
 
 /*==========================================================================*\
 
-    Eine Instanz der Klasse ScPivotLayoutDlg ist ein (semi-)modaler
-    Dialog, in dem mit der Maus Felder mit Spaltenueberschriften den
-    drei Pivot-Kategorien "Spalte", "Zeile" und "Daten" zugeordnet
-    werden koennen.
+    An instance of the class ScPivotLayoutDlg is a (semi-)modal dialog
+    that can be associated to the mouse fields with column headings of
+    the three pivot categories "column", "row" and "data".
 
-    Der Dialog erhaelt in der Struktur LabelData Informationen ueber
-    diese Ueberschriften (Name, Art (Zahl/String) und Funktionsmaske).
-    Weiterhin werden drei PivotFeld-Arrays uebergeben, mit denen die
-    drei Kategorie-Fenster initialisiert werden. Ein Kategorie-Fenster
-    wird durch eine Instanz der Klasse FieldWindow dargestellt. Ein
-    solches Fenster ist fuer die Darstellung der Datenstrukturen am
-    Schirm zustaendig. Es meldet Mausaktionen an den Dialog weiter und
-    bietet entsprechende Methoden zur Veraenderung der Darstellung.
-    Der Dialog sorgt fuer den Abgleich der interenen Datenstrukturen mit
-    der Bildschirmdarstellung. Ein weiteres FieldWindow (Select) bietet
-    alle Tabellenueberschriften zur Auswahl an, ist also "read-only".
+    The dialog receives information about these headers (name,
+    type (number/string) and function mask) in the label data structure
+    Furthermore, three pivot field arrays are passed on, with which the three
+    category windows are initialized. A window class is represented by an
+    instance of class FieldWindow. Such a window is responsible for the
+    representation of data structures on the screen. It reports on mouse
+    actions in the dialogue and provides appropriate methods for
+    changing the representation. The dialogue provides the adjustment of the
+    internal data structures with respect to the representation on the screen.
+    Another FieldWindow(Select) provides all table headers for selection,
+    is thus "read only".
 
 \*==========================================================================*/
 
@@ -168,7 +167,7 @@ private:
     Rectangle               aRectData;
     Rectangle               aRectSelect;
 
-    ScDPLabelDataVec        aLabelDataArr; // (nCol, Feldname, Zahl/Text)
+    ScDPLabelDataVec        aLabelDataArr; // (nCol, Field name, Number/Text)
 
     ScDPFieldType           eLastActiveType;        /// Type of last active area.
     size_t                  nOffset;                /// Offset of first field in TYPE_SELECT area.

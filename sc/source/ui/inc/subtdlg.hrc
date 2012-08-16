@@ -25,7 +25,7 @@
 #define PAGE_GROUP3         4
 #define PAGE_OPTIONS        5
 
-// Gruppen TabPages
+// Groups TabPages
 #define FT_GROUP            10
 #define LB_GROUP            11
 #define FT_COLUMNS          12
@@ -33,7 +33,7 @@
 #define LB_FUNCTIONS        14
 #define FT_FUNCTIONS        15
 
-// Optionen TabPage
+// Options TabPage
 #define FL_GROUP            20
 #define BTN_PAGEBREAK       21
 #define BTN_CASE            22

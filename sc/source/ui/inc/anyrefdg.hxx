@@ -56,20 +56,20 @@ class ScFormulaReferenceHelper
     IAnyRefDialog*      m_pDlg;
     ::std::auto_ptr<ScFormulaCell>      pRefCell;
     ::std::auto_ptr<ScCompiler>         pRefComp;
-    formula::RefEdit*    pRefEdit;               // aktives Eingabefeld
-    formula::RefButton*  pRefBtn;                // Button dazu
+    formula::RefEdit*    pRefEdit;               // active input field
+    formula::RefButton*  pRefBtn;                // associated button
     Window*             m_pWindow;
     SfxBindings*        m_pBindings;
     ::std::auto_ptr<Accelerator>
-                        pAccel;                 // fuer Enter/Escape
-    sal_Bool*               pHiddenMarks;           // Merkfeld fuer versteckte Controls
+                        pAccel;                 // for Enter/Escape
+    sal_Bool*               pHiddenMarks;           // Mark field for hidden Controls
     SCTAB               nRefTab;                // used for ShowReference
 
-    String              sOldDialogText;         // Originaltitel des Dialogfensters
-    Size                aOldDialogSize;         // Originalgroesse Dialogfenster
-    Point               aOldEditPos;            // Originalposition des Eingabefeldes
-    Size                aOldEditSize;           // Originalgroesse des Eingabefeldes
-    Point               aOldButtonPos;          // Originalpositiuon des Buttons
+    String              sOldDialogText;         // Original title of the dialog window
+    Size                aOldDialogSize;         // Original size of the dialog window
+    Point               aOldEditPos;            // Original position of the input field
+    Size                aOldEditSize;           // Original size of the input field
+    Point               aOldButtonPos;          // Original position of the button
 
     sal_Bool                bEnableColorRef;
     sal_Bool                bHighLightRef;

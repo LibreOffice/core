@@ -147,7 +147,7 @@ public:
 };
 
 //----------------------------------------------------------------------------
-// Parameter-Item fuer den Sortierdialog:
+// Parameter item for the sort dialog:
 
 class SC_DLLPUBLIC ScSortItem : public SfxPoolItem
 {
@@ -175,7 +175,6 @@ private:
 };
 
 //----------------------------------------------------------------------------
-// Parameter-Item fuer den Filterdialog:
 
 class SC_DLLPUBLIC ScQueryItem : public SfxPoolItem
 {
@@ -207,7 +206,6 @@ private:
 };
 
 //----------------------------------------------------------------------------
-// Parameter-Item fuer den Zwischenergebnisdialog:
 
 class SC_DLLPUBLIC ScSubTotalItem : public SfxPoolItem
 {
@@ -235,7 +233,6 @@ private:
 };
 
 //----------------------------------------------------------------------------
-// Parameter-Item fuer die Benutzerlisten-TabPage:
 
 class SC_DLLPUBLIC ScUserListItem : public SfxPoolItem
 {
@@ -257,7 +254,6 @@ private:
 };
 
 //----------------------------------------------------------------------------
-// Parameter-Item fuer die Konsolidieren-Dialog
 
 class ScConsolidateItem : public SfxPoolItem
 {
@@ -279,7 +275,6 @@ private:
 };
 
 //----------------------------------------------------------------------------
-// Parameter-Item fuer den Pivot-Dialog
 
 class ScPivotItem : public SfxPoolItem
 {
@@ -305,7 +300,6 @@ private:
 };
 
 //----------------------------------------------------------------------------
-// Parameter-Item fuer den Solver-Dialog
 
 class ScSolveItem : public SfxPoolItem
 {
@@ -327,7 +321,6 @@ private:
 };
 
 //----------------------------------------------------------------------------
-// Parameter-Item fuer den Mehrfachoperationen-Dialog
 
 class ScTabOpItem : public SfxPoolItem
 {

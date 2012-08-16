@@ -111,7 +111,7 @@ private:
     SCCOL           nCol;
     SCROW           nRow;
     SCTAB           nTab;
-    SCTAB           nCount;             //  markierte Tabellen
+    SCTAB           nCount;             //  Marked sheet
 
     void            DoChange() const;
     void            SetChangeTrack();
@@ -192,8 +192,8 @@ private:
     SCCOL           nCol;
     SCROW           nRow;
     SCTAB           nTab;
-    sal_Bool            bColumn;        // Spalten- oder Zeilenumbruch
-    sal_Bool            bInsert;        // Einfuegen oder Loeschen
+    sal_Bool            bColumn;        // Column or row break
+    sal_Bool            bInsert;        // Insert or Delete
 
     void            DoChange( sal_Bool bInsert ) const;
 };
@@ -244,8 +244,8 @@ private:
     SCCOL           nCol;
     SCROW           nRow;
     SCTAB           nTab;
-    String          aUndoStr;           // Daten bei StringZelle
-    EditTextObject* pUndoTObject;       //       bei EditZelle
+    String          aUndoStr;           // Data at String cell
+    EditTextObject* pUndoTObject;       //      at Edit cell
     String          aRedoStr;
     EditTextObject* pRedoTObject;
     sal_uLong           nEndChangeAction;

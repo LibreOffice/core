@@ -35,7 +35,6 @@
 #include <svtools/svmedit.hxx>
 
 //========================================================================
-// Benutzerdefinierte Listen:
 
 class ScUserList;
 class ScDocument;

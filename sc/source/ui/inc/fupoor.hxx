@@ -42,17 +42,12 @@ class Dialog;
 // Create default drawing objects via keyboard
 class SdrObject;
 
-//  Return-Werte fuer Command
+//  Return values for command
 #define SC_CMD_NONE     0
 #define SC_CMD_USED     1
 #define SC_CMD_IGNORE   2
 
-/*************************************************************************
-|*
-|* Basisklasse fuer alle Funktionen
-|*
-\************************************************************************/
-
+/** Base class for all functions */
 class FuPoor
 {
 protected:
@@ -64,15 +59,15 @@ protected:
     SfxRequest      aSfxRequest;
     Dialog*         pDialog;
 
-    Timer           aScrollTimer;           // fuer Autoscrolling
+    Timer           aScrollTimer;           // for Autoscrolling
     DECL_LINK( ScrollHdl, void * );
     void ForceScroll(const Point& aPixPos);
 
-    Timer           aDragTimer;             // fuer Drag&Drop
+    Timer           aDragTimer;             // for Drag&Drop
     DECL_LINK( DragTimerHdl, void * );
     DECL_LINK( DragHdl, void * );
     sal_Bool            bIsInDragMode;
-    Point           aMDPos;                 // Position von MouseButtonDown
+    Point           aMDPos;                 // Position of MouseButtonDown
 
     // member to hold state of the mouse buttons for creation
     // of own MouseEvents (like in ScrollHdl)
@@ -94,7 +89,7 @@ public:
     virtual void DoCopy();
     virtual void DoPaste();
 
-    // Mouse- & Key-Events; Returnwert=TRUE: Event wurde bearbeitet
+    // Mouse- & Key-Events; return value=TRUE: Event was processed
     virtual sal_Bool KeyInput(const KeyEvent& rKEvt);
     virtual sal_Bool MouseMove(const MouseEvent&) { return false; }
 
@@ -106,8 +101,8 @@ public:
 
     virtual sal_uInt8 Command(const CommandEvent& rCEvt);
 
-    virtual void Activate();        // Function aktivieren
-    virtual void Deactivate();      // Function deaktivieren
+    virtual void Activate();
+    virtual void Deactivate();
 
     void SetWindow(Window* pWin) { pWindow = pWin; }
 

@@ -33,7 +33,7 @@ class ScDocument;
 class ScUndoUtil
 {
 public:
-                    //  Block markieren (unsichtbar, muss repainted werden)
+    /**  Mark Block (invisible - has to be repainted) */
     static void MarkSimpleBlock( ScDocShell* pDocShell,
                                 SCCOL nStartX, SCROW nStartY, SCTAB nStartZ,
                                 SCCOL nEndX, SCROW nEndY, SCTAB nEndZ );
@@ -43,12 +43,11 @@ public:
     static void MarkSimpleBlock( ScDocShell* pDocShell,
                                 const ScRange& rRange );
 
-                    //  Bereich +1 painten
     static void PaintMore( ScDocShell* pDocShell,
                                 const ScRange& rRange );
 
-                    //  DB-Bereich im Dokument suchen ("unbenannt" oder nach Bereich)
-                    //  legt neu an, wenn nicht gefunden
+    /** Search for Data base range in Document ("untitled" or by region)
+        create new if not found */
     static ScDBData* GetOldDBData( ScDBData* pUndoData, ScDocument* pDoc, SCTAB nTab,
                                     SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 );
 };

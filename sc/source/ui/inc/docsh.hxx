@@ -85,7 +85,7 @@ typedef ::boost::unordered_map< sal_uLong, sal_uLong > ScChangeActionMergeMap;
 
 //enum ScDBFormat { SC_FORMAT_SDF, SC_FORMAT_DBF };
 
-                                    // Extra-Flags fuer Repaint
+                                    // Extra flags for Repaint
 #define SC_PF_LINES         1
 #define SC_PF_TESTMERGE     2
 #define SC_PF_WHOLEROWS     4
@@ -105,7 +105,7 @@ class SC_DLLPUBLIC ScDocShell: public SfxObjectShell, public SfxListener
 
     bool                bHeaderOn;
     bool                bFooterOn;
-    bool                bIsInplace:1;         // wird von der View gesetzt
+    bool                bIsInplace:1;         // Is set by the View
     bool                bIsEmpty:1;
     bool                bIsInUndo:1;
     bool                bDocumentModifiedPending:1;
@@ -328,8 +328,8 @@ public:
     void            CancelAutoDBRange();    // called when dialog is cancelled
 
     virtual void    ReconnectDdeLink(SfxObjectShell& rServer);
-    void            UpdateLinks();          // Link-Eintraege aktuallisieren
-    sal_Bool            ReloadTabLinks();       // Links ausfuehren (Inhalt aktualisieren)
+    void            UpdateLinks();
+    sal_Bool            ReloadTabLinks();
 
     void            SetFormulaOptions(const ScFormulaOptions& rOpt );
     virtual void    CheckConfigOptions();
@@ -434,7 +434,7 @@ public:
 
     void ResetKeyBindings( ScOptionsUtil::KeyBindingType eType );
 
-    // passwword protection for Calc (derived from SfxObjectShell)
+    // password protection for Calc (derived from SfxObjectShell)
     // see also:    FID_CHG_RECORD, SID_CHG_PROTECT
     virtual bool    IsChangeRecording() const;
     virtual bool    HasChangeRecordProtection() const;
@@ -451,13 +451,13 @@ SO2_DECL_REF(ScDocShell)
 SO2_IMPL_REF(ScDocShell)
 
 
-// Vor Modifizierungen des Dokuments anlegen und danach zerstoeren.
-// Merkt sich im Ctor AutoCalcShellDisabled und IdleDisabled, schaltet sie ab
-// und stellt sie im Dtor wieder her, AutoCalcShellDisabled ggbf. auch vor
-// einem ScDocShell SetDocumentModified.
-// SetDocumentModified hierdran aufrufen statt an der ScDocShell.
-// Im Dtor wird wenn ScDocShell bDocumentModifiedPending gesetzt ist und
-// bAutoCalcShellDisabled nicht gesetzt ist ein SetDocumentModified gerufen.
+/** Create before modifications of the document and then destroy.
+    If noted in the ctor AutoCalcShellDisabled and IdleDisabled,
+    switches them off and restores the dtor AutoCalcShellDisabled
+    also before a ScDocShell SetDocumentModified.
+    Call SetDocumentModified after instead of the ScDocShell.
+    In the dtor, if ScDocShell bDocumentModifiedPending is set and
+    bAutoCalcShellDisabled is not set, then SetDocumentModified is called. */
 class SC_DLLPUBLIC ScDocShellModificator
 {
             ScDocShell&     rDocShell;

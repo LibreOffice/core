@@ -57,7 +57,7 @@ public:
             ScInsertTableDlg( Window* pParent, ScViewData& rViewData, SCTAB nTabCount, bool bFromFile );
             ~ScInsertTableDlg();
 
-    virtual short   Execute();      // ueberladen, um Dialog-Parent zu setzen
+    virtual short   Execute();      // overloaded to set parent dialog
 
     sal_Bool            GetTablesFromFile() { return aBtnFromFile.IsChecked(); }
     sal_Bool            GetTablesAsLink()   { return aBtnLink.IsChecked(); }
@@ -95,7 +95,7 @@ private:
     SfxObjectShellRef       aDocShTablesRef;
 
     bool                bMustClose;
-    sal_uInt16              nSelTabIndex;   // fuer GetFirstTable() / GetNextTable()
+    sal_uInt16              nSelTabIndex;   // for GetFirstTable() / GetNextTable()
     String              aStrCurSelTable;
     SCTAB               nTableCount;
 

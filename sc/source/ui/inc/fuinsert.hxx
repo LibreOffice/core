@@ -30,8 +30,8 @@ class FuInsertGraphic : public FuPoor
            SdrModel* pDoc, SfxRequest& rReq);
     virtual ~FuInsertGraphic();
 
-    virtual void Activate();           // Function aktivieren
-    virtual void Deactivate();         // Function deaktivieren
+    virtual void Activate();
+    virtual void Deactivate();
 };
 
 /************************************************************************/
@@ -43,8 +43,8 @@ class FuInsertOLE : public FuPoor
            SdrModel* pDoc, SfxRequest& rReq);
     virtual ~FuInsertOLE();
 
-    virtual void Activate();           // Function aktivieren
-    virtual void Deactivate();         // Function deaktivieren
+    virtual void Activate();
+    virtual void Deactivate();
 };
 
 /************************************************************************/
@@ -56,8 +56,8 @@ class FuInsertChart : public FuPoor
            SdrModel* pDoc, SfxRequest& rReq);
     virtual ~FuInsertChart();
 
-    virtual void Activate();           // Function aktivieren
-    virtual void Deactivate();         // Function deaktivieren
+    virtual void Activate();
+    virtual void Deactivate();
 };
 
 /************************************************************************/
@@ -69,8 +69,8 @@ class FuInsertMedia : public FuPoor
            SdrModel* pDoc, SfxRequest& rReq);
     virtual ~FuInsertMedia();
 
-    virtual void Activate();           // Function aktivieren
-    virtual void Deactivate();         // Function deaktivieren
+    virtual void Activate();
+    virtual void Deactivate();
 };
 
 #endif      // _SD_FUINSERT_HXX

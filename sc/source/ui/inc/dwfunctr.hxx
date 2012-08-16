@@ -41,12 +41,7 @@
 #include "privsplt.hxx"
 #include "funcdesc.hxx"
 
-/*************************************************************************
-|*
-|* Ableitung vom SfxChildWindow als "Behaelter" fuer Controller
-|*
-\************************************************************************/
-
+/** Derivation of SfxChildWindow as "containers" for Controller */
 class ScFunctionChildWindow : public SfxChildWindow
 {
  public:
@@ -55,12 +50,6 @@ class ScFunctionChildWindow : public SfxChildWindow
 
     SFX_DECL_CHILDWINDOW_WITHID(ScFunctionChildWindow);
 };
-
-/*************************************************************************
-|*
-|* ScFuncDockWin
-|*
-\************************************************************************/
 
 class ScFunctionDockWin : public SfxDockingWindow, public SfxListener
 {

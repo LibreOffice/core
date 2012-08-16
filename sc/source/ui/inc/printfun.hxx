@@ -59,16 +59,16 @@ class FmFormView;
 #define PRINT_HEADER_FONTHEIGHT     200
 
 
-                                            //  Einstellungen fuer Kopf-/Fusszeilen
+                                            // Settings for headers/footers
 struct ScPrintHFParam
 {
     sal_Bool                bEnable;
     sal_Bool                bDynamic;
     sal_Bool                bShared;
-    long                nHeight;            //  insgesamt (Hoehe+Abstand+Rahmen)
-    long                nManHeight;         //  eingestellte Groesse (Min. bei dynamisch)
-    sal_uInt16              nDistance;
-    sal_uInt16              nLeft;              //  Raender
+    long                nHeight;            // in total (height + distance + frames)
+    long                nManHeight;         // set size (min when dynamic)
+  sal_uInt16              nDistance;
+    sal_uInt16              nLeft;              // edges
     sal_uInt16              nRight;
     const ScPageHFItem* pLeft;
     const ScPageHFItem* pRight;
@@ -78,7 +78,7 @@ struct ScPrintHFParam
 };
 
 
-struct ScPrintState                         //  Variablen aus ScPrintFunc retten
+struct ScPrintState                         //  Save Variables from ScPrintFunc
 {
     SCTAB   nPrintTab;
     SCCOL   nStartCol;
@@ -101,7 +101,7 @@ private:
     SCROW   nEndRow;
     size_t  nPagesX;
     sal_Bool*   pHidden;
-    //!     Anzahl wirklich sichtbarer cachen???
+    //!     Cache Number of really visible?
 
 public:
             ScPageRowEntry()    { nStartRow = nEndRow = 0; nPagesX = 0; pHidden = NULL; }
@@ -132,25 +132,25 @@ private:
     OutputDevice*       pDev;
     FmFormView*         pDrawView;
 
-    MapMode             aOldPrinterMode;    //  MapMode vor dem Aufruf
+    MapMode             aOldPrinterMode;    //  MapMode befor the call
 
-    Point               aSrcOffset;         //  Papier-1/100 mm
-    Point               aOffset;            //  mit Faktor aus Seitenformat skaliert
-    sal_uInt16              nManualZoom;        //  Zoom in Preview (Prozent)
-    sal_Bool                bClearWin;          //  Ausgabe vorher loeschen
+    Point               aSrcOffset;         //  Paper-1/100 mm
+    Point               aOffset;            //  scaled by a factor of page size
+    sal_uInt16              nManualZoom;        //  Zoom in Preview (percent)
+    sal_Bool                bClearWin;          //  Clear output before
     sal_Bool                bUseStyleColor;
     sal_Bool                bIsRender;
 
     SCTAB               nPrintTab;
-    long                nPageStart;         //  Offset fuer erste Seite
-    long                nDocPages;          //  Seiten im Dokument
+    long                nPageStart;         //  Offset for the first page
+    long                nDocPages;          //  Number of Pages in Document
 
-    const ScRange*      pUserArea;          //  Selektion, wenn im Dialog eingestellt
+    const ScRange*      pUserArea;          //  Selection, if set in dialog
 
-    const SfxItemSet*   pParamSet;          //  eingestellte Vorlage
-    sal_Bool                bState;             //  aus State-struct erzeugt
+    const SfxItemSet*   pParamSet;          //  Selected template
+    sal_Bool                bState;             // created from State-struct
 
-                                            //  Parameter aus Vorlage:
+                                            //  Parameter from template:
     sal_uInt16              nLeftMargin;
     sal_uInt16              nTopMargin;
     sal_uInt16              nRightMargin;
@@ -161,7 +161,7 @@ private:
     sal_Bool                bSourceRangeValid;
 
     sal_uInt16              nPageUsage;
-    Size                aPageSize;          //  Drucker-Twips
+    Size                aPageSize;          // Printer Twips
     const SvxBoxItem*   pBorderItem;
     const SvxBrushItem* pBackgroundItem;
     const SvxShadowItem* pShadowItem;
@@ -172,16 +172,16 @@ private:
     ScPageTableParam    aTableParam;
     ScPageAreaParam     aAreaParam;
 
-                                            //  berechnete Werte:
+                                            // Calculated values:
     sal_uInt16              nZoom;
     sal_Bool                bPrintCurrentTable;
     sal_Bool                bMultiArea;
     long                nTabPages;
     long                nTotalPages;
 
-    Rectangle           aPageRect;          //  Dokument-Twips
+    Rectangle           aPageRect;          // Document Twips
 
-    MapMode             aLogicMode;         //  in DoPrint gesetzt
+    MapMode             aLogicMode;         // Set in DoPrint
     MapMode             aOffsetMode;
     MapMode             aTwipMode;
     double              nScaleX;
@@ -197,7 +197,7 @@ private:
     SCCOL               nEndCol;
     SCROW               nEndRow;
 
-    SCCOL*              pPageEndX;          // Seitenaufteilung
+    SCCOL*              pPageEndX;          // page layout
     SCROW*              pPageEndY;
     ScPageRowEntry*     pPageRows;
     size_t              nPagesX;
@@ -209,9 +209,9 @@ private:
 
     ScHeaderFieldData   aFieldData;
 
-    std::vector<ScAddress> aNotePosList;        //  Reihenfolge der Notizen
+    std::vector<ScAddress> aNotePosList;        // The order of notes
 
-    ScPageBreakData*    pPageData;          // zum Eintragen der Umbrueche etc.
+    ScPageBreakData*    pPageData;          // for recording the breaks etc.
 
 public:
                     ScPrintFunc( ScDocShell* pShell, SfxPrinter* pNewPrinter, SCTAB nTab,
@@ -250,19 +250,19 @@ public:
 
     sal_Bool            UpdatePages();
 
-    void            ApplyPrintSettings();       // aus DoPrint() schon gerufen
+    void            ApplyPrintSettings();       // Already called from DoPrint()
     long            DoPrint( const MultiSelection& rPageRanges,
                                 long nStartPage, long nDisplayStart, bool bDoPrint,
                                 ScPreviewLocationData* pLocationData );
 
-                    //  Werte abfragen - sofort
+                    // Query values - immediately
 
     Size            GetPageSize() const { return aPageSize; }
     Size            GetDataSize() const;
     void            GetScaleData( Size& rPhysSize, long& rDocHdr, long& rDocFtr );
     long            GetFirstPageNo() const  { return aTableParam.nFirstPageNo; }
 
-                    //  letzte Werte abfragen - nach DoPrint !!!
+                    // Query last value - after DoPrint!!
 
     double          GetScaleX() const { return nScaleX; }
     double          GetScaleY() const { return nScaleY; }
@@ -304,8 +304,8 @@ private:
 
     sal_Bool            IsLeft( long nPageNo );
     sal_Bool            IsMirror( long nPageNo );
-    void            ReplaceFields( long nPageNo );      // aendert Text in pEditEngine
-    void            MakeTableString();                  // setzt aTableStr
+    void            ReplaceFields( long nPageNo );      // changes Text in pEditEngine
+    void            MakeTableString();                  // sets aTableStr
 
     void            PrintPage( long nPageNo,
                                     SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2,

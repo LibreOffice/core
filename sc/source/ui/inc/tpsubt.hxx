@@ -44,7 +44,6 @@ class ScDocument;
 struct ScSubTotalParam;
 
 //========================================================================
-// Gruppenseiten: Basisklasse
 
 class ScTpSubTotalGroup : public SfxTabPage
 {
@@ -141,7 +140,6 @@ public:
 };
 
 //========================================================================
-// Optionen:
 
 class ScTpSubTotalOptions : public SfxTabPage
 {

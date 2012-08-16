@@ -107,7 +107,7 @@ public:
 
 typedef long LExpNum;
 
-//@ Expand-Entrys nicht eindeutig, daher gestrichen
+//@ Expand entrys are ambiguous and therefore removed
 //DECLARE_TABLE( ScChgTrackExps, LExpNum)
 //==================================================================
 

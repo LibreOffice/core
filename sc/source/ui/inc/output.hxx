@@ -144,51 +144,50 @@ private:
     OutputDevice* mpRefDevice;  // printer if used for preview
     OutputDevice* pFmtDevice;   // reference for text formatting
     ScTableInfo& mrTabInfo;
-    RowInfo* pRowInfo;          // Info-Block
-    SCSIZE nArrCount;           // belegte Zeilen im Info-Block
-    ScDocument* mpDoc;          // Dokument
-    SCTAB nTab;                 // Tabelle
-    long nScrX;                 // Ausgabe Startpos. (Pixel)
+    RowInfo* pRowInfo;          // Info block
+    SCSIZE nArrCount;           // occupied lines in info block
+    ScDocument* mpDoc;          // Document
+    SCTAB nTab;                 // sheet
+    long nScrX;                 // Output Startpos. (Pixel)
     long nScrY;
-    long nScrW;                 // Ausgabe Groesse (Pixel)
+    long nScrW;                 // Output size (Pixel)
     long nScrH;
     long nMirrorW;              // Visible output width for mirroring (default: nScrW)
-    SCCOL nX1;                  // Start-/Endkoordinaten
-    SCROW nY1;                  //  ( incl. versteckte )
+    SCCOL nX1;                  // Start-/End coordinates
+    SCROW nY1;                  //  ( incl. hidden )
     SCCOL nX2;
     SCROW nY2;
-    SCCOL nVisX1;               // Start-/Endkoordinaten
-    SCROW nVisY1;               //  ( sichtbarer Bereich )
+    SCCOL nVisX1;               // Start-/End coordinates
+    SCROW nVisY1;               //  ( visable range )
     SCCOL nVisX2;
     SCROW nVisY2;
-    ScOutputType eType;         // Bildschirm/Drucker ...
+    ScOutputType eType;         // Screen/Printer ...
     double mnPPTX;              // Pixel per Twips
     double mnPPTY;
-//  sal_uInt16 nZoom;               // Zoom-Faktor (Prozent) - fuer GetFont
     Fraction aZoomX;
     Fraction aZoomY;
 
-    SdrObject* pEditObj;        // beim Painten auslassen
+    SdrObject* pEditObj;        // Omit when painting
 
-    ScTabViewShell* pViewShell; // zum Connecten von sichtbaren Plug-Ins
+    ScTabViewShell* pViewShell; // for connect from visible plug-ins
 
     // #114135#
     FmFormView* pDrawView;      // SdrView to paint to
 
-    sal_Bool bEditMode;             // InPlace editierte Zelle - nicht ausgeben
+    sal_Bool bEditMode;             // InPlace edited cell - do not output
     SCCOL nEditCol;
     SCROW nEditRow;
 
-    bool bMetaFile;             // Ausgabe auf Metafile (nicht in Pixeln!)
+    bool bMetaFile;             // Output to metafile (not pixels!)
     bool bSingleGrid;           // beim Gitter bChanged auswerten
 
-    bool bPagebreakMode;        // Seitenumbruch-Vorschau
-    bool bSolidBackground;      // weiss statt transparent
+    bool bPagebreakMode;        // Page break preview
+    bool bSolidBackground;      // white instead of transparant
 
     bool mbUseStyleColor;
     bool mbForceAutoColor;
 
-    sal_Bool mbSyntaxMode;          // Syntax-Highlighting
+    sal_Bool mbSyntaxMode;          // Syntax highlighting
     Color* pValueColor;
     Color* pTextColor;
     Color* pFormulaColor;
@@ -197,13 +196,13 @@ private:
 
     bool    mbShowNullValues;
     bool    mbShowFormulas;
-    bool    bShowSpellErrors;   // Spell-Errors in EditObjekten anzeigen
+    bool    bShowSpellErrors;   // Show spelling errors in EditObjects
     bool    bMarkClipped;
 
     bool    bSnapPixel;
 
-    bool    bAnyRotated;        // intern
-    bool    bAnyClipped;        // intern
+    bool    bAnyRotated;        // internal
+    bool    bAnyClipped;        // internal
     bool    bTabProtected;
     sal_uInt8   nTabTextDirection;  // EEHorizontalTextDirection values
     bool    bLayoutRTL;
@@ -301,7 +300,7 @@ public:
     void    DrawEdit(sal_Bool bPixelToLogic);
 
     void    FindRotated();
-    void    DrawRotated(sal_Bool bPixelToLogic);        // logisch
+    void    DrawRotated(sal_Bool bPixelToLogic);        // logical
 
     void    DrawClear();
 
@@ -310,11 +309,11 @@ public:
     void PostPrintDrawingLayer(const Point& rMMOffset); // #i74768# need offset for FormLayer
     void PrintDrawingLayer(const sal_uInt16 nLayer, const Point& rMMOffset);
 
-    // nur Bildschirm:
+    // only screen:
     void    DrawingSingle(const sal_uInt16 nLayer);
     void    DrawSelectiveObjects(const sal_uInt16 nLayer);
 
-    sal_Bool    SetChangedClip();       // sal_False = nix
+    sal_Bool    SetChangedClip();       // sal_False = not
     PolyPolygon GetChangedArea();
 
     void    FindChanged();

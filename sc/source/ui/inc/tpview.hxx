@@ -37,12 +37,10 @@
 #include <svx/strarray.hxx>
 
 //========================================================================
-// View-Optionen:
 
 class ScViewOptions;
 
 //========================================================================
-// TabPage Inhalte
 
 class ScTpContentOptions : public SfxTabPage
 {
@@ -110,7 +108,7 @@ public:
 };
 
 //========================================================================
-// TabPage Layout
+
 class ScDocument;
 class ScTpLayoutOptions : public SfxTabPage
 {

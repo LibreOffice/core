@@ -85,8 +85,8 @@ private:
     sal_Bool            bSaved;
 
 
-    const String    aStrAdd;    // "Hinzufuegen"
-    const String    aStrModify; // "Aendern"
+    const String    aStrAdd;
+    const String    aStrModify;
     const String    aStrInvalid;
 
     String          aStrSource;

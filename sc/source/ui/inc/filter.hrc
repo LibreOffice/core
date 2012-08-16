@@ -19,7 +19,7 @@
                     // -> RID_SCDLG_SPEC_FILTER
                     // -> RID_SCDLG_PIVOTFILTER
 
-// allgemein
+// General
 
 #define BTN_OK              1
 #define BTN_CANCEL          1
@@ -64,7 +64,7 @@
 #define LB_SCROLL           41
 #define LB_OP4              42
 
-// Spezialfilter
+// Special filter
 
 #define FT_CRITERIA_AREA    50
 #define LB_CRITERIA_AREA    51

@@ -24,13 +24,7 @@
 
 class SdrPageView;
 
-
-/*************************************************************************
-|*
-|* Basisklasse fuer alle Funktionen
-|*
-\************************************************************************/
-
+/** Base class for all functions */
 class FuSelection : public FuDraw
 {
 public:
@@ -45,8 +39,8 @@ public:
     virtual sal_Bool MouseButtonDown(const MouseEvent& rMEvt);
     virtual sal_uInt8 Command(const CommandEvent& rCEvt);
 
-    virtual void Activate();           // Function aktivieren
-    virtual void Deactivate();         // Function deaktivieren
+    virtual void Activate();
+    virtual void Deactivate();
 
     void    ActivateNoteHandles(SdrObject* pObj);
 

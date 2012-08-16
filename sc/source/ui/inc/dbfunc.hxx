@@ -56,7 +56,7 @@ public:
                     ScDBFunc( Window* pParent, ScDocShell& rDocSh, ScTabViewShell* pViewShell );
     virtual         ~ScDBFunc();
 
-                    //  nur UISort wiederholt bei Bedarf die Teilergebnisse
+                    // only UISort repeat the partial results if necessary
 
     void            UISort( const ScSortParam& rSortParam,
                           sal_Bool bRecord = sal_True );
@@ -77,7 +77,7 @@ public:
 
     void GotoDBArea( const ::rtl::OUString& rDBName );
 
-                    // DB-Bereich vom Cursor
+                    // DB range from Cursor
     ScDBData*       GetDBData( bool bMarkArea = true, ScGetDBMode eMode = SC_DB_MAKE, ScGetDBSelection eSel = SC_DBSEL_KEEP);
     ScDBData*       GetAnonymousDBData();
 
