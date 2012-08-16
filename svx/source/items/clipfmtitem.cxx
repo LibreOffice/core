@@ -132,7 +132,7 @@ void SvxClipboardFmtItem::AddClipbrdFormat( sal_uIntPtr nId, sal_uInt16 nPos )
     if( nPos > pImpl->aFmtNms.size() )
         nPos = pImpl->aFmtNms.size();
 
-    pImpl->aFmtNms.insert(pImpl->aFmtNms.begin() + nPos, NULL);
+    pImpl->aFmtNms.insert(pImpl->aFmtNms.begin() + nPos, 0);
     pImpl->aFmtIds.insert( pImpl->aFmtIds.begin()+nPos, nId );
 }
 
