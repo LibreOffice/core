@@ -506,8 +506,7 @@ throw ( RuntimeException )
                 //enable some slots hardly, because UNIX clipboard does not notify all changes
                 // Can be removed if follow up task will be fixed directly within applications.
                 // Note: PasteSpecial is handled specifically by calc
-                if ( pMenuItemHandler->aMenuItemURL == ".uno:Paste" ||
-                    ( m_aModuleIdentifier != "com.sun.star.sheet.SpreadsheetDocument" && pMenuItemHandler->aMenuItemURL == ".uno:PasteSpecial" )
+                if ( pMenuItemHandler->aMenuItemURL == ".uno:Paste"
                     || pMenuItemHandler->aMenuItemURL == ".uno:PasteClipboard" )      // special for draw/impress
                     bEnabledItem = sal_True;
                 #endif
