@@ -203,11 +203,13 @@ String SCSTR_NONAME
 
 String SCSTR_COLUMN
 {
+    Text [ x-comment ] = "%1 is replaced to column letter, such as 'Column A'" ;
     Text [ en-US ] = "Column %1" ;
 };
 
 String SCSTR_ROW
 {
+    Text [ x-comment ] = "%1 is replaced to row number, such as 'Row 1'" ;
     Text [ en-US ] = "Row %1" ;
 };
 
