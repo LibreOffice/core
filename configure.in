@@ -4296,14 +4296,12 @@ if test $_os = Darwin; then
     AC_MSG_CHECKING([for bogus pkg-config])
     if test -n "$PKG_CONFIG"; then
         if test "$PKG_CONFIG" = /usr/bin/pkg-config && ls -l /usr/bin/pkg-config | $GREP -q Mono.framework; then
-            AC_MSG_RESULT([yes, from Mono])
+            AC_MSG_ERROR([yes, from Mono. This *will* break the build. Please remove or hide $PKG_CONFIG])
         else
-            AC_MSG_RESULT([yes, from unknown origin])
+            AC_MSG_ERROR([yes, from unknown origin. This *will* break the build. Please remove or hide $PKG_CONFIG])
         fi
-        AC_MSG_WARN([This might have unexpected consequences, please consider hiding $PKG_CONFIG])
-        echo "Having a $PKG_CONFIG might have unexpected consequences, please consider hiding it" >>warn
     else
-        AC_MSG_RESULT([no])
+        AC_MSG_RESULT([no, good])
     fi
 fi
 
