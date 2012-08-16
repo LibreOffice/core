@@ -46,7 +46,6 @@ class SvxBrushItem;
 class Font;
 class Graphic;
 class SvxNodeNum;
-class BitmapEx;
 namespace com{namespace sun{ namespace star{
     namespace text{
         class XNumberingFormatter;
@@ -160,8 +159,6 @@ private:
     Font*               pBulletFont;        // Pointer to the bullet font
 
     String              sCharStyleName;     // Character Style
-
-    BitmapEx*           pScaledImageCache;  // Image scaled to aGraphicSize, only cached for WINDOW/VDEV
 
     DECL_STATIC_LINK( SvxNumberFormat, GraphicArrived, void * );
     virtual void NotifyGraphicArrived();

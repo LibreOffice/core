@@ -61,9 +61,7 @@ EditHTMLParser::EditHTMLParser( SvStream& rIn, const String& rBaseURL, SvKeyValu
     bInTitle(false),
     nInTable(0),
     nInCell(0),
-    nDefListLevel(0),
-    nBulletLevel(0),
-    nNumberingLevel(0)
+    nDefListLevel(0)
 {
     DBG_ASSERT( RTL_TEXTENCODING_DONTKNOW == GetSrcEncoding( ), "EditHTMLParser::EditHTMLParser: Where does the encoding come from?" );
     DBG_ASSERT( !IsSwitchToUCS2(), "EditHTMLParser::::EditHTMLParser: Switch to UCS2?" );

@@ -163,7 +163,6 @@ class EDITENG_DLLPUBLIC SvxAutoCorrectLanguageLists
     Date aModifiedDate;
     Time aModifiedTime, aLastCheckTime;
 
-    LanguageType            eLanguage; //LANGUAGE_DONTKNOW use for all languages
     SvStringsISortDtor*     pCplStt_ExcptLst;
     SvStringsISortDtor*     pWrdStt_ExcptLst;
     SvxAutocorrWordList*    pAutocorr_List;
@@ -187,8 +186,7 @@ class EDITENG_DLLPUBLIC SvxAutoCorrectLanguageLists
 public:
     SvxAutoCorrectLanguageLists( SvxAutoCorrect& rParent,
             const String& rShareAutoCorrectFile,
-            const String& rUserAutoCorrectFile,
-            LanguageType eLang);
+            const String& rUserAutoCorrectFile);
     ~SvxAutoCorrectLanguageLists();
 
     // Load, Set, Get - the replacement list

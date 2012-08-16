@@ -58,8 +58,6 @@ private:
     sal_uInt8                   nInTable;
     sal_uInt8                   nInCell;
     sal_uInt8                   nDefListLevel;
-    sal_uInt8                   nBulletLevel;
-    sal_uInt8                   nNumberingLevel;
 
     void                    StartPara( bool bReal );
     void                    EndPara( bool bReal );

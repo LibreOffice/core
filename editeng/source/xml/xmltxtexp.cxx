@@ -371,7 +371,6 @@ public:
 
 private:
     com::sun::star::uno::Reference< com::sun::star::text::XText > mxText;
-    EditEngine* mpEditEngine;
     ESelection maSelection;
 };
 
@@ -384,7 +383,6 @@ SvxXMLTextExportComponent::SvxXMLTextExportComponent(
     const ::rtl::OUString& rFileName,
     const com::sun::star::uno::Reference< com::sun::star::xml::sax::XDocumentHandler > & xHandler)
 :   SvXMLExport( xServiceFactory, rFileName, xHandler, ((frame::XModel*)new SvxSimpleUnoModel()), MAP_CM ),
-    mpEditEngine( pEditEngine ),
     maSelection( rSel )
 {
     SvxEditEngineSource aEditSource( pEditEngine );

@@ -1569,7 +1569,7 @@ sal_Bool SvxAutoCorrect::CreateLanguageFile( LanguageType eLang, sal_Bool bNewFi
         {
             sShareDirFile = sUserDirFile;
             pLists = new SvxAutoCorrectLanguageLists( *this, sShareDirFile,
-                                                        sUserDirFile, eLang );
+                                                        sUserDirFile );
             pLangTable->insert(eLang, pLists);
             aLastFileTable.erase(nFndPos);
         }
@@ -1580,7 +1580,7 @@ sal_Bool SvxAutoCorrect::CreateLanguageFile( LanguageType eLang, sal_Bool bNewFi
         ( sShareDirFile = sUserDirFile, bNewFile ))
     {
         pLists = new SvxAutoCorrectLanguageLists( *this, sShareDirFile,
-                                                    sUserDirFile, eLang );
+                                                    sUserDirFile );
         pLangTable->insert(eLang, pLists);
         if (nFndPos != aLastFileTable.end())
             aLastFileTable.erase(nFndPos);
@@ -1894,14 +1894,12 @@ String SvxAutoCorrect::GetAutoCorrFileName( LanguageType eLang,
 SvxAutoCorrectLanguageLists::SvxAutoCorrectLanguageLists(
                 SvxAutoCorrect& rParent,
                 const String& rShareAutoCorrectFile,
-                const String& rUserAutoCorrectFile,
-                LanguageType eLang)
+                const String& rUserAutoCorrectFile)
 :   sShareAutoCorrFile( rShareAutoCorrectFile ),
     sUserAutoCorrFile( rUserAutoCorrectFile ),
     aModifiedDate( Date::EMPTY ),
     aModifiedTime( Time::EMPTY ),
     aLastCheckTime( Time::EMPTY ),
-    eLanguage(eLang),
     pCplStt_ExcptLst( 0 ),
     pWrdStt_ExcptLst( 0 ),
     pAutocorr_List( 0 ),
