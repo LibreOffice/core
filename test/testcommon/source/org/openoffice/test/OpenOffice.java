@@ -23,6 +23,7 @@ package org.openoffice.test;
 
 import java.io.File;
 import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Properties;
 import java.util.UUID;
@@ -40,6 +41,17 @@ public class OpenOffice {
 
     private static Logger LOG = Logger.getLogger(OpenOffice.class.getName());
 
+    private static final String[] DEFAULT_HOME = new String[] {
+        "C:/Program Files/OpenOffice.org 3",
+        "C:/Program Files (x86)/OpenOffice.org 3",
+        "/Applications/OpenOffice.org.app/Contents",
+        "/opt/openoffice.org3",
+    };
+
+    private static final String USERHOME = System.getProperty("user.home");
+    private static final String BIN = SystemUtil.isWindows() ? "program/soffice.exe" : SystemUtil.isMac() ? "MacOS/soffice.bin": "program/soffice.bin";
+    private static final String SYSUSERCONFIG = SystemUtil.isWindows()? System.getenv("APPDATA") : SystemUtil.isMac() ?  USERHOME + "/Library/Application Support" : USERHOME;
+
     private static OpenOffice defaultInstance = null;
 
     private File userInstallation = null;
@@ -47,6 +59,8 @@ public class OpenOffice {
     private File defaultUserInstallation = null;
 
     private File home = null;
+
+    private File bin = null;
 
     private ArrayList<String> args = new ArrayList<String>();
 
@@ -62,13 +76,13 @@ public class OpenOffice {
 
     private String id = "-"+UUID.randomUUID().toString().replace("-", "");
 
+
     public OpenOffice() {
         this(null);
     }
 
     /**
-     * Construct Process with the home path of OpenOffice. The home is the
-     * directory which contains soffice.bin.
+     * Construct Process with the home path of OpenOffice.
      *
      * @param appHome
      */
@@ -78,47 +92,40 @@ public class OpenOffice {
         if (appHome == null)
             appHome = System.getenv("OPENOFFICE_HOME");
         if (appHome == null) {
-            if (SystemUtil.isWindows()) {
-                appHome = "C:/Program Files/OpenOffice.org 3/program";
-                if (!new File(appHome).exists())
-                    appHome = "C:/Program Files (x86)/OpenOffice.org 3/program";
-            } else if (SystemUtil.isMac()) {
-                appHome = "/Applications/OpenOffice.org.app/Contents/MacOS";
-            } else {
-                appHome = "/opt/openoffice.org3/program";
+            // Search in the classpath
+            try {
+                URL url = getClass().getClassLoader().getResource(BIN);
+                File file = new File(url.toURI());
+                if (file.exists())
+                    appHome = file.getParentFile().getParentFile().getAbsolutePath();
+            } catch (Exception e) {
+                // ignore
             }
         }
 
-        home = new File(appHome);
+        if (appHome == null) {
+            for (int i = 0; i < DEFAULT_HOME.length; i++)
+                if (new File(DEFAULT_HOME[i]).exists())
+                    appHome = DEFAULT_HOME[i];
+        }
 
-        File bootstrapFile = new File(home, "bootstraprc");
+        home = new File(appHome);
+        bin = new File(appHome, BIN);
+        File binParent = bin.getParentFile();
+        File bootstrapFile = new File(binParent, "bootstraprc");
         if (!bootstrapFile.exists())
-            bootstrapFile = new File(home, "bootstrap.ini");
+            bootstrapFile = new File(binParent, "bootstrap.ini");
         if (!bootstrapFile.exists())
             throw new Error("OpenOffice can not be found or it's broken. Testing can not be performed. " +
                     "Use system property openoffice.home to specify the correct location of OpenOffice.");
 
         Properties props = FileUtil.loadProperties(bootstrapFile);
-        String defaultUserInstallationPath = props.getProperty("UserInstallation");
-        String sysUserConfig = null;
-        if (SystemUtil.isWindows()) {
-            sysUserConfig = System.getenv("APPDATA");
-        } else if (SystemUtil.isMac()) {
-            sysUserConfig = System.getProperty("user.home") + "/Library/Application Support";
-        } else {
-            sysUserConfig = System.getProperty("user.home");
-        }
-
-        defaultUserInstallationPath = defaultUserInstallationPath.replace("$ORIGIN", home.getAbsolutePath()).replace("$SYSUSERCONFIG", sysUserConfig);
+        String defaultUserInstallationPath = props.getProperty("UserInstallation").replace("$ORIGIN", binParent.getAbsolutePath()).replace("$SYSUSERCONFIG", SYSUSERCONFIG);
         defaultUserInstallation = new File(defaultUserInstallationPath);
 
-        File versionFile = new File(home, "versionrc");
+        File versionFile = new File(binParent, "versionrc");
         if (!versionFile.exists())
-            versionFile = new File(home, "version.ini");
-        if (!versionFile.exists())
-            throw new Error("OpenOffice can not be found or it's broken. Testing can not be performed. " +
-                    "Use system property openoffice.home to specify the correct location of OpenOffice.");
-
+            versionFile = new File(binParent, "version.ini");
         versionProps = FileUtil.loadProperties(versionFile);
         addArgs(id);
     }
@@ -258,9 +265,8 @@ public class OpenOffice {
             return;
         }
 
-        String bin = home.getAbsolutePath() + File.separatorChar + (SystemUtil.isWindows() ? "soffice.exe" : "soffice.bin");
         ArrayList<String> cmds = new ArrayList<String>();
-        cmds.add(bin);
+        cmds.add(bin.getAbsolutePath());
         if (automationPort > 0) {
             cmds.add("-automationport=" + automationPort);
             cmds.add("-enableautomation");

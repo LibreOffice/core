@@ -96,9 +96,8 @@
     </target>
 
     <target name="testuno.compile" depends="testuno.init, prepare.junit">
-        <property name="uno.jar.dir" location="${openoffice.home}/../" />
         <path id="uno.classpath">
-            <fileset dir="${uno.jar.dir}" erroronmissingdir="false">
+            <fileset dir="${openoffice.home}" erroronmissingdir="false">
                 <include name="**/juh.jar" />
                 <include name="**/unoil.jar" />
                 <include name="**/ridl.jar" />
@@ -161,7 +160,12 @@
             </or>
         </condition>
         <condition property="install.build.skip">
-            <isset property="openoffice.home" />
+            <or>
+                <isset property="openoffice.home" />
+                            <not>
+                    <isset property="openoffice.archive.dir" />
+                </not>
+            </or>
         </condition>
     </target>
 
@@ -208,7 +212,8 @@
                 <fileset dir="${openoffice.installation.dir}" includes="**/*/soffice.bin" followsymlinks="false" />
             </path>
         </pathconvert>
-        <dirname property="openoffice.home" file="${openoffice.bin}" />
+        <dirname property="openoffice.bin.parent" file="${openoffice.bin}" />
+        <property name="openoffice.home" location="${openoffice.bin.parent}/../" />
         <fail unless="openoffice.home" />
         <echo>Openoffice is installed to ${openoffice.home}</echo>
     </target>
@@ -222,8 +227,6 @@
         <mkdir dir="${test.result}" />
         <mkdir dir="${test.report}" />
         <mkdir dir="${test.output}/temp" />
-        <property file="${openoffice.home}/versionrc" prefix="version" />
-        <property file="${openoffice.home}/version.ini" />
 
         <junit fork="yes" forkmode="once" tempdir="${test.output}/temp" printsummary="yes" showoutput="false" errorProperty="test.failed" failureProperty="test.failed" dir=".">
             <sysproperty key="openoffice.home" value="${openoffice.home}" />
