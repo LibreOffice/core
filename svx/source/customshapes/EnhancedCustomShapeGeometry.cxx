@@ -6439,15 +6439,21 @@ static const mso_CustomShape msoTextChevronInverted =
     (SvxMSDffHandle*)mso_sptTextChevronInvertedHandle, SAL_N_ELEMENTS( mso_sptTextChevronInvertedHandle )
 };
 
+//mso_sptTextRingOutside
+//path = U 10800 ?f0 21600 ?f2 180 539 N U 10800 ?f1 21600 ?f2 180 539 N
 static const SvxMSDffVertPair mso_sptTextRingOutsideVert[] =
 {
-    { 10800, 0 MSO_I }, { 10800, 0 MSO_I }, { 180, 359 },
-    { 10800, 1 MSO_I }, { 10800, 0 MSO_I }, { 180, 359 }
+    { 10800, 0 MSO_I }, { 21600, 2 MSO_I }, { 180, 539},//U
+    { 10800, 1 MSO_I }, { 21600, 2 MSO_I }, { 180, 539 }//U
+    //{ 10800, 0 MSO_I }, { 10800, 0 MSO_I }, { 180, 359 },
+    //{ 10800, 1 MSO_I }, { 10800, 0 MSO_I }, { 180, 359 }
 };
 static const SvxMSDffCalculationData mso_sptTextRingOutsideCalc[] = // adjustment1 : 6629 - 14971
 {
     { 0x2001, { DFF_Prop_adjustValue, 1, 2 } },
-    { 0x8000, { 21600, 0, 0x400 } }
+    { 0x8000, { 21600, 0, 0x400 } },
+    { 0x2000, { DFF_Prop_adjustValue, 0, 0 } }, //$0
+    { 0x8000, { 21600, 0, DFF_Prop_adjustValue } }//21600-$0
 };
 static const sal_uInt16 mso_sptTextRingOutsideSegm[] =
 {
@@ -6456,7 +6462,7 @@ static const sal_uInt16 mso_sptTextRingOutsideSegm[] =
 };
 static const SvxMSDffHandle mso_sptTextRingOutsideHandle[] =
 {
-    {   MSDFF_HANDLE_FLAGS_RANGE,
+    {   MSDFF_HANDLE_FLAGS_RANGE | MSDFF_HANDLE_FLAGS_RANGE_Y_MAX_IS_SPECIAL | MSDFF_HANDLE_FLAGS_RANGE_Y_MIN_IS_SPECIAL,
         10800, 0x100, 10800, 10800, MIN_INT32, 0x7fffffff, 10800, 21600 }
 };
 static const mso_CustomShape msoTextRingOutside =
@@ -6464,7 +6470,7 @@ static const mso_CustomShape msoTextRingOutside =
     (SvxMSDffVertPair*)mso_sptTextRingOutsideVert, SAL_N_ELEMENTS( mso_sptTextRingOutsideVert ),
     (sal_uInt16*)mso_sptTextRingOutsideSegm, sizeof( mso_sptTextRingOutsideSegm ) >> 1,
     (SvxMSDffCalculationData*)mso_sptTextRingOutsideCalc, SAL_N_ELEMENTS( mso_sptTextRingOutsideCalc ),
-    (sal_Int32*)mso_sptDefault16200,
+    (sal_Int32*)mso_sptDefault13500,
     (SvxMSDffTextRectangles*)mso_sptFontWorkTextRect, SAL_N_ELEMENTS( mso_sptFontWorkTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
