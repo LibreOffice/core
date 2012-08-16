@@ -32,6 +32,7 @@ UnoControls\
 accessibility\
 animations\
 apple_remote\
+autodoc\
 avmedia\
 basctl\
 basebmp\
@@ -46,6 +47,7 @@ codemaker\
 comphelper\
 configmgr\
 connectivity\
+cosv\
 cppcanvas\
 cppu\
 cppuhelper\
@@ -140,6 +142,7 @@ ucb\
 ucbhelper\
 ucpp\
 udkapi\
+udm\
 unixODBC\
 unodevtools\
 unoil\
@@ -165,7 +168,6 @@ xmlsecurity\
 dmake_modules:=\
 afms\
 apache-commons\
-autodoc\
 beanshell\
 berkeleydb\
 binfilter \
@@ -173,7 +175,6 @@ boost\
 bridges\
 cairo\
 cli_ure\
-cosv\
 cppunit\
 crashrep\
 ct2n\
@@ -241,7 +242,6 @@ stax\
 stlport\
 sysui\
 tomcat\
-udm\
 vigra\
 xpdf\
 xsltml\
