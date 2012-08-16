@@ -1727,6 +1727,7 @@ public:     // eigentlich private, geht aber leider nur public
     void Read_ParaBiDi(sal_uInt16, const sal_uInt8* pData, short nLen);
     static sal_uInt32 ExtractColour(const sal_uInt8* &rpData, bool bVer67);
 
+    void Read_UnderlineColor(sal_uInt16, const sal_uInt8* pData, short nLen);
     long MapBookmarkVariables(const WW8FieldDesc* pF,String &rOrigName,
         const String &rData);
     String GetMappedBookmark(const String &rOrigName);

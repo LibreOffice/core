@@ -3311,6 +3311,53 @@ void SwWW8ImplReader::Read_TxtForeColor(sal_uInt16, const sal_uInt8* pData, shor
     }
 }
 
+void SwWW8ImplReader::Read_UnderlineColor(sal_uInt16, const sal_uInt8* pData, short nLen)
+{
+    if( nLen < 0 )
+    {
+        //because the UnderlineColor is not a standalone attribute in SW, it belongs to the underline attribute.
+        //And, the .doc file stores attributes separately, this attribute ends here, the "underline"
+        //attribute also terminates (if the character next owns underline, that will be a new underline attribute).
+        //so nothing is left to be done here.
+        return;
+    }
+    else
+    {
+        if ( pAktColl ) //importing style
+        {
+            if( SFX_ITEM_SET == pAktColl->GetItemState( RES_CHRATR_UNDERLINE, sal_False ) )
+            {
+                const SwAttrSet& aSet = pAktColl->GetAttrSet();
+                SvxUnderlineItem *pUnderline
+                    = (SvxUnderlineItem *)(aSet.Get( RES_CHRATR_UNDERLINE, sal_False ).Clone());
+                if(pUnderline){
+                    pUnderline->SetColor( Color( msfilter::util::BGRToRGB(SVBT32ToUInt32(pData)) ) );
+                    pAktColl->SetFmtAttr( *pUnderline );
+                    delete pUnderline;
+                }
+            }
+        }
+        else if ( pAktItemSet )
+        {
+            if ( SFX_ITEM_SET == pAktItemSet->GetItemState( RES_CHRATR_UNDERLINE, sal_False ) )
+            {
+                SvxUnderlineItem *pUnderline
+                    = (SvxUnderlineItem *)(pAktItemSet->Get( RES_CHRATR_UNDERLINE, sal_False ) .Clone());
+                if(pUnderline){
+                    pUnderline->SetColor( Color( msfilter::util::BGRToRGB(SVBT32ToUInt32(pData)) ) );
+                    pAktItemSet->Put( *pUnderline );
+                    delete pUnderline;
+                }
+            }
+        }
+        else
+        {
+            SvxUnderlineItem* pUnderlineAttr = (SvxUnderlineItem*)pCtrlStck->GetOpenStackAttr( *pPaM->GetPoint(), RES_CHRATR_UNDERLINE );
+            if( pUnderlineAttr != NULL )
+                pUnderlineAttr->SetColor( Color( msfilter::util::BGRToRGB(SVBT32ToUInt32( pData ))));
+        }
+    }
+}
 bool SwWW8ImplReader::GetFontParams( sal_uInt16 nFCode, FontFamily& reFamily,
     String& rName, FontPitch& rePitch, CharSet& reCharSet )
 {
@@ -6037,6 +6084,7 @@ const wwSprmDispatcher *GetWW8SprmDispatcher()
         {0x6815, 0},                                 //undocumented
         {0x6816, 0},                                 //undocumented
         {0x6870, &SwWW8ImplReader::Read_TxtForeColor},
+        {0x6877, &SwWW8ImplReader::Read_UnderlineColor},
         {0xC64D, &SwWW8ImplReader::Read_ParaBackColor},
         {0x6467, 0},                                 //undocumented
         {0xF617, 0},                                 //undocumented

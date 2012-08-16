@@ -1283,6 +1283,16 @@ void WW8AttributeOutput::CharUnderline( const SvxUnderlineItem& rUnderline )
     }
 
     m_rWW8Export.pO->push_back( b );
+    Color aColor = rUnderline.GetColor();
+    if( aColor != COL_TRANSPARENT )
+    {
+        if( m_rWW8Export.bWrtWW8 )
+        {
+            m_rWW8Export.InsUInt16( 0x6877 );
+
+            m_rWW8Export.InsUInt32( wwUtility::RGBToBGR( aColor.GetColor() ) );
+        }
+    }
 }
 
 void WW8AttributeOutput::CharLanguage( const SvxLanguageItem& rLanguage )
