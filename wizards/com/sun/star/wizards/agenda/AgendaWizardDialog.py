@@ -278,10 +278,10 @@ class AgendaWizardDialog(WizardDialog):
                     self.resources.resButtonRemove, 134, 136, 5, 581, 40), self)
         self.btnUp = self.insertButton("btnUp", BTNUP_ACTION_PERFORMED,
                 self.PROPS_BUTTON, (14, BTNUP_HID,
-                    self.resources.resButtonUp, 222, 136, 5, 582, 40), self)
+                    self.resources.resButtonUp, 202, 136, 5, 582, 50), self)
         self.btnDown = self.insertButton("btnDown", BTNDOWN_ACTION_PERFORMED,
                 self.PROPS_BUTTON, (14, BTNDOWN_HID,
-                    self.resources.resButtonDown, 264, 136, 5, 583, 40), self)
+                    self.resources.resButtonDown, 254, 136, 5, 583, 50), self)
 
     def buildStep6(self):
         self.insertLabel("lblTitle6", self.PROPS_LABEL_B,

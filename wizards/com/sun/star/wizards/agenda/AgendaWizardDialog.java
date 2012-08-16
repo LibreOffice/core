@@ -321,11 +321,11 @@ public abstract class AgendaWizardDialog  extends WizardDialog implements Agenda
           );
     btnUp = insertButton("btnUp", BTNUP_ACTION_PERFORMED,
             PROPS_BUTTON,
-            new Object[] { INTEGER_14,BTNUP_HID,resources.resButtonUp,222,136,INTEGERS[5],new Short((short)582),INTEGER_40}
+            new Object[] { INTEGER_14,BTNUP_HID,resources.resButtonUp,202,136,INTEGERS[5],new Short((short)582),INTEGER_50}
           );
     btnDown = insertButton("btnDown", BTNDOWN_ACTION_PERFORMED,
             PROPS_BUTTON,
-            new Object[] { INTEGER_14,BTNDOWN_HID,resources.resButtonDown,264,136,INTEGERS[5],new Short((short)583),INTEGER_40}
+            new Object[] { INTEGER_14,BTNDOWN_HID,resources.resButtonDown,254,136,INTEGERS[5],new Short((short)583),INTEGER_50}
           );
           
     
