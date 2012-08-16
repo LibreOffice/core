@@ -621,6 +621,27 @@ SfxPoolItem* SwFltControlStack::GetFmtStackAttr(sal_uInt16 nWhich, sal_uInt16 * 
     return 0;
 }
 
+const SfxPoolItem* SwFltControlStack::GetOpenStackAttr(const SwPosition& rPos, sal_uInt16 nWhich)
+{
+    SwFltStackEntry* pEntry;
+    sal_uInt16 nSize = static_cast< sal_uInt16 >(Count());
+    SwNodeIndex aAktNode( rPos.nNode, -1 );
+    sal_uInt16 nAktIdx = rPos.nContent.GetIndex();
+
+    while (nSize)
+    {
+        pEntry = (*this)[ --nSize ];
+        if(    pEntry->bLocked
+            && (pEntry->pAttr->Which() == nWhich)
+            && (pEntry->nMkNode  == aAktNode)
+            && (pEntry->nMkCntnt == nAktIdx ))
+        {
+            return (SfxPoolItem*)pEntry->pAttr;
+        }
+    }
+    return 0;
+}
+
 const SfxPoolItem* SwFltControlStack::GetFmtAttr(const SwPosition& rPos, sal_uInt16 nWhich)
 {
     SfxPoolItem* pHt = GetFmtStackAttr(nWhich);
