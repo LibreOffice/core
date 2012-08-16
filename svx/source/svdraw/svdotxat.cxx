@@ -57,6 +57,8 @@
 #include <editeng/numitem.hxx>
 #include <editeng/postitem.hxx>
 
+#include <set>
+
 
 bool SdrTextObj::AdjustTextFrameWidthAndHeight(Rectangle& rR, bool bHgt, bool bWdt) const
 {
