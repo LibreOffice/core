@@ -23,6 +23,7 @@
 #include <com/sun/star/drawing/TextVerticalAdjust.hpp>
 #include "oox/helper/helper.hxx"
 #include "oox/helper/propertymap.hxx"
+#include <boost/optional.hpp>
 
 namespace oox {
 namespace drawingml {
@@ -34,10 +35,12 @@ struct TextBodyProperties
     PropertyMap                                     maPropertyMap;
     OptValue< sal_Int32 >                           moRotation;
     OptValue< sal_Int32 >                           moVert;
+    boost::optional< sal_Int32 >                    moInsets[4];
     ::com::sun::star::drawing::TextVerticalAdjust   meVA;
 
     explicit            TextBodyProperties();
 
+    void                pushRotationAdjustments( sal_Int32 nRotation );
     void                pushVertSimulation();
 };
 

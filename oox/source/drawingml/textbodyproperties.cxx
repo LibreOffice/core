@@ -58,6 +58,28 @@ void TextBodyProperties::pushVertSimulation()
     }
 }
 
+/* Push adjusted values, taking into consideration Shape Rotation */
+void TextBodyProperties::pushRotationAdjustments( sal_Int32 nRotation )
+{
+    sal_Int32 nOff      = 0;
+    sal_Int32 aProps[]  = { PROP_TextLeftDistance, PROP_TextUpperDistance, PROP_TextRightDistance, PROP_TextLowerDistance };
+    sal_Int32 n         = ( sal_Int32 )( sizeof( aProps ) / sizeof( sal_Int32 ) );
+
+    switch( nRotation ) // TODO: What happens for part rotations ?
+    {
+        case (90*1*60000): nOff = 1; break;
+        case (90*2*60000): nOff = 2; break;
+        case (90*3*60000): nOff = 3; break;
+        default: break;
+    }
+
+    for( sal_Int32 i = 0; i < n; i++ )
+    {
+        if( moInsets[i] )
+            maPropertyMap[ aProps[ ( nOff++ ) % n ] ] <<= static_cast< sal_Int32 >( *moInsets[i] );
+    }
+}
+
 // ============================================================================
 
 } // namespace drawingml

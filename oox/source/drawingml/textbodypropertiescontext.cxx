@@ -53,25 +53,12 @@ TextBodyPropertiesContext::TextBodyPropertiesContext( ContextHandler& rParent,
 
     // ST_Coordinate
     OUString sValue;
-    sValue = xAttributes->getOptionalValue( XML_lIns );
-    if( !sValue.isEmpty() ) {
-    sal_Int32 nLeftInset = ( !sValue.isEmpty() ? GetCoordinate(  sValue ) : 91440 / 360 );
-    mrTextBodyProp.maPropertyMap[ PROP_TextLeftDistance ]  <<= static_cast< sal_Int32 >( nLeftInset );
-    }
-    sValue = xAttributes->getOptionalValue( XML_tIns );
-    if( !sValue.isEmpty() ) {
-    sal_Int32 nTopInset  = ( !sValue.isEmpty() ? GetCoordinate(  sValue ) : 91440 / 360 );
-    mrTextBodyProp.maPropertyMap[ PROP_TextUpperDistance ] <<= static_cast< sal_Int32 >( nTopInset );
-    }
-    sValue = xAttributes->getOptionalValue( XML_rIns );
-    if( !sValue.isEmpty() ) {
-    sal_Int32 nRightInset  = ( !sValue.isEmpty() ? GetCoordinate(  sValue ) : 91440 / 360 );
-    mrTextBodyProp.maPropertyMap[ PROP_TextRightDistance ] <<= static_cast< sal_Int32 >( nRightInset );
-    }
-    sValue = xAttributes->getOptionalValue( XML_bIns );
-    if( !sValue.isEmpty() ) {
-    sal_Int32 nBottonInset = ( !sValue.isEmpty() ? GetCoordinate(  sValue ) : 45720 / 360 );
-    mrTextBodyProp.maPropertyMap[ PROP_TextLowerDistance ] <<= static_cast< sal_Int32 >( nBottonInset );
+    sal_Int32 aIns[] = { XML_lIns, XML_tIns, XML_rIns, XML_bIns };
+    for( sal_Int32 i = 0; i < ( sal_Int32 )( sizeof( aIns ) / sizeof( sal_Int32 ) ); i++)
+    {
+        sValue = xAttributes->getOptionalValue( aIns[i] );
+        if( !sValue.isEmpty() )
+            mrTextBodyProp.moInsets[i] = GetCoordinate( sValue );
     }
 
     bool bAnchorCenter = aAttribs.getBool( XML_anchorCtr, false );
