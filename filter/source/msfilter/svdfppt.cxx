@@ -7272,6 +7272,16 @@ void ApplyCellAttributes( const SdrObject* pObj, Reference< XCell >& xCell )
             eVA = drawing::TextVerticalAdjust_BOTTOM;
         xPropSet->setPropertyValue( sTextVerticalAdjust, Any( eVA ) );
 
+        //set textHorizontalAdjust and TextWritingMode attr
+        const sal_Int32 eHA(((const SdrTextLeftDistItem&)pObj->GetMergedItem(SDRATTR_TEXT_HORZADJUST)).GetValue());
+        const SvxFrameDirection eDirection = (const SvxFrameDirection)((( const SvxFrameDirectionItem&)pObj->GetMergedItem(EE_PARA_WRITINGDIR)).GetValue());
+        static const rtl::OUString  sHorizontalAdjust( RTL_CONSTASCII_USTRINGPARAM( "TextHorizontalAdjust" ) );
+        static const rtl::OUString  sWritingMode( RTL_CONSTASCII_USTRINGPARAM("TextWritingMode") );
+        xPropSet->setPropertyValue(  sHorizontalAdjust , Any( eHA ) );
+        if ( eDirection == FRMDIR_VERT_TOP_RIGHT )
+        {//vertical writing
+            xPropSet->setPropertyValue(  sWritingMode , Any( ::com::sun::star::text::WritingMode_TB_RL ) );
+        }
         SfxItemSet aSet( pObj->GetMergedItemSet() );
         XFillStyle eFillStyle(((XFillStyleItem&)pObj->GetMergedItem( XATTR_FILLSTYLE )).GetValue());
         ::com::sun::star::drawing::FillStyle eFS( com::sun::star::drawing::FillStyle_NONE );
