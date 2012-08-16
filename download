@@ -243,7 +243,7 @@ if [ "$COM" = "MSC" -a -n "$md5sum" ]; then
 	echo
 	echo
 	echo
-        cmd /c "`cygpath -d $TARFILE_LOCATION/WindowsXP-KB958911-x86-ENU.exe` /extract:$TMPUNPACK /q"
+        cmd /c "`cygpath -w $TARFILE_LOCATION/WindowsXP-KB958911-x86-ENU.exe` /extract:$TMPUNPACK /q"
 	if [ -f $TARFILE_LOCATION/tmp/$gdiplus_dll_path ]; then
 	    echo "Extraction succeeded"
 	    sum=`$md5sum $md5special $TARFILE_LOCATION/tmp/$gdiplus_dll_path | sed "s/ .*//"`
