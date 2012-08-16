@@ -25,10 +25,8 @@
 namespace DOM
 {
     CNotationsMap::CNotationsMap(
-            ::rtl::Reference<CDocumentType> const& pDocType,
-            ::osl::Mutex & rMutex)
+            ::rtl::Reference<CDocumentType> const& pDocType)
         : m_pDocType(pDocType)
-        , m_rMutex(rMutex)
     {
     }
 
