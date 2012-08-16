@@ -117,6 +117,11 @@ namespace sw
                 <a href="mailto:mmaher@openoffice.org">Martin Maher</a
         */
         sal_uLong MSDateTimeFormatToSwFormat(String& rParams, SvNumberFormatter *pFormatter, sal_uInt16 &rLang, bool bHijri);
+        /*Used to identify if the previous is AM time field*/
+        sal_Bool IsPreviousAM(String& rParams, xub_StrLen nPos);
+
+        /*Used to identify if the next is PM time field*/
+        sal_Bool IsNextPM(String& rParams, xub_StrLen nPos);
 
         /** Used by MSDateTimeFormatToSwFormat to identify AM time fields
 
