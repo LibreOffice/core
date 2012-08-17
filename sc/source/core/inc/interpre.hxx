@@ -31,6 +31,7 @@
 
 #include <math.h>
 #include <rtl/math.hxx>
+#include <rtl/ustring.hxx>
 #include "formula/errorcodes.hxx"
 #include "cell.hxx"
 #include "scdll.hxx"
@@ -107,7 +108,7 @@ public:
     /// If pDoc!=NULL the document options are taken into account and if
     /// RegularExpressions are disabled the function returns false regardless
     /// of the string content.
-    static bool MayBeRegExp( const String& rStr, const ScDocument* pDoc );
+    static bool MayBeRegExp( const OUString& rStr, const ScDocument* pDoc );
 
     /// Fail safe division, returning an errDivisionByZero coded into a double
     /// if denominator is 0.0

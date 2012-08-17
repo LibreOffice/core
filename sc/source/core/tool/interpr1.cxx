@@ -7856,7 +7856,7 @@ void ScInterpreter::ScSearch()
         else
             fAnz = 1.0;
         String sStr = GetString();
-        String SearchStr = GetString();
+        OUString SearchStr = GetString();
         xub_StrLen nPos = (xub_StrLen) fAnz - 1;
         xub_StrLen nEndPos = sStr.Len();
         if( nPos >= nEndPos )
@@ -8148,15 +8148,15 @@ void ScInterpreter::ScErrorType()
 }
 
 
-bool ScInterpreter::MayBeRegExp( const String& rStr, const ScDocument* pDoc  )
+bool ScInterpreter::MayBeRegExp( const OUString& rStr, const ScDocument* pDoc  )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::MayBeRegExp" );
     if ( pDoc && !pDoc->GetDocOptions().IsFormulaRegexEnabled() )
         return false;
-    if ( !rStr.Len() || (rStr.Len() == 1 && rStr.GetChar(0) != '.') )
-        return false;   // einzelnes Metazeichen kann keine RegExp sein
+    if ( rStr.isEmpty() || (rStr.getLength() == 1 && rStr[0] != '.') )
+        return false;   // single meta characters can not be a regexp
     static const sal_Unicode cre[] = { '.','*','+','?','[',']','^','$','\\','<','>','(',')','|', 0 };
-    const sal_Unicode* p1 = rStr.GetBuffer();
+    const sal_Unicode* p1 = rStr.getStr();
     sal_Unicode c1;
     while ( ( c1 = *p1++ ) != 0 )
     {
