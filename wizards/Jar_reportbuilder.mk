@@ -29,13 +29,13 @@
 $(eval $(call gb_Jar_Jar,reportbuilderwizard))
 
 $(eval $(call gb_Jar_use_jars,reportbuilderwizard,\
-	$(OUTDIR)/bin/ridl.jar \
-	$(OUTDIR)/bin/unoil.jar \
-	$(OUTDIR)/bin/jurt.jar \
-	$(OUTDIR)/bin/juh.jar \
-	$(OUTDIR)/bin/java_uno.jar \
-	$(OUTDIR)/bin/commonwizards.jar \
-	$(OUTDIR)/bin/report.jar \
+	ridl \
+	unoil \
+	jurt \
+	juh \
+	java_uno \
+	commonwizards \
+	report \
 ))
 
 $(eval $(call gb_Jar_set_packageroot,reportbuilderwizard,com))

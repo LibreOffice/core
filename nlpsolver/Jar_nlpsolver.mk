@@ -29,12 +29,12 @@
 $(eval $(call gb_Jar_Jar,nlpsolver))
 
 $(eval $(call gb_Jar_use_jars,nlpsolver,\
-	$(OUTDIR)/bin/ridl.jar \
-	$(OUTDIR)/bin/unoil.jar \
-	$(OUTDIR)/bin/jurt.jar \
-	$(OUTDIR)/bin/juh.jar \
-	$(OUTDIR)/bin/java_uno.jar \
-	$(OUTDIR)/bin/EvolutionarySolver.jar \
+	ridl \
+	unoil \
+	jurt \
+	juh \
+	java_uno \
+	EvolutionarySolver \
 ))
 
 $(eval $(call gb_Jar_set_packageroot,nlpsolver,com))

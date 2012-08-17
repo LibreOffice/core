@@ -34,10 +34,10 @@ $(eval $(call gb_Jar_add_manifest_classpath,test,\
 ))
 
 $(eval $(call gb_Jar_use_jars,test,\
-	$(OUTDIR)/bin/juh.jar \
-	$(OUTDIR)/bin/ridl.jar \
-	$(OUTDIR)/bin/unoil.jar \
-	$(OUTDIR)/bin/OOoRunner.jar \
+	juh \
+	ridl \
+	unoil \
+	OOoRunner \
 ))
 
 $(eval $(call gb_Jar_use_system_jars,test,\

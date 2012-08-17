@@ -28,12 +28,12 @@
 $(eval $(call gb_Jar_Jar,ConnectivityTools))
 
 $(eval $(call gb_Jar_use_jars,ConnectivityTools,\
-	$(OUTDIR)/bin/ridl.jar \
-	$(OUTDIR)/bin/unoil.jar \
-	$(OUTDIR)/bin/jurt.jar \
-	$(OUTDIR)/bin/juh.jar \
-	$(OUTDIR)/bin/java_uno.jar \
-	$(OUTDIR)/bin/OOoRunnerLight.jar \
+	ridl \
+	unoil \
+	jurt \
+	juh \
+	java_uno \
+	OOoRunnerLight \
 ))
 
 $(eval $(call gb_Jar_set_packageroot,ConnectivityTools,connectivity))

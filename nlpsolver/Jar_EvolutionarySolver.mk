@@ -28,9 +28,6 @@
 
 $(eval $(call gb_Jar_Jar,EvolutionarySolver))
 
-$(eval $(call gb_Jar_use_jars,EvolutionarySolver,\
-))
-
 $(eval $(call gb_Jar_set_packageroot,EvolutionarySolver,net/adaptivebox))
 
 $(eval $(call gb_Jar_set_manifest,EvolutionarySolver,$(SRCDIR)/nlpsolver/ThirdParty/EvolutionarySolver/src/net/adaptivebox/Manifest.mf))

@@ -88,6 +88,10 @@ $(call gb_Jar_get_target,%) : $(call gb_JavaClassSet_get_target,$(call gb_Jar_ge
 # adds jar files to DeliverLogTarget
 # adds dependency for outdir target to workdir target (pattern rule for delivery is in Package.mk)
 define gb_Jar_Jar
+ifeq (,$$(findstring $(1),$$(gb_Jar_KNOWN)))
+$$(eval $$(call gb_Output_info,Currently known jars are: $(sort $(gb_Jar_KNOWN)),ALL))
+$$(eval $$(call gb_Output_error,Jar $(1) must be registered in Repository.mk))
+endif
 $(call gb_Jar_get_target,$(1)) : MANIFEST :=
 $(call gb_Jar_get_target,$(1)) : JARCLASSPATH :=
 $(call gb_Jar_get_target,$(1)) : PACKAGEROOTS :=
@@ -192,8 +196,8 @@ gb_Jar_default_jars := unoloader ridl jurt unoil juh java_uno
 # remember: classpath is "inherited" to ClassSet
 define gb_Jar_use_jar
 $(call gb_JavaClassSet_use_jar,$(call gb_Jar_get_classsetname,$(1)),$(2))
-$(if $(filter-out $(gb_Jar_default_jars),$(basename $(notdir $(2)))),\
-  $(call gb_Jar_add_manifest_classpath,$(1),$(notdir $(2))))
+$(if $(filter-out $(gb_Jar_default_jars),$(2)),\
+  $(call gb_Jar_add_manifest_classpath,$(1),$(2).jar))
 
 endef
 

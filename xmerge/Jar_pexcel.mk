@@ -34,7 +34,7 @@ $(eval $(call gb_Jar_add_packagefile,pexcel,META-INF/converter.xml,$(SRCDIR)/xme
 $(eval $(call gb_Jar_set_packageroot,pexcel,org))
 
 $(eval $(call gb_Jar_use_jars,pexcel,\
-	$(OUTDIR)/bin/xmerge.jar \
+	xmerge \
 ))
 
 $(eval $(call gb_Jar_add_sourcefiles,pexcel,\

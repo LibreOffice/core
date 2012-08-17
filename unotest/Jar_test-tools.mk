@@ -34,9 +34,9 @@ $(eval $(call gb_Jar_add_manifest_classpath,test-tools,\
 ))
 
 $(eval $(call gb_Jar_use_jars,test-tools,\
-	$(OUTDIR)/bin/juh.jar \
-	$(OUTDIR)/bin/ridl.jar \
-	$(OUTDIR)/bin/unoil.jar \
+	juh \
+	ridl \
+	unoil \
 ))
 
 $(eval $(call gb_Jar_set_packageroot,test-tools,org))

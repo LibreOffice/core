@@ -29,11 +29,11 @@
 $(eval $(call gb_JunitTest_JunitTest,forms_complex))
 
 $(eval $(call gb_JunitTest_use_jars,forms_complex,\
-    $(OUTDIR)/bin/OOoRunner.jar \
-    $(OUTDIR)/bin/ridl.jar \
-    $(OUTDIR)/bin/test.jar \
-    $(OUTDIR)/bin/unoil.jar \
-    $(OUTDIR)/bin/jurt.jar \
+    OOoRunner \
+    ridl \
+    test \
+    unoil \
+    jurt \
 ))
 
 $(eval $(call gb_JunitTest_add_sourcefiles,forms_complex,\

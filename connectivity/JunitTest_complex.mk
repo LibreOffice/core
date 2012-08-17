@@ -34,13 +34,20 @@ $(eval $(call gb_JunitTest_set_defs,connectivity_complex,\
 
 # TODO: add use_externals to JunitTest
 $(eval $(call gb_JunitTest_use_jars,connectivity_complex,\
-	$(OUTDIR)/bin/jurt.jar \
-	$(OUTDIR)/bin/OOoRunner.jar \
-	$(OUTDIR)/bin/ridl.jar \
-	$(OUTDIR)/bin/test.jar \
-	$(OUTDIR)/bin/unoil.jar \
-	$(if $(filter YES,$(SYSTEM_HSQLDB)),$(HSQLDB_JAR),$(OUTDIR)/bin/hsqldb.jar) \
+	jurt \
+	OOoRunner \
+	ridl \
+	test \
+	unoil \
 ))
+
+ifeq ($(SYSTEM_HSQLDB),YES)
+$(eval $(call gb_JavaClassSet_use_system_jar,$(call gb_JunitTest_get_classsetname,connectivity_complex),$(HSQLDB_JAR)))
+else
+$(eval $(call gb_JunitTest_use_jars,connectivity_complex,\
+	hsqldb \
+))
+endif
 
 $(eval $(call gb_JunitTest_add_classes,connectivity_complex,\
 	org.openoffice.test.UnoApiTest \

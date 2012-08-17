@@ -29,12 +29,12 @@
 $(eval $(call gb_Jar_Jar,web))
 
 $(eval $(call gb_Jar_use_jars,web,\
-	$(OUTDIR)/bin/ridl.jar \
-	$(OUTDIR)/bin/unoil.jar \
-	$(OUTDIR)/bin/jurt.jar \
-	$(OUTDIR)/bin/juh.jar \
-	$(OUTDIR)/bin/java_uno.jar \
-	$(OUTDIR)/bin/commonwizards.jar \
+	ridl \
+	unoil \
+	jurt \
+	juh \
+	java_uno \
+	commonwizards \
 ))
 
 $(eval $(call gb_Jar_set_packageroot,web,com))

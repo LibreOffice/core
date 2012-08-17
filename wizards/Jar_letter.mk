@@ -29,12 +29,12 @@
 $(eval $(call gb_Jar_Jar,letter))
 
 $(eval $(call gb_Jar_use_jars,letter,\
-	$(OUTDIR)/bin/ridl.jar \
-	$(OUTDIR)/bin/unoil.jar \
-	$(OUTDIR)/bin/jurt.jar \
-	$(OUTDIR)/bin/juh.jar \
-	$(OUTDIR)/bin/java_uno.jar \
-	$(OUTDIR)/bin/commonwizards.jar \
+	ridl \
+	unoil \
+	jurt \
+	juh \
+	java_uno \
+	commonwizards \
 ))
 
 $(eval $(call gb_Jar_set_manifest,letter,$(SRCDIR)/wizards/com/sun/star/wizards/letter/MANIFEST.MF))

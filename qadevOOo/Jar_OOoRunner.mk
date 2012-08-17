@@ -40,11 +40,11 @@ $(eval $(call gb_Jar_add_manifest_classpath,OOoRunner,\
 $(eval $(call gb_Jar_set_manifest,OOoRunner,$(SRCDIR)/qadevOOo/runner/manifest))
 
 $(eval $(call gb_Jar_use_jars,OOoRunner,\
-	$(OUTDIR)/bin/ridl.jar \
-	$(OUTDIR)/bin/unoil.jar \
-	$(OUTDIR)/bin/jurt.jar \
-	$(OUTDIR)/bin/juh.jar \
-	$(OUTDIR)/bin/java_uno.jar \
+	ridl \
+	unoil \
+	jurt \
+	juh \
+	java_uno \
 ))
 
 $(eval $(call gb_Jar_set_packageroot,OOoRunner,\

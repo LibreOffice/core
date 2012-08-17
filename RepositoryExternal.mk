@@ -1976,8 +1976,12 @@ endef
 
 else # !SYSTEM_HSQLDB
 
+$(eval $(call gb_Helper_register_jars,OOO,\
+	hsqldb \
+))
+
 define gb_Jar__use_hsqldb
-$(call gb_Jar_use_jar,$(1),$(OUTDIR)/bin/hsqldb.jar)
+$(call gb_Jar_use_jar,$(1),hsqldb)
 endef
 
 endif # SYSTEM_HSQLDB
@@ -1990,8 +1994,12 @@ endef
 
 else # !SYSTEM_SAXON
 
+$(eval $(call gb_Helper_register_jars,OOO,\
+	saxon9 \
+))
+
 define gb_Jar__use_saxon
-$(call gb_Jar_use_jar,$(1),$(OUTDIR)/bin/saxon9.jar)
+$(call gb_Jar_use_jar,$(1),saxon9)
 endef
 
 endif # SYSTEM_SAXON
@@ -2004,8 +2012,12 @@ endef
 
 else # !SYSTEM_BSH
 
+$(eval $(call gb_Helper_register_jars,OOO,\
+	bsh \
+))
+
 define gb_Jar__use_bsh
-$(call gb_Jar_use_jar,$(1),$(OUTDIR)/bin/bsh.jar)
+$(call gb_Jar_use_jar,$(1),bsh)
 endef
 
 endif # SYSTEM_BSH
@@ -2019,8 +2031,12 @@ endef
 
 else # !SYSTEM_RHINO
 
+$(eval $(call gb_Helper_register_jars,OOO,\
+	js \
+))
+
 define gb_Jar__use_rhino
-$(call gb_Jar_use_jar,$(1),$(OUTDIR)/bin/js.jar)
+$(call gb_Jar_use_jar,$(1),js)
 endef
 
 endif # SYSTEM_RHINO
@@ -2045,20 +2061,27 @@ endef
 
 else # !SYSTEM_APACHE_COMMONS
 
+$(eval $(call gb_Helper_register_jars,OOO,\
+	commons-codec-1.3 \
+	commons-httpclient-3.1 \
+	commons-lang-2.3 \
+	commons-logging-1.1.1 \
+))
+
 define gb_Jar__use_commons-codec
-$(call gb_Jar_use_jar,$(1),$(OUTDIR)/bin/commons-codec-1.3.jar)
+$(call gb_Jar_use_jar,$(1),commons-codec-1.3)
 endef
 
 define gb_Jar__use_commons-httpclient
-$(call gb_Jar_use_jar,$(1),$(OUTDIR)/bin/commons-httpclient-3.1.jar)
+$(call gb_Jar_use_jar,$(1),commons-httpclient-3.1)
 endef
 
 define gb_Jar__use_commons-lang
-$(call gb_Jar_use_jar,$(1),$(OUTDIR)/bin/commons-lang-2.3.jar)
+$(call gb_Jar_use_jar,$(1),commons-lang-2.3)
 endef
 
 define gb_Jar__use_commons-logging
-$(call gb_Jar_use_jar,$(1),$(OUTDIR)/bin/commons-logging-1.1.1.jar)
+$(call gb_Jar_use_jar,$(1),commons-logging-1.1.1)
 endef
 
 endif # SYSTEM_APACHE_COMMONS
@@ -2112,48 +2135,62 @@ endef
 
 else # !SYSTEM_JFREEREPORT
 
+$(eval $(call gb_Helper_register_jars,OOO,\
+	flow-engine-0.9.4 \
+	flute-1.1.6 \
+	libbase-1.1.6 \
+	libfonts-1.1.6 \
+	libformula-1.1.7 \
+	liblayout-0.2.10 \
+	libloader-1.1.6 \
+	librepository-1.1.6 \
+	libserializer-1.1.6 \
+	libxml-1.1.7 \
+	sac \
+))
+
 define gb_Jar__use_flow-engine
-$(call gb_Jar_use_jar,$(1),$(OUTDIR)/bin/flow-engine-0.9.4.jar)
+$(call gb_Jar_use_jar,$(1),flow-engine-0.9.4)
 endef
 
 define gb_Jar__use_flute
-$(call gb_Jar_use_jar,$(1),$(OUTDIR)/bin/flute-1.1.6.jar)
+$(call gb_Jar_use_jar,$(1),flute-1.1.6)
 endef
 
 define gb_Jar__use_libbase
-$(call gb_Jar_use_jar,$(1),$(OUTDIR)/bin/libbase-1.1.6.jar)
+$(call gb_Jar_use_jar,$(1),libbase-1.1.6)
 endef
 
 define gb_Jar__use_libfonts
-$(call gb_Jar_use_jar,$(1),$(OUTDIR)/bin/libfonts-1.1.6.jar)
+$(call gb_Jar_use_jar,$(1),libfonts-1.1.6)
 endef
 
 define gb_Jar__use_libformula
-$(call gb_Jar_use_jar,$(1),$(OUTDIR)/bin/libformula-1.1.7.jar)
+$(call gb_Jar_use_jar,$(1),libformula-1.1.7)
 endef
 
 define gb_Jar__use_liblayout
-$(call gb_Jar_use_jar,$(1),$(OUTDIR)/bin/liblayout-0.2.10.jar)
+$(call gb_Jar_use_jar,$(1),liblayout-0.2.10)
 endef
 
 define gb_Jar__use_libloader
-$(call gb_Jar_use_jar,$(1),$(OUTDIR)/bin/libloader-1.1.6.jar)
+$(call gb_Jar_use_jar,$(1),libloader-1.1.6)
 endef
 
 define gb_Jar__use_librepository
-$(call gb_Jar_use_jar,$(1),$(OUTDIR)/bin/librepository-1.1.6.jar)
+$(call gb_Jar_use_jar,$(1),librepository-1.1.6)
 endef
 
 define gb_Jar__use_libserializer
-$(call gb_Jar_use_jar,$(1),$(OUTDIR)/bin/libserializer-1.1.6.jar)
+$(call gb_Jar_use_jar,$(1),libserializer-1.1.6)
 endef
 
 define gb_Jar__use_libxml
-$(call gb_Jar_use_jar,$(1),$(OUTDIR)/bin/libxml-1.1.7.jar)
+$(call gb_Jar_use_jar,$(1),libxml-1.1.7)
 endef
 
 define gb_Jar__use_sac
-$(call gb_Jar_use_jar,$(1),$(OUTDIR)/bin/sac.jar)
+$(call gb_Jar_use_jar,$(1),sac)
 endef
 
 endif # SYSTEM_JFREEREPORT

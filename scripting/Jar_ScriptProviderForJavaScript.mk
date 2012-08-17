@@ -29,11 +29,11 @@
 $(eval $(call gb_Jar_Jar,ScriptProviderForJavaScript))
 
 $(eval $(call gb_Jar_use_jars,ScriptProviderForJavaScript,\
-	$(OUTDIR)/bin/juh.jar \
-	$(OUTDIR)/bin/jurt.jar \
-	$(OUTDIR)/bin/ridl.jar \
-	$(OUTDIR)/bin/unoil.jar \
-	$(OUTDIR)/bin/ScriptFramework.jar \
+	juh \
+	jurt \
+	ridl \
+	unoil \
+	ScriptFramework \
 ))
 
 $(eval $(call gb_Jar_use_externals,ScriptProviderForJavaScript,\

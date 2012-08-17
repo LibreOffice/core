@@ -29,12 +29,12 @@
 $(eval $(call gb_Jar_Jar,agenda))
 
 $(eval $(call gb_Jar_use_jars,agenda,\
-	$(OUTDIR)/bin/ridl.jar \
-	$(OUTDIR)/bin/unoil.jar \
-	$(OUTDIR)/bin/jurt.jar \
-	$(OUTDIR)/bin/juh.jar \
-	$(OUTDIR)/bin/java_uno.jar \
-	$(OUTDIR)/bin/commonwizards.jar \
+	ridl \
+	unoil \
+	jurt \
+	juh \
+	java_uno \
+	commonwizards \
 ))
 
 $(eval $(call gb_Jar_set_manifest,agenda,$(SRCDIR)/wizards/com/sun/star/wizards/agenda/MANIFEST.MF))

@@ -28,9 +28,9 @@
 $(eval $(call gb_Jar_Jar,juh))
 
 $(eval $(call gb_Jar_use_jars,juh,\
-    $(OUTDIR)/bin/jurt.jar \
-    $(OUTDIR)/bin/ridl.jar \
-    $(OUTDIR)/bin/unoil.jar \
+    jurt \
+    ridl \
+    unoil \
 ))
 
 $(eval $(call gb_Jar_set_packageroot,juh,com))

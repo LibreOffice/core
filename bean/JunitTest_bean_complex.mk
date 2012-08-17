@@ -30,11 +30,11 @@
 $(eval $(call gb_JunitTest_JunitTest,bean_complex))
 
 $(eval $(call gb_JunitTest_use_jars,bean_complex,\
-	$(OUTDIR)/bin/OOoRunner.jar \
-	$(OUTDIR)/bin/ridl.jar \
-	$(OUTDIR)/bin/test.jar \
-	$(OUTDIR)/bin/unoil.jar \
-	$(OUTDIR)/bin/officebean.jar \
+	OOoRunner \
+	ridl \
+	test \
+	unoil \
+	officebean \
 ))
 
 $(eval $(call gb_JunitTest_add_sourcefiles,bean_complex,\

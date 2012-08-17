@@ -40,11 +40,11 @@ $(eval $(call gb_JunitTest_add_sourcefiles,reportdesign_complex,\
 ))
 
 $(eval $(call gb_JunitTest_use_jars,reportdesign_complex,\
-	$(OUTDIR)/bin/OOoRunner.jar \
-	$(OUTDIR)/bin/ridl.jar \
-	$(OUTDIR)/bin/test.jar \
-	$(OUTDIR)/bin/unoil.jar \
-	$(OUTDIR)/bin/jurt.jar \
+	OOoRunner \
+	ridl \
+	test \
+	unoil \
+	jurt \
 ))
 
 $(eval $(call gb_JunitTest_add_classes,reportdesign_complex,\

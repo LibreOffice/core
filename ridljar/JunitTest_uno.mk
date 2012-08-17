@@ -28,7 +28,7 @@
 $(eval $(call gb_JunitTest_JunitTest,ridljar_uno))
 
 $(eval $(call gb_JunitTest_use_jars,ridljar_uno,\
-    $(OUTDIR)/bin/ridl.jar \
+    ridl \
 ))
 
 $(eval $(call gb_JunitTest_add_sourcefiles,ridljar_uno,\

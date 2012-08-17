@@ -37,10 +37,10 @@ $(eval $(call gb_Jar_add_manifest_classpath,TestExtension,\
 ))
 
 $(eval $(call gb_Jar_use_jars,TestExtension,\
-	$(OUTDIR)/bin/juh.jar \
-	$(OUTDIR)/bin/jurt.jar \
-	$(OUTDIR)/bin/ridl.jar \
-	$(OUTDIR)/bin/unoil.jar \
+	juh \
+	jurt \
+	ridl \
+	unoil \
 ))
 
 $(eval $(call gb_Jar_set_packageroot,TestExtension,com))

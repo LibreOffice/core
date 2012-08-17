@@ -10,12 +10,12 @@
 $(eval $(call gb_JunitTest_JunitTest,unotools_complex))
 
 $(eval $(call gb_JunitTest_use_jars,unotools_complex,\
-    $(OUTDIR)/bin/OOoRunner.jar \
-    $(OUTDIR)/bin/jurt.jar \
-    $(OUTDIR)/bin/ridl.jar \
-    $(OUTDIR)/bin/test-tools.jar \
-    $(OUTDIR)/bin/test.jar \
-    $(OUTDIR)/bin/unoil.jar \
+    OOoRunner \
+    jurt \
+    ridl \
+    test-tools \
+    test \
+    unoil \
 ))
 
 $(eval $(call gb_JunitTest_set_defs,unotools_complex,\

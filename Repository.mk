@@ -688,4 +688,57 @@ $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
 ))
 endif
 
+$(eval $(call gb_Helper_register_jars,URE, \
+	java_uno \
+	juh \
+	jurt \
+	ridl \
+	unoil \
+	unoloader \
+))
+
+$(eval $(call gb_Helper_register_jars,OOO, \
+	ConnectivityTools \
+	EvolutionarySolver \
+	FCFGMerge \
+	HelloWorld \
+	Highlight \
+	MemoryUsage \
+	OOoRunner \
+	ScriptFramework \
+	ScriptProviderForBeanShell \
+	ScriptProviderForJava \
+	ScriptProviderForJavaScript \
+	TestExtension \
+	OOoRunnerLight \
+	XMergeBridge \
+	XSLTFilter \
+	XSLTValidate \
+	commonwizards \
+	agenda \
+	aportisdoc \
+	fax \
+	form \
+	htmlsoff \
+	java_accessibility \
+	java_uno_accessbridge \
+	letter \
+	mediawiki \
+	nlpsolver \
+	officebean \
+	pexcel \
+	pocketword \
+	query \
+	report \
+	reportbuilderwizard \
+	sdbc_hsqldb \
+	sun-report-builder \
+	table \
+	test \
+	test-tools \
+	testComponent \
+	web \
+	xmerge \
+))
+
 # vim: set noet sw=4 ts=4:

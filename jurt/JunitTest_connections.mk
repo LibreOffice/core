@@ -28,7 +28,7 @@
 $(eval $(call gb_JunitTest_JunitTest,jurt_connections))
 
 $(eval $(call gb_JunitTest_use_jars,jurt_connections,\
-    $(OUTDIR)/bin/ridl.jar \
+    ridl \
 ))
 
 $(eval $(call gb_JunitTest_use_jar_classset,jurt_connections,jurt))

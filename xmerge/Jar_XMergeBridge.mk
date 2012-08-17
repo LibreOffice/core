@@ -36,11 +36,11 @@ $(eval $(call gb_Jar_set_manifest,XMergeBridge,$(SRCDIR)/xmerge/source/bridge/ma
 $(eval $(call gb_Jar_set_packageroot,XMergeBridge,*.class))
 
 $(eval $(call gb_Jar_use_jars,XMergeBridge,\
-	$(OUTDIR)/bin/xmerge.jar \
-	$(OUTDIR)/bin/unoil.jar \
-	$(OUTDIR)/bin/ridl.jar \
-	$(OUTDIR)/bin/jurt.jar \
-	$(OUTDIR)/bin/juh.jar \
+	xmerge \
+	unoil \
+	ridl \
+	jurt \
+	juh \
 ))
 
 $(eval $(call gb_Jar_add_sourcefiles,XMergeBridge,\

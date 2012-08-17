@@ -28,8 +28,8 @@
 $(eval $(call gb_Jar_Jar,jurt))
 
 $(eval $(call gb_Jar_use_jars,jurt,\
-    $(OUTDIR)/bin/ridl.jar \
-    $(OUTDIR)/bin/unoloader.jar \
+    ridl \
+    unoloader \
 ))
 
 $(eval $(call gb_Jar_set_packageroot,jurt,com))

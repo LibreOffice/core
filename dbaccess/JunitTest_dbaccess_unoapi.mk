@@ -36,11 +36,11 @@ $(eval $(call gb_JunitTest_set_defs,dba_ju_unoapi,\
 ))
 
 $(eval $(call gb_JunitTest_use_jars,dba_ju_unoapi,\
-    $(OUTDIR)/bin/OOoRunner.jar \
-    $(OUTDIR)/bin/jurt.jar \
-    $(OUTDIR)/bin/ridl.jar \
-    $(OUTDIR)/bin/test.jar \
-    $(OUTDIR)/bin/unoil.jar \
+    OOoRunner \
+    jurt \
+    ridl \
+    test \
+    unoil \
 ))
 
 $(eval $(call gb_JunitTest_add_classes,dba_ju_unoapi,\

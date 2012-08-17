@@ -28,8 +28,8 @@
 $(eval $(call gb_JunitTest_JunitTest,jurt_uno))
 
 $(eval $(call gb_JunitTest_use_jars,jurt_uno,\
-    $(OUTDIR)/bin/OOoRunnerLight.jar \
-    $(OUTDIR)/bin/ridl.jar \
+    OOoRunnerLight \
+    ridl \
 ))
 
 $(eval $(call gb_JunitTest_use_jar_classset,jurt_uno,jurt))

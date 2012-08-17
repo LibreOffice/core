@@ -29,10 +29,10 @@
 $(eval $(call gb_Jar_Jar,HelloWorld))
 
 $(eval $(call gb_Jar_use_jars,HelloWorld,\
-	$(OUTDIR)/bin/juh.jar \
-	$(OUTDIR)/bin/jurt.jar \
-	$(OUTDIR)/bin/ridl.jar \
-	$(OUTDIR)/bin/unoil.jar \
+	juh \
+	jurt \
+	ridl \
+	unoil \
 ))
 
 $(eval $(call gb_Jar_add_sourcefiles,HelloWorld,\

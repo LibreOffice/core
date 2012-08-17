@@ -36,11 +36,11 @@ $(eval $(call gb_JunitTest_set_defs,svx_unoapi,\
 ))
 
 $(eval $(call gb_JunitTest_use_jars,svx_unoapi,\
-    $(OUTDIR)/bin/OOoRunner.jar \
-    $(OUTDIR)/bin/ridl.jar \
-    $(OUTDIR)/bin/test.jar \
-    $(OUTDIR)/bin/unoil.jar \
-    $(OUTDIR)/bin/jurt.jar \
+    OOoRunner \
+    ridl \
+    test \
+    unoil \
+    jurt \
 ))
 
 $(eval $(call gb_JunitTest_add_classes,svx_unoapi,\

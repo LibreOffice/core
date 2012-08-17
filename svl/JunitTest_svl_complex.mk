@@ -25,12 +25,12 @@ $(eval $(call gb_JunitTest_set_defs,svl_complex,\
 ))
 
 $(eval $(call gb_JunitTest_use_jars,svl_complex,\
-    $(OUTDIR)/bin/OOoRunner.jar \
-    $(OUTDIR)/bin/ridl.jar \
-    $(OUTDIR)/bin/test.jar \
-    $(OUTDIR)/bin/unoil.jar \
-    $(OUTDIR)/bin/jurt.jar \
-    $(OUTDIR)/bin/ConnectivityTools.jar \
+    OOoRunner \
+    ridl \
+    test \
+    unoil \
+    jurt \
+    ConnectivityTools \
 ))
 
 $(eval $(call gb_JunitTest_add_sourcefiles,svl_complex,\

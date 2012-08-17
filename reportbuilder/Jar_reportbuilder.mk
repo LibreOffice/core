@@ -28,11 +28,11 @@
 $(eval $(call gb_Jar_Jar,sun-report-builder))
 
 $(eval $(call gb_Jar_use_jars,sun-report-builder,\
-	$(OUTDIR)/bin/java_uno.jar \
-	$(OUTDIR)/bin/juh.jar \
-	$(OUTDIR)/bin/jurt.jar \
-	$(OUTDIR)/bin/ridl.jar \
-	$(OUTDIR)/bin/unoil.jar \
+	java_uno \
+	juh \
+	jurt \
+	ridl \
+	unoil \
 ))
 
 $(eval $(call gb_Jar_use_externals,sun-report-builder,\

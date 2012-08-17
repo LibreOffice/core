@@ -34,7 +34,7 @@ $(eval $(call gb_Jar_add_packagefile,pocketword,META-INF/converter.xml,$(SRCDIR)
 $(eval $(call gb_Jar_set_packageroot,pocketword,org))
 
 $(eval $(call gb_Jar_use_jars,pocketword,\
-	$(OUTDIR)/bin/xmerge.jar \
+	xmerge \
 ))
 
 $(eval $(call gb_Jar_add_sourcefiles,pocketword,\

@@ -25,12 +25,12 @@ $(eval $(call gb_JunitTest_set_defs,sfx2_complex,\
 ))
 
 $(eval $(call gb_JunitTest_use_jars,sfx2_complex,\
-    $(OUTDIR)/bin/OOoRunner.jar \
-    $(OUTDIR)/bin/ridl.jar \
-    $(OUTDIR)/bin/test.jar \
-    $(OUTDIR)/bin/test-tools.jar \
-    $(OUTDIR)/bin/unoil.jar \
-    $(OUTDIR)/bin/jurt.jar \
+    OOoRunner \
+    ridl \
+    test \
+    test-tools \
+    unoil \
+    jurt \
 ))
 
 $(eval $(call gb_JunitTest_add_sourcefiles,sfx2_complex,\

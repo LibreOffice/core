@@ -27,9 +27,9 @@
 $(eval $(call gb_Jar_Jar,testComponent))
 
 $(eval $(call gb_Jar_use_jars,testComponent,\
-    $(OUTDIR)/bin/jurt.jar \
-    $(OUTDIR)/bin/ridl.jar \
-    $(OUTDIR)/bin/juh.jar \
+    jurt \
+    ridl \
+    juh \
 ))
 
 $(eval $(call gb_Jar_use_customtargets,testComponent,\

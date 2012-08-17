@@ -30,10 +30,10 @@
 $(eval $(call gb_Jar_Jar,officebean))
 
 $(eval $(call gb_Jar_use_jars,officebean,\
-	$(OUTDIR)/bin/ridl.jar \
-	$(OUTDIR)/bin/unoil.jar \
-	$(OUTDIR)/bin/jurt.jar \
-	$(OUTDIR)/bin/juh.jar \
+	ridl \
+	unoil \
+	jurt \
+	juh \
 ))
 
 $(eval $(call gb_Jar_set_packageroot,officebean,com))

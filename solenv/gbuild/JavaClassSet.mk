@@ -121,9 +121,13 @@ endef
 # problem: currently we can't get these dependencies to work
 # build order dependency is a hack to get these prerequisites out of the way in the build command
 define gb_JavaClassSet_use_jar
-$(call gb_JavaClassSet_get_target,$(1)) : $(2)
-$(call gb_JavaClassSet_get_target,$(1)) : JARDEPS += $(2)
-$(call gb_JavaClassSet_add_classpath,$(1),$(2))
+ifneq (,$$(filter-out $(gb_Jar_KNOWN),$(2)))
+$$(eval $$(call gb_Output_info,currently known jars are: $(sort $(gb_Jar_KNOWN)),ALL))
+$$(eval $$(call gb_Output_error,Cannot link against jar $$(filter-out $(gb_Jar_KNOWN),$(2)). Jars must be registered in Repository.mk))
+endif
+$(call gb_JavaClassSet_get_target,$(1)) : $(call gb_Jar_get_outdir_target,$(2))
+$(call gb_JavaClassSet_get_target,$(1)) : JARDEPS += $(call gb_Jar_get_outdir_target,$(2))
+$(call gb_JavaClassSet_add_classpath,$(1),$(call gb_Jar_get_outdir_target,$(2)))
 $(2) :| $(gb_Helper_PHONY)
 
 endef

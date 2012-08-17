@@ -10,12 +10,12 @@
 $(eval $(call gb_JunitTest_JunitTest,dba_ju_complex))
 
 $(eval $(call gb_JunitTest_use_jars,dba_ju_complex,\
-    $(OUTDIR)/bin/ConnectivityTools.jar \
-    $(OUTDIR)/bin/OOoRunner.jar \
-    $(OUTDIR)/bin/jurt.jar \
-    $(OUTDIR)/bin/ridl.jar \
-    $(OUTDIR)/bin/test.jar \
-    $(OUTDIR)/bin/unoil.jar \
+    ConnectivityTools \
+    OOoRunner \
+    jurt \
+    ridl \
+    test \
+    unoil \
 ))
 
 $(eval $(call gb_JunitTest_set_defs,dba_ju_complex,\

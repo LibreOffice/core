@@ -19,10 +19,10 @@
 $(eval $(call gb_Jar_Jar,XSLTValidate))
 
 $(eval $(call gb_Jar_use_jars,XSLTValidate,\
-	$(OUTDIR)/bin/ridl.jar \
-	$(OUTDIR)/bin/unoil.jar \
-	$(OUTDIR)/bin/jurt.jar \
-	$(OUTDIR)/bin/juh.jar \
+	ridl \
+	unoil \
+	jurt \
+	juh \
 ))
 
 #$(eval $(call gb_Jar_use_externals,XSLTValidate,\

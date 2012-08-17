@@ -28,10 +28,10 @@
 $(eval $(call gb_Jar_Jar,java_uno_accessbridge))
 
 $(eval $(call gb_Jar_use_jars,java_uno_accessbridge,\
-    $(OUTDIR)/bin/java_accessibility.jar \
-    $(OUTDIR)/bin/jurt.jar \
-    $(OUTDIR)/bin/ridl.jar \
-    $(OUTDIR)/bin/unoil.jar \
+    java_accessibility \
+    jurt \
+    ridl \
+    unoil \
 ))
 
 $(eval $(call gb_Jar_set_packageroot,java_uno_accessbridge,org))

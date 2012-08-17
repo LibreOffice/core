@@ -106,10 +106,12 @@ define gb_Helper_init_registries
 gb_Executable_VALIDGROUPS := UREBIN SDK OOO NONE
 gb_Library_VALIDGROUPS := OOOLIBS PLAINLIBS_NONE PLAINLIBS_URE PLAINLIBS_OOO RTLIBS RTVERLIBS UNOLIBS_URE UNOLIBS_OOO UNOVERLIBS EXTENSIONLIBS
 gb_StaticLibrary_VALIDGROUPS := PLAINLIBS
+gb_Jar_VALIDGROUPS := URE OOO
 
 $$(foreach group,$$(gb_Executable_VALIDGROUPS),$$(eval gb_Executable_$$(group) :=))
 $$(foreach group,$$(gb_Library_VALIDGROUPS),$$(eval gb_Library_$$(group) :=))
 $$(foreach group,$$(gb_StaticLibrary_VALIDGROUPS),$$(eval gb_StaticLibrary_$$(group) :=))
+$$(foreach group,$$(gb_Jar_VALIDGROUPS),$$(eval gb_Jar_$$(group) :=))
 
 endef
 
@@ -123,6 +125,7 @@ define gb_Helper_collect_knownlibs
 gb_Library_KNOWNLIBS := $$(foreach group,$$(gb_Library_VALIDGROUPS),$$(gb_Library_$$(group)))
 gb_StaticLibrary_KNOWNLIBS := $$(foreach group,$$(gb_StaticLibrary_VALIDGROUPS),$$(gb_StaticLibrary_$$(group)))
 gb_Executable_KNOWN := $$(foreach group,$$(gb_Executable_VALIDGROUPS),$$(gb_Executable_$$(group)))
+gb_Jar_KNOWN := $$(foreach group,$$(gb_Jar_VALIDGROUPS),$$(gb_Jar_$$(group)))
 
 endef
 
@@ -168,6 +171,21 @@ $(if $(filter-out $(words $(2)),$(words $(sort $(2)))),\
  $(call gb_Output_error,gb_Helper_register_static_libraries: contains duplicates: $(2)))
 
 gb_StaticLibrary_$(1) += $(2)
+
+endef
+
+define gb_Helper_register_jars
+ifeq ($$(filter $(1),$$(gb_Jar_VALIDGROUPS)),)
+$$(eval $$(call gb_Output_error,$(1) is not a valid group for jars. Valid groups are: $$(gb_Jar_VALIDGROUPS)))
+endif
+$(foreach group,$(gb_Jar_VALIDGROUPS),\
+ $(foreach target,$(2),\
+  $(if $(filter $(target),$(gb_Jar_$(group))),\
+   $(call gb_Output_error,gb_Helper_register_jars: already registered: $(target)))))
+$(if $(filter-out $(words $(2)),$(words $(sort $(2)))),\
+ $(call gb_Output_error,gb_Helper_register_jars: contains duplicates: $(2)))
+
+gb_Jar_$(1) += $(2)
 
 endef
 
