@@ -1281,6 +1281,7 @@ sal_Bool EnhWMFReader::ReadEnhWMF()
             }
             break;
             case EMR_CREATEDIBPATTERNBRUSHPT :
+            {
                 sal_uInt32  nTmp32;
                 sal_uInt32  nOffset;
                 *pWMF >> nIndex;
@@ -1317,7 +1318,7 @@ sal_Bool EnhWMFReader::ReadEnhWMF()
                 }
                 Color aColor( (sal_Char)( nRed / nCount ), (sal_Char)( nGreen / nCount ), (sal_Char)( nBlue / nCount ) );
                 pOut->CreateObject( nIndex, GDI_BRUSH, new WinMtfFillStyle( aColor, sal_False ) );
-
+            }
             break;
 
 #ifdef WIN_MTF_ASSERT
@@ -1338,7 +1339,6 @@ sal_Bool EnhWMFReader::ReadEnhWMF()
             case EMR_ANGLEARC :                 WinMtfAssertHandler( "AngleArc" );                  break;
             case EMR_SETCOLORADJUSTMENT :       WinMtfAssertHandler( "SetColorAdjustment" );        break;
             case EMR_POLYDRAW16 :               WinMtfAssertHandler( "PolyDraw16" );                break;
-            case EMR_CREATEDIBPATTERNBRUSHPT :  WinMtfAssertHandler( "CreateDibPatternBrushPt" );   break;
             case EMR_POLYTEXTOUTA :             WinMtfAssertHandler( "PolyTextOutA" );              break;
             case EMR_POLYTEXTOUTW :             WinMtfAssertHandler( "PolyTextOutW" );              break;
             case EMR_CREATECOLORSPACE :         WinMtfAssertHandler( "CreateColorSpace" );          break;
