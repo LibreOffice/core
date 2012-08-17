@@ -357,5 +357,46 @@ public class UIMap {
     public static final VclTreeListBox OptionsDlg_PathTabTree = tree("CUI_HID_OPTPATH_CTL_PATH");
     public static final VclTreeListBox OptionsDlg_MicorOfficeTree = tree("CUI_HID_OFAPAGE_MSFLTR2_CLB");
 
+    // Presentation:"Table Property" dialog
+    public static final VclButton impress_WizardDlg_Next = button("sd:PushButton:DLG_ASS:BUT_NEXT");
+    public static final VclListBox Area_Fill_Color = listbox("cui:ListBox:RID_SVXPAGE_AREA:LB_COLOR");
+    public static final VclTabPage Area_Area_page = tabpage("CUI_HID_AREA_AREA");
+    public static final VclListBox Area_Fill_Type = listbox("cui:ListBox:RID_SVXPAGE_AREA:LB_AREA_TYPE");
+    public static final VclListBox Area_Fill_Gradient = listbox("cui:ListBox:RID_SVXPAGE_AREA:LB_GRADIENT");
+    public static final VclListBox Area_Fill_Hatching = listbox("cui:ListBox:RID_SVXPAGE_AREA:LB_HATCHING");
+    public static final VclListBox Area_Fill_Bitmap = listbox("cui:ListBox:RID_SVXPAGE_AREA:LB_BITMAP");
+    public static final VclTabPage Area_Border_page = tabpage("CUI_HID_BORDER");
+    public static final VclTabPage Area_Font_page = tabpage("CUI_HID_SVXPAGE_CHAR_NAME");
+    public static final VclComboBox Area_Font_Western_Font_Name = combobox("cui:ComboBox:RID_SVXPAGE_CHAR_NAME:LB_WEST_NAME");
+    public static final VclComboBox Area_Font_Western_Style = combobox("cui:ComboBox:RID_SVXPAGE_CHAR_NAME:LB_WEST_STYLE");
+    public static final VclListBox Area_Font_Western_Size = listbox("cui:MetricBox:RID_SVXPAGE_CHAR_NAME:LB_WEST_SIZE");
+    public static final VclListBox Area_Font_Western_Lang = listbox("cui:ListBox:RID_SVXPAGE_CHAR_NAME:LB_WEST_LANG");
+    public static final VclComboBox Area_Font_Eastern_Font_Name = combobox("cui:ComboBox:RID_SVXPAGE_CHAR_NAME:LB_EAST_NAME");
+    public static final VclComboBox Area_Font_Eastern_Style = combobox("cui:ComboBox:RID_SVXPAGE_CHAR_NAME:LB_EAST_STYLE");
+    public static final VclListBox Area_Font_Eastern_Size = listbox("cui:MetricBox:RID_SVXPAGE_CHAR_NAME:LB_EAST_SIZE");
+    public static final VclListBox Area_Font_Eastern_Lang = listbox("cui:ListBox:RID_SVXPAGE_CHAR_NAME:LB_EAST_LANG");
+    public static final VclListBox EffectsPage_Relief = listbox("cui:ListBox:RID_SVXPAGE_CHAR_EFFECTS:LB_RELIEF");
+    public static final VclButton EffectsPage_Outline = button("cui:TriStateBox:RID_SVXPAGE_CHAR_EFFECTS:CB_OUTLINE");
+    public static final VclButton EffectsPage_Shadow = button("cui:TriStateBox:RID_SVXPAGE_CHAR_EFFECTS:CB_SHADOW");
+    public static final VclListBox EffectsPage_Overline = listbox("cui:ListBox:RID_SVXPAGE_CHAR_EFFECTS:LB_OVERLINE");
+    public static final VclListBox EffectsPage_Overline_Color = listbox("cui:ListBox:RID_SVXPAGE_CHAR_EFFECTS:LB_OVERLINE_COLOR");
+    public static final VclListBox EffectsPage_Strikeout = listbox("cui:ListBox:RID_SVXPAGE_CHAR_EFFECTS:LB_STRIKEOUT");
+    public static final VclListBox EffectsPage_Underline = listbox("cui:ListBox:RID_SVXPAGE_CHAR_EFFECTS:LB_UNDERLINE");
+    public static final VclListBox EffectsPage_Underline_Color = listbox("cui:ListBox:RID_SVXPAGE_CHAR_EFFECTS:LB_UNDERLINE_COLOR");
+    public static final VclButton EffectsPage_InvidiualWords = button("cui:CheckBox:RID_SVXPAGE_CHAR_EFFECTS:CB_INDIVIDUALWORDS");
+    public static final VclListBox EffectsPage_Emphasis = listbox("cui:ListBox:RID_SVXPAGE_CHAR_EFFECTS:LB_EMPHASIS");
+    public static final VclListBox EffectsPage_Position = listbox("cui:ListBox:RID_SVXPAGE_CHAR_EFFECTS:LB_POSITION");
+    public static final VclControl Area_Border_Presets = control("CUI_HID_BORDER_CTL_PRESETS");
+    public static final VclListBox Area_Border_LineStyle = listbox("cui:ListBox:RID_SVXPAGE_BORDER:LB_LINESTYLE");
+    public static final VclListBox Area_Border_LineColor = listbox("cui:ListBox:RID_SVXPAGE_BORDER:LB_LINECOLOR");
+    public static final VclField Area_Border_Mf_Left = field("cui:MetricField:RID_SVXPAGE_BORDER:MF_LEFT");
+    public static final VclField Area_Border_Mf_Right = field("cui:MetricField:RID_SVXPAGE_BORDER:MF_RIGHT");
+    public static final VclField Area_Border_Mf_Top = field("cui:MetricField:RID_SVXPAGE_BORDER:MF_TOP");
+    public static final VclField Area_Border_Mf_Bottom = field("cui:MetricField:RID_SVXPAGE_BORDER:MF_BOTTOM");
+    public static final VclButton Area_Border_Sync = button("cui:CheckBox:RID_SVXPAGE_BORDER:CB_SYNC");
+    // Presentation:"Textbox Property" dialog
+    public static final VclToolBox Textbox_Toolbar = toolbox(".HelpId:textbar");
+    public static final VclButton SD_InsertTextboxButtonOnToolbar = button(".uno:Text");
+    public static final VclButton SD_FormatArea = button(".uno:FormatArea");
 
 }
