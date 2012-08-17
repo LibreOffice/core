@@ -26,8 +26,6 @@
 #
 #*************************************************************************
 
-# if a jar prerequisite has changed, the ClassSet must be recompiled. How?
-
 # Jar class
 
 gb_Jar_JAVACOMMAND := $(JAVAINTERPRETER)

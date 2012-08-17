@@ -118,8 +118,6 @@ $$(call gb_Output_error,\
  gb_JavaClassSet_add_jar: use gb_JavaClassSet_use_jar instead.)
 endef
 
-# problem: currently we can't get these dependencies to work
-# build order dependency is a hack to get these prerequisites out of the way in the build command
 define gb_JavaClassSet_use_jar
 ifneq (,$$(filter-out $(gb_Jar_KNOWN),$(2)))
 $$(eval $$(call gb_Output_info,currently known jars are: $(sort $(gb_Jar_KNOWN)),ALL))
@@ -128,7 +126,6 @@ endif
 $(call gb_JavaClassSet_get_target,$(1)) : $(call gb_Jar_get_outdir_target,$(2))
 $(call gb_JavaClassSet_get_target,$(1)) : JARDEPS += $(call gb_Jar_get_outdir_target,$(2))
 $(call gb_JavaClassSet_add_classpath,$(1),$(call gb_Jar_get_outdir_target,$(2)))
-$(2) :| $(gb_Helper_PHONY)
 
 endef
 

@@ -40,6 +40,7 @@ $(call gb_JunitTest_get_clean_target,%) : $(call gb_JavaClassSet_get_clean_targe
 ifneq (,$(strip $(OOO_JUNIT_JAR)))
 
 # DBGSV_ERROR_OUT => in non-product builds, ensure that tools-based assertions do not pop up as message box, but are routed to the shell
+# DISABLE_SAL_DBGBOX is the same, for osl/diagnose.h on Windows only
 .PHONY : $(call gb_JunitTest_get_target,%)
 $(call gb_JunitTest_get_target,%) :
 	$(call gb_Output_announce,$*,$(true),JUT,2)
@@ -111,7 +112,6 @@ define gb_JunitTest_use_jar
 $(call gb_JavaClassSet_use_jar,$(call gb_JunitTest_get_classsetname,$(1)),$(2))
 $(call gb_JunitTest_get_target,$(1)) : T_CP := $$(T_CP)$$(gb_CLASSPATHSEP)$(call gb_Jar_get_outdir_target,$(2))
 $(call gb_JunitTest_get_target,$(1)) : $(call gb_Jar_get_outdir_target,$(2))
-$(2) :| $(gb_Helper_PHONY)
 
 endef
 
