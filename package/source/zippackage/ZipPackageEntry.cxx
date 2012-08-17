@@ -34,8 +34,6 @@ using namespace com::sun::star::container;
 using namespace com::sun::star::packages::zip;
 using namespace com::sun::star::packages::zip::ZipConstants;
 
-using rtl::OUString;
-
 ZipPackageEntry::ZipPackageEntry ( bool bNewFolder )
 : mbIsFolder ( bNewFolder )
 , mbAllowRemoveOnInsert( sal_True )
@@ -64,7 +62,7 @@ void SAL_CALL ZipPackageEntry::setName( const OUString& aName )
     // unfortunately no other exception than RuntimeException can be thrown here
     // usually the package is used through storage implementation, the problem should be detected there
     if ( !::comphelper::OStorageHelper::IsValidZipEntryFileName( aName, sal_True ) )
-        throw RuntimeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Unexpected character is used in file name." ) ), uno::Reference< XInterface >() );
+        throw RuntimeException(OSL_LOG_PREFIX "Unexpected character is used in file name.", uno::Reference< XInterface >() );
 
     msName = aName;
 
@@ -92,7 +90,7 @@ void SAL_CALL ZipPackageEntry::setParent( const uno::Reference< XInterface >& xN
     sal_Int64 nTest(0);
     uno::Reference < XUnoTunnel > xTunnel ( xNewParent, UNO_QUERY );
     if ( !xNewParent.is() || ( nTest = xTunnel->getSomething ( ZipPackageFolder::static_getImplementationId () ) ) == 0 )
-        throw NoSupportException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
+        throw NoSupportException(OSL_LOG_PREFIX, uno::Reference< uno::XInterface >() );
 
     ZipPackageFolder *pNewParent = reinterpret_cast < ZipPackageFolder * > ( nTest );
 

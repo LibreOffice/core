@@ -81,7 +81,7 @@ ZipPackageFolder::~ZipPackageFolder()
 {
 }
 
-sal_Bool ZipPackageFolder::LookForUnexpectedODF12Streams( const ::rtl::OUString& aPath )
+sal_Bool ZipPackageFolder::LookForUnexpectedODF12Streams( const OUString& aPath )
 {
     sal_Bool bHasUnexpected = sal_False;
 
@@ -89,7 +89,7 @@ sal_Bool ZipPackageFolder::LookForUnexpectedODF12Streams( const ::rtl::OUString&
           !bHasUnexpected && aCI != aEnd;
           ++aCI)
     {
-        const ::rtl::OUString &rShortName = (*aCI).first;
+        const OUString &rShortName = (*aCI).first;
         const ContentInfo &rInfo = *(*aCI).second;
 
         if ( rInfo.bFolder )
@@ -101,7 +101,7 @@ sal_Bool ZipPackageFolder::LookForUnexpectedODF12Streams( const ::rtl::OUString&
             }
             else
             {
-                ::rtl::OUString sOwnPath = aPath + rShortName + ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "/" ) );
+                OUString sOwnPath = aPath + rShortName + "/";
                 bHasUnexpected = rInfo.pFolder->LookForUnexpectedODF12Streams( sOwnPath );
             }
         }
@@ -136,17 +136,17 @@ sal_Bool ZipPackageFolder::LookForUnexpectedODF12Streams( const ::rtl::OUString&
 
 void ZipPackageFolder::setChildStreamsTypeByExtension( const beans::StringPair& aPair )
 {
-    ::rtl::OUString aExt;
+    OUString aExt;
     if ( aPair.First.toChar() == (sal_Unicode)'.' )
         aExt = aPair.First;
     else
-        aExt = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "." ) ) + aPair.First;
+        aExt = "." + aPair.First;
 
     for ( ContentHash::const_iterator aCI = maContents.begin(), aEnd = maContents.end();
           aCI != aEnd;
           ++aCI)
     {
-        const ::rtl::OUString &rShortName = (*aCI).first;
+        const OUString &rShortName = (*aCI).first;
         const ContentInfo &rInfo = *(*aCI).second;
 
         if ( rInfo.bFolder )
@@ -182,11 +182,11 @@ const ::com::sun::star::uno::Sequence < sal_Int8 >& ZipPackageFolder::static_get
 }
 
     // XNameContainer
-void SAL_CALL ZipPackageFolder::insertByName( const ::rtl::OUString& aName, const uno::Any& aElement )
+void SAL_CALL ZipPackageFolder::insertByName( const OUString& aName, const uno::Any& aElement )
         throw(IllegalArgumentException, ElementExistException, WrappedTargetException, uno::RuntimeException)
 {
     if (hasByName(aName))
-        throw ElementExistException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
+        throw ElementExistException(OSL_LOG_PREFIX, uno::Reference< uno::XInterface >() );
     else
     {
         uno::Reference < XUnoTunnel > xRef;
@@ -206,22 +206,22 @@ void SAL_CALL ZipPackageFolder::insertByName( const ::rtl::OUString& aName, cons
                 pEntry = static_cast < ZipPackageEntry * > ( pStream );
             }
             else
-                throw IllegalArgumentException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >(), 0 );
+                throw IllegalArgumentException(OSL_LOG_PREFIX, uno::Reference< uno::XInterface >(), 0 );
 
             if (pEntry->getName() != aName )
                 pEntry->setName (aName);
             doInsertByName ( pEntry, sal_True );
         }
         else
-            throw IllegalArgumentException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >(), 0 );
+            throw IllegalArgumentException(OSL_LOG_PREFIX, uno::Reference< uno::XInterface >(), 0 );
     }
 }
-void SAL_CALL ZipPackageFolder::removeByName( const ::rtl::OUString& Name )
+void SAL_CALL ZipPackageFolder::removeByName( const OUString& Name )
         throw(NoSuchElementException, WrappedTargetException, uno::RuntimeException)
 {
     ContentHash::iterator aIter = maContents.find ( Name );
     if ( aIter == maContents.end() )
-        throw NoSuchElementException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
+        throw NoSuchElementException(OSL_LOG_PREFIX, uno::Reference< uno::XInterface >() );
     maContents.erase( aIter );
 }
     // XEnumerationAccess
@@ -242,43 +242,43 @@ sal_Bool SAL_CALL ZipPackageFolder::hasElements(  )
     return maContents.size() > 0;
 }
     // XNameAccess
-ContentInfo& ZipPackageFolder::doGetByName( const ::rtl::OUString& aName )
+ContentInfo& ZipPackageFolder::doGetByName( const OUString& aName )
     throw(NoSuchElementException, WrappedTargetException, uno::RuntimeException)
 {
     ContentHash::iterator aIter = maContents.find ( aName );
     if ( aIter == maContents.end())
-        throw NoSuchElementException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
+        throw NoSuchElementException(OSL_LOG_PREFIX, uno::Reference< uno::XInterface >() );
     return *(*aIter).second;
 }
-uno::Any SAL_CALL ZipPackageFolder::getByName( const ::rtl::OUString& aName )
+uno::Any SAL_CALL ZipPackageFolder::getByName( const OUString& aName )
     throw(NoSuchElementException, WrappedTargetException, uno::RuntimeException)
 {
     return uno::makeAny ( doGetByName ( aName ).xTunnel );
 }
-uno::Sequence< ::rtl::OUString > SAL_CALL ZipPackageFolder::getElementNames(  )
+uno::Sequence< OUString > SAL_CALL ZipPackageFolder::getElementNames(  )
         throw(uno::RuntimeException)
 {
     sal_uInt32 i=0, nSize = maContents.size();
-    uno::Sequence < ::rtl::OUString > aSequence ( nSize );
+    uno::Sequence < OUString > aSequence ( nSize );
     for ( ContentHash::const_iterator aIterator = maContents.begin(), aEnd = maContents.end();
           aIterator != aEnd;
           ++i, ++aIterator)
         aSequence[i] = (*aIterator).first;
     return aSequence;
 }
-sal_Bool SAL_CALL ZipPackageFolder::hasByName( const ::rtl::OUString& aName )
+sal_Bool SAL_CALL ZipPackageFolder::hasByName( const OUString& aName )
     throw(uno::RuntimeException)
 {
     return maContents.find ( aName ) != maContents.end ();
 }
     // XNameReplace
-void SAL_CALL ZipPackageFolder::replaceByName( const ::rtl::OUString& aName, const uno::Any& aElement )
+void SAL_CALL ZipPackageFolder::replaceByName( const OUString& aName, const uno::Any& aElement )
         throw(IllegalArgumentException, NoSuchElementException, WrappedTargetException, uno::RuntimeException)
 {
     if ( hasByName( aName ) )
         removeByName( aName );
     else
-        throw NoSuchElementException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
+        throw NoSuchElementException(OSL_LOG_PREFIX, uno::Reference< uno::XInterface >() );
     insertByName(aName, aElement);
 }
 
@@ -294,29 +294,29 @@ static void ImplSetStoredData( ZipEntry & rEntry, uno::Reference< XInputStream> 
     rEntry.nCrc = aCRC32.getValue();
 }
 
-bool ZipPackageFolder::saveChild( const ::rtl::OUString &rShortName, const ContentInfo &rInfo, ::rtl::OUString &rPath, std::vector < uno::Sequence < PropertyValue > > &rManList, ZipOutputStream & rZipOut, const uno::Sequence < sal_Int8 >& rEncryptionKey, rtlRandomPool &rRandomPool)
+bool ZipPackageFolder::saveChild( const OUString &rShortName, const ContentInfo &rInfo, OUString &rPath, std::vector < uno::Sequence < PropertyValue > > &rManList, ZipOutputStream & rZipOut, const uno::Sequence < sal_Int8 >& rEncryptionKey, rtlRandomPool &rRandomPool)
 {
     bool bSuccess = true;
 
-    const ::rtl::OUString sMediaTypeProperty ( RTL_CONSTASCII_USTRINGPARAM ( "MediaType" ) );
-    const ::rtl::OUString sVersionProperty ( RTL_CONSTASCII_USTRINGPARAM ( "Version" ) );
-    const ::rtl::OUString sFullPathProperty ( RTL_CONSTASCII_USTRINGPARAM ( "FullPath" ) );
-    const ::rtl::OUString sInitialisationVectorProperty ( RTL_CONSTASCII_USTRINGPARAM ( "InitialisationVector" ) );
-    const ::rtl::OUString sSaltProperty ( RTL_CONSTASCII_USTRINGPARAM ( "Salt" ) );
-    const ::rtl::OUString sIterationCountProperty ( RTL_CONSTASCII_USTRINGPARAM ( "IterationCount" ) );
-    const ::rtl::OUString sSizeProperty ( RTL_CONSTASCII_USTRINGPARAM ( "Size" ) );
-    const ::rtl::OUString sDigestProperty ( RTL_CONSTASCII_USTRINGPARAM ( "Digest" ) );
-    const ::rtl::OUString sEncryptionAlgProperty    ( RTL_CONSTASCII_USTRINGPARAM ( "EncryptionAlgorithm" ) );
-    const ::rtl::OUString sStartKeyAlgProperty  ( RTL_CONSTASCII_USTRINGPARAM ( "StartKeyAlgorithm" ) );
-    const ::rtl::OUString sDigestAlgProperty    ( RTL_CONSTASCII_USTRINGPARAM ( "DigestAlgorithm" ) );
-    const ::rtl::OUString  sDerivedKeySizeProperty  ( RTL_CONSTASCII_USTRINGPARAM ( "DerivedKeySize" ) );
+    const OUString sMediaTypeProperty ("MediaType");
+    const OUString sVersionProperty ("Version");
+    const OUString sFullPathProperty ("FullPath");
+    const OUString sInitialisationVectorProperty ("InitialisationVector");
+    const OUString sSaltProperty ("Salt");
+    const OUString sIterationCountProperty ("IterationCount");
+    const OUString sSizeProperty ("Size");
+    const OUString sDigestProperty ("Digest");
+    const OUString sEncryptionAlgProperty    ("EncryptionAlgorithm");
+    const OUString sStartKeyAlgProperty  ("StartKeyAlgorithm");
+    const OUString sDigestAlgProperty    ("DigestAlgorithm");
+    const OUString  sDerivedKeySizeProperty  ("DerivedKeySize");
 
     uno::Sequence < PropertyValue > aPropSet (PKG_SIZE_NOENCR_MNFST);
 
     OSL_ENSURE( ( rInfo.bFolder && rInfo.pFolder ) || ( !rInfo.bFolder && rInfo.pStream ), "A valid child object is expected!" );
     if ( rInfo.bFolder )
     {
-        ::rtl::OUString sTempName = rPath + rShortName + ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "/" ) );
+        OUString sTempName = rPath + rShortName + "/";
 
         if ( !rInfo.pFolder->GetMediaType().isEmpty() )
         {
@@ -344,7 +344,7 @@ bool ZipPackageFolder::saveChild( const ::rtl::OUString &rShortName, const Conte
 
         ZipPackageFolder::copyZipEntry ( *pTempEntry, rInfo.pStream->aEntry );
         pTempEntry->sPath = rPath + rShortName;
-        pTempEntry->nPathLen = (sal_Int16)( ::rtl::OUStringToOString( pTempEntry->sPath, RTL_TEXTENCODING_UTF8 ).getLength() );
+        pTempEntry->nPathLen = (sal_Int16)( OUStringToOString( pTempEntry->sPath, RTL_TEXTENCODING_UTF8 ).getLength() );
 
         sal_Bool bToBeEncrypted = rInfo.pStream->IsToBeEncrypted() && (rEncryptionKey.getLength() || rInfo.pStream->HasOwnKey());
         sal_Bool bToBeCompressed = bToBeEncrypted ? sal_True : rInfo.pStream->IsToBeCompressed();
@@ -352,7 +352,7 @@ bool ZipPackageFolder::saveChild( const ::rtl::OUString &rShortName, const Conte
         aPropSet[PKG_MNFST_MEDIATYPE].Name = sMediaTypeProperty;
         aPropSet[PKG_MNFST_MEDIATYPE].Value <<= rInfo.pStream->GetMediaType( );
         aPropSet[PKG_MNFST_VERSION].Name = sVersionProperty;
-        aPropSet[PKG_MNFST_VERSION].Value <<= ::rtl::OUString(); // no version is stored for streams currently
+        aPropSet[PKG_MNFST_VERSION].Value <<= OUString(); // no version is stored for streams currently
         aPropSet[PKG_MNFST_FULLPATH].Name = sFullPathProperty;
         aPropSet[PKG_MNFST_FULLPATH].Value <<= pTempEntry->sPath;
 
@@ -675,7 +675,7 @@ bool ZipPackageFolder::saveChild( const ::rtl::OUString &rShortName, const Conte
     return bSuccess;
 }
 
-void ZipPackageFolder::saveContents( ::rtl::OUString &rPath, std::vector < uno::Sequence < PropertyValue > > &rManList, ZipOutputStream & rZipOut, const uno::Sequence < sal_Int8 >& rEncryptionKey, rtlRandomPool &rRandomPool )
+void ZipPackageFolder::saveContents( OUString &rPath, std::vector < uno::Sequence < PropertyValue > > &rManList, ZipOutputStream & rZipOut, const uno::Sequence < sal_Int8 >& rEncryptionKey, rtlRandomPool &rRandomPool )
     throw( uno::RuntimeException )
 {
     bool bWritingFailed = false;
@@ -685,7 +685,7 @@ void ZipPackageFolder::saveContents( ::rtl::OUString &rPath, std::vector < uno::
         // it is an empty subfolder, use workaround to store it
         ZipEntry* pTempEntry = new ZipEntry();
         ZipPackageFolder::copyZipEntry ( *pTempEntry, aEntry );
-        pTempEntry->nPathLen = (sal_Int16)( ::rtl::OUStringToOString( rPath, RTL_TEXTENCODING_UTF8 ).getLength() );
+        pTempEntry->nPathLen = (sal_Int16)( OUStringToOString( rPath, RTL_TEXTENCODING_UTF8 ).getLength() );
         pTempEntry->nExtraLen = -1;
         pTempEntry->sPath = rPath;
 
@@ -705,7 +705,7 @@ void ZipPackageFolder::saveContents( ::rtl::OUString &rPath, std::vector < uno::
     }
 
     bool bMimeTypeStreamStored = false;
-    ::rtl::OUString aMimeTypeStreamName( RTL_CONSTASCII_USTRINGPARAM( "mimetype" ) );
+    OUString aMimeTypeStreamName("mimetype");
     if ( m_nFormat == embed::StorageFormats::ZIP && rPath.isEmpty() )
     {
         // let the "mimtype" stream in root folder be stored as the first stream if it is zip format
@@ -721,7 +721,7 @@ void ZipPackageFolder::saveContents( ::rtl::OUString &rPath, std::vector < uno::
           aCI != aEnd;
           ++aCI)
     {
-        const ::rtl::OUString &rShortName = (*aCI).first;
+        const OUString &rShortName = (*aCI).first;
         const ContentInfo &rInfo = *(*aCI).second;
 
         if ( !bMimeTypeStreamStored || !rShortName.equals( aMimeTypeStreamName ) )
@@ -729,7 +729,7 @@ void ZipPackageFolder::saveContents( ::rtl::OUString &rPath, std::vector < uno::
     }
 
     if( bWritingFailed )
-        throw uno::RuntimeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException(OSL_LOG_PREFIX, uno::Reference< uno::XInterface >() );
 }
 
 void ZipPackageFolder::releaseUpwardRef( void )
@@ -770,14 +770,14 @@ sal_Int64 SAL_CALL ZipPackageFolder::getSomething( const uno::Sequence< sal_Int8
         nMe = reinterpret_cast < sal_Int64 > ( this );
     return nMe;
 }
-void SAL_CALL ZipPackageFolder::setPropertyValue( const ::rtl::OUString& aPropertyName, const uno::Any& aValue )
+void SAL_CALL ZipPackageFolder::setPropertyValue( const OUString& aPropertyName, const uno::Any& aValue )
         throw(UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, uno::RuntimeException)
 {
     if ( aPropertyName == "MediaType" )
     {
         // TODO/LATER: activate when zip ucp is ready
         // if ( m_nFormat != embed::StorageFormats::PACKAGE )
-        //  throw UnknownPropertyException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
+        //  throw UnknownPropertyException(OSL_LOG_PREFIX, uno::Reference< uno::XInterface >() );
 
         aValue >>= sMediaType;
     }
@@ -786,16 +786,16 @@ void SAL_CALL ZipPackageFolder::setPropertyValue( const ::rtl::OUString& aProper
     else if ( aPropertyName == "Size" )
         aValue >>= aEntry.nSize;
     else
-        throw UnknownPropertyException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
+        throw UnknownPropertyException(OSL_LOG_PREFIX, uno::Reference< uno::XInterface >() );
 }
-uno::Any SAL_CALL ZipPackageFolder::getPropertyValue( const ::rtl::OUString& PropertyName )
+uno::Any SAL_CALL ZipPackageFolder::getPropertyValue( const OUString& PropertyName )
         throw(UnknownPropertyException, WrappedTargetException, uno::RuntimeException)
 {
     if ( PropertyName == "MediaType" )
     {
         // TODO/LATER: activate when zip ucp is ready
         // if ( m_nFormat != embed::StorageFormats::PACKAGE )
-        //  throw UnknownPropertyException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
+        //  throw UnknownPropertyException(OSL_LOG_PREFIX, uno::Reference< uno::XInterface >() );
 
         return uno::makeAny ( sMediaType );
     }
@@ -804,7 +804,7 @@ uno::Any SAL_CALL ZipPackageFolder::getPropertyValue( const ::rtl::OUString& Pro
     else if ( PropertyName == "Size" )
         return uno::makeAny ( aEntry.nSize );
     else
-        throw UnknownPropertyException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
+        throw UnknownPropertyException(OSL_LOG_PREFIX, uno::Reference< uno::XInterface >() );
 }
 
 void ZipPackageFolder::doInsertByName ( ZipPackageEntry *pEntry, sal_Bool bSetParent )
@@ -825,20 +825,20 @@ void ZipPackageFolder::doInsertByName ( ZipPackageEntry *pEntry, sal_Bool bSetPa
     if ( bSetParent )
         pEntry->setParent ( *this );
 }
-::rtl::OUString ZipPackageFolder::getImplementationName()
+OUString ZipPackageFolder::getImplementationName()
     throw (uno::RuntimeException)
 {
-    return ::rtl::OUString ( RTL_CONSTASCII_USTRINGPARAM ( "ZipPackageFolder" ) );
+    return OUString("ZipPackageFolder");
 }
 
-uno::Sequence< ::rtl::OUString > ZipPackageFolder::getSupportedServiceNames()
+uno::Sequence< OUString > ZipPackageFolder::getSupportedServiceNames()
     throw (uno::RuntimeException)
 {
-    uno::Sequence< ::rtl::OUString > aNames(1);
-    aNames[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.packages.PackageFolder" ) );
+    uno::Sequence< OUString > aNames(1);
+    aNames[0] = "com.sun.star.packages.PackageFolder";
     return aNames;
 }
-sal_Bool SAL_CALL ZipPackageFolder::supportsService( ::rtl::OUString const & rServiceName )
+sal_Bool SAL_CALL ZipPackageFolder::supportsService( OUString const & rServiceName )
     throw (uno::RuntimeException)
 {
     return rServiceName == getSupportedServiceNames()[0];

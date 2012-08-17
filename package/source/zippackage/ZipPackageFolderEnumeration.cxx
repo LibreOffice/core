@@ -43,7 +43,7 @@ uno::Any SAL_CALL ZipPackageFolderEnumeration::nextElement(  )
 {
     uno::Any aAny;
     if (aIterator == rContents.end() )
-        throw container::NoSuchElementException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
+        throw container::NoSuchElementException(OSL_LOG_PREFIX, uno::Reference< uno::XInterface >() );
     aAny <<= (*aIterator).second->xTunnel;
     aIterator++;
     return aAny;
@@ -52,14 +52,14 @@ uno::Any SAL_CALL ZipPackageFolderEnumeration::nextElement(  )
 OUString ZipPackageFolderEnumeration::getImplementationName()
     throw (uno::RuntimeException)
 {
-    return OUString ( RTL_CONSTASCII_USTRINGPARAM ( "ZipPackageFolderEnumeration" ) );
+    return OUString ("ZipPackageFolderEnumeration");
 }
 
 uno::Sequence< OUString > ZipPackageFolderEnumeration::getSupportedServiceNames()
     throw (uno::RuntimeException)
 {
     uno::Sequence< OUString > aNames(1);
-    aNames[0] = OUString( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.packages.PackageFolderEnumeration" ) );
+    aNames[0] = "com.sun.star.packages.PackageFolderEnumeration";
     return aNames;
 }
 sal_Bool SAL_CALL ZipPackageFolderEnumeration::supportsService( OUString const & rServiceName )
