@@ -693,13 +693,13 @@ $(eval $(call gb_Helper_register_jars,URE, \
 	juh \
 	jurt \
 	ridl \
+	testComponent \
 	unoil \
 	unoloader \
 ))
 
 $(eval $(call gb_Helper_register_jars,OOO, \
 	ConnectivityTools \
-	EvolutionarySolver \
 	FCFGMerge \
 	HelloWorld \
 	Highlight \
@@ -723,8 +723,6 @@ $(eval $(call gb_Helper_register_jars,OOO, \
 	java_accessibility \
 	java_uno_accessbridge \
 	letter \
-	mediawiki \
-	nlpsolver \
 	officebean \
 	pexcel \
 	pocketword \
@@ -732,13 +730,18 @@ $(eval $(call gb_Helper_register_jars,OOO, \
 	report \
 	reportbuilderwizard \
 	sdbc_hsqldb \
-	sun-report-builder \
 	table \
 	test \
 	test-tools \
-	testComponent \
 	web \
 	xmerge \
+))
+
+$(eval $(call gb_Helper_register_jars,OXT, \
+	EvolutionarySolver \
+	mediawiki \
+	nlpsolver \
+	sun-report-builder \
 ))
 
 # vim: set noet sw=4 ts=4:

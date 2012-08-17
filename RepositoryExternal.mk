@@ -2067,7 +2067,7 @@ endef
 
 else # !SYSTEM_APACHE_COMMONS
 
-$(eval $(call gb_Helper_register_jars,OOO,\
+$(eval $(call gb_Helper_register_jars,OXT,\
 	commons-codec-1.3 \
 	commons-httpclient-3.1 \
 	commons-lang-2.3 \
@@ -2141,7 +2141,7 @@ endef
 
 else # !SYSTEM_JFREEREPORT
 
-$(eval $(call gb_Helper_register_jars,OOO,\
+$(eval $(call gb_Helper_register_jars,OXT,\
 	flow-engine-0.9.4 \
 	flute-1.1.6 \
 	libbase-1.1.6 \

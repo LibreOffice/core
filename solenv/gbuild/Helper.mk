@@ -106,7 +106,7 @@ define gb_Helper_init_registries
 gb_Executable_VALIDGROUPS := UREBIN SDK OOO NONE
 gb_Library_VALIDGROUPS := OOOLIBS PLAINLIBS_NONE PLAINLIBS_URE PLAINLIBS_OOO RTLIBS RTVERLIBS UNOLIBS_URE UNOLIBS_OOO UNOVERLIBS EXTENSIONLIBS
 gb_StaticLibrary_VALIDGROUPS := PLAINLIBS
-gb_Jar_VALIDGROUPS := URE OOO
+gb_Jar_VALIDGROUPS := URE OOO OXT
 
 $$(foreach group,$$(gb_Executable_VALIDGROUPS),$$(eval gb_Executable_$$(group) :=))
 $$(foreach group,$$(gb_Library_VALIDGROUPS),$$(eval gb_Library_$$(group) :=))
