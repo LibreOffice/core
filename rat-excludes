@@ -460,6 +460,7 @@ main/xmlsecurity/test_docs/certs/p12/*.p12
 # (133) Diverse patches used to allow building external libraries with the contained
 # needed changes
 **/*.patch
+**/*.patch.fixes
 
 # all part of SGA
 # packaging information (used to build install sets)
