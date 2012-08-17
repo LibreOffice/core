@@ -420,11 +420,14 @@ void FadingSlideChange::prepareForRun(
     const ViewEntry& rViewEntry,
     const cppcanvas::CanvasSharedPtr& rDestinationCanvas )
 {
-    // clear page to given fade color. 'Leaving' slide is
-    // painted atop of that, but slowly fading out.
-    fillPage( rDestinationCanvas,
-              ::basegfx::B2DSize( getEnteringSlideSizePixel( rViewEntry.mpView ) ),
-              *maFadeColor );
+    if ( maFadeColor )
+    {
+        // clear page to given fade color. 'Leaving' slide is
+        // painted atop of that, but slowly fading out.
+        fillPage( rDestinationCanvas,
+                ::basegfx::B2DSize( getEnteringSlideSizePixel( rViewEntry.mpView ) ),
+                *maFadeColor );
+    }
 }
 
 void FadingSlideChange::performIn(
