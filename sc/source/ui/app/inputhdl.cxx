@@ -125,6 +125,7 @@ ScTypedCaseStrSet::const_iterator findText(
             size_t nPos = std::distance(rDataSet.begin(), itPos);
             size_t nRPos = rDataSet.size() - 1 - nPos;
             std::advance(it, nRPos);
+            ++it;
         }
 
         for (; it != itEnd; ++it)
@@ -146,7 +147,10 @@ ScTypedCaseStrSet::const_iterator findText(
     {
         ScTypedCaseStrSet::const_iterator it = rDataSet.begin(), itEnd = rDataSet.end();
         if (itPos != rDataSet.end())
+        {
             it = itPos;
+            ++it;
+        }
 
         for (; it != itEnd; ++it)
         {
@@ -1219,9 +1223,12 @@ void ScInputHandler::NextFormulaEntry( bool bBack )
     if ( pActiveView && pFormulaData )
     {
         rtl::OUString aNew;
-        miAutoPosFormula = findText(*pFormulaData, miAutoPosFormula, aAutoSearch, aNew, bBack);
-        if (miAutoPosFormula != pFormulaData->end())
-            ShowTip( aNew );        //  als QuickHelp anzeigen
+        ScTypedCaseStrSet::const_iterator itNew = findText(*pFormulaData, miAutoPosFormula, aAutoSearch, aNew, bBack);
+        if (itNew != pFormulaData->end())
+        {
+            miAutoPosFormula = itNew;
+            ShowTip(aNew); // Display a quick help.
+        }
     }
 
     //  bei Tab wird vorher immer HideCursor gerufen
@@ -1630,9 +1637,13 @@ void ScInputHandler::NextAutoEntry( bool bBack )
                 if ( aSel.nEndPos == nParLen && aText.getLength() == aAutoSearch.getLength() + nSelLen )
                 {
                     rtl::OUString aNew;
-                    miAutoPosColumn = findText(*pColumnData, miAutoPosColumn, aAutoSearch, aNew, bBack);
-                    if (miAutoPosColumn != pColumnData->end())
+                    ScTypedCaseStrSet::const_iterator itNew =
+                        findText(*pColumnData, miAutoPosColumn, aAutoSearch, aNew, bBack);
+
+                    if (itNew != pColumnData->end())
                     {
+                        // match found!
+                        miAutoPosColumn = itNew;
                         bInOwnChange = true;        // disable ModifyHdl (reset below)
 
                         lcl_RemoveLineEnd( aNew );
