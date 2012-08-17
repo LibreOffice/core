@@ -169,6 +169,7 @@
                         <property name="can_focus">True</property>
                         <property name="invisible_char">●</property>
                         <property name="invisible_char_set">True</property>
+                        <property name="pattern">0.00cm</property>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -197,6 +198,7 @@
                         <property name="can_focus">True</property>
                         <property name="invisible_char">●</property>
                         <property name="invisible_char_set">True</property>
+                        <property name="pattern">0.00cm</property>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -211,6 +213,7 @@
                         <property name="can_focus">True</property>
                         <property name="invisible_char">●</property>
                         <property name="invisible_char_set">True</property>
+                        <property name="pattern">0.00cm</property>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -284,6 +287,7 @@
                         <property name="invisible_char">●</property>
                         <property name="adjustment">adjustment2</property>
                         <property name="digits">2</property>
+                        <property name="pattern">0.00cm</property>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -331,6 +335,7 @@
                         <property name="invisible_char">●</property>
                         <property name="adjustment">adjustment1</property>
                         <property name="digits">2</property>
+                        <property name="pattern">0.00cm</property>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -346,6 +351,7 @@
                         <property name="invisible_char">●</property>
                         <property name="adjustment">adjustment1</property>
                         <property name="digits">2</property>
+                        <property name="pattern">0.00cm</property>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>

@@ -36,7 +36,7 @@
 #include <vector>
 
 class ListBox;
-class MetricField;
+class NumericFormatter;
 
 class VCL_DLLPUBLIC VclBuilder
 {
@@ -112,7 +112,7 @@ private:
     typedef StringPair SpinButtonAdjustmentMap;
     std::vector<SpinButtonAdjustmentMap> m_aAdjustmentMaps;
     Adjustment *get_adjustment_by_name(rtl::OString sID);
-    static void mungeadjustment(MetricField &rTarget, Adjustment &rAdjustment);
+    static void mungeadjustment(NumericFormatter &rTarget, Adjustment &rAdjustment);
 
     typedef std::map<rtl::OString, rtl::OString> WidgetTranslations;
     typedef std::map<rtl::OString, WidgetTranslations> Translations;

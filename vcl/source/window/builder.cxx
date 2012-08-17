@@ -118,7 +118,7 @@ VclBuilder::VclBuilder(Window *pParent, rtl::OUString sUIDir, rtl::OUString sUIF
     for (std::vector<SpinButtonAdjustmentMap>::iterator aI = m_aAdjustmentMaps.begin(),
          aEnd = m_aAdjustmentMaps.end(); aI != aEnd; ++aI)
     {
-        MetricField *pTarget = static_cast<MetricField*>(get_by_name(aI->m_sID));
+        NumericFormatter *pTarget = dynamic_cast<NumericFormatter*>(get_by_name(aI->m_sID));
         Adjustment *pAdjustment = get_adjustment_by_name(aI->m_sValue);
         SAL_WARN_IF(!pTarget || !pAdjustment, "vcl", "missing elements of spinbutton/adjustment");
         if (pTarget && pAdjustment)
@@ -202,6 +202,18 @@ void VclBuilder::handleTranslations(xmlreader::XmlReader &reader)
 
 namespace
 {
+    rtl::OString extractPattern(VclBuilder::stringmap &rMap)
+    {
+        rtl::OString sPattern;
+        VclBuilder::stringmap::iterator aFind = rMap.find(rtl::OString(RTL_CONSTASCII_STRINGPARAM("pattern")));
+        if (aFind != rMap.end())
+        {
+            sPattern = aFind->second;
+            rMap.erase(aFind);
+        }
+        return sPattern;
+    }
+
     bool extractOrientation(VclBuilder::stringmap &rMap)
     {
         bool bVertical = false;
@@ -251,6 +263,40 @@ namespace
         if (!pWindow)
             pWindow = new PushButton(pParent, nBits);
         return pWindow;
+    }
+
+    FieldUnit detectMetricUnit(rtl::OString sUnit)
+    {
+        FieldUnit eUnit = FUNIT_NONE;
+
+        if (sUnit == "mm")
+            eUnit = FUNIT_MM;
+        else if (sUnit == "cm")
+            eUnit = FUNIT_CM;
+        else if (sUnit == "m")
+            eUnit = FUNIT_M;
+        else if (sUnit == "km")
+            eUnit = FUNIT_KM;
+        else if ((sUnit == "twips") || (sUnit == "twip"))
+            eUnit = FUNIT_TWIP;
+        else if (sUnit == "pt")
+            eUnit = FUNIT_POINT;
+        else if (sUnit == "pc")
+            eUnit = FUNIT_PICA;
+        else if (sUnit == "\"" || (sUnit == "in") || (sUnit == "inch"))
+            eUnit = FUNIT_INCH;
+        else if ((sUnit == "'") || (sUnit == "ft") || (sUnit == "foot") || (sUnit == "feet"))
+            eUnit = FUNIT_FOOT;
+        else if (sUnit == "mile" || (sUnit == "miles"))
+            eUnit = FUNIT_MILE;
+        else if (sUnit == "ch")
+            eUnit = FUNIT_CHAR;
+        else if (sUnit == "line")
+            eUnit = FUNIT_LINE;
+        else if (sUnit == "%")
+            eUnit = FUNIT_PERCENT;
+
+        return eUnit;
     }
 }
 
@@ -357,7 +403,32 @@ Window *VclBuilder::makeObject(Window *pParent, const rtl::OString &name, const 
     else if (name.equalsL(RTL_CONSTASCII_STRINGPARAM("GtkSpinButton")))
     {
         extractAdjustment(id, rMap);
-        pWindow = new MetricField(pParent, WB_RIGHT|WB_SPIN|WB_BORDER|WB_3DLOOK);
+        rtl::OString sPattern = extractPattern(rMap);
+        rtl::OString sUnit = sPattern;
+
+        for (sal_Int32 i = 0; i < sPattern.getLength(); ++i)
+        {
+            if (sPattern[i] != '.' && sPattern[i] != ',' && sPattern[i] != '0')
+            {
+                sUnit = sPattern.copy(i);
+                break;
+            }
+        }
+
+        FieldUnit eUnit = detectMetricUnit(sUnit);
+
+        if (sPattern.isEmpty())
+        {
+            fprintf(stderr, "making numeric field for %s %s\n", name.getStr(), sUnit.getStr());
+            pWindow = new NumericField(pParent, WB_RIGHT|WB_SPIN|WB_BORDER|WB_3DLOOK);
+        }
+        else
+        {
+            fprintf(stderr, "making metric field for %s %s\n", name.getStr(), sUnit.getStr());
+            MetricField *pField = new MetricField(pParent, WB_RIGHT|WB_SPIN|WB_BORDER|WB_3DLOOK);
+            pField->SetUnit(eUnit);
+            pWindow = pField;
+        }
     }
     else if (name.equalsL(RTL_CONSTASCII_STRINGPARAM("GtkComboBox")))
     {
@@ -1089,7 +1160,7 @@ void VclBuilder::mungemodel(ListBox &rTarget, ListStore &rStore)
         rTarget.SelectEntryPos(0);
 }
 
-void VclBuilder::mungeadjustment(MetricField &rTarget, Adjustment &rAdjustment)
+void VclBuilder::mungeadjustment(NumericFormatter &rTarget, Adjustment &rAdjustment)
 {
     int nMul = rtl_math_pow10Exp(1, rTarget.GetDecimalDigits());
 
