@@ -507,7 +507,7 @@ void EscherPropertyContainer::CreateGradientProperties(
                 //Value of the real number = Integral + (Fractional / 65536.0)
                 nAngle = ( nAngle * 0x10000) / 10;
 
-                nFillFocus = (pGradient->Style == GradientStyle_LINEAR) ?
+                nFillFocus = (pGradient->Style == ::com::sun::star::awt::GradientStyle_LINEAR) ?
                             ( pGradient->XOffset + pGradient->YOffset )/2 : -50;
                 if( !nFillFocus )
                     nFirstColor=nFirstColor ^ 1;
@@ -531,6 +531,7 @@ void EscherPropertyContainer::CreateGradientProperties(
                 bWriteFillTo = true;
             }
             break;
+        default: break;
         }
     }
 
