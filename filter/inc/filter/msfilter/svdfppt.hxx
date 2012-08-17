@@ -1095,7 +1095,7 @@ struct ImplPPTTextObj
     ImplPPTTextObj( PptSlidePersistEntry& rPersistEntry ) : mrPersistEntry ( rPersistEntry ) {};
 };
 
-class PPTTextObj
+class MSFILTER_DLLPUBLIC PPTTextObj
 {
         ImplPPTTextObj*         mpImplTextObj;
         void                    ImplClear();
