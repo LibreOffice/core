@@ -116,14 +116,12 @@ struct BasicManagerImpl
     SvMemoryStream*  mpManagerStream;
     SvMemoryStream** mppLibStreams;
     sal_Int32        mnLibStreamCount;
-    sal_Bool         mbModifiedByLibraryContainer;
     sal_Bool         mbError;
 
     BasicManagerImpl( void )
         : mpManagerStream( NULL )
         , mppLibStreams( NULL )
         , mnLibStreamCount( 0 )
-        , mbModifiedByLibraryContainer( sal_False )
         , mbError( sal_False )
     {}
     ~BasicManagerImpl();
@@ -266,8 +264,6 @@ void SAL_CALL BasMgrContainerListenerImpl::elementInserted( const ContainerEvent
     ::rtl::OUString aName;
     Event.Accessor >>= aName;
 
-    mpMgr->mpImpl->mbModifiedByLibraryContainer = sal_True;
-
     if( bLibContainer )
     {
         Reference< XLibraryContainer > xScriptCont( Event.Source, UNO_QUERY );
@@ -314,8 +310,6 @@ void SAL_CALL BasMgrContainerListenerImpl::elementReplaced( const ContainerEvent
     ::rtl::OUString aName;
     Event.Accessor >>= aName;
 
-    mpMgr->mpImpl->mbModifiedByLibraryContainer = sal_True;
-
     // Replace not possible for library container
 #ifdef DBG_UTIL
     sal_Bool bLibContainer = ( maLibName.getLength() == 0 );
@@ -345,8 +339,6 @@ void SAL_CALL BasMgrContainerListenerImpl::elementRemoved( const ContainerEvent&
 {
     ::rtl::OUString aName;
     Event.Accessor >>= aName;
-
-    mpMgr->mpImpl->mbModifiedByLibraryContainer = sal_True;
 
     sal_Bool bLibContainer = ( maLibName.getLength() == 0 );
     if( bLibContainer )
@@ -786,8 +778,6 @@ void BasicManager::SetLibraryContainerInfo( const LibraryContainerInfo& rInfo )
                     }
                 }
             }
-
-            mpImpl->mbModifiedByLibraryContainer = sal_False;
         }
     }
 
