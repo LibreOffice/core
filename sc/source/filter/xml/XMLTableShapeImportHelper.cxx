@@ -211,7 +211,6 @@ void XMLTableShapeImportHelper::finishShape(
             // position from the most top and left positioned shape(s) within
             // the group
             Point aStartPoint( rShape->getPosition().X,rShape->getPosition().Y );
-            awt::Size aSize(rShape->getSize() );
             uno::Reference< drawing::XShape > xChild( rShapes, uno::UNO_QUERY );
             if (SvxShape* pGroupShapeImp = SvxShape::getImplementation( lcl_getTopLevelParent( xChild ) ))
             {
