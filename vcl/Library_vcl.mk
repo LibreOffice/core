@@ -87,6 +87,12 @@ $(eval $(call gb_Library_use_libraries,vcl,\
     $(gb_STDLIBS) \
 ))
 
+ifeq ($(OS),MACOSX)
+$(eval $(call gb_Library_use_libraries,vcl,\
+    objc \
+))
+endif
+
 ifneq ($(OS),IOS)
 $(eval $(call gb_Library_use_libraries,vcl,\
     jvmaccess \
