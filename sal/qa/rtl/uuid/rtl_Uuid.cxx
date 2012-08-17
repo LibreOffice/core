@@ -29,16 +29,21 @@
 
 #include <math.h>
 #include <stdio.h>
+#include <string.h>
 
-#include <testshl/simpleheader.hxx>
 #include <rtl/uuid.h>
 #include <rtl/ustring.h>
 #include <rtl/ustring.hxx>
+#include <cppunit/TestFixture.h>
+#include <cppunit/extensions/HelperMacros.h>
+#include <cppunit/plugin/TestPlugIn.h>
 
 #ifdef UNX
 #include <unistd.h>
 #include <time.h>
 #endif
+
+#define t_print printf
 
 using ::rtl::OUString;
 using ::rtl::OUStringToOString;
@@ -215,15 +220,15 @@ public:
     CPPUNIT_TEST_SUITE_END();
 }; // class createNamedUuid
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_Uuid::createUuid, "rtl_Uuid");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_Uuid::createNamedUuid, "rtl_Uuid");
+CPPUNIT_TEST_SUITE_REGISTRATION(rtl_Uuid::createUuid);
+CPPUNIT_TEST_SUITE_REGISTRATION(rtl_Uuid::createNamedUuid);
 } // namespace rtl_Uuid
 
 // -----------------------------------------------------------------------------
 
 // this macro creates an empty function, which will called by the RegisterAllFunctions()
 // to let the user the possibility to also register some functions by hand.
-NOADDITIONAL;
+CPPUNIT_PLUGIN_IMPLEMENT();
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

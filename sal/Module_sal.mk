@@ -70,6 +70,7 @@ $(eval $(call gb_Module_add_check_targets,sal,\
 	CppunitTest_sal_rtl_ostringbuffer \
 	CppunitTest_sal_rtl_oustringbuffer \
 	CppunitTest_sal_rtl_strings \
+	CppunitTest_sal_rtl_uuid \
 	CppunitTest_sal_tcwf \
 	CppunitTest_sal_types \
 ))
