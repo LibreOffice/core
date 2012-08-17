@@ -43,8 +43,6 @@ TabPage RID_SFXPAGE_GENERAL
     Text [ en-US ] = "User Data" ;
     FixedText FT_COMPANY
     {
-        Pos = MAP_APPFONT ( LEFT , FLINE ( 0 ) ) ;
-        Size = MAP_APPFONT ( MID-LEFT-2 , FLINEH ) ;
         LeftLabel = TRUE ;
         Text [ en-US ] = "~Company" ;
     };
@@ -52,95 +50,64 @@ TabPage RID_SFXPAGE_GENERAL
     {
         HelpID = "cui:Edit:RID_SFXPAGE_GENERAL:ED_COMPANY";
         Border = TRUE ;
-        Pos = MAP_APPFONT ( MID , LINE ( 0 ) ) ;
-        Size = MAP_APPFONT ( RIGHT-MID , LINEH ) ;
     };
     FixedText FT_NAME
     {
-        Pos = MAP_APPFONT ( LEFT , FLINE ( 1 ) ) ;
-        Size = MAP_APPFONT ( MID-LEFT-2 , FLINEH ) ;
         LeftLabel = TRUE ;
         Text [ en-US ] = "First/Last ~name/Initials" ;
     };
     FixedText FT_NAME_RUSS
     {
-        Pos = MAP_APPFONT ( LEFT , FLINE ( 1 ) ) ;
-        Size = MAP_APPFONT ( MID-LEFT-2 , FLINEH ) ;
         LeftLabel = TRUE ;
-        Hide = TRUE;
         Text [ en-US ] = "Last Name/First name/Father's name/Initials";
     };
     FixedText FT_NAME_EASTERN
     {
-        Pos = MAP_APPFONT ( LEFT , FLINE ( 1 ) ) ;
-        Size = MAP_APPFONT ( MID-LEFT-2 , FLINEH ) ;
         LeftLabel = TRUE ;
-        Hide = TRUE;
         Text [ en-US ] = "Last/First ~name/Initials" ;
     };
     Edit ED_FATHERNAME
     {
         HelpID = "cui:Edit:RID_SFXPAGE_GENERAL:ED_FATHERNAME";
         Border = TRUE ;
-        Hide = TRUE;
-        Pos = MAP_APPFONT ( MID , LINE ( 1 ) ) ;
-        Size = MAP_APPFONT ( NAMELEN-8 , LINEH ) ;
     };
     Edit ED_FIRSTNAME
     {
         HelpID = "cui:Edit:RID_SFXPAGE_GENERAL:ED_FIRSTNAME";
         Border = TRUE ;
-        Pos = MAP_APPFONT ( MID , LINE ( 1 ) ) ;
-        Size = MAP_APPFONT ( NAMELEN-8 , LINEH ) ;
     };
     Edit ED_NAME
     {
         HelpID = "cui:Edit:RID_SFXPAGE_GENERAL:ED_NAME";
         Border = TRUE ;
-        Pos = MAP_APPFONT ( MID+NAMELEN-8+HSPACE , LINE ( 1 ) ) ;
-        Size = MAP_APPFONT ( NAMELEN-8 , LINEH ) ;
     };
     Edit ED_SHORTNAME
     {
         HelpID = "cui:Edit:RID_SFXPAGE_GENERAL:ED_SHORTNAME";
         Border = TRUE ;
-        Pos = MAP_APPFONT ( MID+2* ( NAMELEN-8+HSPACE ) , LINE ( 1 ) ) ;
-        Size = MAP_APPFONT ( RIGHT- ( MID+2* ( NAMELEN-8+HSPACE ) ) , LINEH ) ;
     };
     FixedText FT_STREET
     {
-        Pos = MAP_APPFONT ( LEFT , FLINE ( 2 ) ) ;
-        Size = MAP_APPFONT ( MID-LEFT-2 , FLINEH ) ;
         LeftLabel = TRUE ;
         Text [ en-US ] = "~Street" ;
     };
     FixedText FT_STREET_RUSS
     {
-        Pos = MAP_APPFONT ( LEFT , FLINE ( 2 ) ) ;
-        Size = MAP_APPFONT ( MID-LEFT-2 , FLINEH ) ;
         LeftLabel = TRUE ;
-        Hide = TRUE;
         Text [ en-US ] = "Street/Apartment number";
     };
     Edit ED_STREET
     {
         HelpID = "cui:Edit:RID_SFXPAGE_GENERAL:ED_STREET";
         Border = TRUE ;
-        Pos = MAP_APPFONT ( MID , LINE ( 2 ) ) ;
-        Size = MAP_APPFONT ( RIGHT-MID , LINEH ) ;
     };
     Edit ED_APARTMENTNR
     {
         HelpID = "cui:Edit:RID_SFXPAGE_GENERAL:ED_APARTMENTNR";
         Border = TRUE ;
-        Hide = TRUE;
-        Pos = MAP_APPFONT ( MID , LINE ( 2 ) ) ;
-        Size = MAP_APPFONT ( RIGHT-MID , LINEH ) ;
     };
     FixedText FT_CITY
     {
-        Pos = MAP_APPFONT ( LEFT , FLINE ( 3 ) ) ;
-        Size = MAP_APPFONT ( MID-LEFT-2 , FLINEH ) ;
         LeftLabel = TRUE ;
         Text [ en-US ] = "Zip/City";
     };
@@ -148,41 +115,34 @@ TabPage RID_SFXPAGE_GENERAL
     {
         HelpID = "cui:Edit:RID_SFXPAGE_GENERAL:ED_PLZ";
         Border = TRUE ;
-        Pos = MAP_APPFONT ( MID , LINE ( 3 ) ) ;
-        Size = MAP_APPFONT ( 24 , LINEH ) ;
     };
     Edit ED_CITY
     {
         HelpID = "cui:Edit:RID_SFXPAGE_GENERAL:ED_CITY";
         Border = TRUE ;
-        Pos = MAP_APPFONT ( MID + 24 + HSPACE , LINE ( 3 ) ) ;
-        Size = MAP_APPFONT ( RIGHT - ( MID + 24 + HSPACE ) , LINEH ) ;
+    };
+    FixedText FT_CITY_US
+    {
+        LeftLabel = TRUE ;
+        Text [ en-US ] = "City/State/Zip";
     };
     Edit ED_US_CITY
     {
         HelpID = "cui:Edit:RID_SFXPAGE_GENERAL:ED_US_CITY";
         Border = TRUE ;
-        Pos = MAP_APPFONT ( MID , LINE ( 3 ) ) ;
-        Size = MAP_APPFONT ( 90 , LINEH ) ;
     };
     Edit ED_US_STATE
     {
         HelpID = "cui:Edit:RID_SFXPAGE_GENERAL:ED_US_STATE";
         Border = TRUE ;
-        Pos = MAP_APPFONT ( MID + 90 + HSPACE, LINE ( 3 ) ) ;
-        Size = MAP_APPFONT ( 30 , LINEH ) ;
     };
     Edit ED_US_ZIPCODE
     {
         HelpID = "cui:Edit:RID_SFXPAGE_GENERAL:ED_US_ZIPCODE";
         Border = TRUE ;
-        Pos = MAP_APPFONT ( MID + 90 + HSPACE + 30 + HSPACE, LINE ( 3 ) ) ;
-        Size = MAP_APPFONT ( RIGHT - ( MID + 90 + HSPACE + 30 + HSPACE ) , LINEH ) ;
     };
     FixedText FT_COUNTRY
     {
-        Pos = MAP_APPFONT ( LEFT , FLINE ( 4 ) ) ;
-        Size = MAP_APPFONT ( MID-LEFT-2 , FLINEH ) ;
         LeftLabel = TRUE ;
         Text [ en-US ] = "Country/Region";
     };
@@ -190,13 +150,9 @@ TabPage RID_SFXPAGE_GENERAL
     {
         HelpID = "cui:Edit:RID_SFXPAGE_GENERAL:ED_COUNTRY";
         Border = TRUE ;
-        Pos = MAP_APPFONT ( MID , LINE ( 4 ) ) ;
-        Size = MAP_APPFONT ( RIGHT - MID , LINEH ) ;
     };
     FixedText FT_TITLEPOS
     {
-        Pos = MAP_APPFONT ( LEFT , FLINE ( 5 ) ) ;
-        Size = MAP_APPFONT ( MID-LEFT-2 , FLINEH ) ;
         LeftLabel = TRUE ;
         Text [ en-US ] = "~Title/Position" ;
     };
@@ -204,20 +160,14 @@ TabPage RID_SFXPAGE_GENERAL
     {
         HelpID = "cui:Edit:RID_SFXPAGE_GENERAL:ED_TITLE";
         Border = TRUE ;
-        Pos = MAP_APPFONT ( MID , LINE ( 5 ) ) ;
-        Size = MAP_APPFONT ( NAMELEN-1 , LINEH ) ;
     };
     Edit ED_POSITION
     {
         HelpID = "cui:Edit:RID_SFXPAGE_GENERAL:ED_POSITION";
         Border = TRUE ;
-        Pos = MAP_APPFONT ( MID+NAMELEN-1+HSPACE , LINE ( 5 ) ) ;
-        Size = MAP_APPFONT ( RIGHT- ( MID+NAMELEN-1+HSPACE ) , LINEH ) ;
     };
     FixedText FT_PHONE
     {
-        Pos = MAP_APPFONT ( LEFT , FLINE ( 6 ) ) ;
-        Size = MAP_APPFONT ( MID-LEFT-2 , FLINEH ) ;
         Text [ en-US ] = "Tel. (Home/Work)" ;
         LeftLabel = TRUE ;
     };
@@ -225,20 +175,14 @@ TabPage RID_SFXPAGE_GENERAL
     {
         HelpID = "cui:Edit:RID_SFXPAGE_GENERAL:ED_TELPRIVAT";
         Border = TRUE ;
-        Pos = MAP_APPFONT ( MID , LINE ( 6 ) ) ;
-        Size = MAP_APPFONT ( NAMELEN-1 , LINEH ) ;
     };
     Edit ED_TELCOMPANY
     {
         HelpID = "cui:Edit:RID_SFXPAGE_GENERAL:ED_TELCOMPANY";
         Border = TRUE ;
-        Pos = MAP_APPFONT ( MID+NAMELEN-1+HSPACE , LINE ( 6 ) ) ;
-        Size = MAP_APPFONT ( RIGHT- ( MID+NAMELEN-1+HSPACE ) , LINEH ) ;
     };
     FixedText FT_FAXMAIL
     {
-        Pos = MAP_APPFONT ( LEFT , FLINE ( 7 ) ) ;
-        Size = MAP_APPFONT ( MID-LEFT-2 , FLINEH ) ;
         LeftLabel = TRUE ;
         Text [ en-US ] = "Fa~x / E-mail" ;
     };
@@ -246,15 +190,11 @@ TabPage RID_SFXPAGE_GENERAL
     {
         HelpID = "cui:Edit:RID_SFXPAGE_GENERAL:ED_FAX";
         Border = TRUE ;
-        Pos = MAP_APPFONT ( MID , LINE ( 7 ) ) ;
-        Size = MAP_APPFONT ( NAMELEN-1 , LINEH ) ;
     };
     Edit ED_EMAIL
     {
         HelpID = "cui:Edit:RID_SFXPAGE_GENERAL:ED_EMAIL";
         Border = TRUE ;
-        Pos = MAP_APPFONT ( MID+NAMELEN-1+HSPACE , LINE ( 7 ) ) ;
-        Size = MAP_APPFONT ( RIGHT- ( MID+NAMELEN-1+HSPACE ) , LINEH ) ;
     };
     FixedLine GB_ADDRESS
     {
@@ -271,11 +211,7 @@ TabPage RID_SFXPAGE_GENERAL
         Text [ en-US ] = "Use data for document properties";
     };
 
-     // extra Resourcen f"ur die amerikanische Postadresse
-    String STR_US_STATE
-    {
-        Text [ en-US ] = "City/State/Zip";
-    };
+    // extra resource for US addresses
     String STR_QUERY_REG
     {
         Text [ en-US ] = "Note that street, Zip code and city are used to generate the registration key. You will not be able to change the user data again until the registration has been carried out. Do you want to modify the user data now?";

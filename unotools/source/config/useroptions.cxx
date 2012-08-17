@@ -43,170 +43,127 @@
 
 using namespace utl;
 using namespace com::sun::star;
-using namespace com::sun::star::uno;
-using ::rtl::OUString;
+//using namespace com::sun::star::uno;
+using rtl::OUString;
 
-namespace css = ::com::sun::star;
+//namespace css = ::com::sun::star;
 
 namespace
 {
-    const char s_sData[] = "org.openoffice.UserProfile/Data";
-    const char s_so[] = "o"; // USER_OPT_COMPANY
-    const char s_sgivenname[] = "givenname"; // USER_OPT_FIRSTNAME
-    const char s_ssn[] = "sn"; // USER_OPT_LASTNAME
-    const char s_sinitials[] = "initials"; // USER_OPT_ID
-    const char s_sstreet[] = "street"; // USER_OPT_STREET
-    const char s_sl[] = "l"; // USER_OPT_CITY
-    const char s_sst[] = "st"; // USER_OPT_STATE
-    const char s_spostalcode[] = "postalcode"; // USER_OPT_ZIP
-    const char s_sc[] = "c"; // USER_OPT_COUNTRY
-    const char s_stitle[] = "title"; // USER_OPT_TITLE
-    const char s_sposition[] = "position"; // USER_OPT_POSITION
-    const char s_shomephone[] = "homephone"; // USER_OPT_TELEPHONEHOME
-    const char s_stelephonenumber[] = "telephonenumber"; // USER_OPT_TELEPHONEWORK
-    const char s_sfacsimiletelephonenumber[] = "facsimiletelephonenumber"; // USER_OPT_FAX
-    const char s_smail[] = "mail"; // USER_OPT_EMAIL
-    const char s_scustomernumber[] = "customernumber"; // USER_OPT_CUSTOMERNUMBER
-    const char s_sfathersname[] = "fathersname"; // USER_OPT_FATHERSNAME
-    const char s_sapartment[] = "apartment"; // USER_OPT_APARTMENT
-}
 
-// class SvtUserOptions_Impl ---------------------------------------------
-class SvtUserOptions_Impl;
-class SvtUserConfigChangeListener_Impl : public cppu::WeakImplHelper1
-<
-    com::sun::star::util::XChangesListener
->
-{
-        SvtUserOptions_Impl&    m_rParent;
-    public:
-        SvtUserConfigChangeListener_Impl(SvtUserOptions_Impl& rParent);
-        ~SvtUserConfigChangeListener_Impl();
+OUString const sData = "org.openoffice.UserProfile/Data";
 
-    //XChangesListener
-    virtual void SAL_CALL changesOccurred( const util::ChangesEvent& Event ) throw(RuntimeException);
-    //XEventListener
-    virtual void SAL_CALL disposing( const lang::EventObject& Source ) throw(RuntimeException);
+// vOptionNames[] -- names of the user option entries
+// The order corresponds to the #define USER_OPT_* list in useroptions.hxx.
+OUString const vOptionNames[] = {
+    "l",                         // USER_OPT_CITY
+    "o",                         // USER_OPT_COMPANY
+    "c",                         // USER_OPT_COUNTRY
+    "mail",                      // USER_OPT_EMAIL
+    "facsimiletelephonenumber",  // USER_OPT_FAX
+    "givenname",                 // USER_OPT_FIRSTNAME
+    "sn",                        // USER_OPT_LASTNAME
+    "position",                  // USER_OPT_POSITION
+    "st",                        // USER_OPT_STATE
+    "street",                    // USER_OPT_STREET
+    "homephone",                 // USER_OPT_TELEPHONEHOME
+    "telephonenumber",           // USER_OPT_TELEPHONEWORK
+    "title",                     // USER_OPT_TITLE
+    "initials",                  // USER_OPT_ID
+    "postalcode",                // USER_OPT_ZIP
+    "fathersname",               // USER_OPT_FATHERSNAME
+    "apartment",                 // USER_OPT_APARTMENT
+    "customernumber",            // USER_OPT_CUSTOMERNUMBER
 };
+unsigned const nOptionNameCount = sizeof vOptionNames / sizeof vOptionNames[0];
 
-class SvtUserOptions_Impl : public utl::ConfigurationBroadcaster
+} // namespace
+
+boost::weak_ptr<SvtUserOptions::Impl> SvtUserOptions::pSharedImpl;
+
+// class ChangeListener --------------------------------------------------
+
+class SvtUserOptions::ChangeListener : public cppu::WeakImplHelper1<util::XChangesListener>
 {
 public:
-    SvtUserOptions_Impl();
-    ~SvtUserOptions_Impl();
+    ChangeListener (Impl& rParent): m_rParent(rParent) { }
 
-    // get the user token
-    ::rtl::OUString   GetCompany() const;
-    ::rtl::OUString   GetFirstName() const;
-    ::rtl::OUString   GetLastName() const;
-    ::rtl::OUString   GetID() const;
-    ::rtl::OUString   GetStreet() const;
-    ::rtl::OUString   GetCity() const;
-    ::rtl::OUString   GetState() const;
-    ::rtl::OUString   GetZip() const;
-    ::rtl::OUString   GetCountry() const;
-    ::rtl::OUString   GetPosition() const;
-    ::rtl::OUString   GetTitle() const;
-    ::rtl::OUString   GetTelephoneHome() const;
-    ::rtl::OUString   GetTelephoneWork() const;
-    ::rtl::OUString   GetFax() const;
-    ::rtl::OUString   GetEmail() const;
-    ::rtl::OUString   GetCustomerNumber() const;
-    ::rtl::OUString   GetFathersName() const;
-    ::rtl::OUString   GetApartment() const;
-
-    ::rtl::OUString   GetFullName() const;
-
-    // set the address token
-    void              SetCompany( const ::rtl::OUString& rNewToken );
-    void              SetFirstName( const ::rtl::OUString& rNewToken );
-    void              SetLastName( const ::rtl::OUString& rNewToken );
-    void              SetID( const ::rtl::OUString& rNewToken );
-    void              SetStreet( const ::rtl::OUString& rNewToken );
-    void              SetCity( const ::rtl::OUString& rNewToken );
-    void              SetState( const ::rtl::OUString& rNewToken );
-    void              SetZip( const ::rtl::OUString& rNewToken );
-    void              SetCountry( const ::rtl::OUString& rNewToken );
-    void              SetPosition( const ::rtl::OUString& rNewToken );
-    void              SetTitle( const ::rtl::OUString& rNewToken );
-    void              SetTelephoneHome( const ::rtl::OUString& rNewToken );
-    void              SetTelephoneWork( const ::rtl::OUString& rNewToken );
-    void              SetFax( const ::rtl::OUString& rNewToken );
-    void              SetEmail( const ::rtl::OUString& rNewToken );
-    void              SetCustomerNumber( const ::rtl::OUString& rNewToken );
-    void              SetFathersName( const ::rtl::OUString& rNewToken );
-    void              SetApartment( const ::rtl::OUString& rNewToken );
-
-    sal_Bool          IsTokenReadonly( sal_uInt16 nToken ) const;
-    ::rtl::OUString   GetToken(sal_uInt16 nToken) const;
-    void              Notify();
+    // XChangesListener
+    virtual void SAL_CALL changesOccurred (util::ChangesEvent const& Event) throw(uno::RuntimeException);
+    // XEventListener
+    virtual void SAL_CALL disposing (lang::EventObject const& Source) throw(uno::RuntimeException);
 
 private:
-    uno::Reference< util::XChangesListener >           m_xChangeListener;
-    css::uno::Reference< css::container::XNameAccess > m_xCfg;
-    css::uno::Reference< css::beans::XPropertySet >    m_xData;
+    Impl& m_rParent;
 };
 
-// global ----------------------------------------------------------------
+// class Impl ------------------------------------------------------------
 
-static SvtUserOptions_Impl* pOptions = NULL;
-static sal_Int32            nRefCount = 0;
-
-#define READONLY_DEFAULT    sal_False
-
-SvtUserConfigChangeListener_Impl::SvtUserConfigChangeListener_Impl(SvtUserOptions_Impl& rParent) :
-    m_rParent( rParent )
+class SvtUserOptions::Impl : public utl::ConfigurationBroadcaster
 {
-}
+public:
+    Impl ();
 
-SvtUserConfigChangeListener_Impl::~SvtUserConfigChangeListener_Impl()
-{
-}
+    OUString GetFullName () const;
 
-void SvtUserConfigChangeListener_Impl::changesOccurred( const util::ChangesEvent& rEvent ) throw(RuntimeException)
+    sal_Bool IsTokenReadonly (sal_uInt16 nToken) const;
+    OUString GetToken (sal_uInt16 nToken) const;
+    void     SetToken (sal_uInt16 nToken, OUString const& rNewToken);
+    void     Notify ();
+
+private:
+    uno::Reference<util::XChangesListener> m_xChangeListener;
+    uno::Reference<container::XNameAccess> m_xCfg;
+    uno::Reference<beans::XPropertySet>    m_xData;
+};
+
+// class SvtUserOptions::ChangeListener ----------------------------------
+
+void SvtUserOptions::ChangeListener::changesOccurred (util::ChangesEvent const& rEvent) throw(uno::RuntimeException)
 {
-    if(rEvent.Changes.getLength())
+    if (rEvent.Changes.getLength())
         m_rParent.Notify();
 }
 
-void SvtUserConfigChangeListener_Impl::disposing( const lang::EventObject& rSource ) throw(RuntimeException)
+void SvtUserOptions::ChangeListener::disposing (lang::EventObject const& rSource) throw(uno::RuntimeException)
 {
     try
     {
-        uno::Reference< util::XChangesNotifier > xChgNot( rSource.Source, UNO_QUERY_THROW);
+        uno::Reference<util::XChangesNotifier> xChgNot(rSource.Source, uno::UNO_QUERY_THROW);
         xChgNot->removeChangesListener(this);
     }
-    catch(Exception& )
+    catch (uno::Exception&)
     {
     }
 }
 
-// class SvtUserOptions_Impl ---------------------------------------------
+// class SvtUserOptions::Impl --------------------------------------------
 
-// -----------------------------------------------------------------------
-SvtUserOptions_Impl::SvtUserOptions_Impl() :
-    m_xChangeListener( new SvtUserConfigChangeListener_Impl(*this) )
+SvtUserOptions::Impl::Impl() :
+    m_xChangeListener( new ChangeListener(*this) )
 {
     try
     {
-        m_xCfg = Reference< css::container::XNameAccess > (
-            ::comphelper::ConfigurationHelper::openConfig(
-            ::comphelper::getProcessServiceFactory(),
-            rtl::OUString(s_sData),
-            ::comphelper::ConfigurationHelper::E_STANDARD),
-            css::uno::UNO_QUERY );
+        m_xCfg = uno::Reference<container::XNameAccess>(
+            comphelper::ConfigurationHelper::openConfig(
+                comphelper::getProcessServiceFactory(),
+                sData,
+                comphelper::ConfigurationHelper::E_STANDARD
+            ),
+            uno::UNO_QUERY
+        );
 
-        m_xData = css::uno::Reference< css::beans::XPropertySet >(m_xCfg, css::uno::UNO_QUERY);
-        uno::Reference< util::XChangesNotifier > xChgNot( m_xCfg, UNO_QUERY);
+        m_xData = uno::Reference<beans::XPropertySet>(m_xCfg, uno::UNO_QUERY);
+        uno::Reference<util::XChangesNotifier> xChgNot(m_xCfg, uno::UNO_QUERY);
         try
         {
-            xChgNot->addChangesListener( m_xChangeListener );
+            xChgNot->addChangesListener(m_xChangeListener);
         }
-        catch(RuntimeException& )
+        catch (uno::RuntimeException&)
         {
         }
     }
-    catch(const css::uno::Exception& ex)
+    catch (uno::Exception const& ex)
     {
         m_xCfg.clear();
         SAL_WARN("unotools", "Caught unexpected: " << ex.Message);
@@ -215,756 +172,101 @@ SvtUserOptions_Impl::SvtUserOptions_Impl() :
 
 // -----------------------------------------------------------------------
 
-SvtUserOptions_Impl::~SvtUserOptions_Impl()
+OUString SvtUserOptions::Impl::GetToken (sal_uInt16 nToken) const
 {
-}
-
-::rtl::OUString SvtUserOptions_Impl::GetCompany() const
-{
-    ::rtl::OUString sCompany;
-
-    try
-    {
-        if (m_xData.is())
-            m_xData->getPropertyValue(rtl::OUString(s_so)) >>= sCompany;
-    }
-    catch ( const css::uno::Exception& ex )
-    {
-        SAL_WARN("unotools", "Caught unexpected: " << ex.Message);
-    }
-
-    return sCompany;
-}
-
-::rtl::OUString SvtUserOptions_Impl::GetFirstName() const
-{
-    ::rtl::OUString sFirstName;
-
-    try
-    {
-        if (m_xData.is())
-            m_xData->getPropertyValue(rtl::OUString(s_sgivenname)) >>= sFirstName;
-    }
-    catch ( const css::uno::Exception& ex )
-    {
-        SAL_WARN("unotools", "Caught unexpected: " << ex.Message);
-    }
-
-    return  sFirstName;
-}
-
-::rtl::OUString SvtUserOptions_Impl::GetLastName() const
-{
-    ::rtl::OUString sLastName;
-
-    try
-    {
-        if (m_xData.is())
-            m_xData->getPropertyValue(rtl::OUString(s_ssn)) >>= sLastName;
-    }
-    catch ( const css::uno::Exception& ex )
-    {
-        SAL_WARN("unotools", "Caught unexpected: " << ex.Message);
-    }
-
-    return  sLastName;
-}
-
-::rtl::OUString SvtUserOptions_Impl::GetID() const
-{
-    ::rtl::OUString sID;
-
-    try
-    {
-        if (m_xData.is())
-            m_xData->getPropertyValue(rtl::OUString(s_sinitials)) >>= sID;
-    }
-    catch ( const css::uno::Exception& ex )
-    {
-        SAL_WARN("unotools", "Caught unexpected: " << ex.Message);
-    }
-
-    return  sID;
-}
-
-::rtl::OUString SvtUserOptions_Impl::GetStreet() const
-{
-    ::rtl::OUString sStreet;
-
-    try
-    {
-        if (m_xData.is())
-            m_xData->getPropertyValue(rtl::OUString(s_sstreet)) >>= sStreet;
-    }
-    catch ( const css::uno::Exception& ex )
-    {
-        SAL_WARN("unotools", "Caught unexpected: " << ex.Message);
-    }
-
-    return  sStreet;
-}
-
-::rtl::OUString SvtUserOptions_Impl::GetCity() const
-{
-    ::rtl::OUString sCity;
-
-    try
-    {
-        if (m_xData.is())
-            m_xData->getPropertyValue(rtl::OUString(s_sl)) >>= sCity;
-    }
-    catch ( const css::uno::Exception& ex )
-    {
-        SAL_WARN("unotools", "Caught unexpected: " << ex.Message);
-    }
-
-    return  sCity;
-}
-
-::rtl::OUString SvtUserOptions_Impl::GetState() const
-{
-    ::rtl::OUString sState;
-
-    try
-    {
-        if (m_xData.is())
-            m_xData->getPropertyValue(rtl::OUString(s_sst)) >>= sState;
-    }
-    catch ( const css::uno::Exception& ex )
-    {
-        SAL_WARN("unotools", "Caught unexpected: " << ex.Message);
-    }
-
-    return  sState;
-}
-
-::rtl::OUString SvtUserOptions_Impl::GetZip() const
-{
-    ::rtl::OUString sZip;
-
-    try
-    {
-        if (m_xData.is())
-            m_xData->getPropertyValue(rtl::OUString(s_spostalcode)) >>= sZip;
-    }
-    catch ( const css::uno::Exception& ex )
-    {
-        SAL_WARN("unotools", "Caught unexpected: " << ex.Message);
-    }
-
-    return  sZip;
-}
-
-::rtl::OUString SvtUserOptions_Impl::GetCountry() const
-{
-    ::rtl::OUString sCountry;
-
-    try
-    {
-        if (m_xData.is())
-            m_xData->getPropertyValue(rtl::OUString(s_sc)) >>= sCountry;
-    }
-    catch ( const css::uno::Exception& ex )
-    {
-        SAL_WARN("unotools", "Caught unexpected: " << ex.Message);
-    }
-
-    return  sCountry;
-}
-
-::rtl::OUString SvtUserOptions_Impl::GetPosition() const
-{
-    ::rtl::OUString sPosition;
-
-    try
-    {
-        if (m_xData.is())
-            m_xData->getPropertyValue(rtl::OUString(s_sposition)) >>= sPosition;
-    }
-    catch ( const css::uno::Exception& ex )
-    {
-        SAL_WARN("unotools", "Caught unexpected: " << ex.Message);
-    }
-
-    return  sPosition;
-}
-
-::rtl::OUString SvtUserOptions_Impl::GetTitle() const
-{
-    ::rtl::OUString sTitle;
-
-    try
-    {
-        if (m_xData.is())
-            m_xData->getPropertyValue(rtl::OUString(s_stitle)) >>= sTitle;
-    }
-    catch ( const css::uno::Exception& ex )
-    {
-        SAL_WARN("unotools", "Caught unexpected: " << ex.Message);
-    }
-
-    return  sTitle;
-}
-
-::rtl::OUString SvtUserOptions_Impl::GetTelephoneHome() const
-{
-    ::rtl::OUString sTelephoneHome;
-
-    try
-    {
-        if (m_xData.is())
-            m_xData->getPropertyValue(rtl::OUString(s_shomephone)) >>= sTelephoneHome;
-    }
-    catch ( const css::uno::Exception& ex )
-    {
-        SAL_WARN("unotools", "Caught unexpected: " << ex.Message);
-    }
-
-    return  sTelephoneHome;
-}
-
-::rtl::OUString SvtUserOptions_Impl::GetTelephoneWork() const
-{
-    ::rtl::OUString sTelephoneWork;
-
-    try
-    {
-        if (m_xData.is())
-            m_xData->getPropertyValue(rtl::OUString(s_stelephonenumber)) >>= sTelephoneWork;
-    }
-    catch ( const css::uno::Exception& ex )
-    {
-        SAL_WARN("unotools", "Caught unexpected: " << ex.Message);
-    }
-
-    return  sTelephoneWork;
-}
-
-::rtl::OUString SvtUserOptions_Impl::GetFax() const
-{
-    ::rtl::OUString sFax;
-
-    try
-    {
-        if (m_xData.is())
-            m_xData->getPropertyValue(rtl::OUString(s_sfacsimiletelephonenumber)) >>= sFax;
-    }
-    catch ( const css::uno::Exception& ex )
-    {
-        SAL_WARN("unotools", "Caught unexpected: " << ex.Message);
-    }
-
-    return  sFax;
-}
-
-::rtl::OUString SvtUserOptions_Impl::GetEmail() const
-{
-    ::rtl::OUString sEmail;
-
-    try
-    {
-        if (m_xData.is())
-            m_xData->getPropertyValue(rtl::OUString(s_smail)) >>= sEmail;
-    }
-    catch ( const css::uno::Exception& ex )
-    {
-        SAL_WARN("unotools", "Caught unexpected: " << ex.Message);
-    }
-
-    return  sEmail;
-}
-
-::rtl::OUString SvtUserOptions_Impl::GetCustomerNumber() const
-{
-    ::rtl::OUString sCustomerNumber;
-
-    try
-    {
-        if (m_xData.is())
-            m_xData->getPropertyValue(rtl::OUString(s_scustomernumber)) >>= sCustomerNumber;
-    }
-    catch ( const css::uno::Exception& ex )
-    {
-        SAL_WARN("unotools", "Caught unexpected: " << ex.Message);
-    }
-
-    return  sCustomerNumber;
-}
-
-::rtl::OUString SvtUserOptions_Impl::GetFathersName() const
-{
-    ::rtl::OUString sFathersName;
-
-    try
-    {
-        if (m_xData.is())
-            m_xData->getPropertyValue(rtl::OUString(s_sfathersname)) >>= sFathersName;
-    }
-    catch ( const css::uno::Exception& ex )
-    {
-        SAL_WARN("unotools", "Caught unexpected: " << ex.Message);
-    }
-
-    return  sFathersName;
-}
-
-::rtl::OUString SvtUserOptions_Impl::GetApartment() const
-{
-    ::rtl::OUString sApartment;
-
-    try
-    {
-        if (m_xData.is())
-            m_xData->getPropertyValue(rtl::OUString(s_sapartment)) >>= sApartment;
-    }
-    catch ( const css::uno::Exception& ex )
-    {
-        SAL_WARN("unotools", "Caught unexpected: " << ex.Message);
-    }
-
-    return  sApartment;
-}
-
-void SvtUserOptions_Impl::SetCompany( const ::rtl::OUString& sCompany )
-{
-    try
-    {
-        if (m_xData.is())
-            m_xData->setPropertyValue(rtl::OUString(s_so), css::uno::makeAny(::rtl::OUString(sCompany)));
-        ::comphelper::ConfigurationHelper::flush(m_xCfg);
-    }
-    catch ( const css::uno::Exception& ex)
-    {
-        SAL_WARN("unotools", "Caught unexpected: " << ex.Message);
-    }
-}
-
-void SvtUserOptions_Impl::SetFirstName( const ::rtl::OUString& sFirstName )
-{
-    try
-    {
-        if (m_xData.is())
-            m_xData->setPropertyValue(rtl::OUString(s_sgivenname), css::uno::makeAny(::rtl::OUString(sFirstName)));
-        ::comphelper::ConfigurationHelper::flush(m_xCfg);
-    }
-    catch ( const css::uno::Exception& ex)
-    {
-        SAL_WARN("unotools", "Caught unexpected: " << ex.Message);
-    }
-}
-
-void SvtUserOptions_Impl::SetLastName( const ::rtl::OUString& sLastName )
-{
-    try
-    {
-        if (m_xData.is())
-            m_xData->setPropertyValue(rtl::OUString(s_ssn), css::uno::makeAny(::rtl::OUString(sLastName)));
-        ::comphelper::ConfigurationHelper::flush(m_xCfg);
-    }
-    catch ( const css::uno::Exception& ex)
-    {
-        SAL_WARN("unotools", "Caught unexpected: " << ex.Message);
-    }
-}
-void SvtUserOptions_Impl::SetID( const ::rtl::OUString& sID )
-{
-    try
-    {
-        if (m_xData.is())
-            m_xData->setPropertyValue(rtl::OUString(s_sinitials), css::uno::makeAny(::rtl::OUString(sID)));
-        ::comphelper::ConfigurationHelper::flush(m_xCfg);
-    }
-    catch ( const css::uno::Exception& ex)
-    {
-        SAL_WARN("unotools", "Caught unexpected: " << ex.Message);
-    }
-}
-
-void SvtUserOptions_Impl::SetStreet( const ::rtl::OUString& sStreet )
-{
-    try
-    {
-        if (m_xData.is())
-            m_xData->setPropertyValue(rtl::OUString(s_sstreet), css::uno::makeAny(::rtl::OUString(sStreet)));
-        ::comphelper::ConfigurationHelper::flush(m_xCfg);
-    }
-    catch ( const css::uno::Exception& ex)
-    {
-        SAL_WARN("unotools", "Caught unexpected: " << ex.Message);
-    }
-}
-
-void SvtUserOptions_Impl::SetCity( const ::rtl::OUString& sCity )
-{
-    try
-    {
-        if (m_xData.is())
-            m_xData->setPropertyValue(rtl::OUString(s_sl), css::uno::makeAny(::rtl::OUString(sCity)));
-        ::comphelper::ConfigurationHelper::flush(m_xCfg);
-    }
-    catch ( const css::uno::Exception& ex)
-    {
-        SAL_WARN("unotools", "Caught unexpected: " << ex.Message);
-    }
-}
-
-void SvtUserOptions_Impl::SetState( const ::rtl::OUString& sState )
-{
-    try
-    {
-        if (m_xData.is())
-            m_xData->setPropertyValue(rtl::OUString(s_sst), css::uno::makeAny(::rtl::OUString(sState)));
-        ::comphelper::ConfigurationHelper::flush(m_xCfg);
-    }
-    catch ( const css::uno::Exception& ex)
-    {
-        SAL_WARN("unotools", "Caught unexpected: " << ex.Message);
-    }
-}
-
-void SvtUserOptions_Impl::SetZip( const ::rtl::OUString& sZip )
-{
-    try
-    {
-        if (m_xData.is())
-            m_xData->setPropertyValue(rtl::OUString(s_spostalcode), css::uno::makeAny(::rtl::OUString(sZip)));
-        ::comphelper::ConfigurationHelper::flush(m_xCfg);
-    }
-    catch ( const css::uno::Exception& ex)
-    {
-        SAL_WARN("unotools", "Caught unexpected: " << ex.Message);
-    }
-}
-
-void SvtUserOptions_Impl::SetCountry( const ::rtl::OUString& sCountry )
-{
-    try
-    {
-        if (m_xData.is())
-            m_xData->setPropertyValue(rtl::OUString(s_sc), css::uno::makeAny(::rtl::OUString(sCountry)));
-        ::comphelper::ConfigurationHelper::flush(m_xCfg);
-    }
-    catch ( const css::uno::Exception& ex)
-    {
-        SAL_WARN("unotools", "Caught unexpected: " << ex.Message);
-    }
-}
-
-void SvtUserOptions_Impl::SetPosition( const ::rtl::OUString& sPosition )
-{
-    try
-    {
-        if (m_xData.is())
-            m_xData->setPropertyValue(rtl::OUString(s_sposition), css::uno::makeAny(::rtl::OUString(sPosition)));
-        ::comphelper::ConfigurationHelper::flush(m_xCfg);
-    }
-    catch ( const css::uno::Exception& ex)
-    {
-        SAL_WARN("unotools", "Caught unexpected: " << ex.Message);
-    }
-}
-
-void SvtUserOptions_Impl::SetTitle( const ::rtl::OUString& sTitle )
-{
-    try
-    {
-        if (m_xData.is())
-            m_xData->setPropertyValue(rtl::OUString(s_stitle), css::uno::makeAny(::rtl::OUString(sTitle)));
-        ::comphelper::ConfigurationHelper::flush(m_xCfg);
-    }
-    catch ( const css::uno::Exception& ex)
-    {
-        SAL_WARN("unotools", "Caught unexpected: " << ex.Message);
-    }
-}
-
-void SvtUserOptions_Impl::SetTelephoneHome( const ::rtl::OUString& sTelephoneHome )
-{
-    try
-    {
-        if (m_xData.is())
-            m_xData->setPropertyValue(rtl::OUString(s_shomephone), css::uno::makeAny(::rtl::OUString(sTelephoneHome)));
-        ::comphelper::ConfigurationHelper::flush(m_xCfg);
-    }
-    catch ( const css::uno::Exception& ex)
-    {
-        SAL_WARN("unotools", "Caught unexpected: " << ex.Message);
-    }
-}
-
-void SvtUserOptions_Impl::SetTelephoneWork( const ::rtl::OUString& sTelephoneWork )
-{
-    try
-    {
-        if (m_xData.is())
-            m_xData->setPropertyValue(rtl::OUString(s_stelephonenumber), css::uno::makeAny(::rtl::OUString(sTelephoneWork)));
-        ::comphelper::ConfigurationHelper::flush(m_xCfg);
-    }
-    catch ( const css::uno::Exception& ex)
-    {
-        SAL_WARN("unotools", "Caught unexpected: " << ex.Message);
-    }
-}
-
-void SvtUserOptions_Impl::SetFax( const ::rtl::OUString& sFax )
-{
-    try
-    {
-        if (m_xData.is())
-            m_xData->setPropertyValue(rtl::OUString(s_sfacsimiletelephonenumber), css::uno::makeAny(::rtl::OUString(sFax)));
-        ::comphelper::ConfigurationHelper::flush(m_xCfg);
-    }
-    catch ( const css::uno::Exception& ex)
-    {
-        SAL_WARN("unotools", "Caught unexpected: " << ex.Message);
-    }
-}
-
-void SvtUserOptions_Impl::SetEmail( const ::rtl::OUString& sEmail )
-{
-    try
-    {
-        if (m_xData.is())
-            m_xData->setPropertyValue(rtl::OUString(s_smail), css::uno::makeAny(::rtl::OUString(sEmail)));
-        ::comphelper::ConfigurationHelper::flush(m_xCfg);
-    }
-    catch ( const css::uno::Exception& ex)
-    {
-        SAL_WARN("unotools", "Caught unexpected: " << ex.Message);
-    }
-}
-
-void SvtUserOptions_Impl::SetCustomerNumber( const ::rtl::OUString& sCustomerNumber )
-{
-    try
-    {
-        if (m_xData.is())
-            m_xData->setPropertyValue(rtl::OUString(s_scustomernumber), css::uno::makeAny(::rtl::OUString(sCustomerNumber)));
-        ::comphelper::ConfigurationHelper::flush(m_xCfg);
-    }
-    catch ( const css::uno::Exception& ex)
-    {
-        SAL_WARN("unotools", "Caught unexpected: " << ex.Message);
-    }
-}
-
-void SvtUserOptions_Impl::SetFathersName( const ::rtl::OUString& sFathersName )
-{
-    try
-    {
-        if (m_xData.is())
-            m_xData->setPropertyValue(rtl::OUString(s_sfathersname), css::uno::makeAny(::rtl::OUString(sFathersName)));
-        ::comphelper::ConfigurationHelper::flush(m_xCfg);
-    }
-    catch ( const css::uno::Exception& ex)
-    {
-        SAL_WARN("unotools", "Caught unexpected: " << ex.Message);
-    }
-}
-
-void SvtUserOptions_Impl::SetApartment( const ::rtl::OUString& sApartment )
-{
-    try
-    {
-        if (m_xData.is())
-            m_xData->setPropertyValue(rtl::OUString(s_sapartment), css::uno::makeAny(::rtl::OUString(sApartment)));
-        ::comphelper::ConfigurationHelper::flush(m_xCfg);
-    }
-    catch ( const css::uno::Exception& ex)
-    {
-        SAL_WARN("unotools", "Caught unexpected: " << ex.Message);
-    }
+    OUString sToken;
+    if (nToken < nOptionNameCount)
+    {
+        try
+        {
+            if (m_xData.is())
+                m_xData->getPropertyValue(vOptionNames[nToken]) >>= sToken;
+        }
+        catch (uno::Exception const& ex)
+        {
+            SAL_WARN("unotools", "Caught unexpected: " << ex.Message);
+        }
+    }
+    else
+        SAL_WARN("unotools.config", "SvtUserOptions::Impl::GetToken(): invalid token");
+    return sToken;
 }
 
 // -----------------------------------------------------------------------
 
-::rtl::OUString SvtUserOptions_Impl::GetFullName() const
+void SvtUserOptions::Impl::SetToken (sal_uInt16 nToken, OUString const& sToken)
 {
-    ::rtl::OUString sFullName;
+    if (nToken < nOptionNameCount)
+    {
+        try
+        {
+            if (m_xData.is())
+                m_xData->setPropertyValue(vOptionNames[nToken], uno::makeAny(sToken));
+            comphelper::ConfigurationHelper::flush(m_xCfg);
+        }
+        catch (uno::Exception const& ex)
+        {
+            SAL_WARN("unotools", "Caught unexpected: " << ex.Message);
+        }
+    }
+    else
+        SAL_WARN("unotools.config", "SvtUserOptions::Impl::GetToken(): invalid token");
+}
 
-    sFullName = GetFirstName();
-    sFullName.trim();
-    if ( !sFullName.isEmpty() )
-        sFullName += ::rtl::OUString(" ");
-    sFullName += GetLastName();
-    sFullName.trim();
+// -----------------------------------------------------------------------
 
+OUString SvtUserOptions::Impl::GetFullName () const
+{
+    // TODO international name
+    OUString sFullName = GetToken(USER_OPT_FIRSTNAME).trim();
+    if (!sFullName.isEmpty())
+        sFullName += " ";
+    sFullName += GetToken(USER_OPT_LASTNAME).trim();
     return sFullName;
 }
 
 // -----------------------------------------------------------------------
 
-void SvtUserOptions_Impl::Notify()
+void SvtUserOptions::Impl::Notify ()
 {
     NotifyListeners(0);
 }
 
 // -----------------------------------------------------------------------
 
-sal_Bool SvtUserOptions_Impl::IsTokenReadonly( sal_uInt16 nToken ) const
+sal_Bool SvtUserOptions::Impl::IsTokenReadonly (sal_uInt16 nToken) const
 {
-    css::uno::Reference< css::beans::XPropertySet >     xData(m_xCfg, css::uno::UNO_QUERY);
-    css::uno::Reference< css::beans::XPropertySetInfo > xInfo = xData->getPropertySetInfo();
-    css::beans::Property aProp;
-    sal_Bool             bRet = sal_False;
-
-    switch ( nToken )
+    if (nToken < nOptionNameCount)
     {
-        case USER_OPT_COMPANY:
-        {
-            aProp = xInfo->getPropertyByName(rtl::OUString(s_so));
-            bRet = ((aProp.Attributes & css::beans::PropertyAttribute::READONLY) == css::beans::PropertyAttribute::READONLY);
-            break;
-        }
-        case USER_OPT_FIRSTNAME:
-        {
-                aProp = xInfo->getPropertyByName(rtl::OUString(s_sgivenname));
-                bRet = ((aProp.Attributes & css::beans::PropertyAttribute::READONLY) == css::beans::PropertyAttribute::READONLY);
-                break;
-        }
-        case USER_OPT_LASTNAME:
-        {
-                aProp = xInfo->getPropertyByName(rtl::OUString(s_ssn));
-                bRet = ((aProp.Attributes & css::beans::PropertyAttribute::READONLY) == css::beans::PropertyAttribute::READONLY);
-                break;
-        }
-        case USER_OPT_ID:
-        {
-                aProp = xInfo->getPropertyByName(rtl::OUString(s_sinitials));
-                bRet = ((aProp.Attributes & css::beans::PropertyAttribute::READONLY) == css::beans::PropertyAttribute::READONLY);
-                break;
-        }
-        case USER_OPT_STREET:
-        {
-                aProp = xInfo->getPropertyByName(rtl::OUString(s_sstreet));
-                bRet = ((aProp.Attributes & css::beans::PropertyAttribute::READONLY) == css::beans::PropertyAttribute::READONLY);
-                break;
-        }
-        case USER_OPT_CITY:
-        {
-                aProp = xInfo->getPropertyByName(rtl::OUString(s_sl));
-                bRet = ((aProp.Attributes & css::beans::PropertyAttribute::READONLY) == css::beans::PropertyAttribute::READONLY);
-                break;
-        }
-        case USER_OPT_STATE:
-        {
-                aProp = xInfo->getPropertyByName(rtl::OUString(s_sst));
-                bRet = ((aProp.Attributes & css::beans::PropertyAttribute::READONLY) == css::beans::PropertyAttribute::READONLY);
-                break;
-        }
-        case USER_OPT_ZIP:
-        {
-                aProp = xInfo->getPropertyByName(rtl::OUString(s_spostalcode));
-                bRet = ((aProp.Attributes & css::beans::PropertyAttribute::READONLY) == css::beans::PropertyAttribute::READONLY);
-                break;
-        }
-        case USER_OPT_COUNTRY:
-        {
-                aProp = xInfo->getPropertyByName(rtl::OUString(s_sc));
-                bRet = ((aProp.Attributes & css::beans::PropertyAttribute::READONLY) == css::beans::PropertyAttribute::READONLY);
-                break;
-        }
-        case USER_OPT_POSITION:
-        {
-                aProp = xInfo->getPropertyByName(rtl::OUString(s_sposition));
-                bRet = ((aProp.Attributes & css::beans::PropertyAttribute::READONLY) == css::beans::PropertyAttribute::READONLY);
-                break;
-        }
-        case USER_OPT_TITLE:
-        {
-                aProp = xInfo->getPropertyByName(rtl::OUString(s_stitle));
-                bRet = ((aProp.Attributes & css::beans::PropertyAttribute::READONLY) == css::beans::PropertyAttribute::READONLY);
-                break;
-        }
-        case USER_OPT_TELEPHONEHOME:
-        {
-                aProp = xInfo->getPropertyByName(rtl::OUString(s_shomephone));
-                bRet = ((aProp.Attributes & css::beans::PropertyAttribute::READONLY) == css::beans::PropertyAttribute::READONLY);
-                break;
-        }
-        case USER_OPT_TELEPHONEWORK:
-        {
-                aProp = xInfo->getPropertyByName(rtl::OUString(s_stelephonenumber));
-                bRet = ((aProp.Attributes & css::beans::PropertyAttribute::READONLY) == css::beans::PropertyAttribute::READONLY);
-                break;
-        }
-        case USER_OPT_FAX:
-        {
-                aProp = xInfo->getPropertyByName(rtl::OUString(s_sfacsimiletelephonenumber));
-                bRet = ((aProp.Attributes & css::beans::PropertyAttribute::READONLY) == css::beans::PropertyAttribute::READONLY);
-                break;
-        }
-        case USER_OPT_EMAIL:
-        {
-                aProp = xInfo->getPropertyByName(rtl::OUString(s_smail));
-                bRet = ((aProp.Attributes & css::beans::PropertyAttribute::READONLY) == css::beans::PropertyAttribute::READONLY);
-                break;
-        }
-        case USER_OPT_FATHERSNAME:
-            {
-                aProp = xInfo->getPropertyByName(rtl::OUString(s_sfathersname));
-                bRet = ((aProp.Attributes & css::beans::PropertyAttribute::READONLY) == css::beans::PropertyAttribute::READONLY);
-                break;
-            }
-        case USER_OPT_APARTMENT:
-            {
-                aProp = xInfo->getPropertyByName(rtl::OUString(s_sapartment));
-                bRet = ((aProp.Attributes & css::beans::PropertyAttribute::READONLY) == css::beans::PropertyAttribute::READONLY);
-                break;
-            }
-        default:
-            SAL_WARN( "unotools.config", "SvtUserOptions_Impl::IsTokenReadonly(): invalid token" );
+        uno::Reference<beans::XPropertySet> xData(m_xCfg, uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySetInfo> xInfo = xData->getPropertySetInfo();
+        beans::Property aProp = xInfo->getPropertyByName(vOptionNames[nToken]);
+        return ((aProp.Attributes & beans::PropertyAttribute::READONLY) ==
+            beans::PropertyAttribute::READONLY);
     }
-
-    return bRet;
-}
-
-//------------------------------------------------------------------------
-::rtl::OUString SvtUserOptions_Impl::GetToken(sal_uInt16 nToken) const
-{
-    ::rtl::OUString pRet;
-    switch(nToken)
+    else
     {
-        case USER_OPT_COMPANY:        pRet = GetCompany();     break;
-        case USER_OPT_FIRSTNAME:      pRet = GetFirstName();   break;
-        case USER_OPT_LASTNAME:       pRet = GetLastName();    break;
-        case USER_OPT_ID:             pRet = GetID();          break;
-        case USER_OPT_STREET:         pRet = GetStreet();      break;
-        case USER_OPT_CITY:           pRet = GetCity();        break;
-        case USER_OPT_STATE:          pRet = GetState();       break;
-        case USER_OPT_ZIP:            pRet = GetZip();         break;
-        case USER_OPT_COUNTRY:        pRet = GetCountry();     break;
-        case USER_OPT_POSITION:       pRet = GetPosition();    break;
-        case USER_OPT_TITLE:          pRet = GetTitle();       break;
-        case USER_OPT_TELEPHONEHOME:  pRet = GetTelephoneHome(); break;
-        case USER_OPT_TELEPHONEWORK:  pRet = GetTelephoneWork(); break;
-        case USER_OPT_FAX:            pRet = GetFax();           break;
-        case USER_OPT_EMAIL:          pRet = GetEmail();         break;
-        case USER_OPT_FATHERSNAME:    pRet = GetFathersName();   break;
-        case USER_OPT_APARTMENT:      pRet = GetApartment();     break;
-        default:
-            SAL_WARN( "unotools.config", "SvtUserOptions_Impl::GetToken(): invalid token" );
+        SAL_WARN("unotools.config", "SvtUserOptions::Impl::IsTokenReadonly(): invalid token");
+        return sal_False;
     }
-    return pRet;
 }
 
 // class SvtUserOptions --------------------------------------------------
 
-SvtUserOptions::SvtUserOptions()
+SvtUserOptions::SvtUserOptions ()
 {
     // Global access, must be guarded (multithreading)
-    ::osl::MutexGuard aGuard( GetInitMutex() );
+    osl::MutexGuard aGuard(GetInitMutex());
 
-    if ( !pOptions )
+    if (pSharedImpl.expired())
     {
-        RTL_LOGFILE_CONTEXT(aLog, "unotools ( ??? ) ::SvtUserOptions_Impl::ctor()");
-        pOptions = new SvtUserOptions_Impl;
-
+        RTL_LOGFILE_CONTEXT(aLog, "unotools ( ??? ) SvtUserOptions::Impl::ctor()");
+        pImpl.reset(new Impl);
+        pSharedImpl = pImpl;
         ItemHolder1::holdConfigItem(E_USEROPTIONS);
     }
-    ++nRefCount;
-    pImp = pOptions;
-    pImp->AddListener(this);
+    pImpl = pSharedImpl.lock();
+    pImpl->AddListener(this);
 }
 
 // -----------------------------------------------------------------------
@@ -972,14 +274,8 @@ SvtUserOptions::SvtUserOptions()
 SvtUserOptions::~SvtUserOptions()
 {
     // Global access, must be guarded (multithreading)
-    ::osl::MutexGuard aGuard( GetInitMutex() );
-    pImp->RemoveListener(this);
-    if ( !--nRefCount )
-    {
-        //if ( pOptions->IsModified() )
-        //  pOptions->Commit();
-        DELETEZ( pOptions );
-    }
+    osl::MutexGuard aGuard( GetInitMutex() );
+    pImpl->RemoveListener(this);
 }
 
 // -----------------------------------------------------------------------
@@ -989,317 +285,89 @@ namespace
     class theUserOptionsMutex : public rtl::Static<osl::Mutex, theUserOptionsMutex>{};
 }
 
-::osl::Mutex& SvtUserOptions::GetInitMutex()
+osl::Mutex& SvtUserOptions::GetInitMutex()
 {
     return theUserOptionsMutex::get();
 }
 
 // -----------------------------------------------------------------------
 
-::rtl::OUString SvtUserOptions::GetCompany() const
+//
+// getters
+//
+OUString SvtUserOptions::GetCompany        () const { return GetToken(USER_OPT_COMPANY); }
+OUString SvtUserOptions::GetFirstName      () const { return GetToken(USER_OPT_FIRSTNAME); }
+OUString SvtUserOptions::GetLastName       () const { return GetToken(USER_OPT_LASTNAME); }
+OUString SvtUserOptions::GetID             () const { return GetToken(USER_OPT_ID); }
+OUString SvtUserOptions::GetStreet         () const { return GetToken(USER_OPT_STREET); }
+OUString SvtUserOptions::GetCity           () const { return GetToken(USER_OPT_CITY); }
+OUString SvtUserOptions::GetState          () const { return GetToken(USER_OPT_STATE); }
+OUString SvtUserOptions::GetZip            () const { return GetToken(USER_OPT_ZIP); }
+OUString SvtUserOptions::GetCountry        () const { return GetToken(USER_OPT_COUNTRY); }
+OUString SvtUserOptions::GetPosition       () const { return GetToken(USER_OPT_POSITION); }
+OUString SvtUserOptions::GetTitle          () const { return GetToken(USER_OPT_TITLE); }
+OUString SvtUserOptions::GetTelephoneHome  () const { return GetToken(USER_OPT_TELEPHONEHOME); }
+OUString SvtUserOptions::GetTelephoneWork  () const { return GetToken(USER_OPT_TELEPHONEWORK); }
+OUString SvtUserOptions::GetFax            () const { return GetToken(USER_OPT_FAX); }
+OUString SvtUserOptions::GetEmail          () const { return GetToken(USER_OPT_EMAIL); }
+OUString SvtUserOptions::GetCustomerNumber () const { return GetToken(USER_OPT_CUSTOMERNUMBER); }
+OUString SvtUserOptions::GetFathersName    () const { return GetToken(USER_OPT_FATHERSNAME); }
+OUString SvtUserOptions::GetApartment      () const { return GetToken(USER_OPT_APARTMENT); }
+
+// -----------------------------------------------------------------------
+
+//
+// setters
+//
+void SvtUserOptions::SetCompany   (OUString const& sToken) { SetToken(USER_OPT_COMPANY,   sToken); }
+void SvtUserOptions::SetFirstName (OUString const& sToken) { SetToken(USER_OPT_FIRSTNAME, sToken); }
+void SvtUserOptions::SetLastName  (OUString const& sToken) { SetToken(USER_OPT_LASTNAME,  sToken); }
+void SvtUserOptions::SetID        (OUString const& sToken) { SetToken(USER_OPT_ID,        sToken); }
+void SvtUserOptions::SetStreet    (OUString const& sToken) { SetToken(USER_OPT_STREET,    sToken); }
+void SvtUserOptions::SetCity      (OUString const& sToken) { SetToken(USER_OPT_CITY,      sToken); }
+void SvtUserOptions::SetState     (OUString const& sToken) { SetToken(USER_OPT_STATE,     sToken); }
+void SvtUserOptions::SetZip       (OUString const& sToken) { SetToken(USER_OPT_ZIP,       sToken); }
+void SvtUserOptions::SetCountry   (OUString const& sToken) { SetToken(USER_OPT_COUNTRY,   sToken); }
+void SvtUserOptions::SetPosition  (OUString const& sToken) { SetToken(USER_OPT_POSITION,  sToken); }
+void SvtUserOptions::SetTitle     (OUString const& sToken) { SetToken(USER_OPT_TITLE,     sToken); }
+void SvtUserOptions::SetFax       (OUString const& sToken) { SetToken(USER_OPT_FAX,       sToken); }
+void SvtUserOptions::SetEmail     (OUString const& sToken) { SetToken(USER_OPT_EMAIL,     sToken); }
+void SvtUserOptions::SetTelephoneHome  (OUString const& sToken) { SetToken(USER_OPT_TELEPHONEHOME,  sToken); }
+void SvtUserOptions::SetTelephoneWork  (OUString const& sToken) { SetToken(USER_OPT_TELEPHONEWORK,  sToken); }
+void SvtUserOptions::SetCustomerNumber (OUString const& sToken) { SetToken(USER_OPT_CUSTOMERNUMBER, sToken); }
+void SvtUserOptions::SetFathersName    (OUString const& sToken) { SetToken(USER_OPT_FATHERSNAME,    sToken); }
+void SvtUserOptions::SetApartment      (OUString const& sToken) { SetToken(USER_OPT_APARTMENT,      sToken); }
+
+// -----------------------------------------------------------------------
+
+sal_Bool SvtUserOptions::IsTokenReadonly (sal_uInt16 nToken) const
 {
-    ::osl::MutexGuard aGuard( GetInitMutex() );
-    return pImp->GetCompany();
+    osl::MutexGuard aGuard(GetInitMutex());
+    return pImpl->IsTokenReadonly(nToken);
 }
 
 // -----------------------------------------------------------------------
 
-::rtl::OUString SvtUserOptions::GetFirstName() const
+OUString SvtUserOptions::GetToken (sal_uInt16 nToken) const
 {
-    ::osl::MutexGuard aGuard( GetInitMutex() );
-    return pImp->GetFirstName();
+    osl::MutexGuard aGuard(GetInitMutex());
+    return pImpl->GetToken(nToken);
 }
 
 // -----------------------------------------------------------------------
 
-::rtl::OUString SvtUserOptions::GetLastName() const
+void SvtUserOptions::SetToken (sal_uInt16 nToken, OUString const& rNewToken)
 {
-    ::osl::MutexGuard aGuard( GetInitMutex() );
-    return pImp->GetLastName();
+    osl::MutexGuard aGuard(GetInitMutex());
+    pImpl->SetToken(nToken, rNewToken);
 }
 
 // -----------------------------------------------------------------------
 
-::rtl::OUString SvtUserOptions::GetID() const
+OUString SvtUserOptions::GetFullName () const
 {
-    ::osl::MutexGuard aGuard( GetInitMutex() );
-    return pImp->GetID();
-}
-
-// -----------------------------------------------------------------------
-
-::rtl::OUString SvtUserOptions::GetStreet() const
-{
-    ::osl::MutexGuard aGuard( GetInitMutex() );
-    return pImp->GetStreet();
-}
-
-// -----------------------------------------------------------------------
-
-::rtl::OUString SvtUserOptions::GetCity() const
-{
-    ::osl::MutexGuard aGuard( GetInitMutex() );
-    return pImp->GetCity();
-}
-
-// -----------------------------------------------------------------------
-
-::rtl::OUString SvtUserOptions::GetState() const
-{
-    ::osl::MutexGuard aGuard( GetInitMutex() );
-    return pImp->GetState();
-}
-
-// -----------------------------------------------------------------------
-
-::rtl::OUString SvtUserOptions::GetZip() const
-{
-    ::osl::MutexGuard aGuard( GetInitMutex() );
-    return pImp->GetZip();
-}
-
-// -----------------------------------------------------------------------
-
-::rtl::OUString SvtUserOptions::GetCountry() const
-{
-    ::osl::MutexGuard aGuard( GetInitMutex() );
-    return pImp->GetCountry();
-}
-
-// -----------------------------------------------------------------------
-
-::rtl::OUString SvtUserOptions::GetPosition() const
-{
-    ::osl::MutexGuard aGuard( GetInitMutex() );
-    return pImp->GetPosition();
-}
-
-// -----------------------------------------------------------------------
-
-::rtl::OUString SvtUserOptions::GetTitle() const
-{
-    ::osl::MutexGuard aGuard( GetInitMutex() );
-    return pImp->GetTitle();
-}
-
-// -----------------------------------------------------------------------
-
-::rtl::OUString SvtUserOptions::GetTelephoneHome() const
-{
-    ::osl::MutexGuard aGuard( GetInitMutex() );
-    return pImp->GetTelephoneHome();
-}
-
-// -----------------------------------------------------------------------
-
-::rtl::OUString SvtUserOptions::GetTelephoneWork() const
-{
-    ::osl::MutexGuard aGuard( GetInitMutex() );
-    return pImp->GetTelephoneWork();
-}
-
-// -----------------------------------------------------------------------
-
-::rtl::OUString SvtUserOptions::GetFax() const
-{
-    ::osl::MutexGuard aGuard( GetInitMutex() );
-    return pImp->GetFax();
-}
-
-// -----------------------------------------------------------------------
-
-::rtl::OUString SvtUserOptions::GetEmail() const
-{
-    ::osl::MutexGuard aGuard( GetInitMutex() );
-    return pImp->GetEmail();
-}
-
-// -----------------------------------------------------------------------
-
-::rtl::OUString SvtUserOptions::GetCustomerNumber() const
-{
-    ::osl::MutexGuard aGuard( GetInitMutex() );
-    return pImp->GetCustomerNumber();
-}
-// -----------------------------------------------------------------------
-
-::rtl::OUString SvtUserOptions::GetFathersName() const
-{
-    ::osl::MutexGuard aGuard( GetInitMutex() );
-    return pImp->GetFathersName() ;
-}
-
-// -----------------------------------------------------------------------
-
-::rtl::OUString SvtUserOptions::GetApartment() const
-{
-    ::osl::MutexGuard aGuard( GetInitMutex() );
-    return pImp->GetApartment();
-}
-
-// -----------------------------------------------------------------------
-
-::rtl::OUString SvtUserOptions::GetFullName() const
-{
-    ::osl::MutexGuard aGuard( GetInitMutex() );
-    return pImp->GetFullName();
-}
-
-// -----------------------------------------------------------------------
-
-void SvtUserOptions::SetCompany( const ::rtl::OUString& rNewToken )
-{
-    ::osl::MutexGuard aGuard( GetInitMutex() );
-    pImp->SetCompany( rNewToken );
-}
-
-// -----------------------------------------------------------------------
-
-void SvtUserOptions::SetFirstName( const ::rtl::OUString& rNewToken )
-{
-    ::osl::MutexGuard aGuard( GetInitMutex() );
-    pImp->SetFirstName( rNewToken );
-}
-
-// -----------------------------------------------------------------------
-
-void SvtUserOptions::SetLastName( const ::rtl::OUString& rNewToken )
-{
-    ::osl::MutexGuard aGuard( GetInitMutex() );
-    pImp->SetLastName( rNewToken );
-}
-
-// -----------------------------------------------------------------------
-
-void SvtUserOptions::SetID( const ::rtl::OUString& rNewToken )
-{
-    ::osl::MutexGuard aGuard( GetInitMutex() );
-    pImp->SetID( rNewToken );
-}
-
-// -----------------------------------------------------------------------
-
-void SvtUserOptions::SetStreet( const ::rtl::OUString& rNewToken )
-{
-    ::osl::MutexGuard aGuard( GetInitMutex() );
-    pImp->SetStreet( rNewToken );
-}
-
-// -----------------------------------------------------------------------
-
-void SvtUserOptions::SetCity( const ::rtl::OUString& rNewToken )
-{
-    ::osl::MutexGuard aGuard( GetInitMutex() );
-    pImp->SetCity( rNewToken );
-}
-
-// -----------------------------------------------------------------------
-
-void SvtUserOptions::SetState( const ::rtl::OUString& rNewToken )
-{
-    ::osl::MutexGuard aGuard( GetInitMutex() );
-    pImp->SetState( rNewToken );
-}
-
-// -----------------------------------------------------------------------
-
-void SvtUserOptions::SetZip( const ::rtl::OUString& rNewToken )
-{
-    ::osl::MutexGuard aGuard( GetInitMutex() );
-    pImp->SetZip( rNewToken );
-}
-
-// -----------------------------------------------------------------------
-
-void SvtUserOptions::SetCountry( const ::rtl::OUString& rNewToken )
-{
-    ::osl::MutexGuard aGuard( GetInitMutex() );
-    pImp->SetCountry( rNewToken );
-}
-
-// -----------------------------------------------------------------------
-
-void SvtUserOptions::SetPosition( const ::rtl::OUString& rNewToken )
-{
-    ::osl::MutexGuard aGuard( GetInitMutex() );
-    pImp->SetPosition( rNewToken );
-}
-
-// -----------------------------------------------------------------------
-
-void SvtUserOptions::SetTitle( const ::rtl::OUString& rNewToken )
-{
-    ::osl::MutexGuard aGuard( GetInitMutex() );
-    pImp->SetTitle( rNewToken );
-}
-
-// -----------------------------------------------------------------------
-
-void SvtUserOptions::SetTelephoneHome( const ::rtl::OUString& rNewToken )
-{
-    ::osl::MutexGuard aGuard( GetInitMutex() );
-    pImp->SetTelephoneHome( rNewToken );
-}
-
-// -----------------------------------------------------------------------
-
-void SvtUserOptions::SetTelephoneWork( const ::rtl::OUString& rNewToken )
-{
-    ::osl::MutexGuard aGuard( GetInitMutex() );
-    pImp->SetTelephoneWork( rNewToken );
-}
-
-// -----------------------------------------------------------------------
-
-void SvtUserOptions::SetFax( const ::rtl::OUString& rNewToken )
-{
-    ::osl::MutexGuard aGuard( GetInitMutex() );
-    pImp->SetFax( rNewToken );
-}
-
-// -----------------------------------------------------------------------
-
-void SvtUserOptions::SetEmail( const ::rtl::OUString& rNewToken )
-{
-    ::osl::MutexGuard aGuard( GetInitMutex() );
-    pImp->SetEmail( rNewToken );
-}
-
-// -----------------------------------------------------------------------
-
-void SvtUserOptions::SetCustomerNumber( const ::rtl::OUString& rNewToken )
-{
-    ::osl::MutexGuard aGuard( GetInitMutex() );
-    pImp->SetCustomerNumber( rNewToken );
-}
-// -----------------------------------------------------------------------
-
-void SvtUserOptions::SetFathersName( const ::rtl::OUString& rNewToken )
-{
-    ::osl::MutexGuard aGuard( GetInitMutex() );
-    pImp->SetFathersName( rNewToken );
-}
-
-// -----------------------------------------------------------------------
-
-void SvtUserOptions::SetApartment( const ::rtl::OUString& rNewToken )
-{
-    ::osl::MutexGuard aGuard( GetInitMutex() );
-    pImp->SetApartment( rNewToken );
-}
-
-// -----------------------------------------------------------------------
-
-sal_Bool SvtUserOptions::IsTokenReadonly( sal_uInt16 nToken ) const
-{
-    ::osl::MutexGuard aGuard( GetInitMutex() );
-    return pImp->IsTokenReadonly( nToken );
-}
-//------------------------------------------------------------------------
-::rtl::OUString   SvtUserOptions::GetToken(sal_uInt16 nToken) const
-{
-    ::osl::MutexGuard aGuard( GetInitMutex() );
-    return pImp->GetToken( nToken );
+    osl::MutexGuard aGuard(GetInitMutex());
+    return pImpl->GetFullName();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
