@@ -155,9 +155,9 @@ public class Filter {
                 out.write(getTime() + "," + "Complex XLS Load Show Result: " + perfLoadShow("pvt_benchmark/sc_complex_13sh_4kcell.xls") + System.getProperty("line.separator"));
                 out.flush();
 
-                out.write(getTime() + "," + "Plain ODT Load Finish Result: " + perfLoadFinish("pvt_benchmark/sw_plain_120p_odf1.2.odt", 110) + System.getProperty("line.separator"));
+                out.write(getTime() + "," + "Plain ODT Load Finish Result: " + perfLoadFinish("pvt_benchmark/sw_plain_120p_odf1.2.odt", 100) + System.getProperty("line.separator"));
                 out.flush();
-                out.write(getTime() + "," + "Plain DOC Load Finish Result: " + perfLoadFinish("pvt_benchmark/sw_plain_120p.doc", 110) + System.getProperty("line.separator"));
+                out.write(getTime() + "," + "Plain DOC Load Finish Result: " + perfLoadFinish("pvt_benchmark/sw_plain_120p.doc", 100) + System.getProperty("line.separator"));
                 out.flush();
                 out.write(getTime() + "," + "Complex ODT Load Finish Result: " + perfLoadFinish("pvt_benchmark/sw_complex_100p_odf1.2.odt", 100) + System.getProperty("line.separator"));
                 out.flush();
@@ -478,7 +478,8 @@ public class Filter {
         }
         sleep(5);
 
-        typeKeys("<ctrl s>");
+//      typeKeys("<ctrl s>");
+        app.dispatch(".uno:Save");
         tr = System.currentTimeMillis();
 
         int index = 0;
