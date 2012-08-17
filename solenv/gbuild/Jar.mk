@@ -190,8 +190,8 @@ $$(call gb_Output_error,\
  gb_Jar_add_jar: use gb_Jar_use_jar instead.)
 endef
 
-# these are not added to manifest classpath
-gb_Jar_default_jars := unoloader ridl jurt unoil juh java_uno
+# URE jars are not added to manifest classpath
+gb_Jar_default_jars := $(gb_Jar_URE)
 
 # remember: classpath is "inherited" to ClassSet
 define gb_Jar_use_jar
