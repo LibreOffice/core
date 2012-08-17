@@ -152,37 +152,6 @@ Reference< XInputStream > OActiveDataSink::getInputStream()
 
 
 //===========================================================================
-// Implementation XActiveDataSource
-
-typedef cppu::WeakImplHelper1< XActiveDataSource > ActiveDataSourceHelper;
-
-class OActiveDataSource : public ActiveDataSourceHelper
-{
-    Reference< XOutputStream > mxStream;
-
-public:
-
-    // Methods
-    virtual void SAL_CALL setOutputStream( const Reference< XOutputStream >& aStream )
-        throw(RuntimeException);
-    virtual Reference< XOutputStream > SAL_CALL getOutputStream()
-        throw(RuntimeException);
-};
-
-void OActiveDataSource::setOutputStream( const Reference< XOutputStream >& aStream )
-    throw(RuntimeException)
-{
-    mxStream = aStream;
-}
-
-Reference< XOutputStream > OActiveDataSource::getOutputStream()
-    throw(RuntimeException)
-{
-    return mxStream;
-}
-
-
-//===========================================================================
 // Implementation XActiveDataStreamer
 
 typedef cppu::WeakImplHelper1< XActiveDataStreamer > ActiveDataStreamerHelper;
