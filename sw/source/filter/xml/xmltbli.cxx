@@ -1877,8 +1877,8 @@ SwTableBox *SwXMLTableContext::NewTableBox( const SwStartNode *pStNd,
     if( pBox1 &&
         pBox1->GetSttNd() == pStNd )
     {
-        // wenn der StartNode dem StartNode der initial angelegten Box
-        // entspricht nehmen wir diese Box
+        // if the StartNode is equal to the StartNode of the initially
+        // created box, we use this box
         pBox = pBox1;
         pBox->SetUpper( pUpper );
         pBox1 = 0;
@@ -2057,9 +2057,8 @@ SwTableBox *SwXMLTableContext::MakeTableBox(
     }
     else
     {
-        // und die ist eine Tabelle: dann bauen wir eine neue
-        // Box und fuegen die Zeilen der Tabelle in die Zeilen
-        // der Box ein
+        // and it is a table: therefore we build a new box and
+        // put the rows of the table into the rows of the box
         pBox = new SwTableBox( pBoxFmt, 0, pUpper );
         pCell->GetSubTable()->MakeTable( pBox, nColWidth );
     }
@@ -2251,10 +2250,9 @@ SwTableLine *SwXMLTableContext::MakeTableLine( SwTableBox *pUpper,
         {
             OSL_ENSURE( nCol < nRightCol, "Zu weit gelaufen" );
 
-            // Kann hinter der aktuellen HTML-Tabellen-Spalte gesplittet
-            // werden? Wenn ja, koennte der enstehende Bereich auch noch
-            // in Zeilen zerlegt werden, wenn man die naechste Spalte
-            // hinzunimmt?
+            // Can be split after current HTML table column?
+            // If yes, can the created region still be split to
+            // rows if the next column is added to it?
             sal_Bool bSplit = sal_True;
             sal_Bool bHoriSplitMayContinue = sal_False;
             sal_Bool bHoriSplitPossible = sal_False;
