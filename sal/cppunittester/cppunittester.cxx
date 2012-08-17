@@ -53,6 +53,7 @@
 #include "cppunit/TestRunner.h"
 #include "cppunit/extensions/TestFactoryRegistry.h"
 #include "cppunit/plugin/PlugInManager.h"
+#include "cppunit/plugin/DynamicLibraryManagerException.h"
 #include "cppunit/portability/Stream.h"
 
 #include "boost/noncopyable.hpp"
@@ -137,7 +138,12 @@ public:
         // we statically link to the app executable.
 #else
         CppUnit::PlugInManager manager;
-        manager.load(testlib, args);
+        try {
+            manager.load(testlib, args);
+        } catch (const CppUnit::DynamicLibraryManagerException &e) {
+            fprintf(stderr, "%s\n", e.what());
+            return false;
+        }
 #endif
         CppUnit::TestRunner runner;
         runner.addTest(CppUnit::TestFactoryRegistry::getRegistry().makeTest());
