@@ -84,7 +84,7 @@ public class UnoApp {
             SystemUtil.sleep(2);
         }
 
-        throw new RuntimeException("OpenOffice can be connected!");
+        throw new RuntimeException("OpenOffice can't be connected!");
     }
 
     private Timer timer = new Timer(true);
@@ -143,6 +143,12 @@ public class UnoApp {
     public XComponent loadDocument(String file) throws Exception {
         XComponentLoader componentLoader = (XComponentLoader) UnoRuntime.queryInterface(XComponentLoader.class, desktop);
         return componentLoader.loadComponentFromURL(FileUtil.getUrl(file), "_blank", 0, new PropertyValue[0]);
+    }
+
+
+    public XComponent loadDocumentFromURL(String url) throws Exception {
+        XComponentLoader componentLoader = (XComponentLoader) UnoRuntime.queryInterface(XComponentLoader.class, desktop);
+        return componentLoader.loadComponentFromURL(url, "_blank", 0, new PropertyValue[0]);
     }
 
     public XComponent newDocument(String type) throws Exception {
