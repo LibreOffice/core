@@ -41,7 +41,7 @@ class WindowHash
 {
 public:
     size_t operator()(const ::Window* argument) const
-    { return reinterpret_cast<unsigned long>(argument); }
+    { return reinterpret_cast<uintptr_t>(argument); }
 };
 
 class EventDescriptor
