@@ -180,11 +180,11 @@ void OGLTransitionImpl::displaySlide( double nTime, ::sal_Int32 glSlideTex, std:
         glTranslated( 0, 2 - surfaceLevel, 0 );
 
         glCullFace(GL_FRONT);
-    for(unsigned int i(0); i < primitives.size(); ++i)
-        primitives[i].display(nTime, SlideWidthScale, SlideHeightScale);
+        for(unsigned int i(0); i < primitives.size(); ++i)
+            primitives[i].display(nTime, SlideWidthScale, SlideHeightScale);
         glCullFace(GL_BACK);
 
-    slideShadow( nTime, primitives[0], SlideWidthScale, SlideHeightScale );
+        slideShadow( nTime, primitives[0], SlideWidthScale, SlideHeightScale );
 
         glPopMatrix();
     }
@@ -464,11 +464,11 @@ void OGLTransitionImpl::displaySlidesRochade( double nTime, ::sal_Int32 glLeavin
     glEnable(GL_TEXTURE_2D);
 
     if( nTime > .5) {
-    displaySlide( nTime, glLeavingSlideTex, maLeavingSlidePrimitives, SlideWidthScale, SlideHeightScale );
-    displaySlide( nTime, glEnteringSlideTex, maEnteringSlidePrimitives, SlideWidthScale, SlideHeightScale );
+        displaySlide( nTime, glLeavingSlideTex, maLeavingSlidePrimitives, SlideWidthScale, SlideHeightScale );
+        displaySlide( nTime, glEnteringSlideTex, maEnteringSlidePrimitives, SlideWidthScale, SlideHeightScale );
     } else {
-    displaySlide( nTime, glEnteringSlideTex, maEnteringSlidePrimitives, SlideWidthScale, SlideHeightScale );
-    displaySlide( nTime, glLeavingSlideTex, maLeavingSlidePrimitives, SlideWidthScale, SlideHeightScale );
+        displaySlide( nTime, glEnteringSlideTex, maEnteringSlidePrimitives, SlideWidthScale, SlideHeightScale );
+        displaySlide( nTime, glLeavingSlideTex, maLeavingSlidePrimitives, SlideWidthScale, SlideHeightScale );
     }
 }
 
@@ -1044,11 +1044,11 @@ void OGLTransitionImpl::displaySlidesFadeThroughBlack( double nTime, ::sal_Int32
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
     if( nTime < 0.5 ) {
-    glColor4f( 1, 1, 1, 1 - nTime*2 );
-    displaySlide( nTime, glLeavingSlideTex, maLeavingSlidePrimitives, SlideWidthScale, SlideHeightScale );
+        glColor4f( 1, 1, 1, 1 - nTime*2 );
+        displaySlide( nTime, glLeavingSlideTex, maLeavingSlidePrimitives, SlideWidthScale, SlideHeightScale );
     } else {
-    glColor4f( 1, 1, 1, (nTime - 0.5)*2 );
-    displaySlide( nTime, glEnteringSlideTex, maEnteringSlidePrimitives, SlideWidthScale, SlideHeightScale );
+        glColor4f( 1, 1, 1, (nTime - 0.5)*2 );
+        displaySlide( nTime, glEnteringSlideTex, maEnteringSlidePrimitives, SlideWidthScale, SlideHeightScale );
     }
     glDisable(GL_BLEND);
     glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);

@@ -747,82 +747,82 @@ void OGLTransitionerImpl::setSlides( const uno::Reference< rendering::XBitmap >&
 #if defined( GLX_VERSION_1_3 ) && defined( GLX_EXT_texture_from_pixmap )
 
     if( mnGLXVersion >= 1.2999 && mbTextureFromPixmap && xLeavingSet.is() && xEnteringSet.is() && mbHasTFPVisual ) {
-    Sequence< Any > leaveArgs;
-    Sequence< Any > enterArgs;
-    if( (xLeavingSet->getFastPropertyValue( 1 ) >>= leaveArgs) &&
-        (xEnteringSet->getFastPropertyValue( 1 ) >>= enterArgs) ) {
-        OSL_TRACE ("pixmaps available");
+        Sequence< Any > leaveArgs;
+        Sequence< Any > enterArgs;
+        if( (xLeavingSet->getFastPropertyValue( 1 ) >>= leaveArgs) &&
+            (xEnteringSet->getFastPropertyValue( 1 ) >>= enterArgs) ) {
+            OSL_TRACE ("pixmaps available");
 
-        sal_Int32 depth(0);
+            sal_Int32 depth(0);
 
-        leaveArgs[0] >>= mbFreeLeavingPixmap;
-        enterArgs[0] >>= mbFreeEnteringPixmap;
-        leaveArgs[1] >>= maLeavingPixmap;
-        enterArgs[1] >>= maEnteringPixmap;
-        leaveArgs[2] >>= depth;
+            leaveArgs[0] >>= mbFreeLeavingPixmap;
+            enterArgs[0] >>= mbFreeEnteringPixmap;
+            leaveArgs[1] >>= maLeavingPixmap;
+            enterArgs[1] >>= maEnteringPixmap;
+            leaveArgs[2] >>= depth;
 
-        int pixmapAttribs[] = { GLX_TEXTURE_TARGET_EXT, GLX_TEXTURE_2D_EXT,
-                    GLX_TEXTURE_FORMAT_EXT, GLX_TEXTURE_FORMAT_RGB_EXT,
-                    GLX_MIPMAP_TEXTURE_EXT, True,
-                    None };
+            int pixmapAttribs[] = { GLX_TEXTURE_TARGET_EXT, GLX_TEXTURE_2D_EXT,
+                        GLX_TEXTURE_FORMAT_EXT, GLX_TEXTURE_FORMAT_RGB_EXT,
+                        GLX_MIPMAP_TEXTURE_EXT, True,
+                        None };
 
 
-        // sync so that we possibly get an pending XError, before we set our handler.
-        // this way we will not miss any error from other code
-        unx::glXWaitGL();
-        XSync(GLWin.dpy, false);
+            // sync so that we possibly get an pending XError, before we set our handler.
+            // this way we will not miss any error from other code
+            unx::glXWaitGL();
+            XSync(GLWin.dpy, false);
 
-        int (*oldHandler)(unx::Display* /*dpy*/, unx::XErrorEvent* /*evnt*/);
+            int (*oldHandler)(unx::Display* /*dpy*/, unx::XErrorEvent* /*evnt*/);
 
-        // replace error handler temporarily
-        oldHandler = unx::XSetErrorHandler( oglErrorHandler );
+            // replace error handler temporarily
+            oldHandler = unx::XSetErrorHandler( oglErrorHandler );
 
-        errorTriggered = false;
-        LeavingPixmap = glXCreatePixmap( GLWin.dpy, GLWin.fbc, maLeavingPixmap, pixmapAttribs );
+            errorTriggered = false;
+            LeavingPixmap = glXCreatePixmap( GLWin.dpy, GLWin.fbc, maLeavingPixmap, pixmapAttribs );
 
-        // sync so that we possibly get an XError
-        unx::glXWaitGL();
-        XSync(GLWin.dpy, false);
+            // sync so that we possibly get an XError
+            unx::glXWaitGL();
+            XSync(GLWin.dpy, false);
 
-        if( !errorTriggered )
-        mbUseLeavingPixmap = true;
-        else {
-        OSL_TRACE("XError triggered");
-        if( mbFreeLeavingPixmap ) {
-            unx::XFreePixmap( GLWin.dpy, maLeavingPixmap );
-            mbFreeLeavingPixmap = false;
+            if( !errorTriggered )
+                mbUseLeavingPixmap = true;
+            else {
+                OSL_TRACE("XError triggered");
+                if( mbFreeLeavingPixmap ) {
+                    unx::XFreePixmap( GLWin.dpy, maLeavingPixmap );
+                    mbFreeLeavingPixmap = false;
+                }
+                errorTriggered = false;
+            }
+
+            EnteringPixmap = glXCreatePixmap( GLWin.dpy, GLWin.fbc, maEnteringPixmap, pixmapAttribs );
+
+            // sync so that we possibly get an XError
+            unx::glXWaitGL();
+            XSync(GLWin.dpy, false);
+
+            OSL_TRACE("created glx pixmap %p and %p depth: %d", LeavingPixmap, EnteringPixmap, depth);
+            if( !errorTriggered )
+                mbUseEnteringPixmap = true;
+            else {
+                OSL_TRACE("XError triggered");
+                if( mbFreeEnteringPixmap ) {
+                    unx::XFreePixmap( GLWin.dpy, maEnteringPixmap );
+                    mbFreeEnteringPixmap = false;
+                }
+            }
+
+            // restore the error handler
+            unx::XSetErrorHandler( oldHandler );
         }
-        errorTriggered = false;
-        }
-
-        EnteringPixmap = glXCreatePixmap( GLWin.dpy, GLWin.fbc, maEnteringPixmap, pixmapAttribs );
-
-        // sync so that we possibly get an XError
-        unx::glXWaitGL();
-        XSync(GLWin.dpy, false);
-
-        OSL_TRACE("created glx pixmap %p and %p depth: %d", LeavingPixmap, EnteringPixmap, depth);
-        if( !errorTriggered )
-        mbUseEnteringPixmap = true;
-        else {
-        OSL_TRACE("XError triggered");
-        if( mbFreeEnteringPixmap ) {
-            unx::XFreePixmap( GLWin.dpy, maEnteringPixmap );
-            mbFreeEnteringPixmap = false;
-        }
-        }
-
-        // restore the error handler
-        unx::XSetErrorHandler( oldHandler );
-    }
     }
 
 #endif
 #endif
     if( !mbUseLeavingPixmap )
-    LeavingBytes = mxLeavingBitmap->getData(SlideBitmapLayout,SlideRect);
+        LeavingBytes = mxLeavingBitmap->getData(SlideBitmapLayout,SlideRect);
     if( !mbUseEnteringPixmap )
-    EnteringBytes = mxEnteringBitmap->getData(SlideBitmapLayout,SlideRect);
+        EnteringBytes = mxEnteringBitmap->getData(SlideBitmapLayout,SlideRect);
 
 // TODO
 #ifdef UNX
