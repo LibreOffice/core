@@ -108,17 +108,6 @@ void Layout::Deactivating ()
     pChild = 0;
 }
 
-void Layout::ExecuteGlobal (SfxRequest&)
-{ }
-
-void Layout::GetState (SfxItemSet&, unsigned /*nWhich*/)
-{ }
-
-void Layout::UpdateDebug (bool bBasicStopped)
-{
-    static_cast<void>(bBasicStopped);
-}
-
 // virtual
 void Layout::DataChanged (DataChangedEvent const& rDCEvt)
 {
@@ -144,16 +133,6 @@ void Layout::DataChanged (DataChangedEvent const& rDCEvt)
             Invalidate();
     }
 }
-
-// virtual
-void Layout::ConfigurationChanged( utl::ConfigurationBroadcaster*, sal_uInt32 )
-{ }
-
-// This virtual function is called the first time when the Layout has nonzero size.
-// The overrider can initialize the docking windows.
-void Layout::OnFirstSize (int, int)
-{ }
-
 
 //
 // SplittedSide

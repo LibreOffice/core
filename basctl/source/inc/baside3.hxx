@@ -127,7 +127,7 @@ public:
     virtual void Activating (IDEBaseWindow&);
     virtual void Deactivating ();
     virtual void GetState (SfxItemSet&, unsigned nWhich);
-
+    virtual void UpdateDebug (bool){};
 protected:
     // Layout:
     virtual void OnFirstSize (int nWidth, int nHeight);

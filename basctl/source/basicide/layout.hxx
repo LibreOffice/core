@@ -40,7 +40,7 @@ namespace basctl
 // Layout -- the common base of ModulLayout and DialogLayout.
 // Handles the splitting lines and the dockable windows.
 //
-class Layout: public Window, public utl::ConfigurationListener
+class Layout: public Window
 {
 public:
     void DockaWindow (DockingWindow*);
@@ -48,9 +48,8 @@ public:
 
     virtual void Activating (IDEBaseWindow&);
     virtual void Deactivating ();
-    virtual void ExecuteGlobal (SfxRequest&);
-    virtual void GetState (SfxItemSet&, unsigned nWhich);
-    virtual void UpdateDebug (bool bBasicStopped = false);
+    virtual void GetState (SfxItemSet&, unsigned nWhich) = 0;
+    virtual void UpdateDebug (bool bBasicStopped ) = 0;
 
 protected:
     Layout (Window* pParent);
@@ -63,10 +62,8 @@ protected:
     // Window:
     virtual void Resize ();
     virtual void DataChanged (DataChangedEvent const& rDCEvt);
-    // ConfigurationListener:
-    virtual void ConfigurationChanged (utl::ConfigurationBroadcaster*, sal_uInt32);
     // new:
-    virtual void OnFirstSize (int nWidth, int nHeight);
+    virtual void OnFirstSize (int nWidth, int nHeight) = 0;
 
 private:
     // the main child window (either ModulWindow or DialogWindow)

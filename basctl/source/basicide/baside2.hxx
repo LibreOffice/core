@@ -435,7 +435,7 @@ public:
     virtual void Activating (IDEBaseWindow&);
     virtual void Deactivating ();
     virtual void GetState (SfxItemSet&, unsigned nWhich);
-    virtual void UpdateDebug (bool bBasicStopped = false);
+    virtual void UpdateDebug (bool bBasicStopped);
 public:
     void BasicAddWatch (String const&);
     void BasicRemoveWatch ();

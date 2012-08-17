@@ -691,7 +691,7 @@ long ModulWindow::BasicErrorHdl( StarBASIC * pBasic )
         aErrorTextPrefixBuf.append(IDE_RESSTR(RID_STR_RUNTIMEERROR));
         aErrorTextPrefixBuf.append(StarBASIC::GetVBErrorCode(pBasic->GetErrorCode()));
         aErrorTextPrefixBuf.append(' ');
-        rLayout.UpdateDebug();
+        rLayout.UpdateDebug(false);
     }
     ::rtl::OUString aErrorTextPrefix(aErrorTextPrefixBuf.makeStringAndClear());
     // if other basic, the IDE should try to display the correct module
@@ -739,7 +739,7 @@ long ModulWindow::BasicBreakHdl( StarBASIC* pBasic )
     GetEditView()->SetSelection( TextSelection( TextPaM( nErrorLine, 0 ), TextPaM( nErrorLine, 0 ) ) );
     aXEditorWindow.GetBrkWindow().SetMarkerPos( nErrorLine );
 
-    rLayout.UpdateDebug();
+    rLayout.UpdateDebug(false);
 
     aStatus.bIsInReschedule = true;
     aStatus.bIsRunning = true;

@@ -699,8 +699,6 @@ void BasicIDEShell::ExecuteGlobal( SfxRequest& rReq )
         break;
 
         default:
-            if (pLayout)
-                pLayout->ExecuteGlobal(rReq);
             if (pCurWin)
                 pCurWin->ExecuteGlobal(rReq);
             break;
