@@ -234,7 +234,7 @@ test_fontconfig=yes
 test_cairo=yes
 
 # Default values, as such probably valid just for Linux, set
-# differently below just for Mac OS X,but at least better than
+# differently below just for Mac OSX,but at least better than
 # hardcoding these as we used to do. Much of this is duplicated also
 # in solenv for old build system and for gbuild, ideally we should
 # perhaps define stuff like this only here in configure.in?
