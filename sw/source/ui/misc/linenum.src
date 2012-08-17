@@ -33,7 +33,7 @@
 #include "linenum.hrc"
 #include "helpid.h"
 
-TabPage TP_LINENUMBERING
+ModalDialog DLG_LINENUMBERING
 {
     HelpID = HID_LINENUMBERING ;
     SVLook = TRUE ;
@@ -234,6 +234,23 @@ TabPage TP_LINENUMBERING
         Pos = MAP_APPFONT ( 133 , 110 ) ;
         Size = MAP_APPFONT ( 121 , 8 ) ;
         Text [ en-US ] = "Count" ;
+    };
+    OKButton PB_OK
+    {
+        Pos = MAP_APPFONT ( 54 , 170 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        DefButton = TRUE ;
+    };
+    CancelButton PB_CANCEL
+    {
+        Pos = MAP_APPFONT ( 107 , 170 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        DefButton = TRUE ;
+    };
+    HelpButton PB_HELP
+    {
+        Pos = MAP_APPFONT ( 160 , 170 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
     };
     Text [ en-US ] = "Line Numbering" ;
 };

@@ -46,36 +46,8 @@
 #include <IDocumentStylePoolAccess.hxx>
 
 SwLineNumberingDlg::SwLineNumberingDlg(SwView *pVw) :
-    SfxSingleTabDialog(&pVw->GetViewFrame()->GetWindow(), 0, 0),
-    pSh(pVw->GetWrtShellPtr())
-{
-    // create TabPage
-    SetTabPage(SwLineNumberingPage::Create(this, *(SfxItemSet*)0));
-
-    GetOKButton()->SetClickHdl(LINK(this, SwLineNumberingDlg, OKHdl));
-}
-
-SwLineNumberingDlg::~SwLineNumberingDlg()
-{
-}
-
-IMPL_LINK_NOARG(SwLineNumberingDlg, OKHdl)
-{
-    if (GetOKButton()->IsEnabled())
-    {
-        SfxTabPage* pCurPage = GetTabPage();
-        if( pCurPage )
-            pCurPage->FillItemSet(*(SfxItemSet*)0);
-
-        EndDialog( RET_OK );
-    }
-
-    return 0;
-}
-
-SwLineNumberingPage::SwLineNumberingPage( Window* pParent,
-                                                    const SfxItemSet& rSet )
-    : SfxTabPage(pParent, SW_RES(TP_LINENUMBERING), rSet),
+    SfxModalDialog(&pVw->GetViewFrame()->GetWindow(), SW_RES(DLG_LINENUMBERING)),
+    pSh(pVw->GetWrtShellPtr()),
     aNumberingOnCB      ( this, SW_RES( CB_NUMBERING_ON )),
     aDisplayFL          ( this, SW_RES( FL_DISPLAY )),
     aCharStyleFT        ( this, SW_RES( FT_CHAR_STYLE )),
@@ -98,8 +70,10 @@ SwLineNumberingPage::SwLineNumberingPage( Window* pParent,
     aCountFL            ( this, SW_RES( FL_COUNT )),
     aCountEmptyLinesCB  ( this, SW_RES( CB_COUNT_EMPTYLINES )),
     aCountFrameLinesCB  ( this, SW_RES( CB_COUNT_FRAMELINES )),
-    aRestartEachPageCB  ( this, SW_RES( CB_RESTART_PAGE ))
-
+    aRestartEachPageCB  ( this, SW_RES( CB_RESTART_PAGE )),
+    aOkPB               ( this, SW_RES( PB_OK )),
+    aCancelPB           ( this, SW_RES( PB_CANCEL )),
+    aHelpPB             ( this, SW_RES( PB_HELP ))
 {
     String sIntervalName = aDivIntervalFT.GetAccessibleName();
     sIntervalName += rtl::OUString("(");
@@ -113,23 +87,10 @@ SwLineNumberingPage::SwLineNumberingPage( Window* pParent,
     aNumIntervalNF.SetAccessibleName(sIntervalName);
 
     FreeResource();
-    SwLineNumberingDlg *pDlg = (SwLineNumberingDlg *)GetParent();
-    pSh = pDlg->GetWrtShell();
+
     // char styles
     ::FillCharStyleListBox(aCharStyleLB, pSh->GetView().GetDocShell());
-}
 
-SwLineNumberingPage::~SwLineNumberingPage()
-{
-}
-
-SfxTabPage* SwLineNumberingPage::Create( Window* pParent, const SfxItemSet& rSet )
-{
-    return new SwLineNumberingPage( pParent, rSet );
-}
-
-void SwLineNumberingPage::Reset( const SfxItemSet&  )
-{
     const SwLineNumberInfo &rInf = pSh->GetLineNumberInfo();
     IDocumentStylePoolAccess* pIDSPA = pSh->getIDocumentStylePoolAccess();
 
@@ -178,60 +139,19 @@ void SwLineNumberingPage::Reset( const SfxItemSet&  )
 
     aNumberingOnCB.Check(rInf.IsPaintLineNumbers());
 
-    aNumberingOnCB.SetClickHdl(LINK(this, SwLineNumberingPage, LineOnOffHdl));
-    aDivisorED.SetModifyHdl(LINK(this, SwLineNumberingPage, ModifyHdl));
+    aNumberingOnCB.SetClickHdl(LINK(this, SwLineNumberingDlg, LineOnOffHdl));
+    aDivisorED.SetModifyHdl(LINK(this, SwLineNumberingDlg, ModifyHdl));
     ModifyHdl();
     LineOnOffHdl();
+
+    aOkPB.SetClickHdl(LINK(this, SwLineNumberingDlg, OKHdl));
 }
 
-/*--------------------------------------------------------------------
-    Description: modify
- --------------------------------------------------------------------*/
-IMPL_LINK_NOARG(SwLineNumberingPage, ModifyHdl)
+SwLineNumberingDlg::~SwLineNumberingDlg()
 {
-    sal_Bool bHasValue = aDivisorED.GetText().Len() != 0;
-
-    aDivIntervalFT.Enable(bHasValue);
-    aDivIntervalNF.Enable(bHasValue);
-    aDivRowsFT.Enable(bHasValue);
-
-    return 0;
 }
 
-/*--------------------------------------------------------------------
-    Description: On/Off
- --------------------------------------------------------------------*/
-IMPL_LINK_NOARG(SwLineNumberingPage, LineOnOffHdl)
-{
-    sal_Bool bEnable = aNumberingOnCB.IsChecked();
-
-    aCharStyleFT.Enable(bEnable);
-    aCharStyleLB.Enable(bEnable);
-    aFormatFT.Enable(bEnable);
-    aFormatLB.Enable(bEnable);
-    aPosFT.Enable(bEnable);
-    aPosLB.Enable(bEnable);
-    aOffsetFT.Enable(bEnable);
-    aOffsetMF.Enable(bEnable);
-    aNumIntervalFT.Enable(bEnable);
-    aNumIntervalNF.Enable(bEnable);
-    aNumRowsFT.Enable(bEnable);
-    aDisplayFL.Enable(bEnable);
-    aDivisorFT.Enable(bEnable);
-    aDivisorED.Enable(bEnable);
-    aDivIntervalFT.Enable(bEnable);
-    aDivIntervalNF.Enable(bEnable);
-    aDivRowsFT.Enable(bEnable);
-    aDivisorFL.Enable(bEnable);
-    aCountEmptyLinesCB.Enable(bEnable);
-    aCountFrameLinesCB.Enable(bEnable);
-    aRestartEachPageCB.Enable(bEnable);
-    aCountFL.Enable(bEnable);
-
-    return 0;
-}
-
-sal_Bool SwLineNumberingPage::FillItemSet( SfxItemSet& )
+IMPL_LINK_NOARG(SwLineNumberingDlg, OKHdl)
 {
     SwLineNumberInfo aInf(pSh->GetLineNumberInfo());
 
@@ -281,7 +201,56 @@ sal_Bool SwLineNumberingPage::FillItemSet( SfxItemSet& )
 
     pSh->SetLineNumberInfo(aInf);
 
-    return sal_False;
+    EndDialog( RET_OK );
+
+    return 0;
+}
+
+/*--------------------------------------------------------------------
+    Description: modify
+ --------------------------------------------------------------------*/
+IMPL_LINK_NOARG(SwLineNumberingDlg, ModifyHdl)
+{
+    sal_Bool bHasValue = aDivisorED.GetText().Len() != 0;
+
+    aDivIntervalFT.Enable(bHasValue);
+    aDivIntervalNF.Enable(bHasValue);
+    aDivRowsFT.Enable(bHasValue);
+
+    return 0;
+}
+
+/*--------------------------------------------------------------------
+    Description: On/Off
+ --------------------------------------------------------------------*/
+IMPL_LINK_NOARG(SwLineNumberingDlg, LineOnOffHdl)
+{
+    sal_Bool bEnable = aNumberingOnCB.IsChecked();
+
+    aCharStyleFT.Enable(bEnable);
+    aCharStyleLB.Enable(bEnable);
+    aFormatFT.Enable(bEnable);
+    aFormatLB.Enable(bEnable);
+    aPosFT.Enable(bEnable);
+    aPosLB.Enable(bEnable);
+    aOffsetFT.Enable(bEnable);
+    aOffsetMF.Enable(bEnable);
+    aNumIntervalFT.Enable(bEnable);
+    aNumIntervalNF.Enable(bEnable);
+    aNumRowsFT.Enable(bEnable);
+    aDisplayFL.Enable(bEnable);
+    aDivisorFT.Enable(bEnable);
+    aDivisorED.Enable(bEnable);
+    aDivIntervalFT.Enable(bEnable);
+    aDivIntervalNF.Enable(bEnable);
+    aDivRowsFT.Enable(bEnable);
+    aDivisorFL.Enable(bEnable);
+    aCountEmptyLinesCB.Enable(bEnable);
+    aCountFrameLinesCB.Enable(bEnable);
+    aRestartEachPageCB.Enable(bEnable);
+    aCountFL.Enable(bEnable);
+
+    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

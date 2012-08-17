@@ -29,41 +29,23 @@
 #define _SWLINENUM_HXX
 
 #include <sfx2/basedlgs.hxx>
-#include <sfx2/tabdlg.hxx>
-#include <vcl/fixed.hxx>
+#include <vcl/button.hxx>
 #include <vcl/field.hxx>
+#include <vcl/fixed.hxx>
+#include <vcl/lstbox.hxx>
 #include <numberingtypelistbox.hxx>
 
-#include <vcl/lstbox.hxx>
-
 class Window;
-class SfxItemSet;
 class SwView;
 class SwWrtShell;
 
-/*--------------------------------------------------------------------
-   Description: SingleTabDialog
- --------------------------------------------------------------------*/
-class SwLineNumberingDlg : public SfxSingleTabDialog
+class SwLineNumberingDlg : public SfxModalDialog
 {
+private:
     SwWrtShell* pSh;
 
-    DECL_LINK(OKHdl, void *);
-
-public:
-    inline SwWrtShell* GetWrtShell() const { return pSh; }
-
-     SwLineNumberingDlg(SwView *pVw);
-    ~SwLineNumberingDlg();
-};
-
-/*--------------------------------------------------------------------
-   Description: TabPage
- --------------------------------------------------------------------*/
-class SwLineNumberingPage : public SfxTabPage
-{
     CheckBox        aNumberingOnCB;
-    FixedLine        aDisplayFL;
+    FixedLine       aDisplayFL;
     FixedText       aCharStyleFT;
     ListBox         aCharStyleLB;
     FixedText       aFormatFT;
@@ -75,31 +57,30 @@ class SwLineNumberingPage : public SfxTabPage
     FixedText       aNumIntervalFT;
     NumericField    aNumIntervalNF;
     FixedText       aNumRowsFT;
-    FixedLine        aDivisorFL;
+    FixedLine       aDivisorFL;
     FixedText       aDivisorFT;
     Edit            aDivisorED;
     FixedText       aDivIntervalFT;
     NumericField    aDivIntervalNF;
     FixedText       aDivRowsFT;
-    FixedLine        aCountFL;
+    FixedLine       aCountFL;
     CheckBox        aCountEmptyLinesCB;
     CheckBox        aCountFrameLinesCB;
     CheckBox        aRestartEachPageCB;
 
-    SwWrtShell*     pSh;
+    OKButton        aOkPB;
+    CancelButton    aCancelPB;
+    HelpButton      aHelpPB;
 
-    SwLineNumberingPage( Window* pParent, const SfxItemSet& rSet );
-    ~SwLineNumberingPage();
-
+    DECL_LINK(OKHdl, void *);
     DECL_LINK(LineOnOffHdl, void * = 0);
     DECL_LINK(ModifyHdl, void * = 0);
 
 public:
+    SwWrtShell* GetWrtShell() const { return pSh; }
 
-    static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rAttrSet );
-
-    virtual sal_Bool        FillItemSet( SfxItemSet& rSet );
-    virtual void        Reset( const SfxItemSet& rSet );
+     SwLineNumberingDlg(SwView *pVw);
+    ~SwLineNumberingDlg();
 };
 
 #endif

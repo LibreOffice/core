@@ -31,9 +31,9 @@
 #define _SWTITLEPAGE_HXX
 
 #include <sfx2/basedlgs.hxx>
-#include <sfx2/tabdlg.hxx>
-#include <vcl/fixed.hxx>
+#include <vcl/button.hxx>
 #include <vcl/field.hxx>
+#include <vcl/fixed.hxx>
 #include <vcl/lstbox.hxx>
 #include <numberingtypelistbox.hxx>
 

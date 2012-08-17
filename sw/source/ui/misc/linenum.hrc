@@ -38,4 +38,6 @@
 #define CB_COUNT_FRAMELINES 21
 #define FL_COUNT            22
 #define CB_RESTART_PAGE     23
-
+#define PB_OK               24
+#define PB_CANCEL           25
+#define PB_HELP             26
