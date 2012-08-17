@@ -1,0 +1,15 @@
+--- misc/cppunit-1.13.0/src/cppunit/UnixDynamicLibraryManager.cpp
++++ misc/build/cppunit-1.13.0/src/cppunit/UnixDynamicLibraryManager.cpp
+@@ -34,7 +34,11 @@
+ std::string 
+ DynamicLibraryManager::getLastErrorDetail() const
+ {
+-  return "";
++  const char *last_dlerror = ::dlerror();
++  if (last_dlerror != NULL)
++    return last_dlerror;
++  else
++    return "";
+ }
+ 
+ 

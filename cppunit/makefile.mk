@@ -32,7 +32,7 @@ TARGET = cppunit
 TARFILE_NAME=cppunit-1.13.0
 TARFILE_MD5=0c65c839854edd43d9294d1431a2b292
 
-PATCH_FILES = windows.patch
+PATCH_FILES = windows.patch unix.patch
 
 .IF "$(OS)" == "ANDROID"
 PATCH_FILES += android.patch
