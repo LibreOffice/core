@@ -21,6 +21,7 @@
 #ifndef _UNOTOOLS_TEXTSEARCH_HXX
 #define _UNOTOOLS_TEXTSEARCH_HXX
 #include <i18npool/lang.h>
+#include <rtl/ustring.hxx>
 #include <tools/string.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/lang/Locale.hpp>
@@ -75,6 +76,18 @@ public:
                     sal_Bool bCaseSens = sal_True,
                     sal_Bool bWrdOnly = sal_False,
                     sal_Bool bSrchInSel = sal_False );
+
+    // Wrapper to use OUString as parameter
+    SearchParam( const OUString &rText,
+                    SearchType eSrchType = SearchParam::SRCH_NORMAL,
+                    sal_Bool bCaseSens = sal_True,
+                    sal_Bool bWrdOnly = sal_False,
+                    sal_Bool bSrchInSel = sal_False )
+    {
+        String rText2(rText);
+        SearchParam( rText2, eSrchType, bCaseSens, bWrdOnly, bSrchInSel );
+    }
+
     SearchParam( const SearchParam& );
 
     const String&   GetSrchStr() const          { return sSrchStr; }
