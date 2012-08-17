@@ -21,6 +21,7 @@
 #include <com/sun/star/embed/XEncryptionProtectedSource2.hpp>
 #include <com/sun/star/embed/XTransactedObject.hpp>
 #include <com/sun/star/ucb/XSimpleFileAccess.hpp>
+#include <com/sun/star/ucb/SimpleFileAccess.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
@@ -34,6 +35,7 @@
 
 #include <ucbhelper/content.hxx>
 
+#include <comphelper/componentcontext.hxx>
 #include <comphelper/fileformat.h>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/documentconstants.hxx>
@@ -229,9 +231,8 @@ uno::Reference< io::XInputStream > OStorageHelper::GetInputStreamFromURL(
     if ( !xFactory.is() )
         throw uno::RuntimeException();
 
-    uno::Reference < ::com::sun::star::ucb::XSimpleFileAccess > xTempAccess(
-            xFactory->createInstance ( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ucb.SimpleFileAccess" )) ),
-            uno::UNO_QUERY );
+    uno::Reference < ucb::XSimpleFileAccess2 > xTempAccess(
+         ucb::SimpleFileAccess::create(comphelper::ComponentContext(xFactory).getUNOContext()) );
 
     if ( !xTempAccess.is() )
         throw uno::RuntimeException();

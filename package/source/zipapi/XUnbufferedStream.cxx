@@ -34,8 +34,8 @@
 
 #if 0
 // for debugging purposes here
-#include <com/sun/star/ucb/XSimpleFileAccess.hpp>
-#include <comphelper/processfactory.hxx>
+#include <com/sun/star/ucb/SimpleFileAccess.hpp>
+#include <comphelper/componentcontext.hxx>
 using namespace ::com::sun::star;
 #endif
 
@@ -305,8 +305,8 @@ sal_Int32 SAL_CALL XUnbufferedStream::readBytes( Sequence< sal_Int8 >& aData, sa
             {
                 if ( 0 )
                 {
-                    uno::Reference< lang::XMultiServiceFactory > xFactory = comphelper::getProcessServiceFactory();
-                    uno::Reference< ucb::XSimpleFileAccess > xAccess( xFactory->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ucb.SimpleFileAccess") ) ), uno::UNO_QUERY );
+                    uno::Reference< uno::XComponentContext > xContext = comphelper::getProcessComponentContext();
+                    uno::Reference< ucb::XSimpleFileAccess2 > xAccess( SimpleFileAccess::create(xContext) );
                     uno::Reference< io::XOutputStream > xOut = xAccess->openFileWrite(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "file:///d:/777/Encrypted/picture") ) );
                     xOut->writeBytes( aData );
                     xOut->closeOutput();

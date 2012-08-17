@@ -34,7 +34,7 @@
 #include <com/sun/star/awt/XVclWindowPeer.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
-#include <com/sun/star/ucb/XSimpleFileAccess.hpp>
+#include <com/sun/star/ucb/SimpleFileAccess.hpp>
 #include <com/sun/star/presentation/XPresentation.hpp>
 #include <com/sun/star/presentation/XPresentationSupplier.hpp>
 #include <vcl/window.hxx>
@@ -238,9 +238,9 @@ sal_Bool SoPluginInstance::LoadDocument(NSP_HWND hParent)
         }
 
         //create stream for the document
-        Reference< ::com::sun::star::ucb::XSimpleFileAccess > xSimpleFileAccess(
-            mxRemoteMSF->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ucb.SimpleFileAccess")) ),
-            uno::UNO_QUERY );
+        Reference< beans::XPropertySet > xFactoryProperties( mxRemoteMSF, uno::UNO_QUERY );
+        Reference< uno::XComponentContext > xContext( xFactoryProperties->getPropertyValue( "DefaultContext" ), UNO_QUERY );
+        Reference< ucb::XSimpleFileAccess2 > xSimpleFileAccess( ucb::SimpleFileAccess::create(xContext) );
         if(!xSimpleFileAccess.is())
         {
             debug_fprintf(NSP_LOG_APPEND, "can not create SimpleFileAccess to load URL\n");
