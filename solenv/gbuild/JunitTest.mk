@@ -137,6 +137,30 @@ $(call gb_JunitTest_get_target,$(1)) : T_CP := $$(T_CP)$$(gb_CLASSPATHSEP)$(call
 
 endef
 
+define gb_JunitTest_use_system_jar
+$(call gb_JavaClassSet_use_system_jar,$(call gb_JunitTest_get_classsetname,$(1)),$(2))
+
+endef
+
+define gb_JunitTest_use_system_jars
+$(foreach jar,$(2),$(call gb_JunitTest_use_system_jar,$(1),$(jar)))
+
+endef
+
+# this forwards to functions that must be defined in RepositoryExternal.mk.
+# $(eval $(call gb_JunitTest_use_external,jar,external))
+define gb_JunitTest_use_external
+$(if $(value gb_JunitTest__use_$(2)),\
+  $(call gb_JunitTest__use_$(2),$(1)),\
+  $(error gb_JunitTest_use_external: unknown external: $(2)))
+
+endef
+
+define gb_JunitTest_use_externals
+$(foreach external,$(2),$(call gb_JunitTest_use_external,$(1),$(external)))
+
+endef
+
 define gb_JunitTest_add_customtarget_dependency
 $$(call gb_Output_error,\
  gb_JunitTest_add_customtarget_dependency: use gb_Jar_use_customtarget instead.)
@@ -177,6 +201,10 @@ gb_JunitTest_add_sourcefiles :=
 gb_JunitTest_use_jar :=
 gb_JunitTest_use_jars :=
 gb_JunitTest_use_jar_classset :=
+gb_JunitTest_use_system_jar :=
+gb_JunitTest_use_system_jars :=
+gb_JunitTest_use_external :=
+gb_JunitTest_use_externals :=
 gb_JunitTest_use_customtarget :=
 gb_JunitTest_use_customtargets :=
 

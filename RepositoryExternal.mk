@@ -1973,6 +1973,9 @@ ifeq ($(SYSTEM_HSQLDB),YES)
 define gb_Jar__use_hsqldb
 $(call gb_Jar_use_system_jar,$(1),$(HSQLDB_JAR))
 endef
+define gb_JunitTest__use_hsqldb
+$(call gb_JunitTest_use_system_jar,$(1),$(HSQLDB_JAR))
+endef
 
 else # !SYSTEM_HSQLDB
 
@@ -1982,6 +1985,9 @@ $(eval $(call gb_Helper_register_jars,OOO,\
 
 define gb_Jar__use_hsqldb
 $(call gb_Jar_use_jar,$(1),hsqldb)
+endef
+define gb_JunitTest__use_hsqldb
+$(call gb_JunitTest_use_jar,$(1),hsqldb)
 endef
 
 endif # SYSTEM_HSQLDB

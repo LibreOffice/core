@@ -229,7 +229,7 @@ $$(call gb_Output_error,\
 endef
 
 define gb_Jar_use_system_jars
-$(call gb_JavaClassSet_use_system_jars,$(call gb_Jar_get_classsetname,$(1)),$(2))
+$(foreach jar,$(2),$(call gb_Jar_use_system_jar,$(1),$(jar)))
 
 endef
 

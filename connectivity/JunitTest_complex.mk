@@ -32,7 +32,6 @@ $(eval $(call gb_JunitTest_set_defs,connectivity_complex,\
 	-Dorg.openoffice.test.arg.sce=$(SRCDIR)/connectivity/qa/scenearios.sce \
 ))
 
-# TODO: add use_externals to JunitTest
 $(eval $(call gb_JunitTest_use_jars,connectivity_complex,\
 	jurt \
 	OOoRunner \
@@ -41,13 +40,9 @@ $(eval $(call gb_JunitTest_use_jars,connectivity_complex,\
 	unoil \
 ))
 
-ifeq ($(SYSTEM_HSQLDB),YES)
-$(eval $(call gb_JavaClassSet_use_system_jar,$(call gb_JunitTest_get_classsetname,connectivity_complex),$(HSQLDB_JAR)))
-else
-$(eval $(call gb_JunitTest_use_jars,connectivity_complex,\
+$(eval $(call gb_JunitTest_use_externals,connectivity_complex,\
 	hsqldb \
 ))
-endif
 
 $(eval $(call gb_JunitTest_add_classes,connectivity_complex,\
 	org.openoffice.test.UnoApiTest \
