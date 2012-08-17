@@ -26,9 +26,12 @@
 #include <cppuhelper/implbase3.hxx>
 
 class Window;
-class DialogWindow;
 class DlgEdObj;
 class VCLExternalSolarLock;
+namespace basctl
+{
+    class DialogWindow;
+}
 
 namespace utl {
 class AccessibleStateSetHelper;
@@ -52,7 +55,7 @@ class AccessibleDialogControlShape :    public AccessibleExtendedComponentHelper
 
 private:
     VCLExternalSolarLock*   m_pExternalLock;
-    DialogWindow*           m_pDialogWindow;
+    basctl::DialogWindow*   m_pDialogWindow;
     DlgEdObj*               m_pDlgEdObj;
     bool                    m_bFocused;
     bool                    m_bSelected;
@@ -83,7 +86,7 @@ protected:
     virtual void SAL_CALL   disposing();
 
 public:
-    AccessibleDialogControlShape( DialogWindow* pDialogWindow, DlgEdObj* pDlgEdObj );
+    AccessibleDialogControlShape (basctl::DialogWindow*, DlgEdObj*);
     virtual ~AccessibleDialogControlShape();
 
     // XInterface

@@ -45,7 +45,7 @@ using namespace ::comphelper;
 // class AccessibleDialogControlShape
 // -----------------------------------------------------------------------------
 
-AccessibleDialogControlShape::AccessibleDialogControlShape( DialogWindow* pDialogWindow, DlgEdObj* pDlgEdObj )
+AccessibleDialogControlShape::AccessibleDialogControlShape (basctl::DialogWindow* pDialogWindow, DlgEdObj* pDlgEdObj)
     :AccessibleExtendedComponentHelper_BASE( new VCLExternalSolarLock() )
     ,m_pDialogWindow( pDialogWindow )
     ,m_pDlgEdObj( pDlgEdObj )

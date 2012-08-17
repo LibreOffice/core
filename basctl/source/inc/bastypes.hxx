@@ -16,11 +16,12 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _BASTYPES_HXX
-#define _BASTYPES_HXX
+#ifndef BASCTL_BASTYPES_HXX
+#define BASCTL_BASTYPES_HXX
 
 #include "scriptdocument.hxx"
 
+#include <sbxitem.hxx>
 #include <iderid.hxx>
 #include <svtools/tabbar.hxx>
 #include <vcl/toolbox.hxx>
@@ -30,6 +31,14 @@
 class SbModule;
 class SfxItemSet;
 class SfxRequest;
+class SvxSearchItem;
+
+namespace basctl
+{
+    class Layout;
+    class ModulWindow;
+    class DialogWindow;
+}
 
 #define LINE_SEP_CR     0x0D
 #define LINE_SEP        0x0A
@@ -58,27 +67,37 @@ struct BasicStatus
 
 class BasicDockingWindow : public DockingWindow
 {
-    Rectangle       aFloatingPosAndSize;
+public:
+    BasicDockingWindow (Window* pParent);
+    BasicDockingWindow (basctl::Layout* pParent);
+public:
+    void ResizeIfDocking (Point const&, Size const&);
+    void SetLayoutWindow (basctl::Layout*);
+public:
+    void Show (bool = true);
+    void Hide ();
 
 protected:
-    virtual sal_Bool    Docking( const Point& rPos, Rectangle& rRect );
-    virtual void    EndDocking( const Rectangle& rRect, sal_Bool bFloatMode );
-    virtual void    ToggleFloatingMode();
-    virtual sal_Bool    PrepareToggleFloatingMode();
-    virtual void    StartDocking();
+    virtual sal_Bool Docking( const Point& rPos, Rectangle& rRect );
+    virtual void     EndDocking( const Rectangle& rRect, sal_Bool bFloatMode );
+    virtual void     ToggleFloatingMode();
+    virtual sal_Bool PrepareToggleFloatingMode();
+    virtual void     StartDocking();
 
-public:
-    BasicDockingWindow( Window* pParent );
-};
+private:
+    // the position and the size of the floating window
+    Rectangle aFloatingRect;
+    // the position and the size of the docking window
+    Rectangle aDockingRect;
+    // the parent layout window (only when docking)
+    basctl::Layout* pLayout;
+    // > 0: shown, <= 0: hidden, ++ by Show() and -- by Hide()
+    int nShowCount;
 
-// helper class for sorting TabBar
-class TabBarSortHelper
-{
-public:
-    sal_uInt16          nPageId;
-    String          aPageText;
+    static WinBits const StyleBits;
 
-    bool operator<(const TabBarSortHelper& rComp) const { return (aPageText.CompareIgnoreCaseToAscii( rComp.aPageText ) == COMPARE_LESS); }
+private:
+    void DockThis ();
 };
 
 class BasicIDETabBar : public TabBar
@@ -113,6 +132,9 @@ namespace svl
     class IUndoManager;
 }
 
+//
+// IDEBaseWindow -- the base of both ModulWindow and DialogWindow.
+//
 class IDEBaseWindow : public Window
 {
 private:
@@ -126,6 +148,9 @@ private:
     ::rtl::OUString     m_aLibName;
     ::rtl::OUString     m_aName;
 
+    friend class basctl::ModulWindow;
+    friend class basctl::DialogWindow;
+
 protected:
     virtual void    DoScroll( ScrollBar* pCurScrollBar );
 
@@ -136,14 +161,16 @@ public:
 
     void            Init();
     virtual void    DoInit();
-    virtual void    Deactivating();
+    virtual void    Activating () = 0;
+    virtual void    Deactivating () = 0;
     void            GrabScrollBars( ScrollBar* pHScroll, ScrollBar* pVScroll );
 
     ScrollBar*      GetHScrollBar() const { return pShellHScrollBar; }
     ScrollBar*      GetVScrollBar() const { return pShellVScrollBar; }
 
-    virtual void    ExecuteCommand( SfxRequest& rReq );
-    virtual void    GetState( SfxItemSet& );
+    virtual void    ExecuteCommand (SfxRequest&);
+    virtual void    ExecuteGlobal (SfxRequest&);
+    virtual void    GetState (SfxItemSet&) = 0;
     virtual long    Notify( NotifyEvent& rNEvt );
 
     virtual void    StoreData();
@@ -172,18 +199,16 @@ public:
     void AddStatus(int n) { nStatus |= n; }
     void ClearStatus(int n) { nStatus &= ~n; }
 
-    virtual Window* GetLayoutWindow();
-
     virtual ::svl::IUndoManager*
                     GetUndoManager();
 
     virtual sal_uInt16  GetSearchOptions();
+    virtual sal_uInt16  StartSearchAndReplace (SvxSearchItem const&, bool bFromStart = false);
 
     virtual void    BasicStarted();
     virtual void    BasicStopped();
 
-    bool            IsSuspended() const
-                        { return ( nStatus & BASWIN_SUSPENDED ) ? true : false; }
+    bool            IsSuspended() const { return nStatus & BASWIN_SUSPENDED; }
 
     const ScriptDocument&
                     GetDocument() const { return m_aDocument; }
@@ -193,20 +218,24 @@ public:
     void            SetLibName( const ::rtl::OUString& aLibName ) { m_aLibName = aLibName; }
     const ::rtl::OUString&   GetName() const { return m_aName; }
     void            SetName( const ::rtl::OUString& aName ) { m_aName = aName; }
+
+    virtual void OnNewDocument ();
+    virtual char const* GetHid () const = 0;
+    virtual BasicIDEType GetType () const = 0;
+    void InsertLibInfo () const;
+    bool Is (ScriptDocument const&, rtl::OUString const&, rtl::OUString const&, BasicIDEType, bool bFindSuspended);
+    virtual bool HasActiveEditor () const;
 };
 
 class LibInfoKey
 {
 private:
-    ScriptDocument      m_aDocument;
+    ScriptDocument  m_aDocument;
     ::rtl::OUString m_aLibName;
 
 public:
     LibInfoKey( const ScriptDocument& rDocument, const ::rtl::OUString& rLibName );
     ~LibInfoKey();
-
-    LibInfoKey( const LibInfoKey& rKey );
-    LibInfoKey& operator=( const LibInfoKey& rKey );
 
     bool operator==( const LibInfoKey& rKey ) const;
 
@@ -218,10 +247,10 @@ public:
 class LibInfoItem
 {
 private:
-    ScriptDocument      m_aDocument;
+    ScriptDocument  m_aDocument;
     ::rtl::OUString m_aLibName;
     ::rtl::OUString m_aCurrentName;
-    sal_uInt16              m_nCurrentType;
+    sal_uInt16      m_nCurrentType;
 
 public:
     LibInfoItem( const ScriptDocument& rDocument, const ::rtl::OUString& rLibName, const ::rtl::OUString& rCurrentName, sal_uInt16 nCurrentType );
@@ -230,11 +259,10 @@ public:
     LibInfoItem( const LibInfoItem& rItem );
     LibInfoItem& operator=( const LibInfoItem& rItem );
 
-    const ScriptDocument&
-                    GetDocument() const { return m_aDocument; }
-    const ::rtl::OUString& GetLibName() const { return m_aLibName; }
+    const ScriptDocument&  GetDocument()    const { return m_aDocument; }
+    const ::rtl::OUString& GetLibName()     const { return m_aLibName; }
     const ::rtl::OUString& GetCurrentName() const { return m_aCurrentName; }
-    sal_uInt16          GetCurrentType() const { return m_nCurrentType; }
+    sal_uInt16             GetCurrentType() const { return m_nCurrentType; }
 };
 
 class LibInfos
@@ -284,6 +312,7 @@ public:
     static void getObjectName( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& rLib, const ::rtl::OUString& rModName, ::rtl::OUString& rObjName );
     static sal_Int32 getModuleType(  const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& rLib, const ::rtl::OUString& rModName );
 };
-#endif  // _BASTYPES_HXX
+
+#endif  // BASCTL_BASTYPES_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

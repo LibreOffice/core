@@ -88,6 +88,7 @@ $(eval $(call gb_Library_add_exception_objects,basctl,\
 	basctl/source/basicide/docsignature \
 	basctl/source/basicide/documentenumeration \
 	basctl/source/basicide/iderdll \
+	basctl/source/basicide/layout \
 	basctl/source/basicide/linenumberwindow \
 	basctl/source/basicide/localizationmgr \
 	basctl/source/basicide/macrodlg \

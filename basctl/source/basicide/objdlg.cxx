@@ -24,7 +24,7 @@
 #include "iderdll.hxx"
 #include "iderdll2.hxx"
 #include "objdlg.hxx"
-#include <helpid.hrc>
+#include "helpid.hrc"
 
 #include <sfx2/app.hxx>
 #include <sfx2/dispatch.hxx>
@@ -33,6 +33,9 @@
 #include <svl/itemset.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/taskpanelist.hxx>
+
+namespace basctl
+{
 
 ObjectCatalog::ObjectCatalog (Window* pParent) :
     BasicDockingWindow(pParent),
@@ -136,5 +139,8 @@ void ObjectCatalog::SetCurrentEntry (IDEBaseWindow* pCurWin)
         aDescriptor = pCurWin->CreateEntryDescriptor();
     aTree.SetCurrentEntry(aDescriptor);
 }
+
+
+} // namespace basctl
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

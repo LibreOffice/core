@@ -25,6 +25,7 @@
 #include "baside3.hxx"
 #include "basobj.hxx"
 #include "iderdll.hxx"
+#include "iderdll2.hxx"
 
 #include <basic/basmgr.hxx>
 #include <com/sun/star/script/ModuleType.hpp>
@@ -40,6 +41,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
 
 using ::std::vector;
+using basctl::Layout;
 
 DBG_NAME( IDEBaseWindow )
 
@@ -106,18 +108,11 @@ IMPL_LINK_INLINE_START( IDEBaseWindow, ScrollHdl, ScrollBar *, pCurScrollBar )
 IMPL_LINK_INLINE_END( IDEBaseWindow, ScrollHdl, ScrollBar *, pCurScrollBar )
 
 
+void IDEBaseWindow::ExecuteCommand (SfxRequest&)
+{ }
 
-void IDEBaseWindow::ExecuteCommand( SfxRequest& )
-{
-    DBG_CHKTHIS( IDEBaseWindow, 0 );
-}
-
-
-
-void IDEBaseWindow::GetState( SfxItemSet& )
-{
-    DBG_CHKTHIS( IDEBaseWindow, 0 );
-}
+void IDEBaseWindow::ExecuteGlobal (SfxRequest&)
+{ }
 
 
 long IDEBaseWindow::Notify( NotifyEvent& rNEvt )
@@ -225,18 +220,9 @@ bool IDEBaseWindow::IsPasteAllowed ()
     return false;
 }
 
-Window* IDEBaseWindow::GetLayoutWindow()
-{
-    return this;
-}
-
 ::svl::IUndoManager* IDEBaseWindow::GetUndoManager()
 {
     return NULL;
-}
-
-void IDEBaseWindow::Deactivating()
-{
 }
 
 sal_uInt16 IDEBaseWindow::GetSearchOptions()
@@ -244,32 +230,133 @@ sal_uInt16 IDEBaseWindow::GetSearchOptions()
     return 0;
 }
 
-
-BasicDockingWindow::BasicDockingWindow( Window* pParent ) :
-    DockingWindow( pParent, WB_BORDER | WB_3DLOOK | WB_DOCKABLE | WB_MOVEABLE |
-                            WB_SIZEABLE | WB_ROLLABLE |
-                            WB_DOCKABLE | WB_CLIPCHILDREN )
+sal_uInt16 IDEBaseWindow::StartSearchAndReplace (SvxSearchItem const&, bool bFromStart)
 {
+    static_cast<void>(bFromStart);
+    return 0;
+}
+
+void IDEBaseWindow::OnNewDocument ()
+{ }
+
+void IDEBaseWindow::InsertLibInfo () const
+{
+    if (BasicIDEData* pData = BasicIDEGlobals::GetExtraData())
+    {
+        pData->GetLibInfos().InsertInfo(
+            new LibInfoItem(m_aDocument, m_aLibName, m_aName, GetType())
+        );
+    }
+}
+
+bool IDEBaseWindow::Is (
+    ScriptDocument const& rDocument,
+    rtl::OUString const& rLibName, rtl::OUString const& rName,
+    BasicIDEType eType, bool bFindSuspended
+)
+{
+    if (bFindSuspended || !IsSuspended())
+    {
+        // any non-suspended window is ok
+        if (rLibName.isEmpty() || rName.isEmpty() || eType == BASICIDE_TYPE_UNKNOWN)
+            return true;
+        // ok if the parameters match
+        if (m_aDocument == rDocument && m_aLibName == rLibName && m_aName == rName && GetType() == eType)
+            return true;
+    }
+    return false;
+}
+
+bool IDEBaseWindow::HasActiveEditor () const
+{
+    return false;
+}
+
+
+//
+// BasicDockingWindow
+// ==================
+//
+
+// style bits for BasicDockingWindow
+WinBits const BasicDockingWindow::StyleBits =
+    WB_BORDER | WB_3DLOOK | WB_CLIPCHILDREN |
+    WB_MOVEABLE | WB_SIZEABLE | WB_ROLLABLE | WB_DOCKABLE;
+
+BasicDockingWindow::BasicDockingWindow (Window* pParent) :
+    DockingWindow(pParent, StyleBits),
+    pLayout(0),
+    nShowCount(0)
+{ }
+
+BasicDockingWindow::BasicDockingWindow (Layout* pParent) :
+    DockingWindow(pParent, StyleBits),
+    pLayout(pParent),
+    nShowCount(0)
+{ }
+
+// Sets the position and the size of the docking window. This property is saved
+// when the window is floating. Called by Layout.
+void BasicDockingWindow::ResizeIfDocking (Point const& rPos, Size const& rSize)
+{
+    Rectangle const rRect(rPos, rSize);
+    if (rRect != aDockingRect)
+    {
+        // saving the position and the size
+        aDockingRect = rRect;
+        // resizing if actually docking
+        if (!IsFloatingMode())
+            SetPosSizePixel(rPos, rSize);
+    }
+}
+
+// Sets the parent Layout window.
+// The physical parent is set only when the window is docking.
+void BasicDockingWindow::SetLayoutWindow (Layout* pLayout_)
+{
+    pLayout = pLayout_;
+    if (!IsFloatingMode())
+        SetParent(pLayout);
+
+}
+
+// Increases the "show" reference count.
+// The window is shown when the reference count is positive.
+void BasicDockingWindow::Show (bool bShow) // = true
+{
+    if (bShow)
+    {
+        if (++nShowCount == 1)
+            DockingWindow::Show();
+    }
+    else
+    {
+        if (--nShowCount == 0)
+            DockingWindow::Hide();
+    }
+}
+
+// Decreases the "show" reference count.
+// The window is hidden when the reference count reaches zero.
+void BasicDockingWindow::Hide ()
+{
+    Show(false);
 }
 
 sal_Bool BasicDockingWindow::Docking( const Point& rPos, Rectangle& rRect )
 {
-    ModulWindowLayout* pLayout = (ModulWindowLayout*)GetParent();
-    Rectangle aTmpRec( rRect );
-    bool const bDock = !IsDockingPrevented() && pLayout->IsToBeDocked( this, rPos, aTmpRec );
-    if ( bDock )
+    if (!IsDockingPrevented() && aDockingRect.IsInside(rPos))
     {
-        rRect.SetSize( aTmpRec.GetSize() );
+        rRect.SetSize(aDockingRect.GetSize());
+        return false; // dock
     }
-    else    // adjust old size
+    else // adjust old size
     {
-        if ( !aFloatingPosAndSize.IsEmpty() )
-            rRect.SetSize( aFloatingPosAndSize.GetSize() );
+        if (!aFloatingRect.IsEmpty())
+            rRect.SetSize(aFloatingRect.GetSize());
+        return true; // float
     }
-    return !bDock;  // bFloat
 }
-
-
 
 void BasicDockingWindow::EndDocking( const Rectangle& rRect, sal_Bool bFloatMode )
 {
@@ -278,50 +365,71 @@ void BasicDockingWindow::EndDocking( const Rectangle& rRect, sal_Bool bFloatMode
     else
     {
         SetFloatingMode(false);
-        ModulWindowLayout* pLayout = (ModulWindowLayout*)GetParent();
-        pLayout->DockaWindow( this );
+        DockThis();
     }
 }
-
-
 
 void BasicDockingWindow::ToggleFloatingMode()
 {
-    ModulWindowLayout* pLayout = (ModulWindowLayout*)GetParent();
-    if ( IsFloatingMode() )
+    if (IsFloatingMode())
     {
-        if ( !aFloatingPosAndSize.IsEmpty() )
-            SetPosSizePixel( GetParent()->ScreenToOutputPixel( aFloatingPosAndSize.TopLeft() ),
-                aFloatingPosAndSize.GetSize() );
+        if (!aFloatingRect.IsEmpty())
+            SetPosSizePixel(
+                GetParent()->ScreenToOutputPixel(aFloatingRect.TopLeft()),
+                aFloatingRect.GetSize()
+            );
     }
-    pLayout->DockaWindow( this );
+    DockThis();
 }
-
-
 
 sal_Bool BasicDockingWindow::PrepareToggleFloatingMode()
 {
-    if ( IsFloatingMode() )
+    if (IsFloatingMode())
     {
         // memorize position and size on the desktop...
-        aFloatingPosAndSize.SetPos( GetParent()->OutputToScreenPixel( GetPosPixel() ) );
-        aFloatingPosAndSize.SetSize( GetSizePixel() );
+        aFloatingRect = Rectangle(
+            GetParent()->OutputToScreenPixel(GetPosPixel()),
+            GetSizePixel()
+        );
     }
     return true;
 }
 
-
-
 void BasicDockingWindow::StartDocking()
 {
-    if ( IsFloatingMode() )
+    if (IsFloatingMode())
     {
-        aFloatingPosAndSize.SetPos( GetParent()->OutputToScreenPixel( GetPosPixel() ) );
-        aFloatingPosAndSize.SetSize( GetSizePixel() );
+        aFloatingRect = Rectangle(
+            GetParent()->OutputToScreenPixel(GetPosPixel()),
+            GetSizePixel()
+        );
+    }
+}
+
+void BasicDockingWindow::DockThis ()
+{
+    // resizing when floating -> docking
+    if (!IsFloatingMode())
+    {
+        Point const aPos = aDockingRect.TopLeft();
+        Size const aSize = aDockingRect.GetSize();
+        if (aSize != GetSizePixel() || aPos != GetPosPixel())
+            SetPosSizePixel(aPos, aSize);
+    }
+
+    if (pLayout)
+    {
+        if (!IsFloatingMode() && GetParent() != pLayout)
+            SetParent(pLayout);
+        pLayout->DockaWindow(this);
     }
 }
 
 
+//
+// ExtendedEdit
+// ============
+//
 
 ExtendedEdit::ExtendedEdit( Window* pParent, IDEResId nRes ) :
     Edit( pParent, nRes )
@@ -442,7 +550,7 @@ void BasicIDETabBar::Command( const CommandEvent& rCEvt )
                     {
                         IDEWindowTable& aIDEWindowTable = pIDEShell->GetIDEWindowTable();
                         IDEWindowTable::const_iterator it = aIDEWindowTable.find( GetCurPageId() );
-                        if (it != aIDEWindowTable.end() && dynamic_cast<ModulWindow*>(it->second))
+                        if (it != aIDEWindowTable.end() && dynamic_cast<basctl::ModulWindow*>(it->second))
                         {
                             SbModule* pActiveModule = (SbModule*)pBasic->FindModule( it->second->GetName() );
                             if( pActiveModule && ( pActiveModule->GetModuleType() == script::ModuleType::DOCUMENT ) )
@@ -493,6 +601,23 @@ void BasicIDETabBar::EndRenaming()
 }
 
 
+namespace
+{
+
+// helper class for sorting TabBar
+struct TabBarSortHelper
+{
+    sal_uInt16      nPageId;
+    String          aPageText;
+
+    bool operator < (TabBarSortHelper const& rComp) const
+    {
+        return aPageText.CompareIgnoreCaseToAscii(rComp.aPageText) == COMPARE_LESS;
+    }
+};
+
+} // namespace
+
 void BasicIDETabBar::Sort()
 {
     BasicIDEShell* pIDEShell = BasicIDEGlobals::GetShell();
@@ -513,11 +638,11 @@ void BasicIDETabBar::Sort()
             aTabBarSortHelper.aPageText = GetPageText( nId );
             IDEBaseWindow* pWin = aIDEWindowTable[ nId ];
 
-            if (dynamic_cast<ModulWindow*>(pWin))
+            if (dynamic_cast<basctl::ModulWindow*>(pWin))
             {
                 aModuleList.push_back( aTabBarSortHelper );
             }
-            else if (dynamic_cast<DialogWindow*>(pWin))
+            else if (dynamic_cast<basctl::DialogWindow*>(pWin))
             {
                 aDialogList.push_back( aTabBarSortHelper );
             }
@@ -626,19 +751,6 @@ LibInfoKey::LibInfoKey( const ScriptDocument& rDocument, const ::rtl::OUString& 
 
 LibInfoKey::~LibInfoKey()
 {
-}
-
-LibInfoKey::LibInfoKey( const LibInfoKey& rKey )
-    :m_aDocument( rKey.m_aDocument )
-    ,m_aLibName( rKey.m_aLibName )
-{
-}
-
-LibInfoKey& LibInfoKey::operator=( const LibInfoKey& rKey )
-{
-    m_aDocument = rKey.m_aDocument;
-    m_aLibName = rKey.m_aLibName;
-    return *this;
 }
 
 bool LibInfoKey::operator==( const LibInfoKey& rKey ) const

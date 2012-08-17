@@ -17,12 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <basidesh.hxx>
-#include <baside3.hxx>
-#include <basobj.hxx>
-#include <iderdll.hxx>
+#include "localizationmgr.hxx"
+
+#include "basidesh.hxx"
+#include "baside3.hxx"
+#include "basobj.hxx"
+#include "iderdll.hxx"
 #include "dlged.hxx"
-#include <localizationmgr.hxx>
+
 #include <com/sun/star/resource/XStringResourceSupplier.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <sfx2/dispatch.hxx>
@@ -32,6 +34,9 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::resource;
+
+using basctl::DialogWindow;
+using basctl::ModulWindow;
 
 static ::rtl::OUString aDot( RTL_CONSTASCII_USTRINGPARAM( "." ));
 static ::rtl::OUString aEsc( RTL_CONSTASCII_USTRINGPARAM( "&" ));
@@ -134,10 +139,9 @@ void LocalizationMgr::implEnableDisableResourceForAllLibraryDialogs( HandleResou
     for( sal_Int32 i = 0 ; i < nDlgCount ; i++ )
     {
         String aDlgName = pDlgNames[ i ];
-        DialogWindow* pWin = m_pIDEShell->FindDlgWin( m_aDocument, m_aLibName, aDlgName, false );
-        if (DialogWindow* pDialogWin = dynamic_cast<DialogWindow*>(pWin))
+        if (DialogWindow* pWin = m_pIDEShell->FindDlgWin(m_aDocument, m_aLibName, aDlgName))
         {
-            Reference< container::XNameContainer > xDialog = pDialogWin->GetDialog();
+            Reference< container::XNameContainer > xDialog = pWin->GetDialog();
             if( xDialog.is() )
             {
                 // Handle dialog itself as control

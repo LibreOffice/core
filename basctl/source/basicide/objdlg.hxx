@@ -20,13 +20,17 @@
 #ifndef BASCTL_OBJDLG_HXX
 #define BASCTL_OBJDLG_HXX
 
+#include "bastype2.hxx"
+#include "bastypes.hxx"
+
 #include <svheader.hxx>
 #include <vcl/floatwin.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/image.hxx>
 
-#include <bastype2.hxx>
+namespace basctl
+{
 
 //
 // ObjectCatalog -- a docking window that contains the currently loaded macros
@@ -52,6 +56,8 @@ private:
     virtual void ToggleFloatingMode (); // DockingWindow
     void ArrangeWindows ();
 };
+
+} // namespace basctl
 
 #endif // BASCTL_OBJDLG_HXX
 

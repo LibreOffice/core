@@ -32,9 +32,9 @@
 #include <vcl/xtextedt.hxx>
 #include <vcl/textview.hxx>
 
-LineNumberWindow::LineNumberWindow( Window* pParent, ModulWindow* pModulWin ) :
-    Window( pParent, WB_BORDER ),
-    m_pModulWindow(pModulWin),
+LineNumberWindow::LineNumberWindow (Window* pParent, basctl::ModulWindow* pModulWindow) :
+    Window(pParent, WB_BORDER),
+    m_pModulWindow(pModulWindow),
     m_nCurYOffset(0)
 {
     SetBackground(Wallpaper(GetSettings().GetStyleSettings().GetFieldColor()));

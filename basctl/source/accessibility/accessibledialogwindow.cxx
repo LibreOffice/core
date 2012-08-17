@@ -105,7 +105,7 @@ bool AccessibleDialogWindow::ChildDescriptor::operator<( const ChildDescriptor& 
 // class AccessibleDialogWindow
 // -----------------------------------------------------------------------------
 
-AccessibleDialogWindow::AccessibleDialogWindow( DialogWindow* pDialogWindow )
+AccessibleDialogWindow::AccessibleDialogWindow (basctl::DialogWindow* pDialogWindow)
     :AccessibleExtendedComponentHelper_BASE( new VCLExternalSolarLock() )
     ,m_pDialogWindow( pDialogWindow )
 {

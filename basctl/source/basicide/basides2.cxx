@@ -45,6 +45,9 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 namespace css = ::com::sun::star;
 
+using basctl::ModulWindow;
+using basctl::ModulWindowLayout;
+
 Reference< view::XRenderable > BasicIDEShell::GetRenderable()
 {
     return Reference< view::XRenderable >( new basicide::BasicRenderable( pCurWin ) );
@@ -142,27 +145,6 @@ void BasicIDEShell::SetMDITitle()
     }
 }
 
-void BasicIDEShell::DestroyModulWindowLayout()
-{
-    delete pModulLayout;
-    pModulLayout = 0;
-}
-
-
-void BasicIDEShell::UpdateModulWindowLayout( bool bBasicStopped )
-{
-    if ( pModulLayout )
-    {
-        pModulLayout->GetStackWindow().UpdateCalls();
-        pModulLayout->GetWatchWindow().UpdateWatches( bBasicStopped );
-    }
-}
-
-void BasicIDEShell::CreateModulWindowLayout()
-{
-    pModulLayout = new ModulWindowLayout( &GetViewFrame()->GetWindow() );
-}
-
 ModulWindow* BasicIDEShell::CreateBasWin( const ScriptDocument& rDocument, const ::rtl::OUString& rLibName, const ::rtl::OUString& rModName )
 {
     bCreatingWindow = true;
@@ -199,7 +181,9 @@ ModulWindow* BasicIDEShell::CreateBasWin( const ScriptDocument& rDocument, const
             if( !pWin )
             {
                 // new module window
-                pWin = new ModulWindow( pModulLayout, rDocument, aLibName, aModName, aModule );
+                if (!pModulLayout)
+                    pModulLayout.reset(new ModulWindowLayout(&GetViewFrame()->GetWindow(), aObjectCatalog));
+                pWin = new ModulWindow(pModulLayout.get(), rDocument, aLibName, aModName, aModule);
                 nKey = InsertWindowInTable( pWin );
             }
             else // we've gotten called recursively ( via listener from createModule above ), get outta here
@@ -238,20 +222,15 @@ ModulWindow* BasicIDEShell::CreateBasWin( const ScriptDocument& rDocument, const
     return pWin;
 }
 
-ModulWindow* BasicIDEShell::FindBasWin( const ScriptDocument& rDocument, const ::rtl::OUString& rLibName, const ::rtl::OUString& rModName, bool bCreateIfNotExist, bool bFindSuspended )
+ModulWindow* BasicIDEShell::FindBasWin (
+    ScriptDocument const& rDocument,
+    rtl::OUString const& rLibName, rtl::OUString const& rName,
+    bool bCreateIfNotExist, bool bFindSuspended
+)
 {
-    for( IDEWindowTable::const_iterator it = aIDEWindowTable.begin();
-         it != aIDEWindowTable.end(); ++it )
-    {
-        IDEBaseWindow* pWin = it->second;
-        if (!pWin->IsSuspended() || bFindSuspended)
-            if (rLibName.isEmpty() || (pWin->IsDocument(rDocument) && pWin->GetLibName() == rLibName && pWin->GetName() == rModName))
-            {
-                if (ModulWindow* pModWin = dynamic_cast<ModulWindow*>(pWin))
-                    return pModWin;
-            }
-    }
-    return bCreateIfNotExist ? CreateBasWin(rDocument, rLibName, rModName) : 0;
+    if (IDEBaseWindow* pWin = FindWindow(rDocument, rLibName, rName, BASICIDE_TYPE_MODULE, bFindSuspended))
+        return static_cast<ModulWindow*>(pWin);
+    return bCreateIfNotExist ? CreateBasWin(rDocument, rLibName, rName) : 0;
 }
 
 void BasicIDEShell::Move()
@@ -272,13 +251,12 @@ sal_Int32 getBasicIDEShellCount( void );
 // only if basic window above:
 void BasicIDEShell::ExecuteBasic( SfxRequest& rReq )
 {
-    if (!dynamic_cast<ModulWindow*>(pCurWin))
-        return;
-
-    pCurWin->ExecuteCommand( rReq );
-    sal_Int32 nCount = getBasicIDEShellCount();
-    if( nCount )
-        CheckWindows();
+    if (dynamic_cast<ModulWindow*>(pCurWin))
+    {
+        pCurWin->ExecuteCommand( rReq );
+        if (getBasicIDEShellCount())
+            CheckWindows();
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

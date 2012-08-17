@@ -186,18 +186,15 @@ bool RenameModule( Window* pErrorParent, const ScriptDocument& rDocument, const 
     if ( !rDocument.renameModule( rLibName, rOldName, rNewName ) )
         return false;
 
-    BasicIDEShell* pIDEShell = BasicIDEGlobals::GetShell();
-    if ( pIDEShell )
+    if (BasicIDEShell* pIDEShell = BasicIDEGlobals::GetShell())
     {
-        IDEBaseWindow* pWin = pIDEShell->FindWindow( rDocument, rLibName, rNewName, BASICIDE_TYPE_MODULE, true );
-        if ( pWin )
+        if (basctl::ModulWindow* pWin = pIDEShell->FindBasWin(rDocument, rLibName, rNewName, false, true))
         {
             // set new name in window
             pWin->SetName( rNewName );
 
             // set new module in module window
-            ModulWindow* pModWin = dynamic_cast<ModulWindow*>(pWin);
-            pModWin->SetSbModule( (SbModule*)pModWin->GetBasic()->FindModule( rNewName ) );
+            pWin->SetSbModule( (SbModule*)pWin->GetBasic()->FindModule( rNewName ) );
 
             // update tabwriter
             sal_uInt16 nId = pIDEShell->GetIDEWindowId( pWin );

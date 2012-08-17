@@ -17,9 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _BASIDE3_HXX
-#define _BASIDE3_HXX
+#ifndef BASCTL_BASIDE3_HXX
+#define BASCTL_BASIDE3_HXX
 
+#include "../basicide/layout.hxx"
 #include <bastypes.hxx>
 #include <svl/undo.hxx>
 #include <vcl/dialog.hxx>
@@ -38,9 +39,16 @@ class DlgEdPage;
 class DlgEdView;
 class SfxUndoManager;
 
+namespace basctl
+{
+
+class DialogWindowLayout;
+class ObjectCatalog;
+
 class DialogWindow: public IDEBaseWindow
 {
 private:
+    DialogWindowLayout& rLayout;
     DlgEditor*          pEditor;
     SfxUndoManager*     pUndoMgr;
     Link                aOldNotifyUndoActionHdl;
@@ -65,8 +73,7 @@ protected:
 
 public:
                         TYPEINFO();
-    DialogWindow( Window* pParent, const ScriptDocument& rDocument, ::rtl::OUString aLibName, ::rtl::OUString aName,
-                            const com::sun::star::uno::Reference< com::sun::star::container::XNameContainer >& xDialogModel );
+    DialogWindow (DialogWindowLayout* pParent, ScriptDocument const& rDocument, rtl::OUString aLibName, rtl::OUString aName, com::sun::star::uno::Reference<com::sun::star::container::XNameContainer> const& xDialogModel);
                         DialogWindow( DialogWindow* pCurView ); // never implemented
                         ~DialogWindow();
 
@@ -97,12 +104,45 @@ public:
     // return number of pages to be printed
     virtual sal_Int32 countPages( Printer* pPrinter );
     // print page
-    virtual void printPage( sal_Int32 nPage, Printer* pPrinter );
-    virtual void        Deactivating();
+    virtual void        printPage (sal_Int32 nPage, Printer*);
+
+    virtual void        Activating ();
+    virtual void        Deactivating ();
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible();
+
+    virtual char const* GetHid () const;
+    virtual BasicIDEType GetType () const;
 };
 
-#endif  // _BASIDE3_HXX
+//
+// DialogWindowLayout
+//
+class DialogWindowLayout : public Layout
+{
+public:
+    DialogWindowLayout (Window* pParent, ObjectCatalog&);
+public:
+    // Layout:
+    virtual void Activating (IDEBaseWindow&);
+    virtual void Deactivating ();
+    virtual void GetState (SfxItemSet&, unsigned nWhich);
+
+protected:
+    // Layout:
+    virtual void OnFirstSize (int nWidth, int nHeight);
+
+private:
+    // child window
+    DialogWindow* pChild;
+    // dockable windows
+    ObjectCatalog& rObjectCatalog;
+    // TODO property browser
+};
+
+
+} // namespace basctl
+
+#endif  // BASCTL_BASIDE3_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

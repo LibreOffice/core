@@ -20,11 +20,12 @@
 #ifndef BASCTL_BASIDE2_HXX
 #define BASCTL_BASIDE2_HXX
 
-#include <svheader.hxx>
-
+#include "layout.hxx"
 #include <bastypes.hxx>
 #include <bastype3.hxx>
 #include <basidesh.hxx>
+
+#include <svheader.hxx>
 
 class ExtTextEngine;
 class ExtTextView;
@@ -40,21 +41,24 @@ class SvxSearchItem;
 #include <svtools/colorcfg.hxx>
 
 #include <sfx2/progress.hxx>
-#include <svtools/syntaxhighlight.hxx>
 #include <unotools/options.hxx>
 
 #include "breakpoint.hxx"
 #include "linenumberwindow.hxx"
-#include "objdlg.hxx"
 #include <set>
-
-DBG_NAMEEX( ModulWindow )
 
 #define MARKER_NOMARKER 0xFFFF
 
 namespace com { namespace sun { namespace star { namespace beans {
     class XMultiPropertySet;
 } } } }
+
+namespace basctl
+{
+
+class ObjectCatalog;
+
+DBG_NAMEEX( ModulWindow )
 
 // #108672 Helper functions to get/set text in TextEngine
 // using the stream interface (get/setText() only supports
@@ -90,10 +94,10 @@ class EditorWindow : public Window, public SfxListener
 {
 private:
     class ChangesListener;
-    friend class ChangesListener;
 
     ExtTextView*    pEditView;
     ExtTextEngine*  pEditEngine;
+    ModulWindow&    rModulWindow;
 
     rtl::Reference< ChangesListener > listener_;
     osl::Mutex mutex_;
@@ -107,7 +111,6 @@ private:
     SyntaxLineSet   aSyntaxLineTable;
     DECL_LINK(SyntaxTimerHdl, void *);
     ProgressInfo*   pProgress;
-    ModulWindow*    pModulWindow;
 
     virtual void DataChanged(DataChangedEvent const & rDCEvt);
 
@@ -141,7 +144,7 @@ protected:
     bool            ImpCanModify();
 
 public:
-                    EditorWindow( Window* pParent );
+                    EditorWindow (Window* pParent, ModulWindow*);
                     ~EditorWindow();
 
     ExtTextEngine*  GetEditEngine() const   { return pEditEngine; }
@@ -157,23 +160,23 @@ public:
     void            CreateEditEngine();
     void            SetScrollBarRanges();
     void            InitScrollBars();
-    void            SetModulWindow( ModulWindow* pWin )
-                        { pModulWindow = pWin; }
 
     void            ForceSyntaxTimeout();
     bool            SetSourceInBasic();
 
     bool            CanModify() { return ImpCanModify(); }
+
+    void            UpdateSyntaxHighlighting ();
 };
 
 
 class BreakPointWindow : public Window
 {
 private:
+    ModulWindow&    rModulWindow;
     long            nCurYOffset;
-    sal_uInt16          nMarkerPos;
+    sal_uInt16      nMarkerPos;
     BreakPointList  aBreakPointList;
-    ModulWindow*    pModulWindow;
     bool            bErrorMarker;
 
     virtual void DataChanged(DataChangedEvent const & rDCEvt);
@@ -191,11 +194,8 @@ protected:
     bool            SyncYOffset();
 
 public:
-                    BreakPointWindow( Window* pParent );
+                    BreakPointWindow (Window* pParent, ModulWindow*);
                     ~BreakPointWindow();
-
-    void            SetModulWindow( ModulWindow* pWin )
-                        { pModulWindow = pWin; }
 
     void            SetMarkerPos( sal_uInt16 nLine, bool bErrorMarker = false );
 
@@ -249,7 +249,7 @@ protected:
 
 
 public:
-                    WatchWindow( Window* pParent );
+                    WatchWindow (Layout* pParent);
                     ~WatchWindow();
 
     void            AddWatch( const String& rVName );
@@ -271,7 +271,7 @@ protected:
     virtual void    Paint( const Rectangle& rRect );
 
 public:
-                    StackWindow( Window* pParent );
+                    StackWindow (Layout* pParent);
                     ~StackWindow();
 
     void            UpdateCalls();
@@ -285,8 +285,6 @@ private:
     LineNumberWindow    aLineNumberWindow;
     EditorWindow        aEdtWindow;
     ScrollBar           aEWVScrollBar;
-    bool                bLineNumberDisplay;
-    bool                bObjectCatalogDisplay;
 
     virtual void DataChanged(DataChangedEvent const & rDCEvt);
 
@@ -303,32 +301,25 @@ public:
     ScrollBar&          GetEWVScrollBar()   { return aEWVScrollBar; }
 
     void SetLineNumberDisplay(bool b);
-    void SetObjectCatalogDisplay(bool b);
 };
 
 
 class ModulWindow: public IDEBaseWindow
 {
-    friend class BasicIDEShell;
-
 private:
+    ModulWindowLayout&  rLayout;
     StarBASICRef        xBasic;
     short               nValid;
     ComplexEditorWindow aXEditorWindow;
     BasicStatus         aStatus;
     SbModuleRef         xModule;
-    ModulWindowLayout*  pLayout;
     ::rtl::OUString     aCurPath;
     ::rtl::OUString     m_aModule;
-
-    long                BasicErrorHdl( StarBASIC* pBasic );
-    long                BasicBreakHdl( StarBASIC* pBasic );
 
     void                CheckCompileBasic();
     bool                BasicExecute();
 
     void                GoOnTop();
-    void                AssertValidEditEngine();
 
     sal_Int32           FormatAndPrint( Printer* pPrinter, sal_Int32 nPage = -1 );
     SbModuleRef         XModule();
@@ -336,7 +327,6 @@ protected:
     virtual void    Resize();
     virtual void    GetFocus();
     virtual void    Paint( const Rectangle& );
-    virtual void    Deactivating();
     virtual void    DoInit();
     virtual void    DoScroll( ScrollBar* pCurScrollBar );
 
@@ -347,7 +337,8 @@ public:
 
                     ~ModulWindow();
 
-    virtual void    ExecuteCommand( SfxRequest& rReq );
+    virtual void    ExecuteCommand (SfxRequest& rReq);
+    virtual void    ExecuteGlobal (SfxRequest& rReq);
     virtual void    GetState( SfxItemSet& );
     virtual void    StoreData();
     virtual void    UpdateData();
@@ -363,7 +354,6 @@ public:
     virtual bool    IsReadOnly();
 
     void SetLineNumberDisplay(bool);
-    void SetObjectCatalogDisplay(bool);
 
     StarBASIC*      GetBasic() { XModule(); return xBasic; }
 
@@ -384,6 +374,10 @@ public:
     void            BasicAddWatch();
     void            BasicRemoveWatch();
 
+    long            BasicErrorHdl( StarBASIC* pBasic );
+    long            BasicBreakHdl( StarBASIC* pBasic );
+    void            AssertValidEditEngine();
+
     bool            LoadBasic();
     bool            SaveBasicSource();
     bool            ImportDialog();
@@ -401,9 +395,7 @@ public:
     void            ShowCursor( bool bOn );
 
     virtual sal_uInt16  GetSearchOptions();
-    sal_uInt16          StartSearchAndReplace( const SvxSearchItem& rSearchItem, bool bFromStart = false );
-
-    virtual Window* GetLayoutWindow();
+    virtual sal_uInt16  StartSearchAndReplace (SvxSearchItem const&, bool bFromStart = false);
 
     EditorWindow&       GetEditorWindow()       { return aXEditorWindow.GetEdtWindow(); }
     BreakPointWindow&   GetBreakPointWindow()   { return aXEditorWindow.GetBrkWindow(); }
@@ -412,7 +404,7 @@ public:
     ExtTextEngine*      GetEditEngine()         { return GetEditorWindow().GetEditEngine(); }
     ExtTextView*        GetEditView()           { return GetEditorWindow().GetEditView(); }
     BreakPointList&     GetBreakPoints()        { return GetBreakPointWindow().GetBreakPoints(); }
-    ModulWindowLayout*  GetLayout() const       { return pLayout; }
+    ModulWindowLayout&  GetLayout ()            { return rLayout; }
 
     virtual void        BasicStarted();
     virtual void        BasicStopped();
@@ -422,66 +414,77 @@ public:
 
     const ::rtl::OUString&  GetModule() const { return m_aModule; }
     void                    SetModule( const ::rtl::OUString& aModule ) { m_aModule = aModule; }
+
+    virtual void Activating ();
+    virtual void Deactivating ();
+
+    virtual void OnNewDocument ();
+    virtual char const* GetHid () const;
+    virtual BasicIDEType GetType () const;
+    virtual bool HasActiveEditor () const;
+
+    void UpdateModule ();
 };
 
-class ModulWindowLayout: public Window, public utl::ConfigurationListener
+class ModulWindowLayout: public Layout
 {
-private:
-    // is ArrangeWindows() called first in this object?
-    bool bFirstArrange;
-
-    // splitter lines
-    Splitter aLeftSplit, aBottomSplit, aVertSplit;
-
-    // dockable windows
-    ObjectCatalog aObjectCatalog;
-    WatchWindow aWatchWindow;
-    StackWindow aStackWindow;
-
-    ModulWindow* m_pModulWindow;
-
-    Color m_aSyntaxColors[TT_KEYWORDS + 1];
-    svtools::ColorConfig m_aColorConfig;
-
-    ImageList m_aImagesNormal;
-
-    virtual void DataChanged(DataChangedEvent const & rDCEvt);
-
-    virtual void ConfigurationChanged( utl::ConfigurationBroadcaster*, sal_uInt32 );
-
-    void updateSyntaxHighlighting();
-
-    DECL_LINK( SplitHdl, Splitter * );
-
-    void            ArrangeWindows();
+public:
+    ModulWindowLayout (Window* pParent, ObjectCatalog&);
+public:
+    // Layout:
+    virtual void Activating (IDEBaseWindow&);
+    virtual void Deactivating ();
+    virtual void GetState (SfxItemSet&, unsigned nWhich);
+    virtual void UpdateDebug (bool bBasicStopped = false);
+public:
+    void BasicAddWatch (String const&);
+    void BasicRemoveWatch ();
+    Color GetSyntaxColor (TokenTypes eType) const { return aSyntaxColors.GetColor(eType); }
 
 protected:
-    virtual void    Resize();
-    virtual void    Paint( const Rectangle& rRect );
+    // Window:
+    virtual void Paint (const Rectangle& rRect);
+    // Layout:
+    virtual void OnFirstSize (int nWidth, int nHeight);
 
-public:
-                    ModulWindowLayout( Window* pParent );
-                    ~ModulWindowLayout();
+private:
+    // main child window
+    ModulWindow* pChild;
+    // dockable windows
+    WatchWindow aWatchWindow;
+    StackWindow aStackWindow;
+    ObjectCatalog& rObjectCatalog;
+private:
+    virtual void DataChanged (DataChangedEvent const& rDCEvt);
+private:
+    // SyntaxColors -- stores Basic syntax highlighting colors
+    class SyntaxColors : public utl::ConfigurationListener
+    {
+    public:
+        SyntaxColors ();
+        ~SyntaxColors ();
+    public:
+        void SetActiveEditor (EditorWindow* pEditor_) { pEditor = pEditor_; }
+        void SettingsChanged ();
+    public:
+        Color GetColor (TokenTypes eType) const { return aColors[eType]; }
 
-    void            DockaWindow( DockingWindow* pDockingWin );
-    bool            IsToBeDocked( DockingWindow* pDockingWin, const Point& rPos, Rectangle& rRect );
+    private:
+        virtual void ConfigurationChanged (utl::ConfigurationBroadcaster*, sal_uInt32);
+        void NewConfig (bool bFirst);
 
-    void            SetModulWindow( ModulWindow* pModWin );
-    ModulWindow*    GetModulWindow() const { return m_pModulWindow; }
+    private:
+        // the color values (the indexes are TokenTypes, see svtools/syntaxhighlight.hxx)
+        Color aColors[TT_KEYWORDS + 1];
+        // the configuration
+        svtools::ColorConfig aConfig;
+        // the active editor
+        EditorWindow* pEditor;
 
-    WatchWindow&    GetWatchWindow()    { return aWatchWindow; }
-    StackWindow&    GetStackWindow()    { return aStackWindow; }
-    ObjectCatalog&  GetObjectCatalog()  { return aObjectCatalog; }
-
-    Image getImage(sal_uInt16 nId) const;
-
-    inline Color const & getSyntaxColor(TokenTypes eType) const
-    { return m_aSyntaxColors[eType]; }
-
-    void ToggleObjectCatalog ();
-    bool HasObjectCatalog () const { return aObjectCatalog.IsVisible(); }
-    void UpdateObjectCatalog ();
+    } aSyntaxColors;
 };
+
+} // namespace basctl
 
 #endif // BASCTL_BASIDE2_HXX
 

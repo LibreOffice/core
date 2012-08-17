@@ -22,7 +22,10 @@
 #include "iderdll.hxx"
 #include "iderdll2.hxx"
 #include "objdlg.hxx"
+#include "moduldlg.hxx"
+#include "docsignature.hxx"
 
+#include "helpid.hrc"
 #include "baside2.hrc"
 
 #include <basic/basmgr.hxx>
@@ -41,13 +44,15 @@
 #include <sfx2/request.hxx>
 #include <svl/aeitem.hxx>
 #include <svl/srchitem.hxx>
+#include <svl/visitem.hxx>
 #include <svl/whiter.hxx>
 #include <vcl/xtextedt.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/msgbox.hxx>
+#include <cassert>
 
-using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
+namespace basctl
+{
 
 #define LMARGPRN        1700
 #define RMARGPRN         900
@@ -73,6 +78,9 @@ using namespace comphelper;
 DBG_NAME( ModulWindow )
 
 TYPEINIT1( ModulWindow , IDEBaseWindow );
+
+namespace
+{
 
 void lcl_PrintHeader( Printer* pPrinter, sal_uInt16 nPages, sal_uInt16 nCurPage, const ::rtl::OUString& rTitle, bool bOutput )
 {
@@ -160,17 +168,31 @@ void lcl_ConvertTabsToSpaces( String& rLine )
     }
 }
 
-ModulWindow::ModulWindow( ModulWindowLayout* pParent, const ScriptDocument& rDocument, ::rtl::OUString aLibName,
-                          ::rtl::OUString aName, ::rtl::OUString& aModule )
-        :IDEBaseWindow( pParent, rDocument, aLibName, aName )
-        ,aXEditorWindow( this )
-        ,m_aModule( aModule )
+// until we have some configuration lets just keep
+// persist this value for the process lifetime
+bool bSourceLinesEnabled = false;
+
+} // namespace
+
+
+//
+// ModulWindow
+// ===========
+//
+
+ModulWindow::ModulWindow (
+    ModulWindowLayout* pParent,
+    ScriptDocument const& rDocument,
+    rtl::OUString aLibName, rtl::OUString aName, rtl::OUString& aModule
+) :
+    IDEBaseWindow(pParent, rDocument, aLibName, aName),
+    rLayout(*pParent),
+    nValid(VALIDWINDOW),
+    aXEditorWindow(this),
+    m_aModule(aModule)
 {
     DBG_CTOR( ModulWindow, 0 );
-    nValid = VALIDWINDOW;
-    pLayout = pParent;
     aXEditorWindow.Show();
-
     SetBackground();
 }
 
@@ -514,7 +536,12 @@ bool ModulWindow::SaveBasicSource()
     return bDone;
 }
 
+} // namespace basctl
+
 bool implImportDialog( Window* pWin, const ::rtl::OUString& rCurPath, const ScriptDocument& rDocument, const ::rtl::OUString& aLibName );
+
+namespace basctl
+{
 
 bool ModulWindow::ImportDialog()
 {
@@ -664,7 +691,7 @@ long ModulWindow::BasicErrorHdl( StarBASIC * pBasic )
         aErrorTextPrefixBuf.append(IDE_RESSTR(RID_STR_RUNTIMEERROR));
         aErrorTextPrefixBuf.append(StarBASIC::GetVBErrorCode(pBasic->GetErrorCode()));
         aErrorTextPrefixBuf.append(' ');
-        pLayout->GetStackWindow().UpdateCalls();
+        rLayout.UpdateDebug();
     }
     ::rtl::OUString aErrorTextPrefix(aErrorTextPrefixBuf.makeStringAndClear());
     // if other basic, the IDE should try to display the correct module
@@ -712,8 +739,7 @@ long ModulWindow::BasicBreakHdl( StarBASIC* pBasic )
     GetEditView()->SetSelection( TextSelection( TextPaM( nErrorLine, 0 ), TextPaM( nErrorLine, 0 ) ) );
     aXEditorWindow.GetBrkWindow().SetMarkerPos( nErrorLine );
 
-    pLayout->GetWatchWindow().UpdateWatches();
-    pLayout->GetStackWindow().UpdateCalls();
+    rLayout.UpdateDebug();
 
     aStatus.bIsInReschedule = true;
     aStatus.bIsRunning = true;
@@ -755,22 +781,11 @@ void ModulWindow::BasicAddWatch()
     if ( bAdd )
     {
         TextSelection aSel = GetEditView()->GetSelection();
-        if ( aSel.GetStart().GetPara() == aSel.GetEnd().GetPara() )
-        {
-            aWatchStr = GetEditView()->GetSelected();
-            pLayout->GetWatchWindow().AddWatch( aWatchStr );
-            pLayout->GetWatchWindow().UpdateWatches();
-        }
+        if ( aSel.GetStart().GetPara() == aSel.GetEnd().GetPara() ) // single line selection
+            rLayout.BasicAddWatch(GetEditView()->GetSelected());
     }
 }
 
-
-
-void ModulWindow::BasicRemoveWatch()
-{
-    DBG_CHKTHIS( ModulWindow, 0 );
-    pLayout->GetWatchWindow().RemoveSelectedWatch();
-}
 
 
 void ModulWindow::EditMacro( const String& rMacroName )
@@ -941,12 +956,11 @@ sal_Int32 ModulWindow::FormatAndPrint( Printer* pPrinter, sal_Int32 nPrintPage )
 }
 
 
-void ModulWindow::ExecuteCommand( SfxRequest& rReq )
+void ModulWindow::ExecuteCommand (SfxRequest& rReq)
 {
     DBG_CHKTHIS( ModulWindow, 0 );
     AssertValidEditEngine();
-    sal_uInt16 nSlot = rReq.GetSlot();
-    switch ( nSlot )
+    switch (rReq.GetSlot())
     {
         case SID_DELETE:
         {
@@ -1024,7 +1038,7 @@ void ModulWindow::ExecuteCommand( SfxRequest& rReq )
         break;
         case SID_BASICIDE_REMOVEWATCH:
         {
-            BasicRemoveWatch();
+            rLayout.BasicRemoveWatch();
         }
         break;
         case SID_CUT:
@@ -1032,8 +1046,7 @@ void ModulWindow::ExecuteCommand( SfxRequest& rReq )
             if ( !IsReadOnly() )
             {
                 GetEditView()->Cut();
-                SfxBindings* pBindings = BasicIDE::GetBindingsPtr();
-                if ( pBindings )
+                if (SfxBindings* pBindings = BasicIDE::GetBindingsPtr())
                     pBindings->Invalidate( SID_DOC_MODIFIED );
             }
         }
@@ -1048,8 +1061,7 @@ void ModulWindow::ExecuteCommand( SfxRequest& rReq )
             if ( !IsReadOnly() )
             {
                 GetEditView()->Paste();
-                SfxBindings* pBindings = BasicIDE::GetBindingsPtr();
-                if ( pBindings )
+                if (SfxBindings* pBindings = BasicIDE::GetBindingsPtr())
                     pBindings->Invalidate( SID_DOC_MODIFIED );
             }
         }
@@ -1057,6 +1069,52 @@ void ModulWindow::ExecuteCommand( SfxRequest& rReq )
         case SID_BASICIDE_BRKPNTSCHANGED:
         {
             GetBreakPointWindow().Invalidate();
+        }
+        break;
+        case SID_SHOWLINES:
+        {
+            SFX_REQUEST_ARG(rReq, pItem, SfxBoolItem, rReq.GetSlot(), false);
+            bSourceLinesEnabled = pItem && pItem->GetValue();
+            aXEditorWindow.SetLineNumberDisplay(bSourceLinesEnabled);
+        }
+        break;
+        case SID_BASICIDE_DELETECURRENT:
+        {
+            if (QueryDelModule(m_aName, this))
+                if (m_aDocument.removeModule(m_aLibName, m_aName))
+                    BasicIDE::MarkDocumentModified(m_aDocument);
+        }
+        break;
+        case FID_SEARCH_OFF:
+            GrabFocus();
+            break;
+        case SID_GOTOLINE:
+        {
+            GotoLineDialog aGotoDlg(this);
+            if (aGotoDlg.Execute())
+                if (sal_Int32 const nLine = aGotoDlg.GetLineNumber())
+                {
+                    TextSelection const aSel(TextPaM(nLine - 1, 0), TextPaM(nLine - 1, 0));
+                    GetEditView()->SetSelection(aSel);
+                }
+            break;
+        }
+    }
+}
+
+void ModulWindow::ExecuteGlobal (SfxRequest& rReq)
+{
+    switch (rReq.GetSlot())
+    {
+        case SID_SIGNATURE:
+        {
+            basctl::DocumentSignature aSignature(m_aDocument);
+            if (aSignature.supportsSignatures())
+            {
+                aSignature.signScriptingContent();
+                if (SfxBindings* pBindings = BasicIDE::GetBindingsPtr())
+                    pBindings->Invalidate(SID_SIGNATURE);
+            }
         }
         break;
     }
@@ -1124,6 +1182,11 @@ void ModulWindow::GetState( SfxItemSet &rSet )
                 }
             }
             break;
+            case SID_SHOWLINES:
+            {
+                rSet.Put(SfxBoolItem(nWh, bSourceLinesEnabled));
+                break;
+            }
         }
     }
 }
@@ -1191,25 +1254,30 @@ void ModulWindow::ShowCursor( bool bOn )
 }
 
 
-Window* ModulWindow::GetLayoutWindow()
-{
-    return pLayout;
-}
-
 void ModulWindow::AssertValidEditEngine()
 {
     if ( !GetEditEngine() )
         GetEditorWindow().CreateEditEngine();
 }
 
+void ModulWindow::Activating ()
+{
+    aXEditorWindow.SetLineNumberDisplay(bSourceLinesEnabled);
+    Show();
+}
+
 void ModulWindow::Deactivating()
 {
+    Hide();
     if ( GetEditView() )
         GetEditView()->EraseVirtualDevice();
 }
 
 sal_uInt16 ModulWindow::StartSearchAndReplace( const SvxSearchItem& rSearchItem, bool bFromStart )
 {
+    if (IsSuspended())
+        return 0;
+
     // one could also relinquish syntaxhighlighting/formatting instead of the stupid replace-everything...
     AssertValidEditEngine();
     ExtTextView* pView = GetEditView();
@@ -1354,11 +1422,6 @@ void ModulWindow::SetLineNumberDisplay(bool b)
     aXEditorWindow.SetLineNumberDisplay(b);
 }
 
-void ModulWindow::SetObjectCatalogDisplay(bool b)
-{
-    aXEditorWindow.SetObjectCatalogDisplay(b);
-}
-
 bool ModulWindow::IsPasteAllowed()
 {
     bool bPaste = false;
@@ -1383,374 +1446,207 @@ bool ModulWindow::IsPasteAllowed()
     return bPaste;
 }
 
-ModulWindowLayout::ModulWindowLayout( Window* pParent ) :
-    Window(pParent, WB_CLIPCHILDREN),
-    bFirstArrange(true),
-    aLeftSplit(this, WB_HSCROLL),
-    aBottomSplit(this, WB_VSCROLL),
-    aVertSplit(this, WB_HSCROLL),
-    aObjectCatalog(this),
+void ModulWindow::OnNewDocument ()
+{
+    aXEditorWindow.SetLineNumberDisplay(bSourceLinesEnabled);
+}
+
+char const* ModulWindow::GetHid () const
+{
+    return HID_BASICIDE_MODULWINDOW;
+}
+BasicIDEType ModulWindow::GetType () const
+{
+    return BASICIDE_TYPE_MODULE;
+}
+
+bool ModulWindow::HasActiveEditor () const
+{
+    return !IsSuspended();
+}
+
+
+void ModulWindow::UpdateModule ()
+{
+    rtl::OUString const aModule = getTextEngineText(GetEditEngine());
+
+    // update module in basic
+    assert(xModule);
+
+    // update module in module window
+    SetModule(aModule);
+
+    // update module in library
+    OSL_VERIFY(m_aDocument.updateModule(m_aLibName, m_aName, aModule));
+
+    GetEditEngine()->SetModified(false);
+    BasicIDE::MarkDocumentModified(m_aDocument);
+}
+
+
+//
+// ModulWindowLayout
+// =================
+//
+
+ModulWindowLayout::ModulWindowLayout (Window* pParent, ObjectCatalog& rObjectCatalog_) :
+    Layout(pParent),
+    pChild(0),
     aWatchWindow(this),
     aStackWindow(this),
-    m_pModulWindow(0),
-    m_aImagesNormal(IDEResId(RID_IMGLST_LAYOUT))
+    rObjectCatalog(rObjectCatalog_)
+{ }
+
+void ModulWindowLayout::UpdateDebug (bool bBasicStopped)
 {
-    SetBackground(GetSettings().GetStyleSettings().GetWindowColor());
+    aWatchWindow.UpdateWatches(bBasicStopped);
+    aStackWindow.UpdateCalls();
+}
 
-    Color splitterColor(GetSettings().GetStyleSettings().GetShadowColor());
+void ModulWindowLayout::Paint (Rectangle const&)
+{
+    DrawText(Point(), String(IDEResId(RID_STR_NOMODULE)));
+}
 
-    aLeftSplit.SetLineColor(splitterColor);
-    aLeftSplit.SetFillColor(splitterColor);
-    aBottomSplit.SetLineColor(splitterColor);
-    aBottomSplit.SetFillColor(splitterColor);
-    aVertSplit.SetLineColor(splitterColor);
-    aVertSplit.SetFillColor(splitterColor);
+// virtual
+void ModulWindowLayout::DataChanged (DataChangedEvent const& rDCEvt)
+{
+    Layout::DataChanged(rDCEvt);
+    if (rDCEvt.GetType() == DATACHANGED_SETTINGS && (rDCEvt.GetFlags() & SETTINGS_STYLE))
+        aSyntaxColors.SettingsChanged();
+}
 
-    aLeftSplit.Show();
-    aBottomSplit.Show();
-    aVertSplit.Show();
-    aLeftSplit.SetSplitHdl( LINK(this, ModulWindowLayout, SplitHdl) );
-    aBottomSplit.SetSplitHdl( LINK(this, ModulWindowLayout, SplitHdl) );
-    aVertSplit.SetSplitHdl( LINK(this, ModulWindowLayout, SplitHdl) );
 
+void ModulWindowLayout::Activating (IDEBaseWindow& rChild)
+{
+    assert(dynamic_cast<ModulWindow*>(&rChild));
+    pChild = &static_cast<ModulWindow&>(rChild);
     aWatchWindow.Show();
     aStackWindow.Show();
-    aObjectCatalog.Show();
-
-    Color aColor(GetSettings().GetStyleSettings().GetFieldTextColor());
-    m_aSyntaxColors[TT_UNKNOWN] = aColor;
-    m_aSyntaxColors[TT_WHITESPACE] = aColor;
-    m_aSyntaxColors[TT_EOL] = aColor;
-    m_aColorConfig.AddListener(this);
-    m_aSyntaxColors[TT_IDENTIFIER]
-        = Color(m_aColorConfig.GetColorValue(svtools::BASICIDENTIFIER).nColor);
-    m_aSyntaxColors[TT_NUMBER]
-        = Color(m_aColorConfig.GetColorValue(svtools::BASICNUMBER).nColor);
-    m_aSyntaxColors[TT_STRING]
-        = Color(m_aColorConfig.GetColorValue(svtools::BASICSTRING).nColor);
-    m_aSyntaxColors[TT_COMMENT]
-        = Color(m_aColorConfig.GetColorValue(svtools::BASICCOMMENT).nColor);
-    m_aSyntaxColors[TT_ERROR]
-        = Color(m_aColorConfig.GetColorValue(svtools::BASICERROR).nColor);
-    m_aSyntaxColors[TT_OPERATOR]
-        = Color(m_aColorConfig.GetColorValue(svtools::BASICOPERATOR).nColor);
-    m_aSyntaxColors[TT_KEYWORDS]
-        = Color(m_aColorConfig.GetColorValue(svtools::BASICKEYWORD).nColor);
-
-    Font aFont( GetFont() );
-    Size aSz( aFont.GetSize() );
-    aSz.Height() *= 3;
-    aSz.Height() /= 2;
-    aFont.SetSize( aSz );
-    aFont.SetWeight( WEIGHT_BOLD );
-    aFont.SetColor(GetSettings().GetStyleSettings().GetWindowTextColor());
-    SetFont( aFont );
+    rObjectCatalog.Show();
+    rObjectCatalog.SetLayoutWindow(this);
+    rObjectCatalog.UpdateEntries();
+    Layout::Activating(rChild);
+    aSyntaxColors.SetActiveEditor(&pChild->GetEditorWindow());
 }
 
-ModulWindowLayout::~ModulWindowLayout()
+void ModulWindowLayout::Deactivating ()
 {
-    m_aColorConfig.RemoveListener(this);
+    aSyntaxColors.SetActiveEditor(0);
+    Layout::Deactivating();
+    aWatchWindow.Hide();
+    aStackWindow.Hide();
+    rObjectCatalog.Hide();
+    pChild = 0;
 }
 
-void ModulWindowLayout::Resize()
+void ModulWindowLayout::GetState (SfxItemSet &rSet, unsigned nWhich)
 {
-    // ScrollBars, etc. happens in BasicIDEShell:Adjust...
-    ArrangeWindows();
+    switch (nWhich)
+    {
+        case SID_BASICIDE_CHOOSEMACRO:
+            rSet.Put(SfxVisibilityItem(nWhich, true));
+            break;
+    }
 }
 
-void ModulWindowLayout::Paint( const Rectangle& )
+void ModulWindowLayout::BasicAddWatch (String const& rWatchStr)
 {
-    DrawText( Point(), String( IDEResId( RID_STR_NOMODULE ) ) );
+    aWatchWindow.AddWatch(rWatchStr);
 }
 
-
-void ModulWindowLayout::ArrangeWindows()
+void ModulWindowLayout::BasicRemoveWatch ()
 {
-    static long const nSplitThickness = 2;
-    static double const
-        fDefaultLeftSplit = 0.2,
-        fDefaultBottomSplit = 0.75,
-        fDefaultVertSplit = 0.67;
-
-    Size const aSize = GetOutputSizePixel();
-    long const nWidth = aSize.Width(), nHeight = aSize.Height();
-    if (!nWidth || !nHeight) // empty size
-        return;
-
-    // When ArrangeWindows() is called first,
-    // the initial positions of the splitter lines are set.
-    if (bFirstArrange)
-    {
-        aLeftSplit.SetSplitPosPixel(aSize.Width()  * fDefaultLeftSplit);
-        aBottomSplit.SetSplitPosPixel(aSize.Height() * fDefaultBottomSplit);
-        aVertSplit.SetSplitPosPixel(aSize.Width()  * fDefaultVertSplit);
-        bFirstArrange = false;
-    }
-
-    // resizing windows to the splitting lines
-    long const nLeftSplitPos = aLeftSplit.GetSplitPosPixel();
-    long const nBottomSplitPos = aBottomSplit.GetSplitPosPixel();
-    long const nVertSplitPos = aVertSplit.GetSplitPosPixel();
-    // which window is docked?
-    bool const bObjCat = !aObjectCatalog.IsFloatingMode() && aObjectCatalog.IsVisible();
-    bool const bWatchWin = !aWatchWindow.IsFloatingMode() && aWatchWindow.IsVisible();
-    bool const bStackWin = !aStackWindow.IsFloatingMode() && aStackWindow.IsVisible();
-    long const nBottom = bStackWin || bWatchWin ? nBottomSplitPos : nHeight;
-    // left splitting line
-    if (bObjCat)
-    {
-        aLeftSplit.SetDragRectPixel(Rectangle(Point(0, 0), Size(nWidth, nBottom)));
-        aLeftSplit.SetPosPixel(Point(nLeftSplitPos, 0));
-        aLeftSplit.SetSizePixel(Size(nSplitThickness, nBottom));
-        aLeftSplit.Show();
-    }
-    else
-        aLeftSplit.Hide();
-    // bottom splitting line
-    if (bWatchWin || bStackWin)
-    {
-        aBottomSplit.SetDragRectPixel(Rectangle(Point(0, 0), aSize));
-        aBottomSplit.SetPosPixel(Point(0, nBottomSplitPos));
-        aBottomSplit.SetSizePixel(Size(nWidth, nSplitThickness));
-        aBottomSplit.Show();
-    }
-    else
-        aBottomSplit.Hide();
-    // vertical (bottom) splitting line
-    if (bWatchWin || bStackWin)
-    {
-        Point const aPos(nVertSplitPos, nBottomSplitPos + nSplitThickness);
-        aVertSplit.SetDragRectPixel(Rectangle(Point(0, aPos.Y()), Size(nWidth, nHeight - aPos.Y())));
-        aVertSplit.SetPosSizePixel(aPos, Size(nSplitThickness, nHeight - aPos.Y()));
-        aVertSplit.Show();
-    }
-    else
-        aVertSplit.Hide();
-    // editor window
-    if (m_pModulWindow)
-    {
-        DBG_CHKOBJ(m_pModulWindow, ModulWindow, 0);
-        long const nLeft = bObjCat ? nLeftSplitPos + nSplitThickness : 0;
-        m_pModulWindow->SetPosSizePixel(
-            Point(nLeft, 0),
-            Size(nWidth - nLeft, nBottom)
-        );
-    }
-    // object catalog (left)
-    if (bObjCat)
-    {
-        aObjectCatalog.SetPosPixel(Point(0, 0));
-        aObjectCatalog.SetSizePixel(Size(nLeftSplitPos, nBottom));
-    }
-    // watch (bottom left)
-    if (bWatchWin)
-    {
-        Point const aPos(0, nBottomSplitPos + nSplitThickness);
-        aWatchWindow.SetPosPixel(aPos);
-        aWatchWindow.SetSizePixel(Size(nVertSplitPos, nHeight - aPos.Y()));
-    }
-    // call stack (bottom right)
-    if (bStackWin)
-    {
-        Point const aPos(nVertSplitPos + nSplitThickness, nBottomSplitPos + nSplitThickness);
-        aStackWindow.SetPosPixel(aPos);
-        aStackWindow.SetSizePixel(Size(nWidth - aPos.X(), nHeight - aPos.Y()));
-    }
+    DBG_CHKTHIS( ModulWindow, 0 );
+    aWatchWindow.RemoveSelectedWatch();
 }
 
-IMPL_LINK( ModulWindowLayout, SplitHdl, Splitter *, pSplitter )
+void ModulWindowLayout::OnFirstSize (int const nWidth, int const nHeight)
 {
-    // The split line cannot be closer to the edges than nMargin pixels.
-    static long const nMargin = 16;
-    // Checking margins:
-    if (long const nSize = pSplitter->IsHorizontal() ?
-        GetOutputSizePixel().Width() :
-        GetOutputSizePixel().Height()
-    ) {
-        long const nPos = pSplitter->GetSplitPosPixel();
-        if (nPos < nMargin)
-            pSplitter->SetSplitPosPixel(nMargin);
-        if (nPos > nSize - nMargin)
-            pSplitter->SetSplitPosPixel(nSize - nMargin);
-    }
-    ArrangeWindows();
-    return 0;
+    AddToLeft(&rObjectCatalog, Size(nWidth * 0.20, nHeight * 0.75));
+    AddToBottom(&aWatchWindow, Size(nWidth * 0.67, nHeight * 0.25));
+    AddToBottom(&aStackWindow, Size(nWidth * 0.33, nHeight * 0.25));
 }
+
 
 //
-// IsToBeDocked() -- test whether dock or child:
-// true:  Floating
-// false: Child
+// SyntaxColors
+// ============
 //
-bool ModulWindowLayout::IsToBeDocked (
-    DockingWindow* pDockingWindow, Point const& rPos, Rectangle& rRect
-) {
-    Point const aPos = ScreenToOutputPixel(rPos);
-    Size const aSize = GetOutputSizePixel();
-    long const nWidth = aSize.Width(), nHeight = aSize.Height();
 
-    if (aPos.X() > 0 && aPos.X() < nWidth && aPos.Y() > 0 && aPos.Y() < nHeight)
+ModulWindowLayout::SyntaxColors::SyntaxColors () :
+    pEditor(0)
+{
+    aConfig.AddListener(this);
+
+    aColors[TT_UNKNOWN] =
+    aColors[TT_WHITESPACE] =
+    aColors[TT_EOL] =
+        Application::GetSettings().GetStyleSettings().GetFieldTextColor();
+
+    NewConfig(true);
+}
+
+ModulWindowLayout::SyntaxColors::~SyntaxColors ()
+{
+    aConfig.RemoveListener(this);
+}
+
+void ModulWindowLayout::SyntaxColors::SettingsChanged ()
+{
+    Color const aColor = Application::GetSettings().GetStyleSettings().GetFieldTextColor();
+    if (aColor != aColors[TT_UNKNOWN])
     {
-        long const nLeftSplit = aLeftSplit.GetSplitPosPixel();
-        long const nBottomSplit = aBottomSplit.GetSplitPosPixel();
-        long const nVertSplit = aVertSplit.GetSplitPosPixel();
-        if (pDockingWindow == &aObjectCatalog)
-        {
-            if (aPos.Y() < nBottomSplit && aPos.X() < nLeftSplit)
-            {
-                rRect = Rectangle(
-                    OutputToScreenPixel(Point(0, 0)),
-                    Size(nLeftSplit, nBottomSplit)
-                );
-                return true;
-            }
-        }
-        else if (pDockingWindow == &aWatchWindow)
-        {
-            if (aPos.Y() > nBottomSplit && aPos.X() < nVertSplit)
-            {
-                rRect = Rectangle(
-                    OutputToScreenPixel(Point(0, nBottomSplit)),
-                    Size(nVertSplit, nHeight - nBottomSplit)
-                );
-                return true;
-            }
-        }
-        else if (pDockingWindow == &aStackWindow)
-        {
-            if (aPos.Y() > nBottomSplit && aPos.X() > nVertSplit)
-            {
-                rRect = Rectangle(
-                    OutputToScreenPixel(Point(nVertSplit, nBottomSplit)),
-                    Size(nWidth - nVertSplit, nHeight - nBottomSplit)
-                );
-                return true;
-            }
-        }
-    }
-    return false;
-}
-
-void ModulWindowLayout::DockaWindow (DockingWindow*)
-{
-    ArrangeWindows();
-}
-
-void ModulWindowLayout::SetModulWindow (ModulWindow* pModulWindow)
-{
-    m_pModulWindow = pModulWindow;
-    ArrangeWindows();
-}
-
-// virtual
-void ModulWindowLayout::DataChanged(DataChangedEvent const & rDCEvt)
-{
-    Window::DataChanged(rDCEvt);
-    if (rDCEvt.GetType() == DATACHANGED_SETTINGS
-        && (rDCEvt.GetFlags() & SETTINGS_STYLE) != 0)
-    {
-        bool bInvalidate = false;
-        Color aColor(GetSettings().GetStyleSettings().GetWindowColor());
-        if (aColor
-            != rDCEvt.GetOldSettings()->GetStyleSettings().GetWindowColor())
-        {
-            SetBackground(Wallpaper(aColor));
-            bInvalidate = true;
-        }
-        aColor = GetSettings().GetStyleSettings().GetWindowTextColor();
-        if (aColor != rDCEvt.GetOldSettings()->
-            GetStyleSettings().GetWindowTextColor())
-        {
-            Font aFont(GetFont());
-            aFont.SetColor(aColor);
-            SetFont(aFont);
-            bInvalidate = true;
-        }
-        if (bInvalidate)
-            Invalidate();
-        aColor = GetSettings().GetStyleSettings().GetFieldTextColor();
-        if (aColor != m_aSyntaxColors[TT_UNKNOWN])
-        {
-            m_aSyntaxColors[TT_UNKNOWN] = aColor;
-            m_aSyntaxColors[TT_WHITESPACE] = aColor;
-            m_aSyntaxColors[TT_EOL] = aColor;
-            updateSyntaxHighlighting();
-        }
+        aColors[TT_UNKNOWN] =
+        aColors[TT_WHITESPACE] =
+        aColors[TT_EOL] =
+            aColor;
+        if (pEditor)
+            pEditor->UpdateSyntaxHighlighting();
     }
 }
 
 // virtual
-void ModulWindowLayout::ConfigurationChanged( utl::ConfigurationBroadcaster*, sal_uInt32 )
+void ModulWindowLayout::SyntaxColors::ConfigurationChanged (utl::ConfigurationBroadcaster*, sal_uInt32)
 {
+    NewConfig(false);
+}
+
+// when a new configuration has to be set
+void ModulWindowLayout::SyntaxColors::NewConfig (bool bFirst)
+{
+    static struct
     {
-        Color aColor(m_aColorConfig.GetColorValue(svtools::BASICIDENTIFIER).
-                     nColor);
-        bool bChanged = aColor != m_aSyntaxColors[TT_IDENTIFIER];
-        m_aSyntaxColors[TT_IDENTIFIER] = aColor;
-        aColor = Color(m_aColorConfig.GetColorValue(svtools::BASICNUMBER).nColor);
-    if (bChanged || aColor != m_aSyntaxColors[TT_NUMBER])
-            bChanged = true;
-        m_aSyntaxColors[TT_NUMBER] = aColor;
-        aColor = Color(m_aColorConfig.GetColorValue(svtools::BASICSTRING).nColor);
-        if (bChanged || aColor != m_aSyntaxColors[TT_STRING])
-            bChanged = true;
-        m_aSyntaxColors[TT_STRING] = aColor;
-        aColor = Color(m_aColorConfig.GetColorValue(svtools::BASICCOMMENT).
-                       nColor);
-        if (bChanged || aColor != m_aSyntaxColors[TT_COMMENT])
-            bChanged = true;
-        m_aSyntaxColors[TT_COMMENT] = aColor;
-        aColor = Color(m_aColorConfig.GetColorValue(svtools::BASICERROR).nColor);
-        if (bChanged || aColor != m_aSyntaxColors[TT_ERROR])
-            bChanged = true;
-        m_aSyntaxColors[TT_ERROR] = aColor;
-        aColor = Color(m_aColorConfig.GetColorValue(svtools::BASICOPERATOR).
-                       nColor);
-        if (bChanged || aColor != m_aSyntaxColors[TT_OPERATOR])
-            bChanged = true;
-        m_aSyntaxColors[TT_OPERATOR] = aColor;
-        aColor = Color(m_aColorConfig.GetColorValue(svtools::BASICKEYWORD).
-                       nColor);
-        if (bChanged || aColor != m_aSyntaxColors[TT_KEYWORDS])
-            bChanged = true;
-        m_aSyntaxColors[TT_KEYWORDS] = aColor;
-        if (bChanged)
-            updateSyntaxHighlighting();
+        TokenTypes eTokenType;
+        svtools::ColorConfigEntry eEntry;
     }
-}
-
-void ModulWindowLayout::updateSyntaxHighlighting()
-{
-    if (m_pModulWindow != 0)
+    const vIds[] =
     {
-        EditorWindow & rEditor = m_pModulWindow->GetEditorWindow();
-        sal_uLong nCount = rEditor.GetEditEngine()->GetParagraphCount();
-        for (sal_uLong i = 0; i < nCount; ++i)
-            rEditor.DoDelayedSyntaxHighlight(i);
+        { TT_IDENTIFIER,  svtools::BASICIDENTIFIER },
+        { TT_NUMBER,      svtools::BASICNUMBER },
+        { TT_STRING,      svtools::BASICSTRING },
+        { TT_COMMENT,     svtools::BASICCOMMENT },
+        { TT_ERROR,       svtools::BASICERROR },
+        { TT_OPERATOR,    svtools::BASICOPERATOR },
+        { TT_KEYWORDS,    svtools::BASICKEYWORD },
+    };
+
+    bool bChanged = false;
+    for (unsigned i = 0; i != sizeof vIds / sizeof vIds[0]; ++i)
+    {
+        Color const aColor = aConfig.GetColorValue(vIds[i].eEntry).nColor;
+        Color& rMyColor = aColors[vIds[i].eTokenType];
+        if (bFirst || aColor != rMyColor)
+        {
+            rMyColor = aColor;
+            bChanged = true;
+        }
     }
+    if (bChanged && !bFirst && pEditor)
+        pEditor->UpdateSyntaxHighlighting();
 }
 
-Image ModulWindowLayout::getImage(sal_uInt16 nId) const
-{
-    return m_aImagesNormal.GetImage(nId);
-}
 
-// shows or hides the Object Catalog window (depending on its state)
-void ModulWindowLayout::ToggleObjectCatalog ()
-{
-    // show or hide?
-    bool const bShow = !aObjectCatalog.IsVisible();
-    bShow ? aObjectCatalog.Show() : aObjectCatalog.Hide();
-    if (m_pModulWindow)
-        m_pModulWindow->SetObjectCatalogDisplay(bShow);
-    // refreshing
-    ArrangeWindows();
-}
-
-// Updates the Object Catalog window.
-void ModulWindowLayout::UpdateObjectCatalog ()
-{
-    aObjectCatalog.UpdateEntries();
-}
+} // namespace basctl
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

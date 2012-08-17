@@ -27,7 +27,6 @@
 #include <svl/lstner.hxx>
 #include <tools/link.hxx>
 
-class DialogWindow;
 class DlgEditor;
 class DlgEdModel;
 class DlgEdObj;
@@ -35,6 +34,10 @@ class VCLExternalSolarLock;
 class VclSimpleEvent;
 class VclWindowEvent;
 
+namespace basctl
+{
+    class DialogWindow;
+}
 namespace utl {
 class AccessibleStateSetHelper;
 }
@@ -77,7 +80,7 @@ private:
 
     AccessibleChildren      m_aAccessibleChildren;
     VCLExternalSolarLock*   m_pExternalLock;
-    DialogWindow*           m_pDialogWindow;
+    basctl::DialogWindow*   m_pDialogWindow;
     DlgEditor*              m_pDlgEditor;
     DlgEdModel*             m_pDlgEdModel;
 
@@ -106,7 +109,7 @@ protected:
     virtual void SAL_CALL   disposing();
 
 public:
-    AccessibleDialogWindow( DialogWindow* pDialogWindow );
+    AccessibleDialogWindow (basctl::DialogWindow*);
     ~AccessibleDialogWindow();
 
     // SfxListener

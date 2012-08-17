@@ -30,12 +30,15 @@
 
 #include <vcl/window.hxx>
 
-class ModulWindow;
+namespace basctl
+{
+    class ModulWindow;
+}
 
 class LineNumberWindow : public Window
 {
 private:
-    ModulWindow* m_pModulWindow;
+    basctl::ModulWindow* m_pModulWindow;
     int m_nWidth;
     long m_nCurYOffset;
     int m_nBaseWidth;
@@ -45,7 +48,7 @@ protected:
     virtual void Paint( const Rectangle& );
 
 public:
-    LineNumberWindow( Window* pParent, ModulWindow* pModulWin );
+    LineNumberWindow (Window* pParent, basctl::ModulWindow* pModulWin);
     ~LineNumberWindow();
 
     void DoScroll( long nHorzScroll, long nVertScroll );

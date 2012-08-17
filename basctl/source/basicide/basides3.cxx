@@ -41,6 +41,9 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::io;
 
+using basctl::DialogWindow;
+using basctl::DialogWindowLayout;
+
 DialogWindow* BasicIDEShell::CreateDlgWin( const ScriptDocument& rDocument, const ::rtl::OUString& rLibName, const ::rtl::OUString& rDlgName )
 {
     bCreatingWindow = true;
@@ -86,7 +89,9 @@ DialogWindow* BasicIDEShell::CreateDlgWin( const ScriptDocument& rDocument, cons
                 LocalizationMgr::setStringResourceAtDialog( rDocument, rLibName, aDlgName, xDialogModel );
 
                 // new dialog window
-                pWin = new DialogWindow( &GetViewFrame()->GetWindow(), rDocument, aLibName, aDlgName, xDialogModel );
+                if (!pDialogLayout)
+                    pDialogLayout.reset(new DialogWindowLayout(&GetViewFrame()->GetWindow(), aObjectCatalog));
+                pWin = new DialogWindow(pDialogLayout.get(), rDocument, aLibName, aDlgName, xDialogModel);
                 nKey = InsertWindowInTable( pWin );
             }
         }
@@ -115,22 +120,20 @@ DialogWindow* BasicIDEShell::CreateDlgWin( const ScriptDocument& rDocument, cons
     return pWin;
 }
 
-DialogWindow* BasicIDEShell::FindDlgWin( const ScriptDocument& rDocument, const ::rtl::OUString& rLibName, const ::rtl::OUString& rDlgName, bool bCreateIfNotExist, bool bFindSuspended )
+DialogWindow* BasicIDEShell::FindDlgWin (
+    ScriptDocument const& rDocument,
+    rtl::OUString const& rLibName, rtl::OUString const& rName,
+    bool bCreateIfNotExist, bool bFindSuspended
+)
 {
-    for( IDEWindowTable::const_iterator it = aIDEWindowTable.begin(); it != aIDEWindowTable.end(); ++it )
-    {
-        IDEBaseWindow* pWin = it->second;
-        if (!pWin->IsSuspended() || bFindSuspended)
-            if (rLibName.isEmpty() || (pWin->IsDocument(rDocument) && pWin->GetLibName() == rLibName && pWin->GetName() == rDlgName))
-                if (DialogWindow* pDlgWin = dynamic_cast<DialogWindow*>(pWin))
-                    return pDlgWin;
-    }
-    return bCreateIfNotExist ? CreateDlgWin(rDocument, rLibName, rDlgName) : 0;
+    if (IDEBaseWindow* pWin = FindWindow(rDocument, rLibName, rName, BASICIDE_TYPE_DIALOG, bFindSuspended))
+        return static_cast<DialogWindow*>(pWin);
+    return bCreateIfNotExist ? CreateDlgWin(rDocument, rLibName, rName) : 0;
 }
 
 sal_uInt16 BasicIDEShell::GetIDEWindowId(const IDEBaseWindow* pWin) const
 {
-    for( IDEWindowTable::const_iterator it = aIDEWindowTable.begin(); it != aIDEWindowTable.end(); ++it )
+    for (WindowTableIt it = aIDEWindowTable.begin(); it != aIDEWindowTable.end(); ++it)
         if ( it->second == pWin )
             return it->first;
     return 0;
@@ -147,11 +150,8 @@ SdrView* BasicIDEShell::GetCurDlgView() const
 // only if dialogue window above:
 void BasicIDEShell::ExecuteDialog( SfxRequest& rReq )
 {
-    if (pCurWin && (dynamic_cast<DialogWindow*>(pCurWin) ||
-        (rReq.GetSlot() == SID_IMPORT_DIALOG && dynamic_cast<ModulWindow*>(pCurWin))))
-    {
-        pCurWin->ExecuteCommand( rReq );
-    }
+    if (pCurWin && (dynamic_cast<DialogWindow*>(pCurWin) || rReq.GetSlot() == SID_IMPORT_DIALOG))
+        pCurWin->ExecuteCommand(rReq);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -32,6 +32,7 @@
 #include "idetemp.hxx"
 #include "localizationmgr.hxx"
 #include "propbrw.hxx"
+#include "objdlg.hxx"
 
 #include <basic/basmgr.hxx>
 #include <com/sun/star/resource/StringResourceWithLocation.hpp>
@@ -46,6 +47,7 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/request.hxx>
 #include <svl/aeitem.hxx>
+#include <svl/visitem.hxx>
 #include <svl/whiter.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/urlobj.hxx>
@@ -59,6 +61,9 @@ using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::resource;
 using namespace ::com::sun::star::ui::dialogs;
 
+namespace basctl
+{
+
 #if defined(UNX)
 #define FILTERMASK_ALL "*"
 #else
@@ -69,10 +74,15 @@ DBG_NAME( DialogWindow )
 
 TYPEINIT1( DialogWindow, IDEBaseWindow );
 
-DialogWindow::DialogWindow( Window* pParent, const ScriptDocument& rDocument, ::rtl::OUString aLibName, ::rtl::OUString aName,
-    const com::sun::star::uno::Reference< com::sun::star::container::XNameContainer >& xDialogModel )
-        :IDEBaseWindow( pParent, rDocument, aLibName, aName )
-        ,pUndoMgr(NULL)
+DialogWindow::DialogWindow (
+    DialogWindowLayout* pParent,
+    ScriptDocument const& rDocument,
+    rtl::OUString aLibName, rtl::OUString aName,
+    com::sun::star::uno::Reference<com::sun::star::container::XNameContainer> const& xDialogModel
+) :
+    IDEBaseWindow(pParent, rDocument, aLibName, aName),
+    rLayout(*pParent),
+    pUndoMgr(0)
 {
     InitSettings( true, true, true );
 
@@ -395,11 +405,18 @@ void DialogWindow::GetState( SfxItemSet& rSet )
                     rSet.DisableItem( nWh );
             }
             break;
+            case SID_SHOWLINES:
+            {
+                // if this is not a module window hide the
+                // setting, doesn't make sense for example if the
+                // dialog editor is open
+                rSet.DisableItem(nWh);
+                rSet.Put(SfxVisibilityItem(nWh, false));
+                break;
+            }
         }
     }
 }
-
-
 
 void DialogWindow::ExecuteCommand( SfxRequest& rReq )
 {
@@ -647,6 +664,17 @@ void DialogWindow::ExecuteCommand( SfxRequest& rReq )
         case SID_IMPORT_DIALOG:
             ImportDialog();
             break;
+
+        case SID_BASICIDE_DELETECURRENT:
+            if (QueryDelDialog(m_aName, this))
+            {
+                if (BasicIDE::RemoveDialog(m_aDocument, m_aLibName, m_aName))
+                {
+                    BasicIDE::MarkDocumentModified(m_aDocument);
+                    BasicIDEGlobals::GetShell()->RemoveWindow(this, true);
+                }
+            }
+            break;
     }
 
     rReq.Done();
@@ -865,6 +893,9 @@ bool DialogWindow::SaveDialog()
     return bDone;
 }
 
+} // namespace basctl
+
+
 extern bool localesAreEqual( const ::com::sun::star::lang::Locale& rLocaleLeft,
                              const ::com::sun::star::lang::Locale& rLocaleRight );
 
@@ -951,6 +982,7 @@ LanguageMismatchQueryBox::LanguageMismatchQueryBox( Window* pParent,
 
     SetImage( QueryBox::GetStandardImage() );
 }
+
 
 bool implImportDialog( Window* pWin, const ::rtl::OUString& rCurPath, const ScriptDocument& rDocument, const ::rtl::OUString& aLibName )
 {
@@ -1239,7 +1271,7 @@ bool implImportDialog( Window* pWin, const ::rtl::OUString& rCurPath, const Scri
             bool bSuccess = rDocument.insertDialog( aLibName, aNewDlgName, xISP );
             if( bSuccess )
             {
-                DialogWindow* pNewDlgWin = pIDEShell->CreateDlgWin( rDocument, aLibName, aNewDlgName );
+                basctl::DialogWindow* pNewDlgWin = pIDEShell->CreateDlgWin( rDocument, aLibName, aNewDlgName );
                 pIDEShell->SetCurWindow( pNewDlgWin, true );
             }
 
@@ -1251,6 +1283,10 @@ bool implImportDialog( Window* pWin, const ::rtl::OUString& rCurPath, const Scri
 
     return bDone;
 }
+
+
+namespace basctl
+{
 
 bool DialogWindow::ImportDialog()
 {
@@ -1348,10 +1384,18 @@ void DialogWindow::StoreData()
     }
 }
 
+void DialogWindow::Activating ()
+{
+    UpdateBrowser();
+    Show();
+}
+
 void DialogWindow::Deactivating()
 {
+    Hide();
     if ( IsModified() )
         BasicIDE::MarkDocumentModified( GetDocument() );
+    DisableBrowser();
 }
 
 sal_Int32 DialogWindow::countPages( Printer* pPrinter )
@@ -1399,5 +1443,61 @@ void DialogWindow::InitSettings(bool bFont, bool bForeground, bool bBackground)
 {
     return (::com::sun::star::accessibility::XAccessible*) new AccessibleDialogWindow( this );
 }
+
+char const* DialogWindow::GetHid () const
+{
+    return HID_BASICIDE_DIALOGWINDOW;
+}
+BasicIDEType DialogWindow::GetType () const
+{
+    return BASICIDE_TYPE_DIALOG;
+}
+
+
+//
+// DialogWindowLayout
+// ==================
+//
+
+DialogWindowLayout::DialogWindowLayout (Window* pParent, ObjectCatalog& rObjectCatalog_) :
+    Layout(pParent),
+    pChild(0),
+    rObjectCatalog(rObjectCatalog_)
+{ }
+
+void DialogWindowLayout::Activating (IDEBaseWindow& rChild)
+{
+    assert(dynamic_cast<DialogWindow*>(&rChild));
+    pChild = &static_cast<DialogWindow&>(rChild);
+    rObjectCatalog.SetLayoutWindow(this);
+    rObjectCatalog.UpdateEntries();
+    rObjectCatalog.Show();
+    Layout::Activating(rChild);
+}
+
+void DialogWindowLayout::Deactivating ()
+{
+    Layout::Deactivating();
+    rObjectCatalog.Hide();
+    pChild = 0;
+}
+
+void DialogWindowLayout::GetState (SfxItemSet& rSet, unsigned nWhich)
+{
+    switch (nWhich)
+    {
+        case SID_BASICIDE_CHOOSEMACRO:
+            rSet.Put(SfxVisibilityItem(nWhich, false));
+            break;
+    }
+}
+
+void DialogWindowLayout::OnFirstSize (int const nWidth, int const nHeight)
+{
+    AddToLeft(&rObjectCatalog, Size(nWidth * 0.2, nHeight));
+}
+
+
+} // namespace basctl
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

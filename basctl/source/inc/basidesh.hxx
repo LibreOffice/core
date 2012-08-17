@@ -16,17 +16,19 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _BASIDESH_HXX
-#define _BASIDESH_HXX
+#ifndef BASCTL_BASIDESH_HXX
+#define BASCTL_BASIDESH_HXX
 
 #include "doceventnotifier.hxx"
 #include "sbxitem.hxx"
+#include "../basicide/objdlg.hxx"
 
 #include <com/sun/star/container/XContainerListener.hpp>
 #include <sfx2/viewsh.hxx>
 #include <svx/ifaceids.hxx>
 #include <vcl/scrbar.hxx>
 #include <map>
+#include <boost/scoped_ptr.hpp>
 
 class SfxViewFactory;
 
@@ -36,9 +38,14 @@ const sal_uLong BASICIDE_UI_FEATURE_SHOW_BROWSER = 0x00000001;
 
 //----------------------------------------------------------------------------
 
-class ModulWindow;
-class ModulWindowLayout;
-class DialogWindow;
+namespace basctl
+{
+    class Layout;
+    class ModulWindow;
+    class ModulWindowLayout;
+    class DialogWindow;
+    class DialogWindowLayout;
+}
 class SdrView;
 class BasicIDETabBar;
 class TabBar;
@@ -59,15 +66,21 @@ namespace BasicIDE
     bool RemoveDialog( const ScriptDocument& rDocument, const ::rtl::OUString& rLibName, const ::rtl::OUString& rDlgName );
 }
 
-class BasicIDEShell :public SfxViewShell
-                    ,public ::basctl::DocumentEventListener
+class BasicIDEShell :
+    public SfxViewShell,
+    public basctl::DocumentEventListener
 {
-friend class LocalizationMgr;
+    typedef basctl::DialogWindow DialogWindow;
+    typedef basctl::ModulWindow ModulWindow;
+
+    friend class JavaDebuggingListenerImpl;
+    friend class LocalizationMgr;
     friend bool implImportDialog( Window* pWin, const ::rtl::OUString& rCurPath, const ScriptDocument& rDocument, const ::rtl::OUString& aLibName );
-    friend bool BasicIDE::RemoveDialog( const ScriptDocument& rDocument, const ::rtl::OUString& rLibName, const ::rtl::OUString& rDlgName );
+
+    typedef IDEWindowTable::const_iterator WindowTableIt;
 
     IDEWindowTable      aIDEWindowTable;
-    sal_uInt16              nCurKey;
+    sal_uInt16          nCurKey;
     IDEBaseWindow*      pCurWin;
     ScriptDocument      m_aCurDocument;
     ::rtl::OUString     m_aCurLibName;
@@ -79,11 +92,18 @@ friend class LocalizationMgr;
     BasicIDETabBar*     pTabBar;
     bool                bTabBarSplitted;
     bool                bCreatingWindow;
-    ModulWindowLayout*  pModulLayout;
+    // layout windows
+    boost::scoped_ptr<basctl::ModulWindowLayout> pModulLayout;
+    boost::scoped_ptr<basctl::DialogWindowLayout> pDialogLayout;
+    // the active layout window
+    basctl::Layout* pLayout;
+    // common object catalog window
+    basctl::ObjectCatalog aObjectCatalog;
+
     bool                m_bAppBasicModified;
     ::basctl::DocumentEventNotifier
                         m_aNotifier;
-friend class ContainerListenerImpl;
+    friend class ContainerListenerImpl;
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerListener > m_xLibListener;
 
 #if _SOLAR__PRIVATE
@@ -115,13 +135,11 @@ protected:
 
     void                SetCurWindow( IDEBaseWindow* pNewWin, bool bUpdateTabBar = false, bool bRememberAsCurrent = true );
     void                ManageToolbars();
-    void                RemoveWindow( IDEBaseWindow* pWindow, bool bDestroy, bool bAllowChangeCurWindow = true );
     void                ArrangeTabBar();
 
     ModulWindow*        CreateBasWin( const ScriptDocument& rDocument, const ::rtl::OUString& rLibName, const ::rtl::OUString& rModName );
     DialogWindow*       CreateDlgWin( const ScriptDocument& rDocument, const ::rtl::OUString& rLibName, const ::rtl::OUString& rDlgName );
 
-    ModulWindow*        FindBasWin( const ScriptDocument& rDocument, const ::rtl::OUString& rLibName, const ::rtl::OUString& rModName, bool bCreateIfNotExist, bool bFindSuspended = false );
     ModulWindow*        ShowActiveModuleWindow( StarBASIC* pBasic );
 
     virtual void        SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
@@ -132,10 +150,6 @@ protected:
 
     virtual void        Move();
     virtual void        ShowCursor( bool bOn = true );
-
-    void                CreateModulWindowLayout();
-    void                DestroyModulWindowLayout();
-    void                UpdateModulWindowLayout( bool bBasicStopped );
 
     // DocumentEventListener
     virtual void onDocumentCreated( const ScriptDocument& _rDocument );
@@ -178,9 +192,9 @@ public:
 
     // virtual sal_uInt16           Print( SfxProgress &rProgress, sal_Bool bIsAPI, PrintDialog *pPrintDialog = 0 );
     virtual SfxPrinter*     GetPrinter( sal_Bool bCreate );
-    virtual sal_uInt16          SetPrinter( SfxPrinter *pNewPrinter, sal_uInt16 nDiffFlags = SFX_PRINTER_ALL, bool bIsAPI=false );
+    virtual sal_uInt16      SetPrinter( SfxPrinter *pNewPrinter, sal_uInt16 nDiffFlags = SFX_PRINTER_ALL, bool bIsAPI=false );
     virtual String          GetSelectionText( sal_Bool bCompleteWords );
-    virtual sal_Bool            HasSelection( sal_Bool bText ) const;
+    virtual sal_Bool        HasSelection( sal_Bool bText ) const;
 
     void                GetState( SfxItemSet& );
     void                ExecuteGlobal( SfxRequest& rReq );
@@ -193,10 +207,9 @@ public:
     long                CallBasicErrorHdl( StarBASIC* pBasic );
     long                CallBasicBreakHdl( StarBASIC* pBasic );
 
-    ModulWindowLayout*  GetLayoutWindow() const { return pModulLayout; }
-
     IDEBaseWindow*      FindWindow( const ScriptDocument& rDocument, const ::rtl::OUString& rLibName = ::rtl::OUString(), const ::rtl::OUString& rName = ::rtl::OUString(), BasicIDEType nType = BASICIDE_TYPE_UNKNOWN, bool bFindSuspended = false );
-    DialogWindow*       FindDlgWin( const ScriptDocument& rDocument, const ::rtl::OUString& rLibName, const ::rtl::OUString& rDlgName, bool bCreateIfNotExist, bool bFindSuspended = false );
+    DialogWindow*       FindDlgWin( const ScriptDocument& rDocument, const ::rtl::OUString& rLibName, const ::rtl::OUString& rName, bool bCreateIfNotExist = false, bool bFindSuspended = false );
+    ModulWindow*        FindBasWin( const ScriptDocument& rDocument, const ::rtl::OUString& rLibName, const ::rtl::OUString& rModName, bool bCreateIfNotExist = false, bool bFindSuspended = false );
     IDEBaseWindow*      FindApplicationWindow();
     bool                NextPage( bool bPrev = false );
 
@@ -211,12 +224,12 @@ public:
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >
                         GetCurrentDocument() const;
-    bool SourceLinesDisplayed();
 
-    void UpdateObjectCatalog ();
+    void UpdateObjectCatalog () { aObjectCatalog.UpdateEntries(); }
 
+    void RemoveWindow (IDEBaseWindow* pWindow, bool bDestroy, bool bAllowChangeCurWindow = true);
 };
 
-#endif // _BASIDESH_HXX
+#endif // BASCTL_BASIDESH_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

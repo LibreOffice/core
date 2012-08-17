@@ -189,10 +189,10 @@ bool RenameDialog( Window* pErrorParent, const ScriptDocument& rDocument, const 
     }
 
     BasicIDEShell* pIDEShell = BasicIDEGlobals::GetShell();
-    IDEBaseWindow* pWin = pIDEShell ? pIDEShell->FindWindow( rDocument, rLibName, rOldName, BASICIDE_TYPE_DIALOG, false ) : NULL;
+    basctl::DialogWindow* pWin = pIDEShell ? pIDEShell->FindDlgWin(rDocument, rLibName, rOldName) : 0;
     Reference< XNameContainer > xExistingDialog;
     if ( pWin )
-        xExistingDialog = ((DialogWindow*)pWin)->GetEditor()->GetDialog();
+        xExistingDialog = pWin->GetEditor()->GetDialog();
 
     if ( xExistingDialog.is() )
         LocalizationMgr::renameStringResourceIDs( rDocument, rLibName, rNewName, xExistingDialog );
@@ -206,7 +206,7 @@ bool RenameDialog( Window* pErrorParent, const ScriptDocument& rDocument, const 
         pWin->SetName( rNewName );
 
         // update property browser
-        ((DialogWindow*)pWin)->UpdateBrowser();
+        pWin->UpdateBrowser();
 
         // update tabwriter
         sal_uInt16 nId = pIDEShell->GetIDEWindowId( pWin );
@@ -229,8 +229,7 @@ bool RemoveDialog( const ScriptDocument& rDocument, const ::rtl::OUString& rLibN
     BasicIDEShell* pIDEShell = BasicIDEGlobals::GetShell();
     if ( pIDEShell )
     {
-        DialogWindow* pDlgWin = pIDEShell->FindDlgWin( rDocument, rLibName, rDlgName, false );
-        if( pDlgWin )
+        if (basctl::DialogWindow* pDlgWin = pIDEShell->FindDlgWin(rDocument, rLibName, rDlgName))
         {
             Reference< container::XNameContainer > xDialogModel = pDlgWin->GetDialog();
             LocalizationMgr::removeResourceForDialog( rDocument, rLibName, rDlgName, xDialogModel );
@@ -286,9 +285,11 @@ void MarkDocumentModified( const ScriptDocument& rDocument )
     // does not have to come from a document...
     if ( rDocument.isApplication() )
     {
-        BasicIDEShell* pIDEShell = BasicIDEGlobals::GetShell();
-        if ( pIDEShell )
+        if (BasicIDEShell* pIDEShell = BasicIDEGlobals::GetShell())
+        {
             pIDEShell->SetAppBasicModified();
+            pIDEShell->UpdateObjectCatalog();
+        }
     }
     else
     {
@@ -302,10 +303,6 @@ void MarkDocumentModified( const ScriptDocument& rDocument )
         pBindings->Invalidate( SID_SAVEDOC );
         pBindings->Update( SID_SAVEDOC );
     }
-
-    // updating the Object Catalog
-    if (BasicIDEShell* pIdeShell = BasicIDEGlobals::GetShell())
-        pIdeShell->UpdateObjectCatalog();
 }
 
 //----------------------------------------------------------------------------
@@ -499,6 +496,5 @@ SfxBindings* GetBindingsPtr()
 
 } //namespace BasicIDE
 
-//----------------------------------------------------------------------------
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

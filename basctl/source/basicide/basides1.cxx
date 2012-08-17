@@ -30,7 +30,6 @@
 #include "iderdll2.hxx"
 #include "localizationmgr.hxx"
 #include "managelang.hxx"
-#include "moduldlg.hxx"
 
 #include <basic/basmgr.hxx>
 #include <basic/sbmeth.hxx>
@@ -57,18 +56,10 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;
 
-// until we have some configuration lets just keep
-// persist this value for the process lifetime
-bool& lcl_GetSourceLinesEnabledValue()
-{
-    static bool bSourceLinesEnabled(false);
-    return bSourceLinesEnabled;
-}
-
-bool  BasicIDEShell::SourceLinesDisplayed()
-{
-    return lcl_GetSourceLinesEnabledValue();
-}
+using basctl::ModulWindow;
+using basctl::ModulWindowLayout;
+using basctl::DialogWindow;
+using basctl::DialogWindowLayout;
 
 void BasicIDEShell::ExecuteCurrent( SfxRequest& rReq )
 {
@@ -77,49 +68,10 @@ void BasicIDEShell::ExecuteCurrent( SfxRequest& rReq )
 
     switch ( rReq.GetSlot() )
     {
-        case SID_SHOWLINES:
-        {
-            SFX_REQUEST_ARG(rReq, pItem, SfxBoolItem, rReq.GetSlot(), false);
-            bool const bValue = pItem && pItem->GetValue();
-            lcl_GetSourceLinesEnabledValue() = bValue;
-            if (ModulWindow* pMCurWin = dynamic_cast<ModulWindow*>(pCurWin))
-                pMCurWin->SetLineNumberDisplay(bValue);
-        }
-        break;
-
         case SID_BASICIDE_HIDECURPAGE:
         {
             pCurWin->StoreData();
             RemoveWindow( pCurWin, false );
-        }
-        break;
-        case SID_BASICIDE_DELETECURRENT:
-        {
-            ScriptDocument aDocument( pCurWin->GetDocument() );
-            ::rtl::OUString aLibName = pCurWin->GetLibName();
-            ::rtl::OUString aName = pCurWin->GetName();
-
-            if (dynamic_cast<ModulWindow*>(pCurWin))
-            {
-                if ( QueryDelModule( aName, pCurWin ) )
-                {
-                    if ( aDocument.removeModule( aLibName, aName ) )
-                    {
-                        BasicIDE::MarkDocumentModified( aDocument );
-                    }
-                }
-            }
-            else
-            {
-                if ( QueryDelDialog( aName, pCurWin ) )
-                {
-                    if ( BasicIDE::RemoveDialog( aDocument, aLibName, aName ) )
-                    {
-                        RemoveWindow( pCurWin, true );
-                        BasicIDE::MarkDocumentModified( aDocument );
-                    }
-                }
-            }
         }
         break;
         case SID_BASICIDE_RENAMECURRENT:
@@ -129,162 +81,122 @@ void BasicIDEShell::ExecuteCurrent( SfxRequest& rReq )
         break;
         case FID_SEARCH_NOW:
         {
-            if (ModulWindow* pMCurWin = dynamic_cast<ModulWindow*>(pCurWin))
+            if (!pCurWin->HasActiveEditor())
+                break;
+            DBG_ASSERT( rReq.GetArgs(), "arguments expected" );
+            SfxItemSet const& rArgs = *rReq.GetArgs();
+            // unfortunately I don't know the ID:
+            sal_uInt16 nWhich = rArgs.GetWhichByPos( 0 );
+            DBG_ASSERT( nWhich, "Wich fuer SearchItem ?" );
+            SfxPoolItem const& rItem = rArgs.Get(nWhich);
+            DBG_ASSERT(dynamic_cast<SvxSearchItem const*>(&rItem), "no searchitem!");
+            SvxSearchItem const& rSearchItem = static_cast<SvxSearchItem const&>(rItem);
+            // memorize item because of the adjustments...
+            BasicIDEGlobals::GetExtraData()->SetSearchItem(rSearchItem);
+            sal_Int32 nFound = 0;
+            bool bCanceled = false;
+            if (rSearchItem.GetCommand() == SVX_SEARCHCMD_REPLACE_ALL)
             {
-                DBG_ASSERT( rReq.GetArgs(), "arguments expected" );
-                const SfxItemSet* pArgs = rReq.GetArgs();
-                // unfortunately I don't know the ID:
-                sal_uInt16 nWhich = pArgs->GetWhichByPos( 0 );
-                DBG_ASSERT( nWhich, "Wich fuer SearchItem ?" );
-                const SfxPoolItem& rItem = pArgs->Get( nWhich );
-                IDEWindowTable::const_iterator it;
-                if (SvxSearchItem const* pSearchItem = dynamic_cast<SvxSearchItem const*>(&rItem))
+                sal_uInt16 nActModWindows = 0;
+                for (WindowTableIt it = aIDEWindowTable.begin(); it != aIDEWindowTable.end(); ++it)
                 {
-                    // memorize item because of the adjustments...
-                    BasicIDEGlobals::GetExtraData()->SetSearchItem(*pSearchItem);
-                    sal_Int32 nFound = 0;
-                    bool bCanceled = false;
-                    if (pSearchItem->GetCommand() == SVX_SEARCHCMD_REPLACE_ALL)
+                    IDEBaseWindow* pWin = it->second;
+                    if (pWin->HasActiveEditor())
+                        nActModWindows++;
+                }
+
+                if ( nActModWindows <= 1 || ( !rSearchItem.GetSelection() && QueryBox( pCurWin, WB_YES_NO|WB_DEF_YES, String(IDEResId(RID_STR_SEARCHALLMODULES)) ).Execute() == RET_YES ) )
+                {
+                    for (WindowTableIt it = aIDEWindowTable.begin(); it != aIDEWindowTable.end(); ++it)
                     {
-                        sal_uInt16 nActModWindows = 0;
-                        for( it = aIDEWindowTable.begin(); it != aIDEWindowTable.end(); ++it )
-                        {
-                            IDEBaseWindow* pWin = it->second;
-                            if (!pWin->IsSuspended() && dynamic_cast<ModulWindow*>(pWin))
-                                nActModWindows++;
-                        }
-
-                        if ( ( nActModWindows <= 1 ) || ( !pSearchItem->GetSelection() && QueryBox( pCurWin, WB_YES_NO|WB_DEF_YES, String( IDEResId( RID_STR_SEARCHALLMODULES ) ) ).Execute() == RET_YES ) )
-                        {
-                            for( it = aIDEWindowTable.begin(); it != aIDEWindowTable.end(); ++it )
-                            {
-                                IDEBaseWindow* pWin = it->second;
-                                if (!pWin->IsSuspended())
-                                    if (ModulWindow* pMWin = dynamic_cast<ModulWindow*>(pWin))
-                                        nFound += pMWin->StartSearchAndReplace(*pSearchItem);
-                            }
-                        }
-                        else
-                            nFound = pMCurWin->StartSearchAndReplace(*pSearchItem);
-
-                        ::rtl::OUString aReplStr(IDE_RESSTR(RID_STR_SEARCHREPLACES));
-                        aReplStr = aReplStr.replaceAll("XX", rtl::OUString::valueOf(nFound));
-                        InfoBox( pCurWin, aReplStr ).Execute();
+                        IDEBaseWindow* pWin = it->second;
+                        nFound += pWin->StartSearchAndReplace(rSearchItem);
                     }
-                    else
-                    {
-                        nFound = pMCurWin->StartSearchAndReplace(*pSearchItem);
-                        if ( !nFound && !pSearchItem->GetSelection() )
-                        {
-                            // search other modules...
-                            bool bChangeCurWindow = false;
-                            for( it = aIDEWindowTable.begin(); it != aIDEWindowTable.end(); ++it )
-                                if ( it->second == pCurWin)
-                                    break;
-                            if ( it != aIDEWindowTable.end() )
-                                ++it;
-                            IDEBaseWindow* pWin = NULL;
-                            if ( it != aIDEWindowTable.end() )
-                                pWin = it->second;
-
-                            bool bSearchedFromStart = false;
-                            while ( !nFound && !bCanceled && ( pWin || !bSearchedFromStart ) )
-                            {
-                                if ( !pWin )
-                                {
-                                    SfxViewFrame* pViewFrame = GetViewFrame();
-                                    SfxChildWindow* pChildWin = pViewFrame ? pViewFrame->GetChildWindow( SID_SEARCH_DLG ) : NULL;
-                                    Window* pParent = pChildWin ? pChildWin->GetWindow() : NULL;
-                                    QueryBox aQuery(pParent, WB_YES_NO|WB_DEF_YES, IDE_RESSTR(RID_STR_SEARCHFROMSTART));
-                                    if ( aQuery.Execute() == RET_YES )
-                                    {
-                                        it = aIDEWindowTable.begin();
-                                        if ( it != aIDEWindowTable.end() )
-                                            pWin = it->second;
-                                        bSearchedFromStart = true;
-                                    }
-                                    else
-                                        bCanceled = true;
-                                }
-
-                                if (ModulWindow* pMWin = dynamic_cast<ModulWindow*>(pWin))
-                                    if (!pWin->IsSuspended())
-                                    {
-                                        if ( pWin != pCurWin )
-                                        {
-                                            if ( pCurWin )
-                                                pWin->SetSizePixel( pCurWin->GetSizePixel() );
-                                            nFound = pMWin->StartSearchAndReplace(*pSearchItem, true);
-                                        }
-                                        if ( nFound )
-                                        {
-                                            bChangeCurWindow = true;
-                                            break;
-                                        }
-                                    }
-                                if ( pWin && ( pWin != pCurWin ) )
-                                {
-                                    if ( it != aIDEWindowTable.end() )
-                                        ++it;
-                                    if ( it != aIDEWindowTable.end() )
-                                        pWin = it->second;
-                                    else
-                                        pWin = 0;
-                                }
-                                else
-                                    pWin = 0;
-                            }
-                            if ( !nFound && bSearchedFromStart )
-                                nFound = pMCurWin->StartSearchAndReplace(*pSearchItem, true);
-                            if ( bChangeCurWindow )
-                                SetCurWindow( pWin, true );
-                        }
-                        if ( !nFound && !bCanceled )
-                            InfoBox( pCurWin, String( IDEResId( RID_STR_SEARCHNOTFOUND ) ) ).Execute();
-                    }
-
-                    rReq.Done();
                 }
                 else
-                    DBG_ASSERT(false, "no searchitem!");
+                    nFound = pCurWin->StartSearchAndReplace(rSearchItem);
+
+                rtl::OUString aReplStr(IDE_RESSTR(RID_STR_SEARCHREPLACES));
+                aReplStr = aReplStr.replaceAll("XX", rtl::OUString::valueOf(nFound));
+                InfoBox( pCurWin, aReplStr ).Execute();
             }
-        }
-        break;
-        case FID_SEARCH_OFF:
-        {
-            if (dynamic_cast<ModulWindow*>(pCurWin))
-                pCurWin->GrabFocus();
+            else
+            {
+                nFound = pCurWin->StartSearchAndReplace(rSearchItem);
+                if ( !nFound && !rSearchItem.GetSelection() )
+                {
+                    // search other modules...
+                    bool bChangeCurWindow = false;
+                    WindowTableIt it;
+                    for (it = aIDEWindowTable.begin(); it != aIDEWindowTable.end(); ++it)
+                        if (it->second == pCurWin)
+                            break;
+                    if (it != aIDEWindowTable.end())
+                        ++it;
+                    IDEBaseWindow* pWin = it != aIDEWindowTable.end() ? it->second : 0;
+
+                    bool bSearchedFromStart = false;
+                    while ( !nFound && !bCanceled && ( pWin || !bSearchedFromStart ) )
+                    {
+                        if ( !pWin )
+                        {
+                            SfxViewFrame* pViewFrame = GetViewFrame();
+                            SfxChildWindow* pChildWin = pViewFrame ? pViewFrame->GetChildWindow( SID_SEARCH_DLG ) : NULL;
+                            Window* pParent = pChildWin ? pChildWin->GetWindow() : NULL;
+                            QueryBox aQuery(pParent, WB_YES_NO|WB_DEF_YES, IDE_RESSTR(RID_STR_SEARCHFROMSTART));
+                            if ( aQuery.Execute() == RET_YES )
+                            {
+                                it = aIDEWindowTable.begin();
+                                if ( it != aIDEWindowTable.end() )
+                                    pWin = it->second;
+                                bSearchedFromStart = true;
+                            }
+                            else
+                                bCanceled = true;
+                        }
+
+                        if (pWin && pWin->HasActiveEditor())
+                        {
+                            if ( pWin != pCurWin )
+                            {
+                                if ( pCurWin )
+                                    pWin->SetSizePixel( pCurWin->GetSizePixel() );
+                                nFound = pWin->StartSearchAndReplace(rSearchItem, true);
+                            }
+                            if ( nFound )
+                            {
+                                bChangeCurWindow = true;
+                                break;
+                            }
+                        }
+                        if ( pWin && ( pWin != pCurWin ) )
+                        {
+                            if ( it != aIDEWindowTable.end() )
+                                ++it;
+                            pWin = it != aIDEWindowTable.end() ? it->second : 0;
+                        }
+                        else
+                            pWin = 0;
+                    }
+                    if ( !nFound && bSearchedFromStart )
+                        nFound = pCurWin->StartSearchAndReplace(rSearchItem, true);
+                    if ( bChangeCurWindow )
+                        SetCurWindow( pWin, true );
+                }
+                if ( !nFound && !bCanceled )
+                    InfoBox( pCurWin, String(IDEResId(RID_STR_SEARCHNOTFOUND)) ).Execute();
+            }
+
+            rReq.Done();
         }
         break;
         case SID_UNDO:
         case SID_REDO:
-        {
             if ( GetUndoManager() && pCurWin->AllowUndo() )
-            {
                 GetViewFrame()->ExecuteSlot( rReq );
-            }
-        }
-        break;
-        case SID_GOTOLINE:
-        {
-            if (ModulWindow* pMCurWin = dynamic_cast<ModulWindow*>(pCurWin))
-            {
-                std::auto_ptr< GotoLineDialog > xGotoDlg( new GotoLineDialog( pCurWin ) );
-                if ( xGotoDlg->Execute() )
-                {
-                    rtl::OUString sText =  xGotoDlg->GetText();
-
-                    sal_Int32 nLine = xGotoDlg->GetLineNumber();
-
-                    if ( nLine )
-                        pMCurWin->GetEditView()->SetSelection( TextSelection( TextPaM( nLine - 1 , 0 ), TextPaM( nLine - 1, 0 ) ) );
-                }
-            }
-        }
+            break;
         default:
-        {
             pCurWin->ExecuteCommand( rReq );
-        }
     }
 }
 
@@ -350,22 +262,6 @@ void BasicIDEShell::ExecuteGlobal( SfxRequest& rReq )
             }
         }
         break;
-        case SID_SIGNATURE:
-        {
-            if ( pCurWin )
-            {
-                ::basctl::DocumentSignature aSignature( pCurWin->GetDocument() );
-                if ( aSignature.supportsSignatures() )
-                {
-                    aSignature.signScriptingContent();
-                    SfxBindings* pBindings = BasicIDE::GetBindingsPtr();
-                    if ( pBindings )
-                        pBindings->Invalidate( SID_SIGNATURE );
-                }
-            }
-        }
-        break;
-
         case SID_BASICIDE_MODULEDLG:
         {
             if ( rReq.GetArgs() )
@@ -441,10 +337,13 @@ void BasicIDEShell::ExecuteGlobal( SfxRequest& rReq )
         break;
 
         case SID_BASICIDE_OBJCAT:
-            pModulLayout->ToggleObjectCatalog();
+            // toggling object catalog
+            aObjectCatalog.Show(!aObjectCatalog.IsVisible());
+            if (pLayout)
+                pLayout->ArrangeWindows();
             // refresh the button state
             if (SfxBindings* pBindings = BasicIDE::GetBindingsPtr())
-                pBindings->Invalidate(nSlot);
+                pBindings->Invalidate(SID_BASICIDE_OBJCAT);
             break;
 
         case SID_BASICIDE_NAMECHANGEDONTAB:
@@ -519,7 +418,7 @@ void BasicIDEShell::ExecuteGlobal( SfxRequest& rReq )
         case SID_BASICIDE_STOREALLMODULESOURCES:
         case SID_BASICIDE_UPDATEALLMODULESOURCES:
         {
-            for( IDEWindowTable::const_iterator it = aIDEWindowTable.begin(); it != aIDEWindowTable.end(); ++it )
+            for (WindowTableIt it = aIDEWindowTable.begin(); it != aIDEWindowTable.end(); ++it)
             {
                 IDEBaseWindow* pWin = it->second;
                 if (!pWin->IsSuspended() && dynamic_cast<ModulWindow*>(pWin))
@@ -793,11 +692,18 @@ void BasicIDEShell::ExecuteGlobal( SfxRequest& rReq )
 
         case SID_BASICIDE_MANAGE_LANG:
         {
-            ManageLanguageDialog aDlg( GetCurWindow(), GetCurLocalizationMgr() );
+            ManageLanguageDialog aDlg(pCurWin, m_pCurLocalizationMgr);
             aDlg.Execute();
             rReq.Done();
         }
         break;
+
+        default:
+            if (pLayout)
+                pLayout->ExecuteGlobal(rReq);
+            if (pCurWin)
+                pCurWin->ExecuteGlobal(rReq);
+            break;
     }
 }
 
@@ -808,20 +714,6 @@ void BasicIDEShell::GetState(SfxItemSet &rSet)
     {
         switch ( nWh )
         {
-            case SID_SHOWLINES:
-            {
-                // if this is not a module window hide the
-                // setting, doesn't make sense for example if the
-                // dialog editor is open
-                if(pCurWin && !dynamic_cast<ModulWindow*>(pCurWin))
-                {
-                    rSet.DisableItem( nWh );
-                    rSet.Put(SfxVisibilityItem(nWh, false));
-                }
-                else
-                    rSet.Put( SfxBoolItem( nWh, lcl_GetSourceLinesEnabledValue() ) );
-                break;
-            }
             case SID_DOCINFO:
             {
                 rSet.DisableItem( nWh );
@@ -872,25 +764,12 @@ void BasicIDEShell::GetState(SfxItemSet &rSet)
                     rSet.DisableItem( nWh );
             }
             break;
-            case SID_BASICIDE_CHOOSEMACRO:
             case SID_BASICIDE_OBJCAT:
-            {
-                // FIXME: hide Object Catalog icon from the toolbar,
-                // when window type is not macro editor.
-                if(pCurWin && !dynamic_cast<ModulWindow*>(pCurWin))
-                {
-                    rSet.DisableItem( nWh );
-                    rSet.Put(SfxVisibilityItem(nWh, false));
-                }
+                if (pLayout)
+                    rSet.Put(SfxBoolItem(nWh, aObjectCatalog.IsVisible()));
                 else
-                {
-                    if (nWh == SID_BASICIDE_OBJCAT)
-                        rSet.Put(SfxBoolItem(nWh, pModulLayout && pModulLayout->HasObjectCatalog()));
-                    else
-                        rSet.Put(SfxVisibilityItem(nWh, true));
-                }
+                    rSet.Put(SfxVisibilityItem(nWh, false));
                 break;
-            }
             case SID_BASICIDE_SHOWSBX:
             case SID_BASICIDE_CREATEMACRO:
             case SID_BASICIDE_EDITMACRO:
@@ -1098,6 +977,9 @@ void BasicIDEShell::GetState(SfxItemSet &rSet)
                 }
                 break;
             }
+            default:
+                if (pLayout)
+                    pLayout->GetState(rSet, nWh);
         }
     }
     if ( pCurWin )
@@ -1120,67 +1002,25 @@ sal_Bool BasicIDEShell::HasUIFeature( sal_uInt32 nFeature )
 
 void BasicIDEShell::SetCurWindow( IDEBaseWindow* pNewWin, bool bUpdateTabBar, bool bRememberAsCurrent )
 {
-    // an EditWindow must be set at Sfx for resizing...
-    if ( !pNewWin && ( GetWindow() != pModulLayout ) )
-    {
-        pModulLayout->Show();
-        AdjustPosSizePixel( Point( 0, 0 ), GetViewFrame()->GetWindow().GetOutputSizePixel() );
-        SetWindow( pModulLayout );
-        EnableScrollbars( false );
-        aVScrollBar.Hide();
-    }
-
     if ( pNewWin != pCurWin )
     {
-        IDEBaseWindow* pPrevCurWin = pCurWin;
         pCurWin = pNewWin;
-        if ( pPrevCurWin )
+        if (pLayout)
+            pLayout->Deactivating();
+        if (pCurWin)
         {
-            pPrevCurWin->Hide();
-            pPrevCurWin->Deactivating();
-//          pPrevCurWin->GetLayoutWindow()->Hide();
-            if (DialogWindow* pDialogWin = dynamic_cast<DialogWindow*>(pPrevCurWin))
-            {
-                pDialogWin->DisableBrowser();
-            }
+            if (pCurWin->GetType() == BASICIDE_TYPE_MODULE)
+                pLayout = pModulLayout.get();
             else
-            {
-                pModulLayout->SetModulWindow( NULL );
-            }
-        }
-        if ( pCurWin )
-        {
-            AdjustPosSizePixel( Point( 0, 0 ), GetViewFrame()->GetWindow().GetOutputSizePixel() );
-            if (ModulWindow* pMCurWin = dynamic_cast<ModulWindow*>(pCurWin))
-            {
-                pMCurWin->SetLineNumberDisplay(SourceLinesDisplayed());
-                GetViewFrame()->GetWindow().SetHelpId( HID_BASICIDE_MODULWINDOW );
-                pModulLayout->SetModulWindow(pMCurWin);
-                pModulLayout->Show();
-            }
-            else
-            {
-                pModulLayout->Hide();
-                GetViewFrame()->GetWindow().SetHelpId( HID_BASICIDE_DIALOGWINDOW );
-            }
-
-            if ( bRememberAsCurrent )
-            {
-                BasicIDEData* pData = BasicIDEGlobals::GetExtraData();
-                if ( pData )
-                {
-                    sal_uInt16 nCurrentType = dynamic_cast<ModulWindow*>(pCurWin) ?
-                        BASICIDE_TYPE_MODULE : BASICIDE_TYPE_DIALOG;
-                    LibInfoItem* pLibInfoItem = new LibInfoItem( pCurWin->GetDocument(), pCurWin->GetLibName(), pCurWin->GetName(), nCurrentType );
-                    pData->GetLibInfos().InsertInfo( pLibInfoItem );
-                }
-            }
-
-            if ( GetViewFrame()->GetWindow().IsVisible() ) // SFX will do it later otherwise
+                pLayout = pDialogLayout.get();
+            AdjustPosSizePixel(Point(0, 0), GetViewFrame()->GetWindow().GetOutputSizePixel());
+            pLayout->Activating(*pCurWin);
+            GetViewFrame()->GetWindow().SetHelpId(pCurWin->GetHid());
+            if (bRememberAsCurrent)
+                pCurWin->InsertLibInfo();
+            if (GetViewFrame()->GetWindow().IsVisible()) // SFX will do it later otherwise
                 pCurWin->Show();
-
             pCurWin->Init();
-
             if ( !BasicIDEGlobals::GetExtraData()->ShellInCriticalSection() )
             {
                 Window* pFrameWindow = &GetViewFrame()->GetWindow();
@@ -1190,9 +1030,9 @@ void BasicIDEShell::SetCurWindow( IDEBaseWindow* pNewWin, bool bUpdateTabBar, bo
                 if ( pFocusWindow ) // Focus in BasicIDE
                     pNewWin->GrabFocus();
             }
-            if (DialogWindow* pDCurWin = dynamic_cast<DialogWindow*>(pCurWin))
-                pDCurWin->UpdateBrowser();
         }
+        else
+            pLayout = 0;
         if ( bUpdateTabBar )
         {
             sal_uLong nKey = GetIDEWindowId( pCurWin );
@@ -1208,16 +1048,16 @@ void BasicIDEShell::SetCurWindow( IDEBaseWindow* pNewWin, bool bUpdateTabBar, bo
             if ( pCurWin->GetDocument().isDocument() )
                 SfxObjectShell::SetCurrentComponent( pCurWin->GetDocument().getDocument() );
         }
-        else
+        else if (pLayout)
         {
-            SetWindow( pModulLayout );
+            SetWindow(pLayout);
             GetViewFrame()->GetWindow().SetHelpId( HID_BASICIDE_MODULWINDOW );
-            SfxObjectShell::SetCurrentComponent( NULL );
+            SfxObjectShell::SetCurrentComponent(0);
         }
-        pModulLayout->GetObjectCatalog().SetCurrentEntry(pCurWin);
+        aObjectCatalog.SetCurrentEntry(pCurWin);
         SetUndoManager( pCurWin ? pCurWin->GetUndoManager() : 0 );
         InvalidateBasicIDESlots();
-        EnableScrollbars( pCurWin ? true : false );
+        EnableScrollbars(pCurWin != 0);
 
         if ( m_pCurLocalizationMgr )
             m_pCurLocalizationMgr->handleTranslationbar();
@@ -1277,25 +1117,17 @@ IDEBaseWindow* BasicIDEShell::FindApplicationWindow()
     return FindWindow( ScriptDocument::getApplicationScriptDocument() );
 }
 
-IDEBaseWindow* BasicIDEShell::FindWindow( const ScriptDocument& rDocument, const ::rtl::OUString& rLibName, const ::rtl::OUString& rName, BasicIDEType nType, bool bFindSuspended )
+IDEBaseWindow* BasicIDEShell::FindWindow(
+    ScriptDocument const& rDocument,
+    rtl::OUString const& rLibName, rtl::OUString const& rName,
+    BasicIDEType eType, bool bFindSuspended
+)
 {
-    for( IDEWindowTable::const_iterator it = aIDEWindowTable.begin(); it != aIDEWindowTable.end(); ++it )
+    for (WindowTableIt it = aIDEWindowTable.begin(); it != aIDEWindowTable.end(); ++it)
     {
-        IDEBaseWindow* pWin = it->second;
-        if ( !pWin->IsSuspended() || bFindSuspended )
-        {
-            if ( rLibName.isEmpty() || rName.isEmpty() || nType == BASICIDE_TYPE_UNKNOWN )
-            {
-                // return any non-suspended window
-                return pWin;
-            }
-            else if ( pWin->IsDocument( rDocument ) && pWin->GetLibName() == rLibName && pWin->GetName() == rName &&
-                      ( ( dynamic_cast<ModulWindow*>(pWin)  && nType == BASICIDE_TYPE_MODULE ) ||
-                        ( dynamic_cast<DialogWindow*>(pWin) && nType == BASICIDE_TYPE_DIALOG ) ) )
-            {
-                return pWin;
-            }
-        }
+        IDEBaseWindow* const pWin = it->second;
+        if (pWin->Is(rDocument, rLibName, rName, eType, bFindSuspended))
+            return pWin;
     }
     return 0;
 }
@@ -1406,8 +1238,8 @@ void BasicIDEShell::AdjustPosSizePixel( const Point &rPos, const Size &rSize )
         pTabBar->SetPosSizePixel( Point( rPos.X(), rPos.Y()+aSz.Height() ), Size( aSz.Width()/2, aScrollBarBoxSz.Height() ) );
     }
 
-    if (Window* pEdtWin = pCurWin ? pCurWin->GetLayoutWindow() : pModulLayout)
-        pEdtWin->SetPosSizePixel(rPos, dynamic_cast<DialogWindow*>(pCurWin) ? aSz : aOutSz);
+    if (pLayout)
+        pLayout->SetPosSizePixel(rPos, dynamic_cast<DialogWindow*>(pCurWin) ? aSz : aOutSz);
 }
 
 Reference< XModel > BasicIDEShell::GetCurrentDocument() const
@@ -1444,7 +1276,7 @@ void BasicIDEShell::Deactivate( sal_Bool bMDI )
 
         // test CanClose to also test during deactivating the BasicIDE whether
         // the sourcecode is too large in one of the modules...
-        for( IDEWindowTable::const_iterator it = aIDEWindowTable.begin(); it != aIDEWindowTable.end(); ++it )
+        for (WindowTableIt it = aIDEWindowTable.begin(); it != aIDEWindowTable.end(); ++it)
         {
             IDEBaseWindow* pWin = it->second;
             if ( /* !pWin->IsSuspended() && */ !pWin->CanClose() )
