@@ -2332,6 +2332,8 @@ SdrObject* ImplSdPPTImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pObj
                     sal_Bool    bVertical = sal_False;
                     if ( ( pTextObj->GetShapeType() == mso_sptRectangle ) || ( pTextObj->GetShapeType() == mso_sptTextBox ) )
                     {
+                        //if a placeholder with some custom attribute,the pTextObj will keep those attr,whose text size is zero,
+                        //so sdPage should renew a PresObj to process placeholder.
                         bEmptyPresObj = ( pTextObj->Count() == 0 ) || ( pTextObj->Count() == 1 && pTextObj->First()->GetTextSize() == 0 );
                         switch ( nPlaceholderId )
                         {
@@ -2393,6 +2395,16 @@ SdrObject* ImplSdPPTImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pObj
                             ApplyAttributes( rStCtrl, aSet );
                             pPresObj->SetLogicRect(pText->GetLogicRect());
                             ApplyTextAnchorAttributes( *pTextObj, aSet );
+                            //set custom font attribute of the placeholder
+                            if ( pTextObj->Count() == 1 )
+                            {
+                                PPTParagraphObj* pPara = pTextObj->First();
+                                PPTPortionObj* pPor = NULL;
+                                if ( pPara && pPara->GetTextSize() == 0 && (pPor = pPara->First()))
+                                {
+                                    pPor->ApplyTo(aSet, (SdrPowerPointImport&)*this, pTextObj->GetDestinationInstance());
+                                }
+                            }
                             pPresObj->SetMergedItemSet(aSet);
 
                             if ( ( eAktPageKind != PPT_NOTEPAGE ) && ( nPlacementId != 0xffffffff ) )
