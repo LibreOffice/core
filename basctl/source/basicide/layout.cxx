@@ -240,7 +240,7 @@ void Layout::SplittedSide::ArrangeIn (Rectangle const& rRect)
     }
 
     // positioning separator lines and windows
-    bool bPrevDocked; // is the previous window docked?
+    bool bPrevDocked = false; // is the previous window docked?
     int nStartPos = nPos2; // window position in the strip
     for (unsigned i = 0; i != vWindows.size(); ++i)
     {
