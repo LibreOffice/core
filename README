@@ -8,11 +8,11 @@ Apache OpenOffice (AOO)
     http://incubator.apache.org/openofficeorg/
 
     Apache OpenOffice is a very large project with many components and mainly 
-    implemented in C++ but also in Java, Python and other languages.
+    implemented in C++ but also in Java, Perl, Python and other languages.
 
     Currently supported platforms include:
 
-        UNIX variants
+        Linux variants
         Windows
         Mac OS X
         OS/2
@@ -38,22 +38,7 @@ Building Apache OpenOffice
 
     A comprehensive and complete building guide can be found in the project wiki under
 
-    http://wiki.services.openoffice.org/wiki/Documentation/Building_Guide
-
-    The complete list of prerequisites is documented at
-
-    http://wiki.services.openoffice.org/wiki/Documentation/Building_Guide/Build_Requirements
-
-    and platform specific guides for
-
-    Windows: 
-        http://wiki.services.openoffice.org/wiki/Documentation/Building_Guide/Building_on_Windows
-    Linux: 
-        http://wiki.services.openoffice.org/wiki/Documentation/Building_Guide/Building_on_Linux
-    Mac OS X: 
-        http://wiki.services.openoffice.org/wiki/MacOSXBuildInstructions
-    Solaris: 
-        http://wiki.services.openoffice.org/wiki/Documentation/Building_Guide/Building_on_Solaris
+    http://wiki.openoffice.org/wiki/Documentation/Building_Guide_AOO
 
     With having all prerequisites in place you can simply run
 
@@ -61,8 +46,11 @@ Building Apache OpenOffice
     autoconf
     ./configure <configure_switches>
     ./bootstrap
-    cd instsetoo_native/util
+    source *.set.sh
+    cd instsetoo_native
     build --all
+
+    Note that building OpenOffice can take several hours.
 
     The default build will produce a setup version (e.g. setup program on windows, dmg on Mac OS, 
     rpm and deb packages on Linux, pkg packages on Solaris) and an archived version. The output
