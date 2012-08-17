@@ -21,6 +21,7 @@
 
 package org.openoffice.test.uno;
 
+import java.io.File;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -34,6 +35,7 @@ import com.sun.star.bridge.XUnoUrlResolver;
 import com.sun.star.comp.helper.Bootstrap;
 import com.sun.star.frame.XComponentLoader;
 import com.sun.star.frame.XDesktop;
+import com.sun.star.frame.XStorable;
 import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiComponentFactory;
 import com.sun.star.lang.XMultiServiceFactory;
@@ -154,6 +156,12 @@ public class UnoApp {
     public XComponent newDocument(String type) throws Exception {
         XComponentLoader componentLoader = (XComponentLoader) UnoRuntime.queryInterface(XComponentLoader.class, desktop);
         return componentLoader.loadComponentFromURL("private:factory/" + type, "_blank", 0, new PropertyValue[0]);
+    }
+
+    public void saveDocument(XComponent doc, String toPath) throws Exception {
+        XStorable m_xstorable = (XStorable)UnoRuntime.queryInterface(XStorable.class, doc);
+        String fileUrl = FileUtil.getUrl(new File(toPath));
+        m_xstorable.storeAsURL(fileUrl, new PropertyValue[0]);
     }
 
     public void closeDocument(XComponent doc) {
