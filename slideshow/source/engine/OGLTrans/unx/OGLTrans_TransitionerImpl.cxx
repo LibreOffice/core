@@ -78,16 +78,13 @@ namespace unx
 #endif
 #include <vcl/sysdata.hxx>
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
 #include <boost/date_time/posix_time/posix_time.hpp>
 using namespace ::boost::posix_time;
 
 static ptime t1;
 static ptime t2;
 
-#define DBG(x) x
-#else
-#define DBG(x)
 #endif
 
 using namespace ::com::sun::star;
@@ -313,7 +310,7 @@ public:
     */
     bool mbHasTFPVisual;
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     ptime t3;
     ptime t4;
     ptime t5;
@@ -347,11 +344,11 @@ bool OGLTransitionerImpl::initialize( const Reference< presentation::XSlideShowV
                     cnGLVersion += (version[2] - '0')/10.0;
             } else
                 cnGLVersion = 1.0;
-            OSL_TRACE("GL version: %s parsed: %f", version, cnGLVersion );
+            SAL_INFO("slideshow.opengl", "GL version: " << version << " parsed: " << cnGLVersion << "" );
 
             const GLubyte* vendor = glGetString( GL_VENDOR );
             cbMesa = ( vendor && strstr( (const char *) vendor, "Mesa" ) );
-            OSL_TRACE("GL vendor: %s identified as Mesa: %d", vendor, cbMesa );
+            SAL_INFO("slideshow.opengl", "GL vendor: " << vendor << " identified as Mesa: " << cbMesa << "" );
 
             /* TODO: check for version once the bug in fglrx driver is fixed */
             cbBrokenTexturesATI = (vendor && strcmp( (const char *) vendor, "ATI Technologies Inc." ) == 0 );
@@ -381,7 +378,7 @@ bool OGLTransitionerImpl::createWindow( Window* pPWindow )
 
     GLWin.win = sysData->aWindow;
 
-    OSL_TRACE("parent window: %d", GLWin.win);
+    SAL_INFO("slideshow.opengl", "parent window: " << GLWin.win);
 
     unx::XWindowAttributes xattr;
     unx::XGetWindowAttributes( GLWin.dpy, GLWin.win, &xattr );
@@ -462,7 +459,7 @@ bool OGLTransitionerImpl::createWindow( Window* pPWindow )
       if( vi ) {
       if( !firstVisual )
           firstVisual = vi;
-      OSL_TRACE("trying VisualID %08X", vi->visualid);
+      SAL_INFO("slideshow.opengl", "trying VisualID " << vi->visualid);
           fbconfigs = glXGetFBConfigs (GLWin.dpy, GLWin.screen, &nfbconfigs);
           for ( ; i < nfbconfigs; i++)
           {
@@ -500,18 +497,18 @@ bool OGLTransitionerImpl::createWindow( Window* pPWindow )
           if( i != nfbconfigs ) {
           vi = glXGetVisualFromFBConfig( GLWin.dpy, fbconfigs[i] );
           mbHasTFPVisual = true;
-          OSL_TRACE("found visual suitable for texture_from_pixmap");
+          SAL_INFO("slideshow.opengl", "found visual suitable for texture_from_pixmap");
           } else {
           vi = firstVisual;
           mbHasTFPVisual = false;
-          OSL_TRACE("did not find visual suitable for texture_from_pixmap, using %08X", vi->visualid);
+          SAL_INFO("slideshow.opengl", "did not find visual suitable for texture_from_pixmap, using " << vi->visualid);
           }
 #else
       if( vi ) {
 #endif
               SystemWindowData winData;
               winData.nSize = sizeof(winData);
-          OSL_TRACE("using VisualID %08X", vi->visualid);
+          SAL_INFO("slideshow.opengl", "using VisualID " << vi->visualid);
               winData.pVisual = (void*)(vi->visual);
               pWindow=new SystemChildWindow(pPWindow, 0, &winData, sal_False);
               pChildSysData = pWindow->GetSystemData();
@@ -555,7 +552,7 @@ bool OGLTransitionerImpl::createWindow( Window* pPWindow )
 #endif
     GLWin.vi = vi;
     GLWin.GLXExtensions = unx::glXQueryExtensionsString( GLWin.dpy, GLWin.screen );
-    OSL_TRACE("available GLX extensions: %s", GLWin.GLXExtensions);
+    SAL_INFO("slideshow.opengl", "available GLX extensions: " << GLWin.GLXExtensions);
 #endif
 
     return true;
@@ -592,7 +589,7 @@ bool OGLTransitionerImpl::initWindowFromSlideShowView( const Reference< presenta
     pWindow->SetPosSizePixel(aCanvasArea.X, aCanvasArea.Y, aCanvasArea.Width, aCanvasArea.Height);
     GLWin.Width = aCanvasArea.Width;
     GLWin.Height = aCanvasArea.Height;
-    OSL_TRACE("canvas area: %d,%d - %dx%d", aCanvasArea.X, aCanvasArea.Y, aCanvasArea.Width, aCanvasArea.Height);
+    SAL_INFO("slideshow.opengl", "canvas area: " << aCanvasArea.X << "," << aCanvasArea.Y << " - " << aCanvasArea.Width << "x" << aCanvasArea.Height);
 
 #if defined( WNT )
         GLWin.hDC = GetDC(GLWin.hWnd);
@@ -602,7 +599,7 @@ bool OGLTransitionerImpl::initWindowFromSlideShowView( const Reference< presenta
                                  0,
                                  GL_TRUE);
     if( GLWin.ctx == NULL ) {
-    OSL_TRACE("unable to create GLX context");
+    SAL_INFO("slideshow.opengl", "unable to create GLX context");
     return false;
     }
 #endif
@@ -635,7 +632,7 @@ bool OGLTransitionerImpl::initWindowFromSlideShowView( const Reference< presenta
     wglMakeCurrent(GLWin.hDC,GLWin.hRC);
 #elif defined( UNX )
     if( !glXMakeCurrent( GLWin.dpy, GLWin.win, GLWin.ctx ) ) {
-        OSL_TRACE("unable to select current GLX context");
+        SAL_INFO("slideshow.opengl", "unable to select current GLX context");
         return false;
     }
 
@@ -643,10 +640,10 @@ bool OGLTransitionerImpl::initWindowFromSlideShowView( const Reference< presenta
     mnGLXVersion = 0;
     if( glXQueryVersion( GLWin.dpy, &glxMajor, &glxMinor ) )
       mnGLXVersion = glxMajor + 0.1*glxMinor;
-    OSL_TRACE("available GLX version: %f", mnGLXVersion);
+    SAL_INFO("slideshow.opengl", "available GLX version: " << mnGLXVersion);
 
     GLWin.GLExtensions = glGetString( GL_EXTENSIONS );
-    OSL_TRACE("available GL  extensions: %s", GLWin.GLExtensions);
+    SAL_INFO("slideshow.opengl", "available GL  extensions: " << GLWin.GLExtensions);
 
     mbTextureFromPixmap = GLWin.HasGLXExtension( "GLX_EXT_texture_from_pixmap" );
     mbGenerateMipmap = GLWin.HasGLExtension( "GL_SGIS_generate_mipmap" );
@@ -670,9 +667,9 @@ bool OGLTransitionerImpl::initWindowFromSlideShowView( const Reference< presenta
         XSync(GLWin.dpy, false);
 
         if( errorTriggered )
-            OSL_TRACE("error when trying to set swap interval, NVIDIA or Mesa bug?");
+            SAL_INFO("slideshow.opengl", "error when trying to set swap interval, NVIDIA or Mesa bug?");
         else
-            OSL_TRACE("set swap interval to 1 (enable vsync)");
+            SAL_INFO("slideshow.opengl", "set swap interval to 1 (enable vsync)");
 
         // restore the error handler
         unx::XSetErrorHandler( oldHandler );
@@ -727,16 +724,16 @@ void OGLTransitionerImpl::setSlides( const uno::Reference< rendering::XBitmap >&
     SlideRect.Y1 = 0;
     SlideRect.Y2 = SlideSize.Height;
 
-    OSL_TRACE("leaving bitmap area: %dx%d", SlideSize.Width, SlideSize.Height);
+    SAL_INFO("slideshow.opengl", "leaving bitmap area: " << SlideSize.Width << "x" << SlideSize.Height);
     SlideSize = mxEnteringBitmap->getSize();
-    OSL_TRACE("entering bitmap area: %dx%d", SlideSize.Width, SlideSize.Height);
+    SAL_INFO("slideshow.opengl", "entering bitmap area: " << SlideSize.Width << "x" << SlideSize.Height);
 
 #ifdef UNX
     unx::glXWaitGL();
     XSync(GLWin.dpy, false);
 #endif
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     t1 = microsec_clock::local_time();
 #endif
 
@@ -751,7 +748,7 @@ void OGLTransitionerImpl::setSlides( const uno::Reference< rendering::XBitmap >&
         Sequence< Any > enterArgs;
         if( (xLeavingSet->getFastPropertyValue( 1 ) >>= leaveArgs) &&
             (xEnteringSet->getFastPropertyValue( 1 ) >>= enterArgs) ) {
-            OSL_TRACE ("pixmaps available");
+            SAL_INFO("slideshow.opengl", "pixmaps available");
 
             sal_Int32 depth(0);
 
@@ -787,6 +784,7 @@ void OGLTransitionerImpl::setSlides( const uno::Reference< rendering::XBitmap >&
             if( !errorTriggered )
                 mbUseLeavingPixmap = true;
             else {
+                SAL_INFO("slideshow.opengl", "XError triggered");
                 OSL_TRACE("XError triggered");
                 if( mbFreeLeavingPixmap ) {
                     unx::XFreePixmap( GLWin.dpy, maLeavingPixmap );
@@ -801,11 +799,11 @@ void OGLTransitionerImpl::setSlides( const uno::Reference< rendering::XBitmap >&
             unx::glXWaitGL();
             XSync(GLWin.dpy, false);
 
-            OSL_TRACE("created glx pixmap %p and %p depth: %d", LeavingPixmap, EnteringPixmap, depth);
+            SAL_INFO("slideshow.opengl", "created glx pixmap " << LeavingPixmap << " and " << EnteringPixmap << " depth: " << depth);
             if( !errorTriggered )
                 mbUseEnteringPixmap = true;
             else {
-                OSL_TRACE("XError triggered");
+                SAL_INFO("slideshow.opengl", "XError triggered");
                 if( mbFreeEnteringPixmap ) {
                     unx::XFreePixmap( GLWin.dpy, maEnteringPixmap );
                     mbFreeEnteringPixmap = false;
@@ -868,7 +866,7 @@ void OGLTransitionerImpl::createTexture( unsigned int* texID,
           glTexParameteri( GL_TEXTURE_2D, GL_GENERATE_MIPMAP_SGIS, True);
       myglXBindTexImageEXT (GLWin.dpy, pixmap, GLX_FRONT_LEFT_EXT, NULL);
       if( mbGenerateMipmap && useMipmap ) {
-          OSL_TRACE("use mipmaps");
+          SAL_INFO("slideshow.opengl", "use mipmaps");
           glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
           glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR_MIPMAP_LINEAR); //TRILINEAR FILTERING
       } else {
@@ -1102,15 +1100,15 @@ void OGLTransitionerImpl::GLInitSlides()
     XSync(GLWin.dpy, false);
 #endif
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     t2 = microsec_clock::local_time();
-    OSL_TRACE("textures created in: %s", to_simple_string( t2 - t1 ).c_str());
+    SAL_INFO("slideshow.opengl", "textures created in: " << ( t2 - t1 ));
 #endif
 }
 
 void SAL_CALL OGLTransitionerImpl::update( double nTime ) throw (uno::RuntimeException)
 {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     frame_count ++;
     t3 = microsec_clock::local_time();
     if( frame_count == 1 ) {
@@ -1153,11 +1151,11 @@ void SAL_CALL OGLTransitionerImpl::update( double nTime ) throw (uno::RuntimeExc
     XSync( GLWin.dpy, false );
 #endif
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     t4 = microsec_clock::local_time();
 
-    OSL_TRACE("update time: %f", nTime);
-    OSL_TRACE("update took: %s", to_simple_string( t4 - t3 ).c_str());
+    SAL_INFO("slideshow.opengl", "update time: " << nTime);
+    SAL_INFO("slideshow.opengl", "update took: " << ( t4 - t3 ));
     total_update += (t4 - t3);
 #endif
 }
@@ -1167,7 +1165,7 @@ void SAL_CALL OGLTransitionerImpl::viewChanged( const Reference< presentation::X
                         const Reference< rendering::XBitmap >& rEnteringBitmap )
     throw (uno::RuntimeException)
 {
-    OSL_TRACE("transitioner: view changed");
+    SAL_INFO("slideshow.opengl", "transitioner: view changed");
 
     disposeTextures();
     disposeContextAndWindow();
@@ -1190,7 +1188,7 @@ void OGLTransitionerImpl::disposeContextAndWindow()
     {
     glXMakeCurrent(GLWin.dpy, None, NULL);
     if( glGetError() != GL_NO_ERROR ) {
-        OSL_TRACE("glError: %s", (char *)gluErrorString(glGetError()));
+        SAL_INFO("slideshow.opengl", "glError: " << (char *)gluErrorString(glGetError()));
     }
     glXDestroyContext(GLWin.dpy, GLWin.ctx);
     GLWin.ctx = NULL;
@@ -1255,16 +1253,20 @@ void OGLTransitionerImpl::disposing()
 {
     osl::MutexGuard const guard( m_aMutex );
 
-#ifdef DEBUG
-    OSL_TRACE("dispose %p", this);
+#if OSL_DEBUG_LEVEL > 1
+    SAL_INFO("slideshow.opengl", "dispose " << this);
     if( frame_count ) {
     t6 = microsec_clock::local_time();
     time_duration duration = t6 - t5;
-    OSL_TRACE("whole transition (frames: %d) took: %s fps: %f time spent in updates: %s percentage of transition time: %f%%",
-          frame_count, to_simple_string( duration ).c_str(),
-          ((double)frame_count*1000000000.0)/duration.total_nanoseconds(),
-          to_simple_string( total_update ).c_str(),
-          100*(((double)total_update.total_nanoseconds())/((double)duration.total_nanoseconds()))
+    SAL_INFO("slideshow.opengl",
+            "whole transition (frames: " << frame_count
+            << ") took: " << duration
+            << " fps: "
+            << (((double)frame_count*1000000000.0)/duration.total_nanoseconds())
+            << " time spent in updates: " << total_update
+            << " percentage of transition time: "
+            << (100*(((double)total_update.total_nanoseconds())/((double)duration.total_nanoseconds())))
+            << '%'
         );
     }
 #endif
@@ -1317,7 +1319,9 @@ OGLTransitionerImpl::OGLTransitionerImpl(OGLTransitionImpl* pOGLTransition) :
     GLWin.ctx = 0;
 #endif
 
-    DBG(frame_count = 0);
+#if OSL_DEBUG_LEVEL > 1
+    frame_count = 0;
+#endif
 }
 
 typedef cppu::WeakComponentImplHelper1<presentation::XTransitionFactory> OGLTransitionFactoryImplBase;

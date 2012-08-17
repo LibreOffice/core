@@ -99,7 +99,7 @@ GLuint OGLShaders::LinkProgram( const char *vertexShader, const char *fragmentSh
 
     vertexObject = glCreateShader( GL_VERTEX_SHADER );
     fragmentObject = glCreateShader( GL_FRAGMENT_SHADER );
-    OSL_TRACE("checkpoint 1: shaders created (%d) vertex: %d fragment: %d", glGetError() == GL_NO_ERROR, vertexObject, fragmentObject );
+    SAL_INFO("slideshow.opengl", "checkpoint 1: shaders created (" << (glGetError() == GL_NO_ERROR) << ") vertex: " << vertexObject << " fragment: " << fragmentObject);
 
 
     glShaderSource( vertexObject, 1, &vertexShader, NULL );
@@ -107,17 +107,17 @@ GLuint OGLShaders::LinkProgram( const char *vertexShader, const char *fragmentSh
 
     glCompileShader( vertexObject );
     glGetShaderInfoLog( vertexObject, sizeof( log ), NULL, log );
-    OSL_TRACE("vertex compile log: %s", log);
+    SAL_INFO("slideshow.opengl", "vertex compile log: " << log);
     glGetShaderiv( vertexObject, GL_COMPILE_STATUS, &vertexCompiled );
     glCompileShader( fragmentObject );
     glGetShaderInfoLog( fragmentObject, sizeof( log ), NULL, log );
-    OSL_TRACE("fragment compile log: %s", log);
+    SAL_INFO("slideshow.opengl", "fragment compile log: " << log);
     glGetShaderiv( fragmentObject, GL_COMPILE_STATUS, &fragmentCompiled );
 
     if( !vertexCompiled || !fragmentCompiled )
         return 0;
 
-    OSL_TRACE("checkpoint 2: shaders compiled (%d)", glGetError() == GL_NO_ERROR);
+    SAL_INFO("slideshow.opengl", "checkpoint 2: shaders compiled (" << (glGetError() == GL_NO_ERROR) << ')');
 
     programObject = glCreateProgram();
     glAttachShader( programObject, vertexObject );
@@ -125,13 +125,13 @@ GLuint OGLShaders::LinkProgram( const char *vertexShader, const char *fragmentSh
 
     glLinkProgram( programObject );
     glGetProgramInfoLog( programObject, sizeof( log ), NULL, log );
-    OSL_TRACE("program link log: %s", log);
+    SAL_INFO("slideshow.opengl", "program link log: " << log);
     glGetProgramiv( programObject, GL_LINK_STATUS, &programLinked );
 
     if( !programLinked )
         return 0;
 
-    OSL_TRACE("checkpoint 3: program linked (%d)", glGetError() == GL_NO_ERROR);
+    SAL_INFO("slideshow.opengl", "checkpoint 3: program linked (" << (glGetError() == GL_NO_ERROR) << ')');
 
     return programObject;
 #else
