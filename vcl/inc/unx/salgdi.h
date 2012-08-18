@@ -173,19 +173,6 @@ protected:
     inline  GC              GetCopyGC();
     inline  GC              GetStippleGC();
 
-    int             Clip      ( XLIB_Region   pRegion,
-                                int          &nX,
-                                int          &nY,
-                                unsigned int &nDX,
-                                unsigned int &nDY,
-                                int          &nSrcX,
-                                int          &nSrcY ) const;
-    int             Clip      ( int          &nX,
-                                int          &nY,
-                                unsigned int &nDX,
-                                unsigned int &nDY,
-                                int          &nSrcX,
-                                int          &nSrcY ) const;
     using SalGraphics::DrawBitmap;
     void            DrawBitmap( const SalTwoRect *pPosAry,
                                 SalGraphics      *pThis,

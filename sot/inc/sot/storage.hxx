@@ -212,7 +212,6 @@ public:
 
     sal_Bool                SetProperty( const String& rName, const ::com::sun::star::uno::Any& rValue );
     sal_Bool                GetProperty( const String& rName, ::com::sun::star::uno::Any& rValue );
-    sal_Bool                GetProperty( const String& rEleName, const String& rName, ::com::sun::star::uno::Any& rValue );
     sal_Bool                IsOLEStorage() const;
     static sal_Bool         IsOLEStorage( const String & rFileName );
     static sal_Bool         IsOLEStorage( SvStream* pStream );
