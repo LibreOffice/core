@@ -227,67 +227,22 @@ struct HashUChar
 };
 
 // ---------------------------
-// - HashBmpExScale -
+// - HashBitmap -
 // ---------------------------
 
-struct HashBmpExScale
+struct HashBitmap
 {
-    size_t operator()( const ObjectRepresentation& rObjRep ) const
-    {
-        const GDIMetaFile& aMtf = rObjRep.GetRepresentation();
-        if( aMtf.GetActionSize() == 1 )
-        {
-            const MetaBmpExScaleAction* pAction = (const MetaBmpExScaleAction*) aMtf.GetAction( 0 );
-            if( pAction )
-            {
-                return static_cast< size_t >( pAction->GetBitmapEx().GetChecksum() );
-            }
-            else
-            {
-                OSL_FAIL( "HashBmpExScale: metafile should have MetaBmpExScaleAction only." );
-                return 0;
-            }
-        }
-        else
-        {
-            OSL_FAIL( "HashBmpExScale: metafile should have a single action." );
-            return 0;
-        }
-    }
+    size_t operator()( const ObjectRepresentation& rObjRep ) const;
 };
 
 // ---------------------------
-// - EqualityBmpExScale -
+// - EqualityBitmap -
 // ---------------------------
 
-struct EqualityBmpExScale
+struct EqualityBitmap
 {
     bool operator()( const ObjectRepresentation& rObjRep1,
-                     const ObjectRepresentation& rObjRep2 ) const
-    {
-        const GDIMetaFile& aMtf1 = rObjRep1.GetRepresentation();
-        const GDIMetaFile& aMtf2 = rObjRep2.GetRepresentation();
-        if( aMtf1.GetActionSize() == 1 && aMtf2.GetActionSize() == 1 )
-        {
-            const MetaBmpExScaleAction* pA1 = (const MetaBmpExScaleAction*) aMtf1.GetAction( 0 );
-            const MetaBmpExScaleAction* pA2 = (const MetaBmpExScaleAction*) aMtf2.GetAction( 0 );
-            if( pA1 && pA2 )
-            {
-                return ( pA1->GetBitmapEx().GetChecksum() == pA2->GetBitmapEx().GetChecksum() );
-            }
-            else
-            {
-                OSL_FAIL( "EqualityBmpExScale: metafile should have MetaBmpExScaleAction only." );
-                return false;
-            }
-        }
-        else
-        {
-            OSL_FAIL( "EqualityBmpExScale: metafile should have a single action." );
-            return false;
-        }
-
-    }
+                     const ObjectRepresentation& rObjRep2 ) const;
 };
 
 
@@ -316,7 +271,7 @@ public:
 
     typedef ::boost::unordered_map< Reference< XInterface >, ::rtl::OUString, HashReferenceXInterface >         UOStringMap;
 
-    typedef ::boost::unordered_set< ObjectRepresentation, HashBmpExScale, EqualityBmpExScale >                  MetaBitmapActionSet;
+    typedef ::boost::unordered_set< ObjectRepresentation, HashBitmap, EqualityBitmap >                  MetaBitmapActionSet;
 
 private:
 

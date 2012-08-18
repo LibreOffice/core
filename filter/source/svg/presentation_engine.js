@@ -316,6 +316,72 @@ function mouseHandlerDispatch( aEvt, anAction )
 document.onmouseup = function( aEvt ) { return mouseHandlerDispatch( aEvt, MOUSE_UP ); };
 //document.onmousemove = function( aEvt ) { return mouseHandlerDispatch( aEvt, MOUSE_MOVE ); };
 
+
+/** mouseClickHelper
+ *
+ * @return {Object}
+ *   a mouse click handler
+ */
+function mouseClickHelper( aEvt )
+{
+    // In case text is selected we stay on the current slide.
+    // Anyway if we are dealing with Firefox there is an issue:
+    // Firefox supports a naive way of selecting svg text, if you click
+    // on text the current selection is set to the whole text fragment
+    // wrapped by the related <tspan> element.
+    // That means until you click on text you never move to the next slide.
+    // In order to avoid this case we do not test the status of current
+    // selection, when the presentation is running on a mozilla browser.
+    if( !Detect.isMozilla )
+    {
+        var aWindowObject = document.defaultView;
+        if( aWindowObject )
+        {
+            var aTextSelection = aWindowObject.getSelection();
+            var sSelectedText =  aTextSelection.toString();
+            if( sSelectedText )
+            {
+                log( 'text selection: ' + sSelectedText );
+                if( sLastSelectedText !== sSelectedText )
+                {
+                    bTextHasBeenSelected = true;
+                    sLastSelectedText = sSelectedText;
+                }
+                else
+                {
+                    bTextHasBeenSelected = false;
+                }
+                return null;
+            }
+            else if( bTextHasBeenSelected )
+            {
+                bTextHasBeenSelected = false;
+                sLastSelectedText = '';
+                return null;
+            }
+        }
+        else
+        {
+            log( 'error: HyperlinkElement.handleClick: invalid window object.' );
+        }
+    }
+
+    var aSlideAnimationsHandler = theMetaDoc.aMetaSlideSet[nCurSlide].aSlideAnimationsHandler;
+    if( aSlideAnimationsHandler )
+    {
+        var aCurrentEventMultiplexer = aSlideAnimationsHandler.aEventMultiplexer;
+        if( aCurrentEventMultiplexer )
+        {
+            if( aCurrentEventMultiplexer.hasRegisteredMouseClickHandlers() )
+            {
+                return aCurrentEventMultiplexer.notifyMouseClick( aEvt );
+            }
+        }
+    }
+    return slideOnMouseUp( aEvt );
+}
+
+
 /** Function to supply the default mouse handler dictionary.
  *
  *  @returns default mouse handler dictionary
@@ -329,10 +395,11 @@ function getDefaultMouseHandlerDictionary()
 
     // slide mode
     mouseHandlerDict[SLIDE_MODE][MOUSE_UP]
+        = mouseClickHelper;
         //= function( aEvt ) { return slideOnMouseDown( aEvt ); };
-        = function( aEvt ) { return ( aSlideShow.aEventMultiplexer ) ?
-                                        aSlideShow.aEventMultiplexer.notifyMouseClick( aEvt )
-                                        : slideOnMouseUp( aEvt ); };
+//        = function( aEvt ) { return ( aSlideShow.aEventMultiplexer ) ?
+//                                        aSlideShow.aEventMultiplexer.notifyMouseClick( aEvt )
+//                                        : slideOnMouseUp( aEvt ); };
 
     mouseHandlerDict[SLIDE_MODE][MOUSE_WHEEL]
         = function( aEvt ) { return slideOnMouseWheel( aEvt ); };
@@ -613,6 +680,152 @@ PathTools.arcAsBezier = function( last, rx, ry, xRotg, large, sweep, x, y )
     }
     return result;	// Array
 };
+
+
+function has( name )
+{
+    return has.cache[name];
+}
+
+has.cache = {};
+
+has.add = function( name, test )
+{
+    has.cache[name] = test;
+};
+
+function configureDetectionTools()
+{
+    if( !navigator )
+    {
+        log( 'error: configureDetectionTools: configuration failed' );
+        return null;
+    }
+
+    var n = navigator,
+    dua = n.userAgent,
+    dav = n.appVersion,
+    tv = parseFloat(dav);
+
+    has.add('air', dua.indexOf('AdobeAIR') >= 0),
+    has.add('khtml', dav.indexOf('Konqueror') >= 0 ? tv : undefined);
+    has.add('webkit', parseFloat(dua.split('WebKit/')[1]) || undefined);
+    has.add('chrome', parseFloat(dua.split('Chrome/')[1]) || undefined);
+    has.add('safari', dav.indexOf('Safari')>=0 && !has('chrome') ? parseFloat(dav.split('Version/')[1]) : undefined);
+    has.add('mac', dav.indexOf('Macintosh') >= 0);
+    has.add('quirks', document.compatMode == 'BackCompat');
+    has.add('ios', /iPhone|iPod|iPad/.test(dua));
+    has.add('android', parseFloat(dua.split('Android ')[1]) || undefined);
+
+    if(!has('webkit')){
+        // Opera
+        if(dua.indexOf('Opera') >= 0){
+            // see http://dev.opera.com/articles/view/opera-ua-string-changes and http://www.useragentstring.com/pages/Opera/
+            // 9.8 has both styles; <9.8, 9.9 only old style
+            has.add('opera', tv >= 9.8 ? parseFloat(dua.split('Version/')[1]) || tv : tv);
+        }
+
+        // Mozilla and firefox
+        if(dua.indexOf('Gecko') >= 0 && !has('khtml') && !has('webkit')){
+            has.add('mozilla', tv);
+        }
+        if(has('mozilla')){
+            //We really need to get away from this. Consider a sane isGecko approach for the future.
+            has.add('ff', parseFloat(dua.split('Firefox/')[1] || dua.split('Minefield/')[1]) || undefined);
+        }
+
+        // IE
+        if(document.all && !has('opera')){
+            var isIE = parseFloat(dav.split('MSIE ')[1]) || undefined;
+
+            //In cases where the page has an HTTP header or META tag with
+            //X-UA-Compatible, then it is in emulation mode.
+            //Make sure isIE reflects the desired version.
+            //document.documentMode of 5 means quirks mode.
+            //Only switch the value if documentMode's major version
+            //is different from isIE's major version.
+            var mode = document.documentMode;
+            if(mode && mode != 5 && Math.floor(isIE) != mode){
+                isIE = mode;
+            }
+
+            has.add('ie', isIE);
+        }
+
+        // Wii
+        has.add('wii', typeof opera != 'undefined' && opera.wiiremote);
+    }
+
+    var detect =
+    {
+		// isFF: Number|undefined
+		//		Version as a Number if client is FireFox. undefined otherwise. Corresponds to
+		//		major detected FireFox version (1.5, 2, 3, etc.)
+		isFF: has('ff'),
+
+		// isIE: Number|undefined
+		//		Version as a Number if client is MSIE(PC). undefined otherwise. Corresponds to
+		//		major detected IE version (6, 7, 8, etc.)
+		isIE: has('ie'),
+
+		// isKhtml: Number|undefined
+		//		Version as a Number if client is a KHTML browser. undefined otherwise. Corresponds to major
+		//		detected version.
+		isKhtml: has('khtml'),
+
+		// isWebKit: Number|undefined
+		//		Version as a Number if client is a WebKit-derived browser (Konqueror,
+		//		Safari, Chrome, etc.). undefined otherwise.
+		isWebKit: has('webkit'),
+
+		// isMozilla: Number|undefined
+		//		Version as a Number if client is a Mozilla-based browser (Firefox,
+		//		SeaMonkey). undefined otherwise. Corresponds to major detected version.
+		isMozilla: has('mozilla'),
+		// isMoz: Number|undefined
+		//		Version as a Number if client is a Mozilla-based browser (Firefox,
+		//		SeaMonkey). undefined otherwise. Corresponds to major detected version.
+		isMoz: has('mozilla'),
+
+		// isOpera: Number|undefined
+		//		Version as a Number if client is Opera. undefined otherwise. Corresponds to
+		//		major detected version.
+		isOpera: has('opera'),
+
+		// isSafari: Number|undefined
+		//		Version as a Number if client is Safari or iPhone. undefined otherwise.
+		isSafari: has('safari'),
+
+		// isChrome: Number|undefined
+		//		Version as a Number if client is Chrome browser. undefined otherwise.
+		isChrome: has('chrome'),
+
+		// isMac: Boolean
+		//		True if the client runs on Mac
+		isMac: has('mac'),
+
+		// isIos: Boolean
+		//		True if client is iPhone, iPod, or iPad
+		isIos: has('ios'),
+
+		// isAndroid: Number|undefined
+		//		Version as a Number if client is android browser. undefined otherwise.
+		isAndroid: has('android'),
+
+		// isWii: Boolean
+		//		True if client is Wii
+		isWii: has('wii'),
+
+		// isQuirks: Boolean
+		//		Page is in quirks mode.
+		isQuirks: has('quirks'),
+
+		// isAir: Boolean
+		//		True if client is Adobe Air
+		isAir: has('air')
+    };
+    return detect;
+}
 
 
 
@@ -937,6 +1150,24 @@ function PriorityQueue( aCompareFunc )
     this.aCompareFunc = aCompareFunc;
 }
 
+PriorityQueue.prototype.clone = function()
+{
+    var aCopy = new PriorityQueue( this.aCompareFunc );
+    var src = this.aSequence;
+    var dest = [];
+    var i, l;
+    for( i = 0, l = src.length; i < l; ++i )
+    {
+        if( i in src )
+        {
+            dest.push( src[i] );
+        }
+    }
+    aCopy.aSequence = dest;
+
+    return aCopy;
+};
+
 PriorityQueue.prototype.top = function()
 {
     return this.aSequence[0];
@@ -1171,11 +1402,15 @@ var INDEX_COLUMNS_DEFAULT = 3;
 var INDEX_OFFSET = 0;
 
 // Initialization.
+var Detect = configureDetectionTools();
 var theMetaDoc;
 var theSlideIndexPage;
 var currentMode = SLIDE_MODE;
 var processingEffect = false;
 var nCurSlide = undefined;
+var bTextHasBeenSelected = false;
+var sLastSelectedText = '';
+
 
 // Initialize char and key code dictionaries.
 var charCodeDictionary = getDefaultCharCodeDictionary();
@@ -1240,6 +1475,7 @@ function instantiate( TemplateClass, BaseType )
     return TemplateClass.instanceSet[ nSize ].instance;
 }
 
+
 // ------------------------------------------------------------------------------------------ //
 /**********************************
  ** Helper functions and classes **
@@ -1284,11 +1520,19 @@ function warning( bCondition, sMessage )
 function getNSAttribute( sNSPrefix, aElem, sAttrName )
 {
     if( !aElem ) return null;
-    if( aElem.hasAttributeNS( NSS[sNSPrefix], sAttrName ) )
+    if( 'getAttributeNS' in aElem )
     {
         return aElem.getAttributeNS( NSS[sNSPrefix], sAttrName );
     }
-    return null;
+    else
+    {
+        return aElem.getAttribute( sNSPrefix + ':' + sAttrName );
+    }
+//    if( aElem.hasAttributeNS( NSS[sNSPrefix], sAttrName ) )
+//    {
+//        return aElem.getAttributeNS( NSS[sNSPrefix], sAttrName );
+//    }
+//    return null;
 }
 
 function getOOOAttribute( aElem, sAttrName )
@@ -1691,6 +1935,12 @@ function MetaSlide( sMetaSlideId, aMetaDoc )
     if( false && this.aSlideAnimationsHandler.aRootNode )
         log( this.aSlideAnimationsHandler.aRootNode.info( true ) );
 
+    // We collect text shapes included in this slide .
+    this.aTextShapeSet = this.collectTextShapes();
+
+    // We initialize hyperlinks
+    this.aHyperlinkSet = this.initHyperlinks();
+
 }
 
 MetaSlide.prototype =
@@ -1819,6 +2069,78 @@ initFixedTextFieldContentProvider : function( aOOOAttribute )
             = new FixedTextProvider( aTextFieldElem );
     }
     return this.theMetaDoc.aTextFieldContentProviderSet[ nIndex ];
+},
+
+collectTextShapes : function()
+{
+    var aTextShapeSet = new Array();
+    var aTextShapeIndexElem = getElementByClassName( document, 'TextShapeIndex' );
+    if( aTextShapeIndexElem )
+    {
+        var aIndexEntryList = getElementChildren( aTextShapeIndexElem );
+        var i;
+        for( i = 0; i < aIndexEntryList.length; ++i )
+        {
+            var sSlideId = getOOOAttribute( aIndexEntryList[i], 'slide' );
+            if( sSlideId === this.slideId )
+            {
+                var sTextShapeIds = getOOOAttribute( aIndexEntryList[i], 'id-list' );
+                if( sTextShapeIds )
+                {
+                    //log( 'slide id: ' + this.slideId + ' text shape id list: ' + sTextShapeIds );
+                    var aTextShapeIdSet =  sTextShapeIds.split( ' ' );
+                    var j;
+                    for( j = 0; j < aTextShapeIdSet.length; ++j )
+                    {
+                        var aTextShapeElem = document.getElementById( aTextShapeIdSet[j] );
+                        if( aTextShapeElem )
+                        {
+                            aTextShapeSet.push( aTextShapeElem );
+                        }
+                        else
+                        {
+                            log( 'warning: MetaSlide.collectTextShapes: text shape with id <' + aTextShapeIdSet[j] + '> is not valid.'  );
+                        }
+                    }
+                }
+                break;
+            }
+        }
+    }
+    return aTextShapeSet;
+},
+
+initHyperlinks : function()
+{
+    var aHyperlinkSet = new Object();
+    var i;
+    for( i = 0; i < this.aTextShapeSet.length; ++i )
+    {
+        if( this.aTextShapeSet[i] )
+        {
+            var aHyperlinkIdList = getElementByClassName( this.aTextShapeSet[i], 'HyperlinkIdList' );
+            if( aHyperlinkIdList )
+            {
+                var sHyperlinkIds = aHyperlinkIdList.textContent;
+                if( sHyperlinkIds )
+                {
+                    var aHyperlinkIdSet = sHyperlinkIds.trim().split( ' ' );
+                    var j;
+                    for( j = 0; j < aHyperlinkIdSet.length; ++j )
+                    {
+                        var sId = aHyperlinkIdSet[j];
+                        //log( 'initHyperlinks: j=' + j + ' id: <' + sId + '>' );
+                        var aHyperlinkElem = document.getElementById( sId );
+                        if( aHyperlinkElem )
+                        {
+                            aHyperlinkSet[ sId ] = new HyperlinkElement( sId, aHyperlinkElem, this.aSlideAnimationsHandler.aEventMultiplexer );
+                        }
+                    }
+                }
+            }
+        }
+    }
+    return aHyperlinkSet;
 },
 
 getSlideAnimationsRoot : function()
@@ -9294,6 +9616,7 @@ function AnimatedTextElement( aElement )
         }
     }
 
+    // In case there are embedded bitmaps we need to clone them
     var aBitmapElemSet = new Array();
     var aBitmapCloneSet = new Array();
     var aBitmapPlaceholderSet = getElementsByClassName( aElement, 'BitmapPlaceholder' );
@@ -9346,6 +9669,7 @@ function AnimatedTextElement( aElement )
         aBulletCharClone.setAttribute( 'visibility', 'inherit' );
     if( aBulletCharElem )
         aBulletCharElem.setAttribute( 'visibility', 'hidden' );
+
     for( i = 0; i < aBitmapCloneSet.length; ++i )
     {
         if( aBitmapElemSet[i] )
@@ -10166,6 +10490,102 @@ SourceEventElement.prototype.setDefaultCursor = function()
     this.aElement.setAttribute( 'style', 'cursor: default' );
 };
 
+// ------------------------------------------------------------------------------------------ //
+
+function HyperlinkElement( sId, aElement, aEventMultiplexer )
+{
+    if( !aElement )
+    {
+        log( 'error: HyperlinkElement: passed element is not valid' );
+        return;
+    }
+    if( !aEventMultiplexer )
+    {
+        log( 'error: HyperlinkElement: passed event multiplexer is not valid' );
+        return;
+    }
+
+    this.sId = sId;
+    this.aElement = aElement;
+    this.aEventMultiplexer = aEventMultiplexer;
+    this.nTargetSlideIndex = undefined;
+
+    this.sURL = getNSAttribute( 'xlink', this.aElement, 'href' );
+    if( this.sURL )
+    {
+        if( this.sURL[0] === '#' )
+        {
+            if( this.sURL.substr(1, 5) === 'Slide' )
+            {
+                var sSlideIndex = this.sURL.split( ' ' )[1];
+                this.nTargetSlideIndex = parseInt( sSlideIndex ) - 1;
+            }
+        }
+
+        this.aEventMultiplexer.registerMouseClickHandler( this, 1100 );
+
+        this.bIsPointerOver = false;
+        this.aElement.addEventListener( 'mouseover', bind2( HyperlinkElement.prototype.onMouseEnter, this), false );
+        this.aElement.addEventListener( 'mouseout', bind2( HyperlinkElement.prototype.onMouseLeave, this), false );
+    }
+    else
+    {
+        log( 'warning: HyperlinkElement(' + this.sId + '): url is empty' );
+    }
+}
+
+HyperlinkElement.prototype.onMouseEnter = function()
+{
+    this.bIsPointerOver = true;
+    this.setPointerCursor();
+};
+
+HyperlinkElement.prototype.onMouseLeave = function()
+{
+    this.bIsPointerOver = false;
+    this.setDefaultCursor();
+};
+
+HyperlinkElement.prototype.handleClick = function( aMouseEvent )
+{
+    if( !this.bIsPointerOver ) return false;
+
+    //log( 'hyperlink: ' + this.sURL );
+
+    if( this.nTargetSlideIndex !== undefined )
+    {
+        aSlideShow.displaySlide( this.nTargetSlideIndex, true );
+    }
+    else
+    {
+        var aWindowObject = document.defaultView;
+        if( aWindowObject )
+        {
+            aWindowObject.open( this.sURL, this.sId );
+        }
+        else
+        {
+            log( 'error: HyperlinkElement.handleClick: invalid window object.' );
+        }
+    }
+
+
+    return true;
+};
+
+HyperlinkElement.prototype.setPointerCursor = function()
+{
+    if( this.bClickHandled )
+        return;
+
+    this.aElement.setAttribute( 'style', 'cursor: pointer' );
+};
+
+HyperlinkElement.prototype.setDefaultCursor = function()
+{
+    this.aElement.setAttribute( 'style', 'cursor: default' );
+};
+
 
 // ------------------------------------------------------------------------------------------ //
 function InteractiveAnimationSequence( nId )
@@ -10257,9 +10677,11 @@ PriorityEntry.compare = function( aLhsEntry, aRhsEntry )
     return ( aLhsEntry.nPriority < aRhsEntry.nPriority );
 };
 
+
 // ------------------------------------------------------------------------------------------ //
 function EventMultiplexer( aTimerEventQueue )
 {
+    this.nId = EventMultiplexer.getUniqueId();
     this.aTimerEventQueue = aTimerEventQueue;
     this.aEventMap = new Object();
     this.aSkipEffectEndHandlerSet = new Array();
@@ -10273,6 +10695,25 @@ function EventMultiplexer( aTimerEventQueue )
     this.aRewindedEffectHandlerSet = new Object();
 }
 
+EventMultiplexer.CURR_UNIQUE_ID = 0;
+
+EventMultiplexer.getUniqueId = function()
+{
+    ++EventMultiplexer.CURR_UNIQUE_ID;
+    return EventMultiplexer.CURR_UNIQUE_ID;
+};
+
+EventMultiplexer.prototype.getId = function()
+{
+    return this.nId;
+}
+
+EventMultiplexer.prototype.hasRegisteredMouseClickHandlers = function()
+{
+    var nSize = this.aMouseClickHandlerSet.size();
+    return ( nSize > 0 );
+}
+
 EventMultiplexer.prototype.registerMouseClickHandler = function( aHandler, nPriority )
 {
     var aHandlerEntry = new PriorityEntry( aHandler, nPriority );
@@ -10281,11 +10722,11 @@ EventMultiplexer.prototype.registerMouseClickHandler = function( aHandler, nPrio
 
 EventMultiplexer.prototype.notifyMouseClick = function( aMouseEvent )
 {
-    var aMouseClickHandlerSet = this.aMouseClickHandlerSet;
-    var nSize = aMouseClickHandlerSet.size();
-    for( var i = 0; i < nSize; ++i )
+    var aMouseClickHandlerSet = this.aMouseClickHandlerSet.clone();
+    while( !aMouseClickHandlerSet.isEmpty() )
     {
-        var aHandlerEntry = aMouseClickHandlerSet.aSequence[i];
+        var aHandlerEntry = aMouseClickHandlerSet.top();
+        aMouseClickHandlerSet.pop();
         if( aHandlerEntry.aValue.handleClick( aMouseEvent ) )
             break;
     }

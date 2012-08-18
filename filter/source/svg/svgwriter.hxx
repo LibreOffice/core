@@ -204,7 +204,9 @@ class SVGTextWriter
     SVGFontExport&                              mrFontExport;
     SVGAttributeWriter*                         mpContext;
     VirtualDevice*                              mpVDev;
+    sal_Bool                                    mbIsTextShapeStarted;
     Reference<XText>                            mrTextShape;
+    ::rtl::OUString                             msShapeId;
     Reference<XEnumeration>                     mrParagraphEnumeration;
     Reference<XTextContent>                     mrCurrentTextParagraph;
     Reference<XEnumeration>                     mrTextPortionEnumeration;
@@ -244,6 +246,7 @@ class SVGTextWriter
     sal_Bool nextParagraph();
     sal_Bool nextTextPortion();
 
+    sal_Bool isTextShapeStarted() { return mbIsTextShapeStarted; }
     void startTextShape();
     void endTextShape();
     void startTextParagraph();
@@ -252,7 +255,8 @@ class SVGTextWriter
     void endTextPosition();
     void implExportHyperlinkIds();
     void implWriteBulletChars();
-    void writeBitmapPlaceholder( const MetaBmpExScaleAction* pAction );
+    template< typename MetaBitmapActionType >
+    void writeBitmapPlaceholder( const MetaBitmapActionType* pAction );
     void implWriteEmbeddedBitmaps();
     void writeTextPortion( const Point& rPos, const String& rText,
                            sal_Bool bApplyMapping = sal_True );
@@ -295,8 +299,12 @@ class SVGTextWriter
     void implMap( const Point& rPt, Point& rDstPt ) const;
     void implSetCurrentFont();
     void implSetFontFamily();
+
     template< typename SubType >
     sal_Bool implGetTextPosition( const MetaAction* pAction, Point& raPos, sal_Bool& bEmpty );
+    template< typename SubType >
+    sal_Bool implGetTextPositionFromBitmap( const MetaAction* pAction, Point& raPos, sal_Bool& rbEmpty );
+
     void implRegisterInterface( const Reference< XInterface >& rxIf );
     const ::rtl::OUString & implGetValidIDFromInterface( const Reference< XInterface >& rxIf );
 
@@ -390,7 +398,7 @@ private:
 public:
 
     static ::rtl::OUString  GetPathString( const PolyPolygon& rPolyPoly, sal_Bool bLine );
-    static sal_uLong        GetChecksum( const MetaBmpExScaleAction* pAct );
+    static sal_uLong        GetChecksum( const MetaAction* pAction );
 
 public:
 
@@ -404,7 +412,6 @@ public:
                                            const ::rtl::OUString* pElementId = NULL,
                                            const Reference< XShape >* pXShape = NULL,
                                            const GDIMetaFile* pTextEmbeddedBitmapMtf = NULL );
-    sal_Bool bIsTextShape;
 };
 
 #endif

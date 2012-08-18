@@ -455,7 +455,9 @@ SVGTextWriter::SVGTextWriter( SVGExport& rExport, SVGFontExport& rFontExport )
         mrFontExport( rFontExport ),
         mpContext( NULL ),
         mpVDev( NULL ),
+        mbIsTextShapeStarted( sal_False ),
         mrTextShape(),
+        msShapeId(),
         mrParagraphEnumeration(),
         mrCurrentTextParagraph(),
         mrTextPortionEnumeration(),
@@ -576,10 +578,10 @@ sal_Bool SVGTextWriter::implGetTextPosition<MetaTextRectAction>( const MetaActio
 
 // -----------------------------------------------------------------------------
 
-template<>
-sal_Bool SVGTextWriter::implGetTextPosition<MetaBmpExScaleAction>( const MetaAction* pAction, Point& raPos, sal_Bool& rbEmpty )
+template< typename SubType >
+sal_Bool SVGTextWriter::implGetTextPositionFromBitmap( const MetaAction* pAction, Point& raPos, sal_Bool& rbEmpty )
 {
-    const MetaBmpExScaleAction* pA = (const MetaBmpExScaleAction*) pAction;
+    const SubType* pA = (const SubType*) pAction;
     raPos = pA->GetPoint();
     rbEmpty = sal_False;
     return sal_True;
@@ -640,9 +642,15 @@ sal_Int32 SVGTextWriter::setTextPosition( const GDIMetaFile& rMtf, sal_uLong& nC
             }
             break;
 
+            case( META_BMPSCALE_ACTION ):
+            {
+                bConfigured = implGetTextPositionFromBitmap<MetaBmpScaleAction>( pAction, aPos, bEmpty );
+            }
+            break;
+
             case( META_BMPEXSCALE_ACTION ):
             {
-                bConfigured = implGetTextPosition<MetaBmpExScaleAction>( pAction, aPos, bEmpty );
+                bConfigured = implGetTextPositionFromBitmap<MetaBmpExScaleAction>( pAction, aPos, bEmpty );
             }
             break;
 
@@ -911,6 +919,9 @@ sal_Bool SVGTextWriter::createParagraphEnumeration()
 {
     if( mrTextShape.is() )
     {
+        Reference< XInterface > xRef( mrTextShape, UNO_QUERY );
+        msShapeId = implGetValidIDFromInterface( xRef );
+
         Reference< XEnumerationAccess > xEnumerationAccess( mrTextShape, UNO_QUERY_THROW );
         Reference< XEnumeration > xEnumeration( xEnumerationAccess->createEnumeration(), UNO_QUERY_THROW );
         if( xEnumeration.is() )
@@ -1219,6 +1230,7 @@ void SVGTextWriter::startTextShape()
     }
 
     {
+        mbIsTextShapeStarted = sal_True;
         maParentFont = Font();
         mrExport.AddAttribute( XML_NAMESPACE_NONE, "class", B2UCONST( "TextShape" ) );
         mpTextShapeElem = new SvXMLElementExport( mrExport, XML_NAMESPACE_NONE, aXMLElemText, sal_True, mbIWS );
@@ -1242,6 +1254,7 @@ void SVGTextWriter::endTextShape()
         delete mpTextShapeElem;
         mpTextShapeElem = NULL;
     }
+    mbIsTextShapeStarted = sal_False;
     // these need to be invoked after the <text> element has been closed
     implExportHyperlinkIds();
     implWriteBulletChars();
@@ -1336,7 +1349,7 @@ void SVGTextWriter::implExportHyperlinkIds()
     if( !msHyperlinkIdList.isEmpty() )
     {
         mrExport.AddAttribute( XML_NAMESPACE_NONE, "class", B2UCONST( "HyperlinkIdList" ) );
-        SvXMLElementExport aDescElem( mrExport, XML_NAMESPACE_NONE, "desc", sal_True, sal_True );
+        SvXMLElementExport aDescElem( mrExport, XML_NAMESPACE_NONE, "desc", sal_True, sal_False );
         mrExport.GetDocHandler()->characters( msHyperlinkIdList.trim() );
         msHyperlinkIdList = OUString();
     }
@@ -1413,7 +1426,8 @@ void SVGTextWriter::implWriteBulletChars()
 
 // -----------------------------------------------------------------------------
 
-void SVGTextWriter::writeBitmapPlaceholder( const MetaBmpExScaleAction* pAction )
+template< typename MetaBitmapActionType >
+void SVGTextWriter::writeBitmapPlaceholder( const MetaBitmapActionType* pAction )
 {
     // text position element
     const Point& rPos = pAction->GetPoint();
@@ -1429,6 +1443,8 @@ void SVGTextWriter::writeBitmapPlaceholder( const MetaBmpExScaleAction* pAction 
     // bitmap placeholder element
     sal_uLong nId = SVGActionWriter::GetChecksum( pAction );
     OUString sId = B2UCONST( "bitmap-placeholder(" );
+    sId += msShapeId;
+    sId += B2UCONST( "." );
     sId += OUString::valueOf( (sal_Int64)nId );
     sId += B2UCONST( ")" );
 
@@ -1452,17 +1468,43 @@ void SVGTextWriter::implWriteEmbeddedBitmaps()
         const GDIMetaFile& rMtf = *mpTextEmbeddedBitmapMtf;
 
         OUString sId, sRefId;
-        sal_uLong nId;
+        sal_uLong nId, nChecksum;
+        Point aPt;
+        Size  aSz;
         sal_uLong nCount = rMtf.GetActionSize();
         for( sal_uLong nCurAction = 0; nCurAction < nCount; nCurAction++ )
         {
-            MetaBmpExScaleAction* pAction = (MetaBmpExScaleAction*) rMtf.GetAction( nCurAction );
+
+            const MetaAction* pAction = rMtf.GetAction( nCurAction );
+            const sal_uInt16 nType = pAction->GetType();
+
+            switch( nType )
+            {
+                case( META_BMPSCALE_ACTION ):
+                {
+                    const MetaBmpScaleAction* pA = (const MetaBmpScaleAction*) pAction;
+                    nChecksum = pA->GetBitmap().GetChecksum();
+                    aPt = pA->GetPoint();
+                    aSz = pA->GetSize();
+                }
+                break;
+                case( META_BMPEXSCALE_ACTION ):
+                {
+                    const MetaBmpExScaleAction* pA = (const MetaBmpExScaleAction*) pAction;
+                    nChecksum = pA->GetBitmapEx().GetChecksum();
+                    aPt = pA->GetPoint();
+                    aSz = pA->GetSize();
+                }
+                break;
+            }
 
             // <g id="?" > (used by animations)
             {
                 // embedded bitmap id
                 nId = SVGActionWriter::GetChecksum( pAction );
                 sId = B2UCONST( "embedded-bitmap(" );
+                sId += msShapeId;
+                sId += B2UCONST( "." );
                 sId += OUString::valueOf( (sal_Int64)nId );
                 sId += B2UCONST( ")" );
                 mrExport.AddAttribute( XML_NAMESPACE_NONE, "id", sId );
@@ -1473,20 +1515,17 @@ void SVGTextWriter::implWriteEmbeddedBitmaps()
                 // <use x="?" y="?" xlink:ref="?" >
                 {
                     // referenced bitmap template
-                    nId = pAction->GetBitmapEx().GetChecksum();
                     sRefId = B2UCONST( "#bitmap(" );
-                    sRefId += OUString::valueOf( (sal_Int64)nId );
+                    sRefId += OUString::valueOf( (sal_Int64)nChecksum );
                     sRefId += B2UCONST( ")" );
 
-                    const Point& rPt = pAction->GetPoint();
-                    const Size&  rSz = pAction->GetSize();
-                    Point aPt;
-                    Size  aSz;
-                    implMap( rPt, aPt );
-                    implMap( rSz, aSz );
+                    Point aPoint;
+                    Size  aSize;
+                    implMap( aPt, aPoint );
+                    implMap( aSz, aSize );
 
-                    mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrX, OUString::valueOf( aPt.X() ) );
-                    mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrY, OUString::valueOf( aPt.Y() ) );
+                    mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrX, OUString::valueOf( aPoint.X() ) );
+                    mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrY, OUString::valueOf( aPoint.Y() ) );
                     mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrXLinkHRef, sRefId );
 
                     SvXMLElementExport aRefElem( mrExport, XML_NAMESPACE_NONE, "use", sal_True, sal_True );
@@ -1906,31 +1945,13 @@ PolyPolygon& SVGActionWriter::ImplMap( const PolyPolygon& rPolyPoly, PolyPolygon
 
 // -----------------------------------------------------------------------------
 
-sal_uLong SVGActionWriter::GetChecksum( const MetaBmpExScaleAction* pAct )
+sal_uLong SVGActionWriter::GetChecksum( const MetaAction* pAction )
 {
-    sal_uLong           nCrc = 0;
-    SVBT16              aBT16;
-    SVBT32              aBT32;
-
-    ShortToSVBT16( pAct->GetType(), aBT16 );
-    nCrc = rtl_crc32( nCrc, aBT16, 2 );
-
-    UInt32ToSVBT32( pAct->GetBitmapEx().GetChecksum(), aBT32 );
-    nCrc = rtl_crc32( nCrc, aBT32, 4 );
-
-    UInt32ToSVBT32( pAct->GetPoint().X(), aBT32 );
-    nCrc = rtl_crc32( nCrc, aBT32, 4 );
-
-    UInt32ToSVBT32( pAct->GetPoint().Y(), aBT32 );
-    nCrc = rtl_crc32( nCrc, aBT32, 4 );
-
-    UInt32ToSVBT32( pAct->GetSize().Width(), aBT32 );
-    nCrc = rtl_crc32( nCrc, aBT32, 4 );
-
-    UInt32ToSVBT32( pAct->GetSize().Height(), aBT32 );
-    nCrc = rtl_crc32( nCrc, aBT32, 4 );
-
-    return nCrc;
+    GDIMetaFile aMtf;
+    MetaAction* pA = (MetaAction*)pAction;
+    pA->Duplicate();
+    aMtf.AddAction( pA );
+    return aMtf.GetChecksum();
 }
 
 // -----------------------------------------------------------------------------
@@ -2749,11 +2770,12 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
     if( mnInnerMtfCount )
         nWriteFlags |= SVGWRITER_NO_SHAPE_COMMENTS;
 
+
+    bool bIsTextShape = false;
     if( !mrExport.IsUsePositionedCharacters() && pxShape
             && Reference< XText >( *pxShape, UNO_QUERY ).is() )
     {
-        Reference< XText > xText( *pxShape, UNO_QUERY );
-        maTextWriter.setTextShape( xText, pTextEmbeddedBitmapMtf );
+        bIsTextShape = true;
     }
 
     mbIsPlacehlolderShape = false;
@@ -2769,7 +2791,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
         const MetaAction*   pAction = rMtf.GetAction( nCurAction );
         const sal_uInt16        nType = pAction->GetType();
 
-        if( maTextWriter.getTextShape().is() )
+        if( bIsTextShape )
         {
             try
             {
@@ -3225,6 +3247,12 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                 {
                     if( ( pA->GetComment().equalsIgnoreAsciiCaseL( RTL_CONSTASCII_STRINGPARAM( "XTEXT_PAINTSHAPE_BEGIN" ) ) ) )
                     {
+                        if( pxShape )
+                        {
+                            Reference< XText > xText( *pxShape, UNO_QUERY );
+                            if( xText.is() )
+                                maTextWriter.setTextShape( xText, pTextEmbeddedBitmapMtf );
+                        }
                         maTextWriter.createParagraphEnumeration();
                         {
                             // nTextFound == -1 => no text found
@@ -3343,9 +3371,17 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                 {
                     const MetaBmpScaleAction* pA = (const MetaBmpScaleAction*) pAction;
 
-                    ImplWriteBmp( pA->GetBitmap(),
-                                  pA->GetPoint(), pA->GetSize(),
-                                  Point(), pA->GetBitmap().GetSizePixel() );
+                    // Bitmaps embedded into text shapes are collected and exported elsewhere.
+                    if( maTextWriter.isTextShapeStarted() )
+                    {
+                        maTextWriter.writeBitmapPlaceholder( pA );
+                    }
+                    else
+                    {
+                        ImplWriteBmp( pA->GetBitmap(),
+                                      pA->GetPoint(), pA->GetSize(),
+                                      Point(), pA->GetBitmap().GetSizePixel() );
+                    }
                 }
             }
             break;
@@ -3383,7 +3419,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                     const MetaBmpExScaleAction* pA = (const MetaBmpExScaleAction*) pAction;
 
                     // Bitmaps embedded into text shapes are collected and exported elsewhere.
-                    if( maTextWriter.getTextShape().is() )
+                    if( maTextWriter.isTextShapeStarted() )
                     {
                         maTextWriter.writeBitmapPlaceholder( pA );
                     }
