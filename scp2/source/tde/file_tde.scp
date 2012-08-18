@@ -25,7 +25,7 @@
 
 #ifdef ENABLE_TDE
 File gid_File_Lib_Tdebe
-    TXT_FILE_BODY;
+    LIB_FILE_BODY;
     Styles = (PACKED);
     Dir = SCP2_OOO_BIN_DIR;
     Name = STRING(CONCAT2(tdebe1.uno,UNXSUFFIX));

@@ -14,6 +14,8 @@
 # Major Contributor(s):
 # Copyright (C) 2012 Red Hat, Inc., David Tardon <dtardon@redhat.com>
 #  (initial developer)
+# Copyright (C) 2012 Timothy Pearson <kb9vqf@pearsoncomputing.net>
+#  (TDE version)
 #
 # All Rights Reserved.
 #
@@ -28,7 +30,7 @@
 $(eval $(call gb_Configuration_Configuration,driver_tdeab))
 
 $(eval $(call gb_Configuration_add_spool_modules,driver_tdeab,connectivity/registry/tdeab,\
-	org/openoffice/Office/DataAccess/Drivers-tab.xcu \
+	org/openoffice/Office/DataAccess/Drivers-tdeab.xcu \
 ))
 
 $(eval $(call gb_Configuration_add_localized_datas,driver_tdeab,connectivity/registry/tdeab,\

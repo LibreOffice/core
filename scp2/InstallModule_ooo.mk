@@ -47,6 +47,8 @@ $(eval $(call gb_InstallModule_define_if_set,scp2/ooo,\
 	ENABLE_NSPLUGIN \
 	ENABLE_ONLINE_UPDATE \
 	ENABLE_OPENGL \
+	ENABLE_TDE \
+	ENABLE_TDEAB \
 	ENABLE_TELEPATHY \
 	MERGELIBS \
 	SYSTEM_BOOST \
