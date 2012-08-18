@@ -195,11 +195,7 @@ public:
 
     sal_uInt16 GetItemId( const Point& rPos ) const;
 
-    void SetColCount( sal_uInt16 nNewCols = 1 );
-
     sal_uInt16 GetColCount() const { return mnUserCols; }
-
-    void SetLineCount( sal_uInt16 nNewLines = 0 );
 
     sal_uInt16 GetLineCount() const { return mnUserVisLines; }
 
@@ -264,8 +260,6 @@ protected:
 
     virtual void MouseMove( const MouseEvent& rMEvt );
 
-    virtual void Tracking( const TrackingEvent& rMEvt );
-
     virtual void Command( const CommandEvent& rCEvt );
 
     virtual void Paint( const Rectangle& rRect );
@@ -319,10 +313,7 @@ protected:
     SFX2_DLLPRIVATE void         ImplInsertItem( ThumbnailViewItem *const pItem, const size_t nPos );
     SFX2_DLLPRIVATE void            ImplFireAccessibleEvent( short nEventId, const ::com::sun::star::uno::Any& rOldValue, const ::com::sun::star::uno::Any& rNewValue );
     SFX2_DLLPRIVATE bool         ImplHasAccessibleListeners();
-    SFX2_DLLPRIVATE void         ImplTracking( const Point& rPos, bool bRepeat );
-    SFX2_DLLPRIVATE void         ImplEndTracking( const Point& rPos, bool bCancel );
     DECL_DLLPRIVATE_LINK( ImplScrollHdl, ScrollBar* );
-    DECL_DLLPRIVATE_LINK( ImplTimerHdl, void* );
 
     DECL_LINK(OnItemSelected, ThumbnailViewItem*);
 

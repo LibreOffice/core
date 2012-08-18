@@ -544,27 +544,6 @@ IMPL_LINK( ThumbnailView,ImplScrollHdl, ScrollBar*, pScrollBar )
     return 0;
 }
 
-IMPL_LINK_NOARG(ThumbnailView, ImplTimerHdl)
-{
-    ImplTracking( GetPointerPosPixel(), true );
-    return 0;
-}
-
-void ThumbnailView::ImplTracking( const Point& rPos, bool bRepeat )
-{
-    if ( bRepeat )
-    {
-        if ( ImplScroll( rPos ) )
-        {
-        }
-    }
-}
-
-void ThumbnailView::ImplEndTracking(const Point& /*rPos*/, bool const /*bCancel*/)
-{
-    //FIXME TODO
-}
-
 IMPL_LINK (ThumbnailView, OnItemSelected, ThumbnailViewItem*, pItem)
 {
     maItemStateHdl.Call(pItem);
@@ -681,16 +660,6 @@ void ThumbnailView::MouseMove( const MouseEvent& rMEvt )
     }
 
     Control::MouseMove( rMEvt );
-}
-
-void ThumbnailView::Tracking( const TrackingEvent& rTEvt )
-{
-    Point aMousePos = rTEvt.GetMouseEvent().GetPosPixel();
-
-    if ( rTEvt.IsTrackingEnded() )
-        ImplEndTracking( aMousePos, rTEvt.IsTrackingCanceled() );
-    else
-        ImplTracking( aMousePos, rTEvt.IsTrackingRepeat() );
 }
 
 void ThumbnailView::Command( const CommandEvent& rCEvt )
@@ -933,32 +902,6 @@ sal_uInt16 ThumbnailView::GetItemId( const Point& rPos ) const
         return GetItemId( nItemPos );
 
     return 0;
-}
-
-void ThumbnailView::SetColCount( sal_uInt16 nNewCols )
-{
-    if ( mnUserCols != nNewCols )
-    {
-        mnUserCols = nNewCols;
-
-        CalculateItemPositions();
-
-        if ( IsReallyVisible() && IsUpdateMode() )
-            Invalidate();
-    }
-}
-
-void ThumbnailView::SetLineCount( sal_uInt16 nNewLines )
-{
-    if ( mnUserVisLines != nNewLines )
-    {
-        mnUserVisLines = nNewLines;
-
-        CalculateItemPositions();
-
-        if ( IsReallyVisible() && IsUpdateMode() )
-            Invalidate();
-    }
 }
 
 void ThumbnailView::setItemMaxTextLength(sal_uInt32 nLength)
