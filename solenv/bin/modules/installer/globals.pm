@@ -167,7 +167,6 @@ BEGIN
     $packageversion = 1;
     $packagerevision = 1;
     $rpm = "";
-    $rpmcommand = "";
     $rpminfologged = 0;
     $debian = "";
     $installertypedir = "";
@@ -200,7 +199,6 @@ BEGIN
     $linuxlibrarybaselevel = "1";
     $linuxlibrarypatchlevel = "1.1";
     @linuxlinks = ();
-    @linkrpms = ();
     $archiveformat = "";
     $updatelastsequence = 0;
     $updatesequencecounter = 0;
@@ -258,7 +256,6 @@ BEGIN
     $addlicensefile = 1;
     $addsystemintegration = 0;
     $makedownload = 1;
-    @installsetfiles = ();
     @binarytableonlyfiles = ();
     @allscpactions = ();
     $languagepackaddon = "LanguagePack";
@@ -377,7 +374,6 @@ BEGIN
 
     @removedirs = ();
     @removefiletable = ();
-    @emptypackages = ();
 
     $plat = $^O;
 

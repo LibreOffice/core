@@ -1499,12 +1499,6 @@ sub add_License_Files_into_Installdir
                 $infoline = "New files: Using installation name: $newfile->{'InstallName'}\n";
                 push( @installer::globals::logfileinfo, $infoline);
             }
-
-            # Collecting license and readme file for the installation set
-
-            push(@installer::globals::installsetfiles, $newfile);
-            $infoline = "New files: Adding file $newfilename to the file collector for the installation set. Language: $defaultlanguage\n";
-            push( @installer::globals::logfileinfo, $infoline);
         }
 
         push(@newfilesarray, $onefile);
