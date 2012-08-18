@@ -1986,7 +1986,6 @@ bool INetURLObject::convertAbsToRel(rtl::OUString const & rTheAbsURIRef,
     // path could go into the new relative URL instead, but some people don't
     // like that):
     rtl::OUStringBuffer aSynRelURIRef;
-//  if (nMatch <= 1) nMatch = 0; else // see comment above
     for (sal_Unicode const * p = pBasePathBegin + nMatch; p != pBasePathEnd;
          ++p)
     {
@@ -3221,11 +3220,6 @@ bool INetURLObject::parsePath(INetProtocol eScheme,
 
         case INET_PROT_VIM:
         {
-/* test had to be taken out to make parsePath static; ok since INET_PROT_VIM is
-   obsolete, anyway
-            if (m_aUser.isEmpty())
-                return false;
-*/
             sal_Unicode const * pPathEnd = pPos;
             while (pPathEnd < pEnd && *pPathEnd != nFragmentDelimiter)
                 ++pPathEnd;

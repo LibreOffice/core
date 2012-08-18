@@ -73,14 +73,11 @@ int Sys2SolarError_Impl( int nSysErr )
                 case ERROR_INVALID_HANDLE:              return ERRCODE_IO_GENERAL;
                 case ERROR_NOT_ENOUGH_MEMORY:   return ERRCODE_IO_OUTOFMEMORY;
                 case ERROR_INVALID_BLOCK:               return ERRCODE_IO_GENERAL;
-//              case ERROR_BAD_ENVIRONMENT:     return ERRCODE_IO_;
                 case ERROR_BAD_FORMAT:                  return ERRCODE_IO_WRONGFORMAT;
                 case ERROR_INVALID_ACCESS:              return ERRCODE_IO_ACCESSDENIED;
-//              case ERROR_INVALID_DATA:                return ERRCODE_IO_;
                 case ERROR_INVALID_DRIVE:               return ERRCODE_IO_INVALIDDEVICE;
                 case ERROR_CURRENT_DIRECTORY:   return ERRCODE_IO_CURRENTDIR;
                 case ERROR_NOT_SAME_DEVICE:     return ERRCODE_IO_NOTSAMEDEVICE;
-//              case ERROR_NO_MORE_FILES:               return ERRCODE_IO_;
                 case ERROR_WRITE_PROTECT:               return ERRCODE_IO_CANTWRITE;
                 case ERROR_BAD_UNIT:                    return ERRCODE_IO_INVALIDDEVICE;
                 case ERROR_NOT_READY:                   return ERRCODE_IO_DEVICENOTREADY;

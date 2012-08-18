@@ -2947,23 +2947,6 @@ rtl::OUString INetMIME::decodeHeaderFieldBody(HeaderFieldType eType,
 
             bEncodedWord = bEncodedWord && q != pEnd && *q++ == '=';
 
-//          if (bEncodedWord && q != pEnd)
-//              switch (*q)
-//              {
-//                  case '\t':
-//                  case ' ':
-//                  case '"':
-//                  case ')':
-//                  case ',':
-//                  case '.':
-//                  case '=':
-//                      break;
-//
-//                  default:
-//                      bEncodedWord = false;
-//                      break;
-//              }
-
             sal_Unicode * pUnicodeBuffer = 0;
             sal_Size nUnicodeSize = 0;
             if (bEncodedWord)
@@ -3061,14 +3044,6 @@ rtl::OUString INetMIME::decodeHeaderFieldBody(HeaderFieldType eType,
 
         switch (*p++)
         {
-//          case '\t':
-//          case ' ':
-//          case ',':
-//          case '.':
-//          case '=':
-//              bStartEncodedWord = true;
-//              break;
-
             case '"':
                 if (eType != HEADER_FIELD_TEXT && nCommentLevel == 0)
                 {

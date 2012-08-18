@@ -382,7 +382,6 @@ void SvStream::ImpInit()
     nActPos             = 0;
     nCompressMode       = COMPRESSMODE_NONE;
     eStreamCharSet      = osl_getThreadTextEncoding();
-//  eTargetCharSet      = osl_getThreadTextEncoding();
     nCryptMask          = 0;
     bIsEof              = sal_False;
 #if defined UNX
@@ -1192,7 +1191,6 @@ SvStream& SvStream::operator<< ( float v )
 
 SvStream& SvStream::operator<< ( const double& r )
 {
-//    Write( (char*)&r, sizeof( double ) );
 #if defined UNX
     if( bSwap )
     {
