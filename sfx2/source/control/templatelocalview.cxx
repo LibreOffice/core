@@ -691,8 +691,7 @@ void TemplateLocalView::OnItemDblClicked (ThumbnailViewItem *pRegionItem)
     if (mbSelectionMode)
         mpItemView->setSelectionMode(true);
 
-    if (meFilterOption != FILTER_APP_NONE)
-        mpItemView->filterItems(ViewFilter_Application(meFilterOption));
+    mpItemView->filterItems(ViewFilter_Application(meFilterOption));
 
     mpItemView->Show();
 }
