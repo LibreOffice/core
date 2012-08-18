@@ -45,9 +45,9 @@ SearchParam::SearchParam( const String &rText,
     sSrchStr        = rText;
     eSrchType       = eType;
 
-    bWordOnly       = bWrdOnly;
-    bSrchInSel      = bSearchInSel;
-    bCaseSense      = bCaseSensitive;
+    m_bWordOnly       = bWrdOnly;
+    m_bSrchInSel      = bSearchInSel;
+    m_bCaseSense      = bCaseSensitive;
 
     nTransliterationFlags = 0;
 
@@ -64,9 +64,9 @@ SearchParam::SearchParam( const SearchParam& rParam )
     sReplaceStr     = rParam.sReplaceStr;
     eSrchType       = rParam.eSrchType;
 
-    bWordOnly       = rParam.bWordOnly;
-    bSrchInSel      = rParam.bSrchInSel;
-    bCaseSense      = rParam.bCaseSense;
+    m_bWordOnly       = rParam.m_bWordOnly;
+    m_bSrchInSel      = rParam.m_bSrchInSel;
+    m_bCaseSense      = rParam.m_bCaseSense;
 
     bLEV_Relaxed    = rParam.bLEV_Relaxed;
     nLEV_OtherX     = rParam.nLEV_OtherX;

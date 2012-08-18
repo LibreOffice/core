@@ -57,9 +57,9 @@ private:
 
     SearchType eSrchType;       // search normal/regular/LevDist
 
-    int bWordOnly   : 1;        // used by normal search
-    int bSrchInSel  : 1;        // search only in the selection
-    int bCaseSense  : 1;        //
+    int m_bWordOnly   : 1;        // used by normal search
+    int m_bSrchInSel  : 1;        // search only in the selection
+    int m_bCaseSense  : 1;        //
 
     // values for the "weight Levenshtein-Distance"
     int bLEV_Relaxed : 1;
@@ -73,19 +73,19 @@ private:
 public:
     SearchParam( const String &rText,
                     SearchType eSrchType = SearchParam::SRCH_NORMAL,
-                    sal_Bool bCaseSens = sal_True,
-                    sal_Bool bWrdOnly = sal_False,
-                    sal_Bool bSrchInSel = sal_False );
+                    sal_Bool bCaseSensitive = sal_True,
+                    sal_Bool bWordOnly = sal_False,
+                    sal_Bool bSearchInSelection = sal_False );
 
     // Wrapper to use OUString as parameter
-    SearchParam( const OUString &rText,
+    SearchParam( const ::rtl::OUString &rText,
                     SearchType eSrchType = SearchParam::SRCH_NORMAL,
-                    sal_Bool bCaseSens = sal_True,
-                    sal_Bool bWrdOnly = sal_False,
-                    sal_Bool bSrchInSel = sal_False )
+                    sal_Bool bCaseSensitive = sal_True,
+                    sal_Bool bWordOnly = sal_False,
+                    sal_Bool bSearchInSelection = sal_False )
     {
         String rText2(rText);
-        SearchParam( rText2, eSrchType, bCaseSens, bWrdOnly, bSrchInSel );
+        SearchParam( rText2, eSrchType, bCaseSensitive, bWordOnly, bSearchInSelection );
     }
 
     SearchParam( const SearchParam& );
@@ -94,18 +94,18 @@ public:
     const String&   GetReplaceStr() const       { return sReplaceStr; }
     SearchType      GetSrchType() const         { return eSrchType; }
 
-    int             IsCaseSensitive() const     { return bCaseSense; }
-    int             IsSrchInSelection() const   { return bSrchInSel; }
-    int             IsSrchWordOnly() const      { return bWordOnly; }
+    int             IsCaseSensitive() const     { return m_bCaseSense; }
+    int             IsSrchInSelection() const   { return m_bSrchInSel; }
+    int             IsSrchWordOnly() const      { return m_bWordOnly; }
 
 
     void SetSrchStr( const String& rStr )       { sSrchStr = rStr; }
     void SetReplaceStr( const String& rStr )    { sReplaceStr = rStr; }
     void SetSrchType( SearchType eType )        { eSrchType = eType; }
 
-    void SetCaseSensitive( int bFlag )          { bCaseSense = bFlag; }
-    void SetSrchInSelection( int bFlag )        { bSrchInSel = bFlag; }
-    void SetSrchWordOnly( int bFlag )           { bWordOnly = bFlag; }
+    void SetCaseSensitive( int bFlag )          { m_bCaseSense = bFlag; }
+    void SetSrchInSelection( int bFlag )        { m_bSrchInSel = bFlag; }
+    void SetSrchWordOnly( int bFlag )           { m_bWordOnly = bFlag; }
 
     int             IsSrchRelaxed() const       { return bLEV_Relaxed; }
     int             GetLEVOther() const         { return nLEV_OtherX; }
