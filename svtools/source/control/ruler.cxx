@@ -462,7 +462,6 @@ void Ruler::ImplDrawTicks( long nMin, long nMax, long nStart, long nCenter )
     long    nTickWidth;
     sal_Bool    bNoTicks = sal_False;
 
-    //Amelia
     long    nTickUnit = 0;
     long    nTick2 = 0;
     if ( mnUnitIndex == RULER_UNIT_CHAR )
@@ -502,7 +501,7 @@ void Ruler::ImplDrawTicks( long nMin, long nMax, long nStart, long nCenter )
     long nMaxWidth = maVirDev.PixelToLogic( Size( mpData->nPageWidth, 0 ), maMapMode ).Width();
     if ( nMaxWidth < 0 )
         nMaxWidth = -nMaxWidth;
-    // Amelia
+
     if (( mnUnitIndex == RULER_UNIT_CHAR ) || ( mnUnitIndex == RULER_UNIT_LINE ))
         nMaxWidth /= nTickUnit;
     else
@@ -590,7 +589,6 @@ void Ruler::ImplDrawTicks( long nMin, long nMax, long nStart, long nCenter )
                 // Tick/Tick2 - Output (Strokes)
                 else
                 {
-        /// Amelia
                     if ( ( mnUnitIndex != RULER_UNIT_CHAR ) && ( mnUnitIndex != RULER_UNIT_LINE ) )
                         nTick2 = aImplRulerUnitTab[mnUnitIndex].nTick2;
                     if ( !(nTick % nTick2 ) )

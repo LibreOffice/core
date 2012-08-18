@@ -49,8 +49,8 @@
 #include "attrib.hxx"
 #include "hints.hxx"
 #include "sc.hrc"
-#include "chgtrack.hxx"  // Amelia Wang
-#include "refundo.hxx"  // Amelia Wang
+#include "chgtrack.hxx"
+#include "refundo.hxx"
 #include "markdata.hxx"
 
 // -----------------------------------------------------------------------
@@ -71,7 +71,7 @@ TYPEINIT1(ScUndoRepeatDB,           ScSimpleUndo);
 TYPEINIT1(ScUndoDataPilot,          ScSimpleUndo);
 TYPEINIT1(ScUndoConsolidate,        ScSimpleUndo);
 TYPEINIT1(ScUndoChartData,          ScSimpleUndo);
-TYPEINIT1(ScUndoDataForm,           SfxUndoAction);    // amelia
+TYPEINIT1(ScUndoDataForm,           SfxUndoAction);
 
 // -----------------------------------------------------------------------
 
@@ -2015,7 +2015,6 @@ sal_Bool ScUndoChartData::CanRepeat(SfxRepeatTarget& /* rTarget */) const
     return false;
 }
 
-// Amelia Wang
 ScUndoDataForm::ScUndoDataForm( ScDocShell* pNewDocShell,
                                 SCCOL nStartX, SCROW nStartY, SCTAB nStartZ,
                                 SCCOL nEndX, SCROW nEndY, SCTAB nEndZ,
