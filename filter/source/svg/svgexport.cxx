@@ -455,6 +455,102 @@ sal_Bool ObjectRepresentation::operator==( const ObjectRepresentation& rPresenta
             ( *mpMtf == *rPresentation.mpMtf ) );
 }
 
+// -----------------------------------------------------------------------------
+
+sal_uLong GetBitmapChecksum( const MetaAction* pAction )
+{
+    sal_uLong nChecksum = 0;
+    const sal_uInt16 nType = pAction->GetType();
+
+    switch( nType )
+    {
+        case( META_BMPSCALE_ACTION ):
+        {
+            const MetaBmpScaleAction* pA = (const MetaBmpScaleAction*) pAction;
+            if( pA  )
+                nChecksum = pA->GetBitmap().GetChecksum();
+            else
+                OSL_FAIL( "GetBitmapChecksum: MetaBmpScaleAction pointer is null." );
+        }
+        break;
+        case( META_BMPEXSCALE_ACTION ):
+        {
+            const MetaBmpExScaleAction* pA = (const MetaBmpExScaleAction*) pAction;
+            if( pA )
+                nChecksum = pA->GetBitmapEx().GetChecksum();
+            else
+                OSL_FAIL( "GetBitmapChecksum: MetaBmpExScaleAction pointer is null." );
+        }
+        break;
+    }
+    return nChecksum;
+}
+// -----------------------------------------------------------------------------
+
+void MetaBitmapActionGetPoint( const MetaAction* pAction, Point& rPt )
+{
+    const sal_uInt16 nType = pAction->GetType();
+    switch( nType )
+    {
+        case( META_BMPSCALE_ACTION ):
+        {
+            const MetaBmpScaleAction* pA = (const MetaBmpScaleAction*) pAction;
+            if( pA  )
+                rPt = pA->GetPoint();
+            else
+                OSL_FAIL( "MetaBitmapActionGetPoint: MetaBmpScaleAction pointer is null." );
+        }
+        break;
+        case( META_BMPEXSCALE_ACTION ):
+        {
+            const MetaBmpExScaleAction* pA = (const MetaBmpExScaleAction*) pAction;
+            if( pA )
+                rPt = pA->GetPoint();
+            else
+                OSL_FAIL( "MetaBitmapActionGetPoint: MetaBmpExScaleAction pointer is null." );
+        }
+        break;
+    }
+
+}
+
+// -----------------------------------------------------------------------------
+
+size_t HashBitmap::operator()( const ObjectRepresentation& rObjRep ) const
+{
+    const GDIMetaFile& aMtf = rObjRep.GetRepresentation();
+    if( aMtf.GetActionSize() == 1 )
+    {
+        return static_cast< size_t >( GetBitmapChecksum( aMtf.GetAction( 0 ) ) );
+    }
+    else
+    {
+        OSL_FAIL( "HashBitmap: metafile should have a single action." );
+        return 0;
+    }
+}
+
+// -----------------------------------------------------------------------------
+
+bool EqualityBitmap::operator()( const ObjectRepresentation& rObjRep1,
+                                     const ObjectRepresentation& rObjRep2 ) const
+{
+    const GDIMetaFile& aMtf1 = rObjRep1.GetRepresentation();
+    const GDIMetaFile& aMtf2 = rObjRep2.GetRepresentation();
+    if( aMtf1.GetActionSize() == 1 && aMtf2.GetActionSize() == 1 )
+    {
+        sal_uLong nChecksum1 = GetBitmapChecksum( aMtf1.GetAction( 0 ) );
+        sal_uLong nChecksum2 = GetBitmapChecksum( aMtf2.GetAction( 0 ) );
+        return ( nChecksum1 == nChecksum2 );
+    }
+    else
+    {
+        OSL_FAIL( "EqualityBitmap: metafile should have a single action." );
+        return false;
+    }
+}
+
+
 // -------------
 // - SVGFilter -
 // -------------
@@ -1245,10 +1341,10 @@ sal_Bool SVGFilter::implExportTextEmbeddedBitmaps()
 
         if( aMtf.GetActionSize() == 1 )
         {
-            MetaBmpExScaleAction* pAction = (MetaBmpExScaleAction*) aMtf.GetAction( 0 );
+            MetaAction* pAction = aMtf.GetAction( 0 );
             if( pAction )
             {
-                sal_uLong nId = pAction->GetBitmapEx().GetChecksum();
+                sal_uLong nId = GetBitmapChecksum( pAction );
                 sId = B2UCONST( "bitmap(" );
                 sId += OUString::valueOf( (sal_Int64)nId );
                 sId += B2UCONST( ")" );
@@ -1263,7 +1359,8 @@ sal_Bool SVGFilter::implExportTextEmbeddedBitmaps()
                     const Point aTopLeft;
                     const Size  aSize( aBoundRect.Width, aBoundRect.Height );
 
-                    const Point aPt = pAction->GetPoint();
+                    Point aPt;
+                    MetaBitmapActionGetPoint( pAction, aPt );
                     // The image must be exported with x, y attribute set to 0,
                     // on the contrary when referenced by a <use> element,
                     // specifying the wanted position, they will result
@@ -1726,7 +1823,7 @@ sal_Bool SVGFilter::implExportShape( const Reference< XShape >& rxShape )
                     if( !rShapeId.isEmpty() )
                     {
                         mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "id", rShapeId );
-                        //mpSVGExport->AddAttributeIdLegacy( XML_NAMESPACE_DRAW, rShapeId );
+
                     }
 
                     const GDIMetaFile* pEmbeddedBitmapsMtf = NULL;
@@ -1736,8 +1833,6 @@ sal_Bool SVGFilter::implExportShape( const Reference< XShape >& rxShape )
                     }
 
                     {
-//                        Reference< XText > xText( rxShape, UNO_QUERY );
-//                        mpSVGWriter->bIsTextShape = xText.is();
                         SvXMLElementExport aExp2( *mpSVGExport, XML_NAMESPACE_NONE, "g", sal_True, sal_True );
                         mpSVGWriter->WriteMetaFile( aTopLeft, aSize, rMtf,
                                                     SVGWRITER_WRITE_ALL,
@@ -1869,54 +1964,83 @@ sal_Bool SVGFilter::implCreateObjectsFromShape( const Reference< XDrawPage > & r
                 }
                 else
                 {
-                    Reference< XText > xText( rxShape, UNO_QUERY );
-                    sal_Bool bIsTextShape = xText.is();
-
-                    if( !mpSVGExport->IsUsePositionedCharacters() && bIsTextShape )
+                    if( aGraphic.GetGDIMetaFile().GetActionSize() )
                     {
+                        Reference< XText > xText( rxShape, UNO_QUERY );
+                        sal_Bool bIsTextShape = xText.is();
 
-                        // We create a map of text shape ids.
-                        implRegisterInterface( rxShape );
-                        Reference< XInterface > xRef( rxShape, UNO_QUERY );
-                        const OUString& rShapeId = implGetValidIDFromInterface( xRef );
-                        if( !rShapeId.isEmpty() )
+                        if( !mpSVGExport->IsUsePositionedCharacters() && bIsTextShape )
                         {
-                            mTextShapeIdListMap[rxPage] += rShapeId;
-                            mTextShapeIdListMap[rxPage] += B2UCONST( " " );
-                        }
+                            Reference< XPropertySet >   xShapePropSet( rxShape, UNO_QUERY );
 
-                        // We create a set of bitmaps embedded into text shape.
-                        GDIMetaFile aMtf;
-                        const Point    aNullPt;
-                        const Size    aSize( pObj->GetCurrentBoundRect().GetSize() );
-                        MetaAction*   pAction;
-                        const GDIMetaFile& rMtf = aGraphic.GetGDIMetaFile();
-                        sal_uLong nCount = rMtf.GetActionSize();
-                        for( sal_uLong nCurAction = 0; nCurAction < nCount; ++nCurAction )
-                        {
-                            pAction = rMtf.GetAction( nCurAction );
-                            const sal_uInt16    nType = pAction->GetType();
-
-                            if( nType == META_BMPEXSCALE_ACTION )
+                            if( xShapePropSet.is() )
                             {
-                                GDIMetaFile aEmbeddedBitmapMtf;
-                                pAction->Duplicate();
-                                aEmbeddedBitmapMtf.AddAction( pAction );
-                                aEmbeddedBitmapMtf.SetPrefSize( aSize );
-                                aEmbeddedBitmapMtf.SetPrefMapMode( MAP_100TH_MM );
-                                mEmbeddedBitmapActionSet.insert( ObjectRepresentation( rxShape, aEmbeddedBitmapMtf ) );
-                                pAction->Duplicate();
-                                aMtf.AddAction( pAction );
+                                sal_Bool bHideObj = sal_False;
+
+                                if( mbPresentation )
+                                {
+                                    xShapePropSet->getPropertyValue( B2UCONST( "IsEmptyPresentationObject" ) )  >>= bHideObj;
+                                }
+
+                                if( !bHideObj )
+                                {
+                                    // We create a map of text shape ids.
+                                    implRegisterInterface( rxShape );
+                                    Reference< XInterface > xRef( rxShape, UNO_QUERY );
+                                    const OUString& rShapeId = implGetValidIDFromInterface( xRef );
+                                    if( !rShapeId.isEmpty() )
+                                    {
+                                        mTextShapeIdListMap[rxPage] += rShapeId;
+                                        mTextShapeIdListMap[rxPage] += B2UCONST( " " );
+                                    }
+
+                                    // We create a set of bitmaps embedded into text shape.
+                                    GDIMetaFile   aMtf;
+                                    const Point   aNullPt;
+                                    const Size    aSize( pObj->GetCurrentBoundRect().GetSize() );
+                                    MetaAction*   pAction;
+                                    sal_Bool bIsTextShapeStarted = sal_False;
+                                    const GDIMetaFile& rMtf = aGraphic.GetGDIMetaFile();
+                                    sal_uLong nCount = rMtf.GetActionSize();
+                                    for( sal_uLong nCurAction = 0; nCurAction < nCount; ++nCurAction )
+                                    {
+                                        pAction = rMtf.GetAction( nCurAction );
+                                        const sal_uInt16    nType = pAction->GetType();
+
+                                        if( nType == META_COMMENT_ACTION )
+                                        {
+                                            const MetaCommentAction* pA = (const MetaCommentAction*) pAction;
+                                            if( ( pA->GetComment().equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("XTEXT_PAINTSHAPE_BEGIN")) ) )
+                                            {
+                                                bIsTextShapeStarted = sal_True;
+                                            }
+                                            else if( ( pA->GetComment().equalsIgnoreAsciiCaseL( RTL_CONSTASCII_STRINGPARAM( "XTEXT_PAINTSHAPE_END" ) ) ) )
+                                            {
+                                                bIsTextShapeStarted = sal_False;
+                                            }
+                                        }
+                                        if( bIsTextShapeStarted && ( nType == META_BMPSCALE_ACTION  || nType == META_BMPEXSCALE_ACTION ) )
+                                        {
+                                            GDIMetaFile aEmbeddedBitmapMtf;
+                                            pAction->Duplicate();
+                                            aEmbeddedBitmapMtf.AddAction( pAction );
+                                            aEmbeddedBitmapMtf.SetPrefSize( aSize );
+                                            aEmbeddedBitmapMtf.SetPrefMapMode( MAP_100TH_MM );
+                                            mEmbeddedBitmapActionSet.insert( ObjectRepresentation( rxShape, aEmbeddedBitmapMtf ) );
+                                            pAction->Duplicate();
+                                            aMtf.AddAction( pAction );
+                                        }
+                                    }
+                                    aMtf.SetPrefSize( aSize );
+                                    aMtf.SetPrefMapMode( MAP_100TH_MM );
+                                    mEmbeddedBitmapActionMap[ rxShape ] = ObjectRepresentation( rxShape, aMtf );
+                                }
                             }
                         }
-                        aMtf.SetPrefSize( aSize );
-                        aMtf.SetPrefMapMode( MAP_100TH_MM );
-                        mEmbeddedBitmapActionMap[ rxShape ] = ObjectRepresentation( rxShape, aMtf );
                     }
-
                     (*mpObjects)[ rxShape ] = ObjectRepresentation( rxShape, aGraphic.GetGDIMetaFile() );
+                    bRet = sal_True;
                 }
-                bRet = sal_True;
             }
         }
     }
