@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #if defined( WNT )
 #include <windows.h>
 #else
@@ -26,20 +25,17 @@
 
 #include <tools/date.hxx>
 #include <sal/log.hxx>
+
 #ifdef  MACOSX
 extern "C" {
 struct tm *localtime_r(const time_t *timep, struct tm *buffer);
 }
 #endif
 
-// =======================================================================
-
 static sal_uInt16 aDaysInMonth[12] = { 31, 28, 31, 30, 31, 30,
                                    31, 31, 30, 31, 30, 31 };
 
 #define MAX_DAYS    3636532
-
-// =======================================================================
 
 inline sal_Bool ImpIsLeapYear( sal_uInt16 nYear )
 {
@@ -49,10 +45,7 @@ inline sal_Bool ImpIsLeapYear( sal_uInt16 nYear )
                );
 }
 
-// -----------------------------------------------------------------------
-
 // All callers must have sanitized or normalized month and year values!
-
 inline sal_uInt16 DaysInMonth( sal_uInt16 nMonth, sal_uInt16 nYear )
 {
     if ( nMonth != 2 )
@@ -65,8 +58,6 @@ inline sal_uInt16 DaysInMonth( sal_uInt16 nMonth, sal_uInt16 nYear )
             return aDaysInMonth[nMonth-1];
     }
 }
-
-// -----------------------------------------------------------------------
 
 long Date::DateToDays( sal_uInt16 nDay, sal_uInt16 nMonth, sal_uInt16 nYear )
 {
@@ -81,8 +72,6 @@ long Date::DateToDays( sal_uInt16 nDay, sal_uInt16 nMonth, sal_uInt16 nYear )
     nDays += nDay;
     return nDays;
 }
-
-// -----------------------------------------------------------------------
 
 static void DaysToDate( long nDays,
                         sal_uInt16& rDay, sal_uInt16& rMonth, sal_uInt16& rYear )
@@ -126,8 +115,6 @@ static void DaysToDate( long nDays,
     rDay = (sal_uInt16)nTempDays;
 }
 
-// =======================================================================
-
 Date::Date( DateInitSystem )
 {
 #if defined WNT
@@ -157,8 +144,6 @@ Date::Date( DateInitSystem )
 #endif
 }
 
-// -----------------------------------------------------------------------
-
 void Date::SetDay( sal_uInt16 nNewDay )
 {
     sal_uIntPtr  nMonth  = GetMonth();
@@ -166,8 +151,6 @@ void Date::SetDay( sal_uInt16 nNewDay )
 
     nDate = ((sal_uIntPtr)(nNewDay%100)) + (nMonth*100) + (nYear*10000);
 }
-
-// -----------------------------------------------------------------------
 
 void Date::SetMonth( sal_uInt16 nNewMonth )
 {
@@ -177,8 +160,6 @@ void Date::SetMonth( sal_uInt16 nNewMonth )
     nDate = nDay + (((sal_uIntPtr)(nNewMonth%100))*100) + (nYear*10000);
 }
 
-// -----------------------------------------------------------------------
-
 void Date::SetYear( sal_uInt16 nNewYear )
 {
     sal_uIntPtr  nDay   = GetDay();
@@ -187,14 +168,10 @@ void Date::SetYear( sal_uInt16 nNewYear )
     nDate = nDay + (nMonth*100) + (((sal_uIntPtr)(nNewYear%10000))*10000);
 }
 
-// -----------------------------------------------------------------------
-
 DayOfWeek Date::GetDayOfWeek() const
 {
     return (DayOfWeek)((sal_uIntPtr)(DateToDays( GetDay(), GetMonth(), GetYear() )-1) % 7);
 }
-
-// -----------------------------------------------------------------------
 
 sal_uInt16 Date::GetDayOfYear() const
 {
@@ -207,8 +184,6 @@ sal_uInt16 Date::GetDayOfYear() const
          nDay = nDay + ::DaysInMonth( i, nYear );   // += yields a warning on MSVC, so don't use it
     return nDay;
 }
-
-// -----------------------------------------------------------------------
 
 sal_uInt16 Date::GetWeekOfYear( DayOfWeek eStartDay,
                             sal_Int16 nMinimumNumberOfDaysInWeek ) const
@@ -299,8 +274,6 @@ sal_uInt16 Date::GetWeekOfYear( DayOfWeek eStartDay,
     return (sal_uInt16)nWeek;
 }
 
-// -----------------------------------------------------------------------
-
 sal_uInt16 Date::GetDaysInMonth() const
 {
     sal_uInt16 nDay   = GetDay();
@@ -311,15 +284,11 @@ sal_uInt16 Date::GetDaysInMonth() const
     return DaysInMonth( nMonth, nYear );
 }
 
-// -----------------------------------------------------------------------
-
 sal_Bool Date::IsLeapYear() const
 {
     sal_uInt16 nYear = GetYear();
     return ImpIsLeapYear( nYear );
 }
-
-// -----------------------------------------------------------------------
 
 sal_Bool Date::IsValidAndGregorian() const
 {
@@ -344,14 +313,10 @@ sal_Bool Date::IsValidAndGregorian() const
     return sal_True;
 }
 
-// -----------------------------------------------------------------------
-
 bool Date::IsValidDate() const
 {
     return IsValidDate( GetDay(), GetMonth(), GetYear());
 }
-
-// -----------------------------------------------------------------------
 
 //static
 bool Date::IsValidDate( sal_uInt16 nDay, sal_uInt16 nMonth, sal_uInt16 nYear )
@@ -362,8 +327,6 @@ bool Date::IsValidDate( sal_uInt16 nDay, sal_uInt16 nMonth, sal_uInt16 nYear )
         return false;
     return true;
 }
-
-// -----------------------------------------------------------------------
 
 bool Date::Normalize()
 {
@@ -380,8 +343,6 @@ bool Date::Normalize()
 
     return true;
 }
-
-// -----------------------------------------------------------------------
 
 //static
 bool Date::Normalize( sal_uInt16 & rDay, sal_uInt16 & rMonth, sal_uInt16 & rYear )
@@ -432,8 +393,6 @@ bool Date::Normalize( sal_uInt16 & rDay, sal_uInt16 & rMonth, sal_uInt16 & rYear
     return true;
 }
 
-// -----------------------------------------------------------------------
-
 Date& Date::operator +=( long nDays )
 {
     sal_uInt16  nDay;
@@ -454,8 +413,6 @@ Date& Date::operator +=( long nDays )
 
     return *this;
 }
-
-// -----------------------------------------------------------------------
 
 Date& Date::operator -=( long nDays )
 {
@@ -478,8 +435,6 @@ Date& Date::operator -=( long nDays )
     return *this;
 }
 
-// -----------------------------------------------------------------------
-
 Date& Date::operator ++()
 {
     sal_uInt16  nDay;
@@ -496,8 +451,6 @@ Date& Date::operator ++()
 
     return *this;
 }
-
-// -----------------------------------------------------------------------
 
 Date& Date::operator --()
 {
@@ -516,9 +469,6 @@ Date& Date::operator --()
 }
 
 #ifndef MPW33
-
-// -----------------------------------------------------------------------
-
 Date Date::operator ++( int )
 {
     Date aOldDate = *this;
@@ -526,18 +476,13 @@ Date Date::operator ++( int )
     return aOldDate;
 }
 
-// -----------------------------------------------------------------------
-
 Date Date::operator --( int )
 {
     Date aOldDate = *this;
     Date::operator--();
     return aOldDate;
 }
-
 #endif
-
-// -----------------------------------------------------------------------
 
 Date operator +( const Date& rDate, long nDays )
 {
@@ -546,16 +491,12 @@ Date operator +( const Date& rDate, long nDays )
     return aDate;
 }
 
-// -----------------------------------------------------------------------
-
 Date operator -( const Date& rDate, long nDays )
 {
     Date aDate( rDate );
     aDate -= nDays;
     return aDate;
 }
-
-// -----------------------------------------------------------------------
 
 long operator -( const Date& rDate1, const Date& rDate2 )
 {

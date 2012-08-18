@@ -17,19 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <tools/ref.hxx>
 
-/**************************************************************************
-#*  SvRefBase::~SvRefBase()
-**************************************************************************/
 SvRefBase::~SvRefBase()
 {
 }
 
-/**************************************************************************
-#*  SvRefBase::QueryDelete()
-**************************************************************************/
 void SvRefBase::QueryDelete()
 {
     nRefCount = SV_NO_DELETE_REFCOUNT / 2;

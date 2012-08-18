@@ -21,8 +21,6 @@
 #include <tools/gen.hxx>
 #include <tools/stream.hxx>
 
-// =======================================================================
-
 SvStream& operator>>( SvStream& rIStream, Pair& rPair )
 {
     DBG_ASSERTWARNING( rIStream.GetVersion(), "Pair::>> - Solar-Version not set on rIStream" );
@@ -36,8 +34,6 @@ SvStream& operator>>( SvStream& rIStream, Pair& rPair )
     return rIStream;
 }
 
-// -----------------------------------------------------------------------
-
 SvStream& operator<<( SvStream& rOStream, const Pair& rPair )
 {
     DBG_ASSERTWARNING( rOStream.GetVersion(), "Pair::<< - Solar-Version not set on rOStream" );
@@ -47,12 +43,6 @@ SvStream& operator<<( SvStream& rOStream, const Pair& rPair )
 
     return rOStream;
 }
-
-/*************************************************************************
-|*
-|*    Rectangle::SetSize()
-|*
-*************************************************************************/
 
 void Rectangle::SetSize( const Size& rSize )
 {
@@ -71,12 +61,6 @@ void Rectangle::SetSize( const Size& rSize )
         nBottom = RECT_EMPTY;
 }
 
-/*************************************************************************
-|*
-|*    Rectangle::Union()
-|*
-*************************************************************************/
-
 Rectangle& Rectangle::Union( const Rectangle& rRect )
 {
     if ( rRect.IsEmpty() )
@@ -94,12 +78,6 @@ Rectangle& Rectangle::Union( const Rectangle& rRect )
 
     return *this;
 }
-
-/*************************************************************************
-|*
-|*    Rectangle::Intersection()
-|*
-*************************************************************************/
 
 Rectangle& Rectangle::Intersection( const Rectangle& rRect )
 {
@@ -129,12 +107,6 @@ Rectangle& Rectangle::Intersection( const Rectangle& rRect )
     return *this;
 }
 
-/*************************************************************************
-|*
-|*    Rectangle::Justify()
-|*
-*************************************************************************/
-
 void Rectangle::Justify()
 {
     long nHelp;
@@ -155,12 +127,6 @@ void Rectangle::Justify()
         nTop = nHelp;
     }
 }
-
-/*************************************************************************
-|*
-|*    Rectangle::IsInside()
-|*
-*************************************************************************/
 
 sal_Bool Rectangle::IsInside( const Point& rPoint ) const
 {
@@ -191,12 +157,6 @@ sal_Bool Rectangle::IsInside( const Point& rPoint ) const
     return bRet;
 }
 
-/*************************************************************************
-|*
-|*    Rectangle::IsInside()
-|*
-*************************************************************************/
-
 sal_Bool Rectangle::IsInside( const Rectangle& rRect ) const
 {
     if ( IsInside( rRect.TopLeft() ) && IsInside( rRect.BottomRight() ) )
@@ -205,19 +165,11 @@ sal_Bool Rectangle::IsInside( const Rectangle& rRect ) const
         return sal_False;
 }
 
-/*************************************************************************
-|*
-|*    Rectangle::IsOver()
-|*
-*************************************************************************/
-
 sal_Bool Rectangle::IsOver( const Rectangle& rRect ) const
 {
     // Wenn sie sich nicht schneiden, ueberlappen sie auch nicht
     return !GetIntersection( rRect ).IsEmpty();
 }
-
-// =======================================================================
 
 SvStream& operator>>( SvStream& rIStream, Rectangle& rRect )
 {
@@ -235,8 +187,6 @@ SvStream& operator>>( SvStream& rIStream, Rectangle& rRect )
 
     return rIStream;
 }
-
-// -----------------------------------------------------------------------
 
 SvStream& operator<<( SvStream& rOStream, const Rectangle& rRect )
 {

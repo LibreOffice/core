@@ -22,10 +22,8 @@
 #if defined WNT
 
 #include <cstddef>
-
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
-
 #include "sal/types.h"
 #include "tools/pathutils.hxx"
 

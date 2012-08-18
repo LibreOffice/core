@@ -18,7 +18,6 @@
  */
 
 #ifdef DBG_UTIL
-
 static sal_Bool ImplDbgCheckAsciiStr( const sal_Char* pAsciiStr, sal_Int32 nLen )
 {
     while ( nLen && *pAsciiStr )
@@ -31,10 +30,7 @@ static sal_Bool ImplDbgCheckAsciiStr( const sal_Char* pAsciiStr, sal_Int32 nLen 
 
     return sal_True;
 }
-
 #endif
-
-// =======================================================================
 
 static void ImplCopyAsciiStr( sal_Unicode* pDest, const sal_Char* pSrc,
                               sal_Int32 nLen )
@@ -51,8 +47,6 @@ static void ImplCopyAsciiStr( sal_Unicode* pDest, const sal_Char* pSrc,
     }
 }
 
-// =======================================================================
-
 static sal_Int32 ImplStringCompareAscii( const sal_Unicode* pStr1, const sal_Char* pStr2 )
 {
     sal_Int32 nRet;
@@ -65,8 +59,6 @@ static sal_Int32 ImplStringCompareAscii( const sal_Unicode* pStr1, const sal_Cha
 
     return nRet;
 }
-
-// -----------------------------------------------------------------------
 
 static sal_Int32 ImplStringCompareAscii( const sal_Unicode* pStr1, const sal_Char* pStr2,
                                          xub_StrLen nCount )
@@ -84,8 +76,6 @@ static sal_Int32 ImplStringCompareAscii( const sal_Unicode* pStr1, const sal_Cha
     return nRet;
 }
 
-// -----------------------------------------------------------------------
-
 static sal_Int32 ImplStringCompareWithoutZeroAscii( const sal_Unicode* pStr1, const sal_Char* pStr2,
                                                     xub_StrLen nCount )
 {
@@ -100,8 +90,6 @@ static sal_Int32 ImplStringCompareWithoutZeroAscii( const sal_Unicode* pStr1, co
 
     return nRet;
 }
-
-// -----------------------------------------------------------------------
 
 static sal_Int32 ImplStringICompareAscii( const sal_Unicode* pStr1, const sal_Char* pStr2 )
 {
@@ -128,8 +116,6 @@ static sal_Int32 ImplStringICompareAscii( const sal_Unicode* pStr1, const sal_Ch
 
     return nRet;
 }
-
-// -----------------------------------------------------------------------
 
 static sal_Int32 ImplStringICompareAscii( const sal_Unicode* pStr1, const sal_Char* pStr2,
                                           xub_StrLen nCount )
@@ -162,8 +148,6 @@ static sal_Int32 ImplStringICompareAscii( const sal_Unicode* pStr1, const sal_Ch
     return nRet;
 }
 
-// -----------------------------------------------------------------------
-
 UniString& UniString::AssignAscii( const sal_Char* pAsciiStr )
 {
     DBG_CHKTHIS( UniString, DbgCheckUniString );
@@ -194,8 +178,6 @@ UniString& UniString::AssignAscii( const sal_Char* pAsciiStr )
 
     return *this;
 }
-
-// -----------------------------------------------------------------------
 
 UniString& UniString::AssignAscii( const sal_Char* pAsciiStr, xub_StrLen nLen )
 {
@@ -241,8 +223,6 @@ UniString& UniString::AssignAscii( const sal_Char* pAsciiStr, xub_StrLen nLen )
     return *this;
 }
 
-// -----------------------------------------------------------------------
-
 UniString& UniString::AppendAscii( const sal_Char* pAsciiStr )
 {
     DBG_CHKTHIS( UniString, DbgCheckUniString );
@@ -271,8 +251,6 @@ UniString& UniString::AppendAscii( const sal_Char* pAsciiStr )
 
     return *this;
 }
-
-// -----------------------------------------------------------------------
 
 UniString& UniString::AppendAscii( const sal_Char* pAsciiStr, xub_StrLen nLen )
 {
@@ -316,8 +294,6 @@ UniString& UniString::AppendAscii( const sal_Char* pAsciiStr, xub_StrLen nLen )
     return *this;
 }
 
-// -----------------------------------------------------------------------
-
 UniString& UniString::InsertAscii( const char* pAsciiStr, xub_StrLen nIndex )
 {
     DBG_CHKTHIS( UniString, DbgCheckUniString );
@@ -352,8 +328,6 @@ UniString& UniString::InsertAscii( const char* pAsciiStr, xub_StrLen nIndex )
 
     return *this;
 }
-
-// -----------------------------------------------------------------------
 
 UniString& UniString::ReplaceAscii( xub_StrLen nIndex, xub_StrLen nCount,
                                     const sal_Char* pAsciiStr, xub_StrLen nStrLen )
@@ -412,8 +386,6 @@ UniString& UniString::ReplaceAscii( xub_StrLen nIndex, xub_StrLen nCount,
     return *this;
 }
 
-// -----------------------------------------------------------------------
-
 StringCompare UniString::CompareToAscii( const sal_Char* pAsciiStr,
                                          xub_StrLen nLen ) const
 {
@@ -432,8 +404,6 @@ StringCompare UniString::CompareToAscii( const sal_Char* pAsciiStr,
     else
         return COMPARE_GREATER;
 }
-
-// -----------------------------------------------------------------------
 
 StringCompare UniString::CompareIgnoreCaseToAscii( const sal_Char* pAsciiStr,
                                                    xub_StrLen nLen ) const
@@ -454,8 +424,6 @@ StringCompare UniString::CompareIgnoreCaseToAscii( const sal_Char* pAsciiStr,
         return COMPARE_GREATER;
 }
 
-// -----------------------------------------------------------------------
-
 sal_Bool UniString::EqualsAscii( const sal_Char* pAsciiStr ) const
 {
     DBG_CHKTHIS( UniString, DbgCheckUniString );
@@ -465,8 +433,6 @@ sal_Bool UniString::EqualsAscii( const sal_Char* pAsciiStr ) const
     return (ImplStringCompareAscii( mpData->maStr, pAsciiStr ) == 0);
 }
 
-// -----------------------------------------------------------------------
-
 sal_Bool UniString::EqualsIgnoreCaseAscii( const sal_Char* pAsciiStr ) const
 {
     DBG_CHKTHIS( UniString, DbgCheckUniString );
@@ -475,8 +441,6 @@ sal_Bool UniString::EqualsIgnoreCaseAscii( const sal_Char* pAsciiStr ) const
 
     return (ImplStringICompareAscii( mpData->maStr, pAsciiStr ) == 0);
 }
-
-// -----------------------------------------------------------------------
 
 sal_Bool UniString::EqualsAscii( const sal_Char* pAsciiStr,
                              xub_StrLen nIndex, xub_StrLen nLen ) const
@@ -492,8 +456,6 @@ sal_Bool UniString::EqualsAscii( const sal_Char* pAsciiStr,
     return (ImplStringCompareAscii( mpData->maStr+nIndex, pAsciiStr, nLen ) == 0);
 }
 
-// -----------------------------------------------------------------------
-
 sal_Bool UniString::EqualsIgnoreCaseAscii( const sal_Char* pAsciiStr,
                                        xub_StrLen nIndex, xub_StrLen nLen ) const
 {
@@ -507,8 +469,6 @@ sal_Bool UniString::EqualsIgnoreCaseAscii( const sal_Char* pAsciiStr,
 
     return (ImplStringICompareAscii( mpData->maStr+nIndex, pAsciiStr, nLen ) == 0);
 }
-
-// -----------------------------------------------------------------------
 
 xub_StrLen UniString::SearchAscii( const sal_Char* pAsciiStr, xub_StrLen nIndex ) const
 {
@@ -554,8 +514,6 @@ xub_StrLen UniString::SearchAscii( const sal_Char* pAsciiStr, xub_StrLen nIndex 
     return STRING_NOTFOUND;
 }
 
-// -----------------------------------------------------------------------
-
 xub_StrLen UniString::SearchAndReplaceAscii( const sal_Char* pAsciiStr, const UniString& rRepStr,
                                              xub_StrLen nIndex )
 {
@@ -569,8 +527,6 @@ xub_StrLen UniString::SearchAndReplaceAscii( const sal_Char* pAsciiStr, const Un
 
     return nSPos;
 }
-
-// -----------------------------------------------------------------------
 
 void UniString::SearchAndReplaceAllAscii( const sal_Char* pAsciiStr, const UniString& rRepStr )
 {

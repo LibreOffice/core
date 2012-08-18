@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <tools/tempfile.hxx>
 #include "comdep.hxx"
 
@@ -27,6 +26,7 @@
 #include <rtl/instance.hxx>
 #include <tools/time.hxx>
 #include <tools/debug.hxx>
+
 #include <stdio.h>
 
 #ifdef UNX
@@ -59,6 +59,7 @@ String GetSystemTempDir_Impl()
 }
 
 #define TMPNAME_SIZE  ( 1 + 5 + 5 + 4 + 1 )
+
 String ConstructTempDir_Impl( const String* pParent )
 {
     String aName;

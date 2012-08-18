@@ -18,6 +18,7 @@
  */
 
 #include <tools/stream.hxx>
+
 #ifndef _ZLIB_H
 #ifdef SYSTEM_ZLIB
 #include "zlib.h"
@@ -25,13 +26,10 @@
 #include "zlib/zlib.h"
 #endif
 #endif
+
 #include <tools/zcodec.hxx>
 #include <rtl/crc.h>
 #include <osl/endian.h>
-
-// -----------
-// - Defines -
-// -----------
 
 #define PZSTREAM ((z_stream*) mpsC_Stream)
 
@@ -44,11 +42,6 @@
 #define GZ_RESERVED     0xE0 /* bits 5..7: reserved */
 
 static int gz_magic[2] = { 0x1f, 0x8b }; /* gzip magic header */
-
-
-// ----------
-// - ZCodec -
-// ----------
 
 ZCodec::ZCodec( sal_uIntPtr nInBufSize, sal_uIntPtr nOutBufSize, sal_uIntPtr nMemUsage )
     : mnCRC(0)
@@ -68,14 +61,10 @@ ZCodec::ZCodec( void )
     mpsC_Stream = new z_stream;
 }
 
-// ------------------------------------------------------------------------
-
 ZCodec::~ZCodec()
 {
     delete (z_stream*) mpsC_Stream;
 }
-
-// ------------------------------------------------------------------------
 
 void ZCodec::BeginCompression( sal_uIntPtr nCompressMethod )
 {
@@ -92,8 +81,6 @@ void ZCodec::BeginCompression( sal_uIntPtr nCompressMethod )
     PZSTREAM->opaque = ( voidpf )0;
     PZSTREAM->avail_out = PZSTREAM->avail_in = 0;
 }
-
-// ------------------------------------------------------------------------
 
 long ZCodec::EndCompression()
 {
@@ -125,9 +112,6 @@ long ZCodec::EndCompression()
     return ( mbStatus ) ? retvalue : -1;
 }
 
-
-// ------------------------------------------------------------------------
-
 long ZCodec::Compress( SvStream& rIStm, SvStream& rOStm )
 {
     long nOldTotal_In = PZSTREAM->total_in;
@@ -151,8 +135,6 @@ long ZCodec::Compress( SvStream& rIStm, SvStream& rOStm )
     };
     return ( mbStatus ) ? (long)(PZSTREAM->total_in - nOldTotal_In) : -1;
 }
-
-// ------------------------------------------------------------------------
 
 long ZCodec::Decompress( SvStream& rIStm, SvStream& rOStm )
 {
@@ -199,8 +181,6 @@ long ZCodec::Decompress( SvStream& rIStm, SvStream& rOStm )
     return ( mbStatus ) ? (long)(PZSTREAM->total_out - nOldTotal_Out) : -1;
 }
 
-// ------------------------------------------------------------------------
-
 long ZCodec::Write( SvStream& rOStm, const sal_uInt8* pData, sal_uIntPtr nSize )
 {
     if ( mbInit == 0 )
@@ -225,8 +205,6 @@ long ZCodec::Write( SvStream& rOStm, const sal_uInt8* pData, sal_uIntPtr nSize )
     }
     return ( mbStatus ) ? (long)nSize : -1;
 }
-
-// ------------------------------------------------------------------------
 
 long ZCodec::Read( SvStream& rIStm, sal_uInt8* pData, sal_uIntPtr nSize )
 {
@@ -272,8 +250,6 @@ long ZCodec::Read( SvStream& rIStm, sal_uInt8* pData, sal_uIntPtr nSize )
 
     return (mbStatus ? (long)(nSize - PZSTREAM->avail_out) : -1);
 }
-
-// ------------------------------------------------------------------------
 
 long ZCodec::ReadAsynchron( SvStream& rIStm, sal_uInt8* pData, sal_uIntPtr nSize )
 {
@@ -332,8 +308,6 @@ long ZCodec::ReadAsynchron( SvStream& rIStm, sal_uInt8* pData, sal_uIntPtr nSize
     return (mbStatus ? (long)(nSize - PZSTREAM->avail_out) : -1);
 }
 
-// ------------------------------------------------------------------------
-
 void ZCodec::ImplWriteBack()
 {
     sal_uIntPtr nAvail = mnOutBufSize - PZSTREAM->avail_out;
@@ -347,35 +321,25 @@ void ZCodec::ImplWriteBack()
     }
 }
 
-// ------------------------------------------------------------------------
-
 void ZCodec::SetBreak( sal_uIntPtr nInToRead )
 {
     mnInToRead = nInToRead;
 }
-
-// ------------------------------------------------------------------------
 
 sal_uIntPtr ZCodec::GetBreak( void )
 {
     return ( mnInToRead + PZSTREAM->avail_in );
 }
 
-// ------------------------------------------------------------------------
-
 void ZCodec::SetCRC( sal_uIntPtr nCRC )
 {
     mnCRC = nCRC;
 }
 
-// ------------------------------------------------------------------------
-
 sal_uIntPtr ZCodec::GetCRC()
 {
     return mnCRC;
 }
-
-// ------------------------------------------------------------------------
 
 void ZCodec::ImplInitBuf ( sal_Bool nIOFlag )
 {
@@ -450,19 +414,14 @@ void ZCodec::ImplInitBuf ( sal_Bool nIOFlag )
     }
 }
 
-// ------------------------------------------------------------------------
-
 sal_uIntPtr ZCodec::UpdateCRC ( sal_uIntPtr nLatestCRC, sal_uInt8* pSource, long nDatSize)
 {
     return rtl_crc32( nLatestCRC, pSource, nDatSize );
 }
 
-// ------------------------------------------------------------------------
-
 void GZCodec::BeginCompression( sal_uIntPtr nCompressMethod )
 {
     ZCodec::BeginCompression( nCompressMethod | ZCODEC_GZ_LIB );
 };
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

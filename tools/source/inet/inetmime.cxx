@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <cstddef>
 #include <limits>
 
@@ -28,7 +27,6 @@
 namespace unnamed_tools_inetmime {} using namespace unnamed_tools_inetmime;
     // unnamed namespaces don't work well yet
 
-//============================================================================
 namespace unnamed_tools_inetmime {
 
 class Charset
@@ -53,13 +51,11 @@ inline Charset::Charset(rtl_TextEncoding eTheEncoding,
     DBG_ASSERT(m_pRanges, "Charset::Charset(): Bad ranges");
 }
 
-//============================================================================
 void appendISO88591(UniString & rText, sal_Char const * pBegin,
                     sal_Char const * pEnd);
 
 }
 
-//============================================================================
 class INetMIMECharsetList_Impl
 {
     struct Node
@@ -99,7 +95,6 @@ inline INetMIMECharsetList_Impl::Node::Node(const Charset & rTheCharset,
     m_pNext(pTheNext)
 {}
 
-//============================================================================
 namespace unnamed_tools_inetmime {
 
 struct Parameter
@@ -134,7 +129,6 @@ inline Parameter::Parameter(Parameter * pTheNext,
     m_bExtended(bTheExtended)
 {}
 
-//============================================================================
 struct ParameterList
 {
     Parameter * m_pList;
@@ -157,17 +151,12 @@ inline ParameterList::~ParameterList()
     }
 }
 
-//============================================================================
 bool parseParameters(ParameterList const & rInput,
                      INetContentTypeParameterList * pOutput);
 
 }
 
-//============================================================================
-//
 //  Charset
-//
-//============================================================================
 
 bool Charset::contains(sal_uInt32 nChar) const
 {
@@ -180,11 +169,7 @@ bool Charset::contains(sal_uInt32 nChar) const
     }
 }
 
-//============================================================================
-//
 //  appendISO88591
-//
-//============================================================================
 
 namespace unnamed_tools_inetmime {
 
@@ -201,11 +186,7 @@ void appendISO88591(UniString & rText, sal_Char const * pBegin,
 
 }
 
-//============================================================================
-//
 //  INetMIMECharsetList_Impl
-//
-//============================================================================
 
 INetMIMECharsetList_Impl::~INetMIMECharsetList_Impl()
 {
@@ -217,7 +198,6 @@ INetMIMECharsetList_Impl::~INetMIMECharsetList_Impl()
     }
 }
 
-//============================================================================
 void INetMIMECharsetList_Impl::includes(sal_uInt32 nChar)
 {
     for (Node * p = m_pFirst; p; p = p->m_pNext)
@@ -225,7 +205,6 @@ void INetMIMECharsetList_Impl::includes(sal_uInt32 nChar)
             p->m_bDisabled = true;
 }
 
-//============================================================================
 rtl_TextEncoding
 INetMIMECharsetList_Impl::getPreferredEncoding(rtl_TextEncoding eDefault)
     const
@@ -236,18 +215,13 @@ INetMIMECharsetList_Impl::getPreferredEncoding(rtl_TextEncoding eDefault)
     return eDefault;
 }
 
-//============================================================================
 void INetMIMECharsetList_Impl::reset()
 {
     for (Node * p = m_pFirst; p; p = p->m_pNext)
         p->m_bDisabled = false;
 }
 
-//============================================================================
-//
 //  ParameterList
-//
-//============================================================================
 
 Parameter ** ParameterList::find(const rtl::OString& rAttribute,
                                  sal_uInt32 nSection, bool & rPresent)
@@ -273,11 +247,7 @@ Parameter ** ParameterList::find(const rtl::OString& rAttribute,
     return p;
 }
 
-//============================================================================
-//
 //  parseParameters
-//
-//============================================================================
 
 namespace unnamed_tools_inetmime {
 
@@ -375,11 +345,7 @@ bool parseParameters(ParameterList const & rInput,
 
 }
 
-//============================================================================
-//
 //  INetMIME
-//
-//============================================================================
 
 // static
 bool INetMIME::isAtomChar(sal_uInt32 nChar)
@@ -405,7 +371,6 @@ bool INetMIME::isAtomChar(sal_uInt32 nChar)
     return isUSASCII(nChar) && aMap[nChar];
 }
 
-//============================================================================
 // static
 bool INetMIME::isTokenChar(sal_uInt32 nChar)
 {
@@ -430,7 +395,6 @@ bool INetMIME::isTokenChar(sal_uInt32 nChar)
     return isUSASCII(nChar) && aMap[nChar];
 }
 
-//============================================================================
 // static
 bool INetMIME::isEncodedWordTokenChar(sal_uInt32 nChar)
 {
@@ -455,7 +419,6 @@ bool INetMIME::isEncodedWordTokenChar(sal_uInt32 nChar)
     return isUSASCII(nChar) && aMap[nChar];
 }
 
-//============================================================================
 // static
 bool INetMIME::isIMAPAtomChar(sal_uInt32 nChar)
 {
@@ -480,7 +443,6 @@ bool INetMIME::isIMAPAtomChar(sal_uInt32 nChar)
     return isUSASCII(nChar) && aMap[nChar];
 }
 
-//============================================================================
 // static
 sal_uInt32 INetMIME::getHexDigit(int nWeight)
 {
@@ -493,7 +455,6 @@ sal_uInt32 INetMIME::getHexDigit(int nWeight)
     return aDigits[nWeight];
 }
 
-//============================================================================
 // static
 bool INetMIME::equalIgnoreCase(const sal_Char * pBegin1,
                                const sal_Char * pEnd1,
@@ -509,7 +470,6 @@ bool INetMIME::equalIgnoreCase(const sal_Char * pBegin1,
     return pBegin1 == pEnd1;
 }
 
-//============================================================================
 // static
 bool INetMIME::equalIgnoreCase(const sal_Unicode * pBegin1,
                                const sal_Unicode * pEnd1,
@@ -525,7 +485,6 @@ bool INetMIME::equalIgnoreCase(const sal_Unicode * pBegin1,
     return pBegin1 == pEnd1;
 }
 
-//============================================================================
 // static
 const sal_Unicode * INetMIME::skipLinearWhiteSpace(const sal_Unicode * pBegin,
                                                    const sal_Unicode * pEnd)
@@ -554,7 +513,6 @@ const sal_Unicode * INetMIME::skipLinearWhiteSpace(const sal_Unicode * pBegin,
     return pBegin;
 }
 
-//============================================================================
 // static
 const sal_Char * INetMIME::skipComment(const sal_Char * pBegin,
                                        const sal_Char * pEnd)
@@ -586,7 +544,6 @@ const sal_Char * INetMIME::skipComment(const sal_Char * pBegin,
     return pBegin;
 }
 
-//============================================================================
 // static
 const sal_Unicode * INetMIME::skipComment(const sal_Unicode * pBegin,
                                           const sal_Unicode * pEnd)
@@ -618,7 +575,6 @@ const sal_Unicode * INetMIME::skipComment(const sal_Unicode * pBegin,
     return pBegin;
 }
 
-//============================================================================
 // static
 const sal_Char * INetMIME::skipLinearWhiteSpaceComment(const sal_Char *
                                                            pBegin,
@@ -657,7 +613,6 @@ const sal_Char * INetMIME::skipLinearWhiteSpaceComment(const sal_Char *
     return pBegin;
 }
 
-//============================================================================
 // static
 const sal_Unicode * INetMIME::skipLinearWhiteSpaceComment(const sal_Unicode *
                                                               pBegin,
@@ -697,7 +652,6 @@ const sal_Unicode * INetMIME::skipLinearWhiteSpaceComment(const sal_Unicode *
     return pBegin;
 }
 
-//============================================================================
 // static
 const sal_Char * INetMIME::skipQuotedString(const sal_Char * pBegin,
                                             const sal_Char * pEnd)
@@ -726,7 +680,6 @@ const sal_Char * INetMIME::skipQuotedString(const sal_Char * pBegin,
     return pBegin;
 }
 
-//============================================================================
 // static
 const sal_Unicode * INetMIME::skipQuotedString(const sal_Unicode * pBegin,
                                                const sal_Unicode * pEnd)
@@ -755,7 +708,6 @@ const sal_Unicode * INetMIME::skipQuotedString(const sal_Unicode * pBegin,
     return pBegin;
 }
 
-//============================================================================
 // static
 bool INetMIME::scanUnsigned(const sal_Char *& rBegin, const sal_Char * pEnd,
                             bool bLeadingZeroes, sal_uInt32 & rValue)
@@ -778,7 +730,6 @@ bool INetMIME::scanUnsigned(const sal_Char *& rBegin, const sal_Char * pEnd,
     return true;
 }
 
-//============================================================================
 // static
 bool INetMIME::scanUnsigned(const sal_Unicode *& rBegin,
                             const sal_Unicode * pEnd, bool bLeadingZeroes,
@@ -802,7 +753,6 @@ bool INetMIME::scanUnsigned(const sal_Unicode *& rBegin,
     return true;
 }
 
-//============================================================================
 // static
 const sal_Unicode * INetMIME::scanQuotedBlock(const sal_Unicode * pBegin,
                                               const sal_Unicode * pEnd,
@@ -875,7 +825,6 @@ const sal_Unicode * INetMIME::scanQuotedBlock(const sal_Unicode * pBegin,
     return pBegin;
 }
 
-//============================================================================
 // static
 sal_Char const * INetMIME::scanParameters(sal_Char const * pBegin,
                                           sal_Char const * pEnd,
@@ -1081,7 +1030,6 @@ sal_Char const * INetMIME::scanParameters(sal_Char const * pBegin,
     return parseParameters(aList, pParameters) ? pParameterBegin : pBegin;
 }
 
-//============================================================================
 // static
 sal_Unicode const * INetMIME::scanParameters(sal_Unicode const * pBegin,
                                              sal_Unicode const * pEnd,
@@ -1302,7 +1250,6 @@ sal_Unicode const * INetMIME::scanParameters(sal_Unicode const * pBegin,
     return parseParameters(aList, pParameters) ? pParameterBegin : pBegin;
 }
 
-//============================================================================
 // static
 const sal_Char * INetMIME::getCharsetName(rtl_TextEncoding eEncoding)
 {
@@ -1327,7 +1274,6 @@ const sal_Char * INetMIME::getCharsetName(rtl_TextEncoding eEncoding)
         }
 }
 
-//============================================================================
 namespace unnamed_tools_inetmime {
 
 struct EncodingEntry
@@ -1336,7 +1282,6 @@ struct EncodingEntry
     rtl_TextEncoding m_eEncoding;
 };
 
-//============================================================================
 // The source for the following table is <ftp://ftp.iana.org/in-notes/iana/
 // assignments/character-sets> as of Jan, 21 2000 12:46:00, unless  otherwise
 // noted:
@@ -1517,7 +1462,6 @@ EncodingEntry const aEncodingMap[]
         { "ISO-10646-UCS-2", RTL_TEXTENCODING_UCS2 },
         { "CSUNICODE", RTL_TEXTENCODING_UCS2 } };
 
-//============================================================================
 template< typename T >
 inline rtl_TextEncoding getCharsetEncoding_Impl(T const * pBegin,
                                                 T const * pEnd)
@@ -1531,7 +1475,6 @@ inline rtl_TextEncoding getCharsetEncoding_Impl(T const * pBegin,
 
 }
 
-//============================================================================
 // static
 rtl_TextEncoding INetMIME::getCharsetEncoding(sal_Char const * pBegin,
                                               sal_Char const * pEnd)
@@ -1539,7 +1482,6 @@ rtl_TextEncoding INetMIME::getCharsetEncoding(sal_Char const * pBegin,
     return getCharsetEncoding_Impl(pBegin, pEnd);
 }
 
-//============================================================================
 // static
 INetMIMECharsetList_Impl *
 INetMIME::createPreferredCharsetList(rtl_TextEncoding eEncoding)
@@ -1813,7 +1755,6 @@ INetMIME::createPreferredCharsetList(rtl_TextEncoding eEncoding)
     return pList;
 }
 
-//============================================================================
 // static
 sal_Unicode * INetMIME::convertToUnicode(const sal_Char * pBegin,
                                          const sal_Char * pEnd,
@@ -1855,7 +1796,6 @@ sal_Unicode * INetMIME::convertToUnicode(const sal_Char * pBegin,
     return pBuffer;
 }
 
-//============================================================================
 // static
 sal_Char * INetMIME::convertFromUnicode(const sal_Unicode * pBegin,
                                         const sal_Unicode * pEnd,
@@ -1898,7 +1838,6 @@ sal_Char * INetMIME::convertFromUnicode(const sal_Unicode * pBegin,
     return pBuffer;
 }
 
-//============================================================================
 // static
 void INetMIME::writeUTF8(INetMIMEOutputSink & rSink, sal_uInt32 nChar)
 {
@@ -1934,7 +1873,6 @@ void INetMIME::writeUTF8(INetMIMEOutputSink & rSink, sal_uInt32 nChar)
               << sal_Char((nChar & 0x3F) | 0x80);
 }
 
-//============================================================================
 // static
 void INetMIME::writeHeaderFieldBody(INetMIMEOutputSink & rSink,
                                     HeaderFieldType eType,
@@ -2670,7 +2608,6 @@ void INetMIME::writeHeaderFieldBody(INetMIMEOutputSink & rSink,
     }
 }
 
-//============================================================================
 // static
 bool INetMIME::translateUTF8Char(const sal_Char *& rBegin,
                                  const sal_Char * pEnd,
@@ -2746,7 +2683,6 @@ bool INetMIME::translateUTF8Char(const sal_Char *& rBegin,
     return true;
 }
 
-//============================================================================
 // static
 rtl::OUString INetMIME::decodeHeaderFieldBody(HeaderFieldType eType,
                                           const rtl::OString& rBody)
@@ -3182,11 +3118,7 @@ rtl::OUString INetMIME::decodeHeaderFieldBody(HeaderFieldType eType,
     return sDecoded;
 }
 
-//============================================================================
-//
 //  INetMIMEOutputSink
-//
-//============================================================================
 
 // virtual
 sal_Size INetMIMEOutputSink::writeSequence(const sal_Char * pSequence)
@@ -3196,7 +3128,6 @@ sal_Size INetMIMEOutputSink::writeSequence(const sal_Char * pSequence)
     return nLength;
 }
 
-//============================================================================
 // virtual
 void INetMIMEOutputSink::writeSequence(const sal_uInt32 * pBegin,
                                        const sal_uInt32 * pEnd)
@@ -3216,7 +3147,6 @@ void INetMIMEOutputSink::writeSequence(const sal_uInt32 * pBegin,
     delete[] pBufferBegin;
 }
 
-//============================================================================
 // virtual
 void INetMIMEOutputSink::writeSequence(const sal_Unicode * pBegin,
                                        const sal_Unicode * pEnd)
@@ -3236,14 +3166,12 @@ void INetMIMEOutputSink::writeSequence(const sal_Unicode * pBegin,
     delete[] pBufferBegin;
 }
 
-//============================================================================
 // virtual
 ErrCode INetMIMEOutputSink::getError() const
 {
     return ERRCODE_NONE;
 }
 
-//============================================================================
 void INetMIMEOutputSink::writeLineEnd()
 {
     static const sal_Char aCRLF[2] = { 0x0D, 0x0A };
@@ -3251,11 +3179,7 @@ void INetMIMEOutputSink::writeLineEnd()
     m_nColumn = 0;
 }
 
-//============================================================================
-//
 //  INetMIMEStringOutputSink
-//
-//============================================================================
 
 // virtual
 void INetMIMEStringOutputSink::writeSequence(const sal_Char * pBegin,
@@ -3267,18 +3191,13 @@ void INetMIMEStringOutputSink::writeSequence(const sal_Char * pBegin,
     m_aBuffer.append(pBegin, pEnd - pBegin);
 }
 
-//============================================================================
 // virtual
 ErrCode INetMIMEStringOutputSink::getError() const
 {
     return ERRCODE_NONE;
 }
 
-//============================================================================
-//
 //  INetMIMEEncodedWordOutputSink
-//
-//============================================================================
 
 static const sal_Char aEscape[128]
     = { INetMIMEEncodedWordOutputSink::CONTEXT_TEXT | INetMIMEEncodedWordOutputSink::CONTEXT_COMMENT | INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // 0x00
@@ -3416,7 +3335,6 @@ INetMIMEEncodedWordOutputSink::needsEncodedWordEscape(sal_uInt32 nChar) const
     return !INetMIME::isUSASCII(nChar) || aEscape[nChar] & m_eContext;
 }
 
-//============================================================================
 void INetMIMEEncodedWordOutputSink::finish(bool bWriteTrailer)
 {
     if (m_eInitialSpace == SPACE_ALWAYS && m_nExtraSpaces == 0)
@@ -3874,14 +3792,12 @@ void INetMIMEEncodedWordOutputSink::finish(bool bWriteTrailer)
     m_eEncodedWordState = STATE_INITIAL;
 }
 
-//============================================================================
 INetMIMEEncodedWordOutputSink::~INetMIMEEncodedWordOutputSink()
 {
     rtl_freeMemory(m_pBuffer);
     delete m_pEncodingList;
 }
 
-//============================================================================
 INetMIMEEncodedWordOutputSink &
 INetMIMEEncodedWordOutputSink::operator <<(sal_uInt32 nChar)
 {
@@ -4132,18 +4048,13 @@ INetMIMEEncodedWordOutputSink::operator <<(sal_uInt32 nChar)
     return *this;
 }
 
-//============================================================================
-//
 //  INetContentTypeParameterList
-//
-//============================================================================
 
 void INetContentTypeParameterList::Clear()
 {
     maEntries.clear();
 }
 
-//============================================================================
 const INetContentTypeParameter *
 INetContentTypeParameterList::find(const rtl::OString& rAttribute) const
 {

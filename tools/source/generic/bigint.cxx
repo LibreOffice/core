@@ -17,10 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <math.h>
-#include <tools/tools.h>
 
+#include <tools/tools.h>
 #include <tools/bigint.hxx>
 #include <tools/string.hxx>
 
@@ -39,8 +38,6 @@ static const long MY_MINSHORT = -MY_MAXSHORT;
  */
 
 // Muss auf sal_uInt16/INT16/sal_uInt32/sal_Int32 umgestellt werden !!! W.P.
-
-// -----------------------------------------------------------------------
 
 void BigInt::MakeBigInt( const BigInt& rVal )
 {
@@ -73,8 +70,6 @@ void BigInt::MakeBigInt( const BigInt& rVal )
     }
 }
 
-// -----------------------------------------------------------------------
-
 void BigInt::Normalize()
 {
     if ( bIsBig )
@@ -105,8 +100,6 @@ void BigInt::Normalize()
         nLen = 1;
 }
 
-// -----------------------------------------------------------------------
-
 void BigInt::Mult( const BigInt &rVal, sal_uInt16 nMul )
 {
     sal_uInt16 nK = 0;
@@ -129,8 +122,6 @@ void BigInt::Mult( const BigInt &rVal, sal_uInt16 nMul )
     bIsNeg = rVal.bIsNeg;
 }
 
-// -----------------------------------------------------------------------
-
 void BigInt::Div( sal_uInt16 nDiv, sal_uInt16& rRem )
 {
     sal_uInt32 nK = 0;
@@ -146,8 +137,6 @@ void BigInt::Div( sal_uInt16 nDiv, sal_uInt16& rRem )
         nLen -= 1;
 }
 
-// -----------------------------------------------------------------------
-
 sal_Bool BigInt::IsLess( const BigInt& rVal ) const
 {
     if ( rVal.nLen < nLen)
@@ -161,8 +150,6 @@ sal_Bool BigInt::IsLess( const BigInt& rVal ) const
     }
     return rVal.nNum[i] < nNum[i];
 }
-
-// -----------------------------------------------------------------------
 
 void BigInt::AddLong( BigInt& rB, BigInt& rErg )
 {
@@ -224,8 +211,6 @@ void BigInt::AddLong( BigInt& rB, BigInt& rErg )
         rB.bIsNeg = sal_True;
     }
 }
-
-// -----------------------------------------------------------------------
 
 void BigInt::SubLong( BigInt& rB, BigInt& rErg )
 {
@@ -298,8 +283,6 @@ void BigInt::SubLong( BigInt& rB, BigInt& rErg )
     }
 }
 
-// -----------------------------------------------------------------------
-
 void BigInt::MultLong( const BigInt& rB, BigInt& rErg ) const
 {
     int    i, j;
@@ -324,8 +307,6 @@ void BigInt::MultLong( const BigInt& rB, BigInt& rErg ) const
         rErg.nNum[i + j] = (sal_uInt16)k;
     }
 }
-
-// -----------------------------------------------------------------------
 
 void BigInt::DivLong( const BigInt& rB, BigInt& rErg ) const
 {
@@ -396,8 +377,6 @@ void BigInt::DivLong( const BigInt& rB, BigInt& rErg ) const
     rErg.nLen   = nLen - rB.nLen + 1;
 }
 
-// -----------------------------------------------------------------------
-
 void BigInt::ModLong( const BigInt& rB, BigInt& rErg ) const
 {
     short  i, j;
@@ -465,8 +444,6 @@ void BigInt::ModLong( const BigInt& rB, BigInt& rErg ) const
     rErg.Div( nMult, nQ );
 }
 
-// -----------------------------------------------------------------------
-
 sal_Bool BigInt::ABS_IsLess( const BigInt& rB ) const
 {
     if (bIsBig || rB.bIsBig)
@@ -497,8 +474,6 @@ sal_Bool BigInt::ABS_IsLess( const BigInt& rB ) const
             return nVal < rB.nVal;
 }
 
-// -----------------------------------------------------------------------
-
 BigInt::BigInt( const BigInt& rBigInt )
 {
     if ( rBigInt.bIsBig )
@@ -510,8 +485,6 @@ BigInt::BigInt( const BigInt& rBigInt )
         nVal   = rBigInt.nVal;
     }
 }
-
-// -----------------------------------------------------------------------
 
 BigInt::BigInt( const rtl::OUString& rString )
 {
@@ -538,8 +511,6 @@ BigInt::BigInt( const rtl::OUString& rString )
     else if( bNeg )
         nVal = -nVal;
 }
-
-// -----------------------------------------------------------------------
 
 BigInt::BigInt( double nValue )
 {
@@ -583,8 +554,6 @@ BigInt::BigInt( double nValue )
     }
 }
 
-// -----------------------------------------------------------------------
-
 BigInt::BigInt( sal_uInt32 nValue )
 {
     bIsSet  = sal_True;
@@ -603,8 +572,6 @@ BigInt::BigInt( sal_uInt32 nValue )
     }
 }
 
-// -----------------------------------------------------------------------
-
 BigInt::operator sal_uIntPtr() const
 {
     if ( !bIsBig )
@@ -618,8 +585,6 @@ BigInt::operator sal_uIntPtr() const
     }
     return 0;
 }
-
-// -----------------------------------------------------------------------
 
 BigInt::operator double() const
 {
@@ -643,8 +608,6 @@ BigInt::operator double() const
         return nRet;
     }
 }
-
-// -----------------------------------------------------------------------
 
 rtl::OUString BigInt::GetString() const
 {
@@ -687,8 +650,6 @@ rtl::OUString BigInt::GetString() const
     return aString;
 }
 
-// -----------------------------------------------------------------------
-
 BigInt& BigInt::operator=( const BigInt& rBigInt )
 {
     if ( rBigInt.bIsBig )
@@ -701,8 +662,6 @@ BigInt& BigInt::operator=( const BigInt& rBigInt )
     }
     return *this;
 }
-
-// -----------------------------------------------------------------------
 
 BigInt& BigInt::operator+=( const BigInt& rVal )
 {
@@ -730,8 +689,6 @@ BigInt& BigInt::operator+=( const BigInt& rVal )
     return *this;
 }
 
-// -----------------------------------------------------------------------
-
 BigInt& BigInt::operator-=( const BigInt& rVal )
 {
     if ( !bIsBig && !rVal.bIsBig )
@@ -758,8 +715,6 @@ BigInt& BigInt::operator-=( const BigInt& rVal )
     return *this;
 }
 
-// -----------------------------------------------------------------------
-
 BigInt& BigInt::operator*=( const BigInt& rVal )
 {
     if ( !bIsBig && !rVal.bIsBig
@@ -779,8 +734,6 @@ BigInt& BigInt::operator*=( const BigInt& rVal )
     }
     return *this;
 }
-
-// -----------------------------------------------------------------------
 
 BigInt& BigInt::operator/=( const BigInt& rVal )
 {
@@ -841,8 +794,6 @@ BigInt& BigInt::operator/=( const BigInt& rVal )
     return *this;
 }
 
-// -----------------------------------------------------------------------
-
 BigInt& BigInt::operator%=( const BigInt& rVal )
 {
     if ( !rVal.bIsBig )
@@ -890,8 +841,6 @@ BigInt& BigInt::operator%=( const BigInt& rVal )
     return *this;
 }
 
-// -----------------------------------------------------------------------
-
 sal_Bool operator==( const BigInt& rVal1, const BigInt& rVal2 )
 {
     if ( rVal1.bIsBig || rVal2.bIsBig )
@@ -916,8 +865,6 @@ sal_Bool operator==( const BigInt& rVal1, const BigInt& rVal2 )
     }
     return rVal1.nVal == rVal2.nVal;
 }
-
-// -----------------------------------------------------------------------
 
 sal_Bool operator<( const BigInt& rVal1, const BigInt& rVal2 )
 {
@@ -949,8 +896,6 @@ sal_Bool operator<( const BigInt& rVal1, const BigInt& rVal2 )
     }
     return rVal1.nVal < rVal2.nVal;
 }
-
-// -----------------------------------------------------------------------
 
 sal_Bool operator >(const BigInt& rVal1, const BigInt& rVal2 )
 {

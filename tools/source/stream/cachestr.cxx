@@ -17,16 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <tools/stream.hxx>
 #include <tools/cachestr.hxx>
 #include <tools/tempfile.hxx>
-
-/*************************************************************************
-|*
-|*    SvCacheStream::SvCacheStream()
-|*
-*************************************************************************/
 
 SvCacheStream::SvCacheStream( sal_uIntPtr nMaxMemSize )
 {
@@ -39,12 +32,6 @@ SvCacheStream::SvCacheStream( sal_uIntPtr nMaxMemSize )
     pCurrentStream  = new SvMemoryStream( nMaxMemSize );
     pTempFile       = 0;
 }
-
-/*************************************************************************
-|*
-|*    SvCacheStream::~SvCacheStream()
-|*
-*************************************************************************/
 
 SvCacheStream::~SvCacheStream()
 {
@@ -60,12 +47,6 @@ SvCacheStream::~SvCacheStream()
 
     delete pTempFile;
 }
-
-/*************************************************************************
-|*
-|*    SvCacheStream::SwapOut()
-|*
-*************************************************************************/
 
 void SvCacheStream::SwapOut()
 {
@@ -89,22 +70,10 @@ void SvCacheStream::SwapOut()
     }
 }
 
-/*************************************************************************
-|*
-|*    SvCacheStream::GetData()
-|*
-*************************************************************************/
-
 sal_uIntPtr SvCacheStream::GetData( void* pData, sal_uIntPtr nSize )
 {
     return pCurrentStream->Read( pData, nSize );
 }
-
-/*************************************************************************
-|*
-|*    SvCacheStream::PutData()
-|*
-*************************************************************************/
 
 sal_uIntPtr SvCacheStream::PutData( const void* pData, sal_uIntPtr nSize )
 {
@@ -115,22 +84,10 @@ sal_uIntPtr SvCacheStream::PutData( const void* pData, sal_uIntPtr nSize )
     return pCurrentStream->Write( pData, nSize );
 }
 
-/*************************************************************************
-|*
-|*    SvCacheStream::SeekPos()
-|*
-*************************************************************************/
-
 sal_uIntPtr SvCacheStream::SeekPos( sal_uIntPtr nPos )
 {
     return pCurrentStream->Seek( nPos );
 }
-
-/*************************************************************************
-|*
-|*    SvCacheStream::FlushData()
-|*
-*************************************************************************/
 
 void SvCacheStream::FlushData()
 {
@@ -139,12 +96,6 @@ void SvCacheStream::FlushData()
         && ((SvMemoryStream*)pCurrentStream)->GetSize() > nMaxSize )
         SwapOut();
 }
-
-/*************************************************************************
-|*
-|*    SvCacheStream::GetStr()
-|*
-*************************************************************************/
 
 const void* SvCacheStream::GetBuffer()
 {
@@ -155,22 +106,10 @@ const void* SvCacheStream::GetBuffer()
         return 0;
 }
 
-/*************************************************************************
-|*
-|*    SvCacheStream::SetSize()
-|*
-*************************************************************************/
-
 void SvCacheStream::SetSize( sal_uIntPtr nSize )
 {
     pCurrentStream->SetStreamSize( nSize );
 }
-
-/*************************************************************************
-|*
-|*    SvCacheStream::GetSize()
-|*
-*************************************************************************/
 
 sal_uIntPtr SvCacheStream::GetSize()
 {

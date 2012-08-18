@@ -16,8 +16,6 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-
-
 #define _CONFIG_CXX
 
 #include <cstddef>
@@ -29,16 +27,13 @@
 #ifdef WNT
 #include "stdlib.h"
 #endif
+
 #include <osl/file.hxx>
 #include <tools/stream.hxx>
 #include <tools/debug.hxx>
 #include <tools/config.hxx>
 #include <osl/security.h>
 #include <rtl/strbuf.hxx>
-
-// -----------------
-// - ImplConfigData -
-// -----------------
 
 struct ImplKeyData
 {
@@ -69,8 +64,6 @@ struct ImplConfigData
     sal_Bool            mbIsUTF8BOM;
 };
 
-// =======================================================================
-
 static String toUncPath( const String& rPath )
 {
     ::rtl::OUString aFileURL;
@@ -98,8 +91,6 @@ static sal_uIntPtr ImplSysGetConfigTimeStamp( const rtl::OUString& rFileName )
 
     return nTimeStamp;
 }
-
-// -----------------------------------------------------------------------
 
 static sal_uInt8* ImplSysReadConfig( const rtl::OUString& rFileName,
                                 sal_uInt64& rRead, sal_Bool& rbRead, sal_Bool& rbIsUTF8BOM, sal_uIntPtr& rTimeStamp )
@@ -145,8 +136,6 @@ static sal_uInt8* ImplSysReadConfig( const rtl::OUString& rFileName,
     return pBuf;
 }
 
-// -----------------------------------------------------------------------
-
 static sal_Bool ImplSysWriteConfig( const rtl::OUString& rFileName,
                                 const sal_uInt8* pBuf, sal_uIntPtr nBufLen, sal_Bool rbIsUTF8BOM, sal_uIntPtr& rTimeStamp )
 {
@@ -187,10 +176,7 @@ static sal_Bool ImplSysWriteConfig( const rtl::OUString& rFileName,
     return rbIsUTF8BOM ? bSuccess && bUTF8BOMSuccess : bSuccess;
 }
 
-// -----------------------------------------------------------------------
-
 namespace {
-
 rtl::OString makeOString(const sal_uInt8* p, sal_uInt64 n)
 {
     if (n > SAL_MAX_INT32)
@@ -205,7 +191,6 @@ rtl::OString makeOString(const sal_uInt8* p, sal_uInt64 n)
         reinterpret_cast< char const * >(p),
         sal::static_int_cast< sal_Int32 >(n));
 }
-
 }
 
 static void ImplMakeConfigList( ImplConfigData* pData,
@@ -382,8 +367,6 @@ static void ImplMakeConfigList( ImplConfigData* pData,
     }
 }
 
-// -----------------------------------------------------------------------
-
 static sal_uInt8* ImplGetConfigBuffer( const ImplConfigData* pData, sal_uIntPtr& rLen )
 {
     sal_uInt8*          pWriteBuf;
@@ -535,8 +518,6 @@ static sal_uInt8* ImplGetConfigBuffer( const ImplConfigData* pData, sal_uIntPtr&
     return pWriteBuf;
 }
 
-// -----------------------------------------------------------------------
-
 static void ImplReadConfig( ImplConfigData* pData )
 {
     sal_uIntPtr         nTimeStamp = 0;
@@ -558,8 +539,6 @@ static void ImplReadConfig( ImplConfigData* pData )
     if ( bIsUTF8BOM )
         pData->mbIsUTF8BOM = sal_True;
 }
-
-// -----------------------------------------------------------------------
 
 static void ImplWriteConfig( ImplConfigData* pData )
 {
@@ -585,8 +564,6 @@ static void ImplWriteConfig( ImplConfigData* pData )
     else
         pData->mbModified = sal_False;
 }
-
-// -----------------------------------------------------------------------
 
 static void ImplDeleteConfigData( ImplConfigData* pData )
 {
@@ -615,8 +592,6 @@ static void ImplDeleteConfigData( ImplConfigData* pData )
     pData->mpFirstGroup = NULL;
 }
 
-// =======================================================================
-
 static ImplConfigData* ImplGetConfigData( const rtl::OUString& rFileName )
 {
     ImplConfigData* pData;
@@ -634,15 +609,11 @@ static ImplConfigData* ImplGetConfigData( const rtl::OUString& rFileName )
     return pData;
 }
 
-// -----------------------------------------------------------------------
-
 static void ImplFreeConfigData( ImplConfigData* pDelData )
 {
     ImplDeleteConfigData( pDelData );
     delete pDelData;
 }
-
-// =======================================================================
 
 sal_Bool Config::ImplUpdateConfig() const
 {
@@ -657,8 +628,6 @@ sal_Bool Config::ImplUpdateConfig() const
     else
         return sal_False;
 }
-
-// =======================================================================
 
 ImplGroupData* Config::ImplGetGroup() const
 {
@@ -699,8 +668,6 @@ ImplGroupData* Config::ImplGetGroup() const
     return mpActGroup;
 }
 
-// =======================================================================
-
 Config::Config( const rtl::OUString& rFileName )
 {
     // Daten initialisieren und einlesen
@@ -720,8 +687,6 @@ Config::Config( const rtl::OUString& rFileName )
 #endif
 }
 
-// -----------------------------------------------------------------------
-
 Config::~Config()
 {
 #ifdef DBG_UTIL
@@ -731,8 +696,6 @@ Config::~Config()
     Flush();
     ImplFreeConfigData( mpData );
 }
-
-// -----------------------------------------------------------------------
 
 void Config::SetGroup(const rtl::OString& rGroup)
 {
@@ -744,8 +707,6 @@ void Config::SetGroup(const rtl::OString& rGroup)
         mnDataUpdateId  = mpData->mnDataUpdateId-1;
     }
 }
-
-// -----------------------------------------------------------------------
 
 void Config::DeleteGroup(const rtl::OString& rGroup)
 {
@@ -800,8 +761,6 @@ void Config::DeleteGroup(const rtl::OString& rGroup)
     }
 }
 
-// -----------------------------------------------------------------------
-
 rtl::OString Config::GetGroupName(sal_uInt16 nGroup) const
 {
     // Config-Daten evt. updaten
@@ -826,8 +785,6 @@ rtl::OString Config::GetGroupName(sal_uInt16 nGroup) const
     return aGroupName;
 }
 
-// -----------------------------------------------------------------------
-
 sal_uInt16 Config::GetGroupCount() const
 {
     // Config-Daten evt. updaten
@@ -844,8 +801,6 @@ sal_uInt16 Config::GetGroupCount() const
 
     return nGroupCount;
 }
-
-// -----------------------------------------------------------------------
 
 sal_Bool Config::HasGroup(const rtl::OString& rGroup) const
 {
@@ -870,14 +825,10 @@ sal_Bool Config::HasGroup(const rtl::OString& rGroup) const
     return bRet;
 }
 
-// -----------------------------------------------------------------------
-
 rtl::OString Config::ReadKey(const rtl::OString& rKey) const
 {
     return ReadKey(rKey, rtl::OString());
 }
-
-// -----------------------------------------------------------------------
 
 rtl::OUString Config::ReadKey(const rtl::OString& rKey, rtl_TextEncoding eEncoding) const
 {
@@ -885,8 +836,6 @@ rtl::OUString Config::ReadKey(const rtl::OString& rKey, rtl_TextEncoding eEncodi
         eEncoding = RTL_TEXTENCODING_UTF8;
     return rtl::OStringToOUString(ReadKey(rKey), eEncoding);
 }
-
-// -----------------------------------------------------------------------
 
 rtl::OString Config::ReadKey(const rtl::OString& rKey, const rtl::OString& rDefault) const
 {
@@ -921,8 +870,6 @@ rtl::OString Config::ReadKey(const rtl::OString& rKey, const rtl::OString& rDefa
 
     return rDefault;
 }
-
-// -----------------------------------------------------------------------
 
 void Config::WriteKey(const rtl::OString& rKey, const rtl::OString& rStr)
 {
@@ -990,8 +937,6 @@ void Config::WriteKey(const rtl::OString& rKey, const rtl::OString& rStr)
     }
 }
 
-// -----------------------------------------------------------------------
-
 void Config::DeleteKey(const rtl::OString& rKey)
 {
     // Config-Daten evt. updaten
@@ -1036,8 +981,6 @@ void Config::DeleteKey(const rtl::OString& rKey)
     }
 }
 
-// -----------------------------------------------------------------------
-
 sal_uInt16 Config::GetKeyCount() const
 {
 #ifdef DBG_UTIL
@@ -1071,8 +1014,6 @@ sal_uInt16 Config::GetKeyCount() const
 
     return nCount;
 }
-
-// -----------------------------------------------------------------------
 
 rtl::OString Config::GetKeyName(sal_uInt16 nKey) const
 {
@@ -1108,8 +1049,6 @@ rtl::OString Config::GetKeyName(sal_uInt16 nKey) const
 
     return rtl::OString();
 }
-
-// -----------------------------------------------------------------------
 
 rtl::OString Config::ReadKey(sal_uInt16 nKey) const
 {

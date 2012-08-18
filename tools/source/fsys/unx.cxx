@@ -17,12 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <stdio.h>
 #include <ctype.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include <utime.h>
+
 #if defined LINUX || defined ANDROID
 #include <mntent.h>
 #define mnttab mntent
@@ -72,7 +72,6 @@ struct mymnttab
     mymnttab() { mountdevice = (dev_t) -1; }
 };
 
-
 #if defined(NETBSD) || defined(FREEBSD) || defined(MACOSX) || \
     defined(OPENBSD) || defined(DRAGONFLY) || defined(IOS)
 sal_Bool GetMountEntry(dev_t /* dev */, struct mymnttab * /* mytab */ )
@@ -80,7 +79,6 @@ sal_Bool GetMountEntry(dev_t /* dev */, struct mymnttab * /* mytab */ )
     DBG_WARNING( "Sorry, not implemented: GetMountEntry" );
     return sal_False;
 }
-
 #elif defined AIX
 sal_Bool GetMountEntry(dev_t dev, struct mymnttab *mytab)
 {
@@ -113,10 +111,7 @@ sal_Bool GetMountEntry(dev_t dev, struct mymnttab *mytab)
     free( buffer );
     return sal_False;
 }
-
 #else
-
-
 static sal_Bool GetMountEntry(dev_t dev, struct mymnttab *mytab)
 {
 #if defined SOLARIS
@@ -177,15 +172,7 @@ static sal_Bool GetMountEntry(dev_t dev, struct mymnttab *mytab)
 #   endif
     return sal_False;
 }
-
 #endif
-
-
-/************************************************************************
-|*
-|*    DirEntry::ToAbs()
-|*
-*************************************************************************/
 
 sal_Bool DirEntry::ToAbs()
 {
@@ -202,12 +189,6 @@ sal_Bool DirEntry::ToAbs()
     *this = DirEntry( String( getcwd( sBuf, MAXPATHLEN ), osl_getThreadTextEncoding() ) ) + *this;
     return IsAbs();
 }
-
-/*************************************************************************
-|*
-|*    DirEntry::GetVolume()
-|*
-*************************************************************************/
 
 namespace { struct mymnt : public rtl::Static< mymnttab, mymnt > {}; }
 
@@ -232,16 +213,9 @@ String DirEntry::GetVolume() const
                     rtl::OUString());
 }
 
-/*************************************************************************
-|*
-|*    DirEntry::SetCWD()
-|*
-*************************************************************************/
-
 sal_Bool DirEntry::SetCWD( sal_Bool bSloppy ) const
 {
     DBG_CHKTHIS( DirEntry, ImpCheckDirEntry );
-
 
     rtl::OString aPath(rtl::OUStringToOString(GetFull(), osl_getThreadTextEncoding()));
     if (!chdir(aPath.getStr()))
@@ -261,14 +235,10 @@ sal_Bool DirEntry::SetCWD( sal_Bool bSloppy ) const
     }
 }
 
-//-------------------------------------------------------------------------
-
 sal_uInt16 DirReader_Impl::Init()
 {
     return 0;
 }
-
-//-------------------------------------------------------------------------
 
 sal_uInt16 DirReader_Impl::Read()
 {
@@ -320,11 +290,6 @@ sal_uInt16 DirReader_Impl::Read()
     return 0;
 }
 
-/*************************************************************************
-|*
-|*    FileStat::Update()
-|*
-*************************************************************************/
 sal_Bool FileStat::Update( const DirEntry& rDirEntry, SAL_UNUSED_PARAMETER sal_Bool )
 {
 
@@ -399,8 +364,6 @@ sal_Bool FileStat::Update( const DirEntry& rDirEntry, SAL_UNUSED_PARAMETER sal_B
 
     return sal_True;
 }
-
-//====================================================================
 
 const char *TempDirImpl( char *pBuf )
 {

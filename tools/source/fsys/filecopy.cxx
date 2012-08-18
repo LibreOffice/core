@@ -17,16 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #if defined WNT
 #include <windows.h>
 #include <io.h>
-
 #elif defined UNX
 #include <fcntl.h>
 #include <unistd.h>
 #include <sys/stat.h>
-
 #endif
 
 #include <ctype.h>
@@ -42,24 +39,17 @@
 
 using namespace ::osl;
 
-// -----------------------------------------------------------------------
-
 FileCopier::FileCopier( const DirEntry& rSource, const DirEntry& rTarget ) :
-
     aSource     ( rSource ),
     aTarget     ( rTarget ),
     nBytesTotal ( 0 ),
     nBytesCopied( 0 ),
     nBlockSize  ( 4096 ),
     pImp        ( new FileCopier_Impl )
-
 {
 }
 
-// -----------------------------------------------------------------------
-
 FileCopier::FileCopier( const FileCopier& rCopier ) :
-
     aSource         ( rCopier.aSource ),
     aTarget         ( rCopier.aTarget ),
     nBytesTotal     ( 0 ),
@@ -67,26 +57,13 @@ FileCopier::FileCopier( const FileCopier& rCopier ) :
     aProgressLink   ( rCopier.aProgressLink ),
     nBlockSize      ( 4096 ),
     pImp            ( new FileCopier_Impl )
-
 {
 }
-
-/*************************************************************************
-|*
-|*    FileCopier::~FileCopier()
-|*
-*************************************************************************/
 
 FileCopier::~FileCopier()
 {
     delete pImp;
 }
-
-/*************************************************************************
-|*
-|*    FileCopier::operator =()
-|*
-*************************************************************************/
 
 FileCopier& FileCopier::operator = ( const FileCopier &rCopier )
 {
@@ -101,12 +78,6 @@ FileCopier& FileCopier::operator = ( const FileCopier &rCopier )
     return *this;
 }
 
-/*************************************************************************
-|*
-|*    FileCopier::Progress()
-|*
-*************************************************************************/
-
 sal_Bool FileCopier::Progress()
 {
     if ( !aProgressLink )
@@ -118,8 +89,6 @@ sal_Bool FileCopier::Progress()
         return ( 0 == Error( ERRCODE_ABORT, 0, 0 ) );
     }
 }
-
-//---------------------------------------------------------------------------
 
 ErrCode FileCopier::Error( ErrCode eErr, const DirEntry* pSource, const DirEntry* pTarget )
 {
@@ -138,14 +107,7 @@ ErrCode FileCopier::Error( ErrCode eErr, const DirEntry* pSource, const DirEntry
     return eRet;
 }
 
-/*************************************************************************
-|*
-|*    FileCopier::Execute()
-|*
-*************************************************************************/
-
-FSysError FileCopier::DoCopy_Impl(
-    const DirEntry &rSource, const DirEntry &rTarget )
+FSysError FileCopier::DoCopy_Impl( const DirEntry &rSource, const DirEntry &rTarget )
 {
     FSysError eRet = FSYS_ERR_OK;
     ErrCode eWarn = FSYS_ERR_OK;
@@ -297,14 +259,10 @@ FSysError FileCopier::DoCopy_Impl(
     return !eRet ? eWarn : eRet;
 }
 
-// -----------------------------------------------------------------------
-
 FSysError FileCopier::Execute( FSysAction nActions )
 {
     return ExecuteExact( nActions );
 }
-
-// -----------------------------------------------------------------------
 
 FSysError FileCopier::ExecuteExact( FSysAction nActions, FSysExact eExact )
 {

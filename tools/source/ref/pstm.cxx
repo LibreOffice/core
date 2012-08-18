@@ -17,17 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <tools/debug.hxx>
 #include <tools/pstm.hxx>
 #include <rtl/strbuf.hxx>
 
 #define STOR_NO_OPTIMIZE
 
-/***********************************************************************/
-/************************************************************************
-|*    SvClassManager::Register()
-*************************************************************************/
 void SvClassManager::Register( sal_Int32 nClassId, SvCreateInstancePersist pFunc )
 {
 #ifdef DBG_UTIL
@@ -38,26 +33,20 @@ void SvClassManager::Register( sal_Int32 nClassId, SvCreateInstancePersist pFunc
     aAssocTable.insert(Map::value_type(nClassId, pFunc));
 }
 
-/************************************************************************
-|*    SvClassManager::Get()
-*************************************************************************/
 SvCreateInstancePersist SvClassManager::Get( sal_Int32 nClassId )
 {
     Map::const_iterator i(aAssocTable.find(nClassId));
     return i == aAssocTable.end() ? 0 : i->second;
 }
 
-/****************** SvRttiBase *******************************************/
+// SvRttiBase
 TYPEINIT0( SvRttiBase );
 
-/****************** SvPersistBaseMemberList ******************************/
+// SvPersistBaseMemberList
 
 #define PERSIST_LIST_VER        (sal_uInt8)0
 #define PERSIST_LIST_DBGUTIL    (sal_uInt8)0x80
 
-/************************************************************************
-|*    WritePersistListObjects()
-*************************************************************************/
 void TOOLS_DLLPUBLIC WritePersistListObjects(const SvPersistListWriteable& rList, SvPersistStream & rStm, bool bOnlyStreamed )
 {
 #ifdef STOR_NO_OPTIMIZE
@@ -95,9 +84,6 @@ void TOOLS_DLLPUBLIC WritePersistListObjects(const SvPersistListWriteable& rList
 #endif
 }
 
-/************************************************************************
-|*    ReadObjects()
-*************************************************************************/
 void TOOLS_DLLPUBLIC ReadObjects( SvPersistListReadable& rLst, SvPersistStream & rStm )
 {
     sal_uInt8 nVer;
@@ -137,7 +123,6 @@ void TOOLS_DLLPUBLIC ReadObjects( SvPersistListReadable& rLst, SvPersistStream &
 #endif
 }
 
-//=========================================================================
 SvPersistStream::SvPersistStream
 (
     SvClassManager & rMgr,  /* Alle Factorys, deren Objekt geladen und
@@ -172,7 +157,6 @@ SvPersistStream::SvPersistStream
     }
 }
 
-//=========================================================================
 SvPersistStream::~SvPersistStream()
 /*  [Beschreibung]
 
@@ -183,7 +167,6 @@ SvPersistStream::~SvPersistStream()
     SetStream( NULL );
 }
 
-//=========================================================================
 void SvPersistStream::SetStream
 (
     SvStream * pStream  /* auf diesem Stream arbeitet der PersistStream */
@@ -216,7 +199,6 @@ void SvPersistStream::SetStream
     }
 }
 
-//=========================================================================
 sal_uInt16 SvPersistStream::IsA() const
 /*  [Beschreibung]
 
@@ -235,10 +217,6 @@ sal_uInt16 SvPersistStream::IsA() const
     return ID_PERSISTSTREAM;
 }
 
-
-/*************************************************************************
-|*    SvPersistStream::ResetError()
-*************************************************************************/
 void SvPersistStream::ResetError()
 {
     SvStream::ResetError();
@@ -246,9 +224,6 @@ void SvPersistStream::ResetError()
     pStm->ResetError();
 }
 
-/*************************************************************************
-|*    SvPersistStream::GetData()
-*************************************************************************/
 sal_uIntPtr SvPersistStream::GetData( void* pData, sal_uIntPtr nSize )
 {
     DBG_ASSERT( pStm, "stream not set" );
@@ -257,9 +232,6 @@ sal_uIntPtr SvPersistStream::GetData( void* pData, sal_uIntPtr nSize )
     return nRet;
 }
 
-/*************************************************************************
-|*    SvPersistStream::PutData()
-*************************************************************************/
 sal_uIntPtr SvPersistStream::PutData( const void* pData, sal_uIntPtr nSize )
 {
     DBG_ASSERT( pStm, "stream not set" );
@@ -268,9 +240,6 @@ sal_uIntPtr SvPersistStream::PutData( const void* pData, sal_uIntPtr nSize )
     return nRet;
 }
 
-/*************************************************************************
-|*    SvPersistStream::Seek()
-*************************************************************************/
 sal_uIntPtr SvPersistStream::SeekPos( sal_uIntPtr nPos )
 {
     DBG_ASSERT( pStm, "stream not set" );
@@ -279,16 +248,10 @@ sal_uIntPtr SvPersistStream::SeekPos( sal_uIntPtr nPos )
     return nRet;
 }
 
-/*************************************************************************
-|*    SvPersistStream::FlushData()
-*************************************************************************/
 void SvPersistStream::FlushData()
 {
 }
 
-/*************************************************************************
-|*    SvPersistStream::GetIndex()
-*************************************************************************/
 sal_uIntPtr SvPersistStream::GetIndex( SvPersistBase * pObj ) const
 {
     PersistBaseMap::const_iterator it = aPTable.find( pObj );
@@ -302,9 +265,6 @@ sal_uIntPtr SvPersistStream::GetIndex( SvPersistBase * pObj ) const
     return it->second;
 }
 
-/*************************************************************************
-|*    SvPersistStream::GetObject)
-*************************************************************************/
 SvPersistBase * SvPersistStream::GetObject( sal_uIntPtr nIdx ) const
 {
     if( nIdx >= nStartIdx )
@@ -314,7 +274,6 @@ SvPersistBase * SvPersistStream::GetObject( sal_uIntPtr nIdx ) const
     return NULL;
 }
 
-//=========================================================================
 #define LEN_1           0x80
 #define LEN_2           0x40
 #define LEN_4           0x20
@@ -377,7 +336,6 @@ sal_uInt32 SvPersistStream::ReadCompressed
     return nRet;
 }
 
-//=========================================================================
 void SvPersistStream::WriteCompressed
 (
     SvStream & rStm,/* Aus diesem Stream werden die komprimierten Daten
@@ -422,7 +380,6 @@ void SvPersistStream::WriteCompressed
     }
 }
 
-//=========================================================================
 sal_uInt32 SvPersistStream::WriteDummyLen()
 /*  [Beschreibung]
 
@@ -459,7 +416,6 @@ sal_uInt32 SvPersistStream::WriteDummyLen()
     return Tell();
 }
 
-//=========================================================================
 void SvPersistStream::WriteLen
 (
     sal_uInt32 nObjPos  /* die Position + 4, an der die L"ange geschrieben
@@ -496,7 +452,6 @@ void SvPersistStream::WriteLen
     Seek( nPos );
 }
 
-//=========================================================================
 sal_uInt32 SvPersistStream::ReadLen
 (
     sal_uInt32 * pTestPos   /* Die Position des Streams, nach dem Lesen der
@@ -516,7 +471,6 @@ sal_uInt32 SvPersistStream::ReadLen
     return nLen;
 }
 
-//=========================================================================
 // Dateirormat abw"arts kompatibel
 #ifdef STOR_NO_OPTIMIZE
 #define P_VER       (sal_uInt8)0x00
@@ -568,7 +522,6 @@ static void WriteId
         SvPersistStream::WriteCompressed( rStm, nClassId );
 }
 
-//=========================================================================
 static void ReadId
 (
     SvStream & rStm,
@@ -598,7 +551,6 @@ static void ReadId
     }
 }
 
-//=========================================================================
 void SvPersistStream::WriteObj
 (
     sal_uInt8 nHdr,
@@ -618,7 +570,6 @@ void SvPersistStream::WriteObj
 #endif
 }
 
-//=========================================================================
 SvPersistStream& SvPersistStream::WritePointer
 (
     SvPersistBase * pObj
@@ -648,7 +599,6 @@ SvPersistStream& SvPersistStream::WritePointer
     return *this;
 }
 
-//=========================================================================
 sal_uInt32 SvPersistStream::ReadObj
 (
     SvPersistBase * &   rpObj,
@@ -733,7 +683,6 @@ sal_uInt32 SvPersistStream::ReadObj
     return nId;
 }
 
-//=========================================================================
 SvPersistStream& SvPersistStream::ReadPointer
 (
     SvPersistBase * & rpObj
@@ -743,7 +692,6 @@ SvPersistStream& SvPersistStream::ReadPointer
     return *this;
 }
 
-//=========================================================================
 SvPersistStream& operator <<
 (
     SvPersistStream & rStm,
@@ -753,7 +701,6 @@ SvPersistStream& operator <<
     return rStm.WritePointer( pObj );
 }
 
-//=========================================================================
 SvPersistStream& operator >>
 (
     SvPersistStream & rStm,
@@ -763,7 +710,6 @@ SvPersistStream& operator >>
     return rStm.ReadPointer( rpObj );
 }
 
-//=========================================================================
 SvStream& operator <<
 (
     SvStream & rStm,
@@ -790,7 +736,6 @@ SvStream& operator <<
     return rStm;
 }
 
-//=========================================================================
 SvStream& operator >>
 (
     SvStream & rStm,

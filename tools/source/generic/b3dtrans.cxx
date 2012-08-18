@@ -19,11 +19,8 @@
 
 #include <tools/b3dtrans.hxx>
 
-/*************************************************************************
-|*
-|* Transformationen fuer alle 3D Ausgaben
-|*
-\************************************************************************/
+// B3dTransformationSet --------------------------------------------------------
+// Transformations for all 3D output
 
 B3dTransformationSet::B3dTransformationSet()
 {
@@ -127,12 +124,7 @@ void B3dTransformationSet::Ortho(basegfx::B3DHomMatrix& rTarget, double fLeft, d
     rTarget *= aTemp;
 }
 
-/*************************************************************************
-|*
-|* Reset der Werte
-|*
-\************************************************************************/
-
+/// reset values
 void B3dTransformationSet::Reset()
 {
     // Matritzen auf Einheitsmatritzen
@@ -164,24 +156,13 @@ void B3dTransformationSet::Reset()
     CalcViewport();
 }
 
-/*************************************************************************
-|*
-|* Objekttransformation
-|*
-\************************************************************************/
-
+/// Object transformation
 void B3dTransformationSet::PostSetObjectTrans()
 {
     // Zuweisen und Inverse bestimmen
     maInvObjectTrans = maObjectTrans;
     maInvObjectTrans.invert();
 }
-
-/*************************************************************************
-|*
-|* Orientierungstransformation
-|*
-\************************************************************************/
 
 void B3dTransformationSet::SetOrientation( basegfx::B3DPoint aVRP, basegfx::B3DVector aVPN, basegfx::B3DVector aVUP)
 {
@@ -202,12 +183,7 @@ void B3dTransformationSet::PostSetOrientation()
     maInvOrientation.invert();
 }
 
-/*************************************************************************
-|*
-|* Projektionstransformation
-|*
-\************************************************************************/
-
+/// Projections for transformations
 void B3dTransformationSet::SetProjection(const basegfx::B3DHomMatrix& mProject)
 {
     maProjection = mProject;
@@ -232,12 +208,7 @@ void B3dTransformationSet::PostSetProjection()
     mbWorldToViewValid = sal_False;
 }
 
-/*************************************************************************
-|*
-|* Viewport-Transformation
-|*
-\************************************************************************/
-
+/// Transformations for viewport
 void B3dTransformationSet::CalcViewport()
 {
     // Faktoren fuer die Projektion
@@ -421,11 +392,7 @@ void B3dTransformationSet::PostSetViewport()
 {
 }
 
-/*************************************************************************
-|*
-|* Direkter Zugriff auf verschiedene Transformationen
-|*
-\************************************************************************/
+// direct access to various transformations
 
 const basegfx::B3DPoint B3dTransformationSet::WorldToEyeCoor(const basegfx::B3DPoint& rVec)
 {
@@ -441,11 +408,7 @@ const basegfx::B3DPoint B3dTransformationSet::EyeToWorldCoor(const basegfx::B3DP
     return aVec;
 }
 
-/*************************************************************************
-|*
-|* Konstruktor B3dViewport
-|*
-\************************************************************************/
+// B3dViewport -----------------------------------------------------------------
 
 B3dViewport::B3dViewport()
 :   B3dTransformationSet(),
@@ -482,11 +445,7 @@ void B3dViewport::CalcOrientation()
     SetOrientation(aVRP, aVPN, aVUV);
 }
 
-/*************************************************************************
-|*
-|* Konstruktor B3dViewport
-|*
-\************************************************************************/
+// B3dCamera -------------------------------------------------------------------
 
 B3dCamera::B3dCamera(
     const basegfx::B3DPoint& rPos, const basegfx::B3DVector& rLkAt,

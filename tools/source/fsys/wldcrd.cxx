@@ -19,12 +19,6 @@
 
 #include <tools/wldcrd.hxx>
 
-/*************************************************************************
-|*
-|*    WildCard::Match()
-|*
-*************************************************************************/
-
 /* Diese Methode ueberprueft, ob die Wilde Karte in pWild mit dem String
  * in pStr matscht.
  * Vertragen sich die beiden, so wird 1 zurueckgegeben, sonst 0.
@@ -33,7 +27,6 @@
  * ein '?' in pWild bedeutet genau ein beliebiges Zeichen
  *
  */
-
 sal_uInt16 WildCard::ImpMatch( const char *pWild, const char *pStr ) const
 {
     int    pos=0;
@@ -92,12 +85,6 @@ sal_uInt16 WildCard::ImpMatch( const char *pWild, const char *pStr ) const
     }
     return ( *pStr == '\0' ) && ( *pWild == '\0' );
 }
-
-/*************************************************************************
-|*
-|*    WildCard::Matches()
-|*
-*************************************************************************/
 
 sal_Bool WildCard::Matches( const String& rString ) const
 {

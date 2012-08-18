@@ -16,8 +16,6 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-
-
 #define _DIR_CXX
 
 #include <stdlib.h>
@@ -30,14 +28,7 @@
 
 DBG_NAME( Dir )
 
-/*************************************************************************
-|*
-|*    Dir::InsertPointReached()
-|*
-|*    Beschreibung      stellt fest, ob eingefuegt werden musz
-|*
-*************************************************************************/
-
+/// determines whether insertion is required
 sal_Bool Dir::ImpInsertPointReached( const DirEntry& rNewEntry,
                                  const FileStat& rNewStat,
                                  size_t nCurPos, size_t nSortIndex ) const
@@ -183,14 +174,7 @@ sal_Bool Dir::ImpInsertPointReached( const DirEntry& rNewEntry,
 #undef VALUE
 }
 
-/*************************************************************************
-|*
-|*    Dir::ImpSortedInsert()
-|*
-|*    Beschreibung      fuegt sortiert ein
-|*
-*************************************************************************/
-
+/// Insert as sorted
 void Dir::ImpSortedInsert( const DirEntry *pNewEntry, const FileStat *pNewStat )
 {
     //Sonderfall, keine Sortierung gewuenscht.
@@ -220,14 +204,7 @@ void Dir::ImpSortedInsert( const DirEntry *pNewEntry, const FileStat *pNewStat )
     pLst->push_back( (DirEntry*)pNewEntry );
 }
 
-/*************************************************************************
-|*
-|*    Dir::Construct()
-|*
-|*    Beschreibung      gemeinsame Implementation der Ctoren
-|*
-*************************************************************************/
-
+/// shared implementation of CTORs
 void Dir::Construct( DirEntryKind nKindFlags )
 {
     pLst     = NULL;
@@ -251,12 +228,6 @@ void Dir::Construct( DirEntryKind nKindFlags )
     else
         aNameMask.setGlob(rtl::OUString(static_cast<sal_Unicode>('*')));
 }
-
-/*************************************************************************
-|*
-|*    Dir::Reset()
-|*
-*************************************************************************/
 
 void Dir::Reset()
 {
@@ -316,12 +287,6 @@ void Dir::Reset()
 #endif
 }
 
-/*************************************************************************
-|*
-|*    Dir::Scan()
-|*
-*************************************************************************/
-
 sal_uInt16 Dir::Scan( sal_uInt16 nCount )
 {
 
@@ -352,12 +317,6 @@ sal_uInt16 Dir::Scan( sal_uInt16 nCount )
     return nRead;
 }
 
-/*************************************************************************
-|*
-|*    Dir::Dir()
-|*
-*************************************************************************/
-
 Dir::Dir( const DirEntry& rDirEntry, DirEntryKind nKindFlags ):
     DirEntry( rDirEntry ),
     pReader( 0 )
@@ -367,12 +326,6 @@ Dir::Dir( const DirEntry& rDirEntry, DirEntryKind nKindFlags ):
     Construct( nKindFlags );
     Reset();
 }
-
-/*************************************************************************
-|*
-|*    Dir::~Dir()
-|*
-*************************************************************************/
 
 Dir::~Dir()
 {
@@ -409,12 +362,6 @@ Dir::~Dir()
     delete pReader;
 }
 
-/*************************************************************************
-|*
-|*    Dir::operator[]()
-|*
-*************************************************************************/
-
 DirEntry& Dir::operator[] ( size_t nIndex ) const
 {
     DBG_ASSERT( nIndex < Count(), "Dir::operator[] : nIndex > Count()" );
@@ -422,12 +369,6 @@ DirEntry& Dir::operator[] ( size_t nIndex ) const
     DirEntry *pEntry = (*pLst)[ nIndex ];
     return *pEntry;
 }
-
-/*************************************************************************
-|*
-|*    Dir::operator+= ()
-|*
-*************************************************************************/
 
 Dir& Dir::operator+=( const Dir& rDir )
 {
@@ -467,13 +408,6 @@ Dir& Dir::operator+=( const Dir& rDir )
     }
     return *this;
 }
-
-/*************************************************************************
-|*
-|*    Dir::Count()
-|*
-*************************************************************************/
-
 
 size_t Dir::Count( sal_Bool bUpdated ) const
 {

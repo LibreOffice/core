@@ -17,10 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
+
 #include <tools/debug.hxx>
 #include <tools/stream.hxx>
 #include <tools/resmgr.hxx>
@@ -56,6 +56,7 @@ using namespace osl;
 
 // for thread safety
 static osl::Mutex* pResMgrMutex = NULL;
+
 static osl::Mutex& getResMgrMutex()
 {
     if( !pResMgrMutex )
@@ -68,6 +69,7 @@ static osl::Mutex& getResMgrMutex()
 }
 
 struct ImpContent;
+
 class InternalResMgr
 {
     friend class ResMgr;
@@ -100,8 +102,6 @@ class InternalResMgr
 public:
     static void                 FreeGlobalRes( void *, void * );
 };
-
-// =======================================================================
 
 class ResMgrContainer
 {
@@ -466,8 +466,6 @@ void ResMgrContainer::freeResMgr( InternalResMgr* pResMgr )
     }
 }
 
-// =======================================================================
-
 void Resource::TestRes()
 {
     if( m_pResMgr )
@@ -508,8 +506,6 @@ InternalResMgr::InternalResMgr( const OUString& rFileURL,
 {
 }
 
-// -----------------------------------------------------------------------
-
 InternalResMgr::~InternalResMgr()
 {
     rtl_freeMemory(pContent);
@@ -545,9 +541,6 @@ InternalResMgr::~InternalResMgr()
 
     delete pResUseDump;
 }
-
-// -----------------------------------------------------------------------
-
 
 sal_Bool InternalResMgr::Create()
 {
@@ -620,7 +613,6 @@ sal_Bool InternalResMgr::Create()
     return bDone;
 }
 
-// -----------------------------------------------------------------------
 
 sal_Bool InternalResMgr::IsGlobalAvailable( RESOURCE_TYPE nRT, sal_uInt32 nId ) const
 {
@@ -634,7 +626,6 @@ sal_Bool InternalResMgr::IsGlobalAvailable( RESOURCE_TYPE nRT, sal_uInt32 nId ) 
     return (pFind != (pContent + nEntries)) && (pFind->nTypeAndId == aValue.nTypeAndId);
 }
 
-// -----------------------------------------------------------------------
 
 void* InternalResMgr::LoadGlobalRes( RESOURCE_TYPE nRT, sal_uInt32 nId,
                                      void **pResHandle )
@@ -697,16 +688,12 @@ void* InternalResMgr::LoadGlobalRes( RESOURCE_TYPE nRT, sal_uInt32 nId,
     return NULL;
 }
 
-// -----------------------------------------------------------------------
-
 void InternalResMgr::FreeGlobalRes( void * pResHandle, void * pResource )
 {
     if ( !pResHandle )
         // REsource wurde extra allokiert
         rtl_freeMemory(pResource);
 }
-
-// =======================================================================
 
 #ifdef DBG_UTIL
 
@@ -738,8 +725,6 @@ UniString GetTypeRes_Impl( const ResId& rTypeId )
 
     return aTypStr;
 }
-
-// -----------------------------------------------------------------------
 
 void ResMgr::RscError_Impl( const sal_Char* pMessage, ResMgr* pResMgr,
                             RESOURCE_TYPE nRT, sal_uInt32 nId,
@@ -789,8 +774,6 @@ void ResMgr::RscError_Impl( const sal_Char* pMessage, ResMgr* pResMgr,
 
 #endif
 
-// =======================================================================
-
 static void RscException_Impl()
 {
     switch ( osl_raiseSignal( OSL_SIGNAL_USER_RESOURCEFAILURE, (void*)"" ) )
@@ -810,8 +793,6 @@ static void RscException_Impl()
     }
 }
 
-// =======================================================================
-
 void ImpRCStack::Init( ResMgr* pMgr, const Resource* pObj, sal_uInt32 Id )
 {
     pResource       = NULL;
@@ -825,8 +806,6 @@ void ImpRCStack::Init( ResMgr* pMgr, const Resource* pObj, sal_uInt32 Id )
         Flags      |= RC_AUTORELEASE;
 }
 
-// -----------------------------------------------------------------------
-
 void ImpRCStack::Clear()
 {
     pResource       = NULL;
@@ -837,8 +816,6 @@ void ImpRCStack::Clear()
     nId             = 0;
     pResMgr         = NULL;
 }
-
-// -----------------------------------------------------------------------
 
 static RSHEADER_TYPE* LocalResource( const ImpRCStack* pStack,
                                      RESOURCE_TYPE nRTType,
@@ -866,8 +843,6 @@ static RSHEADER_TYPE* LocalResource( const ImpRCStack* pStack,
     return NULL;
 }
 
-// =======================================================================
-
 void* ResMgr::pEmptyBuffer = NULL;
 
 void* ResMgr::getEmptyBuffer()
@@ -891,8 +866,6 @@ void ResMgr::DestroyAllResMgr()
     delete pResMgrMutex;
     pResMgrMutex = NULL;
 }
-
-// -----------------------------------------------------------------------
 
 void ResMgr::Init( const OUString& rFileName )
 {
@@ -931,15 +904,11 @@ void ResMgr::Init( const OUString& rFileName )
     incStack();
 }
 
-// -----------------------------------------------------------------------
-
 ResMgr::ResMgr( InternalResMgr * pImpMgr )
 {
     pImpRes = pImpMgr;
     Init( pImpMgr->aFileName );
 }
-
-// -----------------------------------------------------------------------
 
 ResMgr::~ResMgr()
 {
@@ -956,7 +925,6 @@ ResMgr::~ResMgr()
         nCurStack--;
     }
 }
-
 
 void ResMgr::incStack()
 {
@@ -1035,7 +1003,6 @@ void ResMgr::TestStack( const Resource* )
 
 #endif
 
-// -----------------------------------------------------------------------
 sal_Bool ResMgr::IsAvailable( const ResId& rId, const Resource* pResObj ) const
 {
     osl::Guard<osl::Mutex> aGuard( getResMgrMutex() );
@@ -1074,8 +1041,6 @@ sal_Bool ResMgr::IsAvailable( const ResId& rId, const Resource* pResObj ) const
     return bAvailable;
 }
 
-// -----------------------------------------------------------------------
-
 void* ResMgr::GetClass()
 {
     osl::Guard<osl::Mutex> aGuard( getResMgrMutex() );
@@ -1085,8 +1050,6 @@ void* ResMgr::GetClass()
 
     return aStack[nCurStack].pClassRes;
 }
-
-// -----------------------------------------------------------------------
 
 sal_Bool ResMgr::GetResource( const ResId& rId, const Resource* pResObj )
 {
@@ -1190,8 +1153,6 @@ sal_Bool ResMgr::GetResource( const ResId& rId, const Resource* pResObj )
     return sal_True;
 }
 
-// -----------------------------------------------------------------------
-
 void * ResMgr::GetResourceSkipHeader( const ResId& rResId, ResMgr ** ppResMgr )
 {
     osl::Guard<osl::Mutex> aGuard( getResMgrMutex() );
@@ -1206,8 +1167,6 @@ void * ResMgr::GetResourceSkipHeader( const ResId& rResId, ResMgr ** ppResMgr )
     }
     return getEmptyBuffer();
 }
-
-// -----------------------------------------------------------------------
 
 void ResMgr::PopContext( const Resource* pResObj )
 {
@@ -1257,8 +1216,6 @@ void ResMgr::PopContext( const Resource* pResObj )
     }
 }
 
-// -----------------------------------------------------------------------
-
 RSHEADER_TYPE* ResMgr::CreateBlock( const ResId& rId )
 {
     osl::Guard<osl::Mutex> aGuard( getResMgrMutex() );
@@ -1286,15 +1243,11 @@ RSHEADER_TYPE* ResMgr::CreateBlock( const ResId& rId )
     return pHeader;
 }
 
-// ------------------------------------------------------------------
-
 sal_Int16 ResMgr::GetShort( void * pShort )
 {
     return ((*((sal_uInt8*)pShort + 0) << 8) |
             (*((sal_uInt8*)pShort + 1) << 0)   );
 }
-
-// ------------------------------------------------------------------
 
 sal_Int32 ResMgr::GetLong( void * pLong )
 {
@@ -1303,8 +1256,6 @@ sal_Int32 ResMgr::GetLong( void * pLong )
             (*((sal_uInt8*)pLong + 2) <<  8) |
             (*((sal_uInt8*)pLong + 3) <<  0)   );
 }
-
-// ------------------------------------------------------------------
 
 sal_uInt64 ResMgr::GetUInt64( void* pDatum )
 {
@@ -1318,7 +1269,6 @@ sal_uInt64 ResMgr::GetUInt64( void* pDatum )
             (sal_uInt64(*((sal_uInt8*)pDatum + 7)) <<  0)   );
 }
 
-// -----------------------------------------------------------------------
 sal_uInt32 ResMgr::GetStringWithoutHook( UniString& rStr, const sal_uInt8* pStr )
 {
     sal_uInt32 nLen=0;
@@ -1349,15 +1299,11 @@ sal_uInt32 ResMgr::GetByteString( rtl::OString& rStr, const sal_uInt8* pStr )
     return nRet;
 }
 
-// ------------------------------------------------------------------
-
 sal_uInt32 ResMgr::GetStringSize( const sal_uInt8* pStr, sal_uInt32& nLen )
 {
     nLen = static_cast< sal_uInt32 >( strlen( (const char*)pStr ) );
     return GetStringSize( nLen );
 }
-
-// -----------------------------------------------------------------------
 
 sal_uInt32 ResMgr::GetRemainSize()
 {
@@ -1371,8 +1317,6 @@ sal_uInt32 ResMgr::GetRemainSize()
                      rTop.pResource->GetLocalOff() -
                      (long)(sal_uInt8 *)rTop.pClassRes);
 }
-
-// -----------------------------------------------------------------------
 
 void* ResMgr::Increment( sal_uInt32 nSize )
 {
@@ -1467,14 +1411,9 @@ ResMgr* ResMgr::CreateFallbackResMgr( const ResId& rId, const Resource* pResourc
     return pFallback;
 }
 
-//---------------------------------------------------------------------------
-//
 // method left here for SDK compatibility,
 // used in "framework/source/services/substitutepathvars.cxx"
-//
 // phone numbers no longer in use for resource files
-//
-//---------------------------------------------------------------------------
 
 const char* ResMgr::GetLang( LanguageType& nType, sal_uInt16 nPrio )
 {
@@ -1652,8 +1591,6 @@ const char* ResMgr::GetLang( LanguageType& nType, sal_uInt16 nPrio )
         return "99";
 }
 
-// -----------------------------------------------------------------------
-
 ResMgr* ResMgr::CreateResMgr( const sal_Char* pPrefixName,
                               com::sun::star::lang::Locale aLocale )
 {
@@ -1667,8 +1604,6 @@ ResMgr* ResMgr::CreateResMgr( const sal_Char* pPrefixName,
     InternalResMgr* pImp = ResMgrContainer::get().getResMgr( aPrefix, aLocale );
     return pImp ? new ResMgr( pImp ) : NULL;
 }
-
-// -----------------------------------------------------------------------
 
 ResMgr* ResMgr::SearchCreateResMgr(
     const sal_Char* pPrefixName,
@@ -1685,8 +1620,6 @@ ResMgr* ResMgr::SearchCreateResMgr(
     return pImp ? new ResMgr( pImp ) : NULL;
 }
 
-// -----------------------------------------------------------------------
-
 sal_Int16 ResMgr::ReadShort()
 {
     osl::Guard<osl::Mutex> aGuard( getResMgrMutex() );
@@ -1699,8 +1632,6 @@ sal_Int16 ResMgr::ReadShort()
     return n;
 }
 
-// -----------------------------------------------------------------------
-
 sal_Int32 ResMgr::ReadLong()
 {
     osl::Guard<osl::Mutex> aGuard( getResMgrMutex() );
@@ -1712,8 +1643,6 @@ sal_Int32 ResMgr::ReadLong()
     Increment( sizeof( sal_Int32 ) );
     return n;
 }
-
-// -----------------------------------------------------------------------
 
 UniString ResMgr::ReadStringWithoutHook()
 {
@@ -1766,8 +1695,6 @@ rtl::OString ResMgr::ReadByteString()
 
     return aRet;
 }
-
-// -----------------------------------------------------------------------
 
 rtl::OString ResMgr::GetAutoHelpId()
 {
@@ -1866,22 +1793,16 @@ rtl::OString ResMgr::GetAutoHelpId()
     return aHID.makeStringAndClear();
 }
 
-// -----------------------------------------------------------------------
-
 void ResMgr::SetReadStringHook( ResHookProc pProc )
 {
     osl::Guard<osl::Mutex> aGuard( getResMgrMutex() );
     pImplResHookProc = pProc;
 }
 
-// -----------------------------------------------------------------------
-
 ResHookProc ResMgr::GetReadStringHook()
 {
     return pImplResHookProc;
 }
-
-// -----------------------------------------------------------------------
 
 void ResMgr::SetDefaultLocale( const com::sun::star::lang::Locale& rLocale )
 {
@@ -1889,14 +1810,10 @@ void ResMgr::SetDefaultLocale( const com::sun::star::lang::Locale& rLocale )
     ResMgrContainer::get().setDefLocale( rLocale );
 }
 
-// -----------------------------------------------------------------------
-
 const OUString& ResMgr::GetFileName() const
 {
     return pImpRes->aFileName;
 }
-
-// =======================================================================
 
 SimpleResMgr::SimpleResMgr( const sal_Char* pPrefixName,
                             const ::com::sun::star::lang::Locale& rLocale )
@@ -1912,19 +1829,16 @@ SimpleResMgr::SimpleResMgr( const sal_Char* pPrefixName,
     DBG_ASSERT( m_pResImpl, "SimpleResMgr::SimpleResMgr : have no impl class !" );
 }
 
-// -----------------------------------------------------------------------
 SimpleResMgr::~SimpleResMgr()
 {
     delete m_pResImpl;
 }
 
-// -----------------------------------------------------------------------
 SimpleResMgr* SimpleResMgr::Create( const sal_Char* pPrefixName, com::sun::star::lang::Locale aLocale )
 {
     return new SimpleResMgr( pPrefixName, aLocale );
 }
 
-// -----------------------------------------------------------------------
 bool SimpleResMgr::IsAvailable( RESOURCE_TYPE _resourceType, sal_uInt32 _resourceId )
 {
     osl::MutexGuard aGuard(m_aAccessSafety);
@@ -1936,7 +1850,6 @@ bool SimpleResMgr::IsAvailable( RESOURCE_TYPE _resourceType, sal_uInt32 _resourc
     return m_pResImpl->IsGlobalAvailable( _resourceType, _resourceId );
 }
 
-// -----------------------------------------------------------------------
 rtl::OUString SimpleResMgr::ReadString( sal_uInt32 nId )
 {
     osl::MutexGuard aGuard(m_aAccessSafety);

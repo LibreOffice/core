@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #ifdef UNX
 #include <errno.h>
 #endif
@@ -27,12 +26,6 @@
 
 #include "comdep.hxx"
 #include <tools/fsys.hxx>
-
-/*************************************************************************
-|*
-|*    FileStat::FileStat()
-|*
-*************************************************************************/
 
 FileStat::FileStat( const DirEntry& rDirEntry, FSysAccess nAccess )
 :   // don't use Default-Ctors!
@@ -67,12 +60,6 @@ FileStat::FileStat( const DirEntry& rDirEntry, FSysAccess nAccess )
         Update( rDirEntry, bFloppy );
 }
 
-/*************************************************************************
-|*
-|*    FileStat::IsKind()
-|*
-*************************************************************************/
-
 sal_Bool FileStat::IsKind( DirEntryKind nKind ) const
 {
     sal_Bool bRet = ( ( nKind == FSYS_KIND_UNKNOWN ) &&
@@ -80,12 +67,6 @@ sal_Bool FileStat::IsKind( DirEntryKind nKind ) const
                    ( ( nKindFlags & nKind ) == nKind );
     return bRet;
 }
-
-/*************************************************************************
-|*
-|*    FileStat::GetReadOnlyFlag()
-|*
-*************************************************************************/
 
 sal_Bool FileStat::GetReadOnlyFlag( const DirEntry &rEntry )
 {
@@ -105,12 +86,6 @@ sal_Bool FileStat::GetReadOnlyFlag( const DirEntry &rEntry )
     return sal_False;
 #endif
 }
-
-/*************************************************************************
-|*
-|*    FileStat::SetReadOnlyFlag()
-|*
-*************************************************************************/
 
 sal_uIntPtr FileStat::SetReadOnlyFlag( const DirEntry &rEntry, sal_Bool bRO )
 {

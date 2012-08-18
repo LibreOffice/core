@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <stdlib.h>
+
 #include <tools/color.hxx>
 #include <tools/debug.hxx>
 #include <tools/stream.hxx>
@@ -27,18 +27,10 @@
 #include <tools/resid.hxx>
 #include <tools/rc.h>
 
-// -----------
-// - Inlines -
-// -----------
-
 static inline long _FRound( double fVal )
 {
     return( fVal > 0.0 ? (long) ( fVal + 0.5 ) : -(long) ( -fVal + 0.5 ) );
 }
-
-// ---------
-// - Color -
-// ---------
 
 Color::Color( const ResId& rResId )
 {
@@ -64,6 +56,7 @@ Color::Color( const ResId& rResId )
         mnColor = RGB_COLORDATA( 0, 0, 0 );
     }
 }
+
 sal_uInt8 Color::GetColorError( const Color& rCompareColor ) const
 {
     const long nErrAbs = labs( (long) rCompareColor.GetRed() - GetRed() ) +
@@ -73,8 +66,6 @@ sal_uInt8 Color::GetColorError( const Color& rCompareColor ) const
     return (sal_uInt8) _FRound( nErrAbs * 0.3333333333 );
 }
 
-// -----------------------------------------------------------------------
-
 void Color::IncreaseLuminance( sal_uInt8 cLumInc )
 {
     SetRed( (sal_uInt8) SAL_BOUND( (long) COLORDATA_RED( mnColor ) + cLumInc, 0L, 255L ) );
@@ -82,16 +73,12 @@ void Color::IncreaseLuminance( sal_uInt8 cLumInc )
     SetBlue( (sal_uInt8) SAL_BOUND( (long) COLORDATA_BLUE( mnColor ) + cLumInc, 0L, 255L ) );
 }
 
-// -----------------------------------------------------------------------
-
 void Color::DecreaseLuminance( sal_uInt8 cLumDec )
 {
     SetRed( (sal_uInt8) SAL_BOUND( (long) COLORDATA_RED( mnColor ) - cLumDec, 0L, 255L ) );
     SetGreen( (sal_uInt8) SAL_BOUND( (long) COLORDATA_GREEN( mnColor ) - cLumDec, 0L, 255L ) );
     SetBlue( (sal_uInt8) SAL_BOUND( (long) COLORDATA_BLUE( mnColor ) - cLumDec, 0L, 255L ) );
 }
-
-// -----------------------------------------------------------------------
 
 void Color::DecreaseContrast( sal_uInt8 cContDec )
 {
@@ -106,8 +93,6 @@ void Color::DecreaseContrast( sal_uInt8 cContDec )
     }
 }
 
-// -----------------------------------------------------------------------
-
 void Color::Invert()
 {
     SetRed( ~COLORDATA_RED( mnColor ) );
@@ -115,23 +100,17 @@ void Color::Invert()
     SetBlue( ~COLORDATA_BLUE( mnColor ) );
 }
 
-// -----------------------------------------------------------------------
-
 sal_Bool Color::IsDark() const
 {
     return GetLuminance() <= 38;
 }
-
-// -----------------------------------------------------------------------
 
 sal_Bool Color::IsBright() const
 {
     return GetLuminance() >= 245;
 }
 
-// -----------------------------------------------------------------------
 // color space conversion
-// -----------------------------------------------------------------------
 
 void Color::RGBtoHSB( sal_uInt16& nHue, sal_uInt16& nSat, sal_uInt16& nBri ) const
 {
@@ -243,8 +222,6 @@ SvStream& Color::Read( SvStream& rIStm, sal_Bool bNewFormat )
     return rIStm;
 }
 
-// -----------------------------------------------------------------------
-
 SvStream& Color::Write( SvStream& rOStm, sal_Bool bNewFormat )
 {
     if ( bNewFormat )
@@ -255,11 +232,7 @@ SvStream& Color::Write( SvStream& rOStm, sal_Bool bNewFormat )
     return rOStm;
 }
 
-// -----------------------------------------------------------------------
-
 #define COL_NAME_USER       ((sal_uInt16)0x8000)
-
-// -----------------------------------------------------------------------
 
 SvStream& operator>>( SvStream& rIStream, Color& rColor )
 {
@@ -326,8 +299,6 @@ SvStream& operator>>( SvStream& rIStream, Color& rColor )
 
     return rIStream;
 }
-
-// -----------------------------------------------------------------------
 
 SvStream& operator<<( SvStream& rOStream, const Color& rColor )
 {

@@ -16,8 +16,6 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-
-
 #include <tools/tools.h>
 
 #include <string.h>
@@ -27,21 +25,15 @@
 #include <dll.hxx>
 #endif
 
-// =======================================================================
-
 void InitTools()
 {
     DBG_DEBUGSTART();
 }
 
-// -----------------------------------------------------------------------
-
 void DeInitTools()
 {
     DBG_DEBUGEND();
 }
-
-// -----------------------------------------------------------------------
 
 void GlobalDeInitTools()
 {

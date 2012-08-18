@@ -43,8 +43,6 @@
 
 #include <osl/diagnose.h>
 
-// =======================================================================
-
 #ifdef DBG_UTIL
 
 // --- PointerList ---
@@ -156,24 +154,17 @@ struct DebugData
 #define DBG_TEST_XTOR_EXTRA (DBG_TEST_XTOR_THIS |  DBG_TEST_XTOR_FUNC |               \
                              DBG_TEST_XTOR_EXIT |  DBG_TEST_XTOR_REPORT )
 
-// ------------------------------
-// - static maintenance variables -
-// ------------------------------
+// static maintenance variables
 
 static DebugData aDebugData;
-
 static sal_Char aCurPath[260];
-
 static int bDbgImplInMain = sal_False;
-
-// =======================================================================
 
 #if defined( WNT )
 static CRITICAL_SECTION aImplCritDbgSection;
 #endif
-static sal_Bool             bImplCritDbgSectionInit = sal_False;
 
-// -----------------------------------------------------------------------
+static sal_Bool             bImplCritDbgSectionInit = sal_False;
 
 void ImplDbgInitLock()
 {
@@ -183,8 +174,6 @@ void ImplDbgInitLock()
     bImplCritDbgSectionInit = sal_True;
 }
 
-// -----------------------------------------------------------------------
-
 void ImplDbgDeInitLock()
 {
 #if defined( WNT )
@@ -192,8 +181,6 @@ void ImplDbgDeInitLock()
 #endif
     bImplCritDbgSectionInit = sal_False;
 }
-
-// -----------------------------------------------------------------------
 
 void ImplDbgLock()
 {
@@ -205,8 +192,6 @@ void ImplDbgLock()
 #endif
 }
 
-// -----------------------------------------------------------------------
-
 void ImplDbgUnlock()
 {
     if ( !bImplCritDbgSectionInit )
@@ -217,11 +202,7 @@ void ImplDbgUnlock()
 #endif
 }
 
-// =======================================================================
-
 #define FILE_LINEEND    "\n"
-
-// =======================================================================
 
 static sal_Bool ImplActivateDebugger( const sal_Char* pMsg )
 {
@@ -238,8 +219,6 @@ static sal_Bool ImplActivateDebugger( const sal_Char* pMsg )
 #endif
 }
 
-// -----------------------------------------------------------------------
-
 static sal_Bool ImplCoreDump()
 {
 #if defined( WNT )
@@ -250,8 +229,6 @@ static sal_Bool ImplCoreDump()
 #endif
     return sal_True;
 }
-
-// =======================================================================
 
 static sal_uIntPtr ImplGetPerfTime()
 {
@@ -275,16 +252,12 @@ static sal_uIntPtr ImplGetPerfTime()
 #endif
 }
 
-// -----------------------------------------------------------------------
-
 typedef FILE*       FILETYPE;
 #define FileOpen    fopen
 #define FileRead    fread
 #define FileWrite   fwrite
 #define FilePrintF  fprintf
 #define FileClose   fclose
-
-// =======================================================================
 
 namespace
 {
@@ -364,6 +337,7 @@ namespace
         };
         lcl_writeConfigString( _pFile, _pKeyName, names[ _nValue ] );
     }
+
     bool lcl_isConfigSection( const sal_Char* _pLine, size_t _nLineLen )
     {
         if ( _nLineLen < 2 )
@@ -373,6 +347,7 @@ namespace
             return true;
         return false;
     }
+
     bool lcl_isConfigKey( const sal_Char* _pLine, size_t _nLineLen, const sal_Char* _pKeyName )
     {
         size_t nKeyLength = strlen( _pKeyName );
@@ -383,6 +358,7 @@ namespace
             return true;
         return false;
     }
+
     sal_Int32 lcl_tryReadConfigString( const sal_Char* _pLine, size_t _nLineLen, const sal_Char* _pKeyName, sal_Char* _pValue, size_t _nValueLen )
     {
         if ( !lcl_isConfigKey( _pLine, _nLineLen, _pKeyName ) )
@@ -394,6 +370,7 @@ namespace
         _pValue[ ( _nValueLen > nValueLen ) ? nValueLen : _nValueLen - 1 ] = 0;
         return strlen( _pValue );
     }
+
     void lcl_tryReadConfigBoolean( const sal_Char* _pLine, size_t _nLineLen, const sal_Char* _pKeyName, sal_uIntPtr* _out_pnValue )
     {
         sal_Char aBuf[2];
@@ -401,6 +378,7 @@ namespace
         if ( nValueLen )
             *_out_pnValue = strcmp( aBuf, "1" ) == 0 ? sal_True : sal_False;
     }
+
     void lcl_matchOutputChannel( sal_Char const * i_buffer, sal_uIntPtr* o_value )
     {
         if ( i_buffer == NULL )
@@ -418,6 +396,7 @@ namespace
             }
         }
     }
+
     void lcl_tryReadOutputChannel( const sal_Char* _pLine, size_t _nLineLen, const sal_Char* _pKeyName, sal_uIntPtr* _out_pnValue )
     {
         sal_Char aBuf[20];
@@ -425,6 +404,7 @@ namespace
         if ( nValueLen )
             lcl_matchOutputChannel( aBuf, _out_pnValue );
     }
+
     void lcl_tryReadConfigFlag( const sal_Char* _pLine, size_t _nLineLen, const sal_Char* _pKeyName, sal_uIntPtr* _out_pnAllFlags, sal_uIntPtr _nCheckFlag )
     {
         sal_Char aBuf[2];
@@ -439,8 +419,6 @@ namespace
     }
 }
 
-// =======================================================================
-
 PointerList::~PointerList()
 {
     PBlock* pBlock = pFirst;
@@ -451,8 +429,6 @@ PointerList::~PointerList()
         pBlock = pNextBlock;
     }
 }
-
-// -----------------------------------------------------------------------
 
 void PointerList::Add( const void* p )
 {
@@ -489,8 +465,6 @@ void PointerList::Add( const void* p )
     pBlock->nCount++;
     nCount++;
 }
-
-// -----------------------------------------------------------------------
 
 sal_Bool PointerList::Remove( const void* p )
 {
@@ -533,8 +507,6 @@ sal_Bool PointerList::Remove( const void* p )
     return sal_False;
 }
 
-// -----------------------------------------------------------------------
-
 const void* PointerList::Get( sal_uIntPtr nPos ) const
 {
     if ( nCount <= nPos )
@@ -563,8 +535,6 @@ const void* PointerList::Get( sal_uIntPtr nPos ) const
     return NULL;
 }
 
-// -----------------------------------------------------------------------
-
 sal_Bool PointerList::IsIn( const void* p ) const
 {
     if ( !p )
@@ -587,9 +557,6 @@ sal_Bool PointerList::IsIn( const void* p ) const
     return sal_False;
 }
 
-
-// =======================================================================
-
 static void DbgGetDbgFileName( sal_Char* pStr, sal_Int32 nMaxLen )
 {
 #if defined( UNX )
@@ -609,8 +576,6 @@ static void DbgGetDbgFileName( sal_Char* pStr, sal_Int32 nMaxLen )
     pStr[ nMaxLen - 1 ] = 0;
 }
 
-// -----------------------------------------------------------------------
-
 static void DbgGetLogFileName( sal_Char* pStr )
 {
 #if defined( UNX )
@@ -628,8 +593,6 @@ static void DbgGetLogFileName( sal_Char* pStr )
     strcpy( pStr, "dbgsv.log" );
 #endif
 }
-
-// -----------------------------------------------------------------------
 
 static DebugData* GetDebugData()
 {
@@ -728,8 +691,6 @@ static DebugData* GetDebugData()
     return &aDebugData;
 }
 
-// -----------------------------------------------------------------------
-
 inline DebugData* ImplGetDebugData()
 {
     if ( !aDebugData.bInit )
@@ -737,8 +698,6 @@ inline DebugData* ImplGetDebugData()
     else
         return &aDebugData;
 }
-
-// -----------------------------------------------------------------------
 
 static FILETYPE ImplDbgInitFile()
 {
@@ -799,8 +758,6 @@ static FILETYPE ImplDbgInitFile()
     return pDebugFile;
 }
 
-// -----------------------------------------------------------------------
-
 static void ImplDbgPrintFile( const sal_Char* pLine )
 {
     FILETYPE pDebugFile = ImplDbgInitFile();
@@ -811,8 +768,6 @@ static void ImplDbgPrintFile( const sal_Char* pLine )
         FileClose( pDebugFile );
     }
 }
-
-// -----------------------------------------------------------------------
 
 static int ImplStrSearch( const sal_Char* pSearchStr, int nSearchLen,
                           const sal_Char* pStr, int nLen )
@@ -827,8 +782,6 @@ static int ImplStrSearch( const sal_Char* pSearchStr, int nSearchLen,
 
     return 0;
 }
-
-// -----------------------------------------------------------------------
 
 static int ImplDbgFilter( const sal_Char* pFilter, const sal_Char* pMsg,
                           int bEmpty )
@@ -860,15 +813,11 @@ static int ImplDbgFilter( const sal_Char* pFilter, const sal_Char* pMsg,
         return sal_False;
 }
 
-// -----------------------------------------------------------------------
-
 extern "C"
 void SAL_CALL dbg_printOslDebugMessage( const sal_Char * pszFileName, sal_Int32 nLine, const sal_Char * pszMessage )
 {
     DbgOut( pszMessage ? pszMessage : "assertion failed!", DBG_OUT_ERROR, pszFileName, (sal_uInt16)nLine );
 }
-
-// -----------------------------------------------------------------------
 
 static void DebugInit()
 {
@@ -882,8 +831,6 @@ static void DebugInit()
         pData->bOslIsHooked = true;
     }
 }
-
-// -----------------------------------------------------------------------
 
 static void DebugDeInit()
 {
@@ -957,8 +904,6 @@ static void DebugDeInit()
     ImplDbgDeInitLock();
 }
 
-// -----------------------------------------------------------------------
-
 static void DebugGlobalDeInit()
 {
     DebugData*  pData = GetDebugData();
@@ -1008,8 +953,6 @@ static void DebugGlobalDeInit()
     pData->aDbgData.nTestFlags &= ~DBG_TEST_PROFILING;
 }
 
-// -----------------------------------------------------------------------
-
 void ImpDbgOutfBuf( sal_Char* pBuf, const sal_Char* pFStr, ... )
 {
     va_list pList;
@@ -1022,8 +965,6 @@ void ImpDbgOutfBuf( sal_Char* pBuf, const sal_Char* pFStr, ... )
     strcat( pBuf, aBuf );
     strcat( pBuf, "\n" );
 }
-
-// -----------------------------------------------------------------------
 
 static void DebugXTorInfo( sal_Char* pBuf )
 {
@@ -1057,7 +998,6 @@ static void DebugXTorInfo( sal_Char* pBuf )
     }
 }
 
-// -----------------------------------------------------------------------
 sal_Bool ImplDbgFilterMessage( const sal_Char* pMsg )
 {
     DebugData*  pData = GetDebugData();
@@ -1067,8 +1007,6 @@ sal_Bool ImplDbgFilterMessage( const sal_Char* pMsg )
         return sal_True;
     return sal_False;
 }
-
-// -----------------------------------------------------------------------
 
 void* DbgFunc( sal_uInt16 nAction, void* pParam )
 {
@@ -1206,16 +1144,12 @@ void* DbgFunc( sal_uInt16 nAction, void* pParam )
     }
 }
 
-// -----------------------------------------------------------------------
-
 DbgChannelId DbgRegisterUserChannel( DbgPrintLine pProc )
 {
     DebugData* pData = ImplGetDebugData();
     pData->aDbgPrintUserChannels.push_back( pProc );
     return (DbgChannelId)( pData->aDbgPrintUserChannels.size() - 1 + DBG_OUT_USER_CHANNEL_0 );
 }
-
-// -----------------------------------------------------------------------
 
 void DbgProf( sal_uInt16 nAction, DbgDataType* pDbgData )
 {
@@ -1306,8 +1240,6 @@ void DbgProf( sal_uInt16 nAction, DbgDataType* pDbgData )
             break;
     }
 }
-
-// -----------------------------------------------------------------------
 
 void DbgXtor( DbgDataType* pDbgData, sal_uInt16 nAction, const void* pThis,
               DbgUsr fDbgUsr )
@@ -1461,8 +1393,6 @@ void DbgXtor( DbgDataType* pDbgData, sal_uInt16 nAction, const void* pThis,
          ? "Leave Dtor from class "
          : "Leave method from class ") << pDbgData->pName);
 }
-
-// -----------------------------------------------------------------------
 
 void DbgOut( const sal_Char* pMsg, sal_uInt16 nDbgOut, const sal_Char* pFile, sal_uInt16 nLine )
 {
@@ -1619,8 +1549,6 @@ void DbgPrintShell(char const * message) {
 #endif
 }
 
-// -----------------------------------------------------------------------
-
 void DbgOutTypef( sal_uInt16 nDbgOut, const sal_Char* pFStr, ... )
 {
     va_list pList;
@@ -1633,8 +1561,6 @@ void DbgOutTypef( sal_uInt16 nDbgOut, const sal_Char* pFStr, ... )
     DbgOut( aBuf, nDbgOut );
 }
 
-// -----------------------------------------------------------------------
-
 void DbgOutf( const sal_Char* pFStr, ... )
 {
     va_list pList;
@@ -1646,8 +1572,6 @@ void DbgOutf( const sal_Char* pFStr, ... )
 
     DbgOut( aBuf );
 }
-
-// =======================================================================
 
 #else
 

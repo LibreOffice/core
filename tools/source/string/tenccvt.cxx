@@ -20,8 +20,6 @@
 #include <rtl/tencinfo.h>
 #include <tools/tenccvt.hxx>
 
-// =======================================================================
-
 rtl_TextEncoding GetExtendedCompatibilityTextEncoding( rtl_TextEncoding eEncoding )
 {
     // Latin1
@@ -33,8 +31,6 @@ rtl_TextEncoding GetExtendedCompatibilityTextEncoding( rtl_TextEncoding eEncodin
     else
         return eEncoding;
 }
-
-// -----------------------------------------------------------------------
 
 rtl_TextEncoding GetExtendedTextEncoding( rtl_TextEncoding eEncoding )
 {
@@ -55,8 +51,6 @@ rtl_TextEncoding GetExtendedTextEncoding( rtl_TextEncoding eEncoding )
         return GetExtendedCompatibilityTextEncoding( eEncoding );
 }
 
-// -----------------------------------------------------------------------
-
 rtl_TextEncoding GetOneByteTextEncoding( rtl_TextEncoding eEncoding )
 {
     rtl_TextEncodingInfo aTextEncInfo;
@@ -72,14 +66,10 @@ rtl_TextEncoding GetOneByteTextEncoding( rtl_TextEncoding eEncoding )
         return RTL_TEXTENCODING_MS_1252;
 }
 
-// -----------------------------------------------------------------------
-
 rtl_TextEncoding GetSOLoadTextEncoding( rtl_TextEncoding eEncoding )
 {
     return GetExtendedCompatibilityTextEncoding( GetOneByteTextEncoding( eEncoding ) );
 }
-
-// -----------------------------------------------------------------------
 
 rtl_TextEncoding GetSOStoreTextEncoding( rtl_TextEncoding eEncoding )
 {

@@ -34,12 +34,7 @@ inline sal_Bool SAL_CALL ascii_isWhitespace( sal_Unicode ch )
 
 #define CONSTASCII_STRINGPARAM(a) (a), RTL_TEXTENCODING_ASCII_US
 
-/*=======================================================================
- *
- * INetMessageEncodeQPStream Interface.
- * (Quoted-Printable Encoding)
- *
- *=====================================================================*/
+/** Quoted-Printable Encoding */
 class INetMessageEncodeQPStream_Impl : public INetMessageIStream
 {
     SvStream               *pMsgStrm;
@@ -64,12 +59,7 @@ public:
     virtual ~INetMessageEncodeQPStream_Impl (void);
 };
 
-/*=====================================================================
- *
- * INetMessageDecodeQPStream Interface.
- * (Quoted-Printable Decoding)
- *
- *====================================================================*/
+/** Quoted-Printable Decoding */
 class INetMessageDecodeQPStream_Impl : public INetMessageOStream
 {
     INetMessageStreamState  eState;
@@ -85,12 +75,7 @@ public:
     virtual ~INetMessageDecodeQPStream_Impl (void);
 };
 
-/*======================================================================
- *
- * INetMessageEncode64Stream Interface.
- * (Base64 Encoding)
- *
- *====================================================================*/
+/** Base64 Encoding */
 class INetMessageEncode64Stream_Impl : public INetMessageIStream
 {
     SvStream  *pMsgStrm;
@@ -114,12 +99,7 @@ public:
     virtual ~INetMessageEncode64Stream_Impl (void);
 };
 
-/*======================================================================
- *
- * INetMessageDecode64Stream Interface.
- * (Base64 Decoding)
- *
- *====================================================================*/
+/** Base64 Decoding */
 class INetMessageDecode64Stream_Impl : public INetMessageOStream
 {
     INetMessageStreamState  eState;
@@ -136,68 +116,38 @@ public:
     virtual ~INetMessageDecode64Stream_Impl (void);
 };
 
-/*=========================================================================
- *
- * INetIStream Implementation.
- *
- *=======================================================================*/
-/*
- * INetIStream.
- */
+// INetIStream
+
 INetIStream::INetIStream ()
 {
 }
 
-/*
- * ~INetIStream.
- */
 INetIStream::~INetIStream (void)
 {
 }
 
-/*
- * Read.
- */
 int INetIStream::Read (sal_Char *pData, sal_uIntPtr nSize)
 {
     return GetData (pData, nSize);
 }
 
-/*=========================================================================
- *
- * INetOStream Implementation.
- *
- *=======================================================================*/
-/*
- * INetOStream.
- */
+// INetOStream
+
 INetOStream::INetOStream ()
 {
 }
 
-/*
- * ~INetOStream.
- */
 INetOStream::~INetOStream (void)
 {
 }
 
-/*
- * Write.
- */
 int INetOStream::Write (const sal_Char *pData, sal_uIntPtr nSize)
 {
     return PutData (pData, nSize);
 }
 
-/*=========================================================================
- *
- * INetMessageIStream Implementation.
- *
- *=======================================================================*/
-/*
- * INetMessageIStream.
- */
+// INetMessageIStream
+
 INetMessageIStream::INetMessageIStream (sal_uIntPtr nBufferSize)
     : pSourceMsg       (NULL),
       bHeaderGenerated (sal_False),
@@ -210,9 +160,6 @@ INetMessageIStream::INetMessageIStream (sal_uIntPtr nBufferSize)
     pRead = pWrite = pBuffer;
 }
 
-/*
- * ~INetMessageIStream.
- */
 INetMessageIStream::~INetMessageIStream (void)
 {
     delete [] pBuffer;
@@ -220,9 +167,6 @@ INetMessageIStream::~INetMessageIStream (void)
     delete pMsgStrm;
 }
 
-/*
- * GetData.
- */
 int INetMessageIStream::GetData (sal_Char *pData, sal_uIntPtr nSize)
 {
     if (pSourceMsg == NULL) return INETSTREAM_STATUS_ERROR;
@@ -273,9 +217,6 @@ int INetMessageIStream::GetData (sal_Char *pData, sal_uIntPtr nSize)
     return (pWBuf - pData);
 }
 
-/*
- * GetMsgLine.
- */
 int INetMessageIStream::GetMsgLine (sal_Char *pData, sal_uIntPtr nSize)
 {
     if (pSourceMsg == NULL) return INETSTREAM_STATUS_ERROR;
@@ -335,14 +276,8 @@ int INetMessageIStream::GetMsgLine (sal_Char *pData, sal_uIntPtr nSize)
     return (pWBuf - pData);
 }
 
-/*=========================================================================
- *
- * INetMessageOStream Implementation.
- *
- *=======================================================================*/
-/*
- * INetMessageOStream.
- */
+// INetMessageOStream
+
 INetMessageOStream::INetMessageOStream (void)
     : pTargetMsg    (NULL),
       bHeaderParsed (sal_False),
@@ -351,9 +286,6 @@ INetMessageOStream::INetMessageOStream (void)
 {
 }
 
-/*
- * ~INetMessageOStream.
- */
 INetMessageOStream::~INetMessageOStream (void)
 {
     if (pMsgBuffer->Tell() > 0)
@@ -372,10 +304,7 @@ INetMessageOStream::~INetMessageOStream (void)
     }
 }
 
-/*
- * PutData.
- * (Simple Field Parsing (RFC822, Appendix B)).
- */
+/// Simple Field Parsing (RFC822, Appendix B)
 int INetMessageOStream::PutData (const sal_Char *pData, sal_uIntPtr nSize)
 {
     if (pTargetMsg == NULL) return INETSTREAM_STATUS_ERROR;
@@ -480,9 +409,6 @@ int INetMessageOStream::PutData (const sal_Char *pData, sal_uIntPtr nSize)
     return INETSTREAM_STATUS_OK;
 }
 
-/*
- * PutMsgLine.
- */
 int INetMessageOStream::PutMsgLine (const sal_Char *pData, sal_uIntPtr nSize)
 {
     // Check for message container.
@@ -523,33 +449,20 @@ int INetMessageOStream::PutMsgLine (const sal_Char *pData, sal_uIntPtr nSize)
     return INETSTREAM_STATUS_OK;
 }
 
-/*=========================================================================
- *
- * INetMessageIOStream Implementation.
- *
- *=======================================================================*/
-/*
- * INetMessageIOStream.
- */
+// INetMessageIOStream
+
 INetMessageIOStream::INetMessageIOStream (sal_uIntPtr nBufferSize)
     : INetMessageIStream (nBufferSize),
       INetMessageOStream ()
 {
 }
 
-/*
- * ~INetMessageIOStream.
- */
 INetMessageIOStream::~INetMessageIOStream (void)
 {
 }
 
-/*=======================================================================
- *
- * INetMessageEncodeQPStream_Impl Implementation.
- * (Quoted-Printable Encoding)
- *
- *=====================================================================*/
+// INetMessageEncodeQPStream_Impl
+
 static const sal_Char hex2pr[16] = {
     '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
     'A', 'B', 'C', 'D', 'E', 'F'
@@ -559,9 +472,6 @@ static const sal_Char ebcdic[] = {
     '!', '"', '#', '$', '@', '[', '\\', ']', '^', '`', '{', '|', '}', '~'
 };
 
-/*
- * INetMessageEncodeQPStream_Impl.
- */
 INetMessageEncodeQPStream_Impl::INetMessageEncodeQPStream_Impl (
     sal_uIntPtr nMsgBufferSize)
     : INetMessageIStream (),
@@ -580,9 +490,6 @@ INetMessageEncodeQPStream_Impl::INetMessageEncodeQPStream_Impl (
     pTokRead = pTokWrite = pTokBuffer;
 }
 
-/*
- * ~INetMessageEncodeQPStream_Impl.
- */
 INetMessageEncodeQPStream_Impl::~INetMessageEncodeQPStream_Impl (void)
 {
     delete pMsgStrm;
@@ -590,9 +497,6 @@ INetMessageEncodeQPStream_Impl::~INetMessageEncodeQPStream_Impl (void)
     delete [] pTokBuffer;
 }
 
-/*
- * GetMsgLine.
- */
 int INetMessageEncodeQPStream_Impl::GetMsgLine (sal_Char *pData, sal_uIntPtr nSize)
 {
     INetMessage *pMsg = GetSourceMessage ();
@@ -762,12 +666,8 @@ int INetMessageEncodeQPStream_Impl::GetMsgLine (sal_Char *pData, sal_uIntPtr nSi
     return (pWBuf - pData);
 }
 
-/*=====================================================================
- *
- * INetMessageDecodeQPStream_Impl Implementation.
- * (Quoted-Printable Decoding)
- *
- *====================================================================*/
+// INetMessageDecodeQPStream_Impl
+
 static const sal_uInt8 pr2hex[128] = {
     0x10, 0x10, 0x10, 0x10, 0x10, 0x10, 0x10, 0x10,
     0x10, 0x10, 0x10, 0x10, 0x10, 0x10, 0x10, 0x10,
@@ -790,9 +690,6 @@ static const sal_uInt8 pr2hex[128] = {
     0x10, 0x10, 0x10, 0x10, 0x10, 0x10, 0x10, 0x10
 };
 
-/*
- * INetMessageDecodeQPStream_Impl.
- */
 INetMessageDecodeQPStream_Impl::INetMessageDecodeQPStream_Impl (void)
     : INetMessageOStream (),
       eState     (INETMSG_EOL_BEGIN),
@@ -802,17 +699,11 @@ INetMessageDecodeQPStream_Impl::INetMessageDecodeQPStream_Impl (void)
     ParseHeader (sal_False);
 }
 
-/*
- * ~INetMessageDecodeQPStream_Impl.
- */
 INetMessageDecodeQPStream_Impl::~INetMessageDecodeQPStream_Impl (void)
 {
     delete pMsgBuffer;
 }
 
-/*
- * PutMsgLine.
- */
 int INetMessageDecodeQPStream_Impl::PutMsgLine (
     const sal_Char *pData, sal_uIntPtr nSize)
 {
@@ -895,12 +786,8 @@ int INetMessageDecodeQPStream_Impl::PutMsgLine (
     return INETSTREAM_STATUS_OK;
 }
 
-/*======================================================================
- *
- * INetMessageEncode64Stream_Impl Implementation.
- * (Base64 Encoding)
- *
- *====================================================================*/
+// INetMessageEncode64Stream_Impl
+
 static const sal_Char six2pr[64] = {
     'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
     'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
@@ -909,9 +796,6 @@ static const sal_Char six2pr[64] = {
     '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '+', '/'
 };
 
-/*
- * INetMessageEncode64Stream_Impl.
- */
 INetMessageEncode64Stream_Impl::INetMessageEncode64Stream_Impl (
     sal_uIntPtr nMsgBufferSize)
     : INetMessageIStream (),
@@ -929,9 +813,6 @@ INetMessageEncode64Stream_Impl::INetMessageEncode64Stream_Impl (
     pTokRead = pTokWrite = pTokBuffer;
 }
 
-/*
- * ~INetMessageEncode64Stream_Impl.
- */
 INetMessageEncode64Stream_Impl::~INetMessageEncode64Stream_Impl (void)
 {
     delete pMsgStrm;
@@ -939,9 +820,6 @@ INetMessageEncode64Stream_Impl::~INetMessageEncode64Stream_Impl (void)
     delete [] pTokBuffer;
 }
 
-/*
- * GetMsgLine.
- */
 int INetMessageEncode64Stream_Impl::GetMsgLine (sal_Char *pData, sal_uIntPtr nSize)
 {
     INetMessage *pMsg = GetSourceMessage ();
@@ -1069,12 +947,8 @@ int INetMessageEncode64Stream_Impl::GetMsgLine (sal_Char *pData, sal_uIntPtr nSi
     return (pWBuf - pData);
 }
 
-/*======================================================================
- *
- * INetMessageDecode64Stream_Impl Implementation.
- * (Base64 Decoding)
- *
- *====================================================================*/
+// INetMessageDecode64Stream_Impl
+
 static const sal_uInt8 pr2six[256] = {
     0x40, 0x40, 0x40, 0x40, 0x40, 0x40, 0x40, 0x40,
     0x40, 0x40, 0x40, 0x40, 0x40, 0x40, 0x40, 0x40,
@@ -1117,9 +991,6 @@ static const sal_uInt8 pr2six[256] = {
     0x40, 0x40, 0x40, 0x40, 0x40, 0x40, 0x40, 0x40
 };
 
-/*
- * INetMessageDecode64Stream_Impl.
- */
 INetMessageDecode64Stream_Impl::INetMessageDecode64Stream_Impl (
     sal_uIntPtr nMsgBufferSize)
     : INetMessageOStream (),
@@ -1132,17 +1003,11 @@ INetMessageDecode64Stream_Impl::INetMessageDecode64Stream_Impl (
     pMsgRead = pMsgWrite = pMsgBuffer;
 }
 
-/*
- * ~INetMessageDecode64Stream_Impl.
- */
 INetMessageDecode64Stream_Impl::~INetMessageDecode64Stream_Impl (void)
 {
     delete [] pMsgBuffer;
 }
 
-/*
- * PutMsgLine.
- */
 int INetMessageDecode64Stream_Impl::PutMsgLine (
     const sal_Char *pData, sal_uIntPtr nSize)
 {
@@ -1239,14 +1104,8 @@ int INetMessageDecode64Stream_Impl::PutMsgLine (
     return INETSTREAM_STATUS_OK;
 }
 
-/*=========================================================================
- *
- * INetMIMEMessageStream Implementation.
- *
- *=======================================================================*/
-/*
- * INetMIMEMessageStream.
- */
+// INetMIMEMessageStream
+
 INetMIMEMessageStream::INetMIMEMessageStream (sal_uIntPtr nBufferSize)
     : INetMessageIOStream (nBufferSize),
       eState      (INETMSG_EOL_BEGIN),
@@ -1259,9 +1118,6 @@ INetMIMEMessageStream::INetMIMEMessageStream (sal_uIntPtr nBufferSize)
 {
 }
 
-/*
- * ~INetMIMEMessageStream.
- */
 INetMIMEMessageStream::~INetMIMEMessageStream (void)
 {
     delete pChildStrm;
@@ -1270,9 +1126,6 @@ INetMIMEMessageStream::~INetMIMEMessageStream (void)
     delete pMsgBuffer;
 }
 
-/*
- * GetMsgEncoding.
- */
 INetMessageEncoding
 INetMIMEMessageStream::GetMsgEncoding (const String& rContentType)
 {
@@ -1305,10 +1158,7 @@ INetMIMEMessageStream::GetMsgEncoding (const String& rContentType)
     return INETMSG_ENCODING_BASE64;
 }
 
-/*
- * GetMsgLine.
- * (Message Generator).
- */
+/// Message Generator
 int INetMIMEMessageStream::GetMsgLine (sal_Char *pData, sal_uIntPtr nSize)
 {
     // Check for message container.
@@ -1540,10 +1390,7 @@ int INetMIMEMessageStream::GetMsgLine (sal_Char *pData, sal_uIntPtr nSize)
     }
 }
 
-/*
- * PutMsgLine.
- * (Message Parser).
- */
+/// Message Parser
 int INetMIMEMessageStream::PutMsgLine (const sal_Char *pData, sal_uIntPtr nSize)
 {
     // Check for message container.
@@ -1766,7 +1613,5 @@ int INetMIMEMessageStream::PutMsgLine (const sal_Char *pData, sal_uIntPtr nSize)
         }
     }
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

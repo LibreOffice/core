@@ -26,9 +26,8 @@
 #include <rtl/instance.hxx>
 #include <rtl/strbuf.hxx>
 #include <comphelper/string.hxx>
-#include <stdio.h>
 
-//=======================================================================
+#include <stdio.h>
 
 inline sal_Bool ascii_isDigit( sal_Unicode ch )
 {
@@ -48,24 +47,13 @@ inline sal_Unicode ascii_toLowerCase( sal_Unicode ch )
         return ch;
 }
 
-/*=======================================================================
- *
- * INetMessage Implementation.
- *
- *=====================================================================*/
 #define CONSTASCII_STRINGPARAM(a) (a), RTL_TEXTENCODING_ASCII_US
 
-/*
- * ~INetMessage.
- */
 INetMessage::~INetMessage()
 {
     ListCleanup_Impl();
 }
 
-/*
- * ListCleanup_Impl.
- */
 void INetMessage::ListCleanup_Impl()
 {
     // Cleanup.
@@ -75,9 +63,6 @@ void INetMessage::ListCleanup_Impl()
     m_aHeaderList.clear();
 }
 
-/*
- * ListCopy.
- */
 void INetMessage::ListCopy (const INetMessage &rMsg)
 {
     if (!(this == &rMsg))
@@ -95,9 +80,6 @@ void INetMessage::ListCopy (const INetMessage &rMsg)
     }
 }
 
-/*
- * SetHeaderField_Impl.
- */
 void INetMessage::SetHeaderField_Impl (
     INetMIME::HeaderFieldType  eType,
     const rtl::OString        &rName,
@@ -111,9 +93,6 @@ void INetMessage::SetHeaderField_Impl (
         INetMessageHeader (rName, aSink.takeBuffer()), rnIndex);
 }
 
-/*
- * SetHeaderField.
- */
 sal_uIntPtr INetMessage::SetHeaderField (
     const INetMessageHeader &rHeader, sal_uIntPtr nIndex)
 {
@@ -122,10 +101,6 @@ sal_uIntPtr INetMessage::SetHeaderField (
     return nResult;
 }
 
-
-/*
- * operator<<
- */
 SvStream& INetMessage::operator<< (SvStream& rStrm) const
 {
     rStrm << static_cast<sal_uInt32>(m_nDocSize);
@@ -140,9 +115,6 @@ SvStream& INetMessage::operator<< (SvStream& rStrm) const
     return rStrm;
 }
 
-/*
- * operator>>
- */
 SvStream& INetMessage::operator>> (SvStream& rStrm)
 {
     // Cleanup.
@@ -172,14 +144,6 @@ SvStream& INetMessage::operator>> (SvStream& rStrm)
     return rStrm;
 }
 
-/*=======================================================================
- *
- * INetRFC822Message Implementation.
- *
- *=====================================================================*/
-/*
- * ImplINetRFC822MessageHeaderData.
- */
 namespace
 {
     struct ImplINetRFC822MessageHeaderDataImpl
@@ -215,9 +179,6 @@ namespace
 
 #define HDR(n) ImplINetRFC822MessageHeaderData::get()[(n)]
 
-/*
- * _ImplINetRFC822MessageHeaderState.
- */
 enum _ImplINetRFC822MessageHeaderState
 {
     INETMSG_RFC822_BEGIN,
@@ -232,9 +193,6 @@ enum _ImplINetRFC822MessageHeaderState
     INETMSG_RFC822_LETTER_S
 };
 
-/*
- * INetRFC822Message.
- */
 INetRFC822Message::INetRFC822Message()
     : INetMessage()
 {
@@ -249,9 +207,6 @@ INetRFC822Message::INetRFC822Message (const INetRFC822Message& rMsg)
         m_nIndex[i] = rMsg.m_nIndex[i];
 }
 
-/*
- * operator=
- */
 INetRFC822Message& INetRFC822Message::operator= (const INetRFC822Message& rMsg)
 {
     if (this != &rMsg)
@@ -264,15 +219,11 @@ INetRFC822Message& INetRFC822Message::operator= (const INetRFC822Message& rMsg)
     return *this;
 }
 
-/*
- * ~INetRFC822Message.
- */
 INetRFC822Message::~INetRFC822Message()
 {
 }
 
-/*
- * ParseDateField and local helper functions.
+/* ParseDateField and local helper functions.
  *
  * Parses a String in (implied) GMT format into class Date and Time objects.
  * Four formats are accepted:
@@ -282,19 +233,14 @@ INetRFC822Message::~INetRFC822Message()
  *   Weekday, 00-Mon-00 00:00:00 [GMT]           (rfc850, rfc1036)
  *   Wkd Mon 00 00:00:00 0000 [GMT]              (ctime)
  *   1*DIGIT                                     (delta seconds)
- *
  */
 
-// Months and Weekdays.
 static const sal_Char *months[12] =
 {
     "Jan", "Feb", "Mar", "Apr", "May", "Jun",
     "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
 };
 
-/*
- * ParseDateField and local helper functions.
- */
 static sal_uInt16 ParseNumber(const rtl::OString& rStr, sal_uInt16& nIndex)
 {
     sal_uInt16 n = nIndex;
@@ -429,10 +375,7 @@ sal_Bool INetRFC822Message::ParseDateField (
               (rDateTime.GetHour() > 23)    ));
 }
 
-/*
- * SetHeaderField.
- * (Header Field Parser).
- */
+// Header Field Parser
 sal_uIntPtr INetRFC822Message::SetHeaderField (
     const INetMessageHeader &rHeader, sal_uIntPtr nNewIndex)
 {
@@ -664,9 +607,6 @@ sal_uIntPtr INetRFC822Message::SetHeaderField (
     return nNewIndex;
 }
 
-/*
- * operator<<
- */
 SvStream& INetRFC822Message::operator<< (SvStream& rStrm) const
 {
     INetMessage::operator<< (rStrm);
@@ -677,9 +617,6 @@ SvStream& INetRFC822Message::operator<< (SvStream& rStrm) const
     return rStrm;
 }
 
-/*
- * operator>>
- */
 SvStream& INetRFC822Message::operator>> (SvStream& rStrm)
 {
     INetMessage::operator>> (rStrm);
@@ -694,14 +631,6 @@ SvStream& INetRFC822Message::operator>> (SvStream& rStrm)
     return rStrm;
 }
 
-/*=======================================================================
- *
- * INetMIMEMessage Implementation.
- *
- *=====================================================================*/
-/*
- * _ImplINetMIMEMessageHeaderData.
- */
 namespace
 {
     struct ImplINetMIMEMessageHeaderDataImpl
@@ -727,9 +656,6 @@ namespace
 
 #define MIMEHDR(n) ImplINetMIMEMessageHeaderData::get()[(n)]
 
-/*
- * _ImplINetMIMEMessageHeaderState.
- */
 enum _ImplINetMIMEMessageHeaderState
 {
     INETMSG_MIME_BEGIN,
@@ -742,9 +668,6 @@ enum _ImplINetMIMEMessageHeaderState
     INETMSG_MIME_TOKEN_CONTENT_T
 };
 
-/*
- * INetMIMEMessage.
- */
 INetMIMEMessage::INetMIMEMessage()
     : INetRFC822Message (),
       pParent       (NULL),
@@ -757,13 +680,9 @@ INetMIMEMessage::INetMIMEMessage()
 INetMIMEMessage::INetMIMEMessage (const INetMIMEMessage& rMsg)
     : INetRFC822Message (rMsg)
 {
-    // Copy.
     CopyImp (rMsg);
 }
 
-/*
- * operator=
- */
 INetMIMEMessage& INetMIMEMessage::operator= (
     const INetMIMEMessage& rMsg)
 {
@@ -772,27 +691,17 @@ INetMIMEMessage& INetMIMEMessage::operator= (
         // Assign base.
         INetRFC822Message::operator= (rMsg);
 
-        // Cleanup.
         CleanupImp();
-
-        // Copy.
         CopyImp (rMsg);
     }
     return *this;
 }
 
-/*
- * ~INetMIMEMessage.
- */
 INetMIMEMessage::~INetMIMEMessage()
 {
-    // Cleanup.
     CleanupImp();
 }
 
-/*
- * CleanupImp.
- */
 void INetMIMEMessage::CleanupImp()
 {
     for( size_t i = 0, n = aChildren.size(); i < n; ++i ) {
@@ -801,9 +710,6 @@ void INetMIMEMessage::CleanupImp()
     aChildren.clear();
 }
 
-/*
- * CopyImp.
- */
 void INetMIMEMessage::CopyImp (const INetMIMEMessage& rMsg)
 {
     bHeaderParsed = rMsg.bHeaderParsed;
@@ -827,19 +733,13 @@ void INetMIMEMessage::CopyImp (const INetMIMEMessage& rMsg)
     }
 }
 
-/*
- * CreateMessage.
- */
 INetMIMEMessage *INetMIMEMessage::CreateMessage (
     const INetMIMEMessage& rMsg) const
 {
     return (new INetMIMEMessage (rMsg));
 }
 
-/*
- * SetHeaderField.
- * (Header Field Parser).
- */
+// Header Field Parser
 sal_uIntPtr INetMIMEMessage::SetHeaderField (
     const INetMessageHeader &rHeader, sal_uIntPtr nNewIndex)
 {
@@ -986,9 +886,6 @@ sal_uIntPtr INetMIMEMessage::SetHeaderField (
     return nNewIndex;
 }
 
-/*
- * Specific Set-Methods.
- */
 void INetMIMEMessage::SetMIMEVersion (const UniString& rVersion)
 {
     SetHeaderField_Impl (
@@ -1022,9 +919,6 @@ void INetMIMEMessage::SetContentTransferEncoding (
         m_nIndex[INETMSG_MIME_CONTENT_TRANSFER_ENCODING]);
 }
 
-/*
- * GetDefaultContentType.
- */
 rtl::OUString INetMIMEMessage::GetDefaultContentType()
 {
     if (pParent != NULL)
@@ -1039,9 +933,6 @@ rtl::OUString INetMIMEMessage::GetDefaultContentType()
     return rtl::OUString("text/plain; charset=us-ascii");
 }
 
-/*
- * EnableAttachChild.
- */
 sal_Bool INetMIMEMessage::EnableAttachChild (INetMessageContainerType eType)
 {
     // Check context.
@@ -1109,9 +1000,6 @@ sal_Bool INetMIMEMessage::EnableAttachChild (INetMessageContainerType eType)
     return sal_True;
 }
 
-/*
- * AttachChild.
- */
 sal_Bool INetMIMEMessage::AttachChild (
     INetMIMEMessage& rChildMsg, sal_Bool bOwner)
 {
@@ -1125,9 +1013,6 @@ sal_Bool INetMIMEMessage::AttachChild (
     return sal_False;
 }
 
-/*
- * operator<<
- */
 SvStream& INetMIMEMessage::operator<< (SvStream& rStrm) const
 {
     INetRFC822Message::operator<< (rStrm);
@@ -1141,9 +1026,6 @@ SvStream& INetMIMEMessage::operator<< (SvStream& rStrm) const
     return rStrm;
 }
 
-/*
- * operator>>
- */
 SvStream& INetMIMEMessage::operator>> (SvStream& rStrm)
 {
     INetRFC822Message::operator>> (rStrm);
@@ -1161,6 +1043,5 @@ SvStream& INetMIMEMessage::operator>> (SvStream& rStrm)
 
     return rStrm;
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

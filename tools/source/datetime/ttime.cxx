@@ -33,8 +33,6 @@
 extern long altzone;
 #endif
 
-// =======================================================================
-
 static sal_Int32 TimeToSec100( const Time& rTime )
 {
     short  nSign   = (rTime.GetTime() >= 0) ? +1 : -1;
@@ -54,8 +52,6 @@ static sal_Int32 TimeToSec100( const Time& rTime )
     return (nRet * nSign);
 }
 
-// -----------------------------------------------------------------------
-
 static Time Sec100ToTime( sal_Int32 nSec100 )
 {
     short nSign;
@@ -71,8 +67,6 @@ static Time Sec100ToTime( sal_Int32 nSec100 )
     aTime.SetTime( aTime.GetTime() * nSign );
     return aTime;
 }
-
-// =======================================================================
 
 Time::Time( TimeInitSystem )
 {
@@ -104,14 +98,10 @@ Time::Time( TimeInitSystem )
 #endif
 }
 
-// -----------------------------------------------------------------------
-
 Time::Time( const Time& rTime )
 {
     nTime = rTime.nTime;
 }
-
-// -----------------------------------------------------------------------
 
 Time::Time( sal_uIntPtr nHour, sal_uIntPtr nMin, sal_uIntPtr nSec, sal_uIntPtr n100Sec )
 {
@@ -127,8 +117,6 @@ Time::Time( sal_uIntPtr nHour, sal_uIntPtr nMin, sal_uIntPtr nSec, sal_uIntPtr n
     nTime = (sal_Int32)(n100Sec + (nSec*100) + (nMin*10000) + (nHour*1000000));
 }
 
-// -----------------------------------------------------------------------
-
 void Time::SetHour( sal_uInt16 nNewHour )
 {
     short  nSign      = (nTime >= 0) ? +1 : -1;
@@ -139,8 +127,6 @@ void Time::SetHour( sal_uInt16 nNewHour )
     nTime = (n100Sec + (nSec*100) + (nMin*10000) +
             (((sal_Int32)nNewHour)*1000000)) * nSign;
 }
-
-// -----------------------------------------------------------------------
 
 void Time::SetMin( sal_uInt16 nNewMin )
 {
@@ -156,8 +142,6 @@ void Time::SetMin( sal_uInt16 nNewMin )
             (nHour*1000000)) * nSign;
 }
 
-// -----------------------------------------------------------------------
-
 void Time::SetSec( sal_uInt16 nNewSec )
 {
     short       nSign     = (nTime >= 0) ? +1 : -1;
@@ -171,8 +155,6 @@ void Time::SetSec( sal_uInt16 nNewSec )
     nTime = (n100Sec + (((sal_Int32)nNewSec)*100) + (nMin*10000) +
             (nHour*1000000)) * nSign;
 }
-
-// -----------------------------------------------------------------------
 
 void Time::Set100Sec( sal_uInt16 nNew100Sec )
 {
@@ -188,8 +170,6 @@ void Time::Set100Sec( sal_uInt16 nNew100Sec )
             (nHour*1000000)) * nSign;
 }
 
-// -----------------------------------------------------------------------
-
 sal_Int32 Time::GetMSFromTime() const
 {
     short       nSign     = (nTime >= 0) ? +1 : -1;
@@ -200,8 +180,6 @@ sal_Int32 Time::GetMSFromTime() const
 
     return (((nHour*3600000)+(nMin*60000)+(nSec*1000)+(n100Sec*10))*nSign);
 }
-
-// -----------------------------------------------------------------------
 
 void Time::MakeTimeFromMS( sal_Int32 nMS )
 {
@@ -218,8 +196,6 @@ void Time::MakeTimeFromMS( sal_Int32 nMS )
     SetTime( aTime.GetTime() * nSign );
 }
 
-// -----------------------------------------------------------------------
-
 double Time::GetTimeInDays() const
 {
     short  nSign      = (nTime >= 0) ? +1 : -1;
@@ -231,15 +207,11 @@ double Time::GetTimeInDays() const
     return (nHour+(nMin/60)+(nSec/(60*60))+(n100Sec/(60*60*100))) / 24 * nSign;
 }
 
-// -----------------------------------------------------------------------
-
 Time& Time::operator =( const Time& rTime )
 {
     nTime = rTime.nTime;
     return *this;
 }
-
-// -----------------------------------------------------------------------
 
 Time& Time::operator +=( const Time& rTime )
 {
@@ -248,8 +220,6 @@ Time& Time::operator +=( const Time& rTime )
     return *this;
 }
 
-// -----------------------------------------------------------------------
-
 Time& Time::operator -=( const Time& rTime )
 {
     nTime = Sec100ToTime( TimeToSec100( *this ) -
@@ -257,15 +227,11 @@ Time& Time::operator -=( const Time& rTime )
     return *this;
 }
 
-// -----------------------------------------------------------------------
-
 Time operator +( const Time& rTime1, const Time& rTime2 )
 {
     return Sec100ToTime( TimeToSec100( rTime1 ) +
                          TimeToSec100( rTime2 ) );
 }
-
-// -----------------------------------------------------------------------
 
 Time operator -( const Time& rTime1, const Time& rTime2 )
 {
@@ -273,16 +239,12 @@ Time operator -( const Time& rTime1, const Time& rTime2 )
                          TimeToSec100( rTime2 ) );
 }
 
-// -----------------------------------------------------------------------
-
 sal_Bool Time::IsEqualIgnore100Sec( const Time& rTime ) const
 {
     sal_Int32 n1 = (nTime < 0 ? -Get100Sec() : Get100Sec() );
     sal_Int32 n2 = (rTime.nTime < 0 ? -rTime.Get100Sec() : rTime.Get100Sec() );
     return (nTime - n1) == (rTime.nTime - n2);
 }
-
-// -----------------------------------------------------------------------
 
 Time Time::GetUTCOffset()
 {
@@ -340,9 +302,6 @@ Time Time::GetUTCOffset()
     return aTime;
 #endif
 }
-
-
-// -----------------------------------------------------------------------
 
 sal_uIntPtr Time::GetSystemTicks()
 {

@@ -25,16 +25,10 @@
 #include <cstdlib>
 #include <math.h>
 
-// --------
-// - Line -
-// --------
-
 double Line::GetLength() const
 {
     return hypot( maStart.X() - maEnd.X(), maStart.Y() - maEnd.Y() );
 }
-
-// ------------------------------------------------------------------------
 
 sal_Bool Line::Intersection( const Line& rLine, Point& rIntersection ) const
 {
@@ -52,8 +46,6 @@ sal_Bool Line::Intersection( const Line& rLine, Point& rIntersection ) const
 
     return bRet;
 }
-
-// ------------------------------------------------------------------------
 
 sal_Bool Line::Intersection( const Line& rLine, double& rIntersectionX, double& rIntersectionY ) const
 {
@@ -105,8 +97,6 @@ sal_Bool Line::Intersection( const Line& rLine, double& rIntersectionX, double& 
 
     return bOk;
 }
-
-// ------------------------------------------------------------------------
 
 sal_Bool Line::Intersection( const Rectangle& rRect, Line& rIntersection ) const
 {
@@ -164,8 +154,6 @@ sal_Bool Line::Intersection( const Rectangle& rRect, Line& rIntersection ) const
 
     return bRet;
 }
-
-// ------------------------------------------------------------------------
 
 double Line::GetDistance( const double& rPtX, const double& rPtY ) const
 {

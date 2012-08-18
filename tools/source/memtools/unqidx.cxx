@@ -19,13 +19,6 @@
 
 #include <tools/unqidx.hxx>
 
-
-/*************************************************************************
-|*
-|*    UniqueIndex::Insert()
-|*
-*************************************************************************/
-
 sal_uIntPtr UniqueIndexImpl::Insert( void* p )
 {
     // NULL-Pointer ist nicht erlaubt
@@ -53,12 +46,6 @@ sal_uIntPtr UniqueIndexImpl::Insert( void* p )
     return ( nUniqIndex + nStartIndex - 1 );
 }
 
-/*************************************************************************
-|*
-|*    UniqueIndexImpl::Insert()
-|*
-*************************************************************************/
-
 void UniqueIndexImpl::Insert( sal_uIntPtr nIndex, void* p )
 {
     // NULL-Pointer ist nicht erlaubt
@@ -75,12 +62,6 @@ void UniqueIndexImpl::Insert( sal_uIntPtr nIndex, void* p )
     if( !bFound )
         nCount++;
 }
-
-/*************************************************************************
-|*
-|*    UniqueIndexImpl::Remove()
-|*
-*************************************************************************/
 
 void* UniqueIndexImpl::Remove( sal_uIntPtr nIndex )
 {
@@ -102,12 +83,6 @@ void* UniqueIndexImpl::Remove( sal_uIntPtr nIndex )
     return NULL;
 }
 
-/*************************************************************************
-|*
-|*    UniqueIndexImpl::Get()
-|*
-*************************************************************************/
-
 void* UniqueIndexImpl::Get( sal_uIntPtr nIndex ) const
 {
     // Ist Index zulaessig
@@ -121,12 +96,6 @@ void* UniqueIndexImpl::Get( sal_uIntPtr nIndex ) const
     return NULL;
 }
 
-/*************************************************************************
-|*
-|*    UniqueIndexImpl::FirstIndex()
-|*
-*************************************************************************/
-
 sal_uIntPtr UniqueIndexImpl::FirstIndex() const
 {
     if ( empty() )
@@ -135,12 +104,6 @@ sal_uIntPtr UniqueIndexImpl::FirstIndex() const
     return begin()->first;
 }
 
-/*************************************************************************
-|*
-|*    UniqueIndexImpl::LastIndex()
-|*
-*************************************************************************/
-
 sal_uIntPtr UniqueIndexImpl::LastIndex() const
 {
     if ( empty() )
@@ -148,12 +111,6 @@ sal_uIntPtr UniqueIndexImpl::LastIndex() const
 
     return rbegin()->first;
 }
-
-/*************************************************************************
-|*
-|*    UniqueIndexImpl::NextIndex()
-|*
-*************************************************************************/
 
 sal_uIntPtr UniqueIndexImpl::NextIndex(sal_uIntPtr aIndex) const
 {
@@ -165,12 +122,6 @@ sal_uIntPtr UniqueIndexImpl::NextIndex(sal_uIntPtr aIndex) const
         return UNIQUEINDEX_ENTRY_NOTFOUND;
     return it->first;
 }
-
-/*************************************************************************
-|*
-|*    UniqueIndexImpl::GetIndexOf()
-|*
-*************************************************************************/
 
 sal_uIntPtr UniqueIndexImpl::GetIndexOf(void* p) const
 {

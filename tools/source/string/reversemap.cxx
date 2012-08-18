@@ -26,7 +26,6 @@
  * instead of those above.
  */
 
-
 #include <rtl/textenc.h>
 #include <tools/tenccvt.hxx>
 

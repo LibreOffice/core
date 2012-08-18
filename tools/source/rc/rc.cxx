@@ -18,19 +18,16 @@
  */
 
 #include <string.h>
+
 #include <tools/date.hxx>
 #include <tools/time.hxx>
 #include <tools/rc.hxx>
 #include <tools/rcid.h>
 
-// =======================================================================
-
 Resource::Resource( const ResId& rResId )
 {
     GetRes( rResId.SetRT( RSC_RESOURCE ) );
 }
-
-// -----------------------------------------------------------------------
 
 void Resource::GetRes( const ResId& rResId )
 {
@@ -39,10 +36,6 @@ void Resource::GetRes( const ResId& rResId )
     m_pResMgr->GetResource( rResId, this );
     IncrementRes( sizeof( RSHEADER_TYPE ) );
 }
-
-// -----------------------------------------------------------------------
-
-// =======================================================================
 
 Time::Time( const ResId& rResId )
 {
@@ -63,8 +56,6 @@ Time::Time( const ResId& rResId )
     if ( 0x08 & nObjMask )
         Set100Sec( (sal_uInt16)pResMgr->ReadShort() );
 }
-
-// =======================================================================
 
 Date::Date( const ResId& rResId ) : nDate(0)
 {

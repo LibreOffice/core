@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <string.h>
 
 #include "boost/static_assert.hpp"
@@ -27,17 +26,13 @@
 #include <rtl/memory.h>
 #include <rtl/tencinfo.h>
 #include <rtl/instance.hxx>
-
 #include <tools/string.hxx>
+
 #include <impstrg.hxx>
 
 #include <tools/debug.hxx>
 
-// =======================================================================
-
 DBG_NAME( UniString )
-
-// -----------------------------------------------------------------------
 
 #define STRCODE         sal_Unicode
 #define STRCODEU        sal_Unicode
@@ -49,30 +44,23 @@ DBG_NAME( UniString )
 #define STRING_RELEASE  rtl_uString_release
 #define STRING_NEW      rtl_uString_new
 
-// -----------------------------------------------------------------------
-
 #include <strimp.cxx>
 #include <strucvt.cxx>
 #include <strascii.cxx>
 
 UniString::UniString(char c): mpData(ImplAllocData(1)) { mpData->maStr[0] = c; }
 
-// -----------------------------------------------------------------------
-
 UniString UniString::CreateFromInt32( sal_Int32 n, sal_Int16 nRadix )
 {
     return rtl::OUString::valueOf(n, nRadix);
 }
 
-// -----------------------------------------------------------------------
-
 namespace { struct Empty : public rtl::Static< const UniString, Empty> {}; }
+
 const UniString& UniString::EmptyString()
 {
     return Empty::get();
 }
-
-// -----------------------------------------------------------------------
 
 sal_Int32 UniString::ToInt32() const
 {
@@ -81,16 +69,12 @@ sal_Int32 UniString::ToInt32() const
     return rtl_ustr_toInt32( mpData->maStr, 10 );
 }
 
-// -----------------------------------------------------------------------
-
 sal_Int64 UniString::ToInt64() const
 {
     DBG_CHKTHIS( UniString, DbgCheckUniString );
 
     return rtl_ustr_toInt64( mpData->maStr, 10 );
 }
-
-// -----------------------------------------------------------------------
 
 xub_StrLen STRING::SearchChar( const STRCODE* pChars, xub_StrLen nIndex ) const
 {
@@ -116,8 +100,6 @@ xub_StrLen STRING::SearchChar( const STRCODE* pChars, xub_StrLen nIndex ) const
     return STRING_NOTFOUND;
 }
 
-// -----------------------------------------------------------------------
-
 xub_StrLen STRING::SearchAndReplace( STRCODE c, STRCODE cRep, xub_StrLen nIndex )
 {
     DBG_CHKTHIS( STRING, DBGCHECKSTRING );
@@ -139,8 +121,6 @@ xub_StrLen STRING::SearchAndReplace( STRCODE c, STRCODE cRep, xub_StrLen nIndex 
 
     return STRING_NOTFOUND;
 }
-
-// -----------------------------------------------------------------------
 
 STRING& STRING::Insert( const STRING& rStr, xub_StrLen nPos, xub_StrLen nLen,
                         xub_StrLen nIndex )
@@ -186,8 +166,6 @@ STRING& STRING::Insert( const STRING& rStr, xub_StrLen nPos, xub_StrLen nLen,
     return *this;
 }
 
-// -----------------------------------------------------------------------
-
 static sal_Int32 ImplStringICompareWithoutZero( const STRCODE* pStr1, const STRCODE* pStr2,
                                                 sal_Int32 nCount )
 {
@@ -217,8 +195,6 @@ static sal_Int32 ImplStringICompareWithoutZero( const STRCODE* pStr1, const STRC
     return nRet;
 }
 
-// -----------------------------------------------------------------------
-
 sal_Bool STRING::EqualsIgnoreCaseAscii( const STRING& rStr, xub_StrLen nIndex, xub_StrLen nLen ) const
 {
     DBG_CHKTHIS( STRING, DBGCHECKSTRING );
@@ -238,8 +214,6 @@ sal_Bool STRING::EqualsIgnoreCaseAscii( const STRING& rStr, xub_StrLen nIndex, x
     // String vergleichen
     return (ImplStringICompareWithoutZero( mpData->maStr+nIndex, rStr.mpData->maStr, nLen ) == 0);
 }
-
-// -----------------------------------------------------------------------
 
 StringCompare STRING::CompareIgnoreCaseToAscii( const STRING& rStr,
                                                 xub_StrLen nLen ) const
@@ -268,8 +242,6 @@ StringCompare STRING::CompareIgnoreCaseToAscii( const STRING& rStr,
     else
         return COMPARE_GREATER;
 }
-
-// -----------------------------------------------------------------------
 
 STRING& STRING::Fill( xub_StrLen nCount, STRCODE cFillChar )
 {
@@ -301,8 +273,6 @@ STRING& STRING::Fill( xub_StrLen nCount, STRCODE cFillChar )
     return *this;
 }
 
-// -----------------------------------------------------------------------
-
 STRING& STRING::Expand( xub_StrLen nCount, STRCODE cExpandChar )
 {
     DBG_CHKTHIS( STRING, DBGCHECKSTRING );
@@ -332,8 +302,6 @@ STRING& STRING::Expand( xub_StrLen nCount, STRCODE cExpandChar )
     return *this;
 }
 
-// -----------------------------------------------------------------------
-
 STRCODE* STRING::GetBufferAccess()
 {
     DBG_CHKTHIS( STRING, DBGCHECKSTRING );
@@ -345,8 +313,6 @@ STRCODE* STRING::GetBufferAccess()
     // Pointer auf den String zurueckgeben
     return mpData->maStr;
 }
-
-// -----------------------------------------------------------------------
 
 void STRING::ReleaseBufferAccess( xub_StrLen nLen )
 {
@@ -373,8 +339,6 @@ void STRING::ReleaseBufferAccess( xub_StrLen nLen )
         mpData->mnLen = nLen;
 }
 
-// -----------------------------------------------------------------------
-
 STRCODE* STRING::AllocBuffer( xub_StrLen nLen )
 {
     DBG_CHKTHIS( STRING, DBGCHECKSTRING );
@@ -391,8 +355,6 @@ STRCODE* STRING::AllocBuffer( xub_StrLen nLen )
     return mpData->maStr;
 }
 
-// -----------------------------------------------------------------------
-
 STRING::STRING( STRCODE c )
 {
     DBG_CTOR( STRING, DBGCHECKSTRING );
@@ -402,8 +364,6 @@ STRING::STRING( STRCODE c )
     mpData = ImplAllocData( 1 );
     mpData->maStr[0] = c;
 }
-
-// -----------------------------------------------------------------------
 
 STRING& STRING::Insert( STRCODE c, xub_StrLen nIndex )
 {
@@ -433,8 +393,6 @@ STRING& STRING::Insert( STRCODE c, xub_StrLen nIndex )
     return *this;
 }
 
-// -----------------------------------------------------------------------
-
 STRING& STRING::ToUpperAscii()
 {
     DBG_CHKTHIS( STRING, DBGCHECKSTRING );
@@ -458,8 +416,6 @@ STRING& STRING::ToUpperAscii()
 
     return *this;
 }
-
-// -----------------------------------------------------------------------
 
 StringCompare STRING::CompareTo( const STRING& rStr, xub_StrLen nLen ) const
 {
@@ -488,8 +444,6 @@ StringCompare STRING::CompareTo( const STRING& rStr, xub_StrLen nLen ) const
         return COMPARE_GREATER;
 }
 
-// -----------------------------------------------------------------------
-
 sal_Bool STRING::Equals( const STRING& rStr ) const
 {
     DBG_CHKTHIS( STRING, DBGCHECKSTRING );
@@ -507,8 +461,6 @@ sal_Bool STRING::Equals( const STRING& rStr ) const
     return (ImplStringCompareWithoutZero( mpData->maStr, rStr.mpData->maStr, mpData->mnLen ) == 0);
 }
 
-// -----------------------------------------------------------------------
-
 sal_Bool STRING::EqualsIgnoreCaseAscii( const STRING& rStr ) const
 {
     DBG_CHKTHIS( STRING, DBGCHECKSTRING );
@@ -525,8 +477,6 @@ sal_Bool STRING::EqualsIgnoreCaseAscii( const STRING& rStr ) const
     // String vergleichen
     return (ImplStringICompareWithoutZero( mpData->maStr, rStr.mpData->maStr, mpData->mnLen ) == 0);
 }
-
-// -----------------------------------------------------------------------
 
 sal_Bool STRING::Equals( const STRING& rStr, xub_StrLen nIndex, xub_StrLen nLen ) const
 {
@@ -548,8 +498,6 @@ sal_Bool STRING::Equals( const STRING& rStr, xub_StrLen nIndex, xub_StrLen nLen 
     return (ImplStringCompareWithoutZero( mpData->maStr+nIndex, rStr.mpData->maStr, nLen ) == 0);
 }
 
-// -----------------------------------------------------------------------
-
 sal_Bool STRING::Equals( const STRCODE* pCharStr, xub_StrLen nIndex, xub_StrLen nLen ) const
 {
     DBG_CHKTHIS( STRING, DBGCHECKSTRING );
@@ -560,8 +508,6 @@ sal_Bool STRING::Equals( const STRCODE* pCharStr, xub_StrLen nIndex, xub_StrLen 
 
     return (ImplStringCompare( mpData->maStr+nIndex, pCharStr, nLen ) == 0);
 }
-
-// -----------------------------------------------------------------------
 
 xub_StrLen STRING::Match( const STRING& rStr ) const
 {
@@ -589,8 +535,6 @@ xub_StrLen STRING::Match( const STRING& rStr ) const
     return STRING_MATCH;
 }
 
-// -----------------------------------------------------------------------
-
 xub_StrLen STRING::SearchBackward( STRCODE c, xub_StrLen nIndex ) const
 {
     DBG_CHKTHIS( STRING, DBGCHECKSTRING );
@@ -612,8 +556,6 @@ xub_StrLen STRING::SearchBackward( STRCODE c, xub_StrLen nIndex ) const
     return STRING_NOTFOUND;
 }
 
-// -----------------------------------------------------------------------
-
 void STRING::SearchAndReplaceAll( const STRING& rStr, const STRING& rRepStr )
 {
     DBG_CHKTHIS( STRING, DBGCHECKSTRING );
@@ -628,8 +570,6 @@ void STRING::SearchAndReplaceAll( const STRING& rStr, const STRING& rRepStr )
         nSPos = Search( rStr, nSPos );
     }
 }
-
-// -----------------------------------------------------------------------
 
 void STRING::SetToken( xub_StrLen nToken, STRCODE cTok, const STRING& rStr,
                        xub_StrLen nIndex )
@@ -668,8 +608,6 @@ void STRING::SetToken( xub_StrLen nToken, STRCODE cTok, const STRING& rStr,
     if ( nTok >= nToken )
         Replace( nFirstChar, i-nFirstChar, rStr );
 }
-
-// -----------------------------------------------------------------------
 
 STRING STRING::GetToken( xub_StrLen nToken, STRCODE cTok, xub_StrLen& rIndex ) const
 {
@@ -718,8 +656,6 @@ STRING STRING::GetToken( xub_StrLen nToken, STRCODE cTok, xub_StrLen& rIndex ) c
     }
 }
 
-// -----------------------------------------------------------------------
-
 STRING& STRING::Append( const STRCODE* pCharStr, xub_StrLen nCharLen )
 {
     DBG_CHKTHIS( STRING, DBGCHECKSTRING );
@@ -763,8 +699,6 @@ STRING& STRING::Append( const STRCODE* pCharStr, xub_StrLen nCharLen )
     return *this;
 }
 
-// -----------------------------------------------------------------------
-
 STRING& STRING::Append( STRCODE c )
 {
     DBG_CHKTHIS( STRING, DBGCHECKSTRING );
@@ -787,8 +721,6 @@ STRING& STRING::Append( STRCODE c )
 
     return *this;
 }
-
-// -----------------------------------------------------------------------
 
 STRING& STRING::Assign( const STRCODE* pCharStr, xub_StrLen nLen )
 {
@@ -834,8 +766,6 @@ STRING& STRING::Assign( const STRCODE* pCharStr, xub_StrLen nLen )
     return *this;
 }
 
-// -----------------------------------------------------------------------
-
 STRING& STRING::Assign( STRCODE c )
 {
     DBG_CHKTHIS( STRING, DBGCHECKSTRING );
@@ -847,8 +777,6 @@ STRING& STRING::Assign( STRCODE c )
     mpData->maStr[0] = c;
     return *this;
 }
-
-// -----------------------------------------------------------------------
 
 xub_StrLen STRING::SearchAndReplace( const STRING& rStr, const STRING& rRepStr,
                                      xub_StrLen nIndex )
@@ -863,8 +791,6 @@ xub_StrLen STRING::SearchAndReplace( const STRING& rStr, const STRING& rRepStr,
 
     return nSPos;
 }
-
-// -----------------------------------------------------------------------
 
 static sal_Int32 ImplStringICompare( const STRCODE* pStr1, const STRCODE* pStr2 )
 {
@@ -892,16 +818,12 @@ static sal_Int32 ImplStringICompare( const STRCODE* pStr1, const STRCODE* pStr2 
     return nRet;
 }
 
-// -----------------------------------------------------------------------
-
 sal_Bool STRING::EqualsIgnoreCaseAscii( const STRCODE* pCharStr ) const
 {
     DBG_CHKTHIS( STRING, DBGCHECKSTRING );
 
     return (ImplStringICompare( mpData->maStr, pCharStr ) == 0);
 }
-
-// -----------------------------------------------------------------------
 
 STRING& STRING::Assign( const STRCODE* pCharStr )
 {
@@ -934,8 +856,6 @@ STRING& STRING::Assign( const STRCODE* pCharStr )
     return *this;
 }
 
-// -----------------------------------------------------------------------
-
 xub_StrLen ImplStringLen( const sal_Char* pStr )
 {
     const sal_Char* pTempStr = pStr;
@@ -943,8 +863,6 @@ xub_StrLen ImplStringLen( const sal_Char* pStr )
         ++pTempStr;
     return (xub_StrLen)(pTempStr-pStr);
 }
-
-// -----------------------------------------------------------------------
 
 xub_StrLen ImplStringLen( const sal_Unicode* pStr )
 {

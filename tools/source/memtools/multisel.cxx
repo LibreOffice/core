@@ -16,8 +16,6 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-
-
 #define _SV_MULTISEL_CXX
 
 #ifdef MI_DEBUG
@@ -38,10 +36,7 @@
 
 using ::rtl::OUString;
 
-//==================================================================
-
 #ifdef MI_DEBUG
-
 static void Print( const MultiSelection* pSel )
 {
     DbgOutf( "TotRange:     %4ld-%4ld\n",
@@ -62,10 +57,7 @@ static void Print( const MultiSelection* pSel )
     DbgOutf( "\n" );
     fclose( pFile );
 }
-
 #endif
-
-// -----------------------------------------------------------------------
 
 void MultiSelection::ImplClear()
 {
@@ -78,8 +70,6 @@ void MultiSelection::ImplClear()
     aSels.clear();
 }
 
-// -----------------------------------------------------------------------
-
 size_t MultiSelection::ImplFindSubSelection( long nIndex ) const
 {
     // iterate through the sub selections
@@ -89,8 +79,6 @@ size_t MultiSelection::ImplFindSubSelection( long nIndex ) const
           ++n ) {} /* empty loop */
     return n;
 }
-
-// -----------------------------------------------------------------------
 
 sal_Bool MultiSelection::ImplMergeSubSelections( size_t nPos1, size_t nPos2 )
 {
@@ -113,8 +101,6 @@ sal_Bool MultiSelection::ImplMergeSubSelections( size_t nPos1, size_t nPos2 )
     return sal_False;
 }
 
-// -----------------------------------------------------------------------
-
 MultiSelection::MultiSelection():
     aTotRange( 0, -1 ),
     nCurSubSel(0),
@@ -123,8 +109,6 @@ MultiSelection::MultiSelection():
     bSelectNew(sal_False)
 {
 }
-
-// -----------------------------------------------------------------------
 
 MultiSelection::MultiSelection( const MultiSelection& rOrig ) :
     aTotRange(rOrig.aTotRange),
@@ -143,8 +127,6 @@ MultiSelection::MultiSelection( const MultiSelection& rOrig ) :
         aSels.push_back( new Range( *rOrig.aSels[ n ] ) );
 }
 
-// -----------------------------------------------------------------------
-
 MultiSelection::MultiSelection( const Range& rRange ):
     aTotRange(rRange),
     nCurSubSel(0),
@@ -154,16 +136,12 @@ MultiSelection::MultiSelection( const Range& rRange ):
 {
 }
 
-// -----------------------------------------------------------------------
-
 MultiSelection::~MultiSelection()
 {
     for ( size_t i = 0, n = aSels.size(); i < n; ++i )
         delete aSels[ i ];
     aSels.clear();
 }
-
-// -----------------------------------------------------------------------
 
 MultiSelection& MultiSelection::operator= ( const MultiSelection& rOrig )
 {
@@ -184,8 +162,6 @@ MultiSelection& MultiSelection::operator= ( const MultiSelection& rOrig )
     return *this;
 }
 
-// -----------------------------------------------------------------------
-
 sal_Bool MultiSelection::operator== ( MultiSelection& rWith )
 {
     if ( aTotRange != rWith.aTotRange || nSelCount != rWith.nSelCount ||
@@ -198,8 +174,6 @@ sal_Bool MultiSelection::operator== ( MultiSelection& rWith )
             return sal_False;
     return sal_True;
 }
-
-// -----------------------------------------------------------------------
 
 void MultiSelection::SelectAll( sal_Bool bSelect )
 {
@@ -214,8 +188,6 @@ void MultiSelection::SelectAll( sal_Bool bSelect )
 
     DBG(Print( this ));
 }
-
-// -----------------------------------------------------------------------
 
 sal_Bool MultiSelection::Select( long nIndex, sal_Bool bSelect )
 {
@@ -320,8 +292,6 @@ sal_Bool MultiSelection::Select( long nIndex, sal_Bool bSelect )
     return sal_True;
 }
 
-// -----------------------------------------------------------------------
-
 void MultiSelection::Select( const Range& rIndexRange, sal_Bool bSelect )
 {
     Range* pRange;
@@ -400,8 +370,6 @@ void MultiSelection::Select( const Range& rIndexRange, sal_Bool bSelect )
     }
 }
 
-// -----------------------------------------------------------------------
-
 sal_Bool MultiSelection::IsSelected( long nIndex ) const
 {
     // find the virtual target position
@@ -409,8 +377,6 @@ sal_Bool MultiSelection::IsSelected( long nIndex ) const
 
     return nSubSelPos < aSels.size() && aSels[ nSubSelPos ]->IsInside(nIndex);
 }
-
-// -----------------------------------------------------------------------
 
 void MultiSelection::Insert( long nIndex, long nCount )
 {
@@ -468,8 +434,6 @@ void MultiSelection::Insert( long nIndex, long nCount )
     DBG(Print( this ));
 }
 
-// -----------------------------------------------------------------------
-
 void MultiSelection::Remove( long nIndex )
 {
     DBG(DbgOutf( "::Remove(%ld)\n", nIndex ));
@@ -510,8 +474,6 @@ void MultiSelection::Remove( long nIndex )
     DBG(Print( this ));
 }
 
-// -----------------------------------------------------------------------
-
 long MultiSelection::ImplFwdUnselected()
 {
     if ( !bCurValid )
@@ -527,8 +489,6 @@ long MultiSelection::ImplFwdUnselected()
     else
         return SFX_ENDOFSELECTION;
 }
-
-// -----------------------------------------------------------------------
 
 long MultiSelection::FirstSelected( sal_Bool bInverse )
 {
@@ -554,8 +514,6 @@ long MultiSelection::FirstSelected( sal_Bool bInverse )
     return SFX_ENDOFSELECTION;
 }
 
-// -----------------------------------------------------------------------
-
 long MultiSelection::LastSelected()
 {
     nCurSubSel = aSels.size() - 1;
@@ -566,8 +524,6 @@ long MultiSelection::LastSelected()
 
     return SFX_ENDOFSELECTION;
 }
-
-// -----------------------------------------------------------------------
 
 long MultiSelection::NextSelected()
 {
@@ -593,8 +549,6 @@ long MultiSelection::NextSelected()
         return SFX_ENDOFSELECTION;
     }
 }
-
-// -----------------------------------------------------------------------
 
 void MultiSelection::SetTotalRange( const Range& rTotRange )
 {
@@ -651,11 +605,8 @@ void MultiSelection::SetTotalRange( const Range& rTotRange )
     nCurIndex = 0;
 }
 
-// -----------------------------------------------------------------------
-//
 // StringRangeEnumerator
-//
-// -----------------------------------------------------------------------
+
 StringRangeEnumerator::StringRangeEnumerator( const rtl::OUString& i_rInput,
                                               sal_Int32 i_nMinNumber,
                                               sal_Int32 i_nMaxNumber,

@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <stdio.h>
 #include <string.h>
 #include <sys/stat.h>
@@ -42,11 +41,7 @@
 
 using namespace osl;
 
-// -----------------------------------------------------------------------
-
-// ----------------
-// - InternalLock -
-// ----------------
+// InternalLock ----------------------------------------------------------------
 
 namespace { struct LockMutex : public rtl::Static< osl::Mutex, LockMutex > {}; }
 
@@ -65,6 +60,7 @@ public:
 };
 
 typedef ::std::vector< InternalStreamLock* > InternalStreamLockList;
+
 namespace { struct LockList : public rtl::Static< InternalStreamLockList, LockList > {}; }
 
 InternalStreamLock::InternalStreamLock(
@@ -197,10 +193,7 @@ void InternalStreamLock::UnlockFile( sal_Size nStart, sal_Size nEnd, SvFileStrea
     }
 }
 
-
-// --------------
-// - StreamData -
-// --------------
+// StreamData ------------------------------------------------------------------
 
 class StreamData
 {
@@ -209,8 +202,6 @@ public:
 
     StreamData() : rHandle( 0 ) { }
 };
-
-// -----------------------------------------------------------------------
 
 static sal_uInt32 GetSvError( int nErrno )
 {
@@ -304,12 +295,6 @@ static sal_uInt32 GetSvError( oslFileError nErrno )
     return nRetVal;
 }
 
-/*************************************************************************
-|*
-|*    SvFileStream::SvFileStream()
-|*
-*************************************************************************/
-
 SvFileStream::SvFileStream( const String& rFileName, StreamMode nOpenMode )
 {
     bIsOpen             = sal_False;
@@ -328,12 +313,6 @@ SvFileStream::SvFileStream( const String& rFileName, StreamMode nOpenMode )
     Open( aSystemFileName, nOpenMode );
 }
 
-/*************************************************************************
-|*
-|*    SvFileStream::SvFileStream()
-|*
-*************************************************************************/
-
 SvFileStream::SvFileStream()
 {
     bIsOpen             = sal_False;
@@ -342,12 +321,6 @@ SvFileStream::SvFileStream()
     pInstanceData       = new StreamData;
     SetBufferSize( 1024 );
 }
-
-/*************************************************************************
-|*
-|*    SvFileStream::~SvFileStream()
-|*
-*************************************************************************/
 
 SvFileStream::~SvFileStream()
 {
@@ -359,12 +332,6 @@ SvFileStream::~SvFileStream()
         delete pInstanceData;
 }
 
-/*************************************************************************
-|*
-|*    SvFileStream::GetFileHandle()
-|*
-*************************************************************************/
-
 sal_uInt32 SvFileStream::GetFileHandle() const
 {
     sal_IntPtr handle;
@@ -374,22 +341,10 @@ sal_uInt32 SvFileStream::GetFileHandle() const
         return (sal_uInt32) -1;
 }
 
-/*************************************************************************
-|*
-|*    SvFileStream::IsA()
-|*
-*************************************************************************/
-
 sal_uInt16 SvFileStream::IsA() const
 {
     return ID_FILESTREAM;
 }
-
-/*************************************************************************
-|*
-|*    SvFileStream::GetData()
-|*
-*************************************************************************/
 
 sal_Size SvFileStream::GetData( void* pData, sal_Size nSize )
 {
@@ -415,12 +370,6 @@ sal_Size SvFileStream::GetData( void* pData, sal_Size nSize )
     }
     return (sal_Size)nRead;
 }
-
-/*************************************************************************
-|*
-|*    SvFileStream::PutData()
-|*
-*************************************************************************/
 
 sal_Size SvFileStream::PutData( const void* pData, sal_Size nSize )
 {
@@ -449,12 +398,6 @@ sal_Size SvFileStream::PutData( const void* pData, sal_Size nSize )
     return (sal_Size)nWrite;
 }
 
-/*************************************************************************
-|*
-|*    SvFileStream::SeekPos()
-|*
-*************************************************************************/
-
 sal_Size SvFileStream::SeekPos( sal_Size nPos )
 {
     if ( IsOpen() )
@@ -478,23 +421,10 @@ sal_Size SvFileStream::SeekPos( sal_Size nPos )
     return 0L;
 }
 
-
-/*************************************************************************
-|*
-|*    SvFileStream::FlushData()
-|*
-*************************************************************************/
-
 void SvFileStream::FlushData()
 {
 // lokal gibt es nicht
 }
-
-/*************************************************************************
-|*
-|*    SvFileStream::LockRange()
-|*
-*************************************************************************/
 
 sal_Bool SvFileStream::LockRange( sal_Size nByteOffset, sal_Size nBytes )
 {
@@ -545,12 +475,6 @@ sal_Bool SvFileStream::LockRange( sal_Size nByteOffset, sal_Size nBytes )
     return sal_True;
 }
 
-/*************************************************************************
-|*
-|*    SvFileStream::UnlockRange()
-|*
-*************************************************************************/
-
 sal_Bool SvFileStream::UnlockRange( sal_Size nByteOffset, sal_Size nBytes )
 {
     if ( ! IsOpen() )
@@ -561,33 +485,15 @@ sal_Bool SvFileStream::UnlockRange( sal_Size nByteOffset, sal_Size nBytes )
     return sal_True;
 }
 
-/*************************************************************************
-|*
-|*    SvFileStream::LockFile()
-|*
-*************************************************************************/
-
 sal_Bool SvFileStream::LockFile()
 {
   return LockRange( 0UL, 0UL );
 }
 
-/*************************************************************************
-|*
-|*    SvFileStream::UnlockFile()
-|*
-*************************************************************************/
-
 sal_Bool SvFileStream::UnlockFile()
 {
     return UnlockRange( 0UL, 0UL );
 }
-
-/*************************************************************************
-|*
-|*    SvFileStream::Open()
-|*
-*************************************************************************/
 
 void SvFileStream::Open( const String& rFilename, StreamMode nOpenMode )
 {
@@ -698,12 +604,6 @@ void SvFileStream::Open( const String& rFilename, StreamMode nOpenMode )
         SetError( ::GetSvError( rc ) );
 }
 
-/*************************************************************************
-|*
-|*    SvFileStream::Close()
-|*
-*************************************************************************/
-
 void SvFileStream::Close()
 {
     UnlockFile();
@@ -729,27 +629,11 @@ void SvFileStream::Close()
     SvStream::ClearError();
 }
 
-/*************************************************************************
-|*
-|*    SvFileStream::ResetError()
-|*
-|*    Beschreibung      STREAM.SDW; Setzt Filepointer auf Dateianfang
-|*
-*************************************************************************/
-
+/// set filepointer to beginning of file
 void SvFileStream::ResetError()
 {
     SvStream::ClearError();
 }
-
-
-/*************************************************************************
-|*
-|*    SvFileStream::SetSize()
-|*
-|*    Beschreibung      STREAM.SDW;
-|*
-*************************************************************************/
 
 void SvFileStream::SetSize (sal_Size nSize)
 {

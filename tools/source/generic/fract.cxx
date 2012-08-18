@@ -17,23 +17,15 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <limits.h>
 #include <tools/debug.hxx>
 #include <tools/fract.hxx>
 #include <tools/stream.hxx>
-
 #include <tools/bigint.hxx>
 
-/*************************************************************************
-|*
-|*    GetGGT()
-|*
-|*    Beschreibung      Berechnet den groessten gemeinsamen Teiler von
-|*                      nVal1 und nVal2
-|*    Parameter         long nVal1, long nVal2
-|*
-*************************************************************************/
+// Beschreibung: Berechnet den groessten gemeinsamen Teiler von
+//               nVal1 und nVal2
+// Parameter     long nVal1, long nVal2
 
 // Die Funktion GetGGT berechnet den groessten gemeinsamen Teiler der
 // beiden als Parameter uebergebenen Werte nVal1 und nVal2 nach dem
@@ -45,7 +37,6 @@
 //              geteilt, bis sie beide gleich sind oder bis bei der Division
 //              kein Rest bleibt. Der kleinere der beiden Werte ist dann der
 //              GGT.
-
 static long GetGGT( long nVal1, long nVal2 )
 {
     nVal1 = Abs( nVal1 );
@@ -69,7 +60,6 @@ static long GetGGT( long nVal1, long nVal2 )
                 return nVal1;
         }
     }
-
     return nVal1;
 }
 
@@ -111,18 +101,11 @@ static void Reduce( BigInt &rVal1, BigInt &rVal2 )
     rVal2 /= nB;
 }
 
-/*************************************************************************
-|*
-|*    Fraction::Fraction()
-|*
-*************************************************************************/
-
 // Zur Initialisierung eines Bruches wird nNum dem Zaehler und nDen dem
 // Nenner zugewiesen. Da negative Werte des Nenners einen Bruch als
 // ungueltig kennzeichnen, wird bei der Eingabe eines negativen Nenners
 // sowohl das Vorzeichen des Nenners und des Zaehlers invertiert um wieder
 // einen gueltigen Wert fuer den Bruch zu erhalten.
-
 Fraction::Fraction( long nNum, long nDen )
 {
     nNumerator = nNum;
@@ -139,18 +122,11 @@ Fraction::Fraction( long nNum, long nDen )
     nDenominator /= n;
 }
 
-/*************************************************************************
-|*
-|*    Fraction::Fraction()
-|*
-*************************************************************************/
-
 // Wenn der Wert von dVal groesser ist als LONG_MAX, dann wird der Bruch
 // auf den Wert ungueltig gesetzt, ansonsten werden dVal und der Nenner
 // solange mit 10 multipliziert, bis entweder der Zaehler oder der Nenner
 // groesser als LONG_MAX / 10 ist. Zum Schluss wird der so entstandene Bruch
 // gekuerzt.
-
 Fraction::Fraction( double dVal )
 {
     long nDen = 1;
@@ -177,12 +153,6 @@ Fraction::Fraction( double dVal )
     nDenominator /= n;
 }
 
-/*************************************************************************
-|*
-|*    Fraction::operator double()
-|*
-*************************************************************************/
-
 Fraction::operator double() const
 {
     if ( nDenominator > 0 )
@@ -190,12 +160,6 @@ Fraction::operator double() const
     else
         return (double)0;
 }
-
-/*************************************************************************
-|*
-|*    Fraction::operator+=()
-|*
-*************************************************************************/
 
 // Zunaechst werden die beiden Parameter auf ihre Gueltigkeit ueberprueft.
 // Ist einer der Parameter ungueltig, dann ist auch des Ergebnis
@@ -206,7 +170,6 @@ Fraction::operator double() const
 // Nenner mit nGGT). Innerhalb der Funktion wird mit dem Datentyp SLong
 // gerechnet, um einen Moeglichen Ueberlauf erkennen zu koennen. Bei
 // einem Ueberlauf wird das Ergebnis auf den Wert ungueltig gesetzt.
-
 Fraction& Fraction::operator += ( const Fraction& rVal )
 {
     if ( !rVal.IsValid() )
@@ -243,12 +206,6 @@ Fraction& Fraction::operator += ( const Fraction& rVal )
     return *this;
 }
 
-/*************************************************************************
-|*
-|*    Fraction::operator-=()
-|*
-*************************************************************************/
-
 // Zunaechst werden die beiden Parameter auf ihre Gueltigkeit ueberprueft.
 // Ist einer der Parameter ungueltig, dann ist auch des Ergebnis
 // ungueltig. Zur Subtraktion werden die beiden Brueche erst durch
@@ -258,7 +215,6 @@ Fraction& Fraction::operator += ( const Fraction& rVal )
 // Nenner mit nGGT). Innerhalb der Funktion wird mit dem Datentyp BigInt
 // gerechnet, um einen Moeglichen Ueberlauf erkennen zu koennen. Bei
 // einem Ueberlauf wird das Ergebnis auf den Wert ungueltig gesetzt.
-
 Fraction& Fraction::operator -= ( const Fraction& rVal )
 {
     if ( !rVal.IsValid() )
@@ -295,12 +251,6 @@ Fraction& Fraction::operator -= ( const Fraction& rVal )
     return *this;
 }
 
-/*************************************************************************
-|*
-|*    Fraction::operator*=()
-|*
-*************************************************************************/
-
 // Zunaechst werden die beiden Parameter auf ihre Gueltigkeit ueberprueft.
 // Ist einer der Parameter ungueltig, dann ist auch des Ergebnis
 // ungueltig. Zur Multiplikation werden jeweils die beiden Zaehler und
@@ -311,7 +261,6 @@ Fraction& Fraction::operator -= ( const Fraction& rVal )
 // Innerhalb der Funktion wird mit dem Datentyp BigInt gerechnet, um
 // einen Moeglichen Ueberlauf erkennen zu koennen. Bei einem Ueberlauf
 // wird das Ergebnis auf den Wert ungueltig gesetzt.
-
 Fraction& Fraction::operator *= ( const Fraction& rVal )
 {
     if ( !rVal.IsValid() )
@@ -343,12 +292,6 @@ Fraction& Fraction::operator *= ( const Fraction& rVal )
     return *this;
 }
 
-/*************************************************************************
-|*
-|*    Fraction::operator/=()
-|*
-*************************************************************************/
-
 // Zunaechst werden die beiden Parameter auf ihre Gueltigkeit ueberprueft.
 // Ist einer der Parameter ungueltig, dann ist auch des Ergebnis
 // ungueltig.
@@ -362,7 +305,6 @@ Fraction& Fraction::operator *= ( const Fraction& rVal )
 // Innerhalb der Funktion wird mit dem Datentyp BigInt gerechnet, um
 // einen Moeglichen Ueberlauf erkennen zu koennen. Bei einem Ueberlauf
 // wird das Ergebnis auf den Wert ungueltig gesetzt.
-
 Fraction& Fraction::operator /= ( const Fraction& rVal )
 {
     if ( !rVal.IsValid() )
@@ -399,13 +341,6 @@ Fraction& Fraction::operator /= ( const Fraction& rVal )
     return *this;
 }
 
-/*************************************************************************
-|*
-|*    Fraction::ReduceInaccurate()
-|*
-*************************************************************************/
-
-
 // Similar to clz_table that can be googled
 const char nbits_table[32] =
 {
@@ -418,7 +353,6 @@ const char nbits_table[32] =
 static int impl_NumberOfBits( unsigned long nNum )
 {
     // http://en.wikipedia.org/wiki/De_Bruijn_sequence
-    //
     // background paper: Using de Bruijn Sequences to Index a 1 in a
     // Computer Word (1998) Charles E. Leiserson,
     // Harald Prokop, Keith H. Randall
@@ -529,12 +463,6 @@ void Fraction::ReduceInaccurate( unsigned nSignificantBits )
     nDenominator = nDiv;
 }
 
-/*************************************************************************
-|*
-|*    Fraction::operator ==()
-|*
-*************************************************************************/
-
 bool operator == ( const Fraction& rVal1, const Fraction& rVal2 )
 {
     if ( !rVal1.IsValid() || !rVal2.IsValid() )
@@ -544,19 +472,12 @@ bool operator == ( const Fraction& rVal1, const Fraction& rVal2 )
            && rVal1.nDenominator == rVal2.nDenominator;
 }
 
-/*************************************************************************
-|*
-|*    Fraction::operator <()
-|*
-*************************************************************************/
-
 // Beide Operanden werden zunaechst auf ihre Gueltigkeit ueberprueft und
 // anschliessend zur Sicherheit noch einmal gekuerzt. Um die Brueche
 // (a/b) und (c/d) zu vergleichen, werden sie zunaechst auf einen
 // gemeinsamen Nenner gebracht (b*d), um dann die beiden Zaehler (a*d)
 // und (c*b) zu vergleichen. Das Ergebnis dieses Vergleichs wird
 // zurueckgegeben.
-
 bool operator < ( const Fraction& rVal1, const Fraction& rVal2 )
 {
     if ( !rVal1.IsValid() || !rVal2.IsValid() )
@@ -570,19 +491,12 @@ bool operator < ( const Fraction& rVal1, const Fraction& rVal2 )
     return nN < nD;
 }
 
-/*************************************************************************
-|*
-|*    Fraction::operator >()
-|*
-*************************************************************************/
-
 // Beide Operanden werden zunaechst auf ihre Gueltigkeit ueberprueft und
 // anschliessend zur Sicherheit noch einmal gekuerzt. Um die Brueche
 // (a/b) und (c/d) zu vergleichen, werden sie zunaechst auf einen
 // gemeinsamen Nenner gebracht (b*d), um dann die beiden Zaehler (a*d)
 // und (c*b) zu vergleichen. Das Ergebnis dieses Vergleichs wird
 // zurueckgegeben.
-
 bool operator > ( const Fraction& rVal1, const Fraction& rVal2 )
 {
     if ( !rVal1.IsValid() || !rVal2.IsValid() )
@@ -596,11 +510,6 @@ bool operator > ( const Fraction& rVal1, const Fraction& rVal2 )
     return nN > nD;
 }
 
-/*************************************************************************
-|*
-|*    SvStream& operator>>( SvStream& rIStream, Fraction& rFract )
-|*
-*************************************************************************/
 SvStream& operator >> ( SvStream& rIStream, Fraction& rFract )
 {
     //fdo#39428 SvStream no longer supports operator>>(long&)
@@ -612,11 +521,6 @@ SvStream& operator >> ( SvStream& rIStream, Fraction& rFract )
     return rIStream;
 }
 
-/*************************************************************************
-|*
-|*    SvStream& operator<<( SvStream& rIStream, Fraction& rFract )
-|*
-*************************************************************************/
 SvStream& operator << ( SvStream& rOStream, const Fraction& rFract )
 {
     //fdo#39428 SvStream no longer supports operator<<(long)

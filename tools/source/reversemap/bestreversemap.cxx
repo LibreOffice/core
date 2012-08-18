@@ -75,7 +75,6 @@ struct Encoder
 
 };
 
-
 int main()
 {
 #   define EXP(x) Encoder(x, #x)

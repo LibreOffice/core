@@ -16,7 +16,6 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-
 #ifndef _dosmsc_hxx
 #define _dosmsc_hxx
 
@@ -25,19 +24,17 @@
 #ifndef ICC
 #include <io.h>
 #endif
+
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <direct.h>
-
 #include <windows.h>
 #include <tools/solar.h>
-
 #include <rtl/strbuf.hxx>
-
-//--------------------------------------------------------------------
 
 #define DOS_DIRECT      _A_SUBDIR
 #define DOS_VOLUMEID    0x08
+
 #ifndef S_IFBLK
 #define S_IFBLK         0x6000
 #endif

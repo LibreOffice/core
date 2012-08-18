@@ -17,18 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "tools/mempool.hxx"
 #include "osl/diagnose.h"
 #include "rtl/alloc.h"
 
 #include <stdio.h>
-
-/*************************************************************************
-|*
-|*    FixedMemPool::FixedMemPool()
-|*
-*************************************************************************/
 
 FixedMemPool::FixedMemPool(char const * pTypeName, sal_uInt16 nTypeSize)
   : m_pTypeName (pTypeName)
@@ -39,34 +32,16 @@ FixedMemPool::FixedMemPool(char const * pTypeName, sal_uInt16 nTypeSize)
     OSL_TRACE("FixedMemPool::ctor(\"%s\"): %p", m_pTypeName, m_pImpl);
 }
 
-/*************************************************************************
-|*
-|*    FixedMemPool::~FixedMemPool()
-|*
-*************************************************************************/
-
 FixedMemPool::~FixedMemPool()
 {
     OSL_TRACE("FixedMemPool::dtor(\"%s\"): %p", m_pTypeName, m_pImpl);
     rtl_cache_destroy ((rtl_cache_type*)(m_pImpl)), m_pImpl = 0;
 }
 
-/*************************************************************************
-|*
-|*    FixedMemPool::Alloc()
-|*
-*************************************************************************/
-
 void* FixedMemPool::Alloc()
 {
     return rtl_cache_alloc ((rtl_cache_type*)(m_pImpl));
 }
-
-/*************************************************************************
-|*
-|*    FixedMemPool::Free()
-|*
-*************************************************************************/
 
 void FixedMemPool::Free( void* pFree )
 {

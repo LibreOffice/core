@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #if !defined UNX
 #ifdef WNT
 #include <windows.h>
@@ -48,21 +47,18 @@
 #ifdef UNX
 #define _MAX_PATH 260
 #endif
+
 #include <tools/stream.hxx>
-
 #include <osl/mutex.hxx>
-
 #include <osl/file.hxx>
 #include <rtl/instance.hxx>
 #include <comphelper/string.hxx>
 
 using namespace osl;
-
 using ::rtl::OUString;
 
 int ApiRet2ToSolarError_Impl( int nApiRet );
 
-//--------------------------------------------------------------------
 int Sys2SolarError_Impl( int nSysErr )
 {
     switch ( nSysErr )
@@ -117,8 +113,6 @@ int Sys2SolarError_Impl( int nSysErr )
     return FSYS_ERR_UNKNOWN;
 }
 
-//--------------------------------------------------------------------
-
 class DirEntryStack
 {
 private:
@@ -171,32 +165,19 @@ inline void DirEntryStack::Clear()
     maStack.clear();
 }
 
-//--------------------------------------------------------------------
-
 DBG_NAME( DirEntry );
-
-/*************************************************************************
-|*
-|*    DirEntry::~DirEntryStack()
-|*
-*************************************************************************/
 
 DirEntryStack::~DirEntryStack()
 {
     maStack.clear();
 }
 
-/*************************************************************************
-|*
-|*    ImpCheckDirEntry()
-|*
-|*    Description       Check DirEntry for DBG_UTIL
-|*    Parameter         void* p     Pointer to DirEntry
-|*    Return-Valu       char*       Error-TExtension or NULL
-|*
-*************************************************************************/
-
 #ifdef DBG_UTIL
+/** Check DirEntry for DBG_UTIL
+
+    @param p Pointer to DirEntry
+    @return char* Error-TExtension or NULL
+*/
 const char* ImpCheckDirEntry( const void* p )
 {
     DirEntry* p0 = (DirEntry*)p;
@@ -208,14 +189,7 @@ const char* ImpCheckDirEntry( const void* p )
 }
 #endif
 
-/*************************************************************************
-|*
-|*    ImplCutPath()
-|*
-|*    Description       Insert "..." for max length of nMaxChars
-|*
-*************************************************************************/
-
+/** Insert "..." for max length of nMaxChars */
 rtl::OString ImplCutPath( const rtl::OString& rStr, sal_Int32 nMax, char cAccDel )
 {
     sal_Int32 nMaxPathLen = nMax;
@@ -548,12 +522,6 @@ FSysError DirEntry::ImpParseName( const rtl::OString& rPfad )
 #endif
 }
 
-/*************************************************************************
-|*
-|*    GetStyle()
-|*
-*************************************************************************/
-
 static FSysPathStyle GetStyle( FSysPathStyle eStyle )
 {
     if ( eStyle == FSYS_STYLE_HOST || eStyle == FSYS_STYLE_DETECT )
@@ -562,16 +530,7 @@ static FSysPathStyle GetStyle( FSysPathStyle eStyle )
         return eStyle;
 }
 
-/*************************************************************************
-|*
-|*    DirEntry::ImpTrim()
-|*
-|*    Beschreibung      bringt den Namen auf Betriebssystem-Norm
-|*                      z.B. 8.3 lower beim MS-DOS Formatter
-|*                      wirkt nicht rekursiv
-|*
-*************************************************************************/
-
+/** Convert name to match OS norm. */
 void DirEntry::ImpTrim()
 {
     // Wildcards werden nicht geclipt
@@ -595,12 +554,6 @@ void DirEntry::ImpTrim()
 #endif
 }
 
-/*************************************************************************
-|*
-|*    DirEntry::DirEntry()
-|*
-*************************************************************************/
-
 DirEntry::DirEntry( const rtl::OString& rName, DirEntryFlag eDirFlag ) :
 #ifdef FEAT_FSYS_DOUBLESPEED
             pStat( 0 ),
@@ -615,12 +568,6 @@ DirEntry::DirEntry( const rtl::OString& rName, DirEntryFlag eDirFlag ) :
 
     ImpTrim();
 }
-
-/*************************************************************************
-|*
-|*    DirEntry::DirEntry()
-|*
-*************************************************************************/
 
 DirEntry::DirEntry( const DirEntry& rOrig ) :
 #ifdef FEAT_FSYS_DOUBLESPEED
@@ -642,12 +589,6 @@ DirEntry::DirEntry( const DirEntry& rOrig ) :
         pParent = NULL;
     }
 }
-
-/*************************************************************************
-|*
-|*    DirEntry::DirEntry()
-|*
-*************************************************************************/
 
 DirEntry::DirEntry( const String& rInitName, FSysPathStyle eStyle )
 #ifdef FEAT_FSYS_DOUBLESPEED
@@ -703,8 +644,6 @@ DirEntry::DirEntry( const String& rInitName, FSysPathStyle eStyle )
         eFlag = FSYS_FLAG_INVALID;
 }
 
-/*************************************************************************/
-
 DirEntry::DirEntry( const rtl::OString& rInitName, FSysPathStyle eStyle )
 #ifdef FEAT_FSYS_DOUBLESPEED
             : pStat( 0 )
@@ -751,12 +690,6 @@ DirEntry::DirEntry( const rtl::OString& rInitName, FSysPathStyle eStyle )
         eFlag = FSYS_FLAG_INVALID;
 }
 
-/*************************************************************************
-|*
-|*    DirEntry::DirEntry()
-|*
-*************************************************************************/
-
 DirEntry::DirEntry( DirEntryFlag eDirFlag )
 #ifdef FEAT_FSYS_DOUBLESPEED
             : pStat( 0 )
@@ -769,12 +702,6 @@ DirEntry::DirEntry( DirEntryFlag eDirFlag )
     pParent         = NULL;
 }
 
-/*************************************************************************
-|*
-|*    DirEntry::~DirEntry()
-|*
-*************************************************************************/
-
 DirEntry::~DirEntry()
 {
     DBG_DTOR( DirEntry, ImpCheckDirEntry );
@@ -785,12 +712,6 @@ DirEntry::~DirEntry()
 #endif
 
 }
-
-/*************************************************************************
-|*
-|*    DirEntry::ImpGetTopPtr() const
-|*
-*************************************************************************/
 
 const DirEntry* DirEntry::ImpGetTopPtr() const
 {
@@ -803,12 +724,6 @@ const DirEntry* DirEntry::ImpGetTopPtr() const
     return pTemp;
 }
 
-/*************************************************************************
-|*
-|*    DirEntry::ImpGetTopPtr()
-|*
-*************************************************************************/
-
 DirEntry* DirEntry::ImpGetTopPtr()
 {
     DBG_CHKTHIS( DirEntry, ImpCheckDirEntry );
@@ -819,12 +734,6 @@ DirEntry* DirEntry::ImpGetTopPtr()
 
     return pTemp;
 }
-
-/*************************************************************************
-|*
-|*    DirEntry::ImpChangeParent()
-|*
-*************************************************************************/
 
 DirEntry* DirEntry::ImpChangeParent( DirEntry* pNewParent, sal_Bool bNormalize )
 {
@@ -842,12 +751,6 @@ DirEntry* DirEntry::ImpChangeParent( DirEntry* pNewParent, sal_Bool bNormalize )
 
     return pTemp;
 }
-
-/*************************************************************************
-|*
-|*    DirEntry::Exists()
-|*
-*************************************************************************/
 
 sal_Bool DirEntry::Exists( FSysAccess nAccess ) const
 {
@@ -890,12 +793,6 @@ sal_Bool DirEntry::Exists( FSysAccess nAccess ) const
         return 0 != ( eKind & ( FSYS_KIND_FILE | FSYS_KIND_DIR ) );
 }
 
-/*************************************************************************
-|*
-|*    DirEntry::First()
-|*
-*************************************************************************/
-
 sal_Bool DirEntry::First()
 {
     FSysFailOnErrorImpl();
@@ -923,12 +820,6 @@ sal_Bool DirEntry::First()
         }
         return sal_False;
 }
-
-/*************************************************************************
-|*
-|*    DirEntry::GetFull()
-|*
-*************************************************************************/
 
 String DirEntry::GetFull( FSysPathStyle eStyle, sal_Bool bWithDelimiter,
                           sal_uInt16 nMaxChars ) const
@@ -972,12 +863,6 @@ String DirEntry::GetFull( FSysPathStyle eStyle, sal_Bool bWithDelimiter,
     return rtl::OStringToOUString(aRet, osl_getThreadTextEncoding());
 }
 
-/*************************************************************************
-|*
-|*    DirEntry::GetPath()
-|*
-*************************************************************************/
-
 DirEntry DirEntry::GetPath() const
 {
     DBG_CHKTHIS( DirEntry, ImpCheckDirEntry );
@@ -987,12 +872,6 @@ DirEntry DirEntry::GetPath() const
 
     return DirEntry();
 }
-
-/*************************************************************************
-|*
-|*    DirEntry::GetExtension()
-|*
-*************************************************************************/
 
 String DirEntry::GetExtension( char cSep ) const
 {
@@ -1013,12 +892,6 @@ String DirEntry::GetExtension( char cSep ) const
     return String();
 }
 
-/*************************************************************************
-|*
-|*    DirEntry::GetBase()
-|*
-*************************************************************************/
-
 String DirEntry::GetBase( char cSep ) const
 {
     DBG_CHKTHIS( DirEntry, ImpCheckDirEntry );
@@ -1038,12 +911,6 @@ String DirEntry::GetBase( char cSep ) const
     // es wurde kein cSep gefunden
     return rtl::OStringToOUString(aName, osl_getThreadTextEncoding());
 }
-
-/*************************************************************************
-|*
-|*    DirEntry::GetName()
-|*
-*************************************************************************/
 
 String DirEntry::GetName( FSysPathStyle eStyle ) const
 {
@@ -1088,12 +955,6 @@ String DirEntry::GetName( FSysPathStyle eStyle ) const
         osl_getThreadTextEncoding());
 }
 
-/*************************************************************************
-|*
-|*    DirEntry::IsAbs()
-|*
-*************************************************************************/
-
 bool DirEntry::IsAbs() const
 {
     DBG_CHKTHIS( DirEntry, ImpCheckDirEntry );
@@ -1104,12 +965,6 @@ bool DirEntry::IsAbs() const
     return ( pParent ? pParent->IsAbs() : eFlag == FSYS_FLAG_ABSROOT && !aName.isEmpty() );
 #endif
 }
-
-/*************************************************************************
-|*
-|*    DirEntry::CutName()
-|*
-*************************************************************************/
 
 String DirEntry::CutName( FSysPathStyle eStyle )
 {
@@ -1147,12 +1002,6 @@ String DirEntry::CutName( FSysPathStyle eStyle )
     return aOldName;
 }
 
-/*************************************************************************
-|*
-|*    DirEntry::operator==()
-|*
-*************************************************************************/
-
 sal_Bool DirEntry::operator==( const DirEntry& rEntry ) const
 {
     DBG_CHKTHIS( DirEntry, ImpCheckDirEntry );
@@ -1178,12 +1027,6 @@ sal_Bool DirEntry::operator==( const DirEntry& rEntry ) const
 
     return ( !pThis && !pWith );
 }
-
-/*************************************************************************
-|*
-|*    DirEntry::operator=()
-|*
-*************************************************************************/
 
 DirEntry& DirEntry::operator=( const DirEntry& rEntry )
 {
@@ -1212,12 +1055,6 @@ DirEntry& DirEntry::operator=( const DirEntry& rEntry )
         delete pOldParent;
     return *this;
 }
-
-/*************************************************************************
-|*
-|*    DirEntry::operator+()
-|*
-*************************************************************************/
 
 DirEntry DirEntry::operator+( const DirEntry& rEntry ) const
 {
@@ -1290,12 +1127,6 @@ DirEntry DirEntry::operator+( const DirEntry& rEntry ) const
         return aRet;
 }
 
-/*************************************************************************
-|*
-|*    DirEntry::operator+=()
-|*
-*************************************************************************/
-
 DirEntry &DirEntry::operator+=( const DirEntry& rEntry )
 {
     DBG_CHKTHIS( DirEntry, ImpCheckDirEntry );
@@ -1303,22 +1134,10 @@ DirEntry &DirEntry::operator+=( const DirEntry& rEntry )
     return *this = *this + rEntry;
 }
 
-/*************************************************************************
-|*
-|*    DirEntry::GetAccessDelimiter()
-|*
-*************************************************************************/
-
 String DirEntry::GetAccessDelimiter( FSysPathStyle eFormatter )
 {
         return rtl::OUString( ACCESSDELIM_C( GetStyle( eFormatter ) ) );
 }
-
-/*************************************************************************
-|*
-|*    DirEntry::SetExtension()
-|*
-*************************************************************************/
 
 void DirEntry::SetExtension( const String& rExtension, char cSep )
 {
@@ -1359,12 +1178,6 @@ void DirEntry::SetExtension( const String& rExtension, char cSep )
     aName = aBuf.makeStringAndClear();
 }
 
-/*************************************************************************
-|*
-|*    DirEntry::SetName()
-|*
-*************************************************************************/
-
 void DirEntry::SetName( const String& rName, FSysPathStyle eFormatter )
 {
     DBG_CHKTHIS( DirEntry, ImpCheckDirEntry );
@@ -1385,11 +1198,6 @@ void DirEntry::SetName( const String& rName, FSysPathStyle eFormatter )
     }
 }
 
-/*************************************************************************
-|*
-|*    DirEntry::Find()
-|*
-*************************************************************************/
 sal_Bool DirEntry::Find( const String& rPfad, char cDelim )
 {
     DBG_CHKTHIS( DirEntry, ImpCheckDirEntry );
@@ -1433,14 +1241,7 @@ sal_Bool DirEntry::Find( const String& rPfad, char cDelim )
     return sal_False;
 }
 
-/*************************************************************************
-|*
-|*    DirEntry::GetDevice()
-|*
-*************************************************************************/
-
 #ifndef UNX
-
 DirEntry DirEntry::GetDevice() const
 {
         DBG_CHKTHIS( DirEntry, ImpCheckDirEntry );
@@ -1453,28 +1254,17 @@ DirEntry DirEntry::GetDevice() const
         else
                 return DirEntry( rtl::OString(), FSYS_FLAG_INVALID );
 }
-
 #endif
-
-/*************************************************************************
-|*
-|*    DirEntry::GetSearchDelimiter()
-|*
-*************************************************************************/
 
 String DirEntry::GetSearchDelimiter( FSysPathStyle eFormatter )
 {
     return rtl::OStringToOUString(rtl::OString(SEARCHDELIM(GetStyle(eFormatter))), osl_getThreadTextEncoding());
 }
 
-/*************************************************************************
-|*
-|*    DirEntry::TempName()
-|*
-|*    Beschreibung      FSYS.SDW - Aha, wo?
-|*
-*************************************************************************/
-namespace { struct TempNameBase_Impl : public rtl::Static< DirEntry, TempNameBase_Impl > {}; }
+namespace
+{
+    struct TempNameBase_Impl : public rtl::Static< DirEntry, TempNameBase_Impl > {};
+}
 
 DirEntry DirEntry::TempName( DirEntryKind eKind ) const
 {
@@ -1626,12 +1416,6 @@ DirEntry DirEntry::TempName( DirEntryKind eKind ) const
         return aRet;
 }
 
-/*************************************************************************
-|*
-|*    DirEntry::operator[]()
-|*
-*************************************************************************/
-
 const DirEntry &DirEntry::operator[]( sal_uInt16 nParentLevel ) const
 {
     DBG_CHKTHIS( DirEntry, ImpCheckDirEntry );
@@ -1644,12 +1428,6 @@ const DirEntry &DirEntry::operator[]( sal_uInt16 nParentLevel ) const
 
     return *pRes;
 }
-
-/*************************************************************************
-|*
-|*    DirEntry::CreatePath()
-|*
-*************************************************************************/
 
 sal_Bool DirEntry::MakeDir( sal_Bool bSloppy ) const
 {
@@ -1705,12 +1483,6 @@ sal_Bool DirEntry::MakeDir( sal_Bool bSloppy ) const
         return sal_True;
 }
 
-/*************************************************************************
-|*
-|*    DirEntry::CopyTo()
-|*
-*************************************************************************/
-
 FSysError DirEntry::CopyTo( const DirEntry& rDest, FSysAction nActions ) const
 {
     DBG_CHKTHIS( DirEntry, ImpCheckDirEntry );
@@ -1735,14 +1507,7 @@ FSysError DirEntry::CopyTo( const DirEntry& rDest, FSysAction nActions ) const
         return fc.Execute(nActions);
 }
 
-/*************************************************************************
-|*
-|*    DirEntry::MoveTo()
-|*
-*************************************************************************/
-
 #if defined WNT || defined UNX
-
 FSysError DirEntry::MoveTo( const DirEntry& rNewName ) const
 {
     DBG_CHKTHIS( DirEntry, ImpCheckDirEntry );
@@ -1885,12 +1650,6 @@ FSysError DirEntry::MoveTo( const DirEntry& rNewName ) const
 
 #endif
 
-/*************************************************************************
-|*
-|*    DirEntry::Kill()
-|*
-*************************************************************************/
-
 FSysError DirEntry::Kill(  FSysAction nActions ) const
 {
     DBG_CHKTHIS( DirEntry, ImpCheckDirEntry );
@@ -1934,7 +1693,6 @@ FSysError DirEntry::Kill(  FSysAction nActions ) const
                 SetLastError(0);
 #endif
                 if ( eError == FSYS_ERR_OK && 0 != _rmdir( (char*) pName ) )
-                //
                 {
                         // falls L"oschen nicht ging, CWD umsetzen
 #ifdef WIN32
@@ -2011,14 +1769,7 @@ FSysError DirEntry::Kill(  FSysAction nActions ) const
         return eError;
 }
 
-/*************************************************************************
-|*
-|*    DirEntry::Contains()
-|*
-|*    Beschreibung      ob rSubEntry direkt oder indirect in *this liegt
-|*
-*************************************************************************/
-
+/** Check if rSubEntry is (in)directly beneath *this */
 sal_Bool DirEntry::Contains( const DirEntry &rSubEntry ) const
 {
     DBG_ASSERT( IsAbs() && rSubEntry.IsAbs(), "must be absolute entries" );
@@ -2035,12 +1786,6 @@ sal_Bool DirEntry::Contains( const DirEntry &rSubEntry ) const
     return sal_False;
 }
 
-/*************************************************************************
-|*
-|*    DirEntry::Level()
-|*
-*************************************************************************/
-
 sal_uInt16 DirEntry::Level() const
 {
     DBG_CHKTHIS( DirEntry, ImpCheckDirEntry );
@@ -2056,25 +1801,15 @@ sal_uInt16 DirEntry::Level() const
     return nLevel;
 }
 
-/*************************************************************************
-|*
-|*    DirEntry::IsValid()
-|*
-*************************************************************************/
-
 sal_Bool DirEntry::IsValid() const
 {
         return (nError == FSYS_ERR_OK);
 }
 
-//========================================================================
-
 #if defined(DBG_UTIL)
-
 void FSysTest()
 {
 }
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

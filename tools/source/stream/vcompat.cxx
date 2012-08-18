@@ -20,10 +20,6 @@
 #include <tools/stream.hxx>
 #include <tools/vcompat.hxx>
 
-// -----------------
-// - VersionCompat -
-// -----------------
-
 VersionCompat::VersionCompat( SvStream& rStm, sal_uInt16 nStreamMode, sal_uInt16 nVersion ) :
             mpRWStm     ( &rStm ),
             mnStmMode   ( nStreamMode ),
@@ -45,8 +41,6 @@ VersionCompat::VersionCompat( SvStream& rStm, sal_uInt16 nStreamMode, sal_uInt16
         }
     }
 }
-
-// ------------------------------------------------------------------------
 
 VersionCompat::~VersionCompat()
 {

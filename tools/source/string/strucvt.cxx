@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-// =======================================================================
-
 UniString::UniString( const char* pByteStr,
                       rtl_TextEncoding eTextEncoding, sal_uInt32 nCvtFlags )
 {
@@ -30,8 +28,6 @@ UniString::UniString( const char* pByteStr,
                         pByteStr, ImplStringLen( pByteStr ),
                         eTextEncoding, nCvtFlags );
 }
-
-// -----------------------------------------------------------------------
 
 UniString::UniString( const char* pByteStr, xub_StrLen nLen,
                       rtl_TextEncoding eTextEncoding, sal_uInt32 nCvtFlags )
@@ -47,8 +43,6 @@ UniString::UniString( const char* pByteStr, xub_StrLen nLen,
                         pByteStr, nLen,
                         eTextEncoding, nCvtFlags );
 }
-
-// =======================================================================
 
 UniString::UniString( const rtl::OUString& rStr )
     : mpData(NULL)
@@ -70,15 +64,12 @@ UniString::UniString( const rtl::OUString& rStr )
     }
 }
 
-// -----------------------------------------------------------------------
-
 UniString& UniString::Assign( const rtl::OUString& rStr )
 {
     DBG_CHKTHIS( UniString, DbgCheckUniString );
 
     OSL_ENSURE(rStr.pData->length < STRING_MAXLEN,
                "Overflowing rtl::OUString -> UniString cut to zero length");
-
 
     if (rStr.pData->length < STRING_MAXLEN)
     {
@@ -93,8 +84,6 @@ UniString& UniString::Assign( const rtl::OUString& rStr )
 
     return *this;
 }
-
-// =======================================================================
 
 #include <rtl/ustrbuf.hxx>
 #include <tools/rc.hxx>
@@ -119,8 +108,6 @@ UniString::UniString( const ResId& rResId )
     {
         STRING_NEW((STRING_TYPE **)&mpData);
     }
-
-
 }
 
 rtl::OUString ResId::toString() const

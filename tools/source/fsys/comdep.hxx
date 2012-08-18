@@ -16,7 +16,6 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-
 #ifndef _COMDEP_HXX
 #define _COMDEP_HXX
 
@@ -37,16 +36,12 @@
 #include "wntmsc.hxx"
 #endif
 
-//--------------------------------------------------------------------
-
 #ifndef LINUX
 DIR *opendir( const char* pPfad );
 dirent *readdir( DIR *pDir );
 int closedir( DIR *pDir );
 char *volumeid( const char* pPfad );
 #endif
-
-//--------------------------------------------------------------------
 
 struct DirReader_Impl
 {
@@ -93,7 +88,6 @@ struct DirReader_Impl
     sal_uInt16      Read(); // Reads one entry and appends it if ok
 };
 
-//--------------------------------------------------------------------
 
 struct FileCopier_Impl
 {
@@ -120,16 +114,11 @@ struct FileCopier_Impl
                     }
 };
 
-//--------------------------------------------------------------------
-
 #if defined WNT
 sal_Bool IsRedirectable_Impl( const rtl::OString &rPath );
 #else
 #define IsRedirectable_Impl( rPath )    sal_True
 #endif
-
-//--------------------------------------------------------------------
-
 
 #endif
 

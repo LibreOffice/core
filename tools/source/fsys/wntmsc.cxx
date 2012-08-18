@@ -17,13 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #ifdef _MSC_VER
 #pragma warning (push,1)
 #endif
+
 #include <stdio.h>
 #include <ctype.h>
 #include <limits.h>
+
 #ifdef _MSC_VER
 #pragma warning (pop)
 #endif
@@ -45,8 +46,6 @@ rtl::OString Upper_Impl(const rtl::OString &rStr)
     CharUpperBuff(&aBuffer[0], rStr.getLength());
     return rtl::OString(&aBuffer[0], rStr.getLength());
 }
-
-//--------------------------------------------------------------------
 
 DIR *opendir( const char* pPfad )
 {
@@ -95,12 +94,6 @@ int closedir( DIR *pDir )
     return bOk;
 }
 
-/*************************************************************************
-|*
-|*    DirEntry::ToAbs()
-|*
-*************************************************************************/
-
 sal_Bool DirEntry::ToAbs()
 {
     DBG_CHKTHIS( DirEntry, ImpCheckDirEntry );
@@ -128,13 +121,6 @@ sal_Bool DirEntry::ToAbs()
     *this = DirEntry( String(sBuf, osl_getThreadTextEncoding() ));
     return sal_True;
 }
-
-
-/*************************************************************************
-|*
-|*    DirEntry::GetVolume()
-|*
-*************************************************************************/
 
 String DirEntry::GetVolume() const
 {
@@ -179,12 +165,6 @@ String DirEntry::GetVolume() const
     return aRet;
 }
 
-/*************************************************************************
-|*
-|*    DirEntry::SetCWD()
-|*
-*************************************************************************/
-
 sal_Bool DirEntry::SetCWD( sal_Bool bSloppy ) const
 {
     DBG_CHKTHIS( DirEntry, ImpCheckDirEntry );
@@ -207,8 +187,6 @@ sal_Bool DirEntry::SetCWD( sal_Bool bSloppy ) const
 
     return sal_False;
 }
-
-//-------------------------------------------------------------------------
 
 USHORT DirReader_Impl::Init()
 {
@@ -250,8 +228,6 @@ USHORT DirReader_Impl::Init()
 
     return 0;
 }
-
-//-------------------------------------------------------------------------
 
 USHORT DirReader_Impl::Read()
 {
@@ -330,14 +306,7 @@ USHORT DirReader_Impl::Read()
     return 0;
 }
 
-/*************************************************************************
-|*
-|*    InitFileStat()
-|*
-|*    Beschreibung      gemeinsamer Teil der Ctoren fuer FileStat
-|*
-*************************************************************************/
-
+/// shared part of CTors for FileStat
 void FileStat::ImpInit( void* p )
 {
     _WIN32_FIND_DATAA *pDirEnt = (_WIN32_FIND_DATAA*) p;
@@ -387,12 +356,6 @@ void FileStat::ImpInit( void* p )
         nKindFlags = FSYS_KIND_DIR;
 }
 
-/*************************************************************************
-|*
-|*    FileStat::FileStat()
-|*
-*************************************************************************/
-
 FileStat::FileStat( const void *pInfo ): // struct dirent
     aDateCreated(0),
     aTimeCreated(0),
@@ -404,17 +367,13 @@ FileStat::FileStat( const void *pInfo ): // struct dirent
     ImpInit( ( (dirent*) pInfo ) );
 }
 
-/*************************************************************************
-|*
-|*    FileStat::Update()
-|*
-*************************************************************************/
-
 #ifdef _MSC_VER
 #pragma warning(push, 1)
 #pragma warning(disable: 4917)
 #endif
+
 #include <shlobj.h>
+
 #ifdef _MSC_VER
 #pragma warning(pop)
 #endif
@@ -427,8 +386,6 @@ FileStat::FileStat( const void *pInfo ): // struct dirent
 #define lstrncmp    strncmp
 #endif
 
-//---------------------------------------------------------------------------
-
 void SHFreeMem( void *p )
 {
     LPMALLOC    pMalloc = NULL;
@@ -439,8 +396,6 @@ void SHFreeMem( void *p )
         pMalloc->Release();
     }
 }
-
-//---------------------------------------------------------------------------
 
 HRESULT SHGetIDListFromPath( HWND hwndOwner, LPCTSTR pszPath, LPITEMIDLIST *ppidl )
 {
@@ -469,8 +424,6 @@ HRESULT SHGetIDListFromPath( HWND hwndOwner, LPCTSTR pszPath, LPITEMIDLIST *ppid
     return hResult;
 }
 
-//---------------------------------------------------------------------------
-
 HRESULT SHGetFolderFromIDList( LPCITEMIDLIST pidl, LPSHELLFOLDER *ppFolder )
 {
     if ( IsBadWritePtr(ppFolder, sizeof(LPSHELLFOLDER)) )
@@ -489,8 +442,6 @@ HRESULT SHGetFolderFromIDList( LPCITEMIDLIST pidl, LPSHELLFOLDER *ppFolder )
 
     return hResult;
 }
-
-//---------------------------------------------------------------------------
 
 HRESULT SHResolvePath( HWND hwndOwner, LPCTSTR pszPath, LPITEMIDLIST *ppidl )
 {
@@ -599,9 +550,7 @@ HRESULT SHResolvePath( HWND hwndOwner, LPCTSTR pszPath, LPITEMIDLIST *ppidl )
 #endif
 }
 
-//---------------------------------------------------------------------------
 // The Wrapper
-//---------------------------------------------------------------------------
 
 sal_Bool Exists_Impl(const rtl::OString& crPath)
 {
@@ -615,8 +564,6 @@ sal_Bool Exists_Impl(const rtl::OString& crPath)
 
     return bSuccess;
 }
-
-//---------------------------------------------------------------------------
 
 sal_Bool FileStat::Update( const DirEntry& rDirEntry, sal_Bool bForceAccess )
 {
@@ -830,15 +777,7 @@ sal_Bool IsRedirectable_Impl( const rtl::OString& rPath )
     return sal_False;
 }
 
-/*************************************************************************
-|*
-|*    TempDirImpl()
-|*
-|*    Beschreibung      liefert den Namens des Directories fuer temporaere
-|*                      Dateien
-|*
-*************************************************************************/
-
+/// get name of the directory for temporary files
 const char* TempDirImpl( char *pBuf )
 {
     if ( !GetTempPath( MAX_PATH, pBuf ) &&

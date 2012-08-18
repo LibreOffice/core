@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <limits.h>
 #include <tools/shl.hxx>
 #include <tools/debug.hxx>
@@ -28,9 +27,7 @@
 class ErrorHandler;
 
 namespace {
-
 typedef void (* DisplayFnPtr)();
-
 }
 
 struct EDcrData
@@ -48,7 +45,6 @@ struct EDcrData
                                 EDcrData();
 
 static  EDcrData                *GetData();
-
 };
 
 class EDcr_Impl
@@ -64,7 +60,6 @@ friend class DynamicErrorInfo;
 friend class ErrorInfo;
 };
 
-
 EDcrData::EDcrData()
 {
     for(sal_uInt16 n=0;n<ERRCODE_DYNAMIC_COUNT;n++)
@@ -74,7 +69,6 @@ EDcrData::EDcrData()
     pDsp=0;
     pFirstCtx=0;
 }
-
 
 EDcrData *EDcrData::GetData()
 {
@@ -112,7 +106,6 @@ void EDcr_Impl::RegisterEDcr(DynamicErrorInfo *pDcr)
         pData->nNextDcr=0;
 }
 
-
 void EDcr_Impl::UnRegisterEDcr(DynamicErrorInfo *pDcr)
 {
 
@@ -130,7 +123,6 @@ TYPEINIT1(DynamicErrorInfo, ErrorInfo);
 TYPEINIT1(StringErrorInfo, DynamicErrorInfo);
 TYPEINIT1(TwoStringErrorInfo, DynamicErrorInfo);
 TYPEINIT1(MessageInfo, DynamicErrorInfo);
-
 
 ErrorInfo *ErrorInfo::GetErrorInfo(sal_uIntPtr lId)
 {
@@ -181,7 +173,6 @@ StringErrorInfo::StringErrorInfo(
 : DynamicErrorInfo(UserId, nFlags), aString(aStringP)
 {
 }
-
 
 class ErrHdl_Impl
 {

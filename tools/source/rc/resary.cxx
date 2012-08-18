@@ -21,8 +21,6 @@
 #include <tools/resary.hxx>
 #include <tools/rcid.h>
 
-// =======================================================================
-
 ResStringArray::ResStringArray( const ResId& rResId )
 {
     rResId.SetRT( RSC_STRINGARRAY );
@@ -47,13 +45,9 @@ ResStringArray::ResStringArray( const ResId& rResId )
     }
 }
 
-// -----------------------------------------------------------------------
-
 ResStringArray::~ResStringArray()
 {
 }
-
-// -----------------------------------------------------------------------
 
 sal_uInt32 ResStringArray::FindIndex( long nValue ) const
 {

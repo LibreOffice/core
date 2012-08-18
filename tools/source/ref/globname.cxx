@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <ctype.h>
 #include <stdio.h>
 #include <string.h>
@@ -27,31 +26,27 @@
 #include <tools/stream.hxx>
 #include <tools/globname.hxx>
 
-/************** class ImpSvGlobalName ************************************/
+// ImpSvGlobalName ------------------------------------------------------------
+
 ImpSvGlobalName::ImpSvGlobalName( const ImpSvGlobalName & rObj )
 {
     nRefCount = 0;
     memcpy( szData, rObj.szData, sizeof( szData ) );
 }
 
-/************** class ImpSvGlobalName ************************************/
 ImpSvGlobalName::ImpSvGlobalName( Empty )
 {
     nRefCount = 1;
     memset( szData, 0, sizeof( szData ) );
 }
 
-/*************************************************************************
-|*    ImpSvGlobalName::operator ==()
-*************************************************************************/
 sal_Bool ImpSvGlobalName::operator == ( const ImpSvGlobalName & rObj ) const
 {
     return !memcmp( szData, rObj.szData, sizeof( szData ) );
 }
 
-/*************************************************************************
-|*    SvGlobalName::SvGlobalName()
-*************************************************************************/
+// SvGlobalName ----------------------------------------------------------------
+
 SvGlobalName::SvGlobalName()
 {
     static ImpSvGlobalName aNoName( ImpSvGlobalName::EMPTY );
@@ -99,9 +94,6 @@ SvGlobalName::SvGlobalName( sal_uInt32 n1, sal_uInt16 n2, sal_uInt16 n3,
     pImp->szData[ 15 ] = b15;
 }
 
-/*************************************************************************
-|*    SvGlobalName::~SvGlobalName()
-*************************************************************************/
 SvGlobalName::~SvGlobalName()
 {
     pImp->nRefCount--;
@@ -109,9 +101,6 @@ SvGlobalName::~SvGlobalName()
         delete pImp;
 }
 
-/*************************************************************************
-|*    SvGlobalName::operator = ()
-*************************************************************************/
 SvGlobalName & SvGlobalName::operator = ( const SvGlobalName & rObj )
 {
     rObj.pImp->nRefCount++;
@@ -122,9 +111,6 @@ SvGlobalName & SvGlobalName::operator = ( const SvGlobalName & rObj )
     return *this;
 }
 
-/*************************************************************************
-|*    SvGlobalName::NewImp()
-*************************************************************************/
 void SvGlobalName::NewImp()
 {
     if( pImp->nRefCount > 1 )
@@ -135,10 +121,6 @@ void SvGlobalName::NewImp()
     }
 }
 
-/*************************************************************************
-|*    SvGlobalName::operator << ()
-|*    SvGlobalName::operator >> ()
-*************************************************************************/
 SvStream& operator << ( SvStream& rOStr, const SvGlobalName & rObj )
 {
     sal_uInt32 a;
@@ -176,9 +158,6 @@ SvStream& operator >> ( SvStream& rStr, SvGlobalName & rObj )
 }
 
 
-/*************************************************************************
-|*    SvGlobalName::operator < ()
-*************************************************************************/
 sal_Bool SvGlobalName::operator < ( const SvGlobalName & rObj ) const
 {
     int n = memcmp( pImp->szData +6, rObj.pImp->szData +6,
@@ -211,9 +190,6 @@ sal_Bool SvGlobalName::operator < ( const SvGlobalName & rObj ) const
 
 }
 
-/*************************************************************************
-|*    SvGlobalName::operator +=()
-*************************************************************************/
 SvGlobalName & SvGlobalName::operator += ( sal_uInt32 n )
 {
     NewImp();
@@ -234,9 +210,6 @@ SvGlobalName & SvGlobalName::operator += ( sal_uInt32 n )
     return *this;
 }
 
-/*************************************************************************
-|*    SvGlobalName::operator ==()
-*************************************************************************/
 sal_Bool SvGlobalName::operator == ( const SvGlobalName & rObj ) const
 {
     return *pImp == *rObj.pImp;
@@ -248,9 +221,6 @@ void SvGlobalName::MakeFromMemory( void * pData )
     memcpy( pImp->szData, pData, sizeof( pImp->szData ) );
 }
 
-/*************************************************************************
-|*    SvGlobalName::MakeId()
-*************************************************************************/
 sal_Bool SvGlobalName::MakeId( const String & rIdStr )
 {
     rtl::OString aStr(rtl::OUStringToOString(rIdStr,
@@ -329,9 +299,6 @@ sal_Bool SvGlobalName::MakeId( const String & rIdStr )
     return sal_False;
 }
 
-/*************************************************************************
-|*    SvGlobalName::GetHexName()
-*************************************************************************/
 String SvGlobalName::GetHexName() const
 {
     rtl::OStringBuffer aHexBuffer;

@@ -16,16 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-
-
 #include <tools/datetime.hxx>
 #include <rtl/math.hxx>
-
-/*************************************************************************
-|*
-|*    DateTime::IsBetween()
-|*
-*************************************************************************/
 
 sal_Bool DateTime::IsBetween( const DateTime& rFrom,
                           const DateTime& rTo ) const
@@ -36,12 +28,6 @@ sal_Bool DateTime::IsBetween( const DateTime& rFrom,
         return sal_False;
 }
 
-/*************************************************************************
-|*
-|*    DateTime::operator >()
-|*
-*************************************************************************/
-
 sal_Bool DateTime::operator >( const DateTime& rDateTime ) const
 {
     if ( (Date::operator>( rDateTime )) ||
@@ -50,12 +36,6 @@ sal_Bool DateTime::operator >( const DateTime& rDateTime ) const
     else
         return sal_False;
 }
-
-/*************************************************************************
-|*
-|*    DateTime::operator <()
-|*
-*************************************************************************/
 
 sal_Bool DateTime::operator <( const DateTime& rDateTime ) const
 {
@@ -66,12 +46,6 @@ sal_Bool DateTime::operator <( const DateTime& rDateTime ) const
         return sal_False;
 }
 
-/*************************************************************************
-|*
-|*    DateTime::operator >=()
-|*
-*************************************************************************/
-
 sal_Bool DateTime::operator >=( const DateTime& rDateTime ) const
 {
     if ( (Date::operator>( rDateTime )) ||
@@ -81,12 +55,6 @@ sal_Bool DateTime::operator >=( const DateTime& rDateTime ) const
         return sal_False;
 }
 
-/*************************************************************************
-|*
-|*    DateTime::operator <=()
-|*
-*************************************************************************/
-
 sal_Bool DateTime::operator <=( const DateTime& rDateTime ) const
 {
     if ( (Date::operator<( rDateTime )) ||
@@ -95,12 +63,6 @@ sal_Bool DateTime::operator <=( const DateTime& rDateTime ) const
     else
         return sal_False;
 }
-
-/*************************************************************************
-|*
-|*    DateTime::GetSecFromDateTime()
-|*
-*************************************************************************/
 
 long DateTime::GetSecFromDateTime( const Date& rDate ) const
 {
@@ -116,12 +78,6 @@ long DateTime::GetSecFromDateTime( const Date& rDate ) const
         return nSec;
     }
 }
-
-/*************************************************************************
-|*
-|*    DateTime::operator +=()
-|*
-*************************************************************************/
 
 DateTime& DateTime::operator +=( const Time& rTime )
 {
@@ -152,12 +108,6 @@ DateTime& DateTime::operator +=( const Time& rTime )
     return *this;
 }
 
-/*************************************************************************
-|*
-|*    DateTime::operator -=()
-|*
-*************************************************************************/
-
 DateTime& DateTime::operator -=( const Time& rTime )
 {
     Time aTime = *this;
@@ -187,24 +137,12 @@ DateTime& DateTime::operator -=( const Time& rTime )
     return *this;
 }
 
-/*************************************************************************
-|*
-|*    DateTime::operator+()
-|*
-*************************************************************************/
-
 DateTime operator +( const DateTime& rDateTime, long nDays )
 {
     DateTime aDateTime( rDateTime );
     aDateTime += nDays;
     return aDateTime;
 }
-
-/*************************************************************************
-|*
-|*    DateTime::operator-()
-|*
-*************************************************************************/
 
 DateTime operator -( const DateTime& rDateTime, long nDays )
 {
@@ -213,12 +151,6 @@ DateTime operator -( const DateTime& rDateTime, long nDays )
     return aDateTime;
 }
 
-/*************************************************************************
-|*
-|*    DateTime::operator+()
-|*
-*************************************************************************/
-
 DateTime operator +( const DateTime& rDateTime, const Time& rTime )
 {
     DateTime aDateTime( rDateTime );
@@ -226,24 +158,12 @@ DateTime operator +( const DateTime& rDateTime, const Time& rTime )
     return aDateTime;
 }
 
-/*************************************************************************
-|*
-|*    DateTime::operator-()
-|*
-*************************************************************************/
-
 DateTime operator -( const DateTime& rDateTime, const Time& rTime )
 {
     DateTime aDateTime( rDateTime );
     aDateTime -= rTime;
     return aDateTime;
 }
-
-/*************************************************************************
-|*
-|*    DateTime::operator +=( double )
-|*
-*************************************************************************/
 
 DateTime& DateTime::operator +=( double fTimeInDays )
 {
@@ -269,24 +189,12 @@ DateTime& DateTime::operator +=( double fTimeInDays )
     return *this;
 }
 
-/*************************************************************************
-|*
-|*    DateTime::operator +( double )
-|*
-*************************************************************************/
-
 DateTime operator +( const DateTime& rDateTime, double fTimeInDays )
 {
     DateTime aDateTime( rDateTime );
     aDateTime += fTimeInDays;
     return aDateTime;
 }
-
-/*************************************************************************
-|*
-|*    DateTime::operator -()
-|*
-*************************************************************************/
 
 double operator -( const DateTime& rDateTime1, const DateTime& rDateTime2 )
 {
