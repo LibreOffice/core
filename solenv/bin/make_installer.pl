@@ -1138,8 +1138,6 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
                 if ( $installer::globals::languagepack ) { $packagename = $packagename . "_u"; }
                 elsif ( $installer::globals::helppack ) { $packagename = $packagename . "_v"; } # wtf...
                 else { $packagename = $packagename . "u"; }
-                my $savestring = $oldpackagename . "\t" . $packagename;
-                push(@installer::globals::linkrpms, $savestring);
                 $linkaddon = "_links";
                 $installer::globals::linuxlinkrpmprocess = 1;
                 $linkpackage = 1;
@@ -1203,7 +1201,6 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
 
             if ( ! ( $#{$filesinpackage} > -1 ))
             {
-                push(@installer::globals::emptypackages, $packagename);
                 $infoline = "\n\nNo file in package: $packagename \-\> Skipping\n\n";
                 push(@installer::globals::logfileinfo, $infoline);
                 next;   # next package, end of loop !
@@ -1314,7 +1311,6 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
 
                     if ( ! ( $#{$filesinpackage} > -1 ))
                     {
-                        push(@installer::globals::emptypackages, $packagename);
                         $infoline = "\nNo file in package: $packagename \-\> Skipping\n";
                         push(@installer::globals::logfileinfo, $infoline);
                         next;   # next package, end of loop !
