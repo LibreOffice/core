@@ -123,11 +123,6 @@ public:
     sal_Bool    Replace( sal_uInt8 cSearchTransparency, sal_uInt8 cReplaceTransparency,
                          sal_uLong nTol = 0UL );
 
-    sal_Bool Scale( const Size& rNewSize, sal_uLong nScaleFlag );
-    sal_Bool Scale( const double& rScaleX, const double& rScaleY, sal_uLong nScaleFlag = BMP_SCALE_DEFAULT );
-    sal_Bool ScaleCropRotate( const double& rScaleX, const double& rScaleY, const Rectangle& rRectPixel, long nAngle10,
-                              const Color& rFillColor, sal_uLong nScaleFlag = BMP_SCALE_DEFAULT );
-
     BitmapReadAccess*   AcquireReadAccess()
     {
         return Bitmap::AcquireReadAccess();
