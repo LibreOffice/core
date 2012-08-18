@@ -78,7 +78,7 @@ class InternalResMgr
 
     ImpContent *                    pContent;
     sal_uInt32                      nOffCorrection;
-    sal_uInt8                       pStringBlock;
+    sal_uInt8 *                     pStringBlock;
     SvStream *                      pStm;
     sal_Bool                        bEqual2Content;
     sal_uInt32                      nEntries;
