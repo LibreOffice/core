@@ -287,35 +287,4 @@ void AlphaMask::ReleaseAccess( BitmapReadAccess* pAccess )
     }
 }
 
-sal_Bool AlphaMask::Scale( const Size& rNewSize, sal_uLong nScaleFlag )
-{
-    sal_Bool bRet = Bitmap::Scale( rNewSize, nScaleFlag );
-
-    if( bRet )
-        Bitmap::Convert( BMP_CONVERSION_8BIT_GREYS );
-
-    return bRet;
-}
-
-sal_Bool AlphaMask::Scale( const double& rScaleX, const double& rScaleY, sal_uLong nScaleFlag )
-{
-    sal_Bool bRet = Bitmap::Scale( rScaleX, rScaleY, nScaleFlag );
-
-    if( bRet )
-        Bitmap::Convert( BMP_CONVERSION_8BIT_GREYS );
-
-    return bRet;
-}
-
-sal_Bool AlphaMask::ScaleCropRotate(
-        const double& rScaleX, const double& rScaleY, const Rectangle& rRectPixel, long nAngle10,
-        const Color& rFillColor, sal_uLong  nScaleFlag  )
-{
-    sal_Bool bRet = Bitmap::ScaleCropRotate( rScaleX, rScaleY, rRectPixel, nAngle10, rFillColor, nScaleFlag );
-    if( bRet )
-        Bitmap::Convert( BMP_CONVERSION_8BIT_GREYS );
-
-    return bRet;
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
