@@ -395,18 +395,20 @@ void ThumbnailView::CalculateItemPositions ()
     // arrange ScrollBar, set values and show it
     if ( mpScrBar )
     {
+        long nLines = (nCurCount+mnCols-1)/mnCols;
+
         Point aPos( aWinSize.Width() - nScrBarWidth - mnScrBarOffset, mnHeaderHeight );
         Size aSize( nScrBarWidth - mnScrBarOffset, aWinSize.Height() - mnHeaderHeight );
 
         mpScrBar->SetPosSizePixel( aPos, aSize );
-        mpScrBar->SetRangeMax( mnLines );
+        mpScrBar->SetRangeMax( (nCurCount+mnCols-1)/mnCols);
         mpScrBar->SetVisibleSize( mnVisLines );
         mpScrBar->SetThumbPos( (long)mnFirstLine );
         long nPageSize = mnVisLines;
         if ( nPageSize < 1 )
             nPageSize = 1;
         mpScrBar->SetPageSize( nPageSize );
-        mpScrBar->Show(mbScroll);
+        mpScrBar->Show( nLines > mnVisLines );
     }
 
     // delete ScrollBar
@@ -1201,6 +1203,7 @@ void ThumbnailView::setSelectionMode (bool mode)
 
 void ThumbnailView::filterItems (const boost::function<bool (const ThumbnailViewItem*) > &func)
 {
+    mnFirstLine = 0;        // start at the top of the list instead of the current position
     maFilterFunc = func;
 
     CalculateItemPositions();
