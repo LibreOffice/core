@@ -303,14 +303,13 @@ ScImportAsciiDlg::ScImportAsciiDlg( Window* pParent,String aDatName,
     String aName = GetText();
     switch (meCall)
     {
+        case SC_TEXTTOCOLUMNS:
+            SetText( maStrTextToColumns );
+            break;
         case SC_IMPORTFILE:
             aName.AppendAscii(RTL_CONSTASCII_STRINGPARAM(" - ["));
             aName += aDatName;
             aName += ']';
-            break;
-        case SC_TEXTTOCOLUMNS:
-            SetText( maStrTextToColumns );
-            break;
         default:
             SetText( aName );
     }
