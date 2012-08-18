@@ -851,86 +851,6 @@ sub get_rtflicensefilesource
 }
 
 ##############################################################
-# A simple converter to create the license text
-# in rtf format
-##############################################################
-
-sub get_rtf_licensetext
-{
-    my ($licensefile) = @_;
-
-    # A very simple rtf converter
-
-    # The static header
-
-    my $rtf_licensetext = '{\rtf1\ansi\deff0';
-    $rtf_licensetext = $rtf_licensetext . '{\fonttbl{\f0\froman\fprq2\fcharset0 Times New Roman;}}';
-    $rtf_licensetext = $rtf_licensetext . '{\colortbl\red0\green0\blue0;\red255\green255\blue255;\red128\green128\blue128;}';
-    $rtf_licensetext = $rtf_licensetext . '{\stylesheet{\s1\snext1 Standard;}}';
-    $rtf_licensetext = $rtf_licensetext . '{\info{\comment StarWriter}{\vern5690}}\deftab709';
-    $rtf_licensetext = $rtf_licensetext . '{\*\pgdsctbl';
-    $rtf_licensetext = $rtf_licensetext . '{\pgdsc0\pgdscuse195\pgwsxn11905\pghsxn16837\marglsxn1134\margrsxn1134\margtsxn1134\margbsxn1134\pgdscnxt0 Standard;}}';
-    $rtf_licensetext = $rtf_licensetext . '\paperh16837\paperw11905\margl1134\margr1134\margt1134\margb1134\sectd\sbknone\pgwsxn11905\pghsxn16837\marglsxn1134\margrsxn1134\margtsxn1134\margbsxn1134\ftnbj\ftnstart1\ftnrstcont\ftnnar\aenddoc\aftnrstcont\aftnstart1\aftnnrlc';
-    $rtf_licensetext = $rtf_licensetext . '\pard\plain \s1';
-
-    for ( my $i = 0; $i <= $#{$licensefile}; $i++ )
-    {
-        my $oneline = ${$licensefile}[$i];
-
-        if ( $i == 0 ) { $oneline =~ s/^\W*//; }
-
-        $oneline =~ s/\t/    /g;        # no tabs allowed, converting to four spaces
-        $oneline =~ s/\n$//g;           # no newline at line end
-
-        # german replacements
-
-        $oneline =~ s/\Ã\„/\\\'c4/g;        # converting "Ä"
-        $oneline =~ s/\Ã\–/\\\'d6/g;        # converting "Ö"
-        $oneline =~ s/\Ã\œ/\\\'dc/g;        # converting "Ü"
-        $oneline =~ s/\Ã\¤/\\\'e4/g;        # converting "ä"
-        $oneline =~ s/\Ã\¶/\\\'f6/g;        # converting "ö"
-        $oneline =~ s/\Ã\¼/\\\'fc/g;        # converting "ü"
-        $oneline =~ s/\Ã\Ÿ/\\\'df/g;        # converting "ß"
-
-        # french replacements
-
-        $oneline =~ s/\Ã\‰/\\\'c9/g;
-        $oneline =~ s/\Ã\€/\\\'c0/g;
-        $oneline =~ s/\Â\«/\\\'ab/g;
-        $oneline =~ s/\Â\»/\\\'bb/g;
-        $oneline =~ s/\Ã\©/\\\'e9/g;
-        $oneline =~ s/\Ã\¨/\\\'e8/g;
-        $oneline =~ s/\Ã\ /\\\'e0/g;
-        $oneline =~ s/\Ã\´/\\\'f4/g;
-        $oneline =~ s/\Ã\§/\\\'e7/g;
-        $oneline =~ s/\Ã\ª/\\\'ea/g;
-        $oneline =~ s/\Ã\Š/\\\'ca/g;
-        $oneline =~ s/\Ã\»/\\\'fb/g;
-        $oneline =~ s/\Ã\¹/\\\'f9/g;
-        $oneline =~ s/\Ã\®/\\\'ee/g;
-
-        # quotation marks
-
-        $oneline =~ s/\â\€\ž/\\\'84/g;
-        $oneline =~ s/\â\€\œ/\\ldblquote/g;
-        $oneline =~ s/\â\€\™/\\rquote/g;
-
-
-        $oneline =~ s/\Â\ /\\\~/g;
-
-        $oneline = '\par ' . $oneline;
-
-        $rtf_licensetext = $rtf_licensetext .  $oneline;
-    }
-
-    # and the end
-
-    $rtf_licensetext = $rtf_licensetext . '\par \par }';
-
-    return $rtf_licensetext;
-}
-
-##############################################################
 # A simple converter to create a license txt string from
 # the rtf format
 ##############################################################
@@ -1007,7 +927,6 @@ sub add_licensefile_to_database
             installer::exiter::exit_program("ERROR: Could not split line correctly!", "add_licensefile_to_database");
         }
 
-        # my $licensetext = get_rtf_licensetext($licensefile);
         my $licensetext = make_string_licensetext($licensefile);
 
         $control{'Text'} = $licensetext;
