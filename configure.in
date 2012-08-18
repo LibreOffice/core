@@ -3693,6 +3693,83 @@ AC_SUBST(SOLARVER)
 AC_SUBST(WORKDIR)
 
 dnl ===================================================================
+dnl Test which package format to use
+dnl ===================================================================
+AC_MSG_CHECKING([which package format to use])
+if test -n "$with_package_format"; then
+    for i in $with_package_format; do
+        case "$i" in
+        aix | bsd | deb | inst | tardist | osx | pkg | rpm | setld | native | portable | archive | dmg | installed | msi)
+            ;;
+        *)
+            AC_MSG_ERROR([unsupported format $i. Supported by EPM are:
+aix - AIX software distribution
+bsd - FreeBSD, NetBSD, or OpenBSD software distribution
+deb - Debian software distribution
+inst or tardist - IRIX software distribution
+osx - MacOS X software distribution
+pkg - Solaris software distribution
+rpm - RedHat software distribution
+setld - Tru64 (setld) software distribution
+native - "Native" software distribution for the platform
+portable - Portable software distribution
+
+LibreOffice additionally supports:
+archive - .tar.gz or .zip
+dmg - Mac OS X .dmg
+installed - installation tree
+msi - Windows .msi
+        ])
+            ;;
+        esac
+    done
+    PKGFORMAT="$with_package_format"
+elif test "$enable_epm" = "yes"; then
+    # defaults
+    case "$_os" in
+    Darwin)
+        PKGFORMAT=dmg
+        ;;
+    SunOS)
+        PKGFORMAT=pkg
+        ;;
+    Linux)
+        # if building on Debian, default should be deb...
+        if test -e /etc/debian_version; then
+            PKGFORMAT=deb
+        else
+            PKGFORMAT=rpm
+        fi
+        ;;
+    AIX)
+        PKGFORMAT=rpm
+        ;;
+    OpenBSD|DragonFly)
+        PKGFORMAT=portable
+        ;;
+    *BSD)
+        PKGFORMAT=bsd
+        ;;
+    WINNT)
+        PKGFORMAT=msi
+        ;;
+    # we never should get here since we check the arciecture/os at the beginning,
+    # but go sure...
+    *)
+        AC_MSG_ERROR([unknown system])
+    esac
+else
+    if test "$WITH_MINGW" = "yes"; then
+        # when tested, we should default this to 'msi', instead of 'archive'
+        PKGFORMAT=archive
+    else
+        PKGFORMAT=native
+    fi
+fi
+AC_MSG_RESULT([$PKGFORMAT])
+AC_SUBST(PKGFORMAT)
+
+dnl ===================================================================
 dnl Set up a different compiler to produce tools to run on the build
 dnl machine when doing cross-compilation
 dnl ===================================================================
@@ -3739,7 +3816,17 @@ if test "$cross_compiling" = "yes"; then
     test -n "$with_system_expat_for_build" && sub_conf_opts="$sub_conf_opts --with-system-expat"
     test "$with_system_icu_for_build" = "yes" -o "$with_system_icu_for_build" = "force" && sub_conf_opts="$sub_conf_opts --with-system-icu"
     test -n "$with_system_libxml_for_build" && sub_conf_opts="$sub_conf_opts --with-system-libxml"
-    test "$WITH_MINGW" = "yes" && sub_conf_opts="$sub_conf_opts --enable-winegcc"
+    # we need the msi build tools on mingw if we are creating the
+    # installation set
+    if test "$WITH_MINGW" = "yes"; then
+        enable_winegcc_for_build=
+        for pkgformat in $PKGFORMAT; do
+            case "$pkgformat" in
+                msi|native) enable_winegcc_for_build=yes ;;
+            esac
+        done
+        test -n "$enable_winegcc_for_build" && sub_conf_opts="$sub_conf_opts --enable-winegcc"
+    fi
     sub_conf_opts="$sub_conf_opts $with_build_platform_configure_options"
     # Don't bother having configure look for stuff not needed for the build platform anyway
     ./configure \
@@ -6075,83 +6162,6 @@ else
     fi
 fi
 AC_SUBST(BUILD_DMAKE)
-
-dnl ===================================================================
-dnl Test which package format to use
-dnl ===================================================================
-AC_MSG_CHECKING([which package format to use])
-if test -n "$with_package_format"; then
-    for i in $with_package_format; do
-        case "$i" in
-        aix | bsd | deb | inst | tardist | osx | pkg | rpm | setld | native | portable | archive | dmg | installed | msi)
-            ;;
-        *)
-            AC_MSG_ERROR([unsupported format $i. Supported by EPM are:
-aix - AIX software distribution
-bsd - FreeBSD, NetBSD, or OpenBSD software distribution
-deb - Debian software distribution
-inst or tardist - IRIX software distribution
-osx - MacOS X software distribution
-pkg - Solaris software distribution
-rpm - RedHat software distribution
-setld - Tru64 (setld) software distribution
-native - "Native" software distribution for the platform
-portable - Portable software distribution
-
-LibreOffice additionally supports:
-archive - .tar.gz or .zip
-dmg - Mac OS X .dmg
-installed - installation tree
-msi - Windows .msi
-        ])
-            ;;
-        esac
-    done
-    PKGFORMAT="$with_package_format"
-elif test "$enable_epm" = "yes"; then
-    # defaults
-    case "$_os" in
-    Darwin)
-        PKGFORMAT=dmg
-        ;;
-    SunOS)
-        PKGFORMAT=pkg
-        ;;
-    Linux)
-        # if building on Debian, default should be deb...
-        if test -e /etc/debian_version; then
-            PKGFORMAT=deb
-        else
-            PKGFORMAT=rpm
-        fi
-        ;;
-    AIX)
-        PKGFORMAT=rpm
-        ;;
-    OpenBSD|DragonFly)
-        PKGFORMAT=portable
-        ;;
-    *BSD)
-        PKGFORMAT=bsd
-        ;;
-    WINNT)
-        PKGFORMAT=msi
-        ;;
-    # we never should get here since we check the arciecture/os at the beginning,
-    # but go sure...
-    *)
-        AC_MSG_ERROR([unknown system])
-    esac
-else
-    if test "$WITH_MINGW" = "yes"; then
-        # when tested, we should default this to 'msi', instead of 'archive'
-        PKGFORMAT=archive
-    else
-        PKGFORMAT=native
-    fi
-fi
-AC_MSG_RESULT([$PKGFORMAT])
-AC_SUBST(PKGFORMAT)
 
 dnl ===================================================================
 dnl Check for epm (not needed for Windows)
