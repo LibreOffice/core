@@ -60,7 +60,7 @@ public:
 
     com::sun::star::uno::TypeDescription readType();
 
-    rtl::OUString readOid();
+    OUString readOid();
 
     rtl::ByteSequence readTid();
 
@@ -77,7 +77,7 @@ private:
 
     sal_uInt64 read64();
 
-    rtl::OUString readString();
+    OUString readString();
 
     BinaryAny readSequence(com::sun::star::uno::TypeDescription const & type);
 

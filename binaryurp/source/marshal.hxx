@@ -63,7 +63,7 @@ public:
         com::sun::star::uno::TypeDescription const & value);
 
     void writeOid(
-        std::vector< unsigned char > * buffer, rtl::OUString const & oid);
+        std::vector< unsigned char > * buffer, OUString const & oid);
 
     void writeTid(
         std::vector< unsigned char > * buffer, rtl::ByteSequence const & tid);

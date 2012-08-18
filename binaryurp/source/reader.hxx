@@ -55,7 +55,7 @@ private:
 
     rtl::Reference< Bridge > bridge_;
     com::sun::star::uno::TypeDescription lastType_;
-    rtl::OUString lastOid_;
+    OUString lastOid_;
     rtl::ByteSequence lastTid_;
     ReaderState state_;
 };

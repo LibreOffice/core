@@ -43,7 +43,7 @@ class IncomingRequest: private boost::noncopyable {
 public:
     IncomingRequest(
         rtl::Reference< Bridge > const & bridge, rtl::ByteSequence const & tid,
-        rtl::OUString const & oid,
+        OUString const & oid,
         com::sun::star::uno::UnoInterfaceReference const & object,
         com::sun::star::uno::TypeDescription const & type,
         sal_uInt16 functionId, bool synchronous,
@@ -61,7 +61,7 @@ private:
 
     rtl::Reference< Bridge > bridge_;
     rtl::ByteSequence tid_;
-    rtl::OUString oid_; // initial object queryInterface; release
+    OUString oid_; // initial object queryInterface; release
     com::sun::star::uno::UnoInterfaceReference object_;
     com::sun::star::uno::TypeDescription type_;
     sal_uInt16 functionId_;

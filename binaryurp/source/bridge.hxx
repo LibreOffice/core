@@ -75,7 +75,7 @@ class Bridge:
 public:
     Bridge(
         rtl::Reference< BridgeFactory > const & factory,
-        rtl::OUString const & name,
+        OUString const & name,
         com::sun::star::uno::Reference<
             com::sun::star::connection::XConnection > const & connection,
         com::sun::star::uno::Reference<
@@ -105,19 +105,19 @@ public:
     rtl::Reference< Writer > getWriter();
 
     com::sun::star::uno::UnoInterfaceReference registerIncomingInterface(
-        rtl::OUString const & oid,
+        OUString const & oid,
         com::sun::star::uno::TypeDescription const & type);
 
-    rtl::OUString registerOutgoingInterface(
+    OUString registerOutgoingInterface(
         com::sun::star::uno::UnoInterfaceReference const & object,
         com::sun::star::uno::TypeDescription const & type);
 
     com::sun::star::uno::UnoInterfaceReference findStub(
-        rtl::OUString const & oid,
+        OUString const & oid,
         com::sun::star::uno::TypeDescription const & type);
 
     void releaseStub(
-        rtl::OUString const & oid,
+        OUString const & oid,
         com::sun::star::uno::TypeDescription const & type);
 
     void resurrectProxy(Proxy & proxy);
@@ -135,7 +135,7 @@ public:
     void decrementActiveCalls() throw ();
 
     bool makeCall(
-        rtl::OUString const & oid,
+        OUString const & oid,
         com::sun::star::uno::TypeDescription const & member, bool setter,
         std::vector< BinaryAny > const & inArguments, BinaryAny * returnValue,
         std::vector< BinaryAny > * outArguments);
@@ -163,7 +163,7 @@ public:
     OutgoingRequest lastOutgoingRequest(rtl::ByteSequence const & tid);
 
     bool isProtocolPropertiesRequest(
-        rtl::OUString const & oid,
+        OUString const & oid,
         com::sun::star::uno::TypeDescription const & type) const;
 
     void setCurrentContextMode();
@@ -174,13 +174,13 @@ private:
     virtual ~Bridge();
 
     virtual com::sun::star::uno::Reference< com::sun::star::uno::XInterface >
-    SAL_CALL getInstance(rtl::OUString const & sInstanceName)
+    SAL_CALL getInstance(OUString const & sInstanceName)
         throw (com::sun::star::uno::RuntimeException);
 
-    virtual rtl::OUString SAL_CALL getName()
+    virtual OUString SAL_CALL getName()
         throw (com::sun::star::uno::RuntimeException);
 
-    virtual rtl::OUString SAL_CALL getDescription()
+    virtual OUString SAL_CALL getDescription()
         throw (com::sun::star::uno::RuntimeException);
 
     virtual void SAL_CALL dispose()
@@ -205,11 +205,11 @@ private:
         std::vector< BinaryAny > const & inArguments);
 
     void makeReleaseCall(
-        rtl::OUString const & oid,
+        OUString const & oid,
         com::sun::star::uno::TypeDescription const & type);
 
     void sendRequest(
-        rtl::ByteSequence const & tid, rtl::OUString const & oid,
+        rtl::ByteSequence const & tid, OUString const & oid,
         com::sun::star::uno::TypeDescription const & type,
         com::sun::star::uno::TypeDescription const & member,
         std::vector< BinaryAny > const & inArguments);
@@ -235,7 +235,7 @@ private:
 
     typedef std::map< com::sun::star::uno::TypeDescription, SubStub > Stub;
 
-    typedef std::map< rtl::OUString, Stub > Stubs;
+    typedef std::map< OUString, Stub > Stubs;
 
     enum State { STATE_INITIAL, STATE_STARTED, STATE_TERMINATED, STATE_FINAL };
 
@@ -244,7 +244,7 @@ private:
         MODE_WAIT, MODE_NORMAL, MODE_NORMAL_WAIT };
 
     rtl::Reference< BridgeFactory > factory_;
-    rtl::OUString name_;
+    OUString name_;
     com::sun::star::uno::Reference< com::sun::star::connection::XConnection >
         connection_;
     com::sun::star::uno::Reference< com::sun::star::bridge::XInstanceProvider >
@@ -253,7 +253,7 @@ private:
     com::sun::star::uno::Mapping cppToBinaryMapping_;
     com::sun::star::uno::Mapping binaryToCppMapping_;
     rtl::ByteSequence protPropTid_;
-    rtl::OUString protPropOid_;
+    OUString protPropOid_;
     com::sun::star::uno::TypeDescription protPropType_;
     com::sun::star::uno::TypeDescription protPropRequest_;
     com::sun::star::uno::TypeDescription protPropCommit_;

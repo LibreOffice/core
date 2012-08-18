@@ -48,7 +48,7 @@ namespace css = com::sun::star;
 
 IncomingRequest::IncomingRequest(
     rtl::Reference< Bridge > const & bridge, rtl::ByteSequence const & tid,
-    rtl::OUString const & oid, css::uno::UnoInterfaceReference const & object,
+    OUString const & oid, css::uno::UnoInterfaceReference const & object,
     css::uno::TypeDescription const & type, sal_uInt16 functionId,
     bool synchronous, css::uno::TypeDescription const & member, bool setter,
     std::vector< BinaryAny > const & inArguments, bool currentContextMode,
@@ -80,7 +80,7 @@ void IncomingRequest::execute() const {
                 isExc = !execute_throw(&ret, &outArgs);
             } catch (const std::exception & e) {
                 throw css::uno::RuntimeException(
-                    (rtl::OUString(
+                    (OUString(
                         RTL_CONSTASCII_USTRINGPARAM("caught C++ exception: ")) +
                      rtl::OStringToOUString(
                          rtl::OString(e.what()), RTL_TEXTENCODING_ASCII_US)),
@@ -109,7 +109,7 @@ void IncomingRequest::execute() const {
         } catch (const css::uno::RuntimeException & e) {
             OSL_TRACE(
                 OSL_LOG_PREFIX "caught UNO runtime exception '%s'",
-                (rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8).
+                (OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8).
                  getStr()));
         } catch (const std::exception & e) {
             OSL_TRACE(OSL_LOG_PREFIX "caught C++ exception '%s'", e.what());
@@ -157,9 +157,9 @@ bool IncomingRequest::execute_throw(
                     OSL_TRACE(
                         (OSL_LOG_PREFIX "initial element '%s':"
                          " NoSuchElementException '%s'"),
-                        (rtl::OUStringToOString(oid_, RTL_TEXTENCODING_UTF8).
+                        (OUStringToOString(oid_, RTL_TEXTENCODING_UTF8).
                          getStr()),
-                        (rtl::OUStringToOString(
+                        (OUStringToOString(
                             e.Message, RTL_TEXTENCODING_UTF8).
                          getStr()));
                 }

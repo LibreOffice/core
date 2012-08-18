@@ -47,7 +47,7 @@ namespace css = com::sun::star;
 Writer::Item::Item() {}
 
 Writer::Item::Item(
-    rtl::ByteSequence const & theTid, rtl::OUString const & theOid,
+    rtl::ByteSequence const & theTid, OUString const & theOid,
     css::uno::TypeDescription const & theType,
     css::uno::TypeDescription const & theMember,
     std::vector< BinaryAny > const & inArguments,
@@ -75,7 +75,7 @@ Writer::Writer(rtl::Reference< Bridge > const  & bridge):
 }
 
 void Writer::sendDirectRequest(
-    rtl::ByteSequence const & tid, rtl::OUString const & oid,
+    rtl::ByteSequence const & tid, OUString const & oid,
     css::uno::TypeDescription const & type,
     css::uno::TypeDescription const & member,
     std::vector< BinaryAny > const & inArguments)
@@ -96,7 +96,7 @@ void Writer::sendDirectReply(
 }
 
 void Writer::queueRequest(
-    rtl::ByteSequence const & tid, rtl::OUString const & oid,
+    rtl::ByteSequence const & tid, OUString const & oid,
     css::uno::TypeDescription const & type,
     css::uno::TypeDescription const & member,
     std::vector< BinaryAny > const & inArguments)
@@ -163,7 +163,7 @@ void Writer::execute() {
                     (item.oid != "UrpProtocolProperties" &&
                      !item.member.equals(
                          css::uno::TypeDescription(
-                             rtl::OUString(
+                             OUString(
                                  RTL_CONSTASCII_USTRINGPARAM(
                                      "com.sun.star.uno.XInterface::"
                                      "release")))) &&
@@ -181,7 +181,7 @@ void Writer::execute() {
     } catch (const css::uno::Exception & e) {
         OSL_TRACE(
             OSL_LOG_PREFIX "caught UNO exception '%s'",
-            rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8).getStr());
+            OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8).getStr());
     } catch (const std::exception & e) {
         OSL_TRACE(OSL_LOG_PREFIX "caught C++ exception '%s'", e.what());
     }
@@ -189,7 +189,7 @@ void Writer::execute() {
 }
 
 void Writer::sendRequest(
-    rtl::ByteSequence const & tid, rtl::OUString const & oid,
+    rtl::ByteSequence const & tid, OUString const & oid,
     css::uno::TypeDescription const & type,
     css::uno::TypeDescription const & member,
     std::vector< BinaryAny > const & inArguments, bool currentContextMode,
@@ -241,7 +241,7 @@ void Writer::sendRequest(
     OSL_ASSERT(functionId >= 0);
     if (functionId > SAL_MAX_UINT16) {
         throw css::uno::RuntimeException(
-            rtl::OUString(
+            OUString(
                 RTL_CONSTASCII_USTRINGPARAM("function ID too large for URP")),
             css::uno::Reference< css::uno::XInterface >());
     }
@@ -409,7 +409,7 @@ void Writer::sendMessage(std::vector< unsigned char > const & buffer) {
     std::vector< unsigned char > header;
     if (buffer.size() > SAL_MAX_UINT32) {
         throw css::uno::RuntimeException(
-            rtl::OUString(
+            OUString(
                 RTL_CONSTASCII_USTRINGPARAM("message too large for URP")),
             css::uno::Reference< css::uno::XInterface >());
     }
@@ -435,7 +435,7 @@ void Writer::sendMessage(std::vector< unsigned char > const & buffer) {
         } catch (const css::io::IOException & e) {
             css::uno::Any exc(cppu::getCaughtException());
             throw css::lang::WrappedTargetRuntimeException(
-                (rtl::OUString(
+                (OUString(
                     RTL_CONSTASCII_USTRINGPARAM(
                         "Binary URP write raised IO exception: ")) +
                  e.Message),

@@ -34,7 +34,7 @@ namespace binaryurp {
 struct ReaderState: private boost::noncopyable {
     com::sun::star::uno::TypeDescription typeCache[cache::size];
 
-    rtl::OUString oidCache[cache::size];
+    OUString oidCache[cache::size];
 
     rtl::ByteSequence tidCache[cache::size];
 };

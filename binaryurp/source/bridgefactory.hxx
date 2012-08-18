@@ -63,9 +63,9 @@ public:
             const & xContext)
         SAL_THROW((com::sun::star::uno::Exception));
 
-    static rtl::OUString SAL_CALL static_getImplementationName();
+    static OUString SAL_CALL static_getImplementationName();
 
-    static com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL
+    static com::sun::star::uno::Sequence< OUString > SAL_CALL
     static_getSupportedServiceNames();
 
     void removeBridge(
@@ -82,18 +82,18 @@ private:
 
     virtual ~BridgeFactory();
 
-    virtual rtl::OUString SAL_CALL getImplementationName()
+    virtual OUString SAL_CALL getImplementationName()
         throw (com::sun::star::uno::RuntimeException);
 
-    virtual sal_Bool SAL_CALL supportsService(rtl::OUString const & ServiceName)
+    virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName)
         throw (com::sun::star::uno::RuntimeException);
 
-    virtual com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL
+    virtual com::sun::star::uno::Sequence< OUString > SAL_CALL
     getSupportedServiceNames() throw (com::sun::star::uno::RuntimeException);
 
     virtual com::sun::star::uno::Reference< com::sun::star::bridge::XBridge >
     SAL_CALL createBridge(
-        rtl::OUString const & sName, rtl::OUString const & sProtocol,
+        OUString const & sName, OUString const & sProtocol,
         com::sun::star::uno::Reference<
             com::sun::star::connection::XConnection > const & aConnection,
         com::sun::star::uno::Reference<
@@ -106,7 +106,7 @@ private:
 
     virtual com::sun::star::uno::Reference< com::sun::star::bridge::XBridge >
     SAL_CALL getBridge(
-        rtl::OUString const & sName)
+        OUString const & sName)
         throw (com::sun::star::uno::RuntimeException);
 
     virtual
@@ -121,7 +121,7 @@ private:
 
     typedef
         std::map<
-            rtl::OUString,
+            OUString,
             com::sun::star::uno::Reference< com::sun::star::bridge::XBridge > >
         BridgeMap;
 

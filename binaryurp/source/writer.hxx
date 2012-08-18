@@ -50,7 +50,7 @@ public:
     // Only called from Bridge::reader_ thread, and only before Bridge::writer_
     // thread is unblocked:
     void sendDirectRequest(
-        rtl::ByteSequence const & tid, rtl::OUString const & oid,
+        rtl::ByteSequence const & tid, OUString const & oid,
         com::sun::star::uno::TypeDescription const & type,
         com::sun::star::uno::TypeDescription const & member,
         std::vector< BinaryAny > const & inArguments);
@@ -64,7 +64,7 @@ public:
         std::vector< BinaryAny > const & outArguments);
 
     void queueRequest(
-        rtl::ByteSequence const & tid, rtl::OUString const & oid,
+        rtl::ByteSequence const & tid, OUString const & oid,
         com::sun::star::uno::TypeDescription const & type,
         com::sun::star::uno::TypeDescription const & member,
         std::vector< BinaryAny > const & inArguments);
@@ -86,7 +86,7 @@ private:
     virtual void execute();
 
     void sendRequest(
-        rtl::ByteSequence const & tid, rtl::OUString const & oid,
+        rtl::ByteSequence const & tid, OUString const & oid,
         com::sun::star::uno::TypeDescription const & type,
         com::sun::star::uno::TypeDescription const & member,
         std::vector< BinaryAny > const & inArguments, bool currentContextMode,
@@ -105,7 +105,7 @@ private:
 
         // Request:
         Item(
-            rtl::ByteSequence const & theTid, rtl::OUString const & theOid,
+            rtl::ByteSequence const & theTid, OUString const & theOid,
             com::sun::star::uno::TypeDescription const & theType,
             com::sun::star::uno::TypeDescription const & theMember,
             std::vector< BinaryAny > const & inArguments,
@@ -124,7 +124,7 @@ private:
 
         rtl::ByteSequence tid; // request + reply
 
-        rtl::OUString oid; // request
+        OUString oid; // request
 
         com::sun::star::uno::TypeDescription type; // request
 
@@ -148,7 +148,7 @@ private:
     WriterState state_;
     Marshal marshal_;
     com::sun::star::uno::TypeDescription lastType_;
-    rtl::OUString lastOid_;
+    OUString lastOid_;
     rtl::ByteSequence lastTid_;
     osl::Condition unblocked_;
     osl::Condition items_;

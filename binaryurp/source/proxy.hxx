@@ -41,10 +41,10 @@ namespace binaryurp {
 class Proxy: public uno_Interface, private boost::noncopyable {
 public:
     Proxy(
-        rtl::Reference< Bridge > const & bridge, rtl::OUString const & oid,
+        rtl::Reference< Bridge > const & bridge, OUString const & oid,
         com::sun::star::uno::TypeDescription const & type);
 
-    rtl::OUString getOid() const;
+    OUString getOid() const;
 
     com::sun::star::uno::TypeDescription getType() const;
 
@@ -61,7 +61,7 @@ public:
     static bool isProxy(
         rtl::Reference< Bridge > const & bridge,
         com::sun::star::uno::UnoInterfaceReference const & object,
-        rtl::OUString * oid);
+        OUString * oid);
 
 private:
     ~Proxy();
@@ -70,11 +70,11 @@ private:
         typelib_TypeDescription const * member, void * returnValue,
         void ** arguments, uno_Any ** exception) const;
 
-    bool isProxy(rtl::Reference< Bridge > const & bridge, rtl::OUString * oid)
+    bool isProxy(rtl::Reference< Bridge > const & bridge, OUString * oid)
         const;
 
     rtl::Reference< Bridge > bridge_;
-    rtl::OUString oid_;
+    OUString oid_;
     com::sun::star::uno::TypeDescription type_;
     oslInterlockedCount references_;
 };

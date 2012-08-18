@@ -38,8 +38,8 @@ bool operator <(TypeDescription const & left, TypeDescription const & right) {
     typelib_TypeClass tc2 = right.get()->eTypeClass;
     return tc1 < tc2 ||
         (tc1 == tc2 &&
-         (rtl::OUString(left.get()->pTypeName) <
-          rtl::OUString(right.get()->pTypeName)));
+         (OUString(left.get()->pTypeName) <
+          OUString(right.get()->pTypeName)));
 }
 
 } } } }

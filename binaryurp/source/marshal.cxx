@@ -73,7 +73,7 @@ void writeCompressed(std::vector< unsigned char > * buffer, sal_uInt32 value) {
 }
 
 void writeString(
-    std::vector< unsigned char > * buffer, rtl::OUString const & value)
+    std::vector< unsigned char > * buffer, OUString const & value)
 {
     assert(buffer != 0);
     rtl::OString v;
@@ -83,7 +83,7 @@ void writeString(
              RTL_UNICODETOTEXT_FLAGS_INVALID_ERROR)))
     {
         throw css::uno::RuntimeException(
-            rtl::OUString(
+            OUString(
                 RTL_CONSTASCII_USTRINGPARAM(
                     "UNO string contains invalid UTF-16 sequence")),
             css::uno::Reference< css::uno::XInterface >());
@@ -148,13 +148,13 @@ void Marshal::writeType(
         } else {
             write8(buffer, static_cast< sal_uInt8 >(tc) | 0x80);
             write16(buffer, idx);
-            writeString(buffer, rtl::OUString(value.get()->pTypeName));
+            writeString(buffer, OUString(value.get()->pTypeName));
         }
     }
 }
 
 void Marshal::writeOid(
-    std::vector< unsigned char > * buffer, rtl::OUString const & oid)
+    std::vector< unsigned char > * buffer, OUString const & oid)
 {
     bool found;
     sal_uInt16 idx;
@@ -223,7 +223,7 @@ void Marshal::writeValue(
     case typelib_TypeClass_STRING:
         writeString(
             buffer,
-            rtl::OUString(*static_cast< rtl_uString * const * >(value)));
+            OUString(*static_cast< rtl_uString * const * >(value)));
         break;
     case typelib_TypeClass_TYPE:
         writeType(

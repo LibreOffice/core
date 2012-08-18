@@ -84,10 +84,10 @@ sal_Int32 random() {
     return n;
 }
 
-rtl::OUString toString(css::uno::TypeDescription const & type) {
+OUString toString(css::uno::TypeDescription const & type) {
     typelib_TypeDescription * d = type.get();
     assert(d != 0 && d->pTypeName != 0);
-    return rtl::OUString(d->pTypeName);
+    return OUString(d->pTypeName);
 }
 
 extern "C" void SAL_CALL freeProxyCallback(
@@ -174,19 +174,19 @@ struct Bridge::SubStub {
 };
 
 Bridge::Bridge(
-    rtl::Reference< BridgeFactory > const & factory, rtl::OUString const & name,
+    rtl::Reference< BridgeFactory > const & factory, OUString const & name,
     css::uno::Reference< css::connection::XConnection > const & connection,
     css::uno::Reference< css::bridge::XInstanceProvider > const & provider):
     factory_(factory), name_(name), connection_(connection),
     provider_(provider),
-    binaryUno_(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(UNO_LB_UNO))),
+    binaryUno_(OUString(RTL_CONSTASCII_USTRINGPARAM(UNO_LB_UNO))),
     cppToBinaryMapping_(
-        rtl::OUString(
+        OUString(
             RTL_CONSTASCII_USTRINGPARAM(CPPU_CURRENT_LANGUAGE_BINDING_NAME)),
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(UNO_LB_UNO))),
+        OUString(RTL_CONSTASCII_USTRINGPARAM(UNO_LB_UNO))),
     binaryToCppMapping_(
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(UNO_LB_UNO)),
-        rtl::OUString(
+        OUString(RTL_CONSTASCII_USTRINGPARAM(UNO_LB_UNO)),
+        OUString(
             RTL_CONSTASCII_USTRINGPARAM(CPPU_CURRENT_LANGUAGE_BINDING_NAME))),
     protPropTid_(
         reinterpret_cast< sal_Int8 const * >(".UrpProtocolPropertiesTid"),
@@ -196,11 +196,11 @@ Bridge::Bridge(
         cppu::UnoType<
             css::uno::Reference< css::bridge::XProtocolProperties > >::get()),
     protPropRequest_(
-        rtl::OUString(
+        OUString(
             RTL_CONSTASCII_USTRINGPARAM(
                 "com.sun.star.bridge.XProtocolProperties::requestChange"))),
     protPropCommit_(
-        rtl::OUString(
+        OUString(
             RTL_CONSTASCII_USTRINGPARAM(
                 "com.sun.star.bridge.XProtocolProperties::commitChange"))),
     state_(STATE_INITIAL), threadPool_(0), currentContextMode_(false),
@@ -210,13 +210,13 @@ Bridge::Bridge(
     assert(factory.is() && connection.is());
     if (!binaryUno_.is()) {
         throw css::uno::RuntimeException(
-            rtl::OUString(
+            OUString(
                 RTL_CONSTASCII_USTRINGPARAM("URP: no binary UNO environment")),
             css::uno::Reference< css::uno::XInterface >());
     }
     if (!(cppToBinaryMapping_.is() && binaryToCppMapping_.is())) {
         throw css::uno::RuntimeException(
-            rtl::OUString(
+            OUString(
                 RTL_CONSTASCII_USTRINGPARAM("URP: no C++ UNO mapping")),
             css::uno::Reference< css::uno::XInterface >());
     }
@@ -402,7 +402,7 @@ rtl::Reference< Writer > Bridge::getWriter() {
 }
 
 css::uno::UnoInterfaceReference Bridge::registerIncomingInterface(
-    rtl::OUString const & oid, css::uno::TypeDescription const & type)
+    OUString const & oid, css::uno::TypeDescription const & type)
 {
     assert(type.is());
     if (oid.isEmpty()) {
@@ -434,15 +434,15 @@ css::uno::UnoInterfaceReference Bridge::registerIncomingInterface(
     return obj;
 }
 
-rtl::OUString Bridge::registerOutgoingInterface(
+OUString Bridge::registerOutgoingInterface(
     css::uno::UnoInterfaceReference const & object,
     css::uno::TypeDescription const & type)
 {
     assert(type.is());
     if (!object.is()) {
-        return rtl::OUString();
+        return OUString();
     }
-    rtl::OUString oid;
+    OUString oid;
     if (!Proxy::isProxy(this, object, &oid)) {
         binaryUno_.get()->pExtEnv->getObjectIdentifier(
             binaryUno_.get()->pExtEnv, &oid.pData, object.get());
@@ -473,7 +473,7 @@ rtl::OUString Bridge::registerOutgoingInterface(
             assert(stub != &newStub);
             if (j->second.references == SAL_MAX_UINT32) {
                 throw css::uno::RuntimeException(
-                    rtl::OUString(
+                    OUString(
                         RTL_CONSTASCII_USTRINGPARAM(
                             "URP: stub reference count overflow")),
                     css::uno::Reference< css::uno::XInterface >());
@@ -485,7 +485,7 @@ rtl::OUString Bridge::registerOutgoingInterface(
 }
 
 css::uno::UnoInterfaceReference Bridge::findStub(
-    rtl::OUString const & oid, css::uno::TypeDescription const & type)
+    OUString const & oid, css::uno::TypeDescription const & type)
 {
     assert(!oid.isEmpty() && type.is());
     osl::MutexGuard g(mutex_);
@@ -507,7 +507,7 @@ css::uno::UnoInterfaceReference Bridge::findStub(
 }
 
 void Bridge::releaseStub(
-    rtl::OUString const & oid, css::uno::TypeDescription const & type)
+    OUString const & oid, css::uno::TypeDescription const & type)
 {
     assert(!oid.isEmpty() && type.is());
     css::uno::UnoInterfaceReference obj;
@@ -517,14 +517,14 @@ void Bridge::releaseStub(
         Stubs::iterator i(stubs_.find(oid));
         if (i == stubs_.end()) {
             throw css::uno::RuntimeException(
-                rtl::OUString(
+                OUString(
                     RTL_CONSTASCII_USTRINGPARAM("URP: release unknown stub")),
                 css::uno::Reference< css::uno::XInterface >());
         }
         Stub::iterator j(i->second.find(type));
         if (j == i->second.end()) {
             throw css::uno::RuntimeException(
-                rtl::OUString(
+                OUString(
                     RTL_CONSTASCII_USTRINGPARAM("URP: release unknown stub")),
                 css::uno::Reference< css::uno::XInterface >());
         }
@@ -618,7 +618,7 @@ void Bridge::decrementActiveCalls() throw () {
 }
 
 bool Bridge::makeCall(
-    rtl::OUString const & oid, css::uno::TypeDescription const & member,
+    OUString const & oid, css::uno::TypeDescription const & member,
     bool setter, std::vector< BinaryAny > const & inArguments,
     BinaryAny * returnValue, std::vector< BinaryAny > * outArguments)
 {
@@ -643,7 +643,7 @@ bool Bridge::makeCall(
     }
     if (resp.get() == 0) {
         throw css::lang::DisposedException(
-            rtl::OUString(
+            OUString(
                 RTL_CONSTASCII_USTRINGPARAM(
                     "Binary URP bridge disposed during call")),
             static_cast< cppu::OWeakObject * >(this));
@@ -710,7 +710,7 @@ void Bridge::handleRequestChangeReply(
     }
     if (n != exp) {
         throw css::uno::RuntimeException(
-            rtl::OUString(
+            OUString(
                 RTL_CONSTASCII_USTRINGPARAM(
                     "URP: requestChange reply with unexpected return value"
                     " received")),
@@ -796,7 +796,7 @@ void Bridge::handleRequestChangeRequest(
         }
     default:
         throw css::uno::RuntimeException(
-            rtl::OUString(
+            OUString(
                 RTL_CONSTASCII_USTRINGPARAM(
                     "URP: unexpected requestChange request received")),
             static_cast< cppu::OWeakObject * >(this));
@@ -824,7 +824,7 @@ void Bridge::handleCommitChangeRequest(
             ret = mapCppToBinaryAny(
                 css::uno::makeAny(
                     css::bridge::InvalidProtocolChangeException(
-                        rtl::OUString(
+                        OUString(
                             RTL_CONSTASCII_USTRINGPARAM(
                                 "InvalidProtocolChangeException")),
                         css::uno::Reference< css::uno::XInterface >(), s[i],
@@ -853,7 +853,7 @@ void Bridge::handleCommitChangeRequest(
         break;
     default:
         throw css::uno::RuntimeException(
-            rtl::OUString(
+            OUString(
                 RTL_CONSTASCII_USTRINGPARAM(
                     "URP: unexpected commitChange request received")),
             static_cast< cppu::OWeakObject * >(this));
@@ -867,7 +867,7 @@ OutgoingRequest Bridge::lastOutgoingRequest(rtl::ByteSequence const & tid) {
 }
 
 bool Bridge::isProtocolPropertiesRequest(
-    rtl::OUString const & oid, css::uno::TypeDescription const & type) const
+    OUString const & oid, css::uno::TypeDescription const & type) const
 {
     return oid == protPropOid_ && type.equals(protPropType_);
 }
@@ -895,11 +895,11 @@ Bridge::~Bridge() {
 }
 
 css::uno::Reference< css::uno::XInterface > Bridge::getInstance(
-    rtl::OUString const & sInstanceName) throw (css::uno::RuntimeException)
+    OUString const & sInstanceName) throw (css::uno::RuntimeException)
 {
     if (sInstanceName.isEmpty()) {
         throw css::uno::RuntimeException(
-            rtl::OUString(
+            OUString(
                 RTL_CONSTASCII_USTRINGPARAM(
                     "XBridge::getInstance sInstanceName must be non-empty")),
             static_cast< cppu::OWeakObject * >(this));
@@ -907,7 +907,7 @@ css::uno::Reference< css::uno::XInterface > Bridge::getInstance(
     for (sal_Int32 i = 0; i != sInstanceName.getLength(); ++i) {
         if (sInstanceName[i] > 0x7F) {
             throw css::io::IOException(
-                rtl::OUString(
+                OUString(
                     RTL_CONSTASCII_USTRINGPARAM(
                         "XBridge::getInstance sInstanceName contains non-ASCII"
                         " character")),
@@ -927,7 +927,7 @@ css::uno::Reference< css::uno::XInterface > Bridge::getInstance(
     bool exc = makeCall(
         sInstanceName,
         css::uno::TypeDescription(
-            rtl::OUString(
+            OUString(
                 RTL_CONSTASCII_USTRINGPARAM(
                     "com.sun.star.uno.XInterface::queryInterface"))),
         false, inArgs, &ret, &outArgs);
@@ -940,12 +940,12 @@ css::uno::Reference< css::uno::XInterface > Bridge::getInstance(
         css::uno::UNO_REF_NO_ACQUIRE);
 }
 
-rtl::OUString Bridge::getName() throw (css::uno::RuntimeException) {
+OUString Bridge::getName() throw (css::uno::RuntimeException) {
     return name_;
 }
 
-rtl::OUString Bridge::getDescription() throw (css::uno::RuntimeException) {
-    rtl::OUStringBuffer b(name_);
+OUString Bridge::getDescription() throw (css::uno::RuntimeException) {
+    OUStringBuffer b(name_);
     b.append(sal_Unicode(':'));
     b.append(connection_->getDescription());
     return b.makeStringAndClear();
@@ -996,7 +996,7 @@ void Bridge::removeEventListener(
 void Bridge::sendCommitChangeRequest() {
     assert(mode_ == MODE_REQUESTED || mode_ == MODE_REPLY_1);
     css::uno::Sequence< css::bridge::ProtocolProperty > s(1);
-    s[0].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CurrentContext"));
+    s[0].Name = OUString(RTL_CONSTASCII_USTRINGPARAM("CurrentContext"));
     std::vector< BinaryAny > a;
     a.push_back(mapCppToBinaryAny(css::uno::makeAny(s)));
     sendProtPropRequest(OutgoingRequest::KIND_COMMIT_CHANGE, a);
@@ -1020,20 +1020,20 @@ void Bridge::sendProtPropRequest(
 }
 
 void Bridge::makeReleaseCall(
-    rtl::OUString const & oid, css::uno::TypeDescription const & type)
+    OUString const & oid, css::uno::TypeDescription const & type)
 {
     AttachThread att(getThreadPool());
     sendRequest(
         att.getTid(), oid, type,
         css::uno::TypeDescription(
-            rtl::OUString(
+            OUString(
                 RTL_CONSTASCII_USTRINGPARAM(
                     "com.sun.star.uno.XInterface::release"))),
         std::vector< BinaryAny >());
 }
 
 void Bridge::sendRequest(
-    rtl::ByteSequence const & tid, rtl::OUString const & oid,
+    rtl::ByteSequence const & tid, OUString const & oid,
     css::uno::TypeDescription const & type,
     css::uno::TypeDescription const & member,
     std::vector< BinaryAny > const & inArguments)
@@ -1075,7 +1075,7 @@ void Bridge::checkDisposed() {
     assert(state_ != STATE_INITIAL);
     if (state_ != STATE_STARTED) {
         throw css::lang::DisposedException(
-            rtl::OUString(
+            OUString(
                 RTL_CONSTASCII_USTRINGPARAM(
                     "Binary URP bridge already disposed")),
             static_cast< cppu::OWeakObject * >(this));

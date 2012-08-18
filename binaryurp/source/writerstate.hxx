@@ -37,7 +37,7 @@ struct WriterState: private boost::noncopyable {
 
     Cache< com::sun::star::uno::TypeDescription > typeCache;
 
-    Cache< rtl::OUString > oidCache;
+    Cache< OUString > oidCache;
 
     Cache< rtl::ByteSequence > tidCache;
 };

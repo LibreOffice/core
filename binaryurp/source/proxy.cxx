@@ -65,7 +65,7 @@ extern "C" void SAL_CALL proxy_dispatchInterface(
 }
 
 Proxy::Proxy(
-    rtl::Reference< Bridge > const & bridge, rtl::OUString const & oid,
+    rtl::Reference< Bridge > const & bridge, OUString const & oid,
     css::uno::TypeDescription const & type):
     bridge_(bridge), oid_(oid), type_(type), references_(1)
 {
@@ -75,7 +75,7 @@ Proxy::Proxy(
     pDispatcher = &proxy_dispatchInterface;
 }
 
-rtl::OUString Proxy::getOid() const {
+OUString Proxy::getOid() const {
     return oid_;
 }
 
@@ -109,7 +109,7 @@ void Proxy::do_dispatch(
             do_dispatch_throw(member, returnValue, arguments, exception);
         } catch (const std::exception & e) {
             throw css::uno::RuntimeException(
-                (rtl::OUString(
+                (OUString(
                     RTL_CONSTASCII_USTRINGPARAM("caught C++ exception: ")) +
                  rtl::OStringToOUString(
                      rtl::OString(e.what()), RTL_TEXTENCODING_ASCII_US)),
@@ -128,7 +128,7 @@ void Proxy::do_dispatch(
 
 bool Proxy::isProxy(
     rtl::Reference< Bridge > const & bridge,
-    css::uno::UnoInterfaceReference const & object, rtl::OUString * oid)
+    css::uno::UnoInterfaceReference const & object, OUString * oid)
 {
     assert(object.is());
     return object.m_pUnoI->acquire == &proxy_acquireInterface &&
@@ -237,7 +237,7 @@ void Proxy::do_dispatch_throw(
 }
 
 bool Proxy::isProxy(
-    rtl::Reference< Bridge > const & bridge, rtl::OUString * oid) const
+    rtl::Reference< Bridge > const & bridge, OUString * oid) const
 {
     assert(oid != 0);
     if (bridge == bridge_) {
