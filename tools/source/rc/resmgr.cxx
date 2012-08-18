@@ -77,11 +77,11 @@ class InternalResMgr
     friend class ResMgrContainer;
 
     ImpContent *                    pContent;
-    sal_uInt32                          nOffCorrection;
-    sal_uInt8 *                         pStringBlock;
+    sal_uInt32                      nOffCorrection;
+    sal_uInt8                       pStringBlock;
     SvStream *                      pStm;
-    sal_Bool                            bEqual2Content;
-    sal_uInt32                          nEntries;
+    sal_Bool                        bEqual2Content;
+    sal_uInt32                      nEntries;
     OUString                        aFileName;
     OUString                        aPrefix;
     OUString                        aResName;
@@ -94,13 +94,13 @@ class InternalResMgr
                                             const OUString& aResName,
                                             const com::sun::star::lang::Locale& rLocale );
                             ~InternalResMgr();
-    sal_Bool                    Create();
+    sal_Bool                Create();
 
-    sal_Bool                    IsGlobalAvailable( RESOURCE_TYPE nRT, sal_uInt32 nId ) const;
+    sal_Bool                IsGlobalAvailable( RESOURCE_TYPE nRT, sal_uInt32 nId ) const;
     void *                  LoadGlobalRes( RESOURCE_TYPE nRT, sal_uInt32 nId,
                                            void **pResHandle );
 public:
-    static void                 FreeGlobalRes( void *, void * );
+    static void             FreeGlobalRes( void *, void * );
 };
 
 class ResMgrContainer
@@ -128,8 +128,8 @@ class ResMgrContainer
     ~ResMgrContainer();
 
     void init();
-    public:
 
+public:
     static ResMgrContainer& get();
     static void release();
 

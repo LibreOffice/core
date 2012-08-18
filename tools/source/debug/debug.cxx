@@ -52,7 +52,7 @@
 struct PBlock
 {
     void*       aData[PBLOCKCOUNT];
-    sal_uInt16      nCount;
+    sal_uInt16  nCount;
     PBlock*     pPrev;
     PBlock*     pNext;
 };
@@ -62,18 +62,18 @@ class PointerList
 private:
     PBlock*     pFirst;
     PBlock*     pLast;
-    sal_uIntPtr       nCount;
+    sal_uIntPtr nCount;
 
 public:
                 PointerList() { pFirst = NULL; pLast = NULL; nCount = 0; }
                 ~PointerList();
 
     void        Add( const void* p );
-    sal_Bool        Remove( const void* p );
+    sal_Bool    Remove( const void* p );
 
     const void* Get( sal_uIntPtr nPos ) const;
-    sal_Bool        IsIn( const void* p ) const;
-    sal_uIntPtr       Count() const { return nCount; }
+    sal_Bool    IsIn( const void* p ) const;
+    sal_uIntPtr Count() const { return nCount; }
 };
 
 // data types
@@ -82,31 +82,31 @@ public:
 
 struct ProfType
 {
-    sal_uIntPtr                   nCount;
-    sal_uIntPtr                   nTime;
-    sal_uIntPtr                   nMinTime;
-    sal_uIntPtr                   nMaxTime;
-    sal_uIntPtr                   nStart;
-    sal_uIntPtr                   nContinueTime;
-    sal_uIntPtr                   nContinueStart;
+    sal_uIntPtr             nCount;
+    sal_uIntPtr             nTime;
+    sal_uIntPtr             nMinTime;
+    sal_uIntPtr             nMaxTime;
+    sal_uIntPtr             nStart;
+    sal_uIntPtr             nContinueTime;
+    sal_uIntPtr             nContinueStart;
     sal_Char                aName[DBG_MAXNAME+1];
 };
 
 struct XtorType
 {
-    sal_uIntPtr                   nCtorCalls;
-    sal_uIntPtr                   nDtorCalls;
-    sal_uIntPtr                   nMaxCount;
-    sal_uIntPtr                   nStatics;
+    sal_uIntPtr             nCtorCalls;
+    sal_uIntPtr             nDtorCalls;
+    sal_uIntPtr             nMaxCount;
+    sal_uIntPtr             nStatics;
     sal_Char                aName[DBG_MAXNAME+1];
-    sal_Bool                    bTest;
+    sal_Bool                bTest;
     PointerList             aThisList;
 };
 
 struct DebugData
 {
     DbgData                 aDbgData;
-    sal_uInt16                  bInit;
+    sal_uInt16              bInit;
     DbgPrintLine            pDbgPrintMsgBox;
     DbgPrintLine            pDbgPrintWindow;
     DbgPrintLine            pDbgPrintTestTool;
@@ -164,7 +164,7 @@ static int bDbgImplInMain = sal_False;
 static CRITICAL_SECTION aImplCritDbgSection;
 #endif
 
-static sal_Bool             bImplCritDbgSectionInit = sal_False;
+static sal_Bool bImplCritDbgSectionInit = sal_False;
 
 void ImplDbgInitLock()
 {

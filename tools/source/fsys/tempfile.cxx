@@ -177,7 +177,8 @@ TempFile::TempFile( const String* pParent, sal_Bool bDirectory )
     CreateTempName_Impl( pImp->aName, sal_True, bDirectory );
 }
 
-TempFile::TempFile( const String& rLeadingChars, const String* pExtension, const String* pParent, sal_Bool bDirectory )
+TempFile::TempFile( const String& rLeadingChars, const String* pExtension,
+                    const String* pParent, sal_Bool bDirectory )
     : pImp( new TempFile_Impl )
     , bKillingFileEnabled( sal_False )
 {

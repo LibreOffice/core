@@ -93,7 +93,9 @@ void B3dTransformationSet::Frustum(basegfx::B3DHomMatrix& rTarget, double fLeft,
     rTarget *= aTemp;
 }
 
-void B3dTransformationSet::Ortho(basegfx::B3DHomMatrix& rTarget, double fLeft, double fRight, double fBottom, double fTop, double fNear, double fFar)
+void B3dTransformationSet::Ortho(basegfx::B3DHomMatrix& rTarget,
+                                 double fLeft, double fRight, double fBottom, double fTop,
+                                 double fNear, double fFar)
 {
     if(fNear == fFar)
     {

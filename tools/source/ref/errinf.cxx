@@ -32,16 +32,14 @@ typedef void (* DisplayFnPtr)();
 
 struct EDcrData
 {
-  public:
-
+public:
     ErrorHandler               *pFirstHdl;
     ErrorContext               *pFirstCtx;
     DisplayFnPtr               pDsp;
-    sal_Bool                       bIsWindowDsp;
-
+    sal_Bool                   bIsWindowDsp;
 
     DynamicErrorInfo            *ppDcr[ERRCODE_DYNAMIC_COUNT];
-    sal_uInt16                      nNextDcr;
+    sal_uInt16                  nNextDcr;
                                 EDcrData();
 
 static  EDcrData                *GetData();
@@ -49,8 +47,8 @@ static  EDcrData                *GetData();
 
 class EDcr_Impl
 {
-    sal_uIntPtr                       lErrId;
-    sal_uInt16                      nMask;
+    sal_uIntPtr                 lErrId;
+    sal_uInt16                  nMask;
 
     void                        RegisterEDcr(DynamicErrorInfo *);
     void                        UnRegisterEDcr(DynamicErrorInfo *);
@@ -176,8 +174,7 @@ StringErrorInfo::StringErrorInfo(
 
 class ErrHdl_Impl
 {
-  public:
-
+public:
     ErrorHandler        *pNext;
     static sal_Bool         CreateString(const ErrorHandler *pStart,
                                      const ErrorInfo*, String&, sal_uInt16&);
@@ -382,8 +379,8 @@ sal_uInt16 ErrorHandler::HandleError(sal_uIntPtr lId, sal_uInt16 nFlags)
 }
 
 sal_Bool ErrHdl_Impl::CreateString( const ErrorHandler *pStart,
-                                const ErrorInfo* pInfo, String& pStr,
-                               sal_uInt16 &rFlags)
+                                    const ErrorInfo* pInfo, String& pStr,
+                                    sal_uInt16 &rFlags)
 {
     for(const ErrorHandler *pHdl=pStart;pHdl;pHdl=pHdl->pImpl->pNext)
     {

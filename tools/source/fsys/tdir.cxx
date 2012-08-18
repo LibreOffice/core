@@ -30,8 +30,8 @@ DBG_NAME( Dir )
 
 /// determines whether insertion is required
 sal_Bool Dir::ImpInsertPointReached( const DirEntry& rNewEntry,
-                                 const FileStat& rNewStat,
-                                 size_t nCurPos, size_t nSortIndex ) const
+                                     const FileStat& rNewStat,
+                                     size_t nCurPos, size_t nSortIndex ) const
 {
 #define VALUE( nKindFlags ) \
     ( ( FSYS_KIND_FILE | FSYS_KIND_DIR | FSYS_KIND_DEV | \

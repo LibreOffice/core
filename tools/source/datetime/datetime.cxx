@@ -19,8 +19,7 @@
 #include <tools/datetime.hxx>
 #include <rtl/math.hxx>
 
-sal_Bool DateTime::IsBetween( const DateTime& rFrom,
-                          const DateTime& rTo ) const
+sal_Bool DateTime::IsBetween( const DateTime& rFrom, const DateTime& rTo ) const
 {
     if ( (*this >= rFrom) && (*this <= rTo) )
         return sal_True;

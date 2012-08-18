@@ -369,15 +369,15 @@ static void ImplMakeConfigList( ImplConfigData* pData,
 
 static sal_uInt8* ImplGetConfigBuffer( const ImplConfigData* pData, sal_uIntPtr& rLen )
 {
-    sal_uInt8*          pWriteBuf;
-    sal_uInt8*          pBuf;
-    sal_uInt8           aLineEndBuf[2] = {0, 0};
+    sal_uInt8*      pWriteBuf;
+    sal_uInt8*      pBuf;
+    sal_uInt8       aLineEndBuf[2] = {0, 0};
     ImplKeyData*    pKey;
     ImplGroupData*  pGroup;
     unsigned int    nBufLen;
-    sal_uInt32          nValueLen;
-    sal_uInt32          nKeyLen;
-    sal_uInt32          nLineEndLen;
+    sal_uInt32      nValueLen;
+    sal_uInt32      nKeyLen;
+    sal_uInt32      nLineEndLen;
 
     if ( pData->meLineEnd == LINEEND_CR )
     {
@@ -520,11 +520,11 @@ static sal_uInt8* ImplGetConfigBuffer( const ImplConfigData* pData, sal_uIntPtr&
 
 static void ImplReadConfig( ImplConfigData* pData )
 {
-    sal_uIntPtr         nTimeStamp = 0;
-    sal_uInt64 nRead = 0;
-    sal_Bool            bRead = sal_False;
-    sal_Bool                bIsUTF8BOM =sal_False;
-    sal_uInt8*          pBuf = ImplSysReadConfig( pData->maFileName, nRead, bRead, bIsUTF8BOM, nTimeStamp );
+    sal_uIntPtr nTimeStamp = 0;
+    sal_uInt64  nRead = 0;
+    sal_Bool    bRead = sal_False;
+    sal_Bool    bIsUTF8BOM =sal_False;
+    sal_uInt8*  pBuf = ImplSysReadConfig( pData->maFileName, nRead, bRead, bIsUTF8BOM, nTimeStamp );
 
     // Aus dem Buffer die Config-Verwaltungsliste aufbauen
     if ( pBuf )

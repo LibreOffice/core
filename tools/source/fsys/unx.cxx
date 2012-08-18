@@ -194,7 +194,7 @@ namespace { struct mymnt : public rtl::Static< mymnttab, mymnt > {}; }
 
 String DirEntry::GetVolume() const
 {
-  DBG_CHKTHIS( DirEntry, ImpCheckDirEntry );
+    DBG_CHKTHIS( DirEntry, ImpCheckDirEntry );
 
     DirEntry aPath( *this );
     aPath.ToAbs();
@@ -207,8 +207,7 @@ String DirEntry::GetVolume() const
         aPath = aPath [1];
     }
     mymnttab &rMnt = mymnt::get();
-    return ((buf.st_dev == rMnt.mountdevice ||
-                GetMountEntry(buf.st_dev, &rMnt)) ?
+    return ((buf.st_dev == rMnt.mountdevice || GetMountEntry(buf.st_dev, &rMnt)) ?
                     rtl::OStringToOUString(rMnt.mountspecial, osl_getThreadTextEncoding()) :
                     rtl::OUString());
 }

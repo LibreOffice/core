@@ -33,16 +33,14 @@ struct tm *localtime_r(const time_t *timep, struct tm *buffer);
 #endif
 
 static sal_uInt16 aDaysInMonth[12] = { 31, 28, 31, 30, 31, 30,
-                                   31, 31, 30, 31, 30, 31 };
+                                       31, 31, 30, 31, 30, 31 };
 
 #define MAX_DAYS    3636532
 
 inline sal_Bool ImpIsLeapYear( sal_uInt16 nYear )
 {
-    return (
-                 ( ((nYear % 4) == 0) && ((nYear % 100) != 0) ) ||
-                 ( (nYear % 400) == 0 )
-               );
+    return ( ( ((nYear % 4) == 0) && ((nYear % 100) != 0) ) ||
+             ( (nYear % 400) == 0 ) );
 }
 
 // All callers must have sanitized or normalized month and year values!

@@ -205,8 +205,7 @@ void INetMIMECharsetList_Impl::includes(sal_uInt32 nChar)
             p->m_bDisabled = true;
 }
 
-rtl_TextEncoding
-INetMIMECharsetList_Impl::getPreferredEncoding(rtl_TextEncoding eDefault)
+rtl_TextEncoding INetMIMECharsetList_Impl::getPreferredEncoding(rtl_TextEncoding eDefault)
     const
 {
     for (Node * p = m_pFirst; p; p = p->m_pNext)

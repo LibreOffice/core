@@ -585,10 +585,9 @@ void INetURLObject::setInvalid()
 
 namespace unnamed_tools_urlobj {
 
-INetURLObject::FSysStyle
-guessFSysStyleByCounting(sal_Unicode const * pBegin,
-                         sal_Unicode const * pEnd,
-                         INetURLObject::FSysStyle eStyle)
+INetURLObject::FSysStyle guessFSysStyleByCounting(sal_Unicode const * pBegin,
+                                                  sal_Unicode const * pEnd,
+                                                  INetURLObject::FSysStyle eStyle)
 {
     DBG_ASSERT(eStyle
                    & (INetURLObject::FSYS_UNX
@@ -2101,9 +2100,8 @@ bool INetURLObject::convertExtToInt(rtl::OUString const & rTheExtURIRef,
 }
 
 // static
-INetURLObject::PrefixInfo const *
-INetURLObject::getPrefix(sal_Unicode const *& rBegin,
-                         sal_Unicode const * pEnd)
+INetURLObject::PrefixInfo const * INetURLObject::getPrefix(sal_Unicode const *& rBegin,
+                                                           sal_Unicode const * pEnd)
 {
     static PrefixInfo const aMap[]
         = { // dummy entry at front needed, because pLast may point here:
@@ -2384,8 +2382,7 @@ bool INetURLObject::setPassword(rtl::OUString const & rThePassword,
 }
 
 // static
-bool INetURLObject::parseHost(
-    sal_Unicode const *& rBegin, sal_Unicode const * pEnd,
+bool INetURLObject::parseHost(sal_Unicode const *& rBegin, sal_Unicode const * pEnd,
     rtl::OUString & rCanonic)
 {
     // RFC 2373 is inconsistent about how to write an IPv6 address in which an

@@ -458,8 +458,8 @@ Polygon::Polygon( const Point& rCenter, long nRadX, long nRadY, sal_uInt16 nPoin
         mpImplPolygon = (ImplPolygon*)(&aStaticImplPolygon);
 }
 
-Polygon::Polygon( const Rectangle& rBound,
-                  const Point& rStart, const Point& rEnd, PolyStyle eStyle, sal_Bool bFullCircle )
+Polygon::Polygon( const Rectangle& rBound, const Point& rStart, const Point& rEnd,
+                  PolyStyle eStyle, sal_Bool bFullCircle )
 {
     DBG_CTOR( Polygon, NULL );
 
@@ -471,7 +471,7 @@ Polygon::Polygon( const Rectangle& rBound,
         const Point aCenter( rBound.Center() );
         const long  nRadX = aCenter.X() - rBound.Left();
         const long  nRadY = aCenter.Y() - rBound.Top();
-        sal_uInt16      nPoints;
+        sal_uInt16  nPoints;
 
         nPoints = (sal_uInt16) ( F_PI * ( 1.5 * ( nRadX + nRadY ) -
                              sqrt( (double) labs( nRadX * nRadY ) ) ) );
@@ -490,8 +490,8 @@ Polygon::Polygon( const Rectangle& rBound,
         double          fEnd = ImplGetParameter( aCenter, rEnd, fRadX, fRadY );
         double          fDiff = fEnd - fStart;
         double          fStep;
-        sal_uInt16          nStart;
-        sal_uInt16          nEnd;
+        sal_uInt16      nStart;
+        sal_uInt16      nEnd;
 
         if( fDiff < 0. )
             fDiff += F_2PI;
@@ -655,12 +655,12 @@ sal_Bool Polygon::IsRect() const
     if ( mpImplPolygon->mpFlagAry == NULL )
     {
         if ( ( ( mpImplPolygon->mnPoints == 5 ) && ( mpImplPolygon->mpPointAry[ 0 ] == mpImplPolygon->mpPointAry[ 4 ] ) ) ||
-                ( mpImplPolygon->mnPoints == 4 ) )
+             ( mpImplPolygon->mnPoints == 4 ) )
         {
             if ( ( mpImplPolygon->mpPointAry[ 0 ].X() == mpImplPolygon->mpPointAry[ 3 ].X() ) &&
-                    ( mpImplPolygon->mpPointAry[ 0 ].Y() == mpImplPolygon->mpPointAry[ 1 ].Y() ) &&
-                        ( mpImplPolygon->mpPointAry[ 1 ].X() == mpImplPolygon->mpPointAry[ 2 ].X() ) &&
-                            ( mpImplPolygon->mpPointAry[ 2 ].Y() == mpImplPolygon->mpPointAry[ 3 ].Y() ) )
+                 ( mpImplPolygon->mpPointAry[ 0 ].Y() == mpImplPolygon->mpPointAry[ 1 ].Y() ) &&
+                 ( mpImplPolygon->mpPointAry[ 1 ].X() == mpImplPolygon->mpPointAry[ 2 ].X() ) &&
+                 ( mpImplPolygon->mpPointAry[ 2 ].Y() == mpImplPolygon->mpPointAry[ 3 ].Y() ) )
                 bIsRect = sal_True;
         }
     }
@@ -925,7 +925,8 @@ void Polygon::AdaptiveSubdivide( Polygon& rResult, const double d ) const
 void Polygon::ImplReduceEdges( Polygon& rPoly, const double& rArea, sal_uInt16 nPercent )
 {
     const double    fBound = 2000.0 * ( 100 - nPercent ) * 0.01;
-    sal_uInt16          nNumNoChange = 0, nNumRuns = 0;
+    sal_uInt16      nNumNoChange = 0,
+                    nNumRuns = 0;
 
     while( nNumNoChange < 2 )
     {
@@ -1109,7 +1110,7 @@ class ImplPolygonPointFilter : public ImplPointFilter
 {
 public:
     ImplPolygon*    mpPoly;     // Nicht loeschen, wird dem Polygon zugewiesen
-    sal_uInt16          mnSize;
+    sal_uInt16      mnSize;
 
                     ImplPolygonPointFilter( sal_uInt16 nDestSize ) :
                         mnSize( 0 )

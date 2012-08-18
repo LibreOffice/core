@@ -39,18 +39,18 @@ class INetMessageEncodeQPStream_Impl : public INetMessageIStream
 {
     SvStream               *pMsgStrm;
 
-    sal_uIntPtr                   nMsgBufSiz;
+    sal_uIntPtr             nMsgBufSiz;
     sal_Char               *pMsgBuffer;
     sal_Char               *pMsgRead;
     sal_Char               *pMsgWrite;
 
-    sal_uIntPtr                   nTokBufSiz;
+    sal_uIntPtr             nTokBufSiz;
     sal_Char               *pTokBuffer;
     sal_Char               *pTokRead;
     sal_Char               *pTokWrite;
 
     INetMessageStreamState  eState;
-    sal_Bool                    bDone;
+    sal_Bool                bDone;
 
     virtual int GetMsgLine (sal_Char *pData, sal_uIntPtr nSize);
 
@@ -65,7 +65,7 @@ class INetMessageDecodeQPStream_Impl : public INetMessageOStream
     INetMessageStreamState  eState;
     SvMemoryStream         *pMsgBuffer;
 
-    sal_uIntPtr                   nTokBufLen;
+    sal_uIntPtr             nTokBufLen;
     sal_Char                pTokBuffer[4];
 
     virtual int PutMsgLine (const sal_Char *pData, sal_uIntPtr nSize);
@@ -78,19 +78,19 @@ public:
 /** Base64 Encoding */
 class INetMessageEncode64Stream_Impl : public INetMessageIStream
 {
-    SvStream  *pMsgStrm;
+    SvStream    *pMsgStrm;
 
-    sal_uIntPtr      nMsgBufSiz;
-    sal_uInt8 *pMsgBuffer;
-    sal_uInt8 *pMsgRead;
-    sal_uInt8 *pMsgWrite;
+    sal_uIntPtr  nMsgBufSiz;
+    sal_uInt8   *pMsgBuffer;
+    sal_uInt8   *pMsgRead;
+    sal_uInt8   *pMsgWrite;
 
-    sal_uIntPtr      nTokBufSiz;
-    sal_Char  *pTokBuffer;
-    sal_Char  *pTokRead;
-    sal_Char  *pTokWrite;
+    sal_uIntPtr  nTokBufSiz;
+    sal_Char    *pTokBuffer;
+    sal_Char    *pTokRead;
+    sal_Char    *pTokWrite;
 
-    sal_Bool       bDone;
+    sal_Bool     bDone;
 
     virtual int GetMsgLine (sal_Char *pData, sal_uIntPtr nSize);
 
@@ -104,7 +104,7 @@ class INetMessageDecode64Stream_Impl : public INetMessageOStream
 {
     INetMessageStreamState  eState;
 
-    sal_uIntPtr                   nMsgBufSiz;
+    sal_uIntPtr             nMsgBufSiz;
     sal_Char               *pMsgBuffer;
     sal_Char               *pMsgRead;
     sal_Char               *pMsgWrite;
@@ -472,8 +472,7 @@ static const sal_Char ebcdic[] = {
     '!', '"', '#', '$', '@', '[', '\\', ']', '^', '`', '{', '|', '}', '~'
 };
 
-INetMessageEncodeQPStream_Impl::INetMessageEncodeQPStream_Impl (
-    sal_uIntPtr nMsgBufferSize)
+INetMessageEncodeQPStream_Impl::INetMessageEncodeQPStream_Impl( sal_uIntPtr nMsgBufferSize)
     : INetMessageIStream (),
       pMsgStrm   (NULL),
       nMsgBufSiz (nMsgBufferSize),

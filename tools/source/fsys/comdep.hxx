@@ -51,8 +51,8 @@ struct DirReader_Impl
     DirEntry*   pParent;
     String      aPath;
     rtl::OString aBypass;
-    sal_Bool        bReady;
-    sal_Bool        bInUse;
+    sal_Bool    bReady;
+    sal_Bool    bInUse;
 
                 DirReader_Impl( Dir &rDir )
                 :   pDir( &rDir ),
@@ -83,9 +83,9 @@ struct DirReader_Impl
                 ~DirReader_Impl()
                 { if( pDosDir ) closedir( pDosDir ); }
 
-                // Init and Read are system-independent
-    sal_uInt16      Init(); // initializes (and if necessary reads devices)
-    sal_uInt16      Read(); // Reads one entry and appends it if ok
+    // Init and Read are system-independent
+    sal_uInt16  Init(); // Initializes (and if necessary) reads devices
+    sal_uInt16  Read(); // Reads one entry and appends it if ok
 };
 
 
