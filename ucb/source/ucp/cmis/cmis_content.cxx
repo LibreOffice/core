@@ -761,15 +761,6 @@ namespace cmis
         return sal_True;
     }
 
-    sal_Bool Content::exchangeIdentity( const uno::Reference< ucb::XContentIdentifier >& /*xNewId*/ )
-    {
-        sal_Bool bRet = sal_False;
-        SAL_INFO( "cmisucp", "TODO - Content::exchangeIdentity()" );
-        // TODO Implement me
-
-        return bRet;
-    }
-
     uno::Sequence< beans::Property > Content::getProperties(
             const uno::Reference< ucb::XCommandEnvironment > & xEnv )
     {

@@ -83,7 +83,6 @@ class X509Certificate_NssImpl : public ::cppu::WeakImplHelper2<
         virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw (com::sun::star::uno::RuntimeException);
 
         static const ::com::sun::star::uno::Sequence< sal_Int8 >& getUnoTunnelId() ;
-        static X509Certificate_NssImpl* getImplementation( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > xObj ) ;
 
         //Helper methods
         void setCert( CERTCertificate* cert ) ;

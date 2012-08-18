@@ -133,12 +133,6 @@ sal_Bool SAL_CALL SanExtensionImpl :: isCritical() throw( ::com::sun::star::uno:
 }
 
 //Helper method
-void SanExtensionImpl :: setCertExtn( ::com::sun::star::uno::Sequence< sal_Int8 > extnId, ::com::sun::star::uno::Sequence< sal_Int8 > extnValue, sal_Bool critical ) {
-    m_critical = critical ;
-    m_xExtnId = extnId ;
-    m_xExtnValue = extnValue ;
-}
-
 void SanExtensionImpl :: setCertExtn( unsigned char* value, unsigned int vlen, unsigned char* id, unsigned int idlen, sal_Bool critical ) {
     unsigned int i ;
     if( value != NULL && vlen != 0 ) {

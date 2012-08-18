@@ -184,23 +184,18 @@ namespace {
 }
 
 ::rtl::OString SanExtensionImpl :: removeOIDFromString( const ::rtl::OString &oidString)
-    {
-        ::rtl::OString objID;
-        ::rtl::OString oid("OID.");
-        if (oidString.match(oid))
-            objID = oidString.copy(oid.getLength());
-        else
-            objID = oidString;
-        return objID;
+{
+    ::rtl::OString objID;
+    ::rtl::OString oid("OID.");
+    if (oidString.match(oid))
+        objID = oidString.copy(oid.getLength());
+    else
+        objID = oidString;
+    return objID;
 
-    }
-//Helper method
-void SanExtensionImpl :: setCertExtn( ::com::sun::star::uno::Sequence< sal_Int8 > extnId, ::com::sun::star::uno::Sequence< sal_Int8 > extnValue, sal_Bool critical ) {
-    m_critical = critical ;
-    m_xExtnId = extnId ;
-    m_xExtnValue = extnValue ;
 }
 
+//Helper method
 void SanExtensionImpl :: setCertExtn( unsigned char* value, unsigned int vlen, unsigned char* id, unsigned int idlen, sal_Bool critical ) {
     unsigned int i ;
     if( value != NULL && vlen != 0 ) {

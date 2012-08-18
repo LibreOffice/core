@@ -125,8 +125,6 @@ private:
     sal_Bool feedSink( com::sun::star::uno::Reference< com::sun::star::uno::XInterface> aSink,
         const com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment >& xEnv );
 
-    sal_Bool exchangeIdentity(const com::sun::star::uno::Reference< com::sun::star::ucb::XContentIdentifier >&  xNewId);
-
     void resetAuthProvider( const com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment >& xEnv );
 
 public:

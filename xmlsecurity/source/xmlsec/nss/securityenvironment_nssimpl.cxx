@@ -240,17 +240,6 @@ const Sequence< sal_Int8>& SecurityEnvironment_NssImpl :: getUnoTunnelId() {
     return theSecurityEnvironment_NssImplUnoTunnelId::get().getSeq();
 }
 
-/* XUnoTunnel extension */
-SecurityEnvironment_NssImpl* SecurityEnvironment_NssImpl :: getImplementation( const Reference< XInterface > xObj ) {
-    Reference< XUnoTunnel > xUT( xObj , UNO_QUERY ) ;
-    if( xUT.is() ) {
-        return reinterpret_cast<SecurityEnvironment_NssImpl*>(
-            sal::static_int_cast<sal_uIntPtr>(xUT->getSomething( getUnoTunnelId() ))) ;
-    } else
-        return NULL ;
-}
-
-
 ::rtl::OUString SecurityEnvironment_NssImpl::getSecurityEnvironmentInformation() throw( ::com::sun::star::uno::RuntimeException )
 {
     rtl::OUString result;

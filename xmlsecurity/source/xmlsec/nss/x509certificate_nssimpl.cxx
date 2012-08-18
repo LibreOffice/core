@@ -321,16 +321,6 @@ const Sequence< sal_Int8>& X509Certificate_NssImpl :: getUnoTunnelId() {
     return theX509Certificate_NssImplUnoTunnelId::get().getSeq();
 }
 
-/* XUnoTunnel extension */
-X509Certificate_NssImpl* X509Certificate_NssImpl :: getImplementation( const Reference< XInterface > xObj ) {
-    Reference< XUnoTunnel > xUT( xObj , UNO_QUERY ) ;
-    if( xUT.is() ) {
-        return reinterpret_cast<X509Certificate_NssImpl*>(
-            sal::static_int_cast<sal_uIntPtr>(xUT->getSomething( getUnoTunnelId() )));
-    } else
-        return NULL ;
-}
-
 ::rtl::OUString getAlgorithmDescription(SECAlgorithmID *aid)
 {
     SECOidTag tag;

@@ -544,9 +544,4 @@ sal_Int32 StgCache::Page2Pos( sal_Int32 nPage )
     return( nPage * nPageSize ) + nPageSize;
 }
 
-sal_Int32 StgCache::Pos2Page( sal_Int32 nPos )
-{
-    return ( ( nPos + nPageSize - 1 ) / nPageSize ) * nPageSize - 1;
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

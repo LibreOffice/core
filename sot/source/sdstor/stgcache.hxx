@@ -50,7 +50,6 @@ protected:
     sal_Bool  bMyStream;                        // sal_True: delete stream in dtor
     sal_Bool  bFile;                            // sal_True: file stream
     sal_Int32 Page2Pos( sal_Int32 );                // page address --> file position
-    sal_Int32 Pos2Page( sal_Int32 );                // file position --> page address
 public:
     StgCache();
     ~StgCache();
