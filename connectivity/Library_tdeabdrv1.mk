@@ -27,9 +27,18 @@
 
 $(eval $(call gb_Library_Library,tdeabdrv1))
 
+$(eval $(call gb_Library_set_include,tdeabdrv1,\
+	-I$(SRCDIR)/connectivity/source/inc \
+	$$(INCLUDE) \
+))
+
 $(eval $(call gb_Library_use_api,tdeabdrv1,\
 	offapi \
 	udkapi \
+))
+
+$(eval $(call gb_Library_use_externals,tdeabdrv1,\
+	tde \
 ))
 
 $(eval $(call gb_Library_add_libs,tdeabdrv1,\

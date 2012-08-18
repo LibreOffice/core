@@ -355,6 +355,8 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     swd \
     swui \
     t602filter \
+	tdeab1 \
+	tdeabdrv1 \
     textconversiondlgs \
     textfd \
     tk \
@@ -552,6 +554,7 @@ $(eval $(call gb_Helper_register_libraries,UNOLIBS_OOO, \
     slideshow \
     stringresource \
     syssh \
+    tdebe1 \
     ucpcmis1 \
     ucpexpand1 \
     ucpext \

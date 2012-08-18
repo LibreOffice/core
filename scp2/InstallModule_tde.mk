@@ -34,6 +34,7 @@ $(eval $(call gb_InstallModule_use_packages,scp2/tde,\
 
 $(eval $(call gb_InstallModule_define_if_set,scp2/tde,\
 	ENABLE_TDE \
+	ENABLE_TDEAB \
 ))
 
 $(eval $(call gb_InstallModule_add_scpfiles,scp2/tde,\
