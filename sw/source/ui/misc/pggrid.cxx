@@ -26,12 +26,9 @@
  *
  ************************************************************************/
 
-
 #ifdef SW_DLLIMPLEMENTATION
 #undef SW_DLLIMPLEMENTATION
 #endif
-
-
 
 #include <sfx2/app.hxx>
 
@@ -301,8 +298,8 @@ void SwTextGridPage::PutGridItem(SfxItemSet& rSet)
         aGridItem.SetPrintGrid(aPrintCB.IsChecked());
         aGridItem.SetColor(aColorLB.GetSelectEntryColor());
         rSet.Put(aGridItem);
-/// Amelia
-            SwView * pView = ::GetActiveView();
+
+        SwView * pView = ::GetActiveView();
         if ( aGridItem.GetGridType() != GRID_NONE )
         {
             if ( aGridItem.GetGridType() == GRID_LINES_CHARS )

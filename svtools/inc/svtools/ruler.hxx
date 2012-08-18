@@ -630,7 +630,6 @@ private:
     sal_uInt16              mnExtraStyle;
     sal_uInt16              mnExtraClicks;
     sal_uInt16              mnExtraModifier;
-// Amelia
     long                mnCharWidth;
     long                mnLineHeight;
 

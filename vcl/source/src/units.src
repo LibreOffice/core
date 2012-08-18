@@ -27,7 +27,6 @@
 
 #include <svids.hrc>
 
-// Amelia : adds two units , 'ch' and 'line'
 StringArray SV_FUNIT_STRINGS
 {
     ItemList [ en-US ] =

@@ -219,7 +219,6 @@ RscEnum * RscTypCont::InitFieldUnitsType()
     SETCONST( pFieldUnits, "FUNIT_FOOT", FUNIT_FOOT );
     SETCONST( pFieldUnits, "FUNIT_MILE", FUNIT_MILE );
     SETCONST( pFieldUnits, "FUNIT_CUSTOM", FUNIT_CUSTOM );
-    // Amelia : adds two units ,"char" and "line"
     SETCONST( pFieldUnits, "FUNIT_CHAR", FUNIT_CHAR );
     SETCONST( pFieldUnits, "FUNIT_LINE", FUNIT_LINE );
     SETCONST( pFieldUnits, "FUNIT_PERCENT", FUNIT_PERCENT );
