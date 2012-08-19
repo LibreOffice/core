@@ -70,6 +70,7 @@
 #define STR_INPUT_TEMPLATE_NEW              288
 
 #define STR_QMSG_SEL_FOLDER_DELETE          289
+#define STR_QMSG_TEMPLATE_OVERWRITE         290
 
 #define IMG_ACTION_SORT             304
 #define IMG_ACTION_REFRESH          305
