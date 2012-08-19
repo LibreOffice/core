@@ -511,7 +511,6 @@ sub create_epm_header
                 my $onereplaces = ${$allreplaces}[$i];
                 $onereplaces =~ s/\s*$//;
                 installer::packagelist::resolve_packagevariables(\$onereplaces, $variableshashref, 1);
-                if ( $installer::globals::linuxlinkrpmprocess ) { $onereplaces = $onereplaces . "u"; }
                 $line = "%replaces" . " " . $onereplaces . "\n";
                 push(@epmheader, $line);
 
@@ -578,7 +577,6 @@ sub create_epm_header
             my $oneprovides = ${$allprovides}[$i];
             $oneprovides =~ s/\s*$//;
             installer::packagelist::resolve_packagevariables(\$oneprovides, $variableshashref, 1);
-            if ( $installer::globals::linuxlinkrpmprocess ) { $oneprovides = $oneprovides . "u"; }
             $line = "%provides" . " " . $oneprovides . "\n";
             push(@epmheader, $line);
         }
@@ -587,8 +585,6 @@ sub create_epm_header
     if ( $onepackage->{$requires} )
     {
         my $requiresstring = $onepackage->{$requires};
-
-        if ( $installer::globals::add_required_package ) { $requiresstring = $requiresstring . "," . $installer::globals::add_required_package; }
 
         # The requires string can contain the separator "," in the names (descriptions) of the packages
         # (that are required for Solaris depend files). Therefore "," inside such a description has to
@@ -611,28 +607,6 @@ sub create_epm_header
 
             $line = "%requires" . " " . $onerequires . "\n";
             push(@epmheader, $line);
-        }
-    }
-    else
-    {
-        if ( $installer::globals::add_required_package )
-        {
-            my $requiresstring = $installer::globals::add_required_package;
-
-            my $replacementstring = "COMMAREPLACEMENT";
-            $requiresstring = installer::converter::replace_masked_separator($requiresstring, ",", "$replacementstring");
-            my $allrequires = installer::converter::convert_stringlist_into_array(\$requiresstring, ",");
-            installer::converter::resolve_masked_separator($allrequires, ",", $replacementstring);
-
-            for ( my $i = 0; $i <= $#{$allrequires}; $i++ )
-            {
-                my $onerequires = ${$allrequires}[$i];
-                $onerequires =~ s/\s*$//;
-                installer::packagelist::resolve_packagevariables(\$onerequires, $variableshashref, 0);
-
-                $line = "%requires" . " " . $onerequires . "\n";
-                push(@epmheader, $line);
-            }
         }
     }
 

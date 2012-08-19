@@ -192,13 +192,9 @@ BEGIN
     $packagename = "";
     $packagelist = "";
     $shiptestdirectory = "";
-    $makelinuxlinkrpm = 0;
-    $linuxlinkrpmprocess = 0;
-    $add_required_package = "";
     @linuxpatchfiles = ();
     $linuxlibrarybaselevel = "1";
     $linuxlibrarypatchlevel = "1.1";
-    @linuxlinks = ();
     $archiveformat = "";
     $updatelastsequence = 0;
     $updatesequencecounter = 0;
@@ -351,7 +347,6 @@ BEGIN
     @featurecollector =();
     $msiassemblyfiles = "";
     $macinstallfilename = "macinstall.ulf";
-    $linuxlinkrpms = "";
     $extensioninstalldir = "gid_Dir_Share_Extension_Install";
     @languagenames = ();
     @requiredpackages = ();

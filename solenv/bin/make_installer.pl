@@ -1126,23 +1126,6 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
             # Debian allows no underline in package name
             if ( $installer::globals::debian ) { $packagename =~ s/_/-/g; }
 
-            my $linkaddon = "";
-            my $linkpackage = 0;
-            $installer::globals::add_required_package = "";
-            $installer::globals::linuxlinkrpmprocess = 0;
-
-            if ( $installer::globals::makelinuxlinkrpm )
-            {
-                my $oldpackagename = $packagename;
-                $installer::globals::add_required_package = $oldpackagename;    # the link rpm requires the non-linked version
-                if ( $installer::globals::languagepack ) { $packagename = $packagename . "_u"; }
-                elsif ( $installer::globals::helppack ) { $packagename = $packagename . "_v"; } # wtf...
-                else { $packagename = $packagename . "u"; }
-                $linkaddon = "_links";
-                $installer::globals::linuxlinkrpmprocess = 1;
-                $linkpackage = 1;
-            }
-
             ####################################################
             # Header for this package into log file
             ####################################################
@@ -1235,35 +1218,6 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
                 strip_libraries($filesinpackage, $languagestringref);
             }
 
-            ###############################################################
-            # Searching for files in $filesinpackage with flag LINUXLINK
-            ###############################################################
-
-            if (( $installer::globals::islinuxbuild ) && ( ! $installer::globals::simple )) # for rpms and debian packages
-            {
-                # special handling for all RPMs in $installer::globals::linuxlinkrpms
-
-                if ( $installer::globals::linuxlinkrpms =~ /\b$onepackagename\b/ )
-                {
-                    if ( $installer::globals::makelinuxlinkrpm )
-                    {
-                        $filesinpackage = \@installer::globals::linuxpatchfiles;
-                        $linksinpackage = \@installer::globals::linuxlinks;
-                        $installer::globals::makelinuxlinkrpm = 0;
-                        if ( $installer::globals::patch ) { $installer::globals::call_epm = 1; }     # enabling packing again
-                    }
-                    else
-                    {
-                        $filesinpackage = installer::worker::prepare_linuxlinkfiles($filesinpackage);
-                        $linksinpackage = installer::worker::prepare_forced_linuxlinkfiles($linksinpackage);
-                        $installer::globals::makelinuxlinkrpm = 1;
-                        $installer::globals::add_required_package = $packagename . "u";
-                        if ( $installer::globals::patch ) { $installer::globals::call_epm = 0; }     # no packing of core module in patch
-                        $shellscriptsfilename = ""; # shell scripts only need to be included into the link rpm
-                    }
-                }
-            }
-
             ###########################################
             # Simple installation mechanism
             ###########################################
@@ -1294,7 +1248,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
                 # Example for a link: l 000 root sys /usr/bin/linkname filename
                 # The source field specifies the file to link to
 
-                my $epmfilename = "epm_" . $onepackagename . $linkaddon . ".lst";
+                my $epmfilename = "epm_" . $onepackagename . ".lst";
 
                 installer::logger::print_message( "... creating epm list file $epmfilename ... \n" );
 
@@ -1417,8 +1371,6 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
                 }
 
             } # end of "if ( ! $installer::globals::simple )
-
-            if ( $installer::globals::makelinuxlinkrpm ) { $k--; }  # decreasing the counter to create the link rpm!
 
         }   # end of "for ( my $k = 0; $k <= $#{$packages}; $k++ )"
 
