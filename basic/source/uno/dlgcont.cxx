@@ -193,7 +193,7 @@ void SAL_CALL SfxDialogLibraryContainer::writeLibraryElement
 
     Reference< XInputStream > xInput( xISP->createInputStream() );
 
-    bool bComplete = sal_False;
+    bool bComplete = false;
     if ( mbOasis2OOoFormat )
     {
         bComplete = writeOasis2OOoLibraryElement( xInput, xOutput );
@@ -219,7 +219,7 @@ void SAL_CALL SfxDialogLibraryContainer::writeLibraryElement
 void SfxDialogLibraryContainer::storeLibrariesToStorage( const uno::Reference< embed::XStorage >& xStorage ) throw ( RuntimeException )
 {
     LibraryContainerMethodGuard aGuard( *this );
-    mbOasis2OOoFormat = sal_False;
+    mbOasis2OOoFormat = false;
 
     if ( mxStorage.is() && xStorage.is() )
     {
@@ -231,7 +231,7 @@ void SfxDialogLibraryContainer::storeLibrariesToStorage( const uno::Reference< e
             if ( nSource == SOFFICE_FILEFORMAT_CURRENT &&
                 nTarget != SOFFICE_FILEFORMAT_CURRENT )
             {
-                mbOasis2OOoFormat = sal_True;
+                mbOasis2OOoFormat = true;
             }
         }
         catch (const Exception& )
@@ -292,7 +292,7 @@ void SfxDialogLibraryContainer::storeLibrariesToStorage( const uno::Reference< e
             }
         }
     }
-    mbOasis2OOoFormat = sal_False;
+    mbOasis2OOoFormat = false;
 }
 
 

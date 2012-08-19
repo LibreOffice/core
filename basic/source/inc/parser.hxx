@@ -39,15 +39,15 @@ class SbiParser : public SbiTokenizer
     SbiExprNode*  pWithVar;
     SbiToken    eEndTok;
     sal_uInt32      nGblChain;          // for global DIMs
-    sal_Bool        bGblDefs;           // sal_True global definitions general
-    sal_Bool        bNewGblDefs;        // sal_True globale definitions before sub
-    sal_Bool        bSingleLineIf;
+    bool        bGblDefs;           // true: global definitions general
+    bool        bNewGblDefs;        // true: globale definitions before sub
+    bool        bSingleLineIf;
 
-    SbiSymDef*  VarDecl( SbiDimList**,sal_Bool,sal_Bool );
-    SbiProcDef* ProcDecl(sal_Bool bDecl);
+    SbiSymDef*  VarDecl( SbiDimList**, bool, bool );
+    SbiProcDef* ProcDecl(bool bDecl);
     void DefStatic( sal_Bool bPrivate );
     void DefProc( sal_Bool bStatic, sal_Bool bPrivate ); // read in procedure
-    void DefVar( SbiOpcode eOp, sal_Bool bStatic ); // read in DIM/REDIM
+    void DefVar( SbiOpcode eOp, bool bStatic ); // read in DIM/REDIM
     void TypeDecl( SbiSymDef&, sal_Bool bAsNewAlreadyParsed=sal_False );    // AS-declaration
     void OpenBlock( SbiToken, SbiExprNode* = NULL );
     void CloseBlock();
@@ -71,7 +71,7 @@ public:
     SbiExprType   eCurExpr;
     short         nBase;            // OPTION BASE-value
     sal_Bool          bText;            // OPTION COMPARE TEXT
-    sal_Bool          bExplicit;        // sal_True: OPTION EXPLICIT
+    bool          bExplicit;        // true: OPTION EXPLICIT
     sal_Bool          bClassModule;     // sal_True: OPTION ClassModule
     StringVector  aIfaceVector;     // Holds all interfaces implemented by a class module
     StringVector  aRequiredTypes;   // Types used in Dim As New <type> outside subs
@@ -85,7 +85,7 @@ public:
     SbiSymDef* CheckRTLForSym( const String& rSym, SbxDataType eType );
     void AddConstants( void );
 
-    sal_Bool HasGlobalCode();
+    bool HasGlobalCode();
 
     sal_Bool TestToken( SbiToken );
     sal_Bool TestSymbol( sal_Bool=sal_False );

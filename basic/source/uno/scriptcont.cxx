@@ -90,7 +90,7 @@ void SfxScriptLibraryContainer::setLibraryPassword
         SfxLibrary* pImplLib = getImplLib( rLibraryName );
         if( rPassword.Len() )
         {
-            pImplLib->mbDoc50Password = sal_True;
+            pImplLib->mbDoc50Password = true;
             pImplLib->mbPasswordProtected = sal_True;
             pImplLib->maPassword = rPassword;
         }
@@ -112,7 +112,7 @@ void SfxScriptLibraryContainer::clearLibraryPassword( const String& rLibraryName
     try
     {
         SfxLibrary* pImplLib = getImplLib( rLibraryName );
-        pImplLib->mbDoc50Password = sal_False;
+        pImplLib->mbDoc50Password = false;
         pImplLib->mbPasswordProtected = sal_False;
         pImplLib->maPassword = OUString();
     }
@@ -503,7 +503,7 @@ void SAL_CALL SfxScriptLibraryContainer::changeLibraryPassword( const OUString& 
             {
                 // Store application basic uncrypted
                 uno::Reference< embed::XStorage > xStorage;
-                storeLibraries_Impl( xStorage, sal_False );
+                storeLibraries_Impl( xStorage, false );
                 bKillCryptedFiles = sal_True;
             }
         }
@@ -523,7 +523,7 @@ void SAL_CALL SfxScriptLibraryContainer::changeLibraryPassword( const OUString& 
         {
             // Store applictaion basic crypted
             uno::Reference< embed::XStorage > xStorage;
-            storeLibraries_Impl( xStorage, sal_False );
+            storeLibraries_Impl( xStorage, false );
             bKillUncryptedFiles = sal_True;
         }
     }

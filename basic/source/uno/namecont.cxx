@@ -368,10 +368,10 @@ SfxLibraryContainer::SfxLibraryContainer( void )
     , mbVBACompat( sal_False )
     , maModifiable( *this, maMutex )
     , maNameContainer( getCppuType( (Reference< XNameAccess >*) NULL ) )
-    , mbOldInfoFormat( sal_False )
-    , mbOasis2OOoFormat( sal_False )
+    , mbOldInfoFormat( false )
+    , mbOasis2OOoFormat( false )
     , mpBasMgr( NULL )
-    , mbOwnBasMgr( sal_False )
+    , mbOwnBasMgr( false )
 {
     DBG_CTOR( SfxLibraryContainer, NULL );
 
@@ -448,7 +448,7 @@ void SAL_CALL SfxLibraryContainer::storeLibrariesToStorage( const Reference< XSt
 
     try
     {
-        storeLibraries_Impl( _rxRootStorage, sal_True );
+        storeLibraries_Impl( _rxRootStorage, true );
     }
     catch( const Exception& )
     {
@@ -603,7 +603,7 @@ void SfxLibraryContainer::init_Impl( const OUString& rInitialDocumentURL,
         // We need a BasicManager to avoid problems
         StarBASIC* pBas = new StarBASIC();
         mpBasMgr = new BasicManager( pBas );
-        mbOwnBasMgr = sal_True;
+        mbOwnBasMgr = true;
 
         OUString aExtension = aInitUrlInetObj.getExtension();
         if( aExtension.compareToAscii( "xlc" ) == COMPARE_EQUAL )
@@ -926,14 +926,14 @@ void SfxLibraryContainer::init_Impl( const OUString& rInitialDocumentURL,
 
                 if( nPass == 1 )
                 {
-                    pImplLib->mbSharedIndexFile = sal_True;
+                    pImplLib->mbSharedIndexFile = true;
                     pImplLib->mbReadOnly = sal_True;
                 }
             }
 
             // Keep flag for documents to force writing the new index files
             if( !bStorage )
-                mbOldInfoFormat = sal_False;
+                mbOldInfoFormat = false;
 
             delete pLibArray;
         }
@@ -1719,13 +1719,13 @@ void SfxLibraryContainer::implImportLibDescriptor
         pLib->mbPreload  = rLib.bPreload;
         pLib->implSetModified( sal_False );
 
-        pLib->mbInitialised = sal_True;
+        pLib->mbInitialised = true;
     }
 }
 
 
 // Methods of new XLibraryStorage interface?
-void SfxLibraryContainer::storeLibraries_Impl( const uno::Reference< embed::XStorage >& i_rStorage, sal_Bool bComplete )
+void SfxLibraryContainer::storeLibraries_Impl( const uno::Reference< embed::XStorage >& i_rStorage, bool bComplete )
 {
     const Sequence< OUString > aNames = maNameContainer.getElementNames();
     sal_Int32 nNameCount = aNames.getLength();
@@ -1971,7 +1971,7 @@ void SfxLibraryContainer::storeLibraries_Impl( const uno::Reference< embed::XSto
     if( !mbOldInfoFormat && !maModifiable.isModified() )
         return;
     maModifiable.setModified( sal_False );
-    mbOldInfoFormat = sal_False;
+    mbOldInfoFormat = false;
 
     // Write library container info
     // Create sax writer
@@ -2167,11 +2167,11 @@ Reference< XNameAccess > SAL_CALL SfxLibraryContainer::createLibraryLink
     OUString aBundledSearchStr(RTL_CONSTASCII_USTRINGPARAM("vnd.sun.star.expand:$BUNDLED_EXTENSIONS"));
     if( StorageURL.indexOf( aUserSearchStr ) != -1 )
     {
-        pNewLib->mbExtension = sal_True;
+        pNewLib->mbExtension = true;
     }
     else if( StorageURL.indexOf( aSharedSearchStr ) != -1 || StorageURL.indexOf( aBundledSearchStr ) != -1 )
     {
-        pNewLib->mbExtension = sal_True;
+        pNewLib->mbExtension = true;
         pNewLib->mbReadOnly = sal_True;
     }
 
@@ -2905,16 +2905,16 @@ SfxLibrary::SfxLibrary( ModifiableHelper& _rModifiable, const Type& aType,
         , maNameContainer( aType )
         , mbLoaded( sal_True )
         , mbIsModified( sal_True )
-        , mbInitialised( sal_False )
+        , mbInitialised( false )
         , mbLink( sal_False )
         , mbReadOnly( sal_False )
         , mbReadOnlyLink( sal_False )
         , mbPreload( sal_False )
         , mbPasswordProtected( sal_False )
         , mbPasswordVerified( sal_False )
-        , mbDoc50Password( sal_False )
-        , mbSharedIndexFile( sal_False )
-        , mbExtension( sal_False )
+        , mbDoc50Password( false )
+        , mbSharedIndexFile( false )
+        , mbExtension( false )
 {
 }
 
@@ -2928,7 +2928,7 @@ SfxLibrary::SfxLibrary( ModifiableHelper& _rModifiable, const Type& aType,
         , maNameContainer( aType )
         , mbLoaded( sal_False )
         , mbIsModified( sal_True )
-        , mbInitialised( sal_False )
+        , mbInitialised( false )
         , maLibInfoFileURL( aLibInfoFileURL )
         , maStorageURL( aStorageURL )
         , mbLink( sal_True )
@@ -2937,9 +2937,9 @@ SfxLibrary::SfxLibrary( ModifiableHelper& _rModifiable, const Type& aType,
         , mbPreload( sal_False )
         , mbPasswordProtected( sal_False )
         , mbPasswordVerified( sal_False )
-        , mbDoc50Password( sal_False )
-        , mbSharedIndexFile( sal_False )
-        , mbExtension( sal_False )
+        , mbDoc50Password( false )
+        , mbSharedIndexFile( false )
+        , mbExtension( false )
 {
 }
 

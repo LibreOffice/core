@@ -228,8 +228,8 @@ protected:
     ModifiableHelper    maModifiable;
 
     NameContainer maNameContainer;
-    sal_Bool    mbOldInfoFormat;
-    sal_Bool    mbOasis2OOoFormat;
+    bool    mbOldInfoFormat;
+    bool    mbOasis2OOoFormat;
 
     ::rtl::OUString maInitialDocumentURL;
     ::rtl::OUString maInfoFileName;
@@ -240,7 +240,7 @@ protected:
 
     ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage > mxStorage;
     BasicManager*   mpBasMgr;
-    sal_Bool        mbOwnBasMgr;
+    bool        mbOwnBasMgr;
 
     enum InitMode
     {
@@ -352,7 +352,7 @@ protected:
 
     void storeLibraries_Impl(
                             const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage,
-                            sal_Bool bComplete );
+                            bool bComplete );
 
     void SAL_CALL initializeFromDocumentURL( const ::rtl::OUString& _rInitialDocumentURL );
     void SAL_CALL initializeFromDocument( const ::com::sun::star::uno::Reference< ::com::sun::star::document::XStorageBasedDocument >& _rxDocument );
@@ -567,7 +567,7 @@ class SfxLibrary
 
     sal_Bool mbLoaded;
     sal_Bool mbIsModified;
-    sal_Bool mbInitialised;
+    bool mbInitialised;
 
 private:
 
@@ -584,11 +584,11 @@ private:
 
     sal_Bool mbPasswordProtected;
     sal_Bool mbPasswordVerified;
-    sal_Bool mbDoc50Password;
+    bool mbDoc50Password;
     ::rtl::OUString maPassword;
 
-    sal_Bool mbSharedIndexFile;
-    sal_Bool mbExtension;
+    bool mbSharedIndexFile;
+    bool mbExtension;
 
     // Additional functionality for localisation
     // Provide modify state including resources

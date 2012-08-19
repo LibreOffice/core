@@ -103,7 +103,7 @@ void SbiParser::If()
     else
     {
         // single line IF
-        bSingleLineIf = sal_True;
+        bSingleLineIf = true;
         nEndLbl = aGen.Gen( _JUMPF, 0 );
         Push( eCurTok );
         while( !bAbort )
@@ -127,7 +127,7 @@ void SbiParser::If()
                     break;
             }
         }
-        bSingleLineIf = sal_False;
+        bSingleLineIf = false;
     }
     aGen.BackChain( nEndLbl );
 }

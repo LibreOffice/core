@@ -132,7 +132,7 @@ SbiParser::SbiParser( StarBASIC* pb, SbModule* pm )
     bGblDefs =
     bNewGblDefs =
     bSingleLineIf =
-    bExplicit = sal_False;
+    bExplicit = false;
     bClassModule = ( pm->GetModuleType() == com::sun::star::script::ModuleType::CLASS );
     OSL_TRACE("Parser - %s, bClassModule %d", rtl::OUStringToOString( pm->GetName(), RTL_TEXTENCODING_UTF8 ).getStr(), bClassModule );
     pPool    = &aPublics;
@@ -178,7 +178,7 @@ SbiSymDef* SbiParser::CheckRTLForSym( const String& rSym, SbxDataType eType )
 
 // close global chain
 
-sal_Bool SbiParser::HasGlobalCode()
+bool SbiParser::HasGlobalCode()
 {
     if( bGblDefs && nGblChain )
     {
@@ -427,7 +427,7 @@ sal_Bool SbiParser::Parse()
                     ( eCurTok == SUB || eCurTok == FUNCTION || eCurTok == PROPERTY ) )
                 {
                     nGblChain = aGen.Gen( _JUMP, 0 );
-                    bNewGblDefs = sal_False;
+                    bNewGblDefs = false;
                 }
                 // statement-opcode at the beginning of a sub, too, please
                 if( ( p->bSubr && (eCurTok != STATIC || Peek() == SUB || Peek() == FUNCTION ) ) ||
@@ -749,7 +749,7 @@ void SbiParser::Option()
     switch( Next() )
     {
         case EXPLICIT:
-            bExplicit = sal_True; break;
+            bExplicit = true; break;
         case BASE:
             if( Next() == NUMBER )
             {
