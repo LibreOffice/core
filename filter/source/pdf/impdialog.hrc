@@ -180,13 +180,15 @@
 #define FL_SECURITY_VERTICAL 160
 
 //controls for digital signatures tab page
-#define CB_SIGN_PDF          170
-#define FT_SIGN_PASSWORD     171
-#define ED_SIGN_PASSWORD     172
-#define FT_SIGN_LOCATION     173
-#define ED_SIGN_LOCATION     174
-#define FT_SIGN_CONTACT      175
-#define ED_SIGN_CONTACT      176
-#define FT_SIGN_REASON       177
-#define ED_SIGN_REASON       178
-#define BTN_SIGN_SELECT_CERT 179
+#define FT_SIGN_CERT_TEXT    170
+#define ED_SIGN_CERT         171
+#define BTN_SIGN_CERT_SELECT 172
+#define BTN_SIGN_CERT_CLEAR  173
+#define FT_SIGN_PASSWORD     174
+#define ED_SIGN_PASSWORD     175
+#define FT_SIGN_LOCATION     176
+#define ED_SIGN_LOCATION     177
+#define FT_SIGN_CONTACT      178
+#define ED_SIGN_CONTACT      179
+#define FT_SIGN_REASON       180
+#define ED_SIGN_REASON       181

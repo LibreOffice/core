@@ -825,27 +825,40 @@ TabPage  RID_PDF_TAB_SIGNING
     TAB_PDF_SIZE;
     Hide = TRUE;
 
-    CheckBox CB_SIGN_PDF
+    FixedText FT_SIGN_CERT_TEXT
     {
-        Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 164 , 16 ) ;
-        TabStop = TRUE ;
-        WordBreak = TRUE ;
-        Text[ en-US ] = "Sign PDF file" ;
+        Pos = MAP_APPFONT( 6, 3 );
+        Size = MAP_APPFONT( 200, 10 );
+        Text[ en-US ] = "Use this certificate to digitally sign PDF documents:";
     };
 
-    PushButton BTN_SIGN_SELECT_CERT
+    Edit ED_SIGN_CERT
+    {
+        Border = TRUE ;
+        Disable = TRUE ;
+        Pos = MAP_APPFONT ( 6, 17 ) ;
+        Size = MAP_APPFONT ( 120 , 13 ) ;
+    };
+
+    PushButton BTN_SIGN_CERT_SELECT
     {
         TabStop = TRUE ;
-        Disable = TRUE ;
-        Pos = MAP_APPFONT ( 12, 17 ) ;
-        Size = MAP_APPFONT ( 120 , 13 ) ;
-        Text[ en-US ] = "Select c~ertificate...";
+        Pos = MAP_APPFONT ( 130, 17 ) ;
+        Size = MAP_APPFONT ( 30 , 13 ) ;
+        Text[ en-US ] = "~Select...";
+    };
+
+    PushButton BTN_SIGN_CERT_CLEAR
+    {
+        TabStop = TRUE ;
+        Pos = MAP_APPFONT ( 165, 17 ) ;
+        Size = MAP_APPFONT ( 30 , 13 ) ;
+        Text[ en-US ] = "Clear";
     };
 
     FixedText FT_SIGN_PASSWORD
     {
-        Pos = MAP_APPFONT( 12, 35 );
+        Pos = MAP_APPFONT( 6, 35 );
         Size = MAP_APPFONT( 109, 10 );
         Text[ en-US ] = "Certificate Password";
     };
@@ -859,7 +872,7 @@ TabPage  RID_PDF_TAB_SIGNING
 
     FixedText FT_SIGN_LOCATION
     {
-        Pos = MAP_APPFONT( 12, 48 );
+        Pos = MAP_APPFONT( 6, 48 );
         Size = MAP_APPFONT( 109, 10 );
         Text[ en-US ] = "Location";
     };
@@ -873,7 +886,7 @@ TabPage  RID_PDF_TAB_SIGNING
 
     FixedText FT_SIGN_CONTACT
     {
-        Pos = MAP_APPFONT( 12, 61 );
+        Pos = MAP_APPFONT( 6, 61 );
         Size = MAP_APPFONT( 109, 10 );
         Text[ en-US ] = "Contact Information";
     };
@@ -887,7 +900,7 @@ TabPage  RID_PDF_TAB_SIGNING
 
     FixedText FT_SIGN_REASON
     {
-        Pos = MAP_APPFONT( 12, 74 );
+        Pos = MAP_APPFONT( 6, 74 );
         Size = MAP_APPFONT( 109, 10 );
         Text[ en-US ] = "Reason";
     };
