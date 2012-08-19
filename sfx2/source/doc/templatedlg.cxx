@@ -1090,6 +1090,11 @@ void SfxTemplateManagerDlg::OnTemplateAsDefault ()
 
 void SfxTemplateManagerDlg::OnFolderDelete()
 {
+    QueryBox aQueryDlg(this, WB_YES_NO | WB_DEF_YES, SfxResId(STR_QMSG_SEL_FOLDER_DELETE).toString());
+
+    if ( aQueryDlg.Execute() == RET_NO )
+        return;
+
     OUString aFolderList;
 
     std::set<const ThumbnailViewItem*>::const_iterator pIter;
