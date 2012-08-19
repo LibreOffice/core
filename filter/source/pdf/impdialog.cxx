@@ -44,6 +44,7 @@
 #include "com/sun/star/frame/XController.hpp"
 #include "com/sun/star/view/XSelectionSupplier.hpp"
 #include "com/sun/star/security/XDocumentDigitalSignatures.hpp"
+#include "com/sun/star/security/XCertificate.hpp"
 
 #include <boost/shared_ptr.hpp>
 
@@ -1683,7 +1684,10 @@ ImpPDFTabSigningPage::ImpPDFTabSigningPage( Window* pParent,
                                               const SfxItemSet& rCoreSet ) :
     SfxTabPage( pParent, PDFFilterResId( RID_PDF_TAB_SIGNING ), rCoreSet ),
 
-    maCbSignPDF( this, PDFFilterResId( CB_SIGN_PDF ) ),
+    maFtSignCert( this, PDFFilterResId( FT_SIGN_CERT_TEXT ) ),
+    maEdSignCert( this, PDFFilterResId( ED_SIGN_CERT ) ),
+    maPbSignCertSelect( this, PDFFilterResId( BTN_SIGN_CERT_SELECT ) ),
+    maPbSignCertClear( this, PDFFilterResId( BTN_SIGN_CERT_CLEAR ) ),
     maFtSignPassword( this, PDFFilterResId( FT_SIGN_PASSWORD ) ),
     maEdSignPassword( this, PDFFilterResId( ED_SIGN_PASSWORD ) ),
     maFtSignLocation( this, PDFFilterResId( FT_SIGN_LOCATION ) ),
@@ -1692,12 +1696,13 @@ ImpPDFTabSigningPage::ImpPDFTabSigningPage( Window* pParent,
     maEdSignContactInfo( this, PDFFilterResId( ED_SIGN_CONTACT ) ),
     maFtSignReason( this, PDFFilterResId( FT_SIGN_REASON ) ),
     maEdSignReason( this, PDFFilterResId( ED_SIGN_REASON ) ),
-    maPbSignSelectCert( this, PDFFilterResId( BTN_SIGN_SELECT_CERT ) ),
     maSignCertificate()
 {
     FreeResource();
 
-    maPbSignSelectCert.SetClickHdl( LINK( this, ImpPDFTabSigningPage, ClickmaPbSignSelectCert ) );
+    maPbSignCertSelect.Enable( true );
+    maPbSignCertSelect.SetClickHdl( LINK( this, ImpPDFTabSigningPage, ClickmaPbSignCertSelect ) );
+    maPbSignCertClear.SetClickHdl( LINK( this, ImpPDFTabSigningPage, ClickmaPbSignCertClear ) );
 }
 
 // -----------------------------------------------------------------------------
@@ -1705,7 +1710,7 @@ ImpPDFTabSigningPage::~ImpPDFTabSigningPage()
 {
 }
 
-IMPL_LINK_NOARG( ImpPDFTabSigningPage, ClickmaPbSignSelectCert )
+IMPL_LINK_NOARG( ImpPDFTabSigningPage, ClickmaPbSignCertSelect )
 {
 
     uno::Sequence< uno::Any > aArgs( 2 );
@@ -1722,6 +1727,29 @@ IMPL_LINK_NOARG( ImpPDFTabSigningPage, ClickmaPbSignSelectCert )
 
     maSignCertificate = xSigner->chooseCertificate();
 
+    if (maSignCertificate.is())
+    {
+        maEdSignCert.SetText(maSignCertificate->getSubjectName());
+        maPbSignCertClear.Enable( true );
+        maEdSignLocation.Enable( true );
+        maEdSignPassword.Enable( true );
+        maEdSignContactInfo.Enable( true );
+        maEdSignReason.Enable( true );
+    }
+
+    return 0;
+}
+
+IMPL_LINK_NOARG( ImpPDFTabSigningPage, ClickmaPbSignCertClear )
+{
+    maEdSignCert.SetText(OUString(""));
+    maSignCertificate.clear();
+    maPbSignCertClear.Enable( false );
+    maEdSignLocation.Enable( false );
+    maEdSignPassword.Enable( false );
+    maEdSignContactInfo.Enable( false );
+    maEdSignReason.Enable( false );
+
     return 0;
 }
 
@@ -1735,12 +1763,12 @@ SfxTabPage*  ImpPDFTabSigningPage::Create( Window* pParent,
 // -----------------------------------------------------------------------------
 void ImpPDFTabSigningPage::GetFilterConfigItem( ImpPDFTabDialog* paParent  )
 {
-    paParent->mbSignPDF = maCbSignPDF.IsChecked();
+    paParent->mbSignPDF = maSignCertificate.is();
+    paParent->maSignCertificate = maSignCertificate;
     paParent->msSignLocation = maEdSignLocation.GetText();
     paParent->msSignPassword = maEdSignPassword.GetText();
     paParent->msSignContact = maEdSignContactInfo.GetText();
     paParent->msSignReason = maEdSignReason.GetText();
-    paParent->maSignCertificate = maSignCertificate;
 
 }
 
@@ -1748,34 +1776,20 @@ void ImpPDFTabSigningPage::GetFilterConfigItem( ImpPDFTabDialog* paParent  )
 void ImpPDFTabSigningPage::SetFilterConfigItem( const  ImpPDFTabDialog* paParent )
 {
 
-    maCbSignPDF.SetToggleHdl( LINK( this, ImpPDFTabSigningPage, ToggleSignPDFHdl ) );
     maEdSignLocation.Enable( false );
     maEdSignPassword.Enable( false );
     maEdSignContactInfo.Enable( false );
     maEdSignReason.Enable( false );
-    maPbSignSelectCert.Enable( false );
+    maPbSignCertClear.Enable( false );
 
     if (paParent->mbSignPDF)
     {
-        maCbSignPDF.Check();
         maEdSignPassword.SetText(paParent->msSignPassword);
         maEdSignLocation.SetText(paParent->msSignLocation);
         maEdSignContactInfo.SetText(paParent->msSignContact);
         maEdSignReason.SetText(paParent->msSignReason);
         maSignCertificate = paParent->maSignCertificate;
     }
-}
-
-// -----------------------------------------------------------------------------
-IMPL_LINK_NOARG(ImpPDFTabSigningPage, ToggleSignPDFHdl)
-{
-    maEdSignPassword.Enable( maCbSignPDF.IsChecked() );
-    maEdSignLocation.Enable( maCbSignPDF.IsChecked() );
-    maEdSignContactInfo.Enable( maCbSignPDF.IsChecked() );
-    maEdSignReason.Enable( maCbSignPDF.IsChecked() );
-    maPbSignSelectCert.Enable( maCbSignPDF.IsChecked() );
-
-    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

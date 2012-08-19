@@ -441,7 +441,10 @@ public:
 //class to implement the digital signing
 class ImpPDFTabSigningPage : public SfxTabPage
 {
-    CheckBox                    maCbSignPDF;
+    FixedText                   maFtSignCert;
+    Edit                        maEdSignCert;
+    PushButton                  maPbSignCertSelect;
+    PushButton                  maPbSignCertClear;
     FixedText                   maFtSignPassword;
     Edit                        maEdSignPassword;
     FixedText                   maFtSignLocation;
@@ -450,11 +453,10 @@ class ImpPDFTabSigningPage : public SfxTabPage
     Edit                        maEdSignContactInfo;
     FixedText                   maFtSignReason;
     Edit                        maEdSignReason;
-    PushButton                  maPbSignSelectCert;
     com::sun::star::uno::Reference< com::sun::star::security::XCertificate > maSignCertificate;
 
-    DECL_LINK( ToggleSignPDFHdl, void* );
-    DECL_LINK( ClickmaPbSignSelectCert, void* );
+    DECL_LINK( ClickmaPbSignCertSelect, void* );
+    DECL_LINK( ClickmaPbSignCertClear, void* );
 
 public:
     ImpPDFTabSigningPage( Window* pParent,
