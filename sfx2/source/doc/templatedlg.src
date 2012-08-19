@@ -90,6 +90,11 @@ String STR_INPUT_TEMPLATE_NEW
     Text [ en-US ] = "Enter template name:";
 };
 
+String STR_QMSG_SEL_FOLDER_DELETE
+{
+    Text [ en-US ] = "Do you want to delete the selected folders?";
+};
+
 ModelessDialog DLG_TEMPLATE_MANAGER
 {
     OutputSize = TRUE;
