@@ -17,9 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-/*
-    Todo: StreamMode <-> AllocateMemory
-*/
+// TODO: StreamMode <-> AllocateMemory
 
 #include <string.h>
 #include <limits.h>

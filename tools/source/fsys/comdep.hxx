@@ -63,9 +63,9 @@ struct DirReader_Impl
                     bInUse( sal_False )
                 {
 
-                    // only use the String from Memer-Var
+                    // only use the String from Member-Var
 
-#if defined(UNX)    //for further eplanation see DirReader_Impl::Read() in unx.cxx
+#if defined(UNX)    // for further explanation see DirReader_Impl::Read() in unx.cxx
                     pDosDir = NULL;
 #else
                     aBypass = rtl::OUStringToOString(aPath, osl_getThreadTextEncoding());
@@ -84,18 +84,18 @@ struct DirReader_Impl
                 { if( pDosDir ) closedir( pDosDir ); }
 
     // Init and Read are system-independent
-    sal_uInt16  Init(); // Initializes (and if necessary) reads devices
-    sal_uInt16  Read(); // Reads one entry and appends it if ok
+    sal_uInt16  Init(); ///< Initializes (and if necessary) reads devices
+    sal_uInt16  Read(); ///< Reads one entry and appends it if ok
 };
 
 
 struct FileCopier_Impl
 {
-    FSysAction      nActions;       // action command  (Copy/Move/recur)
-    Link            aErrorLink;     // link to call upon errors
-    ErrCode         eErr;           // current errorcode in the handler
-    const DirEntry* pErrSource;     // for error handlers in case of Source error
-    const DirEntry* pErrTarget;     // for error handlers in case of Target error
+    FSysAction      nActions;       ///< action command  (Copy/Move/recur)
+    Link            aErrorLink;     ///< link to call upon errors
+    ErrCode         eErr;           ///< current errorcode in the handler
+    const DirEntry* pErrSource;     ///< for Error-Handler in case of Source error
+    const DirEntry* pErrTarget;     ///< for Error-Handler in case of Target error
 
                     FileCopier_Impl()
                     :   nActions( 0 ), eErr( 0 ),

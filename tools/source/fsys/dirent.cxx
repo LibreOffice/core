@@ -998,7 +998,7 @@ sal_Bool DirEntry::operator==( const DirEntry& rEntry ) const
 {
     DBG_CHKTHIS( DirEntry, ImpCheckDirEntry );
 
-    // test wheather the contents are textual the same
+    // test whether the contents are textual the same
 
     if ( nError && ( nError == rEntry.nError ) )
         return sal_True;

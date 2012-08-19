@@ -45,7 +45,7 @@
 
 #ifdef DBG_UTIL
 
-// --- PointerList ---
+// PointerList
 
 #define PBLOCKCOUNT     1024
 

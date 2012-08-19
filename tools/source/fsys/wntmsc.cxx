@@ -586,6 +586,7 @@ sal_Bool FileStat::Update( const DirEntry& rDirEntry, sal_Bool bForceAccess )
         }
 
         // Special treatment if it's a root without device
+
         if ( !rDirEntry.aName.getLength() && rDirEntry.eFlag == FSYS_FLAG_ABSROOT )
         {
             nKindFlags = FSYS_KIND_DIR;

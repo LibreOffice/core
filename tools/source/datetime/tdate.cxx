@@ -232,10 +232,10 @@ sal_uInt16 Date::GetWeekOfYear( DayOfWeek eStartDay,
         // x_monday - thursday
         if ( n1WDay < nMinimumNumberOfDaysInWeek )
             nWeek = 1;
-        // friday
+        // Friday
         else if ( n1WDay == nMinimumNumberOfDaysInWeek )
             nWeek = 53;
-        // saturday
+        // Saturday
         else if ( n1WDay == nMinimumNumberOfDaysInWeek + 1 )
         {
             // Year after leapyear
@@ -244,7 +244,7 @@ sal_uInt16 Date::GetWeekOfYear( DayOfWeek eStartDay,
             else
                 nWeek = 52;
         }
-        // sunday
+        // Sunday
         else
             nWeek = 52;
 

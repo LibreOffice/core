@@ -745,8 +745,8 @@ rtl::OUString read_zeroTerminated_uInt8s_ToOUString(SvStream& rStream, rtl_TextE
         read_zeroTerminated_uInt8s_ToOString(rStream), eEnc);
 }
 
-//Attempt to write a prefixed sequence of nUnits 16bit units from an OUString,
-//returned value is number of bytes written
+/** Attempt to write a prefixed sequence of nUnits 16bit units from an OUString,
+    returned value is number of bytes written */
 sal_Size write_uInt16s_FromOUString(SvStream& rStrm, const rtl::OUString& rStr,
     sal_Size nUnits)
 {

@@ -793,7 +793,7 @@ void Polygon::Optimize( sal_uIntPtr nOptimizeFlags, const PolyOptimizeData* pDat
 }
 
 
-/* Recursively subdivide cubic bezier curve via deCasteljau.
+/** Recursively subdivide cubic bezier curve via deCasteljau.
 
    @param rPointIter
    Output iterator, where the subdivided polylines are written to.

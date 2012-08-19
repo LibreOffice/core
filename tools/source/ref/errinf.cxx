@@ -156,12 +156,10 @@ ErrorInfo* EDcr_Impl::GetDynamicErrorInfo(sal_uIntPtr lId)
         return new ErrorInfo(lId & ~ERRCODE_DYNAMIC_MASK);
 }
 
-
 sal_uInt16 DynamicErrorInfo::GetDialogMask() const
 {
     return pImpl->nMask;
 }
-
 
 StringErrorInfo::StringErrorInfo(
     sal_uIntPtr UserId, const String& aStringP,  sal_uInt16 nFlags)
