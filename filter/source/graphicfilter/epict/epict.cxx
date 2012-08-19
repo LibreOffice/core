@@ -920,7 +920,7 @@ void PictWriter::WriteOpcode_BitsRect(const Point & rPoint, const Size & rSize, 
     // If 24-Bit, then create the Opcode 'DirectBitsRect':
     if ( nBitsPerPixel == 24 )
     {
-:Anzahl Bytes einer (ungepackten) Zeile in Quelle und Ziel berechnen:
+        // Anzahl Bytes einer (ungepackten) Zeile in Quelle und Ziel berechnen:
         nSrcRowBytes =( ( 3 * nWidth ) + 0x0003 ) & 0xfffc;
         nDstRowBytes = nWidth * 4;
 

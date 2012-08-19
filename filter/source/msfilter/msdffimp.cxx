@@ -6470,7 +6470,7 @@ sal_Bool SvxMSDffManager::GetBLIP( sal_uLong nIdx_, Graphic& rData, Rectangle* p
 
             // passende Info-Struct aus unserem Pointer Array nehmen
             SvxMSDffBLIPInfo& rInfo = (*pBLIPInfos)[ nIdx-1 ];
-in the data streamim Daten Stream anspringen
+            // das BLIP Atom im Daten Stream anspringen
             pStData->Seek( rInfo.nFilePos );
             // ggfs. Fehlerstatus zuruecksetzen
             if( pStData->GetError() )
