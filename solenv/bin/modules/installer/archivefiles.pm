@@ -28,7 +28,6 @@
 package installer::archivefiles;
 
 use Archive::Zip qw( :ERROR_CODES :CONSTANTS );
-use installer::converter;
 use installer::exiter;
 use installer::files;
 use installer::globals;
@@ -87,9 +86,9 @@ sub get_patch_file_list
     $patchfilestring =~ s/^\s*\///;
     $patchfilestring =~ s/^\s*\\//;
 
-    my $patchfilesarray = installer::converter::convert_stringlist_into_array_without_newline(\$patchfilestring, ",");
+    my @patchfilesarray = split /,\s*/, $patchfilestring;
 
-    return $patchfilesarray;
+    return \@patchfilesarray;
 }
 
 #################################################################

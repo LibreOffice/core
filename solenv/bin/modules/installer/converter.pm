@@ -65,18 +65,6 @@ sub convert_stringlist_into_array
 
 #############################################################################
 # Converting a string list with separator $listseparator
-# into an array
-#############################################################################
-
-sub convert_stringlist_into_array_without_newline
-{
-    my ( $includestringref, $listseparator ) = @_;
-
-    return [split /\Q$listseparator\E\s*/, ${$includestringref}];
-}
-
-#############################################################################
-# Converting a string list with separator $listseparator
 # into a hash with values 1.
 #############################################################################
 

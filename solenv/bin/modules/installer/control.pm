@@ -91,15 +91,12 @@ sub check_system_path
     my $local_pathseparator = $installer::globals::pathseparator;
 
     if( $^O =~ /cygwin/i )
-    {   # When using cygwin's perl the PATH variable is POSIX style and ...
-        my $temparrayref = installer::converter::convert_stringlist_into_array_without_newline(\$pathvariable, $local_pathseparator);
-        foreach $i (0..$#$temparrayref) {
-            $$temparrayref[$i] = qx{cygpath -m "$$temparrayref[$i]"};
-            chomp($$temparrayref[$i]);
-        }
+    {
+        # When using cygwin's perl the PATH variable is POSIX style and
         # has to be converted to DOS style for further use.
-        $local_pathseparator = ';';
-        $pathvariable = join($local_pathseparator, @$temparrayref);
+        $pathvariable = join ';',
+                        map { $dir = qx{cygpath -m "$_"}; chomp($dir); $dir }
+                        split /\Q$local_pathseparator\E\s*/, $pathvariable;
     }
     my $patharrayref = installer::converter::convert_stringlist_into_array(\$pathvariable, $local_pathseparator);
 

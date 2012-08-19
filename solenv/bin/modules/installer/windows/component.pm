@@ -27,7 +27,6 @@
 
 package installer::windows::component;
 
-use installer::converter;
 use installer::exiter;
 use installer::files;
 use installer::globals;
@@ -460,20 +459,16 @@ sub get_component_name_from_modulegid
 
     my $componentname = "";
 
-    for ( my $i = 0; $i <= $#{$filesref}; $i++ )
+    for my $file ( @{$filesref} )
     {
-        my $onefile = ${$filesref}[$i];
+        next if ( ! $file->{'modules'} );
 
-        if ( $onefile->{'modules'} )
+        my @filemodules = split /,\s*/, $file->{'modules'};
+
+        if (grep {$_ eq $modulegid} @filemodules)
         {
-            my $filemodules = $onefile->{'modules'};
-            my $filemodulesarrayref = installer::converter::convert_stringlist_into_array_without_newline(\$filemodules, ",");
-
-            if (grep {$_ eq $modulegid} @{$filemodulesarrayref})
-            {
-                $componentname = $onefile->{'componentname'};
-                last;
-            }
+            $componentname = $file->{'componentname'};
+            last;
         }
     }
 

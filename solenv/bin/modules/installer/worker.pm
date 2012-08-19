@@ -1503,14 +1503,10 @@ sub add_variables_from_inc_to_hashref
     my ($allvariables, $includepatharrayref) = @_;
 
     my $infoline = "";
-    my $includefilelist = "";
-    if ( $allvariables->{'ADD_INCLUDE_FILES'} ) { $includefilelist = $allvariables->{'ADD_INCLUDE_FILES'}; }
+    my $includefilelist = $allvariables->{'ADD_INCLUDE_FILES'} || "";
 
-    my $includefiles = installer::converter::convert_stringlist_into_array_without_newline(\$includefilelist, ",");
-
-    for ( my $i = 0; $i <= $#{$includefiles}; $i++ )
+    for my $includefilename (split /,\s*/, $includefilelist)
     {
-        my $includefilename = ${$includefiles}[$i];
         $includefilename =~ s/^\s*//;
         $includefilename =~ s/\s*$//;
         $includefilenameref = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$includefilename, $includepatharrayref, 1);

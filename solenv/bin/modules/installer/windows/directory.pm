@@ -86,35 +86,37 @@ sub make_short_dir_version
     my ($longstring, $length, $displayname) = @_;
 
     my $shortstring = "";
-    my $infoline = "";
-    my $savestring = $longstring;
 
-    # Splitting the string at each "underline" and allowing only $length characters per directory name.
+    # Splitting the string at each "underline" and allowing only
+    # $length characters per directory name.
     # Checking also uniqueness and length.
 
-    my $stringarray = installer::converter::convert_stringlist_into_array_without_newline(\$longstring, "_");
-
-    foreach my $onestring ( @{$stringarray} )
+    for my $onestring ( split /_\s*/, $longstring )
     {
         my $partstring = "";
 
         if ( $onestring =~ /\-/ )
         {
-            my $localstringarray = installer::converter::convert_stringlist_into_array_without_newline(\$onestring, "-");
-            foreach my $onelocalstring ( @{$localstringarray} )
+            for my $onelocalstring ( split /-\s*/, $onestring )
             {
-                if ( length($onelocalstring) > $length ) { $onelocalstring = substr($onelocalstring, 0, $length); }
-                $partstring = $partstring . "-" . $onelocalstring;
+                if ( length($onelocalstring) > $length ) {
+                    $onelocalstring = substr($onelocalstring, 0, $length);
+                }
+                $partstring .= "-" . $onelocalstring;
             }
             $partstring =~ s/^\s*\-//;
         }
         else
         {
-            if ( length($onestring) > $length ) { $partstring = substr($onestring, 0, $length); }
-            else { $partstring = $onestring; }
+            if ( length($onestring) > $length ) {
+                $partstring = substr($onestring, 0, $length);
+            }
+            else {
+                $partstring = $onestring;
+            }
         }
 
-        $shortstring = $shortstring . "_" . $partstring;
+        $shortstring .= "_" . $partstring;
     }
 
     $shortstring =~ s/^\s*\_//;
@@ -122,7 +124,7 @@ sub make_short_dir_version
     if ( length($shortstring) > 72 )
     {
         my $shortlength = length($shortstring);
-        $infoline = "WARNING: Failed to create unique directory name with less than 72 characters: \"$displayname\" ($shortstring ($shortlength)).\n";
+        my $infoline = "WARNING: Failed to create unique directory name with less than 72 characters: \"$displayname\" ($shortstring ($shortlength)).\n";
         push(@installer::globals::logfileinfo, $infoline);
     }
 
