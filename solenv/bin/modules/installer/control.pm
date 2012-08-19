@@ -97,6 +97,7 @@ sub check_system_path
         $pathvariable = join ';',
                         map { $dir = qx{cygpath -m "$_"}; chomp($dir); $dir }
                         split /\Q$local_pathseparator\E\s*/, $pathvariable;
+        $local_pathseparator = ';';
     }
     my $patharrayref = installer::converter::convert_stringlist_into_array(\$pathvariable, $local_pathseparator);
 
