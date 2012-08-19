@@ -2602,14 +2602,14 @@ sub create_new_directory_structure
 
         if ( $machine ne "" )
         {
-            installer::systemactions::remove_empty_directory("$installer::globals::epmoutpath/RPMS/$machine");
+            rmdir "$installer::globals::epmoutpath/RPMS/$machine";
         }
-        installer::systemactions::remove_empty_directory("$installer::globals::epmoutpath/RPMS/powerpc");
-        installer::systemactions::remove_empty_directory("$installer::globals::epmoutpath/RPMS/x86_64");
-        installer::systemactions::remove_empty_directory("$installer::globals::epmoutpath/RPMS/i586");
-        installer::systemactions::remove_empty_directory("$installer::globals::epmoutpath/RPMS/i386");
-        installer::systemactions::remove_empty_directory("$installer::globals::epmoutpath/RPMS");
-
+        rmdir "$installer::globals::epmoutpath/RPMS/powerpc";
+        rmdir "$installer::globals::epmoutpath/RPMS/x86_64";
+        rmdir "$installer::globals::epmoutpath/RPMS/i586";
+        rmdir "$installer::globals::epmoutpath/RPMS/i386";
+        rmdir "$installer::globals::epmoutpath/RPMS"
+            or warn "Could not remove RPMS dir: $!";
     }
 
     # Setting unix rights to "775" for $newdir ("RPMS" or "packages")

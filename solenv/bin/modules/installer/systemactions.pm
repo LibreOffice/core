@@ -154,38 +154,6 @@ sub create_directory_with_privileges
     }
 }
 
-######################################################
-# Removing a new direcotory
-######################################################
-
-sub remove_empty_directory
-{
-    my ($directory) = @_;
-
-    my $returnvalue = 1;
-
-    if (-d $directory)
-    {
-        my $systemcall = "rmdir $directory";
-
-        $returnvalue = system($systemcall);
-
-        my $infoline = "Systemcall: $systemcall\n";
-        push( @installer::globals::logfileinfo, $infoline);
-
-        if ($returnvalue)
-        {
-            $infoline = "ERROR: Could not remove \"$directory\"!\n";
-            push( @installer::globals::logfileinfo, $infoline);
-        }
-        else
-        {
-            $infoline = "Success: Removed \"$directory\"!\n";
-            push( @installer::globals::logfileinfo, $infoline);
-        }
-    }
-}
-
 #######################################################################
 # Calculating the number of languages in the string
 #######################################################################
