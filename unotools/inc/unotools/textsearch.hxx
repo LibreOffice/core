@@ -55,7 +55,7 @@ private:
     String sSrchStr;            // the search string
     String sReplaceStr;         // the replace string
 
-    SearchType eSrchType;       // search normal/regular/LevDist
+    SearchType m_eSrchType;       // search normal/regular/LevDist
 
     int m_bWordOnly   : 1;        // used by normal search
     int m_bSrchInSel  : 1;        // search only in the selection
@@ -92,7 +92,7 @@ public:
 
     const String&   GetSrchStr() const          { return sSrchStr; }
     const String&   GetReplaceStr() const       { return sReplaceStr; }
-    SearchType      GetSrchType() const         { return eSrchType; }
+    SearchType      GetSrchType() const         { return m_eSrchType; }
 
     int             IsCaseSensitive() const     { return m_bCaseSense; }
     int             IsSrchInSelection() const   { return m_bSrchInSel; }
@@ -101,7 +101,7 @@ public:
 
     void SetSrchStr( const String& rStr )       { sSrchStr = rStr; }
     void SetReplaceStr( const String& rStr )    { sReplaceStr = rStr; }
-    void SetSrchType( SearchType eType )        { eSrchType = eType; }
+    void SetSrchType( SearchType eType )        { m_eSrchType = eType; }
 
     void SetCaseSensitive( int bFlag )          { m_bCaseSense = bFlag; }
     void SetSrchInSelection( int bFlag )        { m_bSrchInSel = bFlag; }

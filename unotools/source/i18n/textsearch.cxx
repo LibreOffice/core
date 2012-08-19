@@ -43,7 +43,7 @@ SearchParam::SearchParam( const String &rText,
                                 sal_Bool bSearchInSel )
 {
     sSrchStr        = rText;
-    eSrchType       = eType;
+    m_eSrchType       = eType;
 
     m_bWordOnly       = bWrdOnly;
     m_bSrchInSel      = bSearchInSel;
@@ -62,7 +62,7 @@ SearchParam::SearchParam( const SearchParam& rParam )
 {
     sSrchStr        = rParam.sSrchStr;
     sReplaceStr     = rParam.sReplaceStr;
-    eSrchType       = rParam.eSrchType;
+    m_eSrchType       = rParam.m_eSrchType;
 
     m_bWordOnly       = rParam.m_bWordOnly;
     m_bSrchInSel      = rParam.m_bSrchInSel;
