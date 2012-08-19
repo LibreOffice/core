@@ -71,6 +71,8 @@ public:
                          com::sun::star::uno::Reference<com::sun::star::frame::XModel> &rModel,
                          const OUString &rName);
 
+    bool isTemplateNameUnique (const sal_uInt16 nRegionItemId, const OUString &rName) const;
+
 private:
 
     virtual void OnItemDblClicked (ThumbnailViewItem *pRegionItem);

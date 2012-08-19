@@ -679,6 +679,29 @@ bool TemplateLocalView::saveTemplateAs(const TemplateLocalViewItem *pDstItem,
     return true;
 }
 
+bool TemplateLocalView::isTemplateNameUnique(const sal_uInt16 nRegionItemId, const OUString &rName) const
+{
+    for (size_t i = 0, n = mItemList.size(); i < n; ++i)
+    {
+        if (mItemList[i]->mnId == nRegionItemId)
+        {
+            TemplateLocalViewItem *pRegItem =
+                    static_cast<TemplateLocalViewItem*>(mItemList[i]);
+
+            std::vector<TemplateItemProperties>::iterator aIter;
+            for (aIter = pRegItem->maTemplates.begin(); aIter != pRegItem->maTemplates.end(); ++aIter)
+            {
+                if (aIter->aName == rName)
+                    return false;
+            }
+
+            break;
+        }
+    }
+
+    return true;
+}
+
 void TemplateLocalView::OnItemDblClicked (ThumbnailViewItem *pRegionItem)
 {
     // Fill templates

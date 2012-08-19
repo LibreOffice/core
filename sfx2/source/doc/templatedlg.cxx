@@ -1156,10 +1156,23 @@ void SfxTemplateManagerDlg::OnTemplateSaveAs()
         if (!aName.isEmpty())
         {
             OUString aFolderList;
+            OUString aQMsg(SfxResId(STR_QMSG_TEMPLATE_OVERWRITE).toString());
+            QueryBox aQueryDlg(this,WB_YES_NO | WB_DEF_YES, OUString());
 
             if (maView->isOverlayVisible())
             {
-                if (!maView->saveTemplateAs(maView->getOverlayRegionId()+1,m_xModel,aName))
+                sal_uInt16 nRegionItemId = maView->getOverlayRegionId()+1;
+
+                if (!maView->isTemplateNameUnique(nRegionItemId,aName))
+                {
+                    aQMsg = aQMsg.replaceFirst("$1",aName);
+                    aQueryDlg.SetMessText(aQMsg.replaceFirst("$2",maView->getOverlayName()));
+
+                    if (aQueryDlg.Execute() == RET_NO)
+                        return;
+                }
+
+                if (!maView->saveTemplateAs(nRegionItemId,m_xModel,aName))
                     aFolderList = maView->getOverlayName();
             }
             else
@@ -1168,6 +1181,16 @@ void SfxTemplateManagerDlg::OnTemplateSaveAs()
                 for (pIter = maSelFolders.begin(); pIter != maSelFolders.end(); ++pIter)
                 {
                     TemplateLocalViewItem *pItem = (TemplateLocalViewItem*)(*pIter);
+
+                    if (!maView->isTemplateNameUnique(pItem->mnId,aName))
+                    {
+                        OUString aDQMsg = aQMsg.replaceFirst("$1",aName);
+                        aQueryDlg.SetMessText(aDQMsg.replaceFirst("$2",pItem->maTitle));
+
+                        if (aQueryDlg.Execute() == RET_NO)
+                            continue;
+                    }
+
                     if (!maView->saveTemplateAs(pItem,m_xModel,aName))
                     {
                         if (aFolderList.isEmpty())

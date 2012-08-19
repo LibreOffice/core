@@ -95,6 +95,11 @@ String STR_QMSG_SEL_FOLDER_DELETE
     Text [ en-US ] = "Do you want to delete the selected folders?";
 };
 
+String STR_QMSG_TEMPLATE_OVERWRITE
+{
+    Text [ en-US ] = "A template named $1 already exist in $2. Do you want to overwrite it?";
+};
+
 ModelessDialog DLG_TEMPLATE_MANAGER
 {
     OutputSize = TRUE;
