@@ -1071,18 +1071,24 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
 
         if (  $installer::globals::issolarisbuild ) { installer::epmfile::read_packagemap($allvariableshashref, $includepatharrayref, $languagesarrayref); }
 
+        ###########################################
+        # Checking epm state
+        ###########################################
+
         my $epmexecutable = "";
-        my $found_epm = 0;
+        if ( $installer::globals::call_epm )
+        {
+            $epmexecutable = installer::epmfile::find_epm_on_system($includepatharrayref);
+            installer::epmfile::set_patch_state($epmexecutable);    # setting $installer::globals::is_special_epm
+        }
 
         # shuffle array to reduce parallel packaging process in pool
         installer::worker::shuffle_array($packages)
             unless $installer::globals::simple;
 
         # iterating over all packages
-        for ( my $k = 0; $k <= $#{$packages}; $k++ )
+        for my $onepackage ( @{$packages} )
         {
-            my $onepackage = ${$packages}[$k];
-
             # checking, if this is a language pack or a project pack.
             # Creating language packs only, if $installer::globals::languagepack is set. Parameter: -languagepack
 
@@ -1123,14 +1129,11 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
             # Debian allows no underline in package name
             if ( $installer::globals::debian ) { $packagename =~ s/_/-/g; }
 
-            # Debian allows no underline in package name
-            if ( $installer::globals::debian ) { $packagename =~ s/_/-/g; }
-
             ####################################################
             # Header for this package into log file
             ####################################################
 
-            installer::logger::include_header_into_logfile("Creating package: $packagename ($k)");
+            installer::logger::include_header_into_logfile("Creating package: $packagename");
 
             ###########################################
             # Root path, can be defined as parameter
@@ -1218,29 +1221,10 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
                 strip_libraries($filesinpackage, $languagestringref);
             }
 
-            ###########################################
-            # Simple installation mechanism
-            ###########################################
-
-            if ( $installer::globals::simple ) { installer::worker::install_simple($onepackagename, $$languagestringref, $dirsinpackage, $filesinpackage, $linksinpackage, $unixlinksinpackage); }
-
-            ###########################################
-            # Checking epm state
-            ###########################################
-
-            if (( $installer::globals::call_epm ) && ( ! $found_epm ))
-            {
-                $epmexecutable = installer::epmfile::find_epm_on_system($includepatharrayref);
-                installer::epmfile::set_patch_state($epmexecutable);    # setting $installer::globals::is_special_epm
-                $found_epm = 1; # searching only once
+            if ( $installer::globals::simple ) {
+                installer::worker::install_simple($onepackagename, $$languagestringref, $dirsinpackage, $filesinpackage, $linksinpackage, $unixlinksinpackage);
             }
-
-            ###########################################
-            # Creating epm list file
-            ###########################################
-
-            if ( ! $installer::globals::simple )
-            {
+            else {
                 # epm list file format:
                 # type mode owner group destination source options
                 # Example for a file: f 755 root sys /usr/bin/foo foo
@@ -1372,7 +1356,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
 
             } # end of "if ( ! $installer::globals::simple )
 
-        }   # end of "for ( my $k = 0; $k <= $#{$packages}; $k++ )"
+        }   # end of "for ( @{$packages} )"
 
         ##############################################################
         # Post epm functionality, after the last package is packed

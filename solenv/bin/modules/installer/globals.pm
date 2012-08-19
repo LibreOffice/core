@@ -192,9 +192,6 @@ BEGIN
     $packagename = "";
     $packagelist = "";
     $shiptestdirectory = "";
-    @linuxpatchfiles = ();
-    $linuxlibrarybaselevel = "1";
-    $linuxlibrarypatchlevel = "1.1";
     $archiveformat = "";
     $updatelastsequence = 0;
     $updatesequencecounter = 0;
