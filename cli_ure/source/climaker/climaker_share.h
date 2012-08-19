@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#using <mscorlib.dll>
 #using <cli_basetypes.dll>
 
 #include <vcclr.h>
@@ -43,59 +42,59 @@ namespace climaker
 //------------------------------------------------------------------------------
 extern bool g_verbose;
 
-__gc struct Constants
+ref struct Constants
 {
-    static const ::System::String * sUnoVoid = S"void";
-    static const ::System::String * sUnoType = S"type";
-    static const ::System::String * sUnoAny =  S"any";
-    static const ::System::String * sUnoBool = S"boolean";
-    static const ::System::String * sUnoByte = S"byte";
-    static const ::System::String * sUnoChar = S"char";
-    static const ::System::String * sUnoShort = S"short";
-    static const ::System::String * sUnoUShort = S"unsigned short";
-    static const ::System::String * sUnoLong = S"long";
-    static const ::System::String * sUnoULong = S"unsigned long";
-    static const ::System::String * sUnoHyper = S"hyper";
-    static const ::System::String * sUnoUHyper = S"unsigned hyper";
-    static const ::System::String * sUnoString = S"string";
-    static const ::System::String * sUnoFloat = S"float";
-    static const ::System::String * sUnoDouble = S"double";
-    static const ::System::String * sUnoXInterface = S"com.sun.star.uno.XInterface";
-    static const ::System::String * sBrackets = S"[]";
+    static ::System::String ^ sUnoVoid = "void";
+    static ::System::String ^ sUnoType = "type";
+    static ::System::String ^ sUnoAny =  "any";
+    static ::System::String ^ sUnoBool = "boolean";
+    static ::System::String ^ sUnoByte = "byte";
+    static ::System::String ^ sUnoChar = "char";
+    static ::System::String ^ sUnoShort = "short";
+    static ::System::String ^ sUnoUShort = "unsigned short";
+    static ::System::String ^ sUnoLong = "long";
+    static ::System::String ^ sUnoULong = "unsigned long";
+    static ::System::String ^ sUnoHyper = "hyper";
+    static ::System::String ^ sUnoUHyper = "unsigned hyper";
+    static ::System::String ^ sUnoString = "string";
+    static ::System::String ^ sUnoFloat = "float";
+    static ::System::String ^ sUnoDouble = "double";
+    static ::System::String ^ sUnoXInterface = "com.sun.star.uno.XInterface";
+    static ::System::String ^ sBrackets = "[]";
 
-    static const System::String* sObject = S"System.Object";
-    static const System::String* sType = S"System.Type";
-    static const System::String* sUnoidl = S"unoidl.";
-    static const System::String* sVoid = S"System.Void";
-    static const System::String* sAny = S"uno.Any";
-    static const System::String* sBoolean = S"System.Boolean";
-    static const System::String* sChar = S"System.Char";
-    static const System::String* sByte = S"System.Byte";
-    static const System::String* sInt16 = S"System.Int16";
-    static const System::String* sUInt16 = S"System.UInt16";
-    static const System::String* sInt32 = S"System.Int32";
-    static const System::String* sUInt32 = S"System.UInt32";
-    static const System::String* sInt64 = S"System.Int64";
-    static const System::String* sUInt64 = S"System.UInt64";
-    static const System::String* sString = S"System.String";
-    static const System::String* sSingle = S"System.Single";
-    static const System::String* sDouble = S"System.Double";
-    static const System::String* sComma = new System::String(S",");
+    static System::String^ sObject = "System.Object";
+    static System::String^ sType = "System.Type";
+    static System::String^ sUnoidl = "unoidl.";
+    static System::String^ sVoid = "System.Void";
+    static System::String^ sAny = "uno.Any";
+    static System::String^ sBoolean = "System.Boolean";
+    static System::String^ sChar = "System.Char";
+    static System::String^ sByte = "System.Byte";
+    static System::String^ sInt16 = "System.Int16";
+    static System::String^ sUInt16 = "System.UInt16";
+    static System::String^ sInt32 = "System.Int32";
+    static System::String^ sUInt32 = "System.UInt32";
+    static System::String^ sInt64 = "System.Int64";
+    static System::String^ sUInt64 = "System.UInt64";
+    static System::String^ sString = "System.String";
+    static System::String^ sSingle = "System.Single";
+    static System::String^ sDouble = "System.Double";
+    static System::String^ sComma = gcnew System::String(",");
 
 };
 
 //------------------------------------------------------------------------------
-inline ::System::String * ustring_to_String( ::rtl::OUString const & ustr )
+inline ::System::String ^ ustring_to_String( ::rtl::OUString const & ustr )
 {
-    return new ::System::String( ustr.getStr(), 0, ustr.getLength() );
+    return gcnew ::System::String( ustr.getStr(), 0, ustr.getLength() );
 }
 
 //------------------------------------------------------------------------------
-inline ::rtl::OUString String_to_ustring( ::System::String * str )
+inline ::rtl::OUString String_to_ustring( ::System::String ^ str )
 {
     OSL_ASSERT( sizeof (wchar_t) == sizeof (sal_Unicode) );
-    wchar_t const __pin * chars = PtrToStringChars( str );
-    return ::rtl::OUString( chars, str->get_Length() );
+    pin_ptr<const wchar_t> chars = PtrToStringChars( str );
+    return ::rtl::OUString( chars, str->Length );
 }
 
 /* If the argument type is a typedef for an interface then the interface
@@ -104,7 +103,7 @@ inline ::rtl::OUString String_to_ustring( ::System::String * str )
 css::uno::Reference< css::reflection::XInterfaceTypeDescription2 >
 resolveInterfaceTypedef(const css::uno::Reference<css::reflection::XTypeDescription>& type);
 
-const ::System::Reflection::MethodAttributes c_ctor_method_attr =
+static ::System::Reflection::MethodAttributes c_ctor_method_attr =
 (::System::Reflection::MethodAttributes)
     (::System::Reflection::MethodAttributes::Public |
      ::System::Reflection::MethodAttributes::HideBySig |
@@ -114,23 +113,23 @@ const ::System::Reflection::MethodAttributes c_ctor_method_attr =
         ::System::Reflection::MethodAttributes::Instance*/);
 
 //==============================================================================
-__gc class TypeEmitter : public ::System::IDisposable
+ref class TypeEmitter : public ::System::IDisposable
 {
-    ::System::Reflection::Emit::ModuleBuilder * m_module_builder;
-    ::System::Reflection::Assembly * m_extra_assemblies __gc [];
+    ::System::Reflection::Emit::ModuleBuilder ^ m_module_builder;
+    array< ::System::Reflection::Assembly^>^ m_extra_assemblies;
 
-    ::System::Reflection::MethodInfo * m_method_info_Type_GetTypeFromHandle;
+    ::System::Reflection::MethodInfo ^ m_method_info_Type_GetTypeFromHandle;
 
-    ::System::Type * m_type_Exception;
-    ::System::Type * get_type_Exception();
-    ::System::Type * m_type_RuntimeException;
-    ::System::Type * get_type_RuntimeException();
+    ::System::Type ^ m_type_Exception;
+    ::System::Type ^ get_type_Exception();
+    ::System::Type ^ m_type_RuntimeException;
+    ::System::Type ^ get_type_RuntimeException();
 
-    ::System::Reflection::Emit::CustomAttributeBuilder* get_service_exception_attribute(
+    ::System::Reflection::Emit::CustomAttributeBuilder^ get_service_exception_attribute(
         const css::uno::Reference<css::reflection::XServiceConstructorDescription> & ctorDesc);
-    ::System::Reflection::Emit::CustomAttributeBuilder* get_iface_method_exception_attribute(
+    ::System::Reflection::Emit::CustomAttributeBuilder^ get_iface_method_exception_attribute(
         const css::uno::Reference< css::reflection::XInterfaceMethodTypeDescription >& xMethod );
-    ::System::Reflection::Emit::CustomAttributeBuilder* get_exception_attribute(
+    ::System::Reflection::Emit::CustomAttributeBuilder^ get_exception_attribute(
         const css::uno::Sequence<css::uno::Reference<
         css::reflection::XCompoundTypeDescription > >& seq_exceptionsTd );
 /* Creates ::System::Type object for UNO exceptions. The UNO exceptions are
@@ -147,34 +146,34 @@ __gc class TypeEmitter : public ::System::IDisposable
        It is always an instance of an ArrayList returned, even if the sequence argument
        does not contain elements.
     */
-    ::System::Collections::ArrayList * get_service_ctor_method_exceptions_reduced(
+    ::System::Collections::ArrayList ^ get_service_ctor_method_exceptions_reduced(
         const css::uno::Sequence<
         css::uno::Reference<css::reflection::XCompoundTypeDescription> > & seqExceptionsTd);
 
 
-    __gc class iface_entry
+    ref class iface_entry
     {
     public:
         css::reflection::XInterfaceTypeDescription2 * m_xType;
-        ::System::Reflection::Emit::TypeBuilder * m_type_builder;
+        ::System::Reflection::Emit::TypeBuilder ^ m_type_builder;
     };
-    ::System::Collections::Hashtable * m_incomplete_ifaces;
-    ::System::Type * complete_iface_type( iface_entry * entry );
+    ::System::Collections::Hashtable ^ m_incomplete_ifaces;
+    ::System::Type ^ complete_iface_type( iface_entry ^ entry );
 
-    __gc class struct_entry
+    ref class struct_entry
     {
     public:
          css::reflection::XCompoundTypeDescription * m_xType;
-        ::System::Reflection::Emit::TypeBuilder * m_type_builder;
-        ::System::Type * m_base_type;
+        ::System::Reflection::Emit::TypeBuilder ^ m_type_builder;
+        ::System::Type ^ m_base_type;
 
-        ::System::String * m_member_names __gc [];
-        ::System::Type * m_param_types __gc [];
-        ::System::Reflection::ConstructorInfo * m_default_ctor;
-        ::System::Reflection::ConstructorInfo * m_ctor;
+        array< ::System::String^>^ m_member_names;
+        array< ::System::Type^>^ m_param_types;
+        ::System::Reflection::ConstructorInfo ^ m_default_ctor;
+        ::System::Reflection::ConstructorInfo ^ m_ctor;
     };
-    ::System::Collections::Hashtable * m_incomplete_structs;
-    ::System::Type * complete_struct_type( struct_entry * entry );
+    ::System::Collections::Hashtable ^ m_incomplete_structs;
+    ::System::Type ^ complete_struct_type( struct_entry ^ entry );
 
     /*  returns the type for the name. If it is a struct then it may
         complete the struct if not already done. This also refers to its
@@ -184,53 +183,53 @@ __gc class TypeEmitter : public ::System::IDisposable
             the full name of the type.
         @return the type object for sName. Not necessarily a struct.
     */
-    ::System::Type * get_complete_struct( ::System::String * sName);
+    ::System::Type ^ get_complete_struct( ::System::String ^ sName);
 
-    __gc class service_entry
+    ref class service_entry
     {
     public:
-        ::System::Reflection::Emit::TypeBuilder * m_type_builder;
+        ::System::Reflection::Emit::TypeBuilder ^ m_type_builder;
         css::reflection::XServiceTypeDescription2 * m_xType;
     };
-    ::System::Collections::Hashtable * m_incomplete_services;
-    ::System::Type * complete_service_type(service_entry * entry);
+    ::System::Collections::Hashtable ^ m_incomplete_services;
+    ::System::Type ^ complete_service_type(service_entry ^ entry);
 
-    __gc class singleton_entry
+    ref class singleton_entry
     {
     public:
-        ::System::Reflection::Emit::TypeBuilder * m_type_builder;
+        ::System::Reflection::Emit::TypeBuilder ^ m_type_builder;
         css::reflection::XSingletonTypeDescription2 * m_xType;
     };
 
 
-    ::System::Collections::Hashtable * m_incomplete_singletons;
-    ::System::Type * complete_singleton_type(singleton_entry * entry);
+    ::System::Collections::Hashtable ^ m_incomplete_singletons;
+    ::System::Type ^ complete_singleton_type(singleton_entry ^ entry);
 
 
-    ::System::Collections::Hashtable * m_generated_structs;
+    ::System::Collections::Hashtable ^ m_generated_structs;
 
-    ::System::Type * get_type(
-        ::System::String * cli_name, bool throw_exc );
-    ::System::Type * get_type(
+    ::System::Type ^ get_type(
+        ::System::String ^ cli_name, bool throw_exc );
+    ::System::Type ^ get_type(
         css::uno::Reference<
         css::reflection::XConstantTypeDescription > const & xType );
-    ::System::Type * get_type(
+    ::System::Type ^ get_type(
         css::uno::Reference<
         css::reflection::XConstantsTypeDescription > const & xType );
-    ::System::Type * get_type(
+    ::System::Type ^ get_type(
         css::uno::Reference<
         css::reflection::XEnumTypeDescription > const & xType );
     /* returns the type for a struct or exception. In case of a polymorphic struct it may
         return a ::uno::PolymorphicType (cli_basetypes.dll) only if the struct is already
         complete.
     */
-    ::System::Type * get_type(
+    ::System::Type ^ get_type(
         css::uno::Reference<
         css::reflection::XCompoundTypeDescription > const & xType );
-    ::System::Type * get_type(
+    ::System::Type ^ get_type(
         css::uno::Reference<
         css::reflection::XInterfaceTypeDescription2 > const & xType );
-    ::System::Type * get_type(
+    ::System::Type ^ get_type(
         css::uno::Reference<
         css::reflection::XSingletonTypeDescription2 > const & xType );
 
@@ -239,20 +238,20 @@ __gc class TypeEmitter : public ::System::IDisposable
       description of
       com.sun.star.reflection.XServiceTypeDescription2.isSingleInterfaceBased
      */
-    ::System::Type * get_type(
+    ::System::Type ^ get_type(
         css::uno::Reference<
         css::reflection::XServiceTypeDescription2 > const & xType );
 public:
     TypeEmitter(
-        ::System::Reflection::Emit::ModuleBuilder * module_builder,
-        ::System::Reflection::Assembly * assemblies __gc [] );
+        ::System::Reflection::Emit::ModuleBuilder ^ module_builder,
+        array< ::System::Reflection::Assembly^>^ assemblies );
     // must be called to finish up uncompleted types
-    void Dispose();
+    ~TypeEmitter();
 
-    ::System::Reflection::Assembly * type_resolve(
-        ::System::Object * sender, ::System::ResolveEventArgs * args );
+    ::System::Reflection::Assembly ^ type_resolve(
+        ::System::Object ^ sender, ::System::ResolveEventArgs ^ args );
 
-    ::System::Type * get_type(
+    ::System::Type ^ get_type(
         css::uno::Reference<
         css::reflection::XTypeDescription > const & xType );
 };

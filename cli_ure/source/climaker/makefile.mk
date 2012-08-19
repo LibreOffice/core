@@ -71,7 +71,7 @@ CFLAGSCXX +=-AI$(BIN)
 
 # When compiling for CLR, disable "warning C4339: use of undefined type detected
 # in CLR meta-data - use of this type may lead to a runtime exception":
-CFLAGSCXX += -clr:oldSyntax -LN -wd4339 -wd4715
+CFLAGSCXX += -clr -LN -wd4339 -wd4715
 
 OBJFILES = \
     $(OBJ)$/climaker_app.obj	\
