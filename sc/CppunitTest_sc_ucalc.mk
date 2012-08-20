@@ -37,12 +37,6 @@ $(eval $(call gb_CppunitTest_add_exception_objects,sc_ucalc, \
 
 $(eval $(call gb_CppunitTest_use_library_objects,sc_ucalc,sc))
 
-$(call gb_CxxObject_get_target,sc/qa/unit/ucalc): \
-    $(WORKDIR)/AllLangRes/for \
-    $(WORKDIR)/AllLangRes/forui \
-    $(WORKDIR)/AllLangRes/frm \
-    $(WORKDIR)/AllLangRes/sc \
-
 ifeq ($(ENABLE_TELEPATHY),TRUE)
 $(eval $(call gb_CppunitTest_use_libraries,sc_ucalc,tubes))
 endif

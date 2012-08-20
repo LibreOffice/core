@@ -170,4 +170,8 @@ $(eval $(call gb_Library_add_asmobjects,sb,\
 ))
 endif
 
+# Runtime dependency for unit-tests
+$(call gb_LinkTarget_get_target,$(call gb_Library_get_linktargetname,sb)) :| \
+	$(call gb_AllLangResTarget_get_target,sb)
+
 # vim: set noet sw=4 ts=4:

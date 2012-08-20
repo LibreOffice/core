@@ -747,4 +747,8 @@ $(eval $(call gb_SdiTarget_set_include,sw/sdi/swslots,\
     $$(INCLUDE) \
 ))
 
+# Runtime dependency for unit-tests
+$(call gb_LinkTarget_get_target,$(call gb_Library_get_linktargetname,sw)) :| \
+	$(call gb_AllLangResTarget_get_target,sw)
+
 # vim: set noet sw=4 ts=4:

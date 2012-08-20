@@ -48,4 +48,8 @@ $(eval $(call gb_Library_add_exception_objects,date,\
 	scaddins/source/datefunc/datefunc \
 ))
 
+# Runtime dependency for unit-tests
+$(call gb_LinkTarget_get_target,$(call gb_Library_get_linktargetname,date)) :| \
+	$(call gb_AllLangResTarget_get_target,date)
+
 # vim: set noet sw=4 ts=4:

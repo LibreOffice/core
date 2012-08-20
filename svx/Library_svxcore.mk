@@ -463,4 +463,8 @@ $(eval $(call gb_SdiTarget_set_include,svx/sdi/svxslots,\
     -I$(SRCDIR)/svx/sdi \
 ))
 
+# Runtime dependency for unit-tests
+$(call gb_LinkTarget_get_target,$(call gb_Library_get_linktargetname,svxcore)) :| \
+	$(call gb_AllLangResTarget_get_target,svx)
+
 # vim: set noet sw=4 ts=4:
