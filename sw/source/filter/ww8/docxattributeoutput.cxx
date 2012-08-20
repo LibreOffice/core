@@ -575,17 +575,18 @@ void DocxAttributeOutput::EndRun()
 
     WritePostponedMath();
 
-    while ( m_Fields.begin() != m_Fields.end() )
-    {
-        EndField_Impl( m_Fields.front( ) );
-        m_Fields.erase( m_Fields.begin( ) );
-    }
+    // Close fields before any field end as we have started them after the field
     if ( m_closeHyperlinkInThisRun )
     {
         m_pSerializer->endElementNS( XML_w, XML_hyperlink );
         m_closeHyperlinkInThisRun = false;
     }
 
+    while ( m_Fields.begin() != m_Fields.end() )
+    {
+        EndField_Impl( m_Fields.front( ) );
+        m_Fields.erase( m_Fields.begin( ) );
+    }
     // if there is some redlining in the document, output it
     EndRedline();
 }
