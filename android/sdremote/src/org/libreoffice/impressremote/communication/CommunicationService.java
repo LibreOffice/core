@@ -85,23 +85,13 @@ public class CommunicationService extends Service implements Runnable {
     }
 
     public void startSearching() {
-        synchronized (mConnectionVariableMutex) {
-            if (mState == State.CONNECTING || mState == State.CONNECTED) {
-                disconnect();
-            }
-            mNetworkFinder.startFinding();
-            mBluetoothFinder.startFinding();
-            mState = State.SEARCHING;
-        }
-        new BluetoothFinder(this);
+        mNetworkFinder.startFinding();
+        mBluetoothFinder.startFinding();
     }
 
     public void stopSearching() {
-        synchronized (mConnectionVariableMutex) {
-            mNetworkFinder.stopFinding();
-            mBluetoothFinder.stopFinding();
-            mState = State.DISCONNECTED;
-        }
+        mNetworkFinder.stopFinding();
+        mBluetoothFinder.stopFinding();
     }
 
     public void connectTo(Server aServer) {

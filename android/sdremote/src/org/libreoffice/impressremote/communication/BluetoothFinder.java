@@ -40,7 +40,11 @@ public class BluetoothFinder {
 
     public void stopFinding() {
         mAdapter.cancelDiscovery();
-        mContext.unregisterReceiver(mReceiver);
+        try {
+            mContext.unregisterReceiver(mReceiver);
+        } catch (IllegalArgumentException e) {
+            // The receiver wasn't registered
+        }
     }
 
     private HashMap<String, Server> mServerList = new HashMap<String, Server>();

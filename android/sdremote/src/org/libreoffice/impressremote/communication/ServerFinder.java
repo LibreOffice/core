@@ -63,7 +63,7 @@ public class ServerFinder {
                 return;
             }
             Server aServer = new Server(Server.Protocol.NETWORK, aPacket
-                            .getAddress().toString(), aName,
+                            .getAddress().getHostAddress(), aName,
                             System.currentTimeMillis());
             mServerList.put(aServer.getAddress(), aServer);
 
