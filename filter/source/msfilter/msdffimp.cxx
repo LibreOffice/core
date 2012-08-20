@@ -2731,7 +2731,7 @@ void DffPropertyReader::ApplyAttributes( SvStream& rIn, SfxItemSet& rSet, DffObj
                 break;
             }
         }
-        if ( ( ( nLineFlags & 0x08 ) == 0 ) && ( ( nFillFlags & 0x10 ) == 0 ) ) // if there is no fillstyle and linestyle
+        if ( ( ( nLineFlags & 0x08 ) == 0 ) && ( ( nFillFlags & 0x10 ) == 0 ) && ( rObjData.eShapeType != mso_sptPictureFrame ))    // if there is no fillstyle and linestyle
             bHasShadow = sal_False;                                             // we are turning shadow off.
 
         if ( bHasShadow )
@@ -4482,7 +4482,7 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                             aSet.Put( SvxWeightItem( ( GetPropertyValue( DFF_Prop_gtextFStrikethrough, 0 ) & 0x0020 ) != 0 ? WEIGHT_BOLD : WEIGHT_NORMAL, EE_CHAR_WEIGHT ) );
 
                         // SJ TODO: Vertical Writing is not correct, instead this should be
-                        // replaced through "CharacterRotation" by 90°, therefore a new Item has to be
+                        // replaced through "CharacterRotation" by 90? therefore a new Item has to be
                         // supported by svx core, api and xml file format
                         ((SdrObjCustomShape*)pRet)->SetVerticalWriting( ( GetPropertyValue( DFF_Prop_gtextFStrikethrough, 0 ) & 0x2000 ) != 0 );
 

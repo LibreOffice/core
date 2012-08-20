@@ -102,6 +102,7 @@
 #include <ndtxt.hxx>
 // <--
 #include "WW8FFData.hxx"
+#include <editeng/shaditem.hxx>
 
 using namespace com::sun::star;
 using namespace sw::util;
@@ -1726,7 +1727,61 @@ sal_Int32 SwBasicEscherEx::WriteFlyFrameAttr(const SwFrmFmt& rFmt,
         rPropOpt.AddOpt( ESCHER_Prop_dxTextLeft, 0 );
         rPropOpt.AddOpt( ESCHER_Prop_dxTextRight, 0 );
     }
+    const SwAttrSet& rAttrSet = rFmt.GetAttrSet();
+    if (SFX_ITEM_ON == rAttrSet.GetItemState(RES_BOX, false, &pItem))
+    {
+        const SvxBoxItem* pBox = (const SvxBoxItem*)pItem;
+        if( pBox )
+        {
+            const SfxPoolItem* pShadItem;
+            if (SFX_ITEM_ON
+                == rAttrSet.GetItemState(RES_SHADOW, true, &pShadItem))
+            {
+                const SvxShadowItem* pSI = (const SvxShadowItem*)pShadItem;
 
+                const sal_uInt16 nCstScale = 635;        // unit scale between SODC and MS Word
+                const sal_uInt32 nShadowType = 131074;    // shadow type of ms word. need to set the default value.
+
+                sal_uInt32  nColor = (sal_uInt32)(pSI->GetColor().GetColor()) ;
+                sal_uInt32  nOffX = pSI->GetWidth() * nCstScale;
+                sal_uInt32  nOffY = pSI->GetWidth() * nCstScale;
+                sal_uInt32  nShadow = nShadowType;
+
+                SvxShadowLocation eLocation = pSI->GetLocation();
+                if( (eLocation!=SVX_SHADOW_NONE) && (pSI->GetWidth()!=0) )
+                {
+                    switch( eLocation )
+                    {
+                    case SVX_SHADOW_TOPLEFT:
+                        {
+                            nOffX = -nOffX;
+                            nOffY = -nOffY;
+                        }
+                        break;
+                    case SVX_SHADOW_TOPRIGHT:
+                        {
+                            nOffY = -nOffY;
+                        }
+                        break;
+                    case SVX_SHADOW_BOTTOMLEFT:
+                        {
+                            nOffX = -nOffX;
+                        }
+                        break;
+                    case SVX_SHADOW_BOTTOMRIGHT:
+                        break;
+                    default:
+                        break;
+                    }
+
+                    rPropOpt.AddOpt( DFF_Prop_shadowColor,    wwUtility::RGBToBGR((nColor)));
+                    rPropOpt.AddOpt( DFF_Prop_shadowOffsetX,    nOffX );
+                    rPropOpt.AddOpt( DFF_Prop_shadowOffsetY,    nOffY );
+                    rPropOpt.AddOpt( DFF_Prop_fshadowObscured,  nShadow );
+                }
+            }
+        }
+    }
     SvxBrushItem aBrush(rWrt.TrueFrameBgBrush(rFmt));
     WriteBrushAttr(aBrush, rPropOpt);
 
