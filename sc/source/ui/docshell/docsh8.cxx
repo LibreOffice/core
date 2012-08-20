@@ -34,7 +34,10 @@
 #include <comphelper/types.hxx>
 #include <ucbhelper/content.hxx>
 #include <svx/txenctab.hxx>
+
+#ifndef DISABLE_DBCONNECTIVITY
 #include <svx/dbcharsethelper.hxx>
+#endif
 
 #include <com/sun/star/sdb/CommandType.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
@@ -104,6 +107,8 @@ using ::std::vector;
 #define SC_DBPROP_EXTENSION         "Extension"
 #define SC_DBPROP_CHARSET           "CharSet"
 
+#ifndef DISABLE_DBCONNECTIVITY
+
 namespace
 {
     sal_uLong lcl_getDBaseConnection(uno::Reference<sdbc::XDriverManager>& _rDrvMgr,uno::Reference<sdbc::XConnection>& _rConnection,String& _rTabName,const String& rFullFileName,rtl_TextEncoding eCharSet)
@@ -159,6 +164,9 @@ namespace
         return 0L;
     }
 }
+
+#endif // !DISABLE_DBCONNECTIVITY
+
 // -----------------------------------------------------------------------
 // MoveFile/KillFile/IsDocument: similar to SfxContentHelper
 
@@ -245,6 +253,8 @@ bool ScDocShell::IsDocument( const INetURLObject& rURL )
 
 // -----------------------------------------------------------------------
 
+#ifndef DISABLE_DBCONNECTIVITY
+
 static void lcl_setScalesToColumns(ScDocument& rDoc, const vector<long>& rScales)
 {
     SvNumberFormatter* pFormatter = rDoc.GetFormatTable();
@@ -292,9 +302,19 @@ static void lcl_setScalesToColumns(ScDocument& rDoc, const vector<long>& rScales
     }
 }
 
+#endif // !DISABLE_DBCONNECTIVITY
+
 sal_uLong ScDocShell::DBaseImport( const String& rFullFileName, CharSet eCharSet,
                                ScColWidthParam aColWidthParam[MAXCOLCOUNT], ScFlatBoolRowSegments& rRowHeightsRecalc )
 {
+#ifdef DISABLE_DBCONNECTIVITY
+    (void) rFullFileName;
+    (void) eCharSet;
+    (void) aColWidthParam;
+    (void) rRowHeightsRecalc;
+
+    return ERRCODE_IO_GENERAL;
+#else
     ScColumn::DoubleAllocSwitch aAllocSwitch(true);
 
     sal_uLong nErr = eERR_OK;
@@ -470,7 +490,10 @@ sal_uLong ScDocShell::DBaseImport( const String& rFullFileName, CharSet eCharSet
         aDocument.DoColResize( 0, 0, static_cast<SCCOL>(nColCount) - 1, 0 );
 
     return nErr;
+#endif // !DISABLE_DBCONNECTIVITY
 }
+
+#ifndef DISABLE_DBCONNECTIVITY
 
 namespace {
 
@@ -777,8 +800,17 @@ inline void lcl_getLongVarCharString( rtl::OUString& rString, ScBaseCell* pCell,
 
 }
 
+#endif // !DISABLE_DBCONNECTIVITY
+
 sal_uLong ScDocShell::DBaseExport( const rtl::OUString& rFullFileName, CharSet eCharSet, bool& bHasMemo )
 {
+#ifdef DISABLE_DBCONNECTIVITY
+    (void) rFullFileName;
+    (void) eCharSet;
+    (void) bHasMemo;
+
+    return ERRCODE_IO_GENERAL;
+#else
     // remove the file so the dBase driver doesn't find an invalid file
     INetURLObject aDeleteObj( rFullFileName, INET_PROT_FILE );
     KillFile( aDeleteObj );
@@ -1156,6 +1188,7 @@ sal_uLong ScDocShell::DBaseExport( const rtl::OUString& rFullFileName, CharSet e
     }
 
     return nErr;
+#endif // !DISABLE_DBCONNECTIVITY
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
