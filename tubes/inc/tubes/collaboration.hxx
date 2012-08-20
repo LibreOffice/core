@@ -27,14 +27,18 @@ public:
             Collaboration();
     virtual ~Collaboration();
 
+    /** Returns to normal editing mode */
     virtual void EndCollaboration() const = 0;
     virtual void PacketReceived( const OString& rPacket ) const = 0;
+    /** Saves current document and then calls SendFile() with the file URL */
     virtual void SaveAndSendFile( TpContact* pContact ) const = 0;
+    /** Prepares document for collaboration and should call SetConference() */
     virtual void StartCollaboration( TeleConference* pConference ) = 0;
 
     TUBES_DLLPRIVATE sal_uInt64 GetId() const;
     TUBES_DLLPRIVATE void Invite( TpContact* pContact ) const;
 
+    /** Application calls this to display contacts dialog from where can the collaboration start */
     void DisplayContacts();
     void SendFile( TpContact* pContact, const OUString& rURL ) const;
     void SendPacket( const OString& rPacket ) const;

@@ -61,9 +61,6 @@ typedef ::std::vector< AccountContactPair > AccountContactPairV;
 
 class TeleManager
 {
-    TeleManager();
-    ~TeleManager();
-
 public:
     /** Prepare tube manager with account and service to be offered/listened
         to.
@@ -124,6 +121,8 @@ public:
 
     static void             registerCollaboration( Collaboration* pCollaboration );
     static void             unregisterCollaboration( Collaboration* pCollaboration );
+    /** Used to determine whether we are closing the channel by ourselves.
+     * @return true if the Collaboration is still registered  */
     static bool             existsCollaboration( Collaboration* pCollaboration );
     /** Display contact list dialog for all documents. */
     static void             displayAllContacts();
@@ -133,11 +132,15 @@ public:
     /** Broadcast packet to all conferences. Used for demo mode. */
     static void             broadcastPacket( const OString& rPacket );
 
-    static void             setCurrentUuid( const OString& rUuid );
-    static rtl::OString     createUuid();
 
     // Only for callbacks.
     static void             addConference( TeleConference* pConference );
+    static rtl::OString     createUuid();
+    /** @param rUuid
+            is stored so that accepted conference with this UUID could be
+            then retrieved by getConference() when loading new document
+    */
+    static void             setCurrentUuid( const OString& rUuid );
 
     /// "LibreOfficeWhatEver"
     static rtl::OString     getFullClientName();
