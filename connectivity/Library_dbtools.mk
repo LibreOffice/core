@@ -54,7 +54,7 @@ $(eval $(call gb_Library_use_libraries,dbtools,\
 	cppuhelper \
 	sal \
 	salhelper \
-	jvmaccess \
+	$(if $(filter IOS,$(OS)),,jvmaccess) \
 	utl \
 	tl \
 	comphelper \
