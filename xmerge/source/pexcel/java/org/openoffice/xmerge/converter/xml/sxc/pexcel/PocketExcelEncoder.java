@@ -31,9 +31,7 @@ import org.openoffice.xmerge.converter.xml.sxc.NameDefinition;
 import org.openoffice.xmerge.converter.xml.sxc.pexcel.records.Workbook;
 
 /**
- *  This class is used by {@link
- *  org.openoffice.xmerge.converter.xml.sxc.SxcDocumentSerializerImpl
- * SxcDocumentSerializerImpl} to encode the Pocket Excel format.
+ *  This class is used by {@link SxcDocumentSerializerImpl} to encode the Pocket Excel format.
  *
  *  @author  Martin Maher
  */
@@ -200,20 +198,13 @@ final class PocketExcelEncoder extends SpreadsheetEncoder {
     /**
      *  Set the width of the columns in the WorkBook.
      *
-     *  @param  columnWidths  An <code>IntArrayList</code> of column
-     *                        widths.
+     *  @param  columnRows  An <code>ArrayList</code> of ColumnRowInfo
      */
     public void setColumnRows(ArrayList<ColumnRowInfo> columnRows) throws IOException {
 
         wb.addColInfo(columnRows);
     }
 
-     /**
-     *  Set the width of the columns in the WorkBook.
-     *
-     *  @param  columnWidths  An <code>IntArrayList</code> of column
-     *                        widths.
-     */
     public void setNameDefinition(NameDefinition nd) throws IOException {
 
         String parsedName = nd.getDefinition();
@@ -222,12 +213,6 @@ final class PocketExcelEncoder extends SpreadsheetEncoder {
         wb.addNameDefinition(nd);
     }
 
-     /**
-     *  Set the width of the columns in the WorkBook.
-     *
-     *  @param  columnWidths  An <code>IntArrayList</code> of column
-     *                        widths.
-     */
     public void addSettings(BookSettings s) throws IOException {
 
         wb.addSettings(s);

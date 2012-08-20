@@ -45,8 +45,7 @@ import org.openoffice.xmerge.converter.xml.sxc.pexcel.records.Worksheet;
 import org.openoffice.xmerge.util.Debug;
 
 /**
- *  This class is used by {@link
- *  org.openoffice.xmerge.converter.xml.sxc.SxcDocumentDeserializerImpl}
+ *  This class is used by {@link SxcDocumentDeserializerImpl}
  *  SxcDocumentDeserializerImpl} to decode the Pocket Excel format.
  *
  *  @author   Paul Rank
@@ -84,7 +83,7 @@ final class PocketExcelDecoder extends SpreadsheetDecoder {
      *  converts it into a PocketWord WorkSheet.  The WorkSheet is then
      *  added to the WorkBook.
      *
-     *  @param  InputStream An <code>ConvertData</code> containing a
+     *  @param  cd An <code>ConvertData</code> containing a
      *                      Pocket Excel WorkSheet.
      *
      *  @throws  IOException  If any I/O error occurs.

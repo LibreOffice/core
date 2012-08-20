@@ -102,8 +102,6 @@ public class EmbeddedBinaryObject extends EmbeddedObject {
     /**
      * Package private method that constructs the manifest.xml entries for this
      * embedded object.
-     *
-     * @return  Document    <code>Document</code> containing the manifest entries.
      */
     void writeManifestData(Document manifestDoc) throws DOMException {
         Element objNode = manifestDoc.createElement(OfficeConstants.TAG_MANIFEST_FILE);

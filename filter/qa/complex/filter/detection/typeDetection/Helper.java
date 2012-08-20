@@ -304,7 +304,7 @@ public class Helper  {
      * @param propNames String Array of propertie names
      * @param values Objecr Array of propertie values
      * @return <code>PropertyValue[]<code>
-     * @see com.sun.star.benas.PropertyValue
+     * @see com.sun.star.beans.PropertyValue
      * @see com.sun.star.document.MediaDescriptor
      */
     public PropertyValue[] createMediaDescriptor(String[] propNames, Object[] values) {

@@ -128,7 +128,7 @@ public class FormulaParser {
     /**
      * Identify <, >, <=, >=, =, <>
      *
-     * @param  The <code>String</code> which is to be identified
+     * @param  op The <code>String</code> which is to be identified
      * @return A boolean returning the result of the comparison
      */
     private boolean isLogicalOp(String op) {

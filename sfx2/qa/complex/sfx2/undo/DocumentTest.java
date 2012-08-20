@@ -63,8 +63,8 @@ public interface DocumentTest
     /**
      * does multiple modifications do the document, which would normally result in multiple Undo actions.
      *
-     * The test framework will encapsulate the call into an {@link XUndoManager.enterUndoContext()} and
-     * {@link XUndoManager.leaveUndoContext()} call.
+     * The test framework will encapsulate the call into an {@link com.sun.star.document.XUndoManager#enterUndoContext} and
+     * {@link com.sun.star.document.XUndoManager#leaveUndoContext} call.
      *
      * @return
      *  the number of modifications done to the document. The caller assumes (and asserts) that the number

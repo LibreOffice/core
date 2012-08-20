@@ -32,7 +32,7 @@ import com.sun.star.lang.DisposedException;
  * @author      Kay Ramme
  * @see         com.sun.star.lib.uno.environments.remote.ThreadPool
  * @see         com.sun.star.lib.uno.environments.remote.Job
- * @see         com.sun.star.lib.uno.environments.remote.ThreadID
+ * @see         com.sun.star.lib.uno.environments.remote.ThreadId
  * @since       UDK1.0
  */
 public class JobQueue {
@@ -112,7 +112,7 @@ public class JobQueue {
      * which belongs to the given sync job queue.
      * <p>
      * @param threadId         the thread id
-     * @see                    com.sun.star.lib.uno.environments.remote.ThreadID
+     * @see                    com.sun.star.lib.uno.environments.remote.ThreadId
      */
     JobQueue(JavaThreadPoolFactory javaThreadPoolFactory, ThreadId threadId) {
         _javaThreadPoolFactory = javaThreadPoolFactory;
@@ -139,7 +139,7 @@ public class JobQueue {
      * <p>
      * @param threadId        the thread id
      * @param createThread    if true, the queue creates a worker thread if needed
-     * @see             com.sun.star.lib.uno.environments.remote.ThreadID
+     * @see             com.sun.star.lib.uno.environments.remote.ThreadId
      */
     JobQueue(JavaThreadPoolFactory javaThreadPoolFactory, ThreadId threadId, boolean createThread){
         _javaThreadPoolFactory   = javaThreadPoolFactory;
@@ -154,7 +154,7 @@ public class JobQueue {
      * Gives the thread id of this queue
      * <p>
      * @return  the thread id
-     * @see     com.sun.star.lib.uno.environments.remote.ThreadID
+     * @see     com.sun.star.lib.uno.environments.remote.ThreadId
      */
     ThreadId getThreadId() {
         return _threadId;

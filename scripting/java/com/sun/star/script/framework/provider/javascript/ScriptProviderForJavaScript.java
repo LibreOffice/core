@@ -149,7 +149,7 @@ class ScriptImpl implements XScript
          *
          *
          *
-         * @param aParams           All parameters; pure, out params are
+         * @param params            All parameters; pure, out params are
          *                          undefined in sequence, i.e., the value
          *                          has to be ignored by the callee
          *

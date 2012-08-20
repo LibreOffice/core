@@ -160,7 +160,7 @@ public class UnoRuntime {
      * Queries the given UNO object for the given Java class (which must
      * represent a UNO interface type).
      *
-     * @param ifc a Java class representing a UNO interface type
+     * @param zInterface a Java class representing a UNO interface type
      * @param object a reference to any Java object representing (a facet of) a
      * UNO object; may be <code>null</code>
      * @return a reference to the requested UNO interface type if available,

@@ -37,7 +37,7 @@ import com.sun.star.uno.XCurrentContext;
  * remotely because of a method invocation.
  * <p>
  * @author      Kay Ramme
- * @see         com.sun.star.lib.uno.environments.remote.ThreadID
+ * @see         com.sun.star.lib.uno.environments.remote.ThreadId
  * @see         com.sun.star.lib.uno.environments.remote.IReceiver
  * @since       UDK1.0
  */

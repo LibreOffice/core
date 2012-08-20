@@ -706,8 +706,7 @@ public class Base64
      * @param source The data to convert
      * @param off Offset in array where conversion should begin
      * @param len Length of data to convert
-     * @param options Specified options
-     * @param options alphabet type is pulled from this (standard, url-safe, ordered)
+     * @param options Specified options, alphabet type is pulled from this (standard, url-safe, ordered)
      * @see Base64#GZIP
      * @see Base64#DONT_BREAK_LINES
      * @since 2.0

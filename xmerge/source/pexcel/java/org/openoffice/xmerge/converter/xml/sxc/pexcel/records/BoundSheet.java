@@ -59,7 +59,7 @@ public class BoundSheet implements BIFFRecord {
       * Sets the worksheet name. The sheetname length must be doubled as the
      * String is stored in unicode format.
       *
-      * @param  sheetname   worksheet name
+      * @param  sheetName   worksheet name
       */
     void setSheetName(String sheetName) throws IOException {
         this.cch        = (byte) sheetName.length();

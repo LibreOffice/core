@@ -27,9 +27,7 @@ import java.util.ArrayList;
 import org.openoffice.xmerge.converter.palm.Record;
 
 /**
- *  This class is used by {@link
- *  org.openoffice.xmerge.converter.xml.sxw.DocumentSerializerImpl
- *  DocumentSerializerImpl} to encode the AportisDoc format.
+ *  This class is used by {@link DocumentSerializerImpl} to encode the AportisDoc format.
  *  It does not deal with any XML tags.  It only knows how to encode
  *  from <code>String</code>.
  *

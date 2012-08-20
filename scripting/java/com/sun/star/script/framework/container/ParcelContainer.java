@@ -217,11 +217,9 @@ public class ParcelContainer implements XNameAccess
      * @param    xCtx UNO component context
      * @param   containerUrl location of this container.
      * @param   language language for which entries are stored
-     * @return    name of <tt>ParcelContainer</tt>
-     * @throws    IllegalArgumentException
+     * @throws    com.sun.star.lang.IllegalArgumentException
      * @throws    WrappedTargetException
      */
-
     public ParcelContainer( XComponentContext xCtx, String containerUrl, String language ) throws com.sun.star.lang.IllegalArgumentException, com.sun.star.lang.WrappedTargetException
 
     {
@@ -235,8 +233,7 @@ public class ParcelContainer implements XNameAccess
      * @param   language language for which entries are stored
      * @param   loadParcels set to <tt>true</tt> if parcels are to be loaded
      *          on construction.
-     * @return    name of <tt>ParcelContainer</tt>
-     * @throws    IllegalArgumentException
+     * @throws    com.sun.star.lang.IllegalArgumentException
      * @throws    WrappedTargetException
      */
     public ParcelContainer( XComponentContext xCtx, String containerUrl, String language, boolean loadParcels ) throws com.sun.star.lang.IllegalArgumentException, com.sun.star.lang.WrappedTargetException
@@ -252,10 +249,8 @@ public class ParcelContainer implements XNameAccess
      * @param   language language for which entries are stored
      * @param   loadParcels set to <tt>true</tt> if parcels are to be loaded
      *          on construction.
-     * @return    name of <tt>ParcelContainer</tt>
-     * @throws    IllegalArgumentException
+     * @throws    com.sun.star.lang.IllegalArgumentException
      */
-
     public ParcelContainer( ParcelContainer parent, XComponentContext xCtx, String containerUrl, String language, boolean loadParcels ) throws com.sun.star.lang.IllegalArgumentException, com.sun.star.lang.WrappedTargetException
 
     {

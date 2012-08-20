@@ -36,7 +36,7 @@ import com.sun.star.comp.loader.FactoryHelper;
  * @see         com.sun.star.bridge.XBridge
  * @see         com.sun.star.bridge.XBridgeFactory
  * @see         com.sun.star.bridge.XInstanceProvider
- * @see         com.sun.star.loader.JavaLoader
+ * @see         com.sun.star.comp.loader.JavaLoader
  * @since       UDK1.0
  */
 public class ConstantInstanceProvider implements XInstanceProvider {

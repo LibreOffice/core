@@ -67,7 +67,7 @@ public class StorageNativeOutputStream {
      * @param b the data.
      * @param off the start offset in the data.
      * @param len the number of bytes to write.
-     * @exception IOException if an I/O error occurs. In particular,
+     * @exception java.io.IOException if an I/O error occurs. In particular,
      *             an <code>IOException</code> is thrown if the output
      *             stream is closed.
      */
@@ -80,7 +80,7 @@ public class StorageNativeOutputStream {
      * <code>write(b, 0, b.length)</code>.
      *
      * @param      b   the data.
-     * @exception  IOException  if an I/O error occurs.
+     * @exception  java.io.IOException  if an I/O error occurs.
      * @see        java.io.OutputStream#write(byte[], int, int)
      */
     public native void write(String key,String _file,byte[] b) throws java.io.IOException;
@@ -95,7 +95,7 @@ public class StorageNativeOutputStream {
      * @param key The name of the data source.
      * @param _file The name of the file to write to.
      *
-     * @exception  IOException  if an I/O error occurs.
+     * @exception  java.io.IOException  if an I/O error occurs.
      */
     public native void close(String key,String _file) throws java.io.IOException;
 
@@ -112,7 +112,7 @@ public class StorageNativeOutputStream {
      * @param key The name of the data source.
      * @param _file The name of the file to write to.
      * @param      b   the <code>byte</code>.
-     * @exception  IOException  if an I/O error occurs. In particular,
+     * @exception  java.io.IOException  if an I/O error occurs. In particular,
      *             an <code>IOException</code> may be thrown if the
      *             output stream has been closed.
      */
@@ -130,7 +130,7 @@ public class StorageNativeOutputStream {
      * @param key The name of the data source.
      * @param _file The name of the file to write to.
      *
-     * @exception  IOException  if an I/O error occurs.
+     * @exception  java.io.IOException  if an I/O error occurs.
      */
     public native void flush(String key,String _file) throws java.io.IOException;
 
@@ -151,7 +151,7 @@ public class StorageNativeOutputStream {
      * be flushed (for example, by invoking
      * OutputStream.flush) before that data will be affected by sync.
      *
-     * @exception IOException
+     * @exception java.io.IOException
      *        Thrown when the buffers cannot be flushed,
      *        or because the system cannot guarantee that all the
      *        buffers have been synchronized with physical media.

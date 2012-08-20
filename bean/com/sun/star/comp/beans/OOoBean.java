@@ -1062,7 +1062,7 @@ xLayoutManager.showElement("private:resource/menubar/menubar");
 
     /** Helper method to set tool bar visibilty.
 
-         @param bnewValue
+         @param bNewValue
             If false, the tool bar is disabled,
             If true, the tool bar is visible.
 

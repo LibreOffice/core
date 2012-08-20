@@ -284,7 +284,7 @@ implements DOCConstants, OfficeConstants, DocumentDeserializer {
      *  <code>SXWDocument</code>.
      *
      *  @param  docName  <code>Document</code> name
-     *  @param  str      Text content of WordSmith format
+     *  @param  data      Text content of WordSmith format
      *
      *  @return  Resulting <code>SXWDocument</code> object.
      *

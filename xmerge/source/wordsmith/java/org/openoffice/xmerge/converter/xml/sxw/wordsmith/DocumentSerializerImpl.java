@@ -100,10 +100,6 @@ implements OfficeConstants, DocumentSerializer {
      *  but this is the only way to not modify most of the existing
      *  code right now.</p>
      *
-     *  @param  doc  Input should be an XML <code>Document</code>
-     *               object
-     *  @param  os   Output of <code>PalmDB</code> object
-     *
      *  @throws  ConvertException  If any conversion error occurs.
      *  @throws  IOException       If any I/O error occurs.
      */
@@ -457,7 +453,7 @@ implements OfficeConstants, DocumentSerializer {
      *  <i>text:h</i>, <i>text:unordered-list</i> and
      *  <i>text:ordered-list</i>.
      *
-     *  @param  Node  <code>Node</code> to traverse.
+     *  @param  node  <code>Node</code> to traverse.
      *
      *  @throws  IOException  If any I/O error occurs.
      */

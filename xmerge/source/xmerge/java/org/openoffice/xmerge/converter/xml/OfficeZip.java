@@ -34,7 +34,7 @@ import org.openoffice.xmerge.util.Debug;
 
 /**
  *  Class used by {@link
- *  org.openoffice.xmerge.converter.OfficeDocument
+ *  org.openoffice.xmerge.converter.xml.OfficeDocument
  *  OfficeDocument} to handle reading and writing
  *  from a ZIP file, as well as storing ZIP entries.
  *

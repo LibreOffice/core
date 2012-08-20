@@ -28,8 +28,8 @@ import org.w3c.dom.NamedNodeMap;
  *  <code>ParaStyle</code> are used.
  *
  *  @author   David Proulx
- *  @see <a href="TextStyle.html">TextStyle</a>,
- *  <a href="ParaStyle.html">ParaStyle</a>
+ *  @see <a href="TextStyle.html">TextStyle</a>
+ *  @see <a href="ParaStyle.html">ParaStyle</a>
  */
 public class Style {
 

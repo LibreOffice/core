@@ -832,7 +832,7 @@ public abstract class OfficeDocument
      *  <p>TODO: remove dependency on com.sun.xml.tree.XmlDocument
      *  package!</p>
      *
-     *  @param  Document  DOM <code>Document</code> object.
+     *  @param  doc  DOM <code>Document</code> object.
      *
      *  @return  <code>byte</code> array of DOM <code>Document</code>
      *           object.

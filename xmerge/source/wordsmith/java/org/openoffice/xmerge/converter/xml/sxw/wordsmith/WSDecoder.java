@@ -56,7 +56,7 @@ final class WSDecoder implements DOCConstants {
     /**
      *  Decode the text records into a single <code>byte</code> array.
      *
-     *  @param  Record  <code>Record</code> array holding WordSmith
+     *  @param  recs  <code>Record</code> array holding WordSmith
      *                  contents.
      *
      *  @throws  IOException  If any I/O error occurs.
@@ -113,7 +113,7 @@ final class WSDecoder implements DOCConstants {
     /**
      *  Decode the text records into a <code>Wse</code> array.
      *
-     *  @param  Record[]  <code>Record</code> array holding DOC
+     *  @param  recs  <code>Record</code> array holding DOC
      *                    contents.
      *
      *  @throws  IOException  If any I/O error occurs.
@@ -173,7 +173,7 @@ final class WSDecoder implements DOCConstants {
      *  it as a problem with the encoding of that PDB and
      *  throw <code>IOException</code>.</p>
      *
-     *  @param  bytes           Compressed <code>byte</code> array
+     *  @param  cBytes           Compressed <code>byte</code> array
      *  @param  textRecordSize  Size of uncompressed <code>byte</code>
      *                          array
      *

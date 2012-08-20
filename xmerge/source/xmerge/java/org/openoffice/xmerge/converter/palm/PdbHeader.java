@@ -101,7 +101,7 @@ final class PdbHeader {
      *  Read in the data for the PDB header.  Need to
      *  preserve the unsigned value for some of the fields.
      *
-     *  @param  di  A <code>DataInput</code> object.
+     *  @param  in  A <code>DataInput</code> object.
      *
      *  @throws  IOException  If any I/O error occurs.
      */

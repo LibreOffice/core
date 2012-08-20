@@ -41,7 +41,7 @@ import java.net.Socket;
  * @see com.sun.star.connection.XAcceptor
  * @see com.sun.star.connection.XConnection2
  * @see com.sun.star.connection.XConnector
- * @see com.sun.star.loader.JavaLoader
+ * @see com.sun.star.comp.loader.JavaLoader
  *
  * @since UDK 1.0
  */

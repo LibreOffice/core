@@ -309,7 +309,7 @@ public class EventTest {
      * <CODE>m_keyReleased</CODE> are <CODE>TRUE</CODE>
      * @param xUII the XUserInputInterception
      * @param xModel the XModel of a document
-     * @see EventTest.MyKeyHander
+     * @see EventTest.MyKeyHandler
      * @see EventTest.EventTrigger
      */
     private void checkKeyListener(XUserInputInterception xUII, XModel xModel) {
@@ -341,10 +341,9 @@ public class EventTest {
      * <CODE>m_mouseReleased</CODE> are <CODE>TRUE</CODE>
      * @param xUII the XUserInputInterception
      * @param xModel the XModel of a document
-     * @see EventTest.MyMouseClickHander
+     * @see EventTest.MyMouseClickHandler
      * @see EventTest.EventTrigger
      */
-
     private void checkMouseListener(XUserInputInterception xUII, XModel xModel) {
 
         m_mousePressed = false;

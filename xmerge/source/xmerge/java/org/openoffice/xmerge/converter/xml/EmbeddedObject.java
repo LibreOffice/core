@@ -100,8 +100,6 @@ public abstract class EmbeddedObject {
     /**
      * Package private method that constructs the manifest.xml entries for this
      * embedded object.
-     *
-     * @return  Document    <code>Document</code> containing the manifest entries.
      */
     abstract void writeManifestData(Document manifestDoc) throws DOMException;
 }

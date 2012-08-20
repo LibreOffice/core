@@ -167,9 +167,8 @@ public class ScriptEditorForJavaScript implements ScriptEditor
      *  If an editor window is already open for that data it will be
      *  moved to the front.
      *
-     * @param  metadata    The metadata describing the script
      * @param  context     The context in which to execute the script
-     *
+     * @param  entry       The metadata describing the script
      */
     public void edit(final XScriptContext context, ScriptMetaData entry)
     {

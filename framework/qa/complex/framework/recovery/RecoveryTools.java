@@ -141,7 +141,6 @@ public class RecoveryTools {
     /**
      * remove the content of the user backup folder and removes the Recovery.xcu. This
      * was done from the Office via XSimpleFileAccess
-     * @param xMSF a <CODE>XMultiServiceFactory</CODE> to get <CODE>XSimpleFileAccess</CODE>
      * @throws com.sun.star.io.IOException the exception was thrown if something goes wrong.
      */
     public void cleanRecoveryData()

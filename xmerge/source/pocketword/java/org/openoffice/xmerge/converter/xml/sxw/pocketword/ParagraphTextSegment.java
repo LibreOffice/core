@@ -75,7 +75,7 @@ class ParagraphTextSegment implements PocketWordConstants {
     /**
      * <p>Sets the style for this segment.</p>
      *
-     * @param   data    The style describing this segment.
+     * @param   style    The style describing this segment.
      */
     public void setStyle (TextStyle style) {
         pStyle = style;

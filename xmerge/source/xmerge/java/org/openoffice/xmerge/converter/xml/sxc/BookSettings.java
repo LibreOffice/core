@@ -114,7 +114,7 @@ public class BookSettings implements OfficeConstants {
      * Adds an XML entry for a particular setting
      *
      * @param root the root node at which to add the xml entry
-     * @param attriute the name of the attribute to add
+     * @param attribute the name of the attribute to add
      * @param type the attribute type (int, short etc)
      * @param value the value of the attribute
      */

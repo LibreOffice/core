@@ -125,8 +125,6 @@ public final class DocumentDeserializerImpl
      *
      * @param   data    An Enumeration of all Paragraphs in the Pocket Word doc.
      *
-     * @return  The OpenOffice Writer XML representation of the data.
-     *
      * @throws  IOException     If any I/O errors occur.
      */
     private void buildDocument(Iterator<Paragraph> data) throws IOException {

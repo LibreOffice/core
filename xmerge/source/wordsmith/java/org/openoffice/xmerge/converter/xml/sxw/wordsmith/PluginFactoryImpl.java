@@ -126,8 +126,6 @@ public final class PluginFactoryImpl extends SxwPluginFactory
      *  which is an implementation of the <code>DocumentMerger</code>
      *  interface.
      *
-     *  @param  doc  <code>Document</code> to merge.
-     *
      *  @return  A Device Document object
      */
     public Document createDeviceDocument(String name, InputStream is)
