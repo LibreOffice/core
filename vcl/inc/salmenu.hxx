@@ -43,7 +43,7 @@ struct SalItemParams
 
 struct SalMenuButtonItem
 {
-    sal_uInt16              mnId;
+    sal_uInt16          mnId;
     Image               maImage;
     rtl::OUString       maToolTipText;
 

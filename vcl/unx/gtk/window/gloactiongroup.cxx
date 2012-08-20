@@ -52,8 +52,6 @@ g_lo_action_group_query_action (GActionGroup        *group,
                                 GVariant           **state_hint,
                                 GVariant           **state)
 {
-//    printf("%s - %s\n", __FUNCTION__, action_name);
-
     GLOActionGroup *loGroup = G_LO_ACTION_GROUP (group);
     GtkSalMenuItem* item_info;
 
@@ -76,8 +74,14 @@ g_lo_action_group_query_action (GActionGroup        *group,
     if (state_hint)
         *state_hint = NULL;
 
-    if (state)
-        *state = item_info->mpState;
+    if (state) {
+        if (item_info->mpState) {
+            g_variant_ref( item_info->mpState );
+            *state = item_info->mpState;
+        } else {
+            *state = NULL;
+        }
+    }
 
     return TRUE;
 }
@@ -103,7 +107,10 @@ g_lo_action_group_change_state (GActionGroup *group,
     }
 
     if (g_variant_is_of_type(value, item_info->mpStateType)) {
-        item_info->mpState = g_variant_ref_sink(value);
+        if (item_info->mpState)
+            g_variant_unref(item_info->mpState);
+
+        item_info->mpState = g_variant_new_variant(value);
         g_action_group_action_state_changed(group, action_name, value);
     }
 }
@@ -237,6 +244,7 @@ g_lo_action_group_set_action_enabled (GLOActionGroup *group,
                                       const gchar    *action_name,
                                       gboolean        enabled)
 {
+    cout << __FUNCTION__ << " - " << action_name << endl;
     g_return_if_fail (G_IS_LO_ACTION_GROUP (group));
 
     g_action_group_action_enabled_changed(G_ACTION_GROUP(group),
@@ -263,11 +271,25 @@ g_lo_action_group_clear (GLOActionGroup  *group)
 {
     g_return_if_fail (G_IS_LO_ACTION_GROUP (group));
 
-    GList* keys = g_hash_table_get_keys(group->priv->table);
+    g_hash_table_remove_all(group->priv->table);
+}
 
-    for ( GList* list = g_list_first(keys); list; list = g_list_next(list) ) {
-        gchar* action_name = (gchar*) list->data;
+void
+g_lo_action_group_merge (GLOActionGroup *input_group,
+                         GLOActionGroup *output_group)
+{
+    g_return_if_fail (G_IS_LO_ACTION_GROUP (input_group));
+    g_return_if_fail (G_IS_LO_ACTION_GROUP (output_group));
+    g_return_if_fail (input_group != NULL);
+    g_return_if_fail (output_group != NULL);
 
-        g_lo_action_group_remove( group, action_name );
+    GHashTableIter iter;
+    gpointer key, value;
+
+    g_hash_table_iter_init (&iter, input_group->priv->table);
+
+    while (g_hash_table_iter_next (&iter, &key, &value))
+    {
+        g_lo_action_group_insert(output_group, (gchar*) key, value);
     }
 }

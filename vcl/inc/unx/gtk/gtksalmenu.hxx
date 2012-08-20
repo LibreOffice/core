@@ -56,8 +56,6 @@ private:
     std::vector< GtkSalMenuItem* >  maItems;
 
     // DBus attributes
-    gchar*                          aDBusPath;
-    gchar*                          aDBusMenubarPath;
     GDBusConnection*                pSessionBus;
     sal_Int32                       mMenubarId;
     sal_Int32                       mActionGroupId;
@@ -67,8 +65,8 @@ private:
     GMenuModel*                     mpCurrentSection;
     GActionGroup*                   mpActionGroup;
 
-    virtual void    publishMenu( GMenuModel*, GActionGroup* );
     GtkSalMenuItem* GetSalMenuItem( sal_uInt16 nId );
+    sal_Int16      GetSectionNumber( GMenuModel* pSection );
 
 public:
     GtkSalMenu( sal_Bool bMenuBar );
@@ -108,6 +106,7 @@ public:
     virtual ~GtkSalMenuItem();
 
     sal_uInt16          mnId;               // Item ID
+    MenuItemBits        mnBits;             // Item bits
     sal_uInt16          mnPos;              // Item position
     gchar*              maCommand;          // Item command
     Menu*               mpVCLMenu;          // VCL Menu into which this MenuItem is inserted
