@@ -17,7 +17,8 @@
 #include "DiscoveryService.hxx"
 
 #ifdef WIN32
-  #include <winsock.h>
+  #include <winsock2.h>
+  #include <ws2tcpip.h>
   typedef int socklen_t;
 #else
   #include <sys/types.h>
