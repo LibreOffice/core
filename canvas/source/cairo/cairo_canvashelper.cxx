@@ -1045,12 +1045,6 @@ namespace cairocanvas
                 if( aPolygon.isClosed() )
                     cairo_close_path( pCairo );
 
-                if( aOperation == Fill && pTextures )
-                {
-                    cairo_set_matrix( pCairo, &aOrigMatrix );
-                    doOperation( aOperation, pCairo, pTextures, pDevice, aPolyPolygon.getB2DRange() );
-                    cairo_set_matrix( pCairo, &aIdentityMatrix );
-                }
             }
             else
             {
@@ -1063,6 +1057,14 @@ namespace cairocanvas
                 }
             }
         }
+
+        if( aOperation == Fill && pTextures )
+        {
+            cairo_set_matrix( pCairo, &aOrigMatrix );
+            doOperation( aOperation, pCairo, pTextures, pDevice, aPolyPolygon.getB2DRange() );
+            cairo_set_matrix( pCairo, &aIdentityMatrix );
+        }
+
         if( bOpToDo && ( aOperation != Fill || !pTextures ) )
             doOperation( aOperation, pCairo, pTextures, pDevice, aPolyPolygon.getB2DRange() );
 
