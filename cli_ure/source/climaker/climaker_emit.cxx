@@ -277,15 +277,12 @@ Assembly ^ TypeEmitter::type_resolve(
     ::System::Object ^, ::System::ResolveEventArgs ^ args )
 {
     ::System::String ^ cts_name = args->Name;
-    ::System::Type ^ ret_type = m_module_builder->GetType(
-        cts_name, false /* no exc */ );
-    if (nullptr == ret_type)
-    {
-        iface_entry ^ entry = dynamic_cast< iface_entry ^ >(
-            m_incomplete_ifaces[cts_name] );
-        if (nullptr != entry)
-            ret_type = entry->m_type_builder;
-    }
+    ::System::Type ^ ret_type;
+
+    iface_entry ^ entry = dynamic_cast< iface_entry ^ >(m_incomplete_ifaces[cts_name] );
+    if (nullptr != entry)
+        ret_type = entry->m_type_builder;
+
     if (nullptr == ret_type)
     {
         sal_Int32 len = m_extra_assemblies->Length;
