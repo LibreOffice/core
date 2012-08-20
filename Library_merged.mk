@@ -124,12 +124,20 @@ endif
 
 ifeq ($(OS),ANDROID)
 $(eval $(call gb_Library_use_libraries,merged,\
+	basebmp \
 	libotouch \
 ))
+
 $(eval $(call gb_Library_add_libs,merged,\
 	-llog \
 	-landroid \
 	-llo-bootstrap \
+))
+
+$(eval $(call gb_Library_use_externals,merged,\
+	fontconfig \
+	freetype \
+	expat_utf8 \
 ))
 endif
 
