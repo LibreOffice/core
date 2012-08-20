@@ -571,7 +571,10 @@ static QuoteType lcl_isFieldEndQuote( const sal_Unicode* p, const sal_Unicode* p
     // Due to broken CSV generators that don't double embedded quotes check if
     // a field separator immediately or with trailing spaces follows the quote,
     // only then end the field, or at end of string.
-    while (p[1] == ' ')
+    const sal_Unicode cBlank = ' ';
+    if (p[1] == cBlank && ScGlobal::UnicodeStrChr( pSeps, cBlank))
+        return FIELDEND_QUOTE;
+    while (p[1] == cBlank)
         ++p;
     if (!p[1] || ScGlobal::UnicodeStrChr( pSeps, p[1]))
         return FIELDEND_QUOTE;
