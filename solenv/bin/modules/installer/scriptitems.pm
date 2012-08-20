@@ -1720,41 +1720,6 @@ sub remove_tabonlyfiles_from_Installset
     return \@newitemsarray;
 }
 
-###############################################################################
-# Removing all files with flag ONLY_INSTALLED_PRODUCT from installation set.
-# This function is not called for PKGFORMAT installed and archive.
-###############################################################################
-
-sub remove_installedproductonlyfiles_from_Installset
-{
-    my ($itemsarrayref) = @_;
-
-    my $infoline;
-
-    my @newitemsarray = ();
-
-    for ( my $i = 0; $i <= $#{$itemsarrayref}; $i++ )
-    {
-        my $oneitem = ${$itemsarrayref}[$i];
-        my $styles = "";
-        if ( $oneitem->{'Styles'} ) { $styles = $oneitem->{'Styles'}; }
-
-        if ( $styles =~ /\bONLY_INSTALLED_PRODUCT\b/ )
-        {
-            $infoline = "Removing file $oneitem->{'gid'} from the installation set. This file is only required for PKGFORMAT archive or installed).\n";
-            push( @installer::globals::globallogfileinfo, $infoline);
-            next;
-        }
-
-        push(@newitemsarray, $oneitem);
-    }
-
-    $infoline = "\n";
-    push( @installer::globals::globallogfileinfo, $infoline);
-
-    return \@newitemsarray;
-}
-
 ############################################################################
 # Some files cotain a $ in their name. epm conflicts with such files.
 # Solution: Renaming this files, converting "$" to "$$"

@@ -402,11 +402,6 @@ if (! $installer::globals::tab)
     $filesinproductarrayref = installer::scriptitems::remove_tabonlyfiles_from_Installset($filesinproductarrayref);
 }
 
-if (( $installer::globals::packageformat ne "installed" ) && ( $installer::globals::packageformat ne "archive" ))
-{
-    $filesinproductarrayref = installer::scriptitems::remove_installedproductonlyfiles_from_Installset($filesinproductarrayref);
-}
-
 installer::logger::print_message( "... analyzing scpactions ... \n" );
 
 my $scpactionsinproductarrayref = installer::setupscript::get_all_items_from_script($setupscriptref, "ScpAction");
