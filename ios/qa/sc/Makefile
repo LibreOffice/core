@@ -5,7 +5,7 @@ APP=lo-qa-sc-filters-test
 # If run from Xcode, check the CURRENT_ARCH env var for which platform we are
 # building, device or simulator
 
-ifeq ($(CURRENT_ARCH),i386)
+ifneq (,$(filter i386,$(CC)))
 PLATFORM=iphonesimulator
 else
 PLATFORM=iphoneos
