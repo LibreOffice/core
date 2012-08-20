@@ -288,25 +288,18 @@ CC=ccache /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xct
 CC_FOR_BUILD=ccache /Xcode3/usr/bin/gcc-4.0 -mmacosx-version-min=10.4
 CXX_FOR_BUILD=ccache /Xcode3/usr/bin/g++-4.0 -mmacosx-version-min=10.4
 --with-distro=LibreOfficeiOS
---with-system-nss
 --without-help
 --without-helppack-integration
 --without-myspell-dicts
 
-The --with-system-nss doesn't mean that any Mozilla NSS would be used,
-it's just a trick to bypass some tests in the configure script.
-
-For the iOS simulator, using Xcode 4.3 and clang both for the host and
+For the iOS simulator, using Xcode 4.4.1 and clang both for the host and
 build platform:
 
 CXX=ccache /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++ -arch i386 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator5.1.sdk -mmacosx-version-min=10.6
 CC=ccache /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -arch i386 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator5.1.sdk -mmacosx-version-min=10.6
-CC_FOR_BUILD=ccache clang -arch i386 -mmacosx-version-min=10.6
-CXX_FOR_BUILD=ccache clang++ -arch i386 -mmacosx-version-min=10.6
 --enable-werror
---with-build-platform-configure-options=--with-macosx-version-min-required=10.6 --with-macosx-sdk=10.6
+--with-build-platform-configure-options=--with-macosx-version-min-required=10.6
 --with-distro=LibreOfficeiOS
---with-system-nss
 --without-help
 --without-helppack-integration
 --without-myspell-dicts
