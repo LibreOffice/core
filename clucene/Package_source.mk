@@ -26,9 +26,9 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_Package_Package,clucene_source,$(call gb_CustomTarget_get_workdir,clucene/source)))
+$(eval $(call gb_Package_Package,clucene_source,$(call gb_UnpackedTarball_get_dir,clucene)))
 
-$(call gb_Package_get_preparation_target,clucene_source) : $(call gb_CustomTarget_get_target,clucene/source)
+$(eval $(call gb_Package_use_unpacked,clucene_source,clucene))
 
 $(eval $(call gb_Package_add_file,clucene_source,inc/external/CLucene.h,src/core/CLucene.h))
 $(eval $(call gb_Package_add_file,clucene_source,inc/external/CLucene/clucene-config.h,src/shared/CLucene/clucene-config.h))
