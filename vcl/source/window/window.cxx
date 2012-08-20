@@ -1249,25 +1249,43 @@ WinBits Window::ImplInitRes( const ResId& rResId )
 
 // -----------------------------------------------------------------------
 
-void Window::ImplLoadRes( const ResId& rResId )
+WindowResHeader Window::ImplLoadResHeader( const ResId& rResId )
 {
-    sal_uLong nObjMask = ReadLongRes();
+    WindowResHeader aHeader;
+
+    aHeader.nObjMask = ReadLongRes();
 
     // we need to calculate auto helpids before the resource gets closed
     // if the resource  only contains flags, it will be closed before we try to read a help id
     // so we always create an auto help id that might be overwritten later
     // HelpId
-    rtl::OString aHelpId = ImplAutoHelpID( rResId.GetResMgr() );
+    aHeader.aHelpId = ImplAutoHelpID( rResId.GetResMgr() );
 
     // ResourceStyle
-    sal_uLong nRSStyle = ReadLongRes();
+    aHeader.nRSStyle = ReadLongRes();
     // WinBits
     ReadLongRes();
 
-    if( nObjMask & WINDOW_HELPID )
-        aHelpId = ReadByteStringRes();
+    if( aHeader.nObjMask & WINDOW_HELPID )
+        aHeader.aHelpId = ReadByteStringRes();
 
-    SetHelpId( aHelpId );
+    return aHeader;
+}
+
+void Window::loadAndSetJustHelpID(const ResId& rResId)
+{
+    WindowResHeader aHeader = ImplLoadResHeader(rResId);
+    SetHelpId(aHeader.aHelpId);
+    IncrementRes(GetRemainSizeRes());
+}
+
+void Window::ImplLoadRes( const ResId& rResId )
+{
+    WindowResHeader aHeader = ImplLoadResHeader( rResId );
+
+    SetHelpId( aHeader.aHelpId );
+
+    sal_uLong nObjMask = aHeader.nObjMask;
 
     sal_Bool  bPos  = sal_False;
     sal_Bool  bSize = sal_False;
@@ -1303,6 +1321,8 @@ void Window::ImplLoadRes( const ResId& rResId )
         if ( nObjMask & WINDOW_HEIGHT )
             aSize.Height() = ImplLogicUnitToPixelY( ReadLongRes(), eSizeMap );
     }
+
+    sal_uLong nRSStyle = aHeader.nRSStyle;
 
     // looks bad due to optimisation
     if ( nRSStyle & RSWND_CLIENTSIZE )
@@ -4190,12 +4210,14 @@ Window::Window( Window* pParent, const ResId& rResId )
     : mpWindowImpl(NULL)
 {
     DBG_CTOR( Window, ImplDbgCheckWindow );
-    if (VclBuilderContainer::replace_buildable(pParent, rResId.GetId(), *this))
+
+    rResId.SetRT( RSC_WINDOW );
+    WinBits nStyle = ImplInitRes( rResId );
+
+    if (VclBuilderContainer::replace_buildable(pParent, rResId, *this))
         return;
 
     ImplInitWindowData( WINDOW_WINDOW );
-    rResId.SetRT( RSC_WINDOW );
-    WinBits nStyle = ImplInitRes( rResId );
     ImplInit( pParent, nStyle, NULL );
     ImplLoadRes( rResId );
 
@@ -4946,7 +4968,6 @@ void Window::StateChanged( StateChangedType eType )
             break;
         //stuff that does invalidate the layout
         default:
-            fprintf(stderr, "queue_resize due to %d\n", eType);
             queue_resize();
             break;
     }

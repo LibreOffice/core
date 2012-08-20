@@ -481,6 +481,8 @@ Window *VclBuilder::insertObject(Window *pParent, const rtl::OString &rClass, co
         //toplevels default to resizable
         if (pCurrentChild->IsDialog())
             pCurrentChild->SetStyle(pCurrentChild->GetStyle() | WB_SIZEMOVE | WB_3DLOOK);
+        if (pCurrentChild->GetHelpId().isEmpty())
+            pCurrentChild->SetHelpId(m_sHelpRoot + m_sID);
     }
     else
     {
@@ -515,12 +517,12 @@ sal_uInt16 VclBuilder::getPositionWithinParent(Window &rWindow)
     {
         assert(rWindow.mpWindowImpl->mpBorderWindow ==
             rWindow.mpWindowImpl->mpParent);
-        assert(rWindow.mpWindowImpl->mpBorderWindow->mpParent ==
+        assert(rWindow.mpWindowImpl->mpBorderWindow->mpWindowImpl->mpParent ==
             rWindow.mpWindowImpl->mpRealParent);
         return getPositionWithinParent(*rWindow.mpWindowImpl->mpBorderWindow);
     }
 
-    assert(rWindow.GetParent() == rWindow.GetRealParent());
+    assert(rWindow.GetParent() == rWindow.mpWindowImpl->mpRealParent);
 
     sal_uInt16 nPosition = 0;
     Window* pChild = rWindow.GetParent()->mpWindowImpl->mpFirstChild;
@@ -540,7 +542,7 @@ void VclBuilder::reorderWithinParent(Window &rWindow, sal_uInt16 nNewPosition)
     {
         assert(rWindow.mpWindowImpl->mpBorderWindow ==
             rWindow.mpWindowImpl->mpParent);
-        assert(rWindow.mpWindowImpl->mpBorderWindow->mpParent ==
+        assert(rWindow.mpWindowImpl->mpBorderWindow->mpWindowImpl->mpParent ==
             rWindow.mpWindowImpl->mpRealParent);
         reorderWithinParent(*rWindow.mpWindowImpl->mpBorderWindow, nNewPosition);
         return;
@@ -1089,7 +1091,6 @@ VclBuilder::Adjustment *VclBuilder::get_adjustment_by_name(rtl::OString sID)
 
 void VclBuilder::swapGuts(Window &rOrig, Window &rReplacement)
 {
-#if 1
     sal_uInt16 nPosition = getPositionWithinParent(rOrig);
 
     rReplacement.take_properties(rOrig);
@@ -1097,35 +1098,6 @@ void VclBuilder::swapGuts(Window &rOrig, Window &rReplacement)
     reorderWithinParent(rReplacement, nPosition);
 
     assert(nPosition == getPositionWithinParent(rReplacement));
-#else
-    //rReplacement is intended to be not inserted into
-    //anything yet
-    assert(!rReplacement.mpWindowImpl->mpParent);
-
-    rReplacement.ImplInit(rOrig.GetParent(), rOrig.GetStyle(), NULL);
-    assert(rReplacement.GetParent() == rOrig.GetParent());
-
-    rReplacement.ImplRemoveWindow(false);
-
-    Window *pParent = rOrig.mpWindowImpl->mpParent;
-    Window *pOrigsNext = rOrig.mpWindowImpl->mpNext;
-    Window *pOrigsPrev = rOrig.mpWindowImpl->mpPrev;
-    std::swap(rOrig.mpWindowImpl, rReplacement.mpWindowImpl);
-    assert(rReplacement.mpWindowImpl->mpPrev == pOrigsPrev);
-    assert(rReplacement.mpWindowImpl->mpNext == pOrigsNext);
-    if (pOrigsNext)
-        pOrigsNext->mpWindowImpl->mpPrev = &rReplacement;
-    else
-        pParent->mpWindowImpl->mpLastChild = &rReplacement;
-    if (pOrigsPrev)
-        pOrigsPrev->mpWindowImpl->mpNext = &rReplacement;
-    else
-        pParent->mpWindowImpl->mpFirstChild = &rReplacement;
-    assert(!rOrig.mpWindowImpl->mpNext && !rOrig.mpWindowImpl->mpPrev);
-
-    //now put this at the end of the window list
-    rOrig.ImplInsertWindow(pParent);
-#endif
     fprintf(stderr, "swapped %p for %p %p/%p/%p\n", &rReplacement, &rOrig, rReplacement.mpWindowImpl->mpParent, rReplacement.mpWindowImpl->mpRealParent, rReplacement.mpWindowImpl->mpBorderWindow);
 }
 

@@ -183,7 +183,7 @@ public:
     VclBuilderContainer();
     virtual ~VclBuilderContainer();
     static VclBuilder* overrideResourceWithUIXML(Window *pWindow, const ResId& rResId);
-    static bool replace_buildable(Window *pParent, sal_Int32 nID, Window &rReplacement);
+    static bool replace_buildable(Window *pParent, const ResId& rResId, Window &rReplacement);
 };
 
 

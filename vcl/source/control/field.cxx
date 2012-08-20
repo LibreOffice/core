@@ -803,14 +803,15 @@ NumericField::NumericField( Window* pParent, WinBits nWinStyle ) :
 NumericField::NumericField( Window* pParent, const ResId& rResId ) :
     SpinField( WINDOW_NUMERICFIELD )
 {
-    if (VclBuilderContainer::replace_buildable(pParent, rResId.GetId(), *this))
+    rResId.SetRT( RSC_NUMERICFIELD );
+    WinBits nStyle = ImplInitRes( rResId ) ;
+
+    if (VclBuilderContainer::replace_buildable(pParent, rResId, *this))
     {
         SetField( this );
         return;
     }
 
-    rResId.SetRT( RSC_NUMERICFIELD );
-    WinBits nStyle = ImplInitRes( rResId ) ;
     SpinField::ImplInit( pParent, nStyle );
     SetField( this );
     ImplLoadRes( rResId );
@@ -1673,11 +1674,12 @@ MetricField::MetricField( Window* pParent, WinBits nWinStyle ) :
 MetricField::MetricField( Window* pParent, const ResId& rResId ) :
     SpinField( WINDOW_METRICFIELD )
 {
-    if (VclBuilderContainer::replace_buildable(pParent, rResId.GetId(), *this))
-        return;
-
     rResId.SetRT( RSC_METRICFIELD );
     WinBits nStyle = ImplInitRes( rResId ) ;
+
+    if (VclBuilderContainer::replace_buildable(pParent, rResId, *this))
+        return;
+
     SpinField::ImplInit( pParent, nStyle );
     SetField( this );
     ImplLoadRes( rResId );

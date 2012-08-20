@@ -203,12 +203,13 @@ Edit::Edit( Window* pParent, WinBits nStyle ) :
 Edit::Edit( Window* pParent, const ResId& rResId ) :
     Control( WINDOW_EDIT )
 {
-    if (VclBuilderContainer::replace_buildable(pParent, rResId.GetId(), *this))
+    rResId.SetRT( RSC_EDIT );
+    WinBits nStyle = ImplInitRes( rResId );
+
+    if (VclBuilderContainer::replace_buildable(pParent, rResId, *this))
         return;
 
     ImplInitEditData();
-    rResId.SetRT( RSC_EDIT );
-    WinBits nStyle = ImplInitRes( rResId );
     ImplInit( pParent, nStyle );
     ImplLoadRes( rResId );
 

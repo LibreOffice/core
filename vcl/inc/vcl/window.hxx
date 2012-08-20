@@ -347,6 +347,13 @@ class Dialog;
 class WindowImpl;
 class VclBuilder;
 
+struct WindowResHeader
+{
+    sal_uLong nObjMask;
+    rtl::OString aHelpId;
+    sal_uLong nRSStyle;
+};
+
 class VCL_DLLPUBLIC Window : public OutputDevice
 {
     friend class Cursor;
@@ -393,8 +400,9 @@ private:
 public:
     SAL_DLLPRIVATE void                ImplInit( Window* pParent, WinBits nStyle, SystemParentData* pSystemParentData );
     SAL_DLLPRIVATE WinBits             ImplInitRes( const ResId& rResId );
+    SAL_DLLPRIVATE WindowResHeader     ImplLoadResHeader( const ResId& rResId );
     SAL_DLLPRIVATE void                ImplLoadRes( const ResId& rResId );
-    SAL_DLLPRIVATE void                ImplWindowRes( const ResId& rResId );
+    SAL_DLLPRIVATE void                loadAndSetJustHelpID( const ResId& rResId );
     SAL_DLLPRIVATE void                ImplSetFrameParent( const Window* pParent );
     SAL_DLLPRIVATE void                ImplInsertWindow( Window* pParent );
     SAL_DLLPRIVATE void                ImplRemoveWindow( sal_Bool bRemoveFrameData );

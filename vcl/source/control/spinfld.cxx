@@ -377,7 +377,7 @@ void SpinField::take_properties(Window &rOther)
     Edit::take_properties(rOther);
 
     SpinField &rOtherField = static_cast<SpinField&>(rOther);
-    assert(mpEdit && rOther.mpEdit);
+    assert(mpEdit && rOtherField.mpEdit);
     mpEdit->take_properties(*rOtherField.mpEdit);
 
     maUpperRect = rOtherField.maUpperRect;

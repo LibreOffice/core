@@ -1207,12 +1207,13 @@ PushButton::PushButton( Window* pParent, WinBits nStyle ) :
 PushButton::PushButton( Window* pParent, const ResId& rResId ) :
     Button( WINDOW_PUSHBUTTON )
 {
-    if (VclBuilderContainer::replace_buildable(pParent, rResId.GetId(), *this))
+    rResId.SetRT( RSC_PUSHBUTTON );
+    WinBits nStyle = ImplInitRes( rResId );
+
+    if (VclBuilderContainer::replace_buildable(pParent, rResId, *this))
         return;
 
     ImplInitPushButtonData();
-    rResId.SetRT( RSC_PUSHBUTTON );
-    WinBits nStyle = ImplInitRes( rResId );
     ImplInit( pParent, nStyle );
     ImplLoadRes( rResId );
 
@@ -1762,11 +1763,12 @@ OKButton::OKButton( Window* pParent, WinBits nStyle ) :
 OKButton::OKButton( Window* pParent, const ResId& rResId ) :
     PushButton( WINDOW_OKBUTTON )
 {
-    if (VclBuilderContainer::replace_buildable(pParent, rResId.GetId(), *this))
-        return;
-
     rResId.SetRT( RSC_OKBUTTON );
     WinBits nStyle = ImplInitRes( rResId );
+
+    if (VclBuilderContainer::replace_buildable(pParent, rResId, *this))
+        return;
+
     ImplInit( pParent, nStyle );
     ImplLoadRes( rResId );
 
@@ -1785,7 +1787,6 @@ void OKButton::take_properties(Window &rOther)
 
 void OKButton::Click()
 {
-    SAL_WARN_IF(!GetClickHdl(), "vcl", "No handler installed for OKButton");
     // close parent if no link set
     if ( !GetClickHdl() )
     {
@@ -1839,11 +1840,12 @@ CancelButton::CancelButton( Window* pParent, WinBits nStyle ) :
 CancelButton::CancelButton( Window* pParent, const ResId& rResId ) :
     PushButton( WINDOW_CANCELBUTTON )
 {
-    if (VclBuilderContainer::replace_buildable(pParent, rResId.GetId(), *this))
-        return;
-
     rResId.SetRT( RSC_CANCELBUTTON );
     WinBits nStyle = ImplInitRes( rResId );
+
+    if (VclBuilderContainer::replace_buildable(pParent, rResId, *this))
+        return;
+
     ImplInit( pParent, nStyle );
     ImplLoadRes( rResId );
 
@@ -1862,7 +1864,6 @@ void CancelButton::take_properties(Window &rOther)
 
 void CancelButton::Click()
 {
-    SAL_WARN_IF(!GetClickHdl(), "vcl", "No handler installed for CancelButton");
     // close parent if link not set
     if ( !GetClickHdl() )
     {
@@ -1916,11 +1917,12 @@ HelpButton::HelpButton( Window* pParent, WinBits nStyle ) :
 HelpButton::HelpButton( Window* pParent, const ResId& rResId ) :
     PushButton( WINDOW_HELPBUTTON )
 {
-    if (VclBuilderContainer::replace_buildable(pParent, rResId.GetId(), *this))
-        return;
-
     rResId.SetRT( RSC_HELPBUTTON );
     WinBits nStyle = ImplInitRes( rResId );
+
+    if (VclBuilderContainer::replace_buildable(pParent, rResId, *this))
+        return;
+
     ImplInit( pParent, nStyle );
     ImplLoadRes( rResId );
 
@@ -1939,7 +1941,6 @@ void HelpButton::take_properties(Window &rOther)
 
 void HelpButton::Click()
 {
-    SAL_WARN_IF(!GetClickHdl(), "vcl", "No handler installed for HelpButton");
     // trigger help if no link set
     if ( !GetClickHdl() )
     {
@@ -2475,12 +2476,13 @@ RadioButton::RadioButton( Window* pParent, WinBits nStyle ) :
 RadioButton::RadioButton( Window* pParent, const ResId& rResId ) :
     Button( WINDOW_RADIOBUTTON ), mbLegacyNoTextAlign( false )
 {
-    if (VclBuilderContainer::replace_buildable(pParent, rResId.GetId(), *this))
+    rResId.SetRT( RSC_RADIOBUTTON );
+    WinBits nStyle = ImplInitRes( rResId );
+
+    if (VclBuilderContainer::replace_buildable(pParent, rResId, *this))
         return;
 
     ImplInitRadioButtonData();
-    rResId.SetRT( RSC_RADIOBUTTON );
-    WinBits nStyle = ImplInitRes( rResId );
     ImplInit( pParent, nStyle );
     ImplLoadRes( rResId );
 
@@ -3445,12 +3447,13 @@ CheckBox::CheckBox( Window* pParent, WinBits nStyle ) :
 CheckBox::CheckBox( Window* pParent, const ResId& rResId ) :
     Button( WINDOW_CHECKBOX ), mbLegacyNoTextAlign( false )
 {
-    if (VclBuilderContainer::replace_buildable(pParent, rResId.GetId(), *this))
+    rResId.SetRT( RSC_CHECKBOX );
+    WinBits nStyle = ImplInitRes( rResId );
+
+    if (VclBuilderContainer::replace_buildable(pParent, rResId, *this))
         return;
 
     ImplInitCheckBoxData();
-    rResId.SetRT( RSC_CHECKBOX );
-    WinBits nStyle = ImplInitRes( rResId );
     ImplInit( pParent, nStyle );
     ImplLoadRes( rResId );
 

@@ -101,10 +101,12 @@ TabPage::TabPage( Window* pParent, const ResId& rResId ) :
 
     m_pUIBuilder = overrideResourceWithUIXML(this, rResId);
 
-    if (!m_pUIBuilder)
+    if (m_pUIBuilder)
+        loadAndSetJustHelpID(rResId);
+    else
     {
         //fallback to using the binary resource file
-        ImplLoadRes( rResId );
+        ImplLoadRes(rResId);
     }
 
     if ( !(nStyle & WB_HIDE) )

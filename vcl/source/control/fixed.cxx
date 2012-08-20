@@ -165,11 +165,12 @@ FixedText::FixedText( Window* pParent, WinBits nStyle ) :
 FixedText::FixedText( Window* pParent, const ResId& rResId ) :
     Control( WINDOW_FIXEDTEXT )
 {
-    if (VclBuilderContainer::replace_buildable(pParent, rResId.GetId(), *this))
-        return;
-
     rResId.SetRT( RSC_TEXT );
     WinBits nStyle = ImplInitRes( rResId );
+
+    if (VclBuilderContainer::replace_buildable(pParent, rResId, *this))
+        return;
+
     ImplInit( pParent, nStyle );
     ImplLoadRes( rResId );
 
@@ -592,11 +593,12 @@ FixedLine::FixedLine( Window* pParent, WinBits nStyle ) :
 FixedLine::FixedLine( Window* pParent, const ResId& rResId ) :
     Control( WINDOW_FIXEDLINE )
 {
-    if (VclBuilderContainer::replace_buildable(pParent, rResId.GetId(), *this))
-        return;
-
     rResId.SetRT( RSC_FIXEDLINE );
     WinBits nStyle = ImplInitRes( rResId );
+
+    if (VclBuilderContainer::replace_buildable(pParent, rResId, *this))
+        return;
+
     ImplInit( pParent, nStyle );
     ImplLoadRes( rResId );
 

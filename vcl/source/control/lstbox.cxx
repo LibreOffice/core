@@ -67,12 +67,13 @@ ListBox::ListBox( Window* pParent, WinBits nStyle ) : Control( WINDOW_LISTBOX )
 ListBox::ListBox( Window* pParent, const ResId& rResId ) :
     Control( WINDOW_LISTBOX )
 {
-    if (VclBuilderContainer::replace_buildable(pParent, rResId.GetId(), *this))
+    rResId.SetRT( RSC_LISTBOX );
+    WinBits nStyle = ImplInitRes( rResId );
+
+    if (VclBuilderContainer::replace_buildable(pParent, rResId, *this))
         return;
 
     ImplInitListBoxData();
-    rResId.SetRT( RSC_LISTBOX );
-    WinBits nStyle = ImplInitRes( rResId );
     ImplInit( pParent, nStyle );
 
     ImplLoadRes( rResId );
@@ -1586,11 +1587,12 @@ MultiListBox::MultiListBox( Window* pParent, WinBits nStyle ) :
 MultiListBox::MultiListBox( Window* pParent, const ResId& rResId ) :
     ListBox( WINDOW_MULTILISTBOX )
 {
-    if (VclBuilderContainer::replace_buildable(pParent, rResId.GetId(), *this))
-        return;
-
     rResId.SetRT( RSC_MULTILISTBOX );
     WinBits nStyle = ImplInitRes( rResId );
+
+    if (VclBuilderContainer::replace_buildable(pParent, rResId, *this))
+        return;
+
     ImplInit( pParent, nStyle );
     ImplLoadRes( rResId );
 

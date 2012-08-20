@@ -571,7 +571,9 @@ WinBits Dialog::init(Window *pParent, const ResId& rResId)
 
     m_pUIBuilder = overrideResourceWithUIXML(this, rResId);
 
-    if (!m_pUIBuilder)
+    if (m_pUIBuilder)
+        loadAndSetJustHelpID(rResId);
+    else
     {
         //fallback to using the binary resource file
         ImplLoadRes( rResId );
@@ -1244,7 +1246,7 @@ VclBuilderContainer::~VclBuilderContainer()
     delete m_pUIBuilder;
 }
 
-bool VclBuilderContainer::replace_buildable(Window *pParent, sal_Int32 nID, Window &rReplacement)
+bool VclBuilderContainer::replace_buildable(Window *pParent, const ResId& rResId, Window &rReplacement)
 {
     if (!pParent)
         return false;
@@ -1256,8 +1258,15 @@ bool VclBuilderContainer::replace_buildable(Window *pParent, sal_Int32 nID, Wind
     VclBuilder *pUIBuilder = pBuilderContainer->m_pUIBuilder;
     if (!pUIBuilder)
         return false;
+
+    sal_Int32 nID = rResId.GetId();
+
     bool bFound = pUIBuilder->replace(rtl::OString::valueOf(nID), rReplacement);
-    if (!bFound)
+    if (bFound)
+    {
+        rReplacement.loadAndSetJustHelpID(rResId);
+    }
+    else
     {
         fprintf(stderr, "%d %p not found, hiding\n", nID, &rReplacement);
         //move "missing" elements into the action area (just to have
@@ -1273,9 +1282,7 @@ bool VclBuilderContainer::replace_buildable(Window *pParent, sal_Int32 nID, Wind
         rReplacement.ImplInit(pArbitraryParent, 0, NULL);
         rReplacement.Hide();
     }
-    else
-        fprintf(stderr, "%d found\n", nID);
-    assert(rReplacement.mpWindowImpl);
+
     return true;
 }
 
