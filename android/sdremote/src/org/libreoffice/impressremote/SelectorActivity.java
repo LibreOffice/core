@@ -101,6 +101,7 @@ public class SelectorActivity extends Activity {
 
     void doUnbindService() {
         unbindService(mConnection);
+        mCommunicationService = null;
     }
 
     private ServiceConnection mConnection = new ServiceConnection() {

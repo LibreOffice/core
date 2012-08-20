@@ -53,9 +53,10 @@ public class ServerFinder {
             if (i == aBuffer.length || !aCommand.equals("LOREMOTE_ADVERTISE")) {
                 return;
             }
-            for (int j = i; j < aBuffer.length; j++) {
-                if (aPacket.getData()[i] == '\n') {
-                    aName = new String(aPacket.getData(), i + 1, j, CHARSET);
+            for (int j = i + 1; j < aBuffer.length; j++) {
+                if (aPacket.getData()[j] == '\n') {
+                    aName = new String(aPacket.getData(), i + 1, j - (i + 1),
+                                    CHARSET);
                     break;
                 }
             }
@@ -66,6 +67,7 @@ public class ServerFinder {
                             .getAddress().getHostAddress(), aName,
                             System.currentTimeMillis());
             mServerList.put(aServer.getAddress(), aServer);
+            System.out.println("Contains:<<" + aName + ">>");
 
             Intent aIntent = new Intent(
                             CommunicationService.MSG_SERVERLIST_CHANGED);
