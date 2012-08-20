@@ -1116,7 +1116,7 @@ oslFileError SAL_CALL osl_getDirectoryItem(rtl_uString *strFilePath, oslDirector
                 osl_acquireDirectoryItem( (oslDirectoryItem)pItemImpl );
 
                 _tcscpy( pItemImpl->cDriveString, reinterpret_cast<LPCTSTR>(strSysFilePath->buffer) );
-                pItemImpl->cDriveString[0] = _toupper( pItemImpl->cDriveString[0] );
+                pItemImpl->cDriveString[0] = toupper( pItemImpl->cDriveString[0] );
 
                 if ( pItemImpl->cDriveString[_tcslen(pItemImpl->cDriveString) - 1] != '\\' )
                     _tcscat( pItemImpl->cDriveString, TEXT( "\\" ) );
