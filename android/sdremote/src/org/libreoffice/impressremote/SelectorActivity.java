@@ -161,11 +161,13 @@ public class SelectorActivity extends Activity {
                 if (!aMap.containsValue(aServer)) {
                     View aView = getLayoutInflater()
                                     .inflate(R.layout.activity_selector_sublayout_server,
-                                                    aLayout);
+                                                    null);
+
                     TextView aText = (TextView) aView
                                     .findViewById(R.id.selector_sub_label);
                     aText.setOnClickListener(mClickListener);
                     aText.setText(aServer.getName());
+                    aLayout.addView(aView);
                     aMap.put(aServer, aText);
                 }
 
