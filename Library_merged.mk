@@ -47,7 +47,6 @@ $(eval $(call gb_Library_use_libraries,merged,\
 ))
 
 $(eval $(call gb_Library_use_externals,merged,\
-	graphite \
 	icule \
 	icuuc \
 	jpeg \
@@ -56,6 +55,12 @@ $(eval $(call gb_Library_use_externals,merged,\
 	nss3 \
 	zlib \
 ))
+
+ifeq ($(ENABLE_GRAPHITE),TRUE)
+$(eval $(call gb_Library_use_externals,merged,\
+	graphite \
+))
+endif
 
 ifneq (,$(filter DESKTOP,$(BUILD_TYPE)))
 $(eval $(call gb_Library_use_externals,merged,\
