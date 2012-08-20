@@ -195,7 +195,6 @@
 #define HID_FOOTNOTE_OPTIONS                                    "SW_HID_FOOTNOTE_OPTIONS"
 #define HID_ENDNOTE_OPTIONS                                     "SW_HID_ENDNOTE_OPTIONS"
 #define HID_REDLINE_OPT                                         "SW_HID_REDLINE_OPT"
-#define HID_LINENUMBERING                                       "SW_HID_LINENUMBERING"
 #define HID_REDLINE_ACCEPT                                      "SW_HID_REDLINE_ACCEPT"
 #define HID_EDIT_FLD_DB                                         "SW_HID_EDIT_FLD_DB"
 #define HID_EDIT_FLD_DOKINF                                     "SW_HID_EDIT_FLD_DOKINF"

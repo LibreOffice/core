@@ -30,8 +30,7 @@
 
 #include <sfx2/basedlgs.hxx>
 #include <vcl/button.hxx>
-#include <vcl/field.hxx>
-#include <vcl/fixed.hxx>
+#include <vcl/layout.hxx>
 #include <vcl/lstbox.hxx>
 #include <numberingtypelistbox.hxx>
 
@@ -43,34 +42,20 @@ class SwLineNumberingDlg : public SfxModalDialog
 {
 private:
     SwWrtShell* pSh;
-
-    CheckBox        aNumberingOnCB;
-    FixedLine       aDisplayFL;
-    FixedText       aCharStyleFT;
-    ListBox         aCharStyleLB;
-    FixedText       aFormatFT;
-    SwNumberingTypeListBox   aFormatLB;
-    FixedText       aPosFT;
-    ListBox         aPosLB;
-    FixedText       aOffsetFT;
-    MetricField     aOffsetMF;
-    FixedText       aNumIntervalFT;
-    NumericField    aNumIntervalNF;
-    FixedText       aNumRowsFT;
-    FixedLine       aDivisorFL;
-    FixedText       aDivisorFT;
-    Edit            aDivisorED;
-    FixedText       aDivIntervalFT;
-    NumericField    aDivIntervalNF;
-    FixedText       aDivRowsFT;
-    FixedLine       aCountFL;
-    CheckBox        aCountEmptyLinesCB;
-    CheckBox        aCountFrameLinesCB;
-    CheckBox        aRestartEachPageCB;
-
-    OKButton        aOkPB;
-    CancelButton    aCancelPB;
-    HelpButton      aHelpPB;
+    VclContainer* m_pBodyContent;
+    Window* m_pDivIntervalFT;
+    NumericField* m_pDivIntervalNF;
+    Window* m_pDivRowsFT;
+    NumericField* m_pNumIntervalNF;
+    ListBox* m_pCharStyleLB;
+    SwNumberingTypeListBox* m_pFormatLB;
+    ListBox* m_pPosLB;
+    MetricField* m_pOffsetMF;
+    Edit* m_pDivisorED;
+    CheckBox* m_pCountEmptyLinesCB;
+    CheckBox* m_pCountFrameLinesCB;
+    CheckBox* m_pRestartEachPageCB;
+    CheckBox* m_pNumberingOnCB;
 
     DECL_LINK(OKHdl, void *);
     DECL_LINK(LineOnOffHdl, void * = 0);
@@ -79,7 +64,7 @@ private:
 public:
     SwWrtShell* GetWrtShell() const { return pSh; }
 
-     SwLineNumberingDlg(SwView *pVw);
+    SwLineNumberingDlg(SwView *pVw);
     ~SwLineNumberingDlg();
 };
 
