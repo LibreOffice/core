@@ -2130,11 +2130,7 @@ initHyperlinks : function()
                     {
                         var sId = aHyperlinkIdSet[j];
                         //log( 'initHyperlinks: j=' + j + ' id: <' + sId + '>' );
-                        var aHyperlinkElem = document.getElementById( sId );
-                        if( aHyperlinkElem )
-                        {
-                            aHyperlinkSet[ sId ] = new HyperlinkElement( sId, aHyperlinkElem, this.aSlideAnimationsHandler.aEventMultiplexer );
-                        }
+                        aHyperlinkSet[ sId ] = new HyperlinkElement( sId, this.aSlideAnimationsHandler.aEventMultiplexer );
                     }
                 }
             }
@@ -8990,6 +8986,8 @@ function AnimatedElement( aElement )
         log( 'AnimatedElement constructor: element is not valid' );
     }
 
+    this.aSlideShowContext = null;
+
     this.aBaseElement = aElement.cloneNode( true );
     this.aActiveElement = aElement;
     this.sElementId = this.aActiveElement.getAttribute( 'id' );
@@ -9109,14 +9107,25 @@ AnimatedElement.prototype.setToElement = function( aElement )
     return true;
 };
 
-AnimatedElement.prototype.notifySlideStart = function()
+AnimatedElement.prototype.notifySlideStart = function( aSlideShowContext )
 {
+    if( !aSlideShowContext )
+    {
+        log( 'AnimatedElement.notifySlideStart: slideshow context is not valid' );
+    }
+    this.aSlideShowContext = aSlideShowContext;
+
     var aClone = this.aBaseElement.cloneNode( true );
     this.aActiveElement.parentNode.replaceChild( aClone, this.aActiveElement );
     this.aActiveElement = aClone;
 
     this.initElement();
     this.DBG( '.notifySlideStart invoked' );
+};
+
+AnimatedElement.prototype.notifySlideEnd = function()
+{
+    // empty body
 };
 
 AnimatedElement.prototype.notifyAnimationStart = function()
@@ -9544,7 +9553,7 @@ AnimatedElement.prototype.DBG = function( sMessage, nTime )
 };
 
 // ------------------------------------------------------------------------------------------ //
-function AnimatedTextElement( aElement )
+function AnimatedTextElement( aElement, aEventMultiplexer )
 {
     var theDocument = document;
 
@@ -9578,6 +9587,11 @@ function AnimatedTextElement( aElement )
     var aTextElement = theDocument.createElementNS( NSS['svg'], 'text' );
     // Clone paragraph element <tspan>
     var aParagraphElement = aElement.cloneNode( true );
+
+    // We create a group element for wrapping bullets, bitmaps
+    // and text decoration
+    this.aGraphicGroupElement = theDocument.createElementNS( NSS['svg'], 'g' );
+    this.aGraphicGroupElement.setAttribute( 'class', 'GraphicGroup' );
 
     // In case we are dealing with a list item that utilizes a bullet char
     // we need to clone the related bullet char too.
@@ -9643,7 +9657,8 @@ function AnimatedTextElement( aElement )
 
     // Change clone element id.
     this.sParagraphId = sId = aParagraphElement.getAttribute( 'id' );
-    aParagraphElement.setAttribute( 'id', sId +'.a' );
+    aParagraphElement.removeAttribute( 'id' );
+    aAnimatableElement.setAttribute( 'id', sId +'.a' );
     if( aBulletCharClone )
         aBulletCharClone.removeAttribute( 'id' );
     for( i = 0; i < aBitmapCloneSet.length; ++i )
@@ -9652,32 +9667,20 @@ function AnimatedTextElement( aElement )
             aBitmapCloneSet[i].removeAttribute( 'id' );
     }
 
-    // Hide original text paragraph.
+    // Set up visibility
     var sVisibilityAttr = aElement.getAttribute( 'visibility' );
-    if( sVisibilityAttr === 'hidden' )
-    {
-        aAnimatableElement.setAttribute( 'visibility', 'hidden' );
-        this.eInitialVisibility = HIDDEN;
-    }
-    else
-    {
-        aElement.setAttribute( 'visibility', 'hidden' );
-        this.eInitialVisibility = VISIBLE;
-    }
+    if( !sVisibilityAttr )
+        sVisibilityAttr = 'inherit';
+    aAnimatableElement.setAttribute( 'visibility', sVisibilityAttr );
     aParagraphElement.setAttribute( 'visibility', 'inherit' );
-    if( aBulletCharClone )
-        aBulletCharClone.setAttribute( 'visibility', 'inherit' );
+    this.aGraphicGroupElement.setAttribute( 'visibility', 'inherit' );
     if( aBulletCharElem )
         aBulletCharElem.setAttribute( 'visibility', 'hidden' );
-
     for( i = 0; i < aBitmapCloneSet.length; ++i )
     {
         if( aBitmapElemSet[i] )
             aBitmapElemSet[i].setAttribute( 'visibility', 'hidden' );
-        if( aBitmapCloneSet[i] )
-            aBitmapCloneSet[i].setAttribute( 'visibility', 'inherit' );
     }
-
 
     // Append each element to its parent.
     // <g class='AnimatedElements'>
@@ -9685,23 +9688,27 @@ function AnimatedTextElement( aElement )
     //     <text>
     //       <tspan class='TextParagraph'> ... </tspan>
     //     </text>
-    //     [<g class='BulletChar'>...</g>]
-    //     [<g class='EmbeddedBitmap'>...</g>]
-    //     .
-    //     .
-    //     [<g class='EmbeddedBitmap'>...</g>]
+    //     <g class='GraphicGroup'>
+    //       [<g class='BulletChar'>...</g>]
+    //       [<g class='EmbeddedBitmap'>...</g>]
+    //       .
+    //       .
+    //       [<g class='EmbeddedBitmap'>...</g>]
+    //     </g>
     //   </g>
     // </g>
 
     aTextElement.appendChild( aParagraphElement );
     aAnimatableElement.appendChild( aTextElement );
+
     if( aBulletCharClone )
-        aAnimatableElement.appendChild( aBulletCharClone );
+        this.aGraphicGroupElement.appendChild( aBulletCharClone );
     for( i = 0; i < aBitmapCloneSet.length; ++i )
     {
         if( aBitmapCloneSet[i] )
-            aAnimatableElement.appendChild( aBitmapCloneSet[i] );
+            this.aGraphicGroupElement.appendChild( aBitmapCloneSet[i] );
     }
+    aAnimatableElement.appendChild( this.aGraphicGroupElement );
     aAnimatedElementGroup.appendChild( aAnimatableElement );
 
     this.aParentTextElement = aElement.parentNode;
@@ -9709,32 +9716,81 @@ function AnimatedTextElement( aElement )
     this.aAnimatedElementGroup = aAnimatedElementGroup;
     this.nRunningAnimations = 0;
 
-    AnimatedTextElement.superclass.constructor.call( this, aAnimatableElement );
+    // we collect all hyperlink ids
+    this.aHyperlinkIdSet = new Array();
+    var aHyperlinkElementSet = getElementsByClassName( this.aParagraphElement, 'UrlField' );
+    var i = 0;
+    var sHyperlinkId;
+    for( ; i < aHyperlinkElementSet.length; ++i )
+    {
+        sHyperlinkId = aHyperlinkElementSet[i].getAttribute( 'id' );
+        if( sHyperlinkId )
+           this.aHyperlinkIdSet.push( sHyperlinkId );
+        else
+            log( 'error: AnimatedTextElement constructor: hyperlink element has no id' );
+    }
+
+
+    AnimatedTextElement.superclass.constructor.call( this, aAnimatableElement, aEventMultiplexer );
 
 }
 extend( AnimatedTextElement, AnimatedElement );
 
-/*
-AnimatedTextElement.prototype.notifySlideStart = function()
-{
-    var aClone = this.aBaseElement.cloneNode( true );
-    this.aActiveElement.parentNode.replaceChild( aClone, this.aActiveElement );
-    this.aActiveElement = aClone;
 
-    var aAnimatedParagraphElement = this.aActiveElement.firstElementChild.firstElementChild;
-    if( aAnimatedParagraphElement )
+AnimatedTextElement.prototype.setToElement = function( aElement )
+{
+    var bRet = AnimatedTextElement.superclass.setToElement.call( this, aElement );
+    if( bRet )
     {
-        var aParagraphElement = aAnimatedParagraphElement.cloneNode( true );
-        aParagraphElement.setAttribute( 'id', this.sParagraphId );
-        aParagraphElement.setAttribute( 'visibility', aVisibilityAttributeValue[ this.eInitialVisibility  ] );
-        this.aParentTextElement.replaceChild( aParagraphElement, this.aParagraphElement  );
-        this.aParagraphElement = aParagraphElement;
+        this.aGraphicGroupElement = getElementByClassName( this.aActiveElement, 'GraphicGroup' );
+    }
+    return ( bRet && this.aGraphicGroupElement );
+};
+
+AnimatedTextElement.prototype.notifySlideStart = function( aSlideShowContext )
+{
+    log( 'AnimatedTextElement.notifySlideStart' );
+    AnimatedTextElement.superclass.notifySlideStart.call( this, aSlideShowContext );
+    this.aGraphicGroupElement = getElementByClassName( this.aActiveElement, 'GraphicGroup' );
+    this.restoreBaseTextParagraph();
+};
+
+AnimatedTextElement.prototype.notifySlideEnd = function()
+{
+    log( 'AnimatedTextElement.notifySlideEnd' );
+    this.aGraphicGroupElement.setAttribute( 'visibility', 'inherit' );
+};
+
+AnimatedTextElement.prototype.restoreBaseTextParagraph = function()
+{
+    var aActiveParagraphElement = this.aActiveElement.firstElementChild.firstElementChild;
+    if( aActiveParagraphElement )
+    {
+        var sVisibilityAttr = this.aActiveElement.getAttribute( 'visibility' );
+        if( !sVisibilityAttr || ( sVisibilityAttr === 'visible' ) )
+            sVisibilityAttr = 'inherit';
+        if( sVisibilityAttr === 'inherit' )
+            this.aGraphicGroupElement.setAttribute( 'visibility', 'visible' );
+        else
+            this.aGraphicGroupElement.setAttribute( 'visibility', 'hidden' );
+
+        var aParagraphClone = aActiveParagraphElement.cloneNode( true );
+        aParagraphClone.setAttribute( 'id', this.sParagraphId );
+        aParagraphClone.setAttribute( 'visibility', sVisibilityAttr );
+        this.aParentTextElement.replaceChild( aParagraphClone, this.aParagraphElement );
+        this.aParagraphElement = aParagraphClone;
+
+
+        var aEventMultiplexer = this.aSlideShowContext.aEventMultiplexer;
+        var aHyperlinkIdSet = this.aHyperlinkIdSet;
+        var aHyperlinkElementSet = getElementsByClassName( this.aParagraphElement, 'UrlField' );
+        var i = 0;
+        for( ; i < aHyperlinkIdSet.length; ++i )
+        {
+            aEventMultiplexer.notifyElementChangedEvent( aHyperlinkIdSet[i], aHyperlinkElementSet[i] );
+        }
     }
     this.aActiveElement.setAttribute( 'visibility', 'hidden' );
-
-
-    this.initElement();
-    this.DBG( '.notifySlideStart invoked' );
 };
 
 AnimatedTextElement.prototype.notifyAnimationStart = function()
@@ -9742,8 +9798,12 @@ AnimatedTextElement.prototype.notifyAnimationStart = function()
     log( 'AnimatedTextElement.notifyAnimationStart' );
     if( this.nRunningAnimations === 0 )
     {
+        var sVisibilityAttr = this.aParagraphElement.getAttribute( 'visibility' );
+        if( !sVisibilityAttr )
+            sVisibilityAttr = 'inherit';
+        this.aActiveElement.setAttribute( 'visibility', sVisibilityAttr );
+        this.aGraphicGroupElement.setAttribute( 'visibility', 'inherit' );
         this.aParagraphElement.setAttribute( 'visibility', 'hidden' );
-        this.aActiveElement.setAttribute( 'visibility', aVisibilityAttributeValue[ this.eInitialVisibility  ] );
     }
     ++this.nRunningAnimations;
 };
@@ -9754,20 +9814,29 @@ AnimatedTextElement.prototype.notifyAnimationEnd = function()
     --this.nRunningAnimations;
     if( this.nRunningAnimations === 0 )
     {
-        var sVisibilityAttr = this.aActiveElement.getAttribute( 'visibility' );
-        var aAnimatedParagraphElement = this.aActiveElement.firstElementChild.firstElementChild;
-        if( aAnimatedParagraphElement )
-        {
-            var aParagraphElement = aAnimatedParagraphElement.cloneNode( true );
-            aParagraphElement.setAttribute( 'visibility', sVisibilityAttr );
-            aParagraphElement.setAttribute( 'id', this.sParagraphId );
-            this.aParentTextElement.replaceChild( aParagraphElement, this.aParagraphElement  );
-            this.aParagraphElement = aParagraphElement;
-        }
-        this.aActiveElement.setAttribute( 'visibility', 'hidden' );
+        this.restoreBaseTextParagraph();
     }
 };
-*/
+
+AnimatedTextElement.prototype.saveState = function( nAnimationNodeId )
+{
+    if( this.nRunningAnimations === 0 )
+    {
+        var sVisibilityAttr = this.aParagraphElement.getAttribute( 'visibility' );
+        this.aActiveElement.setAttribute( 'visibility', sVisibilityAttr );
+        this.aGraphicGroupElement.setAttribute( 'visibility', 'inherit' );
+    }
+    AnimatedTextElement.superclass.saveState.call( this, nAnimationNodeId );
+};
+
+AnimatedTextElement.prototype.restoreState = function( nAnimationNodeId )
+{
+    var bRet = AnimatedTextElement.superclass.restoreState.call( this, nAnimationNodeId );
+    if( bRet )
+        this.restoreBaseTextParagraph();
+    return bRet;
+};
+
 
 
 // ------------------------------------------------------------------------------------------ //
@@ -10492,17 +10561,17 @@ SourceEventElement.prototype.setDefaultCursor = function()
 
 // ------------------------------------------------------------------------------------------ //
 
-function HyperlinkElement( sId, aElement, aEventMultiplexer )
+function HyperlinkElement( sId, aEventMultiplexer )
 {
+    var aElement = document.getElementById( sId );
     if( !aElement )
     {
-        log( 'error: HyperlinkElement: passed element is not valid' );
+        log( 'error: HyperlinkElement: no element with id: <' + sId + '> found' );
         return;
     }
     if( !aEventMultiplexer )
     {
-        log( 'error: HyperlinkElement: passed event multiplexer is not valid' );
-        return;
+        log( 'AnimatedElement constructor: event multiplexer is not valid' );
     }
 
     this.sId = sId;
@@ -10522,17 +10591,39 @@ function HyperlinkElement( sId, aElement, aEventMultiplexer )
             }
         }
 
+        this.aEventMultiplexer.registerElementChangedHandler( this.sId, bind2( HyperlinkElement.prototype.onElementChanged, this) );
         this.aEventMultiplexer.registerMouseClickHandler( this, 1100 );
 
         this.bIsPointerOver = false;
-        this.aElement.addEventListener( 'mouseover', bind2( HyperlinkElement.prototype.onMouseEnter, this), false );
-        this.aElement.addEventListener( 'mouseout', bind2( HyperlinkElement.prototype.onMouseLeave, this), false );
+        this.mouseEnterHandler = bind2( HyperlinkElement.prototype.onMouseEnter, this);
+        this.mouseLeaveHandler = bind2( HyperlinkElement.prototype.onMouseLeave, this);
+        this.aElement.addEventListener( 'mouseover', this.mouseEnterHandler, false );
+        this.aElement.addEventListener( 'mouseout', this.mouseLeaveHandler, false );
     }
     else
     {
         log( 'warning: HyperlinkElement(' + this.sId + '): url is empty' );
     }
 }
+
+HyperlinkElement.prototype.onElementChanged = function( aElement )
+{
+    //var aElement = document.getElementById( this.sId );
+    if( !aElement )
+    {
+        log( 'error: HyperlinkElement: passed element is not valid' );
+        return;
+    }
+
+    if( this.sURL )
+    {
+        this.aElement.removeEventListener( 'mouseover', this.mouseEnterHandler, false );
+        this.aElement.removeEventListener( 'mouseout', this.mouseLeaveHandler, false );
+        this.aElement = aElement;
+        this.aElement.addEventListener( 'mouseover', this.mouseEnterHandler, false );
+        this.aElement.addEventListener( 'mouseout', this.mouseLeaveHandler, false );
+    }
+};
 
 HyperlinkElement.prototype.onMouseEnter = function()
 {
@@ -10693,6 +10784,7 @@ function EventMultiplexer( aTimerEventQueue )
     this.aRewindRunningInteractiveEffectEventSet = new Object();
     this.aRewindEndedInteractiveEffectEventSet = new Object();
     this.aRewindedEffectHandlerSet = new Object();
+    this.aElementChangedHandlerSet = new Object();
 }
 
 EventMultiplexer.CURR_UNIQUE_ID = 0;
@@ -10873,6 +10965,18 @@ EventMultiplexer.prototype.notifyRewindedEffectEvent = function( aNotifierId )
     }
 };
 
+EventMultiplexer.prototype.registerElementChangedHandler = function( aNotifierId, aHandler )
+{
+    this.aElementChangedHandlerSet[ aNotifierId ] = aHandler;
+}
+
+EventMultiplexer.prototype.notifyElementChangedEvent = function( aNotifierId, aElement )
+{
+    if( this.aElementChangedHandlerSet[ aNotifierId ] )
+    {
+        (this.aElementChangedHandlerSet[ aNotifierId ])( aElement );
+    }
+};
 
 EventMultiplexer.DEBUG = aEventMultiplexerDebugPrinter.isEnabled();
 
@@ -12513,7 +12617,7 @@ SlideShow.prototype.notifyNextEffectEnd = function()
     this.aStartedEffectList[ this.aStartedEffectIndexMap[ -1 ] ].end();
 };
 
-SlideShow.prototype.notifySlideStart = function( nSlideIndex )
+SlideShow.prototype.notifySlideStart = function( nNewSlideIndex, nOldSlideIndex )
 {
     this.nCurrentEffect = 0;
     this.bIsRewinding = false;
@@ -12524,10 +12628,18 @@ SlideShow.prototype.notifySlideStart = function( nSlideIndex )
     this.aStartedEffectIndexMap = new Object();
     this.aStartedEffectIndexMap[ -1 ] = undefined;
 
+    var aAnimatedElementMap;
+    var sId;
+    if( nOldSlideIndex !== undefined )
+    {
+        aAnimatedElementMap = theMetaDoc.aMetaSlideSet[nOldSlideIndex].aSlideAnimationsHandler.aAnimatedElementMap;
+        for( sId in aAnimatedElementMap )
+            aAnimatedElementMap[ sId ].notifySlideEnd();
+    }
 
-    var aAnimatedElementMap = theMetaDoc.aMetaSlideSet[nSlideIndex].aSlideAnimationsHandler.aAnimatedElementMap;
-    for( var sId in aAnimatedElementMap )
-        aAnimatedElementMap[ sId ].notifySlideStart();
+    aAnimatedElementMap = theMetaDoc.aMetaSlideSet[nNewSlideIndex].aSlideAnimationsHandler.aAnimatedElementMap;
+    for( sId in aAnimatedElementMap )
+        aAnimatedElementMap[ sId ].notifySlideStart( this.aContext );
 };
 
 SlideShow.prototype.notifyTransitionEnd = function( nSlideIndex )
@@ -12878,7 +12990,7 @@ SlideShow.prototype.displaySlide = function( nNewSlide, bSkipSlideTransition )
         }
     }
 
-    this.notifySlideStart( nNewSlide );
+    this.notifySlideStart( nNewSlide, nOldSlide );
 
     if( this.isEnabled() && !bSkipSlideTransition  )
     {
