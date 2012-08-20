@@ -8,6 +8,8 @@
  */
 package org.libreoffice.impressremote.communication;
 
+import java.util.ArrayList;
+
 import android.app.Service;
 import android.content.Intent;
 import android.os.Binder;
@@ -87,14 +89,17 @@ public class CommunicationService extends Service implements Runnable {
             if (mState == State.CONNECTING || mState == State.CONNECTED) {
                 disconnect();
             }
-            mFinder.startFinding();
+            mNetworkFinder.startFinding();
+            mBluetoothFinder.startFinding();
             mState = State.SEARCHING;
         }
+        new BluetoothFinder(this);
     }
 
     public void stopSearching() {
         synchronized (mConnectionVariableMutex) {
-            mFinder.stopFinding();
+            mNetworkFinder.stopFinding();
+            mBluetoothFinder.stopFinding();
             mState = State.DISCONNECTED;
         }
     }
@@ -102,7 +107,8 @@ public class CommunicationService extends Service implements Runnable {
     public void connectTo(Server aServer) {
         synchronized (mConnectionVariableMutex) {
             if (mState == State.SEARCHING) {
-                mFinder.stopFinding();
+                mNetworkFinder.stopFinding();
+                mBluetoothFinder.stopFinding();
                 mState = State.DISCONNECTED;
             }
             mServerDesired = aServer;
@@ -150,7 +156,8 @@ public class CommunicationService extends Service implements Runnable {
 
     private Receiver mReceiver = new Receiver(this);
 
-    private ServerFinder mFinder = new ServerFinder(this);
+    private ServerFinder mNetworkFinder = new ServerFinder(this);
+    private BluetoothFinder mBluetoothFinder = new BluetoothFinder(this);
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -179,15 +186,10 @@ public class CommunicationService extends Service implements Runnable {
     }
 
     public Server[] getServers() {
-        return mFinder.getServerList();
-    }
-
-    public void startFindingServers() {
-        mFinder.startFinding();
-    }
-
-    public void stopFindingServers() {
-        mFinder.stopFinding();
+        ArrayList<Server> aServers = new ArrayList<Server>();
+        aServers.addAll(mNetworkFinder.getServerList());
+        aServers.addAll(mBluetoothFinder.getServerList());
+        return aServers.toArray(new Server[aServers.size()]);
     }
 
     public SlideShow getSlideShow() {

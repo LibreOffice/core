@@ -80,6 +80,10 @@ $(eval $(call gb_CppunitTest_use_libraries,sd_uimpress,\
 ))
 endif
 
+$(eval $(call gb_CppunitTest_use_externals,sd_uimpress,\
+    gtk \
+))
+
 $(eval $(call gb_CppunitTest_add_exception_objects,sd_uimpress,\
     sd/qa/unit/uimpress \
 ))

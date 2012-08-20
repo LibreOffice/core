@@ -6,11 +6,11 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
+import java.util.Collection;
 import java.util.HashMap;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.v4.content.LocalBroadcastManager;
 
 public class ServerFinder {
 
@@ -42,9 +42,7 @@ public class ServerFinder {
         try {
             String aCommand = null;
             String aName = null;
-            System.out.println("SF:Reading");
             mSocket.receive(aPacket);
-            System.out.println("SF:Received");
             int i;
             for (i = 0; i < aBuffer.length; i++) {
                 if (aPacket.getData()[i] == '\n') {
@@ -69,10 +67,6 @@ public class ServerFinder {
                             System.currentTimeMillis());
             mServerList.put(aServer.getAddress(), aServer);
 
-            //System.out.println("SF FOUND: IP="
-            //+ aPacket.getAddress().toString() + " HOSTNAME="
-            //+ aName);
-
             Intent aIntent = new Intent(
                             CommunicationService.MSG_SERVERLIST_CHANGED);
             mContext.sendBroadcast(aIntent);
@@ -92,9 +86,6 @@ public class ServerFinder {
 
         mFinishRequested = false;
 
-        Intent aIntent = new Intent(CommunicationService.MSG_SERVERLIST_CHANGED);
-        LocalBroadcastManager.getInstance(mContext).sendBroadcast(aIntent);
-
         if (mListenerThread == null) {
             mListenerThread = new Thread() {
                 @Override
@@ -104,9 +95,7 @@ public class ServerFinder {
                         mSocket = new DatagramSocket();
                         mSocket.setSoTimeout(1000 * 10);
                         while (!mFinishRequested) {
-                            System.out.println("SF:Looping");
                             if (System.currentTimeMillis() - aTime > SEARCH_INTERVAL) {
-                                System.out.println("SF:Sending");
                                 String aString = "LOREMOTE_SEARCH\n";
                                 DatagramPacket aPacket = new DatagramPacket(
                                                 aString.getBytes(CHARSET),
@@ -121,9 +110,7 @@ public class ServerFinder {
                                         mServerList.remove(aServer.getAddress());
                                         Intent aIntent = new Intent(
                                                         CommunicationService.MSG_SERVERLIST_CHANGED);
-                                        LocalBroadcastManager.getInstance(
-                                                        mContext)
-                                                        .sendBroadcast(aIntent);
+                                        mContext.sendBroadcast(aIntent);
 
                                     }
                                 }
@@ -156,7 +143,7 @@ public class ServerFinder {
         }
     }
 
-    public Server[] getServerList() {
-        return mServerList.values().toArray(new Server[mServerList.size()]);
+    public Collection<Server> getServerList() {
+        return mServerList.values();
     }
 }

@@ -67,7 +67,7 @@ public class SelectorActivity extends Activity {
 
     @Override
     public void onBackPressed() {
-        mCommunicationService.stopFindingServers();
+        mCommunicationService.stopSearching();
         Intent aIntent = new Intent(this, CommunicationService.class);
         stopService(aIntent);
         super.onBackPressed();
@@ -76,6 +76,10 @@ public class SelectorActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
+        mNetworkList.removeAllViews();
+        mBluetoothList.removeAllViews();
+        mNetworkServers.clear();
+        mBluetoothServers.clear();
         doBindService();
     }
 
@@ -84,7 +88,7 @@ public class SelectorActivity extends Activity {
         // TODO Auto-generated method stub
         super.onPause();
         if (mCommunicationService != null) {
-            mCommunicationService.stopFindingServers();
+            mCommunicationService.stopSearching();
         }
         doUnbindService();
     }
@@ -105,7 +109,7 @@ public class SelectorActivity extends Activity {
                         IBinder aService) {
             mCommunicationService = ((CommunicationService.CBinder) aService)
                             .getService();
-            mCommunicationService.startFindingServers();
+            mCommunicationService.startSearching();
         }
 
         @Override
@@ -137,15 +141,20 @@ public class SelectorActivity extends Activity {
             // Bluetooth -- Remove old
             for (Entry<Server, View> aEntry : mBluetoothServers.entrySet()) {
                 if (!Arrays.asList(aServers).contains(aEntry.getKey())) {
+                    System.out.println("Removing view "
+                                    + aEntry.getKey().getName());
                     mBluetoothServers.remove(aEntry.getKey());
-                    mBluetoothList.removeView(aEntry.getValue());
+                    mBluetoothList.removeView((View) aEntry.getValue()
+                                    .getParent());
                 }
             }
             // Network -- Remove old
             for (Entry<Server, View> aEntry : mNetworkServers.entrySet()) {
                 if (!Arrays.asList(aServers).contains(aEntry.getKey())) {
-                    mNetworkServers.remove(aEntry.getKey());
-                    mNetworkList.removeView(aEntry.getValue());
+                    System.out.println("Removing view");
+                    mNetworkServers.remove(aEntry.getKey().getName());
+                    mNetworkList.removeView((View) aEntry.getValue()
+                                    .getParent());
                 }
             }
             // Add all new
@@ -156,7 +165,7 @@ public class SelectorActivity extends Activity {
                 LinearLayout aLayout = aIsBluetooth ? mBluetoothList
                                 : mNetworkList;
 
-                if (!aMap.containsValue(aServer)) {
+                if (!aMap.containsKey(aServer)) {
                     View aView = getLayoutInflater()
                                     .inflate(R.layout.activity_selector_sublayout_server,
                                                     null);
@@ -166,7 +175,7 @@ public class SelectorActivity extends Activity {
                     aText.setOnClickListener(mClickListener);
                     aText.setText(aServer.getName());
                     aLayout.addView(aView);
-                    aMap.put(aServer, aView);
+                    aMap.put(aServer, aText);
                 }
 
             }
@@ -188,7 +197,7 @@ public class SelectorActivity extends Activity {
 
         @Override
         public void onClick(View aView) {
-            mCommunicationService.stopFindingServers();
+            mCommunicationService.stopSearching();
 
             Server aDesiredServer = null;
 

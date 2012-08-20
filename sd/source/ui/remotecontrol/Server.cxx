@@ -20,6 +20,7 @@
 #include "Listener.hxx"
 #include "Receiver.hxx"
 #include "RemoteServer.hxx"
+#include "BluetoothServer.hxx"
 
 using namespace std;
 using namespace sd;
@@ -210,6 +211,7 @@ void SdDLL::RegisterRemotes()
 
     sd::RemoteServer::setup();
     sd::DiscoveryService::setup();
+    sd::BluetoothServer::setup();
 
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

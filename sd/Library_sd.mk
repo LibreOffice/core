@@ -60,10 +60,6 @@ $(eval $(call gb_Library_set_include,sd,\
     -I$(WORKDIR)/SdiTarget/sd/sdi \
 ))
 
-$(eval $(call gb_Library_use_externals,sd,\
- libxml2 \
-))
-
 $(eval $(call gb_Library_add_defs,sd,\
     -DSD_DLLIMPLEMENTATION \
 ))
@@ -107,6 +103,11 @@ $(eval $(call gb_Library_use_libraries,sd,\
     vcl \
     xmlsecurity \
     $(gb_STDLIBS) \
+))
+
+$(eval $(call gb_Library_use_externals,sd,\
+ gtk \
+ libxml2 \
 ))
 
 ifeq ($(OS),WNT)
@@ -327,6 +328,7 @@ $(eval $(call gb_Library_add_exception_objects,sd,\
     sd/source/ui/presenter/PresenterPreviewCache \
     sd/source/ui/presenter/PresenterTextView \
     sd/source/ui/presenter/SlideRenderer \
+    sd/source/ui/remotecontrol/BluetoothServer \
     sd/source/ui/remotecontrol/BufferedStreamSocket \
     sd/source/ui/remotecontrol/Communicator \
     sd/source/ui/remotecontrol/DiscoveryService \
