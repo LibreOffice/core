@@ -212,6 +212,7 @@ bool SwDoc::get(/*[in]*/ DocumentSettingId id) const
         case DO_NOT_RESET_PARA_ATTRS_FOR_NUM_FONT: return mbDoNotResetParaAttrsForNumFont;
         case MATH_BASELINE_ALIGNMENT: return mbMathBaselineAlignment;
         case FLOATTABLE_NOMARGINS: return mbFloattableNomargins;
+        case STYLES_NODEFAULT: return mbStylesNoDefault;
         default:
             OSL_FAIL("Invalid setting id");
     }
@@ -389,6 +390,9 @@ void SwDoc::set(/*[in]*/ DocumentSettingId id, /*[in]*/ bool value)
             break;
         case FLOATTABLE_NOMARGINS:
             mbFloattableNomargins = value;
+            break;
+        case STYLES_NODEFAULT:
+            mbStylesNoDefault  = value;
             break;
         default:
             OSL_FAIL("Invalid setting id");

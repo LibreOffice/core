@@ -200,6 +200,8 @@ void WriterFilter::setTargetDocument( const uno::Reference< lang::XComponent >& 
    xSettings->setPropertyValue(rtl::OUString::createFromAscii("FloattableNomargins"), uno::makeAny( sal_True ));
    xSettings->setPropertyValue( rtl::OUString::createFromAscii("BackgroundParaOverDrawings"), uno::makeAny( sal_True ) );
    xSettings->setPropertyValue( rtl::OUString::createFromAscii( "ClippedPictures" ), uno::makeAny( sal_True ) );
+   // Don't load the default style definitions to avoid weird mix
+   xSettings->setPropertyValue( "StylesNoDefault", uno::makeAny( sal_True ) );
 }
 
 void WriterFilter::setSourceDocument( const uno::Reference< lang::XComponent >& xDoc )
