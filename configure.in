@@ -3459,7 +3459,7 @@ linux-gnu*)
         ;;
     s390x)
         CPU=3
-        CPUNAME=S390x
+        CPUNAME=S390X
         RTL_ARCH=S390x
         LIB64="lib64"
         OUTPATH=unxlngs390x
