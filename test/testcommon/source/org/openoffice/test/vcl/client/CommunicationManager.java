@@ -33,6 +33,8 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.openoffice.test.common.SystemUtil;
+
 /**
  * Manage the communication with the automation server.
  * It's used to establish the connection, send and receive data package.
@@ -56,9 +58,9 @@ public class CommunicationManager implements Runnable, Constant{
 
     private Socket socket = null;
 
-    private int reconnectInterval = 4000;
+    private double reconnectInterval = 2;
 
-    private int reconnectCount = 3;
+    private int reconnectCount = 5;
 
     private List<CommunicationListener> listeners = new Vector<CommunicationListener>();
 
@@ -85,39 +87,6 @@ public class CommunicationManager implements Runnable, Constant{
     public CommunicationManager(String host, int port) {
         this.host = host;
         this.port = port;
-    }
-
-
-    /**
-     * Get the max count retrying to connect the server
-     * @return
-     */
-    public int getReconnectCount() {
-        return reconnectCount;
-    }
-
-    /**
-     * Set the max count retrying to connect the server
-     * @param reconnectCount
-     */
-    public void setReconnectCount(int reconnectCount) {
-        this.reconnectCount = reconnectCount;
-    }
-
-    /**
-     * Get the interval between retrying to connect the server
-     * @return
-     */
-    public int getReconnectInterval() {
-        return reconnectInterval;
-    }
-
-    /**
-     * Set the interval between retrying to connect the server
-     * @param reconnectInterval
-     */
-    public void setReconnectInterval(int reconnectInterval) {
-        this.reconnectInterval = reconnectInterval;
     }
 
     /**
@@ -255,14 +224,10 @@ public class CommunicationManager implements Runnable, Constant{
                 logger.log(Level.FINEST, "Failed to connect! Tried " + i, e);
             }
 
-            try {
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                //ignore
-            }
+            SystemUtil.sleep(reconnectInterval);
         }
 
-        throw new CommunicationException("Failed to connect automation server!");
+        throw new CommunicationException("Failed to connect to automation server on: " + host + ":" + port);
     }
 
 

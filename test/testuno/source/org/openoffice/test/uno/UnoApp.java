@@ -58,8 +58,20 @@ public class UnoApp {
 
     private XDesktop desktop = null;
 
+    private double reconnectInterval = 2;
+
+    private int reconnectCount = 5;
+
     public UnoApp() {
         this.openOffice = OpenOffice.getDefault();
+    }
+
+    public UnoApp(OpenOffice openOffice) {
+        this.openOffice = openOffice;
+    }
+
+    public UnoApp(String unoUrl) {
+        this.unoUrl = unoUrl;
     }
 
     /**
@@ -71,7 +83,7 @@ public class UnoApp {
             unoUrl = openOffice.getUnoUrl();
         }
 
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < reconnectCount; i++) {
             try {
                 XUnoUrlResolver resolver = UnoUrlResolver.create(Bootstrap.createInitialComponentContext(null));
                 componentContext = UnoRuntime.queryInterface(XComponentContext.class, resolver.resolve("uno:" + unoUrl + ";StarOffice.ComponentContext"));
@@ -83,10 +95,10 @@ public class UnoApp {
                 // e.printStackTrace(); // for debugging
             }
 
-            SystemUtil.sleep(2);
+            SystemUtil.sleep(reconnectInterval);
         }
 
-        throw new RuntimeException("OpenOffice can't be connected!");
+        throw new RuntimeException("Failed to connect to uno url: " + unoUrl);
     }
 
     private Timer timer = new Timer(true);
