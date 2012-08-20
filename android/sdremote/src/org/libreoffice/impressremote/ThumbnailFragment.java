@@ -18,7 +18,6 @@ import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,7 +29,9 @@ import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import android.widget.TextView;
 
-public class ThumbnailFragment extends Fragment {
+import com.actionbarsherlock.app.SherlockFragment;
+
+public class ThumbnailFragment extends SherlockFragment {
 
     private CommunicationService mCommunicationService;
 

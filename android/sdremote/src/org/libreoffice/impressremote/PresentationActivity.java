@@ -7,7 +7,6 @@ import java.util.TimeZone;
 import org.libreoffice.impressremote.communication.CommunicationService;
 import org.libreoffice.impressremote.communication.SlideShow.Timer;
 
-import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.content.ComponentName;
 import android.content.Context;
@@ -18,14 +17,11 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.text.format.DateFormat;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -35,7 +31,10 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
-public class PresentationActivity extends FragmentActivity {
+import com.actionbarsherlock.app.ActionBar;
+import com.actionbarsherlock.app.SherlockFragmentActivity;
+
+public class PresentationActivity extends SherlockFragmentActivity {
     private CommunicationService mCommunicationService;
     private boolean mIsBound = false;
     private FrameLayout mLayout;
@@ -126,15 +125,17 @@ public class PresentationActivity extends FragmentActivity {
     };
 
     // ---------------------------------------------- ACTION BAR ---------------
+
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.actionbar_presentation, menu);
+    public boolean onCreateOptionsMenu(com.actionbarsherlock.view.Menu menu) {
+        getSupportMenuInflater().inflate(R.menu.actionbar_presentation, menu);
         mActionBarManager = new ActionBarManager();
         return true;
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(
+                    com.actionbarsherlock.view.MenuItem item) {
         Intent aIntent;
         switch (item.getItemId()) {
         case R.id.actionbar_presentation_submenu_options:
@@ -209,7 +210,7 @@ public class PresentationActivity extends FragmentActivity {
 
         public ActionBarManager() {
 
-            ActionBar aBar = getActionBar();
+            ActionBar aBar = getSupportActionBar();
             aBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
             aBar.setCustomView(R.layout.presentation_actionbar);
 

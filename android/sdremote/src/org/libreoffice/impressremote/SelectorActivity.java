@@ -16,7 +16,6 @@ import org.libreoffice.impressremote.communication.CommunicationService;
 import org.libreoffice.impressremote.communication.Server;
 import org.libreoffice.impressremote.communication.Server.Protocol;
 
-import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -30,7 +29,9 @@ import android.view.View.OnClickListener;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-public class SelectorActivity extends Activity {
+import com.actionbarsherlock.app.SherlockActivity;
+
+public class SelectorActivity extends SherlockActivity {
 
     private CommunicationService mCommunicationService;
 

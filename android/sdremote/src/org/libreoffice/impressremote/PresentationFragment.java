@@ -16,7 +16,6 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -29,8 +28,9 @@ import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class PresentationFragment extends Fragment {
+import com.actionbarsherlock.app.SherlockFragment;
 
+public class PresentationFragment extends SherlockFragment {
     private CoverFlow mTopView;
     private ImageView mHandle;
     private View mLayout;

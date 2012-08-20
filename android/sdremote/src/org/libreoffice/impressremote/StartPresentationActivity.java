@@ -2,7 +2,6 @@ package org.libreoffice.impressremote;
 
 import org.libreoffice.impressremote.communication.CommunicationService;
 
-import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -15,7 +14,9 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.view.View;
 import android.view.View.OnClickListener;
 
-public class StartPresentationActivity extends Activity {
+import com.actionbarsherlock.app.SherlockActivity;
+
+public class StartPresentationActivity extends SherlockActivity {
     private CommunicationService mCommunicationService = null;
     private boolean mIsBound = false;
 
