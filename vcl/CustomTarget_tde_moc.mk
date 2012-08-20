@@ -34,6 +34,6 @@ $(call gb_CustomTarget_get_workdir,vcl/unx/kde/fpicker)/kdefilepicker.moc.cxx :\
 		$(SRCDIR)/vcl/unx/kde/fpicker/kdefilepicker.hxx \
 		| $(call gb_CustomTarget_get_workdir,vcl/unx/kde/fpicker)/.dir
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),MOC,1)
-	$(MOC) -o $@ $<
+	cat $< | grep -v 'FILTER_OUT_KDE' | $(MOC) -o $@ -f$<
 
 # vim:set shiftwidth=4 tabstop=4 noexpandtab:

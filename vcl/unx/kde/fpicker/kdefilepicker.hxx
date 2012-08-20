@@ -114,10 +114,12 @@ protected:
     bool                        canNotifySelection( void ) const { return m_bCanNotifySelection; }
 
 protected slots:
+// Qt3 moc does not really understand #ifdef and would process both slots,
+// so the FILTER_OUT_FOO tags are used to remove some slots before moc sees them.
 #ifdef ENABLE_TDE
-    void                        fileHighlightedCommand( const TQString & );
+    void                        fileHighlightedCommand( const TQString & ); // FILTER_OUT_TDE
 #else // ENABLE_TDE
-    void                        fileHighlightedCommand( const QString & );
+    void                        fileHighlightedCommand( const QString & );  // FILTER_OUT_KDE
 #endif // ENABLE_TDE
     void                        selectionChangedCommand();
 
