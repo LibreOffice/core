@@ -239,13 +239,6 @@ public class PathSubstitutionTest
             resubst = new ArrayList<Boolean>();
         }
 
-        public void add(String var)
-        {
-            varName.add(var);
-            substAtBegin.add(Boolean.TRUE);
-            resubst.add(Boolean.TRUE);
-        }
-
         public void add(String var, boolean onlySubstAtBegin,
                 boolean canResubst)
         {
@@ -265,11 +258,6 @@ public class PathSubstitutionTest
         }
 
         public String getVariable(int i)
-        {
-            return varName.get(i);
-        }
-
-        public String getValue(int i)
         {
             return varName.get(i);
         }

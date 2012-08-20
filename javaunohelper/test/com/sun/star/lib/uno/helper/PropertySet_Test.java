@@ -1125,7 +1125,6 @@ class TestClass extends PropertySet
     boolean boolPropC;
 
     public Property propBoolD= new Property("PropBoolD", 301, new Type(Boolean.TYPE), (short) 0);
-    private boolean boolPropD;
 
     public Property propBoolClass= new Property("PropBoolClass", 1001, new Type(Boolean.class), (short) 0);
     public Boolean boolClassProp;
@@ -1453,7 +1452,6 @@ class TestClass extends PropertySet
         enumPropertyState = com.sun.star.beans.PropertyState.DEFAULT_VALUE;
         boolPropB= false;
         boolPropC= false;
-        boolPropD= false;
         boolClassProp= null;
         charClassProp= null;
         byteClassProp= null;

@@ -40,7 +40,6 @@ public class XOutputStreamToByteArrayAdapter
     private int size = 0;
     private int position = 0;
     private boolean externalBuffer = false;
-    private boolean closed = false;
     private byte[] buffer;
 
     /** Creates a new instance of ByteArrayXOutputStream */
@@ -77,7 +76,6 @@ public class XOutputStreamToByteArrayAdapter
             System.arraycopy(buffer, 0, newBuffer, 0, position);
             buffer = newBuffer;
         }
-        closed = true;
     }
 
     public void flush()

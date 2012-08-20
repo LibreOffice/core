@@ -57,16 +57,9 @@ public class StatusIndicator implements com.sun.star.task.XStatusIndicator
     // ____________________
 
     /**
-     * @member m_sText      text, which describe the current status
      * @member m_nRange     max value for any progress
-     * @member m_nValue     the progress value
-     * @member m_nOut       regulate, how the status will be shown
-     * @member m_aProtocol  used for logging and transport information about used interface of this object
      */
-    private String          m_sText     ;
     private int             m_nRange    ;
-    private int             m_nValue    ;
-    private int             m_nOut      ;
     private boolean         m_bWasUsed  ;
 
     // ____________________
@@ -77,10 +70,7 @@ public class StatusIndicator implements com.sun.star.task.XStatusIndicator
      */
     public StatusIndicator( int nOut)
     {
-        m_sText     = new String()  ;
         m_nRange    = 100           ;
-        m_nValue    = 0             ;
-        m_nOut      = nOut          ;
         m_bWasUsed  = false;
     }
 
@@ -100,9 +90,7 @@ public class StatusIndicator implements com.sun.star.task.XStatusIndicator
         synchronized(this)
         {
             m_bWasUsed = true;
-            m_sText  = sText ;
             m_nRange = nRange;
-            m_nValue = 0     ;
         }
         impl_show();
     }
@@ -117,9 +105,7 @@ public class StatusIndicator implements com.sun.star.task.XStatusIndicator
         synchronized(this)
         {
             m_bWasUsed = true;
-            m_sText  = new String();
             m_nRange = 100;
-            m_nValue = 0;
         }
         impl_show();
     }
@@ -137,7 +123,6 @@ public class StatusIndicator implements com.sun.star.task.XStatusIndicator
         synchronized(this)
         {
             m_bWasUsed = true;
-            m_sText = sText;
         }
         impl_show();
     }
@@ -156,9 +141,6 @@ public class StatusIndicator implements com.sun.star.task.XStatusIndicator
         synchronized(this)
         {
             m_bWasUsed = true;
-
-            if (nValue<=m_nRange)
-                m_nValue = nValue;
         }
         impl_show();
     }
@@ -173,8 +155,6 @@ public class StatusIndicator implements com.sun.star.task.XStatusIndicator
         synchronized(this)
         {
             m_bWasUsed = true;
-            m_sText  = new String();
-            m_nValue = 0;
         }
         impl_show();
     }

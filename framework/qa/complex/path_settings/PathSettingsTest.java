@@ -247,27 +247,6 @@ public class PathSettingsTest
         return false;
     }
 
-    private String getPropertyValueAsString(String _sName)
-    {
-        final XPropertySet xPropSet_of_PathSettings = UnoRuntime.queryInterface(XPropertySet.class, aPathSettings);
-        String sValue = "";
-        {
-            Object o;
-            try
-            {
-                o = xPropSet_of_PathSettings.getPropertyValue(_sName);
-                sValue = convertToString(o);
-            }
-            catch (UnknownPropertyException ex)
-            {
-            }
-            catch (WrappedTargetException ex)
-            {
-            }
-        }
-        return sValue;
-    }
-
     /**
      * Shows the path settings
      * @throws UnknownPropertyException
@@ -934,7 +913,6 @@ public class PathSettingsTest
 
         private boolean propChanged = false;
         private boolean propertiesChanged = false;
-        private boolean disposeCalled = false;
         private boolean vetoableChanged = false;
 
         public void propertiesChange(
@@ -956,14 +934,12 @@ public class PathSettingsTest
 
         public void disposing(com.sun.star.lang.EventObject eventObject)
         {
-            disposeCalled = true;
         }
 
         public void resetListener()
         {
             propChanged = false;
             propertiesChanged = false;
-            disposeCalled = false;
             vetoableChanged = false;
         }
 

@@ -88,7 +88,6 @@ public class CheckBookmarks {
     private XMultiServiceFactory m_xMsf = null;
     private XTextDocument m_xDoc = null;
     private XTextDocument m_xOdfReloadedDoc = null;
-    private XTextDocument m_xMsWordReloadedDoc = null;
     private final BookmarkHashes actualHashes = new BookmarkHashes();
 
     private BookmarkHashes get20111110Expectations() {

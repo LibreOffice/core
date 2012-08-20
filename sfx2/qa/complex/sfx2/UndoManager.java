@@ -1240,7 +1240,6 @@ public class UndoManager
 
         public void redo() throws UndoFailedException
         {
-            m_redoCalled = true;
         }
 
         public void dispose()
@@ -1259,12 +1258,10 @@ public class UndoManager
         }
 
         boolean undoCalled() { return m_undoCalled; }
-        boolean redoCalled() { return m_redoCalled; }
         boolean disposed() { return m_disposed; }
 
         private final String    m_title;
         private boolean         m_undoCalled = false;
-        private boolean         m_redoCalled = false;
         private boolean         m_disposed = false;
     }
 

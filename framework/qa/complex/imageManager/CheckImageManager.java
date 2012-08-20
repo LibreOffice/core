@@ -97,7 +97,7 @@ public class CheckImageManager  {
     private void performChecks(XImageManager xImageManager, String testObjectName, XUIConfigurationManager xManager) {
         util.dbg.printInterfaces(xImageManager);
 
-        OXUIConfigurationListenerImpl configListener = new OXUIConfigurationListenerImpl(xManager, xMSF);
+        OXUIConfigurationListenerImpl configListener = new OXUIConfigurationListenerImpl();
         param.put("XUIConfiguration.XUIConfigurationListenerImpl", configListener);
 
         XInitialization xInit = UnoRuntime.queryInterface(XInitialization.class, xImageManager);
@@ -146,14 +146,6 @@ public class CheckImageManager  {
 
     class OXUIConfigurationListenerImpl implements _XUIConfiguration.XUIConfigurationListenerImpl {
         private boolean triggered = false;
-        private XUIConfigurationManager xUIManager = null;
-        private XMultiServiceFactory xMSF = null;
-
-        public OXUIConfigurationListenerImpl(XUIConfigurationManager xUIManager, XMultiServiceFactory xMSF) {
-
-            this.xUIManager = xUIManager;
-            this.xMSF = xMSF;
-        }
 
         public boolean actionWasTriggered() {
             return triggered;

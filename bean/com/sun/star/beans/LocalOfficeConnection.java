@@ -33,7 +33,7 @@ import com.sun.star.lib.uno.helper.UnoUrl;
 import com.sun.star.lib.util.NativeLibraryLoader;
 
 /**
- * This class reprecents a connection to the local office application.
+ * This class represents a connection to the local office application.
  * @deprecated
  */
 public class LocalOfficeConnection

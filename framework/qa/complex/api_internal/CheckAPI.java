@@ -51,9 +51,6 @@ import com.sun.star.uno.UnoRuntime;
  */
 public class CheckAPI  {
 
-    // The name of the tested service
-    private final String testName = "StarOfficeAPI";
-
     /**
      * Return all test methods.
      * @return The test methods.

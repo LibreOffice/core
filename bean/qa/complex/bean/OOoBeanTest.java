@@ -688,18 +688,10 @@ public class OOoBeanTest
         }
         public Dimension getPreferredSize()
         {
-            Container c = getParent();
             return new Dimension(200, 200);
         }
     }
 
-
-
-
-    private XMultiServiceFactory getMSF()
-    {
-        return(UnoRuntime.queryInterface(XMultiServiceFactory.class, connection.getComponentContext().getServiceManager()));
-    }
 
     // setup and close connections
     @BeforeClass public static void setUpConnection() throws Exception {

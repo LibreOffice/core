@@ -677,15 +677,6 @@ public class CheckXComponentLoader
         }
     }
 
-    private void loadURL(XComponentLoader m_xLoader, int nRequiredResult,
-                         String[] sURL, String sTarget, int nFlags,
-                         PropertyValue[] lProps) {
-        for (int i = 0; i < sURL.length; i++)
-        {
-            loadURL(m_xLoader, nRequiredResult, sURL[i], sTarget, nFlags, lProps);
-        }
-    }
-
     /**
      * it match the int result value to a string, which can be used for logging
      */

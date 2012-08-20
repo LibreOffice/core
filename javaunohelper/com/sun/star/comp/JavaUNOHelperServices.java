@@ -29,9 +29,6 @@ import com.sun.star.comp.juhtest.SmoketestCommandEnvironment;
  */
 public class JavaUNOHelperServices {
 
-        static private final String __service_smoketestCommandEnv =
-        "com.sun.star.deployment.test.SmoketestCommandEnvironment";
-
      /**
      * Gives a factory for creating the service.
      * This method is called by the <code>JavaLoader</code>

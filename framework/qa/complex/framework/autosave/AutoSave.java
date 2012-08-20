@@ -166,10 +166,6 @@ public class AutoSave
     /** can be used to trigger/enable/disable the AutoSave feature. */
     private XDispatch m_xAutoSave = null;
 
-    /** a test document, which needs some time for saving to simulate concurrent
-     *  save operations. */
-    private XStorable m_xTestDoc = null;
-
     private XURLTransformer m_xURLParser = null;
 
     //-------------------------------------------

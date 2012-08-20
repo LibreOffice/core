@@ -64,7 +64,6 @@ public class AcceleratorsConfigurationTest
     private XAcceleratorConfiguration m_xModuleAccelCfg = null;
     private XAcceleratorConfiguration m_xDocumentAccelCfg = null;
     /** XCS/XCU based accelerator configuration. */
-    private XNameAccess m_xConfig = null;
     private XNameAccess m_xPrimaryKeys = null;
     private XNameAccess m_xSecondaryKeys = null;
 
@@ -113,7 +112,6 @@ public class AcceleratorsConfigurationTest
     public void after()
             throws java.lang.Exception
     {
-        m_xConfig = null;
         m_xGlobalAccelCfg = null;
         m_xModuleAccelCfg = null;
         m_xDocumentAccelCfg = null;
@@ -573,46 +571,6 @@ public class AcceleratorsConfigurationTest
         }
 
         return sCommand;
-    }
-
-    //-------------------------------------------
-    /** @todo document me.
-     */
-    private void insertKeyToConfiguration(XNameAccess xAccess, String sKey, String sCommand)
-            throws java.lang.Exception
-    {
-        XNameContainer xContainer = UnoRuntime.queryInterface(XNameContainer.class, xAccess);
-        if (!xContainer.hasByName(sKey))
-        {
-            XSingleServiceFactory xFac = UnoRuntime.queryInterface(XSingleServiceFactory.class, xContainer);
-            XInterface xInst = UnoRuntime.queryInterface(XInterface.class, xFac.createInstance());
-            xContainer.insertByName(sKey, xInst);
-        }
-
-        XNameAccess xKey = UnoRuntime.queryInterface(XNameAccess.class, xContainer.getByName(sKey));
-        XNameContainer xCommand = UnoRuntime.queryInterface(XNameContainer.class, xKey.getByName("Command"));
-        String sLocale = getOfficeLocale();
-        if (xCommand.hasByName(sLocale))
-        {
-            xCommand.insertByName(sLocale, sCommand);
-        }
-        else
-        {
-            xCommand.replaceByName(sLocale, sCommand);
-        }
-    }
-
-    //-------------------------------------------
-    /** @todo document me.
-     */
-    private void removeKeyFromConfiguration(XNameAccess xAccess, String sKey)
-            throws java.lang.Exception
-    {
-        XNameContainer xContainer = UnoRuntime.queryInterface(XNameContainer.class, xAccess);
-        if (xContainer.hasByName(sKey))
-        {
-            xContainer.removeByName(sKey);
-        }
     }
 
     //-------------------------------------------

@@ -71,9 +71,6 @@ public class EventTest {
     //-------------------------------------------
     // member
 
-    /** points to the global uno service manager. */
-    private XMultiServiceFactory m_xMSF = null;
-
     /** indicates if the mousePressed event was called*/
     private boolean m_mousePressed = false;
     /** indicates if the mouseReleased event was called*/
@@ -131,9 +128,6 @@ public class EventTest {
      * different components inside.
      */
 @Before public void before() {
-        // get uno service manager from global test environment
-        m_xMSF = getMSF();
-
         // create frame instance
         try {
             // get a soffice factory object

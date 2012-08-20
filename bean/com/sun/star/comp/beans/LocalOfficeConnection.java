@@ -50,8 +50,6 @@ public class LocalOfficeConnection
     public static final String      OFFICE_LIB_NAME     = "officebean";
     public static final String      OFFICE_ID_SUFFIX    = "_Office";
 
-    private static String           mProgramPath;
-
     private Process             mProcess;
     private ContainerFactory        mContainerFactory;
     private XComponentContext       mContext;
@@ -119,11 +117,6 @@ public class LocalOfficeConnection
     }
 
     //-------------------------------------------------------------------------
-    // debugging method
-    private void dbgPrint( String aMessage )
-    {
-        System.err.println( aMessage );
-    }
 
     /**
      * Constructor.
@@ -182,7 +175,6 @@ public class LocalOfficeConnection
             try
             {
                 UnoUrl aURL = UnoUrl.parseUnoUrl( url );
-                mProgramPath = null;
                 mConnType = aURL.getConnection();
                 mPipe = (String) aURL.getConnectionParameters().get( "pipe" );
                 mPort = (String) aURL.getConnectionParameters().get( "port" );
@@ -464,39 +456,6 @@ public class LocalOfficeConnection
 
 
     /**
-     * Retrives a path to the office program folder.
-     *
-     * @return The path to the office program folder.
-     */
-    static private String getProgramPath()
-    {
-        if (mProgramPath == null)
-        {
-            // determine name of executable soffice
-            String aExec = OFFICE_APP_NAME; // default for UNIX
-            String aOS = System.getProperty("os.name");
-
-            // running on Windows?
-            if (aOS.startsWith("Windows"))
-                aExec = OFFICE_APP_NAME + ".exe";
-
-            // add other non-UNIX operating systems here
-            // ...
-
-            // find soffice executable relative to this class's class loader:
-            File path = NativeLibraryLoader.getResource(
-                LocalOfficeConnection.class.getClassLoader(), aExec);
-            if (path != null)
-                mProgramPath = path.getParent();
-
-            // default is ""
-            if ( mProgramPath == null )
-                mProgramPath = "";
-        }
-        return mProgramPath;
-    }
-
-    /**
      * Parses a connection URL.
      * This method accepts a UNO URL with following format:<br />
      * <pre>
@@ -674,8 +633,6 @@ public class LocalOfficeConnection
                 "Invalid UNO connection URL.");
 
         // Set up the connection parameters.
-        if (path != null)
-            mProgramPath = path;
         if (pipe != null)
             mPipe = pipe;
     }

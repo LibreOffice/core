@@ -183,17 +183,6 @@ public class RecoveryTest extends ComplexTestCase {
 
     }
 
-    private void makeRecoveryData(){
-        cleanRecoveryData();
-        startOffice();
-        generateDesktop();
-        makeCrash();
-        int expectedDocumentCount = windowsPosSize.size() + 1;
-        handleRecoveryDialogAfterCrash(expectedDocumentCount);
-        backupRecoveryData();
-        cleanRecoveryData();
-    }
-
     private void startOffice(){
         assure("Could not connect to office", connect());
         log.setWatcher(param.get("Watcher"));
@@ -240,61 +229,6 @@ public class RecoveryTest extends ComplexTestCase {
             return false;
         }
         return true;
-    }
-
-    /**
-     * While creating the test environment the positions and sizes of the frames
-     * was saved. After the Office has recovered the documents, this functions
-     * compares the saved positions and sizes with the current frame.
-     */
-    private void compareWindowPositions(){
-        System.out.println("all frames:########");
-        System.out.println(windowsPosSize.entrySet().toString());
-
-        XEnumeration allComp = DesktopTools.getAllComponents(xMSF);
-
-        String msg=null;
-
-        while (allComp.hasMoreElements()){
-            try{
-                // get all components from the desktop
-                XComponent xComponent = UnoRuntime.queryInterface(
-                                       XComponent.class, allComp.nextElement());
-
-                XModel xModel = UnoRuntime.queryInterface(XModel.class, xComponent);
-
-                String frameName = xModel.getCurrentController().getFrame().getName();
-
-                // check if this frame was used in creation of test environment
-                if (windowsPosSize.containsKey(frameName)){
-
-                    Rectangle oldRect = windowsPosSize.get(frameName);
-
-                    XWindow xWindow = xModel.getCurrentController().getFrame().getContainerWindow();
-                    Rectangle newRect = xWindow.getPosSize();
-
-
-                    boolean ok = oldRect.Height == newRect.Height;
-                    ok &= oldRect.Width == newRect.Width;
-                    ok &= oldRect.X == newRect.X;
-                    ok &= oldRect.Y == newRect.Y;
-
-                    if (!ok){
-                        msg = "The frame '" + frameName + "' has a different position/size:\n";
-                        msg += "original value -> restored value:\n";
-                        msg += "X     : " + oldRect.X + " -> " + newRect.X + "\n";
-                        msg += "Y     : " + oldRect.Y + " -> " + newRect.Y + "\n";
-                        msg += "Height: " + oldRect.Height + " -> " + newRect.Height + "\n";
-                        msg += "Width : " + oldRect.Width + " -> " + newRect.Width + "\n";
-                    }
-
-                    assure(msg, ok, CONTINUE);
-
-                }
-            } catch (com.sun.star.container.NoSuchElementException e) {
-            } catch ( com.sun.star.lang.WrappedTargetException e) {}
-        }
-
     }
 
     /**
@@ -415,12 +349,6 @@ public class RecoveryTest extends ComplexTestCase {
         handleRecoveryDialogAtRestart(expectedDocumentCount, false, true);
         handleAreYouSureDialog(true);
         handleSaveDocumentsDialog(true);
-    }
-    private void handleRecoveryDialog_Recover(int expectedDocumentCount){
-
-    }
-    private void handleRecoveryDialog_RecoverAndCrashreporter(int expectedDocumentCount){
-
     }
      /**
       * This function uses accessibility to handle the dialog which appears while the
@@ -624,30 +552,6 @@ public class RecoveryTest extends ComplexTestCase {
 
     }
 
-    private void makeImpressDoc(String frameName, boolean withContent){
-        log.println("creating Impress document '" + frameName + "'");
-        XComponent xImpressDoc = createNewImpressDoc(frameName);
-        if (withContent) fillImpressDocWithContent(xImpressDoc);
-        positioningDocument(UnoRuntime.queryInterface(XModel.class,
-                                                               xImpressDoc));
-    }
-
-    private void makeDrawDoc(String frameName, boolean withContent){
-        log.println("creating Draw document '" + frameName + "'");
-        XComponent xDrawDoc = createNewDrawDoc(frameName);
-        if (withContent) fillDrawDocWithContent(xDrawDoc);
-        positioningDocument(UnoRuntime.queryInterface(XModel.class,
-                                                                 xDrawDoc));
-    }
-
-    private void makeCalcDoc(String frameName, boolean withContent){
-        log.println("creating Calc document '" + frameName + "'");
-        XSpreadsheetDocument xSpreadsheetDoc = createNewCalcDoc(frameName);
-        if (withContent) fillCalcDocWithContent(xSpreadsheetDoc);
-        positioningDocument(UnoRuntime.queryInterface(XModel.class,
-                                                           xSpreadsheetDoc));
-    }
-
     private void positioningDocument(XModel model){
 
         XWindow xWindow = model.getCurrentController().getFrame().getContainerWindow();
@@ -684,163 +588,6 @@ public class RecoveryTest extends ComplexTestCase {
         posSize.Width =  (width < (maxWidth / 2)) ? width + (maxWidth / 2) : width;
 
         return posSize;
-    }
-
-    private void makeMathDoc(String frameName, boolean withContent){
-        log.println("creating Math document '" + frameName + "'");
-        XComponent xMathDoc = createNewMathDoc(frameName);
-        if (withContent) fillMathDocWithContent(xMathDoc);
-        positioningDocument(UnoRuntime.queryInterface(XModel.class,
-                                                               xMathDoc));
-    }
-
-    private XComponent createNewMathDoc(String frameName){
-        XComponent xMathDoc = null;
-        try{
-            xMathDoc = SOF.createMathDoc(frameName);
-        } catch (com.sun.star.uno.Exception e) {
-            log.println("Exception occurred while creating math document '"+frameName+"':");
-            failed("Couldn't create test environment");
-        }
-        return xMathDoc;
-    }
-
-    private void fillMathDocWithContent(XComponent xMathDoc){
-        // setting a formula in document
-        final String expFormula = "sum a cdot b";
-        final XPropertySet xPS = UnoRuntime.queryInterface
-            (XPropertySet.class, xMathDoc);
-        try {
-            xPS.setPropertyValue("Formula", expFormula);
-        } catch(com.sun.star.lang.WrappedTargetException e) {
-            log.println("Exception occurred while filling math document with content.");
-            failed("Couldn't create test environment");
-        } catch(com.sun.star.lang.IllegalArgumentException e) {
-            log.println("Exception occurred while filling math document with content.");
-            failed("Couldn't create test environment");
-        } catch(com.sun.star.beans.PropertyVetoException e) {
-            log.println("Exception occurred while filling math document with content.");
-            failed("Couldn't create test environment");
-        } catch(com.sun.star.beans.UnknownPropertyException e) {
-            log.println("Exception occurred while filling math document with content.");
-            failed("Couldn't create test environment");
-        }
-    }
-
-    private XComponent createNewImpressDoc(String frameName){
-        XComponent xImpressDoc = null;
-        try{
-            xImpressDoc = SOF.createImpressDoc(frameName);
-        } catch (com.sun.star.uno.Exception e) {
-            log.println("Exception occurred while creating impress document '"+frameName+"':");
-            failed("Couldn't create test environment");
-        }
-        return xImpressDoc;
-    }
-
-
-    private void fillImpressDocWithContent(XComponent xImpressDoc){
-
-        log.println( "get presentation" );
-        XPresentationSupplier oPS = UnoRuntime.queryInterface(XPresentationSupplier.class, xImpressDoc);
-        XInterface oObj = oPS.getPresentation();
-
-        log.println( "get custom presentation" );
-        XCustomPresentationSupplier oCPS = UnoRuntime.queryInterface(
-            XCustomPresentationSupplier.class, xImpressDoc);
-        XNameContainer xCP = oCPS.getCustomPresentations();
-
-        XInterface oInstance = null;
-
-        XSingleServiceFactory oSingleMSF = UnoRuntime.queryInterface(XSingleServiceFactory.class, xCP);
-
-        try{
-            oInstance = (XInterface) oSingleMSF.createInstance();
-        } catch (com.sun.star.uno.Exception e) {
-            log.println("Could not create custom presentation while filling impress document with content.");
-            failed("Couldn't create test environment");
-        }
-
-        try {
-            xCP.insertByName("FirstPresentation",oInstance);
-        } catch (com.sun.star.lang.WrappedTargetException e) {
-            log.println("Could not instert custom presentation while filling impress document with content.");
-            failed("Couldn't create test environment");
-        } catch (com.sun.star.container.ElementExistException e) {
-            log.println("Could not instert custom presentation while filling impress document with content.");
-            failed("Couldn't create test environment");
-        } catch (com.sun.star.lang.IllegalArgumentException e) {
-            log.println("Could not instert custom presentation while filling impress document with content.");
-            failed("Couldn't create test environment");
-        }
-    }
-
-    private XComponent createNewDrawDoc(String frameName){
-        XComponent xDrawDoc = null;
-        try{
-            xDrawDoc = SOF.createDrawDoc(frameName);
-        } catch (com.sun.star.uno.Exception e) {
-            log.println("Exception occurred while creating draw document '"+frameName+"':");
-            failed("Couldn't create test environment");
-        }
-        return xDrawDoc;
-    }
-
-    private void fillDrawDocWithContent(XComponent xDrawDoc){
-        XDrawPagesSupplier oDPS = UnoRuntime.queryInterface(XDrawPagesSupplier.class, xDrawDoc);
-        XDrawPages oDPn = oDPS.getDrawPages();
-        XIndexAccess oDPi = UnoRuntime.queryInterface(XIndexAccess.class, oDPn);
-        XDrawPage oDP = null;
-        try {
-            oDP = (XDrawPage) AnyConverter.toObject(
-                        new Type(XDrawPage.class),oDPi.getByIndex(0));
-        } catch (com.sun.star.lang.WrappedTargetException e) {
-            log.println("Could not get draw pages while filling draw document with content.");
-            failed("Couldn't create test environment");
-        } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
-            log.println("Could not get draw pages while filling draw document with content.");
-            failed("Couldn't create test environment");
-        } catch (com.sun.star.lang.IllegalArgumentException e) {
-            log.println("Could not get draw pages while filling draw document with content.");
-            failed("Couldn't create test environment");
-        }
-
-        //get a Shape
-        log.println( "getting Shape" );
-        XShapes oShapes = UnoRuntime.queryInterface
-            (XShapes.class, oDP);
-        XInterface oObj = SOF.createShape
-            (xDrawDoc, 5000, 3500, 7500, 5000, "Rectangle");
-        for (int i=0; i < 10; i++) {
-            oShapes.add(
-                SOF.createShape(xDrawDoc,
-                    5000, 3500, 7510 + 10 * i, 5010 + 10 * i, "Rectangle"));
-        }
-        XShape oShape = SOF.createShape
-            (xDrawDoc, 3000, 4500, 15000, 1000, "Ellipse");
-        oShapes.add((XShape) oObj);
-        oShapes.add(oShape);
-
-
-        XPropertySet oShapeProps = UnoRuntime.queryInterface(XPropertySet.class, oObj);
-        XStyle aStyle = null;
-        try {
-            aStyle = (XStyle) AnyConverter.toObject(
-                new Type(XStyle.class),oShapeProps.getPropertyValue("Style"));
-            oShapeProps.setPropertyValue("ZOrder", new Integer(1));
-        } catch (com.sun.star.lang.WrappedTargetException e) {
-            log.println("Exception occurred while setting or getting property value while filling draw document with content.");
-            failed("Couldn't create test environment");
-        } catch (com.sun.star.beans.UnknownPropertyException e) {
-            log.println("Exception occurred while setting or getting property value while filling draw document with content.");
-            failed("Couldn't create test environment");
-        } catch (com.sun.star.lang.IllegalArgumentException e) {
-            log.println("Exception occurred while setting or getting property value while filling draw document with content.");
-            failed("Couldn't create test environment");
-        } catch (com.sun.star.beans.PropertyVetoException e) {
-            log.println("Exception occurred while setting or getting property value while filling draw document with content.");
-            failed("Couldn't create test environment");
-        }
     }
 
     private void makeWriterDoc(String frameName, boolean withContent){
@@ -885,69 +632,6 @@ public class RecoveryTest extends ComplexTestCase {
         } catch ( com.sun.star.lang.IllegalArgumentException e ){
             log.println("Exception occurred while filling text document with content.");
             failed("Couldn't create test environment");
-        }
-    }
-
-    private XSpreadsheetDocument createNewCalcDoc(String frameName){
-
-        XSpreadsheetDocument xSheetDoc = null;
-
-        try {
-            xSheetDoc = SOF.createCalcDoc(frameName);
-        } catch (com.sun.star.uno.Exception e) {
-            log.println("Exception occurred while creating calc document '"+frameName+"':");
-            failed("Couldn't create test environment");
-        }
-        return xSheetDoc;
-    }
-
-    private void fillCalcDocWithContent(XSpreadsheetDocument xSpreadsheetDoc){
-
-        try{
-            XSpreadsheets oSpreadsheets = xSpreadsheetDoc.getSheets();
-
-            XSpreadsheet oSheet = (XSpreadsheet) AnyConverter.toObject(
-                             new Type(XSpreadsheet.class),
-                             oSpreadsheets.getByName(
-                                     oSpreadsheets.getElementNames()[0]));
-
-            XCellRange testRange = oSheet.getCellRangeByName("$A$1:$D$4");
-
-            XSheetCellRange testSheetRange = UnoRuntime.queryInterface(
-                                                     XSheetCellRange.class,
-                                                     testRange);
-            oSheet.getCellByPosition(1, 1).setValue(1);
-            oSheet.getCellByPosition(4, 5).setValue(1);
-            oSheet.getCellByPosition(3, 2).setFormula("xTextDoc");
-            oSheet.getCellByPosition(3, 3).setFormula("xTextDoc");
-        } catch (com.sun.star.lang.WrappedTargetException e) {
-            log.println("Exception occurred while filling calc document with content.");
-            failed("Couldn't create test environment");
-        } catch (com.sun.star.container.NoSuchElementException e) {
-            log.println("Exception occurred while filling calc document with content.");
-            failed("Couldn't create test environment");
-        } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
-            log.println("Exception occurred while filling calc document with content.");
-            failed("Couldn't create test environment");
-        } catch (com.sun.star.lang.IllegalArgumentException e) {
-            log.println("Exception occurred while filling calc document with content.");
-            failed("Couldn't create test environment");
-        }
-    }
-
-    /**
-     * copies all files from the backup folder into a folder called backup.recoveryTest
-     * and copies the Recovery.xcu to recovery.xcu.recoeryTest
-     */
-    private void backupRecoveryData()
-    {
-        log.println("backup recovery data...");
-        try{
-            rt.copyRecoveryData(true);
-        }catch (com.sun.star.io.IOException e){
-            failed("could not copy recovery data: " + e.toString());
-        }catch (java.io.IOException e){
-            failed("could not copy recovery data: " + e.toString());
         }
     }
 

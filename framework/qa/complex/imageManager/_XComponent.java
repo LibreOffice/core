@@ -40,7 +40,6 @@ import lib.TestParameters;
 public class _XComponent {
 
     public static XComponent oObj = null;
-    private XNameContainer xContainer = null;
     private XComponent altDispose = null;
     TestParameters tEnv = null;
     boolean listenerDisposed[] = new boolean[2];
