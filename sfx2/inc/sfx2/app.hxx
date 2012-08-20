@@ -136,7 +136,6 @@ class SFX2_DLLPUBLIC SfxApplication: public SfxShell
     void                        Init();
     void                        Exit();
     void                        SettingsChange( sal_uInt16, const AppSettings & );
-    void                        PreInit( );
     void                        Quit();
     void                        Deinitialize();
 
