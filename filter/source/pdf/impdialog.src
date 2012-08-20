@@ -867,6 +867,7 @@ TabPage  RID_PDF_TAB_SIGNING
     {
         Border = TRUE ;
         Pos = MAP_APPFONT ( 102, 35 ) ;
+        PassWord = TRUE;
         Size = MAP_APPFONT ( 68 , 12 ) ;
     };
 
