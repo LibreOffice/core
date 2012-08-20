@@ -8,8 +8,6 @@ import java.net.InetAddress;
 import java.net.SocketException;
 import java.util.HashMap;
 
-import org.libreoffice.impressremote.communication.Server.Protocol;
-
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.content.LocalBroadcastManager;
@@ -77,8 +75,7 @@ public class ServerFinder {
 
             Intent aIntent = new Intent(
                             CommunicationService.MSG_SERVERLIST_CHANGED);
-            LocalBroadcastManager.getInstance(mContext).sendBroadcast(aIntent);
-
+            mContext.sendBroadcast(aIntent);
         } catch (java.net.SocketTimeoutException e) {
             // Ignore -- we want to timeout to enable checking whether we
             // should stop listening periodically
@@ -95,11 +92,6 @@ public class ServerFinder {
 
         mFinishRequested = false;
 
-        // TODO: Remove for production
-        mServerList.put("10.0.2.2",
-                        new Server(Protocol.NETWORK, "10.0.2.2",
-                                        "Android Emulator Localhost", System
-                                                        .currentTimeMillis()));
         Intent aIntent = new Intent(CommunicationService.MSG_SERVERLIST_CHANGED);
         LocalBroadcastManager.getInstance(mContext).sendBroadcast(aIntent);
 

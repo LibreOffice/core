@@ -25,7 +25,6 @@ import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.support.v4.content.LocalBroadcastManager;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.LinearLayout;
@@ -49,8 +48,7 @@ public class SelectorActivity extends Activity {
 
         IntentFilter aFilter = new IntentFilter(
                         CommunicationService.MSG_SERVERLIST_CHANGED);
-        LocalBroadcastManager.getInstance(this).registerReceiver(mListener,
-                        aFilter);
+        registerReceiver(mListener, aFilter);
 
         mBluetoothContainer = findViewById(R.id.selector_container_bluetooth);
         mBluetoothList = (LinearLayout) findViewById(R.id.selector_list_bluetooth);
@@ -64,7 +62,7 @@ public class SelectorActivity extends Activity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(mListener);
+        unregisterReceiver(mListener);
     }
 
     @Override
@@ -168,7 +166,7 @@ public class SelectorActivity extends Activity {
                     aText.setOnClickListener(mClickListener);
                     aText.setText(aServer.getName());
                     aLayout.addView(aView);
-                    aMap.put(aServer, aText);
+                    aMap.put(aServer, aView);
                 }
 
             }
