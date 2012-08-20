@@ -3086,72 +3086,71 @@ void SwXTextTable::setPropertyValue(const OUString& rPropertyName,
                     {
                         break; // something else
                     }
+                    SwDoc* pDoc = pFmt->GetDoc();
+                    SwFrm* pFrm = SwIterator<SwFrm,SwFmt>::FirstElement( *pFmt );
+                    // tables without layout (invisible header/footer?)
+                    if (!pFrm)
                     {
-                        SwDoc* pDoc = pFmt->GetDoc();
-                        SwFrm* pFrm = SwIterator<SwFrm,SwFmt>::FirstElement( *pFmt );
-                        // tables without layout (invisible header/footer?)
-                        if( pFrm )
-                        {
-                            lcl_FormatTable(pFmt);
-                            SwTable* pTable = SwTable::FindTable( pFmt );
-                            SwTableLines &rLines = pTable->GetTabLines();
-
-
-                            // hier muessen die Actions aufgehoben werden
-                            UnoActionRemoveContext aRemoveContext(pDoc);
-                            const SwTableBox* pTLBox = lcl_FindCornerTableBox(rLines, true);
-                            const SwStartNode* pSttNd = pTLBox->GetSttNd();
-                            SwPosition aPos(*pSttNd);
-                            // set cursor to top left cell
-                            SwUnoCrsr* pUnoCrsr = pDoc->CreateUnoCrsr(aPos, sal_True);
-                            pUnoCrsr->Move( fnMoveForward, fnGoNode );
-                            pUnoCrsr->SetRemainInSection( sal_False );
-
-
-
-                            const SwTableBox* pBRBox = lcl_FindCornerTableBox(rLines, false);
-                            pUnoCrsr->SetMark();
-                            pUnoCrsr->GetPoint()->nNode = *pBRBox->GetSttNd();
-                            pUnoCrsr->Move( fnMoveForward, fnGoNode );
-                            SwUnoTableCrsr* pCrsr = dynamic_cast<SwUnoTableCrsr*>(pUnoCrsr);
-                            pCrsr->MakeBoxSels();
-
-                            SfxItemSet aSet(pDoc->GetAttrPool(),
-                                            RES_BOX, RES_BOX,
-                                            SID_ATTR_BORDER_INNER, SID_ATTR_BORDER_INNER,
-                                            0);
-
-                            SvxBoxItem aBox( RES_BOX );
-                            SvxBoxInfoItem aBoxInfo( SID_ATTR_BORDER_INNER );
-
-                            aBox.SetLine(aTopLine.isEmpty() ? 0 : &aTopLine, BOX_LINE_TOP);
-                            aBoxInfo.SetValid(VALID_TOP, aBorder.IsTopLineValid);
-
-                            aBox.SetLine(aBottomLine.isEmpty() ? 0 : &aBottomLine, BOX_LINE_BOTTOM);
-                            aBoxInfo.SetValid(VALID_BOTTOM, aBorder.IsBottomLineValid);
-
-                            aBox.SetLine(aLeftLine.isEmpty() ? 0 : &aLeftLine, BOX_LINE_LEFT);
-                            aBoxInfo.SetValid(VALID_LEFT, aBorder.IsLeftLineValid);
-
-                            aBox.SetLine(aRightLine.isEmpty() ? 0 : &aRightLine, BOX_LINE_RIGHT);
-                            aBoxInfo.SetValid(VALID_RIGHT, aBorder.IsRightLineValid);
-
-                            aBoxInfo.SetLine(aHoriLine.isEmpty() ? 0 : &aHoriLine, BOXINFO_LINE_HORI);
-                            aBoxInfo.SetValid(VALID_HORI, aBorder.IsHorizontalLineValid);
-
-                            aBoxInfo.SetLine(aVertLine.isEmpty() ? 0 : &aVertLine, BOXINFO_LINE_VERT);
-                            aBoxInfo.SetValid(VALID_VERT, aBorder.IsVerticalLineValid);
-
-                            aBox.SetDistance((sal_uInt16)MM100_TO_TWIP(aBorder.Distance));
-                            aBoxInfo.SetValid(VALID_DISTANCE, aBorder.IsDistanceValid);
-
-                            aSet.Put(aBox);
-                            aSet.Put(aBoxInfo);
-
-                            pDoc->SetTabBorders(*pCrsr, aSet);
-                            delete pUnoCrsr;
-                        }
+                        break;
                     }
+                    lcl_FormatTable(pFmt);
+                    SwTable* pTable = SwTable::FindTable( pFmt );
+                    SwTableLines &rLines = pTable->GetTabLines();
+
+
+                    // hier muessen die Actions aufgehoben werden
+                    UnoActionRemoveContext aRemoveContext(pDoc);
+                    const SwTableBox* pTLBox = lcl_FindCornerTableBox(rLines, true);
+                    const SwStartNode* pSttNd = pTLBox->GetSttNd();
+                    SwPosition aPos(*pSttNd);
+                    // set cursor to top left cell
+                    SwUnoCrsr* pUnoCrsr = pDoc->CreateUnoCrsr(aPos, sal_True);
+                    pUnoCrsr->Move( fnMoveForward, fnGoNode );
+                    pUnoCrsr->SetRemainInSection( sal_False );
+
+
+
+                    const SwTableBox* pBRBox = lcl_FindCornerTableBox(rLines, false);
+                    pUnoCrsr->SetMark();
+                    pUnoCrsr->GetPoint()->nNode = *pBRBox->GetSttNd();
+                    pUnoCrsr->Move( fnMoveForward, fnGoNode );
+                    SwUnoTableCrsr* pCrsr = dynamic_cast<SwUnoTableCrsr*>(pUnoCrsr);
+                    pCrsr->MakeBoxSels();
+
+                    SfxItemSet aSet(pDoc->GetAttrPool(),
+                                    RES_BOX, RES_BOX,
+                                    SID_ATTR_BORDER_INNER, SID_ATTR_BORDER_INNER,
+                                    0);
+
+                    SvxBoxItem aBox( RES_BOX );
+                    SvxBoxInfoItem aBoxInfo( SID_ATTR_BORDER_INNER );
+
+                    aBox.SetLine(aTopLine.isEmpty() ? 0 : &aTopLine, BOX_LINE_TOP);
+                    aBoxInfo.SetValid(VALID_TOP, aBorder.IsTopLineValid);
+
+                    aBox.SetLine(aBottomLine.isEmpty() ? 0 : &aBottomLine, BOX_LINE_BOTTOM);
+                    aBoxInfo.SetValid(VALID_BOTTOM, aBorder.IsBottomLineValid);
+
+                    aBox.SetLine(aLeftLine.isEmpty() ? 0 : &aLeftLine, BOX_LINE_LEFT);
+                    aBoxInfo.SetValid(VALID_LEFT, aBorder.IsLeftLineValid);
+
+                    aBox.SetLine(aRightLine.isEmpty() ? 0 : &aRightLine, BOX_LINE_RIGHT);
+                    aBoxInfo.SetValid(VALID_RIGHT, aBorder.IsRightLineValid);
+
+                    aBoxInfo.SetLine(aHoriLine.isEmpty() ? 0 : &aHoriLine, BOXINFO_LINE_HORI);
+                    aBoxInfo.SetValid(VALID_HORI, aBorder.IsHorizontalLineValid);
+
+                    aBoxInfo.SetLine(aVertLine.isEmpty() ? 0 : &aVertLine, BOXINFO_LINE_VERT);
+                    aBoxInfo.SetValid(VALID_VERT, aBorder.IsVerticalLineValid);
+
+                    aBox.SetDistance((sal_uInt16)MM100_TO_TWIP(aBorder.Distance));
+                    aBoxInfo.SetValid(VALID_DISTANCE, aBorder.IsDistanceValid);
+
+                    aSet.Put(aBox);
+                    aSet.Put(aBoxInfo);
+
+                    pDoc->SetTabBorders(*pCrsr, aSet);
+                    delete pUnoCrsr;
                 }
                 break;
                 case FN_UNO_TABLE_BORDER_DISTANCES:
@@ -3278,43 +3277,46 @@ uno::Any SwXTextTable::getPropertyValue(const OUString& rPropertyName) throw( be
                 {
                     SwDoc* pDoc = pFmt->GetDoc();
                     SwFrm* pFrm = SwIterator<SwFrm,SwFmt>::FirstElement( *pFmt );
-                    //Tabellen ohne Layout (unsichtbare Header/Footer )
-                    if( pFrm )
+                    // tables without layout (invisible header/footer?)
+                    if (!pFrm)
                     {
-                        lcl_FormatTable(pFmt);
-                        SwTable* pTable = SwTable::FindTable( pFmt );
-                        SwTableLines &rLines = pTable->GetTabLines();
+                        break;
+                    }
+                    lcl_FormatTable(pFmt);
+                    SwTable* pTable = SwTable::FindTable( pFmt );
+                    SwTableLines &rLines = pTable->GetTabLines();
 
-                        // hier muessen die Actions aufgehoben werden
-                        UnoActionRemoveContext aRemoveContext(pDoc);
-                        const SwTableBox* pTLBox = lcl_FindCornerTableBox(rLines, true);
-                        const SwStartNode* pSttNd = pTLBox->GetSttNd();
-                        SwPosition aPos(*pSttNd);
-                        // Cursor in die obere linke Zelle des Ranges setzen
-                        SwUnoCrsr* pUnoCrsr = pDoc->CreateUnoCrsr(aPos, sal_True);
-                        pUnoCrsr->Move( fnMoveForward, fnGoNode );
-                        pUnoCrsr->SetRemainInSection( sal_False );
+                    // hier muessen die Actions aufgehoben werden
+                    UnoActionRemoveContext aRemoveContext(pDoc);
+                    const SwTableBox* pTLBox = lcl_FindCornerTableBox(rLines, true);
+                    const SwStartNode* pSttNd = pTLBox->GetSttNd();
+                    SwPosition aPos(*pSttNd);
+                    // set cursor to top left cell
+                    SwUnoCrsr* pUnoCrsr = pDoc->CreateUnoCrsr(aPos, sal_True);
+                    pUnoCrsr->Move( fnMoveForward, fnGoNode );
+                    pUnoCrsr->SetRemainInSection( sal_False );
 
-                        const SwTableBox* pBRBox = lcl_FindCornerTableBox(rLines, false);
-                        pUnoCrsr->SetMark();
-                        const SwStartNode* pLastNd = pBRBox->GetSttNd();
-                        pUnoCrsr->GetPoint()->nNode = *pLastNd;
+                    const SwTableBox* pBRBox = lcl_FindCornerTableBox(rLines, false);
+                    pUnoCrsr->SetMark();
+                    const SwStartNode* pLastNd = pBRBox->GetSttNd();
+                    pUnoCrsr->GetPoint()->nNode = *pLastNd;
 
-                        pUnoCrsr->Move( fnMoveForward, fnGoNode );
-                        SwUnoTableCrsr* pCrsr = dynamic_cast<SwUnoTableCrsr*>(pUnoCrsr);
-                        pCrsr->MakeBoxSels();
+                    pUnoCrsr->Move( fnMoveForward, fnGoNode );
+                    SwUnoTableCrsr* pCrsr = dynamic_cast<SwUnoTableCrsr*>(pUnoCrsr);
+                    pCrsr->MakeBoxSels();
 
-                        SfxItemSet aSet(pDoc->GetAttrPool(),
-                                        RES_BOX, RES_BOX,
-                                        SID_ATTR_BORDER_INNER, SID_ATTR_BORDER_INNER,
-                                        0);
-                        aSet.Put(SvxBoxInfoItem( SID_ATTR_BORDER_INNER ));
-                        pDoc->GetTabBorders(*pCrsr, aSet);
-                        const SvxBoxInfoItem& rBoxInfoItem = (const SvxBoxInfoItem&)aSet.Get(SID_ATTR_BORDER_INNER);
-                        const SvxBoxItem& rBox = (const SvxBoxItem&)aSet.Get(RES_BOX);
+                    SfxItemSet aSet(pDoc->GetAttrPool(),
+                                    RES_BOX, RES_BOX,
+                                    SID_ATTR_BORDER_INNER, SID_ATTR_BORDER_INNER,
+                                    0);
+                    aSet.Put(SvxBoxInfoItem( SID_ATTR_BORDER_INNER ));
+                    pDoc->GetTabBorders(*pCrsr, aSet);
+                    const SvxBoxInfoItem& rBoxInfoItem =
+                        (const SvxBoxInfoItem&)aSet.Get(SID_ATTR_BORDER_INNER);
+                    const SvxBoxItem& rBox = (const SvxBoxItem&)aSet.Get(RES_BOX);
 
-                        if (FN_UNO_TABLE_BORDER == pEntry->nWID)
-                        {
+                    if (FN_UNO_TABLE_BORDER == pEntry->nWID)
+                    {
                         table::TableBorder aTableBorder;
                         aTableBorder.TopLine                = SvxBoxItem::SvxLineToLine(rBox.GetTop(), true);
                         aTableBorder.IsTopLineValid         = rBoxInfoItem.IsValid(VALID_TOP);
@@ -3331,9 +3333,9 @@ uno::Any SwXTextTable::getPropertyValue(const OUString& rPropertyName) throw( be
                         aTableBorder.Distance               = TWIP_TO_MM100_UNSIGNED( rBox.GetDistance() );
                         aTableBorder.IsDistanceValid        = rBoxInfoItem.IsValid(VALID_DISTANCE);
                         aRet <<= aTableBorder;
-                        }
-                        else
-                        {
+                    }
+                    else
+                    {
                         table::TableBorder2 aTableBorder;
                         aTableBorder.TopLine                = SvxBoxItem::SvxLineToLine(rBox.GetTop(), true);
                         aTableBorder.IsTopLineValid         = rBoxInfoItem.IsValid(VALID_TOP);
@@ -3350,9 +3352,8 @@ uno::Any SwXTextTable::getPropertyValue(const OUString& rPropertyName) throw( be
                         aTableBorder.Distance               = TWIP_TO_MM100_UNSIGNED( rBox.GetDistance() );
                         aTableBorder.IsDistanceValid        = rBoxInfoItem.IsValid(VALID_DISTANCE);
                         aRet <<= aTableBorder;
-                        }
-                        delete pUnoCrsr;
                     }
+                    delete pUnoCrsr;
                 }
                 break;
                 case FN_UNO_TABLE_BORDER_DISTANCES :
