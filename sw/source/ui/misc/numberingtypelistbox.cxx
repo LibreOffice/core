@@ -58,7 +58,7 @@ SwNumberingTypeListBox::SwNumberingTypeListBox( Window* pWin, const ResId& rResI
     Reload(nTypeFlags);
 }
 
-SwNumberingTypeListBox::SwNumberingTypeListBox( Window* pWin, WinBits nStyle, sal_uInt16 nTypeFlags ) :
+SwNumberingTypeListBox::SwNumberingTypeListBox( Window* pWin, WinBits nStyle ) :
     ListBox(pWin, nStyle),
     pImpl(new SwNumberingTypeListBox_Impl)
 {
@@ -66,7 +66,15 @@ SwNumberingTypeListBox::SwNumberingTypeListBox( Window* pWin, WinBits nStyle, sa
     uno::Reference<text::XDefaultNumberingProvider> xDefNum = text::DefaultNumberingProvider::create(xContext);
 
     pImpl->xInfo = uno::Reference<text::XNumberingTypeInfo>(xDefNum, uno::UNO_QUERY);
-    Reload(nTypeFlags);
+}
+
+bool SwNumberingTypeListBox::set_property(const rtl::OString &rKey, const rtl::OString &rValue)
+{
+    if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("type")))
+        Reload(rValue.toInt32());
+    else
+        return ListBox::set_property(rKey, rValue);
+    return true;
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSwNumberingTypeListBox(Window *pParent)
