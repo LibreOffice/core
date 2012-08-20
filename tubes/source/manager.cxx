@@ -792,54 +792,45 @@ static void presence_changed_cb( TpContact* /* contact */,
 
 AccountContactPairV TeleManager::getContacts()
 {
-  GList *accounts;
-  AccountContactPairV pairs;
+    AccountContactPairV pairs;
 
-  for (accounts = tp_account_manager_get_valid_accounts (pImpl->mpAccountManager);
-       accounts != NULL;
-       accounts = g_list_delete_link (accounts, accounts))
+    for (GList *accounts = tp_account_manager_get_valid_accounts (pImpl->mpAccountManager);
+            accounts != NULL; accounts = g_list_delete_link (accounts, accounts))
     {
-      TpAccount *account = reinterpret_cast<TpAccount *>(accounts->data);
-      TpConnection *connection = tp_account_get_connection (account);
-      TpContact *self;
-      GPtrArray *contacts;
-      guint i;
+        TpAccount *account = reinterpret_cast<TpAccount *>(accounts->data);
+        TpConnection *connection = tp_account_get_connection (account);
 
-      /* Verify account is online and received its contact list. If state is not
-       * SUCCESS this means we didn't received the roster from server yet and
-       * we would have to wait for the "notify:contact-list-state" signal. */
-      if (connection == NULL ||
-          tp_connection_get_contact_list_state (connection) !=
-              TP_CONTACT_LIST_STATE_SUCCESS)
-        continue;
+        /* Verify account is online and received its contact list. If state is not
+         * SUCCESS this means we didn't received the roster from server yet and
+         * we would have to wait for the "notify:contact-list-state" signal. */
+        if (connection == NULL || tp_connection_get_contact_list_state (connection) !=
+                TP_CONTACT_LIST_STATE_SUCCESS)
+            continue;
 
-      self = tp_connection_get_self_contact (connection);
-      contacts = tp_connection_dup_contact_list (connection);
-      for (i = 0; i < contacts->len; i++)
+        TpContact *self = tp_connection_get_self_contact (connection);
+        GPtrArray *contacts = tp_connection_dup_contact_list (connection);
+        for (guint i = 0; i < contacts->len; i++)
         {
-          TpContact *contact =
-              reinterpret_cast<TpContact *>(g_ptr_array_index (contacts, i));
-          if (pImpl->maRegisteredContacts.find (contact) == pImpl->maRegisteredContacts.end())
-          {
-              pImpl->maRegisteredContacts.insert (contact);
-              g_signal_connect (contact, "presence-changed",
-                      G_CALLBACK (presence_changed_cb), NULL );
-          }
-
-          if (contact != self &&
-              tb_contact_is_online (contact))
+            TpContact *contact = reinterpret_cast<TpContact *>(g_ptr_array_index (contacts, i));
+            if (pImpl->maRegisteredContacts.find (contact) == pImpl->maRegisteredContacts.end())
             {
-              g_object_ref (account);
-              g_object_ref (contact);
+                pImpl->maRegisteredContacts.insert (contact);
+                g_signal_connect (contact, "presence-changed",
+                        G_CALLBACK (presence_changed_cb), NULL );
+            }
+            if (contact != self && tb_contact_is_online (contact))
+            {
+                g_object_ref (account);
+                g_object_ref (contact);
 
-              AccountContactPair pair(account, contact);
-              pairs.push_back(pair);
+                AccountContactPair pair(account, contact);
+                pairs.push_back(pair);
             }
         }
-      g_ptr_array_unref (contacts);
+        g_ptr_array_unref (contacts);
     }
 
-  return pairs;
+    return pairs;
 }
 
 rtl::OString TeleManager::getFullClientName()
