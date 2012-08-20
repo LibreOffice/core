@@ -413,12 +413,6 @@ sub install_simple ($$$$$$)
 {
     my ($packagename, $languagestring, $directoriesarray, $filesarray, $linksarray, $unixlinksarray) = @_;
 
-        # locate GNU cp on the system
-        my $gnucp = 'cp';
-        if ( $ENV{'GNUCOPY'} ) { $gnucp = $ENV{'GNUCOPY'}; }
-    my $copyopts = '-af';
-    $copyopts = '-PpRf' unless ( $ENV{'GNUCOPY'} ); # if not gnucopy, assume POSIX copy
-
     installer::logger::print_message( "... installing module $packagename ...\n" );
 
     my $destdir = $installer::globals::destdir;
