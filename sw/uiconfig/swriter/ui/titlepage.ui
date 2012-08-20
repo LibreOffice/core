@@ -97,6 +97,7 @@
                           <object class="GtkLabel" id="label6">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="halign">start</property>
                             <property name="xalign">0</property>
                             <property name="label" translatable="yes">Number of title pages</property>
                           </object>
@@ -125,6 +126,7 @@
                           <object class="GtkLabel" id="label8">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="halign">start</property>
                             <property name="xalign">0</property>
                             <property name="label" translatable="yes">pages</property>
                           </object>
@@ -139,6 +141,7 @@
                           <object class="GtkSpinButton" id="NF_PAGE_COUNT">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <property name="halign">start</property>
                             <property name="invisible_char">●</property>
                             <property name="adjustment">adjustment1</property>
                             <property name="numeric">True</property>
@@ -155,6 +158,7 @@
                             <property name="visible">True</property>
                             <property name="sensitive">False</property>
                             <property name="can_focus">True</property>
+                            <property name="halign">start</property>
                             <property name="invisible_char">●</property>
                             <property name="progress_fraction">0.040000000000000001</property>
                             <property name="progress_pulse_step">1</property>
@@ -176,6 +180,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
+                            <property name="halign">start</property>
                             <property name="use_action_appearance">False</property>
                             <property name="xalign">0</property>
                             <property name="active">True</property>
@@ -196,6 +201,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
+                            <property name="halign">start</property>
                             <property name="use_action_appearance">False</property>
                             <property name="xalign">0</property>
                             <property name="active">True</property>
