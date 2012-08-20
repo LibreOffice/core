@@ -85,6 +85,6 @@ showdeliverables :
 	$(eval MAKEFLAGS := s)
 	$(foreach deliverable,$(sort $(foreach list,$(gb_Deliver_DELIVERABLES_INDEX),$(gb_Deliver_DELIVERABLES_$(list)))),\
 			$(call gb_Deliver_print_deliverable,$(firstword $(subst :, ,$(deliverable))),$(lastword $(subst :, ,$(deliverable)))))
-	true
+	@true
 
 # vim: set noet sw=4:
