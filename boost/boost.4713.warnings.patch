@@ -906,7 +906,7 @@
              if( !allow_null )
              {
                  BOOST_PTR_CONTAINER_THROW_EXCEPTION( 0 == x && "null not allowed", 
---- misc/boost_1_44_0/boost/pool/object_pool.hpp.orig	2011-07-14 16:08:31.672964851 +0100
+--- misc/boost_1_44_0/boost/pool/object_pool.hpp	2011-07-14 16:08:31.672964851 +0100
 +++ misc/build/boost_1_44_0/boost/pool/object_pool.hpp	2011-07-14 16:09:20.851594534 +0100
 @@ -53,8 +53,8 @@
  
@@ -957,3 +957,120 @@
      typedef boost::date_time::all_date_names_put<greg_facet_config, wchar_t> facet_def;
      return std::locale(loc, new facet_def(w_short_month_names,
                                            w_long_month_names,
+--- misc/boost_1_44_0/boost/date_time/time_facet.hpp	2012-08-20 09:12:51.552094137 +0100
++++ misc/build/boost_1_44_0/boost/date_time/time_facet.hpp	2012-08-20 09:10:07.884255317 +0100
+@@ -439,31 +439,31 @@
+                               a_time_dur.get_rep().as_special());
+       }
+ 
+-      string_type format(m_time_duration_format);
++      string_type lcl_format(m_time_duration_format);
+       if (a_time_dur.is_negative()) {
+         // replace %- with minus sign.  Should we use the numpunct facet?
+-        boost::algorithm::replace_all(format,
++        boost::algorithm::replace_all(lcl_format,
+                                       duration_sign_negative_only,
+                                       negative_sign);
+           // remove all the %+ in the string with '-'
+-        boost::algorithm::replace_all(format,
++        boost::algorithm::replace_all(lcl_format,
+                                       duration_sign_always,
+                                       negative_sign);
+       }
+       else { //duration is positive
+         // remove all the %- combos from the string
+-        boost::algorithm::erase_all(format, duration_sign_negative_only);
++        boost::algorithm::erase_all(lcl_format, duration_sign_negative_only);
+         // remove all the %+ in the string with '+'
+-        boost::algorithm::replace_all(format,
++        boost::algorithm::replace_all(lcl_format,
+                                       duration_sign_always,
+                                       positive_sign);
+       }
+ 
+       // %T and %R have to be replaced here since they are not standard
+-      boost::algorithm::replace_all(format,
++      boost::algorithm::replace_all(lcl_format,
+         boost::as_literal(formats_type::full_24_hour_time_format),
+         boost::as_literal(formats_type::full_24_hour_time_expanded_format));
+-      boost::algorithm::replace_all(format,
++      boost::algorithm::replace_all(lcl_format,
+         boost::as_literal(formats_type::short_24_hour_time_format),
+         boost::as_literal(formats_type::short_24_hour_time_expanded_format));
+ 
+@@ -476,22 +476,22 @@
+        * here ourself.
+        */
+       string_type hours_str;
+-      if (format.find(unrestricted_hours_format) != string_type::npos) {
++      if (lcl_format.find(unrestricted_hours_format) != string_type::npos) {
+         hours_str = hours_as_string(a_time_dur);
+-        boost::algorithm::replace_all(format, unrestricted_hours_format, hours_str);
++        boost::algorithm::replace_all(lcl_format, unrestricted_hours_format, hours_str);
+       }
+       // We still have to process restricted hours format specifier. In order to
+       // support parseability of durations in ISO format (%H%M%S), we'll have to
+       // restrict the stringified hours length to 2 characters.
+-      if (format.find(hours_format) != string_type::npos) {
++      if (lcl_format.find(hours_format) != string_type::npos) {
+         if (hours_str.empty())
+           hours_str = hours_as_string(a_time_dur);
+         BOOST_ASSERT(hours_str.length() <= 2);
+-        boost::algorithm::replace_all(format, hours_format, hours_str);
++        boost::algorithm::replace_all(lcl_format, hours_format, hours_str);
+       }
+ 
+       string_type frac_str;
+-      if (format.find(seconds_with_fractional_seconds_format) != string_type::npos) {
++      if (lcl_format.find(seconds_with_fractional_seconds_format) != string_type::npos) {
+         // replace %s with %S.nnn
+         frac_str =
+           fractional_seconds_as_string(a_time_dur, false);
+@@ -500,21 +500,21 @@
+         string_type replace_string(seconds_format);
+         replace_string += sep;
+         replace_string += frac_str;
+-        boost::algorithm::replace_all(format,
++        boost::algorithm::replace_all(lcl_format,
+                                       seconds_with_fractional_seconds_format,
+                                       replace_string);
+       }
+-      if (format.find(fractional_seconds_format) != string_type::npos) {
++      if (lcl_format.find(fractional_seconds_format) != string_type::npos) {
+         // replace %f with nnnnnnn
+         if (!frac_str.size()) {
+           frac_str = fractional_seconds_as_string(a_time_dur, false);
+         }
+-        boost::algorithm::replace_all(format,
++        boost::algorithm::replace_all(lcl_format,
+                                       fractional_seconds_format,
+                                       frac_str);
+       }
+ 
+-      if (format.find(fractional_seconds_or_none_format) != string_type::npos) {
++      if (lcl_format.find(fractional_seconds_or_none_format) != string_type::npos) {
+         // replace %F with nnnnnnn or nothing if fs == 0
+         frac_str =
+           fractional_seconds_as_string(a_time_dur, true);
+@@ -523,18 +523,18 @@
+           string_type replace_string;
+           replace_string += sep;
+           replace_string += frac_str;
+-          boost::algorithm::replace_all(format,
++          boost::algorithm::replace_all(lcl_format,
+                                         fractional_seconds_or_none_format,
+                                         replace_string);
+         }
+         else {
+-          boost::algorithm::erase_all(format,
++          boost::algorithm::erase_all(lcl_format,
+                                       fractional_seconds_or_none_format);
+         }
+       }
+ 
+       return this->do_put_tm(a_next, a_ios, a_fill,
+-                       to_tm(a_time_dur), format);
++                       to_tm(a_time_dur), lcl_format);
+     }
+ 
+     OutItrT put(OutItrT next, std::ios_base& a_ios,
