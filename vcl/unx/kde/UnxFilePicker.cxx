@@ -81,7 +81,11 @@ namespace
         uno::Sequence<rtl::OUString> aRet(3);
         aRet[0] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ui.dialogs.FilePicker"));
         aRet[1] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ui.dialogs.SystemFilePicker"));
+#ifdef ENABLE_TDE
+        aRet[2] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ui.dialogs.TDEFilePicker"));
+#else // ENABLE_TDE
         aRet[2] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ui.dialogs.KDEFilePicker"));
+#endif // ENABLE_TDE
         return aRet;
     }
 }
@@ -717,7 +721,11 @@ void UnxFilePicker::initFilePicker()
 #endif
 
         // The executable name
+#ifdef ENABLE_TDE
+        rtl::OUString helperurl( RTL_CONSTASCII_USTRINGPARAM("${ORIGIN}/tdefilepicker"));
+#else // ENABLE_TDE
         rtl::OUString helperurl( RTL_CONSTASCII_USTRINGPARAM("${ORIGIN}/kdefilepicker"));
+#endif // ENABLE_TDE
         rtl::Bootstrap::expandMacros( helperurl );
         rtl::OUString helperpath;
         osl::FileBase::getSystemPathFromFileURL( helperurl, helperpath );

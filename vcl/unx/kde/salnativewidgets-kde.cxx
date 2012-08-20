@@ -41,6 +41,48 @@
 #include <vcl/vclenum.hxx>
 #include <rtl/ustrbuf.hxx>
 
+#ifdef ENABLE_TDE
+#define QPushButton_String      "TQPushButton"
+#define QRadioButton_String     "TQRadioButton"
+#define QCheckBox_String        "TQCheckBox"
+#define QComboBox_String        "TQComboBox"
+#define QLineEdit_String        "TQLineEdit"
+#define QSpinWidget_String      "TQSpinWidget"
+#define QTabBar_String          "TQTabBar"
+#define QTabWidget_String       "TQTabWidget"
+#define QListView_String        "TQListView"
+#define QScrollBar_String       "TQScrollBar"
+#define QMotifPlusStyle_String  "TQMotifPlusStyle"
+#define QSGIStyle_String        "TQSGIStyle"
+#define QToolBar_String         "TQToolBar"
+#define QToolButton_String      "TQToolButton"
+#define QMenuBar_String         "TQMenuBar"
+#define QPopupMenu_String       "TQPopupMenu"
+#define QProgressBar_String     "TQProgressBar"
+#define QMotifStyle_String      "TQMotifStyle"
+#define QWindowsStyle_String    "TQWindowsStyle"
+#else // ENABLE_TDE
+#define QPushButton_String      "QPushButton"
+#define QRadioButton_String     "QRadioButton"
+#define QCheckBox_String        "QCheckBox"
+#define QComboBox_String        "QComboBox"
+#define QLineEdit_String        "QLineEdit"
+#define QSpinWidget_String      "QSpinWidget"
+#define QTabBar_String          "QTabBar"
+#define QTabWidget_String       "QTabWidget"
+#define QListView_String        "QListView"
+#define QScrollBar_String       "QScrollBar"
+#define QMotifPlusStyle_String  "QMotifPlusStyle"
+#define QSGIStyle_String        "QSGIStyle"
+#define QToolBar_String         "QToolBar"
+#define QToolButton_String      "QToolButton"
+#define QMenuBar_String         "QMenuBar"
+#define QPopupMenu_String       "QPopupMenu"
+#define QProgressBar_String     "QProgressBar"
+#define QMotifStyle_String      "QMotifStyle"
+#define QWindowsStyle_String    "QWindowsStyle"
+#endif // ENABLE_TDE
+
 using namespace ::com::sun::star;
 using namespace ::rtl;
 
@@ -458,11 +500,11 @@ sal_Bool WidgetPainter::drawStyledWidget( QWidget *pWidget,
     const char *pClassName = pWidget->className();
 
     // Draw the widget to the pixmap
-    if ( strcmp( "QPushButton", pClassName ) == 0 )
+    if ( strcmp( QPushButton_String, pClassName ) == 0 )
     {
     // Workaround for the Platinum style.
     // Platinum takes the state directly from the widget, not from SFlags.
-    QPushButton *pPushButton = static_cast<QPushButton *>( pWidget->qt_cast( "QPushButton" ) );
+    QPushButton *pPushButton = static_cast<QPushButton *>( pWidget->qt_cast( QPushButton_String ) );
     if ( pPushButton )
     {
         pPushButton->setDown   ( nStyle & QStyle::Style_Down );
@@ -474,7 +516,7 @@ sal_Bool WidgetPainter::drawStyledWidget( QWidget *pWidget,
         &qPainter, pWidget, qRect,
         pWidget->colorGroup(), nStyle );
     }
-    else if ( strcmp( "QRadioButton", pClassName ) == 0 )
+    else if ( strcmp( QRadioButton_String, pClassName ) == 0 )
     {
     // Bitblt from the screen, because the radio buttons are usually not
     // rectangular, and there could be a bitmap under them
@@ -492,20 +534,20 @@ sal_Bool WidgetPainter::drawStyledWidget( QWidget *pWidget,
         &qPainter, pWidget, qRect,
         pWidget->colorGroup(), nStyle );
     }
-    else if ( strcmp( "QCheckBox", pClassName ) == 0 )
+    else if ( strcmp( QCheckBox_String, pClassName ) == 0 )
     {
     kapp->style().drawControl( QStyle::CE_CheckBox,
         &qPainter, pWidget, qRect,
         pWidget->colorGroup(), nStyle );
     }
-    else if ( strcmp( "QComboBox", pClassName ) == 0 )
+    else if ( strcmp( QComboBox_String, pClassName ) == 0 )
     {
     kapp->style().drawComplexControl( QStyle::CC_ComboBox,
         &qPainter, pWidget, qRect,
         pWidget->colorGroup(), nStyle );
 
     // Editable combo box uses the background of the associated edit box
-    QComboBox *pComboBox = static_cast<QComboBox *>( pWidget->qt_cast( "QComboBox" ) );
+    QComboBox *pComboBox = static_cast<QComboBox *>( pWidget->qt_cast( QComboBox_String ) );
     if ( pComboBox && pComboBox->editable() && pComboBox->lineEdit() )
     {
         QColorGroup::ColorRole eColorRole = ( pComboBox->isEnabled() )?
@@ -516,13 +558,13 @@ sal_Bool WidgetPainter::drawStyledWidget( QWidget *pWidget,
             pComboBox->lineEdit()->colorGroup().brush( eColorRole ) );
     }
     }
-    else if ( strcmp( "QLineEdit", pClassName ) == 0 )
+    else if ( strcmp( QLineEdit_String, pClassName ) == 0 )
     {
     kapp->style().drawPrimitive( QStyle::PE_PanelLineEdit,
         &qPainter, qRect,
         pWidget->colorGroup(), nStyle | QStyle::Style_Sunken );
     }
-    else if ( strcmp( "QSpinWidget", pClassName ) == 0 )
+    else if ( strcmp( QSpinWidget_String, pClassName ) == 0 )
     {
     const SpinbuttonValue *pValue = static_cast<const SpinbuttonValue *> ( &aValue );
 
@@ -553,7 +595,7 @@ sal_Bool WidgetPainter::drawStyledWidget( QWidget *pWidget,
     }
 
     // Spin widget uses the background of the associated edit box
-    QSpinWidget *pSpinWidget = static_cast<QSpinWidget *>( pWidget->qt_cast( "QSpinWidget" ) );
+    QSpinWidget *pSpinWidget = static_cast<QSpinWidget *>( pWidget->qt_cast( QSpinWidget_String ) );
     if ( pSpinWidget && pSpinWidget->editWidget() )
     {
         QColorGroup::ColorRole eColorRole = ( pSpinWidget->isEnabled() )?
@@ -573,7 +615,7 @@ sal_Bool WidgetPainter::drawStyledWidget( QWidget *pWidget,
         pWidget->colorGroup(), nStyle,
         QStyle::SC_All, eActive );
     }
-    else if ( strcmp( "QTabBar", pClassName ) == 0 )
+    else if ( strcmp( QTabBar_String, pClassName ) == 0 )
     {
     const TabitemValue *pValue = static_cast<const TabitemValue *> ( &aValue );
 
@@ -599,19 +641,19 @@ sal_Bool WidgetPainter::drawStyledWidget( QWidget *pWidget,
         pWidget->colorGroup(), nStyle,
         QStyleOption( pTab ) );
     }
-    else if ( strcmp( "QTabWidget", pClassName ) == 0 )
+    else if ( strcmp( QTabWidget_String, pClassName ) == 0 )
     {
     kapp->style().drawPrimitive( QStyle::PE_PanelTabWidget,
         &qPainter, qRect,
         pWidget->colorGroup(), nStyle );
     }
-    else if ( strcmp( "QListView", pClassName ) == 0 )
+    else if ( strcmp( QListView_String, pClassName ) == 0 )
     {
     kapp->style().drawPrimitive( QStyle::PE_Panel,
         &qPainter, qRect,
         pWidget->colorGroup(), nStyle | QStyle::Style_Sunken );
     }
-    else if ( strcmp( "QScrollBar", pClassName ) == 0 )
+    else if ( strcmp( QScrollBar_String, pClassName ) == 0 )
     {
     const ScrollbarValue *pValue = static_cast<const ScrollbarValue *> ( &aValue );
 
@@ -621,13 +663,13 @@ sal_Bool WidgetPainter::drawStyledWidget( QWidget *pWidget,
         // Workaround for Style_MouseOver-aware themes.
         // Quite ugly, but I do not know about a better solution.
         const char *pStyleName = kapp->style().className();
-        if ( strcmp( "QMotifPlusStyle", pStyleName ) == 0 )
+        if ( strcmp( QMotifPlusStyle_String, pStyleName ) == 0 )
         {
         nStyle |= QStyle::Style_MouseOver;
         if ( pValue->mnThumbState & CTRL_STATE_ROLLOVER )
             eActive = QStyle::SC_ScrollBarSlider;
         }
-        else if ( strcmp( "QSGIStyle", pStyleName ) == 0 )
+        else if ( strcmp( QSGIStyle_String, pStyleName ) == 0 )
         {
         nStyle |= QStyle::Style_MouseOver;
         if ( pValue->mnButton1State & CTRL_STATE_ROLLOVER )
@@ -665,7 +707,7 @@ sal_Bool WidgetPainter::drawStyledWidget( QWidget *pWidget,
     }
 
     // Is it a horizontal scroll bar?
-    QScrollBar *pScrollBar = static_cast<QScrollBar *> ( pWidget->qt_cast( "QScrollBar" ) );
+    QScrollBar *pScrollBar = static_cast<QScrollBar *> ( pWidget->qt_cast( QScrollBar_String ) );
     QStyle::StyleFlags eHoriz = QStyle::Style_Default;
     if ( pScrollBar && pScrollBar->orientation() == Qt::Horizontal )
         eHoriz = QStyle::Style_Horizontal;
@@ -675,9 +717,9 @@ sal_Bool WidgetPainter::drawStyledWidget( QWidget *pWidget,
         pWidget->colorGroup(), nStyle | eHoriz,
         QStyle::SC_All, eActive );
     }
-    else if ( strcmp( "QToolBar", pClassName ) == 0 )
+    else if ( strcmp( QToolBar_String, pClassName ) == 0 )
     {
-        QToolBar *pToolBar = static_cast< QToolBar * >( pWidget->qt_cast( "QToolBar" ) );
+        QToolBar *pToolBar = static_cast< QToolBar * >( pWidget->qt_cast( QToolBar_String ) );
         bool bIsHorizontal = false;
         if ( pToolBar && pToolBar->orientation() == Qt::Horizontal )
         {
@@ -720,7 +762,7 @@ sal_Bool WidgetPainter::drawStyledWidget( QWidget *pWidget,
                         &qPainter, qThumbRect, pWidget->colorGroup(), nStyle );
         }
     }
-    else if ( strcmp( "QToolButton", pClassName ) == 0 )
+    else if ( strcmp( QToolButton_String, pClassName ) == 0 )
     {
         if( (nStyle & QStyle::Style_MouseOver) )
             nStyle &= ~QStyle::Style_Off;
@@ -729,7 +771,7 @@ sal_Bool WidgetPainter::drawStyledWidget( QWidget *pWidget,
                 pWidget->colorGroup(), nStyle,
                 QStyle::SC_ToolButton );
     }
-    else if ( strcmp( "QMenuBar", pClassName ) == 0 )
+    else if ( strcmp( QMenuBar_String, pClassName ) == 0 )
     {
         if ( nPart == PART_ENTIRE_CONTROL )
         {
@@ -751,7 +793,7 @@ sal_Bool WidgetPainter::drawStyledWidget( QWidget *pWidget,
                     QStyleOption( pMenuItem ) );
         }
     }
-    else if ( strcmp( "QPopupMenu", pClassName ) == 0 )
+    else if ( strcmp( QPopupMenu_String, pClassName ) == 0 )
     {
         int nMenuItem = ( nStyle & QStyle::Style_Enabled )? m_nPopupMenuEnabledItem: m_nPopupMenuDisabledItem;
         QMenuItem *pMenuItem = static_cast<QPopupMenu*>( pWidget )->findItem( nMenuItem );
@@ -764,7 +806,7 @@ sal_Bool WidgetPainter::drawStyledWidget( QWidget *pWidget,
                 pWidget->colorGroup(), nStyle,
                 QStyleOption( pMenuItem, 0, 0 ) );
     }
-    else if ( strcmp( "QProgressBar", pClassName ) == 0 )
+    else if ( strcmp( QProgressBar_String, pClassName ) == 0 )
     {
         long nProgressWidth = aValue.getNumericVal();
         QProgressBar* pProgress = static_cast<QProgressBar*>(pWidget);
@@ -1940,8 +1982,8 @@ void KDESalFrame::UpdateSettings( AllSettings& rSettings )
         Color aMenuBack = toColor( qMenuCG.background() );
         if ( kapp->style().inherits( "LightStyleV2" ) ||
              kapp->style().inherits( "LightStyleV3" ) ||
-             ( kapp->style().inherits( "QMotifStyle" ) && !kapp->style().inherits( "QSGIStyle" ) ) ||
-             kapp->style().inherits( "QWindowsStyle" ) )
+             ( kapp->style().inherits( QMotifStyle_String ) && !kapp->style().inherits( QSGIStyle_String ) ) ||
+             kapp->style().inherits( QWindowsStyle_String ) )
         {
             aMenuFore = toColor( qMenuCG.buttonText() );
             aMenuBack = toColor( qMenuCG.button() );
@@ -1957,7 +1999,7 @@ void KDESalFrame::UpdateSettings( AllSettings& rSettings )
         // Menu items higlight text color, theme specific
         if ( kapp->style().inherits( "HighContrastStyle" ) ||
              kapp->style().inherits( "KeramikStyle" ) ||
-             kapp->style().inherits( "QWindowsStyle" ) ||
+             kapp->style().inherits( QWindowsStyle_String ) ||
              kapp->style().inherits( "ThinKeramikStyle" ) ||
              kapp->style().inherits( "PlastikStyle" ) )
         {

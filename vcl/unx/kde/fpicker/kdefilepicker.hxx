@@ -114,7 +114,11 @@ protected:
     bool                        canNotifySelection( void ) const { return m_bCanNotifySelection; }
 
 protected slots:
+#ifdef ENABLE_TDE
+    void                        fileHighlightedCommand( const TQString & );
+#else // ENABLE_TDE
     void                        fileHighlightedCommand( const QString & );
+#endif // ENABLE_TDE
     void                        selectionChangedCommand();
 
 protected:

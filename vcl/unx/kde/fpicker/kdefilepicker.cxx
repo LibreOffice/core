@@ -85,6 +85,14 @@
 
 #endif // ENABLE_TDE
 
+#ifdef ENABLE_TDE
+#define QCheckBox_String    "TQCheckBox"
+#define QComboBox_String    "TQComboBox"
+#else // ENABLE_TDE
+#define QCheckBox_String    "QCheckBox"
+#define QComboBox_String    "QComboBox"
+#endif // ENABLE_TDE
+
 #include <algorithm>
 #include <iostream>
 
@@ -104,8 +112,13 @@ KDEFileDialog::KDEFileDialog( const QString &startDir, const QString &filter,
       m_bIsExecuting( false ),
       m_bCanNotifySelection( true )
 {
+#ifdef ENABLE_TDE
+    connect( this, SIGNAL( fileHighlighted( const TQString & ) ),
+             this, SLOT( fileHighlightedCommand( const TQString & ) ) );
+#else // ENABLE_TDE
     connect( this, SIGNAL( fileHighlighted( const QString & ) ),
              this, SLOT( fileHighlightedCommand( const QString & ) ) );
+#endif // ENABLE_TDE
 
     connect( this, SIGNAL( selectionChanged() ),
              this, SLOT( selectionChangedCommand() ) );
@@ -434,7 +447,7 @@ void KDEFileDialog::getValue( const QString &rId, const QString &rAction )
     if ( pWidget )
     {
         QCString qClassName = pWidget->className();
-        if ( qClassName == "QCheckBox" )
+        if ( qClassName == QCheckBox_String )
         {
             QCheckBox *pCheckBox = static_cast< QCheckBox* >( pWidget );
 
@@ -443,7 +456,7 @@ void KDEFileDialog::getValue( const QString &rId, const QString &rAction )
             else
                 qString.append( " bool false" );
         }
-        else if ( qClassName == "QComboBox" )
+        else if ( qClassName == QComboBox_String )
         {
             QComboBox *pComboBox = static_cast< QComboBox* >( pWidget );
             if ( rAction == "getItems" )
@@ -480,14 +493,14 @@ void KDEFileDialog::setValue( const QString &rId, const QString &rAction, const 
     if ( pWidget )
     {
         QCString qClassName = pWidget->className();
-        if ( qClassName == "QCheckBox" )
+        if ( qClassName == QCheckBox_String )
         {
             QCheckBox *pCheckBox = static_cast< QCheckBox* >( pWidget );
 
             bool bValue = ( !rValue.isEmpty() ) && ( rValue.front().lower() == "true" );
             pCheckBox->setChecked( bValue );
         }
-        else if ( qClassName == "QComboBox" )
+        else if ( qClassName == QComboBox_String )
         {
             QComboBox *pComboBox = static_cast< QComboBox* >( pWidget );
             if ( rAction == "addItem" )
@@ -562,7 +575,7 @@ QString KDEFileDialog::addExtension( const QString &rFileName ) const
     QString qExtension;
 
     QWidget *pExtensionWidget = findControl( "100" ); // CHECKBOX_AUTOEXTENSION
-    QCheckBox *pExtensionCB = pExtensionWidget? static_cast< QCheckBox* >( pExtensionWidget->qt_cast( "QCheckBox" ) ): NULL;
+    QCheckBox *pExtensionCB = pExtensionWidget? static_cast< QCheckBox* >( pExtensionWidget->qt_cast( QCheckBox_String ) ): NULL;
     if ( pExtensionCB && pExtensionCB->isChecked() )
     {
         // FIXME: qFilter can be a MIME; we ignore it now...
@@ -660,7 +673,11 @@ QString KDEFileDialog::localCopy( const QString &rFileName ) const
     return qDestURL.url();
 }
 
+#ifdef ENABLE_TDE
+void KDEFileDialog::fileHighlightedCommand( const TQString & )
+#else // ENABLE_TDE
 void KDEFileDialog::fileHighlightedCommand( const QString & )
+#endif // ENABLE_TDE
 {
     if ( canNotifySelection() )
     {
