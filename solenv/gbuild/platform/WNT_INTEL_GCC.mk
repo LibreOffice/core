@@ -464,6 +464,10 @@ gb_InstallScript_EXT := .inf
 
 gb_ExtensionTarget_LICENSEFILE_DEFAULT := $(OUTDIR)/bin/osl/license.txt
 
+# UnpackedTarget class
+
+gb_UnpackedTarget_TARFILE_LOCATION := $(TARFILE_LOCATION)
+
 # Python
 gb_PYTHON_PRECOMMAND := PATH="$${PATH}:$(OUTDIR_FOR_BUILD)/bin" PYTHONHOME="$(OUTDIR_FOR_BUILD)/lib/python" PYTHONPATH="$(OUTDIR_FOR_BUILD)/lib/python;$(OUTDIR_FOR_BUILD)/lib/python/lib-dynload"
 

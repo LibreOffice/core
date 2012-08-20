@@ -323,6 +323,10 @@ gb_InstallScript_EXT := .ins
 
 gb_ExtensionTarget_LICENSEFILE_DEFAULT := $(OUTDIR)/bin/osl/LICENSE
 
+# UnpackedTarget class
+
+gb_UnpackedTarget_TARFILE_LOCATION := $(TARFILE_LOCATION)
+
 # Python
 gb_PYTHON_PRECOMMAND := DYLD_LIBRARY_PATH=$(OUTDIR_FOR_BUILD)/lib
 

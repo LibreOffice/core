@@ -1094,6 +1094,12 @@ define gb_LinkTarget_use_packages
 $(foreach package,$(2),$(call gb_LinkTarget_use_package,$(1),$(package)))
 endef
 
+# Use sources from unpacked tarball of an external project
+define gb_LinkTarget_use_unpacked
+$(call gb_LinkTarget_get_external_headers_target,$(1)) :| $(call gb_UnpackedTarball_get_target,$(2))
+
+endef
+
 # this forwards to functions that must be defined in RepositoryExternal.mk.
 # $(eval $(call gb_LinkTarget_use_external,library,external))
 define gb_LinkTarget_use_external

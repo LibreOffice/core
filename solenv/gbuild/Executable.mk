@@ -127,6 +127,7 @@ $(eval $(foreach method,\
 	add_package_headers \
 	use_package \
 	use_packages \
+	use_unpacked \
 	add_sdi_headers \
 	add_nativeres \
 	set_warnings_not_errors \

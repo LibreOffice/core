@@ -153,6 +153,10 @@ gb_UnoApiHeadersTarget_get_bootstrap_target = $(WORKDIR)/UnoApiHeadersTarget/$(1
 gb_UnoApiHeadersTarget_get_comprehensive_target = $(WORKDIR)/UnoApiHeadersTarget/$(1)/comprehensive.done
 gb_UnoApiHeadersTarget_get_target = $(WORKDIR)/UnoApiHeadersTarget/$(1)/normal.done
 gb_UnoApiPartTarget_get_target = $(WORKDIR)/UnoApiPartTarget/$(1)
+gb_UnpackedTarball_get_dir = $(WORKDIR)/UnpackedTarball/$(1)
+gb_UnpackedTarball_get_target = $(WORKDIR)/UnpackedTarball/$(1).done
+gb_UnpackedTarball_get_preparation_target = $(WORKDIR)/UnpackedTarball/$(1).prepare
+gb_UnpackedTarget_get_target = $(WORKDIR)/UnpackedTarget/$(1)
 gb_WinResTarget_get_target = $(WORKDIR)/WinResTarget/$(1)$(gb_WinResTarget_POSTFIX)
 # workdir targets: $(1) is prefix/path
 gb_Configuration_get_target = $(WORKDIR)/Configuration/$(1).done
@@ -223,6 +227,8 @@ $(eval $(call gb_Helper_make_clean_targets,\
 	ExternalLib \
 	UnoApiHeadersTarget \
 	UnoApiTarget \
+	UnpackedTarball \
+	UnpackedTarget \
 	WinResTarget \
 	YaccTarget \
 	LexTarget \

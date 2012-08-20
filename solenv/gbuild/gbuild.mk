@@ -317,6 +317,7 @@ include $(foreach class, \
 	UnoApiTarget \
 	UnoApi \
 	UnoApiMerge \
+	UnpackedTarball \
 	InternalUnoApi \
 	Zip \
 	Configuration \
