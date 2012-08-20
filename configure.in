@@ -2239,9 +2239,12 @@ if test -z "$enable_database_connectivity"; then
     # Do enable database connectivity for Android for now as otherwise
     # we presumably will get linking errors... We are not as far in
     # the work for iOS, so we might as well disable it for iOS already.
-    if test $_os != iOS; then
+
+    # And actually, do enable it for iOS, too. Let's get back to
+    # figuring out what to do with this later, if ever.
+    #if test $_os != iOS; then
         enable_database_connectivity=yes
-    fi
+    #fi
 fi
 
 DISABLE_DBCONNECTIVITY=''
