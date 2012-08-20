@@ -60,7 +60,6 @@ $(eval $(call gb_Library_use_externals,tubes,\
 $(eval $(call gb_Library_add_exception_objects,tubes,\
 	tubes/source/collaboration \
 	tubes/source/conference \
-	tubes/source/contact-list \
 	tubes/source/contacts \
 	tubes/source/manager \
 ))

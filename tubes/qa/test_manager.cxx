@@ -36,7 +36,6 @@
 #include <rtl/string.hxx>
 #include <rtl/ustring.hxx>
 #include <tubes/collaboration.hxx>
-#include <tubes/contact-list.hxx>
 #include <tubes/manager.hxx>
 #include <unotools/localfilehelper.hxx>
 
@@ -137,7 +136,7 @@ void TestTeleTubes::testInitTeleManager()
 
 void TestTeleTubes::testContactList()
 {
-    AccountContactPairV pairs = TeleManager::getContactList()->getContacts();
+    AccountContactPairV pairs = TeleManager::getContacts();
     /* Both our accounts are meant to be signed in, and they both should be
      * capable of LibreOffice tubes because this test runs after we register
      * our handler. */

@@ -31,7 +31,6 @@
 #include <tubes/collaboration.hxx>
 #include <tubes/conference.hxx>
 #include <tubes/constants.h>
-#include <tubes/contact-list.hxx>
 #include <tubes/file-transfer-helper.h>
 
 #include <com/sun/star/uno/Sequence.hxx>
@@ -91,7 +90,6 @@ public:
     static bool                         mbAccountManagerReady;
     static bool                         mbAccountManagerReadyHandlerInvoked;
     static bool                         mbChannelReadyHandlerInvoked;
-    ContactList*                        mpContactList;
     OString                             msCurrentUUID;
     OString                             msNameSuffix;
     typedef std::map< OString, TeleConference* > MapStringConference;
@@ -100,6 +98,8 @@ public:
     DemoConferences                     maDemoConferences;
     typedef std::set< Collaboration* >  Collaborations;
     Collaborations                      maCollaborations;
+    typedef std::set< TpContact* >      RegisteredContacts;
+    RegisteredContacts                  maRegisteredContacts;
 
                             TeleManagerImpl();
                             ~TeleManagerImpl();
@@ -756,12 +756,90 @@ TeleConference* TeleManager::startBuddySession( TpAccount *pAccount, TpContact *
     return pConference;
 }
 
-ContactList* TeleManager::getContactList()
+static bool tb_presence_is_online( const TpConnectionPresenceType& presence )
 {
-    if (!pImpl->mpContactList)
-        pImpl->mpContactList = new ContactList (pImpl->mpAccountManager);
+    switch (presence)
+    {
+        case TP_CONNECTION_PRESENCE_TYPE_UNSET:
+        case TP_CONNECTION_PRESENCE_TYPE_OFFLINE:
+            return false;
+        case TP_CONNECTION_PRESENCE_TYPE_AVAILABLE:
+        case TP_CONNECTION_PRESENCE_TYPE_AWAY:
+        case TP_CONNECTION_PRESENCE_TYPE_EXTENDED_AWAY:
+        case TP_CONNECTION_PRESENCE_TYPE_HIDDEN:
+        case TP_CONNECTION_PRESENCE_TYPE_BUSY:
+            return true;
+        case TP_CONNECTION_PRESENCE_TYPE_UNKNOWN:
+        case TP_CONNECTION_PRESENCE_TYPE_ERROR:
+        default:
+            return false;
+    }
+}
 
-    return pImpl->mpContactList;
+static bool tb_contact_is_online( TpContact *contact )
+{
+    return tb_presence_is_online (tp_contact_get_presence_type (contact));
+}
+
+static void presence_changed_cb( TpContact* /* contact */,
+                                 guint      /* type */,
+                                 gchar*     /* status */,
+                                 gchar*     /* message */,
+                                 gpointer   /* pContactList*/ )
+{
+    TeleManager::displayAllContacts();
+}
+
+AccountContactPairV TeleManager::getContacts()
+{
+  GList *accounts;
+  AccountContactPairV pairs;
+
+  for (accounts = tp_account_manager_get_valid_accounts (pImpl->mpAccountManager);
+       accounts != NULL;
+       accounts = g_list_delete_link (accounts, accounts))
+    {
+      TpAccount *account = reinterpret_cast<TpAccount *>(accounts->data);
+      TpConnection *connection = tp_account_get_connection (account);
+      TpContact *self;
+      GPtrArray *contacts;
+      guint i;
+
+      /* Verify account is online and received its contact list. If state is not
+       * SUCCESS this means we didn't received the roster from server yet and
+       * we would have to wait for the "notify:contact-list-state" signal. */
+      if (connection == NULL ||
+          tp_connection_get_contact_list_state (connection) !=
+              TP_CONTACT_LIST_STATE_SUCCESS)
+        continue;
+
+      self = tp_connection_get_self_contact (connection);
+      contacts = tp_connection_dup_contact_list (connection);
+      for (i = 0; i < contacts->len; i++)
+        {
+          TpContact *contact =
+              reinterpret_cast<TpContact *>(g_ptr_array_index (contacts, i));
+          if (pImpl->maRegisteredContacts.find (contact) == pImpl->maRegisteredContacts.end())
+          {
+              pImpl->maRegisteredContacts.insert (contact);
+              g_signal_connect (contact, "presence-changed",
+                      G_CALLBACK (presence_changed_cb), NULL );
+          }
+
+          if (contact != self &&
+              tb_contact_is_online (contact))
+            {
+              g_object_ref (account);
+              g_object_ref (contact);
+
+              AccountContactPair pair(account, contact);
+              pairs.push_back(pair);
+            }
+        }
+      g_ptr_array_unref (contacts);
+    }
+
+  return pairs;
 }
 
 rtl::OString TeleManager::getFullClientName()
@@ -823,8 +901,7 @@ TeleManagerImpl::TeleManagerImpl()
         mpFactory( NULL),
         mpClient( NULL),
         mpFileTransferClient( NULL),
-        mpAccountManager( NULL),
-        mpContactList( NULL)
+        mpAccountManager( NULL)
 {
     g_type_init();
 }
@@ -850,8 +927,6 @@ TeleManagerImpl::~TeleManagerImpl()
         g_object_unref( mpFactory);
     if (mpAccountManager)
         g_object_unref( mpAccountManager);
-    if (mpContactList)
-        delete mpContactList;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -34,7 +34,6 @@
 #include <tools/resid.hxx>
 #include <tubes/conference.hxx>
 #include <tubes/collaboration.hxx>
-#include <tubes/contact-list.hxx>
 #include <tubes/manager.hxx>
 #include <unotools/confignode.hxx>
 #include <vcl/fixed.hxx>
@@ -196,44 +195,41 @@ public:
         SAL_INFO( "tubes", "Populating contact list dialog" );
         maList.Clear();
         maACs.clear();
-        ContactList *pContacts = TeleManager::getContactList();
-        if ( pContacts )
-        {
-            AccountContactPairV aPairs = pContacts->getContacts();
-            AccountContactPairV::iterator it;
-            // make sure we have enough memory to not need re-allocation
-            // which would invalidate pointers stored in maList entries
-            maACs.reserve( aPairs.size() );
-            for( it = aPairs.begin(); it != aPairs.end(); ++it )
-            {
-                Image aImage;
-                GFile *pAvatarFile = tp_contact_get_avatar_file( it->second );
-                if( pAvatarFile )
-                {
-                    const rtl::OUString sAvatarFileUrl = fromUTF8( g_file_get_path ( pAvatarFile ) );
-                    Graphic aGraphic;
-                    if( GRFILTER_OK == GraphicFilter::LoadGraphic( sAvatarFileUrl, rtl::OUString(""), aGraphic ) )
-                    {
-                        BitmapEx aBitmap = aGraphic.GetBitmapEx();
-                        double fScale = 30.0 / aBitmap.GetSizePixel().Height();
-                        aBitmap.Scale( fScale, fScale );
-                        aImage = Image( aBitmap );
-                    }
-                }
-                rtl::OUStringBuffer aEntry( 128 );
-                aEntry.append( sal_Unicode( '\t' ) );
-                aEntry.append( fromUTF8 ( tp_contact_get_alias( it->second ) ) );
-                aEntry.append( sal_Unicode( '\t' ) );
-                aEntry.append( fromUTF8 ( tp_contact_get_identifier( it->second ) ) );
-                aEntry.append( sal_Unicode( '\t' ) );
-                SvLBoxEntry* pEntry = maList.InsertEntry( aEntry.makeStringAndClear(), aImage, aImage );
-                // FIXME: ref the TpAccount, TpContact ...
-                maACs.push_back( AccountContactPair( it->first, it->second ) );
-                pEntry->SetUserData( &maACs.back() );
 
-                g_object_unref (it->first);
-                g_object_unref (it->second);
+        AccountContactPairV aPairs = TeleManager::getContacts();
+        AccountContactPairV::iterator it;
+        // make sure we have enough memory to not need re-allocation
+        // which would invalidate pointers stored in maList entries
+        maACs.reserve( aPairs.size() );
+        for( it = aPairs.begin(); it != aPairs.end(); ++it )
+        {
+            Image aImage;
+            GFile *pAvatarFile = tp_contact_get_avatar_file( it->second );
+            if( pAvatarFile )
+            {
+                const rtl::OUString sAvatarFileUrl = fromUTF8( g_file_get_path ( pAvatarFile ) );
+                Graphic aGraphic;
+                if( GRFILTER_OK == GraphicFilter::LoadGraphic( sAvatarFileUrl, rtl::OUString(""), aGraphic ) )
+                {
+                    BitmapEx aBitmap = aGraphic.GetBitmapEx();
+                    double fScale = 30.0 / aBitmap.GetSizePixel().Height();
+                    aBitmap.Scale( fScale, fScale );
+                    aImage = Image( aBitmap );
+                }
             }
+            rtl::OUStringBuffer aEntry( 128 );
+            aEntry.append( sal_Unicode( '\t' ) );
+            aEntry.append( fromUTF8 ( tp_contact_get_alias( it->second ) ) );
+            aEntry.append( sal_Unicode( '\t' ) );
+            aEntry.append( fromUTF8 ( tp_contact_get_identifier( it->second ) ) );
+            aEntry.append( sal_Unicode( '\t' ) );
+            SvLBoxEntry* pEntry = maList.InsertEntry( aEntry.makeStringAndClear(), aImage, aImage );
+            // FIXME: ref the TpAccount, TpContact ...
+            maACs.push_back( AccountContactPair( it->first, it->second ) );
+            pEntry->SetUserData( &maACs.back() );
+
+            g_object_unref (it->first);
+            g_object_unref (it->second);
         }
         Show();
     }

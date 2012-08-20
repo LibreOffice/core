@@ -30,11 +30,6 @@ $(eval $(call gb_CppunitTest_add_exception_objects,tubes_test, \
 	tubes/qa/test_manager \
 ))
 
-$(eval $(call gb_CppunitTest_set_include,tubes_test, \
-	-I$(SRCDIR)/tubes/inc \
-	$$(INCLUDE) \
-))
-
 $(eval $(call gb_CppunitTest_use_libraries,tubes_test, \
 	sal \
 	tubes \

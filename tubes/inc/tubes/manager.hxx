@@ -33,6 +33,9 @@
 #include <tubes/tubesdllapi.h>
 #include <rtl/ustring.hxx>
 
+#include <utility>
+#include <vector>
+
 // For testing purposes, we might need more in future.
 #define LIBO_TUBES_DBUS_INTERFACE "org.libreoffice.calc"
 #define LIBO_TUBES_DBUS_MSG_METHOD "LibOMsg"
@@ -40,12 +43,15 @@
 
 namespace osl { class Mutex; }
 class Collaboration;
-class ContactList;
 class TeleConference;
 class TeleManagerImpl;
 typedef struct _TpAccount TpAccount;
 typedef struct _TpContact TpContact;
 
+typedef ::std::pair< TpAccount *, TpContact * > AccountContactPair;
+typedef ::std::vector< AccountContactPair > AccountContactPairV;
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
 /** Interface to Telepathy DBus Tubes.
 
     Fragile, not working yet.
@@ -78,11 +84,11 @@ public:
     /** Setup client handlers. */
     static bool             registerClients();
 
-    /** Fetches the contact list. Returns 0 before connect() is called successfully.
-        Is non-functional until prepareAccountManager().
+    /** Fetches the contact list.
+        Is non-functional until createAccountManager().
      */
     // exported for unit test
-    TUBES_DLLPUBLIC static ContactList*     getContactList();
+    TUBES_DLLPUBLIC static AccountContactPairV getContacts();
 
     /** Start a demo session where all local documents are shared to each other */
     static TeleConference*  startDemoSession();
