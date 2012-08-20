@@ -27,9 +27,10 @@ import java.io.*;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.Enumeration;
-import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.HashMap;
 import java.util.StringTokenizer;
-import java.util.Vector;
+import java.util.ArrayList;
 import lib.TestParameters;
 import share.LogWriter;
 import util.utils;
@@ -43,10 +44,10 @@ public class Helper  {
 
     /** The runner log writer
      * @member m_log            for log purposes
-     * @member m_sTestDocPath   directory for seraching files to load
-     * @member m_vFiles         list of all files describet in "files.csv"
-     * @member m_hFileURLs     contains the postition of a file name in the m_vFiles Vector
-     * @member m_hFileTypes      contains the postition of a file type in the m_vFiles Vector
+     * @member m_sTestDocPath   directory for searching files to load
+     * @member m_vFiles         list of all files described in "files.csv"
+     * @member m_hFileURLs     contains the position of a file name in the m_vFiles Vector
+     * @member m_hFileTypes      contains the position of a file type in the m_vFiles Vector
      * @member m_param          the test parameters
      */
 
@@ -54,11 +55,11 @@ public class Helper  {
 
     String m_sTestDocPath = null;
 
-    Vector m_vFiles = null;
+    ArrayList<ArrayList<String>>  m_vFiles = null;
 
-    Hashtable m_hFileURLs = new Hashtable();
+    HashMap<String,String> m_hFileURLs = new HashMap<String,String>();
 
-    Hashtable m_hFileTypes = new Hashtable();
+    HashMap<String,String> m_hFileTypes = new HashMap<String,String>();
 
     TestParameters m_param = null;
 
@@ -89,22 +90,22 @@ public class Helper  {
 
 
      /** Reads a comma separated file (CSV). Every line of the file is
-      * repesented by an <code>Vector</code> entry. Every data entry of a row is
+      * represented by an <code>Vector</code> entry. Every data entry of a row is
       * also stored in a <code>Vector</code>. So the returned value is a
       * <code>Vector[][]</code> where the first dimension represents a row
-      * and the second dimenesion inclueds the data values.
+      * and the second dimension includes the data values.
       * @param csvFileName the name of the csv file
       * @return Vector filled with Vector filled with data of a row
       */
-     public Vector getToDoList(String csvFileName){
+     public ArrayList<ArrayList<String>> getToDoList(String csvFileName){
 
        try  {
 
-         Vector vAll = new Vector();
-         Vector vFields = new Vector();
+         ArrayList<ArrayList<String>> vAll = new ArrayList<ArrayList<String>>();
+         ArrayList<String> vFields = new ArrayList<String>();
 
          // get content of file
-         Vector content = getCSVFileContent(csvFileName);
+         ArrayList<String> content = getCSVFileContent(csvFileName);
 
          // remove superfluous content like "#" started lines
          content = removeSuperfluousContent(content);
@@ -113,24 +114,24 @@ public class Helper  {
          content = replacePlaceHolder(content);
 
          // create Enumeration
-         Enumeration contentEnum = content.elements();
+         Iterator<String> contentEnum = content.iterator();
 
          // the first line contains field names of the columns
          // split line by ";"
          StringTokenizer fields = new StringTokenizer(
-                                      contentEnum.nextElement().toString(),";");
+                                      contentEnum.next(),";");
          int fieldCount = 0;
          while (fields.hasMoreElements()){
-             vFields.add(fields.nextElement());
+             vFields.add(fields.nextToken());
              fieldCount++;
          }
 
          // fill vData with data of CSV-row
-         while (contentEnum.hasMoreElements()){
-             Vector vData = new Vector();
+         while (contentEnum.hasNext()){
+             ArrayList<String> vData = new ArrayList<String>();
 
              StringTokenizer data = new StringTokenizer(
-                                      contentEnum.nextElement().toString(),";", true);
+                                      contentEnum.next(),";", true);
 
              // example: data = "firstData;secondData;;forthData"
              // => three tokens => missing one data because the imagine
@@ -139,7 +140,7 @@ public class Helper  {
              boolean nextIsData = false;
              int dataCount = 0;
              while (data.hasMoreTokens()) {
-                 Object myToken = data.nextToken();
+                 String myToken = data.nextToken();
                  // if the "thirdData" will be recieved, myToken=";" but
                  // vData must add an empty String
                  if (myToken.equals(";")){
@@ -176,9 +177,9 @@ public class Helper  {
       * cannot be read
       */
 
-    public Vector getCSVFileContent(String csvFileName) {
+    public ArrayList<String> getCSVFileContent(String csvFileName) {
         try {
-            Vector content = new Vector();
+            ArrayList<String> content = new ArrayList<String>();
             BufferedReader br;
             String line;
             if ( m_param.DebugIsActive ) {
@@ -194,7 +195,7 @@ public class Helper  {
                 br = new BufferedReader(new InputStreamReader(in));
                 try {
                     while( ( line = br.readLine() ) != null ) {
-                            content.addElement( line );
+                            content.add( line );
                     }
                 } catch (IOException e) {
                     br.close();
@@ -230,34 +231,34 @@ public class Helper  {
      * @param content the content of a csv file
      * @return changed file content
      */
-    private Vector replacePlaceHolder(Vector content){
+    private ArrayList<String> replacePlaceHolder(ArrayList<String> content){
 
-        Vector vReturn = new Vector();
+        ArrayList<String> vReturn = new ArrayList<String>();
 
-        Vector placeHolders = new Vector();
-        Enumeration m_params = m_param.keys();
+        ArrayList<String> placeHolders = new ArrayList<String>();
+        Iterator<String> m_params = m_param.keySet().iterator();
         String placeHolder = (String)m_param.get("placeHolder");
 
-        // get all place holdes from typeDetection.csv
-        while (m_params.hasMoreElements()){
-                String holderKey = (String) m_params.nextElement();
+        // get all place holders from typeDetection.csv
+        while (m_params.hasNext()){
+                String holderKey = m_params.next();
                 if (holderKey.startsWith(placeHolder)){
                     placeHolders.add(holderKey);
                 }
         }
 
         // replace all occurrences of place holders in 'CSVData'
-        Enumeration cont = content.elements();
+        Iterator<String> cont = content.iterator();
 
-        while( cont.hasMoreElements() ) {
+        while( cont.hasNext() ) {
 
-            String line = (String) cont.nextElement();
+            String line = cont.next();
             String newLine = line;
-            Enumeration holders = placeHolders.elements();
+            Iterator<String> holders = placeHolders.iterator();
 
-            while( holders.hasMoreElements() ) {
+            while( holders.hasNext() ) {
 
-                String holder = (String) holders.nextElement();
+                String holder = holders.next();
                 int startPos = line.indexOf(holder);
 
                 if (startPos > -1){
@@ -280,29 +281,25 @@ public class Helper  {
 
     /** Removes lines of an ascii file content which starts with "#"
      * or are empty
-     * @param content content of a csv fiöe
+     * @param content content of a csv file
      * @return a stripped Vector
      */
-    public Vector removeSuperfluousContent(Vector content){
-        try{
-            Vector newContent = new Vector();
-            Enumeration cont = content.elements();
-            while( cont.hasMoreElements() ) {
-                String line = (String) cont.nextElement();
-                    if (( ! line.startsWith( "#" ))&& ( line.length() != 0 )) {
-                        newContent.addElement( line );
-                    }
-            }
-            return newContent;
-        } catch (ClassCastException e){
-            return null;
+    public ArrayList<String> removeSuperfluousContent(ArrayList<String> content){
+        ArrayList<String> newContent = new ArrayList<String>();
+        Iterator<String> cont = content.iterator();
+        while( cont.hasNext() ) {
+            String line = cont.next();
+                if (( ! line.startsWith( "#" ))&& ( line.length() != 0 )) {
+                    newContent.add( line );
+                }
         }
+        return newContent;
     }
 
     /** returns a <code>MediaDescripto</code> filled with given properties and
      * values.
-     * @param propNames String Array of propertie names
-     * @param values Objecr Array of propertie values
+     * @param propNames String Array of property names
+     * @param values Object Array of property values
      * @return <code>PropertyValue[]<code>
      * @see com.sun.star.beans.PropertyValue
      * @see com.sun.star.document.MediaDescriptor
@@ -342,7 +339,7 @@ public class Helper  {
     public String getURLforfileAlias(String fileAlias)
                                         throws FileAliasNotFoundException{
         try{
-            String fileURL = (String) m_hFileURLs.get(fileAlias).toString();
+            String fileURL = m_hFileURLs.get(fileAlias).toString();
             return utils.getFullURL(ensureEndingFileSep(m_sTestDocPath) + fileURL);
         } catch (java.lang.NullPointerException e){
             throw new FileAliasNotFoundException(fileAlias);
@@ -358,25 +355,23 @@ public class Helper  {
     public String getTypeforfileAlias(String fileAlias)
                                         throws FileAliasNotFoundException{
         try{
-            return (String) m_hFileTypes.get(fileAlias).toString();
+            return m_hFileTypes.get(fileAlias).toString();
         } catch (java.lang.NullPointerException e){
             throw new FileAliasNotFoundException(fileAlias);
        }
     }
 
     /**
-     *  Filles the Hashtable m_hFileURLs with all file names and their URL
-     *  and the Hashtable m_hFilesTypes with all file names and thier file
-     *  typ name. This informations are extracted from "files.csv"
-     *  This is for faster acccess to get fileURL and fileType of fileAlias
+     *  Fills the Hashtable m_hFileURLs with all file names and their URL
+     *  and the Hashtable m_hFilesTypes with all file names and their file
+     *  type name. This informations are extracted from "files.csv"
+     *  This is for faster access to get fileURL and fileType of fileAlias
      */
     public void createFilesList(){
         for (int i = 0; i < m_vFiles.size();i++){
-            Vector toDo = (Vector) m_vFiles.get(i);
-                m_hFileURLs.put((String) toDo.get(0).toString(),
-                                               (String) toDo.get(1).toString());
-                m_hFileTypes.put((String) toDo.get(0).toString(),
-                                               (String) toDo.get(2).toString());
+            ArrayList<String> toDo = m_vFiles.get(i);
+                m_hFileURLs.put(toDo.get(0), toDo.get(1));
+                m_hFileTypes.put(toDo.get(0), toDo.get(2));
         }
     }
 
@@ -423,7 +418,7 @@ public class Helper  {
 
 }
 
-/** This exeception should be thrown if a method seeks for an invalid alias name */
+/** This exception should be thrown if a method seeks for an invalid alias name */
 class FileAliasNotFoundException extends java.lang.Exception{
     /** throws error message with wrong alias name
      * @param fileAlias the alias name

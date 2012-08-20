@@ -340,7 +340,7 @@ public final class Marshaling_Test {
             result = compareInterfaces((XInterface)op1, (XInterface)op2);
 
         else if(op1.getClass() == String.class && op2.getClass() == String.class) // is it a String ?
-            result = ((String)op1).equals((String)op2);
+            result = ((String)op1).equals(op2);
 
         else if(op1.getClass() == Type.class && op2.getClass() == Type.class) // types?
             result = op1.equals(op2);

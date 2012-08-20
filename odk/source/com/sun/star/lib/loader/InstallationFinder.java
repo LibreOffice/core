@@ -37,7 +37,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.StringTokenizer;
-import java.util.Vector;
+import java.util.ArrayList;
 
 /**
  * This class finds a UNO installation on the system.
@@ -395,7 +395,7 @@ final class InstallationFinder {
             File fSVersion = new File(
                 System.getProperty( "user.home" ) ,SVERSION );
             if ( fSVersion.exists() ) {
-                Vector lines = new Vector();
+                ArrayList<String> lines = new ArrayList<String>();
                 BufferedReader br = null;
                 try {
                     br = new BufferedReader( new InputStreamReader(
@@ -427,7 +427,7 @@ final class InstallationFinder {
                 }
                 for ( int i = lines.size() - 1; i >= 0; i-- ) {
                     StringTokenizer tokens = new StringTokenizer(
-                        (String)lines.elementAt( i ), "=" );
+                        lines.get( i ), "=" );
                     if ( tokens.countTokens() != 2 )
                         continue;
                     String key = tokens.nextToken();

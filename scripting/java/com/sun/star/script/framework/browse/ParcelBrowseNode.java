@@ -99,11 +99,10 @@ public class ParcelBrowseNode extends PropertySet
         XMultiComponentFactory xFac = xCtx.getServiceManager();
         try
         {
-            XSimpleFileAccess xSFA = ( XSimpleFileAccess)
-                UnoRuntime.queryInterface( XSimpleFileAccess.class,
-                    xFac.createInstanceWithContext(
-                        "com.sun.star.ucb.SimpleFileAccess",
-                        xCtx ) );
+            XSimpleFileAccess xSFA = UnoRuntime.queryInterface( XSimpleFileAccess.class,
+                xFac.createInstanceWithContext(
+                    "com.sun.star.ucb.SimpleFileAccess",
+                    xCtx ) );
             if ( xSFA != null && ( xSFA.isReadOnly( parcelDirUrl ) ||
                 container.isUnoPkg() ) )
             {
@@ -221,7 +220,7 @@ public class ParcelBrowseNode extends PropertySet
                     }
                 }
                 else {
-                    newName = (String) AnyConverter.toString(aParams[0]);
+                    newName = AnyConverter.toString(aParams[0]);
                 }
 
                 if ( newName == null || newName.equals(""))
@@ -234,7 +233,7 @@ public class ParcelBrowseNode extends PropertySet
                     String languageName = newName + "." + provider.getScriptEditor().getExtension();
                     String language = container.getLanguage();
 
-                    ScriptEntry entry = new ScriptEntry( language, languageName, languageName, "", new HashMap() );
+                    ScriptEntry entry = new ScriptEntry( language, languageName, languageName, "", new HashMap<String,String>() );
 
                     Parcel parcel = (Parcel)container.getByName( getName() );
                     ScriptMetaData data = new ScriptMetaData( parcel, entry, source );
@@ -311,7 +310,7 @@ public class ParcelBrowseNode extends PropertySet
                     }
                 }
                 else {
-                    newName = (String) AnyConverter.toString(aParams[0]);
+                    newName = AnyConverter.toString(aParams[0]);
                 }
                 container.renameParcel( getName(), newName );
                 Parcel p = (Parcel)container.getByName( newName );

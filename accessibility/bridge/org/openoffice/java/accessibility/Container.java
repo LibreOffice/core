@@ -18,6 +18,8 @@
 
 package org.openoffice.java.accessibility;
 
+import java.awt.Component;
+
 import javax.accessibility.AccessibleContext;
 import javax.accessibility.AccessibleState;
 
@@ -39,15 +41,13 @@ public class Container extends java.awt.Container implements javax.accessibility
         accessibleRole = role;
         unoAccessible = xAccessible;
         unoAccessibleContext = xAccessibleContext;
-        unoAccessibleComponent = (XAccessibleComponent)
-            UnoRuntime.queryInterface(XAccessibleComponent.class,
-            xAccessibleContext);
+        unoAccessibleComponent = UnoRuntime.queryInterface(XAccessibleComponent.class,
+        xAccessibleContext);
 
         // Add the event listener right away, because the global focus notification doesn't
         // work yet ..
-        XAccessibleEventBroadcaster broadcaster = (XAccessibleEventBroadcaster)
-            UnoRuntime.queryInterface(XAccessibleEventBroadcaster.class,
-            unoAccessibleContext);
+        XAccessibleEventBroadcaster broadcaster = UnoRuntime.queryInterface(XAccessibleEventBroadcaster.class,
+        unoAccessibleContext);
         if (broadcaster != null) {
             broadcaster.addEventListener(createEventListener());
         }
@@ -125,10 +125,10 @@ public class Container extends java.awt.Container implements javax.accessibility
 
     public Object[] getAccessibleComponents(Object[] targetSet) {
         try {
-            java.util.ArrayList list = new java.util.ArrayList(targetSet.length);
+            java.util.ArrayList<Component> list = new java.util.ArrayList<Component>(targetSet.length);
             for (int i=0; i < targetSet.length; i++) {
                 java.awt.Component c = AccessibleObjectFactory.getAccessibleComponent(
-                    (XAccessible) UnoRuntime.queryInterface(XAccessible.class, targetSet[i]));
+                    UnoRuntime.queryInterface(XAccessible.class, targetSet[i]));
                 if (c != null) {
                     list.add(c);
                 }
@@ -567,8 +567,7 @@ public class Container extends java.awt.Container implements javax.accessibility
         /** Returns the AccessibleSelection interface for this object */
         public javax.accessibility.AccessibleSelection getAccessibleSelection() {
             try {
-                XAccessibleSelection unoAccessibleSelection = (XAccessibleSelection)
-                    UnoRuntime.queryInterface(XAccessibleSelection.class, unoAccessibleContext);
+                XAccessibleSelection unoAccessibleSelection = UnoRuntime.queryInterface(XAccessibleSelection.class, unoAccessibleContext);
                 if (unoAccessibleSelection != null) {
                     return new AccessibleSelectionImpl(unoAccessibleSelection);
                 }

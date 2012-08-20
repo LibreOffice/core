@@ -40,7 +40,7 @@ class ToggleButton extends AbstractButton implements javax.accessibility.Accessi
         /** Gets the AccessibleValue associated with this object that has a graphical representation */
         public javax.accessibility.AccessibleValue getAccessibleValue() {
             try {
-                XAccessibleValue unoAccessibleValue = (XAccessibleValue) UnoRuntime.queryInterface(XAccessibleValue.class,
+                XAccessibleValue unoAccessibleValue = UnoRuntime.queryInterface(XAccessibleValue.class,
                         unoAccessibleContext);
 
                 return (unoAccessibleValue != null)

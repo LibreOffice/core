@@ -275,7 +275,7 @@ public class UnoPkgContainer extends ParcelContainer
 //            String path = containerUrl.substring( 0, containerUrl.lastIndexOf("/") );
             String packagesUrl = PathUtils.make_url( extensionDb, "/Scripts/" + extensionRepository + "-extension-desc.xml" );
             xos =  m_xSFA.openFileWrite( packagesUrl );
-            XTruncate xTrc = (XTruncate) UnoRuntime.queryInterface( XTruncate.class, xos );
+            XTruncate xTrc = UnoRuntime.queryInterface( XTruncate.class, xos );
             if (  xTrc != null )
             {
                 LogUtils.DEBUG("In writeUnoPackageDB() Truncating...." );

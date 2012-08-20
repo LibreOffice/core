@@ -236,7 +236,7 @@ XInitialization {
         // create the dialog model and set the properties
         Object dialogModel = xMultiComponentFactory.createInstanceWithContext(
             "com.sun.star.awt.UnoControlDialogModel", _xComponentContext );
-        XPropertySet xPSetDialog = ( XPropertySet )UnoRuntime.queryInterface(
+        XPropertySet xPSetDialog = UnoRuntime.queryInterface(
             XPropertySet.class, dialogModel );
         xPSetDialog.setPropertyValue( "PositionX", new Integer( dialogX) );
         xPSetDialog.setPropertyValue( "PositionY", new Integer( dialogY));
@@ -245,13 +245,13 @@ XInitialization {
         xPSetDialog.setPropertyValue( "Title", _title );
 
         // get the service manager from the dialog model
-        XMultiServiceFactory xMultiServiceFactory = ( XMultiServiceFactory )UnoRuntime.queryInterface(
+        XMultiServiceFactory xMultiServiceFactory = UnoRuntime.queryInterface(
             XMultiServiceFactory.class, dialogModel );
 
         // create the Run Macro button model and set the properties
         Object runButtonModel = xMultiServiceFactory.createInstance(
             "com.sun.star.awt.UnoControlButtonModel" );
-        XPropertySet xPSetButton = ( XPropertySet )UnoRuntime.queryInterface(
+        XPropertySet xPSetButton = UnoRuntime.queryInterface(
             XPropertySet.class, runButtonModel );
         LogUtils.DEBUG("run: x="+(((dialogW+cbIncrW)/2)-runButtonW -1) );
         LogUtils.DEBUG("run: y="+(dialogH+cbIncrH-runButtonH-1));
@@ -266,7 +266,7 @@ XInitialization {
         // create the Dont Run Macro button model and set the properties
         Object doNotRunButtonModel = xMultiServiceFactory.createInstance(
             "com.sun.star.awt.UnoControlButtonModel" );
-        xPSetButton = ( XPropertySet )UnoRuntime.queryInterface(
+        xPSetButton = UnoRuntime.queryInterface(
             XPropertySet.class, doNotRunButtonModel );
         LogUtils.DEBUG("dontrun: x="+(((dialogW+cbIncrW)/2)-1) );
         LogUtils.DEBUG("dontrun: y="+(dialogH+cbIncrH-doNotRunButtonH-1 ));
@@ -279,7 +279,7 @@ XInitialization {
         xPSetButton.setPropertyValue( "Label", _doNotRunMacro );
 
         // insert the control models into the dialog model
-        XNameContainer xNameCont = ( XNameContainer )UnoRuntime.queryInterface(
+        XNameContainer xNameCont = UnoRuntime.queryInterface(
             XNameContainer.class, dialogModel );
         xNameCont.insertByName( _runButtonName, runButtonModel );
         xNameCont.insertByName( _doNotRunButtonName, doNotRunButtonModel );
@@ -290,7 +290,7 @@ XInitialization {
             // create the label model and set the properties
             Object label2Model = xMultiServiceFactory.createInstance(
                 "com.sun.star.awt.UnoControlFixedTextModel" );
-            XPropertySet xPSetLabel = ( XPropertySet )UnoRuntime.queryInterface(
+            XPropertySet xPSetLabel = UnoRuntime.queryInterface(
                 XPropertySet.class, label2Model );
             xPSetLabel.setPropertyValue( "PositionX", new Integer( label2X ));
             xPSetLabel.setPropertyValue( "PositionY", new Integer( label2Y ));
@@ -303,7 +303,7 @@ XInitialization {
             // create the label model and set the properties
             Object label3Model = xMultiServiceFactory.createInstance(
                 "com.sun.star.awt.UnoControlFixedTextModel" );
-            XPropertySet xPSetLabel3 = ( XPropertySet )UnoRuntime.queryInterface(
+            XPropertySet xPSetLabel3 = UnoRuntime.queryInterface(
                 XPropertySet.class, label3Model );
             xPSetLabel3.setPropertyValue( "PositionX", new Integer( label3X ));
             xPSetLabel3.setPropertyValue( "PositionY", new Integer( label3Y ));
@@ -316,7 +316,7 @@ XInitialization {
             // create the label model and set the properties
             Object label4Model = xMultiServiceFactory.createInstance(
                 "com.sun.star.awt.UnoControlFixedTextModel" );
-            XPropertySet xPSetLabel4 = ( XPropertySet )UnoRuntime.queryInterface(
+            XPropertySet xPSetLabel4 = UnoRuntime.queryInterface(
                 XPropertySet.class, label4Model );
             xPSetLabel4.setPropertyValue( "PositionX", new Integer( label4X ));
             xPSetLabel4.setPropertyValue( "PositionY", new Integer( label4Y ));
@@ -329,7 +329,7 @@ XInitialization {
             // create the checkbox model and set the properties
             Object checkBoxModel = xMultiServiceFactory.createInstance(
                 "com.sun.star.awt.UnoControlCheckBoxModel" );
-            XPropertySet xPSetCheckBox = ( XPropertySet )UnoRuntime.queryInterface(
+            XPropertySet xPSetCheckBox = UnoRuntime.queryInterface(
                 XPropertySet.class, checkBoxModel );
             xPSetCheckBox.setPropertyValue( "PositionX", new Integer( checkBoxX ));
             xPSetCheckBox.setPropertyValue( "PositionY", new Integer( checkBoxY ));
@@ -351,7 +351,7 @@ XInitialization {
             // create the label model and set the properties
             Object label5Model = xMultiServiceFactory.createInstance(
                 "com.sun.star.awt.UnoControlFixedTextModel" );
-            XPropertySet xPSetLabel5 = ( XPropertySet )UnoRuntime.queryInterface(
+            XPropertySet xPSetLabel5 = UnoRuntime.queryInterface(
                 XPropertySet.class, label5Model );
             xPSetLabel5.setPropertyValue( "PositionX", new Integer( label5X ));
             xPSetLabel5.setPropertyValue( "PositionY", new Integer( label5Y ));
@@ -368,7 +368,7 @@ XInitialization {
             // create the label model and set the properties
             Object labelModel = xMultiServiceFactory.createInstance(
                 "com.sun.star.awt.UnoControlFixedTextModel" );
-            XPropertySet xPSetLabel = ( XPropertySet )UnoRuntime.queryInterface(
+            XPropertySet xPSetLabel = UnoRuntime.queryInterface(
                 XPropertySet.class, labelModel );
             xPSetLabel.setPropertyValue( "PositionX", new Integer( label1X ));
             xPSetLabel.setPropertyValue( "PositionY", new Integer( label1Y ));
@@ -385,25 +385,25 @@ XInitialization {
         // create the dialog control and set the model
         Object dialog = xMultiComponentFactory.createInstanceWithContext(
             "com.sun.star.awt.UnoControlDialog", _xComponentContext );
-        XControl xControl = ( XControl )UnoRuntime.queryInterface(
+        XControl xControl = UnoRuntime.queryInterface(
             XControl.class, dialog );
-        XControlModel xControlModel = ( XControlModel )UnoRuntime.queryInterface(
+        XControlModel xControlModel = UnoRuntime.queryInterface(
             XControlModel.class, dialogModel );
         xControl.setModel( xControlModel );
 
         // add an action listener to the button control
-        XControlContainer xControlCont = ( XControlContainer )UnoRuntime.queryInterface(
+        XControlContainer xControlCont = UnoRuntime.queryInterface(
             XControlContainer.class, dialog );
 
         // Add to yes button
         Object objectButton = xControlCont.getControl( _runButtonName );
-        XButton xButton = ( XButton )UnoRuntime.queryInterface(
+        XButton xButton = UnoRuntime.queryInterface(
             XButton.class, objectButton );
         xButton.addActionListener( new ActionListenerImpl( xControlCont, _runButtonName ) );
 
         // add to no button
         objectButton = xControlCont.getControl( _doNotRunButtonName );
-        xButton = ( XButton )UnoRuntime.queryInterface(
+        xButton = UnoRuntime.queryInterface(
             XButton.class, objectButton );
         xButton.addActionListener( new ActionListenerImpl( xControlCont, _doNotRunButtonName ) );
 
@@ -411,23 +411,23 @@ XInitialization {
         {
             // add to checkbox
             Object objectCheckBox = xControlCont.getControl( _checkBoxName );
-            XCheckBox xCheckBox = ( XCheckBox )UnoRuntime.queryInterface(
+            XCheckBox xCheckBox = UnoRuntime.queryInterface(
                 XCheckBox.class, objectCheckBox );
-            xCheckBox.addItemListener((XItemListener) new ItemListenerImpl( xControlCont ) );
+            xCheckBox.addItemListener(new ItemListenerImpl( xControlCont ) );
         }
 
         // create a peer
         Object toolkit = xMultiComponentFactory.createInstanceWithContext(
             "com.sun.star.awt.ExtToolkit", _xComponentContext );
-        XToolkit xToolkit = ( XToolkit )UnoRuntime.queryInterface(
+        XToolkit xToolkit = UnoRuntime.queryInterface(
             XToolkit.class, toolkit );
-        XWindow xWindow = ( XWindow )UnoRuntime.queryInterface(
+        XWindow xWindow = UnoRuntime.queryInterface(
             XWindow.class, xControl );
         xWindow.setVisible( false );
         xControl.createPeer( xToolkit, null );
 
         // return the dialog
-        XDialog xDialog = ( XDialog )UnoRuntime.queryInterface(
+        XDialog xDialog = UnoRuntime.queryInterface(
             XDialog.class, dialog );
         return xDialog;
     }
@@ -468,14 +468,14 @@ XInitialization {
 
    public void dispose ()
    {
-        XComponent xComponent = ( XComponent )UnoRuntime.queryInterface(
+        XComponent xComponent = UnoRuntime.queryInterface(
             XComponent.class, _xDialog );
        xComponent.dispose();
    }
 
    public void addEventListener ( com.sun.star.lang.XEventListener xListener )
    {
-        XComponent xComponent = ( XComponent )UnoRuntime.queryInterface(
+        XComponent xComponent = UnoRuntime.queryInterface(
             XComponent.class, _xDialog );
        xComponent.addEventListener( xListener );
    }
@@ -483,7 +483,7 @@ XInitialization {
 
    public void removeEventListener ( com.sun.star.lang.XEventListener aListener )
    {
-        XComponent xComponent = ( XComponent )UnoRuntime.queryInterface(
+        XComponent xComponent = UnoRuntime.queryInterface(
             XComponent.class, _xDialog );
        xComponent.removeEventListener( aListener );
    }
@@ -514,7 +514,7 @@ XInitialization {
         private XCheckBox _xCheckBox;
         public ItemListenerImpl( XControlContainer xControlCont ) {
             Object objectCheckBox = xControlCont.getControl( _checkBoxName );
-            _xCheckBox = ( XCheckBox )UnoRuntime.queryInterface(
+            _xCheckBox = UnoRuntime.queryInterface(
                 XCheckBox.class, objectCheckBox );
         }
 

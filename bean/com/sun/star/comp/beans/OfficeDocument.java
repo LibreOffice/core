@@ -47,15 +47,12 @@ public class OfficeDocument extends Wrapper
         super( xModel );
 
         this.xModel = xModel;
-        this.xModifiable = (com.sun.star.util.XModifiable)
-            UnoRuntime.queryInterface(
-                com.sun.star.util.XModifiable.class, xModel );
-        this.xPrintable = (com.sun.star.view.XPrintable)
-            UnoRuntime.queryInterface(
-                com.sun.star.view.XPrintable.class, xModel );
-        this.xStorable = (com.sun.star.frame.XStorable)
-            UnoRuntime.queryInterface(
-                com.sun.star.frame.XStorable.class, xModel );
+        this.xModifiable = UnoRuntime.queryInterface(
+            com.sun.star.util.XModifiable.class, xModel );
+        this.xPrintable = UnoRuntime.queryInterface(
+            com.sun.star.view.XPrintable.class, xModel );
+        this.xStorable = UnoRuntime.queryInterface(
+            com.sun.star.frame.XStorable.class, xModel );
     }
 
     //==========================================================

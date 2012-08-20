@@ -128,9 +128,8 @@ public class Paragraph extends Container implements javax.accessibility.Accessib
                 return null;
 
             try {
-                XAccessibleEditableText unoAccessibleText = (XAccessibleEditableText)
-                    UnoRuntime.queryInterface(XAccessibleEditableText.class,
-                    unoAccessibleComponent);
+                XAccessibleEditableText unoAccessibleText = UnoRuntime.queryInterface(XAccessibleEditableText.class,
+                unoAccessibleComponent);
                 if (unoAccessibleText != null) {
                     return new AccessibleEditableTextImpl(unoAccessibleText);
                 } else {
@@ -144,8 +143,7 @@ public class Paragraph extends Container implements javax.accessibility.Accessib
         /** Gets the AccessibleAction associated with this object that has a graphical representation */
         public javax.accessibility.AccessibleAction getAccessibleAction() {
             try {
-                XAccessibleAction unoAccessibleAction = (XAccessibleAction)
-                    UnoRuntime.queryInterface(XAccessibleAction.class, unoAccessibleComponent);
+                XAccessibleAction unoAccessibleAction = UnoRuntime.queryInterface(XAccessibleAction.class, unoAccessibleComponent);
                 return (unoAccessibleAction != null) ?
                     new AccessibleActionImpl(unoAccessibleAction) : null;
             } catch (com.sun.star.uno.RuntimeException e) {

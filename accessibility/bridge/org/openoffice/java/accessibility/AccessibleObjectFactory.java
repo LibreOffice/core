@@ -18,6 +18,7 @@
 
 package org.openoffice.java.accessibility;
 
+import java.awt.Component;
 import java.lang.ref.WeakReference;
 import javax.accessibility.Accessible;
 import javax.accessibility.AccessibleStateSet;
@@ -32,7 +33,7 @@ public class AccessibleObjectFactory {
     // This type is needed for conversions from/to uno Any
     public static final Type XAccessibleType = new Type(XAccessible.class);
 
-    private static java.util.Hashtable objectList = new java.util.Hashtable();
+    private static java.util.Hashtable<String, WeakReference<Component>> objectList = new java.util.Hashtable<String, WeakReference<Component>>();
     private static java.awt.FocusTraversalPolicy focusTraversalPolicy = new FocusTraversalPolicy();
 
     private static java.awt.EventQueue theEventQueue = java.awt.Toolkit.getDefaultToolkit().
@@ -93,9 +94,9 @@ public class AccessibleObjectFactory {
 
             // Check if we already have a wrapper object for this context
             synchronized (objectList) {
-                WeakReference r = (WeakReference) objectList.get(oid);
+                WeakReference<java.awt.Component> r = objectList.get(oid);
                 if(r != null) {
-                    c = (java.awt.Component) r.get();
+                    c = r.get();
                 }
             }
         }
@@ -450,7 +451,7 @@ public class AccessibleObjectFactory {
         if (c != null) {
             // Add the newly created object to the cache list
             synchronized (objectList) {
-                objectList.put(c.toString(), new WeakReference(c));
+                objectList.put(c.toString(), new WeakReference<Component>(c));
                 if (Build.DEBUG) {
 //                  System.out.println("Object cache now contains " + objectList.size() + " objects.");
                 }
@@ -483,8 +484,7 @@ public class AccessibleObjectFactory {
         if (xAccessibleContext != null) {
             short role = xAccessibleContext.getAccessibleRole();
             XAccessibleStateSet xAccessibleStateSet = xAccessibleContext.getAccessibleStateSet();
-            XAccessibleComponent xAccessibleComponent = (XAccessibleComponent)
-                UnoRuntime.queryInterface(XAccessibleComponent.class, xAccessibleContext);
+            XAccessibleComponent xAccessibleComponent = UnoRuntime.queryInterface(XAccessibleComponent.class, xAccessibleContext);
 
             java.awt.Window w;
             if (role == AccessibleRole.DIALOG) {

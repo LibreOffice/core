@@ -176,8 +176,8 @@ public class LocalOfficeConnection
             {
                 UnoUrl aURL = UnoUrl.parseUnoUrl( url );
                 mConnType = aURL.getConnection();
-                mPipe = (String) aURL.getConnectionParameters().get( "pipe" );
-                mPort = (String) aURL.getConnectionParameters().get( "port" );
+                mPipe = aURL.getConnectionParameters().get( "pipe" );
+                mPort = aURL.getConnectionParameters().get( "port" );
                 mProtocol = aURL.getProtocol();
                 mInitialObject = aURL.getRootOid();
             }
@@ -251,7 +251,7 @@ public class LocalOfficeConnection
         //to the office including the bridge needs to be terminated.
         if (mBridge != null)
         {
-            XComponent comp = (XComponent)UnoRuntime.queryInterface(
+            XComponent comp = UnoRuntime.queryInterface(
                     XComponent.class, mBridge);
             if (comp != null)
                comp.dispose();
@@ -337,10 +337,9 @@ public class LocalOfficeConnection
             // XComponentContext
             if( null != aInitialObject )
             {
-                XPropertySet xPropertySet = (XPropertySet)
-                    UnoRuntime.queryInterface( XPropertySet.class, aInitialObject);
+                XPropertySet xPropertySet = UnoRuntime.queryInterface( XPropertySet.class, aInitialObject);
                         Object xContext = xPropertySet.getPropertyValue("DefaultContext");
-                        XComponentContext xComponentContext = (XComponentContext) UnoRuntime.queryInterface(
+                        XComponentContext xComponentContext = UnoRuntime.queryInterface(
                     XComponentContext.class, xContext);
                 return xComponentContext;
             }
@@ -419,7 +418,7 @@ public class LocalOfficeConnection
 
         XMultiComponentFactory xLocalServiceManager = xLocalContext.getServiceManager();
         try {
-            xBridgeFactory = (XBridgeFactory)UnoRuntime.queryInterface(
+            xBridgeFactory = UnoRuntime.queryInterface(
                     XBridgeFactory.class,
                     xLocalServiceManager.createInstanceWithContext(
                         "com.sun.star.bridge.BridgeFactory", xLocalContext));
@@ -435,7 +434,7 @@ public class LocalOfficeConnection
                 } catch (com.sun.star.uno.Exception e) {
                     throw new com.sun.star.uno.RuntimeException(e.getMessage());
                 }
-                XConnector connector_xConnector = (XConnector)UnoRuntime.queryInterface(XConnector.class, connector);
+                XConnector connector_xConnector = UnoRuntime.queryInterface(XConnector.class, connector);
                 // connect to the server
                 XConnection xConnection = connector_xConnector.connect(conDcp);
                 // create the bridge name. This should not be necessary if we pass an

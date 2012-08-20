@@ -67,7 +67,7 @@ public class MenuContainer extends Container implements javax.accessibility.Acce
     protected class AccessibleMenuContainer extends AccessibleContainer implements javax.accessibility.AccessibleSelection {
 
         protected AccessibleMenuContainer() {
-            unoAccessibleSelection = (XAccessibleSelection) UnoRuntime.queryInterface(XAccessibleSelection.class,
+            unoAccessibleSelection = UnoRuntime.queryInterface(XAccessibleSelection.class,
                     unoAccessibleContext);
         }
 

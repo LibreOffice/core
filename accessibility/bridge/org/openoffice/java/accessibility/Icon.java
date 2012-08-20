@@ -47,7 +47,7 @@ public class Icon extends Component implements javax.accessibility.Accessible {
         /** Gets the AccessibleText associated with this object presenting text on the display */
         public javax.accessibility.AccessibleIcon[] getAccessibleIcon() {
             try {
-                XAccessibleImage unoAccessibleImage = (XAccessibleImage) UnoRuntime.queryInterface(XAccessibleImage.class,
+                XAccessibleImage unoAccessibleImage = UnoRuntime.queryInterface(XAccessibleImage.class,
                         unoAccessibleComponent);
 
                 if (unoAccessibleImage != null) {

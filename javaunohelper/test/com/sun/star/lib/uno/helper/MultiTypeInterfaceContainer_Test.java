@@ -40,11 +40,11 @@ public class MultiTypeInterfaceContainer_Test
     Object proxyObj3TypeProv;
     Object proxyObj2TypeProv;
     //contains original objects
-    List list1;
+    List<Object> list1;
     //contains original objects + proxies
-    List list2;
+    List<Object> list2;
     //contains original object + proxies + null value
-    List list3;
+    List<Object> list3;
 
     /** Creates a new instance of MultiTypeInterfaceContainer_Test */
     public MultiTypeInterfaceContainer_Test()
@@ -60,15 +60,15 @@ public class MultiTypeInterfaceContainer_Test
         proxyObj2TypeProv= ProxyProvider.createProxy(obj2, XTypeProvider.class);
         proxyObj3TypeProv= ProxyProvider.createProxy(obj3, XTypeProvider.class);
 
-        list1= new ArrayList();
+        list1= new ArrayList<Object>();
         list1.add(obj1);
         list1.add(obj2);
         list1.add(obj3);
-        list2= new ArrayList();
+        list2= new ArrayList<Object>();
         list2.add(obj1);
         list2.add(proxyObj2TypeProv);
         list2.add(proxyObj3TypeProv);
-        list3= new ArrayList();
+        list3= new ArrayList<Object>();
         list3.add(obj1);
         list3.add(null);
         list3.add(proxyObj2TypeProv);

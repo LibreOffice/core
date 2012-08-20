@@ -52,7 +52,7 @@ public class EditorScriptContext implements XScriptContext
     */
     public XModel getDocument()
     {
-        XModel xModel = ( XModel ) UnoRuntime.queryInterface( XModel.class,
+        XModel xModel = UnoRuntime.queryInterface( XModel.class,
              m_xDeskTop.getCurrentComponent() );
 
         return xModel;
@@ -60,7 +60,7 @@ public class EditorScriptContext implements XScriptContext
 
     public XScriptInvocationContext getInvocationContext()
     {
-        XScriptInvocationContext xContext = ( XScriptInvocationContext ) UnoRuntime.queryInterface(
+        XScriptInvocationContext xContext = UnoRuntime.queryInterface(
                 XScriptInvocationContext.class, getDocument() );
         return xContext;
     }

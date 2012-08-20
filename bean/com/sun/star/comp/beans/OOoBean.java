@@ -295,9 +295,8 @@ public class OOoBean
                 {
                     com.sun.star.lang.XMultiComponentFactory aFactory =
                         iConn.getComponentContext().getServiceManager();
-                    xServiceFactory = (com.sun.star.lang.XMultiServiceFactory)
-                        UnoRuntime.queryInterface(
-                            com.sun.star.lang.XMultiServiceFactory.class, aFactory );
+                    xServiceFactory = UnoRuntime.queryInterface(
+                        com.sun.star.lang.XMultiServiceFactory.class, aFactory );
                 }
             };
             aConnectorThread.start();
@@ -324,7 +323,7 @@ public class OOoBean
             try
             {
                 Object aObject = getMultiServiceFactory().createInstance( "com.sun.star.frame.Desktop");
-                xDesktop = (com.sun.star.frame.XDesktop) UnoRuntime.queryInterface(
+                xDesktop = UnoRuntime.queryInterface(
                         com.sun.star.frame.XDesktop.class, aObject );
             }
             catch ( com.sun.star.uno.Exception aExc )
@@ -381,8 +380,7 @@ public class OOoBean
                 new CallWatchThread( nOOoCallTimeOut, "clear" );
             //By closing the frame we avoid that dialogs are displayed, for example when
             //the document is modified.
-            com.sun.star.util.XCloseable xCloseable = (com.sun.star.util.XCloseable)
-                UnoRuntime.queryInterface( com.sun.star.util.XCloseable.class, aFrame );
+            com.sun.star.util.XCloseable xCloseable = UnoRuntime.queryInterface( com.sun.star.util.XCloseable.class, aFrame );
             if ( xCloseable != null )
             {
                 try
@@ -415,9 +413,8 @@ public class OOoBean
             {
                 try
                 {
-                    com.sun.star.lang.XComponent xComp = (com.sun.star.lang.XComponent)
-                        UnoRuntime.queryInterface(
-                            com.sun.star.lang.XComponent.class, xURLTransformer );
+                    com.sun.star.lang.XComponent xComp = UnoRuntime.queryInterface(
+                        com.sun.star.lang.XComponent.class, xURLTransformer );
                     if ( xComp != null )
                         xComp.dispose();
                 }
@@ -573,23 +570,23 @@ public class OOoBean
                     {
                         // create the frame
                         com.sun.star.awt.XWindow xWindow =
-                            (com.sun.star.awt.XWindow) UnoRuntime.queryInterface(
-                            com.sun.star.awt.XWindow.class, xFrameWindow.getUNOWindowPeer());
+                            UnoRuntime.queryInterface(
+                        com.sun.star.awt.XWindow.class, xFrameWindow.getUNOWindowPeer());
                         Object xFrame = xServiceFactory.createInstance( "com.sun.star.frame.Frame");
-                        aFrame = new Frame( (com.sun.star.frame.XFrame)UnoRuntime.queryInterface(
+                        aFrame = new Frame( UnoRuntime.queryInterface(
                                 com.sun.star.frame.XFrame.class, xFrame ) );
                         aFrame.initialize( xWindow );
                         aFrame.setName( aFrame.toString() );
 
                         // register the frame at the desktop
                         com.sun.star.frame.XFrames xFrames =
-                                ( (com.sun.star.frame.XFramesSupplier)UnoRuntime.queryInterface(
-                                com.sun.star.frame.XFramesSupplier.class, getOOoDesktop() ) ).getFrames();
+                                UnoRuntime.queryInterface(
+                                com.sun.star.frame.XFramesSupplier.class, getOOoDesktop() ).getFrames();
                         xFrames.append( aFrame );
                     }
 
                     // Initializes the slot command execution environment.
-                    xURLTransformer = (com.sun.star.util.XURLTransformer) UnoRuntime.queryInterface(
+                    xURLTransformer = UnoRuntime.queryInterface(
                         com.sun.star.util.XURLTransformer.class,
                         xServiceFactory.createInstance( "com.sun.star.util.URLTransformer") );
 
@@ -603,8 +600,7 @@ public class OOoBean
                                         }
 
                     // get XComponentLoader from frame
-                    com.sun.star.frame.XComponentLoader xLoader = (com.sun.star.frame.XComponentLoader)
-                        UnoRuntime.queryInterface( com.sun.star.frame.XComponentLoader.class, aFrame );
+                    com.sun.star.frame.XComponentLoader xLoader = UnoRuntime.queryInterface( com.sun.star.frame.XComponentLoader.class, aFrame );
                     if ( xLoader == null )
                     {
                         throw new java.lang.RuntimeException(
@@ -668,7 +664,7 @@ public class OOoBean
 
                     // Get document's XModifiable interface if any.
                     aDocument = new OfficeDocument(
-                        (com.sun.star.frame.XModel) UnoRuntime.queryInterface(
+                        UnoRuntime.queryInterface(
                         com.sun.star.frame.XModel.class, xComponent ) );
                     bLoaded = true;
                 }
@@ -1088,12 +1084,12 @@ xLayoutManager.showElement("private:resource/menubar/menubar");
                 try
                 {
                     com.sun.star.beans.XPropertySet xPropSet =
-                            (com.sun.star.beans.XPropertySet) UnoRuntime.queryInterface(
-                            com.sun.star.beans.XPropertySet.class, aFrame );
+                            UnoRuntime.queryInterface(
+                    com.sun.star.beans.XPropertySet.class, aFrame );
                     com.sun.star.frame.XLayoutManager xLayoutManager =
-                            (com.sun.star.frame.XLayoutManager) UnoRuntime.queryInterface(
-                            com.sun.star.frame.XLayoutManager.class,
-                            xPropSet.getPropertyValue( "LayoutManager" ) );
+                            UnoRuntime.queryInterface(
+                    com.sun.star.frame.XLayoutManager.class,
+                    xPropSet.getPropertyValue( "LayoutManager" ) );
                     if ( bNewValue )
                         xLayoutManager.showElement( aResourceURL );
                     else

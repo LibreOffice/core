@@ -34,7 +34,7 @@ public interface Resolver {
      * @param  c   A Class
      * @return     The ScriptProxy value
      */
-    public ScriptProxy getProxy( ScriptDescriptor sd, Class c )
+    public ScriptProxy getProxy( ScriptDescriptor sd, Class<?> c )
     throws NoSuchMethodException;
 }
 

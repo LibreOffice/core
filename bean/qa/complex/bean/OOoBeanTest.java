@@ -95,7 +95,7 @@ public class OOoBeanTest
 
     private String getText(OOoBean bean) throws Exception
     {
-        com.sun.star.frame.XModel model = (com.sun.star.frame.XModel)bean.getDocument();
+        com.sun.star.frame.XModel model = bean.getDocument();
         com.sun.star.text.XTextDocument myDoc =
             UnoRuntime.queryInterface(com.sun.star.text.XTextDocument.class, model);
         com.sun.star.text.XText xText = myDoc.getText();

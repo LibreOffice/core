@@ -39,12 +39,10 @@ public class Frame
     {
         super( xFrame );
         this.xFrame = xFrame;
-        xDispatchProvider = (com.sun.star.frame.XDispatchProvider)
-            UnoRuntime.queryInterface( com.sun.star.frame.XDispatchProvider.class,
-                xFrame );
-        xDispatchProviderInterception = (com.sun.star.frame.XDispatchProviderInterception)
-            UnoRuntime.queryInterface( com.sun.star.frame.XDispatchProviderInterception.class,
-                xFrame );
+        xDispatchProvider = UnoRuntime.queryInterface( com.sun.star.frame.XDispatchProvider.class,
+            xFrame );
+        xDispatchProviderInterception = UnoRuntime.queryInterface( com.sun.star.frame.XDispatchProviderInterception.class,
+            xFrame );
     }
 
     //==============================================================

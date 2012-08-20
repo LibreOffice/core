@@ -34,6 +34,7 @@ import com.sun.star.uno.*;
 
 import org.openoffice.java.accessibility.*;
 
+import java.awt.Window;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
@@ -42,7 +43,7 @@ import javax.accessibility.Accessible;
 
 public class AccessBridge {
     //
-    protected static java.util.Hashtable topWindowMap = new java.util.Hashtable();
+    protected static java.util.Hashtable<String, Window> topWindowMap = new java.util.Hashtable<String, Window>();
 
     private static java.awt.Window getTopWindowImpl(XAccessible xAccessible) {
         // Because it can not be garantied that
@@ -51,7 +52,7 @@ public class AccessBridge {
         // atomic.
         synchronized (topWindowMap) {
             String oid = UnoRuntime.generateOid(xAccessible);
-            java.awt.Window w = (java.awt.Window) topWindowMap.get(oid);
+            java.awt.Window w = topWindowMap.get(oid);
 
             if (w == null) {
                 w = AccessibleObjectFactory.getTopWindow(xAccessible);
@@ -107,7 +108,7 @@ public class AccessBridge {
                     case AccessibleRole.WINDOW:
                     case AccessibleRole.FRAME:
                     case AccessibleRole.DIALOG:
-                        return (java.awt.Window) topWindowMap.remove(UnoRuntime.generateOid(xAccessible));
+                        return topWindowMap.remove(UnoRuntime.generateOid(xAccessible));
 
                     default:
                         break;
@@ -156,7 +157,7 @@ public class AccessBridge {
                     // FIXME this should be done in VCL
                     unoToolkit.addTopWindowListener(this);
 
-                    String os = (String) System.getProperty("os.name");
+                    String os = System.getProperty("os.name");
 
                     // Try to initialize the WindowsAccessBridgeAdapter
                     if (os.startsWith("Windows")) {
@@ -177,7 +178,7 @@ public class AccessBridge {
         * XTopWindowListener
         */
         public void windowOpened(com.sun.star.lang.EventObject event) {
-            XAccessible xAccessible = (XAccessible) UnoRuntime.queryInterface(XAccessible.class,
+            XAccessible xAccessible = UnoRuntime.queryInterface(XAccessible.class,
                     event.Source);
             java.awt.Window w = getTopWindow(xAccessible);
         }
@@ -198,7 +199,7 @@ public class AccessBridge {
         }
 
         public void windowClosed(com.sun.star.lang.EventObject event) {
-            XAccessible xAccessible = (XAccessible) UnoRuntime.queryInterface(XAccessible.class,
+            XAccessible xAccessible = UnoRuntime.queryInterface(XAccessible.class,
                     event.Source);
 
             java.awt.Window w = removeTopWindow(xAccessible);

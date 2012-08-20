@@ -17,6 +17,8 @@
  */
 package org.openoffice.java.accessibility;
 
+import java.awt.Component;
+
 import com.sun.star.accessibility.*;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.UnoRuntime;
@@ -24,7 +26,7 @@ import com.sun.star.uno.UnoRuntime;
 
 public class Menu extends AbstractButton
     implements javax.accessibility.Accessible {
-    private java.util.ArrayList children;
+    private java.util.ArrayList<Component> children;
     protected XAccessibleSelection unoAccessibleSelection = null;
 
     protected Menu(XAccessible xAccessible,
@@ -34,7 +36,7 @@ public class Menu extends AbstractButton
         try {
             // Create a vector with the correct initial capacity
             int count = unoAccessibleContext.getAccessibleChildCount();
-            children = new java.util.ArrayList(count);
+            children = new java.util.ArrayList<Component>(count);
 
             // Fill the vector with objects
             for (int i = 0; i < count; i++) {
@@ -52,7 +54,7 @@ public class Menu extends AbstractButton
             }
 
             if (children == null) {
-                children = new java.util.ArrayList(0);
+                children = new java.util.ArrayList<Component>(0);
             }
         } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
         }
@@ -172,7 +174,7 @@ public class Menu extends AbstractButton
     protected class AccessibleMenu extends AccessibleAbstractButton
         implements javax.accessibility.AccessibleSelection {
         protected AccessibleMenu() {
-            unoAccessibleSelection = (XAccessibleSelection) UnoRuntime.queryInterface(XAccessibleSelection.class,
+            unoAccessibleSelection = UnoRuntime.queryInterface(XAccessibleSelection.class,
                     unoAccessibleContext);
         }
 

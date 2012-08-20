@@ -712,7 +712,7 @@ public final class PropertySetMixin {
         throws UnknownPropertyException, PropertyVetoException,
         com.sun.star.lang.IllegalArgumentException, WrappedTargetException
     {
-        PropertyData p = (PropertyData) properties.get(name);
+        PropertyData p = properties.get(name);
         if (p == null) {
             throw new UnknownPropertyException(name, object);
         }
@@ -784,7 +784,7 @@ public final class PropertySetMixin {
     Object getProperty(String name, PropertyState[] state)
         throws UnknownPropertyException, WrappedTargetException
     {
-        PropertyData p = (PropertyData) properties.get(name);
+        PropertyData p = properties.get(name);
         if (p == null) {
             throw new UnknownPropertyException(name, object);
         }
@@ -1008,7 +1008,7 @@ public final class PropertySetMixin {
     private PropertyData get(Object object, String propertyName)
         throws UnknownPropertyException
     {
-        PropertyData p = (PropertyData) properties.get(propertyName);
+        PropertyData p = properties.get(propertyName);
         if (p == null || !p.present) {
             throw new UnknownPropertyException(propertyName, object);
         }
@@ -1057,7 +1057,7 @@ public final class PropertySetMixin {
         }
 
         public boolean hasPropertyByName(String name) {
-            PropertyData p = (PropertyData) properties.get(name);
+            PropertyData p = properties.get(name);
             return p != null && p.present;
         }
 

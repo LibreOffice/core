@@ -28,7 +28,7 @@ import com.sun.star.lang.XMultiServiceFactory;
 
 public class Bootstrap_Test {
 
-    static public boolean test( String ini_file, java.util.Hashtable bootstrap_parameters )
+    static public boolean test( String ini_file, java.util.Hashtable<String,String> bootstrap_parameters )
         throws java.lang.Exception
     {
         boolean passed = false;
@@ -91,7 +91,7 @@ public class Bootstrap_Test {
         if ( args.length == 0 )
             usage();
 
-        java.util.Hashtable bootstrap_parameters = new java.util.Hashtable();
+        java.util.Hashtable<String,String> bootstrap_parameters = new java.util.Hashtable<String,String>();
         for ( int nPos = 1; nPos < args.length; ++nPos )
         {
             String arg = args[ nPos ];

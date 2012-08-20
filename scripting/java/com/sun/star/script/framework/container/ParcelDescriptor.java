@@ -294,10 +294,10 @@ public class ParcelDescriptor {
             addScriptEntry(scripts[i]);
     }
 
-    public void setScriptEntries(Enumeration scripts) {
+    public void setScriptEntries(Enumeration<ScriptEntry> scripts) {
         clearEntries();
         while (scripts.hasMoreElements())
-            addScriptEntry((ScriptEntry) scripts.nextElement());
+            addScriptEntry(scripts.nextElement());
     }
 
     public String getLanguageProperty(String name) {
@@ -427,7 +427,7 @@ public class ParcelDescriptor {
             Iterator<String> iter = languagedepprops.keySet().iterator();
             while (iter.hasNext()) {
                 tempitem = document.createElement("prop");
-                key = (String)iter.next();
+                key = iter.next();
                 tempitem.setAttribute("name", key);
                 tempitem.setAttribute("value", languagedepprops.get(key));
                 item.appendChild(tempitem);

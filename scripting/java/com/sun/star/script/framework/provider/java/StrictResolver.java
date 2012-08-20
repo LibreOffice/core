@@ -50,7 +50,7 @@ public class StrictResolver implements Resolver
      * @param  c   the Class file in which to search for the method
      * @return     the ScriptProxy matching the criteria, or null if no match is found
      */
-    public ScriptProxy getProxy( ScriptDescriptor sd, Class c )
+    public ScriptProxy getProxy( ScriptDescriptor sd, Class<?> c )
     throws NoSuchMethodException
     {
         Method m = null;

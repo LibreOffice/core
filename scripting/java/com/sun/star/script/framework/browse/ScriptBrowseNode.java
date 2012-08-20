@@ -71,11 +71,10 @@ public class ScriptBrowseNode extends PropertySet
         try
         {
             data = (ScriptMetaData)parent.getByName( name );
-            xSFA = ( XSimpleFileAccess)
-                UnoRuntime.queryInterface( XSimpleFileAccess.class,
-                    xFac.createInstanceWithContext(
-                        "com.sun.star.ucb.SimpleFileAccess",
-                        xCtx ) );
+            xSFA = UnoRuntime.queryInterface( XSimpleFileAccess.class,
+                xFac.createInstanceWithContext(
+                    "com.sun.star.ucb.SimpleFileAccess",
+                    xCtx ) );
         }
 
         // TODO fix exception types to be caught here, should we rethrow?
@@ -250,7 +249,7 @@ public class ScriptBrowseNode extends PropertySet
 
             try
             {
-                String newName = (String) AnyConverter.toString(aParams[0]);
+                String newName = AnyConverter.toString(aParams[0]);
                 ScriptMetaData oldData = (ScriptMetaData)parent.getByName( name );
                 oldData.loadSource();
                 String oldSource = oldData.getSource();
@@ -261,7 +260,7 @@ public class ScriptBrowseNode extends PropertySet
                 String language = provider.getName();
 
                 ScriptEntry entry = new ScriptEntry(
-                    language, languageName, languageName, "", new HashMap() );
+                    language, languageName, languageName, "", new HashMap<String,String>() );
 
                 ScriptMetaData data = new ScriptMetaData(
                     parent, entry, oldSource );

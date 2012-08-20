@@ -49,7 +49,7 @@ public class ScrollBar extends Component implements SwingConstants, javax.access
         */
         protected AccessibleScrollBar() {
             super();
-            unoAccessibleAction = (XAccessibleAction) UnoRuntime.queryInterface(
+            unoAccessibleAction = UnoRuntime.queryInterface(
                 XAccessibleAction.class, unoAccessibleContext);
             if (unoAccessibleAction != null) {
                 actionCount = unoAccessibleAction.getAccessibleActionCount();
@@ -68,8 +68,7 @@ public class ScrollBar extends Component implements SwingConstants, javax.access
         /** Gets the AccessibleValue associated with this object that has a graphical representation */
         public javax.accessibility.AccessibleValue getAccessibleValue() {
             try {
-                XAccessibleValue unoAccessibleValue = (XAccessibleValue)
-                    UnoRuntime.queryInterface(XAccessibleValue.class, unoAccessibleContext);
+                XAccessibleValue unoAccessibleValue = UnoRuntime.queryInterface(XAccessibleValue.class, unoAccessibleContext);
                 return (unoAccessibleValue != null) ?
                     new AccessibleValueImpl(unoAccessibleValue) : null;
             } catch (com.sun.star.uno.RuntimeException e) {

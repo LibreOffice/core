@@ -74,8 +74,7 @@ public class AccessibleTextImpl implements javax.accessibility.AccessibleText {
 
     public static javax.accessibility.AccessibleText get(com.sun.star.uno.XInterface unoObject) {
         try {
-            XAccessibleText unoAccessibleText = (XAccessibleText)
-                UnoRuntime.queryInterface(XAccessibleText.class, unoObject);
+            XAccessibleText unoAccessibleText = UnoRuntime.queryInterface(XAccessibleText.class, unoObject);
             if (unoAccessibleText != null) {
                 return new AccessibleTextImpl(unoAccessibleText);
             }

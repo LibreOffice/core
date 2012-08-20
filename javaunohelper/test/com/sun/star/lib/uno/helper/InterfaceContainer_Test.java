@@ -54,11 +54,11 @@ public class InterfaceContainer_Test
     Object proxyObj3TypeProv;
     Object proxyObj2TypeProv;
     //contains original objects
-    List list1;
+    List<Object> list1;
     //contains original objects + proxies
-    List list2;
+    List<Object> list2;
     //contains original object + proxies + null value
-    List list3;
+    List<Object> list3;
 
     public InterfaceContainer_Test()
     {
@@ -72,15 +72,15 @@ public class InterfaceContainer_Test
         proxyObj2TypeProv= ProxyProvider.createProxy(obj2, XTypeProvider.class);
         proxyObj3TypeProv= ProxyProvider.createProxy(obj3, XTypeProvider.class);
 
-        list1= new ArrayList();
+        list1= new ArrayList<Object>();
         list1.add(obj1);
         list1.add(obj2);
         list1.add(obj3);
-        list2= new ArrayList();
+        list2= new ArrayList<Object>();
         list2.add(obj1);
         list2.add(proxyObj2TypeProv);
         list2.add(proxyObj3TypeProv);
-        list3= new ArrayList();
+        list3= new ArrayList<Object>();
         list3.add(obj1);
         list3.add(null);
         list3.add(proxyObj2TypeProv);
@@ -368,7 +368,7 @@ public class InterfaceContainer_Test
         r[i++]= cont.isEmpty();
         cont.addAll(list2);
 
-        List list= new ArrayList();
+        List<Object> list= new ArrayList<Object>();
         list.add(list2.get(0));
         list.add(list2.get(1));
         list.add(proxyObj3Weak2);
@@ -396,7 +396,7 @@ public class InterfaceContainer_Test
 
         cont.addAll(list1); //obj1, obj2, obj3
         cont.addAll(list2); //obj1, proxyObj2TypeProv, proxyObj3TypeProv
-        List list = new ArrayList();
+        List<Object> list = new ArrayList<Object>();
         list.add(obj1);
         list.add(proxyObj3Weak1);
 

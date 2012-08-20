@@ -41,7 +41,7 @@ import java.util.Enumeration;
 import java.util.jar.Attributes;
 import java.util.jar.Manifest;
 import java.util.StringTokenizer;
-import java.util.Vector;
+import java.util.ArrayList;
 
 /**
  * This class can be used as a loader for application classes which use UNO.
@@ -72,22 +72,22 @@ public final class Loader {
         String className = null;
         Class clazz = Loader.class;
         ClassLoader loader = clazz.getClassLoader();
-        Vector res = new Vector();
+        ArrayList<URL> res = new ArrayList<URL>();
         try {
-            Enumeration en = loader.getResources( "META-INF/MANIFEST.MF" );
+            Enumeration<URL> en = loader.getResources( "META-INF/MANIFEST.MF" );
             while ( en.hasMoreElements() ) {
-                res.add( (URL) en.nextElement() );
+                res.add( en.nextElement() );
             }
             // the jarfile with the com/sun/star/lib/loader/Loader.class
             // per-entry attribute is most probably the last resource in the
             // list, therefore search backwards
             for ( int i = res.size() - 1; i >= 0; i-- ) {
-                URL jarurl = (URL) res.elementAt( i );
+                URL jarurl = res.get( i );
                 try {
                     JarURLConnection jarConnection =
                         (JarURLConnection) jarurl.openConnection();
                     Manifest mf = jarConnection.getManifest();
-                    Attributes attrs = (Attributes) mf.getAttributes(
+                    Attributes attrs = mf.getAttributes(
                         "com/sun/star/lib/loader/Loader.class" );
                     if ( attrs != null ) {
                         className = attrs.getValue( "Application-Class" );
@@ -154,7 +154,7 @@ public final class Loader {
 
             // get the urls from which to load classes and resources
             // from the class path
-            Vector vec = new Vector();
+            ArrayList<URL> vec = new ArrayList<URL>();
             String classpath = null;
             try {
                 classpath = System.getProperty( "java.class.path" );
@@ -233,7 +233,7 @@ public final class Loader {
         return m_Loader;
     }
 
-    private static void addUrls(Vector urls, String data, String delimiter) {
+    private static void addUrls(ArrayList<URL> urls, String data, String delimiter) {
         StringTokenizer tokens = new StringTokenizer( data, delimiter );
         while ( tokens.hasMoreTokens() ) {
             try {
@@ -247,7 +247,7 @@ public final class Loader {
         }
     }
 
-    private static void callUnoinfo(String path, Vector urls) {
+    private static void callUnoinfo(String path, ArrayList<URL> urls) {
         Process p;
         try {
             p = Runtime.getRuntime().exec(

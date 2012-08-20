@@ -142,7 +142,7 @@ public class InputStreamToXInputStreamAdapter implements XInputStream {
                tmpIntVal = Integer.MAX_VALUE;
             } else {
                // Casting is safe here.
-               tmpIntVal = (int)tmpLongVal;
+               tmpIntVal = tmpLongVal;
             }
             tmpLongVal -= tmpIntVal;
 

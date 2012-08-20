@@ -60,7 +60,7 @@ public class Label extends Component implements javax.accessibility.Accessible {
                 return null;
 
             try {
-                XAccessibleText unoAccessibleText = (XAccessibleText) UnoRuntime.queryInterface(XAccessibleText.class,
+                XAccessibleText unoAccessibleText = UnoRuntime.queryInterface(XAccessibleText.class,
                         unoAccessibleContext);
 
                 if (unoAccessibleText != null) {

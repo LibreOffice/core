@@ -190,8 +190,7 @@ class ScriptImpl implements XScript
             aOutParamIndex[0] = new short[0];
             aOutParam[0] = new Object[0];
 
-
-            Map languageProps = metaData.getLanguageProperties();
+            Map<String,String> languageProps = metaData.getLanguageProperties();
 
             ScriptDescriptor scriptDesc =
                 new ScriptDescriptor( metaData.getLanguageName() );
@@ -271,7 +270,7 @@ class ScriptImpl implements XScript
                 LogUtils.DEBUG( "About to load Class " + className + " starting... " );
 
                 long start = new java.util.Date().getTime();
-                Class c = scriptLoader.loadClass( className );
+                Class<?> c = scriptLoader.loadClass( className );
                 long end = new java.util.Date().getTime();
 
                 LogUtils.DEBUG("loadClass took: " + String.valueOf(end - start) +

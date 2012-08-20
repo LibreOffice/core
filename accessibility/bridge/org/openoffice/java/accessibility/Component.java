@@ -38,13 +38,11 @@ public abstract class Component extends java.awt.Component {
         super();
         unoAccessible = xAccessible;
         unoAccessibleContext = xAccessibleContext;
-        unoAccessibleComponent = (XAccessibleComponent)
-            UnoRuntime.queryInterface(XAccessibleComponent.class, xAccessibleContext);
+        unoAccessibleComponent = UnoRuntime.queryInterface(XAccessibleComponent.class, xAccessibleContext);
         // Add the event listener right away, because the global focus notification doesn't
         // work yet ..
-        XAccessibleEventBroadcaster broadcaster = (XAccessibleEventBroadcaster)
-            UnoRuntime.queryInterface(XAccessibleEventBroadcaster.class,
-            unoAccessibleComponent);
+        XAccessibleEventBroadcaster broadcaster = UnoRuntime.queryInterface(XAccessibleEventBroadcaster.class,
+        unoAccessibleComponent);
         if (broadcaster != null) {
             broadcaster.addEventListener(createEventListener());
         }
@@ -122,10 +120,10 @@ public abstract class Component extends java.awt.Component {
 
     public Object[] getAccessibleComponents(Object[] targetSet) {
         try {
-            java.util.ArrayList list = new java.util.ArrayList(targetSet.length);
+            java.util.ArrayList<java.awt.Component> list = new java.util.ArrayList<java.awt.Component>(targetSet.length);
             for (int i=0; i < targetSet.length; i++) {
                 java.awt.Component c = AccessibleObjectFactory.getAccessibleComponent(
-                    (XAccessible) UnoRuntime.queryInterface(XAccessible.class, targetSet[i]));
+                    UnoRuntime.queryInterface(XAccessible.class, targetSet[i]));
                 if (c != null) {
                     list.add(c);
                 }
@@ -659,8 +657,7 @@ public abstract class Component extends java.awt.Component {
 
         public String getToolTipText() {
             try {
-                XAccessibleExtendedComponent unoAccessibleExtendedComponent = (XAccessibleExtendedComponent)
-                    UnoRuntime.queryInterface(XAccessibleExtendedComponent.class, unoAccessibleComponent);
+                XAccessibleExtendedComponent unoAccessibleExtendedComponent = UnoRuntime.queryInterface(XAccessibleExtendedComponent.class, unoAccessibleComponent);
                 if (unoAccessibleExtendedComponent != null) {
                     return unoAccessibleExtendedComponent.getToolTipText();
                 }
@@ -672,8 +669,7 @@ public abstract class Component extends java.awt.Component {
 
         public String getTitledBorderText() {
             try {
-                XAccessibleExtendedComponent unoAccessibleExtendedComponent = (XAccessibleExtendedComponent)
-                    UnoRuntime.queryInterface(XAccessibleExtendedComponent.class, unoAccessibleComponent);
+                XAccessibleExtendedComponent unoAccessibleExtendedComponent = UnoRuntime.queryInterface(XAccessibleExtendedComponent.class, unoAccessibleComponent);
                 if (unoAccessibleExtendedComponent != null) {
                     return unoAccessibleExtendedComponent.getTitledBorderText();
                 }
@@ -685,8 +681,7 @@ public abstract class Component extends java.awt.Component {
 
         public javax.accessibility.AccessibleKeyBinding getAccessibleKeyBinding() {
             try {
-                XAccessibleAction unoAccessibleAction = (XAccessibleAction)
-                    UnoRuntime.queryInterface(XAccessibleAction.class, unoAccessibleComponent);
+                XAccessibleAction unoAccessibleAction = UnoRuntime.queryInterface(XAccessibleAction.class, unoAccessibleComponent);
                 if (unoAccessibleAction != null) {
                     XAccessibleKeyBinding unoAccessibleKeyBinding = unoAccessibleAction.getAccessibleActionKeyBinding(0);
                     if (unoAccessibleKeyBinding != null) {

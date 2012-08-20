@@ -23,6 +23,7 @@ import com.sun.star.style.*;
 import com.sun.star.uno.*;
 import com.sun.star.accessibility.AccessibleTextType;
 import com.sun.star.accessibility.XAccessibleEditableText;
+import com.sun.star.beans.PropertyValue;
 
 import javax.accessibility.AccessibleText;
 import javax.swing.text.StyleConstants;
@@ -104,7 +105,7 @@ public class AccessibleEditableTextImpl extends AccessibleTextImpl implements ja
 
     /** Sets the attributes for the text between two indices */
     public void setAttributes(int startIndex, int endIndex, javax.swing.text.AttributeSet as) {
-        java.util.ArrayList propertyValues = new java.util.ArrayList();
+        java.util.ArrayList<PropertyValue> propertyValues = new java.util.ArrayList<PropertyValue>();
 
         // Convert Alignment attribute
         Object attribute = as.getAttribute(StyleConstants.Alignment);
@@ -298,7 +299,7 @@ public class AccessibleEditableTextImpl extends AccessibleTextImpl implements ja
             propertyValue.Name = "ParaTabStops";
 
             javax.swing.text.TabSet tabSet = StyleConstants.getTabSet(as);
-            java.util.ArrayList tabStops = new java.util.ArrayList(tabSet.getTabCount());
+            java.util.ArrayList<TabStop> tabStops = new java.util.ArrayList<TabStop>(tabSet.getTabCount());
 
             for (int i = 0, max = tabSet.getTabCount(); i < max; i++) {
                 javax.swing.text.TabStop tab = tabSet.getTab(i);
@@ -323,7 +324,7 @@ public class AccessibleEditableTextImpl extends AccessibleTextImpl implements ja
 
                 tabStops.add(unoTab);
             }
-            propertyValue.Value = (com.sun.star.style.TabStop[]) tabStops.toArray();
+            propertyValue.Value = tabStops.toArray();
             propertyValues.add(propertyValue);
         }
 

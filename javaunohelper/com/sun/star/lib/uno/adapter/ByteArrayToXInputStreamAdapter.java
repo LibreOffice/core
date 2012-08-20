@@ -89,7 +89,7 @@ public class ByteArrayToXInputStreamAdapter
         // System.err.println("readbytes(..., "+param+")");
         _check();
     try {
-            int remain = (int)(m_length - m_pos);
+            int remain = (m_length - m_pos);
             if (param > remain) param = remain;
             /* ARGH!!! */
             if (values[0] == null){

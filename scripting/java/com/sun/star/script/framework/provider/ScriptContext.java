@@ -94,8 +94,7 @@ public class ScriptContext extends PropertySet implements XScriptContext
 
             xInterface = xMCF.createInstanceWithContext(
                 "com.sun.star.frame.Desktop", xCtxt);
-            xDesktop = (XDesktop)
-                UnoRuntime.queryInterface(XDesktop.class, xInterface);
+            xDesktop = UnoRuntime.queryInterface(XDesktop.class, xInterface);
             if ( xModel != null )
             {
                 sc = new ScriptContext(xCtxt, xDesktop, xModel, xInvocContext);

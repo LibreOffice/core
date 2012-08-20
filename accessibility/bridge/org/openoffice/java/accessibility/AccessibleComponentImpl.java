@@ -36,8 +36,7 @@ public class AccessibleComponentImpl implements javax.accessibility.AccessibleCo
 
     protected boolean hasState(short state) {
         try {
-            XAccessibleContext unoAccessibleContext = (XAccessibleContext)
-                UnoRuntime.queryInterface(XAccessibleContext.class, unoObject);
+            XAccessibleContext unoAccessibleContext = UnoRuntime.queryInterface(XAccessibleContext.class, unoObject);
             // All UNO accessibility implementations must support XAccessibleContext
             // and return a valid XAccessibleStateSet ..
             return unoAccessibleContext.getAccessibleStateSet().contains(state);

@@ -142,7 +142,7 @@ public class OfficeDocument
     /* ------------------------------------------------------------------ */
     public boolean isModified()
     {
-        XModifiable modify = (XModifiable)query( XModifiable.class );
+        XModifiable modify = query( XModifiable.class );
         return modify.isModified();
     }
 

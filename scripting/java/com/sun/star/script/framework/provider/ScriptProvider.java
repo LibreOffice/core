@@ -168,19 +168,19 @@ public abstract class ScriptProvider
             if ( AnyConverter.getType(aArguments[0]).getTypeClass().equals(TypeClass.INTERFACE) )
             {
                 // try whether it denotes a XScriptInvocationContext
-                m_xInvocContext = (XScriptInvocationContext)UnoRuntime.queryInterface(
+                m_xInvocContext = UnoRuntime.queryInterface(
                         XScriptInvocationContext.class, aArguments[0]);
                 if ( m_xInvocContext != null )
                 {
                     // if so, obtain the document - by definition, this must be
                     // the ScriptContainer
-                    m_xModel = (XModel)UnoRuntime.queryInterface( XModel.class,
+                    m_xModel = UnoRuntime.queryInterface( XModel.class,
                             m_xInvocContext.getScriptContainer() );
                 }
                 else
                 {
                     // otherwise, check whether it's an XModel
-                    m_xModel = (XModel)UnoRuntime.queryInterface( XModel.class,
+                    m_xModel = UnoRuntime.queryInterface( XModel.class,
                             m_xInvocContext.getScriptContainer() );
                 }
                 if ( m_xModel == null )
@@ -261,8 +261,8 @@ public abstract class ScriptProvider
             m_xBrowseNodeProxy = new ProviderBrowseNode( this,
                 m_container, m_xContext );
 
-            m_xInvocationProxy = (XInvocation)UnoRuntime.queryInterface(XInvocation.class, m_xBrowseNodeProxy);
-            m_xPropertySetProxy = (XPropertySet)UnoRuntime.queryInterface(XPropertySet.class, m_xBrowseNodeProxy);
+            m_xInvocationProxy = UnoRuntime.queryInterface(XInvocation.class, m_xBrowseNodeProxy);
+            m_xPropertySetProxy = UnoRuntime.queryInterface(XPropertySet.class, m_xBrowseNodeProxy);
         }
         else
         {
@@ -608,7 +608,7 @@ public abstract class ScriptProvider
     public void insertByName( String aName, java.lang.Object aElement ) throws com.sun.star.lang.IllegalArgumentException, com.sun.star.container.ElementExistException, com.sun.star.lang.WrappedTargetException
     {
         LogUtils.DEBUG("Provider for " + language + " received register for package " + aName );
-        XPackage newPackage = ( XPackage ) UnoRuntime.queryInterface( XPackage.class, aElement );
+        XPackage newPackage = UnoRuntime.queryInterface( XPackage.class, aElement );
         if ( aName.length() == 0 )
         {
             throw new  com.sun.star.lang.IllegalArgumentException( "Empty name" );
@@ -660,7 +660,7 @@ public abstract class ScriptProvider
         XTransientDocumentsDocumentContentFactory factory = null;
         try
         {
-            factory = (XTransientDocumentsDocumentContentFactory)UnoRuntime.queryInterface(
+            factory = UnoRuntime.queryInterface(
                     XTransientDocumentsDocumentContentFactory.class,
                         m_xMultiComponentFactory.createInstanceWithContext(
                             "com.sun.star.frame.TransientDocumentsDocumentContentFactory",
@@ -699,24 +699,21 @@ public abstract class ScriptProvider
             Object ucb = m_xMultiComponentFactory.createInstanceWithArgumentsAndContext( "com.sun.star.ucb.UniversalContentBroker", args, m_xContext );
 
 
-            XContentIdentifierFactory xFac  =  ( XContentIdentifierFactory )
-                UnoRuntime.queryInterface( XContentIdentifierFactory.class,
-                    ucb );
+            XContentIdentifierFactory xFac  =  UnoRuntime.queryInterface( XContentIdentifierFactory.class,
+                ucb );
 
 
             XContentIdentifier xCntId = xFac.createContentIdentifier( docUrl );
 
 
-            XContentProvider xCntAccess = ( XContentProvider )
-                UnoRuntime.queryInterface( XContentProvider.class,
-                    ucb );
+            XContentProvider xCntAccess = UnoRuntime.queryInterface( XContentProvider.class,
+                ucb );
 
 
             XContent xCnt = xCntAccess.queryContent( xCntId );
 
 
-            XCommandProcessor xCmd = ( XCommandProcessor )
-                UnoRuntime.queryInterface( XCommandProcessor.class, xCnt );
+            XCommandProcessor xCmd = UnoRuntime.queryInterface( XCommandProcessor.class, xCnt );
 
 
             Property[] pArgs = new Property[ ] { new Property() };
@@ -732,10 +729,10 @@ public abstract class ScriptProvider
             com.sun.star.ucb.XCommandEnvironment env = null ;
             Object result =  xCmd.execute( command, 0, env ) ;
 
-            XRow values = ( XRow ) UnoRuntime.queryInterface( XRow.class,
+            XRow values = UnoRuntime.queryInterface( XRow.class,
                 result );
 
-            xModel = ( XModel )  UnoRuntime.queryInterface( XModel.class,
+            xModel = UnoRuntime.queryInterface( XModel.class,
                 values.getObject( 1, null ) );
         }
         catch ( Exception ignore )

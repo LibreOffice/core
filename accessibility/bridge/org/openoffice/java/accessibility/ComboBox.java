@@ -68,7 +68,7 @@ public class ComboBox extends Container {
         /** Gets the AccessibleAction associated with this object that supports one or more actions */
         public javax.accessibility.AccessibleAction getAccessibleAction() {
             if (unoAccessibleAction == null) {
-                unoAccessibleAction = (XAccessibleAction) UnoRuntime.queryInterface(XAccessibleAction.class,
+                unoAccessibleAction = UnoRuntime.queryInterface(XAccessibleAction.class,
                         unoAccessibleContext);
 
                 if (unoAccessibleAction == null) {

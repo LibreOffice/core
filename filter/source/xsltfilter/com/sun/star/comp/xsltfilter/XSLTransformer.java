@@ -245,7 +245,7 @@ public class XSLTransformer
                         l.started();
                     }
 
-                    XSeekable xseek = (XSeekable) UnoRuntime.queryInterface(XSeekable.class, m_xis);
+                    XSeekable xseek = UnoRuntime.queryInterface(XSeekable.class, m_xis);
                     if (xseek != null) {
                         xseek.seek(0);
                     }

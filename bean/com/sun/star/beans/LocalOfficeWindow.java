@@ -58,7 +58,7 @@ public class LocalOfficeWindow
     /* package */ LocalOfficeWindow(OfficeConnection connection)
     {
         mConnection = connection;
-        mConnection.addEventListener((XEventListener)this);
+        mConnection.addEventListener(this);
     }
 
     /**
@@ -109,10 +109,10 @@ public class LocalOfficeWindow
             {
                 compfactory     = mConnection.getComponentContext().getServiceManager();
                 XMultiServiceFactory    factory;
-                factory = (XMultiServiceFactory)UnoRuntime.queryInterface(
+                factory = UnoRuntime.queryInterface(
                         XMultiServiceFactory.class, compfactory);
                 Object          object  = factory.createInstance( "com.sun.star.awt.Toolkit");
-                return (XToolkit)UnoRuntime.queryInterface(XToolkit.class, object);
+                return UnoRuntime.queryInterface(XToolkit.class, object);
             }
             else
                 return null;
@@ -124,13 +124,13 @@ public class LocalOfficeWindow
         if ( !bPeer )
         {
             // set real parent
-            XVclWindowPeer xVclWindowPeer = (XVclWindowPeer)UnoRuntime.queryInterface(
+            XVclWindowPeer xVclWindowPeer = UnoRuntime.queryInterface(
                                XVclWindowPeer.class, mWindow);
             xVclWindowPeer.setProperty( "PluginParent", new Long(getNativeWindow()) );
             bPeer = true;
 
                    // show document window
-            XWindow aWindow = (XWindow)UnoRuntime.queryInterface(XWindow.class, mWindow);
+            XWindow aWindow = UnoRuntime.queryInterface(XWindow.class, mWindow);
             aWindow.setVisible( true );
         }
     }
@@ -141,11 +141,11 @@ public class LocalOfficeWindow
         if ( bPeer )
         {
                    // hide document window
-            XWindow aWindow = (XWindow)UnoRuntime.queryInterface(XWindow.class, mWindow);
+            XWindow aWindow = UnoRuntime.queryInterface(XWindow.class, mWindow);
             aWindow.setVisible( false );
 
             // set null parent
-            XVclWindowPeer xVclWindowPeer = (XVclWindowPeer)UnoRuntime.queryInterface(
+            XVclWindowPeer xVclWindowPeer = UnoRuntime.queryInterface(
                                XVclWindowPeer.class, mWindow);
             xVclWindowPeer.setProperty( "PluginParent", new Long(0) );
             bPeer = false;
@@ -228,7 +228,7 @@ public class LocalOfficeWindow
             addComponentListener( new ComponentEventHandler() );
 
             // set initial visibility
-                        XWindow aWindow = (XWindow)UnoRuntime.queryInterface(XWindow.class, mWindow);
+                        XWindow aWindow = UnoRuntime.queryInterface(XWindow.class, mWindow);
             aWindow.setVisible( bPeer );
         }
         catch (com.sun.star.uno.Exception exp) {

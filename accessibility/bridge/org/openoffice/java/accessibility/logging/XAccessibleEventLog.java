@@ -18,6 +18,8 @@
 
 package org.openoffice.java.accessibility.logging;
 
+import java.awt.Component;
+
 import com.sun.star.accessibility.*;
 import com.sun.star.uno.*;
 
@@ -28,7 +30,7 @@ public class XAccessibleEventLog implements XAccessibleEventListener {
 
     private static XAccessibleEventLog theEventListener = null;
 
-    private static java.util.Hashtable proxyList = new java.util.Hashtable();
+    private static java.util.Hashtable<String, Component> proxyList = new java.util.Hashtable<String, Component>();
 
     /** Creates a new instance of UNOAccessibleEventListener */
     public XAccessibleEventLog() {
@@ -42,8 +44,7 @@ public class XAccessibleEventLog implements XAccessibleEventListener {
     }
 
     public static void addEventListener(XAccessibleContext xac, java.awt.Component c) {
-        XAccessibleEventBroadcaster broadcaster = (XAccessibleEventBroadcaster)
-            UnoRuntime.queryInterface(XAccessibleEventBroadcaster.class, xac);
+        XAccessibleEventBroadcaster broadcaster = UnoRuntime.queryInterface(XAccessibleEventBroadcaster.class, xac);
         if (broadcaster != null) {
             broadcaster.addEventListener(XAccessibleEventLog.get());
 
@@ -137,7 +138,7 @@ public class XAccessibleEventLog implements XAccessibleEventListener {
     }
 
     protected static void logMessage(Object o, String s) {
-        XAccessibleContext xac = (XAccessibleContext) UnoRuntime.queryInterface(XAccessibleContext.class, o);
+        XAccessibleContext xac = UnoRuntime.queryInterface(XAccessibleContext.class, o);
         if( xac != null ) {
             String oid = UnoRuntime.generateOid(xac);
             synchronized (proxyList) {

@@ -145,7 +145,7 @@ public class ScriptDescriptor
      *
      * @param  classes  The feature to be added to the ArgumentTypes attribute
      */
-    public synchronized void addArgumentTypes( Class[] classes )
+    public synchronized void addArgumentTypes( Class<?>[] classes )
     {
         for ( int i = 0; i < classes.length; i++ )
         {
@@ -181,7 +181,7 @@ public class ScriptDescriptor
     public String toString()
     {
         StringBuffer description = new StringBuffer( m_name );
-        Class[] types = getArgumentTypes();
+        Class<?>[] types = getArgumentTypes();
 
         description.append( " (" );
 

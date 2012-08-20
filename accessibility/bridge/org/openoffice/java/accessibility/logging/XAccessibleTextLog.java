@@ -38,7 +38,7 @@ public class XAccessibleTextLog
     private void setName(
         com.sun.star.accessibility.XAccessibleText xAccessibleText) {
         try {
-            com.sun.star.accessibility.XAccessibleContext unoAccessibleContext = (com.sun.star.accessibility.XAccessibleContext) com.sun.star.uno.UnoRuntime.queryInterface(com.sun.star.accessibility.XAccessibleContext.class,
+            com.sun.star.accessibility.XAccessibleContext unoAccessibleContext = com.sun.star.uno.UnoRuntime.queryInterface(com.sun.star.accessibility.XAccessibleContext.class,
                     xAccessibleText);
 
             if (unoAccessibleContext != null) {

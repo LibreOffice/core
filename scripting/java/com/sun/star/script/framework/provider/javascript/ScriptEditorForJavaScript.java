@@ -51,7 +51,7 @@ public class ScriptEditorForJavaScript implements ScriptEditor
     static private Main rhinoWindow;
     private URL scriptURL;
     // global list of ScriptEditors, key is URL of file being edited
-    private static Map BEING_EDITED = new HashMap();
+    private static Map<URL,ScriptEditorForJavaScript> BEING_EDITED = new HashMap<URL,ScriptEditorForJavaScript>();
 
     static {
         try {
@@ -109,7 +109,7 @@ public class ScriptEditorForJavaScript implements ScriptEditor
     public static ScriptEditorForJavaScript getEditor(URL url)
     {
         synchronized (BEING_EDITED) {
-            return (ScriptEditorForJavaScript)BEING_EDITED.get(url);
+            return BEING_EDITED.get(url);
         }
     }
 
@@ -185,8 +185,7 @@ public class ScriptEditorForJavaScript implements ScriptEditor
                     public void run() {
                         synchronized (BEING_EDITED) {
                             ScriptEditorForJavaScript editor =
-                                (ScriptEditorForJavaScript) BEING_EDITED.get(
-                                    url);
+                                BEING_EDITED.get(url);
                             if (editor == null) {
                                 editor = new ScriptEditorForJavaScript(
                                     context, url);
@@ -291,17 +290,16 @@ public class ScriptEditorForJavaScript implements ScriptEditor
         // remove all scripts from BEING_EDITED
         synchronized( BEING_EDITED )
         {
-            java.util.Iterator iter = BEING_EDITED.keySet().iterator();
-            java.util.Vector keysToRemove = new java.util.Vector();
+            java.util.Iterator<URL> iter = BEING_EDITED.keySet().iterator();
+            java.util.ArrayList<URL> keysToRemove = new java.util.ArrayList<URL>();
             while ( iter.hasNext() )
             {
-
-                URL key = (URL)iter.next();
+                URL key = iter.next();
                 keysToRemove.add( key );
             }
             for ( int i=0; i<keysToRemove.size(); i++ )
             {
-                BEING_EDITED.remove( keysToRemove.elementAt( i ) );
+                BEING_EDITED.remove( keysToRemove.get( i ) );
             }
             keysToRemove = null;
         }
@@ -334,7 +332,7 @@ public class ScriptEditorForJavaScript implements ScriptEditor
         {
             synchronized( BEING_EDITED )
             {
-                Object o = BEING_EDITED.remove( this.url );
+                BEING_EDITED.remove( this.url );
             }
         }
     }

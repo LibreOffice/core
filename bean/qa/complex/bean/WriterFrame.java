@@ -77,7 +77,7 @@ class WriterFrame extends java.awt.Frame
 
     public void setText(String s) throws Exception
     {
-        com.sun.star.frame.XModel model = (com.sun.star.frame.XModel)m_bean.getDocument();
+        com.sun.star.frame.XModel model = m_bean.getDocument();
         com.sun.star.text.XTextDocument myDoc =
             UnoRuntime.queryInterface(com.sun.star.text.XTextDocument.class, model);
         com.sun.star.text.XText xText = myDoc.getText();
@@ -88,7 +88,7 @@ class WriterFrame extends java.awt.Frame
 
     public String getText() throws Exception
     {
-        com.sun.star.frame.XModel model = (com.sun.star.frame.XModel)m_bean.getDocument();
+        com.sun.star.frame.XModel model = m_bean.getDocument();
         com.sun.star.text.XTextDocument myDoc =
             UnoRuntime.queryInterface(com.sun.star.text.XTextDocument.class, model);
         com.sun.star.text.XText xText = myDoc.getText();
@@ -112,7 +112,7 @@ class WriterFrame extends java.awt.Frame
      */
     public void goToStart() throws Exception
     {
-        com.sun.star.frame.XModel xModel = (com.sun.star.frame.XModel)m_bean.getDocument();
+        com.sun.star.frame.XModel xModel = m_bean.getDocument();
         com.sun.star.frame.XController xController = xModel.getCurrentController();
 
         com.sun.star.text.XTextViewCursorSupplier xVCSupplier =
@@ -125,7 +125,7 @@ class WriterFrame extends java.awt.Frame
 
     public void pageDown() throws Exception
     {
-        com.sun.star.frame.XModel xModel = (com.sun.star.frame.XModel)m_bean.getDocument();
+        com.sun.star.frame.XModel xModel = m_bean.getDocument();
         com.sun.star.frame.XController xController = xModel.getCurrentController();
 
         com.sun.star.text.XTextViewCursorSupplier xVCSupplier =

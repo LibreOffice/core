@@ -59,7 +59,7 @@ public class ScriptEditorForBeanShell
     private static ScriptEditorForBeanShell theScriptEditorForBeanShell;
 
     // global list of ScriptEditors, key is URL of file being edited
-    private static Map BEING_EDITED = new HashMap();
+    private static Map<URL,ScriptEditorForBeanShell> BEING_EDITED = new HashMap<URL,ScriptEditorForBeanShell>();
 
     // template for new BeanShell scripts
     private static String BSHTEMPLATE;
@@ -121,7 +121,7 @@ public class ScriptEditorForBeanShell
     public static ScriptEditorForBeanShell getEditor(URL url)
     {
         synchronized (BEING_EDITED) {
-            return (ScriptEditorForBeanShell)BEING_EDITED.get(url);
+            return BEING_EDITED.get(url);
         }
     }
 
@@ -211,8 +211,7 @@ public class ScriptEditorForBeanShell
                         public void run() {
                             ScriptEditorForBeanShell editor;
                             synchronized (BEING_EDITED) {
-                                editor = (ScriptEditorForBeanShell)
-                                    BEING_EDITED.get(url);
+                                editor = BEING_EDITED.get(url);
                                 if (editor == null) {
                                     editor = new ScriptEditorForBeanShell(
                                         context, theCl, url);
@@ -241,12 +240,12 @@ public class ScriptEditorForBeanShell
         this.filename  = url.getFile();
         this.cl = cl;
         try {
-            Class c = Class.forName(
+            Class<?> c = Class.forName(
                 "org.openoffice.netbeans.editor.NetBeansSourceView");
 
-            Class[] types = new Class[] { ScriptSourceModel.class };
+            Class<?>[] types = new Class[] { ScriptSourceModel.class };
 
-            java.lang.reflect.Constructor ctor = c.getConstructor(types);
+            java.lang.reflect.Constructor<?> ctor = c.getConstructor(types);
 
             if (ctor != null) {
                 Object[] args = new Object[] { this.model };

@@ -113,7 +113,7 @@ public class XSLTFilterOLEExtracter {
         if (aName.equals("oledata.mso")) {
             try {
                 //get the length and seek to 0
-                XSeekable xSeek = (XSeekable) UnoRuntime.queryInterface(XSeekable.class, m_RootStream);
+                XSeekable xSeek = UnoRuntime.queryInterface(XSeekable.class, m_RootStream);
                 int oleLength = (int) xSeek.getLength();
                 xSeek.seek(0);
                 xSeek = null;
@@ -142,14 +142,14 @@ public class XSLTFilterOLEExtracter {
             if (oSubStream == null) {
                 return "Not Found:" + aName;
             }
-            XInputStream xSubStream = (XInputStream) UnoRuntime.queryInterface(XInputStream.class,
+            XInputStream xSubStream = UnoRuntime.queryInterface(XInputStream.class,
                     oSubStream);
             if (xSubStream == null) {
                 return "Not Found:" + aName;
             }
             //The first four byte are the length of the uncompressed data
             byte pLength[][] = new byte[1][4];
-            XSeekable xSeek = (XSeekable) UnoRuntime.queryInterface(XSeekable.class, xSubStream);
+            XSeekable xSeek = UnoRuntime.queryInterface(XSeekable.class, xSubStream);
             xSeek.seek(0);
             xSeek = null;
             //Get the uncompressed length
@@ -186,7 +186,7 @@ public class XSLTFilterOLEExtracter {
         XStream xTempFileStream = null;
         try {
             Object oTempFile = xMSF.createInstance("com.sun.star.io.TempFile");
-            xTempFileStream = (XStream) UnoRuntime.queryInterface(XStream.class, oTempFile);
+            xTempFileStream = UnoRuntime.queryInterface(XStream.class, oTempFile);
         } catch (Exception e) {
         }
 
@@ -207,18 +207,18 @@ public class XSLTFilterOLEExtracter {
             xOutput.flush();
             //Get the input stream and seek to begin
             XInputStream xInput = m_RootStream.getInputStream();
-            XSeekable xSeek = (XSeekable) UnoRuntime.queryInterface(XSeekable.class, xInput);
+            XSeekable xSeek = UnoRuntime.queryInterface(XSeekable.class, xInput);
             xSeek.seek(0);
             oledata = null;
             xSeek = null;
 
             //create an com.sun.star.embed.OLESimpleStorage from the temp stream
             Object pArgs[] = new Object[1];
-            pArgs[0] = (Object) xInput;
+            pArgs[0] = xInput;
             Object oTempStorage = m_xMSF.createInstanceWithArguments("com.sun.star.embed.OLESimpleStorage", pArgs);
             pArgs = null;
 
-            m_Storage = (XNameContainer) UnoRuntime.queryInterface(XNameContainer.class, oTempStorage);
+            m_Storage = UnoRuntime.queryInterface(XNameContainer.class, oTempStorage);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -230,11 +230,11 @@ public class XSLTFilterOLEExtracter {
                 m_RootStream = CreateTempFileStream(m_xMSF);
 
                 Object pArgs[] = new Object[1];
-                pArgs[0] = (Object) m_RootStream;
+                pArgs[0] = m_RootStream;
                 Object oTempStorage = m_xMSF.createInstanceWithArguments("com.sun.star.embed.OLESimpleStorage", pArgs);
                 pArgs = null;
 
-                m_Storage = (XNameContainer) UnoRuntime.queryInterface(XNameContainer.class, oTempStorage);
+                m_Storage = UnoRuntime.queryInterface(XNameContainer.class, oTempStorage);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -273,13 +273,13 @@ public class XSLTFilterOLEExtracter {
             //write the compressed data to the temp stream
             xOutput.writeBytes(compressedBytes);
             //seek to 0
-            XSeekable xSeek = (XSeekable) UnoRuntime.queryInterface(XSeekable.class, xInput);
+            XSeekable xSeek = UnoRuntime.queryInterface(XSeekable.class, xInput);
             xSeek.seek(0);
             xSeek = null;
             oledata = null;
 
             //insert the temp stream as a sub stream and use an XTransactedObject to commit it immediately
-            XTransactedObject xTransact = (XTransactedObject) UnoRuntime.queryInterface(XTransactedObject.class, m_Storage);
+            XTransactedObject xTransact = UnoRuntime.queryInterface(XTransactedObject.class, m_Storage);
             m_Storage.insertByName(aName, xInput);
             xTransact.commit();
             xTransact = null;
@@ -327,7 +327,7 @@ public class XSLTFilterOLEExtracter {
         Object x = xComponentContext.getServiceManager().createInstanceWithContext(
                 "com.sun.star.connection.Connector", xComponentContext);
 
-        XConnector xConnector = (XConnector) UnoRuntime.queryInterface(XConnector.class, x);
+        XConnector xConnector = UnoRuntime.queryInterface(XConnector.class, x);
 
         String a[] = parseUnoUrl(sConnectionString);
         if (null == a) {
@@ -340,7 +340,7 @@ public class XSLTFilterOLEExtracter {
         x = xComponentContext.getServiceManager().createInstanceWithContext(
                 "com.sun.star.bridge.BridgeFactory", xComponentContext);
 
-        XBridgeFactory xBridgeFactory = (XBridgeFactory) UnoRuntime.queryInterface(
+        XBridgeFactory xBridgeFactory = UnoRuntime.queryInterface(
                 XBridgeFactory.class, x);
 
         // create a nameless bridge with no instance provider
@@ -348,7 +348,7 @@ public class XSLTFilterOLEExtracter {
         XBridge bridge = xBridgeFactory.createBridge("", a[1], m_Connection, null);
 
         // query for the XComponent interface and add this as event listener
-        XComponent xComponent = (XComponent) UnoRuntime.queryInterface(
+        XComponent xComponent = UnoRuntime.queryInterface(
                 XComponent.class, bridge);
 
         // get the remote instance
@@ -360,7 +360,7 @@ public class XSLTFilterOLEExtracter {
                     "Server didn't provide an instance for" + a[2], null);
         }
 
-        XMultiServiceFactory xFac = (XMultiServiceFactory) UnoRuntime.queryInterface(XMultiServiceFactory.class, x);
+        XMultiServiceFactory xFac = UnoRuntime.queryInterface(XMultiServiceFactory.class, x);
         return xFac;
     }
     protected static boolean DEBUG = false;

@@ -46,7 +46,7 @@ public abstract class DescendantManager extends Component {
     protected class AccessibleDescendantManagerListener
         extends AccessibleUNOComponentListener {
         protected AccessibleDescendantManagerListener() {
-            unoAccessibleSelection = (XAccessibleSelection) UnoRuntime.queryInterface(XAccessibleSelection.class,
+            unoAccessibleSelection = UnoRuntime.queryInterface(XAccessibleSelection.class,
                     unoAccessibleContext);
         }
 
@@ -69,7 +69,7 @@ public abstract class DescendantManager extends Component {
         extends AccessibleUNOComponent
         implements javax.accessibility.AccessibleSelection {
         protected AccessibleDescendantManager() {
-            unoAccessibleSelection = (XAccessibleSelection) UnoRuntime.queryInterface(XAccessibleSelection.class,
+            unoAccessibleSelection = UnoRuntime.queryInterface(XAccessibleSelection.class,
                     unoAccessibleContext);
         }
 

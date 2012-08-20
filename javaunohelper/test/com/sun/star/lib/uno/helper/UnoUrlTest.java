@@ -123,7 +123,7 @@ public class UnoUrlTest  {
             assertTrue((url != null));
             assertEquals("ABC", url.getRootOid());
             assertEquals(1, url.getConnectionParameters().size());
-            assertEquals("val9", (String)url.getConnectionParameters().get("key9"));
+            assertEquals("val9", url.getConnectionParameters().get("key9"));
         } catch (com.sun.star.lang.IllegalArgumentException e) {
             fail(e.getMessage());
         }
@@ -176,7 +176,7 @@ public class UnoUrlTest  {
             assertEquals("StarOffice.ServiceManager", url.getRootOid());
             assertEquals("socket", url.getConnection());
             assertEquals("urp", url.getProtocol());
-            assertEquals("2002", (String)url.getConnectionParameters().get("port"));
+            assertEquals("2002", url.getConnectionParameters().get("port"));
         } catch (com.sun.star.lang.IllegalArgumentException e) {
             fail("Caught exception:" + e.getMessage());
         }
@@ -187,7 +187,7 @@ public class UnoUrlTest  {
             UnoUrl url =
                 UnoUrl.parseUnoUrl(
                     "socket,host=localhost,horst=abc%c3%9c%c3%a4ABC%41%2c%2C,port=2002;urp;StarOffice.ServiceManager");
-            assertEquals("abc‹‰ABCA,,", (String)url.getConnectionParameters().get("horst"));
+            assertEquals("abc‹‰ABCA,,", url.getConnectionParameters().get("horst"));
             assertEquals(
                 "host=localhost,horst=abc%c3%9c%c3%a4ABC%41%2c%2C,port=2002",
                 url.getConnectionParametersAsString());

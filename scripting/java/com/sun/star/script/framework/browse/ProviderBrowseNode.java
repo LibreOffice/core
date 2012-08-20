@@ -74,11 +74,10 @@ public class ProviderBrowseNode extends PropertySet
         XMultiComponentFactory xFac = m_xCtx.getServiceManager();
         try
         {
-            xSFA = ( XSimpleFileAccess)
-                UnoRuntime.queryInterface( XSimpleFileAccess.class,
-                    xFac.createInstanceWithContext(
-                        "com.sun.star.ucb.SimpleFileAccess",
-                        xCtx ) );
+            xSFA = UnoRuntime.queryInterface( XSimpleFileAccess.class,
+                xFac.createInstanceWithContext(
+                    "com.sun.star.ucb.SimpleFileAccess",
+                    xCtx ) );
             if (  container.isUnoPkg() || xSFA.isReadOnly( container.getParcelContainerDir() ) )
             {
                 deletable = false;
@@ -209,7 +208,7 @@ public class ProviderBrowseNode extends PropertySet
                     }
                 }
                 else {
-                    name = (String) AnyConverter.toString(aParams[0]);
+                    name = AnyConverter.toString(aParams[0]);
                 }
 
                 if (name == null || name.equals(""))

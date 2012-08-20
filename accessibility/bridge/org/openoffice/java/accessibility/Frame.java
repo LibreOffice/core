@@ -42,9 +42,8 @@ public class Frame extends java.awt.Frame implements javax.accessibility.Accessi
     private void initialize(XAccessibleComponent xAccessibleComponent) {
         unoAccessibleComponent = xAccessibleComponent;
         eventQueue = java.awt.Toolkit.getDefaultToolkit().getSystemEventQueue();
-        XAccessibleEventBroadcaster broadcaster = (XAccessibleEventBroadcaster)
-            UnoRuntime.queryInterface(XAccessibleEventBroadcaster.class,
-            unoAccessibleComponent);
+        XAccessibleEventBroadcaster broadcaster = UnoRuntime.queryInterface(XAccessibleEventBroadcaster.class,
+        unoAccessibleComponent);
         if (broadcaster != null) {
             broadcaster.addEventListener(new AccessibleFrameListener());
         }

@@ -81,7 +81,7 @@ public final class Protocol_Test {
             new Object[] { "hallo" });
         Message iMessage = iReceiver.readMessage();
         Object[] t_params = iMessage.getArguments();
-        assertEquals("hallo", (String)t_params[0]);
+        assertEquals("hallo", t_params[0]);
 
         // send a reply
         iReceiver.writeReply(false, new ThreadId(new byte[] { 0, 1 }), null);
@@ -184,7 +184,7 @@ public final class Protocol_Test {
 
         Object[] t_params = iMessage.getArguments();
 
-        assertEquals("hallo", (String)t_params[0]);
+        assertEquals("hallo", t_params[0]);
 
         assertEquals("inOutString", ((String [])t_params[2])[0]);
 

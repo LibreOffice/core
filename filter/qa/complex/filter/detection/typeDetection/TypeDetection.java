@@ -27,9 +27,11 @@ import com.sun.star.uno.XInterface;
 import complexlib.ComplexTestCase;
 import java.io.File;
 
+import java.util.Iterator;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Vector;
+import java.util.ArrayList;
 import util.utils;
 
 
@@ -218,11 +220,10 @@ public class TypeDetection extends ComplexTestCase {
         XInterface oObj = (XInterface) oInterface ;
         log.println("ImplName: "+utils.getImplName(oObj));
 
-        m_xDetection = (XTypeDetection)
-                UnoRuntime.queryInterface(XTypeDetection.class, oInterface);
-        Enumeration k = param.keys();
-        while (k.hasMoreElements()){
-            String kName = ((String)k.nextElement()).toString();
+        m_xDetection = UnoRuntime.queryInterface(XTypeDetection.class, oInterface);
+        Iterator<String> k = param.keySet().iterator();
+        while (k.hasNext()){
+            String kName = k.next();
             log.println(kName + ":" + param.get(kName).toString());
         }
         // create instrace of helper class
@@ -248,17 +249,17 @@ public class TypeDetection extends ComplexTestCase {
     public void checkByURLonly() {
         try{
             log.println("### checkByURLonly() ###");
-            Vector CSVData =  helper.getToDoList(
+            ArrayList<ArrayList<String>> CSVData =  helper.getToDoList(
                                     (String)param.get("csv.files"));
-            Enumeration allToDos = CSVData.elements();
+            Iterator<ArrayList<String>> allToDos = CSVData.iterator();
 
-            while (allToDos.hasMoreElements()){
-                Vector toDo = (Vector) allToDos.nextElement();
+            while (allToDos.hasNext()){
+                ArrayList<String> toDo = allToDos.next();
 
-                String fileAlias = (String) toDo.get(0);
-                String fileURL  = (String) toDo.get(1);
-                String URLfileType = (String) toDo.get(2);
-                String StreamfileType = (String) toDo.get(3);
+                String fileAlias = toDo.get(0);
+                String fileURL  = toDo.get(1);
+                String URLfileType = toDo.get(2);
+                String StreamfileType = toDo.get(3);
 
                 fileURL =  utils.getFullURL(helper.ensureEndingFileSep(
                               (String)param.get("TestDocumentPath")) + fileURL);
@@ -350,18 +351,18 @@ public class TypeDetection extends ComplexTestCase {
         try{
             log.println("### checkPreselectedType() ###");
 
-            Vector CSVData =  helper.getToDoList(
+            ArrayList<ArrayList<String>> CSVData =  helper.getToDoList(
                                     (String)param.get("csv.preselectedType"));
-            Enumeration allToDos = CSVData.elements();
+            Iterator<ArrayList<String>> allToDos = CSVData.iterator();
 
-            while (allToDos.hasMoreElements()){
+            while (allToDos.hasNext()){
                 try{
-                    Vector toDo = (Vector) allToDos.nextElement();
+                    ArrayList<String> toDo = allToDos.next();
 
-                    String fileAlias = (String) toDo.get(0);
+                    String fileAlias = toDo.get(0);
                     String fileURL  = helper.getURLforfileAlias(fileAlias);
-                    String preselectFileType = (String) toDo.get(1);
-                    String expectedFileType = (String) toDo.get(2);
+                    String preselectFileType = toDo.get(1);
+                    String expectedFileType = toDo.get(2);
 
                     PropertyValue[] MediaDescriptor = helper.createMediaDescriptor(
                         new String[] {"URL", "MediaType"},
@@ -399,21 +400,20 @@ public class TypeDetection extends ComplexTestCase {
         try{
             log.println("### checkPreselectedFilter() ###");
 
-            Vector CSVData =  helper.getToDoList(
+            ArrayList<ArrayList<String>> CSVData =  helper.getToDoList(
                                     (String)param.get("csv.preselectedFilter"));
+            Iterator<ArrayList<String>> allToDos = CSVData.iterator();
 
-            Enumeration allToDos = CSVData.elements();
-
-            while (allToDos.hasMoreElements()){
+            while (allToDos.hasNext()){
                 try{
-                    Vector toDo = (Vector) allToDos.nextElement();
+                    ArrayList<String> toDo = allToDos.next();
 
-                    String fileAlias = (String) toDo.get(0);
+                    String fileAlias = toDo.get(0);
                     String fileURL  = helper.getURLforfileAlias(fileAlias);
-                    String filterName = (String) toDo.get(1);
-                    String filterOptions = (String) toDo.get(2);
-                    String filterData = (String) toDo.get(3);
-                    String expectedType = (String) toDo.get(4);
+                    String filterName = toDo.get(1);
+                    String filterOptions = toDo.get(2);
+                    String filterData = toDo.get(3);
+                    String expectedType = toDo.get(4);
 
                     PropertyValue[] MediaDescriptor = helper.createMediaDescriptor(
                         new String[] {"URL","FilterName",
@@ -452,16 +452,16 @@ public class TypeDetection extends ComplexTestCase {
         try{
             log.println("### checkPreselectedDocService() ###");
 
-            Vector CSVData =  helper.getToDoList((String)param.get("csv.serviceName"));
-            Enumeration allToDos = CSVData.elements();
+            ArrayList<ArrayList<String>> CSVData =  helper.getToDoList((String)param.get("csv.serviceName"));
+            Iterator<ArrayList<String>> allToDos = CSVData.iterator();
 
-            while (allToDos.hasMoreElements()){
+            while (allToDos.hasNext()){
                 try{
-                    Vector toDo = (Vector) allToDos.nextElement();
+                    ArrayList<String> toDo = allToDos.next();
 
-                    String fileAlias = (String) toDo.get(0);
+                    String fileAlias = toDo.get(0);
                     String fileURL  = helper.getURLforfileAlias(fileAlias);
-                    String serviceName = (String) toDo.get(1);
+                    String serviceName = toDo.get(1);
                     String fileType = helper.getTypeforfileAlias(fileAlias);
 
                     PropertyValue[] MediaDescriptor = helper.createMediaDescriptor(

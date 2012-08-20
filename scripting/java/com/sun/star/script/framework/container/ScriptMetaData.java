@@ -249,8 +249,7 @@ public class ScriptMetaData extends ScriptEntry implements Cloneable {
     {
     try
     {
-        String classpath = (String)getLanguageProperties().get("classpath");
-        ArrayList paths = null;
+        String classpath = getLanguageProperties().get("classpath");
 
         if ( classpath == null )
         {
@@ -271,7 +270,7 @@ public class ScriptMetaData extends ScriptEntry implements Cloneable {
         StringTokenizer stk = new StringTokenizer(classpath, ":");
         while (  stk.hasMoreElements() )
         {
-            String relativeClasspath =  (String)stk.nextElement();
+            String relativeClasspath =  stk.nextToken();
             String pathToProcess  = PathUtils.make_url( parcelPath, relativeClasspath);
             URL url = expandURL( context, pathToProcess );
             if ( url != null )
@@ -388,9 +387,8 @@ public class ScriptMetaData extends ScriptEntry implements Cloneable {
         OutputStream os = null;
         try
         {
-            XSimpleFileAccess2 xSFA2 = ( XSimpleFileAccess2 )
-                UnoRuntime.queryInterface( XSimpleFileAccess2.class,
-                    parent.m_xSFA );
+            XSimpleFileAccess2 xSFA2 = UnoRuntime.queryInterface( XSimpleFileAccess2.class,
+                parent.m_xSFA );
             if ( xSFA2 != null )
             {
                 ByteArrayInputStream bis = new ByteArrayInputStream( getSourceBytes() );

@@ -34,7 +34,7 @@ import javax.accessibility.*;
 public class WindowsAccessBridgeAdapter {
     private static Method registerVirtualFrame;
     private static Method revokeVirtualFrame;
-    private static java.util.Hashtable frameMap;
+    private static java.util.Hashtable<Integer, Accessible> frameMap;
 
     protected static native byte[] getProcessID();
 
@@ -44,9 +44,9 @@ public class WindowsAccessBridgeAdapter {
     // Therefor the bridge exports two methods that we try to find here.
     protected static void attach(XComponentContext xComponentContext) {
         try {
-            Class bridge = Class.forName(
+            Class<?> bridge = Class.forName(
                     "com.sun.java.accessibility.AccessBridge");
-            Class[] parameterTypes = {
+            Class<?>[] parameterTypes = {
                 javax.accessibility.Accessible.class, Integer.class
             };
 
@@ -63,7 +63,7 @@ public class WindowsAccessBridgeAdapter {
                         "/singletons/com.sun.star.java.theJavaVirtualMachine");
 
                 if (AnyConverter.isObject(any)) {
-                    XJavaVM xJavaVM = (XJavaVM) UnoRuntime.queryInterface(XJavaVM.class,
+                    XJavaVM xJavaVM = UnoRuntime.queryInterface(XJavaVM.class,
                             AnyConverter.toObject(new Type(XJavaVM.class), any));
 
                     if (xJavaVM != null) {
@@ -71,7 +71,7 @@ public class WindowsAccessBridgeAdapter {
 
                         if (AnyConverter.isLong(any)) {
                             createMapping(AnyConverter.toLong(any));
-                            frameMap = new java.util.Hashtable();
+                            frameMap = new java.util.Hashtable<Integer, Accessible>();
                         }
                     }
                 }
@@ -149,7 +149,7 @@ public class WindowsAccessBridgeAdapter {
                         break;
 
                     default:
-                        a = (Accessible) AccessBridge.getTopWindow(xAccessible);
+                        a = AccessBridge.getTopWindow(xAccessible);
                         break;
                 }
             }
@@ -201,7 +201,7 @@ public class WindowsAccessBridgeAdapter {
     public static void revokeTopWindow(int handle, XAccessible xAccessible) {
         Integer hwnd = new Integer(handle);
 
-        Accessible a = (Accessible) frameMap.remove(hwnd);
+        Accessible a = frameMap.remove(hwnd);
 
         if (a != null) {
             Object[] args = { a, hwnd };

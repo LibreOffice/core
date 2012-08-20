@@ -37,9 +37,8 @@ public class Window extends java.awt.Window implements javax.accessibility.Acces
     private void initialize(XAccessibleComponent xAccessibleComponent) {
         unoAccessibleComponent = xAccessibleComponent;
         eventQueue = java.awt.Toolkit.getDefaultToolkit().getSystemEventQueue();
-        XAccessibleEventBroadcaster broadcaster = (XAccessibleEventBroadcaster)
-            UnoRuntime.queryInterface(XAccessibleEventBroadcaster.class,
-            unoAccessibleComponent);
+        XAccessibleEventBroadcaster broadcaster = UnoRuntime.queryInterface(XAccessibleEventBroadcaster.class,
+        unoAccessibleComponent);
         if (broadcaster != null) {
             broadcaster.addEventListener(new AccessibleWindowListener());
         }

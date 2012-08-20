@@ -31,11 +31,11 @@ import java.util.Hashtable;
 public class ComponentContext_Test {
     public static void main(String args[]) {
         try {
-            Hashtable table = new Hashtable();
+            Hashtable<String,Object> table = new Hashtable<String,Object>();
             table.put( "bla1", new ComponentContextEntry( null, new Integer( 1 ) ) );
             XComponentContext xInitialContext = Bootstrap.createInitialComponentContext( table );
 
-            table = new Hashtable();
+            table = new Hashtable<String,Object>();
             table.put( "bla2", new ComponentContextEntry( new Integer( 2 ) ) );
             table.put( "bla3", new Integer( 3 ) );
             XComponentContext xContext = new ComponentContext( table, xInitialContext );
