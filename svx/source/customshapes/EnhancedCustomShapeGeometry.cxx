@@ -6438,7 +6438,47 @@ static const mso_CustomShape msoTextChevronInverted =
     NULL, 0,
     (SvxMSDffHandle*)mso_sptTextChevronInvertedHandle, SAL_N_ELEMENTS( mso_sptTextChevronInvertedHandle )
 };
-
+//V 0 0 21600 ?f2 0 ?f0 21600 ?f0
+//W 0 0 21600 ?f2 21600 ?f0 0 ?f0 N
+//V 0 ?f3 21600 21600 0 ?f1 21600 ?f1
+//W 0 ?f3 21600 21600 21600 ?f1 0 ?f1 N
+//mso_sptTextRingInside
+static const SvxMSDffVertPair mso_sptTextRingInsideVert[] =
+{
+    { 0, 0 }, { 21600, 2 MSO_I }, { 0, 0 MSO_I },{ 21600, 0 MSO_I },//V
+    { 0, 0 }, { 21600, 2 MSO_I }, { 21600, 0 MSO_I },{ 0, 0 MSO_I },//W
+    { 0, 3 MSO_I }, { 21600, 21600 }, { 0, 1 MSO_I },{ 21600, 1 MSO_I },//V
+    { 0, 3 MSO_I }, { 21600, 21600 }, { 21600, 1 MSO_I },{ 0, 1 MSO_I }//W
+};
+static const SvxMSDffCalculationData mso_sptTextRingInsideCalc[] =  // adjustment1 : 6629 - 14971
+{
+    { 0x2001, { DFF_Prop_adjustValue, 1, 2 } },
+    { 0x8000, { 21600, 0, 0x400 } },
+    { 0x2000, { DFF_Prop_adjustValue, 0, 0 } }, //$0
+    { 0x8000, { 21600, 0, DFF_Prop_adjustValue } }//21600-$0
+};
+static const sal_uInt16 mso_sptTextRingInsideSegm[] =
+{
+    0xa604, 0xa504,0x8000,
+    0xa604, 0xa504,0x8000
+};
+static const SvxMSDffHandle mso_sptTextRingInsideHandle[] =
+{
+    {   MSDFF_HANDLE_FLAGS_RANGE| MSDFF_HANDLE_FLAGS_RANGE_Y_MAX_IS_SPECIAL | MSDFF_HANDLE_FLAGS_RANGE_Y_MIN_IS_SPECIAL,
+        10800, 0x100, 10800, 10800, 0x80000000, 0x7fffffff, 10800, 21600 }
+};
+static const mso_CustomShape msoTextRingInside =
+{
+    (SvxMSDffVertPair*)mso_sptTextRingInsideVert, sizeof( mso_sptTextRingInsideVert ) / sizeof( SvxMSDffVertPair ),
+    (sal_uInt16*)mso_sptTextRingInsideSegm, sizeof( mso_sptTextRingInsideSegm ) >> 1,
+    (SvxMSDffCalculationData*)mso_sptTextRingInsideCalc, sizeof( mso_sptTextRingInsideCalc ) / sizeof( SvxMSDffCalculationData ),
+    (sal_Int32*)mso_sptDefault13500,
+    (SvxMSDffTextRectangles*)mso_sptFontWorkTextRect, sizeof( mso_sptFontWorkTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    21600, 21600,
+    0x80000000, 0x80000000,
+    NULL, 0,
+    (SvxMSDffHandle*)mso_sptTextRingInsideHandle, sizeof( mso_sptTextRingInsideHandle ) / sizeof( SvxMSDffHandle )
+};
 //mso_sptTextRingOutside
 //path = U 10800 ?f0 21600 ?f2 180 539 N U 10800 ?f1 21600 ?f2 180 539 N
 static const SvxMSDffVertPair mso_sptTextRingOutsideVert[] =
@@ -8400,7 +8440,7 @@ const mso_CustomShape* GetCustomShapeContent( MSO_SPT eSpType )
         case mso_sptTextTriangleInverted :      pCustomShape = &msoTextTriangleInverted; break;
         case mso_sptTextChevron :               pCustomShape = &msoTextChevron; break;
         case mso_sptTextChevronInverted :       pCustomShape = &msoTextChevronInverted; break;
-        case mso_sptTextRingInside :            pCustomShape = &msoTextRingOutside; break;  // SJ: TODO->the orientation of the ellipse needs to be changed
+        case mso_sptTextRingInside :            pCustomShape = &msoTextRingInside; break;   // SJ: TODO->the orientation of the ellipse needs to be changed
         case mso_sptTextRingOutside :           pCustomShape = &msoTextRingOutside; break;
         case mso_sptTextFadeRight :             pCustomShape = &msoTextFadeRight; break;
         case mso_sptTextFadeLeft :              pCustomShape = &msoTextFadeLeft; break;
