@@ -1171,6 +1171,10 @@ sal_Bool SVGTextWriter::nextTextPortion()
                         sInfo += sFieldName;
                         sInfo += B2UCONST( "; " );
 
+                        sInfo += B2UCONST( "content: " );
+                        sInfo += xTextField->getPresentation( /* show command: */ sal_False );
+                        sInfo += B2UCONST( "; " );
+
                         if( sFieldName.equalsAscii( "DateTime" ) || sFieldName.equalsAscii( "Header" )
                                 || sFieldName.equalsAscii( "Footer" ) || sFieldName.equalsAscii( "PageNumber" ) )
                         {
@@ -1562,6 +1566,14 @@ void SVGTextWriter::writeTextPortion( const Point& rPos,
                     else
                     {
                         sContent = mrCurrentTextPortion->getString();
+                        if( mbIsURLField && sContent.isEmpty() )
+                        {
+                            Reference < XPropertySet > xPropSet( mrCurrentTextPortion, UNO_QUERY );
+                            Reference < XTextField > xTextField( xPropSet->getPropertyValue( B2UCONST( "TextField" ) ), UNO_QUERY );
+                            sContent = xTextField->getPresentation( /* show command: */ sal_False );
+                            if( sContent.isEmpty() )
+                                OSL_FAIL( "SVGTextWriter::writeTextPortion: content of URL TextField is empty." );
+                        }
                         mnLeftTextPortionLength = sContent.getLength();
                     }
                 }
@@ -1769,6 +1781,7 @@ void SVGTextWriter::implWriteTextPortion( const Point& rPos,
     }
     else if( mbIsURLField && !msUrl.isEmpty() )
     {
+        mrExport.AddAttribute( XML_NAMESPACE_NONE, "class", B2UCONST( "UrlField" ) );
         mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrXLinkHRef, msUrl );
         mbIsURLField = sal_False;
     }
