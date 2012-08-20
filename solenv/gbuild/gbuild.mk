@@ -320,6 +320,7 @@ include $(foreach class, \
 	UnpackedTarball \
 	InternalUnoApi \
 	Zip \
+	AllLangZip \
 	Configuration \
 	ExtensionTarget \
 	Dictionary \

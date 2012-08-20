@@ -76,6 +76,7 @@ endef
 # workdir target patterns
 
 gb_AllLangResTarget_get_target = $(WORKDIR)/AllLangRes/$(1)
+gb_AllLangZip_get_target = $(WORKDIR)/AllLangZip/$(1)
 gb_AsmObject_get_target = $(WORKDIR)/AsmObject/$(1).o
 gb_CObject_get_target = $(WORKDIR)/CObject/$(1).o
 gb_GenCObject_get_target = $(WORKDIR)/GenCObject/$(1).o
@@ -197,6 +198,7 @@ endef
 
 $(eval $(call gb_Helper_make_clean_targets,\
 	AllLangResTarget \
+	AllLangZip \
 	ComponentTarget \
 	ComponentsTarget \
 	ExtensionTarget \

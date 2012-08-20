@@ -69,15 +69,22 @@ $(call gb_Zip__get_preparation_target,%) :
 # the zip package target requires that all added files have a common root directory (package location)
 # names of added files are relative to it; the zip will store them with their complete relative path name
 # the location can't be stored in a scoped variable as it is needed in the add_file macro (see rule above)
-define gb_Zip_Zip
+define gb_Zip_Zip_internal
 $(call gb_Zip_get_target,$(1)) : FILES :=
 $(call gb_Zip_get_target,$(1)) : LOCATION := $(2)
 $(call gb_Zip_get_clean_target,$(1)) : CLEAR_LOCATION :=
 gb_Package_Location_$(1) := $(2)
-$(eval $(call gb_Module_register_target,$(call gb_Zip_get_final_target,$(1)),$(call gb_Zip_get_clean_target,$(1))))
+
 $(call gb_Deliver_add_deliverable,$(call gb_Zip_get_outdir_target,$(1)),$(call gb_Zip_get_target,$(1)),$(1))
 $(call gb_Zip_get_outdir_target,$(1)) : $(call gb_Zip_get_target,$(1)) \
 	| $(dir $(call gb_Zip_get_outdir_target,$(1))).dir
+
+endef
+
+define gb_Zip_Zip
+$(call gb_Zip_Zip_internal,$(1),$(2))
+
+$(eval $(call gb_Module_register_target,$(call gb_Zip_get_final_target,$(1)),$(call gb_Zip_get_clean_target,$(1))))
 
 endef
 
