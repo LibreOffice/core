@@ -2229,6 +2229,12 @@ bool WinwordAnchoring::ConvertPosition( SwFmtHoriOrient& _iorHoriOri,
         {
             eHoriConv = CONV2PG;
         }
+        else if ( _iorHoriOri.IsPosToggle()
+                && _iorHoriOri.GetHoriOrient() == text::HoriOrientation::RIGHT )
+        {
+            eHoriConv = NO_CONV;
+            _iorHoriOri.SetHoriOrient( text::HoriOrientation::OUTSIDE );
+        }
         else
         {
             switch ( _iorHoriOri.GetRelationOrient() )
