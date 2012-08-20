@@ -209,6 +209,7 @@ bool SwDoc::get(/*[in]*/ DocumentSettingId id) const
         case KERN_ASIAN_PUNCTUATION: return mbKernAsianPunctuation;
         case DO_NOT_RESET_PARA_ATTRS_FOR_NUM_FONT: return mbDoNotResetParaAttrsForNumFont;
         case MATH_BASELINE_ALIGNMENT: return mbMathBaselineAlignment;
+        case STYLES_NODEFAULT: return mbStylesNoDefault;
         default:
             OSL_FAIL("Invalid setting id");
     }
@@ -376,6 +377,9 @@ void SwDoc::set(/*[in]*/ DocumentSettingId id, /*[in]*/ bool value)
             break;
         case MATH_BASELINE_ALIGNMENT:
             mbMathBaselineAlignment  = value;
+            break;
+        case STYLES_NODEFAULT:
+            mbStylesNoDefault  = value;
             break;
         default:
             OSL_FAIL("Invalid setting id");

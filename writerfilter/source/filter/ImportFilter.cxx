@@ -173,6 +173,9 @@ void WriterFilter::setTargetDocument( const uno::Reference< lang::XComponent >& 
    uno::Reference< beans::XPropertySet > xSettings( xFactory->createInstance("com.sun.star.document.Settings"), uno::UNO_QUERY );
 
    xSettings->setPropertyValue( "UnbreakableNumberings", uno::makeAny( sal_True ) );
+
+   // Don't load the default style definitions to avoid weird mix
+   xSettings->setPropertyValue( "StylesNoDefault", uno::makeAny( sal_True ) );
 }
 
 void WriterFilter::setSourceDocument( const uno::Reference< lang::XComponent >& xDoc )

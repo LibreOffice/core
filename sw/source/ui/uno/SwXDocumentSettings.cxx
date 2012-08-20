@@ -125,7 +125,8 @@ enum SwDocumentSettingsPropertyHandles
     HANDLE_COLLAPSE_EMPTY_CELL_PARA,
     HANDLE_SMALL_CAPS_PERCENTAGE_66,
     HANDLE_TAB_OVERFLOW,
-    HANDLE_UNBREAKABLE_NUMBERINGS
+    HANDLE_UNBREAKABLE_NUMBERINGS,
+    HANDLE_STYLES_NODEFAULT
 };
 
 MasterPropertySetInfo * lcl_createSettingsInfo()
@@ -188,6 +189,7 @@ MasterPropertySetInfo * lcl_createSettingsInfo()
         { RTL_CONSTASCII_STRINGPARAM("SmallCapsPercentage66"), HANDLE_SMALL_CAPS_PERCENTAGE_66, CPPUTYPE_BOOLEAN, 0, 0},
         { RTL_CONSTASCII_STRINGPARAM("TabOverflow"), HANDLE_TAB_OVERFLOW, CPPUTYPE_BOOLEAN, 0, 0},
         { RTL_CONSTASCII_STRINGPARAM("UnbreakableNumberings"), HANDLE_UNBREAKABLE_NUMBERINGS, CPPUTYPE_BOOLEAN, 0, 0},
+        { RTL_CONSTASCII_STRINGPARAM("StylesNoDefault"), HANDLE_STYLES_NODEFAULT, CPPUTYPE_BOOLEAN, 0, 0},
 /*
  * As OS said, we don't have a view when we need to set this, so I have to
  * find another solution before adding them to this property set - MTG
@@ -747,6 +749,12 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
             mpDoc->set(IDocumentSettingAccess::UNBREAKABLE_NUMBERINGS, bTmp);
         }
         break;
+        case HANDLE_STYLES_NODEFAULT:
+        {
+            sal_Bool bTmp = *(sal_Bool*)rValue.getValue();
+            mpDoc->set(IDocumentSettingAccess::STYLES_NODEFAULT, bTmp);
+        }
+        break;
         default:
             throw UnknownPropertyException();
     }
@@ -1116,6 +1124,12 @@ void SwXDocumentSettings::_getSingleValue( const comphelper::PropertyInfo & rInf
         case HANDLE_UNBREAKABLE_NUMBERINGS:
         {
             sal_Bool bTmp = mpDoc->get( IDocumentSettingAccess::UNBREAKABLE_NUMBERINGS );
+            rValue.setValue( &bTmp, ::getBooleanCppuType() );
+        }
+        break;
+        case HANDLE_STYLES_NODEFAULT:
+        {
+            sal_Bool bTmp = mpDoc->get( IDocumentSettingAccess::STYLES_NODEFAULT );
             rValue.setValue( &bTmp, ::getBooleanCppuType() );
         }
         break;

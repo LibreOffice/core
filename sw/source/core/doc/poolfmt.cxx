@@ -377,661 +377,665 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool( sal_uInt16 nId, bool bRegardLanguage )
         pTxtFmtCollTbl->push_back( pNewColl );
     }
 
-    switch( nId )
+    bool bNoDefault = get( IDocumentSettingAccess::STYLES_NODEFAULT );
+    if ( !bNoDefault )
     {
-    // General content forms
-    case RES_POOLCOLL_STANDARD:
-        /* koreans do not like SvxScriptItem(TRUE) */
-        if (bRegardLanguage)
+        switch( nId )
         {
-            sal_uLong nAppLanguage = GetAppLanguage();
-            if (GetDefaultFrameDirection(nAppLanguage) ==
-                FRMDIR_HORI_RIGHT_TOP)
+        // General content forms
+        case RES_POOLCOLL_STANDARD:
+            /* koreans do not like SvxScriptItem(TRUE) */
+            if (bRegardLanguage)
             {
-                SvxAdjustItem aAdjust(SVX_ADJUST_RIGHT, RES_PARATR_ADJUST );
-                aSet.Put(aAdjust);
+                sal_uLong nAppLanguage = GetAppLanguage();
+                if (GetDefaultFrameDirection(nAppLanguage) ==
+                    FRMDIR_HORI_RIGHT_TOP)
+                {
+                    SvxAdjustItem aAdjust(SVX_ADJUST_RIGHT, RES_PARATR_ADJUST );
+                    aSet.Put(aAdjust);
+                }
+                if (nAppLanguage == LANGUAGE_KOREAN)
+                {
+                    SvxScriptSpaceItem aScriptSpace(sal_False, RES_PARATR_SCRIPTSPACE);
+                    aSet.Put(aScriptSpace);
+                }
             }
-            if (nAppLanguage == LANGUAGE_KOREAN)
+            break;
+
+        case RES_POOLCOLL_TEXT:                 // Text body
             {
-                SvxScriptSpaceItem aScriptSpace(sal_False, RES_PARATR_SCRIPTSPACE);
-                aSet.Put(aScriptSpace);
+                SvxULSpaceItem aUL( 0, PT_6, RES_UL_SPACE );
+                if( get(IDocumentSettingAccess::HTML_MODE) ) aUL.SetLower( HTML_PARSPACE );
+                aSet.Put( aUL );
             }
-        }
-        break;
-
-    case RES_POOLCOLL_TEXT:                 // Text body
-        {
-            SvxULSpaceItem aUL( 0, PT_6, RES_UL_SPACE );
-            if( get(IDocumentSettingAccess::HTML_MODE) ) aUL.SetLower( HTML_PARSPACE );
-            aSet.Put( aUL );
-        }
-        break;
-    case RES_POOLCOLL_TEXT_IDENT:           // Text body indentation
-        {
-            SvxLRSpaceItem aLR( RES_LR_SPACE );
-            aLR.SetTxtFirstLineOfst( GetMetricVal( CM_05 ));
-            aSet.Put( aLR );
-        }
-        break;
-    case RES_POOLCOLL_TEXT_NEGIDENT:        // Text body neg. indentation
-        {
-            SvxLRSpaceItem aLR( RES_LR_SPACE );
-            aLR.SetTxtFirstLineOfst( -(short)GetMetricVal( CM_05 ));
-            aLR.SetTxtLeft( GetMetricVal( CM_1 ));
-            SvxTabStopItem aTStops(RES_PARATR_TABSTOP);    aTStops.Insert( SvxTabStop( 0 ));
-
-            aSet.Put( aLR );
-            aSet.Put( aTStops );
-        }
-        break;
-    case RES_POOLCOLL_TEXT_MOVE:            // Text body move
-        {
-            SvxLRSpaceItem aLR( RES_LR_SPACE );
-            aLR.SetTxtLeft( GetMetricVal( CM_05 ));
-            aSet.Put( aLR );
-        }
-        break;
-
-    case RES_POOLCOLL_CONFRONTATION:    // Text body confrontation
-        {
-            SvxLRSpaceItem aLR( RES_LR_SPACE );
-            aLR.SetTxtFirstLineOfst( - short( GetMetricVal( CM_1 ) * 4 +
-                                              GetMetricVal( CM_05)) );
-            aLR.SetTxtLeft( GetMetricVal( CM_1 ) * 5 );
-            SvxTabStopItem aTStops( RES_PARATR_TABSTOP );    aTStops.Insert( SvxTabStop( 0 ));
-
-            aSet.Put( aLR );
-            aSet.Put( aTStops );
-        }
-        break;
-    case RES_POOLCOLL_MARGINAL:         // Text body marginal
-        {
-            SvxLRSpaceItem aLR( RES_LR_SPACE );
-            aLR.SetTxtLeft( GetMetricVal( CM_1 ) * 4 );
-            aSet.Put( aLR );
-        }
-        break;
-
-    case RES_POOLCOLL_HEADLINE_BASE:            // Base headline
-        {
-            static const sal_uInt16 aFntInit[] = {
-                DEFAULTFONT_LATIN_HEADING,  RES_CHRATR_FONT,
-                                RES_CHRATR_LANGUAGE, LANGUAGE_ENGLISH_US,
-                DEFAULTFONT_CJK_HEADING,    RES_CHRATR_CJK_FONT,
-                                RES_CHRATR_CJK_LANGUAGE, LANGUAGE_ENGLISH_US,
-                DEFAULTFONT_CTL_HEADING,    RES_CHRATR_CTL_FONT,
-                                RES_CHRATR_CTL_LANGUAGE, LANGUAGE_ARABIC_SAUDI_ARABIA,
-                0
-            };
-
-            for( const sal_uInt16* pArr = aFntInit; *pArr; pArr += 4 )
+            break;
+        case RES_POOLCOLL_TEXT_IDENT:           // Text body indentation
             {
-                sal_uInt16 nLng = ((SvxLanguageItem&)GetDefault( *(pArr+2) )).GetLanguage();
-                if( LANGUAGE_DONTKNOW == nLng )
-                    nLng = *(pArr+3);
-
-                Font aFnt( OutputDevice::GetDefaultFont( *pArr,
-                                        nLng, DEFAULTFONT_FLAGS_ONLYONE ) );
-
-                aSet.Put( SvxFontItem( aFnt.GetFamily(), aFnt.GetName(),
-                                        aEmptyStr, aFnt.GetPitch(),
-                                        aFnt.GetCharSet(), *(pArr+1) ));
+                SvxLRSpaceItem aLR( RES_LR_SPACE );
+                aLR.SetTxtFirstLineOfst( GetMetricVal( CM_05 ));
+                aSet.Put( aLR );
             }
+            break;
+        case RES_POOLCOLL_TEXT_NEGIDENT:        // Text body neg. indentation
+            {
+                SvxLRSpaceItem aLR( RES_LR_SPACE );
+                aLR.SetTxtFirstLineOfst( -(short)GetMetricVal( CM_05 ));
+                aLR.SetTxtLeft( GetMetricVal( CM_1 ));
+                SvxTabStopItem aTStops(RES_PARATR_TABSTOP);    aTStops.Insert( SvxTabStop( 0 ));
 
-            SvxFontHeightItem aFntSize( PT_14, 100, RES_CHRATR_FONTSIZE );
-            SvxULSpaceItem aUL( PT_12, PT_6, RES_UL_SPACE );
-            if( get(IDocumentSettingAccess::HTML_MODE) )
-                aUL.SetLower( HTML_PARSPACE );
-            aSet.Put( SvxFmtKeepItem( sal_True, RES_KEEP ));
+                aSet.Put( aLR );
+                aSet.Put( aTStops );
+            }
+            break;
+        case RES_POOLCOLL_TEXT_MOVE:            // Text body move
+            {
+                SvxLRSpaceItem aLR( RES_LR_SPACE );
+                aLR.SetTxtLeft( GetMetricVal( CM_05 ));
+                aSet.Put( aLR );
+            }
+            break;
 
-            pNewColl->SetNextTxtFmtColl( *GetTxtCollFromPool( RES_POOLCOLL_TEXT ));
+        case RES_POOLCOLL_CONFRONTATION:    // Text body confrontation
+            {
+                SvxLRSpaceItem aLR( RES_LR_SPACE );
+                aLR.SetTxtFirstLineOfst( - short( GetMetricVal( CM_1 ) * 4 +
+                                                  GetMetricVal( CM_05)) );
+                aLR.SetTxtLeft( GetMetricVal( CM_1 ) * 5 );
+                SvxTabStopItem aTStops( RES_PARATR_TABSTOP );    aTStops.Insert( SvxTabStop( 0 ));
 
-            aSet.Put( aUL );
-            SetAllScriptItem( aSet, aFntSize );
-        }
-        break;
+                aSet.Put( aLR );
+                aSet.Put( aTStops );
+            }
+            break;
+        case RES_POOLCOLL_MARGINAL:         // Text body marginal
+            {
+                SvxLRSpaceItem aLR( RES_LR_SPACE );
+                aLR.SetTxtLeft( GetMetricVal( CM_1 ) * 4 );
+                aSet.Put( aLR );
+            }
+            break;
 
-    case RES_POOLCOLL_NUMBUL_BASE:          // Base Numbering
-        break;
+        case RES_POOLCOLL_HEADLINE_BASE:            // Base headline
+            {
+                static const sal_uInt16 aFntInit[] = {
+                    DEFAULTFONT_LATIN_HEADING,  RES_CHRATR_FONT,
+                                    RES_CHRATR_LANGUAGE, LANGUAGE_ENGLISH_US,
+                    DEFAULTFONT_CJK_HEADING,    RES_CHRATR_CJK_FONT,
+                                    RES_CHRATR_CJK_LANGUAGE, LANGUAGE_ENGLISH_US,
+                    DEFAULTFONT_CTL_HEADING,    RES_CHRATR_CTL_FONT,
+                                    RES_CHRATR_CTL_LANGUAGE, LANGUAGE_ARABIC_SAUDI_ARABIA,
+                    0
+                };
 
-    case RES_POOLCOLL_GREETING:             // Greeting
-    case RES_POOLCOLL_REGISTER_BASE:        // Base directories
-    case RES_POOLCOLL_SIGNATURE:            // Signatures
-    case RES_POOLCOLL_TABLE:                // Tabele content
-        {
-            SwFmtLineNumber aLN; aLN.SetCountLines( sal_False );
-            aSet.Put( aLN );
-        }
-        break;
+                for( const sal_uInt16* pArr = aFntInit; *pArr; pArr += 4 )
+                {
+                    sal_uInt16 nLng = ((SvxLanguageItem&)GetDefault( *(pArr+2) )).GetLanguage();
+                    if( LANGUAGE_DONTKNOW == nLng )
+                        nLng = *(pArr+3);
 
-    case RES_POOLCOLL_HEADLINE1:        // Headinline 1
-        lcl_SetHeadline( this, pNewColl, aSet, nOutLvlBits, 0, sal_False );
-        break;
-    case RES_POOLCOLL_HEADLINE2:        // Headinline 2
-        lcl_SetHeadline( this, pNewColl, aSet, nOutLvlBits, 1, sal_True );
-        break;
-    case RES_POOLCOLL_HEADLINE3:        // Headinline 3
-        lcl_SetHeadline( this, pNewColl, aSet, nOutLvlBits, 2, sal_False );
-        break;
-    case RES_POOLCOLL_HEADLINE4:        // Headinline 4
-        lcl_SetHeadline( this, pNewColl, aSet, nOutLvlBits, 3, sal_True );
-        break;
-    case RES_POOLCOLL_HEADLINE5:        // Headinline 5
-        lcl_SetHeadline( this, pNewColl, aSet, nOutLvlBits, 4, sal_False );
-        break;
-    case RES_POOLCOLL_HEADLINE6:        // Headinline 6
-        lcl_SetHeadline( this, pNewColl, aSet, nOutLvlBits, 5, sal_False );
-        break;
-    case RES_POOLCOLL_HEADLINE7:        // Headinline 7
-        lcl_SetHeadline( this, pNewColl, aSet, nOutLvlBits, 6, sal_False );
-        break;
-    case RES_POOLCOLL_HEADLINE8:        // Headinline 8
-        lcl_SetHeadline( this, pNewColl, aSet, nOutLvlBits, 7, sal_False );
-        break;
-    case RES_POOLCOLL_HEADLINE9:        // Headinline 9
-        lcl_SetHeadline( this, pNewColl, aSet, nOutLvlBits, 8, sal_False );
-        break;
-    case RES_POOLCOLL_HEADLINE10:       // Headinline 10
-        lcl_SetHeadline( this, pNewColl, aSet, nOutLvlBits, 9, sal_False );
-        break;
+                    Font aFnt( OutputDevice::GetDefaultFont( *pArr,
+                                            nLng, DEFAULTFONT_FLAGS_ONLYONE ) );
+
+                    aSet.Put( SvxFontItem( aFnt.GetFamily(), aFnt.GetName(),
+                                            aEmptyStr, aFnt.GetPitch(),
+                                            aFnt.GetCharSet(), *(pArr+1) ));
+                }
+
+                SvxFontHeightItem aFntSize( PT_14, 100, RES_CHRATR_FONTSIZE );
+                SvxULSpaceItem aUL( PT_12, PT_6, RES_UL_SPACE );
+                if( get(IDocumentSettingAccess::HTML_MODE) )
+                    aUL.SetLower( HTML_PARSPACE );
+                aSet.Put( SvxFmtKeepItem( sal_True, RES_KEEP ));
+
+                pNewColl->SetNextTxtFmtColl( *GetTxtCollFromPool( RES_POOLCOLL_TEXT ));
+
+                aSet.Put( aUL );
+                SetAllScriptItem( aSet, aFntSize );
+            }
+            break;
+
+        case RES_POOLCOLL_NUMBUL_BASE:          // Base Numbering
+            break;
+
+        case RES_POOLCOLL_GREETING:             // Greeting
+        case RES_POOLCOLL_REGISTER_BASE:        // Base directories
+        case RES_POOLCOLL_SIGNATURE:            // Signatures
+        case RES_POOLCOLL_TABLE:                // Tabele content
+            {
+                SwFmtLineNumber aLN; aLN.SetCountLines( sal_False );
+                aSet.Put( aLN );
+            }
+            break;
+
+        case RES_POOLCOLL_HEADLINE1:        // Headinline 1
+            lcl_SetHeadline( this, pNewColl, aSet, nOutLvlBits, 0, sal_False );
+            break;
+        case RES_POOLCOLL_HEADLINE2:        // Headinline 2
+            lcl_SetHeadline( this, pNewColl, aSet, nOutLvlBits, 1, sal_True );
+            break;
+        case RES_POOLCOLL_HEADLINE3:        // Headinline 3
+            lcl_SetHeadline( this, pNewColl, aSet, nOutLvlBits, 2, sal_False );
+            break;
+        case RES_POOLCOLL_HEADLINE4:        // Headinline 4
+            lcl_SetHeadline( this, pNewColl, aSet, nOutLvlBits, 3, sal_True );
+            break;
+        case RES_POOLCOLL_HEADLINE5:        // Headinline 5
+            lcl_SetHeadline( this, pNewColl, aSet, nOutLvlBits, 4, sal_False );
+            break;
+        case RES_POOLCOLL_HEADLINE6:        // Headinline 6
+            lcl_SetHeadline( this, pNewColl, aSet, nOutLvlBits, 5, sal_False );
+            break;
+        case RES_POOLCOLL_HEADLINE7:        // Headinline 7
+            lcl_SetHeadline( this, pNewColl, aSet, nOutLvlBits, 6, sal_False );
+            break;
+        case RES_POOLCOLL_HEADLINE8:        // Headinline 8
+            lcl_SetHeadline( this, pNewColl, aSet, nOutLvlBits, 7, sal_False );
+            break;
+        case RES_POOLCOLL_HEADLINE9:        // Headinline 9
+            lcl_SetHeadline( this, pNewColl, aSet, nOutLvlBits, 8, sal_False );
+            break;
+        case RES_POOLCOLL_HEADLINE10:       // Headinline 10
+            lcl_SetHeadline( this, pNewColl, aSet, nOutLvlBits, 9, sal_False );
+            break;
 
 
-    // Special areas:
-    // Header
-    case RES_POOLCOLL_HEADER:
-    case RES_POOLCOLL_HEADERL:
-    case RES_POOLCOLL_HEADERR:
-    // Footer
-    case RES_POOLCOLL_FOOTER:
-    case RES_POOLCOLL_FOOTERL:
-    case RES_POOLCOLL_FOOTERR:
-        {
-            SwFmtLineNumber aLN; aLN.SetCountLines( sal_False );
-            aSet.Put( aLN );
+        // Special areas:
+        // Header
+        case RES_POOLCOLL_HEADER:
+        case RES_POOLCOLL_HEADERL:
+        case RES_POOLCOLL_HEADERR:
+        // Footer
+        case RES_POOLCOLL_FOOTER:
+        case RES_POOLCOLL_FOOTERL:
+        case RES_POOLCOLL_FOOTERR:
+            {
+                SwFmtLineNumber aLN; aLN.SetCountLines( sal_False );
+                aSet.Put( aLN );
 
-            long nRightMargin = lcl_GetRightMargin( *this );
+                long nRightMargin = lcl_GetRightMargin( *this );
 
-            SvxTabStopItem aTStops( 0, 0, SVX_TAB_ADJUST_DEFAULT, RES_PARATR_TABSTOP );
-            aTStops.Insert( SvxTabStop( nRightMargin / 2, SVX_TAB_ADJUST_CENTER ) );
-            aTStops.Insert( SvxTabStop( nRightMargin, SVX_TAB_ADJUST_RIGHT ) );
+                SvxTabStopItem aTStops( 0, 0, SVX_TAB_ADJUST_DEFAULT, RES_PARATR_TABSTOP );
+                aTStops.Insert( SvxTabStop( nRightMargin / 2, SVX_TAB_ADJUST_CENTER ) );
+                aTStops.Insert( SvxTabStop( nRightMargin, SVX_TAB_ADJUST_RIGHT ) );
 
-            aSet.Put( aTStops );
-        }
-        break;
+                aSet.Put( aTStops );
+            }
+            break;
 
-    case RES_POOLCOLL_TABLE_HDLN:
-        {
-            SetAllScriptItem( aSet, SvxWeightItem( WEIGHT_BOLD, RES_CHRATR_WEIGHT ) );
-            aSet.Put( SvxAdjustItem( SVX_ADJUST_CENTER, RES_PARATR_ADJUST ) );
-            SwFmtLineNumber aLN; aLN.SetCountLines( sal_False );
-            aSet.Put( aLN );
-        }
-        break;
+        case RES_POOLCOLL_TABLE_HDLN:
+            {
+                SetAllScriptItem( aSet, SvxWeightItem( WEIGHT_BOLD, RES_CHRATR_WEIGHT ) );
+                aSet.Put( SvxAdjustItem( SVX_ADJUST_CENTER, RES_PARATR_ADJUST ) );
+                SwFmtLineNumber aLN; aLN.SetCountLines( sal_False );
+                aSet.Put( aLN );
+            }
+            break;
 
-    case RES_POOLCOLL_FOOTNOTE:             // paragraph style Footnote
-    case RES_POOLCOLL_ENDNOTE:              // paragraph style Endnote
-        {
-            SvxLRSpaceItem aLR( RES_LR_SPACE );
-            aLR.SetTxtFirstLineOfst( -(short)( GetMetricVal( CM_05 ) + GetMetricVal( CM_01 ) ) );
-            aLR.SetTxtLeft( GetMetricVal( CM_05 ) + GetMetricVal( CM_01 ) );
-            SetAllScriptItem( aSet, SvxFontHeightItem( PT_10, 100, RES_CHRATR_FONTSIZE ) );
-            aSet.Put( aLR );
-            SwFmtLineNumber aLN; aLN.SetCountLines( sal_False );
-            aSet.Put( aLN );
-        }
-        break;
+        case RES_POOLCOLL_FOOTNOTE:             // paragraph style Footnote
+        case RES_POOLCOLL_ENDNOTE:              // paragraph style Endnote
+            {
+                SvxLRSpaceItem aLR( RES_LR_SPACE );
+                aLR.SetTxtFirstLineOfst( -(short)( GetMetricVal( CM_05 ) + GetMetricVal( CM_01 ) ) );
+                aLR.SetTxtLeft( GetMetricVal( CM_05 ) + GetMetricVal( CM_01 ) );
+                SetAllScriptItem( aSet, SvxFontHeightItem( PT_10, 100, RES_CHRATR_FONTSIZE ) );
+                aSet.Put( aLR );
+                SwFmtLineNumber aLN; aLN.SetCountLines( sal_False );
+                aSet.Put( aLN );
+            }
+            break;
 
-    case RES_POOLCOLL_LABEL:                // Base label
-        {
-            SvxULSpaceItem aUL( RES_UL_SPACE ); aUL.SetUpper( PT_6 ); aUL.SetLower( PT_6 );
-            aSet.Put( aUL );
-            SetAllScriptItem( aSet, SvxPostureItem( ITALIC_NORMAL, RES_CHRATR_POSTURE ) );
-            SetAllScriptItem( aSet, SvxFontHeightItem( PT_10, 100, RES_CHRATR_FONTSIZE ) );
-            SwFmtLineNumber aLN; aLN.SetCountLines( sal_False );
-            aSet.Put( aLN );
-        }
-        break;
+        case RES_POOLCOLL_LABEL:                // Base label
+            {
+                SvxULSpaceItem aUL( RES_UL_SPACE ); aUL.SetUpper( PT_6 ); aUL.SetLower( PT_6 );
+                aSet.Put( aUL );
+                SetAllScriptItem( aSet, SvxPostureItem( ITALIC_NORMAL, RES_CHRATR_POSTURE ) );
+                SetAllScriptItem( aSet, SvxFontHeightItem( PT_10, 100, RES_CHRATR_FONTSIZE ) );
+                SwFmtLineNumber aLN; aLN.SetCountLines( sal_False );
+                aSet.Put( aLN );
+            }
+            break;
 
-    case RES_POOLCOLL_FRAME:                // Frame content
-    case RES_POOLCOLL_LABEL_ABB:            // Label projection
-    case RES_POOLCOLL_LABEL_TABLE:          // Label table
-    case RES_POOLCOLL_LABEL_FRAME:          // Label frame
-    case RES_POOLCOLL_LABEL_DRAWING:        // Label drawing
-        break;
+        case RES_POOLCOLL_FRAME:                // Frame content
+        case RES_POOLCOLL_LABEL_ABB:            // Label projection
+        case RES_POOLCOLL_LABEL_TABLE:          // Label table
+        case RES_POOLCOLL_LABEL_FRAME:          // Label frame
+        case RES_POOLCOLL_LABEL_DRAWING:        // Label drawing
+            break;
 
-    case RES_POOLCOLL_JAKETADRESS:          // Jaket address
-        {
-            SvxULSpaceItem aUL( RES_UL_SPACE ); aUL.SetLower( PT_3 );
-            aSet.Put( aUL );
-            SwFmtLineNumber aLN; aLN.SetCountLines( sal_False );
-            aSet.Put( aLN );
-        }
-        break;
-
-    case RES_POOLCOLL_SENDADRESS:           // Sender address
-        {
-            if( get(IDocumentSettingAccess::HTML_MODE) )
-                SetAllScriptItem( aSet, SvxPostureItem(ITALIC_NORMAL, RES_CHRATR_POSTURE) );
-            else
+        case RES_POOLCOLL_JAKETADRESS:          // Jaket address
             {
                 SvxULSpaceItem aUL( RES_UL_SPACE ); aUL.SetLower( PT_3 );
                 aSet.Put( aUL );
+                SwFmtLineNumber aLN; aLN.SetCountLines( sal_False );
+                aSet.Put( aLN );
             }
-            SwFmtLineNumber aLN; aLN.SetCountLines( sal_False );
-            aSet.Put( aLN );
-        }
-        break;
+            break;
 
-    // User directories:
-    case RES_POOLCOLL_TOX_USERH:            // Header
-        lcl_SetRegister( this, aSet, 0, sal_True, sal_False );
-        {
-            SwFmtLineNumber aLN; aLN.SetCountLines( sal_False );
-            aSet.Put( aLN );
-        }
-        break;
-    case RES_POOLCOLL_TOX_USER1:            // 1. Level
-        lcl_SetRegister( this, aSet, 0, sal_False, sal_True );
-        break;
-    case RES_POOLCOLL_TOX_USER2:            // 2. Level
-        lcl_SetRegister( this, aSet, 1, sal_False, sal_True );
-        break;
-    case RES_POOLCOLL_TOX_USER3:            // 3. Level
-        lcl_SetRegister( this, aSet, 2, sal_False, sal_True );
-        break;
-    case RES_POOLCOLL_TOX_USER4:            // 4. Level
-        lcl_SetRegister( this, aSet, 3, sal_False, sal_True );
-        break;
-    case RES_POOLCOLL_TOX_USER5:            // 5. Level
-        lcl_SetRegister( this, aSet, 4, sal_False, sal_True );
-        break;
-    case RES_POOLCOLL_TOX_USER6:            // 6. Level
-        lcl_SetRegister( this, aSet, 5, sal_False, sal_True );
-        break;
-    case RES_POOLCOLL_TOX_USER7:            // 7. Level
-        lcl_SetRegister( this, aSet, 6, sal_False, sal_True );
-        break;
-    case RES_POOLCOLL_TOX_USER8:            // 8. Level
-        lcl_SetRegister( this, aSet, 7, sal_False, sal_True );
-        break;
-    case RES_POOLCOLL_TOX_USER9:            // 9. Level
-        lcl_SetRegister( this, aSet, 8, sal_False, sal_True );
-        break;
-    case RES_POOLCOLL_TOX_USER10:           // 10. Level
-        lcl_SetRegister( this, aSet, 9, sal_False, sal_True );
-        break;
-
-    // Index directories
-    case RES_POOLCOLL_TOX_IDXH:         // Header
-        lcl_SetRegister( this, aSet, 0, sal_True, sal_False );
-        {
-            SwFmtLineNumber aLN; aLN.SetCountLines( sal_False );
-            aSet.Put( aLN );
-        }
-        break;
-    case RES_POOLCOLL_TOX_IDX1:         // 1. Level
-        lcl_SetRegister( this, aSet, 0, sal_False, sal_False );
-        break;
-    case RES_POOLCOLL_TOX_IDX2:         // 2. Level
-        lcl_SetRegister( this, aSet, 1, sal_False, sal_False );
-        break;
-    case RES_POOLCOLL_TOX_IDX3:         // 3. Level
-        lcl_SetRegister( this, aSet, 2, sal_False, sal_False );
-        break;
-    case RES_POOLCOLL_TOX_IDXBREAK:     // Trenner
-        lcl_SetRegister( this, aSet, 0, sal_False, sal_False );
-        break;
-
-    // Content directories
-    case RES_POOLCOLL_TOX_CNTNTH:       // Header
-        lcl_SetRegister( this, aSet, 0, sal_True, sal_False );
-        {
-            SwFmtLineNumber aLN; aLN.SetCountLines( sal_False );
-            aSet.Put( aLN );
-        }
-        break;
-    case RES_POOLCOLL_TOX_CNTNT1:       // 1. Level
-        lcl_SetRegister( this, aSet, 0, sal_False, sal_True );
-        break;
-    case RES_POOLCOLL_TOX_CNTNT2:       // 2. Level
-        lcl_SetRegister( this, aSet, 1, sal_False, sal_True );
-        break;
-    case RES_POOLCOLL_TOX_CNTNT3:       // 3. Level
-        lcl_SetRegister( this, aSet, 2, sal_False, sal_True );
-        break;
-    case RES_POOLCOLL_TOX_CNTNT4:       // 4. Level
-        lcl_SetRegister( this, aSet, 3, sal_False, sal_True );
-        break;
-    case RES_POOLCOLL_TOX_CNTNT5:       // 5. Level
-        lcl_SetRegister( this, aSet, 4, sal_False, sal_True );
-        break;
-    case RES_POOLCOLL_TOX_CNTNT6:       // 6. Level
-        lcl_SetRegister( this, aSet, 5, sal_False, sal_True );
-        break;
-    case RES_POOLCOLL_TOX_CNTNT7:       // 7. Level
-        lcl_SetRegister( this, aSet, 6, sal_False, sal_True );
-        break;
-    case RES_POOLCOLL_TOX_CNTNT8:       // 8. Level
-        lcl_SetRegister( this, aSet, 7, sal_False, sal_True );
-        break;
-    case RES_POOLCOLL_TOX_CNTNT9:       // 9. Level
-        lcl_SetRegister( this, aSet, 8, sal_False, sal_True );
-        break;
-    case RES_POOLCOLL_TOX_CNTNT10:      // 10. Level
-        lcl_SetRegister( this, aSet, 9, sal_False, sal_True );
-        break;
-
-    case RES_POOLCOLL_TOX_ILLUSH:
-    case RES_POOLCOLL_TOX_OBJECTH:
-    case RES_POOLCOLL_TOX_TABLESH:
-    case RES_POOLCOLL_TOX_AUTHORITIESH:
-        lcl_SetRegister( this, aSet, 0, sal_True, sal_False );
-        {
-            SwFmtLineNumber aLN; aLN.SetCountLines( sal_False );
-            aSet.Put( aLN );
-        }
-        break;
-    case RES_POOLCOLL_TOX_ILLUS1:
-    case RES_POOLCOLL_TOX_OBJECT1:
-    case RES_POOLCOLL_TOX_TABLES1:
-    case RES_POOLCOLL_TOX_AUTHORITIES1:
-        lcl_SetRegister( this, aSet, 0, sal_False, sal_True );
-    break;
-
-
-
-    case RES_POOLCOLL_NUM_LEVEL1S:
-        lcl_SetNumBul( this, pNewColl, aSet, RES_POOLCOLL_NUM_LEVEL1,
-                        lNumFirstLineOffset, SwNumRule::GetNumIndent( 0 ),
-                        PT_12, PT_6 );
-        break;
-    case RES_POOLCOLL_NUM_LEVEL1:
-        lcl_SetNumBul( this, pNewColl, aSet, RES_POOLCOLL_NUM_LEVEL1,
-                        lNumFirstLineOffset, SwNumRule::GetNumIndent( 0 ),
-                        0, PT_6 );
-        break;
-    case RES_POOLCOLL_NUM_LEVEL1E:
-        lcl_SetNumBul( this, pNewColl, aSet, RES_POOLCOLL_NUM_LEVEL1,
-                        lNumFirstLineOffset, SwNumRule::GetNumIndent( 0 ),
-                        0, PT_12 );
-        break;
-    case RES_POOLCOLL_NUM_NONUM1:
-        lcl_SetNumBul( this, pNewColl, aSet, RES_POOLCOLL_NUM_NONUM1,
-                        0, SwNumRule::GetNumIndent( 0 ), 0, PT_6 );
-        break;
-    case RES_POOLCOLL_NUM_LEVEL2S:
-        lcl_SetNumBul( this, pNewColl, aSet, RES_POOLCOLL_NUM_LEVEL2,
-                        lNumFirstLineOffset, SwNumRule::GetNumIndent( 1 ),
-                        PT_12, PT_6 );
-        break;
-    case RES_POOLCOLL_NUM_LEVEL2:
-        lcl_SetNumBul( this, pNewColl, aSet, RES_POOLCOLL_NUM_LEVEL2,
-                        lNumFirstLineOffset, SwNumRule::GetNumIndent( 1 ),
-                        0, PT_6 );
-        break;
-    case RES_POOLCOLL_NUM_LEVEL2E:
-        lcl_SetNumBul( this, pNewColl, aSet, RES_POOLCOLL_NUM_LEVEL2,
-                        lNumFirstLineOffset, SwNumRule::GetNumIndent( 1 ),
-                        0, PT_12 );
-        break;
-    case RES_POOLCOLL_NUM_NONUM2:
-        lcl_SetNumBul( this, pNewColl, aSet, RES_POOLCOLL_NUM_NONUM2,
-                        0, SwNumRule::GetNumIndent( 1 ), 0, PT_6 );
-        break;
-    case RES_POOLCOLL_NUM_LEVEL3S:
-        lcl_SetNumBul( this, pNewColl, aSet, RES_POOLCOLL_NUM_LEVEL3,
-                        lNumFirstLineOffset, SwNumRule::GetNumIndent( 2 ),
-                        PT_12, PT_6 );
-        break;
-    case RES_POOLCOLL_NUM_LEVEL3:
-        lcl_SetNumBul( this, pNewColl, aSet, RES_POOLCOLL_NUM_LEVEL3,
-                        lNumFirstLineOffset, SwNumRule::GetNumIndent( 2 ),
-                        0, PT_6 );
-        break;
-    case RES_POOLCOLL_NUM_LEVEL3E:
-        lcl_SetNumBul( this, pNewColl, aSet, RES_POOLCOLL_NUM_LEVEL3,
-                        lNumFirstLineOffset, SwNumRule::GetNumIndent( 2 ),
-                        0, PT_12 );
-        break;
-    case RES_POOLCOLL_NUM_NONUM3:
-        lcl_SetNumBul( this, pNewColl, aSet, RES_POOLCOLL_NUM_NONUM3,
-                        0, SwNumRule::GetNumIndent( 2 ), 0, PT_6 );
-        break;
-    case RES_POOLCOLL_NUM_LEVEL4S:
-        lcl_SetNumBul( this, pNewColl, aSet, RES_POOLCOLL_NUM_LEVEL4,
-                        lNumFirstLineOffset, SwNumRule::GetNumIndent( 3 ),
-                        PT_12, PT_6 );
-        break;
-    case RES_POOLCOLL_NUM_LEVEL4:
-        lcl_SetNumBul( this, pNewColl, aSet, RES_POOLCOLL_NUM_LEVEL4,
-                        lNumFirstLineOffset, SwNumRule::GetNumIndent( 3 ),
-                        0, PT_6 );
-        break;
-    case RES_POOLCOLL_NUM_LEVEL4E:
-        lcl_SetNumBul( this, pNewColl, aSet, RES_POOLCOLL_NUM_LEVEL4,
-                        lNumFirstLineOffset, SwNumRule::GetNumIndent( 3 ),
-                        0, PT_12 );
-        break;
-    case RES_POOLCOLL_NUM_NONUM4:
-        lcl_SetNumBul( this, pNewColl, aSet, RES_POOLCOLL_NUM_NONUM4,
-                        0, SwNumRule::GetNumIndent( 3 ), 0, PT_6 );
-        break;
-    case RES_POOLCOLL_NUM_LEVEL5S:
-        lcl_SetNumBul( this, pNewColl, aSet, RES_POOLCOLL_NUM_LEVEL5,
-                        lNumFirstLineOffset, SwNumRule::GetNumIndent( 4 ),
-                        PT_12, PT_6 );
-        break;
-    case RES_POOLCOLL_NUM_LEVEL5:
-        lcl_SetNumBul( this, pNewColl, aSet, RES_POOLCOLL_NUM_LEVEL5,
-                        lNumFirstLineOffset, SwNumRule::GetNumIndent( 4 ),
-                        0, PT_6 );
-        break;
-    case RES_POOLCOLL_NUM_LEVEL5E:
-        lcl_SetNumBul( this, pNewColl, aSet, RES_POOLCOLL_NUM_LEVEL5,
-                        lNumFirstLineOffset, SwNumRule::GetNumIndent( 4 ),
-                        0, PT_12 );
-        break;
-    case RES_POOLCOLL_NUM_NONUM5:
-        lcl_SetNumBul( this, pNewColl, aSet, RES_POOLCOLL_NUM_NONUM5,
-                        0, SwNumRule::GetNumIndent( 4 ), 0, PT_6 );
-        break;
-
-    case RES_POOLCOLL_BUL_LEVEL1S:
-        lcl_SetNumBul( this, pNewColl, aSet, RES_POOLCOLL_BUL_LEVEL1,
-                        lBullFirstLineOffset, SwNumRule::GetBullIndent( 0 ),
-                        PT_12, PT_6 );
-        break;
-    case RES_POOLCOLL_BUL_LEVEL1:
-        lcl_SetNumBul( this, pNewColl, aSet, RES_POOLCOLL_BUL_LEVEL1,
-                        lBullFirstLineOffset, SwNumRule::GetBullIndent( 0 ),
-                        0, PT_6 );
-        break;
-    case RES_POOLCOLL_BUL_LEVEL1E:
-        lcl_SetNumBul( this, pNewColl, aSet, RES_POOLCOLL_BUL_LEVEL1,
-                        lBullFirstLineOffset, SwNumRule::GetBullIndent( 0 ),
-                        0, PT_12 );
-        break;
-    case RES_POOLCOLL_BUL_NONUM1:
-        lcl_SetNumBul( this, pNewColl, aSet, RES_POOLCOLL_BUL_NONUM1,
-                        0, SwNumRule::GetBullIndent( 0 ), 0, PT_6 );
-        break;
-    case RES_POOLCOLL_BUL_LEVEL2S:
-        lcl_SetNumBul( this, pNewColl, aSet, RES_POOLCOLL_BUL_LEVEL2,
-                        lBullFirstLineOffset, SwNumRule::GetBullIndent( 1 ),
-                        PT_12, PT_6 );
-        break;
-    case RES_POOLCOLL_BUL_LEVEL2:
-        lcl_SetNumBul( this, pNewColl, aSet, RES_POOLCOLL_BUL_LEVEL2,
-                        lBullFirstLineOffset, SwNumRule::GetBullIndent( 1 ),
-                        0, PT_6 );
-        break;
-    case RES_POOLCOLL_BUL_LEVEL2E:
-        lcl_SetNumBul( this, pNewColl, aSet, RES_POOLCOLL_BUL_LEVEL2,
-                        lBullFirstLineOffset, SwNumRule::GetBullIndent( 1 ),
-                        0, PT_12 );
-        break;
-    case RES_POOLCOLL_BUL_NONUM2:
-        lcl_SetNumBul( this, pNewColl, aSet, RES_POOLCOLL_BUL_NONUM2,
-                        0, SwNumRule::GetBullIndent( 1 ), 0, PT_6 );
-        break;
-    case RES_POOLCOLL_BUL_LEVEL3S:
-        lcl_SetNumBul( this, pNewColl, aSet, RES_POOLCOLL_BUL_LEVEL3,
-                        lBullFirstLineOffset, SwNumRule::GetBullIndent( 2 ),
-                        PT_12, PT_6 );
-        break;
-    case RES_POOLCOLL_BUL_LEVEL3:
-        lcl_SetNumBul( this, pNewColl, aSet, RES_POOLCOLL_BUL_LEVEL3,
-                        lBullFirstLineOffset, SwNumRule::GetBullIndent( 2 ),
-                        0, PT_6 );
-        break;
-    case RES_POOLCOLL_BUL_LEVEL3E:
-        lcl_SetNumBul( this, pNewColl, aSet, RES_POOLCOLL_BUL_LEVEL3,
-                        lBullFirstLineOffset, SwNumRule::GetBullIndent( 2 ),
-                        0, PT_12 );
-        break;
-    case RES_POOLCOLL_BUL_NONUM3:
-        lcl_SetNumBul( this, pNewColl, aSet, RES_POOLCOLL_BUL_NONUM3,
-                        0, SwNumRule::GetBullIndent( 2 ), 0, PT_6 );
-        break;
-    case RES_POOLCOLL_BUL_LEVEL4S:
-        lcl_SetNumBul( this, pNewColl, aSet, RES_POOLCOLL_BUL_LEVEL4,
-                        lBullFirstLineOffset, SwNumRule::GetBullIndent( 3 ),
-                        PT_12, PT_6 );
-        break;
-    case RES_POOLCOLL_BUL_LEVEL4:
-        lcl_SetNumBul( this, pNewColl, aSet, RES_POOLCOLL_BUL_LEVEL4,
-                        lBullFirstLineOffset, SwNumRule::GetBullIndent( 3 ),
-                        0, PT_6 );
-        break;
-    case RES_POOLCOLL_BUL_LEVEL4E:
-        lcl_SetNumBul( this, pNewColl, aSet, RES_POOLCOLL_BUL_LEVEL4,
-                        lBullFirstLineOffset, SwNumRule::GetBullIndent( 3 ),
-                        0, PT_12 );
-        break;
-    case RES_POOLCOLL_BUL_NONUM4:
-        lcl_SetNumBul( this, pNewColl, aSet, RES_POOLCOLL_BUL_NONUM4,
-                        0, SwNumRule::GetBullIndent( 3 ), 0, PT_6 );
-        break;
-    case RES_POOLCOLL_BUL_LEVEL5S:
-        lcl_SetNumBul( this, pNewColl, aSet, RES_POOLCOLL_BUL_LEVEL5,
-                        lBullFirstLineOffset, SwNumRule::GetBullIndent( 4 ),
-                        PT_12, PT_6 );
-        break;
-    case RES_POOLCOLL_BUL_LEVEL5:
-        lcl_SetNumBul( this, pNewColl, aSet, RES_POOLCOLL_BUL_LEVEL5,
-                        lBullFirstLineOffset, SwNumRule::GetBullIndent( 4 ),
-                        0, PT_6 );
-        break;
-    case RES_POOLCOLL_BUL_LEVEL5E:
-        lcl_SetNumBul( this, pNewColl, aSet, RES_POOLCOLL_BUL_LEVEL5,
-                        lBullFirstLineOffset, SwNumRule::GetBullIndent( 4 ),
-                        0, PT_12 );
-        break;
-    case RES_POOLCOLL_BUL_NONUM5:
-        lcl_SetNumBul( this, pNewColl, aSet, RES_POOLCOLL_BUL_NONUM5,
-                        0, SwNumRule::GetBullIndent( 4 ), 0, PT_6 );
-        break;
-
-    case RES_POOLCOLL_DOC_TITEL:            // Document Title
-        {
-            SetAllScriptItem( aSet, SvxWeightItem( WEIGHT_BOLD, RES_CHRATR_WEIGHT ) );
-            SetAllScriptItem( aSet, SvxFontHeightItem( PT_18, 100, RES_CHRATR_FONTSIZE ) );
-
-            aSet.Put( SvxAdjustItem( SVX_ADJUST_CENTER, RES_PARATR_ADJUST ) );
-
-            pNewColl->SetNextTxtFmtColl( *GetTxtCollFromPool(
-                                                RES_POOLCOLL_DOC_SUBTITEL ));
-        }
-        break;
-
-    case RES_POOLCOLL_DOC_SUBTITEL:         // Document subtitle
-        {
-            SetAllScriptItem( aSet, SvxPostureItem( ITALIC_NORMAL, RES_CHRATR_POSTURE ));
-            SetAllScriptItem( aSet, SvxFontHeightItem( PT_14, 100, RES_CHRATR_FONTSIZE ));
-
-            aSet.Put( SvxAdjustItem( SVX_ADJUST_CENTER, RES_PARATR_ADJUST ));
-
-            pNewColl->SetNextTxtFmtColl( *GetTxtCollFromPool(
-                                                RES_POOLCOLL_TEXT ));
-        }
-        break;
-
-    case RES_POOLCOLL_HTML_BLOCKQUOTE:
-        {
-            SvxLRSpaceItem aLR( RES_LR_SPACE );
-            aLR.SetLeft( GetMetricVal( CM_1 ));
-            aLR.SetRight( GetMetricVal( CM_1 ));
-            aSet.Put( aLR );
-            SvxULSpaceItem aUL( RES_UL_SPACE );
-            aUL = pNewColl->GetULSpace();
-            aUL.SetLower( HTML_PARSPACE );
-            aSet.Put( aUL);
-        }
-        break;
-
-    case RES_POOLCOLL_HTML_PRE:
-        {
-            ::lcl_SetDfltFont( DEFAULTFONT_FIXED, aSet );
-
-// WORKAROUND: Set PRE to 10pt
-            SetAllScriptItem( aSet, SvxFontHeightItem(PT_10, 100, RES_CHRATR_FONTSIZE) );
-// WORKAROUND: Set PRE to 10pt
-
-            // The lower paragraph distance is set explicitly (makes
-            // assigning hard attributes easier)
-            SvxULSpaceItem aULSpaceItem( RES_UL_SPACE );
-            aULSpaceItem = pNewColl->GetULSpace();
-            aULSpaceItem.SetLower( 0 );
-            aSet.Put( aULSpaceItem );
-        }
-        break;
-
-    case RES_POOLCOLL_HTML_HR:
-        {
-            SvxBoxItem aBox( RES_BOX );
-            Color aColor( COL_GRAY );
-            SvxBorderLine aNew(&aColor, 1, table::BorderLineStyle::DOUBLE);
-            aBox.SetLine( &aNew, BOX_LINE_BOTTOM );
-
-            aSet.Put( aBox );
-            aSet.Put( SwParaConnectBorderItem( sal_False ) );
-            SetAllScriptItem( aSet, SvxFontHeightItem(120, 100, RES_CHRATR_FONTSIZE) );
-
-            SvxULSpaceItem aUL( RES_UL_SPACE );
+        case RES_POOLCOLL_SENDADRESS:           // Sender address
             {
+                if( get(IDocumentSettingAccess::HTML_MODE) )
+                    SetAllScriptItem( aSet, SvxPostureItem(ITALIC_NORMAL, RES_CHRATR_POSTURE) );
+                else
+                {
+                    SvxULSpaceItem aUL( RES_UL_SPACE ); aUL.SetLower( PT_3 );
+                    aSet.Put( aUL );
+                }
+                SwFmtLineNumber aLN; aLN.SetCountLines( sal_False );
+                aSet.Put( aLN );
+            }
+            break;
+
+        // User directories:
+        case RES_POOLCOLL_TOX_USERH:            // Header
+            lcl_SetRegister( this, aSet, 0, sal_True, sal_False );
+            {
+                SwFmtLineNumber aLN; aLN.SetCountLines( sal_False );
+                aSet.Put( aLN );
+            }
+            break;
+        case RES_POOLCOLL_TOX_USER1:            // 1. Level
+            lcl_SetRegister( this, aSet, 0, sal_False, sal_True );
+            break;
+        case RES_POOLCOLL_TOX_USER2:            // 2. Level
+            lcl_SetRegister( this, aSet, 1, sal_False, sal_True );
+            break;
+        case RES_POOLCOLL_TOX_USER3:            // 3. Level
+            lcl_SetRegister( this, aSet, 2, sal_False, sal_True );
+            break;
+        case RES_POOLCOLL_TOX_USER4:            // 4. Level
+            lcl_SetRegister( this, aSet, 3, sal_False, sal_True );
+            break;
+        case RES_POOLCOLL_TOX_USER5:            // 5. Level
+            lcl_SetRegister( this, aSet, 4, sal_False, sal_True );
+            break;
+        case RES_POOLCOLL_TOX_USER6:            // 6. Level
+            lcl_SetRegister( this, aSet, 5, sal_False, sal_True );
+            break;
+        case RES_POOLCOLL_TOX_USER7:            // 7. Level
+            lcl_SetRegister( this, aSet, 6, sal_False, sal_True );
+            break;
+        case RES_POOLCOLL_TOX_USER8:            // 8. Level
+            lcl_SetRegister( this, aSet, 7, sal_False, sal_True );
+            break;
+        case RES_POOLCOLL_TOX_USER9:            // 9. Level
+            lcl_SetRegister( this, aSet, 8, sal_False, sal_True );
+            break;
+        case RES_POOLCOLL_TOX_USER10:           // 10. Level
+            lcl_SetRegister( this, aSet, 9, sal_False, sal_True );
+            break;
+
+        // Index directories
+        case RES_POOLCOLL_TOX_IDXH:         // Header
+            lcl_SetRegister( this, aSet, 0, sal_True, sal_False );
+            {
+                SwFmtLineNumber aLN; aLN.SetCountLines( sal_False );
+                aSet.Put( aLN );
+            }
+            break;
+        case RES_POOLCOLL_TOX_IDX1:         // 1. Level
+            lcl_SetRegister( this, aSet, 0, sal_False, sal_False );
+            break;
+        case RES_POOLCOLL_TOX_IDX2:         // 2. Level
+            lcl_SetRegister( this, aSet, 1, sal_False, sal_False );
+            break;
+        case RES_POOLCOLL_TOX_IDX3:         // 3. Level
+            lcl_SetRegister( this, aSet, 2, sal_False, sal_False );
+            break;
+        case RES_POOLCOLL_TOX_IDXBREAK:     // Trenner
+            lcl_SetRegister( this, aSet, 0, sal_False, sal_False );
+            break;
+
+        // Content directories
+        case RES_POOLCOLL_TOX_CNTNTH:       // Header
+            lcl_SetRegister( this, aSet, 0, sal_True, sal_False );
+            {
+                SwFmtLineNumber aLN; aLN.SetCountLines( sal_False );
+                aSet.Put( aLN );
+            }
+            break;
+        case RES_POOLCOLL_TOX_CNTNT1:       // 1. Level
+            lcl_SetRegister( this, aSet, 0, sal_False, sal_True );
+            break;
+        case RES_POOLCOLL_TOX_CNTNT2:       // 2. Level
+            lcl_SetRegister( this, aSet, 1, sal_False, sal_True );
+            break;
+        case RES_POOLCOLL_TOX_CNTNT3:       // 3. Level
+            lcl_SetRegister( this, aSet, 2, sal_False, sal_True );
+            break;
+        case RES_POOLCOLL_TOX_CNTNT4:       // 4. Level
+            lcl_SetRegister( this, aSet, 3, sal_False, sal_True );
+            break;
+        case RES_POOLCOLL_TOX_CNTNT5:       // 5. Level
+            lcl_SetRegister( this, aSet, 4, sal_False, sal_True );
+            break;
+        case RES_POOLCOLL_TOX_CNTNT6:       // 6. Level
+            lcl_SetRegister( this, aSet, 5, sal_False, sal_True );
+            break;
+        case RES_POOLCOLL_TOX_CNTNT7:       // 7. Level
+            lcl_SetRegister( this, aSet, 6, sal_False, sal_True );
+            break;
+        case RES_POOLCOLL_TOX_CNTNT8:       // 8. Level
+            lcl_SetRegister( this, aSet, 7, sal_False, sal_True );
+            break;
+        case RES_POOLCOLL_TOX_CNTNT9:       // 9. Level
+            lcl_SetRegister( this, aSet, 8, sal_False, sal_True );
+            break;
+        case RES_POOLCOLL_TOX_CNTNT10:      // 10. Level
+            lcl_SetRegister( this, aSet, 9, sal_False, sal_True );
+            break;
+
+        case RES_POOLCOLL_TOX_ILLUSH:
+        case RES_POOLCOLL_TOX_OBJECTH:
+        case RES_POOLCOLL_TOX_TABLESH:
+        case RES_POOLCOLL_TOX_AUTHORITIESH:
+            lcl_SetRegister( this, aSet, 0, sal_True, sal_False );
+            {
+                SwFmtLineNumber aLN; aLN.SetCountLines( sal_False );
+                aSet.Put( aLN );
+            }
+            break;
+        case RES_POOLCOLL_TOX_ILLUS1:
+        case RES_POOLCOLL_TOX_OBJECT1:
+        case RES_POOLCOLL_TOX_TABLES1:
+        case RES_POOLCOLL_TOX_AUTHORITIES1:
+            lcl_SetRegister( this, aSet, 0, sal_False, sal_True );
+        break;
+
+
+
+        case RES_POOLCOLL_NUM_LEVEL1S:
+            lcl_SetNumBul( this, pNewColl, aSet, RES_POOLCOLL_NUM_LEVEL1,
+                            lNumFirstLineOffset, SwNumRule::GetNumIndent( 0 ),
+                            PT_12, PT_6 );
+            break;
+        case RES_POOLCOLL_NUM_LEVEL1:
+            lcl_SetNumBul( this, pNewColl, aSet, RES_POOLCOLL_NUM_LEVEL1,
+                            lNumFirstLineOffset, SwNumRule::GetNumIndent( 0 ),
+                            0, PT_6 );
+            break;
+        case RES_POOLCOLL_NUM_LEVEL1E:
+            lcl_SetNumBul( this, pNewColl, aSet, RES_POOLCOLL_NUM_LEVEL1,
+                            lNumFirstLineOffset, SwNumRule::GetNumIndent( 0 ),
+                            0, PT_12 );
+            break;
+        case RES_POOLCOLL_NUM_NONUM1:
+            lcl_SetNumBul( this, pNewColl, aSet, RES_POOLCOLL_NUM_NONUM1,
+                            0, SwNumRule::GetNumIndent( 0 ), 0, PT_6 );
+            break;
+        case RES_POOLCOLL_NUM_LEVEL2S:
+            lcl_SetNumBul( this, pNewColl, aSet, RES_POOLCOLL_NUM_LEVEL2,
+                            lNumFirstLineOffset, SwNumRule::GetNumIndent( 1 ),
+                            PT_12, PT_6 );
+            break;
+        case RES_POOLCOLL_NUM_LEVEL2:
+            lcl_SetNumBul( this, pNewColl, aSet, RES_POOLCOLL_NUM_LEVEL2,
+                            lNumFirstLineOffset, SwNumRule::GetNumIndent( 1 ),
+                            0, PT_6 );
+            break;
+        case RES_POOLCOLL_NUM_LEVEL2E:
+            lcl_SetNumBul( this, pNewColl, aSet, RES_POOLCOLL_NUM_LEVEL2,
+                            lNumFirstLineOffset, SwNumRule::GetNumIndent( 1 ),
+                            0, PT_12 );
+            break;
+        case RES_POOLCOLL_NUM_NONUM2:
+            lcl_SetNumBul( this, pNewColl, aSet, RES_POOLCOLL_NUM_NONUM2,
+                            0, SwNumRule::GetNumIndent( 1 ), 0, PT_6 );
+            break;
+        case RES_POOLCOLL_NUM_LEVEL3S:
+            lcl_SetNumBul( this, pNewColl, aSet, RES_POOLCOLL_NUM_LEVEL3,
+                            lNumFirstLineOffset, SwNumRule::GetNumIndent( 2 ),
+                            PT_12, PT_6 );
+            break;
+        case RES_POOLCOLL_NUM_LEVEL3:
+            lcl_SetNumBul( this, pNewColl, aSet, RES_POOLCOLL_NUM_LEVEL3,
+                            lNumFirstLineOffset, SwNumRule::GetNumIndent( 2 ),
+                            0, PT_6 );
+            break;
+        case RES_POOLCOLL_NUM_LEVEL3E:
+            lcl_SetNumBul( this, pNewColl, aSet, RES_POOLCOLL_NUM_LEVEL3,
+                            lNumFirstLineOffset, SwNumRule::GetNumIndent( 2 ),
+                            0, PT_12 );
+            break;
+        case RES_POOLCOLL_NUM_NONUM3:
+            lcl_SetNumBul( this, pNewColl, aSet, RES_POOLCOLL_NUM_NONUM3,
+                            0, SwNumRule::GetNumIndent( 2 ), 0, PT_6 );
+            break;
+        case RES_POOLCOLL_NUM_LEVEL4S:
+            lcl_SetNumBul( this, pNewColl, aSet, RES_POOLCOLL_NUM_LEVEL4,
+                            lNumFirstLineOffset, SwNumRule::GetNumIndent( 3 ),
+                            PT_12, PT_6 );
+            break;
+        case RES_POOLCOLL_NUM_LEVEL4:
+            lcl_SetNumBul( this, pNewColl, aSet, RES_POOLCOLL_NUM_LEVEL4,
+                            lNumFirstLineOffset, SwNumRule::GetNumIndent( 3 ),
+                            0, PT_6 );
+            break;
+        case RES_POOLCOLL_NUM_LEVEL4E:
+            lcl_SetNumBul( this, pNewColl, aSet, RES_POOLCOLL_NUM_LEVEL4,
+                            lNumFirstLineOffset, SwNumRule::GetNumIndent( 3 ),
+                            0, PT_12 );
+            break;
+        case RES_POOLCOLL_NUM_NONUM4:
+            lcl_SetNumBul( this, pNewColl, aSet, RES_POOLCOLL_NUM_NONUM4,
+                            0, SwNumRule::GetNumIndent( 3 ), 0, PT_6 );
+            break;
+        case RES_POOLCOLL_NUM_LEVEL5S:
+            lcl_SetNumBul( this, pNewColl, aSet, RES_POOLCOLL_NUM_LEVEL5,
+                            lNumFirstLineOffset, SwNumRule::GetNumIndent( 4 ),
+                            PT_12, PT_6 );
+            break;
+        case RES_POOLCOLL_NUM_LEVEL5:
+            lcl_SetNumBul( this, pNewColl, aSet, RES_POOLCOLL_NUM_LEVEL5,
+                            lNumFirstLineOffset, SwNumRule::GetNumIndent( 4 ),
+                            0, PT_6 );
+            break;
+        case RES_POOLCOLL_NUM_LEVEL5E:
+            lcl_SetNumBul( this, pNewColl, aSet, RES_POOLCOLL_NUM_LEVEL5,
+                            lNumFirstLineOffset, SwNumRule::GetNumIndent( 4 ),
+                            0, PT_12 );
+            break;
+        case RES_POOLCOLL_NUM_NONUM5:
+            lcl_SetNumBul( this, pNewColl, aSet, RES_POOLCOLL_NUM_NONUM5,
+                            0, SwNumRule::GetNumIndent( 4 ), 0, PT_6 );
+            break;
+
+        case RES_POOLCOLL_BUL_LEVEL1S:
+            lcl_SetNumBul( this, pNewColl, aSet, RES_POOLCOLL_BUL_LEVEL1,
+                            lBullFirstLineOffset, SwNumRule::GetBullIndent( 0 ),
+                            PT_12, PT_6 );
+            break;
+        case RES_POOLCOLL_BUL_LEVEL1:
+            lcl_SetNumBul( this, pNewColl, aSet, RES_POOLCOLL_BUL_LEVEL1,
+                            lBullFirstLineOffset, SwNumRule::GetBullIndent( 0 ),
+                            0, PT_6 );
+            break;
+        case RES_POOLCOLL_BUL_LEVEL1E:
+            lcl_SetNumBul( this, pNewColl, aSet, RES_POOLCOLL_BUL_LEVEL1,
+                            lBullFirstLineOffset, SwNumRule::GetBullIndent( 0 ),
+                            0, PT_12 );
+            break;
+        case RES_POOLCOLL_BUL_NONUM1:
+            lcl_SetNumBul( this, pNewColl, aSet, RES_POOLCOLL_BUL_NONUM1,
+                            0, SwNumRule::GetBullIndent( 0 ), 0, PT_6 );
+            break;
+        case RES_POOLCOLL_BUL_LEVEL2S:
+            lcl_SetNumBul( this, pNewColl, aSet, RES_POOLCOLL_BUL_LEVEL2,
+                            lBullFirstLineOffset, SwNumRule::GetBullIndent( 1 ),
+                            PT_12, PT_6 );
+            break;
+        case RES_POOLCOLL_BUL_LEVEL2:
+            lcl_SetNumBul( this, pNewColl, aSet, RES_POOLCOLL_BUL_LEVEL2,
+                            lBullFirstLineOffset, SwNumRule::GetBullIndent( 1 ),
+                            0, PT_6 );
+            break;
+        case RES_POOLCOLL_BUL_LEVEL2E:
+            lcl_SetNumBul( this, pNewColl, aSet, RES_POOLCOLL_BUL_LEVEL2,
+                            lBullFirstLineOffset, SwNumRule::GetBullIndent( 1 ),
+                            0, PT_12 );
+            break;
+        case RES_POOLCOLL_BUL_NONUM2:
+            lcl_SetNumBul( this, pNewColl, aSet, RES_POOLCOLL_BUL_NONUM2,
+                            0, SwNumRule::GetBullIndent( 1 ), 0, PT_6 );
+            break;
+        case RES_POOLCOLL_BUL_LEVEL3S:
+            lcl_SetNumBul( this, pNewColl, aSet, RES_POOLCOLL_BUL_LEVEL3,
+                            lBullFirstLineOffset, SwNumRule::GetBullIndent( 2 ),
+                            PT_12, PT_6 );
+            break;
+        case RES_POOLCOLL_BUL_LEVEL3:
+            lcl_SetNumBul( this, pNewColl, aSet, RES_POOLCOLL_BUL_LEVEL3,
+                            lBullFirstLineOffset, SwNumRule::GetBullIndent( 2 ),
+                            0, PT_6 );
+            break;
+        case RES_POOLCOLL_BUL_LEVEL3E:
+            lcl_SetNumBul( this, pNewColl, aSet, RES_POOLCOLL_BUL_LEVEL3,
+                            lBullFirstLineOffset, SwNumRule::GetBullIndent( 2 ),
+                            0, PT_12 );
+            break;
+        case RES_POOLCOLL_BUL_NONUM3:
+            lcl_SetNumBul( this, pNewColl, aSet, RES_POOLCOLL_BUL_NONUM3,
+                            0, SwNumRule::GetBullIndent( 2 ), 0, PT_6 );
+            break;
+        case RES_POOLCOLL_BUL_LEVEL4S:
+            lcl_SetNumBul( this, pNewColl, aSet, RES_POOLCOLL_BUL_LEVEL4,
+                            lBullFirstLineOffset, SwNumRule::GetBullIndent( 3 ),
+                            PT_12, PT_6 );
+            break;
+        case RES_POOLCOLL_BUL_LEVEL4:
+            lcl_SetNumBul( this, pNewColl, aSet, RES_POOLCOLL_BUL_LEVEL4,
+                            lBullFirstLineOffset, SwNumRule::GetBullIndent( 3 ),
+                            0, PT_6 );
+            break;
+        case RES_POOLCOLL_BUL_LEVEL4E:
+            lcl_SetNumBul( this, pNewColl, aSet, RES_POOLCOLL_BUL_LEVEL4,
+                            lBullFirstLineOffset, SwNumRule::GetBullIndent( 3 ),
+                            0, PT_12 );
+            break;
+        case RES_POOLCOLL_BUL_NONUM4:
+            lcl_SetNumBul( this, pNewColl, aSet, RES_POOLCOLL_BUL_NONUM4,
+                            0, SwNumRule::GetBullIndent( 3 ), 0, PT_6 );
+            break;
+        case RES_POOLCOLL_BUL_LEVEL5S:
+            lcl_SetNumBul( this, pNewColl, aSet, RES_POOLCOLL_BUL_LEVEL5,
+                            lBullFirstLineOffset, SwNumRule::GetBullIndent( 4 ),
+                            PT_12, PT_6 );
+            break;
+        case RES_POOLCOLL_BUL_LEVEL5:
+            lcl_SetNumBul( this, pNewColl, aSet, RES_POOLCOLL_BUL_LEVEL5,
+                            lBullFirstLineOffset, SwNumRule::GetBullIndent( 4 ),
+                            0, PT_6 );
+            break;
+        case RES_POOLCOLL_BUL_LEVEL5E:
+            lcl_SetNumBul( this, pNewColl, aSet, RES_POOLCOLL_BUL_LEVEL5,
+                            lBullFirstLineOffset, SwNumRule::GetBullIndent( 4 ),
+                            0, PT_12 );
+            break;
+        case RES_POOLCOLL_BUL_NONUM5:
+            lcl_SetNumBul( this, pNewColl, aSet, RES_POOLCOLL_BUL_NONUM5,
+                            0, SwNumRule::GetBullIndent( 4 ), 0, PT_6 );
+            break;
+
+        case RES_POOLCOLL_DOC_TITEL:            // Document Title
+            {
+                SetAllScriptItem( aSet, SvxWeightItem( WEIGHT_BOLD, RES_CHRATR_WEIGHT ) );
+                SetAllScriptItem( aSet, SvxFontHeightItem( PT_18, 100, RES_CHRATR_FONTSIZE ) );
+
+                aSet.Put( SvxAdjustItem( SVX_ADJUST_CENTER, RES_PARATR_ADJUST ) );
+
                 pNewColl->SetNextTxtFmtColl( *GetTxtCollFromPool(
-                                                RES_POOLCOLL_TEXT ));
+                                                    RES_POOLCOLL_DOC_SUBTITEL ));
+            }
+            break;
+
+        case RES_POOLCOLL_DOC_SUBTITEL:         // Document subtitle
+            {
+                SetAllScriptItem( aSet, SvxPostureItem( ITALIC_NORMAL, RES_CHRATR_POSTURE ));
+                SetAllScriptItem( aSet, SvxFontHeightItem( PT_14, 100, RES_CHRATR_FONTSIZE ));
+
+                aSet.Put( SvxAdjustItem( SVX_ADJUST_CENTER, RES_PARATR_ADJUST ));
+
+                pNewColl->SetNextTxtFmtColl( *GetTxtCollFromPool(
+                                                    RES_POOLCOLL_TEXT ));
+            }
+            break;
+
+        case RES_POOLCOLL_HTML_BLOCKQUOTE:
+            {
+                SvxLRSpaceItem aLR( RES_LR_SPACE );
+                aLR.SetLeft( GetMetricVal( CM_1 ));
+                aLR.SetRight( GetMetricVal( CM_1 ));
+                aSet.Put( aLR );
+                SvxULSpaceItem aUL( RES_UL_SPACE );
                 aUL = pNewColl->GetULSpace();
+                aUL.SetLower( HTML_PARSPACE );
+                aSet.Put( aUL);
             }
-            aUL.SetLower( HTML_PARSPACE );
-            aSet.Put( aUL);
-            SwFmtLineNumber aLN; aLN.SetCountLines( sal_False );
-            aSet.Put( aLN );
-        }
-        break;
+            break;
 
-    case RES_POOLCOLL_HTML_DD:
-        {
-            SvxLRSpaceItem aLR( RES_LR_SPACE );
-            aLR = pNewColl->GetLRSpace();
-            // We indent by 1 cm. The IDs are always 2 away from each other!
-            aLR.SetLeft( GetMetricVal( CM_1 ));
-            aSet.Put( aLR );
-        }
-        break;
-    case RES_POOLCOLL_HTML_DT:
-        {
-            SvxLRSpaceItem aLR( RES_LR_SPACE );
+        case RES_POOLCOLL_HTML_PRE:
             {
-                pNewColl->SetNextTxtFmtColl( *GetTxtCollFromPool(
-                                                    RES_POOLCOLL_HTML_DD ));
-                aLR = pNewColl->GetLRSpace();
+                ::lcl_SetDfltFont( DEFAULTFONT_FIXED, aSet );
+
+    // WORKAROUND: Set PRE to 10pt
+                SetAllScriptItem( aSet, SvxFontHeightItem(PT_10, 100, RES_CHRATR_FONTSIZE) );
+    // WORKAROUND: Set PRE to 10pt
+
+                // The lower paragraph distance is set explicitly (makes
+                // assigning hard attributes easier)
+                SvxULSpaceItem aULSpaceItem( RES_UL_SPACE );
+                aULSpaceItem = pNewColl->GetULSpace();
+                aULSpaceItem.SetLower( 0 );
+                aSet.Put( aULSpaceItem );
             }
-            // We indent by 0 cm. The IDs are always 2 away from each other!
-            aLR.SetLeft( 0 );
-            aSet.Put( aLR );
+            break;
+
+        case RES_POOLCOLL_HTML_HR:
+            {
+                SvxBoxItem aBox( RES_BOX );
+                Color aColor( COL_GRAY );
+                SvxBorderLine aNew(&aColor, 1, table::BorderLineStyle::DOUBLE);
+                aBox.SetLine( &aNew, BOX_LINE_BOTTOM );
+
+                aSet.Put( aBox );
+                aSet.Put( SwParaConnectBorderItem( sal_False ) );
+                SetAllScriptItem( aSet, SvxFontHeightItem(120, 100, RES_CHRATR_FONTSIZE) );
+
+                SvxULSpaceItem aUL( RES_UL_SPACE );
+                {
+                    pNewColl->SetNextTxtFmtColl( *GetTxtCollFromPool(
+                                                    RES_POOLCOLL_TEXT ));
+                    aUL = pNewColl->GetULSpace();
+                }
+                aUL.SetLower( HTML_PARSPACE );
+                aSet.Put( aUL);
+                SwFmtLineNumber aLN; aLN.SetCountLines( sal_False );
+                aSet.Put( aLN );
+            }
+            break;
+
+        case RES_POOLCOLL_HTML_DD:
+            {
+                SvxLRSpaceItem aLR( RES_LR_SPACE );
+                aLR = pNewColl->GetLRSpace();
+                // We indent by 1 cm. The IDs are always 2 away from each other!
+                aLR.SetLeft( GetMetricVal( CM_1 ));
+                aSet.Put( aLR );
+            }
+            break;
+        case RES_POOLCOLL_HTML_DT:
+            {
+                SvxLRSpaceItem aLR( RES_LR_SPACE );
+                {
+                    pNewColl->SetNextTxtFmtColl( *GetTxtCollFromPool(
+                                                        RES_POOLCOLL_HTML_DD ));
+                    aLR = pNewColl->GetLRSpace();
+                }
+                // We indent by 0 cm. The IDs are always 2 away from each other!
+                aLR.SetLeft( 0 );
+                aSet.Put( aLR );
+            }
+            break;
         }
-        break;
     }
 
     if( aSet.Count() )

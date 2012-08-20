@@ -566,6 +566,7 @@ private:
                                                     // floating screen objects as given by its
                                                     // attribute 'WrapInfluenceOnObjPos'.
     bool mbMathBaselineAlignment            : 1;    // TL  2010-10-29 #i972#
+    bool mbStylesNoDefault                  : 1;
 
     // non-ui-compatibility flags:
     bool mbOldNumbering                             : 1;
