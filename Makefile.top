@@ -66,6 +66,7 @@ embeddedobj\
 embedserv\
 eventattacher\
 extensions\
+extras\
 fileaccess\
 filter\
 forms\
@@ -186,7 +187,6 @@ curl\
 epm\
 expat\
 external\
-extras\
 fontconfig\
 freetype\
 gdk-pixbuf\

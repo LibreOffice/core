@@ -10418,6 +10418,11 @@ else
 fi
 AC_SUBST(WITH_EXTENSION_INTEGRATION)
 
+dnl Should any extra extensions be included?
+dnl There are standalone tests for each of these below.
+WITH_EXTRA_EXTENSIONS=
+AC_SUBST([WITH_EXTRA_EXTENSIONS])
+
 dnl ===================================================================
 dnl Test whether to include Watch Window extension
 dnl ===================================================================
@@ -10426,6 +10431,7 @@ WATCH_WINDOW_EXTENSION_PACK=
 if test "x$enable_ext_watch_window" = "xyes" -a "x$enable_extension_integration" != "xno"; then
     SCPDEFS="$SCPDEFS -DWITH_EXTENSION_WATCH_WINDOW"
     WATCH_WINDOW_EXTENSION_PACK="23bd75552206dfcd8fd4e29137dcac84-WatchWindow_1.2.0.0.oxt"
+    WITH_EXTRA_EXTENSIONS=YES
     AC_MSG_RESULT([yes])
 else
     AC_MSG_RESULT([no])
@@ -10440,6 +10446,7 @@ DIAGRAM_EXTENSION_PACK=
 if test "x$enable_ext_diagram" = "xyes" -a "x$enable_extension_integration" != "xno"; then
     SCPDEFS="$SCPDEFS -DWITH_EXTENSION_DIAGRAM"
     DIAGRAM_EXTENSION_PACK="8d74685d41f8bffe8c3e71fe8deac09d-SmART_0.9.5.oxt"
+    WITH_EXTRA_EXTENSIONS=YES
     AC_MSG_RESULT([yes])
 else
     AC_MSG_RESULT([no])
@@ -10454,6 +10461,7 @@ VALIDATOR_EXTENSION_PACK=
 if test "x$enable_ext_validator" = "xyes" -a "x$enable_extension_integration" != "xno"; then
     SCPDEFS="$SCPDEFS -DWITH_EXTENSION_VALIDATOR"
     VALIDATOR_EXTENSION_PACK="bbdd5639ada63e3130761daaecae1a10-Validator_1.1.0.0.oxt"
+    WITH_EXTRA_EXTENSIONS=YES
     AC_MSG_RESULT([yes])
 else
     AC_MSG_RESULT([no])
@@ -10468,6 +10476,7 @@ BARCODE_EXTENSION_PACK=
 if test "x$enable_ext_barcode" = "xyes" -a "x$enable_extension_integration" != "xno"; then
     SCPDEFS="$SCPDEFS -DWITH_EXTENSION_BARCODE"
     BARCODE_EXTENSION_PACK="3ed18025a766f1e955707b969c8113a5-Barcode_1.3.5.0.oxt"
+    WITH_EXTRA_EXTENSIONS=YES
     AC_MSG_RESULT([yes])
 else
     AC_MSG_RESULT([no])
@@ -10478,16 +10487,13 @@ dnl ===================================================================
 dnl Test whether to include ConvertTextToNumber extension
 dnl ===================================================================
 AC_MSG_CHECKING([for ConvertTextToNumber extension integration])
-CT2N_EXTENSION_PACK=
 if test "x$enable_ext_ct2n" = "xyes" -a "x$enable_extension_integration" != "xno"; then
     BUILD_TYPE="$BUILD_TYPE CT2N"
     SCPDEFS="$SCPDEFS -DWITH_EXTENSION_CT2N"
-    CT2N_EXTENSION_PACK="451ccf439a36a568653b024534669971-ConvertTextToNumber_1.3.2.oxt"
     AC_MSG_RESULT([yes])
 else
     AC_MSG_RESULT([no])
 fi
-AC_SUBST(CT2N_EXTENSION_PACK)
 
 dnl ===================================================================
 dnl Test whether to include Numbertext extension
@@ -10497,6 +10503,7 @@ NUMBERTEXT_EXTENSION_PACK=
 if test "x$enable_ext_numbertext" = "xyes" -a "x$enable_extension_integration" != "xno"; then
     SCPDEFS="$SCPDEFS -DWITH_EXTENSION_NUMBERTEXT"
     NUMBERTEXT_EXTENSION_PACK="b8cbca7b3363e6ca2d02bc0ba2b63904-numbertext_0.9.4.oxt"
+    WITH_EXTRA_EXTENSIONS=YES
     AC_MSG_RESULT([yes])
 else
     AC_MSG_RESULT([no])
@@ -10511,6 +10518,7 @@ HUNART_EXTENSION_PACK=
 if test "x$enable_ext_hunart" = "xyes" -a "x$enable_extension_integration" != "xno"; then
     SCPDEFS="$SCPDEFS -DWITH_EXTENSION_HUNART"
     HUNART_EXTENSION_PACK="b632bdd25649cc4067bcb410bae23d2b-hunart_0.3.oxt"
+    WITH_EXTRA_EXTENSIONS=YES
     AC_MSG_RESULT([yes])
 else
     AC_MSG_RESULT([no])
@@ -10525,6 +10533,7 @@ TYPO_EXTENSION_PACK=
 if test "x$enable_ext_typo" = "xyes" -a "x$enable_extension_integration" != "xno"; then
     SCPDEFS="$SCPDEFS -DWITH_EXTENSION_TYPO"
     TYPO_EXTENSION_PACK="9d60b6cfa3ef1926848710bbcd11115b-typo_0.4.2.oxt"
+    WITH_EXTRA_EXTENSIONS=YES
     AC_MSG_RESULT([yes])
 else
     AC_MSG_RESULT([no])
@@ -10539,6 +10548,7 @@ GOOGLE_DOCS_EXTENSION_PACK=
 if test "x$enable_ext_google_docs" = "xyes" -a "x$enable_extension_integration" != "xno"; then
     SCPDEFS="$SCPDEFS -DWITH_EXTENSION_GOOGLE_DOCS"
     GOOGLE_DOCS_EXTENSION_PACK="2a64b8e6f185a7f6c19d00fb8bb4cf64-gdocs_3.0.1_modified.oxt"
+    WITH_EXTRA_EXTENSIONS=YES
     AC_MSG_RESULT([yes])
 else
     AC_MSG_RESULT([no])
@@ -10577,6 +10587,7 @@ OOOBLOGGER_EXTENSION_PACK=
 if test "x$enable_ext_oooblogger" = "xyes" -a "x$enable_extension_integration" != "xno"; then
     SCPDEFS="$SCPDEFS -DWITH_EXTENSION_OOOBLOGGER"
     OOOBLOGGER_EXTENSION_PACK="b7b2d0e04e142f26dd96119c80757d1f-oooblogger_0.1.oxt"
+    WITH_EXTRA_EXTENSIONS=YES
     AC_MSG_RESULT([yes])
 else
     AC_MSG_RESULT([no])
@@ -10625,6 +10636,7 @@ else
         esac
     fi
     done
+    WITH_EXTRA_EXTENSIONS=YES
     AC_MSG_RESULT([$SUNTEMPLATES_LANG])
 fi
 AC_SUBST(SUNTEMPLATES_DE_PACK)

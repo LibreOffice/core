@@ -99,7 +99,6 @@ TAGS
 /external/*/*.txt
 /external/*/*.msm
 /moz/zipped/*.zip
-/extras/source/extensions
 
 # links to the other repositories
 /binfilter

@@ -258,27 +258,11 @@ if [ "$COM" = "MSC" -a -n "$md5sum" ]; then
     fi
 fi
 
-# OxygenOffice extras
-for pack in $OOOP_FONTS_PACK $OOOP_GALLERY_PACK $OOOP_SAMPLES_PACK $OOOP_TEMPLATES_PACK ; do
-    check_file $TARFILE_LOCATION/$pack
-    echo "Unpacking OxygenOffice extra '$pack' ..."
-    unzip -o -q $TARFILE_LOCATION/$pack -d $SRC_ROOT/extras/source
-done
-
 if [ -n "$OXYGENOFFICE_PACK" ] ; then
     check_file $TARFILE_LOCATION/$OXYGENOFFICE_PACK
     echo "Unpacking OxygenOffice '$OXYGENOFFICE_PACK' ..."
     unzip -o -q $TARFILE_LOCATION/$OXYGENOFFICE_PACK -d $SRC_ROOT/src
 fi
-
-# Extensions copy
-for pack in $BARCODE_EXTENSION_PACK $DIAGRAM_EXTENSION_PACK $VALIDATOR_EXTENSION_PACK $WATCH_WINDOW_EXTENSION_PACK $NUMBERTEXT_EXTENSION_PACK $HUNART_EXTENSION_PACK $TYPO_EXTENSION_PACK $GOOGLE_DOCS_EXTENSION_PACK $OOOBLOGGER_EXTENSION_PACK $SUNTEMPLATES_DE_PACK $SUNTEMPLATES_EN_US_PACK $SUNTEMPLATES_ES_PACK $SUNTEMPLATES_FR_PACK $SUNTEMPLATES_HU_PACK $SUNTEMPLATES_IT_PACK; do
-    check_file $TARFILE_LOCATION/$pack
-    packfilename=`echo "$pack" | cut -f 2- -s -d - | cut -f 1 -d _`
-    echo "Copy extension: '$pack' as '$packfilename.oxt' ..."
-    mkdir -p $SRC_ROOT/extras/source/extensions/ || exit 1
-    cp $TARFILE_LOCATION/$pack $SRC_ROOT/extras/source/extensions/$packfilename.oxt || exit 1
-done
 
 [ -x "post_download" ] || { echo "'post_download' script not found, run ./autogen.sh." ; exit 1 ; }
 
