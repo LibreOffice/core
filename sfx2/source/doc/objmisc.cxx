@@ -983,12 +983,6 @@ void SfxObjectShell::SetNoName()
 
 //--------------------------------------------------------------------
 
-void SfxObjectShell::MemoryError()
-{
-}
-
-//--------------------------------------------------------------------
-
 SfxProgress* SfxObjectShell::GetProgress() const
 {
     return pImp->pProgress;

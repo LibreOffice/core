@@ -103,12 +103,6 @@ void SfxApplication::Exit()
 {
 }
 
-//---------------------------------------------------------------------------
-
-void SfxApplication::PreInit( )
-{
-}
-
 //-------------------------------------------------------------------------
 
 SfxFilterMatcher& SfxApplication::GetFilterMatcher()

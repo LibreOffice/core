@@ -187,7 +187,6 @@ SfxApplication::SfxApplication()
 
     pAppData_Impl = new SfxAppData_Impl( this );
     pAppData_Impl->m_xImeStatusWindow->init();
-    pApp->PreInit();
 
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "{ initialize DDE" );
 
