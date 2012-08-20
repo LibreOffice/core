@@ -411,8 +411,6 @@ if ( $installer::globals::helppack ) { installer::scriptitems::use_langpack_copy
 if ( $allvariableshashref->{'PRODUCTNAME'} eq "LibO-dev" ) { installer::scriptitems::use_devversion_copy_scpaction($scpactionsinproductarrayref); }
 if ( $installer::globals::patch ) { installer::scriptitems::use_patch_copy_scpaction($scpactionsinproductarrayref); }
 
-# $scpactionsinproductarrayref = installer::scriptitems::remove_scpactions_without_name($scpactionsinproductarrayref);
-
 installer::scriptitems::change_keys_of_scpactions($scpactionsinproductarrayref);
 
 installer::logger::print_message( "... analyzing shortcuts ... \n" );

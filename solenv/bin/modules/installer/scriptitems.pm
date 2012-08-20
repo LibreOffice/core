@@ -1501,39 +1501,6 @@ sub make_filename_language_specific
 }
 
 ############################################################################
-# Removing all scpactions, that have no name.
-# See: FlatLoaderZip
-############################################################################
-
-sub remove_scpactions_without_name
-{
-    my ($itemsarrayref) = @_;
-
-    my $infoline;
-
-    my @newitemsarray = ();
-
-    for ( my $i = 0; $i <= $#{$itemsarrayref}; $i++ )
-    {
-        my $oneitem = ${$itemsarrayref}[$i];
-        my $name = "";
-
-        if ( $oneitem->{'Name'} ) { $name = $oneitem->{'Name'}; }
-
-        if  ( $name eq "" )
-        {
-            $infoline = "ATTENTION: Removing scpaction $oneitem->{'gid'} from the installation set.\n";
-            push( @installer::globals::logfileinfo, $infoline);
-            next;
-        }
-
-        push(@newitemsarray, $oneitem);
-    }
-
-    return \@newitemsarray;
-}
-
-############################################################################
 # Because of the item "File" the source name must be "Name". Therefore
 # "Copy" is changed to "Name" and "Name" is changed to "DestinationName".
 ############################################################################
