@@ -3,9 +3,6 @@
 The idea is to provide 1-1 collaboration between contacts and many-many
 collaboration via MUCs, using Telepathy DBus Tubes over Jabber/XMPP.
 
-First stab is at 1-1 contact channels, hopefully MUCs can be realized using
-the same TeleConference abstraction.
-
 To enable configure LibO with --enable-telepathy
 
 Currently (2012-04-14) at least telepathy-glib 0.18 is needed, which doesn't
@@ -19,7 +16,7 @@ cp -p $HOME/usr/lib/libtelepathy-glib.* $SRCDIR/solver/$INPATH/lib/
 
 If you have a Telepathy-enabled LibreOffice installed to /usr (including
 liboapprover) you may also want to install the .service and .client files to
-make everything service-activatable:
+make everything service-activatable. Currently this does not seem to work.
 
     mkdir -p $HOME/.local/share/telepathy/clients
     ln -s $PWD/tubes/LibreOffice.client \
@@ -31,49 +28,26 @@ make everything service-activatable:
           $PWD/tubes/org.freedesktop.Telepathy.Client.LibreOffice.service \
           $HOME/.local/share/dbus-1/services
 
-Otherwise, you need to make sure liboapprover and a Telepathy-enabled
-LibreOffice are running.
 
+* liboapprover
+
+You may run it in the background. When someone wants to collaborate with you,
+you then get a confirmation dialog.
 
 * Demo modes
 
-This allows you to play with the interposing without having a telepathy
-enabled setup:
+To play with the interposing without having an online account connected, create
+a bit of a document, go to File -> Collaboration -> startDemoSession and bingo.
 
-    INTERCEPT=demo ./soffice -calc
-
-Create a bit of a document, type 'saveas' with spelling auto-correction
-disabled, and bingo.
-
-
-* Status 2012-03-23:
 
 * To do interesting things with this code build and run calc thus:
 
-	SAL_LOG=1 LIBO_TUBES=slave ./soffice -calc   # user one
-	SAL_LOG=1 LIBO_TUBES=master ./soffice -calc  # user two
+	SAL_LOG=1 ./soffice --calc
 
-	hope that a nasty race-condition doesn't occur during startup:
-which is flagged by "we are supposed to handle only one channel" you
-hit it: bang - just try again.
+	Now type simple strings into cells, rename sheets, or go to
+    File -> Collaboration; Listen; startBuddySession;
+    to transfer your document as-is to the other side ...
 
-	you also require only a single jabber connection enabled (in
-empathy) and to have your opponent added and approved on both sides.
-
-	Now type simple strings into cells, rename sheets, or type
-'saveme' to transfer your document as-is to the other side ...
-
-
-* Status 2012-03-20:
-
-* no LibO code depends on this module yet, so it is not built in a regular
-  build, even if configured with --enable-telepathy, so cd tubes and make here
-  * to enable the various SAL_INFO and SAL_WARN messages emitted during
-    cppunittest pass SAL_LOG=... and do a debug build
-  * SAL_LOG="+WARN+INFO.tubes" make -rs debug=true
-  * the cppunittest will currently fail anyway (even if it wouldn't for other
-    reasons), this is on purpose to be able to see the output as otherwise it
-    is silenced down ... :-(
 
 * for the cppunittest needed:
   * Configure two Jabber accounts in Empathy
@@ -81,36 +55,14 @@ empathy) and to have your opponent added and approved on both sides.
   * Copy qa/test-config.ini.example to qa/test-config.ini, and specify those
     two accounts' JIDs in it.
 
-* very nasty GMainLoop handling for cppunittest, HOPEFULLY we will get rid of
-  that in a real LibO
-* working:
-  * contact channels are setup
-  * tube is offered/accepted
-  * packets are sent and received
 
+* TODOs:
 
-TODO:
-
-* cleanup code to use a refcounted single instance thats holds mpAccountManager
-  and stuff and actually releases them, instead of statics
-* TeleManager should be a single instance, not holding any account information;
-  instead, the start...Session() methods should also get the account passed
-* implement master/slave mode in 1-1 buddy conferences, master would do strong
-  ordering
-
-
-other TODOs:
-
-* associate a document with a conference
-  * use SfxObjectShell as an abstraction and broadcast incoming changes?
-  * use UNO API?
-  * first setup just to get something working could share a document
-    accessible by all parties on a network share or some such
-    * may need one master responsible to save the document
-  * later document transfer will be needed, use Telepathy File Transfer
+* TeleConference is not deleted anywhere
 * dialog to pick own account
 * dialog to pick contact or MUC to work with
 * dialog to accept/reject collaboration requests
+* make the .service and .client files work reliably
 
 
 In applications, e.g. Calc:
