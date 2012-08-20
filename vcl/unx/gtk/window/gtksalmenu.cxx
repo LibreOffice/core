@@ -48,13 +48,17 @@ void updateNativeMenu( GtkSalMenu* pMenu ) {
             // Force updating of native menu labels.
             pMenu->SetItemText( i, pSalMenuItem, aText );
 
-            if ( pSalMenuItem->mpSubMenu && pSalMenuItem->mpSubMenu->GetMenu() ) {
-                pSalMenuItem->mpSubMenu->GetMenu()->Activate();
-                updateNativeMenu( pSalMenuItem->mpSubMenu );
+            KeyCode nAccelKey = pSalMenuItem->mpVCLMenu->GetAccelKey( pSalMenuItem->mnId );
+            pMenu->SetAccelerator( i, pSalMenuItem, nAccelKey, nAccelKey.GetName( pMenu->GetFrame()->GetWindow() ) );
 
-                // FIXME: Using Deactivate() let the menu to update itself correctly, but generates
-                // duplicated popup menus.
-//                pSalMenuItem->mpSubMenu->GetMenu()->Deactivate();
+            if ( isSpecialSubmenu( rtl::OUString::createFromAscii( pSalMenuItem->maCommand ) ) == FALSE ) {
+                if ( pSalMenuItem->mpSubMenu && pSalMenuItem->mpSubMenu->GetMenu() ) {
+                    pSalMenuItem->mpSubMenu->GetMenu()->Activate();
+                    // FIXME: Using Deactivate() let the menu to update itself correctly, but generates
+                    // duplicated popup menus.
+                    pSalMenuItem->mpSubMenu->GetMenu()->Deactivate();
+                    updateNativeMenu( pSalMenuItem->mpSubMenu );
+                }
             }
         }
     }
@@ -110,6 +114,30 @@ GActionGroup* GetActionGroupFromMenubar( GtkSalMenu *pMenu )
         pSalMenu = pSalMenu->GetParentSalMenu();
 
     return ( pSalMenu ) ? pSalMenu->GetActionGroup() : NULL;
+}
+
+rtl::OUString GetGtkKeyName( rtl::OUString keyName )
+{
+    rtl::OUString aGtkKeyName("");
+
+    sal_Int32 nIndex = 0;
+
+    do
+    {
+        rtl::OUString token = keyName.getToken( 0, '+', nIndex );
+
+        if ( token == "Ctrl" ) {
+            aGtkKeyName += "<Control>";
+        } else if ( token == "Alt" ) {
+            aGtkKeyName += "<Alt>";
+        } else if ( token == "Shift" ) {
+            aGtkKeyName += "<Shift>";
+        } else {
+            aGtkKeyName += token;
+        }
+    } while ( nIndex >= 0 );
+
+    return aGtkKeyName;
 }
 
 /*
@@ -432,6 +460,29 @@ void GtkSalMenu::SetItemImage( unsigned nPos, SalMenuItem* pSalMenuItem, const I
 
 void GtkSalMenu::SetAccelerator( unsigned nPos, SalMenuItem* pSalMenuItem, const KeyCode& rKeyCode, const rtl::OUString& rKeyName )
 {
+    GtkSalMenuItem *pGtkSalMenuItem = static_cast< GtkSalMenuItem* >( pSalMenuItem );
+
+    if ( rKeyName.isEmpty() )
+        return;
+
+    rtl::OString aAccelerator = rtl::OUStringToOString( GetGtkKeyName( rKeyName ), RTL_TEXTENCODING_UTF8 );
+
+    GVariant* aCurrentAccel = g_menu_model_get_item_attribute_value( pGtkSalMenuItem->mpParentSection, pGtkSalMenuItem->mnPos, "accel", G_VARIANT_TYPE_STRING );
+
+    sal_Bool bSetAccel = sal_True;
+
+    if ( aCurrentAccel ) {
+        if ( g_strcmp0( g_variant_get_string( aCurrentAccel, NULL ), aAccelerator.getStr() ) == 0 ) {
+            bSetAccel = sal_False;
+        }
+    }
+
+    if ( bSetAccel == sal_True ) {
+        g_lo_menu_item_set_attribute_value( pGtkSalMenuItem->mpMenuItem, "accel", g_variant_new_string( aAccelerator.getStr() ) );
+
+        g_lo_menu_remove( G_LO_MENU( pGtkSalMenuItem->mpParentSection), pGtkSalMenuItem->mnPos );
+        g_lo_menu_insert_item( G_LO_MENU( pGtkSalMenuItem->mpParentSection ), pGtkSalMenuItem->mnPos, pGtkSalMenuItem->mpMenuItem );
+    }
 }
 
 void GtkSalMenu::SetItemCommand( unsigned nPos, SalMenuItem* pSalMenuItem, const rtl::OUString& aCommandStr )

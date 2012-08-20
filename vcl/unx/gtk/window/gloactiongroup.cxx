@@ -244,7 +244,6 @@ g_lo_action_group_set_action_enabled (GLOActionGroup *group,
                                       const gchar    *action_name,
                                       gboolean        enabled)
 {
-    cout << __FUNCTION__ << " - " << action_name << endl;
     g_return_if_fail (G_IS_LO_ACTION_GROUP (group));
 
     g_action_group_action_enabled_changed(G_ACTION_GROUP(group),
