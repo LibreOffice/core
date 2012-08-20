@@ -11,9 +11,7 @@ $(eval $(call gb_Executable_Executable,ucpp))
 
 $(eval $(call gb_Executable_set_warnings_not_errors,ucpp))
 
-$(eval $(call gb_Executable_use_custom_headers,ucpp,\
-	ucpp/source \
-))
+$(eval $(call gb_Executable_use_unpacked,ucpp,ucpp))
 
 $(eval $(call gb_Executable_add_defs,ucpp,\
 	-DNO_UCPP_BUF \
@@ -22,14 +20,14 @@ $(eval $(call gb_Executable_add_defs,ucpp,\
 ))
 
 $(eval $(call gb_Executable_add_generated_cobjects,ucpp,\
-	CustomTarget/ucpp/source/assert \
-	CustomTarget/ucpp/source/cpp \
-	CustomTarget/ucpp/source/eval \
-	CustomTarget/ucpp/source/hash \
-	CustomTarget/ucpp/source/lexer \
-	CustomTarget/ucpp/source/macro \
-	CustomTarget/ucpp/source/mem \
-	CustomTarget/ucpp/source/nhash \
+	UnpackedTarball/ucpp/assert \
+	UnpackedTarball/ucpp/cpp \
+	UnpackedTarball/ucpp/eval \
+	UnpackedTarball/ucpp/hash \
+	UnpackedTarball/ucpp/lexer \
+	UnpackedTarball/ucpp/macro \
+	UnpackedTarball/ucpp/mem \
+	UnpackedTarball/ucpp/nhash \
 ))
 
 # vim: set noet sw=4 ts=4:

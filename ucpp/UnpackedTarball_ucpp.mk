@@ -7,13 +7,14 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Module_Module,ucpp))
+$(eval $(call gb_UnpackedTarball_UnpackedTarball,ucpp))
 
-ifneq ($(CROSS_COMPILING),YES)
-$(eval $(call gb_Module_add_targets,ucpp,\
-    Executable_ucpp \
-	UnpackedTarball_ucpp \
+$(eval $(call gb_UnpackedTarball_set_tarball,ucpp,0168229624cfac409e766913506961a8-ucpp-1.3.2.tar.gz))
+
+$(eval $(call gb_UnpackedTarball_set_patchlevel,ucpp,0))
+
+$(eval $(call gb_UnpackedTarball_add_patches,ucpp,\
+    ucpp/ucpp.patch \
 ))
-endif
 
 # vim: set noet sw=4 ts=4:
