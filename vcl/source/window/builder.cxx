@@ -26,6 +26,7 @@
  * instead of those above.
  */
 
+#include <osl/module.h>
 #include <vcl/builder.hxx>
 #include <vcl/button.hxx>
 #include <vcl/dialog.hxx>
@@ -451,7 +452,14 @@ Window *VclBuilder::makeObject(Window *pParent, const rtl::OString &name, const 
     else if (name.equalsL(RTL_CONSTASCII_STRINGPARAM("GtkDrawingArea")))
         pWindow = new Window(pParent);
     else
-        fprintf(stderr, "TO-DO, implement %s\n", name.getStr());
+    {
+        rtl::OString sFunction = rtl::OString("make") + name;
+        customMakeWidget pFunction = (customMakeWidget)osl_getAsciiFunctionSymbol(NULL, sFunction.getStr());
+        if (pFunction)
+            pWindow = (*pFunction)(pParent);
+    }
+    if (!pWindow)
+        fprintf(stderr, "TO-DO, implement %s or add a make%s function\n", name.getStr(), name.getStr());
     if (pWindow)
     {
         pWindow->SetHelpId(m_sHelpRoot + id);

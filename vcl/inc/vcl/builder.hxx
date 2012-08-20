@@ -42,6 +42,7 @@ class VCL_DLLPUBLIC VclBuilder
 {
 public:
     typedef std::map<rtl::OString, rtl::OString> stringmap;
+    typedef Window* (*customMakeWidget)(Window *pParent);
 private:
     struct WinAndId
     {
