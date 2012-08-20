@@ -67,6 +67,7 @@ namespace comphelper
         CPPUTYPE_PAGESTYLELAY,      //getCppuType( (style::PageStyleLayout*)0 )
         CPPUTYPE_VERTALIGN,         //getCppuType( (style::VerticalAlignment*)0 )
         CPPUTYPE_TABLEBORDER,       //getCppuType( (table::TableBorder*)0 )
+        CPPUTYPE_TABLEBORDER2,      //getCppuType( (table::TableBorder*)0 )
         CPPUTYPE_GRFCROP,           //getCppuType( (text::GraphicCrop*)0 )
         CPPUTYPE_SECTFILELNK,       //getCppuType( (text::SectionFileLink*)0 )
         CPPUTYPE_PAGENUMTYPE,       //getCppuType( (const PageNumberType*)0 )

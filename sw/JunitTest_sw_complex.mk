@@ -43,6 +43,7 @@ $(eval $(call gb_JunitTest_add_sourcefiles,sw_complex,\
     sw/qa/complex/writer/CheckFields \
     sw/qa/complex/writer/CheckIndexedPropertyValues \
     sw/qa/complex/writer/CheckNamedPropertyValues \
+    sw/qa/complex/writer/CheckTable \
     sw/qa/complex/writer/LoadSaveTest \
     sw/qa/complex/writer/TestDocument \
     sw/qa/complex/writer/TextPortionEnumerationTest \
@@ -62,6 +63,7 @@ $(eval $(call gb_JunitTest_add_classes,sw_complex,\
     complex.writer.CheckCrossReferences \
     complex.writer.CheckFields\
     complex.writer.CheckFlies \
+    complex.writer.CheckTable \
     complex.writer.CheckIndexedPropertyValues \
     complex.writer.CheckNamedPropertyValues \
     complex.writer.TextPortionEnumerationTest \

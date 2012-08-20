@@ -104,6 +104,7 @@
 #include <com/sun/star/table/ShadowFormat.hpp>
 #include <com/sun/star/table/BorderLine.hpp>
 #include <com/sun/star/table/TableBorder.hpp>
+#include <com/sun/star/table/TableBorder2.hpp>
 #include <com/sun/star/table/TableBorderDistances.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/lang/Locale.hpp>
@@ -174,6 +175,7 @@ namespace comphelper
             case CPPUTYPE_PAGESTYLELAY: pType = &::getCppuType( (style::PageStyleLayout*)0 ); break;
             case CPPUTYPE_VERTALIGN:    pType = &::getCppuType( (style::VerticalAlignment*)0 ); break;
             case CPPUTYPE_TABLEBORDER:  pType = &::getCppuType( (table::TableBorder*)0 ); break;
+            case CPPUTYPE_TABLEBORDER2: pType = &::getCppuType( (table::TableBorder2*)0 ); break;
             case CPPUTYPE_GRFCROP:      pType = &::getCppuType( (text::GraphicCrop*)0 ); break;
             case CPPUTYPE_SECTFILELNK:  pType = &::getCppuType( (text::SectionFileLink*)0 ); break;
             case CPPUTYPE_PAGENUMTYPE:  pType = &::getCppuType( (text::PageNumberType*)0); break;

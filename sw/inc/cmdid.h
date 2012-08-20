@@ -664,6 +664,7 @@ included in c-context files, so c++ style stuff will cause problems.
 #define FN_UNO_FIRST_SHARE_CONTENT          (FN_EXTRA2 + 117)
 #define FN_UNO_HEADER_FIRST                 (FN_EXTRA2 + 118)
 #define FN_UNO_FOOTER_FIRST                 (FN_EXTRA2 + 119)
+#define FN_UNO_TABLE_BORDER2                (FN_EXTRA2 + 120)
 
 /*------------------------------------------------ --------------------
     Area: Help
