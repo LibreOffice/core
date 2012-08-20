@@ -150,64 +150,6 @@ sub resolve_all_directory_names
 }
 
 #############################################################################
-# Files with flag DELETE_ONLY do not need to be packed into installation set
-#############################################################################
-
-sub remove_delete_only_files_from_productlists
-{
-    my ($productarrayref) = @_;
-
-    my @newitems = ();
-
-    for ( my $i = 0; $i <= $#{$productarrayref}; $i++ )
-    {
-        my $oneitem = ${$productarrayref}[$i];
-        my $styles = "";
-
-        if ( $oneitem->{'Styles'} ) { $styles = $oneitem->{'Styles'}; }
-
-        if (!($styles =~ /\bDELETE_ONLY\b/))
-        {
-            push(@newitems, $oneitem);
-        }
-    }
-
-    return \@newitems;
-}
-
-#############################################################################
-# Files with flag NOT_IN_SUITE do not need to be packed into
-# Suite installation sets
-#############################################################################
-
-sub remove_notinsuite_files_from_productlists
-{
-    my ($productarrayref) = @_;
-
-    my @newitems = ();
-
-    for ( my $i = 0; $i <= $#{$productarrayref}; $i++ )
-    {
-        my $oneitem = ${$productarrayref}[$i];
-        my $styles = "";
-
-        if ( $oneitem->{'Styles'} ) { $styles = $oneitem->{'Styles'}; }
-
-        if (!($styles =~ /\bNOT_IN_SUITE\b/))
-        {
-            push(@newitems, $oneitem);
-        }
-        else
-        {
-            my $infoline = "INFO: Flag NOT_IN_SUITE \-\> Removing $oneitem->{'gid'} from file list.\n";
-            push( @installer::globals::globallogfileinfo, $infoline);
-        }
-    }
-
-    return \@newitems;
-}
-
-#############################################################################
 # Files with flag NOT_IN_SUITE do not need to be packed into
 # Suite installation sets
 #############################################################################

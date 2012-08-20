@@ -373,8 +373,6 @@ installer::logger::print_message( "... analyzing files ... \n" );
 
 my $filesinproductarrayref = installer::setupscript::get_all_items_from_script($setupscriptref, "File");
 
-$filesinproductarrayref = installer::scriptitems::remove_delete_only_files_from_productlists($filesinproductarrayref);
-
 if (( ! $installer::globals::iswindowsbuild ) &&
     ( ! $installer::globals::isrpmbuild ) &&
     ( ! $installer::globals::isdebbuild ) &&
@@ -383,8 +381,6 @@ if (( ! $installer::globals::iswindowsbuild ) &&
     ( $installer::globals::packageformat ne "dmg" ) &&
     ( $installer::globals::packageformat ne "archive" ))
     { installer::control::check_oxtfiles($filesinproductarrayref); }
-
-if ($installer::globals::product =~ /suite/i ) { $filesinproductarrayref = installer::scriptitems::remove_notinsuite_files_from_productlists($filesinproductarrayref); }
 
 if (! $installer::globals::languagepack)
 {
