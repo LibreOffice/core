@@ -272,7 +272,7 @@ protected:
                                     const ::rtl::OUString& aTargetURL,
                                     const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XSimpleFileAccess2 > xToUseSFI );
 
-    sal_Bool implLoadLibraryIndexFile( SfxLibrary* pLib,
+    bool implLoadLibraryIndexFile( SfxLibrary* pLib,
                                     ::xmlscript::LibDescriptor& rLib,
                                     const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage,
                                     const ::rtl::OUString& aIndexFileName );

@@ -662,7 +662,7 @@ void SfxLibraryContainer::init_Impl( const OUString& rInitialDocumentURL,
     uno::Reference< io::XInputStream > xInput;
 
     mxStorage = xStorage;
-    sal_Bool bStorage = mxStorage.is();
+    bool bStorage = mxStorage.is();
 
 
     // #110009: Scope to force the StorageRefs to be destructed and
@@ -904,7 +904,7 @@ void SfxLibraryContainer::init_Impl( const OUString& rInitialDocumentURL,
                     if( !pImplLib->mbInitialised && (!bStorage || xLibraryStor.is()) )
                     {
                         OUString aIndexFileName;
-                        sal_Bool bLoaded = implLoadLibraryIndexFile( pImplLib, rLib, xLibraryStor, aIndexFileName );
+                        bool bLoaded = implLoadLibraryIndexFile( pImplLib, rLib, xLibraryStor, aIndexFileName );
                         SAL_WARN_IF(
                             bLoaded && aLibName != rLib.aName, "basic",
                             ("Different library names in library container and"
@@ -1150,7 +1150,7 @@ void SfxLibraryContainer::init_Impl( const OUString& rInitialDocumentURL,
 
                         uno::Reference< embed::XStorage > xDummyStor;
                         ::xmlscript::LibDescriptor aLibDesc;
-                        /*sal_Bool bReadIndexFile =*/ implLoadLibraryIndexFile
+                        implLoadLibraryIndexFile
                             ( pNewLib, aLibDesc, xDummyStor, pNewLib->maLibInfoFileURL );
                         implImportLibDescriptor( pNewLib, aLibDesc );
                     }
@@ -1356,7 +1356,7 @@ void SfxLibraryContainer::implStoreLibrary( SfxLibrary* pLib,
     const Reference< XInteractionHandler >& xHandler )
 {
     sal_Bool bLink = pLib->mbLink;
-    sal_Bool bStorage = xStorage.is() && !bLink;
+    bool bStorage = xStorage.is() && !bLink;
 
     Sequence< OUString > aElementNames = pLib->getElementNames();
     sal_Int32 nNameCount = aElementNames.getLength();
@@ -1512,7 +1512,7 @@ void SfxLibraryContainer::implStoreLibraryIndexFile( SfxLibrary* pLib,
     }
 
     sal_Bool bLink = pLib->mbLink;
-    sal_Bool bStorage = xStorage.is() && !bLink;
+    bool bStorage = xStorage.is() && !bLink;
 
     // Write info file
     uno::Reference< io::XOutputStream > xOut;
@@ -1601,7 +1601,7 @@ void SfxLibraryContainer::implStoreLibraryIndexFile( SfxLibrary* pLib,
 }
 
 
-sal_Bool SfxLibraryContainer::implLoadLibraryIndexFile(  SfxLibrary* pLib,
+bool SfxLibraryContainer::implLoadLibraryIndexFile(  SfxLibrary* pLib,
     ::xmlscript::LibDescriptor& rLib, const uno::Reference< embed::XStorage >& xStorage, const OUString& aIndexFileName )
 {
     Reference< XParser > xParser( mxMSF->createInstance(
@@ -1609,11 +1609,11 @@ sal_Bool SfxLibraryContainer::implLoadLibraryIndexFile(  SfxLibrary* pLib,
     if( !xParser.is() )
     {
         SAL_WARN("basic", "couldn't create sax parser component");
-        return sal_False;
+        return false;
     }
 
     sal_Bool bLink = sal_False;
-    sal_Bool bStorage = sal_False;
+    bool bStorage = false;
     if( pLib )
     {
         bLink = pLib->mbLink;
@@ -1666,7 +1666,7 @@ sal_Bool SfxLibraryContainer::implLoadLibraryIndexFile(  SfxLibrary* pLib,
     }
     if( !xInput.is() )
     {
-        return sal_False;
+        return false;
     }
 
     InputSource source;
@@ -1684,7 +1684,7 @@ sal_Bool SfxLibraryContainer::implLoadLibraryIndexFile(  SfxLibrary* pLib,
         SfxErrorContext aEc( ERRCTX_SFX_LOADBASIC, aLibInfoPath );
         sal_uIntPtr nErrorCode = ERRCODE_IO_GENERAL;
         ErrorHandler::HandleError( nErrorCode );
-        return sal_False;
+        return false;
     }
 
     if( !pLib )
@@ -1699,7 +1699,7 @@ sal_Bool SfxLibraryContainer::implLoadLibraryIndexFile(  SfxLibrary* pLib,
         implImportLibDescriptor( pLib, rLib );
     }
 
-    return sal_True;
+    return true;
 }
 
 void SfxLibraryContainer::implImportLibDescriptor
@@ -1746,7 +1746,7 @@ void SfxLibraryContainer::storeLibraries_Impl( const uno::Reference< embed::XSto
     boost::scoped_ptr< ::xmlscript::LibDescriptorArray > pLibArray(new ::xmlscript::LibDescriptorArray(nLibsToSave));
 
     // Write to storage?
-    sal_Bool bStorage = i_rStorage.is();
+    bool bStorage = i_rStorage.is();
     uno::Reference< embed::XStorage > xSourceLibrariesStor;
     uno::Reference< embed::XStorage > xTargetLibrariesStor;
     ::rtl::OUString sTempTargetStorName;
@@ -2153,7 +2153,7 @@ Reference< XNameAccess > SAL_CALL SfxLibraryContainer::createLibraryLink
     OUString aInitFileName;
     uno::Reference< embed::XStorage > xDummyStor;
     ::xmlscript::LibDescriptor aLibDesc;
-    /*sal_Bool bReadIndexFile = */implLoadLibraryIndexFile( pNewLib, aLibDesc, xDummyStor, aInitFileName );
+    implLoadLibraryIndexFile( pNewLib, aLibDesc, xDummyStor, aInitFileName );
     implImportLibDescriptor( pNewLib, aLibDesc );
 
     Reference< XNameAccess > xRet = static_cast< XNameAccess* >( pNewLib );
@@ -2272,7 +2272,7 @@ void SAL_CALL SfxLibraryContainer::loadLibrary( const OUString& Name )
         }
 
         sal_Bool bLink = pImplLib->mbLink;
-        sal_Bool bStorage = mxStorage.is() && !bLink;
+        bool bStorage = mxStorage.is() && !bLink;
 
         uno::Reference< embed::XStorage > xLibrariesStor;
         uno::Reference< embed::XStorage > xLibraryStor;
@@ -2464,7 +2464,7 @@ void SAL_CALL SfxLibraryContainer::renameLibrary( const OUString& Name, const OU
     bool bMovedSuccessful = true;
 
     // Rename files
-    sal_Bool bStorage = mxStorage.is();
+    bool bStorage = mxStorage.is();
     if( !bStorage && !pImplLib->mbLink )
     {
         bMovedSuccessful = false;

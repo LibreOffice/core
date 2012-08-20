@@ -242,49 +242,49 @@ void SbiParser::Exit()
         Error( SbERR_BAD_EXIT );
 }
 
-sal_Bool SbiParser::TestSymbol( sal_Bool bKwdOk )
+bool SbiParser::TestSymbol( bool bKwdOk )
 {
     Peek();
     if( eCurTok == SYMBOL || ( bKwdOk && IsKwd( eCurTok ) ) )
     {
-        Next(); return sal_True;
+        Next(); return true;
     }
     Error( SbERR_SYMBOL_EXPECTED );
-    return sal_False;
+    return false;
 }
 
 
 
-sal_Bool SbiParser::TestToken( SbiToken t )
+bool SbiParser::TestToken( SbiToken t )
 {
     if( Peek() == t )
     {
-        Next(); return sal_True;
+        Next(); return true;
     }
     else
     {
         Error( SbERR_EXPECTED, t );
-        return sal_False;
+        return false;
     }
 }
 
 
 
-sal_Bool SbiParser::TestComma()
+bool SbiParser::TestComma()
 {
     SbiToken eTok = Peek();
     if( IsEoln( eTok ) )
     {
         Next();
-        return sal_False;
+        return false;
     }
     else if( eTok != COMMA )
     {
         Error( SbERR_EXPECTED, COMMA );
-        return sal_False;
+        return false;
     }
     Next();
-    return sal_True;
+    return true;
 }
 
 
@@ -315,9 +315,9 @@ void SbiParser::StmntBlock( SbiToken eEnd )
 
 
 
-sal_Bool SbiParser::Parse()
+bool SbiParser::Parse()
 {
-    if( bAbort ) return sal_False;
+    if( bAbort ) return false;
 
     EnableErrors();
 
@@ -333,13 +333,13 @@ sal_Bool SbiParser::Parse()
         // can be another nGblChain, so ask for it before.
         if( bNewGblDefs && nGblChain == 0 )
             nGblChain = aGen.Gen( _JUMP, 0 );
-        return sal_False;
+        return false;
     }
 
 
     if( IsEoln( eCurTok ) )
     {
-        Next(); return sal_True;
+        Next(); return true;
     }
 
     if( !bSingleLineIf && MayBeLabel( sal_True ) )
@@ -353,7 +353,7 @@ sal_Bool SbiParser::Parse()
 
         if( IsEoln( eCurTok ) )
         {
-            Next(); return sal_True;
+            Next(); return true;
         }
     }
 
@@ -366,13 +366,13 @@ sal_Bool SbiParser::Parse()
         Next();
         if( eCurTok != NIL )
             aGen.Statement();
-        return sal_False;
+        return false;
     }
 
     // comment?
     if( eCurTok == REM )
     {
-        Next(); return sal_True;
+        Next(); return true;
     }
 
         // In vba it's possible to do Error.foobar ( even if it results in
@@ -458,7 +458,7 @@ sal_Bool SbiParser::Parse()
     }
     // The parser aborts at the end, the
     // next token has not been fetched yet!
-    return sal_True;
+    return true;
 }
 
 
@@ -772,9 +772,9 @@ void SbiParser::Option()
         {
             SbiToken eTok = Next();
             if( eTok == BINARY )
-                bText = sal_False;
+                bText = false;
             else if( eTok == SYMBOL && GetSym().equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("text")) )
-                bText = sal_True;
+                bText = true;
             else
                 Error( SbERR_EXPECTED, "Text/Binary" );
             break;
@@ -784,7 +784,7 @@ void SbiParser::Option()
             break;
 
         case CLASSMODULE:
-            bClassModule = sal_True;
+            bClassModule = true;
             aGen.GetModule().SetModuleType( com::sun::star::script::ModuleType::CLASS );
             break;
         case VBASUPPORT: // Option VBASupport used to override the module mode ( in fact this must reset the mode

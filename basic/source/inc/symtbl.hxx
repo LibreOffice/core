@@ -181,7 +181,7 @@ class SbiProcDef : public SbiSymDef {   // procedure definition (from basic):
     PropertyMode mePropMode;        // Marks if this is a property procedure and which
     String maPropName;              // Property name if property procedure (!= proc name)
     sal_Bool   bCdecl  : 1;             // sal_True: CDECL given
-    sal_Bool   bPublic : 1;             // sal_True: proc is PUBLIC
+    bool   bPublic : 1;             // true: proc is PUBLIC
     sal_Bool   mbProcDecl : 1;          // sal_True: instanciated by SbiParser::ProcDecl
 public:
     SbiProcDef( SbiParser*, const String&, sal_Bool bProcDecl=false );
@@ -193,8 +193,8 @@ public:
     SbiSymPool& GetLocals()         { return GetPool();}
     String& GetLib()                { return aLibName; }
     String& GetAlias()              { return aAlias;   }
-    void SetPublic( sal_Bool b )        { bPublic = b;     }
-    sal_Bool IsPublic() const           { return bPublic;  }
+    void SetPublic( bool b )        { bPublic = b;     }
+    bool IsPublic() const           { return bPublic;  }
     void SetCdecl( sal_Bool b = sal_True)   { bCdecl = b;      }
     sal_Bool IsCdecl() const            { return bCdecl;   }
     sal_Bool IsUsedForProcDecl() const  { return mbProcDecl; }

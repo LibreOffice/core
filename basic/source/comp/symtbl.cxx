@@ -384,7 +384,7 @@ SbiProcDef::SbiProcDef( SbiParser* pParser, const String& rName,
     nLine1  =
     nLine2  = 0;
     mePropMode = PROPERTY_MODE_NONE;
-    bPublic = sal_True;
+    bPublic = true;
     bCdecl  = sal_False;
     bStatic = sal_False;
     // For return values the first element of the parameter

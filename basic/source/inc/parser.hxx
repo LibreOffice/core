@@ -45,17 +45,17 @@ class SbiParser : public SbiTokenizer
 
     SbiSymDef*  VarDecl( SbiDimList**, bool, bool );
     SbiProcDef* ProcDecl(bool bDecl);
-    void DefStatic( sal_Bool bPrivate );
-    void DefProc( sal_Bool bStatic, sal_Bool bPrivate ); // read in procedure
+    void DefStatic( bool bPrivate );
+    void DefProc( bool bStatic, bool bPrivate ); // read in procedure
     void DefVar( SbiOpcode eOp, bool bStatic ); // read in DIM/REDIM
-    void TypeDecl( SbiSymDef&, sal_Bool bAsNewAlreadyParsed=sal_False );    // AS-declaration
+    void TypeDecl( SbiSymDef&, bool bAsNewAlreadyParsed=false );    // AS-declaration
     void OpenBlock( SbiToken, SbiExprNode* = NULL );
     void CloseBlock();
-    sal_Bool Channel( sal_Bool=sal_False );     // parse channel number
+    bool Channel( bool bAlways=false );     // parse channel number
     void StmntBlock( SbiToken );
-    void DefType( sal_Bool bPrivate );  // Parse type declaration
-    void DefEnum( sal_Bool bPrivate );  // Parse enum declaration
-    void DefDeclare( sal_Bool bPrivate );
+    void DefType( bool bPrivate );  // Parse type declaration
+    void DefEnum( bool bPrivate );  // Parse enum declaration
+    void DefDeclare( bool bPrivate );
     void EnableCompatibility();
 public:
     SbxArrayRef   rTypeArray;
@@ -70,15 +70,15 @@ public:
     SbiSymPool*   pPool;
     SbiExprType   eCurExpr;
     short         nBase;            // OPTION BASE-value
-    sal_Bool          bText;            // OPTION COMPARE TEXT
+    bool          bText;            // OPTION COMPARE TEXT
     bool          bExplicit;        // true: OPTION EXPLICIT
-    sal_Bool          bClassModule;     // sal_True: OPTION ClassModule
+    bool          bClassModule;     // true: OPTION ClassModule
     StringVector  aIfaceVector;     // Holds all interfaces implemented by a class module
     StringVector  aRequiredTypes;   // Types used in Dim As New <type> outside subs
     SbxDataType   eDefTypes[26];    // DEFxxx data types
 
     SbiParser( StarBASIC*, SbModule* );
-    sal_Bool Parse();
+    bool Parse();
     SbiExprNode* GetWithVar();
 
     // from 31.3.1996, search symbol in the runtime-library
@@ -87,9 +87,9 @@ public:
 
     bool HasGlobalCode();
 
-    sal_Bool TestToken( SbiToken );
-    sal_Bool TestSymbol( sal_Bool=sal_False );
-    sal_Bool TestComma();
+    bool TestToken( SbiToken );
+    bool TestSymbol( bool bKwdOk=false );
+    bool TestComma();
     void TestEoln();
 
     void Symbol( const KeywordSymbolInfo* pKeywordSymbolInfo = NULL );  // let or call

@@ -68,7 +68,7 @@ SbiSymDef* SbiParser::VarDecl( SbiDimList** ppDim, bool bStatic, bool bConst )
 // Resolving of a AS-Type-Declaration
 // The data type were inserted into the handed over variable
 
-void SbiParser::TypeDecl( SbiSymDef& rDef, sal_Bool bAsNewAlreadyParsed )
+void SbiParser::TypeDecl( SbiSymDef& rDef, bool bAsNewAlreadyParsed )
 {
     SbxDataType eType = rDef.GetType();
     if( bAsNewAlreadyParsed || Peek() == AS )
@@ -239,7 +239,7 @@ void SbiParser::DefVar( SbiOpcode eOp, bool bStatic )
                 bNewGblDefs = false;
             }
             Next();
-            DefProc( sal_False, bPrivate );
+            DefProc( false, bPrivate );
             return;
         }
         else if( eCurTok == ENUM )
@@ -547,10 +547,10 @@ void SbiParser::Erase()
 
 void SbiParser::Type()
 {
-    DefType( sal_False );
+    DefType( false );
 }
 
-void SbiParser::DefType( sal_Bool bPrivate )
+void SbiParser::DefType( bool bPrivate )
 {
     // TODO: Use bPrivate
     (void)bPrivate;
@@ -671,10 +671,10 @@ void SbiParser::DefType( sal_Bool bPrivate )
 
 void SbiParser::Enum()
 {
-    DefEnum( sal_False );
+    DefEnum( false );
 }
 
-void SbiParser::DefEnum( sal_Bool bPrivate )
+void SbiParser::DefEnum( bool bPrivate )
 {
     // Read a the new Token. It had to be a symbol
     if (!TestSymbol())
@@ -937,10 +937,10 @@ SbiProcDef* SbiParser::ProcDecl( bool bDecl )
 
 void SbiParser::Declare()
 {
-    DefDeclare( sal_False );
+    DefDeclare( false );
 }
 
-void SbiParser::DefDeclare( sal_Bool bPrivate )
+void SbiParser::DefDeclare( bool bPrivate )
 {
     Next();
     if( eCurTok != SUB && eCurTok != FUNCTION )
@@ -1071,12 +1071,12 @@ void SbiParser::Call()
 
 void SbiParser::SubFunc()
 {
-    DefProc( sal_False, sal_False );
+    DefProc( false, false );
 }
 
 // Read in of a procedure
 
-void SbiParser::DefProc( sal_Bool bStatic, sal_Bool bPrivate )
+void SbiParser::DefProc( bool bStatic, bool bPrivate )
 {
     sal_uInt16 l1 = nLine, l2 = nLine;
     bool bSub = ( eCurTok == SUB );
@@ -1181,10 +1181,10 @@ void SbiParser::DefProc( sal_Bool bStatic, sal_Bool bPrivate )
 
 void SbiParser::Static()
 {
-    DefStatic( sal_False );
+    DefStatic( false );
 }
 
-void SbiParser::DefStatic( sal_Bool bPrivate )
+void SbiParser::DefStatic( bool bPrivate )
 {
     switch( Peek() )
     {
@@ -1199,7 +1199,7 @@ void SbiParser::DefStatic( sal_Bool bPrivate )
                 bNewGblDefs = false;
             }
             Next();
-            DefProc( sal_True, bPrivate );
+            DefProc( true, bPrivate );
             break;
         default: {
             if( !pProc )

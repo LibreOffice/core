@@ -22,9 +22,9 @@
 
 // test if there's an I/O channel
 
-sal_Bool SbiParser::Channel( sal_Bool bAlways )
+bool SbiParser::Channel( bool bAlways )
 {
-    sal_Bool bRes = sal_False;
+    bool bRes = false;
     Peek();
     if( IsHash() )
     {
@@ -33,7 +33,7 @@ sal_Bool SbiParser::Channel( sal_Bool bAlways )
             Next();
         aExpr.Gen();
         aGen.Gen( _CHANNEL );
-        bRes = sal_True;
+        bRes = true;
     }
     else if( bAlways )
         Error( SbERR_EXPECTED, "#" );
@@ -45,7 +45,7 @@ sal_Bool SbiParser::Channel( sal_Bool bAlways )
 
 void SbiParser::Print()
 {
-    sal_Bool bChan = Channel();
+    bool bChan = Channel();
 
     while( !bAbort )
     {
@@ -76,7 +76,7 @@ void SbiParser::Print()
 
 void SbiParser::Write()
 {
-    sal_Bool bChan = Channel();
+    bool bChan = Channel();
 
     while( !bAbort )
     {
@@ -128,7 +128,7 @@ void SbiParser::Line()
 
 void SbiParser::LineInput()
 {
-    Channel( sal_True );
+    Channel( true );
     SbiExpression* pExpr = new SbiExpression( this, SbOPERAND );
     if( !pExpr->IsVariable() )
         Error( SbERR_VAR_EXPECTED );
@@ -145,7 +145,7 @@ void SbiParser::LineInput()
 void SbiParser::Input()
 {
     aGen.Gen( _RESTART );
-    Channel( sal_True );
+    Channel( true );
     SbiExpression* pExpr = new SbiExpression( this, SbOPERAND );
     while( !bAbort )
     {
