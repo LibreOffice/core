@@ -258,7 +258,7 @@ for REPO in $DIRS ; do
 
     if [ -d "$DIR" -a "z$PUSH_USER" != "z" ]; then
        echo "setting up push url for $DIR"
-       (cd $DIR && git config remote.origin.pushurl "ssh://${PUSH_USER}@git.freedesktop.org/git/libreoffice/${REPO}")
+       (cd $DIR && git config remote.origin.pushurl "ssh://${PUSH_USER}@gerrit.libreoffice.org:29418/${REPO}")
     elif [ -d "$DIR" -a "z$LAST_WORKING" != "z" ]; then
        echo "fetching notes for $REPO ..."
        (cd $DIR && git fetch origin 'refs/notes/*:refs/notes/*')
