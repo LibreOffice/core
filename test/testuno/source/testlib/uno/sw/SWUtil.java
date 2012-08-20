@@ -3,7 +3,13 @@ package testlib.uno.sw;
 import org.openoffice.test.uno.UnoApp;
 
 import com.sun.star.beans.PropertyValue;
+import com.sun.star.container.XNameAccess;
+import com.sun.star.container.XNamed;
 import com.sun.star.frame.XStorable;
+import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.text.XBookmarksSupplier;
+import com.sun.star.text.XTextContent;
+import com.sun.star.text.XTextCursor;
 import com.sun.star.text.XTextDocument;
 import com.sun.star.uno.UnoRuntime;
 
@@ -34,4 +40,21 @@ public class SWUtil {
         return (XTextDocument) UnoRuntime.queryInterface(XTextDocument.class, app.newDocument("swriter"));
 
     }
+
+    /**
+     * Insert a bookmark into text document
+     * @param document text document
+     * @param textCursor which part will be bookmarked
+     * @param bookmarkName bookmark name
+     * @throws Exception
+     */
+    public static void insertBookmark(XTextDocument document, XTextCursor textCursor, String bookmarkName) throws Exception {
+        XMultiServiceFactory xDocFactory = (XMultiServiceFactory) UnoRuntime.queryInterface(XMultiServiceFactory.class, document);
+        Object xBookmark = xDocFactory.createInstance("com.sun.star.text.Bookmark");
+        XTextContent xBookmarkAsTextContent = (XTextContent) UnoRuntime.queryInterface(XTextContent.class, xBookmark);
+        XNamed xBookmarkAsNamed = (XNamed) UnoRuntime.queryInterface(XNamed.class, xBookmark);
+        xBookmarkAsNamed.setName(bookmarkName);
+        document.getText().insertTextContent(textCursor, xBookmarkAsTextContent, true);
+    }
+
 }
