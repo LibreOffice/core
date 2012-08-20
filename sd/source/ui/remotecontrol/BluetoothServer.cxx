@@ -9,9 +9,11 @@
 #include "BluetoothServer.hxx"
 #include <stdio.h>
 
+#ifdef LINUX
 #include <gio/gio.h>
-#include <stdint.h>
 #include <sys/unistd.h>
+#endif
+#include <stdint.h>
 #include <sys/socket.h>
 #include <tools/debug.hxx>
 #include <tools/stream.hxx>
