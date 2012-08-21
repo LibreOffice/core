@@ -256,7 +256,6 @@ $(eval $(call gb_Helper_make_dep_targets,\
 	GenCObject \
 	GenCxxObject \
 	LinkTarget \
-	ScpTarget \
 	SdiTarget \
 	SrsPartTarget \
 	SrsTarget \
