@@ -31,7 +31,7 @@
 #include <com/sun/star/beans/XPropertyAccess.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
-#include <com/sun/star/script/XTypeConverter.hpp>
+#include <com/sun/star/script/Converter.hpp>
 
 #include "osl/diagnose.h"
 #include "osl/mutex.hxx"
@@ -628,11 +628,9 @@ const Reference< XTypeConverter >& PropertyValueSet::getTypeConverter()
     if ( !m_bTriedToGetTypeConverter && !m_xTypeConverter.is() )
     {
         m_bTriedToGetTypeConverter = sal_True;
-        m_xTypeConverter = Reference< XTypeConverter >(
-                                m_xSMgr->createInstance(
-                                    OUString(
-                                        "com.sun.star.script.Converter" ) ),
-                                UNO_QUERY );
+        Reference< XPropertySet > xFactoryProperties( m_xSMgr, UNO_QUERY_THROW );
+        Reference< XComponentContext > xContext( xFactoryProperties->getPropertyValue( "DefaultContext" ), UNO_QUERY_THROW );
+        m_xTypeConverter = Converter::create(xContext);
 
         OSL_ENSURE( m_xTypeConverter.is(),
                     "PropertyValueSet::getTypeConverter() - "

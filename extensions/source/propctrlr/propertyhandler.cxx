@@ -35,6 +35,7 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/lang/NullPointerException.hpp>
 #include <com/sun/star/util/XModifiable.hpp>
+#include <com/sun/star/script/Converter.hpp>
 
 #include <tools/debug.hxx>
 #include <unotools/confignode.hxx>
@@ -73,10 +74,7 @@ namespace pcr
     {
         DBG_CTOR( PropertyHandler, NULL );
 
-        m_xTypeConverter = Reference< XTypeConverter >(
-            m_aContext.createComponent( "com.sun.star.script.Converter" ),
-            UNO_QUERY_THROW
-        );
+        m_xTypeConverter = Converter::create(_rxContext);
     }
 
     //--------------------------------------------------------------------

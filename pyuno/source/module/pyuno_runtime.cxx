@@ -30,6 +30,7 @@
 #include <typelib/typedescription.hxx>
 
 #include <com/sun/star/beans/XMaterialHolder.hpp>
+#include <com/sun/star/script/Converter.hpp>
 
 using rtl::OUString;
 using rtl::OUStringToOString;
@@ -50,6 +51,7 @@ using com::sun::star::uno::XComponentContext;
 using com::sun::star::lang::XSingleServiceFactory;
 using com::sun::star::lang::XUnoTunnel;
 using com::sun::star::reflection::XIdlReflection;
+using com::sun::star::script::Converter;
 using com::sun::star::script::XTypeConverter;
 using com::sun::star::script::XInvocationAdapterFactory2;
 using com::sun::star::script::XInvocation;
@@ -256,11 +258,7 @@ PyRef stRuntimeImpl::create( const Reference< XComponentContext > &ctx )
             OUString(  "pyuno: couldn't instantiate invocation service"  ),
             Reference< XInterface > () );
 
-    c->xTypeConverter = Reference< XTypeConverter > (
-        ctx->getServiceManager()->createInstanceWithContext(
-            OUString(  "com.sun.star.script.Converter"  ),
-            ctx ),
-        UNO_QUERY );
+    c->xTypeConverter = Converter::create(ctx);
     if( ! c->xTypeConverter.is() )
         throw RuntimeException(
             OUString(  "pyuno: couldn't instantiate typeconverter service" ),

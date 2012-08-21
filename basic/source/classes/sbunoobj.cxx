@@ -50,7 +50,7 @@
 #include <com/sun/star/script/BasicErrorException.hpp>
 #include <com/sun/star/script/XAllListener.hpp>
 #include <com/sun/star/script/XInvocationAdapterFactory.hpp>
-#include <com/sun/star/script/XTypeConverter.hpp>
+#include <com/sun/star/script/Converter.hpp>
 #include <com/sun/star/script/XDefaultProperty.hpp>
 #include <com/sun/star/script/XDefaultMethod.hpp>
 #include <com/sun/star/script/XDirectInvocation.hpp>
@@ -263,11 +263,7 @@ Reference< XTypeConverter > getTypeConverter_Impl( void )
         Reference< XComponentContext > xContext = getComponentContext_Impl();
         if( xContext.is() )
         {
-            Reference<XMultiComponentFactory> xSMgr = xContext->getServiceManager();
-            xTypeConverter = Reference<XTypeConverter>(
-                xSMgr->createInstanceWithContext(
-                    ::rtl::OUString( "com.sun.star.script.Converter"),
-                        xContext ), UNO_QUERY );
+            xTypeConverter = Converter::create(xContext);
         }
         if( !xTypeConverter.is() )
         {

@@ -27,6 +27,7 @@
 #include <com/sun/star/frame/XModel2.hpp>
 #include <com/sun/star/frame/XNotifyingDispatch.hpp>
 #include <com/sun/star/script/XDefaultProperty.hpp>
+#include <com/sun/star/script/Converter.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
@@ -118,7 +119,7 @@ getIntrospectionAccess( const uno::Any& aObject ) throw (uno::RuntimeException)
 uno::Reference< script::XTypeConverter >
 getTypeConverter( const uno::Reference< uno::XComponentContext >& xContext ) throw (uno::RuntimeException)
 {
-    static uno::Reference< script::XTypeConverter > xTypeConv( xContext->getServiceManager()->createInstanceWithContext( rtl::OUString( "com.sun.star.script.Converter" ), xContext ), uno::UNO_QUERY_THROW );
+    static uno::Reference< script::XTypeConverter > xTypeConv( script::Converter::create(xContext) );
     return xTypeConv;
 }
 const uno::Any&

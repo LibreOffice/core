@@ -30,6 +30,7 @@
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/i18n/XLocaleData.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
+#include <com/sun/star/script/Converter.hpp>
 #include <com/sun/star/sdb/BooleanComparisonMode.hpp>
 #include <com/sun/star/sdb/SQLFilterOperator.hpp>
 #include <com/sun/star/sdb/XQueriesSupplier.hpp>
@@ -1594,7 +1595,7 @@ void OSingleSelectQueryComposer::setConditionByColumn( const Reference< XPropert
     if ( aValue.hasValue() )
     {
         if(  !m_xTypeConverter.is() )
-            m_aContext.createComponent( "com.sun.star.script.Converter", m_xTypeConverter );
+            m_xTypeConverter.set( Converter::create(m_aContext.getUNOContext()) );
         OSL_ENSURE(m_xTypeConverter.is(),"NO typeconverter!");
 
         if ( nType != DataType::BOOLEAN && DataType::BIT != nType )

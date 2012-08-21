@@ -33,6 +33,7 @@ $(eval $(call gb_Library_Library,evtatt))
 $(eval $(call gb_Library_set_componentfile,evtatt,eventattacher/source/evtatt))
 
 $(eval $(call gb_Library_use_libraries,evtatt,\
+	comphelper \
 	cppuhelper \
 	cppu \
 	sal \

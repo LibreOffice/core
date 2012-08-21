@@ -39,7 +39,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 
-#include <com/sun/star/script/XTypeConverter.hpp>
+#include <com/sun/star/script/Converter.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
 
 #include <rtl/bootstrap.hxx>
@@ -214,10 +214,8 @@ void SfxFrameHTMLWriter::Out_DocInfo( SvStream& rStrm, const String& rBaseURL,
             OutMeta( rStrm, pIndent, OOO_STRING_SVTOOLS_HTML_META_keywords, Keywords, sal_False,
                      eDestEnc, pNonConvertableChars);
 
-        uno::Reference < script::XTypeConverter > xConverter(
-            ::comphelper::getProcessServiceFactory()->createInstance(
-                ::rtl::OUString("com.sun.star.script.Converter")),
-                uno::UNO_QUERY_THROW );
+        uno::Reference < script::XTypeConverter > xConverter( script::Converter::create(
+            ::comphelper::getProcessComponentContext() ) );
         uno::Reference<beans::XPropertySet> xUserDefinedProps(
             i_xDocProps->getUserDefinedProperties(), uno::UNO_QUERY_THROW);
         DBG_ASSERT(xUserDefinedProps.is(), "UserDefinedProperties is null");

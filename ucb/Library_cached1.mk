@@ -32,6 +32,7 @@ $(eval $(call gb_Library_set_componentfile,cached1,ucb/source/cacher/cached1))
 $(eval $(call gb_Library_use_sdk_api,cached1))
 
 $(eval $(call gb_Library_use_libraries,cached1,\
+	comphelper \
 	cppu \
 	cppuhelper \
 	sal \

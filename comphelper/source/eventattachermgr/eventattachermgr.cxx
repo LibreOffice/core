@@ -34,7 +34,7 @@
 #include <com/sun/star/reflection/XIdlClass.hpp>
 #include <com/sun/star/reflection/XIdlReflection.hpp>
 #include <com/sun/star/reflection/XIdlMethod.hpp>
-#include <com/sun/star/script/XTypeConverter.hpp>
+#include <com/sun/star/script/Converter.hpp>
 #include <com/sun/star/script/XEngineListener.hpp>
 #include <com/sun/star/script/XEventAttacher2.hpp>
 #include <com/sun/star/script/XEventAttacherManager.hpp>
@@ -43,6 +43,7 @@
 #include <cppuhelper/interfacecontainer.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase2.hxx>
+#include <comphelper/componentcontext.hxx>
 
 #include <deque>
 #include <algorithm>
@@ -381,11 +382,7 @@ ImplEventAttacherManager::ImplEventAttacherManager( const Reference< XIntrospect
         {
             xAttacher = Reference< XEventAttacher2 >::query( xIFace );
         }
-        xIFace = rSMgr->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.script.Converter" )) );
-        if ( xIFace.is() )
-        {
-            xConverter = Reference< XTypeConverter >::query( xIFace );
-        }
+        xConverter = Converter::create(comphelper::ComponentContext(rSMgr).getUNOContext());
     }
 
     Reference< XInitialization > xInit( xAttacher, UNO_QUERY );

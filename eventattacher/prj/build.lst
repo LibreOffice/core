@@ -1,2 +1,2 @@
-ea      eventattacher   :      offapi cppuhelper LIBXSLT:libxslt NULL
+ea      eventattacher   :      offapi comphelper cppuhelper LIBXSLT:libxslt NULL
 ea	eventattacher\prj	nmake		-	all	ea_prj NULL

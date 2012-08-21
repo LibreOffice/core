@@ -32,10 +32,11 @@
 #include <com/sun/star/ucb/FetchError.hpp>
 #include <com/sun/star/ucb/ResultSetException.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#include <com/sun/star/script/XTypeConverter.hpp>
+#include <com/sun/star/script/Converter.hpp>
 #include <com/sun/star/sdbc/ResultSetType.hpp>
 #include <rtl/ustring.hxx>
 #include <osl/diagnose.h>
+#include <comphelper/componentcontext.hxx>
 
 using namespace com::sun::star::beans;
 using namespace com::sun::star::lang;
@@ -2148,10 +2149,7 @@ const Reference< XTypeConverter >& CachedContentResultSet::getTypeConverter()
     if ( !m_bTriedToGetTypeConverter && !m_xTypeConverter.is() )
     {
         m_bTriedToGetTypeConverter = sal_True;
-        m_xTypeConverter = Reference< XTypeConverter >(
-                                m_xSMgr->createInstance(
-                                    OUString( "com.sun.star.script.Converter" ) ),
-                                UNO_QUERY );
+        m_xTypeConverter = Reference< XTypeConverter >( Converter::create(comphelper::ComponentContext(m_xSMgr).getUNOContext()) );
 
         OSL_ENSURE( m_xTypeConverter.is(),
                     "PropertyValueSet::getTypeConverter() - "

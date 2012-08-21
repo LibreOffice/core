@@ -82,6 +82,7 @@
 #include <cppuhelper/implbase1.hxx>
 
 #include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/script/Converter.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
 
 using rtl::OUStringBuffer;
@@ -97,6 +98,7 @@ using com::sun::star::lang::XComponent;
 using com::sun::star::lang::XInitialization;
 using com::sun::star::lang::IllegalArgumentException;
 
+using com::sun::star::script::Converter;
 using com::sun::star::script::XTypeConverter;
 
 using com::sun::star::uno::RuntimeException;
@@ -543,9 +545,7 @@ void Connection::initialize( const Sequence< Any >& aArguments )
     OUString url;
     Sequence< PropertyValue > args;
 
-    Reference< XTypeConverter > tc( m_ctx->getServiceManager()->createInstanceWithContext(
-        OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.script.Converter" ) ), m_ctx ),
-                                    UNO_QUERY);
+    Reference< XTypeConverter > tc( Converter::create(m_ctx) );
     if( ! tc.is() )
     {
         throw RuntimeException(

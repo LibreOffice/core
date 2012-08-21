@@ -29,10 +29,12 @@
 
 #include <recording/dispatchrecorder.hxx>
 #include <com/sun/star/frame/DispatchStatement.hpp>
+#include <com/sun/star/script/Converter.hpp>
 #include <threadhelp/writeguard.hxx>
 #include <threadhelp/readguard.hxx>
 #include <services.h>
 #include <vcl/svapp.hxx>
+#include <comphelper/componentcontext.hxx>
 
 using namespace ::com::sun::star::uno;
 
@@ -130,7 +132,7 @@ DispatchRecorder::DispatchRecorder( const css::uno::Reference< css::lang::XMulti
         : ThreadHelpBase     ( &Application::GetSolarMutex() )
         , ::cppu::OWeakObject(                               )
         , m_xSMGR            ( xSMGR                         )
-        , m_xConverter( m_xSMGR->createInstance(::rtl::OUString("com.sun.star.script.Converter")), css::uno::UNO_QUERY )
+        , m_xConverter( css::script::Converter::create(comphelper::ComponentContext(m_xSMGR).getUNOContext()) )
 {
 }
 

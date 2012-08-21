@@ -36,6 +36,7 @@
 #include <com/sun/star/inspection/PropertyControlType.hpp>
 #include <com/sun/star/inspection/XHyperlinkControl.hpp>
 #include <com/sun/star/awt/XActionListener.hpp>
+#include <com/sun/star/script/Converter.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
@@ -316,10 +317,7 @@ namespace pcr
     {
         DBG_CTOR( GenericPropertyHandler, NULL );
 
-        m_xTypeConverter = Reference< XTypeConverter >(
-            m_aContext.createComponent( "com.sun.star.script.Converter" ),
-            UNO_QUERY_THROW
-        );
+        m_xTypeConverter = Converter::create(_rxContext);
     }
 
     //--------------------------------------------------------------------

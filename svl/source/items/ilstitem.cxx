@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <com/sun/star/script/XTypeConverter.hpp>
+#include <com/sun/star/script/Converter.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 #include <comphelper/processfactory.hxx>
@@ -73,8 +73,7 @@ SfxPoolItem* SfxIntegerListItem::Clone( SfxItemPool * ) const
 bool SfxIntegerListItem::PutValue  ( const com::sun::star::uno::Any& rVal, sal_uInt8 )
 {
     ::com::sun::star::uno::Reference < ::com::sun::star::script::XTypeConverter > xConverter
-            ( ::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString("com.sun.star.script.Converter")),
-            ::com::sun::star::uno::UNO_QUERY );
+            ( ::com::sun::star::script::Converter::create(::comphelper::getProcessComponentContext()) );
     ::com::sun::star::uno::Any aNew;
     try { aNew = xConverter->convertTo( rVal, ::getCppuType((const ::com::sun::star::uno::Sequence < sal_Int32 >*)0) ); }
     catch (::com::sun::star::uno::Exception&)
