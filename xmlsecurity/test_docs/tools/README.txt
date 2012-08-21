@@ -11,8 +11,9 @@ java -jar httpserv/dist/httpserv.jar --accept portnumber
 portnumber: an arbitrary port number to which the server should listen.
 
 httpserv looks for the requested file relativ to the current directory. For
-example, you are in a directory which contains the index.html. From there
-you run httpserv.jar:
+example, you are in
+$(SRC_ROOT)/xmlsecurity/$(INPATH)/httpserv/dist/javadoc,
+a directory which contains the index.html. From there you run httpserv.jar:
 
 java -jar <path_to_wherever_it_is>/httpserv.jar --accept 8000
 

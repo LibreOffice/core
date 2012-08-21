@@ -71,4 +71,9 @@
     nbproject/build-impl.xml file.
 
     -->
+    <!-- Import the environment as properties to make them available in project.properties
+    -->
+    <target name="-pre-init">
+      <property environment="env" />
+    </target>
 </project>
