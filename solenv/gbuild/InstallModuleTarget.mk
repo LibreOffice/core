@@ -178,8 +178,6 @@ endef
 
 gb_ScpTarget_TARGET := $(SOLARENV)/bin/pre2par.pl
 gb_ScpTarget_COMMAND := $(PERL) $(gb_ScpTarget_TARGET)
-gb_ScpTarget_DEPTARGET := $(call gb_Executable_get_target_for_build,makedepend)
-gb_ScpTarget_DEPCOMMAND := $(gb_Helper_set_ld_path) $(gb_ScpTarget_DEPTARGET)
 
 define gb_ScpTarget__command
 $(call gb_Output_announce,$(2),$(true),SCP,2)
@@ -203,27 +201,6 @@ $(call gb_ScpTarget_get_clean_target,%) :
 	rm -f \
 		$(call gb_ScpTarget_get_target,$*) \
 		$(call gb_ScpTarget_get_external_target,$*) \
-		$(call gb_ScpTarget_get_dep_target,$*)
-
-ifneq ($(gb_FULLDEPS),)
-
-define gb_ScpTarget__command_dep
-$(call gb_Output_announce,SCP:$(2),$(true),DEP,2)
-$(call gb_Helper_abbreviate_dirs,\
-	$(gb_ScpTarget_DEPCOMMAND) \
-		$(SCPDEFS) $(SCP_DEFS) -DDLLPOSTFIX=$(gb_Library_DLLPOSTFIX) \
-		-f $(1) \
-		-p \
-)
-endef
-
-$(dir $(call gb_ScpTarget_get_dep_target,%))%/.dir :
-	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
-
-$(call gb_ScpTarget_get_dep_target,%) :
-	$(call gb_ScpTarget__command_dep,$@,$*)
-
-endif
 
 # gb_ScpTarget_ScpTarget(<target>)
 define gb_ScpTarget_ScpTarget
@@ -235,10 +212,6 @@ $(call gb_ScpTarget_get_external_target,$(1)) :| $(dir $(call gb_ScpTarget_get_t
 $(call gb_ScpPreprocessTarget_get_target,$(1)) :| $(call gb_ScpTarget_get_external_target,$(1))
 $(call gb_ScpTarget_get_clean_target,$(1)) : $(call gb_ScpPreprocessTarget_get_clean_target,$(1))
 $(call gb_ScpTarget_get_target,$(1)) : SCP_ULF := $(gb_Helper_PHONY)
-
-ifneq ($(gb_FULLDEPS),)
-$(call gb_ScpTarget_get_dep_target,$(1)) :| $(dir $(call gb_ScpTarget_get_dep_target,$(1))).dir
-endif
 
 endef
 
