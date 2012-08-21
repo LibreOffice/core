@@ -47,7 +47,7 @@ using namespace vcl;
 
 void Control::ImplInitControlData()
 {
-    mbHasFocus      = sal_False;
+    mbHasControlFocus       = sal_False;
     mpControlData   = new ImplControlData;
 }
 
@@ -295,9 +295,10 @@ long Control::Notify( NotifyEvent& rNEvt )
 {
     if ( rNEvt.GetType() == EVENT_GETFOCUS )
     {
-        if ( !mbHasFocus )
+        if ( !mbHasControlFocus )
         {
-            mbHasFocus = sal_True;
+            mbHasControlFocus = sal_True;
+            StateChanged( STATE_CHANGE_CONTROL_FOCUS );
             if ( ImplCallEventListenersAndHandler( VCLEVENT_CONTROL_GETFOCUS, maGetFocusHdl, this ) )
                 // been destroyed within the handler
                 return sal_True;
@@ -310,7 +311,8 @@ long Control::Notify( NotifyEvent& rNEvt )
             Window* pFocusWin = Application::GetFocusWindow();
             if ( !pFocusWin || !ImplIsWindowOrChild( pFocusWin ) )
             {
-                mbHasFocus = sal_False;
+                mbHasControlFocus = sal_False;
+                StateChanged( STATE_CHANGE_CONTROL_FOCUS );
                 if ( ImplCallEventListenersAndHandler( VCLEVENT_CONTROL_LOSEFOCUS, maLoseFocusHdl, this ) )
                     // been destroyed within the handler
                     return sal_True;

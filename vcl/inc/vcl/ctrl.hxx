@@ -48,7 +48,7 @@ protected:
     ::vcl::ImplControlData* mpControlData;
 
 private:
-    sal_Bool                mbHasFocus;
+    bool                    mbHasControlFocus;
     Link                    maGetFocusHdl;
     Link                    maLoseFocusHdl;
 
@@ -175,6 +175,10 @@ public:
     const Link&     GetGetFocusHdl() const   { return maGetFocusHdl; }
     void            SetLoseFocusHdl( const Link& rLink ) { maLoseFocusHdl = rLink; }
     const Link&     GetLoseFocusHdl() const { return maLoseFocusHdl; }
+
+    /** determines whether the control currently has the focus
+    */
+    bool            HasControlFocus() const { return mbHasControlFocus; }
 
     void            SetLayoutDataParent( const Control* pParent ) const;
 
