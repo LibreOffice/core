@@ -32,6 +32,8 @@
 
 #include <com/sun/star/graphic/XGraphic.hpp>
 
+#include <comphelper/componentcontext.hxx>
+#include <comphelper/processfactory.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <vcl/window.hxx>
@@ -120,11 +122,14 @@ namespace svt { namespace table
         RowPos              nCurrentRow;
         bool                bUseGridLines;
         CachedSortIndicator aSortIndicator;
+        CellValueConversion aStringConverter;
 
         GridTableRenderer_Impl( ITableModel& _rModel )
             :rModel( _rModel )
             ,nCurrentRow( ROW_INVALID )
             ,bUseGridLines( true )
+            ,aSortIndicator( )
+            ,aStringConverter( ::comphelper::ComponentContext( ::comphelper::getProcessServiceFactory() ) )
         {
         }
     };
@@ -392,7 +397,7 @@ namespace svt { namespace table
         _rDevice.DrawLine( _rArea.BottomLeft(), _rArea.BottomRight() );
 
         Any const rowHeading( m_pImpl->rModel.getRowHeading( m_pImpl->nCurrentRow ) );
-        ::rtl::OUString const rowTitle( CellValueConversion::convertToString( rowHeading ) );
+        ::rtl::OUString const rowTitle( m_pImpl->aStringConverter.convertToString( rowHeading ) );
         if ( !rowTitle.isEmpty() )
         {
             ::Color const textColor = lcl_getEffectiveColor( m_pImpl->rModel.getHeaderTextColor(), _rStyle, &StyleSettings::GetFieldTextColor );
@@ -528,7 +533,7 @@ namespace svt { namespace table
             return;
         }
 
-        const ::rtl::OUString sText( CellValueConversion::convertToString( aCellContent ) );
+        const ::rtl::OUString sText( m_pImpl->aStringConverter.convertToString( aCellContent ) );
         impl_paintCellText( i_context, sText );
     }
 
@@ -563,7 +568,7 @@ namespace svt { namespace table
 
     //------------------------------------------------------------------------------------------------------------------
     bool GridTableRenderer::FitsIntoCell( Any const & i_cellContent, ColPos const i_colPos, RowPos const i_rowPos,
-        bool const i_active, bool const i_selected, OutputDevice& i_targetDevice, Rectangle const & i_targetArea )
+        bool const i_active, bool const i_selected, OutputDevice& i_targetDevice, Rectangle const & i_targetArea ) const
     {
         if ( !i_cellContent.hasValue() )
             return true;
@@ -583,7 +588,7 @@ namespace svt { namespace table
             return true;
         }
 
-        ::rtl::OUString const sText( CellValueConversion::convertToString( i_cellContent ) );
+        ::rtl::OUString const sText( m_pImpl->aStringConverter.convertToString( i_cellContent ) );
         if ( sText.isEmpty() )
             return true;
 
@@ -601,6 +606,16 @@ namespace svt { namespace table
         OSL_UNUSED( i_selected );
         OSL_UNUSED( i_rowPos );
         OSL_UNUSED( i_colPos );
+        return true;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    bool GridTableRenderer::GetFormattedCellString( Any const & i_cellValue, ColPos const i_colPos, RowPos const i_rowPos, ::rtl::OUString & o_cellString ) const
+    {
+        o_cellString = m_pImpl->aStringConverter.convertToString( i_cellValue );
+
+        OSL_UNUSED( i_colPos );
+        OSL_UNUSED( i_rowPos );
         return true;
     }
 

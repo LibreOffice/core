@@ -260,7 +260,26 @@ namespace svt { namespace table
                             ColPos const i_colPos, RowPos const i_rowPos,
                             bool const i_active, bool const i_selected,
                             OutputDevice& i_targetDevice, Rectangle const & i_targetArea
-                        ) = 0;
+                        ) const = 0;
+
+        /** attempts to format the content of the given cell as string
+
+            @param i_cellValue
+                the value for which an attempt for a string conversion should be made
+            @param  i_colPos
+                the column position of the cell in question
+            @param  i_rowPos
+                the row position of the cell in question
+            @param  o_cellString
+                the cell content, formatted as string
+            @return
+                <TRUE/> if and only if the content could be formatted as string
+        */
+        virtual bool    GetFormattedCellString(
+                            ::com::sun::star::uno::Any const & i_cellValue,
+                            ColPos const i_colPos, RowPos const i_rowPos,
+                            ::rtl::OUString & o_cellString
+                        ) const = 0;
 
         /// deletes the renderer instance
         virtual ~ITableRenderer() { }
