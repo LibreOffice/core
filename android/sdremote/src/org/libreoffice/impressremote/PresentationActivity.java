@@ -36,7 +36,6 @@ import com.actionbarsherlock.app.SherlockFragmentActivity;
 
 public class PresentationActivity extends SherlockFragmentActivity {
     private CommunicationService mCommunicationService;
-    private boolean mIsBound = false;
     private FrameLayout mLayout;
     private FrameLayout mOuterLayout;
     private ThumbnailFragment mThumbnailFragment;
@@ -49,7 +48,6 @@ public class PresentationActivity extends SherlockFragmentActivity {
 
         bindService(new Intent(this, CommunicationService.class), mConnection,
                         Context.BIND_IMPORTANT);
-        mIsBound = true;
 
         setContentView(R.layout.activity_presentation);
         mOuterLayout = (FrameLayout) findViewById(R.id.framelayout);
@@ -59,21 +57,30 @@ public class PresentationActivity extends SherlockFragmentActivity {
         mLayout.setId(R.id.presentation_innerFrame);
 
         //((FrameLayout) findViewById(R.id.framelayout)).addView(mLayout);
-        mThumbnailFragment = new ThumbnailFragment();
-        mPresentationFragment = new PresentationFragment();
+        if (savedInstanceState == null) {
+            mThumbnailFragment = new ThumbnailFragment();
+            mPresentationFragment = new PresentationFragment();
 
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager
-                        .beginTransaction();
-        fragmentTransaction.add(R.id.presentation_innerFrame,
-                        mPresentationFragment, "fragment_presentation");
-        fragmentTransaction.commit();
+            FragmentManager fragmentManager = getSupportFragmentManager();
 
+            FragmentTransaction fragmentTransaction = fragmentManager
+                            .beginTransaction();
+            fragmentTransaction.add(R.id.presentation_innerFrame,
+                            mPresentationFragment, "fragment_presentation");
+            fragmentTransaction.commit();
+        }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putBoolean("thumbnail_enabled", mThumbnailFragment.isVisible());
     }
 
     @Override
     protected void onDestroy() {
         mActionBarManager.stop();
+        unbindService(mConnection);
         super.onDestroy();
     }
 

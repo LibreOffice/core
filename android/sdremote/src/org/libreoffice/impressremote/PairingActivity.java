@@ -28,7 +28,6 @@ import com.actionbarsherlock.app.SherlockActivity;
 
 public class PairingActivity extends SherlockActivity {
     private CommunicationService mCommunicationService;
-    private boolean mIsBound = false;
     private TextView mPinText;
 
     /** Called when the activity is first created. */
@@ -38,7 +37,6 @@ public class PairingActivity extends SherlockActivity {
 
         bindService(new Intent(this, CommunicationService.class), mConnection,
                         Context.BIND_IMPORTANT);
-        mIsBound = true;
 
         IntentFilter aFilter = new IntentFilter(
                         CommunicationService.MSG_PAIRING_STARTED);
@@ -46,6 +44,12 @@ public class PairingActivity extends SherlockActivity {
         LocalBroadcastManager.getInstance(this).registerReceiver(mListener,
                         aFilter);
 
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        unbindService(mConnection);
     }
 
     private ServiceConnection mConnection = new ServiceConnection() {
@@ -60,7 +64,7 @@ public class PairingActivity extends SherlockActivity {
                             .setText(MessageFormat
                                             .format(getResources()
                                                             .getString(R.string.pairing_instructions_2_deviceName),
-                                                            mCommunicationService
+                                                            CommunicationService
                                                                             .getDeviceName()));
 
             if (mCommunicationService.getState() == State.CONNECTING) {

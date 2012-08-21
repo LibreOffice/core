@@ -59,8 +59,7 @@ public class PresentationFragment extends SherlockFragment {
             if (mTopView != null) {
                 mTopView.setAdapter(new ThumbnailAdapter(mContext,
                                 mCommunicationService.getSlideShow()));
-                mTopView.setSelection(mCommunicationService.getSlideShow()
-                                .getCurrentSlide(), true);
+                mTopView.setSelection(mCommunicationService.getSlideShow().getCurrentSlide(), true);
                 mTopView.setOnItemSelectedListener(new ClickListener());
             }
 
