@@ -170,32 +170,39 @@ void removeTree(OUString const & url) {
         }
         if (rc != osl::FileBase::E_None) {
             throw css::uno::RuntimeException(
-                "cannot iterate directory " + url,
+                ("cannot iterate directory " + url + ": "
+                 + OUString::valueOf(static_cast< sal_Int32 >(rc))),
                 css::uno::Reference< css::uno::XInterface >());
         }
         osl::FileStatus stat(
             osl_FileStatus_Mask_Type | osl_FileStatus_Mask_FileName |
             osl_FileStatus_Mask_FileURL);
-        if (i.getFileStatus(stat) != osl::FileBase::E_None) {
+        rc = i.getFileStatus(stat);
+        if (rc != osl::FileBase::E_None) {
             throw css::uno::RuntimeException(
-                "cannot stat in directory " + url,
+                ("cannot stat in directory " + url + ": "
+                 + OUString::valueOf(static_cast< sal_Int32 >(rc))),
                 css::uno::Reference< css::uno::XInterface >());
         }
         if (stat.getFileType() == osl::FileStatus::Directory) { //TODO: symlinks
             removeTree(stat.getFileURL());
         } else {
-            if (osl::File::remove(stat.getFileURL()) != osl::FileBase::E_None) {
+            rc = osl::File::remove(stat.getFileURL());
+            if (rc != osl::FileBase::E_None) {
                 throw css::uno::RuntimeException(
-                    "cannot remove file " + stat.getFileURL(),
+                    ("cannot remove file " + stat.getFileURL() + ": "
+                     + OUString::valueOf(static_cast< sal_Int32 >(rc))),
                     css::uno::Reference< css::uno::XInterface >());
             }
         }
     }
-    if (osl::Directory::remove(url) != osl::FileBase::E_None) {
-        throw css::uno::RuntimeException(
-            "cannot remove directory " + url,
-            css::uno::Reference< css::uno::XInterface >());
-    }
+    osl::FileBase::RC rc = osl::Directory::remove(url);
+    SAL_WARN_IF(
+        rc != osl::FileBase::E_None, "desktop",
+        "cannot remove directory " << url << ": " +rc);
+        // at least on Windows XP removing some existing directories fails with
+        // osl::FileBase::E_ACCESS because they are read-only; but keeping those
+        // directories around should be harmless once they are empty
 }
 
 // Remove any existing UserInstallation's user/extensions/bundled cache
