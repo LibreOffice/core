@@ -48,16 +48,23 @@ ScTpDefaultsOptions::ScTpDefaultsOptions(Window *pParent, const SfxItemSet &rCor
 {
     FreeResource();
 
-    long nTxtW = aFtNSheets.GetCtrlTextWidth( aFtNSheets.GetText() );
-    long nCtrlW = aFtNSheets.GetSizePixel().Width();
-    if ( nTxtW >= nCtrlW )
+    // the following computation must be modified accordingly if a third line is added to this dialog
+    long nTxtW1 = aFtNSheets.GetCtrlTextWidth( aFtNSheets.GetText() );
+    long nCtrlW1 = aFtNSheets.GetSizePixel().Width();
+    long nTxtW2 = aFtSheetPrefix.GetCtrlTextWidth(aFtSheetPrefix.GetText() );
+    long nCtrlW2 = aFtSheetPrefix.GetSizePixel().Width();
+    if ( nTxtW1 >= nCtrlW1 || nTxtW2 >= nCtrlW2)
     {
+        long nTxtW = std::max(nTxtW1,nTxtW2);
         Size aNewSize = aFtNSheets.GetSizePixel();
-        aNewSize.Width() += ( nTxtW - nCtrlW );
+        aNewSize.Width() = nTxtW;
         aFtNSheets.SetSizePixel( aNewSize );
+        aFtSheetPrefix.SetSizePixel( aNewSize );
         Point aNewPoint = aEdNSheets.GetPosPixel();
-        aNewPoint.X() += ( nTxtW - nCtrlW );
+        aNewPoint.X() += (nTxtW - nCtrlW1);
         aEdNSheets.SetPosPixel( aNewPoint );
+        aNewPoint.Y() = aEdSheetPrefix.GetPosPixel().Y();
+        aEdSheetPrefix.SetPosPixel( aNewPoint );
    }
     aEdNSheets.SetModifyHdl( LINK(this, ScTpDefaultsOptions, NumModifiedHdl) );
     aEdSheetPrefix.SetModifyHdl( LINK(this, ScTpDefaultsOptions, PrefixModifiedHdl) );
