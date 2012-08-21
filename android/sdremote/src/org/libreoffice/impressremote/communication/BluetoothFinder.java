@@ -28,6 +28,9 @@ public class BluetoothFinder {
     }
 
     public void startFinding() {
+        if (mAdapter == null) {
+            return; // No bluetooth adapter found (emulator, special devices)
+        }
         System.out.println("BT:Discovery starting");
         IntentFilter aFilter = new IntentFilter(
                         BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
@@ -39,6 +42,9 @@ public class BluetoothFinder {
     }
 
     public void stopFinding() {
+        if (mAdapter == null) {
+            return; // No bluetooth adapter found (emulator, special devices)
+        }
         mAdapter.cancelDiscovery();
         try {
             mContext.unregisterReceiver(mReceiver);

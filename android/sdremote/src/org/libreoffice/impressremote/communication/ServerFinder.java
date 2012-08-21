@@ -9,6 +9,8 @@ import java.net.SocketException;
 import java.util.Collection;
 import java.util.HashMap;
 
+import org.libreoffice.impressremote.communication.Server.Protocol;
+
 import android.content.Context;
 import android.content.Intent;
 
@@ -69,15 +71,11 @@ public class ServerFinder {
             mServerList.put(aServer.getAddress(), aServer);
             System.out.println("Contains:<<" + aName + ">>");
 
-            Intent aIntent = new Intent(
-                            CommunicationService.MSG_SERVERLIST_CHANGED);
-            mContext.sendBroadcast(aIntent);
+            notifyActivity();
         } catch (java.net.SocketTimeoutException e) {
             // Ignore -- we want to timeout to enable checking whether we
             // should stop listening periodically
         } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
         }
 
     }
@@ -92,6 +90,7 @@ public class ServerFinder {
             mListenerThread = new Thread() {
                 @Override
                 public void run() {
+                    checkAndAddEmulator();
                     long aTime = 0;
                     try {
                         mSocket = new DatagramSocket();
@@ -106,13 +105,13 @@ public class ServerFinder {
                                                 PORT);
                                 mSocket.send(aPacket);
                                 aTime = System.currentTimeMillis();
+                                // Remove stale servers
                                 for (Server aServer : mServerList.values()) {
-                                    if (System.currentTimeMillis()
-                                                    - aServer.getTimeDiscovered() > 60 * 1000) {
+                                    if (!aServer.mNoTimeout
+                                                    && System.currentTimeMillis()
+                                                                    - aServer.getTimeDiscovered() > 60 * 1000) {
                                         mServerList.remove(aServer.getAddress());
-                                        Intent aIntent = new Intent(
-                                                        CommunicationService.MSG_SERVERLIST_CHANGED);
-                                        mContext.sendBroadcast(aIntent);
+                                        notifyActivity();
 
                                     }
                                 }
@@ -143,6 +142,34 @@ public class ServerFinder {
             mFinishRequested = true;
             mListenerThread = null;
         }
+    }
+
+    /**
+     * Check whether we are on an emulator and add it's host to the list of
+     * servers if so (although we do not know whether libo is running on
+     * the host).
+     */
+    private void checkAndAddEmulator() {
+        try {
+            if (InetAddress.getByName("10.0.2.2").isReachable(100)) {
+                System.out.println("NulledNot");
+                Server aServer = new Server(Protocol.NETWORK, "10.0.2.2",
+                                "Android Emulator Host", 0);
+                aServer.mNoTimeout = true;
+                mServerList.put(aServer.getAddress(), aServer);
+                notifyActivity();
+            }
+        } catch (IOException e) {
+            // Probably means we can't connect -- i.e. no emulator host
+        }
+    }
+
+    /**
+     * Notify the activity that the server list has changed.
+     */
+    private void notifyActivity() {
+        Intent aIntent = new Intent(CommunicationService.MSG_SERVERLIST_CHANGED);
+        mContext.sendBroadcast(aIntent);
     }
 
     public Collection<Server> getServerList() {

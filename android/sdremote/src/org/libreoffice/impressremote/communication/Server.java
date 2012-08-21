@@ -10,6 +10,11 @@ public class Server {
     private String mAddress;
     private String mName;
     private long mTimeDiscovered;
+    /**
+     * Signifies a Server that shouldn't be automatically removed from the list.
+     * Used e.g. for the emulator.
+     */
+    protected boolean mNoTimeout = false;
 
     protected Server(Protocol aProtocol, String aAddress, String aName,
                     long aTimeDiscovered) {
