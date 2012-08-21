@@ -848,7 +848,7 @@ sal_Bool ORowSetCache::fillMatrix(sal_Int32& _nNewStartPos, sal_Int32 &_nNewEndP
 sal_Bool ORowSetCache::moveWindow()
 {
     OSL_ENSURE(m_nStartPos >= 0,"ORowSetCache::moveWindow: m_nStartPos is less than 0!");
-    OSL_ENSURE(m_nEndPos > m_nStartPos,"ORowSetCache::moveWindow: m_nStartPos not smaller than m_nEndPos");
+    OSL_ENSURE(m_nEndPos >= m_nStartPos,"ORowSetCache::moveWindow: m_nStartPos not smaller than m_nEndPos");
     OSL_ENSURE(m_nEndPos-m_nStartPos <= m_nFetchSize,"ORowSetCache::moveWindow: m_nStartPos and m_nEndPos too far apart");
 
     if ( m_nStartPos < m_nPosition && m_nPosition <= m_nEndPos )
