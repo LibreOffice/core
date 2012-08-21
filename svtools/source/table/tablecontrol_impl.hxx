@@ -223,10 +223,10 @@ namespace svt { namespace table
         /** returns the position of the current row in the selection vector */
         int getRowSelectedNumber(const ::std::vector<RowPos>& selectedRows, RowPos current);
 
-        /** _rCellRect contains the region, which should be invalidate after some action e.g. selecting row*/
-        void    invalidateSelectedRegion(RowPos _nPrevRow, RowPos _nCurRow, Rectangle& _rCellRect );
+        /** ??? */
+        void    invalidateSelectedRegion( RowPos _nPrevRow, RowPos _nCurRow );
 
-        /** invalidates the part of the data window which is covered by the given row
+        /** invalidates the part of the data window which is covered by the given rows
             @param i_firstRow
                 the index of the first row to include in the invalidation
             @param i_lastRow
@@ -234,6 +234,14 @@ namespace svt { namespace table
                 should happen down to the bottom of the data window.
         */
         void    invalidateRowRange( RowPos const i_firstRow, RowPos const i_lastRow );
+
+        /** invalidates the part of the data window which is covered by the given row
+        */
+        void    invalidateRow( RowPos const i_row ) { invalidateRowRange( i_row, i_row ); }
+
+        /** invalidates all selected rows
+        */
+        void    invalidateSelectedRows();
 
         void    checkCursorPosition();
 

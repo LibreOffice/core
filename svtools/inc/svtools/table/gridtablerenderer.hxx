@@ -80,15 +80,15 @@ namespace svt { namespace table
         virtual void    PaintColumnHeader( ColPos _nCol, bool _bActive, bool _bSelected,
                             OutputDevice& _rDevice, const Rectangle& _rArea,
                             const StyleSettings& _rStyle );
-        virtual void    PrepareRow( RowPos _nRow, bool _bActive, bool _bSelected,
+        virtual void    PrepareRow( RowPos _nRow, bool i_hasControlFocus, bool _bSelected,
                             OutputDevice& _rDevice, const Rectangle& _rRowArea,
                             const StyleSettings& _rStyle );
         virtual void    PaintRowHeader(
-                            bool _bActive, bool _bSelected,
+                            bool i_hasControlFocus, bool _bSelected,
                             OutputDevice& _rDevice, const Rectangle& _rArea,
                             const StyleSettings& _rStyle );
         virtual void    PaintCell( ColPos const i_col,
-                            bool _bActive, bool _bSelected,
+                            bool i_hasControlFocus, bool _bSelected,
                             OutputDevice& _rDevice, const Rectangle& _rArea,
                             const StyleSettings& _rStyle );
         virtual void    ShowCellCursor( Window& _rView, const Rectangle& _rCursorRect);
