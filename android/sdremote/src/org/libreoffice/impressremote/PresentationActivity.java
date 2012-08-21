@@ -28,7 +28,6 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
-import android.widget.FrameLayout.LayoutParams;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
@@ -258,8 +257,6 @@ public class PresentationActivity extends SherlockFragmentActivity {
             mClockBar_countdownButton.setOnClickListener(this);
 
             // Stopwatch bar
-            aInflater.inflate(R.layout.presentation_clockbar_stopwatchbar,
-                            mOuterLayout);
             mStopwatchBar = mOuterLayout
                             .findViewById(R.id.clockbar_stopwatchbar);
 
@@ -271,8 +268,6 @@ public class PresentationActivity extends SherlockFragmentActivity {
             mStopwatchButtonReset.setOnClickListener(this);
 
             // Countdown bar
-            aInflater.inflate(R.layout.presentation_clockbar_countdownbar,
-                            mOuterLayout);
             mCountdownBar = mOuterLayout
                             .findViewById(R.id.clockbar_countdownbar);
 
@@ -294,22 +289,22 @@ public class PresentationActivity extends SherlockFragmentActivity {
             }
             mClockBar_clockButton.setChecked(!mTimerOn);
 
-            FrameLayout.LayoutParams aParams = (LayoutParams) mCountdownBar
-                            .getLayoutParams();
-            aParams.topMargin = mClockBar.getBottom();
-            //            aParams.height = mClockBar.getHeight();
-            //            aParams.bottomMargin = aParams.topMargin + aParams.height;
-            //            aParams.leftMargin = 100;
-            mCountdownBar.setLayoutParams(aParams);
-            mCountdownBar.setPadding(0, mClockBar.getBottom(), 0, 0);
-            mStopwatchBar.setPadding(0, mClockBar.getBottom(), 0, 0);
-            //            mCountdownBar.requestLayout();
-            //            mOuterLayout.requestLayout();
-            //            mOuterLayout.invalidate();
-            //            aParams = (LayoutParams) mStopwatchBar.getLayoutParams();
-            //            aParams.topMargin = mClockBar.getHeight();
-            //            mOuterLayout.invalidate();
-            //            mStopwatchBar.setY(mClockBar.getHeight());
+            //            FrameLayout.LayoutParams aParams = (LayoutParams) mCountdownBar
+            //                            .getLayoutParams();
+            //            aParams.topMargin = mClockBar.getBottom();
+            //            //            aParams.height = mClockBar.getHeight();
+            //            //            aParams.bottomMargin = aParams.topMargin + aParams.height;
+            //            //            aParams.leftMargin = 100;
+            //            mCountdownBar.setLayoutParams(aParams);
+            //            mCountdownBar.setPadding(0, mClockBar.getBottom(), 0, 0);
+            //            mStopwatchBar.setPadding(0, mClockBar.getBottom(), 0, 0);
+            //            //            mCountdownBar.requestLayout();
+            //            //            mOuterLayout.requestLayout();
+            //            //            mOuterLayout.invalidate();
+            //            //            aParams = (LayoutParams) mStopwatchBar.getLayoutParams();
+            //            //            aParams.topMargin = mClockBar.getHeight();
+            //            //            mOuterLayout.invalidate();
+            //            //            mStopwatchBar.setY(mClockBar.getHeight());
 
             boolean aIsCountdown = mCommunicationService.getSlideShow()
                             .getTimer().isCountdown();
@@ -317,7 +312,7 @@ public class PresentationActivity extends SherlockFragmentActivity {
             boolean aStopwatchMode = mTimerOn && !aIsCountdown;
             mClockBar_stopwatchButton.setChecked(aStopwatchMode);
             mStopwatchBar.setVisibility(aStopwatchMode ? View.VISIBLE
-                            : View.INVISIBLE);
+                            : View.GONE);
             mStopwatchBar.bringToFront();
             if (aStopwatchMode) {
                 Timer aTimer = mCommunicationService.getSlideShow().getTimer();
@@ -334,7 +329,7 @@ public class PresentationActivity extends SherlockFragmentActivity {
             boolean aCountdownMode = mTimerOn && aIsCountdown;
             mClockBar_countdownButton.setChecked(mTimerOn && aIsCountdown);
             mCountdownBar.setVisibility(mTimerOn && aIsCountdown ? View.VISIBLE
-                            : View.INVISIBLE);
+                            : View.GONE);
             mCountdownBar.bringToFront();
             if (aCountdownMode) {
                 Timer aTimer = mCommunicationService.getSlideShow().getTimer();
