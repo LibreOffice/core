@@ -46,7 +46,7 @@ endef
 
 define gb_Deliver_register_deliverable
 gb_Deliver_DELIVERABLES_$(notdir $(3)) += $(2):$(1)
-gb_Deliver_DELIVERABLES_INDEX := $(sort $(gb_Deliver_DELIVERABLES_INDEX) $(notdir $(3)))
+gb_Deliver_DELIVERABLES_INDEX := $$(sort $$(gb_Deliver_DELIVERABLES_INDEX) $(notdir $(3)))
 $(if $(gb_LOWRESTIME),.LOW_RESOLUTION_TIME : $(1),)
 
 endef
