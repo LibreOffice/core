@@ -48,7 +48,6 @@ import com.sun.star.uno.UnoRuntime;
 public class CheckCharacterStyle {
 
     private static final UnoApp app = new UnoApp();
-    private static final SDUtil SDUtil = new SDUtil();
     private XComponent m_xSDComponent = null;
     private XText xShapeText = null;
     private String filePath = null;

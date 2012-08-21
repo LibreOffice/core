@@ -25,6 +25,7 @@ package testlib.uno;
 
 import com.sun.star.uno.Exception;
 import com.sun.star.uno.UnoRuntime;
+import com.sun.star.lang.WrappedTargetException;
 import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiServiceFactory;
 
@@ -33,6 +34,7 @@ import com.sun.star.awt.Size;
 
 import com.sun.star.beans.XPropertySet;
 
+import com.sun.star.container.NoSuchElementException;
 import com.sun.star.container.XEnumeration;
 import com.sun.star.container.XEnumerationAccess;
 
@@ -118,6 +120,32 @@ public class ShapeUtil {
                 XPropertySet.class, xTextRange);
         return xPropSet;
     }
+
+    /**
+     * get a paragraph in a shape. the return value is the PropertySet of the text
+     * range that specified by the index
+     */
+    public static XPropertySet getPortion(XShape xShape, int index) throws NoSuchElementException, WrappedTargetException {
+        XEnumerationAccess m_paraAccess = (XEnumerationAccess)UnoRuntime.queryInterface(XEnumerationAccess.class, xShape);
+        XEnumeration xParaEnum = m_paraAccess.createEnumeration();
+        XPropertySet xPropSet = null;
+        int i=0;
+        while(xParaEnum.hasMoreElements())
+        {
+            if(i == index)
+            {
+                Object aPortionObj = xParaEnum.nextElement();
+                XTextRange xTextRange = (XTextRange)UnoRuntime.queryInterface(XTextRange.class, aPortionObj);
+//              System.out.println(xTextRange.getText().getString());
+                xPropSet = (XPropertySet) UnoRuntime.queryInterface(
+                        XPropertySet.class, xTextRange);
+                break;
+            }
+            else i++;
+        }
+        return xPropSet;
+    }
+
 
     /**
      * try to get text of a shape

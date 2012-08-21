@@ -57,7 +57,7 @@ public class SCUtil {
 
     private static HashMap filterName = new HashMap();
 
-    public SCUtil() {
+    private SCUtil() {
 
     }
 
