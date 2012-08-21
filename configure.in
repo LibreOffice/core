@@ -4396,9 +4396,10 @@ AC_SUBST(WINDRES)
 
 dnl ===================================================================
 dnl pkg-config checks on Mac OS X
+dnl (but --enable-mozilla /does/ require a carefully crafted pkg-config)
 dnl ===================================================================
 
-if test $_os = Darwin; then
+if test $_os = Darwin -a "$enable_mozilla" = no; then
     AC_MSG_CHECKING([for bogus pkg-config])
     if test -n "$PKG_CONFIG"; then
         if test "$PKG_CONFIG" = /usr/bin/pkg-config && ls -l /usr/bin/pkg-config | $GREP -q Mono.framework; then
