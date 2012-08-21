@@ -731,8 +731,11 @@ public:
     */
     inline Type getFileType() const
     {
-        assert(isValid(osl_FileStatus_Mask_Type));
-        return static_cast< Type >(_aStatus.eType);
+        SAL_INFO_IF(
+            !isValid(osl_FileStatus_Mask_Type), "sal",
+            "no FileStatus Type determined");
+        return isValid(osl_FileStatus_Mask_Type)
+            ? static_cast< Type >(_aStatus.eType) : Unknown;
     }
 
     /** Is it a directory?
@@ -785,93 +788,117 @@ public:
 
     inline sal_uInt64 getAttributes() const
     {
-        assert(isValid(osl_FileStatus_Mask_Attributes));
+        SAL_INFO_IF(
+            !isValid(osl_FileStatus_Mask_Attributes), "sal",
+            "no FileStatus Attributes determined");
         return _aStatus.uAttributes;
     }
 
     /** Get the creation time of this file.
 
         @return
-        The creation time.
+        The creation time if this information is valid, an uninitialized
+        TimeValue otherwise.
     */
 
     inline TimeValue getCreationTime() const
     {
-        assert(isValid(osl_FileStatus_Mask_CreationTime));
+        SAL_INFO_IF(
+            !isValid(osl_FileStatus_Mask_CreationTime), "sal",
+            "no FileStatus CreationTime determined");
         return _aStatus.aCreationTime;
     }
 
     /** Get the file access time.
 
         @return
-        The last access time.
+        The last access time if this information is valid, an uninitialized
+        TimeValue otherwise.
     */
 
     inline TimeValue getAccessTime() const
     {
-        assert(isValid(osl_FileStatus_Mask_AccessTime));
+        SAL_INFO_IF(
+            !isValid(osl_FileStatus_Mask_AccessTime), "sal",
+            "no FileStatus AccessTime determined");
         return _aStatus.aAccessTime;
     }
 
     /** Get the file modification time.
 
         @return
-        The last modified time.
+        The last modified time if this information is valid, an uninitialized
+        TimeValue otherwise.
     */
 
     inline TimeValue getModifyTime() const
     {
-        assert(isValid(osl_FileStatus_Mask_ModifyTime));
+        SAL_INFO_IF(
+            !isValid(osl_FileStatus_Mask_ModifyTime), "sal",
+            "no FileStatus ModifyTime determined");
         return _aStatus.aModifyTime;
     }
 
     /** Get the size of the file.
 
         @return
-        The actual file size.
+        The actual file size if this information is valid, 0 otherwise.
     */
 
     inline sal_uInt64 getFileSize() const
     {
-        assert(isValid(osl_FileStatus_Mask_FileSize));
+        SAL_INFO_IF(
+            !isValid(osl_FileStatus_Mask_FileSize), "sal",
+            "no FileStatus FileSize determined");
         return _aStatus.uFileSize;
     }
 
     /** Get the file name.
 
         @return
-        The file name.
+        The file name if this information is valid, an empty string otherwise.
     */
 
     inline ::rtl::OUString getFileName() const
     {
-        assert(isValid(osl_FileStatus_Mask_FileName));
-        return rtl::OUString(_aStatus.ustrFileName);
+        SAL_INFO_IF(
+            !isValid(osl_FileStatus_Mask_FileName), "sal",
+            "no FileStatus FileName determined");
+        return isValid(osl_FileStatus_Mask_FileName)
+            ? rtl::OUString(_aStatus.ustrFileName) : rtl::OUString();
     }
 
 
     /** Get the URL of the file.
 
         @return
-        The full qualified URL of the file.
+        The full qualified URL of the file if this information is valid, an
+        empty string otherwise.
     */
 
     inline ::rtl::OUString getFileURL() const
     {
-        assert(isValid(osl_FileStatus_Mask_FileURL));
-        return rtl::OUString(_aStatus.ustrFileURL);
+        SAL_INFO_IF(
+            !isValid(osl_FileStatus_Mask_FileURL), "sal",
+            "no FileStatus FileURL determined");
+        return isValid(osl_FileStatus_Mask_FileURL)
+            ? rtl::OUString(_aStatus.ustrFileURL) : rtl::OUString();
     }
 
     /** Get the link target URL.
 
         @return
-        The link target URL.
+        The link target URL if this information is valid, an empty string
+        otherwise.
     */
 
     inline ::rtl::OUString getLinkTargetURL() const
     {
-        assert(isValid(osl_FileStatus_Mask_LinkTargetURL));
-        return rtl::OUString(_aStatus.ustrLinkTargetURL);
+        SAL_INFO_IF(
+            !isValid(osl_FileStatus_Mask_LinkTargetURL), "sal",
+            "no FileStatus LinkTargetURL determined");
+        return isValid(osl_FileStatus_Mask_LinkTargetURL)
+            ? rtl::OUString(_aStatus.ustrLinkTargetURL) : rtl::OUString();
     }
 
     friend class DirectoryItem;
