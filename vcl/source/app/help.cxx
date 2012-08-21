@@ -250,6 +250,15 @@ sal_Bool Help::ShowQuickHelp( Window* pParent,
 
 // -----------------------------------------------------------------------
 
+void Help::HideBalloonAndQuickHelp()
+{
+    HelpTextWindow const * pHelpWin = ImplGetSVData()->maHelpData.mpHelpWin;
+    bool const bIsVisible = ( pHelpWin != NULL ) && pHelpWin->IsVisible();
+    ImplDestroyHelpWindow( bIsVisible );
+}
+
+// -----------------------------------------------------------------------
+
 sal_uIntPtr Help::ShowTip( Window* pParent, const Rectangle& rScreenRect,
                      const XubString& rText, sal_uInt16 nStyle )
 {
