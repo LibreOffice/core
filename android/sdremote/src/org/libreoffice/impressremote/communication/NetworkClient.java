@@ -50,7 +50,7 @@ public class NetworkClient extends Client {
             mPin = aPin;
             LocalBroadcastManager.getInstance(mContext).sendBroadcast(aIntent);
             // Send out
-            String aName = "Bob"; // TODO: get the proper name
+            String aName = CommunicationService.getDeviceName(); // TODO: get the proper name
             sendCommand("LO_SERVER_CLIENT_PAIR\n" + aName + "\n" + aPin
                             + "\n\n");
 

@@ -11,6 +11,7 @@ package org.libreoffice.impressremote.communication;
 import java.util.ArrayList;
 
 import android.app.Service;
+import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
 import android.os.Binder;
 import android.os.IBinder;
@@ -20,6 +21,21 @@ public class CommunicationService extends Service implements Runnable {
     public enum State {
         DISCONNECTED, SEARCHING, CONNECTING, CONNECTED
     };
+
+    /**
+     * Get the publicly visible device name -- generally the bluetooth name,
+     * however for bluetoothless devices the device model name is used.
+     *
+     * @return The device name.
+     */
+    public static String getDeviceName() {
+        BluetoothAdapter aAdapter = BluetoothAdapter.getDefaultAdapter();
+        if (aAdapter != null) {
+            return aAdapter.getName();
+        } else {
+            return android.os.Build.MODEL;
+        }
+    }
 
     /**
      * Used to protect all writes to mState, mStateDesired, and mServerDesired.
@@ -34,11 +50,6 @@ public class CommunicationService extends Service implements Runnable {
 
     public String getPairingPin() {
         return Client.getPin();
-    }
-
-    public String getDeviceName() {
-        return "Bob";
-        // FIXME: get the device name somehow.
     }
 
     private State mStateDesired = State.DISCONNECTED;
