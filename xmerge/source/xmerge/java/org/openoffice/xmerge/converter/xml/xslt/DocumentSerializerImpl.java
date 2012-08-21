@@ -100,89 +100,113 @@ public final class DocumentSerializerImpl
      *  @throws  IOException       If any I/O error occurs.
      */
     public ConvertData serialize() throws ConvertException, IOException {
-    String docName = sxwDoc.getName();
-    org.w3c.dom.Document domDoc = sxwDoc.getContentDOM();
-    org.w3c.dom.Document metaDoc = sxwDoc.getMetaDOM();
-    org.w3c.dom.Document styleDoc = sxwDoc.getStyleDOM();
-    ByteArrayOutputStream baos= new ByteArrayOutputStream();
-           ConvertData cd = new ConvertData();
-    Node offnode = domDoc.getDocumentElement();
-    if (!(offnode.getNodeName()).equals("office:document")){
-        try{
-        DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder builder= builderFactory.newDocumentBuilder();
-        DOMImplementation domImpl = builder.getDOMImplementation();
-        DocumentType docType =domImpl.createDocumentType("office:document","-//OpenOffice.org//DTD OfficeDocument 1.0//EN",null);
-        org.w3c.dom.Document newDoc = domImpl.createDocument("http://openoffice.org/2000/office","office:document",docType);
+        String docName = sxwDoc.getName();
+        org.w3c.dom.Document domDoc = sxwDoc.getContentDOM();
+        org.w3c.dom.Document metaDoc = sxwDoc.getMetaDOM();
+        org.w3c.dom.Document styleDoc = sxwDoc.getStyleDOM();
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ConvertData cd = new ConvertData();
+        Node offnode = domDoc.getDocumentElement();
+        if (!(offnode.getNodeName()).equals("office:document")) {
+            try {
+                DocumentBuilderFactory builderFactory = DocumentBuilderFactory
+                        .newInstance();
+                DocumentBuilder builder = builderFactory.newDocumentBuilder();
+                DOMImplementation domImpl = builder.getDOMImplementation();
+                DocumentType docType = domImpl.createDocumentType(
+                        "office:document",
+                        "-//OpenOffice.org//DTD OfficeDocument 1.0//EN", null);
+                org.w3c.dom.Document newDoc = domImpl.createDocument(
+                        "http://openoffice.org/2000/office", "office:document",
+                        docType);
 
+                Element rootElement = newDoc.getDocumentElement();
+                rootElement.setAttribute("xmlns:office",
+                        "http://openoffice.org/2000/office");
+                rootElement.setAttribute("xmlns:style",
+                        "http://openoffice.org/2000/style");
+                rootElement.setAttribute("xmlns:text",
+                        "http://openoffice.org/2000/text");
+                rootElement.setAttribute("xmlns:table",
+                        "http://openoffice.org/2000/table");
 
-        Element rootElement=newDoc.getDocumentElement();
-        rootElement.setAttribute("xmlns:office","http://openoffice.org/2000/office");
-        rootElement.setAttribute("xmlns:style","http://openoffice.org/2000/style" );
-        rootElement.setAttribute("xmlns:text","http://openoffice.org/2000/text");
-         rootElement.setAttribute("xmlns:table","http://openoffice.org/2000/table");
+                rootElement.setAttribute("xmlns:draw",
+                        "http://openoffice.org/2000/drawing");
+                rootElement.setAttribute("xmlns:fo",
+                        "http://www.w3.org/1999/XSL/Format");
+                rootElement.setAttribute("xmlns:xlink",
+                        "http://www.w3.org/1999/xlink");
+                rootElement.setAttribute("xmlns:dc",
+                        "http://purl.org/dc/elements/1.1/");
+                rootElement.setAttribute("xmlns:meta",
+                        "http://openoffice.org/2000/meta");
+                rootElement.setAttribute("xmlns:number",
+                        "http://openoffice.org/2000/datastyle");
+                rootElement.setAttribute("xmlns:svg",
+                        "http://www.w3.org/2000/svg");
+                rootElement.setAttribute("xmlns:chart",
+                        "http://openoffice.org/2000/chart");
+                rootElement.setAttribute("xmlns:dr3d",
+                        "http://openoffice.org/2000/dr3d");
+                rootElement.setAttribute("xmlns:math",
+                        "http://www.w3.org/1998/Math/MathML");
+                rootElement.setAttribute("xmlns:form",
+                        "http://openoffice.org/2000/form");
+                rootElement.setAttribute("xmlns:script",
+                        "http://openoffice.org/2000/script");
+                rootElement.setAttribute("xmlns:config",
+                        "http://openoffice.org/2001/config");
+                rootElement.setAttribute("office:class", "text");
+                rootElement.setAttribute("office:version", "1.0");
 
-        rootElement.setAttribute("xmlns:draw","http://openoffice.org/2000/drawing");
-        rootElement.setAttribute("xmlns:fo","http://www.w3.org/1999/XSL/Format" );
-        rootElement.setAttribute("xmlns:xlink","http://www.w3.org/1999/xlink" );
-        rootElement.setAttribute("xmlns:dc","http://purl.org/dc/elements/1.1/" );
-        rootElement.setAttribute("xmlns:meta","http://openoffice.org/2000/meta" );
-        rootElement.setAttribute("xmlns:number","http://openoffice.org/2000/datastyle" );
-        rootElement.setAttribute("xmlns:svg","http://www.w3.org/2000/svg" );
-        rootElement.setAttribute("xmlns:chart","http://openoffice.org/2000/chart" );
-        rootElement.setAttribute("xmlns:dr3d","http://openoffice.org/2000/dr3d" );
-        rootElement.setAttribute("xmlns:math","http://www.w3.org/1998/Math/MathML" );
-        rootElement.setAttribute("xmlns:form","http://openoffice.org/2000/form" );
-        rootElement.setAttribute("xmlns:script","http://openoffice.org/2000/script" );
-        rootElement.setAttribute("xmlns:config","http://openoffice.org/2001/config" );
-        rootElement.setAttribute("office:class","text" );
-        rootElement.setAttribute("office:version","1.0");
+                NodeList nodeList;
+                Node tmpNode;
+                Node rootNode = rootElement;
+                if (metaDoc != null) {
+                    nodeList = metaDoc.getElementsByTagName(TAG_OFFICE_META);
+                    if (nodeList.getLength() > 0) {
+                        tmpNode = newDoc.importNode(nodeList.item(0), true);
+                        rootNode.appendChild(tmpNode);
+                    }
+                }
+                if (styleDoc != null) {
+                    nodeList = styleDoc.getElementsByTagName(TAG_OFFICE_STYLES);
+                    if (nodeList.getLength() > 0) {
+                        tmpNode = newDoc.importNode(nodeList.item(0), true);
+                        rootNode.appendChild(tmpNode);
+                    }
+                }
+                nodeList = domDoc
+                        .getElementsByTagName(TAG_OFFICE_AUTOMATIC_STYLES);
+                if (nodeList.getLength() > 0) {
+                    tmpNode = newDoc.importNode(nodeList.item(0), true);
+                    rootNode.appendChild(tmpNode);
+                }
+                nodeList = domDoc.getElementsByTagName(TAG_OFFICE_BODY);
+                if (nodeList.getLength() > 0) {
+                    tmpNode = newDoc.importNode(nodeList.item(0), true);
+                    rootNode.appendChild(tmpNode);
+                }
+                domDoc = newDoc;
+            } catch (Exception e) {
+                System.out
+                        .println("\nAn Exception occurred with Xslt Serializer"
+                                + e);
+            }
 
-
-        NodeList nodeList;
-        Node tmpNode;
-        Node rootNode = rootElement;
-        if (metaDoc !=null){
-        nodeList= metaDoc.getElementsByTagName(TAG_OFFICE_META);
-        if (nodeList.getLength()>0){
-            tmpNode = newDoc.importNode(nodeList.item(0),true);
-            rootNode.appendChild(tmpNode);
         }
-        } if (styleDoc !=null){
-        nodeList= styleDoc.getElementsByTagName(TAG_OFFICE_STYLES);
-        if (nodeList.getLength()>0){
-            tmpNode = newDoc.importNode(nodeList.item(0),true);
-            rootNode.appendChild(tmpNode);
-        }
-        }if (domDoc !=null){
-        nodeList= domDoc.getElementsByTagName(TAG_OFFICE_AUTOMATIC_STYLES);
-        if (nodeList.getLength()>0){
-            tmpNode = newDoc.importNode(nodeList.item(0),true);
-            rootNode.appendChild(tmpNode);
-        }
-        nodeList= domDoc.getElementsByTagName(TAG_OFFICE_BODY);
-        if (nodeList.getLength()>0){
-            tmpNode = newDoc.importNode(nodeList.item(0),true);
-            rootNode.appendChild(tmpNode);
-        }
-        }
-        domDoc=newDoc;
-        }catch(Exception e){
-        System.out.println("\nAn Exception occurred with Xslt Serializer"+e);
+
+        try {
+            baos = transform(domDoc);
+        } catch (Exception e) {
+            System.out.println("\n Error with Xslt\n");
         }
 
-    }
-
-    try{
-         baos=transform(domDoc);
-    }
-    catch (Exception e){
-        System.out.println("\n Error with Xslt\n");
-    }
-
-        DOMDocument resultDomDoc=(DOMDocument)pluginFactory.createDeviceDocument(docName,new ByteArrayInputStream(baos.toByteArray()));
-    cd.addDocument (resultDomDoc);
-    return cd;
+        DOMDocument resultDomDoc = (DOMDocument) pluginFactory
+                .createDeviceDocument(docName,
+                        new ByteArrayInputStream(baos.toByteArray()));
+        cd.addDocument(resultDomDoc);
+        return cd;
     }
 
     public Source resolve(String href,String base)

@@ -127,9 +127,7 @@ class WseHeader extends Wse {
             e.printStackTrace();
         }
 
-        if (bs != null) {
-            return bs.toByteArray();
-        } else return null;
+        return bs.toByteArray();
     }
 }
 
