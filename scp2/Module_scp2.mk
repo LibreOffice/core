@@ -50,8 +50,6 @@ $(eval $(call gb_Module_add_targets,scp2,\
 	InstallScript_sdkoo \
 	InstallScript_setup_osl \
 	InstallScript_test \
-	Package_inc \
-	Package_langmacros \
 	$(if $(filter WNT,$(GUI)),\
 		InstallModule_activex \
 		InstallModule_quickstart \

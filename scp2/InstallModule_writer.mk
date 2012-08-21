@@ -27,11 +27,6 @@
 
 $(eval $(call gb_InstallModule_InstallModule,scp2/writer))
 
-$(eval $(call gb_InstallModule_use_packages,scp2/writer,\
-	scp2_inc \
-	scp2_langmacros \
-))
-
 $(eval $(call gb_InstallModule_add_templates,scp2/writer,\
     scp2/source/templates/module_langpack_writer \
 ))

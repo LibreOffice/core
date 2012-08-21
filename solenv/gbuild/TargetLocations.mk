@@ -102,7 +102,6 @@ gb_InstallModule_get_target = $(WORKDIR)/InstallModule/$(1).done
 gb_InstallModuleTarget_get_external_target = $(WORKDIR)/InstallModuleTarget/$(1).external
 gb_InstallModuleTarget_get_filelist = $(WORKDIR)/InstallModuleTarget/$(1).filelist
 gb_InstallModuleTarget_get_target = $(WORKDIR)/InstallModuleTarget/$(1).filelist
-gb_InstallModuleTarget_get_workdir = $(patsubst %/,%,$(dir $(call gb_ScpTarget_get_target,%)))
 gb_InstallScriptTarget_get_target = $(WORKDIR)/InstallScriptTarget/$(1)$(gb_InstallScript_EXT)
 gb_Jar_get_target = $(WORKDIR)/Jar/$(1).jar
 gb_Jar_get_classsetname = Jar/$(1)

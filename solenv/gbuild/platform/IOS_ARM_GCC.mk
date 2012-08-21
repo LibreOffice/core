@@ -304,11 +304,6 @@ $(call gb_InstallModuleTarget_add_defs,$(1),\
 	$(if $(filter TRUE,$(SOLAR_JAVA)),-DSOLAR_JAVA) \
 )
 
-$(call gb_InstallModuleTarget_set_include,$(1),\
-	$(SOLARINC) \
-	$(SCP_INCLUDE) \
-)
-
 endef
 
 # ScpConvertTarget class
