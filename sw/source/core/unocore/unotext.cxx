@@ -1755,7 +1755,9 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
         if (bParaAfterInserted)
         {
             xFrameTextCursor->gotoEnd(sal_False);
-            if (!m_pImpl->m_pDoc->DelFullPara(*pFrameCursor->GetPaM()))
+            if (!bParaBeforeInserted)
+                m_pImpl->m_pDoc->DelFullPara(*pFrameCursor->GetPaM());
+            else
             {
                 // In case the frame has a table only, the cursor points to the end of the first cell of the table.
                 SwPaM aPaM(*pFrameCursor->GetPaM()->GetNode()->FindSttNodeByType(SwFlyStartNode)->EndOfSectionNode());
