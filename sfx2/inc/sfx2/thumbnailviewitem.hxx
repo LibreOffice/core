@@ -104,7 +104,8 @@ public:
     const Rectangle& getDrawArea () const { return maDrawArea; }
 
     virtual void calculateItemsPosition (const long nThumbnailHeight, const long nDisplayHeight,
-                                         const long nPadding, sal_uInt32 nMaxTextLenght);
+                                         const long nPadding, sal_uInt32 nMaxTextLenght,
+                                         const ThumbnailItemAttributes *pAttrs);
 
     const Point& getTextPos () const { return maTextPos; }
 

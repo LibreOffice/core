@@ -733,7 +733,7 @@ IMPL_LINK(TemplateLocalView, ChangeNameHdl, TemplateView*, pView)
         {
             mItemList[i]->maTitle = pView->getName();
             mItemList[i]->calculateItemsPosition(mnThumbnailHeight,mnDisplayHeight,
-                                                 mnItemPadding,mpItemAttrs->nMaxTextLenght);
+                                                 mnItemPadding,mpItemAttrs->nMaxTextLenght,mpItemAttrs);
             Invalidate();
             break;
         }

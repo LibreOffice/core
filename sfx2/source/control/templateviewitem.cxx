@@ -37,15 +37,19 @@ TemplateViewItem::~TemplateViewItem ()
 }
 
 void TemplateViewItem::calculateItemsPosition(const long nThumbnailHeight, const long nDisplayHeight,
-                                              const long nPadding, sal_uInt32 nMaxTextLenght)
+                                              const long nPadding, sal_uInt32 nMaxTextLenght,
+                                              const ThumbnailItemAttributes *pAttrs)
 {
-    ThumbnailViewItem::calculateItemsPosition(nThumbnailHeight,nDisplayHeight,nPadding,nMaxTextLenght);
+    ThumbnailViewItem::calculateItemsPosition(nThumbnailHeight,nDisplayHeight,nPadding,nMaxTextLenght, pAttrs);
 
     if (!maSubTitle.isEmpty())
     {
         Size aRectSize = maDrawArea.GetSize();
 
         drawinglayer::primitive2d::TextLayouterDevice aTextDev;
+        aTextDev.setFontAttribute(pAttrs->aFontAttr,
+                                  pAttrs->aFontSize.getX(), pAttrs->aFontSize.getY(),
+                                  com::sun::star::lang::Locale() );
 
         long nSpace = (nDisplayHeight + nPadding - 2*aTextDev.getTextHeight()) / 3;
 

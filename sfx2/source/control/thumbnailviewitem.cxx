@@ -118,9 +118,13 @@ void ThumbnailViewItem::setDrawArea (const Rectangle &area)
 }
 
 void ThumbnailViewItem::calculateItemsPosition (const long nThumbnailHeight, const long nDisplayHeight,
-                                                const long nPadding, sal_uInt32 nMaxTextLenght)
+                                                const long nPadding, sal_uInt32 nMaxTextLenght,
+                                                const ThumbnailItemAttributes *pAttrs)
 {
     drawinglayer::primitive2d::TextLayouterDevice aTextDev;
+    aTextDev.setFontAttribute(pAttrs->aFontAttr,
+                              pAttrs->aFontSize.getX(), pAttrs->aFontSize.getY(),
+                              com::sun::star::lang::Locale() );
 
     Size aRectSize = maDrawArea.GetSize();
     Size aImageSize = maPreview1.GetSizePixel();
