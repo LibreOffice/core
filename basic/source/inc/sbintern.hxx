@@ -95,12 +95,12 @@ struct SbiGlobals
     SbError         nCode;
     xub_StrLen      nLine;
     xub_StrLen      nCol1,nCol2;    // from... to...
-    sal_Bool            bCompiler;      // flag for compiler error
-    sal_Bool            bGlobalInitErr;
-    sal_Bool            bRunInit;       // sal_True, if RunInit active from the Basic
+    bool            bCompiler;      // flag for compiler error
+    bool            bGlobalInitErr;
+    bool            bRunInit;       // true, if RunInit active from the Basic
     String          aErrMsg;        // buffer for GetErrorText()
     ::utl::TransliterationWrapper* pTransliterationWrapper;    // For StrComp
-    sal_Bool            bBlockCompilerError;
+    bool            bBlockCompilerError;
     BasicManager*   pAppBasMgr;
     StarBASIC*      pMSOMacroRuntimLib; // Lib containing MSO Macro Runtime API entry symbols
 

@@ -876,14 +876,14 @@ sal_Bool SfxScriptLibraryContainer::implLoadPasswordLibrary
             return sal_False;
 
         bLoadBinary = sal_True;
-        pScriptLib->mbLoadedBinary = sal_True;
+        pScriptLib->mbLoadedBinary = true;
     }
 
     sal_Bool bLoadSource = sal_False;
     if( !pScriptLib->mbLoadedSource && pLib->mbPasswordVerified && !bVerifyPasswordOnly )
     {
         bLoadSource = sal_True;
-        pScriptLib->mbLoadedSource = sal_True;
+        pScriptLib->mbLoadedSource = true;
     }
 
     Sequence< OUString > aElementNames = pLib->getElementNames();
@@ -1182,8 +1182,8 @@ SfxScriptLibrary::SfxScriptLibrary( ModifiableHelper& _rModifiable,
                                     const Reference< XMultiServiceFactory >& xMSF,
                                     const Reference< XSimpleFileAccess2 >& xSFI )
     : SfxLibrary( _rModifiable, getCppuType( (const OUString *)0 ), xMSF, xSFI )
-    , mbLoadedSource( sal_False )
-    , mbLoadedBinary( sal_False )
+    , mbLoadedSource( false )
+    , mbLoadedBinary( false )
 {
 }
 
@@ -1195,8 +1195,8 @@ SfxScriptLibrary::SfxScriptLibrary( ModifiableHelper& _rModifiable,
                                     sal_Bool ReadOnly )
     : SfxLibrary( _rModifiable, getCppuType( (const OUString *)0 ), xMSF, xSFI,
                         aLibInfoFileURL, aStorageURL, ReadOnly)
-    , mbLoadedSource( sal_False )
-    , mbLoadedBinary( sal_False )
+    , mbLoadedSource( false )
+    , mbLoadedBinary( false )
 {
 }
 

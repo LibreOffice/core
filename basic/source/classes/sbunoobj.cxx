@@ -2306,7 +2306,7 @@ void SbUnoObject::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
                 }
 
                 // call the method
-                GetSbData()->bBlockCompilerError = sal_True;  // #106433 Block compiler errors for API calls
+                GetSbData()->bBlockCompilerError = true;  // #106433 Block compiler errors for API calls
                 try
                 {
                     if( !bInvocation && mxUnoAccess.is() )
@@ -2350,7 +2350,7 @@ void SbUnoObject::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
                 {
                     implHandleAnyException( ::cppu::getCaughtException() );
                 }
-                GetSbData()->bBlockCompilerError = sal_False;  // #106433 Unblock compiler errors
+                GetSbData()->bBlockCompilerError = false;  // #106433 Unblock compiler errors
             }
         }
         else
@@ -2361,8 +2361,8 @@ void SbUnoObject::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
 
 SbUnoObject::SbUnoObject( const rtl::OUString& aName_, const Any& aUnoObj_ )
     : SbxObject( aName_ )
-    , bNeedIntrospection( sal_True )
-    , bNativeCOMObject( sal_False )
+    , bNeedIntrospection( true )
+    , bNativeCOMObject( false )
 {
     static Reference< XIntrospection > xIntrospection;
 
@@ -2396,7 +2396,7 @@ SbUnoObject::SbUnoObject( const rtl::OUString& aName_, const Any& aUnoObj_ )
         // The remainder refers only to the introspection
         if( !xTypeProvider.is() )
         {
-            bNeedIntrospection = sal_False;
+            bNeedIntrospection = false;
             return;
         }
 
@@ -2404,7 +2404,7 @@ SbUnoObject::SbUnoObject( const rtl::OUString& aName_, const Any& aUnoObj_ )
         // hiding of equally named COM symbols, e.g. XInvocation::getValue
         Reference< oleautomation::XAutomationObject > xAutomationObject( aUnoObj_, UNO_QUERY );
         if( xAutomationObject.is() )
-            bNativeCOMObject = sal_True;
+            bNativeCOMObject = true;
     }
 
     maTmpUnoObj = aUnoObj_;
@@ -2462,7 +2462,7 @@ void SbUnoObject::doIntrospection( void )
 
     if( !bNeedIntrospection )
         return;
-    bNeedIntrospection = sal_False;
+    bNeedIntrospection = false;
 
     if( !xIntrospection.is() )
     {

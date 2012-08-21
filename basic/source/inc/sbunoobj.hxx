@@ -106,8 +106,8 @@ class SbUnoObject: public SbxObject
     ::com::sun::star::uno::Reference< ::com::sun::star::script::XInvocation > mxInvocation;
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XExactName > mxExactName;
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XExactName > mxExactNameInvocation;
-    sal_Bool bNeedIntrospection;
-    sal_Bool bNativeCOMObject;
+    bool bNeedIntrospection;
+    bool bNativeCOMObject;
     ::com::sun::star::uno::Any maTmpUnoObj; // Only to save obj for doIntrospection!
     ::boost::shared_ptr< SbUnoStructRefObject > maStructInfo;
     // help method to establish the dbg_-properties

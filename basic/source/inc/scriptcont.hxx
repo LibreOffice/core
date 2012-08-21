@@ -142,8 +142,8 @@ class SfxScriptLibrary : public SfxLibrary, public SfxScriptLibrary_BASE
 
     typedef boost::unordered_map< ::rtl::OUString, ::com::sun::star::script::ModuleInfo, ::rtl::OUStringHash > ModuleInfoMap;
 
-    sal_Bool mbLoadedSource;
-    sal_Bool mbLoadedBinary;
+    bool mbLoadedSource;
+    bool mbLoadedBinary;
     ModuleInfoMap mModuleInfos;
 
     // Provide modify state including resources

@@ -194,14 +194,14 @@ void SbiStream::MapError()
     return user;
 }
 
-sal_Bool needSecurityRestrictions( void )
+bool needSecurityRestrictions( void )
 {
-    static sal_Bool bNeedInit = sal_True;
-    static sal_Bool bRetVal = sal_True;
+    static bool bNeedInit = true;
+    static bool bRetVal = true;
 
     if( bNeedInit )
     {
-        bNeedInit = sal_False;
+        bNeedInit = false;
 
         // Get system user to compare to portal user
         oslSecurity aSecurity = osl_getCurrentSecurity();
@@ -210,12 +210,12 @@ sal_Bool needSecurityRestrictions( void )
         if( !bRet )
         {
             // No valid security! -> Secure mode!
-            return sal_True;
+            return true;
         }
 
         Reference< XMultiServiceFactory > xSMgr = getProcessServiceFactory();
         if( !xSMgr.is() )
-            return sal_True;
+            return true;
         Reference< XBridgeFactory > xBridgeFac( xSMgr->createInstance
             ( ::rtl::OUString("com.sun.star.bridge.BridgeFactory" ) ), UNO_QUERY );
 
@@ -230,13 +230,13 @@ sal_Bool needSecurityRestrictions( void )
         if( nBridgeCount == 0 )
         {
             // No bridges -> local
-            bRetVal = sal_False;
+            bRetVal = false;
             return bRetVal;
         }
 
         // Iterate through all bridges to find (portal) user property
         const Reference< XBridge >* pBridges = aBridgeSeq.getConstArray();
-        bRetVal = sal_False;    // Now only sal_True if user different from portal user is found
+        bRetVal = false;    // Now only sal_True if user different from portal user is found
         sal_Int32 i;
         for( i = 0 ; i < nBridgeCount ; i++ )
         {
@@ -254,7 +254,7 @@ sal_Bool needSecurityRestrictions( void )
                 else
                 {
                     // Different user -> Secure mode!
-                    bRetVal = sal_True;
+                    bRetVal = true;
                     break;
                 }
             }
@@ -268,19 +268,19 @@ sal_Bool needSecurityRestrictions( void )
 // Returns sal_True if UNO is available, otherwise the old file
 // system implementation has to be used
 // #89378 New semantic: Don't just ask for UNO but for UCB
-sal_Bool hasUno( void )
+bool hasUno( void )
 {
-    static sal_Bool bNeedInit = sal_True;
-    static sal_Bool bRetVal = sal_True;
+    static bool bNeedInit = true;
+    static bool bRetVal = true;
 
     if( bNeedInit )
     {
-        bNeedInit = sal_False;
+        bNeedInit = false;
         Reference< XMultiServiceFactory > xSMgr = getProcessServiceFactory();
         if( !xSMgr.is() )
         {
             // No service manager at all
-            bRetVal = sal_False;
+            bRetVal = false;
         }
         else
         {
@@ -290,7 +290,7 @@ sal_Bool hasUno( void )
             if ( !( xManager.is() && xManager->queryContentProvider( ::rtl::OUString("file:///" ) ).is() ) )
             {
                 // No UCB
-                bRetVal = sal_False;
+                bRetVal = false;
             }
         }
     }

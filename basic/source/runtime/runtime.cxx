@@ -527,8 +527,8 @@ SbiRuntime::SbiRuntime( SbModule* pm, SbMethod* pe, sal_uInt32 nStart )
     pStmnt    = (const sal_uInt8* ) pImg->GetCode() + nStart;
     bRun      =
     bError    = true;
-    bInError  = sal_False;
-    bBlocked  = sal_False;
+    bInError  = false;
+    bBlocked  = false;
     nLine     = 0;
     nCol1     = 0;
     nCol2     = 0;
@@ -678,7 +678,7 @@ void SbiRuntime::SetParameters( SbxArray* pParams )
 
 // execute a P-Code
 
-sal_Bool SbiRuntime::Step()
+bool SbiRuntime::Step()
 {
     if( bRun )
     {
@@ -751,7 +751,7 @@ sal_Bool SbiRuntime::Step()
             // in the error handler? so std-error
             if ( !bInError )
             {
-                bInError = sal_True;
+                bInError = true;
 
                 if( !bError )           // On Error Resume Next
                     StepRESUME( 1 );
@@ -791,7 +791,7 @@ sal_Bool SbiRuntime::Step()
                     {
                         pRt->nError = err;
                         if( pRt != pRtErrHdl )
-                            pRt->bRun = sal_False;
+                            pRt->bRun = false;
                         else
                             break;
                         pRt = pRt->pNext;
@@ -924,7 +924,7 @@ SbxVariableRef SbiRuntime::PopVar()
     return xVar;
 }
 
-sal_Bool SbiRuntime::ClearExprStack()
+bool SbiRuntime::ClearExprStack()
 {
     // Attention: Clear() doesn't suffice as methods must be deleted
     while ( nExprLvl )
@@ -932,7 +932,7 @@ sal_Bool SbiRuntime::ClearExprStack()
         PopVar();
     }
     refExprStk->Clear();
-    return sal_False;
+    return false;
 }
 
 // Take variable from the expression-stack without removing it
@@ -1198,7 +1198,7 @@ void SbiRuntime::DllCall
       const String& aDLLName,
       SbxArray* pArgs,          // parameter (from index 1, can be NULL)
       SbxDataType eResType,     // return value
-      sal_Bool bCDecl )         // sal_True: according to C-conventions
+      bool bCDecl )         // true: according to C-conventions
 {
     // No DllCall for "virtual" portal users
     if( needSecurityRestrictions() )

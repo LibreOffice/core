@@ -46,7 +46,7 @@ SbxVariable* getVBAConstant( const String& rName );
 // 0x8000 - Argv is reserved
 
 SbxVariable* SbiRuntime::FindElement
-    ( SbxObject* pObj, sal_uInt32 nOp1, sal_uInt32 nOp2, SbError nNotFound, sal_Bool bLocal, sal_Bool bStatic )
+    ( SbxObject* pObj, sal_uInt32 nOp1, sal_uInt32 nOp2, SbError nNotFound, bool bLocal, bool bStatic )
 {
     bool bIsVBAInterOp = SbiRuntime::isVBAEnabled();
     if( bIsVBAInterOp )
@@ -604,11 +604,11 @@ SbxVariable* SbiRuntime::CheckArray( SbxVariable* pElem )
 
 void SbiRuntime::StepRTL( sal_uInt32 nOp1, sal_uInt32 nOp2 )
 {
-    PushVar( FindElement( rBasic.pRtl, nOp1, nOp2, SbERR_PROC_UNDEFINED, sal_False ) );
+    PushVar( FindElement( rBasic.pRtl, nOp1, nOp2, SbERR_PROC_UNDEFINED, false ) );
 }
 
 void
-SbiRuntime::StepFIND_Impl( SbxObject* pObj, sal_uInt32 nOp1, sal_uInt32 nOp2, SbError nNotFound, sal_Bool bLocal, sal_Bool bStatic )
+SbiRuntime::StepFIND_Impl( SbxObject* pObj, sal_uInt32 nOp1, sal_uInt32 nOp2, SbError nNotFound, bool bLocal, bool bStatic )
 {
     if( !refLocals )
         refLocals = new SbxArray;
@@ -618,7 +618,7 @@ SbiRuntime::StepFIND_Impl( SbxObject* pObj, sal_uInt32 nOp1, sal_uInt32 nOp2, Sb
 
 void SbiRuntime::StepFIND( sal_uInt32 nOp1, sal_uInt32 nOp2 )
 {
-    StepFIND_Impl( pMod, nOp1, nOp2, SbERR_PROC_UNDEFINED, sal_True );
+    StepFIND_Impl( pMod, nOp1, nOp2, SbERR_PROC_UNDEFINED, true );
 }
 
 // Search inside a class module (CM) to enable global search in time
@@ -629,7 +629,7 @@ void SbiRuntime::StepFIND_CM( sal_uInt32 nOp1, sal_uInt32 nOp2 )
     if( pClassModuleObject )
         pMod->SetFlag( SBX_GBLSEARCH );
 
-    StepFIND_Impl( pMod, nOp1, nOp2, SbERR_PROC_UNDEFINED, sal_True );
+    StepFIND_Impl( pMod, nOp1, nOp2, SbERR_PROC_UNDEFINED, true );
 
     if( pClassModuleObject )
         pMod->ResetFlag( SBX_GBLSEARCH );
@@ -637,7 +637,7 @@ void SbiRuntime::StepFIND_CM( sal_uInt32 nOp1, sal_uInt32 nOp2 )
 
 void SbiRuntime::StepFIND_STATIC( sal_uInt32 nOp1, sal_uInt32 nOp2 )
 {
-    StepFIND_Impl( pMod, nOp1, nOp2, SbERR_PROC_UNDEFINED, sal_True, sal_True );
+    StepFIND_Impl( pMod, nOp1, nOp2, SbERR_PROC_UNDEFINED, true, true );
 }
 
 // loading an object-element (+StringID+type)
@@ -661,7 +661,7 @@ void SbiRuntime::StepELEM( sal_uInt32 nOp1, sal_uInt32 nOp2 )
     if( pObj )
         SaveRef( (SbxVariable*)pObj );
 
-    PushVar( FindElement( pObj, nOp1, nOp2, SbERR_NO_METHOD, sal_False ) );
+    PushVar( FindElement( pObj, nOp1, nOp2, SbERR_NO_METHOD, false ) );
 }
 
 // loading a parameter (+offset+type)
@@ -767,7 +767,7 @@ void SbiRuntime::StepCALL( sal_uInt32 nOp1, sal_uInt32 nOp2 )
     SbxArray* pArgs = NULL;
     if( nOp1 & 0x8000 )
         pArgs = refArgv;
-    DllCall( aName, aLibName, pArgs, (SbxDataType) nOp2, sal_False );
+    DllCall( aName, aLibName, pArgs, (SbxDataType) nOp2, false );
     aLibName = String();
     if( nOp1 & 0x8000 )
         PopArgv();
@@ -781,7 +781,7 @@ void SbiRuntime::StepCALLC( sal_uInt32 nOp1, sal_uInt32 nOp2 )
     SbxArray* pArgs = NULL;
     if( nOp1 & 0x8000 )
         pArgs = refArgv;
-    DllCall( aName, aLibName, pArgs, (SbxDataType) nOp2, sal_True );
+    DllCall( aName, aLibName, pArgs, (SbxDataType) nOp2, true );
     aLibName = String();
     if( nOp1 & 0x8000 )
         PopArgv();

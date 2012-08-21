@@ -576,7 +576,7 @@ void SbiRuntime::StepSET_Impl( SbxVariableRef& refVal, SbxVariableRef& refVar, b
         }
 
         // Handle Dim As New
-        sal_Bool bDimAsNew = bVBAEnabled && refVar->IsSet( SBX_DIM_AS_NEW );
+        bool bDimAsNew = bVBAEnabled && refVar->IsSet( SBX_DIM_AS_NEW );
         SbxBaseRef xPrevVarObj;
         if( bDimAsNew )
             xPrevVarObj = refVar->GetObject();
@@ -1264,7 +1264,7 @@ void SbiRuntime::StepNOERROR()
 
 void SbiRuntime::StepLEAVE()
 {
-    bRun = sal_False;
+    bRun = false;
         // If VBA and we are leaving an ErrorHandler then clear the error ( it's been processed )
     if ( bInError && pError )
         SbxErrObject::getUnoErrObject()->Clear();

@@ -1416,7 +1416,7 @@ sal_uInt16 StarBASIC::GetCol2()     { return GetSbData()->nCol2; }
 // Specific to error handler
 SbError StarBASIC::GetErrorCode()       { return GetSbData()->nCode; }
 const String& StarBASIC::GetErrorText() { return GetSbData()->aErrMsg; }
-sal_Bool StarBASIC::IsCompilerError()       { return GetSbData()->bCompiler; }
+bool StarBASIC::IsCompilerError()       { return GetSbData()->bCompiler; }
 
 // From 1996-03-29:
 // The mapping between the old and the new error codes take place by searching
@@ -1597,7 +1597,7 @@ sal_Bool StarBASIC::CError
     }
 
     // set flag, so that GlobalRunInit notice the error
-    GetSbData()->bGlobalInitErr = sal_True;
+    GetSbData()->bGlobalInitErr = true;
 
     // tinker the error message
     MakeErrorText( code, rMsg );
@@ -1607,13 +1607,13 @@ sal_Bool StarBASIC::CError
         code = (sal_uIntPtr)*new StringErrorInfo( code, rMsg );
 
     SetErrorData( code, l, c1, c2 );
-    GetSbData()->bCompiler = sal_True;
+    GetSbData()->bCompiler = true;
     sal_Bool bRet;
     if( GetSbData()->aErrHdl.IsSet() )
         bRet = (sal_Bool) GetSbData()->aErrHdl.Call( this );
     else
         bRet = ErrorHdl();
-    GetSbData()->bCompiler = sal_False;     // only true for error handler
+    GetSbData()->bCompiler = false;     // only true for error handler
     return bRet;
 }
 

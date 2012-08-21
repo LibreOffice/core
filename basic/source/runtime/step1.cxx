@@ -387,7 +387,7 @@ void SbiRuntime::StepRESUME( sal_uInt32 nOp1 )
     pInst->nErr = 0;
     pInst->nErl = 0;
     nError = 0;
-    bInError = sal_False;
+    bInError = false;
 }
 
 // close channel (+channel, 0=all)

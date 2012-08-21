@@ -49,11 +49,11 @@ SbiGlobals::SbiGlobals()
     nCode = 0;
     nLine = 0;
     nCol1 = nCol2 = 0;
-    bCompiler = sal_False;
-    bGlobalInitErr = sal_False;
-    bRunInit = sal_False;
+    bCompiler = false;
+    bGlobalInitErr = false;
+    bRunInit = false;
     pTransliterationWrapper = NULL;
-    bBlockCompilerError = sal_False;
+    bBlockCompilerError = false;
     pAppBasMgr = NULL;
     pMSOMacroRuntimLib = NULL;
 }

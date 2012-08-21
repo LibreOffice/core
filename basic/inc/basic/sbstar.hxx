@@ -148,7 +148,7 @@ public:
     static void     MakeErrorText( SbError, const ::rtl::OUString& aMsg );
     static const    String& GetErrorText();
     static SbError  GetErrorCode();
-    static sal_Bool     IsCompilerError();
+    static bool     IsCompilerError();
     static sal_uInt16   GetVBErrorCode( SbError nError );
     static SbError  GetSfxFromVBError( sal_uInt16 nError );
     sal_Bool            IsBreak() const             { return bBreak; }

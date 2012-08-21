@@ -1166,7 +1166,7 @@ sal_uInt16 SbModule::Run( SbMethod* pMeth )
         GlobalRunInit( /* bBasicStart = */ bDelInst );
 
         // Appeared a compiler error? Then we don't launch
-        if( GetSbData()->bGlobalInitErr == sal_False )
+        if( !GetSbData()->bGlobalInitErr )
         {
             if( bDelInst )
             {
@@ -1300,7 +1300,7 @@ void SbModule::RunInit()
      && pImage->GetFlag( SBIMG_INITCODE ) )
     {
         // Set flag, so that RunInit get activ (Testtool)
-        GetSbData()->bRunInit = sal_True;
+        GetSbData()->bRunInit = true;
 
         SbModule* pOldMod = GetSbData()->pMod;
         GetSbData()->pMod = this;
@@ -1318,7 +1318,7 @@ void SbModule::RunInit()
         pImage->bFirstInit = false;
 
         // RunInit is not activ anymore
-        GetSbData()->bRunInit = sal_False;
+        GetSbData()->bRunInit = false;
     }
 }
 
@@ -1458,7 +1458,7 @@ void SbModule::GlobalRunInit( sal_Bool bBasicStart )
     // With the help of this flags could be located in SbModule::Run() after the call of
     // GlobalRunInit, if at the intialising of the module
     // an error occurred. Then it will not be launched.
-    GetSbData()->bGlobalInitErr = sal_False;
+    GetSbData()->bGlobalInitErr = false;
 
     // Parent of the module is a Basic
     StarBASIC *pBasic = PTR_CAST(StarBASIC,GetParent());

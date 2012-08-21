@@ -263,11 +263,11 @@ class SbiRuntime
     SbxArrayRef   refArgv;
     // #74254, one refSaveObj is not enough! new: pRefSaveList (see above)
     short         nArgc;
-    sal_Bool          bRun;
+    bool          bRun;
     bool          bError;           // true: handle errors
-    sal_Bool          bInError;         // sal_True: in an error handler
-    sal_Bool          bBlocked;         // sal_True: blocked by next call level, #i48868
-    sal_Bool          bVBAEnabled;
+    bool          bInError;         // true: in an error handler
+    bool          bBlocked;         // true: blocked by next call level, #i48868
+    bool          bVBAEnabled;
     sal_uInt16        nFlags;           // Debugging-Flags
     SbError       nError;
     sal_uInt16        nOps;             // opcode counter
@@ -299,7 +299,7 @@ class SbiRuntime
     }
 
     SbxVariable* FindElement
-    ( SbxObject* pObj, sal_uInt32 nOp1, sal_uInt32 nOp2, SbError, sal_Bool bLocal, sal_Bool bStatic = sal_False );
+    ( SbxObject* pObj, sal_uInt32 nOp1, sal_uInt32 nOp2, SbError, bool bLocal, bool bStatic = false );
     void SetupArgs( SbxVariable*, sal_uInt32 );
     SbxVariable* CheckArray( SbxVariable* );
 
@@ -307,7 +307,7 @@ class SbiRuntime
     SbxVariableRef PopVar();
     SbxVariable* GetTOS( short=0 );
     void TOSMakeTemp();
-    sal_Bool ClearExprStack();
+    bool ClearExprStack();
 
     void PushGosub( const sal_uInt8* );
     void PopGosub();
@@ -329,7 +329,7 @@ class SbiRuntime
     void SetParameters( SbxArray* );
 
     // HAS TO BE IMPLEMENTED SOME TIME
-    void DllCall( const String&, const String&, SbxArray*, SbxDataType, sal_Bool );
+    void DllCall( const String&, const String&, SbxArray*, SbxDataType, bool );
 
     // #56204 swap out DIM-functionality into help method (step0.cxx)
     void DimImpl( SbxVariableRef refVar );
@@ -371,7 +371,7 @@ class SbiRuntime
     // all opcodes with two operands
     void StepRTL( sal_uInt32, sal_uInt32 ),     StepPUBLIC( sal_uInt32, sal_uInt32 ),   StepPUBLIC_P( sal_uInt32, sal_uInt32 );
     void StepPUBLIC_Impl( sal_uInt32, sal_uInt32, bool bUsedForClassModule );
-    void StepFIND_Impl( SbxObject* pObj, sal_uInt32 nOp1, sal_uInt32 nOp2, SbError, sal_Bool bLocal, sal_Bool bStatic = sal_False );
+    void StepFIND_Impl( SbxObject* pObj, sal_uInt32 nOp1, sal_uInt32 nOp2, SbError, bool bLocal, bool bStatic = false );
     void StepFIND( sal_uInt32, sal_uInt32 ),    StepELEM( sal_uInt32, sal_uInt32 );
     void StepGLOBAL( sal_uInt32, sal_uInt32 ),  StepLOCAL( sal_uInt32, sal_uInt32 );
     void StepPARAM( sal_uInt32, sal_uInt32),    StepCREATE( sal_uInt32, sal_uInt32 );
@@ -400,10 +400,10 @@ public:
     void FatalError( SbError, const String& );  // error handling = standard, set error
     static sal_Int32 translateErrorToVba( SbError nError, String& rMsg );
     void DumpPCode();
-    sal_Bool Step();                    // single step (one opcode)
-    void Stop()            { bRun = sal_False;   }
-    void block( void )     { bBlocked = sal_True; }
-    void unblock( void )   { bBlocked = sal_False; }
+    bool Step();                    // single step (one opcode)
+    void Stop()            { bRun = false;   }
+    void block( void )     { bBlocked = true; }
+    void unblock( void )   { bBlocked = false; }
     SbMethod* GetMethod()  { return pMeth;   }
     SbModule* GetModule()  { return pMod;    }
     sal_uInt16 GetDebugFlags() { return nFlags;  }
@@ -441,12 +441,12 @@ StarBASIC* GetCurrentBasic( StarBASIC* pRTBasic );
 // no DDE functionality, no DLLCALL) in basic because
 // of portal "virtual" users (portal user != UNIX user)
 // (Implemented in iosys.cxx)
-sal_Bool needSecurityRestrictions( void );
+bool needSecurityRestrictions( void );
 
-// Returns sal_True if UNO is available, otherwise the old
+// Returns true if UNO is available, otherwise the old
 // file system implementation has to be used
 // (Implemented in iosys.cxx)
-sal_Bool hasUno( void );
+bool hasUno( void );
 
 // Converts possibly relative paths to absolute paths
 // according to the setting done by ChDir/ChDrive
