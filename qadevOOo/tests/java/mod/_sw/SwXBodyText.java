@@ -67,7 +67,7 @@ import com.sun.star.uno.XInterface;
  * @see ifc.text._XText
  */
 public class SwXBodyText extends TestCase {
-    XTextDocument xTextDoc = null;;
+    XTextDocument xTextDoc = null;
     SOfficeFactory SOF = null;
 
     /**

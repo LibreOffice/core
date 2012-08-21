@@ -64,7 +64,7 @@ public class SdXPresentation extends TestCase {
 
         try {
             log.println( "creating a draw document" );
-            xImpressDoc = SOF.createImpressDoc(null);;
+            xImpressDoc = SOF.createImpressDoc(null);
         } catch (com.sun.star.uno.Exception e) {
             e.printStackTrace( log );
             throw new StatusException("Couldn't create document", e);
@@ -76,7 +76,7 @@ public class SdXPresentation extends TestCase {
     */
     protected void cleanup( TestParameters Param, PrintWriter log) {
         log.println("disposing xImpressDoc");
-        util.DesktopTools.closeDoc(xImpressDoc);;
+        util.DesktopTools.closeDoc(xImpressDoc);
     }
 
     /**

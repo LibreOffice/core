@@ -40,7 +40,7 @@ class MenuItem extends ToggleButton {
             else
                 super.setComponentState(state, enable);
         }
-    };
+    }
 
     protected XAccessibleEventListener createEventListener() {
         return new AccessibleMenuItemListener();

@@ -96,8 +96,8 @@ public class SdXImpressDocument extends TestCase {
      */
     protected void cleanup(TestParameters Param, PrintWriter log) {
         log.println("disposing xImpressDoc");
-        util.DesktopTools.closeDoc(xImpressDoc);;
-        util.DesktopTools.closeDoc(xImpressDoc2);;
+        util.DesktopTools.closeDoc(xImpressDoc);
+        util.DesktopTools.closeDoc(xImpressDoc2);
     }
 
     /**

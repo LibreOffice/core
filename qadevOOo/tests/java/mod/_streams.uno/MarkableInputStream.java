@@ -80,7 +80,7 @@ public class MarkableInputStream extends TestCase {
     */
     protected TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
 
-        XMultiServiceFactory xMSF = (XMultiServiceFactory)Param.getMSF();;
+        XMultiServiceFactory xMSF = (XMultiServiceFactory)Param.getMSF();
 
         Object aPipe = null;
         Object mostream = null;

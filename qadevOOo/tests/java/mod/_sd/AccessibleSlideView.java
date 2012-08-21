@@ -111,7 +111,7 @@ public class AccessibleSlideView extends TestCase {
     */
     protected void cleanup( TestParameters Param, PrintWriter log ) {
         log.println("disposing impress document");
-        util.DesktopTools.closeDoc(xImpressDoc);;
+        util.DesktopTools.closeDoc(xImpressDoc);
     }
 
     /**

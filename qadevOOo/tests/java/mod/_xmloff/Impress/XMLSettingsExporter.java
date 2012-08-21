@@ -73,7 +73,7 @@ public class XMLSettingsExporter extends TestCase {
 
         try {
             log.println( "creating an impress document" );
-            xImpressDoc = SOF.createImpressDoc(null);;
+            xImpressDoc = SOF.createImpressDoc(null);
         } catch ( Exception e ) {
             // Some exception occures.FAILED
             e.printStackTrace( log );

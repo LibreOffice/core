@@ -96,7 +96,7 @@ public class FilterFactory extends TestCase {
 
         // XNameContainer; XNameReplace
         String filterName = filterNames[0];
-        Object[] instance = null;;
+        Object[] instance = null;
         new PropertyValue();
         try{
             instance = (Object[]) xNA.getByName(filterName);

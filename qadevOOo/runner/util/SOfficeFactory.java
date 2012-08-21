@@ -409,7 +409,6 @@ public class SOfficeFactory {
         int i;
         for (i = 0; oNameAccess.hasByName(prefix + i); i++) {
         }
-        ;
         return prefix + i;
     }
 

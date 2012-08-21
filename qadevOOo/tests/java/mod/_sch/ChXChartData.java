@@ -52,7 +52,7 @@ public class ChXChartData extends TestCase {
 
         try {
             log.println( "creating a chartdocument" );
-            xChartDoc = SOF.createChartDoc(null);;
+            xChartDoc = SOF.createChartDoc(null);
         } catch (com.sun.star.uno.Exception e) {
             // Some exception occures.FAILED
             e.printStackTrace( log );

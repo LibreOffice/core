@@ -126,4 +126,4 @@ public class KeyHandler extends Component implements XKeyHandler, java.awt.KeyEv
     public void disposing(com.sun.star.lang.EventObject event) {
         java.awt.KeyboardFocusManager.getCurrentKeyboardFocusManager().removeKeyEventDispatcher(this);
     }
-};
+}

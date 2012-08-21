@@ -55,7 +55,7 @@ public class SwXTextGraphicObject extends TestCase {
         SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)tParam.getMSF() );
         try {
             log.println( "creating a textdoc" );
-            xTextDoc = SOF.createTextDoc( null );;
+            xTextDoc = SOF.createTextDoc( null );
         } catch ( Exception e ) {
             // Some exception occures.FAILED
             e.printStackTrace( log );

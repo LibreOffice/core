@@ -111,7 +111,7 @@ public class Status extends SimpleStatus {
      * "FAILED.The getLabel works wrong", "PASSED.OK".
      */
     public String toString() {
-        String str = getRunStateString() + "." + getStateString();;
+        String str = getRunStateString() + "." + getStateString();
 
         return str;
     }

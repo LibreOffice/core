@@ -287,4 +287,4 @@ public class RowSet implements XRowSet, XRow
         XComponent rowSetComp = UnoRuntime.queryInterface( XComponent.class, m_rowSet );
         rowSetComp.dispose();
     }
-};
+}

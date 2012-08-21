@@ -578,7 +578,7 @@ public final class AnyConverter_Test {
             AnyConverter.toObject(
                 new Type(com.sun.star.uno.RuntimeException.class), any_exc);
             fail();
-        } catch (com.sun.star.lang.IllegalArgumentException ie) {};
+        } catch (com.sun.star.lang.IllegalArgumentException ie) {}
         any_exc = new Any(com.sun.star.lang.IllegalArgumentException.class,
                           exc);
         assertEquals(
@@ -594,7 +594,7 @@ public final class AnyConverter_Test {
             AnyConverter.toObject(
                 new Type(com.sun.star.uno.RuntimeException.class), any_exc);
             fail();
-        } catch (com.sun.star.lang.IllegalArgumentException ie) {};
+        } catch (com.sun.star.lang.IllegalArgumentException ie) {}
 
         // must fail
         try { AnyConverter.toObject(_type, aType); fail();

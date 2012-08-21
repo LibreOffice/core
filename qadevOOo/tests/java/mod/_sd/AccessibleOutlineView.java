@@ -104,7 +104,7 @@ public class AccessibleOutlineView extends TestCase {
     */
     protected void cleanup( TestParameters Param, PrintWriter log ) {
         log.println("disposing Impress document");
-        util.DesktopTools.closeDoc(xImpressDoc);;
+        util.DesktopTools.closeDoc(xImpressDoc);
     }
 
     /**

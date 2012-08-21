@@ -170,7 +170,6 @@ public class AccessibleButton extends lib.TestCase {
         }
 
         util.DesktopTools.closeDoc(xTextDoc);
-        ;
     }
 
     /**

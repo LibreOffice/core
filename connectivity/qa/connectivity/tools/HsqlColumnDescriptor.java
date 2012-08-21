@@ -72,4 +72,4 @@ public class HsqlColumnDescriptor
         ForeignTable = _ForeignTable;
         ForeignColumn = _ForeignColumn;
     }
-};
+}

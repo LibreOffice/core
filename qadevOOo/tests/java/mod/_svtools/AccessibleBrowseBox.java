@@ -185,7 +185,6 @@ public class AccessibleBrowseBox extends TestCase {
     private void shortWait() {
         try {
             Thread.sleep(5000);
-            ;
         } catch (InterruptedException e) {
             System.out.println("While waiting :" + e);
         }

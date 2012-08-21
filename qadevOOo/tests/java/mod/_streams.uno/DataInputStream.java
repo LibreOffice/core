@@ -81,7 +81,7 @@ public class DataInputStream extends TestCase {
 
         Object oInterface = null;
 
-        XMultiServiceFactory xMSF = (XMultiServiceFactory)Param.getMSF();;
+        XMultiServiceFactory xMSF = (XMultiServiceFactory)Param.getMSF();
         try {
             oInterface = xMSF.createInstance("com.sun.star.io.DataInputStream");
         } catch(com.sun.star.uno.Exception e) {

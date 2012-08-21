@@ -109,7 +109,6 @@ public class AccessibleTabControl extends TestCase {
 
         if (xTextDoc != null) {
             util.DesktopTools.closeDoc(xTextDoc);
-            ;
         }
     }
 
@@ -144,7 +143,6 @@ public class AccessibleTabControl extends TestCase {
 
         if (xTextDoc != null) {
             util.DesktopTools.closeDoc(xTextDoc);
-            ;
         }
 
         // get a soffice factory object

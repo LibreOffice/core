@@ -93,7 +93,7 @@ public class _XMultiPropertySet extends MultiMethodTest {
              propertiesChanged = true;
          }
          public void disposing (EventObject obj) {}
-    };
+    }
 
     private XPropertiesChangeListener PClistener =
         new MyChangeListener();

@@ -49,7 +49,7 @@ public class _XRemoteContentProviderAcceptor extends MultiMethodTest {
         }
         public void disposing (com.sun.star.lang.EventObject obj) {}
 
-    };
+    }
 
     XRemoteContentProviderDoneListener aDoneListener = new DoneListener();
 

@@ -114,7 +114,7 @@ public class TypeDetection extends TestCase {
             (XNameAccess.class, oObj);
         String[] elementNames = xNA.getElementNames();
         String elementName = elementNames[0];
-        Object[] instance = null;;
+        Object[] instance = null;
         try{
             instance = (Object[]) xNA.getByName(elementName);
         } catch (com.sun.star.container.NoSuchElementException e){
