@@ -27,11 +27,6 @@
 
 $(eval $(call gb_InstallModule_InstallModule,scp2/quickstart))
 
-$(eval $(call gb_InstallModule_use_packages,scp2/quickstart,\
-	scp2_inc \
-	scp2_langmacros \
-))
-
 $(eval $(call gb_InstallModule_add_scpfiles,scp2/quickstart,\
     scp2/source/quickstart/file_quickstart \
     scp2/source/quickstart/registryitem_quickstart \

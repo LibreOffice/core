@@ -81,7 +81,8 @@ $(call gb_Helper_abbreviate_dirs,\
 	$(call gb_Helper_execute,cpp.lcc) \
 		-+ -P \
 		$(SCPDEFS) $(SCP_DEFS) -DDLLPOSTFIX=$(gb_Library_DLLPOSTFIX) \
-		$(SCP_INCLUDE) $(SCP_TEMPLATE_INCLUDE) \
+		-I$(SRCDIR)/scp2/inc -I$(call gb_CustomTarget_get_workdir,scp2/macros) \
+		$(SCP_TEMPLATE_INCLUDE) \
 		$(3) > $(1) \
 )
 endef
@@ -212,7 +213,6 @@ $(call gb_Output_announce,SCP:$(2),$(true),DEP,2)
 $(call gb_Helper_abbreviate_dirs,\
 	$(gb_ScpTarget_DEPCOMMAND) \
 		$(SCPDEFS) $(SCP_DEFS) -DDLLPOSTFIX=$(gb_Library_DLLPOSTFIX) \
-		$(SCP_INCLUDE) $(SCP_TEMPLATE_INCLUDE) \
 		-f $(1) \
 		-p \
 )
@@ -295,15 +295,9 @@ $(call gb_InstallModuleTarget_get_external_target,$(1)) :| \
 
 $(call gb_InstallModuleTarget_get_target,$(1)) : SCP_FILES :=
 $(call gb_InstallModuleTarget_get_target,$(1)) : SCP_DEFS :=
-$(call gb_InstallModuleTarget_get_target,$(1)) : SCP_INCLUDE :=
 $(call gb_InstallModuleTarget_get_target,$(1)) : SCP_TEMPLATE_INCLUDE :=
 
 $(call gb_InstallModuleTarget_InstallModuleTarget_platform,$(1))
-
-endef
-
-define gb_InstallModuleTarget_set_include
-$(call gb_InstallModuleTarget_get_target,$(1)) : SCP_INCLUDE := $(2)
 
 endef
 
@@ -330,16 +324,6 @@ define gb_InstallModuleTarget_define_mingw_dll_if_set
 $(call gb_InstallModuleTarget_add_defs,$(1),\
 	$(foreach def,$(2),$(if $($(def)),-DNEEDS_$(def) -D$(def)=\""$($(def))"\")) \
 )
-
-endef
-
-define gb_InstallModuleTarget_use_package
-$(call gb_InstallModuleTarget_get_external_target,$(1)) :| $(call gb_Package_get_target,$(2))
-
-endef
-
-define gb_InstallModuleTarget_use_packages
-$(foreach package,$(2),$(call gb_InstallModuleTarget_use_package,$(1),$(package)))
 
 endef
 

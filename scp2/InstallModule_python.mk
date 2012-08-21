@@ -27,11 +27,6 @@
 
 $(eval $(call gb_InstallModule_InstallModule,scp2/python))
 
-$(eval $(call gb_InstallModule_use_packages,scp2/python,\
-	scp2_inc \
-	scp2_langmacros \
-))
-
 ifeq ($(DISABLE_PYTHON),TRUE)
 $(eval $(call gb_InstallModule_add_defs,scp2/python,\
 	-DDISABLE_PYUNO \

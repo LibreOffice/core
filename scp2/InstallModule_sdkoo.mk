@@ -27,11 +27,6 @@
 
 $(eval $(call gb_InstallModule_InstallModule,scp2/sdkoo))
 
-$(eval $(call gb_InstallModule_use_packages,scp2/sdkoo,\
-	scp2_inc \
-	scp2_langmacros \
-))
-
 $(eval $(call gb_InstallModule_add_scpfiles,scp2/sdkoo,\
     scp2/source/sdkoo/sdkoo \
 ))

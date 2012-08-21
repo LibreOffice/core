@@ -27,11 +27,6 @@
 
 $(eval $(call gb_InstallModule_InstallModule,scp2/tde))
 
-$(eval $(call gb_InstallModule_use_packages,scp2/tde,\
-	scp2_inc \
-	scp2_langmacros \
-))
-
 $(eval $(call gb_InstallModule_define_if_set,scp2/tde,\
 	ENABLE_TDE \
 	ENABLE_TDEAB \
