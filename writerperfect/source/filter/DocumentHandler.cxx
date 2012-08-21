@@ -74,35 +74,12 @@ void DocumentHandler::endElement(const char *psName)
 
 void DocumentHandler::characters(const WPXString &sCharacters)
 {
-    int lastNewline = -1;
-    int length = sCharacters.len();
-    for (int curr = 0; curr < length; ++curr)
-    {
-        if (sCharacters.cstr()[curr] == '\n')
-        {
-            if (curr > lastNewline + 1)
-            {
-                OUString sCharU16(sCharacters.cstr() + lastNewline + 1, curr - lastNewline - 1, RTL_TEXTENCODING_UTF8);
+    OUString sCharU16(sCharacters.cstr(), strlen(sCharacters.cstr()), RTL_TEXTENCODING_UTF8);
 #ifdef DEBUG_XML
-                WPXString sEscapedCharacters(sCharacters, true);
-                printf("%s", sEscapedCharacters.cstr());
+    WPXString sEscapedCharacters(sCharacters, true);
+    printf("%s", sEscapedCharacters.cstr());
 #endif
-                mxHandler->characters(sCharU16);
-            }
-            startElement("text:line-break", WPXPropertyList());
-            endElement("text:line-break");
-            lastNewline = curr;
-        }
-    }
-    if (lastNewline + 1 < length)
-    {
-        OUString sCharU16(sCharacters.cstr() + lastNewline + 1, length - lastNewline - 1, RTL_TEXTENCODING_UTF8);
-#ifdef DEBUG_XML
-        WPXString sEscapedCharacters(sCharacters, true);
-        printf("%s", sEscapedCharacters.cstr());
-#endif
-        mxHandler->characters(sCharU16);
-    }
+    mxHandler->characters(sCharU16);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

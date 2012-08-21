@@ -1750,8 +1750,32 @@ void OdgGenerator::endTextSpan()
 
 void OdgGenerator::insertText(const WPXString &text)
 {
-    DocumentElement *pText = new TextElement(text);
-    mpImpl->mBodyElements.push_back(pText);
+    int length = text.len();
+    WPXString out;
+    for (int curr = 0; curr < length; ++curr)
+    {
+        char ch = text.cstr()[curr];
+        if (ch == '\n')
+        {
+            if (out.len() != 0)
+            {
+                DocumentElement *pText = new TextElement(out);
+                mpImpl->mBodyElements.push_back(pText);
+                out.clear();
+            }
+            mpImpl->mBodyElements.push_back(new TagOpenElement("text:line-break"));
+            mpImpl->mBodyElements.push_back(new TagCloseElement("text:line-break"));
+        }
+        else
+        {
+            out.append(ch);
+        }
+    }
+    if (out.len() != 0)
+    {
+        DocumentElement *pText = new TextElement(out);
+        mpImpl->mBodyElements.push_back(pText);
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
