@@ -28,6 +28,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.FrameLayout.LayoutParams;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
@@ -293,8 +294,22 @@ public class PresentationActivity extends SherlockFragmentActivity {
             }
             mClockBar_clockButton.setChecked(!mTimerOn);
 
-            mCountdownBar.setY(mClockBar.getHeight());
-            mStopwatchBar.setY(mClockBar.getHeight());
+            FrameLayout.LayoutParams aParams = (LayoutParams) mCountdownBar
+                            .getLayoutParams();
+            aParams.topMargin = mClockBar.getBottom();
+            //            aParams.height = mClockBar.getHeight();
+            //            aParams.bottomMargin = aParams.topMargin + aParams.height;
+            //            aParams.leftMargin = 100;
+            mCountdownBar.setLayoutParams(aParams);
+            mCountdownBar.setPadding(0, mClockBar.getBottom(), 0, 0);
+            mStopwatchBar.setPadding(0, mClockBar.getBottom(), 0, 0);
+            //            mCountdownBar.requestLayout();
+            //            mOuterLayout.requestLayout();
+            //            mOuterLayout.invalidate();
+            //            aParams = (LayoutParams) mStopwatchBar.getLayoutParams();
+            //            aParams.topMargin = mClockBar.getHeight();
+            //            mOuterLayout.invalidate();
+            //            mStopwatchBar.setY(mClockBar.getHeight());
 
             boolean aIsCountdown = mCommunicationService.getSlideShow()
                             .getTimer().isCountdown();

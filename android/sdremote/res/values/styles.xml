@@ -19,9 +19,11 @@
         <item name="android:textSize">18dp</item>
     </style>
 
-    <style name="Theme.ImpressRemote.ActionBar" parent="android:style/Widget.Holo.Light.ActionBar">
+    <style name="Theme.ImpressRemote.ActionBar" parent="Widget.Sherlock.Light.ActionBar.Solid.Inverse">
         <item name="android:background">@color/orange</item>
+        <item name="background">@color/orange</item>
         <item name="android:titleTextStyle">@style/Theme.ImpressRemote.ActionBar.Title</item>
+        <item name="titleTextStyle">@style/Theme.ImpressRemote.ActionBar.Title</item>
     </style>
 
     <style name="Theme.ImpressRemote.ActionBarWidget" parent="android:style/Widget.Holo.Light">
@@ -35,14 +37,16 @@
         <!-- <item name="android:popupBackground">@color/black</item> -->
     </style>
 
-    <style name="Theme.ImpressRemote.ActionBarMenuItem" parent="android:style/Widget.Holo.Light.ListView.DropDown">
+    <style name="Theme.ImpressRemote.ActionBarMenuItem" parent="Widget.Sherlock.Light.Spinner.DropDown.ActionBar">
         <item name="android:background">@color/grey</item>
+
         <item name="android:textColor">@color/white</item>
         <item name="android:textSize">16dp</item>
     </style>
 
-    <style name="Theme.ImpressRemote" parent="android:style/Theme.Holo.Light">
+    <style name="Theme.ImpressRemote" parent="Theme.Sherlock.Light.DarkActionBar">
         <item name="android:actionBarStyle">@style/Theme.ImpressRemote.ActionBar</item>
+        <item name="actionBarStyle">@style/Theme.ImpressRemote.ActionBar</item>
         <item name="android:popupMenuStyle">@style/Theme.ImpressRemote.ActionBarMenu</item>
         <item name="android:dropDownListViewStyle">@style/Theme.ImpressRemote.ActionBarMenuItem</item>
         <item name="android:textAppearanceLargePopupMenu">@style/Theme.ImpressRemote.ActionBarMenuItem</item> <!-- <item name="android:actionBarWidgetTheme">@style/Theme.ImpressRemote.ActionBarWidget</item> -->
