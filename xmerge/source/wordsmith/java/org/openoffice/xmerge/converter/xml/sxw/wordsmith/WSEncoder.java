@@ -51,7 +51,6 @@ final class WSEncoder {
     private short version;
     private int textLen;
     private short maxRecSize;
-    private int textRecCount = 0;
 
 
     /* WordSmith document elements. */

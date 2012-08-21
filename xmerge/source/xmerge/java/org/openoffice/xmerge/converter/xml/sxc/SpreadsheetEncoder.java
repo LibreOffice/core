@@ -33,17 +33,6 @@ public abstract class SpreadsheetEncoder {
 
 
     /**
-     *  Creates new SpreadsheetEncoder.
-     *
-     *  @param  name      The name of the WorkBook to be created.
-     *  @param  password  An optional password for the WorkBook.
-     *
-     *  @throws  IOException  If any I/O error occurs.
-     */
-    public SpreadsheetEncoder(String name, String password) throws IOException { }
-
-
-    /**
      *  Create a new WorkSheet within the WorkBook.
      *
      *  @param  sheetName  The name of the WorkSheet.

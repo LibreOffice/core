@@ -155,13 +155,12 @@ class WsePara extends Wse {
      *  <code>dataArray[startIndex]</code> is the beginning of a valid
      *  paragraph descriptor.
      *
-     *  @param  dataArray   <code>byte</code> array.
      *  @param  startIndex  The start index.
      *
      *  @return  The index of the first <code>byte</code> following the
      *           paragraph description.
      */
-    static int computeNewIndex(byte dataArray[], int startIndex) {
+    static int computeNewIndex(int startIndex) {
         return startIndex + 13;
     }
 

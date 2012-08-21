@@ -43,15 +43,11 @@ final class PocketExcelEncoder extends SpreadsheetEncoder {
      *  Constructor creates a Pocket Excel WorkBook.
      *
      *  @param  name      The name of the WorkBook.
-     *  @param  password  The password for the WorkBook.
      *
      *  @throws  IOException  If any I/O error occurs.
      */
-    PocketExcelEncoder(String name, String password) throws IOException {
-
-        super(name, password);
+    PocketExcelEncoder(String name) throws IOException {
         wb = new Workbook(name);
-
     }
 
 

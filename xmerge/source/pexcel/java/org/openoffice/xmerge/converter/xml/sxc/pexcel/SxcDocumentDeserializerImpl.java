@@ -63,8 +63,7 @@ public final class SxcDocumentDeserializerImpl extends SxcDocumentDeserializer {
      */
     public SpreadsheetDecoder createDecoder(String workbook,
         String[] worksheetNames, String password) throws IOException {
-
-        return new PocketExcelDecoder(workbook, worksheetNames, password);
+        return new PocketExcelDecoder();
     }
 
 

@@ -140,7 +140,7 @@ final class WSDecoder implements DOCConstants {
         while (curIndex < rawData.length) {
             if (WsePara.isValid(rawData, curIndex)) {
                 v.add(new WsePara(rawData, curIndex));
-                curIndex = WsePara.computeNewIndex(rawData, curIndex);
+                curIndex = WsePara.computeNewIndex(curIndex);
             } else if (WseTextRun.isValid(rawData, curIndex)) {
                 v.add(new WseTextRun(rawData, curIndex, fontTable, colorTable));
                 curIndex = WseTextRun.computeNewIndex(rawData, curIndex);

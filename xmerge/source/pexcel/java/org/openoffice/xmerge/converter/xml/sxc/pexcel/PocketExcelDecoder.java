@@ -62,17 +62,8 @@ final class PocketExcelDecoder extends SpreadsheetDecoder {
 
     /**
      *  Constructor creates a Pocket Excel WorkBook.
-     *
-     *  @param  name            The name of the WorkBook.
-     *  @param  worksheetNames  set of Strings equivalent to the worksheets
-     *                          contained in the workbook
-     *  @param  password        The password for the workBook.
-     *
-     *  @throws  IOException    If any I/O error occurs.
      */
-    PocketExcelDecoder(String name, String[] worksheetNames, String password) throws IOException {
-        super(name, password);
-
+    PocketExcelDecoder() {
         fmt = new Format();
     }
 

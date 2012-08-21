@@ -84,12 +84,11 @@ class WseHeader extends Wse {
      *  following this element.  It is assumed that the element
      *  starting at <code>dataArray[startIndex]</code> is valid.
      *
-     *  @param  dataArray   <code>byte</code> array.
      *  @param  startIndex  The start index.
      *
      *  @return  The first <code>byte</code> following this element.
      */
-    static int computeNewIndex(byte dataArray[], int startIndex) {
+    static int computeNewIndex(int startIndex) {
         return startIndex + 18;
     }
 

@@ -27,14 +27,12 @@ import org.openoffice.xmerge.util.Debug;
 
 
 abstract class conversionAlgorithm {
-    int I(String val) {
-        return 0;
-    }
+    abstract int I(String val);
 }
 
-    /*
-     *  This algorithm expects only values in millimeters, e.g. "20.3mm".
-     */
+/**
+ *  This algorithm expects only values in millimeters, e.g. "20.3mm".
+ */
 class horizSize extends conversionAlgorithm {
     int I(String value) {
         if (value.endsWith("mm")) {

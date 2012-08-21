@@ -29,37 +29,6 @@ package org.openoffice.xmerge.converter.xml.sxw.wordsmith;
 abstract class Wse {
 
     /**
-     *  Return true if <code>dataArray[startIndex]</code> is the start
-     *  of a valid element of this type.
-     *
-     *  @param  dataArray   <code>byte</code> array.
-     *  @param  startIndex  The start index.
-     *
-     *  @return  true if <code>dataArray[startIndex]</code> is the
-     *           start of a valid element of this type, false otherwise.
-     */
-    static boolean isValid(byte dataArray[], int startIndex) {
-        return false;
-    }
-
-
-    /**
-     *  Compute and return the index of the first <code>byte</code>
-     *  following this element.  It is assumed that the element
-     *  starting at <code>dataArray[startIndex]</code> is valid.
-     *
-     *  @param  dataArray   <code>byte</code> array.
-     *  @param  startIndex  The start index.
-     *
-     *  @return  The index of the first <code>byte</code> following
-     *           this element.
-     */
-    static int computeNewIndex(byte dataArray[], int startIndex) {
-        return 0;
-    }
-
-
-    /**
      *  Return the total number of bytes needed to represent this
      *  object.
      *

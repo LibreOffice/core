@@ -32,12 +32,6 @@ import org.openoffice.xmerge.ConvertData;
 public abstract class SpreadsheetDecoder {
 
     /**
-     *  Constructor for creating new <code>SpreadsheetDecoder</code>.
-     */
-    public SpreadsheetDecoder(String name, String password) throws IOException {
-    }
-
-    /**
      *  Returns the total number of sheets in the WorkBook.
      *
      *  @return  The number of sheets in the WorkBook.
