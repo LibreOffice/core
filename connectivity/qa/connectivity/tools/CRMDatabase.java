@@ -44,7 +44,6 @@ public class CRMDatabase
     private static final String VARCHAR50 = "VARCHAR(50)";
     private final XMultiServiceFactory        m_orb;
     private final HsqlDatabase                m_database;
-    private final DataSource                  m_dataSource;
     private final Connection                  m_connection;
 
     /** constructs the CRM database
@@ -54,7 +53,6 @@ public class CRMDatabase
         m_orb = _orb;
 
         m_database = new HsqlDatabase( m_orb );
-        m_dataSource = m_database.getDataSource();
 
         if ( _withUI )
         {
@@ -87,7 +85,6 @@ public class CRMDatabase
         m_orb = _orb;
 
         m_database = new HsqlDatabase( m_orb, _existingDocumentURL );
-        m_dataSource = m_database.getDataSource();
         m_connection = m_database.defaultConnection();
     }
 

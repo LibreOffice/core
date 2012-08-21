@@ -80,7 +80,7 @@ class FlatFileDatabase extends AbstractDatabase
 
         m_databaseDocument = UnoRuntime.queryInterface( XOfficeDatabaseDocument.class,
             m_orb.createInstance("com.sun.star.sdb.OfficeDatabaseDocument"));
-        m_dataSource = new DataSource(m_orb, m_databaseDocument.getDataSource());
+        m_dataSource = new DataSource(m_databaseDocument.getDataSource());
 
         final XPropertySet dsProperties = UnoRuntime.queryInterface(XPropertySet.class, m_databaseDocument.getDataSource());
         dsProperties.setPropertyValue("URL", "sdbc:" + m_urlSubScheme + ":" + path);
@@ -93,10 +93,8 @@ class FlatFileDatabase extends AbstractDatabase
 
     @param _name
     the name of the table to drop
-    @param _ifExists
-    TRUE if it should be dropped only when it exists.
      */
-    public void dropTable(final String _name,final boolean _ifExists) throws SQLException
+    public void dropTable(final String _name) throws SQLException
     {
         String dropStatement = "DROP TABLE \"" + _name;
         executeSQL(dropStatement);

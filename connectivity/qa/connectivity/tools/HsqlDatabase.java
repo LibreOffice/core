@@ -66,7 +66,7 @@ public class HsqlDatabase extends AbstractDatabase
 
         m_databaseDocument = UnoRuntime.queryInterface(
                 XOfficeDatabaseDocument.class, m_orb.createInstance("com.sun.star.sdb.OfficeDatabaseDocument"));
-        m_dataSource = new DataSource(m_orb, m_databaseDocument.getDataSource());
+        m_dataSource = new DataSource(m_databaseDocument.getDataSource());
 
         final XPropertySet dsProperties = UnoRuntime.queryInterface(XPropertySet.class, m_databaseDocument.getDataSource());
         dsProperties.setPropertyValue("URL", "sdbc:embedded:hsqldb");

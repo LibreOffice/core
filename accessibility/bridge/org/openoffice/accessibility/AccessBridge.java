@@ -120,7 +120,7 @@ public class AccessBridge {
 
         if (implName.equals(AccessBridge.class.getName())) {
             // Initialize toolkit to register at Java <-> Windows access bridge
-            java.awt.Toolkit tk = java.awt.Toolkit.getDefaultToolkit();
+            java.awt.Toolkit.getDefaultToolkit();
 
             xSingleServiceFactory = FactoryHelper.getServiceFactory(_AccessBridge.class,
                     _AccessBridge._serviceName, multiFactory, regKey);

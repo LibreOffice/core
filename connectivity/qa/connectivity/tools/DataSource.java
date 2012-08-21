@@ -36,22 +36,18 @@ public class DataSource
 {
     // the service factory
 
-    private final XMultiServiceFactory m_orb;
     private XDataSource m_dataSource;
 
     public DataSource(final XMultiServiceFactory _orb, final String _registeredName) throws Exception
     {
-        m_orb = _orb;
-
         final XNameAccess dbContext = UnoRuntime.queryInterface(
             XNameAccess.class, _orb.createInstance( "com.sun.star.sdb.DatabaseContext" ) );
 
         m_dataSource = UnoRuntime.queryInterface( XDataSource.class, dbContext.getByName( _registeredName ) );
     }
 
-    public DataSource(final XMultiServiceFactory _orb,final XDataSource _dataSource)
+    public DataSource(final XDataSource _dataSource)
     {
-        m_orb = _orb;
         m_dataSource = _dataSource;
     }
 
