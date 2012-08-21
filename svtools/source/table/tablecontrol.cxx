@@ -106,6 +106,10 @@ namespace svt { namespace table
         // forward certain settings to the data window
         switch ( i_nStateChange )
         {
+        case STATE_CHANGE_CONTROL_FOCUS:
+            m_pImpl->invalidateSelectedRows();
+            break;
+
         case STATE_CHANGE_CONTROLBACKGROUND:
             if ( IsControlBackground() )
                 getDataWindow().SetControlBackground( GetControlBackground() );
