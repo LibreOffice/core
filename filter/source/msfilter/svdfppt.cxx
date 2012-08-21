@@ -592,6 +592,7 @@ void SdrEscherImport::ProcessClientAnchor2( SvStream& rSt, DffRecordHeader& rHd,
     {
         sal_Int16 ls, ts, rs, bs;
         rSt >> ts >> ls >> rs >> bs; // the order of coordinates is a bit strange...
+        l = ls, t = ts, r = rs, b = bs;
     }
     Scale( l );
     Scale( t );
