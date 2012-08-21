@@ -78,28 +78,28 @@ public:
     void                SetHelpFile( const String& rFileName ) { maHelpFile = rFileName; }
     const String&       GetHelpFile() const { return maHelpFile; }
 
-    virtual sal_Bool        Start( const XubString& rHelpId, const Window* pWindow );
-    virtual sal_Bool        SearchKeyword( const XubString& rKeyWord );
+    virtual sal_Bool    Start( const XubString& rHelpId, const Window* pWindow );
+    virtual sal_Bool    SearchKeyword( const XubString& rKeyWord );
     virtual void        OpenHelpAgent( const rtl::OString& rHelpId );
     virtual XubString   GetHelpText( const String& aHelpURL, const Window* pWindow );
 
     static void         EnableContextHelp();
     static void         DisableContextHelp();
-    static sal_Bool         IsContextHelpEnabled();
+    static sal_Bool     IsContextHelpEnabled();
 
     static void         EnableExtHelp();
     static void         DisableExtHelp();
-    static sal_Bool         IsExtHelpEnabled();
-    static sal_Bool         StartExtHelp();
-    static sal_Bool         EndExtHelp();
+    static sal_Bool     IsExtHelpEnabled();
+    static sal_Bool     StartExtHelp();
+    static sal_Bool     EndExtHelp();
 
     static void         EnableBalloonHelp();
     static void         DisableBalloonHelp();
-    static sal_Bool         IsBalloonHelpEnabled();
-    static sal_Bool         ShowBalloon( Window* pParent,
+    static sal_Bool     IsBalloonHelpEnabled();
+    static sal_Bool     ShowBalloon( Window* pParent,
                                      const Point& rScreenPos,
                                      const XubString& rHelpText );
-    static sal_Bool         ShowBalloon( Window* pParent,
+    static sal_Bool     ShowBalloon( Window* pParent,
                                      const Point& rScreenPos,
                                      const Rectangle&,
                                      const XubString& rHelpText );
@@ -117,6 +117,8 @@ public:
                                        const XubString& rHelpText,
                                        sal_uInt16 nStyle = 0 )
                             { return Help::ShowQuickHelp( pParent, rScreenRect, rHelpText, XubString(), nStyle ); }
+
+    static void         HideBalloonAndQuickHelp();
 
     static sal_uLong    ShowTip( Window* pParent,
                                  const Rectangle& rScreenRect,
