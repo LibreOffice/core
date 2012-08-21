@@ -18,10 +18,7 @@
 package org.openoffice.java.accessibility;
 
 import com.sun.star.accessibility.*;
-import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.UnoRuntime;
-
-import javax.accessibility.AccessibleState;
 
 
 public abstract class DescendantManager extends Component {

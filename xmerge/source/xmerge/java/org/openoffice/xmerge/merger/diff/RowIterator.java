@@ -22,7 +22,6 @@ import org.w3c.dom.Node;
 
 import org.openoffice.xmerge.ConverterCapabilities;
 import org.openoffice.xmerge.converter.xml.OfficeConstants;
-import org.openoffice.xmerge.util.Resources;
 
 
 /**

@@ -16,9 +16,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-import com.sun.star.accessibility.*;
-import com.sun.star.lang.EventObject;
-
 import java.util.LinkedList;
 
 /** The event queue singleton dispatches events received from OpenOffice.org

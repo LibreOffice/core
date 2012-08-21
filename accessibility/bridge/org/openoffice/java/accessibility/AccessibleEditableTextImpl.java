@@ -20,12 +20,9 @@ package org.openoffice.java.accessibility;
 
 import com.sun.star.awt.*;
 import com.sun.star.style.*;
-import com.sun.star.uno.*;
-import com.sun.star.accessibility.AccessibleTextType;
 import com.sun.star.accessibility.XAccessibleEditableText;
 import com.sun.star.beans.PropertyValue;
 
-import javax.accessibility.AccessibleText;
 import javax.swing.text.StyleConstants;
 
 /** The GenericAccessibleEditableText mapps the calls to the java AccessibleEditableText

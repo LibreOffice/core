@@ -51,7 +51,6 @@ import com.sun.star.wizards.ui.SortingComponent;
 import com.sun.star.wizards.ui.TitlesComponent;
 import com.sun.star.wizards.ui.UIConsts;
 import com.sun.star.wizards.ui.UnoDialog;
-import com.sun.star.wizards.ui.XCompletion;
 import java.lang.reflect.Method;
 import java.net.URI;
 import java.net.URL;

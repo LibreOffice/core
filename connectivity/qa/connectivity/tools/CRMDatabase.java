@@ -29,12 +29,9 @@ import com.sun.star.lang.IllegalArgumentException;
 import com.sun.star.lang.WrappedTargetException;
 import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.sdb.XSingleSelectQueryComposer;
 import com.sun.star.sdb.application.XDatabaseDocumentUI;
 import com.sun.star.sdbc.SQLException;
-import com.sun.star.sdbcx.XTablesSupplier;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.util.XRefreshable;
 import connectivity.tools.sdb.Connection;
 
 /** implements a small Customer Relationship Management database

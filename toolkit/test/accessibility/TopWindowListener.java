@@ -20,9 +20,7 @@ import com.sun.star.awt.XWindow;
 import com.sun.star.awt.XExtendedToolkit;
 import com.sun.star.accessibility.XAccessible;
 import com.sun.star.accessibility.XAccessibleContext;
-import com.sun.star.uno.XInterface;
 import com.sun.star.uno.UnoRuntime;
-import javax.swing.event.TreeModelEvent;
 
 /** Listen for top window events and create or delete children of the tree
     model accordingly.

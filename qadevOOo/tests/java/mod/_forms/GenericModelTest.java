@@ -31,7 +31,6 @@ import util.WriterTools;
 
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.drawing.XControlShape;
-import com.sun.star.drawing.XShape;
 import com.sun.star.form.XBoundComponent;
 import com.sun.star.form.XForm;
 import com.sun.star.form.XLoadable;

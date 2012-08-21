@@ -17,14 +17,12 @@
  */
 package com.sun.star.wizards.common;
 
-import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.util.DateTime;
 import com.sun.star.beans.PropertyValue;
 import java.util.*;
 import java.io.File;
 
 import com.sun.star.lib.util.UrlToFileMapper;
-import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 

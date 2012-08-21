@@ -18,7 +18,6 @@
 
 package com.sun.star.lib.uno.environments.remote;
 
-import com.sun.star.lib.uno.typedesc.MethodDescription;
 import com.sun.star.lib.uno.typedesc.TypeDescription;
 import org.junit.Test;
 import static org.junit.Assert.*;

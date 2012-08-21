@@ -18,20 +18,13 @@
 
 package util.db;
 
-import com.sun.star.beans.PropertyValue;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.container.NoSuchElementException;
-import com.sun.star.frame.XModel;
-import com.sun.star.frame.XStorable;
 import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.sdb.XDocumentDataSource;
-import com.sun.star.sdb.XOfficeDatabaseDocument;
 import com.sun.star.sdbc.XDataSource;
 import com.sun.star.uno.Exception;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XNamingService;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import lib.StatusException;
 
 /** wraps a com.sun.star.sdb.DataSource

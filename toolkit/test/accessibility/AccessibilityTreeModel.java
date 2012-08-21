@@ -22,17 +22,9 @@ import javax.swing.tree.TreePath;
 
 
 import java.util.Vector;
-import java.util.HashMap;
-import java.util.Enumeration;
-
 import com.sun.star.accessibility.*;
 
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
-import com.sun.star.uno.Any;
-import com.sun.star.lang.EventObject;
-import com.sun.star.lang.XServiceInfo;
-import com.sun.star.lang.XServiceName;
 
 public class AccessibilityTreeModel
     extends AccessibilityTreeModelBase

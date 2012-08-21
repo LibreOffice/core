@@ -20,7 +20,6 @@ package org.openoffice.xmerge.converter.xml.sxw.pocketword;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.Iterator;
 
 import org.openoffice.xmerge.ConvertData;

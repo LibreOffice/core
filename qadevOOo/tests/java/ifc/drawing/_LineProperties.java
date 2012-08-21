@@ -18,7 +18,6 @@
 
 package ifc.drawing;
 
-import com.sun.star.beans.PropertyValue;
 import com.sun.star.drawing.LineDash;
 import lib.MultiPropertyTest;
 

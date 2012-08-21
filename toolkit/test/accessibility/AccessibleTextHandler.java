@@ -28,7 +28,6 @@ import com.sun.star.uno.UnoRuntime;
 import com.sun.star.lang.IndexOutOfBoundsException;
 import com.sun.star.beans.PropertyValue;
 
-import java.util.Vector;
 import java.awt.Container;
 import java.awt.FlowLayout;
 import java.awt.BorderLayout;

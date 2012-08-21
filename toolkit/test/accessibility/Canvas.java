@@ -22,12 +22,7 @@ import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.tree.*;
 import javax.swing.event.TreeSelectionListener;
-import javax.swing.event.TreeSelectionEvent;
 import java.awt.geom.Rectangle2D;
-
-import com.sun.star.accessibility.XAccessible;
-import com.sun.star.accessibility.XAccessibleContext;
-import com.sun.star.accessibility.XAccessibleComponent;
 
 /** This canvas displays accessible objects graphically.  Each accessible
     object with graphical representation is represented by an

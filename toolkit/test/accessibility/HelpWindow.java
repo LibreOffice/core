@@ -24,7 +24,6 @@ import java.net.URL;
 import javax.swing.event.HyperlinkListener;
 import javax.swing.event.HyperlinkEvent;
 import java.net.MalformedURLException;
-import java.io.IOException;
 import java.io.File;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;

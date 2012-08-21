@@ -19,7 +19,6 @@
 package ifc.beans;
 
 import com.sun.star.beans.PropertyState;
-import com.sun.star.uno.XInterface;
 import lib.MultiMethodTest;
 
 import com.sun.star.beans.XPropertyWithState;

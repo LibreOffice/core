@@ -18,18 +18,6 @@
 
 package org.openoffice.xmerge.converter.xml.sxw.wordsmith;
 
-import java.io.IOException;
-
-import org.w3c.dom.NodeList;
-import org.w3c.dom.Node;
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Element;
-
-import org.openoffice.xmerge.Document;
-import org.openoffice.xmerge.ConverterCapabilities;
-import org.openoffice.xmerge.converter.xml.OfficeDocument;
-import org.openoffice.xmerge.converter.xml.sxw.SxwDocument;
-import org.openoffice.xmerge.converter.xml.*;
 
 
 /**

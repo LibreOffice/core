@@ -16,24 +16,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-import javax.swing.tree.TreeModel;
-import javax.swing.tree.TreePath;
-import javax.swing.event.TreeModelListener;
-import javax.swing.event.TreeModelEvent;
-
-import java.util.Vector;
-import java.util.HashMap;
-import java.util.Enumeration;
-
 import com.sun.star.accessibility.*;
-import com.sun.star.uno.*;
-
-import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
-import com.sun.star.uno.Any;
-import com.sun.star.lang.EventObject;
-import com.sun.star.lang.XServiceInfo;
-import com.sun.star.lang.XServiceName;
 
 /** Objects of this class (usually one, singleton?) listen to accessible
     events of all objects in all trees.

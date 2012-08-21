@@ -18,7 +18,6 @@
 
 package org.openoffice.java.accessibility;
 
-import com.sun.star.uno.*;
 import com.sun.star.accessibility.*;
 
 class CheckBox extends ToggleButton {

@@ -27,7 +27,6 @@ import share.DescEntry;
 import stats.Summarizer;
 
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
 
 /**
  * The class supports method based interface tests development.

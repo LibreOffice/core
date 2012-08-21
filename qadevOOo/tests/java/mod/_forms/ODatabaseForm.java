@@ -22,8 +22,6 @@ import ifc.sdb._XCompletedExecution;
 
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.Vector;
-
 import lib.Status;
 import lib.StatusException;
 import lib.TestCase;
@@ -43,7 +41,6 @@ import com.sun.star.container.XIndexAccess;
 import com.sun.star.container.XNameContainer;
 import com.sun.star.container.XNamed;
 import com.sun.star.drawing.XControlShape;
-import com.sun.star.drawing.XShape;
 import com.sun.star.drawing.XShapes;
 import com.sun.star.form.DatabaseParameterEvent;
 import com.sun.star.form.XForm;
@@ -62,7 +59,6 @@ import com.sun.star.sdbc.XRowSet;
 import com.sun.star.sdbc.XRowUpdate;
 import com.sun.star.task.XInteractionRequest;
 import com.sun.star.text.XTextDocument;
-import com.sun.star.uno.Any;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.Type;
 import com.sun.star.uno.UnoRuntime;

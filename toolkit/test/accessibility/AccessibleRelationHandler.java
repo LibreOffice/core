@@ -21,7 +21,6 @@ import com.sun.star.accessibility.XAccessible;
 import com.sun.star.accessibility.XAccessibleContext;
 import com.sun.star.accessibility.AccessibleRelation;
 import com.sun.star.accessibility.XAccessibleRelationSet;
-import com.sun.star.accessibility.AccessibleRelationType;
 import com.sun.star.lang.IndexOutOfBoundsException;
 
 import tools.NameProvider;

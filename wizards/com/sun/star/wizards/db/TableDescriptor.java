@@ -18,8 +18,6 @@
 package com.sun.star.wizards.db;
 
 import java.util.ArrayList;
-import java.util.Vector;
-
 import com.sun.star.awt.VclWindowPeerAttribute;
 import com.sun.star.awt.XWindow;
 import com.sun.star.beans.Property;

@@ -18,7 +18,6 @@
 
 package ifc.lang;
 
-import com.sun.star.container.XNameContainer;
 import lib.MultiMethodTest;
 
 import com.sun.star.frame.XDesktop;

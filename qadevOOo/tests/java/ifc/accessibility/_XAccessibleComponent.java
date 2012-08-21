@@ -18,8 +18,6 @@
 package ifc.accessibility;
 
 import java.util.ArrayList;
-import java.util.Vector;
-
 import lib.MultiMethodTest;
 
 import com.sun.star.accessibility.XAccessible;

@@ -37,7 +37,6 @@ import lib.TestEnvironment;
 import lib.TestParameters;
 
 import util.AccessibilityTools;
-import util.DesktopTools;
 import util.SOfficeFactory;
 
 

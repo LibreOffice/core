@@ -25,9 +25,6 @@ import com.sun.star.uno.*;
 import org.openoffice.java.accessibility.logging.*;
 
 import java.text.BreakIterator;
-import java.util.Locale;
-
-import javax.accessibility.AccessibleContext;
 import javax.accessibility.AccessibleText;
 
 import javax.swing.text.StyleConstants;

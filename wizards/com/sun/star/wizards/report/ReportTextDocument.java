@@ -22,8 +22,6 @@ import com.sun.star.text.XRelativeTextContentRemove;
 import com.sun.star.text.XTextContent;
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.Vector;
-
 import com.sun.star.awt.Rectangle;
 import com.sun.star.awt.VclWindowPeerAttribute;
 import com.sun.star.container.XNameAccess;

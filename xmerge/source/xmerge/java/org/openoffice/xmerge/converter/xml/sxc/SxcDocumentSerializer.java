@@ -18,7 +18,6 @@
 
 package org.openoffice.xmerge.converter.xml.sxc;
 
-import java.awt.Color;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;

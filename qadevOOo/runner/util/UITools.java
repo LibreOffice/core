@@ -32,7 +32,6 @@ import com.sun.star.accessibility.XAccessibleEditableText;
 import com.sun.star.accessibility.XAccessibleSelection;
 import com.sun.star.accessibility.XAccessibleText;
 import com.sun.star.accessibility.XAccessibleValue;
-import com.sun.star.awt.Point;
 import com.sun.star.awt.XExtendedToolkit;
 import com.sun.star.awt.XTopWindow;
 import com.sun.star.awt.XWindow;

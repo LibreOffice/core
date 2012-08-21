@@ -22,8 +22,6 @@ import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
 
-import java.util.Vector;
-
 /**
  *
  * Base Interface to get a description for a given TestJob

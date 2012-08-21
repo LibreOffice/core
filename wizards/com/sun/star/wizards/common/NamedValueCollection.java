@@ -18,7 +18,6 @@
 
 package com.sun.star.wizards.common;
 
-import com.sun.star.beans.PropertyAttribute;
 import com.sun.star.beans.PropertyState;
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.uno.UnoRuntime;

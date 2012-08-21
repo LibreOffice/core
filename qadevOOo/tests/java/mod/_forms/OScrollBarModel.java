@@ -20,7 +20,6 @@ package mod._forms;
 
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.drawing.XControlShape;
-import com.sun.star.drawing.XShape;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.text.XTextDocument;
 import com.sun.star.uno.UnoRuntime;

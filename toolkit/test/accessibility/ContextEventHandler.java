@@ -16,10 +16,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-import com.sun.star.accessibility.XAccessible;
 import com.sun.star.accessibility.AccessibleEventObject;
 import com.sun.star.accessibility.AccessibleEventId;
-import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.AnyConverter;
 
 import java.io.PrintStream;

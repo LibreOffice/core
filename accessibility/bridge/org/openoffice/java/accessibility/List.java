@@ -19,8 +19,6 @@
 package org.openoffice.java.accessibility;
 
 import javax.accessibility.AccessibleContext;
-import javax.accessibility.AccessibleState;
-
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.accessibility.*;

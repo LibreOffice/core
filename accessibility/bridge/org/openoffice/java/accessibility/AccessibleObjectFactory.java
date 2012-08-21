@@ -21,9 +21,6 @@ package org.openoffice.java.accessibility;
 import java.awt.Component;
 import java.awt.EventQueue;
 import java.lang.ref.WeakReference;
-import javax.accessibility.Accessible;
-import javax.accessibility.AccessibleStateSet;
-
 import com.sun.star.uno.*;
 import com.sun.star.accessibility.*;
 import org.openoffice.java.accessibility.logging.XAccessibleEventLog;

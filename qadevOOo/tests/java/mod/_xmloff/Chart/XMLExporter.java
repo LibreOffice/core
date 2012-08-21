@@ -24,7 +24,6 @@ import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
-import util.DesktopTools;
 import util.SOfficeFactory;
 import util.XMLTools;
 

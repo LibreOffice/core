@@ -35,7 +35,6 @@ import com.sun.star.io.XOutputStream;
 import com.sun.star.io.XTruncate;
 
 import com.sun.star.deployment.XPackage;
-import com.sun.star.deployment.ExtensionRemovedException;
 
 public class UnoPkgContainer extends ParcelContainer
 {

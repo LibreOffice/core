@@ -19,7 +19,6 @@
 import javax.swing.tree.TreeModel;
 import javax.swing.event.TreeModelListener;
 import javax.swing.tree.TreePath;
-import javax.swing.event.TreeModelEvent;
 import java.util.Vector;
 
 public class AccessibilityTreeModelBase

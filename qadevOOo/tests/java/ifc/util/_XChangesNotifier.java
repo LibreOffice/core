@@ -23,7 +23,6 @@ import com.sun.star.container.XNameReplace;
 import com.sun.star.util.XChangesBatch;
 import com.sun.star.util.XChangesListener;
 import com.sun.star.util.XChangesNotifier;
-import java.io.PrintWriter;
 import lib.StatusException;
 import lib.MultiMethodTest;
 

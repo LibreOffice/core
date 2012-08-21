@@ -16,46 +16,20 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-import com.sun.star.awt.XWindow;
-import com.sun.star.beans.XPropertySet;
-import com.sun.star.beans.XPropertyChangeListener;
-import com.sun.star.beans.PropertyChangeEvent;
-import com.sun.star.container.XEnumerationAccess;
-import com.sun.star.container.XEnumeration;
-import com.sun.star.document.XEventListener;
-import com.sun.star.drawing.XDrawPage;
-import com.sun.star.drawing.XDrawView;
-import com.sun.star.frame.XController;
 import com.sun.star.frame.XFrame;
-import com.sun.star.frame.XFrameActionListener;
-import com.sun.star.frame.FrameActionEvent;
-import com.sun.star.frame.FrameAction;
-import com.sun.star.lang.XComponent;
-import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.lang.XServiceInfo;
-import com.sun.star.frame.XDesktop;
 import com.sun.star.frame.XModel;
 import com.sun.star.frame.XTerminateListener;
 import com.sun.star.uno.UnoRuntime;
 
-import com.sun.star.accessibility.XAccessible;
 import com.sun.star.accessibility.XAccessibleContext;
-import com.sun.star.accessibility.XAccessibleComponent;
-import com.sun.star.accessibility.XAccessibleExtendedComponent;
-import com.sun.star.accessibility.XAccessibleRelationSet;
-import com.sun.star.accessibility.XAccessibleStateSet;
-
 import com.sun.star.awt.XExtendedToolkit;
 
-import java.util.Vector;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.tree.*;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.event.TreeSelectionEvent;
-import java.io.*;
-
 import ov.ObjectViewContainer;
 
 /** This class manages the GUI of the work bench.

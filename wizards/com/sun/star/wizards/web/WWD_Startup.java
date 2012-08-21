@@ -23,8 +23,6 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Vector;
-
 import com.sun.star.awt.VclWindowPeerAttribute;
 import com.sun.star.awt.XControl;
 import com.sun.star.awt.XItemListener;

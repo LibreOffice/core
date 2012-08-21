@@ -21,7 +21,6 @@ package ifc.awt;
 import lib.MultiMethodTest;
 import lib.Status;
 
-import com.sun.star.awt.XControl;
 import com.sun.star.awt.XControlContainer;
 import com.sun.star.awt.XTabController;
 import com.sun.star.awt.XTabControllerModel;

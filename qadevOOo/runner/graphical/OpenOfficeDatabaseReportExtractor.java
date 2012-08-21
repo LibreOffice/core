@@ -36,8 +36,6 @@ import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
 import com.sun.star.util.XCloseable;
 import complexlib.Assurance;
-// import complexlib.ComplexTestCase.AssureException;
-import helper.OfficeProvider;
 import helper.PropertyHelper;
 import helper.URLHelper;
 import java.io.File;

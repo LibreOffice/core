@@ -19,9 +19,6 @@
 import com.sun.star.accessibility.*;
 import com.sun.star.lang.EventObject;
 import com.sun.star.uno.*;
-import com.sun.star.accessibility.*;
-
-import java.util.LinkedList;
 
 class QueuedListener
     implements XAccessibleEventListener

@@ -18,7 +18,6 @@
 
 package ov;
 
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
@@ -38,9 +37,6 @@ import javax.swing.border.Border;
 import javax.swing.border.BevelBorder;
 
 import com.sun.star.accessibility.XAccessibleContext;
-import com.sun.star.accessibility.XAccessibleComponent;
-import com.sun.star.accessibility.XAccessibleSelection;
-import com.sun.star.uno.UnoRuntime;
 
 
 public class ObjectViewContainer

@@ -17,9 +17,6 @@
  */
 
 import com.sun.star.frame.XFrameActionListener;
-import com.sun.star.frame.FrameActionEvent;
-
-import com.sun.star.lang.EventObject;
 
 public class   FrameActionListener
     implements XFrameActionListener

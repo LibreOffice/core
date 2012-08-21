@@ -18,7 +18,6 @@
 
 package org.openoffice.xmerge.converter.xml.sxw.wordsmith;
 
-import org.openoffice.xmerge.util.Debug;
 import java.io.IOException;
 import java.io.DataOutputStream;
 import java.io.ByteArrayOutputStream;

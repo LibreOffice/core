@@ -18,8 +18,6 @@
 
 package ifc.container;
 
-import java.io.PrintWriter;
-
 import lib.MultiMethodTest;
 import lib.Status;
 import lib.StatusException;

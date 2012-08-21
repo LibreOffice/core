@@ -50,7 +50,6 @@ import javax.xml.transform.*;
 import javax.xml.transform.dom.*;
 import javax.xml.transform.stream.*;
 
-import org.openoffice.xmerge.util.Resources;
 import org.openoffice.xmerge.util.Debug;
 
 /**

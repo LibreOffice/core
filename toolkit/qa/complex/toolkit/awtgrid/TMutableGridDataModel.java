@@ -26,7 +26,6 @@
 
 package complex.toolkit.awtgrid;
 
-import java.lang.reflect.Method;
 import com.sun.star.awt.grid.GridDataEvent;
 import com.sun.star.awt.grid.XMutableGridDataModel;
 import com.sun.star.lang.IllegalArgumentException;

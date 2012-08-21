@@ -16,29 +16,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-import java.lang.Thread;
-
-import com.sun.star.awt.Rectangle;
-import com.sun.star.awt.XWindow;
-
 import com.sun.star.beans.Property;
-import com.sun.star.beans.PropertyValue;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.beans.XPropertySetInfo;
 
 import com.sun.star.container.XIndexAccess;
-import com.sun.star.container.XChild;
-import com.sun.star.container.XEnumerationAccess;
-import com.sun.star.container.XEnumeration;
-
-import com.sun.star.frame.XComponentLoader;
-import com.sun.star.frame.XController;
-import com.sun.star.frame.XDesktop;
-import com.sun.star.frame.XFrame;
-import com.sun.star.frame.XTasksSupplier;
-import com.sun.star.frame.XTask;
-
-import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.lang.XServiceInfo;
 import com.sun.star.lang.XServiceName;
@@ -48,9 +30,7 @@ import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
 import com.sun.star.uno.Type;
 
-import com.sun.star.drawing.XDrawView;
 import com.sun.star.drawing.XDrawPage;
-import com.sun.star.drawing.XShapes;
 import com.sun.star.drawing.XShape;
 import com.sun.star.drawing.XShapeDescriptor;
 

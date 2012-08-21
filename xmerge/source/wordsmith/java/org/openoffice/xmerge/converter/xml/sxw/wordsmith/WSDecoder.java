@@ -21,11 +21,9 @@ package org.openoffice.xmerge.converter.xml.sxw.wordsmith;
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
-import java.io.FileInputStream;
-import java.io.UnsupportedEncodingException;
-import org.openoffice.xmerge.util.Debug;
 
-import org.openoffice.xmerge.converter.palm.*;
+import org.openoffice.xmerge.converter.palm.Record;
+import org.openoffice.xmerge.util.Debug;
 import org.openoffice.xmerge.util.Resources;
 
 /**

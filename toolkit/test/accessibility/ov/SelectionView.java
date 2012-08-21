@@ -18,12 +18,9 @@
 
 package ov;
 
-import java.util.Vector;
-
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
-import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
@@ -33,15 +30,10 @@ import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
-import javax.swing.JList;
 import javax.swing.JPanel;
-import javax.swing.JOptionPane;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JToggleButton;
-import javax.swing.ListSelectionModel;
-
-
 import com.sun.star.accessibility.AccessibleEventId;
 import com.sun.star.accessibility.AccessibleEventObject;
 import com.sun.star.accessibility.AccessibleStateType;

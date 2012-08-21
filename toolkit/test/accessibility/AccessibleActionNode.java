@@ -17,7 +17,6 @@
  */
 
 import javax.swing.JOptionPane;
-import com.sun.star.accessibility.XAccessibleAction;
 
 /**
     Base class for all tree nodes.

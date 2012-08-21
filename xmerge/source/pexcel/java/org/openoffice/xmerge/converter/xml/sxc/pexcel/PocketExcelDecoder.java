@@ -20,7 +20,6 @@ package org.openoffice.xmerge.converter.xml.sxc.pexcel;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 

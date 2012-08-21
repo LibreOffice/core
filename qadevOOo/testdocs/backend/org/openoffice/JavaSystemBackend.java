@@ -32,7 +32,6 @@ import com.sun.star.registry.XRegistryKey;
 import com.sun.star.uno.Type;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
-import com.sun.star.util.XStringSubstitution;
 import com.sun.star.util.XTimeStamped;
 
 

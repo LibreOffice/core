@@ -22,8 +22,6 @@ import ifc.sdb._XCompletedExecution;
 
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.Vector;
-
 import lib.Status;
 import lib.StatusException;
 import lib.TestCase;

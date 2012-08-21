@@ -19,17 +19,8 @@
 // base classes
 import com.sun.star.uno.UnoRuntime;
 
-// factory for creating components
-import com.sun.star.beans.PropertyValue;
 import com.sun.star.bridge.XUnoUrlResolver;
-import com.sun.star.frame.XComponentLoader;
-import com.sun.star.frame.XDesktop;
-import com.sun.star.frame.XModel;
 import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.uno.XInterface;
-
-// Exceptions
-import com.sun.star.uno.RuntimeException;
 
 
 /** @descr  This class establishes a connection to a LibreOffice application.

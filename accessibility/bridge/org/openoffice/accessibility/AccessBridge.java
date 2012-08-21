@@ -21,9 +21,7 @@ import com.sun.star.accessibility.AccessibleRole;
 import com.sun.star.accessibility.XAccessible;
 import com.sun.star.accessibility.XAccessibleContext;
 import com.sun.star.awt.XExtendedToolkit;
-import com.sun.star.awt.XTopWindow;
 import com.sun.star.awt.XTopWindowListener;
-import com.sun.star.awt.XWindow;
 import com.sun.star.comp.loader.FactoryHelper;
 import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XInitialization;
@@ -36,10 +34,6 @@ import org.openoffice.java.accessibility.*;
 
 import java.awt.EventQueue;
 import java.awt.Window;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-
-import javax.accessibility.Accessible;
 
 
 public class AccessBridge {

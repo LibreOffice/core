@@ -37,7 +37,6 @@ import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.Type;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
-import java.io.PrintWriter;
 import lib.MultiMethodTest;
 import lib.StatusException;
 

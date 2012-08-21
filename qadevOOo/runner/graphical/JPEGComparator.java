@@ -21,7 +21,6 @@ package graphical;
 import helper.OSHelper;
 import helper.ProcessHandler;
 import java.io.File;
-import java.io.IOException;
 
 /**
  * Helper class to interpret a jpg filename
