@@ -40,6 +40,7 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
     basic \
     bean \
     binaryurp \
+    bluez_bluetooth \
     canvas \
     chart2 \
     clucene \

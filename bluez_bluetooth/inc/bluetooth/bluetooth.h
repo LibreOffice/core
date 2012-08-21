@@ -58,11 +58,13 @@
 #define BDADDR_LOCAL (&(bdaddr_t) {{0, 0, 0, 0xff, 0xff, 0xff}})
 #ifdef __cplusplus
 #endif
-typedef struct {
-    uint8_t b[6];
-} __attribute__((packed)) bdaddr_t;
-static inline void bacpy(bdaddr_t *dst, const bdaddr_t *src)
+typedef struct
 {
-    memcpy(dst, src, sizeof(bdaddr_t));
+  uint8_t b[6];
+} __attribute__ ((packed)) bdaddr_t;
+static inline void
+bacpy (bdaddr_t * dst, const bdaddr_t * src)
+{
+  memcpy (dst, src, sizeof (bdaddr_t));
 }
 #endif

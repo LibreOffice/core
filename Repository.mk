@@ -430,6 +430,7 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
     avmediagst \
     avmediagst_0_10 \
     avmediawin \
+    bluez_bluetooth \
     cached1 \
     collator_data \
     dbpool2 \

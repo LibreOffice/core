@@ -37,6 +37,7 @@ $(eval $(call gb_Module_add_moduledirs,tail_end,\
     basic \
     bean \
 	binaryurp \
+	bluez_bluetooth \
     canvas \
     chart2 \
     configmgr \

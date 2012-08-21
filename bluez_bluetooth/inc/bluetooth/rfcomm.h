@@ -38,9 +38,10 @@
 #define RFCOMM_TTY_ATTACHED 3
 #ifdef __cplusplus
 #endif
-struct sockaddr_rc {
-    sa_family_t rc_family;
-    bdaddr_t    rc_bdaddr;
-    uint8_t     rc_channel;
+struct sockaddr_rc
+{
+  sa_family_t rc_family;
+  bdaddr_t rc_bdaddr;
+  uint8_t rc_channel;
 };
 #endif
