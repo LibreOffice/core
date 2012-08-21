@@ -206,8 +206,10 @@ $(call gb_YaccTarget_get_target,%) : $(call gb_YaccTarget_get_source,$(SRCDIR),%
 	$(call gb_YaccTarget__command,$<,$*,$@,$(call gb_YaccTarget_get_header_target,$*),$(call gb_YaccTarget_get_grammar_target,$*))
 
 define gb_YaccTarget_YaccTarget
-$(call gb_YaccTarget_get_grammar_target,$(1)) :| $(call gb_YaccTarget_get_target,$(1))
-$(call gb_YaccTarget_get_header_target,$(1)) :| $(call gb_YaccTarget_get_target,$(1))
+$(call gb_YaccTarget_get_grammar_target,$(1)) : $(call gb_YaccTarget_get_target,$(1))
+	touch $$@
+$(call gb_YaccTarget_get_header_target,$(1)) : $(call gb_YaccTarget_get_target,$(1))
+	touch $$@
 
 endef
 
@@ -229,7 +231,8 @@ $(call gb_LexTarget_get_target,%) : $(call gb_LexTarget_get_source,$(SRCDIR),%)
 
 # gb_LexTarget_LexTarget(scanner-file)
 define gb_LexTarget_LexTarget
-$(call gb_LexTarget_get_scanner_target,$(1)) :| $(call gb_LexTarget_get_target,$(1))
+$(call gb_LexTarget_get_scanner_target,$(1)) : $(call gb_LexTarget_get_target,$(1))
+	touch $$@
 
 endef
 
