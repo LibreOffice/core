@@ -402,7 +402,6 @@ public:
     void DumpPCode();
     sal_Bool Step();                    // single step (one opcode)
     void Stop()            { bRun = sal_False;   }
-    sal_Bool IsRun()           { return bRun;    }
     void block( void )     { bBlocked = sal_True; }
     void unblock( void )   { bBlocked = sal_False; }
     SbMethod* GetMethod()  { return pMeth;   }
