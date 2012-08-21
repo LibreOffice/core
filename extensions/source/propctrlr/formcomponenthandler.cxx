@@ -2786,7 +2786,7 @@ namespace pcr
         // non-linked images ( e.g. those located in the document
         // stream ) only if document is available
         Reference< XModel > xModel( impl_getContextDocument_nothrow() );
-        bool bHandleNonLink = xModel.is();
+        bool bHandleNonLink = false;
 
         Reference< XFilePickerControlAccess > xController(aFileDlg.GetFilePicker(), UNO_QUERY);
         DBG_ASSERT(xController.is(), "FormComponentPropertyHandler::impl_browseForImage_nothrow: missing the controller interface on the file picker!");
