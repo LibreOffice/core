@@ -1,0 +1,139 @@
+<?xml version="1.0"?>
+<XShapes>
+ <XShape positionX="5358" positionY="4366" sizeX="5555" sizeY="1" type="com.sun.star.drawing.CustomShape" name="Straight Arrow Connector 4" textAutoGrowHeight="false" textAutoGrowWidth="false" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="BLOCK" textVerticalAdjust="TOP" textLeftDistance="250" textRightDistance="250" textUpperDistance="125" textLowerDistance="125" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="0" textMinimumFrameWidth="0" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" fillStyle="NONE" fillColor="13625333" fillTransparence="0" fillTransparenceGradientName="">
+  <FillTransparenceGradient style="LINEAR" startColor="0" endColor="16777215" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
+  <FillGradient style="LINEAR" startColor="8421504" endColor="16777215" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
+  <FillHatch style="SINGLE" color="8421504" distance="20" angle="0"/>
+  <FillBitmap width="32" height="32"/>
+  <LineDash style="RECT" dots="1" dotLen="20" dashes="1" dashLen="20" distance="20"/>
+  <LineStart/>
+  <LineEnd>
+   <pointSequence>
+    <point positionX="225" positionY="0" polygonFlags="NORMAL"/>
+    <point positionX="450" positionY="409" polygonFlags="NORMAL"/>
+    <point positionX="382" positionY="450" polygonFlags="NORMAL"/>
+    <point positionX="225" positionY="162" polygonFlags="NORMAL"/>
+    <point positionX="67" positionY="450" polygonFlags="NORMAL"/>
+    <point positionX="0" positionY="409" polygonFlags="NORMAL"/>
+    <point positionX="225" positionY="0" polygonFlags="NORMAL"/>
+   </pointSequence>
+  </LineEnd>
+  <Transformation>
+   <Line1 column1="5556.000000" column2="0.000000" column3="5358.000000"/>
+   <Line2 column1="0.000000" column2="2.000000" column3="4366.000000"/>
+   <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
+  </Transformation>
+  <CustomShapeGeometry>
+   <PropertyValue name="IsPostRotateAngle" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="MirroredX" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="MirroredY" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="TextPreRotateAngle" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="Type" handle="0" value="mso-spt32" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="AdjustmentValues" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="ViewBox" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="Path" handle="0" propertyState="DIRECT_VALUE"/>
+  </CustomShapeGeometry>
+ </XShape>
+ <XShape positionX="5356" positionY="5159" sizeX="5555" sizeY="1" type="com.sun.star.drawing.CustomShape" name="Straight Arrow Connector 5" textAutoGrowHeight="false" textAutoGrowWidth="false" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="BLOCK" textVerticalAdjust="TOP" textLeftDistance="250" textRightDistance="250" textUpperDistance="125" textLowerDistance="125" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="0" textMinimumFrameWidth="0" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" fillStyle="NONE" fillColor="13625333" fillTransparence="0" fillTransparenceGradientName="">
+  <FillTransparenceGradient style="LINEAR" startColor="0" endColor="16777215" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
+  <FillGradient style="LINEAR" startColor="8421504" endColor="16777215" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
+  <FillHatch style="SINGLE" color="8421504" distance="20" angle="0"/>
+  <FillBitmap width="32" height="32"/>
+  <LineDash style="RECT" dots="1" dotLen="20" dashes="1" dashLen="20" distance="20"/>
+  <LineStart/>
+  <LineEnd>
+   <pointSequence>
+    <point positionX="225" positionY="0" polygonFlags="NORMAL"/>
+    <point positionX="450" positionY="409" polygonFlags="NORMAL"/>
+    <point positionX="382" positionY="450" polygonFlags="NORMAL"/>
+    <point positionX="225" positionY="162" polygonFlags="NORMAL"/>
+    <point positionX="67" positionY="450" polygonFlags="NORMAL"/>
+    <point positionX="0" positionY="409" polygonFlags="NORMAL"/>
+    <point positionX="225" positionY="0" polygonFlags="NORMAL"/>
+   </pointSequence>
+  </LineEnd>
+  <Transformation>
+   <Line1 column1="5556.000000" column2="0.000000" column3="5356.000000"/>
+   <Line2 column1="0.000000" column2="2.000000" column3="5159.000000"/>
+   <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
+  </Transformation>
+  <CustomShapeGeometry>
+   <PropertyValue name="IsPostRotateAngle" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="MirroredX" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="MirroredY" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="TextPreRotateAngle" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="Type" handle="0" value="mso-spt32" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="AdjustmentValues" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="ViewBox" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="Path" handle="0" propertyState="DIRECT_VALUE"/>
+  </CustomShapeGeometry>
+ </XShape>
+ <XShape positionX="14486" positionY="4366" sizeX="5555" sizeY="1" type="com.sun.star.drawing.CustomShape" name="Straight Arrow Connector 6" textAutoGrowHeight="false" textAutoGrowWidth="false" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="BLOCK" textVerticalAdjust="TOP" textLeftDistance="250" textRightDistance="250" textUpperDistance="125" textLowerDistance="125" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="0" textMinimumFrameWidth="0" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" fillStyle="NONE" fillColor="13625333" fillTransparence="0" fillTransparenceGradientName="">
+  <FillTransparenceGradient style="LINEAR" startColor="0" endColor="16777215" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
+  <FillGradient style="LINEAR" startColor="8421504" endColor="16777215" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
+  <FillHatch style="SINGLE" color="8421504" distance="20" angle="0"/>
+  <FillBitmap width="32" height="32"/>
+  <LineDash style="RECT" dots="1" dotLen="20" dashes="1" dashLen="20" distance="20"/>
+  <LineStart/>
+  <LineEnd>
+   <pointSequence>
+    <point positionX="225" positionY="0" polygonFlags="NORMAL"/>
+    <point positionX="450" positionY="409" polygonFlags="NORMAL"/>
+    <point positionX="382" positionY="450" polygonFlags="NORMAL"/>
+    <point positionX="225" positionY="162" polygonFlags="NORMAL"/>
+    <point positionX="67" positionY="450" polygonFlags="NORMAL"/>
+    <point positionX="0" positionY="409" polygonFlags="NORMAL"/>
+    <point positionX="225" positionY="0" polygonFlags="NORMAL"/>
+   </pointSequence>
+  </LineEnd>
+  <Transformation>
+   <Line1 column1="5556.000000" column2="0.000000" column3="14486.000000"/>
+   <Line2 column1="0.000000" column2="2.000000" column3="4366.000000"/>
+   <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
+  </Transformation>
+  <CustomShapeGeometry>
+   <PropertyValue name="IsPostRotateAngle" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="MirroredX" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="MirroredY" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="TextPreRotateAngle" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="Type" handle="0" value="mso-spt32" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="AdjustmentValues" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="ViewBox" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="Path" handle="0" propertyState="DIRECT_VALUE"/>
+  </CustomShapeGeometry>
+ </XShape>
+ <XShape positionX="14484" positionY="5159" sizeX="5555" sizeY="1" type="com.sun.star.drawing.CustomShape" name="Straight Arrow Connector 8" textAutoGrowHeight="false" textAutoGrowWidth="false" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="BLOCK" textVerticalAdjust="TOP" textLeftDistance="250" textRightDistance="250" textUpperDistance="125" textLowerDistance="125" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="0" textMinimumFrameWidth="0" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" fillStyle="NONE" fillColor="13625333" fillTransparence="0" fillTransparenceGradientName="">
+  <FillTransparenceGradient style="LINEAR" startColor="0" endColor="16777215" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
+  <FillGradient style="LINEAR" startColor="8421504" endColor="16777215" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
+  <FillHatch style="SINGLE" color="8421504" distance="20" angle="0"/>
+  <FillBitmap width="32" height="32"/>
+  <LineDash style="RECT" dots="1" dotLen="20" dashes="1" dashLen="20" distance="20"/>
+  <LineStart/>
+  <LineEnd>
+   <pointSequence>
+    <point positionX="225" positionY="0" polygonFlags="NORMAL"/>
+    <point positionX="450" positionY="409" polygonFlags="NORMAL"/>
+    <point positionX="382" positionY="450" polygonFlags="NORMAL"/>
+    <point positionX="225" positionY="162" polygonFlags="NORMAL"/>
+    <point positionX="67" positionY="450" polygonFlags="NORMAL"/>
+    <point positionX="0" positionY="409" polygonFlags="NORMAL"/>
+    <point positionX="225" positionY="0" polygonFlags="NORMAL"/>
+   </pointSequence>
+  </LineEnd>
+  <Transformation>
+   <Line1 column1="5556.000000" column2="0.000000" column3="14484.000000"/>
+   <Line2 column1="0.000000" column2="2.000000" column3="5159.000000"/>
+   <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
+  </Transformation>
+  <CustomShapeGeometry>
+   <PropertyValue name="IsPostRotateAngle" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="MirroredX" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="MirroredY" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="TextPreRotateAngle" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="Type" handle="0" value="mso-spt32" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="AdjustmentValues" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="ViewBox" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="Path" handle="0" propertyState="DIRECT_VALUE"/>
+  </CustomShapeGeometry>
+ </XShape>
+</XShapes>

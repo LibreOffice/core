@@ -84,10 +84,12 @@ public:
 
     void test();
     void testN759180();
+    void testFdo47434();
 
     CPPUNIT_TEST_SUITE(SdFiltersTest);
     CPPUNIT_TEST(test);
     CPPUNIT_TEST(testN759180);
+    CPPUNIT_TEST(testFdo47434);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -195,6 +197,14 @@ void SdFiltersTest::testN759180()
             }
         }
     }
+}
+
+void SdFiltersTest::testFdo47434()
+{
+    // The problem was the arrow that has cy < 180 and flipH = 0 is rendered incorrectly.
+    // Its height should be 1, not negative.
+    ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/pptx/fdo47434-all.pptx"));
+    testStuff(xDocShRef, rtl::OUStringToOString(getPathFromSrc("/sd/qa/unit/data/pptx/xml/fdo47434_page"), RTL_TEXTENCODING_UTF8));
 }
 
 void SdFiltersTest::testStuff(::sd::DrawDocShellRef xDocShRef, const rtl::OString& fileNameBase)
