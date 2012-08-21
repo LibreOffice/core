@@ -62,11 +62,11 @@ private:
 
     // GMenuModel and GActionGroup attributes
     GMenuModel*                     mpMenuModel;
-    GMenuModel*                     mpCurrentSection;
     GActionGroup*                   mpActionGroup;
 
     GtkSalMenuItem* GetSalMenuItem( sal_uInt16 nId );
-    sal_Int16      GetSectionNumber( GMenuModel* pSection );
+    sal_Int16       GetSectionNumber( GMenuModel* pSection );
+    void            GetInsertionData( unsigned nPos, unsigned *insertSection, unsigned *insertPos );
 
 public:
     GtkSalMenu( sal_Bool bMenuBar );
@@ -93,7 +93,7 @@ public:
     virtual Menu*               GetMenu() { return mpVCLMenu; }
     virtual GtkSalMenu*         GetParentSalMenu() { return mpParentSalMenu; }
     virtual GMenuModel*         GetMenuModel() { return mpMenuModel; }
-    virtual GMenuModel*         GetCurrentSection() { return mpCurrentSection; }
+//    virtual GMenuModel*         GetCurrentSection() { return mpCurrentSection; }
     virtual unsigned            GetItemCount() { return maItems.size(); }
     virtual GtkSalMenuItem*     GetItemAtPos( unsigned nPos ) { return maItems[ nPos ]; }
     virtual GActionGroup*       GetActionGroup() { return mpActionGroup; }
@@ -107,7 +107,6 @@ public:
 
     sal_uInt16          mnId;               // Item ID
     MenuItemBits        mnBits;             // Item bits
-    sal_uInt16          mnPos;              // Item position
     gchar*              maCommand;          // Item command
     Menu*               mpVCLMenu;          // VCL Menu into which this MenuItem is inserted
     GtkSalMenu*         mpParentMenu;       // The menu in which this menu item is inserted
