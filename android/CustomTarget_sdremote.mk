@@ -14,6 +14,8 @@ $(call gb_CustomTarget_get_target,android/sdremote) : $(sdremote_DIR)/done
 
 $(sdremote_DIR)/done : $(gb_Helper_PHONY)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),MAK,1)
-	cd $(SRCDIR)/android/sdremote && $(MAKE)
+	cd $(SRCDIR)/android/sdremote && $(MAKE) clean && $(MAKE) all
+	mkdir -p $(SRCDIR)/instsetoo_native/$(INPATH)/bin
+	cp $(SRCDIR)/android/sdremote/bin/ImpressRemote-debug.apk $(SRCDIR)/instsetoo_native/$(INPATH)/bin
 
 # vim: set noet sw=4 ts=4:
