@@ -8,13 +8,16 @@
 
 include ../../config_host.mk
 
-all:
-	echo sdk.dir=$(ANDROID_SDK_HOME) >local.properties
+all: properties
 	mkdir -p ../abs-lib/libs
 	cp $(ANDROID_SDK_HOME)/extras/android/support/v4/android-support-v4.jar ../abs-lib/libs
 	$(ANT) debug
 
-clean:
+properties:
+	echo sdk.dir=$(ANDROID_SDK_HOME) >local.properties
+	echo sdk.dir=$(ANDROID_SDK_HOME) >../abs-lib/local.properties
+
+clean: properties
 	$(ANT) clean
 
 # vim: set noet sw=4 ts=4:
