@@ -573,6 +573,7 @@ void DocxAttributeOutput::EndRun()
 
         m_pSerializer->startElementNS( XML_w, XML_hyperlink, xAttrList );
         m_pHyperlinkAttrList = NULL;
+        m_startedHyperlink = true;
     }
 
     DoWriteBookmarks( );
@@ -588,15 +589,20 @@ void DocxAttributeOutput::EndRun()
 
     WritePostponedMath();
 
+    if ( m_closeHyperlinkInThisRun )
+    {
+        if ( m_startedHyperlink )
+        {
+            m_pSerializer->endElementNS( XML_w, XML_hyperlink );
+            m_startedHyperlink = false;
+        }
+        m_closeHyperlinkInThisRun = false;
+    }
+
     while ( m_Fields.begin() != m_Fields.end() )
     {
         EndField_Impl( m_Fields.front( ) );
         m_Fields.erase( m_Fields.begin( ) );
-    }
-    if ( m_closeHyperlinkInThisRun )
-    {
-        m_pSerializer->endElementNS( XML_w, XML_hyperlink );
-        m_closeHyperlinkInThisRun = false;
     }
 
     // if there is some redlining in the document, output it
@@ -4375,6 +4381,7 @@ DocxAttributeOutput::DocxAttributeOutput( DocxExport &rExport, FSHelperPtr pSeri
       m_pParentFrame( NULL ),
       m_closeHyperlinkInThisRun( false ),
       m_closeHyperlinkInPreviousRun( false ),
+      m_startedHyperlink( false ),
       m_postponedGraphic( NULL ),
       m_postponedMath( NULL ),
       m_postitFieldsMaxId( 0 ),
