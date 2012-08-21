@@ -184,6 +184,9 @@ void TemplateView::MouseButtonDown (const MouseEvent &rMEvt)
         else
         {
             drawinglayer::primitive2d::TextLayouterDevice aTextDev;
+            aTextDev.setFontAttribute(mpItemAttrs->aFontAttr,
+                                      mpItemAttrs->aFontSize.getX(), mpItemAttrs->aFontSize.getY(),
+                                      com::sun::star::lang::Locale() );
 
             float fTextWidth = aTextDev.getTextWidth(maName,0,maName.getLength());
 
