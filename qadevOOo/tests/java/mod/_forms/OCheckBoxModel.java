@@ -62,7 +62,7 @@ import lib.TestParameters;
 * @see com.sun.star.form.DataAwareControlModel
 * @see com.sun.star.form.XUpdateBroadcaster
 * @see com.sun.star.beans.XPropertyState
-* @see com.sun.star.form.FormControlModel
+* @see com.sun.star.form
 * @see com.sun.star.awt.UnoControlCheckBoxModel
 * @see com.sun.star.container.XNamed
 * @see com.sun.star.form.XBoundComponent

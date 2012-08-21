@@ -47,7 +47,7 @@ import lib.TestParameters;
  * @see com.sun.star.awt.UnoControlGroupBoxModel
  * @see com.sun.star.io.XPersistObject
  * @see com.sun.star.container.XChild
- * @see com.sun.star.form.FormControlModel
+ * @see com.sun.star.form
  * @see com.sun.star.form.FormComponent
  * @see com.sun.star.beans.XPropertyAccess
  * @see com.sun.star.beans.XPropertyContainer

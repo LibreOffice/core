@@ -86,7 +86,7 @@ import com.sun.star.util.XCloseable;
 * @see com.sun.star.view.XSelectionSupplier
 * @see com.sun.star.container.XEnumerationAccess
 * @see com.sun.star.beans.XPropertyState
-* @see com.sun.star.form.FormControlModel
+* @see com.sun.star.form
 * @see com.sun.star.container.XIndexReplace
 * @see com.sun.star.container.XNamed
 * @see com.sun.star.container.XIndexAccess

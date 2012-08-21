@@ -100,7 +100,7 @@ public class _RowSet extends MultiPropertyTest {
      * Overriden method which tests all the properties
      * with <code>SafeTester</code>.
      *
-     * @see #SafeTester
+     * @see SafeTester
      */
     protected void testProperty(String propName) {
         testProperty(propName, new SafeTester()) ;

@@ -78,7 +78,7 @@ public abstract class TestCase {
      * @param tParam test parameters
      * @param log writer to log information while testing
      *
-     * @see #initializeTestCase()
+     * @see #initializeTestCase
      */
     protected void initialize( TestParameters tParam, PrintWriter log ) {
     }
@@ -114,7 +114,7 @@ public abstract class TestCase {
      *
      * @return the created <code>TestEnvironment</code>
      *
-     * @see #createTestEnvironment()
+     * @see #createTestEnvironment
      * @see lib.TestEnvironment
      */
     public synchronized TestEnvironment getTestEnvironment( TestParameters tParam ) {
@@ -157,7 +157,7 @@ public abstract class TestCase {
      * @param log writer to log information while testing
      *
      * @see TestEnvironment
-     * @see #getTestEnvironment()
+     * @see #getTestEnvironment
      */
     protected abstract TestEnvironment createTestEnvironment(
             TestParameters tParam, PrintWriter log );

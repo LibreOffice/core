@@ -59,7 +59,7 @@ public class _XSingleSelectQueryAnalyzer extends MultiMethodTest {
     * <ul>
     *  <li><code>XSingleSelectQueryComposer xCompoer</code></li>
     * </ul> <p>
-     * @see om.sun.star.sdb.XSingleSelectQueryComposer
+     * @see com.sun.star.sdb.XSingleSelectQueryComposer
      */
     protected void before() {
 

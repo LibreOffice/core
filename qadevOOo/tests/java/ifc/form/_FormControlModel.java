@@ -28,7 +28,7 @@ import lib.MultiPropertyTest;
 *  <li><code> TabIndex</code></li>
 *  <li><code> Tag</code></li>
 * </ul>
-* @see com.sun.star.form.FormControlModel
+* @see com.sun.star.form
 */
 public class _FormControlModel extends MultiPropertyTest {
 

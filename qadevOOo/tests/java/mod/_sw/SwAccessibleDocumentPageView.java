@@ -59,7 +59,7 @@ public class SwAccessibleDocumentPageView extends TestCase {
     * @param log writer to log information while testing
     *
     * @see TestEnvironment
-    * @see #getTestEnvironment()
+    * @see #getTestEnvironment
     */
     protected TestEnvironment createTestEnvironment(
         TestParameters Param, PrintWriter log) {
@@ -178,7 +178,7 @@ public class SwAccessibleDocumentPageView extends TestCase {
      * @param Param test parameters
      * @param log writer to log information while testing
      *
-     * @see #initializeTestCase()
+     * @see #initializeTestCase
      */
     protected void initialize(TestParameters Param, PrintWriter log) {
         log.println( "creating a text document" );
