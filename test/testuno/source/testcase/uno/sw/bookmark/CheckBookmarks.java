@@ -22,7 +22,7 @@
 package testcase.uno.sw.bookmark;
 
 import static org.junit.Assert.assertArrayEquals;
-import static testlib.uno.sw.SWUtil.insertBookmark;
+import static testlib.uno.SWUtil.insertBookmark;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -106,7 +106,7 @@ public class CheckBookmarks {
         XTextCursor xTextCursor = xText.createTextCursor();
         xTextCursor.gotoEnd(false);
         xTextCursor.goLeft((short)10, true);
-        xTextCursor.setString("");
+        xTextCursor.setString("new");
 
         // Let's see the bookmarks
         XNameAccess xBookmarks = UnoRuntime.queryInterface(XBookmarksSupplier.class, document).getBookmarks();

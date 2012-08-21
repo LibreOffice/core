@@ -25,7 +25,7 @@ import org.openoffice.test.common.FileUtil;
 import org.openoffice.test.common.Testspace;
 import org.openoffice.test.uno.UnoApp;
 
-import testlib.uno.SDUnoUtil;
+import testlib.uno.SDUtil;
 
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.beans.XPropertySet;
@@ -48,7 +48,7 @@ import com.sun.star.uno.UnoRuntime;
 public class CheckCharacterStyle {
 
     private static final UnoApp app = new UnoApp();
-    private static final SDUnoUtil SDUtil = new SDUnoUtil();
+    private static final SDUtil SDUtil = new SDUtil();
     private XComponent m_xSDComponent = null;
     private XText xShapeText = null;
     private String filePath = null;

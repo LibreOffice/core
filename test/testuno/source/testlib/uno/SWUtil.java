@@ -1,4 +1,4 @@
-package testlib.uno.sw;
+package testlib.uno;
 
 import org.openoffice.test.uno.UnoApp;
 

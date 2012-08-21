@@ -1,17 +1,16 @@
-package testcase.uno;
+package testcase.mix;
 
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.openoffice.test.uno.UnoApp;
+import org.openoffice.test.vcl.widgets.VclApp;
 import org.openoffice.test.vcl.widgets.VclListBox;
 import org.openoffice.test.vcl.widgets.VclTabPage;
 import org.openoffice.test.vcl.widgets.VclWindow;
 
 import com.sun.star.beans.XPropertySet;
-import com.sun.star.frame.XComponentLoader;
-import com.sun.star.lang.XComponent;
 import com.sun.star.text.XText;
 import com.sun.star.text.XTextCursor;
 import com.sun.star.text.XTextDocument;
@@ -24,6 +23,7 @@ import com.sun.star.uno.UnoRuntime;
  */
 public class MixedTest {
     UnoApp unoApp = new UnoApp();
+    VclApp vclApp = new VclApp();
     VclWindow writer = new VclWindow("SW_HID_EDIT_WIN");
     VclTabPage effectsPage = new VclTabPage("CUI_HID_SVXPAGE_CHAR_EFFECTS");
     VclListBox colorList = new VclListBox("cui:ListBox:RID_SVXPAGE_CHAR_EFFECTS:LB_FONTCOLOR");

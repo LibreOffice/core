@@ -17,14 +17,14 @@ import com.sun.star.uno.UnoRuntime;
  *
  *
  */
-public class SDUnoUtil {
+public class SDUtil {
 
     /**
      * @throws WrappedTargetException
      * @throws
      * @throws java.lang.Exception
      */
-    public SDUnoUtil(){
+    public SDUtil(){
 
     }
 
