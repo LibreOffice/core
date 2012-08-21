@@ -7,11 +7,11 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <sfx2/templateonlineview.hxx>
+#include <sfx2/templateremoteview.hxx>
 
 #include <comphelper/processfactory.hxx>
 #include <officecfg/Office/Common.hxx>
-#include <sfx2/templateonlineviewitem.hxx>
+#include <sfx2/templateremoteviewitem.hxx>
 #include <sfx2/templateview.hxx>
 #include <sfx2/templateviewitem.hxx>
 #include <svtools/imagemgr.hxx>
@@ -45,12 +45,12 @@ enum
     ROW_IS_REMOVEABLE
 };
 
-TemplateOnlineView::TemplateOnlineView (Window *pParent, WinBits nWinStyle, bool bDisableTransientChildren)
+TemplateRemoteView::TemplateRemoteView (Window *pParent, WinBits nWinStyle, bool bDisableTransientChildren)
     : TemplateAbstractView(pParent,nWinStyle,bDisableTransientChildren)
     , mbIsSynced(true)
 {
     mpItemView->SetColor(Color(COL_WHITE));
-    mpItemView->setChangeNameHdl(LINK(this,TemplateOnlineView,ChangeNameHdl));
+    mpItemView->setChangeNameHdl(LINK(this,TemplateRemoteView,ChangeNameHdl));
 
     Reference< XMultiServiceFactory > xFactory = comphelper::getProcessServiceFactory();
     Reference< XInteractionHandler >  xGlobalInteractionHandler = Reference< XInteractionHandler >(
@@ -59,13 +59,13 @@ TemplateOnlineView::TemplateOnlineView (Window *pParent, WinBits nWinStyle, bool
     m_xCmdEnv = new ucbhelper::CommandEnvironment( xGlobalInteractionHandler, Reference< XProgressHandler >() );
 }
 
-TemplateOnlineView::~TemplateOnlineView ()
+TemplateRemoteView::~TemplateRemoteView ()
 {
     for (size_t i = 0, n = maRepositories.size(); i < n; ++i)
         delete maRepositories[i];
 }
 
-void TemplateOnlineView::Populate()
+void TemplateRemoteView::Populate()
 {
     uno::Reference < uno::XComponentContext > m_context(comphelper::getProcessComponentContext());
 
@@ -78,7 +78,7 @@ void TemplateOnlineView::Populate()
 
     for (sal_Int32 i = 0; i < aUrls.getLength() && i < aNames.getLength(); ++i)
     {
-        TemplateOnlineViewItem *pItem = new TemplateOnlineViewItem(*this,this);
+        TemplateRemoteViewItem *pItem = new TemplateRemoteViewItem(*this,this);
 
         pItem->mnId = i+1;
         pItem->maTitle = aNames[i];
@@ -88,18 +88,18 @@ void TemplateOnlineView::Populate()
     }
 }
 
-void TemplateOnlineView::reload ()
+void TemplateRemoteView::reload ()
 {
     loadRepository(mpItemView->getId(),true);
 }
 
-void TemplateOnlineView::filterTemplatesByApp(const FILTER_APPLICATION &eApp)
+void TemplateRemoteView::filterTemplatesByApp(const FILTER_APPLICATION &eApp)
 {
     if (mpItemView->IsVisible())
         mpItemView->filterItems(ViewFilter_Application(eApp));
 }
 
-void TemplateOnlineView::showOverlay (bool bVisible)
+void TemplateRemoteView::showOverlay (bool bVisible)
 {
     mpItemView->Show(bVisible);
 
@@ -112,14 +112,14 @@ void TemplateOnlineView::showOverlay (bool bVisible)
     }
 }
 
-void TemplateOnlineView::setOverlayChangeNameHdl(const Link &rLink)
+void TemplateRemoteView::setOverlayChangeNameHdl(const Link &rLink)
 {
     maChangeNameHdl = rLink;
 }
 
-bool TemplateOnlineView::loadRepository (const sal_uInt16 nRepositoryId, bool bRefresh)
+bool TemplateRemoteView::loadRepository (const sal_uInt16 nRepositoryId, bool bRefresh)
 {
-    TemplateOnlineViewItem *pItem = NULL;
+    TemplateRemoteViewItem *pItem = NULL;
 
     for (size_t i = 0, n = maRepositories.size(); i < n; ++i)
     {
@@ -143,7 +143,7 @@ bool TemplateOnlineView::loadRepository (const sal_uInt16 nRepositoryId, bool bR
     mpItemView->setId(nRepositoryId);
     mpItemView->setName(pItem->maTitle);
 
-    rtl::OUString aURL = static_cast<TemplateOnlineViewItem*>(pItem)->getURL();
+    rtl::OUString aURL = static_cast<TemplateRemoteViewItem*>(pItem)->getURL();
 
     try
     {
@@ -253,7 +253,7 @@ bool TemplateOnlineView::loadRepository (const sal_uInt16 nRepositoryId, bool bR
     return true;
 }
 
-bool TemplateOnlineView::insertRepository(const OUString &rName, const OUString &rURL)
+bool TemplateRemoteView::insertRepository(const OUString &rName, const OUString &rURL)
 {
     for (size_t i = 0, n = maRepositories.size(); i < n; ++i)
     {
@@ -261,7 +261,7 @@ bool TemplateOnlineView::insertRepository(const OUString &rName, const OUString 
             return false;
     }
 
-    TemplateOnlineViewItem *pItem = new TemplateOnlineViewItem(*this,this);
+    TemplateRemoteViewItem *pItem = new TemplateRemoteViewItem(*this,this);
 
     pItem->mnId = maRepositories.size()+1;
     pItem->maTitle = rName;
@@ -273,7 +273,7 @@ bool TemplateOnlineView::insertRepository(const OUString &rName, const OUString 
     return true;
 }
 
-bool TemplateOnlineView::deleteRepository(const sal_uInt16 nRepositoryId)
+bool TemplateRemoteView::deleteRepository(const sal_uInt16 nRepositoryId)
 {
     bool bRet = false;
 
@@ -293,7 +293,7 @@ bool TemplateOnlineView::deleteRepository(const sal_uInt16 nRepositoryId)
     return bRet;
 }
 
-void TemplateOnlineView::syncRepositories() const
+void TemplateRemoteView::syncRepositories() const
 {
     if (!mbIsSynced)
     {
@@ -316,7 +316,7 @@ void TemplateOnlineView::syncRepositories() const
     }
 }
 
-IMPL_LINK (TemplateOnlineView, ChangeNameHdl, TemplateView*, pView)
+IMPL_LINK (TemplateRemoteView, ChangeNameHdl, TemplateView*, pView)
 {
     bool bRet = false;
 

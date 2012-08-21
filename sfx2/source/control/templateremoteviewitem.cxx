@@ -7,14 +7,14 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <sfx2/templateonlineviewitem.hxx>
+#include <sfx2/templateremoteviewitem.hxx>
 
-TemplateOnlineViewItem::TemplateOnlineViewItem (ThumbnailView &rView, Window *pParent)
+TemplateRemoteViewItem::TemplateRemoteViewItem (ThumbnailView &rView, Window *pParent)
     : ThumbnailViewItem(rView,pParent)
 {
 }
 
-TemplateOnlineViewItem::~TemplateOnlineViewItem()
+TemplateRemoteViewItem::~TemplateRemoteViewItem()
 {
 }
 

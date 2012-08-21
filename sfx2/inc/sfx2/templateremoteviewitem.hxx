@@ -7,19 +7,19 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef __SFX2_TEMPLATEONLINEVIEWITEM_HXX__
-#define __SFX2_TEMPLATEONLINEVIEWITEM_HXX__
+#ifndef __SFX2_TEMPLATEREMOTEVIEWITEM_HXX__
+#define __SFX2_TEMPLATEREMOTEVIEWITEM_HXX__
 
 #include <sfx2/thumbnailviewitem.hxx>
 #include <sfx2/templateproperties.hxx>
 
-class TemplateOnlineViewItem : public ThumbnailViewItem
+class TemplateRemoteViewItem : public ThumbnailViewItem
 {
 public:
 
-    TemplateOnlineViewItem (ThumbnailView &rView, Window *pParent);
+    TemplateRemoteViewItem (ThumbnailView &rView, Window *pParent);
 
-    virtual ~TemplateOnlineViewItem ();
+    virtual ~TemplateRemoteViewItem ();
 
     void setURL (const rtl::OUString &rURL) { maUrl = rURL; }
 
@@ -37,6 +37,6 @@ private:
     std::vector<TemplateItemProperties> maTemplates;
 };
 
-#endif // __SFX2_TEMPLATEONLINEVIEWITEM_HXX__
+#endif // __SFX2_TEMPLATEREMOTEVIEWITEM_HXX__
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

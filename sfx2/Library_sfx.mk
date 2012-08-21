@@ -138,8 +138,8 @@ $(eval $(call gb_Library_add_exception_objects,sfx,\
     sfx2/source/control/templateviewitem \
     sfx2/source/control/templatelocalview \
     sfx2/source/control/templatelocalviewitem \
-    sfx2/source/control/templateonlineview \
-    sfx2/source/control/templateonlineviewitem \
+    sfx2/source/control/templateremoteview \
+    sfx2/source/control/templateremoteviewitem \
     sfx2/source/control/templatesearchview \
     sfx2/source/control/thumbnailviewitem \
     sfx2/source/control/thumbnailviewacc \
@@ -303,6 +303,6 @@ endif
 
 # Runtime dependency for unit-tests
 $(call gb_LinkTarget_get_target,$(call gb_Library_get_linktargetname,sfx)) :| \
-	$(call gb_AllLangResTarget_get_target,sfx)
+    $(call gb_AllLangResTarget_get_target,sfx)
 
 # vim: set noet sw=4 ts=4:

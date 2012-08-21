@@ -23,8 +23,8 @@
 #include <sfx2/templateinfodlg.hxx>
 #include <sfx2/templatelocalview.hxx>
 #include <sfx2/templatelocalviewitem.hxx>
-#include <sfx2/templateonlineview.hxx>
-#include <sfx2/templateonlineviewitem.hxx>
+#include <sfx2/templateremoteview.hxx>
+#include <sfx2/templateremoteviewitem.hxx>
 #include <sfx2/templateviewitem.hxx>
 #include <sfx2/thumbnailviewitem.hxx>
 #include <sot/storage.hxx>
@@ -113,7 +113,7 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg (Window *parent)
       mpTemplateBar( new ToolBox(this, SfxResId(TBX_ACTION_TEMPLATES))),
       mpSearchView(new TemplateSearchView(this)),
       maView(new TemplateLocalView(this,SfxResId(TEMPLATE_VIEW))),
-      mpOnlineView(new TemplateOnlineView(this, WB_VSCROLL,false)),
+      mpOnlineView(new TemplateRemoteView(this, WB_VSCROLL,false)),
       mbIsSaveMode(false),
       mxDesktop(comphelper::getProcessServiceFactory()->createInstance( "com.sun.star.frame.Desktop" ),uno::UNO_QUERY )
 {
@@ -1246,7 +1246,7 @@ void SfxTemplateManagerDlg::createRepositoryMenu()
 
     mpRepositoryMenu->InsertItem(MNI_REPOSITORY_LOCAL,SfxResId(STR_REPOSITORY_LOCAL).toString());
 
-    const std::vector<TemplateOnlineViewItem*> &rRepos = mpOnlineView->getRepositories();
+    const std::vector<TemplateRemoteViewItem*> &rRepos = mpOnlineView->getRepositories();
 
     for (size_t i = 0, n = rRepos.size(); i < n; ++i)
         mpRepositoryMenu->InsertItem(MNI_REPOSITORY_BASE+rRepos[i]->mnId,rRepos[i]->maTitle);

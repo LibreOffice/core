@@ -20,7 +20,7 @@ class PopupMenu;
 class SfxTemplateInfoDlg;
 class TemplateAbstractView;
 class TemplateLocalView;
-class TemplateOnlineView;
+class TemplateRemoteView;
 class TemplateSearchView;
 class ThumbnailView;
 class ThumbnailViewItem;
@@ -132,7 +132,7 @@ private:
     TemplateSearchView *mpSearchView;
     TemplateAbstractView *mpCurView;
     TemplateLocalView *maView;
-    TemplateOnlineView *mpOnlineView;
+    TemplateRemoteView *mpOnlineView;
     PopupMenu *mpActionMenu;
     PopupMenu *mpRepositoryMenu;
     PopupMenu *mpTemplateDefaultMenu;
