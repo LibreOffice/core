@@ -104,9 +104,10 @@ namespace toolkit
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL ImplName##_CreateInstance( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& i_factory ) \
     { return ::com::sun::star::uno::Reference < ::com::sun::star::uno::XInterface >( ( ::cppu::OWeakObject* ) new ImplName( i_factory ) ); }
 
-::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL UnoControlDialogModel_CreateInstance( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& i_factory )
-{
-    return ::com::sun::star::uno::Reference < ::com::sun::star::uno::XInterface >( ( ::cppu::OWeakObject* ) new OGeometryControlModel<UnoControlDialogModel>( i_factory ) );
+#define IMPL_CREATE_INSTANCE_WITH_GEOMETRY( ImplName ) \
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL ImplName##_CreateInstance( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& i_factory ) \
+{ \
+    return ::com::sun::star::uno::Reference < ::com::sun::star::uno::XInterface >( ( ::cppu::OWeakObject* ) new OGeometryControlModel< ImplName >( i_factory ) ); \
 }
 
 #define GET_FACTORY_WITH_IMPL_PREFIX( ClassName, ImplNamePrefix, ServiceName1, ServiceName2 ) \
@@ -194,6 +195,8 @@ IMPL_CREATEINSTANCE2( AnimatedImagesControl )
 IMPL_CREATEINSTANCE2( AnimatedImagesControlModel )
 IMPL_CREATEINSTANCE2( SpinningProgressControlModel )
 
+IMPL_CREATE_INSTANCE_WITH_GEOMETRY( UnoControlDialogModel )
+
 extern ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL TreeControl_CreateInstance( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& );
 extern ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL TreeControlModel_CreateInstance( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& );
 extern ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL MutableTreeDataModel_CreateInstance( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& );
@@ -211,6 +214,7 @@ extern "C"
 
 TOOLKIT_DLLPUBLIC void* SAL_CALL tk_component_getFactory( const sal_Char* sImplementationName, void* _pServiceManager, void* _pRegistryKey )
 {
+
     void* pRet = NULL;
 
     if ( _pServiceManager )
@@ -293,13 +297,13 @@ TOOLKIT_DLLPUBLIC void* SAL_CALL tk_component_getFactory( const sal_Char* sImple
         GET_FACTORY( DefaultGridColumnModel, szServiceName_DefaultGridColumnModel, NULL );
         GET_FACTORY_WITH_IMPL_PREFIX( GridColumn, "org.openoffice.comp.toolkit", szServiceName_GridColumn, NULL );
         GET_FACTORY_WITH_IMPL_PREFIX( SortableGridDataModel, "org.openoffice.comp.toolkit", szServiceName_SortableGridDataModel, NULL );
-        GET_FACTORY_WITH_IMPL_PREFIX( AnimatedImagesControl, "org.openoffice.comp.toolkit", szServiceName_AnimatedImagesControl, NULL )
-        GET_FACTORY_WITH_IMPL_PREFIX( AnimatedImagesControlModel, "org.openoffice.comp.toolkit", szServiceName_AnimatedImagesControlModel, NULL )
-        GET_FACTORY_WITH_IMPL_PREFIX( SpinningProgressControlModel, "org.openoffice.comp.toolkit", szServiceName_SpinningProgressControlModel, NULL )
         GET_FACTORY( UnoControlTabPageModel, szServiceName_UnoControlTabPageModel, NULL )
         GET_FACTORY( UnoControlTabPage, szServiceName_UnoControlTabPage, NULL )
         GET_FACTORY( UnoControlTabPageContainerModel, szServiceName_UnoControlTabPageContainerModel, NULL )
         GET_FACTORY( UnoControlTabPageContainer, szServiceName_UnoControlTabPageContainer, NULL )
+        GET_FACTORY_WITH_IMPL_PREFIX( AnimatedImagesControl, "org.openoffice.comp.toolkit", szServiceName_AnimatedImagesControl, NULL )
+        GET_FACTORY_WITH_IMPL_PREFIX( AnimatedImagesControlModel, "org.openoffice.comp.toolkit", szServiceName_AnimatedImagesControlModel, NULL )
+        GET_FACTORY_WITH_IMPL_PREFIX( SpinningProgressControlModel, "org.openoffice.comp.toolkit", szServiceName_SpinningProgressControlModel, NULL )
 
         if ( rtl_str_compare( sImplementationName, "com.sun.star.awt.comp.AsyncCallback" ) == 0 )
             return comp_AsyncCallback_component_getFactory( sImplementationName, _pServiceManager, _pRegistryKey );
