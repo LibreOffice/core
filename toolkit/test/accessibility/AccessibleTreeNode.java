@@ -82,7 +82,7 @@ class AccessibleTreeNode
     /** Create a path to this node by first asking the parent for its path
         and then appending this object.
     */
-    public void createPath (java.util.Vector aPath)
+    public void createPath (java.util.Vector<AccessibleTreeNode> aPath)
     {
         if (maParent != null)
             maParent.createPath (aPath);
@@ -91,7 +91,7 @@ class AccessibleTreeNode
 
     public Object[] createPath ()
     {
-        Vector aPath = new Vector (1);
+        Vector<AccessibleTreeNode> aPath = new Vector<AccessibleTreeNode> (1);
         createPath (aPath);
         return aPath.toArray();
     }

@@ -44,7 +44,7 @@ public class ObjectViewContainer
 {
     public ObjectViewContainer ()
     {
-        maViewTemplates = new Vector ();
+        maViewTemplates = new Vector<Class> ();
         maViewBorder = BorderFactory.createBevelBorder (BevelBorder.RAISED);
         setLayout (new GridBagLayout ());
 
@@ -75,7 +75,7 @@ public class ObjectViewContainer
         {
             try
             {
-                Class aViewClass = (Class)maViewTemplates.elementAt (i);
+                Class aViewClass = maViewTemplates.elementAt (i);
                 Method aCreateMethod = aViewClass.getDeclaredMethod (
                     "Create", new Class[] {
                         ObjectViewContainer.class,
@@ -176,5 +176,5 @@ public class ObjectViewContainer
     private JTree maTree;
     private Border maViewBorder;
     /// List of view templates which are instantiated when new object is set.
-    private Vector maViewTemplates;
+    private Vector<Class> maViewTemplates;
 }

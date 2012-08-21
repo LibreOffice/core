@@ -25,13 +25,13 @@ import java.util.Vector;
 class VectorNode
     extends StringNode
 {
-    private Vector maChildren;
+    private Vector<AccessibleTreeNode> maChildren;
 
     public VectorNode (String sDisplayObject, AccessibleTreeNode aParent)
     {
         super (sDisplayObject, aParent);
 
-        maChildren = new Vector ();
+        maChildren = new Vector<AccessibleTreeNode> ();
     }
 
     public void addChild (AccessibleTreeNode aChild)
@@ -47,7 +47,7 @@ class VectorNode
     public AccessibleTreeNode getChild (int nIndex)
         throws IndexOutOfBoundsException
     {
-        return (AccessibleTreeNode)maChildren.elementAt (nIndex);
+        return maChildren.elementAt (nIndex);
     }
 
     public boolean removeChild (int nIndex)

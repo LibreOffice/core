@@ -38,7 +38,7 @@ public class TextView
         ObjectViewContainer aContainer,
         XAccessibleContext xContext)
     {
-        XAccessibleText xText = (XAccessibleText)UnoRuntime.queryInterface(
+        XAccessibleText xText = UnoRuntime.queryInterface(
                 XAccessibleText.class, xContext);
         if (xText != null)
             return new TextView (aContainer);
@@ -86,7 +86,7 @@ public class TextView
     */
     public void SetObject (XAccessibleContext xObject)
     {
-        mxText = (XAccessibleText)UnoRuntime.queryInterface(
+        mxText = UnoRuntime.queryInterface(
             XAccessibleText.class, xObject);
         super.SetObject (xObject);
     }

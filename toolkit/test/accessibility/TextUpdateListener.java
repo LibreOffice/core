@@ -92,8 +92,8 @@ class TextUpdateListener implements TreeModelListener
     {
         // is this text editable? if not, fudge you and return
         XAccessibleEditableText xEdit =
-            (XAccessibleEditableText) UnoRuntime.queryInterface (
-                XAccessibleEditableText.class, xText);
+            UnoRuntime.queryInterface (
+            XAccessibleEditableText.class, xText);
         if (xEdit == null)
             return false;
 

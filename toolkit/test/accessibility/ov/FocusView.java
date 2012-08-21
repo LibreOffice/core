@@ -45,7 +45,7 @@ public class FocusView
         ObjectViewContainer aContainer,
         XAccessibleContext xContext)
     {
-        XAccessibleComponent xComponent = (XAccessibleComponent)UnoRuntime.queryInterface(
+        XAccessibleComponent xComponent = UnoRuntime.queryInterface(
                 XAccessibleComponent.class, xContext);
         if (xComponent != null)
             return new FocusView (aContainer);
@@ -80,7 +80,7 @@ public class FocusView
     */
     public void SetObject (XAccessibleContext xObject)
     {
-        mxComponent = (XAccessibleComponent)UnoRuntime.queryInterface(
+        mxComponent = UnoRuntime.queryInterface(
                 XAccessibleComponent.class, xObject);
         super.SetObject (xObject);
     }

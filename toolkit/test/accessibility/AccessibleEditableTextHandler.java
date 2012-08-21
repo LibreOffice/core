@@ -26,8 +26,8 @@ class AccessibleEditableTextHandler extends NodeHandler
     public NodeHandler createHandler (XAccessibleContext xContext)
     {
         XAccessibleEditableText xText =
-            (XAccessibleEditableText) UnoRuntime.queryInterface (
-                XAccessibleEditableText.class, xContext);
+            UnoRuntime.queryInterface (
+            XAccessibleEditableText.class, xContext);
         if (xText != null)
             return new AccessibleEditableTextHandler (xText);
         else
@@ -46,7 +46,7 @@ class AccessibleEditableTextHandler extends NodeHandler
 
     protected static XAccessibleEditableText getEText (AccTreeNode aNode)
     {
-        return (XAccessibleEditableText) UnoRuntime.queryInterface (
+        return UnoRuntime.queryInterface (
             XAccessibleEditableText.class, aNode.getContext());
     }
 

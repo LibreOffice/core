@@ -541,7 +541,7 @@ public class AccessibilityWorkBench
     // XEventListener
     public void disposing( com.sun.star.lang.EventObject aSourceObj )
     {
-        XFrame xFrame = (XFrame)UnoRuntime.queryInterface(XFrame.class, aSourceObj.Source);
+        XFrame xFrame = UnoRuntime.queryInterface(XFrame.class, aSourceObj.Source);
 
         if( xFrame != null )
             System.out.println("frame disposed");

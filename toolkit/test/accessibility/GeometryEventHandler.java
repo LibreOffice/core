@@ -44,7 +44,7 @@ class GeometryEventHandler
         if (aCanvas != null)
         {
             // Iterate over all nodes in the sub-tree rooted in aNode.
-            LinkedList aShapeQueue = new LinkedList();
+            LinkedList<Object> aShapeQueue = new LinkedList<Object>();
             aShapeQueue.addLast (aNode);
             while (aShapeQueue.size() > 0)
             {

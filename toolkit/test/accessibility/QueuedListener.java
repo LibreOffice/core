@@ -31,11 +31,11 @@ class QueuedListener
 
     public void disposing( final EventObject aEvent)
     {
-        XAccessibleContext xContext = (XAccessibleContext)UnoRuntime.queryInterface(
+        XAccessibleContext xContext = UnoRuntime.queryInterface(
             XAccessibleContext.class, aEvent.Source);
         if (xContext == null)
         {
-            XAccessible xAccessible = (XAccessible)UnoRuntime.queryInterface(
+            XAccessible xAccessible = UnoRuntime.queryInterface(
                 XAccessible.class, aEvent.Source);
             if (xAccessible != null)
                 xContext = xAccessible.getAccessibleContext();

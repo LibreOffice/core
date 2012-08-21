@@ -168,7 +168,7 @@ class TopWindowListener
     {
         if (maModel != null)
         {
-            XWindow xWindow = (XWindow) UnoRuntime.queryInterface(
+            XWindow xWindow = UnoRuntime.queryInterface(
                 XWindow.class, aEvent.Source);
             if (xWindow == null)
                 System.out.println ("event source is no XWindow");
@@ -191,7 +191,7 @@ class TopWindowListener
     {
         if (maModel != null)
         {
-            XWindow xWindow = (XWindow) UnoRuntime.queryInterface(
+            XWindow xWindow = UnoRuntime.queryInterface(
                 XWindow.class, aEvent.Source);
             if (xWindow == null)
                 System.out.println ("event source is no XWindow");

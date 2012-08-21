@@ -81,12 +81,12 @@ public class OfficeConnection
             //  Create a URL Resolver.
             XMultiServiceFactory aLocalServiceManager =
                 com.sun.star.comp.helper.Bootstrap.createSimpleServiceManager();
-            XUnoUrlResolver aURLResolver = (XUnoUrlResolver) UnoRuntime.queryInterface (
+            XUnoUrlResolver aURLResolver = UnoRuntime.queryInterface (
                 XUnoUrlResolver.class,
                 aLocalServiceManager.createInstance ("com.sun.star.bridge.UnoUrlResolver")
                 );
 
-            maServiceManager = (XMultiServiceFactory) UnoRuntime.queryInterface (
+            maServiceManager = UnoRuntime.queryInterface (
                     XMultiServiceFactory.class,
                     aURLResolver.resolve (sConnectString)
                     );

@@ -84,7 +84,7 @@ class HelpWindow
         try
         {
             maCurrentHistoryEntry = -1;
-            maHistory = new LinkedList();
+            maHistory = new LinkedList<URL>();
 
             maFrame = new JFrame ();
             maFrame.addWindowListener (new WindowAdapter ()
@@ -175,7 +175,7 @@ class HelpWindow
             i = maHistory.size()-1;
         if (i != maCurrentHistoryEntry)
         {
-            URL aURL = (URL)maHistory.get (i);
+            URL aURL = maHistory.get (i);
             try
             {
                 maContent.setPage (aURL);
@@ -195,7 +195,7 @@ class HelpWindow
     private static HelpWindow maInstance = null;
     private JFrame maFrame;
     private JEditorPane maContent;
-    private LinkedList maHistory;
+    private LinkedList<URL> maHistory;
     private int maCurrentHistoryEntry;
     private JButton maPrevButton;
     private JButton maNextButton;

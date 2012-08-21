@@ -32,7 +32,7 @@ class NodeMap
 {
     public NodeMap ()
     {
-        maXAccessibleToNode = new HashMap ();
+        maXAccessibleToNode = new HashMap<XAccessibleContext, AccessibleTreeNode> ();
     }
 
     /** Clear the whole map.
@@ -48,7 +48,7 @@ class NodeMap
     */
     public boolean InsertNode (XAccessibleContext xContext, AccessibleTreeNode aNode)
     {
-        AccessibleTreeNode aPreviousNode = (AccessibleTreeNode)maXAccessibleToNode.put (
+        AccessibleTreeNode aPreviousNode = maXAccessibleToNode.put (
             xContext,
             aNode);
         return aPreviousNode != aNode;
@@ -95,7 +95,7 @@ class NodeMap
 
     AccessibleTreeNode GetNode (XAccessibleContext xContext)
     {
-        return (AccessibleTreeNode)maXAccessibleToNode.get (xContext);
+        return maXAccessibleToNode.get (xContext);
     }
 
     AccessibleTreeNode GetNode (Object aObject)
@@ -126,5 +126,5 @@ class NodeMap
 
 
 
-    private HashMap maXAccessibleToNode;
+    private HashMap<XAccessibleContext, AccessibleTreeNode> maXAccessibleToNode;
 }

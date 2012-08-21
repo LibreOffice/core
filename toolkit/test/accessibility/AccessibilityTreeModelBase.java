@@ -27,7 +27,7 @@ public class AccessibilityTreeModelBase
     public AccessibilityTreeModelBase ()
     {
         setRoot (null);
-        maTMListeners = new Vector();
+        maTMListeners = new Vector<TreeModelListener>();
     }
 
     public synchronized void addTreeModelListener(TreeModelListener l)
@@ -132,7 +132,7 @@ public class AccessibilityTreeModelBase
 
 
     // The list of TreeModelListener objects.
-    protected Vector maTMListeners;
+    protected Vector<TreeModelListener> maTMListeners;
 
     // The root node of the tree.  Use setRoot to change it.
     private AccessibleTreeNode maRoot = null;

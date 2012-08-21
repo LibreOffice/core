@@ -82,8 +82,8 @@ class AccessibleRelationHandler
                 {
                     Object aTarget = aRelation.TargetSet[j];
                     XAccessible xAccTarget =
-                        (XAccessible)UnoRuntime.queryInterface(
-                             XAccessible.class, aTarget );
+                        UnoRuntime.queryInterface(
+                         XAccessible.class, aTarget );
                     if( xAccTarget == null )
                     {
                         aBuffer.append( aTarget.toString() );

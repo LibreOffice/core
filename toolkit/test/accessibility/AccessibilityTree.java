@@ -252,7 +252,7 @@ public class AccessibilityTree
                     {
                         AccTreeNode aNode = (AccTreeNode)aObject;
 
-                        Vector aActions = new Vector();
+                        Vector<String> aActions = new Vector<String>();
                         aMenu.add (new AccessibilityTree.ShapeExpandAction(maTree, aNode));
                         aMenu.add (new AccessibilityTree.SubtreeExpandAction(maTree, aNode));
 

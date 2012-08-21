@@ -68,7 +68,7 @@ public class InformationWriter
     {
         try
         {
-            XPropertySet xPropertySet =  (XPropertySet) UnoRuntime.queryInterface(
+            XPropertySet xPropertySet =  UnoRuntime.queryInterface(
                 XPropertySet.class, xObject);
             MessageArea.println (prefix +
                 xPropertySet.getPropertyValue (name));
@@ -86,25 +86,25 @@ public class InformationWriter
     {
         try
         {
-            XIndexAccess xShapeList = (XIndexAccess) UnoRuntime.queryInterface(
+            XIndexAccess xShapeList = UnoRuntime.queryInterface(
                 XIndexAccess.class, xPage);
 
             MessageArea.println ("There are " + xShapeList.getCount()
                 + " shapes");
             for (int i=0; i<xShapeList.getCount(); i++)
             {
-                XShape xShape = (XShape) UnoRuntime.queryInterface(
+                XShape xShape = UnoRuntime.queryInterface(
                     XShape.class, xShapeList.getByIndex (i));
 
                 XShapeDescriptor xShapeDescriptor =
-                    (XShapeDescriptor) UnoRuntime.queryInterface(
-                        XShapeDescriptor.class, xShape);
+                    UnoRuntime.queryInterface(
+                    XShapeDescriptor.class, xShape);
                 String sName = xShapeDescriptor.getShapeType ();
                 MessageArea.println ("   shape " + i + " : " + sName);
 
                 XPropertySet xPropertySet =
-                    (XPropertySet) UnoRuntime.queryInterface(
-                        XPropertySet.class, xShape);
+                    UnoRuntime.queryInterface(
+                    XPropertySet.class, xShape);
                 Integer nZOrder =
                     (Integer) xPropertySet.getPropertyValue ("ZOrder");
                 MessageArea.println ("   zorder = " + nZOrder);
@@ -127,7 +127,7 @@ public class InformationWriter
         try
         {
             MessageArea.println ("Services:");
-            XMultiServiceFactory xMSF = (XMultiServiceFactory) UnoRuntime.queryInterface (
+            XMultiServiceFactory xMSF = UnoRuntime.queryInterface (
                 XMultiServiceFactory.class,
                 xObject
                 );
@@ -157,7 +157,7 @@ public class InformationWriter
         {
             System.out.println ("Info:");
             // Use interface XServiceName to retrieve name of (main) service.
-            XServiceName xSN = (XServiceName) UnoRuntime.queryInterface (
+            XServiceName xSN = UnoRuntime.queryInterface (
                 XServiceName.class, xObject);
             if (xSN == null)
                 MessageArea.println ("    interface XServiceName not supported");
@@ -168,7 +168,7 @@ public class InformationWriter
 
             // Use interface XServiceInfo to retrieve information about
             // supported services.
-            XServiceInfo xSI = (XServiceInfo) UnoRuntime.queryInterface (
+            XServiceInfo xSI = UnoRuntime.queryInterface (
                 XServiceInfo.class, xObject);
             if (xSI == null)
                 MessageArea.println ("    interface XServiceInfo not supported");
@@ -196,7 +196,7 @@ public class InformationWriter
             MessageArea.println ("Interfaces:");
             // Use interface XTypeProvider to retrieve a list of supported
             // interfaces.
-            XTypeProvider xTP = (XTypeProvider) UnoRuntime.queryInterface (
+            XTypeProvider xTP = UnoRuntime.queryInterface (
                 XTypeProvider.class, xObject);
             if (xTP == null)
                 MessageArea.println ("    interface XTypeProvider not supported");
@@ -232,13 +232,13 @@ public class InformationWriter
             //  Get XAccessibleContext object if given object does not
             //  already support this interface.
             XAccessibleContext xContext
-                = (XAccessibleContext) UnoRuntime.queryInterface (
-                    XAccessibleContext.class, xObject);
+                = UnoRuntime.queryInterface (
+                XAccessibleContext.class, xObject);
             if (xContext == null)
             {
                 XAccessible xAccessible
-                    = (XAccessible) UnoRuntime.queryInterface (
-                        XAccessible.class, xObject);
+                    = UnoRuntime.queryInterface (
+                    XAccessible.class, xObject);
                 if (xAccessible == null)
                 {
                     MessageArea.println (sIndent + "given object " + xObject
@@ -292,8 +292,8 @@ public class InformationWriter
                 if (xStateSet != null)
                 {
                     XIndexAccess xStates =
-                        (XIndexAccess) UnoRuntime.queryInterface (
-                            XIndexAccess.class, xStateSet);
+                        UnoRuntime.queryInterface (
+                        XIndexAccess.class, xStateSet);
                     MessageArea.print (xStates.getCount() + " (");
                     for (int i=0; i<xStates.getCount(); i++)
                     {
@@ -332,8 +332,8 @@ public class InformationWriter
         try
         {
             XAccessibleComponent xComponent =
-                (XAccessibleComponent) UnoRuntime.queryInterface (
-                    XAccessibleComponent.class, xObject);
+                UnoRuntime.queryInterface (
+                XAccessibleComponent.class, xObject);
 
             //  Print information about the accessible context.
             if (xComponent != null)
@@ -397,7 +397,7 @@ public class InformationWriter
 
     public void showProperties (XInterface xObject)
     {
-        XPropertySet xSet = (XPropertySet) UnoRuntime.queryInterface (
+        XPropertySet xSet = UnoRuntime.queryInterface (
             XPropertySet.class, xObject);
         if (xSet == null)
             MessageArea.println ("object does not support XPropertySet");

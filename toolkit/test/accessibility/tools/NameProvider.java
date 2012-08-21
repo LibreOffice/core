@@ -40,7 +40,7 @@ public class NameProvider
      */
     public static String getStateName (int nStateId)
     {
-        return (String)maStateMap.get (new Integer(nStateId));
+        return maStateMap.get (new Integer(nStateId));
     }
 
 
@@ -55,7 +55,7 @@ public class NameProvider
      */
     public static String getEventName (int nEventId)
     {
-        return (String)maEventMap.get (new Integer(nEventId));
+        return maEventMap.get (new Integer(nEventId));
     }
 
 
@@ -70,7 +70,7 @@ public class NameProvider
      */
     public static String getRoleName (int nRole)
     {
-        return (String)maRoleMap.get (new Integer(nRole));
+        return maRoleMap.get (new Integer(nRole));
     }
 
 
@@ -85,14 +85,14 @@ public class NameProvider
      */
     public static String getRelationName (int nRelation)
     {
-        return (String)maRelationMap.get (new Integer(nRelation));
+        return maRelationMap.get (new Integer(nRelation));
     }
 
 
-    private static HashMap maStateMap = new HashMap();
-    private static HashMap maEventMap = new HashMap();
-    private static HashMap maRoleMap = new HashMap();
-    private static HashMap maRelationMap = new HashMap();
+    private static HashMap<Integer, String> maStateMap = new HashMap<Integer, String>();
+    private static HashMap<Integer, String> maEventMap = new HashMap<Integer, String>();
+    private static HashMap<Integer, String> maRoleMap = new HashMap<Integer, String>();
+    private static HashMap<Integer, String> maRelationMap = new HashMap<Integer, String>();
 
     static {
         maStateMap.put (new Integer (AccessibleStateType.INVALID), "INVALID");
