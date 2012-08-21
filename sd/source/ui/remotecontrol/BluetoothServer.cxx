@@ -12,8 +12,8 @@
 #ifdef LINUX
 #include <gio/gio.h>
 #include <sys/unistd.h>
-#endif
 #include <sys/socket.h>
+#endif
 #include <tools/debug.hxx>
 #include <tools/stream.hxx>
 
