@@ -33,7 +33,6 @@
 #include "tabledatawindow.hxx"
 #include "tablecontrol_impl.hxx"
 #include "tablegeometry.hxx"
-#include "cellvalueconversion.hxx"
 
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/accessibility/AccessibleTableModelChange.hpp>
@@ -2200,9 +2199,13 @@ namespace svt { namespace table
     //--------------------------------------------------------------------
     ::rtl::OUString TableControl_Impl::getCellContentAsString( RowPos const i_row, ColPos const i_col )
     {
-        ::com::sun::star::uno::Any content;
-        m_pModel->getCellContent( i_col, i_row, content );
-        return CellValueConversion::convertToString( content );
+        Any aCellValue;
+        m_pModel->getCellContent( i_col, i_row, aCellValue );
+
+        ::rtl::OUString sCellStringContent;
+        m_pModel->getRenderer()->GetFormattedCellString( aCellValue, i_col, i_row, sCellStringContent );
+
+        return sCellStringContent;
     }
 
     //--------------------------------------------------------------------
