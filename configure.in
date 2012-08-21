@@ -2929,15 +2929,6 @@ if test -n "$enable_dbgutil" -a "$enable_dbgutil" != "no"; then
     else
         with_system_mysql_cppconn=no
     fi
-    if test $_os = WINNT -a \
-            \( "$enable_mozilla" != no -o \
-               "$enable_build_mozilla" != no \); then
-        # We can't build against the Mozilla stuff if using _DEBUG, will get linking errors
-        # See connectivity/drivers/mozab
-        AC_MSG_WARN([Also disabling Mozilla stuff then])
-        enable_mozilla=no
-        enable_build_mozilla=no
-    fi
 else
     PRODUCT="full"
     PROEXT=".pro"
