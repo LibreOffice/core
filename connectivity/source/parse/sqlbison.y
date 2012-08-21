@@ -20,6 +20,7 @@
 
 #include <vector>
 #include <string.h>
+#include "parse/sqlbison_exports.hxx"
 
 #ifndef _CONNECTIVITY_SQLNODE_HXX
 #include <connectivity/sqlnode.hxx>

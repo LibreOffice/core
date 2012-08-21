@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include "parse/sqlbison_exports.hxx"
+
 #include <sal/macros.h>
 #include <connectivity/sqlnode.hxx>
 #include <connectivity/sqlerror.hxx>
@@ -72,10 +74,6 @@ using namespace ::osl;
 using namespace ::dbtools;
 using namespace ::comphelper;
 
-
-extern int SQLyyparse (void);
-extern ::rtl::OUString ConvertLikeToken(const ::connectivity::OSQLParseNode* pTokenNode, const ::connectivity::OSQLParseNode* pEscapeNode, sal_Bool bInternational);
-extern void setParser( ::connectivity::OSQLParser* );
 
 namespace
 {
