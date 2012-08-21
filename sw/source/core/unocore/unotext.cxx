@@ -1755,7 +1755,14 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
         if (bParaAfterInserted)
         {
             xFrameTextCursor->gotoEnd(sal_False);
-            m_pImpl->m_pDoc->DelFullPara(*pFrameCursor->GetPaM());
+            if (!m_pImpl->m_pDoc->DelFullPara(*pFrameCursor->GetPaM()))
+            {
+                // In case the frame has a table only, the cursor points to the end of the first cell of the table.
+                SwPaM aPaM(*pFrameCursor->GetPaM()->GetNode()->FindSttNodeByType(SwFlyStartNode)->EndOfSectionNode());
+                // Now we have the end of the frame -- the node before that will be the paragraph we want to remove.
+                aPaM.GetPoint()->nNode--;
+                m_pImpl->m_pDoc->DelFullPara(aPaM);
+            }
         }
     }
 
