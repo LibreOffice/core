@@ -41,13 +41,14 @@
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/componentcontext.hxx>
 
 #include <com/sun/star/i18n/XBreakIterator.hpp>
 #include <com/sun/star/i18n/XCharacterClassification.hpp>
 #include <com/sun/star/awt/XExtendedToolkit.hpp>
 #include <com/sun/star/accessibility/AccessibleEventObject.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
-#include <com/sun/star/registry/XImplementationRegistration.hpp>
+#include <com/sun/star/registry/ImplementationRegistration.hpp>
 
 
 using namespace ::com::sun::star;
@@ -101,7 +102,7 @@ uno::Reference< lang::XMultiServiceFactory > vcl::unohelper::GetMultiServiceFact
         {
             pSVData->maAppData.mxMSF = ::cppu::createRegistryServiceFactory( aTempFileName, rtl::OUString(), sal_False );
             uno::Reference < registry::XImplementationRegistration > xReg(
-                pSVData->maAppData.mxMSF->createInstance( OUString("com.sun.star.registry.ImplementationRegistration")), uno::UNO_QUERY );
+                registry::ImplementationRegistration::create( comphelper::ComponentContext(pSVData->maAppData.mxMSF).getUNOContext() ) );
 
             if( xReg.is() )
             {
