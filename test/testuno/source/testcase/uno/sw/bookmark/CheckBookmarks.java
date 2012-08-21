@@ -22,7 +22,7 @@
 package testcase.uno.sw.bookmark;
 
 import static org.junit.Assert.assertArrayEquals;
-import static testlib.uno.SWUtil.insertBookmark;
+import static testlib.uno.SWUtil.*;
 
 import org.junit.After;
 import org.junit.AfterClass;

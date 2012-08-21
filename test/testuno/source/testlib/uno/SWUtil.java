@@ -1,13 +1,33 @@
+/**************************************************************
+ *
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ *
+ *************************************************************/
 package testlib.uno;
 
 import org.openoffice.test.uno.UnoApp;
 
 import com.sun.star.beans.PropertyValue;
-import com.sun.star.container.XNameAccess;
 import com.sun.star.container.XNamed;
 import com.sun.star.frame.XStorable;
+import com.sun.star.io.IOException;
 import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.text.XBookmarksSupplier;
+import com.sun.star.text.XText;
 import com.sun.star.text.XTextContent;
 import com.sun.star.text.XTextCursor;
 import com.sun.star.text.XTextDocument;
@@ -15,17 +35,23 @@ import com.sun.star.uno.UnoRuntime;
 
 public class SWUtil {
 
-    private static final UnoApp app = new UnoApp();
-    public static void saveAsDoc(XTextDocument document, String url) throws Exception {
+
+    public static void saveAsDoc(XTextDocument document, String url) throws IOException {
         saveAs(document, "MS Word 97", url);
 
     }
 
-    public static void saveAsODT(XTextDocument document, String url) throws Exception {
+    public static void saveAsODT(XTextDocument document, String url) throws IOException {
         saveAs(document, "writer8", url);
     }
 
-    public static void saveAs(XTextDocument document, String filterValue, String url) throws Exception {
+    public static void save(XTextDocument document) throws IOException {
+        XStorable store = UnoRuntime.queryInterface(XStorable.class, document);
+        store.store();
+
+    }
+
+    public static void saveAs(XTextDocument document, String filterValue, String url) throws IOException {
         XStorable store = UnoRuntime.queryInterface(XStorable.class, document);
 
         PropertyValue[] propsValue = new PropertyValue[1];
@@ -36,10 +62,33 @@ public class SWUtil {
 
     }
 
-    public static XTextDocument newDocument() throws Exception {
-        return (XTextDocument) UnoRuntime.queryInterface(XTextDocument.class, app.newDocument("swriter"));
+    public static XTextDocument newDocument(UnoApp app) throws Exception {
+        return UnoRuntime.queryInterface(XTextDocument.class, app.newDocument("swriter"));
 
     }
+
+    public static XTextDocument openDocumentFromURL(String url, UnoApp app) throws Exception {
+        return UnoRuntime.queryInterface(XTextDocument.class, app.loadDocumentFromURL(url));
+
+    }
+
+    public static XTextDocument openDocument(String filePath, UnoApp app) throws Exception {
+
+        return UnoRuntime.queryInterface(XTextDocument.class, app.loadDocument(filePath));
+
+    }
+    public static void moveCuror2End(XTextDocument document) {
+        XText xText = document.getText();
+        XTextCursor xTextCursor = xText.createTextCursor();
+        xTextCursor.gotoEnd(false);
+    }
+
+    public static void moveCuror2Start(XTextDocument document) {
+        XText xText = document.getText();
+        XTextCursor xTextCursor = xText.createTextCursor();
+        xTextCursor.gotoStart(false);
+    }
+
 
     /**
      * Insert a bookmark into text document
@@ -49,12 +98,11 @@ public class SWUtil {
      * @throws Exception
      */
     public static void insertBookmark(XTextDocument document, XTextCursor textCursor, String bookmarkName) throws Exception {
-        XMultiServiceFactory xDocFactory = (XMultiServiceFactory) UnoRuntime.queryInterface(XMultiServiceFactory.class, document);
+        XMultiServiceFactory xDocFactory = UnoRuntime.queryInterface(XMultiServiceFactory.class, document);
         Object xBookmark = xDocFactory.createInstance("com.sun.star.text.Bookmark");
-        XTextContent xBookmarkAsTextContent = (XTextContent) UnoRuntime.queryInterface(XTextContent.class, xBookmark);
-        XNamed xBookmarkAsNamed = (XNamed) UnoRuntime.queryInterface(XNamed.class, xBookmark);
+        XTextContent xBookmarkAsTextContent = UnoRuntime.queryInterface(XTextContent.class, xBookmark);
+        XNamed xBookmarkAsNamed = UnoRuntime.queryInterface(XNamed.class, xBookmark);
         xBookmarkAsNamed.setName(bookmarkName);
         document.getText().insertTextContent(textCursor, xBookmarkAsTextContent, true);
     }
-
 }

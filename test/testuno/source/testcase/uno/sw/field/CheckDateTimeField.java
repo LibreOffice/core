@@ -53,12 +53,12 @@ import com.sun.star.util.DateTime;
 public class CheckDateTimeField {
 
 
+
+    private String tempPath = "testcase/uno/sw/temp/" ;
+    private String tempFileName =  String.valueOf(System.currentTimeMillis());
     private static final UnoApp app = new UnoApp();
 
     private XTextDocument document = null;
-    private String tempPath = "testcase/uno/sw/temp/" ;
-    private String tempFileName =  String.valueOf(System.currentTimeMillis());
-
     @Before
     public void setUpDocument() throws Exception {
         document = (XTextDocument) UnoRuntime.queryInterface(XTextDocument.class, app.newDocument("swriter"));
