@@ -1,5 +1,15 @@
 --- misc/libmspub-0.0.3/src/lib/MSPUBParser.cpp	2012-08-21 11:40:41.000000000 +0200
 +++ misc/build/libmspub-0.0.3/src/lib/MSPUBParser.cpp	2012-08-21 12:58:58.435884355 +0200
+@@ -52,7 +52,9 @@
+ #include "TableInfo.h"
+ #include "VerticalAlign.h"
+ 
++#if !defined(_MSC_VER) && !defined(BOOST_CSTDINT_HPP)
+ using boost::int32_t;
++#endif
+ using boost::uint32_t;
+ 
+ libmspub::MSPUBParser::MSPUBParser(WPXInputStream *input, MSPUBCollector *collector)
 @@ -1151,7 +1151,7 @@
    ParagraphStyle ret;
  
@@ -18,3 +28,17 @@
      {
        ret.m_listInfo = ListInfo(bulletChar);
      }
+--- misc/libmspub-0.0.3/src/lib/libmspub_utils.h
++++ misc/build/libmspub-0.0.3/src/lib/libmspub_utils.h
+@@ -43,7 +43,11 @@
+ 
+ typedef unsigned char uint8_t;
+ typedef unsigned short uint16_t;
++#ifndef BOOST_CSTDINT_HPP
+ typedef unsigned uint32_t;
++#endif
++typedef signed char int8_t;
++typedef short int16_t;
+ typedef int int32_t;
+ typedef unsigned __int64 uint64_t;
+ 
