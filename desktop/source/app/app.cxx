@@ -199,7 +199,7 @@ void removeTree(OUString const & url) {
     osl::FileBase::RC rc = osl::Directory::remove(url);
     SAL_WARN_IF(
         rc != osl::FileBase::E_None, "desktop",
-        "cannot remove directory " << url << ": " +rc);
+        "cannot remove directory " << url << ": " << +rc);
         // at least on Windows XP removing some existing directories fails with
         // osl::FileBase::E_ACCESS because they are read-only; but keeping those
         // directories around should be harmless once they are empty
