@@ -141,6 +141,9 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/inspection
 	ObjectInspectorModel \
 	StringRepresentation \
 ))
+$(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/i18n,\
+	BreakIterator \
+))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/linguistic2,\
 	LanguageGuessing \
 	Proofreader \
@@ -822,7 +825,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/graphic
 	MediaProperties \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/i18n,\
-	BreakIterator \
 	ChapterCollator \
 	CharacterClassification \
 	Collator \

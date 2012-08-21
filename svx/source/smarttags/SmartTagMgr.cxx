@@ -28,7 +28,7 @@
 #include <com/sun/star/deployment/ExtensionManager.hpp>
 #include <com/sun/star/text/XTextMarkup.hpp>
 #include <com/sun/star/smarttags/SmartTagRecognizerMode.hpp>
-#include <com/sun/star/i18n/XBreakIterator.hpp>
+#include <com/sun/star/i18n/BreakIterator.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/lang/EventObject.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -45,6 +45,7 @@
 
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
+using namespace com::sun::star::i18n;
 
 #define C2U(cChar) rtl::OUString::createFromAscii(cChar)
 
@@ -55,7 +56,7 @@ SmartTagMgr::SmartTagMgr( const rtl::OUString& rApplicationName )
       maActionList(),
       maDisabledSmartTagTypes(),
       maSmartTagMap(),
-      mxMSF( ::comphelper::getProcessServiceFactory() ),
+      mxContext( ::comphelper::getProcessComponentContext() ),
       mbLabelTextWithSmartTags(true)
 {
 }
@@ -67,27 +68,20 @@ SmartTagMgr::~SmartTagMgr()
 void SmartTagMgr::Init( const rtl::OUString& rConfigurationGroupName )
 {
     // get component context to pass to components:
-    if ( mxMSF.is() )
+    if ( mxContext.is() )
     {
-        Reference< beans::XPropertySet > xPropSet = Reference< beans::XPropertySet>( mxMSF, UNO_QUERY);
-        const Any aAny = xPropSet->getPropertyValue( C2U("DefaultContext"));
-        aAny >>= mxContext;
-
-        if ( mxContext.is() )
-        {
-            PrepareConfiguration( rConfigurationGroupName );
-            ReadConfiguration( true, true );
-            RegisterListener();
-            LoadLibraries();
-        }
+        PrepareConfiguration( rConfigurationGroupName );
+        ReadConfiguration( true, true );
+        RegisterListener();
+        LoadLibraries();
     }
 }
 void SmartTagMgr::CreateBreakIterator() const
 {
-    if ( !mxBreakIter.is() && mxMSF.is() && mxContext.is() )
+    if ( !mxBreakIter.is() && mxContext.is() )
     {
         // get the break iterator
-        mxBreakIter.set(mxMSF->createInstance( C2U( "com.sun.star.i18n.BreakIterator" ) ), UNO_QUERY);
+        mxBreakIter.set( BreakIterator::create(mxContext) );
     }
 }
 
@@ -316,7 +310,7 @@ void SmartTagMgr::changesOccurred( const util::ChangesEvent& rEvent ) throw( Run
 */
 void SmartTagMgr::LoadLibraries()
 {
-    Reference< container::XContentEnumerationAccess > rContent( mxMSF , UNO_QUERY );
+    Reference< container::XContentEnumerationAccess > rContent( mxContext , UNO_QUERY );
     if ( !rContent.is() )
         return;
 
@@ -388,7 +382,7 @@ void SmartTagMgr::PrepareConfiguration( const rtl::OUString& rConfigurationGroup
     aPathArgument.Value = aAny;
     Sequence< Any > aArguments( 1 );
     aArguments[ 0 ] <<= aPathArgument;
-    Reference< lang::XMultiServiceFactory > xConfProv( mxMSF->createInstance(C2U ("com.sun.star.configuration.ConfigurationProvider")), UNO_QUERY );
+    Reference< lang::XMultiServiceFactory > xConfProv( mxContext->getServiceManager()->createInstanceWithContext("com.sun.star.configuration.ConfigurationProvider", mxContext), UNO_QUERY );
 
     if ( !xConfProv.is() )
         return;

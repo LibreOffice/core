@@ -52,7 +52,6 @@ namespace com { namespace sun { namespace star { namespace lang {
     struct Locale;
     struct EventObject;
     struct ChangesEvent;
-    class XMultiServiceFactory;
 } } } }
 
 namespace com { namespace sun { namespace star { namespace beans {
@@ -92,7 +91,6 @@ private:
     std::set< rtl::OUString > maDisabledSmartTagTypes;
     std::multimap < rtl::OUString, ActionReference > maSmartTagMap;
     mutable com::sun::star::uno::Reference< com::sun::star::i18n::XBreakIterator > mxBreakIter;
-    com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory > mxMSF;
     com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext> mxContext;
     com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet > mxConfigurationSettings;
     bool mbLabelTextWithSmartTags;
