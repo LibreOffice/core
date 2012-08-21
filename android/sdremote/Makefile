@@ -14,4 +14,7 @@ all:
 	cp $(ANDROID_SDK_HOME)/extras/android/support/v4/android-support-v4.jar ../abs-lib/libs
 	$(ANT) debug
 
+clean:
+	$(ANT) clean
+
 # vim: set noet sw=4 ts=4:
