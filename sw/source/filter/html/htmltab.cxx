@@ -2072,8 +2072,7 @@ void HTMLTable::SetBorders()
 sal_uInt16 HTMLTable::GetBorderWidth( const SvxBorderLine& rBLine,
                                   sal_Bool bWithDistance ) const
 {
-    sal_uInt16 nBorderWidth = rBLine.GetOutWidth() + rBLine.GetInWidth() +
-                    rBLine.GetDistance();
+    sal_uInt16 nBorderWidth = rBLine.GetWidth();
     if( bWithDistance )
     {
         if( nCellPadding )

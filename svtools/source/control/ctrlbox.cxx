@@ -328,6 +328,10 @@ long BorderWidthImpl::GetLine1( long nWidth ) const
         result = std::max<long>(0,
                     static_cast<long>((m_nRate1 * nWidth) + 0.5)
                         - (nConstant2 + nConstantD));
+        if (result == 0 && m_nRate1 > 0.0 && nWidth > 0)
+        {   // fdo#51777: hack to essentially treat 1 twip DOUBLE border
+            result = 1;  // as 1 twip SINGLE border
+        }
     }
     return result;
 }
