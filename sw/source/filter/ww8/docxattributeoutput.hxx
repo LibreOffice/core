@@ -592,6 +592,7 @@ private:
     // close of hyperlink needed
     bool m_closeHyperlinkInThisRun;
     bool m_closeHyperlinkInPreviousRun;
+    bool m_startedHyperlink;
 
     struct PostponedGraphic
     {
