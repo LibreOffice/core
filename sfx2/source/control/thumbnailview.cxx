@@ -89,16 +89,11 @@ void ThumbnailView::ImplInit()
     mnItemPadding = 0;
     mnVisLines          = 0;
     mnLines             = 0;
-    mnUserItemWidth     = 0;
-    mnUserItemHeight    = 0;
     mnFirstLine         = 0;
     mnScrBarOffset = 1;
     mnSelItemId         = 0;
     mnHighItemId        = 0;
     mnCols              = 0;
-    mnCurCol            = 0;
-    mnUserCols          = 0;
-    mnUserVisLines      = 0;
     mnSpacing           = 0;
     mbScroll            = false;
     mbHasVisibleItems   = false;
@@ -258,14 +253,8 @@ void ThumbnailView::CalculateItemPositions ()
     if (!mnCols)
         mnCols = 1;
 
-    if ( mnUserCols && mnUserCols < mnCols )
-        mnCols = mnUserCols;
-
     // calculate maximum number of visible rows
     mnVisLines = (sal_uInt16)((aWinSize.Height()-mnHeaderHeight) / (mnItemHeight));
-
-    if ( mnUserVisLines && mnUserVisLines < mnVisLines )
-        mnVisLines = mnUserVisLines;
 
     // calculate empty space
     long nHSpace = aWinSize.Width()-nScrBarWidth - mnCols*mnItemWidth;
@@ -848,7 +837,6 @@ void ThumbnailView::RemoveItem( sal_uInt16 nItemId )
     // reset variables
     if ( (mnHighItemId == nItemId) || (mnSelItemId == nItemId) )
     {
-        mnCurCol        = 0;
         mnHighItemId    = 0;
         mnSelItemId     = 0;
     }
@@ -865,7 +853,6 @@ void ThumbnailView::Clear()
 
     // reset variables
     mnFirstLine     = 0;
-    mnCurCol        = 0;
     mnHighItemId    = 0;
     mnSelItemId     = 0;
 

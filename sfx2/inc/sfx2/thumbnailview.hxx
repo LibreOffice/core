@@ -195,10 +195,6 @@ public:
 
     sal_uInt16 GetItemId( const Point& rPos ) const;
 
-    sal_uInt16 GetColCount() const { return mnUserCols; }
-
-    sal_uInt16 GetLineCount() const { return mnUserVisLines; }
-
     long GetItemWidth() const { return mnItemWidth; }
 
     long GetItemHeight() const { return mnItemHeight; }
@@ -319,7 +315,6 @@ protected:
 
 protected:
 
-    Timer maTimer;
     ValueItemList mItemList;
     ScrollBar* mpScrBar;
     Rectangle maItemListRect;
@@ -331,15 +326,10 @@ protected:
     long mnDisplayHeight;       // Height of the data display box (name, etc)
     long mnVisLines;
     long mnLines;
-    long mnUserItemWidth;
-    long mnUserItemHeight;
     sal_uInt16 mnScrBarOffset;
     sal_uInt16 mnSelItemId;
     sal_uInt16 mnHighItemId;
     sal_uInt16 mnCols;
-    sal_uInt16 mnCurCol;
-    sal_uInt16 mnUserCols;
-    sal_uInt16 mnUserVisLines;
     sal_uInt16 mnFirstLine;
     sal_uInt16 mnSpacing;
     bool mbScroll : 1;
