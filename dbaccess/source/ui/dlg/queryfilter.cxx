@@ -357,7 +357,7 @@ sal_Bool DlgFilterCrit::getCondition(const ListBox& _rField,const ListBox& _rCom
     _rFilter.Handle = GetOSQLPredicateType( _rComp.GetSelectEntry() );
     if ( SQLFilterOperator::SQLNULL != _rFilter.Handle && _rFilter.Handle != SQLFilterOperator::NOT_SQLNULL )
     {
-        String sPredicateValue = m_aPredicateInput.getPredicateValue( _rValue.GetText(), getMatchingColumn( _rValue ), sal_True );
+        String sPredicateValue = m_aPredicateInput.getPredicateValue( _rValue.GetText(), getMatchingColumn( _rValue ), sal_False );
         ::Replace_OS_PlaceHolder( sPredicateValue );
         _rFilter.Value <<= ::rtl::OUString(sPredicateValue);
     }
