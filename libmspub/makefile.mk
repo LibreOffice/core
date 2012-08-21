@@ -65,6 +65,9 @@ TARFILE_MD5=b2db54b6e96287ac995d7ed654ace4fc
 BUILD_ACTION=dmake $(MFLAGS) $(CALLMACROS)
 BUILD_DIR=src$/lib
 
+PATCH_FILES=\
+	$(TARFILE_NAME).patch
+
 # --- Targets ------------------------------------------------------
 
 .INCLUDE : set_ext.mk
