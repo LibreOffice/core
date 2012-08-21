@@ -4511,7 +4511,7 @@ const double fMilliSecondsPerDay = 86400000.0;
 //------------------------------------------------------------------
 ::rtl::OUString ConvertLikeToken(const OSQLParseNode* pTokenNode, const OSQLParseNode* pEscapeNode, sal_Bool bInternational)
 {
-	::rtl::OUStringBuffer aMatchStr;
+	::rtl::OUStringBuffer aMatchStr(0);
 	if (pTokenNode->isToken())
 	{
 		sal_Unicode cEscape = 0;
@@ -4533,18 +4533,34 @@ const double fMilliSecondsPerDay = 86400000.0;
 		    sReplace.appendAscii("%_",2);
 		}
 
+		bool wasEscape = false;
 		for (sal_Int32 i = 0; i < nLen; i++)
 		{
 			const sal_Unicode c = aMatchStr[i];
-			if (c == sSearch[0] || c == sSearch[1])
+			// SQL standard requires the escape to be followed
+			// by a meta-character ('%', '_' or itself), else error
+			// We are more lenient here and let it escape anything.
+			// Especially since some databases (e.g. Microsoft SQL Server)
+			// have more meta-characters than the standard, such as e.g. '[' and ']'
+			if (wasEscape)
 			{
-				if (i > 0 && aMatchStr[i - 1] == cEscape)
-					continue;
-				else
-				{
-				        const sal_Unicode cCharacter = sReplace[(c == sSearch[0] ? 0 : 1)];
-					aMatchStr[i] = cCharacter;
-				}
+				wasEscape=false;
+				continue;
+			}
+			if (c == cEscape)
+			{
+				wasEscape=true;
+				continue;
+			}
+			int match = -1;
+			if (c == sSearch[0])
+				match=0;
+			else if (c == sSearch[1])
+				match=1;
+
+			if (match != -1)
+			{
+				aMatchStr[i] = sReplace[match];
 			}
 		}
 	}
