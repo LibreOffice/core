@@ -44,16 +44,16 @@ nothing .PHONY:
 .ELSE
 
 
-ALLTAR: dist/ConvwatchGUIProject.jar
+ALLTAR: $(CLASSDIR)/ConvwatchGUIProject.jar
 
-dist/ConvwatchGUIProject.jar: src/ConvwatchGUI.java src/IniFile.java
+$(CLASSDIR)/ConvwatchGUIProject.jar: src/ConvwatchGUI.java src/IniFile.java
 # .if $(JDK_VERSION) < 160
 # 	echo "You need at least java 6"
 # 	error
 # .endif
 #
 .IF "$(GUI)"=="WNT"
-    $(ANT)
+    $(ANT) -DJAR_OUTPUT_DIRECTORY=$(CLASSDIR) jar
 .ELSE
     ant
 .END
