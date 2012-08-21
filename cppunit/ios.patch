@@ -1,0 +1,43 @@
+--- misc/build/cppunit-1.13.0/configure
++++ misc/build/cppunit-1.13.0/configure
+@@ -23273,7 +23273,7 @@
+   { $as_echo "$as_me:${as_lineno-$LINENO}: result: creating $ac_prefix_conf_OUT - prefix $ac_prefix_conf_UPP for $ac_prefix_conf_INP defines" >&5
+ $as_echo "creating $ac_prefix_conf_OUT - prefix $ac_prefix_conf_UPP for $ac_prefix_conf_INP defines" >&6; }
+   if test -f $ac_prefix_conf_INP ; then
+-    $as_dirname -- /* automatically generated */ ||
++    $as_dirname -- '/* automatically generated */' ||
+ $as_expr X/* automatically generated */ : 'X\(.*[^/]\)//*[^/][^/]*/*$' \| \
+ 	 X/* automatically generated */ : 'X\(//\)[^/]' \| \
+ 	 X/* automatically generated */ : 'X\(//\)$' \| \
+@@ -23318,5 +23318,5 @@
+   else
+     as_fn_error $? "input file $ac_prefix_conf_IN does not exist,     skip generating $ac_prefix_conf_OUT" "$LINENO" 5
+   fi
+-  rm -f conftest.*
++  rm -f -r conftest.*
+ fi
+--- misc/build/cppunit-1.13.0/include/cppunit/plugin/TestPlugIn.h
++++ misc/build/cppunit-1.13.0/include/cppunit/plugin/TestPlugIn.h
+@@ -106,7 +106,9 @@
+  * CppUnitTestPlugIn *CPPUNIT_PLUGIN_EXPORTED_NAME(void);
+  * \endcode
+  */
++#ifndef CPPUNIT_PLUGIN_EXPORTED_NAME
+ #define CPPUNIT_PLUGIN_EXPORTED_NAME cppunitTestPlugIn
++#endif
+ 
+ /*! \brief Type of the function exported by a plug-in.
+  * \ingroup WritingTestPlugIn
+@@ -143,6 +143,12 @@
+ #define CPPUNIT_PLUGIN_IMPLEMENT_MAIN()               \
+   typedef char __CppUnitPlugInImplementMainDummyTypeDef
+ 
++// Actually this is for iOS where we build the cppunit tests libraries
++// as plain archives and just link them statically into test fixture programs,
++// and don't want any stinking duplicate main(), but shouldn't hurt for MacOSX either.
++#elif defined(__APPLE__)
++#define CPPUNIT_PLUGIN_IMPLEMENT_MAIN()               \
++  typedef char __CppUnitPlugInImplementMainDummyTypeDef
+ // Unix
+ #elif defined(CPPUNIT_HAVE_UNIX_DLL_LOADER) || defined(CPPUNIT_HAVE_UNIX_SHL_LOADER)
+ #define CPPUNIT_PLUGIN_IMPLEMENT_MAIN()               \

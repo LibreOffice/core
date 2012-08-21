@@ -38,6 +38,10 @@ PATCH_FILES = windows.patch unix.patch
 PATCH_FILES += android.patch
 .ENDIF
 
+.IF "$(OS)" == "IOS"
+PATCH_FILES += ios.patch
+.ENDIF
+
 .IF "$(OS)" == "WNT"
 .IF "$(COM)" == "MSC"
 
