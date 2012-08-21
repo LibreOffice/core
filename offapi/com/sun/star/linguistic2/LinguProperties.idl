@@ -32,7 +32,6 @@
 #include <com/sun/star/beans/XPropertySet.idl>
 #include <com/sun/star/beans/XFastPropertySet.idl>
 #include <com/sun/star/lang/XComponent.idl>
-#include <com/sun/star/lang/XServiceInfo.idl>
 #include <com/sun/star/lang/Locale.idl>
 
 
@@ -45,7 +44,6 @@ published service LinguProperties
     interface com::sun::star::beans::XPropertySet;
     interface com::sun::star::beans::XFastPropertySet;
     interface com::sun::star::lang::XComponent;
-    interface com::sun::star::lang::XServiceInfo;
 
     /** defines whether new German spelling rules should be used for German
          text or not when doing spell checking or hyphenation, or using the

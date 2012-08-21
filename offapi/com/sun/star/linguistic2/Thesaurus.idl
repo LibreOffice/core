@@ -21,13 +21,12 @@
 
 #include <com/sun/star/lang/XInitialization.idl>
 #include <com/sun/star/lang/XComponent.idl>
-#include <com/sun/star/lang/XServiceInfo.idl>
 #include <com/sun/star/lang/XServiceDisplayName.idl>
 
 
 module com { module sun { module star { module linguistic2 {
 
- published interface XThesaurus;
+published interface XThesaurus;
 
 /** offers thesaurus functionality.
 */
@@ -36,7 +35,6 @@ published service Thesaurus
     interface com::sun::star::linguistic2::XThesaurus;
     interface com::sun::star::lang::XInitialization;
     interface com::sun::star::lang::XComponent;
-    interface com::sun::star::lang::XServiceInfo;
     interface com::sun::star::lang::XServiceDisplayName;
 };
 

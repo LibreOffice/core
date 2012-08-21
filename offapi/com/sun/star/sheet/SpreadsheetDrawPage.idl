@@ -21,7 +21,6 @@
 
 #include <com/sun/star/drawing/XDrawPage.idl>
 #include <com/sun/star/drawing/XShapeGrouper.idl>
-#include <com/sun/star/lang/XServiceInfo.idl>
 
 
  module com {  module sun {  module star {  module sheet {
@@ -66,10 +65,6 @@ published service SpreadsheetDrawPage
      */
     interface com::sun::star::drawing::XShapeGrouper;
 
-
-    /** returns the services implemented by this instance.
-     */
-    interface com::sun::star::lang::XServiceInfo;
 };
 
 

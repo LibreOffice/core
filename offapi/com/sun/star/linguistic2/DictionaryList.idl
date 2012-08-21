@@ -20,7 +20,6 @@
 #define __com_sun_star_linguistic2_DictionaryList_idl__
 
 #include <com/sun/star/lang/XComponent.idl>
-#include <com/sun/star/lang/XServiceInfo.idl>
 
 
 module com { module sun { module star { module linguistic2 {
@@ -40,7 +39,6 @@ published service DictionaryList
 {
     interface com::sun::star::linguistic2::XSearchableDictionaryList;
     interface com::sun::star::lang::XComponent;
-    interface com::sun::star::lang::XServiceInfo;
 };
 
 

@@ -20,7 +20,6 @@
 #ifndef __com_sun_star_i18n_Transliteration_idl__
 #define __com_sun_star_i18n_Transliteration_idl__
 
-#include <com/sun/star/lang/XServiceInfo.idl>
 #include <com/sun/star/i18n/XTransliteration.idl>
 #include <com/sun/star/i18n/XExtendedTransliteration.idl>
 
@@ -32,7 +31,6 @@ module com { module sun { module star { module i18n {
 published service Transliteration
 {
     interface com::sun::star::i18n::XTransliteration;
-    interface com::sun::star::lang::XServiceInfo;
 
     [optional] interface com::sun::star::i18n::XExtendedTransliteration;
 };

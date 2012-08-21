@@ -25,7 +25,6 @@
 
 #include <com/sun/star/frame/Controller.idl>
 
-#include <com/sun/star/lang/XServiceInfo.idl>
 #include <com/sun/star/drawing/XDrawPage.idl>
 
 #include <com/sun/star/awt/XWindow.idl>
@@ -61,12 +60,6 @@ published service SlidesView
     /** lets you access the properties of this service.
      */
     interface com::sun::star::beans::XPropertySet;
-
-
-    /** provides the names of the services implemented by
-                this instance.
-     */
-    interface com::sun::star::lang::XServiceInfo;
 
 
     /** This is the area that is currently visible.

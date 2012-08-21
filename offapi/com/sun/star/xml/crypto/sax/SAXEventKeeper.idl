@@ -28,7 +28,6 @@
 #include <com/sun/star/uno/Exception.idl>
 #include <com/sun/star/xml/sax/XDocumentHandler.idl>
 #include <com/sun/star/lang/XInitialization.idl>
-#include <com/sun/star/lang/XServiceInfo.idl>
 #include <XSecuritySAXEventKeeper.idl>
 #include <XReferenceResolvedBroadcaster.idl>
 #include <XSAXEventKeeperStatusChangeBroadcaster.idl>
@@ -44,7 +43,6 @@ service SAXEventKeeper {
     interface XSAXEventKeeperStatusChangeBroadcaster ;
     interface com::sun::star::xml::sax::XDocumentHandler ;
     interface com::sun::star::lang::XInitialization ;
-    interface com::sun::star::lang::XServiceInfo ;
 };
 
 } ; } ; } ; } ; } ; } ;

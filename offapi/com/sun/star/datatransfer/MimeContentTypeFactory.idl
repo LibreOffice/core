@@ -21,7 +21,6 @@
 #define __com_sun_star_datatransfer_MimeContentType_idl__
 
 #include <com/sun/star/lang/XComponent.idl>
-#include <com/sun/star/lang/XServiceInfo.idl>
 #include <com/sun/star/lang/XTypeProvider.idl>
 
 
@@ -47,10 +46,6 @@ published service MimeContentTypeFactory
         <a href="ftp://ftp.isi.edu/in-notes/rfc2046.txt">Rfc2046</a>.
     */
     interface XMimeContentTypeFactory;
-
-    /** Service should always support this interface.
-    */
-    interface com::sun::star::lang::XServiceInfo;
 
     /** Service should always support this interface.
     */

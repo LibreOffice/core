@@ -27,7 +27,6 @@
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/uno/Exception.idl>
 #include <com/sun/star/lang/XInitialization.idl>
-#include <com/sun/star/lang/XServiceInfo.idl>
 #include <XReferenceResolvedListener.idl>
 #include <XReferenceCollector.idl>
 #include <XBlockerMonitor.idl>
@@ -48,7 +47,6 @@ service Encryptor {
     interface XKeyCollector ;
     interface XMissionTaker ;
     interface com::sun::star::lang::XInitialization ;
-    interface com::sun::star::lang::XServiceInfo ;
 };
 
 } ; } ; } ; } ; } ; } ;

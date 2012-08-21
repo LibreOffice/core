@@ -38,8 +38,6 @@
 
 #include <com/sun/star/container/XNamed.idl>
 
-#include <com/sun/star/lang/XServiceInfo.idl>
-
 #include <com/sun/star/beans/XPropertySet.idl>
 
 #include <com/sun/star/view/PaperOrientation.idl>
@@ -113,13 +111,6 @@ published service GenericDrawPage
                 <p>Duplicated page names inside a document are not allowed.
      */
     [optional] interface com::sun::star::container::XNamed;
-
-
-    // DocMerge from xml: service com::sun::star::drawing::GenericDrawPage: interface com::sun::star::lang::XServiceInfo
-    /** returns the services implemented by this
-                instance.
-     */
-    interface com::sun::star::lang::XServiceInfo;
 
 
     // DocMerge from xml: service com::sun::star::drawing::GenericDrawPage: interface com::sun::star::beans::XPropertySet

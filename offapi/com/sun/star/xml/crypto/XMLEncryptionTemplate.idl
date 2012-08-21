@@ -28,7 +28,6 @@
 #include <com/sun/star/uno/Exception.idl>
 #include <com/sun/star/xml/crypto/XXMLEncryptionTemplate.idl>
 #include <com/sun/star/lang/XInitialization.idl>
-#include <com/sun/star/lang/XServiceInfo.idl>
 
 module com { module sun { module star { module xml { module crypto {
 
@@ -38,7 +37,6 @@ module com { module sun { module star { module xml { module crypto {
 service XMLEncryptionTemplate {
     interface com::sun::star::xml::crypto::XXMLEncryptionTemplate ;
     interface com::sun::star::lang::XInitialization ;
-    interface com::sun::star::lang::XServiceInfo ;
 } ;
 
 

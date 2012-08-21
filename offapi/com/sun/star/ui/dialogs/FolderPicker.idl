@@ -52,10 +52,6 @@ published service FolderPicker
 
     /** Service should always support this interface.
     */
-    interface com::sun::star::lang::XServiceInfo;
-
-    /** Service should always support this interface.
-    */
     interface com::sun::star::lang::XTypeProvider;
 
     /** For canceling a running dialog instance.

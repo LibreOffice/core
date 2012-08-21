@@ -43,10 +43,6 @@ published service SystemShellExecute
 
     /** Service should always support this interface.
     */
-    interface com::sun::star::lang::XServiceInfo;
-
-    /** Service should always support this interface.
-    */
     interface com::sun::star::lang::XTypeProvider;
 };
 

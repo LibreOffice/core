@@ -26,30 +26,23 @@ module com {  module sun {  module star {  module loader {
  published interface XImplementationLoader;
 
 
-/** makes it possible to access services accessible via a <code>UnoUrlResolver</code>
-    E.g., instantiation of services in another process. This service is still in an
-    experimental state and should not be used in a production environment.
- */
-published service Dynamic
-{
-    /** is used to write persistent information into the given registry
-        for accessing a <code>SingleServiceFactory</code> and for activating this
-                implementation.
-     */
-    /** allows registration and activation of described service.
-        The url parameter has to be a comma-separated list of attributes.
-        The following attribute types are understood:
-        servicename = the service name to register this component under
-        link        = a parameter given to a resolver to get a <code>SingleServiceFactory</code>
-        resolver    = a <code>UnoUrlResolver</code> service, which is used to resolve the link
-    */
-    interface XImplementationLoader;
+/**
+   Makes it possible to access services accessible via a <code>UnoUrlResolver</code>
+   E.g., instantiation of services in another process. This service is still in an
+   experimental state and should not be used in a production environment.
 
+   Is used to write persistent information into the given registry
+   for accessing a <code>SingleServiceFactory</code> and for activating this
+   implementation.
 
-    /** gives information about other supported services
-     */
-    interface com::sun::star::lang::XServiceInfo;
-};
+   Allows registration and activation of described service.
+    The url parameter has to be a comma-separated list of attributes.
+    The following attribute types are understood:
+    servicename = the service name to register this component under
+    link        = a parameter given to a resolver to get a <code>SingleServiceFactory</code>
+    resolver    = a <code>UnoUrlResolver</code> service, which is used to resolve the link
+*/
+published service Dynamic : XImplementationLoader;
 
 }; }; }; };
 

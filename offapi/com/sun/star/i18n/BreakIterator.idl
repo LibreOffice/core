@@ -19,7 +19,6 @@
 #ifndef __com_sun_star_i18n_BreakIterator_idl__
 #define __com_sun_star_i18n_BreakIterator_idl__
 
-#include <com/sun/star/lang/XServiceInfo.idl>
 #include <com/sun/star/i18n/XBreakIterator.idl>
 
 
@@ -32,11 +31,7 @@
     <p> It also contains a BreakIterator service for Asian languages.
     </p>
 */
-published service BreakIterator
-{
-    interface com::sun::star::i18n::XBreakIterator;
-    interface com::sun::star::lang::XServiceInfo;
-};
+published service BreakIterator : com::sun::star::i18n::XBreakIterator;
 
 
 }; }; }; };

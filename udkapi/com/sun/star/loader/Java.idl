@@ -21,28 +21,19 @@
 
 #include <com/sun/star/lang/XServiceInfo.idl>
 
- module com {  module sun {  module star {  module loader {
+module com {  module sun {  module star {  module loader {
 
- published interface XImplementationLoader;
-
-
-// DocMerge from xml: service com::sun::star::loader::Java
-/** allows to access a java component stored with a .jar file
- */
-published service Java
-{
-
-    /** is used for writing persistent information in the registry for
-                external implementation and for activating this implementation. The
-                locationUrls must be absolute file urls.
-     */
-    interface XImplementationLoader;
+published interface XImplementationLoader;
 
 
-    /** gives information about other supported services
-     */
-    interface com::sun::star::lang::XServiceInfo;
-};
+/**
+  Allows to access a java component stored with a .jar file.
+
+  Is used for writing persistent information in the registry for
+            external implementation and for activating this implementation. The
+            locationUrls must be absolute file urls.
+*/
+published service Java : XImplementationLoader;
 
 
 }; }; }; };

@@ -31,7 +31,7 @@
 #include <com/sun/star/awt/XWindow.idl>
 
 
- module com {  module sun {  module star {  module presentation {
+module com {  module sun {  module star {  module presentation {
 
 
 /** This component integrates a preview view to a slide show of a presentation
@@ -63,12 +63,6 @@ published service PreviewView
     /** lets you access the properties of this service.
      */
     interface com::sun::star::beans::XPropertySet;
-
-
-    /** provides the names of the services implemented by
-                this instance.
-     */
-    interface com::sun::star::lang::XServiceInfo;
 
 
     /** This is the drawing page that is currently visible.

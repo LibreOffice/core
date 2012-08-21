@@ -20,7 +20,6 @@
 #ifndef __com_sun_star_i18n_InputSequenceChecker_idl__
 #define __com_sun_star_i18n_InputSequenceChecker_idl__
 
-#include <com/sun/star/lang/XServiceInfo.idl>
 #include <com/sun/star/i18n/XExtendedInputSequenceChecker.idl>
 
 
@@ -34,7 +33,6 @@ module com { module sun { module star { module i18n {
 published service InputSequenceChecker
 {
     interface com::sun::star::i18n::XInputSequenceChecker;
-    interface com::sun::star::lang::XServiceInfo;
 
     [optional] interface com::sun::star::i18n::XExtendedInputSequenceChecker;
 };

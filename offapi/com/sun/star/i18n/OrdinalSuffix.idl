@@ -20,7 +20,6 @@
 #ifndef INCLUDED_com_sun_star_i18n_OrdinalSuffix_idl
 #define INCLUDED_com_sun_star_i18n_OrdinalSuffix_idl
 
-#include <com/sun/star/lang/XServiceInfo.idl>
 #include <com/sun/star/i18n/XOrdinalSuffix.idl>
 
 
@@ -37,11 +36,7 @@ module com { module sun { module star { module i18n {
     change without notice and should not be used outside the OOo core.
  */
 
-service OrdinalSuffix
-{
-    interface com::sun::star::i18n::XOrdinalSuffix;
-    interface com::sun::star::lang::XServiceInfo;
-};
+service OrdinalSuffix : com::sun::star::i18n::XOrdinalSuffix;
 
 
 }; }; }; };

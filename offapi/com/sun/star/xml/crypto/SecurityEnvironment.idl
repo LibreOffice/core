@@ -29,7 +29,6 @@
 #include <com/sun/star/xml/crypto/XSecurityEnvironment.idl>
 #include <com/sun/star/lang/XUnoTunnel.idl>
 #include <com/sun/star/lang/XInitialization.idl>
-#include <com/sun/star/lang/XServiceInfo.idl>
 
 module com { module sun { module star { module xml { module crypto {
 
@@ -40,7 +39,6 @@ service SecurityEnvironment {
     interface com::sun::star::xml::crypto::XSecurityEnvironment ;
     interface com::sun::star::lang::XInitialization ;
     interface com::sun::star::lang::XUnoTunnel;
-    interface com::sun::star::lang::XServiceInfo ;
 } ;
 
 } ; } ; } ; } ; } ;

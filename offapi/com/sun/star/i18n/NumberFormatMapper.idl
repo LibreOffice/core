@@ -21,7 +21,6 @@
 #define __com_sun_star_i18n_NumberFormatMapper_idl__
 
 #include <com/sun/star/i18n/XNumberFormatCode.idl>
-#include <com/sun/star/lang/XServiceInfo.idl>
 
 
 module com { module sun { module star { module i18n {
@@ -31,11 +30,7 @@ module com { module sun { module star { module i18n {
     number formatter
 */
 
-published service NumberFormatMapper
-{
-    interface com::sun::star::i18n::XNumberFormatCode;
-    interface com::sun::star::lang::XServiceInfo;
-};
+published service NumberFormatMapper : com::sun::star::i18n::XNumberFormatCode;
 
 }; }; }; };
 #endif

@@ -26,22 +26,14 @@
  published interface XImplementationLoader;
 
 
-/** allows to access a native component stored in a shared library.
- */
-published service SharedLibrary
-{
+/**
+  Allows to access a native component stored in a shared library.
 
-    /** is used for writing persistent information in the registry for
+  Is used for writing persistent information in the registry for
                 an external implementation and for activating this
                 implementation.
-     */
-    interface XImplementationLoader;
-
-
-    /** gives information about other supported services
-     */
-    interface com::sun::star::lang::XServiceInfo;
-};
+*/
+published service SharedLibrary : XImplementationLoader;
 
 }; }; }; }; //module com.sun.star.loader
 

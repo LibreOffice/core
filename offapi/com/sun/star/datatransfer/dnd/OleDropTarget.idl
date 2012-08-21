@@ -30,7 +30,6 @@
 #define __com_sun_star_datatransfer_dnd_OleDropTarget_idl__
 
 #include <com/sun/star/lang/XComponent.idl>
-#include <com/sun/star/lang/XServiceInfo.idl>
 #include <com/sun/star/lang/XInitialization.idl>
 #include <com/sun/star/lang/XTypeProvider.idl>
 
@@ -59,10 +58,6 @@ published service OleDropTarget
     /** For shutdown and listener support.
     */
     interface com::sun::star::lang::XComponent;
-
-    /** Service should always support this interface.
-    */
-    interface com::sun::star::lang::XServiceInfo;
 
     /** Service should always support this interface.
     */

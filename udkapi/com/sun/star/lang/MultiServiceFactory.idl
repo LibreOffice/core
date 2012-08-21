@@ -54,10 +54,6 @@ published service MultiServiceFactory
     */
     interface com::sun::star::lang::XMultiComponentFactory;
 
-    /** Factories, as well as all other services, should always support
-        this interface.
-    */
-    interface com::sun::star::lang::XServiceInfo;
 };
 
 

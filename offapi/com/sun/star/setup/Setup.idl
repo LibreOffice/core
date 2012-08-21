@@ -20,19 +20,11 @@
 #define __com_sun_star_setup_Setup_idl__
 
 #include <com/sun/star/setup/XSetup.idl>
-#include <com/sun/star/lang/XServiceInfo.idl>
 
 module com {  module sun {  module star {  module setup {
 
 /// @deprecated
-published service Setup
-{
-    // DocMerge: empty anyway
-    interface com::sun::star::setup::XSetup;
-
-    // DocMerge: empty anyway
-    interface com::sun::star::lang::XServiceInfo;
-    };
+published service Setup : com::sun::star::setup::XSetup;
 
 }; }; }; };
 #endif
