@@ -34,6 +34,7 @@ import com.sun.star.uno.*;
 
 import org.openoffice.java.accessibility.*;
 
+import java.awt.EventQueue;
 import java.awt.Window;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -224,7 +225,8 @@ public class AccessBridge {
 
         public void dispose() {
             try {
-                java.awt.Toolkit.getDefaultToolkit().getSystemEventQueue().invokeAndWait(
+                java.awt.Toolkit.getDefaultToolkit().getSystemEventQueue();
+                EventQueue.invokeAndWait(
                     new Runnable() {
                         public void run() {
                         }

@@ -19,6 +19,7 @@
 package org.openoffice.java.accessibility;
 
 import java.awt.Component;
+import java.awt.EventQueue;
 
 import javax.accessibility.AccessibleContext;
 import javax.accessibility.AccessibleState;
@@ -173,7 +174,8 @@ public class Container extends java.awt.Container implements javax.accessibility
     }
 
     protected void firePropertyChange(String property, Object oldValue, Object newValue) {
-        getEventQueue().invokeLater(new PropertyChangeBroadcaster(property, oldValue, newValue));
+        getEventQueue();
+        EventQueue.invokeLater(new PropertyChangeBroadcaster(property, oldValue, newValue));
     }
 
     protected void fireStatePropertyChange(AccessibleState state, boolean set) {
@@ -187,7 +189,8 @@ public class Container extends java.awt.Container implements javax.accessibility
                 AccessibleContext.ACCESSIBLE_STATE_PROPERTY,
                 state, null);
         }
-        getEventQueue().invokeLater(broadcaster);
+        getEventQueue();
+        EventQueue.invokeLater(broadcaster);
     }
 
     /**

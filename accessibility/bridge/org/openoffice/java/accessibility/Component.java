@@ -18,6 +18,8 @@
 
 package org.openoffice.java.accessibility;
 
+import java.awt.EventQueue;
+
 import javax.accessibility.AccessibleContext;
 import javax.accessibility.AccessibleState;
 
@@ -168,7 +170,8 @@ public abstract class Component extends java.awt.Component {
     }
 
     protected void firePropertyChange(String property, Object oldValue, Object newValue) {
-        getEventQueue().invokeLater(new PropertyChangeBroadcaster(property, oldValue, newValue));
+        getEventQueue();
+        EventQueue.invokeLater(new PropertyChangeBroadcaster(property, oldValue, newValue));
     }
 
     protected void fireStatePropertyChange(AccessibleState state, boolean set) {
@@ -181,14 +184,15 @@ public abstract class Component extends java.awt.Component {
 
         if (set) {
             broadcaster = new PropertyChangeBroadcaster(
-                accessibleContext.ACCESSIBLE_STATE_PROPERTY,
+                AccessibleContext.ACCESSIBLE_STATE_PROPERTY,
                 null, state);
         } else {
             broadcaster = new PropertyChangeBroadcaster(
-                accessibleContext.ACCESSIBLE_STATE_PROPERTY,
+                AccessibleContext.ACCESSIBLE_STATE_PROPERTY,
                 state, null);
         }
-        getEventQueue().invokeLater(broadcaster);
+        getEventQueue();
+        EventQueue.invokeLater(broadcaster);
     }
 
     /**
@@ -292,7 +296,7 @@ public abstract class Component extends java.awt.Component {
 
                 switch (event.EventId) {
                     case AccessibleEventId.ACTION_CHANGED:
-                        firePropertyChange(accessibleContext.ACCESSIBLE_ACTION_PROPERTY,
+                        firePropertyChange(AccessibleContext.ACCESSIBLE_ACTION_PROPERTY,
                             toNumber(event.OldValue), toNumber(event.NewValue));
                         break;
                     case AccessibleEventId.NAME_CHANGED:
@@ -331,10 +335,10 @@ public abstract class Component extends java.awt.Component {
                         firePropertyChange(AccessibleContext.ACCESSIBLE_SELECTION_PROPERTY, null, null);
                         break;
                     case AccessibleEventId.CARET_CHANGED:
-                        firePropertyChange(accessibleContext.ACCESSIBLE_CARET_PROPERTY, toNumber(event.OldValue), toNumber(event.NewValue));
+                        firePropertyChange(AccessibleContext.ACCESSIBLE_CARET_PROPERTY, toNumber(event.OldValue), toNumber(event.NewValue));
                         break;
                     case AccessibleEventId.VALUE_CHANGED:
-                        firePropertyChange(accessibleContext.ACCESSIBLE_VALUE_PROPERTY, toNumber(event.OldValue), toNumber(event.NewValue));
+                        firePropertyChange(AccessibleContext.ACCESSIBLE_VALUE_PROPERTY, toNumber(event.OldValue), toNumber(event.NewValue));
                     default:
                         // Warn about unhandled events
                         if(Build.DEBUG) {

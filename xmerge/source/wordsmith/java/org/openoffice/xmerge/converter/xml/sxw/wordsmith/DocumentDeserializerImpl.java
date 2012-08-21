@@ -464,23 +464,23 @@ implements DOCConstants, OfficeConstants, DocumentDeserializer {
             // copy font declarations from original document to the new document
             nl = origDomDoc.getElementsByTagName(TAG_OFFICE_FONT_DECLS);
             df = doc.createDocumentFragment();
-            newNode = xu.deepClone(df, nl.item(0));
+            newNode = XmlUtil.deepClone(df, nl.item(0));
             rootNode.insertBefore(newNode, bodyNode);
 
             // copy style catalog from original document to the new document
             nl = origDomDoc.getElementsByTagName(TAG_OFFICE_STYLES);
             df = doc.createDocumentFragment();
-            newNode = xu.deepClone(df, nl.item(0));
+            newNode = XmlUtil.deepClone(df, nl.item(0));
             rootNode.insertBefore(newNode, bodyNode);
 
             nl = origDomDoc.getElementsByTagName(TAG_OFFICE_AUTOMATIC_STYLES);
             df = doc.createDocumentFragment();
-            newNode = xu.deepClone(df, nl.item(0));
+            newNode = XmlUtil.deepClone(df, nl.item(0));
             rootNode.insertBefore(newNode, bodyNode);
 
             nl = origDomDoc.getElementsByTagName(TAG_OFFICE_MASTER_STYLES);
             df = doc.createDocumentFragment();
-            newNode = xu.deepClone(df, nl.item(0));
+            newNode = XmlUtil.deepClone(df, nl.item(0));
             rootNode.insertBefore(newNode, bodyNode);
         }
 

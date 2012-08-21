@@ -64,7 +64,7 @@ public class Paragraph extends Container implements javax.accessibility.Accessib
                         int pos = at.getCaretPosition();
                         // Simulating a caret event here should help at tools
                         // that re not aware of the paragraph approach of OOo.
-                        firePropertyChange(ac.ACCESSIBLE_CARET_PROPERTY,
+                        firePropertyChange(AccessibleContext.ACCESSIBLE_CARET_PROPERTY,
                             new Integer(-1), new Integer(pos));
                     }
                 }
@@ -75,7 +75,7 @@ public class Paragraph extends Container implements javax.accessibility.Accessib
         public void notifyEvent(AccessibleEventObject event) {
             switch (event.EventId) {
                 case AccessibleEventId.CARET_CHANGED:
-                    firePropertyChange(accessibleContext.ACCESSIBLE_CARET_PROPERTY,
+                    firePropertyChange(AccessibleContext.ACCESSIBLE_CARET_PROPERTY,
                         Component.toNumber(event.OldValue),
                         Component.toNumber(event.NewValue));
                     break;
