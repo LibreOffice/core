@@ -6,9 +6,11 @@ import org.libreoffice.impressremote.communication.SlideShow;
 import pl.polidea.coverflow.AbstractCoverFlowImageAdapter;
 import pl.polidea.coverflow.CoverFlow;
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.ServiceConnection;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -16,6 +18,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -39,7 +42,6 @@ public class PresentationFragment extends SherlockFragment {
     private TextView mNumberText;
 
     private CommunicationService mCommunicationService;
-    private SlideShow mSlideShow;
 
     private float mOriginalCoverflowWidth;
     private float mOriginalCoverflowHeight;
@@ -47,8 +49,37 @@ public class PresentationFragment extends SherlockFragment {
     private float mNewCoverflowWidth = 0;
     private float mNewCoverflowHeight = 0;
 
+    private ServiceConnection mConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName aClassName,
+                        IBinder aService) {
+            mCommunicationService = ((CommunicationService.CBinder) aService)
+                            .getService();
+
+            if (mTopView != null) {
+                mTopView.setAdapter(new ThumbnailAdapter(mContext,
+                                mCommunicationService.getSlideShow()));
+                mTopView.setSelection(mCommunicationService.getSlideShow()
+                                .getCurrentSlide(), true);
+                mTopView.setOnItemSelectedListener(new ClickListener());
+            }
+
+            updateSlideNumberDisplay();
+
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName aClassName) {
+            mCommunicationService = null;
+        }
+    };
+
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                     Bundle savedInstanceState) {
+        getActivity().bindService(
+                        new Intent(getActivity().getApplicationContext(),
+                                        CommunicationService.class),
+                        mConnection, Context.BIND_IMPORTANT);
         mContext = getActivity().getApplicationContext();
         container.removeAllViews();
         View v = inflater.inflate(R.layout.fragment_presentation, container,
@@ -68,9 +99,6 @@ public class PresentationFragment extends SherlockFragment {
 
         mHandle = (ImageView) v.findViewById(R.id.presentation_handle);
         mHandle.setOnTouchListener(new SizeListener());
-
-        // Call again to set things up if necessary.
-        setCommunicationService(mCommunicationService);
 
         // Save the height/width for future reference
         mOriginalCoverflowHeight = mTopView.getImageHeight();
@@ -95,11 +123,13 @@ public class PresentationFragment extends SherlockFragment {
         LocalBroadcastManager
                         .getInstance(getActivity().getApplicationContext())
                         .registerReceiver(mListener, aFilter);
+
         return v;
     }
 
     @Override
     public void onDestroyView() {
+        getActivity().unbindService(mConnection);
         super.onDestroyView();
         LocalBroadcastManager
                         .getInstance(getActivity().getApplicationContext())
@@ -108,9 +138,11 @@ public class PresentationFragment extends SherlockFragment {
     }
 
     private void updateSlideNumberDisplay() {
-        int aSlide = mSlideShow.getCurrentSlide();
-        mNumberText.setText((aSlide + 1) + "/" + mSlideShow.getSize());
-        mNotes.loadData(mSlideShow.getNotes(aSlide), "text/html", null);
+        int aSlide = mCommunicationService.getSlideShow().getCurrentSlide();
+        mNumberText.setText((aSlide + 1) + "/"
+                        + mCommunicationService.getSlideShow().getSize());
+        mNotes.loadData(mCommunicationService.getSlideShow().getNotes(aSlide),
+                        "text/html", null);
     }
 
     // -------------------------------------------------- RESIZING LISTENER ----
@@ -207,22 +239,6 @@ public class PresentationFragment extends SherlockFragment {
     }
 
     // ---------------------------------------------------- MESSAGE HANDLER ----
-    public void setCommunicationService(
-                    CommunicationService aCommunicationService) {
-        mCommunicationService = aCommunicationService;
-        if (mCommunicationService == null)
-            return;
-
-        mSlideShow = mCommunicationService.getSlideShow();
-        if (mTopView != null && mSlideShow != null) {
-            mTopView.setAdapter(new ThumbnailAdapter(mContext, mSlideShow));
-            mTopView.setSelection(mSlideShow.getCurrentSlide(), true);
-            mTopView.setOnItemSelectedListener(new ClickListener());
-        }
-
-        updateSlideNumberDisplay();
-    }
-
     private BroadcastReceiver mListener = new BroadcastReceiver() {
 
         @Override

@@ -112,8 +112,6 @@ public class PresentationActivity extends SherlockFragmentActivity {
             mCommunicationService = ((CommunicationService.CBinder) aService)
                             .getService();
 
-            mPresentationFragment
-                            .setCommunicationService(mCommunicationService);
             mThumbnailFragment.setCommunicationService(mCommunicationService);
 
         }

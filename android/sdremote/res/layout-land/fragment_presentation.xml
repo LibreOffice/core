@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res/org.libreoffice.impressremote"
     android:id="@+id/presentation_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -15,9 +16,10 @@
             android:id="@+id/presentation_coverflow"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_marginTop="5dip"
-            coverflow:imageHeight="150dip"
-            coverflow:imageWidth="180dip"
+            android:layout_margin="5dp"
+            android:layout_marginLeft="10dp"
+            coverflow:imageHeight="200dip"
+            coverflow:imageWidth="240dip"
             coverflow:withReflection="false" />
 
         <TextView
@@ -36,6 +38,8 @@
         android:layout_marginRight="6dp"
         android:contentDescription="@string/presentation_ui_resizehandle"
         android:paddingBottom="5dp"
+        android:paddingLeft="5dp"
+        android:paddingRight="10dp"
         android:paddingTop="5dp"
         android:scaleType="fitXY"
         android:src="@drawable/handle" />
