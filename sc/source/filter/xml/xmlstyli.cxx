@@ -516,7 +516,7 @@ void XMLTableStyleContext::FillPropertySet(
             if (!bParentSet)
             {
                 AddProperty(CTF_SC_CELLSTYLE, uno::makeAny(GetImport().GetStyleDisplayName( XML_STYLE_FAMILY_TABLE_CELL, GetParentName() )));
-                bParentSet = sal_True;
+                bParentSet = true;
             }
             sal_Int32 nNumFmt = GetNumberFormat();
             if (nNumFmt >= 0)
@@ -534,7 +534,7 @@ void XMLTableStyleContext::FillPropertySet(
                     ++aItr;
                 }
                 AddProperty(CTF_SC_IMPORT_MAP, aConditionalFormat);
-                bConditionalFormatCreated = sal_True;
+                bConditionalFormatCreated = true;
             }
         }
         else if (GetFamily() == XML_STYLE_FAMILY_TABLE_TABLE)
