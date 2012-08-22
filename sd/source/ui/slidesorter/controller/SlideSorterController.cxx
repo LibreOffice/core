@@ -110,10 +110,10 @@ SlideSorterController::SlideSorterController (SlideSorter& rSlideSorter)
       mpPageSelector(),
       mpFocusManager(),
       mpSlotManager(),
-      mpClipboard(),
       mpScrollBarManager(),
       mpCurrentSlideManager(),
       mpSelectionManager(),
+      mpClipboard(),
       mpInsertionIndicatorHandler(new InsertionIndicatorHandler(rSlideSorter)),
       mpAnimator(new Animator(rSlideSorter)),
       mpVisibleAreaManager(new VisibleAreaManager(rSlideSorter)),
@@ -156,9 +156,9 @@ void SlideSorterController::Init (void)
     mpPageSelector.reset(new PageSelector(mrSlideSorter));
     mpFocusManager.reset(new FocusManager(mrSlideSorter));
     mpSlotManager.reset(new SlotManager(mrSlideSorter));
-    mpClipboard.reset(new Clipboard(mrSlideSorter));
     mpScrollBarManager.reset(new ScrollBarManager(mrSlideSorter));
     mpSelectionManager.reset(new SelectionManager(mrSlideSorter));
+    mpClipboard.reset(new Clipboard(mrSlideSorter));
 
     mpScrollBarManager->LateInitialization();
 
@@ -202,6 +202,7 @@ SlideSorterController::~SlideSorterController (void)
 void SlideSorterController::Dispose (void)
 {
     mpInsertionIndicatorHandler->End(Animator::AM_Immediate);
+    mpClipboard.reset();
     mpSelectionManager.reset();
     mpAnimator->Dispose();
 }
