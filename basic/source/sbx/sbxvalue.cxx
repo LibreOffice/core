@@ -27,36 +27,6 @@
 
 TYPEINIT1(SbxValue,SbxBase)
 
-
-///////////////////////////// error handling //////////////////////////////
-// bring back ?? was ever in ?? currently ifdef out ?
-#ifdef _USED
-// STILL Reverse ENGINEERING!
-
-// The default handling sets the error code only.
-
-#ifndef WNT
-#if defined ( UNX )
-int matherr( struct exception* p )
-#else
-int matherr( struct _exception* p )
-#endif
-{
-    switch( p->type )
-    {
-#if defined ( UNX )
-        case OVERFLOW: SbxBase::SetError( SbxERR_OVERFLOW ); break;
-#else
-        case _OVERFLOW: SbxBase::SetError( SbxERR_OVERFLOW ); break;
-#endif
-        default:        SbxBase::SetError( SbxERR_NOTIMP ); break;
-    }
-    return sal_True;
-}
-#endif
-
-#endif // _USED
-
 ///////////////////////////// constructors //////////////////////////////
 
 SbxValue::SbxValue() : SbxBase()
