@@ -1186,7 +1186,6 @@ void ORptExport::exportAutoStyle(XPropertySet* _xProp,const Reference<XFormatted
 
         awt::Point aPos = xFixedLine->getPosition();
         awt::Size aSize = xFixedLine->getSize();
-        sal_Int32 nSectionHeight = xFixedLine->getSection()->getHeight();
 
         ::rtl::OUString sBorderProp;
         ::std::vector< ::rtl::OUString> aProps;
@@ -1208,11 +1207,15 @@ void ORptExport::exportAutoStyle(XPropertySet* _xProp,const Reference<XFormatted
         }
         else // horizontal
         {
-            // check if border should be bottom
-            if ( (aPos.Y + aSize.Height) == nSectionHeight )
+            if ( xFixedLine->getSection() != NULL)
             {
-                sBorderProp = PROPERTY_BORDERBOTTOM;
-                aProps.push_back(static_cast<const rtl::OUString&>(PROPERTY_BORDERTOP));
+                sal_Int32 nSectionHeight = xFixedLine->getSection()->getHeight();
+                // check if border should be bottom
+                if ( (aPos.Y + aSize.Height) == nSectionHeight )
+                {
+                   sBorderProp = PROPERTY_BORDERBOTTOM;
+                   aProps.push_back(static_cast<const rtl::OUString&>(PROPERTY_BORDERTOP));
+                }
             }
             else
             {
