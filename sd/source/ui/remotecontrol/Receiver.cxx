@@ -55,8 +55,6 @@ void Receiver::parseCommand( std::vector<OString> aCommand )
     }
     catch (uno::RuntimeException &)
     {
-        fprintf( stderr, "Error in retrieving Controller\n" );
-        //return;
     }
 
     if ( aCommand[0].equals( "transition_next" ) )

@@ -20,14 +20,27 @@ namespace sd
 {
 
     /**
-     * A wrapper for an osl StreamSocket to allow reading lines.
+     * [A wrapper for an osl StreamSocket to allow reading lines.]
+     *
+     * Currently wraps either an osl StreamSocket or a standard c socket,
+     * allowing reading and writing for our purposes. Should eventually be
+     * returned to being a StreamSocket wrapper if/when Bluetooth is
+     * integrated into osl Sockets.
      */
     class BufferedStreamSocket :
-        public ::osl::StreamSocket,
+        private ::osl::StreamSocket,
         private ::boost::noncopyable
     {
         public:
+            /**
+             * Create a BufferedStreamSocket on top of an
+             * osl::StreamSocket.
+             */
             BufferedStreamSocket( const osl::StreamSocket &aSocket );
+            /**
+             * Create a BufferedStreamSocket on top of a standard c socket.
+             */
+            BufferedStreamSocket( int aSocket );
             BufferedStreamSocket( const BufferedStreamSocket &aSocket );
             /**
              * Blocks until a line is read.
@@ -35,9 +48,15 @@ namespace sd
              * if there was a problem in communications.
              */
             sal_Int32 readLine(OString& aLine);
+
+            sal_Int32 write( const void* pBuffer, sal_uInt32 n );
+
+            void getPeerAddr(osl::SocketAddr&);
         private:
             sal_Int32 aRet, aRead;
             std::vector<char> aBuffer;
+            int mSocket;
+            bool usingCSocket;
     };
 }
 

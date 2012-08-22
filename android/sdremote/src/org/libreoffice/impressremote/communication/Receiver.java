@@ -35,6 +35,8 @@ public class Receiver {
     }
 
     public void parseCommand(ArrayList<String> aCommand) {
+        if (aCommand.size() == 0)
+            return; // E.g. if empty line received for whatever reason.
         String aInstruction = aCommand.get(0);
         if (aInstruction.equals("slideshow_started")) {
             int aSlideShowlength = Integer.parseInt(aCommand.get(1));

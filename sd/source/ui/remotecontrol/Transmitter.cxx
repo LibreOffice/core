@@ -13,9 +13,9 @@ using namespace std;
 using namespace osl; // Sockets etc.
 using namespace sd;
 
-Transmitter::Transmitter( StreamSocket &aSocket )
+Transmitter::Transmitter( BufferedStreamSocket* aSocket )
   : Thread( "TransmitterThread" ),
-    mStreamSocket( aSocket ),
+    pStreamSocket( aSocket ),
     mQueuesNotEmpty(),
     mFinishRequested(),
     mQueueMutex(),
@@ -38,13 +38,13 @@ void Transmitter::execute()
         {
             OString aMessage( mHighPriority.front() );
             mHighPriority.pop();
-            mStreamSocket.write( aMessage.getStr(), aMessage.getLength() );
+            pStreamSocket->write( aMessage.getStr(), aMessage.getLength() );
         }
         else if ( !mLowPriority.empty() )
         {
             OString aMessage( mLowPriority.front() );
             mLowPriority.pop();
-            mStreamSocket.write( aMessage.getStr(), aMessage.getLength() );
+            pStreamSocket->write( aMessage.getStr(), aMessage.getLength() );
         }
 
         if ( mLowPriority.empty() && mHighPriority.empty() )

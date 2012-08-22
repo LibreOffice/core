@@ -11,6 +11,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.support.v4.content.LocalBroadcastManager;
 
 public class BluetoothFinder {
 
@@ -32,9 +33,8 @@ public class BluetoothFinder {
             return; // No bluetooth adapter found (emulator, special devices)
         }
         System.out.println("BT:Discovery starting");
-        IntentFilter aFilter = new IntentFilter(
-                        BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
-        aFilter.addAction(BluetoothDevice.ACTION_FOUND);
+        IntentFilter aFilter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
+        aFilter.addAction(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
         mContext.registerReceiver(mReceiver, aFilter);
 
         mAdapter.enable();
@@ -64,7 +64,7 @@ public class BluetoothFinder {
         @Override
         public void onReceive(Context context, Intent aIntent) {
             // TODO Auto-generated method stub
-            System.out.println("Received intent");
+            System.out.print("Received intent<<<");
             System.out.println(aIntent.getAction());
             if (aIntent.getAction().equals(BluetoothDevice.ACTION_FOUND)) {
                 BluetoothDevice aDevice = (BluetoothDevice) aIntent.getExtras()
@@ -77,7 +77,8 @@ public class BluetoothFinder {
                 System.out.println("Now we have: " + mServerList.size());
                 Intent aNIntent = new Intent(
                                 CommunicationService.MSG_SERVERLIST_CHANGED);
-                mContext.sendBroadcast(aNIntent);
+                LocalBroadcastManager.getInstance(mContext).sendBroadcast(
+                                aNIntent);
                 //                System.out.println("Found " + aDevice.getName());
                 //                try {
                 //                    // "f36d0a20-e876-11e1-aff1-0800200c9a66"

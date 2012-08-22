@@ -10,16 +10,19 @@
 #define _SD_IMPRESSREMOTE_BLUETOOTHSERVER_HXX
 
 #include <salhelper/thread.hxx>
+#include <vector>
 
 namespace sd
 {
+    class Communicator;
+
     class BluetoothServer:
         public salhelper::Thread
     {
     public:
-        static void setup();
+        static void setup( std::vector<Communicator*>* pCommunicators );
     private:
-        BluetoothServer();
+        BluetoothServer( std::vector<Communicator*>* pCommunicators );
         ~BluetoothServer();
         static BluetoothServer *spServer;
 
@@ -27,6 +30,7 @@ namespace sd
     public:
     private:
         void execute();
+        std::vector<Communicator*>* mpCommunicators;
     };
 }
 

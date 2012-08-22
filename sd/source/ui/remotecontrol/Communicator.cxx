@@ -37,7 +37,7 @@ Communicator::~Communicator()
 // Run as a thread
 void Communicator::execute()
 {
-    pTransmitter = new Transmitter( *mpSocket );
+    pTransmitter = new Transmitter( mpSocket );
     pTransmitter->launch();
 
     pTransmitter->addMessage( "LO_SERVER_SERVER_PAIRED\n\n",
@@ -61,33 +61,24 @@ void Communicator::execute()
     {
     }
 
-    sal_uInt64 aRet, aRead;
-    vector<char> aBuffer;
+    sal_uInt64 aRet;
     vector<OString> aCommand;
-    aRead = 0;
     while ( true )
     {
-        aBuffer.resize( aRead + 100 );
-        aRet = mpSocket->recv( &aBuffer[aRead], 100 );
+        OString aLine;
+        aRet = mpSocket->readLine( aLine );
         if ( aRet == 0 )
         {
             break; // I.e. transmission finished.
         }
-        aRead += aRet;
-        vector<char>::iterator aIt;
-        while ( (aIt = find( aBuffer.begin(), aBuffer.end(), '\n' ))
-            != aBuffer.end() )
+        if ( aLine.getLength() )
         {
-            sal_uInt64 aLocation = aIt - aBuffer.begin();
-
-            aCommand.push_back( OString( &(*aBuffer.begin()), aLocation ) );
-            if ( aIt == aBuffer.begin() )
-            {
-                aReceiver.parseCommand( aCommand );
-                aCommand.clear();
-            }
-            aBuffer.erase( aBuffer.begin(), aIt + 1 ); // Also delete the empty line
-            aRead -= (aLocation + 1);
+            aCommand.push_back( aLine );
+        }
+        else
+        {
+            aReceiver.parseCommand( aCommand );
+            aCommand.clear();
         }
     }
     // TODO: deal with transmision errors gracefully.

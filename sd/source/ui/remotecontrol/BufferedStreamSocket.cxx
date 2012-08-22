@@ -11,6 +11,12 @@
 
 #include <algorithm>
 
+#ifdef WIN32
+  #include <winsock2.h>
+#else
+ #include <sys/socket.h>
+ #include <unistd.h>
+#endif
 using namespace sd;
 using namespace std;
 using namespace osl;
@@ -19,8 +25,34 @@ BufferedStreamSocket::BufferedStreamSocket( const osl::StreamSocket &aSocket ):
     StreamSocket( aSocket ),
     aRet( 0 ),
     aRead( 0 ),
-    aBuffer()
+    aBuffer(),
+    mSocket( 0 ),
+    usingCSocket( false)
 {
+}
+
+BufferedStreamSocket::BufferedStreamSocket( int aSocket ):
+    StreamSocket(),
+    aRet( 0 ),
+    aRead( 0 ),
+    aBuffer(),
+    mSocket( aSocket ),
+    usingCSocket( true )
+{
+}
+
+void BufferedStreamSocket::getPeerAddr(osl::SocketAddr& rAddr)
+{
+    assert ( !usingCSocket );
+    StreamSocket::getPeerAddr( rAddr );
+}
+
+sal_Int32 BufferedStreamSocket::write( const void* pBuffer, sal_uInt32 n )
+{
+    if ( !usingCSocket )
+        return StreamSocket::write( pBuffer, n );
+    else
+        return ::write( mSocket, pBuffer, (size_t) n );
 }
 
 sal_Int32 BufferedStreamSocket::readLine( OString& aLine )
@@ -39,12 +71,15 @@ sal_Int32 BufferedStreamSocket::readLine( OString& aLine )
             aBuffer.erase( aBuffer.begin(), aIt + 1 ); // Also delete the empty line
             aRead -= (aLocation + 1);
 
-            return aLine.getLength();
+            return aLine.getLength() + 1;
         }
 
         // Then try and receive if nothing present
         aBuffer.resize( aRead + 100 );
-        aRet = recv( &aBuffer[aRead], 100 );
+        if ( !usingCSocket)
+            aRet = StreamSocket::recv( &aBuffer[aRead], 100 );
+        else
+            aRet = ::read( mSocket, &aBuffer[aRead], 100 );
 
         if ( aRet == 0 )
         {

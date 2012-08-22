@@ -83,7 +83,6 @@ void RemoteServer::execute()
 
             if ( ! pSocket->readLine( aLine ) ) delete pSocket;
             OString aPin( aLine );
-            fprintf( stderr, "Pin:%s\n", aPin.getStr() );
 
             SocketAddr aClientAddr;
             pSocket->getPeerAddr( aClientAddr );
@@ -117,6 +116,8 @@ void RemoteServer::setup()
 
     spServer = new RemoteServer();
     spServer->launch();
+
+    sd::BluetoothServer::setup( &(spServer->mCommunicators) );
 }
 
 
@@ -211,7 +212,6 @@ void SdDLL::RegisterRemotes()
 
     sd::RemoteServer::setup();
     sd::DiscoveryService::setup();
-    sd::BluetoothServer::setup();
 
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

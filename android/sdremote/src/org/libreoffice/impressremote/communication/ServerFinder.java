@@ -13,6 +13,7 @@ import org.libreoffice.impressremote.communication.Server.Protocol;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.v4.content.LocalBroadcastManager;
 
 public class ServerFinder {
 
@@ -169,7 +170,7 @@ public class ServerFinder {
      */
     private void notifyActivity() {
         Intent aIntent = new Intent(CommunicationService.MSG_SERVERLIST_CHANGED);
-        mContext.sendBroadcast(aIntent);
+        LocalBroadcastManager.getInstance(mContext).sendBroadcast(aIntent);
     }
 
     public Collection<Server> getServerList() {

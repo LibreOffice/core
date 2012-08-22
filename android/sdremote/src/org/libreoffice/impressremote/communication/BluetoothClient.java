@@ -8,6 +8,8 @@
  */
 package org.libreoffice.impressremote.communication;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.net.Socket;
 import java.util.UUID;
 
@@ -15,6 +17,8 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.content.Context;
+import android.content.Intent;
+import android.support.v4.content.LocalBroadcastManager;
 
 /**
  * Standard Network client. Connects to a server using Sockets.
@@ -31,67 +35,77 @@ public class BluetoothClient extends Client {
         super(aContext);
         try {
             BluetoothAdapter aAdapter = BluetoothAdapter.getDefaultAdapter();
+            System.out.println("Attemtping to connect to:" + bluetoothAddress);
             BluetoothDevice aDevice = aAdapter
                             .getRemoteDevice(bluetoothAddress);
+            aAdapter.cancelDiscovery();
             BluetoothSocket aSocket = aDevice
                             .createRfcommSocketToServiceRecord(UUID
-                                            .fromString("00001101-0000-1000-8000-00805f9b34fb"));
+                                            .fromString("00001101-0000-1000-8000-00805F9B34FB"));
             aSocket.connect();
+            //            mSocket = aSocket;
+            System.out.println("Connected");
+
+            mInputStream = aSocket.getInputStream();
+            mReader = new BufferedReader(new InputStreamReader(mInputStream,
+                            CHARSET));
+            mOutputStream = aSocket.getOutputStream();
+
+            //            mOutputStream.write(20);
+            //            mOutputStream.write(20);
+            //            mOutputStream.write(20);
+            //            mOutputStream.flush();
+            //            System.out.println("reading");
+            //            while (true) {
+            //                System.out.println(mInputStream.read());
+            //            }
+            String aTemp = mReader.readLine();
+            System.out.println("SF:waited");
+            if (!aTemp.equals("LO_SERVER_SERVER_PAIRED")) {
+                return;
+            }
+            while (mReader.readLine().length() != 0) {
+                // Get rid of extra lines
+            }
+            Intent aIntent = new Intent(
+                            CommunicationService.MSG_PAIRING_SUCCESSFUL);
+            LocalBroadcastManager.getInstance(mContext).sendBroadcast(aIntent);
+            startListening();
+            // Pairing.
+            //            Random aRandom = new Random();
+            //            String aPin = "" + (aRandom.nextInt(9000) + 1000);
+            //            while (aPin.length() < 4) {
+            //                aPin = "0" + aPin; // Add leading zeros if necessary
+            //            }
+            //            Intent aIntent = new Intent(
+            //                            CommunicationService.MSG_PAIRING_STARTED);
+            //            aIntent.putExtra("PIN", aPin);
+            //            mPin = aPin;
+            //            LocalBroadcastManager.getInstance(mContext).sendBroadcast(aIntent);
+            //            // Send out
+            //            String aName = CommunicationService.getDeviceName(); // TODO: get the proper name
+            //            sendCommand("LO_SERVER_CLIENT_PAIR\n" + aName + "\n" + aPin
+            //                            + "\n\n");
+            //
+            //            // Wait until we get the appropriate string back...
+            //            System.out.println("SF:waiting");
+            //            String aTemp = mReader.readLine();
+            //            System.out.println("SF:waited");
+            //            if (!aTemp.equals("LO_SERVER_SERVER_PAIRED")) {
+            //                return;
+            //            } else {
+            //
+            //            }
+            //            while (mReader.readLine().length() != 0) {
+            //                // Get rid of extra lines
+            //                System.out.println("SF: empty line");
+            //            }
+            //            System.out.println("SD: empty");
+            //            startListening();
 
         } catch (Exception e) {
             e.printStackTrace();
         }
-        //            BluetoothSocket aSocket = new BluetoothClient(bluetoothAddress, aContext)
-        //                                    .createRfcommSocketToServiceRecord(UUID
-        //                                                    .fromString("00001101-0000-1000-8000-00805F9B34F
-        //        }
-        //        try {
-        //            mSocket = new Socket(ipAddress, PORT);
-        //            mInputStream = mSocket.getInputStream();
-        //            mReader = new BufferedReader(new InputStreamReader(mInputStream,
-        //                            CHARSET));
-        //            mOutputStream = mSocket.getOutputStream();
-        //            // Pairing.
-        //            Random aRandom = new Random();
-        //            String aPin = "" + (aRandom.nextInt(9000) + 1000);
-        //            while (aPin.length() < 4) {
-        //                aPin = "0" + aPin; // Add leading zeros if necessary
-        //            }
-        //            Intent aIntent = new Intent(
-        //                            CommunicationService.MSG_PAIRING_STARTED);
-        //            aIntent.putExtra("PIN", aPin);
-        //            mPin = aPin;
-        //            LocalBroadcastManager.getInstance(mContext).sendBroadcast(aIntent);
-        //            // Send out
-        //            String aName = CommunicationService.getDeviceName(); // TODO: get the proper name
-        //            sendCommand("LO_SERVER_CLIENT_PAIR\n" + aName + "\n" + aPin
-        //                            + "\n\n");
-        //
-        //            // Wait until we get the appropriate string back...
-        //            System.out.println("SF:waiting");
-        //            String aTemp = mReader.readLine();
-        //            System.out.println("SF:waited");
-        //            if (!aTemp.equals("LO_SERVER_SERVER_PAIRED")) {
-        //                return;
-        //            } else {
-        //                aIntent = new Intent(
-        //                                CommunicationService.MSG_PAIRING_SUCCESSFUL);
-        //                LocalBroadcastManager.getInstance(mContext).sendBroadcast(
-        //                                aIntent);
-        //            }
-        //            while (mReader.readLine().length() != 0) {
-        //                // Get rid of extra lines
-        //                System.out.println("SF: empty line");
-        //            }
-        //            System.out.println("SD: empty");
-        //            startListening();
-        //        } catch (UnknownHostException e) {
-        //            // TODO Tell the user we have a problem
-        //            e.printStackTrace();
-        //        } catch (IOException e) {
-        //            // TODO As above
-        //            e.printStackTrace();
-        //        }
 
     }
 

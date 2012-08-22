@@ -11,7 +11,7 @@
 
 #include <osl/conditn.hxx>
 #include <osl/mutex.hxx>
-#include <osl/socket.hxx>
+#include "BufferedStreamSocket.hxx"
 #include <salhelper/thread.hxx>
 #include <rtl/string.hxx>
 
@@ -25,7 +25,7 @@ class Transmitter
 {
 public:
     enum Priority { PRIORITY_LOW = 1, PRIORITY_HIGH };
-    Transmitter( osl::StreamSocket &aSocket );
+    Transmitter( ::sd::BufferedStreamSocket* aSocket );
     ~Transmitter();
     void addMessage( const rtl::OString& aMessage, const Priority aPriority );
     void notifyFinished();
@@ -33,7 +33,7 @@ public:
 private:
     void execute();
 
-    ::osl::StreamSocket mStreamSocket;
+    ::sd::BufferedStreamSocket* pStreamSocket;
 
     ::osl::Condition mQueuesNotEmpty;
     ::osl::Condition mFinishRequested;
