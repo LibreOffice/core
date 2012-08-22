@@ -1,0 +1,69 @@
+--- misc/build/Python-2.6.1/PC/VS10.0/_msi.vcxproj.orig	2012-08-22 17:28:56.856166700 -0400
++++ misc/build/Python-2.6.1/PC/VS10.0/_msi.vcxproj	2012-08-22 17:29:12.226731500 -0400
+@@ -151,7 +151,7 @@
+   </PropertyGroup>
+   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+     <Link>
+-      <AdditionalDependencies>fci.lib;msi.lib;rpcrt4.lib;%(AdditionalDependencies)</AdditionalDependencies>
++      <AdditionalDependencies>cabinet.lib;msi.lib;rpcrt4.lib;%(AdditionalDependencies)</AdditionalDependencies>
+       <BaseAddress>0x1D160000</BaseAddress>
+     </Link>
+   </ItemDefinitionGroup>
+@@ -160,13 +160,13 @@
+       <TargetEnvironment>X64</TargetEnvironment>
+     </Midl>
+     <Link>
+-      <AdditionalDependencies>fci.lib;msi.lib;rpcrt4.lib;%(AdditionalDependencies)</AdditionalDependencies>
++      <AdditionalDependencies>cabinet.lib;msi.lib;rpcrt4.lib;%(AdditionalDependencies)</AdditionalDependencies>
+       <BaseAddress>0x1D160000</BaseAddress>
+     </Link>
+   </ItemDefinitionGroup>
+   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+     <Link>
+-      <AdditionalDependencies>fci.lib;msi.lib;rpcrt4.lib;%(AdditionalDependencies)</AdditionalDependencies>
++      <AdditionalDependencies>cabinet.lib;msi.lib;rpcrt4.lib;%(AdditionalDependencies)</AdditionalDependencies>
+       <BaseAddress>0x1D160000</BaseAddress>
+     </Link>
+   </ItemDefinitionGroup>
+@@ -175,13 +175,13 @@
+       <TargetEnvironment>X64</TargetEnvironment>
+     </Midl>
+     <Link>
+-      <AdditionalDependencies>fci.lib;msi.lib;rpcrt4.lib;%(AdditionalDependencies)</AdditionalDependencies>
++      <AdditionalDependencies>cabinet.lib;msi.lib;rpcrt4.lib;%(AdditionalDependencies)</AdditionalDependencies>
+       <BaseAddress>0x1D160000</BaseAddress>
+     </Link>
+   </ItemDefinitionGroup>
+   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='PGInstrument|Win32'">
+     <Link>
+-      <AdditionalDependencies>fci.lib;msi.lib;rpcrt4.lib;%(AdditionalDependencies)</AdditionalDependencies>
++      <AdditionalDependencies>cabinet.lib;msi.lib;rpcrt4.lib;%(AdditionalDependencies)</AdditionalDependencies>
+       <BaseAddress>0x1D160000</BaseAddress>
+     </Link>
+   </ItemDefinitionGroup>
+@@ -190,14 +190,14 @@
+       <TargetEnvironment>X64</TargetEnvironment>
+     </Midl>
+     <Link>
+-      <AdditionalDependencies>fci.lib;msi.lib;rpcrt4.lib;%(AdditionalDependencies)</AdditionalDependencies>
++      <AdditionalDependencies>cabinet.lib;msi.lib;rpcrt4.lib;%(AdditionalDependencies)</AdditionalDependencies>
+       <BaseAddress>0x1D160000</BaseAddress>
+       <TargetMachine>MachineX64</TargetMachine>
+     </Link>
+   </ItemDefinitionGroup>
+   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='PGUpdate|Win32'">
+     <Link>
+-      <AdditionalDependencies>fci.lib;msi.lib;rpcrt4.lib;%(AdditionalDependencies)</AdditionalDependencies>
++      <AdditionalDependencies>cabinet.lib;msi.lib;rpcrt4.lib;%(AdditionalDependencies)</AdditionalDependencies>
+       <BaseAddress>0x1D160000</BaseAddress>
+     </Link>
+   </ItemDefinitionGroup>
+@@ -206,7 +206,7 @@
+       <TargetEnvironment>X64</TargetEnvironment>
+     </Midl>
+     <Link>
+-      <AdditionalDependencies>fci.lib;msi.lib;rpcrt4.lib;%(AdditionalDependencies)</AdditionalDependencies>
++      <AdditionalDependencies>cabinet.lib;msi.lib;rpcrt4.lib;%(AdditionalDependencies)</AdditionalDependencies>
+       <BaseAddress>0x1D160000</BaseAddress>
+       <TargetMachine>MachineX64</TargetMachine>
+     </Link>
