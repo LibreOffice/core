@@ -273,6 +273,7 @@ private:
     SelectionMode meSelectionMode;
     Point maSecondCorner;
     Pointer maSavedPointer;
+    bool mbAutoScrollInstalled;
     sal_Int32 mnAnchorIndex;
     sal_Int32 mnSecondIndex;
     view::ButtonBar::Lock maButtonBarLock;
@@ -1503,6 +1504,7 @@ MultiSelectionModeHandler::MultiSelectionModeHandler (
       meSelectionMode(SM_Normal),
       maSecondCorner(rMouseModelPosition),
       maSavedPointer(mrSlideSorter.GetContentWindow()->GetPointer()),
+      mbAutoScrollInstalled(false),
       mnAnchorIndex(-1),
       mnSecondIndex(-1),
       maButtonBarLock(rSlideSorter)
@@ -1523,6 +1525,12 @@ void MultiSelectionModeHandler::Initialize(const sal_uInt32 nEventCode)
 
 MultiSelectionModeHandler::~MultiSelectionModeHandler (void)
 {
+    if (mbAutoScrollInstalled)
+    {
+        //a call to this handler's MultiSelectionModeHandler::UpdatePosition
+        //may be still waiting to be called back
+        mrSlideSorter.GetController().GetScrollBarManager().clearAutoScrollFunctor();
+    }
     mrSlideSorter.GetContentWindow()->SetPointer(maSavedPointer);
 }
 
@@ -1564,6 +1572,14 @@ void MultiSelectionModeHandler::ProcessEvent (
 bool MultiSelectionModeHandler::ProcessButtonUpEvent (
     SelectionFunction::EventDescriptor& rDescriptor)
 {
+    if (mbAutoScrollInstalled)
+    {
+        //a call to this handler's MultiSelectionModeHandler::UpdatePosition
+        //may be still waiting to be called back
+        mrSlideSorter.GetController().GetScrollBarManager().clearAutoScrollFunctor();
+        mbAutoScrollInstalled = false;
+    }
+
     if (Match(rDescriptor.mnEventCode, BUTTON_UP | LEFT_BUTTON | SINGLE_CLICK))
     {
         mrSelectionFunction.SwitchToNormalMode();
@@ -1620,16 +1636,18 @@ void MultiSelectionModeHandler::UpdatePosition (
     SharedSdWindow pWindow (mrSlideSorter.GetContentWindow());
     const Point aMouseModelPosition (pWindow->PixelToLogic(rMousePosition));
 
-    if ( ! (bAllowAutoScroll && mrSlideSorter.GetController().GetScrollBarManager().AutoScroll(
+    bool bDoAutoScroll = bAllowAutoScroll && mrSlideSorter.GetController().GetScrollBarManager().AutoScroll(
         rMousePosition,
         ::boost::bind(
             &MultiSelectionModeHandler::UpdatePosition,
             this,
             rMousePosition,
-            false))))
-    {
+            false));
+
+    if (!bDoAutoScroll)
         UpdateModelPosition(aMouseModelPosition);
-    }
+
+    mbAutoScrollInstalled |= bDoAutoScroll;
 }
 
 

@@ -617,13 +617,15 @@ bool ScrollBarManager::RepeatAutoScroll (void)
         }
     }
 
-    maAutoScrollFunctor = ::boost::function<void(void)>();
+    clearAutoScrollFunctor();
     mbIsAutoScrollActive = false;
     return false;
 }
 
-
-
+void ScrollBarManager::clearAutoScrollFunctor()
+{
+    maAutoScrollFunctor = ::boost::function<void(void)>();
+}
 
 IMPL_LINK_NOARG(ScrollBarManager, AutoScrollTimeoutHandler)
 {

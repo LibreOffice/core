@@ -172,6 +172,8 @@ public:
 
     void StopAutoScroll (void);
 
+    void clearAutoScrollFunctor();
+
     enum Orientation { Orientation_Horizontal, Orientation_Vertical };
     enum Unit { Unit_Pixel, Unit_Slide };
     /** Scroll the slide sorter by setting the thumbs of the scroll bars and

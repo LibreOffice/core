@@ -100,11 +100,13 @@ void DragAndDropContext::UpdatePosition (
     ::boost::shared_ptr<InsertionIndicatorHandler> pInsertionIndicatorHandler (
         mpTargetSlideSorter->GetController().GetInsertionIndicatorHandler());
 
-    if ( ! (bAllowAutoScroll
+    bool bDoAutoScroll = bAllowAutoScroll
             && mpTargetSlideSorter->GetController().GetScrollBarManager().AutoScroll(
                 rMousePosition,
                 ::boost::bind(
-                    &DragAndDropContext::UpdatePosition, this, rMousePosition, eMode, false))))
+                    &DragAndDropContext::UpdatePosition, this, rMousePosition, eMode, false));
+
+    if (!bDoAutoScroll)
     {
         pInsertionIndicatorHandler->UpdatePosition(aMouseModelPosition, eMode);
 
