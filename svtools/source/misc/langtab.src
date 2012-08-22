@@ -144,6 +144,7 @@ StringArray STR_ARR_SVT_LANGUAGE_TABLE
         < "Malayalam" ; LANGUAGE_MALAYALAM ; > ;
         < "Manipuri" ; LANGUAGE_MANIPURI ; > ;
         < "Marathi" ; LANGUAGE_MARATHI ; > ;
+        < "Moldovan" ; LANGUAGE_ROMANIAN_MOLDOVA ; > ;
         < "Nepali (Nepal)" ; LANGUAGE_NEPALI ; > ;
         < "Nepali (India)" ; LANGUAGE_NEPALI_INDIA ; > ;
         < "Norwegian, Bokmål" ; LANGUAGE_NORWEGIAN_BOKMAL ; > ;
