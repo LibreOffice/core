@@ -1417,11 +1417,6 @@ bool ModulWindow::IsReadOnly()
     return GetEditView() && GetEditView()->IsReadOnly();
 }
 
-void ModulWindow::SetLineNumberDisplay(bool b)
-{
-    aXEditorWindow.SetLineNumberDisplay(b);
-}
-
 bool ModulWindow::IsPasteAllowed()
 {
     bool bPaste = false;

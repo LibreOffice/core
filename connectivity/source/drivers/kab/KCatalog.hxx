@@ -38,8 +38,6 @@ namespace connectivity
 
             inline KabConnection* getConnection() const { return m_pConnection; }
 
-            static const ::rtl::OUString& getDot();
-
             // implementation of the pure virtual methods
             virtual void refreshTables();
             virtual void refreshViews();

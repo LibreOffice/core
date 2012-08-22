@@ -34,13 +34,6 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 
 // -------------------------------------------------------------------------
-KabTable::KabTable( sdbcx::OCollection* _pTables, KabConnection* _pConnection)
-    : KabTable_TYPEDEF(_pTables, sal_True),
-    m_pConnection(_pConnection)
-{
-    construct();
-}
-// -------------------------------------------------------------------------
 KabTable::KabTable( sdbcx::OCollection* _pTables,
                 KabConnection* _pConnection,
                 const ::rtl::OUString& _Name,

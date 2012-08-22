@@ -37,7 +37,6 @@ namespace connectivity
             KabConnection* m_pConnection;
 
         public:
-            KabTable(   sdbcx::OCollection* _pTables, KabConnection* _pConnection);
             KabTable(   sdbcx::OCollection* _pTables,
                     KabConnection* _pConnection,
                     const ::rtl::OUString& _Name,

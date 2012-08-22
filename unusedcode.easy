@@ -12,10 +12,8 @@ SvtSlideSorterBarOptions::AddListenerLink(Link const&)
 SvtSlideSorterBarOptions::RemoveListenerLink(Link const&)
 TextEngine::GetLeftMargin() const
 ThumbnailView::GetItemCount() const
+ThumbnailView::ImplScroll(Point const&)
 ThumbnailView::InsertItem(unsigned short, BitmapEx const&, rtl::OUString const&, unsigned long)
-ThumbnailView::LinkStubImplTimerHdl(void*, void*)
-ThumbnailView::SetColCount(unsigned short)
-ThumbnailView::SetLineCount(unsigned short)
 ThumbnailViewItemAcc::FireAccessibleEvent(short, com::sun::star::uno::Any const&, com::sun::star::uno::Any const&)
 ThumbnailViewItemAcc::getImplementation(com::sun::star::uno::Reference<com::sun::star::uno::XInterface> const&)
 VCLXPrinterServer::getImplementationId()
@@ -24,7 +22,6 @@ VirtualDevice::SetOutputSizePixelScaleOffsetAndBuffer(Size const&, Fraction cons
 Window::PostUserEvent(unsigned long&, unsigned long, void*)
 X11SalGraphics::Clip(int&, int&, unsigned int&, unsigned int&, int&, int&) const
 XclExpPivotCache::GetFieldAcc(rtl::OUString const&)
-basctl::ModulWindow::SetLineNumberDisplay(bool)
 binfilter::ImpSvtData::~ImpSvtData()
 binfilter::PCodeBuffConvertor<unsigned int, unsigned short>::GetBuffer()
 binfilter::PCodeBuffConvertor<unsigned int, unsigned short>::GetSize()
@@ -42,7 +39,6 @@ binfilter::ScMySharedData::~ScMySharedData()
 binfilter::SdrUnoControlAccessArr::DeleteAndDestroy(unsigned short, unsigned short)
 binfilter::ShellResource::~ShellResource()
 binfilter::SoDll::~SoDll()
-binfilter::String::Search(unsigned short const*, unsigned short) const
 binfilter::SvObjectServerList::Remove(SvGlobalName const&)
 binfilter::SvStringsISort::DeleteAndDestroy(unsigned short, unsigned short)
 binfilter::SvStringsISort::Seek_Entry(binfilter::String*, unsigned short*) const

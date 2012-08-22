@@ -54,7 +54,6 @@ void KabCatalog::refreshTables()
     {
         Reference< XRow > xRow(xResult,UNO_QUERY);
         ::rtl::OUString aName;
-        // const ::rtl::OUString& sDot = KabCatalog::getDot();
 
         while (xResult->next())
         {
@@ -80,12 +79,6 @@ void KabCatalog::refreshGroups()
 // -------------------------------------------------------------------------
 void KabCatalog::refreshUsers()
 {
-}
-// -------------------------------------------------------------------------
-const ::rtl::OUString& KabCatalog::getDot()
-{
-    static const ::rtl::OUString sDot = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("."));
-    return sDot;
 }
 // -----------------------------------------------------------------------------
 

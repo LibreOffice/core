@@ -353,8 +353,6 @@ public:
     virtual void    SetReadOnly (bool bReadOnly);
     virtual bool    IsReadOnly();
 
-    void SetLineNumberDisplay(bool);
-
     StarBASIC*      GetBasic() { XModule(); return xBasic; }
 
     SbModule*       GetSbModule() { return xModule; }
