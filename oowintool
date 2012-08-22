@@ -99,11 +99,15 @@ sub print_windows_sdk_home()
 {
     my ($value, $key);
 
-    $value = reg_get_value ('HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Microsoft SDKs/Windows/CurrentInstallFolder');
-
+    $value = reg_get_value ('HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Windows Kits/Installed Roots/KitsRoot');
+	
+	if (!defined $value) {
+        $value = reg_get_value ('HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Microsoft SDKs/Windows/CurrentInstallFolder');
+    }
     if (!defined $value) {
         $value = reg_get_value ('HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/MicrosoftSDK/Directories/Install Dir');
     }
+	
 
     if (!defined $value) {
         $key = reg_find_key ('HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/MicrosoftSDK/InstalledSDKs/*/Install Dir');
