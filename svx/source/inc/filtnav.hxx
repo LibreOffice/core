@@ -48,7 +48,6 @@
 #include <vcl/dockwin.hxx>
 #include "svx/fmtools.hxx"
 #include "fmexch.hxx"
-#include <connectivity/sqlparse.hxx>
 #include "sqlparserclient.hxx"
 
 class FmFormShell;
