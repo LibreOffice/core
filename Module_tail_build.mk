@@ -57,6 +57,7 @@ $(eval $(call gb_Module_add_moduledirs,tail_end,\
 	embedserv \
     eventattacher \
     extensions \
+	extras \
     fileaccess \
     filter \
     forms \
