@@ -57,7 +57,6 @@ The following parameter are needed:
 -u: Path, in which zipfiles are unpacked (optional)
 -msitemplate: Source of the msi file templates (Windows compiler only)
 -msilanguage: Source of the msi file templates (Windows compiler only)
--javalanguage: Source of the Java language files (opt., non-Windows only)
 -buildid: Current BuildID (optional)
 -pro: Product version
 -format: Package format
@@ -141,7 +140,6 @@ sub getparameter
         elsif ($param eq "-msitemplate") { $installer::globals::idttemplatepath = shift(@ARGV); }
         elsif ($param eq "-msilanguage") { $installer::globals::idtlanguagepath = shift(@ARGV); }
         elsif ($param eq "-patchinc") { $installer::globals::patchincludepath = shift(@ARGV); }
-        elsif ($param eq "-javalanguage") { $installer::globals::javalanguagepath = shift(@ARGV); }
         elsif ($param eq "-buildid") { $installer::globals::buildid = shift(@ARGV); }
         elsif ($param eq "-copyproject") { $installer::globals::is_copy_only_project = 1; }
         elsif ($param eq "-languagepack") { $installer::globals::languagepack = 1; }
@@ -565,8 +563,6 @@ sub outputparameter
     if ((!($installer::globals::idtlanguagepath eq "")) && (!($installer::globals::iswindowsbuild))) { push(@output, "msi language path will be ignored for non Windows builds!\n"); }
     if ((!($installer::globals::iswindowsbuild)) && ( $installer::globals::call_epm )) { push(@output, "Calling epm\n"); }
     if ((!($installer::globals::iswindowsbuild)) && (!($installer::globals::call_epm))) { push(@output, "Not calling epm\n"); }
-    if (!($installer::globals::javalanguagepath eq "")) { push(@output, "Java language path: $installer::globals::javalanguagepath\n"); }
-    if ((!($installer::globals::javalanguagepath eq "")) && ($installer::globals::iswindowsbuild)) { push(@output, "Java language path will be ignored for Windows builds!\n"); }
     if ( $installer::globals::patchincludepath ) { push(@output, "Patch include path: $installer::globals::patchincludepath\n"); }
     if ( $installer::globals::tab ) { push(@output, "TAB version\n"); }
     if ( $installer::globals::strip ) { push(@output, "Stripping files\n"); }

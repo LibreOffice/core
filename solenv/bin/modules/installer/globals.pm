@@ -245,7 +245,6 @@ BEGIN
     $lastcabfilename = "";
 
     $defaultlanguage = "";
-    $javalanguagepath = "";
     $addlicensefile = 1;
     $addsystemintegration = 0;
     $makedownload = 1;
