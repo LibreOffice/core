@@ -50,7 +50,6 @@ $(eval $(call gb_Module_add_targets,connectivity,\
 	Library_sdbc2 \
 	Package_generated \
 	Package_inc \
-	Package_xml \
 ))
 
 ifneq ($(SOLAR_JAVA),)

@@ -1,5 +1,4 @@
-# -*- Mode: makefile; tab-width: 4; indent-tabs-mode: t -*-
-#
+# -*- Mode: makefile-gmake; tab-width: 4; indent-tabs-mode: t -*-
 # Version: MPL 1.1 / GPLv3+ / LGPLv3+
 #
 # The contents of this file are subject to the Mozilla Public License Version
@@ -13,7 +12,8 @@
 # License.
 #
 # Major Contributor(s):
-# Copyright (C) 2011 Matúš Kukan <matus.kukan@gmail.com> (initial developer)
+# Copyright (C) 2012 Red Hat, Inc., David Tardon <dtardon@redhat.com>
+#  (initial developer)
 #
 # All Rights Reserved.
 #
@@ -25,9 +25,11 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_Package_Package,fpicker_xml,$(SRCDIR)/fpicker/source/win32))
+$(eval $(call gb_Package_Package,xmlhelp_xsl,$(SRCDIR)/xmlhelp/util))
 
-$(eval $(call gb_Package_add_file,fpicker_xml,xml/fps.xml,filepicker/fps.xml))
-$(eval $(call gb_Package_add_file,fpicker_xml,xml/fop.xml,folderpicker/fop.xml))
+$(eval $(call gb_Package_add_file,xmlhelp_xsl,bin/embed.xsl,embed.xsl))
+$(eval $(call gb_Package_add_file,xmlhelp_xsl,bin/idxcaption.xsl,idxcaption.xsl))
+$(eval $(call gb_Package_add_file,xmlhelp_xsl,bin/idxcontent.xsl,idxcontent.xsl))
+$(eval $(call gb_Package_add_file,xmlhelp_xsl,bin/main_transform.xsl,main_transform.xsl))
 
-# vim: set noet sw=4 ts=4:
+# vim: set shiftwidth=4 tabstop=4 noexpandtab:

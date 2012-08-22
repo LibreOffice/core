@@ -47,7 +47,6 @@ $(eval $(call gb_Module_add_targets,i18npool,\
 	Library_localedata_others \
 	Library_textconv_dict \
 	Package_inc \
-	Package_xml \
 ))
 
 ifneq ($(CROSS_COMPILING),YES)

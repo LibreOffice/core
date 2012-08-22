@@ -38,7 +38,7 @@ $(eval $(call gb_Module_add_targets,basctl,\
 endif
 
 $(eval $(call gb_Module_add_targets,basctl,\
-	Package_xml \
+	Package_uiconfig \
 ))
 
 # vim: set noet sw=4 ts=4:
