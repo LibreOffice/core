@@ -162,6 +162,7 @@ BUILD_ACTION=$(ENV_BUILD) make && make install
 
 .IF "$(CCNUMVER)" >= "001600000000"
 PATCH_FILES+=Python-$(PYVERSION)-vc10.patch
+PATCH_FILES+=Python-$(PYVERSION)-vc12.patch
 BUILD_DIR=PC/VS10.0
 .ELIF "$(CCNUMVER)" >= "001500000000"
 BUILD_DIR=PCbuild
@@ -188,7 +189,9 @@ CONF=Release
 # Build python executable and then runs a minimal script. Running the minimal script
 # ensures that certain *.pyc files are generated which would otherwise be created on
 # solver during registration in insetoo_native
-.IF "$(CCNUMVER)" >= "001600000000"
+.IF "$(CCNUMVER)" >= "001700000000"
+BUILD_ACTION=MSBuild.exe pcbuild.sln /t:Build /p:Configuration=$(CONF) /p:PlatformToolset=v110
+.ELIF "$(CCNUMVER)" >= "001600000000"
 BUILD_ACTION=MSBuild.exe pcbuild.sln /t:Build /p:Configuration=$(CONF) /ToolsVersion:4.0
 .ELSE
 BUILD_ACTION=$(COMPATH)$/vcpackages$/vcbuild.exe pcbuild.sln "$(CONF)|$(ARCH)"
