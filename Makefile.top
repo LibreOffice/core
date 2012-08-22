@@ -406,6 +406,9 @@ else
 	cd instsetoo_native && unset MAKEFLAGS && \
         $(SOLARENV)/bin/build.pl -P$(BUILD_NCPUS) -- -P$(GMAKE_PARALLELISM)
 endif
+ifeq ($(OS),ANDROID)
+	cd android && $(GNUMAKE) -j $(GMAKE_PARALLELISM) $(GMAKE_OPTIONS)
+endif
 
 cross-toolset: bootstrap fetch
 	cd cross_toolset && $(GNUMAKE) -j $(GMAKE_PARALLELISM) $(GMAKE_OPTIONS)

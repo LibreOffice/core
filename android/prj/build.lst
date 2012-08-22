@@ -1,2 +1,2 @@
-an android :: tail_build NULL
+an android :: packimages postprocess NULL
 an android\prj nmake - all an_prj NULL
