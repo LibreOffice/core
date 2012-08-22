@@ -290,7 +290,6 @@ End
 
 Module gid_Module_Root_Files_5
     PackageInfo = "packinfo_office.txt";
-    TabPackageInfo = "packinfo_office_tab.txt";
 	ParentID = gid_Module_Root;
     InstallOrder = "40";
 	Name = "gid_Module_Root_Files_5";

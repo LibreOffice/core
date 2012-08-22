@@ -265,7 +265,6 @@ BEGIN
     $addchildprojects = 0;
     $languagepack = 0;
     $helppack = 0;
-    $tab = 0;
     $patch = 0;
     $patchincludepath = "";
     $refresh_includepaths = 0;

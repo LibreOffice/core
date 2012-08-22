@@ -1652,42 +1652,6 @@ sub remove_patchonlyfiles_from_Installset
 }
 
 ############################################################################
-# Removing all files with flag TAB_ONLY from installation set.
-# This function is not called during tab creation.
-############################################################################
-
-sub remove_tabonlyfiles_from_Installset
-{
-    my ($itemsarrayref) = @_;
-
-    my $infoline;
-
-    my @newitemsarray = ();
-
-    for ( my $i = 0; $i <= $#{$itemsarrayref}; $i++ )
-    {
-        my $oneitem = ${$itemsarrayref}[$i];
-        my $styles = "";
-        if ( $oneitem->{'Styles'} ) { $styles = $oneitem->{'Styles'}; }
-
-        if ( $styles =~ /\bTAB_ONLY\b/ )
-        {
-            $infoline = "Removing tab only file $oneitem->{'gid'} from the installation set.\n";
-            push( @installer::globals::globallogfileinfo, $infoline);
-
-            next;
-        }
-
-        push(@newitemsarray, $oneitem);
-    }
-
-    $infoline = "\n";
-    push( @installer::globals::globallogfileinfo, $infoline);
-
-    return \@newitemsarray;
-}
-
-############################################################################
 # Some files cotain a $ in their name. epm conflicts with such files.
 # Solution: Renaming this files, converting "$" to "$$"
 ############################################################################

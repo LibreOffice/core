@@ -398,11 +398,6 @@ sub main {
         $filesinproductarrayref = installer::scriptitems::remove_patchonlyfiles_from_Installset($filesinproductarrayref);
     }
 
-    if (! $installer::globals::tab)
-    {
-        $filesinproductarrayref = installer::scriptitems::remove_tabonlyfiles_from_Installset($filesinproductarrayref);
-    }
-
     installer::logger::print_message( "... analyzing scpactions ... \n" );
 
     my $scpactionsinproductarrayref = installer::setupscript::get_all_items_from_script($setupscriptref, "ScpAction");

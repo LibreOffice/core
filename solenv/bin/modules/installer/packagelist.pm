@@ -634,10 +634,7 @@ sub collectpackages
     my $onemodule;
     foreach $onemodule ( @{$allmodules} )
     {
-        my $packageinfo = "PackageInfo";
-        if (( $installer::globals::tab ) && ( $onemodule->{"TabPackageInfo"} )) { $packageinfo = "TabPackageInfo" }
-
-        if ( $onemodule->{$packageinfo} )   # this is a package module!
+        if ( $onemodule->{'PackageInfo'} )   # this is a package module!
         {
             my $modulegid = $onemodule->{'gid'};
 
@@ -658,7 +655,7 @@ sub collectpackages
             if ( exists($gid_analyzed{$modulegid}) ) { next; }
             $gid_analyzed{$modulegid} = 1;
 
-            my $packinfofile = $onemodule->{$packageinfo};
+            my $packinfofile = $onemodule->{'PackageInfo'};
 
             # The file with package information has to be found in path list
             my $fileref = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$packinfofile, "" , 0);

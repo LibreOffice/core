@@ -133,7 +133,6 @@ sub getparameter
         elsif ($param eq "-format") { $installer::globals::packageformat = shift(@ARGV); }
         elsif ($param eq "-quiet") { $installer::globals::quiet = 1; }
         elsif ($param eq "-verbose") { $installer::globals::quiet = 0; }
-        elsif ($param eq "-tab") { $installer::globals::tab = 1; }
         elsif ($param eq "-u") { $installer::globals::unpackpath = shift(@ARGV); }
         elsif ($param eq "-i") { $installer::globals::rootpath = shift(@ARGV); }
         elsif ($param eq "-dontcallepm") { $installer::globals::call_epm = 0; }
@@ -564,7 +563,6 @@ sub outputparameter
     if ((!($installer::globals::iswindowsbuild)) && ( $installer::globals::call_epm )) { push(@output, "Calling epm\n"); }
     if ((!($installer::globals::iswindowsbuild)) && (!($installer::globals::call_epm))) { push(@output, "Not calling epm\n"); }
     if ( $installer::globals::patchincludepath ) { push(@output, "Patch include path: $installer::globals::patchincludepath\n"); }
-    if ( $installer::globals::tab ) { push(@output, "TAB version\n"); }
     if ( $installer::globals::strip ) { push(@output, "Stripping files\n"); }
     else { push(@output, "No file stripping\n"); }
     if ( $installer::globals::debian ) { push(@output, "Linux: Creating Debian packages\n"); }
