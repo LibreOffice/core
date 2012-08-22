@@ -12,6 +12,7 @@ ifeq ($(OS),ANDROID)
 
 $(eval $(call gb_Module_add_targets,android,\
     CustomTarget_sdremote \
+    CustomTarget_docloader \
 ))
 
 endif

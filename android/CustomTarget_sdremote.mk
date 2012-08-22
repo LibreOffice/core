@@ -14,7 +14,11 @@ $(call gb_CustomTarget_get_target,android/sdremote) : $(sdremote_DIR)/done
 
 $(sdremote_DIR)/done : $(gb_Helper_PHONY)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),MAK,1)
-	cd $(SRCDIR)/android/sdremote && $(MAKE) clean && $(MAKE) all
+# Lock needed to serialize the Ant cleaning/building which cleans/builds also
+# abs-lib both for DocumentLoader and sdremote. We don't want one Ant to be
+# cleaning out abs-lib while another is building stuff that depends on
+# it. yeah, this sucks
+	cd $(SRCDIR)/android/sdremote && flock $(SRCDIR)/android/lock sh -c "$(MAKE) clean && $(MAKE) all"
 	mkdir -p $(SRCDIR)/instsetoo_native/$(INPATH)/bin
 	cp $(SRCDIR)/android/sdremote/bin/ImpressRemote-debug.apk $(SRCDIR)/instsetoo_native/$(INPATH)/bin
 
