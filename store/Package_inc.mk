@@ -30,6 +30,5 @@ $(eval $(call gb_Package_add_file,store_inc,inc/store/store.h,inc/store/store.h)
 $(eval $(call gb_Package_add_file,store_inc,inc/store/store.hxx,inc/store/store.hxx))
 $(eval $(call gb_Package_add_file,store_inc,inc/store/storedllapi.h,inc/store/storedllapi.h))
 $(eval $(call gb_Package_add_file,store_inc,inc/store/types.h,inc/store/types.h))
-$(eval $(call gb_Package_add_file,store_inc,xml/store.xml,util/store.xml))
 
 # vim: set noet sw=4 ts=4:
