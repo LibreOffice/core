@@ -10,14 +10,8 @@ $(eval $(call gb_CustomTarget_CustomTarget,android/docloader))
 
 docloader_DIR := $(call gb_CustomTarget_get_workdir,android/experimental/DocumentLoader)
 
-# Depending on the tail_end module hopefully means that all libraries and
-# other files that DocumentLoader needs from solver will have been built? Or
-# should we just move the stuff from
-# android/experimental/DocumentLoader/Makefile here, and depend on them
-# explicitly?
 $(call gb_CustomTarget_get_target,android/docloader) : \
-	$(docloader_DIR)/done \
-	$(call gb_Module_get_target,tail_end)
+	$(docloader_DIR)/done
 
 # We know that CustomTarget_sdremote.mk is included first, so sdremote_DIR is
 # defined.  We want that to be built completely first, so that we can

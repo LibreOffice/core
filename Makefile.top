@@ -25,6 +25,8 @@ export GMAKE_OPTIONS:=-r
 endif
 endif
 
+# This list tells which modules are gbuild ones. It does *not* tell which modules to build. That is directed
+# by the module being mentioned in packimages/prj/build.lst, etc, recursively.
 gbuild_modules:= \
 MathMLDTD\
 Mesa\
