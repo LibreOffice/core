@@ -319,6 +319,10 @@ namespace treeview {
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xMSgr,
             rtl::OUString& instpath ) const;
 
+    bool SearchAndInsert(TVDom* p, TVDom* tvDom);
+
+    void Check(TVDom* tvDom);
+
     };  // end class TVChildTarget
 
 

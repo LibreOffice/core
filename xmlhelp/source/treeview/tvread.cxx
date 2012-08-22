@@ -75,6 +75,13 @@ namespace treeview {
             return children.back();
         }
 
+        TVDom* newChild(TVDom* p)
+        {
+            children.push_back( p );
+            p->parent = this;
+            return children.back();
+        }
+
 
         TVDom* getParent() const
         {
@@ -485,18 +492,12 @@ extern "C" void data_handler( void *userData,
         (*tvDom)->setTitle( s,len );
 }
 
-
-
 TVChildTarget::TVChildTarget( const ConfigData& configData,TVDom* tvDom )
 {
     Elements.resize( tvDom->children.size() );
     for( unsigned i = 0; i < Elements.size(); ++i )
         Elements[i] = new TVRead( configData,tvDom->children[i] );
 }
-
-
-
-
 
 TVChildTarget::TVChildTarget( const Reference< XMultiServiceFactory >& xMSF )
 {
@@ -534,8 +535,9 @@ TVChildTarget::TVChildTarget( const Reference< XMultiServiceFactory >& xMSF )
 
         XML_ParserFree( parser );
         delete[] s;
-    }
 
+        Check(pTVDom);
+    }
     // now TVDom holds the relevant information
 
     Elements.resize( tvDom.children.size() );
@@ -548,7 +550,74 @@ TVChildTarget::~TVChildTarget()
 {
 }
 
+void TVChildTarget::Check(TVDom* tvDom)
+{
+        unsigned i = 0;
+        bool h = false;
 
+        while((i<tvDom->children.size()-1) && (!h))
+        {
+            if (((tvDom->children[i])->application == (tvDom->children[tvDom->children.size()-1])->application) &&
+                ((tvDom->children[i])->id == (tvDom->children[tvDom->children.size()-1])->id))
+            {
+                TVDom* p = tvDom->children[tvDom->children.size()-1];
+
+                for(unsigned k=0; k<p->children.size(); ++k)
+                    if (!SearchAndInsert(p->children[k], tvDom->children[i]))       tvDom->children[i]->newChild(p->children[k]);
+
+                tvDom->children.pop_back();
+                h = true;
+            }
+            ++i;
+        }
+}
+
+bool TVChildTarget::SearchAndInsert(TVDom* p, TVDom* tvDom)
+{
+    if (p->isLeaf()) return false;
+
+    bool h = false;
+    sal_Int32 max = 0;
+
+    std::vector< TVDom* >::iterator max_It, i;
+    max_It = tvDom->children.begin();
+
+    sal_Int32 c_int;
+    sal_Int32 p_int = p->id.toInt32();
+
+////////////////////////////////check this level in the tree
+    for(i = tvDom->children.begin(); i!=tvDom->children.end(); ++i)
+        if (!((*i)->isLeaf()) &&
+            ((*i)->id.getLength() == p->id.getLength()) &&
+            (p->id.replaceAt((*i)->parent->id.getLength(), p->id.getLength()-(*i)->parent->id.getLength(), OUString("")) == (*i)->parent->id))      //prefix check
+        {
+            h = true;
+            c_int = (*i)->id.toInt32();
+
+            if (p_int==c_int)
+            {
+                (*(tvDom->children.insert(i+1, p)))->parent = tvDom;
+                return true;
+            }
+            else if(c_int>max && c_int < p_int)
+            {
+                max = c_int;
+                max_It = i+1;
+            }
+        }
+////////////////////////////////recursive call if necessary
+    if (h) (*(tvDom->children.insert(max_It, p)))->parent = tvDom;
+    else
+    {
+        i = tvDom->children.begin();
+        while ((i!=tvDom->children.end()) && (!h))
+        {
+            h = SearchAndInsert(p, *i);
+            ++i;
+        }
+    }
+    return h;
+}
 
 Any SAL_CALL
 TVChildTarget::getByName( const rtl::OUString& aName )
