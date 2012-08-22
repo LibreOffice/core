@@ -157,8 +157,6 @@ public:
     void Error( SbError, const char* );
     void Error( SbError, const ::rtl::OUString &);
 
-    void Keywords( sal_Bool b ) { bKeywords = b; }
-
     static sal_Bool IsEoln( SbiToken t )
         { return sal_Bool( t == EOS || t == EOLN || t == REM ); }
     static sal_Bool IsKwd( SbiToken t )
