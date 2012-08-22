@@ -989,6 +989,13 @@ void SfxFilterContainer::ReadSingleFilter_Impl(
             {
                 lFilterProperties[nFilterProperty].Value >>= sServiceName;
             }
+            else if (lFilterProperties[nFilterProperty].Name == "ExportExtension")
+            {
+                // Extension preferred by the filter.  This takes precedence
+                // over those that are given in the file format type.
+                lFilterProperties[nFilterProperty].Value >>= sExtension;
+                sExtension = rtl::OUString("*.") + sExtension;
+            }
             else if ( lFilterProperties[nFilterProperty].Name == "Type" )
             {
                 lFilterProperties[nFilterProperty].Value >>= sType;
@@ -1025,9 +1032,12 @@ void SfxFilterContainer::ReadSingleFilter_Impl(
                         }
                         else if ( lTypeProperties[nTypeProperty].Name == "Extensions" )
                         {
-                            ::com::sun::star::uno::Sequence< ::rtl::OUString > lExtensions;
-                            lTypeProperties[nTypeProperty].Value >>= lExtensions;
-                            sExtension = implc_convertStringlistToString( lExtensions, ';', DEFINE_CONST_UNICODE("*.") );
+                            if (sExtension.isEmpty())
+                            {
+                                ::com::sun::star::uno::Sequence< ::rtl::OUString > lExtensions;
+                                lTypeProperties[nTypeProperty].Value >>= lExtensions;
+                                sExtension = implc_convertStringlistToString( lExtensions, ';', DEFINE_CONST_UNICODE("*.") );
+                            }
                         }
                         else if ( lTypeProperties[nTypeProperty].Name == "URLPattern" )
                         {
