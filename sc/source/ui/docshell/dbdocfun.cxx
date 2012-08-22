@@ -1324,12 +1324,6 @@ bool ScDBDocFunc::DataPilotUpdate( ScDPObject* pOldObj, const ScDPObject* pNewOb
             }
             if ( pDestObj )
             {
-                // create new database connection for "refresh"
-                // (and re-read column entry collections)
-                // so all changes take effect
-                if ( pNewObj == pOldObj && pDestObj->IsImportData() )
-                    pDestObj->ClearTableData();
-
                 pDestObj->ReloadGroupTableData();
                 pDestObj->InvalidateData();             // before getting the new output area
 
