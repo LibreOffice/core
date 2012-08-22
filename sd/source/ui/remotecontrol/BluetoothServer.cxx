@@ -160,7 +160,8 @@ void BluetoothServer::execute()
 
     sockaddr_rc aAddr;
     aAddr.rc_family = AF_BLUETOOTH;
-    aAddr.rc_bdaddr = {{0, 0, 0, 0, 0, 0}}; // BDADDR_ANY is broken
+//     aAddr.rc_bdaddr = {{0, 0, 0, 0, 0, 0}}; // BDADDR_ANY is broken
+    memset( &aAddr.rc_bdaddr, 0, sizeof( aAddr.rc_bdaddr ) );
     aAddr.rc_channel = 5;
 
     if ( bind( aSocket, (sockaddr*) &aAddr, sizeof(aAddr)) < 0 ) {
