@@ -461,24 +461,27 @@ bool ScDPCache::InitFromDataBase (const Reference<sdbc::XRowSet>& xRowSet, const
         Reference<sdbc::XRow> xRow(xRowSet, UNO_QUERY_THROW);
 
         std::vector<Bucket> aBuckets;
+        ScDPItemData aData;
         for (sal_Int32 nCol = 0; nCol < mnColumnCount; ++nCol)
         {
             xRowSet->first();
-            ScDPItemData aData;
             aBuckets.clear();
             Field& rField = maFields[nCol];
+            SCROW nRow = 0;
             do
             {
-                SCROW nRow = 0;
                 short nFormatType = NUMBERFORMAT_UNDEFINED;
+                aData.SetEmpty();
                 getItemValue(*this, aData, xRow, aColTypes[nCol], nCol+1, rNullDate, nFormatType);
-                aBuckets.push_back(Bucket(aData, 0, nRow++));
+                aBuckets.push_back(Bucket(aData, 0, nRow));
                 if (!aData.IsEmpty())
                 {
                     maEmptyRows.insert_back(nRow, nRow+1, false);
                     SvNumberFormatter* pFormatter = mpDoc->GetFormatTable();
                     rField.mnNumFormat = pFormatter ? pFormatter->GetStandardFormat(nFormatType) : 0;
                 }
+
+                ++nRow;
             }
             while (xRowSet->next());
 
