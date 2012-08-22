@@ -31,7 +31,6 @@ $(eval $(call gb_Module_Module,uui))
 $(eval $(call gb_Module_add_targets,uui,\
 	AllLangResTarget_uui \
 	Library_uui \
-	Package_xml \
 ))
 
 # vim: set noet sw=4 ts=4:

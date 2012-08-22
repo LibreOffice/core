@@ -28,7 +28,6 @@
 
 $(eval $(call gb_Package_Package,basctl_xml,$(SRCDIR)/basctl))
 
-$(eval $(call gb_Package_add_file,basctl_xml,xml/basctl.xml,util/basctl.xml))
 $(eval $(call gb_Package_add_file,basctl_xml,xml/uiconfig/modules/BasicIDE/menubar/menubar.xml,uiconfig/basicide/menubar/menubar.xml))
 $(eval $(call gb_Package_add_file,basctl_xml,xml/uiconfig/modules/BasicIDE/statusbar/statusbar.xml,uiconfig/basicide/statusbar/statusbar.xml))
 $(eval $(call gb_Package_add_file,basctl_xml,xml/uiconfig/modules/BasicIDE/toolbar/dialogbar.xml,uiconfig/basicide/toolbar/dialogbar.xml))

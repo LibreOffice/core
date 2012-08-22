@@ -40,7 +40,6 @@ $(eval $(call gb_Module_add_targets,ucb,\
 	Library_ucphier1 \
 	Library_ucppkg1 \
 	Library_ucptdoc1 \
-	Package_xml \
 ))
 
 ifeq ($(OS),WNT)

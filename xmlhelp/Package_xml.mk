@@ -32,6 +32,4 @@ $(eval $(call gb_Package_add_file,xmlhelp_xml,bin/idxcaption.xsl,idxcaption.xsl)
 $(eval $(call gb_Package_add_file,xmlhelp_xml,bin/idxcontent.xsl,idxcontent.xsl))
 $(eval $(call gb_Package_add_file,xmlhelp_xml,bin/main_transform.xsl,main_transform.xsl))
 
-$(eval $(call gb_Package_add_file,xmlhelp_xml,xml/ucpchelp.xml,ucpchelp.xml))
-
 # vim: set shiftwidth=4 tabstop=4 noexpandtab:
