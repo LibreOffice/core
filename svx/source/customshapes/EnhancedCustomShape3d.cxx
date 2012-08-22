@@ -372,7 +372,9 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
         }
 
         Rectangle aBoundRect2d;
-        SdrObjListIter aIter( *pShape2d, IM_DEEPWITHGROUPS );
+        SdrObjListIter aIter( *pShape2d, IM_DEEPNOGROUPS );
+        const bool bMultipleSubObjects(aIter.Count() > 1);
+
         while( aIter.IsMore() )
         {
             const SdrObject* pNext = aIter.Next();
@@ -385,19 +387,34 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
             if ( pNext->ISA( SdrPathObj ) )
             {
                 const SfxItemSet& rSet = pNext->GetMergedItemSet();
-                const drawinglayer::attribute::SdrLineAttribute aLine(
-                    drawinglayer::primitive2d::createNewSdrLineAttribute(rSet));
-                bool bNeedToConvertToContour(0.0 <= aLine.getWidth() || 0.0 != aLine.getFullDotDashLen());
+                bool bNeedToConvertToContour(false);
 
-                if(!bNeedToConvertToContour && !aLine.isDefault())
+                // do conversion only for single line objects; for all others a fill and a
+                // line object get created. When we have fill, we want no line. That line has
+                // always been there, but since it was never converted to contour, it kept
+                // invisible (all this 'hidden' logic should be migrated to primitives).
+                if(!bMultipleSubObjects)
                 {
-                    const drawinglayer::attribute::SdrLineStartEndAttribute aLineStartEnd(
-                        drawinglayer::primitive2d::createNewSdrLineStartEndAttribute(rSet, aLine.getWidth()));
+                    const XFillStyle eStyle(((XFillStyleItem&)(rSet.Get(XATTR_FILLSTYLE))).GetValue());
 
-                    if((aLineStartEnd.getStartWidth() && aLineStartEnd.isStartActive())
-                        || (aLineStartEnd.getEndWidth() && aLineStartEnd.isEndActive()))
+                    if(XFILL_NONE == eStyle)
                     {
-                        bNeedToConvertToContour = true;
+                        const drawinglayer::attribute::SdrLineAttribute aLine(
+                            drawinglayer::primitive2d::createNewSdrLineAttribute(rSet));
+
+                        bNeedToConvertToContour = (0.0 < aLine.getWidth() || 0.0 != aLine.getFullDotDashLen());
+
+                        if(!bNeedToConvertToContour && !aLine.isDefault())
+                        {
+                            const drawinglayer::attribute::SdrLineStartEndAttribute aLineStartEnd(
+                                drawinglayer::primitive2d::createNewSdrLineStartEndAttribute(rSet, aLine.getWidth()));
+
+                            if((aLineStartEnd.getStartWidth() && aLineStartEnd.isStartActive())
+                                || (aLineStartEnd.getEndWidth() && aLineStartEnd.isEndActive()))
+                            {
+                                bNeedToConvertToContour = true;
+                            }
+                        }
                     }
                 }
 
@@ -413,12 +430,23 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
                         if(aPolyPoly.isClosed())
                         {
                             // correct item properties from line to fill style
-                            aLocalSet.Put(XLineWidthItem(0));
-                            aLocalSet.Put(XLineStyleItem(XLINE_NONE));
-                            aLocalSet.Put(XFillColorItem(XubString(), ((const XLineColorItem&)(aLocalSet.Get(XATTR_LINECOLOR))).GetColorValue()));
-                            aLocalSet.Put(XFillStyleItem(XFILL_SOLID));
-                            aLocalSet.Put(XFillTransparenceItem(((const XLineTransparenceItem&)(aLocalSet.Get(XATTR_LINETRANSPARENCE))).GetValue()));
-                            aLocalFillStyle = XFILL_SOLID;
+                            if(eShadeMode == drawing::ShadeMode_DRAFT)
+                            {
+                                // for draft, create wireframe with fixed line width
+                                aLocalSet.Put(XLineStyleItem(XLINE_SOLID));
+                                aLocalSet.Put(XLineWidthItem(40));
+                                aLocalFillStyle = XFILL_NONE;
+                            }
+                            else
+                            {
+                                // switch from line to fill, copy line attr to fill attr (color, transparence)
+                                aLocalSet.Put(XLineWidthItem(0));
+                                aLocalSet.Put(XLineStyleItem(XLINE_NONE));
+                                aLocalSet.Put(XFillColorItem(XubString(), ((const XLineColorItem&)(aLocalSet.Get(XATTR_LINECOLOR))).GetColorValue()));
+                                aLocalSet.Put(XFillStyleItem(XFILL_SOLID));
+                                aLocalSet.Put(XFillTransparenceItem(((const XLineTransparenceItem&)(aLocalSet.Get(XATTR_LINETRANSPARENCE))).GetValue()));
+                                aLocalFillStyle = XFILL_SOLID;
+                            }
                         }
                         else
                         {
