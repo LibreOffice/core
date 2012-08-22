@@ -1354,7 +1354,7 @@ AC_ARG_WITH(system-icu,
 AC_ARG_WITH(system-openldap,
     AS_HELP_STRING([--with-system-openldap],
         [Use the OpenLDAP LDAP SDK already on system.]),,
-	[with_system_openldap="$with_system_libs"])
+    [with_system_openldap="$with_system_libs"])
 
 AC_ARG_WITH(system-poppler,
     AS_HELP_STRING([--with-system-poppler],
@@ -2219,15 +2219,15 @@ if test $? -eq 0; then
     STRIP_COMPONENTS="--strip-components"
 else
     $GNUTAR --help 2> /dev/null | egrep "strip-path" 2>&1 >/dev/null
-	if test $? -eq 0; then
-	    STRIP_COMPONENTS="--strip-path"
-	else
-		STRIP_COMPONENTS="unsupported"
-	fi
+    if test $? -eq 0; then
+        STRIP_COMPONENTS="--strip-path"
+    else
+        STRIP_COMPONENTS="unsupported"
+    fi
 fi
 AC_MSG_RESULT($STRIP_COMPONENTS)
 if test x$STRIP_COMPONENTS == xunsupported; then
-	AC_MSG_ERROR([you need a tar that is able to strip components.])
+    AC_MSG_ERROR([you need a tar that is able to strip components.])
 fi
 AC_SUBST(STRIP_COMPONENTS)
 
@@ -2997,7 +2997,7 @@ if test "$_os" = "WINNT"; then
         if test -z "$MSPDB_PATH" -a -e "$with_cl_home/../Common7/IDE/mspdb100.dll"; then
             MSPDB_PATH="$with_cl_home/../Common7/IDE"
         fi
-		dnl MSVS 2012 case
+        dnl MSVS 2012 case
         if test -z "$MSPDB_PATH" -a -e "$with_cl_home/../Common7/IDE/mspdb110.dll"; then
             MSPDB_PATH="$with_cl_home/../Common7/IDE"
         fi
@@ -3006,7 +3006,7 @@ if test "$_os" = "WINNT"; then
             dnl AC_PATH_PROG only checks if MSPDB_PATH is still empty
             AC_PATH_PROG(MSPDB_PATH, mspdb80.dll)
             AC_PATH_PROG(MSPDB_PATH, mspdb100.dll)
-			AC_PATH_PROG(MSPDB_PATH, mspdb110.dll)
+            AC_PATH_PROG(MSPDB_PATH, mspdb110.dll)
             MSPDB_PATH=`dirname "$MSPDB_PATH"`
         fi
 
@@ -3059,7 +3059,7 @@ if test "$_os" = "WINNT"; then
                                 printf (\"%04d\",vertoken[[i]] )
                             }
                             }"`
-			if test "$CCNUMVER" -ge "001700000000"; then
+            if test "$CCNUMVER" -ge "001700000000"; then
                 COMEX=14
                 MSVSVER=2012
             elif test "$CCNUMVER" -ge "001600000000"; then
@@ -7769,15 +7769,15 @@ dnl ===================================================================
 if test "$_os" != "WINNT"; then
 AC_MSG_CHECKING([which openldap library to use])
 if test "$with_system_openldap" = "yes"; then
-	AC_MSG_RESULT([external])
+    AC_MSG_RESULT([external])
     SYSTEM_OPENLDAP=YES
     AC_CHECK_HEADERS(ldap.h, [], [AC_MSG_ERROR(ldap.h not found. install openldap libs)], [])
-	AC_CHECK_LIB([ldap], [ldap_simple_bind_s], [:], [AC_MSG_ERROR(openldap lib not found or functional)], [])
-	AC_CHECK_LIB([ldap], [ldap_set_option], [:], [AC_MSG_ERROR(openldap lib not found or functional)], [])
+    AC_CHECK_LIB([ldap], [ldap_simple_bind_s], [:], [AC_MSG_ERROR(openldap lib not found or functional)], [])
+    AC_CHECK_LIB([ldap], [ldap_set_option], [:], [AC_MSG_ERROR(openldap lib not found or functional)], [])
 else
     AC_MSG_RESULT([internal])
     SYSTEM_OPENLDAP=NO
-	BUILD_TYPE="$BUILD_TYPE OPENLDAP"
+    BUILD_TYPE="$BUILD_TYPE OPENLDAP"
 fi
 else
     SYSTEM_OPENLDAP=NO
@@ -11557,7 +11557,7 @@ location (/usr/share/java), specify its pathname via
 --with-junit=..., or disable it via --without-junit])
     fi
     if test $OOO_JUNIT_JAR != ""; then
-	BUILD_TYPE="$BUILD_TYPE QADEVOOO"
+    BUILD_TYPE="$BUILD_TYPE QADEVOOO"
     fi
 fi
 AC_SUBST(OOO_JUNIT_JAR)
@@ -12005,8 +12005,8 @@ else
         ;;
 
     Linux)
-	BUILD_NCPUS=`getconf _NPROCESSORS_ONLN`
-	;;
+        BUILD_NCPUS=`getconf _NPROCESSORS_ONLN`
+    ;;
     # what else than above does profit here *and* has /proc?
     *)
         BUILD_NCPUS=`grep $'^processor\t*:' /proc/cpuinfo | wc -l`
