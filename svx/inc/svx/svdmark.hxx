@@ -43,7 +43,7 @@ class SdrObjList;
 class SdrObject;
 class SdrPageView;
 
-class SdrUShortCont : public std::set<sal_uInt16> {};
+typedef std::set<sal_uInt16> SdrUShortCont;
 
 
 // Alles was eine View ueber ein markiertes Objekt wissen muss

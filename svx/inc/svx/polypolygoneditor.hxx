@@ -27,8 +27,6 @@
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <set>
 
-class SdrUShortCont;
-
 namespace sdr
 {
 
