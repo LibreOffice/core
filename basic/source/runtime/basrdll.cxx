@@ -68,7 +68,7 @@ void BasicDLL::BasicBreak()
 {
     // bJustStopping: if there's someone pressing STOP like crazy umpteen times,
     // but the Basic doesn't stop early enough, the box might appear more often...
-    static sal_Bool bJustStopping = sal_False;
+    static bool bJustStopping = sal_False;
 
     BasicDLL* pThis = BASIC_DLL();
     DBG_ASSERT( pThis, "BasicDLL::EnableBreak: Noch keine Instanz!" );
@@ -76,10 +76,10 @@ void BasicDLL::BasicBreak()
     {
         if ( StarBASIC::IsRunning() && !bJustStopping && ( pThis->bBreakEnabled || pThis->bDebugMode ) )
         {
-            bJustStopping = sal_True;
+            bJustStopping = true;
             StarBASIC::Stop();
             InfoBox( 0, BasResId(IDS_SBERR_TERMINATED).toString() ).Execute();
-            bJustStopping = sal_False;
+            bJustStopping = false;
         }
     }
 }

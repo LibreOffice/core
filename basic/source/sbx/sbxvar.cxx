@@ -369,7 +369,7 @@ void SbxVariable::SetParent( SbxObject* p )
     if ( p && ISA(SbxObject) )
     {
         // then this had to be a child of the new parent
-        sal_Bool bFound = sal_False;
+        bool bFound = false;
         SbxArray *pChildren = p->GetObjects();
         if ( pChildren )
         {

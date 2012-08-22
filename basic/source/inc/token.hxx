@@ -133,36 +133,36 @@ protected:
     SbiToken eCurTok;
     SbiToken ePush;
     sal_uInt16  nPLine, nPCol1, nPCol2; // pushback location
-    sal_Bool bEof;
-    sal_Bool bEos;
-    sal_Bool bKeywords;                 // sal_True, if keywords are parsed
-    sal_Bool bAs;                       // last keyword was AS
-    sal_Bool bErrorIsSymbol;            // Handle Error token as Symbol, not keyword
+    bool bEof;
+    bool bEos;
+    bool bKeywords;                 // true, if keywords are parsed
+    bool bAs;                       // last keyword was AS
+    bool bErrorIsSymbol;            // Handle Error token as Symbol, not keyword
 public:
     SbiTokenizer( const ::rtl::OUString&, StarBASIC* = NULL );
    ~SbiTokenizer();
 
-    inline sal_Bool IsEof()             { return bEof; }
-    inline sal_Bool IsEos()             { return bEos; }
+    inline bool IsEof()             { return bEof; }
+    inline bool IsEos()             { return bEos; }
 
     void  Push( SbiToken );
     const ::rtl::OUString& Symbol( SbiToken );   // reconversion
 
     SbiToken Peek();                    // read the next token
     SbiToken Next();                    // read a token
-    sal_Bool MayBeLabel( sal_Bool= sal_False );
+    bool MayBeLabel( bool= false );
 
     void Error( SbError c ) { GenError( c ); }
     void Error( SbError, SbiToken );
     void Error( SbError, const char* );
     void Error( SbError, const ::rtl::OUString &);
 
-    static sal_Bool IsEoln( SbiToken t )
-        { return sal_Bool( t == EOS || t == EOLN || t == REM ); }
-    static sal_Bool IsKwd( SbiToken t )
-        { return sal_Bool( t >= FIRSTKWD && t <= LASTKWD ); }
-    static sal_Bool IsExtra( SbiToken t )
-        { return sal_Bool( t >= FIRSTEXTRA ); }
+    static bool IsEoln( SbiToken t )
+        { return t == EOS || t == EOLN || t == REM; }
+    static bool IsKwd( SbiToken t )
+        { return t >= FIRSTKWD && t <= LASTKWD; }
+    static bool IsExtra( SbiToken t )
+        { return t >= FIRSTEXTRA; }
 };
 
 

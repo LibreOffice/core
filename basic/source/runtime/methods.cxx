@@ -141,11 +141,11 @@ static long GetDayDiff( const Date& rDate );
 
 static const CharClass& GetCharClass( void )
 {
-    static sal_Bool bNeedsInit = sal_True;
+    static bool bNeedsInit = true;
     static ::com::sun::star::lang::Locale aLocale;
     if( bNeedsInit )
     {
-        bNeedsInit = sal_False;
+        bNeedsInit = false;
         aLocale = Application::GetSettings().GetLocale();
     }
     static CharClass aCharClass( aLocale );
@@ -2559,7 +2559,7 @@ RTLFUNC(Dir)
 
                 if( pRTLData->aDirSeq.getLength() > 0 )
                 {
-                    sal_Bool bFolderFlag = ((pRTLData->nDirFlags & Sb_ATTR_DIRECTORY) != 0);
+                    bool bFolderFlag = ((pRTLData->nDirFlags & Sb_ATTR_DIRECTORY) != 0);
 
                     SbiInstance* pInst = GetSbData()->pInst;
                     bool bCompatibility = ( pInst && pInst->IsCompatibility() );
@@ -2669,7 +2669,7 @@ RTLFUNC(Dir)
 
             if( pRTLData->pDir )
             {
-                sal_Bool bFolderFlag = ((pRTLData->nDirFlags & Sb_ATTR_DIRECTORY) != 0);
+                bool bFolderFlag = ((pRTLData->nDirFlags & Sb_ATTR_DIRECTORY) != 0);
                 for( ;; )
                 {
                     if( pRTLData->nCurDirPos < 0 )
@@ -2801,7 +2801,7 @@ RTLFUNC(GetAttr)
             FileStatus aFileStatus( osl_FileStatus_Mask_Attributes | osl_FileStatus_Mask_Type );
             aItem.getFileStatus( aFileStatus );
             sal_uInt64 nAttributes = aFileStatus.getAttributes();
-            sal_Bool bReadOnly = (nAttributes & osl_File_Attribute_ReadOnly) != 0;
+            bool bReadOnly = (nAttributes & osl_File_Attribute_ReadOnly) != 0;
 
             FileStatus::Type aType = aFileStatus.getFileType();
             sal_Bool bDirectory = isFolder( aType );
@@ -3439,7 +3439,7 @@ RTLFUNC(TypeName)
     else
     {
         SbxDataType eType = rPar.Get(1)->GetType();
-        sal_Bool bIsArray = ( ( eType & SbxARRAY ) != 0 );
+        bool bIsArray = ( ( eType & SbxARRAY ) != 0 );
 
         String aRetStr;
         if ( SbiRuntime::isVBAEnabled() && eType == SbxOBJECT )

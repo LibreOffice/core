@@ -342,7 +342,7 @@ bool SbiParser::Parse()
         Next(); return true;
     }
 
-    if( !bSingleLineIf && MayBeLabel( sal_True ) )
+    if( !bSingleLineIf && MayBeLabel( true ) )
     {
         // is a label
         if( !pProc )

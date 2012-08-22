@@ -51,7 +51,7 @@ const rtl::OUString& SbiStringPool::Find( sal_uInt32 n ) const
         return aData[n - 1];
 }
 
-short SbiStringPool::Add( const rtl::OUString& rVal, sal_Bool bNoCase )
+short SbiStringPool::Add( const rtl::OUString& rVal, bool bNoCase )
 {
     sal_uInt32 n = aData.size();
     for( sal_uInt32 i = 0; i < n; ++i )
@@ -372,7 +372,7 @@ SbiSymScope SbiSymDef::GetScope() const
 // 3) aLabels: labels
 
 SbiProcDef::SbiProcDef( SbiParser* pParser, const String& rName,
-                        sal_Bool bProcDecl )
+                        bool bProcDecl )
          : SbiSymDef( rName )
          , aParams( pParser->aGblStrings, SbPARAM )  // is dumped
          , aLabels( pParser->aLclStrings, SbLOCAL )  // is not dumped
@@ -385,8 +385,8 @@ SbiProcDef::SbiProcDef( SbiParser* pParser, const String& rName,
     nLine2  = 0;
     mePropMode = PROPERTY_MODE_NONE;
     bPublic = true;
-    bCdecl  = sal_False;
-    bStatic = sal_False;
+    bCdecl  = false;
+    bStatic = false;
     // For return values the first element of the parameter
     // list is always defined with name and type of the proc
     aParams.AddSym( aName );

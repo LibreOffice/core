@@ -41,9 +41,9 @@ public:
     SbiStringPool( SbiParser* );
    ~SbiStringPool();
     sal_uInt32 GetSize() const { return aData.size(); }
-    // From 8.4.1999: default changed to sal_True because of #64236 -
-    // change it back to sal_False when the bug is cleanly removed.
-    short Add( const rtl::OUString&, sal_Bool=sal_True );
+    // From 8.4.1999: default changed to true because of #64236 -
+    // change it back to false when the bug is cleanly removed.
+    short Add( const rtl::OUString&, bool=true );
     short Add( double, SbxDataType );
     const rtl::OUString& Find( sal_uInt32 ) const;
     SbiParser* GetParser() { return pParser; }
@@ -146,8 +146,8 @@ public:
     void       SetByVal( bool bByVal_ = true )
                 { bByVal = bByVal_; }
     void       SetStatic( bool bAsStatic = true )      { bStatic = bAsStatic;  }
-    void       SetNew()         { bNew = sal_True;      }
-    void       SetDefinedAs()   { bAs = sal_True;       }
+    void       SetNew()         { bNew = true;      }
+    void       SetDefinedAs()   { bAs = true;       }
     void       SetGlobal(bool b){ bGlobal = b;  }
     void       SetDefaultId( sal_uInt16 n ) { nDefaultId = n; }
     sal_uInt16     GetDefaultId( void ) { return nDefaultId; }
@@ -180,11 +180,11 @@ class SbiProcDef : public SbiSymDef {   // procedure definition (from basic):
     sal_uInt16 nLine1, nLine2;      // line area
     PropertyMode mePropMode;        // Marks if this is a property procedure and which
     String maPropName;              // Property name if property procedure (!= proc name)
-    sal_Bool   bCdecl  : 1;             // sal_True: CDECL given
+    bool   bCdecl  : 1;             // true: CDECL given
     bool   bPublic : 1;             // true: proc is PUBLIC
-    sal_Bool   mbProcDecl : 1;          // sal_True: instanciated by SbiParser::ProcDecl
+    bool   mbProcDecl : 1;          // true: instanciated by SbiParser::ProcDecl
 public:
-    SbiProcDef( SbiParser*, const String&, sal_Bool bProcDecl=false );
+    SbiProcDef( SbiParser*, const String&, bool bProcDecl=false );
     virtual ~SbiProcDef();
     virtual SbiProcDef* GetProcDef();
     virtual void SetType( SbxDataType );
@@ -195,9 +195,9 @@ public:
     String& GetAlias()              { return aAlias;   }
     void SetPublic( bool b )        { bPublic = b;     }
     bool IsPublic() const           { return bPublic;  }
-    void SetCdecl( sal_Bool b = sal_True)   { bCdecl = b;      }
-    sal_Bool IsCdecl() const            { return bCdecl;   }
-    sal_Bool IsUsedForProcDecl() const  { return mbProcDecl; }
+    void SetCdecl( bool b = true)   { bCdecl = b;      }
+    bool IsCdecl() const            { return bCdecl;   }
+    bool IsUsedForProcDecl() const  { return mbProcDecl; }
     void SetLine1( sal_uInt16 n )       { nLine1 = n;      }
     sal_uInt16 GetLine1() const         { return nLine1;   }
     void SetLine2( sal_uInt16 n )       { nLine2 = n;      }

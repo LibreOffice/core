@@ -213,10 +213,10 @@ SbiTokenizer::SbiTokenizer( const ::rtl::OUString& rSrc, StarBASIC* pb )
 {
     pTokTable = aTokTable_Basic;
     TokenTable *tp;
-    bEof = bAs = sal_False;
+    bEof = bAs = false;
     eCurTok = NIL;
     ePush = NIL;
-    bEos = bKeywords = bErrorIsSymbol = sal_True;
+    bEos = bKeywords = bErrorIsSymbol = true;
     if( !nToken )
         for( nToken = 0, tp = pTokTable; tp->t; nToken++, tp++ ) {}
 }
@@ -329,15 +329,15 @@ SbiToken SbiTokenizer::Next()
 
     if( !NextSym() )
     {
-        bEof = bEos = sal_True;
+        bEof = bEos = true;
         return eCurTok = EOLN;
     }
 
     if( aSym[0] == '\n' )
     {
-        bEos = sal_True; return eCurTok = EOLN;
+        bEos = true; return eCurTok = EOLN;
     }
-    bEos = sal_False;
+    bEos = false;
 
     if( bNumber )
         return eCurTok = NUMBER;
@@ -447,11 +447,11 @@ special:
     eCurTok = tp->t;
     // AS: data types are keywords
     if( tp->t == AS )
-        bAs = sal_True;
+        bAs = true;
     else
     {
         if( bAs )
-            bAs = sal_False;
+            bAs = false;
         else if( eCurTok >= DATATYPE1 && eCurTok <= DATATYPE2 && (bErrorIsSymbol || eCurTok != _ERROR_) )
             eCurTok = SYMBOL;
     }
@@ -490,12 +490,12 @@ special:
 #endif
 
 
-sal_Bool SbiTokenizer::MayBeLabel( sal_Bool bNeedsColon )
+bool SbiTokenizer::MayBeLabel( bool bNeedsColon )
 {
     if( eCurTok == SYMBOL || m_aTokenLabelInfo.canTokenBeLabel( eCurTok ) )
-        return bNeedsColon ? DoesColonFollow() : sal_True;
+        return bNeedsColon ? DoesColonFollow() : true;
     else
-        return sal_Bool( eCurTok == NUMBER
+        return ( eCurTok == NUMBER
                   && eScanType == SbxINTEGER
                   && nVal >= 0 );
 }

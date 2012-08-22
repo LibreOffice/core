@@ -845,7 +845,7 @@ SbiProcDef* SbiParser::ProcDecl( bool bDecl )
             Error( SbERR_UNEXPECTED, ALIAS );
         if( pDef->IsCdecl() )
             Error( SbERR_UNEXPECTED, _CDECL_ );
-        pDef->SetCdecl( sal_False );
+        pDef->SetCdecl( false );
         pDef->GetLib().Erase();
         pDef->GetAlias().Erase();
     }
@@ -856,7 +856,7 @@ SbiProcDef* SbiParser::ProcDecl( bool bDecl )
             Error( SbERR_UNEXPECTED, ALIAS );
         if( pDef->IsCdecl() )
             Error( SbERR_UNEXPECTED, _CDECL_ );
-        pDef->SetCdecl( sal_False );
+        pDef->SetCdecl( false );
         pDef->GetAlias().Erase();
     }
     // Brackets?
