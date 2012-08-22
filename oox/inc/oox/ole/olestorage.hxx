@@ -94,10 +94,10 @@ private:
 
 private:
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
-                        mxContext;          /// Component context with service manager.
+                        mxContext;          ///< Component context with service manager.
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >
-                        mxStorage;          /// Access to elements of this sub storage.
-    const OleStorage*   mpParentStorage;    /// Parent OLE storage that contains this storage.
+                        mxStorage;          ///< Access to elements of this sub storage.
+    const OleStorage*   mpParentStorage;    ///< Parent OLE storage that contains this storage.
 };
 
 // ============================================================================

@@ -38,11 +38,11 @@ namespace ole {
 /** Contains generic information about an OLE object. */
 struct OleObjectInfo
 {
-    StreamDataSequence  maEmbeddedData;     /// Data of an embedded OLE object.
-    ::rtl::OUString     maTargetLink;       /// Path to external data for linked OLE object.
+    StreamDataSequence  maEmbeddedData;     ///< Data of an embedded OLE object.
+    ::rtl::OUString     maTargetLink;       ///< Path to external data for linked OLE object.
     ::rtl::OUString     maProgId;
-    bool                mbLinked;           /// True = linked OLE object, false = embedded OLE object.
-    bool                mbShowAsIcon;       /// True = show as icon, false = show contents.
+    bool                mbLinked;           ///< True = linked OLE object, false = embedded OLE object.
+    bool                mbShowAsIcon;       ///< True = show as icon, false = show contents.
     bool                mbAutoUpdate;
 
     explicit            OleObjectInfo();

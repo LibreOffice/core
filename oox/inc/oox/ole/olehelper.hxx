@@ -71,11 +71,11 @@ const sal_uInt8 OLE_STDFONT_STRIKE      = 0x08;
 /** Stores data about a StdFont font structure. */
 struct StdFontInfo
 {
-    ::rtl::OUString     maName;         /// Font name.
-    sal_uInt32          mnHeight;       /// Font height (1/10,000 points).
-    sal_uInt16          mnWeight;       /// Font weight (normal/bold).
-    sal_uInt16          mnCharSet;      /// Font charset.
-    sal_uInt8           mnFlags;        /// Font flags.
+    ::rtl::OUString     maName;         ///< Font name.
+    sal_uInt32          mnHeight;       ///< Font height (1/10,000 points).
+    sal_uInt16          mnWeight;       ///< Font weight (normal/bold).
+    sal_uInt16          mnCharSet;      ///< Font charset.
+    sal_uInt8           mnFlags;        ///< Font flags.
 
     explicit            StdFontInfo();
     explicit            StdFontInfo(

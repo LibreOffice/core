@@ -43,7 +43,7 @@ public:
 
 private:
     ControlModelBase&   mrModel;
-    sal_Int32           mnPropId;           /// Identifier of currently processed property.
+    sal_Int32           mnPropId;           ///< Identifier of currently processed property.
 };
 
 // ============================================================================

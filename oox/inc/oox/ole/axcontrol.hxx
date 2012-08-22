@@ -171,17 +171,17 @@ enum ApiControlType
 /** Specifies how a form control supports transparent background. */
 enum ApiTransparencyMode
 {
-    API_TRANSPARENCY_NOTSUPPORTED,      /// Control does not support transparency.
-    API_TRANSPARENCY_VOID,              /// Transparency is enabled by missing fill color.
-    API_TRANSPARENCY_PAINTTRANSPARENT   /// Transparency is enabled by the 'PaintTransparent' property.
+    API_TRANSPARENCY_NOTSUPPORTED,      ///< Control does not support transparency.
+    API_TRANSPARENCY_VOID,              ///< Transparency is enabled by missing fill color.
+    API_TRANSPARENCY_PAINTTRANSPARENT   ///< Transparency is enabled by the 'PaintTransparent' property.
 };
 
 /** Specifies how a form control supports the DefaultState property. */
 enum ApiDefaultStateMode
 {
-    API_DEFAULTSTATE_BOOLEAN,           /// Control does not support tri-state, state is given as boolean.
-    API_DEFAULTSTATE_SHORT,             /// Control does not support tri-state, state is given as short.
-    API_DEFAULTSTATE_TRISTATE           /// Control supports tri-state, state is given as short.
+    API_DEFAULTSTATE_BOOLEAN,           ///< Control does not support tri-state, state is given as boolean.
+    API_DEFAULTSTATE_SHORT,             ///< Control does not support tri-state, state is given as short.
+    API_DEFAULTSTATE_TRISTATE           ///< Control supports tri-state, state is given as short.
 };
 
 // ----------------------------------------------------------------------------
@@ -378,10 +378,10 @@ public:
     void                convertSize( PropertyMap& rPropMap, const ControlConverter& rConv ) const;
 
 public: // direct access needed for legacy VML drawing controls
-    AxPairData          maSize;         /// Size of the control in 1/100 mm.
+    AxPairData          maSize;         ///< Size of the control in 1/100 mm.
 
 protected:
-    bool                mbAwtModel;     /// True = AWT control model, false = form component.
+    bool                mbAwtModel;     ///< True = AWT control model, false = form component.
 };
 
 typedef ::boost::shared_ptr< ControlModelBase > ControlModelRef;
@@ -418,16 +418,16 @@ private:
     bool                importComplexPart( BinaryInputStream& rInStrm );
 
 protected:
-    StdFontInfo         maFontData;         /// Font formatting.
-    StreamDataSequence  maMouseIcon;        /// Binary picture stream for mouse icon.
-    sal_uInt32          mnFlags;            /// Common flags for ComCtl controls.
-    const sal_uInt16    mnVersion;          /// Current version of the ComCtl control model.
+    StdFontInfo         maFontData;         ///< Font formatting.
+    StreamDataSequence  maMouseIcon;        ///< Binary picture stream for mouse icon.
+    sal_uInt32          mnFlags;            ///< Common flags for ComCtl controls.
+    const sal_uInt16    mnVersion;          ///< Current version of the ComCtl control model.
 
 private:
-    sal_uInt32          mnDataPartId5;      /// Identifier for version 5.0 control data.
-    sal_uInt32          mnDataPartId6;      /// Identifier for version 6.0 control data.
-    bool                mbCommonPart;       /// True = the COMCTL_COMMONDATA part exists.
-    bool                mbComplexPart;      /// True = the COMCTL_COMPLEXDATA part exists.
+    sal_uInt32          mnDataPartId5;      ///< Identifier for version 5.0 control data.
+    sal_uInt32          mnDataPartId6;      ///< Identifier for version 6.0 control data.
+    bool                mbCommonPart;       ///< True = the COMCTL_COMMONDATA part exists.
+    bool                mbComplexPart;      ///< True = the COMCTL_COMPLEXDATA part exists.
 };
 
 // ============================================================================
@@ -445,12 +445,12 @@ protected:
     virtual void        importControlData( BinaryInputStream& rInStrm );
 
 private:
-    sal_uInt32          mnScrollBarFlags;   /// Special flags for scroll bar model.
-    sal_Int32           mnLargeChange;      /// Increment step size (thumb).
-    sal_Int32           mnSmallChange;      /// Increment step size (buttons).
-    sal_Int32           mnMin;              /// Minimum of the value range.
-    sal_Int32           mnMax;              /// Maximum of the value range.
-    sal_Int32           mnPosition;         /// Value of the spin button.
+    sal_uInt32          mnScrollBarFlags;   ///< Special flags for scroll bar model.
+    sal_Int32           mnLargeChange;      ///< Increment step size (thumb).
+    sal_Int32           mnSmallChange;      ///< Increment step size (buttons).
+    sal_Int32           mnMin;              ///< Minimum of the value range.
+    sal_Int32           mnMax;              ///< Maximum of the value range.
+    sal_Int32           mnPosition;         ///< Value of the spin button.
 };
 
 // ============================================================================
@@ -468,10 +468,10 @@ protected:
     virtual void        importControlData( BinaryInputStream& rInStrm );
 
 private:
-    float               mfMin;              /// Minimum of the value range.
-    float               mfMax;              /// Maximum of the value range.
-    sal_uInt16          mnVertical;         /// 0 = horizontal, 1 = vertical.
-    sal_uInt16          mnSmooth;           /// 0 = progress blocks, 1 = pixel resolution.
+    float               mfMin;              ///< Minimum of the value range.
+    float               mfMax;              ///< Maximum of the value range.
+    sal_uInt16          mnVertical;         ///< 0 = horizontal, 1 = vertical.
+    sal_uInt16          mnSmooth;           ///< 0 = progress blocks, 1 = pixel resolution.
 };
 
 // ============================================================================
@@ -503,10 +503,10 @@ public:
     inline sal_Int16    getFontHeight() const { return maFontData.getHeightPoints(); }
 
 public: // direct access needed for legacy VML drawing controls
-    AxFontData          maFontData;         /// The font settings.
+    AxFontData          maFontData;         ///< The font settings.
 
 private:
-    bool                mbSupportsAlign;    /// True = UNO model supports Align property.
+    bool                mbSupportsAlign;    ///< True = UNO model supports Align property.
 };
 
 // ============================================================================
@@ -528,14 +528,14 @@ public:
     virtual void        convertFromProperties( PropertySet& rPropSet, const ControlConverter& rConv );
 
 public: // direct access needed for legacy VML drawing controls
-    StreamDataSequence  maPictureData;      /// Binary picture stream.
-    ::rtl::OUString     maCaption;          /// Visible caption of the button.
-    sal_uInt32          mnTextColor;        /// Text color.
-    sal_uInt32          mnBackColor;        /// Fill color.
-    sal_uInt32          mnFlags;            /// Various flags.
-    sal_uInt32          mnPicturePos;       /// Position of the picture relative to text.
-    sal_Int32           mnVerticalAlign;    /// Vertical alignment (legacy VML drawing controls only).
-    bool                mbFocusOnClick;     /// True = take focus on click.
+    StreamDataSequence  maPictureData;      ///< Binary picture stream.
+    ::rtl::OUString     maCaption;          ///< Visible caption of the button.
+    sal_uInt32          mnTextColor;        ///< Text color.
+    sal_uInt32          mnBackColor;        ///< Fill color.
+    sal_uInt32          mnFlags;            ///< Various flags.
+    sal_uInt32          mnPicturePos;       ///< Position of the picture relative to text.
+    sal_Int32           mnVerticalAlign;    ///< Vertical alignment (legacy VML drawing controls only).
+    bool                mbFocusOnClick;     ///< True = take focus on click.
 };
 
 // ============================================================================
@@ -556,14 +556,14 @@ public:
     virtual void        convertFromProperties( PropertySet& rPropSet, const ControlConverter& rConv );
 
 public: // direct access needed for legacy VML drawing controls
-    ::rtl::OUString     maCaption;          /// Visible caption of the button.
-    sal_uInt32          mnTextColor;        /// Text color.
-    sal_uInt32          mnBackColor;        /// Fill color.
-    sal_uInt32          mnFlags;            /// Various flags.
-    sal_uInt32          mnBorderColor;      /// Flat border color.
-    sal_Int32           mnBorderStyle;      /// Flat border style.
-    sal_Int32           mnSpecialEffect;    /// 3D border effect.
-    sal_Int32           mnVerticalAlign;    /// Vertical alignment (legacy VML drawing controls only).
+    ::rtl::OUString     maCaption;          ///< Visible caption of the button.
+    sal_uInt32          mnTextColor;        ///< Text color.
+    sal_uInt32          mnBackColor;        ///< Fill color.
+    sal_uInt32          mnFlags;            ///< Various flags.
+    sal_uInt32          mnBorderColor;      ///< Flat border color.
+    sal_Int32           mnBorderStyle;      ///< Flat border style.
+    sal_Int32           mnSpecialEffect;    ///< 3D border effect.
+    sal_Int32           mnVerticalAlign;    ///< Vertical alignment (legacy VML drawing controls only).
 };
 
 // ============================================================================
@@ -584,15 +584,15 @@ public:
     virtual void        convertProperties( PropertyMap& rPropMap, const ControlConverter& rConv ) const;
 
 private:
-    StreamDataSequence  maPictureData;      /// Binary picture stream.
-    sal_uInt32          mnBackColor;        /// Fill color.
-    sal_uInt32          mnFlags;            /// Various flags.
-    sal_uInt32          mnBorderColor;      /// Flat border color.
-    sal_Int32           mnBorderStyle;      /// Flat border style.
-    sal_Int32           mnSpecialEffect;    /// 3D border effect.
-    sal_Int32           mnPicSizeMode;      /// Clip, stretch, zoom.
-    sal_Int32           mnPicAlign;         /// Anchor position of the picture.
-    bool                mbPicTiling;        /// True = picture is repeated.
+    StreamDataSequence  maPictureData;      ///< Binary picture stream.
+    sal_uInt32          mnBackColor;        ///< Fill color.
+    sal_uInt32          mnFlags;            ///< Various flags.
+    sal_uInt32          mnBorderColor;      ///< Flat border color.
+    sal_Int32           mnBorderStyle;      ///< Flat border style.
+    sal_Int32           mnSpecialEffect;    ///< 3D border effect.
+    sal_Int32           mnPicSizeMode;      ///< Clip, stretch, zoom.
+    sal_Int32           mnPicAlign;         ///< Anchor position of the picture.
+    bool                mbPicTiling;        ///< True = picture is repeated.
 };
 
 // ============================================================================
@@ -610,26 +610,26 @@ public:
     virtual void        convertProperties( PropertyMap& rPropMap, const ControlConverter& rConv ) const;
 
 public: // direct access needed for legacy VML drawing controls
-    StreamDataSequence  maPictureData;      /// Binary picture stream.
-    ::rtl::OUString     maCaption;          /// Visible caption of the button.
-    ::rtl::OUString     maValue;            /// Current value of the control.
-    ::rtl::OUString     maGroupName;        /// Group name for option buttons.
-    sal_uInt32          mnTextColor;        /// Text color.
-    sal_uInt32          mnBackColor;        /// Fill color.
-    sal_uInt32          mnFlags;            /// Various flags.
-    sal_uInt32          mnPicturePos;       /// Position of the picture relative to text.
-    sal_uInt32          mnBorderColor;      /// Flat border color.
-    sal_Int32           mnBorderStyle;      /// Flat border style.
-    sal_Int32           mnSpecialEffect;    /// 3D border effect.
-    sal_Int32           mnDisplayStyle;     /// Type of the morph control.
-    sal_Int32           mnMultiSelect;      /// Selection mode.
-    sal_Int32           mnScrollBars;       /// Horizontal/vertical scroll bar.
-    sal_Int32           mnMatchEntry;       /// Auto completion mode.
-    sal_Int32           mnShowDropButton;   /// When to show the dropdown button.
-    sal_Int32           mnMaxLength;        /// Maximum character count.
-    sal_Int32           mnPasswordChar;     /// Password character in edit fields.
-    sal_Int32           mnListRows;         /// Number of rows in dropdown box.
-    sal_Int32           mnVerticalAlign;    /// Vertical alignment (legacy VML drawing controls only).
+    StreamDataSequence  maPictureData;      ///< Binary picture stream.
+    ::rtl::OUString     maCaption;          ///< Visible caption of the button.
+    ::rtl::OUString     maValue;            ///< Current value of the control.
+    ::rtl::OUString     maGroupName;        ///< Group name for option buttons.
+    sal_uInt32          mnTextColor;        ///< Text color.
+    sal_uInt32          mnBackColor;        ///< Fill color.
+    sal_uInt32          mnFlags;            ///< Various flags.
+    sal_uInt32          mnPicturePos;       ///< Position of the picture relative to text.
+    sal_uInt32          mnBorderColor;      ///< Flat border color.
+    sal_Int32           mnBorderStyle;      ///< Flat border style.
+    sal_Int32           mnSpecialEffect;    ///< 3D border effect.
+    sal_Int32           mnDisplayStyle;     ///< Type of the morph control.
+    sal_Int32           mnMultiSelect;      ///< Selection mode.
+    sal_Int32           mnScrollBars;       ///< Horizontal/vertical scroll bar.
+    sal_Int32           mnMatchEntry;       ///< Auto completion mode.
+    sal_Int32           mnShowDropButton;   ///< When to show the dropdown button.
+    sal_Int32           mnMaxLength;        ///< Maximum character count.
+    sal_Int32           mnPasswordChar;     ///< Password character in edit fields.
+    sal_Int32           mnListRows;         ///< Number of rows in dropdown box.
+    sal_Int32           mnVerticalAlign;    ///< Vertical alignment (legacy VML drawing controls only).
 };
 
 // ============================================================================
@@ -751,15 +751,15 @@ public:
     virtual void        exportCompObj( BinaryOutputStream& rOutStrm );
 
 public: // direct access needed for legacy VML drawing controls
-    sal_uInt32          mnArrowColor;       /// Button arrow color.
-    sal_uInt32          mnBackColor;        /// Fill color.
-    sal_uInt32          mnFlags;            /// Various flags.
-    sal_Int32           mnOrientation;      /// Orientation of the buttons.
-    sal_Int32           mnMin;              /// Minimum of the value range.
-    sal_Int32           mnMax;              /// Maximum of the value range.
-    sal_Int32           mnPosition;         /// Value of the spin button.
-    sal_Int32           mnSmallChange;      /// Increment step size.
-    sal_Int32           mnDelay;            /// Repeat delay in milliseconds.
+    sal_uInt32          mnArrowColor;       ///< Button arrow color.
+    sal_uInt32          mnBackColor;        ///< Fill color.
+    sal_uInt32          mnFlags;            ///< Various flags.
+    sal_Int32           mnOrientation;      ///< Orientation of the buttons.
+    sal_Int32           mnMin;              ///< Minimum of the value range.
+    sal_Int32           mnMax;              ///< Maximum of the value range.
+    sal_Int32           mnPosition;         ///< Value of the spin button.
+    sal_Int32           mnSmallChange;      ///< Increment step size.
+    sal_Int32           mnDelay;            ///< Repeat delay in milliseconds.
 };
 
 // ============================================================================
@@ -780,17 +780,17 @@ public:
     virtual void        convertFromProperties( PropertySet& rPropSet, const ControlConverter& rConv );
 
 public: // direct access needed for legacy VML drawing controls
-    sal_uInt32          mnArrowColor;       /// Button arrow color.
-    sal_uInt32          mnBackColor;        /// Fill color.
-    sal_uInt32          mnFlags;            /// Various flags.
-    sal_Int32           mnOrientation;      /// Orientation of the buttons.
-    sal_Int32           mnPropThumb;        /// Proportional thumb size.
-    sal_Int32           mnMin;              /// Minimum of the value range.
-    sal_Int32           mnMax;              /// Maximum of the value range.
-    sal_Int32           mnPosition;         /// Value of the spin button.
-    sal_Int32           mnSmallChange;      /// Increment step size (buttons).
-    sal_Int32           mnLargeChange;      /// Increment step size (thumb).
-    sal_Int32           mnDelay;            /// Repeat delay in milliseconds.
+    sal_uInt32          mnArrowColor;       ///< Button arrow color.
+    sal_uInt32          mnBackColor;        ///< Fill color.
+    sal_uInt32          mnFlags;            ///< Various flags.
+    sal_Int32           mnOrientation;      ///< Orientation of the buttons.
+    sal_Int32           mnPropThumb;        ///< Proportional thumb size.
+    sal_Int32           mnMin;              ///< Minimum of the value range.
+    sal_Int32           mnMax;              ///< Maximum of the value range.
+    sal_Int32           mnPosition;         ///< Value of the spin button.
+    sal_Int32           mnSmallChange;      ///< Increment step size (buttons).
+    sal_Int32           mnLargeChange;      ///< Increment step size (thumb).
+    sal_Int32           mnDelay;            ///< Repeat delay in milliseconds.
 };
 
 // ============================================================================
@@ -810,13 +810,13 @@ public:
     ::rtl::OUString     getCaption( sal_Int32 nIndex ) const;
 
 private:
-    AxStringArray       maCaptions;         /// Captions of all tabs.
-    sal_uInt32          mnBackColor;        /// Fill color.
-    sal_uInt32          mnTextColor;        /// Text color.
-    sal_uInt32          mnFlags;            /// Various flags.
-    sal_Int32           mnSelectedTab;      /// The index of the selected tab.
-    sal_uInt32          mnTabStyle;         /// Visual style of the tabs.
-    sal_Int32           mnTabFlagCount;     /// Number of entries in tab flag array.
+    AxStringArray       maCaptions;         ///< Captions of all tabs.
+    sal_uInt32          mnBackColor;        ///< Fill color.
+    sal_uInt32          mnTextColor;        ///< Text color.
+    sal_uInt32          mnFlags;            ///< Various flags.
+    sal_Int32           mnSelectedTab;      ///< The index of the selected tab.
+    sal_uInt32          mnTabStyle;         ///< Visual style of the tabs.
+    sal_Int32           mnTabFlagCount;     ///< Number of entries in tab flag array.
 };
 
 typedef ::boost::shared_ptr< AxTabStripModel > AxTabStripModelRef;
@@ -844,22 +844,22 @@ public:
     bool                importClassTable( BinaryInputStream& rInStrm, AxClassTable& orClassTable );
 
 public: // direct access needed for legacy VML drawing controls
-    StreamDataSequence  maPictureData;      /// Binary picture stream.
-    ::rtl::OUString     maCaption;          /// Visible caption of the form.
-    AxPairData          maLogicalSize;      /// Logical form size (scroll area).
-    AxPairData          maScrollPos;        /// Scroll position.
-    sal_uInt32          mnBackColor;        /// Fill color.
-    sal_uInt32          mnTextColor;        /// Text color.
-    sal_uInt32          mnFlags;            /// Various flags.
-    sal_uInt32          mnBorderColor;      /// Flat border color.
-    sal_Int32           mnBorderStyle;      /// Flat border style.
-    sal_Int32           mnScrollBars;       /// Horizontal/vertical scroll bar.
-    sal_Int32           mnCycleType;        /// Cycle in all forms or in this form.
-    sal_Int32           mnSpecialEffect;    /// 3D border effect.
-    sal_Int32           mnPicAlign;         /// Anchor position of the picture.
-    sal_Int32           mnPicSizeMode;      /// Clip, stretch, zoom.
-    bool                mbPicTiling;        /// True = picture is repeated.
-    bool                mbFontSupport;      /// True = control supports the font property.
+    StreamDataSequence  maPictureData;      ///< Binary picture stream.
+    ::rtl::OUString     maCaption;          ///< Visible caption of the form.
+    AxPairData          maLogicalSize;      ///< Logical form size (scroll area).
+    AxPairData          maScrollPos;        ///< Scroll position.
+    sal_uInt32          mnBackColor;        ///< Fill color.
+    sal_uInt32          mnTextColor;        ///< Text color.
+    sal_uInt32          mnFlags;            ///< Various flags.
+    sal_uInt32          mnBorderColor;      ///< Flat border color.
+    sal_Int32           mnBorderStyle;      ///< Flat border style.
+    sal_Int32           mnScrollBars;       ///< Horizontal/vertical scroll bar.
+    sal_Int32           mnCycleType;        ///< Cycle in all forms or in this form.
+    sal_Int32           mnSpecialEffect;    ///< 3D border effect.
+    sal_Int32           mnPicAlign;         ///< Anchor position of the picture.
+    sal_Int32           mnPicSizeMode;      ///< Clip, stretch, zoom.
+    bool                mbPicTiling;        ///< True = picture is repeated.
+    bool                mbFontSupport;      ///< True = control supports the font property.
 };
 
 typedef ::boost::shared_ptr< AxContainerModelBase > AxContainerModelRef;
@@ -978,8 +978,8 @@ public:
                             const ControlConverter& rConv );
 
 private:
-    ControlModelRef     mxModel;            /// Control model containing the properties.
-    ::rtl::OUString     maName;             /// Name of the control.
+    ControlModelRef     mxModel;            ///< Control model containing the properties.
+    ::rtl::OUString     maName;             ///< Name of the control.
 };
 
 // ----------------------------------------------------------------------------

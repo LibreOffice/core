@@ -76,9 +76,9 @@ public:
     inline void         skipAligned() { align( sizeof( Type ) ); skip( sizeof( Type ) ); }
 
 private:
-    BinaryInputStream*  mpInStrm;           /// The wrapped input stream.
-    sal_Int64           mnStrmPos;          /// Tracks relative position in the stream.
-    sal_Int64           mnStrmSize;         /// Size of the wrapped stream data.
+    BinaryInputStream*  mpInStrm;           ///< The wrapped input stream.
+    sal_Int64           mnStrmPos;          ///< Tracks relative position in the stream.
+    sal_Int64           mnStrmSize;         ///< Size of the wrapped stream data.
 };
 
 // ============================================================================
@@ -233,18 +233,18 @@ private:
     typedef RefVector< ComplexProperty > ComplexPropVector;
 
 private:
-    AxAlignedInputStream maInStrm;          /// The input stream to read from.
-    ComplexPropVector   maLargeProps;       /// Stores info for all used large properties.
-    ComplexPropVector   maStreamProps;      /// Stores info for all used stream data properties.
-    AxPairData          maDummyPairData;    /// Dummy pair for unsupported properties.
-    AxFontData          maDummyFontData;    /// Dummy font for unsupported properties.
-    StreamDataSequence  maDummyPicData;     /// Dummy picture for unsupported properties.
-    ::rtl::OUString     maDummyString;      /// Dummy string for unsupported properties.
-    AxStringArray       maDummyStringArray; /// Dummy string array for unsupported properties.
-    sal_Int64           mnPropFlags;        /// Flags specifying existing properties.
-    sal_Int64           mnNextProp;         /// Next property to read.
-    sal_Int64           mnPropsEnd;         /// End position of simple/large properties.
-    bool                mbValid;            /// True = stream still valid.
+    AxAlignedInputStream maInStrm;          ///< The input stream to read from.
+    ComplexPropVector   maLargeProps;       ///< Stores info for all used large properties.
+    ComplexPropVector   maStreamProps;      ///< Stores info for all used stream data properties.
+    AxPairData          maDummyPairData;    ///< Dummy pair for unsupported properties.
+    AxFontData          maDummyFontData;    ///< Dummy font for unsupported properties.
+    StreamDataSequence  maDummyPicData;     ///< Dummy picture for unsupported properties.
+    ::rtl::OUString     maDummyString;      ///< Dummy string for unsupported properties.
+    AxStringArray       maDummyStringArray; ///< Dummy string array for unsupported properties.
+    sal_Int64           mnPropFlags;        ///< Flags specifying existing properties.
+    sal_Int64           mnNextProp;         ///< Next property to read.
+    sal_Int64           mnPropsEnd;         ///< End position of simple/large properties.
+    bool                mbValid;            ///< True = stream still valid.
 };
 
 // ============================================================================
