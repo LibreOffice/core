@@ -937,6 +937,8 @@ void WW8AttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pTe
             TableInfoRow( pTextNodeInfoInner );
             m_rWW8Export.pPapPlc->AppendFkpEntry( m_rWW8Export.Strm().Tell(), m_rWW8Export.pO->size(), m_rWW8Export.pO->data());
             m_rWW8Export.pO->clear();
+            //For Bug 119650, should break the properties of CHP PLC after a paragraph end.
+            m_rWW8Export.pChpPlc->AppendFkpEntry( m_rWW8Export.Strm().Tell(), m_rWW8Export.pO->size(), m_rWW8Export.pO->data());
         }
     }
 }
