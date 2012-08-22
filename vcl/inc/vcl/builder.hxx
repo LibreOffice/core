@@ -124,11 +124,43 @@ private:
     rtl::OString m_sID;
     rtl::OString m_sHelpRoot;
     Window *m_pParent;
+
+    Window *get_by_name(rtl::OString sID);
 public:
     VclBuilder(Window *pParent, rtl::OUString sUIRootDir, rtl::OUString sUIFile, rtl::OString sID = rtl::OString());
     ~VclBuilder();
     Window *get_widget_root();
-    Window *get_by_name(rtl::OString sID);
+    template <typename T> T* get(T*& ret, rtl::OString sID)
+    {
+        Window *w = get_by_name(sID);
+        ret = static_cast<T*>(w);
+
+#if OSL_DEBUG_LEVEL > 0
+        if (w)
+        {
+            ret = dynamic_cast<T*>(w);
+            assert(ret);
+        }
+#endif
+
+        return ret;
+    }
+    template <typename T=Window> T* get(rtl::OString sID)
+    {
+        Window *w = get_by_name(sID);
+        T* ret = static_cast<T*>(w);
+
+#if OSL_DEBUG_LEVEL > 0
+        if (w)
+        {
+            ret = dynamic_cast<T*>(w);
+            assert(ret);
+        }
+#endif
+
+        return ret;
+    }
+
     rtl::OString get_by_window(const Window *pWindow) const;
     //for the purposes of retrofitting this to the existing code
     //look up sID, clone its properties into replacement and

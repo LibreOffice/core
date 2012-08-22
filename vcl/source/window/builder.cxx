@@ -87,8 +87,8 @@ VclBuilder::VclBuilder(Window *pParent, rtl::OUString sUIDir, rtl::OUString sUIF
     for (std::vector<RadioButtonGroupMap>::iterator aI = m_aGroupMaps.begin(),
          aEnd = m_aGroupMaps.end(); aI != aEnd; ++aI)
     {
-        RadioButton *pOne = static_cast<RadioButton*>(get_by_name(aI->m_sID));
-        RadioButton *pOther = static_cast<RadioButton*>(get_by_name(aI->m_sValue));
+        RadioButton *pOne = get<RadioButton>(aI->m_sID);
+        RadioButton *pOther = get<RadioButton>(aI->m_sValue);
         SAL_WARN_IF(!pOne || !pOther, "vcl", "missing member of radiobutton group");
         if (pOne && pOther)
             pOne->group(*pOther);
@@ -100,7 +100,7 @@ VclBuilder::VclBuilder(Window *pParent, rtl::OUString sUIDir, rtl::OUString sUIF
     for (std::vector<ComboBoxModelMap>::iterator aI = m_aModelMaps.begin(),
          aEnd = m_aModelMaps.end(); aI != aEnd; ++aI)
     {
-        ListBox *pTarget = static_cast<ListBox*>(get_by_name(aI->m_sID));
+        ListBox *pTarget = get<ListBox>(aI->m_sID);
         ListStore *pStore = get_model_by_name(aI->m_sValue);
         SAL_WARN_IF(!pTarget || !pStore, "vcl", "missing elements of combobox/liststore");
         if (pTarget && pStore)
@@ -119,7 +119,7 @@ VclBuilder::VclBuilder(Window *pParent, rtl::OUString sUIDir, rtl::OUString sUIF
     for (std::vector<SpinButtonAdjustmentMap>::iterator aI = m_aAdjustmentMaps.begin(),
          aEnd = m_aAdjustmentMaps.end(); aI != aEnd; ++aI)
     {
-        NumericFormatter *pTarget = dynamic_cast<NumericFormatter*>(get_by_name(aI->m_sID));
+        NumericFormatter *pTarget = dynamic_cast<NumericFormatter*>(get(aI->m_sID));
         Adjustment *pAdjustment = get_adjustment_by_name(aI->m_sValue);
         SAL_WARN_IF(!pTarget || !pAdjustment, "vcl", "missing elements of spinbutton/adjustment");
         if (pTarget && pAdjustment)

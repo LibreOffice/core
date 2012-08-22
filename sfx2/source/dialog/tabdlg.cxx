@@ -515,8 +515,7 @@ void SfxTabDialog::Init_Impl( sal_Bool bFmtFlag, const String* pUserButtonText, 
 */
 
 {
-    fprintf(stderr, "BUILDER is %p\n", m_pUIBuilder);
-    m_pVBox = m_pUIBuilder ? static_cast<VclVBox*>(m_pUIBuilder->get_by_name("dialog-vbox1")) : NULL;
+    m_pVBox = m_pUIBuilder ? m_pUIBuilder->get<VclVBox>("dialog-vbox1") : NULL;
     m_bOwnsVBox = m_pVBox == NULL;
     if (m_bOwnsVBox)
     {
@@ -524,7 +523,7 @@ void SfxTabDialog::Init_Impl( sal_Bool bFmtFlag, const String* pUserButtonText, 
         m_pVBox->set_expand(true);
     }
 
-    m_pTabCtrl = m_pUIBuilder ? static_cast<TabControl*>(m_pUIBuilder->get_by_name(SAL_STRINGIFY(ID_TABCONTROL))) : NULL;
+    m_pTabCtrl = m_pUIBuilder ? m_pUIBuilder->get<TabControl>(SAL_STRINGIFY(ID_TABCONTROL)) : NULL;
     m_bOwnsTabCtrl = m_pTabCtrl == NULL;
     if (m_bOwnsTabCtrl)
     {
@@ -532,42 +531,42 @@ void SfxTabDialog::Init_Impl( sal_Bool bFmtFlag, const String* pUserButtonText, 
         m_pTabCtrl->set_expand(true);
     }
 
-    m_pActionArea = m_pUIBuilder ? static_cast<VclHButtonBox*>(m_pUIBuilder->get_by_name("dialog-action_area1")) : NULL;
+    m_pActionArea = m_pUIBuilder ? m_pUIBuilder->get<VclHButtonBox>("dialog-action_area1") : NULL;
     m_bOwnsActionArea = m_pActionArea == NULL;
     if (m_bOwnsActionArea)
         m_pActionArea = new VclHButtonBox(m_pVBox);
 
-    m_pOKBtn = m_pUIBuilder ? static_cast<OKButton*>(m_pUIBuilder->get_by_name("ok")) : NULL;
+    m_pOKBtn = m_pUIBuilder ? m_pUIBuilder->get<OKButton>("ok") : NULL;
     m_bOwnsOKBtn = m_pOKBtn == NULL;
     if (m_bOwnsOKBtn)
         m_pOKBtn = new OKButton(m_pActionArea);
 
-    m_pApplyBtn = m_pUIBuilder ? static_cast<PushButton*>(m_pUIBuilder->get_by_name("apply")) : NULL;
+    m_pApplyBtn = m_pUIBuilder ? m_pUIBuilder->get<PushButton>("apply") : NULL;
     m_bOwnsApplyBtn = m_pApplyBtn == NULL;
     if (m_bOwnsApplyBtn)
         m_pApplyBtn = NULL;
 
-    m_pUserBtn = m_pUIBuilder ? static_cast<PushButton*>(m_pUIBuilder->get_by_name("user")) : NULL;
+    m_pUserBtn = m_pUIBuilder ? m_pUIBuilder->get<PushButton>("user") : NULL;
     m_bOwnsUserBtn = m_pUserBtn == NULL;
     if (m_bOwnsUserBtn)
         m_pUserBtn = pUserButtonText ? new PushButton(m_pActionArea) : NULL;
 
-    m_pCancelBtn = m_pUIBuilder ? static_cast<CancelButton*>(m_pUIBuilder->get_by_name("cancel")) : NULL;
+    m_pCancelBtn = m_pUIBuilder ? m_pUIBuilder->get<CancelButton>("cancel") : NULL;
     m_bOwnsCancelBtn = m_pCancelBtn == NULL;
     if (m_bOwnsCancelBtn)
         m_pCancelBtn = new CancelButton(m_pActionArea);
 
-    m_pHelpBtn = m_pUIBuilder ? static_cast<HelpButton*>(m_pUIBuilder->get_by_name("help")) : NULL;
+    m_pHelpBtn = m_pUIBuilder ? m_pUIBuilder->get<HelpButton>("help") : NULL;
     m_bOwnsHelpBtn = m_pHelpBtn == NULL;
     if (m_bOwnsHelpBtn)
         m_pHelpBtn = new HelpButton(m_pActionArea);
 
-    m_pResetBtn = m_pUIBuilder ? static_cast<PushButton*>(m_pUIBuilder->get_by_name("reset")) : NULL;
+    m_pResetBtn = m_pUIBuilder ? m_pUIBuilder->get<PushButton>("reset") : NULL;
     m_bOwnsResetBtn = m_pResetBtn == NULL;
     if (m_bOwnsResetBtn)
         m_pResetBtn = new PushButton(m_pActionArea);
 
-    m_pBaseFmtBtn = m_pUIBuilder ? static_cast<PushButton*>(m_pUIBuilder->get_by_name("standard")) : NULL;
+    m_pBaseFmtBtn = m_pUIBuilder ? m_pUIBuilder->get<PushButton>("standard") : NULL;
     m_bOwnsBaseFmtBtn = m_pBaseFmtBtn == NULL;
     if (m_bOwnsBaseFmtBtn)
         m_pBaseFmtBtn = new PushButton(m_pActionArea);

@@ -44,24 +44,24 @@
 #include <IDocumentStylePoolAccess.hxx>
 
 SwLineNumberingDlg::SwLineNumberingDlg(SwView *pVw)
-    : SfxModalDialog( &pVw->GetViewFrame()->GetWindow(), rtl::OString("LineNumberingDialog"),
-        rtl::OUString("modules/swriter/ui/linenumbering.ui") )
+    : SfxModalDialog( &pVw->GetViewFrame()->GetWindow(), "LineNumberingDialog",
+        "modules/swriter/ui/linenumbering.ui" )
     , pSh(pVw->GetWrtShellPtr())
 {
-    m_pBodyContent = static_cast<VclContainer*>(m_pUIBuilder->get_by_name("content"));
-    m_pDivIntervalFT = m_pUIBuilder->get_by_name("every");
-    m_pDivIntervalNF = static_cast<NumericField*>(m_pUIBuilder->get_by_name("linesspin"));
-    m_pDivRowsFT = m_pUIBuilder->get_by_name("lines");
-    m_pNumIntervalNF = static_cast<NumericField*>(m_pUIBuilder->get_by_name("intervalspin"));
-    m_pCharStyleLB = static_cast<ListBox*>(m_pUIBuilder->get_by_name("styledropdown"));
-    m_pFormatLB = static_cast<SwNumberingTypeListBox*>(m_pUIBuilder->get_by_name("formatdropdown"));
-    m_pPosLB = static_cast<ListBox*>(m_pUIBuilder->get_by_name("positiondropdown"));
-    m_pOffsetMF = static_cast<MetricField*>(m_pUIBuilder->get_by_name("spacingspin"));
-    m_pDivisorED = static_cast<Edit*>(m_pUIBuilder->get_by_name("textentry"));
-    m_pCountEmptyLinesCB = static_cast<CheckBox*>(m_pUIBuilder->get_by_name("blanklines"));
-    m_pCountFrameLinesCB = static_cast<CheckBox*>(m_pUIBuilder->get_by_name("linesintextframes"));
-    m_pRestartEachPageCB = static_cast<CheckBox*>(m_pUIBuilder->get_by_name("restarteverynewpage"));
-    m_pNumberingOnCB = static_cast<CheckBox*>(m_pUIBuilder->get_by_name("shownumbering"));
+    m_pUIBuilder->get(m_pBodyContent, "content");
+    m_pUIBuilder->get(m_pDivIntervalFT, "every");
+    m_pUIBuilder->get(m_pDivIntervalNF, "linesspin");
+    m_pUIBuilder->get(m_pDivRowsFT, "lines");
+    m_pUIBuilder->get(m_pNumIntervalNF, "intervalspin");
+    m_pUIBuilder->get(m_pCharStyleLB, "styledropdown");
+    m_pUIBuilder->get(m_pFormatLB, "formatdropdown");
+    m_pUIBuilder->get(m_pPosLB, "positiondropdown");
+    m_pUIBuilder->get(m_pOffsetMF, "spacingspin");
+    m_pUIBuilder->get(m_pDivisorED, "textentry");
+    m_pUIBuilder->get(m_pCountEmptyLinesCB, "blanklines");
+    m_pUIBuilder->get(m_pCountFrameLinesCB, "linesintextframes");
+    m_pUIBuilder->get(m_pRestartEachPageCB, "restarteverynewpage");
+    m_pUIBuilder->get(m_pNumberingOnCB, "shownumbering");
 
     String sIntervalName = m_pDivIntervalFT->GetAccessibleName();
     sIntervalName += rtl::OUString("(");
@@ -69,8 +69,8 @@ SwLineNumberingDlg::SwLineNumberingDlg(SwView *pVw)
     sIntervalName += rtl::OUString(")");
     m_pDivIntervalNF->SetAccessibleName(sIntervalName);
 
-    Window *pNumIntervalFT = m_pUIBuilder->get_by_name("interval");
-    Window *pNumRowsFT = m_pUIBuilder->get_by_name("intervallines");
+    Window *pNumIntervalFT = m_pUIBuilder->get("interval");
+    Window *pNumRowsFT = m_pUIBuilder->get("intervallines");
     sIntervalName = pNumIntervalFT->GetAccessibleName();
     sIntervalName += rtl::OUString("(");
     sIntervalName += pNumRowsFT->GetAccessibleName();
@@ -133,7 +133,7 @@ SwLineNumberingDlg::SwLineNumberingDlg(SwView *pVw)
     ModifyHdl();
     LineOnOffHdl();
 
-    PushButton *pOkPB = static_cast<PushButton*>(m_pUIBuilder->get_by_name("ok"));
+    PushButton *pOkPB = m_pUIBuilder->get<PushButton>("ok");
     pOkPB->SetClickHdl(LINK(this, SwLineNumberingDlg, OKHdl));
 }
 

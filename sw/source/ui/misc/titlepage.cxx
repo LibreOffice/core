@@ -152,18 +152,18 @@ SwTitlePageDlg::SwTitlePageDlg( Window *pParent ) :
         rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("modules/swriter/ui/titlepage.ui")) ),
     mpPageFmtDesc(0)
 {
-    m_pUseExistingPagesRB = static_cast<RadioButton*>(m_pUIBuilder->get_by_name("RB_USE_EXISTING_PAGES"));
-    m_pPageCountNF = static_cast<NumericField*>(m_pUIBuilder->get_by_name("NF_PAGE_COUNT"));
-    m_pDocumentStartRB =  static_cast<RadioButton*>(m_pUIBuilder->get_by_name("RB_DOCUMENT_START"));
-    m_pPageStartRB =  static_cast<RadioButton*>(m_pUIBuilder->get_by_name("RB_PAGE_START"));
-    m_pPageStartNF = static_cast<NumericField*>(m_pUIBuilder->get_by_name("NF_PAGE_START"));
-    m_pRestartNumberingCB = static_cast<CheckBox*>(m_pUIBuilder->get_by_name("CB_RESTART_NUMBERING"));
-    m_pRestartNumberingNF = static_cast<NumericField*>(m_pUIBuilder->get_by_name("NF_RESTART_NUMBERING"));
-    m_pSetPageNumberCB = static_cast<CheckBox*>(m_pUIBuilder->get_by_name("CB_SET_PAGE_NUMBER"));
-    m_pSetPageNumberNF = static_cast<NumericField*>(m_pUIBuilder->get_by_name("NF_SET_PAGE_NUMBER"));
-    m_pPagePropertiesLB = static_cast<ListBox*>(m_pUIBuilder->get_by_name("LB_PAGE_PROPERTIES"));
-    m_pPagePropertiesPB = static_cast<PushButton*>(m_pUIBuilder->get_by_name("PB_PAGE_PROPERTIES"));
-    m_pOkPB = static_cast<OKButton*>(m_pUIBuilder->get_by_name("PB_OK"));
+    m_pUIBuilder->get(m_pUseExistingPagesRB, "RB_USE_EXISTING_PAGES");
+    m_pUIBuilder->get(m_pPageCountNF, "NF_PAGE_COUNT");
+    m_pUIBuilder->get(m_pDocumentStartRB, "RB_DOCUMENT_START");
+    m_pUIBuilder->get(m_pPageStartRB, "RB_PAGE_START");
+    m_pUIBuilder->get(m_pPageStartNF, "NF_PAGE_START");
+    m_pUIBuilder->get(m_pRestartNumberingCB, "CB_RESTART_NUMBERING");
+    m_pUIBuilder->get(m_pRestartNumberingNF, "NF_RESTART_NUMBERING");
+    m_pUIBuilder->get(m_pSetPageNumberCB, "CB_SET_PAGE_NUMBER");
+    m_pUIBuilder->get(m_pSetPageNumberNF, "NF_SET_PAGE_NUMBER");
+    m_pUIBuilder->get(m_pPagePropertiesLB, "LB_PAGE_PROPERTIES");
+    m_pUIBuilder->get(m_pPagePropertiesPB, "PB_PAGE_PROPERTIES");
+    m_pUIBuilder->get(m_pOkPB, "PB_OK");
 
     m_pOkPB->SetClickHdl(LINK(this, SwTitlePageDlg, OKHdl));
     m_pRestartNumberingCB->SetClickHdl(LINK(this, SwTitlePageDlg, RestartNumberingHdl));
