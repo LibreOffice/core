@@ -243,10 +243,10 @@ private:
     ::boost::scoped_ptr<PageSelector> mpPageSelector;
     ::boost::scoped_ptr<FocusManager> mpFocusManager;
     ::boost::shared_ptr<SlotManager> mpSlotManager;
-    ::boost::scoped_ptr<controller::Clipboard> mpClipboard;
     ::boost::scoped_ptr<ScrollBarManager> mpScrollBarManager;
     mutable ::boost::shared_ptr<CurrentSlideManager> mpCurrentSlideManager;
     ::boost::shared_ptr<SelectionManager> mpSelectionManager;
+    ::boost::scoped_ptr<controller::Clipboard> mpClipboard;
     ::boost::shared_ptr<InsertionIndicatorHandler> mpInsertionIndicatorHandler;
     ::boost::shared_ptr<Animator> mpAnimator;
     ::boost::scoped_ptr<VisibleAreaManager> mpVisibleAreaManager;
