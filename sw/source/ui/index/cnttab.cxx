@@ -3141,13 +3141,11 @@ void    SwTokenWindow::InsertAtSelection(
     ctrl_iterator iterActive = std::find(aControlList.begin(),
                                          aControlList.end(), pActiveCtrl);
 
-    ctrl_iterator iterInsert = iterActive;
-
     Size aControlSize(GetOutputSizePixel());
 
     if( WINDOW_EDIT == pActiveCtrl->GetType())
     {
-        ++iterInsert;
+        ++iterActive;
 
         Selection aSel = ((SwTOXEdit*)pActiveCtrl)->GetSelection();
         aSel.Justify();
@@ -3163,7 +3161,7 @@ void    SwTokenWindow::InsertAtSelection(
         SwFormToken aTmpToken(TOKEN_TEXT);
         SwTOXEdit* pEdit = new SwTOXEdit(&aCtrlParentWin, this, aTmpToken);
 
-        iterInsert = aControlList.insert(iterInsert, pEdit);
+        iterActive = aControlList.insert(iterActive, pEdit);
 
         pEdit->SetText(sRight);
         pEdit->SetSizePixel(aControlSize);
@@ -3175,7 +3173,7 @@ void    SwTokenWindow::InsertAtSelection(
     }
     else
     {
-        aControlList.erase(iterActive);
+        iterActive = aControlList.erase(iterActive);
         pActiveCtrl->Hide();
         delete pActiveCtrl;
     }
@@ -3183,7 +3181,7 @@ void    SwTokenWindow::InsertAtSelection(
     //now the new button
     SwTOXButton* pButton = new SwTOXButton(&aCtrlParentWin, this, aToInsertToken);
 
-    aControlList.insert(iterInsert, pButton);
+    aControlList.insert(iterActive, pButton);
 
     pButton->SetPrevNextLink(LINK(this, SwTokenWindow, NextItemBtnHdl));
     pButton->SetGetFocusHdl(LINK(this, SwTokenWindow, TbxFocusBtnHdl));
