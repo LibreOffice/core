@@ -265,7 +265,7 @@ for pack in $OOOP_FONTS_PACK $OOOP_GALLERY_PACK $OOOP_SAMPLES_PACK $OOOP_TEMPLAT
     unzip -o -q $TARFILE_LOCATION/$pack -d $SRC_ROOT/extras/source
 done
 
-if [ "$OXYGENOFFICE_PACK" = "YES" ] ; then
+if [ -n "$OXYGENOFFICE_PACK" ] ; then
     check_file $TARFILE_LOCATION/$OXYGENOFFICE_PACK
     echo "Unpacking OxygenOffice '$OXYGENOFFICE_PACK' ..."
     unzip -o -q $TARFILE_LOCATION/$OXYGENOFFICE_PACK -d $SRC_ROOT/src
