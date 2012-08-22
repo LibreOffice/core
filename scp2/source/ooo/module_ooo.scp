@@ -30,7 +30,6 @@
 Module gid_Module_Root
     Sortkey = "10";
     PackageInfo = "packinfo_office.txt";
-    TabPackageInfo = "packinfo_office_tab.txt";
     InstallOrder = "20";
     MOD_NAME_DESC(MODULE_ROOT_OSL);
     XpdPackageName = "gid_Module_Root_Files_1";
