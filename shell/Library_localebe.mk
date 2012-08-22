@@ -27,9 +27,7 @@
 
 $(eval $(call gb_Library_Library,localebe1))
 
-$(eval $(call gb_Library_use_internal_api,localebe1,\
-	localebe \
-))
+$(eval $(call gb_Library_use_sdk_api,localebe1))
 
 ifeq ($(OS),MACOSX)
 $(eval $(call gb_Library_use_externals,localebe1,\

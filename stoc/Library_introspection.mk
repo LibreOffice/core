@@ -27,9 +27,7 @@
 
 $(eval $(call gb_Library_Library,introspection))
 
-$(eval $(call gb_Library_use_internal_api,introspection,\
-    insp \
-))
+$(eval $(call gb_Library_use_udk_api,introspection))
 
 $(eval $(call gb_Library_use_libraries,introspection,\
     cppu \

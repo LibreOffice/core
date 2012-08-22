@@ -29,9 +29,7 @@ $(eval $(call gb_Library_Library,uuresolver))
 
 $(eval $(call gb_Library_set_componentfile,uuresolver,remotebridges/source/unourl_resolver/uuresolver))
 
-$(eval $(call gb_Library_use_internal_api,uuresolver,\
-	uuresolver \
-))
+$(eval $(call gb_Library_use_udk_api,uuresolver))
 
 $(eval $(call gb_Library_use_libraries,uuresolver,\
 	cppu \

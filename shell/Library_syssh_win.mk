@@ -27,9 +27,7 @@
 
 $(eval $(call gb_Library_Library,syssh))
 
-$(eval $(call gb_Library_use_internal_api,syssh,\
-	syssh \
-))
+$(eval $(call gb_Library_use_sdk_api,syssh))
 
 $(eval $(call gb_Library_use_libraries,syssh,\
 	cppu \

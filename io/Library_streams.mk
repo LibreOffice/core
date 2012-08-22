@@ -27,9 +27,7 @@
 
 $(eval $(call gb_Library_Library,streams))
 
-$(eval $(call gb_Library_use_internal_api,streams,\
-    stm \
-))
+$(eval $(call gb_Library_use_udk_api,streams))
 
 $(eval $(call gb_Library_use_libraries,streams,\
     cppu \

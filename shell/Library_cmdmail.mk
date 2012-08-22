@@ -27,9 +27,7 @@
 
 $(eval $(call gb_Library_Library,cmdmail))
 
-$(eval $(call gb_Library_use_internal_api,cmdmail,\
-	cmdmail \
-))
+$(eval $(call gb_Library_use_sdk_api,cmdmail))
 
 $(eval $(call gb_Library_use_libraries,cmdmail,\
 	cppu \

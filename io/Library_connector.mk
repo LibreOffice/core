@@ -27,9 +27,7 @@
 
 $(eval $(call gb_Library_Library,connector))
 
-$(eval $(call gb_Library_use_internal_api,connector,\
-    connectr \
-))
+$(eval $(call gb_Library_use_udk_api,connector))
 
 $(eval $(call gb_Library_use_libraries,connector,\
     cppu \

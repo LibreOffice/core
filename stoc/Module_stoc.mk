@@ -29,15 +29,6 @@ $(eval $(call gb_Module_Module,stoc))
 
 $(eval $(call gb_Module_add_targets,stoc,\
     InternalUnoApi_bootstrap \
-    InternalUnoApi_corefl \
-    InternalUnoApi_insp \
-    InternalUnoApi_inv \
-    InternalUnoApi_invadp \
-    InternalUnoApi_javaloader \
-    InternalUnoApi_jen \
-    InternalUnoApi_namingservice \
-    InternalUnoApi_proxyfac \
-    InternalUnoApi_stocserv \
     Library_bootstrap \
     Library_introspection \
     Library_invocadapt \

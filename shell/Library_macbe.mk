@@ -29,10 +29,6 @@ $(eval $(call gb_Library_Library,macbe1))
 
 $(eval $(call gb_Library_use_sdk_api,macbe1))
 
-$(eval $(call gb_Library_use_internal_api,macbe1,\
-	macbe \
-))
-
 $(eval $(call gb_Library_use_externals,macbe1,\
 	cocoa \
 	systemconfiguration \

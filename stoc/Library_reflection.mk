@@ -27,9 +27,7 @@
 
 $(eval $(call gb_Library_Library,reflection))
 
-$(eval $(call gb_Library_use_internal_api,reflection,\
-    corefl \
-))
+$(eval $(call gb_Library_use_udk_api,reflection))
 
 $(eval $(call gb_Library_use_libraries,reflection,\
     cppu \

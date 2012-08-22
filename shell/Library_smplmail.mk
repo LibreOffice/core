@@ -27,9 +27,7 @@
 
 $(eval $(call gb_Library_Library,smplmail))
 
-$(eval $(call gb_Library_use_internal_api,smplmail,\
-	smplmail \
-))
+$(eval $(call gb_Library_use_sdk_api,smplmail))
 
 $(eval $(call gb_Library_use_libraries,smplmail,\
 	advapi32 \

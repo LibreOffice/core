@@ -27,9 +27,7 @@
 
 $(eval $(call gb_Library_Library,wininetbe1))
 
-$(eval $(call gb_Library_use_internal_api,wininetbe1,\
-	wininetbe \
-))
+$(eval $(call gb_Library_use_sdk_api,wininetbe1))
 
 $(eval $(call gb_Library_use_libraries,wininetbe1,\
 	cppu \

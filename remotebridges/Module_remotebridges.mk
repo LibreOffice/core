@@ -28,7 +28,6 @@
 $(eval $(call gb_Module_Module,remotebridges))
 
 $(eval $(call gb_Module_add_targets,remotebridges,\
-	InternalUnoApi_uuresolver \
 	Library_uuresolver \
 ))
 

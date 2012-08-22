@@ -27,9 +27,7 @@
 
 $(eval $(call gb_Library_Library,javaloader))
 
-$(eval $(call gb_Library_use_internal_api,javaloader,\
-    javaloader \
-))
+$(eval $(call gb_Library_use_udk_api,javaloader))
 
 $(eval $(call gb_Library_use_libraries,javaloader,\
     cppu \

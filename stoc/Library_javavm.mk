@@ -27,9 +27,7 @@
 
 $(eval $(call gb_Library_Library,javavm))
 
-$(eval $(call gb_Library_use_internal_api,javavm,\
-    jen \
-))
+$(eval $(call gb_Library_use_udk_api,javavm))
 
 $(eval $(call gb_Library_use_libraries,javavm,\
     cppu \

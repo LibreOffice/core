@@ -27,9 +27,7 @@
 
 $(eval $(call gb_Library_Library,proxyfac))
 
-$(eval $(call gb_Library_use_internal_api,proxyfac,\
-    proxyfac \
-))
+$(eval $(call gb_Library_use_udk_api,proxyfac))
 
 $(eval $(call gb_Library_use_libraries,proxyfac,\
     cppu \

@@ -28,9 +28,6 @@
 $(eval $(call gb_Module_Module,io))
 
 $(eval $(call gb_Module_add_targets,io,\
-    InternalUnoApi_acceptor \
-    InternalUnoApi_connectr \
-    InternalUnoApi_stm \
     Library_acceptor \
     Library_connector \
     Library_streams \

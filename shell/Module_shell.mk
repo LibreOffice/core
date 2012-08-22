@@ -28,7 +28,6 @@
 $(eval $(call gb_Module_Module,shell))
 
 $(eval $(call gb_Module_add_targets,shell,\
-	InternalUnoApi_localebe \
 	Library_desktopbe \
 	Library_localebe \
 ))
@@ -68,9 +67,6 @@ ifeq ($(OS),WNT)
 $(eval $(call gb_Module_add_targets,shell,\
 	Executable_regsvrex \
 	Executable_senddoc \
-	InternalUnoApi_smplmail \
-	InternalUnoApi_syssh_win \
-	InternalUnoApi_wininetbe \
 	Library_smplmail \
 	Library_syssh_win \
 	Library_wininetbe \
@@ -104,7 +100,6 @@ endif
 
 ifeq ($(OS),MACOSX)
 $(eval $(call gb_Module_add_targets,shell,\
-	InternalUnoApi_macbe \
 	Library_macbe \
 ))
 endif
@@ -120,8 +115,6 @@ ifeq ($(GUI),UNX)
 $(eval $(call gb_Module_add_targets,shell,\
 	Executable_gnome_open_url \
 	Executable_uri_encode \
-	InternalUnoApi_cmdmail \
-	InternalUnoApi_syssh \
 	Library_cmdmail \
 	Library_syssh \
 	Package_scripts \

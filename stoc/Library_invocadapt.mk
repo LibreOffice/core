@@ -27,9 +27,7 @@
 
 $(eval $(call gb_Library_Library,invocadapt))
 
-$(eval $(call gb_Library_use_internal_api,invocadapt,\
-    invadp \
-))
+$(eval $(call gb_Library_use_udk_api,invocadapt))
 
 $(eval $(call gb_Library_use_libraries,invocadapt,\
     cppu \

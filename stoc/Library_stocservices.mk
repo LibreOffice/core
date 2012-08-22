@@ -32,9 +32,7 @@ $(eval $(call gb_Library_set_include,stocservices,\
     $$(INCLUDE) \
 ))
 
-$(eval $(call gb_Library_use_internal_api,stocservices,\
-    stocserv \
-))
+$(eval $(call gb_Library_use_udk_api,stocservices))
 
 $(eval $(call gb_Library_use_libraries,stocservices,\
     cppu \
