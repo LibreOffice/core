@@ -49,6 +49,16 @@ PathFormat()
     fi
 }
 
+have_WARNINGS="no"
+add_warning()
+{
+    if test "$have_WARNINGS" = "no" ; then
+        echo "*************************************" > warn
+    fi
+    have_WARNINGS="yes"
+    echo "* WARNING : $@" >> warn
+}
+
 if test -n "$SOLARENV" ; then
     AC_MSG_ERROR([You have sourced config_host.mk in this shell.  This may lead to trouble, please run in a fresh (login) shell.])
 fi
@@ -85,8 +95,6 @@ fi
 AC_SUBST(SRC_ROOT)
 AC_SUBST(EXEEXT_FOR_BUILD)
 AC_SUBST(x_Cygwin)
-
-cat /dev/null > warn
 
 if test "z$EUID" = "z0" -a "`uname -o 2>/dev/null`" = "Cygwin"; then
     AC_MSG_ERROR([You must build LibreOffice as a normal user - not using an administrative account])
@@ -2386,17 +2394,17 @@ if test "$CCACHE" != ""; then
         if test $ccache_size -lt 1024; then
             CCACHE=""
             AC_MSG_WARN([ccache's cache size is less than 1GB using it is counter-producive: Disabling auto-ccache detection])
-            echo "ccache's cache size is less than 1GB using it is counter-producive: auto-ccache detection disabled" >> warn
+            add_warning "ccache's cache size is less than 1GB using it is counter-producive: auto-ccache detection disabled"
         else
             # warn that ccache may be too small for debug build
             AC_MSG_WARN([ccache's cache size is less than 5GB using it may be counter-producive for debug or symbol-enabled build])
-            echo "ccache's cache size is less than 5GB using it may be counter-producive for debug or symbol-enabled build" >> warn
+            add_warning "ccache's cache size is less than 5GB using it may be counter-producive for debug or symbol-enabled build"
         fi
     else
         if test $ccache_size -lt 5; then
             #warn that ccache may be too small for debug build
             AC_MSG_WARN([ccache's cache size is less than 5GB using it may be counter-producive for debug or symbol-enabled build])
-            echo "ccache's cache size is less than 5GB using it may be counter-producive for debug or symbol-enabled build" >> warn
+            add_warning "ccache's cache size is less than 5GB using it may be counter-producive for debug or symbol-enabled build"
         fi
     fi
 fi
@@ -2616,13 +2624,13 @@ if test "$_os" = "Darwin"; then
             ;;
         *)
             AC_MSG_WARN([Building with a SDK > 10.4 possibly breaks 10.4 compatibility. Do not use for deliverable build until verified that it really works])
-            echo "Building with a SDK > 10.4 possibly breaks 10.4 compatibility. Do not use for deliverable build until verified that it really works" >>warn
+            add_warning "Building with a SDK > 10.4 possibly breaks 10.4 compatibility. Do not use for deliverable build until verified that it really works"
             ;;
         esac
         ;;
     *)
         AC_MSG_WARN([Building with a minimum version requirement > 10.4 breaks 10.4 compatibility. Do not use for deliverable build])
-        echo "Building with a minimum version requirement > 10.4 breaks 10.4 compatibility. Do not use for deliverable build" >>warn
+        add_warning "Building with a minimum version requirement > 10.4 breaks 10.4 compatibility. Do not use for deliverable build"
         ;;
     esac
 
@@ -4833,7 +4841,7 @@ if test "$_os" = "SunOS"; then
     AC_MSG_CHECKING([SunStudio C++ Compiler])
         if test "$CXX" != "CC"; then
             AC_MSG_WARN([SunStudio C++ was not found])
-            echo "SunStudio C++ was not found" >> warn
+            add_warning "SunStudio C++ was not found"
         else
             AC_MSG_RESULT([checked])
         fi
@@ -5112,7 +5120,7 @@ if test \( "$_os" != "WINNT" -o "$WITH_MINGW" = "yes" \); then
         AC_MSG_RESULT([$stlvisok])
         if test "$stlvisok" = "no"; then
             AC_MSG_WARN([Your gcc STL headers are not visibility safe. Disabling visibility])
-            echo "Your gcc STL headers are not visibility safe. Disabling visibility" >> warn
+            add_warning "Your gcc STL headers are not visibility safe. Disabling visibility"
             unset HAVE_GCC_VISIBILITY_FEATURE
         fi
     fi
@@ -5139,7 +5147,7 @@ istringstream strm( "test" ); return 0;
         AC_MSG_RESULT([$gccvisok])
         if test "$gccvisok" = "no"; then
             AC_MSG_WARN([Your gcc is not -fvisibility-inlines-hidden safe, disabling that.])
-            echo "Your gcc is not -fvisibility-inlines-hidden safe, disabling that." >> warn
+            add_warning "Your gcc is not -fvisibility-inlines-hidden safe, disabling that."
             HAVE_GCC_VISIBILITY_BROKEN="TRUE"
         fi
 
@@ -5166,12 +5174,12 @@ _ACEOF
                 gccvisinlineshiddenok=no
             fi
         fi
-        
+
         rm -f libconftest1$DLLPOST libconftest2$DLLPOST
         AC_MSG_RESULT([$gccvisinlineshiddenok])
         if test "$gccvisinlineshiddenok" = "no"; then
             AC_MSG_WARN([Your gcc/clang is not -fvisibility-inlines-hidden safe, disabling that.])
-            echo "Your gcc/clang is not -fvisibility-inlines-hidden safe, disabling that." >> warn
+            add_warning "Your gcc/clang is not -fvisibility-inlines-hidden safe, disabling that."
             HAVE_GCC_VISIBILITY_BROKEN="TRUE"
         fi
     fi
@@ -5212,7 +5220,7 @@ _ACEOF
         AC_MSG_RESULT([$gccvisbroken])
         if test "$gccvisbroken" = "yes"; then
             AC_MSG_WARN([Your gcc is not -fvisibility=hidden safe. Disabling visibility])
-            echo "Your gcc is not -fvisibility=hidden safe. Disabling visibility" >> warn
+            add_warning "Your gcc is not -fvisibility=hidden safe. Disabling visibility"
             unset HAVE_GCC_VISIBILITY_FEATURE
         fi
     fi
@@ -5689,8 +5697,8 @@ if test "$SOLAR_JAVA" != ""; then
             # else warn
             AC_MSG_WARN([JAVA_HOME is set to /usr - this is very likely to be incorrect])
             AC_MSG_WARN([if this is the case, please inform the correct JAVA_HOME with --with-jdk-home])
-            echo "JAVA_HOME is set to /usr - this is very likely to be incorrect" >> warn
-            echo "if this is the case, please inform the correct JAVA_HOME with --with-jdk-home" >> warn
+            add_warning "JAVA_HOME is set to /usr - this is very likely to be incorrect"
+            add_warning "if this is the case, please inform the correct JAVA_HOME with --with-jdk-home"
         fi
         dnl now that we have the path to the real javac, make a JAVA_HOME out of it..
         if test "$JAVA_HOME" != "/usr"; then
@@ -5762,9 +5770,9 @@ _ACEOF
             AC_MSG_WARN([JAVA_HOME was not explicitly informed with --with-jdk-home. the configure script])
             AC_MSG_WARN([attempted to find JAVA_HOME automatically, but apparently it failed])
             AC_MSG_WARN([in case JAVA_HOME is incorrectly set, some projects with not be built correctly])
-            echo "JAVA_HOME was not explicitly informed with --with-jdk-home. the configure script" >> warn
-            echo "attempted to find JAVA_HOME automatically, but apparently it failed" >> warn
-            echo "in case JAVA_HOME is incorrectly set, some projects with not be built correctly" >> warn
+            add_warning "JAVA_HOME was not explicitly informed with --with-jdk-home. the configure script"
+            add_warning "attempted to find JAVA_HOME automatically, but apparently it failed"
+            add_warning "in case JAVA_HOME is incorrectly set, some projects with not be built correctly"
         fi
     fi
     PathFormat "$JAVA_HOME"
@@ -6263,12 +6271,12 @@ if test "$enable_epm" = "yes"; then
                     if echo "$PKGFORMAT" | $GREP -q rpm; then
                         _pt="rpm"
                         AC_MSG_WARN([the rpms will need to be installed with --nodeps])
-                        echo "the rpms will need to be installed with --nodeps" >> warn
+                        add_warning "the rpms will need to be installed with --nodeps"
                     else
                         _pt="pkg"
                     fi
                     AC_MSG_WARN([the ${_pt}s will not be relocateable])
-                    echo "the ${_pt}s will not be relocateable" >> warn
+                    add_warning "the ${_pt}s will not be relocateable"
                     AC_MSG_WARN([if you want to make sure installation without --nodeps and
                                  relocation will work, you need to patch your epm with the
                                  patch in epm/epm-3.7.patch or build with
@@ -7877,7 +7885,7 @@ else
                 fi
             else
                 AC_MSG_WARN([Building SeaMonkey with MinGW is not tested, and likely to break.])
-                echo "Building SeaMonkey with MinGW is not tested, and likely to break." >> warn
+                add_warning "Building SeaMonkey with MinGW is not tested, and likely to break."
             fi
         fi
 
@@ -8846,7 +8854,7 @@ else
     if test "$_bison_longver" -ge 1875 -o "$_bison_longver" -le 1075; then
         if test "$_bison_version" = "1.875"; then
             AC_MSG_WARN([suspect ($BISON $_bison_version)])
-            echo "Suspect ($BISON $_bison_version) suggest upgrade" >> warn
+            add_warning "Suspect ($BISON $_bison_version) suggest upgrade"
         else
             AC_MSG_RESULT([checked ($BISON $_bison_version)])
         fi
@@ -11377,7 +11385,7 @@ EOF
             cat conftest.xml >&5
             AC_MSG_WARN([Ant does not work - Some Java projects will not build!])
             ANT_HOME=""
-            echo "Ant does not work - Some Java projects will not build!" >>warn
+            add_warning "Ant does not work - Some Java projects will not build!"
         fi
         JAVA_HOME=$oldJAVA_HOME
         rm -f conftest* core core.* *.core
@@ -12063,13 +12071,13 @@ if test "$no_parallelism_make" = "YES"; then
         if test $GMAKE_MODULE_PARALLELISM -gt 1; then
             AC_MSG_WARN([gmake 3.81 crashes with parallelism > 1, reducing it to 1. upgrade to 3.82 to avoid this.])
             if test -z "$with_num_cpus"; then
-                echo "gmake 3.81 crashes with parallelism > 1, reducing it to 1. upgrade to 3.82 to avoid this." >> warn
+                add_warning "gmake 3.81 crashes with parallelism > 1, reducing it to 1. upgrade to 3.82 to avoid this."
             fi
             GMAKE_MODULE_PARALLELISM="1"
         fi
     else
         GMAKE_PARALLELISM="$BUILD_NCPUS"
-        echo "make 3.81 is prone to crashes with parallelism > 1. Since --with-num-cpus was explicitly given, it is honored, but do not complain when make segfault on you." >> warn
+        add_warning "make 3.81 is prone to crashes with parallelism > 1. Since --with-num-cpus was explicitly given, it is honored, but do not complain when make segfault on you."
     fi
 fi
 
@@ -12295,5 +12303,7 @@ $GNUMAKE check
 
 _EOF
 fi
+
+cat warn
 
 dnl vim:set shiftwidth=4 softtabstop=4 expandtab:
