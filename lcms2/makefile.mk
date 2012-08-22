@@ -54,7 +54,10 @@ CONFIGURE_DIR=.
 
 CONFIGURE_ACTION =
 
-.IF "$(CCNUMVER)" >= "001600000000"
+.IF "$(CCNUMVER)" >= "001700000000"
+BUILD_DIR=Projects/VC2010/lcms2_DLL
+BUILD_ACTION=MSBuild.exe lcms2_DLL.vcxproj /p:Configuration=Release /p:Platform=Win32 /p:TargetName=lcms2 /p:PlatformToolset=v110
+.ELIF "$(CCNUMVER)" >= "001600000000"
 BUILD_DIR=Projects/VC2010/lcms2_DLL
 BUILD_ACTION=MSBuild.exe lcms2_DLL.vcxproj /p:Configuration=Release /p:Platform=Win32 /p:TargetName=lcms2
 .ELSE
