@@ -124,6 +124,7 @@
 #include <cellsuno.hxx>
 #include <dbcolect.hxx>
 #include "docfunc.hxx"
+#include <docuno.hxx>
 #include "transobj.hxx"
 
 #include <sfx2/dispatch.hxx>
@@ -1408,6 +1409,19 @@ lcl_setupBorders( const uno::Reference< excel::XRange >& xParentRange, const uno
     return borders;
 }
 
+void lcl_NotifyRangeChanges( const uno::Reference< frame::XModel >& xModel, ScCellRangesBase* pUnoRangesBase ) // i108874
+{
+    if ( xModel.is() && pUnoRangesBase )
+    {
+        ScModelObj* pModelObj = ScModelObj::getImplementation( xModel );
+        const ScRangeList& aCellRanges = pUnoRangesBase->GetRangeList();
+        if ( pModelObj && pModelObj->HasChangesListeners() )
+        {
+            pModelObj->NotifyChanges( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "cell-change" ) ), aCellRanges );
+        }
+    }
+}
+
 ScVbaRange::ScVbaRange( uno::Sequence< uno::Any> const & args,
     uno::Reference< uno::XComponentContext> const & xContext )  throw ( lang::IllegalArgumentException ) : ScVbaRange_BASE( getXSomethingFromArgs< XHelperInterface >( args, 0 ), xContext, getXSomethingFromArgs< beans::XPropertySet >( args, 1, false ), getModelFromXIf( getXSomethingFromArgs< uno::XInterface >( args, 1 ) ), true ), mbIsRows( sal_False ), mbIsColumns( sal_False )
 {
@@ -1571,6 +1585,8 @@ ScVbaRange::setValue( const uno::Any  &aValue ) throw (uno::RuntimeException)
     }
     CellValueSetter valueSetter( aValue );
     setValue( aValue, valueSetter, true );
+    // Fire the range change event.
+    lcl_NotifyRangeChanges( getScDocShell()->GetModel(), getCellRangesBase() );
 }
 
 void SAL_CALL
@@ -1579,6 +1595,8 @@ ScVbaRange::Clear() throw (uno::RuntimeException)
     using namespace ::com::sun::star::sheet::CellFlags;
     sal_Int32 nFlags = VALUE | DATETIME | STRING | FORMULA | HARDATTR | EDITATTR | FORMATTED;
     ClearContents( nFlags, true );
+    // Fire the range change event
+    lcl_NotifyRangeChanges( getScDocShell()->GetModel(), getCellRangesBase() );
 }
 
 //helper ClearContent
@@ -1631,6 +1649,8 @@ ScVbaRange::ClearFormats() throw (uno::RuntimeException)
     using namespace ::com::sun::star::sheet::CellFlags;
     sal_Int32 nFlags = HARDATTR | FORMATTED | EDITATTR;
     ClearContents( nFlags, false );
+    // Fire the range change event.
+    lcl_NotifyRangeChanges( getScDocShell()->GetModel(), getCellRangesBase() );
 }
 
 void
@@ -1646,6 +1666,8 @@ ScVbaRange::setFormulaValue( const uno::Any& rFormula, formula::FormulaGrammar::
     }
     CellFormulaValueSetter formulaValueSetter( rFormula, getScDocument(), eGram );
     setValue( rFormula, formulaValueSetter, bFireEvent );
+    // Fire the range change event.
+    lcl_NotifyRangeChanges( getScDocShell()->GetModel(), getCellRangesBase() );
 }
 
 uno::Any
@@ -1805,6 +1827,9 @@ ScVbaRange::fillSeries( sheet::FillDirection nFillDirection, sheet::FillMode nFi
 
     uno::Reference< sheet::XCellSeries > xCellSeries(mxRange, uno::UNO_QUERY_THROW );
     xCellSeries->fillSeries( nFillDirection, nFillMode, nFillDateMode, fStep, fEndValue );
+
+    // Fire the range change event.
+    lcl_NotifyRangeChanges( getScDocShell()->GetModel(), getCellRangesBase() );
 }
 
 void
@@ -3050,7 +3075,17 @@ ScVbaRange::Replace( const ::rtl::OUString& What, const ::rtl::OUString& Replace
         // OOo.org afaik
 
         uno::Reference< util::XSearchDescriptor > xSearch( xDescriptor, uno::UNO_QUERY );
+        // Find all cells that being replaced, used to fire the range changed event.
+        uno::Reference< container::XIndexAccess > xIndexAccess = xReplace->findAll( xSearch );
         xReplace->replaceAll( xSearch );
+
+        if ( xIndexAccess.is() && xIndexAccess->getCount() > 0 )
+        {
+            // Fire the range change event.
+            ScCellRangesBase* pScCellRangesBase = ScCellRangesBase::getImplementation( xIndexAccess );
+            // i108874 - the original convert method will fail in SUSE
+            lcl_NotifyRangeChanges( getScDocShell()->GetModel(), pScCellRangesBase );
+        }
     }
     return sal_True; // always
 }
