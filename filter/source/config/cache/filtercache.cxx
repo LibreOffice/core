@@ -1834,6 +1834,7 @@ CacheItem FilterCache::impl_loadItem(const css::uno::Reference< css::container::
                 aItem[PROPNAME_UICOMPONENT      ] = xItem->getByName(PROPNAME_UICOMPONENT      );
                 aItem[PROPNAME_FILTERSERVICE    ] = xItem->getByName(PROPNAME_FILTERSERVICE    );
                 aItem[PROPNAME_DOCUMENTSERVICE  ] = xItem->getByName(PROPNAME_DOCUMENTSERVICE  );
+                aItem[PROPNAME_FILESAVEEXTENSION] = xItem->getByName(PROPNAME_FILESAVEEXTENSION);
 
                 // special handling for flags! Convert it from a list of names to its
                 // int representation ...

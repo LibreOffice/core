@@ -69,6 +69,9 @@
             <prop oor:name="UIName" oor:localized="true" oor:type="xs:string">
                 <info><desc>Localized name of the filter, whch can be shown at the UI.</desc></info>
             </prop>
+            <prop oor:name="FileSaveExtension" oor:type="xs:string" oor:nillable="true">
+                <info><desc>Extension to use when exporting content using this filter.  When this value is not given, it is inferred from the Type associated with this filter.</desc></info>
+            </prop>
 		</group>
 	</templates>
 	<component>

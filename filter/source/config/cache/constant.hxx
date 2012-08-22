@@ -69,6 +69,7 @@
 #define  PROPNAME_USERDATA          "UserData"
 #define  PROPNAME_TEMPLATENAME      "TemplateName"
 #define  PROPNAME_FILEFORMATVERSION "FileFormatVersion"
+#define  PROPNAME_FILESAVEEXTENSION "FileSaveExtension"
 
 /** @short  used to identify a frame loader or detect service item
             property against the configuration API and can be used
