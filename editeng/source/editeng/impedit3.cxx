@@ -2477,22 +2477,26 @@ void ImpEditEngine::RecalcTextPortion( ParaPortion* pParaPortion, sal_uInt16 nSt
             pTP->GetLen() = pTP->GetLen() + nNewChars;
         }
 
-        // No HYPHENATOR portion is allowed to get stuck right at the end...
-        DBG_ASSERT( pParaPortion->GetTextPortions().Count(), "RecalcTextPortions: Nothing left! ");
-        sal_uInt16 nLastPortion = pParaPortion->GetTextPortions().Count() - 1;
-        pTP = pParaPortion->GetTextPortions()[nLastPortion];
-        if ( pTP->GetKind() == PORTIONKIND_HYPHENATOR )
+        sal_uInt16 nPortionCount = pParaPortion->GetTextPortions().Count();
+        assert( nPortionCount );
+        if (nPortionCount)
         {
-            // Discard portion; if possible, correct the ones before,
-            // if the Hyphenator portion has swallowed one character...
-            if ( nLastPortion && pTP->GetLen() )
+            // No HYPHENATOR portion is allowed to get stuck right at the end...
+            sal_uInt16 nLastPortion = nPortionCount - 1;
+            pTP = pParaPortion->GetTextPortions()[nLastPortion];
+            if ( pTP->GetKind() == PORTIONKIND_HYPHENATOR )
             {
-                TextPortion* pPrev = pParaPortion->GetTextPortions()[nLastPortion - 1];
-                DBG_ASSERT( pPrev->GetKind() == PORTIONKIND_TEXT, "Portion?!" );
-                pPrev->SetLen( pPrev->GetLen() + pTP->GetLen() );
-                pPrev->GetSize().Width() = (-1);
+                // Discard portion; if possible, correct the ones before,
+                // if the Hyphenator portion has swallowed one character...
+                if ( nLastPortion && pTP->GetLen() )
+                {
+                    TextPortion* pPrev = pParaPortion->GetTextPortions()[nLastPortion - 1];
+                    DBG_ASSERT( pPrev->GetKind() == PORTIONKIND_TEXT, "Portion?!" );
+                    pPrev->SetLen( pPrev->GetLen() + pTP->GetLen() );
+                    pPrev->GetSize().Width() = (-1);
+                }
+                pParaPortion->GetTextPortions().Remove( nLastPortion );
             }
-            pParaPortion->GetTextPortions().Remove( nLastPortion );
         }
     }
 #if OSL_DEBUG_LEVEL > 2
