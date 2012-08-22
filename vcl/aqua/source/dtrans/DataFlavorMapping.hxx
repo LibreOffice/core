@@ -128,6 +128,8 @@ private:
    */
   bool isValidMimeContentType(const OUString& contentType) const;
 
+  NSString* internalOpenOfficeToSystemFlavor(const com::sun::star::datatransfer::DataFlavor& oooDataFlavor) const;
+
 private:
   ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XMimeContentTypeFactory> mrXMimeCntFactory;
   typedef boost::unordered_map< OUString, NSString*, OUStringHash > OfficeOnlyTypes;
