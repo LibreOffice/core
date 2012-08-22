@@ -254,6 +254,7 @@ public:
                     ScInputWindow( Window* pParent, SfxBindings* pBind );
     virtual         ~ScInputWindow();
 
+    virtual void    Paint( const Rectangle& rRect );
     virtual void    Resize();
     virtual void    Select();
 

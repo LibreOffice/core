@@ -86,7 +86,9 @@
 #define TBX_WINDOW_HEIGHT   22 // in Pixeln - fuer alle Systeme gleich?
 #define LEFT_OFFSET         5
 #define INPUTWIN_MULTILINES 6
-const long BUTTON_OFFSET = 2; // space bettween input line and the button to expand / collapse
+const long BUTTON_OFFSET = 2; ///< space between input line and the button to expand / collapse
+const long ADDITIONAL_BORDER = 1; ///< height of the line at the bottom
+const long ADDITIONAL_SPACE = 4; ///< additional vertical space when the multiline edit has more lines
 
 using com::sun::star::uno::Reference;
 using com::sun::star::uno::UNO_QUERY;
@@ -186,7 +188,7 @@ ScTextWndBase* lcl_chooseRuntimeImpl( Window* pParent, SfxBindings* pBind )
 
 ScInputWindow::ScInputWindow( Window* pParent, SfxBindings* pBind ) :
 // mit WB_CLIPCHILDREN, sonst Flicker
-        ToolBox         ( pParent, WinBits(WB_BORDER|WB_3DLOOK|WB_CLIPCHILDREN) ),
+        ToolBox         ( pParent, WinBits(WB_CLIPCHILDREN) ),
         aWndPos         ( this ),
         pRuntimeWindow ( lcl_chooseRuntimeImpl( this, pBind ) ),
         aTextWindow    ( *pRuntimeWindow ),
@@ -535,6 +537,19 @@ void ScInputWindow::Select()
     }
 }
 
+void ScInputWindow::Paint( const Rectangle& rRect )
+{
+    ToolBox::Paint( rRect );
+
+    // draw a line at the bottom to distinguish that from the grid
+    // (we have space for that thanks to ADDITIONAL_BORDER)
+    const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
+    SetLineColor( rStyleSettings.GetShadowColor() );
+
+    Size aSize = GetSizePixel();
+    DrawLine( Point( 0, aSize.Height() - 1 ), Point( aSize.Width() - 1, aSize.Height() - 1 ) );
+}
+
 void ScInputWindow::Resize()
 {
     ToolBox::Resize();
@@ -542,7 +557,7 @@ void ScInputWindow::Resize()
     {
         aTextWindow.Resize();
         Size aSize = GetSizePixel();
-        aSize.Height() = CalcWindowSizePixel().Height();
+        aSize.Height() = CalcWindowSizePixel().Height() + ADDITIONAL_BORDER;
         ScInputBarGroup* pGroupBar = dynamic_cast< ScInputBarGroup* > ( pRuntimeWindow.get() );
         if ( pGroupBar )
         {
@@ -553,7 +568,7 @@ void ScInputWindow::Resize()
             // then the largest item ( e.g. the GroupBar window ) will actually be
             // positioned such that the toolbar will cut off the bottom of that item
             if ( pGroupBar->GetNumLines() > 1 )
-                aSize.Height() += pGroupBar->GetVertOffset();
+                aSize.Height() += pGroupBar->GetVertOffset() + ADDITIONAL_SPACE;
         }
         SetSizePixel(aSize);
         Invalidate();
