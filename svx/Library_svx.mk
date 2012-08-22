@@ -49,6 +49,7 @@ $(eval $(call gb_Library_use_libraries,svx,\
     comphelper \
     cppuhelper \
     cppu \
+    dbtools \
     drawinglayer \
     editeng \
     i18nisolang1 \
