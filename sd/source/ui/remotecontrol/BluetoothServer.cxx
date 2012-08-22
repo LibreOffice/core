@@ -58,7 +58,6 @@ void BluetoothServer::execute()
     GDBusConnection* aConnection = g_bus_get_sync( G_BUS_TYPE_SYSTEM, NULL, &aError );
     if ( aError )
     {
-        fprintf( stderr, aError->message );
         g_error_free( aError );
     }
 
@@ -70,10 +69,9 @@ void BluetoothServer::execute()
     GVariant *aAdapterName = g_variant_get_child_value( aAdapter, 0 );
     if ( aError )
     {
-        fprintf( stderr, aError->message );
         g_error_free( aError );
     }
-    fprintf( stderr, (const char*) g_variant_get_string( aAdapterName, NULL ) );
+//     fprintf( stderr, (const char*) g_variant_get_string( aAdapterName, NULL ) );
 
 
 //     GDBusObjectManager* aManager = g_dbus_object_manager_client_new_sync( aConnection,
@@ -94,7 +92,6 @@ void BluetoothServer::execute()
                                 G_DBUS_CALL_FLAGS_NONE, -1, NULL, &aError);
     if ( aError )
     {
-        fprintf( stderr, aError->message );
         g_error_free( aError );
     }
     (void) aRecordHandle;
@@ -185,7 +182,7 @@ void BluetoothServer::execute()
         close( aSocket );
         return;
     } else {
-        fprintf( stderr, "Accepted Bluetooth\n" );
+//         fprintf( stderr, "Accepted Bluetooth\n" );
 
         Communicator* pCommunicator = new Communicator( new BufferedStreamSocket( bSocket) );
         mpCommunicators->push_back( pCommunicator );
