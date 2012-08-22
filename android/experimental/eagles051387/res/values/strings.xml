@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-
-    <string name="menuOptions">Hello Welcome To LibreOffice For Android!
-        This is the start center. Please choose an application to begin
-        working on your document.</string>
-    <string name="app_name">LibreOffice For Android</string>
-
-</resources>
