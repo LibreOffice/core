@@ -1085,6 +1085,11 @@ AC_ARG_ENABLE(liblangtag,
          implementation.]),
 )
 
+AC_ARG_ENABLE(bogus-pkg-config,
+    AS_HELP_STRING([--enable-bogis-pkg-config],
+        [MACOSX only: on MacOSX pkg-config can cause trouble. by default if one is found in the PATH, an error is issued. This flag turn that error into a warning.]),
+)
+
 dnl ===================================================================
 dnl Optional Packages (--with/without-)
 dnl ===================================================================
@@ -4413,7 +4418,16 @@ if test $_os = Darwin -a "$enable_mozilla" = no; then
         if test "$PKG_CONFIG" = /usr/bin/pkg-config && ls -l /usr/bin/pkg-config | $GREP -q Mono.framework; then
             AC_MSG_ERROR([yes, from Mono. This *will* break the build. Please remove or hide $PKG_CONFIG])
         else
-            AC_MSG_ERROR([yes, from unknown origin. This *will* break the build. Please remove or hide $PKG_CONFIG])
+            if test "$enable_mozilla" = "yes"; then
+                AC_MSG_RESULT([yes, from unkown origin])
+                add_warning "Having a $PKG_CONFIG might have unexpected consequences, please consider hiding it"
+            else
+                if test "$enable_bogus_pkg_config" = "yes"; then
+                    AC_MSG_RESULT([yes, user-approved from unkown origin.])
+                else
+                   AC_MSG_ERROR([yes, from unknown origin. This *will* break the build. Please remove or hide $PKG_CONFIG])
+                fi
+            fi
         fi
     else
         AC_MSG_RESULT([no, good])
