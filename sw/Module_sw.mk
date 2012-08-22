@@ -36,7 +36,6 @@ $(eval $(call gb_Module_add_targets,sw,\
     Library_swui \
     Package_misc \
     Package_uiconfig \
-    Package_xml \
 ))
 
 ifneq ($(DISABLE_SCRIPTING),TRUE)

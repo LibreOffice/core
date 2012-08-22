@@ -29,7 +29,6 @@ $(eval $(call gb_Module_Module,store))
 $(eval $(call gb_Module_add_targets,store,\
     Library_store \
     Package_inc \
-    Package_xml \
 ))
 
 # vim:set shiftwidth=4 softtabstop=4 expandtab:
