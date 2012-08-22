@@ -64,6 +64,7 @@
 
 #include "excdoc.hxx"
 #include "namebuff.hxx"
+#include "xeextlst.hxx"
 
 #include "xcl97rec.hxx"
 #include "xcl97esc.hxx"
@@ -524,7 +525,7 @@ void ExcTable::FillAsTable( SCTAB nCodeNameIdx )
         Add( new XclExpWebQueryBuffer( GetRoot() ) );
 
         // conditional formats
-        Add( new XclExpCondFormatBuffer( GetRoot() ) );
+        Add( new XclExpCondFormatBuffer( GetRoot(), XclExtLstRef() ) );
 
         if( HasVbaStorage() )
             if( nCodeNameIdx < GetExtDocOptions().GetCodeNameCount() )
@@ -555,6 +556,7 @@ void ExcTable::FillAsXmlTable( SCTAB nCodeNameIdx )
 
     // WSBOOL needs data from page settings, create it here, add it later
     boost::shared_ptr< XclExpPageSettings > xPageSett( new XclExpPageSettings( GetRoot() ) );
+    XclExtLstRef xExtLst( new XclExtLst( GetRoot() ) );
     bool bFitToPages = xPageSett->GetPageData().mbFitToPages;
 
     Add( new ExcBof8 );
@@ -601,7 +603,7 @@ void ExcTable::FillAsXmlTable( SCTAB nCodeNameIdx )
     aRecList.AppendRecord( mxCellTable->CreateRecord( EXC_ID_MERGEDCELLS ) );
 
     // conditional formats
-    Add( new XclExpCondFormatBuffer( GetRoot() ) );
+    Add( new XclExpCondFormatBuffer( GetRoot(), xExtLst ) );
 
     if( HasVbaStorage() )
         if( nCodeNameIdx < GetExtDocOptions().GetCodeNameCount() )
@@ -635,6 +637,8 @@ void ExcTable::FillAsXmlTable( SCTAB nCodeNameIdx )
 
     // all MSODRAWING and OBJ stuff of this sheet goes here
     aRecList.AppendRecord( GetObjectManager().ProcessDrawing( GetSdrPage( mnScTab ) ) );
+
+    aRecList.AppendRecord( xExtLst );
 
     // EOF
     Add( new ExcEof );

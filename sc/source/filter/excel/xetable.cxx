@@ -41,6 +41,7 @@
 #include "xehelper.hxx"
 #include "xecontent.hxx"
 #include "xeescher.hxx"
+#include "xeextlst.hxx"
 
 using namespace ::oox;
 
@@ -2184,7 +2185,8 @@ XclExpCellTable::XclExpCellTable( const XclExpRoot& rRoot ) :
     mxNoteList( new XclExpNoteList ),
     mxMergedcells( new XclExpMergedcells( rRoot ) ),
     mxHyperlinkList( new XclExpHyperlinkList ),
-    mxDval( new XclExpDval( rRoot ) )
+    mxDval( new XclExpDval( rRoot ) ),
+    mxExtLst( new XclExtLst( rRoot ) )
 {
     ScDocument& rDoc = GetDoc();
     SCTAB nScTab = GetCurrScTab();
@@ -2431,6 +2433,7 @@ XclExpRecordRef XclExpCellTable::CreateRecord( sal_uInt16 nRecId ) const
         case EXC_ID_MERGEDCELLS:    xRec = mxMergedcells;   break;
         case EXC_ID_HLINK:          xRec = mxHyperlinkList; break;
         case EXC_ID_DVAL:           xRec = mxDval;          break;
+        case EXC_ID_EXTLST:         xRec = mxExtLst;        break;
         default:    OSL_FAIL( "XclExpCellTable::CreateRecord - unknown record id" );
     }
     return xRec;
@@ -2448,6 +2451,7 @@ void XclExpCellTable::SaveXml( XclExpXmlStream& rStrm )
 {
     maColInfoBfr.SaveXml( rStrm );
     maRowBfr.SaveXml( rStrm );
+    mxExtLst->SaveXml( rStrm );
 }
 
 // ============================================================================

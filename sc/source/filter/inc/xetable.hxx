@@ -38,6 +38,7 @@
 #include "xestring.hxx"
 #include "xeformula.hxx"
 #include "xestyle.hxx"
+#include "xeextlst.hxx"
 
 #include <boost/shared_ptr.hpp>
 #include <map>
@@ -1051,6 +1052,7 @@ private:
     typedef boost::shared_ptr< XclExpMergedcells >         XclExpMergedcellsRef;
     typedef boost::shared_ptr< XclExpHyperlinkList >       XclExpHyperlinkRef;
     typedef boost::shared_ptr< XclExpDval >                XclExpDvalRef;
+    typedef boost::shared_ptr< XclExtLst >                 XclExtLstRef;
 
     XclExpColinfoBuffer maColInfoBfr;       /// Buffer for column formatting.
     XclExpRowBuffer     maRowBfr;           /// Rows and cell records.
@@ -1063,6 +1065,7 @@ private:
     XclExpMergedcellsRef mxMergedcells;     /// MERGEDCELLS record for merged cell ranges.
     XclExpHyperlinkRef  mxHyperlinkList;    /// List of HLINK records.
     XclExpDvalRef       mxDval;             /// Data validation with DVAL and DV records.
+    XclExtLstRef        mxExtLst;
 };
 
 #endif

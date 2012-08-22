@@ -82,6 +82,7 @@ $(eval $(call gb_Library_add_exception_objects,scfilt,\
 	sc/source/filter/excel/xechart \
 	sc/source/filter/excel/xecontent \
 	sc/source/filter/excel/xeescher \
+	sc/source/filter/excel/xeextlst \
 	sc/source/filter/excel/xeformula \
 	sc/source/filter/excel/xehelper \
 	sc/source/filter/excel/xelink \

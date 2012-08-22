@@ -968,7 +968,7 @@ void XclExpColScaleCol::SaveXml( XclExpXmlStream& rStrm )
 
 // ----------------------------------------------------------------------------
 
-XclExpCondfmt::XclExpCondfmt( const XclExpRoot& rRoot, const ScConditionalFormat& rCondFormat ) :
+XclExpCondfmt::XclExpCondfmt( const XclExpRoot& rRoot, const ScConditionalFormat& rCondFormat, XclExtLstRef xExtLst ) :
     XclExpRecord( EXC_ID_CONDFMT ),
     XclExpRoot( rRoot )
 {
@@ -985,7 +985,7 @@ XclExpCondfmt::XclExpCondfmt( const XclExpRoot& rRoot, const ScConditionalFormat
                 else if(pFormatEntry->GetType() == condformat::COLORSCALE)
                     maCFList.AppendNewRecord( new XclExpColorScale( GetRoot(), static_cast<const ScColorScaleFormat&>(*pFormatEntry), nIndex ) );
                 else if(pFormatEntry->GetType() == condformat::DATABAR)
-                    maCFList.AppendNewRecord( new XclExpDataBar( GetRoot(), static_cast<const ScDataBarFormat&>(*pFormatEntry), nIndex ) );
+                    maCFList.AppendNewRecord( new XclExpDataBar( GetRoot(), static_cast<const ScDataBarFormat&>(*pFormatEntry), nIndex, xExtLst ) );
             }
         aScRanges.Format( msSeqRef, SCA_VALID, NULL, formula::FormulaGrammar::CONV_XL_A1 );
     }
@@ -1080,7 +1080,7 @@ void XclExpColorScale::SaveXml( XclExpXmlStream& rStrm )
     // OOXTODO: XML_extLst
 }
 
-XclExpDataBar::XclExpDataBar( const XclExpRoot& rRoot, const ScDataBarFormat& rFormat, sal_Int32 nPriority ):
+XclExpDataBar::XclExpDataBar( const XclExpRoot& rRoot, const ScDataBarFormat& rFormat, sal_Int32 nPriority, XclExtLstRef xExtLst ):
     XclExpRecord(),
     XclExpRoot( rRoot ),
     mrFormat( rFormat ),
@@ -1093,6 +1093,16 @@ XclExpDataBar::XclExpDataBar( const XclExpRoot& rRoot, const ScDataBarFormat& rF
     mpCfvoUpperLimit.reset( new XclExpCfvo( GetRoot(), *mrFormat.GetDataBarData()->mpUpperLimit.get(), aAddr ) );
 
     mpCol.reset( new XclExpColScaleCol( GetRoot(), mrFormat.GetDataBarData()->maPositiveColor ) );
+    if(xExtLst.get())
+    {
+        XclExpExtRef pParent = xExtLst->GetItem( XclExpExtDataBarType );
+        if( !pParent.get() )
+        {
+            xExtLst->AddRecord( XclExpExtRef(new XclExpExtCondFormat( *xExtLst.get() )) );
+            pParent = xExtLst->GetItem( XclExpExtDataBarType );
+        }
+        static_cast<XclExpExtCondFormat*>(xExtLst->GetItem( XclExpExtDataBarType ).get())->AddRecord( XclExpExtConditionalFormattingRef(new XclExpExtConditionalFormatting( *pParent, rFormat, aAddr, rtl::OString("{64A12B6B-50E9-436E-8939-DBE15E5BE1DC}") )) );
+    }
 }
 
 void XclExpDataBar::SaveXml( XclExpXmlStream& rStrm )
@@ -1112,6 +1122,20 @@ void XclExpDataBar::SaveXml( XclExpXmlStream& rStrm )
 
     rWorksheet->endElement( XML_dataBar );
 
+    // extLst entries for Excel 2010 and 2013
+    rWorksheet->startElement( XML_extLst, FSEND );
+    rWorksheet->startElement( XML_ext,
+                                FSNS( XML_xmlns, XML_x14 ), "http://schemas.microsoft.com/office/spreadsheetml/2009/9/main",
+                                XML_uri, "{B025F937-C7B1-47D3-B67F-A62EFF666E3E}",
+                                FSEND );
+
+    rWorksheet->startElementNS( XML_x14, XML_id, FSEND );
+    rWorksheet->write( "{64A12B6B-50E9-436E-8939-DBE15E5BE1DC}" );
+    rWorksheet->endElementNS( XML_x14, XML_id );
+
+    rWorksheet->endElement( XML_ext );
+    rWorksheet->endElement( XML_extLst );
+
     rWorksheet->endElement( XML_cfRule );
 
     // OOXTODO: XML_extLst
@@ -1120,7 +1144,7 @@ void XclExpDataBar::SaveXml( XclExpXmlStream& rStrm )
 
 // ----------------------------------------------------------------------------
 
-XclExpCondFormatBuffer::XclExpCondFormatBuffer( const XclExpRoot& rRoot ) :
+XclExpCondFormatBuffer::XclExpCondFormatBuffer( const XclExpRoot& rRoot, XclExtLstRef xExtLst ) :
     XclExpRoot( rRoot )
 {
     if( const ScConditionalFormatList* pCondFmtList = GetDoc().GetCondFormList(GetCurrScTab()) )
@@ -1128,7 +1152,7 @@ XclExpCondFormatBuffer::XclExpCondFormatBuffer( const XclExpRoot& rRoot ) :
         for( ScConditionalFormatList::const_iterator itr = pCondFmtList->begin();
                         itr != pCondFmtList->end(); ++itr)
         {
-            XclExpCondfmtList::RecordRefType xCondfmtRec( new XclExpCondfmt( GetRoot(), *itr ) );
+            XclExpCondfmtList::RecordRefType xCondfmtRec( new XclExpCondfmt( GetRoot(), *itr, xExtLst ) );
             if( xCondfmtRec->IsValid() )
                 maCondfmtList.AppendRecord( xCondfmtRec );
         }

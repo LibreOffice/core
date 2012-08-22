@@ -26,6 +26,9 @@
  * instead of those above.
  */
 
+#ifndef SC_COLORSCALE_HXX
+#define SC_COLORSCALE_HXX
+
 #include <boost/ptr_container/ptr_vector.hpp>
 #include <boost/scoped_ptr.hpp>
 #include <formula/grammar.hxx>
@@ -257,5 +260,7 @@ private:
 
     boost::scoped_ptr<ScDataBarFormatData> mpFormatData;
 };
+
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

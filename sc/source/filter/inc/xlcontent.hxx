@@ -180,6 +180,7 @@ const sal_uInt16 EXC_WQSETT_FORMATFULL      = 0x0003;
 // (0x0804) WEBQRYTABLES
 const sal_uInt16 EXC_ID_WQTABLES            = 0x0804;
 
+const sal_uInt16 EXC_ID_EXTLST              = 0x9988;       /// it is just a random number
 // ============================================================================
 
 #endif

@@ -36,6 +36,7 @@
 #include "xeroot.hxx"
 #include "xestring.hxx"
 #include "xeformula.hxx"
+#include "xeextlst.hxx"
 
 #include "colorscale.hxx"
 
@@ -222,7 +223,7 @@ class ScConditionalFormat;
 class XclExpCondfmt : public XclExpRecord, protected XclExpRoot
 {
 public:
-    explicit            XclExpCondfmt( const XclExpRoot& rRoot, const ScConditionalFormat& rCondFormat );
+    explicit            XclExpCondfmt( const XclExpRoot& rRoot, const ScConditionalFormat& rCondFormat, XclExtLstRef xExtLst );
     virtual             ~XclExpCondfmt();
 
     /** Returns true, if this conditional format contains at least one cell range and CF record. */
@@ -263,7 +264,7 @@ private:
 class XclExpDataBar : public XclExpRecord, protected XclExpRoot
 {
 public:
-    explicit XclExpDataBar( const XclExpRoot& rRoot, const ScDataBarFormat& rFormat, sal_Int32 nPriority );
+    explicit XclExpDataBar( const XclExpRoot& rRoot, const ScDataBarFormat& rFormat, sal_Int32 nPriority, XclExtLstRef xExtLst );
 
     virtual void SaveXml( XclExpXmlStream& rStrm );
 private:
@@ -282,7 +283,7 @@ class XclExpCondFormatBuffer : public XclExpRecordBase, protected XclExpRoot
 {
 public:
     /** Constructs CONDFMT and CF records containing the conditional formats of the current sheet. */
-    explicit            XclExpCondFormatBuffer( const XclExpRoot& rRoot );
+    explicit            XclExpCondFormatBuffer( const XclExpRoot& rRoot, XclExtLstRef xExtLst );
 
     /** Writes all contained CONDFMT records with their CF records. */
     virtual void        Save( XclExpStream& rStrm );

@@ -5661,6 +5661,7 @@ wrapcoords
 writeProtection
 wsDr
 x
+x14
 xAlign
 xIllusions
 xMode
@@ -5676,6 +5677,7 @@ xfrmType
 xl2000
 xl97
 xlm
+xm
 xml
 xmlBased
 xmlCellPr
