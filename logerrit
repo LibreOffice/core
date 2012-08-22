@@ -146,6 +146,7 @@ case "$1" in
 		esac
 		read -p 'is the code looking good (+), bad (-) or none of that ()? ' CODEREVIEW
 		ask_tristate $CODEREVIEW
+		SUBMITFLAG=""
 		case "$ANSWER" in
 			"y")
 				read -p 'do you approve the change (+) too, or prefer someone else to do that ()? ' CODEREVIEW
@@ -153,6 +154,7 @@ case "$1" in
 				case "$ANSWER" in
 					"y")
 						CODEREVIEWFLAG="--code-review=2"
+						SUBMITFLAG="--submit"
 					;;
 					"n")
 						CODEREVIEWFLAG="--code-review=1"
@@ -185,7 +187,7 @@ case "$1" in
 		esac
 		read -p "please type a friendly comment$MESSAGEREQ: " MESSAGE
 		get_REVISION_for_change $CHANGEID
-		ssh ${GERRITHOST?} gerrit review -m \"$MESSAGE\" $VERIFIEDFLAG $CODEREVIEWFLAG $REVISION
+		ssh ${GERRITHOST?} gerrit review -m \"$MESSAGE\" $VERIFIEDFLAG $CODEREVIEWFLAG $SUBMITFLAG $REVISION
 	;;
 	checkout)
 		get_SHA_for_change $2
