@@ -58,8 +58,8 @@ String RID_SVXSTR_TRANSPARENT
 {
     Text [ en-US ] = "No Fill" ;
 };
-String RID_SVXSTR_FILLPATTERN
 
+String RID_SVXSTR_FILLPATTERN
 {
     Text [ en-US ] = "Pattern" ;
 };
