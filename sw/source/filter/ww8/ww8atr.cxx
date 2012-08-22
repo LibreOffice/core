@@ -229,6 +229,13 @@ void MSWordExportBase::ExportPoolItemsToCHP( sw::PoolItems &rItems, sal_uInt16 n
         sal_uInt16 nWhich = pItem->Which();
         if ( ( isCHRATR( nWhich ) || isTXTATR( nWhich ) ) && CollapseScriptsforWordOk( nScript, nWhich ) )
         {
+             //In the id definition, RES_TXTATR_INETFMT must precede RES_TXTATR_CHARFMT, so that link style can overwrite char style.
+             //and in #i24291# it describes "All we want to do is ensure for now is that if a charfmt exist in the character
+             //properties that it rises to the top and is exported first."
+             //In bug 119649, it is in such situation, so we need to ignore the link style when doing ms word filter exports and
+             //add the second judgement for #i24291# definition.
+             if ( nWhich == RES_TXTATR_INETFMT && ( rItems.begin()->second->Which() == RES_TXTATR_CHARFMT ) )
+                 continue;
             AttrOutput().OutputItem( *pItem );
         }
     }
