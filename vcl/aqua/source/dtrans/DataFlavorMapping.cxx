@@ -569,14 +569,17 @@ NSString* DataFlavorMapper::openOfficeToSystemFlavor(const DataFlavor& oOOFlavor
         }
     }
 
-    if( ! sysFlavor )
-    {
-        OfficeOnlyTypes::const_iterator it = maOfficeOnlyTypes.find( oOOFlavor.MimeType );
-        if( it == maOfficeOnlyTypes.end() )
-            sysFlavor = maOfficeOnlyTypes[ oOOFlavor.MimeType ] = OUStringToNSString( oOOFlavor.MimeType );
-        else
-            sysFlavor = it->second;
-    }
+        return sysFlavor;
+}
+
+NSString* DataFlavorMapper::internalOpenOfficeToSystemFlavor(const DataFlavor& oOOFlavor) const
+{
+    NSString* sysFlavor = NULL;
+    OfficeOnlyTypes::const_iterator it = maOfficeOnlyTypes.find( oOOFlavor.MimeType );
+    if( it == maOfficeOnlyTypes.end() )
+        sysFlavor = maOfficeOnlyTypes[ oOOFlavor.MimeType ] = OUStringToNSString( oOOFlavor.MimeType );
+    else
+        sysFlavor = it->second;
 
     return sysFlavor;
 }
@@ -702,6 +705,8 @@ NSArray* DataFlavorMapper::flavorSequenceToTypesArray(const com::sun::star::uno:
   sal_uInt32 nFlavors = flavors.getLength();
   NSMutableArray* array = [[NSMutableArray alloc] initWithCapacity: 1];
 
+  bool bNeedDummyInternalFlavor (true);
+
   for (sal_uInt32 i = 0; i < nFlavors; i++)
   {
       if( flavors[i].MimeType.compareToAscii( "image/bmp", 9 ) == 0 )
@@ -712,6 +717,10 @@ NSArray* DataFlavorMapper::flavorSequenceToTypesArray(const com::sun::star::uno:
       else
       {
           NSString* str = openOfficeToSystemFlavor(flavors[i]);
+          if (str == NULL)
+              str = internalOpenOfficeToSystemFlavor(flavors[i]);
+          else
+              bNeedDummyInternalFlavor = false;
 
           if (str != NULL)
           {
@@ -724,7 +733,7 @@ NSArray* DataFlavorMapper::flavorSequenceToTypesArray(const com::sun::star::uno:
    // #i89462# #i90747#
    // in case no system flavor was found to report
    // report at least one so D&D between OOo targets works
-  if( [array count] == 0 )
+  if( [array count] == 0 || bNeedDummyInternalFlavor)
   {
       [array addObject: PBTYPE_DUMMY_INTERNAL];
   }

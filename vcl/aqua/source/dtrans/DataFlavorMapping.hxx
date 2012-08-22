@@ -132,6 +132,8 @@ private:
    */
   bool isValidMimeContentType(const rtl::OUString& contentType) const;
 
+  NSString* internalOpenOfficeToSystemFlavor(const com::sun::star::datatransfer::DataFlavor& oooDataFlavor) const;
+
 private:
   ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XMimeContentTypeFactory> mrXMimeCntFactory;
   typedef std::hash_map< rtl::OUString, NSString*, rtl::OUStringHash > OfficeOnlyTypes;
