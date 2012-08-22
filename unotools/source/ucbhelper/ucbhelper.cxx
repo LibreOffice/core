@@ -191,11 +191,7 @@ bool utl::UCBContentHelper::GetTitle(
 {
     assert(title != 0);
     try {
-        *title = content(url).
-            getPropertyValue(
-                rtl::OUString("Title")).
-            get<rtl::OUString>();
-        return true;
+        return content(url).getPropertyValue(rtl::OUString("Title")) >>= *title;
     } catch (css::uno::RuntimeException const &) {
         throw;
     } catch (css::ucb::CommandAbortedException const &) {
@@ -300,10 +296,13 @@ bool utl::UCBContentHelper::MakeFolder(
 
 sal_Int64 utl::UCBContentHelper::GetSize(rtl::OUString const & url) {
     try {
-        return
-            content(url).getPropertyValue(
-                rtl::OUString("Size")).
-            get<sal_Int64>();
+        sal_Int64 n = 0;
+        bool ok = (content(url).getPropertyValue(rtl::OUString("Size")) >>= n);
+        SAL_INFO_IF(
+            !ok, "unotools",
+            "UCBContentHelper::GetSize(" << url
+                << "): Size cannot be determined");
+        return n;
     } catch (css::uno::RuntimeException const &) {
         throw;
     } catch (css::ucb::CommandAbortedException const &) {

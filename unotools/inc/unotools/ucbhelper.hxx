@@ -38,6 +38,10 @@ UNOTOOLS_DLLPUBLIC bool IsDocument(rtl::OUString const & url);
 
 UNOTOOLS_DLLPUBLIC bool IsFolder(rtl::OUString const & url);
 
+/// @param title must not be null
+/// @return true iff title has been set (i.e., if obtaining the "Title" property
+///     of the given content yields a non-void value without raising a
+///     non-RuntimeException; RuntimeExceptions are passed through)
 UNOTOOLS_DLLPUBLIC bool GetTitle(
     rtl::OUString const & url, rtl::OUString * title);
 
@@ -50,6 +54,9 @@ UNOTOOLS_DLLPUBLIC bool MakeFolder(
     ucbhelper::Content & parent, rtl::OUString const & title,
     ucbhelper::Content & result, bool exclusive = false);
 
+/// @return the value of the "Size" property of the given content, or zero if
+///     obtaining the property yields a void value or raises a
+///     non-RuntimeException (RuntimeExceptions are passed through)
 UNOTOOLS_DLLPUBLIC sal_Int64 GetSize(rtl::OUString const & url);
 
 UNOTOOLS_DLLPUBLIC bool IsYounger(
