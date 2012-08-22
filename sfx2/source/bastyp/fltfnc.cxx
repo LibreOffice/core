@@ -979,11 +979,12 @@ void SfxFilterContainer::ReadSingleFilter_Impl(
             {
                 lFilterProperties[nFilterProperty].Value >>= sServiceName;
             }
-            else if (lFilterProperties[nFilterProperty].Name == "FileSaveExtension")
+            else if (lFilterProperties[nFilterProperty].Name == "ExportExtension")
             {
                 // Extension preferred by the filter.  This takes precedence
                 // over those that are given in the file format type.
                 lFilterProperties[nFilterProperty].Value >>= sExtension;
+                sExtension = OUString("*.") + sExtension;
             }
             else if ( lFilterProperties[nFilterProperty].Name == "Type" )
             {

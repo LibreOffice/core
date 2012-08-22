@@ -4,7 +4,7 @@
         <prop oor:name="FilterService"/>
         <prop oor:name="UserData"><value></value></prop>
         <prop oor:name="FileFormatVersion"><value>0</value></prop>
-        <prop oor:name="FileSaveExtension"><value>*.csv</value></prop>
+        <prop oor:name="ExportExtension"><value>csv</value></prop>
         <prop oor:name="Type"><value>generic_Text</value></prop>
         <prop oor:name="TemplateName"/>
         <prop oor:name="DocumentService"><value>com.sun.star.sheet.SpreadsheetDocument</value></prop>
