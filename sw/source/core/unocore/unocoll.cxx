@@ -86,6 +86,7 @@
 #include <vbahelper/vbaaccesshelper.hxx>
 #include <basic/basmgr.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/sequenceasvector.hxx>
 
 using ::rtl::OUString;
 using namespace ::com::sun::star;
@@ -1643,7 +1644,20 @@ sal_Int32 SwXBookmarks::getCount(void)
     SolarMutexGuard aGuard;
     if(!IsValid())
         throw uno::RuntimeException();
-    return GetDoc()->getIDocumentMarkAccess()->getBookmarksCount();
+
+    sal_Int32 count(0);
+    IDocumentMarkAccess* const pMarkAccess = GetDoc()->getIDocumentMarkAccess();
+    for (IDocumentMarkAccess::const_iterator_t ppMark =
+            pMarkAccess->getBookmarksBegin();
+         ppMark != pMarkAccess->getBookmarksEnd(); ++ppMark)
+    {
+        if (IDocumentMarkAccess::BOOKMARK ==
+                IDocumentMarkAccess::GetType(**ppMark))
+        {
+            ++count; // only count real bookmarks
+        }
+    }
+    return count;
 }
 
 uno::Any SwXBookmarks::getByIndex(sal_Int32 nIndex)
@@ -1656,12 +1670,26 @@ uno::Any SwXBookmarks::getByIndex(sal_Int32 nIndex)
     if(nIndex < 0 || nIndex >= pMarkAccess->getBookmarksCount())
         throw IndexOutOfBoundsException();
 
-    uno::Any aRet;
-    ::sw::mark::IMark* pBkmk = pMarkAccess->getBookmarksBegin()[nIndex].get();
-    const uno::Reference< text::XTextContent > xRef =
-        SwXBookmark::CreateXBookmark(*GetDoc(), *pBkmk);
-    aRet <<= xRef;
-    return aRet;
+    sal_Int32 count(0);
+    for (IDocumentMarkAccess::const_iterator_t ppMark =
+            pMarkAccess->getBookmarksBegin();
+         ppMark != pMarkAccess->getBookmarksEnd(); ++ppMark)
+    {
+        if (IDocumentMarkAccess::BOOKMARK ==
+                IDocumentMarkAccess::GetType(**ppMark))
+        {
+            if (count == nIndex)
+            {
+                uno::Any aRet;
+                const uno::Reference< text::XTextContent > xRef =
+                    SwXBookmark::CreateXBookmark(*GetDoc(), **ppMark);
+                aRet <<= xRef;
+                return aRet;
+            }
+            ++count; // only count real bookmarks
+        }
+    }
+    throw IndexOutOfBoundsException();
 }
 
 uno::Any SwXBookmarks::getByName(const rtl::OUString& rName)
@@ -1690,13 +1718,19 @@ uno::Sequence< OUString > SwXBookmarks::getElementNames(void)
     if(!IsValid())
         throw uno::RuntimeException();
 
+    ::comphelper::SequenceAsVector< ::rtl::OUString > ret;
     IDocumentMarkAccess* const pMarkAccess = GetDoc()->getIDocumentMarkAccess();
-    uno::Sequence<OUString> aSeq(pMarkAccess->getBookmarksCount());
-    sal_Int32 nCnt = 0;
-    for(IDocumentMarkAccess::const_iterator_t ppMark = pMarkAccess->getBookmarksBegin();
-        ppMark != pMarkAccess->getBookmarksEnd();)
-        aSeq[nCnt++] = (*ppMark++)->GetName();
-    return aSeq;
+    for (IDocumentMarkAccess::const_iterator_t ppMark =
+            pMarkAccess->getBookmarksBegin();
+         ppMark != pMarkAccess->getBookmarksEnd(); ++ppMark)
+    {
+        if (IDocumentMarkAccess::BOOKMARK ==
+                IDocumentMarkAccess::GetType(**ppMark))
+        {
+            ret.push_back((*ppMark)->GetName()); // only add real bookmarks
+        }
+    }
+    return ret.getAsConstList();
 }
 
 sal_Bool SwXBookmarks::hasByName(const OUString& rName)
@@ -1722,7 +1756,19 @@ sal_Bool SwXBookmarks::hasElements(void)
     SolarMutexGuard aGuard;
     if(!IsValid())
         throw uno::RuntimeException();
-    return GetDoc()->getIDocumentMarkAccess()->getBookmarksCount() != 0;
+
+    IDocumentMarkAccess* const pMarkAccess = GetDoc()->getIDocumentMarkAccess();
+    for (IDocumentMarkAccess::const_iterator_t ppMark =
+            pMarkAccess->getBookmarksBegin();
+         ppMark != pMarkAccess->getBookmarksEnd(); ++ppMark)
+    {
+        if (IDocumentMarkAccess::BOOKMARK ==
+                IDocumentMarkAccess::GetType(**ppMark))
+        {
+            return true;
+        }
+    }
+    return false;
 }
 
 SwXNumberingRulesCollection::SwXNumberingRulesCollection( SwDoc* _pDoc ) :
