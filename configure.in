@@ -2848,8 +2848,10 @@ if test "$_os" = "WINNT" -a "$WITH_MINGW" != yes; then
     AC_MSG_CHECKING([whether to build a 64-bit LibreOffice])
     if test "$enable_64_bit" = "" -o "$enable_64_bit" = "no"; then
         AC_MSG_RESULT([no])
+		SDK_ARCH="x86"
     else
         AC_MSG_RESULT([yes])
+		SDK_ARCH="x64"
         BITNESS_OVERRIDE=64
     fi
 
@@ -4664,7 +4666,9 @@ if test "$build_os" = "cygwin"; then
         winsdktest=`./oowintool --windows-sdk-home`
         if test -x "$winsdktest/Bin/midl.exe"; then
             MIDL_PATH="$winsdktest/Bin"
-        fi
+		elif test -x "$winsdktest/Bin/$SDK_ARCH/midl.exe"; then
+				MIDL_PATH="$winsdktest/Bin/$SDK_ARCH"
+		fi
     fi
     if test ! -x "$MIDL_PATH/midl.exe"; then
         AC_MSG_ERROR([midl.exe not found. Make sure it's in PATH or use --with-midl-path])
@@ -4701,7 +4705,7 @@ if test "$build_os" = "cygwin"; then
     if test -n "$with_dotnet_framework_home"; then
         with_dotnet_framework_home=`cygpath -u "$with_dotnet_framework_home"`
     fi
-    if test -f "$with_dotnet_framework_home/lib/mscoree.lib"; then
+	    if test -f "$with_dotnet_framework_home/lib/mscoree.lib"; then
         DOTNET_FRAMEWORK_HOME="$with_dotnet_framework_home"
     fi
     if test -z "$DOTNET_FRAMEWORK_HOME"; then
@@ -4710,12 +4714,12 @@ if test "$build_os" = "cygwin"; then
             DOTNET_FRAMEWORK_HOME="$frametest"
         else
             frametest=`./oowintool --windows-sdk-home`
-            if test -f "$frametest/lib/mscoree.lib"; then
+            if test -f "$frametest/lib/mscoree.lib" -o -f "$frametest/lib/win8/um/$SDK_ARCH/mscoree.lib"; then
                 DOTNET_FRAMEWORK_HOME="$frametest"
             fi
         fi
     fi
-    if test ! -f "$DOTNET_FRAMEWORK_HOME/lib/mscoree.lib"; then
+    if test ! -f "$DOTNET_FRAMEWORK_HOME/lib/mscoree.lib" -a ! -f "$DOTNET_FRAMEWORK_HOME/lib/win8/um/$SDK_ARCH/mscoree.lib"; then
         AC_MSG_ERROR([mscoree.lib (.NET Framework) not found. Make sure you use --with-dotnet-framework-home])
     fi
     AC_MSG_RESULT(found)
@@ -9017,10 +9021,16 @@ problem can be found in issue 49856.])
              -a -f "$WINDOWS_SDK_HOME/Include/SqlUcode.h" \
              -a -f "$WINDOWS_SDK_HOME/Include/usp10.h"; then
             HAVE_PSDK_H="yes"
+		elif test -f "$WINDOWS_SDK_HOME/Include/um/adoint.h" \
+             -a -f "$WINDOWS_SDK_HOME/Include/um/SqlUcode.h" \
+             -a -f "$WINDOWS_SDK_HOME/Include/um/usp10.h"; then
+            HAVE_PSDK_H="yes"
         else
             HAVE_PSDK_H="no"
         fi
         if test -f "$WINDOWS_SDK_HOME/lib/user32.lib"; then
+            HAVE_PSDK_LIB="yes"
+		elif test -f "$WINDOWS_SDK_HOME/lib/win8/um/$SDK_ARCH/user32.lib"; then
             HAVE_PSDK_LIB="yes"
         else
             HAVE_PSDK_LIB="no"
@@ -9034,7 +9044,12 @@ the  Windows SDK are installed.])
         if test ! -x "$WINDOWS_SDK_HOME/bin/msiinfo.exe" \
              -o ! -x "$WINDOWS_SDK_HOME/bin/msidb.exe" \
              -o ! -x "$WINDOWS_SDK_HOME/bin/uuidgen.exe" \
-             -o ! -x "$WINDOWS_SDK_HOME/bin/msitran.exe"; then
+             -o ! -x "$WINDOWS_SDK_HOME/bin/msitran.exe"; then :
+		elif test ! -x "$WINDOWS_SDK_HOME/bin/x86/msiinfo.exe" \
+             -o ! -x "$WINDOWS_SDK_HOME/bin/x86/msidb.exe" \
+             -o ! -x "$WINDOWS_SDK_HOME/bin/x86/uuidgen.exe" \
+             -o ! -x "$WINDOWS_SDK_HOME/bin/x86/msitran.exe"; then :
+		else
             AC_MSG_ERROR([Some (all) files of the Windows Installer SDK are missing, please install.])
         fi
     fi
@@ -9047,6 +9062,8 @@ the  Windows SDK are installed.])
         AC_MSG_RESULT([found Windows SDK 6.0 ($WINDOWS_SDK_HOME)])
     elif echo $WINDOWS_SDK_HOME | grep "v7" >/dev/null 2>/dev/null; then
         AC_MSG_RESULT([found Windows SDK 7 ($WINDOWS_SDK_HOME)])
+	elif echo $WINDOWS_SDK_HOME | grep "8.0" >/dev/null 2>/dev/null; then
+        AC_MSG_RESULT([found Windows SDK 8.0 ($WINDOWS_SDK_HOME)])
     else
         AC_MSG_ERROR([Found legacy Windows Platform SDK ($WINDOWS_SDK_HOME)])
     fi
@@ -9054,6 +9071,9 @@ the  Windows SDK are installed.])
     WINDOWS_SDK_HOME="$formatted_path"
     if test "$build_os" = "cygwin"; then
         SOLARINC="$SOLARINC -I$WINDOWS_SDK_HOME/include -I$COMPATH/include"
+		if test -d "$WINDOWS_SDK_HOME/include/um"; then
+			SOLARINC="$SOLARINC -I$WINDOWS_SDK_HOME/include/um -I$WINDOWS_SDK_HOME/include/shared"
+		fi
     fi
 fi
 AC_SUBST(WINDOWS_SDK_HOME)
@@ -12463,9 +12483,11 @@ if test "$build_os" = "cygwin"; then
     if test "$BITNESS_OVERRIDE" = 64; then
         ILIB="$ILIB;$COMPATH/lib/amd64"
         ILIB="$ILIB;$WINDOWS_SDK_HOME/lib64"
+		ILIB="$ILIB;$WINDOWS_SDK_HOME/lib/win8/um/x64"
     else
         ILIB="$ILIB;$COMPATH/lib"
         ILIB="$ILIB;$WINDOWS_SDK_HOME/lib"
+		ILIB="$ILIB;$WINDOWS_SDK_HOME/lib/win8/um/x86"
     fi
     ILIB="$ILIB;$DOTNET_FRAMEWORK_HOME/lib"
 
