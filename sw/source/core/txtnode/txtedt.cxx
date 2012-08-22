@@ -71,6 +71,7 @@
 #include <txtatr.hxx>
 #include <fmtautofmt.hxx>
 #include <istyleaccess.hxx>
+#include <unicode/uchar.h>
 
 #include <unomid.h>
 
@@ -95,14 +96,6 @@ using namespace ::com::sun::star::smarttags;
 // Achtung: in edlingu.cxx stehen die Variablen!
 extern const SwTxtNode *pLinguNode;
 extern       SwTxtFrm  *pLinguFrm;
-
-bool lcl_IsSkippableWhiteSpace( xub_Unicode cCh )
-{
-    return 0x3000 == cCh ||
-           ' ' == cCh ||
-           '\t' == cCh ||
-           0x0a == cCh;
-}
 
 /*
  * This has basically the same function as SwScriptInfo::MaskHiddenRanges,
@@ -731,7 +724,7 @@ sal_Bool SwScanner::NextWord()
         // skip non-letter characters:
         while ( nBegin < aText.getLength() )
         {
-            if ( !lcl_IsSkippableWhiteSpace( aText[nBegin] ) )
+            if ( !u_isspace( aText[nBegin] ) )
             {
                 if ( !pLanguage )
                 {
@@ -1877,7 +1870,7 @@ void SwTxtNode::CountWords( SwDocStat& rStat,
     //do the count
     // all counts exclude hidden paras and hidden+redlined within para
     // definition of space/white chars in SwScanner (and BreakIter!)
-    // uses both lcl_IsSkippableWhiteSpace and BreakIter getWordBoundary in SwScanner
+    // uses both u_isspace and BreakIter getWordBoundary in SwScanner
     sal_uInt32 nTmpWords = 0;        // count of all words
     sal_uInt32 nTmpAsianWords = 0;   //count of all Asian codepoints
     sal_uInt32 nTmpChars = 0;        // count of all chars

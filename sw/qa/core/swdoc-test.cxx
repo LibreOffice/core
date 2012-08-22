@@ -423,6 +423,7 @@ void SwDocTest::testSwScanner()
     }
 
     //See https://issues.apache.org/ooo/show_bug.cgi?id=89042
+    //See https://bugs.freedesktop.org/show_bug.cgi?id=53399
     {
         SwDocStat aDocStat;
 
@@ -439,15 +440,20 @@ void SwDocTest::testSwScanner()
         CPPUNIT_ASSERT_MESSAGE("Should be 3", aDocStat.nWord == 3);
 
         const sal_Unicode aShouldBeFive[] = {
+            // f    r       e       n       c       h       space
             0x0046, 0x0072, 0x0065, 0x006E, 0x0063, 0x0068, 0x0020,
+            // <<   nbsp    s       a       v       o       i
             0x00AB, 0x00A0, 0x0073, 0x0061, 0x0076, 0x006F, 0x0069,
-            0x0072, 0x0020, 0x0063, 0x0061, 0x006C, 0x0063, 0x0075,
-            0x006C, 0x0065, 0x0072, 0x00A0, 0x00BB
+            // r    nnbsp   c       a       l       c       u
+            0x0072, 0x202f, 0x0063, 0x0061, 0x006C, 0x0063, 0x0075,
+            // l    e       r       idspace >>
+            0x006C, 0x0065, 0x0072, 0x3000, 0x00BB
         };
 
         m_pDoc->AppendTxtNode(*aPaM.GetPoint());
         m_pDoc->InsertString(aPaM, rtl::OUString(aShouldBeFive, SAL_N_ELEMENTS(aShouldBeFive)));
         pTxtNode = aPaM.GetNode()->GetTxtNode();
+        aDocStat.Reset();
         pTxtNode->CountWords(aDocStat, 0, SAL_N_ELEMENTS(aShouldBeFive));
         CPPUNIT_ASSERT_MESSAGE("Should be 5", aDocStat.nWord == 5);
     }
