@@ -8047,7 +8047,8 @@ dnl ===================================================================
 dnl Check for system mozilla headers
 dnl ===================================================================
 HAVE_NON_CONST_NPP_GETMIMEDESCRIPTION=
-AC_MSG_CHECKING([which mozilla headers to use])
+AC_MSG_CHECKING([which Mozilla headers to use])
+
 if test "$with_system_mozilla_headers" = "yes"; then
     AC_MSG_RESULT([external])
     SYSTEM_MOZILLA_HEADERS=YES
@@ -8083,7 +8084,11 @@ if test "$with_system_mozilla_headers" = "yes"; then
     CFLAGS=$save_CFLAGS
     AC_LANG_POP([C])
 else
-    AC_MSG_RESULT([internal])
+    if test "$enable_mozilla" = "no"; then
+        AC_MSG_RESULT([none])
+    else
+        AC_MSG_RESULT([internal])
+    fi
     SYSTEM_MOZILLA_HEADERS=NO
 fi
 AC_SUBST(MOZILLA_HEADERS_CFLAGS)
