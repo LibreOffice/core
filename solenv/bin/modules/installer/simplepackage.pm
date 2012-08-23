@@ -60,6 +60,21 @@ sub check_simple_packager_project
     }
 }
 
+####################################################
+# Detecting the directory with extensions
+####################################################
+
+sub get_extensions_dir
+{
+    my ( $subfolderdir ) = @_;
+
+    my $extensiondir = $subfolderdir . $installer::globals::separator;
+    if ( $installer::globals::officedirhostname ne "" ) { $extensiondir = $extensiondir . $installer::globals::officedirhostname . $installer::globals::separator; }
+    my $extensionsdir = $extensiondir . "share" . $installer::globals::separator . "extensions";
+
+    return $extensionsdir;
+}
+
 ########################################################################
 # Getting the translation file for the Mac Language Pack installer
 ########################################################################
@@ -670,6 +685,9 @@ sub create_simple_package
 
     installer::logger::print_message( "... removing superfluous directories ...\n" );
     installer::logger::include_header_into_logfile("Removing superfluous directories:");
+
+    my $extensionfolder = get_extensions_dir($subfolderdir);
+    installer::systemactions::remove_empty_dirs_in_folder($extensionfolder);
 
     if ( $installer::globals::compiler =~ /^unxmacx/ )
     {
