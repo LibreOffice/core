@@ -10,6 +10,7 @@
 #include <stdio.h>
 
 #ifdef LINUX
+#include <glib.h>
 #include <gio/gio.h>
 #include <sys/unistd.h>
 #include <sys/socket.h>
@@ -53,6 +54,7 @@ struct oslSocketImpl {
 void BluetoothServer::execute()
 {
 #ifdef LINUX
+#ifdef GLIB_VERSION_2_26
     g_type_init();
     GError* aError = NULL;
     GDBusConnection* aConnection = g_bus_get_sync( G_BUS_TYPE_SYSTEM, NULL, &aError );
@@ -191,7 +193,8 @@ void BluetoothServer::execute()
 
     }
 
-#endif
+#endif // GLIB_VERSION_2_26
+#endif // LINUX
 
 #ifdef WIN32
 
