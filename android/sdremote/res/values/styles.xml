@@ -24,6 +24,8 @@
         <item name="background">@color/orange</item>
         <item name="android:titleTextStyle">@style/Theme.ImpressRemote.ActionBar.Title</item>
         <item name="titleTextStyle">@style/Theme.ImpressRemote.ActionBar.Title</item>
+        <item name="backgroundSplit">@color/text_grey</item>
+    <item name="android:backgroundSplit">@color/text_grey</item>
     </style>
 
     <style name="Theme.ImpressRemote.ActionBarWidget" parent="android:style/Widget.Holo.Light">
@@ -54,6 +56,7 @@
         <item name="android:windowBackground">@color/light_grey</item>
         <item name="android:homeAsUpIndicator">@drawable/up_indicator_white</item>
         <item name="android:textColor">@color/text_grey</item>
+
     </style>
 
 </resources>

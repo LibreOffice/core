@@ -16,21 +16,29 @@ import org.libreoffice.impressremote.communication.CommunicationService;
 import org.libreoffice.impressremote.communication.Server;
 import org.libreoffice.impressremote.communication.Server.Protocol;
 
+import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v4.content.LocalBroadcastManager;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.actionbarsherlock.app.SherlockActivity;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuInflater;
+import com.actionbarsherlock.view.MenuItem;
 
 public class SelectorActivity extends SherlockActivity {
 
@@ -66,6 +74,73 @@ public class SelectorActivity extends SherlockActivity {
     protected void onDestroy() {
         super.onDestroy();
         LocalBroadcastManager.getInstance(this).unregisterReceiver(mListener);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getSupportMenuInflater();
+        inflater.inflate(R.menu.selector_activity, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+        case R.id.menu_selector_addServer:
+
+            AlertDialog.Builder builder;
+            AlertDialog alertDialog;
+
+            LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
+            final View layout = inflater.inflate(R.layout.dialog_addserver,
+                            null);
+
+            //            TextView text = (TextView) layout.findViewById(R.id.text);
+            //            text.setText("Hello, this is a custom dialog!");
+            //            ImageView image = (ImageView) layout.findViewById(R.id.image);
+            //            image.setImageResource(R.drawable.android);
+
+            builder = new AlertDialog.Builder(this);
+            builder.setView(layout);
+            builder.setTitle(R.string.addserver);
+            builder.setPositiveButton(R.string.addserver_add,
+                            new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog,
+                                                int which) {
+                                    EditText aAddressEntry = (EditText) layout
+                                                    .findViewById(R.id.addserver_addressentry);
+                                    EditText aNameEntry = (EditText) layout
+                                                    .findViewById(R.id.addserver_nameentry);
+                                    CheckBox aRememberServer = (CheckBox) layout
+                                                    .findViewById(R.id.addserver_remember);
+                                    mCommunicationService
+                                                    .addServer(aAddressEntry
+                                                                    .getText()
+                                                                    .toString(),
+                                                                    aNameEntry.getText()
+                                                                                    .toString(),
+                                                                    aRememberServer.isChecked());
+                                    refreshLists();
+                                }
+                            });
+            builder.setNegativeButton(R.string.addserver_cancel, null);
+            alertDialog = builder.create();
+            alertDialog.show();
+
+            //            Context mContext = getApplicationContext();
+            //            Dialog dialog = new Dialog(mContext);
+            //
+            //            dialog.setContentView(R.layout.dialog_addserver);
+            //            dialog.setTitle(R.string.addserver);
+
+            //            TextView text = (TextView) dialog.findViewById(R.id.text);
+            //            text.setText("Hello, this is a custom dialog!");
+            //            ImageView image = (ImageView) dialog.findViewById(R.id.image);
+            //            image.setImageResource(R.drawable.android);
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override

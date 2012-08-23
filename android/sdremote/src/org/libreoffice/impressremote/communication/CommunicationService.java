@@ -9,10 +9,17 @@
 package org.libreoffice.impressremote.communication;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
+
+import org.libreoffice.impressremote.communication.Server.Protocol;
 
 import android.app.Service;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.os.Binder;
 import android.os.IBinder;
 
@@ -173,6 +180,8 @@ public class CommunicationService extends Service implements Runnable {
     @Override
     public void onCreate() {
         // TODO Create a notification (if configured).
+        loadServersFromPreferences();
+
         mThread = new Thread(this);
         mThread.start();
     }
@@ -180,6 +189,8 @@ public class CommunicationService extends Service implements Runnable {
     @Override
     public void onDestroy() {
         // TODO Destroy the notification (as necessary).
+        mManualServers.clear();
+
         mThread.interrupt();
         mThread = null;
     }
@@ -192,6 +203,7 @@ public class CommunicationService extends Service implements Runnable {
         ArrayList<Server> aServers = new ArrayList<Server>();
         aServers.addAll(mNetworkFinder.getServerList());
         aServers.addAll(mBluetoothFinder.getServerList());
+        aServers.addAll(mManualServers.values());
         return aServers.toArray(new Server[aServers.size()]);
     }
 
@@ -203,5 +215,45 @@ public class CommunicationService extends Service implements Runnable {
         return mReceiver.isSlideShowRunning();
     }
 
+    /**
+     * Manually add a new (network) server to the list of servers.
+     * @param aAddress
+     * @param aRemember
+     */
+    public void addServer(String aAddress, String aName, boolean aRemember) {
+        for (String aServer : mManualServers.keySet()) {
+            if (aServer.equals(aAddress))
+                return;
+        }
+        mManualServers.put(aAddress, new Server(Protocol.NETWORK, aAddress,
+                        aName, 0));
+        if (aRemember) {
+            SharedPreferences aPref = getSharedPreferences(SERVERSTORAGE_KEY,
+                            MODE_PRIVATE);
+            Editor aEditor = aPref.edit();
+            aEditor.putString(aAddress, aName);
+            aEditor.apply();
+        }
+    }
+
+    /**
+     * Key to use with getSharedPreferences to obtain a Map of stored servers.
+     * The keys are the ip/hostnames, the values are the friendly names.
+     */
+    private static final String SERVERSTORAGE_KEY = "sdremote_storedServers";
+    private HashMap<String, Server> mManualServers = new HashMap<String, Server>();
+
+    void loadServersFromPreferences() {
+        SharedPreferences aPref = getSharedPreferences(SERVERSTORAGE_KEY,
+                        MODE_PRIVATE);
+
+        Map<String, String> aStoredMap = (Map<String, String>) aPref.getAll();
+
+        for (Entry<String, String> aServerEntry : aStoredMap.entrySet()) {
+            mManualServers.put(aServerEntry.getKey(), new Server(
+                            Protocol.NETWORK, aServerEntry.getKey(),
+                            aServerEntry.getValue(), 0));
+        }
+    }
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

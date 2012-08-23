@@ -32,5 +32,11 @@
     <string name="about_close">Close</string>
     <string name="about_versionstring">Version: {0} (Build ID: {1})</string>
     <string name="about_copyright">Copyright \u00A9 2012 LibreOffice Contributors and/or their affiliates.</string>
+    <string name="addserver">Add Server</string>
+    <string name="addserver_entername">Server name:</string>
+    <string name="addserver_enteraddress">Server address as IP or hostname:</string>
+    <string name="addserver_remember">Remember this server next time</string>
+    <string name="addserver_add">Add</string>
+    <string name="addserver_cancel">Cancel</string>
 
 </resources>
