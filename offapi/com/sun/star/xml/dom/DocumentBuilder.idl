@@ -1,14 +1,16 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+
 #ifndef __com_sun_star_xml_dom_documentbuilder_idl
 #define __com_sun_star_xml_dom_documentbuilder_idl
+
 #include <com/sun/star/xml/dom/XDocumentBuilder.idl>
+
 module com {  module sun {  module star {  module xml { module dom {
 
-    service DocumentBuilder
-    {
-        interface XDocumentBuilder;
-    };
+service DocumentBuilder : XDocumentBuilder;
+
 };};};};};
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

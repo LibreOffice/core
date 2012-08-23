@@ -33,7 +33,7 @@
 #include "cppuhelper/exc_hlp.hxx"
 #include "osl/file.hxx"
 #include "com/sun/star/uno/XComponentContext.hpp"
-#include "com/sun/star/xml/dom/XDocumentBuilder.hpp"
+#include "com/sun/star/xml/dom/DocumentBuilder.hpp"
 #include "com/sun/star/xml/xpath/XXPathAPI.hpp"
 #include "com/sun/star/io/XActiveDataSource.hpp"
 #include "com/sun/star/io/XActiveDataControl.hpp"
@@ -79,12 +79,7 @@ css::uno::Reference<css::xml::dom::XDocument> BackendDb::getDocument()
     if (!m_doc.is())
     {
         const Reference<css::xml::dom::XDocumentBuilder> xDocBuilder(
-            m_xContext->getServiceManager()->createInstanceWithContext(
-                OUSTR("com.sun.star.xml.dom.DocumentBuilder"),
-                m_xContext ), css::uno::UNO_QUERY);
-        if (!xDocBuilder.is())
-            throw css::uno::RuntimeException(
-                OUSTR(" Could not create service com.sun.star.xml.dom.DocumentBuilder"), 0);
+            css::xml::dom::DocumentBuilder::create(m_xContext) );
 
         ::osl::DirectoryItem item;
         ::osl::File::RC err = ::osl::DirectoryItem::get(m_urlDb, item);

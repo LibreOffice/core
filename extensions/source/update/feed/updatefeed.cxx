@@ -52,7 +52,7 @@
 #include <com/sun/star/ucb/OpenMode.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/task/PasswordContainerInteractionHandler.hpp>
-#include <com/sun/star/xml/dom/XDocumentBuilder.hpp>
+#include <com/sun/star/xml/dom/DocumentBuilder.hpp>
 #include <com/sun/star/xml/xpath/XXPathAPI.hpp>
 
 #include <rtl/ref.hxx>
@@ -416,8 +416,7 @@ UpdateInformationProvider::createInstance(const uno::Reference<uno::XComponentCo
     uno::Reference< ucb::XContentProvider > xContentProvider(xContentIdFactory, uno::UNO_QUERY_THROW);
 
     uno::Reference< xml::dom::XDocumentBuilder > xDocumentBuilder(
-        xServiceManager->createInstanceWithContext( UNISTRING( "com.sun.star.xml.dom.DocumentBuilder" ), xContext ),
-        uno::UNO_QUERY_THROW);
+        xml::dom::DocumentBuilder::create(xContext));
 
     uno::Reference< xml::xpath::XXPathAPI > xXPath(
         xServiceManager->createInstanceWithContext( UNISTRING( "com.sun.star.xml.xpath.XPathAPI" ), xContext ),

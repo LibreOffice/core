@@ -290,6 +290,9 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/util,\
 	UriAbbreviation \
 	URLTransformer \
 ))
+$(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/xml/dom,\
+	DocumentBuilder \
+))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/xml/sax,\
 	FastShapeContextHandler \
 	FastTokenHandler \
@@ -1528,7 +1531,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/xml/cry
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/xml/dom,\
 	SAXDocumentBuilder \
-	DocumentBuilder \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/xml/input,\
 	SaxDocumentHandler \

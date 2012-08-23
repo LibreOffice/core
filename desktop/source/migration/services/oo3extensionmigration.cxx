@@ -46,6 +46,7 @@
 #include <com/sun/star/ucb/NameClash.hpp>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <com/sun/star/xml/xpath/XXPathAPI.hpp>
+#include <com/sun/star/xml/dom/DocumentBuilder.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/deployment/ExtensionManager.hpp>
 
@@ -211,10 +212,7 @@ bool OO3ExtensionMigration::scanDescriptionXml( const ::rtl::OUString& sDescript
 {
     if ( !m_xDocBuilder.is() )
     {
-        m_xDocBuilder = uno::Reference< xml::dom::XDocumentBuilder >(
-            m_ctx->getServiceManager()->createInstanceWithContext(
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.dom.DocumentBuilder")),
-                m_ctx ), uno::UNO_QUERY );
+        m_xDocBuilder = uno::Reference< xml::dom::XDocumentBuilder >( xml::dom::DocumentBuilder::create(m_ctx) );
     }
 
     if ( !m_xSimpleFileAccess.is() )
@@ -223,92 +221,89 @@ bool OO3ExtensionMigration::scanDescriptionXml( const ::rtl::OUString& sDescript
     }
 
     ::rtl::OUString aExtIdentifier;
-    if ( m_xDocBuilder.is() && m_xSimpleFileAccess.is() )
+    try
     {
-        try
+        uno::Reference< io::XInputStream > xIn =
+            m_xSimpleFileAccess->openFileRead( sDescriptionXmlURL );
+
+        if ( xIn.is() )
         {
-            uno::Reference< io::XInputStream > xIn =
-                m_xSimpleFileAccess->openFileRead( sDescriptionXmlURL );
-
-            if ( xIn.is() )
+            uno::Reference< xml::dom::XDocument > xDoc = m_xDocBuilder->parse( xIn );
+            if ( xDoc.is() )
             {
-                uno::Reference< xml::dom::XDocument > xDoc = m_xDocBuilder->parse( xIn );
-                if ( xDoc.is() )
+                uno::Reference< xml::dom::XElement > xRoot = xDoc->getDocumentElement();
+                if ( xRoot.is() && xRoot->getTagName() == "description" )
                 {
-                    uno::Reference< xml::dom::XElement > xRoot = xDoc->getDocumentElement();
-                    if ( xRoot.is() && xRoot->getTagName() == "description" )
+                    uno::Reference< xml::xpath::XXPathAPI > xPath(
+                        m_ctx->getServiceManager()->createInstanceWithContext(
+                            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.xml.xpath.XPathAPI")),
+                            m_ctx),
+                        uno::UNO_QUERY);
+
+                    xPath->registerNS(
+                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("desc")),
+                        xRoot->getNamespaceURI());
+                    xPath->registerNS(
+                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("xlink")),
+                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("http://www.w3.org/1999/xlink")));
+
+                    try
                     {
-                        uno::Reference< xml::xpath::XXPathAPI > xPath(
-                            m_ctx->getServiceManager()->createInstanceWithContext(
-                                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.xml.xpath.XPathAPI")),
-                                m_ctx),
-                            uno::UNO_QUERY);
-
-                        xPath->registerNS(
-                            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("desc")),
-                            xRoot->getNamespaceURI());
-                        xPath->registerNS(
-                            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("xlink")),
-                            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("http://www.w3.org/1999/xlink")));
-
-                        try
-                        {
-                            uno::Reference< xml::dom::XNode > xRootNode( xRoot, uno::UNO_QUERY );
-                            uno::Reference< xml::dom::XNode > xNode(
-                                xPath->selectSingleNode(
-                                    xRootNode,
-                                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("desc:identifier/@value")) ));
-                            if ( xNode.is() )
-                                aExtIdentifier = xNode->getNodeValue();
-                        }
-                        catch ( const xml::xpath::XPathException& )
-                        {
-                        }
-                        catch ( const xml::dom::DOMException& )
-                        {
-                        }
+                        uno::Reference< xml::dom::XNode > xRootNode( xRoot, uno::UNO_QUERY );
+                        uno::Reference< xml::dom::XNode > xNode(
+                            xPath->selectSingleNode(
+                                xRootNode,
+                                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("desc:identifier/@value")) ));
+                        if ( xNode.is() )
+                            aExtIdentifier = xNode->getNodeValue();
+                    }
+                    catch ( const xml::xpath::XPathException& )
+                    {
+                    }
+                    catch ( const xml::dom::DOMException& )
+                    {
                     }
                 }
             }
-
-            if ( !aExtIdentifier.isEmpty() )
-            {
-                // scan extension identifier and try to match with our black list entries
-                for ( sal_uInt32 i = 0; i < m_aBlackList.size(); i++ )
-                {
-                    utl::SearchParam param(m_aBlackList[i], utl::SearchParam::SRCH_REGEXP);
-                    utl::TextSearch  ts(param, LANGUAGE_DONTKNOW);
-
-                    xub_StrLen start = 0;
-                    xub_StrLen end   = static_cast<sal_uInt16>(aExtIdentifier.getLength());
-                    if (ts.SearchFrwrd(aExtIdentifier, &start, &end))
-                        return false;
-                }
-            }
-        }
-        catch ( const ucb::CommandAbortedException& )
-        {
-        }
-        catch ( const uno::RuntimeException& )
-        {
         }
 
-        if ( aExtIdentifier.isEmpty() )
+        if ( !aExtIdentifier.isEmpty() )
         {
-            // Fallback:
-            // Try to use the folder name to match our black list
-            // as some extensions don't provide an identifier in the
-            // description.xml!
+            // scan extension identifier and try to match with our black list entries
             for ( sal_uInt32 i = 0; i < m_aBlackList.size(); i++ )
             {
                 utl::SearchParam param(m_aBlackList[i], utl::SearchParam::SRCH_REGEXP);
                 utl::TextSearch  ts(param, LANGUAGE_DONTKNOW);
 
                 xub_StrLen start = 0;
-                xub_StrLen end   = static_cast<sal_uInt16>(sDescriptionXmlURL.getLength());
-                if (ts.SearchFrwrd(sDescriptionXmlURL, &start, &end))
+                xub_StrLen end   = static_cast<sal_uInt16>(aExtIdentifier.getLength());
+                if (ts.SearchFrwrd(aExtIdentifier, &start, &end))
                     return false;
             }
+        }
+    }
+    catch ( const ucb::CommandAbortedException& )
+    {
+    }
+    catch ( const uno::RuntimeException& )
+    {
+    }
+
+    if ( aExtIdentifier.isEmpty() )
+    {
+        // Fallback:
+        // Try to use the folder name to match our black list
+        // as some extensions don't provide an identifier in the
+        // description.xml!
+        for ( sal_uInt32 i = 0; i < m_aBlackList.size(); i++ )
+        {
+            utl::SearchParam param(m_aBlackList[i], utl::SearchParam::SRCH_REGEXP);
+            utl::TextSearch  ts(param, LANGUAGE_DONTKNOW);
+
+            xub_StrLen start = 0;
+            xub_StrLen end   = static_cast<sal_uInt16>(sDescriptionXmlURL.getLength());
+            if (ts.SearchFrwrd(sDescriptionXmlURL, &start, &end))
+                return false;
         }
     }
 

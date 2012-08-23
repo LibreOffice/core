@@ -22,7 +22,8 @@
 
 #include "saxbuilder.hxx"
 
-#include <com/sun/star/xml/dom/XDocumentBuilder.hpp>
+#include <com/sun/star/xml/dom/DocumentBuilder.hpp>
+#include <comphelper/componentcontext.hxx>
 
 
 namespace DOM
@@ -166,8 +167,7 @@ namespace DOM
         if (!m_aState == SAXDocumentBuilderState_READY)
             throw SAXException();
 
-        Reference< XDocumentBuilder > aBuilder(m_aServiceManager->createInstance(
-                "com.sun.star.xml.dom.DocumentBuilder"), UNO_QUERY_THROW);
+        Reference< XDocumentBuilder > aBuilder(DocumentBuilder::create(comphelper::ComponentContext(m_aServiceManager).getUNOContext()));
         Reference< XDocument > aDocument = aBuilder->newDocument();
         m_aNodeStack.push(Reference< XNode >(aDocument, UNO_QUERY));
         m_aDocument = aDocument;

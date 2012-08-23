@@ -47,7 +47,7 @@
 #include "com/sun/star/xml/dom/DOMException.hpp"
 #include "com/sun/star/xml/dom/XNode.hpp"
 #include "com/sun/star/xml/dom/XNodeList.hpp"
-#include "com/sun/star/xml/dom/XDocumentBuilder.hpp"
+#include "com/sun/star/xml/dom/DocumentBuilder.hpp"
 #include "com/sun/star/xml/xpath/XXPathAPI.hpp"
 #include "com/sun/star/ucb/InteractiveIOException.hpp"
 #include "cppuhelper/implbase1.hxx"
@@ -224,11 +224,7 @@ ExtensionDescription::ExtensionDescription(
 
         //get root node of description.xml
         Reference<css::xml::dom::XDocumentBuilder> xDocBuilder(
-            xContext->getServiceManager()->createInstanceWithContext(
-                OUSTR("com.sun.star.xml.dom.DocumentBuilder"),
-                xContext ), css::uno::UNO_QUERY);
-        if (!xDocBuilder.is())
-            throw css::uno::Exception(OUSTR(" Could not create service com.sun.star.xml.dom.DocumentBuilder"), 0);
+            css::xml::dom::DocumentBuilder::create(xContext) );
 
         if (xDocBuilder->isNamespaceAware() == sal_False)
         {

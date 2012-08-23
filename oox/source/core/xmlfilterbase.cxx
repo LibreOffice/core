@@ -43,7 +43,7 @@
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XOOXMLDocumentPropertiesImporter.hpp>
 #include <com/sun/star/xml/dom/XDocument.hpp>
-#include <com/sun/star/xml/dom/XDocumentBuilder.hpp>
+#include <com/sun/star/xml/dom/DocumentBuilder.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/mediadescriptor.hxx>
@@ -52,6 +52,7 @@
 using ::com::sun::star::uno::XComponentContext;
 using ::com::sun::star::document::XOOXMLDocumentPropertiesImporter;
 using ::com::sun::star::document::XDocumentPropertiesSupplier;
+using ::com::sun::star::xml::dom::DocumentBuilder;
 using ::com::sun::star::xml::dom::XDocument;
 using ::com::sun::star::xml::dom::XDocumentBuilder;
 using ::com::sun::star::xml::sax::XFastSAXSerializable;
@@ -357,11 +358,7 @@ Reference<XDocument> XmlFilterBase::importFragment( const ::rtl::OUString& aFrag
         // create the dom parser
         Reference< XComponentContext > xContext =
             lcl_getComponentContext(getServiceFactory());
-        Reference<XDocumentBuilder> xDomBuilder(
-            xContext->getServiceManager()->createInstanceWithContext(
-                ::rtl::OUString("com.sun.star.xml.dom.DocumentBuilder" ),
-                xContext),
-            UNO_QUERY_THROW );
+        Reference<XDocumentBuilder> xDomBuilder( DocumentBuilder::create(xContext) );
 
         // create DOM from fragment
         xRet = xDomBuilder->parse(xInStrm);
