@@ -1639,7 +1639,7 @@ sub main {
                 {
                     my $licensefilesource = installer::windows::idtglobal::get_rtflicensefilesource($onelanguage, $includepatharrayref_lang);
                     my $licensefile = installer::files::read_file($licensefilesource);
-                    installer::scpzipfiles::replace_all_ziplistvariables_in_rtffile($licensefile, $allvariableshashref);
+                    installer::scpzipfiles::replace_all_ziplistvariables_in_rtffile($licensefile, $allvariablesarrayref, $onelanguage, $loggingdir);
                     my $controltablename = $languageidtdir . $installer::globals::separator . "Control.idt";
                     my $controltable = installer::files::read_file($controltablename);
                     installer::windows::idtglobal::add_licensefile_to_database($licensefile, $controltable);
