@@ -2653,8 +2653,8 @@ if test "$_os" = "Darwin"; then
             /Developer/*)
                 gccprefix=""
                 ;;
-            /Developer.old/*)
-                gccprefix=/Developer.old/usr/bin/
+            /Developer-old/*)
+                gccprefix=/Developer-old/usr/bin/
                 ;;
             /Xcode3/*)
                 gccprefix=/Xcode3/usr/bin/
