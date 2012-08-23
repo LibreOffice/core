@@ -170,6 +170,12 @@ public:
     void testPivotTableEmptyRows();
     void testPivotTableTextNumber();
 
+    /**
+     * Test for checking that pivot table treats strings in a case insensitive
+     * manner.
+     */
+    void testPivotTableCaseInsensitiveStrings();
+
     void testSheetCopy();
     void testSheetMove();
     void testExternalRef();
@@ -241,6 +247,7 @@ public:
     CPPUNIT_TEST(testPivotTableDateGrouping);
     CPPUNIT_TEST(testPivotTableEmptyRows);
     CPPUNIT_TEST(testPivotTableTextNumber);
+    CPPUNIT_TEST(testPivotTableCaseInsensitiveStrings);
     CPPUNIT_TEST(testSheetCopy);
     CPPUNIT_TEST(testSheetMove);
     CPPUNIT_TEST(testExternalRef);
@@ -2913,6 +2920,62 @@ void Test::testPivotTableTextNumber()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("There should be no more tables.", pDPs->GetCount(), static_cast<size_t>(0));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("There shouldn't be any more cache stored.",
                                  pDPs->GetSheetCaches().size(), static_cast<size_t>(0));
+
+    m_pDoc->DeleteTab(1);
+    m_pDoc->DeleteTab(0);
+}
+
+void Test::testPivotTableCaseInsensitiveStrings()
+{
+    m_pDoc->InsertTab(0, OUString("Data"));
+    m_pDoc->InsertTab(1, OUString("Table"));
+
+    // Raw data
+    const char* aData[][2] = {
+        { "Name", "Value" },
+        { "A", "1" },
+        { "a", "2" },
+    };
+
+    // Dimension definition
+    DPFieldDef aFields[] = {
+        { "Name", sheet::DataPilotFieldOrientation_ROW, 0 },
+        { "Value", sheet::DataPilotFieldOrientation_DATA, sheet::GeneralFunction_SUM },
+    };
+
+    ScAddress aPos(1,1,0);
+    ScRange aDataRange = insertRangeData(m_pDoc, aPos, aData, SAL_N_ELEMENTS(aData));
+    CPPUNIT_ASSERT_MESSAGE("failed to insert range data at correct position", aDataRange.aStart == aPos);
+
+    ScDPObject* pDPObj = createDPFromRange(
+        m_pDoc, aDataRange, aFields, SAL_N_ELEMENTS(aFields), false);
+
+    ScDPCollection* pDPs = m_pDoc->GetDPCollection();
+    bool bSuccess = pDPs->InsertNewTable(pDPObj);
+
+    CPPUNIT_ASSERT_MESSAGE("failed to insert a new pivot table object into document.", bSuccess);
+    CPPUNIT_ASSERT_MESSAGE("there should be only one data pilot table.",
+                           pDPs->GetCount() == 1);
+    pDPObj->SetName(pDPs->CreateNewName());
+
+    ScRange aOutRange = refresh(pDPObj);
+
+    {
+        // Expected output table content.  0 = empty cell
+        const char* aOutputCheck[][2] = {
+            { "Name", 0 },
+            { "A", "3" },
+            { "Total Result", "3" },
+        };
+
+        bSuccess = checkDPTableOutput<2>(m_pDoc, aOutRange, aOutputCheck, "Case insensitive strings");
+        CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
+    }
+
+    pDPs->FreeTable(pDPObj);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("There should be no more tables.", pDPs->GetCount(), static_cast<size_t>(0));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("There shouldn't be any more cache stored.",
+                           pDPs->GetSheetCaches().size(), static_cast<size_t>(0));
 
     m_pDoc->DeleteTab(1);
     m_pDoc->DeleteTab(0);
