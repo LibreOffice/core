@@ -4700,6 +4700,38 @@ if test "$build_os" = "cygwin"; then
     CSC_PATH=`cygpath -d "$CSC_PATH"`
     CSC_PATH=`cygpath -u "$CSC_PATH"`
 
+	dnl Check al.exe
+    AC_PATH_PROG(AL_PATH, al.exe)
+    if test -n "$AL_PATH";then
+        AL_PATH=`dirname "$AL_PATH"`
+    fi
+    if test -n "$with_al_path";then
+        with_al_path=`cygpath -u "$with_al_path"`
+    fi
+    if test -x "$with_al_path/al.exe"; then
+        AL_PATH="$with_al_path"
+    fi
+    if test -z "$AL_PATH"; then
+        winsdktest=`./oowintool --windows-sdk-home`
+        if test -x "$winsdktest/Bin/al.exe"; then
+            AL_PATH="$winsdktest/Bin"
+		fi
+    fi
+	if test -z "$AL_PATH"; then
+        altest=`./oowintool --al-home`
+		if test -x "$altest/bin/al.exe"; then
+            AL_PATH="$altest/bin"
+        elif test -x "$altest/al.exe"; then
+            AL_PATH="$altest"
+        fi
+    fi
+    if test ! -x "$AL_PATH/al.exe"; then
+        AC_MSG_ERROR([al.exe not found. Make sure it's in PATH or use --with-al-path])
+    fi
+    # Convert to posix path with 8.3 filename restrictions ( No spaces )
+    AL_PATH=`cygpath -d "$AL_PATH"`
+    AL_PATH=`cygpath -u "$AL_PATH"`
+	
     dnl Check mscoree.lib / .NET Framework dir
     AC_MSG_CHECKING(.NET Framework)
     if test -n "$with_dotnet_framework_home"; then
@@ -4726,6 +4758,9 @@ if test "$build_os" = "cygwin"; then
 
     PathFormat "$MIDL_PATH"
     MIDL_PATH="$formatted_path"
+	
+	PathFormat "$AL_PATH"
+    AL_PATH="$formatted_path"
 
     PathFormat "$DOTNET_FRAMEWORK_HOME"
     DOTNET_FRAMEWORK_HOME="$formatted_path"
@@ -12680,6 +12715,7 @@ else
         pathmunge "$WINDOWS_SDK_HOME/bin" "before"
         pathmunge "$CSC_PATH" "before"
         pathmunge "$MIDL_PATH" "before"
+		pathmunge "$AL_PATH" "before"
         pathmunge "$MSPDB_PATH" "before"
         if test "$BITNESS_OVERRIDE" = 64; then
             pathmunge "$COMPATH/bin/amd64" "before"
