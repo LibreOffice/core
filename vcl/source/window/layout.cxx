@@ -33,6 +33,7 @@
 VclContainer::VclContainer(Window *pParent)
     : Window(WINDOW_CONTAINER)
     , m_nBorderWidth(0)
+    , m_bLayoutDirty(true)
 {
     ImplInit(pParent, 0, NULL);
 }
@@ -67,8 +68,11 @@ void VclContainer::SetPosSizePixel(const Point& rAllocPos, const Size& rAllocati
     else if (bSizeChanged)
         Window::SetSizePixel(aAllocation);
 
-    if (bSizeChanged)
+    if (m_bLayoutDirty || bSizeChanged)
+    {
         setAllocation(aAllocation);
+        m_bLayoutDirty = false;
+    }
 }
 
 void VclContainer::SetPosPixel(const Point& rAllocPos)
@@ -86,11 +90,13 @@ void VclContainer::SetSizePixel(const Size& rAllocation)
     Size aAllocation = rAllocation;
     aAllocation.Width() -= m_nBorderWidth*2;
     aAllocation.Height() -= m_nBorderWidth*2;
-
-    if (aAllocation != GetSizePixel())
-    {
+    bool bSizeChanged = aAllocation != GetSizePixel();
+    if (bSizeChanged)
         Window::SetSizePixel(aAllocation);
+    if (m_bLayoutDirty || bSizeChanged)
+    {
         setAllocation(aAllocation);
+        m_bLayoutDirty = false;
     }
 }
 
@@ -141,22 +147,6 @@ Size VclBox::calculateRequisition() const
     }
 
     return aSize;
-}
-
-namespace
-{
-    //avoid redraws when size/pos is unchanged
-    void setPosSizePixel(Window &rWindow, const Point& rAllocPos, const Size& rAllocation)
-    {
-        bool bPosChanged = rAllocPos != rWindow.GetPosPixel();
-        bool bSizeChanged = rAllocation != rWindow.GetSizePixel();
-        if (bPosChanged && bSizeChanged)
-            rWindow.SetPosSizePixel(rAllocPos, rAllocation);
-        else if (bPosChanged)
-            rWindow.SetPosPixel(rAllocPos);
-        else if (bSizeChanged)
-            rWindow.SetSizePixel(rAllocation);
-    }
 }
 
 void VclBox::setAllocation(const Size &rAllocation)
@@ -263,7 +253,7 @@ void VclBox::setAllocation(const Size &rAllocation)
                     getPrimaryDimension(aBoxSize));
             }
 
-            setPosSizePixel(*pChild, aChildPos, aChildSize);
+            pChild->SetPosSizePixel(aChildPos, aChildSize);
         }
     }
 }
@@ -390,7 +380,7 @@ void VclButtonBox::setAllocation(const Size &rAllocation)
         setSecondaryDimension(aChildSize, getSecondaryDimension(aSize));
         setPrimaryDimension(aChildSize, nHomogeneousDimension);
 
-        setPosSizePixel(*pChild, aPos, aChildSize);
+        pChild->SetPosSizePixel(aPos, aChildSize);
 
         nPrimaryCoordinate = getPrimaryCoordinate(aPos);
         setPrimaryCoordinate(aPos, nPrimaryCoordinate + nHomogeneousDimension + m_nSpacing);
@@ -723,7 +713,7 @@ void VclGrid::setAllocation(const Size& rAllocation)
                         break;
                 }
 
-                setPosSizePixel(*pChild, aChildPos, aChildSize);
+                pChild->SetPosSizePixel(aChildPos, aChildSize);
             }
             aAllocPos.Y() += aHeights[y].m_nValue + get_row_spacing();
         }
@@ -786,7 +776,7 @@ void VclBin::setAllocation(const Size &rAllocation)
 {
     Window *pChild = get_child();
     if (pChild && pChild->IsVisible())
-        setPosSizePixel(*pChild, Point(0, 0), rAllocation);
+        pChild->SetPosSizePixel(Point(0, 0), rAllocation);
 }
 
 //To-Do, hook a DecorationView into VclFrame ?
@@ -839,13 +829,13 @@ void VclFrame::setAllocation(const Size &rAllocation)
         Size aLabelSize = pLabel->GetOptimalSize(WINDOWSIZE_PREFERRED);
         aLabelSize.Height() = std::min(aLabelSize.Height(), aAllocation.Height());
         aLabelSize.Width() = std::min(aLabelSize.Width(), aAllocation.Width());
-        setPosSizePixel(*pLabel, aChildPos, aLabelSize);
+        pLabel->SetPosSizePixel(aChildPos, aLabelSize);
         aAllocation.Height() -= aLabelSize.Height();
         aChildPos.Y() += aLabelSize.Height();
     }
 
     if (pChild && pChild->IsVisible())
-        setPosSizePixel(*pChild, aChildPos, aAllocation);
+        pChild->SetPosSizePixel(aChildPos, aAllocation);
 }
 
 Size VclAlignment::calculateRequisition() const
@@ -876,7 +866,7 @@ void VclAlignment::setAllocation(const Size &rAllocation)
     aAllocation.Width() = rAllocation.Width() - (m_nLeftPadding + m_nRightPadding);
     aAllocation.Height() = rAllocation.Height() - (m_nTopPadding + m_nBottomPadding);
 
-    setPosSizePixel(*pChild, aChildPos, aAllocation);
+    pChild->SetPosSizePixel(aChildPos, aAllocation);
 }
 
 bool VclAlignment::set_property(const rtl::OString &rKey, const rtl::OString &rValue)
@@ -980,7 +970,7 @@ void VclExpander::setAllocation(const Size &rAllocation)
 
     long nExtraExpanderHeight = aExpanderSize.Height() - aButtonSize.Height();
     Point aButtonPos(aChildPos.X(), aChildPos.Y() + nExtraExpanderHeight/2);
-    setPosSizePixel(m_aDisclosureButton, aButtonPos, aButtonSize);
+    m_aDisclosureButton.SetPosSizePixel(aButtonPos, aButtonSize);
 
     if (pLabel && pLabel->IsVisible())
     {
@@ -990,7 +980,7 @@ void VclExpander::setAllocation(const Size &rAllocation)
 
         long nExtraLabelHeight = aExpanderSize.Height() - aLabelSize.Height();
         Point aLabelPos(aChildPos.X() + aButtonSize.Width(), aChildPos.Y() + nExtraLabelHeight/2);
-        setPosSizePixel(*pLabel, aLabelPos, aLabelSize);
+        pLabel->SetPosSizePixel(aLabelPos, aLabelSize);
     }
 
     aAllocation.Height() -= aExpanderSize.Height();
@@ -1000,7 +990,7 @@ void VclExpander::setAllocation(const Size &rAllocation)
     {
         if (!m_aDisclosureButton.IsChecked())
             aAllocation = Size();
-        setPosSizePixel(*pChild, aChildPos, aAllocation);
+        pChild->SetPosSizePixel(aChildPos, aAllocation);
     }
 }
 
@@ -1021,11 +1011,10 @@ IMPL_LINK( VclExpander, ClickHdl, DisclosureButton*, pBtn )
     if (pChild)
     {
         pChild->Show(pBtn->IsChecked());
+        queue_resize();
         Dialog* pResizeDialog = m_bResizeTopLevel ? GetParentDialog() : NULL;
         if (pResizeDialog)
             pResizeDialog->setInitialLayoutSize();
-        else
-            queue_resize();
     }
     return 0;
 }

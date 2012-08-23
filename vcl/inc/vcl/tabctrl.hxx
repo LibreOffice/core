@@ -66,6 +66,7 @@ private:
     sal_Bool                mbRestoreHelpId;
     sal_Bool                mbRestoreUnqId;
     sal_Bool                mbSmallInvalidate;
+    bool                    mbLayoutDirty;
     Link                maActivateHdl;
     Link                maDeactivateHdl;
 
@@ -195,6 +196,18 @@ public:
 
     // rename nOldId to nNewId);
     void ReassignPageId(sal_uInt16 nOldId, sal_uInt16 nNewId);
+
+    using Control::SetPosSizePixel;
+    virtual void SetPosSizePixel(const Point& rNewPos, const Size& rNewSize);
+    virtual void SetSizePixel(const Size& rNewSize);
+
+    Size calculateRequisition() const;
+    void setAllocation(const Size &rAllocation);
+
+    void markLayoutDirty()
+    {
+        mbLayoutDirty = true;
+    }
 };
 
 #endif  // _SV_TABCTRL_HXX

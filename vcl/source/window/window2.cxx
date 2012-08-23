@@ -41,6 +41,7 @@
 #include <vcl/window.hxx>
 #include <vcl/scrbar.hxx>
 #include <vcl/dockwin.hxx>
+#include <vcl/tabctrl.hxx>
 
 #include <window.h>
 #include <outfont.hxx>
@@ -1749,16 +1750,39 @@ void Window::SetBackgroundBitmap( const BitmapEx& rBitmapEx )
     }
 }
 
-//When a widget wants to renegotiate size, get toplevel parent dialog and call
-//resize on it. Maybe better to just find direct parent and if its a container
-//chain it upwards one step at a time until a dialog is found.
+//When a widget wants to renegotiate layout, get toplevel parent dialog and call
+//resize on it. Mark all intermediate containers (or container-alike) widgets
+//as dirty for the size remains unchanged, but layout changed circumstances
 void Window::queue_resize()
 {
-    Dialog *pParent = GetParentDialog();
-    if (!pParent || pParent == this)
+    Dialog *pDialog = NULL;
+
+    Window *pWindow = this;
+
+    while( pWindow )
+    {
+        if (pWindow->GetType() == WINDOW_CONTAINER)
+        {
+            VclContainer *pContainer = static_cast<VclContainer*>(pWindow);
+            pContainer->markLayoutDirty();
+        }
+        else if (pWindow->GetType() == WINDOW_TABCONTROL)
+        {
+            TabControl *pTabControl = static_cast<TabControl*>(pWindow);
+            pTabControl->markLayoutDirty();
+        }
+        else if (pWindow->IsDialog())
+        {
+            pDialog = dynamic_cast<Dialog*>(pWindow);
+            break;
+        }
+        pWindow = pWindow->GetParent();
+    }
+
+    if (!pDialog || pDialog == this)
         return;
-    if (pParent->isLayoutEnabled())
-        pParent->Resize();
+    if (pDialog->isLayoutEnabled())
+        pDialog->Resize();
 }
 
 //We deliberately do not overwrite our maHelpId here

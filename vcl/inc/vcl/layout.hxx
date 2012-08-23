@@ -52,11 +52,16 @@ public:
     {
         return m_nBorderWidth;
     }
+    void markLayoutDirty()
+    {
+        m_bLayoutDirty = true;
+    }
 protected:
     virtual Size calculateRequisition() const = 0;
     virtual void setAllocation(const Size &rAllocation) = 0;
 private:
     int m_nBorderWidth;
+    bool m_bLayoutDirty;
 };
 
 class VCL_DLLPUBLIC VclBox : public VclContainer
