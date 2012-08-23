@@ -61,6 +61,7 @@ $(eval $(call gb_Library_add_linked_libs,ooxml,\
     oox \
 	resourcemodel \
     sal \
+    sfx \
     tl \
     $(gb_STDLIBS) \
 ))
