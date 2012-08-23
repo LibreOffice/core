@@ -126,7 +126,7 @@ void TemplateViewItem::Paint(drawinglayer::processor2d::BaseProcessor2D *pProces
                     pAttrs->aFontSize.getX()*SUBTITLE_SCALE_FACTOR, pAttrs->aFontSize.getY()*SUBTITLE_SCALE_FACTOR,
                     double( maSubTitlePos.X() ), double( maSubTitlePos.Y() ) ) );
 
-        aSeq[8] = Primitive2DReference(
+        aSeq[7] = Primitive2DReference(
                     new TextSimplePortionPrimitive2D(aSubTitleMatrix,
                                                      maSubTitle,0,pAttrs->nMaxTextLenght,
                                                      std::vector< double >( ),
