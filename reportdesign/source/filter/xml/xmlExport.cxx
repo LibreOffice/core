@@ -873,6 +873,12 @@ void ORptExport::exportContainer(const Reference< XSection>& _xSection)
                     }
                     SvXMLElementExport aCell(*this,XML_NAMESPACE_TABLE, XML_TABLE_CELL, sal_True, sal_False);
 
+                    if ( !bShapeHandled )
+                    {
+                        bShapeHandled = true;
+                        exportShapes(_xSection,false);
+                    }
+
                     if ( aColIter->xElement.is() )
                     {
                         // start <text:p>
@@ -880,11 +886,6 @@ void ORptExport::exportContainer(const Reference< XSection>& _xSection)
                         Reference<XServiceInfo> xElement(aColIter->xElement,uno::UNO_QUERY);
                         Reference<XReportComponent> xReportComponent = aColIter->xElement;
 
-                        if ( !bShapeHandled )
-                        {
-                            bShapeHandled = true;
-                            exportShapes(_xSection,false);
-                        }
                         uno::Reference< XShape > xShape(xElement,uno::UNO_QUERY);
                         uno::Reference< XFixedLine > xFixedLine(xElement,uno::UNO_QUERY);
                         if ( !xShape.is() && !xFixedLine.is() )
@@ -963,11 +964,6 @@ void ORptExport::exportContainer(const Reference< XSection>& _xSection)
                                     exportSection(xSection);
                             }
                         }
-                    }
-                    else if ( !bShapeHandled )
-                    {
-                        bShapeHandled = true;
-                        exportShapes(_xSection);
                     }
                     aColIter = aColIter + (aColIter->nColSpan - 1);
                 }
