@@ -132,7 +132,6 @@ class DBConnector : public ScDPCache::DBConnector
 
 public:
     DBConnector(ScDPCache& rCache, const uno::Reference<sdbc::XRowSet>& xRowSet, const Date& rNullDate);
-    ~DBConnector();
 
     bool isValid() const;
 
@@ -152,10 +151,6 @@ DBConnector::DBConnector(ScDPCache& rCache, const uno::Reference<sdbc::XRowSet>&
         mxMetaData = xMetaSupp->getMetaData();
 
     mxRow.set(mxRowSet, UNO_QUERY);
-}
-
-DBConnector::~DBConnector()
-{
 }
 
 bool DBConnector::isValid() const
