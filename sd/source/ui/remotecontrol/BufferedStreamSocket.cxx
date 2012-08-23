@@ -52,7 +52,7 @@ sal_Int32 BufferedStreamSocket::write( const void* pBuffer, sal_uInt32 n )
     if ( !usingCSocket )
         return StreamSocket::write( pBuffer, n );
     else
-        return ::write( mSocket, pBuffer, (size_t) n );
+        return ::send( mSocket, pBuffer, (size_t) n, 0 );
 }
 
 sal_Int32 BufferedStreamSocket::readLine( OString& aLine )
@@ -79,7 +79,7 @@ sal_Int32 BufferedStreamSocket::readLine( OString& aLine )
         if ( !usingCSocket)
             aRet = StreamSocket::recv( &aBuffer[aRead], 100 );
         else
-            aRet = ::read( mSocket, &aBuffer[aRead], 100 );
+            aRet = ::recv( mSocket, &aBuffer[aRead], 100, 0 );
 
         if ( aRet == 0 )
         {
