@@ -452,6 +452,13 @@ Window *VclBuilder::makeObject(Window *pParent, const rtl::OString &name, const 
         pWindow = new FixedText(pParent, WB_CENTER|WB_VCENTER|WB_3DLOOK);
     else if (name.equalsL(RTL_CONSTASCII_STRINGPARAM("GtkImage")))
         pWindow = new FixedImage(pParent, WB_CENTER|WB_VCENTER|WB_3DLOOK);
+    else if (name.equalsL(RTL_CONSTASCII_STRINGPARAM("GtkSeparator")))
+    {
+        if (extractOrientation(rMap))
+            pWindow = new FixedLine(pParent, WB_VERT);
+        else
+            pWindow = new FixedLine(pParent, WB_HORZ);
+    }
     else if (name.equalsL(RTL_CONSTASCII_STRINGPARAM("GtkEntry")))
         pWindow = new Edit(pParent, WB_LEFT|WB_VCENTER|WB_BORDER|WB_3DLOOK);
     else if (name.equalsL(RTL_CONSTASCII_STRINGPARAM("GtkNotebook")))
