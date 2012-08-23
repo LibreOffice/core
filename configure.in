@@ -3339,6 +3339,8 @@ kfreebsd*)
     GUIBASE=unx
     OS=LINUX
     RTL_OS=kFreeBSD
+    P_SEP=:
+
     case "$host_cpu" in
 
     i*86)
