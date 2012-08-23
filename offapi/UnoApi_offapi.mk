@@ -277,6 +277,7 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/ucb,\
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/ui,\
 	GlobalAcceleratorConfiguration \
     ModuleUIConfigurationManagerSupplier \
+    UICommandDescription \
 	WindowContentFactory \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/ui/dialogs,\
@@ -1459,7 +1460,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/ui,\
 	ModuleUIConfigurationManager \
 	ModuleWindowStateConfiguration \
 	UICategoryDescription \
-	UICommandDescription \
 	UIConfigurationManager \
 	UIElement \
 	UIElementFactory \

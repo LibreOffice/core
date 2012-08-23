@@ -31,6 +31,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/frame/XModuleManager.hpp>
+#include <com/sun/star/ui/UICommandDescription.hpp>
 
 #include "sfx2/sfxhelp.hxx"
 #include <sfx2/app.hxx>
@@ -2542,18 +2543,13 @@ IMPL_LINK( SfxTemplateDialog_Impl, ToolBoxRClick, ToolBox *, pBox )
         //create a popup menu in Writer
         boost::scoped_ptr<PopupMenu> pMenu(new PopupMenu);
         uno::Reference< container::XNameAccess > xNameAccess(
-                    ::comphelper::getProcessServiceFactory()->
-                    createInstance( ::rtl::OUString(
-                            "com.sun.star.frame.UICommandDescription") ), uno::UNO_QUERY );
+                    ui::UICommandDescription::create(::comphelper::getProcessComponentContext()) );
         uno::Reference< container::XNameAccess > xUICommands;
-        if ( xNameAccess.is() )
+        rtl::OUString sTextDoc("com.sun.star.text.TextDocument");
+        if(xNameAccess->hasByName(sTextDoc))
         {
-            rtl::OUString sTextDoc("com.sun.star.text.TextDocument");
-            if(xNameAccess->hasByName(sTextDoc))
-            {
-                uno::Any a = xNameAccess->getByName( sTextDoc );
-                a >>= xUICommands;
-            }
+            uno::Any a = xNameAccess->getByName( sTextDoc );
+            a >>= xUICommands;
         }
         if(!xUICommands.is())
             return 0;

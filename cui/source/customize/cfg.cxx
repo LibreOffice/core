@@ -71,6 +71,7 @@
 #include <com/sun/star/ui/ModuleUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/frame/XDesktop.hpp>
+#include <com/sun/star/ui/UICommandDescription.hpp>
 #include <com/sun/star/ui/XUIConfiguration.hpp>
 #include <com/sun/star/ui/XUIConfigurationListener.hpp>
 #include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
@@ -914,12 +915,9 @@ SaveInData::SaveInData(
         ::comphelper::getProcessServiceFactory(), uno::UNO_QUERY_THROW );
 
     uno::Reference< container::XNameAccess > xNameAccess(
-        m_xServiceManager->createInstance(
-            OUString( "com.sun.star.frame.UICommandDescription"  ) ),
-        uno::UNO_QUERY );
+        css::ui::UICommandDescription::create(comphelper::ComponentContext(m_xServiceManager).getUNOContext()) );
 
-    if ( xNameAccess.is() )
-        xNameAccess->getByName( aModuleId ) >>= m_xCommandToLabelMap;
+    xNameAccess->getByName( aModuleId ) >>= m_xCommandToLabelMap;
 
     if ( !m_xImgMgr.is() )
     {

@@ -61,6 +61,7 @@
 #include <com/sun/star/embed/FileSystemStorageFactory.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/ui/ModuleUIConfigurationManagerSupplier.hpp>
+#include <com/sun/star/ui/UICommandDescription.hpp>
 #include <com/sun/star/ui/XUIConfiguration.hpp>
 #include <com/sun/star/ui/XUIConfigurationStorage.hpp>
 #include <com/sun/star/ui/XUIConfigurationPersistence.hpp>
@@ -91,12 +92,9 @@ static const char XDG_CONFIG_PART[] = "/.config";
     ::rtl::OUString sLabel;
 
     uno::Reference< container::XNameAccess > xUICommands;
-    uno::Reference< container::XNameAccess > xNameAccess( ::comphelper::getProcessServiceFactory()->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.UICommandDescription")) ), uno::UNO_QUERY );
-    if ( xNameAccess.is() )
-    {
-        uno::Any a = xNameAccess->getByName( sModuleIdentifier );
-        a >>= xUICommands;
-    }
+    uno::Reference< container::XNameAccess > xNameAccess( ui::UICommandDescription::create(::comphelper::getProcessComponentContext()) );
+    uno::Any a = xNameAccess->getByName( sModuleIdentifier );
+    a >>= xUICommands;
     if (xUICommands.is())
     {
         if ( !sCommand.isEmpty() )

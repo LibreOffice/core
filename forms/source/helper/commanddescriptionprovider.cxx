@@ -23,6 +23,7 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/frame/XModuleManager.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/ui/UICommandDescription.hpp>
 
 #include <comphelper/namedvaluecollection.hxx>
 #include <tools/diagnose_ex.h>
@@ -48,6 +49,7 @@ namespace frm
     using ::com::sun::star::container::XNameAccess;
     using ::com::sun::star::frame::XModuleManager;
     using ::com::sun::star::beans::PropertyValue;
+    using ::com::sun::star::ui::UICommandDescription;
     /** === end UNO using === **/
 
     //====================================================================
@@ -88,7 +90,7 @@ namespace frm
             Reference< XModuleManager > xModuleManager( _rContext.createComponent( "com.sun.star.frame.ModuleManager" ), UNO_QUERY_THROW );
             ::rtl::OUString sModuleID = xModuleManager->identify( _rxDocument );
 
-            Reference< XNameAccess > xUICommandDescriptions( _rContext.createComponent( "com.sun.star.frame.UICommandDescription" ), UNO_QUERY_THROW );
+            Reference< XNameAccess > xUICommandDescriptions( UICommandDescription::create(_rContext.getUNOContext()) );
             m_xCommandAccess.set( xUICommandDescriptions->getByName( sModuleID ), UNO_QUERY_THROW );
         }
         catch( const Exception& )

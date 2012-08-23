@@ -67,6 +67,7 @@
 #include <com/sun/star/task/XJobExecutor.hpp>
 #include <com/sun/star/task/XRestartManager.hpp>
 #include <com/sun/star/document/XEventListener.hpp>
+#include <com/sun/star/ui/UICommandDescription.hpp>
 #include <com/sun/star/ui/XUIElementFactoryRegistration.hpp>
 #include <com/sun/star/frame/XUIControllerRegistration.hpp>
 
@@ -2090,8 +2091,8 @@ void Desktop::PreloadModuleData( const CommandLineArgs& rArgs )
 void Desktop::PreloadConfigurationData()
 {
     Reference< XMultiServiceFactory > rFactory = ::comphelper::getProcessServiceFactory();
-    Reference< XNameAccess > xNameAccess( rFactory->createInstance(
-        rtl::OUString( "com.sun.star.frame.UICommandDescription" )), UNO_QUERY );
+    Reference< XComponentContext > xContext = ::comphelper::getProcessComponentContext();
+    Reference< XNameAccess > xNameAccess( css::ui::UICommandDescription::create(xContext) );
 
     rtl::OUString aWriterDoc( "com.sun.star.text.TextDocument" );
     rtl::OUString aCalcDoc( "com.sun.star.sheet.SpreadsheetDocument" );
@@ -2099,47 +2100,44 @@ void Desktop::PreloadConfigurationData()
     rtl::OUString aImpressDoc( "com.sun.star.presentation.PresentationDocument" );
 
     // preload commands configuration
-    if ( xNameAccess.is() )
+    Any a;
+    Reference< XNameAccess > xCmdAccess;
+
+    try
     {
-        Any a;
-        Reference< XNameAccess > xCmdAccess;
+        a = xNameAccess->getByName( aWriterDoc );
+        a >>= xCmdAccess;
+        if ( xCmdAccess.is() )
+        {
+            xCmdAccess->getByName( rtl::OUString( ".uno:BasicShapes" ));
+            xCmdAccess->getByName( rtl::OUString( ".uno:EditGlossary" ));
+        }
+    }
+    catch ( const ::com::sun::star::uno::Exception& )
+    {
+    }
 
-        try
-        {
-            a = xNameAccess->getByName( aWriterDoc );
-            a >>= xCmdAccess;
-            if ( xCmdAccess.is() )
-            {
-                xCmdAccess->getByName( rtl::OUString( ".uno:BasicShapes" ));
-                xCmdAccess->getByName( rtl::OUString( ".uno:EditGlossary" ));
-            }
-        }
-        catch ( const ::com::sun::star::uno::Exception& )
-        {
-        }
+    try
+    {
+        a = xNameAccess->getByName( aCalcDoc );
+        a >>= xCmdAccess;
+        if ( xCmdAccess.is() )
+            xCmdAccess->getByName( rtl::OUString( ".uno:InsertObjectStarMath" ));
+    }
+    catch ( const ::com::sun::star::uno::Exception& )
+    {
+    }
 
-        try
-        {
-            a = xNameAccess->getByName( aCalcDoc );
-            a >>= xCmdAccess;
-            if ( xCmdAccess.is() )
-                xCmdAccess->getByName( rtl::OUString( ".uno:InsertObjectStarMath" ));
-        }
-        catch ( const ::com::sun::star::uno::Exception& )
-        {
-        }
-
-        try
-        {
-            // draw and impress share the same configuration file (DrawImpressCommands.xcu)
-            a = xNameAccess->getByName( aDrawDoc );
-            a >>= xCmdAccess;
-            if ( xCmdAccess.is() )
-                xCmdAccess->getByName( rtl::OUString( ".uno:Polygon" ));
-        }
-        catch ( const ::com::sun::star::uno::Exception& )
-        {
-        }
+    try
+    {
+        // draw and impress share the same configuration file (DrawImpressCommands.xcu)
+        a = xNameAccess->getByName( aDrawDoc );
+        a >>= xCmdAccess;
+        if ( xCmdAccess.is() )
+            xCmdAccess->getByName( rtl::OUString( ".uno:Polygon" ));
+    }
+    catch ( const ::com::sun::star::uno::Exception& )
+    {
     }
 
     // preload window state configuration

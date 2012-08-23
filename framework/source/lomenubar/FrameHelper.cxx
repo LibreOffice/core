@@ -58,6 +58,7 @@
 #include <com/sun/star/util/URL.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
+#include <com/sun/star/ui/UICommandDescription.hpp>
 #include <com/sun/star/ui/XUIElement.hpp>
 #include <com/sun/star/ui/XUIConfigurationManager.hpp>
 #include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
@@ -276,8 +277,7 @@ FrameHelper::FrameHelper(const Reference< XMultiServiceFactory >&  rServiceManag
 {
 
     //Get xUICommands database (to retrieve labels, see FrameJob::getLabelFromCommandURL ())
-    Reference < XNameAccess > xNameAccess (m_xMSF->createInstance(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.UICommandDescription"))),
-                                           UNO_QUERY);
+    Reference < XNameAccess > xNameAccess (UICommandDescription::create(comphelper::ComponentContext(m_xMSF).getUNOContext()));
     xNameAccess->getByName(m_xMM->identify(xFrame)) >>= m_xUICommands;
 
 

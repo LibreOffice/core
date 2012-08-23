@@ -35,24 +35,19 @@ module com { module sun { module star { module ui {
     </p>
 
     @since OOo 2.0
+
+    Provides access to user interface commands of the installed modules.
+
+    <p>
+    To access the user interface command description of a module, a unique module specifier
+    must be provided to <member scope="com::sun::star::container">XNameAccess::getByName()</member> function.
+    The module specifier can be retrieved from the <type scope="com::sun::star::frame">ModuleManager</type>
+    service. The interface provides references to <type scope="com::sun:star::ui">ModuleUICommandDescription</type>.
+    </p>
+
+    @see com::sun::star::frame::ModuleManager
 */
-
-service UICommandDescription
-{
-    /** provides access to user interface commands of the installed modules.
-
-        <p>
-        To access the user interface command description of a module, a unique module specifier
-        must be provided to <member scope="com::sun::star::container">XNameAccess::getByName()</member> function.
-        The module specifier can be retrieved from the <type scope="com::sun::star::frame">ModuleManager</type>
-        service. The interface provides references to <type scope="com::sun:star::ui">ModuleUICommandDescription</type>.
-        </p>
-
-        @see com::sun::star::frame::ModuleManager
-    */
-
-    interface com::sun::star::container::XNameAccess;
-};
+service UICommandDescription : com::sun::star::container::XNameAccess;
 
 }; }; }; };
 

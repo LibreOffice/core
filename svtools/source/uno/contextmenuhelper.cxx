@@ -40,6 +40,7 @@
 #include <com/sun/star/ui/XUIConfigurationManager.hpp>
 #include <com/sun/star/ui/ModuleUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/ui/ImageType.hpp>
+#include <com/sun/star/ui/UICommandDescription.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 
@@ -442,20 +443,15 @@ ContextMenuHelper::associateUIConfigurationManagers()
             }
 
             uno::Reference< container::XNameAccess > xNameAccess(
-                ::comphelper::getProcessServiceFactory()->createInstance(
-                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                        "com.sun.star.frame.UICommandDescription" ))),
-                    uno::UNO_QUERY );
-            if ( xNameAccess.is() )
+                ui::UICommandDescription::create(::comphelper::getProcessComponentContext()),
+                    uno::UNO_QUERY_THROW );
+            try
             {
-                try
-                {
-                    uno::Any a = xNameAccess->getByName( aModuleId );
-                    a >>= m_xUICommandLabels;
-                }
-                catch ( container::NoSuchElementException& )
-                {
-                }
+                uno::Any a = xNameAccess->getByName( aModuleId );
+                a >>= m_xUICommandLabels;
+            }
+            catch ( container::NoSuchElementException& )
+            {
             }
         }
         catch ( uno::RuntimeException& )

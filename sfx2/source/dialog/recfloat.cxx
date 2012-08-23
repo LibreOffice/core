@@ -21,10 +21,12 @@
 #include <com/sun/star/frame/XModuleManager.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/ui/UICommandDescription.hpp>
 
 #include <svl/eitem.hxx>
 #include <svtools/generictoolboxcontroller.hxx>
 #include <vcl/msgbox.hxx>
+#include <comphelper/componentcontext.hxx>
 #include <comphelper/processfactory.hxx>
 
 #include "recfloat.hxx"
@@ -63,10 +65,7 @@ static rtl::OUString GetLabelFromCommandURL( const rtl::OUString& rCommandURL, c
     if ( !xUICommandDescription.is() )
     {
         xUICommandDescription = uno::Reference< container::XNameAccess >(
-                                    xServiceManager->createInstance(
-                                        rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                                            "com.sun.star.frame.UICommandDescription" ))),
-                                    uno::UNO_QUERY );
+                                    ui::UICommandDescription::create(comphelper::ComponentContext(xServiceManager).getUNOContext()) );
         xTmpNameAccess = xUICommandDescription;
     }
 

@@ -32,6 +32,7 @@
 #include <com/sun/star/frame/XModuleManager.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/ui/UICommandDescription.hpp>
 
 #include "ViewShellBase.hxx"
 #include <algorithm>
@@ -1139,6 +1140,7 @@ void ViewShellBase::SetViewTabBar (const ::rtl::Reference<ViewTabBar>& rViewTabB
     if ( !aCmdURL.isEmpty() ) try
     {
         Reference< XMultiServiceFactory > xServiceManager( ::comphelper::getProcessServiceFactory(), UNO_QUERY_THROW );
+        Reference< XComponentContext > xContext( ::comphelper::getProcessComponentContext(), UNO_QUERY_THROW );
 
         Reference< XModuleManager > xModuleManager( xServiceManager->createInstance( "com.sun.star.frame.ModuleManager" ), UNO_QUERY_THROW );
         Reference< XInterface > xIfac( xFrame, UNO_QUERY_THROW );
@@ -1147,20 +1149,17 @@ void ViewShellBase::SetViewTabBar (const ::rtl::Reference<ViewTabBar>& rViewTabB
 
         if( !aModuleIdentifier.isEmpty() )
         {
-            Reference< XNameAccess > xNameAccess( xServiceManager->createInstance( "com.sun.star.frame.UICommandDescription" ), UNO_QUERY );
-            if( xNameAccess.is() )
+            Reference< XNameAccess > xNameAccess( ui::UICommandDescription::create(xContext) );
+            Reference< ::com::sun::star::container::XNameAccess > m_xUICommandLabels( xNameAccess->getByName( aModuleIdentifier ), UNO_QUERY_THROW );
+            Sequence< PropertyValue > aPropSeq;
+            if( m_xUICommandLabels->getByName( aCmdURL ) >>= aPropSeq )
             {
-                Reference< ::com::sun::star::container::XNameAccess > m_xUICommandLabels( xNameAccess->getByName( aModuleIdentifier ), UNO_QUERY_THROW );
-                Sequence< PropertyValue > aPropSeq;
-                if( m_xUICommandLabels->getByName( aCmdURL ) >>= aPropSeq )
+                for( sal_Int32 i = 0; i < aPropSeq.getLength(); i++ )
                 {
-                    for( sal_Int32 i = 0; i < aPropSeq.getLength(); i++ )
+                    if ( aPropSeq[i].Name == "Name" )
                     {
-                        if ( aPropSeq[i].Name == "Name" )
-                        {
-                            aPropSeq[i].Value >>= aLabel;
-                            break;
-                        }
+                        aPropSeq[i].Value >>= aLabel;
+                        break;
                     }
                 }
             }
