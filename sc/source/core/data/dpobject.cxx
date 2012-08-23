@@ -53,6 +53,10 @@
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/sdb/XCompletedExecution.hpp>
+#include <com/sun/star/sdbc/DataType.hpp>
+#include <com/sun/star/sdbc/XResultSetMetaData.hpp>
+#include <com/sun/star/sdbc/XResultSetMetaDataSupplier.hpp>
+#include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbc/XRowSet.hpp>
 #include <com/sun/star/sheet/GeneralFunction.hpp>
 #include <com/sun/star/sheet/DataPilotFieldFilter.hpp>
@@ -107,6 +111,165 @@ using ::rtl::OUString;
 // -----------------------------------------------------------------------
 
 #define SCDPSOURCE_SERVICE  "com.sun.star.sheet.DataPilotSource"
+
+namespace {
+
+const double D_TIMEFACTOR = 86400.0;
+
+/**
+ * Database connection implementation for UNO database API.  Note that in
+ * the UNO database API, column index is 1-based, whereas the interface
+ * requires that column index be 0-based.
+ */
+class DBConnector : public ScDPCache::DBConnector
+{
+    ScDPCache& mrCache;
+
+    uno::Reference<sdbc::XRowSet> mxRowSet;
+    uno::Reference<sdbc::XRow> mxRow;
+    uno::Reference<sdbc::XResultSetMetaData> mxMetaData;
+    Date maNullDate;
+
+public:
+    DBConnector(ScDPCache& rCache, const uno::Reference<sdbc::XRowSet>& xRowSet, const Date& rNullDate);
+    ~DBConnector();
+
+    bool isValid() const;
+
+    virtual void getValue(long nCol, ScDPItemData &rData, short& rNumType) const;
+    virtual OUString getColumnLabel(long nCol) const;
+    virtual long getColumnCount() const;
+    virtual bool first();
+    virtual bool next();
+    virtual void finish();
+};
+
+DBConnector::DBConnector(ScDPCache& rCache, const uno::Reference<sdbc::XRowSet>& xRowSet, const Date& rNullDate) :
+    mrCache(rCache), mxRowSet(xRowSet), maNullDate(rNullDate)
+{
+    Reference<sdbc::XResultSetMetaDataSupplier> xMetaSupp(mxRowSet, UNO_QUERY);
+    if (xMetaSupp.is())
+        mxMetaData = xMetaSupp->getMetaData();
+
+    mxRow.set(mxRowSet, UNO_QUERY);
+}
+
+DBConnector::~DBConnector()
+{
+}
+
+bool DBConnector::isValid() const
+{
+    return mxRowSet.is() && mxRow.is() && mxMetaData.is();
+}
+
+bool DBConnector::first()
+{
+    return mxRowSet->first();
+}
+
+bool DBConnector::next()
+{
+    return mxRowSet->next();
+}
+
+void DBConnector::finish()
+{
+    if (mxRowSet.is())
+        mxRowSet->beforeFirst();
+}
+
+long DBConnector::getColumnCount() const
+{
+    return mxMetaData->getColumnCount();
+}
+
+OUString DBConnector::getColumnLabel(long nCol) const
+{
+    return mxMetaData->getColumnLabel(nCol+1);
+}
+
+void DBConnector::getValue(long nCol, ScDPItemData &rData, short& rNumType) const
+{
+    rNumType = NUMBERFORMAT_NUMBER;
+    sal_Int32 nType = mxMetaData->getColumnType(nCol+1);
+
+    try
+    {
+        double fValue = 0.0;
+        switch (nType)
+        {
+            case sdbc::DataType::BIT:
+            case sdbc::DataType::BOOLEAN:
+            {
+                rNumType = NUMBERFORMAT_LOGICAL;
+                fValue  = mxRow->getBoolean(nCol+1) ? 1 : 0;
+                rData.SetValue(fValue);
+                break;
+            }
+            case sdbc::DataType::TINYINT:
+            case sdbc::DataType::SMALLINT:
+            case sdbc::DataType::INTEGER:
+            case sdbc::DataType::BIGINT:
+            case sdbc::DataType::FLOAT:
+            case sdbc::DataType::REAL:
+            case sdbc::DataType::DOUBLE:
+            case sdbc::DataType::NUMERIC:
+            case sdbc::DataType::DECIMAL:
+            {
+                //! do the conversion here?
+                fValue = mxRow->getDouble(nCol+1);
+                rData.SetValue(fValue);
+                break;
+            }
+            case sdbc::DataType::DATE:
+            {
+                rNumType = NUMBERFORMAT_DATE;
+
+                util::Date aDate = mxRow->getDate(nCol+1);
+                fValue = Date(aDate.Day, aDate.Month, aDate.Year) - maNullDate;
+                rData.SetValue(fValue);
+                break;
+            }
+            case sdbc::DataType::TIME:
+            {
+                rNumType = NUMBERFORMAT_TIME;
+
+                util::Time aTime = mxRow->getTime(nCol+1);
+                fValue = ( aTime.Hours * 3600 + aTime.Minutes * 60 +
+                           aTime.Seconds + aTime.HundredthSeconds / 100.0 ) / D_TIMEFACTOR;
+                rData.SetValue(fValue);
+                break;
+            }
+            case sdbc::DataType::TIMESTAMP:
+            {
+                rNumType = NUMBERFORMAT_DATETIME;
+
+                util::DateTime aStamp = mxRow->getTimestamp(nCol+1);
+                fValue = ( Date( aStamp.Day, aStamp.Month, aStamp.Year ) - maNullDate ) +
+                         ( aStamp.Hours * 3600 + aStamp.Minutes * 60 +
+                           aStamp.Seconds + aStamp.HundredthSeconds / 100.0 ) / D_TIMEFACTOR;
+                rData.SetValue(fValue);
+                break;
+            }
+            case sdbc::DataType::CHAR:
+            case sdbc::DataType::VARCHAR:
+            case sdbc::DataType::LONGVARCHAR:
+            case sdbc::DataType::SQLNULL:
+            case sdbc::DataType::BINARY:
+            case sdbc::DataType::VARBINARY:
+            case sdbc::DataType::LONGVARBINARY:
+            default:
+                rData.SetString(mrCache.InternString(mxRow->getString(nCol+1)));
+        }
+    }
+    catch (uno::Exception&)
+    {
+        rData.SetEmpty();
+    }
+}
+
+}
 
 sal_uInt16 lcl_GetDataGetOrientation( const uno::Reference<sheet::XDimensionsSupplier>& xSource )
 {
@@ -2830,7 +2993,17 @@ const ScDPCache* ScDPCollection::DBCaches::getCache(
     ::std::auto_ptr<ScDPCache> pCache(new ScDPCache(mpDoc));
     SAL_WNODEPRECATED_DECLARATIONS_POP
     SvNumberFormatter aFormat(mpDoc->GetServiceManager(), ScGlobal::eLnge);
-    pCache->InitFromDataBase(xRowSet, *aFormat.GetNullDate());
+    DBConnector aDB(*pCache, xRowSet, *aFormat.GetNullDate());
+    if (!aDB.isValid())
+        return NULL;
+
+    if (!pCache->InitFromDataBase(aDB))
+    {
+        // initialization failed.
+        comphelper::disposeComponent(xRowSet);
+        return NULL;
+    }
+
     if (pDimData)
         pDimData->WriteToCache(*pCache);
 
@@ -2935,12 +3108,18 @@ void ScDPCollection::DBCaches::updateCache(
     }
 
     SvNumberFormatter aFormat(mpDoc->GetServiceManager(), ScGlobal::eLnge);
-    if (!rCache.InitFromDataBase(xRowSet, *aFormat.GetNullDate()))
+    DBConnector aDB(rCache, xRowSet, *aFormat.GetNullDate());
+    if (!aDB.isValid())
+        return;
+
+    if (!rCache.InitFromDataBase(aDB))
     {
         // initialization failed.
         rRefs.clear();
+        comphelper::disposeComponent(xRowSet);
         return;
     }
+
     if (pDimData)
         pDimData->WriteToCache(rCache);
 

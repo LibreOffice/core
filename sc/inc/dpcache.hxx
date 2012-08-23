@@ -43,12 +43,6 @@
 #include <vector>
 #include <set>
 
-namespace com { namespace sun { namespace star {
-    namespace sdbc {
-        class XRowSet;
-    }
-}}}
-
 struct ScQueryParam;
 class ScDPObject;
 class ScDPItemData;
@@ -102,6 +96,20 @@ public:
         Field();
     };
 
+    /**
+     * Interface for connecting to database source.  Column index is 0-based.
+     */
+    class DBConnector
+    {
+    public:
+        virtual long getColumnCount() const = 0;
+        virtual rtl::OUString getColumnLabel(long nCol) const = 0;
+        virtual bool first() = 0;
+        virtual bool next() = 0;
+        virtual void finish() = 0;
+        virtual void getValue(long nCol, ScDPItemData& rData, short& rNumType) const = 0;
+    };
+
 private:
 
     ScDocument* mpDoc;
@@ -148,7 +156,7 @@ public:
 
     const ItemsType& GetDimMemberValues( SCCOL nDim ) const;
     bool InitFromDoc(ScDocument* pDoc, const ScRange& rRange);
-    bool InitFromDataBase(const  ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet>& xRowSet, const Date& rNullDate);
+    bool InitFromDataBase(DBConnector& rDB);
 
     SCROW  GetRowCount() const;
     SCROW  GetItemDataId( sal_uInt16 nDim, SCROW nRow, bool bRepeatIfEmpty ) const;

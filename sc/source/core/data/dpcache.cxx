@@ -45,15 +45,7 @@
 #include <unotools/localedatawrapper.hxx>
 #include <svl/zforlist.hxx>
 
-#include <com/sun/star/sdbc/DataType.hpp>
-#include <com/sun/star/sdbc/XResultSetMetaData.hpp>
-#include <com/sun/star/sdbc/XResultSetMetaDataSupplier.hpp>
-#include <com/sun/star/sdbc/XRow.hpp>
-#include <com/sun/star/sdbc/XRowSet.hpp>
-
 #include <memory>
-
-const double D_TIMEFACTOR = 86400.0;
 
 using namespace ::com::sun::star;
 
@@ -163,85 +155,6 @@ void initFromCell(
     }
     else
         rData.SetEmpty();
-}
-
-void getItemValue(
-    ScDPCache& rCache, ScDPItemData& rData, const Reference<sdbc::XRow>& xRow, sal_Int32 nType,
-    long nCol, const Date& rNullDate, short& rNumType)
-{
-    rNumType = NUMBERFORMAT_NUMBER;
-    try
-    {
-        double fValue = 0.0;
-        switch (nType)
-        {
-            case sdbc::DataType::BIT:
-            case sdbc::DataType::BOOLEAN:
-            {
-                rNumType = NUMBERFORMAT_LOGICAL;
-                fValue  = xRow->getBoolean(nCol) ? 1 : 0;
-                rData.SetValue(fValue);
-                break;
-            }
-            case sdbc::DataType::TINYINT:
-            case sdbc::DataType::SMALLINT:
-            case sdbc::DataType::INTEGER:
-            case sdbc::DataType::BIGINT:
-            case sdbc::DataType::FLOAT:
-            case sdbc::DataType::REAL:
-            case sdbc::DataType::DOUBLE:
-            case sdbc::DataType::NUMERIC:
-            case sdbc::DataType::DECIMAL:
-            {
-                //! do the conversion here?
-                fValue = xRow->getDouble(nCol);
-                rData.SetValue(fValue);
-                break;
-            }
-            case sdbc::DataType::DATE:
-            {
-                rNumType = NUMBERFORMAT_DATE;
-
-                util::Date aDate = xRow->getDate(nCol);
-                fValue = Date(aDate.Day, aDate.Month, aDate.Year) - rNullDate;
-                rData.SetValue(fValue);
-                break;
-            }
-            case sdbc::DataType::TIME:
-            {
-                rNumType = NUMBERFORMAT_TIME;
-
-                util::Time aTime = xRow->getTime(nCol);
-                fValue = ( aTime.Hours * 3600 + aTime.Minutes * 60 +
-                           aTime.Seconds + aTime.HundredthSeconds / 100.0 ) / D_TIMEFACTOR;
-                rData.SetValue(fValue);
-                break;
-            }
-            case sdbc::DataType::TIMESTAMP:
-            {
-                rNumType = NUMBERFORMAT_DATETIME;
-
-                util::DateTime aStamp = xRow->getTimestamp(nCol);
-                fValue = ( Date( aStamp.Day, aStamp.Month, aStamp.Year ) - rNullDate ) +
-                         ( aStamp.Hours * 3600 + aStamp.Minutes * 60 +
-                           aStamp.Seconds + aStamp.HundredthSeconds / 100.0 ) / D_TIMEFACTOR;
-                rData.SetValue(fValue);
-                break;
-            }
-            case sdbc::DataType::CHAR:
-            case sdbc::DataType::VARCHAR:
-            case sdbc::DataType::LONGVARCHAR:
-            case sdbc::DataType::SQLNULL:
-            case sdbc::DataType::BINARY:
-            case sdbc::DataType::VARBINARY:
-            case sdbc::DataType::LONGVARBINARY:
-            default:
-                rData.SetString(rCache.InternString(xRow->getString(nCol)));
-        }
-    }
-    catch (uno::Exception&)
-    {
-    }
 }
 
 struct Bucket
@@ -424,21 +337,13 @@ bool ScDPCache::InitFromDoc(ScDocument* pDoc, const ScRange& rRange)
     return true;
 }
 
-bool ScDPCache::InitFromDataBase (const Reference<sdbc::XRowSet>& xRowSet, const Date& rNullDate)
+bool ScDPCache::InitFromDataBase(DBConnector& rDB)
 {
     Clear();
 
-    if (!xRowSet.is())
-        // Don't even waste time to go any further.
-        return false;
     try
     {
-        Reference<sdbc::XResultSetMetaDataSupplier> xMetaSupp(xRowSet, UNO_QUERY_THROW);
-        Reference<sdbc::XResultSetMetaData> xMeta = xMetaSupp->getMetaData();
-        if (!xMeta.is())
-            return false;
-
-        mnColumnCount = xMeta->getColumnCount();
+        mnColumnCount = rDB.getColumnCount();
         maFields.clear();
         maFields.reserve(mnColumnCount);
         for (size_t i = 0; i < static_cast<size_t>(mnColumnCount); ++i)
@@ -452,19 +357,17 @@ bool ScDPCache::InitFromDataBase (const Reference<sdbc::XRowSet>& xRowSet, const
 
         for (sal_Int32 nCol = 0; nCol < mnColumnCount; ++nCol)
         {
-            rtl::OUString aColTitle = xMeta->getColumnLabel(nCol+1);
-            aColTypes[nCol]  = xMeta->getColumnType(nCol+1);
+            rtl::OUString aColTitle = rDB.getColumnLabel(nCol);
             AddLabel(aColTitle);
         }
-
-        // Now get the data rows.
-        Reference<sdbc::XRow> xRow(xRowSet, UNO_QUERY_THROW);
 
         std::vector<Bucket> aBuckets;
         ScDPItemData aData;
         for (sal_Int32 nCol = 0; nCol < mnColumnCount; ++nCol)
         {
-            xRowSet->first();
+            if (!rDB.first())
+                continue;
+
             aBuckets.clear();
             Field& rField = maFields[nCol];
             SCROW nRow = 0;
@@ -472,7 +375,7 @@ bool ScDPCache::InitFromDataBase (const Reference<sdbc::XRowSet>& xRowSet, const
             {
                 short nFormatType = NUMBERFORMAT_UNDEFINED;
                 aData.SetEmpty();
-                getItemValue(*this, aData, xRow, aColTypes[nCol], nCol+1, rNullDate, nFormatType);
+                rDB.getValue(nCol, aData, nFormatType);
                 aBuckets.push_back(Bucket(aData, 0, nRow));
                 if (!aData.IsEmpty())
                 {
@@ -483,12 +386,12 @@ bool ScDPCache::InitFromDataBase (const Reference<sdbc::XRowSet>& xRowSet, const
 
                 ++nRow;
             }
-            while (xRowSet->next());
+            while (rDB.next());
 
             processBuckets(aBuckets, rField);
         }
 
-        xRowSet->beforeFirst();
+        rDB.finish();
 
         PostInit();
         return true;
