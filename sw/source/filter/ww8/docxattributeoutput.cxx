@@ -87,6 +87,7 @@
 #include <editeng/editobj.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/svdobj.hxx>
+#include <sfx2/sfxbasemodel.hxx>
 
 #include <anchoredobject.hxx>
 #include <docufld.hxx>
@@ -2287,10 +2288,12 @@ void DocxAttributeOutput::WritePostponedMath()
         return;
     uno::Reference < embed::XEmbeddedObject > xObj(const_cast<SwOLENode*>(m_postponedMath)->GetOLEObj().GetOleRef());
     uno::Reference< uno::XInterface > xInterface( xObj->getComponent(), uno::UNO_QUERY );
-    if( oox::FormulaExportBase* formulaexport = dynamic_cast< oox::FormulaExportBase* >( xInterface.get()))
-        formulaexport->writeFormulaOoxml( m_pSerializer, GetExport().GetFilter().getVersion());
-    else
-        OSL_FAIL( "Math OLE object cannot write out OOXML" );
+// gcc4.4 (and 4.3 and possibly older) have a problem with dynamic_cast directly to the target class,
+// so help it with an intermediate cast. I'm not sure what exactly the problem is, seems to be unrelated
+// to RTLD_GLOBAL, so most probably a gcc bug.
+    oox::FormulaExportBase* formulaexport = dynamic_cast<oox::FormulaExportBase*>(dynamic_cast<SfxBaseModel*>(xInterface.get()));
+    assert( formulaexport != NULL );
+    formulaexport->writeFormulaOoxml( m_pSerializer, GetExport().GetFilter().getVersion());
     m_postponedMath = NULL;
 }
 

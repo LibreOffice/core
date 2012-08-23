@@ -51,6 +51,7 @@
 #include <tools/globname.hxx>
 #include <comphelper/classids.hxx>
 #include <comphelper/embeddedobjectcontainer.hxx>
+#include <sfx2/sfxbasemodel.hxx>
 
 #include <oox/mathml/import.hxx>
 #include <doctok/sprmids.hxx> // NS_sprm namespace
@@ -3635,8 +3636,12 @@ int RTFDocumentImpl::popState()
         OUString aName;
         uno::Reference<embed::XEmbeddedObject> xObject = aContainer.CreateEmbeddedObject(aGlobalName.GetByteSequence(), aName);
         uno::Reference<util::XCloseable> xComponent(xObject->getComponent(), uno::UNO_QUERY);
-        if( oox::FormulaImportBase* pImport = dynamic_cast<oox::FormulaImportBase*>(xComponent.get()))
-            pImport->readFormulaOoxml(m_aMathBuffer);
+// gcc4.4 (and 4.3 and possibly older) have a problem with dynamic_cast directly to the target class,
+// so help it with an intermediate cast. I'm not sure what exactly the problem is, seems to be unrelated
+// to RTLD_GLOBAL, so most probably a gcc bug.
+        oox::FormulaImportBase* pImport = dynamic_cast<oox::FormulaImportBase*>(dynamic_cast<SfxBaseModel*>(xComponent.get()));
+        assert( pImport != NULL );
+        pImport->readFormulaOoxml(m_aMathBuffer);
         RTFValue::Pointer_t pValue(new RTFValue(xObject));
         RTFSprms aMathAttributes;
         aMathAttributes.set(NS_ooxml::LN_starmath, pValue);

@@ -74,6 +74,7 @@ $(eval $(call gb_Library_use_libraries,writerfilter,\
     msfilter \
     oox \
     sal \
+    sfx \
     sot \
     svt \
     tl \

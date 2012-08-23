@@ -80,6 +80,7 @@
 #include <filter/msfilter/msoleexp.hxx>
 #include <filter/msfilter/rtfutil.hxx>
 #include <svtools/miscopt.hxx>
+#include <sfx2/sfxbasemodel.hxx>
 
 #include <docufld.hxx>
 #include <fmtclds.hxx>
@@ -3362,15 +3363,14 @@ bool RtfAttributeOutput::FlyFrameOLEMath(const SwFlyFrmFmt* pFlyFrmFmt, SwOLENod
 
     m_aRunText->append("{" LO_STRING_SVTOOLS_RTF_MMATH " ");
     uno::Reference<util::XCloseable> xClosable(xObj->getComponent(), uno::UNO_QUERY);
-    oox::FormulaExportBase* pBase = dynamic_cast<oox::FormulaExportBase*>(xClosable.get());
-    SAL_WARN_IF(!pBase, "sw.rtf", "Math OLE object cannot write out RTF");
-    if (pBase)
-    {
-        OStringBuffer aBuf;
-        pBase->writeFormulaRtf(aBuf, m_rExport.eCurrentEncoding);
-        m_aRunText->append(aBuf.makeStringAndClear());
-    }
-
+// gcc4.4 (and 4.3 and possibly older) have a problem with dynamic_cast directly to the target class,
+// so help it with an intermediate cast. I'm not sure what exactly the problem is, seems to be unrelated
+// to RTLD_GLOBAL, so most probably a gcc bug.
+    oox::FormulaExportBase* pBase = dynamic_cast<oox::FormulaExportBase*>(dynamic_cast<SfxBaseModel*>(xClosable.get()));
+    assert( pBase != NULL );
+    OStringBuffer aBuf;
+    pBase->writeFormulaRtf(aBuf, m_rExport.eCurrentEncoding);
+    m_aRunText->append(aBuf.makeStringAndClear());
     // Replacement graphic.
     m_aRunText->append("{" LO_STRING_SVTOOLS_RTF_MMATHPICT " ");
     FlyFrameOLEReplacement(pFlyFrmFmt, rOLENode, rSize);

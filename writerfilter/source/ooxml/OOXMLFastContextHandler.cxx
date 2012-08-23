@@ -33,6 +33,7 @@
 #include <comphelper/embeddedobjectcontainer.hxx>
 #include <tools/globname.hxx>
 #include <comphelper/classids.hxx>
+#include <sfx2/sfxbasemodel.hxx>
 #include "OOXMLFastContextHandler.hxx"
 #include "OOXMLFactory.hxx"
 #include "Handler.hxx"
@@ -2441,8 +2442,12 @@ void OOXMLFastContextHandlerMath::process()
     OUString aName;
     uno::Reference< embed::XEmbeddedObject > ref = container.CreateEmbeddedObject( name.GetByteSequence(), aName );
     uno::Reference< uno::XInterface > component( ref->getComponent(), uno::UNO_QUERY );
-    if( oox::FormulaImportBase* import = dynamic_cast< oox::FormulaImportBase* >( component.get()))
-        import->readFormulaOoxml( buffer );
+// gcc4.4 (and 4.3 and possibly older) have a problem with dynamic_cast directly to the target class,
+// so help it with an intermediate cast. I'm not sure what exactly the problem is, seems to be unrelated
+// to RTLD_GLOBAL, so most probably a gcc bug.
+    oox::FormulaImportBase* import = dynamic_cast< oox::FormulaImportBase* >( dynamic_cast< SfxBaseModel* >(component.get()));
+    assert( import != NULL );
+    import->readFormulaOoxml( buffer );
     if (isForwardEvents())
     {
         OOXMLPropertySet * pProps = new OOXMLPropertySetImpl();

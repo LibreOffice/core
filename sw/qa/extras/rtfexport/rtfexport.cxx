@@ -81,8 +81,6 @@ public:
     CPPUNIT_TEST(testFdo50831);
     CPPUNIT_TEST(testFdo48335);
     CPPUNIT_TEST(testFdo38244);
-    // With gcc-4.4, the dynamic_cast in RtfAttributeOutput::FlyFrameOLEMath() fails, strange.
-#if !(__GNUC__ == 4 && __GNUC_MINOR__ == 4)
     CPPUNIT_TEST(testMathAccents);
     CPPUNIT_TEST(testMathEqarray);
     CPPUNIT_TEST(testMathD);
@@ -100,7 +98,6 @@ public:
     CPPUNIT_TEST(testMathSubscripts);
     CPPUNIT_TEST(testMathVerticalstacks);
     CPPUNIT_TEST(testMathRuns);
-#endif
     CPPUNIT_TEST(testFdo53113);
 #endif
     CPPUNIT_TEST_SUITE_END();

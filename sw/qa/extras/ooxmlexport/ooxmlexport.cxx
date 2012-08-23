@@ -49,10 +49,7 @@ public:
     CPPUNIT_TEST(testZoom);
     CPPUNIT_TEST(defaultTabStopNotInStyles);
     CPPUNIT_TEST(testFdo38244);
-    // See rtfexport test on why this is blacklisted.
-#if !(__GNUC__ == 4 && __GNUC_MINOR__ == 4)
     CPPUNIT_TEST(testMathEscape);
-#endif
     CPPUNIT_TEST(testFdo51034);
 #endif
     CPPUNIT_TEST_SUITE_END();
