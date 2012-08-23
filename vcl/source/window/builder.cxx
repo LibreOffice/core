@@ -44,6 +44,7 @@ VclBuilder::VclBuilder(Window *pParent, rtl::OUString sUIDir, rtl::OUString sUIF
     : m_sID(sID)
     , m_sHelpRoot(rtl::OUStringToOString(sUIFile, RTL_TEXTENCODING_UTF8))
     , m_pParent(pParent)
+    , m_pParserState(new ParserState)
 {
     sal_Int32 nIdx = m_sHelpRoot.lastIndexOf('.');
     if (nIdx != -1)
@@ -84,8 +85,8 @@ VclBuilder::VclBuilder(Window *pParent, rtl::OUString sUIDir, rtl::OUString sUIF
     handleChild(pParent, reader);
 
     //Set radiobutton groups when everything has been imported
-    for (std::vector<RadioButtonGroupMap>::iterator aI = m_aGroupMaps.begin(),
-         aEnd = m_aGroupMaps.end(); aI != aEnd; ++aI)
+    for (std::vector<RadioButtonGroupMap>::iterator aI = m_pParserState->m_aGroupMaps.begin(),
+         aEnd = m_pParserState->m_aGroupMaps.end(); aI != aEnd; ++aI)
     {
         RadioButton *pOne = get<RadioButton>(aI->m_sID);
         RadioButton *pOther = get<RadioButton>(aI->m_sValue);
@@ -93,12 +94,10 @@ VclBuilder::VclBuilder(Window *pParent, rtl::OUString sUIDir, rtl::OUString sUIF
         if (pOne && pOther)
             pOne->group(*pOther);
     }
-    //drop maps now
-    std::vector<RadioButtonGroupMap>().swap(m_aGroupMaps);
 
     //Set ComboBox models when everything has been imported
-    for (std::vector<ComboBoxModelMap>::iterator aI = m_aModelMaps.begin(),
-         aEnd = m_aModelMaps.end(); aI != aEnd; ++aI)
+    for (std::vector<ComboBoxModelMap>::iterator aI = m_pParserState->m_aModelMaps.begin(),
+         aEnd = m_pParserState->m_aModelMaps.end(); aI != aEnd; ++aI)
     {
         ListBox *pTarget = get<ListBox>(aI->m_sID);
         ListStore *pStore = get_model_by_name(aI->m_sValue);
@@ -106,18 +105,15 @@ VclBuilder::VclBuilder(Window *pParent, rtl::OUString sUIDir, rtl::OUString sUIF
         if (pTarget && pStore)
             mungemodel(*pTarget, *pStore);
     }
-    //drop maps now
-    std::vector<ComboBoxModelMap>().swap(m_aModelMaps);
-    for (std::vector<ModelAndId>::iterator aI = m_aModels.begin(),
-         aEnd = m_aModels.end(); aI != aEnd; ++aI)
+    for (std::vector<ModelAndId>::iterator aI = m_pParserState->m_aModels.begin(),
+         aEnd = m_pParserState->m_aModels.end(); aI != aEnd; ++aI)
     {
         delete aI->m_pModel;
     }
-    std::vector<ModelAndId>().swap(m_aModels);
 
     //Set SpinButton adjustments when everything has been imported
-    for (std::vector<SpinButtonAdjustmentMap>::iterator aI = m_aAdjustmentMaps.begin(),
-         aEnd = m_aAdjustmentMaps.end(); aI != aEnd; ++aI)
+    for (std::vector<SpinButtonAdjustmentMap>::iterator aI = m_pParserState->m_aAdjustmentMaps.begin(),
+         aEnd = m_pParserState->m_aAdjustmentMaps.end(); aI != aEnd; ++aI)
     {
         NumericFormatter *pTarget = dynamic_cast<NumericFormatter*>(get<Window>(aI->m_sID));
         Adjustment *pAdjustment = get_adjustment_by_name(aI->m_sValue);
@@ -125,12 +121,9 @@ VclBuilder::VclBuilder(Window *pParent, rtl::OUString sUIDir, rtl::OUString sUIF
         if (pTarget && pAdjustment)
             mungeadjustment(*pTarget, *pAdjustment);
     }
-    //drop maps now
-    std::vector<SpinButtonAdjustmentMap>().swap(m_aAdjustmentMaps);
-    std::vector<AdjustmentAndId>().swap(m_aAdjustments);
 
-    //drop maps now
-    Translations().swap(m_aTranslations);
+    //drop maps, etc. now
+    delete m_pParserState;
 
     //auto-show (really necessary ?, maybe drop it when complete)
     for (std::vector<WinAndId>::iterator aI = m_aChildren.begin(),
@@ -190,7 +183,7 @@ void VclBuilder::handleTranslations(xmlreader::XmlReader &reader)
         if (res == xmlreader::XmlReader::RESULT_TEXT && !sID.isEmpty())
         {
             rtl::OString sTranslation(name.begin, name.length);
-            m_aTranslations[sID][sProperty] = sTranslation;
+            m_pParserState->m_aTranslations[sID][sProperty] = sTranslation;
         }
 
         if (res == xmlreader::XmlReader::RESULT_END)
@@ -318,7 +311,7 @@ bool VclBuilder::extractGroup(const rtl::OString &id, stringmap &rMap)
     VclBuilder::stringmap::iterator aFind = rMap.find(rtl::OString(RTL_CONSTASCII_STRINGPARAM("group")));
     if (aFind != rMap.end())
     {
-        m_aGroupMaps.push_back(RadioButtonGroupMap(id, aFind->second));
+        m_pParserState->m_aGroupMaps.push_back(RadioButtonGroupMap(id, aFind->second));
         rMap.erase(aFind);
         return true;
     }
@@ -330,7 +323,7 @@ bool VclBuilder::extractAdjustment(const rtl::OString &id, stringmap &rMap)
     VclBuilder::stringmap::iterator aFind = rMap.find(rtl::OString(RTL_CONSTASCII_STRINGPARAM("adjustment")));
     if (aFind != rMap.end())
     {
-        m_aAdjustmentMaps.push_back(SpinButtonAdjustmentMap(id, aFind->second));
+        m_pParserState->m_aAdjustmentMaps.push_back(SpinButtonAdjustmentMap(id, aFind->second));
         rMap.erase(aFind);
         return true;
     }
@@ -342,7 +335,7 @@ bool VclBuilder::extractModel(const rtl::OString &id, stringmap &rMap)
     VclBuilder::stringmap::iterator aFind = rMap.find(rtl::OString(RTL_CONSTASCII_STRINGPARAM("model")));
     if (aFind != rMap.end())
     {
-        m_aModelMaps.push_back(ComboBoxModelMap(id, aFind->second));
+        m_pParserState->m_aModelMaps.push_back(ComboBoxModelMap(id, aFind->second));
         rMap.erase(aFind);
         return true;
     }
@@ -752,12 +745,12 @@ void VclBuilder::handleChild(Window *pParent, xmlreader::XmlReader &reader)
 
 void VclBuilder::handleAdjustment(const rtl::OString &rID, stringmap &rProperties)
 {
-    m_aAdjustments.push_back(AdjustmentAndId(rID, rProperties));
+    m_pParserState->m_aAdjustments.push_back(AdjustmentAndId(rID, rProperties));
 }
 
 void VclBuilder::handleListStore(xmlreader::XmlReader &reader, const rtl::OString &rID)
 {
-    m_aModels.push_back(ModelAndId(rID, new ListStore));
+    m_pParserState->m_aModels.push_back(ModelAndId(rID, new ListStore));
 
     int nLevel = 1;
     sal_Int32 nIndex = 0;
@@ -796,7 +789,7 @@ void VclBuilder::handleListStore(xmlreader::XmlReader &reader, const rtl::OStrin
                 if (!bTranslated)
                     sValue = rtl::OString(name.begin, name.length);
 
-                m_aModels.back().m_pModel->m_aEntries.push_back(sValue);
+                m_pParserState->m_aModels.back().m_pModel->m_aEntries.push_back(sValue);
 
                 ++nIndex;
             }
@@ -990,8 +983,8 @@ void VclBuilder::applyPackingProperty(Window *pCurrent,
 
 rtl::OString VclBuilder::getTranslation(const rtl::OString &rID, const rtl::OString &rProperty) const
 {
-    Translations::const_iterator aWidgetFind = m_aTranslations.find(rID);
-    if (aWidgetFind != m_aTranslations.end())
+    Translations::const_iterator aWidgetFind = m_pParserState->m_aTranslations.find(rID);
+    if (aWidgetFind != m_pParserState->m_aTranslations.end())
     {
         const WidgetTranslations &rWidgetTranslations = aWidgetFind->second;
         WidgetTranslations::const_iterator aPropertyFind = rWidgetTranslations.find(rProperty);
@@ -1096,8 +1089,8 @@ void VclBuilder::set_window_packing_position(const Window *pWindow, sal_Int32 nP
 
 VclBuilder::ListStore *VclBuilder::get_model_by_name(rtl::OString sID)
 {
-    for (std::vector<ModelAndId>::iterator aI = m_aModels.begin(),
-         aEnd = m_aModels.end(); aI != aEnd; ++aI)
+    for (std::vector<ModelAndId>::iterator aI = m_pParserState->m_aModels.begin(),
+         aEnd = m_pParserState->m_aModels.end(); aI != aEnd; ++aI)
     {
         if (aI->m_sID.equals(sID))
             return aI->m_pModel;
@@ -1108,8 +1101,8 @@ VclBuilder::ListStore *VclBuilder::get_model_by_name(rtl::OString sID)
 
 VclBuilder::Adjustment *VclBuilder::get_adjustment_by_name(rtl::OString sID)
 {
-    for (std::vector<AdjustmentAndId>::iterator aI = m_aAdjustments.begin(),
-         aEnd = m_aAdjustments.end(); aI != aEnd; ++aI)
+    for (std::vector<AdjustmentAndId>::iterator aI = m_pParserState->m_aAdjustments.begin(),
+         aEnd = m_pParserState->m_aAdjustments.end(); aI != aEnd; ++aI)
     {
         if (aI->m_sID.equals(sID))
             return &(aI->m_aAdjustment);

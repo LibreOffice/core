@@ -75,7 +75,6 @@ private:
         {
         }
     };
-    std::vector<ModelAndId> m_aModels;
 
     struct StringPair
     {
@@ -89,10 +88,8 @@ private:
     };
 
     typedef StringPair RadioButtonGroupMap;
-    std::vector<RadioButtonGroupMap> m_aGroupMaps;
-
     typedef StringPair ComboBoxModelMap;
-    std::vector<ComboBoxModelMap> m_aModelMaps;
+
     ListStore *get_model_by_name(rtl::OString sID);
     static void mungemodel(ListBox &rTarget, ListStore &rStore);
 
@@ -108,22 +105,31 @@ private:
             m_aAdjustment.swap(rAdjustment);
         }
     };
-    std::vector<AdjustmentAndId> m_aAdjustments;
 
     typedef StringPair SpinButtonAdjustmentMap;
-    std::vector<SpinButtonAdjustmentMap> m_aAdjustmentMaps;
+
     Adjustment *get_adjustment_by_name(rtl::OString sID);
     static void mungeadjustment(NumericFormatter &rTarget, Adjustment &rAdjustment);
 
     typedef std::map<rtl::OString, rtl::OString> WidgetTranslations;
     typedef std::map<rtl::OString, WidgetTranslations> Translations;
-    Translations m_aTranslations;
+
+    struct ParserState
+    {
+        std::vector<RadioButtonGroupMap> m_aGroupMaps;
+        std::vector<ComboBoxModelMap> m_aModelMaps;
+        std::vector<ModelAndId> m_aModels;
+        std::vector<AdjustmentAndId> m_aAdjustments;
+        std::vector<SpinButtonAdjustmentMap> m_aAdjustmentMaps;
+        Translations m_aTranslations;
+    };
 
     rtl::OString getTranslation(const rtl::OString &rId, const rtl::OString &rProperty) const;
 
     rtl::OString m_sID;
     rtl::OString m_sHelpRoot;
     Window *m_pParent;
+    ParserState *m_pParserState;
 
     Window *get_by_name(rtl::OString sID);
 public:
