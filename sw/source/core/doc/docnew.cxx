@@ -336,6 +336,7 @@ SwDoc::SwDoc()
     mbUseFormerTextWrapping             = aOptions.IsUseOurTextWrapping();
     mbConsiderWrapOnObjPos              = aOptions.IsConsiderWrappingStyle();
     mbMathBaselineAlignment                 = false;        // default for *old* documents is 'off'
+    mbStylesNoDefault                       = false;
     mbAddFlyOffsets                         = false;        // hidden
     mbOldNumbering                          = false;        // hidden
     mbUseHiResolutionVirtualDevice          = true;         // hidden
