@@ -210,8 +210,9 @@ bool ScDPItemData::IsCaseInsEqual(const ScDPItemData& r) const
             ;
     }
 
-    if (mbStringInterned && r.mbStringInterned)
-        return mpString == r.mpString;
+    if (mbStringInterned && r.mbStringInterned && mpString == r.mpString)
+        // Fast equality check for interned strings.
+        return true;
 
     return ScGlobal::GetpTransliteration()->isEqual(GetString(), r.GetString());
 }

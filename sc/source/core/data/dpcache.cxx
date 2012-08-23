@@ -195,7 +195,7 @@ struct EqualByValue : std::binary_function<Bucket, Bucket, bool>
 {
     bool operator() (const Bucket& left, const Bucket& right) const
     {
-        return left.maValue == right.maValue;
+        return left.maValue.IsCaseInsEqual(right.maValue);
     }
 };
 
@@ -251,7 +251,7 @@ void processBuckets(std::vector<Bucket>& aBuckets, ScDPCache::Field& rField)
         it->mnOrderIndex = nCurIndex;
         for (++it; it != itEnd; ++it)
         {
-            if (aPrev != it->maValue)
+            if (!aPrev.IsCaseInsEqual(it->maValue))
                 ++nCurIndex;
 
             it->mnOrderIndex = nCurIndex;
