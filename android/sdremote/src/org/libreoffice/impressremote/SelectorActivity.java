@@ -95,11 +95,6 @@ public class SelectorActivity extends SherlockActivity {
             final View layout = inflater.inflate(R.layout.dialog_addserver,
                             null);
 
-            //            TextView text = (TextView) layout.findViewById(R.id.text);
-            //            text.setText("Hello, this is a custom dialog!");
-            //            ImageView image = (ImageView) layout.findViewById(R.id.image);
-            //            image.setImageResource(R.drawable.android);
-
             builder = new AlertDialog.Builder(this);
             builder.setView(layout);
             builder.setTitle(R.string.addserver);
@@ -128,16 +123,6 @@ public class SelectorActivity extends SherlockActivity {
             alertDialog = builder.create();
             alertDialog.show();
 
-            //            Context mContext = getApplicationContext();
-            //            Dialog dialog = new Dialog(mContext);
-            //
-            //            dialog.setContentView(R.layout.dialog_addserver);
-            //            dialog.setTitle(R.string.addserver);
-
-            //            TextView text = (TextView) dialog.findViewById(R.id.text);
-            //            text.setText("Hello, this is a custom dialog!");
-            //            ImageView image = (ImageView) dialog.findViewById(R.id.image);
-            //            image.setImageResource(R.drawable.android);
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -213,6 +198,20 @@ public class SelectorActivity extends SherlockActivity {
     private HashMap<Server, View> mBluetoothServers = new HashMap<Server, View>();
     private HashMap<Server, View> mNetworkServers = new HashMap<Server, View>();
 
+    private void deleteServer(View aView) {
+        for (Entry<Server, View> aEntry : mNetworkServers.entrySet()) {
+            System.out.println(aEntry.getKey().getName());
+            System.out.println(aView);
+            System.out.println(aEntry.getValue());
+            if (aEntry.getValue() == aView
+                            .findViewById(R.id.selector_sub_label)
+                            || aEntry.getValue().findViewById(
+                                            R.id.selector_sub_label) == aView
+                                            .findViewById(R.id.selector_sub_label))
+                mCommunicationService.removeServer(aEntry.getKey());
+        }
+    }
+
     private void refreshLists() {
         if (mCommunicationService != null) {
 
@@ -256,6 +255,9 @@ public class SelectorActivity extends SherlockActivity {
                     aText.setText(aServer.getName());
                     aLayout.addView(aView);
                     aMap.put(aServer, aText);
+
+                    //                    registerForContextMenu(aView);
+                    registerForContextMenu(aText);
                 }
 
             }
@@ -304,5 +306,26 @@ public class SelectorActivity extends SherlockActivity {
         }
     };
 
+    View aLastSelected = null;
+
+    public void onCreateContextMenu(android.view.ContextMenu menu, View v,
+                    android.view.ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        aLastSelected = v;
+        android.view.MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.selector_contextmenu, menu);
+
+    }
+
+    @Override
+    public boolean onContextItemSelected(android.view.MenuItem item) {
+        switch (item.getItemId()) {
+        case R.id.selector_context_delete:
+            deleteServer(aLastSelected);
+            refreshLists();
+            return true;
+        }
+        return super.onContextItemSelected(item);
+    }
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

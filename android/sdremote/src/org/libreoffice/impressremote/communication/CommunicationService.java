@@ -216,6 +216,26 @@ public class CommunicationService extends Service implements Runnable {
     }
 
     /**
+     * Key to use with getSharedPreferences to obtain a Map of stored servers.
+     * The keys are the ip/hostnames, the values are the friendly names.
+     */
+    private static final String SERVERSTORAGE_KEY = "sdremote_storedServers";
+    private HashMap<String, Server> mManualServers = new HashMap<String, Server>();
+
+    void loadServersFromPreferences() {
+        SharedPreferences aPref = getSharedPreferences(SERVERSTORAGE_KEY,
+                        MODE_PRIVATE);
+
+        Map<String, String> aStoredMap = (Map<String, String>) aPref.getAll();
+
+        for (Entry<String, String> aServerEntry : aStoredMap.entrySet()) {
+            mManualServers.put(aServerEntry.getKey(), new Server(
+                            Protocol.NETWORK, aServerEntry.getKey(),
+                            aServerEntry.getValue(), 0));
+        }
+    }
+
+    /**
      * Manually add a new (network) server to the list of servers.
      * @param aAddress
      * @param aRemember
@@ -236,24 +256,17 @@ public class CommunicationService extends Service implements Runnable {
         }
     }
 
-    /**
-     * Key to use with getSharedPreferences to obtain a Map of stored servers.
-     * The keys are the ip/hostnames, the values are the friendly names.
-     */
-    private static final String SERVERSTORAGE_KEY = "sdremote_storedServers";
-    private HashMap<String, Server> mManualServers = new HashMap<String, Server>();
+    public void removeServer(Server aServer) {
 
-    void loadServersFromPreferences() {
+        mManualServers.remove(aServer.getAddress());
+
         SharedPreferences aPref = getSharedPreferences(SERVERSTORAGE_KEY,
                         MODE_PRIVATE);
+        Editor aEditor = aPref.edit();
+        aEditor.remove(aServer.getAddress());
+        aEditor.apply();
 
-        Map<String, String> aStoredMap = (Map<String, String>) aPref.getAll();
-
-        for (Entry<String, String> aServerEntry : aStoredMap.entrySet()) {
-            mManualServers.put(aServerEntry.getKey(), new Server(
-                            Protocol.NETWORK, aServerEntry.getKey(),
-                            aServerEntry.getValue(), 0));
-        }
     }
+
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
