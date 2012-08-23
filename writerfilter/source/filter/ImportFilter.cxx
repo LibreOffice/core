@@ -183,6 +183,7 @@ void WriterFilter::setTargetDocument( const uno::Reference< lang::XComponent >& 
                rtl::OUString::createFromAscii( "com.sun.star.document.Settings" ) ), uno::UNO_QUERY );
 
    xSettings->setPropertyValue( rtl::OUString::createFromAscii( "UnbreakableNumberings" ), uno::makeAny( sal_True ) );
+   xSettings->setPropertyValue(rtl::OUString::createFromAscii("FloattableNomargins"), uno::makeAny( sal_True ));
 }
 
 void WriterFilter::setSourceDocument( const uno::Reference< lang::XComponent >& xDoc )

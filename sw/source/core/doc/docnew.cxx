@@ -360,6 +360,7 @@ SwDoc::SwDoc()
     mbSmallCapsPercentage66                 = false;        // hidden
     mbTabOverflow                           = true;
     mbUnbreakableNumberings                 = false;
+    mbFloattableNomargins                   = false;
 
     //
     // COMPATIBILITY FLAGS END
