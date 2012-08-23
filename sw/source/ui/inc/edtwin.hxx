@@ -149,11 +149,12 @@ friend void     PageNumNotify(  ViewShell* pVwSh,
                     bUseInputLanguage: 1,
                     bObjectSelect   : 1;
 
-
     sal_uInt16          nKS_NUMDOWN_Count; // #i23725#
     sal_uInt16          nKS_NUMINDENTINC_Count;
 
     SwFrameControlsManager m_aFrameControlsManager;
+    rtl::OUString   m_sTmpHFPageStyle;
+    bool            m_bTmpHFIsHeader;
 
     void            LeaveArea(const Point &);
     void            JustifyAreaTimer();

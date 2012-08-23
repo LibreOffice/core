@@ -93,6 +93,7 @@
 #include <fmtornt.hxx>
 #include <fmtfsize.hxx>
 #include <fmtclds.hxx>
+#include <fmthdft.hxx>
 #include <frmfmt.hxx>
 #include <modcfg.hxx>
 #include <fmtcol.hxx>
@@ -1323,12 +1324,23 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
             rSh.IsHeaderFooterEdit( ) )
     {
         bool bHeader = FRMTYPE_HEADER & rSh.GetFrmType(0,sal_False);
+
+        // Remove the temporary header/footer
+        if ( !m_sTmpHFPageStyle.isEmpty() )
+        {
+            rSh.ChangeHeaderOrFooter( m_sTmpHFPageStyle, m_bTmpHFIsHeader, false, false );
+        }
+
         if ( bHeader )
             rSh.SttPg();
         else
             rSh.EndPg();
         rSh.ToggleHeaderFooterEdit();
     }
+
+    // If we are inputing a key in a temporary header/footer, then make it definitive
+    if ( !m_sTmpHFPageStyle.isEmpty( ) )
+        m_sTmpHFPageStyle = rtl::OUString( );
 
     SfxObjectShell *pObjSh = (SfxObjectShell*)rView.GetViewFrame()->GetObjectShell();
     if ( bLockInput || (pObjSh && pObjSh->GetProgress()) )
@@ -2675,8 +2687,56 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
 
     const Point aDocPos( PixelToLogic( rMEvt.GetPosPixel() ) );
 
+    FrameControlType eControl;
+    bool bIsInHF = IsInHeaderFooter( aDocPos, eControl );
+    if ( !m_sTmpHFPageStyle.isEmpty( ) )
+    {
+        // Are we clicking outside the temporary header/footer? if so remove it
+        rtl::OUString sStyleName = rSh.GetCurPageStyle( false );
+        bool bMatchesTmpHF = sStyleName == m_sTmpHFPageStyle &&
+                        ( ( m_bTmpHFIsHeader && eControl == Header ) ||
+                          ( !m_bTmpHFIsHeader && eControl == Footer ) );
+
+        if ( ( !bIsInHF && rSh.IsHeaderFooterEdit( ) ) || !bMatchesTmpHF )
+            rSh.ChangeHeaderOrFooter( m_sTmpHFPageStyle, m_bTmpHFIsHeader, false, false );
+
+        m_sTmpHFPageStyle = rtl::OUString( );
+    }
+
+    // Are we clicking on a blank header/footer area?
+    if ( bIsInHF && !rSh.IsHeaderFooterEdit( ) )
+    {
+        // Create empty header/footer under the cursor and switch to it
+        const SwPageFrm* pPageFrm = rSh.GetLayout()->GetPageAtPos( aDocPos );
+
+        // Is it active?
+        bool bActive = true;
+        const SwPageDesc* pDesc = pPageFrm->GetPageDesc();
+
+        const SwFrmFmt* pFmt = pDesc->GetLeftFmt();
+        if ( pPageFrm->OnRightPage() )
+             pFmt = pDesc->GetRightFmt();
+
+        if ( pFmt )
+        {
+            if ( eControl == Header )
+                bActive = pFmt->GetHeader().IsActive();
+            else
+                bActive = pFmt->GetFooter().IsActive();
+        }
+
+        if ( !bActive )
+        {
+            const String& rStyleName = pPageFrm->GetPageDesc()->GetName();
+            rSh.ChangeHeaderOrFooter( rStyleName, eControl == Header, true, false );
+            m_sTmpHFPageStyle = rStyleName;
+            m_bTmpHFIsHeader = eControl == Header;
+        }
+    }
+
     if ( lcl_CheckHeaderFooterClick( rSh, aDocPos, rMEvt.GetClicks() ) )
         return;
+
 
     if ( IsChainMode() )
     {
@@ -3825,17 +3885,6 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
             }
             else
                 rView.GetPostItMgr()->SetShadowState(0,false);
-
-            // Are we moving from or to header / footer area?
-            if ( !rSh.IsHeaderFooterEdit() )
-            {
-                FrameControlType eControl;
-                bool bIsInHF = IsInHeaderFooter( aDocPt, eControl );
-                if ( !bIsInHF )
-                    ShowHeaderFooterSeparator( false, false );
-                else
-                    ShowHeaderFooterSeparator( eControl == Header, eControl == Footer );
-            }
         }
         // no break;
         case KEY_SHIFT:
@@ -4579,7 +4628,9 @@ SwEditWin::SwEditWin(Window *pParent, SwView &rMyView):
     bObjectSelect( sal_False ),
     nKS_NUMDOWN_Count(0),
     nKS_NUMINDENTINC_Count(0),
-    m_aFrameControlsManager( this )
+    m_aFrameControlsManager( this ),
+    m_sTmpHFPageStyle( ),
+    m_bTmpHFIsHeader( false )
 {
     SetHelpId(HID_EDIT_WIN);
     EnableChildTransparentMode();
@@ -4757,8 +4808,28 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
             if (rView.GetPostItMgr()->IsHit(rCEvt.GetMousePosPixel()))
                 return;
 
-            if (rCEvt.IsMouseEvent() && lcl_CheckHeaderFooterClick( rSh,
-                        PixelToLogic( rCEvt.GetMousePosPixel() ), 1 ) )
+            Point aDocPos( PixelToLogic( rCEvt.GetMousePosPixel() ) );
+            if ( !rCEvt.IsMouseEvent() )
+                aDocPos = rSh.GetCharRect().Center();
+
+            // Triggering a command remove temporary header/footer status
+            FrameControlType eControl;
+            bool bIsInHF = IsInHeaderFooter( aDocPos, eControl );
+            if ( !m_sTmpHFPageStyle.isEmpty( ) )
+            {
+                const rtl::OUString sStyleName = rSh.GetCurPageStyle( false );
+                bool bMatchesTmpHF = sStyleName == m_sTmpHFPageStyle &&
+                                ( ( m_bTmpHFIsHeader && eControl == Header ) ||
+                                  ( !m_bTmpHFIsHeader && eControl == Footer ) );
+
+                // Are we clicking outside the temporary header/footer? if so remove it
+                if ( ( !bIsInHF && rSh.IsHeaderFooterEdit( ) ) || !bMatchesTmpHF )
+                    rSh.ChangeHeaderOrFooter( m_sTmpHFPageStyle, m_bTmpHFIsHeader, false, false );
+
+                m_sTmpHFPageStyle = rtl::OUString( );
+            }
+
+            if (rCEvt.IsMouseEvent() && lcl_CheckHeaderFooterClick( rSh, aDocPos, 1 ) )
                 return;
 
 
@@ -4774,14 +4845,10 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
                         bNoInterrupt = sal_False;
                         bMBPressed = sal_False;
                     }
-                    Point aDocPos( PixelToLogic( rCEvt.GetMousePosPixel() ) );
-                    if ( !rCEvt.IsMouseEvent() )
-                        aDocPos = rSh.GetCharRect().Center();
-                    else
+                    if ( rCEvt.IsMouseEvent() )
                     {
                         SelectMenuPosition(rSh, rCEvt.GetMousePosPixel());
                         rView.StopShellTimer();
-
                     }
                     const Point aPixPos = LogicToPixel( aDocPos );
 

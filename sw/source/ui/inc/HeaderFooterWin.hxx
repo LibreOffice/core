@@ -45,7 +45,6 @@ class SwHeaderFooterWin : public MenuButton, public SwFrameControl
     Window*               m_pLine;
     bool                  m_bIsAppearing;
     int                   m_nFadeRate;
-    int                   m_nDelayAppearing; ///< Before we show the control, let it transparent for a few timer ticks to avoid appearing with every mouse over.
     Timer                 m_aFadeTimer;
 
 public:
