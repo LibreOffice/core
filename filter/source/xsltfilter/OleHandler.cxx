@@ -48,11 +48,13 @@
 #include <package/Inflater.hxx>
 #include <package/Deflater.hxx>
 
+#include <comphelper/componentcontext.hxx>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/servicefactory.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
+#include <com/sun/star/io/TempFile.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
@@ -70,11 +72,8 @@ using namespace ::rtl;
 namespace XSLT
 {
     Reference<XStream> SAL_CALL OleHandler::createTempFile() {
-        Reference<XStream>
-                tempFile(
-                        m_msf->createInstance(
-                                OUString(
-                                        RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.io.TempFile" ))),
+        Reference<XStream> tempFile(
+                        TempFile::create(comphelper::ComponentContext(m_msf).getUNOContext()),
                         UNO_QUERY);
         OSL_ASSERT(tempFile.is());
         return tempFile;

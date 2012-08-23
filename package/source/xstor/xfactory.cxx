@@ -22,6 +22,7 @@
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/StorageFormats.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/io/TempFile.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
 
 #include <comphelper/componentcontext.hxx>
@@ -84,11 +85,8 @@ uno::Reference< uno::XInterface > SAL_CALL OStorageFactory::createInstance()
 {
     // TODO: reimplement TempStream service to support XStream interface
     uno::Reference < io::XStream > xTempStream(
-                        m_xFactory->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.io.TempFile") ) ),
-                        uno::UNO_QUERY );
-
-    if ( !xTempStream.is() )
-        throw uno::RuntimeException(); // TODO:
+                        io::TempFile::create(comphelper::ComponentContext(m_xFactory).getUNOContext()),
+                        uno::UNO_QUERY_THROW );
 
     return uno::Reference< uno::XInterface >(
                 static_cast< OWeakObject* >( new OStorage(  xTempStream,

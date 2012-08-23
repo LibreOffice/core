@@ -18,6 +18,7 @@
  */
 
 #include "stringresource.hxx"
+#include <com/sun/star/io/TempFile.hpp>
 #include <com/sun/star/io/XTextInputStream.hpp>
 #include <com/sun/star/io/XTextOutputStream.hpp>
 #include <com/sun/star/io/XActiveDataSink.hpp>
@@ -1301,10 +1302,8 @@ BinaryOutput::BinaryOutput( Reference< XMultiComponentFactory > xMCF,
         : m_xMCF( xMCF )
         , m_xContext( xContext )
 {
-    m_xTempFile = m_xMCF->createInstanceWithContext
-        ( ::rtl::OUString("com.sun.star.io.TempFile"), m_xContext );
-    if( m_xTempFile.is() )
-        m_xOutputStream = Reference< io::XOutputStream >( m_xTempFile, UNO_QUERY );
+    m_xTempFile = io::TempFile::create( m_xContext );
+    m_xOutputStream = Reference< io::XOutputStream >( m_xTempFile, UNO_QUERY_THROW );
 }
 
 template< class T >
@@ -1529,19 +1528,15 @@ Reference< io::XInputStream > BinaryInput::getInputStreamForSection( sal_Int32 n
     Reference< io::XInputStream > xIn;
     if( m_nCurPos + nSize <= m_nSize )
     {
-        Reference< io::XOutputStream > xTempOut( m_xMCF->createInstanceWithContext
-            ( ::rtl::OUString("com.sun.star.io.TempFile"), m_xContext ), UNO_QUERY );
-        if( xTempOut.is() )
-        {
-            Sequence< sal_Int8 > aSection( m_pData + m_nCurPos, nSize );
-            xTempOut->writeBytes( aSection );
+        Reference< io::XOutputStream > xTempOut( io::TempFile::create(m_xContext), UNO_QUERY_THROW );
+        Sequence< sal_Int8 > aSection( m_pData + m_nCurPos, nSize );
+        xTempOut->writeBytes( aSection );
 
-            Reference< io::XSeekable> xSeekable( xTempOut, UNO_QUERY );
-            if( xSeekable.is() )
-                xSeekable->seek( 0 );
+        Reference< io::XSeekable> xSeekable( xTempOut, UNO_QUERY );
+        if( xSeekable.is() )
+            xSeekable->seek( 0 );
 
-            xIn = Reference< io::XInputStream>( xTempOut, UNO_QUERY );
-        }
+        xIn = Reference< io::XInputStream>( xTempOut, UNO_QUERY );
     }
     else
         OSL_FAIL( "BinaryInput::getInputStreamForSection(): Read past end" );

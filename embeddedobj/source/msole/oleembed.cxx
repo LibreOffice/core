@@ -38,6 +38,7 @@
 #include <com/sun/star/embed/StateChangeInProgressException.hpp>
 #include <com/sun/star/embed/EmbedMisc.hpp>
 #include <com/sun/star/embed/XEmbedObjectCreator.hpp>
+#include <com/sun/star/io/TempFile.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
@@ -705,8 +706,8 @@ namespace
         // the solution is only active for Unix systems
 #ifndef WNT
         uno::Reference <beans::XPropertySet> xNativeTempFile(
-            xFactory->createInstance(
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.io.TempFile"))), uno::UNO_QUERY_THROW);
+            io::TempFile::create(comphelper::ComponentContext(xFactory).getUNOContext()),
+            uno::UNO_QUERY_THROW);
         uno::Reference < io::XStream > xStream(xNativeTempFile, uno::UNO_QUERY_THROW);
 
         uno::Sequence< uno::Any > aArgs( 2 );

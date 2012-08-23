@@ -31,6 +31,7 @@
 #include <com/sun/star/packages/zip/ZipConstants.hpp>
 #include <com/sun/star/packages/manifest/XManifestReader.hpp>
 #include <com/sun/star/packages/manifest/XManifestWriter.hpp>
+#include <com/sun/star/io/TempFile.hpp>
 #include <com/sun/star/io/XStream.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
@@ -1177,7 +1178,7 @@ uno::Reference< io::XInputStream > ZipPackage::writeTempFile()
     if( bUseTemp )
     {
         // create temporary file
-        uno::Reference < io::XStream > xTempFile( m_xFactory->createInstance ("com.sun.star.io.TempFile"), UNO_QUERY_THROW );
+        uno::Reference < io::XStream > xTempFile( io::TempFile::create(comphelper::ComponentContext(m_xFactory).getUNOContext()), UNO_QUERY_THROW );
         xTempOut.set( xTempFile->getOutputStream(), UNO_SET_THROW );
         xTempIn.set( xTempFile->getInputStream(), UNO_SET_THROW );
     }

@@ -46,6 +46,7 @@
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XStream.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
+#include <com/sun/star/io/TempFile.hpp>
 
 #include <boost/scoped_ptr.hpp>
 
@@ -214,9 +215,7 @@ FileEmitContext::FileEmitContext( const rtl::OUString&                          
     m_xOut()
 {
     m_xContextStream = uno::Reference< io::XStream >(
-        xContext->getServiceManager()->createInstanceWithContext(
-            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.io.TempFile" ) ),
-            xContext ), uno::UNO_QUERY_THROW );
+        io::TempFile::create(xContext), uno::UNO_QUERY_THROW );
     m_xOut = m_xContextStream->getOutputStream();
     m_xSeek = uno::Reference<io::XSeekable>(m_xOut, uno::UNO_QUERY_THROW );
 

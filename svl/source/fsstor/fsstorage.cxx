@@ -39,6 +39,7 @@
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/io/XTruncate.hpp>
+#include <com/sun/star/io/TempFile.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
 
@@ -685,7 +686,7 @@ uno::Reference< io::XStream > SAL_CALL FSStorage::cloneStreamElement( const ::rt
         uno::Reference< io::XInputStream > xInStream = aResultContent.openStream();
 
         xTempResult = uno::Reference < io::XStream >(
-                    m_pImpl->m_xFactory->createInstance ( ::rtl::OUString("com.sun.star.io.TempFile") ),
+                    io::TempFile::create(comphelper::ComponentContext(m_pImpl->m_xFactory).getUNOContext()),
                     uno::UNO_QUERY_THROW );
         uno::Reference < io::XOutputStream > xTempOut = xTempResult->getOutputStream();
         uno::Reference < io::XInputStream > xTempIn = xTempResult->getInputStream();

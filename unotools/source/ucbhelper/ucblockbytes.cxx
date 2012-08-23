@@ -31,6 +31,7 @@
 #include <com/sun/star/ucb/UnsupportedDataSinkException.hpp>
 #include <com/sun/star/ucb/InteractiveIOException.hpp>
 #include <com/sun/star/io/XActiveDataStreamer.hpp>
+#include <com/sun/star/io/TempFile.hpp>
 #include <com/sun/star/ucb/DocumentHeaderField.hpp>
 #include <com/sun/star/ucb/XCommandInfo.hpp>
 #include <com/sun/star/ucb/XCommandProcessor.hpp>
@@ -1322,17 +1323,12 @@ sal_Bool UcbLockBytes::setInputStream_Impl( const Reference<XInputStream> &rxInp
             m_xSeekable = Reference < XSeekable > ( rxInputStream, UNO_QUERY );
             if( !m_xSeekable.is() && rxInputStream.is() )
             {
-                Reference < XMultiServiceFactory > xFactory = ::comphelper::getProcessServiceFactory();
-                Reference< XOutputStream > rxTempOut = Reference < XOutputStream > (
-                                    xFactory->createInstance ( ::rtl::OUString("com.sun.star.io.TempFile") ),
-                                    UNO_QUERY );
+                Reference < XComponentContext > xContext = ::comphelper::getProcessComponentContext();
+                Reference< XOutputStream > rxTempOut = Reference < XOutputStream > ( TempFile::create(xContext), UNO_QUERY_THROW );
 
-                if( rxTempOut.is() )
-                {
-                    ::comphelper::OStorageHelper::CopyInputToOutput( rxInputStream, rxTempOut );
-                    m_xInputStream = Reference< XInputStream >( rxTempOut, UNO_QUERY );
-                    m_xSeekable = Reference < XSeekable > ( rxTempOut, UNO_QUERY );
-                }
+                ::comphelper::OStorageHelper::CopyInputToOutput( rxInputStream, rxTempOut );
+                m_xInputStream = Reference< XInputStream >( rxTempOut, UNO_QUERY );
+                m_xSeekable = Reference < XSeekable > ( rxTempOut, UNO_QUERY );
             }
         }
 

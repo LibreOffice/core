@@ -24,6 +24,7 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
+#include <com/sun/star/io/TempFile.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
@@ -236,11 +237,8 @@ const sal_Int32 n_ConstBufferSize = 32000;
     ::rtl::OUString aTempURL;
 
     uno::Reference < beans::XPropertySet > xTempFile(
-            xFactory->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.io.TempFile") ) ),
-            uno::UNO_QUERY );
-
-    if ( !xTempFile.is() )
-        throw uno::RuntimeException(); // TODO
+            io::TempFile::create(comphelper::ComponentContext(xFactory).getUNOContext()),
+            uno::UNO_QUERY_THROW );
 
     try {
         xTempFile->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RemoveFile") ), uno::makeAny( sal_False ) );
@@ -1513,7 +1511,7 @@ void OWriteStream_Impl::CreateReadonlyCopyBasedOnData( const uno::Reference< io:
     uno::Reference < io::XStream > xTempFile;
     if ( !xTargetStream.is() )
         xTempFile = uno::Reference < io::XStream >(
-            m_xFactory->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.io.TempFile") ) ),
+            io::TempFile::create(comphelper::ComponentContext(m_xFactory).getUNOContext()),
             uno::UNO_QUERY );
     else
         xTempFile = xTargetStream;

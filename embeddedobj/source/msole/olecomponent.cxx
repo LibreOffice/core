@@ -32,6 +32,7 @@
 #include <com/sun/star/embed/UnreachableStateException.hpp>
 #include <com/sun/star/ucb/XSimpleFileAccess.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/io/TempFile.hpp>
 #include <com/sun/star/io/XTruncate.hpp>
 #include <com/sun/star/awt/XRequestCallback.hpp>
 
@@ -1596,11 +1597,8 @@ uno::Any SAL_CALL OleComponent::getTransferData( const datatransfer::DataFlavor&
         // allow to retrieve stream-representation of the object persistence
         bSupportedFlavor = sal_True;
         uno::Reference < io::XStream > xTempFileStream(
-            m_xFactory->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.io.TempFile" ) )),
-            uno::UNO_QUERY );
-
-        if ( !xTempFileStream.is() )
-            throw uno::RuntimeException(); // TODO
+            io::TempFile::create(comphelper::ComponentContext(m_xFactory).getUNOContext()),
+            uno::UNO_QUERY_THROW );
 
         uno::Reference< io::XOutputStream > xTempOutStream = xTempFileStream->getOutputStream();
         uno::Reference< io::XInputStream > xTempInStream = xTempFileStream->getInputStream();

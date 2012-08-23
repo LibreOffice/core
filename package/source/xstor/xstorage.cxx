@@ -22,6 +22,7 @@
 #include <com/sun/star/embed/UseBackupException.hpp>
 #include <com/sun/star/embed/StorageFormats.hpp>
 #include <com/sun/star/ucb/XProgressHandler.hpp>
+#include <com/sun/star/io/TempFile.hpp>
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
 #include <com/sun/star/ucb/XSimpleFileAccess2.hpp>
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
@@ -144,7 +145,7 @@ uno::Reference< io::XInputStream > GetSeekableTempCopy( uno::Reference< io::XInp
                                                         uno::Reference< lang::XMultiServiceFactory > xFactory )
 {
     uno::Reference < io::XOutputStream > xTempOut(
-                        xFactory->createInstance ( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.io.TempFile" ) ) ),
+                        io::TempFile::create(comphelper::ComponentContext(xFactory).getUNOContext()),
                         uno::UNO_QUERY );
     uno::Reference < io::XInputStream > xTempIn( xTempOut, uno::UNO_QUERY );
 
@@ -3800,8 +3801,7 @@ uno::Reference< io::XInputStream > SAL_CALL OStorage::getPlainRawStreamElement(
             throw io::IOException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
 
         uno::Reference < io::XOutputStream > xTempOut(
-                            m_pImpl->GetServiceFactory()->createInstance (
-                                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.io.TempFile" ) ) ),
+                            io::TempFile::create(comphelper::ComponentContext(m_pImpl->GetServiceFactory()).getUNOContext()),
                             uno::UNO_QUERY );
         xTempIn = uno::Reference < io::XInputStream >( xTempOut, uno::UNO_QUERY );
         uno::Reference < io::XSeekable > xSeek( xTempOut, uno::UNO_QUERY );
@@ -3913,8 +3913,7 @@ uno::Reference< io::XInputStream > SAL_CALL OStorage::getRawEncrStreamElement(
             throw io::IOException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
 
         uno::Reference < io::XOutputStream > xTempOut(
-                            m_pImpl->GetServiceFactory()->createInstance (
-                                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.io.TempFile" ) ) ),
+                            io::TempFile::create(comphelper::ComponentContext(m_pImpl->GetServiceFactory()).getUNOContext()),
                             uno::UNO_QUERY );
         xTempIn = uno::Reference < io::XInputStream >( xTempOut, uno::UNO_QUERY );
         uno::Reference < io::XSeekable > xSeek( xTempOut, uno::UNO_QUERY );

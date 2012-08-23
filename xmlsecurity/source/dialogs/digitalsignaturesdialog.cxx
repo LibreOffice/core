@@ -27,6 +27,7 @@
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
 #include <com/sun/star/io/XTruncate.hpp>
+#include <com/sun/star/io/TempFile.hpp>
 #include <com/sun/star/embed/XTransactedObject.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
@@ -773,10 +774,7 @@ SignatureStreamHelper DigitalSignaturesDialog::ImplOpenSignatureStream(
         if (nStreamOpenMode & css::embed::ElementModes::TRUNCATE)
         {
             //We write always into a new temporary stream.
-            mxTempSignatureStream = Reference < css::io::XStream >(
-                mxCtx->getServiceManager()->createInstanceWithContext(
-                OUSTR( "com.sun.star.io.TempFile" ), mxCtx) ,
-                UNO_QUERY_THROW);
+            mxTempSignatureStream = Reference < css::io::XStream >(css::io::TempFile::create(mxCtx), UNO_QUERY_THROW);
             aHelper.xSignatureStream = mxTempSignatureStream;
         }
         else

@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <com/sun/star/io/XTempFile.hpp>
+#include <com/sun/star/io/TempFile.hpp>
 #include "oox/drawingml/graphicshapecontext.hxx"
 #include <osl/diagnose.h>
 
@@ -76,9 +76,9 @@ Reference< XFastContextHandler > GraphicShapeContext::createFastChildContext( sa
             getEmbeddedWAVAudioFile( getRelations(), xAttribs, mpShapePtr->getGraphicProperties().maAudio );
             if( !mpShapePtr->getGraphicProperties().maAudio.msEmbed.isEmpty() )
             {
-                Reference< XMultiServiceFactory > xFactory = comphelper::getProcessServiceFactory();
+                Reference< XComponentContext > xContext = comphelper::getProcessComponentContext();
                 Reference< XInputStream > xInStrm( getFilter().openInputStream( mpShapePtr->getGraphicProperties().maAudio.msEmbed ), UNO_SET_THROW );
-                Reference< XTempFile > xTempFile( xFactory->createInstance( CREATE_OUSTRING( "com.sun.star.io.TempFile" ) ), UNO_QUERY_THROW );
+                Reference< XTempFile > xTempFile( TempFile::create(xContext) );
                 Reference< XOutputStream > xOutStrm( xTempFile->getOutputStream(), UNO_SET_THROW );
                 BinaryXOutputStream aOutStrm( xOutStrm, false );
                 BinaryXInputStream aInStrm( xInStrm, false );

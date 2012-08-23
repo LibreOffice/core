@@ -42,6 +42,7 @@
 #include <com/sun/star/container/XContainerQuery.hpp>
 #include <com/sun/star/document/XTypeDetection.hpp>
 #include <com/sun/star/document/XStandaloneDocumentInfo.hpp>
+#include <com/sun/star/io/TempFile.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/ucb/NameClash.hpp>
@@ -1409,7 +1410,7 @@ sal_Bool SfxDocTplService_Impl::WriteUINamesForTemplateDir_Impl( const ::rtl::OU
     sal_Bool bResult = sal_False;
     try {
         uno::Reference< beans::XPropertySet > xTempFile(
-                mxFactory->createInstance( ::rtl::OUString("com.sun.star.io.TempFile") ),
+                io::TempFile::create(comphelper::ComponentContext(mxFactory).getUNOContext()),
                 uno::UNO_QUERY_THROW );
 
         ::rtl::OUString aTempURL;

@@ -19,6 +19,8 @@
 
 #include <osl/diagnose.h>
 
+#include <com/sun/star/io/TempFile.hpp>
+#include <comphelper/componentcontext.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <switchpersistencestream.hxx>
 
@@ -174,7 +176,7 @@ void SwitchablePersistenceStream::CopyAndSwitchPersistenceTo( const uno::Referen
     if ( !xTargetStream.is() )
     {
         xTargetStream = uno::Reference < io::XStream >(
-            m_xFactory->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.io.TempFile") ) ),
+            io::TempFile::create(comphelper::ComponentContext(m_xFactory).getUNOContext()),
             uno::UNO_QUERY_THROW );
 
         xTargetSeek = uno::Reference< io::XSeekable >( xTargetStream, uno::UNO_QUERY_THROW );

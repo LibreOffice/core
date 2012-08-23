@@ -29,15 +29,16 @@
 
 #include "informationdialog.hxx"
 #include "optimizationstats.hxx"
-#include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #include <com/sun/star/graphic/GraphicProvider.hpp>
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
-#include <rtl/ustrbuf.hxx>
-#include <sal/macros.h>
+#include <com/sun/star/io/TempFile.hpp>
+#include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #include "com/sun/star/util/URL.hpp"
 #include "com/sun/star/util/URLTransformer.hpp"
 #include "com/sun/star/util/XURLTransformer.hpp"
+#include <rtl/ustrbuf.hxx>
+#include <sal/macros.h>
 
 #define DIALOG_WIDTH    240
 #define DIALOG_HEIGHT   80
@@ -215,7 +216,7 @@ OUString InformationDialog::ImpGetStandardImage( const OUString& sPrivateURL )
     rtl::OUString sURL;
     try
     {
-        mxTempFile = Reference< XStream >( mxMSF->getServiceManager()->createInstanceWithContext( OUString("com.sun.star.io.TempFile"), mxMSF ), UNO_QUERY_THROW );
+        mxTempFile = Reference< XStream >( io::TempFile::create(mxMSF), UNO_QUERY_THROW );
         Reference< XPropertySet > xPropSet( mxTempFile, UNO_QUERY );
         Reference< XOutputStream > xOutputStream( mxTempFile->getOutputStream() );
         if ( xOutputStream.is() && xPropSet.is() )

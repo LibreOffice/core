@@ -67,6 +67,7 @@
 #include <com/sun/star/graphic/GraphicType.hpp>
 #include <com/sun/star/io/XStream.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
+#include <com/sun/star/io/TempFile.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/util/URL.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
@@ -350,7 +351,7 @@ Reference< XGraphic > ImpCompressGraphic( const Reference< XComponentContext >& 
                             }
                             if ( bNeedsOptimizing && aDestSizePixel.Width && aDestSizePixel.Height )
                             {
-                                Reference< XStream > xTempFile( rxMSF->getServiceManager()->createInstanceWithContext( OUString("com.sun.star.io.TempFile"), rxMSF ), UNO_QUERY_THROW );
+                                Reference< XStream > xTempFile( io::TempFile::create(rxMSF), UNO_QUERY_THROW );
                                 Reference< XOutputStream > xOutputStream( xTempFile->getOutputStream() );
                                 Reference< XGraphicProvider > xGraphicProvider( GraphicProvider::create( rxMSF ) );
 
@@ -370,7 +371,7 @@ Reference< XGraphic > ImpCompressGraphic( const Reference< XComponentContext >& 
             else // this is a metafile
             {
                 rtl::OUString aDestMimeType( aSourceMimeType );
-                Reference< XStream > xTempFile( rxMSF->getServiceManager()->createInstanceWithContext( OUString("com.sun.star.io.TempFile"), rxMSF ), UNO_QUERY_THROW );
+                Reference< XStream > xTempFile( io::TempFile::create(rxMSF), UNO_QUERY_THROW );
                 Reference< XOutputStream > xOutputStream( xTempFile->getOutputStream() );
                 Reference< XGraphicProvider > xGraphicProvider( GraphicProvider::create( rxMSF ) );
                 ImpCompressGraphic( xGraphicProvider, xGraphic, xOutputStream, aDestMimeType, aLogicalSize, rGraphicSettings.mnJPEGQuality, rGraphicSettings.mnImageResolution, sal_False, aGraphicCropLogic );

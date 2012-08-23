@@ -31,6 +31,7 @@
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/awt/XTopWindow.hpp>
 #include <com/sun/star/embed/XClassifiedObject.hpp>
+#include <com/sun/star/io/TempFile.hpp>
 #include <com/sun/star/io/XStream.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
@@ -276,7 +277,7 @@ sal_Bool OwnView_Impl::ReadContentsAndGenerateTempFile( const uno::Reference< io
     // create m_aNativeTempURL
     ::rtl::OUString aNativeTempURL;
     uno::Reference < beans::XPropertySet > xNativeTempFile(
-            m_xFactory->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.io.TempFile" ) )),
+            io::TempFile::create(comphelper::ComponentContext(m_xFactory).getUNOContext()),
             uno::UNO_QUERY_THROW );
     uno::Reference < io::XStream > xNativeTempStream( xNativeTempFile, uno::UNO_QUERY_THROW );
     uno::Reference < io::XOutputStream > xNativeOutTemp = xNativeTempStream->getOutputStream();

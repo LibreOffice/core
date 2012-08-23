@@ -41,6 +41,7 @@ $(eval $(call gb_Library_add_libs,ucpgvfs1,\
 ))
 
 $(eval $(call gb_Library_use_libraries,ucpgvfs1,\
+	comphelper \
 	cppu \
 	cppuhelper \
 	sal \
