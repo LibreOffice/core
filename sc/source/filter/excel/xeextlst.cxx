@@ -129,8 +129,8 @@ void XclExpExtDataBar::SaveXml( XclExpXmlStream& rStrm )
 {
     sax_fastparser::FSHelperPtr& rWorksheet = rStrm.GetCurrentStream();
     rWorksheet->startElementNS( XML_x14, XML_dataBar,
-                                XML_minLength, rtl::OString::valueOf(0).getStr(),
-                                XML_maxLength, rtl::OString::valueOf(100).getStr(),
+                                XML_minLength, rtl::OString::valueOf(static_cast<sal_Int32>(0)).getStr(),
+                                XML_maxLength, rtl::OString::valueOf(static_cast<sal_Int32>(100)).getStr(),
                                 XML_axisPosition, getAxisPosition(meAxisPosition),
                                 FSEND );
 
