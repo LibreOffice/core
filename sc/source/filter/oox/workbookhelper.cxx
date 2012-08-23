@@ -480,8 +480,7 @@ Reference< XDatabaseRange > WorkbookGlobals::createUnnamedDatabaseRangeObject( c
                                        aScRange.aEnd.Col(), aScRange.aEnd.Row() );
         rDoc.SetAnonymousDBData( aScRange.aStart.Tab() , pNewDBData );
         ScDocShell* pDocSh = static_cast< ScDocShell* >(rDoc.GetDocumentShell());
-        ScDatabaseRangeObj* pDBRangeObj = new ScDatabaseRangeObj( pDocSh, aScRange.aStart.Tab() );
-        xDatabaseRange.set( pDBRangeObj );
+        xDatabaseRange.set(new ScDatabaseRangeObj(pDocSh, aScRange.aStart.Tab()));
     }
     catch( Exception& )
     {

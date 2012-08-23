@@ -494,7 +494,7 @@ public:
 };
 
 
-class SC_DLLPUBLIC ScDatabaseRangeObj : public cppu::WeakImplHelper6<
+class ScDatabaseRangeObj : public cppu::WeakImplHelper6<
                                 com::sun::star::sheet::XDatabaseRange,
                                 com::sun::star::util::XRefreshable,
                                 com::sun::star::container::XNamed,
@@ -516,9 +516,9 @@ private:
     void                    Refreshed_Impl();
 
 public:
-                            ScDatabaseRangeObj(ScDocShell* pDocSh, const String& rNm);
-                            ScDatabaseRangeObj(ScDocShell* pDocSh, const SCTAB nTab);
-    virtual                 ~ScDatabaseRangeObj();
+    ScDatabaseRangeObj(ScDocShell* pDocSh, const String& rNm);
+    SC_DLLPUBLIC ScDatabaseRangeObj(ScDocShell* pDocSh, const SCTAB nTab);
+    virtual ~ScDatabaseRangeObj();
 
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
