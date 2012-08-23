@@ -175,8 +175,7 @@ bool DBConnector::next()
 
 void DBConnector::finish()
 {
-    if (mxRowSet.is())
-        mxRowSet->beforeFirst();
+    mxRowSet->beforeFirst();
 }
 
 long DBConnector::getColumnCount() const
