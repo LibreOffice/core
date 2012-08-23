@@ -17,13 +17,13 @@
  */
 package com.sun.star.report.pentaho.output;
 
+import com.sun.star.awt.Size;
 import com.sun.star.report.ImageService;
 import com.sun.star.report.InputRepository;
 import com.sun.star.report.OutputRepository;
 import com.sun.star.report.ReportExecutionException;
 import com.sun.star.report.pentaho.DefaultNameGenerator;
 
-import java.awt.Dimension;
 import java.awt.Image;
 
 import java.io.BufferedInputStream;
@@ -271,7 +271,7 @@ public class ImageProducer
         try
         {
             final String mimeType = imageService.getMimeType(data);
-            final Dimension dims = imageService.getImageSize(data);
+            final Size dims = imageService.getImageSize(data);
 
             // copy the image into the local output-storage
             // todo: Implement data-fingerprinting so that we can detect the mime-type
@@ -290,8 +290,8 @@ public class ImageProducer
                 storage.closeOutputRepository();
             }
 
-            final CSSNumericValue widthVal = CSSNumericValue.createValue(CSSNumericType.MM, dims.getWidth() / 100.0);
-            final CSSNumericValue heightVal = CSSNumericValue.createValue(CSSNumericType.MM, dims.getHeight() / 100.0);
+            final CSSNumericValue widthVal = CSSNumericValue.createValue(CSSNumericType.MM, dims.Width / 100.0);
+            final CSSNumericValue heightVal = CSSNumericValue.createValue(CSSNumericType.MM, dims.Height / 100.0);
             final OfficeImage officeImage = new OfficeImage("Pictures/" + name, widthVal, heightVal);
             imageCache.put(imageKey, officeImage);
             return officeImage;
@@ -343,11 +343,11 @@ public class ImageProducer
                     inputStream.close();
                 }
                 final byte[] data = bout.toByteArray();
-                final Dimension dims = imageService.getImageSize(data);
+                final Size dims = imageService.getImageSize(data);
                 final String mimeType = imageService.getMimeType(data);
 
-                final CSSNumericValue widthVal = CSSNumericValue.createValue(CSSNumericType.MM, dims.getWidth() / 100.0);
-                final CSSNumericValue heightVal = CSSNumericValue.createValue(CSSNumericType.MM, dims.getHeight() / 100.0);
+                final CSSNumericValue widthVal = CSSNumericValue.createValue(CSSNumericType.MM, dims.Width / 100.0);
+                final CSSNumericValue heightVal = CSSNumericValue.createValue(CSSNumericType.MM, dims.Height / 100.0);
 
                 final String filename = copyToOutputRepository(mimeType, data);
                 final OfficeImage officeImage = new OfficeImage(filename, widthVal, heightVal);
@@ -419,10 +419,10 @@ public class ImageProducer
             }
             final byte[] data = bout.toByteArray();
 
-            final Dimension dims = imageService.getImageSize(data);
+            final Size dims = imageService.getImageSize(data);
             final String mimeType = imageService.getMimeType(data);
-            final CSSNumericValue widthVal = CSSNumericValue.createValue(CSSNumericType.MM, dims.getWidth() / 100.0);
-            final CSSNumericValue heightVal = CSSNumericValue.createValue(CSSNumericType.MM, dims.getHeight() / 100.0);
+            final CSSNumericValue widthVal = CSSNumericValue.createValue(CSSNumericType.MM, dims.Width / 100.0);
+            final CSSNumericValue heightVal = CSSNumericValue.createValue(CSSNumericType.MM, dims.Height / 100.0);
 
             if (preserveIRI)
             {

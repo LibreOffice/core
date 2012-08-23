@@ -17,7 +17,7 @@
  */
 package com.sun.star.report;
 
-import java.awt.Dimension;
+import com.sun.star.awt.Size;
 
 import java.io.InputStream;
 
@@ -48,7 +48,7 @@ public interface ImageService
      *
      * @throws ReportExecutionException
      * @return*/
-    Dimension getImageSize(final InputStream image) throws ReportExecutionException;
+    Size getImageSize(final InputStream image) throws ReportExecutionException;
 
     /**
      * @param image
@@ -56,6 +56,6 @@ public interface ImageService
      *
      * @throws ReportExecutionException
      * @return*/
-    Dimension getImageSize(final byte[] image) throws ReportExecutionException;
+    Size getImageSize(final byte[] image) throws ReportExecutionException;
 }
 

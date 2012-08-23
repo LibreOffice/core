@@ -32,8 +32,6 @@ import com.sun.star.lib.uno.adapter.InputStreamToXInputStreamAdapter;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
 
-import java.awt.Dimension;
-
 import java.io.InputStream;
 
 
@@ -69,14 +67,14 @@ public class SOImageService implements ImageService
         }
     }
 
-    public Dimension getImageSize(final InputStream image) throws ReportExecutionException
+    public Size getImageSize(final InputStream image) throws ReportExecutionException
     {
         return getImageSize(new InputStreamToXInputStreamAdapter(image));
     }
 
-    private Dimension getImageSize(final XInputStream image) throws ReportExecutionException
+    private Size getImageSize(final XInputStream image) throws ReportExecutionException
     {
-        final Dimension dim = new Dimension();
+        final Size dim = new Size();
         try
         {
             final PropertyValue[] value = new PropertyValue[]
@@ -96,13 +94,15 @@ public class SOImageService implements ImageService
                 if (xInfo.hasPropertyByName("Size100thMM"))
                 {
                     Size imageSize = (Size) xImage.getPropertyValue("Size100thMM");
-                    dim.setSize(imageSize.Width, imageSize.Height);
-                    if (dim.height == 0 && dim.width == 0)
+                    dim.Width = imageSize.Width;
+                    dim.Height = imageSize.Height;
+                    if (dim.Height == 0 && dim.Width == 0)
                     {
                         imageSize = (Size) xImage.getPropertyValue("SizePixel");
                         final int dpi = java.awt.Toolkit.getDefaultToolkit().getScreenResolution();
                         final double fac = 2540 / (double) dpi;
-                        dim.setSize(imageSize.Width * fac, imageSize.Height * fac);
+                        dim.Width = (int) (imageSize.Width * fac);
+                        dim.Height = (int) (imageSize.Height * fac);
                     }
                 }
                 else if (xInfo.hasPropertyByName("SizePixel"))
@@ -110,7 +110,8 @@ public class SOImageService implements ImageService
                     final Size imageSize = (Size) xImage.getPropertyValue("SizePixel");
                     final int dpi = java.awt.Toolkit.getDefaultToolkit().getScreenResolution();
                     final double fac = 2540 / dpi;
-                    dim.setSize(imageSize.Width * fac, imageSize.Height * fac);
+                    dim.Width = (int) (imageSize.Width * fac);
+                    dim.Height = (int) (imageSize.Height * fac);
                 }
             }
         }
@@ -121,7 +122,7 @@ public class SOImageService implements ImageService
         return dim;
     }
 
-    public Dimension getImageSize(final byte[] image) throws ReportExecutionException
+    public Size getImageSize(final byte[] image) throws ReportExecutionException
     {
         return getImageSize(new ByteArrayToXInputStreamAdapter(image));
     }
