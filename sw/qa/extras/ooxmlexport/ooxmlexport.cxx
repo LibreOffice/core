@@ -43,6 +43,20 @@ public:
     void testFdo38244();
     void testMathEscape();
     void testFdo51034();
+    void testMathAccents();
+    void testMathD();
+    void testMathEscaping();
+    void testMathLim();
+    void testMathMalformedXml();
+    void testMathMatrix();
+    void testMathMso2k7();
+    void testMathNary();
+    void testMathOverbraceUnderbrace();
+    void testMathOverstrike();
+    void testMathPlaceholders();
+    void testMathRad();
+    void testMathSubscripts();
+    void testMathVerticalStacks();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -51,6 +65,20 @@ public:
     CPPUNIT_TEST(testFdo38244);
     CPPUNIT_TEST(testMathEscape);
     CPPUNIT_TEST(testFdo51034);
+    CPPUNIT_TEST(testMathAccents);
+    CPPUNIT_TEST(testMathD);
+    CPPUNIT_TEST(testMathEscaping);
+    CPPUNIT_TEST(testMathLim);
+    CPPUNIT_TEST(testMathMalformedXml);
+    CPPUNIT_TEST(testMathMatrix);
+    CPPUNIT_TEST(testMathMso2k7);
+    CPPUNIT_TEST(testMathNary);
+    CPPUNIT_TEST(testMathOverbraceUnderbrace);
+    CPPUNIT_TEST(testMathOverstrike);
+    CPPUNIT_TEST(testMathPlaceholders);
+    CPPUNIT_TEST(testMathRad);
+    CPPUNIT_TEST(testMathSubscripts);
+    CPPUNIT_TEST(testMathVerticalStacks);
 #endif
     CPPUNIT_TEST_SUITE_END();
 
@@ -176,6 +204,150 @@ void Test::testFdo51034()
     // The problem was that the 'l' param of the HYPERLINK field was parsed with = "#", not += "#".
     roundtrip("fdo51034.odt");
     CPPUNIT_ASSERT_EQUAL(OUString("http://Www.google.com/#a"), getProperty<OUString>(getRun(getParagraph(1), 1), "HyperLinkURL"));
+}
+
+// Construct the expected formula from UTF8, as there may be such characters.
+// Remove all spaces, as LO export/import may change that.
+// Replace symbol - (i.e. U+2212) with ASCII - , LO does this change and it shouldn't matter.
+#define CHECK_FORMULA( expected, actual ) \
+    CPPUNIT_ASSERT_EQUAL( \
+        OUString( expected, strlen( expected ), RTL_TEXTENCODING_UTF8 ) \
+            .replaceAll( " ", "" ).replaceAll( OUString( "−", strlen( "−" ), RTL_TEXTENCODING_UTF8 ), "-" ), \
+        OUString( actual ).replaceAll( " ", "" ).replaceAll( OUString( "−", strlen( "−" ), RTL_TEXTENCODING_UTF8 ), "-" ))
+
+void Test::testMathAccents()
+{
+    roundtrip( "math-accents.docx" );
+    CHECK_FORMULA(
+        "acute {a} grave {a} check {a} breve {a} circle {a} widevec {a} widetilde {a}"
+            " widehat {a} dot {a} widevec {a} widevec {a} widetilde {a} underline {a}",
+        getFormula( getRun( getParagraph( 1 ), 1 )));
+}
+
+void Test::testMathD()
+{
+    roundtrip( "math-d.docx" );
+    CHECK_FORMULA( "left (x mline y mline z right )", getFormula( getRun( getParagraph( 1 ), 1 )));
+    CHECK_FORMULA( "left (1 right )", getFormula( getRun( getParagraph( 1 ), 2 )));
+    CHECK_FORMULA( "left [2 right ]", getFormula( getRun( getParagraph( 1 ), 3 )));
+    CHECK_FORMULA( "left ldbracket 3 right rdbracket", getFormula( getRun( getParagraph( 1 ), 4 )));
+    CHECK_FORMULA( "left lline 4 right rline", getFormula( getRun( getParagraph( 1 ), 5 )));
+    CHECK_FORMULA( "left ldline 5 right rdline", getFormula( getRun( getParagraph( 1 ), 6 )));
+    CHECK_FORMULA( "left langle 6 right rangle", getFormula( getRun( getParagraph( 1 ), 7 )));
+    CHECK_FORMULA( "left langle a mline b right rangle", getFormula( getRun( getParagraph( 1 ), 8 )));
+    CHECK_FORMULA( "left ({x} over {y} right )", getFormula( getRun( getParagraph( 1 ), 9 )));
+}
+
+void Test::testMathEscaping()
+{
+    roundtrip( "math-escaping.docx" );
+    CHECK_FORMULA( "− ∞ < x < ∞", getFormula( getRun( getParagraph( 1 ), 1 )));
+}
+
+void Test::testMathLim()
+{
+    roundtrip( "math-lim.docx" );
+    CHECK_FORMULA( "lim from {x → 1} {x}", getFormula( getRun( getParagraph( 1 ), 1 )));
+}
+
+void Test::testMathMalformedXml()
+{
+    roundtrip( "math-malformed_xml.docx" );
+    CPPUNIT_ASSERT_EQUAL( 0, getLength());
+}
+
+void Test::testMathMatrix()
+{
+    roundtrip( "math-matrix.docx" );
+    CHECK_FORMULA( "left [matrix {1 # 2 ## 3 # 4} right ]", getFormula( getRun( getParagraph( 1 ), 1 )));
+}
+
+void Test::testMathMso2k7()
+{
+    roundtrip( "math-mso2k7.docx" );
+    CHECK_FORMULA( "A = π {r} ^ {2}", getFormula( getRun( getParagraph( 1 ), 1 )));
+// TODO check the stack/binom difference
+//    CHECK_FORMULA( "{left (x+a right )} ^ {n} = sum from {k=0} to {n} {left (binom {n} {k} right ) {x} ^ {k} {a} ^ {n-k}}",
+    CHECK_FORMULA( "{left (x+a right )} ^ {n} = sum from {k=0} to {n} {left (stack {n # k} right ) {x} ^ {k} {a} ^ {n-k}}",
+        getFormula( getRun( getParagraph( 2 ), 1 )));
+    CHECK_FORMULA( "{left (1+x right )} ^ {n} =1+ {nx} over {1!} + {n left (n-1 right ) {x} ^ {2}} over {2!} +…",
+        getFormula( getRun( getParagraph( 3 ), 1 )));
+// TODO check (cos/sin miss {})
+//    CHECK_FORMULA( "f left (x right ) = {a} rsub {0} + sum from {n=1} to {∞} {left ({a} rsub {n} cos {{nπx} over {L}} + {b} rsub {n} sin {{nπx} over {L}} right )}",
+    CHECK_FORMULA( "f left (x right ) = {a} rsub {0} + sum from {n=1} to {∞} {left ({a} rsub {n} cos {nπx} over {L} + {b} rsub {n} sin {nπx} over {L} right )}",
+        getFormula( getRun( getParagraph( 4 ), 1 )));
+    CHECK_FORMULA( "{a} ^ {2} + {b} ^ {2} = {c} ^ {2}", getFormula( getRun( getParagraph( 5 ), 1 )));
+    CHECK_FORMULA( "x = {- b ± sqrt {{b} ^ {2} -4 ac}} over {2 a}",
+        getFormula( getRun( getParagraph( 6 ), 1 )));
+    CHECK_FORMULA(
+        "{e} ^ {x} =1+ {x} over {1!} + {{x} ^ {2}} over {2!} + {{x} ^ {3}} over {3!} +…,    -∞<x<∞",
+        getFormula( getRun( getParagraph( 7 ), 1 )));
+    CHECK_FORMULA(
+//        "sin {α} ± sin {β} =2 sin {{1} over {2} left (α±β right )} cos {{1} over {2} left (α∓β right )}",
+// TODO check (cos/in miss {})
+        "sin α ± sin β =2 sin {1} over {2} left (α±β right ) cos {1} over {2} left (α∓β right )",
+        getFormula( getRun( getParagraph( 8 ), 1 )));
+    CHECK_FORMULA(
+//        "cos {α} + cos {β} =2 cos {{1} over {2} left (α+β right )} cos {{1} over {2} left (α-β right )}",
+// TODO check (cos/sin miss {})
+        "cos α + cos β =2 cos {1} over {2} left (α+β right ) cos {1} over {2} left (α-β right )",
+        getFormula( getRun( getParagraph( 9 ), 1 )));
+}
+
+void Test::testMathNary()
+{
+    roundtrip( "math-nary.docx" );
+    CHECK_FORMULA( "lllint from {1} to {2} {x + 1}", getFormula( getRun( getParagraph( 1 ), 1 )));
+    CHECK_FORMULA( "prod from {a} {b}", getFormula( getRun( getParagraph( 1 ), 2 )));
+    CHECK_FORMULA( "sum to {2} {x}", getFormula( getRun( getParagraph( 1 ), 3 )));
+}
+
+void Test::testMathOverbraceUnderbrace()
+{
+    roundtrip( "math-overbrace_underbrace.docx" );
+    CHECK_FORMULA( "{abcd} overbrace {4}", getFormula( getRun( getParagraph( 1 ), 1 )));
+    CHECK_FORMULA( "{xyz} underbrace {3}", getFormula( getRun( getParagraph( 2 ), 1 )));
+}
+
+void Test::testMathOverstrike()
+{
+    roundtrip( "math-overstrike.docx" );
+    CHECK_FORMULA( "overstrike {abc}", getFormula( getRun( getParagraph( 1 ), 1 )));
+}
+
+void Test::testMathPlaceholders()
+{
+    roundtrip( "math-placeholders.docx" );
+    CHECK_FORMULA( "sum from <?> to <?> <?>", getFormula( getRun( getParagraph( 1 ), 1 )));
+}
+
+void Test::testMathRad()
+{
+    roundtrip( "math-rad.docx" );
+    CHECK_FORMULA( "sqrt {4}", getFormula( getRun( getParagraph( 1 ), 1 )));
+    CHECK_FORMULA( "nroot {3} {x + 1}", getFormula( getRun( getParagraph( 1 ), 2 )));
+}
+
+void Test::testMathSubscripts()
+{
+    roundtrip( "math-subscripts.docx" );
+    CHECK_FORMULA( "{x} ^ {y} + {e} ^ {x}", getFormula( getRun( getParagraph( 1 ), 1 )));
+    CHECK_FORMULA( "{x} ^ {b}", getFormula( getRun( getParagraph( 1 ), 2 )));
+    CHECK_FORMULA( "{x} rsub {b}", getFormula( getRun( getParagraph( 1 ), 3 )));
+    CHECK_FORMULA( "{a} rsub {c} rsup {b}", getFormula( getRun( getParagraph( 1 ), 4 )));
+    CHECK_FORMULA( "{x} lsub {2} lsup {1}", getFormula( getRun( getParagraph( 1 ), 5 )));
+    CHECK_FORMULA( "{{x csup {6} csub {3}} lsub {4} lsup {5}} rsub {2} rsup {1}",
+        getFormula( getRun( getParagraph( 1 ), 6 )));
+}
+
+void Test::testMathVerticalStacks()
+{
+    roundtrip( "math-vertical_stacks.docx" );
+    CHECK_FORMULA( "{a} over {b}", getFormula( getRun( getParagraph( 1 ), 1 )));
+    CHECK_FORMULA( "{a} / {b}", getFormula( getRun( getParagraph( 2 ), 1 )));
+// TODO check these
+//    CHECK_FORMULA( "binom {a} {b}", getFormula( getRun( getParagraph( 3 ), 1 )));
+//    CHECK_FORMULA( "binom {a} {binom {b} {c}}", getFormula( getRun( getParagraph( 4 ), 1 )));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
