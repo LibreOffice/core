@@ -720,7 +720,7 @@ $(call gb_LinkTarget_get_target,$(1)) : LINKED_LIBS += $$(gb_LINKED_LIBS)
 
 $(call gb_LinkTarget_get_target,$(1)) : $$(foreach lib,$$(gb_LINKED_LIBS),$$(call gb_Library_get_target,$$(lib)))
 $(call gb_LinkTarget_get_external_headers_target,$(1)) : \
-$$(foreach lib,$$(gb_LINKED_LIBS),$$(call gb_Library_get_headers_target,$$(lib)))
+	$(foreach lib,$(2),$(call gb_Library_get_headers_target,$(lib)))
 
 endef
 
