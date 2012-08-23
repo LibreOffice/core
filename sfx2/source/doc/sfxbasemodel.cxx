@@ -43,7 +43,7 @@
 #include <com/sun/star/ui/XUIConfigurationPersistence.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/Aspects.hpp>
-#include <com/sun/star/document/XDocumentProperties.hpp>
+#include <com/sun/star/document/DocumentProperties.hpp>
 #include <com/sun/star/frame/XTransientDocumentsDocumentContentFactory.hpp>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <comphelper/enumhelper.hxx>  // can be removed when this is a "real" service
@@ -921,9 +921,7 @@ SfxBaseModel::getDocumentProperties()
     if ( !m_pData->m_xDocumentProperties.is() )
     {
         uno::Reference< document::XDocumentProperties > xDocProps(
-            ::comphelper::getProcessServiceFactory()->createInstance(
-                DEFINE_CONST_UNICODE("com.sun.star.document.DocumentProperties") ),
-            uno::UNO_QUERY_THROW);
+            document::DocumentProperties::create( ::comphelper::getProcessComponentContext() ) );
         m_pData->impl_setDocumentProperties(xDocProps);
     }
 

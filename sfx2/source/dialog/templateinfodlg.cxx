@@ -15,7 +15,7 @@
 #include <toolkit/helper/vclunohelper.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/document/XDocumentProperties.hpp>
+#include <com/sun/star/document/DocumentProperties.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -83,7 +83,7 @@ void SfxTemplateInfoDlg::loadDocument(const OUString &rURL)
         aProps[0].Value <<= xInteractionHandler;
 
         uno::Reference<document::XDocumentProperties> xDocProps(
-                    xContext->createInstance("com.sun.star.document.DocumentProperties"), uno::UNO_QUERY );
+                    document::DocumentProperties::create(comphelper::getProcessComponentContext()) );
 
         xDocProps->loadFromMedium( rURL, aProps );
 

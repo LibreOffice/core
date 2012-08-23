@@ -57,6 +57,7 @@
 #include <com/sun/star/drawing/Hatch.hpp>
 #include <com/sun/star/drawing/LineDash.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
+#include <com/sun/star/document/DocumentProperties.hpp>
 
 // header for class SvNumberFormatter
 #include <svl/zforlist.hxx>
@@ -695,10 +696,7 @@ uno::Reference< document::XDocumentProperties > SAL_CALL
     ::osl::MutexGuard aGuard( m_aModelMutex );
     if ( !m_xDocumentProperties.is() )
     {
-        uno::Reference< document::XDocumentProperties > xDocProps(
-            ::comphelper::getProcessServiceFactory()->createInstance(
-                C2U("com.sun.star.document.DocumentProperties") ), uno::UNO_QUERY );
-        m_xDocumentProperties.set(xDocProps);
+        m_xDocumentProperties.set( document::DocumentProperties::create( ::comphelper::getProcessComponentContext() ) );
     }
     return m_xDocumentProperties;
 }

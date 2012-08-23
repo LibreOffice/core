@@ -39,7 +39,7 @@
 #include <com/sun/star/awt/FontStrikeout.hpp>
 #include <com/sun/star/awt/FontSlant.hpp>
 #include <com/sun/star/awt/FontUnderline.hpp>
-#include <com/sun/star/document/XDocumentProperties.hpp>
+#include <com/sun/star/document/DocumentProperties.hpp>
 #include <svtools/htmlkywd.hxx>
 #include <svtools/rtfkeywd.hxx>
 #include <tools/color.hxx>
@@ -730,9 +730,7 @@ void OHTMLImportExport::WriteHeader()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OHTMLImportExport::WriteHeader" );
     uno::Reference<document::XDocumentProperties> xDocProps(
-        m_xFactory->createInstance(::rtl::OUString(
-            RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.DocumentProperties"))),
-        uno::UNO_QUERY);
+        document::DocumentProperties::create( comphelper::ComponentContext(m_xFactory).getUNOContext() ) );
     if (xDocProps.is()) {
         xDocProps->setTitle(m_sName);
     }
