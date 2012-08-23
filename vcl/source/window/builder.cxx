@@ -450,6 +450,8 @@ Window *VclBuilder::makeObject(Window *pParent, const rtl::OString &name, const 
     }
     else if (name.equalsL(RTL_CONSTASCII_STRINGPARAM("GtkLabel")))
         pWindow = new FixedText(pParent, WB_CENTER|WB_VCENTER|WB_3DLOOK);
+    else if (name.equalsL(RTL_CONSTASCII_STRINGPARAM("GtkImage")))
+        pWindow = new FixedImage(pParent, WB_CENTER|WB_VCENTER|WB_3DLOOK);
     else if (name.equalsL(RTL_CONSTASCII_STRINGPARAM("GtkEntry")))
         pWindow = new Edit(pParent, WB_LEFT|WB_VCENTER|WB_BORDER|WB_3DLOOK);
     else if (name.equalsL(RTL_CONSTASCII_STRINGPARAM("GtkNotebook")))
@@ -500,8 +502,6 @@ Window *VclBuilder::insertObject(Window *pParent, const rtl::OString &rClass, co
     else
     {
         pCurrentChild = makeObject(pParent, rClass, rID, rMap);
-        if (!pCurrentChild)
-            fprintf(stderr, "missing object!\n");
     }
 
     if (pCurrentChild)
@@ -517,10 +517,7 @@ Window *VclBuilder::insertObject(Window *pParent, const rtl::OString &rClass, co
     rMap.clear();
 
     if (!pCurrentChild)
-    {
-        fprintf(stderr, "missing object!\n");
         pCurrentChild = m_aChildren.empty() ? pParent : m_aChildren.back().m_pWindow;
-    }
     return pCurrentChild;
 }
 
