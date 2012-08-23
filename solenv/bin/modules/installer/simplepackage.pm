@@ -71,9 +71,8 @@ sub get_extensions_dir
     my $extensiondir = $subfolderdir . $installer::globals::separator;
     if ( $installer::globals::officedirhostname ne "" ) { $extensiondir = $extensiondir . $installer::globals::officedirhostname . $installer::globals::separator; }
     my $extensionsdir = $extensiondir . "share" . $installer::globals::separator . "extensions";
-    my $preregdir = $extensiondir . "share" . $installer::globals::separator . "prereg" . $installer::globals::separator . "bundled";
 
-    return ( $extensionsdir, $preregdir );
+    return $extensionsdir;
 }
 
 ##################################################################
@@ -671,7 +670,7 @@ sub create_simple_package
     installer::logger::print_message( "... removing superfluous directories ...\n" );
     installer::logger::include_header_into_logfile("Removing superfluous directories:");
 
-    my ( $extensionfolder, $preregdir ) = get_extensions_dir($subfolderdir);
+    my $extensionfolder = get_extensions_dir($subfolderdir);
     installer::systemactions::remove_empty_dirs_in_folder($extensionfolder);
 
     if ( $installer::globals::compiler =~ /^unxmacx/ )
