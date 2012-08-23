@@ -643,6 +643,9 @@ public:
      CONTEXT_CHARACTER is going to be used (e.g. by appendText()).
     */
     void processDeferredCharacterProperties();
+
+    /// Get a property of the current numbering style's current level.
+    sal_Int32 getCurrentNumberingProperty(OUString aProp);
 };
 } //namespace dmapper
 } //namespace writerfilter

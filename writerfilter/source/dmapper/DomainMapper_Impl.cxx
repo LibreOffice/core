@@ -3747,6 +3747,37 @@ void DomainMapper_Impl::processDeferredCharacterProperties()
     }
 }
 
+sal_Int32 DomainMapper_Impl::getCurrentNumberingProperty(OUString aProp)
+{
+    sal_Int32 nRet = 0;
+
+    PropertyMap::iterator it = m_pTopContext->find(PropertyDefinition( PROP_NUMBERING_RULES, true ) );
+    uno::Reference<container::XIndexAccess> xNumberingRules;
+    if (it != m_pTopContext->end())
+        xNumberingRules.set(it->second, uno::UNO_QUERY);
+    it = m_pTopContext->find(PropertyDefinition( PROP_NUMBERING_LEVEL, true ) );
+    sal_Int32 nNumberingLevel = -1;
+    if (it != m_pTopContext->end())
+        it->second >>= nNumberingLevel;
+    if (xNumberingRules.is() && nNumberingLevel != -1)
+    {
+        uno::Sequence<beans::PropertyValue> aProps;
+        xNumberingRules->getByIndex(nNumberingLevel) >>= aProps;
+        for (int i = 0; i < aProps.getLength(); ++i)
+        {
+            const beans::PropertyValue& rProp = aProps[i];
+
+            if (rProp.Name == aProp)
+            {
+                rProp.Value >>= nRet;
+                break;
+            }
+        }
+    }
+
+    return nRet;
+}
+
 }}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
