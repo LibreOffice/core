@@ -1403,6 +1403,8 @@
 	<string>1</string>
 	<key>NSPrincipalClass</key>
 	<string>VCL_NSApplication</string>
+    <key>LSApplicationCategoryType</key>
+    <string>public.app-category.productivity</string>
 </dict>
 </plist>
 
