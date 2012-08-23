@@ -296,6 +296,11 @@ if ( true )
     URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
     URL3 = $(SVN_TRUNK)$(MD5)-$(name)
 
+if (RAT_JAR_HOME==BUILD)
+    MD5 = e4244e69eb3644e71c254aea5952a918
+    name = apache-rat-incubating-0.8-bin.tar.bz2 
+    URL1 = http://archive.apache.org/dist/incubator/rat/binaries/$(name)
+    URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
 
 ###############################################################################
 # Libraries with category B license

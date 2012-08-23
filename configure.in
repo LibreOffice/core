@@ -909,15 +909,21 @@ AC_ARG_ENABLE(category-b,
                           Flags for individual libraries override this one.
 ],,)
 AC_ARG_WITH(arm-target,
-[  --arm-target        The minimal targeted arm processor
-                          used for the build environment.
-                          Cases :
-                            arm-target < 6 : armv4t compatibility
-                            arm-target = 6 : exact armv6 compatibility
-                    	    arm-target > 6 : armv7-a compatibility
+[  --arm-target            The minimal targeted arm processor
+                              used for the build environment.
+                              Cases :
+                                arm-target < 6 : armv4t compatibility
+                                arm-target = 6 : exact armv6 compatibility
+                                arm-target > 6 : armv7-a compatibility
 
-                          Usage: --with-arm-target=7
+                              Usage: --with-arm-target=7
 ],with_arm_target=$withval,with_arm_target=4)
+AC_ARG_WITH(rat-scan,
+[  --with-rat-scan         Scan source code for license headers.
+                          Use as --with-rat-scan to automatically download pre-built Rat binaries.
+                          Alternatively use as --with-rat-scan=<path-to-rat-direcetory> to use
+                          a separately installed library.
+],with_rat_scan=$withval,)
 
 BUILD_TYPE="OOo"
 ADDITIONAL_REPOSITORIES="../ext_libraries"
@@ -7076,6 +7082,34 @@ else
    AC_MSG_RESULT([yes])
 fi
 AC_SUBST(SYSTEM_LIBJPEG)
+
+dnl ===================================================================
+dnl Test whether rat scan was requested and whether apache-rat is available
+dnl ===================================================================
+RAT_JAR=
+AC_MSG_CHECKING([whether to trigger rat scan])
+if test "$with_rat_scan" != "no"; then
+    if test "$WITH_JAVA" == "no"; then
+        AC_MSG_ERROR([no, java disabled, enable with --with-java])
+    elif test "$enable_saxon" == "no"; then
+        AC_MSG_ERROR([no, saxon disabled, enable with --enable-category-b])
+    elif test "$with_rat_scan" == "yes"; then
+        AC_MSG_RESULT([yes, use pre-built library])
+        RAT_JAR_HOME="BUILD"
+        BUILD_TYPE="$BUILD_TYPE RAT"
+    else
+        AC_MSG_RESULT([yes, use pre-installed library])
+        AC_MSG_CHECKING([whether apache-rat is available])
+        if test -d "$with_rat_scan"; then
+            RAT_JAR_HOME=$with_rat_scan
+        else
+            AC_MSG_ERROR([$with_rat_scan is not a directory])
+        fi
+    fi
+else
+    AC_MSG_RESULT([no])
+fi
+AC_SUBST(RAT_JAR_HOME)
 
 
 dnl ===================================================================

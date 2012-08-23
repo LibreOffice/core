@@ -2015,6 +2015,7 @@ ToFile( "SYSTEM_GETTEXT",    "@SYSTEM_GETTEXT@",   "e" );
 ToFile( "SYSTEM_PANGO",      "@SYSTEM_PANGO@",   "e" );
 ToFile( "SYSTEM_LIBPNG",     "@SYSTEM_LIBPNG@",   "e" );
 ToFile( "SYSTEM_LIBJPEG",    "@SYSTEM_LIBJPEG@",   "e" );
+ToFile( "RAT_JAR_HOME",      "@RAT_JAR_HOME@",     "e" );
 ToFile( "DISABLE_XAW",       "@DISABLE_XAW@",      "e" );
 ToFile( "DMAKE_URL",         "@DMAKE_URL@",        "e" );
 ToFile( "DMAKE_PATH",        "@DMAKE_PATH@",       "e" );

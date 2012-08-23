@@ -1,0 +1,11 @@
+###############################################################################
+#
+# Exclude output trees.  All their content is created when OpenOffice is built.
+#
+main/*/wntmsci12/
+main/*/unxlngi*/
+main/*/unxmac*/
+ext_libraries/*/wntmsci12/
+ext_libraries/*/unxlngi*/
+ext_libraries/*/unxmac*/
+main/solver/
