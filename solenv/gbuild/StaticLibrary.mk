@@ -112,6 +112,8 @@ $(eval $(foreach method,\
 	set_library_path_flags \
 	add_api \
 	use_api \
+	use_sdk_api \
+	use_udk_api \
 	use_internal_api \
 	use_internal_bootstrap_api \
 	use_internal_comprehensive_api \
