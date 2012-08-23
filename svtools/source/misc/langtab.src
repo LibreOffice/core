@@ -144,7 +144,6 @@ StringArray STR_ARR_SVT_LANGUAGE_TABLE
         < "Malayalam" ; LANGUAGE_MALAYALAM ; > ;
         < "Manipuri" ; LANGUAGE_MANIPURI ; > ;
         < "Marathi" ; LANGUAGE_MARATHI ; > ;
-        < "Moldovan" ; LANGUAGE_ROMANIAN_MOLDOVA ; > ;
         < "Nepali (Nepal)" ; LANGUAGE_NEPALI ; > ;
         < "Nepali (India)" ; LANGUAGE_NEPALI_INDIA ; > ;
         < "Norwegian, Bokmål" ; LANGUAGE_NORWEGIAN_BOKMAL ; > ;
@@ -156,7 +155,8 @@ StringArray STR_ARR_SVT_LANGUAGE_TABLE
         < "Portuguese (Brazil)" ; LANGUAGE_PORTUGUESE_BRAZILIAN ; > ;
         < "Punjabi" ; LANGUAGE_PUNJABI ; > ;
         < "Rhaeto-Romance" ; LANGUAGE_RHAETO_ROMAN ; > ;
-        < "Romanian" ; LANGUAGE_ROMANIAN ; > ;
+        < "Romanian (Romania)" ; LANGUAGE_ROMANIAN ; > ;
+        < "Romanian (Moldova)" ; LANGUAGE_ROMANIAN_MOLDOVA ; > ;
         < "Russian" ; LANGUAGE_RUSSIAN ; > ;
         < "Sanskrit" ; LANGUAGE_SANSKRIT ; > ;
         < "Serbian Cyrillic (Serbia and Montenegro)" ; LANGUAGE_SERBIAN_CYRILLIC ; > ;
