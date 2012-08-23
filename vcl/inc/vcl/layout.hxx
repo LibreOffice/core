@@ -29,6 +29,7 @@
 #define _VCLLAYOUT_HXX
 
 #include <vcl/dllapi.h>
+#include <vcl/button.hxx>
 #include <vcl/window.hxx>
 #include <boost/multi_array.hpp>
 
@@ -377,8 +378,8 @@ class VCL_DLLPUBLIC VclBin : public VclContainer
 {
 public:
     VclBin(Window *pParent) : VclContainer(pParent) {}
-    Window *get_child();
-    const Window *get_child() const;
+    virtual Window *get_child();
+    virtual const Window *get_child() const;
     virtual Size calculateRequisition() const;
     virtual void setAllocation(const Size &rAllocation);
 };
@@ -421,6 +422,30 @@ private:
     float m_fYAlign;
     float m_fYScale;
 };
+
+class VCL_DLLPUBLIC VclExpander : public VclBin
+{
+public:
+    VclExpander(Window *pParent)
+        : VclBin(pParent)
+        , m_bResizeTopLevel(true)
+        , m_aDisclosureButton(this)
+    {
+        m_aDisclosureButton.SetToggleHdl(LINK(this, VclExpander, ClickHdl));
+        m_aDisclosureButton.Show();
+    }
+    virtual Window *get_child();
+    virtual const Window *get_child() const;
+    virtual bool set_property(const rtl::OString &rKey, const rtl::OString &rValue);
+protected:
+    virtual Size calculateRequisition() const;
+    virtual void setAllocation(const Size &rAllocation);
+private:
+    bool m_bResizeTopLevel;
+    DisclosureButton m_aDisclosureButton;
+    DECL_DLLPRIVATE_LINK(ClickHdl, DisclosureButton* pBtn);
+};
+
 
 /*
  * @return true if rValue is "True", "true", "1", etc.

@@ -100,6 +100,7 @@ public:
     virtual Size    GetOptimalSize(WindowSizeType eType) const;
     virtual void    Resize();
     bool            isLayoutEnabled() const;
+    void            setInitialLayoutSize();
     virtual bool set_property(const rtl::OString &rKey, const rtl::OString &rValue);
 
     void set_border_width(int nBorderWidth)

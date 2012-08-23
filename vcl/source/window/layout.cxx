@@ -26,6 +26,7 @@
  * instead of those above.
  */
 
+#include <vcl/dialog.hxx>
 #include <vcl/layout.hxx>
 #include "window.h"
 
@@ -865,8 +866,6 @@ Size VclAlignment::calculateRequisition() const
 
 void VclAlignment::setAllocation(const Size &rAllocation)
 {
-    //SetBackground( Color(0x00, 0x00, 0xFF) );
-
     Window *pChild = get_child();
     if (!pChild || !pChild->IsVisible())
         return;
@@ -901,6 +900,134 @@ bool VclAlignment::set_property(const rtl::OString &rKey, const rtl::OString &rV
     else
         return VclBin::set_property(rKey, rValue);
     return true;
+}
+
+const Window *VclExpander::get_child() const
+{
+    const WindowImpl* pWindowImpl = ImplGetWindowImpl();
+
+    assert(pWindowImpl->mpFirstChild == &m_aDisclosureButton);
+
+    return pWindowImpl->mpFirstChild->GetWindow(WINDOW_NEXT);
+}
+
+Window *VclExpander::get_child()
+{
+    return const_cast<Window*>(const_cast<const VclExpander*>(this)->get_child());
+}
+
+Size VclExpander::calculateRequisition() const
+{
+    Size aRet(0, 0);
+
+    WindowImpl* pWindowImpl = ImplGetWindowImpl();
+
+    const Window *pChild = get_child();
+    const Window *pLabel = pChild != pWindowImpl->mpLastChild ? pWindowImpl->mpLastChild : NULL;
+
+    if (pChild && pChild->IsVisible() && m_aDisclosureButton.IsChecked())
+        aRet = pChild->GetOptimalSize(WINDOWSIZE_PREFERRED);
+
+    Size aExpanderSize = m_aDisclosureButton.GetOptimalSize(WINDOWSIZE_PREFERRED);
+
+    if (pLabel && pLabel->IsVisible())
+    {
+        Size aLabelSize = pLabel->GetOptimalSize(WINDOWSIZE_PREFERRED);
+        aExpanderSize.Height() = std::max(aExpanderSize.Height(), aLabelSize.Height());
+        aExpanderSize.Width() += aLabelSize.Width();
+    }
+
+    aRet.Height() += aExpanderSize.Height();
+    aRet.Width() = std::max(aExpanderSize.Width(), aRet.Width());
+
+    const FrameStyle &rFrameStyle =
+        GetSettings().GetStyleSettings().GetFrameStyle();
+    aRet.Width() += rFrameStyle.left + rFrameStyle.right;
+    aRet.Height() += rFrameStyle.top + rFrameStyle.bottom;
+
+    return aRet;
+}
+
+void VclExpander::setAllocation(const Size &rAllocation)
+{
+    const FrameStyle &rFrameStyle =
+        GetSettings().GetStyleSettings().GetFrameStyle();
+    Size aAllocation(rAllocation.Width() - rFrameStyle.left - rFrameStyle.right,
+        rAllocation.Height() - rFrameStyle.top - rFrameStyle.bottom);
+    Point aChildPos(rFrameStyle.left, rFrameStyle.top);
+
+    WindowImpl* pWindowImpl = ImplGetWindowImpl();
+
+    //The label widget is the last (of two) children
+    Window *pChild = get_child();
+    Window *pLabel = pChild != pWindowImpl->mpLastChild ? pWindowImpl->mpLastChild : NULL;
+
+    Size aButtonSize = m_aDisclosureButton.GetOptimalSize(WINDOWSIZE_PREFERRED);
+    Size aLabelSize;
+    Size aExpanderSize = aButtonSize;
+    if (pLabel && pLabel->IsVisible())
+    {
+        aLabelSize = pLabel->GetOptimalSize(WINDOWSIZE_PREFERRED);
+        aExpanderSize.Height() = std::max(aExpanderSize.Height(), aLabelSize.Height());
+        aExpanderSize.Width() += aLabelSize.Width();
+    }
+
+    aExpanderSize.Height() = std::min(aExpanderSize.Height(), aAllocation.Height());
+    aExpanderSize.Width() = std::min(aExpanderSize.Width(), aAllocation.Width());
+
+    aButtonSize.Height() = std::min(aButtonSize.Height(), aExpanderSize.Height());
+    aButtonSize.Width() = std::min(aButtonSize.Width(), aExpanderSize.Width());
+
+    long nExtraExpanderHeight = aExpanderSize.Height() - aButtonSize.Height();
+    Point aButtonPos(aChildPos.X(), aChildPos.Y() + nExtraExpanderHeight/2);
+    setPosSizePixel(m_aDisclosureButton, aButtonPos, aButtonSize);
+
+    if (pLabel && pLabel->IsVisible())
+    {
+        aLabelSize.Height() = std::min(aLabelSize.Height(), aExpanderSize.Height());
+        aLabelSize.Width() = std::min(aLabelSize.Width(),
+            aExpanderSize.Width() - aButtonSize.Width());
+
+        long nExtraLabelHeight = aExpanderSize.Height() - aLabelSize.Height();
+        Point aLabelPos(aChildPos.X() + aButtonSize.Width(), aChildPos.Y() + nExtraLabelHeight/2);
+        setPosSizePixel(*pLabel, aLabelPos, aLabelSize);
+    }
+
+    aAllocation.Height() -= aExpanderSize.Height();
+    aChildPos.Y() += aExpanderSize.Height();
+
+    if (pChild && pChild->IsVisible())
+    {
+        if (!m_aDisclosureButton.IsChecked())
+            aAllocation = Size();
+        setPosSizePixel(*pChild, aChildPos, aAllocation);
+    }
+}
+
+bool VclExpander::set_property(const rtl::OString &rKey, const rtl::OString &rValue)
+{
+    if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("expanded")))
+        m_aDisclosureButton.Check(toBool(rValue));
+    else if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("resize-toplevel")))
+        m_bResizeTopLevel = toBool(rValue);
+    else
+        return VclBin::set_property(rKey, rValue);
+    return true;
+}
+
+IMPL_LINK( VclExpander, ClickHdl, DisclosureButton*, pBtn )
+{
+    Window *pChild = get_child();
+    if (pChild)
+    {
+        pChild->Show(pBtn->IsChecked());
+        Dialog* pResizeDialog = m_bResizeTopLevel ? GetParentDialog() : NULL;
+        if (pResizeDialog)
+            pResizeDialog->setInitialLayoutSize();
+        else
+            queue_resize();
+    }
+    return 0;
 }
 
 Size getLegacyBestSizeForChildren(const Window &rWindow)

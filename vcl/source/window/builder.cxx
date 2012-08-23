@@ -390,6 +390,8 @@ Window *VclBuilder::makeObject(Window *pParent, const rtl::OString &name, const 
         pWindow = new VclGrid(pParent);
     else if (name.equalsL(RTL_CONSTASCII_STRINGPARAM("GtkFrame")))
         pWindow = new VclFrame(pParent);
+    else if (name.equalsL(RTL_CONSTASCII_STRINGPARAM("GtkExpander")))
+        pWindow = new VclExpander(pParent);
     else if (name.equalsL(RTL_CONSTASCII_STRINGPARAM("GtkAlignment")))
         pWindow = new VclAlignment(pParent);
     else if (name.equalsL(RTL_CONSTASCII_STRINGPARAM("GtkButton")))

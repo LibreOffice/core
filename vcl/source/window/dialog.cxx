@@ -649,6 +649,36 @@ long Dialog::Notify( NotifyEvent& rNEvt )
     return nRet;
 }
 
+void Dialog::setInitialLayoutSize()
+{
+    maLayoutTimer.Stop();
+
+    //resize dialog to fit requisition on initial show
+    VclBox *pBox = static_cast<VclBox*>(GetWindow(WINDOW_FIRSTCHILD));
+
+    const DialogStyle& rDialogStyle =
+        GetSettings().GetStyleSettings().GetDialogStyle();
+    pBox->set_border_width(rDialogStyle.content_area_border);
+    pBox->set_spacing(rDialogStyle.content_area_spacing);
+
+    VclButtonBox *pActionArea = getActionArea(this);
+    if (pActionArea)
+    {
+        pActionArea->set_border_width(rDialogStyle.action_area_border);
+        pActionArea->set_spacing(rDialogStyle.button_spacing);
+    }
+
+    Size aSize = get_preferred_size();
+
+    Size aMax = GetOptimalSize(WINDOWSIZE_MAXIMUM);
+    aSize.Width() = std::min(aMax.Width(), aSize.Width());
+    aSize.Height() = std::min(aMax.Height(), aSize.Height());
+
+    SetMinOutputSizePixel(aSize);
+    SetSizePixel(aSize);
+    setPosSizeOnContainee(aSize, *pBox);
+}
+
 // -----------------------------------------------------------------------
 
 void Dialog::StateChanged( StateChangedType nType )
@@ -658,34 +688,7 @@ void Dialog::StateChanged( StateChangedType nType )
     if ( nType == STATE_CHANGE_INITSHOW )
     {
         if (isLayoutEnabled())
-        {
-            maLayoutTimer.Stop();
-
-            //resize dialog to fit requisition on initial show
-            VclBox *pBox = static_cast<VclBox*>(GetWindow(WINDOW_FIRSTCHILD));
-
-            const DialogStyle& rDialogStyle =
-                GetSettings().GetStyleSettings().GetDialogStyle();
-            pBox->set_border_width(rDialogStyle.content_area_border);
-            pBox->set_spacing(rDialogStyle.content_area_spacing);
-
-            VclButtonBox *pActionArea = getActionArea(this);
-            if (pActionArea)
-            {
-                pActionArea->set_border_width(rDialogStyle.action_area_border);
-                pActionArea->set_spacing(rDialogStyle.button_spacing);
-            }
-
-            Size aSize = get_preferred_size();
-
-            Size aMax = GetOptimalSize(WINDOWSIZE_MAXIMUM);
-            aSize.Width() = std::min(aMax.Width(), aSize.Width());
-            aSize.Height() = std::min(aMax.Height(), aSize.Height());
-
-            SetMinOutputSizePixel(aSize);
-            SetSizePixel(aSize);
-            setPosSizeOnContainee(aSize, *pBox);
-        }
+            setInitialLayoutSize();
 
         if ( GetSettings().GetStyleSettings().GetAutoMnemonic() )
             ImplWindowAutoMnemonic( this );
