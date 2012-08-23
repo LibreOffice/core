@@ -51,8 +51,7 @@ $(eval $(call gb_Module_add_targets,extensions,\
 	Library_bib \
 	Library_dbp \
 	Library_pcr \
-	Package_bib \
-	Package_pcr \
+	Package_uiconfig \
 ))
 endif
 

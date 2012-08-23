@@ -28,8 +28,8 @@
 # instead of those above.
 #
 
-$(eval $(call gb_Package_Package,pcr,$(SRCDIR)/extensions/source/propctrlr))
+$(eval $(call gb_Package_Package,extensions_uiconfig,$(SRCDIR)/extensions/source/bibliography/uiconfig/sbibliography/menubar))
 
-$(eval $(call gb_Package_add_file,pcr,xml/pcr.xml,pcr.xml))
+$(eval $(call gb_Package_add_file,extensions_uiconfig,xml/uiconfig/modules/sbibliography/menubar/menubar.xml,menubar.xml))
 
 # vim:set shiftwidth=4 softtabstop=4 expandtab:

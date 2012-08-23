@@ -38,7 +38,6 @@ $(eval $(call gb_Module_add_targets,framework,\
     Package_dtd \
     Package_inc \
     Package_uiconfig \
-    Package_unotypes \
 ))
 
 ifeq ($(ENABLE_LOMENUBAR),TRUE)

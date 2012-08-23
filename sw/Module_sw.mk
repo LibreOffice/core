@@ -34,7 +34,6 @@ $(eval $(call gb_Module_add_targets,sw,\
     Library_sw \
     Library_swd \
     Library_swui \
-    Package_misc \
     Package_uiconfig \
 ))
 
