@@ -55,6 +55,7 @@ sub print_syntax()
     print "   --msvs-productdir       - print productdir\n";
     print "   --dotnetsdk-dir         - print .NET SDK path\n";
     print "   --csc-compilerdir       - print .NET SDK compiler path\n";
+	print "   --al-home    			  - print AL.exe install dir\n";
     print "   --windows-sdk-home      - print Windows SDK install dir\n";
     print "   --jdk-home              - print the jdk install dir\n";
     print "   --help                  - print this message\n";
@@ -115,6 +116,16 @@ sub print_windows_sdk_home()
     }
 
     defined $value || die "Windows SDK not found";
+
+    print cygpath ($value, 'w', $output_format);
+}
+
+sub print_al_home()
+{
+    my ($value, $key);
+
+        $key = reg_find_key ('HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Microsoft SDKs/Windows/*/WinSDK-NetFx40Tools/InstallationFolder');
+        $value = reg_get_value ($key);
 
     print cygpath ($value, 'w', $output_format);
 }
@@ -373,6 +384,8 @@ while (@commands) {
         print_csc_compiler_dir();
     } elsif ($opt eq '--windows-sdk-home') {
         print_windows_sdk_home();
+	} elsif ($opt eq '--al-home') {
+        print_al_home();
     } elsif ($opt eq '--jdk-home') {
         print_jdk_dir();
     } elsif ($opt eq '--help' || $opt eq '/?') {
