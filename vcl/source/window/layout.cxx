@@ -32,7 +32,6 @@
 
 VclContainer::VclContainer(Window *pParent)
     : Window(WINDOW_CONTAINER)
-    , m_nBorderWidth(0)
     , m_bLayoutDirty(true)
 {
     ImplInit(pParent, 0, NULL);
@@ -44,20 +43,25 @@ Size VclContainer::GetOptimalSize(WindowSizeType eType) const
         return Window::GetOptimalSize(eType);
 
     Size aSize = calculateRequisition();
-    aSize.Width() += m_nBorderWidth*2;
-    aSize.Height() += m_nBorderWidth*2;
+    sal_Int32 nBorderWidth = get_border_width();
+    aSize.Width() += nBorderWidth*2 + get_margin_left() + get_margin_right();
+    aSize.Height() += nBorderWidth*2 + get_margin_top() + get_margin_top();
     return aSize;
 }
 
 void VclContainer::SetPosSizePixel(const Point& rAllocPos, const Size& rAllocation)
 {
     Size aAllocation = rAllocation;
-    aAllocation.Width() -= m_nBorderWidth*2;
-    aAllocation.Height() -= m_nBorderWidth*2;
+    sal_Int32 nBorderWidth = get_border_width();
+    sal_Int32 nLeft = get_margin_left();
+    sal_Int32 nTop = get_margin_top();
+
+    aAllocation.Width() -= nBorderWidth*2 + nLeft + get_margin_right();
+    aAllocation.Height() -= nBorderWidth*2 + nTop + get_margin_bottom();
 
     Point aAllocPos = rAllocPos;
-    aAllocPos.X() += m_nBorderWidth;
-    aAllocPos.Y() += m_nBorderWidth;
+    aAllocPos.X() += nBorderWidth + nLeft;
+    aAllocPos.Y() += nBorderWidth + nTop;
 
     bool bPosChanged = aAllocPos != GetPosPixel();
     bool bSizeChanged = aAllocation != GetSizePixel();
@@ -78,8 +82,9 @@ void VclContainer::SetPosSizePixel(const Point& rAllocPos, const Size& rAllocati
 void VclContainer::SetPosPixel(const Point& rAllocPos)
 {
     Point aAllocPos = rAllocPos;
-    aAllocPos.X() += m_nBorderWidth;
-    aAllocPos.Y() += m_nBorderWidth;
+    sal_Int32 nBorderWidth = get_border_width();
+    aAllocPos.X() += nBorderWidth + get_margin_left();
+    aAllocPos.Y() += nBorderWidth + get_margin_top();
 
     if (aAllocPos != GetPosPixel())
         Window::SetPosPixel(aAllocPos);
@@ -88,8 +93,9 @@ void VclContainer::SetPosPixel(const Point& rAllocPos)
 void VclContainer::SetSizePixel(const Size& rAllocation)
 {
     Size aAllocation = rAllocation;
-    aAllocation.Width() -= m_nBorderWidth*2;
-    aAllocation.Height() -= m_nBorderWidth*2;
+    sal_Int32 nBorderWidth = get_border_width();
+    aAllocation.Width() -= nBorderWidth*2 + get_margin_left() + get_margin_right();
+    aAllocation.Height() -= nBorderWidth*2 + get_margin_top() + get_margin_bottom();
     bool bSizeChanged = aAllocation != GetSizePixel();
     if (bSizeChanged)
         Window::SetSizePixel(aAllocation);
@@ -98,15 +104,6 @@ void VclContainer::SetSizePixel(const Size& rAllocation)
         setAllocation(aAllocation);
         m_bLayoutDirty = false;
     }
-}
-
-bool VclContainer::set_property(const rtl::OString &rKey, const rtl::OString &rValue)
-{
-    if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("border-width")))
-        set_border_width(rValue.toInt32());
-    else
-        return Window::set_property(rKey, rValue);
-    return true;
 }
 
 Size VclBox::calculateRequisition() const

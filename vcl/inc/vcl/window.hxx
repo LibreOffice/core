@@ -1185,6 +1185,21 @@ public:
      */
     void set_fill(bool bFill);
 
+    void set_border_width(sal_Int32 nBorderWidth);
+    sal_Int32 get_border_width() const;
+
+    void set_margin_left(sal_Int32 nWidth);
+    sal_Int32 get_margin_left() const;
+
+    void set_margin_right(sal_Int32 nWidth);
+    sal_Int32 get_margin_right() const;
+
+    void set_margin_top(sal_Int32 nWidth);
+    sal_Int32 get_margin_top() const;
+
+    void set_margin_bottom(sal_Int32 nWidth);
+    sal_Int32 get_margin_bottom() const;
+
     /*
      * Gets how the widget is packed with reference to the start or end of the parent
      */
@@ -1244,7 +1259,6 @@ public:
      * Sets the row number to attach the top side of the widget to
      */
     void set_grid_top_attach(sal_Int32 nAttach);
-
 
     /*
      * Sets a widget property

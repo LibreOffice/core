@@ -323,6 +323,11 @@ public:
     sal_Int32           mnGridLeftAttach;
     sal_Int32           mnGridTopAttach;
     sal_Int32           mnGridWidth;
+    sal_Int32           mnBorderWidth;
+    sal_Int32           mnMarginLeft;
+    sal_Int32           mnMarginRight;
+    sal_Int32           mnMarginTop;
+    sal_Int32           mnMarginBottom;
     sal_uInt8           mbFrame:1,
                         mbBorderWin:1,
                         mbOverlapWin:1,

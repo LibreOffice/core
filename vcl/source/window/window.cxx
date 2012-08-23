@@ -642,6 +642,11 @@ void Window::ImplInitWindowData( WindowType nType )
     mpWindowImpl->mnGridLeftAttach    = 0;
     mpWindowImpl->mnGridTopAttach     = 0;
     mpWindowImpl->mnGridWidth         = 1;
+    mpWindowImpl->mnBorderWidth       = 0;
+    mpWindowImpl->mnMarginLeft        = 0;
+    mpWindowImpl->mnMarginRight       = 0;
+    mpWindowImpl->mnMarginTop         = 0;
+    mpWindowImpl->mnMarginBottom      = 0;
     mpWindowImpl->mbFrame             = sal_False;        // sal_True: Window is a frame window
     mpWindowImpl->mbBorderWin         = sal_False;        // sal_True: Window is a border window
     mpWindowImpl->mbOverlapWin        = sal_False;        // sal_True: Window is a overlap window

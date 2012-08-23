@@ -42,16 +42,7 @@ public:
     virtual void SetPosSizePixel(const Point& rNewPos, const Size& rNewSize);
     virtual void SetPosPixel(const Point& rAllocPos);
     virtual void SetSizePixel(const Size& rAllocation);
-    virtual bool set_property(const rtl::OString &rKey, const rtl::OString &rValue);
 
-    void set_border_width(int nBorderWidth)
-    {
-        m_nBorderWidth = nBorderWidth;
-    }
-    int get_border_width() const
-    {
-        return m_nBorderWidth;
-    }
     void markLayoutDirty()
     {
         m_bLayoutDirty = true;
@@ -60,7 +51,6 @@ protected:
     virtual Size calculateRequisition() const = 0;
     virtual void setAllocation(const Size &rAllocation) = 0;
 private:
-    int m_nBorderWidth;
     bool m_bLayoutDirty;
 };
 

@@ -1844,6 +1844,11 @@ void Window::take_properties(Window &rOther)
     mpWindowImpl->mnGridLeftAttach = pWindowImpl->mnGridLeftAttach;
     mpWindowImpl->mnGridTopAttach = pWindowImpl->mnGridTopAttach;
     mpWindowImpl->mnGridWidth = pWindowImpl->mnGridWidth;
+    mpWindowImpl->mnBorderWidth = pWindowImpl->mnBorderWidth;
+    mpWindowImpl->mnMarginLeft = pWindowImpl->mnMarginLeft;
+    mpWindowImpl->mnMarginRight = pWindowImpl->mnMarginRight;
+    mpWindowImpl->mnMarginTop = pWindowImpl->mnMarginTop;
+    mpWindowImpl->mnMarginBottom = pWindowImpl->mnMarginBottom;
     mpWindowImpl->mbFrame = pWindowImpl->mbFrame;
     mpWindowImpl->mbBorderWin = pWindowImpl->mbBorderWin;
     mpWindowImpl->mbOverlapWin = pWindowImpl->mbOverlapWin;
@@ -2014,6 +2019,16 @@ bool Window::set_property(const rtl::OString &rKey, const rtl::OString &rValue)
         SetQuickHelpText(rtl::OStringToOUString(rValue, RTL_TEXTENCODING_UTF8));
     else if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("tooltip-text")))
         SetQuickHelpText(rtl::OStringToOUString(rValue, RTL_TEXTENCODING_UTF8));
+    else if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("border-width")))
+        set_border_width(rValue.toInt32());
+    else if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("margin-left")))
+        set_margin_left(rValue.toInt32());
+    else if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("margin-right")))
+        set_margin_right(rValue.toInt32());
+    else if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("margin-top")))
+        set_margin_top(rValue.toInt32());
+    else if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("margin-bottom")))
+        set_margin_bottom(rValue.toInt32());
     else
     {
         fprintf(stderr, "unhandled property %s\n", rKey.getStr());
@@ -2206,6 +2221,66 @@ void Window::set_grid_top_attach(sal_Int32 nAttach)
 {
     WindowImpl *pWindowImpl = mpWindowImpl->mpBorderWindow ? mpWindowImpl->mpBorderWindow->mpWindowImpl : mpWindowImpl;
     pWindowImpl->mnGridTopAttach = nAttach;
+}
+
+void Window::set_border_width(sal_Int32 nBorderWidth)
+{
+    WindowImpl *pWindowImpl = mpWindowImpl->mpBorderWindow ? mpWindowImpl->mpBorderWindow->mpWindowImpl : mpWindowImpl;
+    pWindowImpl->mnBorderWidth = nBorderWidth;
+}
+
+sal_Int32 Window::get_border_width() const
+{
+    WindowImpl *pWindowImpl = mpWindowImpl->mpBorderWindow ? mpWindowImpl->mpBorderWindow->mpWindowImpl : mpWindowImpl;
+    return pWindowImpl->mnBorderWidth;
+}
+
+void Window::set_margin_left(sal_Int32 nWidth)
+{
+    WindowImpl *pWindowImpl = mpWindowImpl->mpBorderWindow ? mpWindowImpl->mpBorderWindow->mpWindowImpl : mpWindowImpl;
+    pWindowImpl->mnMarginLeft = nWidth;
+}
+
+sal_Int32 Window::get_margin_left() const
+{
+    WindowImpl *pWindowImpl = mpWindowImpl->mpBorderWindow ? mpWindowImpl->mpBorderWindow->mpWindowImpl : mpWindowImpl;
+    return pWindowImpl->mnMarginLeft;
+}
+
+void Window::set_margin_right(sal_Int32 nWidth)
+{
+    WindowImpl *pWindowImpl = mpWindowImpl->mpBorderWindow ? mpWindowImpl->mpBorderWindow->mpWindowImpl : mpWindowImpl;
+    pWindowImpl->mnMarginRight = nWidth;
+}
+
+sal_Int32 Window::get_margin_right() const
+{
+    WindowImpl *pWindowImpl = mpWindowImpl->mpBorderWindow ? mpWindowImpl->mpBorderWindow->mpWindowImpl : mpWindowImpl;
+    return pWindowImpl->mnMarginRight;
+}
+
+void Window::set_margin_top(sal_Int32 nWidth)
+{
+    WindowImpl *pWindowImpl = mpWindowImpl->mpBorderWindow ? mpWindowImpl->mpBorderWindow->mpWindowImpl : mpWindowImpl;
+    pWindowImpl->mnMarginTop = nWidth;
+}
+
+sal_Int32 Window::get_margin_top() const
+{
+    WindowImpl *pWindowImpl = mpWindowImpl->mpBorderWindow ? mpWindowImpl->mpBorderWindow->mpWindowImpl : mpWindowImpl;
+    return pWindowImpl->mnMarginTop;
+}
+
+void Window::set_margin_bottom(sal_Int32 nWidth)
+{
+    WindowImpl *pWindowImpl = mpWindowImpl->mpBorderWindow ? mpWindowImpl->mpBorderWindow->mpWindowImpl : mpWindowImpl;
+    pWindowImpl->mnMarginBottom = nWidth;
+}
+
+sal_Int32 Window::get_margin_bottom() const
+{
+    WindowImpl *pWindowImpl = mpWindowImpl->mpBorderWindow ? mpWindowImpl->mpBorderWindow->mpWindowImpl : mpWindowImpl;
+    return pWindowImpl->mnMarginBottom;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
