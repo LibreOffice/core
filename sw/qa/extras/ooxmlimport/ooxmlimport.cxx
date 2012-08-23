@@ -83,6 +83,7 @@ public:
     void testNumbering1();
     void testBnc773061();
     void testAllGapsWord();
+    void testN775906();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -110,6 +111,7 @@ public:
     CPPUNIT_TEST(testNumbering1);
     CPPUNIT_TEST(testBnc773061);
     CPPUNIT_TEST(testAllGapsWord);
+    CPPUNIT_TEST(testN775906);
 #endif
     CPPUNIT_TEST_SUITE_END();
 
@@ -638,7 +640,6 @@ void Test::testN766487()
 void Test::testN693238()
 {
     /*
-     *
      * The problem was that a continous section break at the end of the doc caused the margins to be ignored.
      *
      * xray ThisComponent.StyleFamilies.PageStyles.Default.LeftMargin ' was 2000, should be 635
@@ -717,6 +718,22 @@ void Test::testAllGapsWord()
     load("all_gaps_word.docx");
     BorderTest borderTest;
     borderTest.testTheBorders(mxComponent);
+}
+
+void Test::testN775906()
+{
+    /*
+     * The problem was that right margin (via direct formatting) erased the left/first margin (inherited from numbering style).
+     *
+     * oParas = ThisComponent.Text.createEnumeration
+     * oPara = oParas.nextElement
+     * xray oPara.ParaFirstLineIndent ' was 0
+     * xray oPara.ParaLeftMargin ' was 0
+     */
+    load("n775906.docx");
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(-635), getProperty<sal_Int32>(getParagraph(1), "ParaFirstLineIndent"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1905), getProperty<sal_Int32>(getParagraph(1), "ParaLeftMargin"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
