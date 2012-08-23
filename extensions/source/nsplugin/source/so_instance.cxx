@@ -28,6 +28,7 @@
 
 
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/frame/DispatchHelper.hpp>
 #include <com/sun/star/frame/XDispatchProviderInterception.hpp>
 #include <com/sun/star/lang/SystemDependent.hpp>
 #include <com/sun/star/awt/XSystemChildFactory.hpp>
@@ -299,14 +300,7 @@ sal_Bool SoPluginInstance::LoadDocument(NSP_HWND hParent)
         debug_fprintf(NSP_LOG_APPEND, "load document success\n");
 
         // create frame::XDispatchHelper and frame::XDispatchProvider
-        m_xDispatcher = Reference< frame::XDispatchHelper > (
-            mxRemoteMSF->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.DispatchHelper"))),
-            uno::UNO_QUERY );
-        if(!m_xDispatcher.is())
-        {
-            debug_fprintf(NSP_LOG_APPEND, "m_xDispatcher can not be getten\n");
-            return sal_False;
-        }
+        m_xDispatcher = Reference< frame::XDispatchHelper >( frame::DispatchHelper::create( xContext ) );
         m_xDispatchProvider = Reference< frame::XDispatchProvider >(m_xFrame, uno::UNO_QUERY);
         if(!m_xDispatchProvider.is())
         {

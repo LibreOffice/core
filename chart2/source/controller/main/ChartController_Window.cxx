@@ -51,7 +51,7 @@
 #include <com/sun/star/chart2/RelativeSize.hpp>
 #include <com/sun/star/chart2/XRegressionCurveContainer.hpp>
 
-#include <com/sun/star/frame/XDispatchHelper.hpp>
+#include <com/sun/star/frame/DispatchHelper.hpp>
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <com/sun/star/util/XUpdatable.hpp>
 #include <comphelper/InlineContainer.hxx>
@@ -1550,20 +1550,15 @@ bool ChartController::execute_KeyInput( const KeyEvent& rKEvt )
     if( ! bReturn &&
         nCode == KEY_ESCAPE )
     {
-        uno::Reference< frame::XDispatchHelper > xDispatchHelper(
-            m_xCC->getServiceManager()->createInstanceWithContext(
-                C2U("com.sun.star.frame.DispatchHelper"), m_xCC ), uno::UNO_QUERY );
-        if( xDispatchHelper.is())
-        {
-            uno::Sequence< beans::PropertyValue > aArgs;
-            xDispatchHelper->executeDispatch(
-                uno::Reference< frame::XDispatchProvider >( m_xFrame, uno::UNO_QUERY ),
-                C2U(".uno:TerminateInplaceActivation"),
-                C2U("_parent"),
-                frame::FrameSearchFlag::PARENT,
-                aArgs );
-            bReturn = true;
-        }
+        uno::Reference< frame::XDispatchHelper > xDispatchHelper( frame::DispatchHelper::create(m_xCC) );
+        uno::Sequence< beans::PropertyValue > aArgs;
+        xDispatchHelper->executeDispatch(
+            uno::Reference< frame::XDispatchProvider >( m_xFrame, uno::UNO_QUERY ),
+            C2U(".uno:TerminateInplaceActivation"),
+            C2U("_parent"),
+            frame::FrameSearchFlag::PARENT,
+            aArgs );
+        bReturn = true;
     }
 
     if( ! bReturn &&

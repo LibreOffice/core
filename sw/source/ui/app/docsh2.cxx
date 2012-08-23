@@ -28,8 +28,9 @@
 
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/frame/XDispatchHelper.hpp>
+#include <com/sun/star/frame/DispatchHelper.hpp>
 
+#include <comphelper/componentcontext.hxx>
 #include <comphelper/processfactory.hxx>
 
 #include <hintids.hxx>
@@ -1005,34 +1006,31 @@ void SwDocShell::Execute(SfxRequest& rReq)
                     if( !ERRCODE_TOERROR( eErr ) )
                     {
                         uno::Reference< lang::XMultiServiceFactory > xORB = ::comphelper::getProcessServiceFactory();
+                        uno::Reference< uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
                         uno::Reference< frame::XDispatchProvider > xProv(
                             xORB->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.ModuleDispatcher"))), UNO_QUERY );
                         if ( xProv.is() )
                         {
                             ::rtl::OUString aCmd(RTL_CONSTASCII_USTRINGPARAM("SendOutlineToImpress"));
-                            uno::Reference< frame::XDispatchHelper > xHelper(
-                                xORB->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.DispatchHelper"))), UNO_QUERY );
-                            if ( xHelper.is() )
+                            uno::Reference< frame::XDispatchHelper > xHelper( frame::DispatchHelper::create(xContext) );
+                            pStrm->Seek( STREAM_SEEK_TO_END );
+                            *pStrm << '\0';
+                            pStrm->Seek( STREAM_SEEK_TO_BEGIN );
+
+                            // Transfer ownership of stream to a lockbytes object
+                            SvLockBytes aLockBytes( pStrm, sal_True );
+                            SvLockBytesStat aStat;
+                            if ( aLockBytes.Stat( &aStat, SVSTATFLAG_DEFAULT ) == ERRCODE_NONE )
                             {
-                                pStrm->Seek( STREAM_SEEK_TO_END );
-                                *pStrm << '\0';
-                                pStrm->Seek( STREAM_SEEK_TO_BEGIN );
+                                sal_uInt32 nLen = aStat.nSize;
+                                sal_uLong nRead = 0;
+                                uno::Sequence< sal_Int8 > aSeq( nLen );
+                                aLockBytes.ReadAt( 0, aSeq.getArray(), nLen, &nRead );
 
-                                // Transfer ownership of stream to a lockbytes object
-                                SvLockBytes aLockBytes( pStrm, sal_True );
-                                SvLockBytesStat aStat;
-                                if ( aLockBytes.Stat( &aStat, SVSTATFLAG_DEFAULT ) == ERRCODE_NONE )
-                                {
-                                    sal_uInt32 nLen = aStat.nSize;
-                                    sal_uLong nRead = 0;
-                                    uno::Sequence< sal_Int8 > aSeq( nLen );
-                                    aLockBytes.ReadAt( 0, aSeq.getArray(), nLen, &nRead );
-
-                                    uno::Sequence< beans::PropertyValue > aArgs(1);
-                                    aArgs[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RtfOutline"));
-                                    aArgs[0].Value <<= aSeq;
-                                    xHelper->executeDispatch( xProv, aCmd, ::rtl::OUString(), 0, aArgs );
-                                }
+                                uno::Sequence< beans::PropertyValue > aArgs(1);
+                                aArgs[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RtfOutline"));
+                                aArgs[0].Value <<= aSeq;
+                                xHelper->executeDispatch( xProv, aCmd, ::rtl::OUString(), 0, aArgs );
                             }
                         }
                     }
@@ -1079,34 +1077,31 @@ void SwDocShell::Execute(SfxRequest& rReq)
                     if ( nWhich == FN_OUTLINE_TO_IMPRESS )
                     {
                         uno::Reference< lang::XMultiServiceFactory > xORB = ::comphelper::getProcessServiceFactory();
+                        uno::Reference< uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
                         uno::Reference< frame::XDispatchProvider > xProv(
                             xORB->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.ModuleDispatcher"))), UNO_QUERY );
                         if ( xProv.is() )
                         {
                             ::rtl::OUString aCmd(RTL_CONSTASCII_USTRINGPARAM("SendOutlineToImpress"));
-                            uno::Reference< frame::XDispatchHelper > xHelper(
-                                xORB->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.DispatchHelper"))), UNO_QUERY );
-                            if ( xHelper.is() )
+                            uno::Reference< frame::XDispatchHelper > xHelper( frame::DispatchHelper::create(xContext) );
+                            pStrm->Seek( STREAM_SEEK_TO_END );
+                            *pStrm << '\0';
+                            pStrm->Seek( STREAM_SEEK_TO_BEGIN );
+
+                            // Transfer ownership of stream to a lockbytes object
+                            SvLockBytes aLockBytes( pStrm, sal_True );
+                            SvLockBytesStat aStat;
+                            if ( aLockBytes.Stat( &aStat, SVSTATFLAG_DEFAULT ) == ERRCODE_NONE )
                             {
-                                pStrm->Seek( STREAM_SEEK_TO_END );
-                                *pStrm << '\0';
-                                pStrm->Seek( STREAM_SEEK_TO_BEGIN );
+                                sal_uInt32 nLen = aStat.nSize;
+                                sal_uLong nRead = 0;
+                                uno::Sequence< sal_Int8 > aSeq( nLen );
+                                aLockBytes.ReadAt( 0, aSeq.getArray(), nLen, &nRead );
 
-                                // Transfer ownership of stream to a lockbytes object
-                                SvLockBytes aLockBytes( pStrm, sal_True );
-                                SvLockBytesStat aStat;
-                                if ( aLockBytes.Stat( &aStat, SVSTATFLAG_DEFAULT ) == ERRCODE_NONE )
-                                {
-                                    sal_uInt32 nLen = aStat.nSize;
-                                    sal_uLong nRead = 0;
-                                    uno::Sequence< sal_Int8 > aSeq( nLen );
-                                    aLockBytes.ReadAt( 0, aSeq.getArray(), nLen, &nRead );
-
-                                    uno::Sequence< beans::PropertyValue > aArgs(1);
-                                    aArgs[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RtfOutline"));
-                                    aArgs[0].Value <<= aSeq;
-                                    xHelper->executeDispatch( xProv, aCmd, ::rtl::OUString(), 0, aArgs );
-                                }
+                                uno::Sequence< beans::PropertyValue > aArgs(1);
+                                aArgs[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RtfOutline"));
+                                aArgs[0].Value <<= aSeq;
+                                xHelper->executeDispatch( xProv, aCmd, ::rtl::OUString(), 0, aArgs );
                             }
                         }
                     }

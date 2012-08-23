@@ -42,10 +42,10 @@
 #include <com/sun/star/awt/XMenuExtended.hpp>
 #include <com/sun/star/awt/XMenuListener.hpp>
 #include <com/sun/star/awt/XPopupMenuExtended.hpp>
+#include <com/sun/star/frame/DispatchHelper.hpp>
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
-#include <com/sun/star/frame/XDispatchHelper.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <com/sun/star/frame/XModel.hpp>
@@ -718,8 +718,7 @@ void
 FrameHelper::dispatchCommand (OUString command)
 {
     OUString target = OUString(RTL_CONSTASCII_USTRINGPARAM(""));
-    Reference < XDispatchHelper > xdh (m_xMSF->createInstance(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.DispatchHelper"))),
-                                       UNO_QUERY);
+    Reference < XDispatchHelper > xdh( DispatchHelper::create(comphelper::ComponentContext(m_xMSF).getUNOContext()) );
 
     // This is a special case, we don't want the helper to be disconnected from the frame
     // when PrintPreview dettaches. See the frameAction method.
