@@ -122,95 +122,139 @@ namespace drawinglayer
                     nSmallStepsY = (sal_uInt32)(fStepY / fSmallStepY);
                 }
 
-                // prepare point vectors for point and cross markers
-                std::vector< basegfx::B2DPoint > aPositionsPoint;
-                std::vector< basegfx::B2DPoint > aPositionsCross;
+                // calculate extended viewport in which grid points may lie at all
+                basegfx::B2DRange aExtendedViewport;
 
-                for(double fX(0.0); fX < aScale.getX(); fX += fStepX)
+                if(rViewInformation.getDiscreteViewport().isEmpty())
                 {
-                    const bool bXZero(basegfx::fTools::equalZero(fX));
+                    // not set, use logic size to travel over all potentioal grid points
+                    aExtendedViewport = basegfx::B2DRange(0.0, 0.0, aScale.getX(), aScale.getY());
+                }
+                else
+                {
+                    // transform unit range to discrete view
+                    aExtendedViewport = basegfx::B2DRange(0.0, 0.0, 1.0, 1.0);
+                    basegfx::B2DHomMatrix aTrans(rViewInformation.getObjectToViewTransformation() * getTransform());
+                    aExtendedViewport.transform(aTrans);
 
-                    for(double fY(0.0); fY < aScale.getY(); fY += fStepY)
+                    // intersect with visible part
+                    aExtendedViewport.intersect(rViewInformation.getDiscreteViewport());
+
+                    if(!aExtendedViewport.isEmpty())
                     {
-                        const bool bYZero(basegfx::fTools::equalZero(fY));
+                        // convert back and apply scale
+                        aTrans.invert();
+                        aTrans.scale(aScale.getX(), aScale.getY());
+                        aExtendedViewport.transform(aTrans);
 
-                        if(!bXZero && !bYZero)
+                        // crop start/end in X/Y to multiples of logical step width
+                        const double fHalfCrossSize((rViewInformation.getInverseObjectToViewTransformation() * basegfx::B2DVector(3.0, 0.0)).getLength());
+                        const double fMinX(floor((aExtendedViewport.getMinX() - fHalfCrossSize) / fStepX) * fStepX);
+                        const double fMaxX(ceil((aExtendedViewport.getMaxX() + fHalfCrossSize) / fStepX) * fStepX);
+                        const double fMinY(floor((aExtendedViewport.getMinY() - fHalfCrossSize) / fStepY) * fStepY);
+                        const double fMaxY(ceil((aExtendedViewport.getMaxY() + fHalfCrossSize) / fStepY) * fStepY);
+
+                        // put to aExtendedViewport and crop on object logic size
+                        aExtendedViewport = basegfx::B2DRange(
+                            std::max(fMinX, 0.0),
+                            std::max(fMinY, 0.0),
+                            std::min(fMaxX, aScale.getX()),
+                            std::min(fMaxY, aScale.getY()));
+                    }
+                }
+
+                if(!aExtendedViewport.isEmpty())
+                {
+                    // prepare point vectors for point and cross markers
+                    std::vector< basegfx::B2DPoint > aPositionsPoint;
+                    std::vector< basegfx::B2DPoint > aPositionsCross;
+
+                    for(double fX(aExtendedViewport.getMinX()); fX < aExtendedViewport.getMaxX(); fX += fStepX)
+                    {
+                        const bool bXZero(basegfx::fTools::equalZero(fX));
+
+                        for(double fY(aExtendedViewport.getMinY()); fY < aExtendedViewport.getMaxY(); fY += fStepY)
                         {
-                            // get discrete position and test against 3x3 area surrounding it
-                            // since it's a cross
-                            const double fHalfCrossSize(3.0 * 0.5);
-                            const basegfx::B2DPoint aViewPos(aRST * basegfx::B2DPoint(fX, fY));
-                            const basegfx::B2DRange aDiscreteRangeCross(
-                                aViewPos.getX() - fHalfCrossSize, aViewPos.getY() - fHalfCrossSize,
-                                aViewPos.getX() + fHalfCrossSize, aViewPos.getY() + fHalfCrossSize);
+                            const bool bYZero(basegfx::fTools::equalZero(fY));
 
-                            if(rViewInformation.getDiscreteViewport().overlaps(aDiscreteRangeCross))
+                            if(!bXZero && !bYZero)
                             {
-                                const basegfx::B2DPoint aLogicPos(rViewInformation.getInverseObjectToViewTransformation() * aViewPos);
-                                aPositionsCross.push_back(aLogicPos);
-                            }
-                        }
+                                // get discrete position and test against 3x3 area surrounding it
+                                // since it's a cross
+                                const double fHalfCrossSize(3.0 * 0.5);
+                                const basegfx::B2DPoint aViewPos(aRST * basegfx::B2DPoint(fX, fY));
+                                const basegfx::B2DRange aDiscreteRangeCross(
+                                    aViewPos.getX() - fHalfCrossSize, aViewPos.getY() - fHalfCrossSize,
+                                    aViewPos.getX() + fHalfCrossSize, aViewPos.getY() + fHalfCrossSize);
 
-                        if(getSubdivisionsX() && !bYZero)
-                        {
-                            double fF(fX + fSmallStepX);
-
-                            for(sal_uInt32 a(1L); a < nSmallStepsX && fF < aScale.getX(); a++, fF += fSmallStepX)
-                            {
-                                const basegfx::B2DPoint aViewPos(aRST * basegfx::B2DPoint(fF, fY));
-
-                                if(rViewInformation.getDiscreteViewport().isInside(aViewPos))
+                                if(rViewInformation.getDiscreteViewport().overlaps(aDiscreteRangeCross))
                                 {
                                     const basegfx::B2DPoint aLogicPos(rViewInformation.getInverseObjectToViewTransformation() * aViewPos);
-                                    aPositionsPoint.push_back(aLogicPos);
+                                    aPositionsCross.push_back(aLogicPos);
                                 }
                             }
-                        }
 
-                        if(getSubdivisionsY() && !bXZero)
-                        {
-                            double fF(fY + fSmallStepY);
-
-                            for(sal_uInt32 a(1L); a < nSmallStepsY && fF < aScale.getY(); a++, fF += fSmallStepY)
+                            if(getSubdivisionsX() && !bYZero)
                             {
-                                const basegfx::B2DPoint aViewPos(aRST * basegfx::B2DPoint(fX, fF));
+                                double fF(fX + fSmallStepX);
 
-                                if(rViewInformation.getDiscreteViewport().isInside(aViewPos))
+                                for(sal_uInt32 a(1); a < nSmallStepsX && fF < aExtendedViewport.getMaxX(); a++, fF += fSmallStepX)
                                 {
-                                    const basegfx::B2DPoint aLogicPos(rViewInformation.getInverseObjectToViewTransformation() * aViewPos);
-                                    aPositionsPoint.push_back(aLogicPos);
+                                    const basegfx::B2DPoint aViewPos(aRST * basegfx::B2DPoint(fF, fY));
+
+                                    if(rViewInformation.getDiscreteViewport().isInside(aViewPos))
+                                    {
+                                        const basegfx::B2DPoint aLogicPos(rViewInformation.getInverseObjectToViewTransformation() * aViewPos);
+                                        aPositionsPoint.push_back(aLogicPos);
+                                    }
+                                }
+                            }
+
+                            if(getSubdivisionsY() && !bXZero)
+                            {
+                                double fF(fY + fSmallStepY);
+
+                                for(sal_uInt32 a(1); a < nSmallStepsY && fF < aExtendedViewport.getMaxY(); a++, fF += fSmallStepY)
+                                {
+                                    const basegfx::B2DPoint aViewPos(aRST * basegfx::B2DPoint(fX, fF));
+
+                                    if(rViewInformation.getDiscreteViewport().isInside(aViewPos))
+                                    {
+                                        const basegfx::B2DPoint aLogicPos(rViewInformation.getInverseObjectToViewTransformation() * aViewPos);
+                                        aPositionsPoint.push_back(aLogicPos);
+                                    }
                                 }
                             }
                         }
                     }
-                }
 
-                // prepare return value
-                const sal_uInt32 nCountPoint(aPositionsPoint.size());
-                const sal_uInt32 nCountCross(aPositionsCross.size());
-                const sal_uInt32 nRetvalCount((nCountPoint ? 1 : 0) + (nCountCross ? 1 : 0));
-                sal_uInt32 nInsertCounter(0);
+                    // prepare return value
+                    const sal_uInt32 nCountPoint(aPositionsPoint.size());
+                    const sal_uInt32 nCountCross(aPositionsCross.size());
+                    const sal_uInt32 nRetvalCount((nCountPoint ? 1 : 0) + (nCountCross ? 1 : 0));
+                    sal_uInt32 nInsertCounter(0);
 
-                aRetval.realloc(nRetvalCount);
+                    aRetval.realloc(nRetvalCount);
 
-                // add PointArrayPrimitive2D if point markers were added
-                if(nCountPoint)
-                {
-                    aRetval[nInsertCounter++] = Primitive2DReference(new PointArrayPrimitive2D(aPositionsPoint, getBColor()));
-                }
-
-                // add MarkerArrayPrimitive2D if cross markers were added
-                if(nCountCross)
-                {
-                    if(!getSubdivisionsX() && !getSubdivisionsY())
+                    // add PointArrayPrimitive2D if point markers were added
+                    if(nCountPoint)
                     {
-                        // no subdivisions, so fall back to points at grid positions, no need to
-                        // visualize a difference between divisions and sub-divisions
-                        aRetval[nInsertCounter++] = Primitive2DReference(new PointArrayPrimitive2D(aPositionsCross, getBColor()));
+                        aRetval[nInsertCounter++] = Primitive2DReference(new PointArrayPrimitive2D(aPositionsPoint, getBColor()));
                     }
-                    else
+
+                    // add MarkerArrayPrimitive2D if cross markers were added
+                    if(nCountCross)
                     {
-                        aRetval[nInsertCounter++] = Primitive2DReference(new MarkerArrayPrimitive2D(aPositionsCross, getCrossMarker()));
+                        if(!getSubdivisionsX() && !getSubdivisionsY())
+                        {
+                            // no subdivisions, so fall back to points at grid positions, no need to
+                            // visualize a difference between divisions and sub-divisions
+                            aRetval[nInsertCounter++] = Primitive2DReference(new PointArrayPrimitive2D(aPositionsCross, getBColor()));
+                        }
+                        else
+                        {
+                            aRetval[nInsertCounter++] = Primitive2DReference(new MarkerArrayPrimitive2D(aPositionsCross, getCrossMarker()));
+                        }
                     }
                 }
             }

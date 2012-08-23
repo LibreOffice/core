@@ -18,11 +18,88 @@
  */
 
 #include <basegfx/numeric/ftools.hxx>
+#include <algorithm>
 
 namespace basegfx
 {
     // init static member of class fTools
     double ::basegfx::fTools::mfSmallValue = 0.000000001;
+
+    double snapToNearestMultiple(double v, const double fStep)
+    {
+        if(fTools::equalZero(fStep))
+        {
+            // with a zero step, all snaps to 0.0
+            return 0.0;
+        }
+        else
+        {
+            const double fHalfStep(fStep * 0.5);
+            const double fChange(fHalfStep - fmod(v + fHalfStep, fStep));
+
+            if(basegfx::fTools::equal(fabs(v), fabs(fChange)))
+            {
+                return 0.0;
+            }
+            else
+            {
+                return v + fChange;
+            }
+        }
+    }
+
+    double snapToZeroRange(double v, double fWidth)
+    {
+        if(fTools::equalZero(fWidth))
+        {
+            // with no range all snaps to range bound
+            return 0.0;
+        }
+        else
+        {
+            if(v < 0.0 || v > fWidth)
+            {
+                double fRetval(fmod(v, fWidth));
+
+                if(fRetval < 0.0)
+                {
+                    fRetval += fWidth;
+                }
+
+                return fRetval;
+            }
+            else
+            {
+                return v;
+            }
+        }
+    }
+
+    double snapToRange(double v, double fLow, double fHigh)
+    {
+        if(fTools::equal(fLow, fHigh))
+        {
+            // with no range all snaps to range bound
+            return 0.0;
+        }
+        else
+        {
+            if(fLow > fHigh)
+            {
+                // correct range order. Evtl. assert this (?)
+                std::swap(fLow, fHigh);
+            }
+
+            if(v < fLow || v > fHigh)
+            {
+                return snapToZeroRange(v - fLow, fHigh - fLow) + fLow;
+            }
+            else
+            {
+                return v;
+            }
+        }
+    }
 } // end of namespace basegfx
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
