@@ -20,10 +20,14 @@
  *************************************************************/
 package testlib.uno;
 
+
 import org.openoffice.test.uno.UnoApp;
 
 import com.sun.star.beans.PropertyValue;
+import com.sun.star.beans.XPropertySet;
 import com.sun.star.container.XNamed;
+import com.sun.star.document.XDocumentInfo;
+import com.sun.star.document.XDocumentInfoSupplier;
 import com.sun.star.frame.XStorable;
 import com.sun.star.io.IOException;
 import com.sun.star.lang.XMultiServiceFactory;
@@ -36,24 +40,20 @@ import com.sun.star.uno.UnoRuntime;
 public class SWUtil {
 
 
+
+
     public static void saveAsDoc(XTextDocument document, String url) throws IOException {
         saveAs(document, "MS Word 97", url);
 
     }
 
+
     public static void saveAsODT(XTextDocument document, String url) throws IOException {
         saveAs(document, "writer8", url);
     }
 
-    public static void save(XTextDocument document) throws IOException {
-        XStorable store = UnoRuntime.queryInterface(XStorable.class, document);
-        store.store();
-
-    }
-
     public static void saveAs(XTextDocument document, String filterValue, String url) throws IOException {
         XStorable store = UnoRuntime.queryInterface(XStorable.class, document);
-
         PropertyValue[] propsValue = new PropertyValue[1];
         propsValue[0] = new PropertyValue();
         propsValue[0].Name = "FilterName";
@@ -62,21 +62,35 @@ public class SWUtil {
 
     }
 
+    public static void save(XTextDocument document) throws IOException {
+        XStorable store = UnoRuntime.queryInterface(XStorable.class, document);
+        store.store();
+    }
+
+    public static XTextDocument saveAndReload(XTextDocument document, UnoApp app) throws Exception {
+        XStorable store = UnoRuntime.queryInterface(XStorable.class, document);
+        store.store();
+        String url = document.getURL();
+        app.closeDocument(document);
+        return openDocumentFromURL(url, app);
+
+    }
+
     public static XTextDocument newDocument(UnoApp app) throws Exception {
-        return UnoRuntime.queryInterface(XTextDocument.class, app.newDocument("swriter"));
+        return (XTextDocument) UnoRuntime.queryInterface(XTextDocument.class, app.newDocument("swriter"));
 
     }
 
     public static XTextDocument openDocumentFromURL(String url, UnoApp app) throws Exception {
-        return UnoRuntime.queryInterface(XTextDocument.class, app.loadDocumentFromURL(url));
+        return (XTextDocument) UnoRuntime.queryInterface(XTextDocument.class, app.loadDocumentFromURL(url));
 
     }
-
     public static XTextDocument openDocument(String filePath, UnoApp app) throws Exception {
 
-        return UnoRuntime.queryInterface(XTextDocument.class, app.loadDocument(filePath));
+        return (XTextDocument) UnoRuntime.queryInterface(XTextDocument.class, app.loadDocument(filePath));
 
     }
+
     public static void moveCuror2End(XTextDocument document) {
         XText xText = document.getText();
         XTextCursor xTextCursor = xText.createTextCursor();
@@ -87,6 +101,20 @@ public class SWUtil {
         XText xText = document.getText();
         XTextCursor xTextCursor = xText.createTextCursor();
         xTextCursor.gotoStart(false);
+    }
+
+    /**
+     * Set document properties. such as subject, title etc
+     * @param document - set document information on this document
+     * @param prop - document information, including "Subject" ,"Title", "Author", "Title", "KeyWords"
+     * @param propValue - value you want to set for prop
+     * @throws Exception
+     */
+    public static void setDocumentProperty(XTextDocument document, String prop, String propValue) throws Exception {
+        XDocumentInfoSupplier docInfoSupplier = UnoRuntime.queryInterface(XDocumentInfoSupplier.class, document);
+        XDocumentInfo docInfo = docInfoSupplier.getDocumentInfo();
+        XPropertySet propsDocInfo = (XPropertySet)UnoRuntime.queryInterface(XPropertySet.class, docInfo);
+        propsDocInfo.setPropertyValue(prop, propValue);
     }
 
 
