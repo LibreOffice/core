@@ -387,6 +387,7 @@ void SwHeaderFooterWin::Paint( const Rectangle& )
                 aSeq, BColorModifier( Color( COL_WHITE ).getBColor(), 1.0 - nFadeRate, BCOLORMODIFYMODE_INTERPOLATE ) ) );
 
     pProcessor->process( aGhostedSeq );
+    delete pProcessor;
 }
 
 bool SwHeaderFooterWin::IsEmptyHeaderFooter( )
