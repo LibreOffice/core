@@ -339,6 +339,8 @@ bool VclBuilder::extractModel(const rtl::OString &id, stringmap &rMap)
 
 Window *VclBuilder::makeObject(Window *pParent, const rtl::OString &name, const rtl::OString &id, stringmap &rMap)
 {
+    bool bIsPlaceHolder = name.isEmpty();
+
     if (pParent && pParent->GetType() == WINDOW_TABCONTROL)
     {
         //We have to add a page
@@ -351,8 +353,6 @@ Window *VclBuilder::makeObject(Window *pParent, const rtl::OString &name, const 
         sal_uInt16 nNewPageId = -(pTabControl->GetPageCount()+1);
         pTabControl->InsertPage(nNewPageId, rtl::OUString());
         pTabControl->SetCurPageId(nNewPageId);
-
-        bool bIsPlaceHolder = name.isEmpty();
 
         if (!bIsPlaceHolder)
         {
@@ -368,6 +368,9 @@ Window *VclBuilder::makeObject(Window *pParent, const rtl::OString &name, const 
             pTabControl->SetTabPage(nNewPageId, pPage);
         }
     }
+
+    if (bIsPlaceHolder)
+        return NULL;
 
     Window *pWindow = NULL;
     if (name.equalsL(RTL_CONSTASCII_STRINGPARAM("GtkDialog")))
