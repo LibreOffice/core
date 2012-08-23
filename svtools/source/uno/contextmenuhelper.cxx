@@ -38,7 +38,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/ui/XUIConfigurationManager.hpp>
-#include <com/sun/star/ui/XModuleUIConfigurationManagerSupplier.hpp>
+#include <com/sun/star/ui/ModuleUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/ui/ImageType.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -430,19 +430,14 @@ ContextMenuHelper::associateUIConfigurationManagers()
                 aModuleId = xModuleManager->identify( xFrame );
 
                 uno::Reference< ui::XModuleUIConfigurationManagerSupplier > xModuleCfgMgrSupplier(
-                    ::comphelper::getProcessServiceFactory()->createInstance(
-                        rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                            "com.sun.star.ui.ModuleUIConfigurationManagerSupplier" ))),
-                        uno::UNO_QUERY );
-                if ( xModuleCfgMgrSupplier.is() )
+                    ui::ModuleUIConfigurationManagerSupplier::create(
+                        ::comphelper::getProcessComponentContext() ) );
+                uno::Reference< ui::XUIConfigurationManager > xUICfgMgr(
+                    xModuleCfgMgrSupplier->getUIConfigurationManager( aModuleId ));
+                if ( xUICfgMgr.is() )
                 {
-                    uno::Reference< ui::XUIConfigurationManager > xUICfgMgr(
-                        xModuleCfgMgrSupplier->getUIConfigurationManager( aModuleId ));
-                    if ( xUICfgMgr.is() )
-                    {
-                        m_xModuleImageMgr = uno::Reference< ui::XImageManager >(
-                            xUICfgMgr->getImageManager(), uno::UNO_QUERY );
-                    }
+                    m_xModuleImageMgr = uno::Reference< ui::XImageManager >(
+                        xUICfgMgr->getImageManager(), uno::UNO_QUERY );
                 }
             }
 

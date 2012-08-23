@@ -792,8 +792,7 @@ FrameHelper::getAcceleratorConfigurations (Reference < XModel >        xModel,
     this->m_docAccelConf = docAccelConf;
 
     //Get module shurtcut database
-    Reference< XModuleUIConfigurationManagerSupplier > modUISupplier(m_xMSF->createInstance(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ui.ModuleUIConfigurationManagerSupplier"))),
-                                                                     UNO_QUERY);
+    Reference< XModuleUIConfigurationManagerSupplier > modUISupplier( ModuleUIConfigurationManagerSupplier::create(comphelper::ComponentContext(m_xMSF).getUNOContext()) );
     Reference< XUIConfigurationManager >   modUIManager = modUISupplier->getUIConfigurationManager(xModuleManager->identify(m_xFrame));
     Reference< XAcceleratorConfiguration > modAccelConf(modUIManager->getShortCutManager(), UNO_QUERY);
     this->m_modAccelConf = modAccelConf;

@@ -32,7 +32,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <stdarg.h>
 #include <com/sun/star/ui/XUIConfigurationPersistence.hpp>
-#include <com/sun/star/ui/XModuleUIConfigurationManagerSupplier.hpp>
+#include <com/sun/star/ui/ModuleUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XSingleComponentFactory.hpp>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
@@ -420,12 +420,16 @@ CTB* CTBWrapper::GetCustomizationData( const rtl::OUString& sTBName )
 
 bool CTBWrapper::ImportCustomToolBar( SfxObjectShell& rDocSh )
 {
+    if(rCTB.empty())
+        return true;
+
+    uno::Reference< uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
+    uno::Reference< ui::XModuleUIConfigurationManagerSupplier > xAppCfgSupp( ui::ModuleUIConfigurationManagerSupplier::create(xContext) );
+
     std::vector<CTB>::iterator it_end = rCTB.end();
     for ( std::vector<CTB>::iterator it = rCTB.begin(); it != it_end; ++it )
     {
         // for each customtoolbar
-        uno::Reference< lang::XMultiServiceFactory > xMSF( ::comphelper::getProcessServiceFactory(), uno::UNO_QUERY_THROW );
-        uno::Reference< ui::XModuleUIConfigurationManagerSupplier > xAppCfgSupp( xMSF->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ui.ModuleUIConfigurationManagerSupplier" ) ) ), uno::UNO_QUERY_THROW );
         CustomToolBarImportHelper helper( rDocSh, xAppCfgSupp->getUIConfigurationManager( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sheet.SpreadsheetDocument" ) ) ) );
         helper.setMSOCommandMap( new  MSOExcelCommandConvertor() );
         // Ignore menu toolbars, excel doesn't ( afaics ) store

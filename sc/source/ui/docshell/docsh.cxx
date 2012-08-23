@@ -51,7 +51,7 @@
 #include <com/sun/star/script/vba/XVBAEventProcessor.hpp>
 #include <com/sun/star/sheet/XSpreadsheetView.hpp>
 #include <com/sun/star/task/XJob.hpp>
-#include <com/sun/star/ui/XModuleUIConfigurationManagerSupplier.hpp>
+#include <com/sun/star/ui/ModuleUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/ui/XAcceleratorConfiguration.hpp>
 
 #include "scabstdlg.hxx"
@@ -2858,16 +2858,12 @@ void ScDocShell::ResetKeyBindings( ScOptionsUtil::KeyBindingType eType )
 {
     using namespace ::com::sun::star::ui;
 
-    Reference<XMultiServiceFactory> xServiceManager = ::comphelper::getProcessServiceFactory();
-    if (!xServiceManager.is())
+    Reference<uno::XComponentContext> xContext = ::comphelper::getProcessComponentContext();
+    if (!xContext.is())
         return;
 
     Reference<XModuleUIConfigurationManagerSupplier> xModuleCfgSupplier(
-        xServiceManager->createInstance(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ui.ModuleUIConfigurationManagerSupplier"))), UNO_QUERY);
-
-    if (!xModuleCfgSupplier.is())
-        return;
+        ModuleUIConfigurationManagerSupplier::create(xContext) );
 
     // Grab the Calc configuration.
     Reference<XUIConfigurationManager> xConfigMgr =

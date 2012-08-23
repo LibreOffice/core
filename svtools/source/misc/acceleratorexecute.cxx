@@ -31,7 +31,7 @@
 #include <com/sun/star/frame/XModuleManager.hpp>
 #include <com/sun/star/frame/XDesktop.hpp>
 #include <com/sun/star/ui/XUIConfigurationManager.hpp>
-#include <com/sun/star/ui/XModuleUIConfigurationManagerSupplier.hpp>
+#include <com/sun/star/ui/ModuleUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/awt/XTopWindow.hpp>
 #include <com/sun/star/awt/KeyModifier.hpp>
@@ -403,8 +403,7 @@ css::uno::Reference< css::ui::XAcceleratorConfiguration > AcceleratorExecute::st
         { return css::uno::Reference< css::ui::XAcceleratorConfiguration >(); }
 
     css::uno::Reference< css::ui::XModuleUIConfigurationManagerSupplier > xUISupplier(
-        xSMGR->createInstance(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ui.ModuleUIConfigurationManagerSupplier" ))),
-        css::uno::UNO_QUERY_THROW);
+        css::ui::ModuleUIConfigurationManagerSupplier::create(comphelper::ComponentContext(xSMGR).getUNOContext()) );
 
     css::uno::Reference< css::ui::XAcceleratorConfiguration > xAccCfg;
     try

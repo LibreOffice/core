@@ -24,7 +24,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
-#include <com/sun/star/ui/XModuleUIConfigurationManagerSupplier.hpp>
+#include <com/sun/star/ui/ModuleUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/ui/XUIConfigurationManager.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/ui/XImageManager.hpp>
@@ -52,6 +52,7 @@ namespace dbaui
         using ::com::sun::star::container::XNameAccess;
         using ::com::sun::star::lang::XMultiServiceFactory;
         using ::com::sun::star::beans::PropertyValue;
+        using ::com::sun::star::ui::ModuleUIConfigurationManagerSupplier;
         using ::com::sun::star::ui::XModuleUIConfigurationManagerSupplier;
         using ::com::sun::star::ui::XUIConfigurationManager;
         using ::com::sun::star::ui::XImageManager;
@@ -124,14 +125,12 @@ namespace dbaui
                 do
                 {
                     // Retrieve popup menu labels
-                    Reference< XMultiServiceFactory> xFactory( ::comphelper::getProcessServiceFactory() );
-                    if ( !xFactory.is() )
+                    Reference< com::sun::star::uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
+                    if ( !xContext.is() )
                         break;
 
                     Reference< XModuleUIConfigurationManagerSupplier > xSupplier(
-                        xFactory->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                            "com.sun.star.ui.ModuleUIConfigurationManagerSupplier" ) ) ),
-                        UNO_QUERY_THROW );
+                        ModuleUIConfigurationManagerSupplier::create(xContext) );
 
                     Reference< XUIConfigurationManager > xManager( xSupplier->getUIConfigurationManager( _rModuleName ) );
                     Reference< XImageManager > xImageManager;

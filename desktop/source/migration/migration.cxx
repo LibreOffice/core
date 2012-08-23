@@ -60,6 +60,7 @@
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/FileSystemStorageFactory.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
+#include <com/sun/star/ui/ModuleUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/ui/XUIConfiguration.hpp>
 #include <com/sun/star/ui/XUIConfigurationStorage.hpp>
 #include <com/sun/star/ui/XUIConfigurationPersistence.hpp>
@@ -1339,11 +1340,10 @@ void NewVersionUIInfo::init(const ::std::vector< MigrationModuleInfo >& vModules
     m_lNewVersionMenubarSettingsSeq.realloc(vModulesInfo.size());
     m_lNewVersionToolbarSettingsSeq.realloc(vModulesInfo.size());
 
-    const ::rtl::OUString sModuleCfgSupplier(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ui.ModuleUIConfigurationManagerSupplier"));
     const ::rtl::OUString sMenubarResourceURL(RTL_CONSTASCII_USTRINGPARAM("private:resource/menubar/menubar"));
     const ::rtl::OUString sToolbarResourcePre(RTL_CONSTASCII_USTRINGPARAM("private:resource/toolbar/"));
 
-    uno::Reference< ui::XModuleUIConfigurationManagerSupplier > xModuleCfgSupplier = uno::Reference< ui::XModuleUIConfigurationManagerSupplier >(::comphelper::getProcessServiceFactory()->createInstance(sModuleCfgSupplier), uno::UNO_QUERY);
+    uno::Reference< ui::XModuleUIConfigurationManagerSupplier > xModuleCfgSupplier = ui::ModuleUIConfigurationManagerSupplier::create( ::comphelper::getProcessComponentContext() );
 
     for (sal_uInt32 i=0; i<vModulesInfo.size(); ++i)
     {

@@ -21,7 +21,7 @@
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/ui/XImageManager.hpp>
 #include <com/sun/star/frame/XModuleManager.hpp>
-#include <com/sun/star/ui/XModuleUIConfigurationManagerSupplier.hpp>
+#include <com/sun/star/ui/ModuleUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/ui/ImageType.hpp>
 #include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
 
@@ -176,11 +176,8 @@ Image SAL_CALL GetImage(
 
                 if ( !xModuleCfgMgrSupplier.is() )
                 {
-                    xModuleCfgMgrSupplier = Reference< XModuleUIConfigurationManagerSupplier >(
-                                                ::comphelper::getProcessServiceFactory()->createInstance(
-                                                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                                                        "com.sun.star.ui.ModuleUIConfigurationManagerSupplier" ))),
-                                                UNO_QUERY );
+                    xModuleCfgMgrSupplier = ModuleUIConfigurationManagerSupplier::create(
+                                              ::comphelper::getProcessComponentContext() );
 
                     m_xModuleCfgMgrSupplier = xModuleCfgMgrSupplier;
                 }

@@ -62,12 +62,13 @@
 #include "eventdlg.hxx"
 #include <dialmgr.hxx>
 
+#include <comphelper/componentcontext.hxx>
 #include <comphelper/documentinfo.hxx>
 #include <comphelper/processfactory.hxx>
 #include <unotools/configmgr.hxx>
 #include <com/sun/star/ui/ItemType.hpp>
 #include <com/sun/star/ui/ItemStyle.hpp>
-#include <com/sun/star/ui/XModuleUIConfigurationManagerSupplier.hpp>
+#include <com/sun/star/ui/ModuleUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/frame/XDesktop.hpp>
 #include <com/sun/star/ui/XUIConfiguration.hpp>
@@ -1688,9 +1689,7 @@ void SvxConfigPage::Reset( const SfxItemSet& )
         }
 
         uno::Reference< css::ui::XModuleUIConfigurationManagerSupplier >
-            xModuleCfgSupplier( xServiceManager->createInstance(
-                OUString( "com.sun.star.ui.ModuleUIConfigurationManagerSupplier" )),
-            uno::UNO_QUERY );
+            xModuleCfgSupplier( css::ui::ModuleUIConfigurationManagerSupplier::create(comphelper::ComponentContext(xServiceManager).getUNOContext()) );
 
         // Set up data for module specific menus
         SaveInData* pModuleData = NULL;

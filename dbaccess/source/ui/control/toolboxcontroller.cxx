@@ -23,7 +23,7 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/menu.hxx>
 #include <com/sun/star/ui/XUIConfigurationManager.hpp>
-#include <com/sun/star/ui/XModuleUIConfigurationManagerSupplier.hpp>
+#include <com/sun/star/ui/ModuleUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/ui/XImageManager.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <vcl/svapp.hxx>
@@ -36,6 +36,7 @@
 #include <osl/mutex.hxx>
 #include "dbu_reghelper.hxx"
 #include "UITools.hxx"
+#include <comphelper/componentcontext.hxx>
 
 
 extern "C" void SAL_CALL createRegistryInfo_OToolboxController()
@@ -185,7 +186,7 @@ namespace dbaui
 
             try
             {
-                Reference<XModuleUIConfigurationManagerSupplier> xModuleCfgMgrSupplier(getServiceManager()->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ui.ModuleUIConfigurationManagerSupplier"))),UNO_QUERY);
+                Reference<XModuleUIConfigurationManagerSupplier> xModuleCfgMgrSupplier(ModuleUIConfigurationManagerSupplier::create(comphelper::ComponentContext(getServiceManager()).getUNOContext()));
                 Reference<XUIConfigurationManager> xUIConfigMgr = xModuleCfgMgrSupplier->getUIConfigurationManager(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.OfficeDatabaseDocument")));
                 Reference<XImageManager> xImageMgr(xUIConfigMgr->getImageManager(),UNO_QUERY);
 

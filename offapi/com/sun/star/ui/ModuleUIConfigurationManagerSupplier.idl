@@ -37,23 +37,19 @@ module com { module sun { module star { module ui {
     access to module based user interface configuration managers.
 
     @since OOo 2.0
+
+    Controls module based user interface configuration managers.
+
+    <p>
+    There can only exists one user interface configuration manager for
+    a module. A user interface configuration manager supports to get and set
+    user interface configuration data for configurable user interface elements.
+
+    @see ConfigurableUIElement
+    @see XUIConfigurationManager
+    </p>
 */
-
-service ModuleUIConfigurationManagerSupplier
-{
-    /** controls module based user interface configuration managers.
-
-        <p>
-        There can only exists one user interface configuration manager for
-        a module. A user interface configuration manager supports to get and set
-        user interface configuration data for configurable user interface elements.
-
-        @see ConfigurableUIElement
-        @see XUIConfigurationManager
-        </p>
-    */
-    interface XModuleUIConfigurationManagerSupplier;
-};
+service ModuleUIConfigurationManagerSupplier : XModuleUIConfigurationManagerSupplier;
 
 
 }; }; }; };

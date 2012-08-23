@@ -30,7 +30,7 @@
 
 #include <com/sun/star/ui/XImageManager.hpp>
 #include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
-#include <com/sun/star/ui/XModuleUIConfigurationManagerSupplier.hpp>
+#include <com/sun/star/ui/ModuleUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/frame/XModuleManager.hpp>
 #include <com/sun/star/ui/ImageType.hpp>
 
@@ -58,6 +58,7 @@ namespace frm
     using ::com::sun::star::ui::XUIConfigurationManagerSupplier;
     using ::com::sun::star::ui::XUIConfigurationManager;
     using ::com::sun::star::ui::XModuleUIConfigurationManagerSupplier;
+    using ::com::sun::star::ui::ModuleUIConfigurationManagerSupplier;
     using ::com::sun::star::frame::XModuleManager;
     using ::com::sun::star::graphic::XGraphic;
     /** === end UNO using === **/
@@ -114,7 +115,7 @@ namespace frm
             ::rtl::OUString sModuleID = xModuleManager->identify( _rxDocument );
 
             Reference< XModuleUIConfigurationManagerSupplier > xSuppUIConfig(
-                _rContext.createComponent( "com.sun.star.ui.ModuleUIConfigurationManagerSupplier" ), UNO_QUERY_THROW );
+                ModuleUIConfigurationManagerSupplier::create(_rContext.getUNOContext()) );
             Reference< XUIConfigurationManager > xUIConfig(
                 xSuppUIConfig->getUIConfigurationManager( sModuleID ), UNO_SET_THROW );
             m_xModuleImageManager.set( xUIConfig->getImageManager(), UNO_QUERY_THROW );

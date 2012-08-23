@@ -54,7 +54,7 @@
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/form/XReset.hpp>
-#include <com/sun/star/ui/XModuleUIConfigurationManagerSupplier.hpp>
+#include <com/sun/star/ui/ModuleUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/frame/XModuleManager.hpp>
 
 #include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
@@ -67,6 +67,7 @@
 
 //-----------------------------------------------
 // include other projects
+#include <comphelper/componentcontext.hxx>
 #include <comphelper/processfactory.hxx>
 #include <svtools/acceleratorexecute.hxx>
 #include <svtools/svlbitm.hxx>
@@ -93,7 +94,6 @@ static ::rtl::OUString SERVICE_UICONFIGMGR              (RTL_CONSTASCII_USTRINGP
 static ::rtl::OUString SERVICE_DESKTOP                  (RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop"                               ));
 static ::rtl::OUString SERVICE_MODULEMANAGER            (RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.ModuleManager"                  ));
 static ::rtl::OUString SERVICE_GLOBALACCCFG             (RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ui.GlobalAcceleratorConfiguration"      ));
-static ::rtl::OUString SERVICE_MODULEUICONFIGSUPPLIER   (RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ui.ModuleUIConfigurationManagerSupplier"));
 static ::rtl::OUString SERVICE_UICMDDESCRIPTION         (RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.UICommandDescription"             ));
 
 static ::rtl::OUString MODULEPROP_SHORTNAME             (RTL_CONSTASCII_USTRINGPARAM("ooSetupFactoryShortName"                                  ));
@@ -877,7 +877,8 @@ void SfxAcceleratorConfigPage::InitAccCfg()
         m_xGlobal = css::uno::Reference< css::ui::XAcceleratorConfiguration >(m_xSMGR->createInstance(SERVICE_GLOBALACCCFG), css::uno::UNO_QUERY_THROW);
 
         // get module accelerator configuration
-        css::uno::Reference< css::ui::XModuleUIConfigurationManagerSupplier > xModuleCfgSupplier(m_xSMGR->createInstance(SERVICE_MODULEUICONFIGSUPPLIER), css::uno::UNO_QUERY_THROW);
+
+        css::uno::Reference< css::ui::XModuleUIConfigurationManagerSupplier > xModuleCfgSupplier(css::ui::ModuleUIConfigurationManagerSupplier::create(comphelper::ComponentContext(m_xSMGR).getUNOContext()));
         css::uno::Reference< css::ui::XUIConfigurationManager > xUICfgManager = xModuleCfgSupplier->getUIConfigurationManager(m_sModuleLongName);
         m_xModule = css::uno::Reference< css::ui::XAcceleratorConfiguration >(xUICfgManager->getShortCutManager(), css::uno::UNO_QUERY_THROW);
     }

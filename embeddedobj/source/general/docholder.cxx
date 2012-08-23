@@ -65,7 +65,7 @@
 #include <com/sun/star/ui/XUIElementSettings.hpp>
 #include <com/sun/star/ui/XUIConfigurationManager.hpp>
 #include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
-#include <com/sun/star/ui/XModuleUIConfigurationManagerSupplier.hpp>
+#include <com/sun/star/ui/ModuleUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/embed/StateChangeInProgressException.hpp>
 
@@ -74,6 +74,7 @@
 #include <osl/diagnose.h>
 #include <rtl/process.h>
 
+#include <comphelper/componentcontext.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 
@@ -584,10 +585,8 @@ uno::Reference< container::XIndexAccess > DocumentHolder::RetrieveOwnMenu_Impl()
 
         if ( !aModuleIdent.isEmpty() )
         {
-            uno::Reference< ::com::sun::star::ui::XModuleUIConfigurationManagerSupplier > xModConfSupplier(
-                    m_xFactory->createInstance( ::rtl::OUString(
-                        RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ui.ModuleUIConfigurationManagerSupplier" ) ) ),
-                    uno::UNO_QUERY_THROW );
+            uno::Reference< ui::XModuleUIConfigurationManagerSupplier > xModConfSupplier(
+                    ui::ModuleUIConfigurationManagerSupplier::create(comphelper::ComponentContext(m_xFactory).getUNOContext()) );
             uno::Reference< ::com::sun::star::ui::XUIConfigurationManager > xModUIConfMan(
                     xModConfSupplier->getUIConfigurationManager( aModuleIdent ),
                     uno::UNO_QUERY_THROW );
