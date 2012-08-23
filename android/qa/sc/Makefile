@@ -26,6 +26,9 @@ all: build-ant
 properties:
 	echo sdk.dir=$(ANDROID_SDK_HOME) >local.properties
 	echo sdk.dir=$(ANDROID_SDK_HOME) >../../Bootstrap/local.properties 
+	echo "# File needed by ndk-gdb" >jni/Application.mk
+	echo "APP_ABI := $(ANDROID_APP_ABI)" >>jni/Application.mk
+	echo "APP_PLATFORM := android-14" >>jni/Application.mk
 
 copy-stuff:
 #
