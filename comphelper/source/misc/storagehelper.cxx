@@ -19,8 +19,9 @@
 
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/XEncryptionProtectedSource2.hpp>
+#include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/embed/XTransactedObject.hpp>
-#include <com/sun/star/ucb/XSimpleFileAccess.hpp>
+#include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -35,7 +36,6 @@
 
 #include <ucbhelper/content.hxx>
 
-#include <comphelper/componentcontext.hxx>
 #include <comphelper/fileformat.h>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/documentconstants.hxx>
@@ -224,20 +224,10 @@ void OStorageHelper::CopyInputToOutput(
 // ----------------------------------------------------------------------
 uno::Reference< io::XInputStream > OStorageHelper::GetInputStreamFromURL(
             const ::rtl::OUString& aURL,
-            const uno::Reference< lang::XMultiServiceFactory >& xSF )
+            const uno::Reference< uno::XComponentContext >& context )
     throw ( uno::Exception )
 {
-    uno::Reference< lang::XMultiServiceFactory > xFactory = xSF.is() ? xSF : ::comphelper::getProcessServiceFactory();
-    if ( !xFactory.is() )
-        throw uno::RuntimeException();
-
-    uno::Reference < ucb::XSimpleFileAccess2 > xTempAccess(
-         ucb::SimpleFileAccess::create(comphelper::ComponentContext(xFactory).getUNOContext()) );
-
-    if ( !xTempAccess.is() )
-        throw uno::RuntimeException();
-
-    uno::Reference< io::XInputStream > xInputStream = xTempAccess->openFileRead( aURL );
+    uno::Reference< io::XInputStream > xInputStream = ucb::SimpleFileAccess::create(context)->openFileRead( aURL );
     if ( !xInputStream.is() )
         throw uno::RuntimeException();
 

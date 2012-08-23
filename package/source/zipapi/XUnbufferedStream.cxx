@@ -32,13 +32,6 @@
 
 #include <osl/mutex.hxx>
 
-#if 0
-// for debugging purposes here
-#include <com/sun/star/ucb/SimpleFileAccess.hpp>
-#include <comphelper/componentcontext.hxx>
-using namespace ::com::sun::star;
-#endif
-
 using namespace ::com::sun::star;
 using namespace com::sun::star::packages::zip::ZipConstants;
 using namespace com::sun::star::io;
@@ -298,21 +291,6 @@ sal_Int32 SAL_CALL XUnbufferedStream::readBytes( Sequence< sal_Int8 >& aData, sa
         {
             if ( !m_xCipherContext.is() && !mbWrappedRaw )
                 maCRC.update( aData );
-
-#if 0
-            // for debugging purposes here
-            if ( mbWrappedRaw )
-            {
-                if ( 0 )
-                {
-                    uno::Reference< uno::XComponentContext > xContext = comphelper::getProcessComponentContext();
-                    uno::Reference< ucb::XSimpleFileAccess2 > xAccess( SimpleFileAccess::create(xContext) );
-                    uno::Reference< io::XOutputStream > xOut = xAccess->openFileWrite(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "file:///d:/777/Encrypted/picture") ) );
-                    xOut->writeBytes( aData );
-                    xOut->closeOutput();
-                }
-            }
-#endif
 
             if ( mnZipSize + maHeader.getLength() == mnMyCurrent && maCRC.getValue() != maEntry.nCrc )
                 throw ZipIOException( OUString( RTL_CONSTASCII_USTRINGPARAM( "The stream seems to be broken!" ) ),

@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include "sal/config.h"
+
+#include <cassert>
+
 #include <vcl/msgbox.hxx>
 #include <svl/eitem.hxx>
 #include <svl/stritem.hxx>
@@ -241,10 +245,9 @@ sal_Bool SfxObjectShell::PutURLContentsToVersionStream_Impl(
             throw RuntimeException();
 
         uno::Reference< io::XInputStream > xTmpInStream =
-            ::comphelper::OStorageHelper::GetInputStreamFromURL( aURL );
-        DBG_ASSERT( xTmpInStream.is(), "The method must create the stream or throw an exception!\n" );
-        if ( !xTmpInStream.is() )
-            throw uno::RuntimeException();
+            ::comphelper::OStorageHelper::GetInputStreamFromURL(
+                aURL, comphelper::getProcessComponentContext() );
+        assert( xTmpInStream.is() );
 
         xTrunc->truncate();
         ::comphelper::OStorageHelper::CopyInputToOutput( xTmpInStream, xOutStream );

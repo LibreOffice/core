@@ -24,13 +24,7 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/lang/XSingleServiceFactory.hpp>
-#include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
-#include <com/sun/star/beans/NamedValue.hpp>
-#include <com/sun/star/io/XInputStream.hpp>
-#include <com/sun/star/io/XOutputStream.hpp>
-#include <com/sun/star/io/XStream.hpp>
 #include "comphelper/comphelperdllapi.h"
 
 
@@ -41,6 +35,18 @@
 #define PACKAGE_ENCRYPTIONDATA_SHA256UTF8 ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PackageSHA256UTF8EncryptionKey" ) )
 #define PACKAGE_ENCRYPTIONDATA_SHA1UTF8   ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PackageSHA1UTF8EncryptionKey" ) )
 #define PACKAGE_ENCRYPTIONDATA_SHA1MS1252 ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PackageSHA1MS1252EncryptionKey" ) )
+
+namespace com { namespace sun { namespace star {
+    namespace beans { struct NamedValue; }
+    namespace embed { class XStorage; }
+    namespace io {
+        class XInputStream;
+        class XOutputStream;
+        class XStream;
+    }
+    namespace lang { class XSingleServiceFactory; }
+    namespace uno { class XComponentContext; }
+} } }
 
 namespace comphelper {
 
@@ -123,8 +129,7 @@ public:
     static ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >
         GetInputStreamFromURL(
             const ::rtl::OUString& aURL,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xFactory
-                            = ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >() )
+            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& context )
         throw ( ::com::sun::star::uno::Exception );
 
     static void SetCommonStorageEncryptionData(

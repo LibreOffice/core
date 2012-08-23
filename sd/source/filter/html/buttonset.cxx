@@ -26,10 +26,13 @@
  *
  ************************************************************************/
 
+#include "sal/config.h"
 
 #include <com/sun/star/embed/ElementModes.hpp>
+#include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/graphic/GraphicProvider.hpp>
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
+#include <com/sun/star/io/XStream.hpp>
 
 #include <osl/file.hxx>
 #include <comphelper/storagehelper.hxx>

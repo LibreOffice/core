@@ -241,11 +241,6 @@ sal_Bool SoPluginInstance::LoadDocument(NSP_HWND hParent)
         Reference< beans::XPropertySet > xFactoryProperties( mxRemoteMSF, uno::UNO_QUERY );
         Reference< uno::XComponentContext > xContext( xFactoryProperties->getPropertyValue( "DefaultContext" ), UNO_QUERY );
         Reference< ucb::XSimpleFileAccess2 > xSimpleFileAccess( ucb::SimpleFileAccess::create(xContext) );
-        if(!xSimpleFileAccess.is())
-        {
-            debug_fprintf(NSP_LOG_APPEND, "can not create SimpleFileAccess to load URL\n");
-            return sal_False;
-        }
         Reference<io::XInputStream> xInputStream = xSimpleFileAccess->openFileRead( m_sURL );
 
         if(!xInputStream.is())
