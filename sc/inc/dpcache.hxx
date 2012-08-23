@@ -108,6 +108,7 @@ public:
         virtual bool next() = 0;
         virtual void finish() = 0;
         virtual void getValue(long nCol, ScDPItemData& rData, short& rNumType) const = 0;
+        virtual ~DBConnector() { };
     };
 
 private:
