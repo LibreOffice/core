@@ -26,10 +26,6 @@
  *
  ************************************************************************/
 
-#ifdef SW_DLLIMPLEMENTATION
-#undef SW_DLLIMPLEMENTATION
-#endif
-
 #include "dbmgr.hxx"
 #include <sfx2/app.hxx>
 #include <vcl/msgbox.hxx>

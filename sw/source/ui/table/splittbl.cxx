@@ -17,12 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
-#ifdef SW_DLLIMPLEMENTATION
-#undef SW_DLLIMPLEMENTATION
-#endif
-
-
 #include <wrtsh.hxx>
 #include <splittbl.hxx>
 #include <splittbl.hrc>

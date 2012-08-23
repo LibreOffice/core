@@ -26,10 +26,6 @@
  *
  ************************************************************************/
 
-#ifdef SW_DLLIMPLEMENTATION
-#undef SW_DLLIMPLEMENTATION
-#endif
-
 #include "swuiidxmrk.hxx"
 #include <hintids.hxx>
 #include <helpid.h>

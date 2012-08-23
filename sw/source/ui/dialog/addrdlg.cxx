@@ -26,11 +26,6 @@
  *
  ************************************************************************/
 
-
-#ifdef SW_DLLIMPLEMENTATION
-#undef SW_DLLIMPLEMENTATION
-#endif
-
 #include "addrdlg.hxx"
 #include <svx/svxdlg.hxx>
 #include <sfx2/sfx.hrc>

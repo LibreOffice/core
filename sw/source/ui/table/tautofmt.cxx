@@ -26,14 +26,6 @@
  *
  ************************************************************************/
 
-
-#ifdef SW_DLLIMPLEMENTATION
-#undef SW_DLLIMPLEMENTATION
-#endif
-
-
-
-
 #include <vcl/edit.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>

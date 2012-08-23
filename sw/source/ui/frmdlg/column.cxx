@@ -26,11 +26,6 @@
  *
  ************************************************************************/
 
-
-#ifdef SW_DLLIMPLEMENTATION
-#undef SW_DLLIMPLEMENTATION
-#endif
-
 #include "column.hxx"
 
 #include "hintids.hxx"

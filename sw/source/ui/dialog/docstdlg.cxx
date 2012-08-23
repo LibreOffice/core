@@ -26,11 +26,6 @@
  *
  ************************************************************************/
 
-#ifdef SW_DLLIMPLEMENTATION
-#undef SW_DLLIMPLEMENTATION
-#endif
-
-
 #include <stdio.h>
 #include <ctype.h>
 #include <swwait.hxx>

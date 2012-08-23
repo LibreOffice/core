@@ -26,13 +26,6 @@
  *
  ************************************************************************/
 
-
-#ifdef SW_DLLIMPLEMENTATION
-#undef SW_DLLIMPLEMENTATION
-#endif
-
-
-
 #include <rsc/rscsfx.hxx>
 #include <com/sun/star/text/XDocumentIndexesSupplier.hpp>
 #include <com/sun/star/text/XTextSectionsSupplier.hpp>

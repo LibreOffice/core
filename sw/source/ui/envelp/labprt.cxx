@@ -26,12 +26,6 @@
  *
  ************************************************************************/
 
-
-#ifdef SW_DLLIMPLEMENTATION
-#undef SW_DLLIMPLEMENTATION
-#endif
-
-
 #include <svtools/prnsetup.hxx>
 #include <unotools/cmdoptions.hxx>
 #include <vcl/print.hxx>

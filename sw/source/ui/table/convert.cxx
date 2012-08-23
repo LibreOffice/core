@@ -26,13 +26,6 @@
  *
  ************************************************************************/
 
-
-
-#ifdef SW_DLLIMPLEMENTATION
-#undef SW_DLLIMPLEMENTATION
-#endif
-
-
 #include <vcl/msgbox.hxx>
 #include <svl/stritem.hxx>
 #include <sfx2/viewfrm.hxx>

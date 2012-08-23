@@ -26,10 +26,6 @@
  *
  ************************************************************************/
 
-#ifdef SW_DLLIMPLEMENTATION
-#undef SW_DLLIMPLEMENTATION
-#endif
-
 #include "optcomp.hxx"
 
 #include "docsh.hxx"

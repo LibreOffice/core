@@ -26,11 +26,6 @@
  *
  ************************************************************************/
 
-
-#ifdef SW_DLLIMPLEMENTATION
-#undef SW_DLLIMPLEMENTATION
-#endif
-
 #include <sfx2/request.hxx>
 #include <sfx2/frame.hxx>
 #include <vcl/svapp.hxx>

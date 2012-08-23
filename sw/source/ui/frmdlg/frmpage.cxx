@@ -26,10 +26,6 @@
  *
  ************************************************************************/
 
-#ifdef SW_DLLIMPLEMENTATION
-#undef SW_DLLIMPLEMENTATION
-#endif
-
 #include <com/sun/star/embed/Aspects.hpp>
 #include <com/sun/star/embed/EmbedMisc.hpp>
 

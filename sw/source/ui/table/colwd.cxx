@@ -26,12 +26,6 @@
  *
  ************************************************************************/
 
-
-#ifdef SW_DLLIMPLEMENTATION
-#undef SW_DLLIMPLEMENTATION
-#endif
-
-
 #include <sfx2/dispatch.hxx>
 #include <svx/dlgutil.hxx>
 #include <colwd.hxx>

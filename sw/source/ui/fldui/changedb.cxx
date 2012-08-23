@@ -26,12 +26,6 @@
  *
  ************************************************************************/
 
-
-
-#ifdef SW_DLLIMPLEMENTATION
-#undef SW_DLLIMPLEMENTATION
-#endif
-
 #include <svtools/stdctrl.hxx>
 #include <vcl/msgbox.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>

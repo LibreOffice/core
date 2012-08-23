@@ -26,11 +26,6 @@
  *
  ************************************************************************/
 
-
-#ifdef SW_DLLIMPLEMENTATION
-#undef SW_DLLIMPLEMENTATION
-#endif
-
 #include <wrtsh.hxx>
 #include <fldbas.hxx>
 #include <fldmgr.hxx>

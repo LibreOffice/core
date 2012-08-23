@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-#ifdef SW_DLLIMPLEMENTATION
-#undef SW_DLLIMPLEMENTATION
-#endif
 #include <hintids.hxx>
 #include <tools/shl.hxx>
 #include <vcl/menu.hxx>

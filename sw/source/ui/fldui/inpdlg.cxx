@@ -26,11 +26,6 @@
  *
  ************************************************************************/
 
-
-#ifdef SW_DLLIMPLEMENTATION
-#undef SW_DLLIMPLEMENTATION
-#endif
-
 #include <comphelper/string.hxx>
 #include <vcl/msgbox.hxx>
 #include <unotools/charclass.hxx>

@@ -26,11 +26,6 @@
  *
  ************************************************************************/
 
-#ifdef SW_DLLIMPLEMENTATION
-#undef SW_DLLIMPLEMENTATION
-#endif
-
-
 #include <swtypes.hxx>
 #include <sfx2/linkmgr.hxx>
 #include <usrfld.hxx>

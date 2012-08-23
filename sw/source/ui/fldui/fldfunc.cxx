@@ -26,11 +26,6 @@
  *
  ************************************************************************/
 
-#ifdef SW_DLLIMPLEMENTATION
-#undef SW_DLLIMPLEMENTATION
-#endif
-
-
 #include <sfx2/app.hxx>
 #include <basic/basmgr.hxx>
 #include <basic/sbmod.hxx>

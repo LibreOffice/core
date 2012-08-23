@@ -26,10 +26,6 @@
  *
  ************************************************************************/
 
-#ifdef SW_DLLIMPLEMENTATION
-#undef SW_DLLIMPLEMENTATION
-#endif
-
 #include <optpage.hxx>
 #include <doc.hxx>
 #include <hintids.hxx>

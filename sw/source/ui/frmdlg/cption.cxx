@@ -26,12 +26,6 @@
  *
  ************************************************************************/
 
-#ifdef SW_DLLIMPLEMENTATION
-#undef SW_DLLIMPLEMENTATION
-#endif
-
-
-
 #include <view.hxx>
 #include <wrtsh.hxx>
 #include <cption.hxx>

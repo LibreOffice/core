@@ -26,10 +26,6 @@
  *
  ************************************************************************/
 
-#ifdef SW_DLLIMPLEMENTATION
-#undef SW_DLLIMPLEMENTATION
-#endif
-
 #include <comphelper/string.hxx>
 #include <tools/shl.hxx>
 #include <swtypes.hxx>

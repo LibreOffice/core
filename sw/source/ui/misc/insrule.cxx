@@ -26,13 +26,6 @@
  *
  ************************************************************************/
 
-
-#ifdef SW_DLLIMPLEMENTATION
-#undef SW_DLLIMPLEMENTATION
-#endif
-
-
-
 #include "hintids.hxx"
 #include <svx/gallery.hxx>
 #include <vcl/msgbox.hxx>

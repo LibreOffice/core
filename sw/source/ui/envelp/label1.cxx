@@ -26,11 +26,6 @@
  *
  ************************************************************************/
 
-#ifdef SW_DLLIMPLEMENTATION
-#undef SW_DLLIMPLEMENTATION
-#endif
-
-
 #include <vcl/waitobj.hxx>
 #include <rtl/ustring.hxx>
 #include <com/sun/star/uno/Sequence.h>

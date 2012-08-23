@@ -26,11 +26,6 @@
  *
  ************************************************************************/
 
-
-#ifdef SW_DLLIMPLEMENTATION
-#undef SW_DLLIMPLEMENTATION
-#endif
-
 #include <svx/dialogs.hrc>
 #include <hintids.hxx>
 #include <sfx2/viewfrm.hxx>

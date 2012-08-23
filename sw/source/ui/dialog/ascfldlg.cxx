@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-#ifdef SW_DLLIMPLEMENTATION
-#undef SW_DLLIMPLEMENTATION
-#endif
 #include <hintids.hxx>
 #include <rtl/textenc.h>
 #include <i18npool/mslangid.hxx>

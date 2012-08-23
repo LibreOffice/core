@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-#ifdef SW_DLLIMPLEMENTATION
-#undef SW_DLLIMPLEMENTATION
-#endif
 #include <mmaddressblockpage.hxx>
 #include <mailmergewizard.hxx>
 #include <swtypes.hxx>

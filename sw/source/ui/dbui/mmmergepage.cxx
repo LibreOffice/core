@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-#ifdef SW_DLLIMPLEMENTATION
-#undef SW_DLLIMPLEMENTATION
-#endif
 #include <mmmergepage.hxx>
 #include <mailmergewizard.hxx>
 #include <mmconfigitem.hxx>

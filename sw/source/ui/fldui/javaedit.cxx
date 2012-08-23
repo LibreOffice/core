@@ -26,11 +26,6 @@
  *
  ************************************************************************/
 
-
-#ifdef SW_DLLIMPLEMENTATION
-#undef SW_DLLIMPLEMENTATION
-#endif
-
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <hintids.hxx>
 #include <vcl/msgbox.hxx>

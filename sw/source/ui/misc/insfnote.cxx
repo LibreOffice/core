@@ -26,11 +26,6 @@
  *
  ************************************************************************/
 
-
-#ifdef SW_DLLIMPLEMENTATION
-#undef SW_DLLIMPLEMENTATION
-#endif
-
 #include <hintids.hxx>
 #include <svl/eitem.hxx>
 #include <svl/stritem.hxx>

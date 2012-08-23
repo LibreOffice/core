@@ -26,11 +26,6 @@
  *
  ************************************************************************/
 
-
-#ifdef SW_DLLIMPLEMENTATION
-#undef SW_DLLIMPLEMENTATION
-#endif
-
 #include "dialmgr.hxx"
 #include "tools/string.hxx"
 #include <sfx2/app.hxx>

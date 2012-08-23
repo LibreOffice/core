@@ -26,13 +26,6 @@
  *
  ************************************************************************/
 
-
-#ifdef SW_DLLIMPLEMENTATION
-#undef SW_DLLIMPLEMENTATION
-#endif
-
-
-
 #include <cmdid.h>
 #include <hintids.hxx>
 #include <svx/dialogs.hrc>

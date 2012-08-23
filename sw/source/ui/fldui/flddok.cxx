@@ -26,11 +26,6 @@
  *
  ************************************************************************/
 
-#ifdef SW_DLLIMPLEMENTATION
-#undef SW_DLLIMPLEMENTATION
-#endif
-
-
 #include <vcl/svapp.hxx>
 #include <flddat.hxx>
 #include <docufld.hxx>

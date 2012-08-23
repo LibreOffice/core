@@ -26,12 +26,6 @@
  *
  ************************************************************************/
 
-
-#ifdef SW_DLLIMPLEMENTATION
-#undef SW_DLLIMPLEMENTATION
-#endif
-
-
 #include <swtypes.hxx>
 #include <selectdbtabledialog.hxx>
 #include <dbtablepreviewdialog.hxx>

@@ -26,11 +26,6 @@
  *
  ************************************************************************/
 
-#ifdef SW_DLLIMPLEMENTATION
-#undef SW_DLLIMPLEMENTATION
-#endif
-
-
 #include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
 #include <tools/urlobj.hxx>

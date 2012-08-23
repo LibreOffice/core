@@ -26,11 +26,6 @@
  *
  ************************************************************************/
 
-#ifdef SW_DLLIMPLEMENTATION
-#undef SW_DLLIMPLEMENTATION
-#endif
-
-
 #include <com/sun/star/text/XTextFieldsSupplier.hpp>
 #include <com/sun/star/util/XRefreshable.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>

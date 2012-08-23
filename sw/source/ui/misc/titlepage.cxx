@@ -27,10 +27,6 @@
  * instead of those above.
  */
 
-#ifdef SW_DLLIMPLEMENTATION
-#undef SW_DLLIMPLEMENTATION
-#endif
-
 #include <sfx2/viewfrm.hxx>
 #include <vcl/msgbox.hxx>
 #include <view.hxx>

@@ -26,11 +26,6 @@
  *
  ************************************************************************/
 
-
-#ifdef SW_DLLIMPLEMENTATION
-#undef SW_DLLIMPLEMENTATION
-#endif
-
 #include <svx/svxdlg.hxx>
 #include <svx/svxids.hrc>
 #include <svx/dialogs.hrc>

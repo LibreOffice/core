@@ -26,11 +26,6 @@
  *
  ************************************************************************/
 
-
-#ifdef SW_DLLIMPLEMENTATION
-#undef SW_DLLIMPLEMENTATION
-#endif
-
 #include <svx/svxids.hrc>
 #include <svx/numinf.hxx>
 #include <swtypes.hxx>

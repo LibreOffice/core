@@ -26,12 +26,6 @@
  *
  ************************************************************************/
 
-
-#ifdef SW_DLLIMPLEMENTATION
-#undef SW_DLLIMPLEMENTATION
-#endif
-
-
 #include <vcl/lstbox.hxx>
 #include <svl/stritem.hxx>
 #include <sfx2/request.hxx>

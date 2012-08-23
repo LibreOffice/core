@@ -26,12 +26,6 @@
  *
  ************************************************************************/
 
-
-#ifdef SW_DLLIMPLEMENTATION
-#undef SW_DLLIMPLEMENTATION
-#endif
-
-
 #include <comphelper/string.hxx>
 #include <sfx2/request.hxx>
 #include <svl/stritem.hxx>
