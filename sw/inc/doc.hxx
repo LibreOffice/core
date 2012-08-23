@@ -567,6 +567,7 @@ private:
                                                     // attribute 'WrapInfluenceOnObjPos'.
     bool mbMathBaselineAlignment            : 1;    // TL  2010-10-29 #i972#
     bool mbStylesNoDefault                  : 1;
+    bool mbFloattableNomargins              : 1; ///< If paragraph margins next to a floating table should be ignored.
 
     // non-ui-compatibility flags:
     bool mbOldNumbering                             : 1;

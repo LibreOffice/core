@@ -1928,6 +1928,26 @@ long SwBorderAttrs::CalcRight( const SwFrm* pCaller ) const
     return nRight;
 }
 
+/// Tries to detect if this paragraph has a floating table attached.
+bool lcl_hasTabFrm(const SwTxtFrm* pTxtFrm)
+{
+    if (pTxtFrm->GetDrawObjs())
+    {
+        const SwSortedObjs* pSortedObjs = pTxtFrm->GetDrawObjs();
+        if (pSortedObjs->Count() > 0)
+        {
+            SwAnchoredObject* pObject = (*pSortedObjs)[0];
+            if (pObject->IsA(TYPE(SwFlyFrm)))
+            {
+                SwFlyFrm* pFly = (SwFlyFrm*)pObject;
+                if (pFly->Lower()->IsTabFrm())
+                    return true;
+            }
+        }
+    }
+    return false;
+}
+
 long SwBorderAttrs::CalcLeft( const SwFrm *pCaller ) const
 {
     long nLeft=0;
@@ -1945,7 +1965,24 @@ long SwBorderAttrs::CalcLeft( const SwFrm *pCaller ) const
     if ( pCaller->IsTxtFrm() && pCaller->IsRightToLeft() )
         nLeft += rLR.GetRight();
     else
-        nLeft += rLR.GetLeft();
+    {
+        bool bIgnoreMargin = false;
+        if (pCaller->IsTxtFrm())
+        {
+            const SwTxtFrm* pTxtFrm = (const SwTxtFrm*)pCaller;
+            if (pTxtFrm->GetTxtNode()->GetDoc()->get(IDocumentSettingAccess::FLOATTABLE_NOMARGINS))
+            {
+                // If this is explicitly requested, ignore the margins next to the floating table.
+                if (lcl_hasTabFrm(pTxtFrm))
+                    bIgnoreMargin = true;
+                // TODO here we only handle the first two paragraphs, would be nice to generalize this.
+                else if (pTxtFrm->FindPrev() && pTxtFrm->FindPrev()->IsTxtFrm() && lcl_hasTabFrm((const SwTxtFrm*)pTxtFrm->FindPrev()))
+                    bIgnoreMargin = true;
+            }
+        }
+        if (!bIgnoreMargin)
+            nLeft += rLR.GetLeft();
+    }
 
 
     // correction: do not retrieve left margin for numbering in R2L-layout

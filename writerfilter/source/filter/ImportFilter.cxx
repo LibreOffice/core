@@ -176,6 +176,8 @@ void WriterFilter::setTargetDocument( const uno::Reference< lang::XComponent >& 
 
    // Don't load the default style definitions to avoid weird mix
    xSettings->setPropertyValue( "StylesNoDefault", uno::makeAny( sal_True ) );
+
+   xSettings->setPropertyValue("FloattableNomargins", uno::makeAny( sal_True ));
 }
 
 void WriterFilter::setSourceDocument( const uno::Reference< lang::XComponent >& xDoc )

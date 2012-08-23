@@ -94,7 +94,8 @@ namespace com { namespace sun { namespace star { namespace i18n { struct Forbidd
          PURGE_OLE,
          KERN_ASIAN_PUNCTUATION,
          MATH_BASELINE_ALIGNMENT,
-         STYLES_NODEFAULT
+         STYLES_NODEFAULT,
+         FLOATTABLE_NOMARGINS
      };
 
  public:
