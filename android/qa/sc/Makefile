@@ -11,8 +11,8 @@ BOOTSTRAP=org.libreoffice.android.Bootstrap
 
 APP_DATA_PATH=/data/data/$(APP_PACKAGE)
 
-SODEST=libs/armeabi-v7a
-OBJLOCAL=obj/local/armeabi-v7a
+SODEST=libs/$(ANDROID_APP_ABI)
+OBJLOCAL=obj/local/$(ANDROID_APP_ABI)
 
 define COPY
 cp $(1) $(SODEST)$(if $(2),/$(2)) && $(STRIP) --strip-debug $(SODEST)$(if $(2),/$(2),/$(notdir $(1))) && \
@@ -29,10 +29,10 @@ properties:
 
 copy-stuff:
 #
-# Copy shared libraries we need to libs/armeabi-v7a so that ant will
+# Copy shared libraries we need to libs/$(ANDROID_APP_ABI) so that ant will
 # include them in the .apk.
 #
-# Copy them to obj/local/armeabi-v7a, too, where gdb will look for
+# Copy them to obj/local/$(ANDROID_APP_ABI), too, where gdb will look for
 # them.
 #
 	mkdir -p $(SODEST) $(OBJLOCAL)
@@ -114,7 +114,7 @@ copy-stuff:
 	done
 #
 # Then the shared GNU C++ library
-	$(call COPY,$(ANDROID_NDK_HOME)/sources/cxx-stl/gnu-libstdc++/libs/armeabi-v7a/libgnustl_shared.so)
+	$(call COPY,$(ANDROID_NDK_HOME)/sources/cxx-stl/gnu-libstdc++/libs/$(ANDROID_APP_ABI)/libgnustl_shared.so)
 #
 # Then other "assets" that can be left in the .apk. Let the directory
 # structure under assets mimic that under solver or workdir for now.
@@ -151,7 +151,7 @@ copy-stuff:
 #
 # Then gdbserver and gdb.setup so that we can debug with ndk-gdb.
 	cp $(ANDROID_NDK_HOME)/toolchains/arm-linux-androideabi-4.4.3/prebuilt/gdbserver $(SODEST)
-	echo set solib-search-path ./obj/local/armeabi-v7a >$(SODEST)/gdb.setup
+	echo set solib-search-path ./obj/local/$(ANDROID_APP_ABI) >$(SODEST)/gdb.setup
 
 
 build-ant: copy-stuff properties

@@ -11,14 +11,8 @@
 # code are very much self-contained pre-packaged thingies.
 APP_DATA_PATH=/data/data/$(APP_PACKAGE)
 
-# Adapt to both Intel and ARM architectures
-ifeq ($(CPU),I)
-ABI_PATH=x86
-else
-ABI_PATH=armeabi-v7a
-endif
-SODEST=libs/$(ABI_PATH)
-OBJLOCAL=obj/local/$(ABI_PATH)
+SODEST=libs/$(ANDROID_APP_ABI)
+OBJLOCAL=obj/local/$(ANDROID_APP_ABI)
 
 define COPYSO
 cp $(1) $(SODEST)$(if $(2),/$(2)) && $(STRIP) --strip-debug $(SODEST)$(if $(2),/$(2),/$(notdir $(1))) && \
@@ -36,7 +30,7 @@ endef
 properties:
 	echo sdk.dir=$(ANDROID_SDK_HOME) >local.properties
 	echo sdk.dir=$(ANDROID_SDK_HOME) >../../Bootstrap/local.properties
-	echo "APP_ABI := $(ABI_PATH)" > jni/Application.mk
+	echo "APP_ABI := $(ANDROID_APP_ABI)" > jni/Application.mk
 	echo "APP_PLATFORM := android-14" >> jni/Application.mk
 
 install: build-ant

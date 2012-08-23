@@ -16,13 +16,8 @@ APP_PACKAGE=org.libreoffice.android.examples
 # code are very much self-contained pre-packaged thingies.
 APP_DATA_PATH=/data/data/$(APP_PACKAGE)
 
-ifeq ($(CPU),I)
-ABI_PATH=x86
-else
-ABI_PATH=armeabi-v7a
-endif
-SODEST=libs/$(ABI_PATH)
-OBJLOCAL=obj/local/$(ABI_PATH)
+SODEST=libs/$(ANDROID_APP_ABI)
+OBJLOCAL=obj/local/$(ANDROID_APP_ABI)
 
 define COPYSO
 cp $(1) $(SODEST)$(if $(2),/$(2)) && $(STRIP) --strip-debug $(SODEST)$(if $(2),/$(2),/$(notdir $(1))) && \
@@ -47,9 +42,9 @@ copy-stuff:
 	mkdir -p $(SODEST) $(OBJLOCAL)
 #
 # Copy shared libraries (including UNO components) we need to
-# libs/armeabi-v7a so that ant will include them in the .apk.
+# libs/$(ANDROID_APP_ABI) so that ant will include them in the .apk.
 #
-# Copy them to obj/local/armeabi-v7a, too, where gdb will look for
+# Copy them to obj/local/$(ANDROID_APP_ABI), too, where gdb will look for
 # them.
 #
 	for F in $(strip \
@@ -135,7 +130,7 @@ copy-stuff:
 	done
 #
 # Then the shared GNU C++ library
-	$(call COPYSO,$(ANDROID_NDK_HOME)/sources/cxx-stl/gnu-libstdc++/$(ANDROID_NDK_TOOLCHAIN_VERSION_SUBDIR)libs/$(ABI_PATH)/libgnustl_shared.so)
+	$(call COPYSO,$(ANDROID_NDK_HOME)/sources/cxx-stl/gnu-libstdc++/$(ANDROID_NDK_TOOLCHAIN_VERSION_SUBDIR)libs/$(ANDROID_APP_ABI)/libgnustl_shared.so)
 #
 # Then other "assets". Let the directory structure under assets mimic
 # that under solver for now.
@@ -235,7 +230,7 @@ copy-stuff:
 # Then gdbserver and gdb.setup so that we can debug with ndk-gdb.
 #
 	cp $(ANDROID_NDK_GDBSERVER) $(SODEST)
-	echo set solib-search-path ./obj/local/$(ABI_PATH) >$(SODEST)/gdb.setup
+	echo set solib-search-path ./obj/local/$(ANDROID_APP_ABI) >$(SODEST)/gdb.setup
 
 build-ant: copy-stuff properties
 #

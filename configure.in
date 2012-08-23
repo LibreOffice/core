@@ -178,12 +178,16 @@ if test -n "$with_android_ndk"; then
     test -z "$STRIP" && STRIP=$ANDROID_ABI_PREBUILT_BIN/$android_gcc_prefix-strip
 
     if test $host_cpu = arm; then
-        ANDROIDCFLAGS="-Wno-psabi -march=armv7-a -mfloat-abi=softfp -mfpu=neon -Wl,--fix-cortex-a8 --sysroot $ANDROID_NDK_HOME/platforms/android-9/arch-arm -L$ANDROID_NDK_HOME/sources/cxx-stl/gnu-libstdc++/${ANDROID_NDK_TOOLCHAIN_VERSION_SUBDIR}libs/armeabi-v7a"
+        ANDROID_APP_ABI=armeabi-v7a
+        ANDROIDCFLAGS="-march=armv7-a -mfloat-abi=softfp -mfpu=neon -Wl,--fix-cortex-a8"
     elif test $host_cpu = mips; then
-        ANDROIDCFLAGS="-Wno-psabi --sysroot $ANDROID_NDK_HOME/platforms/android-9/arch-mips -L$ANDROID_NDK_HOME/sources/cxx-stl/gnu-libstdc++/${ANDROID_NDK_TOOLCHAIN_VERSION_SUBDIR}libs/mips"
+        ANDROID_APP_ABI=mips
+        ANDROIDCFLAGS=""
     else # x86
-        ANDROIDCFLAGS="-Wno-psabi -march=atom --sysroot $ANDROID_NDK_HOME/platforms/android-9/arch-x86 -L$ANDROID_NDK_HOME/sources/cxx-stl/gnu-libstdc++/${ANDROID_NDK_TOOLCHAIN_VERSION_SUBDIR}libs/x86"
+        ANDROID_APP_ABI=x86
+        ANDROIDCFLAGS="-march=atom"
     fi
+    ANDROIDCFLAGS="$ANDROIDCFLAGS -Wno-psabi --sysroot $ANDROID_NDK_HOME/platforms/android-9/arch-$android_cpu -L$ANDROID_NDK_HOME/sources/cxx-stl/gnu-libstdc++/${ANDROID_NDK_TOOLCHAIN_VERSION_SUBDIR}libs/$ANDROID_APP_ABI"
 
     # When using the 4.6 or newer toolchain, use the gold linker
     case "$with_android_ndk_toolchain_version" in
@@ -218,6 +222,7 @@ fi
 AC_SUBST(ANDROID_NDK_HOME)
 AC_SUBST(ANDROID_NDK_TOOLCHAIN_VERSION_SUBDIR)
 AC_SUBST(ANDROID_NDK_GDBSERVER)
+AC_SUBST(ANDROID_APP_ABI)
 
 dnl ===================================================================
 dnl Also --with-android-sdk is mandatory

@@ -77,10 +77,10 @@ buildrcs:
 
 copy-stuff: buildrcs
 #
-# Copy shared libraries we need to libs/armeabi-v7a so that ant will
+# Copy shared libraries we need to libs/$(ANDROID_APP_ABI) so that ant will
 # include them in the .apk.
 #
-# Copy them to obj/local/armeabi-v7a, too, where gdb will look for
+# Copy them to obj/local/$(ANDROID_APP_ABI), too, where gdb will look for
 # them.
 #
 	mkdir -p $(SODEST) $(OBJLOCAL)
@@ -165,7 +165,7 @@ copy-stuff: buildrcs
 
 #
 # Then the shared GNU C++ library
-	$(call COPYSO,$(ANDROID_NDK_HOME)/sources/cxx-stl/gnu-libstdc++/$(ANDROID_NDK_TOOLCHAIN_VERSION_SUBDIR)libs/$(ABI_PATH)/libgnustl_shared.so)
+	$(call COPYSO,$(ANDROID_NDK_HOME)/sources/cxx-stl/gnu-libstdc++/$(ANDROID_NDK_TOOLCHAIN_VERSION_SUBDIR)libs/$(ANDROID_APP_ABI)/libgnustl_shared.so)
 #
 # Then other "assets" that can be left in the .apk. Let the directory
 # structure under assets mimic the install set - except for the fact
@@ -206,7 +206,7 @@ copy-stuff: buildrcs
 # Then gdbserver and gdb.setup so that we can debug with ndk-gdb.
 #
 	cp $(ANDROID_NDK_GDBSERVER) $(SODEST)
-	echo set solib-search-path ./obj/local/$(ABI_PATH) >$(SODEST)/gdb.setup
+	echo set solib-search-path ./obj/local/$(ANDROID_APP_ABI) >$(SODEST)/gdb.setup
 
 
 build-ant: copy-stuff properties
