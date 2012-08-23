@@ -93,18 +93,33 @@ public class TestUtil {
 
     /**
      * Generate a random decimal RGB color number in limited color space
-     * @param rMax  The R value limit, [0, rMax)
-     * @param gMax  The G value limit, [0, gMax)
-     * @param bMax  The B value limit, [0, bMax)
+     * @param rMax  The R value limit, get a value in [0, rMax]
+     * @param gMax  The G value limit, get a value in [0, gMax]
+     * @param bMax  The B value limit, get a value in [0, bMax]
      * @return
      * @throws Exception
      */
     public static int randColor(int rMax, int gMax, int bMax) throws Exception {
-        int r = random.nextInt(rMax) % 256;
-        int g = random.nextInt(gMax) % 256;
-        int b = random.nextInt(bMax) % 256;
+        int r = random.nextInt(rMax + 1) % 256;
+        int g = random.nextInt(gMax + 1) % 256;
+        int b = random.nextInt(bMax + 1) % 256;
 
         return r * 65536 + g * 256 + b;
+    }
+
+    /**
+     * Generate a series of decimal RGB color number
+     * @param size Set the quantity of random color value generated into the array
+     * @return
+     * @throws Exception
+     */
+    public static int[] randColorList(int size) throws Exception {
+        int[] colorList = new int[size];
+        for (int i = 0; i < size; i++) {
+            colorList[i] = randColor();
+        }
+
+        return colorList;
     }
 
     /**

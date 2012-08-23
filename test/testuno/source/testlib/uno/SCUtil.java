@@ -24,10 +24,12 @@ package testlib.uno;
 
 import java.util.HashMap;
 
+import org.openoffice.test.common.FileUtil;
 import org.openoffice.test.common.Testspace;
 import org.openoffice.test.uno.UnoApp;
 
 import com.sun.star.beans.PropertyValue;
+import com.sun.star.beans.XPropertySet;
 import com.sun.star.container.XIndexAccess;
 import com.sun.star.frame.XController;
 import com.sun.star.frame.XModel;
@@ -49,12 +51,12 @@ import com.sun.star.util.XCloseable;
 
 /**
  * Utilities of Spreadsheet
- * @author test
  *
  */
 
 public class SCUtil {
 
+    private static final String scTempDir = "output/sc/"; //Spreadsheet temp file directory
     private static HashMap filterName = new HashMap();
 
     private SCUtil() {
@@ -157,6 +159,17 @@ public class SCUtil {
      */
     public static void setTextToCell(XSpreadsheet xSpreadsheet, int column, int row, String text) throws Exception {
         XCell xCell = xSpreadsheet.getCellByPosition(column, row);
+        XText xText = (XText) UnoRuntime.queryInterface(XText.class, xCell);
+        xText.setString(text);
+    }
+
+    /**
+     * Set text into specific cell
+     * @param xCell
+     * @param text
+     * @throws Exception
+     */
+    public static void setTextToCell(XCell xCell, String text) throws Exception {
         XText xText = (XText) UnoRuntime.queryInterface(XText.class, xCell);
         xText.setString(text);
     }
@@ -306,7 +319,7 @@ public class SCUtil {
         String[][] cellTexts = new String[end_row - start_row+1][end_col - start_col +1];
 
         for (int i = 0; i <= (end_row - start_row); i++ ) {
-            for(int j = 0; j <= (end_col - start_col); j++) {
+            for (int j = 0; j <= (end_col - start_col); j++) {
                 xCell = xCellRange.getCellByPosition(j, i);
                 xText = (XText) UnoRuntime.queryInterface(XText.class, xCell);
                 cellTexts[i][j] = xText.getString();
@@ -345,7 +358,41 @@ public class SCUtil {
     }
 
     /**
-     * Save file as specific file format into testspace/output folder.
+     * Set value of specific property from a cell
+     * @param xCell
+     * @param propName
+     * @param value
+     * @throws Exception
+     */
+    public static void setCellProperties(XCell xCell, String propName, Object value) throws Exception {
+
+        XPropertySet xPropertySet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, xCell);
+        xPropertySet.setPropertyValue(propName, value);
+    }
+
+    /**
+     * Get value of specific property from a cell
+     * @param xCell
+     * @param propName
+     * @return
+     * @throws Exception
+     */
+    public static Object getCellProperties(XCell xCell, String propName) throws Exception {
+        XPropertySet xPropertySet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, xCell);
+        Object value = xPropertySet.getPropertyValue(propName);
+
+        return value;
+    }
+
+    /**
+     * Clear temp file directory
+     */
+    public static void clearTempDir() {
+        FileUtil.deleteFile(Testspace.getFile(Testspace.getPath(scTempDir)));
+    }
+
+    /**
+     * Save file as specific file format into spreadsheet temp file folder.
      * @param scComponent
      * @param fileName  File name string without extension name (e.g. "sampleFile")
      * @param extName ("ods", "ots", "xls", "xlt", "csv")
@@ -355,7 +402,7 @@ public class SCUtil {
 
         initFilterName();
 
-        String storeUrl = Testspace.getUrl("output/" + fileName + "." + extName);
+        String storeUrl = Testspace.getUrl(scTempDir + fileName + "." + extName);
 
         PropertyValue[] storeProps = new PropertyValue[2];
         storeProps[0] = new PropertyValue();
@@ -381,7 +428,7 @@ public class SCUtil {
     }
 
     /**
-     * Close a opening file saved in testspace/output direction and reopen it in Spreadsheet. For save&reload test scenario only.
+     * Close a opening file saved in spreadsheet temp file direction and reopen it in Spreadsheet. For save&reload test scenario only.
      * @param unoApp
      * @param xSpreadsheetDocument
      * @param fullFileName   File name with the extension name. (e.g. "sc.ods")
@@ -391,7 +438,7 @@ public class SCUtil {
     public static XSpreadsheetDocument reloadFile(UnoApp unoApp, XSpreadsheetDocument xSpreadsheetDocument, String fullFileName) throws Exception {
         closeFile(xSpreadsheetDocument);
 
-        String filePath = Testspace.getPath("output/" + fullFileName);
+        String filePath = Testspace.getPath(scTempDir + fullFileName);
         XSpreadsheetDocument xScDocument = UnoRuntime.queryInterface(XSpreadsheetDocument.class, unoApp.loadDocument(filePath));
 
         return xScDocument;
