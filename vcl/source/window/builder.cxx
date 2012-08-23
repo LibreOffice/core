@@ -119,7 +119,7 @@ VclBuilder::VclBuilder(Window *pParent, rtl::OUString sUIDir, rtl::OUString sUIF
     for (std::vector<SpinButtonAdjustmentMap>::iterator aI = m_aAdjustmentMaps.begin(),
          aEnd = m_aAdjustmentMaps.end(); aI != aEnd; ++aI)
     {
-        NumericFormatter *pTarget = dynamic_cast<NumericFormatter*>(get(aI->m_sID));
+        NumericFormatter *pTarget = dynamic_cast<NumericFormatter*>(get<Window>(aI->m_sID));
         Adjustment *pAdjustment = get_adjustment_by_name(aI->m_sValue);
         SAL_WARN_IF(!pTarget || !pAdjustment, "vcl", "missing elements of spinbutton/adjustment");
         if (pTarget && pAdjustment)

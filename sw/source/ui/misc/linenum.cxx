@@ -69,8 +69,8 @@ SwLineNumberingDlg::SwLineNumberingDlg(SwView *pVw)
     sIntervalName += rtl::OUString(")");
     m_pDivIntervalNF->SetAccessibleName(sIntervalName);
 
-    Window *pNumIntervalFT = m_pUIBuilder->get("interval");
-    Window *pNumRowsFT = m_pUIBuilder->get("intervallines");
+    Window *pNumIntervalFT = m_pUIBuilder->get<Window>("interval");
+    Window *pNumRowsFT = m_pUIBuilder->get<Window>("intervallines");
     sIntervalName = pNumIntervalFT->GetAccessibleName();
     sIntervalName += rtl::OUString("(");
     sIntervalName += pNumRowsFT->GetAccessibleName();

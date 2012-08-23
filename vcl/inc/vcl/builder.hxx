@@ -145,7 +145,7 @@ public:
 
         return ret;
     }
-    template <typename T=Window> T* get(rtl::OString sID)
+    template <typename T /*=Window if we had c++11*/> T* get(rtl::OString sID)
     {
         Window *w = get_by_name(sID);
         T* ret = static_cast<T*>(w);
