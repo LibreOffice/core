@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAN3///6I\u003d",
+        "filename": "reportdesign/source/filter/xml/xmlExport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1218,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2012-08-23T15:46:09Z",
+      "side": 1,
+      "message": "you have changed the semantics here: if we have a non-null section adn the size is not equal then nothing happens, while previously it would add a BORDERBOTTOM.",
+      "revId": "e1c451a9e53bf5aa44ac0e45cec30c5778782127",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
