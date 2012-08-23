@@ -123,8 +123,11 @@ $(eval $(call gb_Library_use_externals,merged,\
 endif
 
 ifeq ($(OS),ANDROID)
-$(eval $(call gb_Library_use_libraries,merged,\
+$(eval $(call gb_Library_use_static_libraries,merged,\
 	basebmp \
+))
+
+$(eval $(call gb_Library_use_libraries,merged,\
 	libotouch \
 ))
 

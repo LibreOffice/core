@@ -14,8 +14,17 @@ $(eval $(call gb_CppunitTest_set_include,basebmp_cpputest,\
     $$(INCLUDE) \
 ))
 
+ifeq ($(OS),ANDROID)
+$(eval $(call gb_CppunitTest_use_static_libraries,basebmp_cpputest,\
+    basebmp \
+))
+else
 $(eval $(call gb_CppunitTest_use_libraries,basebmp_cpputest,\
     basebmp \
+))
+endif
+
+$(eval $(call gb_CppunitTest_use_libraries,basebmp_cpputest,\
     basegfx \
     sal \
     $(gb_STDLIBS) \

@@ -61,7 +61,6 @@ copy-stuff:
 #
 	for F in $(strip \
 		  analysislo \
-		  basebmplo \
 		  basegfxlo \
 		  bootstrap.uno \
 		  comphelpgcc3 \

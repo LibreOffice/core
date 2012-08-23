@@ -9,8 +9,17 @@
 
 $(eval $(call gb_Module_Module,basebmp))
 
+ifeq ($(OS),ANDROID)
+$(eval $(call gb_Module_add_targets,basebmp,\
+    StaticLibrary_basebmp \
+))
+else
 $(eval $(call gb_Module_add_targets,basebmp,\
     Library_basebmp \
+))
+endif
+
+$(eval $(call gb_Module_add_targets,basebmp,\
     Package_inc \
 ))
 

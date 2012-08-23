@@ -215,7 +215,9 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     analysis \
     animcore \
     basctl \
-    basebmp \
+    $(if $(filter $(OS),ANDROID),, \
+		basebmp \
+    ) \
     bib \
     canvastools \
     communi \
@@ -628,6 +630,9 @@ $(eval $(call gb_Helper_register_libraries,EXTENSIONLIBS, \
 ))
 
 $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
+    $(if $(filter $(OS),ANDROID), \
+	    basebmp \
+	) \
     basegfx_s \
     codemaker \
     codemaker_cpp \

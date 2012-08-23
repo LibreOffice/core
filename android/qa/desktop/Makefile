@@ -92,7 +92,6 @@ copy-stuff: buildrcs
 #
 	for F in $(strip \
 		  analysislo \
-		  basebmplo \
 		  basegfxlo \
 		  bootstrap.uno \
 		  comphelpgcc3 \

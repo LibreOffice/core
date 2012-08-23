@@ -568,7 +568,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
 	$(vcl_headless_code) \
 ))
 
-$(eval $(call gb_Library_use_libraries,vcl,\
+$(eval $(call gb_Library_use_static_libraries,vcl,\
 	basebmp \
 ))
 
