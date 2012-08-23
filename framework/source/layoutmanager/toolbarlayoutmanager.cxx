@@ -180,12 +180,12 @@ void ToolbarLayoutManager::implts_setDockingAreaWindowSizes( const awt::Rectangl
     if ( rBorderSpace.Height >= 0 )
     {
         // Bottom docking area window
-        sal_Int32 nBottomPos = std::max( sal_Int32( aContainerClientSize.Height - rBorderSpace.Height - aStatusBarHeight ), sal_Int32( 0 ));
+        sal_Int32 nBottomPos = std::max( sal_Int32( aContainerClientSize.Height - rBorderSpace.Height - aStatusBarHeight + 1 ), sal_Int32( 0 ));
         sal_Int32 nHeight = ( nBottomPos == 0 ) ? 0 : rBorderSpace.Height;
 
         xBottomDockAreaWindow->setPosSize( 0, nBottomPos, aContainerClientSize.Width, nHeight, awt::PosSize::POSSIZE );
         xBottomDockAreaWindow->setVisible( sal_True );
-        nLeftRightDockingAreaHeight -= nHeight;
+        nLeftRightDockingAreaHeight -= nHeight - 1;
     }
 
     nLeftRightDockingAreaHeight -= aStatusBarHeight;
