@@ -41,7 +41,6 @@ $(eval $(call gb_Library_set_include,swd,\
 $(eval $(call gb_Library_use_sdk_api,swd))
 
 $(eval $(call gb_Library_add_defs,swd,\
-	-DSWD_DLLIMPLEMENTATION \
     -DSWD_DLLIMPLEMENTATION \
 ))
 
