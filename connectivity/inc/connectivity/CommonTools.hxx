@@ -50,7 +50,6 @@ namespace connectivity
         return match(rWild.getStr(), rStr.getStr(), cEscape);
     }
     //------------------------------------------------------------------------------
-    OOO_DLLPUBLIC_DBTOOLS rtl::OUString toString(const ::com::sun::star::uno::Any& rValue);
     OOO_DLLPUBLIC_DBTOOLS rtl::OUString toDateString(const ::com::sun::star::util::Date& rDate);
     OOO_DLLPUBLIC_DBTOOLS rtl::OUString toTimeString(const ::com::sun::star::util::Time& rTime);
     OOO_DLLPUBLIC_DBTOOLS rtl::OUString toDateTimeString(const ::com::sun::star::util::DateTime& rDateTime);

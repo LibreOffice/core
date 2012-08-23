@@ -152,68 +152,6 @@ namespace connectivity
         return rtl::OUString::createFromAscii(s);
     }
 
-
-    //--------------------------------------------------------------------------------------------------
-    rtl::OUString toString(const Any& rValue)
-    {
-        rtl::OUString aRes;
-        TypeClass aDestinationClass = rValue.getValueType().getTypeClass();
-
-        switch (aDestinationClass)
-        {
-            case TypeClass_CHAR:
-                aRes = ::rtl::OUString::valueOf(*(sal_Unicode*)rValue.getValue());
-                break;
-            case TypeClass_FLOAT:
-                aRes = ::rtl::OUString::valueOf(*(float*)rValue.getValue());
-                break;
-            case TypeClass_DOUBLE:
-                aRes = ::rtl::OUString::valueOf(*(double*)rValue.getValue());
-                break;
-            case TypeClass_BOOLEAN:
-                aRes = ::rtl::OUString::valueOf((sal_Int32)*(sal_Bool*)rValue.getValue());
-                break;
-            case TypeClass_BYTE:
-            case TypeClass_SHORT:
-            case TypeClass_LONG:
-                aRes = ::rtl::OUString::valueOf(*(sal_Int32*)rValue.getValue());
-                break;
-            case TypeClass_HYPER:
-            {
-                sal_Int64 nValue = 0;
-                OSL_VERIFY( rValue >>= nValue );
-                aRes = ::rtl::OUString::valueOf(nValue);
-            }
-            case TypeClass_STRING:
-                rValue >>= aRes;
-                break;
-            case TypeClass_STRUCT:
-                if (rValue.getValueType() == ::getCppuType((const ::com::sun::star::util::Date*)0))
-                {
-                    ::com::sun::star::util::Date aDate;
-                    rValue >>= aDate;
-                    aRes = toDateString(aDate);
-                }
-                else if (rValue.getValueType() == ::getCppuType((const ::com::sun::star::util::DateTime*)0))
-                {
-                    ::com::sun::star::util::DateTime aDT;
-                    rValue >>= aDT;
-                    aRes = toDateTimeString(aDT);
-                }
-                else if (rValue.getValueType() == ::getCppuType((const ::com::sun::star::util::Time*)0))
-                {
-                    ::com::sun::star::util::Time aTime;
-                    rValue >>= aTime;
-                    aRes = toTimeString(aTime);
-                }
-
-                break;
-            default:
-                ;
-        }
-        return aRes;
-    }
-
     // -----------------------------------------------------------------------------
     ::rtl::Reference< jvmaccess::VirtualMachine > getJavaVM(const Reference<XMultiServiceFactory >& _rxFactory)
     {
