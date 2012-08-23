@@ -85,7 +85,7 @@ class SearchView_Keyword
 {
 public:
 
-    SearchView_Keyword (const rtl::OUString &rKeyword)
+    SearchView_Keyword (const OUString &rKeyword)
         : maKeyword(rKeyword)
     {}
 
@@ -96,7 +96,7 @@ public:
 
 private:
 
-    rtl::OUString maKeyword;
+    OUString maKeyword;
 };
 
 SfxTemplateManagerDlg::SfxTemplateManagerDlg (Window *parent)
@@ -441,7 +441,7 @@ IMPL_LINK(SfxTemplateManagerDlg, TBXDropdownHdl, ToolBox*, pBox)
     {
         pBox->SetItemDown( nCurItemId, true );
 
-        std::vector<rtl::OUString> aNames = maView->getFolderNames();
+        std::vector<OUString> aNames = maView->getFolderNames();
 
         PopupMenu *pMoveMenu = new PopupMenu;
         pMoveMenu->SetSelectHdl(LINK(this,SfxTemplateManagerDlg,MoveMenuSelectHdl));
@@ -669,7 +669,7 @@ IMPL_LINK(SfxTemplateManagerDlg, OpenTemplateHdl, ThumbnailViewItem*, pItem)
 
         try
         {
-            mxDesktop->loadComponentFromURL(pTemplateItem->getPath(),rtl::OUString("_default"), 0, aArgs );
+            mxDesktop->loadComponentFromURL(pTemplateItem->getPath(),"_default", 0, aArgs );
         }
         catch( const uno::Exception& )
         {
@@ -691,7 +691,7 @@ IMPL_LINK_NOARG(SfxTemplateManagerDlg, SearchUpdateHdl)
         mpCurView->Hide();
     }
 
-    rtl::OUString aKeyword = mpSearchEdit->GetText();
+    OUString aKeyword = mpSearchEdit->GetText();
 
     if (!aKeyword.isEmpty())
     {
@@ -756,8 +756,8 @@ void SfxTemplateManagerDlg::OnTemplateImport ()
                         DEFINE_CONST_UNICODE(FILEDIALOG_FILTER_ALL) );
 
     // add template filter
-    rtl::OUString sFilterExt;
-    rtl::OUString sFilterName( SfxResId( STR_TEMPLATE_FILTER ).toString() );
+    OUString sFilterExt;
+    OUString sFilterName( SfxResId( STR_TEMPLATE_FILTER ).toString() );
 
     // add filters of modules which are installed
     SvtModuleOptions aModuleOpt;
@@ -804,7 +804,7 @@ void SfxTemplateManagerDlg::OnTemplateImport ()
 
     if ( nCode == ERRCODE_NONE )
     {
-        com::sun::star::uno::Sequence< ::rtl::OUString > aFiles = aFileDlg.GetSelectedFiles();
+        com::sun::star::uno::Sequence<OUString> aFiles = aFileDlg.GetSelectedFiles();
 
         if (aFiles.hasElements())
         {
@@ -956,7 +956,7 @@ void SfxTemplateManagerDlg::OnTemplateSearch ()
     }
 
     mpSearchEdit->Show(!bVisible);
-    mpSearchEdit->SetText(rtl::OUString());
+    mpSearchEdit->SetText(OUString());
 
     // display all templates if we hide the search bar
     if (bVisible && mpCurView->isOverlayVisible())
@@ -978,7 +978,7 @@ void SfxTemplateManagerDlg::OnTemplateEdit ()
         try
         {
             xStorable = uno::Reference< XStorable >(
-                        mxDesktop->loadComponentFromURL(pItem->getPath(),rtl::OUString("_blank"), 0, aArgs ),
+                        mxDesktop->loadComponentFromURL(pItem->getPath(),"_blank", 0, aArgs ),
                         uno::UNO_QUERY );
         }
         catch( const uno::Exception& )
@@ -1320,7 +1320,7 @@ void SfxTemplateManagerDlg::localMoveTo(sal_uInt16 nMenuId)
 
         if (ret)
         {
-            rtl::OUString aName = dlg.getEntryText();
+            OUString aName = dlg.getEntryText();
 
             if (!aName.isEmpty())
                 nItemId = maView->createRegion(aName);
@@ -1369,7 +1369,7 @@ void SfxTemplateManagerDlg::remoteMoveTo(const sal_uInt16 nMenuId)
 
         if (ret)
         {
-            rtl::OUString aName = dlg.getEntryText();
+            OUString aName = dlg.getEntryText();
 
             if (!aName.isEmpty())
                 nItemId = maView->createRegion(aName);
@@ -1423,7 +1423,7 @@ void SfxTemplateManagerDlg::localSearchMoveTo(sal_uInt16 nMenuId)
 
         if (ret)
         {
-            rtl::OUString aName = dlg.getEntryText();
+            OUString aName = dlg.getEntryText();
 
             if (!aName.isEmpty())
                 nItemId = maView->createRegion(aName);

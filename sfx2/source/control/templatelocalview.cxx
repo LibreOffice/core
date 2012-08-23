@@ -71,7 +71,7 @@ public:
         return meApp != FILTER_APP_NONE ? nVisCount : true ;
     }
 
-    bool isValid (const rtl::OUString &rType) const
+    bool isValid (const OUString &rType) const
     {
         bool bRet = true;
 
@@ -120,7 +120,7 @@ void TemplateLocalView::Populate ()
     sal_uInt16 nCount = mpDocTemplates->GetRegionCount();
     for (sal_uInt16 i = 0; i < nCount; ++i)
     {
-        rtl::OUString aRegionName(mpDocTemplates->GetFullRegionName(i));
+        OUString aRegionName(mpDocTemplates->GetFullRegionName(i));
 
         if ((sal_uInt32)aRegionName.getLength() > mpItemAttrs->nMaxTextLenght)
         {
@@ -137,9 +137,9 @@ void TemplateLocalView::Populate ()
 
         for (sal_uInt16 j = 0; j < nEntries; ++j)
         {
-            rtl::OUString aName = mpDocTemplates->GetName(i,j);
-            rtl::OUString aURL = mpDocTemplates->GetPath(i,j);
-            rtl::OUString aType = SvFileInformationManager::GetDescription(INetURLObject(aURL));
+            OUString aName = mpDocTemplates->GetName(i,j);
+            OUString aURL = mpDocTemplates->GetPath(i,j);
+            OUString aType = SvFileInformationManager::GetDescription(INetURLObject(aURL));
 
             if ((sal_uInt32)aName.getLength() > mpItemAttrs->nMaxTextLenght)
             {
@@ -196,10 +196,10 @@ void TemplateLocalView::reload ()
     }
 }
 
-std::vector<rtl::OUString> TemplateLocalView::getFolderNames()
+std::vector<OUString> TemplateLocalView::getFolderNames()
 {
     size_t n = mItemList.size();
-    std::vector<rtl::OUString> ret(n);
+    std::vector<OUString> ret(n);
 
     for (size_t i = 0; i < n; ++i)
         ret[i] = mItemList[i]->maTitle;
@@ -263,14 +263,14 @@ TemplateLocalView::getFilteredItems(const boost::function<bool (const TemplateIt
     return aItems;
 }
 
-sal_uInt16 TemplateLocalView::createRegion(const rtl::OUString &rName)
+sal_uInt16 TemplateLocalView::createRegion(const OUString &rName)
 {
     sal_uInt16 nRegionId = mpDocTemplates->GetRegionCount();    // Next regionId
 
     if (!mpDocTemplates->InsertDir(rName,nRegionId))
         return false;
 
-    rtl::OUString aRegionName = rName;
+    OUString aRegionName = rName;
 
     if ((sal_uInt32)aRegionName.getLength() > mpItemAttrs->nMaxTextLenght)
     {
@@ -576,7 +576,7 @@ bool TemplateLocalView::copyFrom(const sal_uInt16 nRegionItemId, const BitmapEx 
     return false;
 }
 
-bool TemplateLocalView::copyFrom (TemplateLocalViewItem *pItem, const rtl::OUString &rPath)
+bool TemplateLocalView::copyFrom (TemplateLocalViewItem *pItem, const OUString &rPath)
 {
     sal_uInt16 nId = 0;
     sal_uInt16 nDocId = 0;

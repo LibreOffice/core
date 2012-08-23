@@ -46,10 +46,10 @@ TemplateView::~TemplateView ()
     delete mpEditName;
 }
 
-void TemplateView::setName (const rtl::OUString &rName)
+void TemplateView::setName (const OUString &rName)
 {
     maName = rName;
-    mpEditName->SetText(rtl::OUString());
+    mpEditName->SetText(OUString());
 }
 
 void TemplateView::Paint (const Rectangle &rRect)
@@ -153,7 +153,7 @@ void TemplateView::MouseButtonDown (const MouseEvent &rMEvt)
             mbRenderTitle = true;
 
             // Update name if its not empty
-            rtl::OUString aTmp = mpEditName->GetText();
+            OUString aTmp = mpEditName->GetText();
 
             if (!aTmp.isEmpty())
             {
@@ -161,7 +161,7 @@ void TemplateView::MouseButtonDown (const MouseEvent &rMEvt)
             }
             else
             {
-                mpEditName->SetText(rtl::OUString());
+                mpEditName->SetText(OUString());
                 Invalidate();
             }
 
@@ -215,13 +215,13 @@ void TemplateView::OnItemDblClicked(ThumbnailViewItem *pItem)
 
 IMPL_LINK_NOARG(TemplateView, ChangeNameHdl)
 {
-    rtl::OUString aTmp = maName;
+    OUString aTmp = maName;
     maName = mpEditName->GetText();
 
     if (!maChangeNameHdl.Call(this))
         maName = aTmp;
 
-    mpEditName->SetText(rtl::OUString());
+    mpEditName->SetText(OUString());
 
     Invalidate();
     return 0;

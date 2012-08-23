@@ -180,7 +180,7 @@ public:
     virtual ~ThumbnailView ();
 
     void InsertItem( sal_uInt16 nItemId,
-                     const BitmapEx &rImage, const rtl::OUString &rStr,
+                     const BitmapEx &rImage, const OUString &rStr,
                      size_t nPos = THUMBNAILVIEW_APPEND );
 
     void RemoveItem( sal_uInt16 nItemId );
@@ -223,7 +223,7 @@ public:
 
     void deselectItems ();
 
-    rtl::OUString GetItemText( sal_uInt16 nItemId ) const;
+    OUString GetItemText( sal_uInt16 nItemId ) const;
 
     void SetColor( const Color& rColor );
 

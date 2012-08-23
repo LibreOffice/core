@@ -29,9 +29,9 @@ public:
 
     sal_uInt16 getId () const { return mnId; }
 
-    void setName (const rtl::OUString &rName);
+    void setName (const OUString &rName);
 
-    const rtl::OUString& getName () const { return maName; }
+    const OUString& getName () const { return maName; }
 
     virtual void Paint (const Rectangle &rRect);
 
@@ -58,7 +58,7 @@ private:
     Image maCloseImg;
     bool mbRenderTitle;
     sal_uInt16 mnId;
-    rtl::OUString maName;
+    OUString maName;
     Link maDblClickHdl;
     Link maChangeNameHdl;
     Link maCloseHdl;

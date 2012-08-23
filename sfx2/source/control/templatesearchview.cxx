@@ -21,8 +21,8 @@ TemplateSearchView::~TemplateSearchView ()
 }
 
 void TemplateSearchView::AppendItem(sal_uInt16 nItemId, sal_uInt16 nRegionId, sal_uInt16 nIdx,
-                                    const rtl::OUString &rTitle, const rtl::OUString &rSubtitle,
-                                    const rtl::OUString &rPath,
+                                    const OUString &rTitle, const OUString &rSubtitle,
+                                    const OUString &rPath,
                                     const BitmapEx &rImage)
 {
     TemplateSearchViewItem *pItem = new TemplateSearchViewItem(*this,this);

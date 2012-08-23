@@ -70,10 +70,10 @@ void TemplateRemoteView::Populate()
     uno::Reference < uno::XComponentContext > m_context(comphelper::getProcessComponentContext());
 
     // Load from user settings
-    com::sun::star::uno::Sequence< rtl::OUString >  aUrls =
+    com::sun::star::uno::Sequence<OUString>  aUrls =
             officecfg::Office::Common::Misc::TemplateRepositoryUrls::get(m_context);
 
-    com::sun::star::uno::Sequence< rtl::OUString > aNames =
+    com::sun::star::uno::Sequence<OUString> aNames =
             officecfg::Office::Common::Misc::TemplateRepositoryNames::get(m_context);
 
     for (sal_Int32 i = 0; i < aUrls.getLength() && i < aNames.getLength(); ++i)
@@ -143,12 +143,12 @@ bool TemplateRemoteView::loadRepository (const sal_uInt16 nRepositoryId, bool bR
     mpItemView->setId(nRepositoryId);
     mpItemView->setName(pItem->maTitle);
 
-    rtl::OUString aURL = static_cast<TemplateRemoteViewItem*>(pItem)->getURL();
+    OUString aURL = static_cast<TemplateRemoteViewItem*>(pItem)->getURL();
 
     try
     {
 
-        uno::Sequence< rtl::OUString > aProps(8);
+        uno::Sequence<OUString> aProps(8);
 
         aProps[0] = "Title";
         aProps[1] = "Size";
@@ -197,11 +197,11 @@ bool TemplateRemoteView::loadRepository (const sal_uInt16 nRepositoryId, bool bR
                         bContainsDate = !xRow->wasNull();
                     }
 
-                    rtl::OUString aContentURL = xContentAccess->queryContentIdentifierString();
-                    rtl::OUString aTargetURL = xRow->getString( ROW_TARGET_URL );
+                    OUString aContentURL = xContentAccess->queryContentIdentifierString();
+                    OUString aTargetURL = xRow->getString( ROW_TARGET_URL );
                     bool bHasTargetURL = !xRow->wasNull() && !aTargetURL.isEmpty();
 
-                    rtl::OUString sRealURL = bHasTargetURL ? aTargetURL : aContentURL;
+                    OUString sRealURL = bHasTargetURL ? aTargetURL : aContentURL;
 
                     TemplateItemProperties aTemplateItem;
                     aTemplateItem.nId = nIdx+1;

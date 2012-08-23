@@ -141,7 +141,7 @@ BitmapEx TemplateAbstractView::scaleImg (const BitmapEx &rImg, long width, long 
     return aImg;
 }
 
-BitmapEx TemplateAbstractView::fetchThumbnail (const rtl::OUString &msURL, long width, long height)
+BitmapEx TemplateAbstractView::fetchThumbnail (const OUString &msURL, long width, long height)
 {
     using namespace ::com::sun::star;
     using namespace ::com::sun::star::uno;

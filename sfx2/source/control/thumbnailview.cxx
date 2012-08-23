@@ -791,7 +791,7 @@ void ThumbnailView::DataChanged( const DataChangedEvent& rDCEvt )
 }
 
 void ThumbnailView::InsertItem( sal_uInt16 nItemId, const BitmapEx& rImage,
-                           const rtl::OUString& rText, size_t nPos )
+                           const OUString& rText, size_t nPos )
 {
     ThumbnailViewItem* pItem = new ThumbnailViewItem( *this, this );
     pItem->mnId     = nItemId;
@@ -1041,14 +1041,14 @@ void ThumbnailView::deselectItems()
         Invalidate();
 }
 
-rtl::OUString ThumbnailView::GetItemText( sal_uInt16 nItemId ) const
+OUString ThumbnailView::GetItemText( sal_uInt16 nItemId ) const
 {
     size_t nPos = GetItemPos( nItemId );
 
     if ( nPos != THUMBNAILVIEW_ITEM_NOTFOUND )
         return mItemList[nPos]->maTitle;
 
-    return rtl::OUString();
+    return OUString();
 }
 
 void ThumbnailView::SetColor( const Color& rColor )

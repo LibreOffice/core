@@ -37,7 +37,7 @@ public:
 
     virtual void reload ();
 
-    std::vector<rtl::OUString> getFolderNames ();
+    std::vector<OUString> getFolderNames ();
 
     virtual void showOverlay (bool bVisible);
 
@@ -46,7 +46,7 @@ public:
     std::vector<TemplateItemProperties>
         getFilteredItems (const boost::function<bool (const TemplateItemProperties&) > &rFunc) const;
 
-    sal_uInt16 createRegion (const rtl::OUString &rName);
+    sal_uInt16 createRegion (const OUString &rName);
 
     bool removeRegion (const sal_uInt16 nItemId);
 
@@ -59,7 +59,7 @@ public:
 
     bool copyFrom (const sal_uInt16 nRegionItemId, const BitmapEx &rThumbnail, const OUString &rPath);
 
-    bool copyFrom(TemplateLocalViewItem *pItem, const rtl::OUString &rPath);
+    bool copyFrom(TemplateLocalViewItem *pItem, const OUString &rPath);
 
     bool exportTo (const sal_uInt16 nItemId, const sal_uInt16 nRegionItemId, const OUString &rName);
 

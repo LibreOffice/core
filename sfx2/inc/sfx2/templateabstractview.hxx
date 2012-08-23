@@ -112,7 +112,7 @@ public:
 
     static BitmapEx scaleImg (const BitmapEx &rImg, long width, long height);
 
-    static BitmapEx fetchThumbnail (const rtl::OUString &msURL, long width, long height);
+    static BitmapEx fetchThumbnail (const OUString &msURL, long width, long height);
 
 protected:
 
