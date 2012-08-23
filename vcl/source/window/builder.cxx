@@ -257,6 +257,18 @@ namespace
                 pWindow = new CancelButton(pParent, nBits);
             else if (sType.equalsL(RTL_CONSTASCII_STRINGPARAM("gtk-help")))
                 pWindow = new HelpButton(pParent, nBits);
+            else if (sType.equalsL(RTL_CONSTASCII_STRINGPARAM("gtk-media-next")))
+            {
+                PushButton *pBtn = new PushButton(pParent, nBits);
+                pBtn->SetSymbol(SYMBOL_NEXT);
+                pWindow = pBtn;
+            }
+            else if (sType.equalsL(RTL_CONSTASCII_STRINGPARAM("gtk-media-previous")))
+            {
+                PushButton *pBtn = new PushButton(pParent, nBits);
+                pBtn->SetSymbol(SYMBOL_PREV);
+                pWindow = pBtn;
+            }
             else
                 fprintf(stderr, "unknown stock type %s\n", sType.getStr());
         }
