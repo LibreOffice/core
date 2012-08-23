@@ -1750,12 +1750,11 @@ void OdgGenerator::endTextSpan()
 
 void OdgGenerator::insertText(const WPXString &text)
 {
-    int length = text.len();
     WPXString out;
-    for (int curr = 0; curr < length; ++curr)
+    WPXString::Iter i(text);
+    for (i.rewind(); i.next();)
     {
-        char ch = text.cstr()[curr];
-        if (ch == '\n')
+        if ((*i()) == '\n' || (*i()) == '\t')
         {
             if (out.len() != 0)
             {
@@ -1763,12 +1762,20 @@ void OdgGenerator::insertText(const WPXString &text)
                 mpImpl->mBodyElements.push_back(pText);
                 out.clear();
             }
-            mpImpl->mBodyElements.push_back(new TagOpenElement("text:line-break"));
-            mpImpl->mBodyElements.push_back(new TagCloseElement("text:line-break"));
+            if ((*i()) == '\n')
+            {
+                mpImpl->mBodyElements.push_back(new TagOpenElement("text:line-break"));
+                mpImpl->mBodyElements.push_back(new TagCloseElement("text:line-break"));
+            }
+            else if ((*i()) == '\t')
+            {
+                mpImpl->mBodyElements.push_back(new TagOpenElement("text:tab"));
+                mpImpl->mBodyElements.push_back(new TagCloseElement("text:tab"));
+            }
         }
         else
         {
-            out.append(ch);
+            out.append(i());
         }
     }
     if (out.len() != 0)
