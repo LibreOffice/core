@@ -27,6 +27,9 @@
 
 $(eval $(call gb_Package_Package,connectivity_inc,$(SRCDIR)/connectivity/inc/connectivity))
 
+# sqlbison.hxx is generated and thus in another package
+$(call gb_Package_get_target,connectivity_inc) : $(call gb_Package_get_target,connectivity_generated)
+
 $(eval $(call gb_Package_add_file,connectivity_inc,inc/connectivity/BlobHelper.hxx,BlobHelper.hxx))
 $(eval $(call gb_Package_add_file,connectivity_inc,inc/connectivity/CommonTools.hxx,CommonTools.hxx))
 $(eval $(call gb_Package_add_file,connectivity_inc,inc/connectivity/conncleanup.hxx,conncleanup.hxx))

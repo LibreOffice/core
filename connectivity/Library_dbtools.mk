@@ -27,8 +27,6 @@
 
 $(eval $(call gb_Library_Library,dbtools))
 
-# connectivity_generated causes cyclic dependency here, so set include path
-# for that instead
 $(eval $(call gb_Library_use_packages,dbtools,\
 	connectivity_inc \
 ))
@@ -42,9 +40,7 @@ $(eval $(call gb_Library_set_componentfile,dbtools,connectivity/source/dbtools/d
 
 $(eval $(call gb_Library_set_include,dbtools,\
 	$$(INCLUDE) \
-	-I$(SRCDIR)/connectivity/inc \
 	-I$(SRCDIR)/connectivity/source/inc \
-	-I$(dir $(call gb_YaccTarget_get_target,connectivity/source/parse/sqlbison)) \
 ))
 
 $(eval $(call gb_Library_use_sdk_api,dbtools))
