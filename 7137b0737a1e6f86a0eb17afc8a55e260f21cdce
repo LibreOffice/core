@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAN3///54\u003d",
+        "filename": "reportdesign/source/filter/xml/xmlExport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 880,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2012-08-23T15:50:20Z",
+      "side": 1,
+      "message": "this exports the shapes outside the text:p element",
+      "revId": "7137b0737a1e6f86a0eb17afc8a55e260f21cdce",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

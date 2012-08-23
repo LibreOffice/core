@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAN3///58\u003d",
+        "filename": "reportdesign/source/filter/xml/xmlExport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 879,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2012-08-23T15:50:20Z",
+      "side": 0,
+      "message": "this opens a text:p element",
+      "revId": "e4b0ce8887a743d30a0107bc7b8f652b0e3b074c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAN3///6A\u003d",
+        "filename": "reportdesign/source/filter/xml/xmlExport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 887,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2012-08-23T15:50:20Z",
+      "side": 0,
+      "message": "this is inside a \u003ctext:p\u003e element",
+      "revId": "e4b0ce8887a743d30a0107bc7b8f652b0e3b074c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
