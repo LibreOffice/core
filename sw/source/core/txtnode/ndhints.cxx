@@ -61,7 +61,6 @@ static sal_Bool lcl_IsLessStart( const SwTxtAttr &rHt1, const SwTxtAttr &rHt2 )
                 {
                     const sal_uInt16 nS1 = static_cast<const SwTxtCharFmt&>(rHt1).GetSortNumber();
                     const sal_uInt16 nS2 = static_cast<const SwTxtCharFmt&>(rHt2).GetSortNumber();
-                    OSL_ENSURE( nS1 != nS2, "AUTOSTYLES: lcl_IsLessStart trouble" );
                     if ( nS1 != nS2 ) // robust
                         return nS1 < nS2;
                 }
@@ -97,7 +96,6 @@ static sal_Bool lcl_IsLessEnd( const SwTxtAttr &rHt1, const SwTxtAttr &rHt2 )
                 {
                     const sal_uInt16 nS1 = static_cast<const SwTxtCharFmt&>(rHt1).GetSortNumber();
                     const sal_uInt16 nS2 = static_cast<const SwTxtCharFmt&>(rHt2).GetSortNumber();
-                    OSL_ENSURE( nS1 != nS2, "AUTOSTYLES: lcl_IsLessEnd trouble" );
                     if ( nS1 != nS2 ) // robust
                         return nS1 > nS2;
                 }
@@ -260,15 +258,21 @@ bool SwpHintsArray::Check() const
                     ( RES_TXTATR_CHARFMT != pHtLast->Which() && RES_TXTATR_AUTOFMT != pHtLast->Which() ) ||
                     ( RES_TXTATR_CHARFMT != pHtThis->Which() && RES_TXTATR_AUTOFMT != pHtThis->Which() ) ||
                     ( *pHtThis->GetStart() >= *pHtLast->GetEnd() ) ||
-                    (   (   (   (*pHtThis->GetStart() == *pHtLast->GetStart())
-                            &&  (*pHtThis->GetEnd()   == *pHtLast->GetEnd())
-                            ) // same range
-                        ||  (*pHtThis->GetStart() == *pHtThis->GetEnd())
-                        )
+                    (   (   (*pHtThis->GetStart() == *pHtLast->GetStart())
+                        &&  (*pHtThis->GetEnd()   == *pHtLast->GetEnd())
+                        ) // same range
                     &&  (   (pHtThis->Which() != RES_TXTATR_AUTOFMT)
                         ||  (pHtLast->Which() != RES_TXTATR_AUTOFMT)
                         ) // never two AUTOFMT on same range
-                    ),
+                    &&  (   (pHtThis->Which() != RES_TXTATR_CHARFMT)
+                        ||  (pHtLast->Which() != RES_TXTATR_CHARFMT)
+                        ||  (static_cast<const SwTxtCharFmt *>(pHtThis)
+                                ->GetSortNumber() !=
+                             static_cast<const SwTxtCharFmt *>(pHtLast)
+                                ->GetSortNumber())
+                        ) // multiple CHARFMT on same range need distinct sortnr
+                    )
+                ||  (*pHtThis->GetStart() == *pHtThis->GetEnd()),
                    "HintsCheck: Portion inconsistency. "
                    "This can be temporarily ok during undo operations" );
 
