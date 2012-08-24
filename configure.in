@@ -49,13 +49,14 @@ PathFormat()
     fi
 }
 
+cat /dev/null > warn
 have_WARNINGS="no"
 add_warning()
 {
     if test "$have_WARNINGS" = "no" ; then
-        echo "*************************************" > warn
+        echo "*************************************" >> warn
+        have_WARNINGS="yes"
     fi
-    have_WARNINGS="yes"
     echo "* WARNING : $@" >> warn
 }
 
@@ -12342,6 +12343,6 @@ $GNUMAKE check
 _EOF
 fi
 
-cat warn 2> /dev/null
+cat warn
 
 dnl vim:set shiftwidth=4 softtabstop=4 expandtab:
