@@ -159,10 +159,10 @@ $(eval $(call gb_Library_add_generated_cobjects,i18npool,\
 # i18npool dlopens localedata_* libraries.
 # This is runtime dependency to prevent tests
 # to be run sooner then localedata_* exists.
-$(call gb_Library_get_target,i18npool) : | \
-	$(call gb_Library_get_target,localedata_en) \
-	$(call gb_Library_get_target,localedata_es) \
-	$(call gb_Library_get_target,localedata_euro) \
-	$(call gb_Library_get_target,localedata_others) \
+$(call gb_LinkTarget_get_target,$(call gb_Library_get_linktargetname,i18npool)) :| \
+	$(call gb_LinkTarget_get_target,$(call gb_Library_get_linktargetname,localedata_en)) \
+	$(call gb_LinkTarget_get_target,$(call gb_Library_get_linktargetname,localedata_es)) \
+	$(call gb_LinkTarget_get_target,$(call gb_Library_get_linktargetname,localedata_euro)) \
+	$(call gb_LinkTarget_get_target,$(call gb_Library_get_linktargetname,localedata_others)) \
 
 # vim: set noet sw=4 ts=4:
