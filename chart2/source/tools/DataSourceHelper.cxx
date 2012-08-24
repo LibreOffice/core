@@ -97,6 +97,18 @@ void lcl_addErrorBarRanges(
                     lcl_addDataSourceRanges( rOutResult, xErrorBarDataSource );
             }
         }
+
+        if( ( xSeriesProp->getPropertyValue("ErrorBarX") >>= xErrorBarProp ) && xErrorBarProp.is())
+        {
+            sal_Int32 eStyle = ::com::sun::star::chart::ErrorBarStyle::NONE;
+            if( ( xErrorBarProp->getPropertyValue("ErrorBarStyle") >>= eStyle ) &&
+                eStyle == ::com::sun::star::chart::ErrorBarStyle::FROM_DATA )
+            {
+                uno::Reference< data::XDataSource > xErrorBarDataSource( xErrorBarProp, uno::UNO_QUERY );
+                if( xErrorBarDataSource.is() )
+                    lcl_addDataSourceRanges( rOutResult, xErrorBarDataSource );
+            }
+        }
     }
     catch( const uno::Exception & ex )
     {
