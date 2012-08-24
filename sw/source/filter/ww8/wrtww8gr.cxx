@@ -60,6 +60,9 @@
 #include "wrtww8.hxx"
 #include "ww8par.hxx"
 #include "escher.hxx"
+//Added for i120568
+#include "ww8attributeoutput.hxx"
+#include "fmturl.hxx"
 
 #include "docsh.hxx"
 #include <cstdio>
@@ -381,6 +384,16 @@ void WW8Export::OutputLinkedOLE( const OUString& rOleId )
 
 void WW8Export::OutGrf(const sw::Frame &rFrame)
 {
+    //Added for i120568,the hyperlink info within a graphic whose anchor type is "As character"
+    //will be exported to ensure the fidelity
+    const SwFmtURL& rURL = rFrame.GetFrmFmt().GetAttrSet().GetURL();
+    bool bURLStarted = false;
+    if( rURL.GetURL().Len() && rFrame.GetWriterType() == sw::Frame::eGraphic)
+    {
+        bURLStarted = true;
+        m_pAttrOutput->StartURL( rURL.GetURL(), rURL.GetTargetFrameName() );
+    }
+
     // Store the graphic settings in GrfNode so they may be written-out later
     pGrf->Insert(rFrame);
 
@@ -498,6 +511,10 @@ void WW8Export::OutGrf(const sw::Frame &rFrame)
     {
         OutputField( 0, ww::eINCLUDEPICTURE, String(), WRITEFIELD_CLOSE );
     }
+    //Added for i120568,the hyperlink info within a graphic whose anchor type is
+    //"As character" will be exported to ensure the fidelity
+    if( bURLStarted )
+        m_pAttrOutput->EndURL();
 }
 
 GraphicDetails& GraphicDetails::operator=(const GraphicDetails &rOther)
