@@ -68,6 +68,7 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
     formula \
     fpicker \
     framework \
+	hsqldb \
     hwpfilter \
     i18npool \
     i18nutil \

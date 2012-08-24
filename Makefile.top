@@ -72,6 +72,7 @@ forms\
 formula\
 fpicker\
 framework\
+hsqldb\
 hwpfilter\
 i18npool\
 i18nutil\
@@ -193,7 +194,6 @@ gettext\
 glib\
 graphite\
 helpcontent2 \
-hsqldb\
 hunspell\
 hyphen\
 icu\
