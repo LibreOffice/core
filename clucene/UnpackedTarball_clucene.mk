@@ -9,7 +9,7 @@
 
 $(eval $(call gb_UnpackedTarball_UnpackedTarball,clucene))
 
-$(eval $(call gb_UnpackedTarball_set_tarball,clucene,48d647fbd8ef8889e5a7f422c1bfda94-clucene-core-2.3.3.4.tar.gz))
+$(eval $(call gb_UnpackedTarball_set_tarball,clucene,$(CLUCENE_TARBALL)))
 
 $(eval $(call gb_UnpackedTarball_fix_cxx_suffix,clucene,cpp))
 

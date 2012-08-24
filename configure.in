@@ -6526,11 +6526,13 @@ if test "$with_system_clucene" = "yes"; then
 else
     AC_MSG_RESULT([internal])
     SYSTEM_CLUCENE=NO
+    CLUCENE_TARBALL=48d647fbd8ef8889e5a7f422c1bfda94-clucene-core-2.3.3.4.tar.gz
     BUILD_TYPE="$BUILD_TYPE CLUCENE"
 fi
 AC_SUBST(SYSTEM_CLUCENE)
 AC_SUBST(CLUCENE_CFLAGS)
 AC_SUBST(CLUCENE_LIBS)
+AC_SUBST(CLUCENE_TARBALL)
 
 dnl ===================================================================
 dnl Check for system expat

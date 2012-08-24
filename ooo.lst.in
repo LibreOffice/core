@@ -22,7 +22,7 @@ cfbf1ac6f61bf6cf45342a0cc9381be5-liberation-fonts-ttf-2.00.0.tar.gz
 3ade8cfe7e59ca8e65052644fed9fca4-epm-3.7.tar.gz
 3c219630e4302863a9a83d0efde889db-commons-logging-1.1.1-src.tar.gz
 48470d662650c3c074e1c3fabbc67bbd-README_source-9.0.0.7-bj.txt
-48d647fbd8ef8889e5a7f422c1bfda94-clucene-core-2.3.3.4.tar.gz
+@CLUCENE_TARBALL@
 4a660ce8466c9df01f19036435425c3a-glibc-2.1.3-stub.tar.gz
 f101a9e88b783337b20b2e26dfd26d5f-cairo-1.10.2.tar.gz
 599dc4cc65a07ee868cf92a667a913d2-xpdf-3.02.tar.gz
