@@ -273,12 +273,9 @@ ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
 
 ScXMLTableRowCellContext::~ScXMLTableRowCellContext()
 {
-    if (pContentValidationName)
-        delete pContentValidationName;
-    if (pDetectiveObjVec)
-        delete pDetectiveObjVec;
-    if (pCellRangeSource)
-        delete pCellRangeSource;
+    delete pContentValidationName;
+    delete pDetectiveObjVec;
+    delete pCellRangeSource;
 }
 
 void ScXMLTableRowCellContext::LockSolarMutex()
