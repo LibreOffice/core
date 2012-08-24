@@ -313,6 +313,14 @@ $(eval $(call gbuild_modules_rules,$(gbuild_modules)))
 
 $(eval $(call dmake_modules_rules,$(dmake_modules)))
 
+# run a JunitTest - relies on naming convention (module prefix)
+$(WORKDIR)/JunitTest/%/done :
+	cd $(firstword $(subst _, ,$*)) && $(GNUMAKE) $(GMAKE_OPTIONS) $@ gb_PARTIALBUILD=T
+
+# run a CppunitTest - relies on naming convention (module prefix)
+$(WORKDIR)/CppunitTest/%.test :
+	cd $(firstword $(subst _, ,$*)) && $(GNUMAKE) $(GMAKE_OPTIONS) $@ gb_PARTIALBUILD=T
+
 #
 # Clean
 #
