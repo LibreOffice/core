@@ -40,7 +40,6 @@ endef
 define gb_UnpackedTarget__command_unzip
 unzip \
 	-qq \
-	-DD  \
 	-d $(UNPACKED_DIR) $(UNPACKED_TARBALL) && \
 $(if $(filter-out 0,$(UNPACKED_STRIP_COMPONENTS)),\
 	UNZIP_DIR=`ls $(UNPACKED_DIR)` && \
