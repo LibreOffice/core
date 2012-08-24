@@ -111,7 +111,7 @@ void ScUndoDoOutline::Undo()
     ScDocument* pDoc = pDocShell->GetDocument();
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
 
-    // sheet has to be switched on or off before this (#46952#) !!!
+    // sheet has to be switched over as a precondition for the following code. (#46952#) !!!
 
     SCTAB nVisTab = pViewShell->GetViewData()->GetTabNo();
     if ( nVisTab != nTab )
@@ -145,7 +145,7 @@ void ScUndoDoOutline::Redo()
 
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
 
-    // sheet has to be switched on or off before this (#46952#) !!!
+    // sheet has to be switched over as a precondition for the following code. (#46952#) !!!
 
     SCTAB nVisTab = pViewShell->GetViewData()->GetTabNo();
     if ( nVisTab != nTab )
@@ -316,7 +316,7 @@ void ScUndoOutlineLevel::Redo()
 
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
 
-    // sheet has to be switched on or off before this (#46952#) !!!
+    // sheet has to be switched over as a precondition for the following code. (#46952#) !!!
 
     SCTAB nVisTab = pViewShell->GetViewData()->GetTabNo();
     if ( nVisTab != nTab )
@@ -509,7 +509,7 @@ void ScUndoRemoveAllOutlines::Redo()
 
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
 
-    // sheet has to be switched on or off before this (#46952#) !!!
+    // sheet has to be switched over as a precondition for the following code. (#46952#) !!!
 
     SCTAB nTab = aBlockStart.Tab();
     SCTAB nVisTab = pViewShell->GetViewData()->GetTabNo();
@@ -605,7 +605,7 @@ void ScUndoAutoOutline::Redo()
     SCTAB nTab = aBlockStart.Tab();
     if (pViewShell)
     {
-        // sheet has to be switched on or off before this (#46952#) !!!
+    // sheet has to be switched over as a precondition for the following code. (#46952#) !!!
 
         SCTAB nVisTab = pViewShell->GetViewData()->GetTabNo();
         if ( nVisTab != nTab )
@@ -832,8 +832,8 @@ void ScUndoSort::Undo()
         pUndoDoc->CopyToDocument( aDestRange, IDF_ALL|IDF_NOCAPTIONS, false, pDoc );
     }
 
-    // Always reset row heights to ScBlockUndo
-    // (due to automatic adjustment)
+    // row heights always (due to automatic adjustment)
+    // Change to use ScBlockUndo
 //  if (bRepeatQuery)
         pUndoDoc->CopyToDocument( 0, nStartRow, nSortTab, MAXCOL, nEndRow, nSortTab,
                                 IDF_NONE, false, pDoc );
@@ -1409,7 +1409,7 @@ void ScUndoImportData::Repeat(SfxRepeatTarget& rTarget)
 
 sal_Bool ScUndoImportData::CanRepeat(SfxRepeatTarget& rTarget) const
 {
-    //  Repeat only for import for each Data base range, then pUndoDBData is set
+    // Repeat only for import using a database range, then pUndoDBData is set
 
     if (pUndoDBData)
         return (rTarget.ISA(ScTabViewTarget));

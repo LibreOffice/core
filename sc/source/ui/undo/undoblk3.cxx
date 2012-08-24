@@ -100,7 +100,7 @@ ScUndoDeleteContents::ScUndoDeleteContents(
         pDrawUndo = GetSdrUndoAction( pDocShell->GetDocument() );
 
     if ( !(aMarkData.IsMarked() || aMarkData.IsMultiMarked()) )     // no cell selected:
-        aMarkData.SetMarkArea( aRange );                            // cell under cursor is selected
+        aMarkData.SetMarkArea( aRange );                            // select cell under cursor
 
     SetChangeTrack();
 }
@@ -1140,7 +1140,7 @@ void ScUndoReplace::Undo()
 //! selected sheet
 //! select range ?
 
-        // Undo document has now row/column information, thus copy with
+        // Undo document has no row/column information, thus copy with
         // bColRowFlags = FALSE to not destroy Outline groups
 
         sal_uInt16 nUndoFlags = (pSearchItem->GetPattern()) ? IDF_ATTRIB : IDF_CONTENTS;

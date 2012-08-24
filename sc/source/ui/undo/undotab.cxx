@@ -1437,7 +1437,7 @@ void ScUndoScenarioFlags::Undo()
     pDoc->SetScenarioData( nTab, aOldComment, aOldColor, nOldFlags );
 
     pDocShell->PostPaintGridAll();
-    // The sheet name could be found in a formula ...
+    // The sheet name could be used in a formula ...
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
     if (pViewShell)
         pViewShell->UpdateInputHandler();
@@ -1454,7 +1454,7 @@ void ScUndoScenarioFlags::Redo()
     pDoc->SetScenarioData( nTab, aNewComment, aNewColor, nNewFlags );
 
     pDocShell->PostPaintGridAll();
-    // The sheet name could be found in a formula ...
+    // The sheet name could be used in a formula ...
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
     if (pViewShell)
         pViewShell->UpdateInputHandler();

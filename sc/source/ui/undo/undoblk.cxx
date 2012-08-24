@@ -226,7 +226,7 @@ void ScUndoInsertCells::DoChange( const sal_Bool bUndo )
         }
     }
 
-//? Undo for deferred attributes?
+//? Undo for attributes that are shifted out??
 
     sal_uInt16 nPaint = PAINT_GRID;
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
@@ -382,7 +382,7 @@ void ScUndoDeleteCells::DoChange( const sal_Bool bUndo )
     else
         SetChangeTrack();
 
-    // Perform it
+    // execute it
     switch (eCmd)
     {
         case DEL_DELROWS:
@@ -415,7 +415,7 @@ void ScUndoDeleteCells::DoChange( const sal_Bool bUndo )
         }
     }
 
-    // restore for Undo references
+    // If Undo, restore references.
     for( i=0; i<nCount && bUndo; i++ )
     {
         pRefUndoDoc->CopyToDocument( aEffRange.aStart.Col(), aEffRange.aStart.Row(), pTabs[i], aEffRange.aEnd.Col(), aEffRange.aEnd.Row(), pTabs[i]+pScenarios[i],
@@ -455,7 +455,7 @@ void ScUndoDeleteCells::DoChange( const sal_Bool bUndo )
         }
     }
 
-    // Zeichnen
+    // Paint
     sal_uInt16 nPaint = PAINT_GRID;
     switch (eCmd)
     {
@@ -549,7 +549,7 @@ sal_Bool ScUndoDeleteCells::CanRepeat(SfxRepeatTarget& rTarget) const
     return (rTarget.ISA(ScTabViewTarget));
 }
 
-
+/** Delete cells on multi-selection. */
 ScUndoDeleteMulti::ScUndoDeleteMulti( ScDocShell* pNewDocShell,
                                         sal_Bool bNewRows, sal_Bool bNeedsRefresh, SCTAB nNewTab,
                                         const SCCOLROW* pRng, SCCOLROW nRngCnt,
@@ -1345,9 +1345,8 @@ sal_Bool ScUndoDragDrop::CanRepeat(SfxRepeatTarget& /* rTarget */) const
     return false;           // not possible
 }
 
-
-//      Insert list containing range names
-//      (Insert|Name|Insert =>[List])
+/** Insert list containing range names
+    (Insert|Name|Insert =>[List]) */
 ScUndoListNames::ScUndoListNames( ScDocShell* pNewDocShell, const ScRange& rRange,
                 ScDocument* pNewUndoDoc, ScDocument* pNewRedoDoc ) :
     ScBlockUndo( pNewDocShell, rRange, SC_UNDO_AUTOHEIGHT ),
@@ -2157,7 +2156,7 @@ void ScUndoBorder::Redo()
 {
     BeginRedo();
 
-    ScDocument* pDoc = pDocShell->GetDocument();        //! Function to call docfunc
+    ScDocument* pDoc = pDocShell->GetDocument();        //! Call function at docfunc
     size_t nCount = pRanges->size();
     for (size_t i = 0; i < nCount; ++i )
     {
