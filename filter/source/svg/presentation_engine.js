@@ -341,7 +341,7 @@ function mouseClickHelper( aEvt )
             var sSelectedText =  aTextSelection.toString();
             if( sSelectedText )
             {
-                log( 'text selection: ' + sSelectedText );
+                DBGLOG( 'text selection: ' + sSelectedText );
                 if( sLastSelectedText !== sSelectedText )
                 {
                     bTextHasBeenSelected = true;
@@ -1682,6 +1682,10 @@ DebugPrinter.prototype.print = function( sMessage, nTime )
 
 
 // - Debug Printers -
+var aGenericDebugPrinter = new DebugPrinter();
+aGenericDebugPrinter.on();
+var DBGLOG = bind2( DebugPrinter.prototype.print, aGenericDebugPrinter );
+
 var NAVDBG = new DebugPrinter();
 NAVDBG.off();
 
@@ -9663,7 +9667,7 @@ AnimatedTextElement.prototype.setToElement = function( aElement )
 
 AnimatedTextElement.prototype.notifySlideStart = function( aSlideShowContext )
 {
-    log( 'AnimatedTextElement.notifySlideStart' );
+    DBGLOG( 'AnimatedTextElement.notifySlideStart' );
     AnimatedTextElement.superclass.notifySlideStart.call( this, aSlideShowContext );
     this.aGraphicGroupElement = getElementByClassName( this.aActiveElement, 'GraphicGroup' );
     this.restoreBaseTextParagraph();
@@ -9671,7 +9675,7 @@ AnimatedTextElement.prototype.notifySlideStart = function( aSlideShowContext )
 
 AnimatedTextElement.prototype.notifySlideEnd = function()
 {
-    log( 'AnimatedTextElement.notifySlideEnd' );
+    DBGLOG( 'AnimatedTextElement.notifySlideEnd' );
     this.aGraphicGroupElement.setAttribute( 'visibility', 'inherit' );
 };
 
@@ -9709,7 +9713,7 @@ AnimatedTextElement.prototype.restoreBaseTextParagraph = function()
 
 AnimatedTextElement.prototype.notifyAnimationStart = function()
 {
-    log( 'AnimatedTextElement.notifyAnimationStart' );
+    DBGLOG( 'AnimatedTextElement.notifyAnimationStart' );
     if( this.nRunningAnimations === 0 )
     {
         var sVisibilityAttr = this.aParagraphElement.getAttribute( 'visibility' );
@@ -9724,7 +9728,7 @@ AnimatedTextElement.prototype.notifyAnimationStart = function()
 
 AnimatedTextElement.prototype.notifyAnimationEnd = function()
 {
-    log( 'AnimatedTextElement.notifyAnimationEnd' );
+    DBGLOG( 'AnimatedTextElement.notifyAnimationEnd' );
     --this.nRunningAnimations;
     if( this.nRunningAnimations === 0 )
     {

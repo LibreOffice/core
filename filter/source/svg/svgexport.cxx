@@ -1749,42 +1749,6 @@ sal_Bool SVGFilter::implExportShape( const Reference< XShape >& rxShape )
                 {   // for text field shapes we set up text-adjust attributes
                     // and set visibility to hidden
                     OUString aShapeClass = implGetClassFromShape( rxShape );
-
-
-
-                    {
-//                        Reference< XPropertySetInfo > xPropSetInfo = xShapePropSet->getPropertySetInfo();
-//                        Sequence< Property > aPropSeq = xPropSetInfo->getProperties();
-//                        sal_Int32 nLength = aPropSeq.getLength();
-//                        OUString sGraphicPropList;
-//                        for( sal_Int32 i = 0; i < nLength; ++i )
-//                        {
-//                            sGraphicPropList += aPropSeq[i].Name;
-//                            sGraphicPropList += B2UCONST( ": " );
-//                            sGraphicPropList += aPropSeq[i].Type.getTypeName();
-//                            sGraphicPropList += B2UCONST( "; " );
-//                        }
-//                        mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "class", B2UCONST( "Graphic" ) );
-//                        mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "property-list", sGraphicPropList );
-//                        SvXMLElementExport aExp2( *mpSVGExport, XML_NAMESPACE_NONE, "desc", sal_True, sal_True );
-
-//                        if( xPropSetInfo->hasPropertyByName( B2UCONST( "GraphicURL" ) ) )
-//                        {
-//                            OUString sGraphicURL;
-//                            if( xShapePropSet->getPropertyValue( B2UCONST( "GraphicURL" ) ) >>= sGraphicURL )
-//                            {
-//                                if( !sGraphicURL.isEmpty() )
-//                                {
-//                                    mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "class", B2UCONST( "GraphicURL" ) );
-//                                    mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "xlink:ref", sGraphicURL );
-//                                    SvXMLElementExport aExp2( *mpSVGExport, XML_NAMESPACE_NONE, "desc", sal_True, sal_True );
-//                                }
-//                            }
-//                        }
-                    }
-
-
-
                     if( mbPresentation )
                     {
                         sal_Bool bIsPageNumber  = ( aShapeClass == "Slide_Number" );
@@ -1859,7 +1823,6 @@ sal_Bool SVGFilter::implExportShape( const Reference< XShape >& rxShape )
                     if( !rShapeId.isEmpty() )
                     {
                         mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "id", rShapeId );
-
                     }
 
                     const GDIMetaFile* pEmbeddedBitmapsMtf = NULL;
@@ -1968,7 +1931,6 @@ sal_Bool SVGFilter::implCreateObjectsFromShapes( const Reference< XDrawPage > & 
 sal_Bool SVGFilter::implCreateObjectsFromShape( const Reference< XDrawPage > & rxPage, const Reference< XShape >& rxShape )
 {
     sal_Bool bRet = sal_False;
-
     if( rxShape->getShapeType().lastIndexOf( B2UCONST( "drawing.GroupShape" ) ) != -1 )
     {
         Reference< XShapes > xShapes( rxShape, UNO_QUERY );
@@ -2075,8 +2037,8 @@ sal_Bool SVGFilter::implCreateObjectsFromShape( const Reference< XDrawPage > & r
                         }
                     }
                     (*mpObjects)[ rxShape ] = ObjectRepresentation( rxShape, aGraphic.GetGDIMetaFile() );
-                    bRet = sal_True;
                 }
+                bRet = sal_True;
             }
         }
     }
@@ -2183,7 +2145,6 @@ OUString SVGFilter::implGetInterfaceName( const Reference< XInterface >& rxIf )
 IMPL_LINK( SVGFilter, CalcFieldHdl, EditFieldInfo*, pInfo )
 {
     sal_Bool bFieldProcessed = sal_False;
-
     if( pInfo && mbPresentation )
     {
         bFieldProcessed = true;
