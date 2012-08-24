@@ -120,4 +120,10 @@ $(call gb_Package_get_preparation_target,$(1)) :| $(call gb_UnpackedTarball_get_
 
 endef
 
+# Package files from build of an external project
+define gb_Package_use_external_project
+$(call gb_Package_get_preparation_target,$(1)) :| $(call gb_ExternalProject_get_target,$(2))
+
+endef
+
 # vim: set noet sw=4:

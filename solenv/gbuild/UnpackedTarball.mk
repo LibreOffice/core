@@ -103,6 +103,9 @@ endef
 # converted, it is better to be changed to 1.
 gb_UnpackedTarball_PATCHLEVEL_DEFAULT := 3
 
+gb_UnpackedTarball_CONVERTTARGET := $(SRCDIR)/solenv/bin/leconvert.pl
+gb_UnpackedTarball_CONVERTCOMMAND := $(PERL) -w $(gb_UnpackedTarball_CONVERTTARGET)
+
 define gb_UnpackedTarball__copy_files_impl
 $(if $(1),\
 	&& cp $(firstword $(1)) $(firstword $(2)) \
@@ -123,11 +126,13 @@ define gb_UnpackedTarball__command
 $(call gb_Output_announce,$(2),$(true),PAT,2)
 $(call gb_Helper_abbreviate_dirs,\
 	cd $(3) && \
+	$(if $(UNPACKED_FIX_EOL),$(gb_UnpackedTarball_CONVERTCOMMAND) unix $(UNPACKED_FIX_EOL) &&) \
 	$(if $(UNPACKED_PATCHES),\
 		for p in $(UNPACKED_PATCHES); do \
 			$(GNUPATCH) -s -p$(UNPACKED_PATCHLEVEL) < "$$p" || exit 1;\
 		done && \
 	) \
+	$(if $(UNPACKED_FIX_EOL),$(gb_UnpackedTarball_CONVERTCOMMAND) dos $(UNPACKED_FIX_EOL) &&) \
 	$(if $(UNPACKED_CXX_SUFFIX),\
 		for c in `find $(3) -type f -name "*.$(UNPACKED_CXX_SUFFIX)"`; do \
 			mv "$$c" "$${c%.$(UNPACKED_CXX_SUFFIX)}.cxx" || exit 1;\
@@ -168,6 +173,7 @@ define gb_UnpackedTarball_UnpackedTarball_internal
 $(call gb_UnpackedTarball_get_target,$(1)) : UNPACKED_CXX_SUFFIX :=
 $(call gb_UnpackedTarball_get_target,$(1)) : UNPACKED_DESTFILES :=
 $(call gb_UnpackedTarball_get_target,$(1)) : UNPACKED_FILES :=
+$(call gb_UnpackedTarball_get_target,$(1)) : UNPACKED_FIX_EOL :=
 $(call gb_UnpackedTarball_get_target,$(1)) : UNPACKED_PATCHES :=
 $(call gb_UnpackedTarball_get_target,$(1)) : UNPACKED_PATCHLEVEL := $(gb_UnpackedTarball_PATCHLEVEL_DEFAULT)
 $(call gb_UnpackedTarball_get_target,$(1)) : UNPACKED_POST_ACTION :=
@@ -184,6 +190,18 @@ define gb_UnpackedTarball_UnpackedTarball
 $(call gb_UnpackedTarball_UnpackedTarball_internal,$(1))
 
 $$(eval $$(call gb_Module_register_target,$(call gb_UnpackedTarball_get_target,$(1)),$(call gb_UnpackedTarball_get_clean_target,$(1))))
+
+endef
+
+# Convert line ending from dos to unix style for selected files
+#
+# This is done before applying patches, because patches expect unix
+# style line ending, and the files are converted back after that. The
+# files are relative to the unpacked path.
+#
+# gb_UnpackedTarball_fix_end_of_line unpacked file(s)
+define gb_UnpackedTarball_fix_end_of_line
+$(call gb_UnpackedTarball_get_target,$(1)) : UNPACKED_FIX_EOL += $(addprefix $(call gb_UnpackedTarball_get_dir,$(1))/,$(2))
 
 endef
 

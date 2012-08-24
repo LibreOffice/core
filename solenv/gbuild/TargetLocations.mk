@@ -92,9 +92,10 @@ gb_Executable_get_headers_target = $(WORKDIR)/Headers/Executable/$(1)
 gb_ExtensionTarget_get_target = $(WORKDIR)/ExtensionTarget/$(1).oxt
 gb_ExtensionTarget_get_rootdir = $(WORKDIR)/ExtensionTarget/$(1)/root
 gb_ExtensionTarget_get_workdir = $(WORKDIR)/ExtensionTarget/$(1)
-gb_ExternalLib_get_workdir = $(WORKDIR)/ExternalLib/$(1)
-gb_ExternalLib_get_builddir = $(WORKDIR)/ExternalLib/$(1)/build
-gb_ExternalLib_get_target = $(WORKDIR)/ExternalLib/$(1).done
+gb_ExternalProject_get_statedir = $(WORKDIR)/ExternalProject/$(1)
+gb_ExternalProject_get_preparation_target = $(WORKDIR)/ExternalProject/$(1).prepare
+gb_ExternalProject_get_state_target = $(WORKDIR)/ExternalProject/$(1)/$(2)
+gb_ExternalProject_get_target = $(WORKDIR)/ExternalProject/$(1).done
 gb_InstallModule_get_filelist = $(call gb_InstallModuleTarget_get_filelist,$(1))
 gb_InstallModule_get_target = $(WORKDIR)/InstallModule/$(1).done
 gb_InstallModuleTarget_get_external_target = $(WORKDIR)/InstallModuleTarget/$(1).external
@@ -224,7 +225,7 @@ $(eval $(call gb_Helper_make_clean_targets,\
 	ThesaurusIndexTarget \
 	CppunitTest \
 	CustomTarget \
-	ExternalLib \
+	ExternalProject \
 	UnoApiHeadersTarget \
 	UnoApiTarget \
 	UnpackedTarball \

@@ -305,7 +305,7 @@ include $(foreach class, \
 	SdiTarget \
 	Package \
 	CustomTarget \
-	ExternalLib \
+	ExternalProject \
 	Pagein \
 	Pyuno \
 	Rdb \
