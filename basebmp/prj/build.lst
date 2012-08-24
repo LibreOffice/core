@@ -1,2 +1,2 @@
-bx	basebmp	:	sal VIGRA:vigra basegfx BOOST:boost NULL
+bx	basebmp	:	sal vigra basegfx BOOST:boost NULL
 bx	basebmp\prj							nmake	-	all	bx_prj NULL

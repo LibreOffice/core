@@ -7738,10 +7738,11 @@ if test "$with_system_vigra" = "yes"; then
     AC_LANG_POP([C++])
 else
     AC_MSG_RESULT([internal])
-    BUILD_TYPE="$BUILD_TYPE VIGRA"
+    VIGRA_TARBALL=ea91f2fb4212a21d708aced277e6e85a-vigra1.4.0.tar.gz
     SYSTEM_VIGRA=NO
 fi
 AC_SUBST(SYSTEM_VIGRA)
+AC_SUBST(VIGRA_TARBALL)
 
 dnl ===================================================================
 dnl Check for system odbc

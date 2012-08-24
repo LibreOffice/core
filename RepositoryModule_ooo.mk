@@ -157,6 +157,7 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
     uui \
     vbahelper \
     vcl \
+	vigra \
     wizards \
     writerfilter \
     writerperfect \

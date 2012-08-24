@@ -158,6 +158,7 @@ ure\
 uui\
 vbahelper\
 vcl\
+vigra\
 wizards\
 writerfilter\
 writerperfect\
@@ -245,7 +246,6 @@ stax\
 stlport\
 sysui\
 tomcat\
-vigra\
 xpdf\
 xsltml\
 zlib\

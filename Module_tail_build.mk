@@ -141,6 +141,7 @@ $(eval $(call gb_Module_add_moduledirs,tail_end,\
     uui \
     vbahelper \
     vcl \
+	vigra \
     wizards \
     writerfilter \
     writerperfect \
