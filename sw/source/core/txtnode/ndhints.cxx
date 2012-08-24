@@ -174,7 +174,7 @@ sal_uInt16 SwpHintsArray::GetPos( const SwTxtAttr *pHt ) const
 #define CHECK_ERR(cond, text) \
         if(!(cond)) \
         { \
-            OSL_ENSURE(!this, text); \
+            SAL_WARN("sw.core", text); \
             DumpHints(m_HintStarts, m_HintEnds); \
             return !(const_cast<SwpHintsArray*>(this))->Resort(); \
         }
@@ -254,25 +254,27 @@ bool SwpHintsArray::Check() const
         // 8) style portion check
         const SwTxtAttr* pHtThis = m_HintStarts[i];
         const SwTxtAttr* pHtLast = i > 0 ? m_HintStarts[i-1] : 0;
-        CHECK_ERR( 0 == i ||
-                    ( RES_TXTATR_CHARFMT != pHtLast->Which() && RES_TXTATR_AUTOFMT != pHtLast->Which() ) ||
-                    ( RES_TXTATR_CHARFMT != pHtThis->Which() && RES_TXTATR_AUTOFMT != pHtThis->Which() ) ||
-                    ( *pHtThis->GetStart() >= *pHtLast->GetEnd() ) ||
-                    (   (   (*pHtThis->GetStart() == *pHtLast->GetStart())
-                        &&  (*pHtThis->GetEnd()   == *pHtLast->GetEnd())
-                        ) // same range
-                    &&  (   (pHtThis->Which() != RES_TXTATR_AUTOFMT)
-                        ||  (pHtLast->Which() != RES_TXTATR_AUTOFMT)
-                        ) // never two AUTOFMT on same range
-                    &&  (   (pHtThis->Which() != RES_TXTATR_CHARFMT)
-                        ||  (pHtLast->Which() != RES_TXTATR_CHARFMT)
-                        ||  (static_cast<const SwTxtCharFmt *>(pHtThis)
+        CHECK_ERR( (0 == i)
+            ||  (   (RES_TXTATR_CHARFMT != pHtLast->Which())
+                &&  (RES_TXTATR_AUTOFMT != pHtLast->Which()))
+            ||  (   (RES_TXTATR_CHARFMT != pHtThis->Which())
+                &&  (RES_TXTATR_AUTOFMT != pHtThis->Which()))
+            ||  (*pHtThis->GetStart() >= *pHtLast->GetEnd()) // no overlap
+            ||  (   (   (*pHtThis->GetStart() == *pHtLast->GetStart())
+                    &&  (*pHtThis->GetEnd()   == *pHtLast->GetEnd())
+                    ) // same range
+                &&  (   (pHtThis->Which() != RES_TXTATR_AUTOFMT)
+                    ||  (pHtLast->Which() != RES_TXTATR_AUTOFMT)
+                    ) // never two AUTOFMT on same range
+                &&  (   (pHtThis->Which() != RES_TXTATR_CHARFMT)
+                    ||  (pHtLast->Which() != RES_TXTATR_CHARFMT)
+                    ||  (static_cast<const SwTxtCharFmt *>(pHtThis)
                                 ->GetSortNumber() !=
-                             static_cast<const SwTxtCharFmt *>(pHtLast)
+                         static_cast<const SwTxtCharFmt *>(pHtLast)
                                 ->GetSortNumber())
-                        ) // multiple CHARFMT on same range need distinct sortnr
-                    )
-                ||  (*pHtThis->GetStart() == *pHtThis->GetEnd()),
+                    ) // multiple CHARFMT on same range need distinct sortnr
+                )
+            ||  (*pHtThis->GetStart() == *pHtThis->GetEnd()), // this empty
                    "HintsCheck: Portion inconsistency. "
                    "This can be temporarily ok during undo operations" );
 
