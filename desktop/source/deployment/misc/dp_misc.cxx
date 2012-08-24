@@ -213,7 +213,7 @@ bool compareExtensionFolderWithLastSynchronizedFile(
     return bNeedsSync;
 }
 
-bool needToSyncRepostitory(OUString const & name)
+bool needToSyncRepository(OUString const & name)
 {
     OUString folder;
     OUString file;
@@ -558,8 +558,8 @@ void syncRepositories(
     //more revoke and registration calls.
     sal_Bool bModified = false;
     if (force
-        || needToSyncRepostitory(OUString(RTL_CONSTASCII_USTRINGPARAM("shared")))
-        || needToSyncRepostitory(OUString(RTL_CONSTASCII_USTRINGPARAM("bundled"))))
+        || needToSyncRepository(OUString(RTL_CONSTASCII_USTRINGPARAM("shared")))
+        || needToSyncRepository(OUString(RTL_CONSTASCII_USTRINGPARAM("bundled"))))
     {
         xExtensionManager =
             deployment::ExtensionManager::get(
