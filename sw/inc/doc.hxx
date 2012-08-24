@@ -881,8 +881,11 @@ public:
     virtual SwDrawFrmFmt* Insert(const SwPaM &rRg, SdrObject& rDrawObj, const SfxItemSet* pFlyAttrSet, SwFrmFmt*);
     virtual SwFlyFrmFmt* Insert(const SwPaM &rRg, const svt::EmbeddedObjectRef& xObj, const SfxItemSet* pFlyAttrSet,
                         const SfxItemSet* pGrfAttrSet, SwFrmFmt*);
+    //Modify here for #119405, by chengjh, 2012-08-16
+    //Add a para for the char attribute exp...
     virtual bool InsertPoolItem(const SwPaM &rRg, const SfxPoolItem&,
-                                const SetAttrMode nFlags);
+                                const SetAttrMode nFlags,bool bExpandCharToPara=false);
+    //End
     virtual bool InsertItemSet (const SwPaM &rRg, const SfxItemSet&,
                                 const SetAttrMode nFlags);
     virtual void ReRead(SwPaM&, const String& rGrfName, const String& rFltName, const Graphic* pGraphic, const GraphicObject* pGrfObj);

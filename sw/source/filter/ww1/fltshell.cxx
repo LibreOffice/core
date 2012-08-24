@@ -89,7 +89,9 @@ static SwCntntNode* GetCntntNode(SwDoc* pDoc, SwNodeIndex& rIdx, sal_Bool bNext)
 // ------ Stack-Eintrag fuer die gesamten - Attribute vom Text -----------
 SwFltStackEntry::SwFltStackEntry(const SwPosition& rStartPos, SfxPoolItem* pHt ) :
     nMkNode(rStartPos.nNode, -1),
-    nPtNode(nMkNode)
+    //Modify here for #119405, by easyfan, 2012-05-24
+    nPtNode(nMkNode),mnStartCP(-1),mnEndCP(-1),bIsParaEnd(false)
+    //End of modification, by easyfan
 {
     // Anfang vom Bereich merken
     nMkCntnt = rStartPos.nContent.GetIndex();
@@ -109,6 +111,11 @@ SwFltStackEntry::SwFltStackEntry(const SwFltStackEntry& rEntry) :
     bOld    = rEntry.bOld;
     bLocked = bCopied = sal_True; // when rEntry were NOT bLocked we would never have been called
     bConsumedByField = rEntry.bConsumedByField;
+    //Modify here for #119405, by chengjh, 2012-08-16
+    mnStartCP= rEntry.mnStartCP;
+    mnEndCP = rEntry.mnEndCP;
+    bIsParaEnd = rEntry.bIsParaEnd;
+    //End
 }
 
 
@@ -130,21 +137,36 @@ void SwFltStackEntry::SetEndPos(const SwPosition& rEndPos)
     nPtNode = rEndPos.nNode.GetIndex()-1;
     nPtCntnt = rEndPos.nContent.GetIndex();
 }
+//Modify here for #119405, by chengjh, 2012-08-16
+//The only position of 0x0D will not be able to make regin in the old logic
+//because it is beyond the length of para...need special consideration here.
+bool SwFltStackEntry::IsAbleMakeRegion()
+{
+     SwCntntNode *const pCntntNode(
+        SwNodeIndex(nMkNode, +1).GetNode().GetCntntNode());
+        if ((nMkNode.GetIndex() == nPtNode.GetIndex()) && (nMkCntnt == nPtCntnt)
+        && ((0 != nPtCntnt) || (pCntntNode && (0 != pCntntNode->Len())))
+        && ((RES_TXTATR_FIELD != pAttr->Which())
+        && !(bIsParaEnd && pCntntNode && pCntntNode->IsTxtNode() && 0 != pCntntNode->Len() )))
+    {
+        return false;
+    }
 
+    return true;
+}
+//End
 sal_Bool SwFltStackEntry::MakeRegion(SwDoc* pDoc, SwPaM& rRegion, sal_Bool bCheck )
 {
     // does this range actually contain something?
     // empty range is allowed if at start of empty paragraph
     // fields are special: never have range, so leave them
-    SwCntntNode *const pCntntNode(
-        SwNodeIndex(nMkNode, +1).GetNode().GetCntntNode());
-    if ((nMkNode.GetIndex() == nPtNode.GetIndex()) && (nMkCntnt == nPtCntnt)
-        && ((0 != nPtCntnt) || (pCntntNode && (0 != pCntntNode->Len())))
-        && (RES_TXTATR_FIELD != pAttr->Which()))
+    //Modify here for #119405, by chengjh, 2012-08-16
+    //Revised the code and move the code segment to defined function
+        if ( !IsAbleMakeRegion() )
     {
         return sal_False;
     }
-
+    //End
     // !!! Die Content-Indizies beziehen sich immer auf den Node !!!
     rRegion.GetPoint()->nNode = nMkNode.GetIndex() + 1;
     SwCntntNode* pCNd = GetCntntNode(pDoc, rRegion.GetPoint()->nNode, sal_True);
@@ -170,6 +192,10 @@ sal_Bool SwFltStackEntry::MakeRegion(SwDoc* pDoc, SwPaM& rRegion, sal_Bool bChec
 
 SwFltControlStack::SwFltControlStack(SwDoc* pDo, sal_uLong nFieldFl)
     : nFieldFlags(nFieldFl), pDoc(pDo), bIsEndStack(false)
+    //Modify for #119405 by chengjh, 2012-08-16
+    ,bHasSdOD(true),bSdODChecked(false)
+    //End
+
 {
 }
 
@@ -223,6 +249,9 @@ void SwFltControlStack::MarkAllAttrsOld()
 void SwFltControlStack::NewAttr(const SwPosition& rPos, const SfxPoolItem & rAttr )
 {
     SwFltStackEntry *pTmp = new SwFltStackEntry(rPos, rAttr.Clone() );
+    //Modify here for #119405, by easyfan, 2012-05-24
+    pTmp->SetStartCP(GetCurrAttrCP());
+    //End of modification, by easyfan
     sal_uInt16 nWhich = pTmp->pAttr->Which();
     SetAttr(rPos, nWhich);// Ende von evtl. gleichen Attributen auf dem Stack
                                 // Setzen, damit sich die Attribute nicht auf
@@ -239,6 +268,16 @@ void SwFltControlStack::DeleteAndDestroy(Entries::size_type nCnt)
         delete *aElement;
         maEntries.erase(aElement);
     }
+    //Modify for #119405 by chengjh, 2012-08-16
+    //Clear the para end position recorded in reader intermittently for the least impact on loading performance
+    //Because the attributes handled based on the unit of para
+    if ( Count() == 0 )
+    {
+        ClearParaEndPosition();
+        bHasSdOD = true;
+        bSdODChecked = false;
+    }
+    //End
 }
 
 // SwFltControlStack::StealAttr() loescht Attribute des angegebenen Typs vom Stack.
@@ -326,6 +365,9 @@ void SwFltControlStack::SetAttr(const SwPosition& rPos, sal_uInt16 nAttrId,
             if (bF) {
                 pEntry->bConsumedByField = consumedByField;
                 pEntry->SetEndPos(rPos);
+                //Modify here for #119405, by easyfan, 2012-05-24
+                pEntry->SetEndCP(GetCurrAttrCP());
+                //End of modification, by easyfan
             }
             continue;
         }
@@ -409,7 +451,33 @@ static sal_Bool IterateNumrulePiece( const SwNodeIndex& rEnd,
 
     return rTmpStart <= rTmpEnd;                    // gueltig ?
 }
+//Modify for #119405 by chengjh, 2012-08-16
+//***This function will check whether there is existing individual attribute positon for 0x0D***/
+//The check will happen only once for a paragraph during loading
+bool SwFltControlStack::HasSdOD()
+{
+    sal_uInt16 nCnt = static_cast< sal_uInt16 >(Count());
 
+    SwFltStackEntry* pEntry = 0;
+
+    bool bRet = false;
+
+    for (sal_uInt16 i=0; i < nCnt; i++)
+    {
+        pEntry = (*this)[ i ];
+        if ( pEntry && pEntry->mnStartCP == pEntry->mnEndCP )
+        {
+            if ( CheckSdOD(pEntry->mnStartCP,pEntry->mnEndCP) )
+            {
+                bRet = true;
+                break;
+            }
+        }
+    }
+
+    return bRet;
+}
+//End
 void SwFltControlStack::SetAttrInDoc(const SwPosition& rTmpPos, SwFltStackEntry* pEntry)
 {
     SwPaM aRegion( rTmpPos );
@@ -593,9 +661,36 @@ void SwFltControlStack::SetAttrInDoc(const SwPosition& rTmpPos, SwFltStackEntry*
         }
         break;
     default:
-        if (pEntry->MakeRegion(pDoc, aRegion, sal_False))
         {
-            pDoc->InsertPoolItem(aRegion, *pEntry->pAttr, 0);
+            //Modify here for #119405, by chengjh, 2012-08-16
+            //Revised for more complex situations should be considered
+            if ( !bSdODChecked )
+            {
+                bHasSdOD = HasSdOD();
+                bSdODChecked = true;
+            }
+                sal_Int32 nStart = pEntry->GetStartCP();
+                sal_Int32 nEnd = pEntry->GetEndCP();
+                if (nStart != -1 && nEnd != -1 && nEnd >= nStart )
+                {
+                    pEntry->SetIsParaEnd( IsParaEndInCPs(nStart,nEnd,bHasSdOD) );
+                }
+            //End
+            if (pEntry->MakeRegion(pDoc, aRegion, sal_False))
+            {
+                //Modify here for #119405, by easyfan, 2012-05-24
+                sal_Int32 nStart = pEntry->GetStartCP();
+                sal_Int32 nEnd = pEntry->GetEndCP();
+                //Refined 2012-08-16
+                if (pEntry->IsParaEnd())
+                {
+                    pDoc->InsertPoolItem(aRegion, *pEntry->pAttr, 0,true);
+                }else
+                {
+                    pDoc->InsertPoolItem(aRegion, *pEntry->pAttr, 0);
+                }
+                //End
+            }
         }
         break;
     }

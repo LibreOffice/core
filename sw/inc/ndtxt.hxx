@@ -216,6 +216,9 @@ public:
     // SMARTTAGS
     void SetSmartTags( SwWrongList* pNew, bool bDelete = true );
     SwWrongList* GetSmartTags();
+    //Modify here for #119405, by easyfan, 2012-05-24
+    bool TryCharSetExpandToNum(const SfxItemSet& pCharSet);
+    //End of modification, by easyfan
 
     //
     // End: Data collected during idle time

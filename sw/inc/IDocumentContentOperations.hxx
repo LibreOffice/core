@@ -179,8 +179,11 @@
         hinzugefuegt.  Wenn das Attribut nicht eingefuegt werden
         konnte, liefert die Methode sal_False.
     */
+    //Modify here for #119405, by chengjh, 2012-08-16
+    //Add a para for the char attribute exp...
     virtual bool InsertPoolItem(const SwPaM &rRg, const SfxPoolItem&,
-                                const sal_uInt16 nFlags) = 0;
+                                const sal_uInt16 nFlags,bool bExpandCharToPara=false) = 0;
+    //End
 
     /**
     */

@@ -72,6 +72,11 @@ public:
     sal_Bool bLocked;
     sal_Bool bCopied;
     sal_Bool bConsumedByField;
+    //Modify here for #119405, by easyfan, 2012-05-24
+    sal_Int32 mnStartCP;
+    sal_Int32 mnEndCP;
+    bool bIsParaEnd;
+    //End of modification, by easyfan
 
     SW_DLLPUBLIC SwFltStackEntry(const SwPosition & rStartPos, SfxPoolItem* pHt );
     SW_DLLPUBLIC SwFltStackEntry(const SwFltStackEntry& rEntry);
@@ -80,6 +85,17 @@ public:
     void SetStartPos(const SwPosition & rStartPos);
     SW_DLLPUBLIC void SetEndPos(  const SwPosition & rEndPos);
     SW_DLLPUBLIC sal_Bool MakeRegion(SwDoc* pDoc, SwPaM& rRegion, sal_Bool bCheck );
+    //Modify here for #119405, by easyfan, 2012-05-24
+    void SetStartCP(sal_Int32 nCP) {mnStartCP = nCP;}
+    void SetEndCP(sal_Int32 nCP) {mnEndCP = nCP;}
+    sal_Int32 GetStartCP() const {return mnStartCP;}
+    sal_Int32 GetEndCP() const {return mnEndCP;}
+    //End of modification, by easyfan
+    //Modify here for #119405, by chengjh, 2012-08-16
+    bool IsAbleMakeRegion();
+    bool IsParaEnd(){ return bIsParaEnd;}
+    void SetIsParaEnd(bool bArg){ bIsParaEnd = bArg;}
+    //End
 };
 
 class SW_DLLPUBLIC SwFltControlStack
@@ -91,6 +107,11 @@ class SW_DLLPUBLIC SwFltControlStack
 
     sal_uLong nFieldFlags;
     KeyCode aEmptyKeyCode; // fuer Bookmarks
+//Modify for #119405 by chengjh, 2012-08-16
+private:
+    bool bHasSdOD;
+    bool bSdODChecked;
+//End
 
 protected:
     SwDoc* pDoc;
@@ -98,6 +119,16 @@ protected:
 
     void MoveAttrs( const SwPosition&  rPos );
     virtual void SetAttrInDoc(const SwPosition& rTmpPos, SwFltStackEntry* pEntry);
+    //Modify here for #119405, by easyfan, 2012-05-24
+    virtual sal_Int32 GetCurrAttrCP() const {return -1;}
+    virtual bool IsParaEndInCPs(sal_Int32 nStart,sal_Int32 nEnd,bool bSdOD=true) const {return false;}
+    //End of modification, by easyfan
+    //Modify for #119405 by chengjh, 2012-08-16
+    //Clear the para end position recorded in reader intermittently for the least impact on loading performance
+    virtual void ClearParaEndPosition(){};
+    virtual bool CheckSdOD(sal_Int32 nStart,sal_Int32 nEnd){return false;}
+    bool HasSdOD();
+    //End
 
 public:
     enum Flags
