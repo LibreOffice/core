@@ -154,8 +154,10 @@ void TRACE(::rtl::OUString const & sText);
     recently added or removed.
 */
 DESKTOP_DEPLOYMENTMISC_DLLPUBLIC
-void syncRepositories(::com::sun::star::uno::Reference<
-                      ::com::sun::star::ucb::XCommandEnvironment> const & xCmdEnv);
+void syncRepositories(
+    bool force,
+    ::com::sun::star::uno::Reference<
+        ::com::sun::star::ucb::XCommandEnvironment> const & xCmdEnv);
 
 }
 

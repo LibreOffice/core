@@ -225,12 +225,16 @@ interface XPackageManager
         Please use this in case of suspected cache inconsistencies only.
         </p>
 
+        @param force
+               set to true when called during soffice bootstrap after cleaning
+               old extension cache
         @param xAbortChannel
                abort channel to asynchronously abort the adding process
         @param xCmdEnv
                command environment for error and progress handling
     */
     void reinstallDeployedPackages(
+        [in] boolean force,
         [in] com::sun::star::task::XAbortChannel xAbortChannel,
         [in] com::sun::star::ucb::XCommandEnvironment xCmdEnv )
         raises (DeploymentException,

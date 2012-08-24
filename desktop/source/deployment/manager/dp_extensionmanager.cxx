@@ -1205,9 +1205,10 @@ uno::Sequence< uno::Sequence<Reference<deploy::XPackage> > >
    }
 }
 
-//only to be called from unopkg!!!
+// Only to be called from unopkg or soffice bootstrap (with force=true in the
+// latter case):
 void ExtensionManager::reinstallDeployedExtensions(
-    OUString const & repository,
+    sal_Bool force, OUString const & repository,
     Reference<task::XAbortChannel> const & xAbortChannel,
     Reference<ucb::XCommandEnvironment> const & xCmdEnv )
     throw (deploy::DeploymentException,
@@ -1220,10 +1221,11 @@ void ExtensionManager::reinstallDeployedExtensions(
             xPackageManager = getPackageManager(repository);
 
         ::osl::MutexGuard guard(getMutex());
-        xPackageManager->reinstallDeployedPackages(xAbortChannel, xCmdEnv);
+        xPackageManager->reinstallDeployedPackages(
+            force, xAbortChannel, xCmdEnv);
         //We must sync here, otherwise we will get exceptions when extensions
         //are removed.
-        dp_misc::syncRepositories(xCmdEnv);
+        dp_misc::syncRepositories(force, xCmdEnv);
         const uno::Sequence< Reference<deploy::XPackage> > extensions(
             xPackageManager->getDeployedPackages(xAbortChannel, xCmdEnv));
 
