@@ -63,6 +63,9 @@ $(eval $(call gb_Module_add_moduledirs,tail_end,\
     formula \
     fpicker \
     framework \
+	$(if $(filter HSQLDB,$(BUILD_TYPE)),\
+		hsqldb \
+	) \
     hwpfilter \
 	i18npool \
 	i18nutil \
