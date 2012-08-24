@@ -511,25 +511,6 @@ ScValidErrorStyle validAlertToValidError( const sheet::ValidationAlertStyle eVAl
     return eVErrStyle;
 }
 
-ScConditionMode conditionOpToMode( const sheet::ConditionOperator eOp )
-{
-    ScConditionMode eMode;
-    switch( eOp )
-    {
-        case sheet::ConditionOperator_EQUAL:            eMode = SC_COND_EQUAL;      break;
-        case sheet::ConditionOperator_NOT_EQUAL:        eMode = SC_COND_NOTEQUAL;   break;
-        case sheet::ConditionOperator_GREATER:          eMode = SC_COND_GREATER;    break;
-        case sheet::ConditionOperator_GREATER_EQUAL:    eMode = SC_COND_EQGREATER;  break;
-        case sheet::ConditionOperator_LESS:             eMode = SC_COND_LESS;       break;
-        case sheet::ConditionOperator_LESS_EQUAL:       eMode = SC_COND_EQLESS;     break;
-        case sheet::ConditionOperator_BETWEEN:          eMode = SC_COND_BETWEEN;    break;
-        case sheet::ConditionOperator_NOT_BETWEEN:      eMode = SC_COND_NOTBETWEEN; break;
-        case sheet::ConditionOperator_FORMULA:          eMode = SC_COND_DIRECT;     break;
-        default:                                        eMode = SC_COND_NONE;       break;
-    }
-    return eMode;
-}
-
 }
 
 void ScXMLTableRowCellContext::SetContentValidation( const ScRange& rScRange )
@@ -543,7 +524,7 @@ void ScXMLTableRowCellContext::SetContentValidation( const ScRange& rScRange )
         {
             ScValidationData aScValidationData(
                 validationTypeToMode(aValidation.aValidationType),
-                conditionOpToMode(aValidation.aOperator),
+                ScConditionEntry::GetModeFromApi(static_cast<sal_Int32>(aValidation.aOperator)),
                 aValidation.sFormula1, aValidation.sFormula2, pDoc, ScAddress(),
                 aValidation.sFormulaNmsp1, aValidation.sFormulaNmsp2,
                 aValidation.eGrammar1, aValidation.eGrammar2
