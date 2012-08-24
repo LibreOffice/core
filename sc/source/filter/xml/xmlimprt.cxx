@@ -2638,6 +2638,7 @@ throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::R
     uno::Reference<document::XActionLockable> xActionLockable(xDoc, uno::UNO_QUERY);
     if (xActionLockable.is())
         xActionLockable->addActionLock();
+    pDoc->EnableAdjustHeight(false);
 }
 
 // XServiceInfo
@@ -2932,7 +2933,6 @@ throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeE
                     pDoc->SetStreamValid( nTab, true );
         }
 
-        aTables.UpdateRowHeights();
         aTables.FixupOLEs();
     }
     if (GetModel().is())
@@ -2947,6 +2947,7 @@ throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeE
     {
         ScModelObj::getImplementation(GetModel())->AfterXMLLoading(true);
     }
+    pDoc->EnableAdjustHeight( true );
 }
 
 // XEventListener
