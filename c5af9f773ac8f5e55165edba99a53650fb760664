@@ -1,0 +1,276 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAN3///4U\u003d",
+        "filename": "sc/source/ui/undo/undoblk.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 229,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2012-08-24T21:13:02Z",
+      "side": 1,
+      "message": "Undo for attributes that are shifted out?",
+      "revId": "c5af9f773ac8f5e55165edba99a53650fb760664",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAN3///4M\u003d",
+        "filename": "sc/source/ui/undo/undoblk.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 418,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2012-08-24T21:13:02Z",
+      "side": 1,
+      "message": "If Undo, restore references.",
+      "revId": "c5af9f773ac8f5e55165edba99a53650fb760664",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAN3///3g\u003d",
+        "filename": "sc/source/ui/undo/undoblk.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 725,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2012-08-24T21:13:02Z",
+      "side": 1,
+      "message": "Actually DeleteCells was the method name to be called in case it is a single selection.",
+      "revId": "c5af9f773ac8f5e55165edba99a53650fb760664",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAN3///3I\u003d",
+        "filename": "sc/source/ui/undo/undoblk.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2160,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2012-08-24T21:13:02Z",
+      "side": 1,
+      "message": "Actually\n\n Call function at docfunc",
+      "revId": "c5af9f773ac8f5e55165edba99a53650fb760664",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAN3///2w\u003d",
+        "filename": "sc/source/ui/undo/undoblk3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2012-08-24T21:13:02Z",
+      "side": 1,
+      "message": "Actually\n\n select cell under cursor\n\nIt\u0027s an action that is performed if no cell is selected.",
+      "revId": "c5af9f773ac8f5e55165edba99a53650fb760664",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAN3///2Y\u003d",
+        "filename": "sc/source/ui/undo/undoblk3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1143,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2012-08-24T21:13:02Z",
+      "side": 1,
+      "message": "Introduces wrong meaning, should be\n\n has no row/column information",
+      "revId": "c5af9f773ac8f5e55165edba99a53650fb760664",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAN3///2I\u003d",
+        "filename": "sc/source/ui/undo/undodat.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2012-08-24T21:13:02Z",
+      "side": 1,
+      "message": "Actually\n\n sheet has to be switched over\n\nas a precondition for the following code.",
+      "revId": "c5af9f773ac8f5e55165edba99a53650fb760664",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAN3///2A\u003d",
+        "filename": "sc/source/ui/undo/undodat.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2012-08-24T21:13:02Z",
+      "side": 1,
+      "message": "same, switched over",
+      "revId": "c5af9f773ac8f5e55165edba99a53650fb760664",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAN3///14\u003d",
+        "filename": "sc/source/ui/undo/undodat.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 319,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2012-08-24T21:13:02Z",
+      "side": 1,
+      "message": "switched over",
+      "revId": "c5af9f773ac8f5e55165edba99a53650fb760664",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAN3///10\u003d",
+        "filename": "sc/source/ui/undo/undodat.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 512,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2012-08-24T21:13:02Z",
+      "side": 1,
+      "message": "switched over",
+      "revId": "c5af9f773ac8f5e55165edba99a53650fb760664",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAN3///1w\u003d",
+        "filename": "sc/source/ui/undo/undodat.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 608,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2012-08-24T21:13:02Z",
+      "side": 1,
+      "message": "switched over",
+      "revId": "c5af9f773ac8f5e55165edba99a53650fb760664",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAN3///1U\u003d",
+        "filename": "sc/source/ui/undo/undodat.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 836,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2012-08-24T21:13:02Z",
+      "side": 1,
+      "message": "Actually these were two independent comments:\n\n Row heights always (due to automatic adjustment)\n\nand\n\n Change to use ScBlockUndo",
+      "revId": "c5af9f773ac8f5e55165edba99a53650fb760664",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAN3///0k\u003d",
+        "filename": "sc/source/ui/undo/undodat.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1412,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2012-08-24T21:13:02Z",
+      "side": 1,
+      "message": "Instead\n\n Repeat only for import using a database range, ...",
+      "revId": "c5af9f773ac8f5e55165edba99a53650fb760664",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAN3///0U\u003d",
+        "filename": "sc/source/ui/undo/undodraw.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2012-08-24T21:13:02Z",
+      "side": 1,
+      "message": "Actually\n\n DrawUndo has to be remembered outside\n\nand therefore must not be deleted here.",
+      "revId": "c5af9f773ac8f5e55165edba99a53650fb760664",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAN3///z0\u003d",
+        "filename": "sc/source/ui/undo/undotab.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1440,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2012-08-24T21:13:02Z",
+      "side": 1,
+      "message": "could be used in",
+      "revId": "c5af9f773ac8f5e55165edba99a53650fb760664",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAN3///zw\u003d",
+        "filename": "sc/source/ui/undo/undotab.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1457,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2012-08-24T21:13:02Z",
+      "side": 1,
+      "message": "could be used in",
+      "revId": "c5af9f773ac8f5e55165edba99a53650fb760664",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

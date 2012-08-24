@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAN3///34\u003d",
+        "filename": "sc/source/ui/undo/undoblk.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 571,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2012-08-24T21:13:02Z",
+      "side": 0,
+      "message": "Instead of completely removing a method\u0027s description (if it\u0027s not just a senseless repetition of classname::methodname) I\u0027d prefer to translate it instead and remove only the ascii art and use doxygen comment instead. So here\n\n /** Delete cells on multi-selection. */",
+      "revId": "361991a27183d340ae183178147bb22cd166a19c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
