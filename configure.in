@@ -12342,6 +12342,6 @@ $GNUMAKE check
 _EOF
 fi
 
-cat warn
+cat warn 2> /dev/null
 
 dnl vim:set shiftwidth=4 softtabstop=4 expandtab:
