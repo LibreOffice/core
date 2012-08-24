@@ -7088,7 +7088,9 @@ dnl Test whether rat scan was requested and whether apache-rat is available
 dnl ===================================================================
 RAT_JAR=
 AC_MSG_CHECKING([whether to trigger rat scan])
-if test "$with_rat_scan" != "no"; then
+if test -z "$with_rat_scan" -o "$with_rat_scan" == "no"; then
+    AC_MSG_RESULT([no])
+else
     if test "$WITH_JAVA" == "no"; then
         AC_MSG_ERROR([no, java disabled, enable with --with-java])
     elif test "$enable_saxon" == "no"; then
@@ -7106,8 +7108,6 @@ if test "$with_rat_scan" != "no"; then
             AC_MSG_ERROR([$with_rat_scan is not a directory])
         fi
     fi
-else
-    AC_MSG_RESULT([no])
 fi
 AC_SUBST(RAT_JAR_HOME)
 
