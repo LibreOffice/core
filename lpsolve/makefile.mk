@@ -36,6 +36,8 @@ TARGET=lpsolve
 
 # --- Files --------------------------------------------------------
 
+.IF "$(OS)" != "IOS"
+
 TARFILE_NAME=lp_solve_5.5
 TARFILE_MD5=26b3e95ddf3d9c077c480ea45874b3b8
 
@@ -77,10 +79,6 @@ OUT2BIN=$(BUILD_DIR)$/lpsolve55.dll
 .EXPORT: EXTRA_CDEFS EXTRA_LINKFLAGS verbose
 BUILD_ACTION=sh ccc.osx
 OUT2LIB=$(BUILD_DIR)$/liblpsolve55.dylib
-.ELIF "$(OS)"=="IOS"
-.EXPORT: EXTRA_CDEFS EXTRA_LINKFLAGS
-BUILD_ACTION=sh ccc.ios
-OUT2LIB=$(BUILD_DIR)$/liblpsolve55.a
 .ELSE
 .IF "$(COMNAME)"=="sunpro5"
 BUILD_ACTION=sh ccc.solaris
@@ -95,9 +93,17 @@ OUT2LIB=$(BUILD_DIR)$/liblpsolve55.so
 
 OUT2INC=lp_lib.h lp_types.h lp_utils.h lp_Hash.h lp_matrix.h lp_mipbb.h lp_SOS.h
 
+
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :	set_ext.mk
+
+.ENDIF
+
 .INCLUDE :	target.mk
+
+.IF "$(OS)" != "IOS"
+
 .INCLUDE :	tg_ext.mk
 
+.ENDIF

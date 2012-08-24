@@ -85,7 +85,6 @@ my_components = \
     component/sc/util/scfilt \
     component/scaddins/source/analysis/analysis \
     component/scaddins/source/datefunc/date \
-    component/sccomp/source/solver/solver \
     component/sd/util/sd \
     component/sd/util/sdd \
     component/sd/util/sdfilt \
@@ -209,6 +208,7 @@ my_components += \
 .IF "$(OS)" != "IOS"
 
 my_components += \
+    component/sccomp/source/solver/solver \
     component/writerfilter/util/writerfilter \
     component/writerperfect/util/wpftwriter \
     component/writerperfect/util/wpftdraw \
