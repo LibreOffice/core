@@ -197,11 +197,8 @@ class Desktop : public Application
         static void                         enableAcceptors();
         static void                         destroyAcceptor(const rtl::OUString& aDescription);
 
-        sal_Bool                        m_bMinimized;
-        sal_Bool                        m_bInvisible;
         bool                            m_bCleanedExtensionCache;
         bool                            m_bServicesRegistered;
-        sal_uInt16                          m_nAppEvents;
         BootstrapError                  m_aBootstrapError;
         BootstrapStatus                 m_aBootstrapStatus;
 
@@ -209,7 +206,6 @@ class Desktop : public Application
         Timer    m_firstRunTimer;
 
         static ResMgr*                  pResMgr;
-        static sal_Bool                 bSuppressOpenDefault;
 };
 
 }
