@@ -76,8 +76,7 @@ TYPEINIT1(ScUndoInsertAreaLink,     SfxUndoAction);
 TYPEINIT1(ScUndoRemoveAreaLink,     SfxUndoAction);
 TYPEINIT1(ScUndoUpdateAreaLink,     SfxUndoAction);
 
-
-// To Do:
+// TODO:
 /*A*/   // SetOptimalHeight on Document, when no View
 
 
@@ -94,13 +93,13 @@ ScUndoDeleteContents::ScUndoDeleteContents(
         pUndoDoc    ( pNewUndoDoc ),
         pDrawUndo   ( NULL ),
         nFlags      ( nNewFlags ),
-        bMulti      ( bNewMulti )   // over liquid
+        bMulti      ( bNewMulti )   // unnecessary
 {
     if (bObjects)
         pDrawUndo = GetSdrUndoAction( pDocShell->GetDocument() );
 
-    if ( !(aMarkData.IsMarked() || aMarkData.IsMultiMarked()) )     // no cell selected:
-        aMarkData.SetMarkArea( aRange );                            // cell under cursor is selected
+    if ( !(aMarkData.IsMarked() || aMarkData.IsMultiMarked()) )     // if no cell is selected:
+        aMarkData.SetMarkArea( aRange );                            // select cell under cursor
 
     SetChangeTrack();
 }
@@ -146,13 +145,13 @@ void ScUndoDeleteContents::DoChange( const sal_Bool bUndo )
 
     if (bUndo)  // only Undo
     {
-        sal_uInt16 nUndoFlags = IDF_NONE; // either copy all or none of the content
+        sal_uInt16 nUndoFlags = IDF_NONE; // copy either all or none of the content
         if (nFlags & IDF_CONTENTS)        // (Only the correct ones have been copied into UndoDoc)
             nUndoFlags |= IDF_CONTENTS;
         if (nFlags & IDF_ATTRIB)
             nUndoFlags |= IDF_ATTRIB;
         if (nFlags & IDF_EDITATTR)          // Edit-Engine attribute
-            nUndoFlags |= IDF_STRING;       // -> Cells are being changed
+            nUndoFlags |= IDF_STRING;       // -> Cells will be changed
         // do not create clones of note captions, they will be restored via drawing undo
         nUndoFlags |= IDF_NOCAPTIONS;
 
@@ -369,7 +368,7 @@ void ScUndoFillTable::DoChange( const sal_Bool bUndo )
         if ( !aMarkData.GetTableSelect(nTab) )
             pViewShell->SetTabNo( nSrcTab );
 
-        pViewShell->DoneBlockMode();    // causes problems oterwise since selection is on the wrong sheet.
+        pViewShell->DoneBlockMode();    // causes problems otherwise since selection is on the wrong sheet.
     }
 }
 
@@ -997,7 +996,7 @@ void ScUndoAutoFormat::Redo()
             nPPTY = ScGlobal::nScreenPPTY;
         }
 
-        sal_Bool bFormula = false;  //! set
+        sal_Bool bFormula = false;  // remember
 
         for (SCTAB nTab=nStartZ; nTab<=nEndZ; nTab++)
         {
@@ -1140,7 +1139,7 @@ void ScUndoReplace::Undo()
 //! selected sheet
 //! select range ?
 
-        // Undo document has now row/column information, thus copy with
+        // Undo document has no row/column information, thus copy with
         // bColRowFlags = FALSE to not destroy Outline groups
 
         sal_uInt16 nUndoFlags = (pSearchItem->GetPattern()) ? IDF_ATTRIB : IDF_CONTENTS;
@@ -1152,7 +1151,7 @@ void ScUndoReplace::Undo()
     else if (pSearchItem->GetPattern() &&
              pSearchItem->GetCommand() == SVX_SEARCHCMD_REPLACE)
     {
-        String aTempStr = pSearchItem->GetSearchString();       // replace
+        String aTempStr = pSearchItem->GetSearchString();       // toggle
         pSearchItem->SetSearchString(pSearchItem->GetReplaceString());
         pSearchItem->SetReplaceString(aTempStr);
         pDoc->ReplaceStyle( *pSearchItem,
@@ -1251,6 +1250,7 @@ sal_Bool ScUndoReplace::CanRepeat(SfxRepeatTarget& rTarget) const
     return (rTarget.ISA(ScTabViewTarget));
 }
 
+// multi-operation (only simple blocks)
 ScUndoTabOp::ScUndoTabOp( ScDocShell* pNewDocShell,
                 SCCOL nStartX, SCROW nStartY, SCTAB nStartZ,
                 SCCOL nEndX, SCROW nEndY, SCTAB nEndZ, ScDocument* pNewUndoDoc,
@@ -1677,7 +1677,7 @@ void ScUndoRefreshLink::Redo()
 
 void ScUndoRefreshLink::Repeat(SfxRepeatTarget& /* rTarget */)
 {
-    // no such thing
+    // makes no sense
 }
 
 
@@ -1782,7 +1782,7 @@ void ScUndoInsertAreaLink::Redo()
 
 void ScUndoInsertAreaLink::Repeat(SfxRepeatTarget& /* rTarget */)
 {
-    //! ....
+    // makes no sense
 }
 
 
@@ -1865,7 +1865,7 @@ void ScUndoRemoveAreaLink::Redo()
 
 void ScUndoRemoveAreaLink::Repeat(SfxRepeatTarget& /* rTarget */)
 {
-    // no such thing
+    // makes no sense
 }
 
 
@@ -2026,7 +2026,7 @@ void ScUndoUpdateAreaLink::Redo()
 
 void ScUndoUpdateAreaLink::Repeat(SfxRepeatTarget& /* rTarget */)
 {
-    // no such thing
+    // makes no sense
 }
 
 

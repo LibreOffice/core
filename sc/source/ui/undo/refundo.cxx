@@ -54,7 +54,7 @@ ScRefUndoData::ScRefUndoData( const ScDocument* pDoc ) :
 
     pPrintRanges = pDoc->CreatePrintRangeSaver();       // recreated
 
-    //! for Pivot, just mark the range ???
+    // when handling Pivot solely keep the range?
 
     ScDPCollection* pOldDP = ((ScDocument*)pDoc)->GetDPCollection();        //! const
     pDPCollection = pOldDP ? new ScDPCollection(*pOldDP) : NULL;

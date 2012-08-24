@@ -59,7 +59,7 @@
 
 #include <vector>
 
-extern sal_Bool bDrawIsInUndo;          //! somewhere as Member !!!
+extern sal_Bool bDrawIsInUndo; // somewhere as member!
 
 using namespace com::sun::star;
 using ::com::sun::star::uno::Sequence;
@@ -379,7 +379,7 @@ void ScUndoDeleteTab::Undo()
     }
     if (bLink)
     {
-        pDocShell->UpdateLinks();               // Update Link manager updaten
+        pDocShell->UpdateLinks(); // update Link Manager
     }
 
     EndUndo();      // Draw-Undo has to be called before Broadcast!
@@ -470,7 +470,7 @@ void ScUndoRenameTab::DoChange( SCTAB nTabP, const String& rName ) const
     pDocShell->PostPaintExtras();
     pDocShell->PostDataChanged();
 
-    // The sheet name could be found in a formula ...
+    // The sheet name might be used in a formula ...
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
     if (pViewShell)
         pViewShell->UpdateInputHandler();
@@ -488,7 +488,7 @@ void ScUndoRenameTab::Redo()
 
 void ScUndoRenameTab::Repeat(SfxRepeatTarget& /* rTarget */)
 {
-    //  Repeat makes no sense
+    // makes no sense
 }
 
 sal_Bool ScUndoRenameTab::CanRepeat(SfxRepeatTarget& /* rTarget */) const
@@ -804,7 +804,7 @@ void ScUndoTabColor::Redo()
 
 void ScUndoTabColor::Repeat(SfxRepeatTarget& /* rTarget */)
 {
-    //  No Repeat
+    // makes no sense
 }
 
 sal_Bool ScUndoTabColor::CanRepeat(SfxRepeatTarget& /* rTarget */) const
@@ -948,7 +948,7 @@ void ScUndoImportTab::DoChange() const
 
 void ScUndoImportTab::Undo()
 {
-    //! Inserted range names, and so on.
+    // Inserted range names, etc.
 
     SCTAB i;
     ScDocument* pDoc = pDocShell->GetDocument();
@@ -1084,7 +1084,7 @@ ScUndoRemoveLink::ScUndoRemoveLink( ScDocShell* pShell, const String& rDoc ) :
                 {
                     OSL_ENSURE(rtl::OUString(aFltName) == pDoc->GetLinkFlt(i) &&
                                rtl::OUString(aOptions) == pDoc->GetLinkOpt(i),
-                                    "diffrent Filter for a Document?");
+                                    "different Filter for a Document?");
                 }
                 pTabs[nCount] = i;
                 pModes[nCount] = nMode;
@@ -1437,7 +1437,7 @@ void ScUndoScenarioFlags::Undo()
     pDoc->SetScenarioData( nTab, aOldComment, aOldColor, nOldFlags );
 
     pDocShell->PostPaintGridAll();
-    // The sheet name could be found in a formula ...
+    // The sheet name might be used in a formula ...
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
     if (pViewShell)
         pViewShell->UpdateInputHandler();
@@ -1454,7 +1454,7 @@ void ScUndoScenarioFlags::Redo()
     pDoc->SetScenarioData( nTab, aNewComment, aNewColor, nNewFlags );
 
     pDocShell->PostPaintGridAll();
-    // The sheet name could be found in a formula ...
+    // The sheet name might be used in a formula ...
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
     if (pViewShell)
         pViewShell->UpdateInputHandler();

@@ -37,7 +37,7 @@
 #include "global.hxx"
 #include "target.hxx"
 
-#include "undoolk.hxx"              //! shift GetUndo in the Document
+#include "undoolk.hxx"              // TODO move GetUndo in Document
 
 
 // STATIC DATA -----------------------------------------------------------
@@ -165,7 +165,7 @@ void ScUndoWidthOrHeight::Redo()
         if ( nTab < nStartTab || nTab > nEndTab )
             pViewShell->SetTabNo( nStartTab );
 
-        // SetWidthOrHeigt changes current sheet !
+        // SetWidthOrHeight changes current sheet!
         pViewShell->SetWidthOrHeight( bWidth, nRangeCnt, pRanges, eMode, nNewSize, false, true, &aMarkData );
     }
 

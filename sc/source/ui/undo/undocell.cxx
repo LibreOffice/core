@@ -218,8 +218,7 @@ rtl::OUString ScUndoEnterData::GetComment() const
 
 void ScUndoEnterData::DoChange() const
 {
-    // Adjust row height
-    //! only when needed (old or new Edit cell, or Attribute) ??
+    // only when needed (old or new Edit cell, or Attribute)?
     for (sal_uInt16 i=0; i<nCount; i++)
         pDocShell->AdjustRowHeight( nRow, nRow, pTabs[i] );
 
@@ -983,7 +982,7 @@ void ScUndoDetective::Undo()
     }
     else
     {
-        // Delete entry from list
+        // Remove entry from list
 
         ScDetOpList* pList = pDoc->GetDetOpList();
         if (pList && pList->Count())
@@ -994,7 +993,7 @@ void ScUndoDetective::Undo()
                 rVec.erase( it);
             else
             {
-                OSL_FAIL("Detective entry in the list, not found");
+                OSL_FAIL("Detective entry could not be found in list");
             }
         }
     }

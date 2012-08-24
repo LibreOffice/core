@@ -111,7 +111,7 @@ void ScUndoDoOutline::Undo()
     ScDocument* pDoc = pDocShell->GetDocument();
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
 
-    // sheet has to be switched on or off before this (#46952#) !!!
+    // sheet has to be switched over (#46952#)!
 
     SCTAB nVisTab = pViewShell->GetViewData()->GetTabNo();
     if ( nVisTab != nTab )
@@ -145,7 +145,7 @@ void ScUndoDoOutline::Redo()
 
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
 
-    // sheet has to be switched on or off before this (#46952#) !!!
+    // sheet has to be switched over (#46952#)!
 
     SCTAB nVisTab = pViewShell->GetViewData()->GetTabNo();
     if ( nVisTab != nTab )
@@ -509,7 +509,7 @@ void ScUndoRemoveAllOutlines::Redo()
 
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
 
-    // sheet has to be switched on or off before this (#46952#) !!!
+    // sheet has to be switched over (#46952#)!
 
     SCTAB nTab = aBlockStart.Tab();
     SCTAB nVisTab = pViewShell->GetViewData()->GetTabNo();
@@ -832,11 +832,10 @@ void ScUndoSort::Undo()
         pUndoDoc->CopyToDocument( aDestRange, IDF_ALL|IDF_NOCAPTIONS, false, pDoc );
     }
 
-    // Always reset row heights to ScBlockUndo
-    // (due to automatic adjustment)
-//  if (bRepeatQuery)
-        pUndoDoc->CopyToDocument( 0, nStartRow, nSortTab, MAXCOL, nEndRow, nSortTab,
-                                IDF_NONE, false, pDoc );
+    // Row heights always (due to automatic adjustment)
+    // TODO change to use ScBlockUndo
+    pUndoDoc->CopyToDocument( 0, nStartRow, nSortTab, MAXCOL, nEndRow, nSortTab,
+                              IDF_NONE, false, pDoc );
 
     if (pUndoDB)
         pDoc->SetDBCollection( new ScDBCollection( *pUndoDB ), sal_True );
@@ -970,7 +969,7 @@ void ScUndoQuery::Undo()
                                     IDF_ALL, false, pDoc );
         //  Attributes are always copied (#49287#)
 
-        //  the rest of the old range
+        // rest of the old range
         if ( bDestArea && !bDoSize )
         {
             pDoc->DeleteAreaTab( aOldDest, IDF_ALL );
@@ -1132,7 +1131,7 @@ sal_Bool ScUndoAutoFilter::CanRepeat(SfxRepeatTarget& /* rTarget */) const
     return false;
 }
 
-
+// change database sections (dialog)
 ScUndoDBData::ScUndoDBData( ScDocShell* pNewDocShell,
                             ScDBCollection* pNewUndoColl, ScDBCollection* pNewRedoColl ) :
     ScSimpleUndo( pNewDocShell ),
@@ -1148,7 +1147,7 @@ ScUndoDBData::~ScUndoDBData()
 }
 
 rtl::OUString ScUndoDBData::GetComment() const
-{   // "Change Data base rage";
+{   // "Change database range";
     return ScGlobal::GetRscString( STR_UNDO_DBDATA );
 }
 
@@ -1409,7 +1408,7 @@ void ScUndoImportData::Repeat(SfxRepeatTarget& rTarget)
 
 sal_Bool ScUndoImportData::CanRepeat(SfxRepeatTarget& rTarget) const
 {
-    //  Repeat only for import for each Data base range, then pUndoDBData is set
+    //  Repeat only for import using a database range, then pUndoDBData is set
 
     if (pUndoDBData)
         return (rTarget.ISA(ScTabViewTarget));
@@ -1472,7 +1471,7 @@ void ScUndoRepeatDB::Undo()
         {
             SCCOL nFormulaCols = 0;
             SCCOL nCol = aOldQuery.aEnd.Col() + 1;
-            SCROW nRow = aOldQuery.aStart.Row() + 1;        //! Test Header
+            SCROW nRow = aOldQuery.aStart.Row() + 1;        // test the header
             while ( nCol <= MAXCOL &&
                     pDoc->GetCellType(ScAddress( nCol, nRow, nTab )) == CELLTYPE_FORMULA )
                 ++nCol, ++nFormulaCols;
@@ -1489,7 +1488,7 @@ void ScUndoRepeatDB::Undo()
         }
     }
 
-    //!     Data from Filter in other range are still missing !!!!!!!!!!!!!!!!!
+    // TODO Data from Filter in other range are still missing!
 
     if (nNewEndRow > aBlockEnd.Row())
     {
@@ -2060,7 +2059,7 @@ void ScUndoDataForm::DoChange( const sal_Bool bUndo )
 
     ScRefUndoData* pWorkRefData = bUndo ? pRefUndoData : pRefRedoData;
 
-    // Always back-up all or none of the content for Undo
+    // Always back-up either all or none of the content for Undo
     sal_uInt16 nUndoFlags = IDF_NONE;
     if (nFlags & IDF_CONTENTS)
             nUndoFlags |= IDF_CONTENTS;

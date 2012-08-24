@@ -77,17 +77,17 @@ bool ScSimpleUndo::SetViewMarkData( const ScMarkData& rMarkData )
 
 sal_Bool ScSimpleUndo::Merge( SfxUndoAction *pNextAction )
 {
-    // A SdrUndoGroup for the updating of detective arrows can belong
+    // A SdrUndoGroup for updating detective arrows can belong
     // to each Undo-Action.
     // DetectiveRefresh is always called next,
-    // the SdrUndoGroup is packaged in a ScUndoDraw action.
+    // the SdrUndoGroup is encapsulated in a ScUndoDraw action.
     // AddUndoAction is only called with bTryMerg=sal_True
     // for automatic update.
 
     if ( !pDetectiveUndo && pNextAction->ISA(ScUndoDraw) )
     {
-        // SdrUndoAction is aquired from ScUndoDraw Action,
-        // ScUndoDraw is then deleted by the UndoManager
+        // Take SdrUndoAction from ScUndoDraw Action,
+        // ScUndoDraw is later deleted by the UndoManager
 
         ScUndoDraw* pCalcUndo = (ScUndoDraw*)pNextAction;
         pDetectiveUndo = pCalcUndo->GetDrawUndo();
@@ -168,7 +168,7 @@ void ScSimpleUndo::ShowTable( const ScRange& rRange )
         SCTAB nStart = rRange.aStart.Tab();
         SCTAB nEnd   = rRange.aEnd.Tab();
         SCTAB nTab = pViewShell->GetViewData()->GetTabNo();
-        if ( nTab < nStart || nTab > nEnd )                     // when not in range:
+        if ( nTab < nStart || nTab > nEnd )                     // if not in range:
             pViewShell->SetTabNo( nStart );                     // at beginning of the range
     }
 }
@@ -270,7 +270,7 @@ void ScBlockUndo::ShowBlock()
         aRange.aEnd.SetTab( nTab );
         pViewShell->MarkRange( aRange );
 
-        // not through SetMarkArea to Mark Data, due to possible lacking paint
+        // not through SetMarkArea to MarkData, due to possibly lacking paint
     }
 }
 
@@ -415,7 +415,7 @@ void ScMoveUndo::UndoRef()
         pRefUndoData->DoUndo( pDoc, (eMode == SC_UNDO_REFFIRST) );
         // HACK: ScDragDropUndo is the only one with REFFIRST.
         // If not, results possibly in a too frequent adjustment
-        // of ChartRefs not that pretty, but not too bad either..
+        // of ChartRefs. Not that pretty, but not too bad either..
 }
 
 void ScMoveUndo::BeginUndo()
