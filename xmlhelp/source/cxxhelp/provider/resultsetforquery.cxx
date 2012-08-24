@@ -40,7 +40,13 @@
 #pragma warning(disable : 4068 4263 4264 4266)
 #endif
 
+#if defined(__GNUC__) && defined(HAVE_GCC_VISIBILITY_FEATURE)
+#  pragma GCC visibility push (default)
+#endif
 #include <CLucene.h>
+#if defined(__GNUC__) && defined(HAVE_GCC_VISIBILITY_FEATURE)
+#  pragma GCC visibility pop
+#endif
 
 #if defined _MSC_VER
 #pragma warning(pop)
