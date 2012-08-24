@@ -1159,8 +1159,7 @@ void SwEditWin::ChangeFly( sal_uInt8 nDir, sal_Bool bWeb )
             }
             else
             {
-                bSetPos = (::GetHtmlMode(rView.GetDocShell()) & HTMLMODE_SOME_ABS_POS) ?
-                    sal_True : sal_False;
+                bSetPos = sal_True;
             }
         }
         if( bSetPos )

@@ -25,7 +25,6 @@
 #define HTMLMODE_SOME_STYLES        0x0020 /* mind. MS IE */
 #define HTMLMODE_FULL_STYLES        0x0040 /* == SW */
 #define HTMLMODE_PARA_BLOCK         0x0100
-#define HTMLMODE_SOME_ABS_POS       0x2000
 #define HTMLMODE_RESERVED1          0x4000
 #define HTMLMODE_RESERVED0          0x8000
 

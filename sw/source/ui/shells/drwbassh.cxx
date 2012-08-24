@@ -198,11 +198,9 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
 
                         // Erlaubte Verankerungen:
                         short nAnchor = pSh->GetAnchorId();
-                        sal_uInt16 nAllowedAnchors = SVX_OBJ_AT_CNTNT|SVX_OBJ_IN_CNTNT;
+                        sal_uInt16 nAllowedAnchors = SVX_OBJ_AT_CNTNT | SVX_OBJ_IN_CNTNT | SVX_OBJ_PAGE;
                         sal_uInt16 nHtmlMode = ::GetHtmlMode(pSh->GetView().GetDocShell());
 
-                        if( !((HTMLMODE_ON & nHtmlMode) && (0 == (nHtmlMode & HTMLMODE_SOME_ABS_POS))) )
-                            nAllowedAnchors |= SVX_OBJ_PAGE;
                         if ( pSh->IsFlyInFly() )
                             nAllowedAnchors |= SVX_OBJ_AT_FLY;
 

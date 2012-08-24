@@ -894,14 +894,6 @@ void SvxSwPosSizeTabPage::Reset( const SfxItemSet& rSet)
 
     if(m_bHtmlMode)
     {
-        if( 0 == (m_nHtmlMode & HTMLMODE_SOME_ABS_POS))
-        {
-            if(GetAnchorType() == TextContentAnchorType_AT_PAGE)
-            {
-                m_aToParaRB.Check();
-            }
-            m_aToPageRB.Enable(sal_False);
-        }
         m_aHoriMirrorCB.Show(sal_False);
         m_aKeepRatioCB.Enable(sal_False);
         // #i18732# - hide checkbox in HTML mode
@@ -1227,8 +1219,7 @@ IMPL_LINK( SvxSwPosSizeTabPage, PosHdl, ListBox *, pLB )
         m_bAtVertPosModified = sal_True;
 
     // special treatment for HTML-Mode with horz-vert-dependencies
-    if(m_bHtmlMode && m_nHtmlMode & HTMLMODE_SOME_ABS_POS &&
-            TextContentAnchorType_AT_CHARACTER == GetAnchorType())
+    if(m_bHtmlMode && TextContentAnchorType_AT_CHARACTER == GetAnchorType())
     {
         sal_Bool bSet = sal_False;
         if(bHori)
@@ -1444,7 +1435,7 @@ void SvxSwPosSizeTabPage::InitPos(short nAnchor,
         if(m_bHtmlMode)
         {
             m_pVMap = aVParaHtmlMap;
-            m_pHMap = m_nHtmlMode & HTMLMODE_SOME_ABS_POS ? aHParaHtmlAbsMap : aHParaHtmlMap;
+            m_pHMap = aHParaHtmlAbsMap;
         }
         else
         {
@@ -1456,8 +1447,8 @@ void SvxSwPosSizeTabPage::InitPos(short nAnchor,
     {
         if(m_bHtmlMode)
         {
-            m_pVMap = m_nHtmlMode & HTMLMODE_SOME_ABS_POS ? aVCharHtmlAbsMap    : aVCharHtmlMap;
-            m_pHMap = m_nHtmlMode & HTMLMODE_SOME_ABS_POS ? aHCharHtmlAbsMap    : aHCharHtmlMap;
+            m_pVMap = aVCharHtmlAbsMap;
+            m_pHMap = aHCharHtmlAbsMap;
         }
         else
         {
