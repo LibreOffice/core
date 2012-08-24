@@ -10,7 +10,6 @@
 $(eval $(call gb_Package_Package,extras_newfiles,$(SRCDIR)/extras/source/shellnew))
 
 $(eval $(call gb_Package_add_files,extras_newfiles,pck,\
-    soffice.html \
     soffice.odg \
     soffice.odp \
     soffice.ods \
