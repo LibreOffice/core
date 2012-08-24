@@ -227,6 +227,7 @@ public:
                css::uno::RuntimeException);
 
     virtual void SAL_CALL reinstallDeployedPackages(
+        sal_Bool force,
         css::uno::Reference<css::task::XAbortChannel> const & xAbortChannel,
         css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv )
         throw (css::deployment::DeploymentException,

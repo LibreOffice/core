@@ -1164,14 +1164,14 @@ PackageManagerImpl::getDeployedPackages(
 //ToDo: the function must not call registerPackage, do this in
 //XExtensionManager.reinstallDeployedExtensions
 void PackageManagerImpl::reinstallDeployedPackages(
-    Reference<task::XAbortChannel> const &  /*xAbortChannel*/,
+    sal_Bool force, Reference<task::XAbortChannel> const &  /*xAbortChannel*/,
     Reference<XCommandEnvironment> const & xCmdEnv_ )
     throw (deployment::DeploymentException,
            CommandFailedException, CommandAbortedException,
            lang::IllegalArgumentException, RuntimeException)
 {
     check();
-    if (office_is_running())
+    if (!force && office_is_running())
         throw RuntimeException(
             OUSTR("You must close any running Office process before "
                   "reinstalling packages!"), static_cast<OWeakObject *>(this) );

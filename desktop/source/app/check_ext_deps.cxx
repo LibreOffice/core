@@ -51,6 +51,7 @@
 #include "com/sun/star/deployment/ExtensionManager.hpp"
 #include "com/sun/star/deployment/LicenseException.hpp"
 #include "com/sun/star/deployment/ui/LicenseDialog.hpp"
+#include <com/sun/star/task/OfficeRestartManager.hpp>
 #include <com/sun/star/task/XJob.hpp>
 #include <com/sun/star/task/XJobExecutor.hpp>
 #include <com/sun/star/task/XInteractionApprove.hpp>
@@ -77,12 +78,15 @@ class SilentCommandEnv
                                       task::XInteractionHandler,
                                       ucb::XProgressHandler >
 {
+    uno::Reference<uno::XComponentContext> mxContext;
     Desktop    *mpDesktop;
     sal_Int32   mnLevel;
     sal_Int32   mnProgress;
 
 public:
-             SilentCommandEnv( Desktop* pDesktop );
+    SilentCommandEnv(
+        uno::Reference<uno::XComponentContext> const & xContext,
+        Desktop* pDesktop );
     virtual ~SilentCommandEnv();
 
     // XCommandEnvironment
@@ -105,12 +109,14 @@ public:
 };
 
 //-----------------------------------------------------------------------------
-SilentCommandEnv::SilentCommandEnv( Desktop* pDesktop )
-{
-    mpDesktop = pDesktop;
-    mnLevel = 0;
-    mnProgress = 25;
-}
+SilentCommandEnv::SilentCommandEnv(
+    uno::Reference<uno::XComponentContext> const & xContext,
+    Desktop* pDesktop ):
+    mxContext( xContext ),
+    mpDesktop( pDesktop ),
+    mnLevel( 0 ),
+    mnProgress( 25 )
+{}
 
 //-----------------------------------------------------------------------------
 SilentCommandEnv::~SilentCommandEnv()
@@ -144,10 +150,9 @@ void SilentCommandEnv::handle( Reference< task::XInteractionRequest> const & xRe
 
     if ( request >>= licExc )
     {
-        uno::Reference< uno::XComponentContext > xContext = comphelper_getProcessComponentContext();
         uno::Reference< ui::dialogs::XExecutableDialog > xDialog(
             deployment::ui::LicenseDialog::create(
-            xContext, VCLUnoHelper::GetInterface( NULL ),
+            mxContext, VCLUnoHelper::GetInterface( NULL ),
             licExc.ExtensionName, licExc.Text ) );
         sal_Int16 res = xDialog->execute();
         if ( res == ui::dialogs::ExecutableDialogResults::CANCEL )
@@ -416,7 +421,20 @@ sal_Bool Desktop::CheckExtensionDependencies()
 void Desktop::SynchronizeExtensionRepositories()
 {
     RTL_LOGFILE_CONTEXT(aLog,"desktop (jl) ::Desktop::SynchronizeExtensionRepositories");
-    dp_misc::syncRepositories( new SilentCommandEnv( this ) );
+    uno::Reference< uno::XComponentContext > context(
+        comphelper_getProcessComponentContext());
+    uno::Reference< ucb::XCommandEnvironment > silent(
+        new SilentCommandEnv(context, this));
+    if (m_bCleanedExtensionCache) {
+        deployment::ExtensionManager::get(context)->reinstallDeployedExtensions(
+            true, "user", Reference<task::XAbortChannel>(), silent);
+        task::OfficeRestartManager::get(context)->requestRestart(
+            silent->getInteractionHandler());
+    } else {
+        // reinstallDeployedExtensions above already calls syncRepositories
+        // internally:
+        dp_misc::syncRepositories(m_bCleanedExtensionCache, silent);
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

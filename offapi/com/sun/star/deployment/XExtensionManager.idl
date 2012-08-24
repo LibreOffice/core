@@ -260,6 +260,9 @@ interface XExtensionManager
         <p>
         Please use this in case of suspected cache inconsistencies only.
         </p>
+        @param force
+               set to true when called during soffice bootstrap after cleaning
+               old extension cache
         @param repositroy
                the name of the repository
         @param xAbortChannel
@@ -268,6 +271,7 @@ interface XExtensionManager
                command environment for error and progress handling
     */
     void reinstallDeployedExtensions(
+        [in] boolean force,
         [in] string repository,
         [in] com::sun::star::task::XAbortChannel xAbortChannel,
         [in] com::sun::star::ucb::XCommandEnvironment xCmdEnv )

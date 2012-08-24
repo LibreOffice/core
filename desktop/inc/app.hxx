@@ -199,6 +199,7 @@ class Desktop : public Application
 
         sal_Bool                        m_bMinimized;
         sal_Bool                        m_bInvisible;
+        bool                            m_bCleanedExtensionCache;
         bool                            m_bServicesRegistered;
         sal_uInt16                          m_nAppEvents;
         BootstrapError                  m_aBootstrapError;

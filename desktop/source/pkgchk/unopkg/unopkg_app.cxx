@@ -392,7 +392,7 @@ extern "C" DESKTOP_DLLPUBLIC int unopkg_main()
         //synching is done in XExtensionManager.reinstall
         if (!subcmd_gui && ! subCommand.equals(OUSTR("reinstall"))
             && ! dp_misc::office_is_running())
-            dp_misc::syncRepositories(xCmdEnv);
+            dp_misc::syncRepositories(false, xCmdEnv);
 
         if ( subcmd_add || subCommand == "remove" )
         {
@@ -436,7 +436,7 @@ extern "C" DESKTOP_DLLPUBLIC int unopkg_main()
                      RTL_CONSTASCII_STRINGPARAM("reinstall") ))
         {
             xExtensionManager->reinstallDeployedExtensions(
-                repository, Reference<task::XAbortChannel>(), xCmdEnv);
+                false, repository, Reference<task::XAbortChannel>(), xCmdEnv);
         }
         else if ( subCommand == "list" )
         {

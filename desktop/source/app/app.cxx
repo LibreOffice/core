@@ -152,77 +152,81 @@ namespace {
 
 void removeTree(OUString const & url) {
     osl::Directory dir(url);
-    switch (dir.open()) {
+    osl::FileBase::RC rc = dir.open();
+    switch (rc) {
     case osl::FileBase::E_None:
         break;
     case osl::FileBase::E_NOENT:
         return; //TODO: SAL_WARN if recursive
     default:
-        throw css::uno::RuntimeException(
-            "cannot open directory " + url,
-            css::uno::Reference< css::uno::XInterface >());
+        SAL_WARN("desktop", "cannot open directory " << url << ": " << +rc);
+        return;
     }
     for (;;) {
         osl::DirectoryItem i;
-        osl::FileBase::RC rc = dir.getNextItem(i, SAL_MAX_UINT32);
+        rc = dir.getNextItem(i, SAL_MAX_UINT32);
         if (rc == osl::FileBase::E_NOENT) {
             break;
         }
         if (rc != osl::FileBase::E_None) {
-            throw css::uno::RuntimeException(
-                ("cannot iterate directory " + url + ": "
-                 + OUString::valueOf(static_cast< sal_Int32 >(rc))),
-                css::uno::Reference< css::uno::XInterface >());
+            SAL_WARN(
+                "desktop","cannot iterate directory " << url << ": " << +rc);
+            break;
         }
         osl::FileStatus stat(
             osl_FileStatus_Mask_Type | osl_FileStatus_Mask_FileName |
             osl_FileStatus_Mask_FileURL);
         rc = i.getFileStatus(stat);
         if (rc != osl::FileBase::E_None) {
-            throw css::uno::RuntimeException(
-                ("cannot stat in directory " + url + ": "
-                 + OUString::valueOf(static_cast< sal_Int32 >(rc))),
-                css::uno::Reference< css::uno::XInterface >());
+            SAL_WARN(
+                "desktop", "cannot stat in directory " << url << ": " << +rc);
+            continue;
         }
         if (stat.getFileType() == osl::FileStatus::Directory) { //TODO: symlinks
             removeTree(stat.getFileURL());
         } else {
             rc = osl::File::remove(stat.getFileURL());
-            if (rc != osl::FileBase::E_None) {
-                throw css::uno::RuntimeException(
-                    ("cannot remove file " + stat.getFileURL() + ": "
-                     + OUString::valueOf(static_cast< sal_Int32 >(rc))),
-                    css::uno::Reference< css::uno::XInterface >());
-            }
+            SAL_WARN_IF(
+                rc != osl::FileBase::E_None, "desktop",
+                "cannot remove file " << stat.getFileURL() << ": " << +rc);
         }
     }
-    osl::FileBase::RC rc = osl::Directory::remove(url);
+    if (dir.isOpen()) {
+        rc = dir.close();
+        SAL_WARN_IF(
+            rc != osl::FileBase::E_None, "desktop",
+            "cannot close directory " << url << ": " << +rc);
+    }
+    rc = osl::Directory::remove(url);
     SAL_WARN_IF(
         rc != osl::FileBase::E_None, "desktop",
         "cannot remove directory " << url << ": " << +rc);
-        // at least on Windows XP removing some existing directories fails with
-        // osl::FileBase::E_ACCESS because they are read-only; but keeping those
-        // directories around should be harmless once they are empty
 }
 
-// Remove any existing UserInstallation's user/extensions/bundled cache
-// remaining from old installations.  Apparently due to the old
-// share/prereg/bundled mechanism (disabled since
-// 5c47e5f63a79a9e72ec4a100786b1bbf65137ed4 "fdo#51252 Disable copying
-// share/prereg/bundled to avoid startup crashes"), that cache could contain
-// corrupted information (like a UNO component registered twice, which got
-// changed from active to passive registration in one LO version, but the
-// version of the corresponding bundled extension only incremented in a later LO
-// version).  At least in theory, this function could be removed again once no
-// UserInstallation can be poisoned by that old share/prereg/bundled mechanism
-// any more.  (But then Desktop::SynchronizeExtensionRepositories might need to
-// be revisited, see 2d2b19dea1ab401b1b4971ff5b12b87bb11fd666 "Force
-// ExtensionManager resync when the implementation changes" which effectively
-// got reverted again now.  Now, a mismatch between a UserInstallation's
-// user/extensions/bundled and an installation's share/extensions will always be
-// detected here and lead to a removal of user/extensions/bundled, so that
-// Desktop::SynchronizeExtensionRepositories will then definitely resync
-// share/extensions.)
+// Remove any existing UserInstallation's extensions cache data remaining from
+// old installations.  This addresses at least two problems:
+//
+// For one, apparently due to the old share/prereg/bundled mechanism (disabled
+// since 5c47e5f63a79a9e72ec4a100786b1bbf65137ed4 "fdo#51252 Disable copying
+// share/prereg/bundled to avoid startup crashes"), the user/extensions/bundled
+// cache could contain corrupted information (like a UNO component registered
+// twice, which got changed from active to passive registration in one LO
+// version, but the version of the corresponding bundled extension only
+// incremented in a later LO version).
+//
+// For another, UserInstallations have been seen in the wild where no extensions
+// were installed per-user (any longer), but user/uno_packages/cache/registry/
+// com.sun.star.comp.deployment.component.PackageRegistryBackend/*.rdb files
+// contained data nevertheless.
+//
+// When a LO upgrade is detected (i.e., no/ user/extensions/bundled/buildid or
+// one containing an old build ID), then user/extensions/bundled,
+// user/extensions/shared, and user/uno_packages/cache/registry/
+// com.sun.star.comp.deployment.component.PackageRegistryBackend/unorc are
+// removed.  That should prevent any problems starting the service manager due
+// to old junk.  Later on in Desktop::SynchronizeExtensionRepositories, the
+// removed cache data is recreated.
+//
 // As a special case, if you create a UserInstallation with LO >= 3.6.1, then
 // run an old LO <= 3.5.x using share/prereg/bundled on the same
 // UserInstallation (so that it partially overwrites user/extensions/bundled,
@@ -235,33 +239,50 @@ void removeTree(OUString const & url) {
 // <= 3.5.x messed with user/extensions/bundled in the meantime, then it would
 // have rewritten the unorc (dropping the token), and LO >= 3.6.1 can detect
 // that.
-void refreshBundledExtensionsDir() {
+//
+// Multiple instances of soffice.bin can execute this code in parallel for a
+// single UserInstallation, as it is called before OfficeIPCThread is set up.
+// Therefore, any errors here only lead to SAL_WARNs.
+//
+// At least in theory, this function could be removed again once no
+// UserInstallation can be poisoned by old junk any more.
+bool cleanExtensionCache() {
     OUString buildId(
         "${$BRAND_BASE_DIR/program/" SAL_CONFIGFILE("version") ":buildid}");
     rtl::Bootstrap::expandMacros(buildId); //TODO: detect failure
-    OUString dir("$BUNDLED_EXTENSIONS_USER");
-    rtl::Bootstrap::expandMacros(dir); //TODO: detect failure
-    OUString url(dir + "/buildid");
-    OUString nonPrereg(
-        "${$BUNDLED_EXTENSIONS_USER/registry/"
-        "com.sun.star.comp.deployment.component.PackageRegistryBackend/unorc:"
-        "LIBO_NON_PREREG_BUNDLED_EXTENSIONS}");
-    rtl::Bootstrap::expandMacros(nonPrereg);
-    if (nonPrereg == "TRUE") {
-        osl::File f(url);
-        switch (f.open(osl_File_OpenFlag_Read)) {
+    OUString extDir(
+        "${$BRAND_BASE_DIR/program/" SAL_CONFIGFILE("bootstrap")
+        ":UserInstallation}/user/extensions");
+    rtl::Bootstrap::expandMacros(extDir); //TODO: detect failure
+    OUString bundledDir = extDir + "/bundled";
+    OUString buildIdFile(bundledDir + "/buildid");
+    OUString bundledRcFile(
+        "$BUNDLED_EXTENSIONS_USER/registry/"
+        "com.sun.star.comp.deployment.component.PackageRegistryBackend/unorc");
+    rtl::Bootstrap::expandMacros(bundledRcFile); //TODO: detect failure
+    rtl::Bootstrap bundledRc(bundledRcFile);
+    OUString nonPrereg;
+    if (bundledRc.getHandle() == 0
+        || (bundledRc.getFrom("LIBO_NON_PREREG_BUNDLED_EXTENSIONS", nonPrereg)
+            && nonPrereg == "TRUE"))
+    {
+        osl::File f(buildIdFile);
+        osl::FileBase::RC rc = f.open(osl_File_OpenFlag_Read);
+        switch (rc) {
         case osl::FileBase::E_None:
             {
                 rtl::ByteSequence s1;
-                osl::FileBase::RC rc = f.readLine(s1);
-                if (f.close() != osl::FileBase::E_None) {
-                    SAL_WARN(
-                        "desktop", "cannot close " + url + " after reading");
-                }
+                rc = f.readLine(s1);
+                osl::FileBase::RC rc2 = f.close();
+                SAL_WARN_IF(
+                    rc2 != osl::FileBase::E_None, "desktop",
+                    "cannot close " << buildIdFile << " after reading: "
+                        << +rc2);
                 if (rc != osl::FileBase::E_None) {
-                    throw css::uno::RuntimeException(
-                        "cannot read from " + url,
-                        css::uno::Reference< css::uno::XInterface >());
+                    SAL_WARN(
+                        "desktop",
+                        "cannot read from " << buildIdFile << ": " << +rc);
+                    break;
                 }
                 OUString s2(
                     reinterpret_cast< char const * >(s1.getConstArray()),
@@ -269,53 +290,56 @@ void refreshBundledExtensionsDir() {
                     // using ISO 8859-1 avoids any and all conversion errors;
                     // the content should only be a subset of ASCII, anyway
                 if (s2 == buildId) {
-                    return;
+                    return false;
                 }
                 break;
             }
         case osl::FileBase::E_NOENT:
             break;
         default:
-            throw css::uno::RuntimeException(
-                "cannot open " + url + " for reading",
-                css::uno::Reference< css::uno::XInterface >());
+            SAL_WARN(
+                "desktop",
+                "cannot open " << buildIdFile << " for reading: " << +rc);
+            break;
         }
     }
-    removeTree(dir);
-    switch (osl::Directory::createPath(dir)) {
-    case osl::FileBase::E_None:
-    case osl::FileBase::E_EXIST:
-        break;
-    default:
-        throw css::uno::RuntimeException(
-            "cannot create path " + dir,
-            css::uno::Reference< css::uno::XInterface >());
-    }
-    osl::File f(url);
-    if (f.open(osl_File_OpenFlag_Write | osl_File_OpenFlag_Create) !=
-        osl::FileBase::E_None)
-    {
-        throw css::uno::RuntimeException(
-            "cannot open " + url + " for writing",
-            css::uno::Reference< css::uno::XInterface >());
+    removeTree(extDir);
+    OUString userRcFile(
+        "$UNO_USER_PACKAGES_CACHE/registry/"
+        "com.sun.star.comp.deployment.component.PackageRegistryBackend/unorc");
+    rtl::Bootstrap::expandMacros(userRcFile); //TODO: detect failure
+    osl::FileBase::RC rc = osl::File::remove(userRcFile);
+    SAL_WARN_IF(
+        rc != osl::FileBase::E_None && rc != osl::FileBase::E_NOENT, "desktop",
+        "cannot remove file " << userRcFile << ": " << +rc);
+    rc = osl::Directory::createPath(bundledDir);
+    SAL_WARN_IF(
+        rc != osl::FileBase::E_None && rc != osl::FileBase::E_EXIST, "desktop",
+        "cannot create path " << bundledDir << ": " << +rc);
+    osl::File f(buildIdFile);
+    rc = f.open(osl_File_OpenFlag_Write | osl_File_OpenFlag_Create);
+    if (rc != osl::FileBase::E_None) {
+        SAL_WARN(
+            "desktop",
+            "cannot open " << buildIdFile << " for writing: " << +rc);
+        return true;
     }
     OString buf(OUStringToOString(buildId, RTL_TEXTENCODING_UTF8));
         // using UTF-8 avoids almost all conversion errors (and buildid
         // containing single surrogate halves should never happen, anyway); the
         // content should only be a subset of ASCII, anyway
-    sal_uInt64 n;
-    if (f.write(buf.getStr(), buf.getLength(), n) != osl::FileBase::E_None
-        || n != static_cast< sal_uInt32 >(buf.getLength()))
-    {
-        throw css::uno::RuntimeException(
-            "cannot write to " + url,
-            css::uno::Reference< css::uno::XInterface >());
-    }
-    if (f.close() != osl::FileBase::E_None) {
-        throw css::uno::RuntimeException(
-            "cannot close " + url + " after writing",
-            css::uno::Reference< css::uno::XInterface >());
-    }
+    sal_uInt64 n = 0;
+    rc = f.write(buf.getStr(), buf.getLength(), n);
+    SAL_WARN_IF(
+        (rc != osl::FileBase::E_None
+         || n != static_cast< sal_uInt32 >(buf.getLength())),
+        "desktop",
+        "cannot write to " << buildIdFile << ": " << +rc << ", " << n);
+    rc = f.close();
+    SAL_WARN_IF(
+        rc != osl::FileBase::E_None, "desktop",
+        "cannot close " << buildIdFile << " after writing: " << +rc);
+    return true;
 }
 
 }
@@ -543,7 +567,8 @@ rtl::OUString ReplaceStringHookProc( const rtl::OUString& rStr )
 }
 
 Desktop::Desktop()
-: m_bServicesRegistered( false )
+: m_bCleanedExtensionCache( false )
+, m_bServicesRegistered( false )
 , m_aBootstrapError( BE_OK )
 {
     RTL_LOGFILE_TRACE( "desktop (cd100003) ::Desktop::Desktop" );
@@ -561,7 +586,7 @@ void Desktop::Init()
     RTL_LOGFILE_CONTEXT( aLog, "desktop (cd100003) ::Desktop::Init" );
     SetBootstrapStatus(BS_OK);
 
-    refreshBundledExtensionsDir();
+    m_bCleanedExtensionCache = cleanExtensionCache();
 
     // We need to have service factory before going further, but see fdo#37195.
     // Doing this will mmap common.rdb, making it not overwritable on windows,
