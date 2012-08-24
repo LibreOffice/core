@@ -72,9 +72,15 @@ class SwPaMPrinter(object):
         return "%s" % (self.typename)
 
     def children(self):
+        next_ = self.value['pNext']
+        prev  = self.value['pPrev']
         point = self.value['m_pPoint'].dereference()
         mark = self.value['m_pMark'].dereference()
         children = [ ( 'point', point), ( 'mark', mark ) ]
+        if next_ != self.value.address:
+            children.append(("next", next_))
+        if prev != self.value.address:
+            children.append(("prev", prev))
         return children.__iter__()
 
 class SwRectPrinter(object):
