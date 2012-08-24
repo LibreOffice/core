@@ -76,6 +76,7 @@ ThumbnailView::~ThumbnailView()
 
     delete mpScrBar;
     delete mpItemAttrs;
+    delete mpProcessor;
 
     ImplDeleteItems();
 }
