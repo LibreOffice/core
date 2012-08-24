@@ -29,7 +29,6 @@ public class CGLetter extends ConfigGroup
     public boolean cp_PaperCompanyAddressReceiverField;
     public boolean cp_PaperFooter;
     public double cp_PaperFooterHeight;
-    public int cp_Norm;
     public boolean cp_PrintCompanyLogo;
     public boolean cp_PrintCompanyAddressReceiverField;
     public boolean cp_PrintLetterSigns;

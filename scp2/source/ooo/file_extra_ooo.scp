@@ -366,30 +366,27 @@ File gid_File_Extra_Tplwizdesktop
 End
 
 File gid_File_Extra_Tplwizletter
-    Dir = gid_Dir_Share_Template_Wizard_Letter;
+    Dir = gid_Dir_Share_Template_Common_Wizard_Letter;
     ARCHIVE_TXT_FILE_BODY;
     Name = "tplwizletter.zip";
 End
 
-File gid_File_Extra_Tplwizfax_Lang
-    Dir = gid_Dir_Template_Wizard_Fax;
-    TXT_FILE_BODY;
-    Styles = (ARCHIVE, DONT_OVERWRITE);
-    EXTRA_ALL_LANG(tplwizfax,zip);
+File gid_File_Extra_Tplwizfax
+    Dir = gid_Dir_Share_Template_Common_Wizard_Fax;
+    ARCHIVE_TXT_FILE_BODY;
+    Name = "tplwizfax.zip";
 End
 
-File gid_File_Extra_Tplwizagenda_Lang
-    Dir = gid_Dir_Template_Wizard_Agenda;
-    TXT_FILE_BODY;
-    Styles = (ARCHIVE, DONT_OVERWRITE);
-    EXTRA_ALL_LANG(tplwizagenda,zip);
+File gid_File_Extra_Tplwizagenda
+    Dir = gid_Dir_Share_Template_Common_Wizard_Agenda;
+    ARCHIVE_TXT_FILE_BODY;
+    Name = "tplwizagenda.zip";
 End
 
-File gid_File_Extra_Tplwizreport_Lang
-    Dir = gid_Dir_Template_Wizard_Report;
-    TXT_FILE_BODY;
-    Styles = (ARCHIVE, DONT_OVERWRITE);
-    EXTRA_ALL_LANG(tplwizreport,zip);
+File gid_File_Extra_Tplwizreport
+    Dir = gid_Dir_Share_Template_Common_Wizard_Report;
+    ARCHIVE_TXT_FILE_BODY;
+    Name ="tplwizreport.zip";
 End
 
 File gid_File_Extra_Tplwizstyles_Lang

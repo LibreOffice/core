@@ -66,7 +66,6 @@ public abstract class LetterWizardDialog extends WizardDialog implements LetterW
     XFixedText lblAddressX;
     XFixedText lblAddressY;
     XFixedText lblTitle2;
-    XListBox lstLetterNorm;
     XCheckBox chkUseLogo;
     XCheckBox chkUseAddressReceiver;
     XCheckBox chkUseSigns;
@@ -77,7 +76,6 @@ public abstract class LetterWizardDialog extends WizardDialog implements LetterW
     XCheckBox chkUseGreeting;
     XComboBox lstGreeting;
     XCheckBox chkUseFooter;
-    XFixedText lblLetterNorm;
     XFixedText lblTitle3;
     XRadioButton optSenderPlaceholder;
     XRadioButton optSenderDefine;
@@ -262,7 +260,7 @@ public abstract class LetterWizardDialog extends WizardDialog implements LetterW
                 });
         ImageControl3 = insertInfoImage(92, 145, 1);
 
-//    ImageControl3 = insertImage("ImageControl3", 
+//    ImageControl3 = insertImage("ImageControl3",
 //      new String[] {PropertyNames.PROPERTY_BORDER, PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_IMAGEURL, PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, "ScaleImage", PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH},
 //      new Object[] { new Short((short)0), INTEGERS[10],"private:resource/dbu/image/19205","ImageControl3",92,145,Boolean.FALSE,INTEGERS[1],new Short((short)81),INTEGERS[10]}
 //    );
@@ -499,15 +497,6 @@ public abstract class LetterWizardDialog extends WizardDialog implements LetterW
 
     public void buildStep3()
     {
-        lstLetterNorm = insertListBox("lstLetterNorm", LSTLETTERNORM_ACTION_PERFORMED, LSTLETTERNORM_ITEM_CHANGED,
-                new String[]
-                {
-                    "Dropdown", PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
-                },
-                new Object[]
-                {
-                    Boolean.TRUE, INTEGER_12, HelpIds.getHelpIdString(HID + 21), "lstLetterNorm", 210, 34, INTEGERS[3], new Short((short) 21), 74
-                });
         chkUseLogo = insertCheckBox("chkUseLogo", CHKUSELOGO_ITEM_CHANGED,
                 new String[]
                 {
@@ -597,15 +586,6 @@ public abstract class LetterWizardDialog extends WizardDialog implements LetterW
                 new Object[]
                 {
                     INTEGERS[8], HelpIds.getHelpIdString(HID + 31), resources.reschkUseFooter_value, "chkUseFooter", 97, 158, new Short((short) 0), INTEGERS[3], new Short((short) 31), 212
-                });
-        lblLetterNorm = insertLabel("lblLetterNorm",
-                new String[]
-                {
-                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_MULTILINE, PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
-                },
-                new Object[]
-                {
-                    INTEGER_16, resources.reslblLetterNorm_value, Boolean.TRUE, "lblLetterNorm", 97, 28, INTEGERS[3], new Short((short) 50), 109
                 });
         lblTitle3 = insertLabel("lblTitle3",
                 new String[]

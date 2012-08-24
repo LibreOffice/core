@@ -481,6 +481,8 @@ public class ReportWizard extends DatabaseObjectWizard implements XTextListener
             {
                 buildSteps();
 
+                CurReportLayouter.drawConstants();
+
                 m_reportDocument.checkInvariants();
 
                 this.CurDBCommandFieldSelection.preselectCommand(m_wizardContext, false);
@@ -553,7 +555,6 @@ public class ReportWizard extends DatabaseObjectWizard implements XTextListener
         {
             m_reportDocument.getRecordParser().addReportDocument(m_reportDocument.getComponent(), false);
         }
-
         m_reportDocument.getRecordParser().dispose();
     }
 
@@ -735,6 +736,7 @@ public class ReportWizard extends DatabaseObjectWizard implements XTextListener
         {
         }
     }
+
 //    public void tests()
 //    {
 //
@@ -752,7 +754,7 @@ public class ReportWizard extends DatabaseObjectWizard implements XTextListener
 //        long nTime = aDate.getTime();
 //        Long aLong = new Long(nTime);
 //        String aStr = aLong.toString();
-//        
+//
 //        Date aNewDate = new Date(1202382900000L);
 ////         aNewDate.
 //        String aDateStr = aNewDate.toString();

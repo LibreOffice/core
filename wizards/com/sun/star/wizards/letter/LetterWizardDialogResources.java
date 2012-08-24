@@ -96,6 +96,9 @@ public class LetterWizardDialogResources extends Resource
     String reslblTitle5_value;
     String reslblTitle6_value;
 
+    String resSubjectconstPlaceHolder = "#subjectconst#";
+    String resSubjectconstPlaceHolder_value;
+
     public LetterWizardDialogResources(XMultiServiceFactory xmsf)
     {
         super(xmsf, UNIT_NAME, MODULE_NAME);
@@ -158,6 +161,8 @@ public class LetterWizardDialogResources extends Resource
         reslblTitle4_value = getResText(RID_LETTERWIZARDDIALOG_START + 56);
         reslblTitle5_value = getResText(RID_LETTERWIZARDDIALOG_START + 57);
         reslblTitle6_value = getResText(RID_LETTERWIZARDDIALOG_START + 58);
+
+        resSubjectconstPlaceHolder_value = getResText(RID_LETTERWIZARDDIALOG_START + 59);
 
         loadRoadmapResources();
         loadSalutationResources();

@@ -53,13 +53,13 @@ import com.sun.star.wizards.ui.UnoDialog2;
 import com.sun.star.wizards.ui.event.DataAware;
 
 /**
- * 
- * The classes here implement the whole document-functionality of the agenda wizard: 
+ *
+ * The classes here implement the whole document-functionality of the agenda wizard:
  * the live-preview and the final "creation" of the document, when the user clicks "finish". <br/>
  * <br/>
  * <h2>Some terminology:<h2/>
  * items are names or headings. we don't make any distinction.
- * 
+ *
  * <br/>
  * The Agenda Template is used as general "controller" of the whole document, whereas the
  * two child-classes ItemsTable and TopicsTable control the item tables (note plural!) and the
@@ -93,7 +93,7 @@ import com.sun.star.wizards.ui.event.DataAware;
  * Many methods here are synchronized, in order to avoid colission made by
  * events fired too often.
  * @author rpiterman
- *  
+ *
  */
 public class AgendaTemplate extends TextDocument implements TemplateConsts, DataAware.Listener
 {
@@ -120,10 +120,10 @@ public class AgendaTemplate extends TextDocument implements TemplateConsts, Data
      * The template-filename of the current template.
      * Since we often re-link section and the break the link,
      * inorder to restore them, we need a template to link to.
-     * This is practically an identicall copy of the current template. 
+     * This is practically an identicall copy of the current template.
      */
     String template;
-    /** 
+    /**
      * used for common operations on sections.
      */
     TextSectionHandler textSectionHandler;
@@ -132,8 +132,8 @@ public class AgendaTemplate extends TextDocument implements TemplateConsts, Data
      */
     XComponentLoader xComponentLoader;
     /**
-     * an array containing all ItemTable object (which control each an Items 
-     * Table in the document. 
+     * an array containing all ItemTable object (which control each an Items
+     * Table in the document.
      */
     ItemsTable[] itemsTables;
     /**
@@ -155,13 +155,26 @@ public class AgendaTemplate extends TextDocument implements TemplateConsts, Data
      * A temporary variable used to list all items and map them.
      */
     List<XTextRange> _allItems = new ArrayList<XTextRange>();
-    /** 
-     * keep a reference on some static items in the document, 
+    List<XTextRange> constItems = new ArrayList<XTextRange>();
+    /**
+     * keep a reference on some static items in the document,
      * so when their content is changed (through the user), we
      * can just reference them and set their text.
      */
     TextElement teTitle, teDate, teTime, teLocation;
     XTextRange trTitle, trDate, trTime, trLocation;
+
+    TextElement teDateTitle, teTimeTitle, teLocationTitle, teTopics, teNum, teTopicHeader, teResponsibleHeader, teTimeHeader, teAdditionalInformation, teMinutesFor, teDiscussion, teConclusion, teToDo, teResponsibleParty, teDeadline;
+
+    XTextRange trDateTitle, trTimeTitle, trLocationTitle, trTopics, trNum, trTopicHeader, trResponsibleHeader, trTimeHeader, trAdditionalInformation, trMinutesFor, trDiscussion, trConclusion, trToDo, trResponsibleParty, trDeadline;
+
+    List<TextElement> teTopicList = new ArrayList<TextElement>();
+    List<TextElement> teResponsibleList = new ArrayList<TextElement>();
+    List<TextElement> teTimeList = new ArrayList<TextElement>();
+    List<XTextRange> trTopicList = new ArrayList<XTextRange>();
+    List<XTextRange> trResponsibleList = new ArrayList<XTextRange>();
+    List<XTextRange> trTimeList = new ArrayList<XTextRange>();
+
     /**
      * used to format the date / time.
      */
@@ -184,6 +197,45 @@ public class AgendaTemplate extends TextDocument implements TemplateConsts, Data
      * @see #initialize()
      * @see #initializeData(List)
      */
+    public void clearConstants()
+    {
+      teDateTitle = null;
+      teTimeTitle = null;
+      teLocationTitle = null;
+      teTopics = null;
+      teNum = null;
+      teAdditionalInformation = null;
+      teMinutesFor = null;
+      teDiscussion = null;
+      teConclusion = null;
+      teToDo = null;
+      teResponsibleParty = null;
+      teDeadline = null;
+      trDateTitle = null;
+      trTimeTitle = null;
+      trLocationTitle = null;
+      trTopics = null;
+      trNum = null;
+      trAdditionalInformation = null;
+      trMinutesFor = null;
+      trDiscussion = null;
+      trConclusion = null;
+      trToDo = null;
+      trResponsibleParty = null;
+      trDeadline = null;
+    }
+
+    public void clearTopicConstants()
+    {
+      teTopicList.clear();
+      teResponsibleList.clear();
+      teTimeList.clear();
+
+      trTopicList.clear();
+      trResponsibleList.clear();
+      trTimeList.clear();
+    }
+
     public synchronized void load(String templateURL, List<PropertyValue[]> topics)
     {
         template = calcTemplateName(templateURL);
@@ -218,7 +270,10 @@ public class AgendaTemplate extends TextDocument implements TemplateConsts, Data
      */
     private void initializeData(List<PropertyValue[]> topicsData)
     {
-        for (int i = 0; i < itemsTables.length; i++)
+        //I had to decrease the limit by one, since it affects the
+        //#additional-information# tag for some reason. During the tests,
+        //it was working perfectly this way as well.
+        for (int i = 0; i < itemsTables.length - 1; i++)
         {
             try
             {
@@ -289,8 +344,8 @@ public class AgendaTemplate extends TextDocument implements TemplateConsts, Data
         {
             initItemsCache();
         }
-        _allItems = null;
-
+        _allItems.clear();
+        constItems.clear();
     }
 
     /**
@@ -352,7 +407,7 @@ public class AgendaTemplate extends TextDocument implements TemplateConsts, Data
     }
 
     /**
-     * itemsCache is a Map containing all agenda item. These are object which 
+     * itemsCache is a Map containing all agenda item. These are object which
      * "write themselfs" to the table, given a table cursor.
      * A cache is used in order to reuse the objects, instead of recreate them.
      * This method fills the cache will all items objects (names and headings).
@@ -432,6 +487,9 @@ public class AgendaTemplate extends TextDocument implements TemplateConsts, Data
         XMultiServiceFactory docMSF = UnoRuntime.queryInterface(XMultiServiceFactory.class, document);
         try
         {
+            clearConstants();
+            clearTopicConstants();
+
             Object defaults = docMSF.createInstance("com.sun.star.text.Defaults");
             Locale l = (Locale) Helper.getUnoStructValue(defaults, "CharLocale");
 
@@ -469,12 +527,20 @@ public class AgendaTemplate extends TextDocument implements TemplateConsts, Data
         initItemsCache();
         initializeItems();
         initializeTitles();
+        initializeConstantTitles();
+        initializeConstantTopicTitles();
         initializeItemsSections();
         XMultiServiceFactory xMultiServiceFactory = UnoRuntime.queryInterface(XMultiServiceFactory.class, document);
         textSectionHandler = new TextSectionHandler(xMultiServiceFactory, UnoRuntime.queryInterface(XTextDocument.class, document));
         initializeTopics();
+
+        drawConstants();
+        drawTopicConstants();
+
         _allItems.clear();
-        _allItems = null;
+        //_allItems = null;
+        constItems.clear();
+        //constItems = null;
     }
 
     /**
@@ -517,6 +583,136 @@ public class AgendaTemplate extends TextDocument implements TemplateConsts, Data
                 _allItems.remove(i--);
             }
         }
+     }
+//
+    private void initializeConstantTitles()
+    {
+        XTextRange item = null;
+
+        XMultiServiceFactory xmsf = UnoRuntime.queryInterface(XMultiServiceFactory.class, document);
+
+        for (int i = 0; i < constItems.size(); i++)
+        {
+            item = constItems.get(i);
+            String text = item.getString().trim().toLowerCase();
+            if (text.equals(FILLIN_DATETITLE))
+            {
+                teDateTitle = new PlaceholderTextElement(item, resources.resPlaceHolderDateTitle, resources.resPlaceHolderHint, xmsf);
+                trDateTitle = item;
+                constItems.remove(i--);
+            }
+            else if (text.equals(FILLIN_TIMETITLE))
+            {
+                teTimeTitle = new PlaceholderTextElement(item, resources.resPlaceHolderTimeTitle, resources.resPlaceHolderHint, xmsf);
+                trTimeTitle = item;
+                constItems.remove(i--);
+            }
+            else if (text.equals(FILLIN_LOCATIONTITLE))
+            {
+                teLocationTitle = new PlaceholderTextElement(item, resources.resPlaceHolderLocationTitle, resources.resPlaceHolderHint, xmsf);
+                trLocationTitle = item;
+                constItems.remove(i--);
+            }
+            else if (text.equals(FILLIN_TOPICS))
+            {
+                teTopics = new PlaceholderTextElement(item, resources.resPlaceHolderTopics, resources.resPlaceHolderHint, xmsf);
+                trTopics = item;
+                constItems.remove(i--);
+            }
+            else if (text.equals(FILLIN_NUM))
+            {
+                teNum = new PlaceholderTextElement(item, resources.resPlaceHolderNum, resources.resPlaceHolderHint, xmsf);
+                trNum = item;
+                constItems.remove(i--);
+            }
+            else if (text.equals(FILLIN_ADDITIONAL_INFORMATION))
+            {
+                teAdditionalInformation = new PlaceholderTextElement(item, resources.resPlaceHolderAdditionalInformation, resources.resPlaceHolderHint, xmsf);
+                trAdditionalInformation = item;
+                constItems.remove(i--);
+            }
+            else if (text.equals(FILLIN_MINUTES_FOR))
+            {
+                teMinutesFor = new PlaceholderTextElement(item, resources.resPlaceHolderMinutesFor, resources.resPlaceHolderHint, xmsf);
+                trMinutesFor = item;
+                constItems.remove(i--);
+            }
+            else if (text.equals(FILLIN_DISCUSSION))
+            {
+                teDiscussion = new PlaceholderTextElement(item, resources.resPlaceHolderDiscussion, resources.resPlaceHolderHint, xmsf);
+                trDiscussion = item;
+                constItems.remove(i--);
+            }
+            else if (text.equals(FILLIN_CONCLUSION))
+            {
+                teConclusion = new PlaceholderTextElement(item, resources.resPlaceHolderConclusion, resources.resPlaceHolderHint, xmsf);
+                trConclusion = item;
+                constItems.remove(i--);
+            }
+            else if (text.equals(FILLIN_TO_DO))
+            {
+                teToDo = new PlaceholderTextElement(item, resources.resPlaceHolderToDo, resources.resPlaceHolderHint, xmsf);
+                trToDo = item;
+                constItems.remove(i--);
+            }
+            else if (text.equals(FILLIN_RESPONSIBLE_PARTY))
+            {
+                teResponsibleParty = new PlaceholderTextElement(item, resources.resPlaceHolderResponsibleParty, resources.resPlaceHolderHint, xmsf);
+                trResponsibleParty = item;
+                constItems.remove(i--);
+            }
+            else if (text.equals(FILLIN_DEADLINE))
+            {
+                teDeadline = new PlaceholderTextElement(item, resources.resPlaceHolderDeadline, resources.resPlaceHolderHint, xmsf);
+                trDeadline = item;
+                constItems.remove(i--);
+            }
+//
+        }
+    }
+
+    private void initializeConstantTopicTitles()
+    {
+        XTextRange item = null;
+
+        XMultiServiceFactory xmsf = UnoRuntime.queryInterface(XMultiServiceFactory.class, document);
+
+        for (int i = 0; i < constItems.size(); i++)
+        {
+            item = constItems.get(i);
+            String text = item.getString().trim().toLowerCase();
+
+            if (text.equals(FILLIN_TOPIC))
+            {
+                teTopicHeader = new PlaceholderTextElement(item, resources.resPlaceHolderTopic, resources.resPlaceHolderHint, xmsf);
+                trTopicHeader = item;
+
+                teTopicList.add(teTopicHeader);
+                trTopicList.add(trTopicHeader);
+
+                constItems.remove(i--);
+            }
+            else if (text.equals(FILLIN_RESPONSIBLE))
+            {
+                teResponsibleHeader = new PlaceholderTextElement(item, resources.resPlaceHolderResponsible, resources.resPlaceHolderHint, xmsf);
+                trResponsibleHeader = item;
+
+                teResponsibleList.add(teResponsibleHeader);
+                trResponsibleList.add(trResponsibleHeader);
+
+                constItems.remove(i--);
+            }
+            else if (text.equals(FILLIN_TIME_HEADER))
+            {
+                teTimeHeader = new PlaceholderTextElement(item, resources.resPlaceHolderTime, resources.resPlaceHolderHint, xmsf);
+                trTimeHeader = item;
+
+                teTimeList.add(teTimeHeader);
+                trTimeList.add(trTimeHeader);
+
+                constItems.remove(i--);
+            }
+         }
     }
 
     private void initializeTopics()
@@ -524,22 +720,46 @@ public class AgendaTemplate extends TextDocument implements TemplateConsts, Data
         topics = new Topics();
     }
 
+    public void refreshTopicConstants()
+    {
+      constItems = searchFillInItems(1);
+      clearConstants();
+      initializeConstantTopicTitles();
+      drawTopicConstants();
+    }
+
+    public void refreshConstants()
+    {
+      constItems = searchFillInItems(1);
+      clearTopicConstants();
+      initializeConstantTitles();
+      drawConstants();
+    }
+
     private void initializeItems()
     {
-        _allItems = searchFillInItems();
+        _allItems = searchFillInItems(0);
+        constItems = searchFillInItems(1);
     }
 
     /**
      * searches the document for items in the format "&gt;*&lt;"
      * @return a vector containing the XTextRanges of the found items
      */
-    private List<XTextRange> searchFillInItems()
+    private List<XTextRange> searchFillInItems(int type)
     {
         try
         {
             XSearchable xSearchable = UnoRuntime.queryInterface(XSearchable.class, document);
             XSearchDescriptor sd = xSearchable.createSearchDescriptor();
-            sd.setSearchString("<[^>]+>");
+            if(type == 0)
+            {
+              sd.setSearchString("<[^>]+>");
+            }
+            else if(type == 1)
+            {
+              sd.setSearchString("#[^#]+#");
+            }
             sd.setPropertyValue("SearchRegularExpression", Boolean.TRUE);
             sd.setPropertyValue("SearchWords", Boolean.TRUE);
 
@@ -623,7 +843,6 @@ public class AgendaTemplate extends TextDocument implements TemplateConsts, Data
                 UnoDialog2.getModel(te.Source),
                 PropertyNames.PROPERTY_NAME);
         redrawTitle(controlName);
-
     }
 
     private synchronized void redrawTitle(String controlName)
@@ -647,6 +866,65 @@ public class AgendaTemplate extends TextDocument implements TemplateConsts, Data
         else
         {
             throw new IllegalArgumentException("No such title control...");
+        }
+    }
+
+    public void drawConstants()
+    {
+        if(teDateTitle != null){
+          writeTitle(teDateTitle, trDateTitle, resources.resPlaceHolderDateTitle);
+        }
+        if(teTimeTitle != null){
+          writeTitle(teTimeTitle, trTimeTitle, resources.resPlaceHolderTimeTitle);
+        }
+        if(teLocationTitle != null){
+          writeTitle(teLocationTitle, trLocationTitle, resources.resPlaceHolderLocationTitle);
+        }
+        if(teTopics != null){
+          writeTitle(teTopics, trTopics, resources.resPlaceHolderTopics);
+        }
+        if(teNum != null){
+          writeTitle(teNum, trNum, resources.resPlaceHolderNum);
+        }
+        if(teAdditionalInformation != null){
+          writeTitle(teAdditionalInformation, trAdditionalInformation, resources.resPlaceHolderAdditionalInformation);
+        }
+        if(teMinutesFor != null){
+          writeTitle(teMinutesFor, trMinutesFor, resources.resPlaceHolderMinutesFor);
+        }
+        if(teDiscussion != null){
+          writeTitle(teDiscussion, trDiscussion, resources.resPlaceHolderDiscussion);
+        }
+        if(teConclusion != null){
+          writeTitle(teConclusion, trConclusion, resources.resPlaceHolderConclusion);
+        }
+        if(teToDo != null){
+          writeTitle(teToDo, trToDo, resources.resPlaceHolderToDo);
+        }
+        if(teResponsibleParty != null){
+          writeTitle(teResponsibleParty, trResponsibleParty, resources.resPlaceHolderResponsibleParty);
+        }
+        if(teDeadline != null){
+          writeTitle(teDeadline, trDeadline, resources.resPlaceHolderDeadline);
+        }
+    }
+
+    public void drawTopicConstants()
+    {
+       if(teTopicList != null){
+          for(int i=0; i<teTopicList.size(); ++i){
+            writeTitle(teTopicList.get(i), trTopicList.get(i), resources.resPlaceHolderTopic);
+          }
+        }
+        if(teResponsibleList != null){
+          for(int i=0; i<teResponsibleList.size(); ++i){
+            writeTitle(teResponsibleList.get(i), trResponsibleList.get(i), resources.resPlaceHolderResponsible);
+          }
+        }
+        if(teTimeList != null){
+          for(int i=0; i<teTimeList.size(); ++i){
+            writeTitle(teTimeList.get(i), trTimeList.get(i), resources.resPlaceHolderTimeHeader);
+          }
         }
     }
 
@@ -702,7 +980,7 @@ public class AgendaTemplate extends TextDocument implements TemplateConsts, Data
         textSectionHandler.removeAllTextSections();
     }
 
-    /** 
+    /**
      * hidden sections exist when an item's section is hidden because the
      * user specified not to display any items which it contains.
      * When finishing the wizard removes this sections entireley from the document.
@@ -732,9 +1010,9 @@ public class AgendaTemplate extends TextDocument implements TemplateConsts, Data
 
     /**
      * create the minutes for the given topics or remove the minutes section from the document.
-     * If no topics are supplied, or the user 
-     * specified not to create minuts, the minutes section will be removed, 
-     * @param topicsData supplies PropertyValue arrays containing the values for the topics. 
+     * If no topics are supplied, or the user
+     * specified not to create minuts, the minutes section will be removed,
+     * @param topicsData supplies PropertyValue arrays containing the values for the topics.
      */
     public synchronized void createMinutes(List<PropertyValue[]> topicsData)
     {
@@ -773,7 +1051,7 @@ public class AgendaTemplate extends TextDocument implements TemplateConsts, Data
                 String time;
 
                 // first I replace the minutes titles...
-                List<XTextRange> items = searchFillInItems();
+                List<XTextRange> items = searchFillInItems(0);
                 for (int itemIndex = 0; itemIndex < items.size(); itemIndex++)
                 {
                     item = items.get(itemIndex);
@@ -795,6 +1073,7 @@ public class AgendaTemplate extends TextDocument implements TemplateConsts, Data
                     {
                         fillMinutesItem(item, getTimeString(agenda.cp_Time), resources.resPlaceHolderTime);
                     }
+
                 }
 
                 items.clear();
@@ -803,14 +1082,14 @@ public class AgendaTemplate extends TextDocument implements TemplateConsts, Data
                  * now add minutes for each topic.
                  * The template contains *one* minutes section, so
                  * we first use the one available, and then add a new one...
-                 * 
+                 *
                  * topics data has *always* an empty topic at the end...
                  */
                 for (int i = 0; i < topicsData.size() - 1; i++)
                 {
                     PropertyValue[] topic = topicsData.get(i);
 
-                    items = searchFillInItems();
+                    items = searchFillInItems(0);
                     for (int itemIndex = 0; itemIndex < items.size(); itemIndex++)
                     {
                         item = items.get(itemIndex);
@@ -1016,9 +1295,9 @@ public class AgendaTemplate extends TextDocument implements TemplateConsts, Data
                 /* now go through all items that belong to this
                  * table. Check each one agains the model. If it should
                  * be display, call it's write method.
-                 * All items are of type AgendaItem which means they write 
+                 * All items are of type AgendaItem which means they write
                  * two cells to the table: a title (text) and a placeholder.
-                 * see AgendaItem class below. 
+                 * see AgendaItem class below.
                  */
                 for (int i = 0; i < items.size(); i++)
                 {
@@ -1074,7 +1353,7 @@ public class AgendaTemplate extends TextDocument implements TemplateConsts, Data
                 int rowIndex = getRowIndex(cursor);
                 int rowsCount = getRowCount(UnoRuntime.queryInterface(XTextTable.class, table));
 
-                /* now before deleteing i move the cursor up so it 
+                /* now before deleteing i move the cursor up so it
                  * does not disappear, because it will crash office.
                  */
                 cursor.gotoStart(false);
@@ -1097,7 +1376,7 @@ public class AgendaTemplate extends TextDocument implements TemplateConsts, Data
     /**
      * This class handles the preview of the topics table.
      * You can call it the controller of the topics table.
-     * It differs from ItemsTable in that it has no data model - 
+     * It differs from ItemsTable in that it has no data model -
      * the update is done programttically.<br/>
      * <br/>
      * The decision to make this class a class by its own
@@ -1105,7 +1384,7 @@ public class AgendaTemplate extends TextDocument implements TemplateConsts, Data
      * since there is anyway only one instance of this class at runtime
      * it could have also be implemented in the AgendaTemplate class
      * but for clarity and separation I decided to make a sub class for it.
-     * 
+     *
      * @author rp143992
      */
     public class Topics
@@ -1135,7 +1414,7 @@ public class AgendaTemplate extends TextDocument implements TemplateConsts, Data
         List<AgendaElement> topicCells = new ArrayList<AgendaElement>();
         int rowsPerTopic;
         /**
-         * fields which hold the number of the 
+         * fields which hold the number of the
          * fillins in the cells vectors.
          */
         int numCell = -1;
@@ -1155,7 +1434,7 @@ public class AgendaTemplate extends TextDocument implements TemplateConsts, Data
         /**
          * Analyze the structure of the Topics table.
          * The structure Must be as follows:<br>
-         * -One Header Row. <br> 
+         * -One Header Row. <br>
          * -arbitrary number of rows per topic <br>
          * -arbitrary content in the topics row <br>
          * -only soft formatting will be restored. <br>
@@ -1213,7 +1492,7 @@ public class AgendaTemplate extends TextDocument implements TemplateConsts, Data
             }
 
             /*
-             * in the topics table, there are always one 
+             * in the topics table, there are always one
              * title row and three topics defined.
              * So no mutter how many rows a topic takes - we
              * can restore its structure and format.
@@ -1264,7 +1543,7 @@ public class AgendaTemplate extends TextDocument implements TemplateConsts, Data
 
 
 
-            /* now that we know how the topics look like, 
+            /* now that we know how the topics look like,
              * we get the format of the first and last rows.
              */
 
@@ -1340,8 +1619,8 @@ public class AgendaTemplate extends TextDocument implements TemplateConsts, Data
         /**
          * check if the topic with the given index is written to the table.
          * @param topic the topic number (0 base)
-         * @return true if the topic is already written to the table. False if not. 
-         * (false would mean new rows must be added to the table in order to 
+         * @return true if the topic is already written to the table. False if not.
+         * (false would mean new rows must be added to the table in order to
          * be able to write this topic).
          */
         private boolean isWritten(int topic)
@@ -1351,11 +1630,11 @@ public class AgendaTemplate extends TextDocument implements TemplateConsts, Data
 
         /**
          * rewrites a single cell containing.
-         * This is used in order to refresh the topic/responsible/duration data in the 
+         * This is used in order to refresh the topic/responsible/duration data in the
          * preview document, in response to a change in the gui (by the user).
          * Since the structure of the topics table is flexible, we don't reference a cell
          * number. Rather, we use "what" argument to specify which cell should be redrawn.
-         * The Topics object, which analyzed the structure of the topics table appon 
+         * The Topics object, which analyzed the structure of the topics table appon
          * initialization, refreshes the approperiate cell.
          * @param topic index of the topic (0 based).
          * @param what 0 for num, 1 for topic, 2 for responsible, 3 for duration
@@ -1415,10 +1694,10 @@ public class AgendaTemplate extends TextDocument implements TemplateConsts, Data
          * writes the given topic.
          * if the first topic was involved, reformat the
          * first row.
-         * If any rows were added to the table, reformat 
-         * the last row. 
+         * If any rows were added to the table, reformat
+         * the last row.
          * @param topic the index of the topic to write.
-         * @param data the topic's data. (see TopicsControl 
+         * @param data the topic's data. (see TopicsControl
          * for explanation about the topics data model)
          * @throws Exception if something goes wrong (though nothing should).
          */
@@ -1470,10 +1749,10 @@ public class AgendaTemplate extends TextDocument implements TemplateConsts, Data
          * number of actuall topics it does *not* add
          * new rows !
          * Note also that the first topic will never be removed.
-         * If the table contains no topics, the whole section will 
+         * If the table contains no topics, the whole section will
          * be removed uppon finishing.
          * The reason for that is a "table-design" one: the first topic is
-         * maintained in order to be able to add rows with a design of this topic, 
+         * maintained in order to be able to add rows with a design of this topic,
          * and not of the header row.
          * @param topics the number of topics the table should contain.
          * @throws Exception
@@ -1520,7 +1799,7 @@ public class AgendaTemplate extends TextDocument implements TemplateConsts, Data
         /**
          * returns a text element for the given cell,
          * which will write the given text.
-         * @param cell the topics cell number. 
+         * @param cell the topics cell number.
          * @param value the value to write.
          * @return a TextElement object which will write the given value
          * to the given cell.
@@ -1543,7 +1822,7 @@ public class AgendaTemplate extends TextDocument implements TemplateConsts, Data
          * formats a series of cells from the given one,
          * using the given List of TableCellFormatter objects,
          * in the given order.
-         * This method is used to format the first (header) and the last 
+         * This method is used to format the first (header) and the last
          * rows of the table.
          * @param cursor a table cursor, pointing to the start cell to format
          * @param formats a List containing TableCellFormatter objects. Each will format one cell in the direction specified.
@@ -1642,7 +1921,7 @@ public class AgendaTemplate extends TextDocument implements TemplateConsts, Data
     }
 
     /**
-     * returns the rows count of this table, assuming 
+     * returns the rows count of this table, assuming
      * there is no vertical merged cells.
      * @param table
      * @return the rows count of the given table.
@@ -1656,11 +1935,11 @@ public class AgendaTemplate extends TextDocument implements TemplateConsts, Data
 
 /*
  * ===========================================================================================
- * 
+ *
  *                  End of AgendaTempalte class
- *  
+ *
  * ===========================================================================================
- * 
+ *
  */
 /*
  * =================================
@@ -1668,7 +1947,7 @@ public class AgendaTemplate extends TextDocument implements TemplateConsts, Data
  * =================================
  */
 /**
- * Interface that is used for writing content to a Uno Text / TextRange 
+ * Interface that is used for writing content to a Uno Text / TextRange
  * @author rp143992
  *
  */
@@ -1685,8 +1964,8 @@ interface AgendaElement
  * =================================
  */
 /**
- * Basic implementation of the AgendaElement interface - 
- * writes nothing, but applies a ParaStyle to the given XText/XTextRange 
+ * Basic implementation of the AgendaElement interface -
+ * writes nothing, but applies a ParaStyle to the given XText/XTextRange
  * @author rp143992
  *
  * TODO To change the template for this generated type comment go to
@@ -1814,7 +2093,7 @@ class PlaceholderTextElement extends TextElement
  *  The PlaceHolder class
  * =================================
  */
-/** 
+/**
  * An Agenda element which writes no text, but inserts a placeholder, and formats
  * it using a ParaStyleName.
  * @author rp143992
@@ -1858,7 +2137,7 @@ class PlaceholderElement extends ParaStyled
  * =================================
  */
 /**
- * An implementation of AgendaElement which 
+ * An implementation of AgendaElement which
  * gets as a parameter a table cursor, and writes
  * a text to the cell marked by this table cursor, and
  * a place holder to the next cell.
@@ -1945,6 +2224,6 @@ class TableCellFormatter
     }
 }
 
-    
+
 
 

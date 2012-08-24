@@ -24,6 +24,19 @@ import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.wizards.common.*;
 import com.sun.star.wizards.ui.*;
 
+import com.sun.star.uno.AnyConverter;
+import com.sun.star.uno.UnoRuntime;
+import com.sun.star.uno.XComponentContext;
+import com.sun.star.util.XSearchable;
+import com.sun.star.util.XSearchDescriptor;
+import com.sun.star.container.XIndexAccess;
+import com.sun.star.text.*;
+import com.sun.star.wizards.text.*;
+import com.sun.star.wizards.common.TextElement;
+import com.sun.star.wizards.common.PlaceholderTextElement;
+import java.util.List;
+import java.util.ArrayList;
+
 public class ReportLayouter
 {
 
@@ -52,6 +65,9 @@ public class ReportLayouter
     Object aOrientationImage;
     // boolean m_bLandscape = true;
     private XMultiServiceFactory m_xMSF;
+    private XTextRange          trTitleconst, trAuthorconst, trDateconst, trPageconst;
+    private TextElement         teTitleconst, teAuthorconst, teDateconst, tePageconst;
+    private List<XTextRange>    constRangeList = new ArrayList<XTextRange>();
 
     public ReportLayouter(XMultiServiceFactory _xMSF, IReportDocument _CurReportDocument, UnoDialog _CurUnoDialog)
     {
@@ -249,6 +265,8 @@ public class ReportLayouter
                         {
                             iOldContentPos = iPos;
                             CurReportDocument.liveupdate_changeContentTemplate(ContentFiles[1][iPos]);
+                            clearConstants();
+                            drawConstants();
                         }
                         break;
 
@@ -258,6 +276,8 @@ public class ReportLayouter
                         {
                             iOldLayoutPos = iPos;
                             CurReportDocument.liveupdate_changeLayoutTemplate(LayoutFiles[1][iPos]/*, Desktop.getBitmapPath(m_xMSF)*/);
+                            clearConstants();
+                            drawConstants();
                         }
                         break;
 
@@ -327,6 +347,106 @@ public class ReportLayouter
             }
 //                CurReportDocument.getDoc().unlockallControllers();
             Helper.setUnoPropertyValue(CurUnoDialog.xDialogModel, PropertyNames.PROPERTY_ENABLED, Boolean.TRUE);
+        }
+    }
+
+    public void drawConstants()
+    {
+            constRangeList = searchFillInItems(1);
+
+            XTextRange item = null;
+
+            for (int i = 0; i < constRangeList.size(); i++)
+            {
+                item = constRangeList.get(i);
+                String text = item.getString().trim().toLowerCase();
+                if (text.equals("#titleconst#"))
+                {
+                    teTitleconst = new PlaceholderTextElement(item, CurUnoDialog.m_oResource.getResText(UIConsts.RID_REPORT + 86), PropertyNames.EMPTY_STRING, m_xMSF);
+                    trTitleconst = item;
+                    constRangeList.remove(i--);
+                    writeTitle(teTitleconst, trTitleconst, CurUnoDialog.m_oResource.getResText(UIConsts.RID_REPORT + 86));
+                }
+                else if (text.equals("#authorconst#"))
+                {
+                    teAuthorconst = new PlaceholderTextElement(item, CurUnoDialog.m_oResource.getResText(UIConsts.RID_REPORT + 87), PropertyNames.EMPTY_STRING, m_xMSF);
+                    trAuthorconst = item;
+                    constRangeList.remove(i--);
+                    writeTitle(teAuthorconst, trAuthorconst, CurUnoDialog.m_oResource.getResText(UIConsts.RID_REPORT + 87));
+                }
+                else if (text.equals("#dateconst#"))
+                {
+                    teDateconst = new PlaceholderTextElement(item, CurUnoDialog.m_oResource.getResText(UIConsts.RID_REPORT + 88), PropertyNames.EMPTY_STRING, m_xMSF);
+                    trDateconst = item;
+                    constRangeList.remove(i--);
+                    writeTitle(teDateconst, trDateconst, CurUnoDialog.m_oResource.getResText(UIConsts.RID_REPORT + 88));
+                }
+                else if (text.equals("#pageconst#"))
+                {
+                    tePageconst = new PlaceholderTextElement(item, CurUnoDialog.m_oResource.getResText(UIConsts.RID_REPORT + 93), PropertyNames.EMPTY_STRING, m_xMSF);
+                    trPageconst = item;
+                    constRangeList.remove(i--);
+                    writeTitle(tePageconst, trPageconst, CurUnoDialog.m_oResource.getResText(UIConsts.RID_REPORT + 93));
+                }
+            }
+    }
+
+    public void clearConstants()
+    {
+        constRangeList.clear();
+        trTitleconst = null;
+        teTitleconst = null;
+        trAuthorconst = null;
+        teAuthorconst = null;
+        trDateconst = null;
+        teDateconst = null;
+        trPageconst = null;
+        tePageconst = null;
+    }
+
+    private void writeTitle(TextElement te, XTextRange tr, String text)
+    {
+        te.setText(text == null ? PropertyNames.EMPTY_STRING : text);
+        te.write(tr);
+    }
+
+    public List<XTextRange> searchFillInItems(int type)
+    {
+      try
+      {
+            XSearchable xSearchable = UnoRuntime.queryInterface(XSearchable.class, CurReportDocument.getComponent());
+            XSearchDescriptor sd = xSearchable.createSearchDescriptor();
+
+            if(type == 0)
+            {
+              sd.setSearchString("<[^>]+>");
+            }
+            else if(type == 1)
+            {
+              sd.setSearchString("#[^#]+#");
+            }
+            sd.setPropertyValue("SearchRegularExpression", Boolean.TRUE);
+            sd.setPropertyValue("SearchWords", Boolean.TRUE);
+
+            XIndexAccess ia = xSearchable.findAll(sd);
+            List<XTextRange> l = new ArrayList<XTextRange>(ia.getCount());
+            for (int i = 0; i < ia.getCount(); i++)
+            {
+                try
+                {
+                    l.add(UnoRuntime.queryInterface(XTextRange.class, ia.getByIndex(i)));
+                }
+                catch (Exception ex)
+                {
+                    System.err.println("Nonfatal Error in finding fillins.");
+                }
+            }
+            return l;
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+            throw new IllegalArgumentException("Fatal Error: Loading template failed: searching fillins failed");
         }
     }
 }

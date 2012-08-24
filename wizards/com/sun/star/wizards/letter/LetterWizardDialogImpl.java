@@ -17,6 +17,7 @@
  */
 package com.sun.star.wizards.letter;
 
+import java.util.List;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -30,7 +31,6 @@ import com.sun.star.container.NoSuchElementException;
 import com.sun.star.document.MacroExecMode;
 import com.sun.star.document.XDocumentProperties;
 import com.sun.star.document.XDocumentPropertiesSupplier;
-import com.sun.star.lang.IllegalArgumentException;
 import com.sun.star.lang.WrappedTargetException;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.task.XInteractionHandler;
@@ -39,6 +39,7 @@ import com.sun.star.text.XTextFrame;
 import com.sun.star.ucb.CommandAbortedException;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.Exception;
+import com.sun.star.uno.RuntimeException;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
 import com.sun.star.util.CloseVetoException;
@@ -61,22 +62,16 @@ import com.sun.star.wizards.ui.event.DataAware;
 import com.sun.star.wizards.ui.event.RadioDataAware;
 import com.sun.star.wizards.ui.event.UnoDataAware;
 
+import com.sun.star.util.XSearchable;
+import com.sun.star.util.XSearchDescriptor;
+import com.sun.star.container.XIndexAccess;
+import com.sun.star.text.*;
+import com.sun.star.wizards.text.*;
+import com.sun.star.wizards.common.TextElement;
+import com.sun.star.wizards.common.PlaceholderTextElement;
+
 public class LetterWizardDialogImpl extends LetterWizardDialog
 {
-
-    private class Strings
-    {
-	public String Norm;
-	public String NormPath;
-	public String LanguageLabel;
-
-	public Strings(String norm, String normPath, String languageLabel)
-	{
-	    Norm = norm;
-	    NormPath = normPath;
-	    LanguageLabel = languageLabel;
-	}
-    }
 
     protected void enterStep(int OldStep, int NewStep)
     {
@@ -97,16 +92,12 @@ public class LetterWizardDialogImpl extends LetterWizardDialog
     String[][] BusinessFiles;
     String[][] OfficialFiles;
     String[][] PrivateFiles;
-    String[] Norms;
-    String[] NormPaths;
-    String[] NormNames;
     String sTemplatePath;
     String sUserTemplatePath;
     String sBitmapPath;
     String sLetterPath;
     String sLetterLangPackPath;
     String sWorkPath;
-    String sCurrentNorm;
     String sPath;
     boolean bEditTemplate;
     boolean bSaveSuccess = false;
@@ -122,6 +113,10 @@ public class LetterWizardDialogImpl extends LetterWizardDialog
     final static int RM_FOOTER = 5;
     final static int RM_FINALSETTINGS = 6;
 
+    List<XTextRange> constRangeList = new ArrayList<XTextRange>();
+    XTextRange trSubjectconst;
+    TextElement teSubjectconst;
+
     public LetterWizardDialogImpl(XMultiServiceFactory xmsf)
     {
         super(xmsf);
@@ -136,6 +131,10 @@ public class LetterWizardDialogImpl extends LetterWizardDialog
         try
         {
             xLocMSF = Desktop.connect(ConnectStr);
+        }
+        catch (RuntimeException e)
+        {
+            e.printStackTrace();
         }
         catch (Exception e)
         {
@@ -172,7 +171,6 @@ public class LetterWizardDialogImpl extends LetterWizardDialog
             buildStep6();
 
             initializePaths();
-            initializeNorms();
             initializeSalutation();
             initializeGreeting();
 
@@ -183,11 +181,6 @@ public class LetterWizardDialogImpl extends LetterWizardDialog
             //load the last used settings from the registry and apply listeners to the controls:
             initConfiguration();
 
-            //set the language according to the Linguistic
-            int oL = getOfficeLinguistic();
-            myConfig.cp_BusinessLetter.cp_Norm = oL;
-            myConfig.cp_PrivateOfficialLetter.cp_Norm = oL;
-            myConfig.cp_PrivateLetter.cp_Norm = oL;
             initializeTemplates(xMSF);
 
             if (myConfig.cp_BusinessLetter.cp_Greeting.equals(PropertyNames.EMPTY_STRING))
@@ -239,6 +232,8 @@ public class LetterWizardDialogImpl extends LetterWizardDialog
             //disable funtionality that is not supported by the template:
             initializeElements();
 
+            drawConstants();
+
             //disable the document, so that the user cannot change anything:
             myLetterDoc.xFrame.getComponentWindow().setEnable(false);
 
@@ -253,7 +248,7 @@ public class LetterWizardDialogImpl extends LetterWizardDialog
             removeTerminateListener();
             exception.printStackTrace(System.err);
             running = false;
-            }
+        }
     }
 
     public void cancelWizard()
@@ -372,13 +367,87 @@ public class LetterWizardDialogImpl extends LetterWizardDialog
     {
         try
         {
-            //xComponent.dispose();                       
+            //xComponent.dispose();
             XCloseable xCloseable = UnoRuntime.queryInterface(XCloseable.class, myLetterDoc.xFrame);
             xCloseable.close(false);
         }
         catch (CloseVetoException e)
         {
             e.printStackTrace();
+        }
+    }
+
+    public void drawConstants()
+    {
+            constRangeList = searchFillInItems(1);
+
+            XTextRange item = null;
+
+            for (int i = 0; i < constRangeList.size(); i++)
+            {
+                item = constRangeList.get(i);
+                String text = item.getString().trim().toLowerCase();
+                if (text.equals(resources.resSubjectconstPlaceHolder))
+                {
+                    teSubjectconst = new PlaceholderTextElement(item, resources.resSubjectconstPlaceHolder_value, "hint", myLetterDoc.xMSF);
+                    trSubjectconst = item;
+                    constRangeList.remove(i--);
+                    writeTitle(teSubjectconst,trSubjectconst,resources.resSubjectconstPlaceHolder_value);
+                }
+            }
+    }
+
+    public void clearConstants()
+    {
+        constRangeList.clear();
+        trSubjectconst = null;
+        teSubjectconst = null;
+    }
+
+    private void writeTitle(TextElement te, XTextRange tr, String text)
+    {
+        te.setText(text == null ? PropertyNames.EMPTY_STRING : text);
+        te.write(tr);
+    }
+
+    public List<XTextRange> searchFillInItems(int type)
+    {
+      try
+      {
+            XSearchable xSearchable = UnoRuntime.queryInterface(XSearchable.class, xTextDocument);
+            XSearchDescriptor sd = xSearchable.createSearchDescriptor();
+
+            if(type == 0)
+            {
+              sd.setSearchString("<[^>]+>");
+            }
+            else if(type == 1)
+            {
+              sd.setSearchString("#[^#]+#");
+            }
+            sd.setPropertyValue("SearchRegularExpression", Boolean.TRUE);
+            sd.setPropertyValue("SearchWords", Boolean.TRUE);
+
+            XIndexAccess ia = xSearchable.findAll(sd);
+
+            List<XTextRange> l = new ArrayList<XTextRange>(ia.getCount());
+            for (int i = 0; i < ia.getCount(); i++)
+            {
+                try
+                {
+                    l.add(UnoRuntime.queryInterface(XTextRange.class, ia.getByIndex(i)));
+                }
+                catch (Exception ex)
+                {
+                    System.err.println("Nonfatal Error in finding fillins.");
+                }
+            }
+            return l;
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+            throw new IllegalArgumentException("Fatal Error: Loading template failed: searching fillins failed");
         }
     }
 
@@ -498,6 +567,8 @@ public class LetterWizardDialogImpl extends LetterWizardDialog
         initializeElements();
         chkBusinessPaperItemChanged();
         setElements(false);
+        clearConstants();
+        drawConstants();
         myLetterDoc.xTextDocument.unlockControllers();
         activate();
     }
@@ -509,6 +580,8 @@ public class LetterWizardDialogImpl extends LetterWizardDialog
         initializeElements();
         setPossibleSenderData(true);
         setElements(false);
+        clearConstants();
+        drawConstants();
         myLetterDoc.xTextDocument.unlockControllers();
         activate();
     }
@@ -519,6 +592,8 @@ public class LetterWizardDialogImpl extends LetterWizardDialog
         myLetterDoc.xTextDocument.lockControllers();
         initializeElements();
         setElements(true);
+        clearConstants();
+        drawConstants();
         myLetterDoc.xTextDocument.unlockControllers();
         activate();
     }
@@ -763,7 +838,7 @@ public class LetterWizardDialogImpl extends LetterWizardDialog
         }
     }
 
-    //switch Elements on/off -------------------------------------------------------    
+    //switch Elements on/off -------------------------------------------------------
     public void chkUseLogoItemChanged()
     {
         try
@@ -774,9 +849,10 @@ public class LetterWizardDialogImpl extends LetterWizardDialog
                 myLetterDoc.switchElement("Company Logo", logostatus);
             }
         }
-        catch (IllegalArgumentException e)
+        catch (Exception ex)
         {
-            e.printStackTrace();
+            ex.printStackTrace();
+            throw new IllegalArgumentException("Fatal Error: Loading template failed: searching fillins failed");
         }
     }
 
@@ -790,9 +866,10 @@ public class LetterWizardDialogImpl extends LetterWizardDialog
                 myLetterDoc.switchElement("Sender Address Repeated", rstatus);
             }
         }
-        catch (IllegalArgumentException e)
+        catch (Exception ex)
         {
-            e.printStackTrace();
+            ex.printStackTrace();
+            throw new IllegalArgumentException("Fatal Error: Loading template failed: searching fillins failed");
         }
     }
 
@@ -837,7 +914,7 @@ public class LetterWizardDialogImpl extends LetterWizardDialog
                 myLetterDoc.switchFooter("Standard", bFooterPossible, (chkFooterPageNumbers.getState() != 0), txtFooter.getText());
             }
 
-            //enable/disable roadmap item for footer page       
+            //enable/disable roadmap item for footer page
             XInterface BPaperItem = getRoadmapItemByID(RM_FOOTER);
             Helper.setUnoPropertyValue(BPaperItem, PropertyNames.PROPERTY_ENABLED, Boolean.valueOf(bFooterPossible));
 
@@ -989,36 +1066,6 @@ public class LetterWizardDialogImpl extends LetterWizardDialog
         }
     }
 
-    private int getOfficeLinguistic()
-    {
-        int oL = 0;
-        boolean found = false;
-        String OfficeLinguistic = Configuration.getOfficeLinguistic(xMSF);
-        for (int i = 0; i < Norms.length; i++)
-        {
-            if (Norms[i].equalsIgnoreCase(OfficeLinguistic))
-            {
-                oL = i;
-                found = true;
-                break;
-            }
-        }
-        if (!found)
-        {
-            //fall back to English:
-            for (int i = 0; i < Norms.length; i++)
-            {
-                if (Norms[i].equalsIgnoreCase("en-US"))
-                {
-                    oL = i;
-                    found = true;
-                    break;
-                }
-            }
-        }
-        return oL;
-    }
-
     private void setPossibleSenderData(boolean bState)
     {
         setControlProperty("optSenderDefine", PropertyNames.PROPERTY_ENABLED, Boolean.valueOf(bState));
@@ -1090,25 +1137,6 @@ public class LetterWizardDialogImpl extends LetterWizardDialog
 
     }
 
-    public void lstLetterNormItemChanged()
-    {
-        //when the norm changes, the correct template needs to be reloaded      
-        sCurrentNorm = Norms[getCurrentLetter().cp_Norm];
-        initializeTemplates(xMSF);
-        if (optBusinessLetter.getState())
-        {
-            lstBusinessStyleItemChanged();
-        }
-        if (optPrivOfficialLetter.getState())
-        {
-            lstPrivOfficialStyleItemChanged();
-        }
-        if (optPrivateLetter.getState())
-        {
-            lstPrivateStyleItemChanged();
-        }
-    }
-
     public void initializeSalutation()
     {
         setControlProperty("lstSalutation", PropertyNames.STRING_ITEM_LIST, resources.SalutationLabels);
@@ -1117,124 +1145,6 @@ public class LetterWizardDialogImpl extends LetterWizardDialog
     public void initializeGreeting()
     {
         setControlProperty("lstGreeting", PropertyNames.STRING_ITEM_LIST, resources.GreetingLabels);
-    }
-
-    public void initializeNorms()
-    {
-
-        LocaleCodes lc = new LocaleCodes(xmsf);
-        String[] allLocales = lc.getIDs();
-        Object[] nameList =
-        {
-            PropertyNames.EMPTY_STRING, PropertyNames.EMPTY_STRING
-        };
-        String[] nameList2 =
-        {
-            PropertyNames.EMPTY_STRING, PropertyNames.EMPTY_STRING
-        };
-        ArrayList<String> allPaths = new ArrayList<String>();
-        String sLetterSubPath = "/wizard/letter/";
-
-        try
-        {
-            sTemplatePath = FileAccess.deleteLastSlashfromUrl(sTemplatePath);
-            String[] PathParts = sTemplatePath.split("/");
-            String nuString = PropertyNames.EMPTY_STRING;
-            String sMainPath;
-            for (int i = 0; i < (PathParts.length - 1); i++)
-            {
-                nuString = nuString + PathParts[i] + "/";
-            }
-            String sLocLetterPath;
-            sMainPath = nuString;
-            sMainPath = FileAccess.deleteLastSlashfromUrl(sMainPath);
-
-            sLetterPath = sMainPath + sLetterSubPath;
-
-            XInterface xInterface = (XInterface) xMSF.createInstance("com.sun.star.ucb.SimpleFileAccess");
-            com.sun.star.ucb.XSimpleFileAccess xSimpleFileAccess = UnoRuntime.queryInterface(com.sun.star.ucb.XSimpleFileAccess.class, xInterface);
-            nameList2 = xSimpleFileAccess.getFolderContents(sLetterPath, true);
-            for (int i = 0; i < nameList2.length; i++)
-            {
-                allPaths.add(nameList2[i]);
-            }
-            nameList = allPaths.toArray();
-
-
-        }
-        catch (CommandAbortedException e)
-        {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        //} catch (NoValidPathException e) {
-        // TODO Auto-generated catch block
-        //  e.printStackTrace();
-        }
-        catch (Exception e)
-        {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-
-        ArrayList<Strings> StringsVector = new ArrayList<Strings>();
-
-        String[] LanguageLabels;
-
-        boolean found = false;
-        String cIsoCode = PropertyNames.EMPTY_STRING;
-        String MSID = PropertyNames.EMPTY_STRING;
-        int z = 0;
-        for (int i = 0; i < nameList.length; i++)
-        {
-            found = false;
-            cIsoCode = FileAccess.getFilename((String) nameList[i]);
-            for (int t = 0; t < allLocales.length; t++)
-            {
-                String[] aLang = allLocales[t].split(PropertyNames.SEMI_COLON);
-                if (cIsoCode.equalsIgnoreCase(aLang[1]))
-                {
-                    MSID = aLang[2];
-                    found = true;
-                    t = allLocales.length;
-                }
-            }
-            if (!found)
-            {
-                for (int t = 0; t < allLocales.length; t++)
-                {
-                    String[] aLang = allLocales[t].split(PropertyNames.SEMI_COLON);
-                    if (cIsoCode.equalsIgnoreCase(aLang[1].substring(0, 2)))
-                    {
-                        MSID = aLang[2];
-                        found = true;
-                        t = allLocales.length;
-                    }
-                }
-            }
-
-            if (found)
-            {
-		StringsVector.add(new Strings(cIsoCode, (String)nameList[i], lc.getLanguageString(MSID)));
-            }
-        }
-
-        Collections.sort(StringsVector, new Comparator<Strings>() {
-            public int compare(Strings a, Strings b) {
-                return a.LanguageLabel.compareTo(b.LanguageLabel);
-            }
-        });
-
-        Norms = new String[StringsVector.size()];
-        NormPaths = new String[StringsVector.size()];
-        LanguageLabels = new String[StringsVector.size()];
-
-	for(int i = 0; i<StringsVector.size(); i++) {
-    Norms[i] = StringsVector.get(i).Norm;
-    NormPaths[i] = StringsVector.get(i).NormPath;
-    LanguageLabels[i] = StringsVector.get(i).LanguageLabel;
-	}
-
-        setControlProperty("lstLetterNorm", PropertyNames.STRING_ITEM_LIST, LanguageLabels);
     }
 
     private CGLetter getCurrentLetter()
@@ -1259,6 +1169,7 @@ public class LetterWizardDialogImpl extends LetterWizardDialog
             sTemplatePath = FileAccess.getOfficePath(xMSF, "Template", "share", "/wizard");
             sUserTemplatePath = FileAccess.getOfficePath(xMSF, "Template", "user", PropertyNames.EMPTY_STRING);
             sBitmapPath = FileAccess.combinePaths(xMSF, sTemplatePath, "/../wizard/bitmap");
+            sTemplatePath = FileAccess.combinePaths(xMSF, sTemplatePath, "/../common");
         }
         catch (NoValidPathException e)
         {
@@ -1268,12 +1179,12 @@ public class LetterWizardDialogImpl extends LetterWizardDialog
 
     public boolean initializeTemplates(XMultiServiceFactory xMSF)
     {
-        sCurrentNorm = Norms[getCurrentLetter().cp_Norm];
-        //creation of the language independent path:
-        String sLetterPath = NormPaths[getCurrentLetter().cp_Norm];
 
-        // try
-        // {
+      try
+      {
+        sTemplatePath = FileAccess.getOfficePath(xMSF, "Template", "share", "/wizard");
+        String sLetterPath = FileAccess.combinePaths(xMSF, sTemplatePath, "/../common/wizard/letter");
+
         BusinessFiles = FileAccess.getFolderTitles(xMSF, "bus", sLetterPath);
         OfficialFiles = FileAccess.getFolderTitles(xMSF, "off", sLetterPath);
         PrivateFiles = FileAccess.getFolderTitles(xMSF, "pri", sLetterPath);
@@ -1294,12 +1205,12 @@ public class LetterWizardDialogImpl extends LetterWizardDialog
                 {
                     0
                 });
-//            }
-//            catch (com.sun.star.wizards.common.NoValidPathException e)
-//            {
-//                return false;
-//            }
-        return true;
+      }
+      catch (com.sun.star.wizards.common.NoValidPathException e)
+      {
+        return false;
+      }
+      return true;
     }
 
     public void initializeElements()
@@ -1442,7 +1353,6 @@ public class LetterWizardDialogImpl extends LetterWizardDialog
             businessDA.add(UnoDataAware.attachCheckBox(cgl, "cp_PaperFooter", chkPaperFooter, null, true));
             businessDA.add(UnoDataAware.attachNumericControl(cgl, "cp_PaperFooterHeight", numFooterHeight, null, true));
 
-            letterDA.add(UnoDataAware.attachListBox(cgl, "cp_Norm", lstLetterNorm, null, true));
             letterDA.add(UnoDataAware.attachCheckBox(cgl, "cp_PrintCompanyLogo", chkUseLogo, null, true));
             letterDA.add(UnoDataAware.attachCheckBox(cgl, "cp_PrintCompanyAddressReceiverField", chkUseAddressReceiver, null, true));
             letterDA.add(UnoDataAware.attachCheckBox(cgl, "cp_PrintLetterSigns", chkUseSigns, null, true));

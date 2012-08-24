@@ -78,12 +78,30 @@ public class FaxWizardDialogResources extends Resource
     String resoptReceiverDatabase_value;
     String resLabel2_value;
 
+    String resToPlaceHolder = "#to#";
+    String resFromPlaceHolder = "#from#";
+    String resFaxconstPlaceHolder = "#faxconst#";
+    String resTelconstPlaceHolder = "#telconst#";
+    String resEmailconstPlaceHolder = "#emailconst#";
+    String resConsist1PlaceHolder = "#consist1#";
+    String resConsist2PlaceHolder = "#consist2#";
+    String resConsist3PlaceHolder = "#consist3#";
+
+    String resToPlaceHolder_value;
+    String resFromPlaceHolder_value;
+    String resFaxconstPlaceHolder_value;
+    String resTelconstPlaceHolder_value;
+    String resEmailconstPlaceHolder_value;
+    String resConsist1PlaceHolder_value;
+    String resConsist2PlaceHolder_value;
+    String resConsist3PlaceHolder_value;
+
     public FaxWizardDialogResources(XMultiServiceFactory xmsf)
     {
         super(xmsf, UNIT_NAME, MODULE_NAME);
         /**
          * Delete the String, uncomment the getResText method
-         *  
+         *
          */
         resFaxWizardDialog_title = getResText(RID_FAXWIZARDDIALOG_START + 1);
         resLabel9_value = getResText(RID_FAXWIZARDDIALOG_START + 2);
@@ -125,6 +143,16 @@ public class FaxWizardDialogResources extends Resource
         resoptReceiverPlaceholder_value = getResText(RID_FAXWIZARDDIALOG_START + 38);
         resoptReceiverDatabase_value = getResText(RID_FAXWIZARDDIALOG_START + 39);
         resLabel2_value = getResText(RID_FAXWIZARDDIALOG_START + 40);
+
+        resToPlaceHolder_value = getResText(RID_FAXWIZARDDIALOG_START + 41);
+        resFromPlaceHolder_value = getResText(RID_FAXWIZARDDIALOG_START + 42);
+        resFaxconstPlaceHolder_value = getResText(RID_FAXWIZARDDIALOG_START + 43);
+        resTelconstPlaceHolder_value = getResText(RID_FAXWIZARDDIALOG_START + 44);
+        resEmailconstPlaceHolder_value = getResText(RID_FAXWIZARDDIALOG_START + 45);
+        resConsist1PlaceHolder_value = getResText(RID_FAXWIZARDDIALOG_START + 46);
+        resConsist2PlaceHolder_value = getResText(RID_FAXWIZARDDIALOG_START + 47);
+        resConsist3PlaceHolder_value = getResText(RID_FAXWIZARDDIALOG_START + 48);
+
         loadRoadmapResources();
         loadSalutationResources();
         loadGreetingResources();

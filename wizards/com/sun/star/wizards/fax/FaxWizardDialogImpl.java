@@ -56,6 +56,16 @@ import com.sun.star.wizards.ui.event.DataAware;
 import com.sun.star.wizards.ui.event.RadioDataAware;
 import com.sun.star.wizards.ui.event.UnoDataAware;
 
+import com.sun.star.util.XSearchable;
+import com.sun.star.util.XSearchDescriptor;
+import com.sun.star.container.XIndexAccess;
+import com.sun.star.text.*;
+import com.sun.star.wizards.text.*;
+import com.sun.star.wizards.common.TextElement;
+import com.sun.star.wizards.common.PlaceholderTextElement;
+
+import java.util.List;
+
 public class FaxWizardDialogImpl extends FaxWizardDialog
 {
 
@@ -89,6 +99,10 @@ public class FaxWizardDialogImpl extends FaxWizardDialog
     final static int RM_SENDERRECEIVER = 3;
     final static int RM_FOOTER = 4;
     final static int RM_FINALSETTINGS = 5;
+
+    List<XTextRange> constRangeList = new ArrayList<XTextRange>();
+    XTextRange trTo, trFrom, trFaxconst, trTelconst, trEmailconst, trConsist1, trConsist2, trConsist3;
+    TextElement teTo, teFrom, teFaxconst, teTelconst, teEmailconst, teConsist1, teConsist2, teConsist3;
 
     public FaxWizardDialogImpl(XMultiServiceFactory xmsf)
     {
@@ -156,6 +170,7 @@ public class FaxWizardDialogImpl extends FaxWizardDialog
             initConfiguration();
 
             initializeTemplates(xMSF);
+
 
             //update the dialog UI according to the loaded Configuration
             updateUI();
@@ -297,7 +312,7 @@ public class FaxWizardDialogImpl extends FaxWizardDialog
     {
         try
         {
-            //xComponent.dispose();                       
+            //xComponent.dispose();
             XCloseable xCloseable = UnoRuntime.queryInterface(XCloseable.class, myFaxDoc.xFrame);
             xCloseable.close(false);
         }
@@ -305,6 +320,145 @@ public class FaxWizardDialogImpl extends FaxWizardDialog
         {
             e.printStackTrace();
         }
+    }
+
+    public void drawConstants()
+    {
+            constRangeList = searchFillInItems(1);
+
+            XTextRange item = null;
+
+            for (int i = 0; i < constRangeList.size(); i++)
+            {
+                item = constRangeList.get(i);
+                String text = item.getString().trim().toLowerCase();
+                if (text.equals(resources.resToPlaceHolder))
+                {
+                    teTo = new PlaceholderTextElement(item, resources.resToPlaceHolder_value, "hint", myFaxDoc.xMSF);
+                    trTo = item;
+                    constRangeList.remove(i--);
+                    writeTitle(teTo,trTo,resources.resToPlaceHolder_value);
+                }
+                else if (text.equals(resources.resFromPlaceHolder))
+                {
+                    teFrom = new PlaceholderTextElement(item, resources.resFromPlaceHolder_value, "hint", myFaxDoc.xMSF);
+                    trFrom = item;
+                    constRangeList.remove(i--);
+                    writeTitle(teFrom,trFrom,resources.resFromPlaceHolder_value);
+                }
+                else if (text.equals(resources.resFaxconstPlaceHolder))
+                {
+                    teFaxconst = new PlaceholderTextElement(item, resources.resFaxconstPlaceHolder_value, "hint", myFaxDoc.xMSF);
+                    trFaxconst = item;
+                    constRangeList.remove(i--);
+                    writeTitle(teFaxconst,trFaxconst,resources.resFaxconstPlaceHolder_value);
+                }
+                else if (text.equals(resources.resTelconstPlaceHolder))
+                {
+                    teTelconst = new PlaceholderTextElement(item, resources.resTelconstPlaceHolder_value, "hint", myFaxDoc.xMSF);
+                    trTelconst = item;
+                    constRangeList.remove(i--);
+                    writeTitle(teTelconst,trTelconst,resources.resTelconstPlaceHolder_value);
+                }
+                else if (text.equals(resources.resEmailconstPlaceHolder))
+                {
+                    teEmailconst = new PlaceholderTextElement(item, resources.resEmailconstPlaceHolder_value, "hint", myFaxDoc.xMSF);
+                    trEmailconst = item;
+                    constRangeList.remove(i--);
+                    writeTitle(teEmailconst,trEmailconst,resources.resEmailconstPlaceHolder_value);
+                }
+                else if (text.equals(resources.resConsist1PlaceHolder))
+                {
+                    teConsist1 = new PlaceholderTextElement(item, resources.resConsist1PlaceHolder_value, "hint", myFaxDoc.xMSF);
+                    trConsist1 = item;
+                    constRangeList.remove(i--);
+                    writeTitle(teConsist1,trConsist1,resources.resConsist1PlaceHolder_value);
+                }
+                else if (text.equals(resources.resConsist2PlaceHolder))
+                {
+                    teConsist2 = new PlaceholderTextElement(item, resources.resConsist2PlaceHolder_value, "hint", myFaxDoc.xMSF);
+                    trConsist2 = item;
+                    constRangeList.remove(i--);
+                    writeTitle(teConsist2,trConsist2,resources.resConsist2PlaceHolder_value);
+                }
+                else if (text.equals(resources.resConsist3PlaceHolder))
+                {
+                    teConsist3 = new PlaceholderTextElement(item, resources.resConsist3PlaceHolder_value, "hint", myFaxDoc.xMSF);
+                    trConsist3 = item;
+                    constRangeList.remove(i--);
+                    writeTitle(teConsist3,trConsist3,resources.resConsist3PlaceHolder_value);
+                }
+
+            }
+    }
+
+    public void clearConstants()
+    {
+        constRangeList.clear();
+        trTo = null;
+        trFrom = null;
+        trFaxconst = null;
+        trTelconst = null;
+        trEmailconst = null;
+        trConsist1 = null;
+        trConsist2 = null;
+        trConsist3 = null;
+        teTo = null;
+        teFrom = null;
+        teFaxconst = null;
+        teTelconst = null;
+        teEmailconst = null;
+        teConsist1 = null;
+        teConsist2 = null;
+        teConsist3 = null;
+    }
+
+    private void writeTitle(TextElement te, XTextRange tr, String text)
+    {
+        te.setText(text == null ? PropertyNames.EMPTY_STRING : text);
+        te.write(tr);
+    }
+
+    public List<XTextRange> searchFillInItems(int type)
+    {
+      try
+      {
+            XSearchable xSearchable = UnoRuntime.queryInterface(XSearchable.class, xTextDocument);
+            XSearchDescriptor sd = xSearchable.createSearchDescriptor();
+
+            if(type == 0)
+            {
+              sd.setSearchString("<[^>]+>");
+            }
+            else if(type == 1)
+            {
+              sd.setSearchString("#[^#]+#");
+            }
+            sd.setPropertyValue("SearchRegularExpression", Boolean.TRUE);
+            sd.setPropertyValue("SearchWords", Boolean.TRUE);
+
+            XIndexAccess ia = xSearchable.findAll(sd);
+
+            List<XTextRange> l = new ArrayList<XTextRange>(ia.getCount());
+            for (int i = 0; i < ia.getCount(); i++)
+            {
+                try
+                {
+                    l.add(UnoRuntime.queryInterface(XTextRange.class, ia.getByIndex(i)));
+                }
+                catch (Exception ex)
+                {
+                    System.err.println("Nonfatal Error in finding fillins.");
+                }
+            }
+            return l;
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+            throw new IllegalArgumentException("Fatal Error: Loading template failed: searching fillins failed");
+        }
+
     }
 
     public void insertRoadmap()
@@ -379,6 +533,7 @@ public class FaxWizardDialogImpl extends FaxWizardDialog
             sTemplatePath = FileAccess.getOfficePath(xMSF, "Template", "share", "/wizard");
             sUserTemplatePath = FileAccess.getOfficePath(xMSF, "Template", "user", PropertyNames.EMPTY_STRING);
             sBitmapPath = FileAccess.combinePaths(xMSF, sTemplatePath, "/../wizard/bitmap");
+            sTemplatePath = FileAccess.combinePaths(xMSF, sTemplatePath, "/../common");
         }
         catch (NoValidPathException e)
         {
@@ -564,6 +719,8 @@ public class FaxWizardDialogImpl extends FaxWizardDialog
         xTextDocument = myFaxDoc.loadAsPreview(BusinessFiles[1][lstBusinessStyle.getSelectedItemPos()], false);
         initializeElements();
         setElements();
+        clearConstants();
+        drawConstants();
     }
 
     public void optPrivateFaxItemChanged()
@@ -683,7 +840,7 @@ public class FaxWizardDialogImpl extends FaxWizardDialog
         TextFieldHandler myFieldHandler = new TextFieldHandler(myFaxDoc.xMSF, xTextDocument);
         myFieldHandler.changeUserFieldContent("Fax", txtSenderFax.getText());
     }
-    //switch Elements on/off -------------------------------------------------------    
+    //switch Elements on/off -------------------------------------------------------
     public void setElements()
     {
         //UI relevant:
@@ -764,7 +921,7 @@ public class FaxWizardDialogImpl extends FaxWizardDialog
                 myFaxDoc.switchFooter("Standard", bFooterPossible, (chkFooterPageNumbers.getState() != 0), txtFooter.getText());
             }
 
-            //enable/disable roadmap item for footer page       
+            //enable/disable roadmap item for footer page
             XInterface BPaperItem = getRoadmapItemByID(RM_FOOTER);
             Helper.setUnoPropertyValue(BPaperItem, PropertyNames.PROPERTY_ENABLED, Boolean.valueOf(bFooterPossible));
 
@@ -867,4 +1024,4 @@ public class FaxWizardDialogImpl extends FaxWizardDialog
 
 
 
-    
+

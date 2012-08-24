@@ -114,28 +114,6 @@ Directory gid_Dir_Wizards_Fax
     DosName = "fax";
 End
 
-Directory gid_Dir_Wizards_Text
-    Styles = (CREATE);
-    ParentID = gid_Dir_Wizards;
-    DosName = "text";
-End
-
-Directory gid_Dir_Wizards_Common
-    Styles = (CREATE);
-    ParentID = gid_Dir_Wizards;
-    DosName = "common";
-End
-
-Directory gid_Dir_Wizards_Document
-    Styles = (CREATE);
-    ParentID = gid_Dir_Wizards;
-    DosName = "document";
-End
-Directory gid_Dir_Filter
-    ParentID = gid_Brand_Dir_Program;
-    DosName = "filter";
-End
-
 Directory gid_Dir_Resource
     ParentID = gid_Brand_Dir_Program;
     DosName = "resource";
@@ -944,14 +922,34 @@ Directory gid_Dir_Share_Template_Wizard
     DosName = "wizard";
 End
 
+Directory gid_Dir_Share_Template_Common_Wizard
+    ParentID = gid_Dir_Template_Common;
+    DosName = "wizard";
+End
+
+Directory gid_Dir_Share_Template_Common_Wizard_Agenda
+    ParentID = gid_Dir_Share_Template_Common_Wizard;
+    DosName = "agenda";
+End
+
 Directory gid_Dir_Share_Template_Wizard_Bitmap
     ParentID = gid_Dir_Share_Template_Wizard;
     DosName = "bitmap";
 End
 
-Directory gid_Dir_Share_Template_Wizard_Letter
-    ParentID = gid_Dir_Share_Template_Wizard;
+Directory gid_Dir_Share_Template_Common_Wizard_Fax
+    ParentID = gid_Dir_Share_Template_Common_Wizard;
+    DosName = "fax";
+End
+
+Directory gid_Dir_Share_Template_Common_Wizard_Letter
+    ParentID = gid_Dir_Share_Template_Common_Wizard;
     DosName = "letter";
+End
+
+Directory gid_Dir_Share_Template_Common_Wizard_Report
+    ParentID = gid_Dir_Share_Template_Common_Wizard;
+    DosName = "report";
 End
 
 Directory gid_Dir_Template_Language
@@ -1012,31 +1010,6 @@ End
 Directory gid_Dir_Template_Wizard
     ParentID = gid_Dir_Template_Language;
     DIR_IDENT_ALL_LANG(wizard);
-End
-
-Directory gid_Dir_Template_Wizard_Web
-    ParentID = gid_Dir_Template_Wizard;
-    DIR_IDENT_ALL_LANG(web);
-End
-
-Directory gid_Dir_Template_Wizard_Report
-    ParentID = gid_Dir_Template_Wizard;
-    DIR_IDENT_ALL_LANG(report);
-End
-
-Directory gid_Dir_Template_Wizard_Letter
-    ParentID = gid_Dir_Template_Wizard;
-    DIR_IDENT_ALL_LANG(letter);
-End
-
-Directory gid_Dir_Template_Wizard_Fax
-    ParentID = gid_Dir_Template_Wizard;
-    DIR_IDENT_ALL_LANG(fax);
-End
-
-Directory gid_Dir_Template_Wizard_Agenda
-    ParentID = gid_Dir_Template_Wizard;
-    DIR_IDENT_ALL_LANG(agenda);
 End
 
 Directory gid_Dir_Template_Wizard_Styles

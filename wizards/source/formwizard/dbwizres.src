@@ -1484,6 +1484,10 @@ String RID_DB_REPORT_WIZARD_START + 92
 {
     Text [ en-US ] = "No valid report template was found.";
 };
+String RID_DB_REPORT_WIZARD_START + 93
+{
+    Text [ en-US ] = "Page:";
+};
 
 // ============================================================================
 
@@ -2035,6 +2039,11 @@ String RID_LETTERWIZARDDIALOG_START + 58
     Text [ en-US] = "Please specify last settings";
 };
 
+String RID_LETTERWIZARDDIALOG_START + 59
+{
+    Text [ en-US] = "Subject:";
+};
+
 //====================== Letter Wizard Greeting Start
 String RID_LETTERWIZARDSALUTATION_START + 1
 {
@@ -2306,6 +2315,47 @@ String RID_FAXWIZARDDIALOG_START + 40
 {
     Text [ en-US] = "~New return address";
 };
+
+String RID_FAXWIZARDDIALOG_START + 41
+{
+    Text [ en-US] = "To:";
+};
+
+String RID_FAXWIZARDDIALOG_START + 42
+{
+    Text [ en-US] = "From:";
+};
+
+String RID_FAXWIZARDDIALOG_START + 43
+{
+    Text [ en-US] = "Fax:";
+};
+
+String RID_FAXWIZARDDIALOG_START + 44
+{
+    Text [ en-US] = "Tel:";
+};
+
+String RID_FAXWIZARDDIALOG_START + 45
+{
+    Text [ en-US] = "E-mail:";
+};
+
+String RID_FAXWIZARDDIALOG_START + 46
+{
+    Text [ en-US] = "This template consists of";
+};
+
+String RID_FAXWIZARDDIALOG_START + 47
+{
+    Text [ en-US] = "page";
+};
+
+String RID_FAXWIZARDDIALOG_START + 48
+{
+    Text [ en-US] = "Please inform us if transmission errors occur.";
+};
+
 
 //====================== Fax Wizard Communication Start
 String RID_FAXWIZARDCOMMUNICATION_START + 1
@@ -3506,4 +3556,63 @@ String RID_AGENDAWIZARDDIALOG_START +71
 {
     Text [en-US ] = "Move down";
 };
-
+String RID_AGENDAWIZARDDIALOG_START +72
+{
+    Text [en-US ] = "Date:";
+};
+String RID_AGENDAWIZARDDIALOG_START +73
+{
+    Text [en-US ] = "Time:";
+};
+String RID_AGENDAWIZARDDIALOG_START +74
+{
+    Text [en-US ] = "Location:";
+};
+String RID_AGENDAWIZARDDIALOG_START +75
+{
+    Text [en-US ] = "Topics";
+};
+String RID_AGENDAWIZARDDIALOG_START +76
+{
+    Text [en-US ] = "Num.";
+};
+String RID_AGENDAWIZARDDIALOG_START +77
+{
+    Text [en-US ] = "Topic";
+};
+String RID_AGENDAWIZARDDIALOG_START +78
+{
+    Text [en-US ] = "Responsible";
+};
+String RID_AGENDAWIZARDDIALOG_START +79
+{
+    Text [en-US ] = "Time";
+};
+String RID_AGENDAWIZARDDIALOG_START +80
+{
+    Text [en-US ] = "Additional information";
+};
+String RID_AGENDAWIZARDDIALOG_START +81
+{
+    Text [en-US ] = "Minutes for";
+};
+String RID_AGENDAWIZARDDIALOG_START +82
+{
+    Text [en-US ] = "Discussion:";
+};
+String RID_AGENDAWIZARDDIALOG_START +83
+{
+    Text [en-US ] = "Conclusion:";
+};
+String RID_AGENDAWIZARDDIALOG_START +84
+{
+    Text [en-US ] = "To do:";
+};
+String RID_AGENDAWIZARDDIALOG_START +85
+{
+    Text [en-US ] = "Responsible party:";
+};
+String RID_AGENDAWIZARDDIALOG_START +86
+{
+    Text [en-US ] = "Deadline:";
+};

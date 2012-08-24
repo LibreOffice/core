@@ -44,7 +44,6 @@ public interface LetterWizardDialogConst
     public static final String NUMADDRESSWIDTH_TEXT_CHANGED = "numAddressWidthTextChanged";
     public static final String NUMADDRESSY_TEXT_CHANGED = "numAddressYTextChanged";
     public static final String LSTLETTERNORM_ACTION_PERFORMED = null;
-    public static final String LSTLETTERNORM_ITEM_CHANGED = "lstLetterNormItemChanged";
     public static final String CHKUSELOGO_ITEM_CHANGED = "chkUseLogoItemChanged";
     public static final String CHKUSEADDRESSRECEIVER_ITEM_CHANGED = "chkUseAddressReceiverItemChanged";
     public static final String CHKUSESIGNS_ITEM_CHANGED = "chkUseSignsItemChanged";

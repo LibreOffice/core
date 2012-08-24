@@ -39,7 +39,7 @@ public interface TemplateConsts
      */
     public final static String SECTION_TOPICS = "AGENDA_TOPICS";
     /**
-     * the name of the parent minutes section. 
+     * the name of the parent minutes section.
      */
     public final static String SECTION_MINUTES_ALL = "MINUTES_ALL";
     /**
@@ -49,9 +49,9 @@ public interface TemplateConsts
     public final static String SECTION_MINUTES = "MINUTES";    //public final static String AGENDA_ITEM = "AGENDA_ITEM";
     /**
      * taged headings and names.
-     * These will be searched in item tables (in the template) and will be 
+     * These will be searched in item tables (in the template) and will be
      * replaced with resource strings.
-     * 
+     *
      * headings...
      */
     public final static String FILLIN_MEETING_TYPE = "<meeting-type>";
@@ -71,7 +71,7 @@ public interface TemplateConsts
     /**
      * Styles (paragraph styles) used for agenda items.
      * headings styles
-     * 
+     *
      */
     public final static String STYLE_MEETING_TYPE = "MeetingType";
     public final static String STYLE_BRING = "Bring";
@@ -88,9 +88,9 @@ public interface TemplateConsts
     public final static String STYLE_OBSERVERS = "Observers";
     public final static String STYLE_RESOURCE_PERSONS = "ResourcePersons";
     /**
-     * Styles (paragraph styles) used for the <b>text</b> of agenda items 
+     * Styles (paragraph styles) used for the <b>text</b> of agenda items
      * The agenda wizard creates fill-in fields with the given styles...)
-     * 
+     *
      * headings fields styles
      */
     public final static String STYLE_MEETING_TYPE_TEXT = "MeetingTypeText";
@@ -134,4 +134,22 @@ public interface TemplateConsts
     public final static String FILLIN_MINUTE_TOPIC = "<mtopic>";
     public final static String FILLIN_MINUTE_RESPONSIBLE = "<mresponsible>";
     public final static String FILLIN_MINUTE_TIME = "<mtime>";
+
+//
+    public final static String FILLIN_DATETITLE = "#datetitle#";
+    public final static String FILLIN_TIMETITLE = "#timetitle#";
+    public final static String FILLIN_LOCATIONTITLE = "#locationtitle#";
+    public final static String FILLIN_TOPICS = "#topics#";
+    public final static String FILLIN_NUM = "#num.#";
+    public final static String FILLIN_TOPIC = "#topicheader#";
+    public final static String FILLIN_RESPONSIBLE = "#responsibleheader#";
+    public final static String FILLIN_TIME_HEADER = "#timeheader#";
+    public final static String FILLIN_ADDITIONAL_INFORMATION = "#additional-information#";
+    public final static String FILLIN_MINUTES_FOR = "#minutes-for#";
+    public final static String FILLIN_DISCUSSION = "#discussion#";
+    public final static String FILLIN_CONCLUSION = "#conclusion#";
+    public final static String FILLIN_TO_DO = "#to-do#";
+    public final static String FILLIN_RESPONSIBLE_PARTY = "#responsible-party#";
+    public final static String FILLIN_DEADLINE = "#deadline#";
+//
 }

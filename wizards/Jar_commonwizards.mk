@@ -67,6 +67,10 @@ $(eval $(call gb_Jar_add_sourcefiles,commonwizards,\
 	wizards/com/sun/star/wizards/common/PropertySetHelper					\
 	wizards/com/sun/star/wizards/common/NumericalHelper					\
 	wizards/com/sun/star/wizards/common/NamedValueCollection       \
+	wizards/com/sun/star/wizards/common/ParaStyled       \
+	wizards/com/sun/star/wizards/common/PlaceholderTextElement       \
+	wizards/com/sun/star/wizards/common/TemplateElement       \
+	wizards/com/sun/star/wizards/common/TextElement       \
 	wizards/com/sun/star/wizards/db/DBMetaData					\
 	wizards/com/sun/star/wizards/db/CommandMetaData				\
 	wizards/com/sun/star/wizards/db/QueryMetaData					\
