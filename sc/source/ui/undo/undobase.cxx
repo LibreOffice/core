@@ -77,17 +77,17 @@ bool ScSimpleUndo::SetViewMarkData( const ScMarkData& rMarkData )
 
 sal_Bool ScSimpleUndo::Merge( SfxUndoAction *pNextAction )
 {
-    //  Zu jeder Undo-Action kann eine SdrUndoGroup fuer das Aktualisieren
-    //  der Detektiv-Pfeile gehoeren.
-    //  DetectiveRefresh kommt immer hinterher, die SdrUndoGroup ist in
-    //  eine ScUndoDraw Action verpackt.
-    //  Nur beim automatischen Aktualisieren wird AddUndoAction mit
-    //  bTryMerg=sal_True gerufen.
+    // A SdrUndoGroup for the updating of detective arrows can belong
+    // to each Undo-Action.
+    // DetectiveRefresh is always called next,
+    // the SdrUndoGroup is packaged in a ScUndoDraw action.
+    // AddUndoAction is only called with bTryMerg=sal_True
+    // for automatic update.
 
     if ( !pDetectiveUndo && pNextAction->ISA(ScUndoDraw) )
     {
-        //  SdrUndoAction aus der ScUndoDraw Action uebernehmen,
-        //  ScUndoDraw wird dann vom UndoManager geloescht
+        // SdrUndoAction is aquired from ScUndoDraw Action,
+        // ScUndoDraw is then deleted by the UndoManager
 
         ScUndoDraw* pCalcUndo = (ScUndoDraw*)pNextAction;
         pDetectiveUndo = pCalcUndo->GetDrawUndo();
@@ -104,7 +104,7 @@ void ScSimpleUndo::BeginUndo()
 
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
     if (pViewShell)
-        pViewShell->HideAllCursors();       // z.B. wegen zusammengefassten Zellen
+        pViewShell->HideAllCursors();       // for example due to merged cells
 
     //  detective updates happened last, must be undone first
     if (pDetectiveUndo)
@@ -128,11 +128,11 @@ void ScSimpleUndo::EndUndo()
 
 void ScSimpleUndo::BeginRedo()
 {
-    pDocShell->SetInUndo( sal_True );   //! eigenes Flag fuer Redo?
+    pDocShell->SetInUndo( sal_True );   //! own Flag for Redo?
 
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
     if (pViewShell)
-        pViewShell->HideAllCursors();       // z.B. wegen zusammengefassten Zellen
+        pViewShell->HideAllCursors();       // for example due to merged cells
 }
 
 void ScSimpleUndo::EndRedo()
@@ -168,8 +168,8 @@ void ScSimpleUndo::ShowTable( const ScRange& rRange )
         SCTAB nStart = rRange.aStart.Tab();
         SCTAB nEnd   = rRange.aEnd.Tab();
         SCTAB nTab = pViewShell->GetViewData()->GetTabNo();
-        if ( nTab < nStart || nTab > nEnd )                     // wenn nicht im Bereich:
-            pViewShell->SetTabNo( nStart );                     // auf erste des Bereiches
+        if ( nTab < nStart || nTab > nEnd )                     // when not in range:
+            pViewShell->SetTabNo( nStart );                     // at beginning of the range
     }
 }
 
@@ -236,7 +236,7 @@ sal_Bool ScBlockUndo::AdjustHeight()
     }
     else
     {
-        //  Zoom auf 100 lassen
+        // Leave zoom at 100
         nPPTX = ScGlobal::nScreenPPTX;
         nPPTY = ScGlobal::nScreenPPTY;
     }
@@ -261,7 +261,7 @@ void ScBlockUndo::ShowBlock()
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
     if (pViewShell)
     {
-        ShowTable( aBlockRange );       // bei mehreren Tabs im Range ist jede davon gut
+        ShowTable( aBlockRange );       // with multiple sheets in range each of them is good
         pViewShell->MoveCursorAbs( aBlockRange.aStart.Col(), aBlockRange.aStart.Row(),
                                    SC_FOLLOW_JUMP, false, false );
         SCTAB nTab = pViewShell->GetViewData()->GetTabNo();
@@ -270,7 +270,7 @@ void ScBlockUndo::ShowBlock()
         aRange.aEnd.SetTab( nTab );
         pViewShell->MarkRange( aRange );
 
-        //  nicht per SetMarkArea an MarkData, wegen evtl. fehlendem Paint
+        // not through SetMarkArea to Mark Data, due to possible lacking paint
     }
 }
 
@@ -334,7 +334,7 @@ void ScMultiBlockUndo::AdjustHeight()
     }
     else
     {
-        //  Zoom auf 100 lassen
+        // Leave zoom at 100
         nPPTX = ScGlobal::nScreenPPTX;
         nPPTY = ScGlobal::nScreenPPTY;
     }
@@ -413,9 +413,9 @@ void ScMoveUndo::UndoRef()
     pRefUndoDoc->CopyToDocument( aRange, IDF_FORMULA, false, pDoc, NULL, false );
     if (pRefUndoData)
         pRefUndoData->DoUndo( pDoc, (eMode == SC_UNDO_REFFIRST) );
-        // HACK: ScDragDropUndo ist der einzige mit REFFIRST.
-        // Falls nicht, resultiert daraus evtl. ein zu haeufiges Anpassen
-        // der ChartRefs, nicht schoen, aber auch nicht schlecht..
+        // HACK: ScDragDropUndo is the only one with REFFIRST.
+        // If not, results possibly in a too frequent adjustment
+        // of ChartRefs not that pretty, but not too bad either..
 }
 
 void ScMoveUndo::BeginUndo()

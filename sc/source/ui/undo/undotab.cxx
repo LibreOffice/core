@@ -59,7 +59,7 @@
 
 #include <vector>
 
-extern sal_Bool bDrawIsInUndo;          //! irgendwo als Member !!!
+extern sal_Bool bDrawIsInUndo;          //! somewhere as Member !!!
 
 using namespace com::sun::star;
 using ::com::sun::star::uno::Sequence;
@@ -86,11 +86,6 @@ TYPEINIT1(ScUndoRenameObject,   SfxUndoAction);
 TYPEINIT1(ScUndoLayoutRTL,      SfxUndoAction);
 TYPEINIT1(ScUndoTabColor,  SfxUndoAction);
 
-
-// -----------------------------------------------------------------------
-//
-//      Tabelle einfuegen
-//
 
 ScUndoInsertTab::ScUndoInsertTab( ScDocShell* pNewDocShell,
                                   SCTAB nTabNum,
@@ -186,10 +181,6 @@ sal_Bool ScUndoInsertTab::CanRepeat(SfxRepeatTarget& rTarget) const
     return (rTarget.ISA(ScTabViewTarget));
 }
 
-// -----------------------------------------------------------------------
-//
-//      Tabellen einfuegen
-//
 
 ScUndoInsertTables::ScUndoInsertTables( ScDocShell* pNewDocShell,
                                         SCTAB nTabNum,
@@ -287,11 +278,6 @@ sal_Bool ScUndoInsertTables::CanRepeat(SfxRepeatTarget& rTarget) const
     return (rTarget.ISA(ScTabViewTarget));
 }
 
-
-//----------------------------------------------------------------------------------
-//
-//      Tabelle loeschen
-//
 
 ScUndoDeleteTab::ScUndoDeleteTab( ScDocShell* pNewDocShell, const vector<SCTAB> &aTab, //SCTAB nNewTab,
                                     ScDocument* pUndoDocument, ScRefUndoData* pRefData ) :
@@ -393,10 +379,10 @@ void ScUndoDeleteTab::Undo()
     }
     if (bLink)
     {
-        pDocShell->UpdateLinks();               // Link-Manager updaten
+        pDocShell->UpdateLinks();               // Update Link manager updaten
     }
 
-    EndUndo();      // Draw-Undo muss vor dem Broadcast kommen!
+    EndUndo();      // Draw-Undo has to be called before Broadcast!
 
     ScChangeTrack* pChangeTrack = pDocShell->GetDocument()->GetChangeTrack();
     if ( pChangeTrack )
@@ -411,9 +397,9 @@ void ScUndoDeleteTab::Undo()
     pSfxApp->Broadcast( SfxSimpleHint( SC_HINT_DBAREAS_CHANGED ) );
     pSfxApp->Broadcast( SfxSimpleHint( SC_HINT_AREALINKS_CHANGED ) );
 
-    pDocShell->PostPaint(0,0,0, MAXCOL,MAXROW,MAXTAB, PAINT_ALL );  // incl. Extras
+    pDocShell->PostPaint(0,0,0, MAXCOL,MAXROW,MAXTAB, PAINT_ALL );  // incl. extras
 
-    //  nicht ShowTable wegen SetTabNo(..., sal_True):
+    // not ShowTable due to SetTabNo(..., sal_True):
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
     if (pViewShell)
         pViewShell->SetTabNo( lcl_GetVisibleTabBefore( *pDoc, theTabs[0] ), true );
@@ -453,11 +439,6 @@ sal_Bool ScUndoDeleteTab::CanRepeat(SfxRepeatTarget& rTarget) const
 }
 
 
-//---------------------------------------------------------------------------------
-//
-//      Tabelle umbenennen
-//
-
 ScUndoRenameTab::ScUndoRenameTab( ScDocShell* pNewDocShell,
                                   SCTAB nT,
                                   const String& rOldName,
@@ -489,7 +470,7 @@ void ScUndoRenameTab::DoChange( SCTAB nTabP, const String& rName ) const
     pDocShell->PostPaintExtras();
     pDocShell->PostDataChanged();
 
-    //  Der Tabellenname koennte in einer Formel vorkommen...
+    // The sheet name could be found in a formula ...
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
     if (pViewShell)
         pViewShell->UpdateInputHandler();
@@ -507,7 +488,7 @@ void ScUndoRenameTab::Redo()
 
 void ScUndoRenameTab::Repeat(SfxRepeatTarget& /* rTarget */)
 {
-    //  Repeat macht keinen Sinn
+    //  Repeat makes no sense
 }
 
 sal_Bool ScUndoRenameTab::CanRepeat(SfxRepeatTarget& /* rTarget */) const
@@ -515,11 +496,6 @@ sal_Bool ScUndoRenameTab::CanRepeat(SfxRepeatTarget& /* rTarget */) const
     return false;
 }
 
-
-//----------------------------------------------------------------------------------
-//
-//      Tabelle verschieben
-//
 
 ScUndoMoveTab::ScUndoMoveTab(
     ScDocShell* pNewDocShell, vector<SCTAB>* pOldTabs, vector<SCTAB>* pNewTabs,
@@ -560,7 +536,7 @@ void ScUndoMoveTab::DoChange( sal_Bool bUndo ) const
         {
             SCTAB nDestTab = (*mpNewTabs)[i-1];
             SCTAB nOldTab = (*mpOldTabs)[i-1];
-            if (nDestTab > MAXTAB)                          // angehaengt ?
+            if (nDestTab > MAXTAB)                          // appended ?
                 nDestTab = pDoc->GetTableCount() - 1;
 
             pDoc->MoveTab( nDestTab, nOldTab, pProgress );
@@ -584,7 +560,7 @@ void ScUndoMoveTab::DoChange( sal_Bool bUndo ) const
             SCTAB nDestTab = (*mpNewTabs)[i];
             SCTAB nNewTab = nDestTab;
             SCTAB nOldTab = (*mpOldTabs)[i];
-            if (nDestTab > MAXTAB)                          // angehaengt ?
+            if (nDestTab > MAXTAB)                          // appended ?
                 nDestTab = pDoc->GetTableCount() - 1;
 
             pDoc->MoveTab( nOldTab, nNewTab, pProgress );
@@ -626,11 +602,6 @@ sal_Bool ScUndoMoveTab::CanRepeat(SfxRepeatTarget& /* rTarget */) const
     return false;
 }
 
-
-//----------------------------------------------------------------------------------
-//
-//      Copy table
-//
 
 ScUndoCopyTab::ScUndoCopyTab(
     ScDocShell* pNewDocShell,
@@ -717,7 +688,7 @@ void ScUndoCopyTab::Redo()
         nDestTab = (*mpNewTabs)[i];
         SCTAB nNewTab = nDestTab;
         SCTAB nOldTab = (*mpOldTabs)[i];
-        if (nDestTab > MAXTAB)                          // angehaengt ?
+        if (nDestTab > MAXTAB)                          // appended ?
             nDestTab = pDoc->GetTableCount() - 1;
 
         bDrawIsInUndo = sal_True;
@@ -764,7 +735,7 @@ void ScUndoCopyTab::Redo()
 
 void ScUndoCopyTab::Repeat(SfxRepeatTarget& /* rTarget */)
 {
-        // kein Repeat ! ? !
+        // no Repeat ! ? !
 }
 
 sal_Bool ScUndoCopyTab::CanRepeat(SfxRepeatTarget& /* rTarget */) const
@@ -772,10 +743,6 @@ sal_Bool ScUndoCopyTab::CanRepeat(SfxRepeatTarget& /* rTarget */) const
     return false;
 }
 
-//---------------------------------------------------------------------------------
-//
-//      Tab Bg Color
-//
 
 ScUndoTabColor::ScUndoTabColor(
     ScDocShell* pNewDocShell, SCTAB nT, const Color& aOTabBgColor, const Color& aNTabBgColor) :
@@ -845,10 +812,6 @@ sal_Bool ScUndoTabColor::CanRepeat(SfxRepeatTarget& /* rTarget */) const
     return false;
 }
 
-// -----------------------------------------------------------------------
-//
-//      Szenario anlegen
-//
 
 ScUndoMakeScenario::ScUndoMakeScenario( ScDocShell* pNewDocShell,
                         SCTAB nSrc, SCTAB nDest,
@@ -938,11 +901,6 @@ sal_Bool ScUndoMakeScenario::CanRepeat(SfxRepeatTarget& rTarget) const
 }
 
 
-// -----------------------------------------------------------------------
-//
-//      Tabelle einfuegen
-//
-
 ScUndoImportTab::ScUndoImportTab( ScDocShell* pShell,
                         SCTAB nNewTab, SCTAB nNewCount, sal_Bool bNewLink ) :
     ScSimpleUndo( pShell ),
@@ -990,7 +948,7 @@ void ScUndoImportTab::DoChange() const
 
 void ScUndoImportTab::Undo()
 {
-    //! eingefuegte Bereichsnamen etc.
+    //! Inserted range names, and so on.
 
     SCTAB i;
     ScDocument* pDoc = pDocShell->GetDocument();
@@ -1043,7 +1001,7 @@ void ScUndoImportTab::Redo()
 {
     if (!pRedoDoc)
     {
-        OSL_FAIL("wo ist mein Redo-Document?");
+        OSL_FAIL("Where is my Redo Document?");
         return;
     }
 
@@ -1099,11 +1057,6 @@ sal_Bool ScUndoImportTab::CanRepeat(SfxRepeatTarget& rTarget) const
 }
 
 
-// -----------------------------------------------------------------------
-//
-//      Tabellen-Verknuepfung aufheben
-//
-
 ScUndoRemoveLink::ScUndoRemoveLink( ScDocShell* pShell, const String& rDoc ) :
     ScSimpleUndo( pShell ),
     aDocName( rDoc ),
@@ -1131,7 +1084,7 @@ ScUndoRemoveLink::ScUndoRemoveLink( ScDocShell* pShell, const String& rDoc ) :
                 {
                     OSL_ENSURE(rtl::OUString(aFltName) == pDoc->GetLinkFlt(i) &&
                                rtl::OUString(aOptions) == pDoc->GetLinkOpt(i),
-                                    "verschiedene Filter fuer ein Dokument?");
+                                    "diffrent Filter for a Document?");
                 }
                 pTabs[nCount] = i;
                 pModes[nCount] = nMode;
@@ -1177,7 +1130,7 @@ void ScUndoRemoveLink::Redo()
 
 void ScUndoRemoveLink::Repeat(SfxRepeatTarget& /* rTarget */)
 {
-    //  gippsnich
+    // makes no sense
 }
 
 sal_Bool ScUndoRemoveLink::CanRepeat(SfxRepeatTarget& /* rTarget */) const
@@ -1185,11 +1138,6 @@ sal_Bool ScUndoRemoveLink::CanRepeat(SfxRepeatTarget& /* rTarget */) const
     return false;
 }
 
-
-// -----------------------------------------------------------------------
-//
-//      Tabellen ein-/ausblenden
-//
 
 ScUndoShowHideTab::ScUndoShowHideTab( ScDocShell* pShell, SCTAB nNewTab, sal_Bool bNewShow ) :
     ScSimpleUndo( pShell ),
@@ -1281,7 +1229,7 @@ void ScUndoDocProtect::DoProtect(bool bProtect)
     if (pViewShell)
     {
         pViewShell->UpdateLayerLocks();
-        pViewShell->UpdateInputHandler(sal_True);   // damit sofort wieder eingegeben werden kann
+        pViewShell->UpdateInputHandler(sal_True);   // so that input can be immediately entered again
     }
 
     pDocShell->PostPaintGridAll();
@@ -1303,12 +1251,12 @@ void ScUndoDocProtect::Redo()
 
 void ScUndoDocProtect::Repeat(SfxRepeatTarget& /* rTarget */)
 {
-    //  gippsnich
+    // makes no sense
 }
 
 sal_Bool ScUndoDocProtect::CanRepeat(SfxRepeatTarget& /* rTarget */) const
 {
-    return false;       // gippsnich
+    return false;       // makes no sense
 }
 
 rtl::OUString ScUndoDocProtect::GetComment() const
@@ -1355,7 +1303,7 @@ void ScUndoTabProtect::DoProtect(bool bProtect)
     if (pViewShell)
     {
         pViewShell->UpdateLayerLocks();
-        pViewShell->UpdateInputHandler(sal_True);   // damit sofort wieder eingegeben werden kann
+        pViewShell->UpdateInputHandler(sal_True);   // so that input can be immediately entered again
     }
 
     pDocShell->PostPaintGridAll();
@@ -1377,12 +1325,12 @@ void ScUndoTabProtect::Redo()
 
 void ScUndoTabProtect::Repeat(SfxRepeatTarget& /* rTarget */)
 {
-    //  gippsnich
+    // makes no sense
 }
 
 sal_Bool ScUndoTabProtect::CanRepeat(SfxRepeatTarget& /* rTarget */) const
 {
-    return false;       // gippsnich
+    return false;       // makes no sense
 }
 
 rtl::OUString ScUndoTabProtect::GetComment() const
@@ -1391,10 +1339,6 @@ rtl::OUString ScUndoTabProtect::GetComment() const
     return ScGlobal::GetRscString( nId );
 }
 
-// -----------------------------------------------------------------------
-//
-//      Druck-/Wiederholungsbereiche aendern
-//
 
 ScUndoPrintRange::ScUndoPrintRange( ScDocShell* pShell, SCTAB nNewTab,
                                     ScPrintRangeSaver* pOld, ScPrintRangeSaver* pNew ) :
@@ -1444,12 +1388,12 @@ void ScUndoPrintRange::Redo()
 
 void ScUndoPrintRange::Repeat(SfxRepeatTarget& /* rTarget */)
 {
-    //  gippsnich
+    // makes no sense
 }
 
 sal_Bool ScUndoPrintRange::CanRepeat(SfxRepeatTarget& /* rTarget */) const
 {
-    return false;       // gippsnich
+    return false;       // makes no sense
 }
 
 rtl::OUString ScUndoPrintRange::GetComment() const
@@ -1459,11 +1403,6 @@ rtl::OUString ScUndoPrintRange::GetComment() const
 
 
 //------------------------------------------------------------------------
-
-//---------------------------------------------------------------------------------
-//
-//      Szenario-Flags
-//
 
 ScUndoScenarioFlags::ScUndoScenarioFlags( ScDocShell* pNewDocShell, SCTAB nT,
                     const String& rON, const String& rNN, const String& rOC, const String& rNC,
@@ -1498,7 +1437,7 @@ void ScUndoScenarioFlags::Undo()
     pDoc->SetScenarioData( nTab, aOldComment, aOldColor, nOldFlags );
 
     pDocShell->PostPaintGridAll();
-    //  Der Tabellenname koennte in einer Formel vorkommen...
+    // The sheet name could be found in a formula ...
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
     if (pViewShell)
         pViewShell->UpdateInputHandler();
@@ -1515,7 +1454,7 @@ void ScUndoScenarioFlags::Redo()
     pDoc->SetScenarioData( nTab, aNewComment, aNewColor, nNewFlags );
 
     pDocShell->PostPaintGridAll();
-    //  Der Tabellenname koennte in einer Formel vorkommen...
+    // The sheet name could be found in a formula ...
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
     if (pViewShell)
         pViewShell->UpdateInputHandler();
@@ -1526,7 +1465,7 @@ void ScUndoScenarioFlags::Redo()
 
 void ScUndoScenarioFlags::Repeat(SfxRepeatTarget& /* rTarget */)
 {
-    //  Repeat macht keinen Sinn
+    //  Repeat makes no sense
 }
 
 sal_Bool ScUndoScenarioFlags::CanRepeat(SfxRepeatTarget& /* rTarget */) const
@@ -1535,12 +1474,7 @@ sal_Bool ScUndoScenarioFlags::CanRepeat(SfxRepeatTarget& /* rTarget */) const
 }
 
 
-//---------------------------------------------------------------------------------
-//
-//      rename object
 //      (move to different file?)
-//
-
 ScUndoRenameObject::ScUndoRenameObject( ScDocShell* pNewDocShell, const String& rPN,
                                         const String& rON, const String& rNN ) :
     ScSimpleUndo( pNewDocShell ),
@@ -1617,10 +1551,6 @@ sal_Bool ScUndoRenameObject::CanRepeat(SfxRepeatTarget& /* rTarget */) const
     return false;
 }
 
-// -----------------------------------------------------------------------
-//
-//      Switch sheet between left-to-right and right-to-left
-//
 
 ScUndoLayoutRTL::ScUndoLayoutRTL( ScDocShell* pShell, SCTAB nNewTab, sal_Bool bNewRTL ) :
     ScSimpleUndo( pShell ),

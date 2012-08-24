@@ -52,7 +52,7 @@ ScUndoDraw::~ScUndoDraw()
 
 void ScUndoDraw::ForgetDrawUndo()
 {
-    pDrawUndo = NULL;   // nicht loeschen (Draw-Undo muss dann von aussen gemerkt werden)
+    pDrawUndo = NULL;   // do not delete (DrawUndo has to be set from outside)
 }
 
 rtl::OUString ScUndoDraw::GetComment() const

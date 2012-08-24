@@ -81,18 +81,11 @@ TYPEINIT1(ScUndoBorder,             ScBlockUndo);
 
 
 // To Do:
-/*A*/   // SetOptimalHeight auf Dokument, wenn keine View
-/*B*/   // gelinkte Tabellen
+/*A*/   // SetOptimalHeight on Document, when no View
+/*B*/   // linked sheets
 /*C*/   // ScArea
-//?     // spaeter mal pruefen
+//?     // check later
 
-
-// -----------------------------------------------------------------------
-//
-//      Zellen einfuegen
-//      Zeilen einfuegen
-//      einzeln oder Block
-//
 
 ScUndoInsertCells::ScUndoInsertCells( ScDocShell* pNewDocShell,
                                 const ScRange& rRange, SCTAB nNewCount, SCTAB* pNewTabs, SCTAB* pNewScenarios,
@@ -107,13 +100,13 @@ ScUndoInsertCells::ScUndoInsertCells( ScDocShell* pNewDocShell,
     bPartOfPaste( bNewPartOfPaste ),
     pPasteUndo( NULL )
 {
-    if (eCmd == INS_INSROWS)            // ganze Zeilen?
+    if (eCmd == INS_INSROWS)            // whole row?
     {
         aEffRange.aStart.SetCol(0);
         aEffRange.aEnd.SetCol(MAXCOL);
     }
 
-    if (eCmd == INS_INSCOLS)            // ganze Spalten?
+    if (eCmd == INS_INSCOLS)            // whole column?
     {
         aEffRange.aStart.SetRow(0);
         aEffRange.aEnd.SetRow(MAXROW);
@@ -233,7 +226,7 @@ void ScUndoInsertCells::DoChange( const sal_Bool bUndo )
         }
     }
 
-//? Undo fuer herausgeschobene Attribute ?
+//? Undo for deferred attributes?
 
     sal_uInt16 nPaint = PAINT_GRID;
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
@@ -256,14 +249,14 @@ void ScUndoInsertCells::DoChange( const sal_Bool bUndo )
             }
             break;
         case INS_INSCOLS:
-            nPaint |= PAINT_TOP;                // obere Leiste
+            nPaint |= PAINT_TOP;                // top bar
         case INS_CELLSRIGHT:
             for( i=0; i<nCount; i++ )
             {
-                aWorkRange.aEnd.SetCol(MAXCOL);     // bis ganz nach rechts
+                aWorkRange.aEnd.SetCol(MAXCOL);     // to the far right
                 if ( pDocShell->AdjustRowHeight( aWorkRange.aStart.Row(), aWorkRange.aEnd.Row(), pTabs[i]) )
-                {                                   // AdjustDraw zeichnet PAINT_TOP nicht,
-                    aWorkRange.aStart.SetCol(0);    // daher so geloest
+                {                                   // AdjustDraw does not paint PAINT_TOP,
+                    aWorkRange.aStart.SetCol(0);    // thus solved like this
                     aWorkRange.aEnd.SetRow(MAXROW);
                     nPaint |= PAINT_LEFT;
                 }
@@ -290,7 +283,7 @@ void ScUndoInsertCells::Undo()
     if ( pPasteUndo )
         pPasteUndo->Undo();     // undo paste first
 
-    WaitObject aWait( pDocShell->GetActiveDialogParent() );     // wichtig wegen TrackFormulas bei UpdateReference
+    WaitObject aWait( pDocShell->GetActiveDialogParent() );     // important due to TrackFormulas in UpdateReference
     BeginUndo();
     DoChange( sal_True );
     EndUndo();
@@ -298,7 +291,7 @@ void ScUndoInsertCells::Undo()
 
 void ScUndoInsertCells::Redo()
 {
-    WaitObject aWait( pDocShell->GetActiveDialogParent() );     // wichtig wegen TrackFormulas bei UpdateReference
+    WaitObject aWait( pDocShell->GetActiveDialogParent() );     // important due to TrackFormulas in UpdateReference
     BeginRedo();
     DoChange( false );
     EndRedo();
@@ -329,13 +322,6 @@ sal_Bool ScUndoInsertCells::CanRepeat(SfxRepeatTarget& rTarget) const
 }
 
 
-// -----------------------------------------------------------------------
-//
-//      Zellen loeschen
-//      Zeilen loeschen
-//      einzeln oder Block
-//
-
 ScUndoDeleteCells::ScUndoDeleteCells( ScDocShell* pNewDocShell,
                                 const ScRange& rRange, SCTAB nNewCount, SCTAB* pNewTabs, SCTAB* pNewScenarios,
                                 DelCellCmd eNewCmd, ScDocument* pUndoDocument, ScRefUndoData* pRefData ) :
@@ -346,13 +332,13 @@ ScUndoDeleteCells::ScUndoDeleteCells( ScDocShell* pNewDocShell,
     pScenarios( pNewScenarios ),
     eCmd( eNewCmd )
 {
-    if (eCmd == DEL_DELROWS)            // gaze Zeilen?
+    if (eCmd == DEL_DELROWS)            // whole row?
     {
         aEffRange.aStart.SetCol(0);
         aEffRange.aEnd.SetCol(MAXCOL);
     }
 
-    if (eCmd == DEL_DELCOLS)            // ganze Spalten?
+    if (eCmd == DEL_DELCOLS)            // whole column?
     {
         aEffRange.aStart.SetRow(0);
         aEffRange.aEnd.SetRow(MAXROW);
@@ -369,7 +355,7 @@ ScUndoDeleteCells::~ScUndoDeleteCells()
 
 rtl::OUString ScUndoDeleteCells::GetComment() const
 {
-    return ScGlobal::GetRscString( STR_UNDO_DELETECELLS ); // "Loeschen"
+    return ScGlobal::GetRscString( STR_UNDO_DELETECELLS ); // "Delete"
 }
 
 void ScUndoDeleteCells::SetChangeTrack()
@@ -396,7 +382,7 @@ void ScUndoDeleteCells::DoChange( const sal_Bool bUndo )
     else
         SetChangeTrack();
 
-    // Ausfuehren
+    // Perform it
     switch (eCmd)
     {
         case DEL_DELROWS:
@@ -429,7 +415,7 @@ void ScUndoDeleteCells::DoChange( const sal_Bool bUndo )
         }
     }
 
-    // bei Undo Referenzen wiederherstellen
+    // restore for Undo references
     for( i=0; i<nCount && bUndo; i++ )
     {
         pRefUndoDoc->CopyToDocument( aEffRange.aStart.Col(), aEffRange.aStart.Row(), pTabs[i], aEffRange.aEnd.Col(), aEffRange.aEnd.Row(), pTabs[i]+pScenarios[i],
@@ -490,11 +476,11 @@ void ScUndoDeleteCells::DoChange( const sal_Bool bUndo )
             }
             break;
         case DEL_DELCOLS:
-            nPaint |= PAINT_TOP;                // obere Leiste
+            nPaint |= PAINT_TOP;                // top bar
         case DEL_CELLSLEFT:
             for( i=0; i<nCount; i++ )
             {
-                aWorkRange.aEnd.SetCol(MAXCOL);     // bis ganz nach rechts
+                aWorkRange.aEnd.SetCol(MAXCOL);     // to the far right
                 if ( pDocShell->AdjustRowHeight( aWorkRange.aStart.Row(), aWorkRange.aEnd.Row(), pTabs[i] ) )
                 {
                     aWorkRange.aStart.SetCol(0);
@@ -514,21 +500,21 @@ void ScUndoDeleteCells::DoChange( const sal_Bool bUndo )
         pDocShell->PostPaint( aWorkRange.aStart.Col(), aWorkRange.aStart.Row(), pTabs[i],
             aWorkRange.aEnd.Col(), aWorkRange.aEnd.Row(), pTabs[i]+pScenarios[i], nPaint, SC_PF_LINES );
     }
-    // Markierung erst nach EndUndo
+    // Selection only after EndUndo
 
     pDocShell->PostDataChanged();
-    //  CellContentChanged kommt mit der Markierung
+    //  CellContentChanged comes with the selection
 }
 
 void ScUndoDeleteCells::Undo()
 {
-    WaitObject aWait( pDocShell->GetActiveDialogParent() );     // wichtig wegen TrackFormulas bei UpdateReference
+    WaitObject aWait( pDocShell->GetActiveDialogParent() );     // important due to TrackFormulas in UpdateReference
     BeginUndo();
     DoChange( sal_True );
     EndUndo();
     SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_AREALINKS_CHANGED ) );
 
-    // Markierung erst nach EndUndo
+    // Selection only after EndUndo
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
     if (pViewShell)
     {
@@ -541,7 +527,7 @@ void ScUndoDeleteCells::Undo()
 
 void ScUndoDeleteCells::Redo()
 {
-    WaitObject aWait( pDocShell->GetActiveDialogParent() );     // wichtig wegen TrackFormulas bei UpdateReference
+    WaitObject aWait( pDocShell->GetActiveDialogParent() );     // important due to TrackFormulas in UpdateReference
     BeginRedo();
     DoChange( false);
     EndRedo();
@@ -549,7 +535,7 @@ void ScUndoDeleteCells::Redo()
 
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
     if (pViewShell)
-        pViewShell->DoneBlockMode();            // aktuelle weg
+        pViewShell->DoneBlockMode();            // current way
 }
 
 void ScUndoDeleteCells::Repeat(SfxRepeatTarget& rTarget)
@@ -563,11 +549,6 @@ sal_Bool ScUndoDeleteCells::CanRepeat(SfxRepeatTarget& rTarget) const
     return (rTarget.ISA(ScTabViewTarget));
 }
 
-
-// -----------------------------------------------------------------------
-//
-//      Zellen loeschen auf Mehrfachselektion
-//
 
 ScUndoDeleteMulti::ScUndoDeleteMulti( ScDocShell* pNewDocShell,
                                         sal_Bool bNewRows, sal_Bool bNeedsRefresh, SCTAB nNewTab,
@@ -591,7 +572,7 @@ ScUndoDeleteMulti::~ScUndoDeleteMulti()
 
 rtl::OUString ScUndoDeleteMulti::GetComment() const
 {
-    return ScGlobal::GetRscString( STR_UNDO_DELETECELLS );  // wie DeleteCells
+    return ScGlobal::GetRscString( STR_UNDO_DELETECELLS );  // as DeleteCells
 }
 
 void ScUndoDeleteMulti::DoChange() const
@@ -641,7 +622,7 @@ void ScUndoDeleteMulti::SetChangeTrack()
             aRange.aEnd.SetCol( MAXCOL );
         else
             aRange.aEnd.SetRow( MAXROW );
-        // rueckwaerts loeschen
+        // delete in reverse
         SCCOLROW* pOneRange = &pRanges[2*nRangeCnt];
         for ( SCCOLROW nRangeNo=0; nRangeNo<nRangeCnt; nRangeNo++ )
         {
@@ -668,14 +649,14 @@ void ScUndoDeleteMulti::SetChangeTrack()
 
 void ScUndoDeleteMulti::Undo()
 {
-    WaitObject aWait( pDocShell->GetActiveDialogParent() );     // wichtig wegen TrackFormulas bei UpdateReference
+    WaitObject aWait( pDocShell->GetActiveDialogParent() );     // important due to TrackFormulas in UpdateReference
     BeginUndo();
 
     ScDocument* pDoc = pDocShell->GetDocument();
     SCCOLROW* pOneRange;
     SCCOLROW nRangeNo;
 
-    //  rueckwaerts geloescht -> vorwaerts einfuegen
+    // reverse delete -> forward insert
     pOneRange = pRanges;
     for (nRangeNo=0; nRangeNo<nRangeCnt; nRangeNo++)
     {
@@ -705,8 +686,8 @@ void ScUndoDeleteMulti::Undo()
 
     DoChange();
 
-    //! Markierung wieder einzeichnen
-    //! geht im Moment nicht, da keine Daten fuer Markierung vorhanden!
+    //! redrawing the selection is not possible at the moment
+    //! since no data for selection exist
 
     EndUndo();
     SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_AREALINKS_CHANGED ) );
@@ -714,12 +695,12 @@ void ScUndoDeleteMulti::Undo()
 
 void ScUndoDeleteMulti::Redo()
 {
-    WaitObject aWait( pDocShell->GetActiveDialogParent() );     // wichtig wegen TrackFormulas bei UpdateReference
+    WaitObject aWait( pDocShell->GetActiveDialogParent() );     // important due to TrackFormulas in UpdateReference
     BeginRedo();
 
     ScDocument* pDoc = pDocShell->GetDocument();
 
-    // rueckwaerts loeschen
+    // reverese delet
     SCCOLROW* pOneRange = &pRanges[2*nRangeCnt];
     for (SCCOLROW nRangeNo=0; nRangeNo<nRangeCnt; nRangeNo++)
     {
@@ -741,7 +722,7 @@ void ScUndoDeleteMulti::Redo()
 
 void ScUndoDeleteMulti::Repeat(SfxRepeatTarget& rTarget)
 {
-    //  DeleteCells, falls einfache Selektion
+    //  delete cell if single selection
     if (rTarget.ISA(ScTabViewTarget))
         ((ScTabViewTarget&)rTarget).GetViewShell()->DeleteCells( DEL_DELROWS, sal_True );
 }
@@ -751,11 +732,6 @@ sal_Bool ScUndoDeleteMulti::CanRepeat(SfxRepeatTarget& rTarget) const
     return (rTarget.ISA(ScTabViewTarget));
 }
 
-
-// -----------------------------------------------------------------------
-//
-//      Ausschneiden (Cut)
-//
 
 ScUndoCut::ScUndoCut( ScDocShell* pNewDocShell,
                 ScRange aRange, ScAddress aOldEnd, const ScMarkData& rMark,
@@ -775,7 +751,7 @@ ScUndoCut::~ScUndoCut()
 
 rtl::OUString ScUndoCut::GetComment() const
 {
-    return ScGlobal::GetRscString( STR_UNDO_CUT ); // "Ausschneiden"
+    return ScGlobal::GetRscString( STR_UNDO_CUT ); // "cut"
 }
 
 void ScUndoCut::SetChangeTrack()
@@ -796,7 +772,7 @@ void ScUndoCut::DoChange( const sal_Bool bUndo )
     // do not undo/redo objects and note captions, they are handled via drawing undo
     sal_uInt16 nUndoFlags = (IDF_ALL & ~IDF_OBJECTS) | IDF_NOCAPTIONS;
 
-    if (bUndo)  // nur bei Undo
+    if (bUndo)  // nonly for Undo
     {
         //  all sheets - CopyToDocument skips those that don't exist in pUndoDoc
         SCTAB nTabCount = pDoc->GetTableCount();
@@ -808,7 +784,7 @@ void ScUndoCut::DoChange( const sal_Bool bUndo )
         if ( pChangeTrack )
             pChangeTrack->Undo( nStartChangeAction, nEndChangeAction );
     }
-    else        // nur bei Redo
+    else        // only for Redo
     {
         pDocShell->UpdatePaintExt( nExtFlags, aExtendedRange );
         pDoc->DeleteArea( aBlockRange.aStart.Col(), aBlockRange.aStart.Row(),
@@ -857,11 +833,6 @@ sal_Bool ScUndoCut::CanRepeat(SfxRepeatTarget& rTarget) const
 }
 
 
-// -----------------------------------------------------------------------
-//
-//      Einfuegen (Paste)
-//
-
 ScUndoPaste::ScUndoPaste( ScDocShell* pNewDocShell, const ScRangeList& rRanges,
                 const ScMarkData& rMark,
                 ScDocument* pNewUndoDoc, ScDocument* pNewRedoDoc,
@@ -896,7 +867,7 @@ ScUndoPaste::~ScUndoPaste()
 
 rtl::OUString ScUndoPaste::GetComment() const
 {
-    return ScGlobal::GetRscString( STR_UNDO_PASTE ); // "Einfuegen"
+    return ScGlobal::GetRscString( STR_UNDO_PASTE ); // "paste"
 }
 
 void ScUndoPaste::SetChangeTrack()
@@ -926,7 +897,7 @@ void ScUndoPaste::DoChange(bool bUndo)
 
     ScRefUndoData* pWorkRefData = bUndo ? pRefUndoData : pRefRedoData;
 
-        //  fuer Undo immer alle oder keine Inhalte sichern
+    // Always back-up all or none of the content for Undo
     sal_uInt16 nUndoFlags = IDF_NONE;
     if (nFlags & IDF_CONTENTS)
         nUndoFlags |= IDF_CONTENTS;
@@ -1131,11 +1102,6 @@ sal_Bool ScUndoPaste::CanRepeat(SfxRepeatTarget& rTarget) const
 }
 
 
-// -----------------------------------------------------------------------
-//
-//      Verschieben/Kopieren (Drag & Drop)
-//
-
 ScUndoDragDrop::ScUndoDragDrop( ScDocShell* pNewDocShell,
                     const ScRange& rRange, ScAddress aNewDestPos, sal_Bool bNewCut,
                     ScDocument* pUndoDocument, ScRefUndoData* pRefData, sal_Bool bScenario ) :
@@ -1172,7 +1138,7 @@ ScUndoDragDrop::~ScUndoDragDrop()
 }
 
 rtl::OUString ScUndoDragDrop::GetComment() const
-{   // "Verschieben" : "Kopieren"
+{   // "Move" : "Copy"
     return bCut ?
         ScGlobal::GetRscString( STR_UNDO_MOVE ) :
         ScGlobal::GetRscString( STR_UNDO_COPY );
@@ -1223,7 +1189,7 @@ void ScUndoDragDrop::PaintArea( ScRange aRange, sal_uInt16 nExtFlags ) const
 
     if ( bKeepScenarioFlags )
     {
-        //  Szenarien mitkopiert -> auch Szenario-Rahmen painten
+        //  Copy scenario -> also paint scenario file
         aRange.aStart.SetCol(0);
         aRange.aStart.SetRow(0);
         aRange.aEnd.SetCol(MAXCOL);
@@ -1254,7 +1220,7 @@ void ScUndoDragDrop::DoUndo( ScRange aRange ) const
     if ( pChangeTrack )
         pChangeTrack->Undo( nStartChangeAction, nEndChangeAction );
 
-//? DB-Areas vor Daten, damit bei ExtendMerge die Autofilter-Knoepfe stimmen
+//? Database range  before data, so that the Autofilter button match up in ExtendMerge
 
     ScRange aPaintRange = aRange;
     pDoc->ExtendMerge( aPaintRange );           // before deleting
@@ -1376,16 +1342,12 @@ void ScUndoDragDrop::Repeat(SfxRepeatTarget& /* rTarget */)
 
 sal_Bool ScUndoDragDrop::CanRepeat(SfxRepeatTarget& /* rTarget */) const
 {
-    return false;           // geht nicht
+    return false;           // not possible
 }
 
 
-// -----------------------------------------------------------------------
-//
-//      Liste der Bereichsnamen einfuegen
-//      (Einfuegen|Name|Einfuegen =>[Liste])
-//
-
+//      Insert list containing range names
+//      (Insert|Name|Insert =>[List])
 ScUndoListNames::ScUndoListNames( ScDocShell* pNewDocShell, const ScRange& rRange,
                 ScDocument* pNewUndoDoc, ScDocument* pNewRedoDoc ) :
     ScBlockUndo( pNewDocShell, rRange, SC_UNDO_AUTOHEIGHT ),
@@ -1444,12 +1406,6 @@ sal_Bool ScUndoListNames::CanRepeat(SfxRepeatTarget& rTarget) const
 }
 
 
-// -----------------------------------------------------------------------
-//
-//      Szenario anwenden
-//      (Extras|Szenarien)
-//
-
 ScUndoUseScenario::ScUndoUseScenario( ScDocShell* pNewDocShell,
                         const ScMarkData& rMark,
 /*C*/                   const ScArea& rDestArea,
@@ -1493,7 +1449,7 @@ void ScUndoUseScenario::Undo()
     pDoc->DeleteSelection( IDF_ALL, aMarkData );
     pUndoDoc->CopyToDocument( aRange, IDF_ALL, sal_True, pDoc, &aMarkData );
 
-    //  Szenario-Tabellen
+    // scenario table
     sal_Bool bFrame = false;
     SCTAB nTab = aRange.aStart.Tab();
     SCTAB nEndTab = nTab;
@@ -1501,7 +1457,7 @@ void ScUndoUseScenario::Undo()
         ++nEndTab;
     for (SCTAB i = nTab+1; i<=nEndTab; i++)
     {
-        //  Flags immer
+        // Flags always
         rtl::OUString aComment;
         Color  aColor;
         sal_uInt16 nScenFlags;
@@ -1509,7 +1465,7 @@ void ScUndoUseScenario::Undo()
         pDoc->SetScenarioData( i, aComment, aColor, nScenFlags );
         sal_Bool bActive = pUndoDoc->IsActiveScenario( i );
         pDoc->SetActiveScenario( i, bActive );
-        //  Bei Zurueckkopier-Szenarios auch Inhalte
+        //  For copy-back scenario also content
         if ( nScenFlags & SC_SCENARIO_TWOWAY )
         {
             pDoc->DeleteAreaTab( 0,0, MAXCOL,MAXROW, i, IDF_ALL );
@@ -1519,7 +1475,7 @@ void ScUndoUseScenario::Undo()
             bFrame = sal_True;
     }
 
-    //  Wenn sichtbare Rahmen, dann alles painten
+    // if visible borders, then paint all
     if (bFrame)
         pDocShell->PostPaint( 0,0,nTab, MAXCOL,MAXROW,nTab, PAINT_GRID | PAINT_EXTRAS );
     else
@@ -1571,12 +1527,6 @@ sal_Bool ScUndoUseScenario::CanRepeat(SfxRepeatTarget& rTarget) const
 }
 
 
-// -----------------------------------------------------------------------
-//
-//      Vorlage anwenden
-//      (Format|Vorlagenkatalog)
-//
-
 ScUndoSelectionStyle::ScUndoSelectionStyle( ScDocShell* pNewDocShell,
                                       const ScMarkData& rMark,
                                       const ScRange& rRange,
@@ -1608,13 +1558,13 @@ void ScUndoSelectionStyle::DoChange( const sal_Bool bUndo )
     SetViewMarkData( aMarkData );
 
     ScRange aWorkRange( aRange );
-    if ( pDoc->HasAttrib( aWorkRange, HASATTR_MERGED ) )        // zusammengefasste Zellen?
+    if ( pDoc->HasAttrib( aWorkRange, HASATTR_MERGED ) )        // Merged cells?
         pDoc->ExtendMerge( aWorkRange, sal_True );
 
     sal_uInt16 nExtFlags = 0;
     pDocShell->UpdatePaintExt( nExtFlags, aWorkRange );
 
-    if (bUndo)      // bei Undo alte Daten wieder reinschubsen
+    if (bUndo)      // if Undo then push back all old data again
     {
         SCTAB nTabCount = pDoc->GetTableCount();
         ScRange aCopyRange = aWorkRange;
@@ -1622,7 +1572,7 @@ void ScUndoSelectionStyle::DoChange( const sal_Bool bUndo )
         aCopyRange.aEnd.SetTab(nTabCount-1);
         pUndoDoc->CopyToDocument( aCopyRange, IDF_ATTRIB, sal_True, pDoc, &aMarkData );
     }
-    else            // bei Redo Style wieder zuweisen
+    else            // if Redo, then reapply style
     {
         ScStyleSheetPool* pStlPool = pDoc->GetStyleSheetPool();
         ScStyleSheet* pStyleSheet =
@@ -1688,11 +1638,6 @@ sal_uInt16 ScUndoSelectionStyle::GetId() const
 }
 
 
-// -----------------------------------------------------------------------
-//
-//      Matrix-Formel eingeben
-//
-
 ScUndoEnterMatrix::ScUndoEnterMatrix( ScDocShell* pNewDocShell, const ScRange& rArea,
                                       ScDocument* pNewUndoDoc, const String& rForm ) :
     ScBlockUndo( pNewDocShell, rArea, SC_UNDO_SIMPLE ),
@@ -1757,7 +1702,7 @@ void ScUndoEnterMatrix::Redo()
     pDoc->InsertMatrixFormula( aBlockRange.aStart.Col(), aBlockRange.aStart.Row(),
                                aBlockRange.aEnd.Col(),   aBlockRange.aEnd.Row(),
                                aDestMark, aFormula );
-//  pDocShell->PostPaint( aBlockRange, PAINT_GRID );    // nicht noetig ???
+//  pDocShell->PostPaint( aBlockRange, PAINT_GRID );    // not needed ???
 
     SetChangeTrack();
 
@@ -1779,10 +1724,6 @@ sal_Bool ScUndoEnterMatrix::CanRepeat(SfxRepeatTarget& rTarget) const
     return (rTarget.ISA(ScTabViewTarget));
 }
 
-// -----------------------------------------------------------------------
-//
-//      Einzug vermindern / erhoehen
-//
 
 ScRange lcl_GetMultiMarkRange( const ScMarkData& rMark )
 {
@@ -1850,10 +1791,6 @@ sal_Bool ScUndoIndent::CanRepeat(SfxRepeatTarget& rTarget) const
     return (rTarget.ISA(ScTabViewTarget));
 }
 
-// -----------------------------------------------------------------------
-//
-//      Transliteration for cells
-//
 
 ScUndoTransliterate::ScUndoTransliterate( ScDocShell* pNewDocShell, const ScMarkData& rMark,
                             ScDocument* pNewUndoDoc, sal_Int32 nType ) :
@@ -1911,10 +1848,6 @@ sal_Bool ScUndoTransliterate::CanRepeat(SfxRepeatTarget& rTarget) const
     return (rTarget.ISA(ScTabViewTarget));
 }
 
-// -----------------------------------------------------------------------
-//
-//      einzelne Items per Which-IDs aus Bereich loeschen
-//
 
 ScUndoClearItems::ScUndoClearItems( ScDocShell* pNewDocShell, const ScMarkData& rMark,
                             ScDocument* pNewUndoDoc, const sal_uInt16* pW ) :
@@ -1980,10 +1913,6 @@ sal_Bool ScUndoClearItems::CanRepeat(SfxRepeatTarget& rTarget) const
     return (rTarget.ISA(ScTabViewTarget));
 }
 
-// -----------------------------------------------------------------------
-//
-//      Alle Umbrueche einer Tabelle loeschen
-//
 
 ScUndoRemoveBreaks::ScUndoRemoveBreaks( ScDocShell* pNewDocShell,
                                     SCTAB nNewTab, ScDocument* pNewUndoDoc ) :
@@ -2048,10 +1977,6 @@ sal_Bool ScUndoRemoveBreaks::CanRepeat(SfxRepeatTarget& rTarget) const
     return (rTarget.ISA(ScTabViewTarget));
 }
 
-// -----------------------------------------------------------------------
-//
-//      Zusammenfassung aufheben (fuer einen ganzen Bereich)
-//
 
 ScUndoRemoveMerge::ScUndoRemoveMerge( ScDocShell* pNewDocShell,
                                       const ScCellMergeOption& rOption, ScDocument* pNewUndoDoc ) :
@@ -2068,7 +1993,7 @@ ScUndoRemoveMerge::~ScUndoRemoveMerge()
 
 rtl::OUString ScUndoRemoveMerge::GetComment() const
 {
-    return ScGlobal::GetRscString( STR_UNDO_REMERGE );  // "Zusammenfassung aufheben"
+    return ScGlobal::GetRscString( STR_UNDO_REMERGE );  // "remove merge"
 }
 
 void ScUndoRemoveMerge::Undo()
@@ -2122,7 +2047,7 @@ void ScUndoRemoveMerge::Redo()
         // There is no need to extend merge area because it's already been extended.
         ScRange aRange = maOption.getSingleRange(nTab);
 
-        //  ausfuehren
+        // execute it
 
         const SfxPoolItem& rDefAttr = pDoc->GetPool()->GetDefaultItem( ATTR_MERGE );
         ScPatternAttr aPattern( pDoc->GetPool() );
@@ -2170,11 +2095,7 @@ void ScUndoRemoveMerge::SetCurTab()
     aBlockRange.aEnd.SetTab(nCurTab);
 }
 
-// -----------------------------------------------------------------------
-//
-//      nur Umrandung setzen, per ScRangeList (StarOne)
-//
-
+/** set only border, for ScRangeList (StarOne) */
 ScRange lcl_TotalRange( const ScRangeList& rRanges )
 {
     ScRange aTotal;
@@ -2236,7 +2157,7 @@ void ScUndoBorder::Redo()
 {
     BeginRedo();
 
-    ScDocument* pDoc = pDocShell->GetDocument();        //! Funktion an docfunc aufrufen
+    ScDocument* pDoc = pDocShell->GetDocument();        //! Function to call docfunc
     size_t nCount = pRanges->size();
     for (size_t i = 0; i < nCount; ++i )
     {
@@ -2257,12 +2178,12 @@ void ScUndoBorder::Redo()
 
 void ScUndoBorder::Repeat(SfxRepeatTarget& /* rTarget */)
 {
-    //! spaeter (wenn die Funktion aus cellsuno nach docfunc gewandert ist)
+    //! later (when the function has moved from cellsuno to docfunc)
 }
 
 sal_Bool ScUndoBorder::CanRepeat(SfxRepeatTarget& /* rTarget */) const
 {
-    return false;   // s.o.
+    return false;   // See above
 }
 
 

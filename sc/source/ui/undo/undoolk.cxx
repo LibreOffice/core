@@ -31,7 +31,7 @@ SdrUndoAction* GetSdrUndoAction( ScDocument* pDoc )
 {
     ScDrawLayer* pLayer = pDoc->GetDrawLayer();
     if (pLayer)
-        return pLayer->GetCalcUndo();               // muss vorhanden sein
+        return pLayer->GetCalcUndo();               // must exist
     else
         return NULL;
 }
