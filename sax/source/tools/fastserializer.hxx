@@ -39,7 +39,7 @@
 
 namespace sax_fastparser {
 
-class SAX_DLLPUBLIC FastSaxSerializer : public ::cppu::WeakImplHelper2< ::com::sun::star::xml::sax::XFastSerializer, ::com::sun::star::lang::XServiceInfo >
+class FastSaxSerializer : public ::cppu::WeakImplHelper2< ::com::sun::star::xml::sax::XFastSerializer, ::com::sun::star::lang::XServiceInfo >
 {
     typedef ::com::sun::star::uno::Sequence< ::sal_Int8 > Int8Sequence;
     typedef ::com::sun::star::uno::Sequence< ::sal_Int32 > Int32Sequence;

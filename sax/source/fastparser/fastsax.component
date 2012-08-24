@@ -22,7 +22,4 @@
   <implementation name="com.sun.star.comp.extensions.xml.sax.FastParser">
     <service name="com.sun.star.xml.sax.FastParser"/>
   </implementation>
-  <implementation name="com.sun.star.comp.extensions.xml.sax.FastSerializer">
-    <service name="com.sun.star.xml.sax.FastSerializer"/>
-  </implementation>
 </component>

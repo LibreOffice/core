@@ -21,7 +21,6 @@
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/implbase2.hxx>
 
-#include <fastserializer.hxx>
 #include "fastparser.hxx"
 
 using namespace sax_fastparser;
@@ -34,9 +33,6 @@ using namespace ::com::sun::star::lang;
 namespace sax_fastparser
 {
 
-//--------------------------------------
-// the extern interface
-//---------------------------------------
 Reference< XInterface > SAL_CALL FastSaxParser_CreateInstance(
     SAL_UNUSED_PARAMETER const Reference< XMultiServiceFactory > & )
     throw(Exception)
@@ -45,13 +41,6 @@ Reference< XInterface > SAL_CALL FastSaxParser_CreateInstance(
     return Reference< XInterface > ( (OWeakObject * ) p );
 }
 
-Reference< XInterface > SAL_CALL FastSaxSerializer_CreateInstance(
-    SAL_UNUSED_PARAMETER const Reference< XMultiServiceFactory > & )
-    throw(Exception)
-{
-    FastSaxSerializer *p = new FastSaxSerializer;
-    return Reference< XInterface > ( (OWeakObject * ) p );
-}
 }
 
 extern "C"
@@ -75,12 +64,6 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL fastsax_component_getFactory(
             xRet = createSingleFactory( xSMgr, aImplementationName,
                                         FastSaxParser_CreateInstance,
                                         FastSaxParser::getSupportedServiceNames_Static() );
-        }
-        else if ( aImplementationName == SERIALIZER_IMPLEMENTATION_NAME  )
-        {
-            xRet = createSingleFactory( xSMgr, aImplementationName,
-                                        FastSaxSerializer_CreateInstance,
-                                        FastSaxSerializer::getSupportedServiceNames_Static() );
         }
 
         if (xRet.is())
