@@ -36,9 +36,7 @@
 #include <com/sun/star/form/XChangeListener.hpp>
 #include <ooo/vba/XControlProvider.hpp>
 #include <ooo/vba/msforms/fmMousePointer.hpp>
-#ifdef VBA_OOBUILD_HACK
 #include <svtools/bindablecontrolhelper.hxx>
-#endif
 #include "vbacontrol.hxx"
 #include "vbacombobox.hxx"
 #include "vbabutton.hxx"
@@ -281,7 +279,6 @@ ScVbaControl::getControlSource() throw (uno::RuntimeException)
 // #FIXME I *hate* having these upstream differences
 // but this is necessary until I manage to upstream other
 // dependant parts
-#ifdef VBA_OOBUILD_HACK
     rtl::OUString sControlSource;
     uno::Reference< form::binding::XBindableValue > xBindable( m_xProps, uno::UNO_QUERY );
     if ( xBindable.is() )
@@ -301,26 +298,18 @@ ScVbaControl::getControlSource() throw (uno::RuntimeException)
         }
     }
     return sControlSource;
-#else
-    throw uno::RuntimeException( rtl::OUString( "getControlSource not supported" ), uno::Reference< uno::XInterface >()); // not supported
-#endif
 }
 
 void SAL_CALL
 ScVbaControl::setControlSource( const rtl::OUString& _controlsource ) throw (uno::RuntimeException)
 {
-#ifdef VBA_OOBUILD_HACK
     rtl::OUString sEmpty;
     svt::BindableControlHelper::ApplyListSourceAndBindableData( m_xModel, m_xProps, _controlsource, sEmpty );
-#else
-    throw uno::RuntimeException( rtl::OUString( "setControlSource not supported " ).concat( _controlsource ), uno::Reference< uno::XInterface >()); // not supported
-#endif
 }
 
 rtl::OUString SAL_CALL
 ScVbaControl::getRowSource() throw (uno::RuntimeException)
 {
-#ifdef VBA_OOBUILD_HACK
     rtl::OUString sRowSource;
     uno::Reference< form::binding::XListEntrySink > xListSink( m_xProps, uno::UNO_QUERY );
     if ( xListSink.is() )
@@ -341,20 +330,13 @@ ScVbaControl::getRowSource() throw (uno::RuntimeException)
         }
     }
     return sRowSource;
-#else
-    throw uno::RuntimeException( rtl::OUString( "getRowSource not supported" ), uno::Reference< uno::XInterface >()); // not supported
-#endif
 }
 
 void SAL_CALL
 ScVbaControl::setRowSource( const rtl::OUString& _rowsource ) throw (uno::RuntimeException)
 {
-#ifdef VBA_OOBUILD_HACK
     rtl::OUString sEmpty;
     svt::BindableControlHelper::ApplyListSourceAndBindableData( m_xModel, m_xProps, sEmpty, _rowsource );
-#else
-    throw uno::RuntimeException( rtl::OUString( "setRowSource not supported " ).concat( _rowsource ), uno::Reference< uno::XInterface >()); // not supported
-#endif
 }
 
 rtl::OUString SAL_CALL

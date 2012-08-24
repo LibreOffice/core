@@ -32,10 +32,6 @@ $(eval $(call gb_Library_set_include,vbaobj,\
 
 $(eval $(call gb_Library_set_componentfile,vbaobj,sc/util/vbaobj))
 
-$(eval $(call gb_Library_add_defs,vbaobj,\
-	-DVBA_OOBUILD_HACK \
-))
-
 $(eval $(call gb_Library_use_api,vbaobj,\
     offapi \
     oovbaapi \

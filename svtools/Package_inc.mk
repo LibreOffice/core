@@ -39,6 +39,7 @@ $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/accessibletableprovide
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/addresstemplate.hxx,svtools/addresstemplate.hxx))
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/apearcfg.hxx,svtools/apearcfg.hxx))
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/asynclink.hxx,svtools/asynclink.hxx))
+$(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/bindablecontrolhelper.hxx,svtools/bindablecontrolhelper.hxx))
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/borderhelper.hxx,svtools/borderhelper.hxx))
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/brwbox.hxx,svtools/brwbox.hxx))
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/brwhead.hxx,svtools/brwhead.hxx))

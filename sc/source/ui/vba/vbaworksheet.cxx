@@ -960,7 +960,6 @@ ScVbaWorksheet::Spinners( const uno::Any& /*rIndex*/ ) throw (uno::RuntimeExcept
 void SAL_CALL
 ScVbaWorksheet::ShowDataForm( ) throw (uno::RuntimeException)
 {
-#ifdef VBA_OOBUILD_HACK
     uno::Reference< frame::XModel > xModel( getModel(), uno::UNO_QUERY_THROW );
     ScTabViewShell* pTabViewShell = excel::getBestViewShell( xModel );
 
@@ -971,9 +970,6 @@ ScVbaWorksheet::ShowDataForm( ) throw (uno::RuntimeException)
     OSL_ENSURE(pDlg, "Dialog create fail!");
 
     pDlg->Execute();
-#else
-    throw uno::RuntimeException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Not implemented") ), uno::Reference< uno::XInterface >() );
-#endif
 }
 
 uno::Any SAL_CALL

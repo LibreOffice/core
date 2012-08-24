@@ -2954,11 +2954,7 @@ getPasteFlags (sal_Int32 Paste)
         nFlags = IDF_FORMULA;break;
         case excel::XlPasteType::xlPasteFormulasAndNumberFormats :
         case excel::XlPasteType::xlPasteValues:
-#ifdef VBA_OOBUILD_HACK
         nFlags = ( IDF_VALUE | IDF_DATETIME | IDF_STRING | IDF_SPECIAL_BOOLEAN ); break;
-#else
-        nFlags = ( IDF_VALUE | IDF_DATETIME | IDF_STRING ); break;
-#endif
         case excel::XlPasteType::xlPasteValuesAndNumberFormats:
         nFlags = IDF_VALUE | IDF_ATTRIB; break;
         case excel::XlPasteType::xlPasteColumnWidths:
@@ -3566,17 +3562,13 @@ ScVbaRange::Sort( const uno::Any& Key1, const uno::Any& Order1, const uno::Any& 
     if ( nOrientation == excel::XlSortOrientation::xlSortRows )
         bIsSortColumns = sal_True;
     sal_Int16 nHeader = 0;
-#ifdef VBA_OOBUILD_HACK
     nHeader = aSortParam.nCompatHeader;
-#endif
     sal_Bool bContainsHeader = false;
 
     if ( Header.hasValue() )
     {
         nHeader = ::comphelper::getINT16( Header );
-#ifdef VBA_OOBUILD_HACK
         aSortParam.nCompatHeader = nHeader;
-#endif
     }
 
     if ( nHeader == excel::XlYesNoGuess::xlGuess )
@@ -3587,9 +3579,7 @@ ScVbaRange::Sort( const uno::Any& Key1, const uno::Any& Order1, const uno::Any& 
             nHeader =  excel::XlYesNoGuess::xlYes;
         else
             nHeader =  excel::XlYesNoGuess::xlNo;
-#ifdef VBA_OOBUILD_HACK
         aSortParam.nCompatHeader = nHeader;
-#endif
     }
 
     if ( nHeader == excel::XlYesNoGuess::xlYes )
@@ -5574,12 +5564,10 @@ ScVbaRange::AutoFill(  const uno::Reference< excel::XRange >& Destination, const
                 break;
         }
     }
-#ifdef VBA_OOBUILD_HACK
     double fEndValue =  MAXDOUBLE;
     ScDocShell* pDocSh = excel::GetDocShellFromRange( mxRange );
     pDocSh->GetDocFunc().FillAuto( aSourceRange, NULL, eDir, eCmd, eDateCmd,
                                    nCount, fStep, fEndValue, sal_True, sal_True );
-#endif
 }
 sal_Bool SAL_CALL
 ScVbaRange::GoalSeek( const uno::Any& Goal, const uno::Reference< excel::XRange >& ChangingCell ) throw (uno::RuntimeException)
