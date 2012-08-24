@@ -52,9 +52,9 @@ ScRefUndoData::ScRefUndoData( const ScDocument* pDoc ) :
     ScRangeName* pOldRanges = ((ScDocument*)pDoc)->GetRangeName();          //! const
     pRangeName = pOldRanges ? new ScRangeName(*pOldRanges) : NULL;
 
-    pPrintRanges = pDoc->CreatePrintRangeSaver();       // neu erzeugt
+    pPrintRanges = pDoc->CreatePrintRangeSaver();       // recreated
 
-    //! bei Pivot nur Bereiche merken ???
+    //! for Pivot, just mark the range ???
 
     ScDPCollection* pOldDP = ((ScDocument*)pDoc)->GetDPCollection();        //! const
     pDPCollection = pOldDP ? new ScDPCollection(*pOldDP) : NULL;
@@ -166,7 +166,7 @@ void ScRefUndoData::DoUndo( ScDocument* pDoc, sal_Bool bUndoRefFirst )
     if (pDetOpList)
         pDoc->SetDetOpList( new ScDetOpList(*pDetOpList) );
 
-    // bUndoRefFirst ist bSetChartRangeLists
+    // bUndoRefFirst is bSetChartRangeLists
     if ( pChartListenerCollection )
         pDoc->SetChartListenerCollection( new ScChartListenerCollection(
             *pChartListenerCollection ), bUndoRefFirst );
@@ -174,7 +174,7 @@ void ScRefUndoData::DoUndo( ScDocument* pDoc, sal_Bool bUndoRefFirst )
     if (pDBCollection || pRangeName)
     {
         sal_Bool bOldAutoCalc = pDoc->GetAutoCalc();
-        pDoc->SetAutoCalc( false ); // Mehrfachberechnungen vermeiden
+        pDoc->SetAutoCalc( false ); // Avoid multiple calculations
         pDoc->CompileAll();
         pDoc->SetDirty();
         pDoc->SetAutoCalc( bOldAutoCalc );

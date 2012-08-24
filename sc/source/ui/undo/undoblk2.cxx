@@ -37,7 +37,7 @@
 #include "global.hxx"
 #include "target.hxx"
 
-#include "undoolk.hxx"              //! GetUndo ins Document verschieben!
+#include "undoolk.hxx"              //! shift GetUndo in the Document
 
 
 // STATIC DATA -----------------------------------------------------------
@@ -46,12 +46,7 @@ TYPEINIT1(ScUndoWidthOrHeight,      SfxUndoAction);
 
 // -----------------------------------------------------------------------
 
-
-
-//
-//      Spaltenbreiten oder Zeilenhoehen aendern
-//
-
+/** Change column widths or row heights */
 ScUndoWidthOrHeight::ScUndoWidthOrHeight( ScDocShell* pNewDocShell,
                 const ScMarkData& rMark,
                 SCCOLROW nNewStart, SCTAB nNewStartTab, SCCOLROW nNewEnd, SCTAB nNewEndTab,
@@ -86,7 +81,7 @@ ScUndoWidthOrHeight::~ScUndoWidthOrHeight()
 
 rtl::OUString ScUndoWidthOrHeight::GetComment() const
 {
-    // [ "optimale " ] "Spaltenbreite" | "Zeilenhoehe"
+    // [ "optimal " ] "Column width" | "row height"
     return ( bWidth ?
         ( ( eMode == SC_SIZE_OPTIMAL )?
         ScGlobal::GetRscString( STR_UNDO_OPTCOLWIDTH ) :
@@ -113,7 +108,7 @@ void ScUndoWidthOrHeight::Undo()
     }
 
     //! outlines from all tables?
-    if (pUndoTab)                                           // Outlines mit gespeichert?
+    if (pUndoTab)                                           // Outlines are included when saving ?
         pDoc->SetOutlineTable( nStartTab, pUndoTab );
 
     SCTAB nTabCount = pDoc->GetTableCount();
@@ -170,7 +165,7 @@ void ScUndoWidthOrHeight::Redo()
         if ( nTab < nStartTab || nTab > nEndTab )
             pViewShell->SetTabNo( nStartTab );
 
-        // SetWidthOrHeight aendert aktuelle Tabelle !
+        // SetWidthOrHeigt changes current sheet !
         pViewShell->SetWidthOrHeight( bWidth, nRangeCnt, pRanges, eMode, nNewSize, false, true, &aMarkData );
     }
 
