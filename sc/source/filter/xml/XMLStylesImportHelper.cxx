@@ -264,22 +264,16 @@ ScMyStylesImportHelper::ScMyStylesImportHelper(ScXMLImport& rTempImport)
 
 ScMyStylesImportHelper::~ScMyStylesImportHelper()
 {
-    if (pPrevStyleName)
-        delete pPrevStyleName;
-    if (pPrevCurrency)
-        delete pPrevCurrency;
-    if (pStyleName)
-        delete pStyleName;
-    if (pCurrency)
-        delete pCurrency;
+    delete pPrevStyleName;
+    delete pPrevCurrency;
+    delete pStyleName;
+    delete pCurrency;
 }
 
 void ScMyStylesImportHelper::ResetAttributes()
 {
-    if (pPrevStyleName)
-        delete pPrevStyleName;
-    if (pPrevCurrency)
-        delete pPrevCurrency;
+    delete pPrevStyleName;
+    delete pPrevCurrency;
     pPrevStyleName = pStyleName;
     pPrevCurrency = pCurrency;
     nPrevCellType = nCellType;
@@ -331,8 +325,7 @@ void ScMyStylesImportHelper::AddDefaultRange(const ScRange& rRange)
                     ScRange aRange(rRange);
                     aRange.aStart.SetCol(nStartCol);
                     aRange.aEnd.SetCol(i - 1);
-                    if (pPrevStyleName)
-                        delete pPrevStyleName;
+                    delete pPrevStyleName;
                     pPrevStyleName = new rtl::OUString(aPrevItr->sStyleName);
                     AddSingleRange(aRange);
                     nStartCol = i;
@@ -343,8 +336,7 @@ void ScMyStylesImportHelper::AddDefaultRange(const ScRange& rRange)
             {
                 ScRange aRange(rRange);
                 aRange.aStart.SetCol(nStartCol);
-                if (pPrevStyleName)
-                    delete pPrevStyleName;
+                delete pPrevStyleName;
                 pPrevStyleName = new rtl::OUString(aPrevItr->sStyleName);
                 AddSingleRange(aRange);
             }
@@ -360,8 +352,7 @@ void ScMyStylesImportHelper::AddDefaultRange(const ScRange& rRange)
     }
     else
     {
-        if (pPrevStyleName)
-            delete pPrevStyleName;
+        delete pPrevStyleName;
         pPrevStyleName = new rtl::OUString(aRowDefaultStyle->sStyleName);
         AddSingleRange(rRange);
     }
@@ -411,10 +402,8 @@ void ScMyStylesImportHelper::SetRowStyle(const rtl::OUString& sStyleName)
 void ScMyStylesImportHelper::SetAttributes(rtl::OUString* pStyleNameP,
     rtl::OUString* pCurrencyP, const sal_Int16 nCellTypeP)
 {
-    if (this->pStyleName)
-        delete this->pStyleName;
-    if (this->pCurrency)
-        delete this->pCurrency;
+    delete this->pStyleName;
+    delete this->pCurrency;
     this->pStyleName = pStyleNameP;
     this->pCurrency = pCurrencyP;
     this->nCellType = nCellTypeP;
