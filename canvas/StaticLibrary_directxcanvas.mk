@@ -43,6 +43,12 @@ $(eval $(call gb_StaticLibrary_add_defs,directxcanvas,\
 	-UNOMINMAX \
 ))
 
+ifeq ($(WINDOWS_SDK_VERSION),80)
+$(eval $(call gb_StaticLibrary_add_defs,directxcanvas,\
+	-DWIN8_SDK=1 \
+))
+endif
+
 $(eval $(call gb_StaticLibrary_add_exception_objects,directxcanvas,\
 	canvas/source/directx/dx_bitmap \
 	canvas/source/directx/dx_bitmapcanvashelper \

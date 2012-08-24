@@ -81,6 +81,12 @@
 
     typedef IDirectDrawSurface surface_type;
 
+#elif WIN8_SDK == 1 //Windows 8 SDK
+
+    #include <d3d9.h>
+
+    typedef IDirect3DSurface9 surface_type;
+
 #else
 
     #include <dxsdkver.h>
