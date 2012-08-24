@@ -1606,6 +1606,76 @@ void SwTxtNode::DelSoftHyph( const xub_StrLen nStt, const xub_StrLen nEnd )
     }
 }
 
+//In MS Word, the font underline setting of the paragraph end position wont affect the formatting of numbering, so we ignore it
+bool lcl_IsIgnoredCharFmtForNumbering(const sal_uInt16 nWhich)
+{
+    return (nWhich ==  RES_CHRATR_UNDERLINE);
+}
+
+//In MS Word, following properties of the paragraph end position wont affect the formatting of bullets, so we ignore them:
+//Font underline;
+//Font Italic of Western, CJK and CTL;
+//Font Bold of Wertern, CJK and CTL;
+bool lcl_IsIgnoredCharFmtForBullets(const sal_uInt16 nWhich)
+{
+    return (nWhich ==  RES_CHRATR_UNDERLINE || nWhich ==  RES_CHRATR_POSTURE || nWhich ==  RES_CHRATR_WEIGHT
+        || nWhich == RES_CHRATR_CJK_POSTURE || nWhich == RES_CHRATR_CJK_WEIGHT
+        || nWhich == RES_CHRATR_CTL_POSTURE || nWhich == RES_CHRATR_CTL_WEIGHT);
+}
+
+//Condition for expanding char set to character style of specified number rule level:
+//The item inside the set should not conflict to any exist and non-default item inside paragraph properties set (SwCntntNode::SwPAttrSet);
+//The node should have applied a number rule;
+//The node should be counted in a list, if not, make it to be;
+//The item should not conflict to any exist and non-default item inside the character of specified number rule level;
+//The item should not be ignored depend on the exact number rule type;
+bool SwTxtNode::TryCharSetExpandToNum(const SfxItemSet& aCharSet)
+{
+    bool bRet = false;
+    SfxItemIter aIter( aCharSet );
+        const SfxPoolItem* pItem = aIter.FirstItem();
+        const sal_uInt16 nWhich = pItem->Which();
+
+    const SfxPoolItem& rInnerItem = GetAttr(nWhich,false);
+
+    if (!IsDefaultItem(&rInnerItem) &&  !IsInvalidItem(&rInnerItem))
+        return bRet;
+
+    if ( !IsInList() && GetNumRule() && GetListId().Len() > 0 )
+    {
+        return bRet;
+    }
+
+    SwNumRule* pCurrNum = GetNumRule(false);
+
+    int nLevel = GetActualListLevel();
+
+    if (nLevel != -1 && pCurrNum)
+    {
+        const SwNumFmt* pCurrNumFmt = pCurrNum->GetNumFmt(static_cast<sal_uInt16>(nLevel));
+        if (pCurrNumFmt)
+        {
+            if (pCurrNumFmt->IsItemize() && lcl_IsIgnoredCharFmtForBullets(nWhich))
+                return bRet;
+            if (pCurrNumFmt->IsEnumeration() && lcl_IsIgnoredCharFmtForNumbering(nWhich))
+                return bRet;
+            SwCharFmt* pCurrCharFmt =pCurrNumFmt->GetCharFmt();
+
+            if (pCurrCharFmt && pCurrCharFmt->GetItemState(nWhich,false) != SFX_ITEM_SET)
+            {
+                pCurrCharFmt->SetFmtAttr(*pItem);
+                SwNumFmt aNewNumFmt(*pCurrNumFmt);
+                aNewNumFmt.SetCharFmt(pCurrCharFmt);
+                pCurrNum->Set(nLevel,aNewNumFmt);
+                bRet = true;
+            }
+        }
+    }
+
+
+    return bRet;
+}
+
 // setze diese Attribute am TextNode. Wird der gesamte Bereich umspannt,
 // dann setze sie nur im AutoAttrSet (SwCntntNode:: SetAttr)
 sal_Bool SwTxtNode::SetAttr( const SfxItemSet& rSet, xub_StrLen nStt,

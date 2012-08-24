@@ -81,6 +81,9 @@ static SwCntntNode* GetCntntNode(SwDoc* pDoc, SwNodeIndex& rIdx, bool bNext)
 SwFltStackEntry::SwFltStackEntry(const SwPosition& rStartPos, SfxPoolItem* pHt)
     : m_aMkPos(rStartPos)
     , m_aPtPos(rStartPos)
+    , mnStartCP(-1)
+    , mnEndCP(-1)
+    , bIsParaEnd(false)
 {
     pAttr = pHt;        // speicher eine Kopie vom Attribut
     bOld    = sal_False;    // used for marking Attributes *before* skipping field results
@@ -105,22 +108,26 @@ void SwFltStackEntry::SetEndPos(const SwPosition& rEndPos)
     m_aPtPos.SetPos(rEndPos);
 }
 
+
 bool SwFltStackEntry::MakeRegion(SwDoc* pDoc, SwPaM& rRegion, bool bCheck,
-    const SwFltPosition &rMkPos, const SwFltPosition &rPtPos,
+    const SwFltPosition &rMkPos, const SwFltPosition &rPtPos, bool bIsParaEnd,
     sal_uInt16 nWhich)
 {
     // does this range actually contain something?
     // empty range is allowed if at start of empty paragraph
     // fields are special: never have range, so leave them
+    //
+    // The only position of 0x0D will not be able to make region in the old logic
+    // because it is beyond the length of para...need special consideration here.
     SwCntntNode *const pCntntNode(
         SwNodeIndex(rMkPos.m_nNode, +1).GetNode().GetCntntNode());
     if (rMkPos == rPtPos &&
         ((0 != rPtPos.m_nCntnt) || (pCntntNode && (0 != pCntntNode->Len())))
-        && (RES_TXTATR_FIELD != nWhich))
+        && (RES_TXTATR_FIELD != nWhich)
+        && !(bIsParaEnd && pCntntNode && pCntntNode->IsTxtNode() && 0 != pCntntNode->Len() ))
     {
         return false;
     }
-
     // !!! Die Content-Indizies beziehen sich immer auf den Node !!!
     rRegion.GetPoint()->nNode = rMkPos.m_nNode.GetIndex() + 1;
     SwCntntNode* pCNd = GetCntntNode(pDoc, rRegion.GetPoint()->nNode, true);
@@ -144,12 +151,12 @@ bool SwFltStackEntry::MakeRegion(SwDoc* pDoc, SwPaM& rRegion, bool bCheck,
 
 bool SwFltStackEntry::MakeRegion(SwDoc* pDoc, SwPaM& rRegion, bool bCheck) const
 {
-    return MakeRegion(pDoc, rRegion, bCheck, m_aMkPos, m_aPtPos,
+    return MakeRegion(pDoc, rRegion, bCheck, m_aMkPos, m_aPtPos, bIsParaEnd,
         pAttr->Which());
 }
 
 SwFltControlStack::SwFltControlStack(SwDoc* pDo, sal_uLong nFieldFl)
-    : nFieldFlags(nFieldFl), pDoc(pDo), bIsEndStack(false)
+    : nFieldFlags(nFieldFl),bHasSdOD(true), bSdODChecked(false), pDoc(pDo), bIsEndStack(false)
 {
 }
 
@@ -238,7 +245,11 @@ void SwFltControlStack::NewAttr(const SwPosition& rPos, const SfxPoolItem& rAttr
         pExtendCandidate->bOpen=true;
     }
     else
-        maEntries.push_back(new SwFltStackEntry(rPos, rAttr.Clone()));
+    {
+        SwFltStackEntry *pTmp = new SwFltStackEntry(rPos, rAttr.Clone() );
+        pTmp->SetStartCP(GetCurrAttrCP());
+        maEntries.push_back(pTmp);
+    }
 }
 
 void SwFltControlStack::DeleteAndDestroy(Entries::size_type nCnt)
@@ -248,6 +259,14 @@ void SwFltControlStack::DeleteAndDestroy(Entries::size_type nCnt)
     {
         myEIter aElement = maEntries.begin() + nCnt;
         maEntries.erase(aElement);
+    }
+    //Clear the para end position recorded in reader intermittently for the least impact on loading performance
+    //Because the attributes handled based on the unit of para
+    if ( empty() )
+    {
+        ClearParaEndPosition();
+        bHasSdOD = true;
+        bSdODChecked = false;
     }
 }
 
@@ -343,6 +362,7 @@ SwFltStackEntry* SwFltControlStack::SetAttr(const SwPosition& rPos,
             {
                 rEntry.bConsumedByField = consumedByField;
                 rEntry.SetEndPos(rPos);
+                rEntry.SetEndCP(GetCurrAttrCP());
                 if (bLastEntry && nAttrId == rEntry.pAttr->Which())
                 {
                     //potential candidate for merging with an identical
@@ -444,6 +464,28 @@ static bool IterateNumrulePiece( const SwNodeIndex& rEnd,
     rTmpEnd--;                                      // gueltiges Ende
 
     return rTmpStart <= rTmpEnd;                    // gueltig ?
+}
+
+//***This function will check whether there is existing individual attribute positon for 0x0D***/
+//The check will happen only once for a paragraph during loading
+bool SwFltControlStack::HasSdOD()
+{
+    bool bRet = false;
+
+    for (Entries::iterator it = maEntries.begin(); it != maEntries.end(); ++it)
+    {
+        SwFltStackEntry& rEntry = *it;
+        if ( rEntry.mnStartCP == rEntry.mnEndCP )
+        {
+            if ( CheckSdOD(rEntry.mnStartCP,rEntry.mnEndCP) )
+            {
+                bRet = true;
+                break;
+            }
+        }
+    }
+
+    return bRet;
 }
 
 void SwFltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
@@ -628,12 +670,45 @@ void SwFltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
         }
         break;
     default:
-        if (rEntry.MakeRegion(pDoc, aRegion, sal_False))
         {
-            pDoc->InsertPoolItem(aRegion, *rEntry.pAttr, 0);
+            //Revised for more complex situations should be considered
+            if ( !bSdODChecked )
+            {
+                bHasSdOD = HasSdOD();
+                bSdODChecked = true;
+            }
+            sal_Int32 nStart = rEntry.GetStartCP();
+            sal_Int32 nEnd = rEntry.GetEndCP();
+            if (nStart != -1 && nEnd != -1 && nEnd >= nStart )
+            {
+                rEntry.SetIsParaEnd( IsParaEndInCPs(nStart,nEnd,bHasSdOD) );
+            }
+            if (rEntry.MakeRegion(pDoc, aRegion, sal_False))
+            {
+                nStart = rEntry.GetStartCP();
+                nEnd = rEntry.GetEndCP();
+                if (rEntry.IsParaEnd())
+                {
+                    pDoc->InsertPoolItem(aRegion, *rEntry.pAttr, 0, true);
+                }
+                else
+                {
+                    pDoc->InsertPoolItem(aRegion, *rEntry.pAttr, 0);
+                }
+            }
         }
         break;
     }
+}
+
+bool SwFltControlStack::IsParaEndInCPs(sal_Int32 /*nStart*/, sal_Int32 /*nEnd*/,bool /*bSdOD*/) const
+{
+    return false;
+}
+
+bool SwFltControlStack::CheckSdOD(sal_Int32 /*nStart*/, sal_Int32 /*nEnd*/)
+{
+    return false;
 }
 
 SfxPoolItem* SwFltControlStack::GetFmtStackAttr(sal_uInt16 nWhich, sal_uInt16 * pPos)

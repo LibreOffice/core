@@ -495,7 +495,7 @@ void SwDoc::ResetAttrs( const SwPaM &rRg,
 
 static bool
 lcl_InsAttr(SwDoc *const pDoc, const SwPaM &rRg, const SfxItemSet& rChgSet,
-            const SetAttrMode nFlags, SwUndoAttr *const pUndo)
+            const SetAttrMode nFlags, SwUndoAttr *const pUndo,bool bExpandCharToPara=false)
 {
     // Divide the Sets (for selections in Nodes)
     const SfxItemSet* pCharSet = 0;
@@ -899,6 +899,24 @@ lcl_InsAttr(SwDoc *const pDoc, const SwPaM &rRg, const SfxItemSet& rChgSet,
             // Only selection in a Node.
             if( pStt->nNode == pEnd->nNode )
             {
+            //The data parameter flag: bExpandCharToPara, comes from the data member of SwDoc,
+            //Which is set in SW MS word Binary filter WW8ImplRreader. With this flag on, means that
+            //current setting attribute set is a character range properties set and comes from a MS word
+            //binary file, And the setting range include a paragraph end position (0X0D);
+            //More specifications, as such property inside the character range properties set recorded in
+            //MS word binary file are dealed and inserted into data model (SwDoc) one by one, so we
+            //only dealing the scenario that the char properties set with 1 item inside;
+
+                if (bExpandCharToPara && pCharSet && pCharSet->Count() ==1 )
+                {
+                    SwTxtNode* pCurrentNd = pStt->nNode.GetNode().GetTxtNode();
+
+                    if (pCurrentNd)
+                    {
+                         pCurrentNd->TryCharSetExpandToNum(*pCharSet);
+
+                    }
+                }
                 DELETECHARSETS
                 return bRet;
             }
@@ -1002,13 +1020,41 @@ lcl_InsAttr(SwDoc *const pDoc, const SwPaM &rRg, const SfxItemSet& rChgSet,
         ++nNodes;
     }
 
+    //The data parameter flag: bExpandCharToPara, comes from the data member of SwDoc,
+    //Which is set in SW MS word Binary filter WW8ImplRreader. With this flag on, means that
+    //current setting attribute set is a character range properties set and comes from a MS word
+    //binary file, And the setting range include a paragraph end position (0X0D);
+    //More specifications, as such property inside the character range properties set recorded in
+    //MS word binary file are dealed and inserted into data model (SwDoc) one by one, so we
+    //only dealing the scenario that the char properties set with 1 item inside;
+    if (bExpandCharToPara && pCharSet && pCharSet->Count() ==1)
+    {
+        SwPosition aStartPos (*rRg.Start());
+        SwPosition aEndPos (*rRg.End());
+
+        if (aEndPos.nNode.GetNode().GetTxtNode() && aEndPos.nContent != aEndPos.nNode.GetNode().GetTxtNode()->Len())
+            aEndPos.nNode--;
+
+        for (;aStartPos<=aEndPos;aStartPos.nNode++)
+        {
+            SwTxtNode* pCurrentNd = aStartPos.nNode.GetNode().GetTxtNode();
+
+            if (pCurrentNd)
+            {
+                 pCurrentNd->TryCharSetExpandToNum(*pCharSet);
+
+            }
+
+        }
+    }
+
     DELETECHARSETS
     return (nNodes != 0) || bRet;
 }
 
-
+//Add a para for the char attribute exp...
 bool SwDoc::InsertPoolItem( const SwPaM &rRg, const SfxPoolItem &rHt,
-                            const SetAttrMode nFlags )
+                            const SetAttrMode nFlags, bool bExpandCharToPara)
 {
     SwDataChanged aTmp( rRg );
     SwUndoAttr* pUndoAttr = 0;
@@ -1020,7 +1066,7 @@ bool SwDoc::InsertPoolItem( const SwPaM &rRg, const SfxPoolItem &rHt,
 
     SfxItemSet aSet( GetAttrPool(), rHt.Which(), rHt.Which() );
     aSet.Put( rHt );
-    bool bRet = lcl_InsAttr( this, rRg, aSet, nFlags, pUndoAttr );
+    bool bRet = lcl_InsAttr( this, rRg, aSet, nFlags, pUndoAttr,bExpandCharToPara );
 
     if (GetIDocumentUndoRedo().DoesUndo())
     {

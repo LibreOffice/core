@@ -1023,6 +1023,30 @@ const SwNumFmt* SwWW8FltControlStack::GetNumFmtFromStack(const SwPosition &rPos,
     return pRet;
 }
 
+sal_Int32 SwWW8FltControlStack::GetCurrAttrCP() const
+{
+    return rReader.GetCurrAttrCP();
+}
+
+bool SwWW8FltControlStack::IsParaEndInCPs(sal_Int32 nStart,sal_Int32 nEnd,bool bSdOD) const
+{
+    return rReader.IsParaEndInCPs(nStart,nEnd,bSdOD);
+}
+
+//Clear the para end position recorded in reader intermittently for the least impact on loading performance
+void SwWW8FltControlStack::ClearParaEndPosition()
+{
+    if ( !empty() )
+        return;
+
+    rReader.ClearParaEndPosition();
+}
+
+bool SwWW8FltControlStack::CheckSdOD(sal_Int32 nStart,sal_Int32 nEnd)
+{
+    return rReader.IsParaEndInCPs(nStart,nEnd);
+}
+
 void SwWW8FltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
     SwFltStackEntry& rEntry)
 {
@@ -3393,6 +3417,34 @@ long SwWW8ImplReader::ReadTextAttr(WW8_CP& rTxtPos, bool& rbStartLine)
     return nNext;
 }
 
+//Revised 2012.8.16 for the complex attribute presentation of 0x0D in MS
+bool SwWW8ImplReader::IsParaEndInCPs(sal_Int32 nStart, sal_Int32 nEnd,bool bSdOD) const
+{
+    //Revised for performance consideration
+    if (nStart == -1 || nEnd == -1 || nEnd < nStart )
+        return false;
+
+    for (cp_vector::const_reverse_iterator aItr = maEndParaPos.rbegin(); aItr!= maEndParaPos.rend(); aItr++)
+    {
+        //Revised 2012.8.16,to the 0x0D,the attribute will have two situations
+        //*********within***********exact******//
+        //*********but also sample with only left and the position of 0x0d is the edge of the right side***********//
+        if ( bSdOD && ( (nStart < *aItr && nEnd > *aItr) || ( nStart == nEnd && *aItr == nStart)) )
+            return true;
+        else if ( !bSdOD &&  (nStart < *aItr && nEnd >= *aItr) )
+            return true;
+    }
+
+    return false;
+}
+
+//Clear the para end position recorded in reader intermittently for the least impact on loading performance
+void SwWW8ImplReader::ClearParaEndPosition()
+{
+    if ( maEndParaPos.size() > 0 )
+        maEndParaPos.clear();
+}
+
 void SwWW8ImplReader::ReadAttrs(WW8_CP& rNext, WW8_CP& rTxtPos, bool& rbStartLine)
 {
     if( rTxtPos >= rNext )
@@ -3400,6 +3452,7 @@ void SwWW8ImplReader::ReadAttrs(WW8_CP& rNext, WW8_CP& rTxtPos, bool& rbStartLin
 
         do
         {
+            maCurrAttrCP = rTxtPos;
             rNext = ReadTextAttr( rTxtPos, rbStartLine );
         }
         while( rTxtPos >= rNext );
@@ -3483,7 +3536,12 @@ bool SwWW8ImplReader::ReadText(long nStartCp, long nTextLen, ManTypes nType)
         // create a new txtnode and join the two paragraphs together
 
         if (bStartLine && !pPreviousNode) // Zeilenende
+        {
+            //We will record the CP of a paragraph end ('0x0D'), if current loading contents is from main stream;
+            if (mbOnLoadingMain)
+                maEndParaPos.push_back(l-1);
             AppendTxtNode(*pPaM->GetPoint());
+        }
 
         if (pPreviousNode && bStartLine)
         {
@@ -3642,7 +3700,9 @@ SwWW8ImplReader::SwWW8ImplReader(sal_uInt8 nVersionPara, SvStorage* pStorage,
     nDropCap(0),
     nIdctHint(0),
     bBidi(false),
-    bReadTable(false)
+    bReadTable(false),
+    maCurrAttrCP(-1),
+    mbOnLoadingMain(false)
 {
     pStrm->SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
     nWantedVersion = nVersionPara;
@@ -4603,7 +4663,9 @@ sal_uLong SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss, const SwPosition &rPos)
 
             StoreMacroCmds();
         }
+        mbOnLoadingMain = true;
         ReadText(0, pWwFib->ccpText, MAN_MAINTEXT);
+        mbOnLoadingMain = false;
 
     }
 

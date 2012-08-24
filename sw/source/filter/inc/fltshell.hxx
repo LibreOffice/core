@@ -111,6 +111,10 @@ public:
     sal_Bool bOpen;     //Entry open, awaiting being closed
     sal_Bool bConsumedByField;
 
+    sal_Int32 mnStartCP;
+    sal_Int32 mnEndCP;
+    bool bIsParaEnd;
+
     SW_DLLPUBLIC SwFltStackEntry(const SwPosition & rStartPos, SfxPoolItem* pHt );
     SW_DLLPUBLIC ~SwFltStackEntry();
 
@@ -118,8 +122,16 @@ public:
     SW_DLLPUBLIC void SetEndPos(  const SwPosition & rEndPos);
     SW_DLLPUBLIC bool MakeRegion(SwDoc* pDoc, SwPaM& rRegion, bool bCheck) const;
     SW_DLLPUBLIC static bool MakeRegion(SwDoc* pDoc, SwPaM& rRegion,
-        bool bCheck, const SwFltPosition &rMkPos, const SwFltPosition &rPtPos,
+        bool bCheck, const SwFltPosition &rMkPos, const SwFltPosition &rPtPos, bool bIsParaEnd=false,
         sal_uInt16 nWhich=0);
+
+    void SetStartCP(sal_Int32 nCP) {mnStartCP = nCP;}
+    void SetEndCP(sal_Int32 nCP) {mnEndCP = nCP;}
+    sal_Int32 GetStartCP() const {return mnStartCP;}
+    sal_Int32 GetEndCP() const {return mnEndCP;}
+    bool IsAbleMakeRegion();
+    bool IsParaEnd(){ return bIsParaEnd;}
+    void SetIsParaEnd(bool bArg){ bIsParaEnd = bArg;}
 };
 
 class SW_DLLPUBLIC SwFltControlStack : private ::boost::noncopyable
@@ -132,12 +144,23 @@ class SW_DLLPUBLIC SwFltControlStack : private ::boost::noncopyable
     sal_uLong nFieldFlags;
     KeyCode aEmptyKeyCode; // fuer Bookmarks
 
+private:
+    bool bHasSdOD;
+    bool bSdODChecked;
+
 protected:
     SwDoc* pDoc;
     bool bIsEndStack;
 
     void MoveAttrs( const SwPosition&  rPos );
     virtual void SetAttrInDoc(const SwPosition& rTmpPos, SwFltStackEntry& rEntry);
+    virtual sal_Int32 GetCurrAttrCP() const {return -1;}
+    virtual bool IsParaEndInCPs(sal_Int32 nStart,sal_Int32 nEnd,bool bSdOD=true) const;
+
+    //Clear the para end position recorded in reader intermittently for the least impact on loading performance
+    virtual void ClearParaEndPosition(){};
+    virtual bool CheckSdOD(sal_Int32 nStart,sal_Int32 nEnd);
+    bool HasSdOD();
 
 public:
     enum Flags

@@ -1027,6 +1027,21 @@ void WW8ListManager::AdjustLVL( sal_uInt8 nLevel, SwNumRule& rNumRule,
         //
         aNumFmt.SetCharFmt( pFmt );
     }
+    //Ensure the default char fmt is initialized for any level of num ruler if no customized attr
+    else
+    {
+        SwCharFmt* pFmt = aNumFmt.GetCharFmt();
+        if ( !pFmt)
+        {
+            OUString aName = ( sPrefix.Len() ? sPrefix : rNumRule.GetName() );
+                     aName += "z" + OUString::number( nLevel );
+
+                    pFmt = rDoc.MakeCharFmt(aName, (SwCharFmt*)rDoc.GetDfltCharFmt());
+                    bNewCharFmtCreated = true;
+            rCharFmt[ nLevel ] = pFmt;
+            aNumFmt.SetCharFmt( pFmt );
+        }
+    }
     //
     // ggfs. Bullet Font an das NumFormat haengen
     //

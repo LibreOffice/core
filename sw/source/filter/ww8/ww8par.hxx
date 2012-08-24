@@ -332,6 +332,12 @@ protected:
     virtual void SetAttrInDoc(const SwPosition& rTmpPos,
         SwFltStackEntry& rEntry);
 
+    virtual sal_Int32 GetCurrAttrCP() const;
+    virtual bool IsParaEndInCPs(sal_Int32 nStart,sal_Int32 nEnd,bool bSdOD=true) const;
+    //Clear the para end position recorded in reader intermittently for the least impact on loading performance
+    virtual void ClearParaEndPosition();
+    virtual bool CheckSdOD(sal_Int32 nStart,sal_Int32 nEnd);
+
 public:
     SwWW8FltControlStack(SwDoc* pDo, sal_uLong nFieldFl, SwWW8ImplReader& rReader_ )
         : SwFltControlStack( pDo, nFieldFl ), rReader( rReader_ ),
@@ -910,6 +916,8 @@ struct WW8PostProcessAttrsInfo
 //-----------------------------------------
 //            Storage-Reader
 //-----------------------------------------
+typedef std::vector<WW8_CP> cp_vector;
+
 class SwWW8ImplReader
 {
 private:
@@ -1211,6 +1219,9 @@ private:
     bool bReadTable;
     boost::shared_ptr<SwPaM> mpTableEndPaM;
 
+    cp_vector maEndParaPos;
+    WW8_CP maCurrAttrCP;
+    bool mbOnLoadingMain:1;
 //---------------------------------------------
 
     const SprmReadInfo& GetSprmReadInfo(sal_uInt16 nId) const;
@@ -1540,7 +1551,10 @@ public:     // eigentlich private, geht aber leider nur public
     sal_uInt16 GetToggleBiDiAttrFlags() const;
     void SetToggleAttrFlags(sal_uInt16 nFlags);
     void SetToggleBiDiAttrFlags(sal_uInt16 nFlags);
-
+    WW8_CP GetCurrAttrCP() const {return maCurrAttrCP;}
+    bool IsParaEndInCPs(sal_Int32 , sal_Int32,bool bSdOD=true) const;
+    //Clear the para end position recorded in reader intermittently for the least impact on loading performance
+    void ClearParaEndPosition();
 
     long Read_Ftn(WW8PLCFManResult* pRes);
     sal_uInt16 End_Ftn();
