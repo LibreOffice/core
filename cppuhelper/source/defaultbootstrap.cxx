@@ -130,9 +130,10 @@ struct ImplementationInfo: private boost::noncopyable {
         rtl::OUString const & theName, rtl::OUString const & theLoader,
         rtl::OUString const & theUri, rtl::OUString const & thePrefix,
         css::uno::Reference< css::uno::XComponentContext > const &
-            theAlienContext):
+            theAlienContext,
+        rtl::OUString const & theRdbFile):
         name(theName), loader(theLoader), uri(theUri), prefix(thePrefix),
-        alienContext(theAlienContext)
+        alienContext(theAlienContext), rdbFile(theRdbFile)
     {}
 
     explicit ImplementationInfo(rtl::OUString const & theName): name(theName) {}
@@ -142,6 +143,7 @@ struct ImplementationInfo: private boost::noncopyable {
     rtl::OUString const uri;
     rtl::OUString const prefix;
     css::uno::Reference< css::uno::XComponentContext > const alienContext;
+    rtl::OUString const rdbFile;
     std::vector< rtl::OUString > services;
     std::vector< rtl::OUString > singletons;
 };
@@ -149,12 +151,12 @@ struct ImplementationInfo: private boost::noncopyable {
 struct Implementation: private boost::noncopyable {
     Implementation(
         rtl::OUString const & name, rtl::OUString const & loader,
-        rtl::OUString const & uri,
-        rtl::OUString const & prefix = rtl::OUString(),
-        css::uno::Reference< css::uno::XComponentContext > const &
-            alienContext
-                = css::uno::Reference< css::uno::XComponentContext >()):
-        info(new ImplementationInfo(name, loader, uri, prefix, alienContext)),
+        rtl::OUString const & uri, rtl::OUString const & prefix,
+        css::uno::Reference< css::uno::XComponentContext > const & alienContext,
+        rtl::OUString const & rdbFile):
+        info(
+            new ImplementationInfo(
+                name, loader, uri, prefix, alienContext, rdbFile)),
         loaded(false)
     {}
 
@@ -466,7 +468,7 @@ void Parser::handleImplementation() {
     implementation_.reset(
         new Implementation(
             attrImplementation_, attrLoader_, attrUri_, attrPrefix_,
-            alienContext_));
+            alienContext_, reader_.getUrl()));
     if (!data_->namedImplementations.insert(
             NamedImplementations::value_type(
                 attrImplementation_, implementation_)).
@@ -1503,7 +1505,9 @@ bool ServiceManager::readLegacyRdbFile(rtl::OUString const & uri) {
         boost::shared_ptr< Implementation > impl(
             new Implementation(
                 name, readLegacyRdbString(uri, implKey, "UNO/ACTIVATOR"),
-                readLegacyRdbString(uri, implKey, "UNO/LOCATION")));
+                readLegacyRdbString(uri, implKey, "UNO/LOCATION"),
+                rtl::OUString(),
+                css::uno::Reference< css::uno::XComponentContext >(), uri));
         if (!data_.namedImplementations.insert(
                 NamedImplementations::value_type(name, impl)).
             second)
@@ -1745,7 +1749,7 @@ void ServiceManager::removeRdbFiles(std::vector< rtl::OUString > const & uris) {
                  j != data_.namedImplementations.end();)
             {
                 assert(j->second.get() != 0);
-                if (j->second->info->uri == *i) {
+                if (j->second->info->rdbFile == *i) {
                     clear.push_back(j->second);
                     //TODO: The below leaves data_ in an inconsistent state upon
                     // exceptions:
