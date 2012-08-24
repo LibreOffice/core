@@ -902,14 +902,6 @@ void SwFrmPage::Reset( const SfxItemSet &rSet )
 
     if(bHtmlMode)
     {
-        if( 0 == (nHtmlMode & HTMLMODE_SOME_ABS_POS))
-        {
-            if (GetAnchor() == FLY_AT_PAGE)
-            {
-                aAnchorAtParaRB.Check();
-            }
-            aAnchorAtPageRB.Enable(sal_False);
-        }
         aAutoHeightCB.Enable(sal_False);
         aAutoWidthCB.Enable(sal_False);
         aMirrorPagesCB.Show(sal_False);
@@ -1189,7 +1181,7 @@ void SwFrmPage::InitPos(RndStdIds eId,
         if(bHtmlMode)
         {
             pVMap = aVParaHtmlMap;
-            pHMap = nHtmlMode & HTMLMODE_SOME_ABS_POS ? aHParaHtmlAbsMap : aHParaHtmlMap;
+            pHMap = aHParaHtmlAbsMap;
         }
         else
         {
@@ -1201,8 +1193,8 @@ void SwFrmPage::InitPos(RndStdIds eId,
     {
         if(bHtmlMode)
         {
-            pVMap = nHtmlMode & HTMLMODE_SOME_ABS_POS ? aVCharHtmlAbsMap    : aVCharHtmlMap;
-            pHMap = nHtmlMode & HTMLMODE_SOME_ABS_POS ? aHCharHtmlAbsMap    : aHCharHtmlMap;
+            pVMap = aVCharHtmlAbsMap;
+            pHMap = aHCharHtmlAbsMap;
         }
         else
         {
@@ -1878,8 +1870,7 @@ IMPL_LINK( SwFrmPage, PosHdl, ListBox *, pLB )
         bAtVertPosModified = sal_True;
 
     // special treatment for HTML-Mode with horizonal-vertical-dependencies
-    if(bHtmlMode && nHtmlMode&HTMLMODE_SOME_ABS_POS &&
-            (FLY_AT_CHAR == GetAnchor()))
+    if(bHtmlMode && (FLY_AT_CHAR == GetAnchor()))
     {
         sal_Bool bSet = sal_False;
         if(bHori)

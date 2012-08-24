@@ -806,8 +806,7 @@ void SwTextShell::StateInsert( SfxItemSet &rSet )
             case FN_INSERT_FRAME_INTERACT_NOCOL :
             case FN_INSERT_FRAME_INTERACT:
             {
-                if ( GetShell().IsSelFrmMode() ||
-                    (0 != (nHtmlMode & HTMLMODE_ON) && 0 == (nHtmlMode & HTMLMODE_SOME_ABS_POS)) || bCrsrInHidden )
+                if ( GetShell().IsSelFrmMode() || bCrsrInHidden )
                     rSet.DisableItem(nWhich);
             }
             break;
