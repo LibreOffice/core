@@ -135,8 +135,8 @@ void SbxObject::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
     if( p )
     {
         sal_uIntPtr nId = p->GetId();
-        sal_Bool bRead  = sal_Bool( nId == SBX_HINT_DATAWANTED );
-        sal_Bool bWrite = sal_Bool( nId == SBX_HINT_DATACHANGED );
+        bool bRead  = ( nId == SBX_HINT_DATAWANTED );
+        bool bWrite = ( nId == SBX_HINT_DATACHANGED );
         SbxVariable* pVar = p->GetVar();
         if( bRead || bWrite )
         {

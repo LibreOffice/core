@@ -25,21 +25,21 @@
 class SbxSimpleCharClass
 {
 public:
-    sal_Bool isAlpha( sal_Unicode c ) const
+    bool isAlpha( sal_Unicode c ) const
     {
-        sal_Bool bRet = (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z');
+        bool bRet = (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z');
         return bRet;
     }
 
-    sal_Bool isDigit( sal_Unicode c ) const
+    bool isDigit( sal_Unicode c ) const
     {
-        sal_Bool bRet = (c >= '0' && c <= '9');
+        bool bRet = (c >= '0' && c <= '9');
         return bRet;
     }
 
-    sal_Bool isAlphaNumeric( sal_Unicode c ) const
+    bool isAlphaNumeric( sal_Unicode c ) const
     {
-        sal_Bool bRet = isDigit( c ) || isAlpha( c );
+        bool bRet = isDigit( c ) || isAlpha( c );
         return bRet;
     }
 };
@@ -131,7 +131,7 @@ static SbxVariable* QualifiedName
 // a function (with optional parameters).
 
 static SbxVariable* Operand
-    ( SbxObject* pObj, SbxObject* pGbl, const xub_Unicode** ppBuf, sal_Bool bVar )
+    ( SbxObject* pObj, SbxObject* pGbl, const xub_Unicode** ppBuf, bool bVar )
 {
     static SbxSimpleCharClass aCharClass;
 
@@ -181,12 +181,12 @@ static SbxVariable* Operand
 static SbxVariable* MulDiv( SbxObject* pObj, SbxObject* pGbl, const xub_Unicode** ppBuf )
 {
     const xub_Unicode* p = *ppBuf;
-    SbxVariableRef refVar( Operand( pObj, pGbl, &p, sal_False ) );
+    SbxVariableRef refVar( Operand( pObj, pGbl, &p, false ) );
     p = SkipWhitespace( p );
     while( refVar.Is() && ( *p == '*' || *p == '/' ) )
     {
         xub_Unicode cOp = *p++;
-        SbxVariableRef refVar2( Operand( pObj, pGbl, &p, sal_False ) );
+        SbxVariableRef refVar2( Operand( pObj, pGbl, &p, false ) );
         if( refVar2.Is() )
         {
             // temporary variable!
@@ -245,7 +245,7 @@ static SbxVariable* PlusMinus( SbxObject* pObj, SbxObject* pGbl, const xub_Unico
 static SbxVariable* Assign( SbxObject* pObj, SbxObject* pGbl, const xub_Unicode** ppBuf )
 {
     const xub_Unicode* p = *ppBuf;
-    SbxVariableRef refVar( Operand( pObj, pGbl, &p, sal_True ) );
+    SbxVariableRef refVar( Operand( pObj, pGbl, &p, true ) );
     p = SkipWhitespace( p );
     if( refVar.Is() )
     {

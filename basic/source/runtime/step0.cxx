@@ -389,11 +389,11 @@ void SbiRuntime::StepPUT()
     SbxVariableRef refVal = PopVar();
     SbxVariableRef refVar = PopVar();
     // store on its own method (inside a function)?
-    sal_Bool bFlagsChanged = sal_False;
+    bool bFlagsChanged = false;
     sal_uInt16 n = 0;
     if( (SbxVariable*) refVar == (SbxVariable*) pMeth )
     {
-        bFlagsChanged = sal_True;
+        bFlagsChanged = true;
         n = refVar->GetFlags();
         refVar->SetFlag( SBX_WRITE );
     }
@@ -522,11 +522,11 @@ void SbiRuntime::StepSET_Impl( SbxVariableRef& refVal, SbxVariableRef& refVar, b
     }
     else
     {
-        sal_Bool bFlagsChanged = sal_False;
+        bool bFlagsChanged = false;
         sal_uInt16 n = 0;
         if( (SbxVariable*) refVar == (SbxVariable*) pMeth )
         {
-            bFlagsChanged = sal_True;
+            bFlagsChanged = true;
             n = refVar->GetFlags();
             refVar->SetFlag( SBX_WRITE );
         }
@@ -889,7 +889,7 @@ void SbiRuntime::StepREDIMP()
             short nDimsNew = pNewArray->GetDims();
             short nDimsOld = pOldArray->GetDims();
             short nDims = nDimsNew;
-            sal_Bool bRangeError = sal_False;
+            bool bRangeError = false;
 
             // Store dims to use them for copying later
             sal_Int32* pLowerBounds = new sal_Int32[nDims];
@@ -898,7 +898,7 @@ void SbiRuntime::StepREDIMP()
 
             if( nDimsOld != nDimsNew )
             {
-                bRangeError = sal_True;
+                bRangeError = true;
             }
             else
             {

@@ -112,7 +112,7 @@ SbxVariable* getDefaultProp( SbxVariable* pRef );
 #ifndef DISABLE_SCRIPTING
 
 // forward decl.
-sal_Bool implDateSerial( sal_Int16 nYear, sal_Int16 nMonth, sal_Int16 nDay, double& rdRet );
+bool implDateSerial( sal_Int16 nYear, sal_Int16 nMonth, sal_Int16 nDay, double& rdRet );
 
 // from source/classes/sbxmod.cxx
 Reference< XModel > getDocumentModel( StarBASIC* );
@@ -152,7 +152,7 @@ static const CharClass& GetCharClass( void )
     return aCharClass;
 }
 
-static inline sal_Bool isFolder( FileStatus::Type aType )
+static inline bool isFolder( FileStatus::Type aType )
 {
     return ( aType == FileStatus::Directory || aType == FileStatus::Volume );
 }
@@ -685,12 +685,12 @@ void implRemoveDirRecursive( const String& aDirPath )
 {
     DirectoryItem aItem;
     FileBase::RC nRet = DirectoryItem::get( aDirPath, aItem );
-    sal_Bool bExists = (nRet == FileBase::E_None);
+    bool bExists = (nRet == FileBase::E_None);
 
     FileStatus aFileStatus( osl_FileStatus_Mask_Type );
     nRet = aItem.getFileStatus( aFileStatus );
     FileStatus::Type aType = aFileStatus.getFileType();
-    sal_Bool bFolder = isFolder( aType );
+    bool bFolder = isFolder( aType );
 
     if( !bExists || !bFolder )
     {
@@ -720,7 +720,7 @@ void implRemoveDirRecursive( const String& aDirPath )
 
         // Directory?
         FileStatus::Type aType2 = aFileStatus2.getFileType();
-        sal_Bool bFolder2 = isFolder( aType2 );
+        bool bFolder2 = isFolder( aType2 );
         if( bFolder2 )
         {
             implRemoveDirRecursive( aPath );
@@ -2378,7 +2378,7 @@ String implSetupWildcard( const String& rFileParam, SbiRTLData* pRTLData )
     xub_StrLen nLastWild = aFileParam.SearchBackward( cWild1 );
     if( nLastWild == STRING_NOTFOUND )
         nLastWild = aFileParam.SearchBackward( cWild2 );
-    sal_Bool bHasWildcards = ( nLastWild != STRING_NOTFOUND );
+    bool bHasWildcards = ( nLastWild != STRING_NOTFOUND );
 
 
     xub_StrLen nLastDelim = aFileParam.SearchBackward( cDelim1 );
@@ -2436,7 +2436,7 @@ inline sal_Bool implCheckWildcard( const String& rName, SbiRTLData* pRTLData )
 bool isRootDir( String aDirURLStr )
 {
     INetURLObject aDirURLObj( aDirURLStr );
-    sal_Bool bRoot = sal_False;
+    bool bRoot = false;
 
     // Check if it's a root directory
     sal_Int32 nCount = aDirURLObj.getSegmentCount();
@@ -2444,7 +2444,7 @@ bool isRootDir( String aDirURLStr )
     // No segment means Unix root directory "file:///"
     if( nCount == 0 )
     {
-        bRoot = sal_True;
+        bRoot = true;
     }
     // Exactly one segment needs further checking, because it
     // can be Unix "file:///foo/" -> no root
@@ -2455,11 +2455,11 @@ bool isRootDir( String aDirURLStr )
             INetURLObject::DECODE_WITH_CHARSET );
         if( aSeg1.getStr()[1] == (sal_Unicode)':' )
         {
-            bRoot = sal_True;
+            bRoot = true;
         }
     }
     // More than one segments can never be root
-    // so bRoot remains sal_False
+    // so bRoot remains false
 
     return bRoot;
 }
@@ -2539,7 +2539,7 @@ RTLFUNC(Dir)
                         // #78651 Add "." and ".." directories for VB compatibility
                         if( bIncludeFolders )
                         {
-                            sal_Bool bRoot = isRootDir( aDirURLStr );
+                            bool bRoot = isRootDir( aDirURLStr );
 
                             // If it's no root directory we flag the need for
                             // the "." and ".." directories by the value -2
@@ -2638,7 +2638,7 @@ RTLFUNC(Dir)
                     pRTLData->nDirFlags = 0;
 
                 // Read directory
-                sal_Bool bIncludeFolders = ((nFlags & Sb_ATTR_DIRECTORY) != 0);
+                bool bIncludeFolders = ((nFlags & Sb_ATTR_DIRECTORY) != 0);
                 pRTLData->pDir = new Directory( aDirURL );
                 FileBase::RC nRet = pRTLData->pDir->open();
                 if( nRet != FileBase::E_None )
@@ -2653,7 +2653,7 @@ RTLFUNC(Dir)
                 pRTLData->nCurDirPos = 0;
                 if( bIncludeFolders )
                 {
-                    sal_Bool bRoot = isRootDir( aDirURL );
+                    bool bRoot = isRootDir( aDirURL );
 
                     // If it's no root directory we flag the need for
                     // the "." and ".." directories by the value -2
@@ -2704,7 +2704,7 @@ RTLFUNC(Dir)
                         if( bFolderFlag )
                         {
                             FileStatus::Type aType = aFileStatus.getFileType();
-                            sal_Bool bFolder = isFolder( aType );
+                            bool bFolder = isFolder( aType );
                             if( !bFolder )
                                 continue;
                         }
@@ -2804,7 +2804,7 @@ RTLFUNC(GetAttr)
             bool bReadOnly = (nAttributes & osl_File_Attribute_ReadOnly) != 0;
 
             FileStatus::Type aType = aFileStatus.getFileType();
-            sal_Bool bDirectory = isFolder( aType );
+            bool bDirectory = isFolder( aType );
             if( bReadOnly )
                 nFlags |= Sb_ATTR_READONLY;
             if( bDirectory )
@@ -4359,7 +4359,7 @@ sal_Int16 implGetDateYear( double aDate )
     return nRet;
 }
 
-sal_Bool implDateSerial( sal_Int16 nYear, sal_Int16 nMonth, sal_Int16 nDay, double& rdRet )
+bool implDateSerial( sal_Int16 nYear, sal_Int16 nMonth, sal_Int16 nDay, double& rdRet )
 {
 #ifndef DISABLE_SCRIPTING
     if ( nYear < 30 && SbiRuntime::isVBAEnabled() )
@@ -4374,7 +4374,7 @@ sal_Bool implDateSerial( sal_Int16 nYear, sal_Int16 nMonth, sal_Int16 nDay, doub
 #ifndef DISABLE_SCRIPTING
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
 #endif
-        return sal_False;
+        return false;
     }
 
 #ifndef DISABLE_SCRIPTING
@@ -4387,7 +4387,7 @@ sal_Bool implDateSerial( sal_Int16 nYear, sal_Int16 nMonth, sal_Int16 nDay, doub
 #ifndef DISABLE_SCRIPTING
             StarBASIC::Error( SbERR_BAD_ARGUMENT );
 #endif
-            return sal_False;
+            return false;
         }
     }
 #ifndef DISABLE_SCRIPTING
@@ -4421,7 +4421,7 @@ sal_Bool implDateSerial( sal_Int16 nYear, sal_Int16 nMonth, sal_Int16 nDay, doub
 
     long nDiffDays = GetDayDiff( aCurDate );
     rdRet = (double)nDiffDays;
-    return sal_True;
+    return true;
 }
 
 sal_Int16 implGetMinute( double dDate )

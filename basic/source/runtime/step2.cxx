@@ -64,7 +64,7 @@ SbxVariable* SbiRuntime::FindElement
     }
     else
     {
-        sal_Bool bFatalError = sal_False;
+        bool bFatalError = false;
         SbxDataType t = (SbxDataType) nOp2;
         String aName( pImg->GetString( static_cast<short>( nOp1 & 0x7FFF ) ) );
         // Hacky capture of Evaluate [] syntax
@@ -167,13 +167,13 @@ SbxVariable* SbiRuntime::FindElement
                 // not there and not in the object?
                 // don't establish if that thing has parameters!
                 if( nOp1 & 0x8000 )
-                    bFatalError = sal_True;
+                    bFatalError = true;
 
                 // else, if there are parameters, use different error code
                 if( !bLocal || pImg->GetFlag( SBIMG_EXPLICIT ) )
                 {
                     // #39108 if explicit and as ELEM always a fatal error
-                    bFatalError = sal_True;
+                    bFatalError = true;
 
 
                     if( !( nOp1 & 0x8000 ) && nNotFound == SbERR_PROC_UNDEFINED )
@@ -214,12 +214,12 @@ SbxVariable* SbiRuntime::FindElement
         {
             // shall the type be converted?
             SbxDataType t2 = pElem->GetType();
-            sal_Bool bSet = sal_False;
+            bool bSet = false;
             if( !( pElem->GetFlags() & SBX_FIXED ) )
             {
                 if( t != SbxVARIANT && t != t2 &&
                     t >= SbxINTEGER && t <= SbxSTRING )
-                    pElem->SetType( t ), bSet = sal_True;
+                    pElem->SetType( t ), bSet = true;
             }
             // assign pElem to a Ref, to delete a temp-var if applicable
             SbxVariableRef refTemp = pElem;
@@ -333,14 +333,14 @@ void SbiRuntime::SetupArgs( SbxVariable* p, sal_uInt32 nOp1 )
     {
         if( !refArgv )
             StarBASIC::FatalError( SbERR_INTERNAL_ERROR );
-        sal_Bool bHasNamed = sal_False;
+        bool bHasNamed = false;
         sal_uInt16 i;
         sal_uInt16 nArgCount = refArgv->Count();
         for( i = 1 ; i < nArgCount ; i++ )
         {
             if( refArgv->GetAlias( i ).Len() )
             {
-                bHasNamed = sal_True; break;
+                bHasNamed = true; break;
             }
         }
         if( bHasNamed )
@@ -704,7 +704,7 @@ void SbiRuntime::StepPARAM( sal_uInt32 nOp1, sal_uInt32 nOp2 )
     if( p->GetType() == SbxERROR && ( i ) )
     {
         // if there's a parameter missing, it can be OPTIONAL
-        sal_Bool bOpt = sal_False;
+        bool bOpt = false;
         if( pMeth )
         {
             SbxInfo* pInfo = pMeth->GetInfo();
@@ -723,11 +723,11 @@ void SbiRuntime::StepPARAM( sal_uInt32 nOp1, sal_uInt32 nOp2 )
                         p->PutString( aDefaultStr );
                         refParams->Put( p, i );
                     }
-                    bOpt = sal_True;
+                    bOpt = true;
                 }
             }
         }
-        if( bOpt == sal_False )
+        if( !bOpt )
             Error( SbERR_NOT_OPTIONAL );
     }
     else if( t != SbxVARIANT && (SbxDataType)(p->GetType() & 0x0FFF ) != t )
@@ -794,10 +794,10 @@ void SbiRuntime::StepSTMNT( sal_uInt32 nOp1, sal_uInt32 nOp2 )
 {
     // If the Expr-Stack at the beginning of a statement constains a variable,
     // some fool has called X as a function, although it's a variable!
-    sal_Bool bFatalExpr = sal_False;
+    bool bFatalExpr = false;
     String sUnknownMethodName;
     if( nExprLvl > 1 )
-        bFatalExpr = sal_True;
+        bFatalExpr = true;
     else if( nExprLvl )
     {
         SbxVariable* p = refExprStk->Get( 0 );
@@ -805,7 +805,7 @@ void SbiRuntime::StepSTMNT( sal_uInt32 nOp1, sal_uInt32 nOp2 )
          && refLocals.Is() && refLocals->Find( p->GetName(), p->GetClass() ) )
         {
             sUnknownMethodName = p->GetName();
-            bFatalExpr = sal_True;
+            bFatalExpr = true;
         }
     }
 
@@ -1011,7 +1011,7 @@ void SbiRuntime::StepDCREATE_IMPL( sal_uInt32 nOp1, sal_uInt32 nOp2 )
         short nDimsNew = pArray->GetDims();
         short nDimsOld = pOldArray->GetDims();
         short nDims = nDimsNew;
-        sal_Bool bRangeError = sal_False;
+        bool bRangeError = false;
 
         // Store dims to use them for copying later
         sal_Int32* pLowerBounds = new sal_Int32[nDims];
@@ -1019,7 +1019,7 @@ void SbiRuntime::StepDCREATE_IMPL( sal_uInt32 nOp1, sal_uInt32 nOp2 )
         sal_Int32* pActualIndices = new sal_Int32[nDims];
         if( nDimsOld != nDimsNew )
         {
-            bRangeError = sal_True;
+            bRangeError = true;
         }
         else
         {

@@ -762,7 +762,7 @@ SbxVariable* SbiStdObject::Find( const rtl::OUString& rName, SbxClassType t )
         // else search one
         sal_uInt16 nHash_ = SbxVariable::MakeHashCode( rName );
         Methods* p = aMethods;
-        sal_Bool bFound = sal_False;
+        bool bFound = false;
         short nIndex = 0;
         sal_uInt16 nSrchMask = _TYPEMASK;
         switch( t )
@@ -779,11 +779,11 @@ SbxVariable* SbiStdObject::Find( const rtl::OUString& rName, SbxClassType t )
              && ( rName.equalsIgnoreAsciiCaseAscii( p->pName ) ) )
             {
                 SbiInstance* pInst = GetSbData()->pInst;
-                bFound = sal_True;
+                bFound = true;
                 if( p->nArgs & _COMPTMASK )
                 {
                     if ( !pInst || ( pInst->IsCompatibility()  && ( _NORMONLY & p->nArgs )  ) || ( !pInst->IsCompatibility()  && ( _COMPATONLY & p->nArgs )  ) )
-                        bFound = sal_False;
+                        bFound = false;
                 }
                 break;
             }

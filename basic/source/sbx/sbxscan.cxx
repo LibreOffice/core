@@ -89,13 +89,13 @@ SbxError ImpScan( const ::rtl::OUString& rWSrc, double& nVal, SbxDataType& rType
     const char* pStart = aBStr.getStr();
     const char* p = pStart;
     char buf[ 80 ], *q = buf;
-    sal_Bool bRes = sal_True;
-    sal_Bool bMinus = sal_False;
+    bool bRes = true;
+    bool bMinus = false;
     nVal = 0;
     SbxDataType eScanType = SbxSINGLE;
     while( *p &&( *p == ' ' || *p == '\t' ) ) p++;
     if( *p == '-' )
-        p++, bMinus = sal_True;
+        p++, bMinus = true;
     if( isdigit( *p ) ||( (*p == cNonIntntlComma || *p == cIntntlComma ||
             *p == cIntntl1000) && isdigit( *(p+1 ) ) ) )
     {
@@ -153,7 +153,7 @@ SbxError ImpScan( const ::rtl::OUString& rWSrc, double& nVal, SbxDataType& rType
         *q = 0;
 
         if( comma > 1 || exp > 1 )
-            bRes = sal_False;
+            bRes = false;
 
         if( !comma && !exp )
         {
@@ -185,7 +185,7 @@ SbxError ImpScan( const ::rtl::OUString& rWSrc, double& nVal, SbxDataType& rType
         {
             case 'O': cmp = "01234567"; base = 8; ndig = 11; break;
             case 'H': break;
-            default : bRes = sal_False;
+            default : bRes = false;
         }
         long l = 0;
         int i;
@@ -194,7 +194,7 @@ SbxError ImpScan( const ::rtl::OUString& rWSrc, double& nVal, SbxDataType& rType
             char ch = sal::static_int_cast< char >( toupper( *p ) );
             p++;
             if( strchr( cmp, ch ) ) *q++ = ch;
-            else bRes = sal_False;
+            else bRes = false;
         }
         *q = 0;
         for( q = buf; *q; q++ )
@@ -203,7 +203,7 @@ SbxError ImpScan( const ::rtl::OUString& rWSrc, double& nVal, SbxDataType& rType
             if( i > 9 ) i -= 7;
             l =( l * base ) + i;
             if( !ndig-- )
-                bRes = sal_False;
+                bRes = false;
         }
         if( *p == '&' ) p++;
         nVal = (double) l;
@@ -253,20 +253,20 @@ static double roundArray[] = {
 
 /***************************************************************************
 |*
-|*  void myftoa( double, char *, short, short, sal_Bool, sal_Bool )
+|*  void myftoa( double, char *, short, short, bool, bool )
 |*
 |*  description:        conversion double --> ASCII
 |*  parameters:         double              the number
 |*                      char *              target buffer
 |*                      short               number of positions after decimal point
 |*                      short               range of the exponent ( 0=no E )
-|*                      sal_Bool                sal_True: with 1000-separators
-|*                      sal_Bool                sal_True: output without formatting
+|*                      bool                true: with 1000-separators
+|*                      bool                true: output without formatting
 |*
 ***************************************************************************/
 
 static void myftoa( double nNum, char * pBuf, short nPrec, short nExpWidth,
-                    sal_Bool bPt, sal_Bool bFix, sal_Unicode cForceThousandSep = 0 )
+                    bool bPt, bool bFix, sal_Unicode cForceThousandSep = 0 )
 {
 
     short nExp = 0;
@@ -389,7 +389,7 @@ void ImpCvtNum( double nNum, short nPrec, ::rtl::OUString& rRes, sal_Bool bCoreS
     }
     double dMaxNumWithoutExp = (nPrec == 6) ? 1E6 : 1E14;
     myftoa( nNum, p, nPrec,( nNum &&( nNum < 1E-1 || nNum >= dMaxNumWithoutExp ) ) ? 4:0,
-        sal_False, sal_True, cDecimalSep );
+        false, true, cDecimalSep );
     // remove trailing zeros
     for( p = cBuf; *p &&( *p != 'E' ); p++ ) {}
     q = p; p--;
@@ -477,7 +477,7 @@ static sal_uInt16 printfmtnum( double nNum, XubString& rRes, const XubString& rW
     short   nPrec  = 0;             // number of positions after decimal point
     short   nWidth = 0;             // number range completely
     short   nLen;                   // length of converted number
-    sal_Bool    bPoint = sal_False;         // sal_True: with 1000 seperators
+    bool    bPoint = false;         // true: with 1000 seperators
     sal_Bool    bTrail = sal_False;         // sal_True, if following minus
     sal_Bool    bSign  = sal_False;         // sal_True: always with leading sign
     sal_Bool    bNeg   = sal_False;         // sal_True: number is negative
@@ -515,7 +515,7 @@ static sal_uInt16 printfmtnum( double nNum, XubString& rRes, const XubString& rW
         // 1000 separators?
         if( *pFmt == ',' )
         {
-            nWidth++; pFmt++; bPoint = sal_True;
+            nWidth++; pFmt++; bPoint = true;
         } else break;
     }
     // after point
@@ -536,7 +536,7 @@ static sal_uInt16 printfmtnum( double nNum, XubString& rRes, const XubString& rW
     if( nNum < 0.0 ) nNum = -nNum, bNeg = sal_True;
     p = cBuf;
     if( bSign ) *p++ = bNeg ? '-' : '+';
-    myftoa( nNum, p, nPrec, nExpDig, bPoint, sal_False );
+    myftoa( nNum, p, nPrec, nExpDig, bPoint, false );
     nLen = strlen( cBuf );
 
     // overflow?
@@ -694,7 +694,7 @@ sal_Int16 implGetWeekDay( double aDate, bool bFirstDayParam = false, sal_Int16 n
 // from methods.cxx
 sal_Int16 implGetMinute( double dDate );
 sal_Int16 implGetDateYear( double aDate );
-sal_Bool implDateSerial( sal_Int16 nYear, sal_Int16 nMonth, sal_Int16 nDay, double& rdRet );
+bool implDateSerial( sal_Int16 nYear, sal_Int16 nMonth, sal_Int16 nDay, double& rdRet );
 
 void SbxValue::Format( XubString& rRes, const XubString* pFmt ) const
 {

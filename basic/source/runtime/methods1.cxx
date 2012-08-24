@@ -1148,7 +1148,7 @@ void PutGet( SbxArray& rPar, sal_Bool bPut )
     sal_Int16 nFileNo = rPar.Get(1)->GetInteger();
     SbxVariable* pVar2 = rPar.Get(2);
     SbxDataType eType2 = pVar2->GetType();
-    sal_Bool bHasRecordNo = (sal_Bool)(eType2 != SbxEMPTY && eType2 != SbxERROR);
+    bool bHasRecordNo = (eType2 != SbxEMPTY && eType2 != SbxERROR);
     long nRecordNo = pVar2->GetLong();
     if ( nFileNo < 1 || ( bHasRecordNo && nRecordNo < 1 ) )
     {
@@ -1166,7 +1166,7 @@ void PutGet( SbxArray& rPar, sal_Bool bPut )
     }
 
     SvStream* pStrm = pSbStrm->GetStrm();
-    sal_Bool bRandom = pSbStrm->IsRandom();
+    bool bRandom = pSbStrm->IsRandom();
     short nBlockLen = bRandom ? pSbStrm->GetBlockLen() : 0;
 
     if( bPut )
@@ -1247,7 +1247,7 @@ RTLFUNC(Environ)
     rPar.Get(0)->PutString( aResult );
 }
 
-static double GetDialogZoomFactor( sal_Bool bX, long nValue )
+static double GetDialogZoomFactor( bool bX, long nValue )
 {
     OutputDevice* pDevice = Application::GetDefaultDevice();
     double nResult = 0;
@@ -1287,7 +1287,7 @@ RTLFUNC(GetDialogZoomFactorX)
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
         return;
     }
-    rPar.Get(0)->PutDouble( GetDialogZoomFactor( sal_True, rPar.Get(1)->GetLong() ));
+    rPar.Get(0)->PutDouble( GetDialogZoomFactor( true, rPar.Get(1)->GetLong() ));
 }
 
 RTLFUNC(GetDialogZoomFactorY)
@@ -1300,7 +1300,7 @@ RTLFUNC(GetDialogZoomFactorY)
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
         return;
     }
-    rPar.Get(0)->PutDouble( GetDialogZoomFactor( sal_False, rPar.Get(1)->GetLong()));
+    rPar.Get(0)->PutDouble( GetDialogZoomFactor( false, rPar.Get(1)->GetLong()));
 }
 
 
@@ -1907,7 +1907,7 @@ IntervalInfo* getIntervalInfo( const String& rStringCode )
 }
 
 // From methods.cxx
-sal_Bool implDateSerial( sal_Int16 nYear, sal_Int16 nMonth, sal_Int16 nDay, double& rdRet );
+bool implDateSerial( sal_Int16 nYear, sal_Int16 nMonth, sal_Int16 nDay, double& rdRet );
 sal_Int16 implGetDateDay( double aDate );
 sal_Int16 implGetDateMonth( double aDate );
 sal_Int16 implGetDateYear( double aDate );
@@ -1966,7 +1966,7 @@ RTLFUNC(DateAdd)
         // Keep hours, minutes, seconds
         double dHoursMinutesSeconds = dDate - floor( dDate );
 
-        sal_Bool bOk = sal_True;
+        bool bOk = true;
         sal_Int16 nYear, nMonth, nDay;
         sal_Int16 nTargetYear16 = 0, nTargetMonth = 0;
         implGetDayMonthYear( nYear, nMonth, nDay, dDate );
