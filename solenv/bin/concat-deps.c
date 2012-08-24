@@ -166,7 +166,6 @@ void* data = NULL;
 
     if(pool->extent)
     {
-        fputs("taking a pool extent\n", stderr);
         /* we already have an extent, so this is a secondary */
         if(pool->secondary)
         {
