@@ -7,18 +7,17 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Module_Module,sax))
+$(eval $(call gb_StaticLibrary_StaticLibrary,sax_shared))
 
-$(eval $(call gb_Module_add_targets,sax,\
-    Library_expwrap \
-    Library_fastsax \
-    Library_sax \
-    Package_inc \
-	StaticLibrary_sax_shared \
+$(eval $(call gb_StaticLibrary_set_include,sax_shared,\
+    -I$(SRCDIR)/sax/inc \
+    $$(INCLUDE) \
 ))
 
-$(eval $(call gb_Module_add_check_targets,sax,\
-    CppunitTest_sax \
+$(eval $(call gb_StaticLibrary_use_sdk_api,sax_shared))
+
+$(eval $(call gb_StaticLibrary_add_exception_objects,sax_shared,\
+	sax/source/expatwrap/xml2utf \
 ))
 
 # vim: set noet sw=4 ts=4:

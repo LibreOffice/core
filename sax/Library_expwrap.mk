@@ -11,6 +11,10 @@ $(eval $(call gb_Library_Library,expwrap))
 
 $(eval $(call gb_Library_set_componentfile,expwrap,sax/source/expatwrap/expwrap))
 
+$(eval $(call gb_Library_set_include,expwrap,\
+    -I$(SRCDIR)/sax/inc \
+    $$(INCLUDE) \
+))
 
 $(eval $(call gb_Library_use_sdk_api,expwrap))
 
@@ -22,20 +26,17 @@ $(eval $(call gb_Library_use_libraries,expwrap,\
     cppu \
     cppuhelper \
     sal \
-    sax \
     $(gb_STDLIBS) \
 ))
 
-
-$(eval $(call gb_Library_set_include,expwrap,\
-    -I$(SRCDIR)/sax/inc \
-    $$(INCLUDE) \
+$(eval $(call gb_Library_use_static_libraries,expwrap,\
+	sax_shared \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,expwrap,\
-    sax/source/expatwrap/attrlistimpl \
-    sax/source/expatwrap/sax_expat \
-    sax/source/expatwrap/saxwriter \
+	sax/source/expatwrap/attrlistimpl \
+	sax/source/expatwrap/sax_expat \
+	sax/source/expatwrap/saxwriter \
 ))
 
 # vim: set noet sw=4 ts=4:

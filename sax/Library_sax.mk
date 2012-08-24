@@ -13,6 +13,11 @@ $(eval $(call gb_Library_use_package,sax,\
     sax_inc \
 ))
 
+$(eval $(call gb_Library_set_include,sax,\
+    -I$(SRCDIR)/sax/inc \
+    $$(INCLUDE) \
+))
+
 $(eval $(call gb_Library_use_sdk_api,sax))
 
 $(eval $(call gb_Library_use_libraries,sax,\
@@ -23,20 +28,14 @@ $(eval $(call gb_Library_use_libraries,sax,\
     $(gb_STDLIBS) \
 ))
 
-$(eval $(call gb_Library_set_include,sax,\
-    -I$(SRCDIR)/sax/inc \
-    $$(INCLUDE) \
-))
-
 $(eval $(call gb_Library_add_defs,sax,\
     -DSAX_DLLIMPLEMENTATION \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,sax,\
-    sax/source/expatwrap/xml2utf \
     sax/source/tools/converter \
     sax/source/tools/fastattribs \
-    sax/source/tools/fastserializer \
+	sax/source/tools/fastserializer \
     sax/source/tools/fshelper \
 ))
 

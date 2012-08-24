@@ -21,7 +21,7 @@
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/implbase2.hxx>
 
-#include "../tools/fastserializer.hxx"
+#include <fastserializer.hxx>
 #include "fastparser.hxx"
 
 using namespace sax_fastparser;

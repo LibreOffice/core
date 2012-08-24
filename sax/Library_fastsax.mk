@@ -11,10 +11,15 @@ $(eval $(call gb_Library_Library,fastsax))
 
 $(eval $(call gb_Library_set_componentfile,fastsax,sax/source/fastparser/fastsax))
 
+$(eval $(call gb_Library_set_include,fastsax,\
+    -I$(SRCDIR)/sax/inc \
+    $$(INCLUDE) \
+))
+
 $(eval $(call gb_Library_use_sdk_api,fastsax))
 
 $(eval $(call gb_Library_use_externals,fastsax,\
-        expat_utf8 \
+	expat_utf8 \
 	zlib \
 ))
 
@@ -22,18 +27,17 @@ $(eval $(call gb_Library_use_libraries,fastsax,\
     cppu \
     cppuhelper \
     sal \
-    sax \
+	sax \
     $(gb_STDLIBS) \
 ))
 
-$(eval $(call gb_Library_set_include,fastsax,\
-    -I$(SRCDIR)/sax/inc \
-    $$(INCLUDE) \
+$(eval $(call gb_Library_use_static_libraries,fastsax,\
+	sax_shared \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,fastsax,\
-    sax/source/fastparser/facreg \
-    sax/source/fastparser/fastparser \
+	sax/source/fastparser/facreg \
+	sax/source/fastparser/fastparser \
 ))
 
 # vim: set noet sw=4 ts=4:

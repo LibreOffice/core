@@ -17,17 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <sax/saxdllapi.h>
+#include <sal/types.h>
 
-
-/*
-*
-* Text2UnicodeConverter
-*
-**/
 namespace sax_expatwrap {
 
-class SAX_DLLPUBLIC Text2UnicodeConverter
+class Text2UnicodeConverter
 {
 
 public:
@@ -53,7 +47,7 @@ private:
 * Unicode2TextConverter
 *
 **-----------------------------------------*/
-class SAX_DLLPUBLIC Unicode2TextConverter
+class Unicode2TextConverter
 {
 public:
     Unicode2TextConverter( rtl_TextEncoding encoding );
@@ -84,7 +78,7 @@ private:
 * XMLFile2UTFConverter
 *
 **-----------------------------------------*/
-class SAX_DLLPUBLIC XMLFile2UTFConverter
+class XMLFile2UTFConverter
 {
 public:
     XMLFile2UTFConverter( ):

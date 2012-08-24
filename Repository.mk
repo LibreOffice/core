@@ -648,6 +648,7 @@ $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
     ssleay32 \
     ooopathutils \
     sample \
+    sax_shared \
     simplemapi \
     shell_xmlparser \
     shell_xmlparser_x64 \

@@ -32,7 +32,7 @@ namespace sax_expatwrap
 struct AttributeList_impl;
 
 //FIXME
-class /*SAX_DLLPUBLIC*/ AttributeList :
+class AttributeList :
     public ::cppu::WeakImplHelper2<
                 ::com::sun::star::xml::sax::XAttributeList,
                 ::com::sun::star::util::XCloneable >
