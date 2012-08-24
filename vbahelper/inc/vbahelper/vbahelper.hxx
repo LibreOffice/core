@@ -27,10 +27,6 @@
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/awt/XControl.hpp>
 #include <com/sun/star/awt/XDevice.hpp>
-#include <com/sun/star/frame/XDispatchResultListener.hpp>
-#include <com/sun/star/frame/DispatchResultEvent.hpp>
-#include <com/sun/star/frame/DispatchResultState.hpp>
-#include <com/sun/star/lang/EventObject.hpp>
 #include <com/sun/star/awt/XUnitConversion.hpp>
 #include <basic/basmgr.hxx>
 #include <basic/sberrors.hxx>
@@ -77,7 +73,7 @@ namespace ooo
         VBAHELPER_DLLPUBLIC css::uno::Reference< css::script::XTypeConverter > getTypeConverter( const css::uno::Reference< css::uno::XComponentContext >& xContext ) throw (css::uno::RuntimeException);
 
         VBAHELPER_DLLPUBLIC void dispatchRequests( const css::uno::Reference< css::frame::XModel>& xModel, const rtl::OUString& aUrl );
-     VBAHELPER_DLLPUBLIC void dispatchRequests (const css::uno::Reference< css::frame::XModel>& xModel, const rtl::OUString & aUrl, const css::uno::Sequence< css::beans::PropertyValue >& sProps, const css::uno::Reference< css::frame::XDispatchResultListener >& rListener = css::uno::Reference< css::frame::XDispatchResultListener >(), const sal_Bool bSilent = sal_True );
+     VBAHELPER_DLLPUBLIC void dispatchRequests (const css::uno::Reference< css::frame::XModel>& xModel, const rtl::OUString & aUrl, const css::uno::Sequence< css::beans::PropertyValue >& sProps );
         VBAHELPER_DLLPUBLIC void dispatchExecute(SfxViewShell* pView, sal_uInt16 nSlot, SfxCallMode nCall = SFX_CALLMODE_SYNCHRON );
         VBAHELPER_DLLPUBLIC sal_Int32 OORGBToXLRGB( sal_Int32 );
         VBAHELPER_DLLPUBLIC sal_Int32 XLRGBToOORGB( sal_Int32 );
@@ -250,24 +246,6 @@ public:
     static void exception( int err,  const rtl::OUString& additionalArgument ) throw( css::script::BasicErrorException );
 
     static void exception( const css::uno::Exception& ex ) throw( css::script::BasicErrorException );
-};
-
-class VBAHELPER_DLLPUBLIC VBADispatchListener : public cppu::WeakImplHelper1< css::frame::XDispatchResultListener >
-{
-private:
-    css::uno::Any m_Result;
-    sal_Bool m_State;
-
-public:
-    VBADispatchListener();
-    ~VBADispatchListener();
-
-    css::uno::Any getResult() { return m_Result; }
-    sal_Bool getState() { return m_State; }
-
-    // XDispatchResultListener
-    virtual void SAL_CALL dispatchFinished( const css::frame::DispatchResultEvent& aEvent ) throw ( css::uno::RuntimeException );
-    virtual void SAL_CALL disposing( const css::lang::EventObject& aEvent ) throw ( css::uno::RuntimeException );
 };
 
     } // vba

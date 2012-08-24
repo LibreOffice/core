@@ -25,7 +25,6 @@ using namespace ::com::sun::star;
 sal_Bool SAL_CALL VbaDialogBase::Show() throw ( uno::RuntimeException )
 {
     rtl::OUString aURL;
-    sal_Bool bSuccess = sal_False;
     if ( m_xModel.is() )
     {
         aURL = mapIndexToName( mnIndex );
@@ -35,25 +34,9 @@ sal_Bool SAL_CALL VbaDialogBase::Show() throw ( uno::RuntimeException )
                 uno::Reference< XInterface > () );
 
         uno::Sequence< beans::PropertyValue > dispatchProps(0);
-        if ( aURL == ".uno:PrinterSetup" )
-        {
-            dispatchProps.realloc(1);
-            dispatchProps[0].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "VBADialogResultRequest" ) );
-            dispatchProps[0].Value <<= (sal_Bool) sal_True;
-        }
+        dispatchRequests( m_xModel, aURL, dispatchProps );
 
-        VBADispatchListener *pNotificationListener = new VBADispatchListener();
-        uno::Reference< frame::XDispatchResultListener > rListener = pNotificationListener;
-        dispatchRequests( m_xModel, aURL, dispatchProps, rListener, sal_False );
-
-        bSuccess = pNotificationListener->getState();
-        uno::Any aResult = pNotificationListener->getResult();
-        if ( bSuccess )
-        {
-            if ( aResult.getValueTypeClass() == uno::TypeClass_BOOLEAN )
-                aResult >>= bSuccess;
-        }
     }
-    return bSuccess;
+    return sal_True;
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

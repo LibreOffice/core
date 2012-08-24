@@ -144,7 +144,7 @@ void dispatchExecute(SfxViewShell* pViewShell, sal_uInt16 nSlot, SfxCallMode nCa
 }
 
 void
-dispatchRequests (const uno::Reference< frame::XModel>& xModel, const rtl::OUString & aUrl, const uno::Sequence< beans::PropertyValue >& sProps, const uno::Reference< frame::XDispatchResultListener >& rListener, const sal_Bool bSilent )
+dispatchRequests (const uno::Reference< frame::XModel>& xModel, const rtl::OUString & aUrl, const uno::Sequence< beans::PropertyValue >& sProps )
 {
     util::URL url;
     url.Complete = aUrl;
@@ -172,7 +172,6 @@ dispatchRequests (const uno::Reference< frame::XModel>& xModel, const rtl::OUStr
     }
 
     uno::Reference<frame::XDispatch> xDispatcher = xDispatchProvider->queryDispatch(url,emptyString,0);
-    uno::Reference< frame::XNotifyingDispatch > xNotifyingDispatcher( xDispatcher, uno::UNO_QUERY );
 
     uno::Sequence<beans::PropertyValue> dispatchProps(1);
 
@@ -188,19 +187,9 @@ dispatchRequests (const uno::Reference< frame::XModel>& xModel, const rtl::OUStr
             *pDest = *pSrc;
     }
 
-    if ( bSilent )
-    {
-        (*pDest).Name = rtl::OUString(  "Silent" );
-        (*pDest).Value <<= (sal_Bool)sal_True;
-    }
-
-    if ( !rListener.is() && xDispatcher.is() )
+    if ( xDispatcher.is() )
     {
         xDispatcher->dispatch( url, dispatchProps );
-    }
-    else if ( rListener.is() && xNotifyingDispatcher.is() )
-    {
-        xNotifyingDispatcher->dispatchWithNotification( url, dispatchProps, rListener );
     }
 }
 
@@ -1165,28 +1154,6 @@ double Millimeter::getInPoints(int _hmm)
 {
     double points = double( static_cast<double>(_hmm) / factor);
     return points;
-}
-
-// Listener for XNotifyingDispatch
-VBADispatchListener::VBADispatchListener() : m_State( sal_False )
-{
-}
-
-// Listener for XNotifyingDispatch
-VBADispatchListener::~VBADispatchListener()
-{
-}
-
-// Listener for XNotifyingDispatch
-void SAL_CALL VBADispatchListener::dispatchFinished( const frame::DispatchResultEvent& aEvent ) throw ( uno::RuntimeException )
-{
-    m_Result = aEvent.Result;
-    m_State = ( aEvent.State == frame::DispatchResultState::SUCCESS ) ? sal_True : sal_False;
-}
-
-// Listener for XNotifyingDispatch
-void SAL_CALL VBADispatchListener::disposing( const lang::EventObject& /*aEvent*/ ) throw( uno::RuntimeException )
-{
 }
 
 uno::Reference< XHelperInterface > getVBADocument( const uno::Reference< frame::XModel >& xModel )
