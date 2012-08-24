@@ -47,6 +47,7 @@ ScVbaPages::getServiceImplName()
 uno::Reference< container::XEnumeration > SAL_CALL
 ScVbaPages::createEnumeration() throw (uno::RuntimeException)
 {
+    // #STUB
     return uno::Reference< container::XEnumeration >();
 }
 

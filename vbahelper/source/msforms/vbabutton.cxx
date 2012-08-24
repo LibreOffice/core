@@ -71,15 +71,18 @@ sal_Bool SAL_CALL ScVbaButton::getCancel() throw (uno::RuntimeException)
 
 void SAL_CALL ScVbaButton::setCancel( sal_Bool /*bCancel*/ ) throw (uno::RuntimeException)
 {
+    // #STUB
 }
 
 sal_Bool SAL_CALL ScVbaButton::getDefault() throw (uno::RuntimeException)
 {
+    // #STUB
     return sal_False;
 }
 
 void SAL_CALL ScVbaButton::setDefault( sal_Bool /*bDefault*/ ) throw (uno::RuntimeException)
 {
+    // #STUB
 }
 
 sal_Int32 SAL_CALL ScVbaButton::getBackColor() throw (uno::RuntimeException)
@@ -99,6 +102,7 @@ sal_Int32 SAL_CALL ScVbaButton::getForeColor() throw (uno::RuntimeException)
 
 void SAL_CALL ScVbaButton::setForeColor( sal_Int32 /*nForeColor*/ ) throw (uno::RuntimeException)
 {
+    // #STUB
 }
 
 uno::Reference< msforms::XNewFont > SAL_CALL ScVbaButton::getFont() throw (uno::RuntimeException)

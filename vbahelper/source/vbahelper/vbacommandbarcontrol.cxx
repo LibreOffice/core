@@ -133,6 +133,7 @@ ScVbaCommandBarControl::setEnabled( sal_Bool _enabled ) throw (uno::RuntimeExcep
 ScVbaCommandBarControl::getBeginGroup() throw (css::uno::RuntimeException)
 {
     // TODO: need to check if the item before this item is of type 'separator'
+    //#STUB
     return sal_False;
 }
 

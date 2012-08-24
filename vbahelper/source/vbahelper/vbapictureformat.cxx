@@ -104,7 +104,6 @@ ScVbaPictureFormat::IncrementContrast( double increment ) throw (uno::RuntimeExc
 {
     double nContrast = getContrast();
     nContrast += increment;
-    //VBA, minz@cn.ibm.com.
     if( nContrast < 0 )
     {
         nContrast = 0.0;

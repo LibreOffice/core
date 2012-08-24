@@ -56,15 +56,6 @@ ScVbaShape::ScVbaShape( const uno::Reference< XHelperInterface >& xParent, const
 
 ScVbaShape::~ScVbaShape()
 {
-    // dtor must never ever throw
-    /*try
-    {
-        removeShapeListener();
-        removeShapesListener();
-    }
-    catch( uno::Exception& )
-    {
-    }*/
 }
 
 void SAL_CALL
@@ -268,6 +259,7 @@ ScVbaShape::setTop( double _top ) throw (uno::RuntimeException)
 sal_Bool SAL_CALL
 ScVbaShape::getVisible() throw (uno::RuntimeException)
 {
+    // #STUB
     //UNO Shapes are always visible
     return sal_True;
 }
@@ -275,6 +267,7 @@ ScVbaShape::getVisible() throw (uno::RuntimeException)
 void SAL_CALL
 ScVbaShape::setVisible( sal_Bool /*_visible*/ ) throw (uno::RuntimeException)
 {
+    // #STUB
     //UNO Shapes are always visible
 }
 
@@ -513,27 +506,27 @@ void SAL_CALL ScVbaShape::Copy() throw (uno::RuntimeException)
 sal_Bool SAL_CALL
 ScVbaShape::getLockAspectRatio() throw (uno::RuntimeException)
 {
-    // FIXME:
+    // #STUB
     return sal_False;
 }
 
 void SAL_CALL
 ScVbaShape::setLockAspectRatio( sal_Bool /*_lockaspectratio*/ ) throw (uno::RuntimeException)
 {
-    // FIXME:
+    // #STUB
 }
 
 sal_Bool SAL_CALL
 ScVbaShape::getLockAnchor() throw (uno::RuntimeException)
 {
-    // FIXME:
+    // #STUB
     return sal_True;
 }
 
 void SAL_CALL
 ScVbaShape::setLockAnchor( sal_Bool /*_lockanchor*/ ) throw (uno::RuntimeException)
 {
-    // FIXME:
+    // #STUB
 }
 
 sal_Int32 SAL_CALL

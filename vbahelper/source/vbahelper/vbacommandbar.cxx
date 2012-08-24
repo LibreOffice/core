@@ -211,11 +211,13 @@ void SAL_CALL VbaDummyCommandBar::setName( const ::rtl::OUString& _name ) throw 
 
 ::sal_Bool SAL_CALL VbaDummyCommandBar::getVisible() throw (uno::RuntimeException)
 {
+    // #STUB
     return sal_True;
 }
 
 void SAL_CALL VbaDummyCommandBar::setVisible( ::sal_Bool /*_visible*/ ) throw (uno::RuntimeException)
 {
+    // #STUB
 }
 
 ::sal_Bool SAL_CALL VbaDummyCommandBar::getEnabled() throw (uno::RuntimeException)
@@ -233,6 +235,7 @@ void SAL_CALL VbaDummyCommandBar::setEnabled( sal_Bool _enabled ) throw (uno::Ru
 void SAL_CALL VbaDummyCommandBar::Delete(  ) throw (script::BasicErrorException, uno::RuntimeException)
 {
     // no-op
+    // #STUB
 }
 
 uno::Any SAL_CALL VbaDummyCommandBar::Controls( const uno::Any& aIndex ) throw (script::BasicErrorException, uno::RuntimeException)

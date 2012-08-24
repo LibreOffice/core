@@ -122,6 +122,7 @@ sal_Int32 SAL_CALL ScVbaTextBox::getSpecialEffect() throw (uno::RuntimeException
 
 void SAL_CALL ScVbaTextBox::setSpecialEffect( sal_Int32 /*nSpecialEffect*/ ) throw (uno::RuntimeException)
 {
+    // #STUB
 }
 
 sal_Int32 SAL_CALL ScVbaTextBox::getBorderStyle() throw (uno::RuntimeException)
@@ -131,6 +132,7 @@ sal_Int32 SAL_CALL ScVbaTextBox::getBorderStyle() throw (uno::RuntimeException)
 
 void SAL_CALL ScVbaTextBox::setBorderStyle( sal_Int32 /*nBorderStyle*/ ) throw (uno::RuntimeException)
 {
+    // #STUB
 }
 
 sal_Int32 SAL_CALL ScVbaTextBox::getTextLength() throw (uno::RuntimeException)

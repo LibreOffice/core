@@ -60,14 +60,14 @@ ScVbaLabel::setValue( const uno::Any& _value ) throw (::com::sun::star::uno::Run
 rtl::OUString SAL_CALL
 ScVbaLabel::getAccelerator() throw (css::uno::RuntimeException)
 {
-    //FIXME: seems not support?
+    // #STUB
     return rtl::OUString();
 }
 
 void SAL_CALL
 ScVbaLabel::setAccelerator( const rtl::OUString& /*_accelerator*/ ) throw (::com::sun::star::uno::RuntimeException)
 {
-    //FIXME: seems not support?
+    // #STUB
 }
 
 uno::Reference< msforms::XNewFont > SAL_CALL ScVbaLabel::getFont() throw (uno::RuntimeException)

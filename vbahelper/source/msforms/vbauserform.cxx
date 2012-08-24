@@ -158,6 +158,7 @@ void SAL_CALL ScVbaUserForm::setVisible( sal_Bool bVisible ) throw (uno::Runtime
 void SAL_CALL
 ScVbaUserForm::RePaint(  ) throw (uno::RuntimeException)
 {
+    // #STUB
     // do nothing
 }
 

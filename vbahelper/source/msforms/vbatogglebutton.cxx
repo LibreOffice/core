@@ -100,20 +100,24 @@ void SAL_CALL ScVbaToggleButton::setAutoSize( sal_Bool bAutoSize ) throw (uno::R
 
 sal_Bool SAL_CALL ScVbaToggleButton::getCancel() throw (uno::RuntimeException)
 {
+    // #STUB
     return sal_False;
 }
 
 void SAL_CALL ScVbaToggleButton::setCancel( sal_Bool /*bCancel*/ ) throw (uno::RuntimeException)
 {
+    // #STUB
 }
 
 sal_Bool SAL_CALL ScVbaToggleButton::getDefault() throw (uno::RuntimeException)
 {
+    // #STUB
     return sal_False;
 }
 
 void SAL_CALL ScVbaToggleButton::setDefault( sal_Bool /*bDefault*/ ) throw (uno::RuntimeException)
 {
+    // #STUB
 }
 
 sal_Int32 SAL_CALL ScVbaToggleButton::getBackColor() throw (uno::RuntimeException)
@@ -128,11 +132,13 @@ void SAL_CALL ScVbaToggleButton::setBackColor( sal_Int32 nBackColor ) throw (uno
 
 sal_Int32 SAL_CALL ScVbaToggleButton::getForeColor() throw (uno::RuntimeException)
 {
+    // #STUB
     return 0;
 }
 
 void SAL_CALL ScVbaToggleButton::setForeColor( sal_Int32 /*nForeColor*/ ) throw (uno::RuntimeException)
 {
+    // #STUB
 }
 
 uno::Reference< msforms::XNewFont > SAL_CALL ScVbaToggleButton::getFont() throw (uno::RuntimeException)
