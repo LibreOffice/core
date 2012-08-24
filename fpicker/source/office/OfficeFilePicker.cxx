@@ -632,7 +632,7 @@ Sequence< rtl::OUString > SAL_CALL SvtFilePicker::getFiles() throw( RuntimeExcep
         for(size_t i = 0; i < aPathList.size(); ++i)
         {
             aObj.SetURL(aPathList[i]);
-            aPath[i] = aObj.getName();
+            aPath[i + 1] = aObj.getName();
         }
     }
 
