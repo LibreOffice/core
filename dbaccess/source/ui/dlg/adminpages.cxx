@@ -328,7 +328,7 @@ namespace dbaui
         const Size aMinSize( io_button.CalcMinimumSize() );
         if ( aMinSize.Width() > aOldSize.Width() )
         {
-            io_button.SetPosSizePixel(
+            io_button.setPosSizePixel(
                 aOldPos.X() + aOldSize.Width() - aMinSize.Width(),
                 0,
                 aMinSize.Width(),

@@ -1304,6 +1304,13 @@ void TabControl::SetSizePixel(const Size& rNewSize)
         setAllocation(rNewSize);
 }
 
+void TabControl::SetPosPixel(const Point& rPos)
+{
+    Window::SetPosPixel(rPos);
+    if (mbLayoutDirty)
+        setAllocation(GetOutputSizePixel());
+}
+
 void TabControl::Resize()
 {
     setAllocation(Control::GetOutputSizePixel());

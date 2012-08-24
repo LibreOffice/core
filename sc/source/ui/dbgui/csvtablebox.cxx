@@ -127,29 +127,29 @@ void ScCsvTableBox::InitControls()
     if( mbFixedMode )
     {
         // ruler sets height internally
-        maRuler.SetPosSizePixel( 0, 0, nDataWidth, 0 );
+        maRuler.setPosSizePixel( 0, 0, nDataWidth, 0 );
         sal_Int32 nY = maRuler.GetSizePixel().Height();
         maData.mnWinHeight -= nY;
-        maGrid.SetPosSizePixel( 0, nY, nDataWidth, maData.mnWinHeight );
+        maGrid.setPosSizePixel( 0, nY, nDataWidth, maData.mnWinHeight );
     }
     else
-        maGrid.SetPosSizePixel( 0, 0, nDataWidth, nDataHeight );
+        maGrid.setPosSizePixel( 0, 0, nDataWidth, nDataHeight );
     maGrid.Show();
     maRuler.Show( mbFixedMode );
 
     // scrollbars always visible
-    maHScroll.SetPosSizePixel( 0, nDataHeight, nDataWidth, nScrollBarSize );
+    maHScroll.setPosSizePixel( 0, nDataHeight, nDataWidth, nScrollBarSize );
     InitHScrollBar();
     maHScroll.Show();
 
     // scrollbars always visible
-    maVScroll.SetPosSizePixel( nDataWidth, 0, nScrollBarSize, nDataHeight );
+    maVScroll.setPosSizePixel( nDataWidth, 0, nScrollBarSize, nDataHeight );
     InitVScrollBar();
     maVScroll.Show();
 
     bool bScrBox = maHScroll.IsVisible() && maVScroll.IsVisible();
     if( bScrBox )
-        maScrollBox.SetPosSizePixel( nDataWidth, nDataHeight, nScrollBarSize, nScrollBarSize );
+        maScrollBox.setPosSizePixel( nDataWidth, nDataHeight, nScrollBarSize, nScrollBarSize );
     maScrollBox.Show( bScrBox );
 
     // let the controls self-adjust to visible area

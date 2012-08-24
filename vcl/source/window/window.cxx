@@ -5510,7 +5510,7 @@ void Window::SetBorderStyle( sal_uInt16 nBorderStyle )
             // set us to the position and size of our previous border
             Point aBorderPos( pBorderWin->GetPosPixel() );
             Size aBorderSize( pBorderWin->GetSizePixel() );
-            SetPosSizePixel( aBorderPos.X(), aBorderPos.Y(), aBorderSize.Width(), aBorderSize.Height() );
+            setPosSizePixel( aBorderPos.X(), aBorderPos.Y(), aBorderSize.Width(), aBorderSize.Height() );
             // release border window
             delete pBorderWin;
 
@@ -7066,7 +7066,7 @@ void Window::EnableAlwaysOnTop( sal_Bool bEnable )
 
 // -----------------------------------------------------------------------
 
-void Window::SetPosSizePixel( long nX, long nY,
+void Window::setPosSizePixel( long nX, long nY,
                               long nWidth, long nHeight, sal_uInt16 nFlags )
 {
     DBG_CHKTHIS( Window, ImplDbgCheckWindow );

@@ -209,7 +209,7 @@ void VCLStatusIndicator::impl_recalcLayout(Window* pStatusBar   ,
        return;
 
     Size aParentSize = pParentWindow->GetSizePixel();
-    pStatusBar->SetPosSizePixel(0,
+    pStatusBar->setPosSizePixel(0,
                                 0,
                                 aParentSize.Width(),
                                 aParentSize.Height());

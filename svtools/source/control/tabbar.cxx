@@ -2334,7 +2334,7 @@ sal_Bool TabBar::StartEditMode( sal_uInt16 nPageId )
             nWidth = aRect.GetWidth();
         }
         mpEdit->SetText( GetPageText( mnEditId ) );
-        mpEdit->SetPosSizePixel( nX, aRect.Top()+mnOffY+1, nWidth, aRect.GetHeight()-3 );
+        mpEdit->setPosSizePixel( nX, aRect.Top()+mnOffY+1, nWidth, aRect.GetHeight()-3 );
         Font    aFont = GetPointFont();
         Color   aForegroundColor;
         Color   aBackgroundColor;

@@ -3141,9 +3141,9 @@ long ImplListBoxFloatingWindow::PreNotify( NotifyEvent& rNEvt )
 
 // -----------------------------------------------------------------------
 
-void ImplListBoxFloatingWindow::SetPosSizePixel( long nX, long nY, long nWidth, long nHeight, sal_uInt16 nFlags )
+void ImplListBoxFloatingWindow::setPosSizePixel( long nX, long nY, long nWidth, long nHeight, sal_uInt16 nFlags )
 {
-    FloatingWindow::SetPosSizePixel( nX, nY, nWidth, nHeight, nFlags );
+    FloatingWindow::setPosSizePixel( nX, nY, nWidth, nHeight, nFlags );
 
     // Fix #60890# ( MBA ): um auch im aufgeklappten Zustand der Listbox die Gr"o\se einfach zu einen
     // Aufruf von Resize() "andern zu k"onnen, wird die Position hier ggf. angepa\t

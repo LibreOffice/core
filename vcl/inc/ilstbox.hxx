@@ -556,7 +556,7 @@ public:
     Size            CalcFloatSize();
     void            StartFloat( sal_Bool bStartTracking );
 
-    virtual void    SetPosSizePixel( long nX, long nY,
+    virtual void    setPosSizePixel( long nX, long nY,
                                      long nWidth, long nHeight, sal_uInt16 nFlags = WINDOW_POSSIZE_ALL );
     void            SetPosSizePixel( const Point& rNewPos, const Size& rNewSize )
                         { FloatingWindow::SetPosSizePixel( rNewPos, rNewSize ); }

@@ -1719,18 +1719,18 @@ VCLXWindow* Window::GetWindowPeer() const
 
 void Window::SetPosPixel( const Point& rNewPos )
 {
-    SetPosSizePixel( rNewPos.X(), rNewPos.Y(), 0, 0, WINDOW_POSSIZE_POS );
+    setPosSizePixel( rNewPos.X(), rNewPos.Y(), 0, 0, WINDOW_POSSIZE_POS );
 }
 
 void Window::SetSizePixel( const Size& rNewSize )
 {
-    SetPosSizePixel( 0, 0, rNewSize.Width(), rNewSize.Height(),
+    setPosSizePixel( 0, 0, rNewSize.Width(), rNewSize.Height(),
                      WINDOW_POSSIZE_SIZE );
 }
 
 void Window::SetPosSizePixel( const Point& rNewPos, const Size& rNewSize )
 {
-    SetPosSizePixel( rNewPos.X(), rNewPos.Y(),
+    setPosSizePixel( rNewPos.X(), rNewPos.Y(),
                      rNewSize.Width(), rNewSize.Height(),
                      WINDOW_POSSIZE_POSSIZE );
 }

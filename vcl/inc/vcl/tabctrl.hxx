@@ -197,9 +197,9 @@ public:
     // rename nOldId to nNewId);
     void ReassignPageId(sal_uInt16 nOldId, sal_uInt16 nNewId);
 
-    using Control::SetPosSizePixel;
-    virtual void SetPosSizePixel(const Point& rNewPos, const Size& rNewSize);
+    virtual void SetPosPixel(const Point& rPos);
     virtual void SetSizePixel(const Size& rNewSize);
+    virtual void SetPosSizePixel(const Point& rNewPos, const Size& rNewSize);
 
     Size calculateRequisition() const;
     void setAllocation(const Size &rAllocation);

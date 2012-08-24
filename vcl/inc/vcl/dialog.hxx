@@ -58,7 +58,6 @@ private:
     sal_Bool            mbOldSaveBack;
     sal_Bool            mbInClose;
     sal_Bool            mbModalMode;
-    int             m_nBorderWidth;
     Timer           maLayoutTimer;
 
     SAL_DLLPRIVATE void    ImplInitDialogData();
@@ -102,16 +101,6 @@ public:
     bool            isLayoutEnabled() const;
     void            setInitialLayoutSize();
     virtual bool set_property(const rtl::OString &rKey, const rtl::OString &rValue);
-
-    void set_border_width(int nBorderWidth)
-    {
-        m_nBorderWidth = nBorderWidth;
-    }
-    int get_border_width() const
-    {
-        return m_nBorderWidth;
-    }
-
 
     virtual sal_Bool    Close();
 

@@ -354,7 +354,6 @@ void Dialog::ImplInitDialogData()
     mbInClose               = sal_False;
     mbModalMode             = sal_False;
     mnMousePositioned       = 0;
-    m_nBorderWidth          = 0;
     mpDialogImpl            = new DialogImpl;
 
     //To-Do, reuse maResizeTimer
@@ -1160,7 +1159,7 @@ void Dialog::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal
     {
         ImplBorderWindow aImplWin( this, WB_BORDER|WB_STDWORK, BORDERWINDOW_STYLE_OVERLAP );
         aImplWin.SetText( GetText() );
-        aImplWin.SetPosSizePixel( aPos.X(), aPos.Y(), aSize.Width(), aSize.Height() );
+        aImplWin.setPosSizePixel( aPos.X(), aPos.Y(), aSize.Width(), aSize.Height() );
         aImplWin.SetDisplayActive( sal_True );
         aImplWin.InitView();
 
@@ -1184,23 +1183,27 @@ Size Dialog::GetOptimalSize(WindowSizeType eType) const
 
     Size aSize = GetWindow(WINDOW_FIRSTCHILD)->GetOptimalSize(eType);
 
+    sal_Int32 nBorderWidth = get_border_width();
+
     aSize.Height() += mpWindowImpl->mnLeftBorder + mpWindowImpl->mnRightBorder
-        + 2*m_nBorderWidth;
+        + 2*nBorderWidth;
     aSize.Width() += mpWindowImpl->mnTopBorder + mpWindowImpl->mnBottomBorder
-        + 2*m_nBorderWidth;
+        + 2*nBorderWidth;
 
     return Window::CalcWindowSize(aSize);
 }
 
 void Dialog::setPosSizeOnContainee(Size aSize, VclContainer &rBox)
 {
-    aSize.Width() -= mpWindowImpl->mnLeftBorder + mpWindowImpl->mnRightBorder
-        + 2 * m_nBorderWidth;
-    aSize.Height() -= mpWindowImpl->mnTopBorder + mpWindowImpl->mnBottomBorder
-        + 2 * m_nBorderWidth;
+    sal_Int32 nBorderWidth = get_border_width();
 
-    Point aPos(mpWindowImpl->mnLeftBorder + m_nBorderWidth,
-        mpWindowImpl->mnTopBorder + m_nBorderWidth);
+    aSize.Width() -= mpWindowImpl->mnLeftBorder + mpWindowImpl->mnRightBorder
+        + 2 * nBorderWidth;
+    aSize.Height() -= mpWindowImpl->mnTopBorder + mpWindowImpl->mnBottomBorder
+        + 2 * nBorderWidth;
+
+    Point aPos(mpWindowImpl->mnLeftBorder + nBorderWidth,
+        mpWindowImpl->mnTopBorder + nBorderWidth);
 
     rBox.SetPosSizePixel(aPos, aSize);
 }

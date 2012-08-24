@@ -438,22 +438,22 @@ void ImpSvMEdit::Resize()
         if ( !mpHScrollBar )
             mpTextWindow->GetTextEngine()->SetMaxTextWidth( aSz.Width() );
         else
-            mpHScrollBar->SetPosSizePixel( 0, aEditSize.Height()-nSBWidth, aSz.Width(), nSBWidth );
+            mpHScrollBar->setPosSizePixel( 0, aEditSize.Height()-nSBWidth, aSz.Width(), nSBWidth );
 
         Point aTextWindowPos( maTextWindowOffset );
         if ( mpVScrollBar )
         {
             if( Application::GetSettings().GetLayoutRTL() )
             {
-                mpVScrollBar->SetPosSizePixel( 0, 0, nSBWidth, aSz.Height() );
+                mpVScrollBar->setPosSizePixel( 0, 0, nSBWidth, aSz.Height() );
                 aTextWindowPos.X() += nSBWidth;
             }
             else
-                mpVScrollBar->SetPosSizePixel( aEditSize.Width()-nSBWidth, 0, nSBWidth, aSz.Height() );
+                mpVScrollBar->setPosSizePixel( aEditSize.Width()-nSBWidth, 0, nSBWidth, aSz.Height() );
         }
 
         if ( mpScrollBox )
-            mpScrollBox->SetPosSizePixel( aSz.Width(), aSz.Height(), nSBWidth, nSBWidth );
+            mpScrollBox->setPosSizePixel( aSz.Width(), aSz.Height(), nSBWidth, nSBWidth );
 
         Size aTextWindowSize( aSz );
         aTextWindowSize.Width() -= maTextWindowOffset.X();

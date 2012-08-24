@@ -149,7 +149,7 @@ void TabDialog::ImplPosControls()
                 nBtnEx          = aViewSize.Width()+IMPL_DIALOG_OFFSET;
             }
 
-            mpViewWindow->SetPosSizePixel( nViewOffX, nViewOffY,
+            mpViewWindow->setPosSizePixel( nViewOffX, nViewOffY,
                                            nViewWidth, nViewHeight,
                                            nViewPosFlags );
         }

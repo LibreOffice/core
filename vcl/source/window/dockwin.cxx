@@ -919,7 +919,7 @@ WinBits DockingWindow::GetFloatStyle() const
 
 // -----------------------------------------------------------------------
 
-void DockingWindow::SetPosSizePixel( long nX, long nY,
+void DockingWindow::setPosSizePixel( long nX, long nY,
                                      long nWidth, long nHeight,
                                      sal_uInt16 nFlags )
 {
@@ -927,16 +927,16 @@ void DockingWindow::SetPosSizePixel( long nX, long nY,
     if( pWrapper )
     {
         if ( pWrapper->mpFloatWin )
-            pWrapper->mpFloatWin->SetPosSizePixel( nX, nY, nWidth, nHeight, nFlags );
+            pWrapper->mpFloatWin->setPosSizePixel( nX, nY, nWidth, nHeight, nFlags );
         else
-            Window::SetPosSizePixel( nX, nY, nWidth, nHeight, nFlags );
+            Window::setPosSizePixel( nX, nY, nWidth, nHeight, nFlags );
         return;
     }
 
     if ( mpFloatWin )
-        mpFloatWin->SetPosSizePixel( nX, nY, nWidth, nHeight, nFlags );
+        mpFloatWin->setPosSizePixel( nX, nY, nWidth, nHeight, nFlags );
     else
-        Window::SetPosSizePixel( nX, nY, nWidth, nHeight, nFlags );
+        Window::setPosSizePixel( nX, nY, nWidth, nHeight, nFlags );
 }
 
 // -----------------------------------------------------------------------

@@ -494,7 +494,7 @@ void SvxShowCharSet::SetFont( const Font& rFont )
 
     if( bNeedVscroll)
     {
-        aVscrollSB.SetPosSizePixel( nX * COLUMN_COUNT, 0, SBWIDTH, nY * ROW_COUNT );
+        aVscrollSB.setPosSizePixel( nX * COLUMN_COUNT, 0, SBWIDTH, nY * ROW_COUNT );
         aVscrollSB.SetRangeMin( 0 );
         int nLastRow = (maFontCharMap.GetCharCount() - 1 + COLUMN_COUNT) / COLUMN_COUNT;
         aVscrollSB.SetRangeMax( nLastRow );

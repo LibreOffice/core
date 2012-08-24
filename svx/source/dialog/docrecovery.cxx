@@ -631,7 +631,7 @@ PluginProgressWindow::PluginProgressWindow(      Window*                        
     Show();
     Size aParentSize = pParent->GetSizePixel();
     // align the progressbar to its parent
-    SetPosSizePixel( -9, 0, aParentSize.Width() + 15, aParentSize.Height() - 4 );
+    setPosSizePixel( -9, 0, aParentSize.Width() + 15, aParentSize.Height() - 4 );
 }
 
 //===============================================

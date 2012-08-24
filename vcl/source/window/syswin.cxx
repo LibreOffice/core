@@ -801,7 +801,7 @@ void SystemWindow::SetWindowStateData( const WindowStateData& rData )
             nY = 0;
         if( nY + nHeight > (long) rGeom.nHeight )
             nY = rGeom.nHeight - nHeight;
-        SetPosSizePixel( nX, nY, nWidth, nHeight, nPosSize );
+        setPosSizePixel( nX, nY, nWidth, nHeight, nPosSize );
         maOrgSize = Size( nWidth, nHeight );
 
         // 91625 - ignore Minimize

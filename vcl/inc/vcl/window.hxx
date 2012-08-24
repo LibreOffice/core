@@ -155,7 +155,7 @@ namespace svt { class PopupWindowControllerImpl; }
 #define WINDOW_PREVTOPWINDOWSIBLING     ((sal_uInt16)15)
 #define WINDOW_NEXTTOPWINDOWSIBLING     ((sal_uInt16)16)
 
-// Flags for SetPosSizePixel()
+// Flags for setPosSizePixel()
 #define WINDOW_POSSIZE_X                ((sal_uInt16)0x0001)
 #define WINDOW_POSSIZE_Y                ((sal_uInt16)0x0002)
 #define WINDOW_POSSIZE_WIDTH            ((sal_uInt16)0x0004)
@@ -841,7 +841,7 @@ public:
     void                EnableAlwaysOnTop( sal_Bool bEnable = sal_True );
     sal_Bool                IsAlwaysOnTopEnabled() const;
 
-    virtual void        SetPosSizePixel( long nX, long nY,
+    virtual void        setPosSizePixel( long nX, long nY,
                                          long nWidth, long nHeight,
                                          sal_uInt16 nFlags = WINDOW_POSSIZE_ALL );
     virtual void        SetPosPixel( const Point& rNewPos );

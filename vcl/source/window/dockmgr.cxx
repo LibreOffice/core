@@ -82,8 +82,7 @@ public:
     virtual void    PopupModeEnd();
     virtual void    Resizing( Size& rSize );
     virtual sal_Bool    Close();
-    using Window::SetPosSizePixel;
-    virtual void    SetPosSizePixel( long nX, long nY,
+    virtual void    setPosSizePixel( long nX, long nY,
                                      long nWidth, long nHeight,
                                      sal_uInt16 nFlags = WINDOW_POSSIZE_ALL );
 
@@ -286,11 +285,11 @@ void ImplDockFloatWin2::Resize()
     }
 }
 
-void ImplDockFloatWin2::SetPosSizePixel( long nX, long nY,
+void ImplDockFloatWin2::setPosSizePixel( long nX, long nY,
                                      long nWidth, long nHeight,
                                      sal_uInt16 nFlags )
 {
-    FloatingWindow::SetPosSizePixel( nX, nY, nWidth, nHeight, nFlags );
+    FloatingWindow::setPosSizePixel( nX, nY, nWidth, nHeight, nFlags );
 }
 
 // -----------------------------------------------------------------------
@@ -491,7 +490,7 @@ void DockingManager::SetPosSizePixel( Window *pWindow, long nX, long nY,
 {
     ImplDockingWindowWrapper* pWrapper = GetDockingWindowWrapper( pWindow );
     if( pWrapper )
-        pWrapper->SetPosSizePixel( nX, nY, nWidth, nHeight, nFlags );
+        pWrapper->setPosSizePixel( nX, nY, nWidth, nHeight, nFlags );
 }
 
 Rectangle DockingManager::GetPosSizePixel( const Window *pWindow )
@@ -1436,14 +1435,14 @@ WinBits ImplDockingWindowWrapper::GetFloatStyle() const
 
 // -----------------------------------------------------------------------
 
-void ImplDockingWindowWrapper::SetPosSizePixel( long nX, long nY,
+void ImplDockingWindowWrapper::setPosSizePixel( long nX, long nY,
                                      long nWidth, long nHeight,
                                      sal_uInt16 nFlags )
 {
     if ( mpFloatWin )
-        mpFloatWin->SetPosSizePixel( nX, nY, nWidth, nHeight, nFlags );
+        mpFloatWin->setPosSizePixel( nX, nY, nWidth, nHeight, nFlags );
     else
-        GetWindow()->SetPosSizePixel( nX, nY, nWidth, nHeight, nFlags );
+        GetWindow()->setPosSizePixel( nX, nY, nWidth, nHeight, nFlags );
 }
 
 // -----------------------------------------------------------------------

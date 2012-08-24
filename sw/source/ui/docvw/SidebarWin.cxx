@@ -599,11 +599,11 @@ void SwSidebarWin::DoResize()
     {
         const Size aSizeOfMetadataControls( GetSizePixel().Width() - GetMetaButtonAreaWidth(),
                                             GetMetaHeight()/2 );
-        mpMetadataAuthor->SetPosSizePixel( 0,
+        mpMetadataAuthor->setPosSizePixel( 0,
                                            aHeight,
                                            aSizeOfMetadataControls.Width(),
                                            aSizeOfMetadataControls.Height() );
-        mpMetadataDate->SetPosSizePixel( 0,
+        mpMetadataDate->setPosSizePixel( 0,
                                          aHeight + aSizeOfMetadataControls.Height(),
                                          aSizeOfMetadataControls.Width(),
                                          aSizeOfMetadataControls.Height() );
@@ -618,15 +618,15 @@ void SwSidebarWin::DoResize()
 
     if (!Application::GetSettings().GetLayoutRTL())
     {
-        mpSidebarTxtControl->SetPosSizePixel(0, 0, aWidth, aHeight);
-        mpVScrollbar->SetPosSizePixel( aWidth, 0, GetScrollbarWidth(), aHeight);
+        mpSidebarTxtControl->setPosSizePixel(0, 0, aWidth, aHeight);
+        mpVScrollbar->setPosSizePixel( aWidth, 0, GetScrollbarWidth(), aHeight);
     }
     else
     {
-        mpSidebarTxtControl->SetPosSizePixel( ( (aTextHeight > aHeight) && !IsPreview()
+        mpSidebarTxtControl->setPosSizePixel( ( (aTextHeight > aHeight) && !IsPreview()
                                       ? GetScrollbarWidth() : 0 ) , 0,
                                       aWidth, aHeight);
-        mpVScrollbar->SetPosSizePixel( 0, 0, GetScrollbarWidth(), aHeight);
+        mpVScrollbar->setPosSizePixel( 0, 0, GetScrollbarWidth(), aHeight);
     }
 
     mpVScrollbar->SetVisibleSize( PixelToLogic(Size(0,aHeight)).Height() );
@@ -660,7 +660,7 @@ void SwSidebarWin::DoResize()
 
     {
         const Rectangle aRectMetaButtonPixel( LogicToPixel( aRectMetaButton ) );
-        mpMenuButton->SetPosSizePixel( aRectMetaButtonPixel.Left(),
+        mpMenuButton->setPosSizePixel( aRectMetaButtonPixel.Left(),
                                        aRectMetaButtonPixel.Top(),
                                        aRectMetaButtonPixel.GetWidth(),
                                        aRectMetaButtonPixel.GetHeight() );

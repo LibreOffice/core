@@ -64,9 +64,8 @@ public:
 
     // common ruler handling --------------------------------------------------
 public:
-    using Window::SetPosSizePixel;
     /** Sets position and size of the ruler. The height is calculated internally. */
-    virtual void                SetPosSizePixel(
+    virtual void                setPosSizePixel(
                                     long nX, long nY,
                                     long nWidth, long nHeight,
                                     sal_uInt16 nFlags = WINDOW_POSSIZE_ALL );

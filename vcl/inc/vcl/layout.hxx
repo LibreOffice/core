@@ -38,7 +38,6 @@ class VCL_DLLPUBLIC VclContainer : public Window
 public:
     VclContainer(Window *pParent);
     virtual Size GetOptimalSize(WindowSizeType eType) const;
-    using Window::SetPosSizePixel;
     virtual void SetPosSizePixel(const Point& rNewPos, const Size& rNewSize);
     virtual void SetPosPixel(const Point& rAllocPos);
     virtual void SetSizePixel(const Size& rAllocation);

@@ -652,7 +652,7 @@ sal_uInt16 ListBox::GetDropDownLineCount() const
 
 // -----------------------------------------------------------------------
 
-void ListBox::SetPosSizePixel( long nX, long nY, long nWidth, long nHeight, sal_uInt16 nFlags )
+void ListBox::setPosSizePixel( long nX, long nY, long nWidth, long nHeight, sal_uInt16 nFlags )
 {
     if( IsDropDownBox() && ( nFlags & WINDOW_POSSIZE_SIZE ) )
     {
@@ -667,7 +667,7 @@ void ListBox::SetPosSizePixel( long nX, long nY, long nWidth, long nHeight, sal_
             nHeight = mnDDHeight;
     }
 
-    Control::SetPosSizePixel( nX, nY, nWidth, nHeight, nFlags );
+    Control::setPosSizePixel( nX, nY, nWidth, nHeight, nFlags );
 }
 
 // -----------------------------------------------------------------------
@@ -700,7 +700,7 @@ void ListBox::Resize()
 
             // use the themes drop down size for the button
             aOutSz.Width() = aContent.Left();
-            mpBtn->SetPosSizePixel( aContent.Left(), nTop, aContent.Right(), (nBottom-nTop) );
+            mpBtn->setPosSizePixel( aContent.Left(), nTop, aContent.Right(), (nBottom-nTop) );
 
             // adjust the size of the edit field
             if ( GetNativeControlRegion( CTRL_LISTBOX, PART_SUB_EDIT,
@@ -729,8 +729,8 @@ void ListBox::Resize()
         else
         {
             nSBWidth = CalcZoom( nSBWidth );
-            mpImplWin->SetPosSizePixel( 0, 0, aOutSz.Width() - nSBWidth, aOutSz.Height() );
-            mpBtn->SetPosSizePixel( aOutSz.Width() - nSBWidth, 0, nSBWidth, aOutSz.Height() );
+            mpImplWin->setPosSizePixel( 0, 0, aOutSz.Width() - nSBWidth, aOutSz.Height() );
+            mpBtn->setPosSizePixel( aOutSz.Width() - nSBWidth, 0, nSBWidth, aOutSz.Height() );
         }
     }
     else

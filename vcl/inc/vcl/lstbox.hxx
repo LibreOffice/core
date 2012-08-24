@@ -101,12 +101,12 @@ public:
 
     virtual const Wallpaper& GetDisplayBackground() const;
 
-    virtual void        SetPosSizePixel( long nX, long nY,
+    virtual void        setPosSizePixel( long nX, long nY,
                                          long nWidth, long nHeight, sal_uInt16 nFlags = WINDOW_POSSIZE_ALL );
     void                SetPosSizePixel( const Point& rNewPos, const Size& rNewSize )
                         { Control::SetPosSizePixel( rNewPos, rNewSize ); }
     void                SetDropDownSizePixel( const Size& rNewSize )
-    { if( IsDropDownBox() ) SetPosSizePixel( 0, 0, rNewSize.Width(), rNewSize.Height(), WINDOW_POSSIZE_SIZE | WINDOW_POSSIZE_DROPDOWN ); }
+    { if( IsDropDownBox() ) setPosSizePixel( 0, 0, rNewSize.Width(), rNewSize.Height(), WINDOW_POSSIZE_SIZE | WINDOW_POSSIZE_DROPDOWN ); }
 
     Rectangle           GetDropDownPosSizePixel() const;
 

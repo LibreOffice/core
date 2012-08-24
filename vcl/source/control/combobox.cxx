@@ -575,7 +575,7 @@ sal_uInt16 ComboBox::GetDropDownLineCount() const
 
 // -----------------------------------------------------------------------
 
-void ComboBox::SetPosSizePixel( long nX, long nY, long nWidth, long nHeight,
+void ComboBox::setPosSizePixel( long nX, long nY, long nWidth, long nHeight,
                                 sal_uInt16 nFlags )
 {
     if( IsDropDownBox() && ( nFlags & WINDOW_POSSIZE_SIZE ) )
@@ -591,7 +591,7 @@ void ComboBox::SetPosSizePixel( long nX, long nY, long nWidth, long nHeight,
             nHeight = mnDDHeight;
     }
 
-    Edit::SetPosSizePixel( nX, nY, nWidth, nHeight, nFlags );
+    Edit::setPosSizePixel( nX, nY, nWidth, nHeight, nFlags );
 }
 
 // -----------------------------------------------------------------------
@@ -621,7 +621,7 @@ void ComboBox::Resize()
             aPoint = pBorder->ScreenToOutputPixel( OutputToScreenPixel( aPoint ) );
             aContent.Move(-aPoint.X(), -aPoint.Y());
 
-            mpBtn->SetPosSizePixel( aContent.Left(), nTop, aContent.getWidth(), (nBottom-nTop) );
+            mpBtn->setPosSizePixel( aContent.Left(), nTop, aContent.getWidth(), (nBottom-nTop) );
 
             // adjust the size of the edit field
             if ( GetNativeControlRegion(CTRL_COMBOBOX, PART_SUB_EDIT,
@@ -645,13 +645,13 @@ void ComboBox::Resize()
             long nSBWidth = GetSettings().GetStyleSettings().GetScrollBarSize();
             nSBWidth = CalcZoom( nSBWidth );
             mpSubEdit->SetPosSizePixel( Point( 0, 0 ), Size( aOutSz.Width() - nSBWidth, aOutSz.Height() ) );
-            mpBtn->SetPosSizePixel( aOutSz.Width() - nSBWidth, nTop, nSBWidth, (nBottom-nTop) );
+            mpBtn->setPosSizePixel( aOutSz.Width() - nSBWidth, nTop, nSBWidth, (nBottom-nTop) );
         }
     }
     else
     {
         mpSubEdit->SetSizePixel( Size( aOutSz.Width(), mnDDHeight ) );
-        mpImplLB->SetPosSizePixel( 0, mnDDHeight, aOutSz.Width(), aOutSz.Height() - mnDDHeight );
+        mpImplLB->setPosSizePixel( 0, mnDDHeight, aOutSz.Width(), aOutSz.Height() - mnDDHeight );
         if ( GetText().Len() )
             ImplUpdateFloatSelection();
     }

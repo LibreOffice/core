@@ -256,7 +256,7 @@ const short HITPIX=2; //hit-tolerance in pixel
             , Fraction(nScaleXNumerator,nScaleXDenominator)
             , Fraction(nScaleYNumerator,nScaleYDenominator) );
             m_pChartWindow->SetMapMode(aNewMapMode);
-            m_pChartWindow->SetPosSizePixel( X, Y, Width, Height, Flags );
+            m_pChartWindow->setPosSizePixel( X, Y, Width, Height, Flags );
 
             //#i75867# poor quality of ole's alternative view with 3D scenes and zoomfactors besides 100%
             uno::Reference< beans::XPropertySet > xProp( m_xChartView, uno::UNO_QUERY );
@@ -285,7 +285,7 @@ const short HITPIX=2; //hit-tolerance in pixel
         {
             //change visarea
             ChartModelHelper::setPageSize( awt::Size( aLogicSize.Width(), aLogicSize.Height() ), getModel() );
-            m_pChartWindow->SetPosSizePixel( X, Y, Width, Height, Flags );
+            m_pChartWindow->setPosSizePixel( X, Y, Width, Height, Flags );
         }
         m_pChartWindow->Invalidate();
     }

@@ -677,7 +677,7 @@ void SwNavigationPI::Resize()
         // GlobalTree faengt weiter oben an und reicht bis ganz unten
         aNewSize.Height() += (nDist + nDocLBIniHeight + aPos.Y() - aGlobalTree.GetPosPixel().Y());
         aGlobalTree.SetSizePixel(aNewSize);
-        aDocListBox.SetPosSizePixel( aLBPos.X(), aLBPos.Y(),
+        aDocListBox.setPosSizePixel( aLBPos.X(), aLBPos.Y(),
                                      aDocLBSz.Width(), aDocLBSz.Height(),
                                       WINDOW_POSSIZE_X|WINDOW_POSSIZE_Y|WINDOW_POSSIZE_WIDTH);
 
@@ -795,7 +795,7 @@ SwNavigationPI::SwNavigationPI( SfxBindings* _pBindings,
       )
         ((SfxDockingWindow*)pParent)->SetOutputSizePixel(aMinSize);
 
-    aContentTree.SetPosSizePixel( 0, nListboxYPos, 0, 0, WINDOW_POSSIZE_Y );
+    aContentTree.setPosSizePixel( 0, nListboxYPos, 0, 0, WINDOW_POSSIZE_Y );
     aContentTree.SetStyle( aContentTree.GetStyle()|WB_HASBUTTONS|WB_HASBUTTONSATROOT|
                             WB_CLIPCHILDREN|WB_HSCROLL|WB_FORCE_MAKEVISIBLE );
     aContentTree.SetSpaceBetweenEntries(3);
@@ -808,7 +808,7 @@ SwNavigationPI::SwNavigationPI( SfxBindings* _pBindings,
     aContentToolBox.CheckItem(FN_SHOW_CONTENT_BOX, sal_True);
 
 //  TreeListBox fuer Globaldokument
-    aGlobalTree.SetPosSizePixel( 0, nListboxYPos, 0, 0, WINDOW_POSSIZE_Y );
+    aGlobalTree.setPosSizePixel( 0, nListboxYPos, 0, 0, WINDOW_POSSIZE_Y );
     aGlobalTree.SetSelectionMode( MULTIPLE_SELECTION );
     aGlobalTree.SetStyle( aGlobalTree.GetStyle()|WB_HASBUTTONS|WB_HASBUTTONSATROOT|
                                 WB_CLIPCHILDREN|WB_HSCROLL );

@@ -904,10 +904,10 @@ sal_Bool ImplBorderWindowView::ImplTracking( ImplBorderFrameData* pData, const T
                 {
                     // no move (only resize) if position did not change
                     if( aOldPos != aNewRect.TopLeft() )
-                        pBorderWindow->SetPosSizePixel( aNewRect.Left(), aNewRect.Top(),
+                        pBorderWindow->setPosSizePixel( aNewRect.Left(), aNewRect.Top(),
                                                     aNewRect.GetWidth(), aNewRect.GetHeight(), WINDOW_POSSIZE_POSSIZE );
                     else
-                        pBorderWindow->SetPosSizePixel( aNewRect.Left(), aNewRect.Top(),
+                        pBorderWindow->setPosSizePixel( aNewRect.Left(), aNewRect.Top(),
                                                     aNewRect.GetWidth(), aNewRect.GetHeight(), WINDOW_POSSIZE_SIZE );
 
                     pBorderWindow->ImplUpdateAll();
@@ -2049,7 +2049,7 @@ void ImplBorderWindow::Resize()
                     nMenuHeight = mnOrgMenuHeight;
             }
             mpBorderView->GetBorder( nLeftBorder, nTopBorder, nRightBorder, nBottomBorder );
-            mpMenuBarWindow->SetPosSizePixel( nLeftBorder,
+            mpMenuBarWindow->setPosSizePixel( nLeftBorder,
                                               nTopBorder,
                                               aSize.Width()-nLeftBorder-nRightBorder,
                                               nMenuHeight,

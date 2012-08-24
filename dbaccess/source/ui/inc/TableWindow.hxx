@@ -191,9 +191,6 @@ namespace dbaui
         /** clears the listbox inside. Must be called be the dtor is called.
         */
         void clearListBox();
-
-    protected:
-        using Window::SetPosSizePixel;
     };
 }
 #endif //DBAUI_TABLEWINDOW_HXX

@@ -62,9 +62,10 @@ public:
     virtual void    ActivatePage();
     virtual void    DeactivatePage();
 
-    //To-Do, inherit from VclContainer
-    using Window::SetPosSizePixel;
+    //To-Do, consider inheriting from VclContainer
     virtual void    SetPosSizePixel(const Point& rNewPos, const Size& rNewSize);
+    virtual void    SetPosPixel(const Point& rNewPos);
+    virtual void    SetSizePixel(const Size& rNewSize);
     virtual Size    GetOptimalSize(WindowSizeType eType) const;
 };
 

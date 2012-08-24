@@ -183,7 +183,7 @@ public:
     void            SetFloatStyle( WinBits nWinStyle );
     WinBits         GetFloatStyle() const;
 
-    virtual void    SetPosSizePixel( long nX, long nY,
+    virtual void    setPosSizePixel( long nX, long nY,
                                      long nWidth, long nHeight,
                                      sal_uInt16 nFlags = WINDOW_POSSIZE_ALL );
     void            SetPosSizePixel( const Point& rNewPos,
@@ -340,7 +340,7 @@ public:
     void            SetFloatStyle( WinBits nWinStyle );
     WinBits         GetFloatStyle() const;
 
-    virtual void    SetPosSizePixel( long nX, long nY,
+    virtual void    setPosSizePixel( long nX, long nY,
                                      long nWidth, long nHeight,
                                      sal_uInt16 nFlags = WINDOW_POSSIZE_ALL );
     void            SetPosSizePixel( const Point& rNewPos,

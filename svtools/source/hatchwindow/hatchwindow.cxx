@@ -64,7 +64,7 @@ void VCLXHatchWindow::initializeWindow( const uno::Reference< awt::XWindowPeer >
         throw lang::IllegalArgumentException(); // TODO
 
     pHatchWindow = new SvResizeWindow( pParent, this );
-    pHatchWindow->SetPosSizePixel( aBounds.X, aBounds.Y, aBounds.Width, aBounds.Height );
+    pHatchWindow->setPosSizePixel( aBounds.X, aBounds.Y, aBounds.Width, aBounds.Height );
     aHatchBorderSize = aSize;
     pHatchWindow->SetHatchBorderPixel( Size( aSize.Width, aSize.Height ) );
 

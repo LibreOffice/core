@@ -619,7 +619,7 @@ bool OGLTransitionerImpl::initWindowFromSlideShowView( const Reference< presenta
         return false;
 
     awt::Rectangle aCanvasArea = mxView->getCanvasArea();
-    pWindow->SetPosSizePixel(aCanvasArea.X, aCanvasArea.Y, aCanvasArea.Width, aCanvasArea.Height);
+    pWindow->setPosSizePixel(aCanvasArea.X, aCanvasArea.Y, aCanvasArea.Width, aCanvasArea.Height);
     GLWin.Width = aCanvasArea.Width;
     GLWin.Height = aCanvasArea.Height;
     SAL_INFO("slideshow.opengl", "canvas area: " << aCanvasArea.X << "," << aCanvasArea.Y << " - " << aCanvasArea.Width << "x" << aCanvasArea.Height);

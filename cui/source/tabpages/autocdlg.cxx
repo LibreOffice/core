@@ -155,7 +155,7 @@ OfaAutoCorrDlg::OfaAutoCorrDlg(Window* pParent, const SfxItemSet* _pSet ) :
     Size aMinSize(aLanguageFT.CalcMinimumSize());
     //reserve some extra space for CJK accelerators that are possible inserted
     //later (like '(A)')
-    aLanguageFT.SetPosSizePixel( 0, 0, aMinSize.Width() + 20, 0, WINDOW_POSSIZE_WIDTH );
+    aLanguageFT.setPosSizePixel( 0, 0, aMinSize.Width() + 20, 0, WINDOW_POSSIZE_WIDTH );
 
     if ( bOpenSmartTagOptions )
         SetCurPageId( RID_OFAPAGE_SMARTTAG_OPTIONS );
