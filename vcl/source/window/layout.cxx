@@ -41,40 +41,39 @@ Size VclContainer::GetOptimalSize(WindowSizeType eType) const
 {
     if (eType == WINDOWSIZE_MAXIMUM)
         return Window::GetOptimalSize(eType);
+    return calculateRequisition();
+}
 
-    Size aSize = calculateRequisition();
-    sal_Int32 nBorderWidth = get_border_width();
-    aSize.Width() += nBorderWidth*2 + get_margin_left() + get_margin_right();
-    aSize.Height() += nBorderWidth*2 + get_margin_top() + get_margin_top();
-    return aSize;
+void VclContainer::setLayoutAllocation(Window &rWindow, const Point &rPos, const Size &rSize)
+{
+    sal_Int32 nBorderWidth = rWindow.get_border_width();
+    sal_Int32 nLeft = rWindow.get_margin_left() + nBorderWidth;
+    sal_Int32 nTop = rWindow.get_margin_top() + nBorderWidth;
+    sal_Int32 nRight = rWindow.get_margin_right() + nBorderWidth;
+    sal_Int32 nBottom = rWindow.get_margin_bottom() + nBorderWidth;
+    Point aPos(rPos.X() + nLeft, rPos.Y() + nTop);
+    Size aSize(rSize.Width() - nLeft - nRight, rSize.Height() - nTop - nBottom);
+    rWindow.SetPosSizePixel(aPos, aSize);
+}
+
+Size VclContainer::getLayoutRequisition(const Window &rWindow)
+{
+    sal_Int32 nBorderWidth = rWindow.get_border_width();
+    sal_Int32 nLeft = rWindow.get_margin_left() + nBorderWidth;
+    sal_Int32 nTop = rWindow.get_margin_top() + nBorderWidth;
+    sal_Int32 nRight = rWindow.get_margin_right() + nBorderWidth;
+    sal_Int32 nBottom = rWindow.get_margin_bottom() + nBorderWidth;
+    Size aSize(rWindow.get_preferred_size());
+    return Size(aSize.Width() + nLeft + nRight, aSize.Height() + nTop + nBottom);
 }
 
 void VclContainer::SetPosSizePixel(const Point& rAllocPos, const Size& rAllocation)
 {
-    Size aAllocation = rAllocation;
-    sal_Int32 nBorderWidth = get_border_width();
-    sal_Int32 nLeft = get_margin_left();
-    sal_Int32 nTop = get_margin_top();
-
-    aAllocation.Width() -= nBorderWidth*2 + nLeft + get_margin_right();
-    aAllocation.Height() -= nBorderWidth*2 + nTop + get_margin_bottom();
-
-    Point aAllocPos = rAllocPos;
-    aAllocPos.X() += nBorderWidth + nLeft;
-    aAllocPos.Y() += nBorderWidth + nTop;
-
-    bool bPosChanged = aAllocPos != GetPosPixel();
-    bool bSizeChanged = aAllocation != GetSizePixel();
-    if (bPosChanged && bSizeChanged)
-        Window::SetPosSizePixel(aAllocPos, aAllocation);
-    else if (bPosChanged)
-        Window::SetPosPixel(aAllocPos);
-    else if (bSizeChanged)
-        Window::SetSizePixel(aAllocation);
-
+    bool bSizeChanged = rAllocation != GetOutputSizePixel();
+    Window::SetPosSizePixel(rAllocPos, rAllocation);
     if (m_bLayoutDirty || bSizeChanged)
     {
-        setAllocation(aAllocation);
+        setAllocation(rAllocation);
         m_bLayoutDirty = false;
     }
 }
@@ -118,7 +117,7 @@ Size VclBox::calculateRequisition() const
         if (!pChild->IsVisible())
             continue;
         ++nVisibleChildren;
-        Size aChildSize = pChild->get_preferred_size();
+        Size aChildSize = getLayoutRequisition(*pChild);
         long nSecondaryDimension = getSecondaryDimension(aChildSize);
         if (nSecondaryDimension > getSecondaryDimension(aSize))
             setSecondaryDimension(aSize, nSecondaryDimension);
@@ -210,7 +209,7 @@ void VclBox::setAllocation(const Size &rAllocation)
                 setPrimaryDimension(aBoxSize, nHomogeneousDimension);
             else
             {
-                aBoxSize = pChild->get_preferred_size();
+                aBoxSize = getLayoutRequisition(*pChild);
                 long nPrimaryDimension = getPrimaryDimension(aBoxSize);
                 nPrimaryDimension += nPadding;
                 bool bExpand = pChild->get_expand();
@@ -234,7 +233,7 @@ void VclBox::setAllocation(const Size &rAllocation)
             else
             {
                 setPrimaryDimension(aChildSize,
-                    getPrimaryDimension(pChild->get_preferred_size()));
+                    getPrimaryDimension(getLayoutRequisition(*pChild)));
 
                 setPrimaryCoordinate(aChildPos, nPrimaryCoordinate +
                     (getPrimaryDimension(aBoxSize) - getPrimaryDimension(aChildSize)) / 2);
@@ -250,7 +249,7 @@ void VclBox::setAllocation(const Size &rAllocation)
                     getPrimaryDimension(aBoxSize));
             }
 
-            pChild->SetPosSizePixel(aChildPos, aChildSize);
+            setLayoutAllocation(*pChild, aChildPos, aChildSize);
         }
     }
 }
@@ -284,7 +283,7 @@ Size VclButtonBox::calculateRequisition() const
         if (!pChild->IsVisible())
             continue;
         ++nVisibleChildren;
-        Size aChildSize = pChild->get_preferred_size();
+        Size aChildSize = getLayoutRequisition(*pChild);
         if (aChildSize.Width() > aSize.Width())
             aSize.Width() = aChildSize.Width();
         if (aChildSize.Height() > aSize.Height())
@@ -377,7 +376,7 @@ void VclButtonBox::setAllocation(const Size &rAllocation)
         setSecondaryDimension(aChildSize, getSecondaryDimension(aSize));
         setPrimaryDimension(aChildSize, nHomogeneousDimension);
 
-        pChild->SetPosSizePixel(aPos, aChildSize);
+        setLayoutAllocation(*pChild, aPos, aChildSize);
 
         nPrimaryCoordinate = getPrimaryCoordinate(aPos);
         setPrimaryCoordinate(aPos, nPrimaryCoordinate + nHomogeneousDimension + m_nSpacing);
@@ -490,7 +489,7 @@ void VclGrid::calcMaxs(const array_type &A, std::vector<Value> &rWidths, std::ve
             const Window *pChild = A[x][y];
             if (!pChild)
                 continue;
-            Size aChildSize = pChild->get_preferred_size();
+            Size aChildSize = getLayoutRequisition(*pChild);
 
             sal_Int32 nWidth = pChild->get_grid_width();
             for (sal_Int32 nSpanX = 0; nSpanX < nWidth; ++nSpanX)
@@ -666,7 +665,7 @@ void VclGrid::setAllocation(const Size& rAllocation)
                 Size aChildPreferredSize;
 
                 if (eHalign != VCL_ALIGN_FILL || eValign != VCL_ALIGN_FILL)
-                    aChildPreferredSize = pChild->GetOptimalSize(WINDOWSIZE_PREFERRED);
+                    aChildPreferredSize = getLayoutRequisition(*pChild);
 
                 switch (eHalign)
                 {
@@ -710,7 +709,7 @@ void VclGrid::setAllocation(const Size& rAllocation)
                         break;
                 }
 
-                pChild->SetPosSizePixel(aChildPos, aChildSize);
+                setLayoutAllocation(*pChild, aChildPos, aChildSize);
             }
             aAllocPos.Y() += aHeights[y].m_nValue + get_row_spacing();
         }
@@ -765,7 +764,7 @@ Size VclBin::calculateRequisition() const
 {
     const Window *pChild = get_child();
     if (pChild && pChild->IsVisible())
-        return pChild->GetOptimalSize(WINDOWSIZE_PREFERRED);
+        return getLayoutRequisition(*pChild);
     return Size(0, 0);
 }
 
@@ -773,7 +772,7 @@ void VclBin::setAllocation(const Size &rAllocation)
 {
     Window *pChild = get_child();
     if (pChild && pChild->IsVisible())
-        pChild->SetPosSizePixel(Point(0, 0), rAllocation);
+        setLayoutAllocation(*pChild, Point(0, 0), rAllocation);
 }
 
 //To-Do, hook a DecorationView into VclFrame ?
@@ -788,11 +787,11 @@ Size VclFrame::calculateRequisition() const
     const Window *pLabel = pChild != pWindowImpl->mpLastChild ? pWindowImpl->mpLastChild : NULL;
 
     if (pChild && pChild->IsVisible())
-        aRet = pChild->GetOptimalSize(WINDOWSIZE_PREFERRED);
+        aRet = getLayoutRequisition(*pChild);
 
     if (pLabel && pLabel->IsVisible())
     {
-        Size aLabelSize = pLabel->GetOptimalSize(WINDOWSIZE_PREFERRED);
+        Size aLabelSize = getLayoutRequisition(*pLabel);
         aRet.Height() += aLabelSize.Height();
         aRet.Width() = std::max(aLabelSize.Width(), aRet.Width());
     }
@@ -823,16 +822,16 @@ void VclFrame::setAllocation(const Size &rAllocation)
 
     if (pLabel && pLabel->IsVisible())
     {
-        Size aLabelSize = pLabel->GetOptimalSize(WINDOWSIZE_PREFERRED);
+        Size aLabelSize = getLayoutRequisition(*pLabel);
         aLabelSize.Height() = std::min(aLabelSize.Height(), aAllocation.Height());
         aLabelSize.Width() = std::min(aLabelSize.Width(), aAllocation.Width());
-        pLabel->SetPosSizePixel(aChildPos, aLabelSize);
+        setLayoutAllocation(*pLabel, aChildPos, aLabelSize);
         aAllocation.Height() -= aLabelSize.Height();
         aChildPos.Y() += aLabelSize.Height();
     }
 
     if (pChild && pChild->IsVisible())
-        pChild->SetPosSizePixel(aChildPos, aAllocation);
+        setLayoutAllocation(*pChild, aChildPos, aAllocation);
 }
 
 Size VclAlignment::calculateRequisition() const
@@ -843,7 +842,7 @@ Size VclAlignment::calculateRequisition() const
     const Window *pChild = get_child();
     if (pChild && pChild->IsVisible())
     {
-        Size aChildSize = pChild->GetOptimalSize(WINDOWSIZE_PREFERRED);
+        Size aChildSize = getLayoutRequisition(*pChild);
         aRet.Width() += aChildSize.Width();
         aRet.Height() += aChildSize.Height();
     }
@@ -863,7 +862,7 @@ void VclAlignment::setAllocation(const Size &rAllocation)
     aAllocation.Width() = rAllocation.Width() - (m_nLeftPadding + m_nRightPadding);
     aAllocation.Height() = rAllocation.Height() - (m_nTopPadding + m_nBottomPadding);
 
-    pChild->SetPosSizePixel(aChildPos, aAllocation);
+    setLayoutAllocation(*pChild, aChildPos, aAllocation);
 }
 
 bool VclAlignment::set_property(const rtl::OString &rKey, const rtl::OString &rValue)
@@ -913,13 +912,13 @@ Size VclExpander::calculateRequisition() const
     const Window *pLabel = pChild != pWindowImpl->mpLastChild ? pWindowImpl->mpLastChild : NULL;
 
     if (pChild && pChild->IsVisible() && m_aDisclosureButton.IsChecked())
-        aRet = pChild->GetOptimalSize(WINDOWSIZE_PREFERRED);
+        aRet = getLayoutRequisition(*pChild);
 
-    Size aExpanderSize = m_aDisclosureButton.GetOptimalSize(WINDOWSIZE_PREFERRED);
+    Size aExpanderSize = getLayoutRequisition(m_aDisclosureButton);
 
     if (pLabel && pLabel->IsVisible())
     {
-        Size aLabelSize = pLabel->GetOptimalSize(WINDOWSIZE_PREFERRED);
+        Size aLabelSize = getLayoutRequisition(*pLabel);
         aExpanderSize.Height() = std::max(aExpanderSize.Height(), aLabelSize.Height());
         aExpanderSize.Width() += aLabelSize.Width();
     }
@@ -949,12 +948,12 @@ void VclExpander::setAllocation(const Size &rAllocation)
     Window *pChild = get_child();
     Window *pLabel = pChild != pWindowImpl->mpLastChild ? pWindowImpl->mpLastChild : NULL;
 
-    Size aButtonSize = m_aDisclosureButton.GetOptimalSize(WINDOWSIZE_PREFERRED);
+    Size aButtonSize = getLayoutRequisition(m_aDisclosureButton);
     Size aLabelSize;
     Size aExpanderSize = aButtonSize;
     if (pLabel && pLabel->IsVisible())
     {
-        aLabelSize = pLabel->GetOptimalSize(WINDOWSIZE_PREFERRED);
+        aLabelSize = getLayoutRequisition(*pLabel);
         aExpanderSize.Height() = std::max(aExpanderSize.Height(), aLabelSize.Height());
         aExpanderSize.Width() += aLabelSize.Width();
     }
@@ -967,7 +966,7 @@ void VclExpander::setAllocation(const Size &rAllocation)
 
     long nExtraExpanderHeight = aExpanderSize.Height() - aButtonSize.Height();
     Point aButtonPos(aChildPos.X(), aChildPos.Y() + nExtraExpanderHeight/2);
-    m_aDisclosureButton.SetPosSizePixel(aButtonPos, aButtonSize);
+    setLayoutAllocation(m_aDisclosureButton, aButtonPos, aButtonSize);
 
     if (pLabel && pLabel->IsVisible())
     {
@@ -977,7 +976,7 @@ void VclExpander::setAllocation(const Size &rAllocation)
 
         long nExtraLabelHeight = aExpanderSize.Height() - aLabelSize.Height();
         Point aLabelPos(aChildPos.X() + aButtonSize.Width(), aChildPos.Y() + nExtraLabelHeight/2);
-        pLabel->SetPosSizePixel(aLabelPos, aLabelSize);
+        setLayoutAllocation(*pLabel, aLabelPos, aLabelSize);
     }
 
     aAllocation.Height() -= aExpanderSize.Height();
@@ -987,7 +986,7 @@ void VclExpander::setAllocation(const Size &rAllocation)
     {
         if (!m_aDisclosureButton.IsChecked())
             aAllocation = Size();
-        pChild->SetPosSizePixel(aChildPos, aAllocation);
+        setLayoutAllocation(*pChild, aChildPos, aAllocation);
     }
 }
 

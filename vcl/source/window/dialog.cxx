@@ -1181,7 +1181,7 @@ Size Dialog::GetOptimalSize(WindowSizeType eType) const
     if (eType == WINDOWSIZE_MAXIMUM || !isLayoutEnabled())
         return SystemWindow::GetOptimalSize(eType);
 
-    Size aSize = GetWindow(WINDOW_FIRSTCHILD)->GetOptimalSize(eType);
+    Size aSize = VclContainer::getLayoutRequisition(*GetWindow(WINDOW_FIRSTCHILD));
 
     sal_Int32 nBorderWidth = get_border_width();
 
@@ -1205,7 +1205,7 @@ void Dialog::setPosSizeOnContainee(Size aSize, VclContainer &rBox)
     Point aPos(mpWindowImpl->mnLeftBorder + nBorderWidth,
         mpWindowImpl->mnTopBorder + nBorderWidth);
 
-    rBox.SetPosSizePixel(aPos, aSize);
+    VclContainer::setLayoutAllocation(rBox, aPos, aSize);
 }
 
 IMPL_LINK( Dialog, ImplHandleLayoutTimerHdl, void*, EMPTYARG )

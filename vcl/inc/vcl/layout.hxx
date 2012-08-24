@@ -46,6 +46,13 @@ public:
     {
         m_bLayoutDirty = true;
     }
+
+    //These take into account the external margins of the rWindow widget
+    //while GetOptimalSize/get_preferred_size and SetPosSizePixel are
+    //oblivious to them
+    static Size getLayoutRequisition(const Window &rWindow);
+    static void setLayoutAllocation(Window &rWindow, const Point &rPos, const Size &rSize);
+
 protected:
     virtual Size calculateRequisition() const = 0;
     virtual void setAllocation(const Size &rAllocation) = 0;
