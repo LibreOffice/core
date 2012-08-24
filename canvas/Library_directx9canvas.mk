@@ -43,6 +43,12 @@ $(eval $(call gb_Library_add_defs,directx9canvas,\
 	-UNOMINMAX \
 ))
 
+ifeq ($(WINDOWS_SDK_VERSION),80)
+$(eval $(call gb_Library_add_defs,directx9canvas,\
+	-DWIN8_SDK=1 \
+))
+endif
+
 $(eval $(call gb_Library_use_libraries,directx9canvas,\
 	cppu \
 	tk \
