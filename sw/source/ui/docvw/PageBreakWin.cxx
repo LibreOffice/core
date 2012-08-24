@@ -215,6 +215,7 @@ void SwPageBreakWin::Paint( const Rectangle& )
                     *this, aNewViewInfos );
 
     pProcessor->process( aGhostedSeq );
+    delete pProcessor;
 }
 
 void SwPageBreakWin::Select( )
