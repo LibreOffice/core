@@ -282,36 +282,36 @@ void SwView::ExecSearch(SfxRequest& rReq, sal_Bool bNoMessage)
             case SVX_SEARCHCMD_REPLACE_ALL:
                 {
                     SwSearchOptions aOpts( pWrtShell, pSrchItem->GetBackward() );
-
-                    // Fix for i#8288: "Replace all" should leave the cursor at the place it was
-                    // before executing the command, rather than at the site of the final replacement.
-                    // To do this take note of the current cursor position before replace all begins:
-                    // note: must be stored so that it is corrected by PamCorr*
-                    ::boost::scoped_ptr<SwUnoCrsr> const pTmpCursor(
-                            pWrtShell->GetDoc()->CreateUnoCrsr(
-                                *pWrtShell->GetSwCrsr()->GetPoint()));
-
-                    if( !pSrchItem->GetSelection() )
-                    {
-                        // bestehende Selektionen aufheben,
-                        // wenn nicht in selektierten Bereichen gesucht werden soll
-                        pWrtShell->KillSelection(0, false);
-                        if( DOCPOS_START == aOpts.eEnd )
-                            pWrtShell->EndDoc();
-                        else
-                            pWrtShell->SttDoc();
-                    }
-
                     bExtra = sal_False;
                     sal_uLong nFound;
 
                     {   //Scope for SwWait-Object
                         SwWait aWait( *GetDocShell(), sal_True );
                         pWrtShell->StartAllAction();
+                        if (!pSrchItem->GetSelection())
+                        {
+                            // if we don't want to search in the selection...
+                            pWrtShell->KillSelection(0, false);
+                            // i#8288 "replace all" should not change cursor
+                            // position, so save current cursor
+                            pWrtShell->Push();
+                            if (DOCPOS_START == aOpts.eEnd)
+                            {
+                                pWrtShell->EndDoc();
+                            }
+                            else
+                            {
+                                pWrtShell->SttDoc();
+                            }
+                        }
                         nFound = FUNC_Search( aOpts );
-                        // #i8288# Now that everything has been replaced, restore the original cursor position.
-                        *(pWrtShell->GetSwCrsr()->GetPoint()) =
-                            *pTmpCursor->GetPoint();
+                        if (!pSrchItem->GetSelection())
+                        {
+                            // create it just to overwrite it with stack cursor
+                            pWrtShell->CreateCrsr();
+                            // i#8288 restore the original cursor position
+                            pWrtShell->Pop(false);
+                        }
                         pWrtShell->EndAllAction();
                     }
 
