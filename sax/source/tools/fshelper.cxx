@@ -18,7 +18,7 @@
  */
 
 #include <sax/fshelper.hxx>
-#include <fastserializer.hxx>
+#include "fastserializer.hxx"
 #include <com/sun/star/xml/sax/XFastTokenHandler.hpp>
 #include <comphelper/processfactory.hxx>
 #include <rtl/ustrbuf.hxx>
