@@ -691,8 +691,6 @@ uno::Reference< io::XStream > getAdditionalStream( const rtl::OUString&         
                                     rtl::OString aIsoPwd = rtl::OUStringToOString( io_rPwd,
                                                                                    RTL_TEXTENCODING_ISO_8859_1 );
                                     bAuthenticated = pPDFFile->setupDecryptionData( aIsoPwd.getStr() );
-                                    // trash password string on heap
-                                    rtl_zeroMemory( (void*)aIsoPwd.getStr(), aIsoPwd.getLength() );
                                 }
                                 if( ! bAuthenticated )
                                 {
@@ -720,8 +718,6 @@ uno::Reference< io::XStream > getAdditionalStream( const rtl::OUString&         
                                         rtl::OString aIsoPwd = rtl::OUStringToOString( io_rPwd,
                                                                                        RTL_TEXTENCODING_ISO_8859_1 );
                                         bAuthenticated = pPDFFile->setupDecryptionData( aIsoPwd.getStr() );
-                                        // trash password string on heap
-                                        rtl_zeroMemory( (void*)aIsoPwd.getStr(), aIsoPwd.getLength() );
                                     } while( bEntered && ! bAuthenticated );
                                 }
 
