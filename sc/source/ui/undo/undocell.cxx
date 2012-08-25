@@ -26,10 +26,8 @@
  *
  ************************************************************************/
 
-
 #include "scitems.hxx"
 #include <editeng/eeitem.hxx>
-
 #include <editeng/editobj.hxx>
 #include <svl/zforlist.hxx>
 #include <sfx2/app.hxx>
@@ -54,8 +52,6 @@
 #include "docuno.hxx"
 
 using ::boost::shared_ptr;
-
-// STATIC DATA -----------------------------------------------------------
 
 TYPEINIT1(ScUndoCursorAttr, ScSimpleUndo);
 TYPEINIT1(ScUndoEnterData, ScSimpleUndo);
@@ -175,7 +171,6 @@ sal_Bool ScUndoCursorAttr::CanRepeat(SfxRepeatTarget& rTarget) const
 {
     return (rTarget.ISA(ScTabViewTarget));
 }
-
 
 ScUndoEnterData::ScUndoEnterData( ScDocShell* pNewDocShell,
             SCCOL nNewCol, SCROW nNewRow, SCTAB nNewTab,
@@ -428,7 +423,6 @@ sal_Bool ScUndoEnterValue::CanRepeat(SfxRepeatTarget& /* rTarget */) const
     return false;
 }
 
-
 ScUndoPutCell::ScUndoPutCell( ScDocShell* pNewDocShell, const ScAddress& rNewPos,
                             ScBaseCell* pUndoCell, ScBaseCell* pRedoCell, sal_Bool bHeight ) :
     ScSimpleUndo( pNewDocShell ),
@@ -512,7 +506,6 @@ sal_Bool ScUndoPutCell::CanRepeat(SfxRepeatTarget& /* rTarget */) const
     return false;
 }
 
-
 ScUndoPageBreak::ScUndoPageBreak( ScDocShell* pNewDocShell,
             SCCOL nNewCol, SCROW nNewRow, SCTAB nNewTab,
             sal_Bool bNewColumn, sal_Bool bNewInsert ) :
@@ -593,7 +586,6 @@ sal_Bool ScUndoPageBreak::CanRepeat(SfxRepeatTarget& rTarget) const
     return (rTarget.ISA(ScTabViewTarget));
 }
 
-
 ScUndoPrintZoom::ScUndoPrintZoom( ScDocShell* pNewDocShell,
             SCTAB nT, sal_uInt16 nOS, sal_uInt16 nOP, sal_uInt16 nNS, sal_uInt16 nNP ) :
     ScSimpleUndo( pNewDocShell ),
@@ -663,7 +655,6 @@ sal_Bool ScUndoPrintZoom::CanRepeat(SfxRepeatTarget& rTarget) const
 {
     return (rTarget.ISA(ScTabViewTarget));
 }
-
 
 ScUndoThesaurus::ScUndoThesaurus( ScDocShell* pNewDocShell,
                                   SCCOL nNewCol, SCROW nNewRow, SCTAB nNewTab,
@@ -785,9 +776,6 @@ sal_Bool ScUndoThesaurus::CanRepeat(SfxRepeatTarget& rTarget) const
     return (rTarget.ISA(ScTabViewTarget));
 }
 
-
-// ============================================================================
-
 ScUndoReplaceNote::ScUndoReplaceNote( ScDocShell& rDocShell, const ScAddress& rPos,
         const ScNoteData& rNoteData, bool bInsert, SdrUndoAction* pDrawUndo ) :
     ScSimpleUndo( &rDocShell ),
@@ -884,8 +872,6 @@ void ScUndoReplaceNote::DoRemoveNote( const ScNoteData& rNoteData )
     }
 }
 
-// ============================================================================
-
 ScUndoShowHideNote::ScUndoShowHideNote( ScDocShell& rDocShell, const ScAddress& rPos, bool bShow ) :
     ScSimpleUndo( &rDocShell ),
     maPos( rPos ),
@@ -927,8 +913,6 @@ rtl::OUString ScUndoShowHideNote::GetComment() const
     return ScGlobal::GetRscString( mbShown ? STR_UNDO_SHOWNOTE : STR_UNDO_HIDENOTE );
 }
 
-// ============================================================================
-
 ScUndoDetective::ScUndoDetective( ScDocShell* pNewDocShell,
                                     SdrUndoAction* pDraw, const ScDetOpData* pOperation,
                                     ScDetOpList* pUndoList ) :
@@ -966,7 +950,6 @@ rtl::OUString ScUndoDetective::GetComment() const
 
     return ScGlobal::GetRscString( nId );
 }
-
 
 void ScUndoDetective::Undo()
 {
@@ -1034,7 +1017,6 @@ sal_Bool ScUndoDetective::CanRepeat(SfxRepeatTarget& /* rTarget */) const
 {
     return false;
 }
-
 
 ScUndoRangeNames::ScUndoRangeNames( ScDocShell* pNewDocShell,
                                     ScRangeName* pOld, ScRangeName* pNew, SCTAB nTab ) :
@@ -1104,8 +1086,5 @@ sal_Bool ScUndoRangeNames::CanRepeat(SfxRepeatTarget& /* rTarget */) const
 {
     return false;
 }
-
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

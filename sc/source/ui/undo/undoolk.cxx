@@ -22,11 +22,6 @@
 #include "document.hxx"
 #include "drwlayer.hxx"
 
-
-// STATIC DATA -----------------------------------------------------------
-
-// -----------------------------------------------------------------------
-
 SdrUndoAction* GetSdrUndoAction( ScDocument* pDoc )
 {
     ScDrawLayer* pLayer = pDoc->GetDrawLayer();
@@ -62,11 +57,9 @@ void DoSdrUndoAction( SdrUndoAction* pUndoAction, ScDocument* pDoc )
     }
 }
 
-
 void RedoSdrUndoAction( SdrUndoAction* pUndoAction )
 {
     // DoSdrUndoAction/RedoSdrUndoAction is called even if the pointer is null
-
     if ( pUndoAction )
         pUndoAction->Redo();
 }
@@ -82,7 +75,5 @@ void EnableDrawAdjust( ScDocument* pDoc, sal_Bool bEnable )
     if (pLayer)
         pLayer->EnableAdjust(bEnable);
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

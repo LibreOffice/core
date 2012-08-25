@@ -49,8 +49,6 @@ TYPEINIT1(ScMoveUndo,       ScSimpleUndo);
 TYPEINIT1(ScDBFuncUndo,     ScSimpleUndo);
 TYPEINIT1(ScUndoWrapper,    SfxUndoAction);
 
-// -----------------------------------------------------------------------
-
 ScSimpleUndo::ScSimpleUndo( ScDocShell* pDocSh ) :
     pDocShell( pDocSh ),
     pDetectiveUndo( NULL )
@@ -172,9 +170,6 @@ void ScSimpleUndo::ShowTable( const ScRange& rRange )
             pViewShell->SetTabNo( nStart );                     // at beginning of the range
     }
 }
-
-
-// -----------------------------------------------------------------------
 
 ScBlockUndo::ScBlockUndo( ScDocShell* pDocSh, const ScRange& rRange,
                                             ScBlockUndoMode eBlockMode ) :
@@ -384,8 +379,6 @@ void ScMultiBlockUndo::ShowBlock()
     }
 }
 
-// -----------------------------------------------------------------------
-
 ScMoveUndo::ScMoveUndo( ScDocShell* pDocSh, ScDocument* pRefDoc, ScRefUndoData* pRefData,
                                                 ScMoveUndoMode eRefMode ) :
     ScSimpleUndo( pDocSh ),
@@ -439,8 +432,6 @@ void ScMoveUndo::EndUndo()
 
     ScSimpleUndo::EndUndo();
 }
-
-// -----------------------------------------------------------------------
 
 ScDBFuncUndo::ScDBFuncUndo( ScDocShell* pDocSh, const ScRange& rOriginal, SdrUndoAction* pDrawUndo ) :
     ScSimpleUndo( pDocSh ),
@@ -542,8 +533,6 @@ void ScDBFuncUndo::EndRedo()
     ScSimpleUndo::EndRedo();
 }
 
-// -----------------------------------------------------------------------
-
 ScUndoWrapper::ScUndoWrapper( SfxUndoAction* pUndo ) :
     pWrappedUndo( pUndo )
 {
@@ -629,6 +618,5 @@ sal_Bool ScUndoWrapper::CanRepeat(SfxRepeatTarget& rTarget) const
     else
         return false;
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
