@@ -1,3 +1,24 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * Copyright © 2011 Canonical Ltd.
+ *
+ * This library is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation; either version 2 of the
+ * licence, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307,
+ * USA.
+ *
+ * Author: Antonio Fernández <antonio.fernandez@aentos.es>
+ */
 
 #include "unx/gtk/gtksalmenu.hxx"
 
@@ -12,59 +33,60 @@
 using namespace std;
 
 //Some menus are special, this is the list of them
-gboolean
-isSpecialSubmenu (OUString command)
-{
-    const gchar * specialSubmenus[11] = {".uno:CharFontName",
-                                         ".uno:FontHeight",
-                                         ".uno:ObjectMenue",
-                                         ".uno:InsertPageHeader",
-                                         ".uno:InsertPageFooter",
-                                         ".uno:ChangeControlType",
-                                         ".uno:AvailableToolbars",
-                                         ".uno:ScriptOrganizer",
-                                         ".uno:RecentFileList",
-                                         ".uno:AddDirect",
-                                         ".uno:AutoPilotMenu"};
+//gboolean
+//isSpecialSubmenu (OUString command)
+//{
+//    const gchar * specialSubmenus[11] = {".uno:CharFontName",
+//                                         ".uno:FontHeight",
+//                                         ".uno:ObjectMenue",
+//                                         ".uno:InsertPageHeader",
+//                                         ".uno:InsertPageFooter",
+//                                         ".uno:ChangeControlType",
+//                                         ".uno:AvailableToolbars",
+//                                         ".uno:ScriptOrganizer",
+//                                         ".uno:RecentFileList",
+//                                         ".uno:AddDirect",
+//                                         ".uno:AutoPilotMenu"};
 
-    for (gint i = 0; i < 11; i++)
-    {
-        if (command.equals (OUString::createFromAscii (specialSubmenus[i])))
-            return TRUE;
-    }
-    return FALSE;
-}
+//    for (gint i = 0; i < 11; i++)
+//    {
+//        if (command.equals (OUString::createFromAscii (specialSubmenus[i])))
+//            return TRUE;
+//    }
+//    return FALSE;
+//}
 
-void updateNativeMenu( GtkSalMenu* pMenu ) {
+static void UpdateNativeMenu( GtkSalMenu* pMenu ) {
     if ( pMenu == NULL )
         return;
 
+    Menu* pVCLMenu = pMenu->GetMenu();
+
     for ( sal_uInt16 i = 0; i < pMenu->GetItemCount(); i++ ) {
-        GtkSalMenuItem* pSalMenuItem = pMenu->GetItemAtPos( i );
+        sal_uInt16 nId = pVCLMenu->GetItemId( i );
+        GtkSalMenuItem *pSalMenuItem = pMenu->GetItemAtPos( i );
 
-        Menu* pVCLMenu = pSalMenuItem->mpVCLMenu;
-
-        if ( pVCLMenu == NULL )
+        if ( pVCLMenu->GetItemType( nId ) == MENUITEM_SEPARATOR )
             continue;
 
-        sal_uInt16 nId = pSalMenuItem->mnId;
-
         String aText = pVCLMenu->GetItemText( nId );
+        String aCommand = pVCLMenu->GetItemCommand( nId );
         sal_Bool itemEnabled = pVCLMenu->IsItemEnabled( nId );
+        KeyCode nAccelKey = pVCLMenu->GetAccelKey( nId );
+        sal_Bool itemChecked = pVCLMenu->IsItemChecked( nId );
 
         // Force updating of native menu labels.
         pMenu->SetItemText( i, pSalMenuItem, aText );
-
+        pMenu->SetItemCommand( i, pSalMenuItem, aCommand );
         pMenu->EnableItem( i, itemEnabled );
-
-        //            KeyCode nAccelKey = pSubmenu->GetAccelKey( pSalMenuItem->mnId );
-        //            pMenu->SetAccelerator( i, pSalMenuItem, nAccelKey, nAccelKey.GetName( pMenu->GetFrame()->GetWindow() ) );
+//        pMenu->SetAccelerator( i, pSalMenuItem, nAccelKey, nAccelKey.GetName( pMenu->GetFrame()->GetWindow() ) );
+//        pMenu->CheckItem( i, itemChecked );
 
         GtkSalMenu* pSubmenu = pSalMenuItem->mpSubMenu;
 
         if ( pSubmenu && pSubmenu->GetMenu() ) {
             pSubmenu->GetMenu()->Activate();
-            updateNativeMenu( pSubmenu );
+            UpdateNativeMenu( pSubmenu );
             pSubmenu->GetMenu()->Deactivate();
         }
     }
@@ -73,7 +95,7 @@ void updateNativeMenu( GtkSalMenu* pMenu ) {
 gboolean GenerateMenu(gpointer user_data) {
     GtkSalMenu* pSalMenu = static_cast< GtkSalMenu* >( user_data );
 
-    updateNativeMenu( pSalMenu );
+    UpdateNativeMenu( pSalMenu );
 
     return TRUE;
 }
@@ -122,88 +144,100 @@ GActionGroup* GetActionGroupFromMenubar( GtkSalMenu *pMenu )
     return ( pSalMenu ) ? pSalMenu->GetActionGroup() : NULL;
 }
 
-rtl::OUString GetGtkKeyName( rtl::OUString keyName )
-{
-    rtl::OUString aGtkKeyName("");
+//rtl::OUString GetGtkKeyName( rtl::OUString keyName )
+//{
+//    rtl::OUString aGtkKeyName("");
 
-    sal_Int32 nIndex = 0;
+//    sal_Int32 nIndex = 0;
 
-    do
-    {
-        rtl::OUString token = keyName.getToken( 0, '+', nIndex );
+//    do
+//    {
+//        rtl::OUString token = keyName.getToken( 0, '+', nIndex );
 
-        if ( token == "Ctrl" ) {
-            aGtkKeyName += "<Control>";
-        } else if ( token == "Alt" ) {
-            aGtkKeyName += "<Alt>";
-        } else if ( token == "Shift" ) {
-            aGtkKeyName += "<Shift>";
-        } else {
-            aGtkKeyName += token;
-        }
-    } while ( nIndex >= 0 );
+//        if ( token == "Ctrl" ) {
+//            aGtkKeyName += "<Control>";
+//        } else if ( token == "Alt" ) {
+//            aGtkKeyName += "<Alt>";
+//        } else if ( token == "Shift" ) {
+//            aGtkKeyName += "<Shift>";
+//        } else {
+//            aGtkKeyName += token;
+//        }
+//    } while ( nIndex >= 0 );
 
-    return aGtkKeyName;
-}
+//    return aGtkKeyName;
+//}
+
+//GVariant* GetRadionButtonHints( GtkSalMenuItem *pSalMenuItem )
+//{
+//    GVariantBuilder *pBuilder;
+//    GVariant *pHints;
+
+//    pBuilder = g_variant_builder_new( G_VARIANT_TYPE_STRING );
+
+//    Menu* pMenu = pSalMenuItem->mpVCLMenu;
+
+//    gboolean bItemIncluded = FALSE;
+
+//    for ( sal_uInt16 i = 0; i < pMenu->GetItemCount(); i++ )
+//    {
+//        sal_uInt16 nId = pMenu->GetItemId( i );
+//        MenuItemBits itemBits = pMenu->GetItemBits( nId );
+//        MenuItemType itemType = pMenu->GetItemType( nId );
+
+//        if ( itemBits & MIB_RADIOCHECK )
+//        {
+//            rtl::OString aValue = rtl::OUStringToOString( pMenu->GetItemText( nId ), RTL_TEXTENCODING_UTF8 );
+//            g_variant_builder_add( pBuilder, "s", aValue.getStr() );
+
+//            if ( nId == pSalMenuItem->mnId )
+//                bItemIncluded = TRUE;
+//        }
+//        else if ( itemType == MENUITEM_SEPARATOR )
+//        {
+//            if ( bItemIncluded == FALSE )
+//            {
+//                g_variant_builder_clear( pBuilder );
+//            }
+//            else
+//                break;
+//        }
+//    }
+
+//    // Build an array of G_VARIANT_TYPE_STRING.
+//    pHints = g_variant_new ("as", pBuilder);
+//    g_variant_builder_unref ( pBuilder );
+
+//    return pHints;
+//}
 
 /*
  * GtkSalMenu
  */
 
-GtkSalMenuItem* GtkSalMenu::GetSalMenuItem( sal_uInt16 nId )
-{
-    for ( sal_uInt16 i = 0; i < maItems.size(); i++ )
-    {
-        GtkSalMenuItem* pSalMenuItem = maItems[ i ];
-
-        if ( pSalMenuItem->mnId == nId ) {
-            return pSalMenuItem;
-        }
-
-        if ( pSalMenuItem->mpSubMenu )
-        {
-            pSalMenuItem = pSalMenuItem->mpSubMenu->GetSalMenuItem( nId );
-            if (pSalMenuItem) {
-                return pSalMenuItem;
-            }
-        }
-    }
-
-    return NULL;
-}
-
-sal_Int16 GtkSalMenu::GetSectionNumber( GMenuModel* pSection )
-{
-    if ( pSection == NULL )
-        return -1;
-
-    for ( int i = 0; maSections.size(); i++ )
-    {
-        if ( maSections[ i ] == pSection )
-            return i;
-    }
-
-    return -1;
-}
-
 void GtkSalMenu::GetInsertionData( unsigned nPos, unsigned *insertSection, unsigned *insertPos )
 {
-    unsigned nItems;
-    unsigned nSection;
-
-    for ( nSection = 0, nItems = 0; nSection < maSections.size(); nSection++ )
+    if ( mpVCLMenu == NULL || nPos >= mpVCLMenu->GetItemCount() )
     {
-        if ( nPos <= nItems + g_menu_model_get_n_items( maSections[ nSection ] ) ) {
-            *insertSection = nSection;
-            *insertPos = nPos - nItems;
-            return;
+        *insertSection = g_menu_model_get_n_items( mpMenuModel ) - 1;
+        *insertPos = MENU_APPEND;
+    }
+    else
+    {
+        unsigned nItem;
+        gint nItemPos;
+
+        for ( nItem = 0, *insertSection = 0, nItemPos = -1; nItem <= nPos; nItem++ )
+        {
+            if ( mpVCLMenu->GetItemType( nItem ) == MENUITEM_SEPARATOR ) {
+                (*insertSection)++;
+                nItemPos = -1;
+            } else
+                nItemPos++;
         }
 
-        nItems += g_menu_model_get_n_items( maSections[ nSection ] ) + 1;    // +1 to count the separator.
+        *insertPos = nItemPos;
     }
-
-    *insertSection = maSections.size() - 1;
-    *insertPos = MENU_APPEND;
 }
 
 GtkSalMenu::GtkSalMenu( sal_Bool bMenuBar ) :
@@ -211,44 +245,32 @@ GtkSalMenu::GtkSalMenu( sal_Bool bMenuBar ) :
     mpVCLMenu( NULL ),
     mpParentSalMenu( NULL ),
     mpFrame( NULL ),
-    pSessionBus( NULL ),
-    mMenubarId( 0 ),
-    mActionGroupId ( 0 ),
     mpMenuModel( NULL ),
     mpActionGroup( NULL )
 {
-    GMenuModel* pSection = G_MENU_MODEL( g_lo_menu_new() );
-    maSections.push_back( pSection );
-
     if (bMenuBar) {
         mpActionGroup = G_ACTION_GROUP( g_lo_action_group_new() );
-
-        pSessionBus = g_bus_get_sync (G_BUS_TYPE_SESSION, NULL, NULL);
-        if(!pSessionBus) puts ("Fail bus get");
-    } else {
-        mpMenuModel = G_MENU_MODEL( g_lo_menu_new() );
-        g_lo_menu_append_section( G_LO_MENU( mpMenuModel ), NULL, pSection );
     }
+
+    mpMenuModel = G_MENU_MODEL( g_lo_menu_new() );
+    g_lo_menu_insert_section( G_LO_MENU( mpMenuModel ), 0, NULL);
 }
 
 GtkSalMenu::~GtkSalMenu()
 {
-    g_source_remove_by_user_data( this );
+    if ( mpActionGroup ) {
+        g_lo_action_group_clear( G_LO_ACTION_GROUP( mpActionGroup ) );
+    }
 
     if ( mbMenuBar ) {
+        g_source_remove_by_user_data( this );
+
         g_lo_menu_remove( G_LO_MENU( mpMenuModel ), 0 );
         mpMenuModel = NULL;
     } else {
         g_object_unref( mpMenuModel );
     }
 
-    if ( mpActionGroup ) {
-        g_lo_action_group_clear( G_LO_ACTION_GROUP( mpActionGroup ) );
-    }
-
-    pSessionBus = NULL;
-
-    maSections.clear();
     maItems.clear();
 }
 
@@ -261,51 +283,56 @@ void GtkSalMenu::InsertItem( SalMenuItem* pSalMenuItem, unsigned nPos )
 {
     GtkSalMenuItem *pItem = static_cast<GtkSalMenuItem*>( pSalMenuItem );
 
-    if ( nPos == MENU_APPEND ) {
+    if ( nPos == MENU_APPEND )
         maItems.push_back( pItem );
-    } else {
+    else
         maItems.insert( maItems.begin() + nPos, pItem );
-    }
-
-    if ( pItem->mpMenuItem ) {
-        unsigned nSection, nInsertPos;
-
-        // Get the section number and position to insert the item.
-        GetInsertionData( nPos, &nSection, &nInsertPos );
-
-        g_lo_menu_insert_item( G_LO_MENU( maSections[ nSection ] ), nInsertPos, pItem->mpMenuItem );
-    } else {
-        // If no mpMenuItem exists, then item is a separator.
-        GMenuModel* pSection = G_MENU_MODEL( g_lo_menu_new() );
-        maSections.push_back( pSection );
-
-        if ( mpMenuModel != NULL )
-            g_lo_menu_append_section( G_LO_MENU( mpMenuModel ), NULL, pSection );
-    }
 
     pItem->mpParentMenu = this;
+
+    if ( pItem->mnType != MENUITEM_SEPARATOR )
+    {
+        unsigned nInsertSection, nInsertPos;
+        GetInsertionData( nPos, &nInsertSection, &nInsertPos );
+
+        g_lo_menu_insert_in_section( G_LO_MENU( mpMenuModel ), nInsertSection, nInsertPos, "EMPTY STRING" );
+    }
+    else
+    {
+        g_lo_menu_insert_section( G_LO_MENU( mpMenuModel ), MENU_APPEND, NULL );
+    }
 }
 
 void GtkSalMenu::RemoveItem( unsigned nPos )
 {
-    GtkSalMenuItem* pItem = maItems[ nPos ];
+    GLOMenu* pMenu = G_LO_MENU( mpMenuModel );
 
-    if ( pItem->mpMenuItem != NULL ) {
-        GLOActionGroup* pActionGroup = G_LO_ACTION_GROUP( GetActionGroupFromMenubar( this ) );
-        if ( pActionGroup ) {
-            g_lo_action_group_remove( pActionGroup, pItem->maCommand );
-        }
-
+    // If item is a separator, the last section of the menu is removed.
+    if ( mpVCLMenu->GetItemType( nPos ) != MENUITEM_SEPARATOR )
+    {
         unsigned nSection, nItemPos;
         GetInsertionData( nPos, &nSection, &nItemPos );
 
-        g_lo_menu_remove( G_LO_MENU( maSections[ nSection ] ), nItemPos );
+//        gchar *aCommand = g_lo_menu_get_action_value_from_item_in_section( pMenu, nSection, nItemPos );
 
-        // Remove empty sections unless section is the last one.
-        if ( g_menu_model_get_n_items( maSections[ nSection ] ) == 0 && maSections.size() > 1 ) {
-            g_lo_menu_remove( G_LO_MENU( mpMenuModel ), nSection );
-            maSections.erase( maSections.begin() + nSection );
-        }
+//        if ( aCommand ) {
+//            GLOActionGroup* pActionGroup = G_LO_ACTION_GROUP( GetActionGroupFromMenubar( this ) );
+
+//            if ( pActionGroup != NULL )
+//                g_lo_action_group_remove( pActionGroup, aCommand );
+
+//            g_free( aCommand );
+//        }
+
+        cout << __FUNCTION__ << " - " << nSection << " - " << nItemPos << " - " << nPos << " - " << this << endl;
+        g_lo_menu_remove_from_section( pMenu, nSection, nItemPos );
+    }
+    else
+    {
+        gint nSection = g_menu_model_get_n_items( mpMenuModel ) - 1;
+        cout << __FUNCTION__ << " - " << nSection << endl;
+        if ( nSection < 0 )
+            g_lo_menu_remove( pMenu, nSection );
     }
 
     maItems.erase( maItems.begin() + nPos );
@@ -313,23 +340,22 @@ void GtkSalMenu::RemoveItem( unsigned nPos )
 
 void GtkSalMenu::SetSubMenu( SalMenuItem* pSalMenuItem, SalMenu* pSubMenu, unsigned nPos )
 {
+    cout << __FUNCTION__ << endl;
     GtkSalMenuItem *pItem = static_cast< GtkSalMenuItem* >( pSalMenuItem );
     GtkSalMenu *pGtkSubMenu = static_cast< GtkSalMenu* >( pSubMenu );
 
     if ( pGtkSubMenu == NULL )
         return;
 
+    pGtkSubMenu->mpParentSalMenu = this;
     pItem->mpSubMenu = pGtkSubMenu;
-    g_lo_menu_item_set_submenu( pItem->mpMenuItem, pGtkSubMenu->mpMenuModel );
 
     // Update item in GMenuModel.
     unsigned nSection, nItemPos;
     GetInsertionData( nPos, &nSection, &nItemPos );
 
-    g_lo_menu_remove( G_LO_MENU( maSections[ nSection ] ), nItemPos );
-    g_lo_menu_insert_item( G_LO_MENU( maSections[ nSection ] ), nItemPos, pItem->mpMenuItem );
-
-    pGtkSubMenu->mpParentSalMenu = this;
+    cout << __FUNCTION__ << " - " << nSection << " - " << nItemPos << " - " << nPos << " - " << this << endl;
+    g_lo_menu_set_submenu_to_item_in_section( G_LO_MENU( mpMenuModel ), nSection, nItemPos, pGtkSubMenu->mpMenuModel );
 }
 
 void GtkSalMenu::SetFrame( const SalFrame* pFrame )
@@ -345,7 +371,7 @@ void GtkSalMenu::SetFrame( const SalFrame* pFrame )
         GLOActionGroup* pActionGroup = G_LO_ACTION_GROUP( g_object_get_data( G_OBJECT( gdkWindow ), "g-lo-action-group" ) );
 
         if ( pMenu && pActionGroup ) {
-            mpMenuModel = G_MENU_MODEL( pMenu );
+//            mpMenuModel = G_MENU_MODEL( pMenu );
 
             // Merge current action group with the exported one
             g_lo_action_group_clear( pActionGroup );
@@ -355,8 +381,6 @@ void GtkSalMenu::SetFrame( const SalFrame* pFrame )
 
             mpActionGroup = G_ACTION_GROUP( pActionGroup );
         } else {
-            mpMenuModel = G_MENU_MODEL( g_lo_menu_new() );
-
             g_object_set_data_full( G_OBJECT( gdkWindow ), "g-lo-menubar", mpMenuModel, ObjectDestroyedNotify );
             g_object_set_data_full( G_OBJECT( gdkWindow ), "g-lo-action-group", mpActionGroup, ObjectDestroyedNotify );
 
@@ -366,6 +390,10 @@ void GtkSalMenu::SetFrame( const SalFrame* pFrame )
             gchar* aDBusWindowPath = g_strdup_printf( "/window/%lu", windowId );
             gchar* aDBusMenubarPath = g_strdup_printf( "/window/%lu/menus/menubar", windowId );
 
+            // Get a DBus session connection.
+            GDBusConnection* pSessionBus = g_bus_get_sync (G_BUS_TYPE_SESSION, NULL, NULL);
+            if(!pSessionBus) puts ("Failed to get DBus session connection");
+
             gdk_x11_window_set_utf8_property ( gdkWindow, "_GTK_UNIQUE_BUS_NAME", g_dbus_connection_get_unique_name( pSessionBus ) );
             gdk_x11_window_set_utf8_property ( gdkWindow, "_GTK_APPLICATION_OBJECT_PATH", "" );
             gdk_x11_window_set_utf8_property ( gdkWindow, "_GTK_WINDOW_OBJECT_PATH", aDBusWindowPath );
@@ -373,24 +401,24 @@ void GtkSalMenu::SetFrame( const SalFrame* pFrame )
 
             // Publish the menu.
             if ( aDBusMenubarPath ) {
-                mMenubarId = g_dbus_connection_export_menu_model (pSessionBus, aDBusMenubarPath, mpMenuModel, NULL);
-                if(!mMenubarId) puts("Fail export menubar");
+                sal_uInt16 menubarId = g_dbus_connection_export_menu_model (pSessionBus, aDBusMenubarPath, mpMenuModel, NULL);
+                if(!menubarId) puts("Failed to export menubar");
             }
 
             if ( aDBusPath ) {
-                mActionGroupId = g_dbus_connection_export_action_group( pSessionBus, aDBusPath, mpActionGroup, NULL);
+                sal_uInt16 actionGroupId = g_dbus_connection_export_action_group( pSessionBus, aDBusPath, mpActionGroup, NULL);
+                if(!actionGroupId) puts("Failed to export action group");
             }
 
             g_free( aDBusPath );
             g_free( aDBusWindowPath );
             g_free( aDBusMenubarPath );
         }
+//        updateNativeMenu( this );
+//        updateNativeMenu( this );
 
-        // Menubar has only one section.
-        g_lo_menu_append_section( G_LO_MENU( mpMenuModel ), NULL, maSections[ 0 ] );
-
-        // Refresh the menu every second.
-        // This code is a workaround until required modifications in Gtk+ are available.
+//        // Refresh the menu every second.
+//        // This code is a workaround until required modifications in Gtk+ are available.
         g_timeout_add_seconds( 1, GenerateMenu, this );
     }
 }
@@ -405,27 +433,29 @@ const GtkSalFrame* GtkSalMenu::GetFrame() const
 
 void GtkSalMenu::CheckItem( unsigned nPos, sal_Bool bCheck )
 {
-//    cout << __FUNCTION__ << " - " << nPos << " - " << bCheck << endl;
+//    GtkSalMenuItem* pItem = maItems[ nPos ];
+
+//    if ( pItem->maCommand == NULL || g_strcmp0( pItem->maCommand, "" ) == 0 )
+//        return;
+
 //    GActionGroup* pActionGroup = GetActionGroupFromMenubar( this );
 
 //    if ( !pActionGroup )
 //        return;
 
-//    GtkSalMenuItem* pSalMenuItem = maItems[ nPos ];
 
-//    if ( !pSalMenuItem || pSalMenuItem->mpSubMenu )
+//    if ( !pItem || pItem->mpSubMenu )
 //        return;
 
-//    MenuItemBits itemBits = pSalMenuItem->mnBits;
 //    GVariant *pCheckValue = NULL;
 
-//    if ( itemBits & MIB_CHECKABLE ) {
+//    if ( pItem->mnBits & MIB_CHECKABLE ) {
 //        gboolean bCheckedValue = ( bCheck == sal_True ) ? TRUE : FALSE;
 //        pCheckValue = g_variant_new_boolean( bCheckedValue );
 //    }
 
 //    if ( pCheckValue )
-//        g_action_group_change_action_state( pActionGroup, pSalMenuItem->maCommand, pCheckValue );
+//        g_action_group_change_action_state( pActionGroup, pItem->maCommand, pCheckValue );
 }
 
 void GtkSalMenu::EnableItem( unsigned nPos, sal_Bool bEnable )
@@ -435,49 +465,57 @@ void GtkSalMenu::EnableItem( unsigned nPos, sal_Bool bEnable )
     if ( pActionGroup == NULL )
         return;
 
-    GtkSalMenuItem* pItem = maItems[ nPos ];
+    sal_uInt16 nId = mpVCLMenu->GetItemId( nPos );
+    rtl::OUString aOUCommand = mpVCLMenu->GetItemCommand( nId );
+
+    if ( aOUCommand == NULL || aOUCommand.isEmpty() )
+        return;
+
+    gchar* aCommand = (gchar*) rtl::OUStringToOString( aOUCommand, RTL_TEXTENCODING_UTF8 ).getStr();
 
     gboolean bItemEnabled = (bEnable == sal_True) ? TRUE : FALSE;
 
-    if ( pItem->maCommand == NULL || g_strcmp0( pItem->maCommand, "" ) == 0 )
-        return;
-
-    g_lo_action_group_set_action_enabled( pActionGroup, pItem->maCommand, bItemEnabled );
+    if ( g_action_group_get_action_enabled( G_ACTION_GROUP( pActionGroup ), aCommand ) != bItemEnabled )
+        g_lo_action_group_set_action_enabled( pActionGroup, aCommand, bItemEnabled );
 }
 
 void GtkSalMenu::SetItemText( unsigned nPos, SalMenuItem* pSalMenuItem, const rtl::OUString& rText )
 {
     // Replace the "~" character with "_".
     rtl::OUString aText = rText.replace( '~', '_' );
-    rtl::OString aConvertedText = OUStringToOString(aText, RTL_TEXTENCODING_UTF8);
+    rtl::OString aConvertedText = OUStringToOString( aText, RTL_TEXTENCODING_UTF8 );
 
-    GtkSalMenuItem *pItem = static_cast<GtkSalMenuItem*>( pSalMenuItem );
-    GLOMenuItem *pMenuItem = G_LO_MENU_ITEM( pItem->mpMenuItem );
+//    GtkSalMenuItem *pItem = static_cast<GtkSalMenuItem*>( pSalMenuItem );
 
-    unsigned nSection, nInsertPos;
-    GetInsertionData( nPos, &nSection, &nInsertPos );
+    unsigned nSection, nItemPos;
+    GetInsertionData( nPos, &nSection, &nItemPos );
 
-    GLOMenu* pSection = G_LO_MENU( maSections[ nSection ] );
+    cout << __FUNCTION__ << " - " << nSection << " - " << nItemPos << " - " << nPos << " - " << this << " - " << aConvertedText.getStr() << endl;
 
-    GVariant* aCurrentLabel = NULL;
+//    GLOMenu* pSection = G_LO_MENU( maSections[ nSection ] );
 
-    if ( g_menu_model_get_n_items( maSections[ nSection ] ) > 0 )
-        aCurrentLabel = g_menu_model_get_item_attribute_value( G_MENU_MODEL( pSection ), nInsertPos, G_MENU_ATTRIBUTE_LABEL, G_VARIANT_TYPE_STRING );
+//    GVariant* aCurrentLabel = NULL;
 
-    sal_Bool bSetLabel = sal_True;
+//    if ( g_menu_model_get_n_items( maSections[ nSection ] ) > nInsertPos )
+//        aCurrentLabel = g_menu_model_get_item_attribute_value( G_MENU_MODEL( pSection ), nInsertPos, G_MENU_ATTRIBUTE_LABEL, G_VARIANT_TYPE_STRING );
 
-    if ( aCurrentLabel != NULL ) {
-        if ( g_strcmp0( g_variant_get_string( aCurrentLabel, NULL ), aConvertedText.getStr() ) == 0 ) {
-            bSetLabel = sal_False;
-        }
-    }
+//    sal_Bool bSetLabel = sal_True;
 
-    if ( bSetLabel == sal_True ) {
-        g_lo_menu_item_set_label( pMenuItem, aConvertedText.getStr() );
+//    if ( aCurrentLabel != NULL ) {
+//        if ( g_strcmp0( g_variant_get_string( aCurrentLabel, NULL ), aConvertedText.getStr() ) == 0 ) {
+//            bSetLabel = sal_False;
+//        }
+//    }
 
-        g_lo_menu_remove( pSection, nInsertPos );
-        g_lo_menu_insert_item( pSection, nInsertPos, pItem->mpMenuItem );
-    }
+//    if ( bSetLabel == sal_True ) {
+        g_lo_menu_set_label_in_section( G_LO_MENU( mpMenuModel ), nSection, nItemPos, aConvertedText.getStr() );
+
+////        cout << __FUNCTION__ << " - " << aConvertedText.getStr() << " - Section: " << nSection << " - Position: " << nInsertPos << " - Section size: " << g_menu_model_get_n_items( G_MENU_MODEL( pSection ) ) << endl;
+//        if ( g_menu_model_get_n_items( G_MENU_MODEL( pSection ) ) > nInsertPos )
+//            g_lo_menu_remove( pSection, nInsertPos );
+
+//        g_lo_menu_insert_item( pSection, nInsertPos, pItem );
+//    }
 }
 
 void GtkSalMenu::SetItemImage( unsigned nPos, SalMenuItem* pSalMenuItem, const Image& rImage)
@@ -486,63 +524,98 @@ void GtkSalMenu::SetItemImage( unsigned nPos, SalMenuItem* pSalMenuItem, const I
 
 void GtkSalMenu::SetAccelerator( unsigned nPos, SalMenuItem* pSalMenuItem, const KeyCode& rKeyCode, const rtl::OUString& rKeyName )
 {
-    //    GtkSalMenuItem *pGtkSalMenuItem = static_cast< GtkSalMenuItem* >( pSalMenuItem );
+//    GtkSalMenuItem *pItem = static_cast< GtkSalMenuItem* >( pSalMenuItem );
 
-    //    if ( rKeyName.isEmpty() )
-    //        return;
+//    if ( rKeyName.isEmpty() )
+//        return;
 
-    //    rtl::OString aAccelerator = rtl::OUStringToOString( GetGtkKeyName( rKeyName ), RTL_TEXTENCODING_UTF8 );
+//    rtl::OString aAccelerator = rtl::OUStringToOString( GetGtkKeyName( rKeyName ), RTL_TEXTENCODING_UTF8 );
 
-    //    GVariant* aCurrentAccel = g_menu_model_get_item_attribute_value( pGtkSalMenuItem->mpParentSection, pGtkSalMenuItem->mnPos, "accel", G_VARIANT_TYPE_STRING );
+//    unsigned nSection, nItemPos;
+//    GetInsertionData( nPos, &nSection, &nItemPos );
 
-    //    sal_Bool bSetAccel = sal_True;
+//    GLOMenu* pSection = G_LO_MENU( maSections[ nSection ] );
 
-    //    if ( aCurrentAccel ) {
-    //        if ( g_strcmp0( g_variant_get_string( aCurrentAccel, NULL ), aAccelerator.getStr() ) == 0 ) {
-    //            bSetAccel = sal_False;
-    //        }
-    //    }
+//    GVariant* aCurrentAccel = g_menu_model_get_item_attribute_value( G_MENU_MODEL( pSection ), nItemPos, "accel", G_VARIANT_TYPE_STRING );
 
-    //    if ( bSetAccel == sal_True ) {
-    //        g_lo_menu_item_set_attribute_value( pGtkSalMenuItem->mpMenuItem, "accel", g_variant_new_string( aAccelerator.getStr() ) );
+//    sal_Bool bSetAccel = sal_True;
 
-    //        g_lo_menu_remove( G_LO_MENU( pGtkSalMenuItem->mpParentSection), pGtkSalMenuItem->mnPos );
-    //        g_lo_menu_insert_item( G_LO_MENU( pGtkSalMenuItem->mpParentSection ), pGtkSalMenuItem->mnPos, pGtkSalMenuItem->mpMenuItem );
-    //    }
+//    if ( aCurrentAccel ) {
+//        if ( g_strcmp0( g_variant_get_string( aCurrentAccel, NULL ), aAccelerator.getStr() ) == 0 ) {
+//            bSetAccel = sal_False;
+//        }
+//    }
+
+//    if ( bSetAccel == sal_True ) {
+//        g_lo_menu_item_set_attribute_value( pItem->mpMenuItem, "accel", g_variant_new_string( aAccelerator.getStr() ) );
+
+//        g_lo_menu_remove( pSection, nItemPos );
+//        g_lo_menu_insert_item( pSection, nItemPos, pItem );
+//    }
 }
 
 void GtkSalMenu::SetItemCommand( unsigned nPos, SalMenuItem* pSalMenuItem, const rtl::OUString& aCommandStr )
 {
     GtkSalMenuItem* pItem = static_cast< GtkSalMenuItem* >( pSalMenuItem );
 
-    if ( pItem->mpMenuItem ) {
-        rtl::OString aOCommandStr = rtl::OUStringToOString( aCommandStr, RTL_TEXTENCODING_UTF8 );
+    if ( pItem->mnType == MENUITEM_SEPARATOR || pItem->mpVCLMenu->GetPopupMenu( pItem->mnId ) != NULL )
+        return;
 
-        if ( pItem->maCommand )
-            g_free( pItem->maCommand );
+    gchar* aCommand = (gchar*) rtl::OUStringToOString( aCommandStr, RTL_TEXTENCODING_UTF8 ).getStr();
 
-        pItem->maCommand = g_strdup( aOCommandStr.getStr() );
+    GLOActionGroup* pActionGroup = G_LO_ACTION_GROUP( GetActionGroupFromMenubar( this ) );
+    if ( pActionGroup == NULL )
+        return;
 
-        GLOActionGroup* pActionGroup = G_LO_ACTION_GROUP( GetActionGroupFromMenubar( this ) );
-        if ( pActionGroup ) {
-            g_lo_action_group_insert( pActionGroup, pItem->maCommand, pItem );
-        }
+//    gboolean bChecked = ( pItem->mpVCLMenu->IsItemChecked( pItem->mnId ) ) ? TRUE : FALSE;
 
-        if ( pItem->mpVCLMenu->GetPopupMenu( pItem->mnId ) == NULL ) {
-            gchar* aItemCommand = g_strconcat("win.", pItem->maCommand, NULL );
+//    if ( pItem->mnBits & MIB_CHECKABLE )
+//    {
+////        cout << "Item with command: " << pItem->maCommand << " is checkmark button." << endl;
 
-            g_lo_menu_item_set_action_and_target( pItem->mpMenuItem, aItemCommand, NULL );
+//        // Item is a checkmark button.
+//        GVariantType* pStateType = g_variant_type_new( (gchar*) G_VARIANT_TYPE_BOOLEAN );
+//        GVariant* pState = g_variant_new_boolean( bChecked );
 
-            g_free( aItemCommand );
+//        g_lo_action_group_insert_stateful( pActionGroup, aCommand, pItem, NULL, pStateType, NULL, pState );
+//    }
+//    else if ( pItem->mnBits & MIB_RADIOCHECK )
+//    {
+////        cout << "Item with command: " << pItem->maCommand << " is a radio button." << endl;
 
-            unsigned nSection, nInsertPos;
-            GetInsertionData( nPos, &nSection, &nInsertPos );
+//        // Item is a radio button.
+////        GVariantType* pParameterType = g_variant_type_new( (gchar*) G_VARIANT_TYPE_STRING );
+////        GVariantType* pStateType = g_variant_type_new( (gchar*) G_VARIANT_TYPE_STRING );
+//        //        GVariant* pStateHint = GetRadionButtonHints( pItem );
+////        GVariant* pState = g_variant_new_string( "" );
 
-            GLOMenu* pSection = G_LO_MENU( maSections[ nSection ] );
-            g_lo_menu_remove( pSection, nInsertPos );
-            g_lo_menu_insert_item( pSection, nInsertPos, pItem->mpMenuItem );
-        }
-    }
+////        g_lo_action_group_insert_stateful( pActionGroup, aCommand, pItem, pParameterType, pStateType, NULL, pState );
+//    }
+//    else
+//    {
+        // Item is not special, so insert a stateless action.
+        g_lo_action_group_insert( pActionGroup, aCommand, pItem );
+//    }
+
+    // Menu item is not updated unless it's necessary.
+//    if ( ( pItem->maCommand != NULL ) && ( g_strcmp0( pItem->maCommand, aCommand ) == 0 ) )
+//        return;
+
+//    if ( pItem->maCommand != NULL )
+//        g_free( pItem->maCommand );
+
+//    pItem->maCommand = g_strdup( aCommand );
+
+        unsigned nSection, nItemPos;
+        GetInsertionData( nPos, &nSection, &nItemPos );
+
+        cout << __FUNCTION__ << " - " << nSection << " - " << nItemPos << " - " << nPos << " - " << this << endl;
+
+    gchar* aItemCommand = g_strconcat("win.", aCommand, NULL );
+
+    g_lo_menu_set_action_and_target_value_to_item_in_section( G_LO_MENU( mpMenuModel ), nSection, nItemPos, aItemCommand, NULL );
+
+    g_free( aItemCommand );
 }
 
 void GtkSalMenu::GetSystemMenuData( SystemMenuData* pData )
@@ -562,37 +635,16 @@ void GtkSalMenu::Freeze()
 GtkSalMenuItem::GtkSalMenuItem( const SalItemParams* pItemData ) :
     mnId( pItemData->nId ),
     mnBits( pItemData->nBits ),
-    maCommand( NULL ),
+    mnType( pItemData->eType ),
     mpVCLMenu( pItemData->pMenu ),
     mpParentMenu( NULL ),
-    mpSubMenu( NULL ),
-    mpMenuItem( NULL ),
-    mpStateType( NULL ),
-    mpState( NULL )
+    mpSubMenu( NULL )
 {
-    if ( pItemData->eType != MENUITEM_SEPARATOR ) {
-        mpMenuItem = g_lo_menu_item_new( "EMPTY STRING", NULL );
-
-        rtl::OUString aCommand = mpVCLMenu->GetItemCommand( mnId );
-
-        if ( aCommand == NULL || aCommand.isEmpty() == sal_True )
-            return;
-
-        maCommand = g_strdup( rtl::OUStringToOString( aCommand, RTL_TEXTENCODING_UTF8 ).getStr() );
-        gchar* aActionCommand = g_strconcat( "win.", maCommand, NULL );
-
-        g_lo_menu_item_set_action_and_target( mpMenuItem, aActionCommand, NULL );
-
-        g_free( aActionCommand );
-    }
 }
 
 GtkSalMenuItem::~GtkSalMenuItem()
 {
-    if ( mpMenuItem ) {
-        g_object_unref( mpMenuItem );
-
-        if ( maCommand )
-            g_free( maCommand );
-    }
+//    mpVCLMenu = NULL;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

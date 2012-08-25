@@ -1,3 +1,26 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+
+/*
+ * Copyright © 2011 Canonical Ltd.
+ *
+ * This library is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation; either version 2 of the
+ * licence, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307,
+ * USA.
+ *
+ * Author: Antonio Fernández <antonio.fernandez@aentos.es>
+ */
+
 #include <unx/gtk/gloactiongroup.h>
 
 #include <unx/gtk/gtkinst.hxx>
@@ -9,6 +32,92 @@
 #include <iostream>
 
 using namespace std;
+
+/*
+ * GLOAction
+ */
+
+#define G_TYPE_LO_ACTION                                (g_lo_action_get_type ())
+#define G_LO_ACTION(inst)                               (G_TYPE_CHECK_INSTANCE_CAST ((inst),                     \
+                                                             G_TYPE_LO_ACTION, GLOAction))
+#define G_IS_LO_ACTION(inst)                            (G_TYPE_CHECK_INSTANCE_TYPE ((inst),                     \
+                                                             G_TYPE_LO_ACTION))
+
+struct _GLOAction
+{
+    GObject         parent_instance;
+
+    GtkSalMenuItem* item;               // A pointer to the menu item.
+    gboolean        enabled;            // TRUE if action is enabled, FALSE otherwise.
+    GVariantType*   parameter_type;     // A GVariantType with the action parameter type.
+    GVariantType*   state_type;         // A GVariantType with item state type
+    GVariant*       state_hint;         // A GVariant with state hints.
+    GVariant*       state;              // A GVariant with current item state
+};
+
+typedef GObjectClass GLOActionClass;
+typedef struct _GLOAction GLOAction;
+
+G_DEFINE_TYPE (GLOAction, g_lo_action, G_TYPE_OBJECT);
+
+GLOAction*
+g_lo_action_new (void)
+{
+    return G_LO_ACTION (g_object_new (G_TYPE_LO_ACTION, NULL));
+}
+
+static void
+g_lo_action_init (GLOAction *action)
+{
+    action->item = NULL;
+    action->enabled = FALSE;
+    action->parameter_type = NULL;
+    action->state_type = NULL;
+    action->state_hint = NULL;
+    action->state = NULL;
+}
+
+static void
+g_lo_action_finalize (GObject *object)
+{
+    GLOAction* action = G_LO_ACTION(object);
+
+    action->item = NULL;
+
+    if (action->parameter_type) {
+        g_variant_type_free (action->parameter_type);
+        action->parameter_type = NULL;
+    }
+
+    if (action->state_type) {
+        g_variant_type_free (action->state_type);
+        action->state_type = NULL;
+    }
+
+    if (action->state_hint) {
+        g_variant_unref (action->state_hint);
+        action->state_hint = NULL;
+    }
+
+    if (action->state) {
+        g_variant_unref (action->state);
+        action->state = NULL;
+    }
+
+    G_OBJECT_CLASS (g_lo_action_parent_class)->finalize (object);
+}
+
+static void
+g_lo_action_class_init (GLOActionClass *klass)
+{
+    GObjectClass *object_class = G_OBJECT_CLASS(klass);
+
+    object_class->finalize = g_lo_action_finalize;
+}
+
+/*
+ * GLOActionGroup
+ */
 
 struct _GLOActionGroupPrivate
 {
@@ -52,35 +161,32 @@ g_lo_action_group_query_action (GActionGroup        *group,
                                 GVariant           **state_hint,
                                 GVariant           **state)
 {
-    GLOActionGroup *loGroup = G_LO_ACTION_GROUP (group);
-    GtkSalMenuItem* item_info;
+//    cout << __FUNCTION__ << " - " << action_name << " - enabled: " << enabled << " - parameter_type: " << parameter_type << " - state_type: " << state_type << " - state_hint: " << state_hint << " - state: " << state << endl;
+    GLOActionGroup *lo_group = G_LO_ACTION_GROUP (group);
+    GLOAction* action;
 
-    item_info = static_cast< GtkSalMenuItem* >( g_hash_table_lookup (loGroup->priv->table, action_name) );
+    action = G_LO_ACTION (g_hash_table_lookup (lo_group->priv->table, action_name));
 
-    if (item_info == NULL)
+    if (action == NULL)
         return FALSE;
 
-    if (enabled) {
-        sal_Bool bEnabled = item_info->mpVCLMenu->IsItemEnabled( item_info->mnId );
-        *enabled = (bEnabled) ? TRUE : FALSE;
+    if (enabled)
+        *enabled = action->enabled;
+
+    if (parameter_type) {
+        *parameter_type = action->parameter_type;
     }
 
-    if (parameter_type)
-        *parameter_type = NULL;
+    if (state_type) {
+        *state_type = action->state_type;
+    }
 
-    if (state_type)
-        *state_type = item_info->mpStateType;
-
-    if (state_hint)
-        *state_hint = NULL;
+    if (state_hint) {
+        *state_hint = (action->state_hint) ? g_variant_ref(action->state_hint) : NULL;
+    }
 
     if (state) {
-        if (item_info->mpState) {
-            g_variant_ref( item_info->mpState );
-            *state = item_info->mpState;
-        } else {
-            *state = NULL;
-        }
+        *state = (action->state) ? g_variant_ref(action->state) : NULL;
     }
 
     return TRUE;
@@ -95,24 +201,23 @@ g_lo_action_group_change_state (GActionGroup *group,
         return;
 
     GLOActionGroup* lo_group = G_LO_ACTION_GROUP (group);
-    GtkSalMenuItem* item_info;
 
-    item_info = static_cast<GtkSalMenuItem*>( g_hash_table_lookup (lo_group->priv->table, action_name) );
+    GLOAction* action = G_LO_ACTION (g_hash_table_lookup (lo_group->priv->table, action_name));
 
-    if (!item_info)
+    if (action == NULL)
         return;
 
-    if (!item_info->mpStateType) {
-        item_info->mpStateType = g_variant_type_copy(g_variant_get_type(value));
-    }
+    if (action->state_type == NULL)
+        action->state_type = g_variant_type_copy(g_variant_get_type(value));
 
-    if (g_variant_is_of_type(value, item_info->mpStateType)) {
-        if (item_info->mpState)
-            g_variant_unref(item_info->mpState);
+    g_return_if_fail (g_variant_is_of_type(value, action->state_type) == TRUE);
 
-        item_info->mpState = g_variant_new_variant(value);
-        g_action_group_action_state_changed(group, action_name, value);
-    }
+    if (action->state)
+        g_variant_unref(action->state);
+
+    action->state = g_variant_take_ref(value);
+
+    g_action_group_action_state_changed(group, action_name, value);
 }
 
 static void
@@ -120,15 +225,14 @@ g_lo_action_group_activate (GActionGroup *group,
                             const gchar  *action_name,
                             GVariant     *parameter)
 {
-    GLOActionGroup *loGroup = G_LO_ACTION_GROUP (group);
-    GtkSalMenuItem *pSalMenuItem;
+    GTK_YIELD_GRAB();
 
-    pSalMenuItem = static_cast< GtkSalMenuItem* >( g_hash_table_lookup (loGroup->priv->table, action_name) );
+    GLOActionGroup *loGroup = G_LO_ACTION_GROUP (group);
+    GLOAction* action = G_LO_ACTION (g_hash_table_lookup (loGroup->priv->table, action_name));
+    GtkSalMenuItem *pSalMenuItem = action->item;
 
     if (pSalMenuItem == NULL || pSalMenuItem->mpSubMenu )
         return;
-
-    GTK_YIELD_GRAB();
 
     const GtkSalFrame *pFrame = pSalMenuItem->mpParentMenu ? pSalMenuItem->mpParentMenu->GetFrame() : NULL;
 
@@ -177,18 +281,44 @@ g_lo_action_group_insert (GLOActionGroup *group,
                           const gchar    *action_name,
                           gpointer        action_info)
 {
+    g_lo_action_group_insert_stateful (group, action_name, action_info, NULL, NULL, NULL, NULL);
+}
+
+void
+g_lo_action_group_insert_stateful (GLOActionGroup     *group,
+                                   const gchar        *action_name,
+                                   gpointer            action_info,
+                                   const GVariantType *parameter_type,
+                                   const GVariantType *state_type,
+                                   GVariant           *state_hint,
+                                   GVariant           *state)
+{
     g_return_if_fail (G_IS_LO_ACTION_GROUP (group));
 
-    gpointer old_action;
+    GLOAction* old_action = G_LO_ACTION (g_hash_table_lookup (group->priv->table, action_name));
 
-    old_action = g_hash_table_lookup (group->priv->table, action_name);
-
-    if (old_action != action_info)
+    if (old_action == NULL || old_action->item != action_info)
     {
         if (old_action != NULL)
             g_action_group_action_removed (G_ACTION_GROUP (group), action_name);
 
-        g_hash_table_insert (group->priv->table, g_strdup (action_name), action_info);
+        GLOAction* action = g_lo_action_new();
+
+        g_hash_table_insert (group->priv->table, g_strdup (action_name), action);
+
+        action->item = static_cast< GtkSalMenuItem* >( action_info );
+
+        if (parameter_type)
+            action->parameter_type = (GVariantType*) parameter_type;
+
+        if (state_type)
+            action->state_type = (GVariantType*) state_type;
+
+        if (state_hint)
+            action->state_hint = g_variant_take_ref (state_hint);
+
+        if (state)
+            action->state = g_variant_take_ref (state);
 
         g_action_group_action_added (G_ACTION_GROUP (group), action_name);
     }
@@ -197,9 +327,9 @@ g_lo_action_group_insert (GLOActionGroup *group,
 static void
 g_lo_action_group_finalize (GObject *object)
 {
-    GLOActionGroup *loGroup = G_LO_ACTION_GROUP (object);
+    GLOActionGroup *lo_group = G_LO_ACTION_GROUP (object);
 
-    g_hash_table_unref (loGroup->priv->table);
+    g_hash_table_unref (lo_group->priv->table);
 
     G_OBJECT_CLASS (g_lo_action_group_parent_class)->finalize (object);
 }
@@ -211,7 +341,7 @@ g_lo_action_group_init (GLOActionGroup *group)
                                                  G_TYPE_LO_ACTION_GROUP,
                                                  GLOActionGroupPrivate);
     group->priv->table = g_hash_table_new_full (g_str_hash, g_str_equal,
-                                                  g_free, NULL );
+                                                  g_free, g_object_unref);
 }
 
 static void
@@ -245,11 +375,30 @@ g_lo_action_group_set_action_enabled (GLOActionGroup *group,
                                       gboolean        enabled)
 {
     g_return_if_fail (G_IS_LO_ACTION_GROUP (group));
+    g_return_if_fail (action_name != NULL);
+
+    GLOAction* action = G_LO_ACTION (g_hash_table_lookup (group->priv->table, action_name));
+
+    if (action == NULL)
+        return;
+
+    action->enabled = enabled;
 
     g_action_group_action_enabled_changed(G_ACTION_GROUP(group),
                                           action_name,
                                           enabled);
+}
 
+gpointer
+g_lo_action_group_get_action_item (GLOActionGroup *group,
+                                   const gchar    *action_name)
+{
+    g_return_val_if_fail (G_IS_LO_ACTION_GROUP (group), NULL);
+    g_return_val_if_fail (action_name != NULL, NULL);
+
+    GLOAction* action = G_LO_ACTION (g_hash_table_lookup (group->priv->table, action_name));
+
+    return (action != NULL) ? action->item : NULL;
 }
 
 void
@@ -270,7 +419,12 @@ g_lo_action_group_clear (GLOActionGroup  *group)
 {
     g_return_if_fail (G_IS_LO_ACTION_GROUP (group));
 
-    g_hash_table_remove_all(group->priv->table);
+    GList* keys = g_hash_table_get_keys (group->priv->table);
+
+    for (GList* element = g_list_first (keys); element != NULL; element = g_list_next (element))
+    {
+        g_lo_action_group_remove (group, (gchar*) element->data);
+    }
 }
 
 void
@@ -292,3 +446,5 @@ g_lo_action_group_merge (GLOActionGroup *input_group,
         g_lo_action_group_insert(output_group, (gchar*) key, value);
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

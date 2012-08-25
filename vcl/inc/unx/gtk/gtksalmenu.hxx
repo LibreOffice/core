@@ -1,30 +1,25 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*************************************************************************
+
+/*
+ * Copyright © 2011 Canonical Ltd.
  *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * This library is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation; either version 2 of the
+ * licence, or (at your option) any later version.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * This library is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
  *
- * OpenOffice.org - a multi-platform office productivity suite
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307,
+ * USA.
  *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
+ * Author: Antonio Fernández <antonio.fernandez@aentos.es>
+ */
 
 #ifndef GTKSALMENU_HXX
 #define GTKSALMENU_HXX
@@ -39,32 +34,25 @@
 #include "glomenu.h"
 #include "gloactiongroup.h"
 
-#include <vector>
 
-
+class MenuItemList;
 class GtkSalMenuItem;
 
 class GtkSalMenu : public SalMenu
 {
 private:
+    std::vector< GtkSalMenuItem* >  maItems;
+
     sal_Bool                        mbMenuBar;
     Menu*                           mpVCLMenu;
     GtkSalMenu*                     mpParentSalMenu;
     const GtkSalFrame*              mpFrame;
 
-    std::vector< GMenuModel* >      maSections;
-    std::vector< GtkSalMenuItem* >  maItems;
-
-    // DBus attributes
-    GDBusConnection*                pSessionBus;
-    sal_Int32                       mMenubarId;
-    sal_Int32                       mActionGroupId;
-
     // GMenuModel and GActionGroup attributes
     GMenuModel*                     mpMenuModel;
     GActionGroup*                   mpActionGroup;
 
-    GtkSalMenuItem* GetSalMenuItem( sal_uInt16 nId );
+
     sal_Int16       GetSectionNumber( GMenuModel* pSection );
     void            GetInsertionData( unsigned nPos, unsigned *insertSection, unsigned *insertPos );
 
@@ -93,10 +81,10 @@ public:
     virtual Menu*               GetMenu() { return mpVCLMenu; }
     virtual GtkSalMenu*         GetParentSalMenu() { return mpParentSalMenu; }
     virtual GMenuModel*         GetMenuModel() { return mpMenuModel; }
-//    virtual GMenuModel*         GetCurrentSection() { return mpCurrentSection; }
     virtual unsigned            GetItemCount() { return maItems.size(); }
     virtual GtkSalMenuItem*     GetItemAtPos( unsigned nPos ) { return maItems[ nPos ]; }
     virtual GActionGroup*       GetActionGroup() { return mpActionGroup; }
+//    virtual GtkSalMenuItem*     GetSalMenuItem( sal_uInt16 nId );
 };
 
 class GtkSalMenuItem : public SalMenuItem
@@ -107,14 +95,10 @@ public:
 
     sal_uInt16          mnId;               // Item ID
     MenuItemBits        mnBits;             // Item bits
-    gchar*              maCommand;          // Item command
+    MenuItemType        mnType;             // Item type
     Menu*               mpVCLMenu;          // VCL Menu into which this MenuItem is inserted
     GtkSalMenu*         mpParentMenu;       // The menu in which this menu item is inserted
     GtkSalMenu*         mpSubMenu;          // Sub menu of this item (if defined)
-    GMenuModel*         mpParentSection;    // Section where this item is added.
-    GLOMenuItem*        mpMenuItem;         // The GMenuItem
-    GVariantType*       mpStateType;        // A GVariantType with item state type
-    GVariant*           mpState;            // A GVariant with current item state
 };
 
 #endif // GTKSALMENU_HXX
