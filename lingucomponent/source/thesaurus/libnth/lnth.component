@@ -26,7 +26,7 @@
 *
 **********************************************************************-->
 
-<component loader="com.sun.star.loader.SharedLibrary"
+<component loader="com.sun.star.loader.SharedLibrary" prefix="lnth"
     xmlns="http://openoffice.org/2010/uno-components">
   <implementation name="org.openoffice.lingu.new.Thesaurus">
     <service name="com.sun.star.linguistic2.Thesaurus"/>

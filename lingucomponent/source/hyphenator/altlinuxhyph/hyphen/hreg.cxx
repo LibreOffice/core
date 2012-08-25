@@ -50,7 +50,7 @@ extern void * SAL_CALL Hyphenator_getFactory(
 extern "C"
 {
 
-SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
+SAL_DLLPUBLIC_EXPORT void * SAL_CALL hyphen_component_getFactory(
     const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey )
 {
     void * pRet = Hyphenator_getFactory(

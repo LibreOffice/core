@@ -26,7 +26,7 @@
 *
 **********************************************************************-->
 
-<component loader="com.sun.star.loader.SharedLibrary"
+<component loader="com.sun.star.loader.SharedLibrary" prefix="spell"
     xmlns="http://openoffice.org/2010/uno-components">
   <implementation name="org.openoffice.lingu.MySpellSpellChecker">
     <service name="com.sun.star.linguistic2.SpellChecker"/>
