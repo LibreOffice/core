@@ -1751,8 +1751,6 @@ sal_Bool GtkSalGraphics::NWPaintGTKScrollbar( ControlType, ControlPart nPart,
 
     // Find the overall bounding rect of the control
     pixmapRect = rControlRectangle;
-    pixmapRect.SetSize( Size( pixmapRect.GetWidth() + 1,
-                              pixmapRect.GetHeight() + 1 ) );
     scrollbarRect = pixmapRect;
 
     if ( (scrollbarRect.GetWidth() <= 1) || (scrollbarRect.GetHeight() <= 1) )
@@ -1939,13 +1937,22 @@ sal_Bool GtkSalGraphics::NWPaintGTKScrollbar( ControlType, ControlPart nPart,
                         x+hShim+thumbRect.Left(), y+vShim+thumbRect.Top(),
                         thumbRect.GetWidth(), thumbRect.GetHeight(), scrollbarOrientation );
     }
+
+    // Some engines require allocation, e.g. Clearlooks uses it to identify
+    // positions of the buttons, whereupon the first and the last button will
+    // have rounded corners.
+    GTK_WIDGET(scrollbarWidget)->allocation.x = x;
+    GTK_WIDGET(scrollbarWidget)->allocation.y = y;
+    GTK_WIDGET(scrollbarWidget)->allocation.width = w;
+    GTK_WIDGET(scrollbarWidget)->allocation.height = h;
+
     // ----------------- BUTTON 1 //
     if ( has_backward )
     {
         NWConvertVCLStateToGTKState( pScrollbarVal->mnButton1State, &stateType, &shadowType );
         if ( stateType == GTK_STATE_INSENSITIVE )    stateType = GTK_STATE_NORMAL;
         gtk_paint_box( style, gdkDrawable, stateType, shadowType,
-                       gdkRect, GTK_WIDGET(scrollbarWidget), "stepper",
+                       gdkRect, GTK_WIDGET(scrollbarWidget), scrollbarTag,
                        x+hShim+button11BoundRect.Left(), y+vShim+button11BoundRect.Top(),
                        button11BoundRect.GetWidth(), button11BoundRect.GetHeight() );
         // ----------------- ARROW 1
@@ -1960,7 +1967,7 @@ sal_Bool GtkSalGraphics::NWPaintGTKScrollbar( ControlType, ControlPart nPart,
         NWConvertVCLStateToGTKState( pScrollbarVal->mnButton2State, &stateType, &shadowType );
         if ( stateType == GTK_STATE_INSENSITIVE )    stateType = GTK_STATE_NORMAL;
         gtk_paint_box( style, gdkDrawable, stateType, shadowType,
-                       gdkRect, GTK_WIDGET(scrollbarWidget), "stepper",
+                       gdkRect, GTK_WIDGET(scrollbarWidget), scrollbarTag,
                        x+hShim+button12BoundRect.Left(), y+vShim+button12BoundRect.Top(),
                        button12BoundRect.GetWidth(), button12BoundRect.GetHeight() );
         // ----------------- ARROW 1
@@ -1976,7 +1983,7 @@ sal_Bool GtkSalGraphics::NWPaintGTKScrollbar( ControlType, ControlPart nPart,
         NWConvertVCLStateToGTKState( pScrollbarVal->mnButton1State, &stateType, &shadowType );
         if ( stateType == GTK_STATE_INSENSITIVE )    stateType = GTK_STATE_NORMAL;
         gtk_paint_box( style, gdkDrawable, stateType, shadowType, gdkRect,
-                       GTK_WIDGET(scrollbarWidget), "stepper",
+                       GTK_WIDGET(scrollbarWidget), scrollbarTag,
                        x+hShim+button21BoundRect.Left(), y+vShim+button21BoundRect.Top(),
                        button21BoundRect.GetWidth(), button21BoundRect.GetHeight() );
         // ----------------- ARROW 2
@@ -1991,7 +1998,7 @@ sal_Bool GtkSalGraphics::NWPaintGTKScrollbar( ControlType, ControlPart nPart,
         NWConvertVCLStateToGTKState( pScrollbarVal->mnButton2State, &stateType, &shadowType );
         if ( stateType == GTK_STATE_INSENSITIVE )    stateType = GTK_STATE_NORMAL;
         gtk_paint_box( style, gdkDrawable, stateType, shadowType, gdkRect,
-                       GTK_WIDGET(scrollbarWidget), "stepper",
+                       GTK_WIDGET(scrollbarWidget), scrollbarTag,
                        x+hShim+button22BoundRect.Left(), y+vShim+button22BoundRect.Top(),
                        button22BoundRect.GetWidth(), button22BoundRect.GetHeight() );
         // ----------------- ARROW 2
