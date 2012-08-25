@@ -933,8 +933,6 @@ static bool checkEncryption( const rtl::OUString&                               
                     rtl::OString aIsoPwd = rtl::OUStringToOString( io_rPwd,
                                                                    RTL_TEXTENCODING_ISO_8859_1 );
                     bAuthenticated = pPDFFile->setupDecryptionData( aIsoPwd.getStr() );
-                    // trash password string on heap
-                    rtl_zeroMemory( (void*)aIsoPwd.getStr(), aIsoPwd.getLength() );
                 }
                 if( bAuthenticated )
                     bSuccess = true;
@@ -949,16 +947,12 @@ static bool checkEncryption( const rtl::OUString&                               
                             rtl::OString aIsoPwd = rtl::OUStringToOString( io_rPwd,
                                                                            RTL_TEXTENCODING_ISO_8859_1 );
                             bAuthenticated = pPDFFile->setupDecryptionData( aIsoPwd.getStr() );
-                            // trash password string on heap
-                            rtl_zeroMemory( (void*)aIsoPwd.getStr(), aIsoPwd.getLength() );
                         } while( bEntered && ! bAuthenticated );
                     }
 
                     OSL_TRACE( "password: %s", bAuthenticated ? "matches" : "does not match" );
                     bSuccess = bAuthenticated;
                 }
-                // trash password string on heap
-                rtl_zeroMemory( (void*)io_rPwd.getStr(), io_rPwd.getLength()*sizeof(sal_Unicode) );
                 if( bAuthenticated )
                 {
                     rtl::OUStringBuffer aBuf( 128 );
