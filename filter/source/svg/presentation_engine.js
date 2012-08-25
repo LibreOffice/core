@@ -2323,6 +2323,24 @@ PlaceholderShape.prototype.init = function()
                 this.element = aTextFieldElement;
                 this.textElement = aPlaceholderElement;
             }
+
+            // We remove all text lines but the first one used as placeholder.
+            var aTextLineGroupElem = this.textElement.parentNode.parentNode;
+            if( aTextLineGroupElem )
+            {
+                // Just to be sure it is the element we are looking for.
+                var sFontFamilyAttr = aTextLineGroupElem.getAttribute( 'font-family' );
+                if( sFontFamilyAttr )
+                {
+                    var aChildSet = getElementChildren( aTextLineGroupElem );
+                    if( aChildSet.length > 1  )
+                    var i = 1;
+                    for( ; i < aChildSet.length; ++i )
+                    {
+                        aTextLineGroupElem.removeChild( aChildSet[i] );
+                    }
+                }
+            }
         }
     }
 };
