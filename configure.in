@@ -660,7 +660,8 @@ dnl ---------- *** ----------
 
 AC_ARG_ENABLE(mergelibs,
     AS_HELP_STRING([--enable-mergelibs],
-        [Enables linking of big merged library used for better performance.])
+        [Enables linking of big, merged, library.
+         Still somehow experimental. Tested only for Linux and Android.])
 )
 
 AC_ARG_ENABLE(graphite,
@@ -12070,9 +12071,15 @@ fi
 # ===================================================================
 # Creating bigger shared library to link against
 # ===================================================================
-AC_MSG_CHECKING([whether to create a big library for better performance])
+AC_MSG_CHECKING([whether to create huge library])
 MERGELIBS=
-if test "$enable_mergelibs" = "yes"; then
+if test $enable_mergelibs = yes; then
+    if test $WITH_BINFILTER = YES; then
+        AC_MSG_ERROR([--enable-mergelibs conflicts with --enable-binfilter. It would need fixing.])
+    fi
+    if test $_os != Linux -a $_os != Android; then
+        add_warning "--enable-mergelibs is not tested for this platform"
+    fi
     MERGELIBS="TRUE"
     AC_MSG_RESULT([yes])
 else
