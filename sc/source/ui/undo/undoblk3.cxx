@@ -790,10 +790,6 @@ void ScUndoAutoFormat::Undo()
 
     ScDocument* pDoc = pDocShell->GetDocument();
 
-    // Attribute
-//  pDoc->DeleteAreaTab( aBlockRange, IDF_ATTRIB );
-//  pUndoDoc->CopyToDocument( aBlockRange, IDF_ATTRIB, sal_False, pDoc );
-
     SCTAB nTabCount = pDoc->GetTableCount();
     pDoc->DeleteArea( aBlockRange.aStart.Col(), aBlockRange.aStart.Row(),
                       aBlockRange.aEnd.Col(), aBlockRange.aEnd.Row(),

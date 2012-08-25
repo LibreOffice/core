@@ -1691,7 +1691,6 @@ void ScUndoEnterMatrix::Redo()
     pDoc->InsertMatrixFormula( aBlockRange.aStart.Col(), aBlockRange.aStart.Row(),
                                aBlockRange.aEnd.Col(),   aBlockRange.aEnd.Row(),
                                aDestMark, aFormula );
-//  pDocShell->PostPaint( aBlockRange, PAINT_GRID );    // not needed ???
 
     SetChangeTrack();
 
