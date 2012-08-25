@@ -55,6 +55,7 @@ $(eval $(call gb_Library_add_x64_generated_exception_objects,so_activex_x64,\
 
 $(eval $(call gb_Library_add_ldflags,so_activex_x64,\
 	/DEF:$(SRCDIR)/extensions/source/activex/so_activex.def \
+	-LIBPATH:$(ATL_LIB)/amd64 \
 ))
 
 $(eval $(call gb_Library_use_system_win32_libs,so_activex_x64,\

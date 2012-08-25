@@ -10,12 +10,10 @@
 
 #ifdef _ATL_STATIC_REGISTRY
 #include <statreg.h>
-#include <statreg.cpp>
 #endif
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1300)
 #undef _DEBUG
 #endif
-#include <atlimpl.cpp>
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
