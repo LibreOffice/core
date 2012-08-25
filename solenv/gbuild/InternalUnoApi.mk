@@ -113,12 +113,6 @@ endef
 
 define gb_InternalUnoApi_set_xmlfile
 $(call gb_UnoApiTarget_set_xmlfile,$(1)_out,$(2))
-$(call gb_Package_Package_internal,$(1)_xml,$(SRCDIR))
-$(call gb_Package_add_file,$(1)_xml,xml/$(notdir $(2)),$(2))
-$(call gb_InternalUnoApi_get_target,$(1)) :| \
-	$(call gb_Package_get_target,$(1)_xml)
-$(call gb_InternalUnoApi_get_clean_target,$(1)) : \
-	$(call gb_Package_get_clean_target,$(1)_xml)
 
 endef
 
