@@ -66,6 +66,10 @@ $(eval $(call gb_Library_add_libs,emser,\
 ))
 endif
 
+$(eval $(call gb_Library_add_ldflags,emser,\
+	-LIBPATH:$(ATL_LIB) \
+))
+
 $(eval $(call gb_Library_add_exception_objects,emser,\
 	embedserv/source/embed/docholder \
 	embedserv/source/embed/ed_idataobj \
