@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAN3///xo\u003d",
+        "filename": "sc/source/ui/undo/undoblk.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1069,
+      "author": {
+        "id": 1000030
+      },
+      "writtenOn": "2012-08-25T01:10:04Z",
+      "side": 1,
+      "message": "Let\u0027s not remove the \u0027!\u0027 in //! style comments.  Those comments mean they were from a senior developer (of Sun) questioning the validity of the code (back in the old OOo times).  They are useful at least to me.",
+      "revId": "786ba42890ef4f0e7eec0143eef435fcf7d43c3c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAN3///xk\u003d",
+        "filename": "sc/source/ui/undo/undoblk2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1000030
+      },
+      "writtenOn": "2012-08-25T01:10:04Z",
+      "side": 1,
+      "message": "Same here.",
+      "revId": "786ba42890ef4f0e7eec0143eef435fcf7d43c3c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
