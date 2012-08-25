@@ -332,7 +332,7 @@ MakeCopyRight()
 
     cr  << "Copyright &copy; "
         << year
-        << ", The Apache Software Foundation, Licensed under the Apache License, Version 2.0. Apache, the Apache feather logo, Apache OpenOffice and OpenOfifce.org are trademarks of The Apache Software Foundation. Other names may be trademarks of their respective owners.";
+        << ", The Apache Software Foundation, Licensed under the Apache License, Version 2.0. Apache, the Apache feather logo, Apache OpenOffice and OpenOffice.org are trademarks of The Apache Software Foundation. Other names may be trademarks of their respective owners.";
     return String(cr.c_str());
 
 }
