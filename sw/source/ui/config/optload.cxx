@@ -769,11 +769,6 @@ void SwCaptionOptPage::SaveEntry(SvLBoxEntry* pEntry)
 IMPL_LINK_NOARG(SwCaptionOptPage, ModifyHdl)
 {
     String sFldTypeName = aCategoryBox.GetText();
-
-    SfxSingleTabDialog *pDlg = (SfxSingleTabDialog *)GetParent();
-    PushButton *pBtn = pDlg->GetOKButton();
-    if (pBtn)
-        pBtn->Enable(sFldTypeName.Len() != 0);
     sal_Bool bEnable = aCategoryBox.IsEnabled() && sFldTypeName != sNone;
 
     aFormatText.Enable(bEnable);
