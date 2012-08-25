@@ -78,14 +78,11 @@ TYPEINIT1(ScUndoRemoveBreaks,       SfxUndoAction);
 TYPEINIT1(ScUndoRemoveMerge,        ScBlockUndo);
 TYPEINIT1(ScUndoBorder,             ScBlockUndo);
 
-
-
 // TODO:
 /*A*/   // SetOptimalHeight on Document, if no View
 /*B*/   // linked sheets
 /*C*/   // ScArea
 //?     // check later
-
 
 ScUndoInsertCells::ScUndoInsertCells( ScDocShell* pNewDocShell,
                                 const ScRange& rRange, SCTAB nNewCount, SCTAB* pNewTabs, SCTAB* pNewScenarios,
@@ -831,7 +828,6 @@ sal_Bool ScUndoCut::CanRepeat(SfxRepeatTarget& rTarget) const
     return (rTarget.ISA(ScTabViewTarget));
 }
 
-
 ScUndoPaste::ScUndoPaste( ScDocShell* pNewDocShell, const ScRangeList& rRanges,
                 const ScMarkData& rMark,
                 ScDocument* pNewUndoDoc, ScDocument* pNewRedoDoc,
@@ -1100,7 +1096,6 @@ sal_Bool ScUndoPaste::CanRepeat(SfxRepeatTarget& rTarget) const
     return (rTarget.ISA(ScTabViewTarget));
 }
 
-
 ScUndoDragDrop::ScUndoDragDrop( ScDocShell* pNewDocShell,
                     const ScRange& rRange, ScAddress aNewDestPos, sal_Bool bNewCut,
                     ScDocument* pUndoDocument, ScRefUndoData* pRefData, sal_Bool bScenario ) :
@@ -1209,7 +1204,6 @@ void ScUndoDragDrop::PaintArea( ScRange aRange, sal_uInt16 nExtFlags ) const
 
     pDocShell->PostPaint( aRange, nPaint, nExtFlags );
 }
-
 
 void ScUndoDragDrop::DoUndo( ScRange aRange ) const
 {
@@ -1344,7 +1338,6 @@ sal_Bool ScUndoDragDrop::CanRepeat(SfxRepeatTarget& /* rTarget */) const
     return false;           // not possible
 }
 
-
 //      Insert list containing range names
 //      (Insert|Name|Insert =>[List])
 ScUndoListNames::ScUndoListNames( ScDocShell* pNewDocShell, const ScRange& rRange,
@@ -1403,7 +1396,6 @@ sal_Bool ScUndoListNames::CanRepeat(SfxRepeatTarget& rTarget) const
 {
     return (rTarget.ISA(ScTabViewTarget));
 }
-
 
 ScUndoUseScenario::ScUndoUseScenario( ScDocShell* pNewDocShell,
                         const ScMarkData& rMark,
@@ -1525,7 +1517,6 @@ sal_Bool ScUndoUseScenario::CanRepeat(SfxRepeatTarget& rTarget) const
     return false;
 }
 
-
 ScUndoSelectionStyle::ScUndoSelectionStyle( ScDocShell* pNewDocShell,
                                       const ScMarkData& rMark,
                                       const ScRange& rRange,
@@ -1636,7 +1627,6 @@ sal_uInt16 ScUndoSelectionStyle::GetId() const
     return STR_UNDO_APPLYCELLSTYLE;
 }
 
-
 ScUndoEnterMatrix::ScUndoEnterMatrix( ScDocShell* pNewDocShell, const ScRange& rArea,
                                       ScDocument* pNewUndoDoc, const String& rForm ) :
     ScBlockUndo( pNewDocShell, rArea, SC_UNDO_SIMPLE ),
@@ -1723,7 +1713,6 @@ sal_Bool ScUndoEnterMatrix::CanRepeat(SfxRepeatTarget& rTarget) const
     return (rTarget.ISA(ScTabViewTarget));
 }
 
-
 ScRange lcl_GetMultiMarkRange( const ScMarkData& rMark )
 {
     OSL_ENSURE( rMark.IsMultiMarked(), "wrong mark type" );
@@ -1790,7 +1779,6 @@ sal_Bool ScUndoIndent::CanRepeat(SfxRepeatTarget& rTarget) const
     return (rTarget.ISA(ScTabViewTarget));
 }
 
-
 ScUndoTransliterate::ScUndoTransliterate( ScDocShell* pNewDocShell, const ScMarkData& rMark,
                             ScDocument* pNewUndoDoc, sal_Int32 nType ) :
     ScBlockUndo( pNewDocShell, lcl_GetMultiMarkRange(rMark), SC_UNDO_AUTOHEIGHT ),
@@ -1846,7 +1834,6 @@ sal_Bool ScUndoTransliterate::CanRepeat(SfxRepeatTarget& rTarget) const
 {
     return (rTarget.ISA(ScTabViewTarget));
 }
-
 
 ScUndoClearItems::ScUndoClearItems( ScDocShell* pNewDocShell, const ScMarkData& rMark,
                             ScDocument* pNewUndoDoc, const sal_uInt16* pW ) :
@@ -1975,7 +1962,6 @@ sal_Bool ScUndoRemoveBreaks::CanRepeat(SfxRepeatTarget& rTarget) const
 {
     return (rTarget.ISA(ScTabViewTarget));
 }
-
 
 ScUndoRemoveMerge::ScUndoRemoveMerge( ScDocShell* pNewDocShell,
                                       const ScCellMergeOption& rOption, ScDocument* pNewUndoDoc ) :
@@ -2182,8 +2168,5 @@ sal_Bool ScUndoBorder::CanRepeat(SfxRepeatTarget& /* rTarget */) const
 {
     return false;   // See above
 }
-
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

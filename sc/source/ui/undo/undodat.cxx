@@ -73,7 +73,6 @@ TYPEINIT1(ScUndoConsolidate,        ScSimpleUndo);
 TYPEINIT1(ScUndoChartData,          ScSimpleUndo);
 TYPEINIT1(ScUndoDataForm,           SfxUndoAction);
 
-// -----------------------------------------------------------------------
 // Show or hide outline groups
 
 ScUndoDoOutline::ScUndoDoOutline( ScDocShell* pNewDocShell,
@@ -125,7 +124,6 @@ void ScUndoDoOutline::Undo()
         pViewShell->ShowOutline( bColumns, nLevel, nEntry, false, false );
 
     //  Original column/row status
-
     if (bColumns)
         pUndoDoc->CopyToDocument( static_cast<SCCOL>(nStart), 0, nTab,
                 static_cast<SCCOL>(nEnd), MAXROW, nTab, IDF_NONE, false, pDoc);
@@ -251,7 +249,6 @@ sal_Bool ScUndoMakeOutline::CanRepeat(SfxRepeatTarget& rTarget) const
     return (rTarget.ISA(ScTabViewTarget));
 }
 
-
 ScUndoOutlineLevel::ScUndoOutlineLevel( ScDocShell* pNewDocShell,
                         SCCOLROW nNewStart, SCCOLROW nNewEnd, SCTAB nNewTab,
                         ScDocument* pNewUndoDoc, ScOutlineTable* pNewUndoTab,
@@ -338,7 +335,6 @@ sal_Bool ScUndoOutlineLevel::CanRepeat(SfxRepeatTarget& rTarget) const
     return (rTarget.ISA(ScTabViewTarget));
 }
 
-
 /** show/hide outline over block marks */
 ScUndoOutlineBlock::ScUndoOutlineBlock( ScDocShell* pNewDocShell,
                         SCCOL nStartX, SCROW nStartY, SCTAB nStartZ,
@@ -375,11 +371,9 @@ void ScUndoOutlineBlock::Undo()
     SCTAB nTab = aBlockStart.Tab();
 
     //  Original Outline table
-
     pDoc->SetOutlineTable( nTab, pUndoTable );
 
     //  Original column/row status
-
     SCCOLROW    nStartCol = aBlockStart.Col();
     SCCOLROW    nEndCol = aBlockEnd.Col();
     SCCOLROW    nStartRow = aBlockStart.Row();
@@ -444,7 +438,6 @@ sal_Bool ScUndoOutlineBlock::CanRepeat(SfxRepeatTarget& rTarget) const
     return (rTarget.ISA(ScTabViewTarget));
 }
 
-
 ScUndoRemoveAllOutlines::ScUndoRemoveAllOutlines( ScDocShell* pNewDocShell,
                                     SCCOL nStartX, SCROW nStartY, SCTAB nStartZ,
                                     SCCOL nEndX, SCROW nEndY, SCTAB nEndZ,
@@ -477,11 +470,9 @@ void ScUndoRemoveAllOutlines::Undo()
     SCTAB nTab = aBlockStart.Tab();
 
     //  Original Outline table
-
     pDoc->SetOutlineTable( nTab, pUndoTable );
 
     //  Original column/row status
-
     SCCOL   nStartCol = aBlockStart.Col();
     SCCOL   nEndCol = aBlockEnd.Col();
     SCROW   nStartRow = aBlockStart.Row();
@@ -532,7 +523,6 @@ sal_Bool ScUndoRemoveAllOutlines::CanRepeat(SfxRepeatTarget& rTarget) const
     return (rTarget.ISA(ScTabViewTarget));
 }
 
-
 ScUndoAutoOutline::ScUndoAutoOutline( ScDocShell* pNewDocShell,
                                     SCCOL nStartX, SCROW nStartY, SCTAB nStartZ,
                                     SCCOL nEndX, SCROW nEndY, SCTAB nEndZ,
@@ -565,11 +555,9 @@ void ScUndoAutoOutline::Undo()
     SCTAB nTab = aBlockStart.Tab();
 
     // Original outline table
-
     pDoc->SetOutlineTable( nTab, pUndoTable );
 
     // Original column/row status
-
     if (pUndoDoc && pUndoTable)
     {
         SCCOLROW nStartCol;
@@ -638,7 +626,6 @@ sal_Bool ScUndoAutoOutline::CanRepeat(SfxRepeatTarget& rTarget) const
     return (rTarget.ISA(ScTabViewTarget));
 }
 
-
 ScUndoSubTotals::ScUndoSubTotals( ScDocShell* pNewDocShell, SCTAB nNewTab,
                                 const ScSubTotalParam& rNewParam, SCROW nNewEndY,
                                 ScDocument* pNewUndoDoc, ScOutlineTable* pNewUndoTab,
@@ -686,11 +673,9 @@ void ScUndoSubTotals::Undo()
 
 
     // Original Outline table
-
     pDoc->SetOutlineTable( nTab, pUndoTable );
 
     // Original column/row status
-
     if (pUndoDoc && pUndoTable)
     {
         SCCOLROW nStartCol;
@@ -763,7 +748,6 @@ sal_Bool ScUndoSubTotals::CanRepeat(SfxRepeatTarget& /* rTarget */) const
 {
     return false;     // is not possible due to column numbers
 }
-
 
 ScUndoSort::ScUndoSort( ScDocShell* pNewDocShell,
                         SCTAB nNewTab, const ScSortParam& rParam,
@@ -1196,7 +1180,6 @@ sal_Bool ScUndoDBData::CanRepeat(SfxRepeatTarget& /* rTarget */) const
     return false;    // is not possible
 }
 
-
 ScUndoImportData::ScUndoImportData( ScDocShell* pNewDocShell, SCTAB nNewTab,
                                 const ScImportParam& rParam, SCCOL nNewEndX, SCROW nNewEndY,
                                 SCCOL nNewFormula,
@@ -1500,11 +1483,9 @@ void ScUndoRepeatDB::Undo()
     }
 
     // Original Outline table
-
     pDoc->SetOutlineTable( nTab, pUndoTable );
 
     // Original column/row status
-
     if (pUndoDoc && pUndoTable)
     {
         SCCOLROW nStartCol;
@@ -1523,7 +1504,6 @@ void ScUndoRepeatDB::Undo()
     }
 
     //  Original data and references
-
     ScUndoUtil::MarkSimpleBlock( pDocShell, 0, aBlockStart.Row(), nTab,
                                             MAXCOL, aBlockEnd.Row(), nTab );
     pDoc->DeleteAreaTab( 0, aBlockStart.Row(),
@@ -1585,7 +1565,6 @@ sal_Bool ScUndoRepeatDB::CanRepeat(SfxRepeatTarget& rTarget) const
 {
     return (rTarget.ISA(ScTabViewTarget));
 }
-
 
 ScUndoDataPilot::ScUndoDataPilot( ScDocShell* pNewDocShell,
                             ScDocument* pOldDoc, ScDocument* pNewDoc,
@@ -1747,7 +1726,6 @@ sal_Bool ScUndoDataPilot::CanRepeat(SfxRepeatTarget& /* rTarget */) const
     return false;
 }
 
-
 ScUndoConsolidate::ScUndoConsolidate( ScDocShell* pNewDocShell, const ScArea& rArea,
                     const ScConsolidateParam& rPar, ScDocument* pNewUndoDoc,
                     sal_Bool bReference, SCROW nInsCount, ScOutlineTable* pTab,
@@ -1887,9 +1865,7 @@ sal_Bool ScUndoConsolidate::CanRepeat(SfxRepeatTarget& /* rTarget */) const
     return false;
 }
 
-
 // Change source data of Chart
-
 void ScUndoChartData::Init()
 {
     ScDocument* pDoc = pDocShell->GetDocument();
@@ -2016,7 +1992,6 @@ void ScUndoDataForm::SetChangeTrack()
         else
                 nStartChangeAction = nEndChangeAction = 0;
 }
-
 
 void ScUndoDataForm::Undo()
 {
@@ -2164,4 +2139,5 @@ void ScUndoDataForm::DoChange( const sal_Bool bUndo )
     if (pViewShell)
         pViewShell->CellContentChanged();
 }
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

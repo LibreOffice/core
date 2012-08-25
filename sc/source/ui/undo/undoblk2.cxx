@@ -39,12 +39,7 @@
 
 #include "undoolk.hxx"              // TODO move GetUndo in Document
 
-
-// STATIC DATA -----------------------------------------------------------
-
 TYPEINIT1(ScUndoWidthOrHeight,      SfxUndoAction);
-
-// -----------------------------------------------------------------------
 
 /** Change column widths or row heights */
 ScUndoWidthOrHeight::ScUndoWidthOrHeight( ScDocShell* pNewDocShell,
@@ -186,6 +181,5 @@ sal_Bool ScUndoWidthOrHeight::CanRepeat(SfxRepeatTarget& rTarget) const
 {
     return (rTarget.ISA(ScTabViewTarget));
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

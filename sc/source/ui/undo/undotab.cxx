@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-
 #include <sfx2/app.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
@@ -68,8 +67,6 @@ using ::std::auto_ptr;
 using ::std::vector;
 using ::boost::shared_ptr;
 
-// STATIC DATA -----------------------------------------------------------
-
 TYPEINIT1(ScUndoInsertTab,      SfxUndoAction);
 TYPEINIT1(ScUndoInsertTables,   SfxUndoAction);
 TYPEINIT1(ScUndoDeleteTab,      SfxUndoAction);
@@ -85,7 +82,6 @@ TYPEINIT1(ScUndoScenarioFlags,  SfxUndoAction);
 TYPEINIT1(ScUndoRenameObject,   SfxUndoAction);
 TYPEINIT1(ScUndoLayoutRTL,      SfxUndoAction);
 TYPEINIT1(ScUndoTabColor,  SfxUndoAction);
-
 
 ScUndoInsertTab::ScUndoInsertTab( ScDocShell* pNewDocShell,
                                   SCTAB nTabNum,
@@ -180,7 +176,6 @@ sal_Bool ScUndoInsertTab::CanRepeat(SfxRepeatTarget& rTarget) const
 {
     return (rTarget.ISA(ScTabViewTarget));
 }
-
 
 ScUndoInsertTables::ScUndoInsertTables( ScDocShell* pNewDocShell,
                                         SCTAB nTabNum,
@@ -277,7 +272,6 @@ sal_Bool ScUndoInsertTables::CanRepeat(SfxRepeatTarget& rTarget) const
 {
     return (rTarget.ISA(ScTabViewTarget));
 }
-
 
 ScUndoDeleteTab::ScUndoDeleteTab( ScDocShell* pNewDocShell, const vector<SCTAB> &aTab, //SCTAB nNewTab,
                                     ScDocument* pUndoDocument, ScRefUndoData* pRefData ) :
@@ -438,7 +432,6 @@ sal_Bool ScUndoDeleteTab::CanRepeat(SfxRepeatTarget& rTarget) const
     return (rTarget.ISA(ScTabViewTarget));
 }
 
-
 ScUndoRenameTab::ScUndoRenameTab( ScDocShell* pNewDocShell,
                                   SCTAB nT,
                                   const String& rOldName,
@@ -495,7 +488,6 @@ sal_Bool ScUndoRenameTab::CanRepeat(SfxRepeatTarget& /* rTarget */) const
 {
     return false;
 }
-
 
 ScUndoMoveTab::ScUndoMoveTab(
     ScDocShell* pNewDocShell, vector<SCTAB>* pOldTabs, vector<SCTAB>* pNewTabs,
@@ -601,7 +593,6 @@ sal_Bool ScUndoMoveTab::CanRepeat(SfxRepeatTarget& /* rTarget */) const
 {
     return false;
 }
-
 
 ScUndoCopyTab::ScUndoCopyTab(
     ScDocShell* pNewDocShell,
@@ -812,7 +803,6 @@ sal_Bool ScUndoTabColor::CanRepeat(SfxRepeatTarget& /* rTarget */) const
     return false;
 }
 
-
 ScUndoMakeScenario::ScUndoMakeScenario( ScDocShell* pNewDocShell,
                         SCTAB nSrc, SCTAB nDest,
                         const String& rN, const String& rC,
@@ -899,7 +889,6 @@ sal_Bool ScUndoMakeScenario::CanRepeat(SfxRepeatTarget& rTarget) const
 {
     return (rTarget.ISA(ScTabViewTarget));
 }
-
 
 ScUndoImportTab::ScUndoImportTab( ScDocShell* pShell,
                         SCTAB nNewTab, SCTAB nNewCount, sal_Bool bNewLink ) :
@@ -1056,7 +1045,6 @@ sal_Bool ScUndoImportTab::CanRepeat(SfxRepeatTarget& rTarget) const
     return (rTarget.ISA(ScTabViewTarget));
 }
 
-
 ScUndoRemoveLink::ScUndoRemoveLink( ScDocShell* pShell, const String& rDoc ) :
     ScSimpleUndo( pShell ),
     aDocName( rDoc ),
@@ -1138,7 +1126,6 @@ sal_Bool ScUndoRemoveLink::CanRepeat(SfxRepeatTarget& /* rTarget */) const
     return false;
 }
 
-
 ScUndoShowHideTab::ScUndoShowHideTab( ScDocShell* pShell, SCTAB nNewTab, sal_Bool bNewShow ) :
     ScSimpleUndo( pShell ),
     nTab( nNewTab ),
@@ -1191,8 +1178,6 @@ rtl::OUString ScUndoShowHideTab::GetComment() const
     sal_uInt16 nId = bShow ? STR_UNDO_SHOWTAB : STR_UNDO_HIDETAB;
     return ScGlobal::GetRscString( nId );
 }
-
-// ============================================================================
 
 SAL_WNODEPRECATED_DECLARATIONS_PUSH
 ScUndoDocProtect::ScUndoDocProtect(ScDocShell* pShell, auto_ptr<ScDocProtection> pProtectSettings) :
@@ -1264,8 +1249,6 @@ rtl::OUString ScUndoDocProtect::GetComment() const
     sal_uInt16 nId = mpProtectSettings->isProtected() ? STR_UNDO_PROTECT_DOC : STR_UNDO_UNPROTECT_DOC;
     return ScGlobal::GetRscString( nId );
 }
-
-// ============================================================================
 
 SAL_WNODEPRECATED_DECLARATIONS_PUSH
 ScUndoTabProtect::ScUndoTabProtect(ScDocShell* pShell, SCTAB nTab, auto_ptr<ScTableProtection> pProtectSettings) :
@@ -1339,7 +1322,6 @@ rtl::OUString ScUndoTabProtect::GetComment() const
     return ScGlobal::GetRscString( nId );
 }
 
-
 ScUndoPrintRange::ScUndoPrintRange( ScDocShell* pShell, SCTAB nNewTab,
                                     ScPrintRangeSaver* pOld, ScPrintRangeSaver* pNew ) :
     ScSimpleUndo( pShell ),
@@ -1400,9 +1382,6 @@ rtl::OUString ScUndoPrintRange::GetComment() const
 {
     return ScGlobal::GetRscString( STR_UNDO_PRINTRANGES );
 }
-
-
-//------------------------------------------------------------------------
 
 ScUndoScenarioFlags::ScUndoScenarioFlags( ScDocShell* pNewDocShell, SCTAB nT,
                     const String& rON, const String& rNN, const String& rOC, const String& rNC,
@@ -1472,7 +1451,6 @@ sal_Bool ScUndoScenarioFlags::CanRepeat(SfxRepeatTarget& /* rTarget */) const
 {
     return false;
 }
-
 
 //      (move to different file?)
 ScUndoRenameObject::ScUndoRenameObject( ScDocShell* pNewDocShell, const String& rPN,
@@ -1550,7 +1528,6 @@ sal_Bool ScUndoRenameObject::CanRepeat(SfxRepeatTarget& /* rTarget */) const
 {
     return false;
 }
-
 
 ScUndoLayoutRTL::ScUndoLayoutRTL( ScDocShell* pShell, SCTAB nNewTab, sal_Bool bNewRTL ) :
     ScSimpleUndo( pShell ),

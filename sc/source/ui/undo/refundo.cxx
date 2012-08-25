@@ -41,8 +41,6 @@
 #include "areasave.hxx"
 #include "unoreflist.hxx"
 
-// -----------------------------------------------------------------------
-
 ScRefUndoData::ScRefUndoData( const ScDocument* pDoc ) :
     pUnoRefs( NULL )
 {
@@ -186,8 +184,5 @@ void ScRefUndoData::DoUndo( ScDocument* pDoc, sal_Bool bUndoRefFirst )
     if ( pUnoRefs )
         pUnoRefs->Undo( pDoc );
 }
-
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
