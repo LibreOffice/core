@@ -38,7 +38,9 @@
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/plugin/TestPlugIn.h>
 
-#ifdef UNX
+#ifdef WNT
+#include <windows.h>
+#elif defined UNX
 #include <unistd.h>
 #include <time.h>
 #endif
@@ -156,10 +158,9 @@ namespace ThreadHelper
      void thread_sleep(sal_Int32 _nSec)
     {
 #ifdef WNT      //Windows
-        Sleep(_nSec * 10 );
-#endif
-#if ( defined UNX )
-        sleep( _nSec );
+        ::Sleep(_nSec * 10);
+#elif defined UNX
+        ::sleep(_nSec);
 #endif
     }
 }
