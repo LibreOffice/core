@@ -360,7 +360,8 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(if $(filter Executable,$(TARGETTYPE)),$(gb_Executable_TARGETTYPEFLAGS)) \
 		$(if $(filter YES,$(TARGETGUI)), -SUBSYSTEM:WINDOWS, -SUBSYSTEM:CONSOLE) \
 		$(if $(filter YES,$(LIBRARY_X64)), -MACHINE:X64, -MACHINE:IX86) \
-		$(if $(filter YES,$(LIBRARY_X64)), -LIBPATH:$(OUTDIR)/lib/x64 -LIBPATH:$(COMPATH)/lib/amd64 -LIBPATH:$(WINDOWS_SDK_HOME)/lib/x64,) \
+		$(if $(filter YES,$(LIBRARY_X64)), -LIBPATH:$(OUTDIR)/lib/x64 -LIBPATH:$(COMPATH)/lib/amd64 -LIBPATH:$(WINDOWS_SDK_HOME)/lib/x64 \
+		$(if $(filter 80,$(WINDOWS_SDK_VERSION)),-LIBPATH:$(WINDOWS_SDK_HOME)/lib/win8/um/x64,),) \
 		$(T_LDFLAGS) \
 		@$${RESPONSEFILE} \
 		$(foreach lib,$(LINKED_LIBS),$(call gb_Library_get_filename,$(lib))) \

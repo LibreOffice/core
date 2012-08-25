@@ -42,6 +42,10 @@ $(eval $(call gb_Library_set_include,oleautobridge2,\
 	$$(INCLUDE) \
 ))
 
+$(eval $(call gb_Library_add_ldflags,oleautobridge2,\
+	-LIBPATH:$(ATL_LIB) \
+))
+
 $(eval $(call gb_Library_use_libraries,oleautobridge2,\
 	comphelper \
 	cppuhelper \
