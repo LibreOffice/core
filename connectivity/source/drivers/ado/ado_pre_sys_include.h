@@ -26,6 +26,8 @@
 #pragma warning(disable:4917)
 #endif
 
+#include <sdkddkver.h>
+
 #define ADO_REDUCED_WARN_LEVEL
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
