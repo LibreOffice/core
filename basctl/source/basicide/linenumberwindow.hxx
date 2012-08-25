@@ -25,30 +25,30 @@
  * in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
  * instead of those above.
  */
-#ifndef BASICIDE_LINENUMBERWINDOW_HXX
-#define BASICIDE_LINENUMBERWINDOW_HXX
+#ifndef BASCTL_LINENUMBERWINDOW_HXX
+#define BASCTL_LINENUMBERWINDOW_HXX
 
 #include <vcl/window.hxx>
 
 namespace basctl
 {
-    class ModulWindow;
-}
+
+class ModulWindow;
 
 class LineNumberWindow : public Window
 {
 private:
-    basctl::ModulWindow* m_pModulWindow;
+    ModulWindow* m_pModulWindow;
     int m_nWidth;
     long m_nCurYOffset;
     int m_nBaseWidth;
-    virtual void DataChanged(DataChangedEvent const & rDCEvt);
+    virtual void DataChanged (DataChangedEvent const& rDCEvt);
 
 protected:
     virtual void Paint( const Rectangle& );
 
 public:
-    LineNumberWindow (Window* pParent, basctl::ModulWindow* pModulWin);
+    LineNumberWindow (Window* pParent, ModulWindow* pModulWin);
     ~LineNumberWindow();
 
     void DoScroll( long nHorzScroll, long nVertScroll );
@@ -59,5 +59,8 @@ public:
     int GetWidth();
 };
 
-#endif // BASICIDE_LINENUMBERWINDOW_HXX
+} // namespace basctl
+
+#endif // BASCTL_LINENUMBERWINDOW_HXX
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

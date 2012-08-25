@@ -17,12 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
-#ifndef _BASCTL_DLGEDFAC_HXX
-#define _BASCTL_DLGEDFAC_HXX
+#ifndef BASCTL_DLGEDFAC_HXX
+#define BASCTL_DLGEDFAC_HXX
 
 #include <svx/svdobj.hxx>
 #include <com/sun/star/frame/XModel.hpp>
+
+namespace basctl
+{
 
 //============================================================================
 // DlgEdFactory
@@ -38,6 +40,8 @@ public:
     DECL_LINK( MakeObject, SdrObjFactory * );
 };
 
-#endif // _BASCTL_DLGEDFAC_HXX
+} // namespace basctl
+
+#endif // BASCTL_DLGEDFAC_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

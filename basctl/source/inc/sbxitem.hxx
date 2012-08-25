@@ -16,20 +16,23 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _SBXITEM_HXX
-#define _SBXITEM_HXX
+#ifndef BASCTL_SBXITEM_HXX
+#define BASCTL_SBXITEM_HXX
 
 #include "scriptdocument.hxx"
 #include <svl/poolitem.hxx>
 
-enum BasicIDEType
+namespace basctl
 {
-    BASICIDE_TYPE_UNKNOWN,
-    BASICIDE_TYPE_SHELL,
-    BASICIDE_TYPE_LIBRARY,
-    BASICIDE_TYPE_MODULE,
-    BASICIDE_TYPE_DIALOG,
-    BASICIDE_TYPE_METHOD
+
+enum ItemType
+{
+    TYPE_UNKNOWN,
+    TYPE_SHELL,
+    TYPE_LIBRARY,
+    TYPE_MODULE,
+    TYPE_DIALOG,
+    TYPE_METHOD
 };
 
 class SbxItem : public SfxPoolItem
@@ -38,24 +41,28 @@ class SbxItem : public SfxPoolItem
     const ::rtl::OUString   m_aLibName;
     const ::rtl::OUString   m_aName;
     const ::rtl::OUString   m_aMethodName;
-    BasicIDEType            m_nType;
+    ItemType                m_eType;
 
 public:
     TYPEINFO();
-    SbxItem(sal_uInt16 nWhich, const ScriptDocument& rDocument, const ::rtl::OUString& aLibName, const ::rtl::OUString& aName, BasicIDEType nType);
-    SbxItem(sal_uInt16 nWhich, const ScriptDocument& rDocument, const ::rtl::OUString& aLibName, const ::rtl::OUString& aName, const ::rtl::OUString& aMethodName, BasicIDEType nType);
-    SbxItem(const SbxItem&);
+    SbxItem(sal_uInt16 nWhich, const ScriptDocument& rDocument, const ::rtl::OUString& aLibName, const ::rtl::OUString& aName, ItemType);
+    SbxItem(sal_uInt16 nWhich, const ScriptDocument& rDocument, const ::rtl::OUString& aLibName, const ::rtl::OUString& aName, const ::rtl::OUString& aMethodName, ItemType eType);
 
     virtual SfxPoolItem* Clone(SfxItemPool *pPool = 0) const;
     virtual int operator==(const SfxPoolItem&) const;
 
-    const ScriptDocument& GetDocument() const;
-    const ::rtl::OUString& GetLibName() const;
-    const ::rtl::OUString& GetName() const;
-    const ::rtl::OUString& GetMethodName() const;
-    BasicIDEType GetType() const;
+    ScriptDocument const& GetDocument () const { return m_aDocument; }
+    rtl::OUString const& GetLibName () const { return m_aLibName; }
+    rtl::OUString const& GetName () const { return m_aName; }
+    rtl::OUString const& GetMethodName () const { return m_aMethodName; }
+    ItemType GetType () const { return m_eType; }
 };
 
-#endif
+} // namespace basctl
+
+// For baside.sdi, because I don't know how to use nested names in it.
+using basctl::SbxItem;
+
+#endif // BASCTL_SBXITEM_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

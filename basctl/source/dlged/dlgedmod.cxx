@@ -21,6 +21,8 @@
 #include "dlgedpage.hxx"
 #include <tools/debug.hxx>
 
+namespace basctl
+{
 
 DBG_NAME(DlgEdModel)
 
@@ -64,5 +66,7 @@ Window* DlgEdModel::GetCurDocViewWin()
 }
 
 //----------------------------------------------------------------------------
+
+} // namespace basctl
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

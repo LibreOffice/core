@@ -23,7 +23,7 @@ interface BasicIDEView
 {
 }
 
-shell BasicIDEShell
+shell basctl_Shell
 {
     import BasicIDEView [Automation];
 
@@ -512,7 +512,7 @@ interface BasicIDEDocument
 {
 }
 
-shell BasicDocShell
+shell basctl_DocShell
 {
     import BasicIDEDocument [Automation];
 }

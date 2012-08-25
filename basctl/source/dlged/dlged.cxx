@@ -45,6 +45,9 @@
 #include <xmlscript/xml_helper.hxx>
 #include <xmlscript/xmldlg_imexp.hxx>
 
+namespace basctl
+{
+
 using namespace comphelper;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -63,22 +66,19 @@ static ::rtl::OUString aTitlePropName( RTL_CONSTASCII_USTRINGPARAM( "Title" ));
 
 TYPEINIT1( DlgEdHint, SfxHint );
 
-DlgEdHint::DlgEdHint( DlgEdHintKind eHint )
-    :eHintKind( eHint )
-{
-}
+DlgEdHint::DlgEdHint (Kind eHint) :
+    eKind(eHint)
+{ }
 
 
-DlgEdHint::DlgEdHint( DlgEdHintKind eHint, DlgEdObj* pObj )
-    :eHintKind( eHint )
-    ,pDlgEdObj( pObj )
-{
-}
+DlgEdHint::DlgEdHint (Kind eHint, DlgEdObj* pObj) :
+    eKind(eHint),
+    pDlgEdObj(pObj)
+{ }
 
 
 DlgEdHint::~DlgEdHint()
-{
-}
+{ }
 
 
 //============================================================================
@@ -187,7 +187,7 @@ DlgEditor::DlgEditor( const ::com::sun::star::uno::Reference< ::com::sun::star::
     ,pObjFac(NULL)
     ,pWindow(NULL)
     ,pFunc(NULL)
-    ,eMode( DLGED_SELECT )
+    ,eMode( DlgEditor::SELECT )
     ,eActObj( OBJ_DLG_PUSHBUTTON )
     ,bFirstDraw(false)
     ,aGridSize( 100, 100 )  // 100TH_MM
@@ -344,7 +344,7 @@ void DlgEditor::DoScroll( ScrollBar* )
     pWindow->SetMapMode( aMap );
     pWindow->Update();
 
-    DlgEdHint aHint( DLGED_HINT_WINDOWSCROLLED );
+    DlgEdHint aHint( DlgEdHint::WINDOWSCROLLED );
     Broadcast( aHint );
 }
 
@@ -474,7 +474,7 @@ void DlgEditor::MouseButtonUp( const MouseEvent& rMEvt )
 {
     bool bRet = pFunc->MouseButtonUp( rMEvt );
 
-    if( eMode == DLGED_INSERT )
+    if( eMode == DlgEditor::INSERT )
         bCreateOK = bRet;
 }
 
@@ -608,37 +608,36 @@ IMPL_LINK_NOARG(DlgEditor, PaintTimeout)
 
 IMPL_LINK_NOARG(DlgEditor, MarkTimeout)
 {
-    BasicIDEShell* pIDEShell = BasicIDEGlobals::GetShell();
-
-    SfxViewFrame* pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
+    Shell* pShell = GetShell();
+    SfxViewFrame* pViewFrame = pShell ? pShell->GetViewFrame() : NULL;
     SfxChildWindow* pChildWin = pViewFrame ? pViewFrame->GetChildWindow( SID_SHOW_PROPERTYBROWSER ) : NULL;
     if ( !pChildWin )
         return 0L;
 
-    ((PropBrw*)(pChildWin->GetWindow()))->Update( pIDEShell );
+    ((PropBrw*)(pChildWin->GetWindow()))->Update(pShell);
 
     return 1;
 }
 
 
-void DlgEditor::SetMode( DlgEdMode eNewMode )
+void DlgEditor::SetMode (Mode eNewMode )
 {
     if ( eNewMode != eMode )
     {
         delete pFunc;
 
-        if ( eNewMode == DLGED_INSERT )
+        if ( eNewMode == INSERT )
             pFunc = new DlgEdFuncInsert( this );
         else
             pFunc = new DlgEdFuncSelect( this );
 
-        if ( eNewMode == DLGED_READONLY )
+        if ( eNewMode == READONLY )
             pDlgEdModel->SetReadOnly( true );
         else
             pDlgEdModel->SetReadOnly( false );
     }
 
-    if ( eNewMode == DLGED_TEST )
+    if ( eNewMode == TEST )
         ShowDialog();
 
     eMode = eNewMode;
@@ -1129,8 +1128,8 @@ bool DlgEditor::IsPasteAllowed()
 
 void DlgEditor::ShowProperties()
 {
-    BasicIDEShell* pIDEShell = BasicIDEGlobals::GetShell();
-    SfxViewFrame* pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
+    Shell* pShell = GetShell();
+    SfxViewFrame* pViewFrame = pShell ? pShell->GetViewFrame() : NULL;
     if ( pViewFrame && !pViewFrame->HasChildWindow( SID_SHOW_PROPERTYBROWSER ) )
         pViewFrame->ToggleChildWindow( SID_SHOW_PROPERTYBROWSER );
 }
@@ -1324,5 +1323,8 @@ bool DlgEditor::AdjustPageSize()
 
     return bAdjustedPageSize;
 }
+
+
+} // namespace basctl
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

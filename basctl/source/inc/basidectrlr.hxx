@@ -17,28 +17,32 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _BASCTL_BASICIDECTRLR_HXX
-#define _BASCTL_BASICIDECTRLR_HXX
+#ifndef BASCTL_BASICIDECTRLR_HXX
+#define BASCTL_BASICIDECTRLR_HXX
 
 #include <comphelper/broadcasthelper.hxx>
 #include <comphelper/propertycontainer.hxx>
 #include <comphelper/proparrhlp.hxx>
 #include <sfx2/sfxbasecontroller.hxx>
 
-class BasicIDEShell;
+namespace basctl
+{
 
-class BasicIDEController    :public comphelper::OMutexAndBroadcastHelper
-                            ,public ::comphelper::OPropertyContainer
-                            ,public ::comphelper::OPropertyArrayUsageHelper< BasicIDEController >
-                            ,public SfxBaseController
+class Shell;
+
+class Controller :
+    public comphelper::OMutexAndBroadcastHelper,
+    public comphelper::OPropertyContainer,
+    public comphelper::OPropertyArrayUsageHelper<Controller>,
+    public SfxBaseController
 {
 private:
     // properties
     sal_Int32   m_nIconId;
 
 public:
-    BasicIDEController( BasicIDEShell* pViewShell );
-    virtual ~BasicIDEController();
+    Controller (Shell* pViewShell);
+    virtual ~Controller();
 
     // XInterface
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
@@ -60,6 +64,8 @@ protected:
     virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const;
 };
 
-#endif  // _BASCTL_BASICIDECTRLR_HXX
+} // namespace basctl
+
+#endif // BASCTL_BASICIDECTRLR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

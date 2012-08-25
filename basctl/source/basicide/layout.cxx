@@ -33,7 +33,7 @@ static int const nSplitThickness = 3;
 } // namespace
 
 // ctor for derived classes
-// pParent: the parent window (BasicIDEShell)
+// pParent: the parent window (Shell)
 Layout::Layout (Window* pParent) :
     Window(pParent, WB_CLIPCHILDREN),
     pChild(0),
@@ -91,10 +91,10 @@ void Layout::DockaWindow (DockingWindow*)
     ArrangeWindows();
 }
 
-void Layout::Activating (IDEBaseWindow& rIdeWindow)
+void Layout::Activating (BaseWindow& rWindow)
 {
     // first activation
-    pChild = &rIdeWindow;
+    pChild = &rWindow;
     ArrangeWindows();
     Show();
     pChild->Activating();
@@ -154,7 +154,7 @@ Layout::SplittedSide::SplittedSide (Layout* pParent, Side eSide) :
 
 
 // Add() -- adds a new window to the side (after construction)
-void Layout::SplittedSide::Add (BasicDockingWindow* pWin, Size const& rSize)
+void Layout::SplittedSide::Add (DockingWindow* pWin, Size const& rSize)
 {
     int const nSize1 = (bVertical ? rSize.Width() : rSize.Height()) + nSplitThickness;
     int const nSize2 = bVertical ? rSize.Height() : rSize.Width();
@@ -245,7 +245,7 @@ void Layout::SplittedSide::ArrangeIn (Rectangle const& rRect)
     for (unsigned i = 0; i != vWindows.size(); ++i)
     {
         // window
-        BasicDockingWindow& rWin = *vWindows[i];
+        DockingWindow& rWin = *vWindows[i];
         bool const bDocked = rWin.IsVisible() && !rWin.IsFloatingMode();
         // The window is docked between nStartPos and nEndPos along.
         int const nEndPos = i == vWindows.size() - 1 ?

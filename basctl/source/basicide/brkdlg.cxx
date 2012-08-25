@@ -29,8 +29,14 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
 
+namespace basctl
+{
+
 // FIXME  Why does BreakPointDialog allow only sal_uInt16 for break-point line
 // numbers, whereas BreakPoint supports sal_uLong?
+
+namespace
+{
 
 bool lcl_ParseText(rtl::OUString const &rText, size_t& rLineNr )
 {
@@ -53,6 +59,8 @@ bool lcl_ParseText(rtl::OUString const &rText, size_t& rLineNr )
     rLineNr = static_cast< size_t >(n);
     return true;
 }
+
+} // namespace
 
 BreakPointDialog::BreakPointDialog( Window* pParent, BreakPointList& rBrkPntList ) :
         ModalDialog( pParent, IDEResId( RID_BASICIDE_BREAKPOINTDLG ) ),
@@ -130,7 +138,7 @@ void BreakPointDialog::CheckButtons()
     }
 }
 
-IMPL_LINK_INLINE_START( BreakPointDialog, CheckBoxHdl, CheckBox *, pChkBx )
+IMPL_LINK_INLINE_START( BreakPointDialog, CheckBoxHdl, ::CheckBox *, pChkBx )
 {
     BreakPoint* pBrk = GetSelectedBreakPoint();
     if ( pBrk )
@@ -138,7 +146,7 @@ IMPL_LINK_INLINE_START( BreakPointDialog, CheckBoxHdl, CheckBox *, pChkBx )
 
     return 0;
 }
-IMPL_LINK_INLINE_END( BreakPointDialog, CheckBoxHdl, CheckBox *, pChkBx )
+IMPL_LINK_INLINE_END( BreakPointDialog, CheckBoxHdl, ::CheckBox *, pChkBx )
 
 
 
@@ -195,13 +203,8 @@ IMPL_LINK( BreakPointDialog, ButtonHdl, Button *, pButton )
             String aEntryStr( RTL_CONSTASCII_USTRINGPARAM( "# " ) );
             aEntryStr += String::CreateFromInt32( pBrk->nLine );
             aComboBox.InsertEntry( aEntryStr, COMBOBOX_APPEND );
-            BasicIDEShell* pIDEShell = BasicIDEGlobals::GetShell();
-            SfxViewFrame* pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
-            SfxDispatcher* pDispatcher = pViewFrame ? pViewFrame->GetDispatcher() : NULL;
-            if( pDispatcher )
-            {
+            if (SfxDispatcher* pDispatcher = GetDispatcher())
                 pDispatcher->Execute( SID_BASICIDE_BRKPNTSCHANGED );
-            }
         }
         else
         {
@@ -221,14 +224,8 @@ IMPL_LINK( BreakPointDialog, ButtonHdl, Button *, pButton )
             if ( nEntry && !( nEntry < aComboBox.GetEntryCount() ) )
                 nEntry--;
             aComboBox.SetText( aComboBox.GetEntry( nEntry ) );
-            BasicIDEShell* pIDEShell = BasicIDEGlobals::GetShell();
-            SfxViewFrame* pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
-            SfxDispatcher* pDispatcher = pViewFrame ? pViewFrame->GetDispatcher() : NULL;
-
-            if( pDispatcher )
-            {
+            if (SfxDispatcher* pDispatcher = GetDispatcher())
                 pDispatcher->Execute( SID_BASICIDE_BRKPNTSCHANGED );
-            }
         }
         CheckButtons();
     }
@@ -256,6 +253,6 @@ BreakPoint* BreakPointDialog::GetSelectedBreakPoint()
     return pBrk;
 }
 
-
+} // namespace basctl
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

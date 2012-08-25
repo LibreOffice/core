@@ -17,8 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _BASCTL_DLGEDFUNC_HXX
-#define _BASCTL_DLGEDFUNC_HXX
+#ifndef BASCTL_DLGEDFUNC_HXX
+#define BASCTL_DLGEDFUNC_HXX
+
+namespace basctl
+{
 
 class DlgEditor;
 
@@ -79,6 +82,8 @@ public:
 };
 
 
-#endif //_BASCTL_DLGEDFUNC_HXX
+} // namespace basctl
+
+#endif // BASCTL_DLGEDFUNC_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

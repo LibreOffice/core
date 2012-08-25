@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _BRKDLG_HXX
-#define _BRKDLG_HXX
+#ifndef BASCTL_BRKDLG_HXX
+#define BASCTL_BRKDLG_HXX
 
 #include <svheader.hxx>
 #include <bastypes.hxx>
@@ -27,6 +27,9 @@
 #include <vcl/button.hxx>
 #include <vcl/field.hxx>
 #include <vcl/fixed.hxx>
+
+namespace basctl
+{
 
 class BreakPointDialog : public ModalDialog
 {
@@ -37,7 +40,7 @@ private:
     PushButton      aNewButton;
     PushButton      aDelButton;
 //  PushButton      aShowButton;
-    CheckBox        aCheckBox;
+    ::CheckBox      aCheckBox;
     FixedText       aBrkText;
     FixedText       aPassText;
     NumericField    aNumericField;
@@ -47,7 +50,7 @@ private:
 
 protected:
     void            CheckButtons();
-    DECL_LINK( CheckBoxHdl, CheckBox * );
+    DECL_LINK( CheckBoxHdl, ::CheckBox * );
     DECL_LINK( ComboBoxHighlightHdl, ComboBox * );
     DECL_LINK( EditModifyHdl, Edit * );
     DECL_LINK( ButtonHdl, Button * );
@@ -61,6 +64,8 @@ public:
     void    SetCurrentBreakPoint( BreakPoint* pBrk );
 };
 
-#endif  // _BRKDLG_HXX
+} // namespace basctl
+
+#endif // BASCTL_BRKDLG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

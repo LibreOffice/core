@@ -17,23 +17,25 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _IDERDLL_HXX
-#define _IDERDLL_HXX
+#ifndef BASCTL_IDERDLL_HXX
+#define BASCTL_IDERDLL_HXX
 
-class BasicIDEShell;
-class BasicIDEData;
-
-namespace BasicIDEGlobals
+namespace basctl
 {
-    void ensure();
 
-    void ShellCreated(BasicIDEShell* pShell);
-    BasicIDEShell* GetShell();
-    void ShellDestroyed(BasicIDEShell* pShell);
+class Shell;
+class ExtraData;
 
-    BasicIDEData* GetExtraData();
-}
+void EnsureIde ();
 
-#endif //_IDERDLL_HXX
+void ShellCreated (Shell* pShell);
+Shell* GetShell();
+void ShellDestroyed (Shell* pShell);
+
+ExtraData* GetExtraData();
+
+} // namespace basctl
+
+#endif // BASCTL_IDERDLL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

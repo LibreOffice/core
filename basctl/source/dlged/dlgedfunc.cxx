@@ -24,6 +24,8 @@
 #include "dlgedview.hxx"
 #include <vcl/seleng.hxx>
 
+namespace basctl
+{
 
 //----------------------------------------------------------------------------
 
@@ -399,7 +401,7 @@ bool DlgEdFuncInsert::MouseButtonDown( const MouseEvent& rMEvt )
     else if ( rMEvt.IsLeft() && rMEvt.GetClicks() == 2 )
     {
         // if object was hit, show property browser
-        if ( pView->IsMarkedHit(aPos, nHitLog) && pParent->GetMode() != DLGED_READONLY )
+        if ( pView->IsMarkedHit(aPos, nHitLog) && pParent->GetMode() != DlgEditor::READONLY )
             pParent->ShowProperties();
     }
 
@@ -533,7 +535,7 @@ bool DlgEdFuncSelect::MouseButtonDown( const MouseEvent& rMEvt )
     else if ( rMEvt.IsLeft() && rMEvt.GetClicks() == 2 )
     {
         // if object was hit, show property browser
-        if ( pView->IsMarkedHit(aMDPos, nHitLog) && pParent->GetMode() != DLGED_READONLY )
+        if ( pView->IsMarkedHit(aMDPos, nHitLog) && pParent->GetMode() != DlgEditor::READONLY )
             pParent->ShowProperties();
     }
 
@@ -603,5 +605,7 @@ bool DlgEdFuncSelect::MouseMove( const MouseEvent& rMEvt )
 }
 
 //----------------------------------------------------------------------------
+
+} // namespace basctl
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

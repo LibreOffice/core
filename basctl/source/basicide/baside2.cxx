@@ -77,7 +77,7 @@ using namespace comphelper;
 
 DBG_NAME( ModulWindow )
 
-TYPEINIT1( ModulWindow , IDEBaseWindow );
+TYPEINIT1( ModulWindow , BaseWindow );
 
 namespace
 {
@@ -185,7 +185,7 @@ ModulWindow::ModulWindow (
     ScriptDocument const& rDocument,
     rtl::OUString aLibName, rtl::OUString aName, rtl::OUString& aModule
 ) :
-    IDEBaseWindow(pParent, rDocument, aLibName, aName),
+    BaseWindow(pParent, rDocument, aLibName, aName),
     rLayout(*pParent),
     nValid(VALIDWINDOW),
     aXEditorWindow(this),
@@ -280,8 +280,7 @@ void ModulWindow::CheckCompileBasic()
         {
             bool bDone = false;
 
-            BasicIDEShell* pIDEShell = BasicIDEGlobals::GetShell();
-            pIDEShell->GetViewFrame()->GetWindow().EnterWait();
+            GetShell()->GetViewFrame()->GetWindow().EnterWait();
 
             if( bModified )
             {
@@ -300,7 +299,7 @@ void ModulWindow::CheckCompileBasic()
                 GetBreakPoints().SetBreakPointsInBasic( xModule );
             }
 
-            pIDEShell->GetViewFrame()->GetWindow().LeaveWait();
+            GetShell()->GetViewFrame()->GetWindow().LeaveWait();
 
             aStatus.bError = !bDone;
             aStatus.bIsRunning = false;
@@ -355,13 +354,13 @@ bool ModulWindow::BasicExecute()
             if ( !pMethod )
             {
                 // If not in a method then prompt the user
-                return ( !BasicIDE::ChooseMacro( uno::Reference< frame::XModel >(), false, rtl::OUString() ).isEmpty() );
+                return ( !ChooseMacro( uno::Reference< frame::XModel >(), false, rtl::OUString() ).isEmpty() );
             }
             if ( pMethod )
             {
                 pMethod->SetDebugFlags( aStatus.nBasicFlags );
                 BasicDLL::SetDebugMode( true );
-                BasicIDE::RunMethod( pMethod );
+                RunMethod( pMethod );
                 BasicDLL::SetDebugMode( false );
                 // if cancelled during Interactive=false
                 BasicDLL::EnableBreak( true );
@@ -536,12 +535,7 @@ bool ModulWindow::SaveBasicSource()
     return bDone;
 }
 
-} // namespace basctl
-
 bool implImportDialog( Window* pWin, const ::rtl::OUString& rCurPath, const ScriptDocument& rDocument, const ::rtl::OUString& aLibName );
-
-namespace basctl
-{
 
 bool ModulWindow::ImportDialog()
 {
@@ -746,7 +740,7 @@ long ModulWindow::BasicBreakHdl( StarBASIC* pBasic )
 
     AddStatus( BASWIN_INRESCHEDULE );
 
-    BasicIDE::InvalidateDebuggerSlots();
+    InvalidateDebuggerSlots();
 
     while( aStatus.bIsRunning )
         Application::Yield();
@@ -872,7 +866,7 @@ void ModulWindow::UpdateData()
             setTextEngineText( GetEditEngine(), xModule->GetSource32() );
             GetEditView()->SetSelection( aSel );
             GetEditEngine()->SetModified( false );
-            BasicIDE::MarkDocumentModified( GetDocument() );
+            MarkDocumentModified( GetDocument() );
         }
     }
 }
@@ -1046,7 +1040,7 @@ void ModulWindow::ExecuteCommand (SfxRequest& rReq)
             if ( !IsReadOnly() )
             {
                 GetEditView()->Cut();
-                if (SfxBindings* pBindings = BasicIDE::GetBindingsPtr())
+                if (SfxBindings* pBindings = GetBindingsPtr())
                     pBindings->Invalidate( SID_DOC_MODIFIED );
             }
         }
@@ -1061,7 +1055,7 @@ void ModulWindow::ExecuteCommand (SfxRequest& rReq)
             if ( !IsReadOnly() )
             {
                 GetEditView()->Paste();
-                if (SfxBindings* pBindings = BasicIDE::GetBindingsPtr())
+                if (SfxBindings* pBindings = GetBindingsPtr())
                     pBindings->Invalidate( SID_DOC_MODIFIED );
             }
         }
@@ -1082,7 +1076,7 @@ void ModulWindow::ExecuteCommand (SfxRequest& rReq)
         {
             if (QueryDelModule(m_aName, this))
                 if (m_aDocument.removeModule(m_aLibName, m_aName))
-                    BasicIDE::MarkDocumentModified(m_aDocument);
+                    MarkDocumentModified(m_aDocument);
         }
         break;
         case FID_SEARCH_OFF:
@@ -1108,11 +1102,11 @@ void ModulWindow::ExecuteGlobal (SfxRequest& rReq)
     {
         case SID_SIGNATURE:
         {
-            basctl::DocumentSignature aSignature(m_aDocument);
+            DocumentSignature aSignature(m_aDocument);
             if (aSignature.supportsSignatures())
             {
                 aSignature.signScriptingContent();
-                if (SfxBindings* pBindings = BasicIDE::GetBindingsPtr())
+                if (SfxBindings* pBindings = GetBindingsPtr())
                     pBindings->Invalidate(SID_SIGNATURE);
             }
         }
@@ -1216,7 +1210,7 @@ bool ModulWindow::IsModified()
 
 void ModulWindow::GoOnTop()
 {
-    BasicIDEGlobals::GetShell()->GetViewFrame()->ToTop();
+    GetShell()->GetViewFrame()->ToTop();
 }
 
 ::rtl::OUString ModulWindow::GetSbModuleName()
@@ -1366,7 +1360,7 @@ void ModulWindow::BasicStopped()
     GetBreakPointWindow().SetMarkerPos( MARKER_NOMARKER );
 }
 
-BasicEntryDescriptor ModulWindow::CreateEntryDescriptor()
+EntryDescriptor ModulWindow::CreateEntryDescriptor()
 {
     ScriptDocument aDocument( GetDocument() );
     String aLibName( GetLibName() );
@@ -1403,7 +1397,7 @@ BasicEntryDescriptor ModulWindow::CreateEntryDescriptor()
                 break;
         }
     }
-    return BasicEntryDescriptor( aDocument, eLocation, aLibName, aLibSubName, aModName, OBJ_TYPE_MODULE );
+    return EntryDescriptor( aDocument, eLocation, aLibName, aLibSubName, aModName, OBJ_TYPE_MODULE );
 }
 
 void ModulWindow::SetReadOnly (bool b)
@@ -1450,9 +1444,9 @@ char const* ModulWindow::GetHid () const
 {
     return HID_BASICIDE_MODULWINDOW;
 }
-BasicIDEType ModulWindow::GetType () const
+ItemType ModulWindow::GetType () const
 {
-    return BASICIDE_TYPE_MODULE;
+    return TYPE_MODULE;
 }
 
 bool ModulWindow::HasActiveEditor () const
@@ -1475,7 +1469,7 @@ void ModulWindow::UpdateModule ()
     OSL_VERIFY(m_aDocument.updateModule(m_aLibName, m_aName, aModule));
 
     GetEditEngine()->SetModified(false);
-    BasicIDE::MarkDocumentModified(m_aDocument);
+    MarkDocumentModified(m_aDocument);
 }
 
 
@@ -1512,7 +1506,7 @@ void ModulWindowLayout::DataChanged (DataChangedEvent const& rDCEvt)
 }
 
 
-void ModulWindowLayout::Activating (IDEBaseWindow& rChild)
+void ModulWindowLayout::Activating (BaseWindow& rChild)
 {
     assert(dynamic_cast<ModulWindow*>(&rChild));
     pChild = &static_cast<ModulWindow&>(rChild);

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _BASCTL_DLGED_HXX
-#define _BASCTL_DLGED_HXX
+#ifndef BASCTL_DLGED_HXX
+#define BASCTL_DLGED_HXX
 
 #include <com/sun/star/awt/XControlContainer.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
@@ -30,6 +30,16 @@
 #include <tools/gen.hxx>
 #include <vcl/timer.hxx>
 
+class ScrollBar;
+class Printer;
+class KeyEvent;
+class MouseEvent;
+class Timer;
+class Window;
+
+namespace basctl
+{
+
 #define DLGED_PAGE_WIDTH_MIN    1280
 #define DLGED_PAGE_HEIGHT_MIN   1024
 
@@ -37,31 +47,31 @@
 // DlgEdHint
 //============================================================================
 
-enum DlgEdHintKind
-{
-    DLGED_HINT_UNKNOWN,
-    DLGED_HINT_WINDOWSCROLLED,
-    DLGED_HINT_LAYERCHANGED,
-    DLGED_HINT_OBJORDERCHANGED,
-    DLGED_HINT_SELECTIONCHANGED
-};
-
 class DlgEdObj;
 
 class DlgEdHint: public SfxHint
 {
+public:
+    enum Kind {
+        UNKNOWN,
+        WINDOWSCROLLED,
+        LAYERCHANGED,
+        OBJORDERCHANGED,
+        SELECTIONCHANGED,
+    };
+
 private:
-    DlgEdHintKind   eHintKind;
-    DlgEdObj*       pDlgEdObj;
+    Kind       eKind;
+    DlgEdObj*  pDlgEdObj;
 
 public:
     TYPEINFO();
-    DlgEdHint( DlgEdHintKind eHint );
-    DlgEdHint( DlgEdHintKind eHint, DlgEdObj* pObj );
+    DlgEdHint (Kind);
+    DlgEdHint (Kind, DlgEdObj* pObj);
     virtual ~DlgEdHint();
 
-    DlgEdHintKind   GetKind() const { return eHintKind; }
-    DlgEdObj*       GetObject() const { return pDlgEdObj; }
+    Kind       GetKind() const { return eKind; }
+    DlgEdObj*  GetObject() const { return pDlgEdObj; }
 };
 
 
@@ -69,23 +79,23 @@ public:
 // DlgEditor
 //============================================================================
 
-enum DlgEdMode { DLGED_INSERT, DLGED_SELECT, DLGED_TEST, DLGED_READONLY };
-
-class ScrollBar;
 class DlgEdModel;
 class DlgEdPage;
 class DlgEdView;
 class DlgEdForm;
 class DlgEdFactory;
 class DlgEdFunc;
-class Printer;
-class KeyEvent;
-class MouseEvent;
-class Timer;
-class Window;
 
 class DlgEditor: public SfxBroadcaster
 {
+public:
+    enum Mode {
+        INSERT,
+        SELECT,
+        TEST,
+        READONLY,
+    };
+
 private:
     DECL_LINK(PaintTimeout, void *);
     DECL_LINK(MarkTimeout, void *);
@@ -107,7 +117,7 @@ protected:
     DlgEdFactory*       pObjFac;
     Window*             pWindow;
     DlgEdFunc*          pFunc;
-    DlgEdMode           eMode;
+    Mode                eMode;
     sal_uInt16          eActObj;
     bool                bFirstDraw;
     Size                aGridSize;
@@ -175,11 +185,11 @@ public:
     void            Paint( const Rectangle& rRect );
     bool            KeyInput( const KeyEvent& rKEvt );
 
-    void            SetMode( DlgEdMode eMode );
+    void            SetMode (Mode eMode);
     void            SetInsertObj( sal_uInt16 eObj );
     sal_uInt16      GetInsertObj() const;
     void            CreateDefaultObject();
-    DlgEdMode       GetMode() const { return eMode; }
+    Mode            GetMode() const { return eMode; }
     bool            IsCreateOK() const { return bCreateOK; }
 
     void            Cut();
@@ -199,6 +209,8 @@ public:
     bool            isInPaint() const { return mnPaintGuard > 0; }
 };
 
-#endif //_BASCTL_DLGED_HXX
+} // namespace basctl
+
+#endif // BASCTL_DLGED_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

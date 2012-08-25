@@ -38,7 +38,7 @@ namespace basctl
 {
 
 ObjectCatalog::ObjectCatalog (Window* pParent) :
-    BasicDockingWindow(pParent),
+    DockingWindow(pParent),
     aTitle(this),
     aTree(this, IDEResId(RID_TLB_MACROS))
 {
@@ -92,7 +92,7 @@ void ObjectCatalog::Resize ()
 void ObjectCatalog::ToggleFloatingMode ()
 {
     // base class version
-    BasicDockingWindow::ToggleFloatingMode();
+    DockingWindow::ToggleFloatingMode();
     // rearranging the controls (title)
     ArrangeWindows();
 }
@@ -132,9 +132,9 @@ void ObjectCatalog::ArrangeWindows ()
         aTree.Hide();
 }
 
-void ObjectCatalog::SetCurrentEntry (IDEBaseWindow* pCurWin)
+void ObjectCatalog::SetCurrentEntry (BaseWindow* pCurWin)
 {
-    BasicEntryDescriptor aDescriptor;
+    EntryDescriptor aDescriptor;
     if (pCurWin)
         aDescriptor = pCurWin->CreateEntryDescriptor();
     aTree.SetCurrentEntry(aDescriptor);

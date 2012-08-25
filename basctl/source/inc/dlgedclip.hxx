@@ -17,11 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _BASCTL_DLGEDCLIP_HXX
-#define _BASCTL_DLGEDCLIP_HXX
+#ifndef BASCTL_DLGEDCLIP_HXX
+#define BASCTL_DLGEDCLIP_HXX
 
 #include <com/sun/star/datatransfer/clipboard/XClipboardOwner.hpp>
 #include <cppuhelper/implbase2.hxx>
+
+namespace basctl
+{
 
 //============================================================================
 // DlgEdTransferableImpl
@@ -51,6 +54,8 @@ public:
     virtual void SAL_CALL lostOwnership( const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboard >& xClipboard, const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >& xTrans ) throw(::com::sun::star::uno::RuntimeException);
 };
 
-#endif // _BASCTL_DLGEDCLIP_HXX
+} // namespace basctl
+
+#endif // BASCTL_DLGEDCLIP_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

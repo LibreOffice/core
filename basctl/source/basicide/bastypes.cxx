@@ -37,32 +37,38 @@
 #include <svl/stritem.hxx>
 #include <vcl/msgbox.hxx>
 
+namespace basctl
+{
+
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
 
-using ::std::vector;
-using basctl::Layout;
 
-DBG_NAME( IDEBaseWindow )
+//
+// BaseWindow
+// ==========
+//
 
-TYPEINIT0( IDEBaseWindow )
+DBG_NAME( BaseWindow )
+
+TYPEINIT0( BaseWindow )
 TYPEINIT1( SbxItem, SfxPoolItem );
 
-IDEBaseWindow::IDEBaseWindow( Window* pParent, const ScriptDocument& rDocument, ::rtl::OUString aLibName, ::rtl::OUString aName )
+BaseWindow::BaseWindow( Window* pParent, const ScriptDocument& rDocument, ::rtl::OUString aLibName, ::rtl::OUString aName )
     :Window( pParent, WinBits( WB_3DLOOK ) )
     ,m_aDocument( rDocument )
     ,m_aLibName( aLibName )
     ,m_aName( aName )
 {
-    DBG_CTOR( IDEBaseWindow, 0 );
+    DBG_CTOR( BaseWindow, 0 );
     pShellHScrollBar = 0;
     pShellVScrollBar = 0;
     nStatus = 0;
 }
 
-IDEBaseWindow::~IDEBaseWindow()
+BaseWindow::~BaseWindow()
 {
-    DBG_DTOR( IDEBaseWindow, 0 );
+    DBG_DTOR( BaseWindow, 0 );
     if ( pShellVScrollBar )
         pShellVScrollBar->SetScrollHdl( Link() );
     if ( pShellHScrollBar )
@@ -71,27 +77,26 @@ IDEBaseWindow::~IDEBaseWindow()
 
 
 
-void IDEBaseWindow::Init()
+void BaseWindow::Init()
 {
-    DBG_CHKTHIS( IDEBaseWindow, 0 );
+    DBG_CHKTHIS( BaseWindow, 0 );
     if ( pShellVScrollBar )
-        pShellVScrollBar->SetScrollHdl( LINK( this, IDEBaseWindow, ScrollHdl ) );
+        pShellVScrollBar->SetScrollHdl( LINK( this, BaseWindow, ScrollHdl ) );
     if ( pShellHScrollBar )
-        pShellHScrollBar->SetScrollHdl( LINK( this, IDEBaseWindow, ScrollHdl ) );
+        pShellHScrollBar->SetScrollHdl( LINK( this, BaseWindow, ScrollHdl ) );
     DoInit();   // virtual...
 }
 
 
 
-void IDEBaseWindow::DoInit()
+void BaseWindow::DoInit()
+{ }
+
+
+
+void BaseWindow::GrabScrollBars( ScrollBar* pHScroll, ScrollBar* pVScroll )
 {
-}
-
-
-
-void IDEBaseWindow::GrabScrollBars( ScrollBar* pHScroll, ScrollBar* pVScroll )
-{
-    DBG_CHKTHIS( IDEBaseWindow, 0 );
+    DBG_CHKTHIS( BaseWindow, 0 );
     pShellHScrollBar = pHScroll;
     pShellVScrollBar = pVScroll;
 //  Init(); // does not make sense, leads to flickering and errors...
@@ -99,23 +104,23 @@ void IDEBaseWindow::GrabScrollBars( ScrollBar* pHScroll, ScrollBar* pVScroll )
 
 
 
-IMPL_LINK_INLINE_START( IDEBaseWindow, ScrollHdl, ScrollBar *, pCurScrollBar )
+IMPL_LINK_INLINE_START( BaseWindow, ScrollHdl, ScrollBar *, pCurScrollBar )
 {
-    DBG_CHKTHIS( IDEBaseWindow, 0 );
+    DBG_CHKTHIS( BaseWindow, 0 );
     DoScroll( pCurScrollBar );
     return 0;
 }
-IMPL_LINK_INLINE_END( IDEBaseWindow, ScrollHdl, ScrollBar *, pCurScrollBar )
+IMPL_LINK_INLINE_END( BaseWindow, ScrollHdl, ScrollBar *, pCurScrollBar )
 
 
-void IDEBaseWindow::ExecuteCommand (SfxRequest&)
+void BaseWindow::ExecuteCommand (SfxRequest&)
 { }
 
-void IDEBaseWindow::ExecuteGlobal (SfxRequest&)
+void BaseWindow::ExecuteGlobal (SfxRequest&)
 { }
 
 
-long IDEBaseWindow::Notify( NotifyEvent& rNEvt )
+long BaseWindow::Notify( NotifyEvent& rNEvt )
 {
     long nDone = 0;
 
@@ -132,10 +137,8 @@ long IDEBaseWindow::Notify( NotifyEvent& rNEvt )
             {
                 if ( aCode.IsMod1() )
                 {
-                    BasicIDEShell* pIDEShell = BasicIDEGlobals::GetShell();
-                    if ( pIDEShell )
-                        pIDEShell->NextPage( nCode == KEY_PAGEUP );
-
+                    if (Shell* pShell = GetShell())
+                        pShell->NextPage( nCode == KEY_PAGEUP );
                     nDone = 1;
                 }
             }
@@ -147,38 +150,38 @@ long IDEBaseWindow::Notify( NotifyEvent& rNEvt )
 }
 
 
-void IDEBaseWindow::DoScroll( ScrollBar* )
+void BaseWindow::DoScroll( ScrollBar* )
 {
-    DBG_CHKTHIS( IDEBaseWindow, 0 );
+    DBG_CHKTHIS( BaseWindow, 0 );
 }
 
 
-void IDEBaseWindow::StoreData()
+void BaseWindow::StoreData()
 {
 }
 
-bool IDEBaseWindow::CanClose()
-{
-    return true;
-}
-
-bool IDEBaseWindow::AllowUndo()
+bool BaseWindow::CanClose()
 {
     return true;
 }
 
+bool BaseWindow::AllowUndo()
+{
+    return true;
+}
 
 
-void IDEBaseWindow::UpdateData()
+
+void BaseWindow::UpdateData()
 {
 }
 
-::rtl::OUString IDEBaseWindow::GetTitle()
+::rtl::OUString BaseWindow::GetTitle()
 {
     return ::rtl::OUString();
 }
 
-::rtl::OUString IDEBaseWindow::CreateQualifiedName()
+::rtl::OUString BaseWindow::CreateQualifiedName()
 {
     ::rtl::OUStringBuffer aName;
     if ( !m_aLibName.isEmpty() )
@@ -193,72 +196,68 @@ void IDEBaseWindow::UpdateData()
     return aName.makeStringAndClear();
 }
 
-void IDEBaseWindow::SetReadOnly (bool)
+void BaseWindow::SetReadOnly (bool)
 {
 }
 
-bool IDEBaseWindow::IsReadOnly ()
+bool BaseWindow::IsReadOnly ()
 {
     return false;
 }
 
-void IDEBaseWindow::BasicStarted()
+void BaseWindow::BasicStarted()
 {
 }
 
-void IDEBaseWindow::BasicStopped()
+void BaseWindow::BasicStopped()
 {
 }
 
-bool IDEBaseWindow::IsModified ()
+bool BaseWindow::IsModified ()
 {
     return true;
 }
 
-bool IDEBaseWindow::IsPasteAllowed ()
+bool BaseWindow::IsPasteAllowed ()
 {
     return false;
 }
 
-::svl::IUndoManager* IDEBaseWindow::GetUndoManager()
+::svl::IUndoManager* BaseWindow::GetUndoManager()
 {
     return NULL;
 }
 
-sal_uInt16 IDEBaseWindow::GetSearchOptions()
+sal_uInt16 BaseWindow::GetSearchOptions()
 {
     return 0;
 }
 
-sal_uInt16 IDEBaseWindow::StartSearchAndReplace (SvxSearchItem const&, bool bFromStart)
+sal_uInt16 BaseWindow::StartSearchAndReplace (SvxSearchItem const&, bool bFromStart)
 {
     static_cast<void>(bFromStart);
     return 0;
 }
 
-void IDEBaseWindow::OnNewDocument ()
+void BaseWindow::OnNewDocument ()
 { }
 
-void IDEBaseWindow::InsertLibInfo () const
+void BaseWindow::InsertLibInfo () const
 {
-    if (BasicIDEData* pData = BasicIDEGlobals::GetExtraData())
-    {
-        pData->GetLibInfos().InsertInfo(
-            new LibInfoItem(m_aDocument, m_aLibName, m_aName, GetType())
-        );
-    }
+    if (ExtraData* pData = GetExtraData())
+        pData->GetLibInfos().InsertInfo(m_aDocument, m_aLibName, m_aName, GetType());
 }
 
-bool IDEBaseWindow::Is (
+bool BaseWindow::Is (
     ScriptDocument const& rDocument,
     rtl::OUString const& rLibName, rtl::OUString const& rName,
-    BasicIDEType eType, bool bFindSuspended
+    ItemType eType, bool bFindSuspended
 )
 {
     if (bFindSuspended || !IsSuspended())
     {
         // any non-suspended window is ok
-        if (rLibName.isEmpty() || rName.isEmpty() || eType == BASICIDE_TYPE_UNKNOWN)
+        if (rLibName.isEmpty() || rName.isEmpty() || eType == TYPE_UNKNOWN)
             return true;
         // ok if the parameters match
         if (m_aDocument == rDocument && m_aLibName == rLibName && m_aName == rName && GetType() == eType)
@@ -267,37 +266,37 @@ bool IDEBaseWindow::Is (
     return false;
 }
 
-bool IDEBaseWindow::HasActiveEditor () const
+bool BaseWindow::HasActiveEditor () const
 {
     return false;
 }
 
 
 //
-// BasicDockingWindow
-// ==================
+// DockingWindow
+// =============
 //
 
-// style bits for BasicDockingWindow
-WinBits const BasicDockingWindow::StyleBits =
+// style bits for DockingWindow
+WinBits const DockingWindow::StyleBits =
     WB_BORDER | WB_3DLOOK | WB_CLIPCHILDREN |
     WB_MOVEABLE | WB_SIZEABLE | WB_ROLLABLE | WB_DOCKABLE;
 
-BasicDockingWindow::BasicDockingWindow (Window* pParent) :
-    DockingWindow(pParent, StyleBits),
+DockingWindow::DockingWindow (Window* pParent) :
+    ::DockingWindow(pParent, StyleBits),
     pLayout(0),
     nShowCount(0)
 { }
 
-BasicDockingWindow::BasicDockingWindow (Layout* pParent) :
-    DockingWindow(pParent, StyleBits),
+DockingWindow::DockingWindow (Layout* pParent) :
+    ::DockingWindow(pParent, StyleBits),
     pLayout(pParent),
     nShowCount(0)
 { }
 
 // Sets the position and the size of the docking window. This property is saved
 // when the window is floating. Called by Layout.
-void BasicDockingWindow::ResizeIfDocking (Point const& rPos, Size const& rSize)
+void DockingWindow::ResizeIfDocking (Point const& rPos, Size const& rSize)
 {
     Rectangle const rRect(rPos, rSize);
     if (rRect != aDockingRect)
@@ -312,7 +311,7 @@ void BasicDockingWindow::ResizeIfDocking (Point const& rPos, Size const& rSize)
 
 // Sets the parent Layout window.
 // The physical parent is set only when the window is docking.
-void BasicDockingWindow::SetLayoutWindow (Layout* pLayout_)
+void DockingWindow::SetLayoutWindow (Layout* pLayout_)
 {
     pLayout = pLayout_;
     if (!IsFloatingMode())
@@ -322,28 +321,28 @@ void BasicDockingWindow::SetLayoutWindow (Layout* pLayout_)
 
 // Increases the "show" reference count.
 // The window is shown when the reference count is positive.
-void BasicDockingWindow::Show (bool bShow) // = true
+void DockingWindow::Show (bool bShow) // = true
 {
     if (bShow)
     {
         if (++nShowCount == 1)
-            DockingWindow::Show();
+            ::DockingWindow::Show();
     }
     else
     {
         if (--nShowCount == 0)
-            DockingWindow::Hide();
+            ::DockingWindow::Hide();
     }
 }
 
 // Decreases the "show" reference count.
 // The window is hidden when the reference count reaches zero.
-void BasicDockingWindow::Hide ()
+void DockingWindow::Hide ()
 {
     Show(false);
 }
 
-sal_Bool BasicDockingWindow::Docking( const Point& rPos, Rectangle& rRect )
+sal_Bool DockingWindow::Docking( const Point& rPos, Rectangle& rRect )
 {
     if (!IsDockingPrevented() && aDockingRect.IsInside(rPos))
     {
@@ -358,10 +357,10 @@ sal_Bool BasicDockingWindow::Docking( const Point& rPos, Rectangle& rRect )
     }
 }
 
-void BasicDockingWindow::EndDocking( const Rectangle& rRect, sal_Bool bFloatMode )
+void DockingWindow::EndDocking( const Rectangle& rRect, sal_Bool bFloatMode )
 {
     if ( bFloatMode )
-        DockingWindow::EndDocking( rRect, bFloatMode );
+        ::DockingWindow::EndDocking( rRect, bFloatMode );
     else
     {
         SetFloatingMode(false);
@@ -369,7 +368,7 @@ void BasicDockingWindow::EndDocking( const Rectangle& rRect, sal_Bool bFloatMode
     }
 }
 
-void BasicDockingWindow::ToggleFloatingMode()
+void DockingWindow::ToggleFloatingMode()
 {
     if (IsFloatingMode())
     {
@@ -382,7 +381,7 @@ void BasicDockingWindow::ToggleFloatingMode()
     DockThis();
 }
 
-sal_Bool BasicDockingWindow::PrepareToggleFloatingMode()
+sal_Bool DockingWindow::PrepareToggleFloatingMode()
 {
     if (IsFloatingMode())
     {
@@ -395,7 +394,7 @@ sal_Bool BasicDockingWindow::PrepareToggleFloatingMode()
     return true;
 }
 
-void BasicDockingWindow::StartDocking()
+void DockingWindow::StartDocking()
 {
     if (IsFloatingMode())
     {
@@ -406,7 +405,7 @@ void BasicDockingWindow::StartDocking()
     }
 }
 
-void BasicDockingWindow::DockThis ()
+void DockingWindow::DockThis ()
 {
     // resizing when floating -> docking
     if (!IsFloatingMode())
@@ -462,44 +461,33 @@ IMPL_LINK_INLINE_START( ExtendedEdit, EditAccHdl, Accelerator *, pAcc )
 IMPL_LINK_INLINE_END( ExtendedEdit, EditAccHdl, Accelerator *, pAcc )
 
 
+//
+//  TabBar
+// ========
+//
 
-struct TabBarDDInfo
-{
-    sal_uLong   npTabBar;
-    sal_uInt16  nPage;
-
-    TabBarDDInfo() { npTabBar = 0; nPage = 0; }
-    TabBarDDInfo( sal_uLong _npTabBar, sal_uInt16 _nPage ) { npTabBar = _npTabBar; nPage = _nPage; }
-};
-
-
-BasicIDETabBar::BasicIDETabBar( Window* pParent ) :
-    TabBar( pParent, WinBits( WB_3DLOOK | WB_SCROLL | WB_BORDER | WB_SIZEABLE | WB_DRAG ) )
+TabBar::TabBar( Window* pParent ) :
+    ::TabBar( pParent, WinBits( WB_3DLOOK | WB_SCROLL | WB_BORDER | WB_SIZEABLE | WB_DRAG ) )
 {
     EnableEditMode(true);
 
     SetHelpId( HID_BASICIDE_TABBAR );
 }
 
-void BasicIDETabBar::MouseButtonDown( const MouseEvent& rMEvt )
+void TabBar::MouseButtonDown( const MouseEvent& rMEvt )
 {
     if ( rMEvt.IsLeft() && ( rMEvt.GetClicks() == 2 ) && !IsInEditMode() )
     {
-        BasicIDEShell* pIDEShell = BasicIDEGlobals::GetShell();
-        SfxViewFrame* pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
-        SfxDispatcher* pDispatcher = pViewFrame ? pViewFrame->GetDispatcher() : NULL;
-        if( pDispatcher )
-        {
+        if (SfxDispatcher* pDispatcher = GetDispatcher())
             pDispatcher->Execute( SID_BASICIDE_MODULEDLG );
-        }
     }
     else
     {
-        TabBar::MouseButtonDown( rMEvt );
+        ::TabBar::MouseButtonDown( rMEvt ); // base class version
     }
 }
 
-void BasicIDETabBar::Command( const CommandEvent& rCEvt )
+void TabBar::Command( const CommandEvent& rCEvt )
 {
     if ( ( rCEvt.GetCommand() == COMMAND_CONTEXTMENU ) && !IsInEditMode() )
     {
@@ -508,7 +496,7 @@ void BasicIDETabBar::Command( const CommandEvent& rCEvt )
         {
             Point aP = PixelToLogic( aPos );
             MouseEvent aMouseEvent( aP, 1, MOUSE_SIMPLECLICK, MOUSE_LEFT );
-            TabBar::MouseButtonDown( aMouseEvent );
+            ::TabBar::MouseButtonDown( aMouseEvent ); // base class
         }
 
         PopupMenu aPopup( IDEResId( RID_POPUP_TABBAR ) );
@@ -526,11 +514,10 @@ void BasicIDETabBar::Command( const CommandEvent& rCEvt )
             aPopup.EnableItem(SID_BASICIDE_MODULEDLG, false);
         }
 
-        BasicIDEShell* pIDEShell = BasicIDEGlobals::GetShell();
-        if ( pIDEShell )
+        if (Shell* pShell = GetShell())
         {
-            ScriptDocument aDocument( pIDEShell->GetCurDocument() );
-            ::rtl::OUString aOULibName( pIDEShell->GetCurLibName() );
+            ScriptDocument aDocument( pShell->GetCurDocument() );
+            ::rtl::OUString aOULibName( pShell->GetCurLibName() );
             Reference< script::XLibraryContainer2 > xModLibContainer( aDocument.getLibraryContainer( E_SCRIPTS ), UNO_QUERY );
             Reference< script::XLibraryContainer2 > xDlgLibContainer( aDocument.getLibraryContainer( E_DIALOGS ), UNO_QUERY );
             if ( ( xModLibContainer.is() && xModLibContainer->hasByName( aOULibName ) && xModLibContainer->isLibraryReadOnly( aOULibName ) ) ||
@@ -548,9 +535,9 @@ void BasicIDETabBar::Command( const CommandEvent& rCEvt )
                 {
                     if (StarBASIC* pBasic = pBasMgr->GetLib(aOULibName))
                     {
-                        IDEWindowTable& aIDEWindowTable = pIDEShell->GetIDEWindowTable();
-                        IDEWindowTable::const_iterator it = aIDEWindowTable.find( GetCurPageId() );
-                        if (it != aIDEWindowTable.end() && dynamic_cast<basctl::ModulWindow*>(it->second))
+                        Shell::WindowTable& aWindowTable = pShell->GetWindowTable();
+                        Shell::WindowTableIt it = aWindowTable.find( GetCurPageId() );
+                        if (it != aWindowTable.end() && dynamic_cast<ModulWindow*>(it->second))
                         {
                             SbModule* pActiveModule = (SbModule*)pBasic->FindModule( it->second->GetName() );
                             if( pActiveModule && ( pActiveModule->GetModuleType() == script::ModuleType::DOCUMENT ) )
@@ -563,18 +550,14 @@ void BasicIDETabBar::Command( const CommandEvent& rCEvt )
                 }
             }
         }
-
-
-        if (pIDEShell)
-            if (SfxViewFrame* pViewFrame = pIDEShell->GetViewFrame())
-                if (SfxDispatcher* pDispatcher = pViewFrame->GetDispatcher())
-                    pDispatcher->Execute(aPopup.Execute(this, aPos));
+        if (SfxDispatcher* pDispatcher = GetDispatcher())
+            pDispatcher->Execute(aPopup.Execute(this, aPos));
     }
 }
 
-long BasicIDETabBar::AllowRenaming()
+long TabBar::AllowRenaming()
 {
-    bool const bValid = BasicIDE::IsValidSbxName( GetEditText() );
+    bool const bValid = IsValidSbxName(GetEditText());
 
     if ( !bValid )
         ErrorBox( this, WB_OK | WB_DEF_OK, String( IDEResId( RID_STR_BADSBXNAME ) ) ).Execute();
@@ -583,20 +566,15 @@ long BasicIDETabBar::AllowRenaming()
 }
 
 
-void BasicIDETabBar::EndRenaming()
+void TabBar::EndRenaming()
 {
     if ( !IsEditModeCanceled() )
     {
         SfxUInt16Item aID( SID_BASICIDE_ARG_TABID, GetEditPageId() );
         SfxStringItem aNewName( SID_BASICIDE_ARG_MODULENAME, GetEditText() );
-        BasicIDEShell* pIDEShell = BasicIDEGlobals::GetShell();
-        SfxViewFrame* pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
-        SfxDispatcher* pDispatcher = pViewFrame ? pViewFrame->GetDispatcher() : NULL;
-        if( pDispatcher )
-        {
+        if (SfxDispatcher* pDispatcher = GetDispatcher())
             pDispatcher->Execute( SID_BASICIDE_NAMECHANGEDONTAB,
                                   SFX_CALLMODE_SYNCHRON, &aID, &aNewName, 0L );
-        }
     }
 }
 
@@ -618,15 +596,14 @@ struct TabBarSortHelper
 
 } // namespace
 
-void BasicIDETabBar::Sort()
+void TabBar::Sort()
 {
-    BasicIDEShell* pIDEShell = BasicIDEGlobals::GetShell();
-    if ( pIDEShell )
+    if (Shell* pShell = GetShell())
     {
-        IDEWindowTable& aIDEWindowTable = pIDEShell->GetIDEWindowTable();
+        Shell::WindowTable& aWindowTable = pShell->GetWindowTable();
         TabBarSortHelper aTabBarSortHelper;
-        ::std::vector<TabBarSortHelper> aModuleList;
-        ::std::vector<TabBarSortHelper> aDialogList;
+        std::vector<TabBarSortHelper> aModuleList;
+        std::vector<TabBarSortHelper> aDialogList;
         sal_uInt16 nPageCount = GetPageCount();
         sal_uInt16 i;
 
@@ -636,13 +613,13 @@ void BasicIDETabBar::Sort()
             sal_uInt16 nId = GetPageId( i );
             aTabBarSortHelper.nPageId = nId;
             aTabBarSortHelper.aPageText = GetPageText( nId );
-            IDEBaseWindow* pWin = aIDEWindowTable[ nId ];
+            BaseWindow* pWin = aWindowTable[ nId ];
 
-            if (dynamic_cast<basctl::ModulWindow*>(pWin))
+            if (dynamic_cast<ModulWindow*>(pWin))
             {
                 aModuleList.push_back( aTabBarSortHelper );
             }
-            else if (dynamic_cast<basctl::DialogWindow*>(pWin))
+            else if (dynamic_cast<DialogWindow*>(pWin))
             {
                 aDialogList.push_back( aTabBarSortHelper );
             }
@@ -743,109 +720,78 @@ sal_uLong CalcLineCount( SvStream& rStream )
     return nCRs;
 }
 
-LibInfoKey::LibInfoKey( const ScriptDocument& rDocument, const ::rtl::OUString& rLibName )
-    :m_aDocument( rDocument )
-    ,m_aLibName( rLibName )
+//
+// LibInfos
+// ========
+//
+
+LibInfos::LibInfos ()
+{ }
+
+LibInfos::~LibInfos ()
+{ }
+
+void LibInfos::InsertInfo (
+    ScriptDocument const& rDocument,
+    rtl::OUString const& rLibName,
+    rtl::OUString const& rCurrentName,
+    ItemType eCurrentType
+)
 {
+    Key aKey(rDocument, rLibName);
+    m_aMap.erase(aKey);
+    m_aMap.insert(Map::value_type(aKey, Item(rDocument, rLibName, rCurrentName, eCurrentType)));
 }
 
-LibInfoKey::~LibInfoKey()
+void LibInfos::RemoveInfoFor (ScriptDocument const& rDocument)
 {
+    Map::iterator it;
+    for (it = m_aMap.begin(); it != m_aMap.end(); ++it)
+        if (it->first.GetDocument() == rDocument)
+            break;
+    if (it != m_aMap.end())
+        m_aMap.erase(it);
 }
 
-bool LibInfoKey::operator==( const LibInfoKey& rKey ) const
+LibInfos::Item const* LibInfos::GetInfo (
+    ScriptDocument const& rDocument, rtl::OUString const& rLibName
+)
 {
-    bool bRet = false;
-    if ( m_aDocument == rKey.m_aDocument && m_aLibName == rKey.m_aLibName )
-        bRet = true;
-    return bRet;
+    Map::iterator it = m_aMap.find(Key(rDocument, rLibName));
+    return it != m_aMap.end() ? &it->second : 0;
 }
 
-LibInfoItem::LibInfoItem( const ScriptDocument& rDocument, const ::rtl::OUString& rLibName, const ::rtl::OUString& rCurrentName, sal_uInt16 nCurrentType )
-    :m_aDocument( rDocument )
-    ,m_aLibName( rLibName )
-    ,m_aCurrentName( rCurrentName )
-    ,m_nCurrentType( nCurrentType )
+LibInfos::Key::Key (ScriptDocument const& rDocument, rtl::OUString const& rLibName) :
+    m_aDocument(rDocument), m_aLibName(rLibName)
+{ }
+
+LibInfos::Key::~Key ()
+{ }
+
+bool LibInfos::Key::operator == (Key const& rKey) const
 {
+    return m_aDocument == rKey.m_aDocument && m_aLibName == rKey.m_aLibName;
 }
 
-LibInfoItem::~LibInfoItem()
+size_t LibInfos::Key::Hash::operator () (Key const& rKey) const
 {
+    return rKey.m_aDocument.hashCode() + rKey.m_aLibName.hashCode();
 }
 
-LibInfoItem::LibInfoItem( const LibInfoItem& rItem )
-    :m_aDocument( rItem.m_aDocument )
-    ,m_aLibName( rItem.m_aLibName )
-    ,m_aCurrentName( rItem.m_aCurrentName )
-    ,m_nCurrentType( rItem.m_nCurrentType )
-{
-}
+LibInfos::Item::Item (
+    ScriptDocument const& rDocument,
+    rtl::OUString const& rLibName,
+    rtl::OUString const& rCurrentName,
+    ItemType eCurrentType
+) :
+    m_aDocument(rDocument),
+    m_aLibName(rLibName),
+    m_aCurrentName(rCurrentName),
+    m_eCurrentType(eCurrentType)
+{ }
 
-LibInfoItem& LibInfoItem::operator=( const LibInfoItem& rItem )
-{
-    m_aDocument = rItem.m_aDocument;
-    m_aLibName = rItem.m_aLibName;
-    m_aCurrentName = rItem.m_aCurrentName;
-    m_nCurrentType = rItem.m_nCurrentType;
-
-    return *this;
-}
-
-LibInfos::LibInfos()
-{
-}
-
-LibInfos::~LibInfos()
-{
-    LibInfoMap::iterator end = m_aLibInfoMap.end();
-    for ( LibInfoMap::iterator it = m_aLibInfoMap.begin(); it != end; ++it )
-        delete it->second;
-    m_aLibInfoMap.clear();
-}
-
-void LibInfos::InsertInfo( LibInfoItem* pItem )
-{
-    LibInfoKey aKey( pItem->GetDocument(), pItem->GetLibName() );
-    LibInfoMap::iterator it = m_aLibInfoMap.find( aKey );
-    if ( it != m_aLibInfoMap.end() )
-    {
-        LibInfoItem* pI = it->second;
-        m_aLibInfoMap.erase( it );
-        delete pI;
-    }
-    m_aLibInfoMap.insert( LibInfoMap::value_type( aKey, pItem ) );
-}
-
-void LibInfos::RemoveInfoFor( const ScriptDocument& _rDocument )
-{
-    for (   LibInfoMap::iterator it = m_aLibInfoMap.begin();
-            it != m_aLibInfoMap.end();
-        )
-    {
-        if ( it->first.GetDocument() != _rDocument )
-        {
-            ++it;
-            continue;
-        }
-
-        LibInfoItem* pItem = it->second;
-
-        LibInfoMap::iterator next_it = it; ++next_it;
-        m_aLibInfoMap.erase( it );
-        it = next_it;
-
-        delete pItem;
-    }
-}
-
-LibInfoItem* LibInfos::GetInfo( const LibInfoKey& rKey )
-{
-    LibInfoItem* pItem = 0;
-    LibInfoMap::iterator it = m_aLibInfoMap.find( rKey );
-    if ( it != m_aLibInfoMap.end() )
-        pItem = it->second;
-    return pItem;
-}
+LibInfos::Item::~Item ()
+{ }
 
 bool QueryDel( const ::rtl::OUString& rName, const ResId& rId, Window* pParent )
 {
@@ -932,5 +878,8 @@ bool QueryPassword( const Reference< script::XLibraryContainer >& xLibContainer,
 
     return bOK;
 }
+
+
+} // namespace basctl
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

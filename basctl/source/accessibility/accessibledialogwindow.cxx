@@ -36,6 +36,9 @@
 #include <toolkit/helper/convert.hxx>
 #include <vcl/svapp.hxx>
 
+namespace basctl
+{
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -538,26 +541,26 @@ void AccessibleDialogWindow::Notify( SfxBroadcaster&, const SfxHint& rHint )
     }
     else if (DlgEdHint const* pDlgEdHint = dynamic_cast<DlgEdHint const*>(&rHint))
     {
-        switch ( pDlgEdHint->GetKind() )
+        switch (pDlgEdHint->GetKind())
         {
-            case DLGED_HINT_WINDOWSCROLLED:
+            case DlgEdHint::WINDOWSCROLLED:
             {
                 UpdateChildren();
                 UpdateBounds();
             }
             break;
-            case DLGED_HINT_LAYERCHANGED:
+            case DlgEdHint::LAYERCHANGED:
             {
                 if (DlgEdObj* pDlgEdObj = pDlgEdHint->GetObject())
                     UpdateChild( ChildDescriptor( pDlgEdObj ) );
             }
             break;
-            case DLGED_HINT_OBJORDERCHANGED:
+            case DlgEdHint::OBJORDERCHANGED:
             {
                 SortChildren();
             }
             break;
-            case DLGED_HINT_SELECTIONCHANGED:
+            case DlgEdHint::SELECTIONCHANGED:
             {
                 UpdateFocused();
                 UpdateSelected();
@@ -1092,5 +1095,7 @@ void AccessibleDialogWindow::deselectAccessibleChild( sal_Int32 nChildIndex ) th
 }
 
 // -----------------------------------------------------------------------------
+
+} // namespace basctl
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

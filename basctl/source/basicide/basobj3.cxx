@@ -52,6 +52,9 @@
 #include <osl/process.h>
 #include <osl/file.hxx>
 
+namespace basctl
+{
+
 using namespace comphelper;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -63,20 +66,15 @@ using namespace ::com::sun::star::container;
 extern "C" {
     SAL_DLLPUBLIC_EXPORT long basicide_handle_basic_error( void* pPtr )
     {
-        return BasicIDE::HandleBasicError( (StarBASIC*)pPtr );
+        return HandleBasicError( (StarBASIC*)pPtr );
     }
 }
 
-namespace BasicIDE
-{
 //----------------------------------------------------------------------------
 
 SbMethod* CreateMacro( SbModule* pModule, const String& rMacroName )
 {
-    BasicIDEShell* pIDEShell = BasicIDEGlobals::GetShell();
-    SfxViewFrame* pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
-    SfxDispatcher* pDispatcher = pViewFrame ? pViewFrame->GetDispatcher() : NULL;
-
+    SfxDispatcher* pDispatcher = GetDispatcher();
     if( pDispatcher )
     {
         pDispatcher->Execute( SID_BASICIDE_STOREALLMODULESOURCES );
@@ -131,15 +129,15 @@ SbMethod* CreateMacro( SbModule* pModule, const String& rMacroName )
     // update module in library
     ScriptDocument aDocument( ScriptDocument::NoDocument );
     StarBASIC* pBasic = dynamic_cast<StarBASIC*>(pModule->GetParent());
-    DBG_ASSERT(pBasic, "BasicIDE::CreateMacro: No Basic found!");
+    DBG_ASSERT(pBasic, "basctl::CreateMacro: No Basic found!");
     if ( pBasic )
     {
-        BasicManager* pBasMgr = BasicIDE::FindBasicManager( pBasic );
-        DBG_ASSERT(pBasMgr, "BasicIDE::CreateMacro: No BasicManager found!");
+        BasicManager* pBasMgr = FindBasicManager( pBasic );
+        DBG_ASSERT(pBasMgr, "basctl::CreateMacro: No BasicManager found!");
         if ( pBasMgr )
         {
             aDocument = ScriptDocument::getDocumentForBasicManager( pBasMgr );
-            OSL_ENSURE( aDocument.isValid(), "BasicIDE::CreateMacro: no document for the given BasicManager!" );
+            OSL_ENSURE( aDocument.isValid(), "basctl::CreateMacro: no document for the given BasicManager!" );
             if ( aDocument.isValid() )
             {
                 String aLibName = pBasic->GetName();
@@ -157,19 +155,25 @@ SbMethod* CreateMacro( SbModule* pModule, const String& rMacroName )
     }
 
     if ( aDocument.isAlive() )
-        BasicIDE::MarkDocumentModified( aDocument );
+        MarkDocumentModified( aDocument );
 
     return pMethod;
 }
 
 //----------------------------------------------------------------------------
 
-bool RenameDialog( Window* pErrorParent, const ScriptDocument& rDocument, const ::rtl::OUString& rLibName, const ::rtl::OUString& rOldName, const ::rtl::OUString& rNewName )
+bool RenameDialog (
+    Window* pErrorParent,
+    ScriptDocument const& rDocument,
+    rtl::OUString const& rLibName,
+    rtl::OUString const& rOldName,
+    rtl::OUString const& rNewName
+)
     throw(ElementExistException, NoSuchElementException)
 {
     if ( !rDocument.hasDialog( rLibName, rOldName ) )
     {
-        OSL_FAIL( "BasicIDE::RenameDialog: old module name is invalid!" );
+        OSL_FAIL( "basctl::RenameDialog: old module name is invalid!" );
         return false;
     }
 
@@ -188,8 +192,8 @@ bool RenameDialog( Window* pErrorParent, const ScriptDocument& rDocument, const 
         return false;
     }
 
-    BasicIDEShell* pIDEShell = BasicIDEGlobals::GetShell();
-    basctl::DialogWindow* pWin = pIDEShell ? pIDEShell->FindDlgWin(rDocument, rLibName, rOldName) : 0;
+    Shell* pShell = GetShell();
+    DialogWindow* pWin = pShell ? pShell->FindDlgWin(rDocument, rLibName, rOldName) : 0;
     Reference< XNameContainer > xExistingDialog;
     if ( pWin )
         xExistingDialog = pWin->GetEditor()->GetDialog();
@@ -209,14 +213,14 @@ bool RenameDialog( Window* pErrorParent, const ScriptDocument& rDocument, const 
         pWin->UpdateBrowser();
 
         // update tabwriter
-        sal_uInt16 nId = pIDEShell->GetIDEWindowId( pWin );
+        sal_uInt16 nId = pShell->GetWindowId( pWin );
         DBG_ASSERT( nId, "No entry in Tabbar!" );
         if ( nId )
         {
-            BasicIDETabBar* pTabBar = (BasicIDETabBar*)pIDEShell->GetTabBar();
-            pTabBar->SetPageText( nId, rNewName );
-            pTabBar->Sort();
-            pTabBar->MakeVisible( pTabBar->GetCurPageId() );
+            TabBar& rTabBar = pShell->GetTabBar();
+            rTabBar.SetPageText( nId, rNewName );
+            rTabBar.Sort();
+            rTabBar.MakeVisible( rTabBar.GetCurPageId() );
         }
     }
     return true;
@@ -226,10 +230,9 @@ bool RenameDialog( Window* pErrorParent, const ScriptDocument& rDocument, const 
 
 bool RemoveDialog( const ScriptDocument& rDocument, const ::rtl::OUString& rLibName, const ::rtl::OUString& rDlgName )
 {
-    BasicIDEShell* pIDEShell = BasicIDEGlobals::GetShell();
-    if ( pIDEShell )
+    if (Shell* pShell = GetShell())
     {
-        if (basctl::DialogWindow* pDlgWin = pIDEShell->FindDlgWin(rDocument, rLibName, rDlgName))
+        if (DialogWindow* pDlgWin = pShell->FindDlgWin(rDocument, rLibName, rDlgName))
         {
             Reference< container::XNameContainer > xDialogModel = pDlgWin->GetDialog();
             LocalizationMgr::removeResourceForDialog( rDocument, rLibName, rDlgName, xDialogModel );
@@ -260,7 +263,7 @@ BasicManager* FindBasicManager( StarBASIC* pLib )
         )
     {
         BasicManager* pBasicMgr = doc->getBasicManager();
-        OSL_ENSURE( pBasicMgr, "BasicIDE::FindBasicManager: no basic manager for the document!" );
+        OSL_ENSURE( pBasicMgr, "basctl::FindBasicManager: no basic manager for the document!" );
         if ( !pBasicMgr )
             continue;
 
@@ -285,10 +288,10 @@ void MarkDocumentModified( const ScriptDocument& rDocument )
     // does not have to come from a document...
     if ( rDocument.isApplication() )
     {
-        if (BasicIDEShell* pIDEShell = BasicIDEGlobals::GetShell())
+        if (Shell* pShell = GetShell())
         {
-            pIDEShell->SetAppBasicModified();
-            pIDEShell->UpdateObjectCatalog();
+            pShell->SetAppBasicModified();
+            pShell->UpdateObjectCatalog();
         }
     }
     else
@@ -296,8 +299,7 @@ void MarkDocumentModified( const ScriptDocument& rDocument )
         rDocument.setDocumentModified();
     }
 
-    SfxBindings* pBindings = BasicIDE::GetBindingsPtr();
-    if ( pBindings )
+    if (SfxBindings* pBindings = GetBindingsPtr())
     {
         pBindings->Invalidate( SID_SIGNATURE );
         pBindings->Invalidate( SID_SAVEDOC );
@@ -319,26 +321,28 @@ void RunMethod( SbMethod* pMethod )
 void StopBasic()
 {
     StarBASIC::Stop();
-    BasicIDEShell* pShell = BasicIDEGlobals::GetShell();
-    if ( pShell )
+    if (Shell* pShell = GetShell())
     {
-        IDEWindowTable& rWindows = pShell->GetIDEWindowTable();
-        for( IDEWindowTable::const_iterator it = rWindows.begin(); it != rWindows.end(); ++it )
+        Shell::WindowTable& rWindows = pShell->GetWindowTable();
+        for (Shell::WindowTableIt it = rWindows.begin(); it != rWindows.end(); ++it )
         {
-            IDEBaseWindow* pWin = it->second;
+            BaseWindow* pWin = it->second;
             // call BasicStopped manually because the Stop-Notify
             // might not get through otherwise
             pWin->BasicStopped();
         }
     }
-    BasicIDE::BasicStopped();
+    BasicStopped();
 }
 
 //----------------------------------------------------------------------------
 
-void BasicStopped( bool* pbAppWindowDisabled,
-        bool* pbDispatcherLocked, sal_uInt16* pnWaitCount,
-        SfxUInt16Item** ppSWActionCount, SfxUInt16Item** ppSWLockViewCount )
+void BasicStopped(
+    bool* pbAppWindowDisabled,
+    bool* pbDispatcherLocked,
+    sal_uInt16* pnWaitCount,
+    SfxUInt16Item** ppSWActionCount, SfxUInt16Item** ppSWLockViewCount
+)
 {
     // maybe there are some locks to be removed after an error
     // or an explicit cancelling of the basic...
@@ -355,13 +359,12 @@ void BasicStopped( bool* pbAppWindowDisabled,
         *ppSWLockViewCount = 0;
 
     // AppWait ?
-    BasicIDEShell* pIDEShell = BasicIDEGlobals::GetShell();
-    if( pIDEShell )
+    if (Shell* pShell = GetShell())
     {
         sal_uInt16 nWait = 0;
-        while ( pIDEShell->GetViewFrame()->GetWindow().IsWait() )
+        while ( pShell->GetViewFrame()->GetWindow().IsWait() )
         {
-            pIDEShell->GetViewFrame()->GetWindow().LeaveWait();
+            pShell->GetViewFrame()->GetWindow().LeaveWait();
             nWait++;
         }
         if ( pnWaitCount )
@@ -382,8 +385,7 @@ void BasicStopped( bool* pbAppWindowDisabled,
 
 void InvalidateDebuggerSlots()
 {
-    SfxBindings* pBindings = BasicIDE::GetBindingsPtr();
-    if ( pBindings )
+    if (SfxBindings* pBindings = GetBindingsPtr())
     {
         pBindings->Invalidate( SID_BASICSTOP );
         pBindings->Update( SID_BASICSTOP );
@@ -408,25 +410,25 @@ void InvalidateDebuggerSlots()
 
 long HandleBasicError( StarBASIC* pBasic )
 {
-    BasicIDEGlobals::ensure();
-    BasicIDE::BasicStopped();
+    EnsureIde();
+    BasicStopped();
 
     // no error output during macro choosing
-    if ( BasicIDEGlobals::GetExtraData()->ChoosingMacro() )
+    if (GetExtraData()->ChoosingMacro())
         return 1;
-    if ( BasicIDEGlobals::GetExtraData()->ShellInCriticalSection() )
+    if (GetExtraData()->ShellInCriticalSection())
         return 2;
 
     long nRet = 0;
-    BasicIDEShell* pIDEShell = 0;
+    Shell* pShell = 0;
     if ( SvtModuleOptions().IsBasicIDE() )
     {
-        BasicManager* pBasMgr = BasicIDE::FindBasicManager( pBasic );
+        BasicManager* pBasMgr = FindBasicManager( pBasic );
         if ( pBasMgr )
         {
             bool bProtected = false;
             ScriptDocument aDocument( ScriptDocument::getDocumentForBasicManager( pBasMgr ) );
-            OSL_ENSURE( aDocument.isValid(), "BasicIDE::HandleBasicError: no document for the given BasicManager!" );
+            OSL_ENSURE( aDocument.isValid(), "basctl::HandleBasicError: no document for the given BasicManager!" );
             if ( aDocument.isValid() )
             {
                 ::rtl::OUString aOULibName( pBasic->GetName() );
@@ -443,20 +445,20 @@ long HandleBasicError( StarBASIC* pBasic )
 
             if ( !bProtected )
             {
-                pIDEShell = BasicIDEGlobals::GetShell();
-                if ( !pIDEShell )
+                pShell = GetShell();
+                if ( !pShell )
                 {
                     SfxAllItemSet aArgs( SFX_APP()->GetPool() );
                     SfxRequest aRequest( SID_BASICIDE_APPEAR, SFX_CALLMODE_SYNCHRON, aArgs );
                     SFX_APP()->ExecuteSlot( aRequest );
-                    pIDEShell = BasicIDEGlobals::GetShell();
+                    pShell = GetShell();
                 }
             }
         }
     }
 
-    if ( pIDEShell )
-        nRet = pIDEShell->CallBasicErrorHdl( pBasic );
+    if ( pShell )
+        nRet = pShell->CallBasicErrorHdl( pBasic );
     else
         ErrorHandler::HandleError( StarBASIC::GetErrorCode() );
 
@@ -470,17 +472,16 @@ SfxBindings* GetBindingsPtr()
     SfxBindings* pBindings = NULL;
 
     SfxViewFrame* pFrame = NULL;
-    if ( BasicIDEGlobals::GetShell() )
+    if (Shell* pShell = GetShell())
     {
-        pFrame = BasicIDEGlobals::GetShell()->GetViewFrame();
+        pFrame = pShell->GetViewFrame();
     }
     else
     {
         SfxViewFrame* pView = SfxViewFrame::GetFirst();
         while ( pView )
         {
-            SfxObjectShell* pObjShell = pView->GetObjectShell();
-            if (dynamic_cast<BasicDocShell*>(pObjShell))
+            if (dynamic_cast<DocShell*>(pView->GetObjectShell()))
             {
                 pFrame = pView;
                 break;
@@ -494,7 +495,18 @@ SfxBindings* GetBindingsPtr()
     return pBindings;
 }
 
-} //namespace BasicIDE
+//----------------------------------------------------------------------------
 
+SfxDispatcher* GetDispatcher ()
+{
+    if (Shell* pShell = GetShell())
+        if (SfxViewFrame* pViewFrame = pShell->GetViewFrame())
+            if (SfxDispatcher* pDispatcher = pViewFrame->GetDispatcher())
+                return pDispatcher;
+    return 0;
+}
+
+//----------------------------------------------------------------------------
+} // namespace basctl
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

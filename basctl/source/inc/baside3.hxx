@@ -33,19 +33,20 @@
 class Printer;
 class StarBASIC;
 class SfxItemSet;
-class DlgEditor;
-class DlgEdModel;
-class DlgEdPage;
-class DlgEdView;
 class SfxUndoManager;
 
 namespace basctl
 {
 
+class DlgEditor;
+class DlgEdModel;
+class DlgEdPage;
+class DlgEdView;
+
 class DialogWindowLayout;
 class ObjectCatalog;
 
-class DialogWindow: public IDEBaseWindow
+class DialogWindow: public BaseWindow
 {
 private:
     DialogWindowLayout& rLayout;
@@ -91,7 +92,7 @@ public:
     bool                ImportDialog();
 
     virtual ::rtl::OUString      GetTitle();
-    virtual BasicEntryDescriptor CreateEntryDescriptor();
+    virtual EntryDescriptor      CreateEntryDescriptor();
     virtual void        SetReadOnly (bool bReadOnly);
     virtual bool        IsReadOnly();
 
@@ -99,8 +100,7 @@ public:
     virtual bool        IsModified();
     virtual bool        IsPasteAllowed();
 
-    virtual ::svl::IUndoManager*
-                        GetUndoManager();
+    virtual svl::IUndoManager* GetUndoManager();
     // return number of pages to be printed
     virtual sal_Int32 countPages( Printer* pPrinter );
     // print page
@@ -112,7 +112,7 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible();
 
     virtual char const* GetHid () const;
-    virtual BasicIDEType GetType () const;
+    virtual ItemType GetType () const;
 };
 
 //
@@ -124,7 +124,7 @@ public:
     DialogWindowLayout (Window* pParent, ObjectCatalog&);
 public:
     // Layout:
-    virtual void Activating (IDEBaseWindow&);
+    virtual void Activating (BaseWindow&);
     virtual void Deactivating ();
     virtual void GetState (SfxItemSet&, unsigned nWhich);
     virtual void UpdateDebug (bool){};
@@ -143,6 +143,6 @@ private:
 
 } // namespace basctl
 
-#endif  // BASCTL_BASIDE3_HXX
+#endif // BASCTL_BASIDE3_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

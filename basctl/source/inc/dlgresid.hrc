@@ -16,8 +16,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _BASCTL_DLGRESID_HRC
-#define _BASCTL_DLGRESID_HRC
+#ifndef BASCTL_DLGRESID_HRC
+#define BASCTL_DLGRESID_HRC
 
 #include <svl/solar.hrc>
 
@@ -63,5 +63,5 @@
 
 // -----------------------------------------------------------------------
 
-#endif          // _BASCTL_DLGRESID_HRC
+#endif // BASCTL_DLGRESID_HRC
 

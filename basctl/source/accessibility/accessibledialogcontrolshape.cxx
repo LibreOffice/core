@@ -33,6 +33,9 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/svapp.hxx>
 
+namespace basctl
+{
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -45,7 +48,7 @@ using namespace ::comphelper;
 // class AccessibleDialogControlShape
 // -----------------------------------------------------------------------------
 
-AccessibleDialogControlShape::AccessibleDialogControlShape (basctl::DialogWindow* pDialogWindow, DlgEdObj* pDlgEdObj)
+AccessibleDialogControlShape::AccessibleDialogControlShape (DialogWindow* pDialogWindow, DlgEdObj* pDlgEdObj)
     :AccessibleExtendedComponentHelper_BASE( new VCLExternalSolarLock() )
     ,m_pDialogWindow( pDialogWindow )
     ,m_pDlgEdObj( pDlgEdObj )
@@ -606,5 +609,7 @@ Reference< awt::XFont > AccessibleDialogControlShape::getFont(  ) throw (Runtime
 }
 
 // -----------------------------------------------------------------------------
+
+} // namespace basctl
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

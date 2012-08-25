@@ -37,6 +37,9 @@
 #include <tools/diagnose_ex.h>
 #include <vcl/stdtext.hxx>
 
+namespace basctl
+{
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -68,24 +71,21 @@ PropBrwMgr::PropBrwMgr( Window* _pParent, sal_uInt16 nId,
 }
 
 
-void PropBrw::Update( const SfxViewShell* _pShell )
+void PropBrw::Update( const SfxViewShell* pShell )
 {
-    const BasicIDEShell* pBasicIDEShell = dynamic_cast< const BasicIDEShell* >( _pShell );
-    OSL_ENSURE( pBasicIDEShell || !_pShell, "PropBrw::Update: invalid shell!" );
-    if ( pBasicIDEShell )
-    {
-        ImplUpdate( pBasicIDEShell->GetCurrentDocument(), pBasicIDEShell->GetCurDlgView() );
-    }
-    else if ( _pShell )
-    {
-        ImplUpdate( NULL, _pShell->GetDrawView() );
-    }
+    Shell const* pIdeShell = dynamic_cast<Shell const*>(pShell);
+    OSL_ENSURE( pIdeShell || !pShell, "PropBrw::Update: invalid shell!" );
+    if (pIdeShell)
+        ImplUpdate(pIdeShell->GetCurrentDocument(), pIdeShell->GetCurDlgView());
+    else if (pShell)
+        ImplUpdate(NULL, pShell->GetDrawView());
     else
-    {
-        ImplUpdate( NULL, NULL );
-    }
+        ImplUpdate(NULL, NULL);
 }
 
+
+namespace
+{
 
 const long STD_WIN_SIZE_X = 300;
 const long STD_WIN_SIZE_Y = 350;
@@ -94,6 +94,9 @@ const long STD_MIN_SIZE_X = 250;
 const long STD_MIN_SIZE_Y = 250;
 
 const long WIN_BORDER = 2;
+
+} // namespace
+
 
 DBG_NAME(PropBrw)
 
@@ -550,5 +553,7 @@ void PropBrw::ImplUpdate( const Reference< XModel >& _rxContextDocument, SdrView
         DBG_UNHANDLED_EXCEPTION();
     }
 }
+
+} // namespace basctl
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

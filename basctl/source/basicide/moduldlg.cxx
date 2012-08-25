@@ -41,20 +41,26 @@
 #include <tools/diagnose_ex.h>
 #include <xmlscript/xmldlg_imexp.hxx>
 
+namespace basctl
+{
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::resource;
 
-ExtBasicTreeListBox::ExtBasicTreeListBox( Window* pParent, const ResId& rRes )
-    : BasicTreeListBox( pParent, rRes )
-{
-}
+//
+// ExtTreeListBox
+// ==============
+//
 
-ExtBasicTreeListBox::~ExtBasicTreeListBox()
-{
-}
+ExtTreeListBox::ExtTreeListBox (Window* pParent, ResId const& rRes) :
+    TreeListBox( pParent, rRes )
+{ }
 
-sal_Bool ExtBasicTreeListBox::EditingEntry( SvLBoxEntry* pEntry, Selection& )
+ExtTreeListBox::~ExtTreeListBox ()
+{ }
+
+sal_Bool ExtTreeListBox::EditingEntry( SvLBoxEntry* pEntry, Selection& )
 {
     bool bRet = false;
 
@@ -63,7 +69,7 @@ sal_Bool ExtBasicTreeListBox::EditingEntry( SvLBoxEntry* pEntry, Selection& )
         sal_uInt16 nDepth = GetModel()->GetDepth( pEntry );
         if ( nDepth >= 2 )
         {
-            BasicEntryDescriptor aDesc( GetEntryDescriptor( pEntry ) );
+            EntryDescriptor aDesc = GetEntryDescriptor(pEntry);
             ScriptDocument aDocument( aDesc.GetDocument() );
             ::rtl::OUString aLibName( aDesc.GetLibName() );
             Reference< script::XLibraryContainer2 > xModLibContainer( aDocument.getLibraryContainer( E_SCRIPTS ), UNO_QUERY );
@@ -80,9 +86,9 @@ sal_Bool ExtBasicTreeListBox::EditingEntry( SvLBoxEntry* pEntry, Selection& )
     return bRet;
 }
 
-sal_Bool ExtBasicTreeListBox::EditedEntry( SvLBoxEntry* pEntry, const rtl::OUString& rNewText )
+sal_Bool ExtTreeListBox::EditedEntry( SvLBoxEntry* pEntry, const rtl::OUString& rNewText )
 {
-    if ( !BasicIDE::IsValidSbxName(rNewText) )
+    if ( !IsValidSbxName(rNewText) )
     {
         ErrorBox( this, WB_OK | WB_DEF_OK, IDE_RESSTR(RID_STR_BADSBXNAME) ).Execute();
         return false;
@@ -93,27 +99,24 @@ sal_Bool ExtBasicTreeListBox::EditedEntry( SvLBoxEntry* pEntry, const rtl::OUStr
         // nothing to do
         return true;
 
-    BasicEntryDescriptor aDesc( GetEntryDescriptor( pEntry ) );
+    EntryDescriptor aDesc = GetEntryDescriptor(pEntry);
     ScriptDocument aDocument( aDesc.GetDocument() );
-    DBG_ASSERT( aDocument.isValid(), "ExtBasicTreeListBox::EditedEntry: no document!" );
+    DBG_ASSERT( aDocument.isValid(), "ExtTreeListBox::EditedEntry: no document!" );
     if ( !aDocument.isValid() )
         return false;
     ::rtl::OUString aLibName( aDesc.GetLibName() );
-    BasicEntryType eType( aDesc.GetType() );
+    EntryType eType = aDesc.GetType();
 
-    bool bSuccess = ( eType == OBJ_TYPE_MODULE )
-        ?   BasicIDE::RenameModule( this, aDocument, aLibName, aCurText, rNewText )
-        :   BasicIDE::RenameDialog( this, aDocument, aLibName, aCurText, rNewText );
+    bool bSuccess = eType == OBJ_TYPE_MODULE ?
+        RenameModule(this, aDocument, aLibName, aCurText, rNewText) :
+        RenameDialog(this, aDocument, aLibName, aCurText, rNewText);
 
     if ( !bSuccess )
         return false;
 
-    BasicIDE::MarkDocumentModified( aDocument );
+    MarkDocumentModified( aDocument );
 
-    BasicIDEShell* pIDEShell = BasicIDEGlobals::GetShell();
-    SfxViewFrame* pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
-    SfxDispatcher* pDispatcher = pViewFrame ? pViewFrame->GetDispatcher() : NULL;
-    if( pDispatcher )
+    if (SfxDispatcher* pDispatcher = GetDispatcher())
     {
         SbxItem aSbxItem( SID_BASICIDE_ARG_SBX, aDocument, aLibName, rNewText, ConvertType( eType ) );
         pDispatcher->Execute( SID_BASICIDE_SBXRENAMED,
@@ -131,7 +134,7 @@ sal_Bool ExtBasicTreeListBox::EditedEntry( SvLBoxEntry* pEntry, const rtl::OUStr
 }
 
 
-DragDropMode ExtBasicTreeListBox::NotifyStartDrag( TransferDataContainer&, SvLBoxEntry* pEntry )
+DragDropMode ExtTreeListBox::NotifyStartDrag( TransferDataContainer&, SvLBoxEntry* pEntry )
 {
     DragDropMode nMode_ = SV_DRAGDROP_NONE;
 
@@ -141,7 +144,7 @@ DragDropMode ExtBasicTreeListBox::NotifyStartDrag( TransferDataContainer&, SvLBo
         if ( nDepth >= 2 )
         {
             nMode_ = SV_DRAGDROP_CTRL_COPY;
-            BasicEntryDescriptor aDesc( GetEntryDescriptor( pEntry ) );
+            EntryDescriptor aDesc = GetEntryDescriptor(pEntry);
             ScriptDocument aDocument( aDesc.GetDocument() );
             ::rtl::OUString aLibName( aDesc.GetLibName() );
             // allow MOVE mode only for libraries, which are not readonly
@@ -171,7 +174,7 @@ DragDropMode ExtBasicTreeListBox::NotifyStartDrag( TransferDataContainer&, SvLBo
 }
 
 
-sal_Bool ExtBasicTreeListBox::NotifyAcceptDrop( SvLBoxEntry* pEntry )
+sal_Bool ExtTreeListBox::NotifyAcceptDrop( SvLBoxEntry* pEntry )
 {
     // don't drop on a BasicManager (nDepth == 0)
     sal_uInt16 nDepth = pEntry ? GetModel()->GetDepth( pEntry ) : 0;
@@ -189,14 +192,14 @@ sal_Bool ExtBasicTreeListBox::NotifyAcceptDrop( SvLBoxEntry* pEntry )
     if ( bValid && ( nDepth > 0 ) )
     {
         // get source module/dialog name
-        BasicEntryDescriptor aSourceDesc( GetEntryDescriptor( pSelected ) );
-        ::rtl::OUString aSourceName( aSourceDesc.GetName() );
-        BasicEntryType eSourceType( aSourceDesc.GetType() );
+        EntryDescriptor aSourceDesc = GetEntryDescriptor(pSelected);
+        rtl::OUString aSourceName = aSourceDesc.GetName();
+        EntryType eSourceType = aSourceDesc.GetType();
 
         // get target shell and target library name
-        BasicEntryDescriptor aDestDesc( GetEntryDescriptor( pEntry ) );
-        const ScriptDocument& rDestDoc( aDestDesc.GetDocument() );
-        ::rtl::OUString aDestLibName( aDestDesc.GetLibName() );
+        EntryDescriptor aDestDesc = GetEntryDescriptor(pEntry);
+        ScriptDocument const& rDestDoc = aDestDesc.GetDocument();
+        rtl::OUString aDestLibName = aDestDesc.GetLibName();
 
         // check if module library is not loaded, readonly or password protected
         Reference< script::XLibraryContainer2 > xModLibContainer( rDestDoc.getLibraryContainer( E_SCRIPTS ), UNO_QUERY );
@@ -235,14 +238,14 @@ sal_Bool ExtBasicTreeListBox::NotifyAcceptDrop( SvLBoxEntry* pEntry )
     return bValid;
 }
 
-sal_Bool ExtBasicTreeListBox::NotifyMoving( SvLBoxEntry* pTarget, SvLBoxEntry* pEntry,
+sal_Bool ExtTreeListBox::NotifyMoving( SvLBoxEntry* pTarget, SvLBoxEntry* pEntry,
                         SvLBoxEntry*& rpNewParent, sal_uLong& rNewChildPos )
 {
     return NotifyCopyingMoving( pTarget, pEntry,
                                     rpNewParent, rNewChildPos, true );
 }
 
-sal_Bool ExtBasicTreeListBox::NotifyCopying( SvLBoxEntry* pTarget, SvLBoxEntry* pEntry,
+sal_Bool ExtTreeListBox::NotifyCopying( SvLBoxEntry* pTarget, SvLBoxEntry* pEntry,
                         SvLBoxEntry*& rpNewParent, sal_uLong& rNewChildPos )
 {
 //  return false;   // how do I copy an SBX?!
@@ -250,9 +253,14 @@ sal_Bool ExtBasicTreeListBox::NotifyCopying( SvLBoxEntry* pTarget, SvLBoxEntry* 
                                     rpNewParent, rNewChildPos, false );
 }
 
-void BasicIDEShell::CopyDialogResources( Reference< io::XInputStreamProvider >& io_xISP,
-                                         const ScriptDocument& rSourceDoc, const ::rtl::OUString& rSourceLibName, const ScriptDocument& rDestDoc,
-                                         const ::rtl::OUString& rDestLibName, const ::rtl::OUString& rDlgName )
+void Shell::CopyDialogResources(
+    Reference< io::XInputStreamProvider >& io_xISP,
+    ScriptDocument const& rSourceDoc,
+    rtl::OUString const& rSourceLibName,
+    ScriptDocument const& rDestDoc,
+    rtl::OUString const& rDestLibName,
+    rtl::OUString const& rDlgName
+)
 {
     if ( !io_xISP.is() )
         return;
@@ -306,7 +314,7 @@ void BasicIDEShell::CopyDialogResources( Reference< io::XInputStreamProvider >& 
 }
 
 
-sal_Bool ExtBasicTreeListBox::NotifyCopyingMoving( SvLBoxEntry* pTarget, SvLBoxEntry* pEntry,
+sal_Bool ExtTreeListBox::NotifyCopyingMoving( SvLBoxEntry* pTarget, SvLBoxEntry* pEntry,
                         SvLBoxEntry*& rpNewParent, sal_uLong& rNewChildPos, sal_Bool bMove )
 {
     (void)pEntry;
@@ -328,21 +336,19 @@ sal_Bool ExtBasicTreeListBox::NotifyCopyingMoving( SvLBoxEntry* pTarget, SvLBoxE
     }
 
     // get target shell and target library name
-    BasicEntryDescriptor aDestDesc( GetEntryDescriptor( rpNewParent ) );
+    EntryDescriptor aDestDesc = GetEntryDescriptor(rpNewParent);
     const ScriptDocument& rDestDoc( aDestDesc.GetDocument() );
     ::rtl::OUString aDestLibName( aDestDesc.GetLibName() );
 
     // get source shell, library name and module/dialog name
-    BasicEntryDescriptor aSourceDesc( GetEntryDescriptor( FirstSelected() ) );
+    EntryDescriptor aSourceDesc = GetEntryDescriptor(FirstSelected());
     const ScriptDocument rSourceDoc( aSourceDesc.GetDocument() );
     ::rtl::OUString aSourceLibName( aSourceDesc.GetLibName() );
     ::rtl::OUString aSourceName( aSourceDesc.GetName() );
-    BasicEntryType eType( aSourceDesc.GetType() );
+    EntryType eType = aSourceDesc.GetType();
 
     // get dispatcher
-    BasicIDEShell* pIDEShell = BasicIDEGlobals::GetShell();
-    SfxViewFrame* pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
-    SfxDispatcher* pDispatcher = pViewFrame ? pViewFrame->GetDispatcher() : NULL;
+    SfxDispatcher* pDispatcher = GetDispatcher();
 
     if ( bMove )    // move
     {
@@ -368,11 +374,11 @@ sal_Bool ExtBasicTreeListBox::NotifyCopyingMoving( SvLBoxEntry* pTarget, SvLBoxE
                     // remove module from source library
                     if ( rSourceDoc.removeModule( aSourceLibName, aSourceName ) )
                     {
-                        BasicIDE::MarkDocumentModified( rSourceDoc );
+                        MarkDocumentModified( rSourceDoc );
 
                         // insert module into target library
                         if ( rDestDoc.insertModule( aDestLibName, aSourceName, aModule ) )
-                            BasicIDE::MarkDocumentModified( rDestDoc );
+                            MarkDocumentModified( rDestDoc );
                     }
                 }
             }
@@ -382,17 +388,17 @@ sal_Bool ExtBasicTreeListBox::NotifyCopyingMoving( SvLBoxEntry* pTarget, SvLBoxE
                 Reference< io::XInputStreamProvider > xISP;
                 if ( rSourceDoc.getDialog( aSourceLibName, aSourceName, xISP ) )
                 {
-                    BasicIDEShell::CopyDialogResources( xISP, rSourceDoc,
+                    Shell::CopyDialogResources( xISP, rSourceDoc,
                         aSourceLibName, rDestDoc, aDestLibName, aSourceName );
 
                     // remove dialog from source library
-                    if ( BasicIDE::RemoveDialog( rSourceDoc, aSourceLibName, aSourceName ) )
+                    if (RemoveDialog(rSourceDoc, aSourceLibName, aSourceName))
                     {
-                        BasicIDE::MarkDocumentModified( rSourceDoc );
+                        MarkDocumentModified(rSourceDoc);
 
                         // insert dialog into target library
                         if ( rDestDoc.insertDialog( aDestLibName, aSourceName, xISP ) )
-                            BasicIDE::MarkDocumentModified( rDestDoc );
+                            MarkDocumentModified(rDestDoc);
                     }
                 }
             }
@@ -414,7 +420,7 @@ sal_Bool ExtBasicTreeListBox::NotifyCopyingMoving( SvLBoxEntry* pTarget, SvLBoxE
                 {
                     // insert module into target library
                     if ( rDestDoc.insertModule( aDestLibName, aSourceName, aModule ) )
-                        BasicIDE::MarkDocumentModified( rDestDoc );
+                        MarkDocumentModified( rDestDoc );
                 }
             }
             else if ( eType == OBJ_TYPE_DIALOG )    // dialog
@@ -423,12 +429,12 @@ sal_Bool ExtBasicTreeListBox::NotifyCopyingMoving( SvLBoxEntry* pTarget, SvLBoxE
                 Reference< io::XInputStreamProvider > xISP;
                 if ( rSourceDoc.getDialog( aSourceLibName, aSourceName, xISP ) )
                 {
-                    BasicIDEShell::CopyDialogResources( xISP, rSourceDoc,
+                    Shell::CopyDialogResources( xISP, rSourceDoc,
                         aSourceLibName, rDestDoc, aDestLibName, aSourceName );
 
                     // insert dialog into target library
                     if ( rDestDoc.insertDialog( aDestLibName, aSourceName, xISP ) )
-                        BasicIDE::MarkDocumentModified( rDestDoc );
+                        MarkDocumentModified( rDestDoc );
                 }
             }
         }
@@ -452,7 +458,12 @@ sal_Bool ExtBasicTreeListBox::NotifyCopyingMoving( SvLBoxEntry* pTarget, SvLBoxE
     return 2;   // open...
 }
 
-OrganizeDialog::OrganizeDialog( Window* pParent, sal_Int16 tabId, BasicEntryDescriptor& rDesc )
+//
+// OrganizeDialog
+// ==============
+//
+
+OrganizeDialog::OrganizeDialog( Window* pParent, sal_Int16 tabId, EntryDescriptor& rDesc )
     :TabDialog( pParent, IDEResId( RID_TD_ORGANIZE ) )
     ,aTabCtrl( this, IDEResId( RID_TC_ORGANIZE ) )
     ,m_aCurEntry( rDesc )
@@ -474,13 +485,8 @@ OrganizeDialog::OrganizeDialog( Window* pParent, sal_Int16 tabId, BasicEntryDesc
 
     ActivatePageHdl( &aTabCtrl );
 
-    BasicIDEShell* pIDEShell = BasicIDEGlobals::GetShell();
-    SfxViewFrame* pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
-    SfxDispatcher* pDispatcher = pViewFrame ? pViewFrame->GetDispatcher() : NULL;
-    if( pDispatcher )
-    {
+    if (SfxDispatcher* pDispatcher = GetDispatcher())
         pDispatcher->Execute( SID_BASICIDE_STOREALLMODULESOURCES );
-    }
 }
 
 OrganizeDialog::~OrganizeDialog()
@@ -510,22 +516,25 @@ IMPL_LINK( OrganizeDialog, ActivatePageHdl, TabControl *, pTabCtrl )
         {
             case RID_TP_MOD:
             {
-                pNewTabPage = new ObjectPage( pTabCtrl, IDEResId( RID_TP_MODULS ), BROWSEMODE_MODULES );
-                ((ObjectPage*)pNewTabPage)->SetTabDlg( this );
-                ((ObjectPage*)pNewTabPage)->SetCurrentEntry( m_aCurEntry );
+                ObjectPage* pObjectPage = new ObjectPage(pTabCtrl, IDEResId(RID_TP_MODULS), BROWSEMODE_MODULES);
+                pNewTabPage = pObjectPage;
+                pObjectPage->SetTabDlg(this);
+                pObjectPage->SetCurrentEntry(m_aCurEntry);
             }
             break;
             case RID_TP_DLG:
             {
-                pNewTabPage = new ObjectPage( pTabCtrl, IDEResId( RID_TP_DLGS ), BROWSEMODE_DIALOGS );
-                ((ObjectPage*)pNewTabPage)->SetTabDlg( this );
-                ((ObjectPage*)pNewTabPage)->SetCurrentEntry( m_aCurEntry );
+                ObjectPage* pObjectPage = new ObjectPage( pTabCtrl, IDEResId( RID_TP_DLGS ), BROWSEMODE_DIALOGS );
+                pNewTabPage = pObjectPage;
+                pObjectPage->SetTabDlg(this);
+                pObjectPage->SetCurrentEntry(m_aCurEntry);
             }
             break;
             case RID_TP_LIB:
             {
-                pNewTabPage = new LibPage( pTabCtrl );
-                ((LibPage*)pNewTabPage)->SetTabDlg( this );
+                LibPage* pLibPage = new LibPage( pTabCtrl );
+                pNewTabPage = pLibPage;
+                pLibPage->SetTabDlg( this );
             }
             break;
             default:    OSL_FAIL( "PageHdl: Unbekannte ID!" );
@@ -535,6 +544,11 @@ IMPL_LINK( OrganizeDialog, ActivatePageHdl, TabControl *, pTabCtrl )
     }
     return 0;
 }
+
+//
+// ObjectPage
+// ==========
+//
 
 ObjectPage::ObjectPage( Window * pParent, const ResId& rResId, sal_uInt16 nMode ) :
         TabPage(        pParent, rResId ),
@@ -578,7 +592,7 @@ ObjectPage::ObjectPage( Window * pParent, const ResId& rResId, sal_uInt16 nMode 
     CheckButtons();
 }
 
-void ObjectPage::SetCurrentEntry( BasicEntryDescriptor& rDesc )
+void ObjectPage::SetCurrentEntry (EntryDescriptor& rDesc)
 {
     aBasicBox.SetCurrentEntry( rDesc );
 }
@@ -596,7 +610,7 @@ void ObjectPage::CheckButtons()
 {
     // enable/disable edit button
     SvLBoxEntry* pCurEntry = aBasicBox.GetCurEntry();
-    BasicEntryDescriptor aDesc( aBasicBox.GetEntryDescriptor( pCurEntry ) );
+    EntryDescriptor aDesc = aBasicBox.GetEntryDescriptor(pCurEntry);
     ScriptDocument aDocument( aDesc.GetDocument() );
     ::rtl::OUString aLibName( aDesc.GetLibName() );
     ::rtl::OUString aLibSubName( aDesc.GetLibSubName() );
@@ -650,7 +664,7 @@ void ObjectPage::CheckButtons()
         aDelButton.Disable();
 }
 
-IMPL_LINK( ObjectPage, BasicBoxHighlightHdl, BasicTreeListBox *, pBox )
+IMPL_LINK( ObjectPage, BasicBoxHighlightHdl, TreeListBox *, pBox )
 {
     if ( !pBox->IsSelected( pBox->GetHdlEntry() ) )
         return 0;
@@ -667,14 +681,12 @@ IMPL_LINK( ObjectPage, ButtonHdl, Button *, pButton )
         SfxRequest aRequest( SID_BASICIDE_APPEAR, SFX_CALLMODE_SYNCHRON, aArgs );
         SFX_APP()->ExecuteSlot( aRequest );
 
-        BasicIDEShell* pIDEShell = BasicIDEGlobals::GetShell();
-        SfxViewFrame* pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
-        SfxDispatcher* pDispatcher = pViewFrame ? pViewFrame->GetDispatcher() : NULL;
+        SfxDispatcher* pDispatcher = GetDispatcher();
         SvLBoxEntry* pCurEntry = aBasicBox.GetCurEntry();
         DBG_ASSERT( pCurEntry, "Entry?!" );
         if ( aBasicBox.GetModel()->GetDepth( pCurEntry ) >= 2 )
         {
-            BasicEntryDescriptor aDesc( aBasicBox.GetEntryDescriptor( pCurEntry ) );
+            EntryDescriptor aDesc = aBasicBox.GetEntryDescriptor(pCurEntry);
             if ( pDispatcher )
             {
                 ::rtl::OUString aModName( aDesc.GetName() );
@@ -696,9 +708,9 @@ IMPL_LINK( ObjectPage, ButtonHdl, Button *, pButton )
             SvLBoxEntry* pParentEntry = aBasicBox.GetParent( pCurEntry );
             if ( pParentEntry )
             {
-                BasicDocumentEntry* pBasicDocumentEntry = (BasicDocumentEntry*)pParentEntry->GetUserData();
-                if ( pBasicDocumentEntry )
-                    aDocument = pBasicDocumentEntry->GetDocument();
+                DocumentEntry* pDocumentEntry = (DocumentEntry*)pParentEntry->GetUserData();
+                if (pDocumentEntry)
+                    aDocument = pDocumentEntry->GetDocument();
             }
             SfxUsrAnyItem aDocItem( SID_BASICIDE_ARG_DOCUMENT_MODEL, makeAny( aDocument.getDocumentOrNull() ) );
             ::rtl::OUString aLibName( aBasicBox.GetEntryText( pCurEntry ) );
@@ -727,7 +739,7 @@ bool ObjectPage::GetSelection( ScriptDocument& rDocument, ::rtl::OUString& rLibN
     bool bRet = false;
 
     SvLBoxEntry* pCurEntry = aBasicBox.GetCurEntry();
-    BasicEntryDescriptor aDesc( aBasicBox.GetEntryDescriptor( pCurEntry ) );
+    EntryDescriptor aDesc = aBasicBox.GetEntryDescriptor(pCurEntry);
     rDocument = aDesc.GetDocument();
     rLibName = aDesc.GetLibName();
     if ( rLibName.isEmpty() )
@@ -814,15 +826,10 @@ void ObjectPage::NewDialog()
                 if ( !aDocument.createDialog( aLibName, aDlgName, xISP ) )
                     return;
 
-                SbxItem aSbxItem( SID_BASICIDE_ARG_SBX, aDocument, aLibName, aDlgName, BASICIDE_TYPE_DIALOG );
-                BasicIDEShell* pIDEShell = BasicIDEGlobals::GetShell();
-                SfxViewFrame* pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
-                SfxDispatcher* pDispatcher = pViewFrame ? pViewFrame->GetDispatcher() : NULL;
-                if( pDispatcher )
-                {
+                SbxItem aSbxItem( SID_BASICIDE_ARG_SBX, aDocument, aLibName, aDlgName, TYPE_DIALOG );
+                if (SfxDispatcher* pDispatcher = GetDispatcher())
                     pDispatcher->Execute( SID_BASICIDE_SBXINSERTED,
                                             SFX_CALLMODE_SYNCHRON, &aSbxItem, 0L );
-                }
                 LibraryLocation eLocation = aDocument.getLibraryLocation( aLibName );
                 SvLBoxEntry* pRootEntry = aBasicBox.FindRootEntry( aDocument, eLocation );
                 if ( pRootEntry )
@@ -843,7 +850,8 @@ void ObjectPage::NewDialog()
                                 aDlgName,
                                 Image( IDEResId( RID_IMG_DIALOG ) ),
                                 pLibEntry, false,
-                                std::auto_ptr< BasicEntry >( new BasicEntry( OBJ_TYPE_DIALOG ) ) );
+                                std::auto_ptr<Entry>(new Entry(OBJ_TYPE_DIALOG))
+                            );
                             SAL_WNODEPRECATED_DECLARATIONS_POP
                             DBG_ASSERT( pEntry, "InsertEntry fehlgeschlagen!" );
                         }
@@ -860,14 +868,14 @@ void ObjectPage::DeleteCurrent()
 {
     SvLBoxEntry* pCurEntry = aBasicBox.GetCurEntry();
     DBG_ASSERT( pCurEntry, "Kein aktueller Eintrag!" );
-    BasicEntryDescriptor aDesc( aBasicBox.GetEntryDescriptor( pCurEntry ) );
+    EntryDescriptor aDesc( aBasicBox.GetEntryDescriptor( pCurEntry ) );
     ScriptDocument aDocument( aDesc.GetDocument() );
     DBG_ASSERT( aDocument.isAlive(), "ObjectPage::DeleteCurrent: no document!" );
     if ( !aDocument.isAlive() )
         return;
     ::rtl::OUString aLibName( aDesc.GetLibName() );
     ::rtl::OUString aName( aDesc.GetName() );
-    BasicEntryType eType( aDesc.GetType() );
+    EntryType eType = aDesc.GetType();
 
     if ( ( eType == OBJ_TYPE_MODULE && QueryDelModule( aName, this ) ) ||
          ( eType == OBJ_TYPE_DIALOG && QueryDelDialog( aName, this ) ) )
@@ -875,10 +883,7 @@ void ObjectPage::DeleteCurrent()
         aBasicBox.GetModel()->Remove( pCurEntry );
         if ( aBasicBox.GetCurEntry() )  // OV-Bug ?
             aBasicBox.Select( aBasicBox.GetCurEntry() );
-        BasicIDEShell* pIDEShell = BasicIDEGlobals::GetShell();
-        SfxViewFrame* pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
-        SfxDispatcher* pDispatcher = pViewFrame ? pViewFrame->GetDispatcher() : NULL;
-        if( pDispatcher )
+        if (SfxDispatcher* pDispatcher = GetDispatcher())
         {
             SbxItem aSbxItem( SID_BASICIDE_ARG_SBX, aDocument, aLibName, aName, aBasicBox.ConvertType( eType ) );
             pDispatcher->Execute( SID_BASICIDE_SBXDELETED,
@@ -891,10 +896,10 @@ void ObjectPage::DeleteCurrent()
             if ( eType == OBJ_TYPE_MODULE )
                 bSuccess = aDocument.removeModule( aLibName, aName );
             else if ( eType == OBJ_TYPE_DIALOG )
-                bSuccess = BasicIDE::RemoveDialog( aDocument, aLibName, aName );
+                bSuccess = RemoveDialog( aDocument, aLibName, aName );
 
             if ( bSuccess )
-                BasicIDE::MarkDocumentModified( aDocument );
+                MarkDocumentModified( aDocument );
         }
         catch (const container::NoSuchElementException& )
         {
@@ -941,7 +946,7 @@ void LibDialog::SetStorageName( const ::rtl::OUString& rName )
 
 // Helper function
 SbModule* createModImpl( Window* pWin, const ScriptDocument& rDocument,
-    BasicTreeListBox& rBasicBox, const ::rtl::OUString& rLibName, ::rtl::OUString aModName, bool bMain )
+    TreeListBox& rBasicBox, const ::rtl::OUString& rLibName, ::rtl::OUString aModName, bool bMain )
 {
     OSL_ENSURE( rDocument.isAlive(), "createModImpl: invalid document!" );
     if ( !rDocument.isAlive() )
@@ -976,15 +981,10 @@ SbModule* createModImpl( Window* pWin, const ScriptDocument& rDocument,
             StarBASIC* pBasic = pBasMgr? pBasMgr->GetLib( aLibName ) : 0;
                 if ( pBasic )
                     pModule = pBasic->FindModule( aModName );
-                SbxItem aSbxItem( SID_BASICIDE_ARG_SBX, rDocument, aLibName, aModName, BASICIDE_TYPE_MODULE );
-            BasicIDEShell* pIDEShell = BasicIDEGlobals::GetShell();
-            SfxViewFrame* pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
-            SfxDispatcher* pDispatcher = pViewFrame ? pViewFrame->GetDispatcher() : NULL;
-            if( pDispatcher )
-            {
+                SbxItem aSbxItem( SID_BASICIDE_ARG_SBX, rDocument, aLibName, aModName, TYPE_MODULE );
+            if (SfxDispatcher* pDispatcher = GetDispatcher())
                 pDispatcher->Execute( SID_BASICIDE_SBXINSERTED,
                                       SFX_CALLMODE_SYNCHRON, &aSbxItem, 0L );
-            }
             LibraryLocation eLocation = rDocument.getLibraryLocation( aLibName );
             SvLBoxEntry* pRootEntry = rBasicBox.FindRootEntry( rDocument, eLocation );
             if ( pRootEntry )
@@ -1018,7 +1018,8 @@ SbModule* createModImpl( Window* pWin, const ScriptDocument& rDocument,
                             aModName,
                             Image( IDEResId( RID_IMG_MODULE ) ),
                             pSubRootEntry, false,
-                            std::auto_ptr< BasicEntry >( new BasicEntry( OBJ_TYPE_MODULE ) ) );
+                            std::auto_ptr<Entry>(new Entry(OBJ_TYPE_MODULE))
+                        );
                         SAL_WNODEPRECATED_DECLARATIONS_POP
                         DBG_ASSERT( pEntry, "InsertEntry fehlgeschlagen!" );
                     }
@@ -1039,5 +1040,8 @@ SbModule* createModImpl( Window* pWin, const ScriptDocument& rDocument,
     }
     return pModule;
 }
+
+
+} // namespace basctl
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -15,8 +15,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _MOPTIONS_HRC
-#define _MOPTIONS_HRC
+#ifndef BASCTL_MOPTIONS_HRC
+#define BASCTL_MOPTIONS_HRC
 
 #include <svl/solar.hrc>
 
@@ -34,5 +34,5 @@
 #define RID_FT_HELPNAME     11
 #define RID_ED_HELPNAME     12
 
-#endif // _MOPTIONS_HRC
+#endif // BASCTL_MOPTIONS_HRC
 

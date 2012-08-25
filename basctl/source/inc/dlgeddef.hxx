@@ -17,10 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _BASCTL_DLGEDDEF_HXX
-#define _BASCTL_DLGEDDEF_HXX
+#ifndef BASCTL_DLGEDDEF_HXX
+#define BASCTL_DLGEDDEF_HXX
 
 #include <sal/types.h>
+
+namespace basctl
+{
 
 const sal_uInt32 DlgInventor = sal_uInt32('D')*0x00000001+
                            sal_uInt32('L')*0x00000100+
@@ -80,6 +83,8 @@ const sal_uInt32 DlgInventor = sal_uInt32('D')*0x00000001+
 #define DLGED_PROP_DECORATION           ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Decoration" ) )
 
 
-#endif // _BASCTL_DLGEDDEF_HXX
+} // namespace basctl
+
+#endif // BASCTL_DLGEDDEF_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

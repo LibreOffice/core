@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _BASCTL_PROPBRW_HXX
-#define _BASCTL_PROPBRW_HXX
+#ifndef BASCTL_PROPBRW_HXX
+#define BASCTL_PROPBRW_HXX
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <comphelper/stl_types.hxx>
@@ -26,6 +26,12 @@
 #include <sfx2/dockwin.hxx>
 #include <svl/lstner.hxx>
 #include <svx/svdmark.hxx>
+
+class SfxBindings;
+class SdrView;
+
+namespace basctl
+{
 
 //============================================================================
 // PropBrwMgr
@@ -41,9 +47,6 @@ public:
 //============================================================================
 // PropBrw
 //============================================================================
-
-class SfxBindings;
-class SdrView;
 
 class PropBrw : public SfxDockingWindow , public SfxListener, public SfxBroadcaster
 {
@@ -91,7 +94,7 @@ public:
     using Window::Update;
     // note: changing the Context document to an instance other than the one given in the ctor is not supported
     // currently
-    void    Update( const SfxViewShell* _pShell );
+    void    Update( const SfxViewShell* pShell );
     SdrView*        GetCurView() const { return pView; }
 
 private:
@@ -100,6 +103,8 @@ private:
     void    ImplReCreateController();
 };
 
-#endif // _BASCTL_PROPBRW_HXX
+} // namespace basctl
+
+#endif // BASCTL_PROPBRW_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

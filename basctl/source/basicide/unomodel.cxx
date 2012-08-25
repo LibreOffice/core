@@ -28,6 +28,9 @@
 #include <iderdll.hxx>
 #include <basdoc.hxx>
 
+namespace basctl
+{
+
 using ::rtl::OUString;
 using namespace ::cppu;
 using namespace ::std;
@@ -110,9 +113,11 @@ uno::Reference< uno::XInterface > SAL_CALL SIDEModel_createInstance(
                 const uno::Reference< lang::XMultiServiceFactory > & ) throw( uno::Exception )
 {
     SolarMutexGuard aGuard;
-    BasicIDEGlobals::ensure();
-    SfxObjectShell* pShell = new BasicDocShell();
+    EnsureIde();
+    SfxObjectShell* pShell = new DocShell();
     return uno::Reference< uno::XInterface >( pShell->GetModel() );
 }
+
+} // namespace basctl
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -229,7 +229,7 @@ public:
 
 
 
-class WatchWindow : public BasicDockingWindow
+class WatchWindow : public DockingWindow
 {
 private:
     String              aWatchStr;
@@ -260,7 +260,7 @@ public:
 };
 
 
-class StackWindow : public BasicDockingWindow
+class StackWindow : public DockingWindow
 {
 private:
     SvTreeListBox   aTreeListBox;
@@ -304,7 +304,7 @@ public:
 };
 
 
-class ModulWindow: public IDEBaseWindow
+class ModulWindow: public BaseWindow
 {
 private:
     ModulWindowLayout&  rLayout;
@@ -348,7 +348,7 @@ public:
     // print page
     virtual void printPage( sal_Int32 nPage, Printer* pPrinter );
     virtual ::rtl::OUString  GetTitle();
-    virtual BasicEntryDescriptor CreateEntryDescriptor();
+    virtual EntryDescriptor CreateEntryDescriptor();
     virtual bool    AllowUndo();
     virtual void    SetReadOnly (bool bReadOnly);
     virtual bool    IsReadOnly();
@@ -418,7 +418,7 @@ public:
 
     virtual void OnNewDocument ();
     virtual char const* GetHid () const;
-    virtual BasicIDEType GetType () const;
+    virtual ItemType GetType () const;
     virtual bool HasActiveEditor () const;
 
     void UpdateModule ();
@@ -430,7 +430,7 @@ public:
     ModulWindowLayout (Window* pParent, ObjectCatalog&);
 public:
     // Layout:
-    virtual void Activating (IDEBaseWindow&);
+    virtual void Activating (BaseWindow&);
     virtual void Deactivating ();
     virtual void GetState (SfxItemSet&, unsigned nWhich);
     virtual void UpdateDebug (bool bBasicStopped);

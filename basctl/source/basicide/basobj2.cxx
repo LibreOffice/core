@@ -43,6 +43,9 @@
 #include <algorithm>
 #include <memory>
 
+namespace basctl
+{
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::container;
@@ -55,7 +58,7 @@ extern "C" {
     {
         ::rtl::OUString aMacroDesc( pMacroDesc );
         Reference< frame::XModel > aDocument( static_cast< frame::XModel* >( pOnlyInDocument_AsXModel ) );
-        ::rtl::OUString aScriptURL = BasicIDE::ChooseMacro( aDocument, bChooseOnly, aMacroDesc );
+        ::rtl::OUString aScriptURL = basctl::ChooseMacro( aDocument, bChooseOnly, aMacroDesc );
         rtl_uString* pScriptURL = aScriptURL.pData;
         rtl_uString_acquire( pScriptURL );
 
@@ -64,31 +67,23 @@ extern "C" {
     SAL_DLLPUBLIC_EXPORT void basicide_macro_organizer( sal_Int16 nTabId )
     {
         OSL_TRACE("in basicide_macro_organizer");
-        BasicIDE::Organize( nTabId );
+        basctl::Organize( nTabId );
     }
 }
 
-namespace BasicIDE
-{
 //----------------------------------------------------------------------------
 
 void Organize( sal_Int16 tabId )
 {
-    BasicIDEGlobals::ensure();
+    EnsureIde();
 
-    BasicEntryDescriptor aDesc;
-    BasicIDEShell* pIDEShell = BasicIDEGlobals::GetShell();
-    if ( pIDEShell )
-    {
-        IDEBaseWindow* pCurWin = pIDEShell->GetCurWindow();
-        if ( pCurWin )
+    EntryDescriptor aDesc;
+    if (Shell* pShell = GetShell())
+        if (BaseWindow* pCurWin = pShell->GetCurWindow())
             aDesc = pCurWin->CreateEntryDescriptor();
-    }
 
     Window* pParent = Application::GetDefDialogParent();
-    OrganizeDialog* pDlg = new OrganizeDialog( pParent, tabId, aDesc );
-    pDlg->Execute();
-    delete pDlg;
+    OrganizeDialog(pParent, tabId, aDesc).Execute();
 }
 
 //----------------------------------------------------------------------------
@@ -160,11 +155,17 @@ Sequence< ::rtl::OUString > GetMergedLibraryNames( const Reference< script::XLib
 
 //----------------------------------------------------------------------------
 
-bool RenameModule( Window* pErrorParent, const ScriptDocument& rDocument, const ::rtl::OUString& rLibName, const ::rtl::OUString& rOldName, const ::rtl::OUString& rNewName )
+bool RenameModule (
+    Window* pErrorParent,
+    const ScriptDocument& rDocument,
+    const ::rtl::OUString& rLibName,
+    const ::rtl::OUString& rOldName,
+    const ::rtl::OUString& rNewName
+)
 {
     if ( !rDocument.hasModule( rLibName, rOldName ) )
     {
-        OSL_FAIL( "BasicIDE::RenameModule: old module name is invalid!" );
+        OSL_FAIL( "basctl::RenameModule: old module name is invalid!" );
         return false;
     }
 
@@ -186,9 +187,9 @@ bool RenameModule( Window* pErrorParent, const ScriptDocument& rDocument, const 
     if ( !rDocument.renameModule( rLibName, rOldName, rNewName ) )
         return false;
 
-    if (BasicIDEShell* pIDEShell = BasicIDEGlobals::GetShell())
+    if (Shell* pShell = GetShell())
     {
-        if (basctl::ModulWindow* pWin = pIDEShell->FindBasWin(rDocument, rLibName, rNewName, false, true))
+        if (ModulWindow* pWin = pShell->FindBasWin(rDocument, rLibName, rNewName, false, true))
         {
             // set new name in window
             pWin->SetName( rNewName );
@@ -197,14 +198,14 @@ bool RenameModule( Window* pErrorParent, const ScriptDocument& rDocument, const 
             pWin->SetSbModule( (SbModule*)pWin->GetBasic()->FindModule( rNewName ) );
 
             // update tabwriter
-            sal_uInt16 nId = pIDEShell->GetIDEWindowId( pWin );
+            sal_uInt16 nId = pShell->GetWindowId( pWin );
             DBG_ASSERT( nId, "No entry in Tabbar!" );
             if ( nId )
             {
-                BasicIDETabBar* pTabBar = (BasicIDETabBar*)pIDEShell->GetTabBar();
-                pTabBar->SetPageText( nId, rNewName );
-                pTabBar->Sort();
-                pTabBar->MakeVisible( pTabBar->GetCurPageId() );
+                TabBar& rTabBar = pShell->GetTabBar();
+                rTabBar.SetPageText(nId, rNewName);
+                rTabBar.Sort();
+                rTabBar.MakeVisible(rTabBar.GetCurPageId());
             }
         }
     }
@@ -250,7 +251,7 @@ namespace
         if ( pData->aDocument.isDocument() )
             pUndoGuard.reset( new ::framework::DocumentUndoGuard( pData->aDocument.getDocument() ) );
 
-        BasicIDE::RunMethod( pData->xMethod );
+        RunMethod(pData->xMethod);
 
         return 1L;
     }
@@ -262,9 +263,9 @@ namespace
 {
     (void)rMacroDesc;
 
-    BasicIDEGlobals::ensure();
+    EnsureIde();
 
-    BasicIDEGlobals::GetExtraData()->ChoosingMacro() = true;
+    GetExtraData()->ChoosingMacro() = true;
 
     String aScriptURL;
     bool bError = false;
@@ -280,7 +281,7 @@ namespace
 
     short nRetValue = pChooser->Execute();
 
-    BasicIDEGlobals::GetExtraData()->ChoosingMacro() = false;
+    GetExtraData()->ChoosingMacro() = false;
 
     switch ( nRetValue )
     {
@@ -296,21 +297,21 @@ namespace
             SbModule* pModule = pMethod->GetModule();
             if ( !pModule )
             {
-                SAL_WARN( "basctl.basicide", "BasicIDE::ChooseMacro: No Module found!" );
+                SAL_WARN( "basctl.basicide", "basctl::ChooseMacro: No Module found!" );
                 break;
             }
 
             StarBASIC* pBasic = dynamic_cast<StarBASIC*>(pModule->GetParent());
             if ( !pBasic )
             {
-                SAL_WARN( "basctl.basicide", "BasicIDE::ChooseMacro: No Basic found!" );
+                SAL_WARN( "basctl.basicide", "basctl::ChooseMacro: No Basic found!" );
                 break;
             }
 
-            BasicManager* pBasMgr = BasicIDE::FindBasicManager( pBasic );
+            BasicManager* pBasMgr = FindBasicManager( pBasic );
             if ( !pBasMgr )
             {
-                SAL_WARN( "basctl.basicide", "BasicIDE::ChooseMacro: No BasicManager found!" );
+                SAL_WARN( "basctl.basicide", "basctl::ChooseMacro: No BasicManager found!" );
                 break;
             }
 
@@ -348,7 +349,7 @@ namespace
                             xLimitToDocument.set( xScripts, UNO_QUERY );
                             if ( !xLimitToDocument.is() )
                             {
-                                OSL_ENSURE( false, "BasicIDE::ChooseMacro: a script container which is no document!?" );
+                                OSL_ENSURE( false, "basctl::ChooseMacro: a script container which is no document!?" );
                                 xLimitToDocument = rxLimitToDocument;
                             }
                         }
@@ -432,7 +433,12 @@ Sequence< ::rtl::OUString > GetMethodNames( const ScriptDocument& rDocument, con
 
 //----------------------------------------------------------------------------
 
-bool HasMethod( const ScriptDocument& rDocument, const ::rtl::OUString& rLibName, const ::rtl::OUString& rModName, const ::rtl::OUString& rMethName )
+bool HasMethod (
+    ScriptDocument const& rDocument,
+    rtl::OUString const& rLibName,
+    rtl::OUString const& rModName,
+    rtl::OUString const& rMethName
+)
 {
     bool bHasMethod = false;
 
@@ -452,7 +458,8 @@ bool HasMethod( const ScriptDocument& rDocument, const ::rtl::OUString& rLibName
 
     return bHasMethod;
 }
-} //namespace BasicIDE
+
 //----------------------------------------------------------------------------
+} // namespace basctl
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

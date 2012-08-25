@@ -28,6 +28,9 @@
 #include <iderdll.hxx>
 #include "dlgedobj.hxx"
 
+namespace basctl
+{
+
 TYPEINIT1( DlgEdView, SdrView );
 
 //----------------------------------------------------------------------------
@@ -53,7 +56,7 @@ void DlgEdView::MarkListHasChanged()
 {
     SdrView::MarkListHasChanged();
 
-    DlgEdHint aHint( DLGED_HINT_SELECTIONCHANGED );
+    DlgEdHint aHint( DlgEdHint::SELECTIONCHANGED );
     if ( pDlgEditor )
     {
         pDlgEditor->Broadcast( aHint );
@@ -127,7 +130,7 @@ void DlgEdView::MakeVisible( const Rectangle& rRect, Window& rWin )
         if ( pDlgEditor )
             pDlgEditor->UpdateScrollBars();
 
-        DlgEdHint aHint( DLGED_HINT_WINDOWSCROLLED );
+        DlgEdHint aHint( DlgEdHint::WINDOWSCROLLED );
         if ( pDlgEditor )
             pDlgEditor->Broadcast( aHint );
     }
@@ -197,5 +200,7 @@ SdrObject* DlgEdView::CheckSingleSdrObjectHit(const Point& rPnt, sal_uInt16 nTol
 
     return pRetval;
 }
+
+} // namespace basctl
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -37,6 +37,9 @@
 #include <sfx2/dispatch.hxx>
 #include <svtools/langtab.hxx>
 
+namespace basctl
+{
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
@@ -58,7 +61,7 @@ LibBoxControl::~LibBoxControl()
 
 void LibBoxControl::StateChanged( sal_uInt16, SfxItemState eState, const SfxPoolItem* pState )
 {
-    BasicLibBox* pBox = (BasicLibBox*) GetToolBox().GetItemWindow( GetId() );
+    LibBox* pBox = (LibBox*)GetToolBox().GetItemWindow(GetId());
 
     DBG_ASSERT( pBox, "Box not found" );
     if ( !pBox )
@@ -77,7 +80,7 @@ void LibBoxControl::StateChanged( sal_uInt16, SfxItemState eState, const SfxPool
 
 Window* LibBoxControl::CreateItemWindow( Window *pParent )
 {
-    return new BasicLibBox( pParent, m_xFrame );
+    return new LibBox( pParent, m_xFrame );
 }
 
 //=============================================================================
@@ -141,9 +144,9 @@ void DocListenerBox::onDocumentModeChanged( const ScriptDocument& /*_rDocument*/
 }
 
 //=============================================================================
-//= BasicLibBox
+//= basctl::LibBox
 //=============================================================================
-BasicLibBox::BasicLibBox( Window* pParent, const uno::Reference< frame::XFrame >& rFrame ) :
+LibBox::LibBox( Window* pParent, const uno::Reference< frame::XFrame >& rFrame ) :
     DocListenerBox( pParent ),
     m_xFrame( rFrame )
 {
@@ -158,12 +161,12 @@ BasicLibBox::BasicLibBox( Window* pParent, const uno::Reference< frame::XFrame >
 
 
 
-BasicLibBox::~BasicLibBox()
+LibBox::~LibBox()
 {
     ClearBox();
 }
 
-void BasicLibBox::Update( const SfxStringItem* pItem )
+void LibBox::Update( const SfxStringItem* pItem )
 {
 
 //  if ( !pItem  || !pItem->GetValue().Len() )
@@ -180,7 +183,7 @@ void BasicLibBox::Update( const SfxStringItem* pItem )
         SelectEntry( aCurText );
 }
 
-void BasicLibBox::ReleaseFocus()
+void LibBox::ReleaseFocus()
 {
     SfxViewShell* pCurSh = SfxViewShell::Current();
     DBG_ASSERT( pCurSh, "Current ViewShell not found!" );
@@ -195,7 +198,7 @@ void BasicLibBox::ReleaseFocus()
     }
 }
 
-void BasicLibBox::FillBox()
+void LibBox::FillBox()
 {
     SetUpdateMode(false);
     bIgnoreSelect = true;
@@ -207,7 +210,7 @@ void BasicLibBox::FillBox()
 
     // create list box entries
     sal_uInt16 nPos = InsertEntry( String( IDEResId( RID_STR_ALL ) ), LISTBOX_APPEND );
-    SetEntryData( nPos, new BasicLibEntry( ScriptDocument::getApplicationScriptDocument(), LIBRARY_LOCATION_UNKNOWN, String() ) );
+    SetEntryData( nPos, new LibEntry( ScriptDocument::getApplicationScriptDocument(), LIBRARY_LOCATION_UNKNOWN, String() ) );
     InsertEntries( ScriptDocument::getApplicationScriptDocument(), LIBRARY_LOCATION_USER );
     InsertEntries( ScriptDocument::getApplicationScriptDocument(), LIBRARY_LOCATION_SHARE );
 
@@ -231,7 +234,7 @@ void BasicLibBox::FillBox()
     bIgnoreSelect = false;
 }
 
-void BasicLibBox::InsertEntries( const ScriptDocument& rDocument, LibraryLocation eLocation )
+void LibBox::InsertEntries( const ScriptDocument& rDocument, LibraryLocation eLocation )
 {
     // get a sorted list of library names
     Sequence< ::rtl::OUString > aLibNames = rDocument.getLibraryNames();
@@ -246,12 +249,12 @@ void BasicLibBox::InsertEntries( const ScriptDocument& rDocument, LibraryLocatio
             String aName( rDocument.getTitle( eLocation ) );
             String aEntryText( CreateMgrAndLibStr( aName, aLibName ) );
             sal_uInt16 nPos = InsertEntry( aEntryText, LISTBOX_APPEND );
-            SetEntryData( nPos, new BasicLibEntry( rDocument, eLocation, aLibName ) );
+            SetEntryData( nPos, new LibEntry( rDocument, eLocation, aLibName ) );
         }
     }
 }
 
-long BasicLibBox::PreNotify( NotifyEvent& rNEvt )
+long LibBox::PreNotify( NotifyEvent& rNEvt )
 {
     long nDone = 0;
     if( rNEvt.GetType() == EVENT_KEYINPUT )
@@ -296,7 +299,7 @@ long BasicLibBox::PreNotify( NotifyEvent& rNEvt )
     return nDone ? nDone : ListBox::PreNotify( rNEvt );
 }
 
-void BasicLibBox::Select()
+void LibBox::Select()
 {
     if ( !IsTravelSelect() )
     {
@@ -307,34 +310,30 @@ void BasicLibBox::Select()
     }
 }
 
-void BasicLibBox::NotifyIDE()
+void LibBox::NotifyIDE()
 {
     sal_uInt16 nSelPos = GetSelectEntryPos();
-    BasicLibEntry* pEntry = static_cast<BasicLibEntry*>(GetEntryData( nSelPos ));
-    if ( pEntry )
+    if (LibEntry* pEntry = static_cast<LibEntry*>(GetEntryData(nSelPos)))
     {
         ScriptDocument aDocument( pEntry->GetDocument() );
         SfxUsrAnyItem aDocumentItem( SID_BASICIDE_ARG_DOCUMENT_MODEL, uno::makeAny( aDocument.getDocumentOrNull() ) );
         String aLibName = pEntry->GetLibName();
         SfxStringItem aLibNameItem( SID_BASICIDE_ARG_LIBNAME, aLibName );
-        BasicIDEShell* pIDEShell = BasicIDEGlobals::GetShell();
-        SfxViewFrame* pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
-        SfxDispatcher* pDispatcher = pViewFrame ? pViewFrame->GetDispatcher() : NULL;
-        if ( pDispatcher )
-        {
-            pDispatcher->Execute( SID_BASICIDE_LIBSELECTED,
-                                  SFX_CALLMODE_SYNCHRON, &aDocumentItem, &aLibNameItem, 0L );
-        }
+        if (SfxDispatcher* pDispatcher = GetDispatcher())
+            pDispatcher->Execute(
+                SID_BASICIDE_LIBSELECTED,
+                SFX_CALLMODE_SYNCHRON, &aDocumentItem, &aLibNameItem, 0L
+            );
     }
     ReleaseFocus();
 }
 
-void BasicLibBox::ClearBox()
+void LibBox::ClearBox()
 {
     sal_uInt16 nCount = GetEntryCount();
     for ( sal_uInt16 i = 0; i < nCount; ++i )
     {
-        BasicLibEntry* pEntry = static_cast<BasicLibEntry*>(GetEntryData( i ));
+        LibEntry* pEntry = static_cast<LibEntry*>(GetEntryData( i ));
         delete pEntry;
     }
     ListBox::Clear();
@@ -356,7 +355,7 @@ LanguageBoxControl::~LanguageBoxControl()
 void LanguageBoxControl::StateChanged( sal_uInt16 nID, SfxItemState eState, const SfxPoolItem* pItem )
 {
     (void)nID;
-    if (BasicLanguageBox* pBox = static_cast<BasicLanguageBox*>(GetToolBox().GetItemWindow(GetId())))
+    if (LanguageBox* pBox = static_cast<LanguageBox*>(GetToolBox().GetItemWindow(GetId())))
     {
         if (eState != SFX_ITEM_AVAILABLE)
             pBox->Disable();
@@ -370,12 +369,12 @@ void LanguageBoxControl::StateChanged( sal_uInt16 nID, SfxItemState eState, cons
 
 Window* LanguageBoxControl::CreateItemWindow( Window *pParent )
 {
-    return new BasicLanguageBox( pParent );
+    return new LanguageBox( pParent );
 }
 
-// class BasicLanguageBox ------------------------------------------------
+// class basctl::LanguageBox -----------------------------------------------
 
-BasicLanguageBox::BasicLanguageBox( Window* pParent ) :
+LanguageBox::LanguageBox( Window* pParent ) :
 
     DocListenerBox( pParent ),
 
@@ -390,19 +389,19 @@ BasicLanguageBox::BasicLanguageBox( Window* pParent ) :
     FillBox();
 }
 
-BasicLanguageBox::~BasicLanguageBox()
+LanguageBox::~LanguageBox()
 {
     ClearBox();
 }
 
-void BasicLanguageBox::FillBox()
+void LanguageBox::FillBox()
 {
     SetUpdateMode(false);
     m_bIgnoreSelect = true;
     m_sCurrentText = GetSelectEntry();
     ClearBox();
 
-    boost::shared_ptr<LocalizationMgr> pCurMgr(BasicIDEGlobals::GetShell()->GetCurLocalizationMgr());
+    boost::shared_ptr<LocalizationMgr> pCurMgr(GetShell()->GetCurLocalizationMgr());
     if ( pCurMgr->isLibraryLocalized() )
     {
         Enable();
@@ -448,7 +447,7 @@ void BasicLanguageBox::FillBox()
     m_bIgnoreSelect = false;
 }
 
-void BasicLanguageBox::ClearBox()
+void LanguageBox::ClearBox()
 {
     sal_uInt16 nCount = GetEntryCount();
     for ( sal_uInt16 i = 0; i < nCount; ++i )
@@ -459,14 +458,14 @@ void BasicLanguageBox::ClearBox()
     ListBox::Clear();
 }
 
-void BasicLanguageBox::SetLanguage()
+void LanguageBox::SetLanguage()
 {
     LanguageEntry* pEntry = (LanguageEntry*)GetEntryData( GetSelectEntryPos() );
     if ( pEntry )
-        BasicIDEGlobals::GetShell()->GetCurLocalizationMgr()->handleSetCurrentLocale( pEntry->m_aLocale );
+        GetShell()->GetCurLocalizationMgr()->handleSetCurrentLocale( pEntry->m_aLocale );
 }
 
-void BasicLanguageBox::Select()
+void LanguageBox::Select()
 {
     if ( !m_bIgnoreSelect )
         SetLanguage();
@@ -474,7 +473,7 @@ void BasicLanguageBox::Select()
         SelectEntry( m_sCurrentText );  // Select after Escape
 }
 
-long BasicLanguageBox::PreNotify( NotifyEvent& rNEvt )
+long LanguageBox::PreNotify( NotifyEvent& rNEvt )
 {
     long nDone = 0;
     if( rNEvt.GetType() == EVENT_KEYINPUT )
@@ -507,7 +506,7 @@ long BasicLanguageBox::PreNotify( NotifyEvent& rNEvt )
     return nDone ? nDone : ListBox::PreNotify( rNEvt );
 }
 
-void BasicLanguageBox::Update( const SfxStringItem* pItem )
+void LanguageBox::Update( const SfxStringItem* pItem )
 {
     FillBox();
 
@@ -518,5 +517,8 @@ void BasicLanguageBox::Update( const SfxStringItem* pItem )
             SelectEntry( m_sCurrentText );
     }
 }
+
+
+} // namespace basctl
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
