@@ -67,8 +67,6 @@ copy-stuff:
 		  datelo \
 		  expwrap.uno \
 		  fastsax.uno \
-		  forlo \
-		  foruilo \
 		  frmlo \
 		  gcc3_uno \
 		  i18nisolang1gcc3 \
@@ -106,7 +104,6 @@ copy-stuff:
 		  vbahelperlo \
 		  xml2 \
 		  xmlreader \
-		  xstor \
 		  ); do \
 	    $(call COPY,$(OUTDIR)/lib/lib$${F}.so); \
 	done

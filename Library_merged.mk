@@ -54,6 +54,20 @@ $(eval $(call gb_Library_use_externals,merged,\
 	zlib \
 ))
 
+# This would be needed on all platforms but only on android we merge libraries from lingucomponent
+ifeq ($(OS),ANDROID)
+$(eval $(call gb_Library_use_externals,merged,\
+	hunspell \
+))
+$(eval $(call gb_Library_use_static_libraries,merged,\
+	ulingu \
+))
+$(eval $(call gb_Library_add_libs,merged,\
+	$(if $(filter MSC,$(COM)),libmythes.lib,-lmythes-1.2) \
+	$(if $(filter MSC,$(COM)),hyphen.lib,-lhyphen) \
+))
+endif
+
 ifeq ($(ENABLE_GRAPHITE),TRUE)
 $(eval $(call gb_Library_use_externals,merged,\
 	graphite \

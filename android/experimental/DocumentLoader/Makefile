@@ -62,8 +62,6 @@ copy-stuff:
 		   evtattlo \
 		   expwrap.uno \
 		   fastsax.uno \
-		   forlo \
-		   foruilo \
 		   frmlo \
 		   gcc3_uno \
 		   hwplo \
@@ -120,7 +118,6 @@ copy-stuff:
 		   xmlreader \
 		   xmlsecurity \
 		   xslt \
-		   xstor \
 		  ); do \
 	    $(call COPYSO,$(OUTDIR)/lib/lib$${F}.so); \
 	done

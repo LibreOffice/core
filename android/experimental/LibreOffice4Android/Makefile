@@ -35,12 +35,9 @@ copy-stuff:
 		   evtattlo \
 		   expwrap.uno \
 		   fastsax.uno \
-		   forlo \
-		   foruilo \
 		   frmlo \
 		   gcc3_uno \
 		   hwplo \
-		   hyphenlo \
 		   i18nisolang1gcc3 \
 		   icudatalo \
 		   icui18nlo \
@@ -53,7 +50,6 @@ copy-stuff:
 		   jvmaccessgcc3 \
 		   jvmfwk \
 		   libotouchlo \
-		   lnthlo \
 		   lo-bootstrap \
 		   localedata_en \
 		   localedata_es \
@@ -73,7 +69,6 @@ copy-stuff:
 		   sdlo \
 		   sddlo \
 		   smdlo \
-		   spelllo \
 		   stocservices.uno \
 		   store \
 		   svgfilterlo \
@@ -102,7 +97,6 @@ copy-stuff:
 		   xmlsecurity \
 		   xoflo \
 		   xslt \
-		   xstor \
 		  ); do \
 	    $(call COPYSO,$(OUTDIR)/lib/lib$${F}.so); \
 	done

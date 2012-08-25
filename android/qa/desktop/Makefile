@@ -98,10 +98,7 @@ copy-stuff: buildrcs
 		  cppcanvaslo \
 		  embobj \
 		  expwrap.uno \
-		  forlo \
-		  foruilo \
 		  gcc3_uno \
-		  hyphenlo \
 		  i18nisolang1gcc3 \
 		  icudatalo \
 		  icui18nlo \
@@ -111,7 +108,6 @@ copy-stuff: buildrcs
 		  jvmfwk \
 		  libotouchlo \
 		  introspection.uno \
-		  lnthlo \
 		  localedata_en \
 		  localedata_es \
 		  localedata_euro \
@@ -121,7 +117,6 @@ copy-stuff: buildrcs
 		  ooxlo \
 		  reflection.uno \
 		  reg \
-		  spelllo \
 		  stocservices.uno \
 		  store \
 		  test \
@@ -139,7 +134,6 @@ copy-stuff: buildrcs
 		  xmlreader \
 		  xmlsecurity \
 		  xslt \
-		  xstor \
 		  \
 		  swlo \
 		  swuilo \
