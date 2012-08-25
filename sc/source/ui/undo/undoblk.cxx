@@ -770,7 +770,7 @@ void ScUndoCut::DoChange( const sal_Bool bUndo )
 
     if (bUndo)  // only for Undo
     {
-        //  all sheets - CopyToDocument skips those that don't exist in pUndoDoc
+        // all sheets - CopyToDocument skips those that don't exist in pUndoDoc
         SCTAB nTabCount = pDoc->GetTableCount();
         ScRange aCopyRange = aExtendedRange;
         aCopyRange.aStart.SetTab(0);
@@ -1066,9 +1066,9 @@ void ScUndoPaste::Redo()
 {
     BeginRedo();
     ScDocument* pDoc = pDocShell->GetDocument();
-    EnableDrawAdjust( pDoc, false );                //! include in ScBlockUndo?
+    EnableDrawAdjust( pDoc, false );    // include in ScBlockUndo?
     DoChange( false );
-    EnableDrawAdjust( pDoc, sal_True );                 //! include in ScBlockUndo?
+    EnableDrawAdjust( pDoc, sal_True ); // include in ScBlockUndo?
     EndRedo();
     SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_AREALINKS_CHANGED ) );
 }

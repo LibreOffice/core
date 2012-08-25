@@ -951,7 +951,7 @@ void ScUndoQuery::Undo()
         pUndoDoc->CopyToDocument( aQueryParam.nDestCol, aQueryParam.nDestRow, aQueryParam.nDestTab,
                                     nDestEndCol, nDestEndRow, aQueryParam.nDestTab,
                                     IDF_ALL, false, pDoc );
-        //  Attributes are always copied (#49287#)
+        // Attributes are always copied (#49287#)
 
         // rest of the old range
         if ( bDestArea && !bDoSize )
@@ -1036,7 +1036,7 @@ sal_Bool ScUndoQuery::CanRepeat(SfxRepeatTarget& /* rTarget */) const
     return false;    // does not work due to column numbers
 }
 
-//      Show or hide AutoFilter buttons (doesn't include filter settings)
+// Show or hide AutoFilter buttons (doesn't include filter settings)
 
 ScUndoAutoFilter::ScUndoAutoFilter( ScDocShell* pNewDocShell, const ScRange& rRange,
                                     const ::rtl::OUString& rName, bool bSet ) :
@@ -2006,9 +2006,9 @@ void ScUndoDataForm::Redo()
 {
         BeginRedo();
         ScDocument* pDoc = pDocShell->GetDocument();
-        EnableDrawAdjust( pDoc, false );                                //! include in ScBlockUndo?
+        EnableDrawAdjust( pDoc, false ); // include in ScBlockUndo?
         DoChange( false );
-        EnableDrawAdjust( pDoc, true );                                 //! include in ScBlockUndo?
+        EnableDrawAdjust( pDoc, true );  // include in ScBlockUndo?
         EndRedo();
         SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_AREALINKS_CHANGED ) );
 }
@@ -2026,8 +2026,8 @@ void ScUndoDataForm::DoChange( const sal_Bool bUndo )
 {
     ScDocument* pDoc = pDocShell->GetDocument();
 
-    //      RefUndoData for redo is created before first undo
-    //      (with DeleteUnchanged after the DoUndo call)
+    // RefUndoData for redo is created before first undo
+    // (with DeleteUnchanged after the DoUndo call)
     sal_Bool bCreateRedoData = ( bUndo && pRefUndoData && !pRefRedoData );
     if ( bCreateRedoData )
             pRefRedoData = new ScRefUndoData( pDoc );
@@ -2057,7 +2057,7 @@ void ScUndoDataForm::DoChange( const sal_Bool bUndo )
             pRedoDoc->InitUndoSelected( pDoc, *mpMarkData, bColInfo, bRowInfo );
         }
         //  read "redo" data from the document in the first undo
-            //  all sheets - CopyToDocument skips those that don't exist in pRedoDoc
+        //  all sheets - CopyToDocument skips those that don't exist in pRedoDoc
         ScRange aCopyRange = aBlockRange;
         aCopyRange.aStart.SetTab(0);
         aCopyRange.aEnd.SetTab(nTabCount-1);
@@ -2077,7 +2077,7 @@ void ScUndoDataForm::DoChange( const sal_Bool bUndo )
 
     if (pWorkRefData)
     {
-        pWorkRefData->DoUndo( pDoc, true );             // TRUE = bSetChartRangeLists for SetChartListenerCollection
+        pWorkRefData->DoUndo( pDoc, true ); // TRUE = bSetChartRangeLists for SetChartListenerCollection
         if ( pDoc->RefreshAutoFilter( 0,0, MAXCOL,MAXROW, aBlockRange.aStart.Tab() ) )
             bPaintAll = true;
     }
@@ -2095,7 +2095,7 @@ void ScUndoDataForm::DoChange( const sal_Bool bUndo )
         SetChangeTrack();
 
     ScRange aDrawRange( aBlockRange );
-    pDoc->ExtendMerge( aDrawRange, true );      // only needed for single sheet (text/rtf etc.)
+    pDoc->ExtendMerge( aDrawRange, true ); // only needed for single sheet (text/rtf etc.)
     sal_uInt16 nPaint = PAINT_GRID;
     if (bPaintAll)
     {

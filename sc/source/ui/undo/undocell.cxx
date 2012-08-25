@@ -93,7 +93,7 @@ ScUndoCursorAttr::~ScUndoCursorAttr()
 
 rtl::OUString ScUndoCursorAttr::GetComment() const
 {
-    //! own text for automatic attribution
+    // own text for automatic attribution
 
     sal_uInt16 nId = STR_UNDO_CURSORATTR;        // "Attribute"
     return ScGlobal::GetRscString( nId );

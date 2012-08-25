@@ -102,8 +102,8 @@ void ScUndoWidthOrHeight::Undo()
             nPaintStart = 0;        // paint all, because of changed selection
     }
 
-    //! outlines from all tables?
-    if (pUndoTab)                                           // Outlines are included when saving ?
+    // outlines from all tables?
+    if (pUndoTab)   // Are outlines included when saving ?
         pDoc->SetOutlineTable( nStartTab, pUndoTab );
 
     SCTAB nTabCount = pDoc->GetTableCount();

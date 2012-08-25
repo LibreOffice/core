@@ -128,11 +128,11 @@ void ScUndoInsertTab::Undo()
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
     pViewShell->SetTabNo(nTab);
 
-    pDocShell->SetInUndo( sal_True );               //! BeginUndo
+    pDocShell->SetInUndo( sal_True ); // BeginUndo
     bDrawIsInUndo = sal_True;
     pViewShell->DeleteTable( nTab, false );
     bDrawIsInUndo = false;
-    pDocShell->SetInUndo( false );              //! EndUndo
+    pDocShell->SetInUndo( false );    // EndUndo
 
     DoSdrUndoAction( pDrawUndo, pDocShell->GetDocument() );
 
@@ -140,7 +140,7 @@ void ScUndoInsertTab::Undo()
     if ( pChangeTrack )
         pChangeTrack->Undo( nEndChangeAction, nEndChangeAction );
 
-    //  SetTabNo(...,sal_True) for all views to sync with drawing layer pages
+    // SetTabNo(...,sal_True) for all views to sync with drawing layer pages
     pDocShell->Broadcast( SfxSimpleHint( SC_HINT_FORCESETTAB ) );
 }
 
@@ -148,9 +148,9 @@ void ScUndoInsertTab::Redo()
 {
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
 
-    RedoSdrUndoAction( pDrawUndo );             // Draw Redo first
+    RedoSdrUndoAction( pDrawUndo ); // Draw Redo first
 
-    pDocShell->SetInUndo( sal_True );               //! BeginRedo
+    pDocShell->SetInUndo( sal_True ); // BeginRedo
     bDrawIsInUndo = sal_True;
     if (bAppend)
         pViewShell->AppendTable( sNewName, false );
@@ -160,7 +160,7 @@ void ScUndoInsertTab::Redo()
         pViewShell->InsertTable( sNewName, nTab, false );
     }
     bDrawIsInUndo = false;
-    pDocShell->SetInUndo( false );              //! EndRedo
+    pDocShell->SetInUndo( false );    // EndRedo
 
     SetChangeTrack();
 }
@@ -226,13 +226,13 @@ void ScUndoInsertTables::Undo()
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
     pViewShell->SetTabNo(nTab);
 
-    pDocShell->SetInUndo( sal_True );               //! BeginUndo
+    pDocShell->SetInUndo( sal_True ); // BeginUndo
     bDrawIsInUndo = sal_True;
 
     pViewShell->DeleteTables( nTab, static_cast<SCTAB>(aNameList.size()) );
 
     bDrawIsInUndo = false;
-    pDocShell->SetInUndo( false );              //! EndUndo
+    pDocShell->SetInUndo( false );    // EndUndo
 
     DoSdrUndoAction( pDrawUndo, pDocShell->GetDocument() );
 
@@ -240,7 +240,7 @@ void ScUndoInsertTables::Undo()
     if ( pChangeTrack )
         pChangeTrack->Undo( nStartChangeAction, nEndChangeAction );
 
-    //  SetTabNo(...,sal_True) for all views to sync with drawing layer pages
+    // SetTabNo(...,sal_True) for all views to sync with drawing layer pages
     pDocShell->Broadcast( SfxSimpleHint( SC_HINT_FORCESETTAB ) );
 }
 
@@ -248,15 +248,15 @@ void ScUndoInsertTables::Redo()
 {
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
 
-    RedoSdrUndoAction( pDrawUndo );             // Draw Redo first
+    RedoSdrUndoAction( pDrawUndo ); // Draw Redo first
 
-    pDocShell->SetInUndo( sal_True );               //! BeginRedo
+    pDocShell->SetInUndo( sal_True ); // BeginRedo
     bDrawIsInUndo = sal_True;
     pViewShell->SetTabNo(nTab);
     pViewShell->InsertTables( aNameList, nTab, static_cast<SCTAB>(aNameList.size()),false );
 
     bDrawIsInUndo = false;
-    pDocShell->SetInUndo( false );              //! EndRedo
+    pDocShell->SetInUndo( false );    // EndRedo
 
     SetChangeTrack();
 }
@@ -376,7 +376,7 @@ void ScUndoDeleteTab::Undo()
         pDocShell->UpdateLinks(); // update Link Manager
     }
 
-    EndUndo();      // Draw-Undo has to be called before Broadcast!
+    EndUndo(); // Draw-Undo has to be called before Broadcast!
 
     ScChangeTrack* pChangeTrack = pDocShell->GetDocument()->GetChangeTrack();
     if ( pChangeTrack )
@@ -386,7 +386,7 @@ void ScUndoDeleteTab::Undo()
     {
         pDocShell->Broadcast( ScTablesHint( SC_TAB_INSERTED, theTabs[i]) );
     }
-    SfxApplication* pSfxApp = SFX_APP();                                // Navigator
+    SfxApplication* pSfxApp = SFX_APP(); // Navigator
     pSfxApp->Broadcast( SfxSimpleHint( SC_HINT_TABLES_CHANGED ) );
     pSfxApp->Broadcast( SfxSimpleHint( SC_HINT_DBAREAS_CHANGED ) );
     pSfxApp->Broadcast( SfxSimpleHint( SC_HINT_AREALINKS_CHANGED ) );
@@ -404,17 +404,17 @@ void ScUndoDeleteTab::Redo()
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
     pViewShell->SetTabNo( lcl_GetVisibleTabBefore( *pDocShell->GetDocument(), theTabs.front() ) );
 
-    RedoSdrUndoAction( pDrawUndo );             // Draw Redo first
+    RedoSdrUndoAction( pDrawUndo ); // Draw Redo first
 
-    pDocShell->SetInUndo( sal_True );               //! BeginRedo
+    pDocShell->SetInUndo( sal_True ); // BeginRedo
     bDrawIsInUndo = sal_True;
     pViewShell->DeleteTables( theTabs, false );
     bDrawIsInUndo = false;
-    pDocShell->SetInUndo( sal_True );               //! EndRedo
+    pDocShell->SetInUndo( sal_True ); // EndRedo
 
     SetChangeTrack();
 
-    //  SetTabNo(...,sal_True) for all views to sync with drawing layer pages
+    // SetTabNo(...,sal_True) for all views to sync with drawing layer pages
     pDocShell->Broadcast( SfxSimpleHint( SC_HINT_FORCESETTAB ) );
 }
 
@@ -457,7 +457,7 @@ void ScUndoRenameTab::DoChange( SCTAB nTabP, const String& rName ) const
     ScDocument* pDoc = pDocShell->GetDocument();
     pDoc->RenameTab( nTabP, rName );
 
-    SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_TABLES_CHANGED ) );    // Navigator
+    SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_TABLES_CHANGED ) ); // Navigator
 
     pDocShell->PostPaintGridAll();
     pDocShell->PostPaintExtras();
@@ -519,7 +519,7 @@ void ScUndoMoveTab::DoChange( sal_Bool bUndo ) const
     ScDocument* pDoc = pDocShell->GetDocument();
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
 
-    if (bUndo)                                      // UnDo
+    if (bUndo)
     {
         size_t i = mpNewTabs->size();
         ScProgress* pProgress = new ScProgress(pDocShell , ScGlobal::GetRscString(STR_UNDO_MOVE_TAB),
@@ -528,7 +528,7 @@ void ScUndoMoveTab::DoChange( sal_Bool bUndo ) const
         {
             SCTAB nDestTab = (*mpNewTabs)[i-1];
             SCTAB nOldTab = (*mpOldTabs)[i-1];
-            if (nDestTab > MAXTAB)                          // appended ?
+            if (nDestTab > MAXTAB) // appended ?
                 nDestTab = pDoc->GetTableCount() - 1;
 
             pDoc->MoveTab( nDestTab, nOldTab, pProgress );
@@ -552,7 +552,7 @@ void ScUndoMoveTab::DoChange( sal_Bool bUndo ) const
             SCTAB nDestTab = (*mpNewTabs)[i];
             SCTAB nNewTab = nDestTab;
             SCTAB nOldTab = (*mpOldTabs)[i];
-            if (nDestTab > MAXTAB)                          // appended ?
+            if (nDestTab > MAXTAB) // appended ?
                 nDestTab = pDoc->GetTableCount() - 1;
 
             pDoc->MoveTab( nOldTab, nNewTab, pProgress );
@@ -567,7 +567,7 @@ void ScUndoMoveTab::DoChange( sal_Bool bUndo ) const
         delete pProgress;
     }
 
-    SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_TABLES_CHANGED ) );    // Navigator
+    SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_TABLES_CHANGED ) ); // Navigator
 
     pDocShell->PostPaintGridAll();
     pDocShell->PostPaintExtras();
@@ -586,7 +586,7 @@ void ScUndoMoveTab::Redo()
 
 void ScUndoMoveTab::Repeat(SfxRepeatTarget& /* rTarget */)
 {
-        // No Repeat ! ? !
+        // FIXME: No Repeat !?!
 }
 
 sal_Bool ScUndoMoveTab::CanRepeat(SfxRepeatTarget& /* rTarget */) const
@@ -628,7 +628,7 @@ void ScUndoCopyTab::DoChange() const
     if (pViewShell)
         pViewShell->SetTabNo((*mpOldTabs)[0],true);
 
-    SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_TABLES_CHANGED ) );    // Navigator
+    SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_TABLES_CHANGED ) ); // Navigator
 
     pDocShell->PostPaintGridAll();
     pDocShell->PostPaintExtras();
@@ -639,13 +639,13 @@ void ScUndoCopyTab::Undo()
 {
     ScDocument* pDoc = pDocShell->GetDocument();
 
-    DoSdrUndoAction( pDrawUndo, pDoc );                 // before the sheets are deleted
+    DoSdrUndoAction( pDrawUndo, pDoc ); // before the sheets are deleted
 
     vector<SCTAB>::const_reverse_iterator itr, itrEnd = mpNewTabs->rend();
     for (itr = mpNewTabs->rbegin(); itr != itrEnd; ++itr)
     {
         SCTAB nDestTab = *itr;
-        if (nDestTab > MAXTAB)                          // append?
+        if (nDestTab > MAXTAB) // append?
             nDestTab = pDoc->GetTableCount() - 1;
 
         bDrawIsInUndo = sal_True;
@@ -659,7 +659,7 @@ void ScUndoCopyTab::Undo()
     for (itr = mpNewTabs->rbegin(); itr != itrEnd; ++itr)
     {
         SCTAB nDestTab = *itr;
-        if (nDestTab > MAXTAB)                          // append?
+        if (nDestTab > MAXTAB) // append?
             nDestTab = pDoc->GetTableCount() - 1;
 
         pDocShell->Broadcast( ScTablesHint( SC_TAB_DELETED, nDestTab ) );
@@ -679,7 +679,7 @@ void ScUndoCopyTab::Redo()
         nDestTab = (*mpNewTabs)[i];
         SCTAB nNewTab = nDestTab;
         SCTAB nOldTab = (*mpOldTabs)[i];
-        if (nDestTab > MAXTAB)                          // appended ?
+        if (nDestTab > MAXTAB) // appended ?
             nDestTab = pDoc->GetTableCount() - 1;
 
         bDrawIsInUndo = sal_True;
@@ -690,7 +690,7 @@ void ScUndoCopyTab::Redo()
 
         SCTAB nAdjSource = nOldTab;
         if ( nNewTab <= nOldTab )
-            ++nAdjSource;               // new position of source table after CopyTab
+            ++nAdjSource; // new position of source table after CopyTab
 
         if ( pDoc->IsScenario(nAdjSource) )
         {
@@ -716,9 +716,9 @@ void ScUndoCopyTab::Redo()
         }
     }
 
-    RedoSdrUndoAction( pDrawUndo );             // after the sheets are inserted
+    RedoSdrUndoAction( pDrawUndo ); // after the sheets are inserted
 
-    pViewShell->SetTabNo( nDestTab, sal_True );     // after draw-undo
+    pViewShell->SetTabNo( nDestTab, sal_True ); // after draw-undo
 
     DoChange();
 
@@ -726,7 +726,7 @@ void ScUndoCopyTab::Redo()
 
 void ScUndoCopyTab::Repeat(SfxRepeatTarget& /* rTarget */)
 {
-        // no Repeat ! ? !
+        // FIXME: no Repeat !?!
 }
 
 sal_Bool ScUndoCopyTab::CanRepeat(SfxRepeatTarget& /* rTarget */) const
@@ -852,7 +852,7 @@ void ScUndoMakeScenario::Undo()
 
     SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_TABLES_CHANGED ) );
 
-    //  SetTabNo(...,sal_True) for all views to sync with drawing layer pages
+    // SetTabNo(...,sal_True) for all views to sync with drawing layer pages
     pDocShell->Broadcast( SfxSimpleHint( SC_HINT_FORCESETTAB ) );
 }
 
@@ -860,7 +860,7 @@ void ScUndoMakeScenario::Redo()
 {
     SetViewMarkData(*mpMarkData);
 
-    RedoSdrUndoAction( pDrawUndo );             // Draw Redo first
+    RedoSdrUndoAction( pDrawUndo ); // Draw Redo first
 
     pDocShell->SetInUndo( sal_True );
     bDrawIsInUndo = sal_True;
@@ -930,7 +930,7 @@ void ScUndoImportTab::DoChange() const
         }
     }
 
-    SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_TABLES_CHANGED ) );    // Navigator
+    SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_TABLES_CHANGED ) ); // Navigator
     pDocShell->PostPaint( 0,0,0, MAXCOL,MAXROW,MAXTAB,
                                 PAINT_GRID | PAINT_TOP | PAINT_LEFT | PAINT_EXTRAS );
 }
@@ -976,7 +976,7 @@ void ScUndoImportTab::Undo()
 
     }
 
-    DoSdrUndoAction( pDrawUndo, pDoc );             // before the sheets are deleted
+    DoSdrUndoAction( pDrawUndo, pDoc ); // before the sheets are deleted
 
     bDrawIsInUndo = sal_True;
     for (i=0; i<nCount; i++)
@@ -997,7 +997,7 @@ void ScUndoImportTab::Redo()
     ScDocument* pDoc = pDocShell->GetDocument();
     rtl::OUString aName;
     SCTAB i;
-    for (i=0; i<nCount; i++)                // first insert all sheets (#63304#)
+    for (i=0; i<nCount; i++) // first insert all sheets (#63304#)
     {
         SCTAB nTabPos=nTab+i;
         pRedoDoc->GetName(nTabPos,aName);
@@ -1005,7 +1005,7 @@ void ScUndoImportTab::Redo()
         pDoc->InsertTab(nTabPos,aName);
         bDrawIsInUndo = false;
     }
-    for (i=0; i<nCount; i++)                // then copy into inserted sheets
+    for (i=0; i<nCount; i++) // then copy into inserted sheets
     {
         SCTAB nTabPos=nTab+i;
         pRedoDoc->CopyToDocument(0,0,nTabPos, MAXCOL,MAXROW,nTabPos, IDF_ALL,false, pDoc );
@@ -1028,7 +1028,7 @@ void ScUndoImportTab::Redo()
             pDoc->SetTabProtection(nTabPos, pRedoDoc->GetTabProtection(nTabPos));
     }
 
-    RedoSdrUndoAction( pDrawUndo );     // after the sheets are inserted
+    RedoSdrUndoAction( pDrawUndo ); // after the sheets are inserted
 
     DoChange();
 }
@@ -1214,7 +1214,7 @@ void ScUndoDocProtect::DoProtect(bool bProtect)
     if (pViewShell)
     {
         pViewShell->UpdateLayerLocks();
-        pViewShell->UpdateInputHandler(sal_True);   // so that input can be immediately entered again
+        pViewShell->UpdateInputHandler(sal_True); // so that input can be immediately entered again
     }
 
     pDocShell->PostPaintGridAll();
@@ -1241,7 +1241,7 @@ void ScUndoDocProtect::Repeat(SfxRepeatTarget& /* rTarget */)
 
 sal_Bool ScUndoDocProtect::CanRepeat(SfxRepeatTarget& /* rTarget */) const
 {
-    return false;       // makes no sense
+    return false; // makes no sense
 }
 
 rtl::OUString ScUndoDocProtect::GetComment() const
@@ -1313,7 +1313,7 @@ void ScUndoTabProtect::Repeat(SfxRepeatTarget& /* rTarget */)
 
 sal_Bool ScUndoTabProtect::CanRepeat(SfxRepeatTarget& /* rTarget */) const
 {
-    return false;       // makes no sense
+    return false; // makes no sense
 }
 
 rtl::OUString ScUndoTabProtect::GetComment() const
@@ -1452,7 +1452,7 @@ sal_Bool ScUndoScenarioFlags::CanRepeat(SfxRepeatTarget& /* rTarget */) const
     return false;
 }
 
-//      (move to different file?)
+// (move to different file?)
 ScUndoRenameObject::ScUndoRenameObject( ScDocShell* pNewDocShell, const String& rPN,
                                         const String& rON, const String& rNN ) :
     ScSimpleUndo( pNewDocShell ),

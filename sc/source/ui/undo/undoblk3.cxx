@@ -567,7 +567,7 @@ void ScUndoAutoFill::Redo()
 {
     BeginRedo();
 
-//! Select sheet
+    // Select sheet
 
     SCCOLROW nCount = 0;
     switch (eFillDir)
@@ -942,7 +942,7 @@ void ScUndoReplace::SetChangeTrack()
     if ( pChangeTrack )
     {
         if ( pUndoDoc )
-        {   //! UndoDoc includes only teh changed cells,
+        {   // UndoDoc includes only the changed cells,
             // that is why an Iterator can be used
             pChangeTrack->AppendContentsIfInRefDoc( pUndoDoc,
                 nStartChangeAction, nEndChangeAction );
@@ -976,15 +976,15 @@ void ScUndoReplace::Undo()
 
     ShowTable( aCursorPos.Tab() );
 
-    if (pUndoDoc)       // only for ReplaceAll !!
+    if (pUndoDoc) // only for ReplaceAll!
     {
         OSL_ENSURE(pSearchItem->GetCommand() == SVX_SEARCHCMD_REPLACE_ALL,
                    "ScUndoReplace:: Wrong Mode");
 
         SetViewMarkData( aMarkData );
 
-//! selected sheet
-//! select range ?
+        // selected tables
+        // remember range?
 
         // Undo document has no row/column information, thus copy with
         // bColRowFlags = FALSE to not destroy Outline groups
@@ -1638,7 +1638,7 @@ ScUndoUpdateAreaLink::~ScUndoUpdateAreaLink()
 
 rtl::OUString ScUndoUpdateAreaLink::GetComment() const
 {
-    return ScGlobal::GetRscString( STR_UNDO_UPDATELINK );   //! own text ??
+    return ScGlobal::GetRscString( STR_UNDO_UPDATELINK );   // own text?
 }
 
 void ScUndoUpdateAreaLink::DoChange( const sal_Bool bUndo ) const

@@ -545,7 +545,7 @@ ScUndoWrapper::~ScUndoWrapper()
 
 void ScUndoWrapper::ForgetWrappedUndo()
 {
-    pWrappedUndo = NULL;    // don't delete in dtor - pointer must be stored outside
+    pWrappedUndo = NULL; // don't delete in dtor - pointer must be stored outside
 }
 
 rtl::OUString ScUndoWrapper::GetComment() const
