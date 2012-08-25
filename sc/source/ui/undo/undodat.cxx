@@ -1285,9 +1285,6 @@ void ScUndoImportData::Undo()
         ScUndoUtil::MarkSimpleBlock( pDocShell, nCol1, nRow1, nTable, nCol2, nRow2, nTable );
     }
 
-// erack! it's broadcasted
-//  pDoc->SetDirty();
-
     SCTAB nVisTab = pViewShell->GetViewData()->GetTabNo();
     if ( nVisTab != nTab )
         pViewShell->SetTabNo( nTab );
@@ -1356,9 +1353,6 @@ void ScUndoImportData::Redo()
         pRedoDBData->GetArea( nTable, nCol1, nRow1, nCol2, nRow2 );
         ScUndoUtil::MarkSimpleBlock( pDocShell, nCol1, nRow1, nTable, nCol2, nRow2, nTable );
     }
-
-// erack! it's broadcasted
-//  pDoc->SetDirty();
 
     SCTAB nVisTab = pViewShell->GetViewData()->GetTabNo();
     if ( nVisTab != nTab )
@@ -1521,9 +1515,6 @@ void ScUndoRepeatDB::Undo()
         pDoc->SetRangeName( new ScRangeName( *pUndoRange ) );
     if (pUndoDB)
         pDoc->SetDBCollection( new ScDBCollection( *pUndoDB ), sal_True );
-
-// erack! it's broadcasted
-//  pDoc->SetDirty();
 
     SCTAB nVisTab = pViewShell->GetViewData()->GetTabNo();
     if ( nVisTab != nTab )
