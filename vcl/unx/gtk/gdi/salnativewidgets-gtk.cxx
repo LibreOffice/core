@@ -446,8 +446,10 @@ void GtkData::initNWF( void )
     gtk_widget_style_get( gWidgetData[0].gMenuWidget,
             "vertical-padding", &vertical_padding,
             (char *)NULL);
-    pSVData->maNWFData.mnMenuFormatBorderX = horizontal_padding;
-    pSVData->maNWFData.mnMenuFormatBorderY = vertical_padding;
+    gint xthickness = gWidgetData[0].gMenuWidget->style->xthickness;
+    gint ythickness = gWidgetData[0].gMenuWidget->style->ythickness;
+    pSVData->maNWFData.mnMenuFormatBorderX = xthickness + horizontal_padding;
+    pSVData->maNWFData.mnMenuFormatBorderY = ythickness + vertical_padding;
 
     if( SalGetDesktopEnvironment() == "KDE" )
     {
