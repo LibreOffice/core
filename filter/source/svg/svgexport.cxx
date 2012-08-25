@@ -352,7 +352,7 @@ sal_Bool SVGExport::IsUseTinyProfile() const
 {
     sal_Bool bRet = sal_False;
 
-    if( mrFilterData.getLength() > 0 )
+    if( IsUsePositionedCharacters() && mrFilterData.getLength() > 0 )
         mrFilterData[ 0 ].Value >>= bRet;
 
     return bRet;
@@ -364,17 +364,10 @@ sal_Bool SVGExport::IsEmbedFonts() const
 {
     sal_Bool bRet = sal_False;
 
-    if( mrFilterData.getLength() > 1 )
+    if( IsUsePositionedCharacters() && mrFilterData.getLength() > 1 )
         mrFilterData[ 1 ].Value >>= bRet;
 
     return bRet;
-}
-
-// -----------------------------------------------------------------------------
-
-sal_Bool SVGExport::IsUsePositionedCharacters() const
-{
-    return false;
 }
 
 // -----------------------------------------------------------------------------
@@ -400,6 +393,18 @@ sal_Bool SVGExport::IsUseOpacity() const
 
     return bRet;
 }
+
+// -----------------------------------------------------------------------------
+
+sal_Bool SVGExport::IsUsePositionedCharacters() const
+{
+    sal_Bool bRet = sal_False;
+    if( mrFilterData.getLength() > 6 )
+        mrFilterData[ 6 ].Value >>= bRet;
+
+    return bRet;
+}
+
 
 // ------------------------
 // - ObjectRepresentation -
