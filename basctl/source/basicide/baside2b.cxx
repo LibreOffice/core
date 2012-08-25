@@ -109,7 +109,10 @@ void setTextEngineText( ExtTextEngine* pEngine, const ::rtl::OUString aStr )
     pEngine->Read( aMemStream );
 }
 
-void lcl_DrawIDEWindowFrame( BasicDockingWindow* pWin )
+namespace
+{
+
+void lcl_DrawIDEWindowFrame( DockingWindow* pWin )
 {
     if ( pWin->IsFloatingMode() )
         return;
@@ -156,6 +159,8 @@ void lcl_SeparateNameAndIndex( const String& rVName, String& rVar, String& rInde
             rIndex.Erase( nLastChar, 1 );
     }
 }
+
+} // namespace
 
 
 //
@@ -397,8 +402,7 @@ void EditorWindow::MouseButtonUp( const MouseEvent &rEvt )
     if ( pEditView )
     {
         pEditView->MouseButtonUp( rEvt );
-        SfxBindings* pBindings = BasicIDE::GetBindingsPtr();
-        if ( pBindings )
+        if (SfxBindings* pBindings = GetBindingsPtr())
             pBindings->Invalidate( SID_BASICIDE_STAT_POS );
     }
 }
@@ -407,9 +411,7 @@ void EditorWindow::MouseButtonDown( const MouseEvent &rEvt )
 {
     GrabFocus();
     if ( pEditView )
-    {
         pEditView->MouseButtonDown( rEvt );
-    }
 }
 
 void EditorWindow::Command( const CommandEvent& rCEvt )
@@ -436,7 +438,7 @@ bool EditorWindow::ImpCanModify()
         if ( QueryBox( 0, WB_OK_CANCEL, String( IDEResId( RID_STR_WILLSTOPPRG ) ) ).Execute() == RET_OK )
         {
             rModulWindow.GetBasicStatus().bIsRunning = false;
-            BasicIDE::StopBasic();
+            StopBasic();
         }
         else
             bCanModify = false;
@@ -491,8 +493,7 @@ void EditorWindow::KeyInput( const KeyEvent& rKEvt )
     }
     else
     {
-        SfxBindings* pBindings = BasicIDE::GetBindingsPtr();
-        if ( pBindings )
+        if (SfxBindings* pBindings = GetBindingsPtr())
         {
             pBindings->Invalidate( SID_BASICIDE_STAT_POS );
             if ( rKEvt.GetKeyCode().GetGroup() == KEYGROUP_CURSOR )
@@ -539,8 +540,6 @@ bool EditorWindow::SetSourceInBasic()
     return bChanged;
 }
 
-} // namespace basctl
-
 // Returns the position of the last character of any of the following
 // EOL char combinations: CR, CR/LF, LF, return -1 if no EOL is found
 sal_Int32 searchEOL( const ::rtl::OUString& rStr, sal_Int32 fromIndex )
@@ -558,10 +557,6 @@ sal_Int32 searchEOL( const ::rtl::OUString& rStr, sal_Int32 fromIndex )
     }
     return iRetPos;
 }
-
-
-namespace basctl
-{
 
 void EditorWindow::CreateEditEngine()
 {
@@ -596,7 +591,11 @@ void EditorWindow::CreateEditEngine()
     // nLines*4: SetText+Formatting+DoHighlight+Formatting
     // it could be cut down on one formatting but you would wait even longer
     // for the text then if the source code is long...
-    pProgress = new ProgressInfo( BasicIDEGlobals::GetShell()->GetViewFrame()->GetObjectShell(), String( IDEResId( RID_STR_GENERATESOURCE ) ), nLines*4 );
+    pProgress = new ProgressInfo(
+        GetShell()->GetViewFrame()->GetObjectShell(),
+        String(IDEResId(RID_STR_GENERATESOURCE)),
+        nLines*4
+    );
     setTextEngineText( pEditEngine, aOUSource );
 
     pEditView->SetStartDocPos( Point( 0, 0 ) );
@@ -626,8 +625,7 @@ void EditorWindow::CreateEditEngine()
 
     InitScrollBars();
 
-    SfxBindings* pBindings = BasicIDE::GetBindingsPtr();
-    if ( pBindings )
+    if (SfxBindings* pBindings = GetBindingsPtr())
         pBindings->Invalidate( SID_BASICIDE_STAT_POS );
 
     DBG_ASSERT( rModulWindow.GetBreakPointWindow().GetCurYOffset() == 0, "CreateEditEngine: Brechpunkte verschoben?" );
@@ -931,7 +929,11 @@ void EditorWindow::ParagraphInsertedDeleted( sal_uLong nPara, bool bInserted )
 void EditorWindow::CreateProgress( const String& rText, sal_uLong nRange )
 {
     DBG_ASSERT( !pProgress, "ProgressInfo existiert schon" );
-    pProgress = new ProgressInfo( BasicIDEGlobals::GetShell()->GetViewFrame()->GetObjectShell(), rText, nRange );
+    pProgress = new ProgressInfo(
+        GetShell()->GetViewFrame()->GetObjectShell(),
+        rText,
+        nRange
+    );
 }
 
 void EditorWindow::DestroyProgress()
@@ -1179,7 +1181,7 @@ namespace
 }
 
 WatchWindow::WatchWindow (Layout* pParent) :
-    BasicDockingWindow(pParent),
+    DockingWindow(pParent),
     aWatchStr( IDEResId( RID_STR_REMOVEWATCH ) ),
     aXEdit( this, IDEResId( RID_EDT_WATCHEDIT ) ),
     aRemoveWatchButton( this, IDEResId( RID_IMGBTN_REMOVEWATCH ) ),
@@ -1430,16 +1432,9 @@ bool WatchWindow::RemoveSelectedWatch()
 
 IMPL_LINK_INLINE_START( WatchWindow, ButtonHdl, ImageButton *, pButton )
 {
-    if ( pButton == &aRemoveWatchButton )
-    {
-        BasicIDEShell* pIDEShell = BasicIDEGlobals::GetShell();
-        SfxViewFrame* pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
-        SfxDispatcher* pDispatcher = pViewFrame ? pViewFrame->GetDispatcher() : NULL;
-        if( pDispatcher )
-        {
-            pDispatcher->Execute( SID_BASICIDE_REMOVEWATCH );
-        }
-    }
+    if (pButton == &aRemoveWatchButton)
+        if (SfxDispatcher* pDispatcher = GetDispatcher())
+            pDispatcher->Execute(SID_BASICIDE_REMOVEWATCH);
     return 0;
 }
 IMPL_LINK_INLINE_END( WatchWindow, ButtonHdl, ImageButton *, pButton )
@@ -1528,7 +1523,7 @@ void WatchWindow::UpdateWatches( bool bBasicStopped )
 //
 
 StackWindow::StackWindow (Layout* pParent) :
-    BasicDockingWindow(pParent),
+    DockingWindow(pParent),
     aTreeListBox( this, WB_BORDER | WB_3DLOOK | WB_HSCROLL | WB_TABSTOP ),
     aStackStr( IDEResId( RID_STR_STACK ) )
 {

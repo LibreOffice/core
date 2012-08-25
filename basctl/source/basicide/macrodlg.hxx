@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 //
-#ifndef _MACRODLG_HXX
-#define _MACRODLG_HXX
+#ifndef BASCTL_MACRODLG_HXX
+#define BASCTL_MACRODLG_HXX
 
 #include <svheader.hxx>
 
@@ -28,6 +28,9 @@
 #include <vcl/fixed.hxx>
 
 #include <vcl/button.hxx>
+
+namespace basctl
+{
 
 #define MACRO_CLOSE         10
 #define MACRO_OK_RUN        11
@@ -45,7 +48,7 @@ private:
     Edit                    aMacroNameEdit;
     FixedText               aMacroFromTxT;
     FixedText               aMacrosSaveInTxt;
-    BasicTreeListBox        aBasicBox;
+    TreeListBox             aBasicBox;
     FixedText               aMacrosInTxt;
     String                  aMacrosInTxtBaseStr;
     SvTreeListBox           aMacroBox;
@@ -60,8 +63,8 @@ private:
     PushButton              aNewLibButton;
     PushButton              aNewModButton;
 
-    bool                bNewDelIsDel;
-    bool                bForceStoreBasic;
+    bool                    bNewDelIsDel;
+    bool                    bForceStoreBasic;
 
     sal_uInt16              nMode;
 
@@ -93,9 +96,11 @@ public:
     virtual short       Execute();
 
     void                SetMode( sal_uInt16 nMode );
-    sal_uInt16              GetMode() const { return nMode; }
+    sal_uInt16          GetMode() const { return nMode; }
 };
 
-#endif  // _MACRODLG_HXX
+} // namespace basctl
+
+#endif // BASCTL_MACRODLG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

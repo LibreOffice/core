@@ -29,9 +29,15 @@
 #include <svl/aeitem.hxx>
 #include <vcl/toolbox.hxx>
 
+namespace basctl
+{
+
 using namespace ::com::sun::star::uno;
 
-static ::rtl::OUString aSubToolBarResName( RTL_CONSTASCII_USTRINGPARAM( "private:resource/toolbar/insertcontrolsbar" ) );
+namespace
+{
+    rtl::OUString aSubToolBarResName( RTL_CONSTASCII_USTRINGPARAM( "private:resource/toolbar/insertcontrolsbar" ) );
+}
 
 SFX_IMPL_TOOLBOX_CONTROL( TbxControls, SfxAllEnumItem )
 
@@ -144,5 +150,7 @@ SfxPopupWindow* TbxControls::CreatePopupWindow()
     return(0);
 }
 
+
+} // namespace basctl
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

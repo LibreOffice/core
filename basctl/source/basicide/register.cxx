@@ -26,11 +26,13 @@
 
 #include "unomodel.hxx"
 
+namespace basctl
+{
+
 using ::rtl::OUString;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
-
 
 extern "C" {
 
@@ -71,8 +73,9 @@ SAL_DLLPUBLIC_EXPORT void* SAL_CALL component_getFactory( const sal_Char* pImple
     // Return with result of this operation.
     return pReturn ;
 }
+
 } // extern "C"
 
-
+} // namespace basctl
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

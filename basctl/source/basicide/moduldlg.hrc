@@ -16,8 +16,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _MODULDLG_HRC
-#define _MODULDLG_HRC
+#ifndef BASCTL_MODULDLG_HRC
+#define BASCTL_MODULDLG_HRC
 
 #include <svl/solar.hrc>
 
@@ -56,4 +56,4 @@
 #define RB_EXPORTASPACKAGE      42
 #define RB_EXPORTASBASIC        43
 
-#endif  // _MODULDLG_HRC
+#endif // BASCTL_MODULDLG_HRC

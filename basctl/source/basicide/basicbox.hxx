@@ -16,9 +16,9 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-//
-#ifndef _BASICBOX_HXX
-#define _BASICBOX_HXX
+
+#ifndef BASCTL_BASICBOX_HXX
+#define BASCTL_BASICBOX_HXX
 
 #include "doceventnotifier.hxx"
 #include <svl/stritem.hxx>
@@ -26,6 +26,8 @@
 #include <sfx2/tbxctrl.hxx>
 #include <vcl/lstbox.hxx>
 
+namespace basctl
+{
 
 class LibBoxControl: public SfxToolBoxControl
 {
@@ -44,7 +46,7 @@ public:
     of open documents
 */
 class DocListenerBox    :public ListBox
-                        ,public ::basctl::DocumentEventListener
+                        ,public DocumentEventListener
 {
 protected:
     DocListenerBox( Window* pParent );
@@ -66,12 +68,12 @@ private:
     virtual void onDocumentModeChanged( const ScriptDocument& _rDocument );
 
 private:
-    ::basctl::DocumentEventNotifier m_aNotifier;
+    DocumentEventNotifier m_aNotifier;
 };
 
 //
 
-class BasicLibBox : public DocListenerBox
+class LibBox : public DocListenerBox
 {
 private:
     String          aCurText;
@@ -93,9 +95,9 @@ protected:
     virtual long    PreNotify( NotifyEvent& rNEvt );
 
 public:
-                    BasicLibBox( Window* pParent,
+                    LibBox( Window* pParent,
                                  const com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame );
-                    ~BasicLibBox();
+                    ~LibBox();
 
     using           Window::Update;
     void            Update( const SfxStringItem* pItem );
@@ -113,7 +115,7 @@ public:
     virtual Window*     CreateItemWindow( Window *pParent );
 };
 
-class BasicLanguageBox : public DocListenerBox
+class LanguageBox : public DocListenerBox
 {
 private:
     String          m_sNotLocalizedStr;
@@ -133,13 +135,15 @@ protected:
     virtual long    PreNotify( NotifyEvent& rNEvt );
 
 public:
-    BasicLanguageBox( Window* pParent );
-    ~BasicLanguageBox();
+    LanguageBox( Window* pParent );
+    ~LanguageBox();
 
     using           Window::Update;
     void            Update( const SfxStringItem* pItem );
 };
 
-#endif  // _BASICBOX_HXX
+} // namespace basctl
+
+#endif // BASCTL_BASICBOX_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -41,6 +41,9 @@
 #include <unotools/sharedunocomponent.hxx>
 #include <vcl/svapp.hxx>
 
+namespace basctl
+{
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
@@ -1289,7 +1292,7 @@ void DlgEdObj::SetLayer(SdrLayerID nLayer)
     {
         SdrUnoObj::SetLayer( nLayer );
 
-        DlgEdHint aHint( DLGED_HINT_LAYERCHANGED, this );
+        DlgEdHint aHint( DlgEdHint::LAYERCHANGED, this );
         GetDlgEdForm()->GetDlgEditor()->Broadcast( aHint );
     }
 }
@@ -1850,5 +1853,6 @@ bool DlgEdObj::MakeDataAware( const Reference< frame::XModel >& xModel )
 }
 //----------------------------------------------------------------------------
 
+} // namespace basctl
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

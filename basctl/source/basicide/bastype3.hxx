@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _BASTYPE3_HXX
-#define _BASTYPE3_HXX
+#ifndef BASCTL_BASTYPE3_HXX
+#define BASCTL_BASTYPE3_HXX
 
 #include <svheader.hxx>
 
@@ -26,6 +26,9 @@
 #include <iderid.hxx>
 
 #ifndef NO_SPECIALEDIT
+
+namespace basctl
+{
 
 class ExtendedEdit : public Edit
 {
@@ -49,8 +52,10 @@ public:
     Accelerator&    GetAccelerator()                        { return aAcc; }
 };
 
-#endif  //NO_SPECIALEDIT
+} // namespace basctl
 
-#endif  // _BASTYPE3_HXX
+#endif // NO_SPECIALEDIT
+
+#endif // BASCTL_BASTYPE3_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

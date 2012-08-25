@@ -41,19 +41,19 @@
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
+namespace basctl
+{
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 namespace css = ::com::sun::star;
 
-using basctl::ModulWindow;
-using basctl::ModulWindowLayout;
-
-Reference< view::XRenderable > BasicIDEShell::GetRenderable()
+Reference< view::XRenderable > Shell::GetRenderable()
 {
-    return Reference< view::XRenderable >( new basicide::BasicRenderable( pCurWin ) );
+    return Reference<view::XRenderable>( new Renderable(pCurWin) );
 }
 
-sal_Bool BasicIDEShell::HasSelection( sal_Bool /* bText */ ) const
+sal_Bool Shell::HasSelection( sal_Bool /* bText */ ) const
 {
     if (ModulWindow* pMCurWin = dynamic_cast<ModulWindow*>(pCurWin))
     {
@@ -64,7 +64,7 @@ sal_Bool BasicIDEShell::HasSelection( sal_Bool /* bText */ ) const
     return false;
 }
 
-String BasicIDEShell::GetSelectionText( sal_Bool bWholeWord )
+String Shell::GetSelectionText( sal_Bool bWholeWord )
 {
     String aText;
     if (ModulWindow* pMCurWin = dynamic_cast<ModulWindow*>(pCurWin))
@@ -86,27 +86,27 @@ String BasicIDEShell::GetSelectionText( sal_Bool bWholeWord )
     return aText;
 }
 
-SfxPrinter* BasicIDEShell::GetPrinter( sal_Bool bCreate )
+SfxPrinter* Shell::GetPrinter( sal_Bool bCreate )
 {
     if ( pCurWin )
     {
-        BasicDocShell* pDocShell = (BasicDocShell*)GetViewFrame()->GetObjectShell();
+        DocShell* pDocShell = (DocShell*)GetViewFrame()->GetObjectShell();
         DBG_ASSERT( pDocShell, "DocShell ?!" );
         return pDocShell->GetPrinter( bCreate );
     }
     return 0;
 }
 
-sal_uInt16 BasicIDEShell::SetPrinter( SfxPrinter *pNewPrinter, sal_uInt16 nDiffFlags, bool )
+sal_uInt16 Shell::SetPrinter( SfxPrinter *pNewPrinter, sal_uInt16 nDiffFlags, bool )
 {
     (void)nDiffFlags;
-    BasicDocShell* pDocShell = (BasicDocShell*)GetViewFrame()->GetObjectShell();
+    DocShell* pDocShell = (DocShell*)GetViewFrame()->GetObjectShell();
     DBG_ASSERT( pDocShell, "DocShell ?!" );
     pDocShell->SetPrinter( pNewPrinter );
     return 0;
 }
 
-void BasicIDEShell::SetMDITitle()
+void Shell::SetMDITitle()
 {
     ::rtl::OUStringBuffer aTitleBuf;
     if ( !m_aCurLibName.isEmpty() )
@@ -119,7 +119,7 @@ void BasicIDEShell::SetMDITitle()
     else
         aTitleBuf.append(IDE_RESSTR(RID_STR_ALL));
 
-    ::basctl::DocumentSignature aCurSignature( m_aCurDocument );
+    DocumentSignature aCurSignature( m_aCurDocument );
     if ( aCurSignature.getScriptingSignatureState() == SIGNATURESTATE_SIGNATURES_OK )
     {
         aTitleBuf.append(' ');
@@ -145,7 +145,7 @@ void BasicIDEShell::SetMDITitle()
     }
 }
 
-ModulWindow* BasicIDEShell::CreateBasWin( const ScriptDocument& rDocument, const ::rtl::OUString& rLibName, const ::rtl::OUString& rModName )
+ModulWindow* Shell::CreateBasWin( const ScriptDocument& rDocument, const ::rtl::OUString& rLibName, const ::rtl::OUString& rModName )
 {
     bCreatingWindow = true;
 
@@ -193,7 +193,7 @@ ModulWindow* BasicIDEShell::CreateBasWin( const ScriptDocument& rDocument, const
     else
     {
         pWin->SetStatus( pWin->GetStatus() & ~BASWIN_SUSPENDED );
-        nKey = GetIDEWindowId( pWin );
+        nKey = GetWindowId( pWin );
         DBG_ASSERT( nKey, "CreateBasWin: Kein Key- Fenster nicht gefunden!" );
     }
     if( nKey && xLib.is() && rDocument.isInVBAMode() )
@@ -222,41 +222,40 @@ ModulWindow* BasicIDEShell::CreateBasWin( const ScriptDocument& rDocument, const
     return pWin;
 }
 
-ModulWindow* BasicIDEShell::FindBasWin (
+ModulWindow* Shell::FindBasWin (
     ScriptDocument const& rDocument,
     rtl::OUString const& rLibName, rtl::OUString const& rName,
     bool bCreateIfNotExist, bool bFindSuspended
 )
 {
-    if (IDEBaseWindow* pWin = FindWindow(rDocument, rLibName, rName, BASICIDE_TYPE_MODULE, bFindSuspended))
+    if (BaseWindow* pWin = FindWindow(rDocument, rLibName, rName, TYPE_MODULE, bFindSuspended))
         return static_cast<ModulWindow*>(pWin);
     return bCreateIfNotExist ? CreateBasWin(rDocument, rLibName, rName) : 0;
 }
 
-void BasicIDEShell::Move()
+void Shell::Move()
 {
     if (ModulWindow* pMCurWin = dynamic_cast<ModulWindow*>(pCurWin))
         pMCurWin->FrameWindowMoved();
 }
 
-void BasicIDEShell::ShowCursor( bool bOn )
+void Shell::ShowCursor( bool bOn )
 {
     if (ModulWindow* pMCurWin = dynamic_cast<ModulWindow*>(pCurWin))
         pMCurWin->ShowCursor(bOn);
 }
 
-// Hack for #101048
-sal_Int32 getBasicIDEShellCount( void );
-
 // only if basic window above:
-void BasicIDEShell::ExecuteBasic( SfxRequest& rReq )
+void Shell::ExecuteBasic( SfxRequest& rReq )
 {
     if (dynamic_cast<ModulWindow*>(pCurWin))
     {
         pCurWin->ExecuteCommand( rReq );
-        if (getBasicIDEShellCount())
+        if (nShellCount)
             CheckWindows();
     }
 }
+
+} // namespace basctl
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -191,7 +191,7 @@ namespace basctl
         }
     }
 
-    class ScriptDocument_Impl : public DocumentEventListener
+    class ScriptDocument::Impl : public DocumentEventListener
     {
     private:
         bool                            m_bIsApplication;
@@ -204,9 +204,9 @@ namespace basctl
                                         m_pDocListener;
 
     public:
-        ScriptDocument_Impl( );
-        ScriptDocument_Impl( const Reference< XModel >& _rxDocument );
-        ~ScriptDocument_Impl();
+        Impl ();
+        Impl (Reference<XModel> const& rxDocument);
+        ~Impl ();
 
         /** determines whether the instance refers to a valid "document" with script and
             dialog libraries
@@ -295,16 +295,16 @@ namespace basctl
     };
 
     //====================================================================
-    //= ScriptDocument_Impl - implementation
+    //= ScriptDocument::Impl - implementation
     //====================================================================
-    ScriptDocument_Impl::ScriptDocument_Impl()
+    ScriptDocument::Impl::Impl()
         :m_bIsApplication( true )
         ,m_bValid( true )
         ,m_bDocumentClosed( false )
     {
     }
 
-    ScriptDocument_Impl::ScriptDocument_Impl( const Reference< XModel >& _rxDocument )
+    ScriptDocument::Impl::Impl( const Reference< XModel >& _rxDocument )
         :m_bIsApplication( false )
         ,m_bValid( false )
         ,m_bDocumentClosed( false )
@@ -317,12 +317,12 @@ namespace basctl
         }
     }
 
-    ScriptDocument_Impl::~ScriptDocument_Impl()
+    ScriptDocument::Impl::~Impl()
     {
         invalidate();
     }
 
-    void ScriptDocument_Impl::invalidate()
+    void ScriptDocument::Impl::invalidate()
     {
         m_bIsApplication = false;
         m_bValid = false;
@@ -336,7 +336,7 @@ namespace basctl
             m_pDocListener->dispose();
     }
 
-    bool ScriptDocument_Impl::impl_initDocument_nothrow( const Reference< XModel >& _rxModel )
+    bool ScriptDocument::Impl::impl_initDocument_nothrow( const Reference< XModel >& _rxModel )
     {
         try
         {
@@ -363,9 +363,9 @@ namespace basctl
         return m_bValid;
     }
 
-    Reference< XLibraryContainer > ScriptDocument_Impl::getLibraryContainer( LibraryContainerType _eType ) const
+    Reference< XLibraryContainer > ScriptDocument::Impl::getLibraryContainer( LibraryContainerType _eType ) const
     {
-        OSL_ENSURE( isValid(), "ScriptDocument_Impl::getLibraryContainer: invalid!" );
+        OSL_ENSURE( isValid(), "ScriptDocument::Impl::getLibraryContainer: invalid!" );
 
         Reference< XLibraryContainer > xContainer;
         if ( !isValid() )
@@ -389,10 +389,10 @@ namespace basctl
         return xContainer;
     }
 
-    bool ScriptDocument_Impl::isReadOnly() const
+    bool ScriptDocument::Impl::isReadOnly() const
     {
-        OSL_ENSURE( isValid(), "ScriptDocument_Impl::isReadOnly: invalid state!" );
-        OSL_ENSURE( !isApplication(), "ScriptDocument_Impl::isReadOnly: not allowed to be called for the application!" );
+        OSL_ENSURE( isValid(), "ScriptDocument::Impl::isReadOnly: invalid state!" );
+        OSL_ENSURE( !isApplication(), "ScriptDocument::Impl::isReadOnly: not allowed to be called for the application!" );
 
         bool bIsReadOnly = true;
         if ( isValid() && !isApplication() )
@@ -411,7 +411,7 @@ namespace basctl
         return bIsReadOnly;
     }
 
-    bool ScriptDocument_Impl::isInVBAMode() const
+    bool ScriptDocument::Impl::isInVBAMode() const
     {
         bool bResult = false;
         if ( !isApplication() )
@@ -424,9 +424,9 @@ namespace basctl
     }
 
 
-    BasicManager* ScriptDocument_Impl::getBasicManager() const
+    BasicManager* ScriptDocument::Impl::getBasicManager() const
     {
-        OSL_ENSURE( isValid(), "ScriptDocument_Impl::getBasicManager: invalid state!" );
+        OSL_ENSURE( isValid(), "ScriptDocument::Impl::getBasicManager: invalid state!" );
         if ( !isValid() )
             return NULL;
 
@@ -437,10 +437,10 @@ namespace basctl
     }
 
 
-    Reference< XModel > ScriptDocument_Impl::getDocument() const
+    Reference< XModel > ScriptDocument::Impl::getDocument() const
     {
-        OSL_ENSURE( isValid(), "ScriptDocument_Impl::getDocument: invalid state!" );
-        OSL_ENSURE( isDocument(), "ScriptDocument_Impl::getDocument: for documents only!" );
+        OSL_ENSURE( isValid(), "ScriptDocument::Impl::getDocument: invalid state!" );
+        OSL_ENSURE( isDocument(), "ScriptDocument::Impl::getDocument: for documents only!" );
         if ( !isValid() || !isDocument() )
             return NULL;
 
@@ -448,10 +448,10 @@ namespace basctl
     }
 
 
-    Reference< XNameContainer > ScriptDocument_Impl::getLibrary( LibraryContainerType _eType, const ::rtl::OUString& _rLibName, bool _bLoadLibrary ) const
+    Reference< XNameContainer > ScriptDocument::Impl::getLibrary( LibraryContainerType _eType, const ::rtl::OUString& _rLibName, bool _bLoadLibrary ) const
         SAL_THROW((NoSuchElementException))
     {
-        OSL_ENSURE( isValid(), "ScriptDocument_Impl::getLibrary: invalid state!" );
+        OSL_ENSURE( isValid(), "ScriptDocument::Impl::getLibrary: invalid state!" );
 
         Reference< XNameContainer > xContainer;
         try
@@ -483,7 +483,7 @@ namespace basctl
     }
 
 
-    bool ScriptDocument_Impl::hasLibrary( LibraryContainerType _eType, const ::rtl::OUString& _rLibName ) const
+    bool ScriptDocument::Impl::hasLibrary( LibraryContainerType _eType, const ::rtl::OUString& _rLibName ) const
     {
         bool bHas = false;
         try
@@ -499,7 +499,7 @@ namespace basctl
     }
 
 
-    Reference< XNameContainer > ScriptDocument_Impl::getOrCreateLibrary( LibraryContainerType _eType, const ::rtl::OUString& _rLibName ) const
+    Reference< XNameContainer > ScriptDocument::Impl::getOrCreateLibrary( LibraryContainerType _eType, const ::rtl::OUString& _rLibName ) const
     {
         Reference< XNameContainer > xLibrary;
         try
@@ -521,7 +521,7 @@ namespace basctl
     }
 
 
-    void ScriptDocument_Impl::loadLibraryIfExists( LibraryContainerType _eType, const ::rtl::OUString& _rLibrary )
+    void ScriptDocument::Impl::loadLibraryIfExists( LibraryContainerType _eType, const ::rtl::OUString& _rLibrary )
     {
         try
         {
@@ -536,9 +536,9 @@ namespace basctl
     }
 
 
-    bool ScriptDocument_Impl::removeModuleOrDialog( LibraryContainerType _eType, const ::rtl::OUString& _rLibName, const ::rtl::OUString& _rModuleName )
+    bool ScriptDocument::Impl::removeModuleOrDialog( LibraryContainerType _eType, const ::rtl::OUString& _rLibName, const ::rtl::OUString& _rModuleName )
     {
-        OSL_ENSURE( isValid(), "ScriptDocument_Impl::removeModuleOrDialog: invalid!" );
+        OSL_ENSURE( isValid(), "ScriptDocument::Impl::removeModuleOrDialog: invalid!" );
         if ( isValid() )
         {
             try
@@ -559,9 +559,9 @@ namespace basctl
     }
 
 
-    bool ScriptDocument_Impl::hasModuleOrDialog( LibraryContainerType _eType, const ::rtl::OUString& _rLibName, const ::rtl::OUString& _rModName ) const
+    bool ScriptDocument::Impl::hasModuleOrDialog( LibraryContainerType _eType, const ::rtl::OUString& _rLibName, const ::rtl::OUString& _rModName ) const
     {
-        OSL_ENSURE( isValid(), "ScriptDocument_Impl::hasModuleOrDialog: invalid!" );
+        OSL_ENSURE( isValid(), "ScriptDocument::Impl::hasModuleOrDialog: invalid!" );
         if ( !isValid() )
             return false;
 
@@ -579,9 +579,9 @@ namespace basctl
     }
 
 
-    bool ScriptDocument_Impl::getModuleOrDialog( LibraryContainerType _eType, const ::rtl::OUString& _rLibName, const ::rtl::OUString& _rObjectName, Any& _out_rModuleOrDialog )
+    bool ScriptDocument::Impl::getModuleOrDialog( LibraryContainerType _eType, const ::rtl::OUString& _rLibName, const ::rtl::OUString& _rObjectName, Any& _out_rModuleOrDialog )
     {
-        OSL_ENSURE( isValid(), "ScriptDocument_Impl::getModuleOrDialog: invalid!" );
+        OSL_ENSURE( isValid(), "ScriptDocument::Impl::getModuleOrDialog: invalid!" );
         if ( !isValid() )
             return false;
 
@@ -603,10 +603,10 @@ namespace basctl
     }
 
 
-    bool ScriptDocument_Impl::renameModuleOrDialog( LibraryContainerType _eType, const ::rtl::OUString& _rLibName,
+    bool ScriptDocument::Impl::renameModuleOrDialog( LibraryContainerType _eType, const ::rtl::OUString& _rLibName,
         const ::rtl::OUString& _rOldName, const ::rtl::OUString& _rNewName, const Reference< XNameContainer >& _rxExistingDialogModel )
     {
-        OSL_ENSURE( isValid(), "ScriptDocument_Impl::renameModuleOrDialog: invalid!" );
+        OSL_ENSURE( isValid(), "ScriptDocument::Impl::renameModuleOrDialog: invalid!" );
         if ( !isValid() )
             return false;
 
@@ -671,7 +671,7 @@ namespace basctl
     }
 
 
-    bool ScriptDocument_Impl::createModule( const ::rtl::OUString& _rLibName, const ::rtl::OUString& _rModName, bool _bCreateMain, ::rtl::OUString& _out_rNewModuleCode ) const
+    bool ScriptDocument::Impl::createModule( const ::rtl::OUString& _rLibName, const ::rtl::OUString& _rModName, bool _bCreateMain, ::rtl::OUString& _out_rNewModuleCode ) const
     {
         _out_rNewModuleCode = ::rtl::OUString();
         try
@@ -698,7 +698,7 @@ namespace basctl
     }
 
 
-    bool ScriptDocument_Impl::insertModuleOrDialog( LibraryContainerType _eType, const ::rtl::OUString& _rLibName, const ::rtl::OUString& _rObjectName, const Any& _rElement ) const
+    bool ScriptDocument::Impl::insertModuleOrDialog( LibraryContainerType _eType, const ::rtl::OUString& _rLibName, const ::rtl::OUString& _rObjectName, const Any& _rElement ) const
     {
         try
         {
@@ -717,7 +717,7 @@ namespace basctl
     }
 
 
-    bool ScriptDocument_Impl::updateModule( const ::rtl::OUString& _rLibName, const ::rtl::OUString& _rModName, const ::rtl::OUString& _rModuleCode ) const
+    bool ScriptDocument::Impl::updateModule( const ::rtl::OUString& _rLibName, const ::rtl::OUString& _rModName, const ::rtl::OUString& _rModuleCode ) const
     {
         try
         {
@@ -735,7 +735,7 @@ namespace basctl
     }
 
 
-    bool ScriptDocument_Impl::createDialog( const ::rtl::OUString& _rLibName, const ::rtl::OUString& _rDialogName, Reference< XInputStreamProvider >& _out_rDialogProvider ) const
+    bool ScriptDocument::Impl::createDialog( const ::rtl::OUString& _rLibName, const ::rtl::OUString& _rDialogName, Reference< XInputStreamProvider >& _out_rDialogProvider ) const
     {
         try
         {
@@ -771,9 +771,9 @@ namespace basctl
     }
 
 
-    void ScriptDocument_Impl::setDocumentModified() const
+    void ScriptDocument::Impl::setDocumentModified() const
     {
-        OSL_ENSURE( isValid() && isDocument(), "ScriptDocument_Impl::setDocumentModified: only to be called for real documents!" );
+        OSL_ENSURE( isValid() && isDocument(), "ScriptDocument::Impl::setDocumentModified: only to be called for real documents!" );
         if ( isValid() && isDocument() )
         {
             try
@@ -788,9 +788,9 @@ namespace basctl
     }
 
 
-    bool ScriptDocument_Impl::isDocumentModified() const
+    bool ScriptDocument::Impl::isDocumentModified() const
     {
-        OSL_ENSURE( isValid() && isDocument(), "ScriptDocument_Impl::isDocumentModified: only to be called for real documents!" );
+        OSL_ENSURE( isValid() && isDocument(), "ScriptDocument::Impl::isDocumentModified: only to be called for real documents!" );
         bool bIsModified = false;
         if ( isValid() && isDocument() )
         {
@@ -807,7 +807,7 @@ namespace basctl
     }
 
 
-    bool ScriptDocument_Impl::saveDocument( const Reference< XStatusIndicator >& _rxStatusIndicator ) const
+    bool ScriptDocument::Impl::saveDocument( const Reference< XStatusIndicator >& _rxStatusIndicator ) const
     {
         Reference< XFrame > xFrame;
         if ( !getCurrentFrame( xFrame ) )
@@ -846,9 +846,9 @@ namespace basctl
     }
 
 
-    ::rtl::OUString ScriptDocument_Impl::getTitle() const
+    ::rtl::OUString ScriptDocument::Impl::getTitle() const
     {
-        OSL_PRECOND( isValid() && isDocument(), "ScriptDocument_Impl::getTitle: for documents only!" );
+        OSL_PRECOND( isValid() && isDocument(), "ScriptDocument::Impl::getTitle: for documents only!" );
 
         ::rtl::OUString sTitle;
         if ( isValid() && isDocument() )
@@ -859,9 +859,9 @@ namespace basctl
     }
 
 
-    ::rtl::OUString ScriptDocument_Impl::getURL() const
+    ::rtl::OUString ScriptDocument::Impl::getURL() const
     {
-        OSL_PRECOND( isValid() && isDocument(), "ScriptDocument_Impl::getURL: for documents only!" );
+        OSL_PRECOND( isValid() && isDocument(), "ScriptDocument::Impl::getURL: for documents only!" );
 
         ::rtl::OUString sURL;
         if ( isValid() && isDocument() )
@@ -879,9 +879,9 @@ namespace basctl
     }
 
 
-    bool ScriptDocument_Impl::allowMacros() const
+    bool ScriptDocument::Impl::allowMacros() const
     {
-        OSL_ENSURE( isValid() && isDocument(), "ScriptDocument_Impl::allowMacros: for documents only!" );
+        OSL_ENSURE( isValid() && isDocument(), "ScriptDocument::Impl::allowMacros: for documents only!" );
         bool bAllow = false;
         if ( isValid() && isDocument() )
         {
@@ -898,10 +898,10 @@ namespace basctl
     }
 
 
-    bool ScriptDocument_Impl::getCurrentFrame( Reference< XFrame >& _out_rxFrame ) const
+    bool ScriptDocument::Impl::getCurrentFrame( Reference< XFrame >& _out_rxFrame ) const
     {
         _out_rxFrame.clear();
-        OSL_PRECOND( isValid() && isDocument(), "ScriptDocument_Impl::getCurrentFrame: documents only!" );
+        OSL_PRECOND( isValid() && isDocument(), "ScriptDocument::Impl::getCurrentFrame: documents only!" );
         if ( !isValid() || !isDocument() )
             return false;
 
@@ -920,7 +920,7 @@ namespace basctl
     }
 
 
-    bool ScriptDocument_Impl::isLibraryShared( const ::rtl::OUString& _rLibName, LibraryContainerType _eType )
+    bool ScriptDocument::Impl::isLibraryShared( const ::rtl::OUString& _rLibName, LibraryContainerType _eType )
     {
         bool bIsShared = false;
         try
@@ -991,43 +991,43 @@ namespace basctl
     }
 
 
-    void ScriptDocument_Impl::onDocumentCreated( const ScriptDocument& /*_rDocument*/ )
+    void ScriptDocument::Impl::onDocumentCreated( const ScriptDocument& /*_rDocument*/ )
     {
         // not interested in
     }
 
-    void ScriptDocument_Impl::onDocumentOpened( const ScriptDocument& /*_rDocument*/ )
+    void ScriptDocument::Impl::onDocumentOpened( const ScriptDocument& /*_rDocument*/ )
     {
         // not interested in
     }
 
-    void ScriptDocument_Impl::onDocumentSave( const ScriptDocument& /*_rDocument*/ )
+    void ScriptDocument::Impl::onDocumentSave( const ScriptDocument& /*_rDocument*/ )
     {
         // not interested in
     }
 
-    void ScriptDocument_Impl::onDocumentSaveDone( const ScriptDocument& /*_rDocument*/ )
+    void ScriptDocument::Impl::onDocumentSaveDone( const ScriptDocument& /*_rDocument*/ )
     {
         // not interested in
     }
 
-    void ScriptDocument_Impl::onDocumentSaveAs( const ScriptDocument& /*_rDocument*/ )
+    void ScriptDocument::Impl::onDocumentSaveAs( const ScriptDocument& /*_rDocument*/ )
     {
         // not interested in
     }
 
-    void ScriptDocument_Impl::onDocumentSaveAsDone( const ScriptDocument& /*_rDocument*/ )
+    void ScriptDocument::Impl::onDocumentSaveAsDone( const ScriptDocument& /*_rDocument*/ )
     {
         // not interested in
     }
 
-    void ScriptDocument_Impl::onDocumentClosed( const ScriptDocument& _rDocument )
+    void ScriptDocument::Impl::onDocumentClosed( const ScriptDocument& _rDocument )
     {
         DBG_TESTSOLARMUTEX();
-        OSL_PRECOND( isValid(), "ScriptDocument_Impl::onDocumentClosed: should not be listening if I'm not valid!" );
+        OSL_PRECOND( isValid(), "ScriptDocument::Impl::onDocumentClosed: should not be listening if I'm not valid!" );
 
         bool bMyDocument = m_xDocument == _rDocument.getDocument();
-        OSL_PRECOND( bMyDocument, "ScriptDocument_Impl::onDocumentClosed: didn't want to know *this*!" );
+        OSL_PRECOND( bMyDocument, "ScriptDocument::Impl::onDocumentClosed: didn't want to know *this*!" );
         if ( bMyDocument )
         {
             m_bDocumentClosed = true;
@@ -1035,12 +1035,12 @@ namespace basctl
     }
 
 
-    void ScriptDocument_Impl::onDocumentTitleChanged( const ScriptDocument& /*_rDocument*/ )
+    void ScriptDocument::Impl::onDocumentTitleChanged( const ScriptDocument& /*_rDocument*/ )
     {
         // not interested in
     }
 
-    void ScriptDocument_Impl::onDocumentModeChanged( const ScriptDocument& /*_rDocument*/ )
+    void ScriptDocument::Impl::onDocumentModeChanged( const ScriptDocument& /*_rDocument*/ )
     {
         // not interested in
     }
@@ -1049,13 +1049,12 @@ namespace basctl
     //= ScriptDocument
     //====================================================================
     ScriptDocument::ScriptDocument()
-        :m_pImpl( new ScriptDocument_Impl() )
-    {
-    }
+        :m_pImpl(new Impl)
+    { }
 
 
     ScriptDocument::ScriptDocument( ScriptDocument::SpecialDocument _eType )
-        :m_pImpl( new ScriptDocument_Impl( Reference< XModel >() ) )
+        :m_pImpl( new Impl( Reference< XModel >() ) )
     {
         OSL_ENSURE( _eType == NoDocument, "ScriptDocument::ScriptDocument: unknown SpecialDocument type!" );
         (void)_eType;
@@ -1063,7 +1062,7 @@ namespace basctl
 
 
     ScriptDocument::ScriptDocument( const Reference< XModel >& _rxDocument )
-        :m_pImpl( new ScriptDocument_Impl( _rxDocument ) )
+        :m_pImpl( new Impl( _rxDocument ) )
     {
         OSL_ENSURE( _rxDocument.is(), "ScriptDocument::ScriptDocument: document must not be NULL!" );
             // a NULL document results in an uninitialized instance, and for this
@@ -1319,7 +1318,7 @@ namespace basctl
 
     Sequence< ::rtl::OUString > ScriptDocument::getLibraryNames() const
     {
-        return BasicIDE::GetMergedLibraryNames( getLibraryContainer( E_SCRIPTS ), getLibraryContainer( E_DIALOGS ) );
+        return GetMergedLibraryNames( getLibraryContainer( E_SCRIPTS ), getLibraryContainer( E_DIALOGS ) );
     }
 
 
@@ -1394,7 +1393,7 @@ namespace basctl
             return false;
 
         // doc shell modified
-        BasicIDE::MarkDocumentModified( *const_cast< ScriptDocument* >( this ) );    // here?
+        MarkDocumentModified( *const_cast< ScriptDocument* >( this ) );    // here?
         return true;
     }
 
@@ -1444,7 +1443,7 @@ namespace basctl
         if ( !m_pImpl->createDialog( _rLibName, _rDialogName, _out_rDialogProvider ) )
             return false;
 
-        BasicIDE::MarkDocumentModified( *const_cast< ScriptDocument* >( this ) );    // here?
+        MarkDocumentModified( *const_cast< ScriptDocument* >( this ) );    // here?
         return true;
     }
 
@@ -1576,6 +1575,6 @@ namespace basctl
         return m_pImpl->allowMacros();
     }
 
-}
+} // namespace basctl
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

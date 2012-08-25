@@ -27,11 +27,13 @@
 #include "tools/multisel.hxx"
 #include "tools/resary.hxx"
 
+namespace basctl
+{
+
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
-using namespace basicide;
 
-BasicRenderable::BasicRenderable( IDEBaseWindow* pWin )
+Renderable::Renderable (BaseWindow* pWin)
 : cppu::WeakComponentImplHelper1< com::sun::star::view::XRenderable >( maMutex )
 , mpWindow( pWin )
 {
@@ -75,11 +77,11 @@ BasicRenderable::BasicRenderable( IDEBaseWindow* pWin )
                                                   );
 }
 
-BasicRenderable::~BasicRenderable()
+Renderable::~Renderable()
 {
 }
 
-Printer* BasicRenderable::getPrinter()
+Printer* Renderable::getPrinter()
 {
     Printer* pPrinter = NULL;
     Any aValue( getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "RenderDevice" ) ) ) );
@@ -94,7 +96,7 @@ Printer* BasicRenderable::getPrinter()
     return pPrinter;
 }
 
-sal_Int32 SAL_CALL BasicRenderable::getRendererCount (
+sal_Int32 SAL_CALL Renderable::getRendererCount (
         const Any&, const Sequence<beans::PropertyValue >& i_xOptions
         ) throw (lang::IllegalArgumentException, RuntimeException)
 {
@@ -103,8 +105,7 @@ sal_Int32 SAL_CALL BasicRenderable::getRendererCount (
     sal_Int32 nCount = 0;
     if( mpWindow )
     {
-        Printer* pPrinter = getPrinter();
-        if( pPrinter )
+        if (Printer* pPrinter = getPrinter())
         {
             nCount = mpWindow->countPages( pPrinter );
             sal_Int64 nContent = getIntValue( "PrintContent", -1 );
@@ -127,7 +128,7 @@ sal_Int32 SAL_CALL BasicRenderable::getRendererCount (
     return nCount;
 }
 
-Sequence<beans::PropertyValue> SAL_CALL BasicRenderable::getRenderer (
+Sequence<beans::PropertyValue> SAL_CALL Renderable::getRenderer (
         sal_Int32, const Any&, const Sequence<beans::PropertyValue>& i_xOptions
         ) throw (lang::IllegalArgumentException, RuntimeException)
 {
@@ -154,7 +155,7 @@ Sequence<beans::PropertyValue> SAL_CALL BasicRenderable::getRenderer (
     return aVals;
 }
 
-void SAL_CALL BasicRenderable::render (
+void SAL_CALL Renderable::render (
         sal_Int32 nRenderer, const Any&,
         const Sequence<beans::PropertyValue>& i_xOptions
         ) throw (lang::IllegalArgumentException, RuntimeException)
@@ -163,8 +164,7 @@ void SAL_CALL BasicRenderable::render (
 
     if( mpWindow )
     {
-        Printer* pPrinter = getPrinter();
-        if( pPrinter )
+        if (Printer* pPrinter = getPrinter())
         {
             sal_Int64 nContent = getIntValue( "PrintContent", -1 );
             if( nContent == 1 )
@@ -192,5 +192,6 @@ void SAL_CALL BasicRenderable::render (
     }
 }
 
+} // namespace basctl
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

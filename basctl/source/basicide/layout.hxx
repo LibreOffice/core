@@ -28,13 +28,14 @@
 #include <boost/shared_ptr.hpp>
 
 class DockingWindow;
-class BasicDockingWindow;
-class IDEBaseWindow;
 class SfxRequest;
 class SfxItemSet;
 
 namespace basctl
 {
+
+class DockingWindow;
+class BaseWindow;
 
 //
 // Layout -- the common base of ModulLayout and DialogLayout.
@@ -46,7 +47,7 @@ public:
     void DockaWindow (DockingWindow*);
     void ArrangeWindows ();
 
-    virtual void Activating (IDEBaseWindow&);
+    virtual void Activating (BaseWindow&);
     virtual void Deactivating ();
     virtual void GetState (SfxItemSet&, unsigned nWhich) = 0;
     virtual void UpdateDebug (bool bBasicStopped ) = 0;
@@ -55,8 +56,8 @@ protected:
     Layout (Window* pParent);
     virtual ~Layout ();
 
-    void AddToLeft   (BasicDockingWindow* pWin, Size const& rSize) { aLeftSide.Add(pWin, rSize); }
-    void AddToBottom (BasicDockingWindow* pWin, Size const& rSize) { aBottomSide.Add(pWin, rSize); }
+    void AddToLeft   (DockingWindow* pWin, Size const& rSize) { aLeftSide.Add(pWin, rSize); }
+    void AddToBottom (DockingWindow* pWin, Size const& rSize) { aBottomSide.Add(pWin, rSize); }
 
 protected:
     // Window:
@@ -67,7 +68,7 @@ protected:
 
 private:
     // the main child window (either ModulWindow or DialogWindow)
-    IDEBaseWindow* pChild;
+    BaseWindow* pChild;
 
     // when this window has at first (nonempty) size
     bool bFirstSize;
@@ -78,7 +79,7 @@ private:
     public:
         enum Side {Right, Top, Left, Bottom};
         SplittedSide (Layout*, Side);
-        void Add (BasicDockingWindow*, Size const&);
+        void Add (DockingWindow*, Size const&);
         bool IsEmpty () const;
         int  GetSize () const;
         void ArrangeIn (Rectangle const&);
@@ -101,7 +102,7 @@ private:
         // the main splitting line
         Splitter aSplitter;
         // the dockable windows
-        std::vector<BasicDockingWindow*> vWindows;
+        std::vector<DockingWindow*> vWindows;
         // splitting lines between the docking windows (vWindows.size() - 1)
         std::vector<boost::shared_ptr<Splitter> > vSplitters;
 

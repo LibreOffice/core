@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _BASCTL_DLGEDOBJ_HXX
-#define _BASCTL_DLGEDOBJ_HXX
+#ifndef BASCTL_DLGEDOBJ_HXX
+#define BASCTL_DLGEDOBJ_HXX
 
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
@@ -27,6 +27,9 @@
 #include <svx/svdouno.hxx>
 
 #include <boost/optional.hpp>
+
+namespace basctl
+{
 
 typedef ::std::multimap< sal_Int16, ::rtl::OUString, ::std::less< sal_Int16 > > IndexToNameMap;
 
@@ -183,6 +186,8 @@ private:
     void    ImplInvalidateDeviceInfo();
 };
 
-#endif // _BASCTL_DLGEDOBJ_HXX
+} // namespace basctl
+
+#endif // BASCTL_DLGEDOBJ_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

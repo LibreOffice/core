@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _IDETEMP_HXX
-#define _IDETEMP_HXX
+#ifndef BASCTL_IDETEMP_HXX
+#define BASCTL_IDETEMP_HXX
 
 
 enum SvxChooseControlEnum
@@ -53,6 +53,6 @@ enum SvxChooseControlEnum
 
 #define SvxChooseControlItem SfxAllEnumItem
 
-#endif
+#endif // BASCTL_IDETEMP_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

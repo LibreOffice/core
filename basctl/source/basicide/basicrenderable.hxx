@@ -16,29 +16,30 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _BASICRENDERABLE_HXX
-#define _BASICRENDERABLE_HXX
+#ifndef BASCTL_BASICRENDERABLE_HXX
+#define BASCTL_BASICRENDERABLE_HXX
 
 #include "com/sun/star/view/XRenderable.hpp"
 #include "cppuhelper/compbase1.hxx"
 
 #include "vcl/print.hxx"
 
-class IDEBaseWindow;
+namespace basctl
+{
 
-namespace basicide
+class BaseWindow;
+
+class Renderable :
+    public cppu::WeakComponentImplHelper1< com::sun::star::view::XRenderable >,
+    public vcl::PrinterOptionsHelper
 {
-class BasicRenderable :
-        public cppu::WeakComponentImplHelper1< com::sun::star::view::XRenderable >,
-        public vcl::PrinterOptionsHelper
-{
-    IDEBaseWindow*      mpWindow;
+    BaseWindow*         mpWindow;
     osl::Mutex          maMutex;
 
     Printer* getPrinter();
 public:
-    BasicRenderable( IDEBaseWindow* pWin );
-    virtual ~BasicRenderable();
+    Renderable (BaseWindow*);
+    virtual ~Renderable();
 
     // XRenderable
     virtual sal_Int32 SAL_CALL getRendererCount (
@@ -60,8 +61,8 @@ public:
 
 };
 
-} // namespace
+} // namespace basctl
 
-#endif
+#endif // BASCTL_BASICRENDERABLE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

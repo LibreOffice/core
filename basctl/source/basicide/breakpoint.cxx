@@ -24,6 +24,9 @@
 
 #include <stddef.h>
 
+namespace basctl
+{
+
 BreakPointList::BreakPointList()
 {}
 
@@ -164,4 +167,7 @@ void BreakPointList::clear()
 {
     maBreakPoints.clear();
 }
+
+} // namespace basctl
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

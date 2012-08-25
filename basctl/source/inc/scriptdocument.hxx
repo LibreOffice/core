@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SCRIPTDOCUMENT_HXX
-#define SCRIPTDOCUMENT_HXX
+#ifndef BASCTL_SCRIPTDOCUMENT_HXX
+#define BASCTL_SCRIPTDOCUMENT_HXX
 
 #include <com/sun/star/script/XLibraryContainer.hpp>
 #include <com/sun/star/frame/XModel.hpp>
@@ -28,8 +28,9 @@
 #include <boost/shared_ptr.hpp>
 #include <vector>
 
-class BasicManager;
 class SfxListener;
+
+class BasicManager;
 
 //........................................................................
 namespace basctl
@@ -64,8 +65,6 @@ namespace basctl
     //====================================================================
     //= ScriptDocument
     //====================================================================
-    class ScriptDocument_Impl;
-
     class ScriptDocument;
     typedef ::std::vector< ScriptDocument >  ScriptDocuments;
 
@@ -74,7 +73,8 @@ namespace basctl
     class ScriptDocument
     {
     private:
-        ::boost::shared_ptr< ScriptDocument_Impl > m_pImpl;
+        class Impl;
+        boost::shared_ptr<Impl> m_pImpl;
 
     private:
         /** creates a ScriptDocument instance which operates on the application-wide
@@ -507,23 +507,6 @@ namespace basctl
 } // namespace basctl
 //........................................................................
 
-// convenience ... better would be all classes in the project are in
-// the same namespace ...
-using ::basctl::ScriptDocument;
-using ::basctl::ScriptDocuments;
-using ::basctl::E_SCRIPTS;
-using ::basctl::E_DIALOGS;
-using ::basctl::LibraryLocation;
-using ::basctl::LIBRARY_LOCATION_UNKNOWN;
-using ::basctl::LIBRARY_LOCATION_USER;
-using ::basctl::LIBRARY_LOCATION_SHARE;
-using ::basctl::LIBRARY_LOCATION_DOCUMENT;
-using ::basctl::LibraryType;
-using ::basctl::LIBRARY_TYPE_UNKNOWN;
-using ::basctl::LIBRARY_TYPE_MODULE;
-using ::basctl::LIBRARY_TYPE_DIALOG;
-using ::basctl::LIBRARY_TYPE_ALL;
-
-#endif // SCRIPTDOCUMENT_HXX
+#endif // BASCTL_SCRIPTDOCUMENT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

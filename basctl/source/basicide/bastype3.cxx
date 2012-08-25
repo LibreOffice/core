@@ -31,6 +31,9 @@
 #include <deque>
 #include <sfx2/docfac.hxx>
 
+namespace basctl
+{
+
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
 
@@ -38,16 +41,16 @@ using namespace ::com::sun::star;
 typedef std::deque< SvLBoxEntry* > EntryArray;
 
 
-void BasicTreeListBox::RequestingChildren( SvLBoxEntry* pEntry )
+void TreeListBox::RequestingChildren( SvLBoxEntry* pEntry )
 {
-    BasicEntryDescriptor aDesc( GetEntryDescriptor( pEntry ) );
-    ScriptDocument aDocument( aDesc.GetDocument() );
-    OSL_ENSURE( aDocument.isAlive(), "BasicTreeListBox::RequestingChildren: invalid document!" );
+    EntryDescriptor aDesc = GetEntryDescriptor(pEntry);
+    ScriptDocument aDocument = aDesc.GetDocument();
+    OSL_ENSURE( aDocument.isAlive(), "basctl::TreeListBox::RequestingChildren: invalid document!" );
     if ( !aDocument.isAlive() )
         return;
 
-    LibraryLocation eLocation( aDesc.GetLocation() );
-    BasicEntryType eType( aDesc.GetType() );
+    LibraryLocation eLocation = aDesc.GetLocation();
+    EntryType eType = aDesc.GetType();
 
     if ( eType == OBJ_TYPE_DOCUMENT )
     {
@@ -111,7 +114,7 @@ void BasicTreeListBox::RequestingChildren( SvLBoxEntry* pEntry )
             }
             else
             {
-                OSL_FAIL( "BasicTreeListBox::RequestingChildren: Error loading library!" );
+                OSL_FAIL( "basctl::TreeListBox::RequestingChildren: Error loading library!" );
             }
         }
     }
@@ -124,11 +127,11 @@ void BasicTreeListBox::RequestingChildren( SvLBoxEntry* pEntry )
         ImpCreateLibSubSubEntriesInVBAMode( pEntry, aDocument, aLibName );
     }
     else {
-        OSL_FAIL( "BasicTreeListBox::RequestingChildren: Unknown Type!" );
+        OSL_FAIL( "basctl::TreeListBox::RequestingChildren: Unknown Type!" );
     }
 }
 
-void BasicTreeListBox::ExpandedHdl()
+void TreeListBox::ExpandedHdl()
 {
     SvLBoxEntry* pEntry = GetHdlEntry();
     DBG_ASSERT( pEntry, "Was wurde zugeklappt?" );
@@ -144,7 +147,7 @@ void BasicTreeListBox::ExpandedHdl()
     }
 }
 
-void BasicTreeListBox::ScanAllEntries()
+void TreeListBox::ScanAllEntries()
 {
     ScanEntry( ScriptDocument::getApplicationScriptDocument(), LIBRARY_LOCATION_USER );
     ScanEntry( ScriptDocument::getApplicationScriptDocument(), LIBRARY_LOCATION_SHARE );
@@ -160,7 +163,7 @@ void BasicTreeListBox::ScanAllEntries()
     }
 }
 
-SbxVariable* BasicTreeListBox::FindVariable( SvLBoxEntry* pEntry )
+SbxVariable* TreeListBox::FindVariable( SvLBoxEntry* pEntry )
 {
     if ( !pEntry )
         return 0;
@@ -183,7 +186,7 @@ SbxVariable* BasicTreeListBox::FindVariable( SvLBoxEntry* pEntry )
             break;
             case 0:
             {
-                aDocument = static_cast<BasicDocumentEntry*>(pEntry->GetUserData())->GetDocument();
+                aDocument = static_cast<DocumentEntry*>(pEntry->GetUserData())->GetDocument();
             }
             break;
         }
@@ -198,7 +201,7 @@ SbxVariable* BasicTreeListBox::FindVariable( SvLBoxEntry* pEntry )
         {
             SvLBoxEntry* pLE = aEntries[n];
             DBG_ASSERT( pLE, "Can not find entry in array" );
-            BasicEntry* pBE = static_cast<BasicEntry*>(pLE->GetUserData());
+            Entry* pBE = static_cast<Entry*>(pLE->GetUserData());
             DBG_ASSERT( pBE, "The data in the entry not found!" );
             String aName( GetEntryText( pLE ) );
 
@@ -257,7 +260,7 @@ SbxVariable* BasicTreeListBox::FindVariable( SvLBoxEntry* pEntry )
     return pVar;
 }
 
-BasicEntryDescriptor BasicTreeListBox::GetEntryDescriptor( SvLBoxEntry* pEntry )
+EntryDescriptor TreeListBox::GetEntryDescriptor( SvLBoxEntry* pEntry )
 {
     ScriptDocument aDocument( ScriptDocument::getApplicationScriptDocument() );
     LibraryLocation eLocation = LIBRARY_LOCATION_UNKNOWN;
@@ -265,10 +268,10 @@ BasicEntryDescriptor BasicTreeListBox::GetEntryDescriptor( SvLBoxEntry* pEntry )
     String aLibSubName;
     String aName;
     String aMethodName;
-    BasicEntryType eType = OBJ_TYPE_UNKNOWN;
+    EntryType eType = OBJ_TYPE_UNKNOWN;
 
     if ( !pEntry )
-        return BasicEntryDescriptor( aDocument, eLocation, aLibName, aLibSubName, aName, aMethodName, eType );
+        return EntryDescriptor( aDocument, eLocation, aLibName, aLibSubName, aName, aMethodName, eType );
 
     EntryArray aEntries;
 
@@ -287,10 +290,10 @@ BasicEntryDescriptor BasicTreeListBox::GetEntryDescriptor( SvLBoxEntry* pEntry )
             break;
             case 0:
             {
-                if (BasicDocumentEntry* pBasicDocumentEntry = static_cast<BasicDocumentEntry*>(pEntry->GetUserData()))
+                if (DocumentEntry* pDocumentEntry = static_cast<DocumentEntry*>(pEntry->GetUserData()))
                 {
-                    aDocument = pBasicDocumentEntry->GetDocument();
-                    eLocation = pBasicDocumentEntry->GetLocation();
+                    aDocument = pDocumentEntry->GetDocument();
+                    eLocation = pDocumentEntry->GetLocation();
                     eType = OBJ_TYPE_DOCUMENT;
                 }
             }
@@ -305,7 +308,7 @@ BasicEntryDescriptor BasicTreeListBox::GetEntryDescriptor( SvLBoxEntry* pEntry )
         {
             SvLBoxEntry* pLE = aEntries[n];
             DBG_ASSERT( pLE, "Entrie im Array nicht gefunden" );
-            BasicEntry* pBE = static_cast<BasicEntry*>(pLE->GetUserData());
+            Entry* pBE = static_cast<Entry*>(pLE->GetUserData());
             DBG_ASSERT( pBE, "Keine Daten im Eintrag gefunden!" );
 
             switch ( pBE->GetType() )
@@ -356,57 +359,34 @@ BasicEntryDescriptor BasicTreeListBox::GetEntryDescriptor( SvLBoxEntry* pEntry )
         }
     }
 
-    return BasicEntryDescriptor( aDocument, eLocation, aLibName, aLibSubName, aName, aMethodName, eType );
+    return EntryDescriptor( aDocument, eLocation, aLibName, aLibSubName, aName, aMethodName, eType );
 }
 
-BasicIDEType BasicTreeListBox::ConvertType( BasicEntryType eType )
+ItemType TreeListBox::ConvertType (EntryType eType)
 {
-    BasicIDEType nType = static_cast<BasicIDEType>(OBJ_TYPE_UNKNOWN);
-
-    switch ( eType )
+    switch (eType)
     {
-        case OBJ_TYPE_DOCUMENT:
-        {
-            nType = BASICIDE_TYPE_SHELL;
-        }
-        break;
-        case OBJ_TYPE_LIBRARY:
-        {
-            nType = BASICIDE_TYPE_LIBRARY;
-        }
-        break;
-        case OBJ_TYPE_MODULE:
-        {
-            nType = BASICIDE_TYPE_MODULE;
-        }
-        break;
-        case OBJ_TYPE_DIALOG:
-        {
-            nType = BASICIDE_TYPE_DIALOG;
-        }
-        break;
-        case OBJ_TYPE_METHOD:
-        {
-            nType = BASICIDE_TYPE_METHOD;
-        }
-        break;
-        default: ;
+        case OBJ_TYPE_DOCUMENT:  return TYPE_SHELL;
+        case OBJ_TYPE_LIBRARY:   return TYPE_LIBRARY;
+        case OBJ_TYPE_MODULE:    return TYPE_MODULE;
+        case OBJ_TYPE_DIALOG:    return TYPE_DIALOG;
+        case OBJ_TYPE_METHOD:    return TYPE_METHOD;
+        default:
+            return static_cast<ItemType>(OBJ_TYPE_UNKNOWN);
     }
-
-    return nType;
 }
 
-bool BasicTreeListBox::IsValidEntry( SvLBoxEntry* pEntry )
+bool TreeListBox::IsValidEntry( SvLBoxEntry* pEntry )
 {
     bool bIsValid = false;
 
-    BasicEntryDescriptor aDesc( GetEntryDescriptor( pEntry ) );
+    EntryDescriptor aDesc( GetEntryDescriptor( pEntry ) );
     ScriptDocument aDocument( aDesc.GetDocument() );
     LibraryLocation eLocation( aDesc.GetLocation() );
     String aLibName( aDesc.GetLibName() );
     String aName( aDesc.GetName() );
     String aMethodName( aDesc.GetMethodName() );
-    BasicEntryType eType( aDesc.GetType() );
+    EntryType eType( aDesc.GetType() );
 
     switch ( eType )
     {
@@ -434,7 +414,7 @@ bool BasicTreeListBox::IsValidEntry( SvLBoxEntry* pEntry )
         break;
         case OBJ_TYPE_METHOD:
         {
-            bIsValid = BasicIDE::HasMethod( aDocument, aLibName, aName, aMethodName );
+            bIsValid = HasMethod( aDocument, aLibName, aName, aMethodName );
         }
         break;
         case OBJ_TYPE_DOCUMENT_OBJECTS:
@@ -451,20 +431,20 @@ bool BasicTreeListBox::IsValidEntry( SvLBoxEntry* pEntry )
     return bIsValid;
 }
 
-SbModule* BasicTreeListBox::FindModule( SvLBoxEntry* pEntry )
+SbModule* TreeListBox::FindModule( SvLBoxEntry* pEntry )
 {
     return dynamic_cast<SbModule*>(FindVariable(pEntry));
 }
 
-SvLBoxEntry* BasicTreeListBox::FindRootEntry( const ScriptDocument& rDocument, LibraryLocation eLocation )
+SvLBoxEntry* TreeListBox::FindRootEntry( const ScriptDocument& rDocument, LibraryLocation eLocation )
 {
-    OSL_ENSURE( rDocument.isValid(), "BasicTreeListBox::FindRootEntry: invalid document!" );
+    OSL_ENSURE( rDocument.isValid(), "basctl::TreeListBox::FindRootEntry: invalid document!" );
     sal_uLong nRootPos = 0;
     SvLBoxEntry* pRootEntry = GetEntry( nRootPos );
     while ( pRootEntry )
     {
-        DBG_ASSERT( static_cast<BasicEntry*>(pRootEntry->GetUserData())->GetType() == OBJ_TYPE_DOCUMENT, "Kein Shelleintrag?" );
-        BasicDocumentEntry* pBDEntry = static_cast<BasicDocumentEntry*>(pRootEntry->GetUserData());
+        DBG_ASSERT( static_cast<Entry*>(pRootEntry->GetUserData())->GetType() == OBJ_TYPE_DOCUMENT, "Kein Shelleintrag?" );
+        DocumentEntry* pBDEntry = static_cast<DocumentEntry*>(pRootEntry->GetUserData());
         if (pBDEntry && pBDEntry->GetDocument() == rDocument && pBDEntry->GetLocation() == eLocation)
             return pRootEntry;
         pRootEntry = GetEntry( ++nRootPos );
@@ -482,5 +462,8 @@ SvLBoxEntry* BasicTreeListBox::FindRootEntry( const ScriptDocument& rDocument, L
     aName.append(rLibName);
     return aName.makeStringAndClear();
 }
+
+
+} // namespace basctl
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

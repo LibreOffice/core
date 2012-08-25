@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _BASCTL_ACCESSIBLEDIALOGWINDOW_HXX_
-#define _BASCTL_ACCESSIBLEDIALOGWINDOW_HXX_
+#ifndef BASCTL_ACCESSIBLEDIALOGWINDOW_HXX
+#define BASCTL_ACCESSIBLEDIALOGWINDOW_HXX
 
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -27,21 +27,21 @@
 #include <svl/lstner.hxx>
 #include <tools/link.hxx>
 
-class DlgEditor;
-class DlgEdModel;
-class DlgEdObj;
 class VCLExternalSolarLock;
 class VclSimpleEvent;
 class VclWindowEvent;
 
-namespace basctl
-{
-    class DialogWindow;
-}
 namespace utl {
-class AccessibleStateSetHelper;
+   class AccessibleStateSetHelper;
 }
 
+namespace basctl
+{
+
+class DialogWindow;
+class DlgEditor;
+class DlgEdModel;
+class DlgEdObj;
 
 //  ----------------------------------------------------
 //  class AccessibleDialogWindow
@@ -162,7 +162,8 @@ public:
     virtual void SAL_CALL deselectAccessibleChild( sal_Int32 nChildIndex ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
 };
 
+} // namespace basctl
 
-#endif // _BASCTL_ACCESSIBLEDIALOGWINDOW_HXX_
+#endif // BASCTL_ACCESSIBLEDIALOGWINDOW_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

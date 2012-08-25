@@ -22,6 +22,8 @@
 #include "dlgedmod.hxx"
 #include "dlgedobj.hxx"
 
+namespace basctl
+{
 
 TYPEINIT1( DlgEdPage, SdrPage );
 
@@ -60,7 +62,7 @@ SdrObject* DlgEdPage::SetObjectOrdNum(sal_uLong nOldObjNum, sal_uLong nNewObjNum
 {
     SdrObject* pObj = SdrPage::SetObjectOrdNum( nOldObjNum, nNewObjNum );
 
-    DlgEdHint aHint( DLGED_HINT_OBJORDERCHANGED );
+    DlgEdHint aHint( DlgEdHint::OBJORDERCHANGED );
     if ( pDlgEdForm )
     {
         DlgEditor* pDlgEditor = pDlgEdForm->GetDlgEditor();
@@ -72,5 +74,7 @@ SdrObject* DlgEdPage::SetObjectOrdNum(sal_uLong nOldObjNum, sal_uLong nNewObjNum
 }
 
 //----------------------------------------------------------------------------
+
+} // namespace basctl
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

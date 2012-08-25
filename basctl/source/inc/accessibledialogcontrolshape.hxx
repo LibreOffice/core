@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _BASCTL_ACCESSIBLEDIALOGCONTROLSHAPE_HXX_
-#define _BASCTL_ACCESSIBLEDIALOGCONTROLSHAPE_HXX_
+#ifndef BASCTL_ACCESSIBLEDIALOGCONTROLSHAPE_HXX
+#define BASCTL_ACCESSIBLEDIALOGCONTROLSHAPE_HXX
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -26,16 +26,17 @@
 #include <cppuhelper/implbase3.hxx>
 
 class Window;
-class DlgEdObj;
 class VCLExternalSolarLock;
-namespace basctl
-{
-    class DialogWindow;
-}
 
 namespace utl {
-class AccessibleStateSetHelper;
+    class AccessibleStateSetHelper;
 }
+
+namespace basctl
+{
+
+class DlgEdObj;
+class DialogWindow;
 
 //  ----------------------------------------------------
 //  class AccessibleDialogControlShape
@@ -55,7 +56,7 @@ class AccessibleDialogControlShape :    public AccessibleExtendedComponentHelper
 
 private:
     VCLExternalSolarLock*   m_pExternalLock;
-    basctl::DialogWindow*   m_pDialogWindow;
+    DialogWindow*           m_pDialogWindow;
     DlgEdObj*               m_pDlgEdObj;
     bool                    m_bFocused;
     bool                    m_bSelected;
@@ -86,7 +87,7 @@ protected:
     virtual void SAL_CALL   disposing();
 
 public:
-    AccessibleDialogControlShape (basctl::DialogWindow*, DlgEdObj*);
+    AccessibleDialogControlShape (DialogWindow*, DlgEdObj*);
     virtual ~AccessibleDialogControlShape();
 
     // XInterface
@@ -133,7 +134,8 @@ public:
     virtual ::rtl::OUString SAL_CALL getToolTipText(  ) throw (::com::sun::star::uno::RuntimeException);
 };
 
+} // namespace basctl
 
-#endif // _BASCTL_ACCESSIBLEDIALOGCONTROLSHAPE_HXX_
+#endif // BASCTL_ACCESSIBLEDIALOGCONTROLSHAPE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

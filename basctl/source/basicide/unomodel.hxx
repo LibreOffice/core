@@ -16,12 +16,15 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef UNOMODEL_HXX
-#define UNOMODEL_HXX
+#ifndef BASCTL_UNOMODEL_HXX
+#define BASCTL_UNOMODEL_HXX
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <sfx2/sfxbasemodel.hxx>
+
+namespace basctl
+{
 
 //-----------------------------------------------------------------------------
 class SIDEModel : public SfxBaseModel,
@@ -55,6 +58,8 @@ com::sun::star::uno::Reference< com::sun::star::uno::XInterface > SAL_CALL SIDEM
                 const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory > & rSMgr )
                     throw( com::sun::star::uno::Exception );
 
-#endif
+} // namespace basctl
+
+#endif // BASCTL_UNOMODEL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

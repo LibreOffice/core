@@ -36,15 +36,15 @@
 #include <sfx2/request.hxx>
 #include <tools/diagnose_ex.h>
 
+namespace basctl
+{
+
 using namespace comphelper;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::io;
 
-using basctl::DialogWindow;
-using basctl::DialogWindowLayout;
-
-DialogWindow* BasicIDEShell::CreateDlgWin( const ScriptDocument& rDocument, const ::rtl::OUString& rLibName, const ::rtl::OUString& rDlgName )
+DialogWindow* Shell::CreateDlgWin( const ScriptDocument& rDocument, const ::rtl::OUString& rLibName, const ::rtl::OUString& rDlgName )
 {
     bCreatingWindow = true;
 
@@ -103,7 +103,7 @@ DialogWindow* BasicIDEShell::CreateDlgWin( const ScriptDocument& rDocument, cons
     else
     {
         pWin->SetStatus( pWin->GetStatus() & ~BASWIN_SUSPENDED );
-        nKey = GetIDEWindowId( pWin );
+        nKey = GetWindowId( pWin );
         DBG_ASSERT( nKey, "CreateDlgWin: Kein Key - Fenster nicht gefunden!" );
     }
 
@@ -120,26 +120,26 @@ DialogWindow* BasicIDEShell::CreateDlgWin( const ScriptDocument& rDocument, cons
     return pWin;
 }
 
-DialogWindow* BasicIDEShell::FindDlgWin (
+DialogWindow* Shell::FindDlgWin (
     ScriptDocument const& rDocument,
     rtl::OUString const& rLibName, rtl::OUString const& rName,
     bool bCreateIfNotExist, bool bFindSuspended
 )
 {
-    if (IDEBaseWindow* pWin = FindWindow(rDocument, rLibName, rName, BASICIDE_TYPE_DIALOG, bFindSuspended))
+    if (BaseWindow* pWin = FindWindow(rDocument, rLibName, rName, TYPE_DIALOG, bFindSuspended))
         return static_cast<DialogWindow*>(pWin);
     return bCreateIfNotExist ? CreateDlgWin(rDocument, rLibName, rName) : 0;
 }
 
-sal_uInt16 BasicIDEShell::GetIDEWindowId(const IDEBaseWindow* pWin) const
+sal_uInt16 Shell::GetWindowId(const BaseWindow* pWin) const
 {
-    for (WindowTableIt it = aIDEWindowTable.begin(); it != aIDEWindowTable.end(); ++it)
+    for (WindowTableIt it = aWindowTable.begin(); it != aWindowTable.end(); ++it)
         if ( it->second == pWin )
             return it->first;
     return 0;
 }
 
-SdrView* BasicIDEShell::GetCurDlgView() const
+SdrView* Shell::GetCurDlgView() const
 {
     if (DialogWindow* pDCurWin = dynamic_cast<DialogWindow*>(pCurWin))
         return pDCurWin->GetView();
@@ -148,10 +148,12 @@ SdrView* BasicIDEShell::GetCurDlgView() const
 }
 
 // only if dialogue window above:
-void BasicIDEShell::ExecuteDialog( SfxRequest& rReq )
+void Shell::ExecuteDialog( SfxRequest& rReq )
 {
     if (pCurWin && (dynamic_cast<DialogWindow*>(pCurWin) || rReq.GetSlot() == SID_IMPORT_DIALOG))
         pCurWin->ExecuteCommand(rReq);
 }
+
+} // namespace basctl
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

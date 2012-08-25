@@ -20,6 +20,9 @@
 #include "dlgedlist.hxx"
 #include "dlgedobj.hxx"
 
+namespace basctl
+{
+
 //============================================================================
 // DlgEdPropListenerImpl
 //============================================================================
@@ -101,5 +104,7 @@ void SAL_CALL DlgEdEvtContListenerImpl::elementRemoved(const ::com::sun::star::c
 }
 
 //----------------------------------------------------------------------------
+
+} // namespace basctl
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
