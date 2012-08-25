@@ -13,6 +13,8 @@ $(eval $(call gb_StaticLibrary_use_package,basebmp,basebmp_inc))
 
 $(eval $(call gb_StaticLibrary_use_sdk_api,basebmp))
 
+$(eval $(call gb_StaticLibrary_use_external,basebmp,vigra_headers))
+
 $(eval $(call gb_StaticLibrary_use_libraries,basebmp,\
     basegfx \
     sal \
