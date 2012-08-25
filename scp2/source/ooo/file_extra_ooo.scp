@@ -389,11 +389,10 @@ File gid_File_Extra_Tplwizreport
     Name ="tplwizreport.zip";
 End
 
-File gid_File_Extra_Tplwizstyles_Lang
-    Dir = gid_Dir_Template_Wizard_Styles;
-    TXT_FILE_BODY;
-    Styles = (ARCHIVE, DONT_OVERWRITE);
-    EXTRA_ALL_LANG(tplwizstyles,zip);
+File gid_File_Extra_Tplwizstyles
+    Dir = gid_Dir_Share_Template_Common_Wizard_Styles;
+    ARCHIVE_TXT_FILE_BODY;
+    Name = tplwizstyles.zip;
 End
 
 File gid_File_Extra_Webcast_Asp

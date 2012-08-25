@@ -11,7 +11,6 @@ $(eval $(call gb_Module_Module,extras))
 
 $(eval $(call gb_Module_add_targets,extras,\
 	AllLangZip_autotextshare \
-	AllLangZip_tplwizstyles \
 	CustomTarget_autocorr \
 	Package_fonts \
 	Package_newfiles \
@@ -39,6 +38,7 @@ $(eval $(call gb_Module_add_targets,extras,\
 	Zip_tplwizfax \
 	Zip_tplwizletter \
 	Zip_tplwizreport \
+	Zip_tplwizstyles \
 	Zip_wordbook \
 ))
 

@@ -17,6 +17,8 @@
  */
 #define SAMPLES                 1000
 #define STYLES                  1100
+#define STYLENAME_DEF           1120
+#define STYLENAME               1150
 #define AgendaDlgName		1200
 #define AgendaDlgNoCancel	1201
 #define AgendaDlgFrame		1202
@@ -29,7 +31,6 @@
 #define TextField    1400
 #define Newsletter    1450
 
-// --------------------------------------------------------------------
 String SAMPLES
 {
     Text [ en-US ] = "In order to use the full functionality of this sample, create a document that is based on this template.";
@@ -40,7 +41,6 @@ String SAMPLES + 1
     Text [ en-US ] = "Remarks";
 };
 
-// --------------------------------------------------------------------
 String STYLES
 {
     Text [ en-US ] = "Theme Selection";
@@ -61,7 +61,186 @@ String STYLES + 3
     Text [ en-US ] = "~OK";
 };
 
-// --------------------------------------------------------------------
+String STYLENAME_DEF
+{
+    Text = "(Standard)";
+};
+
+String STYLENAME_DEF + 1
+{
+    Text = "Autumn Leaves";
+};
+
+String STYLENAME_DEF + 2
+{
+    Text = "Be";
+};
+
+String STYLENAME_DEF + 3
+{
+    Text = "Black and White";
+};
+
+String STYLENAME_DEF + 4
+{
+    Text = "Blackberry Bush";
+};
+
+String STYLENAME_DEF + 5
+{
+    Text = "Blue Jeans";
+};
+
+String STYLENAME_DEF + 6
+{
+    Text = "Fifties Diner";
+};
+
+String STYLENAME_DEF + 7
+{
+    Text = "Glacier";
+};
+
+String STYLENAME_DEF + 8
+{
+    Text = "Green Grapes";
+};
+
+String STYLENAME_DEF + 9
+{
+    Text = "Marine";
+};
+
+String STYLENAME_DEF + 10
+{
+    Text = "Millennium";
+};
+
+String STYLENAME_DEF + 11
+{
+    Text = "Nature";
+};
+
+String STYLENAME_DEF + 12
+{
+    Text = "Neon";
+};
+
+String STYLENAME_DEF + 13
+{
+    Text = "Night";
+};
+
+String STYLENAME_DEF + 14
+{
+    Text = "PC Nostalgia";
+};
+
+String STYLENAME_DEF + 15
+{
+    Text = "Pastel";
+};
+
+String STYLENAME_DEF + 16
+{
+    Text = "Pool Party";
+};
+
+String STYLENAME_DEF + 17
+{
+    Text = "Pumpkin";
+};
+
+String STYLENAME
+{
+    Text [ en-US ] = "(Standard)";
+};
+
+String STYLENAME + 1
+{
+    Text [ en-US ] = "Autumn Leaves";
+};
+
+String STYLENAME + 2
+{
+    Text [ en-US ] = "Be";
+};
+
+String STYLENAME + 3
+{
+    Text [ en-US ] = "Black and White";
+};
+
+String STYLENAME + 4
+{
+    Text [ en-US ] = "Blackberry Bush";
+};
+
+String STYLENAME + 5
+{
+    Text [ en-US ] = "Blue Jeans";
+};
+
+String STYLENAME + 6
+{
+    Text [ en-US ] = "Fifties Diner";
+};
+
+String STYLENAME + 7
+{
+    Text [ en-US ] = "Glacier";
+};
+
+String STYLENAME + 8
+{
+    Text [ en-US ] = "Green Grapes";
+};
+
+String STYLENAME + 9
+{
+    Text [ en-US ] = "Marine";
+};
+
+String STYLENAME + 10
+{
+    Text [ en-US ] = "Millennium";
+};
+
+String STYLENAME + 11
+{
+    Text [ en-US ] = "Nature";
+};
+
+String STYLENAME + 12
+{
+    Text [ en-US ] = "Neon";
+};
+
+String STYLENAME + 13
+{
+    Text [ en-US ] = "Night";
+};
+
+String STYLENAME + 14
+{
+    Text [ en-US ] = "PC Nostalgia";
+};
+
+String STYLENAME + 15
+{
+    Text [ en-US ] = "Pastel";
+};
+
+String STYLENAME + 16
+{
+    Text [ en-US ] = "Pool Party";
+};
+
+String STYLENAME + 17
+{
+    Text [ en-US ] = "Pumpkin";
+};
+
 String AgendaDlgName
 {
     Text [ en-US ] = "Minutes Template";
@@ -87,7 +266,6 @@ String AgendaDlgButton2
     Text [ en-US ] = "Evaluation Minutes";
 };
 
-// --------------------------------------------------------------------
 String CorrespondenceNoTextmark
 {
     Text [ en-US ] = "The bookmark 'Recipient' is missing.";
@@ -347,4 +525,3 @@ String Newsletter + 12
 {
     Text [ en-US ] = "Double-sided";
 };
-

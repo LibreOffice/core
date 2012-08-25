@@ -21,6 +21,9 @@
 
 Const SAMPLES = 1000
 Const STYLES = 1100
+Const STYLENAME_DEF = 1120
+Const STYLENAME = 1150
+Const NumStyles = 18
 Const aTempFileName = &quot;Berend_Ilko_Tom_Stella_Volker.stc&quot;
 Public Const Twip = 425
 Dim oUcbObject as Object
@@ -51,10 +54,10 @@ Dim RValue as Integer
 Dim oNewDocument as Object
 Dim mFileProperties(1) as New com.sun.star.beans.PropertyValue
 	PrepareForEditing = NULL
-        BasicLibraries.LoadLibrary( &quot;Tools&quot; )
+	BasicLibraries.LoadLibrary( &quot;Tools&quot; )
 	If InitResources(&quot;&apos;Template&apos;&quot;, &quot;tpl&quot;) then
 		If IsMissing(oDocument) Then
-      		oDocument = ThisComponent
+			oDocument = ThisComponent
 		End If
 		If oDocument.IsReadOnly then
 			MMessage = GetResText(SAMPLES)
@@ -89,11 +92,13 @@ Sub ShowStyles
 Dim TemplateDir, ActFileTitle, DisplayDummy as String
 Dim sFilterName(0) as String
 Dim StyleNames() as String
+Dim LocalizedStyleNames(NumStyles,2) As String
+Dim LocalizedStyleName As String
 Dim t as Integer
 Dim MaxIndex as Integer
-        BasicLibraries.LoadLibrary(&quot;Tools&quot;)
+	BasicLibraries.LoadLibrary(&quot;Tools&quot;)
 	If InitResources(&quot;&apos;Template&apos;&quot;, &quot;tpl&quot;) then
-    oDocument = ThisComponent
+	oDocument = ThisComponent
 		If oDocument.SupportsService(&quot;com.sun.star.sheet.SpreadsheetDocument&quot;) Then
 			ToggleWindow(False)
 			oUcbObject = createUnoService(&quot;com.sun.star.ucb.SimpleFileAccess&quot;)
@@ -107,8 +112,18 @@ Dim MaxIndex as Integer
 			DialogModel.Title = GetResText(STYLES)
 			DialogModel.cmdCancel.Label = GetResText(STYLES+2)
 			DialogModel.cmdOk.Label = GetResText(STYLES+3)
+			For t = 0 to NumStyles - 1
+				LocalizedStyleNames(t,0) = GetResText(STYLENAME_DEF+t)
+				LocalizedStyleNames(t,1) = GetResText(STYLENAME+t)
+			Next t
 			Stylenames() = ReadDirectories(StylesDir, False, False, True,)
 			MaxIndex = Ubound(Stylenames())
+			For t = 0 to MaxIndex
+				LocalizedStyleName = StringInMultiArray(LocalizedStyleNames(), StyleNames(t,1), 0, 1)
+				If LocalizedStyleName &lt;&gt; "" Then
+					StyleNames(t,1) = LocalizedStyleName
+				End If
+			Next t
 			BubbleSortList(Stylenames(),True)
 			Dim cStyles(MaxIndex)
 			For t = 0 to MaxIndex
@@ -134,8 +149,8 @@ Dim Position as Integer
 	If Position &gt; -1 Then
 		ToggleWindow(False)
 		StylePath = Files(Position)
-	  	aOptions(0).Name = &quot;OverwriteStyles&quot;
- 		aOptions(0).Value = true
+		aOptions(0).Name = &quot;OverwriteStyles&quot;
+		aOptions(0).Value = true
 		oFamilies.loadStylesFromURL(StylePath, aOptions())
 		ToggleWindow(True)
 	End If
@@ -171,8 +186,8 @@ Sub RestoreCurrentStyles
 	ToggleWindow(False)
 	On Local Error Goto NoFile
 	If FileExists(aTempURL) Then
-	  	aOptions(0).Name = &quot;OverwriteStyles&quot;
-  		aOptions(0).Value = true
+		aOptions(0).Name = &quot;OverwriteStyles&quot;
+		aOptions(0).Value = true
 		oFamilies.LoadStylesFromURL(aTempURL, aOptions())
 		KillTempFile()
 	End If

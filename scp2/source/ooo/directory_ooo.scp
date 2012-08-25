@@ -952,6 +952,11 @@ Directory gid_Dir_Share_Template_Common_Wizard_Report
     DosName = "report";
 End
 
+Directory gid_Dir_Share_Template_Common_Wizard_Styles
+    ParentID = gid_Dir_Share_Template_Common_Wizard;
+    DosName = "styles";
+End
+
 Directory gid_Dir_Template_Language
     ParentID = gid_Dir_Template;
     DIR_ISOLANGUAGE_ALL_LANG_2;
@@ -1010,11 +1015,6 @@ End
 Directory gid_Dir_Template_Wizard
     ParentID = gid_Dir_Template_Language;
     DIR_IDENT_ALL_LANG(wizard);
-End
-
-Directory gid_Dir_Template_Wizard_Styles
-    ParentID = gid_Dir_Template_Wizard;
-    DIR_IDENT_ALL_LANG(styles);
 End
 
 Directory gid_Dir_Share_Database

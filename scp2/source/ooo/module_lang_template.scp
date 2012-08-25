@@ -31,7 +31,6 @@ Module gid_Module_Langpack_Basis_Template
     Description = "gid_Module_Langpack_Root_Template";
     Styles = (TEMPLATEMODULE);
     Files = (gid_File_Extra_Autotextshare_Lang,
-             gid_File_Extra_Tplwizstyles_Lang,
              gid_File_Registry_Filter_Zip,
              gid_File_Registry_Lang,
              gid_File_Registry_Spool_Langpack_Lang,
