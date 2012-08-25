@@ -78,7 +78,7 @@ classname* classname::getImplementation( const uno::Reference< uno::XInterface >
 UNO3_GETIMPLEMENTATION_BASE_IMPL(classname)\
 sal_Int64 SAL_CALL classname::getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& rId ) throw(::com::sun::star::uno::RuntimeException) \
 { \
-    if( rId.getLength() == 16 && 0 == rtl_compareMemory( getUnoTunnelId().getConstArray(), \
+    if( rId.getLength() == 16 && 0 == memcmp( getUnoTunnelId().getConstArray(), \
                                                          rId.getConstArray(), 16 ) ) \
     { \
         return sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_IntPtr>(this)); \
@@ -90,7 +90,7 @@ sal_Int64 SAL_CALL classname::getSomething( const ::com::sun::star::uno::Sequenc
 UNO3_GETIMPLEMENTATION_BASE_IMPL(classname)\
 sal_Int64 SAL_CALL classname::getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& rId ) throw(::com::sun::star::uno::RuntimeException) \
 { \
-    if( rId.getLength() == 16 && 0 == rtl_compareMemory( getUnoTunnelId().getConstArray(), \
+    if( rId.getLength() == 16 && 0 == memcmp( getUnoTunnelId().getConstArray(), \
                                                          rId.getConstArray(), 16 ) ) \
     { \
         return sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_IntPtr>(this)); \

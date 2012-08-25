@@ -25,6 +25,7 @@
 #include <osl/time.h>
 #include <rtl/digest.h>
 #include <rtl/random.h>
+#include <string.h>
 
 using ::rtl::OUString;
 using ::com::sun::star::uno::Sequence;
@@ -269,10 +270,10 @@ Sequence< sal_Int8 > DocPasswordHelper::GetXLHashAsSequence(
     if ( !aPassword.isEmpty() && aDocId.getLength() == 16 )
     {
         sal_uInt16 pPassData[16];
-        rtl_zeroMemory( pPassData, sizeof(pPassData) );
+        memset( pPassData, 0, sizeof(pPassData) );
 
         sal_Int32 nPassLen = ::std::min< sal_Int32 >( aPassword.getLength(), 15 );
-        rtl_copyMemory( pPassData, aPassword.getStr(), nPassLen * sizeof(pPassData[0]) );
+        memcpy( pPassData, aPassword.getStr(), nPassLen * sizeof(pPassData[0]) );
 
         aResultKey = GenerateStd97Key( pPassData, aDocId );
     }
@@ -287,7 +288,7 @@ Sequence< sal_Int8 > DocPasswordHelper::GetXLHashAsSequence(
     if ( pPassData[0] && aDocId.getLength() == 16 )
     {
         sal_uInt8 pKeyData[64];
-        rtl_zeroMemory( pKeyData, sizeof(pKeyData) );
+        memset( pKeyData, 0, sizeof(pKeyData) );
 
         sal_Int32 nInd = 0;
 
@@ -317,7 +318,7 @@ Sequence< sal_Int8 > DocPasswordHelper::GetXLHashAsSequence(
 
         // Update digest with padding.
         pKeyData[16] = 0x80;
-        rtl_zeroMemory( pKeyData + 17, sizeof(pKeyData) - 17 );
+        memset( pKeyData + 17, 0, sizeof(pKeyData) - 17 );
         pKeyData[56] = 0x80;
         pKeyData[57] = 0x0a;
 
@@ -328,7 +329,7 @@ Sequence< sal_Int8 > DocPasswordHelper::GetXLHashAsSequence(
         rtl_digest_rawMD5 ( hDigest, (sal_uInt8*)aResultKey.getArray(), aResultKey.getLength() );
 
         // Erase KeyData array and leave.
-        rtl_zeroMemory( pKeyData, sizeof(pKeyData) );
+        memset( pKeyData, 0, sizeof(pKeyData) );
     }
 
     return aResultKey;
