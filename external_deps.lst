@@ -72,7 +72,7 @@ if ( true )
 if (SOLAR_JAVA == TRUE)
     MD5 = 17960f35b2239654ba608cf1f3e256b3
     name = lucene-2.9.4-src.tar.gz
-    URL1 = http://www.us.apache.org/dist/lucene/java/2.9.4/lucene-2.9.4-src.tar.gz
+    URL1 = http://archive.apache.org/dist/lucene/java/2.9.4/lucene-2.9.4-src.tar.gz
     URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
     # Fall back to a version in SVN from a previous revsion.
     URL3 = http://svn.apache.org/repos/asf/!svn/bc/1337615/incubator/ooo/trunk/ext_sources/$(MD5)-$(name)
