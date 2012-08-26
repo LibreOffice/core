@@ -1189,6 +1189,7 @@ SwPagePreView::SwPagePreView(SfxViewFrame *pViewFrame, SfxViewShell* pOldSh):
     SfxViewShell( pViewFrame, SWVIEWFLAGS ),
     aViewWin( &pViewFrame->GetWindow(), *this ),
     nNewPage(USHRT_MAX),
+    sPageStr(SW_RES(STR_PAGE)),
     pHScrollbar(0),
     pVScrollbar(0),
     pPageUpBtn(0),
