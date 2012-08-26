@@ -27,8 +27,8 @@
 # The primary fallback site.
 OOO_EXTRAS=http://ooo-extras.apache-extras.org.codespot.com/files/
 
-# Secondary fallback for category-A libraries.
-SVN_TRUNK=http://svn.apache.org/repos/asf/!svn/bc/1336449/incubator/ooo/trunk/ext_sources/
+# Must not fallback to svn
+# SVN_TRUNK=http://svn.apache.org/repos/asf/!svn/bc/1336449/incubator/ooo/trunk/ext_sources/
 
 
 ###############################################################################
@@ -40,134 +40,115 @@ if ( true )
     name = ucpp-1.3.2.tar.gz
     URL1 = http://ucpp.googlecode.com/files/ucpp-1.3.2.tar.gz
     URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
-    URL3 = $(SVN_TRUNK)$(MD5)-$(name)
 
 if ( true )
     MD5 = 067201ea8b126597670b5eff72e1f66c
     name = mythes-1.2.0.tar.gz
     URL1 = http://sourceforge.net/projects/hunspell/files/MyThes/1.2.0/mythes-1.2.0.tar.gz/download
     URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
-    URL3 = $(SVN_TRUNK)$(MD5)-$(name)
 
 if (SYSTEM_LIBTEXTCAT != YES)
     MD5 = 128cfc86ed5953e57fe0f5ae98b62c2e
     name = libtextcat-2.2.tar.gz
     URL1 = http://software.wise-guys.nl/download/libtextcat-2.2.tar.gz
     URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
-    URL3 = $(SVN_TRUNK)$(MD5)-$(name)
 
 if (SOLAR_JAVA == TRUE)
     MD5 = 17410483b5b5f267aa18b7e00b65e6e0
     name = hsqldb_1_8_0.zip
     URL1 = http://sourceforge.net/projects/hsqldb/files/hsqldb/hsqldb_1_8_0/hsqldb_1_8_0_10.zip/download
     URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
-    URL3 = $(SVN_TRUNK)$(MD5)-$(name)
 
 if ( true )
     MD5 = 1756c4fa6c616ae15973c104cd8cb256
     name = Adobe-Core35_AFMs-314.tar.gz
     URL1 = $(OOO_EXTRAS)$(MD5)-$(name)
-    URL2 = $(SVN_TRUNK)$(MD5)-$(name)
 
 if (SOLAR_JAVA == TRUE)
     MD5 = 17960f35b2239654ba608cf1f3e256b3
     name = lucene-2.9.4-src.tar.gz
     URL1 = http://archive.apache.org/dist/lucene/java/2.9.4/lucene-2.9.4-src.tar.gz
     URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
-    # Fall back to a version in SVN from a previous revsion.
-    URL3 = http://svn.apache.org/repos/asf/!svn/bc/1337615/incubator/ooo/trunk/ext_sources/$(MD5)-$(name)
  
 if (WITH_MOZILLA != NO)
     MD5 = 1f24ab1d39f4a51faf22244c94a6203f
     name = xmlsec1-1.2.14.tar.gz
     URL1 = ftp://ftp.aleksey.com/pub/xmlsec/releases/xmlsec1-1.2.14.tar.gz
     URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
-    URL3 = $(SVN_TRUNK)$(MD5)-$(name)
 
 if (SYSTEM_REDLAND != YES)
     MD5 = 284e768eeda0e2898b0d5bf7e26a016e
     name = raptor-1.4.18.tar.gz
     URL1 = http://download.librdf.org/source/raptor-1.4.18.tar.gz
     URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
-    URL3 = $(SVN_TRUNK)$(MD5)-$(name)
 
 if (SYSTEM_REDLAND != YES)
     MD5 = ca66e26082cab8bb817185a116db809b
     name = redland-1.0.8.tar.gz
     URL1 = http://download.librdf.org/source/redland-1.0.8.tar.gz
     URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
-    URL3 = $(SVN_TRUNK)$(MD5)-$(name)
 
 if (SYSTEM_REDLAND != YES)
     MD5 = fca8706f2c4619e2fa3f8f42f8fc1e9d
     name = rasqal-0.9.16.tar.gz
     URL1 = http://download.librdf.org/source/rasqal-0.9.16.tar.gz
     URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
-    URL3 = $(SVN_TRUNK)$(MD5)-$(name)
 
 if (SOLAR_JAVA==TRUE && ENABLE_MEDIAWIKI==YES)
     MD5 = 2c9b0f83ed5890af02c0df1c1776f39b
     name = commons-httpclient-3.1-src.tar.gz
     URL1 = http://archive.apache.org/dist/httpcomponents/commons-httpclient/source/commons-httpclient-3.1-src.tar.gz
     URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
-    URL3 = $(SVN_TRUNK)$(MD5)-$(name)
 
 if (SOLAR_JAVA==TRUE && ENABLE_MEDIAWIKI==YES)
     MD5 = 2e482c7567908d334785ce7d69ddfff7
     name = commons-codec-1.6-src.tar.gz
-    URL1 = http://apache.spinellicreations.com//commons/codec/source/commons-codec-1.6-src.tar.gz
-    URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
-    URL3 = $(SVN_TRUNK)$(MD5)-$(name)
+    URL1 = http://archive.apache.org/dist/commons/codec/source/commons-codec-1.6-src.tar.gz
+    URL2 = http://apache.spinellicreations.com//commons/codec/source/commons-codec-1.6-src.tar.gz
+    URL3 = $(OOO_EXTRAS)$(MD5)-$(name)
 
 if ( true )
     MD5 = 2f6ecca935948f7db92d925d88d0d078
     name = icu4c-4_0_1-src.tgz
     URL1 = http://download.icu-project.org/files/icu4c/4.0.1/icu4c-4_0_1-src.tgz
     URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
-    URL3 = $(SVN_TRUNK)$(MD5)-$(name)
 
 if ( true )
     SHA1 = 231af70b7567a753b49df4216743010c193884b7
     name = serf-1.1.0.tar.bz2
     URL1 = http://serf.googlecode.com/files/serf-1.1.0.tar.bz2
     URL2 = $(OOO_EXTRAS)$(SHA1)-$(name)
-    URL3 = http://svn.apache.org/repos/asf/!svn/bc/1351976/incubator/ooo/trunk/ext_sources/$(SHA1)-$(name)
 
 if (SOLAR_JAVA==TRUE && (ENABLE_MEDIAWIKI==YES || ENABLE_REPORTBUILDER==YES))
     MD5 = 3c219630e4302863a9a83d0efde889db
     name = commons-logging-1.1.1-src.tar.gz
     # This seems to be the original host, but the MD5 sum does not match.
-    # URL1 = http://<some-apache-mirror>/commons/logging/source/commons-logging-1.1.1-src.tar.gz
+    # URL1 = http://archive.apache.org/dist/commons/logging/source/commons-logging-1.1.1-src.tar.gz
     URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
-    URL3 = $(SVN_TRUNK)$(MD5)-$(name)
 
 if (SOLAR_JAVA==TRUE && ENABLE_MEDIAWIKI==YES)
     MD5 = 625ff5f2f968dd908bca43c9469d6e6b
     name = commons-lang-2.4-src.tar.gz
     URL1 = http://archive.apache.org/dist/commons/lang/source/commons-lang-2.4-src.tar.gz
     URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
-    URL3 = $(SVN_TRUNK)$(MD5)-$(name)
 
 if (SYSTEM_OPENSSL!=YES && DISABLE_OPENSSL!=TRUE)
     MD5 = 63ddc5116488985e820075e65fbe6aa4
     name = openssl-0.9.8o.tar.gz
     URL1 = http://www.openssl.org/source/openssl-0.9.8o.tar.gz
     URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
-    URL3 = $(SVN_TRUNK)$(MD5)-$(name)
 
 if ( true )
     MD5 = 97262fe54dddaf583eaaee3497a426e1
     name = apr-1.4.5.tar.gz
-    URL1 = $(OOO_EXTRAS)$(MD5)-$(name)
-    URL2 = $(SVN_TRUNK)$(MD5)-$(name)
+    URL1 = http://archive.apache.org/dist/apr/$(name)
+    URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
 
 if ( true )
     MD5 = 666a5d56098a9debf998510e304c8095
     name = apr-util-1.4.1.tar.gz
-    # Can not yet detect automatically the right mirror to use.
-    # URL1 = http://<some-apache-mirror>/apr/apr-util-1.4.1.tar.gz
+    URL1 = http://archive.apache.org/dist/apr/$(name)
     URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
-    URL3 = $(SVN_TRUNK)$(MD5)-$(name)
 
 if ( true )
     MD5 = c441926f3a552ed3e5b274b62e86af16
@@ -175,34 +156,29 @@ if ( true )
     # This seems to be the original host, but the MD5 sum does not match.
     # URL1 = http://sourceforge.net/projects/stlport/files/STLport%20archive/STLport%204/STLport-4.0.tar.gz/download
     URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
-    URL3 = $(SVN_TRUNK)$(MD5)-$(name)
 
 if ( true )
     MD5 = 18f577b374d60b3c760a3a3350407632
     name = STLport-4.5.tar.gz
     URL1 = http://sourceforge.net/projects/stlport/files/STLport%20archive/STLport%204/STLport-4.5.tar.gz/download
     URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
-    URL3 = $(SVN_TRUNK)$(MD5)-$(name)
 
 if ( true )
     MD5 = 7376930b0d3f3d77a685d94c4a3acda8
     name = STLport-4.5-0119.tar.gz
     URL1 = $(OOO_EXTRAS)$(MD5)-$(name)
-    URL2 = $(SVN_TRUNK)$(MD5)-$(name)
 
 if (SYSTEM_LIBXML != YES)
     MD5 = 7740a8ec23878a2f50120e1faa2730f2
     name = libxml2-2.7.6.tar.gz
     URL1 = ftp://xmlsoft.org/libxml2/libxml2-2.7.6.tar.gz
     URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
-    URL3 = $(SVN_TRUNK)$(MD5)-$(name)
 
 if (SYSTEM_LIBXSLT != YES)
     MD5 = e61d0364a30146aaa3001296f853b2b9
     name = libxslt-1.1.26.tar.gz
     URL1 = ftp://xmlsoft.org/libxml2/libxslt-1.1.26.tar.gz
     URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
-    URL3 = $(SVN_TRUNK)$(MD5)-$(name)
 
 if (SOLAR_JAVA == TRUE)
     MD5 = 7e4e73c21f031d5a4c93c128baf7fd75
@@ -210,83 +186,71 @@ if (SOLAR_JAVA == TRUE)
     # This seems to be the original host, but the MD5 sum does not match.
     # URL1 = http://<mirror>/tomcat/tomcat-5/v5.5.35/bin/apache-tomcat-5.5.35.tar.gz
     URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
-    URL3 = $(SVN_TRUNK)$(MD5)-$(name)
 
 if (SOLAR_JAVA == TRUE)
     MD5 = 980143f96b3f6ce45d2e4947da21a5e9
     name = stax-src-1.2.0.zip
     URL1 = http://dist.codehaus.org/stax/distributions/stax-src-1.2.0.zip
     URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
-    URL3 = $(SVN_TRUNK)$(MD5)-$(name)
 
 if (SYSTEM_JPEG != YES)
     MD5 = a2c10c04f396a9ce72894beb18b4e1f9
     name = jpeg-8c.tar.gz
     URL1 = http://www.ijg.org/files/jpegsrc.v8c.tar.gz
     URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
-    URL3 = $(SVN_TRUNK)$(MD5)-$(name)
 
 if (ENABLE_MEDIAWIKI == YES)
     MD5 = a7983f859eafb2677d7ff386a023bc40
     name = xsltml_2.1.2.zip
     URL1 = http://sourceforge.net/projects/xsltml/files/xsltml/v.2.1.2/xsltml_2.1.2.zip/download
     URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
-    URL3 = $(SVN_TRUNK)$(MD5)-$(name)
 
 if (SYSTEM_PYTHON != YES)
     MD5 = c57477edd6d18bd9eeca2f21add73919
     name = Python-2.7.3.tar.bz2
     URL1 = http://www.python.org/ftp/python/2.7.3/Python-2.7.3.tar.bz2
     URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
-    URL3 = http://svn.apache.org/repos/asf/!svn/bc/1366182/incubator/ooo/trunk/ext_sources/$(MD5)-$(name)
 
 if (GUI!=UNX || SYSTEM_ZLIB!=YES)
     MD5 = c735eab2d659a96e5a594c9e8541ad63
     name = zlib-1.2.5.tar.gz
     URL1 = $(OOO_EXTRAS)$(MD5)-$(name)
-    URL2 = $(SVN_TRUNK)$(MD5)-$(name)
 
 if ( true )
     MD5 = cf8a6967f7de535ae257fa411c98eb88
     name = mdds_0.3.0.tar.bz2
     URL1 = http://multidimalgorithm.googlecode.com/files/mdds_0.3.0.tar.bz2
     URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
-    URL3 = $(SVN_TRUNK)$(MD5)-$(name)
 
 if (SYSTEM_VIGRA != YES)
     MD5 = ea91f2fb4212a21d708aced277e6e85a
     name = vigra1.4.0.tar.gz
     URL1 = http://hci.iwr.uni-heidelberg.de/vigra/vigra1.4.0.tar.gz
     URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
-    URL3 = $(SVN_TRUNK)$(MD5)-$(name)
 
 if (SYSTEM_CURL != YES)
     MD5 = ecb2e37e45c9933e2a963cabe03670ab
     name = curl-7.19.7.tar.gz
     URL1 = http://curl.haxx.se/download/curl-7.19.7.tar.gz
     URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
-    URL3 = $(SVN_TRUNK)$(MD5)-$(name)
 
 if (SYSTEM_EXPAT != YES)
     MD5 = ee8b492592568805593f81f8cdf2a04c
     name = expat-2.0.1.tar.gz
     URL1 = http://sourceforge.net/projects/expat/files/expat/2.0.1/expat-2.0.1.tar.gz/download
     URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
-    URL3 = $(SVN_TRUNK)$(MD5)-$(name)
 
 if (WITH_CATA_FONTS == YES)
     MD5 = f872f4ac066433d8ff92f5e316b36ff9
     name = dejavu-fonts-ttf-2.33.zip
     URL1 = http://sourceforge.net/projects/dejavu/files/dejavu/2.33/dejavu-fonts-ttf-2.33.zip/download
     URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
-    URL3 = $(SVN_TRUNK)$(MD5)-$(name)
 
 if (SYSTEM_BOOST!=YES || (OS==SOLARIS && COM!=GCC))
     MD5 = fcc6df1160753d0b8c835d17fdeeb0a7
     name = boost_1_39_0.tar.gz
     URL1 = http://sourceforge.net/projects/boost/files/boost/1.39.0/boost_1_39_0.tar.gz/download
     URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
-    URL3 = $(SVN_TRUNK)$(MD5)-$(name)
 
 if ( true )
     MD5 = fdb27bfe2dbe2e7b57ae194d9bf36bab
@@ -294,7 +258,6 @@ if ( true )
     # This seems to be the original host, but the MD5 sum does not match.
     # URL1 = http://sourceforge.net/projects/sampleicc/files/sampleicc/SampleICC%201.3.2/SampleICC-1.3.2.zip/download
     URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
-    URL3 = $(SVN_TRUNK)$(MD5)-$(name)
 
 if (RAT_JAR_HOME==BUILD)
     MD5 = e4244e69eb3644e71c254aea5952a918
@@ -310,7 +273,6 @@ if (ENABLE_CATEGORY_B==YES)
     MD5 = 2b5f1ca58d6ef30f18f1415b65bed81c
     name = CoinMP-1.6.0.tgz
     URL1 = $(OOO_EXTRAS)$(MD5)-$(name)
-    URL2 = $(SVN_TRUNK)$(MD5)-$(name)
 
 if (WITH_CATB_FONTS == YES)
     MD5 = 35efabc239af896dfb79be7ebdd6e6b9
@@ -318,34 +280,29 @@ if (WITH_CATB_FONTS == YES)
     # This seems to be the original host, but the MD5 sum does not match.
     # URL1 = http://scripts.sil.org/cms/scripts/render_download.php?format=file&media_id=GentiumBasic_110&filename=GentiumBasic_110.zip
     URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
-    URL3 = $(SVN_TRUNK)$(MD5)-$(name)
 
 if (ENABLE_CATEGORY_B==YES && ENABLE_HYPHEN==YES)
     MD5 = 48a9f787f43a09c0a9b7b00cd1fddbbf
     name = hyphen-2.7.1.tar.gz
     URL1 = http://sourceforge.net/projects/hunspell/files/Hyphen/2.7/hyphen-2.7.1.tar.gz/download
     URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
-    URL3 = $(SVN_TRUNK)$(MD5)-$(name)
 
 if (ENABLE_CATEGORY_B==YES && WITH_CATB_FONTS==YES)
     MD5 = 61f59e4110781cbe66b46449eadac231
     name = croscorefonts-1.21.0.tar.gz
     URL1 = $(OOO_EXTRAS)$(MD5)-$(name)
-    URL2 = $(SVN_TRUNK)$(MD5)-$(name)
 
 if (ENABLE_CATEGORY_B==YES && ENABLE_HUNSPELL==YES)
     name = hunspell-1.3.2.tar.gz
     MD5 = 3121aaf3e13e5d88dfff13fb4a5f1ab8
     URL1 = http://sourceforge.net/projects/hunspell/files/Hunspell/1.3.2/hunspell-1.3.2.tar.gz/download
     URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
-    URL3 = $(SVN_TRUNK)$(MD5)-$(name)
 
 if (ENABLE_CATEGORY_B==YES && SOLAR_JAVA==TRUE && ENABLE_JAVASCRIPT==YES)
     MD5 = 99d94103662a8d0b571e247a77432ac5
     name = rhino1_7R3.zip
     URL1 = ftp://ftp.mozilla.org/pub/mozilla.org/js/rhino1_7R3.zip
     URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
-    URL3 = $(SVN_TRUNK)$(MD5)-$(name)
 
 if (ENABLE_CATEGORY_B==YES && WITH_MOZILLA!=NO && BUILD_MOZAB==TRUE)
     MD5 = a169ab152209200a7bad29a275cb0333
@@ -353,44 +310,37 @@ if (ENABLE_CATEGORY_B==YES && WITH_MOZILLA!=NO && BUILD_MOZAB==TRUE)
     # This seems to be the original host, but the MD5 sum does not match.
     # URL1 = ftp://ftp.mozilla.org/pub/mozilla.org/seamonkey/releases/1.1.4/seamonkey-1.1.4.source.tar.gz
     URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
-    URL3 = $(SVN_TRUNK)$(MD5)-$(name)
 
 if (ENABLE_CATEGORY_B==YES && ENABLE_NSS_MODULE==YES)
     MD5 = b92261a5679276c400555004937af965
     name = nss-3.12.6-with-nspr-4.8.4.tar.gz
     URL1 = $(OOO_EXTRAS)$(MD5)-$(name)
-    URL2 = $(SVN_TRUNK)$(MD5)-$(name)
 
 if (ENABLE_CATEGORY_B==YES && SYSTEM_SAXON!=YES && DISABLE_SAXON!=YES && SOLAR_JAVA==TRUE)
     MD5 = 24be19595acad0a2cae931af77a0148a
     name = LICENSE_source-9.0.0.7-bj.html
     URL1 = $(OOO_EXTRAS)$(MD5)-$(name)
-    URL2 = $(SVN_TRUNK)$(MD5)-$(name)
 
 if (ENABLE_CATEGORY_B==YES && SYSTEM_SAXON!=YES && DISABLE_SAXON!=YES && SOLAR_JAVA==TRUE)
     MD5 = 48470d662650c3c074e1c3fabbc67bbd
     name = README_source-9.0.0.7-bj.txt
     URL1 = $(OOO_EXTRAS)$(MD5)-$(name)
-    URL2 = $(SVN_TRUNK)$(MD5)-$(name)
 
 if (ENABLE_CATEGORY_B==YES && SYSTEM_SAXON!=YES && DISABLE_SAXON!=YES && SOLAR_JAVA==TRUE)
     MD5 = ada24d37d8d638b3d8a9985e80bc2978
     name = source-9.0.0.7-bj.zip
     URL1 = $(OOO_EXTRAS)$(MD5)-$(name)
-    URL2 = $(SVN_TRUNK)$(MD5)-$(name)
 
 if (ENABLE_CATEGORY_B==YES && SYSTEM_GRAPHITE!=YES && ENABLE_GRAPHITE==TRUE)
     MD5 = 377a60170e5185eb63d3ed2fae98e621
     name = README_silgraphite-2.3.1.txt
     URL1 = $(OOO_EXTRAS)$(MD5)-$(name)
-    URL2 = $(SVN_TRUNK)$(MD5)-$(name)
 
 if (ENABLE_CATEGORY_B==YES && SYSTEM_GRAPHITE!=YES && ENABLE_GRAPHITE==TRUE)
     MD5 = d35724900f6a4105550293686688bbb3
     name = silgraphite-2.3.1.tar.gz
     URL1 = http://sourceforge.net/projects/silgraphite/files/silgraphite/2.3.1/silgraphite-2.3.1.tar.gz/download
     URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
-    URL3 = $(SVN_TRUNK)$(MD5)-$(name)
 
 if (ENABLE_CATEGORY_B==YES && SOLAR_JAVA==TRUE && DISABLE_BEANSHELL!=YES)
     MD5 = ea570af93c284aa9e5621cd563f54f4d
@@ -398,4 +348,3 @@ if (ENABLE_CATEGORY_B==YES && SOLAR_JAVA==TRUE && DISABLE_BEANSHELL!=YES)
     # This seems to be the original host, but the MD5 sum does not match.
     # URL1 = http://www.beanshell.org/bsh-2.0b1.jar
     URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
-    URL3 = $(SVN_TRUNK)$(MD5)-$(name)
