@@ -11,8 +11,6 @@ $(eval $(call gb_UnpackedTarball_UnpackedTarball,clucene))
 
 $(eval $(call gb_UnpackedTarball_set_tarball,clucene,$(CLUCENE_TARBALL)))
 
-$(eval $(call gb_UnpackedTarball_fix_cxx_suffix,clucene,cpp))
-
 ifneq ($(OS),WNT)
 $(eval $(call gb_UnpackedTarball_set_post_action,clucene,\
 	mkdir -p inc/internal/CLucene/util && \

@@ -218,6 +218,7 @@ $(eval $(foreach method,\
 	export_objects_list \
 	add_nativeres \
 	set_warnings_not_errors \
+	set_cxx_suffix \
 ,\
 	$(call gb_Library__forward_to_Linktarget,$(method))\
 ))

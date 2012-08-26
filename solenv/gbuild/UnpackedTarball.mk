@@ -132,11 +132,6 @@ $(call gb_Helper_abbreviate_dirs,\
 		done && \
 	) \
 	$(if $(UNPACKED_FIX_EOL),$(gb_UnpackedTarball_CONVERTCOMMAND) dos $(UNPACKED_FIX_EOL) &&) \
-	$(if $(UNPACKED_CXX_SUFFIX),\
-		for c in `find $(3) -type f -name "*.$(UNPACKED_CXX_SUFFIX)"`; do \
-			mv "$$c" "$${c%.$(UNPACKED_CXX_SUFFIX)}.cxx" || exit 1;\
-		done && \
-	) \
 	$(if $(UNPACKED_FILES),\
 		mkdir -p $(sort $(dir $(UNPACKED_DESTFILES))) && \
 		$(call gb_UnpackedTarball__copy_files,$(UNPACKED_FILES),$(UNPACKED_DESTFILES)) && \
@@ -174,7 +169,6 @@ endef
 
 # Initialize unpacked tarball
 define gb_UnpackedTarball_UnpackedTarball_internal
-$(call gb_UnpackedTarball_get_target,$(1)) : UNPACKED_CXX_SUFFIX :=
 $(call gb_UnpackedTarball_get_target,$(1)) : UNPACKED_DESTFILES :=
 $(call gb_UnpackedTarball_get_target,$(1)) : UNPACKED_FILES :=
 $(call gb_UnpackedTarball_get_target,$(1)) : UNPACKED_FIX_EOL :=
@@ -206,19 +200,6 @@ endef
 # gb_UnpackedTarball_fix_end_of_line unpacked file(s)
 define gb_UnpackedTarball_fix_end_of_line
 $(call gb_UnpackedTarball_get_target,$(1)) : UNPACKED_FIX_EOL += $(addprefix $(call gb_UnpackedTarball_get_dir,$(1))/,$(2))
-
-endef
-
-# Set suffix of C++ files, if different from 'cxx'
-#
-# All files with that extension will be renamed to .cxx . This is because
-# LinkTarget requires .cxx extension for C++ files.
-#
-# This is done after applying patches.
-#
-# gb_UnpackedTarball_fix_cxx_suffix unpacked used-suffix
-define gb_UnpackedTarball_fix_cxx_suffix
-$(call gb_UnpackedTarball_get_target,$(1)) : UNPACKED_CXX_SUFFIX := $(2)
 
 endef
 

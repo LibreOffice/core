@@ -127,6 +127,7 @@ $(eval $(foreach method,\
 	use_unpacked \
 	add_sdi_headers \
 	set_warnings_not_errors \
+	set_cxx_suffix \
 ,\
 	$(call gb_StaticLibrary_forward_to_Linktarget,$(method))\
 ))

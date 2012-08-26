@@ -155,9 +155,9 @@ gb_GenCObject_get_source = $(WORKDIR)/$(1).c
 # defined by platform
 #  gb_CObject__command
 
-$(call gb_GenCObject_get_target,%) : $(call gb_GenCObject_get_source,%)
-	test -f $< || (echo "Missing generated source file $<" && false)
-	$(call gb_CObject__command,$@,$*,$<,$(call gb_GenCObject_get_dep_target,$*))
+$(call gb_GenCObject_get_target,%) :
+	test -f $(call gb_GenCObject_get_source,$*) || (echo "Missing generated source file $(call gb_GenCObject_get_source,$*)" && false)
+	$(call gb_CObject__command,$@,$*,$(call gb_GenCObject_get_source,$*),$(call gb_GenCObject_get_dep_target,$*))
 
 ifeq ($(gb_FULLDEPS),$(true))
 $(call gb_GenCObject_get_dep_target,%) :
@@ -169,13 +169,13 @@ endif
 
 # GenCxxObject class
 
-gb_GenCxxObject_get_source = $(WORKDIR)/$(1).cxx
+gb_GenCxxObject_get_source = $(WORKDIR)/$(1).$(CXX_SUFFIX)
 # defined by platform
 #  gb_CxxObject__command
 
-$(call gb_GenCxxObject_get_target,%) : $(call gb_GenCxxObject_get_source,%)
-	test -f $< || (echo "Missing generated source file $<" && false)
-	$(call gb_CxxObject__command,$@,$*,$<,$(call gb_GenCxxObject_get_dep_target,$*))
+$(call gb_GenCxxObject_get_target,%) :
+	test -f $(call gb_GenCxxObject_get_source,$*) || (echo "Missing generated source file $(call gb_GenCxxObject_get_source,$*)" && false)
+	$(call gb_CxxObject__command,$@,$*,$(call gb_GenCxxObject_get_source,$*),$(call gb_GenCxxObject_get_dep_target,$*))
 
 ifeq ($(gb_FULLDEPS),$(true))
 $(call gb_GenCxxObject_get_dep_target,%) :
@@ -494,6 +494,7 @@ $(call gb_LinkTarget_get_target,$(1)) : PDBFILE :=
 $(call gb_LinkTarget_get_target,$(1)) : EXTRAOBJECTLISTS :=
 $(call gb_LinkTarget_get_target,$(1)) : NATIVERES :=
 $(call gb_LinkTarget_get_target,$(1)) : WARNINGS_NOT_ERRORS :=
+$(call gb_LinkTarget_get_target,$(1)) : $(eval CXX_SUFFIX := cxx)
 
 ifeq ($(gb_FULLDEPS),$(true))
 -include $(call gb_LinkTarget_get_dep_target,$(1))
@@ -517,6 +518,7 @@ $(call gb_LinkTarget_get_dep_target,$(1)) : TARGETTYPE :=
 $(call gb_LinkTarget_get_dep_target,$(1)) : LIBRARY_X64 :=
 $(call gb_LinkTarget_get_dep_target,$(1)) : EXTRAOBJECTLISTS :=
 $(call gb_LinkTarget_get_dep_target,$(1)) : WARNINGS_NOT_ERRORS :=
+$(call gb_LinkTarget_get_dep_target,$(1)) : $(eval CXX_SUFFIX := cxx)
 endif
 
 endef
@@ -851,10 +853,11 @@ define gb_LinkTarget_add_generated_c_object
 $(call gb_LinkTarget_get_target,$(1)) : GENCOBJECTS += $(2)
 $(call gb_LinkTarget_get_clean_target,$(1)) : GENCOBJECTS += $(2)
 
-# Make just needs to know gb_GenCObject_get_source is a real target.
-# Then it can use implicit rule for gb_GenCObject_get_target.
-$(call gb_GenCObject_get_source,$(2)) : | $(gb_Helper_MISCDUMMY)
 $(call gb_LinkTarget_get_target,$(1)) : $(call gb_GenCObject_get_target,$(2))
+$(call gb_GenCObject_get_target,$(2)) : $(call gb_GenCObject_get_source,$(2))
+# Often gb_GenCObject_get_source does not have its own rule and is only a byproduct.
+# That's why we need this order-only dependency on gb_Helper_MISCDUMMY
+$(call gb_GenCObject_get_source,$(2)) : | $(gb_Helper_MISCDUMMY)
 $(call gb_GenCObject_get_target,$(2)) : | $(call gb_LinkTarget_get_headers_target,$(1))
 $(call gb_GenCObject_get_target,$(2)) : T_CFLAGS += $(call gb_LinkTarget__get_cflags,$(4)) $(3)
 $(call gb_GenCObject_get_target,$(2)) : \
@@ -871,10 +874,11 @@ define gb_LinkTarget_add_generated_cxx_object
 $(call gb_LinkTarget_get_target,$(1)) : GENCXXOBJECTS += $(2)
 $(call gb_LinkTarget_get_clean_target,$(1)) : GENCXXOBJECTS += $(2)
 
-# Make just needs to know gb_GenCxxObject_get_source is a real target.
-# Then it can use implicit rule for gb_GenCxxObject_get_target.
-$(call gb_GenCxxObject_get_source,$(2)) : | $(gb_Helper_MISCDUMMY)
 $(call gb_LinkTarget_get_target,$(1)) : $(call gb_GenCxxObject_get_target,$(2))
+$(call gb_GenCxxObject_get_target,$(2)) : $(call gb_GenCxxObject_get_source,$(2))
+# Often gb_GenCxxObject_get_source does not have its own rule and is only a byproduct.
+# That's why we need this order-only dependency on gb_Helper_MISCDUMMY
+$(call gb_GenCxxObject_get_source,$(2)) : | $(gb_Helper_MISCDUMMY)
 $(call gb_GenCxxObject_get_target,$(2)) : | $(call gb_LinkTarget_get_headers_target,$(1))
 $(call gb_GenCxxObject_get_target,$(2)) : T_CXXFLAGS += $(3)
 $(call gb_GenCxxObject_get_target,$(2)) : \
@@ -1116,6 +1120,19 @@ define gb_LinkTarget_set_warnings_not_errors
 $(call gb_LinkTarget_get_target,$(1)) : WARNINGS_NOT_ERRORS := $(true)
 ifeq ($(gb_FULLDEPS),$(true))
 $(call gb_LinkTarget_get_dep_target,$(1)) : WARNINGS_NOT_ERRORS := $(true)
+endif
+
+endef
+
+# Set suffix of C++ files, if different from 'cxx'
+#
+# This is useful for external libraries.
+#
+# gb_LinkTarget_set_cxx_suffix linktarget used-suffix
+define gb_LinkTarget_set_cxx_suffix
+$(call gb_LinkTarget_get_target,$(1)) : $(eval CXX_SUFFIX := $(2))
+ifeq ($(gb_FULLDEPS),$(true))
+$(call gb_LinkTarget_get_dep_target,$(1)) : $(eval CXX_SUFFIX := $(2))
 endif
 
 endef
