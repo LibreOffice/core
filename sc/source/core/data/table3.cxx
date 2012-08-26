@@ -563,7 +563,9 @@ void ScTable::QuickSort( ScSortInfoArray* pArray, SCsCOLROW nLo, SCsCOLROW nHi )
 
 void ScTable::SwapCol(SCCOL nCol1, SCCOL nCol2)
 {
-    for (SCROW nRow = aSortParam.nRow1; nRow <= aSortParam.nRow2; nRow++)
+    SCROW nRowStart = aSortParam.nRow1;
+    SCROW nRowEnd = aSortParam.nRow2;
+    for (SCROW nRow = nRowStart; nRow <= nRowEnd; nRow++)
     {
         aCol[nCol1].SwapCell(nRow, aCol[nCol2]);
         if (aSortParam.bIncludePattern)
@@ -589,16 +591,19 @@ void ScTable::SwapCol(SCCOL nCol1, SCCOL nCol2)
         ScPostIt* pPostIt = itr->second;
         ++itr;
 
-        if (nCol == nCol1)
+        if(nRow >= nRowStart && nRow <= nRowEnd)
         {
-            aNoteMap.insert(nCol, nRow, pPostIt);
-            maNotes.ReleaseNote(nCol2, nRow);
-        }
-        else if (nCol == nCol2)
-        {
-            aNoteMap.insert(nCol, nRow, pPostIt);
-            maNotes.ReleaseNote(nCol1, nRow);
+            if (nCol == nCol1)
+            {
+                aNoteMap.insert(nCol2, nRow, pPostIt);
+                maNotes.ReleaseNote(nCol, nRow);
+            }
+            else if (nCol == nCol2)
+            {
+                aNoteMap.insert(nCol1, nRow, pPostIt);
+                maNotes.ReleaseNote(nCol, nRow);
 
+            }
         }
     }
 
@@ -609,6 +614,7 @@ void ScTable::SwapCol(SCCOL nCol1, SCCOL nCol2)
         SCCOL nCol = itr->first.first;
         SCROW nRow = itr->first.second;
         ScPostIt* pPostIt = itr->second;
+        ++itr;
 
         maNotes.insert(nCol, nRow, pPostIt);
         aNoteMap.ReleaseNote(nCol, nRow);
@@ -617,7 +623,9 @@ void ScTable::SwapCol(SCCOL nCol1, SCCOL nCol2)
 
 void ScTable::SwapRow(SCROW nRow1, SCROW nRow2)
 {
-    for (SCCOL nCol = aSortParam.nCol1; nCol <= aSortParam.nCol2; nCol++)
+    SCCOL nColStart = aSortParam.nCol1;
+    SCCOL nColEnd = aSortParam.nCol2;
+    for (SCCOL nCol = nColStart; nCol <= nColEnd; nCol++)
     {
         aCol[nCol].SwapRow(nRow1, nRow2);
         if (aSortParam.bIncludePattern)
@@ -655,16 +663,18 @@ void ScTable::SwapRow(SCROW nRow1, SCROW nRow2)
         ScPostIt* pPostIt = itr->second;
         ++itr;
 
-        if (nRow == nRow1)
+        if( nCol >= nColStart && nCol <= nColEnd )
         {
-            aNoteMap.insert(nCol, nRow, pPostIt);
-            maNotes.ReleaseNote(nCol, nRow2);
-        }
-        else if (nRow == nRow2)
-        {
-            aNoteMap.insert(nCol, nRow, pPostIt);
-            maNotes.ReleaseNote(nCol, nRow1);
-
+            if (nRow == nRow1)
+            {
+                aNoteMap.insert(nCol, nRow2, pPostIt);
+                maNotes.ReleaseNote(nCol, nRow);
+            }
+            else if (nRow == nRow2)
+            {
+                aNoteMap.insert(nCol, nRow1, pPostIt);
+                maNotes.ReleaseNote(nCol, nRow);
+            }
         }
     }
 
@@ -675,6 +685,7 @@ void ScTable::SwapRow(SCROW nRow1, SCROW nRow2)
         SCCOL nCol = itr->first.first;
         SCROW nRow = itr->first.second;
         ScPostIt* pPostIt = itr->second;
+        ++itr;
 
         maNotes.insert(nCol, nRow, pPostIt);
         aNoteMap.ReleaseNote(nCol, nRow);
