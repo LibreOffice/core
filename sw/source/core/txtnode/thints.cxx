@@ -1637,7 +1637,6 @@ bool SwTxtNode::TryCharSetExpandToNum(const SfxItemSet& aCharSet)
     SfxItemIter aIter( aCharSet );
         const SfxPoolItem* pItem = aIter.FirstItem();
         const sal_uInt16 nWhich = pItem->Which();
-    xub_StrLen nIdx = 0;
 
     const SfxPoolItem& rInnerItem = GetAttr(nWhich,false);
 
