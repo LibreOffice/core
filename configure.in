@@ -7250,6 +7250,7 @@ dnl ===================================================================
 dnl Check for system hsqldb
 dnl ===================================================================
 if test "$with_java" != "no"; then
+HSQLDB_USE_JDBC_4_1=
 AC_MSG_CHECKING([which hsqldb to use])
 if test "$with_system_hsqldb" = "yes"; then
     AC_MSG_RESULT([external])
@@ -7290,9 +7291,18 @@ else
     AC_MSG_RESULT([internal])
     SYSTEM_HSQLDB=NO
     BUILD_TYPE="$BUILD_TYPE HSQLDB"
+    AC_MSG_CHECKING([whether hsqldb should be built with JDBC 4.1])
+    javanumver=`$JAVAINTERPRETER -version 2>&1 | $AWK -v num=true -f $SRC_ROOT/solenv/bin/getcompver.awk`
+    if expr "$javanumver" '>=' 000100060000 > /dev/null; then
+        AC_MSG_RESULT([yes])
+        HSQLDB_USE_JDBC_4_1=YES
+    else
+        AC_MSG_RESULT([no])
+    fi
 fi
 AC_SUBST(SYSTEM_HSQLDB)
 AC_SUBST(HSQLDB_JAR)
+AC_SUBST([HSQLDB_USE_JDBC_4_1])
 fi
 
 dnl ===================================================================
