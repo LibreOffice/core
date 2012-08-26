@@ -218,7 +218,7 @@ class TableManager
 
         void resetRowProps()
         {
-            mpCellProps.reset();
+            mpRowProps.reset();
         }
 
         void setRowProps(PropertiesPointer pProps)

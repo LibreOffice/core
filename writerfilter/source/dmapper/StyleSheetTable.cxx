@@ -221,7 +221,19 @@ void lcl_mergeProps( PropertyMapPtr pToFill,  PropertyMapPtr pToAdd, TblStyleTyp
     pToFill->insert( pToAdd );
 }
 
-PropertyMapPtr TableStyleSheetEntry::GetLocalPropertiesFromMask( sal_Int32 nMask )
+void TableStyleSheetEntry::MergePropertiesFromMask(const short nBit, const sal_Int32 nMask,
+                                                   const TblStyleType nStyleId,
+                                                   PropertyMapPtr pToFill)
+{
+    TblStylePrs::iterator pIt = m_aStyles.find( nStyleId );
+
+    short nTestBit = 1 << nBit;
+    sal_Int32 nBitMask = sal_Int32( nTestBit );
+    if ( ( nMask & nBitMask ) && ( pIt != m_aStyles.end( ) ) )
+        lcl_mergeProps( pToFill, pIt->second, nStyleId );
+}
+
+PropertyMapPtr TableStyleSheetEntry::GetLocalPropertiesFromMask( const sal_Int32 nMask )
 {
     // Order from right to left
     static TblStyleType aBitsOrder[] =
@@ -243,20 +255,21 @@ PropertyMapPtr TableStyleSheetEntry::GetLocalPropertiesFromMask( sal_Int32 nMask
 
     // Get the properties applying according to the mask
     PropertyMapPtr pProps( new PropertyMap( ) );
-    short nBit = 0;
+    short nBit = 4;
     do
     {
-        TblStyleType nStyleId = aBitsOrder[nBit];
-        TblStylePrs::iterator pIt = m_aStyles.find( nStyleId );
-
-        short nTestBit = 1 << nBit;
-        sal_Int32 nBitMask = sal_Int32( nTestBit );
-        if ( ( nMask & nBitMask ) && ( pIt != m_aStyles.end( ) ) )
-            lcl_mergeProps( pProps, pIt->second, nStyleId );
-
+        MergePropertiesFromMask(nBit, nMask, aBitsOrder[nBit], pProps);
         nBit++;
     }
     while ( nBit < 13 );
+
+    nBit = 0;
+    do
+    {
+        MergePropertiesFromMask(nBit, nMask, aBitsOrder[nBit], pProps);
+        nBit++;
+    }
+    while ( nBit < 4 );         // nw/ne/sw/se overwrite others
 
     return pProps;
 }
@@ -543,8 +556,12 @@ void StyleSheetTable::lcl_sprm(Sprm & rSprm)
         case NS_ooxml::LN_CT_Style_personalReply:
         case NS_ooxml::LN_CT_Style_rsid:
         case NS_ooxml::LN_CT_Style_trPr:
-        case NS_ooxml::LN_CT_Style_tcPr:
             /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+        break;
+        case NS_ooxml::LN_CT_Style_tcPr:
+        {
+            resolveSprmProps(rSprm);
+        }
         break;
         case NS_ooxml::LN_CT_Style_tblPr: //contains table properties
         case NS_ooxml::LN_CT_Style_tblStylePr: //contains  to table properties

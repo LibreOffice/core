@@ -145,7 +145,9 @@ public:
     virtual ~TableStyleSheetEntry( );
 
 protected:
-    PropertyMapPtr GetLocalPropertiesFromMask( sal_Int32 nMask );
+    PropertyMapPtr GetLocalPropertiesFromMask( const sal_Int32 nMask );
+    void           MergePropertiesFromMask(const short nBit, const sal_Int32 nMask,
+                                           const TblStyleType nStyleId, PropertyMapPtr pToFill);
 };
 typedef boost::shared_ptr<TableStyleSheetEntry> TableStyleSheetEntryPtr;
 
