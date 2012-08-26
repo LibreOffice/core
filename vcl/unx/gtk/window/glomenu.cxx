@@ -299,6 +299,32 @@ g_lo_menu_set_action_and_target_value_to_item_in_section (GLOMenu     *menu,
 }
 
 void
+g_lo_menu_set_accelerator_to_item_in_section (GLOMenu     *menu,
+                                              gint         section,
+                                              gint         position,
+                                              const gchar *accelerator)
+{
+    g_return_if_fail (G_IS_LO_MENU (menu));
+
+    GMenuModel *model = G_MENU_MODEL_CLASS (g_lo_menu_parent_class)
+                        ->get_item_link (G_MENU_MODEL (menu), section, G_MENU_LINK_SECTION);
+
+    g_return_if_fail (model != NULL);
+
+    GVariant *value;
+
+    if (accelerator != NULL)
+        value = g_variant_new_string (accelerator);
+    else
+        value = NULL;
+
+    g_lo_menu_set_attribute_value (G_LO_MENU (model), position, "accel", value);
+
+    // Notify the update.
+    g_menu_model_items_changed (model, position, 1, 1);
+}
+
+void
 g_lo_menu_set_link (GLOMenu     *menu,
                     gint         position,
                     const gchar *link,

@@ -70,7 +70,7 @@ static void
 g_lo_action_init (GLOAction *action)
 {
     action->item = NULL;
-    action->enabled = FALSE;
+    action->enabled = TRUE;
     action->parameter_type = NULL;
     action->state_type = NULL;
     action->state_hint = NULL;
@@ -84,25 +84,17 @@ g_lo_action_finalize (GObject *object)
 
     action->item = NULL;
 
-    if (action->parameter_type) {
+    if (action->parameter_type)
         g_variant_type_free (action->parameter_type);
-        action->parameter_type = NULL;
-    }
 
-    if (action->state_type) {
+    if (action->state_type)
         g_variant_type_free (action->state_type);
-        action->state_type = NULL;
-    }
 
-    if (action->state_hint) {
+    if (action->state_hint)
         g_variant_unref (action->state_hint);
-        action->state_hint = NULL;
-    }
 
-    if (action->state) {
+    if (action->state)
         g_variant_unref (action->state);
-        action->state = NULL;
-    }
 
     G_OBJECT_CLASS (g_lo_action_parent_class)->finalize (object);
 }

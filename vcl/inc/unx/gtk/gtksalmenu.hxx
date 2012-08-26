@@ -93,11 +93,14 @@ public:
     sal_uInt16          mnId;               // Item ID
     MenuItemBits        mnBits;             // Item bits
     MenuItemType        mnType;             // Item type
-    gchar*              maCommand;          // Item command
-    gchar*              maLabel;            // Item label
     Menu*               mpVCLMenu;          // VCL Menu into which this MenuItem is inserted
     GtkSalMenu*         mpParentMenu;       // The menu in which this menu item is inserted
     GtkSalMenu*         mpSubMenu;          // Sub menu of this item (if defined)
+
+    // FIXME: Most of this info should be retrieved from the GMenuModel, but doing that crashes the application at the moment.
+    gchar*              maCommand;          // Item command
+    gchar*              maLabel;            // Item label
+    gchar*              maAccel;            // Item accelerator
 };
 
 #endif // GTKSALMENU_HXX

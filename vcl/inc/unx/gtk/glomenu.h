@@ -97,6 +97,11 @@ void        g_lo_menu_set_action_and_target_value_to_item_in_section    (GLOMenu
                                                                          const gchar *command,
                                                                          GVariant    *target_value);
 
+void        g_lo_menu_set_accelerator_to_item_in_section                (GLOMenu     *menu,
+                                                                         gint         section,
+                                                                         gint         position,
+                                                                         const gchar *accelerator);
+
 void        g_lo_menu_set_submenu_to_item_in_section                    (GLOMenu     *menu,
                                                                          gint         section,
                                                                          gint         position,

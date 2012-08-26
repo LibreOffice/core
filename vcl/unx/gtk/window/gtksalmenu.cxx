@@ -79,8 +79,8 @@ static void UpdateNativeMenu( GtkSalMenu* pMenu ) {
         pMenu->SetItemCommand( i, pSalMenuItem, aCommand );
         pMenu->SetItemText( i, pSalMenuItem, aText );
         pMenu->EnableItem( i, itemEnabled );
-//        pMenu->SetAccelerator( i, pSalMenuItem, nAccelKey, nAccelKey.GetName( pMenu->GetFrame()->GetWindow() ) );
-//        pMenu->CheckItem( i, itemChecked );
+        pMenu->SetAccelerator( i, pSalMenuItem, nAccelKey, nAccelKey.GetName( pMenu->GetFrame()->GetWindow() ) );
+        pMenu->CheckItem( i, itemChecked );
 
         GtkSalMenu* pSubmenu = pSalMenuItem->mpSubMenu;
 
@@ -144,29 +144,30 @@ GActionGroup* GetActionGroupFromMenubar( GtkSalMenu *pMenu )
     return ( pSalMenu ) ? pSalMenu->GetActionGroup() : NULL;
 }
 
-//rtl::OUString GetGtkKeyName( rtl::OUString keyName )
-//{
-//    rtl::OUString aGtkKeyName("");
+// FIXME: Check for missing keys. Maybe translating keycodes would be safer...
+rtl::OUString GetGtkKeyName( rtl::OUString keyName )
+{
+    rtl::OUString aGtkKeyName("");
 
-//    sal_Int32 nIndex = 0;
+    sal_Int32 nIndex = 0;
 
-//    do
-//    {
-//        rtl::OUString token = keyName.getToken( 0, '+', nIndex );
+    do
+    {
+        rtl::OUString token = keyName.getToken( 0, '+', nIndex );
 
-//        if ( token == "Ctrl" ) {
-//            aGtkKeyName += "<Control>";
-//        } else if ( token == "Alt" ) {
-//            aGtkKeyName += "<Alt>";
-//        } else if ( token == "Shift" ) {
-//            aGtkKeyName += "<Shift>";
-//        } else {
-//            aGtkKeyName += token;
-//        }
-//    } while ( nIndex >= 0 );
+        if ( token == "Ctrl" ) {
+            aGtkKeyName += "<Control>";
+        } else if ( token == "Alt" ) {
+            aGtkKeyName += "<Alt>";
+        } else if ( token == "Shift" ) {
+            aGtkKeyName += "<Shift>";
+        } else {
+            aGtkKeyName += token;
+        }
+    } while ( nIndex >= 0 );
 
-//    return aGtkKeyName;
-//}
+    return aGtkKeyName;
+}
 
 //GVariant* GetRadionButtonHints( GtkSalMenuItem *pSalMenuItem )
 //{
@@ -248,10 +249,6 @@ GtkSalMenu::GtkSalMenu( sal_Bool bMenuBar ) :
     mpMenuModel( NULL ),
     mpActionGroup( NULL )
 {
-    if (bMenuBar) {
-//        mpActionGroup = G_ACTION_GROUP( g_lo_action_group_new() );
-    }
-
     mpMenuModel = G_MENU_MODEL( g_lo_menu_new() );
     g_lo_menu_new_section( G_LO_MENU( mpMenuModel ), 0, NULL);
 }
@@ -264,12 +261,7 @@ GtkSalMenu::~GtkSalMenu()
 
     if ( mbMenuBar ) {
         g_source_remove_by_user_data( this );
-
-//        GLOMenu* pMainMenu = G_LO_MENU( g_object_get_data( G_OBJECT( gdkWindow ), "g-lo-menubar" ) );
-
         g_lo_menu_remove( G_LO_MENU( mpMenuModel ), 0 );
-//        g_lo_menu_remove( pMainMenu, 0 );
-//        mpMenuModel = NULL;
     } else {
         g_object_unref( mpMenuModel );
     }
@@ -389,11 +381,6 @@ void GtkSalMenu::SetFrame( const SalFrame* pFrame )
             GDBusConnection* pSessionBus = g_bus_get_sync (G_BUS_TYPE_SESSION, NULL, NULL);
             if(!pSessionBus) puts ("Failed to get DBus session connection");
 
-            gdk_x11_window_set_utf8_property ( gdkWindow, "_GTK_UNIQUE_BUS_NAME", g_dbus_connection_get_unique_name( pSessionBus ) );
-            gdk_x11_window_set_utf8_property ( gdkWindow, "_GTK_APPLICATION_OBJECT_PATH", "" );
-            gdk_x11_window_set_utf8_property ( gdkWindow, "_GTK_WINDOW_OBJECT_PATH", aDBusWindowPath );
-            gdk_x11_window_set_utf8_property ( gdkWindow, "_GTK_MENUBAR_OBJECT_PATH", aDBusMenubarPath );
-
             // Publish the menu.
             if ( aDBusMenubarPath ) {
                 sal_uInt16 menubarId = g_dbus_connection_export_menu_model (pSessionBus, aDBusMenubarPath, G_MENU_MODEL( pMainMenu ), NULL);
@@ -404,6 +391,13 @@ void GtkSalMenu::SetFrame( const SalFrame* pFrame )
                 sal_uInt16 actionGroupId = g_dbus_connection_export_action_group( pSessionBus, aDBusPath, G_ACTION_GROUP( pActionGroup ), NULL);
                 if(!actionGroupId) puts("Failed to export action group");
             }
+
+            // Set window properties.
+            gdk_x11_window_set_utf8_property ( gdkWindow, "_GTK_UNIQUE_BUS_NAME", g_dbus_connection_get_unique_name( pSessionBus ) );
+            gdk_x11_window_set_utf8_property ( gdkWindow, "_GTK_APPLICATION_OBJECT_PATH", "" );
+            gdk_x11_window_set_utf8_property ( gdkWindow, "_GTK_WINDOW_OBJECT_PATH", aDBusWindowPath );
+            gdk_x11_window_set_utf8_property ( gdkWindow, "_GTK_MENUBAR_OBJECT_PATH", aDBusMenubarPath );
+
 
             g_free( aDBusPath );
             g_free( aDBusWindowPath );
@@ -492,7 +486,7 @@ void GtkSalMenu::SetItemText( unsigned nPos, SalMenuItem* pSalMenuItem, const rt
 
     GtkSalMenuItem* pItem = static_cast< GtkSalMenuItem* >( pSalMenuItem );
 
-    // FIXME: It would be better retrieving the label from the menu itself, but this currently crashes the app.
+    // FIXME: It would be better retrieving the label from the menu itself, but it currently crashes the app.
     if ( pItem->maLabel && g_strcmp0( pItem->maLabel, aConvertedText.getStr() ) == 0 )
         bSetLabel = sal_False;
 
@@ -511,34 +505,28 @@ void GtkSalMenu::SetItemImage( unsigned nPos, SalMenuItem* pSalMenuItem, const I
 
 void GtkSalMenu::SetAccelerator( unsigned nPos, SalMenuItem* pSalMenuItem, const KeyCode& rKeyCode, const rtl::OUString& rKeyName )
 {
-//    GtkSalMenuItem *pItem = static_cast< GtkSalMenuItem* >( pSalMenuItem );
+    GtkSalMenuItem *pItem = static_cast< GtkSalMenuItem* >( pSalMenuItem );
 
-//    if ( rKeyName.isEmpty() )
-//        return;
+    if ( rKeyName.isEmpty() )
+        return;
 
-//    rtl::OString aAccelerator = rtl::OUStringToOString( GetGtkKeyName( rKeyName ), RTL_TEXTENCODING_UTF8 );
+    rtl::OString aAccelerator = rtl::OUStringToOString( GetGtkKeyName( rKeyName ), RTL_TEXTENCODING_UTF8 );
 
-//    unsigned nSection, nItemPos;
-//    GetInsertionData( nPos, &nSection, &nItemPos );
+    unsigned nSection, nItemPos;
+    GetItemSectionAndPosition( nPos, &nSection, &nItemPos );
 
-//    GLOMenu* pSection = G_LO_MENU( maSections[ nSection ] );
+    sal_Bool bSetAccel = sal_True;
 
-//    GVariant* aCurrentAccel = g_menu_model_get_item_attribute_value( G_MENU_MODEL( pSection ), nItemPos, "accel", G_VARIANT_TYPE_STRING );
+    if ( pItem->maAccel && g_strcmp0( pItem->maAccel, aAccelerator.getStr() ) == 0 )
+            bSetAccel = sal_False;
 
-//    sal_Bool bSetAccel = sal_True;
+    if ( bSetAccel == sal_True ) {
+        if (pItem->maAccel)
+            g_free( pItem->maAccel );
 
-//    if ( aCurrentAccel ) {
-//        if ( g_strcmp0( g_variant_get_string( aCurrentAccel, NULL ), aAccelerator.getStr() ) == 0 ) {
-//            bSetAccel = sal_False;
-//        }
-//    }
-
-//    if ( bSetAccel == sal_True ) {
-//        g_lo_menu_item_set_attribute_value( pItem->mpMenuItem, "accel", g_variant_new_string( aAccelerator.getStr() ) );
-
-//        g_lo_menu_remove( pSection, nItemPos );
-//        g_lo_menu_insert_item( pSection, nItemPos, pItem );
-//    }
+        pItem->maAccel = g_strdup( aAccelerator.getStr() );
+        g_lo_menu_set_accelerator_to_item_in_section ( G_LO_MENU( mpMenuModel ), nSection, nItemPos, pItem->maAccel );
+    }
 }
 
 void GtkSalMenu::SetItemCommand( unsigned nPos, SalMenuItem* pSalMenuItem, const rtl::OUString& aCommandStr )
@@ -624,11 +612,12 @@ GtkSalMenuItem::GtkSalMenuItem( const SalItemParams* pItemData ) :
     mnId( pItemData->nId ),
     mnBits( pItemData->nBits ),
     mnType( pItemData->eType ),
-    maCommand( NULL ),
-    maLabel( NULL ),
     mpVCLMenu( pItemData->pMenu ),
     mpParentMenu( NULL ),
-    mpSubMenu( NULL )
+    mpSubMenu( NULL ),
+    maCommand( NULL ),
+    maLabel( NULL ),
+    maAccel( NULL )
 {
 }
 
@@ -639,6 +628,9 @@ GtkSalMenuItem::~GtkSalMenuItem()
 
     if ( maLabel )
         g_free( maLabel );
+
+    if ( maAccel )
+        g_free( maAccel );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
