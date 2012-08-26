@@ -121,12 +121,12 @@ protected:
     virtual void SetAttrInDoc(const SwPosition& rTmpPos, SwFltStackEntry* pEntry);
     //Modify here for #119405, by easyfan, 2012-05-24
     virtual sal_Int32 GetCurrAttrCP() const {return -1;}
-    virtual bool IsParaEndInCPs(sal_Int32 nStart,sal_Int32 nEnd,bool bSdOD=true) const {return false;}
+    virtual bool IsParaEndInCPs(sal_Int32 /* nStart */,sal_Int32 /* nEnd */,bool /* bSdOD=true */) const {return false;}
     //End of modification, by easyfan
     //Modify for #119405 by chengjh, 2012-08-16
     //Clear the para end position recorded in reader intermittently for the least impact on loading performance
     virtual void ClearParaEndPosition(){};
-    virtual bool CheckSdOD(sal_Int32 nStart,sal_Int32 nEnd){return false;}
+    virtual bool CheckSdOD(sal_Int32 /* nStart */,sal_Int32 /* nEnd */){return false;}
     bool HasSdOD();
     //End
 
