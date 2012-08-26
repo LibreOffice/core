@@ -52,9 +52,7 @@ private:
     GMenuModel*                     mpMenuModel;
     GActionGroup*                   mpActionGroup;
 
-
-    sal_Int16       GetSectionNumber( GMenuModel* pSection );
-    void            GetInsertionData( unsigned nPos, unsigned *insertSection, unsigned *insertPos );
+    void            GetItemSectionAndPosition( unsigned nPos, unsigned *insertSection, unsigned *insertPos );
 
 public:
     GtkSalMenu( sal_Bool bMenuBar );
@@ -84,7 +82,6 @@ public:
     virtual unsigned            GetItemCount() { return maItems.size(); }
     virtual GtkSalMenuItem*     GetItemAtPos( unsigned nPos ) { return maItems[ nPos ]; }
     virtual GActionGroup*       GetActionGroup() { return mpActionGroup; }
-//    virtual GtkSalMenuItem*     GetSalMenuItem( sal_uInt16 nId );
 };
 
 class GtkSalMenuItem : public SalMenuItem
@@ -96,6 +93,8 @@ public:
     sal_uInt16          mnId;               // Item ID
     MenuItemBits        mnBits;             // Item bits
     MenuItemType        mnType;             // Item type
+    gchar*              maCommand;          // Item command
+    gchar*              maLabel;            // Item label
     Menu*               mpVCLMenu;          // VCL Menu into which this MenuItem is inserted
     GtkSalMenu*         mpParentMenu;       // The menu in which this menu item is inserted
     GtkSalMenu*         mpSubMenu;          // Sub menu of this item (if defined)

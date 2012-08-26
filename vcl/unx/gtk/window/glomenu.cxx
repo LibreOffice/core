@@ -41,7 +41,6 @@ G_DEFINE_TYPE (GLOMenu, g_lo_menu, G_TYPE_MENU_MODEL);
 
 struct item
 {
-//    GtkSalMenuItem* menu_item;      // Menu item pointer.
     GHashTable*     attributes;     // Item attributes.
     GHashTable*     links;          // Item links.
 };
@@ -50,7 +49,6 @@ struct item
 static void
 g_lo_menu_struct_item_init (struct item *menu_item)
 {
-//    menu_item->menu_item = NULL;
     menu_item->attributes = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, (GDestroyNotify) g_variant_unref);
     menu_item->links = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, g_object_unref);
 }
@@ -134,7 +132,6 @@ g_lo_menu_insert (GLOMenu        *menu,
                   gint            position,
                   const gchar    *label)
 {
-//    puts(__FUNCTION__);
     g_return_if_fail (G_IS_LO_MENU (menu));
 
     if (position < 0 || position > (gint) menu->items->len)
@@ -180,7 +177,6 @@ g_lo_menu_set_attribute_value (GLOMenu     *menu,
                                const gchar *attribute,
                                GVariant    *value)
 {
-//    puts(__FUNCTION__);
     g_return_if_fail (G_IS_LO_MENU (menu));
     g_return_if_fail (attribute != NULL);
     g_return_if_fail (valid_attribute_name (attribute));
@@ -194,6 +190,7 @@ g_lo_menu_set_attribute_value (GLOMenu     *menu,
         g_hash_table_insert (menu_item.attributes, g_strdup (attribute), g_variant_ref_sink (value));
     else
         g_hash_table_remove (menu_item.attributes, attribute);
+
 }
 
 void
@@ -201,7 +198,6 @@ g_lo_menu_set_label (GLOMenu     *menu,
                      gint         position,
                      const gchar *label)
 {
-//    puts(__FUNCTION__);
     g_return_if_fail (G_IS_LO_MENU (menu));
 
     GVariant *value;
@@ -215,21 +211,46 @@ g_lo_menu_set_label (GLOMenu     *menu,
 }
 
 void
-g_lo_menu_set_label_in_section (GLOMenu     *menu,
-                                gint         section,
-                                gint         position,
-                                const gchar *label)
+g_lo_menu_set_label_to_item_in_section (GLOMenu     *menu,
+                                        gint         section,
+                                        gint         position,
+                                        const gchar *label)
 {
-//    puts(__FUNCTION__);
     g_return_if_fail (G_IS_LO_MENU (menu));
 
-    struct item menu_item = g_array_index (menu->items, struct item, section);
-
-    GLOMenu *model = G_LO_MENU (g_hash_table_lookup (menu_item.links, G_MENU_LINK_SECTION));
+    GLOMenu *model = G_LO_MENU (G_MENU_MODEL_CLASS (g_lo_menu_parent_class)
+                                ->get_item_link (G_MENU_MODEL (menu), section, G_MENU_LINK_SECTION));
 
     g_return_if_fail (model != NULL);
 
     g_lo_menu_set_label (model, position, label);
+
+    // Notify the update.
+    g_menu_model_items_changed (G_MENU_MODEL (model), position, 1, 1);
+}
+
+gchar *
+g_lo_menu_get_label_from_item_in_section (GLOMenu     *menu,
+                                          gint         section,
+                                          gint         position)
+{
+    g_return_val_if_fail (G_IS_LO_MENU (menu), NULL);
+
+    GLOMenu *model = G_LO_MENU (G_MENU_MODEL_CLASS (g_lo_menu_parent_class)
+                                ->get_item_link (G_MENU_MODEL (menu), section, G_MENU_LINK_SECTION));
+
+    g_return_val_if_fail (model != NULL, NULL);
+
+    struct item menu_item = g_array_index (model->items, struct item, position);
+
+
+
+    GVariant *current_label = (GVariant*) g_hash_table_lookup (menu_item.attributes, G_MENU_ATTRIBUTE_LABEL);
+
+    if (current_label)
+        return (gchar*) g_variant_get_string (current_label, NULL);
+    else
+        return NULL;
 }
 
 void
@@ -238,7 +259,6 @@ g_lo_menu_set_action_and_target_value (GLOMenu     *menu,
                                        const gchar *action,
                                        GVariant    *target_value)
 {
-//    puts(__FUNCTION__);
     g_return_if_fail (G_IS_LO_MENU (menu));
 
     GVariant *action_value;
@@ -273,26 +293,9 @@ g_lo_menu_set_action_and_target_value_to_item_in_section (GLOMenu     *menu,
     g_return_if_fail (model != NULL);
 
     g_lo_menu_set_action_and_target_value (model, position, command, target_value);
-}
 
-gchar*
-g_lo_menu_get_action_value_from_item_in_section (GLOMenu *menu,
-                                                 gint section,
-                                                 gint position)
-{
-    g_return_val_if_fail (G_IS_LO_MENU (menu), NULL);
-
-    GMenuModel *model = G_MENU_MODEL_CLASS (g_lo_menu_parent_class)
-                                ->get_item_link (G_MENU_MODEL (menu), section, G_MENU_LINK_SECTION);
-
-    GVariant *action = g_menu_model_get_item_attribute_value (model, position, G_MENU_ATTRIBUTE_LABEL, NULL);
-
-    gchar *action_name = NULL;
-
-    if (action)
-        action_name = g_strdup (g_variant_get_string (action, NULL));
-
-    return action_name;
+    // Notify the update.
+    g_menu_model_items_changed (G_MENU_MODEL (model), position, 1, 1);
 }
 
 void
@@ -301,7 +304,6 @@ g_lo_menu_set_link (GLOMenu     *menu,
                     const gchar *link,
                     GMenuModel  *model)
 {
-//    puts(__FUNCTION__);
     g_return_if_fail (G_IS_LO_MENU (menu));
     g_return_if_fail (link != NULL);
     g_return_if_fail (valid_attribute_name (link));
@@ -318,11 +320,11 @@ g_lo_menu_set_link (GLOMenu     *menu,
 }
 
 void
-g_lo_menu_insert_section (GLOMenu     *menu,
-                          gint         position,
-                          const gchar *label)
+g_lo_menu_insert_section (GLOMenu *menu,
+                          gint position,
+                          const gchar *label,
+                          GMenuModel* section)
 {
-//    puts(__FUNCTION__);
     g_return_if_fail (G_IS_LO_MENU (menu));
 
     if (position < 0 || position > (gint) menu->items->len)
@@ -335,25 +337,33 @@ g_lo_menu_insert_section (GLOMenu     *menu,
     g_array_insert_val (menu->items, position, menu_item);
 
     g_lo_menu_set_label (menu, position, label);
-
-    GMenuModel *section = G_MENU_MODEL (g_lo_menu_new());
     g_lo_menu_set_link (menu, position, G_MENU_LINK_SECTION, section);
 
     g_menu_model_items_changed (G_MENU_MODEL (menu), position, 0, 1);
-
-//    g_lo_menu_insert (menu, position, label);
-//    menu_item = g_lo_menu_item_new_section (label, section);
-//    g_lo_menu_insert_item (menu, position, menu_item);
-//    g_object_unref (menu_item);
 }
 
 void
-g_lo_menu_set_submenu (GLOMenu    *menu,
-                       gint        position,
-                       GMenuModel *submenu)
+g_lo_menu_new_section (GLOMenu     *menu,
+                       gint         position,
+                       const gchar *label)
 {
-//    puts(__FUNCTION__);
-    g_lo_menu_set_link (menu, position, G_MENU_LINK_SUBMENU, submenu);
+    GMenuModel *section = G_MENU_MODEL (g_lo_menu_new());
+
+    g_lo_menu_insert_section (menu, position, label, section);
+
+//    g_object_unref (section);
+}
+
+
+
+GLOMenu *
+g_lo_menu_get_section (GLOMenu *menu,
+                       gint section)
+{
+    g_return_val_if_fail (G_IS_LO_MENU (menu), NULL);
+
+    return G_LO_MENU (G_MENU_MODEL_CLASS (g_lo_menu_parent_class)
+                      ->get_item_link (G_MENU_MODEL (menu), section, G_MENU_LINK_SECTION));
 }
 
 void
@@ -371,7 +381,7 @@ g_lo_menu_set_submenu_to_item_in_section (GLOMenu    *menu,
 
     g_return_if_fail (model != NULL);
 
-    g_lo_menu_set_submenu (model, position, submenu);
+    g_lo_menu_set_link (model, position, G_MENU_LINK_SUBMENU, submenu);
 }
 
 static void
@@ -387,7 +397,6 @@ void
 g_lo_menu_remove (GLOMenu *menu,
                   gint     position)
 {
-    printf("%s - %d\n", __FUNCTION__, position);
     g_return_if_fail (G_IS_LO_MENU (menu));
     g_return_if_fail (0 <= position && position < (gint) menu->items->len);
 

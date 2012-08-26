@@ -36,86 +36,71 @@ G_BEGIN_DECLS
 #define G_IS_LO_MENU(inst)      (G_TYPE_CHECK_INSTANCE_TYPE ((inst), \
                                  G_TYPE_LO_MENU))
 
-typedef struct _GLOMenu     GLOMenu;
+typedef struct _GLOMenu GLOMenu;
 
 class GtkSalMenuItem;
 
 GLIB_AVAILABLE_IN_2_32
-GType           g_lo_menu_get_type                          (void) G_GNUC_CONST;
+GType       g_lo_menu_get_type                                          (void) G_GNUC_CONST;
 GLIB_AVAILABLE_IN_2_32
-GLOMenu *       g_lo_menu_new                               (void);
+GLOMenu *   g_lo_menu_new                                               (void);
 
-void            g_lo_menu_insert                      (GLOMenu        *menu,
-                                                            gint            position,
-                                                            const char     *label);
+void        g_lo_menu_insert                                            (GLOMenu     *menu,
+                                                                         gint         position,
+                                                                         const char  *label);
 
-void            g_lo_menu_insert_in_section           (GLOMenu        *menu,
-                                                       gint            section,
-                                                       gint            position,
-                                                       const gchar    *label);
+void        g_lo_menu_insert_in_section                                 (GLOMenu     *menu,
+                                                                         gint         section,
+                                                                         gint         position,
+                                                                         const gchar *label);
 
-void            g_lo_menu_insert_section                    (GLOMenu     *menu,
-                                                             gint         position,
-                                                             const gchar *label);
+void        g_lo_menu_new_section                                       (GLOMenu     *menu,
+                                                                         gint         position,
+                                                                         const gchar *label);
 
-void            g_lo_menu_remove                            (GLOMenu        *menu,
-                                                             gint            position);
+void        g_lo_menu_insert_section                                    (GLOMenu     *menu,
+                                                                         gint         position,
+                                                                         const gchar *label,
+                                                                         GMenuModel  *section);
 
-void            g_lo_menu_remove_from_section               (GLOMenu        *menu,
-                                                             gint            section,
-                                                             gint            position);
+GLOMenu *   g_lo_menu_get_section                                       (GLOMenu     *menu,
+                                                                         gint         section);
 
-//void            g_lo_menu_insert                            (GLOMenu     *menu,
-//                                                             gint         position,
-//                                                             const gchar *label);
+void        g_lo_menu_remove                                            (GLOMenu     *menu,
+                                                                         gint         position);
 
-//void            g_lo_menu_append                            (GLOMenu     *menu,
-//                                                             const gchar *label,
-//                                                             const gchar *detailed_action);
+void        g_lo_menu_remove_from_section                               (GLOMenu     *menu,
+                                                                         gint         section,
+                                                                         gint         position);
 
-//void            g_lo_menu_insert_submenu                    (GLOMenu     *menu,
-//                                                             gint         position,
-//                                                             const gchar *label,
-//                                                             GMenuModel  *submenu);
-//void            g_lo_menu_prepend_submenu                   (GLOMenu     *menu,
-//                                                             const gchar *label,
-//                                                             GMenuModel  *submenu);
-//void            g_lo_menu_append_submenu                    (GLOMenu     *menu,
-//                                                             const gchar *label,
-//                                                             GMenuModel  *submenu);
+void        g_lo_menu_set_label                                         (GLOMenu     *menu,
+                                                                         gint         position,
+                                                                         const gchar *label);
 
-void            g_lo_menu_set_label                         (GLOMenu     *menu,
-                                                             gint         position,
-                                                             const gchar *label);
+void        g_lo_menu_set_label_to_item_in_section                      (GLOMenu     *menu,
+                                                                         gint         section,
+                                                                         gint         position,
+                                                                         const gchar *label);
 
-void            g_lo_menu_set_label_in_section              (GLOMenu     *menu,
-                                                             gint         section,
-                                                             gint         position,
-                                                             const gchar *label);
+gchar *     g_lo_menu_get_label_from_item_in_section                    (GLOMenu     *menu,
+                                                                         gint         section,
+                                                                         gint         position);
 
-void g_lo_menu_set_action_and_target_value (GLOMenu     *menu,
-                                            gint         position,
-                                            const gchar *command,
-                                            GVariant    *target_value);
+void        g_lo_menu_set_action_and_target_value                       (GLOMenu     *menu,
+                                                                         gint         position,
+                                                                         const gchar *command,
+                                                                         GVariant    *target_value);
 
-void g_lo_menu_set_action_and_target_value_to_item_in_section (GLOMenu     *menu,
-                                                               gint section,
-                                            gint         position,
-                                            const gchar *command,
-                                            GVariant    *target_value);
+void        g_lo_menu_set_action_and_target_value_to_item_in_section    (GLOMenu     *menu,
+                                                                         gint         section,
+                                                                         gint         position,
+                                                                         const gchar *command,
+                                                                         GVariant    *target_value);
 
-void            g_lo_menu_set_submenu                  (GLOMenu    *menu,
-                                                        gint        position,
-                                                        GMenuModel *submenu);
-
-void            g_lo_menu_set_submenu_to_item_in_section    (GLOMenu    *menu,
-                                                             gint        section,
-                                                             gint        position,
-                                                             GMenuModel *submenu);
-
-gchar* g_lo_menu_get_action_value_from_item_in_section (GLOMenu *menu,
-                                                 gint section,
-                                                 gint position);
+void        g_lo_menu_set_submenu_to_item_in_section                    (GLOMenu     *menu,
+                                                                         gint         section,
+                                                                         gint         position,
+                                                                         GMenuModel  *submenu);
 
 G_END_DECLS
 
