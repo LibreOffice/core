@@ -129,7 +129,7 @@ public:
     int MovePage( int eMoveMode );
 
     // erzeuge den String fuer die StatusLeiste
-    void GetStatusStr( String& rStr, sal_uInt16 nPageCount ) const;
+    OUString GetStatusStr( sal_uInt16 nPageCount ) const;
 
     void RepaintCoreRect( const SwRect& rRect );
 
@@ -186,7 +186,7 @@ class SW_DLLPUBLIC SwPagePreView: public SfxViewShell
     // to support keyboard the number of the page to go to can be set too
     sal_uInt16                  nNewPage;
     // visible range
-    String                  sPageStr;
+    OUString                sPageStr;
     Size                    aDocSz;
     Rectangle               aVisArea;
 

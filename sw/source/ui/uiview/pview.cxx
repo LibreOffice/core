@@ -415,7 +415,7 @@ void SwPagePreViewWin::SetWinSize( const Size& rNewSize )
     maScale = GetMapMode().GetScaleX();
 }
 
-void SwPagePreViewWin::GetStatusStr( String& rStr, sal_uInt16 nPageCnt ) const
+OUString SwPagePreViewWin::GetStatusStr( sal_uInt16 nPageCnt ) const
 {
     // show physical and virtual page number of
     // selected page, if it's visible.
@@ -428,15 +428,16 @@ void SwPagePreViewWin::GetStatusStr( String& rStr, sal_uInt16 nPageCnt ) const
     {
         nPageNum = mnSttPage > 1 ? mnSttPage : 1;
     }
+    OUStringBuffer aStatusStr;
     sal_uInt16 nVirtPageNum = mpPgPrevwLayout->GetVirtPageNumByPageNum( nPageNum );
     if( nVirtPageNum && nVirtPageNum != nPageNum )
     {
-        rStr += String::CreateFromInt32( nVirtPageNum );
-        rStr += ' ';
+        aStatusStr.append( static_cast<sal_Int32>(nVirtPageNum) ).append( ' ' );
     }
-    rStr += String::CreateFromInt32( nPageNum );
-    rStr.AppendAscii( RTL_CONSTASCII_STRINGPARAM(" / "));
-    rStr += String::CreateFromInt32( nPageCnt );
+    aStatusStr.append( static_cast<sal_Int32>(nPageNum) );
+    aStatusStr.append( " / " );
+    aStatusStr.append( static_cast<sal_Int32>(nPageCnt) );
+    return aStatusStr.makeStringAndClear();
 }
 
 void  SwPagePreViewWin::KeyInput( const KeyEvent &rKEvt )
@@ -1008,8 +1009,7 @@ void  SwPagePreView::GetState( SfxItemSet& rSet )
 
         case FN_STAT_PAGE:
             {
-                String aStr( sPageStr );
-                aViewWin.GetStatusStr( aStr, mnPageCount );
+                OUString aStr = sPageStr + aViewWin.GetStatusStr( mnPageCount );
                 rSet.Put( SfxStringItem( nWhich, aStr) );
             }
             break;
@@ -1337,8 +1337,7 @@ int SwPagePreView::ChgPage( int eMvMode, int bUpdateScrollbar )
     if( bChg )
     {
         // Statusleiste updaten
-        String aStr( sPageStr );
-        aViewWin.GetStatusStr( aStr, mnPageCount );
+        OUString aStr = sPageStr + aViewWin.GetStatusStr( mnPageCount );
         SfxBindings& rBindings = GetViewFrame()->GetBindings();
 
         if( bUpdateScrollbar )
