@@ -191,9 +191,8 @@ sal_Bool SwFltStackEntry::MakeRegion(SwDoc* pDoc, SwPaM& rRegion, sal_Bool bChec
 }
 
 SwFltControlStack::SwFltControlStack(SwDoc* pDo, sal_uLong nFieldFl)
-    : nFieldFlags(nFieldFl), pDoc(pDo), bIsEndStack(false)
-    //Modify for #119405 by chengjh, 2012-08-16
-    ,bHasSdOD(true),bSdODChecked(false)
+  : nFieldFlags(nFieldFl), bHasSdOD(true)
+  ,bSdODChecked(false), pDoc(pDo), bIsEndStack(false)
     //End
 
 {
@@ -679,8 +678,6 @@ void SwFltControlStack::SetAttrInDoc(const SwPosition& rTmpPos, SwFltStackEntry*
             if (pEntry->MakeRegion(pDoc, aRegion, sal_False))
             {
                 //Modify here for #119405, by easyfan, 2012-05-24
-                sal_Int32 nStart = pEntry->GetStartCP();
-                sal_Int32 nEnd = pEntry->GetEndCP();
                 //Refined 2012-08-16
                 if (pEntry->IsParaEnd())
                 {
