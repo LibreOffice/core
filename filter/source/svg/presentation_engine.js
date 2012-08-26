@@ -1606,6 +1606,34 @@ function getClassAttribute(  aElem )
     return '';
 }
 
+function createElementGroup( aParentElement, aElementList, nFrom, nCount, sGroupClass, sGroupId )
+{
+    var nTo = nFrom + nCount;
+    if( nCount < 1 || aElementList.length < nTo )
+    {
+        log( 'createElementGroup: not enough elements available.' );
+        return;
+    }
+    var firstElement = aElementList[nFrom];
+    if( !firstElement )
+    {
+        log( 'createElementGroup: element not found.' );
+        return;
+    }
+    var aGroupElement = document.createElementNS( NSS['svg'], 'g' );
+    if( sGroupId )
+        aGroupElement.setAttribute( 'id', sGroupId );
+    if( sGroupClass )
+        aGroupElement.setAttribute( 'class', sGroupClass );
+    aParentElement.insertBefore( aGroupElement, firstElement );
+    var i = nFrom;
+    for( ; i < nTo; ++i )
+    {
+        aParentElement.removeChild( aElementList[i] );
+        aGroupElement.appendChild( aElementList[i] );
+    }
+}
+
 function initVisibilityProperty( aElement )
 {
     var nVisibility = VISIBLE;
@@ -2213,6 +2241,47 @@ function MasterPage( sMasterPageId )
     {
         this.backgroundObjectsId = this.backgroundObjects.getAttribute( 'id' );
         this.backgroundObjectsVisibility = initVisibilityProperty( this.backgroundObjects );
+
+        if( this.backgroundObjectsVisibility != HIDDEN )
+        {
+            var aBackgroundObjectList = getElementChildren( this.backgroundObjects );
+            var nFrom = 0;
+            var nCount = 0;
+            var nSubGroupId = 1;
+            var sClass;
+            var sId = '';
+            this.aBackgroundObjectSubGroupIdList = new Array();
+            var i = 0;
+            for( ; i < aBackgroundObjectList.length; ++i )
+            {
+                sClass = aBackgroundObjectList[i].getAttribute( 'class' );
+                if( !sClass || ( ( sClass !== aDateTimeClassName ) && ( sClass !== aFooterClassName )
+                                     && ( sClass !== aHeaderClassName ) && ( sClass !== aSlideNumberClassName ) ) )
+                {
+                    if( nCount === 0 )
+                    {
+                        nFrom = i;
+                        sId = this.backgroundObjectsId + '.' + nSubGroupId;
+                        ++nSubGroupId;
+                        this.aBackgroundObjectSubGroupIdList.push( sId );
+                    }
+                    ++nCount;
+                }
+                else
+                {
+                    this.aBackgroundObjectSubGroupIdList.push( sClass );
+                    if( nCount !== 0 )
+                    {
+                        createElementGroup( this.backgroundObjects, aBackgroundObjectList, nFrom, nCount, 'BackgroundObjectSubgroup', sId );
+                        nCount = 0;
+                    }
+                }
+            }
+            if( nCount !== 0 )
+            {
+                createElementGroup( this.backgroundObjects, aBackgroundObjectList, nFrom, nCount, 'BackgroundObjectSubgroup', sId );
+            }
+        }
     }
     else
     {
@@ -2355,15 +2424,14 @@ PlaceholderShape.prototype.init = function()
  *  <g class='MasterPageView'>
  *      <use class='Background'>               // reference to master page background element
  *      <g class='BackgroundObjects'>
- *          <g class='BackgroundFields'>
- *              <g class='Slide_Number'>       // a cloned element
+ *          <use class='BackgroundObjectSubGroup'>     // reference to the group of shapes on the master page that are below text fields
+ *          <g class='Slide_Number'>                   // a cloned element
  *                  ...
- *              </g>
- *              <use class='Date/Time'>        // reference to a clone
- *              <use class='Footer'>
- *              <use class='Header'>
  *          </g>
- *          <use class='BackgroundShapes'>     // reference to the group of shapes on the master page
+ *          <use class='Date/Time'>                    // reference to a clone
+ *          <use class='Footer'>
+ *          <use class='Header'>
+ *          <use class='BackgroundObjectSubGroup'>     // reference to the group of shapes on the master page that are above text fields
  *      </g>
  *  </g>
  *
@@ -2458,11 +2526,9 @@ MasterPageView.prototype.createElement = function()
         this.aBackgroundObjectsElement = theDocument.createElementNS( NSS['svg'], 'g' );
         this.aBackgroundObjectsElement.setAttribute( 'class', 'BackgroundObjects' );
 
-        // create background fields group
-        this.aBackgroundFieldsElement = theDocument.createElementNS( NSS['svg'], 'g' );
-        this.aBackgroundFieldsElement.setAttribute( 'class', 'BackgroundFields' );
-
         // clone and initialize text field elements
+        var aBackgroundObjectSubGroupIdList = this.aMasterPage.aBackgroundObjectSubGroupIdList;
+        this.aBackgroundSubGroupElementSet = new Array();
         var aPlaceholderShapeSet = this.aMasterPage.aPlaceholderShapeSet;
         var aTextFieldContentProviderSet = this.aMetaSlide.aTextFieldContentProviderSet;
         // where cloned elements are appended
@@ -2470,58 +2536,76 @@ MasterPageView.prototype.createElement = function()
         var aTextFieldHandlerSet = this.aMetaSlide.theMetaDoc.aTextFieldHandlerSet;
         var sMasterSlideId = this.aMasterPage.id;
 
-        // Slide Number Field
-        // The cloned element is appended directly to the field group element
-        // since there is no slide number field content shared between two slide
-        // (because the slide number of two slide is always different).
-        if( aPlaceholderShapeSet[aSlideNumberClassName] &&
-            aPlaceholderShapeSet[aSlideNumberClassName].isValid() &&
-            this.aMetaSlide.nIsPageNumberVisible &&
-            aTextFieldContentProviderSet[aSlideNumberClassName] )
+        var i = 0;
+        var sId;
+        for( ; i < aBackgroundObjectSubGroupIdList.length; ++i )
         {
-            this.aSlideNumberFieldHandler =
-            new SlideNumberFieldHandler( aPlaceholderShapeSet[aSlideNumberClassName],
-                                         aTextFieldContentProviderSet[aSlideNumberClassName] );
-            this.aSlideNumberFieldHandler.update( this.aMetaSlide.nSlideNumber );
-            this.aSlideNumberFieldHandler.appendTo( this.aBackgroundFieldsElement );
+            sId = aBackgroundObjectSubGroupIdList[i];
+            if( sId === aSlideNumberClassName )
+            {
+                // Slide Number Field
+                // The cloned element is appended directly to the field group element
+                // since there is no slide number field content shared between two slide
+                // (because the slide number of two slide is always different).
+                if( aPlaceholderShapeSet[aSlideNumberClassName] &&
+                    aPlaceholderShapeSet[aSlideNumberClassName].isValid() &&
+                    this.aMetaSlide.nIsPageNumberVisible &&
+                    aTextFieldContentProviderSet[aSlideNumberClassName] )
+                {
+                    this.aSlideNumberFieldHandler =
+                    new SlideNumberFieldHandler( aPlaceholderShapeSet[aSlideNumberClassName],
+                                                 aTextFieldContentProviderSet[aSlideNumberClassName] );
+                    this.aSlideNumberFieldHandler.update( this.aMetaSlide.nSlideNumber );
+                    this.aSlideNumberFieldHandler.appendTo( this.aBackgroundObjectsElement );
+                }
+            }
+            else if( sId === aDateTimeClassName )
+            {
+                // Date/Time field
+                if( this.aMetaSlide.nIsDateTimeVisible )
+                {
+                    this.aDateTimeFieldHandler =
+                    this.initTextFieldHandler( aDateTimeClassName, aPlaceholderShapeSet,
+                                               aTextFieldContentProviderSet, aDefsElement,
+                                               aTextFieldHandlerSet, sMasterSlideId );
+                }
+            }
+            else if( sId === aFooterClassName )
+            {
+                // Footer Field
+                if( this.aMetaSlide.nIsFooterVisible )
+                {
+                    this.aFooterFieldHandler =
+                    this.initTextFieldHandler( aFooterClassName, aPlaceholderShapeSet,
+                                               aTextFieldContentProviderSet, aDefsElement,
+                                               aTextFieldHandlerSet, sMasterSlideId );
+                }
+            }
+            else if( sId === aHeaderClassName )
+            {
+                // Header Field
+                if( this.aMetaSlide.nIsHeaderVisible )
+                {
+                    this.aHeaderFieldHandler =
+                    this.initTextFieldHandler( aHeaderClassName, aPlaceholderShapeSet,
+                                               aTextFieldContentProviderSet, aDefsElement,
+                                               aTextFieldHandlerSet, sMasterSlideId );
+                }
+            }
+            else
+            {
+                // init BackgroundObjectSubGroup elements
+                var aBackgroundSubGroupElement = theDocument.createElementNS( NSS['svg'], 'use' );
+                aBackgroundSubGroupElement.setAttribute( 'class', 'BackgroundObjectSubGroup' );
+                setNSAttribute( 'xlink', aBackgroundSubGroupElement,
+                                'href', '#' + sId );
+                this.aBackgroundSubGroupElementSet.push( aBackgroundSubGroupElement );
+                // node linking
+                this.aBackgroundObjectsElement.appendChild( aBackgroundSubGroupElement );
+            }
+
         }
-
-        // Date/Time field
-        if( this.aMetaSlide.nIsDateTimeVisible )
-        {
-            this.aDateTimeFieldHandler =
-            this.initTextFieldHandler( aDateTimeClassName, aPlaceholderShapeSet,
-                                       aTextFieldContentProviderSet, aDefsElement,
-                                       aTextFieldHandlerSet, sMasterSlideId );
-        }
-
-        // Footer Field
-        if( this.aMetaSlide.nIsFooterVisible )
-        {
-            this.aFooterFieldHandler =
-            this.initTextFieldHandler( aFooterClassName, aPlaceholderShapeSet,
-                                       aTextFieldContentProviderSet, aDefsElement,
-                                       aTextFieldHandlerSet, sMasterSlideId );
-        }
-
-        // Header Field
-        if( this.aMetaSlide.nIsHeaderVisible )
-        {
-            this.aHeaderFieldHandler =
-            this.initTextFieldHandler( aHeaderClassName, aPlaceholderShapeSet,
-                                       aTextFieldContentProviderSet, aDefsElement,
-                                       aTextFieldHandlerSet, sMasterSlideId );
-        }
-
-        // init BackgroundShapes element
-        this.aBackgroundShapesElement = theDocument.createElementNS( NSS['svg'], 'use' );
-        this.aBackgroundShapesElement.setAttribute( 'class', 'BackgroundShapes' );
-        setNSAttribute( 'xlink', this.aBackgroundShapesElement,
-                        'href', '#' + this.aMasterPage.backgroundObjectsId );
-
         // node linking
-        this.aBackgroundObjectsElement.appendChild( this.aBackgroundFieldsElement );
-        this.aBackgroundObjectsElement.appendChild( this.aBackgroundShapesElement );
         aMasterPageViewElement.appendChild( this.aBackgroundObjectsElement );
     }
 
@@ -2561,7 +2645,7 @@ function( sClassName, aPlaceholderShapeSet, aTextFieldContentProviderSet,
         setNSAttribute( 'xlink', aTextFieldElement,
                         'href', '#' + aTextFieldHandler.sId );
         // node linking
-        this.aBackgroundFieldsElement.appendChild( aTextFieldElement );
+        this.aBackgroundObjectsElement.appendChild( aTextFieldElement );
     }
     return aTextFieldHandler;
 };
