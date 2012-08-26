@@ -69,7 +69,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
     }
     else if (errcode != JFW_E_NONE && errcode != JFW_E_DIRECT_MODE)
     {
-        fprintf(stderr,"javaldx failed! \n");
+        fprintf(stderr,"javaldx failed!\n");
         return -1;
     }
 
@@ -79,12 +79,12 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 
     if (errcode == JFW_E_INVALID_SETTINGS)
     {
-        fprintf(stderr,"javaldx failed. User must select a JRE from options dialog!");
+        fprintf(stderr,"javaldx: invalid settings. User must select a JRE from options dialog!\n");
         return -1;
     }
     else if (errcode != JFW_E_NONE)
     {
-        fprintf(stderr,"javaldx failed! \n");
+        fprintf(stderr,"javaldx failed!\n");
         return -1;
     }
 
@@ -171,7 +171,7 @@ static bool findAndSelect(JavaInfo ** ppInfo)
     javaFrameworkError errcode = jfw_findAndSelectJRE(ppInfo);
     if (errcode == JFW_E_NO_JAVA_FOUND)
     {
-        fprintf(stderr,"javaldx: Could not find a Java Runtime Environment! \n");
+        fprintf(stderr,"javaldx: Could not find a Java Runtime Environment!\n");
         return false;
     }
     else if (errcode != JFW_E_NONE && errcode != JFW_E_DIRECT_MODE)
