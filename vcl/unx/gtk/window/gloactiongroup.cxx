@@ -39,9 +39,9 @@ using namespace std;
 
 #define G_TYPE_LO_ACTION                                (g_lo_action_get_type ())
 #define G_LO_ACTION(inst)                               (G_TYPE_CHECK_INSTANCE_CAST ((inst),                     \
-                                                             G_TYPE_LO_ACTION, GLOAction))
+                                                         G_TYPE_LO_ACTION, GLOAction))
 #define G_IS_LO_ACTION(inst)                            (G_TYPE_CHECK_INSTANCE_TYPE ((inst),                     \
-                                                             G_TYPE_LO_ACTION))
+                                                         G_TYPE_LO_ACTION))
 
 struct _GLOAction
 {
@@ -161,7 +161,6 @@ g_lo_action_group_query_action (GActionGroup        *group,
                                 GVariant           **state_hint,
                                 GVariant           **state)
 {
-//    cout << __FUNCTION__ << " - " << action_name << " - enabled: " << enabled << " - parameter_type: " << parameter_type << " - state_type: " << state_type << " - state_hint: " << state_hint << " - state: " << state << endl;
     GLOActionGroup *lo_group = G_LO_ACTION_GROUP (group);
     GLOAction* action;
 

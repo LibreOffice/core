@@ -249,7 +249,7 @@ GtkSalMenu::GtkSalMenu( sal_Bool bMenuBar ) :
     mpActionGroup( NULL )
 {
     if (bMenuBar) {
-        mpActionGroup = G_ACTION_GROUP( g_lo_action_group_new() );
+//        mpActionGroup = G_ACTION_GROUP( g_lo_action_group_new() );
     }
 
     mpMenuModel = G_MENU_MODEL( g_lo_menu_new() );
@@ -265,8 +265,11 @@ GtkSalMenu::~GtkSalMenu()
     if ( mbMenuBar ) {
         g_source_remove_by_user_data( this );
 
+//        GLOMenu* pMainMenu = G_LO_MENU( g_object_get_data( G_OBJECT( gdkWindow ), "g-lo-menubar" ) );
+
         g_lo_menu_remove( G_LO_MENU( mpMenuModel ), 0 );
-        mpMenuModel = NULL;
+//        g_lo_menu_remove( pMainMenu, 0 );
+//        mpMenuModel = NULL;
     } else {
         g_object_unref( mpMenuModel );
     }
@@ -368,18 +371,13 @@ void GtkSalMenu::SetFrame( const SalFrame* pFrame )
         GLOActionGroup* pActionGroup = G_LO_ACTION_GROUP( g_object_get_data( G_OBJECT( gdkWindow ), "g-lo-action-group" ) );
 
         if ( pMainMenu && pActionGroup ) {
-            // Merge current action group with the exported one
-            g_lo_action_group_clear( pActionGroup );
-            g_lo_action_group_merge( G_LO_ACTION_GROUP( mpActionGroup ), pActionGroup );
-            g_lo_action_group_clear( G_LO_ACTION_GROUP( mpActionGroup ) );
-            g_object_unref( mpActionGroup );
-
-            mpActionGroup = G_ACTION_GROUP( pActionGroup );
+            g_lo_menu_remove( pMainMenu, 0 );
         } else {
             pMainMenu = g_lo_menu_new();
+            pActionGroup = g_lo_action_group_new();
 
-            g_object_set_data_full( G_OBJECT( gdkWindow ), "g-lo-menubar", mpMenuModel, ObjectDestroyedNotify );
-            g_object_set_data_full( G_OBJECT( gdkWindow ), "g-lo-action-group", mpActionGroup, ObjectDestroyedNotify );
+            g_object_set_data_full( G_OBJECT( gdkWindow ), "g-lo-menubar", pMainMenu, ObjectDestroyedNotify );
+            g_object_set_data_full( G_OBJECT( gdkWindow ), "g-lo-action-group", pActionGroup, ObjectDestroyedNotify );
 
             XLIB_Window windowId = GDK_WINDOW_XID( gdkWindow );
 
@@ -398,12 +396,12 @@ void GtkSalMenu::SetFrame( const SalFrame* pFrame )
 
             // Publish the menu.
             if ( aDBusMenubarPath ) {
-                sal_uInt16 menubarId = g_dbus_connection_export_menu_model (pSessionBus, aDBusMenubarPath, mpMenuModel, NULL);
+                sal_uInt16 menubarId = g_dbus_connection_export_menu_model (pSessionBus, aDBusMenubarPath, G_MENU_MODEL( pMainMenu ), NULL);
                 if(!menubarId) puts("Failed to export menubar");
             }
 
             if ( aDBusPath ) {
-                sal_uInt16 actionGroupId = g_dbus_connection_export_action_group( pSessionBus, aDBusPath, mpActionGroup, NULL);
+                sal_uInt16 actionGroupId = g_dbus_connection_export_action_group( pSessionBus, aDBusPath, G_ACTION_GROUP( pActionGroup ), NULL);
                 if(!actionGroupId) puts("Failed to export action group");
             }
 
@@ -413,8 +411,8 @@ void GtkSalMenu::SetFrame( const SalFrame* pFrame )
         }
 
         // Menubar has only one section, so we put it on the exported menu.
-//        GMenuModel *pSection = G_MENU_MODEL( g_lo_menu_get_section( G_LO_MENU( mpMenuModel ), 0 ) );
-//        g_lo_menu_insert_section( pMainMenu, 0, NULL, pSection );
+        g_lo_menu_insert_section( pMainMenu, 0, NULL, mpMenuModel );
+        mpActionGroup = G_ACTION_GROUP( pActionGroup );
 
 //        UpdateNativeMenu( this );
 //        UpdateNativeMenu( this );
