@@ -43,6 +43,7 @@ basegfx\
 basic\
 bean\
 binaryurp\
+boost\
 canvas\
 chart2\
 clucene\
@@ -177,7 +178,6 @@ apache-commons\
 beanshell\
 berkeleydb\
 binfilter \
-boost\
 bridges\
 cairo\
 cli_ure\

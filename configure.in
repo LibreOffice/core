@@ -7724,11 +7724,13 @@ else
     AC_MSG_RESULT([internal])
     BUILD_TYPE="$BUILD_TYPE BOOST"
     SYSTEM_BOOST=NO
+    BOOST_TARBALL=f02578f5218f217a9f20e9c30e119c6a-boost_1_44_0.tar.bz2
     HAVE_BOOST_UNORDERED_MAP=TRUE
 fi
 AC_SUBST([HAVE_BOOST_UNORDERED_MAP])
 AC_SUBST([MINGW_BOOST_DATE_TIME_DLL])
 AC_SUBST(SYSTEM_BOOST)
+AC_SUBST(BOOST_TARBALL)
 
 dnl ===================================================================
 dnl Check for system mdds

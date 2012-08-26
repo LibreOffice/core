@@ -531,7 +531,6 @@ SOFFICELIB=isofficeapp.lib
 UNOPKGAPPLIB=iunopkgapp.lib
 TESTLIB=itest.lib
 UNOTESTLIB=iunotest.lib
-BOOSTTHREADLIB=boostthread.lib
 XMLREADERLIB=ixmlreader.lib
 
 .ENDIF              # ("$(GUI)"=="UNX" || "$(COM)"=="GCC")
