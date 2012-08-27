@@ -69,8 +69,6 @@ SCP1FILES  = installation_ooo.par          \
              module_systemint.par          \
              module_graphicfilter.par      \
              file_graphicfilter.par        \
-             module_testtool.par           \
-             file_testtool.par             \
              module_xsltfilter.par         \
              file_xsltfilter.par           \
              module_python.par             \
@@ -226,8 +224,6 @@ SCP2FILES  = installation_ooo.par          \
              module_systemint.par          \
              module_graphicfilter.par      \
              file_graphicfilter.par        \
-             module_testtool.par           \
-             file_testtool.par             \
              module_xsltfilter.par         \
              file_xsltfilter.par           \
              module_python.par             \
