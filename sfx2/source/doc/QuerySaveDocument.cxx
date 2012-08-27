@@ -36,6 +36,7 @@ short ExecuteQuerySaveDocument(Window* _pParent,const String& _rTitle)
     aText.SearchAndReplace( DEFINE_CONST_UNICODE( "$(DOC)" ),
                             _rTitle );
     QueryBox aQBox( _pParent, WB_YES_NO_CANCEL | WB_DEF_YES, aText );
+    aQBox.SetText(SfxResId(STR_QUERY_SAVE_DOCUMENT_TITLE).toString()); // Window title
     aQBox.SetButtonText( BUTTONID_NO, SfxResId(STR_NOSAVEANDCLOSE).toString() );
     aQBox.SetButtonText( BUTTONID_YES, SfxResId(STR_SAVEDOC).toString() );
     return aQBox.Execute();
