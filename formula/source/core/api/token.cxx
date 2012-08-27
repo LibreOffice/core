@@ -328,7 +328,12 @@ bool FormulaTokenArray::Fill(const uno::Sequence< sheet::FormulaToken >& _aSeque
     const sal_Int32 nCount = _aSequence.getLength();
     for (sal_Int32 nPos=0; nPos<nCount; nPos++)
     {
-        bError |= AddFormulaToken( _aSequence[nPos] ,_pRef);
+        bool bOneError = AddFormulaToken( _aSequence[nPos] ,_pRef);
+        if (bOneError)
+        {
+            AddOpCode( ocErrName);  // add something that indicates an error
+            bError = true;
+        }
     }
     return bError;
 }
