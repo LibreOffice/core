@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAN3///ug\u003d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-27T16:36:12Z",
+      "side": 1,
+      "message": "adjusted hash based on cgit",
+      "revId": "0d77f9acb9fb8677825b990c93b9e313f79067f6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAN3///uk\u003d",
+        "filename": "sc/source/core/inc/interpre.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 331,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-27T16:36:12Z",
+      "side": 1,
+      "message": "reading a file more often helps as I found another sentence that was not translated yet ;-)",
+      "revId": "0d77f9acb9fb8677825b990c93b9e313f79067f6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAN3///us\u003d",
+        "filename": "sc/source/core/inc/interpre.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-27T16:36:12Z",
+      "side": 0,
+      "message": "removed because same line already in L32",
+      "revId": "3a8f97a07ff02e160e35c54986c30c014c6415d0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAN3///uo\u003d",
+        "filename": "sc/source/core/inc/interpre.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 312,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-27T16:36:12Z",
+      "side": 0,
+      "message": "commented out function",
+      "revId": "3a8f97a07ff02e160e35c54986c30c014c6415d0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
