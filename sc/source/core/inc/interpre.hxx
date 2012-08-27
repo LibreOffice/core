@@ -102,7 +102,7 @@ public:
     static void SetGlobalConfig(const ScCalcConfig& rConfig);
     static const ScCalcConfig& GetGlobalConfig();
 
-    static void GlobalExit();           // aus ScGlobal::Clear() gerufen
+    static void GlobalExit();           // called by ScGlobal::Clear()
 
     /// Could string be a regular expression?
     /// If pDoc!=NULL the document options are taken into account and if
@@ -172,9 +172,9 @@ void PushIllegalParameter();
 void PushIllegalArgument();
 void PushNoValue();
 void PushNA();
-//-------------------------------------------------------------------------
-// Funktionen fuer den Zugriff auf das Document
-//-------------------------------------------------------------------------
+
+// Functions for accessing a document
+
 void ReplaceCell( ScAddress& );     // for TableOp
 void ReplaceCell( SCCOL& rCol, SCROW& rRow, SCTAB& rTab );  // for TableOp
 bool IsTableOpInRange( const ScRange& );
@@ -207,9 +207,7 @@ bool CreateStringArr(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
 bool CreateCellArr(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                    SCCOL nCol2, SCROW nRow2, SCTAB nTab2, sal_uInt8* pCellArr);
 
-//-----------------------------------------------------------------------------
 // Stack operations
-//-----------------------------------------------------------------------------
 
 /** Does substitute with formula::FormulaErrorToken in case nGlobalError is set and the token
     passed is not formula::FormulaErrorToken.
@@ -350,10 +348,12 @@ ScMatrixRef CreateMatrixFromDoubleRef( const formula::FormulaToken* pToken,
 inline ScTokenMatrixMap& GetTokenMatrixMap();
 ScTokenMatrixMap* CreateTokenMatrixMap();
 ScMatrixRef GetMatrix();
-void ScTableOp();                                       // Mehrfachoperationen
-void ScErrCell();                                       // Sonderbehandlung
-                                                        // Fehlerzelle
-//-----------------------------allgemeine Hilfsfunktionen
+void ScTableOp();                                       // repeated operations
+void ScErrCell();                                       // special handling for
+                                                        // error cell
+
+// common helper functions
+
 void SetMaxIterationCount(sal_uInt16 n);
 inline void CurFmtToFuncFmt()
     { nFuncFmtType = nCurFmtType; nFuncFmtIndex = nCurFmtIndex; }
@@ -615,7 +615,7 @@ void ScDecimal();
 void ScConvert();
 void ScEuroConvert();
 
-//----------------------- Finanzfunktionen ------------------------------------
+// financial functions
 void ScNPV();
 void ScIRR();
 void ScMIRR();
@@ -660,8 +660,8 @@ void ScIntercept();
 double ScGetGCD(double fx, double fy);
 void ScGCD();
 void ScLCM();
-//-------------------------- Matrixfunktionen ---------------------------------
 
+// matrix functions
 void ScMatValue();
 void MEMat(const ScMatrixRef& mM, SCSIZE n);
 void ScMatDet();
@@ -698,7 +698,7 @@ void ScForecast();
 //------------------------- Functions in interpr3.cxx -------------------------
 void ScNoName();
 void ScBadName();
-// Statistik:
+// Statistics:
 double phi(double x);
 double integralPhi(double x);
 double taylor(double* pPolynom, sal_uInt16 nMax, double x);
