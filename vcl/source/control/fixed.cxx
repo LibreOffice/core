@@ -922,6 +922,7 @@ void FixedBitmap::SetBitmap( const Bitmap& rBitmap )
 {
     maBitmap = rBitmap;
     StateChanged( STATE_CHANGE_DATA );
+    queue_resize();
 }
 
 // =======================================================================
@@ -1145,6 +1146,7 @@ void FixedImage::SetImage( const Image& rImage )
     {
         maImage = rImage;
         StateChanged( STATE_CHANGE_DATA );
+        queue_resize();
     }
 }
 
