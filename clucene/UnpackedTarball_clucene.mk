@@ -26,7 +26,6 @@ $(eval $(call gb_UnpackedTarball_set_patchlevel,clucene,0))
 # http://sourceforge.net/mailarchive/message.php?msg_id=29143260
 $(eval $(call gb_UnpackedTarball_add_patches,clucene,\
 	clucene/patches/clucene-debug.patch \
-	clucene/patches/clucene-gcc-atomics.patch \
 	clucene/patches/clucene-internal-zlib.patch \
 	clucene/patches/clucene-multimap-put.patch \
 	clucene/patches/clucene-narrowing-conversions.patch \
@@ -39,10 +38,18 @@ $(eval $(call gb_UnpackedTarball_add_file,clucene,src/shared/CLucene/_clucene-co
 ifeq ($(COM),MSC)
 $(eval $(call gb_UnpackedTarball_add_file,clucene,src/shared/CLucene/clucene-config.h,clucene/configs/clucene-config-MSVC.h))
 else
+ifeq ($(HAVE_GCC_BUILTIN_ATOMIC),TRUE)
+$(eval $(call gb_UnpackedTarball_add_file,clucene,src/shared/CLucene/clucene-config.h,clucene/configs/clucene-config-MINGW-atomic.h))
+else
 $(eval $(call gb_UnpackedTarball_add_file,clucene,src/shared/CLucene/clucene-config.h,clucene/configs/clucene-config-MINGW.h))
 endif
+endif
 else # ! $(OS),WNT
+ifeq ($(HAVE_GCC_BUILTIN_ATOMIC),TRUE)
+$(eval $(call gb_UnpackedTarball_add_file,clucene,src/shared/CLucene/clucene-config.h,clucene/configs/clucene-config-GCC-atomic.h))
+else
 $(eval $(call gb_UnpackedTarball_add_file,clucene,src/shared/CLucene/clucene-config.h,clucene/configs/clucene-config-generic.h))
+endif
 ifeq ($(OS),LINUX)
 $(eval $(call gb_UnpackedTarball_add_file,clucene,src/shared/CLucene/_clucene-config.h,clucene/configs/_clucene-config-LINUX.h))
 else

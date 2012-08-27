@@ -8,52 +8,52 @@
 /* CMake will look for these headers: */
 #define _CL_HAVE_STRING_H  1
 #define _CL_HAVE_MEMORY_H  1
-#define _CL_HAVE_UNISTD_H  1
-/* #undef _CL_HAVE_IO_H */
-/* #undef _CL_HAVE_DIRECT_H */
-#define _CL_HAVE_DIRENT_H  1
-#define _CL_HAVE_SYS_DIR_H
+/* #undef _CL_HAVE_UNISTD_H */
+#define _CL_HAVE_IO_H  1
+#define _CL_HAVE_DIRECT_H  1
+/* #undef _CL_HAVE_DIRENT_H */
+/* #undef _CL_HAVE_SYS_DIR_H */
 /* #undef _CL_HAVE_SYS_NDIR_H */
 #define _CL_HAVE_ERRNO_H  1
 #define _CL_HAVE_WCHAR_H  1
 #define _CL_HAVE_WCTYPE_H
 #define _CL_HAVE_CTYPE_H  1
-/* #undef _CL_HAVE_WINDOWS_H */
+#define _CL_HAVE_WINDOWS_H  1
 /* #undef _CL_HAVE_WINDEF_H */
 #define _CL_HAVE_SYS_TYPES_H  1
 /* #undef _CL_HAVE_DLFCN_H */
-#define _CL_HAVE_EXT_HASH_MAP  1
+/* #undef _CL_HAVE_EXT_HASH_MAP */
 /* #undef _CL_HAVE_EXT_HASH_SET */
-#define _CL_HAVE_TR1_UNORDERED_MAP 1
-#define _CL_HAVE_TR1_UNORDERED_SET  1
-#define _CL_HAVE_HASH_MAP
-#define _CL_HAVE_HASH_SET
+/* #undef _CL_HAVE_TR1_UNORDERED_MAP */
+/* #undef _CL_HAVE_TR1_UNORDERED_SET */
+/* #undef _CL_HAVE_HASH_MAP */
+/* #undef _CL_HAVE_HASH_SET */
 /* #undef _CL_HAVE_NDIR_H */
 #define _CL_HAVE_SYS_STAT_H  1
 #define _CL_HAVE_SYS_TIMEB_H  1
-#define _CL_HAVE_SYS_TIME_H 1
-/* #undef _CL_HAVE_TCHAR_H */
-#define _CL_HAVE_SYS_MMAN_H 1
-/* #undef _CL_HAVE_WINERROR_H */
-#define _CL_HAVE_STDINT_H 1
+/* #undef _CL_HAVE_SYS_TIME_H */
+#define _CL_HAVE_TCHAR_H 1
+/* #undef _CL_HAVE_SYS_MMAN_H */
+#define _CL_HAVE_WINERROR_H 1
+/* #undef _CL_HAVE_STDINT_H */
 
 // our needed types
-/* undef int8_t int8_t */
-/* undef uint8_t uint8_t */
-/* undef int16_t int16_t */
-/* undef uint16_t uint16_t */
-/* undef int32_t int32_t */
-/* undef uint32_t uint32_t */
-/* undef int64_t int64_t */
-/* undef uint64_t uint64_t */
+typedef signed char int8_t;
+typedef unsigned char uint8_t;
+typedef signed short int16_t;
+typedef unsigned short uint16_t;
+typedef signed int int32_t;
+typedef unsigned int uint32_t;
+typedef signed long long int64_t;
+typedef unsigned long long uint64_t;
 
 /* undef float_t*/
-
+typedef unsigned long _cl_dword_t;
 /* undef size_t size_t */
 
 /* tchar & _T definitions... */
-typedef  wchar_t TCHAR;
-#define _T(x) L ## x
+/* undef TCHAR TCHAR */
+/* #undef _T */
 
 /* CMake will determine these specifics. Things like bugs, etc */
 
@@ -61,22 +61,22 @@ typedef  wchar_t TCHAR;
 /* #undef LUCENE_DISABLE_HASHING */
 
 /* Define if you have POSIX threads libraries and header files. */
-#define _CL_HAVE_PTHREAD  1
+/* #undef _CL_HAVE_PTHREAD */
 
 /* Define if you have Win32 threads libraries and header files. */
-/* #undef _CL_HAVE_WIN32_THREADS */
+#define _CL_HAVE_WIN32_THREADS  1
 
 /* Define if we have gcc atomic functions */
-/* #undef _CL_HAVE_GCC_ATOMIC_FUNCTIONS */
+#define _CL_HAVE_GCC_ATOMIC_FUNCTIONS 1
 
 /* Define what eval method is required for float_t to be defined (for GCC). */
 /* #undef _FLT_EVAL_METHOD */
 
 /* If we use hashmaps, which namespace do we use: */
-#define CL_NS_HASHING(func) std::tr1::func
+#define CL_NS_HASHING(func)
 /* If we use hashmaps, which classes do we use: */
-#define _CL_HASH_MAP unordered_map
-#define _CL_HASH_SET unordered_set
+#define _CL_HASH_MAP
+#define _CL_HASH_SET
 
 /* define if the compiler implements namespaces */
 #define _CL_HAVE_NAMESPACES
@@ -101,12 +101,12 @@ typedef  wchar_t TCHAR;
 
 /* Define to 1 if you can safely include both <sys/time.h> and <time.h>. */
 //not actually used for anything...
-//#define _CL_TIME_WITH_SYS_TIME  1
+/* #undef _CL_TIME_WITH_SYS_TIME */
 
 /* Define that we will be using -fvisibility=hidden, and
  * make public classes visible using __attribute__ ((visibility("default")))
  */
-#define _CL_HAVE_GCCVISIBILITYPATCH 1
+/* #undef _CL_HAVE_GCCVISIBILITYPATCH */
 
 
 /* Versions, etc */
