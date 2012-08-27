@@ -114,7 +114,7 @@ bool ScClipUtil::CheckDestRanges(
         SCCOL nCols = aTest.aEnd.Col() - aTest.aStart.Col() + 1;
         SCROW nRowTest = (nRows / nSrcRows) * nSrcRows;
         SCCOL nColTest = (nCols / nSrcCols) * nSrcCols;
-        if (nRows != nRowTest || nCols != nColTest)
+        if ( rDest.size() > 1 && ( nRows != nRowTest || nCols != nColTest ) )
         {
             // Destination range is not a multiple of the source range. Bail out.
             return false;
