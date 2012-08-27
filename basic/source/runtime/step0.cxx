@@ -351,7 +351,13 @@ inline bool checkUnoStructCopy( bool bVBA, SbxVariableRef& refVal, SbxVariableRe
 
     SbUnoObject* pUnoVal =  PTR_CAST(SbUnoObject,(SbxObject*)xValObj);
     SbUnoStructRefObject* pUnoStructVal = PTR_CAST(SbUnoStructRefObject,(SbxObject*)xValObj);
-    Any aAny = pUnoVal ? pUnoVal->getUnoAny() : pUnoStructVal->getUnoAny();
+    Any aAny;
+    // make doubly sure value is either an Uno object or
+    // an uno struct
+    if ( pUnoVal || pUnoStructVal )
+        aAny = pUnoVal ? pUnoVal->getUnoAny() : pUnoStructVal->getUnoAny();
+    else
+        return false;
     if (  aAny.getValueType().getTypeClass() == TypeClass_STRUCT )
     {
         refVar->SetType( SbxOBJECT );
