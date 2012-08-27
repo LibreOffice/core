@@ -5076,7 +5076,25 @@ if test "$GCC" = "yes"; then
         AC_MSG_RESULT([no])
     fi
 
-    AC_MSG_CHECKING([whether $CC supports -std=gnu++0x without Language Defect 757])
+    AC_MSG_CHECKING([whether $CC supports atomic functions])
+    AC_LINK_IFELSE([AC_LANG_PROGRAM([[]], [[
+	int v = 0;
+	if (__sync_add_and_fetch(&v, 1) != 1 ||
+	    __sync_sub_and_fetch(&v, 1) != 0)
+		return 1;
+	__sync_synchronize();
+	if (__sync_val_compare_and_swap(&v, 0, 1) != 0 ||
+	    v != 1)
+		return 1;
+	return 0;
+]])],[HAVE_GCC_BUILTIN_ATOMIC=TRUE],[])
+    if test "$HAVE_GCC_BUILTIN_ATOMIC" = "TRUE"; then
+        AC_MSG_RESULT([yes])
+    else
+        AC_MSG_RESULT([no])
+    fi
+
+    AC_MSG_CHECKING([whether $CXX supports -std=gnu++0x without Language Defect 757])
     save_CXXFLAGS=$CXXFLAGS
     CXXFLAGS="$CXXFLAGS -std=gnu++0x"
     AC_LANG_PUSH([C++])
@@ -5122,6 +5140,7 @@ fi
 AC_SUBST(HAVE_CXX0X)
 AC_SUBST(HAVE_GCC_NO_LONG_DOUBLE)
 AC_SUBST(HAVE_GCC_AVX)
+AC_SUBST(HAVE_GCC_BUILTIN_ATOMIC)
 
 dnl ===================================================================
 dnl system stl sanity tests
