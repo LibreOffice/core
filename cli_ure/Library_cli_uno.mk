@@ -11,7 +11,7 @@ $(eval $(call gb_Library_Library,cli_uno))
 
 $(eval $(call gb_Library_add_cxxflags,cli_uno,\
 	-AI $(gb_Helper_OUTDIRLIBDIR) \
-	-clr:oldSyntax \
+	-clr \
 	-wd4339 \
 ))
 

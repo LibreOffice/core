@@ -21,7 +21,6 @@
 #define INCLUDED_CLI_ENVIRONMENT_H
 
 #include "cli_base.h"
-#using <mscorlib.dll>
 
 using namespace System;
 using namespace System::Collections;
@@ -30,12 +29,12 @@ using namespace System::Runtime::Serialization;
 namespace cli_uno
 {
 
-public __gc class Cli_environment
+public ref class Cli_environment
 {
-    static System::String* sOidPart;
-    static  Hashtable* m_objects;
-    static System::Runtime::Serialization::ObjectIDGenerator* m_IDGen;
-    inline static System::String* createKey(System::String* oid, System::Type* t);
+    static System::String^ sOidPart;
+    static  Hashtable^ m_objects;
+    static System::Runtime::Serialization::ObjectIDGenerator^ m_IDGen;
+    inline static System::String^ createKey(System::String^ oid, System::Type^ t);
 
 #if OSL_DEBUG_LEVEL >= 1
     int _numRegisteredObjects;
@@ -45,11 +44,11 @@ public:
 
     static Cli_environment()
     {
-        m_objects = Hashtable::Synchronized(new Hashtable());
-        m_IDGen = new System::Runtime::Serialization::ObjectIDGenerator();
-        System::Text::StringBuilder* buffer = new System::Text::StringBuilder(256);
+        m_objects = Hashtable::Synchronized(gcnew Hashtable());
+        m_IDGen = gcnew System::Runtime::Serialization::ObjectIDGenerator();
+        System::Text::StringBuilder^ buffer = gcnew System::Text::StringBuilder(256);
         Guid gd = Guid::NewGuid();
-        buffer->Append(S";cli[0];");
+        buffer->Append(";cli[0];");
         buffer->Append(gd.ToString());
         sOidPart = buffer->ToString();
     }
@@ -63,21 +62,21 @@ public:
        cli object is represents all interfaces of the UNO object. Therefore the
        object can be registered only with its OID; a type is not necessary.
     */
-    Object* registerInterface(Object* obj, System::String* oid);
+    Object^ registerInterface(Object^ obj, System::String^ oid);
     /**
        Registers a CLI object as being mapped by this bridge. The resulting
        object represents exactly one UNO interface.
      */
-    Object* registerInterface(Object* obj, System::String* oid, System::Type* type);
+    Object^ registerInterface(Object^ obj, System::String^ oid, System::Type^ type);
 
     /**
        By revoking an interface it is declared that the respective interface has
        not been mapped. The proxy implementations call revoke interface in their
        destructors.
      */
-    inline void revokeInterface(System::String* oid);
+    inline void revokeInterface(System::String^ oid);
 
-    void revokeInterface(System::String* oid, System::Type* type);
+    void revokeInterface(System::String^ oid, System::Type^ type);
     /**
      * Retrieves an interface identified by its object id and type from this
      * environment.
@@ -86,7 +85,7 @@ public:
      * @param type the type description of the interface to be retrieved
      * @see com.sun.star.uno.IEnvironment#getRegisteredInterface
      */
-    Object* getRegisteredInterface(System::String* oid, System::Type* type);
+    Object^ getRegisteredInterface(System::String^ oid, System::Type^ type);
 
     /**
      * Generates a worldwide unique object identifier (oid) for the given object. It is
@@ -96,7 +95,7 @@ public:
      * @return     the generated oid.
      * @param      object     the object for which a Oid should be generated.
      */
-    static System::String* getObjectIdentifier(Object* obj);
+    static System::String^ getObjectIdentifier(Object^ obj);
 
 };
 

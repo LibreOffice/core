@@ -26,7 +26,6 @@
 #include "uno/dispatcher.h"
 #include "cli_base.h"
 #include "cli_environment.h"
-#using <mscorlib.dll>
 //#using <cli_uretypes.dll>
 #using <cli_basetypes.dll>
 #using <system.dll>
@@ -47,8 +46,8 @@ struct Mapping : public uno_Mapping
 // The environment will be created in uno_initEnvironment. See also the remarks there
 //Managed cli environment for cli objects an UNO proxies (which are cli
 //objects. The uno_Environment is not used for cli objects.
-__gc struct CliEnvHolder {
-static Cli_environment * g_cli_env = NULL;
+ref struct CliEnvHolder {
+static Cli_environment ^ g_cli_env = nullptr;
 };
 
 //==================================================================================================
@@ -72,7 +71,7 @@ struct Bridge
     void release() const;
 
     void  map_to_uno(
-        void * uno_data, System::Object* cli_data,
+        void * uno_data, System::Object^ cli_data,
         typelib_TypeDescriptionReference * type,
         bool assign) const;
 
@@ -81,28 +80,28 @@ struct Bridge
        the type of the converted data. It may be a byref type.
      */
     void map_to_cli(
-        System::Object* *cli_data, void const * uno_data,
-        typelib_TypeDescriptionReference * type, System::Type* info /* maybe 0 */,
+        System::Object^ *cli_data, void const * uno_data,
+        typelib_TypeDescriptionReference * type, System::Type^ info /* maybe 0 */,
         bool bDontCreateObj) const;
 
-    System::Object* map_uno2cli(uno_Interface * pUnoI, typelib_InterfaceTypeDescription* pTD) const;
+    System::Object^ map_uno2cli(uno_Interface * pUnoI, typelib_InterfaceTypeDescription* pTD) const;
 
-    System::Object* call_uno(uno_Interface * pUnoI,
+    System::Object^ call_uno(uno_Interface * pUnoI,
                       typelib_TypeDescription* member_td,
                       typelib_TypeDescriptionReference * return_type,
                       sal_Int32 nParams, typelib_MethodParameter const * pParams,
-                      System::Object * args[], System::Type* argTypes[],
-                      System::Object** pException) const;
+                      array<System::Object^>^ args, array<System::Type^>^ argTypes,
+                      System::Object^* pException) const;
 
 
     void call_cli(
-        System::Object* cliI, sr::MethodInfo* method,
+        System::Object^ cliI, sr::MethodInfo^ method,
         typelib_TypeDescriptionReference * return_type,
         typelib_MethodParameter * params, int nParams,
         void * uno_ret, void * uno_args [], uno_Any ** uno_exc ) const;
 
     uno_Interface * map_cli2uno(
-        System::Object* cliI, typelib_TypeDescription* pTD) const;
+        System::Object^ cliI, typelib_TypeDescription* pTD) const;
 
 };
 
