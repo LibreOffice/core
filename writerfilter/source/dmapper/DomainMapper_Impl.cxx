@@ -26,6 +26,7 @@
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/container/XIndexReplace.hpp>
 #include <com/sun/star/container/XNamed.hpp>
+#include <com/sun/star/document/PrinterIndependentLayout.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -3662,6 +3663,12 @@ void DomainMapper_Impl::ApplySettingsTable()
                 uno::Reference<container::XIndexAccess> xIndexAccess(xBox, uno::UNO_QUERY);
                 uno::Reference<document::XViewDataSupplier> xViewDataSupplier(m_xTextDocument, uno::UNO_QUERY);
                 xViewDataSupplier->setViewData(xIndexAccess);
+            }
+
+            if (m_pSettingsTable->GetUsePrinterMetrics())
+            {
+                uno::Reference< beans::XPropertySet > xSettings(m_xTextFactory->createInstance("com.sun.star.document.Settings"), uno::UNO_QUERY);
+                xSettings->setPropertyValue("PrinterIndependentLayout", uno::makeAny(document::PrinterIndependentLayout::DISABLED));
             }
         }
         catch(const uno::Exception&)
