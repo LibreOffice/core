@@ -4651,7 +4651,7 @@ ScVbaRange::AutoFilter( const uno::Any& Field, const uno::Any& Criteria1, const 
         if ( bIsValidOpValue )
         {
             // if its a bottom/top Ten(Percent/Value) and there
-            // is no value specified for critera1 set it to 10
+            // is no value specified for criteria1 set it to 10
             if ( !bCritHasNumericValue && sCriteria1.isEmpty() && ( nOperator != excel::XlAutoFilterOperator::xlOr ) && ( nOperator != excel::XlAutoFilterOperator::xlAnd ) )
             {
                 sTabFilts[0].IsNumeric = sal_True;
