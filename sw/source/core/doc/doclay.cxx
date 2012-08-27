@@ -2053,7 +2053,7 @@ void SwDoc::SetAllUniqueFlyNames()
     if( 255 < ( n = GetSpzFrmFmts()->size() ))
         n = 255;
     SwFrmFmts aArr;
-    aArr.reserve( (sal_Int8)n );
+    aArr.reserve( n );
     SwFrmFmt* pFlyFmt;
     sal_Bool bLoadedFlag = sal_True;            // something for the Layout
 
