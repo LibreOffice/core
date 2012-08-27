@@ -14,12 +14,7 @@ mkdir: %_DEST%\bin%_EXT%\so
 ..\%__SRC%\lib\updatefeed.uno.so %_DEST%\lib%_EXT%\updatefeed.uno.so
 ..\%__SRC%\bin\oleautobridge2.uno.dll %_DEST%\bin%_EXT%\odf4ms\oleautobridge.uno.dll
 ..\%__SRC%\lib\*.dylib %_DEST%\lib%_EXT%\*.dylib
-..\%__SRC%\bin\pluginapp.bin %_DEST%\bin%_EXT%\pluginapp.bin
 ..\%__SRC%\bin\*.res %_DEST%\bin%_EXT%\*.res
-..\%__SRC%\bin\nsplugin.exe %_DEST%\bin%_EXT%\nsplugin.exe
-..\%__SRC%\bin\nsplugin %_DEST%\bin%_EXT%\nsplugin
-..\%__SRC%\bin\npsoplugin.dll %_DEST%\bin%_EXT%\npsoplugin.dll
-..\%__SRC%\bin\npsoplugin_so.dll %_DEST%\bin%_EXT%\so\npsoplugin.dll
 ..\%__SRC%\bin\x64\so_activex.dll %_DEST%\bin%_EXT%\so_activex_x64.dll
 ..\%__SRC%\bin\mdibundle.zip %_DEST%\bin%_EXT%\mdibundle.zip
 ..\%__SRC%\misc\oleautobridge.component %_DEST%\xml%_EXT%\oleautobridge.component

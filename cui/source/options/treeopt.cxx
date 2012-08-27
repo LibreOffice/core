@@ -363,9 +363,6 @@ SfxTabPage* CreateGeneralTabPage( sal_uInt16 nId, Window* pParent, const SfxItem
         case RID_SVXPAGE_ACCESSIBILITYCONFIG:       fnCreate = &SvxAccessibilityOptionsTabPage::Create; break;
         case RID_SVXPAGE_SSO:                       fnCreate = GetSSOCreator(); break;
         case RID_SVXPAGE_OPTIONS_CTL:               fnCreate = &SvxCTLOptionsPage::Create ; break;
-        //added by jmeng begin
-        case RID_SVXPAGE_INET_MOZPLUGIN:            fnCreate = &MozPluginTabPage::Create; break;
-        //added by jmeng end
         case RID_SVXPAGE_OPTIONS_JAVA:              fnCreate = &SvxJavaOptionsPage::Create ; break;
         case RID_SVXPAGE_ONLINEUPDATE:              fnCreate = &SvxOnlineUpdateTabPage::Create; break;
         case RID_OPTPAGE_CHART_DEFCOLORS:           fnCreate = &SvxDefaultColorOptPage::Create; break;
@@ -413,7 +410,6 @@ static OptionsMapping_Impl __READONLY_DATA OptionsMap_Impl[] =
     { "Internet",           "Proxy",                RID_SVXPAGE_INET_PROXY },
     { "Internet",           "Search",               RID_SVXPAGE_INET_SEARCH },
     { "Internet",           "Email",                RID_SVXPAGE_INET_MAIL },
-    { "Internet",           "MozillaPlugin",        RID_SVXPAGE_INET_MOZPLUGIN },
     { "LoadSave",           NULL,                   SID_FILTER_DLG },
     { "LoadSave",           "General",              RID_SFXPAGE_SAVE },
     { "LoadSave",           "VBAProperties",        SID_OPTFILTER_MSOFFICE },
@@ -2177,33 +2173,6 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
             // Disable E-mail tab-page on Windows
             if ( nPageId == RID_SVXPAGE_INET_MAIL )
                 continue;
-#endif
-#if defined MACOSX
-            // Disable Mozilla Plug-in tab-page on Mac
-            if ( nPageId == RID_SVXPAGE_INET_MOZPLUGIN )
-                continue;
-#endif
-#ifdef LINUX
-            // Disable Mozilla Plug-in tab-page on Linux if we find a
-            // globally installed plugin
-            if ( nPageId == RID_SVXPAGE_INET_MOZPLUGIN ) {
-                struct stat sb;
-                char *p;
-                bool bHaveSystemWidePlugin = false;
-                char mozpaths[]="/usr/lib/mozilla/plugins/libnpsoplugin.so:/usr/lib/firefox/plugins/libnpsoplugin.so:/usr/lib/mozilla-firefox/plugins/libnpsoplugin.so:/usr/lib/iceweasel/plugins/libnpsoplugin.so:/usr/lib/iceape/plugins/libnpsoplugin.so:/usr/lib/browser-plugins/libnpsoplugin.so:/usr/lib64/browser-plugins/libnpsoplugin.so";
-
-                p = strtok(mozpaths, ":");
-                while (p != NULL) {
-                    if (stat(p, &sb) != -1) {
-                         bHaveSystemWidePlugin = true;
-                         break;
-                    }
-                    p = strtok(NULL, ":");
-                }
-
-                if (bHaveSystemWidePlugin == true)
-                    continue;
-            }
 #endif
             AddTabPage( nPageId, rInetArray.GetString(i), nGroup );
         }

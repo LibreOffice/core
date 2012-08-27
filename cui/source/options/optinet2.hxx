@@ -273,29 +273,6 @@ public:
     virtual void        Reset( const SfxItemSet& rSet );
 };
 
-//added by jmeng begin
-class MozPluginTabPage : public SfxTabPage
-{
-    FixedLine       aMSWordGB;
-    CheckBox        aWBasicCodeCB;
-
-    sal_Bool isInstalled(void);
-    sal_Bool installPlugin(void);
-    sal_Bool uninstallPlugin(void);
-
-    MozPluginTabPage( Window* pParent, const SfxItemSet& rSet );
-    virtual ~MozPluginTabPage();
-
-public:
-
-    static SfxTabPage*  Create( Window* pParent,
-                                const SfxItemSet& rAttrSet );
-
-    virtual sal_Bool        FillItemSet( SfxItemSet& rSet );
-    virtual void        Reset( const SfxItemSet& rSet );
-
-};
-//added by jmeng end
 #endif
 
 /* -----------------------------20.06.01 16:32--------------------------------
