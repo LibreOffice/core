@@ -79,6 +79,7 @@ class AbstractSwWordCountFloatDlg_Impl : public AbstractSwWordCountFloatDlg
 {
     DECL_ABSTDLG_BASE(AbstractSwWordCountFloatDlg_Impl,SwWordCountFloatDlg)
     virtual void                UpdateCounts();
+    virtual void                SetCounts(const SwDocStat &rCurrCnt, const SwDocStat &rDocStat);
     virtual Window *            GetWindow(); //this method is added for return a Window type pointer
 };
 

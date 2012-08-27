@@ -140,6 +140,7 @@
 #include <svx/ofaitem.hxx>
 #include <unomid.h>
 #include <docstat.hxx>
+#include <wordcountdialog.hxx>
 
 const char sStatusDelim[] = " : ";
 const char sStatusComma[] = " , ";//#outlinelevel, define a Variable for "," add by zhaojianwei
@@ -1215,6 +1216,10 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
                     wordCount = wordCount.replaceAll("$2", rtl::OUString::valueOf(static_cast<sal_Int64>(selectionStats.nWord)));
                 }
                 rSet.Put(SfxStringItem(FN_STAT_WORDCOUNT, wordCount));
+
+                SwWordCountWrapper *pWrdCnt = (SwWordCountWrapper*)GetViewFrame()->GetChildWindow(SwWordCountWrapper::GetChildWindowId());
+                if (pWrdCnt)
+                    pWrdCnt->SetCounts(selectionStats, documentStats);
             }
             break;
 

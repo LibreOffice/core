@@ -571,6 +571,10 @@ void AbstractSwWordCountFloatDlg_Impl::UpdateCounts()
     pDlg->UpdateCounts();
 }
 
+void AbstractSwWordCountFloatDlg_Impl::SetCounts(const SwDocStat &rCurrCnt, const SwDocStat &rDocStat)
+{
+    pDlg->SetCounts(rCurrCnt, rDocStat);
+}
 
 AbstractMailMergeWizard_Impl::~AbstractMailMergeWizard_Impl()
 {

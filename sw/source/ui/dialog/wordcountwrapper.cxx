@@ -58,3 +58,8 @@ void SwWordCountWrapper::UpdateCounts()
 {
     pAbstDlg->UpdateCounts();
 }
+
+void SwWordCountWrapper::SetCounts(const SwDocStat &rCurrCnt, const SwDocStat &rDocStat)
+{
+    pAbstDlg->SetCounts(rCurrCnt, rDocStat);
+}

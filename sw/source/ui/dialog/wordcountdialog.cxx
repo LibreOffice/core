@@ -133,4 +133,9 @@ void SwWordCountFloatDlg::UpdateCounts()
     aDlg.SetValues(aCurrCnt, aDocStat);
 }
 
+void SwWordCountFloatDlg::SetCounts(const SwDocStat &rCurrCnt, const SwDocStat &rDocStat)
+{
+    aDlg.SetValues(rCurrCnt, rDocStat);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

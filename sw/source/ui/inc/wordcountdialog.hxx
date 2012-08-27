@@ -78,6 +78,8 @@ class SwWordCountFloatDlg : public SfxModelessDialog
                              Window *pParent,
                              SfxChildWinInfo* pInfo);
     void    UpdateCounts();
+
+    void    SetCounts(const SwDocStat &rCurrCnt, const SwDocStat &rDocStat);
 };
 
 class SwWordCountWrapper : public SfxChildWindow
@@ -93,6 +95,7 @@ protected:
 
 public:
     void    UpdateCounts();
+    void    SetCounts(const SwDocStat &rCurrCnt, const SwDocStat &rDocStat);
 };
 
 #endif

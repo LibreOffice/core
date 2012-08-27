@@ -203,6 +203,7 @@ class AbstractSwWordCountFloatDlg : public VclAbstractDialog
 {
 public:
     virtual void        UpdateCounts() = 0;
+    virtual void        SetCounts(const SwDocStat &rCurrCnt, const SwDocStat &rDocStat) = 0;
     virtual Window *    GetWindow() = 0; //this method is added for return a Window type pointer
 };
 
