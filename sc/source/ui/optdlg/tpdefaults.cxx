@@ -65,7 +65,7 @@ ScTpDefaultsOptions::ScTpDefaultsOptions(Window *pParent, const SfxItemSet &rCor
         aEdNSheets.SetPosPixel( aNewPoint );
         aNewPoint.Y() = aEdSheetPrefix.GetPosPixel().Y();
         aEdSheetPrefix.SetPosPixel( aNewPoint );
-   }
+    }
     aEdNSheets.SetModifyHdl( LINK(this, ScTpDefaultsOptions, NumModifiedHdl) );
     aEdSheetPrefix.SetModifyHdl( LINK(this, ScTpDefaultsOptions, PrefixModifiedHdl) );
     aEdSheetPrefix.SetGetFocusHdl( LINK(this, ScTpDefaultsOptions, PrefixEditOnFocusHdl) );
