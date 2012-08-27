@@ -48,10 +48,14 @@
 #include "cell.hxx"
 #include "drwlayer.hxx"
 #include "userdat.hxx"
+#include "dpobject.hxx"
+#include "dpsave.hxx"
 
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/drawing/XControlShape.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
+#include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
+#include <com/sun/star/sheet/GeneralFunction.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 
@@ -157,6 +161,8 @@ public:
 
     void testCellAnchoredShapesODS();
 
+    void testPivotTableBasicODS();
+
     CPPUNIT_TEST_SUITE(ScFiltersTest);
     CPPUNIT_TEST(testRangeNameXLS);
     CPPUNIT_TEST(testRangeNameXLSX);
@@ -195,6 +201,8 @@ public:
     CPPUNIT_TEST(testNumberFormatCSV);
 
     CPPUNIT_TEST(testCellAnchoredShapesODS);
+
+    CPPUNIT_TEST(testPivotTableBasicODS);
 
     //disable testPassword on MacOSX due to problems with libsqlite3
     //also crashes on DragonFly due to problems with nss/nspr headers
@@ -1385,6 +1393,82 @@ void ScFiltersTest::testCellAnchoredShapesODS()
         CPPUNIT_ASSERT_MESSAGE("Failed to retrieve user data for this object.", pData);
         CPPUNIT_ASSERT_MESSAGE("Bounding rectangle should have been calculated upon import.", !pData->maLastRect.IsEmpty());
     }
+
+    xDocSh->DoClose();
+}
+
+namespace {
+
+class FindDimByName : std::unary_function<const ScDPSaveDimension*, bool>
+{
+    OUString maName;
+public:
+    FindDimByName(const OUString& rName) : maName(rName) {}
+
+    bool operator() (const ScDPSaveDimension* p) const
+    {
+        return p && p->GetName() == maName;
+    }
+};
+
+bool hasDimension(const std::vector<const ScDPSaveDimension*>& rDims, const OUString& aName)
+{
+    return std::find_if(rDims.begin(), rDims.end(), FindDimByName(aName)) != rDims.end();
+}
+
+}
+
+void ScFiltersTest::testPivotTableBasicODS()
+{
+    OUString aFileNameBase("pivot-table-basic.");
+    OUString aFileExt = OUString::createFromAscii(aFileFormats[ODS].pName);
+    OUString aFilterName = OUString::createFromAscii(aFileFormats[ODS].pFilterName);
+    OUString aFilterType = OUString::createFromAscii(aFileFormats[ODS].pTypeName);
+
+    rtl::OUString aFileName;
+    createFileURL(aFileNameBase, aFileExt, aFileName);
+    ScDocShellRef xDocSh = load (aFilterName, aFileName, rtl::OUString(), aFilterType, aFileFormats[ODS].nFormatType);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load pivot-table-basic.ods", xDocSh.Is());
+
+    ScDocument* pDoc = xDocSh->GetDocument();
+    CPPUNIT_ASSERT_MESSAGE("There should be exactly two sheets.", pDoc->GetTableCount() == 2);
+
+    ScDPCollection* pDPs = pDoc->GetDPCollection();
+    CPPUNIT_ASSERT_MESSAGE("Failed to get a live ScDPCollection instance.", pDPs);
+    CPPUNIT_ASSERT_MESSAGE("There should be exactly one pivot table instance.", pDPs->GetCount() == 1);
+
+    const ScDPObject* pDPObj = (*pDPs)[0];
+    CPPUNIT_ASSERT_MESSAGE("Failed to get an pivot table object.", pDPObj);
+    const ScDPSaveData* pSaveData = pDPObj->GetSaveData();
+    CPPUNIT_ASSERT_MESSAGE("Failed to get ScDPSaveData instance.", pSaveData);
+    std::vector<const ScDPSaveDimension*> aDims;
+
+    // Row fields
+    pSaveData->GetAllDimensionsByOrientation(sheet::DataPilotFieldOrientation_ROW, aDims);
+    CPPUNIT_ASSERT_MESSAGE("There should be exactly 3 row fields (2 normal dimensions and 1 layout dimension).", aDims.size() == 3);
+    CPPUNIT_ASSERT_MESSAGE("Dimension expected, but not found.", hasDimension(aDims, "Row1"));
+    CPPUNIT_ASSERT_MESSAGE("Dimension expected, but not found.", hasDimension(aDims, "Row2"));
+    const ScDPSaveDimension* pDataLayout = pSaveData->GetExistingDataLayoutDimension();
+    CPPUNIT_ASSERT_MESSAGE("There should be a data layout field as a row field.",
+                           pDataLayout && pDataLayout->GetOrientation() == sheet::DataPilotFieldOrientation_ROW);
+
+    // Column fields
+    pSaveData->GetAllDimensionsByOrientation(sheet::DataPilotFieldOrientation_COLUMN, aDims);
+    CPPUNIT_ASSERT_MESSAGE("There should be exactly 2 column fields.", aDims.size() == 2);
+    CPPUNIT_ASSERT_MESSAGE("Dimension expected, but not found.", hasDimension(aDims, "Col1"));
+    CPPUNIT_ASSERT_MESSAGE("Dimension expected, but not found.", hasDimension(aDims, "Col2"));
+
+    // Page fields
+    pSaveData->GetAllDimensionsByOrientation(sheet::DataPilotFieldOrientation_PAGE, aDims);
+    CPPUNIT_ASSERT_MESSAGE("There should be exactly 2 page fields.", aDims.size() == 2);
+    CPPUNIT_ASSERT_MESSAGE("Dimension expected, but not found.", hasDimension(aDims, "Page1"));
+    CPPUNIT_ASSERT_MESSAGE("Dimension expected, but not found.", hasDimension(aDims, "Page2"));
+
+    // Check the data field.
+    pSaveData->GetAllDimensionsByOrientation(sheet::DataPilotFieldOrientation_DATA, aDims);
+    CPPUNIT_ASSERT_MESSAGE("There should be exactly 1 data field.", aDims.size() == 1);
+    const ScDPSaveDimension* pDim = aDims.back();
+    CPPUNIT_ASSERT_MESSAGE("Function for the data field should be COUNT.", pDim->GetFunction() == sheet::GeneralFunction_COUNT);
 
     xDocSh->DoClose();
 }
