@@ -145,7 +145,7 @@ namespace
             pMarkAccess->getBookmarksBegin(),
             pMarkAccess->getBookmarksEnd(),
             aEndOfPara,
-            bind(&::sw::mark::IMark::StartsAfter, _2, _1)); // finds the first that starts after
+            boost::bind(&::sw::mark::IMark::StartsAfter, _2, _1)); // finds the first that starts after
 
         // search for all bookmarks that start or end in this paragraph
         const SwNodeIndex nOwnNode = rUnoCrsr.GetPoint()->nNode;
