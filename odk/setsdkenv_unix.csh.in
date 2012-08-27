@@ -104,7 +104,7 @@ switch (`${OO_SDK_HOME}/config.guess | cut -d"-" -f3,4`)
     set exampleout=SOLARISexample.out
 
     # set LD_LIBRARY_PATH
-    if ( $?LD_LIBARY_PATH == 0) then
+    if ( $?LD_LIBRARY_PATH == 0) then
 	setenv LD_LIBRARY_PATH ${OO_SDK_HOME}/lib:${OO_SDK_OUT}/${exampleout}/lib:${OO_SDK_URE_LIB_DIR}:.
     else
 	setenv LD_LIBRARY_PATH ${OO_SDK_HOME}/lib:${OO_SDK_OUT}/${exampleout}/lib:${OO_SDK_URE_LIB_DIR}:.:${LD_LIBRARY_PATH}
@@ -125,7 +125,7 @@ switch (`${OO_SDK_HOME}/config.guess | cut -d"-" -f3,4`)
     set platform=Linux
 
     # set LD_LIBRARY_PATH
-    if ( $?LD_LIBARY_PATH == 0) then
+    if ( $?LD_LIBRARY_PATH == 0) then
 	setenv LD_LIBRARY_PATH ${OO_SDK_HOME}/lib:${OO_SDK_OUT}/${exampleout}/lib:${OO_SDK_URE_LIB_DIR}:.
     else
 	setenv LD_LIBRARY_PATH ${OO_SDK_HOME}/lib:${OO_SDK_OUT}/${exampleout}/lib:${OO_SDK_URE_LIB_DIR}:.:${LD_LIBRARY_PATH}
@@ -167,7 +167,7 @@ switch (`${OO_SDK_HOME}/config.guess | cut -d"-" -f3,4`)
     set platform=FreeBSD
 
     # set LD_LIBRARY_PATH
-    if ( $?LD_LIBARY_PATH == 0) then
+    if ( $?LD_LIBRARY_PATH == 0) then
 	setenv LD_LIBRARY_PATH ${OO_SDK_HOME}/lib:${OO_SDK_OUT}/${exampleout}/lib:${OO_SDK_URE_LIB_DIR}:.
     else
 	setenv LD_LIBRARY_PATH ${OO_SDK_HOME}/lib:${OO_SDK_OUT}/${exampleout}/lib:${OO_SDK_URE_LIB_DIR}:.:${LD_LIBRARY_PATH}

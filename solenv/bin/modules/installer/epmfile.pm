@@ -2401,7 +2401,7 @@ sub create_packages_without_epm
 
         if ( $rpm_failed )
         {
-            # Because of the problems with LD_LIBARY_PATH, a direct call of local "rpm" or "rpmbuild" might be successful
+            # Because of the problems with LD_LIBRARY_PATH, a direct call of local "rpm" or "rpmbuild" might be successful
             my $rpmprog = "";
             if ( -f "/usr/bin/rpmbuild" ) { $rpmprog = "/usr/bin/rpmbuild"; }
             elsif ( -f "/usr/bin/rpm" ) { $rpmprog = "/usr/bin/rpm"; }
@@ -2420,7 +2420,7 @@ sub create_packages_without_epm
 
                 my $helperreturnvalue = $?; # $? contains the return value of the systemcall
 
-                $infoline = "\nLast try: Using $rpmprog directly (problem with LD_LIBARY_PATH)\n";
+                $infoline = "\nLast try: Using $rpmprog directly (problem with LD_LIBRARY_PATH)\n";
                 push( @installer::globals::logfileinfo, $infoline);
 
                 $infoline = "\nSystemcall: $helpersystemcall\n";
