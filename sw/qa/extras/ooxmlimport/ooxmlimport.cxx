@@ -41,6 +41,7 @@
 #include <com/sun/star/text/XFormField.hpp>
 #include <com/sun/star/text/XPageCursor.hpp>
 #include <com/sun/star/text/XTextFieldsSupplier.hpp>
+#include <com/sun/star/text/XTextFrame.hpp>
 #include <com/sun/star/text/XTextFramesSupplier.hpp>
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
@@ -84,6 +85,7 @@ public:
     void testBnc773061();
     void testAllGapsWord();
     void testN775906();
+    void testN775899();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -112,6 +114,7 @@ public:
     CPPUNIT_TEST(testBnc773061);
     CPPUNIT_TEST(testAllGapsWord);
     CPPUNIT_TEST(testN775906);
+    CPPUNIT_TEST(testN775899);
 #endif
     CPPUNIT_TEST_SUITE_END();
 
@@ -734,6 +737,32 @@ void Test::testN775906()
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(-635), getProperty<sal_Int32>(getParagraph(1), "ParaFirstLineIndent"));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1905), getProperty<sal_Int32>(getParagraph(1), "ParaLeftMargin"));
+}
+
+void Test::testN775899()
+{
+    /*
+     * The problem was that a floating table wasn't imported as a frame, then it contained fake paragraphs.
+     *
+     * ThisComponent.TextFrames.Count ' was 0
+     * oParas = ThisComponent.TextFrames(0).Text.createEnumeration
+     * oPara = oParas.nextElement
+     * oPara.supportsService("com.sun.star.text.TextTable") 'was a fake paragraph
+     * oParas.hasMoreElements 'was true
+     */
+    load("n775899.docx");
+
+    uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xIndexAccess(xTextFramesSupplier->getTextFrames(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
+
+    uno::Reference<text::XTextFrame> xFrame(xIndexAccess->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xFrame->getText(), uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
+    uno::Reference<lang::XServiceInfo> xServiceInfo(xParaEnum->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_True, xServiceInfo->supportsService("com.sun.star.text.TextTable"));
+
+    CPPUNIT_ASSERT_EQUAL(sal_False, xParaEnum->hasMoreElements());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
