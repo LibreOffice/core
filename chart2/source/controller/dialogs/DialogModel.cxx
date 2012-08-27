@@ -187,6 +187,7 @@ struct lcl_DataSeriesContainerAppend : public
     lcl_DataSeriesContainerAppend & operator* ()     { return *this; }
     lcl_DataSeriesContainerAppend & operator++ ()    { return *this; }
     lcl_DataSeriesContainerAppend & operator++ (int) { return *this; }
+    lcl_DataSeriesContainerAppend & operator= ( lcl_DataSeriesContainerAppend& ) { return *this; }
 
 private:
     tContainerType & m_rDestCnt;
@@ -245,6 +246,7 @@ struct lcl_RolesWithRangeAppend : public
     lcl_RolesWithRangeAppend & operator* ()     { return *this; }
     lcl_RolesWithRangeAppend & operator++ ()    { return *this; }
     lcl_RolesWithRangeAppend & operator++ (int) { return *this; }
+    lcl_RolesWithRangeAppend & operator= ( lcl_RolesWithRangeAppend& ) { return *this; }
 
 private:
     tContainerType & m_rDestCnt;
