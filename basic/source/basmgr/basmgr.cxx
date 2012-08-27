@@ -389,7 +389,6 @@ private:
     sal_Bool            bDoLoad;
     sal_Bool            bReference;
     sal_Bool            bPasswordVerified;
-    sal_Bool            bFoundInPath;   // Must not relativated again!
 
     // Lib represents library in new UNO library container
     Reference< XLibraryContainer > mxScriptCont;
@@ -430,9 +429,6 @@ public:
                                                         { aPassword = rNewPassword; }
     sal_Bool            IsPasswordVerified() const          { return bPasswordVerified; }
     void            SetPasswordVerified()               { bPasswordVerified = sal_True; }
-
-    sal_Bool            IsFoundInPath() const               { return bFoundInPath; }
-    void            SetFoundInPath( sal_Bool bInPath )      { bFoundInPath = bInPath; }
 
     static BasicLibInfo*    Create( SotStorageStream& rSStream );
 
@@ -534,7 +530,6 @@ BasicLibInfo::BasicLibInfo()
     bReference          = sal_False;
     bPasswordVerified   = sal_False;
     bDoLoad             = sal_False;
-    bFoundInPath        = sal_False;
     mxScriptCont        = NULL;
     aStorageName        = rtl::OUString(szImbedded);
     aRelStorageName     = rtl::OUString(szImbedded);
@@ -895,7 +890,6 @@ void BasicManager::LoadBasicManager( SotStorage& rStorage, const String& rBaseUR
                 if( aPathCFG.SearchFile( aSearchFile, SvtPathOptions::PATH_BASIC ) )
                 {
                     pInfo->SetStorageName( aSearchFile );
-                    pInfo->SetFoundInPath( sal_True );
                 }
             }
         }
