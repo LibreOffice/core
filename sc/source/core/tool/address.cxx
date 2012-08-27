@@ -327,6 +327,57 @@ lcl_XL_ParseSheetRef( const sal_Unicode* start,
 }
 
 
+/** Tries to obtain the external document index and replace by actual document
+    name.
+
+    @param ppErrRet
+           Contains the default pointer the caller would return if this method
+           returns FALSE, may be replaced by NULL for type or data errors.
+
+    @returns FALSE only if the input name is numeric and not within the index
+    sequence, or the link type cannot be determined or data mismatch. Returns
+    TRUE in all other cases, also when there is no index sequence or the input
+    name is not numeric.
+ */
+bool lcl_XL_getExternalDoc( const sal_Unicode** ppErrRet, String& rExternDocName,
+        const uno::Sequence< const sheet::ExternalLinkInfo > * pExternalLinks)
+{
+    // 1-based, sequence starts with an empty element.
+    if (pExternalLinks && pExternalLinks->getLength() > 1)
+    {
+        // A numeric "document name" is an index into the sequence.
+        if (CharClass::isAsciiNumeric( rExternDocName))
+        {
+            sal_Int32 i = rExternDocName.ToInt32();
+            if (i <= 0 || i >= pExternalLinks->getLength())
+                return false;   // with default *ppErrRet
+            const sheet::ExternalLinkInfo & rInfo = (*pExternalLinks)[i];
+            switch (rInfo.Type)
+            {
+                case sheet::ExternalLinkType::DOCUMENT :
+                    {
+                        rtl::OUString aStr;
+                        if (!(rInfo.Data >>= aStr))
+                        {
+                            OSL_TRACE( "ScRange::Parse_XL_Header: Data type mismatch for ExternalLinkInfo %d", i);
+                            *ppErrRet = NULL;
+                            return false;
+                        }
+                        rExternDocName = aStr;
+                    }
+                    break;
+                default:
+                    OSL_TRACE( "ScRange::Parse_XL_Header: unhandled ExternalLinkType %d for index %d",
+                            rInfo.Type, i);
+                    *ppErrRet = NULL;
+                    return false;
+            }
+        }
+    }
+    return true;
+}
+
+
 const sal_Unicode* ScRange::Parse_XL_Header(
         const sal_Unicode* p,
         const ScDocument* pDoc,
@@ -369,36 +420,10 @@ const sal_Unicode* ScRange::Parse_XL_Header(
         }
         ++p;
 
-        // 1-based, sequence starts with an empty element.
-        if (pExternalLinks && pExternalLinks->getLength() > 1)
-        {
-            // A numeric "document name" is an index into the sequence.
-            if (CharClass::isAsciiNumeric( rExternDocName))
-            {
-                sal_Int32 i = rExternDocName.ToInt32();
-                if (i <= 0 || i >= pExternalLinks->getLength())
-                    return start;
-                const sheet::ExternalLinkInfo & rInfo = (*pExternalLinks)[i];
-                switch (rInfo.Type)
-                {
-                    case sheet::ExternalLinkType::DOCUMENT :
-                        {
-                            rtl::OUString aStr;
-                            if (!(rInfo.Data >>= aStr))
-                            {
-                                OSL_TRACE( "ScRange::Parse_XL_Header: Data type mismatch for ExternalLinkInfo %d", i);
-                                return NULL;
-                            }
-                            rExternDocName = aStr;
-                        }
-                        break;
-                    default:
-                        OSL_TRACE( "ScRange::Parse_XL_Header: unhandled ExternalLinkType %d for index %d",
-                                rInfo.Type, i);
-                        return NULL;
-                }
-            }
-        }
+        const sal_Unicode* pErrRet = start;
+        if (!lcl_XL_getExternalDoc( &pErrRet, rExternDocName, pExternalLinks))
+            return pErrRet;
+
         rExternDocName = ScGlobal::GetAbsDocName(rExternDocName, pDoc->GetDocumentShell());
     }
     else if (*p == '\'')
@@ -408,6 +433,8 @@ const sal_Unicode* ScRange::Parse_XL_Header(
         // 'E:\[EXTDATA12B.XLSB]Sheet1:Sheet3'!$A$11
         // But, 'Sheet1'!B3 would also be a valid!
         // Excel does not allow [ and ] characters in sheet names though.
+        // But, more sickness comes with MOOXML as there may be
+        // '[1]Sheet 4'!$A$1  where [1] is the external doc's index.
         p = lcl_ParseQuotedName(p, rExternDocName);
         if (!*p || *p != '!')
         {
@@ -436,6 +463,14 @@ const sal_Unicode* ScRange::Parse_XL_Header(
                     for ( ; *p != ']'; ++p)
                         ;
                     ++p;
+
+                    // Handle '[1]Sheet 4'!$A$1
+                    if (nOpen == 0)
+                    {
+                        const sal_Unicode* pErrRet = start;
+                        if (!lcl_XL_getExternalDoc( &pErrRet, rExternDocName, pExternalLinks))
+                            return pErrRet;
+                    }
                 }
             }
         }
