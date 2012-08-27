@@ -33,6 +33,57 @@
       "revId": "786ba42890ef4f0e7eec0143eef435fcf7d43c3c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAN3///v0\u003d",
+        "filename": "sc/source/ui/undo/undodat.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2009,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-27T12:34:58Z",
+      "side": 1,
+      "message": "same here",
+      "revId": "786ba42890ef4f0e7eec0143eef435fcf7d43c3c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAN3///vw\u003d",
+        "filename": "sc/source/ui/undo/undodat.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2011,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-27T12:34:58Z",
+      "side": 1,
+      "message": "and here",
+      "revId": "786ba42890ef4f0e7eec0143eef435fcf7d43c3c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAN3///vs\u003d",
+        "filename": "sc/source/ui/undo/undotab.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-27T12:34:58Z",
+      "side": 1,
+      "message": "wouldn\u0027t it be better to provide two wrapper methods \"BeginUndo\" and \"EndUndo\" to make the code more understandable?",
+      "revId": "786ba42890ef4f0e7eec0143eef435fcf7d43c3c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
