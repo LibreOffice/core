@@ -42,7 +42,7 @@ class SvStream;
 class ScDdeLink : public ::sfx2::SvBaseLink, public SvtBroadcaster
 {
 private:
-static sal_Bool bIsInUpdate;
+static bool bIsInUpdate;
 
     ScDocument*     pDoc;
 
@@ -51,7 +51,7 @@ static sal_Bool bIsInUpdate;
     String          aItem;
     sal_uInt8       nMode;          // number format mode
 
-    sal_Bool        bNeedUpdate;    // is set, if update was not possible
+    bool            bNeedUpdate;    // is set, if update was not possible
 
     ScMatrixRef     pResult;
 
@@ -79,21 +79,20 @@ public:
     const ScMatrix* GetResult() const           { return pResult.get(); }
     void            SetResult( ScMatrixRef pRes ) { pResult = pRes; }
 
-                                            // XML and Excel import after NewData()
+                    // XML and Excel import after NewData()
     ScMatrixRef     GetModifiableResult()   { return pResult; }
 
     const String&   GetAppl() const     { return aAppl; }
     const String&   GetTopic() const    { return aTopic; }
     const String&   GetItem() const     { return aItem; }
-    sal_uInt8           GetMode() const     { return nMode; }
+    sal_uInt8       GetMode() const     { return nMode; }
 
     void            TryUpdate();
 
-    sal_Bool            NeedsUpdate() const { return bNeedUpdate; }
+    bool            NeedsUpdate() const { return bNeedUpdate; }
 
-    static sal_Bool     IsInUpdate()        { return bIsInUpdate; }
+    static bool     IsInUpdate()        { return bIsInUpdate; }
 };
-
 
 #endif
 
