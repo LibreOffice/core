@@ -58,7 +58,6 @@ PATCH_FILES=\
     icu4c-warnings.patch \
     icu4c.9313.cygwin.patch \
     icu4c-macosx.patch \
-    icu4c-interlck.patch \
     icu4c-solarisgcc.patch \
 
 .IF "$(OS)"=="ANDROID"
@@ -67,6 +66,10 @@ PATCH_FILES+=\
 .ELSE
 PATCH_FILES+=\
     icu4c-rpath.patch
+.ENDIF
+
+.IF "$(HAVE_GCC_BUILTIN_ATOMIC)"=="TRUE"
+EXTRA_CDEFS+=-DU_HAVE_GCC_ATOMICS=1
 .ENDIF
 
 .IF "$(GUI)"=="UNX"
@@ -236,7 +239,7 @@ BUILD_AND_HOST=--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM) --with-cross-bu
 BUILD_AND_HOST=--build=i586-pc-mingw32 --enable-64bit-libs=no
 .ENDIF
 
-CONFIGURE_ACTION+=sh -c 'CFLAGS="-O -D_MT" CXXFLAGS="-O -D_MT" LDFLAGS="$(icu_LDFLAGS)" LIBS="$(icu_LIBS)" \
+CONFIGURE_ACTION+=sh -c 'CPPFLAGS="$(EXTRA_CDEFS)" CFLAGS="-O -D_MT" CXXFLAGS="-O -D_MT" LDFLAGS="$(icu_LDFLAGS)" LIBS="$(icu_LIBS)" \
 ./configure $(BUILD_AND_HOST) --enable-layout --disable-static --enable-shared --disable-samples'
 
 CONFIGURE_FLAGS=
