@@ -162,7 +162,7 @@ private:
 
     VolatileType meVolatileType;
 
-//---------------------------------Funktionen in interpre.cxx---------
+// functions in interpre.cxx:
 // nMust <= nAct <= nMax ? ok : PushError
 inline bool MustHaveParamCount( short nAct, short nMust );
 inline bool MustHaveParamCount( short nAct, short nMust, short nMax );
@@ -366,7 +366,7 @@ inline void TreatDoubleError( double& rVal );
 bool LookupQueryWithCache( ScAddress & o_rResultPos,
         const ScQueryParam & rParam ) const;
 
-//---------------------------------Funktionen in interpr1.cxx---------
+// functions in interpr1.cxx:
 void ScIfJump();
 void ScChoseJump();
 
@@ -553,7 +553,7 @@ void ScBitRshift();
 void ScBitLshift();
 void ScTTT();
 
-//----------------Funktionen in interpr2.cxx---------------
+// functions in interpr2.cxx:
 
 /** Obtain the date serial number for a given date.
     @param bStrict
@@ -656,7 +656,7 @@ void ScNominal();
 void ScMod();
 void ScBackSolver();
 void ScIntercept();
-//-------------------------Funktionen in interpr5.cxx--------------------------
+// functions in in interpr5.cxx:
 double ScGetGCD(double fx, double fy);
 void ScGCD();
 void ScLCM();
@@ -695,7 +695,7 @@ bool CheckMatrix(bool _bLOG,sal_uInt8& nCase,SCSIZE& nCX,SCSIZE& nCY,SCSIZE& nRX
 void ScRGP();
 void ScRKP();
 void ScForecast();
-//------------------------- Functions in interpr3.cxx -------------------------
+// functions in interpr3.cxx:
 void ScNoName();
 void ScBadName();
 // Statistics:
@@ -791,7 +791,7 @@ void ScSlope();
 void ScTrend();
 void ScInfo();
 
-//------------------------ Functions in interpr6.cxx -------------------------
+// functions in interpr6.cxx:
 
 static const double fMaxGammaArgument;  // defined in interpr3.cxx
 
@@ -823,7 +823,6 @@ public:
     sal_uLong                   GetRetFormatIndex() const   { return nRetFmtIndex; }
 };
 
-
 inline void ScInterpreter::MatrixDoubleRefToMatrix()
 {
     if ( bMatrixFormula && GetStackType() == formula::svDoubleRef )
@@ -833,7 +832,6 @@ inline void ScInterpreter::MatrixDoubleRefToMatrix()
     }
 }
 
-
 inline bool ScInterpreter::MatrixParameterConversion()
 {
     if ( (bMatrixFormula || pCur->HasForceArray()) && !pJumpMatrix && sp > 0 )
@@ -841,14 +839,12 @@ inline bool ScInterpreter::MatrixParameterConversion()
     return false;
 }
 
-
 inline ScTokenMatrixMap& ScInterpreter::GetTokenMatrixMap()
 {
     if (!pTokenMatrixMap)
         pTokenMatrixMap = CreateTokenMatrixMap();
     return *pTokenMatrixMap;
 }
-
 
 inline bool ScInterpreter::MustHaveParamCount( short nAct, short nMust )
 {
@@ -861,7 +857,6 @@ inline bool ScInterpreter::MustHaveParamCount( short nAct, short nMust )
     return false;
 }
 
-
 inline bool ScInterpreter::MustHaveParamCount( short nAct, short nMust, short nMax )
 {
     if ( nMust <= nAct && nAct <= nMax )
@@ -873,7 +868,6 @@ inline bool ScInterpreter::MustHaveParamCount( short nAct, short nMust, short nM
     return false;
 }
 
-
 inline bool ScInterpreter::MustHaveParamCountMin( short nAct, short nMin )
 {
     if ( nAct >= nMin )
@@ -881,7 +875,6 @@ inline bool ScInterpreter::MustHaveParamCountMin( short nAct, short nMin )
     PushParameterExpected();
     return false;
 }
-
 
 inline bool ScInterpreter::CheckStringResultLen( String& rResult, const String& rAdd )
 {
@@ -893,7 +886,6 @@ inline bool ScInterpreter::CheckStringResultLen( String& rResult, const String& 
     }
     return true;
 }
-
 
 inline void ScInterpreter::TreatDoubleError( double& rVal )
 {
@@ -907,7 +899,6 @@ inline void ScInterpreter::TreatDoubleError( double& rVal )
         rVal = 0.0;
     }
 }
-
 
 inline double ScInterpreter::div( const double& fNumerator, const double& fDenominator )
 {

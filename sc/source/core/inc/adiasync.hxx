@@ -38,7 +38,6 @@ extern "C" {
 void CALLTYPE ScAddInAsyncCallBack( double& nHandle, void* pData );
 }
 
-
 class ScDocument;
 class ScAddInDocs : public std::set<ScDocument*> {};
 
@@ -68,7 +67,7 @@ public:
     static ScAddInAsync*    Get( sal_uLong nHandle );
     static void     CallBack( sal_uLong nHandle, void* pData );
     static void     RemoveDocument( ScDocument* pDocument );
-    sal_Bool            IsValid() const         { return bValid; }
+    sal_Bool        IsValid() const         { return bValid; }
     ParamType       GetType() const         { return meType; }
     double          GetValue() const        { return nVal; }
     const String&   GetString() const       { return *pStr; }
@@ -88,8 +87,6 @@ struct CompareScAddInAsync
 class ScAddInAsyncs : public std::set<ScAddInAsync*, CompareScAddInAsync> {};
 
 extern ScAddInAsyncs theAddInAsyncTbl;  // in adiasync.cxx
-
-
 
 #endif
 

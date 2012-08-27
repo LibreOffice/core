@@ -79,21 +79,20 @@ public:
     const ScMatrix* GetResult() const           { return pResult.get(); }
     void            SetResult( ScMatrixRef pRes ) { pResult = pRes; }
 
-                                            // XML and Excel import after NewData()
+                    // XML and Excel import after NewData()
     ScMatrixRef     GetModifiableResult()   { return pResult; }
 
     const String&   GetAppl() const     { return aAppl; }
     const String&   GetTopic() const    { return aTopic; }
     const String&   GetItem() const     { return aItem; }
-    sal_uInt8           GetMode() const     { return nMode; }
+    sal_uInt8       GetMode() const     { return nMode; }
 
     void            TryUpdate();
 
-    sal_Bool            NeedsUpdate() const { return bNeedUpdate; }
+    sal_Bool        NeedsUpdate() const { return bNeedUpdate; }
 
-    static sal_Bool     IsInUpdate()        { return bIsInUpdate; }
+    static sal_Bool IsInUpdate()        { return bIsInUpdate; }
 };
-
 
 #endif
 
