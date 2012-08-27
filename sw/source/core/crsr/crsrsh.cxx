@@ -679,6 +679,17 @@ int SwCrsrShell::SetCrsr( const Point &rLPt, sal_Bool bOnlyText, bool bBlock )
     bool bInHeaderFooter = pFrm && ( pFrm->IsHeaderFrm() || pFrm->IsFooterFrm() );
     if ( bInHeaderFooter != IsHeaderFooterEdit() )
         ToggleHeaderFooterEdit();
+    else
+    {
+        // Make sure we have the proper Header/Footer separators shown
+        // as these may be changed if clicking on an empty Header/Footer
+        SetShowHeaderFooterSeparator( Header, pFrm != NULL && pFrm->IsHeaderFrm( ) );
+        SetShowHeaderFooterSeparator( Footer, pFrm != NULL && pFrm->IsFooterFrm( ) );
+
+        // Repaint everything
+        GetWin()->Invalidate();
+    }
+
 
     if( pBlockCrsr && bBlock )
     {

@@ -1323,23 +1323,12 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
             rSh.IsHeaderFooterEdit( ) )
     {
         bool bHeader = FRMTYPE_HEADER & rSh.GetFrmType(0,sal_False);
-
-        // Remove the temporary header/footer
-        if ( !m_sTmpHFPageStyle.isEmpty() )
-        {
-            rSh.ChangeHeaderOrFooter( m_sTmpHFPageStyle, m_bTmpHFIsHeader, false, false );
-        }
-
         if ( bHeader )
             rSh.SttPg();
         else
             rSh.EndPg();
         rSh.ToggleHeaderFooterEdit();
     }
-
-    // If we are inputing a key in a temporary header/footer, then make it definitive
-    if ( !m_sTmpHFPageStyle.isEmpty( ) )
-        m_sTmpHFPageStyle = rtl::OUString( );
 
     SfxObjectShell *pObjSh = (SfxObjectShell*)rView.GetViewFrame()->GetObjectShell();
     if ( bLockInput || (pObjSh && pObjSh->GetProgress()) )
@@ -2686,26 +2675,10 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
 
     const Point aDocPos( PixelToLogic( rMEvt.GetPosPixel() ) );
 
-    FrameControlType eControl;
-    bool bIsInHF = IsInHeaderFooter( aDocPos, eControl );
-    if ( !m_sTmpHFPageStyle.isEmpty( ) )
-    {
-        // Are we clicking outside the temporary header/footer? if so remove it
-        rtl::OUString sStyleName = rSh.GetCurPageStyle( false );
-        bool bMatchesTmpHF = sStyleName == m_sTmpHFPageStyle &&
-                        ( ( m_bTmpHFIsHeader && eControl == Header ) ||
-                          ( !m_bTmpHFIsHeader && eControl == Footer ) );
-
-        if ( ( !bIsInHF && rSh.IsHeaderFooterEdit( ) ) || !bMatchesTmpHF )
-            rSh.ChangeHeaderOrFooter( m_sTmpHFPageStyle, m_bTmpHFIsHeader, false, false );
-
-        m_sTmpHFPageStyle = rtl::OUString( );
-    }
-
     // Are we clicking on a blank header/footer area?
-    if ( bIsInHF && !rSh.IsHeaderFooterEdit( ) )
+    FrameControlType eControl;
+    if ( IsInHeaderFooter( aDocPos, eControl ) )
     {
-        // Create empty header/footer under the cursor and switch to it
         const SwPageFrm* pPageFrm = rSh.GetLayout()->GetPageAtPos( aDocPos );
 
         // Is it active?
@@ -2726,10 +2699,25 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
 
         if ( !bActive )
         {
-            const String& rStyleName = pPageFrm->GetPageDesc()->GetName();
-            rSh.ChangeHeaderOrFooter( rStyleName, eControl == Header, true, false );
-            m_sTmpHFPageStyle = rStyleName;
-            m_bTmpHFIsHeader = eControl == Header;
+            SwPaM aPam( *rSh.GetCurrentShellCursor().GetPoint() );
+            bool bWasInHeader = aPam.GetPoint( )->nNode.GetNode( ).FindHeaderStartNode( ) != NULL;
+            bool bWasInFooter = aPam.GetPoint( )->nNode.GetNode( ).FindFooterStartNode( ) != NULL;
+
+            // Is the cursor in a part like similar to the one we clicked on? For example,
+            // if the cursor is in a header and we click on an empty header... don't change anything to
+            // keep consistent behaviour due to header edit mode (and the same for the footer as well).
+            //
+            // Otherwise, we hide the header/footer control if a separator is shown, and vice versa.
+            if ( !( bWasInHeader && eControl == Header ) &&
+                 !( bWasInFooter && eControl == Footer ) )
+            {
+                rSh.SetShowHeaderFooterSeparator( eControl, !rSh.IsShowHeaderFooterSeparator( eControl ) );
+            }
+
+            // Repaint everything
+            Invalidate();
+
+            return;
         }
     }
 
@@ -4627,9 +4615,7 @@ SwEditWin::SwEditWin(Window *pParent, SwView &rMyView):
     bObjectSelect( sal_False ),
     nKS_NUMDOWN_Count(0),
     nKS_NUMINDENTINC_Count(0),
-    m_aFrameControlsManager( this ),
-    m_sTmpHFPageStyle( ),
-    m_bTmpHFIsHeader( false )
+    m_aFrameControlsManager( this )
 {
     SetHelpId(HID_EDIT_WIN);
     EnableChildTransparentMode();
@@ -4810,23 +4796,6 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
             Point aDocPos( PixelToLogic( rCEvt.GetMousePosPixel() ) );
             if ( !rCEvt.IsMouseEvent() )
                 aDocPos = rSh.GetCharRect().Center();
-
-            // Triggering a command remove temporary header/footer status
-            FrameControlType eControl;
-            bool bIsInHF = IsInHeaderFooter( aDocPos, eControl );
-            if ( !m_sTmpHFPageStyle.isEmpty( ) )
-            {
-                const rtl::OUString sStyleName = rSh.GetCurPageStyle( false );
-                bool bMatchesTmpHF = sStyleName == m_sTmpHFPageStyle &&
-                                ( ( m_bTmpHFIsHeader && eControl == Header ) ||
-                                  ( !m_bTmpHFIsHeader && eControl == Footer ) );
-
-                // Are we clicking outside the temporary header/footer? if so remove it
-                if ( ( !bIsInHF && rSh.IsHeaderFooterEdit( ) ) || !bMatchesTmpHF )
-                    rSh.ChangeHeaderOrFooter( m_sTmpHFPageStyle, m_bTmpHFIsHeader, false, false );
-
-                m_sTmpHFPageStyle = rtl::OUString( );
-            }
 
             if (rCEvt.IsMouseEvent() && lcl_CheckHeaderFooterClick( rSh, aDocPos, 1 ) )
                 return;
