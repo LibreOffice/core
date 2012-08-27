@@ -146,7 +146,6 @@
 #define RID_SVXPAGE_INET_SEARCH             (RID_SVX_START + 160)
 #define RID_SVXPAGE_INET_PROXY              (RID_SVX_START + 157)
 #define RID_SVXPAGE_INET_MAIL               (RID_SVX_START + 155)
-#define RID_SVXPAGE_INET_MOZPLUGIN          (RID_SVX_START + 2161)
 #define RID_OFAPAGE_HTMLOPT             (RID_OFA_START + 100)
 #define OFA_TP_LANGUAGES                (RID_OFA_START + 205)
 #define OFA_TP_MISC                     (RID_OFA_START + 200)
