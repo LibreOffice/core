@@ -79,6 +79,40 @@ public class TestUtil {
     }
 
     /**
+     * Generate a font size number in limited range
+     * @param max  The font size in Excel2003 is [1,409]
+     * @return
+     * @throws Exception
+     */
+    public static double randFontSize(int max) throws Exception {
+        double basic = random.nextInt(max * 2);
+        double size = 1;
+        if (basic < 2) {
+            size = 1;
+        }
+        else {
+            size = basic / 2;
+        }
+
+        return size;
+    }
+
+    /**
+     * Generate a series of font size number
+     * @param listSize
+     * @param max
+     * @return
+     * @throws Exception
+     */
+    public static double[] randFontSizeList(int listSize, int max) throws Exception {
+        double[] sizeList = new double[listSize];
+        for (int i =0; i < listSize; i++) {
+            sizeList[i] = randFontSize(max);
+        }
+        return sizeList;
+    }
+
+    /**
      * Generate a random decimal RGB color number
      * @return
      * @throws Exception
