@@ -81,9 +81,12 @@ void CBaseReader::Initialize( const std::string& ContentName)
         if (m_ZipContent.empty())
             m_ZipFile.GetUncompressedContent( ContentName, m_ZipContent );
 
-        xml_parser parser;
-        parser.set_document_handler(this);  // pass current reader as reader to the sax parser
-        parser.parse(&m_ZipContent[0], m_ZipContent.size());
+        if (!m_ZipContent.empty())
+        {
+            xml_parser parser;
+            parser.set_document_handler(this);  // pass current reader as reader to the sax parser
+            parser.parse(&m_ZipContent[0], m_ZipContent.size());
+        }
     }
     catch(std::exception&
     #if OSL_DEBUG_LEVEL > 0

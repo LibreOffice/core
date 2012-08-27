@@ -261,6 +261,8 @@ static bool areHeadersConsistent(const LocalFileHeader &header, const CentralDir
 
 static bool findCentralDirectoryEnd(StreamInterface *stream)
 {
+    if (!stream)
+        return false;
     stream->sseek(0, SEEK_SET);
     try
     {
@@ -483,7 +485,7 @@ void ZipFile::GetUncompressedContent(
             ContentBuffer.clear();
             return;
         }
-		(void)inflateEnd(&strm);
+        (void)inflateEnd(&strm);
     }
 }
 
