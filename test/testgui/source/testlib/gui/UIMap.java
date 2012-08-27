@@ -462,6 +462,10 @@ public class UIMap {
     public static final VclButton SlideAutoAfter = button("SD_HID_SD_SLIDETRANSITIONPANE_RB_ADVANCE_AUTO");
     public static final VclButton ApplyToAllSlides = button("SD_HID_SD_SLIDETRANSITIONPANE_PB_APPLY_TO_ALL");
 
+    //Spreadsheet: Standard Filter Dialog
+    public static final VclComboBox FilterValue1 = combobox("sc:ComboBox:RID_SCDLG_FILTER:ED_VAL1");
+    public static final VclDialog StandardFilterDlg = dialog(".uno:DataFilterStandardFilter");
+
 
 
 
