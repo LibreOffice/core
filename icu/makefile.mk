@@ -49,6 +49,7 @@ TARFILE_ROOTDIR=icu
 #http://bugs.icu-project.org/trac/ticket/8198 rendering with 0D30 and 0D31
 
 PATCH_FILES=\
+    icu4c-bsd.patch \
     icu4c-build.patch \
     icu4c.8320.freeserif.crash.patch \
     icu4c.8198.revert.icu5431.patch \
