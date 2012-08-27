@@ -136,6 +136,9 @@ $(call gb_Helper_abbreviate_dirs,\
 		mkdir -p $(sort $(dir $(UNPACKED_DESTFILES))) && \
 		$(call gb_UnpackedTarball__copy_files,$(UNPACKED_FILES),$(UNPACKED_DESTFILES)) && \
 	) \
+	$(if $(UNPACKED_SUBDIRS),\
+		cp -rf $(UNPACKED_SUBDIRS) $(gb_EXTERNAL_HEADERS_DIR) && \
+	) \
 	$(if $(UNPACKED_POST_ACTION),\
 		$(UNPACKED_POST_ACTION) && \
 	) \
@@ -160,6 +163,7 @@ $(call gb_UnpackedTarball_get_clean_target,%) :
 			$(call gb_UnpackedTarball_get_target,$*) \
 			$(call gb_UnpackedTarball_get_preparation_target,$*) \
 			$(call gb_UnpackedTarball_get_dir,$*) \
+			$(foreach subdir,$(UNPACKED_SUBDIRS),$(gb_EXTERNAL_HEADERS_DIR)/$(subdir)) \
 	)
 
 define gb_UnpackedTarball__get_makefile
@@ -175,6 +179,8 @@ $(call gb_UnpackedTarball_get_target,$(1)) : UNPACKED_FIX_EOL :=
 $(call gb_UnpackedTarball_get_target,$(1)) : UNPACKED_PATCHES :=
 $(call gb_UnpackedTarball_get_target,$(1)) : UNPACKED_PATCHLEVEL := $(gb_UnpackedTarball_PATCHLEVEL_DEFAULT)
 $(call gb_UnpackedTarball_get_target,$(1)) : UNPACKED_POST_ACTION :=
+$(call gb_UnpackedTarball_get_target,$(1)) : UNPACKED_SUBDIRS :=
+$(call gb_UnpackedTarball_get_clean_target,$(1)) : UNPACKED_SUBDIRS :=
 
 $(call gb_UnpackedTarball_get_preparation_target,$(1)) : $(call gb_UnpackedTarball__get_makefile)
 $(call gb_UnpackedTarball_get_preparation_target,$(1)) :| $(dir $(call gb_UnpackedTarball_get_target,$(1))).dir
@@ -261,6 +267,19 @@ endef
 # gb_UnpackedTarball_add_files unpacked subdir file(s)
 define gb_UnpackedTarball_add_files
 $(foreach file,$(3),$(call gb_UnpackedTarball_add_file,$(1),$(2)/$(notdir $(file)),$(file)))
+
+endef
+
+# Copy header files from the unpacked subdir(s) to solver
+#
+# Used for boost.
+# For other external headers, include path is added in RepositoryExternal.mk
+#
+# gb_UnpackedTarball_copy_header_files unpacked subdir(s)
+define gb_UnpackedTarball_copy_header_files
+$(call gb_UnpackedTarball_get_target,$(1)) :| $(gb_EXTERNAL_HEADERS_DIR)/.dir
+$(call gb_UnpackedTarball_get_target,$(1)) : UNPACKED_SUBDIRS := $(2)
+$(call gb_UnpackedTarball_get_clean_target,$(1)) : UNPACKED_SUBDIRS := $(2)
 
 endef
 
