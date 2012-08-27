@@ -7,9 +7,9 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_UnpackedTarball_UnpackedTarball,hsqldb))
-
 include $(SRCDIR)/hsqldb/version.mk
+
+$(eval $(call gb_UnpackedTarball_UnpackedTarball,hsqldb))
 
 $(eval $(call gb_UnpackedTarball_set_tarball,hsqldb,17410483b5b5f267aa18b7e00b65e6e0-hsqldb_$(HSQLDB_VERSION).zip))
 
