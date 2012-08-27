@@ -116,13 +116,11 @@ struct BasicManagerImpl
     SvMemoryStream*  mpManagerStream;
     SvMemoryStream** mppLibStreams;
     sal_Int32        mnLibStreamCount;
-    sal_Bool         mbError;
 
     BasicManagerImpl( void )
         : mpManagerStream( NULL )
         , mppLibStreams( NULL )
         , mnLibStreamCount( 0 )
-        , mbError( sal_False )
     {}
     ~BasicManagerImpl();
 };
@@ -659,8 +657,6 @@ BasicManager::BasicManager( SotStorage& rStorage, const String& rBaseURL, StarBA
                 *static_cast<SvStream*>(&xBasicStream) >> *( mpImpl->mppLibStreams[nL] );
             }
         }
-        else
-            mpImpl->mbError = sal_True;
     }
     else
     {
