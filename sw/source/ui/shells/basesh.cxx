@@ -1585,7 +1585,6 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
                             (eSet == FLY_AS_CHAR));
                     if(nWhich != FN_TOOL_ANCHOR)
                     {
-                        sal_uInt16 nHtmlMode = ::GetHtmlMode(GetView().GetDocShell());
                         if( nWhich == FN_TOOL_ANCHOR_FRAME && !rSh.IsFlyInFly() )
                             rSet.DisableItem(nWhich);
                         else
