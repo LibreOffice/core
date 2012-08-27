@@ -8234,12 +8234,12 @@ You can use --with-system-icu-for-build=force to use it anyway.])
         if test -z "$SYSTEM_GENCMN"; then
             AC_MSG_ERROR([\'gencmn\' not found in \$PATH, install the icu development tool \'gencmn\'])
         fi
-        if test "$ICU_MAJOR" -ge "5" -o "$ICU_MAJOR" = "4" -a "$ICU_MINOR" -ge "4"; then
+        if test "$ICU_MAJOR" -ge "49" -o \( "$ICU_MAJOR" = "4" -a "$ICU_MINOR" -ge "4" \); then
             ICU_RECLASSIFIED_CLOSE_PARENTHESIS="YES"
         else
             ICU_RECLASSIFIED_CLOSE_PARENTHESIS="NO"
         fi
-        if test "$ICU_MAJOR" -ge "5" -o "$ICU_MAJOR" = "4" -a "$ICU_MINOR" -ge "9"; then
+        if test "$ICU_MAJOR" -ge "49"; then
             ICU_RECLASSIFIED_PREPEND_SET_EMPTY="YES"
         else
             ICU_RECLASSIFIED_PREPEND_SET_EMPTY="NO"
