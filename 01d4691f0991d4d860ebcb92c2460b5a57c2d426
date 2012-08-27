@@ -19,6 +19,40 @@
     },
     {
       "key": {
+        "uuid": "AAAAN3///vQ\u003d",
+        "filename": "sc/source/core/inc/adiasync.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1000030
+      },
+      "writtenOn": "2012-08-27T15:15:26Z",
+      "side": 1,
+      "message": "This extra indentation came from a previous replacement of BOOL with sal_Bool. The correct \"fix\" for this is to replace sal_Bool with bool (all lowercase) which should also take care of the inconsistent indentation issue.",
+      "revId": "01d4691f0991d4d860ebcb92c2460b5a57c2d426",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAN3///vM\u003d",
+        "filename": "sc/source/core/inc/ddelink.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1000030
+      },
+      "writtenOn": "2012-08-27T15:15:26Z",
+      "side": 1,
+      "message": "Let\u0027s change sal_Bool to bool here also while we are at it.",
+      "revId": "01d4691f0991d4d860ebcb92c2460b5a57c2d426",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAN3///wA\u003d",
         "filename": "sc/source/core/inc/interpre.hxx",
         "patchSetId": 1
@@ -30,6 +64,23 @@
       "writtenOn": "2012-08-27T12:28:18Z",
       "side": 1,
       "message": "are these lines needed?",
+      "revId": "01d4691f0991d4d860ebcb92c2460b5a57c2d426",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAN3///vI\u003d",
+        "filename": "sc/source/core/inc/interpre.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 165,
+      "author": {
+        "id": 1000030
+      },
+      "writtenOn": "2012-08-27T15:15:26Z",
+      "side": 1,
+      "message": "We can remove it.",
       "revId": "01d4691f0991d4d860ebcb92c2460b5a57c2d426",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
