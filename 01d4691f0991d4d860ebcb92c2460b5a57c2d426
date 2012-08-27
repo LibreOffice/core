@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAN3///v8\u003d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-27T12:28:18Z",
+      "side": 1,
+      "message": "This paragraph needs to be removed before the code is integrated into the codebase.",
+      "revId": "01d4691f0991d4d860ebcb92c2460b5a57c2d426",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAN3///wA\u003d",
+        "filename": "sc/source/core/inc/interpre.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 165,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-27T12:28:18Z",
+      "side": 1,
+      "message": "are these lines needed?",
+      "revId": "01d4691f0991d4d860ebcb92c2460b5a57c2d426",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
