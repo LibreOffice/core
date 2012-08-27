@@ -115,7 +115,7 @@
     </target>
 
     <target name="clean" description="Clean all output">
-        <delete dir="${out}" />
+        <delete dir="${env.INPATH}" />
     </target>
 
     <target name="check.junit">
@@ -245,13 +245,14 @@
                 <path refid="uno.classpath"/>
             </classpath>
         </junit>
-
+        <property file="${openoffice.home}/program/versionrc" prefix="openoffice"/>
+        <property file="${openoffice.home}/program/version.ini" prefix="openoffice"/>
         <junitreport todir="${test.report}">
             <fileset dir="${test.result}">
                 <include name="TEST-*.xml" />
             </fileset>
             <report format="frames" styledir="${junit.style.dir}" todir="${test.report}">
-                <param name="TITLE" expression="GUI Test Result" />
+                <param name="TITLE" expression="Test Build: AOO${openoffice.buildid}.r${openoffice.Revision}, OS: ${os.name}-${os.version}-${os.arch}"/>
             </report>
         </junitreport>
         <property name="test.report.index" location="${test.report}/index.html" />

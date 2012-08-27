@@ -643,10 +643,6 @@ h6 {
                     </td>
                     <td><xsl:value-of select="$insamepackage/@timestamp"/></td>
                     <td><xsl:value-of select="$insamepackage/@hostname"/></td>
-
-					<!-- Added by VclAuto -->
-        <td><xsl:value-of select="properties/property[@name='version.buildid']/@value"/></td>
-        <td><xsl:value-of select="properties/property[@name='os.name']/@value"/>-<xsl:value-of select="properties/property[@name='os.version']/@value"/>-<xsl:value-of select="properties/property[@name='os.arch']/@value"/></td>
                 </tr>
             </xsl:for-each>
         </table>
@@ -737,9 +733,6 @@ h6 {
         <th nowrap="nowrap">Time(s)</th>
         <th nowrap="nowrap">Time Stamp</th>
         <th>Host</th>
-         <!-- Added by Vclauto -->
-        <th nowrap="nowrap">Product</th>
-        <th nowrap="nowrap">Env</th>
     </tr>
 </xsl:template>
 
@@ -754,7 +747,7 @@ h6 {
         <th>Status</th>
         <th width="80%">Type</th>
         <th nowrap="nowrap">Time(s)</th>
-        <!-- Added by Vclauto -->
+        <!-- Added by AOO -->
         <th>Screenshot</th>
         
     </tr>
@@ -799,9 +792,6 @@ h6 {
         </td>
         <td><xsl:apply-templates select="@timestamp"/></td>
         <td><xsl:apply-templates select="@hostname"/></td>
-        <!-- Added by VclAuto -->
-        <td><xsl:value-of select="properties/property[@name='version.buildid']/@value"/></td>
-        <td><xsl:value-of select="properties/property[@name='os.name']/@value"/>-<xsl:value-of select="properties/property[@name='os.version']/@value"/>-<xsl:value-of select="properties/property[@name='os.arch']/@value"/></td>
     </tr>
 </xsl:template>
 
@@ -852,7 +842,7 @@ h6 {
             </xsl:call-template>
         </td>
 
-		<!-- Added by VclAuto -->
+		<!-- Added by AOO -->
 		<td>
 			<xsl:variable name="screenshot.dir">
 				<xsl:if test="not(boolean($show.class))">../../screenshot</xsl:if>
