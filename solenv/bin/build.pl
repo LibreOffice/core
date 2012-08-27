@@ -2017,7 +2017,10 @@ sub run_job {
         if (!-d $log_dir) {
              system("$perl $mkout");
         };
-        $error_code = system ("$job_to_do 2>&1 | tee $log_file");
+        $error_code = system ("$job_to_do > $log_file 2>&1");
+        if (!$grab_output && -f $log_file) {
+            system("cat $log_file");
+        };
     } else {
         $error_code = system ("$job_to_do");
     };
