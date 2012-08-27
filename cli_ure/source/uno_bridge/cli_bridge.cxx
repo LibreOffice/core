@@ -31,7 +31,6 @@
 
 #include "cli_bridge.h"
 #include "cli_proxy.h"
-#using <mscorlib.dll>
 #if defined(_MSC_VER) && (_MSC_VER < 1400)
 #include <_vcclrit.h>
 #endif
@@ -85,7 +84,7 @@ void SAL_CALL Mapping_cli2uno(
 
         if (0 != cliI)
         {
-            System::Object* cliObj= sri::GCHandle::op_Explicit(cliI).Target;
+            System::Object^ cliObj= sri::GCHandle::FromIntPtr(IntPtr(cliI)).Target;
             (*ppOut)= bridge->map_cli2uno(cliObj, (typelib_TypeDescription*) td);
         }
     }
@@ -130,16 +129,16 @@ void SAL_CALL Mapping_uno2cli(
 
         if (0 != *ppDNetI)
         {
-            sri::GCHandle::op_Explicit(ppDNetI).Free();
+            sri::GCHandle::FromIntPtr(IntPtr(ppDNetI)).Free();
         }
 
         if (0 != pUnoI)
         {
-            System::Object* cliI=  bridge->map_uno2cli(pUnoI, td);
+            System::Object^ cliI=  bridge->map_uno2cli(pUnoI, td);
             intptr_t ptr= NULL;
             if(cliI)
             {
-                ptr= sri::GCHandle::op_Explicit(sri::GCHandle::Alloc(cliI))
+                ptr= sri::GCHandle::ToIntPtr(sri::GCHandle::Alloc(cliI))
 #ifdef _WIN32
                     .ToInt32();
 #else /* defined(_WIN64) */                 .ToInt64();
@@ -288,7 +287,7 @@ SAL_DLLPUBLIC_EXPORT void SAL_CALL uno_initEnvironment( uno_Environment * uno_cl
     //where g_cli_env is accessed.
     //When we compile the bridge with .NET 2 then we can again hold g_cli_env as a static gcroot
     //member in a unmanaged class, such as Bridge.
-    CliEnvHolder::g_cli_env = new Cli_environment();
+    CliEnvHolder::g_cli_env = gcnew Cli_environment();
 }
 //##################################################################################################
 SAL_DLLPUBLIC_EXPORT void SAL_CALL uno_ext_getMapping(
