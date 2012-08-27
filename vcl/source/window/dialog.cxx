@@ -1222,7 +1222,7 @@ IMPL_LINK( Dialog, ImplHandleLayoutTimerHdl, void*, EMPTYARG )
     return 0;
 }
 
-void Dialog::Resize()
+void Dialog::queue_layout()
 {
     if (hasPendingLayout())
         return;
@@ -1231,6 +1231,11 @@ void Dialog::Resize()
     if (!isLayoutEnabled())
         return;
     maLayoutTimer.Start();
+}
+
+void Dialog::Resize()
+{
+    queue_layout();
 }
 
 bool Dialog::set_property(const rtl::OString &rKey, const rtl::OString &rValue)

@@ -100,6 +100,7 @@ public:
     virtual void    Resize();
     bool            isLayoutEnabled() const;
     void            setInitialLayoutSize();
+    void            queue_layout();
     virtual bool set_property(const rtl::OString &rKey, const rtl::OString &rValue);
 
     virtual sal_Bool    Close();
