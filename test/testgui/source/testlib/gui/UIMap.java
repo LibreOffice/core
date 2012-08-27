@@ -450,6 +450,17 @@ public class UIMap {
     public static final VclEditBox ObjectFilePath = editbox("cui:Edit:MD_INSERT_OLEOBJECT:ED_FILEPATH");
     public static final VclButton ObjectFileSearch = button("cui:PushButton:MD_INSERT_OLEOBJECT:BTN_FILEPATH");
     public static final VclButton ObjectFileLink = button("cui:CheckBox:MD_INSERT_OLEOBJECT:CB_FILELINK");
+    public static final VclField NumberofCol = field("cui:NumericField:RID_SVX_NEWTABLE_DLG:NF_COLUMNS");
+
+    //Presentation: Insert Table
+    public static final VclField NumberofRow = field("cui:NumericField:RID_SVX_NEWTABLE_DLG:NF_ROWS");
+    public static final VclDialog InsertSlideObjects = dialog("SD_HID_DLG_INSERT_PAGES_OBJS");
+
+    //Presentation: Slide Transition Settings
+    public static final VclListBox ImpressSlideTransitions = listbox("SD_HID_SD_SLIDETRANSITIONPANE_LB_SLIDE_TRANSITIONS");
+    public static final VclListBox SlideShowSpeed = listbox("SD_HID_SD_SLIDETRANSITIONPANE_LB_SPEED");
+    public static final VclButton SlideAutoAfter = button("SD_HID_SD_SLIDETRANSITIONPANE_RB_ADVANCE_AUTO");
+    public static final VclButton ApplyToAllSlides = button("SD_HID_SD_SLIDETRANSITIONPANE_PB_APPLY_TO_ALL");
 
 
 
