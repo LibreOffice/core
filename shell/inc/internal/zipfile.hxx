@@ -162,7 +162,6 @@ private:
 private:
     StreamInterface *m_pStream;
     bool m_bShouldFree;
-    long m_iStartOffset;
 };
 
 #endif
