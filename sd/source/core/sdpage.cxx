@@ -1214,7 +1214,7 @@ static void CalcAutoLayoutRectangles( SdPage& rPage, int nLayout, Rectangle* rRe
         rRectangle[2] = Rectangle (aLayoutPos, aLayoutSize);
 
         if( bRightToLeft && (nLayout != 9) )
-            ::std::swap< Rectangle >( rRectangle[1], rRectangle[2] );
+            ::std::swap( rRectangle[1], rRectangle[2] );
         break;
     case 2: // title, shape, 2 shapes
         aTempPnt = aLayoutPos;
@@ -1234,7 +1234,7 @@ static void CalcAutoLayoutRectangles( SdPage& rPage, int nLayout, Rectangle* rRe
 
         if( bRightToLeft )
         {
-            ::std::swap< long >( rRectangle[1].Left(), rRectangle[2].Left() );
+            ::std::swap( rRectangle[1].Left(), rRectangle[2].Left() );
             rRectangle[3].Left() = rRectangle[2].Left();
         }
         break;
@@ -1256,7 +1256,7 @@ static void CalcAutoLayoutRectangles( SdPage& rPage, int nLayout, Rectangle* rRe
 
         if( bRightToLeft )
         {
-            ::std::swap< long >( rRectangle[1].Left(), rRectangle[2].Left() );
+            ::std::swap( rRectangle[1].Left(), rRectangle[2].Left() );
             rRectangle[3].Left() = rRectangle[2].Left();
         }
         break;
