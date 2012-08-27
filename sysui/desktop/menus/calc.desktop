@@ -9,6 +9,7 @@ MimeType=application/vnd.oasis.opendocument.spreadsheet;application/vnd.oasis.op
 Name=%PRODUCTNAME Calc
 GenericName=Spreadsheet
 Comment=Perform calculations, analyze information and manage lists in spreadsheets by using Calc.
+Keywords=Accounting;Stats;Chart;ods;xls;xlsx;
 InitialPreference=5
 X-Ayatana-Desktop-Shortcuts=X-New
 [X-New Shortcut Group]

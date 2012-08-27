@@ -9,6 +9,7 @@ MimeType=application/vnd.oasis.opendocument.database;application/vnd.sun.xml.bas
 Name=%PRODUCTNAME Base
 GenericName=Database Development
 Comment=Manage databases, create queries and reports to track and manage your information by using Base.
+Keywords=Data;SQL;
 InitialPreference=5
 X-Ayatana-Desktop-Shortcuts=X-New
 [X-New Shortcut Group]

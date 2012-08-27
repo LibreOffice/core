@@ -9,6 +9,7 @@ MimeType=application/vnd.oasis.opendocument.graphics;application/vnd.oasis.opend
 Name=%PRODUCTNAME Draw
 GenericName=Drawing Program
 Comment=Create and edit drawings, flow charts, and logos by using Draw.
+Keywords=Vector;Schema;Diagram;odg;
 InitialPreference=5
 X-Ayatana-Desktop-Shortcuts=X-New
 [X-New Shortcut Group]

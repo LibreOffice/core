@@ -9,6 +9,7 @@ MimeType=application/vnd.oasis.opendocument.text;application/vnd.oasis.opendocum
 Name=%PRODUCTNAME Writer
 GenericName=Word Processor
 Comment=Create and edit text and graphics in letters, reports, documents and Web pages by using Writer.
+Keywords=Text;Letter;CV;odt;doc;docx;
 InitialPreference=5
 X-Ayatana-Desktop-Shortcuts=X-New
 [X-New Shortcut Group]
