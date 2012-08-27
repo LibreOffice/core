@@ -31,6 +31,7 @@ import org.openoffice.test.uno.UnoApp;
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.container.XIndexAccess;
+import com.sun.star.container.XNamed;
 import com.sun.star.frame.XController;
 import com.sun.star.frame.XModel;
 import com.sun.star.frame.XStorable;
@@ -106,6 +107,50 @@ public class SCUtil {
                 (XSpreadsheet) UnoRuntime.queryInterface(XSpreadsheet.class, xIndexAccess.getByIndex(index));
 
         return xSpreadsheet;
+    }
+
+    /**
+     * Get sheet name by sheet index
+     *
+     * @param xSpreadsheetDocument
+     * @param index
+     *            (Short) 0,1,2,...
+     * @return
+     * @throws Exception
+     */
+    public static String getSCSheetNameByIndex(
+            XSpreadsheetDocument xSpreadsheetDocument, short index)
+            throws Exception {
+        XSpreadsheets xSpreadsheets = xSpreadsheetDocument.getSheets();
+        XIndexAccess xIndexAccess = (XIndexAccess) UnoRuntime.queryInterface(
+                XIndexAccess.class, xSpreadsheets);
+        XSpreadsheet xSpreadsheet = (XSpreadsheet) UnoRuntime.queryInterface(
+                XSpreadsheet.class, xIndexAccess.getByIndex(index));
+        XNamed xsheetname = (XNamed) UnoRuntime.queryInterface(XNamed.class,
+                xSpreadsheet);
+        return xsheetname.getName();
+    }
+
+    /**
+     * Set sheet name by sheet index
+     *
+     * @param xSpreadsheetDocument
+     * @param index
+     *            (Short) 0,1,2,...
+     * @return
+     * @throws Exception
+     */
+    public static void setSCSheetNameByIndex(
+            XSpreadsheetDocument xSpreadsheetDocument, short index,
+            String sheetname) throws Exception {
+        XSpreadsheets xSpreadsheets = xSpreadsheetDocument.getSheets();
+        XIndexAccess xIndexAccess = (XIndexAccess) UnoRuntime.queryInterface(
+                XIndexAccess.class, xSpreadsheets);
+        XSpreadsheet xSpreadsheet = (XSpreadsheet) UnoRuntime.queryInterface(
+                XSpreadsheet.class, xIndexAccess.getByIndex(index));
+        XNamed xsheetname = (XNamed) UnoRuntime.queryInterface(XNamed.class,
+                xSpreadsheet);
+        xsheetname.setName(sheetname);
     }
 
     /**
@@ -358,6 +403,26 @@ public class SCUtil {
     }
 
     /**
+     * Get sheet object by sheet index
+     *
+     * @param xSpreadsheetDocument
+     * @return
+     * @throws Exception
+     */
+    public static String getSCActiveSheetName(
+            XSpreadsheetDocument xSpreadsheetDocument) throws Exception {
+        XModel xSpreadsheetModel = (XModel) UnoRuntime.queryInterface(
+                XModel.class, xSpreadsheetDocument);
+        XSpreadsheetView xSpeadsheetView = (XSpreadsheetView) UnoRuntime
+                .queryInterface(XSpreadsheetView.class,
+                        xSpreadsheetModel.getCurrentController());
+        XSpreadsheet activesheet = xSpeadsheetView.getActiveSheet();
+        XNamed activesheetName = (XNamed) UnoRuntime.queryInterface(
+                XNamed.class, activesheet);
+        return activesheetName.getName();
+    }
+
+    /**
      * Set value of specific property from a cell
      * @param xCell
      * @param propName
@@ -416,6 +481,22 @@ public class SCUtil {
                 (XStorable) UnoRuntime.queryInterface(XStorable.class, scComponent);
         scStorable.storeAsURL(storeUrl, storeProps);
     }
+
+    /**
+     * Save file after open file.
+     *
+     * @param xSpreadsheetDocument
+     * @throws Exception
+     */
+    public static void save(XSpreadsheetDocument xSpreadsheetDocument)
+            throws Exception {
+
+        XStorable scStorable = (XStorable) UnoRuntime.queryInterface(
+                XStorable.class, xSpreadsheetDocument);
+        scStorable.store();
+
+    }
+
 
     /**
      * Close specific opening spreadsheet file which has been saved
