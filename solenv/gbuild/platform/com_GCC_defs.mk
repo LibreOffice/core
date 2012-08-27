@@ -57,6 +57,12 @@ gb_COMPILERDEFS := \
 	-DCPPU_ENV=gcc3 \
 	-DGXX_INCLUDE_PATH=$(GXX_INCLUDE_PATH) \
 
+ifeq ($(HAVE_GCC_BUILTIN_ATOMIC),TRUE)
+gb_COMPILERDEFS += \
+    -DHAVE_GCC_BUILTIN_ATOMIC \
+
+endif
+
 gb_CFLAGS_COMMON := \
 	-Wall \
 	-Wendif-labels \
