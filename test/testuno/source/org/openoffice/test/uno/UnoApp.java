@@ -60,7 +60,7 @@ public class UnoApp {
 
     private double reconnectInterval = 2;
 
-    private int reconnectCount = 5;
+    private int reconnectCount = 10;
 
     public UnoApp() {
         this.openOffice = OpenOffice.getDefault();
