@@ -40,6 +40,9 @@ $(eval $(call gb_Library_set_include,sal,\
 ))
 
 $(eval $(call gb_Library_add_defs,sal,\
+	$(if $(filter $(HAVE_GCC_BUILTIN_ATOMIC),TRUE), \
+		-DHAVE_GCC_BUILTIN_ATOMIC \
+	) \
 	$(if $(VALGRIND_CFLAGS), \
 		$(VALGRIND_CFLAGS) \
 		-DHAVE_MEMCHECK_H=1 \
