@@ -38,6 +38,7 @@
 
 #include <platform.h>
 #include <cppuhelper/interfacecontainer.h>
+#include <comphelper/componentcontext.hxx>
 #include <comphelper/mimeconfighelper.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <osl/file.hxx>
