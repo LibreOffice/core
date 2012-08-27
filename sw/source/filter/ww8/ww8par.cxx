@@ -3897,7 +3897,7 @@ void wwSectionManager::InsertSegments()
 
         bool bInsertSection = (aIter != aStart) ? (aIter->IsContinous() &&  bThisAndPreviousAreCompatible): false;
         bool bInsertPageDesc = !bInsertSection;
-        bool bProtected = SectionIsProtected(*aIter); // do we really  need this ?? I guess I have a different logic in editshell which disales this...
+        bool bProtected = SectionIsProtected(*aIter); // do we really  need this ?? I guess I have a different logic in editshell which disables this...
         if (bUseEnhFields && mrReader.pWDop->fProtEnabled && aIter->IsNotProtected())
         {
             // here we have the special case that the whole document is protected, with the execption of this section.
