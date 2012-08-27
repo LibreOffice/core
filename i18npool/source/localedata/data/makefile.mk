@@ -175,6 +175,7 @@ SHL3OBJS=	\
     $(SLO)$/localedata_fur_IT.obj	\
     $(SLO)$/localedata_fy_NL.obj	\
     $(SLO)$/localedata_ga_IE.obj	\
+    $(SLO)$/localedata_gd_GB.obj	\
     $(SLO)$/localedata_gsc_FR.obj	\
     $(SLO)$/localedata_hr_HR.obj	\
     $(SLO)$/localedata_hsb_DE.obj	\
