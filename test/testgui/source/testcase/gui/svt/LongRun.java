@@ -19,12 +19,30 @@
  *
  *************************************************************/
 
-package testcase.gui;
-import static org.openoffice.test.common.Testspace.*;
-import static org.junit.Assert.*;
-import static org.openoffice.test.vcl.Tester.*;
-import static testlib.gui.AppUtil.*;
-import static testlib.gui.UIMap.*;
+package testcase.gui.svt;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.openoffice.test.common.Testspace.getPath;
+import static org.openoffice.test.common.Testspace.prepareData;
+import static org.openoffice.test.vcl.Tester.sleep;
+import static org.openoffice.test.vcl.Tester.typeText;
+import static testlib.gui.AppUtil.submitOpenDlg;
+import static testlib.gui.AppUtil.submitSaveDlg;
+import static testlib.gui.AppUtil.typeKeys;
+import static testlib.gui.UIMap.AlienFormatDlg;
+import static testlib.gui.UIMap.EffectsPage;
+import static testlib.gui.UIMap.EffectsPage_Color;
+import static testlib.gui.UIMap.PresentationWizard;
+import static testlib.gui.UIMap.app;
+import static testlib.gui.UIMap.calc;
+import static testlib.gui.UIMap.draw;
+import static testlib.gui.UIMap.impress;
+import static testlib.gui.UIMap.math_EditWindow;
+import static testlib.gui.UIMap.math_ElementsWindow;
+import static testlib.gui.UIMap.menuItem;
+import static testlib.gui.UIMap.startcenter;
+import static testlib.gui.UIMap.writer;
 
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
@@ -37,7 +55,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-import org.openoffice.test.OpenOffice;
 import org.openoffice.test.common.Condition;
 import org.openoffice.test.common.FileUtil;
 import org.openoffice.test.common.GraphicsUtil;
@@ -61,10 +78,9 @@ public class LongRun {
      */
     @Before
     public void setUp() throws Exception {
-        OpenOffice.killAll();
-        app.start();
+        app.start(true);
         result = new PrintStream(new FileOutputStream(Testspace.getFile("output/longrun.csv")));
-        HashMap<String, Object> proccessInfo = SystemUtil.findProcess(".*soffice\\.bin.*");
+        HashMap<String, Object> proccessInfo = SystemUtil.findProcess(".*(soffice\\.bin|soffice.*-env).*");
         pid = (String)proccessInfo.get("pid");
         result.println("Iterator,Time,Memory(KB),CPU(%)");
         LOG.info("Result will be saved to " + Testspace.getPath("output/longrun.csv"));
