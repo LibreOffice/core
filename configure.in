@@ -2221,7 +2221,7 @@ fi
 AC_SUBST(GNUTAR)
 
 AC_MSG_CHECKING([for tar's option to strip components])
-$GNUTAR --help 2> /dev/null | egrep "strip-components" 2>&1 >/dev/null
+$GNUTAR --help 2> /dev/null | egrep "bsdtar|strip-components" 2>&1 >/dev/null
 if test $? -eq 0; then
     STRIP_COMPONENTS="--strip-components"
 else
