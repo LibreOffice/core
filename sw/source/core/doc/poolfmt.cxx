@@ -1486,7 +1486,7 @@ SwPageDesc* SwDoc::GetPageDescFromPool( sal_uInt16 nId, bool bRegardLanguage )
             aSet.Put( aLR );
             aSet.Put( aUL );
             if( pNewPgDsc )
-                pNewPgDsc->SetUseOn( nsUseOnPage::PD_ALL );
+                pNewPgDsc->SetUseOn( nsUseOnPage::PD_ALL | nsUseOnPage::PD_FIRSTSHARE );
         }
         break;
 

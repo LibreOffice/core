@@ -287,6 +287,8 @@ inline void SwPageDesc::SetUseOn( UseOnPage eNew )
         eTmp = nsUseOnPage::PD_HEADERSHARE;
     if ( eUse & nsUseOnPage::PD_FOOTERSHARE )
         eTmp = (UseOnPage) (eTmp | nsUseOnPage::PD_FOOTERSHARE);
+    if ( eUse & nsUseOnPage::PD_FIRSTSHARE )
+        eTmp = (UseOnPage) (eTmp | nsUseOnPage::PD_FIRSTSHARE);
     eUse = (UseOnPage) (eTmp | eNew);
 
 }
