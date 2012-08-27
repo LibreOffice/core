@@ -60,14 +60,14 @@ static void UpdateNativeMenu( GtkSalMenu* pMenu ) {
     if ( pMenu == NULL )
         return;
 
+    Menu* pVCLMenu = pMenu->GetMenu();
+
     for ( sal_uInt16 i = 0; i < pMenu->GetItemCount(); i++ ) {
         GtkSalMenuItem *pSalMenuItem = pMenu->GetItemAtPos( i );
         sal_uInt16 nId = pSalMenuItem->mnId;
 
         if ( pSalMenuItem->mnType == MENUITEM_SEPARATOR )
             continue;
-
-        Menu* pVCLMenu = pSalMenuItem->mpVCLMenu;
 
         String aText = pVCLMenu->GetItemText( nId );
         String aCommand = pVCLMenu->GetItemCommand( nId );
@@ -169,7 +169,7 @@ rtl::OUString GetGtkKeyName( rtl::OUString keyName )
     return aGtkKeyName;
 }
 
-//GVariant* GetRadionButtonHints( GtkSalMenuItem *pSalMenuItem )
+//GVariant* GetRadioButtonHints( GtkSalMenuItem *pSalMenuItem )
 //{
 //    GVariantBuilder *pBuilder;
 //    GVariant *pHints;
@@ -216,6 +216,7 @@ rtl::OUString GetGtkKeyName( rtl::OUString keyName )
  * GtkSalMenu
  */
 
+// FIXME: Iterating through the whole list everytime is slow, but works. Some fine tuning would be required here...
 void GtkSalMenu::GetItemSectionAndPosition( unsigned nPos, unsigned *insertSection, unsigned *insertPos )
 {
     if ( mpVCLMenu == NULL || nPos >= mpVCLMenu->GetItemCount() )
@@ -398,7 +399,6 @@ void GtkSalMenu::SetFrame( const SalFrame* pFrame )
             gdk_x11_window_set_utf8_property ( gdkWindow, "_GTK_WINDOW_OBJECT_PATH", aDBusWindowPath );
             gdk_x11_window_set_utf8_property ( gdkWindow, "_GTK_MENUBAR_OBJECT_PATH", aDBusMenubarPath );
 
-
             g_free( aDBusPath );
             g_free( aDBusWindowPath );
             g_free( aDBusMenubarPath );
@@ -441,10 +441,26 @@ void GtkSalMenu::CheckItem( unsigned nPos, sal_Bool bCheck )
         return;
 
     GVariant *pCheckValue = NULL;
+    gboolean bCheckedValue = ( bCheck == sal_True ) ? TRUE : FALSE;
 
-    if ( pItem->mnBits & MIB_CHECKABLE ) {
-        gboolean bCheckedValue = ( bCheck == sal_True ) ? TRUE : FALSE;
-        pCheckValue = g_variant_new_boolean( bCheckedValue );
+    // FIXME: Why pItem->mnBits differs from GetItemBits value?
+    MenuItemBits bits = pItem->mpVCLMenu->GetItemBits( pItem->mnId );
+
+    if ( bits & MIB_CHECKABLE ) {
+        GVariant* pState = g_action_group_get_action_state( pActionGroup, pItem->maCommand );
+        gboolean bCurrentState = g_variant_get_boolean( pState );
+
+        if ( bCurrentState != bCheck )
+            pCheckValue = g_variant_new_boolean( bCheckedValue );
+    }
+    else if ( bits & MIB_RADIOCHECK )
+    {
+        GVariant* pState = g_action_group_get_action_state( pActionGroup, pItem->maCommand );
+        gchar* aCurrentState = (gchar*) g_variant_get_string( pState, NULL );
+        gboolean bCurrentState = g_strcmp0( aCurrentState, "" ) != 0;
+
+        if ( bCurrentState != bCheck )
+            pCheckValue = (bCheckedValue) ? g_variant_new_string( pItem->maCommand ) : g_variant_new_string( "" );
     }
 
     if ( pCheckValue )
@@ -533,7 +549,9 @@ void GtkSalMenu::SetItemCommand( unsigned nPos, SalMenuItem* pSalMenuItem, const
 {
     GtkSalMenuItem* pItem = static_cast< GtkSalMenuItem* >( pSalMenuItem );
 
-    if ( pItem->mnType == MENUITEM_SEPARATOR || pItem->mpVCLMenu->GetPopupMenu( pItem->mnId ) != NULL )
+    if ( pItem->mnType == MENUITEM_SEPARATOR ||
+         pItem->mpVCLMenu->GetPopupMenu( pItem->mnId ) != NULL ||
+         aCommandStr.isEmpty() )
         return;
 
     gchar* aCommand = (gchar*) rtl::OUStringToOString( aCommandStr, RTL_TEXTENCODING_UTF8 ).getStr();
@@ -542,32 +560,38 @@ void GtkSalMenu::SetItemCommand( unsigned nPos, SalMenuItem* pSalMenuItem, const
     if ( pActionGroup == NULL )
         return;
 
-    gboolean bChecked = ( pItem->mpVCLMenu->IsItemChecked( pItem->mnId ) ) ? TRUE : FALSE;
+    GVariant *pTarget = NULL;
 
-    if ( pItem->mnBits & MIB_CHECKABLE )
-    {
-        // Item is a checkmark button.
-        GVariantType* pStateType = g_variant_type_new( (gchar*) G_VARIANT_TYPE_BOOLEAN );
-        GVariant* pState = g_variant_new_boolean( bChecked );
+    if ( g_action_group_has_action( G_ACTION_GROUP( pActionGroup ), aCommand ) == FALSE ) {
+        gboolean bChecked = ( pItem->mpVCLMenu->IsItemChecked( pItem->mnId ) ) ? TRUE : FALSE;
 
-        g_lo_action_group_insert_stateful( pActionGroup, aCommand, pItem, NULL, pStateType, NULL, pState );
-    }
-//    else if ( pItem->mnBits & MIB_RADIOCHECK )
-//    {
-//        cout << "Item with command: " << aCommand << " is a radio button." << endl;
+        // FIXME: Why pItem->mnBits differs from GetItemBits value?
+        MenuItemBits bits = pItem->mpVCLMenu->GetItemBits( pItem->mnId );
 
-//        // Item is a radio button.
-////        GVariantType* pParameterType = g_variant_type_new( (gchar*) G_VARIANT_TYPE_STRING );
-////        GVariantType* pStateType = g_variant_type_new( (gchar*) G_VARIANT_TYPE_STRING );
-//        //        GVariant* pStateHint = GetRadionButtonHints( pItem );
-////        GVariant* pState = g_variant_new_string( "" );
+        if ( bits & MIB_CHECKABLE )
+        {
+            // Item is a checkmark button.
+            GVariantType* pStateType = g_variant_type_new( (gchar*) G_VARIANT_TYPE_BOOLEAN );
+            GVariant* pState = g_variant_new_boolean( bChecked );
 
-////        g_lo_action_group_insert_stateful( pActionGroup, aCommand, pItem, pParameterType, pStateType, NULL, pState );
-//    }
-    else
-    {
-        // Item is not special, so insert a stateless action.
-        g_lo_action_group_insert( pActionGroup, aCommand, pItem );
+            g_lo_action_group_insert_stateful( pActionGroup, aCommand, pItem, NULL, pStateType, NULL, pState );
+        }
+        else if ( bits & MIB_RADIOCHECK )
+        {
+            // Item is a radio button.
+            GVariantType* pParameterType = g_variant_type_new( (gchar*) G_VARIANT_TYPE_STRING );
+            GVariantType* pStateType = g_variant_type_new( (gchar*) G_VARIANT_TYPE_STRING );
+            //        GVariant* pStateHint = GetRadioButtonHints( pItem );
+            GVariant* pState = g_variant_new_string( "" );
+            pTarget = g_variant_new_string( aCommand );
+
+            g_lo_action_group_insert_stateful( pActionGroup, aCommand, pItem, pParameterType, pStateType, NULL, pState );
+        }
+        else
+        {
+            // Item is not special, so insert a stateless action.
+            g_lo_action_group_insert( pActionGroup, aCommand, pItem );
+        }
     }
 
     // Menu item is not updated unless it's necessary.
@@ -589,7 +613,7 @@ void GtkSalMenu::SetItemCommand( unsigned nPos, SalMenuItem* pSalMenuItem, const
 
     pItem->maCommand = g_strdup( aCommand );
 
-    g_lo_menu_set_action_and_target_value_to_item_in_section( G_LO_MENU( mpMenuModel ), nSection, nItemPos, aItemCommand, NULL );
+    g_lo_menu_set_action_and_target_value_to_item_in_section( G_LO_MENU( mpMenuModel ), nSection, nItemPos, aItemCommand, pTarget );
 
     g_free( aItemCommand );
 }
