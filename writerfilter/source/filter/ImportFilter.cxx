@@ -32,6 +32,7 @@
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/document/PrinterIndependentLayout.hpp>
 #include <comphelper/mediadescriptor.hxx>
 #include <oox/core/filterdetect.hxx>
 #include <dmapper/DomainMapper.hxx>
@@ -184,6 +185,7 @@ void WriterFilter::setTargetDocument( const uno::Reference< lang::XComponent >& 
 
    xSettings->setPropertyValue( rtl::OUString::createFromAscii( "UnbreakableNumberings" ), uno::makeAny( sal_True ) );
    xSettings->setPropertyValue(rtl::OUString::createFromAscii("FloattableNomargins"), uno::makeAny( sal_True ));
+   xSettings->setPropertyValue(rtl::OUString::createFromAscii("PrinterIndependentLayout"), uno::makeAny(document::PrinterIndependentLayout::DISABLED));
 }
 
 void WriterFilter::setSourceDocument( const uno::Reference< lang::XComponent >& xDoc )
