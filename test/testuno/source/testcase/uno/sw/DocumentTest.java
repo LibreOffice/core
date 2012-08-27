@@ -18,7 +18,10 @@ import com.sun.star.beans.XPropertySet;
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.frame.*;
 import com.sun.star.uno.UnoRuntime;
+import com.sun.star.util.XCloseable;
 import com.sun.star.lang.XComponent;
+import com.sun.star.container.XEnumerationAccess;
+import com.sun.star.container.XEnumeration;
 
 
 public class DocumentTest {
@@ -66,6 +69,23 @@ public class DocumentTest {
     }
 
 
+    /**
+     * test close document
+     * @throws Exception
+     */
+    @Test
+    public void testCloseDocument() throws Exception
+    {
+        XComponent component = unoApp.newDocument("swriter");
+        unoApp.closeDocument(component);
+        XModel xModel = unoApp.getDesktop().getCurrentFrame().getController().getModel();
+        Assert.assertTrue("Document has been closed.",xModel==null);
+    }
+
+    /**
+     * test new document
+     * @throws Exception
+     */
     @Test
     public void testNewDocument() throws Exception
     {
@@ -78,7 +98,10 @@ public class DocumentTest {
         unoApp.closeDocument(textDocument);
     }
 
-
+    /**
+     * test new document from template
+     * @throws Exception
+     */
     @Test
     public void testNewDocumentFromTemplate() throws Exception
     {
@@ -99,6 +122,10 @@ public class DocumentTest {
         unoApp.closeDocument(textDocument);
     }
 
+    /**
+     * test save document as odt
+     * @throws Exception
+     */
     @Test
     public void testSaveDocument() throws Exception
     {
@@ -126,6 +153,10 @@ public class DocumentTest {
         unoApp.closeDocument(textDocument);
     }
 
+    /**
+     * test save document as doc
+     * @throws Exception
+     */
     @Test
     public void testSaveAsDocument() throws Exception
     {
@@ -155,6 +186,10 @@ public class DocumentTest {
         unoApp.closeDocument(textDocument);
     }
 
+    /**
+     * test export document as pdf
+     * @throws Exception
+     */
     @Test
     public void testExportAsPDF() throws Exception
     {
@@ -184,6 +219,10 @@ public class DocumentTest {
         unoApp.closeDocument(textDocument);
     }
 
+    /**
+     * test save document as template
+     * @throws Exception
+     */
     @Test
     public void testSaveAsTemplate() throws Exception
     {

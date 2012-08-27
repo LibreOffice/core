@@ -25,16 +25,22 @@ import org.openoffice.test.uno.UnoApp;
 
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.beans.XPropertySet;
+import com.sun.star.container.XEnumeration;
+import com.sun.star.container.XEnumerationAccess;
 import com.sun.star.container.XNamed;
 import com.sun.star.document.XDocumentInfo;
 import com.sun.star.document.XDocumentInfoSupplier;
 import com.sun.star.frame.XStorable;
 import com.sun.star.io.IOException;
 import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.style.BreakType;
+import com.sun.star.text.ControlCharacter;
 import com.sun.star.text.XText;
 import com.sun.star.text.XTextContent;
 import com.sun.star.text.XTextCursor;
 import com.sun.star.text.XTextDocument;
+import com.sun.star.frame.XModel;
+import com.sun.star.frame.XController;
 import com.sun.star.uno.UnoRuntime;
 
 public class SWUtil {
@@ -133,4 +139,50 @@ public class SWUtil {
         xBookmarkAsNamed.setName(bookmarkName);
         document.getText().insertTextContent(textCursor, xBookmarkAsTextContent, true);
     }
+
+    /**
+     * insert column break in current cursor
+     * @param xText
+     * @param currentCursor
+     * @throws Exception
+     */
+    public static void insertColumnBreak(XText xText, XTextCursor currentCursor) throws Exception
+    {
+        XPropertySet xCursorProps = (XPropertySet)UnoRuntime.queryInterface(
+                XPropertySet.class, currentCursor);
+        xCursorProps.setPropertyValue("BreakType", BreakType.COLUMN_AFTER);
+        xText.insertControlCharacter(currentCursor,ControlCharacter.PARAGRAPH_BREAK,false);
+    }
+
+    /**
+     * insert page break in current cursor
+     * @param xText
+     * @param currentCursor
+     * @throws Exception
+     */
+    public static void insertPageBreak(XText xText, XTextCursor currentCursor) throws Exception
+    {
+        XPropertySet xCursorProps = (XPropertySet)UnoRuntime.queryInterface(
+                XPropertySet.class, currentCursor);
+        xCursorProps.setPropertyValue("BreakType", BreakType.PAGE_AFTER);
+        xText.insertControlCharacter(currentCursor,ControlCharacter.PARAGRAPH_BREAK,false);
+    }
+
+
+    /**
+     * get page count
+     * @param document
+     * @return
+     * @throws Exception
+     */
+    public static int getPageCount(XTextDocument document) throws Exception
+    {
+        XModel xmodel = (XModel)UnoRuntime.queryInterface(XModel.class, document);
+        XController xcont = xmodel.getCurrentController();
+
+        XPropertySet xps = (XPropertySet)UnoRuntime.queryInterface(XPropertySet.class, xcont);
+        Integer pageCount = (Integer) xps.getPropertyValue("PageCount");
+        return pageCount.intValue();
+    }
+
 }
