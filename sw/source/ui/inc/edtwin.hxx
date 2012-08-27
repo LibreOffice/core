@@ -154,8 +154,6 @@ friend void     PageNumNotify(  ViewShell* pVwSh,
     sal_uInt16          nKS_NUMINDENTINC_Count;
 
     SwFrameControlsManager m_aFrameControlsManager;
-    rtl::OUString   m_sTmpHFPageStyle;
-    bool            m_bTmpHFIsHeader;
 
     void            LeaveArea(const Point &);
     void            JustifyAreaTimer();
