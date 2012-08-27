@@ -1315,9 +1315,6 @@ void PDFWriterImpl::padPassword( const rtl::OUString& i_rPassword, sal_uInt8* o_
     sal_Int32 i,y;
     for( i = nCurrentChar, y = 0 ; i < ENCRYPTED_PWD_SIZE; i++, y++ )
         o_pPaddedPW[i] = s_nPadString[y];
-
-    // trash memory of temporary clear text password
-    memset( (sal_Char*)aString.getStr(), 0, aString.getLength() );
 }
 
 /**********************************

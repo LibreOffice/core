@@ -1317,10 +1317,6 @@ IMPL_LINK_NOARG(ImpPDFTabSecurityPage, ClickmaPbSetPwdHdl)
         }
         else
             maPreparedOwnerPassword = Sequence< NamedValue >();
-
-        // trash clear text passwords string memory
-        memset( (void*)aUserPW.getStr(), 0, aUserPW.getLength() );
-        memset( (void*)aOwnerPW.getStr(), 0, aOwnerPW.getLength() );
     }
     enablePermissionControls();
     return 0;
