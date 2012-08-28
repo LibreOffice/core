@@ -245,6 +245,7 @@ public class OpenOffice {
      */
     public static void killAll() {
         SystemUtil.killProcess(".*soffice.*");
+        SystemUtil.sleep(1);
     }
 
 
