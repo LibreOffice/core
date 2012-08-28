@@ -85,7 +85,7 @@ public class VclApp {
     public void start(boolean isCleanUserInstallation) {    // Default to clean user installation
         if (openOffice != null) {
             if (isCleanUserInstallation) {
-                openOffice.kill();
+                OpenOffice.killAll();
                 openOffice.cleanUserInstallation();
                 openOffice.start();
                 SystemUtil.sleep(10);

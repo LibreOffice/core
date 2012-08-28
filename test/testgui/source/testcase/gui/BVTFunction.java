@@ -24,16 +24,73 @@
  */
 package testcase.gui;
 
-import static org.openoffice.test.common.Testspace.*;
-import static org.junit.Assert.*;
-import static org.openoffice.test.vcl.Tester.*;
-import static testlib.gui.AppUtil.*;
-import static testlib.gui.UIMap.*;
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+import static org.openoffice.test.common.Testspace.getPath;
+import static org.openoffice.test.common.Testspace.prepareData;
+import static org.openoffice.test.vcl.Tester.sleep;
+import static testlib.gui.AppUtil.submitOpenDlg;
+import static testlib.gui.AppUtil.submitSaveDlg;
+import static testlib.gui.AppUtil.typeKeys;
+import static testlib.gui.UIMap.AboutDialog;
+import static testlib.gui.UIMap.Chart_Wizard;
+import static testlib.gui.UIMap.FileSave;
+import static testlib.gui.UIMap.FileSave_FileType;
+import static testlib.gui.UIMap.File_PrintDlg;
+import static testlib.gui.UIMap.FillSeriesDlg;
+import static testlib.gui.UIMap.FindDlg;
+import static testlib.gui.UIMap.FindDlg_Find;
+import static testlib.gui.UIMap.FindDlg_FindAll;
+import static testlib.gui.UIMap.FindDlg_For;
+import static testlib.gui.UIMap.FindDlg_ReplaceAll;
+import static testlib.gui.UIMap.FindDlg_ReplaceWith;
+import static testlib.gui.UIMap.InsertTable;
+import static testlib.gui.UIMap.MacroDialogsPage;
+import static testlib.gui.UIMap.PDFGeneralPage;
+import static testlib.gui.UIMap.PresentationWizard;
+import static testlib.gui.UIMap.SC_FunctionWizardDlg;
+import static testlib.gui.UIMap.SC_FunctionWizardDlg_Edit1;
+import static testlib.gui.UIMap.SC_FunctionWizardDlg_FunctionList;
+import static testlib.gui.UIMap.SC_FunctionWizardDlg_Next;
+import static testlib.gui.UIMap.SC_InputBar_Input;
+import static testlib.gui.UIMap.SC_InputBar_Sum;
+import static testlib.gui.UIMap.SlideShow;
+import static testlib.gui.UIMap.SortOptionsPage;
+import static testlib.gui.UIMap.SortOptionsPage_CustomSortOrder;
+import static testlib.gui.UIMap.SortOptionsPage_CustomSortOrderList;
+import static testlib.gui.UIMap.SortOptionsPage_RangeContainsColumnLabels;
+import static testlib.gui.UIMap.SortPage;
+import static testlib.gui.UIMap.SortPage_Ascending3;
+import static testlib.gui.UIMap.SortPage_By1;
+import static testlib.gui.UIMap.SortPage_By2;
+import static testlib.gui.UIMap.SortPage_By3;
+import static testlib.gui.UIMap.SortPage_Descending1;
+import static testlib.gui.UIMap.SortPage_Descending2;
+import static testlib.gui.UIMap.SortPage_Descending3;
+import static testlib.gui.UIMap.SortWarningDlg_Current;
+import static testlib.gui.UIMap.Table_Toolbar;
+import static testlib.gui.UIMap.Wizards_AgendaDialog;
+import static testlib.gui.UIMap.Wizards_AgendaDialog_FinishButton;
+import static testlib.gui.UIMap.app;
+import static testlib.gui.UIMap.button;
+import static testlib.gui.UIMap.calc;
+import static testlib.gui.UIMap.chart;
+import static testlib.gui.UIMap.draw;
+import static testlib.gui.UIMap.impress;
+import static testlib.gui.UIMap.msgbox;
+import static testlib.gui.UIMap.oo;
+import static testlib.gui.UIMap.toolbox;
+import static testlib.gui.UIMap.writer;
+import static testlib.gui.UIMap.writer_InsertTable;
 
 import java.awt.Rectangle;
 import java.io.File;
 
-import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -56,9 +113,9 @@ public class BVTFunction {
         app.start(true);
     }
 
-    @After
-    public void tearDown() throws Exception {
-
+    @AfterClass
+    public void afterClass() throws Exception {
+        app.close();
     }
 
     @Test

@@ -32,6 +32,7 @@ import static testlib.gui.UIMap.*;
 import java.io.File;
 
 import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -53,9 +54,9 @@ public class SmokeTest {
         smoketestOutput = new File(oo.getUserInstallation(), "user/temp");
     }
 
-    @After
-    public void tearDown() throws Exception {
-
+    @AfterClass
+    public void afterClass() throws Exception {
+        app.close();
     }
 
     @Test

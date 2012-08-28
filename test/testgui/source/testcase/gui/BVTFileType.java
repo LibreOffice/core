@@ -24,15 +24,32 @@
  */
 package testcase.gui;
 
-import static org.openoffice.test.common.Testspace.*;
-import static org.junit.Assert.*;
-import static org.openoffice.test.vcl.Tester.*;
-import static testlib.gui.AppUtil.*;
-import static testlib.gui.UIMap.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.openoffice.test.common.Testspace.getPath;
+import static org.openoffice.test.common.Testspace.prepareData;
+import static org.openoffice.test.vcl.Tester.sleep;
+import static org.openoffice.test.vcl.Tester.typeText;
+import static testlib.gui.AppUtil.openStartcenter;
+import static testlib.gui.AppUtil.submitOpenDlg;
+import static testlib.gui.AppUtil.submitSaveDlg;
+import static testlib.gui.AppUtil.typeKeys;
+import static testlib.gui.UIMap.AlienFormatDlg;
+import static testlib.gui.UIMap.EffectsPage;
+import static testlib.gui.UIMap.EffectsPage_Color;
+import static testlib.gui.UIMap.PresentationWizard;
+import static testlib.gui.UIMap.app;
+import static testlib.gui.UIMap.calc;
+import static testlib.gui.UIMap.draw;
+import static testlib.gui.UIMap.impress;
+import static testlib.gui.UIMap.math_EditWindow;
+import static testlib.gui.UIMap.math_ElementsWindow;
+import static testlib.gui.UIMap.writer;
 
 import java.awt.Rectangle;
 
-import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
@@ -56,9 +73,9 @@ public class BVTFileType {
         app.start(true);
     }
 
-    @After
-    public void tearDown() throws Exception {
-
+    @AfterClass
+    public void afterClass() throws Exception {
+        app.close();
     }
 
     /**
