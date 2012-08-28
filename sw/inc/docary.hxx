@@ -49,13 +49,13 @@ class SwTxtFmtColl;
 class SwGrfFmtColl;
 
 namespace com { namespace sun { namespace star { namespace i18n {
-    struct ForbiddenCharacters;    // comes from the I18N UNO interface
+    struct ForbiddenCharacters;    ///< comes from the I18N UNO interface
 }}}}
 
 #include <swtypes.hxx>
 
-// provides some methods for generic operations on lists that contain
-// SwFmt* subclasses.
+/** provides some methods for generic operations on lists that contain
+SwFmt* subclasses. */
 class SwFmtsBase
 {
 public:
@@ -70,11 +70,11 @@ public:
     virtual size_t GetFmtCount() const { return size(); }
     virtual SwFmt* GetFmt(size_t idx) const { return (SwFmt*)operator[](idx); }
     sal_uInt16 GetPos(const SwGrfFmtColl* pFmt) const;
-    // free's any remaining child objects
+    /// free's any remaining child objects
     virtual ~SwGrfFmtColls() {}
 };
 
-// Specific frame formats (frames, DrawObjects).
+/// Specific frame formats (frames, DrawObjects).
 class SW_DLLPUBLIC SwFrmFmts : public std::vector<SwFrmFmt*>, public SwFmtsBase
 {
 public:
@@ -82,7 +82,7 @@ public:
     virtual SwFmt* GetFmt(size_t idx) const { return (SwFmt*)operator[](idx); }
     sal_uInt16 GetPos(const SwFrmFmt* pFmt) const;
     bool Contains(const SwFrmFmt* pFmt) const;
-    // free's any remaining child objects
+    /// free's any remaining child objects
     virtual ~SwFrmFmts();
 };
 
@@ -93,7 +93,7 @@ public:
     virtual SwFmt* GetFmt(size_t idx) const { return (SwFmt*)operator[](idx); }
     sal_uInt16 GetPos(const SwCharFmt* pFmt) const;
     bool Contains(const SwCharFmt* pFmt) const;
-    // free's any remaining child objects
+    /// free's any remaining child objects
     virtual ~SwCharFmts();
 };
 
@@ -106,7 +106,7 @@ public:
     virtual ~SwTxtFmtColls() {}
 };
 
-// Array of Undo-history.
+/// Array of Undo-history.
 class SW_DLLPUBLIC SwSectionFmts : public std::vector<SwSectionFmt*>, public SwFmtsBase
 {
 public:
@@ -114,27 +114,27 @@ public:
     virtual SwFmt* GetFmt(size_t idx) const { return (SwFmt*)operator[](idx); }
     sal_uInt16 GetPos(const SwSectionFmt* pFmt) const;
     bool Contains(const SwSectionFmt* pFmt) const;
-    // free's any remaining child objects
+    /// free's any remaining child objects
     virtual ~SwSectionFmts();
 };
 
 class SwFldTypes : public std::vector<SwFieldType*> {
 public:
-    // the destructor will free all objects still in the vector
+    /// the destructor will free all objects still in the vector
     ~SwFldTypes();
     sal_uInt16 GetPos(const SwFieldType* pFieldType) const;
 };
 
 class SwTOXTypes : public std::vector<SwTOXType*> {
 public:
-    // the destructor will free all objects still in the vector
+    /// the destructor will free all objects still in the vector
     ~SwTOXTypes();
     sal_uInt16 GetPos(const SwTOXType* pTOXType) const;
 };
 
 class SW_DLLPUBLIC SwNumRuleTbl : public std::vector<SwNumRule*> {
 public:
-    // the destructor will free all objects still in the vector
+    /// the destructor will free all objects still in the vector
     ~SwNumRuleTbl();
     sal_uInt16 GetPos(const SwNumRule* pRule) const;
 };
@@ -166,9 +166,9 @@ public:
     void DeleteAndDestroy( sal_uInt16 nPos, sal_uInt16 nLen = 1 );
     void DeleteAndDestroyAll();
 
-    // Search next or previous Redline with the same Seq. No.
-    // Search can be restricted via Lookahaed.
-    // Using 0 or USHRT_MAX makes search the whole array.
+    /** Search next or previous Redline with the same Seq. No.
+       Search can be restricted via Lookahaed.
+       Using 0 or USHRT_MAX makes search the whole array. */
     sal_uInt16 FindNextOfSeqNo( sal_uInt16 nSttPos, sal_uInt16 nLookahead = 20 ) const;
     sal_uInt16 FindPrevOfSeqNo( sal_uInt16 nSttPos, sal_uInt16 nLookahead = 20 ) const;
     sal_uInt16 FindNextSeqNo( sal_uInt16 nSeqNo, sal_uInt16 nSttPos,
@@ -183,7 +183,7 @@ public:
 
 class SwUnoCrsrTbl : public std::set<SwUnoCrsr*> {
 public:
-    // the destructor will free all objects still in the set
+    /// the destructor will free all objects still in the set
     ~SwUnoCrsrTbl();
 };
 

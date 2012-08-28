@@ -41,19 +41,19 @@ class SwPaM;
 class IntlWrapper;
 class SwEndNoteInfo;
 
-// Pagedescriptor
-// Client of SwPageDesc that is "described" by the attribute.
+/** Pagedescriptor
+ Client of SwPageDesc that is "described" by the attribute. */
 
 class SW_DLLPUBLIC SwFmtPageDesc : public SfxPoolItem, public SwClient
 {
-    // This "Doc"-function is made friend in order to be able
-    // to set the auto-flag after copying!!
+    /** This "Doc"-function is made friend in order to be able
+     to set the auto-flag after copying!! */
     friend sal_Bool InsAttr( SwDoc*, const SwPaM &, const SfxItemSet&, sal_uInt16,
                         SwHistory* );
-    sal_uInt16 nNumOffset;          // Offset page number.
-    sal_uInt16 nDescNameIdx;        // SW3-Reader: stringpool-index of style name.
-    SwModify* pDefinedIn;       // Points to the object in which the
-                                // attribute was set (CntntNode/Format).
+    sal_uInt16 nNumOffset;          ///< Offset page number.
+    sal_uInt16 nDescNameIdx;        ///< SW3-Reader: stringpool-index of style name.
+    SwModify* pDefinedIn;       /**< Points to the object in which the
+                                 attribute was set (CntntNode/Format). */
 protected:
     virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew );
     virtual void SwClientNotify( const SwModify&, const SfxHint& rHint );
@@ -66,7 +66,7 @@ public:
 
     TYPEINFO();
 
-    // "Pure virtual methods" of SfxPoolItem.
+    /// "Pure virtual methods" of SfxPoolItem.
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
@@ -83,7 +83,7 @@ public:
     sal_uInt16  GetNumOffset() const        { return nNumOffset; }
     void    SetNumOffset( sal_uInt16 nNum ) { nNumOffset = nNum; }
 
-    // Query / set where attribute is anchored.
+    /// Query / set where attribute is anchored.
     inline const SwModify* GetDefinedIn() const { return pDefinedIn; }
     void ChgDefinedIn( const SwModify* pNew ) { pDefinedIn = (SwModify*)pNew; }
     void RegisterToEndNotInfo( SwEndNoteInfo& );
