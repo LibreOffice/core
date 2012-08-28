@@ -106,6 +106,7 @@ public:
     void testFdo48446();
     void testFdo47495();
     void testAllGapsWord();
+    void testFdo52052();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -153,6 +154,7 @@ public:
     CPPUNIT_TEST(testFdo48446);
     CPPUNIT_TEST(testFdo47495);
     CPPUNIT_TEST(testAllGapsWord);
+    CPPUNIT_TEST(testFdo52052);
 #endif
     CPPUNIT_TEST_SUITE_END();
 
@@ -913,6 +915,13 @@ void Test::testAllGapsWord()
     load("all_gaps_word.rtf");
     BorderTest borderTest;
     borderTest.testTheBorders(mxComponent);
+}
+
+void Test::testFdo52052()
+{
+    load("fdo52052.rtf");
+    // Make sure the textframe containing the text "third" appears on the 3rd page.
+    CPPUNIT_ASSERT_EQUAL(OUString("third"), parseDump("/root/page[3]/body/txt/anchored/fly/txt/text()"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
