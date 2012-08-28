@@ -54,6 +54,7 @@
 #include "xehelper.hxx"
 #include "xestyle.hxx"
 #include "xename.hxx"
+#include <rtl/uuid.h>
 
 using namespace ::oox;
 
@@ -1080,6 +1081,25 @@ void XclExpColorScale::SaveXml( XclExpXmlStream& rStrm )
     // OOXTODO: XML_extLst
 }
 
+namespace {
+
+rtl::OString createGuidStringFromInt(sal_uInt8 nGuid[16])
+{
+    rtl::OStringBuffer aBuffer;
+    aBuffer.append('{');
+    for(size_t i = 0; i < 16; ++i)
+    {
+        aBuffer.append(static_cast<sal_Int32>(nGuid[i]), 16);
+        if(i == 3|| i == 5 || i == 7 || i == 9 )
+            aBuffer.append('-');
+    }
+    aBuffer.append('}');
+    rtl::OString aString = aBuffer.makeStringAndClear();
+    return aString.toAsciiUpperCase();
+}
+
+}
+
 XclExpDataBar::XclExpDataBar( const XclExpRoot& rRoot, const ScDataBarFormat& rFormat, sal_Int32 nPriority, XclExtLstRef xExtLst ):
     XclExpRecord(),
     XclExpRoot( rRoot ),
@@ -1101,7 +1121,10 @@ XclExpDataBar::XclExpDataBar( const XclExpRoot& rRoot, const ScDataBarFormat& rF
             xExtLst->AddRecord( XclExpExtRef(new XclExpExtCondFormat( *xExtLst.get() )) );
             pParent = xExtLst->GetItem( XclExpExtDataBarType );
         }
-        static_cast<XclExpExtCondFormat*>(xExtLst->GetItem( XclExpExtDataBarType ).get())->AddRecord( XclExpExtConditionalFormattingRef(new XclExpExtConditionalFormatting( *pParent, rFormat, aAddr, rtl::OString("{64A12B6B-50E9-436E-8939-DBE15E5BE1DC}") )) );
+        sal_uInt8 nGuid[16];
+        rtl_createUuid(nGuid, NULL, true);
+        maGuid = createGuidStringFromInt(nGuid);
+        static_cast<XclExpExtCondFormat*>(xExtLst->GetItem( XclExpExtDataBarType ).get())->AddRecord( XclExpExtConditionalFormattingRef(new XclExpExtConditionalFormatting( *pParent, rFormat, aAddr, maGuid) ));
     }
 }
 
@@ -1130,7 +1153,7 @@ void XclExpDataBar::SaveXml( XclExpXmlStream& rStrm )
                                 FSEND );
 
     rWorksheet->startElementNS( XML_x14, XML_id, FSEND );
-    rWorksheet->write( "{64A12B6B-50E9-436E-8939-DBE15E5BE1DC}" );
+    rWorksheet->write( maGuid.getStr() );
     rWorksheet->endElementNS( XML_x14, XML_id );
 
     rWorksheet->endElement( XML_ext );

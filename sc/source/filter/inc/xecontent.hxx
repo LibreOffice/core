@@ -274,6 +274,7 @@ private:
 
     const ScDataBarFormat& mrFormat;
     sal_Int32 mnPriority;
+    rtl::OString maGuid;
 };
 
 // ----------------------------------------------------------------------------
