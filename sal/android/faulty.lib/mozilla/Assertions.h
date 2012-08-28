@@ -8,6 +8,19 @@
 #ifndef mozilla_Assertions_h_
 #define mozilla_Assertions_h_
 
+// This header gets included early enough in all the faulty.lib code so make
+// sure some warnings are just that. Mozilla apparetly doesn't like -Werror?
+
+#ifdef LIBO_WERROR
+#pragma GCC diagnostic warning "-Wempty-body"
+#pragma GCC diagnostic warning "-Wformat"
+#pragma GCC diagnostic warning "-Wignored-qualifiers"
+#pragma GCC diagnostic warning "-Wshadow"
+#pragma GCC diagnostic warning "-Wsign-compare"
+#pragma GCC diagnostic warning "-Wunused-parameter"
+#pragma GCC diagnostic warning "-Wunused-variable"
+#endif
+
 #include "mozilla/Attributes.h"
 
 #include <stddef.h>

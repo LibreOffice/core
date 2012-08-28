@@ -29,8 +29,10 @@ $(eval $(call gb_Library_Library,lo-bootstrap))
 
 # We explicitly *don't* want gb_STDLIBS to be linked here
 $(eval $(call gb_Library_add_libs,lo-bootstrap,\
+	-lz \
 	-llog \
 	-landroid \
+	-lgnustl_static \
 ))
 
 $(eval $(call gb_Library_add_cobjects,lo-bootstrap,\
@@ -49,6 +51,7 @@ $(eval $(call gb_Library_set_include,lo-bootstrap,\
 	$$(INCLUDE) \
 	-I$(SRCDIR)/sal/android/faulty.lib \
 	-I$(SRCDIR)/sal/inc \
+	-DHAVE_DLADDR \
 ))
 
 # vim: set noet sw=4 ts=4:
