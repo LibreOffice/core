@@ -125,8 +125,12 @@ protected:
         return xStyleFamily;
     }
 
-    /// Extract a value from the layout dump using an XPath expression and an attribute name.
-    rtl::OUString parseDump(rtl::OString aXPath, rtl::OString aAttribute)
+    /**
+     * Extract a value from the layout dump using an XPath expression and an attribute name.
+     *
+     * If the attribute is omitted, the text of the node is returned.
+     */
+    rtl::OUString parseDump(rtl::OString aXPath, rtl::OString aAttribute = OString())
     {
         if (!mpXmlBuffer)
             dumpLayout();
@@ -136,8 +140,13 @@ protected:
         xmlXPathContextPtr pXmlXpathCtx = xmlXPathNewContext(pXmlDoc);
         xmlXPathObjectPtr pXmlXpathObj = xmlXPathEvalExpression(BAD_CAST(aXPath.getStr()), pXmlXpathCtx);
         xmlNodeSetPtr pXmlNodes = pXmlXpathObj->nodesetval;
+        CPPUNIT_ASSERT_EQUAL(1, xmlXPathNodeSetGetLength(pXmlNodes));
         xmlNodePtr pXmlNode = pXmlNodes->nodeTab[0];
-        rtl::OUString aRet = rtl::OUString::createFromAscii((const char*)xmlGetProp(pXmlNode, BAD_CAST(aAttribute.getStr())));
+        rtl::OUString aRet;
+        if (aAttribute.getLength())
+            aRet = rtl::OUString::createFromAscii((const char*)xmlGetProp(pXmlNode, BAD_CAST(aAttribute.getStr())));
+        else
+            aRet = rtl::OUString::createFromAscii((const char*)XML_GET_CONTENT(pXmlNode));
 
         xmlFreeDoc(pXmlDoc);
 
