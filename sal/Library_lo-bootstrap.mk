@@ -37,8 +37,17 @@ $(eval $(call gb_Library_add_cobjects,lo-bootstrap,\
 	sal/android/lo-bootstrap \
 ))
 
+$(eval $(call gb_Library_add_cxxobjects,lo-bootstrap,\
+	sal/android/faulty.lib/linker/CustomElf \
+	sal/android/faulty.lib/linker/ElfLoader \
+	sal/android/faulty.lib/linker/Mappable \
+	sal/android/faulty.lib/linker/SeekableZStream \
+	sal/android/faulty.lib/linker/Zip \
+))
+
 $(eval $(call gb_Library_set_include,lo-bootstrap,\
 	$$(INCLUDE) \
+	-I$(SRCDIR)/sal/android/faulty.lib \
 	-I$(SRCDIR)/sal/inc \
 ))
 
