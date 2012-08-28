@@ -749,7 +749,7 @@ void BasicManager::SetLibraryContainerInfo( const LibraryContainerInfo& rInfo )
                 StarBASIC* pLib = pBasLibInfo->GetLib();
                 if( !pLib )
                 {
-                    sal_Bool bLoaded = ImpLoadLibary( pBasLibInfo, NULL, sal_False );
+                    sal_Bool bLoaded = ImpLoadLibrary( pBasLibInfo, NULL, sal_False );
                     if( bLoaded )
                         pLib = pBasLibInfo->GetLib();
                 }
@@ -900,7 +900,7 @@ void BasicManager::LoadBasicManager( SotStorage& rStorage, const String& rBaseUR
         if ( bLoadLibs && pInfo->DoLoad() &&
             ( ( !pInfo->IsExtern() ) || ( pInfo->IsReference() ) ) )
         {
-            ImpLoadLibary( pInfo, &rStorage );
+            ImpLoadLibrary( pInfo, &rStorage );
         }
     }
 
@@ -1044,7 +1044,7 @@ BasicLibInfo* BasicManager::CreateLibInfo()
     return pInf;
 }
 
-sal_Bool BasicManager::ImpLoadLibary( BasicLibInfo* pLibInfo, SotStorage* pCurStorage, sal_Bool bInfosOnly )
+sal_Bool BasicManager::ImpLoadLibrary( BasicLibInfo* pLibInfo, SotStorage* pCurStorage, sal_Bool bInfosOnly )
 {
     DBG_CHKTHIS( BasicManager, 0 );
 
@@ -1235,14 +1235,14 @@ StarBASIC* BasicManager::AddLib( SotStorage& rStorage, const String& rLibName, s
         aNewLibName += '_';
 
     BasicLibInfo* pLibInfo = CreateLibInfo();
-    // Use original name otherwise ImpLoadLibary failes...
+    // Use original name otherwise ImpLoadLibrary failes...
     pLibInfo->SetLibName( rLibName );
     // but doesn't work this way if name exists twice
     sal_uInt16 nLibId = (sal_uInt16) pLibs->GetPos( pLibInfo );
 
     // Set StorageName before load because it is compared with pCurStorage
     pLibInfo->SetStorageName( aStorageName );
-    sal_Bool bLoaded = ImpLoadLibary( pLibInfo, &rStorage );
+    sal_Bool bLoaded = ImpLoadLibrary( pLibInfo, &rStorage );
 
     if ( bLoaded )
     {
@@ -1480,7 +1480,7 @@ sal_Bool BasicManager::LoadLib( sal_uInt16 nLib )
         }
         else
         {
-            bDone = ImpLoadLibary( pLibInfo, NULL, sal_False );
+            bDone = ImpLoadLibrary( pLibInfo, NULL, sal_False );
             StarBASIC* pLib = GetLib( nLib );
             if ( pLib )
             {

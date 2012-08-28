@@ -131,8 +131,8 @@ private:
     BASIC_DLLPRIVATE void Init();
 
 protected:
-    sal_Bool            ImpLoadLibary( BasicLibInfo* pLibInfo ) const;
-    sal_Bool            ImpLoadLibary( BasicLibInfo* pLibInfo, SotStorage* pCurStorage, sal_Bool bInfosOnly = sal_False );
+    sal_Bool            ImpLoadLibrary( BasicLibInfo* pLibInfo ) const;
+    sal_Bool            ImpLoadLibrary( BasicLibInfo* pLibInfo, SotStorage* pCurStorage, sal_Bool bInfosOnly = sal_False );
     void            ImpCreateStdLib( StarBASIC* pParentFromStdLib );
     void            ImpMgrNotLoaded(  const String& rStorageName  );
     BasicLibInfo*   CreateLibInfo();
