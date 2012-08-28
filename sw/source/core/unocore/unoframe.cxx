@@ -657,12 +657,17 @@ sal_Bool    SwGraphicProperties_Impl::AnyToItemSet(
         rtl::Reference< SwDocStyleSheet > xStyle( new SwDocStyleSheet(*pStyle) );
         const :: SfxItemSet *pItemSet = &xStyle->GetItemSet();
         //Begin Bug 119922
-            sal_Bool bOasis = sal_False;
-        SfxMedium* pMedium = NULL;
-        const SfxFilter * pFilter = NULL;
-        if ( ( pMedium = pDoc->GetDocShell()->GetMedium() ) &&
-                ( pFilter = pMedium->GetFilter() ) )
-            bOasis = pFilter->GetVersion() > SOFFICE_FILEFORMAT_60;
+        sal_Bool bOasis = sal_False;
+        {
+            const SfxMedium* pMedium = pDoc->GetDocShell()->GetMedium();
+            const SfxFilter * pFilter = pMedium
+                ? pMedium->GetFilter()
+                : NULL;
+            if ( pMedium && pFilter )
+            {
+                bOasis = pFilter->GetVersion() > SOFFICE_FILEFORMAT_60;
+            }
+        }
         bRet = FillBaseProperties( rFrmSet, *pItemSet, rSizeFound, bOasis );
         //End Bug 119922
         lcl_FillMirror ( rGrSet, *pItemSet, pHEvenMirror, pHOddMirror, pVMirror, bRet );
