@@ -32,7 +32,7 @@ $(eval $(call gb_Library_add_libs,lo-bootstrap,\
 	-lz \
 	-llog \
 	-landroid \
-	-lgnustl_static \
+	-lstlport_static \
 ))
 
 $(eval $(call gb_Library_add_cobjects,lo-bootstrap,\
@@ -48,10 +48,16 @@ $(eval $(call gb_Library_add_cxxobjects,lo-bootstrap,\
 ))
 
 $(eval $(call gb_Library_set_include,lo-bootstrap,\
+	-I$(ANDROID_NDK_HOME)/sources/cxx-stl/stlport/stlport \
 	$$(INCLUDE) \
 	-I$(SRCDIR)/sal/android/faulty.lib \
 	-I$(SRCDIR)/sal/inc \
 	-DHAVE_DLADDR \
+))
+
+$(eval $(call gb_Library_set_ldflags,lo-bootstrap,\
+	-L$(ANDROID_NDK_HOME)/sources/cxx-stl/stlport/libs/$(ANDROID_APP_ABI) \
+	$$(LDFLAGS) \
 ))
 
 # vim: set noet sw=4 ts=4:

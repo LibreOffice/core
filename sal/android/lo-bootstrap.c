@@ -69,6 +69,18 @@
 
 #define MAX(a,b) ((a) > (b) ? (a) : (b))
 
+extern void *__wrap_dlopen(const char *path, int flags);
+extern const char *__wrap_dlerror(void);
+extern void *__wrap_dlsym(void *handle, const char *symbol);
+extern int __wrap_dlclose(void *handle);
+extern int __wrap_dladdr(void *addr, Dl_info *info);
+
+#define dlopen __wrap_dlopen
+#define dlerror __wrap_dlerror
+#define dlsym __wrap_dlsym
+#define dlclose __wrap_dlclose
+#define dladdr __wrap_dladdr
+
 struct engine {
     int dummy;
 };

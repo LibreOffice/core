@@ -225,6 +225,26 @@ if test -n "$with_android_ndk"; then
 
     test -z "$CC" && CC="$ANDROID_ABI_PREBUILT_BIN/$android_gcc_prefix-gcc $ANDROIDCFLAGS"
     test -z "$CXX" && CXX="$ANDROID_ABI_PREBUILT_BIN/$android_gcc_prefix-g++ $ANDROIDCXXFLAGS"
+
+    AC_MSG_CHECKING([whether the CRT objects have text relocations])
+    echo 'int foo() { return 0; }' > conftest.cpp
+    if AC_TRY_COMMAND(${CXX} -shared -o conftest.so conftest.cpp 1>&5) &&
+        test -s conftest.so; then
+        if $android_gcc_prefix-readelf -d conftest.so | grep -q TEXTREL; then
+            crt_has_text_relocations=yes
+        else
+            crt_has_text_relocations=no
+        fi
+    else
+        AC_ERROR([couldn't compile a simple C file])
+    fi
+    AC_MSG_RESULT([$crt_has_text_relocations])
+    rm -rf conftest*
+    if test $crt_has_text_relocations = yes; then
+        # We should build only libraries for Android anyway, no executables
+        CXX="$CXX -nostartfiles"
+        CC="$CC -nostartfiles"
+    fi
 fi
 AC_SUBST(ANDROID_NDK_HOME)
 AC_SUBST(ANDROID_NDK_TOOLCHAIN_VERSION_SUBDIR)
