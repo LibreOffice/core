@@ -79,7 +79,7 @@ public class AccessibleTreeCellRenderer
         if (maChangedLines.size() <= nRow)
             maChangedLines.setSize (nRow+1);
         nRow -= 1; // row index is one to large for some reason.
-        maChangedLines.set (nRow, new Boolean (true));
+        maChangedLines.set (nRow, true);
     }
 
     /** Inform the cell renderer of a set of changed line which to paint

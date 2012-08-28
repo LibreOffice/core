@@ -359,7 +359,7 @@ class AccTreeNode
                 aDescriptor.mnChildCount = nChildCount;
                 // Fill in the indices of the updated children.
                 for (int j=0; j<nChildCount; j++)
-                    aChildIndices.add(new Integer(j+nOffset));
+                    aChildIndices.add(j+nOffset);
             }
             nOffset += aDescriptor.mnChildCount;
         }

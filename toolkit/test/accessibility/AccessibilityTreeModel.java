@@ -401,7 +401,7 @@ public class AccessibilityTreeModel
         int nChildIndices[] = new int[nCount];
         for (int i=0; i<nCount; i++)
         {
-            int nIndex = aChildIndices.elementAt(i).intValue();
+            int nIndex = aChildIndices.elementAt(i);
             aChildObjects[i] = aNode.getChild (nIndex);
             nChildIndices[i] = nIndex;
         }
