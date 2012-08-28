@@ -65,9 +65,9 @@ GType               g_lo_action_group_get_type              (void) G_GNUC_CONST;
 
 GLOActionGroup *    g_lo_action_group_new                   (void);
 
-void                g_lo_action_group_insert                (GLOActionGroup *group,
-                                                             const gchar    *action_name,
-                                                             gpointer        action_info);
+void                g_lo_action_group_insert                (GLOActionGroup     *group,
+                                                             const gchar        *action_name,
+                                                             gpointer            action_info);
 
 void                g_lo_action_group_insert_stateful       (GLOActionGroup     *group,
                                                              const gchar        *action_name,
@@ -77,20 +77,20 @@ void                g_lo_action_group_insert_stateful       (GLOActionGroup     
                                                              GVariant           *state_hint,
                                                              GVariant           *state);
 
-void                g_lo_action_group_set_action_enabled    (GLOActionGroup *group,
-                                                             const gchar    *action_name,
-                                                             gboolean        enabled);
+void                g_lo_action_group_set_action_enabled    (GLOActionGroup     *group,
+                                                             const gchar        *action_name,
+                                                             gboolean           enabled);
 
-gpointer            g_lo_action_group_get_action_item       (GLOActionGroup *group,
-                                                             const gchar    *action_name);
+gpointer            g_lo_action_group_get_action_item       (GLOActionGroup     *group,
+                                                             const gchar        *action_name);
 
-void                g_lo_action_group_remove                (GLOActionGroup *group,
-                                                             const gchar    *action_name);
+void                g_lo_action_group_remove                (GLOActionGroup     *group,
+                                                             const gchar        *action_name);
 
-void                g_lo_action_group_clear                 (GLOActionGroup *group);
+void                g_lo_action_group_clear                 (GLOActionGroup     *group);
 
-void                g_lo_action_group_merge                 (GLOActionGroup *input_group,
-                                                             GLOActionGroup *output_group);
+void                g_lo_action_group_merge                 (GLOActionGroup     *input_group,
+                                                             GLOActionGroup     *output_group);
 
 G_END_DECLS
 

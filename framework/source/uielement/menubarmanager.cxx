@@ -1028,7 +1028,7 @@ IMPL_LINK( MenuBarManager, Activate, AbstractMenu *, pMenu )
     }
 
     // Freeze the menu
-//    m_pVCLMenu->Freeze();
+    m_pVCLMenu->Freeze();
 
     return 1;
 }

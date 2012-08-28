@@ -27,6 +27,7 @@
 #include <gio/gio.h>
 
 #define G_LO_MENU_ATTRIBUTE_ACCELERATOR     "accel"
+#define G_LO_MENU_ATTRIBUTE_COMMAND         "command"
 
 G_BEGIN_DECLS
 
@@ -44,6 +45,9 @@ GLIB_AVAILABLE_IN_2_32
 GType       g_lo_menu_get_type                                          (void) G_GNUC_CONST;
 GLIB_AVAILABLE_IN_2_32
 GLOMenu *   g_lo_menu_new                                               (void);
+
+gint       g_lo_menu_get_n_items_from_section                           (GLOMenu     *menu,
+                                                                         gint         section);
 
 void        g_lo_menu_insert                                            (GLOMenu     *menu,
                                                                          gint         position,
@@ -97,15 +101,35 @@ void        g_lo_menu_set_action_and_target_value_to_item_in_section    (GLOMenu
                                                                          const gchar *command,
                                                                          GVariant    *target_value);
 
+void        g_lo_menu_set_command_to_item_in_section                    (GLOMenu     *menu,
+                                                                         gint         section,
+                                                                         gint         position,
+                                                                         const gchar *command);
+
+gchar *     g_lo_menu_get_command_from_item_in_section                  (GLOMenu     *menu,
+                                                                         gint         section,
+                                                                         gint         position);
+
 void        g_lo_menu_set_accelerator_to_item_in_section                (GLOMenu     *menu,
                                                                          gint         section,
                                                                          gint         position,
                                                                          const gchar *accelerator);
 
+gchar *     g_lo_menu_get_accelerator_from_item_in_section              (GLOMenu     *menu,
+                                                                         gint         section,
+                                                                         gint         position);
+
 void        g_lo_menu_set_submenu_to_item_in_section                    (GLOMenu     *menu,
                                                                          gint         section,
                                                                          gint         position,
                                                                          GMenuModel  *submenu);
+
+GLOMenu *   g_lo_menu_get_submenu_from_item_in_section                  (GLOMenu     *menu,
+                                                                         gint         section,
+                                                                         gint         position);
+
+GLOMenu *   g_lo_menu_get_menu_containing_item                          (GLOMenu     *menu,
+                                                                         gint         item_id);
 
 G_END_DECLS
 

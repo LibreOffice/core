@@ -52,6 +52,7 @@ private:
     GMenuModel*                     mpMenuModel;
     GActionGroup*                   mpActionGroup;
 
+    sal_Int32       GetPositionFromItem( GtkSalMenuItem* pSalMenuItem );
     void            GetItemSectionAndPosition( unsigned nPos, unsigned *insertSection, unsigned *insertPos );
 
 public:
@@ -78,9 +79,11 @@ public:
     virtual void                SetMenu( Menu* pMenu ) { mpVCLMenu = pMenu; }
     virtual Menu*               GetMenu() { return mpVCLMenu; }
     virtual GtkSalMenu*         GetParentSalMenu() { return mpParentSalMenu; }
+    virtual void                SetMenuModel( GMenuModel* pMenuModel ) { mpMenuModel = pMenuModel; }
     virtual GMenuModel*         GetMenuModel() { return mpMenuModel; }
     virtual unsigned            GetItemCount() { return maItems.size(); }
     virtual GtkSalMenuItem*     GetItemAtPos( unsigned nPos ) { return maItems[ nPos ]; }
+    virtual void                SetActionGroup( GActionGroup* pActionGroup ) { mpActionGroup = pActionGroup; }
     virtual GActionGroup*       GetActionGroup() { return mpActionGroup; }
 };
 
@@ -96,11 +99,6 @@ public:
     Menu*               mpVCLMenu;          // VCL Menu into which this MenuItem is inserted
     GtkSalMenu*         mpParentMenu;       // The menu in which this menu item is inserted
     GtkSalMenu*         mpSubMenu;          // Sub menu of this item (if defined)
-
-    // FIXME: Most of this info should be retrieved from the GMenuModel, but doing that crashes the application at the moment.
-    gchar*              maCommand;          // Item command
-    gchar*              maLabel;            // Item label
-    gchar*              maAccel;            // Item accelerator
 };
 
 #endif // GTKSALMENU_HXX
