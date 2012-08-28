@@ -400,7 +400,10 @@ void ScColumn::DeleteRange( SCSIZE nStartIndex, SCSIZE nEndIndex, sal_uInt16 nDe
                 bool bKeepBC = pBC && pBC->HasListeners();
                 // #i99844# do not release broadcaster from old cell, it still has to notify deleted content
                 if (bKeepBC)
+                {
                     pNoteCell = new ScNoteCell( pBC );
+                    pOldCell->ReleaseBroadcaster();
+                }
 
                 // remove cell entry in cell item list
                 SCROW nOldRow = maItems[nIdx].nRow;
