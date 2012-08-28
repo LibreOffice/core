@@ -50,25 +50,19 @@ public class AddDeleteSymbolsFromCatalog {
 
         // New a formula document
         app.dispatch("private:factory/smath");
-        sleep(3);   // If no sleep, can not find math_SymbolsDlg in mac
+        math_EditWindow.waitForExistence(10, 2);
 
         // Click catalog button
         math_CatalogButton.click();
 
-        // Verify if the "Symbols" dialog pop up
-        assertTrue("Symbols dialog does not pop up", math_SymbolsDlg.exists(3));
-
         // Select "Special", click "Edit" button
         math_SymbolsDlgListbox.select(2);
         math_SymbolsDlgEditButton.click();
-
-        // Verify if the "Edit Symbols" dialog pop up
-        assertTrue("Edit Symbols dialog does not pop up", math_EditSymbolsDlg.exists(3));
     }
 
     @After
     public void tearDown() throws Exception {
-        app.close();
+
     }
 
     /**

@@ -46,12 +46,12 @@ public class HeaderAndFooterSetting{
 
     @Before
     public void setUp() throws Exception {
-//      app.start(true);    // Bug 120476
-        app.start();
+        app.start(true);    // Bug 120476
 
         // New a impress, insert some slides
         app.dispatch("private:factory/simpress?slot=6686");
         PresentationWizard.ok();
+        impress.waitForExistence(10, 2);
 
         for(int i=0; i<5;i++){
             SD_InsertPageButtonOnToolbar.click();
@@ -64,14 +64,14 @@ public class HeaderAndFooterSetting{
 
     @After
     public void tearDown() throws Exception {
-        app.close();
+
     }
 
     /**
      * Test Copy slide with Apply Footer to same file and different file
      * @throws Exception
      */
-    @Test//?
+    @Test
     public void testCopySlideWithApplyFooter() throws Exception{
 
         //add header and footer
@@ -257,7 +257,7 @@ public class HeaderAndFooterSetting{
      * Test footer not show on the first slide.
      * @throws Exception
      */
-    @Test//??
+    @Test
     public void testFooterNotShowOn1stSlide() throws Exception{
 
         //add header and footer
@@ -269,8 +269,12 @@ public class HeaderAndFooterSetting{
 
         // Check slide 1
         ImpressSlideSorter.focus();
-        typeKeys("<up><up><up><up><up>");
-        sleep(1);   // If no sleep, error occur
+//      typeKeys("<up><up><up><up><up>");   // Not stable on ubuntu10.04
+//      sleep(1);   // If no sleep, error occur
+        for (int i=0; i<5; i++) {
+            typeKeys("<up>");
+            sleep(1);
+        }
 
         app.dispatch(".uno:HeaderAndFooter");
         assertEquals(true,SD_FooterNotShowOn1stSlide.isChecked());

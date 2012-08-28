@@ -48,7 +48,7 @@ public class ValiditySampleFile {
 
     @After
     public void tearDown() throws Exception {
-        app.close();
+
     }
 
     /**

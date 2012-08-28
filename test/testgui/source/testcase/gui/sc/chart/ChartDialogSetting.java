@@ -50,12 +50,13 @@ public class ChartDialogSetting {
 
         // Create a new spreadsheet document
         app.dispatch("private:factory/scalc");
+        calc.waitForExistence(10, 2);
         app.dispatch(".uno:InsertObjectChart");
     }
 
     @After
     public void tearDown() throws Exception {
-        app.close();
+
     }
 
     /**

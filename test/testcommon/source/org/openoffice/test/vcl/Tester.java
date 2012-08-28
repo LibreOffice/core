@@ -37,6 +37,8 @@ import java.util.StringTokenizer;
 public class Tester {
     static Robot robot;
 
+    static double factor = Double.parseDouble(System.getProperty("sleep.factor", "1.0"));
+
     static {
         try {
             robot = new Robot();
@@ -55,9 +57,9 @@ public class Tester {
      *
      * @param delay
      */
-    public static void sleep(double delay) {
+    public static void sleep(double seconds) {
         try {
-            Thread.sleep((long) (delay * 1000));
+            Thread.sleep((long) (seconds * factor * 1000));
         } catch (InterruptedException e) {
         }
     }

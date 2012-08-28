@@ -50,7 +50,7 @@ public class ValidityDialogDefaultValue {
 
     @After
     public void tearDown() throws Exception {
-        app.close();
+
     }
 
     /**

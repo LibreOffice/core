@@ -45,13 +45,12 @@ public class OpenDocumentWithHeaderFooter {
 
     @Before
     public void setUp() throws Exception {
-//      app.start(true);    // Bug 120476
-        app.start();
+        app.start(true);    // Bug 120476
     }
 
     @After
     public void tearDown() throws Exception {
-        app.close();
+
     }
 
     /**
@@ -65,7 +64,7 @@ public class OpenDocumentWithHeaderFooter {
         String file = prepareData("sd/AOO3.4HeaderFooter.odp");
         app.dispatch(".uno:Open");
         submitOpenDlg(file);
-        sleep(2);   // If no sleep, error occur on mac
+        impress.waitForExistence(10, 2);
 
         //check after reopen
         app.dispatch(".uno:HeaderAndFooter");
@@ -106,6 +105,7 @@ public class OpenDocumentWithHeaderFooter {
         String file = prepareData("sd/gfdd.ppt");
         app.dispatch(".uno:Open");
         submitOpenDlg(file);
+        impress.waitForExistence(10, 2);
 
         //check after reopen
         app.dispatch(".uno:HeaderAndFooter");

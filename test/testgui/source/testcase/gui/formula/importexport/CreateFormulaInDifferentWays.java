@@ -56,7 +56,7 @@ public class CreateFormulaInDifferentWays {
 
     @After
     public void tearDown() throws Exception {
-        app.close();
+
     }
 
     /**

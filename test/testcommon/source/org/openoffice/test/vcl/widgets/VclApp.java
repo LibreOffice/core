@@ -51,7 +51,8 @@ public class VclApp {
     }
 
     public VclApp(OpenOffice openOffice) {
-        this("localhost", openOffice.getAutomationPort());
+//      this("localhost", openOffice.getAutomationPort());
+        this("127.0.0.1", openOffice.getAutomationPort());  // In case "localhost" is modified incorrectly
         this.openOffice = openOffice;
     }
 
@@ -87,13 +88,27 @@ public class VclApp {
                 openOffice.kill();
                 openOffice.cleanUserInstallation();
                 openOffice.start();
-                SystemUtil.sleep(5);
+                SystemUtil.sleep(10);
             } else {
                 openOffice.start();
             }
         }
 
         communicationManager.start();
+    }
+
+    public void loadDocument(String file) {
+        dispatch(".uno:Open");
+        VclComboBox FilePicker_Path = new VclComboBox("SVT_HID_FILEDLG_AUTOCOMPLETEBOX");
+        FilePicker_Path.setText(file);
+        VclButton FilePicker_Open = new VclButton("fpicker:PushButton:DLG_SVT_EXPLORERFILE:BTN_EXPLORERFILE_OPEN");
+        FilePicker_Open.click();
+        VclWindow writer = new VclWindow("SW_HID_EDIT_WIN");
+        writer.waitForExistence(10, 2);
+    }
+
+    public void newDocument(String type) {
+        dispatch(type);
     }
 
     public OpenOffice getOpenOffice() {

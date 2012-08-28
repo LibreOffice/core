@@ -53,12 +53,12 @@ public class BVTFileType {
 
     @Before
     public void setUp() throws Exception {
-        app.start();
+        app.start(true);
     }
 
     @After
     public void tearDown() throws Exception {
-        app.close();
+
     }
 
     /**
@@ -100,7 +100,7 @@ public class BVTFileType {
         String saveTo = getPath("temp/" + file);
         // Create a new text document
         app.dispatch("private:factory/swriter");
-        sleep(3);
+        writer.waitForExistence(10, 2);
 
         // Input some text by keyboard
         writer.focus();
@@ -238,7 +238,7 @@ public class BVTFileType {
         String text = "Hello Openoffice";
         app.dispatch("private:factory/simpress?slot=6686");
         PresentationWizard.ok();
-        sleep(1);
+        impress.waitForExistence(10, 2);
         impress.click(0.01, 0.01);
         typeKeys(text);
         sleep(2);
@@ -256,7 +256,6 @@ public class BVTFileType {
         app.dispatch(".uno:Open");
         submitOpenDlg(saveTo);
         impress.waitForExistence(10, 2);
-        sleep(2);
         impress.click(3, 3);
         typeKeys("<tab><enter>");
         app.dispatch(".uno:SelectAll");
@@ -316,7 +315,7 @@ public class BVTFileType {
 
         // Create a new drawing document
         app.dispatch("private:factory/sdraw");
-        sleep(3);
+        draw.waitForExistence(10, 2);
 
         // Insert a picture fully filled with green
         app.dispatch(".uno:InsertGraphic");
@@ -393,7 +392,7 @@ public class BVTFileType {
 
         // Create a new math
         app.dispatch("private:factory/smath");
-        sleep(3);
+        math_EditWindow.waitForExistence(10, 2);
 
         // Verify if the Elements window is active
         assertTrue(math_ElementsWindow.exists(3));

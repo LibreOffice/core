@@ -56,13 +56,14 @@ public class ValidityDialogSetting {
 
         // New a spreadsheet, select cell range, open Validity dialog
         app.dispatch("private:factory/scalc");
+        calc.waitForExistence(10, 2);
         CalcUtil.selectRange("A1:C5");
         app.dispatch(".uno:Validation");
     }
 
     @After
     public void tearDown() throws Exception {
-        app.close();
+
     }
 
     /**

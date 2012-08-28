@@ -55,11 +55,12 @@ public class SortDialogSetting {
 
         // Create a new spreadsheet document
         app.dispatch("private:factory/scalc");
+        calc.waitForExistence(10, 2);
     }
 
     @After
     public void tearDown() throws Exception {
-        app.close();
+
     }
 
     /**

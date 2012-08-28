@@ -53,14 +53,14 @@ public class SubtotalsFunctions {
         String file = prepareData("sc/SubtotalsSampleFile.ods");
         app.dispatch(".uno:Open");
         submitOpenDlg(file);
-        sleep(2);
+        calc.waitForExistence(10, 2);
         CalcUtil.selectRange("A1:E7");
         app.dispatch(".uno:DataSubTotals");
     }
 
     @After
     public void tearDown() throws Exception {
-        app.close();
+
     }
 
     /**

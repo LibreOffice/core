@@ -57,7 +57,7 @@ public class ValidityDateSupport1024Columns {
 
     @After
     public void tearDown() throws Exception {
-        app.close();
+
     }
 
     /**

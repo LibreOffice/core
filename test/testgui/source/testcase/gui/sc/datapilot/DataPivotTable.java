@@ -54,12 +54,12 @@ public class DataPivotTable {
 
     @Before
     public void setUp() throws Exception {
-        app.start();
+        app.start(true);
     }
 
     @After
     public void tearDown() throws Exception {
-        app.close();
+
     }
 
     /**

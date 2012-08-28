@@ -52,7 +52,7 @@ public class Table {
 
     @After
     public void tearDown() throws Exception {
-        app.close();
+
     }
 
     /**

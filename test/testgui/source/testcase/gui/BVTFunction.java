@@ -53,12 +53,12 @@ public class BVTFunction {
 
     @Before
     public void setUp() throws Exception {
-        app.start();
+        app.start(true);
     }
 
     @After
     public void tearDown() throws Exception {
-        app.close();
+
     }
 
     @Test
@@ -89,7 +89,7 @@ public class BVTFunction {
     public void testPrintDialog() {
         // Create a new text document
         app.dispatch("private:factory/swriter");
-        sleep(3);
+        writer.waitForExistence(10, 2);
         app.dispatch(".uno:Print");
         assertTrue(File_PrintDlg.exists(5));
         File_PrintDlg.cancel();
@@ -158,7 +158,7 @@ public class BVTFunction {
 
         // Create a new text document
         app.dispatch("private:factory/swriter");
-        sleep(3);
+        writer.waitForExistence(10, 2);
 
         // Insert a picture fully filled with green
         writer.click(400, 400);
@@ -193,7 +193,7 @@ public class BVTFunction {
 
         // Create a new text document
         app.dispatch("private:factory/scalc");
-        sleep(3);
+        calc.waitForExistence(10, 2);
 
         // Insert a picture fully filled with green
         app.dispatch(".uno:InsertGraphic");
@@ -229,7 +229,7 @@ public class BVTFunction {
         // Create a new text document
         app.dispatch("private:factory/simpress?slot=6686");
         PresentationWizard.ok();
-        sleep(3);
+        impress.waitForExistence(10, 2);
 
         // Insert a picture fully filled with green
         app.dispatch(".uno:InsertGraphic");
@@ -339,7 +339,7 @@ public class BVTFunction {
         };
         // Create a new text document
         app.dispatch("private:factory/scalc");
-        sleep(3);
+        calc.waitForExistence(10, 2);
 
         CalcUtil.selectRange("C5");
         typeKeys("1<enter>");
@@ -474,7 +474,7 @@ public class BVTFunction {
 
         // Create a new drawing document
         app.dispatch("private:factory/sdraw");
-        sleep(3);
+        draw.waitForExistence(10, 2);
 
         // Insert a chart
         app.dispatch(".uno:InsertObjectChart");
@@ -498,7 +498,7 @@ public class BVTFunction {
 
         // Create a new text document
         app.dispatch("private:factory/swriter");
-        sleep(3);
+        writer.waitForExistence(10, 2);
 
         // Insert a chart
         app.dispatch(".uno:InsertObjectChart");
@@ -522,7 +522,7 @@ public class BVTFunction {
 
         // Create a new spreadsheet document
         app.dispatch("private:factory/scalc");
-        sleep(3);
+        calc.waitForExistence(10, 2);
 
         // Insert a chart
         app.dispatch(".uno:InsertObjectChart");
@@ -548,7 +548,7 @@ public class BVTFunction {
         // Create a new presentation document
         app.dispatch("private:factory/simpress?slot=6686");
         PresentationWizard.ok();
-        sleep(3);
+        impress.waitForExistence(10, 2);
 
         // Insert a chart
         app.dispatch(".uno:InsertObjectChart");
@@ -572,7 +572,7 @@ public class BVTFunction {
 
         // Create a new drawing document
         app.dispatch("private:factory/sdraw");
-        sleep(3);
+        draw.waitForExistence(10, 2);
 
         // Insert a table
         app.dispatch(".uno:InsertTable");
@@ -580,6 +580,7 @@ public class BVTFunction {
         sleep(3);
 
         // Verify if the table toolbar is active
+        typeKeys("123");    // Insert text to focus on table, to avoid Bug 120171 on linux
         assertTrue(Table_Toolbar.exists(3));
 
         // Focus on edit pane
@@ -598,7 +599,7 @@ public class BVTFunction {
 
         // Create a new text document
         app.dispatch("private:factory/swriter");
-        sleep(3);
+        writer.waitForExistence(10, 2);
 
         // Insert a table
         app.dispatch(".uno:InsertTable");
@@ -629,7 +630,7 @@ public class BVTFunction {
         // Create a new presentation document
         app.dispatch("private:factory/simpress?slot=6686");
         PresentationWizard.ok();
-        sleep(3);
+        impress.waitForExistence(10, 2);
 
         // Insert a table
         app.dispatch(".uno:InsertTable");
@@ -637,6 +638,7 @@ public class BVTFunction {
         sleep(3);
 
         // Verify if the table toolbar is active
+        typeKeys("123");    // Insert text to focus on table, to avoid Bug 120171 on linux
         assertTrue(Table_Toolbar.exists(3));
 
         // // Check the statusbar to verify if the table is inserted
@@ -659,7 +661,7 @@ public class BVTFunction {
 
         // Create a new spreadsheet document
         app.dispatch("private:factory/scalc");
-        sleep(3);
+        calc.waitForExistence(10, 2);
 
         // Insert source numbers
         String sourceNumber1 = "5";
@@ -692,7 +694,7 @@ public class BVTFunction {
 
         // Create a new spreadsheet document
         app.dispatch("private:factory/scalc");
-        sleep(3);
+        calc.waitForExistence(10, 2);
 
         // Insert source numbers and expected result
         String sourceData = "0";
@@ -722,7 +724,7 @@ public class BVTFunction {
 
         // Create a new spreadsheet document
         app.dispatch("private:factory/scalc");
-        sleep(3);
+        calc.waitForExistence(10, 2);
 
         // Insert source number
         String sourceNumber = "-5";

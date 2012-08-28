@@ -55,7 +55,7 @@ public class SmokeTest {
 
     @After
     public void tearDown() throws Exception {
-        app.close();
+
     }
 
     @Test
