@@ -2,6 +2,9 @@ The originals of these come from svn checkout
 http://source.icu-project.org/repos/icu/icu/trunk/source/data/brkitr they no
 longer appear in the icu tarballs, but are in icu's svn
 
+dict_word is used for dictionary word break, edit_word is for cursor
+travelling, while count_word is for word count.
+
 At various stages these copies have been customized and are now horribly out of
 sync. It unclear which diffs from the base versions are deliberate and which
 are now accidental :-(
