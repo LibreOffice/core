@@ -55,6 +55,9 @@ private:
     MetricField aTabMF;
     CheckBox    aUseSquaredPageMode;
     CheckBox    aUseCharUnit;
+    FixedLine   aWordCountFL;
+    FixedText   aWordCountFT;
+    Edit        aWordCountED;
 
     SwWrtShell* pWrtShell;
     sal_Bool    bHTMLMode;

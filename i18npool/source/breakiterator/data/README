@@ -22,12 +22,6 @@ Date:   Sat Jan 29 12:51:52 2011 +0000
 
     Resolves: fdo#31271 wrong line break with (
 
-commit 109fa8224194edfc4ca75ee5cc5e760e54d76a3f
-Author: Thomas Lange [tl] <tl@openoffice.org>
-Date:   Wed Dec 8 14:39:09 2010 +0100
-
-    cws tl84: #i89042# word count fix
-
 commit 42be5541baf18e3292a14a9d478eda33f61e10ab
 Author: Mattias Johnsson <m.t.johnsson@gmail.com>
 Date:   Thu Nov 4 23:25:02 2010 +1100
@@ -585,6 +579,7 @@ Date:   Mon Mar 8 16:17:05 2004 +0000
 
 done, regression tests added:
 
+#i89042# word count fix (regression test is in writer)
 #i58513# add break iterator rules for Finish
 #i19716# fix wrong line break on bracket characters
 #i21290# extend Greek script type

@@ -26,6 +26,7 @@
  *
  ************************************************************************/
 
+#include <officecfg/Office/Writer.hxx>
 #include <comphelper/string.hxx>
 #include <tools/shl.hxx>
 #include <swtypes.hxx>
@@ -88,7 +89,10 @@ SwLoadOptPage::SwLoadOptPage( Window* pParent, const SfxItemSet& rSet ) :
     aTabFT              ( this, SW_RES( FT_TAB ) ),
     aTabMF              ( this, SW_RES( MF_TAB ) ),
     aUseSquaredPageMode ( this, SW_RES( CB_USE_SQUARE_PAGE_MODE ) ),
-    aUseCharUnit             ( this , SW_RES( CB_USE_CHAR_UNIT ) ),
+    aUseCharUnit        ( this , SW_RES( CB_USE_CHAR_UNIT ) ),
+    aWordCountFL        ( this , SW_RES( FL_WORDCOUNT ) ),
+    aWordCountFT        ( this , SW_RES( FT_WORDCOUNT ) ),
+    aWordCountED        ( this , SW_RES( ED_WORDCOUNT ) ),
 
     pWrtShell   ( NULL ),
     bHTMLMode   ( sal_False ),
@@ -131,10 +135,10 @@ SwLoadOptPage::SwLoadOptPage( Window* pParent, const SfxItemSet& rSet ) :
 
     SvtCJKOptions aCJKOptions;
     if(!aCJKOptions.IsAsianTypographyEnabled())
-        {
+    {
         aUseSquaredPageMode.Hide();
-                aUseCharUnit.Hide();
-        }
+        aUseCharUnit.Hide();
+    }
 }
 
 SwLoadOptPage::~SwLoadOptPage()
@@ -206,6 +210,15 @@ sal_Bool SwLoadOptPage::FillItemSet( SfxItemSet& rSet )
     if( bIsUseCharUnitFlag != aUseCharUnit.GetSavedValue())
     {
         rSet.Put(SfxBoolItem(SID_ATTR_APPLYCHARUNIT, bIsUseCharUnitFlag ));
+        bRet = sal_True;
+    }
+
+    if (aWordCountED.GetText() != aWordCountED.GetSavedValue())
+    {
+        boost::shared_ptr< comphelper::ConfigurationChanges > batch(
+            comphelper::ConfigurationChanges::create());
+        officecfg::Office::Writer::WordCount::AdditionalSeperators::set(aWordCountED.GetText(), batch);
+        batch->commit();
         bRet = sal_True;
     }
 
@@ -304,6 +317,9 @@ void SwLoadOptPage::Reset( const SfxItemSet& rSet)
         aUseCharUnit.Check(pUsrPref->IsApplyCharUnit());
     }
     aUseCharUnit.SaveValue();
+
+    aWordCountED.SetText(officecfg::Office::Writer::WordCount::AdditionalSeperators::get());
+    aWordCountED.SaveValue();
 }
 
 IMPL_LINK_NOARG(SwLoadOptPage, MetricHdl)

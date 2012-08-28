@@ -37,6 +37,7 @@
 #include <editeng/hangulhanja.hxx>
 #include <SwSmartTagMgr.hxx>
 #include <linguistic/lngprops.hxx>
+#include <officecfg/Office/Writer.hxx>
 #include <unotools/transliterationwrapper.hxx>
 #include <unotools/charclass.hxx>
 #include <dlelstnr.hxx>
@@ -655,11 +656,43 @@ XubString SwTxtNode::GetCurWord( xub_StrLen nPos ) const
 SwScanner::SwScanner( const SwTxtNode& rNd, const rtl::OUString& rTxt,
     const LanguageType* pLang, const ModelToViewHelper& rConvMap,
     sal_uInt16 nType, sal_Int32 nStart, sal_Int32 nEnde, sal_Bool bClp )
-    : rNode( rNd ), aText( rTxt), pLanguage( pLang ), rConversionMap( rConvMap ), nLen( 0 ), nWordType( nType ), bClip( bClp )
+    : rNode( rNd )
+    , aPreDashReplacementText(rTxt)
+    , pLanguage( pLang )
+    , rConversionMap( rConvMap )
+    , nLen( 0 )
+    , nOverriddenDashCount( 0 )
+    , nWordType( nType )
+    , bClip( bClp )
 {
-    OSL_ENSURE( !aText.isEmpty(), "SwScanner: EmptyString" );
+    OSL_ENSURE( !aPreDashReplacementText.isEmpty(), "SwScanner: EmptyString" );
     nStartPos = nBegin = nStart;
     nEndPos = nEnde;
+
+    //MSWord f.e has special emdash and endash behaviour in that they break
+    //words for the purposes of word counting, while a hyphen etc. doesn't.
+    //
+    //The default configuration treats emdash/endash as a word break, but
+    //additional ones can be added in under tools->options
+    if (nWordType == i18n::WordType::WORD_COUNT)
+    {
+        rtl::OUString sDashes = officecfg::Office::Writer::WordCount::AdditionalSeperators::get();
+        rtl::OUStringBuffer aBuf(aPreDashReplacementText);
+        for (sal_Int32 i = nStartPos; i < nEndPos; ++i)
+        {
+            sal_Unicode cChar = aBuf[i];
+            if (sDashes.indexOf(cChar) != -1)
+            {
+                aBuf[i] = ' ';
+                ++nOverriddenDashCount;
+            }
+        }
+        aText = aBuf.makeStringAndClear();
+    }
+    else
+        aText = aPreDashReplacementText;
+
+    assert(aPreDashReplacementText.getLength() == aText.getLength());
 
     if ( pLanguage )
     {
@@ -836,7 +869,7 @@ sal_Bool SwScanner::NextWord()
     if ( nWordType == i18n::WordType::WORD_COUNT )
         nLen = forceEachAsianCodePointToWord(aText, nBegin, nLen);
 
-    aWord = aText.copy( nBegin, nLen );
+    aWord = aPreDashReplacementText.copy( nBegin, nLen );
 
     return sal_True;
 }
@@ -1892,30 +1925,35 @@ void SwTxtNode::CountWords( SwDocStat& rStat,
     sal_uInt32 nTmpCharsExcludingSpaces = 0;  // all non-white chars
 
     // count words in masked and expanded text:
-    if (!aExpandText.isEmpty() && pBreakIt->GetBreakIter().is())
+    if (!aExpandText.isEmpty())
     {
-        // zero is NULL for pLanguage -----------v               last param = true for clipping
-        SwScanner aScanner( *this, aExpandText, 0, aConversionMap, i18n::WordType::WORD_COUNT,
-                            nExpandBegin, nExpandEnd, true );
-
-        // used to filter out scanner returning almost empty strings (len=1; unichar=0x0001)
-        const rtl::OUString aBreakWord( CH_TXTATR_BREAKWORD );
-
-        while ( aScanner.NextWord() )
+        if (pBreakIt->GetBreakIter().is())
         {
-            //  1 is len(CH_TXTATR_BREAKWORD) : match returns length of match
-            if( 1 != aExpandText.match(aBreakWord, aScanner.GetBegin() ))
-            {
-                ++nTmpWords;
-                const rtl::OUString &rWord = aScanner.GetWord();
-                if (pBreakIt->GetBreakIter()->getScriptType(rWord, 0) == i18n::ScriptType::ASIAN)
-                    ++nTmpAsianWords;
-                nTmpCharsExcludingSpaces += pBreakIt->getGraphemeCount(rWord);
-            }
-        }
-    }
+            // zero is NULL for pLanguage -----------v               last param = true for clipping
+            SwScanner aScanner( *this, aExpandText, 0, aConversionMap, i18n::WordType::WORD_COUNT,
+                                nExpandBegin, nExpandEnd, true );
 
-    nTmpChars = pBreakIt->getGraphemeCount(aExpandText, nExpandBegin, nExpandEnd);
+            // used to filter out scanner returning almost empty strings (len=1; unichar=0x0001)
+            const rtl::OUString aBreakWord( CH_TXTATR_BREAKWORD );
+
+            while ( aScanner.NextWord() )
+            {
+                //  1 is len(CH_TXTATR_BREAKWORD) : match returns length of match
+                if( 1 != aExpandText.match(aBreakWord, aScanner.GetBegin() ))
+                {
+                    ++nTmpWords;
+                    const rtl::OUString &rWord = aScanner.GetWord();
+                    if (pBreakIt->GetBreakIter()->getScriptType(rWord, 0) == i18n::ScriptType::ASIAN)
+                        ++nTmpAsianWords;
+                    nTmpCharsExcludingSpaces += pBreakIt->getGraphemeCount(rWord);
+                }
+            }
+
+            nTmpCharsExcludingSpaces += aScanner.getOverriddenDashCount();
+        }
+
+        nTmpChars = pBreakIt->getGraphemeCount(aExpandText, nExpandBegin, nExpandEnd);
+    }
 
     // no nTmpCharsExcludingSpaces adjust needed neither for blanked out MaskedChars
     // nor for mid-word selection - set scanner bClip = true at creation
@@ -1938,6 +1976,7 @@ void SwTxtNode::CountWords( SwDocStat& rStat,
             nTmpCharsExcludingSpaces += pBreakIt->getGraphemeCount(rWord);
         }
 
+        nTmpCharsExcludingSpaces += aScanner.getOverriddenDashCount();
         nTmpChars += pBreakIt->getGraphemeCount(sNumString);
     }
     else if ( bHasBullet )

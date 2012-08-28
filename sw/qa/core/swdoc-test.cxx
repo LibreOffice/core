@@ -567,6 +567,116 @@ void SwDocTest::testSwScanner()
         CPPUNIT_ASSERT_EQUAL(aDocStat.nWord, static_cast<sal_uLong>(0));
         CPPUNIT_ASSERT_EQUAL(aDocStat.nChar, static_cast<sal_uLong>(0));
     }
+
+    //See https://bugs.freedesktop.org/show_bug.cgi?id=38983
+    {
+        SwDocStat aDocStat;
+
+        rtl::OUString sTemplate("ThisXis a test.");
+
+        m_pDoc->AppendTxtNode(*aPaM.GetPoint());
+        m_pDoc->InsertString(aPaM, sTemplate.replace('X', ' '));
+        pTxtNode = aPaM.GetNode()->GetTxtNode();
+        pTxtNode->CountWords(aDocStat, 0, pTxtNode->Len());
+        CPPUNIT_ASSERT(aDocStat.nWord == 4 &&
+                       aDocStat.nCharExcludingSpaces == 12 &&
+                       aDocStat.nChar == 15);
+        aDocStat.Reset();
+
+        m_pDoc->AppendTxtNode(*aPaM.GetPoint());
+        m_pDoc->InsertString(aPaM, sTemplate.replaceAll(rtl::OUString('X'), rtl::OUString(" = ")));
+        pTxtNode = aPaM.GetNode()->GetTxtNode();
+        pTxtNode->CountWords(aDocStat, 0, pTxtNode->Len());
+        CPPUNIT_ASSERT(aDocStat.nWord == 5 &&
+                       aDocStat.nCharExcludingSpaces == 13 &&
+                       aDocStat.nChar == 17);
+        aDocStat.Reset();
+
+        m_pDoc->AppendTxtNode(*aPaM.GetPoint());
+        m_pDoc->InsertString(aPaM, sTemplate.replaceAll(rtl::OUString('X'), rtl::OUString(" _ ")));
+        pTxtNode = aPaM.GetNode()->GetTxtNode();
+        pTxtNode->CountWords(aDocStat, 0, pTxtNode->Len());
+        CPPUNIT_ASSERT(aDocStat.nWord == 5 &&
+                       aDocStat.nCharExcludingSpaces == 13 &&
+                       aDocStat.nChar == 17);
+        aDocStat.Reset();
+
+        m_pDoc->AppendTxtNode(*aPaM.GetPoint());
+        m_pDoc->InsertString(aPaM, sTemplate.replaceAll(rtl::OUString('X'), rtl::OUString(" -- ")));
+        pTxtNode = aPaM.GetNode()->GetTxtNode();
+        pTxtNode->CountWords(aDocStat, 0, pTxtNode->Len());
+        CPPUNIT_ASSERT(aDocStat.nWord == 5 &&
+                       aDocStat.nCharExcludingSpaces == 14 &&
+                       aDocStat.nChar == 18);
+        aDocStat.Reset();
+
+        m_pDoc->AppendTxtNode(*aPaM.GetPoint());
+        m_pDoc->InsertString(aPaM, sTemplate.replace('X', '_'));
+        pTxtNode = aPaM.GetNode()->GetTxtNode();
+        pTxtNode->CountWords(aDocStat, 0, pTxtNode->Len());
+        CPPUNIT_ASSERT(aDocStat.nWord == 3 &&
+                       aDocStat.nCharExcludingSpaces == 13 &&
+                       aDocStat.nChar == 15);
+        aDocStat.Reset();
+
+        m_pDoc->AppendTxtNode(*aPaM.GetPoint());
+        m_pDoc->InsertString(aPaM, sTemplate.replace('X', '-'));
+        pTxtNode = aPaM.GetNode()->GetTxtNode();
+        pTxtNode->CountWords(aDocStat, 0, pTxtNode->Len());
+        CPPUNIT_ASSERT(aDocStat.nWord == 3 &&
+                       aDocStat.nCharExcludingSpaces == 13 &&
+                       aDocStat.nChar == 15);
+        aDocStat.Reset();
+
+        m_pDoc->AppendTxtNode(*aPaM.GetPoint());
+        m_pDoc->InsertString(aPaM, sTemplate.replace('X', 0x2012));
+        pTxtNode = aPaM.GetNode()->GetTxtNode();
+        pTxtNode->CountWords(aDocStat, 0, pTxtNode->Len());
+        CPPUNIT_ASSERT(aDocStat.nWord == 3 &&
+                       aDocStat.nCharExcludingSpaces == 13 &&
+                       aDocStat.nChar == 15);
+        aDocStat.Reset();
+
+        m_pDoc->AppendTxtNode(*aPaM.GetPoint());
+        m_pDoc->InsertString(aPaM, sTemplate.replace('X', 0x2015));
+        pTxtNode = aPaM.GetNode()->GetTxtNode();
+        pTxtNode->CountWords(aDocStat, 0, pTxtNode->Len());
+        CPPUNIT_ASSERT(aDocStat.nWord == 3 &&
+                       aDocStat.nCharExcludingSpaces == 13 &&
+                       aDocStat.nChar == 15);
+        aDocStat.Reset();
+
+        //But default configuration should, msword-alike treak emdash
+        //and endash as word seperators for word-counting
+        m_pDoc->AppendTxtNode(*aPaM.GetPoint());
+        m_pDoc->InsertString(aPaM, sTemplate.replace('X', 0x2013));
+        pTxtNode = aPaM.GetNode()->GetTxtNode();
+        pTxtNode->CountWords(aDocStat, 0, pTxtNode->Len());
+        CPPUNIT_ASSERT(aDocStat.nWord == 4 &&
+                       aDocStat.nCharExcludingSpaces == 13 &&
+                       aDocStat.nChar == 15);
+        aDocStat.Reset();
+
+        m_pDoc->AppendTxtNode(*aPaM.GetPoint());
+        m_pDoc->InsertString(aPaM, sTemplate.replace('X', 0x2014));
+        pTxtNode = aPaM.GetNode()->GetTxtNode();
+        pTxtNode->CountWords(aDocStat, 0, pTxtNode->Len());
+        CPPUNIT_ASSERT(aDocStat.nWord == 4 &&
+                       aDocStat.nCharExcludingSpaces == 13 &&
+                       aDocStat.nChar == 15);
+        aDocStat.Reset();
+
+        const sal_Unicode aChunk[] = {' ', 0x2013, ' '};
+        rtl::OUString sChunk(aChunk, SAL_N_ELEMENTS(aChunk));
+        m_pDoc->AppendTxtNode(*aPaM.GetPoint());
+        m_pDoc->InsertString(aPaM, sTemplate.replaceAll(rtl::OUString('X'), sChunk));
+        pTxtNode = aPaM.GetNode()->GetTxtNode();
+        pTxtNode->CountWords(aDocStat, 0, pTxtNode->Len());
+        CPPUNIT_ASSERT(aDocStat.nWord == 4 &&
+                       aDocStat.nCharExcludingSpaces == 13 &&
+                       aDocStat.nChar == 17);
+        aDocStat.Reset();
+    }
 }
 
 //See https://bugs.freedesktop.org/show_bug.cgi?id=40599

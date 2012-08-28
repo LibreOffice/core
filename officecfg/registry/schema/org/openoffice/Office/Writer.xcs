@@ -5736,6 +5736,19 @@
                 	<value>false</value>
                 	</prop>
                 </group>
+		<group oor:name="WordCount">
+                	<info>
+                        	<desc>Contains settings for word counting</desc>
+                	</info>
+                	<prop oor:name="AdditionalSeperators" oor:type="xs:string" oor:nillable="false">
+               		<info>
+                        	<author>cmc</author>
+                        	<desc>configures additional word seperators for word counting</desc>
+                        	<label>Additional Word Seperators</label>
+                	</info>
+                	<value>—–</value>
+                	</prop>
+                </group>
 		<group oor:name="Navigator">
 			<info>
 				<desc>Contains settings for the Navigator.</desc>

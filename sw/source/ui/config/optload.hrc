@@ -32,7 +32,10 @@
 #define FT_TAB                  21
 #define MF_TAB                  22
 #define CB_USE_SQUARE_PAGE_MODE 23
-#define CB_USE_CHAR_UNIT                24
+#define CB_USE_CHAR_UNIT        24
+#define FL_WORDCOUNT            25
+#define FT_WORDCOUNT            26
+#define ED_WORDCOUNT            27
 
 // SwCaptionOptPage -----------------------------
 

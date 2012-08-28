@@ -43,13 +43,15 @@ class SwScanner
 {
     rtl::OUString aWord;
     const SwTxtNode& rNode;
-    const rtl::OUString aText;
+    const rtl::OUString aPreDashReplacementText;
+    rtl::OUString aText;
     const LanguageType* pLanguage;
     const ModelToViewHelper& rConversionMap;
     sal_Int32 nStartPos;
     sal_Int32 nEndPos;
     sal_Int32 nBegin;
     sal_Int32 nLen;
+    sal_Int32 nOverriddenDashCount;
     LanguageType aCurrLang;
     sal_uInt16 nWordType;
     sal_Bool bClip;
@@ -74,6 +76,8 @@ public:
     sal_Int32 GetLen() const           { return nLen; }
 
     LanguageType GetCurrentLanguage() const {return aCurrLang;}
+
+    sal_Int32 getOverriddenDashCount() const {return nOverriddenDashCount; }
 };
 
 #endif
