@@ -1441,7 +1441,8 @@ void SvNumberFormatter::GetOutputString(const double& fOutNumber,
 void SvNumberFormatter::GetOutputString(String& sString,
                                         sal_uInt32 nFIndex,
                                         String& sOutString,
-                                        Color** ppColor )
+                                        Color** ppColor,
+                                        bool bUseStarFormat )
 {
     SvNumberformat* pFormat = GetFormatEntry( nFIndex );
     if (!pFormat)
@@ -1454,7 +1455,11 @@ void SvNumberFormatter::GetOutputString(String& sString,
     else
     {
         ChangeIntl(pFormat->GetLanguage());
+        if ( bUseStarFormat )
+           pFormat->SetStarFormatSupport( true );
         pFormat->GetOutputString(sString, sOutString, ppColor);
+        if ( bUseStarFormat )
+           pFormat->SetStarFormatSupport( false );
     }
 }
 
@@ -1485,7 +1490,8 @@ void SvNumberFormatter::GetOutputString(const double& fOutNumber,
 void SvNumberFormatter::GetOutputString(rtl::OUString& sString,
                                         sal_uInt32 nFIndex,
                                         rtl::OUString& sOutString,
-                                        Color** ppColor)
+                                        Color** ppColor,
+                                        bool bUseStarFormat )
 {
     SvNumberformat* pFormat = GetFormatEntry( nFIndex );
     if (!pFormat)
@@ -1500,7 +1506,11 @@ void SvNumberFormatter::GetOutputString(rtl::OUString& sString,
         ChangeIntl(pFormat->GetLanguage());
         String aString = sString;
         String aOutString = sOutString;
+        if ( bUseStarFormat )
+           pFormat->SetStarFormatSupport( true );
         pFormat->GetOutputString(aString, aOutString, ppColor);
+        if ( bUseStarFormat )
+           pFormat->SetStarFormatSupport( false );
         sString = aString;
         sOutString = aOutString;
     }

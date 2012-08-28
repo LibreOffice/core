@@ -63,7 +63,7 @@ void ScCellFormat::GetString( ScBaseCell* pCell, sal_uLong nFormat, rtl::OUStrin
         case CELLTYPE_STRING:
             {
                 rtl::OUString aCellString = ((ScStringCell*)pCell)->GetString();
-                rFormatter.GetOutputString( aCellString, nFormat, rString, ppColor );
+                rFormatter.GetOutputString( aCellString, nFormat, rString, ppColor, bUseStarFormat );
             }
             break;
         case CELLTYPE_EDIT:
@@ -135,12 +135,12 @@ void ScCellFormat::GetString( ScBaseCell* pCell, sal_uLong nFormat, rtl::OUStrin
                             if ( !bNullVals && fValue == 0.0 )
                                 rString = rtl::OUString();
                             else
-                                rFormatter.GetOutputString( fValue, nFormat, rString, ppColor );
+                                rFormatter.GetOutputString( fValue, nFormat, rString, ppColor, bUseStarFormat );
                         }
                         else
                         {
                             rtl::OUString aCellString = pFCell->GetString();
-                            rFormatter.GetOutputString( aCellString, nFormat, rString, ppColor );
+                            rFormatter.GetOutputString( aCellString, nFormat, rString, ppColor, bUseStarFormat );
                         }
                     }
                 }

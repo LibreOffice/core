@@ -3881,8 +3881,8 @@ bool SvNumberformat::ImpGetNumberOutput(double fNumber,
                 case NF_SYMBOLTYPE_STAR:
                     if( bStarFlag )
                     {
-                        sStr.Insert( (sal_Unicode) 0x1B, k /*++*/ );
                         sStr.Insert(rInfo.sStrArray[j].GetChar(1),k);
+                        sStr.Insert( (sal_Unicode) 0x1B, k );
                         bRes = true;
                     }
                     break;
@@ -4001,8 +4001,8 @@ bool SvNumberformat::ImpNumberFillWithThousands(
             case NF_SYMBOLTYPE_STAR:
                 if( bStarFlag )
                 {
-                    sStr.Insert( (sal_Unicode) 0x1B, k/*++*/ );
                     sStr.Insert(rInfo.sStrArray[j].GetChar(1),k);
+                    sStr.Insert( (sal_Unicode) 0x1B, k );
                     bRes = true;
                 }
                 break;
@@ -4165,8 +4165,8 @@ bool SvNumberformat::ImpNumberFill( String& sStr,       // number string
             case NF_SYMBOLTYPE_STAR:
                 if( bStarFlag )
                 {
-                    sStr.Insert( sal_Unicode(0x1B), k++ );
                     sStr.Insert(rInfo.sStrArray[j].GetChar(1),k);
+                    sStr.Insert( sal_Unicode(0x1B), k );
                     bRes = true;
                 }
                 break;
