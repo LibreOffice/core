@@ -466,6 +466,9 @@ public class UIMap {
     public static final VclComboBox FilterValue1 = combobox("sc:ComboBox:RID_SCDLG_FILTER:ED_VAL1");
     public static final VclDialog StandardFilterDlg = dialog(".uno:DataFilterStandardFilter");
 
+    //Fontwork
+    public static final VclDialog FontworkGalleryDlg = dialog("svx:ModalDialog:RID_SVX_MDLG_FONTWORK_GALLERY");
+
 
 
 
