@@ -76,12 +76,12 @@ ScAddInAsync::ScAddInAsync(sal_uLong nHandleP, FuncData* pFuncData, ScDocument* 
 
 ScAddInAsync::~ScAddInAsync()
 {
-    // aSeekObj hat das alles nicht, Handle 0 gibt es sonst nicht
+    // aSeekObj does not have that, handle 0 does not exist otherwise
     if ( nHandle )
     {
-        // im dTor wg. theAddInAsyncTbl.DeleteAndDestroy in ScGlobal::Clear
+        // in dTor because of theAddInAsyncTbl.DeleteAndDestroy in ScGlobal::Clear
         mpFuncData->Unadvice( (double)nHandle );
-        if ( meType == PTR_STRING && pStr )      // mit Typvergleich wg. Union!
+        if ( meType == PTR_STRING && pStr )      // include type comparison because of union
             delete pStr;
         delete pDocs;
     }
@@ -107,10 +107,10 @@ void ScAddInAsync::CallBack( sal_uLong nHandleP, void* pData )
     ScAddInAsync* p;
     if ( (p = Get( nHandleP )) == NULL )
         return;
-    // keiner mehr dran? Unadvice und weg damit
+
     if ( !p->HasListeners() )
     {
-        // nicht im dTor wg. theAddInAsyncTbl.DeleteAndDestroy in ScGlobal::Clear
+        // not in dTor because of theAddInAsyncTbl.DeleteAndDestroy in ScGlobal::Clear
         theAddInAsyncTbl.erase( p );
         delete p;
         return ;
@@ -148,7 +148,7 @@ void ScAddInAsync::RemoveDocument( ScDocument* pDocumentP )
     if ( !theAddInAsyncTbl.empty() )
     {
         for( ScAddInAsyncs::reverse_iterator iter1 = theAddInAsyncTbl.rbegin(); iter1 != theAddInAsyncTbl.rend(); ++iter1 )
-        {   // rueckwaerts wg. Pointer-Aufrueckerei im Array
+        {   // backwards because of pointer-movement in array
             ScAddInAsync* pAsync = *iter1;
             ScAddInDocs* p = pAsync->pDocs;
             ScAddInDocs::iterator iter2 = p->find( pDocumentP );
@@ -156,7 +156,7 @@ void ScAddInAsync::RemoveDocument( ScDocument* pDocumentP )
             {
                 p->erase( iter2 );
                 if ( p->empty() )
-                {   // dieses AddIn wird nicht mehr benutzt
+                {   // this AddIn is not used anymore
                     theAddInAsyncTbl.erase( --(iter1.base()) );
                     delete pAsync;
                 }

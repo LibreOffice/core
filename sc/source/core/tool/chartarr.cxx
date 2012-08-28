@@ -133,7 +133,7 @@ ScMemChart* ScChartArray::CreateMemChartSingle()
     SCSIZE nRow;
 
         //
-        //  wirkliche Groesse (ohne versteckte Zeilen/Spalten)
+        //  real size (without hidden rows/columns)
         //
 
     SCCOL nColAdd = HasRowHeaders() ? 1 : 0;
@@ -148,7 +148,7 @@ ScMemChart* ScChartArray::CreateMemChartSingle()
     ScRangeListRef aRangeListRef(GetRangeList());
     aRangeListRef->front()->GetVars( nCol1, nRow1, nTab1, nCol2, nRow2, nTab2 );
 
-    SCCOL nStrCol = nCol1;      // fuer Beschriftung merken
+    SCCOL nStrCol = nCol1;      // remember for labeling
     SCROW nStrRow = nRow1;
     // Skip hidden columns.
     // TODO: make use of last column value once implemented.
@@ -161,7 +161,7 @@ ScMemChart* ScChartArray::CreateMemChartSingle()
     if (pDocument->RowHidden(nRow1, nTab1, NULL, &nLastRow))
         nRow1 = nLastRow + 1;
 
-    // falls alles hidden ist, bleibt die Beschriftung am Anfang
+    // if everything is hidden then the label remains at the beginning
     if ( nCol1 <= nCol2 )
     {
         nStrCol = nCol1;
@@ -239,7 +239,7 @@ ScMemChart* ScChartArray::CreateMemChartSingle()
             {
                 for (nRow=0; nRow<nRowCount; nRow++)
                 {
-                    double nVal = DBL_MIN;      // Hack fuer Chart, um leere Zellen zu erkennen
+                    double nVal = DBL_MIN;      // Hack for Chart to recognize empty cells
 
                     pDocument->GetCell( aCols[nCol], aRows[nRow], nTab1, pCell );
                     if (pCell)
@@ -369,7 +369,7 @@ ScMemChart* ScChartArray::CreateMemChartMulti()
             {
                 for ( nRow = 0; nRow < nRowCount; nRow++, nIndex++ )
                 {
-                    double nVal = DBL_MIN;      // Hack fuer Chart, um leere Zellen zu erkennen
+                    double nVal = DBL_MIN;      // Hack for Chart to recognize empty cells
                     const ScAddress* pPos = GetPositionMap()->GetPosition( nIndex );
                     if ( pPos )
                     {   // sonst: Luecke
@@ -402,10 +402,10 @@ ScMemChart* ScChartArray::CreateMemChartMulti()
         {
             for ( nRow = 0; nRow < nRowCount; nRow++, nIndex++ )
             {
-                double nVal = DBL_MIN;      // Hack fuer Chart, um leere Zellen zu erkennen
+                double nVal = DBL_MIN;      // Hack for Chart to recognize empty cells
                 const ScAddress* pPos = GetPositionMap()->GetPosition( nIndex );
                 if ( pPos )
-                {   // sonst: Luecke
+                {   // otherwise: Gap
                     ScBaseCell* pCell = pDocument->GetCell( *pPos );
                     if (pCell)
                     {
@@ -431,10 +431,10 @@ ScMemChart* ScChartArray::CreateMemChartMulti()
             }
         }
 
-//2do: Beschriftung bei Luecken
+//2do: Label when gaps
 
         //
-        //  Spalten-Header
+        //  Column header
         //
 
         SCCOL nPosCol = 0;
@@ -463,7 +463,7 @@ ScMemChart* ScChartArray::CreateMemChartMulti()
         }
 
         //
-        //  Zeilen-Header
+        //  Row header
         //
 
         SCROW nPosRow = 0;
