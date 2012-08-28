@@ -17,6 +17,8 @@ import java.util.Random;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.support.v4.content.LocalBroadcastManager;
 
 /**
@@ -30,20 +32,16 @@ public class NetworkClient extends Client {
 
     private Socket mSocket;
 
-    public NetworkClient(String ipAddress, Context aContext) {
+    public NetworkClient(Server aServer, Context aContext) {
         super(aContext);
         try {
-            mSocket = new Socket(ipAddress, PORT);
+            mSocket = new Socket(aServer.getAddress(), PORT);
             mInputStream = mSocket.getInputStream();
             mReader = new BufferedReader(new InputStreamReader(mInputStream,
                             CHARSET));
             mOutputStream = mSocket.getOutputStream();
             // Pairing.
-            Random aRandom = new Random();
-            String aPin = "" + (aRandom.nextInt(9000) + 1000);
-            while (aPin.length() < 4) {
-                aPin = "0" + aPin; // Add leading zeros if necessary
-            }
+            String aPin = setupPin(aServer);
             Intent aIntent = new Intent(
                             CommunicationService.MSG_PAIRING_STARTED);
             aIntent.putExtra("PIN", aPin);
@@ -80,6 +78,34 @@ public class NetworkClient extends Client {
             e.printStackTrace();
         }
 
+    }
+
+    private String setupPin(Server aServer) {
+        // Get settings
+        SharedPreferences aPreferences = mContext.getSharedPreferences(
+                        "sdremote_authorisedremotes",
+                        android.content.Context.MODE_PRIVATE);
+        if (aPreferences.contains(aServer.getName())) {
+            return aPreferences.getString(aServer.getName(), "");
+        } else {
+            String aPin = generatePin();
+
+            Editor aEdit = aPreferences.edit();
+            aEdit.putString(aServer.getName(), aPin);
+            aEdit.commit();
+
+            return aPin;
+        }
+
+    }
+
+    private String generatePin() {
+        Random aRandom = new Random();
+        String aPin = "" + (aRandom.nextInt(9000) + 1000);
+        while (aPin.length() < 4) {
+            aPin = "0" + aPin; // Add leading zeros if necessary
+        }
+        return aPin;
     }
 
     @Override

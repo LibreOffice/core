@@ -11,7 +11,14 @@
 #include <vector>
 
 #include "officecfg/Office/Common.hxx"
+#include "officecfg/Office/Impress.hxx"
+
+#include <com/sun/star/container/XNameAccess.hpp>
+#include <com/sun/star/container/XNameContainer.hpp>
+#include <com/sun/star/uno/Sequence.hxx>
+
 #include <comphelper/processfactory.hxx>
+#include <comphelper/configuration.hxx>
 
 #include "sddll.hxx"
 
@@ -25,8 +32,13 @@
 using namespace std;
 using namespace sd;
 using namespace ::com::sun::star;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::container;
+using namespace ::com::sun::star::lang;
 using rtl::OString;
 using namespace ::osl;
+using namespace ::comphelper;
 
 // struct ClientInfoInternal:
 //     ClientInfo
@@ -89,10 +101,11 @@ void RemoteServer::execute()
             OUString aAddress = aClientAddr.getHostname();
 
             MutexGuard aGuard( mDataMutex );
-            mAvailableClients.push_back( new ClientInfoInternal(
+            ClientInfoInternal* pClient = new ClientInfoInternal(
                     OStringToOUString( aName, RTL_TEXTENCODING_UTF8 ),
                     aAddress, pSocket, OStringToOUString( aPin,
-                    RTL_TEXTENCODING_UTF8 ) ) );
+                    RTL_TEXTENCODING_UTF8 ) );
+            mAvailableClients.push_back( pClient );
 
             // Read off any additional non-empty lines
             do
@@ -100,6 +113,27 @@ void RemoteServer::execute()
                 pSocket->readLine( aLine );
             }
             while ( aLine.getLength() > 0 );
+
+            // Check if we already have this server.
+            Reference< XNameAccess > xConfig = officecfg::Office::Impress::Misc::AuthorisedRemotes::get();
+            Sequence< OUString > aNames = xConfig->getElementNames();
+            for ( int i = 0; i < aNames.getLength(); i++ )
+            {
+                if ( aNames[i].equals( pClient->mName ) )
+                {
+                    Reference<XNameAccess> xSetItem( xConfig->getByName(aNames[i]), UNO_QUERY );
+                    Any axPin(xSetItem->getByName("PIN"));
+                    OUString sPin;
+                    axPin >>= sPin;
+
+                    if ( ! sPin.equals( pClient->mPin ) ) {
+                        break;
+                    }
+                    connectClient( pClient, sPin );
+                    break;
+                }
+
+            }
         } else {
             delete pSocket;
         }
@@ -180,6 +214,32 @@ sal_Bool RemoteServer::connectClient( ClientInfo* pClient, rtl::OUString aPin )
     ClientInfoInternal *apClient = (ClientInfoInternal*) pClient;
     if ( apClient->mPin.equals( aPin ) )
     {
+        // Save in settings first
+        boost::shared_ptr< ConfigurationChanges > aChanges = ConfigurationChanges::create();
+        Reference< XNameContainer > xConfig = officecfg::Office::Impress::Misc::AuthorisedRemotes::get( aChanges );
+
+        Reference<XSingleServiceFactory> xChildFactory (
+            xConfig, UNO_QUERY);
+        Reference<XNameReplace> xChild( xChildFactory->createInstance(), UNO_QUERY);
+                Any aValue;
+        if (xChild.is())
+        {
+            // Check whether the client is already saved
+            Sequence< OUString > aNames = xConfig->getElementNames();
+            for ( int i = 0; i < aNames.getLength(); i++ )
+            {
+                if ( aNames[i].equals( apClient->mName ) )
+                    xConfig->replaceByName( apClient->mName, makeAny( xChild ) );
+                else
+                    xConfig->insertByName( apClient->mName, makeAny( xChild ) );
+            }
+
+            aValue <<= OUString( apClient->mPin );
+            xChild->replaceByName("PIN", aValue);
+            aChanges->commit();
+        }
+
+
         Communicator* pCommunicator = new Communicator( apClient->mpStreamSocket );
         MutexGuard aGuard( spServer->mDataMutex );
 

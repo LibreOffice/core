@@ -86,8 +86,7 @@ public class CommunicationService extends Service implements Runnable {
                         mState = State.CONNECTING;
                         switch (mServerDesired.getProtocol()) {
                         case NETWORK:
-                            mClient = new NetworkClient(
-                                            mServerDesired.getAddress(), this);
+                            mClient = new NetworkClient(mServerDesired, this);
                             break;
                         case BLUETOOTH:
                             mClient = new BluetoothClient(
