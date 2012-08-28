@@ -7,14 +7,13 @@ ScVbaFormat<ooo::vba::excel::XStyle>::setAddIndent(com::sun::star::uno::Any cons
 ScVbaFormat<ooo::vba::excel::XStyle>::setNumberFormat(com::sun::star::lang::Locale, rtl::OUString const&)
 SvtSlideSorterBarOptions::AddListenerLink(Link const&)
 SvtSlideSorterBarOptions::RemoveListenerLink(Link const&)
+SwEditWin::ShowHeaderFooterSeparator(bool, bool)
 TextEngine::GetLeftMargin() const
 ThumbnailView::GetItemCount() const
 ThumbnailView::ImplScroll(Point const&)
 ThumbnailView::InsertItem(unsigned short, BitmapEx const&, rtl::OUString const&, unsigned long)
 ThumbnailViewItemAcc::FireAccessibleEvent(short, com::sun::star::uno::Any const&, com::sun::star::uno::Any const&)
 ThumbnailViewItemAcc::getImplementation(com::sun::star::uno::Reference<com::sun::star::uno::XInterface> const&)
-VCLXPrinterServer::getImplementationId()
-VCLXPrinterServer::getTypes()
 VirtualDevice::SetOutputSizePixelScaleOffsetAndBuffer(Size const&, Fraction const&, Point const&, boost::shared_array<unsigned char> const&)
 Window::PostUserEvent(unsigned long&, unsigned long, void*)
 XclExpPivotCache::GetFieldAcc(rtl::OUString const&)
