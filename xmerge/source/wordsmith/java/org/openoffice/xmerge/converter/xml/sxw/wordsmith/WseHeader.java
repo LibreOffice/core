@@ -109,12 +109,10 @@ class WseHeader extends Wse {
      *  @return  A <code>byte</code> array representing this element.
      */
     byte[] getBytes() {
-        DataOutputStream os;  // Used for storing the data
-        ByteArrayOutputStream bs = null;  // Used for storing the data
+        ByteArrayOutputStream bs = new ByteArrayOutputStream();
+        DataOutputStream os = new DataOutputStream(bs);
 
         try {
-            bs = new ByteArrayOutputStream();
-            os = new DataOutputStream(bs);
             os.write(2);  // binary doc indicator
             os.write(4);  // binary header indicator
 
