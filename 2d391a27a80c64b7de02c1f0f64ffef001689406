@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAN3///to\u003d",
+        "filename": "sc/source/core/tool/ddelink.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1000030
+      },
+      "writtenOn": "2012-08-28T14:12:58Z",
+      "side": 1,
+      "message": "You need to revert this change.  This breaks the build.\n\nWhen reading a value from an SvStream instance using \u003e\u003e, be extra careful with the type of the variable.",
+      "revId": "2d391a27a80c64b7de02c1f0f64ffef001689406",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAN3///tk\u003d",
+        "filename": "sc/source/core/tool/ddelink.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1000030
+      },
+      "writtenOn": "2012-08-28T14:12:58Z",
+      "side": 1,
+      "message": "You need to revert this too.  It creates a new compiler warning.",
+      "revId": "2d391a27a80c64b7de02c1f0f64ffef001689406",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
