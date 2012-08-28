@@ -2068,6 +2068,12 @@ AC_ARG_WITH(max-jobs,
          Defaults to 1, unless you configure --enable-icecream - then to 10.]),
 ,)
 
+AC_ARG_WITH(check-jobs,
+    AS_HELP_STRING([--with-check-jobs],
+        [Maximum number of jobs that will be issued at the same time during 'make subsequenttest'.
+         Default value is the same as 'max-jobs'. Useful because the subsequent tests are very lighweight.]),
+,)
+
 dnl ===================================================================
 dnl MacOSX build and runtime environment options
 dnl ===================================================================
@@ -12164,6 +12170,17 @@ fi
 AC_MSG_RESULT([per module:$GMAKE_MODULE_PARALLELISM, for tail_build:$GMAKE_PARALLELISM])
 AC_SUBST(GMAKE_PARALLELISM)
 AC_SUBST(GMAKE_MODULE_PARALLELISM)
+
+dnl ===================================================================
+dnl Number of parallel jobs to be executed during subsequenttest
+dnl ===================================================================
+AC_MSG_CHECKING([for maximum no. of jobs during subsequenttest])
+CHECK_PARALLELISM=$GMAKE_PARALLELISM
+if test "$with_check_jobs" != ""; then
+    CHECK_PARALLELISM="$with_check_jobs"
+fi
+AC_MSG_RESULT([$CHECK_PARALLELISM])
+AC_SUBST(CHECK_PARALLELISM)
 
 dnl ===================================================================
 dnl Setting up the environment.
