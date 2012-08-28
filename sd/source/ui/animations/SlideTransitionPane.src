@@ -34,7 +34,7 @@ Control DLG_SLIDE_TRANSITION_PANE
     FixedLine FL_APPLY_TRANSITION
     {
         Size = MAP_APPFONT( 1, RSC_CD_FIXEDLINE_HEIGHT );
-        Text [ en-US ] = "Apply to selected slides";
+        Text [ en-US ] = "~Apply to selected slides";
     };
 
     ListBox LB_SLIDE_TRANSITIONS
@@ -56,7 +56,7 @@ Control DLG_SLIDE_TRANSITION_PANE
     FixedText FT_SPEED
     {
         Size = MAP_APPFONT( 1, RSC_CD_FIXEDTEXT_HEIGHT );
-        Text [ en-US ] = "Speed";
+        Text [ en-US ] = "~Speed";
     };
 
     ListBox LB_SPEED
@@ -78,7 +78,7 @@ Control DLG_SLIDE_TRANSITION_PANE
     FixedText FT_SOUND
     {
         Size = MAP_APPFONT( 1, RSC_CD_FIXEDTEXT_HEIGHT );
-        Text [ en-US ] = "Sound";
+        Text [ en-US ] = "Sou~nd";
     };
 
     ListBox LB_SOUND
@@ -110,7 +110,7 @@ Control DLG_SLIDE_TRANSITION_PANE
     Fixedline FL_ADVANCE_SLIDE
     {
         Size = MAP_APPFONT( 1, RSC_CD_FIXEDLINE_HEIGHT );
-        Text [ en-US ] = "Advance slide";
+        Text [ en-US ] = "A~dvance slide";
     };
 
     RadioButton RB_ADVANCE_ON_MOUSE
@@ -162,7 +162,7 @@ Control DLG_SLIDE_TRANSITION_PANE
         Size = MAP_APPFONT( 1, RSC_CD_PUSHBUTTON_HEIGHT );
         TabStop = TRUE ;
 
-        Text [ en-US ] = "Apply to All Slides";
+        Text [ en-US ] = "~Apply to All Slides";
     };
 
 
@@ -172,7 +172,7 @@ Control DLG_SLIDE_TRANSITION_PANE
         Size = MAP_APPFONT( 1, RSC_CD_PUSHBUTTON_HEIGHT );
         TabStop = TRUE ;
 
-        Text [ en-US ] = "Play";
+        Text [ en-US ] = "~Play";
     };
 
     PushButton PB_SLIDE_SHOW
@@ -181,7 +181,7 @@ Control DLG_SLIDE_TRANSITION_PANE
         Size = MAP_APPFONT( 1, RSC_CD_PUSHBUTTON_HEIGHT );
         TabStop = TRUE ;
 
-        Text [ en-US ] = "Slide Show";
+        Text [ en-US ] = "S~lide Show";
     };
 
     FixedLine FL_EMPTY2
@@ -195,7 +195,7 @@ Control DLG_SLIDE_TRANSITION_PANE
         Size = MAP_APPFONT( 1, RSC_CD_CHECKBOX_HEIGHT );
         TabStop = TRUE ;
 
-        Text [ en-US ] = "Automatic preview";
+        Text [ en-US ] = "A~utomatic preview";
     };
 
     // --------------------
