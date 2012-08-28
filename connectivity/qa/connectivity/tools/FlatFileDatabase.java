@@ -89,17 +89,6 @@ class FlatFileDatabase extends AbstractDatabase
         storable.storeAsURL( m_databaseDocumentFile, new PropertyValue[] { } );
     }
 
-    /** drops the table with a given name
-
-    @param _name
-    the name of the table to drop
-     */
-    public void dropTable(final String _name) throws SQLException
-    {
-        String dropStatement = "DROP TABLE \"" + _name;
-        executeSQL(dropStatement);
-    }
-
     final String    m_urlSubScheme;
     File            m_tableFileLocation = null;
 }

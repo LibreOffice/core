@@ -210,21 +210,6 @@ public class HsqlDatabase
         return (XModel)UnoRuntime.queryInterface( XModel.class, m_databaseDocument );
     }
 
-    /** drops the table with a given name
-
-        @param _name
-            the name of the table to drop
-        @param _ifExists
-            TRUE if it should be dropped only when it exists.
-    */
-    public void dropTable( String _name, boolean _ifExists ) throws SQLException
-    {
-        String dropStatement = "DROP TABLE \"" + _name;
-        if ( _ifExists )
-            dropStatement += "\" IF EXISTS";
-        executeSQL( dropStatement );
-    }
-
     /** returns the URL of the ODB document represented by this instance
      */
     public String getDocumentURL()
