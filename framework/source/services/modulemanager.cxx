@@ -51,40 +51,31 @@ namespace framework
 static const char CFGPATH_FACTORIES[] = "/org.openoffice.Setup/Office/Factories";
 static const char MODULEPROP_IDENTIFIER[] = "ooSetupFactoryModuleIdentifier";
 
-DEFINE_XINTERFACE_7(ModuleManager                                    ,
-                    OWeakObject                                      ,
-                    DIRECT_INTERFACE(css::lang::XTypeProvider       ),
-                    DIRECT_INTERFACE(css::lang::XServiceInfo        ),
-                    DIRECT_INTERFACE(css::container::XNameReplace   ),
-                    DIRECT_INTERFACE(css::container::XNameAccess    ),
-                    DIRECT_INTERFACE(css::container::XElementAccess ),
-                    DIRECT_INTERFACE(css::container::XContainerQuery),
-                    DIRECT_INTERFACE(css::frame::XModuleManager     ))
+rtl::OUString ModuleManager::impl_getStaticImplementationName() {
+    return IMPLEMENTATIONNAME_MODULEMANAGER;
+}
 
-DEFINE_XTYPEPROVIDER_7(ModuleManager                  ,
-                       css::lang::XTypeProvider       ,
-                       css::lang::XServiceInfo        ,
-                       css::container::XNameReplace   ,
-                       css::container::XNameAccess    ,
-                       css::container::XElementAccess ,
-                       css::container::XContainerQuery,
-                       css::frame::XModuleManager     )
+css::uno::Reference< css::lang::XSingleServiceFactory >
+ModuleManager::impl_createFactory(
+    css::uno::Reference< css::lang::XMultiServiceFactory > const & manager)
+{
+    return cppu::createSingleFactory(
+        manager, impl_getStaticImplementationName(), &impl_createInstance,
+        impl_getSupportedServiceNames());
+}
 
-DEFINE_XSERVICEINFO_ONEINSTANCESERVICE(ModuleManager                   ,
-                                       ::cppu::OWeakObject             ,
-                                       SERVICENAME_MODULEMANAGER       ,
-                                       IMPLEMENTATIONNAME_MODULEMANAGER)
+css::uno::Sequence< rtl::OUString >
+ModuleManager::impl_getSupportedServiceNames() {
+    css::uno::Sequence< rtl::OUString > s(1);
+    s[0] = SERVICENAME_MODULEMANAGER;
+    return s;
+}
 
-DEFINE_INIT_SERVICE(
-                    ModuleManager,
-                    {
-                        /*Attention
-                            I think we don't need any mutex or lock here ... because we are called by our own static method impl_createInstance()
-                            to create a new instance of this class by our own supported service factory.
-                            see macro DEFINE_XSERVICEINFO_MULTISERVICE and "impl_initService()" for further informations!
-                        */
-                    }
-                   )
+css::uno::Reference< css::uno::XInterface > ModuleManager::impl_createInstance(
+    css::uno::Reference< css::lang::XMultiServiceFactory > const & manager)
+{
+    return static_cast< cppu::OWeakObject * >(new ModuleManager(manager));
+}
 
 ModuleManager::ModuleManager(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR)
     : ThreadHelpBase(     )
@@ -96,6 +87,30 @@ ModuleManager::~ModuleManager()
 {
     if (m_xCFG.is())
         m_xCFG.clear();
+}
+
+rtl::OUString ModuleManager::getImplementationName()
+    throw (css::uno::RuntimeException)
+{
+    return impl_getStaticImplementationName();
+}
+
+sal_Bool ModuleManager::supportsService(rtl::OUString const & ServiceName)
+    throw (css::uno::RuntimeException)
+{
+    css::uno::Sequence< rtl::OUString > s(getSupportedServiceNames());
+    for (sal_Int32 i = 0; i != s.getLength(); ++i) {
+        if (s[i] == ServiceName) {
+            return true;
+        }
+    }
+    return false;
+}
+
+css::uno::Sequence< rtl::OUString > ModuleManager::getSupportedServiceNames()
+    throw (css::uno::RuntimeException)
+{
+    return impl_getSupportedServiceNames();
 }
 
 ::rtl::OUString SAL_CALL ModuleManager::identify(const css::uno::Reference< css::uno::XInterface >& xModule)
