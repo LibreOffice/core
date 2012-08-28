@@ -470,17 +470,15 @@ Reference< XAccessible > OTableGrantControl::CreateAccessibleCell( sal_Int32 _nR
     if(nColumnId != COL_TABLE_NAME)
     {
         TriState eState = STATE_NOCHECK;
-        sal_Bool bEnable = sal_False;
         TTablePrivilegeMap::const_iterator aFind = findPrivilege(_nRow);
         if(aFind != m_aPrivMap.end())
         {
             eState = isAllowed(nColumnId,aFind->second.nRights) ? STATE_CHECK : STATE_NOCHECK;
-            bEnable = isAllowed(nColumnId,aFind->second.nWithGrant);
         }
         else
             eState = STATE_NOCHECK;
 
-        return EditBrowseBox::CreateAccessibleCheckBoxCell( _nRow, _nColumnPos,eState,bEnable );
+        return EditBrowseBox::CreateAccessibleCheckBoxCell( _nRow, _nColumnPos,eState );
     }
     return EditBrowseBox::CreateAccessibleCell( _nRow, _nColumnPos );
 }

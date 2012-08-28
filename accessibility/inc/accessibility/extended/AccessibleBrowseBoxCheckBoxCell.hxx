@@ -38,7 +38,6 @@ namespace accessibility
     {
     private:
         TriState m_eState;
-        sal_Bool m_bEnabled;
         sal_Bool m_bIsTriState;
 
     protected:
@@ -53,8 +52,7 @@ namespace accessibility
                                 sal_Int32 _nRowPos,
                                 sal_uInt16 _nColPos,
                                 const TriState& _eState,
-                                sal_Bool _bEnabled,
-                                sal_Bool _bIsTriState = sal_True);
+                                sal_Bool _bIsTriState);
 
         // XInterface
         DECLARE_XINTERFACE( )

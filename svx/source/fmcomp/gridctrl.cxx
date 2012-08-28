@@ -3792,7 +3792,7 @@ Reference< XAccessible > DbGridControl::CreateAccessibleCell( sal_Int32 _nRow, s
                     eValue = STATE_DONTKNOW;
                     break;
             }
-            return DbGridControl_Base::CreateAccessibleCheckBoxCell( _nRow, _nColumnPos,eValue,sal_True );
+            return DbGridControl_Base::CreateAccessibleCheckBoxCell( _nRow, _nColumnPos,eValue );
         }
     }
     return DbGridControl_Base::CreateAccessibleCell( _nRow, _nColumnPos );

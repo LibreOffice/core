@@ -34,11 +34,9 @@ namespace accessibility
                                 sal_Int32 _nRowPos,
                                 sal_uInt16 _nColPos
                                 ,const TriState& _eState,
-                                sal_Bool _bEnabled,
                                 sal_Bool _bIsTriState)
         :AccessibleBrowseBoxCell(_rxParent, _rBrowseBox, _xFocusWindow, _nRowPos, _nColPos, BBTYPE_CHECKBOXCELL)
         ,m_eState(_eState)
-        ,m_bEnabled(_bEnabled)
         ,m_bIsTriState(_bIsTriState)
     {
     }

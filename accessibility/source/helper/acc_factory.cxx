@@ -210,7 +210,6 @@ inline bool hasFloatingChild(Window *pWindow)
                 sal_Int32 _nRowPos,
                 sal_uInt16 _nColPos,
                 const TriState& _eState,
-                sal_Bool _bEnabled,
                 sal_Bool _bIsTriState
             ) const;
 
@@ -501,10 +500,10 @@ inline bool hasFloatingChild(Window *pWindow)
     Reference< XAccessible > AccessibleFactory::createAccessibleCheckBoxCell(
         const Reference< XAccessible >& _rxParent, IAccessibleTableProvider& _rBrowseBox,
         const Reference< XWindow >& _xFocusWindow, sal_Int32 _nRowPos, sal_uInt16 _nColPos,
-        const TriState& _eState, sal_Bool _bEnabled, sal_Bool _bIsTriState ) const
+        const TriState& _eState, sal_Bool _bIsTriState ) const
     {
         return new AccessibleCheckBoxCell( _rxParent, _rBrowseBox, _xFocusWindow,
-            _nRowPos, _nColPos, _eState, _bEnabled, _bIsTriState );
+            _nRowPos, _nColPos, _eState, _bIsTriState );
     }
 
     //--------------------------------------------------------------------
