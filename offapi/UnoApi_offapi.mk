@@ -77,6 +77,10 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/configurat
 	Update \
     theDefaultProvider \
 ))
+$(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/datatransfer,\
+	DataFormatTranslator \
+	MimeContentTypeFactory \
+))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/deployment,\
 	ExtensionManager \
 	PackageInformationProvider \
@@ -251,6 +255,12 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/sheet,\
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/smarttags,\
 	SmartTagAction \
 	SmartTagRecognizer \
+))
+$(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/system,\
+	ProxySettings \
+	SimpleCommandMail \
+	SimpleSystemMail \
+	SystemShellExecute \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/task,\
 	InteractionRequestStringResolver \
@@ -558,10 +568,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/configu
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/configuration/bootstrap,\
 	BootstrapContext \
-))
-$(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/datatransfer,\
-	DataFormatTranslator \
-	MimeContentTypeFactory \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/datatransfer/clipboard,\
 	ClipboardManager \
@@ -1182,12 +1188,8 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/sync,\
 	Synchronizer \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/system,\
-	ProxySettings \
 	SOffice52ProxySettings \
-	SimpleCommandMail \
-	SimpleSystemMail \
 	SystemProxySettings \
-	SystemShellExecute \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/table,\
 	AccessibleCellView \

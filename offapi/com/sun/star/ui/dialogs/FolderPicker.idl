@@ -30,15 +30,13 @@
 #define __com_sun_star_ui_dialogs_FolderPicker_idl__
 
 #include <com/sun/star/lang/XComponent.idl>
-#include <com/sun/star/lang/XServiceInfo.idl>
-#include <com/sun/star/lang/XTypeProvider.idl>
 #include <com/sun/star/util/XCancellable.idl>
 
 
 module com { module sun { module star { module ui { module dialogs {
 
 
- published interface XFolderPicker;
+published interface XFolderPicker;
 
 /** A FolderPicker service.
 */
@@ -49,10 +47,6 @@ published service FolderPicker
         browse for and select folders.
     */
     interface XFolderPicker;
-
-    /** Service should always support this interface.
-    */
-    interface com::sun::star::lang::XTypeProvider;
 
     /** For canceling a running dialog instance.
         <p>This may be useful for automatic test tools for instance.</p>

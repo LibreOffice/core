@@ -30,7 +30,6 @@
 #define __com_sun_star_ui_dialogs_FilePicker_idl__
 
 #include <com/sun/star/lang/XComponent.idl>
-#include <com/sun/star/lang/XTypeProvider.idl>
 #include <com/sun/star/lang/XInitialization.idl>
 #include <com/sun/star/util/XCancellable.idl>
 
@@ -120,9 +119,6 @@ published service FilePicker
     */
     interface com::sun::star::lang::XComponent;
 
-    /** Service should always support this interface.
-    */
-    interface com::sun::star::lang::XTypeProvider;
 };
 
 

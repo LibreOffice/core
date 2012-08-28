@@ -20,9 +20,6 @@
 #ifndef __com_sun_star_datatransfer_MimeContentType_idl__
 #define __com_sun_star_datatransfer_MimeContentType_idl__
 
-#include <com/sun/star/lang/XComponent.idl>
-#include <com/sun/star/lang/XTypeProvider.idl>
-
 
 module com { module sun { module star { module datatransfer {
 
@@ -37,20 +34,7 @@ module com { module sun { module star { module datatransfer {
 
     @see com::sun::star::datatransfer::XMimeContentTypeFactory
 */
-published service MimeContentTypeFactory
-{
-    /** Creates an instance that implement the interface
-        <type>XMimeContentType</type> from the string
-        representation of such a MIME content-types that is conform to
-        <a href="ftp://ftp.isi.edu/in-notes/rfc2045.txt">Rfc2045</a>,
-        <a href="ftp://ftp.isi.edu/in-notes/rfc2046.txt">Rfc2046</a>.
-    */
-    interface XMimeContentTypeFactory;
-
-    /** Service should always support this interface.
-    */
-    interface com::sun::star::lang::XTypeProvider;
-};
+published service MimeContentTypeFactory : XMimeContentTypeFactory;
 
 
 }; }; }; };
