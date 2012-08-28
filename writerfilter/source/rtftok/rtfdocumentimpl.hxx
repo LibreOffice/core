@@ -420,6 +420,8 @@ namespace writerfilter {
                 void replayBuffer(RTFBuffer_t& rBuffer);
                 /// If we have some unicode or hex characters to send.
                 void checkUnicode(bool bUnicode = true, bool bHex = true);
+                /// If we have a pending continous section break.
+                void checkDeferredContSectBreak();
 
                 uno::Reference<uno::XComponentContext> const& m_xContext;
                 uno::Reference<io::XInputStream> const& m_xInputStream;
@@ -511,6 +513,7 @@ namespace writerfilter {
                 rtl::OUStringBuffer m_aUnicodeBuffer;
                 /// Same for hex characters.
                 rtl::OStringBuffer m_aHexBuffer;
+                bool m_bDeferredContSectBreak;
         };
     } // namespace rtftok
 } // namespace writerfilter
