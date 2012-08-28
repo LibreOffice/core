@@ -225,7 +225,6 @@ public class AccessBridge {
 
         public void dispose() {
             try {
-                java.awt.Toolkit.getDefaultToolkit().getSystemEventQueue();
                 EventQueue.invokeAndWait(
                     new Runnable() {
                         public void run() {

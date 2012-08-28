@@ -457,7 +457,6 @@ implements DOCConstants, OfficeConstants, DocumentDeserializer {
             origSxwDoc.read(new ByteArrayInputStream(bos.toByteArray()));
             org.w3c.dom.Document origDomDoc = origSxwDoc.getContentDOM();
 
-            XmlUtil xu = new XmlUtil();
             org.w3c.dom.DocumentFragment df;
             org.w3c.dom.Node newNode;
 

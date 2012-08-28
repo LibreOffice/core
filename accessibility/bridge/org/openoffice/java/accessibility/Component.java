@@ -170,7 +170,6 @@ public abstract class Component extends java.awt.Component {
     }
 
     protected void firePropertyChange(String property, Object oldValue, Object newValue) {
-        getEventQueue();
         EventQueue.invokeLater(new PropertyChangeBroadcaster(property, oldValue, newValue));
     }
 
@@ -191,7 +190,6 @@ public abstract class Component extends java.awt.Component {
                 AccessibleContext.ACCESSIBLE_STATE_PROPERTY,
                 state, null);
         }
-        getEventQueue();
         EventQueue.invokeLater(broadcaster);
     }
 
