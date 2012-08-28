@@ -354,13 +354,6 @@ Date:   Tue Oct 24 12:53:13 2006 +0000
     INTEGRATION: CWS tl29 (1.12.24); FILE MERGED
     2006/09/20 01:24:53 khong 1.12.24.1: #i69482# fixed mismatch of nextWord and getWordBoundary
 
-commit be43820c99d96a9e03e2ec5871f6259283b53b58
-Author: Rüdiger Timm <rt@openoffice.org>
-Date:   Thu May 4 08:11:17 2006 +0000
-
-    INTEGRATION: CWS locales203 (1.1.2); FILE ADDED
-    2006/04/25 22:47:02 khong 1.1.2.1: #i58513 add break iterator rules for Finish
-
 commit 97d89862a2285071202cc8010d888ffcbf96279a
 Author: Jens-Heiner Rechtien <hr@openoffice.org>
 Date:   Thu Nov 17 19:30:35 2005 +0000
@@ -592,6 +585,7 @@ Date:   Mon Mar 8 16:17:05 2004 +0000
 
 done, regression tests added:
 
+#i58513# add break iterator rules for Finish
 #i19716# fix wrong line break on bracket characters
 #i21290# extend Greek script type
 #i21907# fix isBeginWord and isEndWord problem

@@ -487,6 +487,46 @@ void TestBreakIterator::testWordBoundaries()
         while (nPos++ < aTest.getLength());
         CPPUNIT_ASSERT(i == SAL_N_ELEMENTS(aExpected));
     }
+
+    //See https://issues.apache.org/ooo/show_bug.cgi?id=58513
+    {
+        aLocale.Language = "fi";
+        aLocale.Country = "FI";
+
+        rtl::OUString aTest("Kuorma-auto kaakkois- ja Keski-Suomi");
+
+        {
+            sal_Int32 nPos = 0;
+            sal_Int32 aExpected[] = {12, 22, 25, 36};
+            size_t i = 0;
+            do
+            {
+                CPPUNIT_ASSERT(i < SAL_N_ELEMENTS(aExpected));
+                nPos = m_xBreak->getWordBoundary(aTest, nPos, aLocale,
+                    i18n::WordType::WORD_COUNT, true).endPos;
+                CPPUNIT_ASSERT(aExpected[i++] == nPos);
+            }
+            while (nPos++ < aTest.getLength());
+            CPPUNIT_ASSERT(i == SAL_N_ELEMENTS(aExpected));
+        }
+
+        {
+            sal_Int32 nPos = 0;
+            sal_Int32 aExpected[] = {0, 11, 12, 21, 22, 24, 25, 36};
+            size_t i = 0;
+            do
+            {
+                CPPUNIT_ASSERT(i < SAL_N_ELEMENTS(aExpected));
+                aBounds = m_xBreak->getWordBoundary(aTest, nPos, aLocale,
+                    i18n::WordType::DICTIONARY_WORD, true);
+                CPPUNIT_ASSERT(aExpected[i++] == aBounds.startPos);
+                CPPUNIT_ASSERT(aExpected[i++] == aBounds.endPos);
+                nPos = aBounds.endPos;
+            }
+            while (nPos++ < aTest.getLength());
+            CPPUNIT_ASSERT(i == SAL_N_ELEMENTS(aExpected));
+        }
+    }
 }
 
 //See http://qa.openoffice.org/issues/show_bug.cgi?id=111152
