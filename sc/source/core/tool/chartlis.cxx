@@ -238,7 +238,7 @@ void ScChartListener::Update()
     if ( pUnoData )
     {
         bDirty = false;
-        //! irgendwann mal erkennen, was sich innerhalb des Charts geaendert hat
+        // recognize some day what has changed inside the Chart
         chart::ChartDataChangeEvent aEvent( pUnoData->GetSource(),
                                         chart::ChartDataChangeType_ALL,
                                         0, 0, 0, 0 );
@@ -652,7 +652,7 @@ void ScChartListenerCollection::UpdateDirtyCharts()
             p->Update();
 
         if (aTimer.IsActive() && !pDoc->IsImportingXML())
-            break;                      // da kam einer dazwischen
+            break;                      // one interfered
     }
 }
 
@@ -748,8 +748,8 @@ void ScChartListenerCollection::UpdateChartsContainingTab( SCTAB nTab )
 
 bool ScChartListenerCollection::operator==( const ScChartListenerCollection& r ) const
 {
-    // hier nicht ScStrCollection::operator==() verwenden, der umstaendlich via
-    // IsEqual und Compare laeuft, stattdessen ScChartListener::operator==()
+    // Do not use ScStrCollection::operator==() here that uses IsEqual und Compare.
+    // Use ScChartListener::operator==() instead.
     if (pDoc != r.pDoc || maListeners.size() != r.maListeners.size())
         return false;
 

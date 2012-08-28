@@ -1924,7 +1924,7 @@ bool ScAddress::Move( SCsCOL dx, SCsROW dy, SCsTAB dz, ScDocument* pDoc )
 
 bool ScRange::Move( SCsCOL dx, SCsROW dy, SCsTAB dz, ScDocument* pDoc )
 {
-    // Einfahces &, damit beides ausgefuehrt wird!!
+    // simple & to process both
     return aStart.Move( dx, dy, dz, pDoc ) & aEnd.Move( dx, dy, dz, pDoc );
 }
 
