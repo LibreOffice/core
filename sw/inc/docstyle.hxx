@@ -74,10 +74,10 @@ class SW_DLLPUBLIC SwDocStyleSheet : public SfxStyleSheetBase
     sal_Bool                bPhysical;
 
 
-    // Make empty shell a real StyleSheet (Core).
+    /// Make empty shell a real StyleSheet (Core).
     SW_DLLPRIVATE void              Create();
 
-    // Fill StyleSheet with data.
+    /// Fill StyleSheet with data.
     enum FillStyleType {
         FillOnlyName,
         FillAllInfo,
@@ -106,16 +106,16 @@ public:
     sal_Bool                    IsPhysical() const              { return bPhysical; }
     void                    SetPhysical(sal_Bool bPhys);
 
-    // add optional parameter <bResetIndentAttrsAtParagraphStyle>, default value sal_False,
-    // which indicates that the indent attributes at a paragraph style should
-    // be reset in case that a list style is applied to the paragraph style and
-    // no indent attributes are applied.
+    /** add optional parameter <bResetIndentAttrsAtParagraphStyle>, default value sal_False,
+     which indicates that the indent attributes at a paragraph style should
+     be reset in case that a list style is applied to the paragraph style and
+     no indent attributes are applied. */
     void                    SetItemSet( const SfxItemSet& rSet,
                                         const bool bResetIndentAttrsAtParagraphStyle = false );
 
     virtual SfxItemSet&     GetItemSet();
-    // new method for paragraph styles to merge indent attributes of applied list
-    // style into the given item set, if the list style indent attributes are applicable.
+    /** new method for paragraph styles to merge indent attributes of applied list
+     style into the given item set, if the list style indent attributes are applicable. */
     void MergeIndentAttrsOfListStyle( SfxItemSet& rSet );
     virtual const String&   GetParent() const;
     virtual const String&   GetFollow() const;
@@ -123,8 +123,8 @@ public:
     virtual sal_uLong GetHelpId( String& rFile );
     virtual void SetHelpId( const String& r, sal_uLong nId );
 
-    // Preset the members without physical access.
-    // Used by StyleSheetPool.
+    /** Preset the members without physical access.
+     Used by StyleSheetPool. */
     void                    PresetName(const String& rName)  { aName   = rName; }
     void                    PresetNameAndFamily(const String& rName);
     void                    PresetParent(const String& rName){ aParent = rName; }
@@ -186,7 +186,7 @@ class SwDocStyleSheetPool : public SfxStyleSheetBasePool
 {
     rtl::Reference< SwDocStyleSheet > mxStyleSheet;
     SwDoc&              rDoc;
-    sal_Bool                bOrganizer : 1;     // Organizer
+    sal_Bool                bOrganizer : 1;     ///< Organizer
 
 
     virtual SfxStyleSheetBase* Create( const String&, SfxStyleFamily, sal_uInt16 nMask);
@@ -225,7 +225,7 @@ public:
 protected:
     virtual ~SwDocStyleSheetPool();
 
-    //For not-so-clever compilers.
+    /// For not-so-clever compilers.
 private:
     SwDocStyleSheetPool( const SwDocStyleSheetPool& );
 };

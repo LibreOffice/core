@@ -40,7 +40,7 @@ class SvNumberFormatter;
 
 enum RES_FIELDS
 {
-// For old documents the Field-Which IDs must be preserved !!!
+ /// For old documents the Field-Which IDs must be preserved !!!
     RES_FIELDS_BEGIN,
     RES_DBFLD = RES_FIELDS_BEGIN,
     RES_USERFLD,
@@ -79,13 +79,13 @@ enum RES_FIELDS
     RES_JUMPEDITFLD,
     RES_SCRIPTFLD,
     RES_DATETIMEFLD,
-    RES_AUTHORITY,  //Table of authorities
+    RES_AUTHORITY,  ///< Table of authorities
     RES_COMBINED_CHARS,
     RES_DROPDOWN,
     RES_FIELDS_END
 };
 
-// List of FieldTypes at UI.
+ /// List of FieldTypes at UI.
 enum SwFldTypesEnum
 {
     TYP_BEGIN,
@@ -151,28 +151,28 @@ enum SwFileNameFormat
 
 enum SwVarFormat
 {
-    VVF_CMD         = 0x0010,   // Show command.
-    VVF_INVISIBLE   = 0x0040,   // Invisible.
-    VVF_XXP         = 0x0400,   // 1234%
-    VVF_XX_XXP      = 0x0800,   // 1.234,56%
+    VVF_CMD         = 0x0010,   ///< Show command.
+    VVF_INVISIBLE   = 0x0040,   ///< Invisible.
+    VVF_XXP         = 0x0400,   ///< 1234%
+    VVF_XX_XXP      = 0x0800,   ///< 1.234,56%
     VVF_CLEAR       = 0x000f,
 
 // From here new formats:
-    VVF_SYS         = 0x2000,   // Format for numbers from system.
-    VVF_X           = 0x2100,   // 1234
-    VVF_X_X         = 0x2200,   // 1234.5
-    VVF_X_XX        = 0x2300,   // 1245.56
-    VVF_XX_X        = 0x2400,   // 1.234.5
-    VVF_XX_XX       = 0x2500,   // 1.234.56
-    VVF_XX_XXX      = 0x2600,   // 1.234.567
-    VVF_SYS_CUR     = 0x2700,   // Format for currency from system.
-    VVF_CUR_X       = 0x2800,   // EUR 1234
-    VVF_CUR_XX_XX   = 0x2900,   // EUR 1234.56 EUR 1234.00
-    VVF_CUR_XX_X0   = 0x2a00,   // EUR 1234.56 EUR 1234.--
-    VVF_X_CUR       = 0x2b00,   // 1234 EUR
-    VVF_XX_XX_CUR   = 0x2c00,   // 1234.56 EUR 1234.00 EUR
-    VVF_XX_X0_CUR   = 0x2d00,   // 1234.56 EUR 1234.-- EUR
-// Compatibility:
+    VVF_SYS         = 0x2000,   ///< Format for numbers from system.
+    VVF_X           = 0x2100,   ///< 1234
+    VVF_X_X         = 0x2200,   ///< 1234.5
+    VVF_X_XX        = 0x2300,   ///< 1245.56
+    VVF_XX_X        = 0x2400,   ///< 1.234.5
+    VVF_XX_XX       = 0x2500,   ///< 1.234.56
+    VVF_XX_XXX      = 0x2600,   ///< 1.234.567
+    VVF_SYS_CUR     = 0x2700,   ///< Format for currency from system.
+    VVF_CUR_X       = 0x2800,   ///< EUR 1234
+    VVF_CUR_XX_XX   = 0x2900,   ///< EUR 1234.56 EUR 1234.00
+    VVF_CUR_XX_X0   = 0x2a00,   ///< EUR 1234.56 EUR 1234.--
+    VVF_X_CUR       = 0x2b00,   ///< 1234 EUR
+    VVF_XX_XX_CUR   = 0x2c00,   ///< 1234.56 EUR 1234.00 EUR
+    VVF_XX_X0_CUR   = 0x2d00,   ///< 1234.56 EUR 1234.-- EUR
+/// Compatibility:
     VF_CMD          = VVF_CMD,
     VF_INVISIBLE    = VVF_INVISIBLE,
     VF_XXP          = VVF_XXP,
@@ -188,19 +188,19 @@ enum SwVarFormat
 typedef sal_uInt16 SwGetSetExpType;
 namespace nsSwGetSetExpType
 {
-    const SwGetSetExpType GSE_STRING  = 0x0001; // String
-    const SwGetSetExpType GSE_EXPR    = 0x0002; // Expression
-    const SwGetSetExpType GSE_INP     = 0x0004; // InputField
-    const SwGetSetExpType GSE_SEQ     = 0x0008; // Sequence
-    const SwGetSetExpType GSE_FORMULA = 0x0010; // Formula
+    const SwGetSetExpType GSE_STRING  = 0x0001; ///< String
+    const SwGetSetExpType GSE_EXPR    = 0x0002; ///< Expression
+    const SwGetSetExpType GSE_INP     = 0x0004; ///< InputField
+    const SwGetSetExpType GSE_SEQ     = 0x0008; ///< Sequence
+    const SwGetSetExpType GSE_FORMULA = 0x0010; ///< Formula
 }
 
 typedef sal_uInt16 SwExtendedSubType;
 namespace nsSwExtendedSubType
 {
-    const SwExtendedSubType SUB_CMD         = 0x0100;   // Show command.
-    const SwExtendedSubType SUB_INVISIBLE   = 0x0200;   // Invisible.
-    const SwExtendedSubType SUB_OWN_FMT     = 0x0400;   // SwDBField: Don't accept formating from database.
+    const SwExtendedSubType SUB_CMD         = 0x0100;   ///< Show command.
+    const SwExtendedSubType SUB_INVISIBLE   = 0x0200;   ///< Invisible.
+    const SwExtendedSubType SUB_OWN_FMT     = 0x0400;   ///< SwDBField: Don't accept formating from database.
 }
 
 enum SwInputFieldSubType
@@ -227,33 +227,33 @@ enum SwDateTimeSubType
 
 extern sal_uInt16 aTypeTab[];
 
-// General tools.
+/// General tools.
 String  GetResult(double nVal, sal_uInt32 nNumFmt, sal_uInt16 nLang = LANGUAGE_SYSTEM);
 void    SetErrorStr(const String& rStr);
 String  FormatNumber(sal_uInt32 nNum, sal_uInt32 nFormat);
 
-// Instances of SwFields and those derived from it occur 0 to n times.
-// For each class there is one instance of the associated type class.
-// Base class of all field types is SwFieldType.
+/** Instances of SwFields and those derived from it occur 0 to n times.
+ For each class there is one instance of the associated type class.
+ Base class of all field types is SwFieldType. */
 
 class SW_DLLPUBLIC SwFieldType : public SwModify
 {
     sal_uInt16 nWhich;
 
-    friend void _FinitUI();     // In order to delete pointer!
+    friend void _FinitUI();     ///< In order to delete pointer!
     static  std::vector<String>* pFldNames;
 
-    static void _GetFldName();  // Sets up FldNames; fldmgr.cxx!
+    static void _GetFldName();  ///< Sets up FldNames; fldmgr.cxx!
 
 protected:
-    // Single argument ctors shall be explicit.
+    /// Single argument ctors shall be explicit.
     explicit SwFieldType( sal_uInt16 nWhichId );
 
 public:
 
     static  const String&   GetTypeStr( sal_uInt16 nTypeId );
 
-    // Only in derived classes.
+    /// Only in derived classes.
     virtual const rtl::OUString&   GetName() const;
     virtual SwFieldType*    Copy()    const = 0;
     virtual bool QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) const;
@@ -269,14 +269,14 @@ inline void SwFieldType::UpdateFlds() const
     ((SwFieldType*)this)->ModifyNotification( 0, 0 );
 }
 
-// Base class of all fields.
-// Type of field is queried via Which.
-// Expanded content of field is queried via Expand().
+/** Base class of all fields.
+ Type of field is queried via Which.
+ Expanded content of field is queried via Expand(). */
 class SW_DLLPUBLIC SwField
 {
 private:
-    mutable String      m_Cache; // Cached expansion (for clipboard).
-    sal_uInt16              nLang;   // Always change via SetLanguage!
+    mutable String      m_Cache;     ///< Cached expansion (for clipboard).
+    sal_uInt16              nLang;   ///< Always change via SetLanguage!
     sal_Bool                bIsAutomaticLanguage;
     sal_uInt32          nFormat;
 
@@ -295,7 +295,7 @@ public:
 
     inline SwFieldType* GetTyp() const;
 
-    // Set new type (used for copying among documents).
+    /// Set new type (used for copying among documents).
     virtual SwFieldType* ChgTyp( SwFieldType* );
 
     /** expand the field.
@@ -308,12 +308,12 @@ public:
       */
     String              ExpandField(bool const bCached) const;
 
-    // Returns name or content.
+    /// @return name or content.
     virtual String      GetFieldName() const;
 
     SwField *           CopyField() const;
 
-    // ResId
+    /// ResId
     sal_uInt16              Which() const
 #ifdef DBG_UTIL
         ;       // implemented in fldbas.cxx
@@ -326,11 +326,11 @@ public:
     virtual sal_uInt16      GetSubType() const;
     virtual void        SetSubType(sal_uInt16);
 
-    // Language at field position.
+    /// Language at field position.
     inline sal_uInt16       GetLanguage() const;
     virtual void        SetLanguage(sal_uInt16 nLng);
 
-    // Query parameters for dialog and for BASIC.
+    /// Query parameters for dialog and for BASIC.
     inline sal_uInt32   GetFormat() const;
     virtual const rtl::OUString& GetPar1() const;
     virtual rtl::OUString GetPar2()   const;
@@ -344,7 +344,7 @@ public:
     virtual bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhichId ) const;
     virtual bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhichId );
 
-    // Does the field possess an action on its ClickHandler? (e.g. INetFields, ...).
+    /// Does the field possess an action on its ClickHandler? (e.g. INetFields, ...).
     sal_Bool            HasClickHdl() const;
     sal_Bool            IsFixed() const;
 
@@ -364,11 +364,11 @@ inline sal_uInt16 SwField::GetLanguage() const
     { return nLang;     }
 
 
-//Fields containing values that have to be formated via number formatter.
+ /// Fields containing values that have to be formated via number formatter.
 class SwValueFieldType : public SwFieldType
 {
     SwDoc*  pDoc;
-    sal_Bool    bUseFormat; // Use number formatter.
+    sal_Bool    bUseFormat; ///< Use number formatter.
 
 protected:
     SwValueFieldType( SwDoc* pDocPtr, sal_uInt16 nWhichId );

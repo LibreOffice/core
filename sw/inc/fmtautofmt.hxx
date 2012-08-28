@@ -43,19 +43,19 @@ class SwFmtAutoFmt: public SfxPoolItem
 public:
     SwFmtAutoFmt( sal_uInt16 nWhich = RES_TXTATR_AUTOFMT );
 
-    // single argument ctors shall be explicit.
+    /// single argument ctors shall be explicit.
     virtual ~SwFmtAutoFmt();
 
-    // @@@ public copy ctor, but no copy assignment?
+    /// @@@ public copy ctor, but no copy assignment?
     SwFmtAutoFmt( const SwFmtAutoFmt& rAttr );
 private:
-    // @@@ public copy ctor, but no copy assignment?
+    /// @@@ public copy ctor, but no copy assignment?
     SwFmtAutoFmt & operator= (const SwFmtAutoFmt &);
 public:
 
     TYPEINFO();
 
-    // "pure virtual methods" of SfxPoolItem
+    /// "pure virtual methods" of SfxPoolItem
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,

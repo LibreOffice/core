@@ -36,17 +36,17 @@ class SwFrmFmt;
 class SwNodeIndex;
 
 
-// For querying current flys in document.
+/// For querying current flys in document.
 class SW_DLLPUBLIC SwPosFlyFrm
 {
-    const SwFrmFmt* pFrmFmt;    // FlyFrmFmt
-    SwNodeIndex* pNdIdx;        // Index for node is sufficient.
+    const SwFrmFmt* pFrmFmt;    ///< FlyFrmFmt
+    SwNodeIndex* pNdIdx;        ///< Index for node is sufficient.
     sal_uInt32 nOrdNum;
 public:
     SwPosFlyFrm( const SwNodeIndex& , const SwFrmFmt*, sal_uInt16 nArrPos );
-    virtual ~SwPosFlyFrm(); // Virtual for Writer (DLL !!)
+    virtual ~SwPosFlyFrm(); ///< Virtual for Writer (DLL !!)
 
-    // Operators for sort array.
+    /// Operators for sort array.
     sal_Bool operator==( const SwPosFlyFrm& );
     sal_Bool operator<( const SwPosFlyFrm& );
 

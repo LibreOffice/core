@@ -40,13 +40,13 @@ enum FlyCntType
 
 // Return values for chainable and chain.
 #define SW_CHAIN_OK             0
-#define SW_CHAIN_NOT_EMPTY      1       // Only empty frames may be connected.
-#define SW_CHAIN_IS_IN_CHAIN    2       // Destination already in chain.
-#define SW_CHAIN_WRONG_AREA     3       // Destination in section where it shouldn't be
-                                        // (header, footer).
-#define SW_CHAIN_NOT_FOUND      4       // Destination and/or source not found.
-#define SW_CHAIN_SOURCE_CHAINED 5       // Source already has a follow.
-#define SW_CHAIN_SELF           6       // Self-chaining is not allowed.
+#define SW_CHAIN_NOT_EMPTY      1       ///< Only empty frames may be connected.
+#define SW_CHAIN_IS_IN_CHAIN    2       ///< Destination already in chain.
+#define SW_CHAIN_WRONG_AREA     3       /**< Destination in section where it shouldn't be
+                                         (header, footer). */
+#define SW_CHAIN_NOT_FOUND      4       ///< Destination and/or source not found.
+#define SW_CHAIN_SOURCE_CHAINED 5       ///< Source already has a follow.
+#define SW_CHAIN_SELF           6       ///< Self-chaining is not allowed.
 
 
 

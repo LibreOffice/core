@@ -36,16 +36,16 @@
 #include <format.hxx>
 #include <boost/ptr_container/ptr_vector.hpp>
 
-// ColumnDescriptor
+/// ColumnDescriptor
 class SwColumn
 {
-    sal_uInt16 nWish;   // Desired width, borders included.
-                    // It is inversely proportional to the ratio of
-                    // desired width environment / current width column.
-    sal_uInt16 nUpper;  // Top border.
-    sal_uInt16 nLower;  // Bottom border.
-    sal_uInt16 nLeft;   // Left border.
-    sal_uInt16 nRight;  // Right border.
+    sal_uInt16 nWish;   /**< Desired width, borders included.
+                         It is inversely proportional to the ratio of
+                         desired width environment / current width column. */
+    sal_uInt16 nUpper;  ///< Top border.
+    sal_uInt16 nLower;  ///< Bottom border.
+    sal_uInt16 nLeft;   ///< Left border.
+    sal_uInt16 nRight;  ///< Right border.
 
 public:
     SwColumn();
@@ -78,23 +78,23 @@ enum SwColLineAdj
 
 class SW_DLLPUBLIC SwFmtCol : public SfxPoolItem
 {
-    editeng::SvxBorderStyle eLineStyle; //style of the separator line
-    sal_uLong   nLineWidth;     // Width of the separator line.
-    Color   aLineColor;     // Color of the separator line.
+    editeng::SvxBorderStyle eLineStyle;     ///< style of the separator line
+    sal_uLong   nLineWidth;                 ///< Width of the separator line.
+    Color   aLineColor;                     ///< Color of the separator line.
 
-    sal_uInt16   nLineHeight;   // Percentile height of lines.
-                            // (Based on height of columns including UL).
+    sal_uInt16   nLineHeight;               /**< Percentile height of lines.
+                                          (Based on height of columns including UL). */
 
-    SwColLineAdj eAdj;      // Line will be adjusted top, centered or bottom.
+    SwColLineAdj eAdj;                      ///< Line will be adjusted top, centered or bottom.
 
-    SwColumns   aColumns;   // Information concerning the columns.
-    sal_uInt16      nWidth;     // Total desired width of all columns.
+    SwColumns   aColumns;                   ///< Information concerning the columns.
+    sal_uInt16      nWidth;                 ///< Total desired width of all columns.
 
-    sal_Bool bOrtho;            // Only if this flag is set, the setting of GutterWidth will
-                            // be accompanied by a "visual rearrangement".
-                            // The flag must be reset if widths of columns or borders are changed.
-                            // When it is set (again) the visual arrangement is recalculated.
-                            // The flag is initially set.
+    sal_Bool bOrtho;            /**< Only if this flag is set, the setting of GutterWidth will
+                             be accompanied by a "visual rearrangement".
+                             The flag must be reset if widths of columns or borders are changed.
+                             When it is set (again) the visual arrangement is recalculated.
+                             The flag is initially set. */
 
     SW_DLLPRIVATE void Calc( sal_uInt16 nGutterWidth, sal_uInt16 nAct );
 
@@ -105,7 +105,7 @@ public:
 
     SwFmtCol& operator=( const SwFmtCol& );
 
-    // "pure virtual methods" of SfxPoolItem
+    /// "pure virtual methods" of SfxPoolItem
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
@@ -131,8 +131,8 @@ public:
     sal_uInt16           GetWishWidth() const { return nWidth; }
     sal_uInt8            GetLineHeight()const { return nLineHeight; }
 
-    // Return USHRT_MAX if ambiguous.
-    // Return smallest width if bMin is true.
+    /** @return USHRT_MAX if ambiguous.
+     @return smallest width if bMin is true. */
     sal_uInt16 GetGutterWidth( sal_Bool bMin = sal_False ) const;
 
     void SetLineStyle(editeng::SvxBorderStyle eStyle)        { eLineStyle = eStyle;}
@@ -142,30 +142,30 @@ public:
     void SetLineAdj( SwColLineAdj eNew ){ eAdj = eNew; }
     void SetWishWidth( sal_uInt16 nNew )    { nWidth = nNew; }
 
-    // This function allows to (repeatedly) initialize the columns.
-    // The Ortho flag is set automatically.
+    /** This function allows to (repeatedly) initialize the columns.
+     The Ortho flag is set automatically. */
     void Init( sal_uInt16 nNumCols, sal_uInt16 nGutterWidth, sal_uInt16 nAct );
 
-    // Adjusts borders for columns in aColumns.
-    // If flag bOrtho is set, columns are visually re-arranged.
-    // If the flag is not set, columns widths are not changed and
-    // borders are adjusted.
+    /** Adjusts borders for columns in aColumns.
+     If flag bOrtho is set, columns are visually re-arranged.
+     If the flag is not set, columns widths are not changed and
+     borders are adjusted. */
     void SetGutterWidth( sal_uInt16 nNew, sal_uInt16 nAct );
 
-    // This too re-arranges columns automatically if flag is set.
-    // Only in this case the second parameter is needed and evaluated.
+    /** This too re-arranges columns automatically if flag is set.
+     Only in this case the second parameter is needed and evaluated. */
     void SetOrtho( sal_Bool bNew, sal_uInt16 nGutterWidth, sal_uInt16 nAct );
 
-    //For the reader
+    /// For the reader
     void _SetOrtho( sal_Bool bNew ) { bOrtho = bNew; }
 
-    // Calculates current width of column nCol.
-    // The ratio of desired width of this column to return value is
-    // proportional to ratio of total desired value to nAct.
+    /** Calculates current width of column nCol.
+     The ratio of desired width of this column to return value is
+     proportional to ratio of total desired value to nAct. */
     sal_uInt16 CalcColWidth( sal_uInt16 nCol, sal_uInt16 nAct ) const;
 
-    // As above except that it returns the width of PrtArea -
-    // that corresponds to what constitutes the column for the user.
+    /** As above except that it @return the width of PrtArea -
+     that corresponds to what constitutes the column for the user. */
     sal_uInt16 CalcPrtColWidth( sal_uInt16 nCol, sal_uInt16 nAct ) const;
 };
 

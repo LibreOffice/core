@@ -50,10 +50,10 @@ class SW_DLLPUBLIC SwFmtFld : public SfxPoolItem, public SwClient, public SfxBro
     SwField *pField;
     SwTxtFld* pTxtAttr;
 
-    SwFmtFld(); // Default attibute.
+    SwFmtFld(); ///< Default attibute.
 
-    // Protected CopyCtor.
-    // @@@ copy construction allowed, but copy assignment is not? @@@
+    /* Protected CopyCtor.
+     @@@ copy construction allowed, but copy assignment is not? @@@ */
     SwFmtFld& operator=(const SwFmtFld& rFld);
 
 protected:
@@ -63,15 +63,15 @@ protected:
 public:
     TYPEINFO();
 
-    // Single argument constructors shall be explicit.
+    /// Single argument constructors shall be explicit.
     explicit SwFmtFld( const SwField &rFld );
 
-    // @@@ copy construction allowed, but copy assignment is not? @@@
+    /// @@@ copy construction allowed, but copy assignment is not? @@@
     SwFmtFld( const SwFmtFld& rAttr );
 
     virtual ~SwFmtFld();
 
-    // "Pure virtual methods" of SfxPoolItem.
+    /// "Pure virtual methods" of SfxPoolItem.
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
 

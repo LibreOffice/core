@@ -44,7 +44,7 @@ class SwFmtFld;
 class _SetGetExpFlds;
 class SwEditShell;
 
-// Forward declaration: get "BodyTxtNode" for exp.fld in Fly's headers/footers/footnotes.
+/// Forward declaration: get "BodyTxtNode" for exp.fld in Fly's headers/footers/footnotes.
 const SwTxtNode* GetBodyTxtNode( const SwDoc& pDoc, SwPosition& rPos,
                                  const SwFrm& rFrm );
 
@@ -85,8 +85,8 @@ public:
         SwGetExpFieldType(SwDoc* pDoc);
         virtual SwFieldType*    Copy() const;
 
-        // Overlay, because get-field cannot be changed and therefore
-        // does not need to be updated. Update at changing of set-values!
+        /** Overlay, because get-field cannot be changed and therefore
+         does not need to be updated. Update at changing of set-values! */
 protected:
    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew );
 };
@@ -112,19 +112,19 @@ public:
     inline const String&        GetExpStr() const;
     inline void                 ChgExpStr(const String& rExpand);
 
-    // Called by formating.
+    /// Called by formating.
     inline sal_Bool                 IsInBodyTxt() const;
 
-    // Set by UpdateExpFlds where node position is known.
+    /// Set by UpdateExpFlds where node position is known.
     inline void                 ChgBodyTxtFlag( sal_Bool bIsInBody );
 
-    // For fields in header/footer/footnotes/flys:
-    // Only called by formating!!
+    /** For fields in header/footer/footnotes/flys:
+     Only called by formating!! */
     void                        ChangeExpansion( const SwFrm&, const SwTxtFld& );
 
     virtual String      GetFieldName() const;
 
-    // Change formula.
+    /// Change formula.
     virtual rtl::OUString GetPar2() const;
     virtual void        SetPar2(const rtl::OUString& rStr);
 
@@ -144,11 +144,11 @@ inline void SwGetExpField::ChgExpStr(const String& rExpand)
 inline const String& SwGetExpField::GetExpStr() const
     { return sExpand;   }
 
-// Called by formating.
+ /// Called by formating.
 inline sal_Bool SwGetExpField::IsInBodyTxt() const
     { return bIsInBodyTxt; }
 
-// Set by UpdateExpFlds where node position is known.
+ /// Set by UpdateExpFlds where node position is known.
 inline void SwGetExpField::ChgBodyTxtFlag( sal_Bool bIsInBody )
     { bIsInBodyTxt = bIsInBody; }
 
@@ -181,7 +181,7 @@ public:
     sal_Bool                IsDeleted() const       { return bDeleted; }
     void                    SetDeleted( sal_Bool b )    { bDeleted = b; }
 
-    // Overlay, because set-field takes care for its being updated by itself.
+    /// Overlay, because set-field takes care for its being updated by itself.
     inline const rtl::OUString& GetSetRefName() const;
 
     sal_uInt16 SetSeqRefNo( SwSetExpField& rFld );
@@ -189,15 +189,15 @@ public:
     sal_uInt16 GetSeqFldList( SwSeqFldList& rList );
     String MakeSeqName( sal_uInt16 nSeqNo );
 
-    // Number sequence fields chapterwise if required.
+    /// Number sequence fields chapterwise if required.
     const String& GetDelimiter() const      { return sDelim; }
     void SetDelimiter( const String& s )    { sDelim = s; }
     sal_uInt8 GetOutlineLvl() const                 { return nLevel; }
     void SetOutlineLvl( sal_uInt8 n )           { nLevel = n; }
     void SetChapter( SwSetExpField& rFld, const SwNode& rNd );
 
-    // Member only for SwDoc::UpdateExpFld.
-    // It is needed only at runtime of sequence field types!
+    /** Member only for SwDoc::UpdateExpFld.
+     It is needed only at runtime of sequence field types! */
     const SwNode* GetOutlineChgNd() const   { return pOutlChgNd; }
     void SetOutlineChgNd( const SwNode* p ) { pOutlChgNd = p; }
 
@@ -252,14 +252,14 @@ public:
 
     inline sal_Bool                 IsSequenceFld() const;
 
-    // Logical number, sequence fields.
+    /// Logical number, sequence fields.
     inline void                 SetSeqNumber( sal_uInt16 n )    { nSeqNo = n; }
     inline sal_uInt16           GetSeqNumber() const        { return nSeqNo; }
 
-    // Query name only.
+    /// Query name only.
     virtual const rtl::OUString& GetPar1()   const;
 
-    // Query formula.
+    /// Query formula.
     virtual rtl::OUString       GetPar2()   const;
     virtual void                SetPar2(const rtl::OUString& rStr);
     virtual bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) const;
@@ -312,18 +312,18 @@ class SW_DLLPUBLIC SwInputField : public SwField
     virtual SwField*        Copy() const;
 
 public:
-    // Direct input via dialog; delete old value.
+    /// Direct input via dialog; delete old value.
     SwInputField(SwInputFieldType*, const String& rContent ,
                  const String& rPrompt, sal_uInt16 nSubType = 0,
                  sal_uLong nFmt = 0);
 
     virtual String          GetFieldName() const;
 
-    // Content
+    /// Content
     virtual const rtl::OUString&   GetPar1() const;
     virtual void            SetPar1(const rtl::OUString& rStr);
 
-    // aPromptText
+    /// aPromptText
     virtual rtl::OUString   GetPar2() const;
     virtual void            SetPar2(const rtl::OUString& rStr);
 
@@ -358,9 +358,9 @@ public:
     void        PushCrsr();
     void        PopCrsr();
 
-    // Put all that are new into SortLst for updating. Returns count.
-    // (For Glossary: only update its input-fields).
-    // Compare TmpLst with current fields.
+    /** Put all that are new into SortLst for updating. @return count.
+     (For Glossary: only update its input-fields).
+     Compare TmpLst with current fields. */
     sal_uInt16      BuildSortLst();
 
     void        RemoveUnselectedFlds();
@@ -371,7 +371,7 @@ private:
     std::set<const SwTxtFld*> aTmpLst;
 };
 
-// Implementation in tblcalc.cxx.
+ /// Implementation in tblcalc.cxx.
 class SwTblFieldType : public SwValueFieldType
 {
 public:
@@ -388,7 +388,7 @@ class SwTblField : public SwValueField, public SwTableFormula
     virtual String      Expand() const;
     virtual SwField*    Copy() const;
 
-    // Search TextNode containing the field.
+    /// Search TextNode containing the field.
     virtual const SwNode* GetNodeOfFormula() const;
 
     String GetCommand();
@@ -408,7 +408,7 @@ public:
 
     virtual String      GetFieldName() const;
 
-    // The formula.
+    /// The formula.
     virtual rtl::OUString GetPar2()   const;
     virtual void        SetPar2(const rtl::OUString& rStr);
     virtual bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) const;

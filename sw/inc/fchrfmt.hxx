@@ -43,28 +43,28 @@ class IntlWrapper;
 class SW_DLLPUBLIC SwFmtCharFmt: public SfxPoolItem, public SwClient
 {
     friend class SwTxtCharFmt;
-    SwTxtCharFmt* pTxtAttr;     // My text attribute.
+    SwTxtCharFmt* pTxtAttr;     ///< My text attribute.
 
 public:
     SwFmtCharFmt() : pTxtAttr(0) {}
 
-    // single argument ctors shall be explicit.
+    /// single argument ctors shall be explicit.
     explicit SwFmtCharFmt( SwCharFmt *pFmt );
     virtual ~SwFmtCharFmt();
 
-    // @@@ public copy ctor, but no copy assignment?
+    /// @@@ public copy ctor, but no copy assignment?
     SwFmtCharFmt( const SwFmtCharFmt& rAttr );
 protected:
    virtual void Modify( const SfxPoolItem*, const SfxPoolItem* );
 
 private:
-    // @@@ public copy ctor, but no copy assignment?
+    /// @@@ public copy ctor, but no copy assignment?
     SwFmtCharFmt & operator= (const SwFmtCharFmt &);
 public:
 
     TYPEINFO();
 
-    // "pure virtual methods" of SfxPoolItem
+    /// "pure virtual methods" of SfxPoolItem
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
