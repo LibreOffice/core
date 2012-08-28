@@ -1123,7 +1123,7 @@ void ScConditionEntry::SourceChanged( const ScAddress& rChanged )
                         ScRange aPaint( nCol1,nRow1,nTab1, nCol2,nRow2,nTab2 );
 
                         //  kein Paint, wenn es nur die Zelle selber ist
-                        if ( aPaint.aStart != rChanged || aPaint.aEnd != rChanged )
+                        if ( aPaint.IsValid() && (aPaint.aStart != rChanged || aPaint.aEnd != rChanged ))
                             DataChanged( &aPaint );
                     }
                 }
