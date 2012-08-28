@@ -431,10 +431,18 @@ void GtkSalGraphics::PaintScrollbar(GtkStyleContext *context,
 
         gtk_style_context_restore(context);
     }
+
+    bool backwardButtonInsensitive =
+        pScrollbarVal->mnCur == pScrollbarVal->mnMin;
+    bool forwardButtonInsensitive = pScrollbarVal->mnMax == 0 ||
+        pScrollbarVal->mnCur + pScrollbarVal->mnVisibleSize >= pScrollbarVal->mnMax;
+
     // ----------------- BUTTON 1 //
     if ( has_backward )
     {
         NWConvertVCLStateToGTKState( pScrollbarVal->mnButton1State, &stateFlags, &shadowType );
+        if ( backwardButtonInsensitive )
+            stateFlags = GTK_STATE_FLAG_INSENSITIVE;
 
         gtk_style_context_save(context);
         gtk_style_context_set_state(context, stateFlags);
@@ -459,6 +467,8 @@ void GtkSalGraphics::PaintScrollbar(GtkStyleContext *context,
     if ( has_forward2 )
     {
         NWConvertVCLStateToGTKState( pScrollbarVal->mnButton2State, &stateFlags, &shadowType );
+        if ( forwardButtonInsensitive )
+            stateFlags = GTK_STATE_FLAG_INSENSITIVE;
 
         gtk_style_context_save(context);
         gtk_style_context_set_state(context, stateFlags);
@@ -484,6 +494,8 @@ void GtkSalGraphics::PaintScrollbar(GtkStyleContext *context,
     if ( has_backward2 )
     {
         NWConvertVCLStateToGTKState( pScrollbarVal->mnButton1State, &stateFlags, &shadowType );
+        if ( backwardButtonInsensitive )
+            stateFlags = GTK_STATE_FLAG_INSENSITIVE;
 
         gtk_style_context_save(context);
         gtk_style_context_set_state(context, stateFlags);
@@ -508,6 +520,8 @@ void GtkSalGraphics::PaintScrollbar(GtkStyleContext *context,
     if ( has_forward )
     {
         NWConvertVCLStateToGTKState( pScrollbarVal->mnButton2State, &stateFlags, &shadowType );
+        if ( forwardButtonInsensitive )
+            stateFlags = GTK_STATE_FLAG_INSENSITIVE;
 
         gtk_style_context_save(context);
         gtk_style_context_set_state(context, stateFlags);

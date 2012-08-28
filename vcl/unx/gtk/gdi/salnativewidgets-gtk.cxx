@@ -1948,11 +1948,17 @@ sal_Bool GtkSalGraphics::NWPaintGTKScrollbar( ControlType, ControlPart nPart,
     GTK_WIDGET(scrollbarWidget)->allocation.width = w;
     GTK_WIDGET(scrollbarWidget)->allocation.height = h;
 
+    bool backwardButtonInsensitive =
+        pScrollbarVal->mnCur == pScrollbarVal->mnMin;
+    bool forwardButtonInsensitive = pScrollbarVal->mnMax == 0 ||
+        pScrollbarVal->mnCur + pScrollbarVal->mnVisibleSize >= pScrollbarVal->mnMax;
+
     // ----------------- BUTTON 1 //
     if ( has_backward )
     {
         NWConvertVCLStateToGTKState( pScrollbarVal->mnButton1State, &stateType, &shadowType );
-        if ( stateType == GTK_STATE_INSENSITIVE )    stateType = GTK_STATE_NORMAL;
+        if ( backwardButtonInsensitive )
+            stateType = GTK_STATE_INSENSITIVE;
         gtk_paint_box( style, gdkDrawable, stateType, shadowType,
                        gdkRect, GTK_WIDGET(scrollbarWidget), scrollbarTag,
                        x+hShim+button11BoundRect.Left(), y+vShim+button11BoundRect.Top(),
@@ -1967,7 +1973,8 @@ sal_Bool GtkSalGraphics::NWPaintGTKScrollbar( ControlType, ControlPart nPart,
     if ( has_forward2 )
     {
         NWConvertVCLStateToGTKState( pScrollbarVal->mnButton2State, &stateType, &shadowType );
-        if ( stateType == GTK_STATE_INSENSITIVE )    stateType = GTK_STATE_NORMAL;
+        if ( forwardButtonInsensitive )
+            stateType = GTK_STATE_INSENSITIVE;
         gtk_paint_box( style, gdkDrawable, stateType, shadowType,
                        gdkRect, GTK_WIDGET(scrollbarWidget), scrollbarTag,
                        x+hShim+button12BoundRect.Left(), y+vShim+button12BoundRect.Top(),
@@ -1983,7 +1990,8 @@ sal_Bool GtkSalGraphics::NWPaintGTKScrollbar( ControlType, ControlPart nPart,
     if ( has_backward2 )
     {
         NWConvertVCLStateToGTKState( pScrollbarVal->mnButton1State, &stateType, &shadowType );
-        if ( stateType == GTK_STATE_INSENSITIVE )    stateType = GTK_STATE_NORMAL;
+        if ( backwardButtonInsensitive )
+            stateType = GTK_STATE_INSENSITIVE;
         gtk_paint_box( style, gdkDrawable, stateType, shadowType, gdkRect,
                        GTK_WIDGET(scrollbarWidget), scrollbarTag,
                        x+hShim+button21BoundRect.Left(), y+vShim+button21BoundRect.Top(),
@@ -1998,7 +2006,8 @@ sal_Bool GtkSalGraphics::NWPaintGTKScrollbar( ControlType, ControlPart nPart,
     if ( has_forward )
     {
         NWConvertVCLStateToGTKState( pScrollbarVal->mnButton2State, &stateType, &shadowType );
-        if ( stateType == GTK_STATE_INSENSITIVE )    stateType = GTK_STATE_NORMAL;
+        if ( forwardButtonInsensitive )
+            stateType = GTK_STATE_INSENSITIVE;
         gtk_paint_box( style, gdkDrawable, stateType, shadowType, gdkRect,
                        GTK_WIDGET(scrollbarWidget), scrollbarTag,
                        x+hShim+button22BoundRect.Left(), y+vShim+button22BoundRect.Top(),
