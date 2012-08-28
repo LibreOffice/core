@@ -43,6 +43,12 @@ namespace writerfilter {
 
                 int resolveParse();
                 int asHex(char ch);
+                /// Number of states on the stack.
+                int getGroup() const;
+                /// To be invoked by the pushState() callback to signal when the importer enters a group.
+                void pushGroup();
+                /// To be invoked by the popState() callback to single when the importer leaves a group.
+                void popGroup();
             private:
                 SvStream& Strm();
                 int resolveKeyword();
@@ -53,6 +59,8 @@ namespace writerfilter {
                 uno::Reference<task::XStatusIndicator> const& m_xStatusIndicator;
                 // This is the same as m_aRTFControlWords, but sorted
                 std::vector<RTFSymbol> m_aRTFControlWords;
+                /// Same as the size of the importer's states, except that this can be negative for invalid input.
+                int m_nGroup;
         };
     } // namespace rtftok
 } // namespace writerfilter

@@ -232,7 +232,6 @@ RTFDocumentImpl::RTFDocumentImpl(uno::Reference<uno::XComponentContext> const& x
     m_xDstDoc(xDstDoc),
     m_xFrame(xFrame),
     m_xStatusIndicator(xStatusIndicator),
-    m_nGroup(0),
     m_aDefaultState(this),
     m_bSkipUnknown(false),
     m_aFontEncodings(),
@@ -3203,7 +3202,7 @@ int RTFDocumentImpl::dispatchToggle(RTFKeyword nKeyword, bool bParam, int nParam
 
 int RTFDocumentImpl::pushState()
 {
-    //SAL_INFO("writerfilter", OSL_THIS_FUNC << " before push: " << m_nGroup);
+    //SAL_INFO("writerfilter", OSL_THIS_FUNC << " before push: " << m_pTokenizer->getGroup());
 
     checkUnicode();
     m_nGroupStartPos = Strm().Tell();
@@ -3219,7 +3218,7 @@ int RTFDocumentImpl::pushState()
     m_aStates.push(aState);
     m_aStates.top().aDestinationText.setLength(0);
 
-    m_nGroup++;
+    m_pTokenizer->pushGroup();
 
     switch (m_aStates.top().nDestinationState)
     {
@@ -3297,7 +3296,7 @@ void RTFDocumentImpl::resetAttributes()
 
 int RTFDocumentImpl::popState()
 {
-    //SAL_INFO("writerfilter", OSL_THIS_FUNC << " before pop: m_nGroup " << m_nGroup <<
+    //SAL_INFO("writerfilter", OSL_THIS_FUNC << " before pop: m_pTokenizer->getGroup() " << m_pTokenizer->getGroup() <<
     //                         ", dest state: " << m_aStates.top().nDestinationState);
 
     checkUnicode();
@@ -3756,7 +3755,7 @@ int RTFDocumentImpl::popState()
     }
 
     // This is the end of the doc, see if we need to close the last section.
-    if (m_nGroup == 1 && !m_bFirstRun)
+    if (m_pTokenizer->getGroup() == 1 && !m_bFirstRun)
     {
         m_bDeferredContSectBreak = false;
         sectBreak(true);
@@ -3764,7 +3763,7 @@ int RTFDocumentImpl::popState()
 
     m_aStates.pop();
 
-    m_nGroup--;
+    m_pTokenizer->popGroup();
 
     // list table
     if (aState.nDestinationState == DESTINATION_LISTENTRY)
@@ -3933,11 +3932,6 @@ uno::Reference<lang::XMultiServiceFactory> RTFDocumentImpl::getModelFactory()
 RTFParserState& RTFDocumentImpl::getState()
 {
     return m_aStates.top();
-}
-
-int RTFDocumentImpl::getGroup() const
-{
-    return m_nGroup;
 }
 
 void RTFDocumentImpl::setDestinationText(OUString& rString)

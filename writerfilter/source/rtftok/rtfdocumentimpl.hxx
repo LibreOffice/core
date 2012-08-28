@@ -424,8 +424,6 @@ namespace writerfilter {
                 void seek(sal_uInt32 nPos);
                 uno::Reference<lang::XMultiServiceFactory> getModelFactory();
                 RTFParserState& getState();
-                /// Number of states on the stack.
-                int getGroup() const;
                 void setDestinationText(rtl::OUString& rString);
                 /// Resolve a picture: If not inline, then anchored.
                 int resolvePict(bool bInline);
@@ -493,8 +491,6 @@ namespace writerfilter {
                 Stream* m_pMapperStream;
                 boost::shared_ptr<RTFSdrImport> m_pSdrImport;
                 boost::shared_ptr<RTFTokenizer> m_pTokenizer;
-                /// Same as m_aStates.size(), except that this can be negative for invalid input.
-                int m_nGroup;
                 std::stack<RTFParserState> m_aStates;
                 /// Read by RTF_PARD.
                 RTFParserState m_aDefaultState;
