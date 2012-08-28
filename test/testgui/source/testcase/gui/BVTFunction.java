@@ -114,7 +114,7 @@ public class BVTFunction {
     }
 
     @AfterClass
-    public void afterClass() throws Exception {
+    public static void afterClass() throws Exception {
         app.close();
     }
 
