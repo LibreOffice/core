@@ -41,6 +41,7 @@
 #include <frmfmt.hxx>
 #include <viewimp.hxx>
 #include <docsh.hxx>
+#include <pagefrm.hxx>
 
 
 /** helper function to select all objects in an SdrMarkList;
@@ -82,6 +83,12 @@ SwEditShell::HandleUndoRedoContext(::sw::UndoRedoContext & rContext)
                 static_cast<SwFlyFrmFmt*>(pSelFmt)->GetFrm(& aPt, false);
             if (pFly)
             {
+                // fdo#36681: Invalidate the content and layout to refresh
+                // the picture anchoring properly
+                SwPageFrm* pPageFrm = pFly->FindPageFrmOfAnchor();
+                pPageFrm->InvalidateFlyLayout();
+                pPageFrm->InvalidateCntnt();
+
                 static_cast<SwFEShell*>(this)->SelectFlyFrm(*pFly, true);
             }
         }
