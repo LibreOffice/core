@@ -277,7 +277,8 @@ RTFDocumentImpl::RTFDocumentImpl(uno::Reference<uno::XComponentContext> const& x
     m_bFormField(false),
     m_bIsInFrame(false),
     m_aUnicodeBuffer(),
-    m_aHexBuffer()
+    m_aHexBuffer(),
+    m_bDeferredContSectBreak(false)
 {
     OSL_ASSERT(xInputStream.is());
     m_pInStream.reset(utl::UcbStreamHelper::CreateStream(xInputStream, sal_True));
@@ -1077,6 +1078,7 @@ void RTFDocumentImpl::replayBuffer(RTFBuffer_t& rBuffer)
 int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
 {
     checkUnicode();
+    checkDeferredContSectBreak();
     RTFSkipDestination aSkip(*this);
     switch (nKeyword)
     {
@@ -1406,6 +1408,7 @@ int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
 {
     if (nKeyword != RTF_HEXCHAR)
         checkUnicode();
+    checkDeferredContSectBreak();
     RTFSkipDestination aSkip(*this);
     sal_uInt8 cCh = 0;
 
@@ -1462,7 +1465,17 @@ int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
             }
             break;
         case RTF_SECT:
-                sectBreak();
+            {
+                RTFValue::Pointer_t pBreak = m_aStates.top().aSectionSprms.find(NS_sprm::LN_SBkc);
+                if (pBreak.get() && !pBreak->getInt())
+                {
+                    // This is a continous section break, don't send it yet.
+                    // It's possible that we'll have nothing after this token, and then we should ignore it.
+                    m_bDeferredContSectBreak = true;
+                }
+                else
+                    sectBreak();
+            }
             break;
         case RTF_NOBREAK:
             {
@@ -1583,10 +1596,21 @@ int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
             break;
         case RTF_PAGE:
             {
-                sal_uInt8 sBreak[] = { 0xc };
-                Mapper().text(sBreak, 1);
-                if (!m_bNeedPap)
-                    parBreak();
+                // If we're inside a continous section, we should send a section break, not a page one.
+                RTFValue::Pointer_t pBreak = m_aStates.top().aSectionSprms.find(NS_sprm::LN_SBkc);
+                if (pBreak.get() && !pBreak->getInt())
+                {
+                    dispatchFlag(RTF_SBKPAGE);
+                    sectBreak();
+                    dispatchFlag(RTF_SBKNONE);
+                }
+                else
+                {
+                    sal_uInt8 sBreak[] = { 0xc };
+                    Mapper().text(sBreak, 1);
+                    if (!m_bNeedPap)
+                        parBreak();
+                }
             }
             break;
         case RTF_CHPGN:
@@ -1609,6 +1633,7 @@ int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
 int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
 {
     checkUnicode();
+    checkDeferredContSectBreak();
     RTFSkipDestination aSkip(*this);
     int nParam = -1;
     int nSprm = -1;
@@ -2224,6 +2249,7 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
 int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
 {
     checkUnicode(nKeyword != RTF_U, true);
+    checkDeferredContSectBreak();
     RTFSkipDestination aSkip(*this);
     int nSprm = 0;
     RTFValue::Pointer_t pIntValue(new RTFValue(nParam));
@@ -2923,6 +2949,7 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
 int RTFDocumentImpl::dispatchToggle(RTFKeyword nKeyword, bool bParam, int nParam)
 {
     checkUnicode();
+    checkDeferredContSectBreak();
     RTFSkipDestination aSkip(*this);
     int nSprm = -1;
     RTFValue::Pointer_t pBoolValue(new RTFValue(!bParam || nParam != 0));
@@ -3455,7 +3482,10 @@ int RTFDocumentImpl::popState()
 
     // This is the end of the doc, see if we need to close the last section.
     if (m_nGroup == 1 && !m_bFirstRun)
+    {
+        m_bDeferredContSectBreak = false;
         sectBreak(true);
+    }
 
     m_aStates.pop();
 
@@ -3670,6 +3700,15 @@ void RTFDocumentImpl::checkUnicode(bool bUnicode, bool bHex)
     {
         OUString aString = OStringToOUString(m_aHexBuffer.makeStringAndClear(), m_aStates.top().nCurrentEncoding);
         text(aString);
+    }
+}
+
+void RTFDocumentImpl::checkDeferredContSectBreak()
+{
+    if (m_bDeferredContSectBreak)
+    {
+        m_bDeferredContSectBreak = false;
+        sectBreak();
     }
 }
 
