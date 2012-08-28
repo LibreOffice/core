@@ -217,7 +217,7 @@ bool InitExternalFunc(const rtl::OUString& rModuleName)
                 sal_uInt16 nParamCount;
                 ParamType eParamType[MAXFUNCPARAM];
                 ParamType eAsyncType = NONE;
-                // alles initialisieren, falls das AddIn sich schlecht verhaelt
+                // initialize all,  in case the AddIn behaves bad
                 cFuncName[0] = 0;
                 cInternalName[0] = 0;
                 nParamCount = 0;
