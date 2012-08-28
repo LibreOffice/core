@@ -95,6 +95,7 @@ using com::sun::star::beans::XPropertySet;
 using com::sun::star::beans::PropertyValue;
 using com::sun::star::container::XNameAccess;
 using com::sun::star::container::NoSuchElementException;
+using com::sun::star::frame::DispatchHelper;
 using com::sun::star::frame::XController;
 using com::sun::star::frame::XComponentLoader;
 using com::sun::star::frame::XDispatch;
