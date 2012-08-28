@@ -49,6 +49,10 @@ gb_CppunitTest_CPPTESTPRECOMMAND := :
 # eventually enable this to be done this in some more elegant and less
 # redundant fashion.
 
+# _PTHREADS is meaningful in glibc headers, which Android doesn't use, and in
+# the NDK in stlport, which we don't use.
+gb_OSDEFS := $(subst -D_PTHREADS,,$(gb_OSDEFS))
+
 gb_LinkTarget_LDFLAGS += \
     -Wl,-z,defs \
 	-Wl,--as-needed \
