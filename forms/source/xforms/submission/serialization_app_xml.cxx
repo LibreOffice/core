@@ -31,6 +31,7 @@
 #include "serialization_app_xml.hxx"
 
 #include <comphelper/processfactory.hxx>
+#include <com/sun/star/io/Pipe.hpp>
 #include <com/sun/star/xml/dom/XNode.hpp>
 #include <com/sun/star/xml/dom/XDocument.hpp>
 #include <com/sun/star/xml/dom/XNodeList.hpp>
@@ -42,8 +43,7 @@
 
 CSerializationAppXML::CSerializationAppXML()
     : m_aFactory(comphelper::getProcessServiceFactory())
-    , m_aPipe(CSS::uno::Reference< CSS::io::XOutputStream > (m_aFactory->createInstance(
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.io.Pipe") ) ), CSS::uno::UNO_QUERY))
+    , m_aPipe(CSS::io::Pipe::create(comphelper::getProcessComponentContext()), CSS::uno::UNO_QUERY_THROW)
 {
     OSL_ENSURE(m_aPipe.is(), "cannot create Pipe");
 }

@@ -77,7 +77,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,udkapi,udkapi/com/sun/star/io,\
 	MarkableOutputStream \
 	ObjectInputStream \
 	ObjectOutputStream \
-	Pipe \
 	Pump \
 	TextInputStream \
 	TextOutputStream \
@@ -139,6 +138,7 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,udkapi,udkapi/com/sun/star/container,
 	EnumerableMap \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,udkapi,udkapi/com/sun/star/io,\
+	Pipe \
 	SequenceInputStream \
 	SequenceOutputStream \
 	TempFile \
@@ -326,6 +326,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,udkapi,udkapi/com/sun/star/io,\
 	XObjectInputStream \
 	XObjectOutputStream \
 	XOutputStream \
+    XPipe \
 	XPersist \
 	XPersistObject \
 	XSeekable \

@@ -42,6 +42,7 @@
 #include <tools/diagnose_ex.h>
 
 #include <sot/storage.hxx>
+#include <com/sun/star/io/Pipe.hpp>
 #include <com/sun/star/ui/dialogs/XFilePicker.hpp>
 #include <com/sun/star/ui/dialogs/XFolderPicker.hpp>
 #include <com/sun/star/ui/dialogs/XFilterManager.hpp>
@@ -55,6 +56,7 @@
 #include <com/sun/star/ucb/NameClash.hpp>
 #include "com/sun/star/packages/manifest/XManifestWriter.hpp"
 #include <unotools/pathoptions.hxx>
+#include <comphelper/componentcontext.hxx>
 #include <comphelper/processfactory.hxx>
 
 #include <com/sun/star/util/VetoException.hpp>
@@ -1356,8 +1358,7 @@ void LibPage::ExportAsPackage( const String& aLibName )
         // write into pipe:
         Reference<packages::manifest::XManifestWriter> xManifestWriter( xMSF->createInstance
             ( DEFINE_CONST_UNICODE("com.sun.star.packages.manifest.ManifestWriter") ), UNO_QUERY );
-        Reference<io::XOutputStream> xPipe( xMSF->createInstance
-            ( DEFINE_CONST_UNICODE("com.sun.star.io.Pipe") ), UNO_QUERY );
+        Reference<io::XOutputStream> xPipe( io::Pipe::create(comphelper::ComponentContext(xMSF).getUNOContext()), UNO_QUERY );
         xManifestWriter->writeManifestSequence(
             xPipe, Sequence< Sequence<beans::PropertyValue> >(
                 &manifest[ 0 ], manifest.size() ) );

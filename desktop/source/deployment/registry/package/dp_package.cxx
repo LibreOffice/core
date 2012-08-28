@@ -49,6 +49,7 @@
 #include "com/sun/star/graphic/XGraphic.hpp"
 #include "com/sun/star/graphic/GraphicProvider.hpp"
 #include "com/sun/star/graphic/XGraphicProvider.hpp"
+#include <com/sun/star/io/Pipe.hpp>
 #include "com/sun/star/io/XOutputStream.hpp"
 #include "com/sun/star/io/XInputStream.hpp"
 #include "com/sun/star/task/InteractionClassification.hpp"
@@ -1182,9 +1183,7 @@ void BackendImpl::PackageImpl::exportTo(
             xContext->getServiceManager()->createInstanceWithContext(
                 OUSTR("com.sun.star.packages.manifest.ManifestWriter"),
                 xContext ), UNO_QUERY_THROW );
-        Reference<io::XOutputStream> xPipe(
-            xContext->getServiceManager()->createInstanceWithContext(
-                OUSTR("com.sun.star.io.Pipe"), xContext ), UNO_QUERY_THROW );
+        Reference<io::XOutputStream> xPipe( io::Pipe::create(xContext), UNO_QUERY_THROW );
         xManifestWriter->writeManifestSequence(
             xPipe, comphelper::containerToSequence(manifest) );
 

@@ -16,10 +16,14 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef __com_sun_star_io_Pipe_idl__
-#define __com_sun_star_io_Pipe_idl__
+#ifndef __com_sun_star_io_XPipe_idl__
+#define __com_sun_star_io_XPipe_idl__
 
-#include <com/sun/star/io/XPipe.idl>
+#include <com/sun/star/io/XOutputStream.idl>
+
+#include <com/sun/star/io/XInputStream.idl>
+
+
 
 module com {  module sun {  module star {  module io {
 
@@ -34,7 +38,15 @@ module com {  module sun {  module star {  module io {
     <p> With the pipe-service, an outputstream can be converted into an
     input stream at the cost of an additional buffer.
  */
-published service Pipe : XPipe;
+published interface XPipe
+{
+    // DocMerge: empty anyway
+    interface com::sun::star::io::XOutputStream;
+
+    // DocMerge: empty anyway
+    interface com::sun::star::io::XInputStream;
+
+};
 
 
 }; }; }; };

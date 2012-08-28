@@ -62,6 +62,7 @@
 
 #include <com/sun/star/util/XMacroExpander.hpp>
 
+#include <com/sun/star/io/Pipe.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/io/XActiveDataSource.hpp>
@@ -342,11 +343,8 @@ m_rServiceFactory(r), m_bTerminated(sal_False), m_bError(sal_False)
                         tsink->setInputStream(xInputStream);
 
                         // create pipe
-                        css::uno::Reference<XOutputStream>
-                                pipeout(
-                                        m_rServiceFactory->createInstance(
-                                                OUString(
-                                                         "com.sun.star.io.Pipe" )),
+                        css::uno::Reference<XOutputStream> pipeout(
+                                        Pipe::create(comphelper::ComponentContext(m_rServiceFactory).getUNOContext()),
                                         UNO_QUERY);
                         css::uno::Reference<XInputStream> pipein(pipeout, UNO_QUERY);
 
@@ -498,11 +496,8 @@ m_rServiceFactory(r), m_bTerminated(sal_False), m_bError(sal_False)
                 m_tcontrol->addListener(css::uno::Reference<XStreamListener> (this));
 
                 // create pipe
-                css::uno::Reference<XOutputStream>
-                        pipeout(
-                                m_rServiceFactory->createInstance(
-                                        OUString(
-                                                 "com.sun.star.io.Pipe" )),
+                css::uno::Reference<XOutputStream> pipeout(
+                                Pipe::create(comphelper::ComponentContext(m_rServiceFactory).getUNOContext()),
                                 UNO_QUERY);
                 css::uno::Reference<XInputStream> pipein(pipeout, UNO_QUERY);
 

@@ -84,9 +84,7 @@ void mygetchar()
 
 void testPipe( const Reference < XMultiServiceFactory > & rSmgr )
 {
-    Reference < XOutputStream > rOut(
-        rSmgr->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.io.Pipe" )) ),
-        UNO_QUERY );
+    Reference < XOutputStream > rOut( Pipe::create(comphelper::ComponentContext(rSmgr).getUNOContext()), UNO_QUERY_THROW );
 
     OSL_ASSERT( rOut.is() );
 
