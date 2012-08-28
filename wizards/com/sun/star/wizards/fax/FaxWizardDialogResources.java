@@ -96,6 +96,14 @@ public class FaxWizardDialogResources extends Resource
     String resConsist2PlaceHolder_value;
     String resConsist3PlaceHolder_value;
 
+    String resPrivateFaxBottle;
+    String resPrivateFaxLines;
+    String resPrivateFaxMarine;
+    String resBusinessFaxClassic;
+    String resBusinessFaxClassicPrivate;
+    String resBusinessFaxModern;
+    String resBusinessFaxModernPrivate;
+
     public FaxWizardDialogResources(XMultiServiceFactory xmsf)
     {
         super(xmsf, UNIT_NAME, MODULE_NAME);
@@ -152,6 +160,14 @@ public class FaxWizardDialogResources extends Resource
         resConsist1PlaceHolder_value = getResText(RID_FAXWIZARDDIALOG_START + 46);
         resConsist2PlaceHolder_value = getResText(RID_FAXWIZARDDIALOG_START + 47);
         resConsist3PlaceHolder_value = getResText(RID_FAXWIZARDDIALOG_START + 48);
+
+        resPrivateFaxBottle = getResText(RID_FAXWIZARDDIALOG_START + 49);
+        resPrivateFaxLines = getResText(RID_FAXWIZARDDIALOG_START + 50);
+        resPrivateFaxMarine = getResText(RID_FAXWIZARDDIALOG_START + 51);
+        resBusinessFaxClassic = getResText(RID_FAXWIZARDDIALOG_START + 52);
+        resBusinessFaxClassicPrivate = getResText(RID_FAXWIZARDDIALOG_START + 53);
+        resBusinessFaxModern = getResText(RID_FAXWIZARDDIALOG_START + 54);
+        resBusinessFaxModernPrivate = getResText(RID_FAXWIZARDDIALOG_START + 55);
 
         loadRoadmapResources();
         loadSalutationResources();

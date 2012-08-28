@@ -50,6 +50,9 @@ import com.sun.star.wizards.ui.event.DataAware;
 import com.sun.star.wizards.ui.event.RadioDataAware;
 import com.sun.star.wizards.ui.event.UnoDataAware;
 
+import com.sun.star.beans.XPropertySet;
+import com.sun.star.uno.XInterface;
+
 /**
  * This class is the dialog implementation class -
  * there is not much business logic here - but mostley
@@ -202,10 +205,8 @@ public class AgendaWizardDialogImpl extends AgendaWizardDialog
 
     private void initializePaths() {
         try {
-            sTemplatePath = FileAccess.getOfficePath(xMSF, "Template", "share", "/wizard");
             sUserTemplatePath = FileAccess.getOfficePath(xMSF, "Template", "user", PropertyNames.EMPTY_STRING);
             sBitmapPath = FileAccess.combinePaths(xMSF, sTemplatePath, "/../wizard/bitmap");
-            sTemplatePath = FileAccess.combinePaths(xMSF, sTemplatePath, "/../common");
         } catch (NoValidPathException e) {
             e.printStackTrace();
         }
@@ -305,7 +306,9 @@ public class AgendaWizardDialogImpl extends AgendaWizardDialog
      */
     public boolean initializeTemplates() {
         try {
-            String sTemplatePath = FileAccess.getOfficePath(xMSF, "Template", "share", "/wizard");
+            XInterface xPathInterface = (XInterface) xMSF.createInstance("com.sun.star.util.PathSettings");
+            XPropertySet xPropertySet = UnoRuntime.queryInterface(XPropertySet.class, xPathInterface);
+            sTemplatePath = ((String[]) xPropertySet.getPropertyValue("Template_user"))[0];
 
             //sCurrentNorm = Norms[getCurrentLetter().cp_Norm];
             String sAgendaPath = FileAccess.combinePaths(xMSF, sTemplatePath, "/../common/wizard/agenda" );

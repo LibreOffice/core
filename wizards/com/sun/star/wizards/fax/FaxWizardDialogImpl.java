@@ -65,6 +65,8 @@ import com.sun.star.wizards.common.TextElement;
 import com.sun.star.wizards.common.PlaceholderTextElement;
 
 import java.util.List;
+import com.sun.star.beans.XPropertySet;
+import com.sun.star.uno.XInterface;
 
 public class FaxWizardDialogImpl extends FaxWizardDialog
 {
@@ -461,6 +463,45 @@ public class FaxWizardDialogImpl extends FaxWizardDialog
 
     }
 
+    private void exchangeTitlesToLocalizedOnes()
+    {
+      for(int i = 0; i < BusinessFiles[0].length; ++i)
+      {
+        if( BusinessFiles[0][i].equals("Classic Fax") )
+        {
+          BusinessFiles[0][i] = resources.resBusinessFaxClassic;
+        }
+        else if( BusinessFiles[0][i].equals("Classic Fax from Private") )
+        {
+          BusinessFiles[0][i] = resources.resBusinessFaxClassicPrivate;
+        }
+        else if( BusinessFiles[0][i].equals("Modern Fax") )
+        {
+          BusinessFiles[0][i] = resources.resBusinessFaxModern;
+        }
+        else if( BusinessFiles[0][i].equals("Modern Fax from Private") )
+        {
+          BusinessFiles[0][i] = resources.resBusinessFaxModernPrivate;
+        }
+      }
+
+      for(int i = 0; i < PrivateFiles[0].length; ++i)
+      {
+        if( PrivateFiles[0][i].equals("Bottle") )
+        {
+          PrivateFiles[0][i] = resources.resPrivateFaxBottle;
+        }
+        else if( PrivateFiles[0][i].equals("Lines") )
+        {
+          PrivateFiles[0][i] = resources.resPrivateFaxLines;
+        }
+        else if( PrivateFiles[0][i].equals("Marine") )
+        {
+          PrivateFiles[0][i] = resources.resPrivateFaxMarine;
+        }
+      }
+    }
+
     public void insertRoadmap()
     {
         addRoadmap();
@@ -530,12 +571,17 @@ public class FaxWizardDialogImpl extends FaxWizardDialog
     {
         try
         {
-            sTemplatePath = FileAccess.getOfficePath(xMSF, "Template", "share", "/wizard");
+            XInterface xPathInterface = (XInterface) xMSF.createInstance("com.sun.star.util.PathSettings");
+            XPropertySet xPropertySet = UnoRuntime.queryInterface(XPropertySet.class, xPathInterface);
+            sTemplatePath = ((String[]) xPropertySet.getPropertyValue("Template_user"))[0];
             sUserTemplatePath = FileAccess.getOfficePath(xMSF, "Template", "user", PropertyNames.EMPTY_STRING);
             sBitmapPath = FileAccess.combinePaths(xMSF, sTemplatePath, "/../wizard/bitmap");
-            sTemplatePath = FileAccess.combinePaths(xMSF, sTemplatePath, "/../common");
         }
         catch (NoValidPathException e)
+        {
+            e.printStackTrace();
+        }
+        catch (Exception e)
         {
             e.printStackTrace();
         }
@@ -551,6 +597,8 @@ public class FaxWizardDialogImpl extends FaxWizardDialog
 
             BusinessFiles = FileAccess.getFolderTitles(xMSF, "bus", sFaxPath);
             PrivateFiles = FileAccess.getFolderTitles(xMSF, "pri", sFaxPath);
+
+            exchangeTitlesToLocalizedOnes();
 
             setControlProperty("lstBusinessStyle", PropertyNames.STRING_ITEM_LIST, BusinessFiles[0]);
             setControlProperty("lstPrivateStyle", PropertyNames.STRING_ITEM_LIST, PrivateFiles[0]);

@@ -68,10 +68,12 @@ public class ReportLayouter
     private XTextRange          trTitleconst, trAuthorconst, trDateconst, trPageconst;
     private TextElement         teTitleconst, teAuthorconst, teDateconst, tePageconst;
     private List<XTextRange>    constRangeList = new ArrayList<XTextRange>();
+    private boolean isBuilderInstalled;
 
-    public ReportLayouter(XMultiServiceFactory _xMSF, IReportDocument _CurReportDocument, UnoDialog _CurUnoDialog)
+    public ReportLayouter(XMultiServiceFactory _xMSF, IReportDocument _CurReportDocument, UnoDialog _CurUnoDialog, boolean _isBuilderInstalled)
     {
         m_xMSF = _xMSF;
+        isBuilderInstalled = _isBuilderInstalled;
         try
         {
             short curtabindex = (short) (100 * ReportWizard.SOTEMPLATEPAGE);
@@ -265,8 +267,11 @@ public class ReportLayouter
                         {
                             iOldContentPos = iPos;
                             CurReportDocument.liveupdate_changeContentTemplate(ContentFiles[1][iPos]);
-                            clearConstants();
-                            drawConstants();
+                            if(!isBuilderInstalled)
+                            {
+                              clearConstants();
+                              drawConstants();
+                            }
                         }
                         break;
 
@@ -276,8 +281,11 @@ public class ReportLayouter
                         {
                             iOldLayoutPos = iPos;
                             CurReportDocument.liveupdate_changeLayoutTemplate(LayoutFiles[1][iPos]/*, Desktop.getBitmapPath(m_xMSF)*/);
-                            clearConstants();
-                            drawConstants();
+                            if(!isBuilderInstalled)
+                            {
+                              clearConstants();
+                              drawConstants();
+                            }
                         }
                         break;
 

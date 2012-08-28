@@ -690,6 +690,7 @@ public class ReportTextImplementation extends ReportImplementationHelper impleme
         {
 //                    ContentFiles = FileAccess.getFolderTitles(m_xMSF, "cnt", CurReportDocument.getReportPath());
             ContentFiles = FileAccess.getFolderTitles(getMSF(), "cnt", getReportPath());
+            exchangeContentTitlesWithLocalisedOnes(ContentFiles);
         }
         catch (com.sun.star.wizards.common.NoValidPathException e)
         {
@@ -711,6 +712,7 @@ public class ReportTextImplementation extends ReportImplementationHelper impleme
         {
 //                    LayoutFiles = FileAccess.getFolderTitles(m_xMSF, "stl", CurReportDocument.getReportPath());
             LayoutFiles = FileAccess.getFolderTitles(getMSF(), "stl", getReportPath());
+            exchangeLayoutTitlesWithLocalisedOnes(LayoutFiles);
         }
         catch (com.sun.star.wizards.common.NoValidPathException e)
         {
@@ -744,5 +746,135 @@ public class ReportTextImplementation extends ReportImplementationHelper impleme
 
     public void checkInvariants() throws java.lang.Exception
     {
+    }
+
+    private void exchangeContentTitlesWithLocalisedOnes(String[][] ContentFiles)
+    {
+      for(int i = 0; i < ContentFiles[0].length; ++i)
+        {
+          if( ContentFiles[0][i].equals("Align Left - Border") )
+          {
+            ContentFiles[0][i] = m_resource.getResText(UIConsts.RID_REPORT + 94);
+          }
+          else if( ContentFiles[0][i].equals("Align Left - Compact") )
+          {
+            ContentFiles[0][i] = m_resource.getResText(UIConsts.RID_REPORT + 95);
+          }
+          else if( ContentFiles[0][i].equals("Align Left - Elegant") )
+          {
+            ContentFiles[0][i] = m_resource.getResText(UIConsts.RID_REPORT + 96);
+          }
+          else if( ContentFiles[0][i].equals("Align Left - Highlighted") )
+          {
+            ContentFiles[0][i] = m_resource.getResText(UIConsts.RID_REPORT + 97);
+          }
+          else if( ContentFiles[0][i].equals("Align Left - Modern") )
+          {
+            ContentFiles[0][i] = m_resource.getResText(UIConsts.RID_REPORT + 98);
+          }
+          else if( ContentFiles[0][i].equals("Align Left - Red & Blue") )
+          {
+            ContentFiles[0][i] = m_resource.getResText(UIConsts.RID_REPORT + 99);
+          }
+          else if( ContentFiles[0][i].equals("Default") )
+          {
+            ContentFiles[0][i] = m_resource.getResText(UIConsts.RID_REPORT + 100);
+          }
+          else if( ContentFiles[0][i].equals("Outline - Borders") )
+          {
+            ContentFiles[0][i] = m_resource.getResText(UIConsts.RID_REPORT + 101);
+          }
+          else if( ContentFiles[0][i].equals("Outline - Compact") )
+          {
+            ContentFiles[0][i] = m_resource.getResText(UIConsts.RID_REPORT + 102);
+          }
+          else if( ContentFiles[0][i].equals("Outline - Elegant") )
+          {
+            ContentFiles[0][i] = m_resource.getResText(UIConsts.RID_REPORT + 103);
+          }
+          else if( ContentFiles[0][i].equals("Outline - Highlighted") )
+          {
+            ContentFiles[0][i] = m_resource.getResText(UIConsts.RID_REPORT + 104);
+          }
+          else if( ContentFiles[0][i].equals("Outline - Modern") )
+          {
+            ContentFiles[0][i] = m_resource.getResText(UIConsts.RID_REPORT + 105);
+          }
+          else if( ContentFiles[0][i].equals("Outline - Red & Blue") )
+          {
+            ContentFiles[0][i] = m_resource.getResText(UIConsts.RID_REPORT + 106);
+          }
+          else if( ContentFiles[0][i].equals("Outline, indented - Borders") )
+          {
+            ContentFiles[0][i] = m_resource.getResText(UIConsts.RID_REPORT + 107);
+          }
+          else if( ContentFiles[0][i].equals("Outline, indented - Compact") )
+          {
+            ContentFiles[0][i] = m_resource.getResText(UIConsts.RID_REPORT + 108);
+          }
+          else if( ContentFiles[0][i].equals("Outline, indented - Elegant") )
+          {
+            ContentFiles[0][i] = m_resource.getResText(UIConsts.RID_REPORT + 109);
+          }
+          else if( ContentFiles[0][i].equals("Outline, indented - Highlighted") )
+          {
+            ContentFiles[0][i] = m_resource.getResText(UIConsts.RID_REPORT + 110);
+          }
+          else if( ContentFiles[0][i].equals("Outline, indented - Modern") )
+          {
+            ContentFiles[0][i] = m_resource.getResText(UIConsts.RID_REPORT + 111);
+          }
+          else if( ContentFiles[0][i].equals("Outline, indented - Red & Blue") )
+          {
+            ContentFiles[0][i] = m_resource.getResText(UIConsts.RID_REPORT + 112);
+          }
+        }
+    }
+
+    private void exchangeLayoutTitlesWithLocalisedOnes(String[][] LayoutFiles)
+    {
+        for(int i = 0; i < LayoutFiles[0].length; ++i)
+        {
+          if( LayoutFiles[0][i].equals("Bubbles") )
+          {
+            LayoutFiles[0][i] = m_resource.getResText(UIConsts.RID_REPORT + 113);
+          }
+          else if( LayoutFiles[0][i].equals("Cinema") )
+          {
+            LayoutFiles[0][i] = m_resource.getResText(UIConsts.RID_REPORT + 114);
+          }
+          else if( LayoutFiles[0][i].equals("Controlling") )
+          {
+            LayoutFiles[0][i] = m_resource.getResText(UIConsts.RID_REPORT + 115);
+          }
+          else if( LayoutFiles[0][i].equals("Default") )
+          {
+            LayoutFiles[0][i] = m_resource.getResText(UIConsts.RID_REPORT + 116);
+          }
+          else if( LayoutFiles[0][i].equals("Drafting") )
+          {
+            LayoutFiles[0][i] = m_resource.getResText(UIConsts.RID_REPORT + 117);
+          }
+          else if( LayoutFiles[0][i].equals("Finances") )
+          {
+            LayoutFiles[0][i] = m_resource.getResText(UIConsts.RID_REPORT + 118);
+          }
+          else if( LayoutFiles[0][i].equals("Flipchart") )
+          {
+            LayoutFiles[0][i] = m_resource.getResText(UIConsts.RID_REPORT + 119);
+          }
+          else if( LayoutFiles[0][i].equals("Formal with Company Logo") )
+          {
+            LayoutFiles[0][i] = m_resource.getResText(UIConsts.RID_REPORT + 120);
+          }
+          else if( LayoutFiles[0][i].equals("Generic") )
+          {
+            LayoutFiles[0][i] = m_resource.getResText(UIConsts.RID_REPORT + 121);
+          }
+          else if( LayoutFiles[0][i].equals("Worldmap") )
+          {
+            LayoutFiles[0][i] = m_resource.getResText(UIConsts.RID_REPORT + 122);
+          }
+        }
     }
 }
