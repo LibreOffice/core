@@ -86,6 +86,7 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
     linguistic \
     lotuswordpro \
     MathMLDTD \
+	mdds \
     Mesa \
     nlpsolver \
     np_sdk \

@@ -109,6 +109,23 @@ endef
 
 endif
 
+ifeq ($(SYSTEM_MDDS),YES)
+
+gb_LinkTarget__use_mdds_headers :=
+
+else
+
+define gb_LinkTarget__use_mdds_headers
+$(call gb_LinkTarget_use_unpacked,$(1),mdds)
+$(call gb_LinkTarget_set_include,$(1),\
+	-I$(call gb_UnpackedTarball_get_dir,mdds/include) \
+	$$(INCLUDE) \
+)
+
+endef
+
+endif
+
 # External libraries
 
 ifeq ($(SYSTEM_CPPUNIT),YES)

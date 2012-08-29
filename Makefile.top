@@ -89,6 +89,7 @@ l10ntools\
 lingucomponent\
 linguistic\
 lotuswordpro\
+mdds\
 nlpsolver\
 np_sdk\
 o3tl\
@@ -220,7 +221,6 @@ libxmlsec\
 libxslt\
 lcms2\
 lpsolve\
-mdds\
 migrationanalysis\
 more_fonts\
 moz\

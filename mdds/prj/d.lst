@@ -1,8 +1,0 @@
-mkdir: %_DEST%\inc\mdds
-mkdir: %_DEST%\inc\mdds\compat
-mkdir: %_DEST%\inc\mdds\hash_container
-
-..\%__SRC%\inc\mdds\* %_DEST%\inc\mdds
-..\%__SRC%\inc\mdds\compat\* %_DEST%\inc\mdds\compat
-..\%__SRC%\inc\mdds\hash_container\* %_DEST%\inc\mdds\hash_container
-
