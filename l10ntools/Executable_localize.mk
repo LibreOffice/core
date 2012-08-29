@@ -26,8 +26,17 @@
 
 $(eval $(call gb_Executable_Executable,localize))
 
+$(eval $(call gb_Executable_set_include,localize,\
+    -I$(SRCDIR)/l10ntools/inc \
+    $$(INCLUDE) \
+))
+
 $(eval $(call gb_Executable_use_libraries,localize,\
     sal \
+))
+
+$(eval $(call gb_Executable_use_static_libraries,localize,\
+    transex \
 ))
 
 $(eval $(call gb_Executable_add_exception_objects,localize,\

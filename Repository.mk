@@ -50,6 +50,7 @@ $(eval $(call gb_Helper_register_executables,NONE, \
     rdbmaker \
     regsingleton \
     regsvrex \
+	renewpo \
     rsc \
     rscdep \
     saxparser \
