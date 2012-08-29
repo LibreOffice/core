@@ -29,11 +29,28 @@
 #include "po.hxx"
 #include <ctime>
 #include <vector>
+#include <boost/crc.hpp>
 
 #define POESCAPED OString("\\n\\t\\r\\\\\\\"")
 #define POUNESCAPED OString("\n\t\r\\\"")
 
 //Class GenPoEntry
+
+//Generate KeyId
+OString ImplGenKeyId(const OString& rGenerator)
+{
+    boost::crc_32_type aCRC32;
+    aCRC32.process_bytes(rGenerator.getStr(), rGenerator.getLength());
+    sal_uInt32 nCRC = aCRC32.checksum();
+    OString sKeyId = "";
+    while ( sKeyId.getLength() < 4 )
+    {
+        //Concat a char from the [33,126] intervallum of ASCII
+        sKeyId += OString(char(int(double(nCRC & 255)/255*93)+33));
+        nCRC >>= 8;
+    }
+    return sKeyId;
+}
 
 //Escape text
 OString ImplEscapeText(const OString& rText,
@@ -101,6 +118,7 @@ GenPoEntry::GenPoEntry()
     , m_sUnTransStr( OString() )
     , m_sTransStr( OString() )
     , m_bFuzzy( false )
+    , m_sKeyId( OString() )
 {
 }
 
@@ -109,15 +127,21 @@ GenPoEntry::~GenPoEntry()
 {
 }
 
+//Set keyid
+void GenPoEntry::genKeyId()
+{
+    m_sKeyId = ImplGenKeyId(m_sReference + m_sContext + m_sUnTransStr);
+}
+
 //Write to file
 void GenPoEntry::writeToFile(std::ofstream& io_rOFStream)
 {
     if ( !m_sWhiteSpace.isEmpty() )
         io_rOFStream << m_sWhiteSpace.getStr();
     if ( !m_sExtractCom.isEmpty() )
-        io_rOFStream << "#. "
-                     << m_sExtractCom.replaceAll("\n","\n#. ").getStr()
-                     << std::endl;
+        io_rOFStream << "#. " << m_sExtractCom.getStr() << std::endl;
+    if ( !m_sKeyId.isEmpty() )
+        io_rOFStream << "#. " << m_sKeyId.getStr() << std::endl;
     if ( !m_sReference.isEmpty() )
         io_rOFStream << "#: " << m_sReference.getStr() << std::endl;
     if ( m_bFuzzy )
@@ -125,14 +149,12 @@ void GenPoEntry::writeToFile(std::ofstream& io_rOFStream)
     if ( !m_sContext.isEmpty() )
         io_rOFStream << "msgctxt "
                      << ImplGenMsgString(m_sContext).getStr() << std::endl;
-        io_rOFStream << "msgid "
-                     << ImplGenMsgString(
-                            ImplEscapeText(m_sUnTransStr)).getStr()
-                     << std::endl;
-        io_rOFStream << "msgstr "
-                     << ImplGenMsgString(
-                            ImplEscapeText(m_sTransStr)).getStr()
-                     << std::endl;
+    io_rOFStream << "msgid "
+                 << ImplGenMsgString(ImplEscapeText(m_sUnTransStr)).getStr()
+                 << std::endl;
+    io_rOFStream << "msgstr "
+                 << ImplGenMsgString(ImplEscapeText(m_sTransStr)).getStr()
+                 << std::endl;
 }
 
 //Class PoEntry
@@ -156,48 +178,7 @@ void ImplSplitAt(const OString& rSource, const sal_Int32 nDelimiter,
     o_vParts.push_back(rSource.copy(nLastSplit));
 }
 
-//Generate crc24
-sal_Int32 ImplGenCRC24(const OString& rKey)
-{
-    const sal_Int32 CRC24_INIT = 0x00b704ce;
-    const sal_Int32 CRC24_POLY = 0x00864cfb;
-    sal_Int32 nCRC = CRC24_INIT;
-    sal_Int32 nPosition = 0;
 
-    while ( nPosition < rKey.getLength() )
-    {
-        nCRC ^= sal_Int32(rKey[nPosition]) << 16;
-        for (sal_uInt16 i = 0; i < 8; ++i)
-        {
-            nCRC <<= 1;
-            if (nCRC & 0x01000000)
-                nCRC ^= CRC24_POLY;
-        }
-        ++nPosition;
-    }
-    return nCRC & 0x00ffffff;
-}
-
-//Generate KeyId
-OString ImplGenKeyId(const OString& rSourcePath, const OString& rContext)
-{
-    std::vector<OString> vPathParts;
-    ImplSplitAt(rSourcePath,'\\',vPathParts);
-    if ( vPathParts.size()<3 ) throw;
-
-    sal_Int32 nCRC = ImplGenCRC24(  vPathParts[vPathParts.size()-3] + "_" +
-                                    vPathParts[vPathParts.size()-2] + "_" +
-                                    vPathParts[vPathParts.size()-1] + "_" +
-                                    rContext);
-    const OString sSymbols = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz#_";
-    OString sKeyId = "";
-    while ( sKeyId.getLength() < 4 )
-    {
-        sKeyId += sSymbols.copy(nCRC & 63, 1);
-        nCRC >>= 6;
-    }
-    return sKeyId;
-}
 
 //Construct PoEntry from sdfline
 PoEntry::PoEntry(const OString& rSDFLine, const TYPE eType)
@@ -206,7 +187,6 @@ PoEntry::PoEntry(const OString& rSDFLine, const TYPE eType)
     , m_sLocalId( OString() )
     , m_sResourceType(OString() )
     , m_eType( TTEXT )
-    , m_sKeyId( OString() )
 {
     setWhiteSpace("\n");
     std::vector<OString> vParts;
@@ -236,13 +216,13 @@ PoEntry::PoEntry(const OString& rSDFLine, const TYPE eType)
         throw; break;
     }
     setContext(sContext);
-    m_sKeyId = ImplGenKeyId(vParts[PROJECT] + "\\" + vParts[SOURCEFILE],
-                            sContext);
-    setExtractCom((m_sHelpText.isEmpty() ? "" : m_sHelpText + "\n") + m_sKeyId);
+    setExtractCom(m_sHelpText);
 
     setUnTransStr(vParts[eType]);
+    genKeyId();
 }
 
+//Destructor
 PoEntry::~PoEntry()
 {
 }
