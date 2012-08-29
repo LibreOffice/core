@@ -99,9 +99,13 @@ class SFX2_DLLPUBLIC SfxModelessDialog: public ModelessDialog
     SAL_DLLPRIVATE SfxModelessDialog(SfxModelessDialog &); // not defined
     SAL_DLLPRIVATE void operator =(SfxModelessDialog &); // not defined
 
+    void Init(SfxBindings *pBindinx, SfxChildWindow *pCW);
+
 protected:
                             SfxModelessDialog( SfxBindings*, SfxChildWindow*,
                                 Window*, const ResId& );
+                            SfxModelessDialog( SfxBindings*, SfxChildWindow*,
+                                Window*, const rtl::OString& rID, const rtl::OUString& rUIXMLDescription );
                             ~SfxModelessDialog();
     virtual sal_Bool            Close();
     virtual void            Resize();

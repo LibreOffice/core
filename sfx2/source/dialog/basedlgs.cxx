@@ -339,19 +339,29 @@ IMPL_LINK_NOARG(SfxModelessDialog, TimerHdl)
     return 0;
 }
 
-// -----------------------------------------------------------------------
-
-SfxModelessDialog::SfxModelessDialog( SfxBindings *pBindinx,
-                        SfxChildWindow *pCW, Window *pParent,
-                        const ResId& rResId ) :
-    ModelessDialog(pParent, rResId),
-    pBindings(pBindinx),
-    pImp( new SfxModelessDialog_Impl )
+SfxModelessDialog::SfxModelessDialog(SfxBindings *pBindinx,
+    SfxChildWindow *pCW, Window *pParent, const ResId& rResId)
+    : ModelessDialog(pParent, rResId)
 {
+    Init(pBindinx, pCW);
+    SetHelpId("");
+}
+
+SfxModelessDialog::SfxModelessDialog(SfxBindings* pBindinx,
+    SfxChildWindow *pCW, Window *pParent, const rtl::OString& rID,
+    const rtl::OUString& rUIXMLDescription)
+    : ModelessDialog(pParent, rID, rUIXMLDescription)
+{
+    Init(pBindinx, pCW);
+}
+
+void SfxModelessDialog::Init(SfxBindings *pBindinx, SfxChildWindow *pCW)
+{
+    pBindings = pBindinx;
+    pImp = new SfxModelessDialog_Impl;
     pImp->pMgr = pCW;
     pImp->bConstructed = sal_False;
     SetUniqueId( GetHelpId() );
-    SetHelpId("");
     if ( pBindinx )
         pImp->StartListening( *pBindinx );
     pImp->aMoveTimer.SetTimeout(50);
