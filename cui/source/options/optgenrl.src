@@ -210,12 +210,6 @@ TabPage RID_SFXPAGE_GENERAL
         Hide = TRUE;
         Text [ en-US ] = "Use data for document properties";
     };
-
-    // extra resource for US addresses
-    String STR_QUERY_REG
-    {
-        Text [ en-US ] = "Note that street, Zip code and city are used to generate the registration key. You will not be able to change the user data again until the registration has been carried out. Do you want to modify the user data now?";
-    };
 };
 
 // RID_SVXQB_CHANGEDATA ---------------------------------------------------

@@ -54,9 +54,6 @@
 #define FT_NAME_EASTERN 41
 #define FT_CITY_US      42
 
-#define STR_US_STATE    10
-#define STR_QUERY_REG   11
-
 #endif // #ifndef SVX_OPTGENRL_HRC
 
 // ******************************************************************* EOF
