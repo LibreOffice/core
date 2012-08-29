@@ -38,6 +38,8 @@
 #include <vcl/svapp.hxx>
 #include <vcl/tabctrl.hxx>
 #include <vcl/tabpage.hxx>
+#include <svdata.hxx>
+#include <svids.hrc>
 #include <window.h>
 
 VclBuilder::VclBuilder(Window *pParent, rtl::OUString sUIDir, rtl::OUString sUIFile, rtl::OString sID)
@@ -158,7 +160,7 @@ void VclBuilder::handleTranslations(xmlreader::XmlReader &reader)
     while(1)
     {
         xmlreader::XmlReader::Result res = reader.nextItem(
-            xmlreader::XmlReader::TEXT_NORMALIZED, &name, &nsId);
+            xmlreader::XmlReader::TEXT_RAW, &name, &nsId);
 
         if (res == xmlreader::XmlReader::RESULT_BEGIN)
         {
@@ -810,7 +812,7 @@ void VclBuilder::handleListStore(xmlreader::XmlReader &reader, const rtl::OStrin
                 }
 
                 reader.nextItem(
-                    xmlreader::XmlReader::TEXT_NORMALIZED, &name, &nsId);
+                    xmlreader::XmlReader::TEXT_RAW, &name, &nsId);
 
                 if (!bTranslated)
                     sValue = rtl::OString(name.begin, name.length);
@@ -968,7 +970,7 @@ void VclBuilder::applyPackingProperty(Window *pCurrent,
             rtl::OString sKey(name.begin, name.length);
             sKey = sKey.replace('_', '-');
             reader.nextItem(
-                xmlreader::XmlReader::TEXT_NORMALIZED, &name, &nsId);
+                xmlreader::XmlReader::TEXT_RAW, &name, &nsId);
             rtl::OString sValue(name.begin, name.length);
 
             if (sKey.equalsL(RTL_CONSTASCII_STRINGPARAM("expand")))
@@ -1054,7 +1056,7 @@ void VclBuilder::collectProperty(xmlreader::XmlReader &reader, const rtl::OStrin
 
     }
 
-    reader.nextItem(xmlreader::XmlReader::TEXT_NORMALIZED, &name, &nsId);
+    reader.nextItem(xmlreader::XmlReader::TEXT_RAW, &name, &nsId);
     if (!bTranslated)
         sValue = rtl::OString(name.begin, name.length);
 
