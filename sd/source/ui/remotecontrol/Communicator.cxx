@@ -95,6 +95,8 @@ void Communicator::execute()
 
 void Communicator::informListenerDestroyed()
 {
+    pTransmitter->addMessage( "slideshow_finished\n\n",
+                               Transmitter::PRIORITY_HIGH );
     mListener.clear();
 }
 
