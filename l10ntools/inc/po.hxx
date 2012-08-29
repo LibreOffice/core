@@ -32,7 +32,7 @@
 #include <fstream>
 #include <rtl/string.hxx>
 
-class PoEntry
+class GenPoEntry
 {
 
 private:
@@ -44,31 +44,55 @@ private:
     OString    m_sUnTransStr;
     OString    m_sTransStr;
 
-    OString    m_sKeyId;
-
-protected:
-    void            setExtractCom(const OString& rExtCom)
-                    { m_sExtractCom = rExtCom; }
-
 public:
-                    PoEntry();
-                    PoEntry(const OString& i_rSDFLine,
-                            const sal_uInt16 eType = TEXT);
-    virtual         ~PoEntry();
+                        GenPoEntry();
+    virtual             ~GenPoEntry();
 
-    virtual void    writeToFile(std::ofstream& io_rOFStream);
+    virtual void        setWhiteSpace(const OString& rWhiteSpace)
+                        { m_sWhiteSpace = rWhiteSpace; }
+    virtual void        setExtractCom(const OString& rExtractCom)
+                        { m_sExtractCom = rExtractCom; }
+    virtual void        setReference(const OString& rReference)
+                        { m_sReference = rReference; }
+    virtual void        setContext(const OString& rContext)
+                        { m_sContext = rContext; }
+    virtual void        setUnTransStr(const OString& rUnTransStr)
+                        { m_sUnTransStr = rUnTransStr; }
+    virtual void        setTransStr(const OString& rTransStr)
+                        { m_sTransStr = rTransStr; }
 
-    void            setTransStr(const OString& rTransStr);
+    virtual void        writeToFile(std::ofstream& io_rOFStream);
+};
 
+class PoEntry: public GenPoEntry
+{
+public:
     enum SDFPARTS { PROJECT, SOURCEFILE, DUMMY, RESOURCETYPE, GROUPID,
                     LOCALID, HELPID, PLATFORM, WIDTH, LANGUAGEID,
                     TEXT, HELPTEXT, QUICKHELPTEXT, TITLE, TIMESTAMP };
+    enum TYPE { TTEXT=TEXT, TQUICKHELPTEXT=QUICKHELPTEXT, TTITLE=TITLE };
+private:
+
+    OString     m_sSourceFile;
+    OString     m_sGroupId;
+    OString     m_sLocalId;
+    OString     m_sResourceType;
+    TYPE        m_eType;
+    OString     m_sHelpText;
+    OString     m_sKeyId;
+
+public:
+
+                        PoEntry(const OString& i_rSDFLine,
+                            const TYPE eType = TTEXT);
+    virtual             ~PoEntry();
+
+    virtual void        setUnTransStr(const OString& rUnTransStr);
+    virtual void        setTransStr(const OString& rTransStr);
+
 };
 
-
-
-
-class PoHeader: public PoEntry
+class PoHeader: public GenPoEntry
 {
 
 private:
