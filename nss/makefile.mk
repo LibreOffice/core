@@ -134,8 +134,7 @@ BUILD_ACTION += NSS_USE_SYSTEM_SQLITE=1
 
 PATCH_FILES+=nss.patch.mingw
 
-moz_build:=$(shell cygpath -p $(MOZILLABUILD))
-PATH!:=$(moz_build)/bin:$(PATH)
+PATH!:=$(MOZILLABUILD)/bin:$(PATH)
 
 nss_CC=$(CC)
 nss_CXX=$(CXX)
