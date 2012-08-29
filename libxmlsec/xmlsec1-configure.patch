@@ -51,7 +51,7 @@
 +  ;;
 +
 +*)
-+  NSS_LIBS_LIST="-lnss3 -lsoftokn3 -lsmime3"
++  NSS_LIBS_LIST="-lnss3 -lsmime3"
 +  NSPR_LIBS_LIST="-lnspr4 -lplds4 -lplc4"
 +  ;;
 +esac
