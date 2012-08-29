@@ -380,7 +380,7 @@ void SvxGeneralTabPage::SetAccessibleNames ()
         for (unsigned iField = rRow.nFirstField; iField != rRow.nLastField; ++iField)
         {
             // the token
-            rtl::OUString sPart = sList.getToken(0, '/', nIndex).trim();
+            rtl::OUString sPart = sList.getToken(0, static_cast<sal_Unicode>('/'), nIndex).trim();
             Edit& rEdit = vFields[iField]->aEdit;
             // creating the accessible name
             if (iBracket != -1)
