@@ -28,6 +28,8 @@ use File::Temp;
 use File::Path;
 
 $TempDir = "";
+my $FirstTransitionIndex = 0;
+my $LastTransitionIndex = -1;
 
 
 # all the XML package generation is a blatant rip from AF's
@@ -95,7 +97,7 @@ sub zip_dirtree
         #   Remove .. directories from the middle of the path.
         while ($zip_name =~ /\/[^\/][^\.\/][^\/]*\/\.\.\//)
         {
-            $zip_name = $` . "/" . $';
+            $zip_name = $` . "/" . $'; # $'
         }
     }
 
@@ -139,6 +141,8 @@ sub writeSlideStyles
     my $transitionSubType = pop @_;
     my $transitionType = pop @_;
     my $slideNum = pop @_;
+
+    return if $slideNum<$FirstTransitionIndex || ($LastTransitionIndex>=0 && $slideNum>$LastTransitionIndex);
 
     print $OUT "  <style:style style:name=\"dp",$slideNum,"\" style:family=\"drawing-page\">\n";
     print $OUT "   <style:drawing-page-properties presentation:transition-type=\"automatic\" presentation:duration=\"PT00H00M01S\" presentation:background-visible=\"true\" presentation:background-objects-visible=\"true\" draw:fill=\"solid\" draw:fill-color=\"#ff",$slideNum % 2 ? "ff99" : "cc99","\" smil:type=\"",$transitionType,"\" smil:subtype=\"",$transitionSubType,"\" ",$direction == 0 ? "" : "smil:direction=\"reverse\" ",$mode == 0 ? "" : "smil:mode=\"out\"","/>\n";
@@ -213,6 +217,8 @@ sub writeSlide
     my $transitionSubtype = pop @_;
     my $transitionType = pop @_;
     my $slideNum = pop @_;
+
+    return if $slideNum<$FirstTransitionIndex || ($LastTransitionIndex>=0 && $slideNum>$LastTransitionIndex);
 
     print $OUT "   <draw:page draw:name=\"page",$slideNum,"\" draw:style-name=\"dp",$slideNum,"\" draw:master-page-name=\"Default\" presentation:presentation-page-layout-name=\"AL1T19\">";
 
@@ -552,6 +558,8 @@ output-file-name defaults to alltransitions.odp.
 options: -a    Generate _all_ combinations of type, subtype,
                direction, and mode
          -h    Print this usage information.
+         -f    First transition to include, defaults to 0
+         -l    Last transition to include
 END_OF_USAGE
 }
 
@@ -578,6 +586,14 @@ sub process_command_line
         if ($ARGV[$i] eq "-a")
         {
             $global_gen_all=1;
+        }
+        elsif ($ARGV[$i] eq "-f")
+        {
+            $FirstTransitionIndex = $ARGV[++$i];
+        }
+        elsif ($ARGV[$i] eq "-l")
+        {
+            $LastTransitionIndex = $ARGV[++$i];
         }
         elsif ($ARGV[$i] =~ /^-/)
         {
