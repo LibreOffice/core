@@ -228,29 +228,19 @@ void Test::testN751077()
     load( "n751077.docx" );
 
 /*
-enum = ThisComponent.Text.createEnumeration
-enum.NextElement
-para = enum.NextElement
-xray para.String
-xray para.PageStyleName
+xray ThisComponent.DrawPage(1).getByIndex(0).String
+xray ThisComponent.DrawPage(1).getByIndex(0).Anchor.PageStyleName
 */
-    uno::Reference<text::XTextDocument> textDocument(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XEnumerationAccess> paraEnumAccess(textDocument->getText(), uno::UNO_QUERY);
-    // list of paragraphs
-    uno::Reference<container::XEnumeration> paraEnum = paraEnumAccess->createEnumeration();
-    // go to 1st paragraph
-    (void) paraEnum->nextElement();
-    // get the 2nd paragraph
-    uno::Reference<uno::XInterface> paragraph(paraEnum->nextElement(), uno::UNO_QUERY);
-    // text of the paragraph
-    uno::Reference<text::XTextRange> text(paragraph, uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL( OUString( "TEXT1" ), text->getString());
-    // we want to test the paragraph is on the first page (it was put onto another page without the fix),
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(xTextDocument, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
+    uno::Reference<drawing::XShapes> xShapes(xDrawPage->getByIndex(1), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xShape(xShapes->getByIndex(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("TEXT1"), xShape->getString());
+    // we want to test the textbox is on the first page (it was put onto another page without the fix),
     // use a small trick and instead of checking the page layout, check the page style
-    uno::Reference<beans::XPropertySet> paragraphProperties(paragraph, uno::UNO_QUERY);
-    OUString pageStyle;
-    paragraphProperties->getPropertyValue( "PageStyleName" ) >>= pageStyle;
-    CPPUNIT_ASSERT_EQUAL( OUString( "First Page" ), pageStyle );
+    uno::Reference<text::XTextContent> xTextContent(xShape, uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("First Page"), getProperty<OUString>(xTextContent->getAnchor(), "PageStyleName"));
 }
 
 void Test::testN705956_1()
@@ -266,8 +256,9 @@ xray graphic.Size
     uno::Reference<drawing::XDrawPageSupplier> drawPageSupplier(textDocument, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> drawPage = drawPageSupplier->getDrawPage();
     CPPUNIT_ASSERT_EQUAL( sal_Int32( 1 ), drawPage->getCount());
+    uno::Reference<drawing::XShapes> shapes(drawPage->getByIndex(0), uno::UNO_QUERY);
     uno::Reference<drawing::XShape> image;
-    drawPage->getByIndex(0) >>= image;
+    shapes->getByIndex(0) >>= image;
     uno::Reference<beans::XPropertySet> imageProperties(image, uno::UNO_QUERY);
     uno::Reference<graphic::XGraphic> graphic;
     imageProperties->getPropertyValue( "Graphic" ) >>= graphic;

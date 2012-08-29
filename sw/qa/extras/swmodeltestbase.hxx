@@ -26,6 +26,7 @@
  */
 
 #include <com/sun/star/text/XTextDocument.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 
 #include <test/bootstrapfixture.hxx>
 #include <unotest/macros_test.hxx>
@@ -72,6 +73,15 @@ protected:
             }
         }
         return aBuf.getLength();
+    }
+
+    template< typename T >
+    T getProperty( uno::Reference< uno::XInterface > obj, const rtl::OUString& name ) const
+    {
+        uno::Reference< beans::XPropertySet > properties( obj, uno::UNO_QUERY );
+        T data = T();
+        properties->getPropertyValue( name ) >>= data;
+        return data;
     }
 
     uno::Reference<lang::XComponent> mxComponent;

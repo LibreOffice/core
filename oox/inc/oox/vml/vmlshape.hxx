@@ -208,7 +208,7 @@ struct ShapeModel
                         ~ShapeModel();
 
     /** Creates and returns a new shape textbox structure. */
-    TextBox&            createTextBox();
+    TextBox&            createTextBox(ShapeTypeModel& rModel);
     /** Creates and returns a new shape client data structure. */
     ClientData&         createClientData();
 };
@@ -290,6 +290,10 @@ protected:
                         implConvertAndInsert(
                             const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxShapes,
                             const ::com::sun::star::awt::Rectangle& rShapeRect ) const;
+    /** Used by both RectangleShape and ComplexShape. */
+    com::sun::star::uno::Reference<com::sun::star::drawing::XShape>createPictureObject(
+            const com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rxShapes,
+            const com::sun::star::awt::Rectangle& rShapeRect, rtl::OUString& rGraphicPath ) const;
 
 private:
     ::rtl::OUString     maService;          /// Name of the UNO shape service.

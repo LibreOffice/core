@@ -29,6 +29,8 @@
 #include "oox/vml/vmltextbox.hxx"
 
 #include <rtl/ustrbuf.hxx>
+#include <com/sun/star/awt/FontWeight.hpp>
+#include <com/sun/star/text/XTextAppend.hpp>
 
 namespace oox {
 namespace vml {
@@ -37,6 +39,7 @@ namespace vml {
 
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
+using namespace com::sun::star;
 
 // ============================================================================
 
@@ -52,10 +55,9 @@ TextPortionModel::TextPortionModel( const TextFontModel& rFont, const OUString& 
 {
 }
 
-// ============================================================================
-
-TextBox::TextBox()
-    : borderDistanceSet( false )
+TextBox::TextBox(ShapeTypeModel& rTypeModel)
+    : mrTypeModel(rTypeModel),
+    borderDistanceSet( false )
 {
 }
 
@@ -77,7 +79,33 @@ OUString TextBox::getText() const
     return aBuffer.makeStringAndClear();
 }
 
-// ============================================================================
+void TextBox::convert(uno::Reference<drawing::XShape> xShape) const
+{
+    uno::Reference<text::XTextAppend> xTextAppend(xShape, uno::UNO_QUERY);
+    for (PortionVector::const_iterator aIt = maPortions.begin(), aEnd = maPortions.end(); aIt != aEnd; ++aIt)
+    {
+        beans::PropertyValue aPropertyValue;
+        std::vector<beans::PropertyValue> aPropVec;
+        const TextFontModel& rFont = aIt->maFont;
+        if (rFont.mobBold.has())
+        {
+            aPropertyValue.Name = "CharWeight";
+            aPropertyValue.Value = uno::makeAny(rFont.mobBold.get() ? awt::FontWeight::BOLD : awt::FontWeight::NORMAL);
+            aPropVec.push_back(aPropertyValue);
+        }
+        if (rFont.monSize.has())
+        {
+            aPropertyValue.Name = "CharHeight";
+            aPropertyValue.Value = uno::makeAny(double(rFont.monSize.get()) / 2.);
+            aPropVec.push_back(aPropertyValue);
+        }
+        uno::Sequence<beans::PropertyValue> aPropSeq(aPropVec.size());
+        beans::PropertyValue* pValues = aPropSeq.getArray();
+        for (std::vector<beans::PropertyValue>::iterator i = aPropVec.begin(); i != aPropVec.end(); ++i)
+            *pValues++ = *i;
+        xTextAppend->appendTextPortion(aIt->maText, aPropSeq);
+    }
+}
 
 } // namespace vml
 } // namespace oox

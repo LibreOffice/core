@@ -236,9 +236,9 @@ ShapeModel::~ShapeModel()
 {
 }
 
-TextBox& ShapeModel::createTextBox()
+TextBox& ShapeModel::createTextBox(ShapeTypeModel& rModel)
 {
-    mxTextBox.reset( new TextBox );
+    mxTextBox.reset( new TextBox(rModel) );
     return *mxTextBox;
 }
 
@@ -480,6 +480,9 @@ Reference< XShape > SimpleShape::implConvertAndInsert( const Reference< XShapes 
                     PropertySet( xShape ).setAnyProperty(PROP_RelativeHeight, makeAny( nHeight ) );
             }
         }
+
+        if (getTextBox())
+            getTextBox()->convert(xShape);
     }
 
     // Import Legacy Fragments (if any)
@@ -504,6 +507,37 @@ Reference< XShape > SimpleShape::implConvertAndInsert( const Reference< XShapes 
     return xShape;
 }
 
+Reference< XShape > SimpleShape::createPictureObject( const Reference< XShapes >& rxShapes, const Rectangle& rShapeRect, OUString& rGraphicPath ) const
+{
+    Reference< XShape > xShape = mrDrawing.createAndInsertXShape( "com.sun.star.drawing.GraphicObjectShape", rxShapes, rShapeRect );
+    if( xShape.is() )
+    {
+        XmlFilterBase& rFilter = mrDrawing.getFilter();
+        OUString aGraphicUrl = rFilter.getGraphicHelper().importEmbeddedGraphicObject( rGraphicPath );
+        PropertySet aPropSet( xShape );
+        if( !aGraphicUrl.isEmpty() )
+        {
+            aPropSet.setProperty( PROP_GraphicURL, aGraphicUrl );
+        }
+        uno::Reference< lang::XServiceInfo > xServiceInfo(rxShapes, uno::UNO_QUERY);
+        // If the shape has an absolute position, set the properties accordingly, unless we're inside a group shape.
+        if ( maTypeModel.maPosition == "absolute" && !xServiceInfo->supportsService("com.sun.star.drawing.GroupShape"))
+        {
+            aPropSet.setProperty(PROP_HoriOrientPosition, rShapeRect.X);
+            aPropSet.setProperty(PROP_VertOrientPosition, rShapeRect.Y);
+            aPropSet.setProperty(PROP_Opaque, sal_False);
+        }
+
+        lcl_SetAnchorType(aPropSet, maTypeModel);
+
+        if ( maTypeModel.maPositionVerticalRelative == "page" )
+        {
+            aPropSet.setProperty(PROP_VertOrientRelation, text::RelOrientation::PAGE_FRAME);
+        }
+    }
+    return xShape;
+}
+
 // ============================================================================
 
 RectangleShape::RectangleShape( Drawing& rDrawing ) :
@@ -513,21 +547,11 @@ RectangleShape::RectangleShape( Drawing& rDrawing ) :
 
 Reference<XShape> RectangleShape::implConvertAndInsert(const Reference<XShapes>& rxShapes, const Rectangle& rShapeRect) const
 {
-    XmlFilterBase& rFilter = mrDrawing.getFilter();
     OUString aGraphicPath = getGraphicPath();
 
     // try to create a picture object
     if(!aGraphicPath.isEmpty())
-    {
-        Reference<XShape> xShape = mrDrawing.createAndInsertXShape(CREATE_OUSTRING("com.sun.star.drawing.GraphicObjectShape"), rxShapes, rShapeRect);
-        if (xShape.is())
-        {
-            OUString aGraphicUrl = rFilter.getGraphicHelper().importEmbeddedGraphicObject(aGraphicPath);
-            PropertySet aPropSet(xShape);
-            aPropSet.setProperty(PROP_GraphicURL, aGraphicUrl);
-        }
-        return xShape;
-    }
+        return SimpleShape::createPictureObject(rxShapes, rShapeRect, aGraphicPath);
 
     // default: try to create a rectangle shape
     Reference<XShape> xShape = SimpleShape::implConvertAndInsert(rxShapes, rShapeRect);
@@ -704,33 +728,7 @@ Reference< XShape > ComplexShape::implConvertAndInsert( const Reference< XShapes
 
     // try to create a picture object
     if( !aGraphicPath.isEmpty() )
-    {
-        Reference< XShape > xShape = mrDrawing.createAndInsertXShape( CREATE_OUSTRING( "com.sun.star.drawing.GraphicObjectShape" ), rxShapes, rShapeRect );
-        if( xShape.is() )
-        {
-            OUString aGraphicUrl = rFilter.getGraphicHelper().importEmbeddedGraphicObject( aGraphicPath );
-            PropertySet aPropSet( xShape );
-            if( !aGraphicUrl.isEmpty() )
-            {
-                aPropSet.setProperty( PROP_GraphicURL, aGraphicUrl );
-            }
-            // If the shape has an absolute position, set the properties accordingly.
-            if ( maTypeModel.maPosition == "absolute" )
-            {
-                aPropSet.setProperty(PROP_HoriOrientPosition, rShapeRect.X);
-                aPropSet.setProperty(PROP_VertOrientPosition, rShapeRect.Y);
-                aPropSet.setProperty(PROP_Opaque, sal_False);
-            }
-
-            lcl_SetAnchorType(aPropSet, maTypeModel);
-
-            if ( maTypeModel.maPositionVerticalRelative == "page" )
-            {
-                aPropSet.setProperty(PROP_VertOrientRelation, text::RelOrientation::PAGE_FRAME);
-            }
-        }
-        return xShape;
-    }
+        return SimpleShape::createPictureObject(rxShapes, rShapeRect, aGraphicPath);
 
     // default: try to create a custom shape
     return CustomShape::implConvertAndInsert( rxShapes, rShapeRect );
@@ -788,6 +786,9 @@ Reference< XShape > GroupShape::implConvertAndInsert( const Reference< XShapes >
     catch( Exception& )
     {
     }
+    // Make sure group shapes are inline as well, unless there is an explicit different style.
+    PropertySet aPropertySet(xGroupShape);
+    lcl_SetAnchorType(aPropertySet, maTypeModel);
     return xGroupShape;
 }
 
