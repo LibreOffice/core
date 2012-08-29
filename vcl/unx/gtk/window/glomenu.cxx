@@ -488,6 +488,9 @@ g_lo_menu_set_submenu_to_item_in_section (GLOMenu    *menu,
     g_return_if_fail (model != NULL);
 
     g_lo_menu_set_link (model, position, G_MENU_LINK_SUBMENU, submenu);
+
+    // Notify the update.
+    g_menu_model_items_changed (G_MENU_MODEL (model), position, 1, 1);
 }
 
 GLOMenu *
