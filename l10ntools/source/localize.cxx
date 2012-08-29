@@ -286,9 +286,9 @@ void handleCommand(
                 if (!sLine.getToken(PoEntry::TEXT,'\t').isEmpty())
                     PoEntry(sLine).writeToFile(outPut);
                 if (!sLine.getToken(PoEntry::QUICKHELPTEXT,'\t').isEmpty())
-                    PoEntry(sLine,PoEntry::QUICKHELPTEXT).writeToFile(outPut);
+                    PoEntry(sLine,PoEntry::TQUICKHELPTEXT).writeToFile(outPut);
                 if (!sLine.getToken(PoEntry::TITLE,'\t').isEmpty())
-                    PoEntry(sLine,PoEntry::TITLE).writeToFile(outPut);
+                    PoEntry(sLine,PoEntry::TTITLE).writeToFile(outPut);
             }
             std::getline(in, s);
         };

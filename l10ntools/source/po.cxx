@@ -30,42 +30,15 @@
 #include <ctime>
 #include <vector>
 
-#define ESCAPED OString("\\n\\t\\r\\\\\\\"")
-#define UNESCAPED OString("\n\t\r\\\"")
+#define POESCAPED OString("\\n\\t\\r\\\\\\\"")
+#define POUNESCAPED OString("\n\t\r\\\"")
 
-
-//Get actual time in "YEAR-MO-DA HO:MI+ZONE" form
-OString ImplGetTime()
-{
-    time_t aNow(time(NULL));
-    struct tm* pNow(localtime(&aNow));
-    char pBuff[50];
-    strftime( pBuff, sizeof pBuff, "%Y-%m-%d %H:%M%z", pNow );
-    return pBuff;
-}
-
-//Split string at the delimiter char
-void ImplSplitAt(const OString& rSource, const sal_Int32 nDelimiter,
-                 std::vector<OString>& o_vParts)
-{
-    o_vParts.resize( 0 );
-    sal_Int32 nActIndex( 0 );
-    sal_Int32 nLastSplit( 0 );
-    while( nActIndex < rSource.getLength() )
-    {
-        if ( rSource[nActIndex] == nDelimiter )
-        {
-            o_vParts.push_back(rSource.copy(nLastSplit,nActIndex-nLastSplit));
-            nLastSplit = nActIndex+1;
-        }
-        ++nActIndex;
-    }
-    o_vParts.push_back(rSource.copy(nLastSplit));
-}
+//Class GenPoEntry
 
 //Escape text
-OString ImplEscapeText(const OString& rText, const OString& rUnEscaped,
-                       const OString& rEscaped)
+OString ImplEscapeText(const OString& rText,
+                       const OString& rUnEscaped= POUNESCAPED,
+                       const OString& rEscaped = POESCAPED)
 {
     if(rEscaped.getLength()!=2*rUnEscaped.getLength()) throw;
     OString sResult = rText;
@@ -80,16 +53,10 @@ OString ImplEscapeText(const OString& rText, const OString& rUnEscaped,
     return sResult;
 }
 
-
-//Escape text to write to po files
-OString ImplEscapeText(const OString& rText)
-{
-    return ImplEscapeText(rText,UNESCAPED,ESCAPED);
-}
-
 //Unescape text
-OString ImplUnEscapeText(const OString& rText,const OString& rEscaped,
-                       const OString& rUnEscaped)
+OString ImplUnEscapeText(const OString& rText,
+                         const OString& rEscaped = POESCAPED,
+                         const OString& rUnEscaped = POUNESCAPED)
 {
     if(rEscaped.getLength()!=2*rUnEscaped.getLength()) throw;
     OString sResult = rText;
@@ -103,25 +70,6 @@ OString ImplUnEscapeText(const OString& rText,const OString& rEscaped,
     }
     return sResult;
 }
-
-//Unescape text from po files
-OString ImplUnEscapeText(const OString& rText)
-{
-    return ImplUnEscapeText(rText,ESCAPED,UNESCAPED);
-}
-
-//Unescape extracted helptext
-OString ImplFromSDFHelpText(const OString& rText)
-{
-    return ImplUnEscapeText(rText,"\\<\\>\\\"\\\\","<>\"\\");
-}
-
-//Unescape extracted text
-OString ImplFromSDFText(const OString& rText)
-{
-    return ImplUnEscapeText(rText,"\\n\\t\\r","\n\t\r");
-}
-
 
 //Generate msgctxt, msgid and msgstr strings
 OString ImplGenMsgString(const OString& rSource)
@@ -142,6 +90,67 @@ OString ImplGenMsgString(const OString& rSource)
         return "\"\"\n" +  sResult;
 
     return sResult;
+}
+
+//Default constructor
+GenPoEntry::GenPoEntry()
+    : m_sWhiteSpace( OString() )
+    , m_sExtractCom( OString() )
+    , m_sReference( OString() )
+    , m_sContext( OString() )
+    , m_sUnTransStr( OString() )
+    , m_sTransStr( OString() )
+{
+}
+
+//Destructor
+GenPoEntry::~GenPoEntry()
+{
+}
+
+//Write to file
+void GenPoEntry::writeToFile(std::ofstream& io_rOFStream)
+{
+    if ( !m_sWhiteSpace.isEmpty() )
+        io_rOFStream << m_sWhiteSpace.getStr();
+    if ( !m_sExtractCom.isEmpty() )
+        io_rOFStream << "#. "
+                     << m_sExtractCom.replaceAll("\n","\n#. ").getStr()
+                     << std::endl;
+    if ( !m_sReference.isEmpty() )
+        io_rOFStream << "#: " << m_sReference.getStr() << std::endl;
+    if ( !m_sContext.isEmpty() )
+        io_rOFStream << "msgctxt "
+                     << ImplGenMsgString(m_sContext).getStr() << std::endl;
+        io_rOFStream << "msgid "
+                     << ImplGenMsgString(
+                            ImplEscapeText(m_sUnTransStr)).getStr()
+                     << std::endl;
+        io_rOFStream << "msgstr "
+                     << ImplGenMsgString(
+                            ImplEscapeText(m_sTransStr)).getStr()
+                     << std::endl;
+}
+
+//Class PoEntry
+
+//Split string at the delimiter char
+void ImplSplitAt(const OString& rSource, const sal_Int32 nDelimiter,
+                 std::vector<OString>& o_vParts)
+{
+    o_vParts.resize( 0 );
+    sal_Int32 nActIndex( 0 );
+    sal_Int32 nLastSplit( 0 );
+    while( nActIndex < rSource.getLength() )
+    {
+        if ( rSource[nActIndex] == nDelimiter )
+        {
+            o_vParts.push_back(rSource.copy(nLastSplit,nActIndex-nLastSplit));
+            nLastSplit = nActIndex+1;
+        }
+        ++nActIndex;
+    }
+    o_vParts.push_back(rSource.copy(nLastSplit));
 }
 
 //Generate crc24
@@ -187,86 +196,89 @@ OString ImplGenKeyId(const OString& rSourcePath, const OString& rContext)
     return sKeyId;
 }
 
-//Default constructor
-PoEntry::PoEntry()
-    : m_sWhiteSpace( OString() )
-    , m_sExtractCom( OString() )
-    , m_sReference( OString() )
-    , m_sContext( OString() )
-    , m_sUnTransStr( OString() )
-    , m_sTransStr( OString() )
-    , m_sKeyId( OString() )
-{
-}
-
 //Construct PoEntry from sdfline
-PoEntry::PoEntry(const OString& rSDFLine, const sal_uInt16 eType)
-    : m_sWhiteSpace( "\n" )
-    , m_sExtractCom( OString() )
-    , m_sTransStr( OString() )
+PoEntry::PoEntry(const OString& rSDFLine, const TYPE eType)
+    : m_sSourceFile( OString() )
+    , m_sGroupId( OString() )
+    , m_sLocalId( OString() )
+    , m_sResourceType(OString() )
+    , m_eType( TTEXT )
     , m_sKeyId( OString() )
 {
+    setWhiteSpace("\n");
     std::vector<OString> vParts;
     ImplSplitAt(rSDFLine,'\t',vParts);
     if(vParts.size()!=15) throw;
 
-    m_sReference = vParts[SOURCEFILE].
-                   copy(vParts[SOURCEFILE].lastIndexOf("\\")+1);
-    m_sContext = vParts[GROUPID] + "\\n" +
-                 (vParts[LOCALID].isEmpty()? "" : vParts[LOCALID] + "\\n") +
-                 vParts[RESOURCETYPE];
+    m_sSourceFile = vParts[SOURCEFILE].
+                        copy(vParts[SOURCEFILE].lastIndexOf("\\")+1);
+    setReference(m_sSourceFile);
+    m_sGroupId = vParts[GROUPID];
+    m_sLocalId = vParts[LOCALID];
+    m_sResourceType = vParts[RESOURCETYPE];
+    m_eType = eType;
+    m_sHelpText = vParts[HELPTEXT];
 
+    OString sContext = m_sGroupId + "\\n" +
+                       (m_sLocalId.isEmpty() ? "" : m_sLocalId + "\\n") +
+                       m_sResourceType;
     switch(eType){
-    case TEXT:
-        m_sContext += ".text"; break;
-    case QUICKHELPTEXT:
-        m_sContext += ".quickhelptext"; break;
-    case TITLE:
-        m_sContext += ".title"; break;
+    case TTEXT:
+        sContext += ".text"; break;
+    case TQUICKHELPTEXT:
+        sContext += ".quickhelptext"; break;
+    case TTITLE:
+        sContext += ".title"; break;
     default:
         throw; break;
     }
-    if (m_sReference.endsWith(".xhp"))
-        m_sUnTransStr = ImplFromSDFHelpText(vParts[eType]);
-    else
-        m_sUnTransStr = ImplFromSDFText(vParts[eType]);
+    setContext(sContext);
+    m_sKeyId = ImplGenKeyId(vParts[PROJECT] + "\\" + vParts[SOURCEFILE],
+                            sContext);
+    setExtractCom((m_sHelpText.isEmpty() ? "" : m_sHelpText + "\n") + m_sKeyId);
 
-    m_sExtractCom = vParts[HELPTEXT];
-    m_sKeyId = ImplGenKeyId(vParts[PROJECT] +
-               "\\" + vParts[SOURCEFILE],m_sContext);
+    setUnTransStr(vParts[eType]);
 }
 
 PoEntry::~PoEntry()
 {
 }
 
-//Write out
-void PoEntry::writeToFile(std::ofstream& io_rOFStream)
+//Unescape sdf text
+OString ImplUnEscapeSDFText(const OString& rText,const bool bHelpText = false)
 {
-    if ( !m_sWhiteSpace.isEmpty() )
-        io_rOFStream << m_sWhiteSpace.getStr();
-    if ( !m_sExtractCom.isEmpty() )
-        io_rOFStream << "#. " << m_sExtractCom.getStr() << std::endl;
-    if ( !m_sKeyId.isEmpty() )
-        io_rOFStream << "#. " << m_sKeyId.getStr() << std::endl;
-    if ( !m_sReference.isEmpty() )
-        io_rOFStream << "#: " << m_sReference.getStr() << std::endl;
-    if ( !m_sContext.isEmpty() )
-        io_rOFStream << "msgctxt "
-                     << ImplGenMsgString(m_sContext).getStr() << std::endl;
-        io_rOFStream << "msgid "
-                     << ImplGenMsgString(
-                            ImplEscapeText(m_sUnTransStr)).getStr()
-                     << std::endl;
-        io_rOFStream << "msgstr "
-                     << ImplGenMsgString(
-                            ImplEscapeText(m_sTransStr)).getStr()
-                     << std::endl;
+    if ( bHelpText )
+        return ImplUnEscapeText(rText,"\\<\\>\\\"\\\\","<>\"\\");
+    else
+        return ImplUnEscapeText(rText,"\\n\\t\\r","\n\t\r");
 }
 
+//Set translation text when input is in sdf format
+void PoEntry::setUnTransStr(const OString& rUnTransStr)
+{
+    GenPoEntry::setUnTransStr(
+                    ImplUnEscapeSDFText(
+                        rUnTransStr,m_sSourceFile.endsWith(".xhp")));
+}
+
+//Set translated text when input is in sdf format
 void PoEntry::setTransStr(const OString& rTransStr)
 {
-    m_sTransStr = ImplUnEscapeText(rTransStr);
+    GenPoEntry::setTransStr(
+                    ImplUnEscapeSDFText(
+                        rTransStr,m_sSourceFile.endsWith(".xhp")));
+}
+
+//Class PoHeader
+
+//Get actual time in "YEAR-MO-DA HO:MI+ZONE" form
+OString ImplGetTime()
+{
+    time_t aNow(time(NULL));
+    struct tm* pNow(localtime(&aNow));
+    char pBuff[50];
+    strftime( pBuff, sizeof pBuff, "%Y-%m-%d %H:%M%z", pNow );
+    return pBuff;
 }
 
 //Constructor
