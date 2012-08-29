@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAN3///sg\u003d",
+        "filename": "sc/source/core/tool/address.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1927,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2012-08-29T15:16:40Z",
+      "side": 1,
+      "message": "\u0027single\u0027 instead of \u0027simple\u0027 (one \u0026 as opposed to \u0026\u0026)",
+      "revId": "a194fbd1619f4c81b8212dc7bb9d4ad01e736ae0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAN3///sc\u003d",
+        "filename": "sc/source/core/tool/adiasync.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2012-08-29T15:16:40Z",
+      "side": 1,
+      "message": "\u0027comparison\u0027 instead of \u0027comparation\u0027 (which is not an English vocable)",
+      "revId": "a194fbd1619f4c81b8212dc7bb9d4ad01e736ae0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAN3///sY\u003d",
+        "filename": "sc/source/core/tool/callform.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 220,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2012-08-29T15:16:40Z",
+      "side": 1,
+      "message": "we don\u0027t iterate here but initialize ... better\n\n initialize all, in case the AddIn behaves bad",
+      "revId": "a194fbd1619f4c81b8212dc7bb9d4ad01e736ae0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
