@@ -24,7 +24,7 @@ ifneq ($(HUNART_EXTENSION_PACK),)
 $(eval $(call gb_Package_add_file,extras_extensions,bin/hunart.oxt,$(HUNART_EXTENSION_PACK)))
 endif
 ifneq ($(NUMBERTEXT_EXTENSION_PACK),)
-$(eval $(call gb_Package_add_file,extras_extensions,bin/numberext.oxt,$(NUMBERTEXT_EXTENSION_PACK)))
+$(eval $(call gb_Package_add_file,extras_extensions,bin/numbertext.oxt,$(NUMBERTEXT_EXTENSION_PACK)))
 endif
 ifneq ($(OOOBLOGGER_EXTENSION_PACK),)
 $(eval $(call gb_Package_add_file,extras_extensions,bin/oooblogger.oxt,$(OOOBLOGGER_EXTENSION_PACK)))
