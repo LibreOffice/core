@@ -106,15 +106,15 @@ CONFIGURE_DIR=
 CONFIGURE_ACTION=autoreconf ; .$/configure
 
 .IF "$(CROSS_COMPILING)"=="YES"
-BUILD_AND_HOST=--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM) MINGW_SYSROOT=$(MINGW_SYSROOT)
+BUILD_AND_HOST=--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM) MINGW_SYSROOT=$(MINGW_SYSROOT) OBJDUMP="$(OBJDUMP)"
 .ELSE
-BUILD_AND_HOST=--build=i586-pc-mingw32 --host=i586-pc-mingw32 --with-mozilla_ver=1.7.5 --enable-mscrypto
+BUILD_AND_HOST=--build=i586-pc-mingw32 --host=i586-pc-mingw32 --with-mozilla_ver=1.7.5 --enable-mscrypto OBJDUMP="$(WRAPCMD) objdump"
 .ENDIF
 
 # Note that this is obsolete crack for building *locally* on Windows with MinGW,
 # something we don't see the point in here in LibreOffice
 
-CONFIGURE_FLAGS=--with-libxslt=no --with-openssl=no --with-gnutls=no --disable-crypto-dl $(BUILD_AND_HOST) CC="$(xmlsec_CC)" LDFLAGS="-Wl,--no-undefined $(CONF_ILIB)" LIBS="$(xmlsec_LIBS)" LIBXML2LIB="$(LIBXML2LIB)" ZLIB3RDLIB=$(ZLIB3RDLIB) OBJDUMP="$(WRAPCMD) objdump"
+CONFIGURE_FLAGS=--with-libxslt=no --with-openssl=no --with-gnutls=no --disable-crypto-dl $(BUILD_AND_HOST) CC="$(xmlsec_CC)" LDFLAGS="-Wl,--no-undefined $(CONF_ILIB)" LIBS="$(xmlsec_LIBS)" LIBXML2LIB="$(LIBXML2LIB)" ZLIB3RDLIB=$(ZLIB3RDLIB)
 
 .IF "$(SYSTEM_NSS)" != "YES"
 CONFIGURE_FLAGS+=--enable-pkgconfig=no
