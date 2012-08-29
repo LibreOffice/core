@@ -203,6 +203,9 @@
 #define FT_USERINTERFACE        30
 #define LB_USERINTERFACE        31
 #define STR_IB_LANGCHANGE_TITLE 32
+#define FI_DATEPATTERNS         33
+#define FT_DATEPATTERNS         34
+#define ED_DATEPATTERNS         35
 
 #define FL_FILEDLG                  53
 #define FI_FILEDLG_RO               54
