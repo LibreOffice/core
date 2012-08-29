@@ -12,6 +12,7 @@ $(eval $(call gb_UI_UI,modules/swriter))
 $(eval $(call gb_UI_add_uifiles,modules/swriter,\
 	sw/uiconfig/swriter/ui/linenumbering \
 	sw/uiconfig/swriter/ui/titlepage \
+	sw/uiconfig/swriter/ui/wordcount \
 ))
 
 # vim: set noet sw=4 ts=4:
