@@ -284,6 +284,12 @@ class RectangleShape : public SimpleShape
 {
 public:
     explicit            RectangleShape( Drawing& rDrawing );
+protected:
+    /** Creates the corresponding XShape and inserts it into the passed container. */
+    virtual com::sun::star::uno::Reference<com::sun::star::drawing::XShape>
+                        implConvertAndInsert(
+                            const com::sun::star::uno::Reference<com::sun::star::drawing::XShapes>& rxShapes,
+                            const com::sun::star::awt::Rectangle& rShapeRect) const;
 };
 
 // ============================================================================

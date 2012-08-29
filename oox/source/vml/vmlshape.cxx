@@ -454,6 +454,28 @@ RectangleShape::RectangleShape( Drawing& rDrawing ) :
 {
 }
 
+Reference<XShape> RectangleShape::implConvertAndInsert(const Reference<XShapes>& rxShapes, const Rectangle& rShapeRect) const
+{
+    XmlFilterBase& rFilter = mrDrawing.getFilter();
+    OUString aGraphicPath = getGraphicPath();
+
+    // try to create a picture object
+    if(!aGraphicPath.isEmpty())
+    {
+        Reference<XShape> xShape = mrDrawing.createAndInsertXShape("com.sun.star.drawing.GraphicObjectShape", rxShapes, rShapeRect);
+        if (xShape.is())
+        {
+            OUString aGraphicUrl = rFilter.getGraphicHelper().importEmbeddedGraphicObject(aGraphicPath);
+            PropertySet aPropSet(xShape);
+            aPropSet.setProperty(PROP_GraphicURL, aGraphicUrl);
+        }
+        return xShape;
+    }
+
+    // default: try to create a rectangle shape
+    return SimpleShape::implConvertAndInsert(rxShapes, rShapeRect);
+}
+
 // ============================================================================
 
 EllipseShape::EllipseShape( Drawing& rDrawing ) :
