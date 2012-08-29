@@ -62,7 +62,7 @@
 
 #include "com/sun/star/lang/XMultiServiceFactory.hpp"
 #include "com/sun/star/container/XNameAccess.hpp"
-#include "com/sun/star/system/XSystemShellExecute.hpp"
+#include "com/sun/star/system/SystemShellExecute.hpp"
 #include "com/sun/star/system/SystemShellExecuteFlags.hpp"
 #include "com/sun/star/task/XJobExecutor.hpp"
 #include "com/sun/star/util/XStringWidth.hpp"
@@ -877,10 +877,8 @@ IMPL_LINK_NOARG(BackingWindow, ToolboxHdl)
                     sURL = value.get<rtl::OUString> ();
                     localizeWebserviceURI(sURL);
 
-                    Reference< com::sun::star::system::XSystemShellExecute > xSystemShellExecute(
-                        comphelper::getProcessServiceFactory()->createInstance(
-                            rtl::OUString( "com.sun.star.system.SystemShellExecute"  ) ),
-                        UNO_QUERY_THROW);
+                    Reference< system::XSystemShellExecute > xSystemShellExecute(
+                        system::SystemShellExecute::create(comphelper::getProcessComponentContext()));
                     //throws css::lang::IllegalArgumentException, css::system::SystemShellExecuteException
                     xSystemShellExecute->execute( sURL, rtl::OUString(), com::sun::star::system::SystemShellExecuteFlags::URIS_ONLY);
                 }

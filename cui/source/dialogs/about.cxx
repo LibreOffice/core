@@ -39,7 +39,7 @@
 #include <svtools/langhelp.hxx>
 
 #include "com/sun/star/system/SystemShellExecuteFlags.hpp"
-#include "com/sun/star/system/XSystemShellExecute.hpp"
+#include "com/sun/star/system/SystemShellExecute.hpp"
 #include <comphelper/processfactory.hxx>
 #include "comphelper/anytostring.hxx"
 #include "cppuhelper/exc_hlp.hxx"
@@ -133,11 +133,9 @@ IMPL_LINK( AboutDialog, HandleClick, PushButton*, pButton )
         return 1;
     try
     {
-        Reference< com::sun::star::system::XSystemShellExecute > xSystemShellExecute(
-            ::comphelper::getProcessServiceFactory()->createInstance(
-                DEFINE_CONST_UNICODE("com.sun.star.system.SystemShellExecute") ), UNO_QUERY_THROW );
-        xSystemShellExecute->execute( sURL, rtl::OUString(),
-                                      com::sun::star::system::SystemShellExecuteFlags::URIS_ONLY );
+        Reference< system::XSystemShellExecute > xSystemShellExecute(
+            system::SystemShellExecute::create(::comphelper::getProcessComponentContext() ) );
+        xSystemShellExecute->execute( sURL, rtl::OUString(), system::SystemShellExecuteFlags::URIS_ONLY );
     }
     catch (const Exception&)
     {

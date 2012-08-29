@@ -43,8 +43,8 @@
 #include <com/sun/star/document/XExporter.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
 
-#include "com/sun/star/system/XSystemShellExecute.hpp"
-#include "com/sun/star/system/SystemShellExecuteFlags.hpp"
+#include <com/sun/star/system/SystemShellExecute.hpp>
+#include <com/sun/star/system/SystemShellExecuteFlags.hpp>
 
 #include "com/sun/star/ui/dialogs/TemplateDescription.hpp"
 #include <vcl/svapp.hxx>
@@ -72,6 +72,7 @@ using namespace com::sun::star::frame;
 using namespace com::sun::star::task;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::io;
+using namespace com::sun::star::system;
 using namespace com::sun::star::xml;
 using namespace com::sun::star::xml::sax;
 
@@ -566,8 +567,9 @@ void XMLFilterTestDialog::doExport( Reference< XComponent > xComp )
 
 void XMLFilterTestDialog::displayXMLFile( const OUString& rURL )
 {
-    ::com::sun::star::uno::Reference< com::sun::star::system::XSystemShellExecute > xSystemShellExecute(comphelper::getProcessServiceFactory()->createInstance(DEFINE_CONST_UNICODE("com.sun.star.system.SystemShellExecute") ), com::sun::star::uno::UNO_QUERY_THROW );
-    xSystemShellExecute->execute( rURL, rtl::OUString(),  com::sun::star::system::SystemShellExecuteFlags::URIS_ONLY );
+    Reference< XSystemShellExecute > xSystemShellExecute(
+          SystemShellExecute::create(comphelper::getProcessComponentContext()) );
+    xSystemShellExecute->execute( rURL, rtl::OUString(), SystemShellExecuteFlags::URIS_ONLY );
 }
 
 void XMLFilterTestDialog::onImportBrowse()

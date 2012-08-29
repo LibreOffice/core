@@ -49,7 +49,7 @@
 #include <com/sun/star/ucb/XSimpleFileAccess2.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
-#include <com/sun/star/system/XSystemShellExecute.hpp>
+#include <com/sun/star/system/SystemShellExecute.hpp>
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
 
 #include <rtl/logfile.hxx>
@@ -878,10 +878,9 @@ void SAL_CALL OleEmbeddedObject::doVerb( sal_Int32 nVerbID )
 
                 if (!m_aTempDumpURL.isEmpty())
                 {
-                    uno::Reference< ::com::sun::star::system::XSystemShellExecute > xSystemShellExecute( m_xFactory->createInstance(
-                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.system.SystemShellExecute"))),
-                        uno::UNO_QUERY_THROW);
-                    xSystemShellExecute->execute(m_aTempDumpURL, ::rtl::OUString(), ::com::sun::star::system::SystemShellExecuteFlags::URIS_ONLY);
+                    uno::Reference< system::XSystemShellExecute > xSystemShellExecute(
+                        system::SystemShellExecute::create(comphelper::ComponentContext(m_xFactory).getUNOContext()) );
+                    xSystemShellExecute->execute(m_aTempDumpURL, ::rtl::OUString(), system::SystemShellExecuteFlags::URIS_ONLY);
                 }
                 else
                     throw embed::UnreachableStateException();

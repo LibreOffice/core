@@ -68,7 +68,7 @@
 #include "com/sun/star/i18n/CollatorOptions.hpp"
 
 #include "com/sun/star/system/SystemShellExecuteFlags.hpp"
-#include "com/sun/star/system/XSystemShellExecute.hpp"
+#include "com/sun/star/system/SystemShellExecute.hpp"
 
 #include "com/sun/star/ui/dialogs/ExecutableDialogResults.hpp"
 #include "com/sun/star/ui/dialogs/TemplateDescription.hpp"
@@ -632,7 +632,7 @@ void DialogHelper::openWebBrowser( const OUString & sURL, const OUString &sTitle
     try
     {
         uno::Reference< XSystemShellExecute > xSystemShellExecute(
-            m_xContext->getServiceManager()->createInstanceWithContext( OUSTR( "com.sun.star.system.SystemShellExecute" ), m_xContext), uno::UNO_QUERY_THROW);
+            SystemShellExecute::create(m_xContext));
         //throws css::lang::IllegalArgumentException, css::system::SystemShellExecuteException
         xSystemShellExecute->execute( sURL, OUString(),  SystemShellExecuteFlags::URIS_ONLY );
     }

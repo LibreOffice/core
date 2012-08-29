@@ -69,7 +69,7 @@
 #include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/script/XTypeConverter.hpp>
-#include <com/sun/star/system/XSystemShellExecute.hpp>
+#include <com/sun/star/system/SystemShellExecute.hpp>
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
 #include <unotools/localedatawrapper.hxx>
 #include <com/sun/star/container/XNameContainer.hpp>
@@ -1680,14 +1680,12 @@ IMPL_LINK_NOARG(SvtDocumentTemplateDialog, OpenLinkHdl_Impl)
         localizeWebserviceURI(sURL);
         try
         {
-            uno::Reference< lang::XMultiServiceFactory > xSMGR =
-                ::comphelper::getProcessServiceFactory();
-            uno::Reference< com::sun::star::system::XSystemShellExecute > xSystemShell(
-                xSMGR->createInstance( ::rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.system.SystemShellExecute" ) ) ),
-                uno::UNO_QUERY_THROW );
+            uno::Reference< uno::XComponentContext > xContext =
+                ::comphelper::getProcessComponentContext();
+            uno::Reference< system::XSystemShellExecute > xSystemShell(
+                system::SystemShellExecute::create(xContext) );
             if ( xSystemShell.is() )
-                xSystemShell->execute( sURL, ::rtl::OUString(), com::sun::star::system::SystemShellExecuteFlags::URIS_ONLY );
+                xSystemShell->execute( sURL, ::rtl::OUString(), system::SystemShellExecuteFlags::URIS_ONLY );
             EndDialog( RET_CANCEL );
         }
         catch( const uno::Exception& e )

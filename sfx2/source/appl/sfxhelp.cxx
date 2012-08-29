@@ -39,7 +39,7 @@
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <com/sun/star/frame/XModuleManager.hpp>
-#include <com/sun/star/system/XSystemShellExecute.hpp>
+#include <com/sun/star/system/SystemShellExecute.hpp>
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
 #include <unotools/configmgr.hxx>
 #include <unotools/configitem.hxx>
@@ -670,15 +670,10 @@ static bool impl_showOnlineHelp( const String& rURL )
     try
     {
         Reference< XSystemShellExecute > xSystemShell(
-                ::comphelper::getProcessServiceFactory()->createInstance(
-                    rtl::OUString( "com.sun.star.system.SystemShellExecute"  ) ),
-                UNO_QUERY );
+                SystemShellExecute::create(::comphelper::getProcessComponentContext()) );
 
-        if ( xSystemShell.is() )
-        {
-            xSystemShell->execute( aHelpLink, rtl::OUString(), SystemShellExecuteFlags::URIS_ONLY );
-            return true;
-        }
+        xSystemShell->execute( aHelpLink, rtl::OUString(), SystemShellExecuteFlags::URIS_ONLY );
+        return true;
     }
     catch (const Exception&)
     {

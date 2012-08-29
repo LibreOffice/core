@@ -88,7 +88,7 @@
 #include <com/sun/star/linguistic2/XSpellChecker1.hpp>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
-#include <com/sun/star/system/XSystemShellExecute.hpp>
+#include <com/sun/star/system/SystemShellExecute.hpp>
 #include <com/sun/star/ui/UICommandDescription.hpp>
 
 
@@ -851,9 +851,8 @@ void SwSpellPopup::Execute( sal_uInt16 nId )
     {
         try
         {
-            uno::Reference< com::sun::star::system::XSystemShellExecute > xSystemShellExecute(
-                ::comphelper::getProcessServiceFactory()->createInstance(
-                    DEFINE_CONST_UNICODE("com.sun.star.system.SystemShellExecute") ), uno::UNO_QUERY_THROW );
+            uno::Reference< system::XSystemShellExecute > xSystemShellExecute(
+                system::SystemShellExecute::create( ::comphelper::getProcessComponentContext() ) );
             xSystemShellExecute->execute( sExplanationLink, rtl::OUString(),
                     com::sun::star::system::SystemShellExecuteFlags::URIS_ONLY );
         }

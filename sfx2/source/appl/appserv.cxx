@@ -33,7 +33,7 @@
 #include <com/sun/star/document/XEmbeddedScripts.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
-#include <com/sun/star/system/XSystemShellExecute.hpp>
+#include <com/sun/star/system/SystemShellExecute.hpp>
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
 #include <com/sun/star/system/SystemShellExecuteException.hpp>
 
@@ -426,10 +426,9 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
             ::rtl::OUString sURL("http://hub.libreoffice.org/file-a-bug/");
             try
             {
-                uno::Reference< com::sun::star::system::XSystemShellExecute > xSystemShellExecute(
-                    ::comphelper::getProcessServiceFactory()->createInstance(
-                        DEFINE_CONST_UNICODE("com.sun.star.system.SystemShellExecute") ), uno::UNO_QUERY_THROW );
-                xSystemShellExecute->execute( sURL, ::rtl::OUString(),  com::sun::star::system::SystemShellExecuteFlags::URIS_ONLY );
+                uno::Reference< system::XSystemShellExecute > xSystemShellExecute(
+                    system::SystemShellExecute::create(::comphelper::getProcessComponentContext()) );
+                xSystemShellExecute->execute( sURL, ::rtl::OUString(), system::SystemShellExecuteFlags::URIS_ONLY );
             }
             catch ( uno::Exception& )
             {
@@ -1039,9 +1038,10 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
             {
                 uno::Reference< lang::XMultiServiceFactory > xSMGR =
                     ::comphelper::getProcessServiceFactory();
+                uno::Reference< uno::XComponentContext > xContext =
+                    ::comphelper::getProcessComponentContext();
                 uno::Reference< css::system::XSystemShellExecute > xSystemShell(
-                    xSMGR->createInstance( DEFINE_CONST_UNICODE("com.sun.star.system.SystemShellExecute" ) ),
-                    uno::UNO_QUERY_THROW );
+                    css::system::SystemShellExecute::create(xContext) );
 
                 // read repository URL from configuration
                 ::rtl::OUString sTemplRepoURL =

@@ -30,7 +30,7 @@
 #include "sal/config.h"
 
 #include "com/sun/star/lang/IllegalArgumentException.hpp"
-#include "com/sun/star/system/XSystemShellExecute.hpp"
+#include "com/sun/star/system/SystemShellExecute.hpp"
 #include "com/sun/star/system/SystemShellExecuteException.hpp"
 #include "com/sun/star/system/SystemShellExecuteFlags.hpp"
 #include "com/sun/star/uno/Reference.hxx"
@@ -59,11 +59,7 @@ bool sfx2::openUriExternally(
     rtl::OUString const & uri, bool handleSystemShellExecuteException)
 {
     css::uno::Reference< css::system::XSystemShellExecute > exec(
-        comphelper::getProcessServiceFactory()->createInstance(
-            rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
-                    "com.sun.star.system.SystemShellExecute"))),
-        css::uno::UNO_QUERY_THROW);
+        css::system::SystemShellExecute::create(comphelper::getProcessComponentContext()));
     try {
         exec->execute(
             uri, rtl::OUString(),

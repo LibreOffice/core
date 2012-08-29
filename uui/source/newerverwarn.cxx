@@ -23,7 +23,7 @@
 
 #include <com/sun/star/frame/XDesktop.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
-#include <com/sun/star/system/XSystemShellExecute.hpp>
+#include <com/sun/star/system/SystemShellExecute.hpp>
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
@@ -95,14 +95,10 @@ IMPL_LINK_NOARG(NewerVersionWarningDialog, UpdateHdl)
     {
         if (  !sNotifyURL.isEmpty()  &&  !m_sVersion.isEmpty() )
         {
-            uno::Reference< lang::XMultiServiceFactory > xSMGR =
-                ::comphelper::getProcessServiceFactory();
-            uno::Reference< XSystemShellExecute > xSystemShell(
-                xSMGR->createInstance( ::rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.system.SystemShellExecute" ) ) ),
-                uno::UNO_QUERY_THROW );
+            uno::Reference< uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
+            uno::Reference< XSystemShellExecute > xSystemShell( SystemShellExecute::create(xContext) );
             sNotifyURL += m_sVersion;
-            if ( xSystemShell.is() && !sNotifyURL.isEmpty() )
+            if ( !sNotifyURL.isEmpty() )
             {
                 xSystemShell->execute(
                     sNotifyURL, ::rtl::OUString(), SystemShellExecuteFlags::URIS_ONLY );
