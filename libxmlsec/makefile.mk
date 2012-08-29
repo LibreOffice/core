@@ -97,13 +97,24 @@ xmlsec_LIBS=
 .IF "$(MINGW_SHARED_GXXLIB)"=="YES"
 xmlsec_LIBS+=$(MINGW_SHARED_LIBSTDCPP)
 .ENDIF
+CONF_ILIB=
+.IF "$(ILIB)" != ""
+CONF_ILIB=-L$(ILIB:s/;/ -L/)
+.ENDIF
+
 CONFIGURE_DIR=
-CONFIGURE_ACTION=.$/configure
+CONFIGURE_ACTION=autoreconf ; .$/configure
+
+.IF "$(CROSS_COMPILING)"=="YES"
+BUILD_AND_HOST=--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM) MINGW_SYSROOT=$(MINGW_SYSROOT)
+.ELSE
+BUILD_AND_HOST=--build=i586-pc-mingw32 --host=i586-pc-mingw32 --with-mozilla_ver=1.7.5 --enable-mscrypto
+.ENDIF
 
 # Note that this is obsolete crack for building *locally* on Windows with MinGW,
 # something we don't see the point in here in LibreOffice
 
-CONFIGURE_FLAGS=--with-libxslt=no --with-openssl=no --with-gnutls=no --with-mozilla_ver=1.7.5 --enable-mscrypto --disable-crypto-dl --build=i586-pc-mingw32 --host=i586-pc-mingw32 CC="$(xmlsec_CC)" LDFLAGS="-no-undefined -L$(ILIB:s/;/ -L/)" LIBS="$(xmlsec_LIBS)" LIBXML2LIB=$(LIBXML2LIB) ZLIB3RDLIB=$(ZLIB3RDLIB) OBJDUMP="$(WRAPCMD) objdump"
+CONFIGURE_FLAGS=--with-libxslt=no --with-openssl=no --with-gnutls=no --disable-crypto-dl $(BUILD_AND_HOST) CC="$(xmlsec_CC)" LDFLAGS="-Wl,--no-undefined $(CONF_ILIB)" LIBS="$(xmlsec_LIBS)" LIBXML2LIB="$(LIBXML2LIB)" ZLIB3RDLIB=$(ZLIB3RDLIB) OBJDUMP="$(WRAPCMD) objdump"
 
 .IF "$(SYSTEM_NSS)" != "YES"
 CONFIGURE_FLAGS+=--enable-pkgconfig=no
@@ -154,7 +165,7 @@ LDFLAGS:=$(xmlsec_LDFLAGS)
 
 .ENDIF
 CONFIGURE_DIR=
-CONFIGURE_ACTION=.$/configure ADDCFLAGS="$(xmlsec_CFLAGS)" CPPFLAGS="$(xmlsec_CPPFLAGS)"
+CONFIGURE_ACTION=autoreconf ; .$/configure ADDCFLAGS="$(xmlsec_CFLAGS)" CPPFLAGS="$(xmlsec_CPPFLAGS)"
 CONFIGURE_FLAGS=--with-pic --disable-shared --disable-crypto-dl --with-libxslt=no --with-gnutls=no LIBXML2LIB="$(LIBXML2LIB)"
 
 .IF "$(CROSS_COMPILING)"=="YES"
@@ -193,8 +204,12 @@ OUTDIR2INC=include$/xmlsec
 
 .IF "$(OS)"=="WNT"
 .IF "$(COM)"=="GCC"
-OUT2LIB+=src$/.libs$/libxmlsec1.dll.a src$/nss$/.libs$/libxmlsec1-nss.dll.a src$/mscrypto$/.libs$/libxmlsec1-mscrypto.dll.a
-OUT2BIN+=src$/.libs$/libxmlsec1.dll src$/nss$/.libs$/libxmlsec1-nss.dll src$/mscrypto$/.libs$/libxmlsec1-mscrypto.dll
+OUT2LIB+=src$/.libs$/libxmlsec1.dll.a src$/nss$/.libs$/libxmlsec1-nss.dll.a
+OUT2BIN+=src$/.libs$/libxmlsec1.dll src$/nss$/.libs$/libxmlsec1-nss.dll
+.IF "$(CROSS_COMPILING)" != "YES"
+OUT2LIB+=src$/mscrypto$/.libs$/libxmlsec1-mscrypto.dll.a
+OUT2BIN+=src$/mscrypto$/.libs$/libxmlsec1-mscrypto.dll
+.ENDIF
 .ELSE
 OUT2LIB+=win32$/binaries$/*.lib
 OUT2BIN+=win32$/binaries$/*.dll

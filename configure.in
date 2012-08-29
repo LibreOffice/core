@@ -2788,6 +2788,7 @@ AC_SUBST(DISABLE_ATL)
 
 if test "$cross_compiling" = "yes"; then
     CROSS_COMPILING=YES
+    SCPDEFS="$SCPDEFS -DCROSS_COMPILING"
 else
     CROSS_COMPILING=
     BUILD_TYPE="$BUILD_TYPE NATIVE"
@@ -4840,6 +4841,10 @@ using namespace std;
             if test -n "$MINGW_GXXDLL"; then
                 mingw_gxxdll_root=${MINGW_GXXDLL%.dll}
                 mingw_gxxdll_root=${mingw_gxxdll_root#lib}
+                if test "$CROSS_COMPILING" = "YES" ; then
+                    dnl m4 escaping!
+                    mingw_gxxdll_root=${mingw_gxxdll_root%-[[0-9]]}
+                fi
                 MINGW_SHARED_LIBSTDCPP=-l$mingw_gxxdll_root
                 MINGW_SHARED_GXXLIB=YES
                 AC_MSG_RESULT([$MINGW_GXXDLL])

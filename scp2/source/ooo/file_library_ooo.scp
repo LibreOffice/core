@@ -1521,6 +1521,18 @@ File gid_File_Lib_LibXMLSec_xmlseccore
     Styles = (PACKED);
 End
 
+#ifdef CROSS_COMPILING
+File gid_File_Lib_LibXMLSec_xmlsecnss
+    LIB_FILE_BODY;
+  #ifdef _gcc3
+    Name = "libxmlsec1-nss.dll";
+  #else
+    Name = "libxmlsec-nss.dll";
+  #endif
+    Dir = SCP2_OOO_BIN_DIR;
+    Styles = (PACKED);
+End
+#else
 File gid_File_Lib_LibXMLSec_xmlsecmscrypto
     LIB_FILE_BODY;
   #ifdef _gcc3
@@ -1531,6 +1543,7 @@ File gid_File_Lib_LibXMLSec_xmlsecmscrypto
     Dir = SCP2_OOO_BIN_DIR;
     Styles = (PACKED);
 End
+#endif
 #endif
 
 File gid_File_Lib_Migrationoo2
