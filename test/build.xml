@@ -33,7 +33,7 @@
     <property name="testspace" value="${env.TESTSPACE}" />
     <property name="classes" value="${testspace}/class" />
     <property name="dist" value="${testspace}/dist" />
-    <property name="test.classes" value="testcase/gui/SmokeTest.class,testcase/gui/BVTFileType.class,testcase/gui/BVTFunction.class" />
+    <property name="test.classes" value="testcase/gui/bvt/*.class" />
     <property name="test.output" value="${testspace}/output" />
     <property name="test.result" value="${test.output}/result" />
     <property name="test.report" value="${test.output}/report" />
