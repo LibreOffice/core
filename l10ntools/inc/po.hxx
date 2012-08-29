@@ -43,6 +43,7 @@ private:
     OString    m_sContext;
     OString    m_sUnTransStr;
     OString    m_sTransStr;
+    bool       m_bFuzzy;
 
 public:
                         GenPoEntry();
@@ -60,6 +61,8 @@ public:
                         { m_sUnTransStr = rUnTransStr; }
     virtual void        setTransStr(const OString& rTransStr)
                         { m_sTransStr = rTransStr; }
+    virtual void        setFuzzy(bool bFuzzy)
+                        { m_bFuzzy = bFuzzy; }
 
     virtual void        writeToFile(std::ofstream& io_rOFStream);
 };

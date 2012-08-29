@@ -41,6 +41,7 @@ class Entry:
     """Represents a single line in an SDF file."""
 
     def __init__(self, items):
+        self.has_translation = None;
         self.items = items # list of 15 fields
         path = self.items[1].split('\\')
         self.po = "%s/%s/%s.po" % (options.input.replace('\\', '/'), self.items[0], "/".join(path[:-1]))
@@ -65,13 +66,20 @@ class Entry:
         """Translates text in the entry based on translations."""
 
         self.items[9] = options.language
+        self.items[2] = ""
+        self.has_translation = False
         for idx, key in self.keys:
             try:
-                self.items[idx] = translations.data[(self.po, key)]
+                if translations.data[(self.po, key)][1]:
+                    self.items[2] += "1"
+                else:
+                    self.items[2] += "0"
+                self.items[idx] = translations.data[(self.po, key)][0]
+                self.has_translation = True
 
                 self.items[14] = "2002-02-02 02:02:02"
             except KeyError:
-                pass
+                self.items[idx]=""
         self.items[14] = self.items[14].strip()
 
     def sdf2po(self, s):
@@ -95,8 +103,10 @@ class Template:
 
         sock = xopen(options.output, "w", encoding='utf-8')
         for line in self.lines:
+            sock.write("\t".join(line.items))
             line.translate(translations)
-            sock.write("\t".join(line.items)+"\r\n")
+            if line.has_translation:
+                sock.write("\t".join(line.items)+"\r\n")
         sock.close()
 
 class Translations:
@@ -120,10 +130,10 @@ class Translations:
                     elif line.startswith("msgstr "):
                         trans = line.strip()[8:-1]
                         if len(trans):
+                            self.setdata(path, key, trans, fuzzy)
                             if fuzzy:
                                 fuzzy = False
                             else:
-                                self.setdata(path, key, trans)
                                 multiline = False
                         else:
                             buf = []
@@ -132,16 +142,15 @@ class Translations:
                     elif multiline and line.startswith('"'):
                         buf.append(line.strip()[1:-1])
                     elif multiline and not len(line.strip()) and len("".join(buf)):
+                        self.setdata(path, key, "".join(buf),fuzzy)
                         if fuzzy:
                             fuzzy = False
-                        else:
-                            self.setdata(path, key, "".join(buf))
                         buf = []
                         multiline = False
-                if multiline and len("".join(buf)) and not fuzzy:
-                    self.setdata(path, key, "".join(buf))
+                if multiline and len("".join(buf)):
+                    self.setdata(path, key, "".join(buf),fuzzy)
 
-    def setdata(self, path, key, s):
+    def setdata(self, path, key, s, fuzzy = False):
         """Sets the translation for a given path and key, handling (un)escaping
         as well."""
         if key:
@@ -151,7 +160,7 @@ class Translations:
                 s = self.escape_help_text(s)
             else:
                 s = s.replace('\\\\', '\\')
-            self.data[(path.replace('\\', '/'), key)] = s
+            self.data[(path.replace('\\', '/'), key)] = ( s , fuzzy )
 
     def escape_help_text(self, text):
         """Escapes the help text as it would be in an SDF file."""

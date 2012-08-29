@@ -30,6 +30,7 @@
 #include <fstream>
 #include <dirent.h>
 #include <string>
+#include <vector>
 #include <rtl/string.hxx>
 #include "po.hxx"
 
@@ -40,7 +41,8 @@ bool IsSameEntry(const OString& rFirstEntry,const OString& rSecEntry)
 {
     for(int i = PoEntry::PROJECT; i<=PoEntry::LOCALID;++i)
     {
-        if ( rFirstEntry.getToken(i,'\t') != rSecEntry.getToken(i,'\t'))
+        if ( rFirstEntry.getToken(i,'\t') != rSecEntry.getToken(i,'\t') &&
+             i != PoEntry::DUMMY)
             return false;
     }
     return true;
@@ -57,19 +59,34 @@ OString GetPath(const OString& rPath, const OString& rLine)
     return sSourcePath;
 }
 
+OString DelLocalId(const OString& rLine)
+{
+    sal_uInt16 nTabIndex = 0;
+    for(sal_uInt16 nComponent=0; nComponent<PoEntry::LOCALID; ++nComponent)
+    {
+        nTabIndex = rLine.indexOf('\t',nTabIndex);
+        ++nTabIndex;
+    }
+    return rLine.replaceAt(nTabIndex,
+                           rLine.indexOf('\t',nTabIndex)-nTabIndex,
+                           "");
+}
+
 //Renew po files of the actual language
 void HandleLanguage(struct dirent* pLangEntry, const OString& rPath,
-                    const OString& rpo2ooPath, const OString& rSDFPath)
+                    const OString& rpo2loPath, const OString& rSDFPath)
 {
     const OString LangEntryName = pLangEntry->d_name;
     const OString SDFFileName = LangEntryName + ".sdf";
 
     //Generate and open sdf
-    cout << "Start process with language: " <<  LangEntryName.getStr() << endl;
-    system( (rpo2ooPath + " -t " + rSDFPath +
-            " -l " + LangEntryName + " " +
-            rPath.getStr() + LangEntryName + " " +
-            SDFFileName).getStr());
+    cout << "Process start with language: " <<  LangEntryName.getStr() << endl;
+    system( (rpo2loPath +
+            " -i " + rPath.getStr() + LangEntryName +
+            " -o " + SDFFileName +
+            " -l " + LangEntryName +
+            " -t " + rSDFPath).getStr());
+    cout << "Language sdf is ready!" << endl;
 
     ofstream aOutPut;
     ifstream aSDFInput(SDFFileName.getStr());
@@ -118,9 +135,31 @@ void HandleLanguage(struct dirent* pLangEntry, const OString& rPath,
         {
             sActTrans ="";
         }
-        PoEntry aPE(sActUnTrans);
-        aPE.setTransStr(sActTrans.getToken(PoEntry::TEXT,'\t'));
-        aPE.writeToFile(aOutPut);
+        const vector<PoEntry::TYPE> vTypes = { PoEntry::TTEXT,
+                                               PoEntry::TQUICKHELPTEXT,
+                                               PoEntry::TTITLE };
+        sal_uInt16 nDummyBit = 0;
+        for( sal_uInt16 nIndex=0; nIndex<vTypes.size(); ++nIndex)
+        {
+            if (!sActUnTrans.getToken(vTypes[nIndex],'\t').isEmpty())
+            {
+                /**Because of xrmex lexer there are duplicated id's,
+                   only use this if the lexer have already fixed*/
+                if (sActUnTrans.getToken(PoEntry::GROUPID,'\t')==
+                    sActUnTrans.getToken(PoEntry::LOCALID,'\t') &&
+                    sActUnTrans.getToken(PoEntry::SOURCEFILE,'\t').
+                                endsWith(".xrm"))
+                {
+                    sActUnTrans = DelLocalId(sActUnTrans);
+                }
+                PoEntry aPE(sActUnTrans, vTypes[nIndex]);
+                aPE.setTransStr(sActTrans.getToken(vTypes[nIndex],'\t'));
+                aPE.setFuzzy(sActTrans.isEmpty() ? 0 :
+                             bool(sActTrans.getToken(PoEntry::DUMMY,'\t').
+                                            copy(nDummyBit++,1).toInt32()));
+                aPE.writeToFile(aOutPut);
+            }
+        }
 
         //Check wheather next entry is in the same po file
         OString sNextSourcePath = GetPath(sPath,sLine);
@@ -145,12 +184,10 @@ int main(int argc, char* argv[])
     //Usage
     if (argc < 4)
     {
-        cout << "Use: renewpot translationsdir po2oo en-us.sdf" << endl;
-        cout << "translationsdir: in this dir there are language" << endl;
-        cout << "directories which contain the po files. These" << endl;
-        cout << "directories have named by the languageid" << endl;
-        cout << "po2oo: the path withwhich po2oo can be call" << endl;
-        cout << "en-us.sdf: the path to call po2oo with this sdf" << endl;
+        cout << "Use: renewpot translationsdir po2lo en-US.sdf" << endl;
+        cout << "translationsdir: this directory contains the po" << endl;
+        cout << "files of all languages. Every language has a" << endl;
+        cout << "directory named with language id." << endl;
         return 1;
     }
 

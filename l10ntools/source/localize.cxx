@@ -281,15 +281,13 @@ void handleCommand(
         while (!in.eof())
         {
             OString sLine = OString(s.data(),s.length());
-            if (!sLine.isEmpty())
-            {
-                if (!sLine.getToken(PoEntry::TEXT,'\t').isEmpty())
-                    PoEntry(sLine).writeToFile(outPut);
-                if (!sLine.getToken(PoEntry::QUICKHELPTEXT,'\t').isEmpty())
-                    PoEntry(sLine,PoEntry::TQUICKHELPTEXT).writeToFile(outPut);
-                if (!sLine.getToken(PoEntry::TITLE,'\t').isEmpty())
-                    PoEntry(sLine,PoEntry::TTITLE).writeToFile(outPut);
-            }
+
+            if (!sLine.getToken(PoEntry::TEXT,'\t').isEmpty())
+                PoEntry(sLine).writeToFile(outPut);
+            if (!sLine.getToken(PoEntry::QUICKHELPTEXT,'\t').isEmpty())
+                PoEntry(sLine,PoEntry::TQUICKHELPTEXT).writeToFile(outPut);
+            if (!sLine.getToken(PoEntry::TITLE,'\t').isEmpty())
+                PoEntry(sLine,PoEntry::TTITLE).writeToFile(outPut);
             std::getline(in, s);
         };
         in.close();
