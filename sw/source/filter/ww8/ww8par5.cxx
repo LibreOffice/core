@@ -1524,6 +1524,8 @@ eF_ResT SwWW8ImplReader::Read_F_Seq( WW8FieldDesc*, String& rStr )
 {
     String aSequenceName;
     String aBook;
+    bool bHidden    = false;
+    bool bFormat    = false;
     bool bCountOn   = true;
     String sStart;
     SvxExtNumType eNumFormat = SVX_NUM_ARABIC;
@@ -1541,9 +1543,12 @@ eF_ResT SwWW8ImplReader::Read_F_Seq( WW8FieldDesc*, String& rStr )
             break;
 
         case 'h':
+            if( !bFormat )
+                bHidden = true;             // Hidden-Flag aktivieren
             break;
 
         case '*':
+            bFormat = true;                 // Format-Flag aktivieren
             nRet = aReadParam.SkipToNextToken();
             if( -2 == nRet && !( aReadParam.GetResult().EqualsAscii("MERGEFORMAT") || aReadParam.GetResult().EqualsAscii("CHARFORMAT") ))
                 eNumFormat = GetNumTypeFromName( aReadParam.GetResult() );
@@ -1575,6 +1580,10 @@ eF_ResT SwWW8ImplReader::Read_F_Seq( WW8FieldDesc*, String& rStr )
     SwSetExpFieldType* pFT = (SwSetExpFieldType*)rDoc.InsertFldType(
                         SwSetExpFieldType( &rDoc, aSequenceName, nsSwGetSetExpType::GSE_SEQ ) );
     SwSetExpField aFld( pFT, aEmptyStr, eNumFormat );
+
+    //#i120654# Add bHidden for /h flag (/h: Hide the field result.)
+    if (bHidden)
+        aFld.SetSubType(aFld.GetSubType() | nsSwExtendedSubType::SUB_INVISIBLE);
 
     if (sStart.Len())
         aFld.SetFormula( ( aSequenceName += '=' ) += sStart );
