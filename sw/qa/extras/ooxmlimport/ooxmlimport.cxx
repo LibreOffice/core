@@ -30,6 +30,7 @@
 
 #include <com/sun/star/awt/XBitmap.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/document/XEmbeddedObjectSupplier2.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
@@ -86,9 +87,11 @@ public:
     void testAllGapsWord();
     void testN775906();
     void testN775899();
+    void testN777345();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
+#if 0
     CPPUNIT_TEST(testN751054);
     CPPUNIT_TEST(testN751117);
     CPPUNIT_TEST(testN751017);
@@ -115,6 +118,8 @@ public:
     CPPUNIT_TEST(testAllGapsWord);
     CPPUNIT_TEST(testN775906);
     CPPUNIT_TEST(testN775899);
+#endif
+    CPPUNIT_TEST(testN777345);
 #endif
     CPPUNIT_TEST_SUITE_END();
 
@@ -763,6 +768,21 @@ void Test::testN775899()
     CPPUNIT_ASSERT_EQUAL(sal_True, xServiceInfo->supportsService("com.sun.star.text.TextTable"));
 
     CPPUNIT_ASSERT_EQUAL(sal_False, xParaEnum->hasMoreElements());
+}
+
+void Test::testN777345()
+{
+    // The problem was that v:imagedata inside v:rect was ignored.
+    load("n777345.docx");
+
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
+    uno::Reference<document::XEmbeddedObjectSupplier2> xSupplier(xDraws->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<graphic::XGraphic> xGraphic = xSupplier->getReplacementGraphic();
+    Graphic aGraphic(xGraphic);
+    // If this changes later, feel free to update it, but make sure it's not
+    // the checksum of a white/transparent placeholder rectangle.
+    CPPUNIT_ASSERT_EQUAL(sal_uLong(2404338915), aGraphic.GetChecksum());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
