@@ -343,7 +343,7 @@ void ScTable::DestroySortCollator()
 }
 
 
-void ScTable::SortReorder( ScSortInfoArray* pArray, ScProgress& rProgress )
+void ScTable::SortReorder( ScSortInfoArray* pArray, ScProgress* pProgress )
 {
     bool bByRow = aSortParam.bByRow;
     SCSIZE nCount = pArray->GetCount();
@@ -372,7 +372,8 @@ void ScTable::SortReorder( ScSortInfoArray* pArray, ScProgress& rProgress )
             ::std::swap(p, aTable[nOrg-nStart]);
             OSL_ENSURE( p == ppInfo[nPos], "SortReorder: nOrg MisMatch" );
         }
-        rProgress.SetStateOnPercent( nPos );
+        if(pProgress)
+            pProgress->SetStateOnPercent( nPos );
     }
 }
 
@@ -742,7 +743,7 @@ void ScTable::DecoladeRow( ScSortInfoArray* pArray, SCROW nRow1, SCROW nRow2 )
     }
 }
 
-void ScTable::Sort(const ScSortParam& rSortParam, bool bKeepQuery)
+void ScTable::Sort(const ScSortParam& rSortParam, bool bKeepQuery, ScProgress* pProgress)
 {
     aSortParam = rSortParam;
     InitSortCollator( rSortParam );
@@ -757,13 +758,13 @@ void ScTable::Sort(const ScSortParam& rSortParam, bool bKeepQuery)
             aSortParam.nRow1 + 1 : aSortParam.nRow1);
         if (!IsSorted(nRow1, nLastRow))
         {
-            ScProgress aProgress( pDocument->GetDocumentShell(),
-                                    ScGlobal::GetRscString(STR_PROGRESS_SORTING), nLastRow - nRow1 );
+            if(pProgress)
+                pProgress->SetState( 0, nLastRow-nRow1 );
             ScSortInfoArray* pArray = CreateSortInfoArray( nRow1, nLastRow );
             if ( nLastRow - nRow1 > 255 )
                 DecoladeRow( pArray, nRow1, nLastRow );
             QuickSort( pArray, nRow1, nLastRow );
-            SortReorder( pArray, aProgress );
+            SortReorder( pArray, pProgress );
             delete pArray;
             // #i59745# update position of caption objects of cell notes
             ScNoteUtil::UpdateCaptionPositions( *pDocument, ScRange( aSortParam.nCol1, nRow1, nTab, aSortParam.nCol2, nLastRow, nTab ) );
@@ -780,11 +781,11 @@ void ScTable::Sort(const ScSortParam& rSortParam, bool bKeepQuery)
             aSortParam.nCol1 + 1 : aSortParam.nCol1);
         if (!IsSorted(nCol1, nLastCol))
         {
-            ScProgress aProgress( pDocument->GetDocumentShell(),
-                                    ScGlobal::GetRscString(STR_PROGRESS_SORTING), nLastCol - nCol1 );
+            if(pProgress)
+                pProgress->SetState( 0, nLastCol-nCol1 );
             ScSortInfoArray* pArray = CreateSortInfoArray( nCol1, nLastCol );
             QuickSort( pArray, nCol1, nLastCol );
-            SortReorder( pArray, aProgress );
+            SortReorder( pArray, pProgress );
             delete pArray;
             // #i59745# update position of caption objects of cell notes
             ScNoteUtil::UpdateCaptionPositions( *pDocument, ScRange( nCol1, aSortParam.nRow1, nTab, nLastCol, aSortParam.nRow2, nTab ) );

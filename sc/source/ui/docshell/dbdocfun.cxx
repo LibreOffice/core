@@ -582,7 +582,10 @@ sal_Bool ScDBDocFunc::Sort( SCTAB nTab, const ScSortParam& rSortParam,
 
     // don't call ScDocument::Sort with an empty SortParam (may be empty here if bCopy is set)
     if (aLocalParam.GetSortKeyCount() && aLocalParam.maKeyState[0].bDoSort)
-        pDoc->Sort( nTab, aLocalParam, bRepeatQuery );
+    {
+        ScProgress aProgress(&rDocShell, ScGlobal::GetRscString(STR_PROGRESS_SORTING), 0);
+        pDoc->Sort( nTab, aLocalParam, bRepeatQuery, &aProgress );
+    }
 
     sal_Bool bSave = sal_True;
     if (bCopy)

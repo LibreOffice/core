@@ -1471,7 +1471,7 @@ public:
 
     SC_DLLPUBLIC SvNumberFormatter* GetFormatTable() const;
 
-    void            Sort( SCTAB nTab, const ScSortParam& rSortParam, bool bKeepQuery );
+    void            Sort( SCTAB nTab, const ScSortParam& rSortParam, bool bKeepQuery, ScProgress* pProgress );
     SCSIZE          Query( SCTAB nTab, const ScQueryParam& rQueryParam, bool bKeepSub );
     SC_DLLPUBLIC bool           CreateQueryParam( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                                         SCTAB nTab, ScQueryParam& rQueryParam );
