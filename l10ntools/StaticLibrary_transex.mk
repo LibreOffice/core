@@ -37,6 +37,7 @@ $(eval $(call gb_StaticLibrary_add_exception_objects,transex,\
     l10ntools/source/merge \
     l10ntools/source/file \
     l10ntools/source/directory \
+	l10ntools/source/po \
 ))
 
 # vim: set noet sw=4 ts=4:
