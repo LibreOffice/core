@@ -57,6 +57,9 @@ TARFILE_MD5=1f24ab1d39f4a51faf22244c94a6203f
 #xmlsec1-mingw32.patch: Mingw32 support. 
 #xmlsec1-mingw-customkeymanage-addmscrypto.patch: builds the custom keymanager on mingw
 #xmlsec1-vc.path: support for Visual C++ 10
+#xmlsec1-1.2.14-ansi.patch: otherwise, at least MacPorts autoreconf (GNU
+# Autoconf) 2.69 fails with "configure.in:50: error: automatic de-ANSI-fication
+# support has been removed"
 PATCH_FILES=\
    xmlsec1-configure.patch \
    xmlsec1-configure-libxml-libxslt.patch \
@@ -69,7 +72,8 @@ PATCH_FILES=\
    xmlsec1-mingw-keymgr-mscrypto.patch \
    xmlsec1-vc10.patch \
    xmlsec1-1.2.14_fix_extern_c.patch \
-   xmlsec1-android.patch
+   xmlsec1-android.patch \
+   xmlsec1-1.2.14-ansi.patch
 
 ADDITIONAL_FILES= \
     include$/xmlsec$/mscrypto$/akmngr.h \
