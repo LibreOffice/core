@@ -194,13 +194,13 @@ void handleCommand(
             throw false; //TODO
         }
         rtl::OUStringBuffer buf(
-            //getEnvironment(
-                //rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SOLARVER"))));
-        //buf.append('/');
-        //buf.append(
-            //getEnvironment(
-                rtl::OUString("/home/zolnai/git/libo/solver/unxlngi6.pro"));
-                   // RTL_CONSTASCII_USTRINGPARAM("INPATH_FOR_BUILD"))));
+            getEnvironment(
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SOLARVER"))));
+        buf.append('/');
+        buf.append(
+            getEnvironment(
+                rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM("INPATH_FOR_BUILD"))));
         buf.appendAscii(RTL_CONSTASCII_STRINGPARAM("/bin/"));
         buf.append(executable);
         buf.appendAscii(RTL_CONSTASCII_STRINGPARAM(" -e -p "));

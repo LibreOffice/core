@@ -45,7 +45,7 @@ OString ImplGenKeyId(const OString& rGenerator)
     OString sKeyId = "";
     while ( sKeyId.getLength() < 4 )
     {
-        //Concat a char from the [33,126] intervallum of ASCII
+        //Concat a char from the [33,126] interval of ASCII
         sKeyId += OString(char(int(double(nCRC & 255)/255*93)+33));
         nCRC >>= 8;
     }
@@ -59,10 +59,10 @@ OString ImplEscapeText(const OString& rText,
 {
     if(rEscaped.getLength()!=2*rUnEscaped.getLength()) throw;
     OString sResult = rText;
-    sal_Int32 nCount = 0;
-    for(sal_Int32 nIndex=0; nIndex<rText.getLength(); ++nIndex)
+    int nCount = 0;
+    for(int nIndex=0; nIndex<rText.getLength(); ++nIndex)
     {
-        sal_Int32 nActChar = rUnEscaped.indexOf(rText[nIndex]);
+        int nActChar = rUnEscaped.indexOf(rText[nIndex]);
         if(nActChar!=-1)
             sResult = sResult.replaceAt((nIndex)+(nCount++),1,
                                         rEscaped.copy(2*nActChar,2));
@@ -77,10 +77,10 @@ OString ImplUnEscapeText(const OString& rText,
 {
     if(rEscaped.getLength()!=2*rUnEscaped.getLength()) throw;
     OString sResult = rText;
-    sal_Int32 nCount = 0;
-    for(sal_Int32 nIndex=0; nIndex<rText.getLength()-1; ++nIndex)
+    int nCount = 0;
+    for(int nIndex=0; nIndex<rText.getLength()-1; ++nIndex)
     {
-        sal_Int32 nActChar = rEscaped.indexOf(rText.copy(nIndex,2));
+        int nActChar = rEscaped.indexOf(rText.copy(nIndex,2));
         if(nActChar % 2 == 0)
             sResult = sResult.replaceAt((nIndex++)-(nCount++),2,
                                         rUnEscaped.copy(nActChar/2,1));
@@ -95,7 +95,7 @@ OString ImplGenMsgString(const OString& rSource)
         return "\"\"";
 
     OString sResult = "\"" + rSource + "\"";
-    sal_Int32 nIndex = 0;
+    int nIndex = 0;
     while((nIndex=sResult.indexOf("\\n",nIndex))!=-1)
     {
         if( sResult.copy(nIndex-1,3) != "\\\\n" )
@@ -160,12 +160,12 @@ void GenPoEntry::writeToFile(std::ofstream& io_rOFStream)
 //Class PoEntry
 
 //Split string at the delimiter char
-void ImplSplitAt(const OString& rSource, const sal_Int32 nDelimiter,
+void ImplSplitAt(const OString& rSource, const char nDelimiter,
                  std::vector<OString>& o_vParts)
 {
     o_vParts.resize( 0 );
-    sal_Int32 nActIndex( 0 );
-    sal_Int32 nLastSplit( 0 );
+    int nActIndex( 0 );
+    int nLastSplit( 0 );
     while( nActIndex < rSource.getLength() )
     {
         if ( rSource[nActIndex] == nDelimiter )
