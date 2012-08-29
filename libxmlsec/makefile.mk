@@ -59,7 +59,9 @@ TARFILE_MD5=1f24ab1d39f4a51faf22244c94a6203f
 #xmlsec1-vc.path: support for Visual C++ 10
 #xmlsec1-1.2.14-ansi.patch: otherwise, at least MacPorts autoreconf (GNU
 # Autoconf) 2.69 fails with "configure.in:50: error: automatic de-ANSI-fication
-# support has been removed"
+# support has been removed" (cf. upstream <http://git.gnome.org/browse/xmlsec/
+# commit/?id=6a4968bc33f83aaf61efc0a80333350ce9c372f5> "error in macro
+# AM_C_PROTOTYPES (Roumen)")
 PATCH_FILES=\
    xmlsec1-configure.patch \
    xmlsec1-configure-libxml-libxslt.patch \
