@@ -272,6 +272,10 @@ protected:
                         implConvertAndInsert(
                             const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxShapes,
                             const ::com::sun::star::awt::Rectangle& rShapeRect ) const;
+    /** Used by both RectangleShape and ComplexShape. */
+    com::sun::star::uno::Reference<com::sun::star::drawing::XShape>createPictureObject(
+            const com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rxShapes,
+            const com::sun::star::awt::Rectangle& rShapeRect, OUString& rGraphicPath ) const;
 
 private:
     ::rtl::OUString     maService;          ///< Name of the UNO shape service.
