@@ -17,6 +17,7 @@
             <child>
               <object class="GtkButton" id="28">
                 <property name="label">gtk-ok</property>
+                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
@@ -32,6 +33,7 @@
             <child>
               <object class="GtkButton" id="29">
                 <property name="label">gtk-cancel</property>
+                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
@@ -47,6 +49,7 @@
             <child>
               <object class="GtkButton" id="30">
                 <property name="label">gtk-help</property>
+                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
@@ -91,6 +94,7 @@
                         <child>
                           <object class="GtkRadioButton" id="15">
                             <property name="label" translatable="yes">Optimal</property>
+                            <property name="use_action_appearance">False</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -108,6 +112,7 @@
                         <child>
                           <object class="GtkRadioButton" id="16">
                             <property name="label" translatable="yes">Fit width and height</property>
+                            <property name="use_action_appearance">False</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -126,6 +131,7 @@
                         <child>
                           <object class="GtkRadioButton" id="17">
                             <property name="label" translatable="yes">Fit width</property>
+                            <property name="use_action_appearance">False</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -144,6 +150,7 @@
                         <child>
                           <object class="GtkRadioButton" id="18">
                             <property name="label" translatable="yes">100%</property>
+                            <property name="use_action_appearance">False</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -166,6 +173,7 @@
                             <child>
                               <object class="GtkRadioButton" id="19">
                                 <property name="label" translatable="yes">Variable</property>
+                                <property name="use_action_appearance">False</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
@@ -182,11 +190,10 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkSpinButton" id="20">
+                              <object class="GtkSpinButton" id="20:0%">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="invisible_char">●</property>
-                                <property name="pattern">0%</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -239,6 +246,7 @@
                         <child>
                           <object class="GtkRadioButton" id="22">
                             <property name="label" translatable="yes">Automatic</property>
+                            <property name="use_action_appearance">False</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -256,6 +264,7 @@
                         <child>
                           <object class="GtkRadioButton" id="23">
                             <property name="label" translatable="yes">Single page</property>
+                            <property name="use_action_appearance">False</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -278,6 +287,7 @@
                             <child>
                               <object class="GtkRadioButton" id="24">
                                 <property name="label" translatable="yes">Columns</property>
+                                <property name="use_action_appearance">False</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
@@ -294,11 +304,10 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkSpinButton" id="25">
+                              <object class="GtkSpinButton" id="25:0">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="invisible_char">●</property>
-                                <property name="pattern">0</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -321,6 +330,7 @@
                             <child>
                               <object class="GtkCheckButton" id="26">
                                 <property name="label" translatable="yes">Book mode</property>
+                                <property name="use_action_appearance">False</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>

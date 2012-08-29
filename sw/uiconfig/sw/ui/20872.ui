@@ -165,12 +165,11 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkSpinButton" id="26">
+                      <object class="GtkSpinButton" id="26:0.00cm">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="invisible_char">●</property>
                         <property name="invisible_char_set">True</property>
-                        <property name="pattern">0.00cm</property>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -194,12 +193,11 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkSpinButton" id="20">
+                      <object class="GtkSpinButton" id="20:0.00cm">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="invisible_char">●</property>
                         <property name="invisible_char_set">True</property>
-                        <property name="pattern">0.00cm</property>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -209,12 +207,11 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkSpinButton" id="24">
+                      <object class="GtkSpinButton" id="24:0.00cm">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="invisible_char">●</property>
                         <property name="invisible_char_set">True</property>
-                        <property name="pattern">0.00cm</property>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -282,13 +279,12 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkSpinButton" id="5">
+                      <object class="GtkSpinButton" id="5:0.00cm">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="invisible_char">●</property>
                         <property name="adjustment">adjustment2</property>
                         <property name="digits">2</property>
-                        <property name="pattern">0.00cm</property>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -330,13 +326,12 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkSpinButton" id="8">
+                      <object class="GtkSpinButton" id="8:0.00cm">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="invisible_char">●</property>
                         <property name="adjustment">adjustment1</property>
                         <property name="digits">2</property>
-                        <property name="pattern">0.00cm</property>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -346,13 +341,12 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkSpinButton" id="10">
+                      <object class="GtkSpinButton" id="10:0.00cm">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="invisible_char">●</property>
                         <property name="adjustment">adjustment1</property>
                         <property name="digits">2</property>
-                        <property name="pattern">0.00cm</property>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>

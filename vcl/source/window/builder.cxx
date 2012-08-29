@@ -170,6 +170,9 @@ void VclBuilder::handleTranslations(xmlreader::XmlReader &reader)
                     {
                         name = reader.getAttributeValue(false);
                         sID = rtl::OString(name.begin, name.length);
+                        sal_Int32 nDelim = sID.indexOf(':');
+                        if (nDelim != -1)
+                            sID = sID.copy(nDelim);
                     }
                     else if (name.equals(RTL_CONSTASCII_STRINGPARAM("i")))
                     {
@@ -613,6 +616,13 @@ void VclBuilder::handleTabChild(Window *pParent, xmlreader::XmlReader &reader)
                     {
                         name = reader.getAttributeValue(false);
                         sID = rtl::OString(name.begin, name.length);
+                        sal_Int32 nDelim = sID.indexOf(':');
+                        if (nDelim != -1)
+                        {
+                            rtl::OString sPattern = sID.copy(nDelim+1);
+                            aProperties[rtl::OString("pattern")] = sPattern;
+                            sID = sID.copy(0, nDelim);
+                        }
                     }
                 }
             }
@@ -825,6 +835,7 @@ Window* VclBuilder::handleObject(Window *pParent, xmlreader::XmlReader &reader)
 {
     rtl::OString sClass;
     rtl::OString sID;
+    rtl::OString sPattern;
 
     xmlreader::Span name;
     int nsId;
@@ -840,8 +851,13 @@ Window* VclBuilder::handleObject(Window *pParent, xmlreader::XmlReader &reader)
         {
             name = reader.getAttributeValue(false);
             sID = rtl::OString(name.begin, name.length);
+            sal_Int32 nDelim = sID.indexOf(':');
+            if (nDelim != -1)
+            {
+                sPattern = sID.copy(nDelim+1);
+                sID = sID.copy(0, nDelim);
+            }
         }
-
     }
 
     if (sClass.equalsL(RTL_CONSTASCII_STRINGPARAM("GtkListStore")))
@@ -853,6 +869,9 @@ Window* VclBuilder::handleObject(Window *pParent, xmlreader::XmlReader &reader)
     int nLevel = 1;
 
     stringmap aProperties;
+
+    if (!sPattern.isEmpty())
+        aProperties[rtl::OString("pattern")] = sPattern;
 
     Window *pCurrentChild = NULL;
     while(1)

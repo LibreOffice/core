@@ -235,7 +235,7 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkSpinButton" id="spacingspin">
+                              <object class="GtkSpinButton" id="spacingspin:0.00cm">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="halign">start</property>
@@ -243,7 +243,6 @@
                                 <property name="invisible_char_set">True</property>
                                 <property name="adjustment">spacingadjustment</property>
                                 <property name="digits">2</property>
-                                <property name="pattern">0.00cm</property>
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
