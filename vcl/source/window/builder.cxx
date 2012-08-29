@@ -26,7 +26,7 @@
  * instead of those above.
  */
 
-#include <osl/module.h>
+#include <osl/module.hxx>
 #include <vcl/builder.hxx>
 #include <vcl/button.hxx>
 #include <vcl/dialog.hxx>
@@ -342,6 +342,8 @@ bool VclBuilder::extractModel(const rtl::OString &id, stringmap &rMap)
     return false;
 }
 
+extern "C" { static void SAL_CALL thisModule() {} }
+
 Window *VclBuilder::makeObject(Window *pParent, const rtl::OString &name, const rtl::OString &id, stringmap &rMap)
 {
     bool bIsPlaceHolder = name.isEmpty();
@@ -472,10 +474,24 @@ Window *VclBuilder::makeObject(Window *pParent, const rtl::OString &name, const 
         pWindow = new Window(pParent);
     else
     {
-        rtl::OString sFunction = rtl::OString("make") + name;
-        customMakeWidget pFunction = (customMakeWidget)osl_getAsciiFunctionSymbol(NULL, sFunction.getStr());
-        if (pFunction)
-            pWindow = (*pFunction)(pParent);
+        sal_Int32 nDelim = name.indexOf(':');
+        if (nDelim != -1)
+        {
+            rtl::OUStringBuffer sModule;
+#ifdef SAL_DLLPREFIX
+            sModule.append(SAL_DLLPREFIX);
+#endif
+            sModule.append(rtl::OStringToOUString(name.copy(0, nDelim), RTL_TEXTENCODING_UTF8));
+#ifdef SAL_DLLEXTENSION
+            sModule.append(SAL_DLLEXTENSION);
+#endif
+            rtl::OUString sFunction(rtl::OStringToOUString(rtl::OString("make") + name.copy(nDelim+1), RTL_TEXTENCODING_UTF8));
+            osl::Module aModule;
+            aModule.loadRelative(&thisModule, sModule.makeStringAndClear());
+            customMakeWidget pFunction = (customMakeWidget)aModule.getFunctionSymbol(sFunction);
+            if (pFunction)
+                pWindow = (*pFunction)(pParent);
+        }
     }
     if (!pWindow)
         fprintf(stderr, "TO-DO, implement %s or add a make%s function\n", name.getStr(), name.getStr());

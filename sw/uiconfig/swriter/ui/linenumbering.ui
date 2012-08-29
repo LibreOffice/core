@@ -207,7 +207,7 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="SwNumberingTypeListBox" id="formatdropdown">
+                              <object class="swlo:SwNumberingTypeListBox" id="formatdropdown">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="hexpand">True</property>
