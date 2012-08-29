@@ -166,6 +166,14 @@ LDFLAGS:=$(xmlsec_LDFLAGS)
 .ENDIF
 CONFIGURE_DIR=
 CONFIGURE_ACTION=autoreconf ; .$/configure ADDCFLAGS="$(xmlsec_CFLAGS)" CPPFLAGS="$(xmlsec_CPPFLAGS)"
+
+.IF "$(OS)" == "MACOSX"
+.IF "$(ACLOCAL)" == ""
+ACLOCAL=aclocal
+.ENDIF
+CONFIGURE_ACTION:=ACLOCAL="$(ACLOCAL) -I$(SRCDIR)/m4/mac" $(CONFIGURE_ACTION)
+.ENDIF
+
 CONFIGURE_FLAGS=--with-pic --disable-shared --disable-crypto-dl --with-libxslt=no --with-gnutls=no LIBXML2LIB="$(LIBXML2LIB)"
 
 .IF "$(CROSS_COMPILING)"=="YES"
@@ -192,7 +200,7 @@ CONFIGURE_FLAGS += \
 # --with-nss or parse -pkg-config --libs / cflags mozilla-nss since
 # the lib may a) be in /usr/lib (Debian) and be not in $with_nss/include
 # $with_nss/lib.
-.IF "$(SYSTEM_NSS)" != "YES"
+.IF "$(SYSTEM_NSS)" != "YES" || "$(OS)" == "MACOSX"
 CONFIGURE_FLAGS+=--enable-pkgconfig=no
 .ENDIF
 BUILD_ACTION=$(GNUMAKE) -j$(EXTMAXPROCESS)
