@@ -3822,6 +3822,18 @@ void SwWW8ImplReader::Read_NoLineNumb(sal_uInt16 , const sal_uInt8* pData, short
     NewAttr( aLN );
 }
 
+bool lcl_HasExplicitLeft(const WW8PLCFMan *pPlcxMan, bool bVer67)
+{
+    WW8PLCFx_Cp_FKP *pPap = pPlcxMan ? pPlcxMan->GetPapPLCF() : 0;
+    if (pPap)
+    {
+        if (bVer67)
+            return pPap->HasSprm(17);
+        else
+            return (pPap->HasSprm(0x840F) || pPap->HasSprm(0x845E));
+    }
+    return false;
+}
 // Sprm 16, 17
 void SwWW8ImplReader::Read_LR( sal_uInt16 nId, const sal_uInt8* pData, short nLen )
 {
@@ -3931,6 +3943,26 @@ void SwWW8ImplReader::Read_LR( sal_uInt16 nId, const sal_uInt8* pData, short nLe
             }
 
             aLR.SetTxtFirstLineOfst(nPara);
+
+            if (!pAktColl)
+            {
+                if (const SwTxtNode* pNode = pPaM->GetNode()->GetTxtNode())
+                {
+                    if ( const SwNumFmt *pNumFmt = GetNumFmtFromTxtNode(*pNode) )
+                    {
+                        if (!lcl_HasExplicitLeft(pPlcxMan, bVer67))
+                        {
+                            int tmp = pNumFmt->GetIndentAt();
+                            aLR.SetTxtLeft(pNumFmt->GetIndentAt());
+
+                            // If have not explicit left, set number format list tab position is doc default tab
+                            const SvxTabStopItem *pDefaultStopItem = (const SvxTabStopItem *)rDoc.GetAttrPool().GetPoolDefaultItem(RES_PARATR_TABSTOP);
+                            if ( pDefaultStopItem &&  pDefaultStopItem->Count() > 0 )
+                                ((SwNumFmt*)(pNumFmt))->SetListtabPos( ((SvxTabStop&)(*pDefaultStopItem)[0]).GetTabPos() );
+                        }
+                    }
+                }
+            }
             if (pAktColl && nAktColl < vColl.size())
             {
                 vColl[nAktColl].bListReleventIndentSet = true;
