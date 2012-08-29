@@ -271,7 +271,7 @@ void SvxGeneralTabPage::CreateControls ()
         ));
         Row& rRow = *vRows.back();
         // fields in the row
-        static unsigned const nFieldCount = sizeof vFieldInfo / sizeof vFieldInfo[0];
+        static unsigned const nFieldCount = SAL_N_ELEMENTS(vFieldInfo);
         // skipping other (invisible) rows
         while (iField != nFieldCount && vFieldInfo[iField].eRow != eRow)
             ++iField;
