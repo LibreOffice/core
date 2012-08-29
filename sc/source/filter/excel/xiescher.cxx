@@ -455,11 +455,15 @@ void XclImpDrawObjBase::PreProcessSdrObject( XclImpDffConverter& rDffConv, SdrOb
 {
     // default: front layer, derived classes may have to set other layer in DoPreProcessSdrObj()
     rSdrObj.NbcSetLayer( SC_LAYER_FRONT );
-    const bool bEnableUndo = rSdrObj.GetModel()->IsUndoEnabled();
-    rSdrObj.GetModel()->EnableUndo(false);
-    // set object name (GetObjName() will always return a non-empty name)
-    rSdrObj.SetName( GetObjName() );
-    rSdrObj.GetModel()->EnableUndo(bEnableUndo);
+    SdrModel * pModel = rSdrObj.GetModel();
+    if ( pModel ) {
+        const bool bEnableUndo = pModel->IsUndoEnabled();
+        pModel->EnableUndo(false);
+        // set object name (GetObjName() will always return a non-empty name)
+        rSdrObj.SetName( GetObjName() );
+        pModel->EnableUndo(bEnableUndo);
+    } else
+        rSdrObj.SetName( GetObjName() );
     // #i39167# full width for all objects regardless of horizontal alignment
     rSdrObj.SetMergedItem( SdrTextHorzAdjustItem( SDRTEXTHORZADJUST_BLOCK ) );
 
