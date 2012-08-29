@@ -166,7 +166,6 @@ public:
           maEndValue(),
           mpAnim( rAnim ),
           maInterpolator( rInterpolator ),
-          mbDynamicStartValue( false ),
           mbCumulative( bCumulative )
     {
         ENSURE_OR_THROW( mpAnim, "Invalid animation object" );
@@ -223,12 +222,7 @@ public:
             if( maTo )
             {
                 // To animation
-
-                // According to the SMIL spec
-                // (http://www.w3.org/TR/smil20/animation.html#animationNS-ToAnimation),
-                // the to animation interpolates between
-                // the _running_ underlying value and the to value (as the end value)
-                mbDynamicStartValue = true;
+                maStartValue = aAnimationStartValue;
                 maEndValue = *maTo;
             }
             else if( maBy )
@@ -256,9 +250,7 @@ public:
             getPresentationValue(
                 accumulate( maEndValue,
                             mbCumulative * nRepeatCount, // means: mbCumulative ? nRepeatCount : 0,
-                            maInterpolator( (mbDynamicStartValue
-                                             ? mpAnim->getUnderlyingValue()
-                                             : maStartValue),
+                            maInterpolator( maStartValue,
                                             maEndValue,
                                             nModifiedTime ) ) ) );
     }
@@ -274,9 +266,7 @@ public:
             getPresentationValue(
                 accumulate( maEndValue, mbCumulative ? nRepeatCount : 0,
                             lerp( maInterpolator,
-                                  (mbDynamicStartValue
-                                   ? mpAnim->getUnderlyingValue()
-                                   : maStartValue),
+                                  maStartValue,
                                   maEndValue,
                                   nFrame,
                                   BaseType::getNumberOfKeyTimes() ) ) ) );
@@ -315,7 +305,6 @@ private:
 
     ::boost::shared_ptr< AnimationType >    mpAnim;
     Interpolator< ValueType >               maInterpolator;
-    bool                                    mbDynamicStartValue;
     bool                                    mbCumulative;
 };
 
