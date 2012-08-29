@@ -54,8 +54,8 @@ APP2OBJS=   $(OBJ)$/test.obj
 APP2RPATH=NONE
 .IF "$(GUI)"=="UNX" && "$(OS)"!="MACOSX"
 
-.IF "$(OS)"=="LINUX"
-APP2LINKFLAGS=-Wl,-rpath,\''$$ORIGIN:$$ORIGIN/../lib'\'
+.IF "$(OS)"=="LINUX" || "$(OS)"=="FREEBSD"
+APP2LINKFLAGS=-Wl,-z,origin -Wl,-rpath,\''$$ORIGIN:$$ORIGIN/../lib'\'
 .ENDIF
 
 .IF "$(OS)"=="SOLARIS"

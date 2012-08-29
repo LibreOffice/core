@@ -5,7 +5,7 @@
      MKSHLIB='$(CC) $(DSO_LDOPTS) -o $@'
      DSO_CFLAGS=-fPIC
 -    DSO_LDOPTS='-shared -Wl,-soname -Wl,$(notdir $@)'
-+    DSO_LDOPTS='-shared -Wl,-rpath,\$$ORIGIN -Wl,-soname -Wl,$(notdir $@)'
++    DSO_LDOPTS='-shared -Wl,-z,origin -Wl,-rpath,\$$ORIGIN -Wl,-soname -Wl,$(notdir $@)'
      _OPTIMIZE_FLAGS=-O2
      _DEBUG_FLAGS="-g -fno-inline"  # most people on linux use gcc/gdb, and that
                                     # combo is not yet good at debugging inlined
@@ -26,6 +26,16 @@
  RANLIB		= ranlib
  
  ifndef CPU_ARCH
+--- misc/nss-3.13.5/mozilla/security/coreconf/FreeBSD.mk	2009-11-23 05:06:29.000000000 -0500
++++ misc/build/nss-3.13.5/mozilla/security/coreconf/FreeBSD.mk	2012-08-28 20:27:20.000000000 -0400
+@@ -57,6 +57,7 @@
+ 
+ DSO_CFLAGS		= -fPIC
+ DSO_LDOPTS		= -shared -Wl,-soname -Wl,$(notdir $@)
++DSO_LDOPTS		+= '-Wl,-z,origin -Wl,-rpath,$$ORIGIN'
+ 
+ #
+ # The default implementation strategy for FreeBSD is pthreads.
 --- misc/nss-3.13.5/mozilla/security/coreconf/Linux.mk	2010-01-15 23:19:00.000000000 +0100
 +++ misc/build/nss-3.13.5/mozilla/security/coreconf/Linux.mk	2010-06-11 16:35:54.981151732 +0200
 @@ -46,8 +46,11 @@
@@ -47,7 +57,7 @@
  # we don't use -z defs there.
  ZDEFS_FLAG		= -Wl,-z,defs
 -DSO_LDOPTS		+= $(if $(findstring 2.11.90.0.8,$(shell ld -v)),,$(ZDEFS_FLAG))
-+DSO_LDOPTS		+= $(if $(findstring 2.11.90.0.8,$(shell ld -v)),,$(ZDEFS_FLAG)) '-Wl,-rpath,$$ORIGIN'
++DSO_LDOPTS		+= $(if $(findstring 2.11.90.0.8,$(shell ld -v)),,$(ZDEFS_FLAG)) '-Wl,-z,origin -Wl,-rpath,$$ORIGIN'
  LDFLAGS			+= $(ARCHFLAG)
  
  # INCLUDES += -I/usr/include -Y/usr/include/linux
@@ -100,7 +110,7 @@
  ifndef BUILD_OPT
 --- misc/nss-3.13.5/mozilla/security/nss/cmd/platlibs.mk	2010-02-04 19:59:10.000000000 +0100
 +++ misc/build/nss-3.13.5/mozilla/security/nss/cmd/platlibs.mk	2010-06-11 16:35:55.004869805 +0200
-@@ -41,27 +41,28 @@
+@@ -41,27 +41,32 @@
  ifeq ($(OS_ARCH), SunOS) 
  ifeq ($(BUILD_SUN_PKG), 1)
  ifeq ($(USE_64), 1)
@@ -117,22 +127,26 @@
  endif
  endif
  
++ifeq ($(OS_ARCH), FreeBSD)
++EXTRA_SHARED_LIBS += -Wl,-z,origin -Wl,-rpath,'$$ORIGIN'
++endif
++
  ifeq ($(OS_ARCH), Linux)
  ifeq ($(BUILD_SUN_PKG), 1)
  ifeq ($(USE_64), 1)
 -EXTRA_SHARED_LIBS += -Wl,-rpath,'$$ORIGIN/../lib64:/opt/sun/private/lib64:$$ORIGIN/../lib'
-+EXTRA_SHARED_LIBS += -Wl,-rpath,'$$ORIGIN'
++EXTRA_SHARED_LIBS += -Wl,-z,origin -Wl,-rpath,'$$ORIGIN'
  else
 -EXTRA_SHARED_LIBS += -Wl,-rpath,'$$ORIGIN/../lib:/opt/sun/private/lib'
-+EXTRA_SHARED_LIBS += -Wl,-rpath,'$$ORIGIN'
++EXTRA_SHARED_LIBS += -Wl,-z,origin -Wl,-rpath,'$$ORIGIN'
  endif
  else
  ifeq ($(USE_64), 1)
 -EXTRA_SHARED_LIBS += -Wl,-rpath,'$$ORIGIN/../lib64:$$ORIGIN/../lib'
-+EXTRA_SHARED_LIBS += -Wl,-rpath,'$$ORIGIN'
++EXTRA_SHARED_LIBS += -Wl,-z,origin -Wl,-rpath,'$$ORIGIN'
  else
 -EXTRA_SHARED_LIBS += -Wl,-rpath,'$$ORIGIN/../lib'
-+EXTRA_SHARED_LIBS += -Wl,-rpath,'$$ORIGIN'
++EXTRA_SHARED_LIBS += -Wl,-z,origin -Wl,-rpath,'$$ORIGIN'
  endif
  endif
  endif

@@ -86,16 +86,23 @@
  PYTHON = @MOZ_PYTHON@
 --- misc/mozilla/config/config.mk	2008-01-29 20:30:22.000000000 +0100
 +++ misc/build/mozilla/config/config.mk	2008-08-14 16:22:21.000000000 +0200
-@@ -758,6 +758,23 @@
+@@ -758,6 +758,30 @@
  endif
  
  #
 +# Shared library RUNPATH linker option(s)
 +#
-+ifeq ($(OS_ARCH),Linux)
-+EXTRA_DSO_LDOPTS += -Wl,-rpath,\$$ORIGIN:\$$ORIGIN/../ure-link/lib
++ifeq ($(OS_ARCH),FreeBSD)
++EXTRA_DSO_LDOPTS += -Wl,-z,origin -Wl,-rpath,\$$ORIGIN:\$$ORIGIN/../ure-link/lib
 +ifdef IS_COMPONENT
-+EXTRA_DSO_LDOPTS += -Wl,-rpath,\$$ORIGIN/..:\$$ORIGIN/../../ure-link/lib
++EXTRA_DSO_LDOPTS += -Wl,-z,origin -Wl,-rpath,\$$ORIGIN/..:\$$ORIGIN/../../ure-link/lib
++endif # IS_COMPONENT
++endif # FreeBSD
++
++ifeq ($(OS_ARCH),Linux)
++EXTRA_DSO_LDOPTS += -Wl,-z,origin -Wl,-rpath,\$$ORIGIN:\$$ORIGIN/../ure-link/lib
++ifdef IS_COMPONENT
++EXTRA_DSO_LDOPTS += -Wl,-z,origin -Wl,-rpath,\$$ORIGIN/..:\$$ORIGIN/../../ure-link/lib
 +endif # IS_COMPONENT
 +endif # Linux
 +
@@ -510,7 +517,7 @@
      MKSHLIB='$(CC) $(DSO_LDOPTS) -o $@'
      DSO_CFLAGS=-fPIC
      DSO_LDOPTS='-shared -Wl,-soname -Wl,$(notdir $@)'
-+    DSO_LDOPTS="$DSO_LDOPTS -Wl,-rpath,'$\$ORIGIN:$\$ORIGIN/../ure-link/lib'"
++    DSO_LDOPTS="$DSO_LDOPTS -Wl,-z,origin -Wl,-rpath,'$\$ORIGIN:$\$ORIGIN/../ure-link/lib'"
      OS_LIBS="$OS_LIBS -lc"
      _OPTIMIZE_FLAGS=-O2
      _DEBUG_FLAGS="-g -fno-inline"  # most people on linux use gcc/gdb, and that
@@ -579,7 +586,7 @@
      MKSHLIB='$(CC) $(DSO_LDOPTS) -o $@'
      DSO_CFLAGS=-fPIC
      DSO_LDOPTS='-shared -Wl,-soname -Wl,$(notdir $@)'
-+    DSO_LDOPTS="$DSO_LDOPTS -Wl,-rpath,'$\$ORIGIN:$\$ORIGIN/../ure-link/lib'"
++    DSO_LDOPTS="$DSO_LDOPTS -Wl,-z,origin -Wl,-rpath,'$\$ORIGIN:$\$ORIGIN/../ure-link/lib'"
      OS_LIBS="$OS_LIBS -lc"
      _OPTIMIZE_FLAGS=-O2
      _DEBUG_FLAGS="-g -fno-inline"  # most people on linux use gcc/gdb, and that
@@ -5793,12 +5800,16 @@
      else
 --- misc/mozilla/nsprpub/lib/ds/Makefile.in	2006-12-22 14:47:17.000000000 +0100
 +++ misc/build/mozilla/nsprpub/lib/ds/Makefile.in	2008-08-14 16:22:21.000000000 +0200
-@@ -79,18 +79,22 @@
+@@ -79,18 +79,26 @@
  OS_LIBS = -lc
  endif
  
++ifeq ($(OS_ARCH),FreeBSD)
++MKSHLIB += -Wl,-z,origin -Wl,-rpath,\$$ORIGIN:\$$ORIGIN/../ure-link/lib
++endif
++
 +ifeq ($(OS_ARCH),Linux)
-+MKSHLIB += -Wl,-rpath,\$$ORIGIN:\$$ORIGIN/../ure-link/lib
++MKSHLIB += -Wl,-z,origin -Wl,-rpath,\$$ORIGIN:\$$ORIGIN/../ure-link/lib
 +endif
 +
  ifeq ($(OS_ARCH),SunOS)
@@ -5821,12 +5832,16 @@
  # dependencies in the same directory where it resides.
 --- misc/mozilla/nsprpub/lib/libc/src/Makefile.in	2006-12-22 14:47:17.000000000 +0100
 +++ misc/build/mozilla/nsprpub/lib/libc/src/Makefile.in	2008-08-14 16:22:21.000000000 +0200
-@@ -89,18 +89,22 @@
+@@ -89,18 +89,26 @@
  OS_LIBS = -lc
  endif
  
++ifeq ($(OS_ARCH),FreeBSD)
++MKSHLIB += -Wl,-z,origin -Wl,-rpath,\$$ORIGIN:\$$ORIGIN/../ure-link/lib
++endif
++
 +ifeq ($(OS_ARCH),Linux)
-+MKSHLIB += -Wl,-rpath,\$$ORIGIN:\$$ORIGIN/../ure-link/lib
++MKSHLIB += -Wl,-z,origin -Wl,-rpath,\$$ORIGIN:\$$ORIGIN/../ure-link/lib
 +endif
 +
  ifeq ($(OS_ARCH),SunOS)
@@ -5885,7 +5900,7 @@
  
  DSO_CFLAGS		= -fPIC
  DSO_LDOPTS		= -shared $(ARCHFLAG)
-+DSO_LDOPTS		+= -Wl,-rpath,\$$ORIGIN:\$$ORIGIN/../ure-link/lib
++DSO_LDOPTS		+= -Wl,-z,origin -Wl,-rpath,\$$ORIGIN:\$$ORIGIN/../ure-link/lib
  DSO_LDFLAGS		=
  LDFLAGS			+= $(ARCHFLAG)
  

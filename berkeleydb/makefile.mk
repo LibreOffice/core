@@ -89,14 +89,14 @@ CXXFLAGS+=-g
 .ENDIF
 
 .IF "$(GUI)"=="UNX"
-.IF "$(OS)$(COM)"=="LINUXGCC"
-LDFLAGS:=-Wl,-rpath,'$$$$ORIGIN'
+.IF "$(OS)$(COM)"=="LINUXGCC" || "$(OS)$(COM)"=="FREEBSDGCC"
+LDFLAGS:=-Wl,-z,origin -Wl,-rpath,'$$$$ORIGIN'
 .EXPORT: LDFLAGS
 #The current dir when linking is unxlngi6.pro/misc/build/db-4.2.52.NC/out
 # the map file is in  unxlngi6.pro/misc/build/db-4.2.52.NC
 LDFLAGSVERSION:= -Wl,--version-script=../db_4_7_gcc4.map
 .EXPORT: LDFLAGSVERSION
-.ENDIF                  # "$(OS)$(COM)"=="LINUXGCC"
+.ENDIF                  # "$(OS)$(COM)"=="LINUXGCC" || "$(OS)$(COM)"=="FREEBSDGCC"
 .IF "$(OS)$(COM)"=="SOLARISC52"
 LDFLAGS:=$(ARCH_FLAGS) -R\''$$$$ORIGIN'\'
 .EXPORT: LDFLAGS

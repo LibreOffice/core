@@ -137,7 +137,7 @@ OUT2INC+=src$/cairo-quartz.h
 .ELSE
 # ----------- Unix ---------------------------------------------------------
 .IF "$(OS)$(COM)"=="LINUXGCC" || "$(OS)$(COM)"=="FREEBSDGCC"
-cairo_LDFLAGS+=-Wl,-rpath,\$$$$ORIGIN:\$$$$ORIGIN/../ure-link/lib -Wl,-z,noexecstack
+cairo_LDFLAGS+=-Wl,-z,origin -Wl,-rpath,\$$$$ORIGIN:\$$$$ORIGIN/../ure-link/lib -Wl,-z,noexecstack
 .ELIF "$(OS)$(COM)"=="SOLARISC52"
 cairo_LDFLAGS+=-Wl,-R\$$$$ORIGIN:\$$$$ORIGIN/../ure-link/lib
 .ENDIF  # "$(OS)$(COM)"=="LINUXGCC" || "$(OS)$(COM)"=="FREEBSDGCC"

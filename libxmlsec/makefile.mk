@@ -154,8 +154,8 @@ xmlsec_CPPFLAGS+=$(EXTRA_CDEFS)
 .ENDIF
 
 .IF "$(OS)$(COM)"=="LINUXGCC" || "$(OS)$(COM)"=="FREEBSDGCC"
-xmlsec_LDFLAGS+=-Wl,-rpath,'$$$$ORIGIN:$$$$ORIGIN/../ure-link/lib'
-.ENDIF			# "$(OS)$(COM)"=="LINUXGCC"
+xmlsec_LDFLAGS+=-Wl,-z,origin -Wl,-rpath,'$$$$ORIGIN:$$$$ORIGIN/../ure-link/lib'
+.ENDIF			# "$(OS)$(COM)"=="LINUXGCC" || "$(OS)$(COM)"=="FREEBSDGCC"
 .IF "$(OS)$(COM)"=="SOLARISC52"
 xmlsec_LDFLAGS+=-Wl,-R'$$$$ORIGIN:$$$$ORIGIN/../ure-link/lib'
 .ENDIF			# "$(OS)$(COM)"=="SOLARISC52"
