@@ -462,7 +462,7 @@ AnimationBaseNode::fillCommonParameters() const
     // calc accel/decel:
     double nAcceleration = 0.0;
     double nDeceleration = 0.0;
-    en    for ( boost::shared_ptr<BaseNode> pNode( pSelf );
+    for ( boost::shared_ptr<BaseNode> pNode( pSelf );
           pNode; pNode = pNode->getParentNode() )
     {
         uno::Reference<animations::XAnimationNode> const xAnimationNode(
