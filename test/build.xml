@@ -23,18 +23,17 @@
 
 
 <project basedir="." default="test">
-    <property file="build.properties" />
     <property environment="env" />
-
-    <property name="env.INPATH" value="output"/>
-    <property name="classes" value="${env.INPATH}/class" />
-    <property name="dist" value="${env.INPATH}/dist" />
-
-    <property name="env.TESTSPACE" value="testspace" />
-    <property name="env.JUNIT_HOME" value="${env.INPATH}/junit" />
+    <property file="build.properties" />
+    <property name="env.DISPLAY" value=":0.0"/>
+    <property name="env.INPATH" value="testspace"/>
+    <property name="env.TESTSPACE" value="${env.INPATH}" />
+    <property name="env.JUNIT_HOME" value="external/junit" />
     <property name="junit.home" value="${env.JUNIT_HOME}" />
     <property name="testspace" value="${env.TESTSPACE}" />
-    <property name="test.classes" value="testsuite/gui/BVT.class" />
+    <property name="classes" value="${testspace}/class" />
+    <property name="dist" value="${testspace}/dist" />
+    <property name="test.classes" value="testcase/gui/SmokeTest.class,testcase/gui/BVTFileType.class,testcase/gui/BVTFunction.class" />
     <property name="test.output" value="${testspace}/output" />
     <property name="test.result" value="${test.output}/result" />
     <property name="test.report" value="${test.output}/report" />
@@ -115,7 +114,7 @@
     </target>
 
     <target name="clean" description="Clean all output">
-        <delete dir="${env.INPATH}" />
+        <delete dir="${testspace}" />
     </target>
 
     <target name="check.junit">
@@ -180,21 +179,20 @@
     </target>
 
     <target name="download.build" unless="download.build.skip" description="Download the specified build from the remote server">
-        <script language="javascript">
-                        value = project.getProperty("openoffice.archive.url");
-                        resolvedValue = project.replaceProperties(value);
-                        project.setProperty("openoffice.archive.url", resolvedValue);
-        </script>
-        <echo>Archive address: ${openoffice.archive.url}</echo>
+        <echo message="openoffice.archive.url.resolved=${openoffice.archive.url}" file="${testspace}/.temp.properties" />
+        <property file="${testspace}/.temp.properties"/>
+        <echo>Archive address: ${openoffice.archive.url.resolved}</echo>
         <property name="openoffice.archive.dir" value="${testspace}/download/${openoffice.build}" />
         <mkdir dir="${openoffice.archive.dir}" />
-        <get src="${openoffice.archive.url}" dest="${openoffice.archive.dir}" verbose="false" usetimestamp="true" skipexisting="true" />
+        <get src="${openoffice.archive.url.resolved}" dest="${openoffice.archive.dir}" verbose="false" usetimestamp="true" skipexisting="true" />
     </target>
 
     <target name="install.build" unless="install.build.skip" description="Install the build to the local">
-        <property name="openoffice.installation.dir" value="${testspace}/installation/${openoffice.build}" />
-        <mkdir dir="${openoffice.installation.dir}" />
-        <unzip dest="${openoffice.installation.dir}">
+        <property name="openoffice.installation.dir" value="${testspace}/install/${openoffice.build}" />
+        <property name="openoffice.installation.dest" value="${testspace}/install/dest" />
+        <delete dir="${openoffice.installation.dest}"/>
+        <mkdir dir="${openoffice.installation.dest}" />
+        <unzip dest="${openoffice.installation.dest}">
             <fileset dir="${openoffice.archive.dir}">
                 <include name="**/Apache_OpenOffice*.zip" />
             </fileset>
@@ -204,9 +202,21 @@
                 <fileset dir="${openoffice.archive.dir}" includes="Apache_OpenOffice*.gz" />
             </path>
         </pathconvert>
-        <exec dir="${openoffice.installation.dir}" executable="tar" failifexecutionfails="false">
+        <exec dir="${openoffice.installation.dest}" executable="tar" failifexecutionfails="false">
             <arg line="-zxf ${gz.files}" />
         </exec>
+
+        <pathconvert property="openoffice.12.dir" pathsep=" " setonempty="false">
+            <path>
+                <dirset dir="${openoffice.installation.dest}">
+                    <include name="*"/>
+                </dirset>
+            </path>
+        </pathconvert>
+
+        <move file="${openoffice.12.dir}" tofile="${openoffice.installation.dir}"/>
+        <delete dir="${openoffice.installation.dest}"/>
+
         <pathconvert property="openoffice.bin" pathsep=" " setonempty="false">
             <path>
                 <fileset dir="${openoffice.installation.dir}" includes="**/*/soffice.bin" followsymlinks="false" />
@@ -229,6 +239,7 @@
         <mkdir dir="${test.output}/temp" />
 
         <junit fork="yes" forkmode="once" tempdir="${test.output}/temp" printsummary="yes" showoutput="false" errorProperty="test.failed" failureProperty="test.failed" dir=".">
+            <env key="DISPLAY" value="${env.DISPLAY}"/>
             <sysproperty key="openoffice.home" value="${openoffice.home}" />
             <sysproperty key="testspace" value="${testspace}" />
             <syspropertyset>
@@ -264,25 +275,17 @@
     </target>
 
     <target name="report.test" unless="report.test.skip" description="Upload the testing result to report repository.">
-        <exec executable="hostname" outputproperty="host.name" />
-        <property name="report.to" value="${openoffice.build}_${host.name}" />
-        <!--
-        <echo>Sending report to ${report.repos.server}/${report.repos.dir}/${report.to}</echo>
-        <ftp server="${report.repos.server}" remotedir="${report.repos.dir}/${report.to}" userid="${report.repos.user}" password="${report.repos.password}" action="mkdir" />
-        <ftp server="${report.repos.server}" remotedir="${report.repos.dir}/${report.to}" userid="${report.repos.user}" password="${report.repos.password}" depends="yes">
-            <fileset dir="${test.output}">
-            </fileset>
-        </ftp>
-        -->
+        <property name="report.to" value="r${openoffice.Revision}/${os.name}-${os.version}-${os.arch}" />
         <echo>Uploading report to ${report.repos}/${report.to}</echo>
-        <tempfile property="report.to.temp" suffix=".output" destDir="${testspace}" deleteonexit="true"/>
+        <property name="report.to.temp" location="${testspace}/.temp.ouput"/>
+        <delete dir="${report.to.temp}" deleteonexit="true"/>
         <copy todir="${report.to.temp}/${report.to}">
             <fileset dir="${test.output}" />
         </copy>
-
-        <scp todir="${report.repos}">
+        <scp todir="${report.repos}" trust="true">
             <fileset dir="${report.to.temp}"/>
         </scp>
+        <delete dir="${report.to.temp}" deleteonexit="true"/>
     </target>
 
     <target name="detect.build" depends="find.build" description="Check if new build is available. If no new build is available, the target will be failed.">

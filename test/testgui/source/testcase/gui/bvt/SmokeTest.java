@@ -21,17 +21,18 @@
 
 
 
-package testcase.gui;
+package testcase.gui.bvt;
 
-import static org.openoffice.test.common.Testspace.*;
-import static org.junit.Assert.*;
-import static org.openoffice.test.common.FileUtil.*;
-import static testlib.gui.AppUtil.*;
-import static testlib.gui.UIMap.*;
+import static org.junit.Assert.assertTrue;
+import static org.openoffice.test.common.FileUtil.readFileAsString;
+import static org.openoffice.test.common.Testspace.prepareData;
+import static testlib.gui.AppUtil.submitOpenDlg;
+import static testlib.gui.UIMap.app;
+import static testlib.gui.UIMap.oo;
+import static testlib.gui.UIMap.writer;
 
 import java.io.File;
 
-import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Rule;

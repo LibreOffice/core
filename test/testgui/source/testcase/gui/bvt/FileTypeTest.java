@@ -22,7 +22,7 @@
 /**
  *
  */
-package testcase.gui;
+package testcase.gui.bvt;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -63,7 +63,7 @@ import testlib.gui.Log;
 /**
  *
  */
-public class BVTFileType {
+public class FileTypeTest {
 
     @Rule
     public Log LOG = new Log();

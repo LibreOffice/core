@@ -739,6 +739,18 @@ h6 {
 <!-- method header -->
 <xsl:template name="testcase.test.header">
     <xsl:param name="show.class" select="''"/>
+     <script type="text/javascript" language="JavaScript"><![CDATA[
+        function showScreenshot(pack, name) {
+        	if (pack) {
+        	    pack = pack.replace(new RegExp("[^.]+", "g"), "./");
+        		location.href= "." + pack + "../screenshot/" + name;
+        	} else {
+        		location.href="../screenshot/" + name;
+        	}
+        	
+        }
+      ]]>
+    </script>
     <tr valign="top">
 	<xsl:if test="boolean($show.class)">
 	    <th>Class</th>
@@ -807,7 +819,7 @@ h6 {
         </xsl:attribute>
 	<xsl:variable name="class.href">
 	    <xsl:value-of select="concat(translate(../@package,'.','/'), '/', ../@id, '_', ../@name, '.html')"/>
-	</xsl:variable>
+	</xsl:variable>	
 	<xsl:if test="boolean($show.class)">
 	    <td><a href="{$class.href}"><xsl:value-of select="../@name"/></a></td>
 	</xsl:if>
@@ -843,17 +855,21 @@ h6 {
         </td>
 
 		<!-- Added by AOO -->
+
 		<td>
-			<xsl:variable name="screenshot.dir">
-				<xsl:if test="not(boolean($show.class))">../../screenshot</xsl:if>
-				<xsl:if test="boolean($show.class)">../screenshot</xsl:if>
+			<xsl:variable name="screenshot.path">
+				<xsl:if test="not(boolean($show.class))">
+					<xsl:value-of select="../@package"/>
+				</xsl:if>
+				<xsl:if test="boolean($show.class)"></xsl:if>
 			</xsl:variable>
+	
 			<xsl:choose>
 				<xsl:when test="failure">
-					<a href="{$screenshot.dir}/{@classname}.{@name}.failure.png">screenshot</a>
+					<a href="javascript:showScreenshot('{$screenshot.path}','{@classname}.{@name}.failure.png')">screenshot</a>
 				</xsl:when>
 				<xsl:when test="error">
-					<a href="{$screenshot.dir}/{@classname}.{@name}.error.png">screenshot</a>
+					<a href="javascript:showScreenshot('{$screenshot.path}','{@classname}.{@name}.error.png')">screenshot</a>
 				</xsl:when>
 				<xsl:otherwise>
 				</xsl:otherwise>

@@ -22,7 +22,7 @@
 /**
  *
  */
-package testcase.gui;
+package testcase.gui.bvt;
 
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
@@ -103,7 +103,7 @@ import testlib.gui.Log;
 /**
  *
  */
-public class BVTFunction {
+public class BasicFunctionTest {
 
     @Rule
     public Log LOG = new Log();
