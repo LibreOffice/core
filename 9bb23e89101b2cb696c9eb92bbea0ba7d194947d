@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAN3///tc\u003d",
+        "filename": "cui/source/options/optgenrl.src",
+        "patchSetId": 1
+      },
+      "lineNbr": 217,
+      "author": {
+        "id": 1000028
+      },
+      "writtenOn": "2012-08-29T20:56:58Z",
+      "side": 1,
+      "message": "Would you mind removing this string, too? I don\u0027t think it is of any use in LibreOffice.",
+      "revId": "9bb23e89101b2cb696c9eb92bbea0ba7d194947d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
