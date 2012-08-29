@@ -31,12 +31,13 @@
 #include <docstat.hxx>
 #include <dialog.hrc>
 #include <cmdid.h>
-#include "vcl/msgbox.hxx" // RET_CANCEL
 #include <swmodule.hxx>
 #include <wview.hxx>
-#include <sfx2/viewfrm.hxx>
 #include <swwait.hxx>
 #include <wrtsh.hxx>
+#include <comphelper/string.hxx>
+#include <sfx2/viewfrm.hxx>
+#include <vcl/msgbox.hxx>
 
 IMPL_LINK_NOARG(SwWordCountFloatDlg, CloseHdl)
 {   
@@ -53,14 +54,23 @@ SwWordCountFloatDlg::~SwWordCountFloatDlg()
     ViewShell::SetCareWin( 0 );
 }
 
+namespace
+{
+    void setValue(FixedText *pWidget, sal_uLong nValue)
+    {
+        rtl::OUString sValue(rtl::OUString::valueOf(static_cast<sal_Int64>(nValue)));
+        pWidget->SetText(sValue);
+    }
+}
+
 void SwWordCountFloatDlg::SetValues(const SwDocStat& rCurrent, const SwDocStat& rDoc)
 {
-    m_pCurrentWordFT->SetText(rtl::OUString::valueOf(static_cast<sal_Int64>(rCurrent.nWord)));
-    m_pCurrentCharacterFT->SetText(rtl::OUString::valueOf(static_cast<sal_Int64>(rCurrent.nChar)));
-    m_pCurrentCharacterExcludingSpacesFT->SetText(rtl::OUString::valueOf(static_cast<sal_Int64>(rCurrent.nCharExcludingSpaces)));
-    m_pDocWordFT->SetText(rtl::OUString::valueOf(static_cast<sal_Int64>(rDoc.nWord)));
-    m_pDocCharacterFT->SetText(rtl::OUString::valueOf(static_cast<sal_Int64>(rDoc.nChar)));
-    m_pDocCharacterExcludingSpacesFT->SetText(rtl::OUString::valueOf(static_cast<sal_Int64>(rDoc.nCharExcludingSpaces)));
+    setValue(m_pCurrentWordFT, rCurrent.nWord);
+    setValue(m_pCurrentCharacterFT, rCurrent.nChar);
+    setValue(m_pCurrentCharacterExcludingSpacesFT, rCurrent.nCharExcludingSpaces);
+    setValue(m_pDocWordFT, rDoc.nWord);
+    setValue(m_pDocCharacterFT, rDoc.nChar);
+    setValue(m_pDocCharacterExcludingSpacesFT, rDoc.nCharExcludingSpaces);
 }
 
 //TODO, add asian/non-asian word count to UI when CJK mode is enabled.
@@ -77,6 +87,15 @@ SwWordCountFloatDlg::SwWordCountFloatDlg(SfxBindings* _pBindings,
     m_pUIBuilder->get(m_pDocCharacterFT, "docchars");
     m_pUIBuilder->get(m_pDocCharacterExcludingSpacesFT, "doccharsnospaces");
     m_pUIBuilder->get(m_pClosePB, "close");
+
+    long nPrefWidth = m_pCurrentWordFT->get_preferred_size().Width();
+
+    m_pCurrentWordFT->set_width_request(nPrefWidth);
+    m_pCurrentCharacterFT->set_width_request(nPrefWidth);
+    m_pCurrentCharacterExcludingSpacesFT->set_width_request(nPrefWidth);
+    m_pDocWordFT->set_width_request(nPrefWidth);
+    m_pDocCharacterFT->set_width_request(nPrefWidth);
+    m_pDocCharacterExcludingSpacesFT->set_width_request(nPrefWidth);
 
     Initialize(pInfo);
 
