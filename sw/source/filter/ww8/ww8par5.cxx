@@ -1494,6 +1494,12 @@ eF_ResT SwWW8ImplReader::Read_F_Seq( WW8FieldDesc*, String& rStr )
                         SwSetExpFieldType( &rDoc, aSequenceName, nsSwGetSetExpType::GSE_SEQ ) );
     SwSetExpField aFld( pFT, aEmptyStr, eNumFormat );
 
+    //Bug 120654: Add for /h flag(/h: Hiden the field result.)
+    if (bHidden)
+    aFld.SetSubType(aFld.GetSubType() | nsSwExtendedSubType::SUB_INVISIBLE);
+    //Bug 120654(End)
+
+
     if (sStart.Len())
         aFld.SetFormula( ( aSequenceName += '=' ) += sStart );
     else if (!bCountOn)
