@@ -37,7 +37,7 @@
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>
-#include <com/sun/star/util/XNumberFormatter.hpp>
+#include <com/sun/star/util/NumberFormatter.hpp>
 #include <com/sun/star/sdb/XCompletedConnection.hpp>
 #include <com/sun/star/sdb/XCompletedExecution.hpp>
 #include <com/sun/star/container/XChild.hpp>
@@ -235,12 +235,8 @@ struct SwNewDBMgr_Impl
 
 void lcl_InitNumberFormatter(SwDSParam& rParam, uno::Reference<XDataSource> xSource)
 {
-    uno::Reference<XMultiServiceFactory> xMgr = ::comphelper::getProcessServiceFactory();
-    if( xMgr.is() )
-    {
-        uno::Reference<XInterface> xInstance = xMgr->createInstance( C2U( "com.sun.star.util.NumberFormatter" ));
-        rParam.xFormatter = uno::Reference<util::XNumberFormatter>(xInstance, UNO_QUERY) ;
-    }
+    uno::Reference<XComponentContext> xContext = ::comphelper::getProcessComponentContext();
+    rParam.xFormatter = uno::Reference<util::XNumberFormatter>(util::NumberFormatter::create(xContext), UNO_QUERY);
     if(!xSource.is())
         xSource = SwNewDBMgr::getDataSourceAsParent(rParam.xConnection, rParam.sDataSource);
 

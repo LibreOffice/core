@@ -31,6 +31,7 @@
 #include <toolkit/helper/property.hxx>
 
 #include <com/sun/star/awt/XVclWindowPeer.hpp>
+#include <com/sun/star/util/NumberFormatter.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 
 #include <tools/diagnose_ex.h>
@@ -251,7 +252,7 @@ namespace toolkit
             if ( !m_xCachedFormatter.is() )
             {
                 m_xCachedFormatter = Reference< XNumberFormatter >(
-                    ::comphelper::createProcessComponent( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.NumberFormatter" ) ) ),
+                    NumberFormatter::create(::comphelper::getProcessComponentContext()),
                     UNO_QUERY_THROW
                 );
             }

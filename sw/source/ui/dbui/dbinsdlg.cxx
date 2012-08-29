@@ -46,7 +46,7 @@
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/sdbc/ResultSetType.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/util/XNumberFormatter.hpp>
+#include <com/sun/star/util/NumberFormatter.hpp>
 #include <com/sun/star/util/XNumberFormatTypes.hpp>
 #include <com/sun/star/sdbc/XRowSet.hpp>
 #include <comphelper/processfactory.hxx>
@@ -108,13 +108,13 @@ namespace swui
 }
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdbcx;
-using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::uno;
 
 const char cDBFldStart  = '<';
 const char cDBFldEnd    = '>';
@@ -1226,11 +1226,8 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
             // every data set
             SwDBFormatData aDBFormatData;
             Reference< XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
-            if( xMgr.is() )
-            {
-                Reference<XInterface> xInstance = xMgr->createInstance( C2U( "com.sun.star.util.NumberFormatter" ));
-                aDBFormatData.xFormatter = Reference<util::XNumberFormatter>(xInstance, UNO_QUERY) ;
-            }
+            Reference< XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
+            aDBFormatData.xFormatter = Reference<util::XNumberFormatter>(util::NumberFormatter::create(xContext), UNO_QUERY_THROW) ;
 
             Reference<XPropertySet> xSourceProps(xSource, UNO_QUERY);
             if(xSourceProps.is())

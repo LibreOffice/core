@@ -41,7 +41,7 @@
 #include <com/sun/star/sdbc/XResultSetMetaDataSupplier.hpp>
 #include <com/sun/star/sdbc/XParameters.hpp>
 #include <com/sun/star/uno/XAggregation.hpp>
-#include <com/sun/star/util/XNumberFormatter.hpp>
+#include <com/sun/star/util/NumberFormatter.hpp>
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
@@ -1755,8 +1755,7 @@ Sequence< Sequence< PropertyValue > > OSingleSelectQueryComposer::getStructuredC
             if ( pCondition )
             {
                 ::std::vector< ::std::vector < PropertyValue > > aFilters;
-                Reference< XNumberFormatter > xFormatter;
-                m_aContext.createComponent( "com.sun.star.util.NumberFormatter", xFormatter );
+                Reference< XNumberFormatter > xFormatter( NumberFormatter::create(m_aContext.getUNOContext()), UNO_QUERY_THROW );
                 xFormatter->attachNumberFormatsSupplier( m_xNumberFormatsSupplier );
 
                 if (setORCriteria(pCondition, m_aAdditiveIterator, aFilters, xFormatter))

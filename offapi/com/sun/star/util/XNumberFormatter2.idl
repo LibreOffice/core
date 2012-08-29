@@ -16,21 +16,30 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef __com_sun_star_util_NumberFormatter_idl__
-#define __com_sun_star_util_NumberFormatter_idl__
+#ifndef __com_sun_star_util_XNumberFormatter2_idl__
+#define __com_sun_star_util_XNumberFormatter2_idl__
 
-#include <com/sun/star/util/XNumberFormatter2.idl>
-
+#include <com/sun/star/util/XNumberFormatter.idl>
+#include <com/sun/star/util/XNumberFormatPreviewer.idl>
 
 module com {  module sun {  module star {  module util {
 
+/** Provides a unified interface for the NumberFormatter service to implement.
+*/
+published interface XNumberFormatter2
+{
 
-/** represents an object which can format numbers and strings.
+    /** is used to format or parse numbers using formats from a
+        <type>NumberFormats</type> object.
+     */
+    interface com::sun::star::util::XNumberFormatter;
 
-    <p>A NumberFormatter, if available, can be created by the global
-    service manager.</p>
- */
-published service NumberFormatter : XNumberFormatter2;
+    /** is used to format numbers using a number format string
+        that is not inserted into a <type>NumberFormats</type> object.
+     */
+    interface com::sun::star::util::XNumberFormatPreviewer;
+
+};
 
 
 }; }; }; };

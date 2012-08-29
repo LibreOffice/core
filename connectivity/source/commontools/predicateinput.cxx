@@ -23,6 +23,7 @@
 #include <connectivity/dbtools.hxx>
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/sdbc/ColumnValue.hpp>
+#include <com/sun/star/util/NumberFormatter.hpp>
 #include <osl/diagnose.h>
 #include <connectivity/sqlnode.hxx>
 #include <connectivity/PColumn.hxx>
@@ -38,8 +39,10 @@ namespace dbtools
     using ::com::sun::star::sdbc::XConnection;
     using ::com::sun::star::lang::XMultiServiceFactory;
     using ::com::sun::star::util::XNumberFormatsSupplier;
+    using ::com::sun::star::util::NumberFormatter;
     using ::com::sun::star::util::XNumberFormatter;
     using ::com::sun::star::uno::UNO_QUERY;
+    using ::com::sun::star::uno::UNO_QUERY_THROW;
     using ::com::sun::star::beans::XPropertySet;
     using ::com::sun::star::beans::XPropertySetInfo;
     using ::com::sun::star::lang::Locale;
@@ -105,16 +108,16 @@ namespace dbtools
             OSL_ENSURE( m_xORB.is(), "OPredicateInputController::OPredicateInputController: need a service factory!" );
             if ( m_xORB.is() )
             {
-                m_xFormatter = Reference< XNumberFormatter >( m_xORB->createInstance(
-                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.NumberFormatter" ) ) ),
-                    UNO_QUERY
+                m_xFormatter = Reference< XNumberFormatter >(
+                    NumberFormatter::create(comphelper::ComponentContext(m_xORB).getUNOContext()),
+                    UNO_QUERY_THROW
                 );
             }
 
             Reference< XNumberFormatsSupplier >  xNumberFormats = ::dbtools::getNumberFormats( m_xConnection, sal_True );
             if ( !xNumberFormats.is() )
                 ::comphelper::disposeComponent( m_xFormatter );
-            else if ( m_xFormatter.is() )
+            else
                 m_xFormatter->attachNumberFormatsSupplier( xNumberFormats );
 
             // create the locale data

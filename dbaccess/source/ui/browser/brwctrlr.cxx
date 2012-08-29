@@ -59,6 +59,7 @@
 #include <com/sun/star/sdbcx/XRowLocate.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <com/sun/star/uno/TypeClass.hpp>
+#include <com/sun/star/util/NumberFormatter.hpp>
 #include <com/sun/star/util/XCancellable.hpp>
 
 #include <comphelper/enumhelper.hxx>
@@ -83,6 +84,7 @@
 #include <vcl/msgbox.hxx>
 #include <vcl/waitobj.hxx>
 
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::sdb;
@@ -775,10 +777,9 @@ void SbaXDataBrowserController::initFormatter()
     if(xSupplier.is())
     {
         // create a new formatter
-        m_xFormatter = Reference< ::com::sun::star::util::XNumberFormatter > (
-            getORB()->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.NumberFormatter"))), UNO_QUERY);
-        if (m_xFormatter.is())
-            m_xFormatter->attachNumberFormatsSupplier(xSupplier);
+        m_xFormatter = Reference< util::XNumberFormatter > (
+            util::NumberFormatter::create(comphelper::ComponentContext(getORB()).getUNOContext()), UNO_QUERY_THROW);
+        m_xFormatter->attachNumberFormatsSupplier(xSupplier);
     }
     else // clear the formatter
         m_xFormatter = NULL;

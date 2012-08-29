@@ -26,6 +26,7 @@
 #include <rtl/math.hxx>
 
 #include <com/sun/star/lang/XServiceName.hpp>
+#include <com/sun/star/util/NumberFormatter.hpp>
 
 using namespace ::com::sun::star;
 
@@ -140,13 +141,8 @@ OUString SAL_CALL RegressionCurveCalculator::getFormattedRepresentation(
     // create and prepare a number formatter
     if( !xNumFmtSupplier.is())
         return getRepresentation();
-    Reference< util::XNumberFormatter > xNumFormatter;
-    Reference< lang::XMultiServiceFactory > xFact( comphelper::getProcessServiceFactory(), uno::UNO_QUERY );
-    if( xFact.is())
-        xNumFormatter.set( xFact->createInstance(
-                               OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.NumberFormatter"))), uno::UNO_QUERY );
-    if( !xNumFormatter.is())
-        return getRepresentation();
+    Reference< uno::XComponentContext > xContext( comphelper::getProcessComponentContext(), uno::UNO_QUERY_THROW );
+    Reference< util::XNumberFormatter > xNumFormatter( util::NumberFormatter::create(xContext), uno::UNO_QUERY_THROW );
     xNumFormatter->attachNumberFormatsSupplier( xNumFmtSupplier );
 
     return ImplGetRepresentation( xNumFormatter, nNumberFormatKey );

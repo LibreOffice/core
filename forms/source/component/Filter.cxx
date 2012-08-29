@@ -53,6 +53,7 @@
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
+#include <com/sun/star/util/NumberFormatter.hpp>
 #include <com/sun/star/awt/XItemList.hpp>
 
 #include <comphelper/numbers.hxx>
@@ -131,9 +132,8 @@ namespace frm
 
             if ( xFormatSupplier.is() )
             {
-                maContext.createComponent( "com.sun.star.util.NumberFormatter", m_xFormatter );
-                if ( m_xFormatter.is() )
-                    m_xFormatter->attachNumberFormatsSupplier( xFormatSupplier );
+                m_xFormatter.set(NumberFormatter::create(maContext.getUNOContext()), UNO_QUERY_THROW );
+                m_xFormatter->attachNumberFormatsSupplier( xFormatSupplier );
             }
         }
         if ( !m_xFormatter.is() )

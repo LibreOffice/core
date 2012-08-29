@@ -86,6 +86,7 @@
 #include "dlgattr.hxx"
 #include <vcl/msgbox.hxx>
 #include <com/sun/star/container/XChild.hpp>
+#include <com/sun/star/util/NumberFormatter.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 #include <com/sun/star/util/XNumberFormatter.hpp>
 #include "dbu_misc.hrc"
@@ -114,6 +115,7 @@ namespace dbaui
 // .........................................................................
 using namespace ::dbtools;
 using namespace ::comphelper;
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::task;
 using namespace ::com::sun::star::sdbcx;
@@ -1622,10 +1624,9 @@ Reference< XNumberFormatter > getNumberFormatter(const Reference< XConnection >&
         if ( xSupplier.is() )
         {
             // create a new formatter
-            xFormatter = Reference< ::com::sun::star::util::XNumberFormatter > (
-                _rMF->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.NumberFormatter"))), UNO_QUERY);
-            if ( xFormatter.is() )
-                xFormatter->attachNumberFormatsSupplier(xSupplier);
+            xFormatter = Reference< util::XNumberFormatter > (
+                util::NumberFormatter::create(comphelper::ComponentContext(_rMF).getUNOContext()), UNO_QUERY_THROW);
+            xFormatter->attachNumberFormatsSupplier(xSupplier);
         }
     }
     catch(const Exception&)

@@ -33,8 +33,10 @@
 #include <com/sun/star/sdb/XDocumentDataSource.hpp>
 #include <com/sun/star/sdb/XOfficeDatabaseDocument.hpp>
 #include <com/sun/star/sdbc/XDataSource.hpp>
+#include <com/sun/star/util/NumberFormatter.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 
+#include <comphelper/componentcontext.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/types.hxx>
 #include <connectivity/dbexception.hxx>
@@ -64,6 +66,7 @@ namespace dbaui
     using ::com::sun::star::uno::UNO_QUERY;
     using ::com::sun::star::container::XChild;
     using ::com::sun::star::sdbc::XDataSource;
+    using ::com::sun::star::util::NumberFormatter;
     using ::com::sun::star::util::XNumberFormatter;
     using ::com::sun::star::util::XNumberFormatsSupplier;
     using ::com::sun::star::frame::XFrame;
@@ -294,8 +297,8 @@ namespace dbaui
             Reference< XNumberFormatsSupplier> xSupplier = ::dbtools::getNumberFormats(m_pImpl->m_xConnection);
             if(xSupplier.is())
             {
-                m_pImpl->m_xFormatter = Reference< XNumberFormatter >(getORB()
-                    ->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.NumberFormatter"))), UNO_QUERY);
+                m_pImpl->m_xFormatter = Reference< XNumberFormatter >(
+                    NumberFormatter::create(comphelper::ComponentContext(getORB()).getUNOContext()), UNO_QUERY_THROW);
                 m_pImpl->m_xFormatter->attachNumberFormatsSupplier(xSupplier);
             }
             OSL_ENSURE(m_pImpl->m_xFormatter.is(),"No NumberFormatter!");
