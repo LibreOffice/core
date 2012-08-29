@@ -224,6 +224,7 @@ public:
 
     void testFindAreaPosRowDown();
     void testFindAreaPosColRight();
+    void testSort();
 
     CPPUNIT_TEST_SUITE(Test);
     CPPUNIT_TEST(testCollator);
@@ -271,6 +272,7 @@ public:
     CPPUNIT_TEST(testCopyPasteFormulasExternalDoc);
     CPPUNIT_TEST(testFindAreaPosRowDown);
     CPPUNIT_TEST(testFindAreaPosColRight);
+    CPPUNIT_TEST(testSort);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -4877,6 +4879,49 @@ void Test::testFindAreaPosColRight()
 
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(1), nRow);
     CPPUNIT_ASSERT_EQUAL(static_cast<SCCOL>(6), nCol);
+
+    pDoc->DeleteTab(0);
+}
+
+void Test::testSort()
+{
+    ScDocument* pDoc = m_xDocShRef->GetDocument();
+    rtl::OUString aTabName1("test1");
+    pDoc->InsertTab(0, aTabName1);
+
+    const char* aData[][2] = {
+        { "2", "4" },
+        { "4", "1" },
+        { "1", "2" }
+    };
+
+    clearRange( pDoc, ScRange(0, 0, 0, 1, SAL_N_ELEMENTS(aData), 0));
+    ScAddress aPos(0,0,0);
+    ScRange aDataRange = insertRangeData( pDoc, aPos, aData, SAL_N_ELEMENTS(aData));
+    CPPUNIT_ASSERT_MESSAGE("failed to insert range data at correct position", aDataRange.aStart == aPos);
+
+    rtl::OUString aHello("Hello");
+    rtl::OUString aJimBob("Jim Bob");
+    ScAddress rAddr(1, 1, 0);
+    ScPostIt* pNote = m_pDoc->GetNotes(rAddr.Tab())->GetOrCreateNote(rAddr);
+    pNote->SetText(rAddr, aHello);
+    pNote->SetAuthor(aJimBob);
+
+    ScSortParam aSortData;
+    aSortData.nCol1 = 1;
+    aSortData.nCol2 = 1;
+    aSortData.nRow1 = 0;
+    aSortData.nRow2 = 2;
+    aSortData.maKeyState[0].bDoSort = true;
+    aSortData.maKeyState[0].nField = 1;
+
+    pDoc->Sort(0, aSortData, false, NULL);
+    double nVal = pDoc->GetValue(1,0,0);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(nVal, 1.0, 1e-8);
+
+    // check that note is also moved
+    pNote = m_pDoc->GetNotes(0)->findByAddress( 1, 0 );
+    CPPUNIT_ASSERT(pNote);
 
     pDoc->DeleteTab(0);
 }
