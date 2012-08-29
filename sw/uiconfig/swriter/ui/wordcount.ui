@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <!-- interface-requires gtk+ 3.0 -->
-  <object class="GtkDialog" id="dialog1">
+  <object class="GtkDialog" id="WordCountDialog">
     <property name="can_focus">False</property>
     <property name="border_width">5</property>
     <property name="type_hint">dialog</property>
@@ -13,8 +13,9 @@
         <child internal-child="action_area">
           <object class="GtkButtonBox" id="dialog-action_area1">
             <property name="can_focus">False</property>
+            <property name="layout_style">end</property>
             <child>
-              <object class="GtkButton" id="101">
+              <object class="GtkButton" id="help">
                 <property name="label">gtk-help</property>
                 <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
@@ -31,7 +32,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkButton" id="102">
+              <object class="GtkButton" id="close">
                 <property name="label">gtk-close</property>
                 <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
@@ -73,15 +74,15 @@
                     <property name="top_padding">7</property>
                     <property name="bottom_padding">5</property>
                     <property name="left_padding">5</property>
-                    <property name="right_padding">5</property>
                     <child>
                       <object class="GtkGrid" id="grid1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="hexpand">True</property>
                         <property name="row_spacing">2</property>
-                        <property name="column_spacing">100</property>
+                        <property name="column_spacing">10</property>
                         <child>
-                          <object class="GtkLabel" id="3">
+                          <object class="GtkLabel" id="label1">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="xalign">0</property>
@@ -96,24 +97,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkLabel" id="4">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="halign">center</property>
-                            <property name="valign">center</property>
-                            <property name="xalign">1</property>
-                            <property name="label" translatable="yes">0</property>
-                            <property name="justify">right</property>
-                          </object>
-                          <packing>
-                            <property name="left_attach">1</property>
-                            <property name="top_attach">0</property>
-                            <property name="width">1</property>
-                            <property name="height">1</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkLabel" id="5">
+                          <object class="GtkLabel" id="label2">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="xalign">0</property>
@@ -128,24 +112,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkLabel" id="6">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="halign">center</property>
-                            <property name="valign">end</property>
-                            <property name="xalign">1</property>
-                            <property name="label" translatable="yes">0</property>
-                            <property name="justify">right</property>
-                          </object>
-                          <packing>
-                            <property name="left_attach">1</property>
-                            <property name="top_attach">1</property>
-                            <property name="width">1</property>
-                            <property name="height">1</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkLabel" id="7">
+                          <object class="GtkLabel" id="label3">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="xalign">0</property>
@@ -160,13 +127,47 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkLabel" id="8">
+                          <object class="GtkLabel" id="selectwords">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="halign">center</property>
-                            <property name="valign">end</property>
+                            <property name="halign">end</property>
+                            <property name="hexpand">True</property>
                             <property name="xalign">1</property>
-                            <property name="label" translatable="yes">0</property>
+                            <property name="label">                0</property>
+                            <property name="justify">right</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">1</property>
+                            <property name="top_attach">0</property>
+                            <property name="width">1</property>
+                            <property name="height">1</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="selectchars">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="halign">end</property>
+                            <property name="hexpand">True</property>
+                            <property name="xalign">1</property>
+                            <property name="label">                0</property>
+                            <property name="justify">right</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">1</property>
+                            <property name="top_attach">1</property>
+                            <property name="width">1</property>
+                            <property name="height">1</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="selectcharsnospaces">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="halign">end</property>
+                            <property name="hexpand">True</property>
+                            <property name="xalign">1</property>
+                            <property name="label">                0</property>
                             <property name="justify">right</property>
                           </object>
                           <packing>
@@ -181,10 +182,10 @@
                   </object>
                 </child>
                 <child type="label">
-                  <object class="GtkLabel" id="1">
+                  <object class="GtkLabel" id="label4">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">&lt;b&gt;Current selection &lt;/b&gt;</property>
+                    <property name="label" translatable="yes">Current selection</property>
                     <property name="use_markup">True</property>
                   </object>
                 </child>
@@ -212,10 +213,11 @@
                       <object class="GtkGrid" id="grid2">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="hexpand">True</property>
                         <property name="row_spacing">2</property>
-                        <property name="column_spacing">100</property>
+                        <property name="column_spacing">10</property>
                         <child>
-                          <object class="GtkLabel" id="9">
+                          <object class="GtkLabel" id="label5">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="xalign">0</property>
@@ -230,7 +232,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkLabel" id="10">
+                          <object class="GtkLabel" id="label6">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="xalign">0</property>
@@ -245,7 +247,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkLabel" id="11">
+                          <object class="GtkLabel" id="label7">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="xalign">0</property>
@@ -260,12 +262,13 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkLabel" id="12">
+                          <object class="GtkLabel" id="docwords">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="halign">center</property>
+                            <property name="halign">end</property>
+                            <property name="hexpand">True</property>
                             <property name="xalign">1</property>
-                            <property name="label" translatable="yes">0</property>
+                            <property name="label">                0</property>
                             <property name="justify">right</property>
                           </object>
                           <packing>
@@ -276,12 +279,13 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkLabel" id="13">
+                          <object class="GtkLabel" id="docchars">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="halign">center</property>
+                            <property name="halign">end</property>
+                            <property name="hexpand">True</property>
                             <property name="xalign">1</property>
-                            <property name="label" translatable="yes">0</property>
+                            <property name="label">                0</property>
                             <property name="justify">right</property>
                           </object>
                           <packing>
@@ -292,12 +296,13 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkLabel" id="14">
+                          <object class="GtkLabel" id="doccharsnospaces">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="halign">center</property>
+                            <property name="halign">end</property>
+                            <property name="hexpand">True</property>
                             <property name="xalign">1</property>
-                            <property name="label" translatable="yes">0</property>
+                            <property name="label">                0</property>
                             <property name="justify">right</property>
                           </object>
                           <packing>
@@ -312,10 +317,10 @@
                   </object>
                 </child>
                 <child type="label">
-                  <object class="GtkLabel" id="2">
+                  <object class="GtkLabel" id="label8">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">&lt;b&gt;Whole document&lt;/b&gt;</property>
+                    <property name="label" translatable="yes">Whole document</property>
                     <property name="use_markup">True</property>
                   </object>
                 </child>
@@ -338,8 +343,8 @@
       </object>
     </child>
     <action-widgets>
-      <action-widget response="0">101</action-widget>
-      <action-widget response="0">102</action-widget>
+      <action-widget response="0">help</action-widget>
+      <action-widget response="0">close</action-widget>
     </action-widgets>
   </object>
 </interface>

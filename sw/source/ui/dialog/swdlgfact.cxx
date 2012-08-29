@@ -1539,24 +1539,14 @@ AbstractMarkFloatDlg * SwAbstractDialogFactory_Impl::CreateAuthMarkFloatDlg( int
     return 0;
 }
 
-AbstractSwWordCountFloatDlg * SwAbstractDialogFactory_Impl::CreateSwWordCountDialog( int nResId,
+AbstractSwWordCountFloatDlg * SwAbstractDialogFactory_Impl::CreateSwWordCountDialog(
                                                                               SfxBindings* pBindings,
                                                                               SfxChildWindow* pChild,
                                                                               Window *pParent,
-                                                                              SfxChildWinInfo* pInfo )
+                                                                              SfxChildWinInfo* pInfo)
 {
-    SwWordCountFloatDlg* pDlg=NULL;
-    switch ( nResId )
-    {
-        case DLG_WORDCOUNT :
-            pDlg = new SwWordCountFloatDlg( pBindings, pChild, pParent, pInfo );
-            break;
-        default:
-            break;
-    }
-    if ( pDlg )
-        return new AbstractSwWordCountFloatDlg_Impl( pDlg );
-    return 0;
+    SwWordCountFloatDlg* pDlg = new SwWordCountFloatDlg( pBindings, pChild, pParent, pInfo );
+    return new AbstractSwWordCountFloatDlg_Impl( pDlg );
 }
 
 //add for SwIndexMarkModalDlg begin

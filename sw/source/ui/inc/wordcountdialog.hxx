@@ -35,67 +35,26 @@ struct SwDocStat;
 #include <sfx2/childwin.hxx>
 #include "swabstdlg.hxx"
 
-class SwWordCountDialog
-{
-    VclVBox vbox;
-    VclVBox content_area;
-
-    VclHBox aCurrentSelection;
-    FixedText aCurrentSelectionText;
-    FixedLine aCurrentSelectionLine;
-
-    VclVBox aSelectionBox;
-    VclHBox aSelectionRow1;
-    FixedText aCurrentWordFT;
-    FixedInfo aCurrentWordFI;
-    VclHBox aSelectionRow2;
-    FixedText aCurrentCharacterFT;
-    FixedInfo aCurrentCharacterFI;
-    VclHBox aSelectionRow3;
-    FixedText aCurrentCharacterExcludingSpacesFT;
-    FixedInfo aCurrentCharacterExcludingSpacesFI;
-
-    VclHBox aDoc;
-    FixedText aDocText;
-    FixedLine aDocLine;
-
-    VclVBox aDocBox;
-    VclHBox aDocRow1;
-    FixedText aDocWordFT;
-    FixedInfo aDocWordFI;
-    VclHBox aDocRow2;
-    FixedText aDocCharacterFT;
-    FixedInfo aDocCharacterFI;
-    VclHBox aDocRow3;
-    FixedText aDocCharacterExcludingSpacesFT;
-    FixedInfo aDocCharacterExcludingSpacesFI;
-
-    FixedLine aBottomFL;
-
-    VclHButtonBox action_area;
-    OKButton aOK;
-    HelpButton aHelp;
-
-    void InitControls();
-
-public:
-    SwWordCountDialog(Dialog* pParent);
-    ~SwWordCountDialog();
-
-    void    SetValues(const SwDocStat& rCurrent, const SwDocStat& rDoc);
-
-    SW_DLLPRIVATE DECL_LINK( OkHdl,     void* );
-};
-
 class SwWordCountFloatDlg : public SfxModelessDialog
 {
-    SwWordCountDialog   aDlg;
     virtual void    Activate();
-    public:
+    void    SetValues(const SwDocStat& rCurrent, const SwDocStat& rDoc);
+
+    FixedText* m_pCurrentWordFT;
+    FixedText* m_pCurrentCharacterFT;
+    FixedText* m_pCurrentCharacterExcludingSpacesFT;
+    FixedText* m_pDocWordFT;
+    FixedText* m_pDocCharacterFT;
+    FixedText* m_pDocCharacterExcludingSpacesFT;
+    PushButton* m_pClosePB;
+
+    SW_DLLPRIVATE DECL_LINK( CloseHdl,     void* );
+public:
     SwWordCountFloatDlg(     SfxBindings* pBindings,
                              SfxChildWindow* pChild,
                              Window *pParent,
                              SfxChildWinInfo* pInfo);
+    ~SwWordCountFloatDlg();
     void    UpdateCounts();
 
     void    SetCounts(const SwDocStat &rCurrCnt, const SwDocStat &rDocStat);

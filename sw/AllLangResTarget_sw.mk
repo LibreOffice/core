@@ -115,7 +115,6 @@ $(eval $(call gb_SrsTarget_add_files,sw/res,\
     sw/source/ui/dialog/dialog.src \
     sw/source/ui/dialog/docstdlg.src \
     sw/source/ui/dialog/regionsw.src \
-    sw/source/ui/dialog/wordcountdialog.src \
     sw/source/ui/dochdl/dochdl.src \
     sw/source/ui/dochdl/selglos.src \
     sw/source/ui/docvw/annotation.src \

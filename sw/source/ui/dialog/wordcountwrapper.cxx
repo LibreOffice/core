@@ -28,7 +28,6 @@
 #include <wordcountdialog.hxx>
 #include <docstat.hxx>
 #include <dialog.hrc>
-#include <wordcountdialog.hrc>
 #include <cmdid.h>
 
 SFX_IMPL_CHILDWINDOW_WITHID(SwWordCountWrapper, FN_WORDCOUNT_DIALOG)
@@ -41,7 +40,7 @@ SwWordCountWrapper::SwWordCountWrapper(   Window *pParentWindow,
 {
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
     OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
-    pAbstDlg = pFact->CreateSwWordCountDialog( DLG_WORDCOUNT, pBindings, this, pParentWindow, pInfo );
+    pAbstDlg = pFact->CreateSwWordCountDialog(pBindings, this, pParentWindow, pInfo);
     OSL_ENSURE(pAbstDlg, "Dialog construction failed!");
     pWindow = pAbstDlg->GetWindow();
 

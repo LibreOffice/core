@@ -354,11 +354,8 @@ public:
                                     const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& _rxFrame,
                                                                         sal_uInt32 nResId
                                                                         ) = 0;
-    virtual AbstractSwWordCountFloatDlg* CreateSwWordCountDialog(int nResId,
-                                                    SfxBindings* pBindings,
-                                                       SfxChildWindow* pChild,
-                                                       Window *pParent,
-                                                    SfxChildWinInfo* pInfo) = 0;
+    virtual AbstractSwWordCountFloatDlg* CreateSwWordCountDialog(SfxBindings* pBindings,
+        SfxChildWindow* pChild, Window *pParent, SfxChildWinInfo* pInfo) = 0;
 
     virtual AbstractSwInsertAbstractDlg * CreateSwInsertAbstractDlg ( Window* pParent, int nResId) = 0; // add for SwInsertAbstractDlg
     virtual AbstractSwAsciiFilterDlg*  CreateSwAsciiFilterDlg ( Window* pParent, SwDocShell& rDocSh,

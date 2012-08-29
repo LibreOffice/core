@@ -519,7 +519,6 @@
 #define HID_MM_SENDMAILS_STATUSLB                               "SW_HID_MM_SENDMAILS_STATUSLB"
 #define HID_MAILMERGECHILD                                      "SW_HID_MAILMERGECHILD"
 #define HID_MM_CUSTOMFIELDS                                     "SW_HID_MM_CUSTOMFIELDS"
-#define HID_DLG_WORDCOUNT                                       "SW_HID_DLG_WORDCOUNT"
 #define HID_MM_MAILSTATUS_TLB                                   "SW_HID_MM_MAILSTATUS_TLB"
 #define HID_RETURN_TO_MAILMERGE                                 "SW_HID_RETURN_TO_MAILMERGE"
 #define HID_MM_SAVEWARNING                                      "SW_HID_MM_SAVEWARNING"
