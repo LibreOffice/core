@@ -177,7 +177,7 @@ if test -n "$with_android_ndk"; then
         AC_MSG_ERROR([Can't figure out the toolchain prefix])
     fi
 
-    test -z "$SYSBASE" && export SYSBASE=$ANDROID_NDK_HOME/platforms/android-9/arch-$android_cpu
+    test -z "$SYSBASE" && export SYSBASE=$ANDROID_NDK_HOME/platforms/android-8/arch-$android_cpu
     test -z "$AR" && AR=$ANDROID_ABI_PREBUILT_BIN/$android_gcc_prefix-ar
     test -z "$NM" && NM=$ANDROID_ABI_PREBUILT_BIN/$android_gcc_prefix-nm
     test -z "$OBJDUMP" && OBJDUMP=$ANDROID_ABI_PREBUILT_BIN/$android_gcc_prefix-objdump
@@ -194,7 +194,7 @@ if test -n "$with_android_ndk"; then
         ANDROID_APP_ABI=x86
         ANDROIDCFLAGS="-march=atom"
     fi
-    ANDROIDCFLAGS="$ANDROIDCFLAGS -Wno-psabi --sysroot $ANDROID_NDK_HOME/platforms/android-9/arch-$android_cpu -L$ANDROID_NDK_HOME/sources/cxx-stl/gnu-libstdc++/${ANDROID_NDK_TOOLCHAIN_VERSION_SUBDIR}libs/$ANDROID_APP_ABI"
+    ANDROIDCFLAGS="$ANDROIDCFLAGS -Wno-psabi --sysroot $ANDROID_NDK_HOME/platforms/android-8/arch-$android_cpu -L$ANDROID_NDK_HOME/sources/cxx-stl/gnu-libstdc++/${ANDROID_NDK_TOOLCHAIN_VERSION_SUBDIR}libs/$ANDROID_APP_ABI"
 
     # When using the 4.6 or newer toolchain, use the gold linker
     case "$with_android_ndk_toolchain_version" in
@@ -504,7 +504,7 @@ linux-android*)
     fi
 
     # Verify that the NDK and SDK options are proper
-    if test ! -f "$ANDROID_NDK_HOME/platforms/android-9/arch-arm/usr/lib/libc.a"; then
+    if test ! -f "$ANDROID_NDK_HOME/platforms/android-8/arch-arm/usr/lib/libc.a"; then
         AC_MSG_ERROR([the --with-android-ndk option does not point to an Android NDK])
     fi
 
