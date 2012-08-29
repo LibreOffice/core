@@ -152,18 +152,18 @@ SwTitlePageDlg::SwTitlePageDlg( Window *pParent ) :
         rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("modules/swriter/ui/titlepage.ui")) ),
     mpPageFmtDesc(0)
 {
-    m_pUIBuilder->get(m_pUseExistingPagesRB, "RB_USE_EXISTING_PAGES");
-    m_pUIBuilder->get(m_pPageCountNF, "NF_PAGE_COUNT");
-    m_pUIBuilder->get(m_pDocumentStartRB, "RB_DOCUMENT_START");
-    m_pUIBuilder->get(m_pPageStartRB, "RB_PAGE_START");
-    m_pUIBuilder->get(m_pPageStartNF, "NF_PAGE_START");
-    m_pUIBuilder->get(m_pRestartNumberingCB, "CB_RESTART_NUMBERING");
-    m_pUIBuilder->get(m_pRestartNumberingNF, "NF_RESTART_NUMBERING");
-    m_pUIBuilder->get(m_pSetPageNumberCB, "CB_SET_PAGE_NUMBER");
-    m_pUIBuilder->get(m_pSetPageNumberNF, "NF_SET_PAGE_NUMBER");
-    m_pUIBuilder->get(m_pPagePropertiesLB, "LB_PAGE_PROPERTIES");
-    m_pUIBuilder->get(m_pPagePropertiesPB, "PB_PAGE_PROPERTIES");
-    m_pUIBuilder->get(m_pOkPB, "PB_OK");
+    get(m_pUseExistingPagesRB, "RB_USE_EXISTING_PAGES");
+    get(m_pPageCountNF, "NF_PAGE_COUNT");
+    get(m_pDocumentStartRB, "RB_DOCUMENT_START");
+    get(m_pPageStartRB, "RB_PAGE_START");
+    get(m_pPageStartNF, "NF_PAGE_START");
+    get(m_pRestartNumberingCB, "CB_RESTART_NUMBERING");
+    get(m_pRestartNumberingNF, "NF_RESTART_NUMBERING");
+    get(m_pSetPageNumberCB, "CB_SET_PAGE_NUMBER");
+    get(m_pSetPageNumberNF, "NF_SET_PAGE_NUMBER");
+    get(m_pPagePropertiesLB, "LB_PAGE_PROPERTIES");
+    get(m_pPagePropertiesPB, "PB_PAGE_PROPERTIES");
+    get(m_pOkPB, "PB_OK");
 
     m_pOkPB->SetClickHdl(LINK(this, SwTitlePageDlg, OKHdl));
     m_pRestartNumberingCB->SetClickHdl(LINK(this, SwTitlePageDlg, RestartNumberingHdl));

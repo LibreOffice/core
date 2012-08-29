@@ -223,6 +223,14 @@ public:
     virtual ~VclBuilderContainer();
     static VclBuilder* overrideResourceWithUIXML(Window *pWindow, const ResId& rResId);
     static bool replace_buildable(Window *pParent, const ResId& rResId, Window &rReplacement);
+    template <typename T> T* get(T*& ret, rtl::OString sID)
+    {
+        return m_pUIBuilder->get<T>(ret, sID);
+    }
+    template <typename T /*=Window if we had c++11*/> T* get(rtl::OString sID)
+    {
+        return m_pUIBuilder->get<T>(sID);
+    }
 };
 
 

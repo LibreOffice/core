@@ -48,20 +48,20 @@ SwLineNumberingDlg::SwLineNumberingDlg(SwView *pVw)
         "modules/swriter/ui/linenumbering.ui" )
     , pSh(pVw->GetWrtShellPtr())
 {
-    m_pUIBuilder->get(m_pBodyContent, "content");
-    m_pUIBuilder->get(m_pDivIntervalFT, "every");
-    m_pUIBuilder->get(m_pDivIntervalNF, "linesspin");
-    m_pUIBuilder->get(m_pDivRowsFT, "lines");
-    m_pUIBuilder->get(m_pNumIntervalNF, "intervalspin");
-    m_pUIBuilder->get(m_pCharStyleLB, "styledropdown");
-    m_pUIBuilder->get(m_pFormatLB, "formatdropdown");
-    m_pUIBuilder->get(m_pPosLB, "positiondropdown");
-    m_pUIBuilder->get(m_pOffsetMF, "spacingspin");
-    m_pUIBuilder->get(m_pDivisorED, "textentry");
-    m_pUIBuilder->get(m_pCountEmptyLinesCB, "blanklines");
-    m_pUIBuilder->get(m_pCountFrameLinesCB, "linesintextframes");
-    m_pUIBuilder->get(m_pRestartEachPageCB, "restarteverynewpage");
-    m_pUIBuilder->get(m_pNumberingOnCB, "shownumbering");
+    get(m_pBodyContent, "content");
+    get(m_pDivIntervalFT, "every");
+    get(m_pDivIntervalNF, "linesspin");
+    get(m_pDivRowsFT, "lines");
+    get(m_pNumIntervalNF, "intervalspin");
+    get(m_pCharStyleLB, "styledropdown");
+    get(m_pFormatLB, "formatdropdown");
+    get(m_pPosLB, "positiondropdown");
+    get(m_pOffsetMF, "spacingspin");
+    get(m_pDivisorED, "textentry");
+    get(m_pCountEmptyLinesCB, "blanklines");
+    get(m_pCountFrameLinesCB, "linesintextframes");
+    get(m_pRestartEachPageCB, "restarteverynewpage");
+    get(m_pNumberingOnCB, "shownumbering");
 
     String sIntervalName = m_pDivIntervalFT->GetAccessibleName();
     sIntervalName += rtl::OUString("(");

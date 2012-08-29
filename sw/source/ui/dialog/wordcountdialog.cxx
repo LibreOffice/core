@@ -80,13 +80,13 @@ SwWordCountFloatDlg::SwWordCountFloatDlg(SfxBindings* _pBindings,
                                          SfxChildWinInfo* pInfo)
     : SfxModelessDialog(_pBindings, pChild, pParent, "WordCountDialog", "modules/swriter/ui/wordcount.ui")
 {
-    m_pUIBuilder->get(m_pCurrentWordFT, "selectwords");
-    m_pUIBuilder->get(m_pCurrentCharacterFT, "selectchars");
-    m_pUIBuilder->get(m_pCurrentCharacterExcludingSpacesFT, "selectcharsnospaces");
-    m_pUIBuilder->get(m_pDocWordFT, "docwords");
-    m_pUIBuilder->get(m_pDocCharacterFT, "docchars");
-    m_pUIBuilder->get(m_pDocCharacterExcludingSpacesFT, "doccharsnospaces");
-    m_pUIBuilder->get(m_pClosePB, "close");
+    get(m_pCurrentWordFT, "selectwords");
+    get(m_pCurrentCharacterFT, "selectchars");
+    get(m_pCurrentCharacterExcludingSpacesFT, "selectcharsnospaces");
+    get(m_pDocWordFT, "docwords");
+    get(m_pDocCharacterFT, "docchars");
+    get(m_pDocCharacterExcludingSpacesFT, "doccharsnospaces");
+    get(m_pClosePB, "close");
 
     long nPrefWidth = m_pCurrentWordFT->get_preferred_size().Width();
 
