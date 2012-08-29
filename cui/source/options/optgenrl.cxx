@@ -377,7 +377,7 @@ void SvxGeneralTabPage::SetAccessibleNames ()
         if (iBracket != -1)
             sList = sList.copy(iBracket + 1, sLabel.lastIndexOf(')') - iBracket - 1);
         // cutting at '/'s
-        int nIndex = 0;
+        sal_Int32 nIndex = 0;
         for (unsigned iField = rRow.nFirstField; iField != rRow.nLastField; ++iField)
         {
             // the token
