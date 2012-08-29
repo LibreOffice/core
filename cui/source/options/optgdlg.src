@@ -558,21 +558,41 @@ TabPage OFA_TP_LANGUAGES
         TabStop = TRUE ;
         Sort = TRUE;
     };
+    FixedImage FI_DATEPATTERNS
+    {
+        Pos = MAP_APPFONT ( 5 , 78 ) ;
+        Size = MAP_APPFONT ( 6 , 6 ) ;
+        Hide = TRUE;
+    };
+    FixedText FT_DATEPATTERNS
+    {
+        Pos = MAP_APPFONT ( 12 , 76 ) ;
+        Size = MAP_APPFONT ( 108 , 8 ) ;
+        Text [ en-US ] = "Date acceptance ~patterns";
+    };
+    Edit ED_DATEPATTERNS
+    {
+        HelpID = "cui:Edit:OFA_TP_LANGUAGES:ED_DATEPATTERNS";
+        Pos = MAP_APPFONT ( 123 , 74 ) ;
+        Size = MAP_APPFONT ( 125 , 12 ) ;
+        Border = TRUE ;
+        TabStop = TRUE ;
+    };
     FixedLine FL_LINGU_LANG
     {
-        Pos = MAP_APPFONT ( 6 , 77 ) ;
+        Pos = MAP_APPFONT ( 6 , 92 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
         Text [ en-US ] = "Default languages for documents";
     };
     FixedImage FI_WEST_LANG
     {
-        Pos = MAP_APPFONT ( 5 , 92 ) ;
+        Pos = MAP_APPFONT ( 5 , 107 ) ;
         Size = MAP_APPFONT ( 6 , 6 ) ;
         Hide = TRUE;
     };
     FixedText FT_WEST_LANG
     {
-        Pos = MAP_APPFONT ( 12 , 90 ) ;
+        Pos = MAP_APPFONT ( 12 , 105 ) ;
         Size = MAP_APPFONT ( 108 , 8 ) ;
         Text [ en-US ] = "Western";
     };
@@ -580,7 +600,7 @@ TabPage OFA_TP_LANGUAGES
     ListBox LB_WEST_LANG
     {
         HelpID = "cui:ListBox:OFA_TP_LANGUAGES:LB_WEST_LANG";
-        Pos = MAP_APPFONT ( 123 ,  88 ) ;
+        Pos = MAP_APPFONT ( 123 ,  103 ) ;
         Size = MAP_APPFONT ( 125 , 60 ) ;
         DropDown = TRUE ;
         Border = TRUE ;
@@ -589,20 +609,20 @@ TabPage OFA_TP_LANGUAGES
     };
     FixedImage FI_ASIAN_LANG
     {
-        Pos = MAP_APPFONT ( 5 , 108 ) ;
+        Pos = MAP_APPFONT ( 5 , 123 ) ;
         Size = MAP_APPFONT ( 6 , 6 ) ;
         Hide = TRUE;
     };
     FixedText FT_ASIAN_LANG
     {
-        Pos = MAP_APPFONT ( 12 , 106 ) ;
+        Pos = MAP_APPFONT ( 12 , 121 ) ;
         Size = MAP_APPFONT ( 108 , 8 ) ;
         Text [ en-US ] = "Asian";
     };
     ListBox LB_ASIAN_LANG
     {
         HelpID = "cui:ListBox:OFA_TP_LANGUAGES:LB_ASIAN_LANG";
-        Pos = MAP_APPFONT ( 123 , 104 ) ;
+        Pos = MAP_APPFONT ( 123 , 119 ) ;
         Size = MAP_APPFONT ( 125 , 60 ) ;
         DropDown = TRUE ;
         Border = TRUE ;
@@ -611,20 +631,20 @@ TabPage OFA_TP_LANGUAGES
     };
     FixedImage FI_COMPLEX_LANG
     {
-        Pos = MAP_APPFONT ( 5 , 124 ) ;
+        Pos = MAP_APPFONT ( 5 , 139 ) ;
         Size = MAP_APPFONT ( 6 , 6 ) ;
         Hide = TRUE;
     };
     FixedText FT_COMPLEX_LANG
     {
-        Pos = MAP_APPFONT ( 12 , 122 ) ;
+        Pos = MAP_APPFONT ( 12 , 137 ) ;
         Size = MAP_APPFONT ( 108 , 8 ) ;
         Text [ en-US ] = "C~TL";
     };
     ListBox LB_COMPLEX_LANG
     {
         HelpID = "cui:ListBox:OFA_TP_LANGUAGES:LB_COMPLEX_LANG";
-        Pos = MAP_APPFONT ( 123 , 120 ) ;
+        Pos = MAP_APPFONT ( 123 , 135 ) ;
         Size = MAP_APPFONT ( 125 , 60 ) ;
         DropDown = TRUE ;
         Border = TRUE ;
@@ -634,39 +654,39 @@ TabPage OFA_TP_LANGUAGES
     CheckBox CB_CURRENT_DOC
     {
         HelpID = "cui:CheckBox:OFA_TP_LANGUAGES:CB_CURRENT_DOC";
-        Pos = MAP_APPFONT ( 123 , 135 ) ;
+        Pos = MAP_APPFONT ( 123 , 150 ) ;
         Size = MAP_APPFONT ( 125 , RSC_CD_CHECKBOX_HEIGHT ) ;
         Text [ en-US ] = "For the current document only";
     };
     FixedLine FL_ENHANCED
     {
-        Pos = MAP_APPFONT ( 6 , 145 ) ;
+        Pos = MAP_APPFONT ( 6 , 160 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
         Text [ en-US ] = "Enhanced language support";
     };
     FixedImage FI_ASIANSUPPORT
     {
-        Pos = MAP_APPFONT ( 5 , 160 ) ;
+        Pos = MAP_APPFONT ( 5 , 175 ) ;
         Size = MAP_APPFONT ( 6 , 6 ) ;
         Hide = TRUE;
     };
     CheckBox CB_ASIANSUPPORT
     {
         HelpID = "cui:CheckBox:OFA_TP_LANGUAGES:CB_ASIANSUPPORT";
-        Pos = MAP_APPFONT ( 12 , 158 ) ;
+        Pos = MAP_APPFONT ( 12 , 173 ) ;
         Size = MAP_APPFONT ( 236 ,RSC_CD_CHECKBOX_HEIGHT ) ;
         Text [ en-US ] = "E~nabled for Asian languages";
     };
     FixedImage FI_CTLSUPPORT
     {
-        Pos = MAP_APPFONT ( 5 , 175 ) ;
+        Pos = MAP_APPFONT ( 5 , 190 ) ;
         Size = MAP_APPFONT ( 6 , 6 ) ;
         Hide = TRUE;
     };
     CheckBox CB_CTLSUPPORT
     {
         HelpID = "cui:CheckBox:OFA_TP_LANGUAGES:CB_CTLSUPPORT";
-        Pos = MAP_APPFONT ( 12 , 173 ) ;
+        Pos = MAP_APPFONT ( 12 , 188 ) ;
         Size = MAP_APPFONT ( 236 , RSC_CD_CHECKBOX_HEIGHT ) ;
         Text [ en-US ] = "Ena~bled for complex text layout (CTL)";
     };

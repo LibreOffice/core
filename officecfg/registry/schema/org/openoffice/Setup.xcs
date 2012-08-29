@@ -457,6 +457,14 @@
                 </info>
                 <value>true</value>
 			</prop>
+			<prop oor:name="DateAcceptancePatterns" oor:type="xs:string" oor:nillable="true">
+				<!-- UIHints: Tools - Options - Language Settings - Languages - Language of - Date acceptance patterns -->
+				<info>
+					<author>erAck</author>
+					<desc>Indicates the date acceptance patterns defined by the user. By default, this label is empty and the patterns defined in the ooSetupSystemLocale are used.</desc>
+				</info>
+				<value/>
+			</prop>
 		</group>
 		<group oor:name="Configuration">
 			<info>

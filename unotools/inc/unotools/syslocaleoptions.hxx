@@ -31,10 +31,11 @@
 #include <com/sun/star/lang/Locale.hpp>
 
 // bits for broadcasting hints of changes in a SfxSimpleHint, may be combined
-const sal_uLong SYSLOCALEOPTIONS_HINT_LOCALE    = 0x00000001;
-const sal_uLong SYSLOCALEOPTIONS_HINT_CURRENCY  = 0x00000002;
-const sal_uLong SYSLOCALEOPTIONS_HINT_UILOCALE  = 0x00000004;
-const sal_uLong SYSLOCALEOPTIONS_HINT_DECSEP    = 0x00000008;
+const sal_uLong SYSLOCALEOPTIONS_HINT_LOCALE       = 0x00000001;
+const sal_uLong SYSLOCALEOPTIONS_HINT_CURRENCY     = 0x00000002;
+const sal_uLong SYSLOCALEOPTIONS_HINT_UILOCALE     = 0x00000004;
+const sal_uLong SYSLOCALEOPTIONS_HINT_DECSEP       = 0x00000008;
+const sal_uLong SYSLOCALEOPTIONS_HINT_DATEPATTERNS = 0x00000010;
 
 class SvtSysLocaleOptions_Impl;
 class SvtListener;
@@ -54,7 +55,8 @@ public:
     {
         E_LOCALE,
         E_UILOCALE,
-        E_CURRENCY
+        E_CURRENCY,
+        E_DATEPATTERNS
     };
                                 SvtSysLocaleOptions();
                                 virtual ~SvtSysLocaleOptions();
@@ -108,6 +110,12 @@ public:
     /// The config string may be empty to denote the default currency of the locale
             const ::rtl::OUString&  GetCurrencyConfigString() const;
             void                SetCurrencyConfigString( const ::rtl::OUString& rStr );
+
+    /** The config string may be empty to denote the default
+        DateAcceptancePatterns of the locale */
+            const ::rtl::OUString&  GetDatePatternsConfigString() const;
+            void                SetDatePatternsConfigString( const ::rtl::OUString& rStr );
+
     // determine whether the decimal separator defined in the keyboard layout is used
     // or the one approriate to the locale
             sal_Bool            IsDecimalSeparatorAsLocale() const;

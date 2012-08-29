@@ -141,19 +141,24 @@ void SvNumberFormatterRegistry_Impl::ConfigurationChanged(
     utl::ConfigurationBroadcaster*,
     sal_uInt32 nHint)
 {
-        if ( nHint & SYSLOCALEOPTIONS_HINT_LOCALE )
-        {
-            ::osl::MutexGuard aGuard( SvNumberFormatter::GetMutex() );
-            for( size_t i = 0, n = aFormatters.size(); i < n; ++i )
-                aFormatters[ i ]->ReplaceSystemCL( eSysLanguage );
-            eSysLanguage = MsLangId::getRealLanguage( LANGUAGE_SYSTEM );
-        }
-        if ( nHint & SYSLOCALEOPTIONS_HINT_CURRENCY )
-        {
-            ::osl::MutexGuard aGuard( SvNumberFormatter::GetMutex() );
-            for( size_t i = 0, n = aFormatters.size(); i < n; ++i )
-                aFormatters[ i ]->ResetDefaultSystemCurrency();
-        }
+    ::osl::MutexGuard aGuard( SvNumberFormatter::GetMutex() );
+
+    if ( nHint & SYSLOCALEOPTIONS_HINT_LOCALE )
+    {
+        for( size_t i = 0, n = aFormatters.size(); i < n; ++i )
+            aFormatters[ i ]->ReplaceSystemCL( eSysLanguage );
+        eSysLanguage = MsLangId::getRealLanguage( LANGUAGE_SYSTEM );
+    }
+    if ( nHint & SYSLOCALEOPTIONS_HINT_CURRENCY )
+    {
+        for( size_t i = 0, n = aFormatters.size(); i < n; ++i )
+            aFormatters[ i ]->ResetDefaultSystemCurrency();
+    }
+    if ( nHint & SYSLOCALEOPTIONS_HINT_DATEPATTERNS )
+    {
+        for( size_t i = 0, n = aFormatters.size(); i < n; ++i )
+            aFormatters[ i ]->InvalidateDateAcceptancePatterns();
+    }
 }
 
 
@@ -3155,6 +3160,12 @@ void SvNumberFormatter::SetDefaultSystemCurrency( const String& rAbbrev, Languag
 void SvNumberFormatter::ResetDefaultSystemCurrency()
 {
     nDefaultSystemCurrencyFormat = NUMBERFORMAT_ENTRY_NOT_FOUND;
+}
+
+
+void SvNumberFormatter::InvalidateDateAcceptancePatterns()
+{
+    pStringScanner->InvalidateDateAcceptancePatterns();
 }
 
 

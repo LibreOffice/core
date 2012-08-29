@@ -1012,12 +1012,6 @@ bool ImpSvNumberInputScan::CanForceToIso8601( DateFormat eDateFormat )
                 break;
             }
 
-            if (!comphelper::string::equals(pFormatter->GetDateSep(), '-'))
-            {
-                nCanForceToIso8601 = 2; // date separator does not interfere
-                break;
-            }
-
             sal_Int32 n;
             switch (eDateFormat)
             {
@@ -1292,6 +1286,18 @@ DateFormat ImpSvNumberInputScan::GetDateOrder()
                             return DMY;
                     }
                     break;
+                default:
+                case 0:
+                    switch ((nOrder & 0xff))
+                    {
+                        case 'Y':
+                            return YMD;
+                        case 'M':
+                            return MDY;
+                        case 'D':
+                            return DMY;
+                    }
+                    break;
             }
     }
     SAL_WARN( "nf.date", "ImpSvNumberInputScan::GetDateOrder: undefined, falling back to locale's default");
@@ -1432,8 +1438,30 @@ input for the following reasons:
                 nCounter = 1;
                 switch (nMonthPos)  // where is the month
                 {
-                    case 0:             // not found => only day entered
-                        pCal->setValue( CalendarFieldIndex::DAY_OF_MONTH, ImplGetDay(0) );
+                    case 0:             // not found
+                        {
+                            // If input matched a date pattern, use the pattern
+                            // to determine if it is a day, month or year. The
+                            // pattern should have only one single value then,
+                            // 'D-', 'M-' or 'Y-'. If input did not match a
+                            // pattern assume the usual day of current month.
+                            sal_uInt32 nDateOrder = (bFormatTurn ?
+                                    pFormat->GetExactDateOrder() :
+                                    GetDatePatternOrder());
+                            switch (nDateOrder)
+                            {
+                                case 'Y':
+                                    pCal->setValue( CalendarFieldIndex::YEAR, ImplGetYear(0) );
+                                    break;
+                                case 'M':
+                                    pCal->setValue( CalendarFieldIndex::MONTH, ImplGetMonth(0) );
+                                    break;
+                                case 'D':
+                                default:
+                                    pCal->setValue( CalendarFieldIndex::DAY_OF_MONTH, ImplGetDay(0) );
+                                    break;
+                            }
+                        }
                         break;
                     case 1:             // month at the beginning (Jan 01)
                         pCal->setValue( CalendarFieldIndex::MONTH, Abs(nMonth)-1 );
@@ -2223,6 +2251,7 @@ bool ImpSvNumberInputScan::ScanEndString( const String& rString,
         }
     }
 
+    bool bSignDetectedHere = false;
     if (   nSign == 0                               // conflict - not signed
         && eScannedType != NUMBERFORMAT_DATE)       // and not date
 //!? catch time too?
@@ -2230,6 +2259,8 @@ bool ImpSvNumberInputScan::ScanEndString( const String& rString,
         nSign = GetSign(rString, nPos);             // 1- DM
         if (nNegCheck)                              // '(' as sign
             return MatchedReturn();
+        if (nSign)
+            bSignDetectedHere = true;
     }
 
     SkipBlanks(rString, nPos);
@@ -2300,6 +2331,8 @@ bool ImpSvNumberInputScan::ScanEndString( const String& rString,
         const String& rDate = pFormatter->GetDateSep();
         bDate = SkipString( rDate, rString, nPos);      // 10.  10-  10/
     }
+    if (bDate && bSignDetectedHere)
+        nSign = 0;                                  // 'D-' takes precedence over signed date
     if (bDate
             || ((MayBeIso8601() || MayBeMonthDate())
                 && SkipChar( '-', rString, nPos)))
@@ -2866,6 +2899,12 @@ void ImpSvNumberInputScan::ChangeIntl()
                           cDecSep == pFormatter->GetDateSep().GetChar(0) );
     bTextInitialized = false;
     aUpperCurrSymbol.Erase();
+    InvalidateDateAcceptancePatterns();
+}
+
+
+void ImpSvNumberInputScan::InvalidateDateAcceptancePatterns()
+{
     if (sDateAcceptancePatterns.getLength())
         sDateAcceptancePatterns = ::com::sun::star::uno::Sequence< ::rtl::OUString >();
 }

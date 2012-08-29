@@ -179,6 +179,9 @@ class OfaLanguagesTabPage : public SfxTabPage
     CheckBox        aDecimalSeparatorCB;
     FixedText       aCurrencyFT;
     ListBox         aCurrencyLB;
+    ReadOnlyImage   aDatePatternsFI;
+    FixedText       aDatePatternsFT;
+    Edit            aDatePatternsED;
 
     FixedLine       aLinguLanguageGB;
     ReadOnlyImage   aWesternLanguageFI;
@@ -207,6 +210,7 @@ class OfaLanguagesTabPage : public SfxTabPage
 
     DECL_LINK(  SupportHdl, CheckBox* ) ;
     DECL_LINK(  LocaleSettingHdl, SvxLanguageBox* ) ;
+    DECL_LINK(  DatePatternsHdl, Edit* ) ;
 
 public:
     OfaLanguagesTabPage( Window* pParent, const SfxItemSet& rSet );

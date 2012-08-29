@@ -77,11 +77,13 @@ class SvtSysLocaleOptions_Impl : public utl::ConfigItem
         OUString                m_aLocaleString;    // en-US or de-DE or empty for SYSTEM
         OUString                m_aUILocaleString;    // en-US or de-DE or empty for SYSTEM
         OUString                m_aCurrencyString;  // USD-en-US or EUR-de-DE
+        OUString                m_aDatePatternsString;  // "Y-M-D;M-D"
         sal_Bool                m_bDecimalSeparator; //use decimal separator same as locale
 
         sal_Bool                m_bROLocale;
         sal_Bool                m_bROUILocale;
         sal_Bool                m_bROCurrency;
+        sal_Bool                m_bRODatePatterns;
         sal_Bool                m_bRODecimalSeparator;
 
         static  const Sequence< /* const */ OUString >  GetPropertyNames();
@@ -107,6 +109,10 @@ public:
                                     { return m_aCurrencyString; }
             void                SetCurrencyString( const OUString& rStr );
 
+            const OUString&     GetDatePatternsString() const
+                                    { return m_aDatePatternsString; }
+            void                SetDatePatternsString( const OUString& rStr );
+
             sal_Bool            IsDecimalSeparatorAsLocale() const { return m_bDecimalSeparator;}
             void                SetDecimalSeparatorAsLocale( sal_Bool bSet);
 
@@ -124,13 +130,15 @@ public:
 #define PROPERTYNAME_UILOCALE           OUString(RTL_CONSTASCII_USTRINGPARAM("ooLocale"))
 #define PROPERTYNAME_CURRENCY           OUString(RTL_CONSTASCII_USTRINGPARAM("ooSetupCurrency"))
 #define PROPERTYNAME_DECIMALSEPARATOR   OUString(RTL_CONSTASCII_USTRINGPARAM("DecimalSeparatorAsLocale"))
+#define PROPERTYNAME_DATEPATTERNS       OUString(RTL_CONSTASCII_USTRINGPARAM("DateAcceptancePatterns"))
 
 #define PROPERTYHANDLE_LOCALE           0
 #define PROPERTYHANDLE_UILOCALE         1
 #define PROPERTYHANDLE_CURRENCY         2
 #define PROPERTYHANDLE_DECIMALSEPARATOR 3
+#define PROPERTYHANDLE_DATEPATTERNS     4
 
-#define PROPERTYCOUNT                   4
+#define PROPERTYCOUNT                   5
 
 const Sequence< OUString > SvtSysLocaleOptions_Impl::GetPropertyNames()
 {
@@ -139,7 +147,8 @@ const Sequence< OUString > SvtSysLocaleOptions_Impl::GetPropertyNames()
         PROPERTYNAME_LOCALE,
         PROPERTYNAME_UILOCALE,
         PROPERTYNAME_CURRENCY,
-        PROPERTYNAME_DECIMALSEPARATOR
+        PROPERTYNAME_DECIMALSEPARATOR,
+        PROPERTYNAME_DATEPATTERNS
     };
     const Sequence< OUString > seqPropertyNames( pProperties, PROPERTYCOUNT );
     return seqPropertyNames;
@@ -153,6 +162,7 @@ SvtSysLocaleOptions_Impl::SvtSysLocaleOptions_Impl()
     , m_bROLocale(CFG_READONLY_DEFAULT)
     , m_bROUILocale(CFG_READONLY_DEFAULT)
     , m_bROCurrency(CFG_READONLY_DEFAULT)
+    , m_bRODatePatterns(CFG_READONLY_DEFAULT)
     , m_bRODecimalSeparator(sal_False)
 
 {
@@ -220,6 +230,18 @@ SvtSysLocaleOptions_Impl::SvtSysLocaleOptions_Impl()
                             }
                             m_bRODecimalSeparator = pROStates[nProp];
                         }
+                        break;
+                        case PROPERTYHANDLE_DATEPATTERNS :
+                            {
+                                OUString aStr;
+                                if ( pValues[nProp] >>= aStr )
+                                    m_aDatePatternsString = aStr;
+                                else
+                                {
+                                    SAL_WARN( "unotools.config", "Wrong property type!" );
+                                }
+                                m_bRODatePatterns = pROStates[nProp];
+                            }
                         break;
                         default:
                             SAL_WARN( "unotools.config", "Wrong property type!" );
@@ -290,6 +312,11 @@ sal_Bool SvtSysLocaleOptions_Impl::IsReadOnly( SvtSysLocaleOptions::EOption eOpt
                 bReadOnly = m_bROCurrency;
                 break;
             }
+        case SvtSysLocaleOptions::E_DATEPATTERNS :
+            {
+                bReadOnly = m_bRODatePatterns;
+                break;
+            }
     }
     return bReadOnly;
 }
@@ -349,6 +376,14 @@ void SvtSysLocaleOptions_Impl::Commit()
                     ++nRealCount;
                 }
             break;
+            case PROPERTYHANDLE_DATEPATTERNS :
+                if (!m_bRODatePatterns)
+                {
+                    pNames[nRealCount] = aOrgNames[nProp];
+                    pValues[nRealCount] <<= m_aDatePatternsString;
+                    ++nRealCount;
+                }
+                break;
             default:
                 SAL_WARN( "unotools.config", "invalid index to save a path" );
         }
@@ -399,6 +434,16 @@ void SvtSysLocaleOptions_Impl::SetCurrencyString( const OUString& rStr )
     }
 }
 
+void SvtSysLocaleOptions_Impl::SetDatePatternsString( const OUString& rStr )
+{
+    if (!m_bRODatePatterns && rStr != m_aDatePatternsString )
+    {
+        m_aDatePatternsString = rStr;
+        SetModified();
+        NotifyListeners( SYSLOCALEOPTIONS_HINT_DATEPATTERNS );
+    }
+}
+
 void SvtSysLocaleOptions_Impl::SetDecimalSeparatorAsLocale( sal_Bool bSet)
 {
     if(bSet != m_bDecimalSeparator)
@@ -446,6 +491,13 @@ void SvtSysLocaleOptions_Impl::Notify( const Sequence< rtl::OUString >& seqPrope
         {
             seqValues[nProp] >>= m_bDecimalSeparator;
             m_bRODecimalSeparator = seqROStates[nProp];
+        }
+        else if( seqPropertyNames[nProp] == PROPERTYNAME_DATEPATTERNS )
+        {
+            DBG_ASSERT( seqValues[nProp].getValueTypeClass() == TypeClass_STRING, "DatePatterns property type" );
+            seqValues[nProp] >>= m_aDatePatternsString;
+            m_bRODatePatterns = seqROStates[nProp];
+            nHint |= SYSLOCALEOPTIONS_HINT_DATEPATTERNS;
         }
     }
     if ( nHint )
@@ -550,6 +602,18 @@ void SvtSysLocaleOptions::SetCurrencyConfigString( const OUString& rStr )
 {
     MutexGuard aGuard( GetMutex() );
     pOptions->SetCurrencyString( rStr );
+}
+
+const OUString& SvtSysLocaleOptions::GetDatePatternsConfigString() const
+{
+    MutexGuard aGuard( GetMutex() );
+    return pOptions->GetDatePatternsString();
+}
+
+void SvtSysLocaleOptions::SetDatePatternsConfigString( const OUString& rStr )
+{
+    MutexGuard aGuard( GetMutex() );
+    pOptions->SetDatePatternsString( rStr );
 }
 
 sal_Bool SvtSysLocaleOptions::IsDecimalSeparatorAsLocale() const

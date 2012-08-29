@@ -943,6 +943,10 @@ public:
     // called by SvNumberFormatterRegistry_Impl::Notify if the default system currency changes
     void ResetDefaultSystemCurrency();
 
+    // Called by SvNumberFormatterRegistry_Impl::Notify if the system locale's
+    // date acceptence patterns change.
+    void InvalidateDateAcceptancePatterns();
+
     // Replace the SYSTEM language/country format codes. Called upon change of
     // the user configurable locale.
     // Old compatibility codes are replaced, user defined are converted, and

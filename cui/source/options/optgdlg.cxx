@@ -1206,6 +1206,22 @@ static OUString sUserLocalePath(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Offi
 static const OUString sUserLocaleKey(RTL_CONSTASCII_USTRINGPARAM("UILocale"));
 static Sequence< OUString > seqInstalledLanguages;
 
+static OUString lcl_getDatePatternsConfigString( const LocaleDataWrapper& rLocaleWrapper )
+{
+    Sequence< OUString > aDateAcceptancePatterns = rLocaleWrapper.getDateAcceptancePatterns();
+    sal_Int32 nPatterns = aDateAcceptancePatterns.getLength();
+    OUStringBuffer aBuf( nPatterns * 6 );   // 6 := length of Y-M-D;
+    SAL_WARN_IF( !nPatterns, "cui.options", "No date acceptance pattern");
+    if (nPatterns)
+    {
+        const OUString* pPatterns = aDateAcceptancePatterns.getConstArray();
+        aBuf.append( pPatterns[0]);
+        for (sal_Int32 i=1; i < nPatterns; ++i)
+            aBuf.append(';').append( pPatterns[i]);
+    }
+    return aBuf.makeStringAndClear();
+}
+
 OfaLanguagesTabPage::OfaLanguagesTabPage( Window* pParent, const SfxItemSet& rSet ) :
     SfxTabPage( pParent, CUI_RES( OFA_TP_LANGUAGES ), rSet ),
     aUILanguageGB(this,         CUI_RES(FL_UI_LANG      )),
@@ -1219,6 +1235,9 @@ OfaLanguagesTabPage::OfaLanguagesTabPage( Window* pParent, const SfxItemSet& rSe
     aDecimalSeparatorCB(this,   CUI_RES(CB_DECIMALSEPARATOR)),
     aCurrencyFT( this,          CUI_RES(FT_CURRENCY       )),
     aCurrencyLB( this,          CUI_RES(LB_CURRENCY       )),
+    aDatePatternsFI( this,      CUI_RES(FI_DATEPATTERNS   )),
+    aDatePatternsFT( this,      CUI_RES(FT_DATEPATTERNS   )),
+    aDatePatternsED( this,      CUI_RES(ED_DATEPATTERNS   )),
     aLinguLanguageGB(this,      CUI_RES(FL_LINGU_LANG       )),
     aWesternLanguageFI(this,    CUI_RES(FI_WEST_LANG      )),
     aWesternLanguageFT(this,    CUI_RES(FT_WEST_LANG      )),
@@ -1341,6 +1360,8 @@ OfaLanguagesTabPage::OfaLanguagesTabPage( Window* pParent, const SfxItemSet& rSe
     delete pLanguageTable;
 
     aLocaleSettingLB.SetSelectHdl( LINK( this, OfaLanguagesTabPage, LocaleSettingHdl ) );
+    aDatePatternsED.SetModifyHdl( LINK( this, OfaLanguagesTabPage, DatePatternsHdl ) );
+
     Link aLink( LINK( this, OfaLanguagesTabPage, SupportHdl ) );
     aAsianSupportCB.SetClickHdl( aLink );
     aCTLSupportCB.SetClickHdl( aLink );
@@ -1537,6 +1558,11 @@ sal_Bool OfaLanguagesTabPage::FillItemSet( SfxItemSet& rSet )
     if ( sOldCurr != sNewCurr )
         pLangConfig->aSysLocaleOptions.SetCurrencyConfigString( sNewCurr );
 
+    // Configured date acceptance patterns, for example Y-M-D;M-D or empty for
+    // locale default.
+    if (aDatePatternsED.GetText() != aDatePatternsED.GetSavedValue())
+        pLangConfig->aSysLocaleOptions.SetDatePatternsConfigString( aDatePatternsED.GetText());
+
     SfxObjectShell* pCurrentDocShell = SfxObjectShell::Current();
     Reference< XPropertySet > xLinguProp( LinguMgr::GetLinguPropertySet(), UNO_QUERY );
     sal_Bool bCurrentDocCBChecked = aCurrentDocCB.IsChecked();
@@ -1687,6 +1713,22 @@ void OfaLanguagesTabPage::Reset( const SfxItemSet& rSet )
     aCurrencyLB.Enable(!bReadonly);
     aCurrencyFT.Enable(!bReadonly);
     aCurrencyFI.Show(bReadonly);
+
+    // date acceptance patterns
+    OUString aDatePatternsString = pLangConfig->aSysLocaleOptions.GetDatePatternsConfigString();
+    if (aDatePatternsString.isEmpty())
+    {
+        Locale aTempLocale;
+        SvxLanguageToLocale( aTempLocale, Application::GetSettings().GetLanguage());
+        LocaleDataWrapper aLocaleWrapper( ::comphelper::getProcessServiceFactory(), aTempLocale );
+        aDatePatternsString = lcl_getDatePatternsConfigString( aLocaleWrapper);
+    }
+    aDatePatternsED.SetText( aDatePatternsString);
+    bReadonly = pLangConfig->aSysLocaleOptions.IsReadOnly(SvtSysLocaleOptions::E_DATEPATTERNS);
+    aDatePatternsED.Enable(!bReadonly);
+    aDatePatternsFT.Enable(!bReadonly);
+    aDatePatternsFI.Show(bReadonly);
+    aDatePatternsED.SaveValue();
 
     //western/CJK/CLK language
     LanguageType eCurLang = LANGUAGE_NONE;
@@ -1871,14 +1913,98 @@ IMPL_LINK( OfaLanguagesTabPage, LocaleSettingHdl, SvxLanguageBox*, pBox )
     }
     aCurrencyLB.SelectEntryPos( nPos );
 
-    //update the decimal separator key of the related CheckBox
+    // obtain corresponding locale data
     Locale aTempLocale;
     SvxLanguageToLocale( aTempLocale, eLang );
     LocaleDataWrapper aLocaleWrapper( ::comphelper::getProcessServiceFactory(), aTempLocale );
+
+    // update the decimal separator key of the related CheckBox
     String sTempLabel(sDecimalSeparatorLabel);
     sTempLabel.SearchAndReplaceAscii("%1", aLocaleWrapper.getNumDecimalSep() );
     aDecimalSeparatorCB.SetText(sTempLabel);
 
+    // update the date acceptance patterns
+    OUString aDatePatternsString = lcl_getDatePatternsConfigString( aLocaleWrapper);
+    aDatePatternsED.SetText( aDatePatternsString);
+
+    return 0;
+}
+
+IMPL_LINK( OfaLanguagesTabPage, DatePatternsHdl, Edit*, pEd )
+{
+    OUString aPatterns( pEd->GetText());
+    bool bValid = true;
+    if (!aPatterns.isEmpty())
+    {
+        for (sal_Int32 nIndex=0; nIndex >= 0 && bValid; /*nop*/)
+        {
+            OUString aPat( aPatterns.getToken( 0, ';', nIndex));
+            if (aPat.isEmpty() && nIndex < 0)
+            {
+                // Indicating failure when about to append a pattern is too
+                // confusing. Empty patterns are ignored anyway when sequencing
+                // to SvtSysLocale.
+                continue;   // for
+            }
+            else if (aPat.getLength() < 2)
+                bValid = false;
+            else
+            {
+                bool bY, bM, bD;
+                bY = bM = bD = false;
+                bool bSep = true;
+                for (sal_Int32 i = 0; i < aPat.getLength() && bValid; /*nop*/)
+                {
+                    sal_uInt32 c = aPat.iterateCodePoints( &i);
+                    // Only one Y,M,D per pattern, separated by any character(s).
+                    switch (c)
+                    {
+                        case 'Y':
+                            if (bY || !bSep)
+                                bValid = false;
+                            bY = true;
+                            bSep = false;
+                            break;
+                        case 'M':
+                            if (bM || !bSep)
+                                bValid = false;
+                            bM = true;
+                            bSep = false;
+                            break;
+                        case 'D':
+                            if (bD || !bSep)
+                                bValid = false;
+                            bD = true;
+                            bSep = false;
+                            break;
+                        default:
+                            bSep = true;
+                    }
+                }
+                // At least one of Y,M,D
+                bValid &= (bY || bM || bD);
+            }
+        }
+    }
+    if (bValid)
+    {
+        pEd->SetControlForeground();
+        pEd->SetControlBackground();
+    }
+    else
+    {
+        // color to use as foreground for an invalid pattern
+        #define INVALID_PATTERN_FOREGROUND_COLOR Color(COL_WHITE)
+        // color to use as background for an invalid pattern
+        #define INVALID_PATTERN_BACKGROUND_COLOR Color(0xff6563)
+#if 0
+        //! Gives white on white!?!
+        pEd->SetControlBackground( INVALID_PATTERN_BACKGROUND_COLOR);
+        pEd->SetControlForeground( INVALID_PATTERN_FOREGROUND_COLOR);
+#else
+        pEd->SetControlForeground( INVALID_PATTERN_BACKGROUND_COLOR);
+#endif
+    }
     return 0;
 }
 

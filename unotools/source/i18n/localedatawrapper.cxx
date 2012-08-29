@@ -120,6 +120,8 @@ void LocaleDataWrapper::invalidateData()
     xDefaultCalendar.reset();
     if (aGrouping.getLength())
         aGrouping[0] = 0;
+    if (aDateAcceptancePatterns.getLength())
+        aDateAcceptancePatterns = Sequence<OUString>();
     // dummies
     cCurrZeroChar = '0';
 }
@@ -1845,16 +1847,71 @@ void LocaleDataWrapper::evaluateLocaleDataChecking()
 
 ::com::sun::star::uno::Sequence< ::rtl::OUString > LocaleDataWrapper::getDateAcceptancePatterns() const
 {
+    ::utl::ReadWriteGuard aGuard( aMutex );
+
+    if (aDateAcceptancePatterns.getLength())
+        return aDateAcceptancePatterns;
+
+    aGuard.changeReadToWrite();
+
     try
     {
         if ( xLD.is() )
-            return xLD->getDateAcceptancePatterns( getLocale() );
+        {
+            const_cast<LocaleDataWrapper*>(this)->aDateAcceptancePatterns =
+                xLD->getDateAcceptancePatterns( getLocale() );
+            return aDateAcceptancePatterns;
+        }
     }
     catch (const Exception& e)
     {
         SAL_WARN( "unotools.i18n", "getDateAcceptancePatterns: Exception caught " << e.Message );
     }
     return ::com::sun::star::uno::Sequence< ::rtl::OUString >(0);
+}
+
+// --- Override layer --------------------------------------------------------
+
+void LocaleDataWrapper::setDateAcceptancePatterns(
+        const ::com::sun::star::uno::Sequence< ::rtl::OUString > & rPatterns )
+{
+    ::utl::ReadWriteGuard aGuard( aMutex, ::utl::ReadWriteGuardMode::nWrite );
+
+    if (!aDateAcceptancePatterns.getLength() || !rPatterns.getLength())
+    {
+        try
+        {
+            if ( xLD.is() )
+                aDateAcceptancePatterns = xLD->getDateAcceptancePatterns( getLocale() );
+        }
+        catch (const Exception& e)
+        {
+            SAL_WARN( "unotools.i18n", "setDateAcceptancePatterns: Exception caught " << e.Message );
+        }
+        if (!rPatterns.getLength())
+            return;     // just a reset
+        if (!aDateAcceptancePatterns.getLength())
+        {
+            aDateAcceptancePatterns = rPatterns;
+            return;
+        }
+    }
+
+    // Never overwrite the locale's full date pattern! The first.
+    if (aDateAcceptancePatterns[0] == rPatterns[0])
+        aDateAcceptancePatterns = rPatterns;    // sane
+    else
+    {
+        // Copy existing full date pattern and append the sequence passed.
+        /* TODO: could check for duplicates and shrink target sequence */
+        Sequence< OUString > aTmp( rPatterns.getLength() + 1 );
+        OUString* pArray1 = aTmp.getArray();
+        const OUString* pArray2 = rPatterns.getConstArray();
+        pArray1[0] = aDateAcceptancePatterns[0];
+        for (sal_Int32 i=0; i < rPatterns.getLength(); ++i)
+            pArray1[i+1] = pArray2[i];
+        aDateAcceptancePatterns = aTmp;
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
