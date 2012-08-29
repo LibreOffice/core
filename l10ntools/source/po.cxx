@@ -100,6 +100,7 @@ GenPoEntry::GenPoEntry()
     , m_sContext( OString() )
     , m_sUnTransStr( OString() )
     , m_sTransStr( OString() )
+    , m_bFuzzy( false )
 {
 }
 
@@ -119,6 +120,8 @@ void GenPoEntry::writeToFile(std::ofstream& io_rOFStream)
                      << std::endl;
     if ( !m_sReference.isEmpty() )
         io_rOFStream << "#: " << m_sReference.getStr() << std::endl;
+    if ( m_bFuzzy )
+        io_rOFStream << "#, fuzzy" << std::endl;
     if ( !m_sContext.isEmpty() )
         io_rOFStream << "msgctxt "
                      << ImplGenMsgString(m_sContext).getStr() << std::endl;
