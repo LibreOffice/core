@@ -61,8 +61,8 @@ OString GetPath(const OString& rPath, const OString& rLine)
 
 OString DelLocalId(const OString& rLine)
 {
-    sal_uInt16 nTabIndex = 0;
-    for(sal_uInt16 nComponent=0; nComponent<PoEntry::LOCALID; ++nComponent)
+    unsigned nTabIndex = 0;
+    for(unsigned nComponent=0; nComponent<PoEntry::LOCALID; ++nComponent)
     {
         nTabIndex = rLine.indexOf('\t',nTabIndex);
         ++nTabIndex;
@@ -138,8 +138,8 @@ void HandleLanguage(struct dirent* pLangEntry, const OString& rPath,
         const vector<PoEntry::TYPE> vTypes = { PoEntry::TTEXT,
                                                PoEntry::TQUICKHELPTEXT,
                                                PoEntry::TTITLE };
-        sal_uInt16 nDummyBit = 0;
-        for( sal_uInt16 nIndex=0; nIndex<vTypes.size(); ++nIndex)
+        unsigned short nDummyBit = 0;
+        for( unsigned nIndex=0; nIndex<vTypes.size(); ++nIndex)
         {
             if (!sActUnTrans.getToken(vTypes[nIndex],'\t').isEmpty())
             {
