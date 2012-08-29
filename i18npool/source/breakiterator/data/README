@@ -16,24 +16,6 @@ latest versions.
 
 to-review, later are ok:
 
-commit 681082b57612ef325c7f695846369d44c68dda11
-Author: Caolán McNamara <caolanm@redhat.com>
-Date:   Sat Jan 29 12:51:52 2011 +0000
-
-    Resolves: fdo#31271 wrong line break with (
-
-commit 42be5541baf18e3292a14a9d478eda33f61e10ab
-Author: Mattias Johnsson <m.t.johnsson@gmail.com>
-Date:   Thu Nov 4 23:25:02 2010 +1100
-
-    An opening quote should not be counted as a word by word count tool
-
-commit 600c6460a6ffa169ad0cc9bed4b77c545cc50f52
-Author: Thomas Lange [tl] <tl@openoffice.org>
-Date:   Tue Aug 24 16:46:29 2010 +0200
-
-    cws tl82: #i113785# ligatures for spell checking will no longer break words
-
 commit ae9d7c2cef9ecd42687d64f985b9e2dcbc68a034
 Author: Thomas Lange [tl] <tl@openoffice.org>
 Date:   Tue Apr 27 10:09:22 2010 +0200
@@ -579,6 +561,9 @@ Date:   Mon Mar 8 16:17:05 2004 +0000
 
 done, regression tests added:
 
+#i113785# ligatures for spell checking will no longer break words
+An opening quote should not be counted as a word by word count tool (regression test in in writer)
+fdo#31271 wrong line break with (
 #i89042# word count fix (regression test is in writer)
 #i58513# add break iterator rules for Finish
 #i19716# fix wrong line break on bracket characters

@@ -212,7 +212,7 @@ void TestBreakIterator::testWordBoundaries()
 
     //See https://issues.apache.org/ooo/show_bug.cgi?id=14904
     {
-        const sal_Unicode TEST1[] =
+        const sal_Unicode TEST[] =
         {
             'W', 'o', 'r', 'k', 'i', 'n', 'g', ' ', 0x201C, 'W', 'o', 'r', 'd', 's',
             ' ', 's', 't', 'a', 'r', 't', 'i', 'n', 'g', ' ', 'w', 'i', 't',
@@ -223,7 +223,7 @@ void TestBreakIterator::testWordBoundaries()
             't', ' ', 'e', 'v', 'e', 'n', ' ' , 0x00BF, 'r', 'e', 'a', 'l', '?', ' ',
             'S', 'p', 'a', 'n', 'i', 's', 'h'
         };
-        rtl::OUString aTest(TEST1, SAL_N_ELEMENTS(TEST1));
+        rtl::OUString aTest(TEST, SAL_N_ELEMENTS(TEST));
 
         aBounds = m_xBreak->getWordBoundary(aTest, 4, aLocale, i18n::WordType::DICTIONARY_WORD, false);
         CPPUNIT_ASSERT(aBounds.startPos == 0 && aBounds.endPos == 7);
@@ -526,6 +526,24 @@ void TestBreakIterator::testWordBoundaries()
             while (nPos++ < aTest.getLength());
             CPPUNIT_ASSERT(i == SAL_N_ELEMENTS(aExpected));
         }
+    }
+
+    //See https://issues.apache.org/ooo/show_bug.cgi?id=113785
+    {
+        aLocale.Language = rtl::OUString("en");
+        aLocale.Country = rtl::OUString("US");
+
+        const sal_Unicode TEST[] =
+        {
+            'r', 'u', 0xFB00, 'l', 'e', ' ', 0xFB01, 's', 'h'
+        };
+        rtl::OUString aTest(TEST, SAL_N_ELEMENTS(TEST));
+
+        aBounds = m_xBreak->getWordBoundary(aTest, 1, aLocale, i18n::WordType::DICTIONARY_WORD, false);
+        CPPUNIT_ASSERT(aBounds.startPos == 0 && aBounds.endPos == 5);
+
+        aBounds = m_xBreak->getWordBoundary(aTest, 7, aLocale, i18n::WordType::DICTIONARY_WORD, false);
+        CPPUNIT_ASSERT(aBounds.startPos == 6 && aBounds.endPos == 9);
     }
 }
 
