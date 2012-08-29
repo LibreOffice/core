@@ -782,7 +782,7 @@ void Test::testN777345()
     Graphic aGraphic(xGraphic);
     // If this changes later, feel free to update it, but make sure it's not
     // the checksum of a white/transparent placeholder rectangle.
-    CPPUNIT_ASSERT_EQUAL(sal_uLong(2404338915), aGraphic.GetChecksum());
+    CPPUNIT_ASSERT_EQUAL(sal_uLong(2404338915U), aGraphic.GetChecksum());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
