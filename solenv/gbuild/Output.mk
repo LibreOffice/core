@@ -29,7 +29,7 @@
 # user notifications and formatting
 
 define gb_Output__format_type
-[ $(word 2,$(1) build clean) $(2) ]
+[$(word 2,$(1) build clean) $(2)]
 endef
 
 define gb_Output__format_target
@@ -47,11 +47,11 @@ define gb_Output_announce_bell
 endef
 
 define gb_Output_info
-$(info [ info  $(2) ] $(1))
+$(info [info  $(2)] $(1))
 endef
 
 define gb_Output_warn
-$(warning $(NEWLINE)[ WARN  $(2) ] !!!$(NEWLINE)[ WARN  $(2) ] !!! $(1)$(NEWLINE)[ WARN  $(2) ] !!!)
+$(warning $(NEWLINE)[WARN  $(2)] !!!$(NEWLINE)[WARN  $(2)] !!! $(1)$(NEWLINE)[WARN  $(2)] !!!)
 endef
 
 gb_Output_ESCAPE := $(shell echo|awk 'BEGIN { printf "%c", 27 }' -)
@@ -107,11 +107,11 @@ $(subst :, ,$(word 2,$(1) \
 endef
 
 define gb_Output_info
-$(info $(gb_Output_COLOR_OUTBUILD_LEVEL6)[ $(gb_Output_COLOR_INBUILD_LEVEL6)info  $(2)$(gb_Output_COLOR_OUTBUILD_LEVEL6) ]$(gb_Output_COLOR_RESET) $(1))
+$(info $(gb_Output_COLOR_OUTBUILD_LEVEL6)[$(gb_Output_COLOR_INBUILD_LEVEL6)info  $(2)$(gb_Output_COLOR_OUTBUILD_LEVEL6)]$(gb_Output_COLOR_RESET) $(1))
 endef
 
 define gb_Output_warn
-$(warning $(NEWLINE)$(gb_Output_COLOR_OUTCLEAN_LEVEL6)[ $(gb_Output_COLOR_INCLEAN_LEVEL6)WARN  $(2)$(gb_Output_COLOR_OUTCLEAN_LEVEL6) ]$(gb_Output_COLOR_RESET) !!!$(NEWLINE)$(gb_Output_COLOR_OUTCLEAN_LEVEL6)[ $(gb_Output_COLOR_INCLEAN_LEVEL6)WARN  $(2)$(gb_Output_COLOR_OUTCLEAN_LEVEL6) ]$(gb_Output_COLOR_RESET) !!! $(1)$(NEWLINE)$(gb_Output_COLOR_OUTCLEAN_LEVEL6)[ $(gb_Output_COLOR_INCLEAN_LEVEL6)WARN  $(2)$(gb_Output_COLOR_OUTCLEAN_LEVEL6) ]$(gb_Output_COLOR_RESET) !!!)
+$(warning $(NEWLINE)$(gb_Output_COLOR_OUTCLEAN_LEVEL6)[$(gb_Output_COLOR_INCLEAN_LEVEL6)WARN  $(2)$(gb_Output_COLOR_OUTCLEAN_LEVEL6)]$(gb_Output_COLOR_RESET) !!!$(NEWLINE)$(gb_Output_COLOR_OUTCLEAN_LEVEL6)[$(gb_Output_COLOR_INCLEAN_LEVEL6)WARN  $(2)$(gb_Output_COLOR_OUTCLEAN_LEVEL6)]$(gb_Output_COLOR_RESET) !!! $(1)$(NEWLINE)$(gb_Output_COLOR_OUTCLEAN_LEVEL6)[$(gb_Output_COLOR_INCLEAN_LEVEL6)WARN  $(2)$(gb_Output_COLOR_OUTCLEAN_LEVEL6)]$(gb_Output_COLOR_RESET) !!!)
 endef
 
 define gb_Output_error
