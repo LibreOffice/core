@@ -396,8 +396,36 @@ AnimationBaseNode::fillCommonParameters() const
 
     boost::optional<double> aRepeats;
     double nRepeats = 0;
-    if( (mxAnimateNode->getRepeatCount() >>= nRepeats) ) {
-        aRepeats.reset( nRepeats );
+    bool bRepeatIndefinite = false;
+    animations::Timing eTiming;
+
+    // Search parent nodes for an explicitly stated repeat count.
+    BaseNodeSharedPtr const pSelf( getSelf() );
+    for ( boost::shared_ptr<BaseNode> pNode( pSelf );
+          pNode;
+          pNode = pNode->getParentNode() )
+    {
+        uno::Reference<animations::XAnimationNode> const xAnimationNode(
+            pNode->getXAnimationNode() );
+        if( (xAnimationNode->getRepeatCount() >>= nRepeats) )
+        {
+            // Found an explicit repeat count.
+            break;
+        }
+        if( (xAnimationNode->getRepeatCount() >>= eTiming) &&
+            (eTiming == animations::Timing_INDEFINITE ))
+        {
+            // Found an explicit repeat count of Timing::INDEFINITE.
+            bRepeatIndefinite = true;
+            break;
+        }
+    }
+
+    if( nRepeats || bRepeatIndefinite ) {
+        if (nRepeats)
+        {
+            aRepeats.reset( nRepeats );
+        }
     }
     else {
         if( (mxAnimateNode->getRepeatDuration() >>= nRepeats) ) {
@@ -434,8 +462,7 @@ AnimationBaseNode::fillCommonParameters() const
     // calc accel/decel:
     double nAcceleration = 0.0;
     double nDeceleration = 0.0;
-    BaseNodeSharedPtr const pSelf( getSelf() );
-    for ( boost::shared_ptr<BaseNode> pNode( pSelf );
+    en    for ( boost::shared_ptr<BaseNode> pNode( pSelf );
           pNode; pNode = pNode->getParentNode() )
     {
         uno::Reference<animations::XAnimationNode> const xAnimationNode(
