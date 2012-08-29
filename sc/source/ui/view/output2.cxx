@@ -567,7 +567,7 @@ void ScDrawStringsVars::RepeatToFill( long colWidth )
         return;
 
     long nCharsToInsert = aSpaceToFill / charWidth;
-    StringBuffer aFill;
+    OUStringBuffer aFill;
     comphelper::string::padToLength(aFill, nCharsToInsert, nChar);
     aString.Insert( aFill.makeStringAndClear(), nPos);
     TextChanged();
