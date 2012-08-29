@@ -1632,10 +1632,14 @@ int HTMLParser::FilterPRE( int nToken )
 
     case HTML_TABCHAR:
         {
-            xub_StrLen nSpaces = sal::static_int_cast< xub_StrLen >(
-                8 - (nPre_LinePos % 8));
+            sal_Int32 nSpaces = (8 - (nPre_LinePos % 8));
             DBG_ASSERT( !aToken.Len(), "Why is the token not empty?" );
-            aToken.Expand( nSpaces, ' ' );
+            if (aToken.Len() < nSpaces)
+            {
+                using comphelper::string::padToLength;
+                OUStringBuffer aBuf(aToken);
+                aToken = padToLength(aBuf, nSpaces, ' ').makeStringAndClear();
+            }
             nPre_LinePos += nSpaces;
             nToken = HTML_TEXTTOKEN;
         }

@@ -753,10 +753,12 @@ void PatternFormatter::ImplSetMask(const rtl::OString& rEditMask,
 
     if ( m_aEditMask.getLength() != maLiteralMask.Len() )
     {
-        if ( m_aEditMask.getLength() < maLiteralMask.Len() )
-            maLiteralMask.Erase(m_aEditMask.getLength());
+        OUStringBuffer aBuf(maLiteralMask);
+        if (m_aEditMask.getLength() < aBuf.getLength())
+            aBuf.remove(m_aEditMask.getLength(), aBuf.getLength() - m_aEditMask.getLength());
         else
-            maLiteralMask.Expand(m_aEditMask.getLength(), ' ');
+            comphelper::string::padToLength(aBuf, m_aEditMask.getLength(), ' ');
+        maLiteralMask = aBuf.makeStringAndClear();
     }
 
     // Strict mode allows only the input mode if only equal characters are allowed as mask and if

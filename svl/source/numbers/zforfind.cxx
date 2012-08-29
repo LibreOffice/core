@@ -1122,14 +1122,16 @@ bool ImpSvNumberInputScan::IsAcceptedDatePattern( sal_uInt16 nStartPatternAt )
                             nPat += nLen - 1;
                         else if (nPat + nLen > rPat.getLength() && sStrArray[nNext].GetChar(nLen-1) == ' ')
                         {
+                            using namespace comphelper::string;
                             // Trailing blanks in input.
-                            String aStr(comphelper::string::stripEnd(sStrArray[nNext], ' '));
+                            OUStringBuffer aBuf(stripEnd(sStrArray[nNext], ' '));
                             // Expand again in case of pattern "M. D. " and
                             // input "M. D.  ", maybe fetched far, but..
-                            aStr.Expand( rPat.getLength() - nPat, ' ');
+                            padToLength(aBuf, rPat.getLength() - nPat, ' ');
+                            OUString aStr = aBuf.makeStringAndClear();
                             bOk = (rPat.indexOf( aStr, nPat) == nPat);
                             if (bOk)
-                                nPat += aStr.Len() - 1;
+                                nPat += aStr.getLength() - 1;
                         }
                     }
                     break;
@@ -1196,9 +1198,10 @@ bool ImpSvNumberInputScan::SkipDatePatternSeparator( sal_uInt16 nParticle, xub_S
                     {
                         // The same ugly trailing blanks check as in
                         // IsAcceptedDatePattern().
-                        String aStr(comphelper::string::stripEnd(sStrArray[nNext], ' '));
-                        aStr.Expand( rPat.getLength() - nPat, ' ');
-                        bOk = (rPat.indexOf( aStr, nPat) == nPat);
+                        using namespace comphelper::string;
+                        OUStringBuffer aBuf(stripEnd(sStrArray[nNext], ' '));
+                        padToLength(aBuf, rPat.getLength() - nPat, ' ');
+                        bOk = (rPat.indexOf( aBuf.makeStringAndClear(), nPat) == nPat);
                     }
                     if (bOk)
                     {

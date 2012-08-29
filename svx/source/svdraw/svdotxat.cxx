@@ -251,11 +251,12 @@ void SdrTextObj::ImpSetTextStyleSheetListeners()
 
                 if(aStyleName.Len())
                 {
-                    XubString aFam = UniString::CreateFromInt32((sal_uInt16)eStyleFam);
-                    aFam.Expand(5);
+                    OUStringBuffer aFam;
+                    aFam.append(static_cast<sal_Int32>(eStyleFam));
+                    comphelper::string::padToLength(aFam, 5, ' ');
 
                     aStyleName += sal_Unicode('|');
-                    aStyleName += aFam;
+                    aStyleName += aFam.makeStringAndClear();
 
                     sal_Bool bFnd(sal_False);
                     sal_uInt32 nNum(aStyleNames.size());

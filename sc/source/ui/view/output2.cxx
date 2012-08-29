@@ -65,6 +65,7 @@
 #include "fillinfo.hxx"
 
 #include <com/sun/star/i18n/DirectionProperty.hpp>
+#include <comphelper/string.hxx>
 
 #include <boost/ptr_container/ptr_vector.hpp>
 
@@ -566,9 +567,9 @@ void ScDrawStringsVars::RepeatToFill( long colWidth )
         return;
 
     long nCharsToInsert = aSpaceToFill / charWidth;
-    String aFill;
-    aFill.Expand( nCharsToInsert, nChar);
-    aString.Insert( aFill, nPos);
+    StringBuffer aFill;
+    comphelper::string::padToLength(aFill, nCharsToInsert, nChar);
+    aString.Insert( aFill.makeStringAndClear(), nPos);
     TextChanged();
 }
 
