@@ -45,6 +45,7 @@
 #include <svx/dlgutil.hxx>
 #include <svx/svxids.hrc> // SID_FIELD_GRABFOCUS
 
+#include <boost/ref.hpp>
 #include <boost/make_shared.hpp>
 
 namespace
@@ -267,7 +268,7 @@ void SvxGeneralTabPage::CreateControls ()
             continue;
         // creating row
         vRows.push_back(boost::make_shared<Row>(
-            *this, vRowInfo[iRow].nTextId, eRow
+            boost::ref(*this), vRowInfo[iRow].nTextId, eRow
         ));
         Row& rRow = *vRows.back();
         // fields in the row
@@ -281,7 +282,7 @@ void SvxGeneralTabPage::CreateControls ()
         {
             // creating edit field
             vFields.push_back(boost::make_shared<Field>(
-                *this, vFieldInfo[iField].nEditId, iField
+                boost::ref(*this), vFieldInfo[iField].nEditId, iField
             ));
             // "short name" field?
             if (vFieldInfo[iField].nEditId == ED_SHORTNAME)
