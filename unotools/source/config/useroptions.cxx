@@ -56,26 +56,26 @@ OUString const sData = "org.openoffice.UserProfile/Data";
 // vOptionNames[] -- names of the user option entries
 // The order corresponds to the #define USER_OPT_* list in useroptions.hxx.
 OUString const vOptionNames[] = {
-    "l",                         // USER_OPT_CITY
-    "o",                         // USER_OPT_COMPANY
-    "c",                         // USER_OPT_COUNTRY
-    "mail",                      // USER_OPT_EMAIL
-    "facsimiletelephonenumber",  // USER_OPT_FAX
-    "givenname",                 // USER_OPT_FIRSTNAME
-    "sn",                        // USER_OPT_LASTNAME
-    "position",                  // USER_OPT_POSITION
-    "st",                        // USER_OPT_STATE
-    "street",                    // USER_OPT_STREET
-    "homephone",                 // USER_OPT_TELEPHONEHOME
-    "telephonenumber",           // USER_OPT_TELEPHONEWORK
-    "title",                     // USER_OPT_TITLE
-    "initials",                  // USER_OPT_ID
-    "postalcode",                // USER_OPT_ZIP
-    "fathersname",               // USER_OPT_FATHERSNAME
-    "apartment",                 // USER_OPT_APARTMENT
-    "customernumber",            // USER_OPT_CUSTOMERNUMBER
+    OUString("l"),                         // USER_OPT_CITY
+    OUString("o"),                         // USER_OPT_COMPANY
+    OUString("c"),                         // USER_OPT_COUNTRY
+    OUString("mail"),                      // USER_OPT_EMAIL
+    OUString("facsimiletelephonenumber"),  // USER_OPT_FAX
+    OUString("givenname"),                 // USER_OPT_FIRSTNAME
+    OUString("sn"),                        // USER_OPT_LASTNAME
+    OUString("position"),                  // USER_OPT_POSITION
+    OUString("st"),                        // USER_OPT_STATE
+    OUString("street"),                    // USER_OPT_STREET
+    OUString("homephone"),                 // USER_OPT_TELEPHONEHOME
+    OUString("telephonenumber"),           // USER_OPT_TELEPHONEWORK
+    OUString("title"),                     // USER_OPT_TITLE
+    OUString("initials"),                  // USER_OPT_ID
+    OUString("postalcode"),                // USER_OPT_ZIP
+    OUString("fathersname"),               // USER_OPT_FATHERSNAME
+    OUString("apartment"),                 // USER_OPT_APARTMENT
+    OUString("customernumber")             // USER_OPT_CUSTOMERNUMBER
 };
-unsigned const nOptionNameCount = sizeof vOptionNames / sizeof vOptionNames[0];
+const sal_uInt16 nOptionNameCount = SAL_N_ELEMENTS(vOptionNames);
 
 } // namespace
 
