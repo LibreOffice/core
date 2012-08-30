@@ -88,10 +88,10 @@ public:
     void testN775906();
     void testN775899();
     void testN777345();
+    void testN777337();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
-#if 0
     CPPUNIT_TEST(testN751054);
     CPPUNIT_TEST(testN751117);
     CPPUNIT_TEST(testN751017);
@@ -118,8 +118,8 @@ public:
     CPPUNIT_TEST(testAllGapsWord);
     CPPUNIT_TEST(testN775906);
     CPPUNIT_TEST(testN775899);
-#endif
     CPPUNIT_TEST(testN777345);
+    CPPUNIT_TEST(testN777337);
 #endif
     CPPUNIT_TEST_SUITE_END();
 
@@ -783,6 +783,22 @@ void Test::testN777345()
     // If this changes later, feel free to update it, but make sure it's not
     // the checksum of a white/transparent placeholder rectangle.
     CPPUNIT_ASSERT_EQUAL(sal_uLong(2404338915U), aGraphic.GetChecksum());
+}
+
+void Test::testN777337()
+{
+    /*
+     * The problem was that the top and bottom margin on the first page was only 0.1cm instead of 1.7cm.
+     *
+     * oFirst = ThisComponent.StyleFamilies.PageStyles.getByName("First Page")
+     * xray oFirst.TopMargin
+     * xray oFirst.BottomMargin
+     */
+    load("n777337.docx");
+
+    uno::Reference<beans::XPropertySet> xPropertySet(getStyles("PageStyles")->getByName("First Page"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1702), getProperty<sal_Int32>(xPropertySet, "TopMargin"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1702), getProperty<sal_Int32>(xPropertySet, "BottomMargin"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
