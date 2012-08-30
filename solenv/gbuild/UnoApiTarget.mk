@@ -288,10 +288,25 @@ define gb_UnoApiHeadersTarget__command
 
 endef
 
+# On iOS we use static linking because dynamic loading of own code
+# isn't allowed by the iOS App Store rules, and we want our code to be
+# eventually distributable there as part of apps.
+
+# To avoid problems that this causes together with the lovely
+# intentional breaking of the One Definition Rule, for iOS we always
+# generate comprehensive headers for udkapi. (The ODR breakage doesn't
+# harm, by accident or careful design, on platforms where shared
+# libraries are used.)
+
 $(call gb_UnoApiHeadersTarget_get_bootstrap_target,%) : \
 		$(gb_UnoApiHeadersTarget_CPPUMAKERTARGET)
-	$(call gb_Output_announce,$*,$(true),HPB,3)
-	$(call gb_UnoApiHeadersTarget__command,$@,$*,$(call gb_UnoApiHeadersTarget_get_bootstrap_dir,$*))
+	$(if $(filter IOSudkapi,$(OS)$*), \
+		$(call gb_Output_announce,$*,$(true),HPB,3) \
+		$(call gb_UnoApiHeadersTarget__command,$@,$*,$(call gb_UnoApiHeadersTarget_get_bootstrap_dir,$*),-C), \
+	\
+		$(call gb_Output_announce,$*,$(true),HPB,3) \
+		$(call gb_UnoApiHeadersTarget__command,$@,$*,$(call gb_UnoApiHeadersTarget_get_bootstrap_dir,$*)) \
+	)
 
 $(call gb_UnoApiHeadersTarget_get_comprehensive_target,%) : \
 		$(gb_UnoApiHeadersTarget_CPPUMAKERTARGET)
@@ -300,8 +315,13 @@ $(call gb_UnoApiHeadersTarget_get_comprehensive_target,%) : \
 
 $(call gb_UnoApiHeadersTarget_get_target,%) : \
 		$(gb_UnoApiHeadersTarget_CPPUMAKERTARGET)
-	$(call gb_Output_announce,$*,$(true),HPP,3)
-	$(call gb_UnoApiHeadersTarget__command,$@,$*,$(call gb_UnoApiHeadersTarget_get_dir,$*),-L)
+	$(if $(filter IOSudkapi,$(OS)$*), \
+		$(call gb_Output_announce,$*,$(true),HPP,3) \
+		$(call gb_UnoApiHeadersTarget__command,$@,$*,$(call gb_UnoApiHeadersTarget_get_dir,$*),-C), \
+	\
+		$(call gb_Output_announce,$*,$(true),HPP,3) \
+		$(call gb_UnoApiHeadersTarget__command,$@,$*,$(call gb_UnoApiHeadersTarget_get_dir,$*),-L) \
+	)
 
 .PHONY : $(call gb_UnoApiHeadersTarget_get_clean_target,%)
 $(call gb_UnoApiHeadersTarget_get_clean_target,%) :
