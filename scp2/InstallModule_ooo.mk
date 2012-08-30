@@ -219,6 +219,7 @@ $(eval $(call gb_InstallModule_add_templates,scp2/ooo,\
 $(eval $(call gb_InstallModule_add_scpfiles,scp2/ooo,\
     scp2/source/ooo/common_brand \
     scp2/source/ooo/common_brand_readme \
+    scp2/source/ooo/directory_ooo \
     scp2/source/ooo/directory_ooo_macosx \
     scp2/source/ooo/file_extra_ooo \
     scp2/source/ooo/file_font_ooo \
@@ -241,7 +242,6 @@ $(eval $(call gb_InstallModule_add_scpfiles,scp2/ooo,\
 ))
 
 $(eval $(call gb_InstallModule_add_localized_scpfiles,scp2/ooo,\
-    scp2/source/ooo/directory_ooo \
     scp2/source/ooo/module_helppack \
     scp2/source/ooo/module_langpack \
     scp2/source/ooo/module_ooo \
