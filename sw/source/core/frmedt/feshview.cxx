@@ -1113,6 +1113,23 @@ bool SwFEShell::IsObjSelectable( const Point& rPt )
     return bRet;
 }
 
+SdrObject* SwFEShell::GetObjAt( const Point& rPt )
+{
+    SdrObject* pRet = 0;
+    SET_CURR_SHELL(this);
+    SwDrawView *pDView = Imp()->GetDrawView();
+    if( pDView )
+    {
+        SdrPageView* pPV;
+        sal_uInt16 nOld = pDView->GetHitTolerancePixel();
+        pDView->SetHitTolerancePixel( pDView->GetMarkHdlSizePixel()/2 );
+
+        pDView->PickObj( rPt, pDView->getHitTolLog(), pRet, pPV, SDRSEARCH_PICKMARKABLE );
+        pDView->SetHitTolerancePixel( nOld );
+    }
+    return pRet;
+}
+
 // Test if there is a object at that position and if it should be selected.
 sal_Bool SwFEShell::ShouldObjectBeSelected(const Point& rPt)
 {
