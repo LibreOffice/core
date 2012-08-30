@@ -32,7 +32,7 @@
  
  DSO_CFLAGS		= -fPIC
  DSO_LDOPTS		= -shared -Wl,-soname -Wl,$(notdir $@)
-+DSO_LDOPTS		+= '-Wl,-z,origin -Wl,-rpath,$$ORIGIN'
++DSO_LDOPTS		+= -Wl,-z,origin '-Wl,-rpath,$$ORIGIN'
  
  #
  # The default implementation strategy for FreeBSD is pthreads.
@@ -57,7 +57,7 @@
  # we don't use -z defs there.
  ZDEFS_FLAG		= -Wl,-z,defs
 -DSO_LDOPTS		+= $(if $(findstring 2.11.90.0.8,$(shell ld -v)),,$(ZDEFS_FLAG))
-+DSO_LDOPTS		+= $(if $(findstring 2.11.90.0.8,$(shell ld -v)),,$(ZDEFS_FLAG)) '-Wl,-z,origin -Wl,-rpath,$$ORIGIN'
++DSO_LDOPTS		+= $(if $(findstring 2.11.90.0.8,$(shell ld -v)),,$(ZDEFS_FLAG)) -Wl,-z,origin '-Wl,-rpath,$$ORIGIN'
  LDFLAGS			+= $(ARCHFLAG)
  
  # INCLUDES += -I/usr/include -Y/usr/include/linux
