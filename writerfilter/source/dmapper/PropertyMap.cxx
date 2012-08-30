@@ -543,7 +543,7 @@ uno::Reference< text::XTextColumns > SectionPropertyMap::ApplyColumnProperties(
         uno::Reference< beans::XPropertySet > xColumnPropSet( xColumns, uno::UNO_QUERY_THROW );
         if( !m_bEvenlySpaced &&
                 (sal_Int32(m_aColWidth.size()) == (m_nColumnCount + 1 )) &&
-                (sal_Int32(m_aColDistance.size()) == m_nColumnCount))
+                ((sal_Int32(m_aColDistance.size()) == m_nColumnCount) || (sal_Int32(m_aColDistance.size()) == m_nColumnCount + 1)) )
         {
             //the column width in word is an absolute value, in OOo it's relative
             //the distances are both absolute
