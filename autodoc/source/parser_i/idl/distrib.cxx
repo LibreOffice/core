@@ -74,7 +74,6 @@ TokenDistributor::ProcessingData::ProcessingData(
         // itCurToken
         // aCurResult
         nTryCount(0),
-        bFinished(false),
         rRepository(io_rRepository),
         rParserInfo(io_rParserInfo),
         pDocuProcessor(&i_rDocuProcessor),

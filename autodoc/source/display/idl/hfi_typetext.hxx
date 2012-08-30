@@ -44,7 +44,6 @@ class HF_IdlTypeText : public HtmlFactory_Idl
                         HF_IdlTypeText(
                             Environment &       io_rEnv,
                             Xml::Element &      o_rOut,
-                            bool                i_bWithLink,
                             const client *      i_pScopeGivingCe = 0 );
                         HF_IdlTypeText(
                             Environment &       io_rEnv,
@@ -143,7 +142,6 @@ class HF_IdlTypeText : public HtmlFactory_Idl
     // DATA
     mutable const client *
                         pReferingCe;
-    bool                bWithLink;
 };
 
 

@@ -95,7 +95,7 @@ HF_IdlSglIfcService::Produce_byData( const client & i_ce ) const
     aTopList.Produce_Term(C_sImplementedInterface);
 
     HF_IdlTypeText
-        aImplementedInterface( Env(), aTopList.Produce_Definition(), true, &i_ce);
+        aImplementedInterface( Env(), aTopList.Produce_Definition(), &i_ce);
     aImplementedInterface.Produce_byData( SglIfcServiceAttr::BaseInterface(i_ce) );
 
     CurOut() << new Html::HorizontalLine;

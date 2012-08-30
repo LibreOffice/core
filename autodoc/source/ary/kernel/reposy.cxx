@@ -45,7 +45,7 @@ RepositoryCenter::RepositoryCenter()
         aLocation(),
         pIdlPartition(0)
 {
-    pIdlPartition = & idl::InternalGate::Create_Partition_(*this);
+    pIdlPartition = & idl::InternalGate::Create_Partition_();
 }
 
 RepositoryCenter::~RepositoryCenter()

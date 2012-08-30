@@ -161,7 +161,6 @@ class TokenDistributor : private TokenProcessing_Types
         TokenProcessing_Result
                             aCurResult;
         uintt               nTryCount;
-        bool                bFinished;
         ary::Repository &
                             rRepository;
         ParserInfo &        rParserInfo;

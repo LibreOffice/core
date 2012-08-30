@@ -55,8 +55,7 @@ class RepositoryPartition : public InternalGate
 {
   public:
     // LIFECYCLE
-                        RepositoryPartition(
-                            RepositoryCenter &  i_repository );
+                        RepositoryPartition();
                         ~RepositoryPartition();
     // INHERITED
         // Interface Gate:
@@ -73,8 +72,6 @@ class RepositoryPartition : public InternalGate
 
   private:
     // DATA
-    RepositoryCenter *  pCenter;
-
     Dyn<CeAdmin>        pCes;
     Dyn<TypeAdmin>      pTypes;
     Dyn<NameLookup>     pNamesDictionary;

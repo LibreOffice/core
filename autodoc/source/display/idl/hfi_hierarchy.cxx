@@ -174,7 +174,7 @@ Write_Bases( csi::xml::Element &            o_out,
         o_out << " ";
 
         HF_IdlTypeText
-            aDisplay( i_env, o_out, true, i_env.CurPageCe());
+            aDisplay( i_env, o_out, i_env.CurPageCe());
         aDisplay.Produce_byData(nType);
         o_out << "\n";
 

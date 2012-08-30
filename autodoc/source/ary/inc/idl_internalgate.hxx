@@ -25,14 +25,6 @@
 
 namespace ary
 {
-    class RepositoryCenter;
-}
-
-
-
-
-namespace ary
-{
 namespace idl
 {
 
@@ -46,8 +38,7 @@ class InternalGate : public ::ary::idl::Gate
     virtual             ~InternalGate() {}
 
     static DYN InternalGate &
-                        Create_Partition_(
-                            RepositoryCenter &  i_center );
+                        Create_Partition_();
 };
 
 

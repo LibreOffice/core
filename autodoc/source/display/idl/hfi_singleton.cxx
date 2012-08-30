@@ -77,7 +77,7 @@ HF_IdlSingleton::Produce_byData_ServiceBased( const client & i_ce ) const
     aTopList.Produce_Term(C_sAssociatedService);
 
     HF_IdlTypeText
-        aAssociatedService( Env(), aTopList.Produce_Definition(), true );
+        aAssociatedService( Env(), aTopList.Produce_Definition() );
     aAssociatedService.Produce_byData( SingletonAttr::AssociatedService(i_ce) );
 
     CurOut() << new Html::HorizontalLine;
@@ -105,7 +105,7 @@ HF_IdlSingleton::Produce_byData_InterfaceBased( const client & i_ce ) const
     aTopList.Produce_Term(C_sImplementedInterface);
 
     HF_IdlTypeText
-        aImplementedInterface( Env(), aTopList.Produce_Definition(), true );
+        aImplementedInterface( Env(), aTopList.Produce_Definition() );
     aImplementedInterface.Produce_byData( SglIfcSingletonAttr::BaseInterface(i_ce) );
 
     CurOut() << new Html::HorizontalLine;

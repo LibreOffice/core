@@ -136,7 +136,7 @@ HF_IdlXrefs::Produce_List( const char *        i_title,
     Xml::Element &
         rOutCell = aList.Add_Row() >>* new Html::TableCell;
     HF_IdlTypeText
-        aTypeWriter(Env(), rOutCell, true, pClient);
+        aTypeWriter(Env(), rOutCell, pClient);
     for ( ce_list & it = i_iterator; it; ++it )
     {
         aTypeWriter.Produce_byData(*it);
@@ -239,7 +239,7 @@ HF_IdlXrefs::recursive_make_ListInTree( Xml::Element &      o_rDisplay,
     const char * sLevelIndentation = "    ";
 
     HF_IdlTypeText
-        aTypeWriter(Env(), o_rDisplay, true, &i_ce);
+        aTypeWriter(Env(), o_rDisplay, &i_ce);
     for ( ; i_iterator.operator bool(); ++i_iterator )
     {
         for (uintt i = 0; i < i_level; ++i)

@@ -280,7 +280,7 @@ HtmlFactory_Idl::recursive_ShowBases( Xml::Element &     o_screen,
     if (pCe == 0)
     {
         HF_IdlTypeText
-            aText( Env(), o_screen, false );
+            aText( Env(), o_screen );
         aText.Produce_byData( i_baseType );
         o_screen
             << "\n";
@@ -289,7 +289,7 @@ HtmlFactory_Idl::recursive_ShowBases( Xml::Element &     o_screen,
     }
 
     HF_IdlTypeText
-        aBaseLink( Env(), o_screen, true );
+        aBaseLink( Env(), o_screen );
     aBaseLink.Produce_byData(pCe->CeId());
     o_screen
         << "\n";
