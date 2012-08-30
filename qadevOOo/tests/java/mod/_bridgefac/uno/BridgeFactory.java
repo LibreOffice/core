@@ -103,5 +103,3 @@ public class BridgeFactory extends TestCase {
         curPort = ((Integer)tEnv.getObjRelation("Connector.Port")).intValue() ;
     }
 }
-
-

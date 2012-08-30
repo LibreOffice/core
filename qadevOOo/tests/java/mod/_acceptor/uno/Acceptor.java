@@ -109,5 +109,3 @@ public class Acceptor extends TestCase {
         curPort = ((Integer)tEnv.getObjRelation("Acceptor.Port")).intValue();
     }
 }
-
-

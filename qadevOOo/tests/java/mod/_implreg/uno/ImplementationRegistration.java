@@ -16,7 +16,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-package mod._corereflection.uno;
+package mod._implreg.uno;
 
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.XInterface;
@@ -27,26 +27,23 @@ import lib.TestParameters;
 
 /**
 * Test for object which is represented by service
-* <code>com.sun.star.reflection.CoreReflection</code>. <p>
+* <code>com.sun.star.registry.ImplementationRegistration</code>. <p>
 * Object implements the following interfaces :
 * <ul>
-*  <li> <code>com::sun::star::reflection::XIdlReflection</code></li>
+*  <li> <code>com::sun::star::registry::XImplementationRegistration</code></li>
 * </ul>
-* @see com.sun.star.reflection.XIdlReflection
-* @see ifc.reflection._XIdlReflection
+* This object test <b> is NOT </b> designed to be run in several
+* threads concurently.
+* @see com.sun.star.registry.XImplementationRegistration
+* @see com.sun.star.registry.ImplementationRegistration
+* @see ifc.registry._XImplementationRegistration
 */
-public class CoreReflection extends TestCase {
-
-    /**
-    * Does nothing.
-    */
-    protected void initialize ( TestParameters Param, PrintWriter log) {
-
-    }
+public class ImplementationRegistration extends TestCase {
 
     /**
     * Creating a Testenvironment for the interfaces to be tested.
-    * Creates <code>com.sun.star.reflection.CoreReflection</code> service.
+    * Creates service
+    * <code>com.sun.star.registry.ImplementationRegistration</code>.
     */
     protected TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
         XInterface oObj = null;
@@ -55,20 +52,20 @@ public class CoreReflection extends TestCase {
         try {
             XMultiServiceFactory xMSF = (XMultiServiceFactory)Param.getMSF();
             oInterface = xMSF.createInstance
-                ("com.sun.star.reflection.CoreReflection");
+                ( "com.sun.star.registry.ImplementationRegistration" );
+        } catch( com.sun.star.uno.Exception e ) {
+            log.println("Service not available" );
         }
-        catch(com.sun.star.uno.Exception e) {
-            e.printStackTrace(log);
-            log.println("CoreReflection Service not available" );
-        }
+
+        if (oInterface == null)
+            log.println("Service wasn't created") ;
 
         oObj = (XInterface) oInterface;
 
-        log.println( "    creating a new environment for CoreReflection object" );
+        log.println( "    creating a new environment for object" );
         TestEnvironment tEnv = new TestEnvironment( oObj );
 
         return tEnv;
     } // finish method getTestEnvironment
 
-}    // finish class CoreReflection
-
+}    // finish class NestedRegistry
