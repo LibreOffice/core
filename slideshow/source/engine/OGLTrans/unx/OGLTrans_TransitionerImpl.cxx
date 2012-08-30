@@ -311,12 +311,12 @@ public:
     bool mbHasTFPVisual;
 
 #if OSL_DEBUG_LEVEL > 1
-    ptime t3;
-    ptime t4;
-    ptime t5;
-    ptime t6;
-    time_duration total_update;
-    int frame_count;
+    ptime maUpdateStartTime;
+    ptime maUpdateEndTime;
+    ptime maStartTime;
+    ptime maEndTime;
+    time_duration maTotalUpdateDuration;
+    int mnFrameCount;
 #endif
 };
 
@@ -1109,11 +1109,11 @@ void OGLTransitionerImpl::GLInitSlides()
 void SAL_CALL OGLTransitionerImpl::update( double nTime ) throw (uno::RuntimeException)
 {
 #if OSL_DEBUG_LEVEL > 1
-    frame_count ++;
-    t3 = microsec_clock::local_time();
-    if( frame_count == 1 ) {
-    t5 = t3;
-    total_update = seconds (0);
+    mnFrameCount ++;
+    maUpdateStartTime = microsec_clock::local_time();
+    if( mnFrameCount == 1 ) {
+    maStartTime = maUpdateStartTime;
+    maTotalUpdateDuration = seconds (0);
     }
 #endif
     osl::MutexGuard const guard( m_aMutex );
@@ -1152,11 +1152,11 @@ void SAL_CALL OGLTransitionerImpl::update( double nTime ) throw (uno::RuntimeExc
 #endif
 
 #if OSL_DEBUG_LEVEL > 1
-    t4 = microsec_clock::local_time();
+    maUpdateEndTime = microsec_clock::local_time();
 
     SAL_INFO("slideshow.opengl", "update time: " << nTime);
-    SAL_INFO("slideshow.opengl", "update took: " << ( t4 - t3 ));
-    total_update += (t4 - t3);
+    SAL_INFO("slideshow.opengl", "update took: " << ( maUpdateEndTime - maUpdateStartTime ));
+    maTotalUpdateDuration += (maUpdateEndTime - maUpdateStartTime);
 #endif
 }
 
@@ -1255,17 +1255,17 @@ void OGLTransitionerImpl::disposing()
 
 #if OSL_DEBUG_LEVEL > 1
     SAL_INFO("slideshow.opengl", "dispose " << this);
-    if( frame_count ) {
-    t6 = microsec_clock::local_time();
-    time_duration duration = t6 - t5;
+    if( mnFrameCount ) {
+    maEndTime = microsec_clock::local_time();
+    time_duration duration = maEndTime - maStartTime;
     SAL_INFO("slideshow.opengl",
-            "whole transition (frames: " << frame_count
+            "whole transition (frames: " << mnFrameCount
             << ") took: " << duration
             << " fps: "
-            << (((double)frame_count*1000000000.0)/duration.total_nanoseconds())
-            << " time spent in updates: " << total_update
+            << (((double)mnFrameCount*1000000000.0)/duration.total_nanoseconds())
+            << " time spent in updates: " << maTotalUpdateDuration
             << " percentage of transition time: "
-            << (100*(((double)total_update.total_nanoseconds())/((double)duration.total_nanoseconds())))
+            << (100*(((double)maTotalUpdateDuration.total_nanoseconds())/((double)duration.total_nanoseconds())))
             << '%'
         );
     }
@@ -1320,7 +1320,7 @@ OGLTransitionerImpl::OGLTransitionerImpl(OGLTransitionImpl* pOGLTransition) :
 #endif
 
 #if OSL_DEBUG_LEVEL > 1
-    frame_count = 0;
+    mnFrameCount = 0;
 #endif
 }
 
