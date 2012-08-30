@@ -1006,7 +1006,7 @@ $(call gb_LinkTarget_add_libs,$(1),$(GTHREAD_LIBS))
 endef
 
 
-ifeq ($(ENABLE_DBUS),YES)
+ifeq ($(ENABLE_DBUS),TRUE)
 
 define gb_LinkTarget__use_dbus
 $(call gb_LinkTarget_set_include,$(1),\
@@ -1525,7 +1525,7 @@ endef
 endif # ENABLE_KDE4
 
 
-ifeq ($(ENABLE_TDE),YES)
+ifeq ($(ENABLE_TDE),TRUE)
 
 define gb_LinkTarget__use_tde
 $(call gb_LinkTarget_add_libs,$(1),\
