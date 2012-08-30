@@ -51,7 +51,6 @@ private:
     const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& m_xServiceFactory;
     const cssu::Reference< dcss::security::XCertificate >& m_rXCert;
     Window* m_pParent;
-    ResMgr*     pResourceMgr;
 
     DECL_LINK(OKHdl_Impl, void *);
     DECL_LINK(ViewCertHdl_Impl, void *);

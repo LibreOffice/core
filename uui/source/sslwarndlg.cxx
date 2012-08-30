@@ -65,8 +65,7 @@ SSLWarnDialog::SSLWarnDialog
     m_aLine ( this, ResId( FL_LINE, *pResMgr ) ),
     m_aWarnImage ( this, ResId( IMG_WARN, *pResMgr ) ),
     m_xServiceFactory ( xServiceFactory ),
-    m_rXCert ( rXCert ),
-    pResourceMgr    ( pResMgr )
+    m_rXCert ( rXCert )
 {
     FreeResource();
     m_aWarnImage.SetImage( WarningBox::GetStandardImage() );

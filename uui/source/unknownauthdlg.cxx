@@ -75,8 +75,7 @@ UnknownAuthDialog::UnknownAuthDialog
     m_aLabel1 ( this, ResId( FT_LABEL_1, *pResMgr ) ),
     m_aWarnImage ( this, ResId( IMG_WARN, *pResMgr ) ),
     m_xServiceFactory ( xServiceFactory ),
-    m_rXCert ( rXCert ),
-    pResourceMgr ( pResMgr )
+    m_rXCert ( rXCert )
 {
     FreeResource();
 
