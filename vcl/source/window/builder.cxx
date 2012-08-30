@@ -126,17 +126,6 @@ VclBuilder::VclBuilder(Window *pParent, rtl::OUString sUIDir, rtl::OUString sUIF
 
     //drop maps, etc. now
     delete m_pParserState;
-
-    //auto-show (really necessary ?, maybe drop it when complete)
-    for (std::vector<WinAndId>::iterator aI = m_aChildren.begin(),
-         aEnd = m_aChildren.end(); aI != aEnd; ++aI)
-    {
-        Window *pWindow = aI->m_pWindow;
-        if (pWindow)
-        {
-            pWindow->Show();
-        }
-    }
 }
 
 VclBuilder::~VclBuilder()
@@ -375,11 +364,13 @@ Window *VclBuilder::makeObject(Window *pParent, const rtl::OString &name, const 
         if (!bIsPlaceHolder)
         {
             TabPage* pPage = new TabPage(pTabControl);
+            pPage->Show();
             m_aChildren.push_back(WinAndId(rtl::OString(), pPage));
 
             //And give the page one container as a child to make it a layout enabled
             //tab page
             VclBin* pContainer = new VclBin(pPage);
+            pContainer->Show();
             m_aChildren.push_back(WinAndId(rtl::OString(), pContainer));
             pParent = pContainer;
 
@@ -788,8 +779,6 @@ void VclBuilder::handleAdjustment(const rtl::OString &rID, stringmap &rPropertie
 void VclBuilder::handleRow(xmlreader::XmlReader &reader, const rtl::OString &rID, sal_Int32 nRowIndex)
 {
     int nLevel = 1;
-
-    fprintf(stderr, "handleRow for %s\n", rID.getStr());
 
     ListStore::row aRow;
 
