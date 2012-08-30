@@ -226,11 +226,7 @@ public:
         return maList.size();
     }
 
-    SdrMark* GetMark(sal_uLong nNum) const
-    {
-        return maList[nNum];
-    }
-
+    SdrMark* GetMark(sal_uLong nNum) const;
     sal_uLong FindObject(const SdrObject* pObj) const;
     void InsertEntry(const SdrMark& rMark, sal_Bool bChkSort = sal_True);
     void DeleteMark(sal_uLong nNum);
